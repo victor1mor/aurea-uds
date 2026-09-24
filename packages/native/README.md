@@ -852,6 +852,16 @@ poda nenhuma: módulo que não é importado não entra no grafo.
 Os nomes são **os mesmos do sprite da web**, e um gate cobra isso (check 38): o que `<Icon name>`
 desenha lá, `icons/<nome>` desenha aqui.
 
+**Um glifo próprio** (o logotipo do app) sai de `criarGlifo`, sem o app importar o
+`react-native-svg`: retângulos, círculos e caminhos, preenchidos ou a traço. A tinta usa os nomes
+do SVG, e `"currentColor"` é a cor do `Icon`:
+
+```tsx
+const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
+                         strokeLinecap: "round", paths: ["M…"]});
+const ICONES = criarRegistroDeIcones({...OS_DO_APP, logo: Logo});
+```
+
 ## O que este pacote não faz
 
 - **Não promete paridade** com a web. O React Native não tem `<p>`, cascata de tipografia,

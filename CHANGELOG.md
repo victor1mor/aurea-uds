@@ -15,6 +15,33 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.10.1] — 2026-09-24
+
+⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+
+Uma peça só, e só acréscimo: **R-05, a metade que faltava.** Sai sozinha, sem o Lote 3, porque
+sem ela o app não abre: o logotipo dele é desenhado a traço, e a trava do app barra o
+`react-native-svg` direto.
+
+### Adicionado
+
+- **R-05 · `criarGlifo` desenha a TRAÇO.** Cada forma aceita `stroke`, `strokeWidth`,
+  `strokeLinecap` e `strokeLinejoin`, com os nomes do SVG. Duas coisas que um logotipo a traço
+  precisa:
+  - **`"currentColor"`** em `stroke` ou `fill` é a cor do `Icon`, e o traço troca com o tema.
+  - **A tinta pode ir no desenho inteiro**, como os atributos no `<svg>` raiz de um arquivo; a
+    de cada forma vence.
+
+  ```tsx
+  const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
+                           strokeLinecap: "round", paths: ["M…"]});
+  ```
+
+  Sem `stroke`, nada muda. A espessura está na unidade do `viewBox`: cresce com o glifo.
+  O glifo a traço entrou no `apps/native-smoke` (bloco 2), para a prova no aparelho.
+
+---
+
 ## [0.10.0] — 2026-09-24
 
 ✅ **PUBLICADA em 24/09/2026, nos sete pacotes, pelo terminal do Victor.** Não conferida no
