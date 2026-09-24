@@ -109,8 +109,6 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 - `Select` e `Combobox` lado a lado mostram o vazio de jeitos diferentes. Observação do app.
 - C-06 (`option` sem estilo no escuro) provavelmente morreu com o `Select` novo. **Medir antes de
   fechar.**
-- 16 fotos de referência do `catalog.spec.ts` estão velhas (de 11/09/2026) e reprovam igual no
-  `main` limpo. Regravar pede olhar cada uma antes.
 - O nativo **nunca rodou num iPhone**. Antes de prometer a `1.0`, rodar o teste de aparelho no iOS.
 
 ### Como cada lote anda
