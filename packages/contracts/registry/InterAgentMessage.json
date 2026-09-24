@@ -1,0 +1,87 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": [
+      "arrow--right"
+    ]
+  },
+  "name": "InterAgentMessage",
+  "summary": "A message from one agent to another, where the direction is the data.",
+  "icon": "send",
+  "states": [
+    "request",
+    "response",
+    "handoff",
+    "broadcast",
+    "error"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--danger-400",
+    "--font-code",
+    "--muted-foreground",
+    "--radius-card",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground",
+    "--text-sm",
+    "--text-xs",
+    "--tracking-wider",
+    "--weight-bold"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "disclosure — the reason is a native <details>, so opening and closing is the platform's. The from/to pair is a named group: the arrow is an Icon and Icons are always aria-hidden, so without the name a screen reader would hear two names side by side and lose the direction, which is the whole point of this component.",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter, which opens the message's detail. The detail is a native <details>/<summary>, the same idiom as the Accordion, so the keyboard is the platform's. Space is DECLARED and did NOT toggle it: measured directly on 29/08/2026 by reading the open attribute before and after the key, in Chromium build 1194. It stays declared because activating a summary with Space is the documented HTML behaviour and other engines do deliver it — what is recorded here is that this build did not."
+  },
+  "related": {
+    "components": [
+      "MessageList",
+      "EventStream",
+      "TaskQueue"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#InterAgentMessage"
+  },
+  "props": [
+    {
+      "name": "messages",
+      "type": "AgentMessage[]",
+      "default": "—",
+      "description": "Each entry carries from, to, body and an optional kind. Not MessageList: that one is a conversation with a person; here the handoff between two agents is what you are reading, and a list with two authors cannot say who delivered what to whom."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Agent messages\"",
+      "description": "Accessible name of the list."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the list."
+    }
+  ],
+  "notes": [
+    "`to` is optional: a broadcast has no single target, and the component says so in words rather than leaving the field blank.",
+    "The six colours by intent from the reference (technical cyan, billing amber, sales slate…) did NOT come in. It is the third time Part H refuses the same thing — after the eleven span colours in H.d and the six state colours in H.a. Colour by category inside a locked palette is unreadable for anyone who does not separate colours; kind enters as a word, in a badge."
+  ]
+}

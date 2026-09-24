@@ -1,0 +1,81 @@
+{
+  "name": "Drawer",
+  "category": "Overlays",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Panel that slides in from a screen edge.",
+  "icon": "side-panel--close",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "left",
+    "right"
+  ],
+  "variantProp": "side",
+  "sizes": [],
+  "states": [
+    "open",
+    "closed"
+  ],
+  "tokens": [
+    "--border",
+    "--overlay",
+    "--shadow-lg",
+    "--surface-1",
+    "--z-drawer"
+  ],
+  "a11y": {
+    "role": "dialog",
+    "apg": "dialog (modal)",
+    "keyboard": [
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Dialog"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#Drawer"
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled, same contract as Dialog."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The <h2> in the header, and the accessible name."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The panel body."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "default": "—",
+      "description": "Escape, backdrop and close button all route here."
+    },
+    {
+      "name": "side",
+      "type": "left | right",
+      "default": "right",
+      "description": "Which edge it slides from. It is a physical side, not a logical one: a drawer anchored to the writing direction would move when the language changes, which is not what a navigation panel should do."
+    }
+  ]
+}

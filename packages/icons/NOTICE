@@ -1,0 +1,10 @@
+Aurea Icons
+Copyright 2026 Aurea contributors
+
+This package redistributes glyphs from Carbon Icons.
+
+Carbon Icons (@carbon/icons)
+Copyright IBM Corp. 2016, 2026
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+The sprite in dist/aurea-icons.svg is built from the @carbon/icons
+package without modification of the glyph drawings.

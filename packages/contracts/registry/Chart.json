@@ -1,0 +1,69 @@
+{
+  "name": "Chart",
+  "category": "Data Display",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "summary": "Sized, named surface that hosts a Recharts chart wearing Aurea tokens.",
+  "icon": "chart--area",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--muted-foreground",
+    "--secondary",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "none: there is no APG pattern for a chart. The practice adopted is a named group around the drawing, because the <svg> the engine emits is role=\"application\" and an application with no name around it tells the reader nothing about what it is reading. Keyboard navigation between data points is the engine's accessibility layer, on by default.",
+    "keyboard": [
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight"
+    ],
+    "keyboardNote": "NOT measured in a browser. The Chart wraps Recharts, whose keyboard belongs to the chart engine and needs a bank with real data plus a series in focus. Declared here as UNVERIFIED on purpose: check 30 requires this note precisely so that a keyboard written from memory cannot pass as measured. See G-A11Y-09."
+  },
+  "dependencies": {
+    "engine": "recharts",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ChartTooltip",
+      "ChartLegend",
+      "KPI"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/chart.tsx#Chart"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactElement",
+      "default": "none",
+      "description": "REQUIRED. One Recharts chart element (AreaChart, BarChart, LineChart…). Aurea does not wrap the chart types: the engine draws, this component holds."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "the provider's \"Chart\"",
+      "description": "Accessible name of the whole drawing. Say what it plots, not that it is a chart."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "none",
+      "description": "Added to the box. The height is CSS, not a prop — a dimension comes from a class, so density still reaches it and nobody writes a raw pixel."
+    }
+  ]
+}

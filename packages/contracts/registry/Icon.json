@@ -1,0 +1,73 @@
+{
+  "name": "Icon",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Carbon icon primitive rendered from a sprite.",
+  "icon": "color-palette",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "lg",
+    "md",
+    "sm",
+    "xl"
+  ],
+  "responsive": {"size": "visual"},
+  "states": [],
+  "tokens": [
+    "--border",
+    "--duration-fast",
+    "--ease-standard",
+    "--font-code",
+    "--foreground",
+    "--media-foreground",
+    "--muted-foreground",
+    "--primary",
+    "--radius-lg",
+    "--secondary",
+    "--subtle-foreground",
+    "--text-base"
+  ],
+  "a11y": {
+    "role": "img",
+    "keyboard": [],
+    "apg": "No role and no keyboard: every Icon carries aria-hidden=\"true\". An icon is decorative by construction here — the name comes from the text beside it, or from the label of the control it sits in. An icon that must be announced is a control with a label, not an Icon."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/system.tsx#Icon"
+  },
+  "props": [
+    {
+      "name": "name",
+      "type": "IconName",
+      "default": "—",
+      "description": "The Carbon glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg | xl",
+      "default": "md",
+      "description": "Token scale. It follows the text it sits next to."
+    },
+    {
+      "name": "spriteUrl",
+      "type": "string",
+      "default": "—",
+      "description": "LOCAL override of where the glyphs come from. The normal way is to set it once on AureaProvider; this is for the rare page carrying two sprites."
+    }
+  ]
+}

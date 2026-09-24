@@ -1,0 +1,176 @@
+name: Release
+
+# O SEGUNDO PASSO DA ADR-0013, e ele só existe depois do primeiro: o npm exige que o pacote JÁ
+# EXISTA para aceitar um trusted publisher. Os seis existem desde 31/07/2026, e a `0.6.0` de
+# 30/08/2026 foi o último publish feito à mão, com 2FA, seis vezes.
+#
+# NENHUM TOKEN. A autenticação é OIDC — o GitHub emite um token de identidade de curta duração
+# para ESTE workflow, neste repositório, e o npm o troca por permissão de publicar. É por isso
+# que `id-token: write` abaixo não é enfeite: sem ele o `npm publish` cai em "need auth".
+#
+# ⚠ ANTES DE ESTE ARQUIVO SERVIR PARA ALGUMA COISA, dois passos fora daqui:
+#   1. em npmjs.com, para CADA um dos seis pacotes: Settings → Trusted publisher → GitHub
+#      Actions, com o repositório, o nome deste arquivo (`release.yml`) e o ambiente `npm`;
+#   2. em Settings → Environments do repositório, criar o ambiente `npm`. Ele é onde se põe a
+#      exigência de aprovação humana, que é o que impede um publish acidental.
+#
+# ⚠ E UMA COISA A CONFERIR NA HORA, em vez de presumir: a ADR-0013 registra que **provenance não
+# é gerada para repositório privado**. Se o npm recusar o trusted publisher por causa disso, o
+# caminho continua sendo o publish local com 2FA que a ADR descreve — e este arquivo espera o
+# repositório virar público. Não invente token de longa duração para contornar: a ADR rejeitou
+# esse caminho, e ele acaba em ≈01/2027 de qualquer forma.
+
+on:
+  # DISPARO MANUAL, e de propósito. Publicar é definitivo — não se desfaz um `npm publish` depois
+  # de 72h —, então o gatilho é um ato deliberado de uma pessoa, não um efeito colateral de um
+  # push. A versão que sai é a que está nos `package.json`, medida abaixo, e não um número
+  # digitado aqui: número digitado é a segunda fonte de verdade que o check 32 existe para negar.
+  workflow_dispatch:
+    inputs:
+      confirmar:
+        description: "Escreva PUBLICAR para confirmar. Qualquer outra coisa interrompe."
+        required: true
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write        # o token OIDC; sem isto não há trusted publishing
+    steps:
+      - name: Confirmação escrita
+        if: inputs.confirmar != 'PUBLICAR'
+        run: |
+          echo "::error::A confirmação não foi escrita. Nada foi publicado."
+          exit 1
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.x"
+
+      # A ADR-0013 mediu o piso: npm >= 11.5.1 e Node >= 22.14 para OIDC. O Node vem do passo
+      # acima; o npm que acompanha a imagem pode estar abaixo, então ele sobe explicitamente.
+      # Sem isto a falha aparece como "need auth", que manda investigar o lugar errado.
+      - name: npm com suporte a OIDC
+        run: |
+          npm install -g npm@latest
+          npm --version
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # A MESMA CADEIA QUE A ADR-0013 EXIGE DO PUBLISH LOCAL. Ela roda aqui inteira em vez de
+      # confiar no job de CI do push: o que se publica é ESTA árvore, neste instante, e um verde
+      # de vinte minutos atrás não é uma afirmação sobre ela.
+      - name: Build
+        run: pnpm build
+
+      # `git diff --exit-code` depois do build é o gate `dist == build`: se o build mudou algum
+      # arquivo versionado, o que está no repositório não é o que o código produz — e seria isso
+      # que iria para o npm.
+      - name: A árvore está limpa depois do build
+        run: git diff --exit-code
+
+      - name: Validate
+        run: python scripts/validate.py
+        # A lista de nomes privados mora num SEGREDO do repositório, não no código. O GitHub não
+        # entrega segredo a pedido vindo de fork; só nesse caso o check 1 é declarado pulado.
+        env:
+          AUREA_NOMES_PRIVADOS: ${{ secrets.AUREA_NOMES_PRIVADOS }}
+
+      - name: Testes
+        run: pnpm test
+
+      - name: O que vai dentro de cada tarball
+        run: node scripts/check-pack.mjs
+
+      # A VERSÃO SAI DOS ARQUIVOS, e o check 32 já garantiu que os oito dizem o mesmo número.
+      # Ler daqui em vez de pedir na entrada evita o modo de falha clássico: publicar 0.7.0
+      # digitado sobre uma árvore que ainda está em 0.6.0.
+      - name: Qual versão vai sair
+        id: versao
+        run: |
+          V=$(node -p "require('./packages/react/package.json').version")
+          echo "v=$V" >> "$GITHUB_OUTPUT"
+          echo "Versão medida na árvore: $V"
+
+      # A ORDEM É A DA ADR-0013 — o `react` por último na versão original, porque é o único que a
+      # documentação de instalação faz depender dos outros. O `native` entrou DEPOIS dele, e por
+      # uma razão mais forte que documentação: ele depende de `@aurea-uds/tokens` de verdade
+      # (`dependencies`), então publicá-lo antes do `tokens` o deixaria apontando para uma versão
+      # que não existe no registro. `tokens` primeiro, `native` último.
+      #
+      # PULA O QUE JÁ ESTÁ LÁ em vez de falhar: se o publish parou no meio (foi o que a ADR
+      # previu ao escrever o laço que para no primeiro erro), rodar de novo termina o serviço
+      # em vez de reprovar em cima do primeiro pacote que deu certo.
+      #
+      # 🔴 EMPACOTA COM `pnpm pack` E PUBLICA O TARBALL — não `npm publish` de dentro da pasta.
+      # Medido em 10/09/2026, preparando a 0.7.0, e vale a pena por extenso porque é a diferença
+      # entre publicar e publicar QUEBRADO:
+      #
+      #     npm  pack -> "@aurea-uds/tokens": "workspace:^"   <- não instala em ninguém
+      #     pnpm pack -> "@aurea-uds/tokens": "^0.7.0"        <- correto
+      #
+      # `workspace:` é protocolo do pnpm; fora dele não é versão válida. O `@aurea-uds/native` é o
+      # PRIMEIRO pacote publicável desta casa com dependência interna, então este caminho nunca
+      # tinha sido exercitado — os seis anteriores não têm nenhuma, e é por isso que seis releases
+      # com `npm publish` passaram sem tocar nisso.
+      #
+      # ⚠ Quem envia CONTINUA sendo o npm (`npm publish <arquivo>.tgz`), de propósito: o mecanismo
+      # de credencial não muda — 2FA no local, OIDC/trusted publishing aqui. Trocar para
+      # `pnpm publish` resolveria a tradução e abriria uma pergunta nova sobre OIDC que não está
+      # medida. Provado em 10/09/2026: `npm publish` aceita caminho de tarball e lê dele o nome e
+      # a versão certos.
+      #
+      # ⚠ E medido também: para os seis SEM dependência interna, o tarball do pnpm é equivalente
+      # ao do npm — mesma lista de arquivos e mesmo manifesto, mudando só a ORDEM das chaves. Ou
+      # seja, uniformizar não muda o que os seis já publicavam.
+      #
+      # ⚠ O `@aurea-uds/native` NÃO tem trusted publisher configurado no npm (o `CLAUDE.md`
+      # registra isso como pendência do Victor). Enquanto não tiver, este passo falha NELE — e
+      # falhar é o certo: melhor parar do que pular em silêncio um pacote que devia sair.
+      - name: Publicar os sete
+        run: |
+          set -euo pipefail
+          V="${{ steps.versao.outputs.v }}"
+          mkdir -p .tarballs
+          for p in tokens icons fonts core contracts react native; do
+            nome="@aurea-uds/$p"
+            if npm view "$nome@$V" version >/dev/null 2>&1; then
+              echo "--- $nome@$V já está publicado, pulando"
+              continue
+            fi
+            echo "--- empacotando $nome@$V com pnpm, que traduz o protocolo workspace:"
+            ( cd "packages/$p" && pnpm pack --pack-destination "$GITHUB_WORKSPACE/.tarballs" )
+            tgz=".tarballs/aurea-uds-$p-$V.tgz"
+            [ -f "$tgz" ] || { echo "::error::pnpm pack nao gerou $tgz"; exit 1; }
+            # Sem backtick e sem process substitution: backtick dentro de "" e' substituicao de
+            # comando no shell, e `set -o pipefail` mata o script quando o grep nao acha nada —
+            # os dois defeitos foram escritos aqui em 10/09/2026 e pegos antes de rodar.
+            if tar xzOf "$tgz" package/package.json | grep -q '"workspace:'; then
+              echo "::error::$nome levaria protocolo workspace: no tarball"; exit 1
+            fi
+            echo "--- publicando $tgz"
+            npm publish "$tgz"
+          done
+
+      - name: Conferir no registro
+        run: |
+          set -euo pipefail
+          V="${{ steps.versao.outputs.v }}"
+          for p in tokens icons fonts core contracts react native; do
+            saiu=$(npm view "@aurea-uds/$p" version)
+            echo "@aurea-uds/$p -> $saiu"
+            [ "$saiu" = "$V" ] || { echo "::error::@aurea-uds/$p está em $saiu, esperado $V"; exit 1; }
+          done

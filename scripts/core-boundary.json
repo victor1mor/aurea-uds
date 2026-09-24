@@ -1,0 +1,42 @@
+{
+  "_porque": "O core e' o que TODO consumidor da biblioteca baixa, e por isso so' deve conter classe que um componente Aurea consiga produzir. A auditoria de 26/07/2026 (achado A6) mediu 24,6% dos bytes servindo a moldura do catalogo escrito a mao e mockups do kit de origem; a Fase 4 os moveu para apps/docs/docs.css. Esta lista e' o RESIDUO permitido. O gate (validate.py, check 15) falha se ela CRESCER.",
+  "_como_regerar": "python scripts/validate.py --write-core-boundary",
+  "_duas_naturezas": "'catalogo' = classe que o catalogo GERADO consome e ainda nao tem componente proprio (sai virando componente com ficha, ou indo para o chrome do gerador). 'composto' = a classe so aparece grudada numa classe do React (ex.: .btn.mobile-nav-toggle, .chart-bar.alt) — a regra e' alcancavel, o nome sobra.",
+  "_por_que_cresceu_em_30_07": "A lista ganhou 5 nomes (alt, bad, off, open, step) na Fase 9, e o core NAO piorou: a MEDICAO ficou honesta. O check 15 procurava o nome da classe no fonte inteiro do pacote React, entao identificadores de codigo enganavam — a variavel `const off=disabled||loading` do Button fazia `.off` parecer produzida pela biblioteca. Agora o corpus e' o conteudo das STRINGS do fonte, que e' o unico lugar de onde sai um nome de classe. As cinco sao chrome do apps/docs (.step) ou modificador grudado numa classe de mockup (.chart-bar.alt, .health-cell.bad, .health-cell.off, .accordion-item.open) — divida antiga, agora visivel.",
+  "_limite_declarado": "O gate olha CLASSE, nao regra: nao percebe regra nova de docs escrita com classe que ja esta nesta lista. Sai junto com apps/docs/index.html. E ele nao ve SELETOR DE ELEMENTO, que nao tem classe nenhuma — foi assim que 'table { min-width:720px }' vazou por todo o sistema ate o Lote 4 esbarrar nela (02/08/2026). Regra de elemento no core continua sem gate: escreva-a escopada, ou ela e' global.",
+  "_sem_regra": "'semRegra' e' a OUTRA direcao da fronteira (check 18): classe que o pacote React EMITE e o core nao estiliza. Achado da Fase 7 (30/07/2026), medido ao escrever o preview do CommandPaletteShell: eram 12. A Fase 11 escreveu as NOVE que eram divida e a lista caiu para 3. Em 02/08/2026 caiu para 2: 'table' saiu porque a regra de tabela de dados, que era de ELEMENTO e vazava para toda <table> do documento, foi escopada a '.table'/'.table-wrap' — a entrada existia por causa daquele vazamento e sumiu junto com ele. Sobram as duas que nao precisam de regra: 'combobox-section' (involucro; quem tem pele e' .combobox-group-label) e 'code-editor' (a pele vem do EditorView.theme do CodeMirror, por decisao registrada no modulo). A lista pode CAIR, nunca subir.",
+  "_limite_do_check_18": "Ele olha NOME, nao efeito: uma regra vazia ('.grid{}') passaria. Quem cobra o efeito e' tests/visual/skin.spec.ts, que renderiza os nove com SO o core e mede — foi escrito na Fase 11 junto das regras, porque o defeito A13 era exatamente 'funciona na nossa documentacao e nao no consumidor'.",
+  "catalogo": [
+    "bad",
+    "demo",
+    "doc-nav",
+    "eyebrow",
+    "hide-below-lg",
+    "hide-below-md",
+    "nav-group",
+    "nav-group-label",
+    "open",
+    "org",
+    "w3",
+    "warn"
+  ],
+  "composto": [
+    "chart-bar",
+    "device-grid",
+    "doc-actions",
+    "event-row",
+    "is-done",
+    "media-library-row",
+    "media-optional",
+    "mono",
+    "operational-grid",
+    "pattern-gallery",
+    "pattern-toolbar",
+    "queue-item",
+    "schedule-grid",
+    "universal-grid"
+  ],
+  "semRegra": [
+    "code-editor"
+  ]
+}

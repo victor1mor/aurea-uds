@@ -1,0 +1,36 @@
+{
+  "name": "useReorder",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Ready",
+  "summary": "The accessible drag-and-drop reordering protocol, shared by SortableList and BlockEditor.",
+  "icon": "drag--horizontal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "dragging"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "Reordenar tem de funcionar sem ponteiro: o protocolo cobre teclado (pegar, mover, soltar, cancelar) e anuncia cada passo por live region. Extraido do SortableList quando o BlockEditor virou o SEGUNDO dono do mesmo protocolo — duas copias garantem que a proxima correcao entra so' numa."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#useReorder"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "name": "ContextMenu",
+  "category": "Overlays",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Actions menu opened by right-click or long-press.",
+  "icon": "menu",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "checked",
+    "closed",
+    "highlighted",
+    "open",
+    "popup-open"
+  ],
+  "tokens": [
+    "--border",
+    "--control-h-md",
+    "--foreground",
+    "--popover",
+    "--popover-foreground",
+    "--radius-lg",
+    "--radius-sm",
+    "--shadow-lg",
+    "--surface-3",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "menu",
+    "apg": "menu",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "Home",
+      "End",
+      "Enter",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 27/08/2026, with the menu OPENED by right click — measuring keys on a closed trigger measures a menu that does not exist. ArrowLeft, ArrowUp, Home and End were delivered and not declared. Enter is declared and showed no observable change in this snapshot; it activates the highlighted item, and with no item highlighted there is nothing to observe."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "DropdownMenu"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#ContextMenu"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The region that answers the right button. It is rendered focusable (tabIndex 0) on purpose: the keyboard route into a context menu is Shift+F10 or the Menu key, and the browser only fires those over a FOCUSED element. Without that, the menu is mouse-only."
+    },
+    {
+      "name": "items",
+      "type": "Array<MenuItemDef | \"separator\">",
+      "default": "—",
+      "description": "The menu, as data: {label, onClick?, disabled?, leadingIcon?}. The literal string \"separator\" draws a rule — a separator is not an item, so it never takes focus."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Names both the trigger region and the menu. A right-click target with no name is announced as nothing at all."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Goes on the trigger region, which is the element you can see."
+    }
+  ]
+}

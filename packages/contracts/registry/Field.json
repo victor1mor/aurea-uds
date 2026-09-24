@@ -1,0 +1,112 @@
+{
+  "name": "Field",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Form-field wrapper: label, control, description and error.",
+  "icon": "document--blank",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "responsive": {
+    "orientation": "visual"
+  },
+  "states": [
+    "default",
+    "invalid",
+    "disabled"
+  ],
+  "tokens": [
+    "--danger-400",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "group",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab"
+    ],
+    "apg": "No APG pattern: Field is the wrapper, not the control, and it is never focusable itself. It takes one of two shapes, and the shape is decided by the child. (1) One labelable native child, or one documented Aurea control that forwards the association, and no own accessible name: Field owns the name — it renders a real <label for> and clones the child to attach id, aria-describedby and aria-invalid. (2) Several children, an arbitrary component wrapper, or one child that carries its own label prop, aria-label or aria-labelledby: Field becomes role=group with aria-labelledby, and emits no <label for>, because it would either point at nothing or give the control a second name. Either way hint and error DESCRIBE, never NAME. That split is the A12 finding — closed in Fase 5, reopened as AUD-0001 on 2026-08-12 because the wrapper was still a <label> with hint and error inside it, and reclosed the same day with exact-name assertions. The keyboard is whatever the control inside brings.",
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component. Field is a wrapper: it owns the label, the hint and the error, and the keyboard belongs to the control inside it."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Input",
+      "Select",
+      "Range"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#Field"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. This is the accessible NAME of the control, and nothing else is. Clicking it focuses the control — Field wires htmlFor to the id it gives the child, so there is no id to keep in sync."
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Help text beside the label. Announced as DESCRIPTION via aria-describedby — it is deliberately outside the name, so a screen reader says \"E-mail\" and not \"E-mail we use it to sign you in\"."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Shown below the control when the value is rejected, and joined to hint in the description. Also sets aria-invalid on the control: a red border alone says nothing to a colour-blind or blind user."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto",
+      "description": "The id of the CONTROL, not of the wrapper — it is what htmlFor points at. Omit it and Field generates one. An id already declared on the child wins over this."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The control. Field owns the name for a single child that does not name itself: Input, Select, Textarea, Range, Combobox, MultiCombobox. Pass a control that carries its own label, aria-label or aria-labelledby (including Switch, Checkbox and Radio), or several children, and Field becomes a named group instead — see a11y.apg. Controls with a label of their own and their own layout (NumberField, OTPField, SegmentedControl, Toggle) are not Field children."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Ties this field to a key in the Form's errors. With it, the child becomes the form's control and receives aria-invalid plus the message id; without it, Field behaves exactly as it did before — the addition is deliberately additive, because this component's semantics were paid for with an audit (AUD-0001) and are not touched to add a feature."
+    },
+    {
+      "name": "orientation",
+      "type": "Responsive<FieldOrientation>",
+      "default": "vertical",
+      "description": "Label to the left of the control instead of above it — the settings-form row. It is a GRID and not a flex row on purpose: in a row the error message would become a third column beside the control, and it talks about the VALUE, so it has to fall under the control."
+    },
+    {
+      "name": "labelWidth",
+      "type": "\"auto\" | string",
+      "default": "—",
+      "description": "Width of the label column when orientation is horizontal. \"auto\" sizes it to the label; any CSS length fixes it. Without it the column is the --field-label-width token (12rem), which on a 375px phone leaves a Combobox no room for its value."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Help text that needs a sentence (B-12): it sits under the control and does not share the label's line. `hint` stays what it is, a short note beside the label. It is HeroUI's Description and the `description` this house's Checkbox already has. Joins aria-describedby in screen order: hint, description, error."
+    }
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  }
+}

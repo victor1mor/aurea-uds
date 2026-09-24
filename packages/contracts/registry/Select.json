@@ -1,0 +1,136 @@
+{
+  "name": "Select",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Choose a single value from a closed list, in the Aurea skin.",
+  "icon": "chevron--down",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "focus",
+    "disabled",
+    "invalid",
+    "open",
+    "placeholder",
+    "highlighted"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--control-h-md",
+    "--duration-fast",
+    "--field-bg",
+    "--foreground",
+    "--radius-control"
+  ],
+  "a11y": {
+    "role": "combobox",
+    "apg": "combobox (select-only)",
+    "keyboard": [
+      "ArrowDown",
+      "ArrowUp",
+      "Home",
+      "End",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Since 24/09/2026 the Select is the Base UI select wearing the Aurea skin, not the native <select>: the list the native element opens belongs to the operating system and no author CSS reaches it. The trigger is a <button> with role combobox; the list opens below it with the same panel, 18px row radius and check column as the Combobox list. Printable-character typeahead still works and is not listed as a key because it is any character."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": [
+      "checkmark"
+    ]
+  },
+  "related": {
+    "components": [
+      "Combobox",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#Select"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "<option> and <optgroup> elements, read the way the browser reads them: an option without value uses its text. Kept so code written for the native <select> keeps working; the list itself is drawn by the Aurea."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "The chosen value, as a string. Without value, defaultValue or placeholder the first enabled option is chosen, which is what the native <select> did."
+    },
+    {
+      "name": "items",
+      "type": "SelectOption[] | SelectOptGroup[]",
+      "default": "—",
+      "description": "The list as data: { value, label, disabled? } or groups { label, items }. Use it instead of <option> children when the list comes from data."
+    },
+    {
+      "name": "onChange",
+      "type": "(e: { target: { value, name } }) => void",
+      "default": "—",
+      "description": "Called with an event-shaped object, so handlers written for the native <select> (reading e.target.value) keep working."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called with the chosen value directly."
+    },
+    {
+      "name": "placeholder",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Shown in the trigger while nothing is chosen. Giving one also stops the first option from being chosen by default."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Form field name. The value is submitted through a hidden input, as the native element did."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "The form will not submit without a value."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes. Choosing a VALUE is Select; executing an ACTION is a Menu."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step, NOT the HTML size attribute — that one is how many options show at once, and it is deliberately shadowed here."
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "name": "Tabs",
+  "category": "Navigation",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Switch between peer views in the same context.",
+  "icon": "switcher",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "selected",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--foreground",
+    "--muted",
+    "--muted-foreground",
+    "--radius-control",
+    "--secondary"
+  ],
+  "a11y": {
+    "role": "tablist",
+    "apg": "tabs",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowLeft, ArrowRight, Home, End — the four the ficha declares. What the arrows DO is a choice since G-API-02: with `activateOnFocus` (the default, and what Aurea always did) the arrow moves focus and switches the panel; with `activateOnFocus={false}` it only moves focus and Enter/Space activates, which is the APG's manual pattern and the right one when switching a tab costs a network round trip. That behaviour is measured in tests/unit/components.test.tsx, and the test was proven against the defect: with the literal `activateOnFocus` back in the JSX, the manual case fails."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "SegmentedControl"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#Tabs"
+  },
+  "props": [
+    {
+      "name": "tabs",
+      "type": "Array<{id: string; label: ReactNode; content: ReactNode}>",
+      "default": "—",
+      "description": "Tab and panel together, because they are one thing: a tab with no panel is a button."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the open tab. Controlled."
+    },
+    {
+      "name": "onChange",
+      "type": "(id: string) => void",
+      "default": "—",
+      "description": "Fires on click and on arrow keys."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Tabs\"",
+      "description": "Accessible name of the tab list."
+    },
+    {
+      "name": "orientation",
+      "type": "Responsive<'horizontal' | 'vertical'>",
+      "default": "horizontal",
+      "description": "Resolved at runtime and handed to the engine, which publishes data-orientation/aria-orientation and adapts the arrow keys."
+    },
+    {
+      "name": "activateOnFocus",
+      "type": "boolean",
+      "default": "true",
+      "description": "Automatic activation: the arrow switches the panel along with focus. Set false for the APG's manual pattern — the arrow moves focus and Enter/Space activates. Use false when switching a tab is expensive."
+    },
+    {
+      "name": "loopFocus",
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether the arrow wraps from the last tab back to the first."
+    }
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  },
+  "responsive": {
+    "orientation": "behavioral"
+  }
+}

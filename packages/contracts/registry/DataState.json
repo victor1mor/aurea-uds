@@ -1,0 +1,109 @@
+{
+  "name": "DataState",
+  "category": "Feedback",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "One region, four faces: loading, failed, empty, or the content itself.",
+  "icon": "data--view",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "loading",
+    "error",
+    "empty",
+    "stale",
+    "partial",
+    "degraded",
+    "offline",
+    "waiting_user",
+    "waiting_approval",
+    "waiting_dependency"
+  ],
+  "tokens": [
+    "--space-3",
+    "--space-8"
+  ],
+  "a11y": {
+    "role": "none",
+    "apg": "No role of its own — what it carries is the announcement. While loading, the region sets aria-busy=\"true\", which is what tells assistive technology to WAIT instead of announcing half an update (MDN/WAI on aria-busy); Skeleton is already aria-hidden, so what speaks is the region and not the rectangles. The error face reuses Alert, which is already role=alert, and the empty face reuses EmptyState. Nothing new was invented for the screen reader.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Skeleton",
+      "Alert",
+      "EmptyState",
+      "DataGrid"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#DataState"
+  },
+  "props": [
+    {
+      "name": "state",
+      "type": "loading | error | empty | UniversalState",
+      "default": "—",
+      "description": "Leave it out and the children render, plain. THE RULE THAT MATTERS: the three terminal faces (loading, error, empty) replace the content, and every universal state (stale, partial, degraded, offline, waiting_*) does NOT — it keeps the content on screen and puts the notice above it. Showing old data without saying so is worse than showing none, and hiding what the reader already had because it went stale is losing information they were using. This is the same decision DataGrid took."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode | (() => ReactNode)",
+      "default": "—",
+      "description": "REQUIRED. Pass a function when building the content is expensive: in the loading face it is never called, so you do not pay to render what has not arrived."
+    },
+    {
+      "name": "message",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Replaces the built-in sentence. Only you know what actually failed — \"the billing service is down\" beats \"this could not be loaded\"."
+    },
+    {
+      "name": "skeleton",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The shape of what is coming. The default is a single bar, which is honest but says nothing; a skeleton that mirrors the real layout is what stops the page from jumping when the data lands."
+    },
+    {
+      "name": "emptyTitle",
+      "type": "ReactNode",
+      "default": "\"Nothing here yet\"",
+      "description": "Say what is missing in the words of the thing: \"No invoices\" beats \"No results\"."
+    },
+    {
+      "name": "emptyIcon",
+      "type": "IconName",
+      "default": "\"document--blank\"",
+      "description": "Passed through to EmptyState."
+    },
+    {
+      "name": "action",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The way out of the empty face — usually the button that creates the first one."
+    }
+  ],
+  "axes": {
+    "state": [
+      "degraded",
+      "empty",
+      "error",
+      "loading",
+      "offline",
+      "partial",
+      "stale",
+      "waiting_approval",
+      "waiting_dependency",
+      "waiting_user"
+    ]
+  }
+}

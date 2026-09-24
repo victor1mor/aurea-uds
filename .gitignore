@@ -1,0 +1,36 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+test-results/
+playwright-report/
+blob-report/
+
+# As duas aplicações de prova da fronteira servidor/cliente (PLANO-1.0, A3 e A4).
+# A SAÍDA delas é descartável e se refaz com `pnpm build` — ao contrário de
+# `packages/*/dist`, que é commitada e gateada por `dist == build`.
+apps/proof-*/out/
+# banco de medição do teclado (G-A11Y-04): saída descartável, como a dos proof-*
+apps/keyboard-probe/out/
+apps/proof-*/.next/
+apps/proof-*/next-env.d.ts
+apps/proof-*/tsconfig.tsbuildinfo
+
+# As referências de construção (BUILDING.md §1) — centenas de MB de código de
+# terceiro que serve para ESTUDAR anatomia. Nenhuma linha delas entra na Aurea,
+# e é por isso que a licença de cada uma não é critério de escolha: sem
+# redistribuição, não há o que cumprir. A trava real está no BUILDING.md §1.
+# Ficam fora do git de propósito: entrariam no histórico para sempre, e a
+# ADR-0010 prevê tornar este repositório público um dia. Se sumirem, o Victor
+# baixa de novo; nenhum build ou gate depende delas.
+Referencia/
+
+# Tarballs do `node scripts/publicar.mjs` — artefato de publicacao, nunca versionado.
+.tarballs/
+
+# Gerado por tests/unit/native-vitrine.test.tsx + scripts/tirar-vitrine.mjs — regenerável.
+tmp-vitrine/
+
+# A lista de nomes privados do validate.py (check 1). Nunca vai para o git.
+.nomes-privados
+__pycache__/

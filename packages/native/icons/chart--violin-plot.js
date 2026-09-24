@@ -1,0 +1,12 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function ChartViolinPlot({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M30,30H4a2,2,0,0,1-2-2V2H4V28H30Z", fill: color}),
+    React.createElement(Path, {d: "M14.86,7.8232,13,4.7231V2H11V4.7231l-1.86,3.1A7.9986,7.9986,0,0,0,8,11.939v.122a7.9961,7.9961,0,0,0,1.14,4.1158l1.86,3.1V26h2V19.2769l1.86-3.1A7.9986,7.9986,0,0,0,16,12.061v-.122A7.9961,7.9961,0,0,0,14.86,7.8232ZM12,6.9434l1.145,1.9087A6.0027,6.0027,0,0,1,13.9185,11h-3.837a6.0086,6.0086,0,0,1,.7735-2.1484Zm0,10.1132-1.145-1.9087A6.0027,6.0027,0,0,1,10.0815,13h3.837a6.0086,6.0086,0,0,1-.7735,2.1484Z", fill: color}),
+    React.createElement(Path, {d: "M27.86,11.8232,26,8.7231V2H24V8.7231l-1.86,3.1A7.9986,7.9986,0,0,0,21,15.939v.122a7.9961,7.9961,0,0,0,1.14,4.1158l1.86,3.1V26h2V23.2769l1.86-3.1A7.9986,7.9986,0,0,0,29,16.061v-.122A7.9961,7.9961,0,0,0,27.86,11.8232Zm-2.86-.88,1.145,1.9087A6.0027,6.0027,0,0,1,26.9185,15h-3.837a6.0086,6.0086,0,0,1,.7735-2.1484Zm0,10.1132-1.145-1.9087A6.0027,6.0027,0,0,1,23.0815,17h3.837a6.0086,6.0086,0,0,1-.7735,2.1484Z", fill: color})
+  );
+}

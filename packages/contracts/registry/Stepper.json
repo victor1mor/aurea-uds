@@ -1,0 +1,97 @@
+{
+  "name": "Stepper",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Progress through numbered steps, for a task that happens in a fixed order.",
+  "icon": "task--progress",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "active",
+    "done",
+    "error"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--primary",
+    "--primary-foreground",
+    "--danger-400",
+    "--subtle-foreground",
+    "--muted-foreground",
+    "--surface-1",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "none: there is no APG pattern for a stepper. The practice adopted is role=list with aria-current=\"step\" on the active one, which is also what the only reference that ships a stepper does.",
+    "keyboard": [
+      "Tab",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": [
+      "checkmark",
+      "error"
+    ]
+  },
+  "related": {
+    "components": [
+      "Progress",
+      "Breadcrumb",
+      "Tabs"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#Stepper"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "StepItem[]",
+      "default": "none",
+      "description": "REQUIRED. One entry per step: label, state, optional note, and an optional handler. The number comes from the position, so it can never drift."
+    },
+    {
+      "name": "items[].state",
+      "type": "\"default\" | \"active\" | \"done\" | \"error\"",
+      "default": "\"default\"",
+      "description": "`done` shows a check, `error` shows the error glyph in the danger colour, `active` is the one announced as current."
+    },
+    {
+      "name": "items[].optional",
+      "type": "ReactNode",
+      "default": "none",
+      "description": "A note under the label, for a step that may be skipped."
+    },
+    {
+      "name": "items[].onClick",
+      "type": "() => void",
+      "default": "none",
+      "description": "Makes the step a real button, for a flow the user may enter at any point. Without it the step is not interactive."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "the provider's \"Steps\"",
+      "description": "Accessible name of the whole list."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

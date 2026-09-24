@@ -1,0 +1,82 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "ToolPermission",
+  "summary": "What each tool may do, without asking again.",
+  "icon": "password",
+  "states": [
+    "ask",
+    "always",
+    "never"
+  ],
+  "tokens": [
+    "--font-code",
+    "--radius-sm",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--surface-2",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "region",
+    "apg": "radiogroup — the three-way choice is a SegmentedControl, which is Base UI's radio group (ADR-0016)",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End",
+      "ArrowUp",
+      "ArrowDown",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: ArrowLeft, ArrowRight, ArrowUp, ArrowDown and Space. ArrowUp, ArrowDown and Space were delivered and NOT declared before this measurement. They are not this component's own work: the three-way choice is a SegmentedControl, which is the engine's radio group since ADR-0016, and the ficha was declaring a subset of what that pattern ships. Declared and not confirmed in this snapshot: Home and End. Absence of an observable change does not prove absence of effect: a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "related": {
+    "components": [
+      "SegmentedControl",
+      "HumanApproval"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#ToolPermission"
+  },
+  "props": [
+    {
+      "name": "tools",
+      "type": "ToolPermissionEntry[]",
+      "default": "—",
+      "description": "One row per tool. `scope` sits NEXT TO the name, never hidden: \"read\" and \"read /etc\" are different permissions, and granting the second thinking it is the first is the defect this component exists to prevent."
+    },
+    {
+      "name": "onChange",
+      "type": "(id: string, permission: PermissionLevel) => void",
+      "default": "—",
+      "description": "Fires when a permission changes. The three-way choice is a SegmentedControl, so arrows move AND select, with Home and End — writing three toggle buttons here would redo by hand the pattern ADR-0016 rejected."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Tool permissions\"",
+      "description": "Accessible name of the region."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the region."
+    }
+  ]
+}

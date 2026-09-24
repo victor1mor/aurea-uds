@@ -1,0 +1,893 @@
+{
+  "fonte": "media-chrome",
+  "caminho": "Referencia/media-chrome-main",
+  "commit": "c624760",
+  "medidoEm": "2026-08-21",
+  "metodo": "constants.ts (protocolo) + um módulo por custom element + src/js/lang",
+  "totais": {
+    "elementos": 34,
+    "eventosDePedido": 26,
+    "atributosDeEstado": 44,
+    "slotsDistintos": 35,
+    "partesDistintas": 26,
+    "idiomas": 7,
+    "chavesDeTexto": 45
+  },
+  "protocolo": {
+    "eventosDePedido": [
+      "mediaairplayrequest",
+      "mediaaudiotrackrequest",
+      "mediadisablesubtitlesrequest",
+      "mediaentercastrequest",
+      "mediaenterfullscreenrequest",
+      "mediaenterpiprequest",
+      "mediaexitcastrequest",
+      "mediaexitfullscreenrequest",
+      "mediaexitpiprequest",
+      "mediahidetexttracksrequest",
+      "medialooprequest",
+      "mediamuterequest",
+      "mediapauserequest",
+      "mediaplaybackraterequest",
+      "mediaplayrequest",
+      "mediapreviewrequest",
+      "mediarenditionrequest",
+      "mediaseekrequest",
+      "mediaseektoliverequest",
+      "mediashowsubtitlesrequest",
+      "mediashowtexttracksrequest",
+      "mediatogglesubtitlesrequest",
+      "mediaunmuterequest",
+      "mediavolumerequest",
+      "registermediastatereceiver",
+      "unregistermediastatereceiver"
+    ],
+    "props": [
+      "mediaAirplayUnavailable",
+      "mediaAudioTrackEnabled",
+      "mediaAudioTrackList",
+      "mediaAudioTrackUnavailable",
+      "mediaBuffered",
+      "mediaCastUnavailable",
+      "mediaChaptersCues",
+      "mediaCurrentTime",
+      "mediaDuration",
+      "mediaEnded",
+      "mediaError",
+      "mediaErrorCode",
+      "mediaErrorMessage",
+      "mediaFullscreenUnavailable",
+      "mediaHasPlayed",
+      "mediaHeight",
+      "mediaIsAirplaying",
+      "mediaIsCasting",
+      "mediaIsFullscreen",
+      "mediaIsPip",
+      "mediaLang",
+      "mediaLoading",
+      "mediaLoop",
+      "mediaMuted",
+      "mediaPaused",
+      "mediaPipUnavailable",
+      "mediaPlaybackRate",
+      "mediaPreviewChapter",
+      "mediaPreviewCoords",
+      "mediaPreviewImage",
+      "mediaPreviewTime",
+      "mediaRenditionList",
+      "mediaRenditionSelected",
+      "mediaRenditionUnavailable",
+      "mediaSeekable",
+      "mediaStreamType",
+      "mediaSubtitlesList",
+      "mediaSubtitlesShowing",
+      "mediaTargetLiveWindow",
+      "mediaTimeIsLive",
+      "mediaVolume",
+      "mediaVolumeLevel",
+      "mediaVolumeUnavailable",
+      "mediaWidth"
+    ],
+    "atributosDeEstado": [
+      "mediaairplayunavailable",
+      "mediaaudiotrackenabled",
+      "mediaaudiotracklist",
+      "mediaaudiotrackunavailable",
+      "mediabuffered",
+      "mediacastunavailable",
+      "mediachapterscues",
+      "mediacurrenttime",
+      "mediaduration",
+      "mediaended",
+      "mediaerror",
+      "mediaerrorcode",
+      "mediaerrormessage",
+      "mediafullscreenunavailable",
+      "mediahasplayed",
+      "mediaheight",
+      "mediaisairplaying",
+      "mediaiscasting",
+      "mediaisfullscreen",
+      "mediaispip",
+      "medialang",
+      "medialoading",
+      "medialoop",
+      "mediamuted",
+      "mediapaused",
+      "mediapipunavailable",
+      "mediaplaybackrate",
+      "mediapreviewchapter",
+      "mediapreviewcoords",
+      "mediapreviewimage",
+      "mediapreviewtime",
+      "mediarenditionlist",
+      "mediarenditionselected",
+      "mediarenditionunavailable",
+      "mediaseekable",
+      "mediastreamtype",
+      "mediasubtitleslist",
+      "mediasubtitlesshowing",
+      "mediatargetlivewindow",
+      "mediatimeislive",
+      "mediavolume",
+      "mediavolumelevel",
+      "mediavolumeunavailable",
+      "mediawidth"
+    ]
+  },
+  "i18n": {
+    "idiomas": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "pt",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "chavesDeTexto": 45,
+    "cobertura": [
+      {
+        "idioma": "de",
+        "entradas": 70
+      },
+      {
+        "idioma": "en",
+        "entradas": 70
+      },
+      {
+        "idioma": "es",
+        "entradas": 70
+      },
+      {
+        "idioma": "fr",
+        "entradas": 70
+      },
+      {
+        "idioma": "pt",
+        "entradas": 70
+      },
+      {
+        "idioma": "zh-CN",
+        "entradas": 70
+      },
+      {
+        "idioma": "zh-TW",
+        "entradas": 70
+      }
+    ],
+    "amostraDeChaves": [
+      "A media error caused playback to be aborted. The media could be corrupt or your browser does not support this format.",
+      "A network error caused the media download to fail.",
+      "An unsupported error occurred. The server or network failed, or your browser does not support this format.",
+      "Decode Error",
+      "Disable captions",
+      "Enable captions",
+      "Encryption Error",
+      "Enter fullscreen mode",
+      "Enter picture in picture mode",
+      "Exit fullscreen mode",
+      "Exit picture in picture mode",
+      "Network Error"
+    ]
+  },
+  "elementos": [
+    {
+      "arquivo": "media-airplay-button.ts",
+      "tag": "media-airplay-button",
+      "classe": "MediaAirplayButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "enter",
+        "exit",
+        "icon",
+        "tooltip-enter",
+        "tooltip-exit"
+      ],
+      "emite": [
+        "MEDIA_AIRPLAY_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 140
+    },
+    {
+      "arquivo": "media-captions-button.ts",
+      "tag": "media-captions-button",
+      "classe": "MediaCaptionsButton",
+      "estende": "MediaChromeButton",
+      "observa": [
+        "MEDIA_SUBTITLES_LIST",
+        "MEDIA_SUBTITLES_SHOWING"
+      ],
+      "slots": [
+        "icon",
+        "off",
+        "on",
+        "tooltip-disable",
+        "tooltip-enable"
+      ],
+      "emite": [
+        "MEDIA_TOGGLE_SUBTITLES_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "checked",
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 181
+    },
+    {
+      "arquivo": "media-cast-button.ts",
+      "tag": "media-cast-button",
+      "classe": "MediaCastButton",
+      "estende": "MediaChromeButton",
+      "observa": [
+        "MEDIA_CAST_UNAVAILABLE",
+        "MEDIA_IS_CASTING"
+      ],
+      "slots": [
+        "enter",
+        "exit",
+        "icon",
+        "tooltip-enter",
+        "tooltip-exit"
+      ],
+      "emite": [
+        "MEDIA_ENTER_CAST_REQUEST",
+        "MEDIA_EXIT_CAST_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 135
+    },
+    {
+      "arquivo": "media-chrome-button.ts",
+      "tag": "media-chrome-button",
+      "classe": "MediaChromeButton",
+      "estende": "globalThis.HTMLElement",
+      "observa": [
+        "MEDIA_LANG",
+        "disabled"
+      ],
+      "slots": [
+        "tooltip",
+        "tooltip-content"
+      ],
+      "emite": [],
+      "partes": [
+        "tooltip"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "teclas": [],
+      "linhas": 397
+    },
+    {
+      "arquivo": "media-chrome-dialog.ts",
+      "tag": "media-chrome-dialog",
+      "classe": "MediaChromeDialog",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [
+        "expanded"
+      ],
+      "teclas": [
+        "Escape",
+        "Tab"
+      ],
+      "linhas": 291
+    },
+    {
+      "arquivo": "media-chrome-range.ts",
+      "tag": "media-chrome-range",
+      "classe": "MediaChromeRange",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [
+        "thumb"
+      ],
+      "emite": [],
+      "partes": [
+        "progress",
+        "thumb",
+        "track"
+      ],
+      "ariaEmitidos": [
+        "disabled",
+        "hidden"
+      ],
+      "teclas": [],
+      "linhas": 676
+    },
+    {
+      "arquivo": "media-container.ts",
+      "tag": "media-container",
+      "classe": "MediaContainer",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [
+        "centered-chrome",
+        "dialog",
+        "gestures-chrome",
+        "media",
+        "middle-chrome",
+        "poster",
+        "top-chrome"
+      ],
+      "emite": [],
+      "partes": [
+        "bottom",
+        "center",
+        "centered",
+        "centered-layer",
+        "chrome",
+        "dialog-layer",
+        "gesture-layer",
+        "layer",
+        "media-layer",
+        "middle",
+        "poster-layer",
+        "top",
+        "vertical-layer"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 764
+    },
+    {
+      "arquivo": "media-control-bar.ts",
+      "tag": "media-control-bar",
+      "classe": "MediaControlBar",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 116
+    },
+    {
+      "arquivo": "media-controller.ts",
+      "tag": "media-controller",
+      "classe": "MediaController",
+      "estende": "MediaContainer",
+      "observa": [],
+      "slots": [],
+      "emite": [
+        "MEDIA_ENTER_FULLSCREEN_REQUEST",
+        "MEDIA_ENTER_PIP_REQUEST",
+        "MEDIA_EXIT_FULLSCREEN_REQUEST",
+        "MEDIA_EXIT_PIP_REQUEST",
+        "MEDIA_LOOP_REQUEST",
+        "MEDIA_MUTE_REQUEST",
+        "MEDIA_PAUSE_REQUEST",
+        "MEDIA_PLAYBACK_RATE_REQUEST",
+        "MEDIA_PLAY_REQUEST",
+        "MEDIA_SEEK_REQUEST",
+        "MEDIA_TOGGLE_SUBTITLES_REQUEST",
+        "MEDIA_UNMUTE_REQUEST",
+        "MEDIA_VOLUME_REQUEST",
+        "REGISTER_MEDIA_STATE_RECEIVER",
+        "UNREGISTER_MEDIA_STATE_RECEIVER"
+      ],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [
+        " ",
+        "Space"
+      ],
+      "linhas": 1230
+    },
+    {
+      "arquivo": "media-duration-display.ts",
+      "tag": "media-duration-display",
+      "classe": "MediaDurationDisplay",
+      "estende": "MediaTextDisplay",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 65
+    },
+    {
+      "arquivo": "media-error-dialog.ts",
+      "tag": "media-error-dialog",
+      "classe": "MediaErrorDialog",
+      "estende": "MediaChromeDialog",
+      "observa": [],
+      "slots": [
+        "error-"
+      ],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 133
+    },
+    {
+      "arquivo": "media-fullscreen-button.ts",
+      "tag": "media-fullscreen-button",
+      "classe": "MediaFullscreenButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "enter",
+        "exit",
+        "icon",
+        "tooltip-enter",
+        "tooltip-exit"
+      ],
+      "emite": [
+        "MEDIA_ENTER_FULLSCREEN_REQUEST",
+        "MEDIA_EXIT_FULLSCREEN_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 162
+    },
+    {
+      "arquivo": "media-gesture-receiver.ts",
+      "tag": "media-gesture-receiver",
+      "classe": "MediaGestureReceiver",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [],
+      "emite": [
+        "MEDIA_PAUSE_REQUEST",
+        "MEDIA_PLAY_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "teclas": [],
+      "linhas": 206
+    },
+    {
+      "arquivo": "media-keyboard-shortcuts-dialog.ts",
+      "tag": "media-keyboard-shortcuts-dialog",
+      "classe": "MediaKeyboardShortcutsDialog",
+      "estende": "MediaChromeDialog",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [
+        "Escape"
+      ],
+      "linhas": 199
+    },
+    {
+      "arquivo": "media-live-button.ts",
+      "tag": "media-live-button",
+      "classe": "MediaLiveButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "indicator",
+        "spacer",
+        "text"
+      ],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [
+        "disabled",
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 153
+    },
+    {
+      "arquivo": "media-loading-indicator.ts",
+      "tag": "media-loading-indicator",
+      "classe": "MediaLoadingIndicator",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [
+        "icon"
+      ],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "live"
+      ],
+      "teclas": [],
+      "linhas": 245
+    },
+    {
+      "arquivo": "media-loop-button.ts",
+      "tag": "media-loop-button",
+      "classe": "MediaLoopButton",
+      "estende": "MediaChromeButton",
+      "observa": [
+        "MEDIA_LOOP"
+      ],
+      "slots": [],
+      "emite": [
+        "MEDIA_LOOP_REQUEST"
+      ],
+      "partes": [
+        "checked-indicator",
+        "indicator"
+      ],
+      "ariaEmitidos": [
+        "checked",
+        "hidden"
+      ],
+      "teclas": [],
+      "linhas": 104
+    },
+    {
+      "arquivo": "media-mute-button.ts",
+      "tag": "media-mute-button",
+      "classe": "MediaMuteButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "high",
+        "icon",
+        "low",
+        "medium",
+        "off",
+        "tooltip-mute",
+        "tooltip-unmute"
+      ],
+      "emite": [
+        "MEDIA_MUTE_REQUEST",
+        "MEDIA_UNMUTE_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 130
+    },
+    {
+      "arquivo": "media-pip-button.ts",
+      "tag": "media-pip-button",
+      "classe": "MediaPipButton",
+      "estende": "MediaChromeButton",
+      "observa": [
+        "MEDIA_IS_PIP",
+        "MEDIA_PIP_UNAVAILABLE"
+      ],
+      "slots": [
+        "enter",
+        "exit",
+        "icon",
+        "tooltip-enter",
+        "tooltip-exit"
+      ],
+      "emite": [
+        "MEDIA_ENTER_PIP_REQUEST",
+        "MEDIA_EXIT_PIP_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 130
+    },
+    {
+      "arquivo": "media-play-button.ts",
+      "tag": "media-play-button",
+      "classe": "MediaPlayButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "icon",
+        "pause",
+        "play",
+        "tooltip-pause",
+        "tooltip-play"
+      ],
+      "emite": [
+        "MEDIA_PAUSE_REQUEST",
+        "MEDIA_PLAY_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 113
+    },
+    {
+      "arquivo": "media-playback-rate-button.ts",
+      "tag": "media-playback-rate-button",
+      "classe": "MediaPlaybackRateButton",
+      "estende": "MediaChromeButton",
+      "observa": [
+        "MEDIA_PLAYBACK_RATE"
+      ],
+      "slots": [
+        "icon"
+      ],
+      "emite": [
+        "MEDIA_PLAYBACK_RATE_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 154
+    },
+    {
+      "arquivo": "media-poster-image.ts",
+      "tag": "media-poster-image",
+      "classe": "MediaPosterImage",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [
+        "img",
+        "poster"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "teclas": [],
+      "linhas": 126
+    },
+    {
+      "arquivo": "media-preview-chapter-display.ts",
+      "tag": "media-preview-chapter-display",
+      "classe": "MediaPreviewChapterDisplay",
+      "estende": "MediaTextDisplay",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [
+        "valuetext"
+      ],
+      "teclas": [],
+      "linhas": 75
+    },
+    {
+      "arquivo": "media-preview-thumbnail.ts",
+      "tag": "media-preview-thumbnail",
+      "classe": "MediaPreviewThumbnail",
+      "estende": "globalThis.HTMLElement",
+      "observa": [
+        "MEDIA_PREVIEW_COORDS",
+        "MEDIA_PREVIEW_IMAGE"
+      ],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 227
+    },
+    {
+      "arquivo": "media-preview-time-display.ts",
+      "tag": "media-preview-time-display",
+      "classe": "MediaPreviewTimeDisplay",
+      "estende": "MediaTextDisplay",
+      "observa": [
+        "MEDIA_PREVIEW_TIME"
+      ],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 58
+    },
+    {
+      "arquivo": "media-seek-backward-button.ts",
+      "tag": "media-seek-backward-button",
+      "classe": "MediaSeekBackwardButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "icon"
+      ],
+      "emite": [
+        "MEDIA_SEEK_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 139
+    },
+    {
+      "arquivo": "media-seek-forward-button.ts",
+      "tag": "media-seek-forward-button",
+      "classe": "MediaSeekForwardButton",
+      "estende": "MediaChromeButton",
+      "observa": [],
+      "slots": [
+        "icon"
+      ],
+      "emite": [
+        "MEDIA_SEEK_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 138
+    },
+    {
+      "arquivo": "media-text-display.ts",
+      "tag": "media-text-display",
+      "classe": "MediaTextDisplay",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 154
+    },
+    {
+      "arquivo": "media-theme-element.ts",
+      "tag": "media-theme",
+      "classe": "MediaThemeElement",
+      "estende": "globalThis.HTMLElement",
+      "observa": [
+        "template"
+      ],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 301
+    },
+    {
+      "arquivo": "media-theme.ts",
+      "tag": "INCONCLUSIVO",
+      "classe": "INCONCLUSIVO",
+      "estende": "INCONCLUSIVO",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 2
+    },
+    {
+      "arquivo": "media-time-display.ts",
+      "tag": "media-time-display",
+      "classe": "MediaTimeDisplay",
+      "estende": "MediaTextDisplay",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [
+        "description",
+        "label"
+      ],
+      "teclas": [],
+      "linhas": 338
+    },
+    {
+      "arquivo": "media-time-range.ts",
+      "tag": "media-time-range",
+      "classe": "MediaTimeRange",
+      "estende": "MediaChromeRange",
+      "observa": [],
+      "slots": [
+        "current",
+        "preview",
+        "preview-arrow"
+      ],
+      "emite": [
+        "MEDIA_PREVIEW_REQUEST",
+        "MEDIA_SEEK_REQUEST"
+      ],
+      "partes": [
+        "arrow",
+        "box",
+        "buffered",
+        "current-box",
+        "preview-box"
+      ],
+      "ariaEmitidos": [
+        "label",
+        "valuetext"
+      ],
+      "teclas": [],
+      "linhas": 944
+    },
+    {
+      "arquivo": "media-tooltip.ts",
+      "tag": "media-tooltip",
+      "classe": "MediaTooltip",
+      "estende": "globalThis.HTMLElement",
+      "observa": [],
+      "slots": [],
+      "emite": [],
+      "partes": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "linhas": 294
+    },
+    {
+      "arquivo": "media-volume-range.ts",
+      "tag": "media-volume-range",
+      "classe": "MediaVolumeRange",
+      "estende": "MediaChromeRange",
+      "observa": [],
+      "slots": [],
+      "emite": [
+        "MEDIA_VOLUME_REQUEST"
+      ],
+      "partes": [],
+      "ariaEmitidos": [
+        "label",
+        "valuetext"
+      ],
+      "teclas": [],
+      "linhas": 124
+    }
+  ]
+}

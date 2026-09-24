@@ -1,0 +1,103 @@
+{
+  "name": "EmptyState",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Placeholder for an empty or zero-result view.",
+  "icon": "folder--open",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "waiting_user",
+    "waiting_approval",
+    "waiting_dependency",
+    "offline",
+    "stale",
+    "partial",
+    "degraded"
+  ],
+  "tokens": [
+    "--foreground",
+    "--muted-foreground",
+    "--subtle-foreground",
+    "--text-base",
+    "--weight-semibold"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No APG pattern and no role: it is a <div> with a heading, a sentence and usually an action. The heading level is yours to set through `titleAs`, because the level belongs to the document — frozen at h3 it breaks heading order. Keyboard interaction, when there is any, belongs to the `action` you pass."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Skeleton"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#EmptyState"
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What is not here. Required: an empty state without a sentence is a blank area."
+    },
+    {
+      "name": "titleAs",
+      "type": "h2 | h3 | h4 | p",
+      "default": "h3",
+      "description": "The heading level belongs to the DOCUMENT, not to the component. Frozen at h3, an empty state at the top of a page jumps h1 → h3 and axe fails heading-order. Pass `p` when it is not a heading at all."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "One line on why it is empty, or on what fills it."
+    },
+    {
+      "name": "action",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The way out — usually a Button. An empty state with nothing to do next is a dead end."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Carbon glyph above the title, rendered at size xl. Defaults to `document--blank`."
+    },
+    {
+      "name": "state",
+      "type": "waiting_user | waiting_approval | waiting_dependency | offline | stale | partial | degraded",
+      "default": "—",
+      "description": "Universal state (Part J). It derives no colour on purpose — an empty view is already neutral, and colouring it would be an alarm where there is only absence. What it does is set `data-state` and supply the default description, so “no connection” is not seven different sentences on seven screens."
+    }
+  ],
+  "axes": {
+    "state": [
+      "degraded",
+      "offline",
+      "partial",
+      "stale",
+      "waiting_approval",
+      "waiting_dependency",
+      "waiting_user"
+    ],
+    "titleAs": [
+      "h2",
+      "h3",
+      "h4",
+      "p"
+    ]
+  }
+}

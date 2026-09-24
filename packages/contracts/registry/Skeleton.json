@@ -1,0 +1,51 @@
+{
+  "name": "Skeleton",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Placeholder shown while content loads.",
+  "icon": "pending",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--surface-3"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No role, and the absence is the design: it carries aria-hidden=\"true\", so it is removed from the accessibility tree entirely. A placeholder has nothing to say — announcing a shimmering box would be noise. What tells a screen reader that something is loading is the live region around it, or Spinner, which does have a role. Not focusable, no keyboard."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Progress",
+      "EmptyState"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Skeleton"
+  },
+  "props": [
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Where the shape comes from. There is no size prop on purpose: a skeleton stands in for one specific piece of content, and only the page knows how big that is."
+    },
+    {
+      "name": "style",
+      "type": "CSSProperties",
+      "default": "—",
+      "description": "The usual way to give it width and height for a one-off. Every other div attribute passes through as well."
+    }
+  ]
+}

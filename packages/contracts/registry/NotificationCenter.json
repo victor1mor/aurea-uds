@@ -1,0 +1,104 @@
+{
+  "name": "NotificationCenter",
+  "category": "Feedback",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Inbox surface aggregating notifications.",
+  "icon": "notification--new",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "side": [
+      "bottom",
+      "left",
+      "right",
+      "top"
+    ]
+  },
+  "states": [
+    "closed",
+    "open",
+    "read",
+    "unread"
+  ],
+  "tokens": [
+    "--border",
+    "--focus-strong",
+    "--foreground",
+    "--muted-foreground",
+    "--primary",
+    "--primary-foreground",
+    "--radius-control",
+    "--radius-sm",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-8",
+    "--surface-3",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "status",
+    "keyboard": [
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Popover",
+      "Banner"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#NotificationCenter"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "NotificationItem[]",
+      "default": "—",
+      "description": "The feed, as data: {id, title, description?, time?, icon?, read?, group?, onClick?}. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted."
+    },
+    {
+      "name": "onItemClick",
+      "type": "(item: NotificationItem) => void",
+      "default": "—",
+      "description": "Fires for every item. An item that has neither this nor its own onClick renders as a <div>, not a button — nothing that does nothing is focusable."
+    },
+    {
+      "name": "onMarkAllRead",
+      "type": "() => void",
+      "default": "—",
+      "description": "Draws the mark-all action, and only while something is unread."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Notifications\"",
+      "description": "Accessible name of the trigger and of the panel. The unread count is appended to the trigger's name, so it is heard and not only seen."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "notification",
+      "description": "Carbon glyph on the trigger."
+    },
+    {
+      "name": "side",
+      "type": "top | right | bottom | left",
+      "default": "bottom",
+      "description": "Which side the panel opens on. It flips on its own when there is no room."
+    }
+  ]
+}

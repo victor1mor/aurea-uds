@@ -1,0 +1,1957 @@
+{
+ "_gerado": "2026-08-22",
+ "_fonte": "shadcn/ui",
+ "_metodo": "camada de DOCUMENTAÇÃO (§11), lida da web. Complementa o inventário de CÓDIGO — não o substitui, e não substitui a leitura humana.",
+ "_controle": "input-group: 3 trechos + 2 seções conhecidas",
+ "paginas": 67,
+ "comErro": 3,
+ "porPagina": {
+  "accordion": {
+   "secoes": [
+    "Accordion",
+    "What are your shipping options?",
+    "What is your return policy?",
+    "How can I contact customer support?",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "How do I reset my password?",
+    "Can I change my subscription plan?",
+    "What payment methods do you accept?",
+    "Multiple",
+    "Notification Settings",
+    "Privacy Security",
+    "Billing Subscription",
+    "Disabled",
+    "Can I access my account history?",
+    "Premium feature information",
+    "How do I update my email address?",
+    "Borders",
+    "How does billing work?",
+    "Is my data secure?",
+    "What integrations do you support?",
+    "Card",
+    "What subscription plans do you offer?",
+    "How does billing work?",
+    "How do I cancel my subscription?",
+    "RTL",
+    "كيف يمكنني إعادة تعيين كلمة المرور؟",
+    "هل يمكنني تغيير خطة الاشتراك الخاصة بي؟",
+    "ما هي طرق الدفع التي تقبلونها؟",
+    "API Reference"
+   ],
+   "composicao": "Accordion ├── AccordionItem │ ├── AccordionTrigger │ └── AccordionContent └── AccordionItem ├── AccordionTrigger └── AccordionContent Basic # A basic accordion that shows one item at a time. The first item is open by default. How do I reset my password? Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your password. The link will expire in ",
+   "achados": {
+    "responsivo": [
+     "You can enable email alerts for updates or push notifications for mobile devices."
+    ],
+    "composicao": [
+     "</ AccordionContent > </ AccordionItem > </ Accordion > Composition # Use the following composition to build an Accordion : Copy Accordion ├── AccordionItem │ ├── AccordionTrigger │ └── AccordionContent └── AccordionItem ├── AccordionTrigger └── AccordionContent Basic # A basic accordion that shows one item at a time.",
+     "Typography Alert On This Page Installation Usage Composition Basic Multiple Disabled Borders Card RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "acessibilidade": [
+     "Copy import { Accordion, AccordionContent, View Code Installation # Command Manual pnpm npm yarn bun pnpm dlx shadcn@latest add accordion Copy Usage # Copy import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from \"@/components/ui/accordion\" Copy < Accordion defaultValue ={ [ \"item-1\" ] } > < AccordionItem value = \"item-1\" > < AccordionTrigger > Is it accessible?"
+    ]
+   },
+   "caracteres": 5212
+  },
+  "alert": {
+   "secoes": [
+    "Alert",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Destructive",
+    "Action",
+    "Custom Colors",
+    "RTL",
+    "API Reference",
+    "Alert",
+    "AlertTitle",
+    "AlertDescription",
+    "AlertAction"
+   ],
+   "composicao": "Alert ├── Icon ├── AlertTitle ├── AlertDescription └── AlertAction Basic # A basic alert with an icon, title and description. Account updated successfully Your profile information has been saved. Changes will be reflected immediately. Copy import { CheckCircle2Icon } from \"lucide-react\" import { View Code Destructive # Use variant=\"destructive\" to create a destructive alert. Payment failed Your pa",
+   "achados": {
+    "composicao": [
+     "</ AlertDescription > < AlertAction > < Button variant = \"outline\" > Enable </ Button > </ AlertAction > </ Alert > Composition # Use the following composition to build an Alert : Copy Alert ├── Icon ├── AlertTitle ├── AlertDescription └── AlertAction Basic # A basic alert with an icon, title and description.",
+     "Prop Type Default className string - Accordion Alert Dialog On This Page Installation Usage Composition Basic Destructive Action Custom Colors RTL API Reference Alert AlertTitle AlertDescription AlertAction Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4692
+  },
+  "alert-dialog": {
+   "secoes": [
+    "Alert Dialog",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Small",
+    "Media",
+    "Small with Media",
+    "Destructive",
+    "RTL",
+    "API Reference",
+    "size"
+   ],
+   "composicao": "AlertDialog ├── AlertDialogTrigger └── AlertDialogContent ├── AlertDialogHeader │ ├── AlertDialogMedia │ ├── AlertDialogTitle │ └── AlertDialogDescription └── AlertDialogFooter ├── AlertDialogCancel └── AlertDialogAction Basic # A basic alert dialog with a title, description, and cancel and continue buttons. Show Dialog Copy import { AlertDialog, AlertDialogAction, View Code Small # Use the size=\"",
+   "achados": {
+    "composicao": [
+     "Alert Aspect Ratio On This Page Installation Usage Composition Basic Small Media Small with Media Destructive RTL API Reference size Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4610
+  },
+  "aria": {
+   "erro": "Error: 404 em https://ui.shadcn.com/docs/components/aria"
+  },
+  "aspect-ratio": {
+   "secoes": [
+    "Aspect Ratio",
+    "Installation",
+    "Usage",
+    "Square",
+    "Portrait",
+    "RTL",
+    "API Reference",
+    "AspectRatio"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3076
+  },
+  "attachment": {
+   "secoes": [
+    "Attachment",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Features",
+    "Image",
+    "States",
+    "Sizes",
+    "Group",
+    "Trigger",
+    "Accessibility",
+    "Label icon-only actions",
+    "Label the trigger",
+    "Keyboard scrolling",
+    "Meaning beyond color",
+    "API Reference",
+    "Attachment",
+    "AttachmentMedia",
+    "AttachmentContent",
+    "AttachmentTitle",
+    "AttachmentDescription",
+    "AttachmentActions",
+    "AttachmentAction",
+    "AttachmentTrigger",
+    "AttachmentGroup"
+   ],
+   "composicao": "Attachment ├── AttachmentMedia ├── AttachmentContent │ ├── AttachmentTitle │ └── AttachmentDescription ├── AttachmentActions │ └── AttachmentAction └── AttachmentTrigger Use AttachmentGroup to lay out multiple attachments in a scrollable row: Copy AttachmentGroup ├── Attachment └── Attachment Features # Icon and image media through AttachmentMedia Upload states: idle , uploading , processing , err",
+   "achados": {
+    "teclado": [
+     "Keyboard scrolling # An AttachmentGroup scrolls horizontally.",
+     "When its attachments are interactive: a trigger or actions, keyboard users reach off-screen items by tabbing to them."
+    ],
+    "aria": [
+     "research-summary.pdf Open preview dialog Copy import { CopyIcon, FileSearchIcon, XIcon } from \"lucide-react\" import { View Code Copy < Dialog > < Attachment > { /* media, content, actions */ } < DialogTrigger render ={ < AttachmentTrigger aria-label = \"Preview research-summary.pdf\" /> } /> </ Attachment > < DialogContent > { /* ...",
+     "Label icon-only actions # AttachmentAction is usually icon-only, so give each one an aria-label describing the action and its target.",
+     "Copy < AttachmentAction aria-label = \"Remove sales-dashboard.pdf\" > < XIcon /> </ AttachmentAction > Label the trigger # AttachmentTrigger covers the card with no text of its own, so give it an aria-label for what activating it does.",
+     "Copy < AttachmentTrigger render ={ < a href ={ url } target = \"_blank\" rel = \"noreferrer\" aria-label = \"Open workspace.png\" /> } /> The trigger sits behind the actions in the stacking order, so an AttachmentAction and the AttachmentTrigger never trap each other — both remain separately focusable and clickable.",
+     "For a row of presentational attachments, make the group itself focusable and scrollable by adding tabIndex={0} , role=\"group\" , and an aria-label ."
+    ],
+    "composicao": [
+     "AttachmentMedia # The media slot for an icon or image preview.",
+     "className string - Additional classes to apply to the media slot.",
+     "Prop Type Default Description className string - Additional classes to apply to the content slot."
+    ],
+    "acessibilidade": [
+     "*/ } </ DialogContent > </ Dialog > Accessibility # AttachmentAction renders a Button , and AttachmentTrigger renders a real <button> (or your element via render )."
+    ]
+   },
+   "caracteres": 9215
+  },
+  "avatar": {
+   "secoes": [
+    "Avatar",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Badge",
+    "Badge with Icon",
+    "Avatar Group",
+    "Avatar Group Count",
+    "Avatar Group with Icon",
+    "Sizes",
+    "Dropdown",
+    "RTL",
+    "API Reference",
+    "Avatar",
+    "AvatarImage",
+    "AvatarFallback",
+    "AvatarBadge",
+    "AvatarGroup",
+    "AvatarGroupCount"
+   ],
+   "composicao": "Avatar ├── AvatarImage ├── AvatarFallback └── AvatarBadge Use the following composition to build an AvatarGroup : Copy AvatarGroup ├── Avatar │ ├── AvatarImage │ ├── AvatarFallback │ └── AvatarBadge ├── Avatar │ ├── AvatarImage │ ├── AvatarFallback │ └── AvatarBadge └── AvatarGroupCount Basic # A basic avatar component with an image and a fallback. CN Copy import { Avatar, AvatarFallback, View Cod",
+   "achados": {
+    "composicao": [
+     "Attachment Badge On This Page Installation Usage Composition Basic Badge Badge with Icon Avatar Group Avatar Group Count Avatar Group with Icon Sizes Dropdown RTL API Reference Avatar AvatarImage AvatarFallback AvatarBadge AvatarGroup AvatarGroupCount Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 5327
+  },
+  "badge": {
+   "secoes": [
+    "Badge",
+    "Installation",
+    "Usage",
+    "Variants",
+    "With Icon",
+    "With Spinner",
+    "Link",
+    "Custom Colors",
+    "RTL",
+    "API Reference",
+    "Badge"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Deleting Generating Copy import { Badge } from \"@/components/ui/badge\" import { Spinner } from \"@/components/ui/spinner\" View Code Link # Use the render prop to render a link as a badge."
+    ]
+   },
+   "caracteres": 3861
+  },
+  "base": {
+   "erro": "Error: 404 em https://ui.shadcn.com/docs/components/base"
+  },
+  "breadcrumb": {
+   "secoes": [
+    "Breadcrumb",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Custom separator",
+    "Dropdown",
+    "Collapsed",
+    "Link component",
+    "RTL",
+    "API Reference",
+    "Breadcrumb",
+    "BreadcrumbList",
+    "BreadcrumbItem",
+    "BreadcrumbLink",
+    "BreadcrumbPage",
+    "BreadcrumbSeparator",
+    "BreadcrumbEllipsis"
+   ],
+   "composicao": "Breadcrumb └── BreadcrumbList ├── BreadcrumbItem │ └── BreadcrumbLink ├── BreadcrumbSeparator ├── BreadcrumbItem │ └── BreadcrumbLink ├── BreadcrumbSeparator └── BreadcrumbItem └── BreadcrumbPage Basic # A basic breadcrumb with a home link and a components link. Home Components Breadcrumb Copy import { Breadcrumb, BreadcrumbItem, View Code Custom separator # Use a custom component as children for ",
+   "achados": {
+    "composicao": [
+     "Home Components Breadcrumb Copy import Link from \"next/link\" import { DotIcon } from \"lucide-react\" View Code Dropdown # You can compose <BreadcrumbItem /> with a <DropdownMenu /> to create a dropdown in the breadcrumb.",
+     "Home More Components Breadcrumb Copy import Link from \"next/link\" import { View Code Link component # To use a custom link component from your routing library, you can use the render prop on <BreadcrumbLink /> .",
+     "Prop Type Default className string - Badge Bubble On This Page Installation Usage Composition Basic Custom separator Dropdown Collapsed Link component RTL API Reference Breadcrumb BreadcrumbList BreadcrumbItem BreadcrumbLink BreadcrumbPage BreadcrumbSeparator BreadcrumbEllipsis Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 5312
+  },
+  "bubble": {
+   "secoes": [
+    "Bubble",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Features",
+    "Variants",
+    "Alignment",
+    "Bubble Group",
+    "Links and Buttons",
+    "Reactions",
+    "Show More / Collapsible",
+    "Tooltip",
+    "Popover",
+    "Accessibility",
+    "Labeling Reactions",
+    "Interactive Bubbles",
+    "Meaning Beyond Color",
+    "API Reference",
+    "Bubble",
+    "BubbleContent",
+    "BubbleReactions",
+    "BubbleGroup"
+   ],
+   "composicao": "Bubble ├── BubbleContent └── BubbleReactions Use BubbleGroup to group consecutive bubbles from the same sender: Copy BubbleGroup ├── Bubble │ └── BubbleContent └── Bubble └── BubbleContent Features # Seven visual variants, from a strong primary bubble to unframed ghost content Start and end alignment for sender and receiver bubbles Reactions that anchor to the bubble edge with configurable side an",
+   "achados": {
+    "aria": [
+     "A screen reader reads each glyph with no context, and counters like +8 are announced as \"plus eight\".",
+     "Group the row as a single image with a descriptive aria-label so it announces once.",
+     "role=\"img\" also hides the individual emoji from assistive tech, so no aria-hidden is needed.",
+     "Copy < BubbleReactions role = \"img\" aria-label = \"Reactions: thumbs up, fire, and 8 more\" > < span > 👍 </ span > < span > 🔥 </ span > < span > +8 </ span > </ BubbleReactions > When reactions are interactive, render buttons instead and give icon-only buttons an aria-label .",
+     "Copy < BubbleReactions > < Button aria-label = \"Thumbs up\" variant = \"secondary\" size = \"icon-xs\" > < ThumbsUpIcon /> </ Button > </ BubbleReactions > Interactive Bubbles # When a bubble is clickable, render it as a real <button> or <a> with the render prop so it is focusable and exposes the correct role."
+    ],
+    "composicao": [
+     "Copy import { Bubble, BubbleContent, View Code Links and Buttons # You can turn a bubble into a link or button by using the render prop on BubbleContent .",
+     "Copy < BubbleReactions > < Button aria-label = \"Thumbs up\" variant = \"secondary\" size = \"icon-xs\" > < ThumbsUpIcon /> </ Button > </ BubbleReactions > Interactive Bubbles # When a bubble is clickable, render it as a real <button> or <a> with the render prop so it is focusable and exposes the correct role.",
+     "Breadcrumb Button On This Page Installation Usage Composition Features Variants Alignment Bubble Group Links and Buttons Reactions Show More / Collapsible Tooltip Popover Accessibility Labeling Reactions Interactive Bubbles Meaning Beyond Color API Reference Bubble BubbleContent BubbleReactions BubbleGroup Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "acessibilidade": [
+     "The accessibility review found two focus states that were visually too subtle in dark mode.",
+     "Copy import { InfoIcon } from \"lucide-react\" import { View Code Accessibility # Bubble renders the presentational message surface.",
+     "BubbleContent ships a visible focus ring for interactive elements, and the accessible name comes from the bubble text.",
+     "Breadcrumb Button On This Page Installation Usage Composition Features Variants Alignment Bubble Group Links and Buttons Reactions Show More / Collapsible Tooltip Popover Accessibility Labeling Reactions Interactive Bubbles Meaning Beyond Color API Reference Bubble BubbleContent BubbleReactions BubbleGroup Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 11160
+  },
+  "button": {
+   "secoes": [
+    "Button",
+    "Installation",
+    "Usage",
+    "Cursor",
+    "Size",
+    "Default",
+    "Outline",
+    "Secondary",
+    "Ghost",
+    "Destructive",
+    "Link",
+    "Icon",
+    "With Icon",
+    "Rounded",
+    "Spinner",
+    "Button Group",
+    "As Link",
+    "RTL",
+    "API Reference",
+    "Button"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "The Base UI Button component always applies role=\"button\" , which overrides the semantic link role on <a> elements."
+    ],
+    "toque": [
+     "If you want to keep the cursor: pointer behavior, add the following code to your CSS file: You can also enable this during project setup with npx shadcn@latest init --pointer .",
+     "globals.css Copy @layer base { button :not ( :disabled ), [ role = \"button\" ] :not ( :disabled ) { cursor : pointer ; } } Size # Use the size prop to change the size of the button."
+    ]
+   },
+   "caracteres": 5612
+  },
+  "button-group": {
+   "secoes": [
+    "Button Group",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Accessibility",
+    "ButtonGroup vs ToggleGroup",
+    "Orientation",
+    "Size",
+    "Nested",
+    "Separator",
+    "Split",
+    "Input",
+    "Input Group",
+    "Dropdown Menu",
+    "Select",
+    "Popover",
+    "RTL",
+    "API Reference",
+    "ButtonGroup",
+    "ButtonGroupSeparator",
+    "ButtonGroupText"
+   ],
+   "composicao": "ButtonGroup ├── Button or Input ├── ButtonGroupSeparator └── ButtonGroupText Accessibility # The ButtonGroup component has the role attribute set to group . Use Tab to navigate between the buttons in the group. Use aria-label or aria-labelledby to label the button group. Copy < ButtonGroup aria-label = \"Button group\" > < Button > Button 1 </ Button > < Button > Button 2 </ Button > </ ButtonGroup ",
+   "achados": {
+    "aria": [
+     "Use aria-label or aria-labelledby to label the button group.",
+     "Copy < ButtonGroup aria-label = \"Button group\" > < Button > Button 1 </ Button > < Button > Button 2 </ Button > </ ButtonGroup > ButtonGroup vs ToggleGroup # Use the ButtonGroup component when you want to group buttons that perform an action."
+    ],
+    "composicao": [
+     "Prop Type Default render React.ReactElement Copy < ButtonGroup > < ButtonGroupText > Text </ ButtonGroupText > < Button > Button </ Button > </ ButtonGroup > Use the render prop to render a custom component as the text, for example a label."
+    ]
+   },
+   "caracteres": 6530
+  },
+  "calendar": {
+   "secoes": [
+    "Calendar",
+    "Installation",
+    "Usage",
+    "About",
+    "Date Picker",
+    "Persian / Hijri / Jalali Calendar",
+    "Selected Date (With TimeZone)",
+    "Basic",
+    "Range Calendar",
+    "Month and Year Selector",
+    "Presets",
+    "Date and Time Picker",
+    "Booked dates",
+    "Custom Cell Size",
+    "Week Numbers",
+    "RTL",
+    "API Reference",
+    "Changelog",
+    "RTL Support",
+    "Import the Locale type.",
+    "Add locale prop to the Calendar component.",
+    "Pass locale to DayPicker.",
+    "Update CalendarDayButton to accept locale.",
+    "Update date formatting in CalendarDayButton.",
+    "Pass locale to DayButton component.",
+    "Update RTL-aware CSS classes."
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 13394
+  },
+  "card": {
+   "secoes": [
+    "Card",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Size",
+    "Spacing",
+    "Image",
+    "RTL",
+    "API Reference",
+    "Card",
+    "CardHeader",
+    "CardTitle",
+    "CardDescription",
+    "CardAction",
+    "CardContent",
+    "CardFooter",
+    "Changelog",
+    "Spacing Variable",
+    "Update the Card root spacing classes.",
+    "Update CardHeader spacing classes.",
+    "Update CardContent and CardFooter spacing classes."
+   ],
+   "composicao": "Card ├── CardHeader │ ├── CardTitle │ ├── CardDescription │ └── CardAction ├── CardContent └── CardFooter Size # Use the size=\"sm\" prop to set the size of the card to small. The small size variant uses smaller spacing. Scheduled reports Weekly snapshots. No more manual exports. Choose a schedule (daily, or weekly). Send to channels or specific teammates. Include charts, tables, and key metrics. Se",
+   "achados": {
+    "composicao": [
+     "</ Card > } Calendar Carousel On This Page Installation Usage Composition Size Spacing Image RTL API Reference Card CardHeader CardTitle CardDescription CardAction CardContent CardFooter Changelog Spacing Variable Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "acessibilidade": [
+     "Featured Design systems meetup A practical talk on component APIs, accessibility, and shipping faster."
+    ]
+   },
+   "caracteres": 8759
+  },
+  "carousel": {
+   "secoes": [
+    "Carousel",
+    "About",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Sizes",
+    "Spacing",
+    "Orientation",
+    "Options",
+    "API",
+    "Events",
+    "Plugins",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Carousel ├── CarouselContent │ ├── CarouselItem │ └── CarouselItem ├── CarouselPrevious └── CarouselNext Sizes # To set the size of the items, you can use the basis utility class on the <CarouselItem /> . 1 2 3 4 5 Previous slide Next slide Copy import * as React from \"react\" import { Card, CardContent } from \"@/components/ui/card\" View Code Copy // 33% of the carousel width. < Carousel > < Carous",
+   "achados": {
+    "composicao": [
+     "</ CarouselItem > </ CarouselContent > < CarouselPrevious /> < CarouselNext /> </ Carousel > Composition # Use the following composition to build a Carousel : Copy Carousel ├── CarouselContent │ ├── CarouselItem │ └── CarouselItem ├── CarouselPrevious └── CarouselNext Sizes # To set the size of the items, you can use the basis utility class on the <CarouselItem /> .",
+     "Card Chart On This Page About Installation Usage Composition Sizes Spacing Orientation Options API Events Plugins RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 8111
+  },
+  "chart": {
+   "secoes": [
+    "Chart",
+    "Component",
+    "Updating to Recharts v3",
+    "Installation",
+    "Your First Chart",
+    "Start by defining your data",
+    "Define your chart config",
+    "Build your chart",
+    "Add a Grid",
+    "Import the CartesianGrid component.",
+    "Add the CartesianGrid component to your chart.",
+    "Add an Axis",
+    "Import the XAxis component.",
+    "Add the XAxis component to your chart.",
+    "Add Tooltip",
+    "Import the ChartTooltip and ChartTooltipContent components.",
+    "Add the components to your chart.",
+    "Add Legend",
+    "Import the ChartLegend and ChartLegendContent components.",
+    "Add the components to your chart.",
+    "Chart Config",
+    "Theming",
+    "CSS Variables",
+    "Define your colors in your css file",
+    "Add the color to your chartConfig",
+    "hex, hsl or oklch",
+    "Using Colors",
+    "Components",
+    "Chart Data",
+    "Tailwind",
+    "Tooltip",
+    "Props",
+    "Colors",
+    "Custom",
+    "Legend",
+    "Colors",
+    "Custom",
+    "Accessibility",
+    "RTL"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "This prop adds keyboard access and screen reader support to your charts."
+    ],
+    "aria": [
+     "This prop adds keyboard access and screen reader support to your charts."
+    ],
+    "responsivo": [
+     "Bar Chart - Interactive Showing total visitors for the last 3 months Desktop 7,324 Mobile 7,250 Introducing Charts .",
+     "Keep a height, min-h-* , or aspect-* on ChartContainer so ResponsiveContainer can measure on first render.",
+     "Start by defining your data The following data represents the number of desktop and mobile users for each month.",
+     "components/example-chart.tsx Copy import { type ChartConfig } from \"@/components/ui/chart\" const chartConfig = { desktop: { label: \"Desktop\" , color: \"#2563eb\" , }, mobile: { label: \"Mobile\" , color: \"#60a5fa\" , }, } satisfies ChartConfig Build your chart You can now build your chart using Recharts components.",
+     "This is required for the chart to be responsive.",
+     "slice ( 0 , 3 ) } /> < Bar dataKey = \"desktop\" fill = \"var(--color-desktop)\" radius ={ 4 } /> < Bar dataKey = \"mobile\" fill = \"var(--color-mobile)\" radius ={ 4 } /> </ BarChart > </ ChartContainer > Copy \"use client\" import { Bar, BarChart, CartesianGrid, XAxis } from \"recharts\" View Code Add Tooltip # So far we've only used components from Recharts."
+    ],
+    "composicao": [
+     "We designed the chart component with composition in mind."
+    ],
+    "acessibilidade": [
+     "Copy < ChartContainer config ={ chartConfig } className = \"h-[200px] w-full\" > < BarChart accessibilityLayer data ={ chartData } > < CartesianGrid vertical ={ false } /> < XAxis dataKey = \"month\" tickLine ={ false } tickMargin ={ 10 } axisLine ={ false } tickFormatter ={ ( value ) => value.",
+     "Accessibility # You can turn on the accessibilityLayer prop to add an accessible layer to your chart.",
+     "components/example-chart.tsx Copy < LineChart accessibilityLayer /> RTL # To enable RTL support in shadcn/ui, see the RTL configuration guide ."
+    ]
+   },
+   "caracteres": 14443
+  },
+  "checkbox": {
+   "secoes": [
+    "Checkbox",
+    "Installation",
+    "Usage",
+    "Checked State",
+    "Invalid State",
+    "Basic",
+    "Description",
+    "Disabled",
+    "Group",
+    "Table",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "useState ( false ) return < Checkbox checked ={ checked } onCheckedChange ={ setChecked } /> } Invalid State # Set aria-invalid on the checkbox and data-invalid on the field wrapper to show the invalid styles."
+    ]
+   },
+   "caracteres": 4644
+  },
+  "collapsible": {
+   "secoes": [
+    "Collapsible",
+    "Order #4189",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Controlled State",
+    "Basic",
+    "Settings Panel",
+    "File Tree",
+    "RTL",
+    "الطلب #4189",
+    "API Reference"
+   ],
+   "composicao": "Collapsible ├── CollapsibleTrigger └── CollapsibleContent Controlled State # Use the open and onOpenChange props to control the state. Copy import * as React from \"react\" export function Example () { const [ open , setOpen ] = React. useState ( false ) return ( < Collapsible open ={ open } onOpenChange ={ setOpen } > < CollapsibleTrigger > Toggle </ CollapsibleTrigger > < CollapsibleContent > Cont",
+   "achados": {
+    "composicao": [
+     "</ CollapsibleContent > </ Collapsible > Composition # Use the following composition to build a Collapsible : Copy Collapsible ├── CollapsibleTrigger └── CollapsibleContent Controlled State # Use the open and onOpenChange props to control the state.",
+     "Checkbox Combobox On This Page Installation Usage Composition Controlled State Basic Settings Panel File Tree RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3907
+  },
+  "combobox": {
+   "secoes": [
+    "Combobox",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Simple",
+    "With chips",
+    "With groups and collection",
+    "Custom Items",
+    "Multiple Selection",
+    "Basic",
+    "Multiple",
+    "Clear Button",
+    "Groups",
+    "Custom Items",
+    "Invalid",
+    "Disabled",
+    "Auto Highlight",
+    "Popup",
+    "Input Group",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Combobox ├── ComboboxInput └── ComboboxContent ├── ComboboxEmpty └── ComboboxList ├── ComboboxItem └── ComboboxItem With chips # Multi-select with multiple , chips, and a chips input (see Multiple ). Copy Combobox ├── ComboboxChips │ ├── ComboboxValue │ │ └── ComboboxChip │ └── ComboboxChipsInput └── ComboboxContent ├── ComboboxEmpty └── ComboboxList ├── ComboboxItem └── ComboboxItem With groups a",
+   "achados": {
+    "aria": [
+     "Copy \"use client\" import { View Code Invalid # Use the aria-invalid prop to make the combobox invalid."
+    ],
+    "composicao": [
+     "</ ComboboxEmpty > < ComboboxList > { ( item ) => ( < ComboboxItem key ={ item } value ={ item } > { item } </ ComboboxItem > ) } </ ComboboxList > </ ComboboxContent > </ Combobox > ) } Composition # Simple # A single-line input and a flat list (see Basic ).",
+     "Copy \"use client\" import { View Code Popup # You can trigger the combobox from a button or any other component by using the render prop.",
+     "Collapsible Command On This Page Installation Usage Composition Simple With chips With groups and collection Custom Items Multiple Selection Basic Multiple Clear Button Groups Custom Items Invalid Disabled Auto Highlight Popup Input Group RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 7118
+  },
+  "command": {
+   "secoes": [
+    "Command",
+    "About",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Command Palette",
+    "Shortcuts",
+    "Command Palette",
+    "Groups",
+    "Command Palette",
+    "Scrollable",
+    "Command Palette",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Command ├── CommandInput └── CommandList ├── CommandEmpty ├── CommandGroup │ ├── CommandItem │ └── CommandItem ├── CommandSeparator └── CommandGroup ├── CommandItem └── CommandItem Basic # A simple command menu in a dialog. Open Menu Command Palette Search for a command to run... Copy \"use client\" import * as React from \"react\" View Code Shortcuts # Open Menu Command Palette Search for a command t",
+   "achados": {
+    "composicao": [
+     "Combobox Context Menu On This Page About Installation Usage Composition Basic Shortcuts Groups Scrollable RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4166
+  },
+  "context-menu": {
+   "secoes": [
+    "Context Menu",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Submenu",
+    "Shortcuts",
+    "Groups",
+    "Icons",
+    "Checkboxes",
+    "Radio",
+    "Destructive",
+    "Sides",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "ContextMenu ├── ContextMenuTrigger └── ContextMenuContent ├── ContextMenuGroup │ ├── ContextMenuLabel │ ├── ContextMenuItem │ └── ContextMenuItem ├── ContextMenuSeparator ├── ContextMenuGroup │ ├── ContextMenuLabel │ ├── ContextMenuCheckboxItem │ └── ContextMenuCheckboxItem ├── ContextMenuSeparator ├── ContextMenuGroup │ ├── ContextMenuLabel │ └── ContextMenuRadioGroup │ ├── ContextMenuRadioItem │",
+   "achados": {
+    "teclado": [
+     "Right click here Long press here Copy import { ContextMenu, ContextMenuContent, View Code Shortcuts # Add ContextMenuShortcut to show keyboard hints."
+    ],
+    "toque": [
+     "Right click here Long press here Copy import { ContextMenu, ContextMenuContent, View Code Submenu # Use ContextMenuSub to nest secondary actions.",
+     "Right click here Long press here Copy import { ContextMenu, ContextMenuContent, View Code Shortcuts # Add ContextMenuShortcut to show keyboard hints.",
+     "Right click here Long press here Copy import { ContextMenu, ContextMenuContent, View Code Groups # Group related actions and separate them with dividers.",
+     "Right click here Long press here Copy import { ContextMenu, ContextMenuContent, View Code Icons # Combine icons with labels for quick scanning.",
+     "Right click here Long press here Copy import { ClipboardPasteIcon, CopyIcon, View Code Checkboxes # Use ContextMenuCheckboxItem for toggles.",
+     "Right click here Long press here Copy import { ContextMenu, ContextMenuCheckboxItem, View Code Radio # Use ContextMenuRadioItem for exclusive choices."
+    ],
+    "composicao": [
+     "Command Data Table On This Page Installation Usage Composition Basic Submenu Shortcuts Groups Icons Checkboxes Radio Destructive Sides RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 5400
+  },
+  "data-table": {
+   "secoes": [
+    "Data Table",
+    "Introduction",
+    "Table of Contents",
+    "Installation",
+    "Prerequisites",
+    "Project Structure",
+    "Set up Table Features",
+    "Basic Table",
+    "Column Definitions",
+    "DataTable / component",
+    "Render the table",
+    "Cell Formatting",
+    "Update columns definition",
+    "Row Actions",
+    "Update columns definition",
+    "Pagination",
+    "Pagination is already enabled",
+    "Add pagination controls",
+    "Sorting",
+    "Update DataTable",
+    "Make header cell sortable",
+    "Filtering",
+    "Update DataTable",
+    "Visibility",
+    "Update DataTable",
+    "Row Selection",
+    "Update column definitions",
+    "Update DataTable",
+    "Show selected rows",
+    "Reusable Components",
+    "Column header",
+    "Pagination",
+    "Column toggle",
+    "RTL"
+   ],
+   "composicao": "app └── payments ├── columns.tsx ├── data-table-features.ts ├── data-table.tsx └── page.tsx I'm using a Next.js example here but this works for any other React framework. columns.tsx (client component) will contain our column definitions. data-table-features.ts will contain the shared features object that tells TanStack Table which behavior to enable. data-table.tsx (client component) will contain",
+   "achados": {
+    "aria": [
+     "value) } aria-label = \"Select all\" /> ), cell : ({ row }) => ( < Checkbox checked ={ row.",
+     "value) } aria-label = \"Select row\" /> ), enableSorting: false , enableHiding: false , }), ]) Update <DataTable> # app/payments/data-table.tsx Copy export function DataTable < TData extends RowData >({ columns , data , } : DataTableProps < TData >) { const [ sorting , setSorting ] = React."
+    ],
+    "composicao": [
+     "getCanSort ()) { return &#x3C; div className = { cn (className)}>{title}&#x3C;/ div > } return ( &#x3C; div className = { cn ( \"flex items-center gap-2\" , className)}> &#x3C; DropdownMenu > &#x3C; DropdownMenuTrigger asChild > &#x3C; Button variant = \"ghost\" size = \"sm\" className = \"-ml-3 h-8 data-[state=open]:bg-accent\" > &#x3C; span >{title}&#x3C;/ span > {column."
+    ]
+   },
+   "caracteres": 29014
+  },
+  "date-picker": {
+   "secoes": [
+    "Date Picker",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Range Picker",
+    "Date of Birth",
+    "Input",
+    "Time Picker",
+    "Natural Language Picker",
+    "RTL"
+   ],
+   "composicao": "Popover ├── PopoverTrigger └── PopoverContent └── Calendar Basic # A basic date picker component. Date Pick a date Copy \"use client\" import * as React from \"react\" View Code Range Picker # A date picker component for selecting a range of dates. Date Picker Range Jan 20, 2026 - Feb 09, 2026 Copy \"use client\" import * as React from \"react\" View Code Date of Birth # A date picker component for select",
+   "achados": {
+    "composicao": [
+     "Base UI React Aria Radix UI Pick a date Copy \"use client\" import * as React from \"react\" View Code Installation # The Date Picker is built using a composition of the <Popover /> and the <Calendar /> components.",
+     "Composition # A date picker is built from Popover and Calendar (there is no DatePicker root component): Copy Popover ├── PopoverTrigger └── PopoverContent └── Calendar Basic # A basic date picker component.",
+     "Arabic (العربية) ▼ Toggle اختر تاريخًا Copy \"use client\" import * as React from \"react\" View Code Data Table Dialog On This Page Installation Usage Composition Basic Range Picker Date of Birth Input Time Picker Natural Language Picker RTL Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4542
+  },
+  "dialog": {
+   "secoes": [
+    "Dialog",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Custom Close Button",
+    "No Close Button",
+    "Sticky Footer",
+    "Scrollable Content",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Dialog ├── DialogTrigger └── DialogContent ├── DialogHeader │ ├── DialogTitle │ └── DialogDescription └── DialogFooter Custom Close Button # Replace the default close control with your own button. Share Copy import { Button } from \"@/components/ui/button\" import { Dialog, View Code No Close Button # Use showCloseButton={false} to hide the close button. No Close Button Copy import { Button } from \"",
+   "achados": {
+    "composicao": [
+     "</ DialogDescription > </ DialogHeader > </ DialogContent > </ Dialog > Composition # Use the following composition to build a Dialog : Copy Dialog ├── DialogTrigger └── DialogContent ├── DialogHeader │ ├── DialogTitle │ └── DialogDescription └── DialogFooter Custom Close Button # Replace the default close control with your own button.",
+     "Date Picker Direction On This Page Installation Usage Composition Custom Close Button No Close Button Sticky Footer Scrollable Content RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3662
+  },
+  "direction": {
+   "secoes": [
+    "Direction",
+    "Installation",
+    "Usage",
+    "useDirection"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2934
+  },
+  "drawer": {
+   "secoes": [
+    "Drawer",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Custom Sizes",
+    "Styling",
+    "Position",
+    "Swipe Handle",
+    "Nested",
+    "Non Modal",
+    "Snap Points",
+    "Responsive",
+    "Migrating from Vaul",
+    "Update the dependency.",
+    "Replace direction with swipeDirection .",
+    "Replace asChild with render .",
+    "Update snap point props.",
+    "Update animation and focus props.",
+    "Review Vaul-only props.",
+    "Update custom data attribute selectors.",
+    "API Reference"
+   ],
+   "composicao": "Drawer ├── DrawerTrigger └── DrawerContent ├── DrawerHeader │ ├── DrawerTitle │ └── DrawerDescription └── DrawerFooter DrawerContent composes the portal, overlay, viewport, and popup from Base UI. For lower-level control, DrawerPortal , DrawerOverlay , and DrawerSwipeHandle are also exported. Custom Sizes # A vertical drawer sizes itself to its content and is capped at calc(100dvh - 6rem) by defau",
+   "achados": {
+    "responsivo": [
+     "On iOS Safari, the drawer overlay is absolutely positioned and requires a positioned body to cover the viewport after the page is scrolled.",
+     "A side drawer spans 75% of the viewport width, or 24rem on larger screens.",
+     "Variable Default Description --drawer-inset 0px Floats the drawer from the viewport edges.",
+     "Open Drawer Copy \"use client\" import { useIsMobile } from \"@/hooks/use-mobile\" View Code Non Modal # Set modal={false} to allow interaction with the rest of the page while the drawer is open.",
+     "Numbers between 0 and 1 represent fractions of the viewport.",
+     "Open Snap Drawer Copy \"use client\" import { Button } from \"@/components/ui/button\" View Code Responsive # You can combine the Dialog and Drawer components to create a responsive dialog."
+    ],
+    "toque": [
+     "Copy < DrawerContent className = \"w-96\" > When the same component renders in multiple directions, scope an override to one axis using the data-[swipe-axis=*] variants.",
+     "Copy < DrawerContent className = \"data-[swipe-axis=y]:max-h-[50vh] data-[swipe-axis=x]:w-96\" > To make a region of the drawer scrollable, make the scroll container a flex item.",
+     "--drawer-bleed-background var(--color-popover) Fills the gap behind the drawer on swipe overshoot.",
+     "The drawer also sets data attributes you can target with variants such as data-[swipe-direction=down]: on DrawerContent , or group-data-[swipe-axis=y]/drawer-popup: on its descendants.",
+     "Attribute Values Set when data-swipe-direction up , right , down , left Always.",
+     "data-swiping Present A swipe is in progress."
+    ],
+    "composicao": [
+     "Set the overlay variable on [data-slot=drawer-overlay] in your CSS.",
+     "Copy - <Drawer direction=\"bottom\"> + <Drawer swipeDirection=\"down\"> Replace asChild with render .",
+     "For DrawerTrigger , pass the trigger element to the render prop.",
+     "Copy - <DrawerTrigger asChild> - <Button variant=\"outline\">Open</Button> - </DrawerTrigger> + <DrawerTrigger render={<Button variant=\"outline\" />}> + Open + </DrawerTrigger> For DrawerClose , pass the close element to the render prop.",
+     "Copy - <DrawerClose asChild> - <Button variant=\"outline\">Cancel</Button> - </DrawerClose> + <DrawerClose render={<Button variant=\"outline\" />}> + Cancel + </DrawerClose> Update snap point props.",
+     "Direction Dropdown Menu On This Page Installation Usage Composition Custom Sizes Styling Position Swipe Handle Nested Non Modal Snap Points Responsive Migrating from Vaul API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 9864
+  },
+  "dropdown-menu": {
+   "secoes": [
+    "Dropdown Menu",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Submenu",
+    "Shortcuts",
+    "Icons",
+    "Checkboxes",
+    "Checkboxes Icons",
+    "Radio Group",
+    "Radio Icons",
+    "Destructive",
+    "Avatar",
+    "Complex",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "DropdownMenu ├── DropdownMenuTrigger └── DropdownMenuContent ├── DropdownMenuGroup │ ├── DropdownMenuLabel │ ├── DropdownMenuItem │ └── DropdownMenuItem ├── DropdownMenuSeparator ├── DropdownMenuGroup │ ├── DropdownMenuLabel │ ├── DropdownMenuCheckboxItem │ └── DropdownMenuCheckboxItem ├── DropdownMenuSeparator ├── DropdownMenuGroup │ ├── DropdownMenuLabel │ └── DropdownMenuRadioGroup │ ├── Dropdo",
+   "achados": {
+    "teclado": [
+     "Open Copy \"use client\" import { Button } from \"@/components/ui/button\" View Code Shortcuts # Add DropdownMenuShortcut to show keyboard hints."
+    ],
+    "composicao": [
+     "Drawer Empty On This Page Installation Usage Composition Basic Submenu Shortcuts Icons Checkboxes Checkboxes Icons Radio Group Radio Icons Destructive Avatar Complex RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 5262
+  },
+  "empty": {
+   "secoes": [
+    "Empty",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Outline",
+    "Background",
+    "Avatar",
+    "Avatar Group",
+    "InputGroup",
+    "RTL",
+    "API Reference",
+    "Empty",
+    "EmptyHeader",
+    "EmptyMedia",
+    "EmptyTitle",
+    "EmptyDescription",
+    "EmptyContent"
+   ],
+   "composicao": "Empty ├── EmptyHeader │ ├── EmptyMedia │ ├── EmptyTitle │ └── EmptyDescription └── EmptyContent Outline # Use the border utility class to create an outline empty state. Cloud Storage Empty Upload files to your cloud storage to access them anywhere. Upload Files Copy import { IconCloud } from \"@tabler/icons-react\" import { Button } from \"@/components/ui/button\" View Code Background # Use the bg-* a",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string Copy < EmptyContent > < Button > Add Project </ Button > </ EmptyContent > Dropdown Menu Field On This Page Installation Usage Composition Outline Background Avatar Avatar Group InputGroup RTL API Reference Empty EmptyHeader EmptyMedia EmptyTitle EmptyDescription EmptyContent Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 5905
+  },
+  "field": {
+   "secoes": [
+    "Field",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Field",
+    "FieldGroup",
+    "FieldSet",
+    "Anatomy",
+    "Form",
+    "Input",
+    "Textarea",
+    "Select",
+    "Slider",
+    "Fieldset",
+    "Checkbox",
+    "Radio",
+    "Switch",
+    "Choice Card",
+    "Field Group",
+    "RTL",
+    "Responsive Layout",
+    "Validation and Errors",
+    "Accessibility",
+    "API Reference",
+    "FieldSet",
+    "FieldLegend",
+    "FieldGroup",
+    "Field",
+    "FieldContent",
+    "FieldLabel",
+    "FieldTitle",
+    "FieldDescription",
+    "FieldSeparator",
+    "FieldError"
+   ],
+   "composicao": "Field ├── FieldLabel ├── Input / Textarea / Switch / Select ├── FieldDescription └── FieldError FieldGroup # Related fields in one group. Use FieldSeparator between sections when needed. Copy FieldGroup ├── Field │ ├── FieldLabel │ ├── Input / Textarea / Switch / Select │ ├── FieldDescription │ └── FieldError ├── FieldSeparator └── Field ├── FieldLabel └── Input / Textarea / Switch / Select FieldS",
+   "achados": {
+    "teclado": [
+     "</ FieldError > </ Field > Accessibility # FieldSet and FieldLegend keep related controls grouped for keyboard and assistive tech users."
+    ],
+    "aria": [
+     "</ FieldDescription > </ Field > < Field > < FieldLabel htmlFor = \"username\" > Username </ FieldLabel > < Input id = \"username\" autoComplete = \"off\" aria-invalid /> < FieldError > Choose another username.",
+     "Add aria-invalid on the input itself for assistive technologies.",
+     "Copy < Field data-invalid > < FieldLabel htmlFor = \"email\" > Email </ FieldLabel > < Input id = \"email\" type = \"email\" aria-invalid /> < FieldError > Enter a valid email address.",
+     "</ FieldError > </ Field > Accessibility # FieldSet and FieldLegend keep related controls grouped for keyboard and assistive tech users.",
+     "Field outputs role=\"group\" so nested controls inherit labeling from FieldLabel and FieldLegend when combined.",
+     "Apply FieldSeparator sparingly to ensure screen readers encounter clear section boundaries."
+    ],
+    "responsivo": [
+     "Responsive fields: Set orientation=\"responsive\" for automatic column layouts inside container-aware parents.",
+     "Apply @container/field-group classes on FieldGroup to switch orientations at specific breakpoints.",
+     "FieldGroup # Layout wrapper that stacks Field components and enables container queries for responsive orientations.",
+     "Prop Type Default orientation \"vertical\" | \"horizontal\" | \"responsive\" \"vertical\" className string data-invalid boolean Copy < Field orientation = \"horizontal\" > < FieldLabel htmlFor = \"remember\" > Remember me </ FieldLabel > < Switch id = \"remember\" /> </ Field > FieldContent # Flex column that groups control and descriptions when the label sits beside the control."
+    ],
+    "toque": [
+     "Prop Type Default className string Copy < FieldContent > < FieldTitle > Enable Touch ID </ FieldTitle > < FieldDescription > Unlock your device faster."
+    ],
+    "composicao": [
+     "</ FieldError > </ Field > < Field orientation = \"horizontal\" > < Switch id = \"newsletter\" /> < FieldLabel htmlFor = \"newsletter\" > Subscribe to the newsletter </ FieldLabel > </ Field > </ FieldGroup > </ FieldSet > Composition # Field # A single control with label, helper text, and validation.",
+     "</ FieldDescription > </ FieldContent > FieldDescription # Helper text slot that automatically balances long lines in horizontal layouts."
+    ],
+    "acessibilidade": [
+     "Copy FieldSet ├── FieldLegend ├── FieldDescription └── FieldGroup ├── Field │ ├── FieldLabel │ ├── Input / Textarea / Switch / Select │ ├── FieldDescription │ └── FieldError └── Field ├── FieldLabel └── Input / Textarea / Switch / Select Anatomy # The Field family is designed for composing accessible forms.",
+     "</ FieldError > </ Field > Accessibility # FieldSet and FieldLegend keep related controls grouped for keyboard and assistive tech users.",
+     "Prop Type Default className string Copy < FieldSeparator > Or continue with </ FieldSeparator > FieldError # Accessible error container that accepts children or an errors array (e.g., from react-hook-form )."
+    ]
+   },
+   "caracteres": 12292
+  },
+  "hover-card": {
+   "secoes": [
+    "Hover Card",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Trigger Delays",
+    "Positioning",
+    "Basic",
+    "Sides",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "HoverCard ├── HoverCardTrigger └── HoverCardContent Trigger Delays # Use delay and closeDelay on the trigger to control when the card opens and closes. Copy < HoverCard > < HoverCardTrigger delay ={ 100 } closeDelay ={ 200 } > Hover </ HoverCardTrigger > < HoverCardContent > Content </ HoverCardContent > </ HoverCard > Positioning # Use the side and align props on HoverCardContent to control place",
+   "achados": {
+    "composicao": [
+     "</ HoverCardContent > </ HoverCard > Composition # Use the following composition to build a HoverCard : Copy HoverCard ├── HoverCardTrigger └── HoverCardContent Trigger Delays # Use delay and closeDelay on the trigger to control when the card opens and closes.",
+     "Field Input On This Page Installation Usage Composition Trigger Delays Positioning Basic Sides RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3344
+  },
+  "input": {
+   "secoes": [
+    "Input",
+    "Installation",
+    "Usage",
+    "Basic",
+    "Field",
+    "Field Group",
+    "Disabled",
+    "Invalid",
+    "File",
+    "Inline",
+    "Grid",
+    "Required",
+    "Badge",
+    "Input Group",
+    "Button Group",
+    "Form",
+    "RTL"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Copy import { Field, FieldDescription, View Code Invalid # Use the aria-invalid prop to mark the input as invalid."
+    ]
+   },
+   "caracteres": 5303
+  },
+  "input-group": {
+   "secoes": [
+    "Input Group",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Align",
+    "inline-start",
+    "inline-end",
+    "block-start",
+    "block-end",
+    "Icon",
+    "Text",
+    "Button",
+    "Kbd",
+    "Dropdown",
+    "Spinner",
+    "Textarea",
+    "Custom Input",
+    "RTL",
+    "API Reference",
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupInput",
+    "InputGroupTextarea"
+   ],
+   "composicao": "InputGroup ├── InputGroupInput or InputGroupTextarea ├── InputGroupAddon ├── InputGroupButton └── InputGroupText Align # Use the align prop on InputGroupAddon to position the addon relative to the input. For proper focus management, InputGroupAddon should always be placed after InputGroupInput or InputGroupTextarea in the DOM. Use the align prop to visually position the addon. inline-start # Use a",
+   "achados": {
+    "foco": [
+     "For proper focus management, InputGroupAddon should always be placed after InputGroupInput or InputGroupTextarea in the DOM."
+    ],
+    "aria": [
+     "Prop Type Default size \"xs\" | \"icon-xs\" | \"sm\" | \"icon-sm\" \"xs\" variant \"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\" \"ghost\" className string Copy < InputGroupButton > Button </ InputGroupButton > < InputGroupButton size = \"icon-xs\" aria-label = \"Copy\" > < CopyIcon /> </ InputGroupButton > InputGroupInput # Replacement for <Input /> when building input groups."
+    ],
+    "composicao": [
+     "Copy import { LoaderIcon } from \"lucide-react\" import { View Code Textarea # Line 1, Column 1 Run script.js Copy import { IconBrandJavascript, IconCopy, View Code Custom Input # Add the data-slot=\"input-group-control\" attribute to your custom input for automatic focus state handling.",
+     "This component has the input group styles pre-applied and uses the unified data-slot=\"input-group-control\" for focus state handling.",
+     "This component has the textarea group styles pre-applied and uses the unified data-slot=\"input-group-control\" for focus state handling."
+    ]
+   },
+   "caracteres": 7316
+  },
+  "input-otp": {
+   "secoes": [
+    "Input OTP",
+    "About",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Pattern",
+    "Separator",
+    "Disabled",
+    "Controlled",
+    "Invalid",
+    "Four Digits",
+    "Alphanumeric",
+    "Form",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "InputOTP ├── InputOTPGroup │ ├── InputOTPSlot │ ├── InputOTPSlot │ └── InputOTPSlot ├── InputOTPSeparator ├── InputOTPGroup │ ├── InputOTPSlot │ ├── InputOTPSlot │ └── InputOTPSlot ├── InputOTPSeparator └── InputOTPGroup ├── InputOTPSlot └── InputOTPSlot Pattern # Use the pattern prop to define a custom pattern for the OTP input. Copy import { REGEXP_ONLY_DIGITS_AND_CHARS } from \"input-otp\" ; < In",
+   "achados": {
+    "aria": [
+     "Copy \"use client\" import * as React from \"react\" View Code Invalid # Use aria-invalid on the slots to show an error state."
+    ],
+    "composicao": [
+     "Input Group Item On This Page About Installation Usage Composition Pattern Separator Disabled Controlled Invalid Four Digits Alphanumeric Form RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4726
+  },
+  "item": {
+   "secoes": [
+    "Item",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Item vs Field",
+    "Variant",
+    "Size",
+    "Icon",
+    "Avatar",
+    "Image",
+    "Group",
+    "Header",
+    "Link",
+    "Dropdown",
+    "RTL",
+    "API Reference",
+    "Item",
+    "ItemGroup",
+    "ItemSeparator",
+    "ItemMedia",
+    "ItemContent",
+    "ItemTitle",
+    "ItemDescription",
+    "ItemActions",
+    "ItemHeader",
+    "ItemFooter"
+   ],
+   "composicao": "ItemGroup └── Item ├── ItemHeader ├── ItemMedia ├── ItemContent │ ├── ItemTitle │ └── ItemDescription ├── ItemActions └── ItemFooter Item vs Field # Use Field if you need to display a form input such as a checkbox, input, radio, or select. If you only need to display content such as a title, description, and actions, use Item . Variant # Use the variant prop to change the visual style of the item.",
+   "achados": {
+    "composicao": [
+     "Copy import Image from \"next/image\" import { View Code Link # Use the render prop to render the item as a link."
+    ]
+   },
+   "caracteres": 7769
+  },
+  "kbd": {
+   "secoes": [
+    "Kbd",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Group",
+    "Button",
+    "Tooltip",
+    "Input Group",
+    "RTL",
+    "API Reference",
+    "Kbd",
+    "KbdGroup"
+   ],
+   "composicao": "KbdGroup ├── Kbd └── Kbd Group # Use the KbdGroup component to group keyboard keys together. Use Ctrl + B Ctrl + K to open the command palette Copy import { Kbd, KbdGroup } from \"@/components/ui/kbd\" export function KbdGroupExample () { View Code Button # Use the Kbd component inside a Button component to display a keyboard key inside a button. Accept ⏎ Copy import { Button } from \"@/components/ui",
+   "achados": {
+    "teclado": [
+     "Use Ctrl + B Ctrl + K to open the command palette Copy import { Kbd, KbdGroup } from \"@/components/ui/kbd\" export function KbdGroupExample () { View Code Button # Use the Kbd component inside a Button component to display a keyboard key inside a button.",
+     "Accept ⏎ Copy import { Button } from \"@/components/ui/button\" import { Kbd } from \"@/components/ui/kbd\" View Code Tooltip # You can use the Kbd component inside a Tooltip component to display a tooltip with a keyboard key.",
+     "Save Print Copy import { Button } from \"@/components/ui/button\" import { ButtonGroup } from \"@/components/ui/button-group\" import { Kbd, KbdGroup } from \"@/components/ui/kbd\" View Code Input Group # You can use the Kbd component inside a InputGroupAddon component to display a keyboard key inside an input group.",
+     "Arabic (العربية) ▼ Toggle ⌘ ⇧ ⌥ ⌃ Ctrl + B Copy \"use client\" import * as React from \"react\" View Code API Reference # Kbd # Use the Kbd component to display a keyboard key."
+    ],
+    "composicao": [
+     "Prop Type Default className string `` Copy < KbdGroup > < Kbd > Ctrl </ Kbd > < Kbd > B </ Kbd > </ KbdGroup > Item Label On This Page Installation Usage Composition Group Button Tooltip Input Group RTL API Reference Kbd KbdGroup Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3624
+  },
+  "label": {
+   "secoes": [
+    "Label",
+    "Installation",
+    "Usage",
+    "Label in Field",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3133
+  },
+  "marker": {
+   "secoes": [
+    "Marker",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Features",
+    "Variants",
+    "Status",
+    "Shimmer",
+    "Separator",
+    "Border",
+    "With Icon",
+    "Links and Buttons",
+    "Accessibility",
+    "Status and Progress",
+    "Labeled Separators",
+    "Bordered Markers",
+    "Decorative Icons",
+    "Interactive Markers",
+    "API Reference",
+    "Marker",
+    "MarkerIcon",
+    "MarkerContent"
+   ],
+   "composicao": "Marker ├── MarkerIcon └── MarkerContent Features # Inline marker, bordered row, and labeled separator variants Decorative icon slot that is hidden from assistive tech Polymorphic root via render for link and button markers Pairs with the shimmer utility for streaming status text Customizable styling through the className prop on every part Variants # Use variant to switch between an inline marker,",
+   "achados": {
+    "aria": [
+     "Status # Set role=\"status\" and include a Spinner for streaming or in-progress markers so updates are announced.",
+     "Status and Progress # For streaming or progress markers such as \"Thinking...\" or a running tool, set role=\"status\" so assistive tech announces the update as it appears.",
+     "Copy < Marker variant = \"separator\" > < MarkerContent > Today </ MarkerContent > </ Marker > Note: Do not add role=\"separator\" to a labeled divider.",
+     "A separator takes its accessible name from aria-label , not from its text, and its contents are treated as presentational, so the visible label would not be announced.",
+     "Reserve role=\"separator\" for a divider with no meaningful text.",
+     "The bottom border is decorative, so choose role=\"status\" , render , or no role based on the marker's purpose."
+    ],
+    "composicao": [
+     "Compose it with Message in a conversation thread.",
+     "Switched to a new branch Explored 4 files Syncing completed Copy import { BookOpenCheck, GitBranchIcon, SearchIcon } from \"lucide-react\" import { Marker, MarkerContent, MarkerIcon } from \"@/components/ui/marker\" View Code Links and Buttons # Turn a marker into a link or button with the render prop on Marker .",
+     "Copy < Marker aria-label = \"Synced\" > < MarkerIcon > < CheckIcon /> </ MarkerIcon > </ Marker > Interactive Markers # When a marker links or triggers an action, render it as a real <button> or <a> with the render prop so it is focusable and exposes the correct role.",
+     "MarkerIcon # A decorative icon slot.",
+     "Prop Type Default Description className string - Additional classes to apply to the icon slot.",
+     "Prop Type Default Description className string - Additional classes to apply to the content slot."
+    ],
+    "acessibilidade": [
+     "A separator takes its accessible name from aria-label , not from its text, and its contents are treated as presentational, so the visible label would not be announced.",
+     "The accessible name comes from the marker text.",
+     "Label Menubar On This Page Installation Usage Composition Features Variants Status Shimmer Separator Border With Icon Links and Buttons Accessibility Status and Progress Labeled Separators Bordered Markers Decorative Icons Interactive Markers API Reference Marker MarkerIcon MarkerContent Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 8617
+  },
+  "menubar": {
+   "secoes": [
+    "Menubar",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Checkbox",
+    "Radio",
+    "Submenu",
+    "With Icons",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Menubar ├── MenubarMenu │ ├── MenubarTrigger │ └── MenubarContent │ ├── MenubarGroup │ │ ├── MenubarLabel │ │ ├── MenubarItem │ │ └── MenubarItem │ ├── MenubarSeparator │ ├── MenubarGroup │ │ ├── MenubarLabel │ │ ├── MenubarCheckboxItem │ │ └── MenubarCheckboxItem │ ├── MenubarSeparator │ ├── MenubarGroup │ │ ├── MenubarLabel │ │ └── MenubarRadioGroup │ │ ├── MenubarRadioItem │ │ └── MenubarRadioI",
+   "achados": {
+    "composicao": [
+     "Marker Message On This Page Installation Usage Composition Checkbox Radio Submenu With Icons RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4124
+  },
+  "message": {
+   "secoes": [
+    "Message",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Features",
+    "Avatar",
+    "Group",
+    "Header and Footer",
+    "Actions",
+    "Attachment",
+    "Accessibility",
+    "Label icon-only actions",
+    "Status updates",
+    "API Reference",
+    "Message",
+    "MessageGroup",
+    "MessageAvatar",
+    "MessageContent",
+    "MessageHeader",
+    "MessageFooter"
+   ],
+   "composicao": "Message ├── MessageAvatar └── MessageContent ├── MessageHeader ├── Bubble └── MessageFooter Use MessageGroup to stack consecutive messages from the same sender: Copy MessageGroup ├── Message └── Message Features # Start and end alignment for sender and receiver rows via the align prop Avatar slot that anchors to the bottom of the message and stays clear of the footer Header and footer slots for se",
+   "achados": {
+    "aria": [
+     "Label icon-only actions # Action buttons in MessageFooter are usually icon-only, so give each one an aria-label .",
+     "Copy < MessageFooter > < Button variant = \"ghost\" size = \"icon\" aria-label = \"Copy\" > < CopyIcon /> </ Button > </ MessageFooter > Status updates # For in-progress messages, use a Marker with role=\"status\" so assistive tech announces the update as it appears."
+    ],
+    "composicao": [
+     "MessageAvatar # The avatar slot, aligned to the bottom of the message.",
+     "Prop Type Default Description className string - Additional classes to apply to the avatar slot.",
+     "Prop Type Default Description className string - Additional classes to apply to the content slot.",
+     "Menubar Message Scroller On This Page Installation Usage Composition Features Avatar Group Header and Footer Actions Attachment Accessibility Label icon-only actions Status updates API Reference Message MessageGroup MessageAvatar MessageContent MessageHeader MessageFooter Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "acessibilidade": [
+     "Copy \"use client\" import { DownloadIcon, FileTextIcon } from \"lucide-react\" View Code Accessibility # Message is a presentational layout wrapper.",
+     "Accessibility comes from the content you place inside it.",
+     "Menubar Message Scroller On This Page Installation Usage Composition Features Avatar Group Header and Footer Actions Attachment Accessibility Label icon-only actions Status updates API Reference Message MessageGroup MessageAvatar MessageContent MessageHeader MessageFooter Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 7743
+  },
+  "message-scroller": {
+   "secoes": [
+    "Message Scroller",
+    "What Makes a Great Streaming Chat Experience",
+    "MessageScroller",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Core Concepts",
+    "Anchoring Turns",
+    "Group Chat",
+    "Keeping Context Visible",
+    "Following the Live Edge",
+    "Opening Saved Threads",
+    "Loading Earlier Messages",
+    "Animating New Messages",
+    "Jumping to Messages",
+    "Tracking the Reader&#x27;s Position",
+    "Reading Scroll State",
+    "Performance",
+    "Virtualization",
+    "Accessibility",
+    "Unstyled",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Selecting text, using the keyboard, opening a link, or searching should all stop the interface from moving.",
+     "Keep the transcript navigable, preserve keyboard focus, and announce important events at a comfortable pace.",
+     "Scrolling away from the live edge releases the view, whether by wheel, touch, keyboard scroll keys, or dragging the scrollbar.",
+     "start }px)` , } } > < Message > { message.content } </ Message > </ div > ) }) } </ div > </ MessageScrollerContent > </ MessageScrollerViewport > < MessageScrollerButton /> </ MessageScroller > </ MessageScrollerProvider > ) } Accessibility # MessageScroller keeps the scroll container keyboard reachable and the transcript announceable without forcing a specific message UI.",
+     "MessageScrollerViewport is a labelled, keyboard-focusable scroll region by default.",
+     "It uses role=\"region\" , aria-label=\"Messages\" , and tabIndex={0} , so keyboard users can focus the transcript and scroll it directly."
+    ],
+    "aria": [
+     "Rows stay in the DOM for selection, copy, find-in-page, SSR, and assistive tech, but the browser can skip rendering work for rows far outside the viewport.",
+     "It uses role=\"region\" , aria-label=\"Messages\" , and tabIndex={0} , so keyboard users can focus the transcript and scroll it directly.",
+     "MessageScrollerContent marks the transcript as a live region with role=\"log\" and aria-relevant=\"additions\" .",
+     "Copy < MessageScrollerContent aria-busy ={ status === \"streaming\" } > { /* messages */ } </ MessageScrollerContent > Pass aria-busy while a turn streams if announcements should wait for the completed message row."
+    ],
+    "responsivo": [
+     "Start a new turn near the top of the viewport.",
+     "Stay responsive in long threads.",
+     "Streaming text, markdown, code, images, and long history should still feel responsive.",
+     "MessageScroller is scoped to the scroll viewport.",
+     "Lays out the viewport, content, and controls inside the provider.",
+     "An anchor is the row the viewport should treat as the start of that turn."
+    ],
+    "toque": [
+     "Scrolling away from the live edge releases the view, whether by wheel, touch, keyboard scroll keys, or dragging the scrollbar."
+    ],
+    "composicao": [
+     "The deploy moved large CSV jobs onto the shared retry policy, which made each failed attempt hold a worker slot longer than before."
+    ],
+    "acessibilidade": [
+     "Be accessible without the noise.",
+     "start }px)` , } } > < Message > { message.content } </ Message > </ div > ) }) } </ div > </ MessageScrollerContent > </ MessageScrollerViewport > < MessageScrollerButton /> </ MessageScroller > </ MessageScrollerProvider > ) } Accessibility # MessageScroller keeps the scroll container keyboard reachable and the transcript announceable without forcing a specific message UI."
+    ]
+   },
+   "caracteres": 30811
+  },
+  "native-select": {
+   "secoes": [
+    "Native Select",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Simple",
+    "With groups",
+    "Groups",
+    "Disabled",
+    "Invalid",
+    "Native Select vs Select",
+    "RTL",
+    "API Reference",
+    "NativeSelect",
+    "NativeSelectOption",
+    "NativeSelectOptGroup"
+   ],
+   "composicao": "NativeSelect ├── NativeSelectOption ├── NativeSelectOption ├── NativeSelectOption └── NativeSelectOption With groups # Use NativeSelectOptGroup to organize options into categories. Copy NativeSelect ├── NativeSelectOptGroup │ ├── NativeSelectOption │ └── NativeSelectOption └── NativeSelectOptGroup ├── NativeSelectOption └── NativeSelectOption Groups # Use NativeSelectOptGroup to organize options i",
+   "achados": {
+    "aria": [
+     "Disabled Apple Banana Blueberry Copy import { NativeSelect, NativeSelectOption, View Code Invalid # Use aria-invalid to show validation errors and the data-invalid attribute to the Field component for styling."
+    ],
+    "responsivo": [
+     "Error state Apple Banana Blueberry Copy import { NativeSelect, NativeSelectOption, View Code Native Select vs Select # Use NativeSelect for native browser behavior, better performance, or mobile-optimized dropdowns."
+    ]
+   },
+   "caracteres": 4989
+  },
+  "navigation-menu": {
+   "secoes": [
+    "Navigation Menu",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Link Component",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "NavigationMenu ├── NavigationMenuList │ ├── NavigationMenuItem │ │ ├── NavigationMenuTrigger │ │ └── NavigationMenuContent │ │ ├── NavigationMenuLink │ │ └── NavigationMenuLink │ └── NavigationMenuItem │ └── NavigationMenuLink └── NavigationMenuIndicator Link Component # Use the render prop to compose a custom link component such as Next.js Link . Copy import Link from \"next/link\" import { Navigat",
+   "achados": {
+    "composicao": [
+     "Native Select Pagination On This Page Installation Usage Composition Link Component RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3594
+  },
+  "pagination": {
+   "secoes": [
+    "Pagination",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Simple",
+    "Icons Only",
+    "Next.js",
+    "RTL",
+    "Changelog",
+    "RTL Support",
+    "Update PaginationPrevious .",
+    "Update PaginationNext ."
+   ],
+   "composicao": "Pagination └── PaginationContent ├── PaginationItem │ └── PaginationPrevious ├── PaginationItem │ └── PaginationLink ├── PaginationItem │ └── PaginationEllipsis └── PaginationItem └── PaginationNext Simple # A simple pagination with only page numbers. 1 2 3 4 5 Copy import { Pagination, PaginationContent, View Code Icons Only # Use just the previous and next buttons without page numbers. This is u",
+   "achados": {},
+   "caracteres": 5331
+  },
+  "popover": {
+   "secoes": [
+    "Popover",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Basic",
+    "Align",
+    "With Form",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Popover ├── PopoverTrigger └── PopoverContent Basic # A simple popover with a header, title, and description. Open Popover Copy import { Button } from \"@/components/ui/button\" import { Popover, View Code Align # Use the align prop on PopoverContent to control the horizontal alignment. Start Center End Copy import { Button } from \"@/components/ui/button\" import { Popover, View Code With Form # A po",
+   "achados": {
+    "composicao": [
+     "</ PopoverDescription > </ PopoverHeader > </ PopoverContent > </ Popover > Composition # Use the following composition to build a Popover : Copy Popover ├── PopoverTrigger └── PopoverContent Basic # A simple popover with a header, title, and description.",
+     "Pagination Progress On This Page Installation Usage Composition Basic Align With Form RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3460
+  },
+  "progress": {
+   "secoes": [
+    "Progress",
+    "Installation",
+    "Usage",
+    "Composition",
+    "With label and value",
+    "Label",
+    "Controlled",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Progress ├── ProgressLabel ├── ProgressValue └── ProgressTrack └── ProgressIndicator Label # Use ProgressLabel and ProgressValue to add a label and value display. Upload progress 56% x Copy import { Progress, ProgressLabel, View Code Controlled # A progress bar that can be controlled by a slider. x Copy \"use client\" import * as React from \"react\" View Code RTL # To enable RTL support in shadcn/ui,",
+   "achados": {
+    "composicao": [
+     "Base UI React Aria Radix UI x Copy \"use client\" import * as React from \"react\" View Code Installation # Command Manual pnpm npm yarn bun pnpm dlx shadcn@latest add progress Copy Usage # Copy import { Progress } from \"@/components/ui/progress\" Copy < Progress value ={ 33 } /> Composition # With label and value # Use ProgressLabel and ProgressValue to add a label and value display.",
+     "Popover Questionnaire On This Page Installation Usage Composition With label and value Label Controlled RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3069
+  },
+  "questionnaire": {
+   "secoes": [
+    "Questionnaire",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Server Rendering",
+    "Multiple Selection",
+    "Freeform Answer",
+    "Explicit Skip",
+    "Shortcuts",
+    "Custom Validation",
+    "Controlled",
+    "Resume",
+    "Conditional Items",
+    "Navigation State",
+    "Custom Progress",
+    "Animated Items",
+    "Card",
+    "Dialog",
+    "Accessibility",
+    "Unstyled",
+    "API Reference"
+   ],
+   "composicao": "Questionnaire ├── QuestionnaireProgress ├── QuestionnaireItem │ ├── QuestionnaireTitle │ ├── QuestionnaireDescription │ ├── QuestionnaireChoices │ │ ├── QuestionnaireChoice │ │ └── QuestionnaireInput │ └── QuestionnaireError └── QuestionnaireActions ├── QuestionnairePrevious ├── QuestionnaireSkip ├── QuestionnaireNext └── QuestionnaireSubmit Questionnaire owns the ordered items, active item, answe",
+   "achados": {
+    "teclado": [
+     "Use the displayed shortcut or navigate with the keyboard.",
+     "See the Questionnaire accessibility guide for labeling custom compositions and the complete keyboard behavior."
+    ],
+    "aria": [
+     "Descriptions and active errors are associated with the current item, and invalid items and answer controls expose aria-invalid .",
+     "Always give QuestionnaireInput an accessible name with a visible label, aria-label , or aria-labelledby ."
+    ],
+    "composicao": [
+     "Share context Copy \"use client\" import * as React from \"react\" View Code Freeform Answer # Compose QuestionnaireInput with fixed choices when the user can provide another answer.",
+     "Previous Next Save workflow Copy \"use client\" import * as React from \"react\" View Code Card # Compose Questionnaire with Card slots while keeping the question title and description semantic.",
+     "Previous Next Create task Copy \"use client\" import * as React from \"react\" View Code Dialog # Compose Questionnaire inside a Dialog while keeping cancellation and dismissal host-owned.",
+     "Progress Radio Group On This Page Installation Usage Composition Server Rendering Multiple Selection Freeform Answer Explicit Skip Shortcuts Custom Validation Controlled Resume Conditional Items Navigation State Custom Progress Animated Items Card Dialog Accessibility Unstyled API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "acessibilidade": [
+     "Open clarification Copy \"use client\" import * as React from \"react\" View Code Accessibility # QuestionnaireItem renders a fieldset , and QuestionnaireTitle renders its legend .",
+     "Always give QuestionnaireInput an accessible name with a visible label, aria-label , or aria-labelledby .",
+     "See the Questionnaire accessibility guide for labeling custom compositions and the complete keyboard behavior.",
+     "Progress Radio Group On This Page Installation Usage Composition Server Rendering Multiple Selection Freeform Answer Explicit Skip Shortcuts Custom Validation Controlled Resume Conditional Items Navigation State Custom Progress Animated Items Card Dialog Accessibility Unstyled API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 14361
+  },
+  "radio-group": {
+   "secoes": [
+    "Radio Group",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Description",
+    "Choice Card",
+    "Fieldset",
+    "Disabled",
+    "Invalid",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "RadioGroup ├── RadioGroupItem └── RadioGroupItem Description # Radio group items with a description using the Field component. Default Standard spacing for most use cases. Comfortable More space between elements. Compact Minimal spacing for dense layouts. Copy import { Field, FieldContent, View Code Choice Card # Use FieldLabel to wrap the entire Field for a clickable card-style selection. Plus Fo",
+   "achados": {
+    "aria": [
+     "Disabled Option 2 Option 3 Copy import { Field, FieldLabel } from \"@/components/ui/field\" import { RadioGroup, RadioGroupItem } from \"@/components/ui/radio-group\" View Code Invalid # Use aria-invalid on RadioGroupItem and data-invalid on Field to show validation errors."
+    ],
+    "composicao": [
+     "Questionnaire Resizable On This Page Installation Usage Composition Description Choice Card Fieldset Disabled Invalid RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4418
+  },
+  "radix": {
+   "erro": "Error: 404 em https://ui.shadcn.com/docs/components/radix"
+  },
+  "resizable": {
+   "secoes": [
+    "Resizable",
+    "About",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Vertical",
+    "Handle",
+    "RTL",
+    "API Reference",
+    "Changelog",
+    "2025-02-02 react-resizable-panels v4"
+   ],
+   "composicao": "ResizablePanelGroup ├── ResizablePanel ├── ResizableHandle └── ResizablePanel Vertical # Use orientation=\"vertical\" for vertical resizing. Header Content Copy import { ResizableHandle, ResizablePanel, View Code Handle # Use the withHandle prop on ResizableHandle to show a visible handle. Sidebar Content Copy import { ResizableHandle, ResizablePanel, View Code RTL # To enable RTL support in shadcn/",
+   "achados": {
+    "composicao": [
+     "Radio Group Scroll Area On This Page About Installation Usage Composition Vertical Handle RTL API Reference Changelog 2025-02-02 react-resizable-panels v4 Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3708
+  },
+  "scroll-area": {
+   "secoes": [
+    "Scroll Area",
+    "Tags",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Horizontal",
+    "RTL",
+    "العلامات",
+    "API Reference"
+   ],
+   "composicao": "ScrollArea └── ScrollBar Horizontal # Use ScrollBar with orientation=\"horizontal\" for horizontal scrolling. Photo by Ornella Binni Photo by Tom Byrom Photo by Vladimir Malyavko Copy import * as React from \"react\" import Image from \"next/image\" View Code RTL # To enable RTL support in shadcn/ui, see the RTL configuration guide . Arabic (العربية) ▼ Toggle العلامات v1.2.0-beta.50 v1.2.0-beta.49 v1.2.",
+   "achados": {
+    "composicao": [
+     "</ ScrollArea > Composition # Use the following composition to build a ScrollArea : Copy ScrollArea └── ScrollBar Horizontal # Use ScrollBar with orientation=\"horizontal\" for horizontal scrolling.",
+     "Resizable Select On This Page Installation Usage Composition Horizontal RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4264
+  },
+  "select": {
+   "secoes": [
+    "Select",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Align Item With Trigger",
+    "Groups",
+    "Scrollable",
+    "Disabled",
+    "Invalid",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Select ├── SelectTrigger │ └── SelectValue └── SelectContent ├── SelectGroup │ ├── SelectLabel │ ├── SelectItem │ └── SelectItem ├── SelectSeparator └── SelectGroup ├── SelectLabel ├── SelectItem └── SelectItem Align Item With Trigger # Use alignItemWithTrigger on SelectContent to control whether the selected item aligns with the trigger. When true (default), the popup positions so the selected it",
+   "achados": {
+    "aria": [
+     "Select a timezone ▼ Copy import { Select, SelectContent, View Code Disabled # Select a fruit ▼ Copy import { Select, SelectContent, View Code Invalid # Add the data-invalid attribute to the Field component and the aria-invalid attribute to the SelectTrigger component to show an error state.",
+     "Copy < Field data-invalid > < FieldLabel > Fruit </ FieldLabel > < SelectTrigger aria-invalid > < SelectValue /> </ SelectTrigger > </ Field > Fruit Select a fruit ▼ Please select a fruit."
+    ],
+    "composicao": [
+     "Scroll Area Separator On This Page Installation Usage Composition Align Item With Trigger Groups Scrollable Disabled Invalid RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 4294
+  },
+  "separator": {
+   "secoes": [
+    "Separator",
+    "Installation",
+    "Usage",
+    "Vertical",
+    "Menu",
+    "List",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3163
+  },
+  "sheet": {
+   "secoes": [
+    "Sheet",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Side",
+    "No Close Button",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Sheet ├── SheetTrigger └── SheetContent ├── SheetHeader │ ├── SheetTitle │ └── SheetDescription └── SheetFooter Side # Use the side prop on SheetContent to set the edge of the screen where the sheet appears. Values are top , right , bottom , or left . top right bottom left Copy import { Button } from \"@/components/ui/button\" import { Sheet, View Code No Close Button # Use showCloseButton={false} o",
+   "achados": {
+    "composicao": [
+     "</ SheetDescription > </ SheetHeader > </ SheetContent > </ Sheet > Composition # Use the following composition to build a Sheet : Copy Sheet ├── SheetTrigger └── SheetContent ├── SheetHeader │ ├── SheetTitle │ └── SheetDescription └── SheetFooter Side # Use the side prop on SheetContent to set the edge of the screen where the sheet appears.",
+     "Separator Sidebar On This Page Installation Usage Composition Side No Close Button RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3308
+  },
+  "sidebar": {
+   "secoes": [
+    "Sidebar",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Structure",
+    "SidebarProvider",
+    "Props",
+    "Width",
+    "Keyboard Shortcut",
+    "Sidebar",
+    "Props",
+    "useSidebar",
+    "SidebarHeader",
+    "SidebarFooter",
+    "SidebarContent",
+    "SidebarGroup",
+    "SidebarMenu",
+    "SidebarMenuButton",
+    "SidebarMenuAction",
+    "SidebarMenuSub",
+    "SidebarMenuBadge",
+    "SidebarMenuSkeleton",
+    "SidebarTrigger",
+    "SidebarRail",
+    "Controlled Sidebar",
+    "Theming",
+    "Styling",
+    "RTL",
+    "Changelog",
+    "RTL Support",
+    "Add dir prop to Sidebar component.",
+    "Add data-side attribute to sidebar container.",
+    "Update sidebar container positioning classes.",
+    "Update SidebarRail positioning classes.",
+    "Add RTL flip to SidebarTrigger icon."
+   ],
+   "composicao": "SidebarProvider ├── Sidebar │ ├── SidebarHeader │ ├── SidebarContent │ │ ├── SidebarGroup │ │ │ ├── SidebarGroupLabel │ │ │ ├── SidebarGroupAction │ │ │ ├── SidebarGroupContent │ │ │ └── SidebarMenu │ │ │ ├── SidebarMenuItem │ │ │ │ ├── SidebarMenuButton │ │ │ │ ├── SidebarMenuAction │ │ │ │ └── SidebarMenuBadge │ │ │ └── SidebarMenuItem │ │ │ ├── SidebarMenuButton │ │ │ └── SidebarMenuSub │ │ │ ├",
+   "achados": {
+    "teclado": [
+     "CSSProperties } > < Sidebar /> </ SidebarProvider > Keyboard Shortcut # To trigger the sidebar, you use the cmd+b keyboard shortcut on Mac and ctrl+b on Windows."
+    ],
+    "responsivo": [
+     "components/ui/sidebar.tsx Copy const SIDEBAR_WIDTH = \"16rem\" const SIDEBAR_WIDTH_MOBILE = \"18rem\" For multiple sidebars in your application, you can use the --sidebar-width and --sidebar-width-mobile CSS variables in the style prop.",
+     "Copy < SidebarProvider style ={ { \"--sidebar-width\" : \"20rem\" , \"--sidebar-width-mobile\" : \"20rem\" , } as React .",
+     "openMobile boolean Whether the sidebar is open on mobile.",
+     "setOpenMobile (open: boolean) => void Sets the open state of the sidebar on mobile.",
+     "isMobile boolean Whether the sidebar is on mobile."
+    ],
+    "composicao": [
+     "By default, the SidebarMenuButton renders a button but you can use the render prop to render a different component such as a Link or an a tag.",
+     "Add data-side={side} to the sidebar container element: Copy <div data-slot=\"sidebar-container\" + data-side={side} className={cn( Update sidebar container positioning classes."
+    ]
+   },
+   "caracteres": 16096
+  },
+  "skeleton": {
+   "secoes": [
+    "Skeleton",
+    "Installation",
+    "Usage",
+    "Avatar",
+    "Card",
+    "Text",
+    "Form",
+    "Table",
+    "RTL"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2848
+  },
+  "slider": {
+   "secoes": [
+    "Slider",
+    "Installation",
+    "Usage",
+    "Range",
+    "Multiple Thumbs",
+    "Vertical",
+    "Controlled",
+    "Disabled",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3094
+  },
+  "spinner": {
+   "secoes": [
+    "Spinner",
+    "Installation",
+    "Usage",
+    "Customization",
+    "Size",
+    "Button",
+    "Badge",
+    "Input Group",
+    "Empty",
+    "RTL"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "ComponentProps < \"svg\" >) { return ( < LoaderIcon role = \"status\" aria-label = \"Loading\" className ={ cn ( \"size-4 animate-spin\" , className) } {..."
+    ]
+   },
+   "caracteres": 3974
+  },
+  "switch": {
+   "secoes": [
+    "Switch",
+    "Installation",
+    "Usage",
+    "Description",
+    "Choice Card",
+    "Disabled",
+    "Invalid",
+    "Size",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Disabled Copy import { Field, FieldLabel } from \"@/components/ui/field\" import { Switch } from \"@/components/ui/switch\" View Code Invalid # Add the aria-invalid prop to the Switch component to indicate an invalid state."
+    ]
+   },
+   "caracteres": 3661
+  },
+  "table": {
+   "secoes": [
+    "Table",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Footer",
+    "Actions",
+    "Data Table",
+    "RTL"
+   ],
+   "composicao": "Table ├── TableCaption ├── TableHeader │ └── TableRow │ ├── TableHead │ ├── TableHead │ ├── TableHead │ └── TableHead ├── TableBody │ ├── TableRow │ │ ├── TableCell │ │ ├── TableCell │ │ ├── TableCell │ │ └── TableCell │ └── TableRow │ ├── TableCell │ ├── TableCell │ ├── TableCell │ └── TableCell └── TableFooter Footer # Use the <TableFooter /> component to add a footer to the table. A list of you",
+   "achados": {
+    "teclado": [
+     "Product Price Actions Wireless Mouse $29.99 Open menu Mechanical Keyboard $129.99 Open menu USB-C Hub $49.99 Open menu Copy import { MoreHorizontalIcon } from \"lucide-react\" import { Button } from \"@/components/ui/button\" View Code Data Table # You can use the <Table /> component to build more complex data tables."
+    ]
+   },
+   "caracteres": 4698
+  },
+  "tabs": {
+   "secoes": [
+    "Tabs",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Line",
+    "Vertical",
+    "Disabled",
+    "Icons",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Tabs ├── TabsList │ ├── TabsTrigger │ └── TabsTrigger ├── TabsContent └── TabsContent Line # Use the variant=\"line\" prop on TabsList for a line style. Overview Analytics Reports Copy import { Tabs, TabsList, TabsTrigger } from \"@/components/ui/tabs\" export function TabsLine () { View Code Vertical # Use orientation=\"vertical\" for vertical tabs. Account Password Notifications Copy import { Tabs, Ta",
+   "achados": {
+    "composicao": [
+     "</ TabsContent > </ Tabs > Composition # Use the following composition to build Tabs : Copy Tabs ├── TabsList │ ├── TabsTrigger │ └── TabsTrigger ├── TabsContent └── TabsContent Line # Use the variant=\"line\" prop on TabsList for a line style.",
+     "Table Textarea On This Page Installation Usage Composition Line Vertical Disabled Icons RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3882
+  },
+  "textarea": {
+   "secoes": [
+    "Textarea",
+    "Installation",
+    "Usage",
+    "Field",
+    "Disabled",
+    "Invalid",
+    "Button",
+    "RTL"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Message Copy import { Field, FieldLabel } from \"@/components/ui/field\" import { Textarea } from \"@/components/ui/textarea\" View Code Invalid # Use the aria-invalid prop to mark the textarea as invalid."
+    ]
+   },
+   "caracteres": 3171
+  },
+  "toast": {
+   "secoes": [
+    "Toast",
+    "Installation",
+    "Run the following command:",
+    "Add the Toaster component.",
+    "Usage",
+    "Types",
+    "Action",
+    "Promise",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {
+    "toque": [
+     "Create Event Copy \"use client\" import { Button } from \"@/components/ui/button\" View Code API Reference # See the Base UI Toast documentation for details about manager options, stacking, swipe dismissal, and the primitive API."
+    ]
+   },
+   "caracteres": 3178
+  },
+  "toggle": {
+   "secoes": [
+    "Toggle",
+    "Installation",
+    "Usage",
+    "Outline",
+    "With Text",
+    "Size",
+    "Disabled",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2936
+  },
+  "toggle-group": {
+   "secoes": [
+    "Toggle Group",
+    "Installation",
+    "Usage",
+    "Composition",
+    "Outline",
+    "Size",
+    "Spacing",
+    "Vertical",
+    "Disabled",
+    "Custom",
+    "RTL",
+    "API Reference",
+    "Changelog",
+    "2026-05-17 Default Spacing"
+   ],
+   "composicao": "ToggleGroup ├── ToggleGroupItem └── ToggleGroupItem Outline # Use variant=\"outline\" for an outline style. All Missed Copy import { ToggleGroup, ToggleGroupItem, View Code Size # Use the size prop to change the size of the toggle group. Top Bottom Left Right Top Bottom Left Right Copy import { ToggleGroup, ToggleGroupItem, View Code Spacing # Use spacing to add spacing between toggle group items. T",
+   "achados": {
+    "composicao": [
+     "Toggle Tooltip On This Page Installation Usage Composition Outline Size Spacing Vertical Disabled Custom RTL API Reference Changelog 2026-05-17 Default Spacing Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3764
+  },
+  "tooltip": {
+   "secoes": [
+    "Tooltip",
+    "Installation",
+    "Run the following command:",
+    "Add the TooltipProvider to the root of your app.",
+    "Usage",
+    "Composition",
+    "Side",
+    "With Keyboard Shortcut",
+    "Disabled Button",
+    "RTL",
+    "API Reference"
+   ],
+   "composicao": "Tooltip ├── TooltipTrigger └── TooltipContent Side # Use the side prop to change the position of the tooltip. left top bottom right Copy import { Button } from \"@/components/ui/button\" import { Tooltip, View Code With Keyboard Shortcut # Copy import { SaveIcon } from \"lucide-react\" import { Button } from \"@/components/ui/button\" View Code Disabled Button # Show a tooltip on a disabled button by wr",
+   "achados": {
+    "teclado": [
+     "left top bottom right Copy import { Button } from \"@/components/ui/button\" import { Tooltip, View Code With Keyboard Shortcut # Copy import { SaveIcon } from \"lucide-react\" import { Button } from \"@/components/ui/button\" View Code Disabled Button # Show a tooltip on a disabled button by wrapping it with a span.",
+     "Toggle Group Typography On This Page Installation Usage Composition Side With Keyboard Shortcut Disabled Button RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "composicao": [
+     "Toggle Group Typography On This Page Installation Usage Composition Side With Keyboard Shortcut Disabled Button RTL API Reference Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 3466
+  },
+  "typography": {
+   "secoes": [
+    "Typeset",
+    "Principles",
+    "Features",
+    "Building Your Typeset",
+    "Custom Typesets",
+    "Custom Themes",
+    "Accessibility and Dark Mode",
+    "Responsive Table",
+    "Overrides",
+    "Opting Out",
+    "Streaming",
+    "Prior Art"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "If the text feels a little tight on a dark surface, you can loosen the leading there: Copy .dark .typeset { --typeset-leading : 1.9 ; } Responsive Table # Tables stay real tables and wrap to fit.",
+     "Theming Dark Mode On This Page Principles Features Building Your Typeset Custom Typesets Custom Themes Accessibility and Dark Mode Responsive Table Overrides Opting Out Streaming Prior Art Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ],
+    "acessibilidade": [
+     "Theming Dark Mode On This Page Principles Features Building Your Typeset Custom Typesets Custom Themes Accessibility and Dark Mode Responsive Table Overrides Opting Out Streaming Prior Art Deploy your shadcn/ui app on Vercel Trusted by OpenAI, Sonos, Adobe, and more."
+    ]
+   },
+   "caracteres": 9830
+  }
+ }
+}

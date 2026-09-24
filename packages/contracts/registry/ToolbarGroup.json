@@ -1,0 +1,56 @@
+{
+  "name": "ToolbarGroup",
+  "category": "Actions",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Structural grouping of toolbar items.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--space-1"
+  ],
+  "a11y": {
+    "role": "group",
+    "keyboard": [],
+    "apg": "No role of its own and no keyboard: it is the Base UI Toolbar Group, which clusters related controls inside the toolbar. The roving tabindex belongs to Toolbar; the group only groups. Pass `label` when the cluster needs a name."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Toolbar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#ToolbarGroup"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Names the sub-group. Without it the group is only visual."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Buttons that belong together inside the toolbar."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes on the group."
+    }
+  ]
+}

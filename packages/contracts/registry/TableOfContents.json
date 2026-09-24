@@ -1,0 +1,74 @@
+{
+  "name": "TableOfContents",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "In-page index of a document's sections. Sticky beside the content, marks the section in view.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "current"
+  ],
+  "tokens": [
+    "--border",
+    "--foreground",
+    "--muted-foreground",
+    "--primary",
+    "--space-1",
+    "--space-3",
+    "--space-4",
+    "--space-6",
+    "--space-8",
+    "--subtle-foreground",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "navigation",
+    "apg": "landmark-navigation",
+    "keyboard": [
+      "Tab",
+      "Enter"
+    ]
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Breadcrumb",
+      "AppShell"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#TableOfContents"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "TocItem[]",
+      "default": "—",
+      "description": "The entries: {id, label, sub?}. `sub` indents one level and there is no level below that — a contents list that mirrors five heading levels is a second document."
+    },
+    {
+      "name": "current",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the section you are in; it gets aria-current. Which one that is depends on scroll, and scroll is the page's business, not the component's."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"On this page\"",
+      "description": "Both the visible heading and the accessible name of the <nav> — one string, so they cannot say different things."
+    }
+  ]
+}

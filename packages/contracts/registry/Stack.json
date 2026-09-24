@@ -1,0 +1,63 @@
+{
+  "name": "Stack",
+  "category": "Layout",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Vertical spacing/layout primitive.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--space-4"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "Layout primitive, no role and no keyboard: it is a <div> that lays its children in a column. Semantics belong to what you put in it."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Cluster",
+      "Grid"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Stack"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Vertical flow: a column with --space-4 between items. The gap has three steps and no others (ADR-0051) — a layout primitive that takes any spacing is how a system stops having spacing."
+    },
+    {
+      "name": "gap",
+      "type": "\"tight\" | \"normal\" | \"loose\"",
+      "default": "\"normal\"",
+      "description": "Three steps and no others (ADR-0051): tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\" | \"stretch\"",
+      "default": "\"stretch\"",
+      "description": "The cross axis. The default stretches children to the column width, as always; `start` keeps each child at its own width."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "For alignment or width that this one job needs. Every other div attribute passes through."
+    }
+  ]
+}

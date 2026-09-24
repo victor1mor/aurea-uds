@@ -1,0 +1,14 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function PedestrianFamily({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M20,30H17a2.0021,2.0021,0,0,1-2-2V23h2v5h3V23h2V19a1.0011,1.0011,0,0,0-1-1H12.2793l-2-6H4a1.0011,1.0011,0,0,0-1,1v6H5v9H9V21h2v7a2.0021,2.0021,0,0,1-2,2H5a2.0021,2.0021,0,0,1-2-2V21a2.0021,2.0021,0,0,1-2-2V13a3.0033,3.0033,0,0,1,3-3h6.2793a1.998,1.998,0,0,1,1.8975,1.3674L13.7207,16H21a3.0033,3.0033,0,0,1,3,3v4a2.0021,2.0021,0,0,1-2,2v3A2.0021,2.0021,0,0,1,20,30Z", fill: color}),
+    React.createElement(Path, {d: "M28,30H26V19h3V13a1.0011,1.0011,0,0,0-1-1H24V10h4a3.0033,3.0033,0,0,1,3,3v6a2.0021,2.0021,0,0,1-2,2H28Z", fill: color}),
+    React.createElement(Path, {d: "M7,9a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,7,9ZM7,3A2,2,0,1,0,9,5,2.0021,2.0021,0,0,0,7,3Z", fill: color}),
+    React.createElement(Path, {d: "M25,9a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,25,9Zm0-6a2,2,0,1,0,2,2A2.0021,2.0021,0,0,0,25,3Z", fill: color}),
+    React.createElement(Path, {d: "M18.5,15A3.5,3.5,0,1,1,22,11.5,3.5041,3.5041,0,0,1,18.5,15Zm0-5A1.5,1.5,0,1,0,20,11.5,1.5017,1.5017,0,0,0,18.5,10Z", fill: color})
+  );
+}

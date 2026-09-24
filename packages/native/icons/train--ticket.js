@@ -1,0 +1,11 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function TrainTicket({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M29.1257,7.125a1.125,1.125,0,1,1,0-2.25h.875V2h-12V4.875h.875a1.125,1.125,0,0,1,0,2.25h-.875V10h12V7.125Z", fill: color}),
+    React.createElement(Path, {d: "M22.0007,13v3h-16V10h9V8H6.185A2.9948,2.9948,0,0,1,9.0007,6h6V4h-6a5.0057,5.0057,0,0,0-5,5V21a4.99,4.99,0,0,0,3.582,4.77L5.77,30H7.9458L9.66,26h8.6812l1.7143,4h2.1758l-1.8127-4.23A4.99,4.99,0,0,0,24.0007,21V13Zm0,7h-3v2h2.8157a2.9948,2.9948,0,0,1-2.8157,2h-10A2.9948,2.9948,0,0,1,6.185,22H9.0007V20h-3V18h16Z", fill: color})
+  );
+}

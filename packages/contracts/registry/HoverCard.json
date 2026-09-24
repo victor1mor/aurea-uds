@@ -1,0 +1,76 @@
+{
+  "name": "HoverCard",
+  "category": "Overlays",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Rich preview that opens when the pointer rests on a link, and whose content can be reached.",
+  "icon": "user--avatar",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "side": [
+      "bottom",
+      "left",
+      "right",
+      "top"
+    ]
+  },
+  "states": [
+    "closed",
+    "open"
+  ],
+  "tokens": [
+    "--popover",
+    "--popover-foreground",
+    "--border",
+    "--radius-card",
+    "--shadow-lg",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "dialog",
+    "apg": "none: deliberately not the Tooltip pattern. A tooltip is a short LABEL and its content must not be reachable; a preview is content and must be.",
+    "keyboard": [
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/preview-card",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Tooltip",
+      "Popover",
+      "Avatar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#HoverCard"
+  },
+  "props": [
+    {
+      "name": "trigger",
+      "type": "ReactElement",
+      "default": "none",
+      "description": "REQUIRED. The element the pointer rests on, usually a link or a name."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "none",
+      "description": "The preview. Never put anything essential here: pointer rest is not available to keyboard-only or touch users."
+    },
+    {
+      "name": "side",
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+      "default": "\"bottom\"",
+      "description": "Preferred side. The engine flips it when there is no room."
+    }
+  ]
+}

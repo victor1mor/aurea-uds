@@ -1,0 +1,58 @@
+{
+  "name": "Accordion",
+  "category": "Disclosure",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Stack of expandable/collapsible sections.",
+  "icon": "chevron--down",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "expanded",
+    "collapsed",
+    "disabled"
+  ],
+  "tokens": [
+    "--border",
+    "--control-h-md",
+    "--foreground",
+    "--muted-foreground",
+    "--surface-hover",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "accordion",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "TreeView"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/disclosure.tsx#Accordion"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{id: string; title: ReactNode; content: ReactNode}>",
+      "default": "—",
+      "description": "The sections. Built on native <details>/<summary>, so opening, closing, keyboard and find-in-page come from the browser and the component ships no JavaScript at all. Several can be open at once: exclusivity would need the `name` attribute, and hiding what someone just opened is rarely what they wanted."
+    }
+  ]
+}

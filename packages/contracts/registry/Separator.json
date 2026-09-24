@@ -1,0 +1,85 @@
+{
+  "name": "Separator",
+  "category": "Layout",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A rule between things. Horizontal or vertical, one hairline in the border colour — the thing a sidebar uses between sections and a toolbar uses between groups.",
+  "icon": "subtract",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--border",
+    "--space-2"
+  ],
+  "a11y": {
+    "role": "separator",
+    "apg": "No pattern is needed and that is the point: a native <hr> already carries role=\"separator\" implicitly, so writing the role would be redundant ARIA — and the APG's own warning is that no ARIA beats bad ARIA. The separator role defaults to horizontal orientation, so aria-orientation is emitted ONLY when the separator is vertical. There is no keyboard interaction: a separator is not focusable and never was.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Sidebar",
+      "NavList",
+      "Toolbar",
+      "ToolbarSeparator",
+      "Stack",
+      "Cluster"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/layout-client.tsx#Separator"
+  },
+  "props": [
+    {
+      "name": "orientation",
+      "type": "Responsive<'horizontal' | 'vertical'>",
+      "default": "horizontal",
+      "description": "Horizontal is a full-width hairline; vertical is a 1px column that stretches to the tallest sibling, with a floor so it cannot measure zero inside a flex row. BEHAVIOURAL and not visual: the resolved value goes to the engine, which publishes data-orientation and, in the vertical case, aria-orientation — the horizontal one is role=\"separator\"'s implicit default and announcing it would be noise. This is why the component is client-side: an attribute cannot come from a CSS class."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the separator element."
+    },
+    {
+      "name": "spacing",
+      "type": "\"none\" | \"tight\" | \"normal\" | \"loose\"",
+      "default": "\"none\"",
+      "description": "The space on both sides of the line (C-04), in the same three steps as the layout primitives' gap (ADR-0051). On a vertical separator the space goes to the sides."
+    }
+  ],
+  "notes": [
+    "It is pure markup and ships NO JavaScript. The engine already in use (Base UI) HAS a Separator, and it was deliberately not used: it is marked 'use client', it calls a hook, and all it produces is role=\"separator\" plus aria-orientation — two attributes. Importing it would drag this module across the server/client boundary, which is the defect ADR-0026 records (Card cost 118.5 KB crossing it). This is the rare case where \"if the engine delivers it, we do not write it\" loses to the boundary.",
+    "It draws with `background` on a 1px box, not with `border`: the thickness then does not depend on which border side someone wrote, and one class serves both orientations. The browser's own <hr> margin and border are zeroed — otherwise the rule arrives with spacing nobody asked for.",
+    "NOT included, and on purpose: the three separator tones HeroUI carries (secondary/tertiary), because this system has one --border and inventing a tone scale here would be copying their token system; and the separator WITH A LABEL in the middle (\"or\", a date inside a conversation), which is a different structure since an <hr> cannot carry text. That one is the next step if anybody needs it.",
+    "Inside a Toolbar use ToolbarSeparator, not this one: the toolbar's separator takes part in the roving tabindex the engine manages. Base UI splits the two for the same reason."
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ],
+    "spacing": [
+      "loose",
+      "none",
+      "normal",
+      "tight"
+    ]
+  },
+  "responsive": {
+    "orientation": "behavioral"
+  }
+}

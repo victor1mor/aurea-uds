@@ -1,0 +1,46 @@
+{
+  "name": "AspectRatio",
+  "category": "Layout",
+  "layer": "Primitive",
+  "maturity": "Ready",
+  "summary": "A box that keeps its proportion, whatever the width.",
+  "icon": "zoom--fit",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "generic",
+    "apg": "n-a",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Card",
+      "Grid",
+      "MediaPlayer"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#AspectRatio"
+  },
+  "props": [
+    {
+      "name": "ratio",
+      "type": "number",
+      "default": "1",
+      "description": "Width over height, as a number — 16/9 is 1.777…. It becomes the CSS aspect-ratio, so the box keeps the proportion at any width."
+    }
+  ]
+}

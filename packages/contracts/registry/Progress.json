@@ -1,0 +1,53 @@
+{
+  "name": "Progress",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Determinate progress bar.",
+  "icon": "progress-bar--round",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "determinate"
+  ],
+  "tokens": [
+    "--primary",
+    "--surface-3"
+  ],
+  "a11y": {
+    "role": "progressbar",
+    "keyboard": [],
+    "apg": "The APG pattern is Meter/Progressbar: role=\"progressbar\" with aria-valuemin, aria-valuemax and aria-valuenow, all three present. No keyboard interaction — a progress bar reports, it does not accept input. That is what separates it from Range, which is a slider."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Skeleton"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Progress"
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "number",
+      "default": "—",
+      "description": "Percentage, 0 to 100. Clamped once and used for both the fill and aria-valuenow, so what is drawn and what is announced cannot drift apart. There is no indeterminate mode: when the total is unknown, use Spinner."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the bar. Without it the screen reader announces a bare number with no subject."
+    }
+  ]
+}

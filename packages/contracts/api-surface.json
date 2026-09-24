@@ -1,0 +1,5247 @@
+{
+  "_gerado": "node scripts/build-api-surface.mjs — lido da emissão do tsc, não do registry. Editar à mão é o defeito que ele existe para não repetir.",
+  "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
+  "schemaVersion": "1.0",
+  "totals": {
+    "modulos": 35,
+    "componentes": 120,
+    "hooks": 9,
+    "aliasesLiterais": 54,
+    "propsDistintas": 236
+  },
+  "aliases": {
+    "ButtonVariant": {
+      "module": "actions",
+      "raw": "\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
+      "union": [
+        "primary",
+        "secondary",
+        "outline",
+        "ghost",
+        "primary-outline",
+        "primary-ghost",
+        "danger",
+        "danger-outline",
+        "danger-ghost",
+        "link",
+        "link-primary",
+        "link-danger",
+        "nav"
+      ]
+    },
+    "ButtonAppearance": {
+      "module": "actions",
+      "raw": "\"solid\" | \"outline\" | \"ghost\" | \"link\" | \"nav\"",
+      "union": [
+        "solid",
+        "outline",
+        "ghost",
+        "link",
+        "nav"
+      ]
+    },
+    "ButtonTone": {
+      "module": "actions",
+      "raw": "\"neutral\" | \"brand\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "union": [
+        "neutral",
+        "brand",
+        "danger",
+        "success",
+        "warning",
+        "info"
+      ]
+    },
+    "ComponentSize": {
+      "module": "actions",
+      "raw": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "union": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
+    },
+    "ToggleProps": {
+      "module": "actions",
+      "raw": "ToggleBase & ({ children: ToggleChildren; label?: string; } | { children?: never; label: string; })",
+      "union": null
+    },
+    "AgentState": {
+      "module": "agents",
+      "raw": "\"idle\" | \"thinking\" | \"running\" | \"paused\" | \"error\" | \"completed\"",
+      "union": [
+        "idle",
+        "thinking",
+        "running",
+        "paused",
+        "error",
+        "completed"
+      ]
+    },
+    "TaskState": {
+      "module": "agents",
+      "raw": "\"queued\" | \"running\" | \"completed\" | \"failed\" | \"blocked\" | \"paused\"",
+      "union": [
+        "queued",
+        "running",
+        "completed",
+        "failed",
+        "blocked",
+        "paused"
+      ]
+    },
+    "TaskPriority": {
+      "module": "agents",
+      "raw": "\"low\" | \"medium\" | \"high\"",
+      "union": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "RiskLevel": {
+      "module": "agents",
+      "raw": "\"low\" | \"medium\" | \"high\"",
+      "union": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "PermissionLevel": {
+      "module": "agents",
+      "raw": "\"ask\" | \"always\" | \"never\"",
+      "union": [
+        "ask",
+        "always",
+        "never"
+      ]
+    },
+    "EventSeverity": {
+      "module": "agents",
+      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ]
+    },
+    "HealthState": {
+      "module": "agents",
+      "raw": "\"operational\" | \"degraded\" | \"down\" | \"maintenance\" | \"unknown\"",
+      "union": [
+        "operational",
+        "degraded",
+        "down",
+        "maintenance",
+        "unknown"
+      ]
+    },
+    "UsageMetric": {
+      "module": "agents",
+      "raw": "\"tokens\" | \"cost\" | \"requests\"",
+      "union": [
+        "tokens",
+        "cost",
+        "requests"
+      ]
+    },
+    "CostState": {
+      "module": "agents",
+      "raw": "\"under\" | \"near\" | \"over\"",
+      "union": [
+        "under",
+        "near",
+        "over"
+      ]
+    },
+    "MemoryScope": {
+      "module": "agents",
+      "raw": "\"episodic\" | \"semantic\" | \"procedural\"",
+      "union": [
+        "episodic",
+        "semantic",
+        "procedural"
+      ]
+    },
+    "MemoryOperation": {
+      "module": "agents",
+      "raw": "\"added\" | \"updated\" | \"recalled\" | \"forgotten\"",
+      "union": [
+        "added",
+        "updated",
+        "recalled",
+        "forgotten"
+      ]
+    },
+    "MessageKind": {
+      "module": "agents",
+      "raw": "\"request\" | \"response\" | \"handoff\" | \"broadcast\" | \"error\"",
+      "union": [
+        "request",
+        "response",
+        "handoff",
+        "broadcast",
+        "error"
+      ]
+    },
+    "CalendarProps": {
+      "module": "calendar",
+      "raw": "React.ComponentProps<typeof DayPicker> & { label?: string; }",
+      "union": null
+    },
+    "Breakpoint": {
+      "module": "escala",
+      "raw": "\"2xs\" | \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
+      "union": [
+        "2xs",
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl",
+        "2xl"
+      ]
+    },
+    "ContainerBreakpoint": {
+      "module": "escala",
+      "raw": "\"2xs\" | \"xs\" | \"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "2xs",
+        "xs",
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "StatusVariant": {
+      "module": "feedback-client",
+      "raw": "\"neutral\" | \"online\" | \"offline\" | \"busy\" | \"away\" | \"running\" | \"success\" | \"warning\" | \"danger\" | \"info\"",
+      "union": [
+        "neutral",
+        "online",
+        "offline",
+        "busy",
+        "away",
+        "running",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ]
+    },
+    "AlertVariant": {
+      "module": "feedback-client",
+      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ]
+    },
+    "BannerVariant": {
+      "module": "feedback-client",
+      "raw": "AlertVariant",
+      "union": null
+    },
+    "DataStateValue": {
+      "module": "feedback-client",
+      "raw": "\"loading\" | \"error\" | \"empty\" | UniversalState",
+      "union": null
+    },
+    "UploadFn": {
+      "module": "file-input",
+      "raw": "(file: File, ctx: UploadContext) => Promise<void | { checksum?: string; }>",
+      "union": null
+    },
+    "FieldOrientation": {
+      "module": "inputs-client",
+      "raw": "\"vertical\" | \"horizontal\"",
+      "union": [
+        "vertical",
+        "horizontal"
+      ]
+    },
+    "FieldLabelWidth": {
+      "module": "inputs-client",
+      "raw": "\"auto\" | (string & {})",
+      "union": null
+    },
+    "SeparatorSpacing": {
+      "module": "layout-client",
+      "raw": "\"none\" | \"tight\" | \"normal\" | \"loose\"",
+      "union": [
+        "none",
+        "tight",
+        "normal",
+        "loose"
+      ]
+    },
+    "BadgeVariant": {
+      "module": "markup",
+      "raw": "\"neutral\" | \"primary\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"running\" | \"paused\" | \"offline\" | \"review\"",
+      "union": [
+        "neutral",
+        "primary",
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "running",
+        "paused",
+        "offline",
+        "review"
+      ]
+    },
+    "AvatarSize": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "TopbarVariant": {
+      "module": "markup",
+      "raw": "\"floating\" | \"flush\" | \"pill\"",
+      "union": [
+        "floating",
+        "flush",
+        "pill"
+      ]
+    },
+    "CardProps": {
+      "module": "markup",
+      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
+      "union": null
+    },
+    "LayoutGap": {
+      "module": "markup",
+      "raw": "\"tight\" | \"normal\" | \"loose\"",
+      "union": [
+        "tight",
+        "normal",
+        "loose"
+      ]
+    },
+    "StackAlign": {
+      "module": "markup",
+      "raw": "\"start\" | \"center\" | \"end\" | \"stretch\"",
+      "union": [
+        "start",
+        "center",
+        "end",
+        "stretch"
+      ]
+    },
+    "ClusterAlign": {
+      "module": "markup",
+      "raw": "\"start\" | \"center\" | \"end\" | \"baseline\"",
+      "union": [
+        "start",
+        "center",
+        "end",
+        "baseline"
+      ]
+    },
+    "ClusterJustify": {
+      "module": "markup",
+      "raw": "\"start\" | \"center\" | \"end\" | \"between\"",
+      "union": [
+        "start",
+        "center",
+        "end",
+        "between"
+      ]
+    },
+    "BadgeEmphasis": {
+      "module": "markup",
+      "raw": "\"soft\" | \"solid\" | \"outline\"",
+      "union": [
+        "soft",
+        "solid",
+        "outline"
+      ]
+    },
+    "BadgeSize": {
+      "module": "markup",
+      "raw": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "xs",
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "BadgePlacement": {
+      "module": "markup",
+      "raw": "\"top-end\" | \"top-start\" | \"bottom-end\" | \"bottom-start\"",
+      "union": [
+        "top-end",
+        "top-start",
+        "bottom-end",
+        "bottom-start"
+      ]
+    },
+    "BadgeFit": {
+      "module": "markup",
+      "raw": "\"auto\" | \"content\"",
+      "union": [
+        "auto",
+        "content"
+      ]
+    },
+    "RangeOrientation": {
+      "module": "markup",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "FieldSize": {
+      "module": "markup",
+      "raw": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">",
+      "union": null
+    },
+    "AddonSide": {
+      "module": "markup",
+      "raw": "\"start\" | \"end\"",
+      "union": [
+        "start",
+        "end"
+      ]
+    },
+    "AddonLayout": {
+      "module": "markup",
+      "raw": "\"inline\" | \"block\"",
+      "union": [
+        "inline",
+        "block"
+      ]
+    },
+    "StepState": {
+      "module": "navigation-client",
+      "raw": "\"default\" | \"active\" | \"done\" | \"error\"",
+      "union": [
+        "default",
+        "active",
+        "done",
+        "error"
+      ]
+    },
+    "TabsOrientation": {
+      "module": "navigation-client",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "SidebarVariant": {
+      "module": "navigation-client",
+      "raw": "\"floating\" | \"flush\"",
+      "union": [
+        "floating",
+        "flush"
+      ]
+    },
+    "BottomNavVariant": {
+      "module": "navigation-client",
+      "raw": "\"floating\" | \"edge\"",
+      "union": [
+        "floating",
+        "edge"
+      ]
+    },
+    "BottomNavIndicator": {
+      "module": "navigation-client",
+      "raw": "\"none\" | \"subtle\" | \"pill\" | \"circle\" | \"circle-raised\" | \"circle-bold\" | \"circle-outline\"",
+      "union": [
+        "none",
+        "subtle",
+        "pill",
+        "circle",
+        "circle-raised",
+        "circle-bold",
+        "circle-outline"
+      ]
+    },
+    "BottomNavWidth": {
+      "module": "navigation-client",
+      "raw": "\"full\" | \"content\"",
+      "union": [
+        "full",
+        "content"
+      ]
+    },
+    "BottomNavVariantLegacy": {
+      "module": "navigation-client",
+      "raw": "\"flat\" | \"surface\" | \"pill\" | \"dock\"",
+      "union": [
+        "flat",
+        "surface",
+        "pill",
+        "dock"
+      ]
+    },
+    "BottomNavVariantAny": {
+      "module": "navigation-client",
+      "raw": "BottomNavVariant | BottomNavVariantLegacy",
+      "union": null
+    },
+    "DialogSize": {
+      "module": "overlays",
+      "raw": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
+      "union": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl",
+        "full"
+      ]
+    },
+    "AccessGateProps": {
+      "module": "overlays",
+      "raw": "{ allowed: boolean; children: ReactElement; } & ({ mode?: \"hide\"; fallback?: ReactNode; reason?: never; } | { mode: \"disable\"; reason: ReactNode; fallback?: never; })",
+      "union": null
+    },
+    "OverlaySide": {
+      "module": "overlays",
+      "raw": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+      "union": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ]
+    },
+    "MenuEntry": {
+      "module": "overlays",
+      "raw": "MenuActionDef | MenuLinkDef | MenuCheckboxDef | MenuRadioGroupDef | MenuSubmenuDef | MenuGroupDef | \"separator\"",
+      "union": null
+    },
+    "MenuItemDef": {
+      "module": "overlays",
+      "raw": "MenuActionDef",
+      "union": null
+    },
+    "MenubarOrientation": {
+      "module": "overlays",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "AureaTheme": {
+      "module": "pure",
+      "raw": "\"dark\" | \"light\"",
+      "union": [
+        "dark",
+        "light"
+      ]
+    },
+    "AureaDensity": {
+      "module": "pure",
+      "raw": "\"compact\" | \"comfortable\" | \"spacious\"",
+      "union": [
+        "compact",
+        "comfortable",
+        "spacious"
+      ]
+    },
+    "UniversalState": {
+      "module": "pure",
+      "raw": "\"waiting_user\" | \"waiting_approval\" | \"waiting_dependency\" | \"offline\" | \"stale\" | \"partial\" | \"degraded\"",
+      "union": [
+        "waiting_user",
+        "waiting_approval",
+        "waiting_dependency",
+        "offline",
+        "stale",
+        "partial",
+        "degraded"
+      ]
+    },
+    "Orientation": {
+      "module": "pure",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "QRCodeSize": {
+      "module": "qrcode",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "AureaToastType": {
+      "module": "system",
+      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ]
+    },
+    "AureaThemeName": {
+      "module": "system",
+      "raw": "\"dark\" | \"light\"",
+      "union": [
+        "dark",
+        "light"
+      ]
+    },
+    "IconName": {
+      "module": "system",
+      "raw": "string",
+      "union": null
+    },
+    "IconSize": {
+      "module": "system",
+      "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "union": [
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
+    }
+  },
+  "modules": {
+    "actions": {
+      "components": [
+        {
+          "name": "Button",
+          "kind": "const",
+          "propsType": "ButtonProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "ButtonVariant",
+              "values": [
+                "primary",
+                "secondary",
+                "outline",
+                "ghost",
+                "primary-outline",
+                "primary-ghost",
+                "danger",
+                "danger-outline",
+                "danger-ghost",
+                "link",
+                "link-primary",
+                "link-danger",
+                "nav"
+              ]
+            },
+            {
+              "name": "appearance",
+              "optional": true,
+              "type": "ButtonAppearance",
+              "values": [
+                "solid",
+                "outline",
+                "ghost",
+                "link",
+                "nav"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "ButtonTone",
+              "values": [
+                "neutral",
+                "brand",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<ComponentSize>",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "loading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "leadingIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "trailingIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "href",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "rel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "download",
+              "optional": true,
+              "type": "boolean | string",
+              "values": null
+            },
+            {
+              "name": "kbd",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ButtonGroup",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<Orientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "IconButton",
+          "kind": "const",
+          "propsType": "IconButtonProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "ButtonVariant",
+              "values": [
+                "primary",
+                "secondary",
+                "outline",
+                "ghost",
+                "primary-outline",
+                "primary-ghost",
+                "danger",
+                "danger-outline",
+                "danger-ghost",
+                "link",
+                "link-primary",
+                "link-danger",
+                "nav"
+              ]
+            },
+            {
+              "name": "appearance",
+              "optional": true,
+              "type": "ButtonAppearance",
+              "values": [
+                "solid",
+                "outline",
+                "ghost",
+                "link",
+                "nav"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "ButtonTone",
+              "values": [
+                "neutral",
+                "brand",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<ComponentSize>",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "loading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "leadingIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "trailingIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "href",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "rel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "download",
+              "optional": true,
+              "type": "boolean | string",
+              "values": null
+            },
+            {
+              "name": "kbd",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": false,
+              "type": "IconName",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Toggle",
+          "kind": "function",
+          "propsType": "ToggleProps",
+          "props": [
+            {
+              "name": "pressed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultPressed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onPressedChange",
+              "optional": true,
+              "type": "(pressed: boolean) => void",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ToggleChildren | never",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ToggleGroup",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "multiple",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<Orientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "React.ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Toolbar",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<Orientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ToolbarButton",
+          "kind": "const",
+          "propsType": "ButtonProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "ButtonVariant",
+              "values": [
+                "primary",
+                "secondary",
+                "outline",
+                "ghost",
+                "primary-outline",
+                "primary-ghost",
+                "danger",
+                "danger-outline",
+                "danger-ghost",
+                "link",
+                "link-primary",
+                "link-danger",
+                "nav"
+              ]
+            },
+            {
+              "name": "appearance",
+              "optional": true,
+              "type": "ButtonAppearance",
+              "values": [
+                "solid",
+                "outline",
+                "ghost",
+                "link",
+                "nav"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "ButtonTone",
+              "values": [
+                "neutral",
+                "brand",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<ComponentSize>",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "loading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "leadingIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "trailingIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "href",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "rel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "download",
+              "optional": true,
+              "type": "boolean | string",
+              "values": null
+            },
+            {
+              "name": "kbd",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ToolbarGroup",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ToolbarSeparator",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "agents": {
+      "components": [
+        {
+          "name": "AgentCard",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "name",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "avatarSrc",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "model",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "state",
+              "optional": true,
+              "type": "AgentState",
+              "values": [
+                "idle",
+                "thinking",
+                "running",
+                "paused",
+                "error",
+                "completed"
+              ]
+            },
+            {
+              "name": "capabilities",
+              "optional": true,
+              "type": "AgentCapability[]",
+              "values": null
+            },
+            {
+              "name": "actions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "AgentInspector",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "title",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "sections",
+              "optional": true,
+              "type": "Array<{ label: string; items: Array<{ term: string; value: ReactNode; }>; }>",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "AgentStatus",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "state",
+              "optional": true,
+              "type": "AgentState",
+              "values": [
+                "idle",
+                "thinking",
+                "running",
+                "paused",
+                "error",
+                "completed"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "AutomationCard",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "name",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "trigger",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "action",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "enabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onToggle",
+              "optional": true,
+              "type": "(enabled: boolean) => void",
+              "values": null
+            },
+            {
+              "name": "lastRun",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "lastResult",
+              "optional": true,
+              "type": "\"success\" | \"failure\"",
+              "values": [
+                "success",
+                "failure"
+              ]
+            },
+            {
+              "name": "details",
+              "optional": true,
+              "type": "Array<{ term: string; value: ReactNode; }>",
+              "values": null
+            },
+            {
+              "name": "actions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "CostMeter",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "spent",
+              "optional": false,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "limit",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "softLimit",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "currency",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "period",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "segments",
+              "optional": true,
+              "type": "CostSegment[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "EventStream",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "events",
+              "optional": false,
+              "type": "StreamEvent[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "follow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "HealthMatrix",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "entries",
+              "optional": false,
+              "type": "HealthEntry[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "HumanApproval",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "title",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "details",
+              "optional": true,
+              "type": "Array<{ term: string; value: ReactNode; }>",
+              "values": null
+            },
+            {
+              "name": "risk",
+              "optional": true,
+              "type": "RiskLevel",
+              "values": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            {
+              "name": "reasoning",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "deadline",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "decision",
+              "optional": true,
+              "type": "\"approved\" | \"denied\"",
+              "values": [
+                "approved",
+                "denied"
+              ]
+            },
+            {
+              "name": "onApprove",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onDeny",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "InterAgentMessage",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "messages",
+              "optional": false,
+              "type": "AgentMessage[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "InvocationPanel",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "title",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "input",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "steps",
+              "optional": true,
+              "type": "InvocationStep[]",
+              "values": null
+            },
+            {
+              "name": "output",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "running",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "MemoryLedger",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "records",
+              "optional": false,
+              "type": "MemoryRecord[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ModelUsage",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "entries",
+              "optional": false,
+              "type": "ModelUsageEntry[]",
+              "values": null
+            },
+            {
+              "name": "metric",
+              "optional": true,
+              "type": "UsageMetric",
+              "values": [
+                "tokens",
+                "cost",
+                "requests"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "currency",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "TaskQueue",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "tasks",
+              "optional": false,
+              "type": "QueueTask[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onRetry",
+              "optional": true,
+              "type": "(task: QueueTask) => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ToolPermission",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "tools",
+              "optional": false,
+              "type": "ToolPermissionEntry[]",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "(id: string, permission: PermissionLevel) => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "TraceTimeline",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "spans",
+              "optional": false,
+              "type": "TraceSpan[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "calendar": {
+      "components": [
+        {
+          "name": "Calendar",
+          "kind": "function",
+          "propsType": "CalendarProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "chart": {
+      "components": [
+        {
+          "name": "Chart",
+          "kind": "function",
+          "propsType": "ChartProps",
+          "props": [
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ChartLegend",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "ChartTooltip",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "code-client": {
+      "components": [
+        {
+          "name": "CodeBlock",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "children",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "language",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "copyable",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "code-editor": {
+      "components": [
+        {
+          "name": "CodeEditor",
+          "kind": "function",
+          "propsType": "CodeEditorProps",
+          "props": [
+            {
+              "name": "readOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "code": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "communication": {
+      "components": [
+        {
+          "name": "MessageComposer",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "onSend",
+              "optional": false,
+              "type": "(text: string) => void",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "sendLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "MessageList",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "messages",
+              "optional": false,
+              "type": "ChatMessage[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "data-display-client": {
+      "components": [
+        {
+          "name": "SortableList",
+          "kind": "function",
+          "propsType": "SortableListProps",
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "SortableItem[]",
+              "values": null
+            },
+            {
+              "name": "onReorder",
+              "optional": false,
+              "type": "(from: number, to: number) => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Table",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "caption",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "data-display": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "data-grid": {
+      "components": [
+        {
+          "name": "DataGrid",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "data",
+              "optional": false,
+              "type": "T[]",
+              "values": null
+            },
+            {
+              "name": "columns",
+              "optional": false,
+              "type": "Array<ColumnDef<T, any>>",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "filterable",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "pageSize",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "selectable",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onSelectionChange",
+              "optional": true,
+              "type": "(rows: T[]) => void",
+              "values": null
+            },
+            {
+              "name": "getRowId",
+              "optional": true,
+              "type": "(row: T, index: number) => string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "sorting",
+              "optional": true,
+              "type": "SortingState",
+              "values": null
+            },
+            {
+              "name": "onSortingChange",
+              "optional": true,
+              "type": "(sorting: SortingState) => void",
+              "values": null
+            },
+            {
+              "name": "globalFilter",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onGlobalFilterChange",
+              "optional": true,
+              "type": "(filter: string) => void",
+              "values": null
+            },
+            {
+              "name": "page",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "onPageChange",
+              "optional": true,
+              "type": "(page: number) => void",
+              "values": null
+            },
+            {
+              "name": "rowSelection",
+              "optional": true,
+              "type": "RowSelectionState",
+              "values": null
+            },
+            {
+              "name": "onRowSelectionChange",
+              "optional": true,
+              "type": "(selection: RowSelectionState) => void",
+              "values": null
+            },
+            {
+              "name": "manualSorting",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "manualFiltering",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "manualPagination",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "rowCount",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "filters",
+              "optional": true,
+              "type": "GridFilterSpec[]",
+              "values": null
+            },
+            {
+              "name": "columnFilters",
+              "optional": true,
+              "type": "ColumnFiltersState",
+              "values": null
+            },
+            {
+              "name": "onColumnFiltersChange",
+              "optional": true,
+              "type": "(filters: ColumnFiltersState) => void",
+              "values": null
+            },
+            {
+              "name": "bulkActions",
+              "optional": true,
+              "type": "Array<{ id: string; label: string; icon?: IconName; onAction: (rows: T[], clear: () => void) => void; }>",
+              "values": null
+            },
+            {
+              "name": "stickyHeader",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "hideableColumns",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "columnVisibility",
+              "optional": true,
+              "type": "VisibilityState",
+              "values": null
+            },
+            {
+              "name": "onColumnVisibilityChange",
+              "optional": true,
+              "type": "(v: VisibilityState) => void",
+              "values": null
+            },
+            {
+              "name": "resizableColumns",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "columnSizing",
+              "optional": true,
+              "type": "ColumnSizingState",
+              "values": null
+            },
+            {
+              "name": "onColumnSizingChange",
+              "optional": true,
+              "type": "(s: ColumnSizingState) => void",
+              "values": null
+            },
+            {
+              "name": "state",
+              "optional": true,
+              "type": "\"loading\" | \"error\" | UniversalState",
+              "values": [
+                "loading",
+                "error",
+                "waiting_user",
+                "waiting_approval",
+                "waiting_dependency",
+                "offline",
+                "stale",
+                "partial",
+                "degraded"
+              ]
+            },
+            {
+              "name": "stateMessage",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "renderDetail",
+              "optional": true,
+              "type": "(row: T) => React.ReactNode",
+              "values": null
+            },
+            {
+              "name": "detailRowId",
+              "optional": true,
+              "type": "string | null",
+              "values": null
+            },
+            {
+              "name": "onDetailRowIdChange",
+              "optional": true,
+              "type": "(id: string | null) => void",
+              "values": null
+            },
+            {
+              "name": "onExport",
+              "optional": true,
+              "type": "(rows: T[], scope: { count: number; filtered: boolean; selected: boolean; }) => void",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "disclosure": {
+      "components": [
+        {
+          "name": "Accordion",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "Array<{ id: string; title: ReactNode; content: ReactNode; }>",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Collapsible",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "trigger",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "open",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultOpen",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onOpenChange",
+              "optional": true,
+              "type": "(open: boolean) => void",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "escala": {
+      "components": [
+        {
+          "name": "ESCALA",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "ESCALA_CONTAINER",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "PONTOS_CONTAINER_DESC",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "PONTOS_DESC",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "feedback-client": {
+      "components": [
+        {
+          "name": "Alert",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "AlertVariant",
+              "values": [
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "name": "state",
+              "optional": true,
+              "type": "UniversalState",
+              "values": [
+                "waiting_user",
+                "waiting_approval",
+                "waiting_dependency",
+                "offline",
+                "stale",
+                "partial",
+                "degraded"
+              ]
+            },
+            {
+              "name": "title",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "onDismiss",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Banner",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "BannerVariant",
+              "values": [
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "name": "state",
+              "optional": true,
+              "type": "UniversalState",
+              "values": [
+                "waiting_user",
+                "waiting_approval",
+                "waiting_dependency",
+                "offline",
+                "stale",
+                "partial",
+                "degraded"
+              ]
+            },
+            {
+              "name": "title",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "onDismiss",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "DataState",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "state",
+              "optional": true,
+              "type": "DataStateValue",
+              "values": [
+                "loading",
+                "error",
+                "empty",
+                "waiting_user",
+                "waiting_approval",
+                "waiting_dependency",
+                "offline",
+                "stale",
+                "partial",
+                "degraded"
+              ]
+            },
+            {
+              "name": "message",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "skeleton",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "emptyTitle",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "emptyIcon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "action",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode | (() => ReactNode)",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "EmptyState",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "title",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "titleAs",
+              "optional": true,
+              "type": "\"h2\" | \"h3\" | \"h4\" | \"p\"",
+              "values": [
+                "h2",
+                "h3",
+                "h4",
+                "p"
+              ]
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "action",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "state",
+              "optional": true,
+              "type": "UniversalState",
+              "values": [
+                "waiting_user",
+                "waiting_approval",
+                "waiting_dependency",
+                "offline",
+                "stale",
+                "partial",
+                "degraded"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "NotificationCenter",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "NotificationItem[]",
+              "values": null
+            },
+            {
+              "name": "onItemClick",
+              "optional": true,
+              "type": "(item: NotificationItem) => void",
+              "values": null
+            },
+            {
+              "name": "onMarkAllRead",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "side",
+              "optional": true,
+              "type": "OverlaySide",
+              "values": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Spinner",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<\"sm\" | \"md\" | \"lg\">",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "decorative",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Status",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "StatusVariant",
+              "values": [
+                "neutral",
+                "online",
+                "offline",
+                "busy",
+                "away",
+                "running",
+                "success",
+                "warning",
+                "danger",
+                "info"
+              ]
+            },
+            {
+              "name": "state",
+              "optional": true,
+              "type": "UniversalState",
+              "values": [
+                "waiting_user",
+                "waiting_approval",
+                "waiting_dependency",
+                "offline",
+                "stale",
+                "partial",
+                "degraded"
+              ]
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "feedback": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "file-input": {
+      "components": [
+        {
+          "name": "FileInput",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "accept",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "maxSize",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "multiple",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onFilesChange",
+              "optional": true,
+              "type": "(files: File[]) => void",
+              "values": null
+            },
+            {
+              "name": "upload",
+              "optional": true,
+              "type": "UploadFn",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "hint",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "initialQueue",
+              "optional": true,
+              "type": "FileQueueItem[]",
+              "values": null
+            },
+            {
+              "name": "onQueueChange",
+              "optional": true,
+              "type": "(queue: FileQueueItem[]) => void",
+              "values": null
+            },
+            {
+              "name": "preview",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "checksum",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "graph": {
+      "components": [
+        {
+          "name": "DependencyGraph",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "nodes",
+              "optional": false,
+              "type": "GraphNodeItem[]",
+              "values": null
+            },
+            {
+              "name": "edges",
+              "optional": false,
+              "type": "GraphEdgeItem[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "selectedId",
+              "optional": true,
+              "type": "string | null",
+              "values": null
+            },
+            {
+              "name": "onSelect",
+              "optional": true,
+              "type": "(id: string) => void",
+              "values": null
+            },
+            {
+              "name": "connectable",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onConnect",
+              "optional": true,
+              "type": "(edge: { from: string; to: string; }) => void",
+              "values": null
+            },
+            {
+              "name": "onNodeMove",
+              "optional": true,
+              "type": "(id: string, pos: { x: number; y: number; }) => void",
+              "values": null
+            },
+            {
+              "name": "height",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "identity-client": {
+      "components": [
+        {
+          "name": "Avatar",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "src",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "alt",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "fallback",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<AvatarSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "identity": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "index": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "inputs-client": {
+      "components": [
+        {
+          "name": "BlockEditor",
+          "kind": "function",
+          "propsType": "BlockEditorProps",
+          "props": [
+            {
+              "name": "blocks",
+              "optional": false,
+              "type": "EditorBlock[]",
+              "values": null
+            },
+            {
+              "name": "onReorder",
+              "optional": false,
+              "type": "(from: number, to: number) => void",
+              "values": null
+            },
+            {
+              "name": "onRemove",
+              "optional": true,
+              "type": "(index: number) => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Combobox",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "ComboboxOption[] | ComboboxOptGroup[]",
+              "values": null
+            },
+            {
+              "name": "empty",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "ComboboxOption | null",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(v: ComboboxOption | null) => void",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Field",
+          "kind": "function",
+          "propsType": "FieldProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "hint",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "error",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<FieldOrientation>",
+              "values": [
+                "vertical",
+                "horizontal"
+              ]
+            },
+            {
+              "name": "labelWidth",
+              "optional": true,
+              "type": "FieldLabelWidth",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Form",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "errors",
+              "optional": true,
+              "type": "Record<string, string | string[]>",
+              "values": null
+            },
+            {
+              "name": "onSubmit",
+              "optional": true,
+              "type": "(values: Record<string, unknown>) => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Input",
+          "kind": "const",
+          "propsType": "InputProps",
+          "props": [
+            {
+              "name": "formatOnBlur",
+              "optional": true,
+              "type": "(value: string) => string",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MultiCombobox",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "ComboboxOption[] | ComboboxOptGroup[]",
+              "values": null
+            },
+            {
+              "name": "empty",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "ComboboxOption[]",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(v: ComboboxOption[]) => void",
+              "values": null
+            },
+            {
+              "name": "onInputChange",
+              "optional": true,
+              "type": "(query: string) => void",
+              "values": null
+            },
+            {
+              "name": "loading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "NumberField",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "number | null",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(v: number | null) => void",
+              "values": null
+            },
+            {
+              "name": "min",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "step",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "readOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "format",
+              "optional": true,
+              "type": "Intl.NumberFormatOptions",
+              "values": null
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "scrubbable",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "scrubDirection",
+              "optional": true,
+              "type": "\"horizontal\" | \"vertical\"",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "OTPField",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "length",
+              "optional": false,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "mask",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "PasswordField",
+          "kind": "function",
+          "propsType": "PasswordFieldProps",
+          "props": [
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "defaultVisible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "SearchField",
+          "kind": "function",
+          "propsType": "SearchFieldProps",
+          "props": [
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SegmentedControl",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "Array<{ value: string; label: ReactNode; }>",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": false,
+              "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Select",
+          "kind": "const",
+          "propsType": "SelectProps",
+          "props": [
+            {
+              "name": "items",
+              "optional": true,
+              "type": "SelectOption[] | SelectOptGroup[]",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "(e: SelectChange) => void",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "inputs": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "internal": {
+      "components": [],
+      "hooks": [
+        "useReorder",
+        "useAureaStrings",
+        "useSpriteUrl",
+        "useTheme",
+        "useDensity",
+        "usePortalContainer"
+      ],
+      "clientDirective": false
+    },
+    "layout-client": {
+      "components": [
+        {
+          "name": "AppShell",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "brand",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "navigation",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "navItems",
+              "optional": true,
+              "type": "SidebarItem[]",
+              "values": null
+            },
+            {
+              "name": "currentNavId",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "navLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "topbar",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "topbarVariant",
+              "optional": true,
+              "type": "Exclude<TopbarVariant, \"pill\">",
+              "values": [
+                "floating",
+                "flush"
+              ]
+            },
+            {
+              "name": "topbarDivider",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "sidebarVariant",
+              "optional": true,
+              "type": "SidebarVariant",
+              "values": [
+                "floating",
+                "flush"
+              ]
+            },
+            {
+              "name": "sidebarCollapsed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "contentVariant",
+              "optional": true,
+              "type": "\"surface\" | \"plain\"",
+              "values": [
+                "surface",
+                "plain"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Separator",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<Orientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "spacing",
+              "optional": true,
+              "type": "SeparatorSpacing",
+              "values": [
+                "none",
+                "tight",
+                "normal",
+                "loose"
+              ]
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "layout": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "markup": {
+      "components": [
+        {
+          "name": "AspectRatio",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "ratio",
+              "optional": true,
+              "type": "number",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "AvatarGroup",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "total",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<AvatarSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Badge",
+          "kind": "function",
+          "propsType": "BadgeProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "BadgeVariant",
+              "values": [
+                "neutral",
+                "primary",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "running",
+                "paused",
+                "offline",
+                "review"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "BadgeSize",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "leading",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "trailing",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "imageAlt",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "showZero",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Card",
+          "kind": "function",
+          "propsType": "CardProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": false,
+              "type": "\"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"interactive\"",
+              "values": [
+                "base",
+                "danger",
+                "inset",
+                "interactive",
+                "raised",
+                "selected"
+              ]
+            },
+            {
+              "name": "render",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Checkbox",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cluster",
+          "kind": "function",
+          "propsType": "ClusterProps",
+          "props": []
+        },
+        {
+          "name": "DataList",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "Array<{ term: ReactNode; value: ReactNode; }>",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Grid",
+          "kind": "function",
+          "propsType": "GridProps",
+          "props": []
+        },
+        {
+          "name": "InputGroup",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "width",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "InputGroupAddon",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "side",
+              "optional": true,
+              "type": "AddonSide",
+              "values": [
+                "start",
+                "end"
+              ]
+            },
+            {
+              "name": "layout",
+              "optional": true,
+              "type": "Responsive<AddonLayout>",
+              "values": [
+                "inline",
+                "block"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Kbd",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "KPI",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "trend",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Label",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "htmlFor",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "LogStream",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "lines",
+              "optional": false,
+              "type": "Array<{ time?: string; level?: string; text: string; }>",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "MediaPlayerShell",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "Progress",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "value",
+              "optional": false,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Prose",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "Radio",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Range",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<RangeOrientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Skeleton",
+          "kind": "function",
+          "propsType": null,
+          "props": []
+        },
+        {
+          "name": "Stack",
+          "kind": "function",
+          "propsType": "StackProps",
+          "props": []
+        },
+        {
+          "name": "Switch",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Textarea",
+          "kind": "const",
+          "propsType": "TextareaProps",
+          "props": [
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Timeline",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "Array<{ title: ReactNode; description?: ReactNode; time?: ReactNode; }>",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Topbar",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "TopbarVariant",
+              "values": [
+                "floating",
+                "flush",
+                "pill"
+              ]
+            },
+            {
+              "name": "brand",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "divider",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "media-client": {
+      "components": [
+        {
+          "name": "Carousel",
+          "kind": "function",
+          "propsType": "CarouselProps",
+          "props": [
+            {
+              "name": "children",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "controls",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "indicators",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Gallery",
+          "kind": "function",
+          "propsType": "GalleryProps",
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "GalleryItem[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "selected",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onSelect",
+              "optional": true,
+              "type": "(id: string) => void",
+              "values": null
+            },
+            {
+              "name": "zoom",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ratio",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Image",
+          "kind": "function",
+          "propsType": "ImageProps",
+          "props": [
+            {
+              "name": "ratio",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "fit",
+              "optional": true,
+              "type": "\"cover\" | \"contain\"",
+              "values": [
+                "cover",
+                "contain"
+              ]
+            },
+            {
+              "name": "render",
+              "optional": true,
+              "type": "React.ReactElement",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "MediaEmbed",
+          "kind": "function",
+          "propsType": "MediaEmbedProps",
+          "props": []
+        },
+        {
+          "name": "MediaPlayer",
+          "kind": "function",
+          "propsType": "MediaPlayerProps",
+          "props": [
+            {
+              "name": "kind",
+              "optional": true,
+              "type": "\"video\" | \"audio\"",
+              "values": [
+                "video",
+                "audio"
+              ]
+            },
+            {
+              "name": "title",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "subtitle",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "media": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "navigation-client": {
+      "components": [
+        {
+          "name": "BottomNav",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "SidebarItem[]",
+              "values": null
+            },
+            {
+              "name": "current",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "BottomNavVariantAny",
+              "values": [
+                "floating",
+                "edge",
+                "flat",
+                "surface",
+                "pill",
+                "dock"
+              ]
+            },
+            {
+              "name": "indicator",
+              "optional": true,
+              "type": "BottomNavIndicator",
+              "values": [
+                "none",
+                "subtle",
+                "pill",
+                "circle",
+                "circle-raised",
+                "circle-bold",
+                "circle-outline"
+              ]
+            },
+            {
+              "name": "width",
+              "optional": true,
+              "type": "BottomNavWidth",
+              "values": [
+                "full",
+                "content"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Breadcrumb",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "Array<{ label: ReactNode; href?: string; }>",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "CommandPalette",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "open",
+              "optional": false,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onClose",
+              "optional": false,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "CommandItem[]",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "CommandPaletteShell",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "open",
+              "optional": false,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "query",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onQueryChange",
+              "optional": false,
+              "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "NavList",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "NavListItem[]",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Pagination",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "page",
+              "optional": false,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "total",
+              "optional": false,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "onPageChange",
+              "optional": false,
+              "type": "(p: number) => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Sidebar",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": true,
+              "type": "SidebarItem[]",
+              "values": null
+            },
+            {
+              "name": "current",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "collapsed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "SidebarVariant",
+              "values": [
+                "floating",
+                "flush"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Stepper",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "StepItem[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "TableOfContents",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "TocItem[]",
+              "values": null
+            },
+            {
+              "name": "current",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Tabs",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "tabs",
+              "optional": false,
+              "type": "Array<{ id: string; label: ReactNode; content: ReactNode; }>",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": false,
+              "type": "(id: string) => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<TabsOrientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "activateOnFocus",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "loopFocus",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "TreeView",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "items",
+              "optional": false,
+              "type": "TreeNode[]",
+              "values": null
+            },
+            {
+              "name": "defaultExpandedIds",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "onSelect",
+              "optional": true,
+              "type": "(node: TreeNode) => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "navigation": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "overlays": {
+      "components": [
+        {
+          "name": "AccessGate",
+          "kind": "function",
+          "propsType": "AccessGateProps",
+          "props": [
+            {
+              "name": "allowed",
+              "optional": false,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "\"hide\" | \"disable\"",
+              "values": [
+                "disable",
+                "hide"
+              ]
+            },
+            {
+              "name": "fallback",
+              "optional": true,
+              "type": "ReactNode | never",
+              "values": null
+            },
+            {
+              "name": "reason",
+              "optional": false,
+              "type": "never | ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ConfirmDialog",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "open",
+              "optional": false,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "title",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "confirmLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "cancelLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "destructive",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onConfirm",
+              "optional": false,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onCancel",
+              "optional": false,
+              "type": "() => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ContextMenu",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "MenuEntry[]",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Dialog",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "open",
+              "optional": false,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "title",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "footer",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "onClose",
+              "optional": false,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "DialogSize",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "full"
+              ]
+            },
+            {
+              "name": "dismissible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Drawer",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "open",
+              "optional": false,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "title",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "onClose",
+              "optional": false,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "side",
+              "optional": true,
+              "type": "\"left\" | \"right\"",
+              "values": [
+                "left",
+                "right"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DropdownMenu",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "trigger",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "MenuEntry[]",
+              "values": null
+            },
+            {
+              "name": "side",
+              "optional": true,
+              "type": "OverlaySide",
+              "values": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "HoverCard",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "trigger",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "side",
+              "optional": true,
+              "type": "OverlaySide",
+              "values": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Menubar",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "menus",
+              "optional": false,
+              "type": "Array<{ label: ReactNode; items: MenuEntry[]; disabled?: boolean; }>",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "modal",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "loopFocus",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "Responsive<MenubarOrientation>",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Popover",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "trigger",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "title",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "side",
+              "optional": true,
+              "type": "OverlaySide",
+              "values": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tooltip",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "content",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "side",
+              "optional": true,
+              "type": "OverlaySide",
+              "values": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ]
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "pure": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "qrcode": {
+      "components": [
+        {
+          "name": "QRCode",
+          "kind": "function",
+          "propsType": "QRCodeProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<QRCodeSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "ecc",
+              "optional": true,
+              "type": "ErrorCorrection",
+              "values": null
+            },
+            {
+              "name": "quietZone",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "responsivo-runtime": {
+      "components": [
+        {
+          "name": "ContainerScope",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "children",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [
+        "useValorResponsivo"
+      ],
+      "clientDirective": false
+    },
+    "system": {
+      "components": [
+        {
+          "name": "AureaProvider",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "children",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "strings",
+              "optional": true,
+              "type": "Partial<AureaStrings>",
+              "values": null
+            },
+            {
+              "name": "direction",
+              "optional": true,
+              "type": "\"ltr\" | \"rtl\"",
+              "values": [
+                "ltr",
+                "rtl"
+              ]
+            },
+            {
+              "name": "spriteUrl",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "portalContainer",
+              "optional": true,
+              "type": "HTMLElement | null",
+              "values": null
+            },
+            {
+              "name": "theme",
+              "optional": true,
+              "type": "AureaTheme",
+              "values": [
+                "dark",
+                "light"
+              ]
+            },
+            {
+              "name": "defaultTheme",
+              "optional": true,
+              "type": "AureaTheme",
+              "values": [
+                "dark",
+                "light"
+              ]
+            },
+            {
+              "name": "onThemeChange",
+              "optional": true,
+              "type": "(theme: AureaTheme) => void",
+              "values": null
+            },
+            {
+              "name": "density",
+              "optional": true,
+              "type": "AureaDensity",
+              "values": [
+                "compact",
+                "comfortable",
+                "spacious"
+              ]
+            },
+            {
+              "name": "defaultDensity",
+              "optional": true,
+              "type": "AureaDensity",
+              "values": [
+                "compact",
+                "comfortable",
+                "spacious"
+              ]
+            },
+            {
+              "name": "onDensityChange",
+              "optional": true,
+              "type": "(density: AureaDensity) => void",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "Icon",
+          "kind": "function",
+          "propsType": "IconProps",
+          "props": [
+            {
+              "name": "name",
+              "optional": false,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "spriteUrl",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<IconSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            }
+          ]
+        }
+      ],
+      "hooks": [
+        "useAureaTheme",
+        "useToast"
+      ],
+      "clientDirective": false
+    }
+  }
+}

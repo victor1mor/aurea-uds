@@ -1,0 +1,53 @@
+{
+  "name": "ContainerScope",
+  "category": "Layout",
+  "layer": "Foundation",
+  "maturity": "Ready",
+  "summary": "Declares an Aurea container: the box that container-responsive values measure themselves against.",
+  "icon": "maximize",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "generic",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "não introduz semântica: é uma caixa de layout. O que ela publica é o elemento medido, e isso não tem representação em ARIA."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Tabs",
+      "Toolbar",
+      "Menubar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/responsivo-runtime.tsx#ContainerScope"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What is measured against this box."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

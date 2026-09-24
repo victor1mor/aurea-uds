@@ -1,0 +1,47 @@
+{
+  "name": "Timeline",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Chronological sequence of events.",
+  "icon": "time",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--border",
+    "--primary",
+    "--surface-1"
+  ],
+  "a11y": {
+    "role": "list",
+    "keyboard": [],
+    "apg": "No APG pattern and no keyboard: it is an <ol>, because the order IS the information and a screen reader announces the count and position for free."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "DataList",
+      "MessageList"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Timeline"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{title: ReactNode; description?: ReactNode; time?: ReactNode}>",
+      "default": "—",
+      "description": "The events, rendered as an <ol> because the order IS the information. `time` is a node, so an absolute date and a relative one are equally welcome."
+    }
+  ]
+}

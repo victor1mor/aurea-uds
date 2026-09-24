@@ -1,0 +1,57 @@
+{
+  "name": "KPI",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Single headline metric with optional delta.",
+  "icon": "analytics",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--muted-foreground",
+    "--text-3xl"
+  ],
+  "a11y": {
+    "role": "group",
+    "keyboard": [],
+    "apg": "No APG pattern and no keyboard: it is a Card with a label, a number and an optional trend, all as text. Nothing is focusable — a KPI that opens a detail view wraps the action around it, it does not become one."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "DataList"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#KPI"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What is being measured. Sits above the number, in muted text."
+    },
+    {
+      "name": "value",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The number itself, already formatted — the component does not format."
+    },
+    {
+      "name": "trend",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The change, as a node and not a number: the sign, the unit and the wording belong to the domain, not to a card."
+    }
+  ]
+}

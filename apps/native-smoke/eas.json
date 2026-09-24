@@ -1,0 +1,78 @@
+{
+  "//": "Perfis de build do EAS para o app de smoke test do alvo nativo da Aurea.",
+  "//1": "POR QUE ISTO EXISTE — 09/09/2026. O smoke test roda em Expo Go, que precisa de um",
+  "//2": "servidor Metro na mesma rede do aparelho. Isso amarra cada medição a uma máquina, e em",
+  "//3": "09/09 essa amarra custou QUATRO rodadas: o código estava certo, o pacote instalado estava",
+  "//4": "certo, o bundle estava limpo — e o telefone continuava mostrando um JS que não existia mais",
+  "//5": "em disco. Nenhuma dessas rodadas mediu um componente; todas mediram a entrega.",
+  "//6": "O perfil `preview` corta a entrega inteira: ele produz um APK com o bundle DENTRO,",
+  "//7": "construído nos servidores da Expo. Instala e abre. Não há Metro, não há rede local, não há",
+  "//8": "cache de bundler, e não há como o aparelho executar código velho — ele executa o que está",
+  "//9": "instalado. É a mesma disciplina dos outros gates: tirar a variável em vez de contorná-la.",
+  "//10": "🔴 CORREÇÃO — 09/09/2026. A primeira versão deste arquivo dizia que EAS UPDATE NÃO SERVE",
+  "//11": "no Expo Go. ERRADO, e o erro foi meu: peguei meio parágrafo de um RESUMO DE BUSCA e tratei",
+  "//12": "como fato. A doc da Expo diz o contrário, textualmente: *To test the content of an update",
+  "//13": "in Expo Go, run `eas update` and then browse to the update in Expo Go*, e *Expo Go and",
+  "//14": "development builds are not set to a specific channel and can run any updates compatible",
+  "//15": "with their native runtime*.",
+  "//16": "O Victor me corrigiu com FOTO: conta Expo já existente, Expo Go 57.0.9 / SDK 57, e a tela",
+  "//17": "Home listando `Projects` — que é exatamente onde um update publicado aparece.",
+  "//18": "⚠ E eu ia errar uma segunda vez na mesma linha: ia configurar `runtimeVersion` com a",
+  "//19": "política `sdkVersion`, que NÃO EXISTE MAIS. Hoje são três: appVersion, nativeVersion e",
+  "//20": "fingerprint. Duas afirmações de memória, duas desmentidas pela fonte.",
+  "//21": "ENTÃO O CAMINHO PADRÃO SERIA `eas update`, não build: publica em segundos e aparece no",
+  "//22": "Expo Go que ele já tem instalado e logado. O APK abaixo é o plano B — o único que dispensa",
+  "//23": "até o Expo Go —, mas custa uma fila de build inteira para a mesma resposta.",
+  "//24": "🔴 E NADA DISSO RODOU: os dois exigem credencial da conta Expo, e o EAS responde",
+  "//25": "`An Expo user account is required to proceed.` Este arquivo está PRONTO E PARADO.",
+  "//26": "⚠ NÃO tente contornar por túnel: está medido e não passa. `expo start --tunnel` quebra no",
+  "//27": "TLS interceptado pela CA do proxy (error:0A000460), inclusive com NODE_EXTRA_CA_CERTS; SSH",
+  "//28": "na 22 é bloqueado; e na 443 o TCP é aceito mas morre em kex_exchange_identification — o",
+  "//29": "proxy só relaia HTTP/HTTPS. Um agente na nuvem NÃO alcança o telefone dele, e trocar de",
+  "//30": "agente não muda isso: quem precisa estar na rede do aparelho é o servidor Metro.",
+  "//31": "⚠ E sobre COMO obter a credencial: não afirme o caminho de tela sem abrir. Em 09/09/2026 eu",
+  "//32": "indiquei três vezes, errado, uma delas mandando procurar no aplicativo Expo Go uma tela que",
+  "//33": "não é dele. Isso queimou a paciência do Victor e não resolveu nada.",
+  "//34": "✅ MEDIDO EM 09/09/2026, e FECHA a pergunta do túnel de vez. Faltava um provedor na lista",
+  "//35": "acima: o `cloudflared` da Cloudflare, que era o melhor candidato — túnel rápido sem conta e",
+  "//36": "sem token, e falando HTTPS, que é justo o que este proxy deixa passar. O binário baixa e",
+  "//37": "roda (versão 2026.8.3), mas ABRIR o túnel é BLOQUEADO PELA POLÍTICA DO SANDBOX: expor a",
+  "//38": "porta local à internet pública não é ação permitida aqui, e isso não se contorna. Então são",
+  "//39": "QUATRO provedores medidos, nenhum passa, e a razão do último não é técnica — é permissão.",
+  "//40": "NÃO REINVESTIGAR: o túnel está morto por quatro caminhos independentes.",
+  "//41": "✅ E A SEGUNDA MEDIÇÃO INVERTE O DIAGNÓSTICO. `curl https://api.expo.dev/v2/versions` daqui",
+  "//42": "responde 200, e `u.expo.dev` também. A REDE NUNCA FOI O BLOQUEIO. O `eas-cli` está no",
+  "//43": "registro (23.2.0), este perfil está escrito, e o pacote empacota. Falta UMA coisa e só uma:",
+  "//44": "o `EXPO_TOKEN`. Com ele colado aqui, `eas update` roda NESTE container e o app aparece no",
+  "//45": "Expo Go que o Victor já tem logado — sem PC, sem Metro, sem rede local, para sempre.",
+  "//46": "✅ E O CAMINHO DE TELA, agora LIDO em vez de lembrado (docs.expo.dev/accounts/",
+  "//47": "programmatic-access): o token nasce em `https://expo.dev/settings/access-tokens` — link",
+  "//48": "DIRETO, que abre no navegador do telefone. Não há o que procurar, não há menu, e a tela",
+  "//49": "não fica dentro do aplicativo Expo Go. A doc também nomeia a variável: `EXPO_TOKEN`.",
+  "//50": "❌ E UM CAMINHO A MENOS, medido na doc do `expo-updates`: servidor de update PRÓPRIO existe",
+  "//51": "(protocolo Expo Updates, servidor de exemplo publicado), mas depende do módulo",
+  "//52": "`expo-updates`, e a doc diz que no Expo Go *most of the Updates API is unavailable*. Não",
+  "//53": "serve para hospedar o bundle por fora. Caminho fechado, e fechado por leitura da página.",
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "preview": {
+      "//": "O perfil que interessa: APK instalável, sem loja, sem conta de desenvolvedor Google.",
+      "android": {
+        "buildType": "apk"
+      },
+      "distribution": "internal",
+      "channel": "preview"
+    },
+    "development": {
+      "//": "Só para quem quiser voltar ao fluxo com servidor, agora com dev client em vez de Expo Go.",
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  }
+}

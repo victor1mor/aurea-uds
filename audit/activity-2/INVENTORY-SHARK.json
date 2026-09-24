@@ -1,0 +1,4356 @@
+{
+  "fonte": "shark-ui",
+  "caminho": "Referencia/shark-ui-main",
+  "commit": "1261047",
+  "medidoEm": "2026-08-27",
+  "metodo": "módulo TypeScript por componente em registry/manifest + fonte em registry/react",
+  "totais": {
+    "manifestos": 101,
+    "comFonte": 95,
+    "comExemplo": 94,
+    "composicoes": 801,
+    "sobreArk": 91,
+    "comTokenProprio": 5,
+    "tokensProprios": 9,
+    "comKeyframes": 6,
+    "keyframesDistintas": 9,
+    "estadosDistintos": 65,
+    "blocos": 2,
+    "templates": 9
+  },
+  "tokensPorComponente": [
+    {
+      "nome": "accordion",
+      "tokens": [
+        "--animate-slide-down",
+        "--animate-slide-up"
+      ]
+    },
+    {
+      "nome": "collapsible",
+      "tokens": [
+        "--animate-collapse",
+        "--animate-expand"
+      ]
+    },
+    {
+      "nome": "marquee",
+      "tokens": [
+        "--animate-marquee-x",
+        "--animate-marquee-y"
+      ]
+    },
+    {
+      "nome": "progress",
+      "tokens": [
+        "--animate-indeterminate"
+      ]
+    },
+    {
+      "nome": "swap",
+      "tokens": [
+        "--animate-flip-in",
+        "--animate-flip-out"
+      ]
+    }
+  ],
+  "componentes": [
+    {
+      "nome": "accordion",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "--animate-slide-down",
+        "--animate-slide-up",
+        "slideDown 0.2s ease-out",
+        "slideUp 0.2s ease-out"
+      ],
+      "tokensProprios": [
+        "--animate-slide-down",
+        "--animate-slide-up"
+      ],
+      "keyframes": [
+        "slideDown",
+        "slideUp"
+      ],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "Accordion",
+        "AccordionContent",
+        "AccordionItem",
+        "AccordionTrigger"
+      ],
+      "primitivesArk": [
+        "accordion"
+      ],
+      "estadosData": [
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 111
+    },
+    {
+      "nome": "action-bar",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/badge.json",
+        "/r/separator.json",
+        "action-bar",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "ActionBar",
+        "ActionBarBody",
+        "ActionBarClose",
+        "ActionBarContent",
+        "ActionBarSeparator",
+        "ActionBarTrigger",
+        "ActionBarValue"
+      ],
+      "primitivesArk": [
+        "factory",
+        "presence",
+        "raiz"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "expanded",
+        "label",
+        "labelledby"
+      ],
+      "linhas": 352
+    },
+    {
+      "nome": "alert-dialog",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/dialog.json",
+        "alert-dialog",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 2,
+      "exporta": [
+        "AlertDialog",
+        "AlertDialogAction",
+        "AlertDialogBody",
+        "AlertDialogCancel",
+        "AlertDialogClose",
+        "AlertDialogContent",
+        "AlertDialogDescription",
+        "AlertDialogFooter",
+        "AlertDialogHeader",
+        "AlertDialogTitle",
+        "AlertDialogTrigger"
+      ],
+      "primitivesArk": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 99
+    },
+    {
+      "nome": "alert",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Alert",
+        "AlertAction",
+        "AlertDescription",
+        "AlertTitle"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 129
+    },
+    {
+      "nome": "announcement",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Announcement",
+        "AnnouncementTitle"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 71
+    },
+    {
+      "nome": "aspect-ratio",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "aspect-ratio",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "AspectRatio"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 26
+    },
+    {
+      "nome": "autocomplete",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/combobox.json",
+        "/r/separator.json",
+        "autocomplete",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 12,
+      "exporta": [
+        "Autocomplete",
+        "AutocompleteClear",
+        "AutocompleteCollection",
+        "AutocompleteContent",
+        "AutocompleteControl",
+        "AutocompleteEmpty",
+        "AutocompleteGroup",
+        "AutocompleteGroupLabel",
+        "AutocompleteInput",
+        "AutocompleteItem",
+        "AutocompleteList",
+        "AutocompleteSeparator",
+        "AutocompleteTrigger"
+      ],
+      "primitivesArk": [
+        "combobox"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 87
+    },
+    {
+      "nome": "avatar",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/status.json",
+        "avatar",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 14,
+      "exporta": [
+        "Avatar",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "AvatarGroupCount",
+        "AvatarImage"
+      ],
+      "primitivesArk": [
+        "avatar",
+        "factory"
+      ],
+      "estadosData": [
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "size",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 158
+    },
+    {
+      "nome": "badge",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 16,
+      "exporta": [
+        "Badge"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "size"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 119
+    },
+    {
+      "nome": "bottom-navigation",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/tabs.json",
+        "bottom-navigation",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 3,
+      "exporta": [
+        "BottomNavigation",
+        "BottomNavigationItem",
+        "BottomNavigationItemIcon",
+        "BottomNavigationItemLabel",
+        "BottomNavigationList"
+      ],
+      "primitivesArk": [
+        "factory",
+        "tabs"
+      ],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "selected"
+      ],
+      "linhas": 106
+    },
+    {
+      "nome": "breadcrumb",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "breadcrumb",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "Breadcrumb",
+        "BreadcrumbEllipsis",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbList",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "current",
+        "hidden",
+        "label"
+      ],
+      "linhas": 117
+    },
+    {
+      "nome": "button-group",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/separator.json",
+        "button-group",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 8,
+      "exporta": [
+        "ButtonGroup",
+        "ButtonGroupSeparator",
+        "ButtonGroupText"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "linhas": 95
+    },
+    {
+      "nome": "button",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 21,
+      "exporta": [
+        "Button"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "disabled",
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "size",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "busy",
+        "disabled",
+        "invalid"
+      ],
+      "linhas": 175
+    },
+    {
+      "nome": "calendar",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/native-select.json",
+        "calendar",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "Calendar",
+        "CalendarClearTrigger",
+        "CalendarContext",
+        "CalendarControl",
+        "CalendarLabel",
+        "CalendarMonthSelect",
+        "CalendarNextTrigger",
+        "CalendarPresetTrigger",
+        "CalendarPrevTrigger",
+        "CalendarTable",
+        "CalendarTableBody",
+        "CalendarTableCell",
+        "CalendarTableDays",
+        "CalendarTableHead",
+        "CalendarTableHeader",
+        "CalendarTableNextMonth",
+        "CalendarTableRow",
+        "CalendarTodayTrigger",
+        "CalendarTrigger",
+        "CalendarView",
+        "CalendarViewControl",
+        "CalendarViewDate",
+        "CalendarWeekDays",
+        "CalendarYearSelect"
+      ],
+      "primitivesArk": [
+        "date-picker"
+      ],
+      "estadosData": [
+        "disabled",
+        "focus",
+        "hover-range-end",
+        "hover-range-start",
+        "in-range",
+        "range-end",
+        "range-start",
+        "selected",
+        "slot",
+        "today",
+        "unavailable",
+        "view"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus",
+        "hover-range-end",
+        "hover-range-start",
+        "in-range",
+        "range-end",
+        "range-start",
+        "selected",
+        "today",
+        "unavailable",
+        "view"
+      ],
+      "ariaEmitidos": [
+        "selected"
+      ],
+      "linhas": 410
+    },
+    {
+      "nome": "card",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "card",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "Card",
+        "CardAction",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardMedia",
+        "CardTitle"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 177
+    },
+    {
+      "nome": "carousel",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "carousel",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "Carousel",
+        "CarouselContent",
+        "CarouselControl",
+        "CarouselIndicator",
+        "CarouselIndicatorGroup",
+        "CarouselItem",
+        "CarouselNext",
+        "CarouselPrevious"
+      ],
+      "primitivesArk": [
+        "carousel"
+      ],
+      "estadosData": [
+        "current",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "current",
+        "orientation"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 191
+    },
+    {
+      "nome": "chart",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "chart-1",
+        "chart-2",
+        "chart-3",
+        "chart-4",
+        "chart-5",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-blue-700)",
+        "var(--color-cyan-900)",
+        "var(--color-emerald-500)",
+        "var(--color-orange-600)",
+        "var(--color-purple-500)",
+        "var(--color-rose-500)",
+        "var(--color-teal-600)"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 1,
+      "exporta": [
+        "ChartContainer",
+        "ChartLegend",
+        "ChartLegendContent",
+        "ChartStyle",
+        "ChartTooltip",
+        "ChartTooltipContent"
+      ],
+      "primitivesArk": [],
+      "estadosData": [
+        "chart",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "chart",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "chart"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 404
+    },
+    {
+      "nome": "checkbox",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "checkbox",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 8,
+      "exporta": [
+        "Checkbox",
+        "CheckboxGroup",
+        "CheckboxIndicator"
+      ],
+      "primitivesArk": [
+        "checkbox"
+      ],
+      "estadosData": [
+        "checked",
+        "disabled",
+        "focus-visible",
+        "invalid",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "checked",
+        "disabled",
+        "focus-visible",
+        "invalid",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 96
+    },
+    {
+      "nome": "circular-progress",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "circular-progress",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "CircularProgress",
+        "CircularProgressTrack",
+        "CircularProgressValue"
+      ],
+      "primitivesArk": [
+        "progress",
+        "raiz"
+      ],
+      "estadosData": [
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "linhas": 140
+    },
+    {
+      "nome": "circular-slider",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/field.json",
+        "circular-slider",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "CircularSlider",
+        "CircularSliderMarker",
+        "CircularSliderMarkerGroup",
+        "CircularSliderThumb",
+        "CircularSliderValue"
+      ],
+      "primitivesArk": [
+        "angle-slider"
+      ],
+      "estadosData": [
+        "disabled",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "linhas": 296
+    },
+    {
+      "nome": "client-only",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "client-only",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 2,
+      "exporta": [
+        "ClientOnly"
+      ],
+      "primitivesArk": [
+        "client-only"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 8
+    },
+    {
+      "nome": "clipboard",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/input.json",
+        "clipboard",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "Clipboard",
+        "ClipboardIndicator",
+        "ClipboardInput",
+        "ClipboardTrigger",
+        "ClipboardValue"
+      ],
+      "primitivesArk": [
+        "clipboard"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 114
+    },
+    {
+      "nome": "collapsible",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "--animate-collapse",
+        "--animate-expand",
+        "collapse 0.2s ease-out",
+        "expand 0.2s ease-out"
+      ],
+      "tokensProprios": [
+        "--animate-collapse",
+        "--animate-expand"
+      ],
+      "keyframes": [
+        "collapse",
+        "expand"
+      ],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "Collapsible",
+        "CollapsibleContent",
+        "CollapsibleIndicator",
+        "CollapsibleTrigger"
+      ],
+      "primitivesArk": [
+        "collapsible"
+      ],
+      "estadosData": [
+        "disabled",
+        "partial-collapse",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "partial-collapse",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 95
+    },
+    {
+      "nome": "color-picker",
+      "tipo": "registry:ui",
+      "dependencias": [],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 29,
+      "exporta": [
+        "ColorPicker",
+        "ColorPickerArea",
+        "ColorPickerAreaThumb",
+        "ColorPickerContent",
+        "ColorPickerControl",
+        "ColorPickerEyeDropperTrigger",
+        "ColorPickerInput",
+        "ColorPickerSlider",
+        "ColorPickerSwatch",
+        "ColorPickerSwatchGroup",
+        "ColorPickerSwatchIndicator",
+        "ColorPickerSwatchPreview",
+        "ColorPickerSwatchTrigger",
+        "ColorPickerTransparencyGrid",
+        "ColorPickerTrigger",
+        "ColorPickerValue",
+        "ColorPickerValueSwatch",
+        "ColorPickerView"
+      ],
+      "primitivesArk": [
+        "color-picker",
+        "factory",
+        "portal"
+      ],
+      "estadosData": [
+        "disabled",
+        "orientation",
+        "size",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "orientation",
+        "size",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 455
+    },
+    {
+      "nome": "combobox",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/input-group.json",
+        "/r/input.json",
+        "combobox",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 14,
+      "exporta": [
+        "Combobox",
+        "ComboboxClear",
+        "ComboboxContent",
+        "ComboboxContext",
+        "ComboboxControl",
+        "ComboboxEmpty",
+        "ComboboxFieldInput",
+        "ComboboxGroup",
+        "ComboboxGroupLabel",
+        "ComboboxInput",
+        "ComboboxItem",
+        "ComboboxList",
+        "ComboboxPositioner",
+        "ComboboxTrigger"
+      ],
+      "primitivesArk": [
+        "combobox",
+        "portal"
+      ],
+      "estadosData": [
+        "disabled",
+        "highlighted",
+        "placement",
+        "size",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "highlighted",
+        "placement",
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 326
+    },
+    {
+      "nome": "command",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/combobox.json",
+        "/r/dialog.json",
+        "/r/input-group.json",
+        "/r/input.json",
+        "/r/menu.json",
+        "/r/separator.json",
+        "command",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "Command",
+        "CommandContent",
+        "CommandDialog",
+        "CommandDialogContent",
+        "CommandDialogTrigger",
+        "CommandEmpty",
+        "CommandFooter",
+        "CommandGroup",
+        "CommandGroupLabel",
+        "CommandInput",
+        "CommandItem",
+        "CommandList",
+        "CommandSeparator",
+        "CommandShortcut"
+      ],
+      "primitivesArk": [
+        "combobox",
+        "dialog",
+        "raiz"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 267
+    },
+    {
+      "nome": "context-menu",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/menu.json",
+        "context-menu",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 1,
+      "exporta": [
+        "ContextMenu",
+        "ContextMenuContent",
+        "ContextMenuGroup",
+        "ContextMenuItem",
+        "ContextMenuSeparator",
+        "ContextMenuShortcut",
+        "ContextMenuSub",
+        "ContextMenuSubContent",
+        "ContextMenuSubTrigger",
+        "ContextMenuTrigger"
+      ],
+      "primitivesArk": [
+        "menu"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 69
+    },
+    {
+      "nome": "data-list",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "data-list",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "DataList",
+        "DataListItem",
+        "DataListItemLabel",
+        "DataListItemValue"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "list",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "list",
+        "orientation"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 85
+    },
+    {
+      "nome": "date-input",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/input-group.json",
+        "date-input",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 15,
+      "exporta": [
+        "DateInput"
+      ],
+      "primitivesArk": [
+        "date-input"
+      ],
+      "estadosData": [
+        "disabled",
+        "placeholder-shown",
+        "readonly",
+        "size",
+        "slot",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "placeholder-shown",
+        "readonly",
+        "slot",
+        "type"
+      ],
+      "ariaEmitidos": [
+        "invalid",
+        "label"
+      ],
+      "linhas": 187
+    },
+    {
+      "nome": "date-picker",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/calendar.json",
+        "/r/input-group.json",
+        "/r/input.json",
+        "date-picker",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "DatePicker",
+        "DatePickerContent",
+        "DatePickerInput",
+        "DatePickerPresetTrigger",
+        "DatePickerTimer",
+        "DatePickerTrigger",
+        "DatePickerValue"
+      ],
+      "primitivesArk": [
+        "date-picker",
+        "portal"
+      ],
+      "estadosData": [
+        "placeholder-shown",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "placeholder-shown",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 171
+    },
+    {
+      "nome": "dialog",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/scroll-area.json",
+        "dialog",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 12,
+      "exporta": [
+        "Dialog",
+        "DialogBody",
+        "DialogClose",
+        "DialogContent",
+        "DialogDescription",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogOverlay",
+        "DialogPositioner",
+        "DialogTitle",
+        "DialogTrigger"
+      ],
+      "primitivesArk": [
+        "dialog",
+        "factory",
+        "portal"
+      ],
+      "estadosData": [
+        "has-nested",
+        "nested",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "has-nested",
+        "nested",
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 347
+    },
+    {
+      "nome": "download-trigger",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "download-trigger",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 3,
+      "exporta": [
+        "DownloadTrigger"
+      ],
+      "primitivesArk": [
+        "download-trigger"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 9
+    },
+    {
+      "nome": "drawer",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/scroll-area.json",
+        "drawer",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "Drawer",
+        "DrawerBody",
+        "DrawerClose",
+        "DrawerContent",
+        "DrawerDescription",
+        "DrawerFooter",
+        "DrawerGrabber",
+        "DrawerHeader",
+        "DrawerOverlay",
+        "DrawerPositioner",
+        "DrawerProvider",
+        "DrawerTitle",
+        "DrawerTrigger"
+      ],
+      "primitivesArk": [
+        "drawer",
+        "factory",
+        "portal"
+      ],
+      "estadosData": [
+        "active",
+        "dragging",
+        "has-nested",
+        "nested-drawer-open",
+        "nested-drawer-swiping",
+        "slot",
+        "state",
+        "swipe-direction",
+        "swiping"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "active",
+        "dragging",
+        "has-nested",
+        "nested-drawer-open",
+        "nested-drawer-swiping",
+        "slot",
+        "state",
+        "swipe-direction",
+        "swiping"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 508
+    },
+    {
+      "nome": "editable",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "editable",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 13,
+      "exporta": [
+        "Editable",
+        "EditableArea",
+        "EditableCancelTrigger",
+        "EditableControl",
+        "EditableEditTrigger",
+        "EditableInput",
+        "EditablePreview",
+        "EditableSubmitTrigger"
+      ],
+      "primitivesArk": [
+        "editable"
+      ],
+      "estadosData": [
+        "orientation",
+        "placeholder-shown",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "placeholder-shown",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 135
+    },
+    {
+      "nome": "field",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/separator.json",
+        "field",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 19,
+      "exporta": [
+        "Field",
+        "FieldContent",
+        "FieldDescription",
+        "FieldError",
+        "FieldGroup",
+        "FieldHelper",
+        "FieldLabel",
+        "FieldLegend",
+        "FieldRequiredIndicator",
+        "FieldSeparator",
+        "FieldSet",
+        "FieldTitle"
+      ],
+      "primitivesArk": [
+        "factory",
+        "field",
+        "fieldset"
+      ],
+      "estadosData": [
+        "content",
+        "data-slot",
+        "disabled",
+        "invalid",
+        "orientation",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "content",
+        "orientation",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "data-slot",
+        "disabled",
+        "invalid",
+        "orientation",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 305
+    },
+    {
+      "nome": "file-upload",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "file-upload",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "FileUpload",
+        "FileUploadClearTrigger",
+        "FileUploadDescription",
+        "FileUploadDropzone",
+        "FileUploadDropzoneIcon",
+        "FileUploadHelper",
+        "FileUploadItem",
+        "FileUploadItemDeleteTrigger",
+        "FileUploadItemGroup",
+        "FileUploadItemName",
+        "FileUploadItemPreview",
+        "FileUploadItemPreviewImage",
+        "FileUploadItemSize",
+        "FileUploadList",
+        "FileUploadRootProvider",
+        "FileUploadTitle",
+        "FileUploadTrigger"
+      ],
+      "primitivesArk": [
+        "factory",
+        "file-upload"
+      ],
+      "estadosData": [
+        "cover",
+        "dragging",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "cover",
+        "dragging",
+        "invalid"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 327
+    },
+    {
+      "nome": "float",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "float",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 2,
+      "exporta": [
+        "Float"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "placement",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 44
+    },
+    {
+      "nome": "floating-panel",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/scroll-area.json",
+        "floating-panel",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "FloatingPanel",
+        "FloatingPanelBody",
+        "FloatingPanelCloseTrigger",
+        "FloatingPanelContent",
+        "FloatingPanelControl",
+        "FloatingPanelDragTrigger",
+        "FloatingPanelFooter",
+        "FloatingPanelHeader",
+        "FloatingPanelMaximize",
+        "FloatingPanelMinimize",
+        "FloatingPanelResizeTrigger",
+        "FloatingPanelRestore",
+        "FloatingPanelStageTrigger",
+        "FloatingPanelTitle",
+        "FloatingPanelTrigger"
+      ],
+      "primitivesArk": [
+        "factory",
+        "floating-panel",
+        "portal"
+      ],
+      "estadosData": [
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 286
+    },
+    {
+      "nome": "format",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "format",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 10,
+      "exporta": [
+        "FormatByte",
+        "FormatNumber",
+        "FormatRelativeTime"
+      ],
+      "primitivesArk": [
+        "format"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 16
+    },
+    {
+      "nome": "frame",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "frame",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 2,
+      "exporta": [
+        "Frame",
+        "FrameDescription",
+        "FrameFooter",
+        "FrameHeader",
+        "FramePanel",
+        "FrameTitle"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 115
+    },
+    {
+      "nome": "highlight",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "highlight",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "Highlight"
+      ],
+      "primitivesArk": [
+        "highlight"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 30
+    },
+    {
+      "nome": "hint",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "hint",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 3,
+      "exporta": [
+        "Hint",
+        "HintArrow",
+        "HintContent",
+        "HintTrigger"
+      ],
+      "primitivesArk": [
+        "raiz"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [
+        "describedby"
+      ],
+      "linhas": 271
+    },
+    {
+      "nome": "hitbox",
+      "tipo": "registry:style",
+      "dependencias": [],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": true,
+      "temFonte": false,
+      "temExemplo": true,
+      "composicoes": 7,
+      "exporta": [],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 0
+    },
+    {
+      "nome": "hover-card",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "hover-card",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "HoverCard",
+        "HoverCardArrow",
+        "HoverCardContent",
+        "HoverCardTrigger"
+      ],
+      "primitivesArk": [
+        "hover-card",
+        "raiz"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "placement",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 104
+    },
+    {
+      "nome": "image-cropper",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "image-cropper",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 8,
+      "exporta": [
+        "ImageCropper",
+        "ImageCropperGrid",
+        "ImageCropperHandle",
+        "ImageCropperImage",
+        "ImageCropperSelection"
+      ],
+      "primitivesArk": [
+        "image-cropper"
+      ],
+      "estadosData": [
+        "axis",
+        "disabled",
+        "dragging",
+        "panning",
+        "position",
+        "shape",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "axis",
+        "disabled",
+        "dragging",
+        "panning",
+        "position",
+        "shape"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 171
+    },
+    {
+      "nome": "input-group",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/input.json",
+        "/r/textarea.json",
+        "input-group",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 21,
+      "exporta": [
+        "InputGroup",
+        "InputGroupAddon",
+        "InputGroupButton",
+        "InputGroupInput",
+        "InputGroupText",
+        "InputGroupTextarea"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "align",
+        "disabled",
+        "invalid",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "align",
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "align",
+        "disabled",
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "invalid"
+      ],
+      "linhas": 243
+    },
+    {
+      "nome": "input-otp",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/input.json",
+        "input-otp",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 10,
+      "exporta": [
+        "InputOTP",
+        "InputOTPSeparator",
+        "InputOTPSlot"
+      ],
+      "primitivesArk": [
+        "factory",
+        "pin-input"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 70
+    },
+    {
+      "nome": "input",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "input",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 15,
+      "exporta": [
+        "Input"
+      ],
+      "primitivesArk": [
+        "field"
+      ],
+      "estadosData": [
+        "invalid",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "invalid"
+      ],
+      "ariaEmitidos": [
+        "invalid"
+      ],
+      "linhas": 57
+    },
+    {
+      "nome": "item",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/separator.json",
+        "item",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 13,
+      "exporta": [
+        "Item",
+        "ItemActions",
+        "ItemContent",
+        "ItemDescription",
+        "ItemFooter",
+        "ItemGroup",
+        "ItemHeader",
+        "ItemMedia",
+        "ItemSeparator",
+        "ItemTitle"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 217
+    },
+    {
+      "nome": "json-tree-view",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "JsonTreeView"
+      ],
+      "primitivesArk": [
+        "json-tree-view"
+      ],
+      "estadosData": [
+        "kind",
+        "part",
+        "slot",
+        "state",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "kind",
+        "part",
+        "state",
+        "type"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 81
+    },
+    {
+      "nome": "kbd",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "kbd",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "Kbd",
+        "KbdGroup"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 57
+    },
+    {
+      "nome": "link-overlay",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "link-overlay",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 3,
+      "exporta": [
+        "LinkBox",
+        "LinkOverlay"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 41
+    },
+    {
+      "nome": "listbox",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/menu.json",
+        "listbox",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 16,
+      "exporta": [
+        "Listbox",
+        "ListboxContent",
+        "ListboxEmpty",
+        "ListboxItem",
+        "ListboxItemGroup",
+        "ListboxItemGroupLabel",
+        "ListboxItemIndicator",
+        "ListboxItemText",
+        "ListboxShortcut",
+        "ListboxValueText"
+      ],
+      "primitivesArk": [
+        "listbox"
+      ],
+      "estadosData": [
+        "disabled",
+        "highlighted",
+        "orientation",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "highlighted",
+        "orientation",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 222
+    },
+    {
+      "nome": "locale",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "locale",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [
+        "LocaleProvider"
+      ],
+      "primitivesArk": [
+        "locale"
+      ],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 11
+    },
+    {
+      "nome": "marquee",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "--animate-marquee-x",
+        "--animate-marquee-y",
+        "marqueeX var(--marquee-duration) linear infinite var(--marquee-delay)",
+        "marqueeY var(--marquee-duration) linear infinite var(--marquee-delay)"
+      ],
+      "tokensProprios": [
+        "--animate-marquee-x",
+        "--animate-marquee-y"
+      ],
+      "keyframes": [
+        "marqueeX",
+        "marqueeY"
+      ],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Marquee",
+        "MarqueeContent",
+        "MarqueeEdge",
+        "MarqueeItem"
+      ],
+      "primitivesArk": [
+        "marquee"
+      ],
+      "estadosData": [
+        "orientation",
+        "reverse",
+        "side",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "reverse",
+        "side"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 129
+    },
+    {
+      "nome": "menu",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "menu",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 14,
+      "exporta": [
+        "Menu",
+        "MenuArrow",
+        "MenuCheckboxItem",
+        "MenuContent",
+        "MenuGroup",
+        "MenuGroupLabel",
+        "MenuItem",
+        "MenuPositioner",
+        "MenuQuickItem",
+        "MenuRadioGroup",
+        "MenuRadioItem",
+        "MenuSeparator",
+        "MenuShortcut",
+        "MenuSub",
+        "MenuSubContent",
+        "MenuSubTrigger",
+        "MenuTrigger"
+      ],
+      "primitivesArk": [
+        "factory",
+        "menu",
+        "raiz"
+      ],
+      "estadosData": [
+        "date",
+        "disabled",
+        "highlighted",
+        "placement",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "date",
+        "disabled",
+        "highlighted",
+        "placement",
+        "state",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 367
+    },
+    {
+      "nome": "native-select",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/field.json",
+        "native-select",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "NativeSelect",
+        "NativeSelectOptGroup",
+        "NativeSelectOption"
+      ],
+      "primitivesArk": [
+        "factory",
+        "field"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "hidden",
+        "invalid"
+      ],
+      "linhas": 85
+    },
+    {
+      "nome": "number-input",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/field.json",
+        "/r/input.json",
+        "number-input",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 15,
+      "exporta": [
+        "NumberInput",
+        "NumberInputDecrement",
+        "NumberInputGroup",
+        "NumberInputIncrement",
+        "NumberInputInput",
+        "NumberInputScrubber"
+      ],
+      "primitivesArk": [
+        "number-input"
+      ],
+      "estadosData": [
+        "disabled",
+        "invalid",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "invalid",
+        "size",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "invalid",
+        "label"
+      ],
+      "linhas": 160
+    },
+    {
+      "nome": "pagination",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "pagination",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "Pagination",
+        "PaginationEllipsis",
+        "PaginationItem",
+        "PaginationItemLink",
+        "PaginationItems",
+        "PaginationNext",
+        "PaginationPrevious"
+      ],
+      "primitivesArk": [
+        "pagination"
+      ],
+      "estadosData": [
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "selected"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 159
+    },
+    {
+      "nome": "password-input",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/input-group.json",
+        "password-input",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 12,
+      "exporta": [
+        "PasswordInput",
+        "PasswordInputGroup",
+        "PasswordInputIndicator",
+        "PasswordInputInput",
+        "PasswordInputTrigger"
+      ],
+      "primitivesArk": [
+        "password-input"
+      ],
+      "estadosData": [
+        "disabled",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "size"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 103
+    },
+    {
+      "nome": "popover",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/scroll-area.json",
+        "popover",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "Popover",
+        "PopoverAnchor",
+        "PopoverArrow",
+        "PopoverBody",
+        "PopoverClose",
+        "PopoverContent",
+        "PopoverDescription",
+        "PopoverFooter",
+        "PopoverHeader",
+        "PopoverPositioner",
+        "PopoverTitle",
+        "PopoverTrigger"
+      ],
+      "primitivesArk": [
+        "factory",
+        "popover",
+        "portal"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 238
+    },
+    {
+      "nome": "presence",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "presence",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 1,
+      "exporta": [
+        "Presence"
+      ],
+      "primitivesArk": [
+        "presence"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 18
+    },
+    {
+      "nome": "progress",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "--animate-indeterminate",
+        "indeterminate 1.5s ease-in-out infinite"
+      ],
+      "tokensProprios": [
+        "--animate-indeterminate"
+      ],
+      "keyframes": [
+        "indeterminate"
+      ],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "Progress",
+        "ProgressRange",
+        "ProgressTrack",
+        "ProgressValue"
+      ],
+      "primitivesArk": [
+        "progress"
+      ],
+      "estadosData": [
+        "orientation",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 109
+    },
+    {
+      "nome": "prose",
+      "tipo": "registry:ui",
+      "dependencias": [],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 22,
+      "exporta": [
+        "Prose"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 17
+    },
+    {
+      "nome": "qr-code",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "qr-code",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "QrCode",
+        "QrCodeDownload",
+        "QrCodeFrame",
+        "QrCodeOverlay"
+      ],
+      "primitivesArk": [
+        "qr-code"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 79
+    },
+    {
+      "nome": "radio-group",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/field.json",
+        "radio-group",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "RadioGroup",
+        "RadioGroupItem",
+        "RadioGroupLabel",
+        "RadioGroupText"
+      ],
+      "primitivesArk": [
+        "radio-group"
+      ],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "invalid",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "invalid",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 101
+    },
+    {
+      "nome": "rating-group",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "rating-group",
+        "registry:ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": false,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 0
+    },
+    {
+      "nome": "rating",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 10,
+      "exporta": [
+        "Rating",
+        "RatingItem"
+      ],
+      "primitivesArk": [
+        "rating-group"
+      ],
+      "estadosData": [
+        "bg",
+        "disabled",
+        "fg",
+        "half",
+        "highlighted",
+        "readonly",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "bg",
+        "fg",
+        "half",
+        "highlighted",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "fg",
+        "half",
+        "highlighted",
+        "readonly",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 114
+    },
+    {
+      "nome": "resizable",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "resizable"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 6,
+      "exporta": [
+        "Resizable",
+        "ResizablePanel",
+        "ResizableResizeTrigger"
+      ],
+      "primitivesArk": [
+        "splitter"
+      ],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 78
+    },
+    {
+      "nome": "scroll-area",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "scroll-area"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "ScrollArea",
+        "ScrollAreaScrollbar"
+      ],
+      "primitivesArk": [
+        "scroll-area"
+      ],
+      "estadosData": [
+        "at-bottom",
+        "at-top",
+        "hover",
+        "orientation",
+        "overflow-x",
+        "overflow-y",
+        "scrolling",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "at-bottom",
+        "at-top",
+        "hover",
+        "orientation",
+        "overflow-x",
+        "overflow-y",
+        "scrolling",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 100
+    },
+    {
+      "nome": "segment-group",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "segment-group"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 10,
+      "exporta": [
+        "SegmentGroup",
+        "SegmentGroupIndicator",
+        "SegmentGroupItem",
+        "SegmentGroupItemText"
+      ],
+      "primitivesArk": [
+        "segment-group"
+      ],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "orientation",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "orientation",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 127
+    },
+    {
+      "nome": "select",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/input.json",
+        "/r/separator.json",
+        "registry:ui",
+        "select"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 13,
+      "exporta": [
+        "Select",
+        "SelectClearTrigger",
+        "SelectContent",
+        "SelectContext",
+        "SelectEmpty",
+        "SelectGroup",
+        "SelectGroupLabel",
+        "SelectItem",
+        "SelectSeparator",
+        "SelectTrigger",
+        "SelectValue"
+      ],
+      "primitivesArk": [
+        "factory",
+        "raiz",
+        "select"
+      ],
+      "estadosData": [
+        "disabled",
+        "highlighted",
+        "placeholder-shown",
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "highlighted",
+        "placeholder-shown",
+        "placement",
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 282
+    },
+    {
+      "nome": "separator",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "separator"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "Separator"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation"
+      ],
+      "ariaEmitidos": [
+        "orientation"
+      ],
+      "linhas": 35
+    },
+    {
+      "nome": "sheet",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/dialog.json",
+        "registry:ui",
+        "sheet"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 10,
+      "exporta": [
+        "Sheet",
+        "SheetBody",
+        "SheetClose",
+        "SheetContent",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetOverlay",
+        "SheetPositioner",
+        "SheetTitle",
+        "SheetTrigger"
+      ],
+      "primitivesArk": [
+        "dialog",
+        "portal"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "placement",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 232
+    },
+    {
+      "nome": "show",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "show"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 1,
+      "exporta": [
+        "Show"
+      ],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 29
+    },
+    {
+      "nome": "sidebar",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/input.json",
+        "/r/scroll-area.json",
+        "/r/separator.json",
+        "/r/sheet.json",
+        "/r/skeleton.json",
+        "/r/tooltip.json",
+        "/r/use-is-mobile.json",
+        "registry:ui",
+        "sidebar"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [
+        "Sidebar",
+        "SidebarContent",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarHeader",
+        "SidebarInput",
+        "SidebarInset",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubItem",
+        "SidebarProvider",
+        "SidebarRail",
+        "SidebarSeparator",
+        "SidebarTrigger"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "active",
+        "collapsible",
+        "mobile",
+        "placement",
+        "sidebar",
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "collapsible",
+        "mobile",
+        "placement",
+        "sidebar",
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "active",
+        "collapsible",
+        "placement",
+        "sidebar",
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 823
+    },
+    {
+      "nome": "signature-pad",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "registry:ui",
+        "signature-pad"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 3,
+      "exporta": [
+        "SignaturePad"
+      ],
+      "primitivesArk": [
+        "signature-pad"
+      ],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 121
+    },
+    {
+      "nome": "skeleton",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "skeleton"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "Skeleton",
+        "SkeletonCircle",
+        "SkeletonText"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 78
+    },
+    {
+      "nome": "skip-nav",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "skip-nav"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 1,
+      "exporta": [
+        "SkipNavContent",
+        "SkipNavLink"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 65
+    },
+    {
+      "nome": "slider",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/field.json",
+        "registry:ui",
+        "slider"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Slider",
+        "SliderLabel",
+        "SliderValue"
+      ],
+      "primitivesArk": [
+        "slider"
+      ],
+      "estadosData": [
+        "disabled",
+        "dragging",
+        "interval",
+        "orientation",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "interval",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "dragging",
+        "orientation",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 203
+    },
+    {
+      "nome": "spinner",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "spinner"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "Spinner"
+      ],
+      "primitivesArk": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 19
+    },
+    {
+      "nome": "status",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 13,
+      "exporta": [
+        "Status"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "linhas": 52
+    },
+    {
+      "nome": "steps",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "steps"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 7,
+      "exporta": [
+        "Steps",
+        "StepsCompletedContent",
+        "StepsContent",
+        "StepsDescription",
+        "StepsIndicator",
+        "StepsItem",
+        "StepsList",
+        "StepsNext",
+        "StepsPrevious",
+        "StepsSeparator",
+        "StepsTitle",
+        "StepsTrigger"
+      ],
+      "primitivesArk": [
+        "factory",
+        "steps"
+      ],
+      "estadosData": [
+        "complete",
+        "current",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "complete",
+        "current",
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 203
+    },
+    {
+      "nome": "style",
+      "tipo": "registry:style",
+      "dependencias": [
+        "0.5rem",
+        "accent-foreground",
+        "card-foreground",
+        "chart-1",
+        "chart-2",
+        "chart-3",
+        "chart-4",
+        "chart-5",
+        "color-mix(in srgb, var(--background) 96%, var(--color-neutral-50))",
+        "color-mix(in srgb, var(--background) 98%, var(--color-neutral-50))",
+        "color-mix(in srgb, var(--color-neutral-100) 64%, var(--sidebar))",
+        "color-mix(in srgb, var(--color-neutral-50) 10%, var(--background))",
+        "color-mix(in srgb, var(--color-neutral-50) 10%, var(--sidebar))",
+        "color-mix(in srgb, var(--color-neutral-50) 11%, var(--sidebar))",
+        "color-mix(in srgb, var(--color-neutral-50) 8%, var(--background))",
+        "color-mix(in srgb, var(--color-neutral-500) 70%, var(--color-neutral-50))",
+        "color-mix(in srgb, var(--color-neutral-500) 80%, var(--color-neutral-950))",
+        "color-mix(in srgb, var(--color-neutral-800) 64%, var(--sidebar))",
+        "color-mix(in srgb, var(--color-neutral-950) 11%, var(--sidebar))",
+        "color-mix(in srgb, var(--color-neutral-950) 12%, var(--background))",
+        "color-mix(in srgb, var(--color-neutral-950) 13%, var(--background))",
+        "color-mix(in srgb, var(--color-neutral-950) 6%, var(--background))",
+        "color-mix(in srgb, var(--color-neutral-950) 6%, var(--sidebar))",
+        "color-mix(in srgb, var(--color-neutral-950) 97%, var(--color-neutral-50))",
+        "color-mix(in srgb, var(--color-red-600) 90%, var(--color-neutral-50))",
+        "color-mix(in srgb, var(--color-white) 10%, var(--background))",
+        "destructive-foreground",
+        "font-heading",
+        "font-mono",
+        "font-sans",
+        "info-foreground",
+        "muted-foreground",
+        "popover-foreground",
+        "primary-foreground",
+        "secondary-foreground",
+        "sidebar-accent",
+        "sidebar-accent-foreground",
+        "sidebar-border",
+        "sidebar-foreground",
+        "sidebar-primary",
+        "sidebar-primary-foreground",
+        "sidebar-ring",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-cyan-900)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-neutral-100)",
+        "var(--color-neutral-400)",
+        "var(--color-neutral-50)",
+        "var(--color-neutral-500)",
+        "var(--color-neutral-800)",
+        "var(--color-neutral-950)",
+        "var(--color-orange-600)",
+        "var(--color-purple-500)",
+        "var(--color-red-400)",
+        "var(--color-red-500)",
+        "var(--color-red-700)",
+        "var(--color-rose-500)",
+        "var(--color-teal-600)",
+        "var(--font-heading, ui-sans-serif, system-ui, sans-serif)",
+        "var(--font-mono, ui-monospace, monospace)",
+        "var(--font-sans, ui-sans-serif, system-ui, sans-serif)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": true,
+      "temFonte": false,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 0
+    },
+    {
+      "nome": "swap",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "--animate-flip-in",
+        "--animate-flip-out",
+        "flip-in 0.2s ease-out",
+        "flip-out 0.2s ease-out"
+      ],
+      "tokensProprios": [
+        "--animate-flip-in",
+        "--animate-flip-out"
+      ],
+      "keyframes": [
+        "flip-in",
+        "flip-out"
+      ],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 5,
+      "exporta": [
+        "Swap",
+        "SwapIndicator"
+      ],
+      "primitivesArk": [
+        "swap"
+      ],
+      "estadosData": [
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 69
+    },
+    {
+      "nome": "switch",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "switch"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 8,
+      "exporta": [
+        "Switch"
+      ],
+      "primitivesArk": [
+        "switch"
+      ],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "invalid",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "invalid",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 61
+    },
+    {
+      "nome": "table",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "table"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 7,
+      "exporta": [
+        "Table",
+        "TableBody",
+        "TableCaption",
+        "TableCell",
+        "TableFooter",
+        "TableHead",
+        "TableHeader",
+        "TableRow"
+      ],
+      "primitivesArk": [
+        "factory"
+      ],
+      "estadosData": [
+        "hoverable",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "hoverable",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "hoverable",
+        "state",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 155
+    },
+    {
+      "nome": "tabs",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "tabs"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Tabs",
+        "TabsContent",
+        "TabsList",
+        "TabsTrigger"
+      ],
+      "primitivesArk": [
+        "tabs"
+      ],
+      "estadosData": [
+        "disabled",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "selected"
+      ],
+      "linhas": 139
+    },
+    {
+      "nome": "tags-input",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/input-group.json",
+        "registry:ui",
+        "tags-input"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 19,
+      "exporta": [
+        "TagsInput",
+        "TagsInputClearTrigger",
+        "TagsInputContext",
+        "TagsInputControl",
+        "TagsInputInput",
+        "TagsInputItem",
+        "TagsInputItemDeleteTrigger",
+        "TagsInputItemInput",
+        "TagsInputItemPreview",
+        "TagsInputItemText",
+        "TagsInputRootProvider"
+      ],
+      "primitivesArk": [
+        "tags-input"
+      ],
+      "estadosData": [
+        "disabled",
+        "highlighted",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "highlighted",
+        "size"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 282
+    },
+    {
+      "nome": "textarea",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "textarea"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 7,
+      "exporta": [
+        "Textarea"
+      ],
+      "primitivesArk": [
+        "field"
+      ],
+      "estadosData": [
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "invalid"
+      ],
+      "ariaEmitidos": [
+        "invalid"
+      ],
+      "linhas": 37
+    },
+    {
+      "nome": "timer",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "timer"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Timer",
+        "TimerActionTrigger",
+        "TimerArea",
+        "TimerControl",
+        "TimerItem",
+        "TimerItemGroup",
+        "TimerItemLabel",
+        "TimerPause",
+        "TimerPlay",
+        "TimerReset",
+        "TimerRestart",
+        "TimerResume",
+        "TimerSeparator",
+        "TimerStart"
+      ],
+      "primitivesArk": [
+        "factory",
+        "timer"
+      ],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 202
+    },
+    {
+      "nome": "toast",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "destructive-foreground",
+        "info-foreground",
+        "success-foreground",
+        "var(--color-amber-400)",
+        "var(--color-amber-500)",
+        "var(--color-amber-700)",
+        "var(--color-blue-400)",
+        "var(--color-blue-500)",
+        "var(--color-blue-700)",
+        "var(--color-emerald-400)",
+        "var(--color-emerald-500)",
+        "var(--color-emerald-700)",
+        "var(--color-red-400)",
+        "var(--color-red-700)",
+        "warning-foreground"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 8,
+      "exporta": [
+        "ToastItem",
+        "Toaster"
+      ],
+      "primitivesArk": [
+        "portal",
+        "toast"
+      ],
+      "estadosData": [
+        "align",
+        "slot",
+        "state",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "align",
+        "state",
+        "type"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "linhas": 172
+    },
+    {
+      "nome": "toggle-group",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/toggle.json",
+        "registry:ui",
+        "toggle-group"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 13,
+      "exporta": [
+        "ToggleGroup",
+        "ToggleGroupItem"
+      ],
+      "primitivesArk": [
+        "toggle-group"
+      ],
+      "estadosData": [
+        "orientation",
+        "slot",
+        "spacing",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "spacing",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "spacing",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 120
+    },
+    {
+      "nome": "toggle-tooltip",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/popover.json",
+        "registry:ui",
+        "toggle-tooltip"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "ToggleTooltip",
+        "ToggleTooltipArrow",
+        "ToggleTooltipContent",
+        "ToggleTooltipTrigger"
+      ],
+      "primitivesArk": [
+        "popover",
+        "portal"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "placement",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 95
+    },
+    {
+      "nome": "toggle",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "registry:ui",
+        "toggle"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 9,
+      "exporta": [
+        "Toggle",
+        "ToggleIndicator"
+      ],
+      "primitivesArk": [
+        "toggle"
+      ],
+      "estadosData": [
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 74
+    },
+    {
+      "nome": "tooltip",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "tooltip"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 4,
+      "exporta": [
+        "Tooltip",
+        "TooltipArrow",
+        "TooltipContent",
+        "TooltipTrigger"
+      ],
+      "primitivesArk": [
+        "portal",
+        "tooltip"
+      ],
+      "estadosData": [
+        "placement",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "placement",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 103
+    },
+    {
+      "nome": "tour",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "/r/button.json",
+        "/r/dialog.json",
+        "registry:ui",
+        "tour"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "Tour",
+        "TourActionTrigger",
+        "TourActions",
+        "TourBody",
+        "TourClose",
+        "TourContent",
+        "TourDescription",
+        "TourFooter",
+        "TourHeader",
+        "TourNextStep",
+        "TourOverlay",
+        "TourPositioner",
+        "TourPreviousStep",
+        "TourProgressText",
+        "TourSpotlight",
+        "TourTitle",
+        "TourTrigger"
+      ],
+      "primitivesArk": [
+        "factory",
+        "raiz",
+        "tour"
+      ],
+      "estadosData": [
+        "slot",
+        "state",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "state",
+        "type"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 419
+    },
+    {
+      "nome": "tree-view",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "@keyframes collapse",
+        "@keyframes expand",
+        "var(--collapsed-height, 0)",
+        "var(--height)"
+      ],
+      "tokensProprios": [],
+      "keyframes": [
+        "collapse",
+        "expand"
+      ],
+      "temCssProprio": true,
+      "temFonte": true,
+      "temExemplo": true,
+      "composicoes": 11,
+      "exporta": [
+        "TreeView",
+        "TreeViewBranch",
+        "TreeViewBranchContent",
+        "TreeViewBranchIndicator",
+        "TreeViewBranchItem",
+        "TreeViewCheckbox",
+        "TreeViewContent",
+        "TreeViewItem",
+        "TreeViewLabel",
+        "TreeViewNode",
+        "TreeViewTree"
+      ],
+      "primitivesArk": [
+        "factory",
+        "tree-view"
+      ],
+      "estadosData": [
+        "disabled",
+        "focus",
+        "selected",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus",
+        "selected",
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 466
+    },
+    {
+      "nome": "ui",
+      "tipo": "registry:ui",
+      "dependencias": [
+        "registry:ui",
+        "ui"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": false,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 0
+    },
+    {
+      "nome": "use-is-mobile",
+      "tipo": "registry:hook",
+      "dependencias": [],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": false,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 0
+    },
+    {
+      "nome": "utils",
+      "tipo": "registry:lib",
+      "dependencias": [
+        "registry:lib",
+        "utils"
+      ],
+      "tokensProprios": [],
+      "keyframes": [],
+      "temCssProprio": false,
+      "temFonte": false,
+      "temExemplo": false,
+      "composicoes": 0,
+      "exporta": [],
+      "primitivesArk": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 0
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "MessageList",
+  "category": "Communication",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Scrolling list of conversation messages.",
+  "icon": "chat",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--radius-lg",
+    "--secondary",
+    "--space-2",
+    "--space-3"
+  ],
+  "a11y": {
+    "role": "log",
+    "keyboard": [],
+    "apg": "No APG pattern: the container is role=\"log\" with aria-live=\"polite\", which is the practice for a conversation — it is read in the order it arrives. This differs from NotificationCenter on purpose: a feed you revisit at your own pace must NOT be a live region. Nothing is focusable."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "MessageComposer"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/communication.tsx#MessageList"
+  },
+  "props": [
+    {
+      "name": "messages",
+      "type": "ChatMessage[]",
+      "default": "—",
+      "description": "The conversation, as data: {id, body, author?, time?, avatar?, status?}. Transport and state are yours; this renders."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Conversation\"",
+      "description": "Accessible name of the log region. Name it when a page holds more than one conversation."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the container, which is also the live region."
+    }
+  ]
+}

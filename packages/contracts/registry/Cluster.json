@@ -1,0 +1,75 @@
+{
+  "name": "Cluster",
+  "category": "Layout",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Horizontal wrapping/layout primitive.",
+  "icon": "drag--horizontal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--space-3"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "Layout primitive, no role and no keyboard: it is a <div> that lays its children in a wrapping row. Semantics belong to what you put in it."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Stack",
+      "Grid"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Cluster"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Horizontal flow that wraps: centred on the cross axis, --space-3 between items. It is the row of chips, buttons or tags — the one layout that must never cause sideways scrolling, which is why wrapping is not optional."
+    },
+    {
+      "name": "gap",
+      "type": "\"tight\" | \"normal\" | \"loose\"",
+      "default": "\"normal\"",
+      "description": "Three steps and no others (ADR-0051): tight is --space-2, normal is --space-3, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\" | \"baseline\"",
+      "default": "\"center\"",
+      "description": "The cross axis (vertical). Same names as the native Cluster."
+    },
+    {
+      "name": "justify",
+      "type": "\"start\" | \"center\" | \"end\" | \"between\"",
+      "default": "\"start\"",
+      "description": "The main axis. `between` spreads the free space: a name on the left, a button on the right."
+    },
+    {
+      "name": "wrap",
+      "type": "boolean",
+      "default": "true",
+      "description": "The row wraps by default. `false` keeps everything on one line."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "For justification or width. Every other div attribute passes through."
+    }
+  ]
+}

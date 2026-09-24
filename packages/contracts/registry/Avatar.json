@@ -1,0 +1,87 @@
+{
+  "name": "Avatar",
+  "category": "Identity",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Represents a user or entity with image or initials.",
+  "icon": "user--avatar",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "fallback"
+  ],
+  "tokens": [
+    "--border-strong",
+    "--control-h-lg",
+    "--control-h-md",
+    "--control-h-sm",
+    "--foreground",
+    "--surface-1",
+    "--surface-3",
+    "--text-xs",
+    "--weight-bold"
+  ],
+  "a11y": {
+    "role": "img",
+    "apg": "No APG pattern: an avatar is an image. Decorative next to the name it repeats — pass alt=\"\" then, which is the default, so it does not read the same name twice. When the avatar is the only identification, alt carries the name.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AvatarGroup",
+      "Badge"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/identity-client.tsx#Avatar"
+  },
+  "props": [
+    {
+      "name": "src",
+      "type": "string",
+      "default": "—",
+      "description": "The picture. A broken URL falls back instead of showing the browser's broken-image glyph — measured, it did not before."
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "default": "\"\"",
+      "description": "Empty by default, because an avatar usually sits beside the name it stands for and repeating it is noise. Fill it when the avatar is the only identification."
+    },
+    {
+      "name": "fallback",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What shows with no src, or when src fails: initials, an icon, anything. Without it the circle is empty, which is a legitimate placeholder."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg",
+      "default": "md",
+      "description": "Token scale, not pixels. It shares --control-h-* with the controls, so an avatar next to a button of the same size lines up by construction, and density reaches it."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+// Aurea nativo — `Button` e `IconButton`, sobre `Pressable`.
+//
+// ── A API: DOIS EIXOS, e o atalho da web NÃO atravessa ───────────────────────────────────────
+// Medida a ficha da web antes de escrever (passo 1 do BUILDING.md). Lá existem TRÊS props que
+// pintam a mesma coisa, e a própria ficha diz qual é qual: *"`variant` é atalho para o par
+// (appearance, tone). Os treze nomes continuam valendo e pintam exatamente o mesmo; a API de dois
+// eixos é appearance + tone"* — a ADR-0044.
+//
+// O `variant` existe lá porque a Aurea **está publicada** e aqueles treze nomes são contrato com
+// quem instalou. **Aqui não há nada publicado**, e nascer com o atalho seria nascer com a dívida:
+// dois caminhos para a mesma pintura, e a próxima sessão perguntando qual é o certo. Então o
+// nativo tem `appearance` + `tone`, e só.
+//
+// ── O que ficou de fora, com o motivo (passo 5: escopo menor que a referência) ───────────────
+//   `href`      — não há navegação por documento no RN; link é `Linking.openURL`, do app;
+//   `type`      — `submit`/`reset` são de `<form>`, que não existe;
+//   `kbd`       — atalho de teclado impresso no botão não faz sentido no toque;
+//   `loading`   — precisa do `Spinner`, que é Lote 2. Entra lá, não aqui, e é melhor faltar do
+//                 que nascer com um giro desenhado à mão que o Lote 2 teria de substituir;
+//   `appearance:"nav"` — é a pele do item de navegação, e quem a consome é o `BottomNav`/`NavList`
+//                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
+import * as React from "react";
+import { Pressable, View } from "react-native";
+import { criarFolha, REACAO_AO_TOQUE } from "./estilos.js";
+import { Icon } from "./icon.js";
+import { Text } from "./text.js";
+import { useAureaTokens, useSobreAMarca } from "./theme.js";
+const ALTURA = {
+    xs: "controlHXs", sm: "controlHSm", md: "controlHMd", lg: "controlHLg", xl: "controlHXl",
+};
+// Os mesmos números do `.btn-*` do core, medidos lá — não reinventados aqui.
+const PADDING = { xs: 10, sm: 12, md: 15, lg: 20, xl: 26 };
+const GAP = { xs: 6, sm: 8, md: 8, lg: 8, xl: 10 };
+const FONTE = {
+    xs: "xs", sm: "xs", md: "sm", lg: "base", xl: "base",
+};
+const ICONE = {
+    xs: "sm", sm: "sm", md: "sm", lg: "md", xl: "md",
+};
+/** Par (fundo, texto, borda) por tom, para cada aparência. Tudo de token, nada cru. */
+function pintar(t, tone) {
+    const m = {
+        neutral: { solido: t.color.secondary, texto: t.color.secondaryForeground, sobre: t.color.foreground },
+        // ⚠ O TOM DA MARCA TEM DUAS CORES, e confundi-las foi defeito publicado na `0.8.2`.
+        //
+        // `solido` é o amarelo da marca, que é FUNDO: o texto por cima é escuro e lê bem.
+        // `sobre` é o mesmo amarelo virando TEXTO — e aí ele some. Medido sobre o fundo do tema
+        // claro: **1,73:1**, contra os 4,5:1 que a WCAG exige para texto normal. No escuro dá 10,34.
+        //
+        // O token certo existe desde sempre e é o `link`: mesmo matiz (86.047), mais escuro,
+        // **5,02:1** no claro — e no escuro ele É o amarelo da marca, então nada muda lá. A
+        // identidade não foi tocada: o amarelo de preencher continua invariável, como manda o
+        // `CLAUDE.md`. O que mudou é qual dos dois se usa para ESCREVER.
+        //
+        // ⚠ Achado pelo app na tela de entrar, não por teste nosso — os 1430 passavam por cima.
+        brand: { solido: t.color.primary, texto: t.color.primaryForeground, sobre: t.color.link },
+        // ⚠ MESMO DEFEITO DO TOM DA MARCA, achado por medir os outros tons em vez de parar no
+        // primeiro: `destructive` escrito sobre o tema claro dá **4,30:1** — reprova por pouco, mas
+        // reprova. O `danger400` passa nos DOIS temas (6,86 no claro, 7,47 no escuro), e não é
+        // invenção: o `Input` já usa esse token para a borda de inválido.
+        // O `solido` continua no `destructive`, porque ali ele é FUNDO e o texto por cima é claro.
+        danger: { solido: t.color.destructive, texto: t.color.destructiveForeground, sobre: t.color.danger400 ?? t.color.destructive },
+        success: { solido: t.color.success, texto: t.color.successForeground, sobre: t.color.success },
+        warning: { solido: t.color.warning, texto: t.color.warningForeground, sobre: t.color.warning },
+        info: { solido: t.color.info, texto: t.color.infoForeground, sobre: t.color.info },
+    };
+    return m[tone];
+}
+/**
+ * O mesmo par, corrigido quando a peça está DENTRO de um `Card variant="brand"`.
+ *
+ * 🔴 **Sem isto o botão não existe sobre o amarelo — medido nas quatro aparências, 17/09/2026:**
+ * cheio neutro **1,61** no claro · cheio da marca **1,00** (amarelo no amarelo) · contornado
+ * **1,38** no claro · só-texto **1,83** no escuro. O `Card variant="brand"` EXIGE `action` no
+ * tipo, então o cartão obrigava a ter um botão e não dava a ele nenhuma forma de aparecer.
+ *
+ * A saída não é paleta nova: **uma única cor do sistema passa de 3:1 contra o amarelo nos dois
+ * temas**, e é a tinta que o cartão já manda para dentro (4,54). Então aqui:
+ *
+ * - **cheio** — o fundo vira a TINTA e a letra vira o amarelo do cartão. O botão fica escuro
+ *   sobre o amarelo, que é o único desenho que se enxerga nos dois temas;
+ * - **contornado e sem fundo** — contorno e letra viram a tinta.
+ *
+ * ⚠ **O tom pedido é IGNORADO aqui**, como já acontece no `Text`: um `tone="danger"` sobre o
+ * amarelo mede menos que a norma, e obedecer entregaria um botão ilegível em nome da obediência.
+ */
+function pintarSobreAMarca(base, marca) {
+    if (marca == null)
+        return base;
+    return { solido: marca.tinta, texto: marca.fundo, sobre: marca.tinta };
+}
+const folha = criarFolha((t) => ({
+    // ⚠ O ALVO DE TOQUE, e é a decisão mais importante deste arquivo.
+    //
+    // Medido em 03/09/2026: `targetMin` da Aurea é **44 dp**, e a escala de controle é
+    // xs=26 · sm=30 · md=36 · lg=42 · xl=50. **Três das cinco alturas são menores que o alvo
+    // mínimo** — e a altura vem de token de densidade, que é identidade e não se mexe.
+    //
+    // A saída óbvia seria `hitSlop`, e ela está ERRADA. Pesquisado em 03/09/2026: o `hitSlop`
+    // expande a área do DEDO e **não é levado em conta pelo TalkBack** — o retângulo que o leitor
+    // de tela explora continua o visual. Quem usa leitor ficaria com o alvo pequeno, que é
+    // exatamente quem mais precisa do alvo grande. A recomendação corrente é `minHeight`/padding
+    // explícito, e é o que está aqui.
+    //
+    // Como isto NÃO mexe no desenho: o `Pressable` tem `minHeight: targetMin` e centraliza; quem
+    // pinta fundo, borda e raio é a `caixa` interna, com a altura do token. O botão continua com
+    // 36 dp de desenho e passa a ter 44 de alvo — e o leitor de tela enxerga os 44, porque o
+    // elemento acessível é o `Pressable`, não um retângulo invisível ao lado dele.
+    alvo: { minHeight: t.size.targetMin, justifyContent: "center", alignSelf: "flex-start" },
+    alvoLargura: { alignSelf: "stretch" },
+    caixa: {
+        flexDirection: "row", alignItems: "center", justifyContent: "center",
+        borderRadius: t.size.radiusControl, // 999 — pill, identidade INTOCÁVEL
+        borderWidth: t.size.borderWidth,
+    },
+    // `.btn:active` e `.btn:disabled` do core — os números moram no `estilos.ts` desde que o
+    // `Card` com `onPress` passou a reagir igual (R-04, 24/09/2026).
+    ...REACAO_AO_TOQUE,
+}));
+/**
+ * Botão. `Pressable` do RN, alvo ≥ `--target-min`, pele de token.
+ *
+ * ⚠ **`disabled` no RN não tira da ordem de foco como o `:disabled` do HTML** — ele bloqueia o
+ * toque e marca `accessibilityState.disabled`, e o leitor de tela ainda alcança e anuncia
+ * "desativado". Isso é MELHOR do que o `:disabled` da web para o caso que a ficha do `Button`
+ * descreve: lá, um botão desabilitado some da ordem de foco e a explicação pendurada nele não é
+ * lida por ninguém. Aqui não há o dilema, então não há o par `aria-disabled` — um só basta.
+ */
+export function Button({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, ...rest }) {
+    const t = useAureaTokens();
+    const s = folha(t);
+    const marca = useSobreAMarca();
+    const cor = pintarSobreAMarca(pintar(t, tone), marca);
+    const corDaBorda = marca?.tinta ?? t.color.border;
+    const caixa = React.useMemo(() => ({
+        height: t.size[ALTURA[size]],
+        paddingHorizontal: PADDING[size],
+        gap: GAP[size],
+        backgroundColor: appearance === "solid" ? cor.solido : "transparent",
+        borderColor: appearance === "outline" ? corDaBorda : "transparent",
+        ...(fullWidth ? { flex: 1 } : null),
+    }), [t, size, appearance, cor.solido, corDaBorda, fullWidth]);
+    const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
+    return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, accessibilityState: { disabled: !!disabled, ...(pressed === undefined ? null : { checked: pressed }) }, style: ({ pressed: tocando }) => [
+            s.alvo, fullWidth && s.alvoLargura,
+            tocando && s.pressionado, disabled && s.inerte,
+        ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa], children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
+                    ? _jsx(Text, { size: FONTE[size], weight: 500, leading: "none", style: { color: corDoTexto }, children: children })
+                    : children, trailingIcon ? _jsx(Icon, { name: trailingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, trailing ?? null] }) }));
+}
+/**
+ * Botão quadrado, só glifo.
+ *
+ * O raio NÃO é o pill: o core usa `--radius-md` no `.btn-icon` (e `--radius-sm` nos dois menores),
+ * porque um quadrado com raio 999 vira círculo. Medido lá, não escolhido aqui.
+ *
+ * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
+ * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
+ */
+export function IconButton({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, ...rest }) {
+    const t = useAureaTokens();
+    const s = folha(t);
+    const marca = useSobreAMarca();
+    const cor = pintarSobreAMarca(pintar(t, tone), marca);
+    const corDaBorda = marca?.tinta ?? t.color.border;
+    const lado = t.size[ALTURA[size]];
+    const caixa = React.useMemo(() => ({
+        height: lado, width: lado, paddingHorizontal: 0,
+        borderRadius: size === "xs" || size === "sm" ? t.size.radiusSm : t.size.radiusMd,
+        backgroundColor: appearance === "solid" ? cor.solido : "transparent",
+        borderColor: appearance === "outline" ? corDaBorda : "transparent",
+    }), [t, lado, size, appearance, cor.solido, corDaBorda]);
+    return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: label, accessibilityState: { disabled: !!disabled, ...(pressed === undefined ? null : { checked: pressed }) }, style: ({ pressed: tocando }) => [
+            s.alvo, { minWidth: t.size.targetMin, alignItems: "center" },
+            tocando && s.pressionado, disabled && s.inerte,
+        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], color: appearance === "solid" ? cor.texto : cor.sobre, icons: icons }) }) }));
+}

@@ -1,0 +1,57 @@
+{
+  "name": "Kbd",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "A keyboard key or shortcut, shown as the user would press it. Renders the <kbd> element.",
+  "icon": "keyboard",
+  "platforms": {
+    "web": "stable",
+    "native": "n-a"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--border-strong",
+    "--font-code",
+    "--muted-foreground",
+    "--radius-sm",
+    "--secondary"
+  ],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button",
+      "CommandPaletteShell"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Kbd"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The key or combination, written the way the platform writes it (⌘K, Ctrl+K)."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes. Inside a Button it inherits the button's colour automatically."
+    }
+  ]
+}

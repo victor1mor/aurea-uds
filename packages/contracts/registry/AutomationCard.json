@@ -1,0 +1,124 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "AutomationCard",
+  "summary": "A rule that runs on its own: when this, then that — and a switch.",
+  "icon": "workflow-automation",
+  "states": [
+    "enabled",
+    "disabled",
+    "succeeded",
+    "failed"
+  ],
+  "tokens": [
+    "--muted-foreground",
+    "--space-3"
+  ],
+  "a11y": {
+    "role": "article",
+    "apg": "switch — turning the rule on and off is the Switch, a native checkbox with role=switch, so the keyboard is the platform's. The rest is a labelled article holding a DataList.",
+    "keyboard": [
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Space, which toggles the card's switch. The card itself is an article; the only interactive element it owns is that switch, and Space is the switch's key."
+  },
+  "related": {
+    "components": [
+      "Switch",
+      "DataList",
+      "Status"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#AutomationCard"
+  },
+  "props": [
+    {
+      "name": "name",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What the rule is called."
+    },
+    {
+      "name": "trigger",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The WHEN. Rendered as the term/value pair the house already uses, not as prose: whoever reads this needs to find the condition without scanning a paragraph."
+    },
+    {
+      "name": "action",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The THEN. A rule is a condition and a consequence — that pair is what separates this card from AgentCard, which is identity, and from TaskQueue, which is queued work."
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "default": "—",
+      "description": "Whether the rule is live. A disabled rule does not disappear and does not change colour: it recedes. Hiding it would hide the very rule someone is looking for in order to switch it back on."
+    },
+    {
+      "name": "onToggle",
+      "type": "(enabled: boolean) => void",
+      "default": "—",
+      "description": "Without it there is no switch — a read-only card stays read-only instead of showing a control that does nothing."
+    },
+    {
+      "name": "lastRun",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "When it last fired."
+    },
+    {
+      "name": "lastResult",
+      "type": "\"success\" | \"failure\"",
+      "default": "—",
+      "description": "How it went, as a Status — so the outcome is a word and not only a colour."
+    },
+    {
+      "name": "details",
+      "type": "Array<{term: string; value: ReactNode}>",
+      "default": "—",
+      "description": "Extra rows appended after WHEN and THEN in the same list."
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Buttons for the footer. They enter as nodes, so whoever builds the button knows what it does — the reference dispatches by string, which trades the compiler for a verbal agreement."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the card."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "One line under the name, saying what the automation does. It is separate from name so the card can lay the two out on its own grid."
+    }
+  ],
+  "notes": [
+    "The execution history did NOT come in. In the reference it is a tab with a table inside the same component; here DataGrid and EventStream already exist for that, and absorbing it would make the card answer for two contracts — the mistake TaskQueue refused in H.b."
+  ],
+  "axes": {
+    "lastResult": [
+      "failure",
+      "success"
+    ]
+  }
+}

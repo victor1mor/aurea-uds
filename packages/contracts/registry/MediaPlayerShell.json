@@ -1,0 +1,74 @@
+{
+  "name": "MediaPlayerShell",
+  "category": "Media",
+  "layer": "Shell",
+  "maturity": "Stable",
+  "summary": "Layout shell hosting a media player and its chrome.",
+  "icon": "video",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--border",
+    "--font-code",
+    "--font-ui",
+    "--foreground",
+    "--media-buffered",
+    "--media-canvas",
+    "--media-caption-bg",
+    "--media-foreground",
+    "--media-muted",
+    "--media-scrim",
+    "--media-track",
+    "--muted-foreground",
+    "--primary",
+    "--radius-card",
+    "--radius-full",
+    "--radius-lg",
+    "--radius-md",
+    "--radius-sm",
+    "--secondary",
+    "--shadow-lg",
+    "--surface-3",
+    "--surface-hover",
+    "--text-base",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "group",
+    "keyboard": [],
+    "apg": "No role and no keyboard: it draws the player surface and nothing else. Every semantic — the control group, the labelled buttons, the native range inputs — belongs to MediaPlayer."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "MediaPlayer"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#MediaPlayerShell"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The chrome you compose, hosted by the frame. What the frame gives you is worth naming, because rebuilding it by hand is where players go wrong: the dark canvas that stays dark in both themes, overflow clipping so nothing escapes the rounded corner, an isolated stacking context so .media-overlay-title and .media-controls layer above the picture without z-index fights, and a fixed aspect-ratio so the page does not jump before the media has measured itself. Slots it is built for: .media-viewport (picture or placeholder), .media-overlay-title, .media-controls. Use it when the default chrome would be WRONG — a live stream has no duration and nothing to seek, so a seek bar there is a control that lies. For a player that plays, use MediaPlayer."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the surface. Every other div attribute passes through."
+    }
+  ]
+}

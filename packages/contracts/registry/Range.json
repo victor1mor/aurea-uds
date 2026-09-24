@@ -1,0 +1,91 @@
+{
+  "name": "Range",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Slider for selecting a value from a range.",
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  },
+  "icon": "meter",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "responsive": {
+    "orientation": "visual"
+  },
+  "states": [
+    "default",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--primary"
+  ],
+  "a11y": {
+    "role": "slider",
+    "apg": "slider",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown"
+    ],
+    "keyboardNote": "Measured in a browser on 22/08/2026, not read off the APG: Range is a native <input type=range> and the browser already ships all eight keys. The ficha declared four, so the docs under-sold an accessibility contract the component honours."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Range"
+  },
+  "props": [
+    {
+      "name": "min / max / step",
+      "type": "number",
+      "default": "0 / 100 / 1",
+      "description": "Native bounds. The thumb is themed by tokens; the behaviour is the browser's."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "number",
+      "default": "—",
+      "description": "Controlled or uncontrolled."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes. Pair it with a text field when the exact number matters."
+    },
+    {
+      "name": "orientation",
+      "type": "Responsive<RangeOrientation>",
+      "default": "horizontal",
+      "description": "A vertical slider. The engine publishes the orientation and the arrow keys follow it, so this is not only a rotation."
+    }
+  ]
+}

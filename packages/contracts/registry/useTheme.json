@@ -1,0 +1,44 @@
+{
+  "name": "useTheme",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Read the current theme and switch it, from anywhere inside AureaProvider.",
+  "icon": "light",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "dark",
+    "light"
+  ],
+  "tokens": [
+    "--background",
+    "--foreground",
+    "--primary"
+  ],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "trocar tema NAO move o foco nem reordena nada: e a mesma arvore com outra pele. Quem desenha o botao deve rotula-lo pela ACAO ('Switch to light'), nao pelo estado."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AureaProvider",
+      "useDensity"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#useTheme"
+  }
+}

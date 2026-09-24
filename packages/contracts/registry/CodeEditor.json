@@ -1,0 +1,108 @@
+{
+  "name": "CodeEditor",
+  "category": "Code",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Editable code surface.",
+  "icon": "code",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "focused",
+    "read-only"
+  ],
+  "tokens": [
+    "--border",
+    "--border-width",
+    "--danger-400",
+    "--focus-strong",
+    "--font-code",
+    "--foreground",
+    "--info-400",
+    "--leading-relaxed",
+    "--muted-foreground",
+    "--popover",
+    "--popover-foreground",
+    "--primary",
+    "--radius-lg",
+    "--radius-md",
+    "--selection",
+    "--space-2",
+    "--space-3",
+    "--success-400",
+    "--surface-2",
+    "--surface-inset",
+    "--text-xs",
+    "--warning-400"
+  ],
+  "a11y": {
+    "role": "log",
+    "keyboard": [
+      "Enter",
+      "Tab",
+      "Shift+Tab",
+      "Ctrl+Z",
+      "Ctrl+Shift+Z",
+      "Home",
+      "End"
+    ],
+    "apg": "No APG pattern for a code editor. The keyboard is CodeMirror's basicSetup, and the important part is what is NOT bound: `indentWithTab` is deliberately absent, so Tab MOVES FOCUS OUT instead of indenting. An editor that swallows Tab is a keyboard trap (WCAG 2.1.2). The editing surface carries the accessible name through contentAttributes, which is why `ariaLabel` reaches the element that actually takes focus.",
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter, which opens a line and auto-indents it. Enter was delivered by the editor and NOT declared before this measurement. LIMITS, and they are the method's: Ctrl+Z and Ctrl+Shift+Z cannot be reached because the probe presses keys WITHOUT modifiers by design — the same limit the DataGrid's F2 and Control+Home have. Tab and Shift+Tab are out of the count on both sides, since Tab moves focus anywhere on a page. Home and End were not observed: in CodeMirror they move the caret, and a caret is not in the DOM snapshot this probe takes — absence of an observable change does not prove absence of effect. The document is a contenteditable and the engine is a third party (CodeMirror), so what this note establishes is the boundary of what our instrument can say about it."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "CodeBlock"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/code-editor.tsx#CodeEditor"
+  },
+  "props": [
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "\"\"",
+      "description": "The starting document. Uncontrolled: it is read on mount and never again, so typing does not fight a re-render."
+    },
+    {
+      "name": "onChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Fires on every document change. Held through a ref, which is why replacing the handler does not tear down the editor and lose the undo history."
+    },
+    {
+      "name": "extensions",
+      "type": "Extension[]",
+      "default": "—",
+      "description": "Where your language goes. No language is bundled on purpose — pass @codemirror/lang-* and the weight, and the choice, stay yours."
+    },
+    {
+      "name": "readOnly",
+      "type": "boolean",
+      "default": "false",
+      "description": "Reconfigured through a CodeMirror Compartment, so toggling it keeps the document, the selection and the history intact."
+    },
+    {
+      "name": "ariaLabel",
+      "type": "string",
+      "default": "\"Code editor\"",
+      "description": "Accessible name of the editing area. It goes on the contenteditable itself, which is the element that takes focus."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the host element that CodeMirror mounts into."
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "ModelUsage",
+  "summary": "Consumption split by model: which one took how much.",
+  "icon": "chart--bar",
+  "states": [],
+  "tokens": [
+    "--primary",
+    "--radius-full",
+    "--space-2",
+    "--space-3",
+    "--surface-2",
+    "--text-base",
+    "--text-sm",
+    "--weight-bold"
+  ],
+  "a11y": {
+    "role": "region",
+    "apg": "meter — each bar is a share of a known total, not a task advancing. The bar width is not readable on its own, so aria-valuetext carries the formatted number.",
+    "keyboard": []
+  },
+  "related": {
+    "components": [
+      "CostMeter",
+      "Chart",
+      "TraceTimeline"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#ModelUsage"
+  },
+  "props": [
+    {
+      "name": "entries",
+      "type": "ModelUsageEntry[]",
+      "default": "—",
+      "description": "One row per model: model, optional provider, and the three measures (tokens, cost, requests). Rows are sorted descending by the active metric, on a copy — the caller's array is not mutated."
+    },
+    {
+      "name": "metric",
+      "type": "\"tokens\" | \"cost\" | \"requests\"",
+      "default": "\"tokens\"",
+      "description": "Which measure the bars compare. The reference exposes the same choice as four tabs because each one is a separate query in its product; here the data arrives ready and the dimension is a prop."
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "default": "\"USD\"",
+      "description": "ISO currency code, used only when metric is \"cost\"."
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "default": "\"en-US\"",
+      "description": "Passed to Intl.NumberFormat. The default is fixed on purpose: a locale read from the environment would make the rendered text differ between a developer machine and CI, and the catalogue is rendered ahead of time."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Model usage\"",
+      "description": "Accessible name of the region."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the card."
+    }
+  ],
+  "axes": {
+    "metric": [
+      "cost",
+      "requests",
+      "tokens"
+    ]
+  }
+}

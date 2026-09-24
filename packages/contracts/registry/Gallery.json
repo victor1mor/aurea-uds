@@ -1,0 +1,91 @@
+{
+  "name": "Gallery",
+  "category": "Media",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "A grid of pictures you can pick from, and enlarge in the dialog that already exists.",
+  "icon": "image",
+  "platforms": {
+    "web": "stable",
+    "native": "supported"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "current"
+  ],
+  "tokens": [
+    "--radius-lg",
+    "--muted-foreground",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "No roving tabindex: in a grid of photos people expect to tab picture by picture, the same reasoning written into Sidebar. The selected tile is marked with aria-current, and the visual signal is the shared .is-selected language, never colour alone.",
+    "keyboard": [
+      "Tab",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which select the focused tile. The first run reported zero of three, and the cause was the probe, not the component: the bank started on the tile that was ALREADY selected, so activating it changed nothing. Measuring from an unselected tile shows both keys working — the same starting-position blindness the DataGrid and TreeView banks were built around. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Image",
+      "Dialog",
+      "Carousel"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/media-client.tsx#Gallery"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{id, src, alt, caption?}>",
+      "default": "—",
+      "description": "The pictures, as data — the same idiom as Timeline, DataList and Stepper. Each tile renders an <Image>, so the reserved box and the broken-source fallback come with it."
+    },
+    {
+      "name": "selected",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the chosen item. The gallery keeps no selection of its own: in the MediaLibrary archetype the library, the detail panel and the player share ONE constant, and three parallel strings that happen to agree today is the I1 finding waiting for the first rename."
+    },
+    {
+      "name": "onSelect",
+      "type": "(id: string) => void",
+      "default": "—",
+      "description": "Called on click. Without it and without zoom the tiles are not buttons at all — a button that does nothing is a focus stop that lies to anyone on a keyboard."
+    },
+    {
+      "name": "zoom",
+      "type": "boolean",
+      "default": "false",
+      "description": "Clicking also enlarges the picture in the Dialog this library already has — focus trap, Escape and backdrop included. No second floating surface is born for this."
+    },
+    {
+      "name": "ratio",
+      "type": "string",
+      "default": "1/1",
+      "description": "Aspect ratio of every tile, passed straight to Image. Square by default because a grid of mixed ratios is a ragged grid."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Gallery",
+      "description": "Accessible name of the list. Name it for what it holds — two unnamed galleries on a page announce the same thing twice."
+    },
+    {
+      "name": "--gallery-min",
+      "type": "CSS custom property",
+      "default": "8rem",
+      "description": "Minimum tile width. The grid fills with as many columns as fit, so the container decides the count, not a prop. Same escape valve as --carousel-slide."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function IbmCloudVpcClientVpn({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M16,2c-7.7,0-14,6.3-14,14s6.3,14,14,14h1V2h-1ZM15,4v11h-5c.2-4.2,1.9-8.1,4.8-10.9h.2v-.1ZM15,17v11h-.2c-2.9-2.8-4.6-6.7-4.8-10.9h5v-.1ZM11.5,4.9c-2.1,2.9-3.3,6.4-3.5,10.1h-4c.4-4.6,3.4-8.5,7.5-10.1ZM4,17h4c.2,3.7,1.4,7.2,3.5,10.1-4.1-1.7-7.1-5.5-7.5-10.1ZM29,23h-1v-2c0-1.7-1.3-3-3-3s-3,1.3-3,3v2h-1c-.6,0-1,.4-1,1v5c0,.6.4,1,1,1h8c.6,0,1-.4,1-1v-5c0-.6-.4-1-1-1ZM24,21c0-.6.4-1,1-1s1,.4,1,1v2h-2v-2ZM28,28h-6v-3h6v3ZM25,8c1.7,0,3-1.3,3-3s-1.3-3-3-3-3,1.3-3,3,1.3,3,3,3ZM25,4c.6,0,1,.4,1,1s-.4,1-1,1-1-.4-1-1,.4-1,1-1ZM25,14c.6,0,1,.4,1,1s-.4,1-1,1-1-.4-1-1,.4-1,1-1ZM25,10c.6,0,1,.4,1,1s-.4,1-1,1-1-.4-1-1,.4-1,1-1Z", fill: color})
+  );
+}

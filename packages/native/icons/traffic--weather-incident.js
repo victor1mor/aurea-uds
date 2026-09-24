@@ -1,0 +1,18 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function TrafficWeatherIncident({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M2 24H4V30H2z", fill: color}),
+    React.createElement(Path, {d: "M28 2H30V30H28z", fill: color}),
+    React.createElement(Path, {d: "M15 2H17V6H15z", fill: color}),
+    React.createElement(Path, {d: "M15 10H17V14H15z", fill: color}),
+    React.createElement(Path, {d: "M15 18H17V22H15z", fill: color}),
+    React.createElement(Path, {d: "M15 26H17V30H15z", fill: color}),
+    React.createElement(Path, {d: "M6,12A3.8978,3.8978,0,0,1,2,8.223a3.9017,3.9017,0,0,1,.6533-2.0639L5.17,2.4141a1.0381,1.0381,0,0,1,1.6592,0L9.3154,6.11A3.9693,3.9693,0,0,1,10,8.223,3.8978,3.8978,0,0,1,6,12Zm0-7.2368L4.3438,7.2257A1.89,1.89,0,0,0,4,8.223a1.9007,1.9007,0,0,0,2,1.7775A1.9007,1.9007,0,0,0,8,8.223a1.98,1.98,0,0,0-.375-1.0466Z", fill: color}),
+    React.createElement(Path, {d: "M11,11.7627,9.3438,14.2253A1.89,1.89,0,0,0,9,15.2226,1.9007,1.9007,0,0,0,11,17a1.9007,1.9007,0,0,0,2-1.7774,1.98,1.98,0,0,0-.375-1.0467Z", fill: color}),
+    React.createElement(Path, {d: "M6,15.7627,4.3438,18.2253A1.89,1.89,0,0,0,4,19.2226,1.9007,1.9007,0,0,0,6,21a1.9007,1.9007,0,0,0,2-1.7774,1.98,1.98,0,0,0-.375-1.0467Z", fill: color})
+  );
+}

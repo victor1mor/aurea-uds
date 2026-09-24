@@ -1,0 +1,6870 @@
+{
+  "_gerado": "node audit/activity-2/crossref.mjs",
+  "_aviso": "TRIAGEM POR NOME, não a matriz do §13. Nome igual não é capacidade igual (§15). `A_COMPARAR` significa exatamente isso: existe dos dois lados e ainda não foi comparado.",
+  "totais": {
+    "capacidadesDistintas": 428,
+    "ausentesNaAurea": 369,
+    "aCompararNaAurea": 59,
+    "soNaAurea": 21
+  },
+  "soNaAurea": [
+    "app-shell",
+    "aurea-provider",
+    "chart-legend",
+    "chart-tooltip",
+    "cluster",
+    "code-editor",
+    "command-palette-shell",
+    "kpi",
+    "log-stream",
+    "media-player",
+    "media-player-shell",
+    "message-composer",
+    "message-list",
+    "multi-combobox",
+    "notification-center",
+    "search-field",
+    "segmented-control",
+    "table-of-contents",
+    "toolbar-button",
+    "toolbar-group",
+    "toolbar-separator"
+  ],
+  "linhas": [
+    {
+      "capacidade": "avatar",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "Avatar",
+        "avatar"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "checkbox",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "Checkbox",
+        "checkbox",
+        "checkbox-group"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "menu",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "Menu",
+        "dropdown",
+        "dropdown-menu",
+        "menu"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "select",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "NativeSelect",
+        "Select",
+        "native-select",
+        "select"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "slider",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "Slider",
+        "slider"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "tabs",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "Tabs",
+        "tabs"
+      ],
+      "tipos": [
+        "application",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "toggle",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "ToggleButton",
+        "toggle"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "tooltip",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 7,
+      "nomes": [
+        "Tooltip",
+        "tooltip"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "accordion",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Accordion",
+        "accordion"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "dialog",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Dialog",
+        "Modal",
+        "dialog"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "input",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Input",
+        "TextField",
+        "input"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "popover",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Popover",
+        "popover"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "progress",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "LinearProgress",
+        "progress"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "radio",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Radio",
+        "RadioGroup",
+        "radio",
+        "radio-group"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "switch",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Switch",
+        "switch"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "table",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Table",
+        "table"
+      ],
+      "tipos": [
+        "application",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "toast",
+      "aurea": false,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 6,
+      "nomes": [
+        "Snackbar",
+        "sonner",
+        "toast"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "alert-dialog",
+      "aurea": false,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "alert-dialog"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "button",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "Button",
+        "button"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "button-group",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "ButtonGroup",
+        "button-group"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "collapsible",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "collapsible"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "combobox",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "kibo",
+        "mui",
+        "reui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "Autocomplete",
+        "autocomplete",
+        "combobox"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "reui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "context-menu",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "context-menu"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "drawer",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "Drawer",
+        "drawer",
+        "sheet"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "hover-card",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "hover-card",
+        "preview-card"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "otp-field",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "input-otp",
+        "one-time-password-field",
+        "otp-field"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "pagination",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "Pagination",
+        "pagination"
+      ],
+      "tipos": [
+        "application",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "scroll-area",
+      "aurea": false,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "scroll-area"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "separator",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "separator"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "toggle-group",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 5,
+      "nomes": [
+        "toggle-group"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "alert",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "Alert",
+        "alert"
+      ],
+      "tipos": [
+        "component",
+        "reui",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "aspect-ratio",
+      "aurea": false,
+      "refs": [
+        "radix",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "aspect-ratio"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "badge",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "Badge",
+        "badge"
+      ],
+      "tipos": [
+        "component",
+        "reui",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "calendar",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "calendar"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "card",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "Card",
+        "card"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "carousel",
+      "aurea": false,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "carousel"
+      ],
+      "tipos": [
+        "application",
+        "component",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "field",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "field"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "file-input",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "reui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "dropzone",
+        "file-upload"
+      ],
+      "tipos": [
+        "application",
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "form",
+      "aurea": false,
+      "refs": [
+        "base-ui",
+        "radix",
+        "shadcn-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "form"
+      ],
+      "tipos": [
+        "base",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "menubar",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "menubar"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "navigation-menu",
+      "aurea": false,
+      "refs": [
+        "base-ui",
+        "radix",
+        "reui",
+        "shadcn-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "navigation-menu"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "rating",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "mui",
+        "reui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "Rating",
+        "rating"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "skeleton",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "Skeleton",
+        "skeleton"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "spinner",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "spinner"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "textarea",
+      "aurea": true,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 4,
+      "nomes": [
+        "textarea"
+      ],
+      "tipos": [
+        "base",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "breadcrumb",
+      "aurea": true,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "breadcrumb"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "chart",
+      "aurea": true,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "chart"
+      ],
+      "tipos": [
+        "block",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "command",
+      "aurea": false,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "command"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "empty-state",
+      "aurea": true,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "empty",
+        "empty-state"
+      ],
+      "tipos": [
+        "application",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "input-group",
+      "aurea": false,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "input-group"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "kbd",
+      "aurea": true,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "kbd"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "label",
+      "aurea": false,
+      "refs": [
+        "radix",
+        "reui",
+        "shadcn-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "label"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "number-field",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "reui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "number-field",
+        "number-input"
+      ],
+      "tipos": [
+        "component",
+        "primitive",
+        "reui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "resizable",
+      "aurea": false,
+      "refs": [
+        "reui",
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "resizable"
+      ],
+      "tipos": [
+        "component",
+        "ui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "toolbar",
+      "aurea": true,
+      "refs": [
+        "base-ui",
+        "mui",
+        "radix"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "Toolbar",
+        "toolbar"
+      ],
+      "tipos": [
+        "component",
+        "primitive"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "tree",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "reui",
+        "shark-ui"
+      ],
+      "quantasRefs": 3,
+      "nomes": [
+        "tree",
+        "tree-view"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "announcement",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "announcement"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "bottom-nav",
+      "aurea": false,
+      "refs": [
+        "mui",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "BottomNavigation",
+        "bottom-navigation"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chip",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "mui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "Chip",
+        "pill"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "color-picker",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "color-picker"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "date-picker",
+      "aurea": false,
+      "refs": [
+        "shark-ui",
+        "untitled-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "date-picker"
+      ],
+      "tipos": [
+        "application",
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "gantt",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "reui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "gantt"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "kanban",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "reui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "kanban"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "mui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "List",
+        "list"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "locale",
+      "aurea": false,
+      "refs": [
+        "mui",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "locale"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "marquee",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "marquee"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "password-toggle",
+      "aurea": false,
+      "refs": [
+        "radix",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "password-input",
+        "password-toggle-field"
+      ],
+      "tipos": [
+        "component",
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "popper",
+      "aurea": false,
+      "refs": [
+        "mui",
+        "radix"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "Popper",
+        "popper"
+      ],
+      "tipos": [
+        "component",
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "progress-circle",
+      "aurea": false,
+      "refs": [
+        "mui",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "CircularProgress",
+        "circular-progress"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "qr-code",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "qr-code"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "sidebar",
+      "aurea": true,
+      "refs": [
+        "shadcn-ui",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "sidebar"
+      ],
+      "tipos": [
+        "block",
+        "component",
+        "ui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "status",
+      "aurea": true,
+      "refs": [
+        "kibo",
+        "shark-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "status"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "stepper",
+      "aurea": true,
+      "refs": [
+        "mui",
+        "reui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "Stepper",
+        "stepper"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "tags",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "untitled-ui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "tags"
+      ],
+      "tipos": [
+        "base",
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "typography",
+      "aurea": false,
+      "refs": [
+        "kibo",
+        "mui"
+      ],
+      "quantasRefs": 2,
+      "nomes": [
+        "Typography",
+        "typography"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "accessible-icon",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "accessible-icon"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "accordion-actions",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "AccordionActions"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "accordion-details",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "AccordionDetails"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "accordion-summary",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "AccordionSummary"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "action-bar",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "action-bar"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "ai",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ai"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "alert-title",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "AlertTitle"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "announce",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "announce"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "app-navigation",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "app-navigation"
+      ],
+      "tipos": [
+        "application"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "arrow",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "arrow"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "auth",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "auth"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "avatar-group",
+      "aurea": true,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "AvatarGroup"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "avatar-stack",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "avatar-stack"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "backdrop",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Backdrop"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "badges",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "badges"
+      ],
+      "tipos": [
+        "base"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "banner",
+      "aurea": true,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "banner"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "blog",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "blog"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "bottom-navigation-action",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "BottomNavigationAction"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "box",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Box"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "breadcrumbs",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Breadcrumbs"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "button-base",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ButtonBase"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "buttons",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "buttons"
+      ],
+      "tipos": [
+        "base"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "card-action-area",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "CardActionArea"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "card-actions",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "CardActions"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "card-content",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "CardContent"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "card-header",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "CardHeader"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "card-media",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "CardMedia"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "cascader",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "cascader"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-axes",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-axes"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-default",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-default"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-gradient",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-gradient"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-icons",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-icons"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-interactive",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-interactive"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-legend",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-legend"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-linear",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-linear"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-stacked",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-stacked"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-stacked-expand",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-stacked-expand"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-area-step",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-area-step"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-active",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-active"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-default",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-default"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-horizontal",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-horizontal"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-interactive",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-interactive"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-label",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-label"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-label-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-label-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-mixed",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-mixed"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-multiple",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-multiple"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-negative",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-negative"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-bar-stacked",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-bar-stacked"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-default",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-default"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-dots",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-dots"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-dots-colors",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-dots-colors"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-dots-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-dots-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-interactive",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-interactive"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-label",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-label"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-label-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-label-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-linear",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-linear"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-multiple",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-multiple"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-line-step",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-line-step"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-donut",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-donut"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-donut-active",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-donut-active"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-donut-text",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-donut-text"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-interactive",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-interactive"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-label",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-label"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-label-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-label-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-label-list",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-label-list"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-legend",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-legend"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-separator-none",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-separator-none"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-simple",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-simple"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-pie-stacked",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-pie-stacked"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-default",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-default"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-dots",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-dots"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-grid-circle",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-grid-circle"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-grid-circle-fill",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-grid-circle-fill"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-grid-circle-no-lines",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-grid-circle-no-lines"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-grid-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-grid-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-grid-fill",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-grid-fill"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-grid-none",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-grid-none"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-icons",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-icons"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-label-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-label-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-legend",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-legend"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-lines-only",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-lines-only"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-multiple",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-multiple"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radar-radius",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radar-radius"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radial-grid",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radial-grid"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radial-label",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radial-label"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radial-shape",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radial-shape"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radial-simple",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radial-simple"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radial-stacked",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radial-stacked"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-radial-text",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-radial-text"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-advanced",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-advanced"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-default",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-default"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-formatter",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-formatter"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-icons",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-icons"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-indicator-line",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-indicator-line"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-indicator-none",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-indicator-none"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-label-custom",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-label-custom"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-label-formatter",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-label-formatter"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "chart-tooltip-label-none",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "chart-tooltip-label-none"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "charts",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "charts"
+      ],
+      "tipos": [
+        "application"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "choicebox",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "choicebox"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "circular-slider",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "circular-slider"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "class-name",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "className"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "click-away-listener",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ClickAwayListener"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "client-only",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "client-only"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "clipboard",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "clipboard"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "code-block",
+      "aurea": true,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "code-block"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "collapse",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Collapse"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "colors",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "colors"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "comparison",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "comparison"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "container",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Container"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "contribution-graph",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "contribution-graph"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "credit-card",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "credit-card"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "csp-provider",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "csp-provider"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "css-baseline",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "CssBaseline"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "cursor",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "cursor"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dark-scrollbar",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "darkScrollbar"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dashboard",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "dashboard"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dashboard-01",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "dashboard-01"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "data-grid",
+      "aurea": true,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "data-grid"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "data-list",
+      "aurea": true,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "data-list"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "date-input",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "date-input"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "date-selector",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "date-selector"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "deck",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "deck"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "default-props-provider",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "DefaultPropsProvider"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dialog-actions",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "DialogActions"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dialog-content",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "DialogContent"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dialog-content-text",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "DialogContentText"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dialog-stack",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "dialog-stack"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dialog-title",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "DialogTitle"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "direction-provider",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "direction-provider"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "dismissable-layer",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "dismissable-layer"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "divider",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Divider"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "download-trigger",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "download-trigger"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "ecommerce",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ecommerce"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "editable",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "editable"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "editor",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "editor"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "email",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "email"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "event-calendar",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "event-calendar"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "fab",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Fab"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "fade",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Fade"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "featured-icon",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "featured-icon"
+      ],
+      "tipos": [
+        "foundations"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "fieldset",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "fieldset"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "file-upload-trigger",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "file-upload-trigger"
+      ],
+      "tipos": [
+        "base"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "filled-input",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "FilledInput"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "filters",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "filters"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "float",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "float"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "floating-panel",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "floating-panel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "floating-ui-react",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "floating-ui-react"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "focus-guards",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "focus-guards"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "focus-scope",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "focus-scope"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "form-control",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "FormControl"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "form-control-label",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "FormControlLabel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "form-group",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "FormGroup"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "form-helper-text",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "FormHelperText"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "form-label",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "FormLabel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "format",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "format"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "gallery",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ImageList"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "generate-utility-class",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "generateUtilityClass"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "generate-utility-classes",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "generateUtilityClasses"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "glimpse",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "glimpse"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "global-styles",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "GlobalStyles"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "grid",
+      "aurea": true,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Grid"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "grow",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Grow"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "highlight",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "highlight"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "hint",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "hint"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "hitbox",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "hitbox"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "icon",
+      "aurea": true,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Icon"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "icon-button",
+      "aurea": true,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "IconButton"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "icon-stack",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "icon-stack"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "icon-tile",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "icon-tile"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "image-crop",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "image-crop"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "image-cropper",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "image-cropper"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "image-list-item",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ImageListItem"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "image-list-item-bar",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ImageListItemBar"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "image-zoom",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "image-zoom"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "init-color-scheme-script",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "InitColorSchemeScript"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "input-adornment",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "InputAdornment"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "input-base",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "InputBase"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "input-label",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "InputLabel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "integration-icons",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "integration-icons"
+      ],
+      "tipos": [
+        "foundations"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "internals",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "internals"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "json-tree-view",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "json-tree-view"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "landing",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "landing"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "link",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Link"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "link-overlay",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "link-overlay"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-item",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListItem"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-item-avatar",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListItemAvatar"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-item-button",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListItemButton"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-item-icon",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListItemIcon"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-item-secondary-action",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListItemSecondaryAction"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-item-text",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListItemText"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "list-subheader",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ListSubheader"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "listbox",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "listbox"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "loading-indicator",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "loading-indicator"
+      ],
+      "tipos": [
+        "application"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "login-01",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "login-01"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "login-02",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "login-02"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "login-03",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "login-03"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "login-04",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "login-04"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "login-05",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "login-05"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "logo",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "logo"
+      ],
+      "tipos": [
+        "foundations"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-airplay-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-airplay-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-captions-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-captions-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-cast-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-cast-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-chrome-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-chrome-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-chrome-dialog",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-chrome-dialog"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-chrome-range",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-chrome-range"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-container",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-container"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-control-bar",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-control-bar"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-controller",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-controller"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-duration-display",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-duration-display"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-error-dialog",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-error-dialog"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-fullscreen-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-fullscreen-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-gesture-receiver",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-gesture-receiver"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-keyboard-shortcuts-dialog",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-keyboard-shortcuts-dialog"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-live-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-live-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-loading-indicator",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-loading-indicator"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-loop-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-loop-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-mute-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-mute-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-pip-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-pip-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-play-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-play-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-playback-rate-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-playback-rate-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-poster-image",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-poster-image"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-preview-chapter-display",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-preview-chapter-display"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-preview-thumbnail",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-preview-thumbnail"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-preview-time-display",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-preview-time-display"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-seek-backward-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-seek-backward-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-seek-forward-button",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-seek-forward-button"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-text-display",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-text-display"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-theme",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-theme"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-theme-element",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-theme-element"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-time-display",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-time-display"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-time-range",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-time-range"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-tooltip",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-tooltip"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "media-volume-range",
+      "aurea": false,
+      "refs": [
+        "media-chrome"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "media-volume-range"
+      ],
+      "tipos": [
+        "custom-element"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "menu-item",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "MenuItem"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "menu-list",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "MenuList"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "merge-props",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "merge-props"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "meter",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "meter"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "mini-calendar",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "mini-calendar"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "mobile-stepper",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "MobileStepper"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "modals",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "modals"
+      ],
+      "tipos": [
+        "application"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "no-ssr",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "NoSsr"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "outlined-input",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "OutlinedInput"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "overridable-component",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "OverridableComponent"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "pagination-item",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "PaginationItem"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "paper",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Paper"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "patterns",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "patterns"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "payment-icons",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "payment-icons"
+      ],
+      "tipos": [
+        "foundations"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "phone-input",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "phone-input"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "pigment-container",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "PigmentContainer"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "pigment-grid",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "PigmentGrid"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "pigment-stack",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "PigmentStack"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "podcast",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "podcast"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "progress-indicators",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "progress-indicators"
+      ],
+      "tipos": [
+        "base"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "prose",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "prose"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "radio-buttons",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "radio-buttons"
+      ],
+      "tipos": [
+        "base"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "radix-ui",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "radix-ui"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "rating-group",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "rating-group"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "reel",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "reel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "relative-time",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "relative-time"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "roving-focus",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "roving-focus"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sandbox",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sandbox"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "scoped-css-baseline",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ScopedCssBaseline"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "scrollspy",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "scrollspy"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "segment-group",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "segment-group"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "shadcn-ui",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "shadcn-ui"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "show",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "show"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-01",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-01"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-02",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-02"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-03",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-03"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-04",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-04"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-05",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-05"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-06",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-06"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-07",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-07"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-08",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-08"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-09",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-09"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-10",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-10"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-11",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-11"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-12",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-12"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-13",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-13"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-14",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-14"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-15",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-15"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sidebar-16",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sidebar-16"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "signature-pad",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "signature-pad"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "signup-01",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "signup-01"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "signup-02",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "signup-02"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "signup-03",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "signup-03"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "signup-04",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "signup-04"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "signup-05",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "signup-05"
+      ],
+      "tipos": [
+        "block"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "skip-nav",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "skip-nav"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "slide",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Slide"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "slideout-menus",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "slideout-menus"
+      ],
+      "tipos": [
+        "application"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "snackbar-content",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "SnackbarContent"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "snippet",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "snippet"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "social-icons",
+      "aurea": false,
+      "refs": [
+        "untitled-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "social-icons"
+      ],
+      "tipos": [
+        "foundations"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "sortable",
+      "aurea": false,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "sortable"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "speed-dial",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "SpeedDial"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "speed-dial-action",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "SpeedDialAction"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "speed-dial-icon",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "SpeedDialIcon"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "stack",
+      "aurea": true,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Stack"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "step",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Step"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "step-button",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "StepButton"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "step-connector",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "StepConnector"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "step-content",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "StepContent"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "step-icon",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "StepIcon"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "step-label",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "StepLabel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "steps",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "steps"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "stories",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "stories"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "style",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "style"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "svg-icon",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "SvgIcon"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "swap",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "swap"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "swipeable-drawer",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "SwipeableDrawer"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "tab",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Tab"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "tab-scroll-button",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TabScrollButton"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-body",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableBody"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-cell",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableCell"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-container",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableContainer"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-footer",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableFooter"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-head",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableHead"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-pagination",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TablePagination"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-pagination-actions",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TablePaginationActions"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-row",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableRow"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "table-sort-label",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TableSortLabel"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "tags-input",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "tags-input"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "task-manager",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "task-manager"
+      ],
+      "tipos": [
+        "template"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "textarea-autosize",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "TextareaAutosize"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "theme-css-vars-augmentation",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "themeCssVarsAugmentation"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "theme-switcher",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "theme-switcher"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "ticker",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ticker"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "timeline",
+      "aurea": true,
+      "refs": [
+        "reui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "timeline"
+      ],
+      "tipos": [
+        "component",
+        "reui"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "timer",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "timer"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "toggle-button-group",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ToggleButtonGroup"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "toggle-tooltip",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "toggle-tooltip"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "topbar",
+      "aurea": true,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "AppBar"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "A_COMPARAR"
+    },
+    {
+      "capacidade": "tour",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "tour"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "transitions",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "transitions"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "typescript-config",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "typescript-config"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "ui",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "ui"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "unstable-trap-focus",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Unstable_TrapFocus"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "unstable-use-media-query",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "unstable-use-media-query"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-autocomplete",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "useAutocomplete"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-is-mobile",
+      "aurea": false,
+      "refs": [
+        "shark-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "use-is-mobile"
+      ],
+      "tipos": [
+        "component",
+        "hook"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-lazy-ripple",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "useLazyRipple"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-media-query",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "useMediaQuery"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-mobile",
+      "aurea": false,
+      "refs": [
+        "shadcn-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "use-mobile"
+      ],
+      "tipos": [
+        "hook"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-pagination",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "usePagination"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-render",
+      "aurea": false,
+      "refs": [
+        "base-ui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "use-render"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "use-scroll-trigger",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "useScrollTrigger"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "version",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "version"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "video-player",
+      "aurea": false,
+      "refs": [
+        "kibo"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "video-player"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "visually-hidden",
+      "aurea": false,
+      "refs": [
+        "radix"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "visually-hidden"
+      ],
+      "tipos": [
+        "primitive"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "zero-styled",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "zero-styled"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    },
+    {
+      "capacidade": "zoom",
+      "aurea": false,
+      "refs": [
+        "mui"
+      ],
+      "quantasRefs": 1,
+      "nomes": [
+        "Zoom"
+      ],
+      "tipos": [
+        "component"
+      ],
+      "estado": "AUREA_AUSENTE"
+    }
+  ]
+}

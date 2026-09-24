@@ -1,0 +1,86 @@
+{
+  "name": "CommandPalette",
+  "category": "Navigation",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "The command palette with the engine wired up: type, filter, run.",
+  "icon": "search",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "closed",
+    "open",
+    "empty"
+  ],
+  "tokens": [
+    "--border",
+    "--overlay",
+    "--popover",
+    "--popover-foreground",
+    "--radius-card",
+    "--shadow-lg",
+    "--space-3",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "dialog",
+    "apg": "combobox",
+    "keyboard": [
+      "ArrowDown",
+      "ArrowUp",
+      "Enter",
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "CommandPaletteShell",
+      "Combobox",
+      "Kbd"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#CommandPalette"
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "REQUIRED. You own the state, as in Dialog and Drawer. Closed, it renders nothing at all."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "default": "—",
+      "description": "REQUIRED. Fires on Escape and after a command is chosen — in that order: closing happens BEFORE the command runs, so a command that navigates does not leave the palette floating over the new screen."
+    },
+    {
+      "name": "items",
+      "type": "CommandItem[]",
+      "default": "—",
+      "description": "REQUIRED. Commands as DATA ({id, label, icon?, kbd?, run}), never children — a list kept as children drifts out of sync with the filter, which is the same decision Combobox took."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "\"Type a command…\"",
+      "description": "Also the accessible name of the input."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Command palette\"",
+      "description": "Accessible name of the dialog."
+    }
+  ]
+}

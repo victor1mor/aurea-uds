@@ -1,0 +1,67 @@
+{
+  "name": "Spinner",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Indeterminate activity indicator for a wait with no known end.",
+  "icon": "renew",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {"size": "visual"},
+  "states": [
+    "spinning"
+  ],
+  "tokens": [
+    "--icon-sm",
+    "--icon-md",
+    "--icon-lg"
+  ],
+  "a11y": {
+    "role": "status",
+    "apg": "none: the practice adopted is role=\"status\" with an accessible name, which the three references that ship a spinner agree on",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Progress",
+      "Skeleton",
+      "Button"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#Spinner"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "Same scale as the icons, so a spinner and a glyph on the same line measure alike."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "the provider's \"Loading\"",
+      "description": "What is being waited for. Announced by screen readers."
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides it from assistive tech. Use only inside a control that already announces the wait — a Button with `loading` does."
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "name": "Menubar",
+  "category": "Navigation",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "summary": "The application menu row — File, Edit, View — where an open menu hands over to its neighbour.",
+  "icon": "menu",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  },
+  "sizes": [],
+  "responsive": {
+    "orientation": "behavioral"
+  },
+  "states": [
+    "checked",
+    "default",
+    "disabled",
+    "focus-visible",
+    "hover",
+    "open",
+    "popup-open"
+  ],
+  "tokens": [
+    "--control-h-sm",
+    "--focus-strong",
+    "--foreground",
+    "--primary",
+    "--radius-control",
+    "--secondary",
+    "--space-05",
+    "--space-3",
+    "--surface-hover",
+    "--text-sm",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "menubar",
+    "apg": "menubar",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowDown",
+      "ArrowUp",
+      "Home",
+      "End",
+      "Escape",
+      "Enter"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/menubar",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "DropdownMenu",
+      "ContextMenu",
+      "Toolbar",
+      "Topbar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#Menubar"
+  },
+  "props": [
+    {
+      "name": "menus",
+      "type": "Array<{ label: ReactNode; items: MenuEntry[]; disabled?: boolean; }>",
+      "default": "—",
+      "description": "The bar, as data: one entry per top-level menu, each with its own MenuEntry list. Passing them together is what lets an open menu hand over to its neighbour on the arrow key."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the bar."
+    },
+    {
+      "name": "orientation",
+      "type": "Responsive<MenubarOrientation>",
+      "default": "horizontal",
+      "description": "A vertical menubar is the side-panel shape. Responsive."
+    },
+    {
+      "name": "loopFocus",
+      "type": "boolean",
+      "default": "true",
+      "description": "The arrow wraps from the last menu back to the first."
+    },
+    {
+      "name": "modal",
+      "type": "boolean",
+      "default": "true",
+      "description": "While a menu is open the rest of the page is inert. Turn it off for a bar that stays usable with a menu down."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Turns the whole bar off."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

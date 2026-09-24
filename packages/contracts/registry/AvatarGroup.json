@@ -1,0 +1,89 @@
+{
+  "name": "AvatarGroup",
+  "category": "Identity",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Overlapping stack of avatars, with a count for the ones that do not fit.",
+  "icon": "user--multiple",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "overflowing"
+  ],
+  "tokens": [
+    "--surface-1",
+    "--secondary",
+    "--muted-foreground",
+    "--text-xs",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "none: a row of portraits is a group, so it takes role=group and a name. The count is aria-hidden because it repeats what the group already says.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Avatar",
+      "Cluster"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#AvatarGroup"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "none",
+      "description": "REQUIRED. The Avatar elements. They overlap in source order."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "none",
+      "description": "How many to show. The rest become a single count. Without it, every avatar is shown."
+    },
+    {
+      "name": "total",
+      "type": "number",
+      "default": "the number of children",
+      "description": "Use when the real total lives on the server and only a page of avatars was sent."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "none",
+      "description": "Whose faces these are. A row of portraits with no name says nothing."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg",
+      "default": "md",
+      "description": "Size of the count bubble, so it matches the avatars beside it — pass the same value you passed them. It was a number until 06/08/2026; the debt is paid and the scale is Avatar's."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

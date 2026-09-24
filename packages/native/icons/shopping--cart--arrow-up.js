@@ -1,0 +1,13 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Circle, Path} from "react-native-svg";
+
+export default function ShoppingCartArrowUp({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Circle, {cx: "10", cy: "28", r: "2", fill: color}),
+    React.createElement(Circle, {cx: "24", cy: "28", r: "2", fill: color}),
+    React.createElement(Path, {d: "M4.9806,2.8039A1,1,0,0,0,4,2H0V4H3.18L7.0194,23.1961A1,1,0,0,0,8,24H26V22H8.82l-.8-4H26a1,1,0,0,0,.9762-.783L29.2445,7H27.1971l-1.9989,9H7.62Z", fill: color}),
+    React.createElement(Path, {d: "M21.586 9.414 18 5.828 18 14 16 14 16 5.828 12.414 9.414 11 8 17 2 23 8 21.586 9.414z", fill: color})
+  );
+}

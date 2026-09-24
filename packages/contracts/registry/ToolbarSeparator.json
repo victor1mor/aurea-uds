@@ -1,0 +1,44 @@
+{
+  "name": "ToolbarSeparator",
+  "category": "Actions",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Visual divider between toolbar groups.",
+  "icon": "subtract",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--border"
+  ],
+  "a11y": {
+    "role": "separator",
+    "keyboard": [],
+    "apg": "The separator carries the native separator semantics from the Base UI Toolbar and is never focusable — a divider is not a stop on the way. It flips its own orientation with the toolbar."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Toolbar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#ToolbarSeparator"
+  },
+  "props": [
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes. Orientation is read from the toolbar, not passed in."
+    }
+  ]
+}

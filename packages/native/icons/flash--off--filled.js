@@ -1,0 +1,11 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function FlashOffFilled({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M30,28.59,3.41,2,2,3.41,8.4,9.82,7,15.77A1,1,0,0,0,8,17h4.83L11,28.85a1,1,0,0,0,.6,1.07A1.09,1.09,0,0,0,12,30a1,1,0,0,0,.79-.39l6.68-8.73L28.59,30Z", fill: color}),
+    React.createElement(Path, {d: "M22.53,16.87l3.26-4.26a1,1,0,0,0,.11-1A1,1,0,0,0,25,11H20.25L22,3.22a1,1,0,0,0-.2-.85A1,1,0,0,0,21,2H11a1,1,0,0,0-1,.77l-.3,1.3Z", fill: color})
+  );
+}

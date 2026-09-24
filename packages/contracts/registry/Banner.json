@@ -1,0 +1,110 @@
+{
+  "name": "Banner",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Prominent message spanning a wide region.",
+  "icon": "notification",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "info",
+    "success",
+    "warning",
+    "danger"
+  ],
+  "sizes": [],
+  "states": [
+    "waiting_user",
+    "waiting_approval",
+    "waiting_dependency",
+    "offline",
+    "stale",
+    "partial",
+    "degraded"
+  ],
+  "tokens": [
+    "--border",
+    "--danger-400",
+    "--danger-bg",
+    "--info-400",
+    "--info-bg",
+    "--muted-foreground",
+    "--radius-card",
+    "--secondary",
+    "--success-400",
+    "--success-bg",
+    "--text-sm",
+    "--warning-400",
+    "--warning-bg"
+  ],
+  "a11y": {
+    "role": "status",
+    "keyboard": [],
+    "apg": "Same live-region rule as Alert: `danger` is role=\"alert\", the rest role=\"status\". The only focusable thing is the dismiss button, and it appears only when you pass `onDismiss` — reachable by Tab, with an accessible name from the i18n strings."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Alert"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#Banner"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "info | success | warning | danger",
+      "default": "info",
+      "description": "Tone, and the same live-region rule as Alert: `danger` is role=\"alert\", the rest role=\"status\"."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Rendered as a <strong> above the body."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Carbon glyph in the leading column. Leave it out and the column still holds its place — an empty span keeps the three-column grid — so banners stacked together stay aligned."
+    },
+    {
+      "name": "onDismiss",
+      "type": "() => void",
+      "default": "—",
+      "description": "Passing it is what draws the close button. Without it the banner cannot be dismissed, which is the right default for something the reader has to see."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The body, under the title."
+    },
+    {
+      "name": "state",
+      "type": "waiting_user | waiting_approval | waiting_dependency | offline | stale | partial | degraded",
+      "default": "—",
+      "description": "Universal state (Part J) — same axis and same derivation as on Alert: `variant` is severity, `state` is the condition. It sets `data-state`, picks the severity when no `variant` is given, and supplies the message when there are no children. A banner is the page-width place to say “no connection” or “working with reduced capability”, which is why it carries the same vocabulary as the inline alert instead of a second one."
+    }
+  ],
+  "axes": {
+    "state": [
+      "degraded",
+      "offline",
+      "partial",
+      "stale",
+      "waiting_approval",
+      "waiting_dependency",
+      "waiting_user"
+    ]
+  }
+}

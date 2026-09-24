@@ -1,0 +1,122 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "HumanApproval",
+  "summary": "The gate: what is about to happen, and a person's decision.",
+  "icon": "rule",
+  "states": [
+    "pending",
+    "approved",
+    "denied",
+    "low-risk",
+    "medium-risk",
+    "high-risk"
+  ],
+  "tokens": [
+    "--muted-foreground",
+    "--space-2",
+    "--space-3",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "region",
+    "apg": "none — a labelled region holding the request and the two buttons",
+    "keyboard": []
+  },
+  "related": {
+    "components": [
+      "Alert",
+      "Badge",
+      "DataList",
+      "ToolPermission"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#HumanApproval"
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What is being asked for. Names the region for a screen reader when it is a string."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What will happen if this is approved, in plain words."
+    },
+    {
+      "name": "details",
+      "type": "Array<{ term: string; value: ReactNode }>",
+      "default": "—",
+      "description": "The exact parameters, as a DataList and not as prose: whoever approves needs to read what will actually run, and a paragraph hides a file path in the middle of a sentence."
+    },
+    {
+      "name": "risk",
+      "type": "\"low\" | \"medium\" | \"high\"",
+      "default": "—",
+      "description": "Three steps, measured from the reference."
+    },
+    {
+      "name": "reasoning",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Why the agent wants this."
+    },
+    {
+      "name": "deadline",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "When the decision is due. Shown as text — expiry is yours to enforce, because only you know what happens when it lapses."
+    },
+    {
+      "name": "decision",
+      "type": "\"approved\" | \"denied\"",
+      "default": "—",
+      "description": "Once decided, the pair of buttons becomes the RESULT instead of disappearing. Disappearing erases the trace of what the person chose, and that is the difference between a record and a tidy screen."
+    },
+    {
+      "name": "onApprove",
+      "type": "() => void",
+      "default": "—",
+      "description": "Fires on approve."
+    },
+    {
+      "name": "onDeny",
+      "type": "() => void",
+      "default": "—",
+      "description": "Fires on deny. Deny comes FIRST in reading and tab order: the destructive action should not be the first to take focus nor the easiest to hit without reading."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the region."
+    }
+  ],
+  "axes": {
+    "decision": [
+      "approved",
+      "denied"
+    ],
+    "risk": [
+      "high",
+      "low",
+      "medium"
+    ]
+  }
+}

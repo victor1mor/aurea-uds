@@ -1,0 +1,2488 @@
+{
+  "_gerado": "node audit/activity-2/inventory-radix-themes.mjs",
+  "_oQueE": "A camada ESTILIZADA da Radix — a de primitives já foi inventariada em 06-INVENTARIO-RADIX.md e responde outra pergunta. Aquela tem comportamento e nenhuma aparência; esta tem variant/size/color/radius. Tratar as duas como uma só perderia o eixo a comparar.",
+  "_metodo": "Os *.props.d.ts declaram cada eixo com valores, default e `responsive`. O extrator SEGUE o reexport para `_internal` quando o componente não define os próprios — sem isso o Button sairia sem eixo nenhum.",
+  "fonte": "Radix Themes",
+  "medidoEm": "2026-08-22",
+  "versao": "3.3.0",
+  "licenca": "MIT",
+  "totais": {
+    "componentes": 50,
+    "comEixo": 48,
+    "comEixoResponsivo": 47,
+    "nomesDeEixo": [
+      "accentColor",
+      "align",
+      "alignContent",
+      "appearance",
+      "as",
+      "clip",
+      "color",
+      "direction",
+      "display",
+      "flow",
+      "grayColor",
+      "justify",
+      "justifyItems",
+      "layout",
+      "orientation",
+      "p",
+      "panelBackground",
+      "pb",
+      "pl",
+      "pr",
+      "pt",
+      "px",
+      "py",
+      "radius",
+      "resize",
+      "scaling",
+      "scrollbars",
+      "side",
+      "size",
+      "trim",
+      "underline",
+      "variant",
+      "weight",
+      "wrap"
+    ]
+  },
+  "componentes": [
+    {
+      "nome": "alert-dialog",
+      "definicaoEm": "dialog.props",
+      "eixos": {
+        "align": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "padroes": {
+        "align": "3"
+      },
+      "eixosResponsivos": [
+        "align"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "avatar",
+      "definicaoEm": "avatar.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "variant": [
+          "solid",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "size": "3",
+        "variant": "soft"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "badge",
+      "definicaoEm": "badge.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "solid",
+          "soft",
+          "surface",
+          "outline"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "size": "1",
+        "variant": "soft"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "blockquote",
+      "definicaoEm": "blockquote.props",
+      "eixos": {
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "weight": [
+          "light",
+          "regular",
+          "medium",
+          "bold"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      },
+      "padroes": {},
+      "eixosResponsivos": [
+        "size",
+        "weight",
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "box",
+      "definicaoEm": "box.props",
+      "eixos": {
+        "display": [
+          "none",
+          "inline",
+          "inline-block",
+          "block",
+          "contents"
+        ],
+        "as": [
+          "div",
+          "span"
+        ]
+      },
+      "padroes": {
+        "as": "div"
+      },
+      "eixosResponsivos": [
+        "display"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "button",
+      "definicaoEm": "_internal/base-button.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "variant": [
+          "classic",
+          "solid",
+          "soft",
+          "surface",
+          "outline",
+          "ghost"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "size": "2",
+        "variant": "solid"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "loading"
+      ]
+    },
+    {
+      "nome": "callout",
+      "definicaoEm": "callout.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "soft",
+          "surface",
+          "outline"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "size": "2",
+        "variant": "soft"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "card",
+      "definicaoEm": "card.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "variant": [
+          "surface",
+          "classic",
+          "ghost"
+        ]
+      },
+      "padroes": {
+        "size": "1",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "checkbox-cards",
+      "definicaoEm": "checkbox-cards.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "surface",
+          "classic"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "checkbox-group",
+      "definicaoEm": "checkbox-group.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "checkbox",
+      "definicaoEm": "_internal/base-checkbox.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "code",
+      "definicaoEm": "code.props",
+      "eixos": {
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "weight": [
+          "light",
+          "regular",
+          "medium",
+          "bold"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "variant": [
+          "solid",
+          "soft",
+          "outline",
+          "ghost"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "variant": "soft"
+      },
+      "eixosResponsivos": [
+        "size",
+        "weight",
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "container",
+      "definicaoEm": "container.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "display": [
+          "none",
+          "initial"
+        ],
+        "align": [
+          "left",
+          "center",
+          "right"
+        ]
+      },
+      "padroes": {
+        "size": "4"
+      },
+      "eixosResponsivos": [
+        "align",
+        "display",
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "context-menu",
+      "definicaoEm": "_internal/base-menu.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2"
+        ],
+        "variant": [
+          "solid",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "solid"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "data-list",
+      "definicaoEm": "data-list.props",
+      "eixos": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "align": [
+          "start",
+          "center",
+          "end",
+          "baseline",
+          "stretch"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ]
+      },
+      "padroes": {
+        "orientation": "horizontal",
+        "size": "2"
+      },
+      "eixosResponsivos": [
+        "align",
+        "orientation",
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "dialog",
+      "definicaoEm": "dialog.props",
+      "eixos": {
+        "align": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "padroes": {
+        "align": "3"
+      },
+      "eixosResponsivos": [
+        "align"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "dropdown-menu",
+      "definicaoEm": "_internal/base-menu.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2"
+        ],
+        "variant": [
+          "solid",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "solid"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "em",
+      "definicaoEm": "em.props",
+      "eixos": {
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ]
+      },
+      "padroes": {},
+      "eixosResponsivos": [
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "flex",
+      "definicaoEm": "flex.props",
+      "eixos": {
+        "display": [
+          "none",
+          "inline-flex",
+          "flex"
+        ],
+        "direction": [
+          "row",
+          "column",
+          "row-reverse",
+          "column-reverse"
+        ],
+        "align": [
+          "start",
+          "center",
+          "end",
+          "baseline",
+          "stretch"
+        ],
+        "justify": [
+          "start",
+          "center",
+          "end",
+          "between"
+        ],
+        "wrap": [
+          "nowrap",
+          "wrap",
+          "wrap-reverse"
+        ],
+        "as": [
+          "div",
+          "span"
+        ]
+      },
+      "padroes": {
+        "as": "div"
+      },
+      "eixosResponsivos": [
+        "align",
+        "direction",
+        "display",
+        "justify",
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "grid",
+      "definicaoEm": "grid.props",
+      "eixos": {
+        "display": [
+          "none",
+          "inline-grid",
+          "grid"
+        ],
+        "flow": [
+          "row",
+          "column",
+          "dense",
+          "row-dense",
+          "column-dense"
+        ],
+        "align": [
+          "start",
+          "center",
+          "end",
+          "baseline",
+          "stretch"
+        ],
+        "justify": [
+          "start",
+          "center",
+          "end",
+          "between"
+        ],
+        "alignContent": [
+          "start",
+          "center",
+          "end",
+          "baseline",
+          "between",
+          "around",
+          "evenly",
+          "stretch"
+        ],
+        "justifyItems": [
+          "start",
+          "center",
+          "end",
+          "baseline",
+          "stretch"
+        ],
+        "as": [
+          "div",
+          "span"
+        ]
+      },
+      "padroes": {
+        "as": "div"
+      },
+      "eixosResponsivos": [
+        "align",
+        "alignContent",
+        "display",
+        "flow",
+        "justify",
+        "justifyItems"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "heading",
+      "definicaoEm": "heading.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ],
+        "trim": [
+          "normal",
+          "start",
+          "end",
+          "both"
+        ],
+        "align": [
+          "left",
+          "center",
+          "right"
+        ],
+        "weight": [
+          "light",
+          "regular",
+          "medium",
+          "bold"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "as": [
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6"
+        ]
+      },
+      "padroes": {
+        "size": "6",
+        "as": "h1"
+      },
+      "eixosResponsivos": [
+        "align",
+        "size",
+        "trim",
+        "weight",
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "hover-card",
+      "definicaoEm": "hover-card.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "padroes": {
+        "size": "2"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "icon-button",
+      "definicaoEm": "_internal/base-button.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "variant": [
+          "classic",
+          "solid",
+          "soft",
+          "surface",
+          "outline",
+          "ghost"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "size": "2",
+        "variant": "solid"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "loading"
+      ]
+    },
+    {
+      "nome": "inset",
+      "definicaoEm": "inset.props",
+      "eixos": {
+        "side": [
+          "all",
+          "x",
+          "y",
+          "top",
+          "bottom",
+          "left",
+          "right"
+        ],
+        "clip": [
+          "border-box",
+          "padding-box"
+        ],
+        "p": [
+          "current",
+          "0"
+        ],
+        "px": [
+          "current",
+          "0"
+        ],
+        "py": [
+          "current",
+          "0"
+        ],
+        "pt": [
+          "current",
+          "0"
+        ],
+        "pr": [
+          "current",
+          "0"
+        ],
+        "pb": [
+          "current",
+          "0"
+        ],
+        "pl": [
+          "current",
+          "0"
+        ]
+      },
+      "padroes": {
+        "side": "all",
+        "clip": "border-box"
+      },
+      "eixosResponsivos": [
+        "clip",
+        "p",
+        "pb",
+        "pl",
+        "pr",
+        "pt",
+        "px",
+        "py",
+        "side"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "kbd",
+      "definicaoEm": "kbd.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "variant": [
+          "classic",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "variant": "classic"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "link",
+      "definicaoEm": "link.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "underline": [
+          "auto",
+          "always",
+          "hover",
+          "none"
+        ],
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ],
+        "trim": [
+          "normal",
+          "start",
+          "end",
+          "both"
+        ],
+        "weight": [
+          "light",
+          "regular",
+          "medium",
+          "bold"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      },
+      "padroes": {
+        "color": "gray",
+        "underline": "auto"
+      },
+      "eixosResponsivos": [
+        "size",
+        "trim",
+        "weight",
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "popover",
+      "definicaoEm": "popover.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "padroes": {
+        "size": "2"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "progress",
+      "definicaoEm": "progress.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "quote",
+      "definicaoEm": "quote.props",
+      "eixos": {
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ]
+      },
+      "padroes": {},
+      "eixosResponsivos": [
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "radio-cards",
+      "definicaoEm": "radio-cards.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "surface",
+          "classic"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "radio-group",
+      "definicaoEm": "radio-group.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "radio",
+      "definicaoEm": "_internal/base-radio.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "scroll-area",
+      "definicaoEm": "scroll-area.props",
+      "eixos": {
+        "scrollbars": [
+          "vertical",
+          "horizontal",
+          "both"
+        ],
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "padroes": {
+        "scrollbars": "both",
+        "size": "1"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "section",
+      "definicaoEm": "section.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "display": [
+          "none",
+          "initial"
+        ]
+      },
+      "padroes": {
+        "size": "3"
+      },
+      "eixosResponsivos": [
+        "display",
+        "size"
+      ],
+      "booleanos": [
+        "asChild"
+      ]
+    },
+    {
+      "nome": "segmented-control",
+      "definicaoEm": "segmented-control.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "surface",
+          "classic"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "disabled"
+      ]
+    },
+    {
+      "nome": "select",
+      "definicaoEm": "select.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "variant": [
+          "solid",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "solid"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "separator",
+      "definicaoEm": "separator.props",
+      "eixos": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "padroes": {
+        "orientation": "horizontal",
+        "size": "1"
+      },
+      "eixosResponsivos": [
+        "orientation",
+        "size"
+      ],
+      "booleanos": [
+        "decorative"
+      ]
+    },
+    {
+      "nome": "skeleton",
+      "definicaoEm": "skeleton.props",
+      "eixos": {},
+      "padroes": {},
+      "eixosResponsivos": [],
+      "booleanos": [
+        "loading"
+      ]
+    },
+    {
+      "nome": "slider",
+      "definicaoEm": "slider.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "spinner",
+      "definicaoEm": "spinner.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "padroes": {
+        "size": "2"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "loading"
+      ]
+    },
+    {
+      "nome": "strong",
+      "definicaoEm": "strong.props",
+      "eixos": {
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ]
+      },
+      "padroes": {},
+      "eixosResponsivos": [
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "switch",
+      "definicaoEm": "switch.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "tab-nav",
+      "definicaoEm": "_internal/base-tab-list.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2"
+        ],
+        "wrap": [
+          "nowrap",
+          "wrap",
+          "wrap-reverse"
+        ],
+        "justify": [
+          "start",
+          "center",
+          "end"
+        ]
+      },
+      "padroes": {
+        "size": "2"
+      },
+      "eixosResponsivos": [
+        "justify",
+        "size",
+        "wrap"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "table",
+      "definicaoEm": "table.props",
+      "eixos": {
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "surface",
+          "ghost"
+        ],
+        "layout": [
+          "auto",
+          "fixed"
+        ],
+        "align": [
+          "start",
+          "center",
+          "end",
+          "baseline"
+        ],
+        "justify": [
+          "start",
+          "center",
+          "end"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "ghost"
+      },
+      "eixosResponsivos": [
+        "align",
+        "justify",
+        "layout",
+        "size"
+      ],
+      "booleanos": []
+    },
+    {
+      "nome": "tabs",
+      "definicaoEm": "_internal/base-tab-list.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2"
+        ],
+        "wrap": [
+          "nowrap",
+          "wrap",
+          "wrap-reverse"
+        ],
+        "justify": [
+          "start",
+          "center",
+          "end"
+        ]
+      },
+      "padroes": {
+        "size": "2"
+      },
+      "eixosResponsivos": [
+        "justify",
+        "size",
+        "wrap"
+      ],
+      "booleanos": [
+        "highContrast"
+      ]
+    },
+    {
+      "nome": "text-area",
+      "definicaoEm": "text-area.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ],
+        "resize": [
+          "none",
+          "vertical",
+          "horizontal",
+          "both"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "resize",
+        "size"
+      ],
+      "booleanos": []
+    },
+    {
+      "nome": "text-field",
+      "definicaoEm": "text-field.props",
+      "eixos": {
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3"
+        ],
+        "variant": [
+          "classic",
+          "surface",
+          "soft"
+        ],
+        "side": [
+          "left",
+          "right"
+        ]
+      },
+      "padroes": {
+        "size": "2",
+        "variant": "surface"
+      },
+      "eixosResponsivos": [
+        "size"
+      ],
+      "booleanos": []
+    },
+    {
+      "nome": "text",
+      "definicaoEm": "text.props",
+      "eixos": {
+        "color": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "wrap": [
+          "wrap",
+          "nowrap",
+          "pretty",
+          "balance"
+        ],
+        "trim": [
+          "normal",
+          "start",
+          "end",
+          "both"
+        ],
+        "align": [
+          "left",
+          "center",
+          "right"
+        ],
+        "weight": [
+          "light",
+          "regular",
+          "medium",
+          "bold"
+        ],
+        "size": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "as": [
+          "span",
+          "div",
+          "label",
+          "p"
+        ]
+      },
+      "padroes": {
+        "as": "span"
+      },
+      "eixosResponsivos": [
+        "align",
+        "size",
+        "trim",
+        "weight",
+        "wrap"
+      ],
+      "booleanos": [
+        "asChild",
+        "highContrast",
+        "truncate"
+      ]
+    },
+    {
+      "nome": "theme",
+      "definicaoEm": "theme.props",
+      "eixos": {
+        "appearance": [
+          "inherit",
+          "light",
+          "dark"
+        ],
+        "accentColor": [
+          "gray",
+          "gold",
+          "bronze",
+          "brown",
+          "yellow",
+          "amber",
+          "orange",
+          "tomato",
+          "red",
+          "ruby",
+          "crimson",
+          "pink",
+          "plum",
+          "purple",
+          "violet",
+          "iris",
+          "indigo",
+          "blue",
+          "cyan",
+          "teal",
+          "jade",
+          "green",
+          "grass",
+          "lime",
+          "mint",
+          "sky"
+        ],
+        "grayColor": [
+          "auto",
+          "gray",
+          "mauve",
+          "slate",
+          "sage",
+          "olive",
+          "sand"
+        ],
+        "panelBackground": [
+          "solid",
+          "translucent"
+        ],
+        "radius": [
+          "none",
+          "small",
+          "medium",
+          "large",
+          "full"
+        ],
+        "scaling": [
+          "90%",
+          "95%",
+          "100%",
+          "105%",
+          "110%"
+        ]
+      },
+      "padroes": {
+        "appearance": "inherit",
+        "accentColor": "indigo",
+        "grayColor": "auto",
+        "panelBackground": "translucent",
+        "radius": "medium",
+        "scaling": "100%"
+      },
+      "eixosResponsivos": [],
+      "booleanos": [
+        "asChild",
+        "hasBackground"
+      ]
+    },
+    {
+      "nome": "tooltip",
+      "definicaoEm": "tooltip.props",
+      "eixos": {},
+      "padroes": {},
+      "eixosResponsivos": [],
+      "booleanos": []
+    }
+  ]
+}

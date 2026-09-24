@@ -1,0 +1,2493 @@
+{
+  "fonte": "kibo-ui",
+  "caminho": "Referencia/kibo-main",
+  "commit": "3d63cdb",
+  "medidoEm": "2026-08-27",
+  "metodo": "package.json por componente (custo real de dependência) + árvore packages/patterns",
+  "totais": {
+    "pacotesDeComponente": 40,
+    "semDependenciaExterna": 7,
+    "sobreShadcn": 38,
+    "dependenciasExternasDistintas": 44,
+    "estadosDistintos": 21,
+    "componentesComPattern": 53,
+    "variantesDeclaradas": 209,
+    "composicoes": 1101,
+    "composicoesPorComponente": 20.77
+  },
+  "dependenciasMaisUsadas": [
+    {
+      "dep": "lucide-react",
+      "componentes": 22
+    },
+    {
+      "dep": "@radix-ui/react-use-controllable-state",
+      "componentes": 10
+    },
+    {
+      "dep": "radix-ui",
+      "componentes": 5
+    },
+    {
+      "dep": "motion",
+      "componentes": 5
+    },
+    {
+      "dep": "date-fns",
+      "componentes": 4
+    },
+    {
+      "dep": "jotai",
+      "componentes": 3
+    },
+    {
+      "dep": "@dnd-kit/core",
+      "componentes": 3
+    },
+    {
+      "dep": "@dnd-kit/modifiers",
+      "componentes": 2
+    },
+    {
+      "dep": "@shikijs/transformers",
+      "componentes": 1
+    },
+    {
+      "dep": "react-icons",
+      "componentes": 1
+    },
+    {
+      "dep": "shiki",
+      "componentes": 1
+    },
+    {
+      "dep": "color",
+      "componentes": 1
+    }
+  ],
+  "componentes": [
+    {
+      "nome": "announcement",
+      "descricao": "A compound badge designed to display an announcement.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [
+        "Announcement",
+        "AnnouncementTag",
+        "AnnouncementTitle"
+      ],
+      "subcomponentes": 3,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 54
+    },
+    {
+      "nome": "avatar-stack",
+      "descricao": "Avatar Stack is a component that allows you to stack and overlap avatars.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [
+        "AvatarStack"
+      ],
+      "subcomponentes": 1,
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 52
+    },
+    {
+      "nome": "banner",
+      "descricao": "A banner is a full-width component that can be used to show a message and action to the user.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "lucide-react"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "Banner",
+        "BannerAction",
+        "BannerClose",
+        "BannerContext",
+        "BannerIcon",
+        "BannerTitle"
+      ],
+      "subcomponentes": 6,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 143
+    },
+    {
+      "nome": "calendar",
+      "descricao": "The calendar view displays features on a grid calendar. Specifically it shows the end date of each feature, and groups features by day.",
+      "dependenciasExternas": [
+        "date-fns",
+        "jotai",
+        "lucide-react"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "CalendarBody",
+        "CalendarDate",
+        "CalendarDatePagination",
+        "CalendarDatePicker",
+        "CalendarHeader",
+        "CalendarItem",
+        "CalendarMonthPicker",
+        "CalendarProvider",
+        "CalendarYearPicker"
+      ],
+      "subcomponentes": 12,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "expanded"
+      ],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 497
+    },
+    {
+      "nome": "choicebox",
+      "descricao": "Choiceboxes are a great way to show radio or checkbox options with a card style.",
+      "dependenciasExternas": [
+        "lucide-react",
+        "radix-ui"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "Choicebox",
+        "ChoiceboxIndicator",
+        "ChoiceboxItem",
+        "ChoiceboxItemDescription",
+        "ChoiceboxItemHeader",
+        "ChoiceboxItemSubtitle",
+        "ChoiceboxItemTitle"
+      ],
+      "subcomponentes": 8,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 114
+    },
+    {
+      "nome": "code-block",
+      "descricao": "Provides syntax highlighting, line numbers, and copy to clipboard functionality for code blocks.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "@shikijs/transformers",
+        "lucide-react",
+        "react-icons",
+        "shiki"
+      ],
+      "custoEmDependencia": 5,
+      "sobreShadcn": true,
+      "exporta": [
+        "CodeBlock",
+        "CodeBlockBody",
+        "CodeBlockContent",
+        "CodeBlockCopyButton",
+        "CodeBlockFilename",
+        "CodeBlockFiles",
+        "CodeBlockHeader",
+        "CodeBlockItem",
+        "CodeBlockSelect",
+        "CodeBlockSelectContent",
+        "CodeBlockSelectItem",
+        "CodeBlockSelectTrigger",
+        "CodeBlockSelectValue"
+      ],
+      "subcomponentes": 15,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 703
+    },
+    {
+      "nome": "color-picker",
+      "descricao": "Allows users to select a color. Modeled after the color picker in Figma.",
+      "dependenciasExternas": [
+        "color",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "ColorPicker",
+        "ColorPickerAlpha",
+        "ColorPickerEyeDropper",
+        "ColorPickerFormat",
+        "ColorPickerHue",
+        "ColorPickerOutput",
+        "ColorPickerSelection"
+      ],
+      "subcomponentes": 9,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 468
+    },
+    {
+      "nome": "combobox",
+      "descricao": "Autocomplete input and command palette with a list of suggestions.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "lucide-react"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "Combobox",
+        "ComboboxContent",
+        "ComboboxCreateNew",
+        "ComboboxEmpty",
+        "ComboboxGroup",
+        "ComboboxInput",
+        "ComboboxItem",
+        "ComboboxList",
+        "ComboboxSeparator",
+        "ComboboxTrigger"
+      ],
+      "subcomponentes": 11,
+      "estadosData": [
+        "disabled"
+      ],
+      "estadosEmitidos": [],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [
+        "selected"
+      ],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 310
+    },
+    {
+      "nome": "comparison",
+      "descricao": "A slider-based component for comparing two items in an overlay.",
+      "dependenciasExternas": [
+        "lucide-react",
+        "motion"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "Comparison",
+        "ComparisonHandle",
+        "ComparisonItem"
+      ],
+      "subcomponentes": 4,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "hidden",
+        "label",
+        "valuemax",
+        "valuemin",
+        "valuenow"
+      ],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 210
+    },
+    {
+      "nome": "contribution-graph",
+      "descricao": "A GitHub-style contribution graph component that displays activity levels over time.",
+      "dependenciasExternas": [
+        "date-fns"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "ContributionGraph",
+        "ContributionGraphBlock",
+        "ContributionGraphCalendar",
+        "ContributionGraphFooter",
+        "ContributionGraphLegend",
+        "ContributionGraphTotalCount"
+      ],
+      "subcomponentes": 9,
+      "estadosData": [
+        "count",
+        "date",
+        "level"
+      ],
+      "estadosEmitidos": [
+        "count",
+        "date",
+        "level"
+      ],
+      "estadosReagidos": [
+        "level"
+      ],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 518
+    },
+    {
+      "nome": "credit-card",
+      "descricao": "Credit card components for displaying and validating credit card information.",
+      "dependenciasExternas": [
+        "react-svg-credit-card-payment-icons"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "CreditCard",
+        "CreditCardBack",
+        "CreditCardChip",
+        "CreditCardCvv",
+        "CreditCardExpiry",
+        "CreditCardFlipper",
+        "CreditCardFront",
+        "CreditCardLogo",
+        "CreditCardMagStripe",
+        "CreditCardName",
+        "CreditCardNumber",
+        "CreditCardServiceProvider"
+      ],
+      "subcomponentes": 14,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 349
+    },
+    {
+      "nome": "cursor",
+      "descricao": "A cursor component, great for realtime interactive applications.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [
+        "Cursor",
+        "CursorBody",
+        "CursorMessage",
+        "CursorName",
+        "CursorPointer"
+      ],
+      "subcomponentes": 5,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 63
+    },
+    {
+      "nome": "deck",
+      "descricao": "A Tinder-like swipeable card stack component with smooth animations.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "lucide-react",
+        "motion"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "Deck",
+        "DeckCards",
+        "DeckEmpty",
+        "DeckItem"
+      ],
+      "subcomponentes": 5,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 298
+    },
+    {
+      "nome": "dialog-stack",
+      "descricao": "Composable stacked dialogs, useful for creating a wizard, nested form or multi-step process. It provides a consistent layout and styling for each dialog, and includes navigation component.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "radix-ui"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "DialogStack",
+        "DialogStackBody",
+        "DialogStackContent",
+        "DialogStackDescription",
+        "DialogStackFooter",
+        "DialogStackHeader",
+        "DialogStackNext",
+        "DialogStackOverlay",
+        "DialogStackPrevious",
+        "DialogStackTitle",
+        "DialogStackTrigger"
+      ],
+      "subcomponentes": 12,
+      "estadosData": [
+        "state"
+      ],
+      "estadosEmitidos": [],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 485
+    },
+    {
+      "nome": "dropzone",
+      "descricao": "Allows users to drag-and-drop files into a container to upload or process them.",
+      "dependenciasExternas": [
+        "lucide-react",
+        "react-dropzone"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "Dropzone",
+        "DropzoneContent",
+        "DropzoneEmptyState"
+      ],
+      "subcomponentes": 4,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 203
+    },
+    {
+      "nome": "editor",
+      "descricao": "The Editor component is a powerful and flexible text editor that allows you to create and edit rich text content.",
+      "dependenciasExternas": [
+        "@floating-ui/dom",
+        "@tiptap/core",
+        "@tiptap/extension-code-block-lowlight",
+        "@tiptap/extension-list",
+        "@tiptap/extension-subscript",
+        "@tiptap/extension-superscript",
+        "@tiptap/extension-table",
+        "@tiptap/extension-text-style",
+        "@tiptap/extension-typography",
+        "@tiptap/extensions",
+        "@tiptap/pm",
+        "@tiptap/react",
+        "@tiptap/starter-kit",
+        "@tiptap/suggestion",
+        "fuse.js",
+        "lowlight",
+        "lucide-react",
+        "tippy.js"
+      ],
+      "custoEmDependencia": 18,
+      "sobreShadcn": true,
+      "exporta": [
+        "EditorBubbleMenu",
+        "EditorCharacterCount",
+        "EditorClearFormatting",
+        "EditorFloatingMenu",
+        "EditorFormatBold",
+        "EditorFormatCode",
+        "EditorFormatItalic",
+        "EditorFormatStrike",
+        "EditorFormatSubscript",
+        "EditorFormatSuperscript",
+        "EditorFormatUnderline",
+        "EditorLinkSelector",
+        "EditorNodeBulletList",
+        "EditorNodeCode",
+        "EditorNodeHeading1",
+        "EditorNodeHeading2",
+        "EditorNodeHeading3",
+        "EditorNodeOrderedList",
+        "EditorNodeQuote",
+        "EditorNodeTable",
+        "EditorNodeTaskList",
+        "EditorNodeText",
+        "EditorProvider",
+        "EditorSelector",
+        "EditorTableColumnAfter",
+        "EditorTableColumnBefore",
+        "EditorTableColumnDelete",
+        "EditorTableColumnMenu",
+        "EditorTableDelete",
+        "EditorTableFix",
+        "EditorTableGlobalMenu",
+        "EditorTableHeaderColumnToggle",
+        "EditorTableHeaderRowToggle",
+        "EditorTableMenu",
+        "EditorTableMergeCells",
+        "EditorTableRowAfter",
+        "EditorTableRowBefore",
+        "EditorTableRowDelete",
+        "EditorTableRowMenu",
+        "EditorTableSplitCell"
+      ],
+      "subcomponentes": 44,
+      "estadosData": [
+        "id",
+        "label",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "id",
+        "label",
+        "type"
+      ],
+      "estadosReagidos": [
+        "type"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [
+        "Escape"
+      ],
+      "primitivesRadix": [],
+      "linhas": 1981
+    },
+    {
+      "nome": "gantt",
+      "descricao": "The Gantt chart is a powerful tool for visualizing project schedules and tracking the progress of tasks. It provides a clear, hierarchical view of tasks, allowing you to easily identify manage project timelines.",
+      "dependenciasExternas": [
+        "@dnd-kit/core",
+        "@dnd-kit/modifiers",
+        "@uidotdev/usehooks",
+        "date-fns",
+        "jotai",
+        "lodash.throttle",
+        "lucide-react"
+      ],
+      "custoEmDependencia": 7,
+      "sobreShadcn": true,
+      "exporta": [
+        "GanttAddFeatureHelper",
+        "GanttColumn",
+        "GanttColumns",
+        "GanttContentHeader",
+        "GanttCreateMarkerTrigger",
+        "GanttFeatureDragHelper",
+        "GanttFeatureItem",
+        "GanttFeatureItemCard",
+        "GanttFeatureList",
+        "GanttFeatureListGroup",
+        "GanttFeatureRow",
+        "GanttHeader",
+        "GanttMarker",
+        "GanttProvider",
+        "GanttSidebar",
+        "GanttSidebarGroup",
+        "GanttSidebarHeader",
+        "GanttSidebarItem",
+        "GanttTimeline",
+        "GanttToday"
+      ],
+      "subcomponentes": 24,
+      "estadosData": [
+        "roadmap-ui"
+      ],
+      "estadosEmitidos": [
+        "roadmap-ui"
+      ],
+      "estadosReagidos": [
+        "roadmap-ui"
+      ],
+      "ariaEmitidos": [],
+      "teclas": [
+        "Enter"
+      ],
+      "primitivesRadix": [],
+      "linhas": 1470
+    },
+    {
+      "nome": "glimpse",
+      "descricao": "A component that shows a preview of a URL when hovering over a link.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [
+        "Glimpse",
+        "GlimpseContent",
+        "GlimpseDescription",
+        "GlimpseImage",
+        "GlimpseTitle",
+        "GlimpseTrigger"
+      ],
+      "subcomponentes": 11,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 90
+    },
+    {
+      "nome": "image-crop",
+      "descricao": "Helps you crop images to a specific size or aspect ratio.",
+      "dependenciasExternas": [
+        "lucide-react",
+        "radix-ui",
+        "react-image-crop"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "Cropper",
+        "ImageCrop",
+        "ImageCropApply",
+        "ImageCropContent",
+        "ImageCropReset"
+      ],
+      "subcomponentes": 6,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 369
+    },
+    {
+      "nome": "image-zoom",
+      "descricao": "Image zoom is a component that allows you to zoom in on an image.",
+      "dependenciasExternas": [
+        "react-medium-image-zoom"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "ImageZoom"
+      ],
+      "subcomponentes": 1,
+      "estadosData": [
+        "rmiz-btn-unzoom",
+        "rmiz-btn-zoom",
+        "rmiz-content",
+        "rmiz-ghost",
+        "rmiz-modal-content",
+        "rmiz-modal-img",
+        "rmiz-modal-overlay",
+        "zoom"
+      ],
+      "estadosEmitidos": [],
+      "estadosReagidos": [
+        "rmiz-btn-unzoom",
+        "rmiz-btn-zoom",
+        "rmiz-content",
+        "rmiz-ghost",
+        "rmiz-modal-content",
+        "rmiz-modal-img",
+        "rmiz-modal-overlay",
+        "zoom"
+      ],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 53
+    },
+    {
+      "nome": "kanban",
+      "descricao": "A kanban board is a visual tool that helps you manage and visualize your work. It is a board with columns, and each column represents a status, e.g. \"Backlog\", \"In Progress\", \"Done\".",
+      "dependenciasExternas": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "tunnel-rat"
+      ],
+      "custoEmDependencia": 4,
+      "sobreShadcn": true,
+      "exporta": [
+        "KanbanBoard",
+        "KanbanCard",
+        "KanbanCards",
+        "KanbanHeader",
+        "KanbanProvider"
+      ],
+      "subcomponentes": 6,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 339
+    },
+    {
+      "nome": "list",
+      "descricao": "List views are a great way to show a list of tasks grouped by status and ranked by priority.",
+      "dependenciasExternas": [
+        "@dnd-kit/core",
+        "@dnd-kit/modifiers"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "ListGroup",
+        "ListHeader",
+        "ListItem",
+        "ListItems",
+        "ListProvider"
+      ],
+      "subcomponentes": 5,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 153
+    },
+    {
+      "nome": "marquee",
+      "descricao": "Marquees are a great way to show a list of items in a horizontal scrolling motion.",
+      "dependenciasExternas": [
+        "react-fast-marquee"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "Marquee",
+        "MarqueeContent",
+        "MarqueeFade",
+        "MarqueeItem"
+      ],
+      "subcomponentes": 4,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 60
+    },
+    {
+      "nome": "mini-calendar",
+      "descricao": "A composable mini calendar component for picking dates close to today.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "date-fns",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "custoEmDependencia": 4,
+      "sobreShadcn": true,
+      "exporta": [
+        "MiniCalendar",
+        "MiniCalendarDay",
+        "MiniCalendarDays",
+        "MiniCalendarNavigation"
+      ],
+      "subcomponentes": 5,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 231
+    },
+    {
+      "nome": "pill",
+      "descricao": "A flexible badge component designed for a variety of use cases.",
+      "dependenciasExternas": [
+        "lucide-react"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "Pill",
+        "PillAvatar",
+        "PillAvatarGroup",
+        "PillButton",
+        "PillDelta",
+        "PillIcon",
+        "PillIndicator",
+        "PillStatus"
+      ],
+      "subcomponentes": 8,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 167
+    },
+    {
+      "nome": "qr-code",
+      "descricao": "QR Code is a component that generates a QR code from a string.",
+      "dependenciasExternas": [
+        "culori",
+        "qrcode"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "QRCode"
+      ],
+      "subcomponentes": 1,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 132
+    },
+    {
+      "nome": "rating",
+      "descricao": "A star rating component with keyboard navigation and hover effects.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "lucide-react"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "Rating",
+        "RatingButton"
+      ],
+      "subcomponentes": 3,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 244
+    },
+    {
+      "nome": "reel",
+      "descricao": "A composable Reel component that looks like Instagram Stories - a full-height, 9:16 aspect ratio container with video playback and progress indicators.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "lucide-react",
+        "motion"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "Reel",
+        "ReelContent",
+        "ReelControlledExample",
+        "ReelControls",
+        "ReelFooter",
+        "ReelHeader",
+        "ReelImage",
+        "ReelItem",
+        "ReelMuteButton",
+        "ReelNavigation",
+        "ReelNextButton",
+        "ReelOverlay",
+        "ReelPlayButton",
+        "ReelPreviousButton",
+        "ReelProgress",
+        "ReelVideo"
+      ],
+      "subcomponentes": 20,
+      "estadosData": [
+        "reel-content",
+        "reel-item"
+      ],
+      "estadosEmitidos": [
+        "reel-content",
+        "reel-item"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 1074
+    },
+    {
+      "nome": "relative-time",
+      "descricao": "A component that displays time in various timezones.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "RelativeTime",
+        "RelativeTimeZone",
+        "RelativeTimeZoneDate",
+        "RelativeTimeZoneDisplay",
+        "RelativeTimeZoneLabel"
+      ],
+      "subcomponentes": 7,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 182
+    },
+    {
+      "nome": "sandbox",
+      "descricao": "The sandbox component allows you to preview and test components in a sandboxed environment.",
+      "dependenciasExternas": [
+        "@codesandbox/sandpack-react"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "SandboxCodeEditor",
+        "SandboxConsole",
+        "SandboxFileExplorer",
+        "SandboxLayout",
+        "SandboxPreview",
+        "SandboxProvider",
+        "SandboxTabs",
+        "SandboxTabsContent",
+        "SandboxTabsList",
+        "SandboxTabsTrigger"
+      ],
+      "subcomponentes": 11,
+      "estadosData": [
+        "selected",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "selected",
+        "state"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [
+        "hidden",
+        "selected"
+      ],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 252
+    },
+    {
+      "nome": "snippet",
+      "descricao": "Snippet is a component that allows you to display and copy code in a tabbed interface.",
+      "dependenciasExternas": [
+        "lucide-react"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": false,
+      "exporta": [
+        "Snippet",
+        "SnippetCopyButton",
+        "SnippetHeader",
+        "SnippetTabsContent",
+        "SnippetTabsList",
+        "SnippetTabsTrigger"
+      ],
+      "subcomponentes": 6,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 124
+    },
+    {
+      "nome": "spinner",
+      "descricao": "A spinner is a visual indicator that shows progress or activity.",
+      "dependenciasExternas": [
+        "lucide-react"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "Spinner"
+      ],
+      "subcomponentes": 8,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 272
+    },
+    {
+      "nome": "status",
+      "descricao": "Status components are used to display the uptime of a service.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [
+        "Status",
+        "StatusIndicator",
+        "StatusLabel"
+      ],
+      "subcomponentes": 3,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 63
+    },
+    {
+      "nome": "table",
+      "descricao": "Table views are used to display data in a tabular format. They are useful for displaying large amounts of data in a structured way.",
+      "dependenciasExternas": [
+        "@tanstack/react-table",
+        "jotai",
+        "lucide-react"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "TableBody",
+        "TableCell",
+        "TableColumnHeader",
+        "TableContext",
+        "TableHead",
+        "TableHeader",
+        "TableHeaderGroup",
+        "TableProvider",
+        "TableRow"
+      ],
+      "subcomponentes": 9,
+      "estadosData": [
+        "state"
+      ],
+      "estadosEmitidos": [
+        "state"
+      ],
+      "estadosReagidos": [
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 247
+    },
+    {
+      "nome": "tags",
+      "descricao": "Tags are a way to apply multiple labels to an item.",
+      "dependenciasExternas": [
+        "lucide-react"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": false,
+      "exporta": [
+        "Tags",
+        "TagsContent",
+        "TagsEmpty",
+        "TagsGroup",
+        "TagsInput",
+        "TagsItem",
+        "TagsList",
+        "TagsTrigger",
+        "TagsValue"
+      ],
+      "subcomponentes": 10,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 222
+    },
+    {
+      "nome": "theme-switcher",
+      "descricao": "A component to switch between light, dark and system theme.",
+      "dependenciasExternas": [
+        "@radix-ui/react-use-controllable-state",
+        "lucide-react",
+        "motion"
+      ],
+      "custoEmDependencia": 3,
+      "sobreShadcn": true,
+      "exporta": [
+        "ThemeSwitcher"
+      ],
+      "subcomponentes": 1,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "teclas": [],
+      "primitivesRadix": [
+        "use-controllable-state"
+      ],
+      "linhas": 100
+    },
+    {
+      "nome": "ticker",
+      "descricao": "A composable finance ticker for displaying symbols, prices and changes.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [
+        "Ticker",
+        "TickerIcon",
+        "TickerPrice",
+        "TickerPriceChange",
+        "TickerSymbol"
+      ],
+      "subcomponentes": 8,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "labelledby"
+      ],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 196
+    },
+    {
+      "nome": "tree",
+      "descricao": "A composable tree component with animated expand/collapse and customizable nodes.",
+      "dependenciasExternas": [
+        "lucide-react",
+        "motion"
+      ],
+      "custoEmDependencia": 2,
+      "sobreShadcn": true,
+      "exporta": [
+        "TreeExpander",
+        "TreeIcon",
+        "TreeLabel",
+        "TreeLines",
+        "TreeNode",
+        "TreeNodeContent",
+        "TreeNodeTrigger",
+        "TreeProvider",
+        "TreeView"
+      ],
+      "subcomponentes": 11,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 446
+    },
+    {
+      "nome": "typography",
+      "descricao": "A typography component designed to display text with a consistent style.",
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "sobreShadcn": true,
+      "exporta": [],
+      "subcomponentes": 0,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 1
+    },
+    {
+      "nome": "video-player",
+      "descricao": "A composable, shadcn/ui styled video player component that uses the media-chrome library.",
+      "dependenciasExternas": [
+        "media-chrome"
+      ],
+      "custoEmDependencia": 1,
+      "sobreShadcn": true,
+      "exporta": [
+        "VideoPlayer",
+        "VideoPlayerContent",
+        "VideoPlayerControlBar",
+        "VideoPlayerMuteButton",
+        "VideoPlayerPlayButton",
+        "VideoPlayerSeekBackwardButton",
+        "VideoPlayerSeekForwardButton",
+        "VideoPlayerTimeDisplay",
+        "VideoPlayerTimeRange",
+        "VideoPlayerVolumeRange"
+      ],
+      "subcomponentes": 10,
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "teclas": [],
+      "primitivesRadix": [],
+      "linhas": 126
+    }
+  ],
+  "patterns": [
+    {
+      "componente": "accordion",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "form",
+          "composicoes": 2
+        },
+        {
+          "variante": "multi-level",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        },
+        {
+          "variante": "subtitle",
+          "composicoes": 4
+        },
+        {
+          "variante": "tabs",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 21
+    },
+    {
+      "componente": "alert",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "error",
+          "composicoes": 5
+        },
+        {
+          "variante": "info",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        },
+        {
+          "variante": "success",
+          "composicoes": 5
+        },
+        {
+          "variante": "warning",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 25
+    },
+    {
+      "componente": "alert-dialog",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "confirmation",
+          "composicoes": 6
+        },
+        {
+          "variante": "custom-actions",
+          "composicoes": 5
+        },
+        {
+          "variante": "destructive",
+          "composicoes": 7
+        },
+        {
+          "variante": "form",
+          "composicoes": 7
+        },
+        {
+          "variante": "informational",
+          "composicoes": 7
+        },
+        {
+          "variante": "success",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 39
+    },
+    {
+      "componente": "aspect-ratio",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 7
+    },
+    {
+      "componente": "avatar",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "square",
+          "composicoes": 7
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 14
+    },
+    {
+      "componente": "badge",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "destructive",
+          "composicoes": 5
+        },
+        {
+          "variante": "outline",
+          "composicoes": 5
+        },
+        {
+          "variante": "secondary",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 20
+    },
+    {
+      "componente": "breadcrumb",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "home-icon",
+          "composicoes": 7
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 14
+    },
+    {
+      "componente": "button",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "destructive",
+          "composicoes": 7
+        },
+        {
+          "variante": "link",
+          "composicoes": 7
+        },
+        {
+          "variante": "outline",
+          "composicoes": 7
+        },
+        {
+          "variante": "secondary",
+          "composicoes": 7
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 35
+    },
+    {
+      "componente": "button-group",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "actions",
+          "composicoes": 4
+        },
+        {
+          "variante": "advanced",
+          "composicoes": 4
+        },
+        {
+          "variante": "badges",
+          "composicoes": 4
+        },
+        {
+          "variante": "display",
+          "composicoes": 4
+        },
+        {
+          "variante": "forms",
+          "composicoes": 4
+        },
+        {
+          "variante": "interactive",
+          "composicoes": 4
+        },
+        {
+          "variante": "media",
+          "composicoes": 4
+        },
+        {
+          "variante": "navigation",
+          "composicoes": 3
+        },
+        {
+          "variante": "patterns",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 39
+    },
+    {
+      "componente": "calendar",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "dialog",
+          "composicoes": 8
+        },
+        {
+          "variante": "standard",
+          "composicoes": 8
+        }
+      ],
+      "composicoes": 16
+    },
+    {
+      "componente": "card",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 4
+    },
+    {
+      "componente": "carousel",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 4
+    },
+    {
+      "componente": "chart",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "area",
+          "composicoes": 10
+        },
+        {
+          "variante": "bar",
+          "composicoes": 10
+        },
+        {
+          "variante": "line",
+          "composicoes": 10
+        },
+        {
+          "variante": "pie",
+          "composicoes": 11
+        },
+        {
+          "variante": "radar",
+          "composicoes": 14
+        },
+        {
+          "variante": "radial",
+          "composicoes": 6
+        },
+        {
+          "variante": "tooltip",
+          "composicoes": 9
+        }
+      ],
+      "composicoes": 70
+    },
+    {
+      "componente": "checkbox",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 12
+        }
+      ],
+      "composicoes": 12
+    },
+    {
+      "componente": "collapsible",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "card",
+          "composicoes": 5
+        },
+        {
+          "variante": "faq",
+          "composicoes": 5
+        },
+        {
+          "variante": "outline",
+          "composicoes": 4
+        },
+        {
+          "variante": "sidebar",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 23
+    },
+    {
+      "componente": "combobox",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "custom-actions",
+          "composicoes": 7
+        },
+        {
+          "variante": "grouped",
+          "composicoes": 7
+        },
+        {
+          "variante": "multi-select",
+          "composicoes": 7
+        },
+        {
+          "variante": "rich-content",
+          "composicoes": 7
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        },
+        {
+          "variante": "with-states",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 42
+    },
+    {
+      "componente": "command",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "dialog",
+          "composicoes": 7
+        },
+        {
+          "variante": "popover",
+          "composicoes": 7
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 21
+    },
+    {
+      "componente": "context-menu",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "canvas",
+          "composicoes": 5
+        },
+        {
+          "variante": "file",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        },
+        {
+          "variante": "table",
+          "composicoes": 5
+        },
+        {
+          "variante": "text",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 27
+    },
+    {
+      "componente": "data-table",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 8
+    },
+    {
+      "componente": "date-picker",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 8
+        }
+      ],
+      "composicoes": 8
+    },
+    {
+      "componente": "dialog",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 17
+        }
+      ],
+      "composicoes": 17
+    },
+    {
+      "componente": "drawer",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "bottom",
+          "composicoes": 7
+        },
+        {
+          "variante": "left",
+          "composicoes": 5
+        },
+        {
+          "variante": "right",
+          "composicoes": 5
+        },
+        {
+          "variante": "top",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 22
+    },
+    {
+      "componente": "dropdown-menu",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "actions",
+          "composicoes": 5
+        },
+        {
+          "variante": "editor",
+          "composicoes": 5
+        },
+        {
+          "variante": "profile",
+          "composicoes": 5
+        },
+        {
+          "variante": "settings",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        },
+        {
+          "variante": "support",
+          "composicoes": 3
+        }
+      ],
+      "composicoes": 30
+    },
+    {
+      "componente": "empty",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "actions",
+          "composicoes": 5
+        },
+        {
+          "variante": "data",
+          "composicoes": 5
+        },
+        {
+          "variante": "search",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 22
+    },
+    {
+      "componente": "field",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 7
+        },
+        {
+          "variante": "basic-inputs",
+          "composicoes": 5
+        },
+        {
+          "variante": "layouts",
+          "composicoes": 6
+        },
+        {
+          "variante": "selects",
+          "composicoes": 7
+        },
+        {
+          "variante": "text-areas",
+          "composicoes": 6
+        },
+        {
+          "variante": "toggles",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 38
+    },
+    {
+      "componente": "form",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 7
+        },
+        {
+          "variante": "basic-forms",
+          "composicoes": 7
+        },
+        {
+          "variante": "layouts",
+          "composicoes": 7
+        },
+        {
+          "variante": "multi-field",
+          "composicoes": 7
+        },
+        {
+          "variante": "patterns",
+          "composicoes": 7
+        },
+        {
+          "variante": "validation",
+          "composicoes": 7
+        }
+      ],
+      "composicoes": 42
+    },
+    {
+      "componente": "hover-card",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "info",
+          "composicoes": 5
+        },
+        {
+          "variante": "preview",
+          "composicoes": 5
+        },
+        {
+          "variante": "profile",
+          "composicoes": 5
+        },
+        {
+          "variante": "stats",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 20
+    },
+    {
+      "componente": "input",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "special",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 7
+        },
+        {
+          "variante": "types",
+          "composicoes": 7
+        },
+        {
+          "variante": "validation",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 24
+    },
+    {
+      "componente": "input-group",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "ai",
+          "composicoes": 4
+        },
+        {
+          "variante": "buttons",
+          "composicoes": 4
+        },
+        {
+          "variante": "custom",
+          "composicoes": 4
+        },
+        {
+          "variante": "dropdown",
+          "composicoes": 4
+        },
+        {
+          "variante": "icons",
+          "composicoes": 4
+        },
+        {
+          "variante": "label",
+          "composicoes": 4
+        },
+        {
+          "variante": "spinner",
+          "composicoes": 4
+        },
+        {
+          "variante": "text",
+          "composicoes": 4
+        },
+        {
+          "variante": "textarea",
+          "composicoes": 4
+        },
+        {
+          "variante": "tooltip",
+          "composicoes": 3
+        }
+      ],
+      "composicoes": 39
+    },
+    {
+      "componente": "input-otp",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "behavior",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        },
+        {
+          "variante": "states",
+          "composicoes": 4
+        },
+        {
+          "variante": "use-cases",
+          "composicoes": 4
+        },
+        {
+          "variante": "variants",
+          "composicoes": 3
+        }
+      ],
+      "composicoes": 20
+    },
+    {
+      "componente": "item",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "interactive",
+          "composicoes": 2
+        },
+        {
+          "variante": "layout",
+          "composicoes": 3
+        },
+        {
+          "variante": "media",
+          "composicoes": 3
+        },
+        {
+          "variante": "standard",
+          "composicoes": 2
+        }
+      ],
+      "composicoes": 10
+    },
+    {
+      "componente": "kbd",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "arrow-keys",
+          "composicoes": 4
+        },
+        {
+          "variante": "function-keys",
+          "composicoes": 6
+        },
+        {
+          "variante": "platform-specific",
+          "composicoes": 5
+        },
+        {
+          "variante": "pressed-state",
+          "composicoes": 5
+        },
+        {
+          "variante": "sequence",
+          "composicoes": 4
+        },
+        {
+          "variante": "shortcut",
+          "composicoes": 5
+        },
+        {
+          "variante": "sizes",
+          "composicoes": 5
+        },
+        {
+          "variante": "with-icons",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 39
+    },
+    {
+      "componente": "label",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 8
+        }
+      ],
+      "composicoes": 8
+    },
+    {
+      "componente": "menubar",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 10
+        }
+      ],
+      "composicoes": 10
+    },
+    {
+      "componente": "navigation-menu",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "complex",
+          "composicoes": 5
+        },
+        {
+          "variante": "features",
+          "composicoes": 5
+        },
+        {
+          "variante": "marketing",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 20
+    },
+    {
+      "componente": "pagination",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 5
+        },
+        {
+          "variante": "basic",
+          "composicoes": 5
+        },
+        {
+          "variante": "navigation",
+          "composicoes": 4
+        },
+        {
+          "variante": "sizes",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 19
+    },
+    {
+      "componente": "popover",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "standard",
+          "composicoes": 15
+        }
+      ],
+      "composicoes": 15
+    },
+    {
+      "componente": "progress",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "basic",
+          "composicoes": 5
+        },
+        {
+          "variante": "colored",
+          "composicoes": 5
+        },
+        {
+          "variante": "sizes",
+          "composicoes": 5
+        },
+        {
+          "variante": "with-label",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 20
+    },
+    {
+      "componente": "radio-group",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 2
+        },
+        {
+          "variante": "form",
+          "composicoes": 2
+        },
+        {
+          "variante": "layout",
+          "composicoes": 3
+        },
+        {
+          "variante": "standard",
+          "composicoes": 2
+        }
+      ],
+      "composicoes": 9
+    },
+    {
+      "componente": "scroll-area",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 3
+        },
+        {
+          "variante": "layout",
+          "composicoes": 3
+        },
+        {
+          "variante": "standard",
+          "composicoes": 2
+        }
+      ],
+      "composicoes": 8
+    },
+    {
+      "componente": "separator",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "basic",
+          "composicoes": 5
+        },
+        {
+          "variante": "spacing",
+          "composicoes": 5
+        },
+        {
+          "variante": "styled",
+          "composicoes": 5
+        },
+        {
+          "variante": "with-text",
+          "composicoes": 3
+        }
+      ],
+      "composicoes": 18
+    },
+    {
+      "componente": "sheet",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "details",
+          "composicoes": 5
+        },
+        {
+          "variante": "form",
+          "composicoes": 5
+        },
+        {
+          "variante": "multi-section",
+          "composicoes": 5
+        },
+        {
+          "variante": "navigation",
+          "composicoes": 5
+        },
+        {
+          "variante": "settings",
+          "composicoes": 5
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 29
+    },
+    {
+      "componente": "skeleton",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "card",
+          "composicoes": 5
+        },
+        {
+          "variante": "content",
+          "composicoes": 5
+        },
+        {
+          "variante": "form",
+          "composicoes": 5
+        },
+        {
+          "variante": "list",
+          "composicoes": 5
+        },
+        {
+          "variante": "profile",
+          "composicoes": 5
+        },
+        {
+          "variante": "table",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 30
+    },
+    {
+      "componente": "slider",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "interactive",
+          "composicoes": 5
+        },
+        {
+          "variante": "range",
+          "composicoes": 5
+        },
+        {
+          "variante": "settings",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        },
+        {
+          "variante": "styled",
+          "composicoes": 5
+        },
+        {
+          "variante": "vertical",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 29
+    },
+    {
+      "componente": "sonner",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "content",
+          "composicoes": 5
+        },
+        {
+          "variante": "interactive",
+          "composicoes": 4
+        },
+        {
+          "variante": "position",
+          "composicoes": 6
+        },
+        {
+          "variante": "promise",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 24
+    },
+    {
+      "componente": "spinner",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "applications",
+          "composicoes": 3
+        },
+        {
+          "variante": "button",
+          "composicoes": 5
+        },
+        {
+          "variante": "inline",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 5
+        }
+      ],
+      "composicoes": 17
+    },
+    {
+      "componente": "switch",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "cards",
+          "composicoes": 4
+        },
+        {
+          "variante": "icons",
+          "composicoes": 3
+        },
+        {
+          "variante": "labeled",
+          "composicoes": 4
+        },
+        {
+          "variante": "square",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 19
+    },
+    {
+      "componente": "table",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 8
+    },
+    {
+      "componente": "tabs",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "advanced",
+          "composicoes": 3
+        },
+        {
+          "variante": "content",
+          "composicoes": 3
+        },
+        {
+          "variante": "layout",
+          "composicoes": 3
+        },
+        {
+          "variante": "standard",
+          "composicoes": 2
+        }
+      ],
+      "composicoes": 11
+    },
+    {
+      "componente": "textarea",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "form",
+          "composicoes": 5
+        },
+        {
+          "variante": "labeled",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 13
+    },
+    {
+      "componente": "toggle",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "sizes",
+          "composicoes": 3
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 7
+    },
+    {
+      "componente": "toggle-group",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "sizes",
+          "composicoes": 3
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 7
+    },
+    {
+      "componente": "tooltip",
+      "nivelDeVariante": true,
+      "variantes": [
+        {
+          "variante": "content",
+          "composicoes": 4
+        },
+        {
+          "variante": "standard",
+          "composicoes": 4
+        }
+      ],
+      "composicoes": 8
+    }
+  ]
+}

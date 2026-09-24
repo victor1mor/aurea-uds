@@ -1,0 +1,18 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Circle, Path} from "react-native-svg";
+
+export default function CarbonForAEM({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Circle, {cx: "7", cy: "6", r: "1", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "11", cy: "6", r: "1", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "28.5", cy: "24.5", r: "1.5", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "23.5", cy: "27.5", r: "1.5", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "18.5", cy: "24.5", r: "1.5", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "18.5", cy: "19.5", r: "1.5", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "23.5", cy: "16.5", r: "1.5", strokeWidth: "0", fill: color}),
+    React.createElement(Circle, {cx: "28.5", cy: "19.5", r: "1.5", strokeWidth: "0", fill: color}),
+    React.createElement(Path, {strokeWidth: "0", d: "m28,2H4c-1.1046,0-2,.8954-2,2v20c0,1.1046.8954,2,2,2h9v-2H4v-14h24v4h2V4c0-1.1046-.8954-2-2-2Zm0,6H4v-4h24v4Z", fill: color})
+  );
+}

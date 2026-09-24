@@ -1,0 +1,4358 @@
+{
+  "_gerado": "node audit/activity-2/inventory-heroui.mjs",
+  "_metodo": "npm pack de @heroui/react e @heroui/styles. Os eixos saem do FONTE TypeScript do pacote de estilos (tv({variants})), porque o pacote de componentes não os declara — medir só ele concluiria que a HeroUI não tem variante nenhuma.",
+  "_escopo": "Superfície publicada. Teclado e ARIA vêm de react-aria-components e NÃO estão medidos aqui: eles moram no motor, num terceiro pacote, e afirmá-los sem medir seria o mesmo erro que a matriz do §13 cometeu na primeira versão.",
+  "fonte": "HeroUI",
+  "medidoEm": "2026-08-27",
+  "licenca": "Apache-2.0 (LICENSE no pacote @heroui/react)",
+  "versoes": {
+    "@heroui/react": "3.2.4",
+    "@heroui/styles": "3.2.4"
+  },
+  "totais": {
+    "componentes": 85,
+    "comEixoDeclarado": 57,
+    "semArquivoDeEstilo": 2,
+    "sobreReactAria": 72,
+    "sobreRadix": 1,
+    "eixosDistintos": [
+      "align",
+      "animationType",
+      "color",
+      "fullWidth",
+      "hideScrollBar",
+      "isAttached",
+      "isDetached",
+      "isDisabled",
+      "isIconOnly",
+      "isInvalid",
+      "isRequired",
+      "layout",
+      "orientation",
+      "placement",
+      "scroll",
+      "shape",
+      "showDots",
+      "size",
+      "status",
+      "truncate",
+      "type",
+      "variant",
+      "weight"
+    ]
+  },
+  "semArquivoDeEstilo": [
+    "form",
+    "rac"
+  ],
+  "componentes": [
+    {
+      "nome": "accordion",
+      "exporta": [
+        "Accordion"
+      ],
+      "subcomponentes": [
+        "Accordion",
+        "AccordionHeading",
+        "AccordionItem",
+        "AccordionPanel",
+        "AccordionRoot",
+        "AccordionTrigger",
+        "Heading",
+        "Item",
+        "Panel",
+        "Root",
+        "Trigger"
+      ],
+      "eixos": {
+        "variant": [
+          "base",
+          "default",
+          "surface"
+        ]
+      },
+      "padroesDeEixo": {},
+      "variantes": [
+        "base",
+        "default",
+        "surface"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Disclosure",
+        "DisclosureGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "expanded",
+        "focus-visible",
+        "hide-separator",
+        "hovered",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "expanded",
+        "hide-separator",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "expanded",
+        "focus-visible",
+        "hide-separator",
+        "hovered",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 214
+    },
+    {
+      "nome": "alert",
+      "exporta": [
+        "Alert"
+      ],
+      "subcomponentes": [
+        "Alert"
+      ],
+      "eixos": {
+        "status": [
+          "accent",
+          "base",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ]
+      },
+      "padroesDeEixo": {
+        "status": "default"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 171
+    },
+    {
+      "nome": "alert-dialog",
+      "exporta": [
+        "AlertDialog"
+      ],
+      "subcomponentes": [
+        "AlertDialog",
+        "AlertDialogBackdrop",
+        "AlertDialogBody",
+        "AlertDialogCloseTrigger",
+        "AlertDialogContainer",
+        "AlertDialogDialog",
+        "AlertDialogFooter",
+        "AlertDialogHeader",
+        "AlertDialogHeading",
+        "AlertDialogRoot",
+        "AlertDialogTrigger",
+        "Backdrop",
+        "Body",
+        "CloseTrigger",
+        "Container",
+        "Dialog",
+        "Footer",
+        "Header",
+        "Heading",
+        "Root",
+        "Trigger"
+      ],
+      "eixos": {
+        "size": [
+          "cover",
+          "dialog",
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ],
+        "status": [
+          "accent",
+          "danger",
+          "default",
+          "icon",
+          "success",
+          "warning"
+        ],
+        "variant": [
+          "backdrop",
+          "blur",
+          "opaque",
+          "transparent"
+        ]
+      },
+      "padroesDeEixo": {
+        "size": "md",
+        "status": "danger",
+        "variant": "opaque"
+      },
+      "variantes": [
+        "backdrop",
+        "blur",
+        "opaque",
+        "transparent"
+      ],
+      "tamanhos": [
+        "cover",
+        "dialog",
+        "lg",
+        "md",
+        "sm",
+        "xs"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Dialog",
+        "Modal"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 335
+    },
+    {
+      "nome": "autocomplete",
+      "exporta": [
+        "Autocomplete"
+      ],
+      "subcomponentes": [
+        "Autocomplete",
+        "AutocompleteFilter",
+        "AutocompletePopover",
+        "AutocompleteValue",
+        "Filter",
+        "Popover",
+        "Value"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "trigger",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Autocomplete",
+        "Button",
+        "Group",
+        "Popover",
+        "Select"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "empty",
+        "entering",
+        "exiting",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "open",
+        "placeholder",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "empty",
+        "open",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "empty",
+        "entering",
+        "exiting",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "open",
+        "placeholder",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "linhas": 301
+    },
+    {
+      "nome": "avatar",
+      "exporta": [
+        "Avatar"
+      ],
+      "subcomponentes": [
+        "Avatar",
+        "AvatarFallback",
+        "AvatarImage",
+        "AvatarRoot",
+        "Fallback",
+        "Image",
+        "Root"
+      ],
+      "eixos": {
+        "color": [
+          "accent",
+          "danger",
+          "default",
+          "fallback",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "base",
+          "default",
+          "soft"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "default",
+        "size": "md"
+      },
+      "variantes": [
+        "base",
+        "default",
+        "soft"
+      ],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [
+        "avatar"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 109
+    },
+    {
+      "nome": "badge",
+      "exporta": [
+        "Badge"
+      ],
+      "subcomponentes": [
+        "Badge"
+      ],
+      "eixos": {
+        "color": [
+          "accent",
+          "base",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "placement": [
+          "base",
+          "bottom-left",
+          "bottom-right",
+          "top-left",
+          "top-right"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary",
+          "soft"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "default",
+        "placement": "top-right",
+        "size": "md",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary",
+        "soft"
+      ],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 104
+    },
+    {
+      "nome": "breadcrumbs",
+      "exporta": [
+        "Breadcrumbs"
+      ],
+      "subcomponentes": [
+        "Breadcrumbs",
+        "BreadcrumbsItem",
+        "BreadcrumbsRoot",
+        "Item",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Breadcrumbs"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "current",
+        "hovered",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "current",
+        "hovered"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 99
+    },
+    {
+      "nome": "button",
+      "exporta": [
+        "Button"
+      ],
+      "subcomponentes": [
+        "Button",
+        "ButtonRoot",
+        "Root"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ],
+        "isIconOnly": [
+          "true"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "danger",
+          "danger-soft",
+          "ghost",
+          "outline",
+          "primary",
+          "secondary",
+          "tertiary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "isIconOnly": "false",
+        "size": "md",
+        "variant": "primary"
+      },
+      "variantes": [
+        "danger",
+        "danger-soft",
+        "ghost",
+        "outline",
+        "primary",
+        "secondary",
+        "tertiary"
+      ],
+      "tamanhos": [
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "focus-visible",
+        "hovered",
+        "pending",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "focus-visible",
+        "hovered",
+        "pending",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 64
+    },
+    {
+      "nome": "button-group",
+      "exporta": [
+        "BUTTON_GROUP_CHILD",
+        "ButtonGroup"
+      ],
+      "subcomponentes": [
+        "ButtonGroup",
+        "ButtonGroupRoot",
+        "Root"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "true"
+        ],
+        "orientation": [
+          "base",
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "orientation": "horizontal"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Group",
+        "ToggleButtonGroup",
+        "slots"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "focus-visible",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "focus-visible",
+        "pressed"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 101
+    },
+    {
+      "nome": "calendar",
+      "exporta": [
+        "Calendar"
+      ],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Calendar",
+        "I"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "open",
+        "outside-month",
+        "pressed",
+        "selected",
+        "slot",
+        "today",
+        "unavailable"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "open",
+        "outside-month",
+        "pressed",
+        "selected",
+        "today",
+        "unavailable"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 417
+    },
+    {
+      "nome": "calendar-year-picker",
+      "exporta": [
+        "CalendarYearPicker"
+      ],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Calendar",
+        "RangeCalendar"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "hovered",
+        "open",
+        "selected",
+        "slot",
+        "year"
+      ],
+      "estadosEmitidos": [
+        "open",
+        "selected",
+        "slot",
+        "year"
+      ],
+      "estadosReagidos": [
+        "hovered",
+        "open",
+        "selected",
+        "slot",
+        "year"
+      ],
+      "ariaEmitidos": [
+        "aria-expanded",
+        "aria-hidden",
+        "aria-label",
+        "aria-selected"
+      ],
+      "linhas": 492
+    },
+    {
+      "nome": "card",
+      "exporta": [
+        "Card"
+      ],
+      "subcomponentes": [
+        "Card"
+      ],
+      "eixos": {
+        "variant": [
+          "base",
+          "default",
+          "secondary",
+          "tertiary",
+          "transparent"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "default"
+      },
+      "variantes": [
+        "base",
+        "default",
+        "secondary",
+        "tertiary",
+        "transparent"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 161
+    },
+    {
+      "nome": "checkbox",
+      "exporta": [
+        "Checkbox"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Checkbox"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "indeterminate",
+        "invalid",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "indeterminate",
+        "invalid",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 154
+    },
+    {
+      "nome": "checkbox-group",
+      "exporta": [],
+      "subcomponentes": [
+        "CheckboxGroup"
+      ],
+      "eixos": {
+        "variant": [
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "primary"
+      },
+      "variantes": [
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "CheckboxGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 38
+    },
+    {
+      "nome": "chip",
+      "exporta": [
+        "Chip"
+      ],
+      "subcomponentes": [
+        "Chip"
+      ],
+      "eixos": {
+        "color": [
+          "accent",
+          "base",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary",
+          "soft",
+          "tertiary"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "default",
+        "variant": "secondary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary",
+        "soft",
+        "tertiary"
+      ],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 83
+    },
+    {
+      "nome": "close-button",
+      "exporta": [
+        "CloseButton"
+      ],
+      "subcomponentes": [
+        "CloseButton",
+        "CloseButtonRoot",
+        "Root"
+      ],
+      "eixos": {
+        "variant": [
+          "default"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "default"
+      },
+      "variantes": [
+        "default"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "focus-visible",
+        "hovered",
+        "pending",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "focus-visible",
+        "hovered",
+        "pending",
+        "pressed"
+      ],
+      "ariaEmitidos": [
+        "aria-label"
+      ],
+      "linhas": 48
+    },
+    {
+      "nome": "color-area",
+      "exporta": [
+        "ColorArea"
+      ],
+      "subcomponentes": [
+        "ColorArea",
+        "ColorAreaRoot",
+        "ColorAreaThumb",
+        "Root",
+        "Thumb"
+      ],
+      "eixos": {
+        "showDots": [
+          "base",
+          "false",
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "showDots": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ColorArea"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "dragging",
+        "focus-visible",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "dragging",
+        "focus-visible"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 85
+    },
+    {
+      "nome": "color-field",
+      "exporta": [
+        "ColorField"
+      ],
+      "subcomponentes": [
+        "Group",
+        "Input"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ColorField"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "invalid",
+        "required",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "required",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 49
+    },
+    {
+      "nome": "color-input-group",
+      "exporta": [
+        "ColorInputGroup"
+      ],
+      "subcomponentes": [
+        "ColorInputGroup",
+        "ColorInputGroupInput",
+        "ColorInputGroupRoot",
+        "Input",
+        "Root"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Group",
+        "Input"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 117
+    },
+    {
+      "nome": "color-picker",
+      "exporta": [
+        "ColorPicker"
+      ],
+      "subcomponentes": [
+        "ColorPicker",
+        "ColorPickerPopover",
+        "ColorPickerRoot",
+        "ColorPickerTrigger",
+        "Popover",
+        "Root",
+        "Trigger"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "ColorPicker",
+        "Popover"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus-visible",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus-visible",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 105
+    },
+    {
+      "nome": "color-slider",
+      "exporta": [
+        "ColorSlider"
+      ],
+      "subcomponentes": [
+        "ColorSlider",
+        "ColorSliderOutput",
+        "ColorSliderRoot",
+        "ColorSliderThumb",
+        "ColorSliderTrack",
+        "Output",
+        "Root",
+        "Thumb",
+        "Track"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ColorSlider"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "dragging",
+        "focus-visible",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "dragging",
+        "focus-visible",
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 222
+    },
+    {
+      "nome": "color-swatch",
+      "exporta": [
+        "ColorSwatch"
+      ],
+      "subcomponentes": [
+        "ColorSwatch",
+        "ColorSwatchRoot",
+        "Root"
+      ],
+      "eixos": {
+        "shape": [
+          "circle",
+          "square"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xl",
+          "xs"
+        ]
+      },
+      "padroesDeEixo": {
+        "shape": "circle",
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "lg",
+        "md",
+        "sm",
+        "xl",
+        "xs"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ColorSwatch"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 45
+    },
+    {
+      "nome": "color-swatch-picker",
+      "exporta": [
+        "ColorSwatchPicker"
+      ],
+      "subcomponentes": [
+        "ColorSwatchPicker",
+        "ColorSwatchPickerItem",
+        "ColorSwatchPickerRoot",
+        "ColorSwatchPickerSwatch",
+        "Item",
+        "Root",
+        "Swatch"
+      ],
+      "eixos": {
+        "layout": [
+          "base",
+          "grid",
+          "stack"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm",
+          "xl",
+          "xs"
+        ],
+        "variant": [
+          "base",
+          "circle",
+          "square"
+        ]
+      },
+      "padroesDeEixo": {
+        "layout": "grid",
+        "size": "md",
+        "variant": "circle"
+      },
+      "variantes": [
+        "base",
+        "circle",
+        "square"
+      ],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm",
+        "xl",
+        "xs"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ColorSwatchPicker"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "light-color",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "light-color",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "light-color",
+        "selected"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 167
+    },
+    {
+      "nome": "combo-box",
+      "exporta": [
+        "ComboBox"
+      ],
+      "subcomponentes": [
+        "ComboBox",
+        "ComboBoxPopover",
+        "ComboBoxTrigger",
+        "Popover",
+        "Trigger"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "inputGroup",
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "ComboBox",
+        "Group"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "open",
+        "placeholder",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "open",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "open",
+        "placeholder",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 217
+    },
+    {
+      "nome": "date-field",
+      "exporta": [
+        "DateField"
+      ],
+      "subcomponentes": [
+        "Group",
+        "Input",
+        "Segment"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "DateField"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "invalid",
+        "required",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "required",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 51
+    },
+    {
+      "nome": "date-input-group",
+      "exporta": [
+        "DateInputGroup"
+      ],
+      "subcomponentes": [
+        "DateInputGroup",
+        "DateInputGroupInput",
+        "DateInputGroupRoot",
+        "DateInputGroupSegment",
+        "Input",
+        "Root",
+        "Segment"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "DateField",
+        "Group"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-within",
+        "focused",
+        "hovered",
+        "invalid",
+        "placeholder",
+        "slot",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-within",
+        "focused",
+        "hovered",
+        "invalid",
+        "placeholder",
+        "slot",
+        "type"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 167
+    },
+    {
+      "nome": "date-picker",
+      "exporta": [
+        "DatePicker"
+      ],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "DatePicker"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus-visible",
+        "required",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "required",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus-visible"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 172
+    },
+    {
+      "nome": "date-range-picker",
+      "exporta": [
+        "DateRangePicker"
+      ],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "DateRangePicker"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus-visible",
+        "required",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "required",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus-visible"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 195
+    },
+    {
+      "nome": "description",
+      "exporta": [
+        "Description"
+      ],
+      "subcomponentes": [
+        "Description",
+        "DescriptionRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Text"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 40
+    },
+    {
+      "nome": "disclosure",
+      "exporta": [
+        "Disclosure"
+      ],
+      "subcomponentes": [
+        "Content",
+        "Disclosure",
+        "DisclosureContent",
+        "DisclosureHeading",
+        "DisclosureRoot",
+        "DisclosureTrigger",
+        "Heading",
+        "Root",
+        "Trigger"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Disclosure",
+        "Heading"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "expanded",
+        "focus-visible",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "expanded",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "expanded",
+        "focus-visible"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 179
+    },
+    {
+      "nome": "disclosure-group",
+      "exporta": [
+        "DisclosureGroup"
+      ],
+      "subcomponentes": [
+        "DisclosureGroup",
+        "DisclosureGroupRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "DisclosureGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 102
+    },
+    {
+      "nome": "drawer",
+      "exporta": [
+        "Drawer"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "placement": [
+          "bottom",
+          "content",
+          "dialog",
+          "left",
+          "right",
+          "top"
+        ],
+        "variant": [
+          "backdrop",
+          "blur",
+          "opaque",
+          "transparent"
+        ]
+      },
+      "padroesDeEixo": {
+        "placement": "bottom",
+        "variant": "opaque"
+      },
+      "variantes": [
+        "backdrop",
+        "blur",
+        "opaque",
+        "transparent"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Dialog",
+        "Modal"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 466
+    },
+    {
+      "nome": "dropdown",
+      "exporta": [
+        "Dropdown"
+      ],
+      "subcomponentes": [
+        "Dropdown",
+        "DropdownItem",
+        "DropdownItemIndicator",
+        "DropdownPopover",
+        "DropdownRoot",
+        "DropdownSection",
+        "DropdownSubmenuIndicator",
+        "DropdownSubmenuTrigger",
+        "DropdownTrigger",
+        "Item",
+        "ItemIndicator",
+        "Popover",
+        "Root",
+        "Section",
+        "SubmenuIndicator",
+        "SubmenuTrigger",
+        "Trigger"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Menu"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "pending",
+        "placement",
+        "pressed",
+        "selection-mode",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "selection-mode",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "pending",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 180
+    },
+    {
+      "nome": "empty-state",
+      "exporta": [
+        "EmptyState"
+      ],
+      "subcomponentes": [
+        "EmptyState"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 35
+    },
+    {
+      "nome": "error-message",
+      "exporta": [
+        "ErrorMessage"
+      ],
+      "subcomponentes": [
+        "ErrorMessage",
+        "ErrorMessageRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Text"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 40
+    },
+    {
+      "nome": "field-error",
+      "exporta": [
+        "FieldError"
+      ],
+      "subcomponentes": [
+        "FieldError",
+        "FieldErrorRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "FieldError"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot",
+        "visible"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "visible"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "visible"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 35
+    },
+    {
+      "nome": "fieldset",
+      "exporta": [
+        "Fieldset"
+      ],
+      "subcomponentes": [
+        "Fieldset"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "disabled",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 149
+    },
+    {
+      "nome": "form",
+      "exporta": [
+        "Form"
+      ],
+      "subcomponentes": [
+        "Form",
+        "FormRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": false,
+      "primitivesReactAria": [
+        "Form"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 26
+    },
+    {
+      "nome": "header",
+      "exporta": [
+        "Header"
+      ],
+      "subcomponentes": [
+        "Header",
+        "HeaderRoot"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Header"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 33
+    },
+    {
+      "nome": "input",
+      "exporta": [
+        "Input"
+      ],
+      "subcomponentes": [
+        "Input",
+        "InputRoot",
+        "Root"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ],
+        "variant": [
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Input"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "focused",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "focused",
+        "hovered",
+        "invalid"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 45
+    },
+    {
+      "nome": "input-group",
+      "exporta": [
+        "InputGroup"
+      ],
+      "subcomponentes": [
+        "Input",
+        "InputGroup",
+        "InputGroupInput",
+        "InputGroupPrefix",
+        "InputGroupRoot",
+        "InputGroupSuffix",
+        "InputGroupTextArea",
+        "Prefix",
+        "Root",
+        "Suffix",
+        "TextArea"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Group",
+        "Input",
+        "TextArea"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 149
+    },
+    {
+      "nome": "input-otp",
+      "exporta": [
+        "InputOTP",
+        "REGEXP_ONLY_CHARS",
+        "REGEXP_ONLY_DIGITS",
+        "REGEXP_ONLY_DIGITS_AND_CHARS"
+      ],
+      "subcomponentes": [
+        "Group",
+        "InputOTP",
+        "InputOTPGroup",
+        "InputOTPRoot",
+        "InputOTPSeparator",
+        "InputOTPSlot",
+        "Root",
+        "Separator",
+        "Slot"
+      ],
+      "eixos": {
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "FieldError"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "active",
+        "disabled",
+        "filled",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "disabled",
+        "filled",
+        "invalid",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "active",
+        "disabled",
+        "filled",
+        "hovered",
+        "invalid"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 162
+    },
+    {
+      "nome": "kbd",
+      "exporta": [
+        "Kbd"
+      ],
+      "subcomponentes": [
+        "Kbd"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "light"
+        ]
+      },
+      "padroesDeEixo": {},
+      "variantes": [
+        "default",
+        "light"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 146
+    },
+    {
+      "nome": "label",
+      "exporta": [
+        "Label"
+      ],
+      "subcomponentes": [
+        "Label",
+        "LabelRoot",
+        "Root"
+      ],
+      "eixos": {
+        "isDisabled": [
+          "true"
+        ],
+        "isInvalid": [
+          "true"
+        ],
+        "isRequired": [
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "isDisabled": "false",
+        "isInvalid": "false",
+        "isRequired": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Label"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "invalid",
+        "required",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "invalid",
+        "required",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 41
+    },
+    {
+      "nome": "link",
+      "exporta": [
+        "Link"
+      ],
+      "subcomponentes": [
+        "Link",
+        "LinkRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Link"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "default-icon",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "default-icon",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "default-icon",
+        "focus-visible",
+        "hovered",
+        "pressed"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 76
+    },
+    {
+      "nome": "list-box",
+      "exporta": [
+        "ListBox"
+      ],
+      "subcomponentes": [
+        "Item",
+        "Root",
+        "Section"
+      ],
+      "eixos": {
+        "variant": [
+          "danger",
+          "default"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "default"
+      },
+      "variantes": [
+        "danger",
+        "default"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ListBox"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 43
+    },
+    {
+      "nome": "list-box-item",
+      "exporta": [
+        "ListBoxItem"
+      ],
+      "subcomponentes": [
+        "ListBoxItem",
+        "ListBoxItemRoot",
+        "Root"
+      ],
+      "eixos": {
+        "variant": [
+          "danger",
+          "default",
+          "item"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "default"
+      },
+      "variantes": [
+        "danger",
+        "default",
+        "item"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ListBox"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot",
+        "visible"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "visible"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 93
+    },
+    {
+      "nome": "list-box-section",
+      "exporta": [
+        "ListBoxSection"
+      ],
+      "subcomponentes": [
+        "ListBoxSection",
+        "ListBoxSectionRoot"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ListBox"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 34
+    },
+    {
+      "nome": "menu",
+      "exporta": [
+        "Menu"
+      ],
+      "subcomponentes": [
+        "Item",
+        "Root",
+        "Section"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Menu"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 40
+    },
+    {
+      "nome": "menu-item",
+      "exporta": [
+        "MenuItem"
+      ],
+      "subcomponentes": [
+        "MenuItem",
+        "MenuItemRoot",
+        "Root"
+      ],
+      "eixos": {
+        "variant": [
+          "danger",
+          "default",
+          "item"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "default"
+      },
+      "variantes": [
+        "danger",
+        "default",
+        "item"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Menu"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus",
+        "focus-visible",
+        "has-submenu",
+        "hovered",
+        "pressed",
+        "selected",
+        "selection-mode",
+        "slot",
+        "type",
+        "visible"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "type",
+        "visible"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus",
+        "focus-visible",
+        "has-submenu",
+        "hovered",
+        "pressed",
+        "selected",
+        "selection-mode",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 138
+    },
+    {
+      "nome": "menu-section",
+      "exporta": [
+        "MenuSection"
+      ],
+      "subcomponentes": [
+        "MenuSection",
+        "MenuSectionRoot"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Menu"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 34
+    },
+    {
+      "nome": "meter",
+      "exporta": [
+        "Meter"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "color": [
+          "accent",
+          "base",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "accent",
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Meter"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 126
+    },
+    {
+      "nome": "modal",
+      "exporta": [
+        "Modal"
+      ],
+      "subcomponentes": [
+        "Backdrop",
+        "CloseTrigger",
+        "Container",
+        "Dialog",
+        "Heading",
+        "Modal",
+        "ModalBackdrop",
+        "ModalCloseTrigger",
+        "ModalContainer",
+        "ModalDialog",
+        "ModalHeading",
+        "ModalRoot",
+        "Root"
+      ],
+      "eixos": {
+        "scroll": [
+          "body",
+          "container",
+          "dialog",
+          "inside",
+          "outside"
+        ],
+        "size": [
+          "container",
+          "cover",
+          "dialog",
+          "full",
+          "lg",
+          "md",
+          "sm",
+          "xs"
+        ],
+        "variant": [
+          "backdrop",
+          "blur",
+          "opaque",
+          "transparent"
+        ]
+      },
+      "padroesDeEixo": {
+        "scroll": "inside",
+        "size": "md",
+        "variant": "opaque"
+      },
+      "variantes": [
+        "backdrop",
+        "blur",
+        "opaque",
+        "transparent"
+      ],
+      "tamanhos": [
+        "container",
+        "cover",
+        "dialog",
+        "full",
+        "lg",
+        "md",
+        "sm",
+        "xs"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Dialog",
+        "Modal"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "placement",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "pressed"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 314
+    },
+    {
+      "nome": "number-field",
+      "exporta": [
+        "NumberField"
+      ],
+      "subcomponentes": [
+        "DecrementButton",
+        "Group",
+        "IncrementButton",
+        "Input",
+        "NumberField",
+        "NumberFieldDecrementButton",
+        "NumberFieldGroup",
+        "NumberFieldIncrementButton",
+        "NumberFieldInput",
+        "NumberFieldRoot",
+        "Root"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "group",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Group",
+        "Input",
+        "NumberField"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 148
+    },
+    {
+      "nome": "pagination",
+      "exporta": [
+        "Pagination"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "padroesDeEixo": {
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "active",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "active",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-current",
+        "aria-hidden",
+        "aria-label"
+      ],
+      "linhas": 259
+    },
+    {
+      "nome": "popover",
+      "exporta": [
+        "Popover"
+      ],
+      "subcomponentes": [
+        "Arrow",
+        "Content",
+        "Dialog",
+        "Heading",
+        "Popover",
+        "PopoverArrow",
+        "PopoverContent",
+        "PopoverDialog",
+        "PopoverHeading",
+        "PopoverRoot",
+        "Root"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Dialog",
+        "Popover"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 176
+    },
+    {
+      "nome": "progress-bar",
+      "exporta": [
+        "ProgressBar"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "color": [
+          "accent",
+          "base",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "accent",
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ProgressBar"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 126
+    },
+    {
+      "nome": "progress-circle",
+      "exporta": [
+        "ProgressCircle"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "color": [
+          "accent",
+          "base",
+          "danger",
+          "default",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "accent",
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ProgressBar"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 144
+    },
+    {
+      "nome": "rac",
+      "exporta": [],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": false,
+      "primitivesReactAria": [
+        "i"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 4
+    },
+    {
+      "nome": "radio",
+      "exporta": [
+        "Radio"
+      ],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "RadioGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 116
+    },
+    {
+      "nome": "radio-group",
+      "exporta": [
+        "RadioGroup"
+      ],
+      "subcomponentes": [
+        "RadioGroup",
+        "RadioGroupRoot",
+        "Root"
+      ],
+      "eixos": {
+        "variant": [
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "primary"
+      },
+      "variantes": [
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "RadioGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "hovered",
+        "orientation",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "hovered",
+        "orientation",
+        "selected",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 41
+    },
+    {
+      "nome": "range-calendar",
+      "exporta": [
+        "RangeCalendar"
+      ],
+      "subcomponentes": [],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "I",
+        "RangeCalendar"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "open",
+        "outside-month",
+        "pressed",
+        "selected",
+        "selection-end",
+        "selection-start",
+        "slot",
+        "today",
+        "unavailable"
+      ],
+      "estadosEmitidos": [
+        "disabled",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "open",
+        "outside-month",
+        "pressed",
+        "selected",
+        "selection-end",
+        "selection-start",
+        "today",
+        "unavailable"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 366
+    },
+    {
+      "nome": "scroll-shadow",
+      "exporta": [
+        "ScrollShadow",
+        "ScrollShadowRoot"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "hideScrollBar": [
+          "base",
+          "false",
+          "true"
+        ],
+        "orientation": [
+          "base",
+          "horizontal",
+          "vertical"
+        ],
+        "variant": [
+          "base",
+          "fade"
+        ]
+      },
+      "padroesDeEixo": {
+        "hideScrollBar": "false",
+        "orientation": "vertical",
+        "variant": "fade"
+      },
+      "variantes": [
+        "base",
+        "fade"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "bottom-scroll",
+        "left-right-scroll",
+        "left-scroll",
+        "orientation",
+        "right-scroll",
+        "scroll-shadow-size",
+        "slot",
+        "top-bottom-scroll",
+        "top-scroll"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "scroll-shadow-size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "bottom-scroll",
+        "left-right-scroll",
+        "left-scroll",
+        "right-scroll",
+        "top-bottom-scroll",
+        "top-scroll"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 214
+    },
+    {
+      "nome": "search-field",
+      "exporta": [
+        "SearchField"
+      ],
+      "subcomponentes": [
+        "ClearButton",
+        "Group",
+        "Input",
+        "Root",
+        "SearchField",
+        "SearchFieldClearButton",
+        "SearchFieldGroup",
+        "SearchFieldInput",
+        "SearchFieldRoot"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "group",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Group",
+        "Input",
+        "SearchField"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "empty",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "empty",
+        "focus-within",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 147
+    },
+    {
+      "nome": "select",
+      "exporta": [
+        "Select"
+      ],
+      "subcomponentes": [
+        "Popover",
+        "Select",
+        "SelectPopover",
+        "SelectTrigger",
+        "SelectValue",
+        "Trigger",
+        "Value"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "trigger",
+          "true"
+        ],
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Button",
+        "Popover",
+        "Select"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "open",
+        "placeholder",
+        "placement",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "open",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "entering",
+        "exiting",
+        "focus",
+        "focus-visible",
+        "hovered",
+        "invalid",
+        "open",
+        "placeholder",
+        "placement",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 164
+    },
+    {
+      "nome": "separator",
+      "exporta": [
+        "Separator"
+      ],
+      "subcomponentes": [
+        "Root",
+        "Separator",
+        "SeparatorRoot"
+      ],
+      "eixos": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ],
+        "variant": [
+          "default",
+          "secondary",
+          "tertiary"
+        ]
+      },
+      "padroesDeEixo": {
+        "orientation": "horizontal",
+        "variant": "default"
+      },
+      "variantes": [
+        "default",
+        "secondary",
+        "tertiary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Separator",
+        "slots"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 42
+    },
+    {
+      "nome": "skeleton",
+      "exporta": [
+        "Skeleton"
+      ],
+      "subcomponentes": [
+        "Skeleton"
+      ],
+      "eixos": {
+        "animationType": [
+          "none",
+          "pulse",
+          "shimmer"
+        ]
+      },
+      "padroesDeEixo": {
+        "animationType": "shimmer"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 40
+    },
+    {
+      "nome": "slider",
+      "exporta": [
+        "Slider"
+      ],
+      "subcomponentes": [
+        "Output",
+        "Root",
+        "Slider",
+        "SliderOutput",
+        "SliderRoot",
+        "SliderThumb",
+        "SliderTrack",
+        "Thumb",
+        "Track"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Slider"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "dragging",
+        "fill-end",
+        "fill-start",
+        "focus-visible",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "disabled",
+        "fill-end",
+        "fill-start",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "dragging",
+        "fill-end",
+        "fill-start",
+        "focus-visible",
+        "orientation",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 197
+    },
+    {
+      "nome": "spinner",
+      "exporta": [
+        "Spinner"
+      ],
+      "subcomponentes": [
+        "Spinner"
+      ],
+      "eixos": {
+        "color": [
+          "accent",
+          "current",
+          "danger",
+          "success",
+          "warning"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm",
+          "xl"
+        ]
+      },
+      "padroesDeEixo": {
+        "color": "accent",
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "lg",
+        "md",
+        "sm",
+        "xl"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "linhas": 103
+    },
+    {
+      "nome": "surface",
+      "exporta": [
+        "Surface"
+      ],
+      "subcomponentes": [
+        "Surface"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "secondary",
+          "tertiary",
+          "transparent"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "default"
+      },
+      "variantes": [
+        "default",
+        "secondary",
+        "tertiary",
+        "transparent"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 50
+    },
+    {
+      "nome": "switch",
+      "exporta": [
+        "Switch"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ]
+      },
+      "padroesDeEixo": {
+        "size": "md"
+      },
+      "variantes": [],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Switch"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 136
+    },
+    {
+      "nome": "switch-group",
+      "exporta": [
+        "SwitchGroup"
+      ],
+      "subcomponentes": [
+        "SwitchGroup"
+      ],
+      "eixos": {
+        "orientation": [
+          "base",
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "padroesDeEixo": {
+        "orientation": "vertical"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 44
+    },
+    {
+      "nome": "table",
+      "exporta": [
+        "Table"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Table"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "allows-sorting",
+        "direction",
+        "disabled",
+        "dragging",
+        "drop-target",
+        "focus-visible",
+        "hovered",
+        "resizing",
+        "selected",
+        "slot",
+        "tree-column"
+      ],
+      "estadosEmitidos": [
+        "direction",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "allows-sorting",
+        "direction",
+        "disabled",
+        "dragging",
+        "drop-target",
+        "focus-visible",
+        "hovered",
+        "resizing",
+        "selected",
+        "tree-column"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 361
+    },
+    {
+      "nome": "tabs",
+      "exporta": [
+        "Tabs"
+      ],
+      "subcomponentes": [
+        "Indicator",
+        "List",
+        "Panel",
+        "Root",
+        "Tab",
+        "TabIndicator",
+        "TabList",
+        "TabPanel",
+        "Tabs",
+        "TabsRoot"
+      ],
+      "eixos": {
+        "variant": [
+          "base",
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "variant": "primary"
+      },
+      "variantes": [
+        "base",
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "SelectionIndicator",
+        "Tabs"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "bottom-scroll",
+        "disabled",
+        "exiting",
+        "focus-visible",
+        "hovered",
+        "left-right-scroll",
+        "left-scroll",
+        "orientation",
+        "right-scroll",
+        "selected",
+        "slot",
+        "top-bottom-scroll",
+        "top-scroll"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "bottom-scroll",
+        "disabled",
+        "exiting",
+        "focus-visible",
+        "hovered",
+        "left-right-scroll",
+        "left-scroll",
+        "orientation",
+        "right-scroll",
+        "selected",
+        "top-bottom-scroll",
+        "top-scroll"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "linhas": 269
+    },
+    {
+      "nome": "tag",
+      "exporta": [
+        "Tag"
+      ],
+      "subcomponentes": [
+        "RemoveButton",
+        "Root",
+        "Tag",
+        "TagRemoveButton",
+        "TagRoot"
+      ],
+      "eixos": {
+        "size": [
+          "base",
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "base",
+          "default",
+          "surface"
+        ]
+      },
+      "padroesDeEixo": {
+        "size": "md",
+        "variant": "default"
+      },
+      "variantes": [
+        "base",
+        "default",
+        "surface"
+      ],
+      "tamanhos": [
+        "base",
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "TagGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected"
+      ],
+      "ariaEmitidos": [
+        "aria-label"
+      ],
+      "linhas": 101
+    },
+    {
+      "nome": "tag-group",
+      "exporta": [
+        "TagGroup"
+      ],
+      "subcomponentes": [
+        "Root",
+        "TagGroup",
+        "TagGroupRoot"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "TagGroup"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 78
+    },
+    {
+      "nome": "textarea",
+      "exporta": [
+        "TextArea"
+      ],
+      "subcomponentes": [
+        "Root",
+        "TextArea",
+        "TextAreaRoot"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ],
+        "variant": [
+          "primary",
+          "secondary"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "variant": "primary"
+      },
+      "variantes": [
+        "primary",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "TextArea"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "disabled",
+        "focus-visible",
+        "focused",
+        "hovered",
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "focus-visible",
+        "focused",
+        "hovered",
+        "invalid"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 41
+    },
+    {
+      "nome": "textfield",
+      "exporta": [
+        "TextField"
+      ],
+      "subcomponentes": [
+        "Root",
+        "TextField",
+        "TextFieldRoot"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "TextField"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "invalid",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 54
+    },
+    {
+      "nome": "time-field",
+      "exporta": [
+        "TimeField"
+      ],
+      "subcomponentes": [
+        "Group",
+        "Input",
+        "Segment"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "false",
+          "true"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "TimeField"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "invalid",
+        "required",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "required",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "invalid",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 51
+    },
+    {
+      "nome": "toast",
+      "exporta": [
+        "DEFAULT_GAP",
+        "DEFAULT_MAX_VISIBLE_TOAST",
+        "DEFAULT_RAC_MAX_VISIBLE_TOAST",
+        "DEFAULT_SCALE_FACTOR",
+        "DEFAULT_TOAST_TIMEOUT",
+        "DEFAULT_TOAST_WIDTH",
+        "Toast"
+      ],
+      "subcomponentes": [
+        "Content",
+        "ToastContent"
+      ],
+      "eixos": {
+        "placement": [
+          "bottom",
+          "region",
+          "toast",
+          "top"
+        ],
+        "variant": [
+          "accent",
+          "danger",
+          "default",
+          "success",
+          "toast",
+          "warning"
+        ]
+      },
+      "padroesDeEixo": {
+        "placement": "bottom",
+        "variant": "default"
+      },
+      "variantes": [
+        "accent",
+        "danger",
+        "default",
+        "success",
+        "toast",
+        "warning"
+      ],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Text",
+        "Toast"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "frontmost",
+        "hidden",
+        "hovered",
+        "index",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "frontmost",
+        "hidden",
+        "index",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "frontmost",
+        "hidden",
+        "hovered",
+        "slot"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 622
+    },
+    {
+      "nome": "toggle-button",
+      "exporta": [
+        "ToggleButton"
+      ],
+      "subcomponentes": [
+        "Root",
+        "ToggleButton",
+        "ToggleButtonRoot"
+      ],
+      "eixos": {
+        "isIconOnly": [
+          "true"
+        ],
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "variant": [
+          "default",
+          "ghost"
+        ]
+      },
+      "padroesDeEixo": {
+        "isIconOnly": "false",
+        "size": "md",
+        "variant": "default"
+      },
+      "variantes": [
+        "default",
+        "ghost"
+      ],
+      "tamanhos": [
+        "lg",
+        "md",
+        "sm"
+      ],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ToggleButton"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "focus-visible",
+        "hovered",
+        "pressed",
+        "selected"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 50
+    },
+    {
+      "nome": "toggle-button-group",
+      "exporta": [
+        "TOGGLE_BUTTON_GROUP_CHILD",
+        "ToggleButtonGroup"
+      ],
+      "subcomponentes": [
+        "Root",
+        "ToggleButtonGroup",
+        "ToggleButtonGroupRoot"
+      ],
+      "eixos": {
+        "fullWidth": [
+          "base",
+          "false",
+          "true"
+        ],
+        "isDetached": [
+          "base",
+          "false",
+          "true"
+        ],
+        "orientation": [
+          "base",
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "padroesDeEixo": {
+        "fullWidth": "false",
+        "isDetached": "false",
+        "orientation": "horizontal"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "ToggleButtonGroup",
+        "slots"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "focus-visible",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "focus-visible",
+        "pressed"
+      ],
+      "ariaEmitidos": [
+        "aria-hidden"
+      ],
+      "linhas": 88
+    },
+    {
+      "nome": "toolbar",
+      "exporta": [
+        "Toolbar"
+      ],
+      "subcomponentes": [],
+      "eixos": {
+        "isAttached": [
+          "true"
+        ],
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "padroesDeEixo": {
+        "isAttached": "false",
+        "orientation": "horizontal"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Separator",
+        "ToggleButtonGroup",
+        "Toolbar"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 55
+    },
+    {
+      "nome": "tooltip",
+      "exporta": [
+        "Tooltip"
+      ],
+      "subcomponentes": [
+        "Arrow",
+        "Content",
+        "Root",
+        "Tooltip",
+        "TooltipArrow",
+        "TooltipContent",
+        "TooltipRoot"
+      ],
+      "eixos": {},
+      "padroesDeEixo": {},
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Tooltip"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "entering",
+        "exiting",
+        "focus-visible",
+        "placement",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "linhas": 175
+    },
+    {
+      "nome": "typography",
+      "exporta": [
+        "Typography"
+      ],
+      "subcomponentes": [
+        "Code",
+        "Heading",
+        "Paragraph",
+        "Prose",
+        "Root",
+        "Typography",
+        "TypographyRoot"
+      ],
+      "eixos": {
+        "align": [
+          "center",
+          "end",
+          "justify",
+          "start"
+        ],
+        "color": [
+          "default",
+          "muted"
+        ],
+        "truncate": [
+          "true"
+        ],
+        "type": [
+          "body",
+          "body-sm",
+          "body-xs",
+          "code",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6"
+        ],
+        "weight": [
+          "bold",
+          "medium",
+          "normal",
+          "semibold"
+        ]
+      },
+      "padroesDeEixo": {
+        "align": "start",
+        "color": "default",
+        "type": "body"
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "temEstilo": true,
+      "primitivesReactAria": [
+        "Text"
+      ],
+      "primitivesRadix": [],
+      "estadosData": [
+        "slot",
+        "type"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "type"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "linhas": 99
+    }
+  ]
+}

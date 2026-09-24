@@ -1,0 +1,16 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function PartlyCloudy({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M27 15H31V17H27z", fill: color}),
+    React.createElement(Path, {d: "M23.086 5.794H27.329V7.794H23.086z", transform: "rotate(-45 25.207 6.794)", fill: color}),
+    React.createElement(Path, {d: "M15 1H17V5H15z", fill: color}),
+    React.createElement(Path, {d: "M4.672 24.208H8.915V26.208H4.672z", transform: "rotate(-45 6.793 25.208)", fill: color}),
+    React.createElement(Path, {d: "M5.793 4.672H7.793V8.915H5.793z", transform: "rotate(-45 6.793 6.794)", fill: color}),
+    React.createElement(Path, {d: "M1 15H5V17H1z", fill: color}),
+    React.createElement(Path, {d: "M26.7939,20.3418a6.9617,6.9617,0,0,0-1.8681-3.2671A8.485,8.485,0,0,0,25,16a9,9,0,1,0-14.585,7.0332A4.9771,4.9771,0,0,0,15,30H25a4.9947,4.9947,0,0,0,1.7939-9.6582ZM9,16a6.9955,6.9955,0,0,1,13.9849-.2969A6.8883,6.8883,0,0,0,20,15a7.04,7.04,0,0,0-6.7944,5.3418A4.986,4.986,0,0,0,11.5618,21.39,6.9675,6.9675,0,0,1,9,16ZM25,28H15a2.9945,2.9945,0,0,1-.6963-5.9082l.6587-.1572.0986-.67a4.9923,4.9923,0,0,1,9.878,0l.0986.6695.6587.1572A2.9945,2.9945,0,0,1,25,28Z", fill: color})
+  );
+}

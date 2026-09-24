@@ -1,0 +1,93 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "InvocationPanel",
+  "summary": "One execution: what was asked, the steps, what came out.",
+  "icon": "flow",
+  "states": [
+    "idle",
+    "running",
+    "step-running",
+    "step-error"
+  ],
+  "tokens": [
+    "--border",
+    "--danger-400",
+    "--primary",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--subtle-foreground",
+    "--text-xs",
+    "--tracking-wider"
+  ],
+  "a11y": {
+    "role": "region",
+    "apg": "disclosure — each step with a body is a native <details>, so opening and closing is the platform's, keyboard included",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter, which opens a step's detail. Each step that has a body is a native <details>/<summary>. Space is declared and did not toggle it in Chromium build 1194 — same direct measurement, same reason for keeping it, as InterAgentMessage."
+  },
+  "related": {
+    "components": [
+      "AgentStatus",
+      "AgentCard",
+      "CodeBlock"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#InvocationPanel"
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Names the panel, and names the region for a screen reader when it is a string."
+    },
+    {
+      "name": "input",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What was asked. Yours to format — a prompt, a form, a payload."
+    },
+    {
+      "name": "steps",
+      "type": "InvocationStep[]",
+      "default": "—",
+      "description": "What happened in between. A step with `content` becomes a native <details>: folding is platform behaviour, with keyboard and ARIA already in it, where the reference spends a library Collapsible to arrive at the same place."
+    },
+    {
+      "name": "output",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What came out."
+    },
+    {
+      "name": "running",
+      "type": "boolean",
+      "default": "false",
+      "description": "Marks `aria-busy` on the whole region. The reference animates the label with a shimmer instead — decoration a screen reader cannot reach and that reduced-motion would have to undo."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the panel."
+    }
+  ]
+}

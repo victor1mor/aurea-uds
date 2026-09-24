@@ -1,0 +1,52 @@
+{
+  "name": "LogStream",
+  "category": "Code",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Live-appending stream of log lines.",
+  "icon": "terminal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--border",
+    "--danger-400",
+    "--font-code",
+    "--primary",
+    "--radius-md",
+    "--subtle-foreground",
+    "--surface-inset",
+    "--warning-400"
+  ],
+  "a11y": {
+    "role": "log",
+    "keyboard": [],
+    "apg": "No APG pattern: the container is role=\"log\" with aria-live=\"polite\", so lines added after mount are announced as they arrive and the ones already there are not re-read. Nothing is focusable: a log is read, not operated."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "CodeBlock",
+      "MessageList"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#LogStream"
+  },
+  "props": [
+    {
+      "name": "lines",
+      "type": "Array<{time?: string; level?: string; text: string}>",
+      "default": "—",
+      "description": "The lines. The container is role=\"log\" with aria-live=\"polite\", so lines added after mount are announced as they arrive and the ones already there are not re-read. `level` becomes the .log-<level> class."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "useValorResponsivo",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Ready",
+  "summary": "Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.",
+  "icon": "task--settings",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "simples",
+    "viewport",
+    "container"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "existe POR CAUSA de acessibilidade: um eixo que muda teclado ou aria-* não pode ser resolvido só por CSS, senão a interface fica visualmente numa orientação e semanticamente noutra."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ContainerScope",
+      "Tabs",
+      "Toolbar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/responsivo-runtime.tsx#useValorResponsivo"
+  }
+}

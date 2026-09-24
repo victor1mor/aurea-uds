@@ -1,0 +1,101 @@
+{
+  "name": "Dialog",
+  "category": "Overlays",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Modal surface that interrupts for a focused task.",
+  "icon": "maximize",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg",
+    "xl",
+    "full"
+  ],
+  "states": [
+    "open",
+    "closed"
+  ],
+  "tokens": [
+    "--border",
+    "--overlay",
+    "--popover",
+    "--popover-foreground",
+    "--radius-card",
+    "--shadow-lg",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "dialog",
+    "apg": "dialog (modal)",
+    "keyboard": [
+      "Escape",
+      "Tab"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Drawer",
+      "Popover"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#Dialog"
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled, always. The dialog never closes itself; it asks, through onClose, and you decide. Two sources for one piece of state is how a dialog gets stuck open."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Rendered as the <h2> in the header and used as the accessible name. Required: a modal with no name announces only \"dialog\"."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The body. It is the part that scrolls; the header and footer stay put."
+    },
+    {
+      "name": "footer",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The actions row. Leave it out and the footer is not rendered at all, rather than rendered empty."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "default": "—",
+      "description": "Called by Escape, by the backdrop, and by the close button — one exit for the three, so a dialog cannot be dismissable one way and not another."
+    },
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
+      "default": "\"md\"",
+      "description": "The width (B-03), chosen by Victor: HeroUI's four (xs 320, sm 384, md 448, lg 512), then xl (1024, the --breakpoint-lg token) for a wide detail view, and full — the screen minus the usual margin, keeping the 22 radius. The default became HeroUI's md, 448; up to 0.8.14 every dialog was 560."
+    },
+    {
+      "name": "dismissible",
+      "type": "boolean",
+      "default": "true",
+      "description": "false keeps the dialog open during an operation (C-07): no Escape, no click outside, and the close button is DISABLED rather than hidden, so the header does not move mid-operation."
+    }
+  ],
+  "sizeProp": "size"
+}

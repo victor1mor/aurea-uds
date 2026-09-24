@@ -1,0 +1,19 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function CloudApp({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M25.8289,13.1155A10.02,10.02,0,0,0,16,5.0005V7a8.0233,8.0233,0,0,1,7.8649,6.4934l.2591,1.346,1.3488.2441A5.5019,5.5019,0,0,1,24.5076,26H16v2h8.5076a7.5019,7.5019,0,0,0,1.3213-14.8845Z", fill: color}),
+    React.createElement(Path, {d: "M8 24H14V26H8z", fill: color}),
+    React.createElement(Path, {d: "M4 24H6V26H4z", fill: color}),
+    React.createElement(Path, {d: "M6 20H14V22H6z", fill: color}),
+    React.createElement(Path, {d: "M2 20H4V22H2z", fill: color}),
+    React.createElement(Path, {d: "M8 16H14V18H8z", fill: color}),
+    React.createElement(Path, {d: "M4 16H6V18H4z", fill: color}),
+    React.createElement(Path, {d: "M10 12H14V14H10z", fill: color}),
+    React.createElement(Path, {d: "M6 12H8V14H6z", fill: color}),
+    React.createElement(Path, {d: "M12 8H14V10H12z", fill: color})
+  );
+}

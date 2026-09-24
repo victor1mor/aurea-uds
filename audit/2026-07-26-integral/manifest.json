@@ -1,0 +1,322 @@
+{
+  "_nota": "PROPOSTA. Manifesto estruturado do PROJETO (nao de componente — isso e' packages/contracts/registry). Escrito a mao nesta auditoria a partir de medicao; se aprovado, passa a ser GERADO por script e gateado com dist==build, como os checks 6/7/8 do validate.py. Nao consumir como fonte de verdade enquanto for escrito a mao.",
+  "schemaVersion": "0.1-proposta",
+  "measuredAt": "2026-07-26",
+  "measuredCommit": "c4c0dc1",
+  "project": {
+    "name": "Aurea Universal Design System",
+    "short": "Aurea UDS",
+    "brand": "Aurea",
+    "version": "1.7.0",
+    "npmScope": "@aurea-uds",
+    "license": "Apache-2.0",
+    "thirdParty": [
+      {
+        "name": "IBM Plex",
+        "license": "OFL-1.1"
+      },
+      {
+        "name": "Carbon Icons",
+        "license": "Apache-2.0"
+      }
+    ],
+    "repoRoot": "C:/Aurea-UI",
+    "branch": "main",
+    "state": "em construcao — trilha Biblioteca fases 0-5 fechadas; trilha Catalogo etapa 3 em andamento"
+  },
+  "toolchain": {
+    "packageManager": "pnpm@11.16.0",
+    "workspace": [
+      "packages/*",
+      "apps/*"
+    ],
+    "node": 24,
+    "typescript": "7.0.2 strict",
+    "react": "19.2.7",
+    "headlessEngine": "@base-ui/react@1.6.0",
+    "test": {
+      "unit": "vitest@4.1.10 + jsdom + jest-axe",
+      "browser": "playwright@1.61.1 + axe-core@4.10.2"
+    },
+    "validator": "python scripts/validate.py",
+    "localServer": "python -m http.server 8123",
+    "ausente": [
+      "bundler",
+      "linter",
+      "formatter",
+      "release automation",
+      "publicacao npm"
+    ]
+  },
+  "modules": [
+    {
+      "path": "packages/tokens",
+      "papel": "fonte unica dos valores visuais (DTCG 2025.10)",
+      "gerado": "dist/aurea.tokens.css",
+      "dependeDe": []
+    },
+    {
+      "path": "packages/core",
+      "papel": "pele do sistema: CSS + comportamento sem framework",
+      "gerado": "dist/aurea.css = tokens + src",
+      "dependeDe": [
+        "packages/tokens"
+      ]
+    },
+    {
+      "path": "packages/fonts",
+      "papel": "IBM Plex WOFF2 + fonts.css",
+      "dependeDe": []
+    },
+    {
+      "path": "packages/icons",
+      "papel": "sprite Carbon gerado (1,26 MB)",
+      "dependeDe": []
+    },
+    {
+      "path": "packages/contracts",
+      "papel": "contrato do sistema + 65 fichas de componente",
+      "dependeDe": []
+    },
+    {
+      "path": "packages/react",
+      "papel": "65 componentes React num arquivo unico",
+      "gerado": "dist por tsc",
+      "dependeDe": [
+        "packages/core",
+        "packages/contracts"
+      ]
+    },
+    {
+      "path": "apps/catalog",
+      "papel": "catalogo gerado do registry, dogfooded",
+      "gerado": "169 html + assets",
+      "dependeDe": [
+        "packages/react",
+        "packages/core",
+        "packages/contracts",
+        "packages/icons",
+        "packages/fonts"
+      ]
+    },
+    {
+      "path": "apps/docs",
+      "papel": "catalogo legado escrito a mao (a aposentar)",
+      "gerado": "so o <style>",
+      "dependeDe": [
+        "packages/core",
+        "packages/fonts"
+      ]
+    },
+    {
+      "path": "patterns",
+      "papel": "23 receitas de arquetipo de aplicacao (.md)",
+      "dependeDe": [
+        "packages/contracts"
+      ]
+    },
+    {
+      "path": "examples",
+      "papel": "consumo vanilla e React",
+      "dependeDe": [
+        "packages/react",
+        "packages/core"
+      ]
+    }
+  ],
+  "medido": {
+    "_fonte": "STATE.md, gerado e gateado pelo check 13 do validate.py",
+    "_porque": "este bloco copiava os numeros a mao e drifitou na Fase 3 (dizia 81 testes quando eram 112, 13 gates quando eram 17). Numero de estado vive num lugar so.",
+    "naoContaveis": {
+      "coreBytesAlcancaveisPeloReact": 52587,
+      "coreBytesSoDocsOuProduto": 22091,
+      "coreBytesSoCatalogo": 3375,
+      "coreImportant": 22,
+      "coreUsaLayer": false,
+      "_nota": "medidos na auditoria de 26/07; nao ha gate que os acompanhe — entram na Fase 4"
+    }
+  },
+  "documentosCanonicos": {
+    "identidade e regras": "CLAUDE.md",
+    "visao e arquitetura": "AUREA.md",
+    "etapas por fase": "ROADMAP.md",
+    "taxonomia-alvo": "DIRECTION.md",
+    "ponteiro de regras": "AGENTS.md",
+    "spec de maquina — sistema": "packages/contracts/aurea.contract.json",
+    "spec de maquina — componente": "packages/contracts/registry/*.json",
+    "consumo publico": "README.md",
+    "historia de auditoria": [
+      "AUDIT-2026-07-18.md",
+      "AUDIT-2026-07-26.md",
+      "audit/2026-07-26-integral/"
+    ],
+    "ausentes": [
+      "estado gerado",
+      "registro de decisoes (ADR)",
+      "registro de referencias externas",
+      "criterios de qualidade",
+      "mapa do codigo",
+      "protocolo de sessao canonico",
+      "manifesto gerado"
+    ]
+  },
+  "comandos": {
+    "build": "pnpm build",
+    "validate": "python scripts/validate.py",
+    "test": "pnpm test",
+    "gatesDuros": "pnpm exec playwright test tests/visual/catalog-sweep.spec.ts tests/visual/geometry.spec.ts tests/visual/rtl.spec.ts tests/visual/status.spec.ts",
+    "pixel": "pnpm exec playwright test tests/visual/docs.spec.ts tests/visual/matrix.spec.ts tests/visual/catalog.spec.ts",
+    "servirCatalogo": "python -m http.server 8123",
+    "regravarBaselinePxCru": "python scripts/validate.py --write-raw-px-baseline",
+    "state": "pnpm state  (= python scripts/validate.py --write-state)"
+  },
+  "gates": [
+    {
+      "id": "validate-1",
+      "cobre": "27 nomes privados no repo inteiro, com auto-teste"
+    },
+    {
+      "id": "validate-3",
+      "cobre": "valor canonico do amarelo e dos raios; CSS integro"
+    },
+    {
+      "id": "validate-4",
+      "cobre": "ausencia de gradient()"
+    },
+    {
+      "id": "validate-4b",
+      "cobre": "breakpoint fora da escala Tailwind; legado congelado"
+    },
+    {
+      "id": "validate-5",
+      "cobre": "todo token do pacote existe no core"
+    },
+    {
+      "id": "validate-6/7/8",
+      "cobre": "dist==build de core e docs; contrato embutido==pacote"
+    },
+    {
+      "id": "validate-9",
+      "cobre": "23 receitas <-> contrato, secoes na ordem, indice"
+    },
+    {
+      "id": "validate-10",
+      "cobre": "LICENSE por pacote, OFL, NOTICE em files"
+    },
+    {
+      "id": "validate-11",
+      "cobre": "schema das 65 fichas, token existe, cobertura exata"
+    },
+    {
+      "id": "validate-12",
+      "cobre": "catraca de pixel cru de ESPACAMENTO em 4 caminhos"
+    },
+    {
+      "id": "catalog-sweep",
+      "cobre": "169 paginas: 7 larguras, headings, console/4xx, axe x 2 temas"
+    },
+    {
+      "id": "rtl",
+      "cobre": "eixo inline espelha; glifos e mapa nao"
+    },
+    {
+      "id": "status",
+      "cobre": "variante nao colapsa; rotulo nao pintado"
+    },
+    {
+      "id": "ci",
+      "cobre": "pnpm audit high, build com arvore limpa, smoke ESM e SSR"
+    },
+    {
+      "id": "validate-13",
+      "cobre": "STATE.md e bloco do README == estado medido"
+    },
+    {
+      "id": "validate-14",
+      "cobre": "uniao de variante do TypeScript == variants da ficha"
+    },
+    {
+      "id": "geometry",
+      "cobre": "altura de controle por densidade (fixture do core) + altura unica por classe nas 169 paginas"
+    }
+  ],
+  "gatesAusentes": [
+    "fronteira: classe no core sem componente React",
+    "catraca de raio, font-size, font-weight, line-height",
+    "props da ficha == assinatura TypeScript",
+    "componente Stable tem teste",
+    "axe com overlay ABERTO",
+    "texto a 200% sem rolagem lateral",
+    "contrato de foco por familia",
+    "gate de pixel ativo (falta baseline -linux.png)"
+  ],
+  "achadosAbertos": {
+    "arquivo": "audit/2026-07-26-integral/02-ACHADOS.md",
+    "_placar": "a tabela do §0 daquele arquivo é a fonte; isto é o resumo",
+    "total": 36,
+    "fechados": 10,
+    "abertos": 26,
+    "porSeveridade": {
+      "CRITICO": 2,
+      "ALTO": 9,
+      "MEDIO": 19,
+      "BAIXO": 6
+    },
+    "fechados_ids": [
+      "I1",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "B2",
+      "B3",
+      "M9",
+      "M14",
+      "A9"
+    ],
+    "abertos_criticos": [
+      "I2 padrao unico nao implementado: 4 modelos de pagina"
+    ],
+    "abertos_altos": [
+      "A5 arquivo unico, um entry point, 8 deps",
+      "A6 25% do core e' chrome de docs e mockup",
+      "A7 Dialog/Drawer/Popover/Tooltip sem teste",
+      "A8 catalogo sem navegacao movel"
+    ]
+  },
+  "decisoesAbertas": [
+    {
+      "id": "D2",
+      "assunto": "chips Uses X / Used here sao feature permanente",
+      "onde": "AUREA.md:195"
+    },
+    {
+      "id": "D3",
+      "assunto": "modelo de pagina igual para todo tipo, ou nucleo + extras",
+      "onde": "AUREA.md:196",
+      "bloqueia": "Fase 7 do plano"
+    }
+  ],
+  "bloqueios": [
+    "sem baseline -linux.png: gate de pixel inativo no CI (follow-up A4 de 18/07)",
+    "maquina Windows nao gera baseline Linux localmente",
+    "sem leitor de tela no ambiente de auditoria",
+    "apenas Chromium instalado",
+    "apps/docs congela 25 KB de CSS de chrome e 6 breakpoints legados no pacote publico"
+  ],
+  "travaDeImplementacao": {
+    "ativa": false,
+    "significado": "a etapa de auditoria nao alterou nada; depois dela o Victor autorizou fase por fase",
+    "executadas": [
+      "Fase 1 estado gerado",
+      "Fase 2 geometria",
+      "Fase 3 provider/ref/variante"
+    ],
+    "liberacao": "PODE IMPLEMENTAR, por fase, do Victor"
+  },
+  "lacunasDoPlano": [
+    "distribuicao/publicacao — nenhuma fase; sem ela nao ha como instalar a Aurea",
+    "trilha nativa (@aurea-uds/native) — nao existe; so os tokens atravessam para React Native",
+    "registro de referencias externas — deliverable pedido e NAO produzido (Kibo/Untitled nao acessados)"
+  ]
+}

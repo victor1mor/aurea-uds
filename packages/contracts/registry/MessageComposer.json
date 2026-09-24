@@ -1,0 +1,84 @@
+{
+  "name": "MessageComposer",
+  "category": "Communication",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Input surface for composing a message.",
+  "icon": "send",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "empty",
+    "disabled"
+  ],
+  "tokens": [
+    "--space-3"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No APG pattern: it is a <form> with a text input and a submit button, and native semantics deliver the behaviour — Enter submits because the form does, not because we listened for a key. The input always has an aria-label, since a placeholder disappears the moment you type and so cannot be a name."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "MessageList"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/communication.tsx#MessageComposer"
+  },
+  "props": [
+    {
+      "name": "onSend",
+      "type": "(text: string) => void",
+      "default": "—",
+      "description": "Called with the trimmed text, then the field clears itself. Empty or whitespace-only never sends, and the send button stays disabled until there is something to send."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "—",
+      "description": "Hint inside the field. It is not the name — a placeholder disappears the moment you type."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Message\"",
+      "description": "Accessible name of the input, which is what a screen reader reads."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Carbon glyph inside the field, before the text."
+    },
+    {
+      "name": "sendLabel",
+      "type": "string",
+      "default": "\"Send\"",
+      "description": "Accessible name of the send button, which shows only an icon."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the field and the button together."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the <form>."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "name": "SearchField",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Text field specialized for search, with clear affordance.",
+  "icon": "search",
+  "platforms": {
+    "web": "stable",
+    "native": "supported"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "disabled",
+    "invalid"
+  ],
+  "tokens": [
+    "--subtle-foreground"
+  ],
+  "a11y": {
+    "role": "searchbox",
+    "keyboard": [
+      "Enter",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Nothing was confirmed by the snapshot: the focus lands on a text input, where Space types a character and every printable key changes the value — the probe excludes that case (digitaTexto) rather than accusing a correct ficha. Declared and not confirmed in this snapshot: Enter, Escape. Absence of an observable change does not prove absence of effect — a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Input",
+      "Combobox"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#SearchField"
+  },
+  "props": [
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "search",
+      "description": "The glyph inside the field. Decorative — the accessible name comes from the label."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "—",
+      "description": "What can be searched, e.g. \"Search components…\"."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "Controlled or uncontrolled."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step. The glyph shrinks with it."
+    },
+    {
+      "name": "width",
+      "type": "string",
+      "default": "—",
+      "description": "The field width (A-08): \"20rem\" or \"auto\". Without it, 100% of the line as always. `size` changes height and type, never width."
+    }
+  ]
+}

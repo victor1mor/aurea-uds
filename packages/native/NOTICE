@@ -1,0 +1,12 @@
+Aurea Native
+Copyright 2026 Aurea contributors
+
+This package redistributes glyphs from Carbon Icons.
+
+Carbon Icons (@carbon/icons)
+Copyright IBM Corp. 2016, 2026
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+The components in icons/ are generated from the @carbon/icons package
+without modification of the glyph drawings: the path data is copied
+verbatim and only the SVG element names and attributes are translated
+to the react-native-svg API.

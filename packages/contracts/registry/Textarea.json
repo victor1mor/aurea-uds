@@ -1,0 +1,102 @@
+{
+  "name": "Textarea",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Multi-line text entry control.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "focus",
+    "disabled",
+    "invalid",
+    "readonly"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--control-h-md",
+    "--danger-400",
+    "--duration-fast",
+    "--field-bg",
+    "--foreground",
+    "--radius-control",
+    "--radius-lg",
+    "--subtle-foreground"
+  ],
+  "a11y": {
+    "role": "textbox",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab",
+      "Enter"
+    ],
+    "apg": "No APG pattern: it is a native <textarea>. Enter inserts a line break rather than submitting, which is the difference from Input and the reason both exist. Tab moves out instead of indenting — a text area that traps Tab traps the keyboard.",
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter, which inserts a line break and changes the value. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Input",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Textarea"
+  },
+  "props": [
+    {
+      "name": "rows",
+      "type": "number",
+      "default": "2",
+      "description": "Visible height in lines. The user can still resize it; the field does not fight that."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "Controlled or uncontrolled."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "—",
+      "description": "An example of the content, not the label."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes. Every native attribute of the element passes through: name, required, autoComplete, pattern, min/max, and the rest."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step, NOT the HTML rows/cols. Height still grows with the content."
+    }
+  ]
+}

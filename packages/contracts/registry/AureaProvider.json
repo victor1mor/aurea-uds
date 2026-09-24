@@ -1,0 +1,135 @@
+{
+  "name": "AureaProvider",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Root provider: strings, icon sprite, text direction, toasts and where popups mount.",
+  "icon": "settings",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "defaultDensity": [
+      "comfortable",
+      "compact",
+      "spacious"
+    ],
+    "defaultTheme": [
+      "dark",
+      "light"
+    ],
+    "density": [
+      "comfortable",
+      "compact",
+      "spacious"
+    ],
+    "direction": [
+      "ltr",
+      "rtl"
+    ],
+    "theme": [
+      "dark",
+      "light"
+    ]
+  },
+  "states": [],
+  "tokens": [
+    "--border",
+    "--ease-emphasized",
+    "--ease-standard",
+    "--popover",
+    "--popover-foreground",
+    "--radius-lg",
+    "--shadow-md",
+    "--z-toast"
+  ],
+  "a11y": {
+    "role": null,
+    "apg": "No pattern and no role: the provider renders no element of its own, it only carries context. What it does carry matters for accessibility — the strings behind every built-in accessible name, and portalContainer, which decides whether popup content lands inside one of your landmarks.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Icon"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/system.tsx#AureaProvider"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Your application. Put the provider once, at the root — everything below it reads the context."
+    },
+    {
+      "name": "strings",
+      "type": "Partial<AureaStrings>",
+      "default": "English defaults",
+      "description": "Overrides for the built-in accessible names and labels. Merged over the defaults, so you translate only what you need. `ptBR` ships as a ready locale."
+    },
+    {
+      "name": "spriteUrl",
+      "type": "string",
+      "default": "\"/aurea-icons.svg\"",
+      "description": "Where the Carbon sprite lives. Application configuration, so it belongs here and not on every Icon — an app served from a sub-path used to lose every glyph and had to be fixed component by component."
+    },
+    {
+      "name": "direction",
+      "type": "ltr | rtl",
+      "default": "ltr",
+      "description": "Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror. The CSS mirrors on its own through logical properties — but you still have to put dir=\"rtl\" on your <html>; the provider does not touch the DOM."
+    },
+    {
+      "name": "portalContainer",
+      "type": "HTMLElement | null",
+      "default": "—",
+      "description": "Where every popup mounts: dialog, drawer, tooltip, popover, hover card, both menus, notification panel, combobox list and toasts. Unset, they mount on document.body — which is what lets them stack and position without inheriting overflow or transform from anything. Point it at a node inside one of your landmarks when you need popup content to satisfy the \"all content in a landmark\" check."
+    },
+    {
+      "name": "theme",
+      "type": "AureaTheme",
+      "default": "—",
+      "description": "Controlled theme. Pass it to command; the provider then never writes it on its own."
+    },
+    {
+      "name": "defaultTheme",
+      "type": "AureaTheme",
+      "default": "—",
+      "description": "Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back."
+    },
+    {
+      "name": "onThemeChange",
+      "type": "(theme: AureaTheme) => void",
+      "default": "—",
+      "description": "Fires with the new theme, whether it changed from here or from useTheme."
+    },
+    {
+      "name": "density",
+      "type": "AureaDensity",
+      "default": "—",
+      "description": "Controlled density. Same convention as theme."
+    },
+    {
+      "name": "defaultDensity",
+      "type": "AureaDensity",
+      "default": "—",
+      "description": "Seeds the density without controlling it."
+    },
+    {
+      "name": "onDensityChange",
+      "type": "(density: AureaDensity) => void",
+      "default": "—",
+      "description": "Fires with the new density."
+    }
+  ]
+}

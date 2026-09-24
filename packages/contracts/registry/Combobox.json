@@ -1,0 +1,154 @@
+{
+  "name": "Combobox",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Text field with an autocomplete listbox.",
+  "icon": "search",
+  "platforms": {
+    "web": "stable",
+    "native": "supported"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "focus",
+    "disabled",
+    "invalid",
+    "highlighted"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--control-h-md",
+    "--control-h-sm",
+    "--duration-fast",
+    "--field-bg",
+    "--focus-strong",
+    "--foreground",
+    "--muted-foreground",
+    "--primary",
+    "--radius-control",
+    "--radius-full",
+    "--secondary",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "combobox",
+    "apg": "combobox",
+    "keyboard": [
+      "ArrowDown",
+      "Enter",
+      "Escape",
+      "ArrowUp"
+    ],
+    "keyboardNote": "Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowUp, ArrowDown. ArrowUp is delivered by the engine and the ficha did NOT declare it — the merge of the two lineages had reverted the ficha to a three-key list, and this measurement is what caught it. Declared and not confirmed in this snapshot: Enter, Escape. Space is out of the count by category, not by convenience: in a text input the space bar types a space and changes the value, so the snapshot sees a change for any printable key. Absence of an observable change does not prove absence of effect — a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "MultiCombobox",
+      "Select"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#Combobox"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "ComboboxOption[] | ComboboxOptGroup[]",
+      "default": "—",
+      "description": "The options, as data: {value, label} — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped."
+    },
+    {
+      "name": "value",
+      "type": "ComboboxOption | null",
+      "default": "—",
+      "description": "The selected option, or null."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(v) => void",
+      "default": "—",
+      "description": "Fires with the chosen option."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "—",
+      "description": "Shown while nothing is selected."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the field."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Turns off the field and both buttons at once."
+    },
+    {
+      "name": "empty",
+      "type": "ReactNode",
+      "default": "\"No results\"",
+      "description": "What the list shows when nothing matches. A fixed string cannot say 'no fruit by that name', and the engine always allowed the content to be written."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<'sm' | 'md' | 'lg'>",
+      "default": "md",
+      "description": "The system's size step, not the HTML character count — it paints the inner input with the same .input-sm/.input-lg skin as the rest of the field family. Responsive: it resolves in the CSS layer, so it costs no observer."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the INPUT, not of the container — it is what a <label htmlFor> has to point at. Without it one is generated."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the field wrapper, not onto the input."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the input, which is the focusable node. It is spelled out because this component unpacks a fixed list of props and silently drops anything else — that is what kept Field from reaching the input (AUD-0001)."
+    },
+    {
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\"",
+      "default": "—",
+      "description": "Same route and same reason as aria-describedby: the input carries it, the wrapper would not announce it."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name when there is no visible label — a filter in a grid without labels (C-01). With `label`, prefer `label`."
+    }
+  ],
+  "responsive": {
+    "size": "visual"
+  }
+}

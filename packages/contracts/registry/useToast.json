@@ -1,0 +1,50 @@
+{
+  "name": "useToast",
+  "kind": "hook",
+  "category": "Feedback",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Raise a transient notification from anywhere inside AureaProvider.",
+  "icon": "notification",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "success",
+    "warning",
+    "danger"
+  ],
+  "tokens": [
+    "--radius-card",
+    "--shadow-lg",
+    "--space-3"
+  ],
+  "a11y": {
+    "role": "status",
+    "apg": "alert",
+    "keyboard": [
+      "Escape"
+    ],
+    "nota": "a lista é uma região viva montada pelo AureaProvider; o toast é anunciado sem roubar o foco"
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/toast",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Alert",
+      "Banner",
+      "NotificationCenter",
+      "AureaProvider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/system.tsx#useToast"
+  }
+}

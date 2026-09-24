@@ -1,0 +1,62 @@
+{
+  "name": "Table",
+  "category": "Data Display",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Presents rows and columns of data.",
+  "icon": "data--structured",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--border",
+    "--card",
+    "--focus",
+    "--radius-card",
+    "--radius-lg",
+    "--space-3"
+  ],
+  "a11y": {
+    "role": "table",
+    "apg": "table",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "DataGrid",
+      "DataList"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/data-display-client.tsx#Table"
+  },
+  "props": [
+    {
+      "name": "caption",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Rendered as a real <caption>, and when it is a string it also becomes the accessible name of the scroll region around the table. Without it the region falls back to \"Table\"."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The <thead> and <tbody>, written by you. This is the presentational table; the one that sorts, filters and pages is DataGrid."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the <table>. The wrapper around it is focusable (tabIndex 0) so a table wider than the screen can be scrolled with the keyboard, not only by dragging."
+    }
+  ]
+}

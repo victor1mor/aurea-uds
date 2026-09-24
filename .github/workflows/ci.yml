@@ -1,0 +1,283 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      update_snapshots:
+        description: "Regerar os baselines de screenshot do Linux e publicar como artefato"
+        type: boolean
+        default: false
+
+# Actions fixadas por SHA (não por tag móvel): só o SHA é referência imutável
+# (GitHub Secure Use; auditoria 18/07/2026, MÉDIO 12). Atualizar deliberadamente.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.x"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Auditoria de dependências (bloqueia em high/critical)
+        run: pnpm audit --audit-level=high
+
+      - name: Validate (nomes privados, tokens, dist==build, licenças, sem gradientes)
+        run: python scripts/validate.py
+        # A lista de nomes privados mora num SEGREDO do repositório, não no código. O GitHub não
+        # entrega segredo a pedido vindo de fork; só nesse caso o check 1 é declarado pulado.
+        env:
+          AUREA_NOMES_PRIVADOS: ${{ secrets.AUREA_NOMES_PRIVADOS }}
+          AUREA_SEM_LISTA: ${{ github.event.pull_request.head.repo.fork && '1' || '' }}
+
+      # Inclui build:catalog — as 169 páginas são geradas aqui. Com o passo seguinte
+      # (árvore suja = falha) isto é a prova de geração limpa que a auditoria de 26/07
+      # pediu no A7: o erro dela era trava de arquivo do Windows, não do gerador.
+      - name: Build (tokens, icons, core, fonts, react, catálogo)
+        run: pnpm build
+
+      - name: Falhar se dist desatualizado
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Árvore de trabalho suja após o build — dist desatualizado. Rode 'pnpm build' e commite:"
+            git status --porcelain
+            git diff
+            exit 1
+          fi
+
+      # Critério 26 do QUALITY.md e condição 1 da ADR-0010: só `dist/` entra no tarball.
+      # Era conferência à mão até 31/07/2026. Roda DEPOIS do build porque mede o que sairia
+      # publicado, e o que sairia depende do build.
+      - name: Gate de tarball (o que cada pacote publicaria)
+        run: node scripts/check-pack.mjs
+
+      - name: Smoke — @aurea-uds/react ESM importa e exporta os componentes
+        working-directory: packages/react
+        run: node -e "import('@aurea-uds/react').then(m=>{if(!(m.Button&&m.Card&&m.AppShell&&m.Field&&m.Input))process.exit(1);console.log('react ESM OK —',Object.keys(m).length,'exports')})"
+
+      # Fase 9 (achado A5): adotar a biblioteca por partes. Cada subpath tem de resolver pelo
+      # `exports` do pacote — os módulos de motor opcional NÃO podem estar no barril, senão
+      # quem importa um Button carrega CodeMirror de novo e a fronteira é decoração.
+      - name: Smoke — subpaths resolvem e o barril não carrega dependência pesada
+        working-directory: packages/react
+        run: |
+          node -e "
+          const leves=['actions','inputs','navigation','overlays','disclosure','feedback','data-display','identity','media','code','communication','layout','system','agents'];
+          const pesados={'code-editor':'CodeEditor','data-grid':'DataGrid','qrcode':'QRCode','calendar':'Calendar','chart':'Chart','graph':'DependencyGraph'};
+          Promise.all([
+            import('@aurea-uds/react'),
+            ...leves.map(s=>import('@aurea-uds/react/'+s)),
+            ...Object.keys(pesados).map(s=>import('@aurea-uds/react/'+s)),
+          ]).then(([barril,...resto])=>{
+            const noBarril=Object.values(pesados).filter(n=>n in barril);
+            if(noBarril.length){console.error('pesado no barril:',noBarril);process.exit(1)}
+            const vazios=resto.filter(m=>Object.keys(m).length===0);
+            if(vazios.length){console.error('subpath sem export');process.exit(1)}
+            if(!(resto[0].Button))throw new Error('/actions sem Button');
+            console.log('subpaths OK —',leves.length,'categorias +',Object.keys(pesados).length,'pesados fora do barril');
+          }).catch(e=>{console.error(e);process.exit(1)})
+          "
+
+      - name: Smoke — core JS é SSR-safe (roda sob Node sem DOM)
+        run: node packages/core/dist/aurea.js && echo "core JS SSR OK (no-op sem DOM)"
+
+      # PLANO-1.0, item A3. O `pnpm build` acima já construiu a prova do lado CLIENTE (A4), que
+      # entrou na cadeia; esta é a do lado SERVIDOR e fica fora dela porque `next build` custa
+      # ~30 s e ninguém precisa disso a cada build local.
+      #
+      # Depois do passo de árvore limpa DE PROPÓSITO: o `next build` escreve `.next/` e `out/`
+      # (ambos no .gitignore) e, na primeira execução de um projeto TypeScript, chega a instalar
+      # `@types/node` sozinho. Rodar antes tornaria o gate de dist refém do humor do framework.
+      #
+      # O gate é o próprio build: sem as diretivas `"use client"`, ele MORRE apontando o módulo,
+      # o barril e a página — provado em 06/08/2026 removendo a diretiva de `internal.js`.
+      - name: Prova A3 — aplicação em framework com componentes de servidor
+        run: pnpm build:proof-server
+
+      # E o build não basta: um build verde que renderiza uma casca vazia passaria igual. Isto
+      # lê o HTML que a exportação estática gravou e cobra o que só existe se a fronteira estiver
+      # inteira dos dois lados — inclusive o `cx()` CHAMADO no servidor, que é o `pure.tsx`.
+      - name: Prova A3 — a página de servidor RENDERIZOU
+        run: |
+          node -e "
+          const h = require('fs').readFileSync('apps/proof-server/out/index.html', 'utf8');
+          const exigido = {
+            'marco da página':            'id=\"prova\"',
+            'cx() rodou no SERVIDOR':     'data-cx=\"card card-raised\"',
+            'componente de servidor':     '<details',
+            'componente de cliente':      'id=\"do-cliente\"',
+            'estado inicial do Toggle':   'aria-pressed=\"false\"',
+            'dado puro atravessou (ptBR)':'Carregando',
+          };
+          const falta = Object.entries(exigido).filter(([, m]) => !h.includes(m));
+          if (falta.length) { console.error('A3 nao renderizou:', falta.map(([q]) => q)); process.exit(1) }
+          console.log('A3 OK —', h.length, 'bytes de HTML renderizado no build');
+          "
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Testes de interação (teclado, foco, ARIA)
+        run: pnpm test
+
+  # Gate visual em push/PR: SÓ compara, nunca regenera. A regeneração é o job
+  # separado abaixo, exclusivo do workflow_dispatch (auditoria 18/07/2026, ALTO 4:
+  # antes o mesmo passo rodava --update-snapshots e passava por continue-on-error,
+  # então nunca bloqueava regressão).
+  visual:
+    runs-on: ubuntu-latest
+    # CONTÊINER, e não `ubuntu-latest` puro — medido em 08/08/2026, e é o que torna o gate de
+    # pixel REPRODUZÍVEL fora da CI. Em runner puro, a rasterização é a daquela imagem de VM
+    # específica: numa Debian 13 com o mesmo commit e o mesmo lockfile, 45 de 52 capturas saíam
+    # diferentes. Dentro desta imagem, a MESMA máquina Debian reproduz o runner byte a byte —
+    # medido: as 6 do matrix.spec e 10 das 16 do catalog.spec bateram com `maxDiffPixels: 0`,
+    # e as que falharam eram conteúdo que tinha mudado de propósito.
+    # Consequência prática: qualquer máquina com esta imagem gera baseline que a CI aceita, e o
+    # gate deixou de depender da CI estar paga. A tag acompanha a versão do @playwright/test do
+    # package.json — subir uma sem a outra troca a rasterização e reprova tudo.
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.x"
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      # NÃO reinstalar o chromium: ele já vem na imagem, na versão exata que a rasterização
+      # das baselines assume. `playwright install` aqui baixaria outro binário e desfaria o
+      # ganho do contêiner sem que nada acusasse.
+      - name: Conferir que o chromium da imagem existe
+        run: pnpm exec playwright --version
+
+      # O catálogo é gerado a partir do core, então o screenshot dele testa packages/core
+      # direto — sem injeção, sem spec duplicada. Era `apps/docs`, que saiu na Parte D.
+      - name: Build
+        run: pnpm build
+
+      # PLANO-1.0, item A4 — a outra metade da prova da fronteira, e a que precisa de navegador.
+      # O A3 (no job `build`) prova o lado do SERVIDOR e morre se uma diretiva sumir. Este roda o
+      # pacote empacotado por empacotador de CLIENTE e cobra o que só o navegador mostra: que a
+      # aplicação HIDRATA e o estado responde ao clique. O SPA já foi construído pelo `pnpm build`
+      # acima (`build:proof-client` está na cadeia por causa deste teste).
+      # Independe de plataforma — mede atributo e estilo computado, não pixel. Gate DURO.
+      - name: Prova A4 — o SPA do empacotador de cliente monta e hidrata
+        run: pnpm exec playwright test tests/visual/proof-client.spec.ts
+
+      # Independe de plataforma: compara estilo computado, não pixel. Gate DURO.
+      - name: RTL — eixo inline espelha; glifos e mapa não
+        run: pnpm exec playwright test tests/visual/rtl.spec.ts
+
+      # Varredura das 169 páginas do catálogo: rolagem lateral em 7 larguras, hierarquia de
+      # título, console/4xx e axe nos dois temas. Também independe de plataforma — mede
+      # propriedade, não pixel — então é gate DURO. Existe porque a auditoria de 26/07/2026
+      # achou defeito em página que o gate de screenshot não amostrava (A1, A2, A3, A5).
+      - name: Varredura do catálogo (overflow, headings, console, axe × 2 temas)
+        run: pnpm exec playwright test tests/visual/catalog-sweep.spec.ts
+
+      # Geometria: altura de controle por densidade (fixture do core) + altura única por
+      # classe nas 169 páginas. Mede propriedade computada, não pixel — gate DURO. Existe
+      # porque a auditoria de 26/07/2026 achou aba 8px mais baixa que campo em spacious e
+      # badge medindo 22 e 26px na mesma barra, com os 6 screenshots da matriz passando
+      # (eles comparam pixel, e o gate de pixel está inativo por falta de baseline Linux).
+      - name: Geometria (altura por densidade e por classe, 2 temas)
+        run: pnpm exec playwright test tests/visual/geometry.spec.ts
+
+      # Screenshots (matriz + catálogo) SÓ comparam contra baseline do mesmo SO. Os
+      # *-linux.png precisam existir no repo (gere-os com o job de regeneração e
+      # commite). Quando existem, o passo é DURO e bloqueia. Quando não existem,
+      # avisa e não bloqueia — mas NUNCA gera-e-passa (o bug do ALTO 4). Nunca
+      # usa --update-snapshots aqui: regenerar é só no job dispatch.
+      - name: Screenshot diff (matriz + catálogo)
+        run: |
+          if ls tests/visual/*-snapshots/*-linux.png >/dev/null 2>&1; then
+            pnpm exec playwright test tests/visual/matrix.spec.ts tests/visual/catalog.spec.ts
+          else
+            echo "::warning::Gate de pixel INATIVO: sem baseline -linux.png no repo. Rode o workflow com update_snapshots=true e commite o artefato para ativá-lo."
+          fi
+
+      - name: Publicar relatório em caso de falha
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # Regeneração dos baselines Linux — SÓ no dispatch com o flag. Isolada da
+  # comparação de propósito (separar regeneração de comparação, ALTO 4).
+  visual-update:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
+    runs-on: ubuntu-latest
+    # CONTÊINER, e não `ubuntu-latest` puro — medido em 08/08/2026, e é o que torna o gate de
+    # pixel REPRODUZÍVEL fora da CI. Em runner puro, a rasterização é a daquela imagem de VM
+    # específica: numa Debian 13 com o mesmo commit e o mesmo lockfile, 45 de 52 capturas saíam
+    # diferentes. Dentro desta imagem, a MESMA máquina Debian reproduz o runner byte a byte —
+    # medido: as 6 do matrix.spec e 10 das 16 do catalog.spec bateram com `maxDiffPixels: 0`,
+    # e as que falharam eram conteúdo que tinha mudado de propósito.
+    # Consequência prática: qualquer máquina com esta imagem gera baseline que a CI aceita, e o
+    # gate deixou de depender da CI estar paga. A tag acompanha a versão do @playwright/test do
+    # package.json — subir uma sem a outra troca a rasterização e reprova tudo.
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.x"
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      # NÃO reinstalar o chromium: ele já vem na imagem, na versão exata que a rasterização
+      # das baselines assume. `playwright install` aqui baixaria outro binário e desfaria o
+      # ganho do contêiner sem que nada acusasse.
+      - name: Conferir que o chromium da imagem existe
+        run: pnpm exec playwright --version
+      - name: Build
+        run: pnpm build
+      # As DUAS specs de pixel: o passo de comparação já roda catalog.spec.ts
+      # quando existe baseline Linux. Regenerar só a matriz ativaria o gate pela metade e a
+      # CI quebraria na primeira execução com "snapshot doesn't exist" — Playwright não cria
+      # baseline sozinho quando CI=true, e é assim que tem de ser.
+      - name: Regerar baselines Linux (matriz + catálogo)
+        run: pnpm exec playwright test tests/visual/matrix.spec.ts tests/visual/catalog.spec.ts --update-snapshots
+      - name: Publicar baselines para commit
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: playwright-snapshots-linux
+          path: tests/visual/**/*-snapshots/*-linux.png
+          retention-days: 7

@@ -1,0 +1,92 @@
+{
+  "name": "Switch",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "On/off toggle.",
+  "icon": "power",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "lg",
+    "md",
+    "sm"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "checked",
+    "focus",
+    "disabled",
+    "invalid"
+  ],
+  "tokens": [
+    "--border",
+    "--control-selected",
+    "--control-selected-foreground",
+    "--duration-base",
+    "--ease-standard",
+    "--focus-strong",
+    "--muted",
+    "--muted-foreground"
+  ],
+  "a11y": {
+    "role": "switch",
+    "apg": "switch",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Space. Declared and not confirmed in this snapshot: Enter. Absence of an observable change does not prove absence of effect — a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Checkbox"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Switch"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. A switch with no label is a mystery toggle."
+    },
+    {
+      "name": "checked / defaultChecked",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled or uncontrolled. role=\"switch\" is set for you."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes. Switch applies immediately; a Checkbox waits for the form to be submitted."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step."
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "TraceTimeline",
+  "summary": "How long each step took, as a waterfall.",
+  "icon": "meter",
+  "states": [
+    "default",
+    "nested",
+    "error"
+  ],
+  "tokens": [
+    "--danger-400",
+    "--primary",
+    "--radius-full",
+    "--space-1",
+    "--space-3",
+    "--surface-2",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "meter — each bar is a measure inside a known range, not the progress of a task",
+    "keyboard": []
+  },
+  "related": {
+    "components": [
+      "Timeline",
+      "InvocationPanel",
+      "EventStream"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#TraceTimeline"
+  },
+  "props": [
+    {
+      "name": "spans",
+      "type": "TraceSpan[]",
+      "default": "—",
+      "description": "Each bar is offset by (start-min)/(max-min) and sized by (end-start)/(max-min) — the maths of the reference. This is NOT the Timeline component: that one is a column of moments, this is a waterfall of DURATIONS, where position and width are the data. `depth` indents to show who called whom. `kind` is TEXT: the reference paints eleven span categories in eleven colours, and colour-per-category on a locked palette is unreadable for anyone who does not separate them."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Trace\"",
+      "description": "Accessible name of the list."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the list."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@aurea-uds/proof-server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Aplicacao de prova da fronteira servidor/cliente (PLANO-1.0, item A3). Nao publica.",
+  "scripts": {
+    "build": "next build"
+  },
+  "dependencies": {
+    "@aurea-uds/core": "workspace:*",
+    "@aurea-uds/react": "workspace:*",
+    "next": "16.3.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.2"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "useAureaStrings",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Read the string dictionary the provider is using, to translate your own labels with it.",
+  "icon": "settings",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [],
+  "a11y": {
+    "role": "n-a",
+    "apg": "n-a",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AureaProvider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#useAureaStrings"
+  }
+}

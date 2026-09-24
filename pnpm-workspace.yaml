@@ -1,0 +1,59 @@
+packages:
+  - packages/*
+  - apps/*
+  # FORA do workspace de proposito, e nao por acidente: o `apps/native-smoke` e' um app Expo
+  # DESCARTAVEL, que existe so' para provar o Lote 0 num Android (NATIVE.md §7). Dentro do
+  # workspace, todo `pnpm install` desta casa passaria a baixar o Expo inteiro — centenas de MB e
+  # uma arvore de dependencia nova — para uma coisa que se usa uma vez por lote.
+  #
+  # Ele tambem NAO consome os pacotes por link: instala os TARBALLS que `node preparar.mjs` gera.
+  # A razao esta' escrita la', e a curta e' esta: link de workspace exigiria configurar
+  # `watchFolders` no Metro, e uma falha de configuracao do bundler nao ensina nada sobre a
+  # fundacao nativa — que e' a unica coisa que aquele app existe para medir.
+  - '!apps/native-smoke'
+allowBuilds:
+  # false de propósito: o postinstall do @carbon/icons é `ibmtelemetry` (liga
+  # pra IBM no install). Só lemos os SVGs — o build dele não é necessário.
+  '@carbon/icons': false
+
+overrides:
+  # CVE GHSA-4cwx-7wf7-3272 (alto): undici >=7.0.0 <7.29.0 vaza informacao entre
+  # usuarios e trava no parse. Chega por jsdom, que e' dependencia de TESTE — nao
+  # sai em pacote publicado. Mas o gate de auditoria da CI bloqueia em `high`, e
+  # esta' certo: divida de seguranca conhecida nao dorme no repositorio.
+  # 7.29.0 e' o patch e cabe no `^7.25.0` que o jsdom pede — sem bump maior.
+  # Sai quando o jsdom subir sozinho para a linha 8.x.
+  undici: '^7.29.0'
+  # GHSA-2v37-7h3g-55p8 (alto): nanoid <3.3.17 entra em laco infinito quando um
+  # gerador customizado recebe size zero. NAO veio do @xyflow/react — medido com
+  # `pnpm why nanoid` em 09/08/2026: os dois caminhos sao postcss, um por vite
+  # (teste e proof-client) e outro por next (proof-server). E' divida pre-existente
+  # que apareceu quando a auditoria voltou a rodar, e o gate da CI reprova em `high`.
+  # 3.3.17 e' o patch e cabe no intervalo que o postcss pede — sem bump maior.
+  nanoid: '^3.3.17'
+
+auditConfig:
+  # DUAS VULNERABILIDADES `high` SEM PATCH PUBLICADO, aceitas em 02/09/2026 com registro.
+  #
+  # As duas sao do mesmo pacote — `image-size` — e chegam por UM caminho so:
+  #   @aurea-uds/native (devDependencies) > react-native > metro > image-size
+  #
+  # Por que nao ha override, que e' o que este repositorio faz com undici e nanoid: **nao existe
+  # versao corrigida.** Medido em 02/09/2026 contra o registro: os dois advisories dizem "patched
+  # >=2.0.3" e a ultima versao PUBLICADA e' a `2.0.2` (dist-tags: latest 2.0.2, legacy 1.2.1).
+  # Nao ha para onde subir; um override apontaria para uma versao que nao existe.
+  #
+  # Por que aceitar em vez de tirar o react-native:
+  #   • ele e' **devDependency**, e so' para o typecheck. Nao entra em tarball nenhum — o
+  #     `check-pack.mjs` mede isso, e `@aurea-uds/native` publica 11 linhas, todas nossas;
+  #   • `image-size` roda dentro do **Metro**, que e' o bundler do CONSUMIDOR. Ele nao esta' no
+  #     caminho de execucao de nada que a Aurea publique;
+  #   • as duas sao DoS por laco infinito ao PARSEAR uma imagem JXL/HEIF maliciosa. Para morder,
+  #     alguem teria de por uma imagem dessas no bundle;
+  #   • a alternativa e' declarar os tipos do React Native a mao, e isso e' pior: uma segunda
+  #     verdade sobre uma API que ninguem aqui consegue rodar em aparelho.
+  #
+  # SAI quando o `image-size` publicar a 2.0.3 e o Metro subir — ai vira override, como os outros.
+  ignoreGhsas:
+    - GHSA-w3rx-r6r6-pgpr
+    - GHSA-5p2g-fcmc-qvqq

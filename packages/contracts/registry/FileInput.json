@@ -1,0 +1,137 @@
+{
+  "name": "FileInput",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Upload control with progress and validation.",
+  "icon": "upload",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "uploading",
+    "error",
+    "disabled",
+    "pending",
+    "paused",
+    "conflict",
+    "receipt",
+    "dragging",
+    "invalid"
+  ],
+  "tokens": [
+    "--border",
+    "--muted-foreground",
+    "--radius-md",
+    "--space-2",
+    "--space-20",
+    "--space-3",
+    "--surface-2",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "button",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts), and the measurement CANNOT confirm it: the component is a native <input type=file>, where Enter and Space open the operating system's file picker. That is OS chrome and does not exist in the DOM, so no snapshot of the document can prove the keys work. The probe declares the exemption explicitly (efeitoForaDoDOM) instead of accusing a correct ficha — the same case as Enter on a closed <select>."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/file-input.tsx#FileInput"
+  },
+  "props": [
+    {
+      "name": "accept",
+      "type": "string",
+      "default": "—",
+      "description": "MIME types or extensions, checked on drop too — not only in the picker dialog."
+    },
+    {
+      "name": "maxSize",
+      "type": "number",
+      "default": "—",
+      "description": "Limit in bytes. Over it the file is refused with a readable message, not silently."
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "default": "false",
+      "description": "More than one file per pick."
+    },
+    {
+      "name": "onFilesChange",
+      "type": "(files: File[]) => void",
+      "default": "—",
+      "description": "Fires with the accepted list, after filtering by type and size."
+    },
+    {
+      "name": "upload",
+      "type": "(ctx: UploadContext) => Promise<void>",
+      "default": "—",
+      "description": "Real upload with progress, cancel and retry. Without it the component only collects files."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Names the drop zone."
+    },
+    {
+      "name": "hint",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What is accepted, in words, beside the zone."
+    },
+    {
+      "name": "initialQueue",
+      "type": "FileQueueItem[]",
+      "default": "—",
+      "description": "Restores a queue you persisted earlier — id, name, bytes, status and progress, all plain data. It is INITIAL and not controlled, and the word is literal: a `File` does not come back from storage, so a restored item has the record and not the bytes. It can be shown and removed, never re-sent, and the Retry button is hidden on it rather than offered and broken. An item restored with an ACTIVE status (pending, uploading, paused) is normalised to `canceled`, because without the bytes it is neither uploading nor able to: before 2026-08-12 it showed inert Pause/Resume/Cancel buttons and counted as in-flight, which held the receipt back forever (AUD-0006). Ids you pass are respected and new ids skip them, so `f0` from a restored queue no longer collides with the first file added (AUD-0002)."
+    },
+    {
+      "name": "onQueueChange",
+      "type": "(queue: FileQueueItem[]) => void",
+      "default": "—",
+      "description": "Fires on every change to the queue, in serialisable form. Where you persist it — local storage, a server, nowhere — is yours, the same boundary the grid draws for its URL state."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows a thumbnail for image files, in the same slot the document icon occupies — the row does not change height because of it. Only images: generating an object URL for a 40 MB PDF shows nothing. The URL is revoked whenever the item LEAVES the queue — removed, replaced in single mode, or replaced by a name conflict — and any survivor is revoked on unmount. The browser holds the bytes until someone says otherwise, and until 2026-08-12 only the remove path revoked (AUD-0009)."
+    },
+    {
+      "name": "checksum",
+      "type": "boolean",
+      "default": "false",
+      "description": "Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one."
+    }
+  ]
+}

@@ -1,0 +1,1118 @@
+{
+  "fonte": "reui",
+  "caminho": "Referencia/reui-main",
+  "commit": "0daf79d",
+  "medidoEm": "2026-08-27",
+  "metodo": "MDX de documentação (frontmatter + prosa de intenção) + pacote por componente",
+  "copiaDoShadcn": {
+    "medido": true,
+    "arquivos": 62,
+    "identicos": 62
+  },
+  "totais": {
+    "documentados": 22,
+    "comFonte": 21,
+    "semDependenciaExterna": 2,
+    "comIntencaoEscrita": 5,
+    "composicoes": 258,
+    "linhasDeImplementacao": 49336,
+    "caracteresDeIntencao": 4066,
+    "motores": [
+      "base",
+      "radix"
+    ]
+  },
+  "componentes": [
+    {
+      "nome": "alert",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Alert",
+      "descricao": "Displays a callout for user attention, such as a success message, warning, or error.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 20,
+      "dependenciasExternas": [
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 1,
+      "exporta": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "teclas": [],
+      "linhas": 93
+    },
+    {
+      "nome": "autocomplete",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Autocomplete",
+      "descricao": "An input that suggests options as you type.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 12,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@hookform/resolvers",
+        "class-variance-authority",
+        "react-hook-form",
+        "sonner",
+        "zod"
+      ],
+      "custoEmDependencia": 6,
+      "exporta": [],
+      "estadosData": [
+        "disabled",
+        "has-overflow-y",
+        "highlighted",
+        "side",
+        "size",
+        "slot",
+        "starting-style"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "has-overflow-y",
+        "highlighted",
+        "side",
+        "slot",
+        "starting-style"
+      ],
+      "teclas": [],
+      "linhas": 361
+    },
+    {
+      "nome": "badge",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Badge",
+      "descricao": "Badges are used to highlight items, notify users, or display statuses.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 25,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 2,
+      "exporta": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 103
+    },
+    {
+      "nome": "cascader",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Cascader",
+      "descricao": "A nested multi-level combobox with drill-down navigation, breadcrumbs, search and custom rows.",
+      "intencao": "Cascader is a select whose options form a tree. Instead of scrolling one long list you drill from a category into its children and commit a value at whatever depth matters. It is the control for attribute pickers, category trees, org charts, region pickers, permission scopes and file paths. What it adds over a flat combobox is level navigation: pressing a branch opens it instead of committing a selection, the popup stays open, and a breadcrumb and a back control say where you are. The trigger then shows the selection's full path rather than a bare leaf label, because in a nested picker the lea",
+      "intencaoCompleta": 632,
+      "temFonte": true,
+      "composicoes": 20,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@tanstack/react-virtual",
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 3,
+      "exporta": [
+        "CASCADER_ACTION_CLASS",
+        "CASCADER_LABELS",
+        "CASCADER_LIST_HEIGHT_CLASS",
+        "CASCADER_LIST_PAD_CLASS",
+        "CASCADER_MORE_PREFIX",
+        "CASCADER_ROOT_KEY",
+        "CASCADER_ROWS_CLASS",
+        "CASCADER_SCROLL_CLASS"
+      ],
+      "estadosData": [
+        "active",
+        "branch",
+        "closed",
+        "depth",
+        "disabled",
+        "driven",
+        "empty",
+        "expanded",
+        "highlighted",
+        "indeterminate",
+        "index",
+        "invalid",
+        "menu-target",
+        "mode",
+        "more",
+        "open",
+        "selected",
+        "selected-count",
+        "side",
+        "slot",
+        "state",
+        "variant",
+        "virtualized"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "branch",
+        "depth",
+        "disabled",
+        "driven",
+        "expanded",
+        "indeterminate",
+        "index",
+        "invalid",
+        "menu-target",
+        "mode",
+        "more",
+        "open",
+        "selected",
+        "selected-count",
+        "slot",
+        "state",
+        "virtualized"
+      ],
+      "estadosReagidos": [
+        "closed",
+        "disabled",
+        "empty",
+        "highlighted",
+        "indeterminate",
+        "open",
+        "selected",
+        "side",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "teclas": [
+        " ",
+        "ArrowDown",
+        "ArrowUp",
+        "Backspace",
+        "Enter"
+      ],
+      "linhas": 8554
+    },
+    {
+      "nome": "data-grid",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Data Grid",
+      "descricao": "A powerful TanStack Table v9 data grid with sorting, filtering, pagination, footer rows, drag-and-drop, virtualization, infinite scroll, row pinning, and tree rows.",
+      "intencao": "The current `data-grid` package ships the shared grid context, table renderers, pagination, column controls, drag-and-drop helpers, virtualization, infinite scroll, footer helpers, row-pinning support, and tree rows. Footer components (`DataGridTableFoot`, `DataGridTableFootRow`, `DataGridTableFootRowCell`) plus the `DataGridTableRowPin` and `DataGridTableRowExpand` toggles are exported from `data-grid-table.tsx`. In the base build, `data-grid-scroll-area.tsx` is also included and exports `DataGridScrollArea` for dedicated scroll handling around sticky-header or wide tables.",
+      "intencaoCompleta": 581,
+      "temFonte": true,
+      "composicoes": 30,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@dnd-kit/core",
+        "@dnd-kit/modifiers",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@tanstack/react-table",
+        "@tanstack/react-virtual",
+        "class-variance-authority",
+        "sonner"
+      ],
+      "custoEmDependencia": 9,
+      "exporta": [],
+      "estadosData": [
+        "depth",
+        "edge",
+        "grid",
+        "index",
+        "last-col",
+        "orientation",
+        "outer-pinned-col",
+        "overflow-vertical",
+        "pinned",
+        "row-id",
+        "row-pinned",
+        "row-pinned-boundary",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "depth",
+        "edge",
+        "grid",
+        "index",
+        "last-col",
+        "orientation",
+        "outer-pinned-col",
+        "overflow-vertical",
+        "pinned",
+        "row-id",
+        "row-pinned",
+        "row-pinned-boundary",
+        "slot",
+        "state"
+      ],
+      "estadosReagidos": [
+        "index",
+        "last-col",
+        "orientation",
+        "outer-pinned-col",
+        "pinned",
+        "row-id",
+        "slot",
+        "state"
+      ],
+      "teclas": [
+        " ",
+        "Enter"
+      ],
+      "linhas": 6190
+    },
+    {
+      "nome": "date-selector",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Date Selector",
+      "descricao": "A universal date selector component with multiple period types, filter modes, and flexible display options.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 4,
+      "dependenciasExternas": [
+        "date-fns"
+      ],
+      "custoEmDependencia": 1,
+      "exporta": [
+        "DEFAULT_DATE_SELECTOR_I18N",
+        "DateSelector"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 1362
+    },
+    {
+      "nome": "event-calendar",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Event Calendar",
+      "descricao": "A headless-first event calendar with month, week, day, N-day and agenda views, drag-and-drop scheduling, recurring events, time zones, and an external CRUD contract.",
+      "intencao": "The demo above is the whole feature surface in one example: every view (month, week, day, N-days, agenda, and the resource time grid), a multi-day all-day bar, custom chips via `renderEvent`, and a tabbed Settings panel driving view settings, time-grid options, and interactions as controlled props - with a reset back to defaults. The `event-calendar` package separates the calendar engine from the calendar UI. A subscribable store (`useEventCalendarState`) owns events, view, date, selection, and interactions with controlled and uncontrolled modes for every state pair; the shipped view component",
+      "intencaoCompleta": 1231,
+      "temFonte": true,
+      "composicoes": 5,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@date-fns/tz",
+        "date-fns"
+      ],
+      "custoEmDependencia": 3,
+      "exporta": [],
+      "estadosData": [
+        "active",
+        "all-day",
+        "draft",
+        "dragging",
+        "drop-into",
+        "drop-invalid",
+        "drop-target",
+        "ec-bounds-end",
+        "ec-bounds-start",
+        "ec-day",
+        "ec-native-scroll",
+        "ec-resource",
+        "edge",
+        "kind",
+        "loading",
+        "mode",
+        "off",
+        "outside",
+        "past",
+        "preview",
+        "recurring",
+        "selected",
+        "slot",
+        "today",
+        "view",
+        "weekend"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "all-day",
+        "draft",
+        "dragging",
+        "drop-into",
+        "drop-invalid",
+        "drop-target",
+        "ec-bounds-end",
+        "ec-bounds-start",
+        "ec-day",
+        "ec-native-scroll",
+        "ec-resource",
+        "edge",
+        "kind",
+        "loading",
+        "mode",
+        "off",
+        "outside",
+        "past",
+        "preview",
+        "recurring",
+        "selected",
+        "slot",
+        "today",
+        "view",
+        "weekend"
+      ],
+      "estadosReagidos": [
+        "dragging",
+        "ec-day",
+        "loading",
+        "selected",
+        "slot",
+        "today"
+      ],
+      "teclas": [
+        "Escape"
+      ],
+      "linhas": 9844
+    },
+    {
+      "nome": "file-upload",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "File Upload",
+      "descricao": "Enables users to upload files to a server or application.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": false,
+      "composicoes": 10,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "class-variance-authority",
+        "sonner"
+      ],
+      "custoEmDependencia": 6,
+      "exporta": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 0
+    },
+    {
+      "nome": "filters",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Filters",
+      "descricao": "A stepped filter builder with nested attributes, popover value editors and a boolean query tree.",
+      "intencao": "Filters turns a schema of attributes into a filter bar. A user picks an attribute, picks a condition, gives it a value, and the result is one boolean query object you compile into a predicate, a query string or a request body. The state it edits is a TREE, not a list of chips. `FilterQuery` is a group of rules combined by `and` or `or`, and a group may hold another group, so `(A and B) or C` is expressible from day one. The chip row renders the flat case of that tree and the advanced builder renders the whole of it, read and written through the same actions, which is why `variant` picks a chro",
+      "intencaoCompleta": 636,
+      "temFonte": true,
+      "composicoes": 12,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@tanstack/react-table",
+        "@tanstack/react-virtual",
+        "class-variance-authority",
+        "date-fns"
+      ],
+      "custoEmDependencia": 5,
+      "exporta": [
+        "DEFAULT_FILTER_EDITORS",
+        "DEFAULT_FILTER_LABELS",
+        "DEFAULT_FILTER_OPERATORS",
+        "DEFAULT_FILTER_OPERATOR_LABELS",
+        "DEFAULT_FILTER_VALUE_TYPE",
+        "FILTER_DATE_FORMAT",
+        "FILTER_DND_ACTIVATION",
+        "FILTER_DROP_ZONE_SELECTOR",
+        "FILTER_FIELD_PICKER_CLASS",
+        "FILTER_GROUP_SELECTOR",
+        "FILTER_MENU_CLASS",
+        "FILTER_MENU_LABEL_CLASS",
+        "FILTER_ROOT_KEY",
+        "FILTER_ROW_SEAM_PX",
+        "FILTER_ROW_SELECTOR",
+        "FilterAdvancedRow",
+        "FilterBooleanEditor",
+        "FilterChip",
+        "FilterFieldPicker",
+        "FilterMenu",
+        "FilterMoveToMenuItems",
+        "FilterMultiSelectEditor",
+        "FilterNumberEditor",
+        "FilterOperatorPopover",
+        "FilterRangeEditor",
+        "FilterReorderProvider",
+        "FilterRowStateProvider",
+        "FilterRuleMenuItems",
+        "FilterSelectEditor",
+        "FilterTextEditor",
+        "FilterValuePopover",
+        "Filters",
+        "FiltersAdvanced",
+        "FiltersAdvancedPanel",
+        "FiltersBuilder",
+        "FiltersRow",
+        "RELATIVE_NEXT_WEEK",
+        "RELATIVE_TODAY",
+        "RELATIVE_TOMORROW",
+        "RELATIVE_YESTERDAY"
+      ],
+      "estadosData": [
+        "depth",
+        "dragging",
+        "drop-edge",
+        "drop-index",
+        "drop-into",
+        "drop-invalid",
+        "drop-parent",
+        "empty",
+        "ending-style",
+        "filter-cell",
+        "focused",
+        "incomplete",
+        "index",
+        "invalid",
+        "node-id",
+        "parent-id",
+        "popup-open",
+        "readonly",
+        "rule-id",
+        "selected",
+        "slot",
+        "state",
+        "unknown"
+      ],
+      "estadosEmitidos": [
+        "depth",
+        "drop-index",
+        "drop-parent",
+        "empty",
+        "filter-cell",
+        "focused",
+        "incomplete",
+        "index",
+        "invalid",
+        "node-id",
+        "parent-id",
+        "readonly",
+        "rule-id",
+        "slot",
+        "state",
+        "unknown"
+      ],
+      "estadosReagidos": [
+        "dragging",
+        "drop-edge",
+        "drop-into",
+        "drop-invalid",
+        "drop-parent",
+        "ending-style",
+        "invalid",
+        "popup-open",
+        "selected",
+        "slot",
+        "state"
+      ],
+      "teclas": [
+        " ",
+        "Alt",
+        "ArrowDown",
+        "ArrowUp",
+        "Backspace",
+        "Delete",
+        "End",
+        "Enter",
+        "Escape",
+        "Home"
+      ],
+      "linhas": 10172
+    },
+    {
+      "nome": "frame",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Frame",
+      "descricao": "Displays related content in a structured frame.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 19,
+      "dependenciasExternas": [
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 1,
+      "exporta": [],
+      "estadosData": [
+        "slot",
+        "spacing"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "spacing"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "spacing"
+      ],
+      "teclas": [],
+      "linhas": 195
+    },
+    {
+      "nome": "gantt",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Gantt",
+      "descricao": "A headless-first gantt with split tree and timeline panes, day to year scales, zoom, drag and resize scheduling, progress, summary rollups, and an external CRUD contract.",
+      "intencao": "The `gantt` package ships a subscribable headless engine (`useGanttState`) and a composable view layer on top of it: a resizable tree pane for the resource hierarchy, a horizontal timeline with day, week, month, quarter, and year scales, zoom, infinite scrolling, drag and resize scheduling with live validation, per-bar progress fills, and duration-weighted summary rollups on parent rows. The engine never mutates your data on its own; every timing change flows through one proposal funnel (`onEventUpdate`, `canDropEvent`) so external CRUD stays in your hands. The composition contract is `<Gantt>",
+      "intencaoCompleta": 854,
+      "temFonte": true,
+      "composicoes": 5,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@date-fns/tz",
+        "class-variance-authority",
+        "date-fns"
+      ],
+      "custoEmDependencia": 4,
+      "exporta": [],
+      "estadosData": [
+        "active",
+        "all-day",
+        "axis",
+        "column",
+        "completed",
+        "custom",
+        "drag-kind",
+        "dragging",
+        "drop-invalid",
+        "drop-target",
+        "edge",
+        "full",
+        "gantt-axis",
+        "gantt-bar-color",
+        "gantt-bar-label",
+        "gantt-bar-max",
+        "gantt-bar-min",
+        "gantt-bar-start-ms",
+        "gantt-native-scroll",
+        "gantt-range-end",
+        "gantt-range-start",
+        "gantt-resource",
+        "gantt-row",
+        "gantt-row-id",
+        "gantt-row-static",
+        "gantt-snap",
+        "hover",
+        "invalid",
+        "kind",
+        "label-outside",
+        "lane",
+        "lane-count",
+        "off",
+        "orientation",
+        "past",
+        "placement",
+        "progress",
+        "recurring",
+        "resizing",
+        "scale",
+        "selected",
+        "side",
+        "slot",
+        "today"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "all-day",
+        "axis",
+        "column",
+        "completed",
+        "custom",
+        "drag-kind",
+        "dragging",
+        "drop-invalid",
+        "drop-target",
+        "edge",
+        "full",
+        "gantt-axis",
+        "gantt-bar-color",
+        "gantt-bar-label",
+        "gantt-bar-max",
+        "gantt-bar-min",
+        "gantt-bar-start-ms",
+        "gantt-native-scroll",
+        "gantt-range-end",
+        "gantt-range-start",
+        "gantt-resource",
+        "gantt-row",
+        "gantt-row-id",
+        "gantt-row-static",
+        "gantt-snap",
+        "hover",
+        "invalid",
+        "kind",
+        "label-outside",
+        "lane",
+        "lane-count",
+        "off",
+        "past",
+        "placement",
+        "progress",
+        "recurring",
+        "scale",
+        "selected",
+        "side",
+        "slot",
+        "today"
+      ],
+      "estadosReagidos": [
+        "custom",
+        "drag-kind",
+        "full",
+        "gantt-axis",
+        "gantt-native-scroll",
+        "gantt-row",
+        "gantt-row-id",
+        "hover",
+        "orientation",
+        "resizing",
+        "selected",
+        "slot"
+      ],
+      "teclas": [
+        "ArrowLeft",
+        "ArrowRight",
+        "Escape",
+        "date",
+        "scale"
+      ],
+      "linhas": 8919
+    },
+    {
+      "nome": "icon-stack",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Icon Stack",
+      "descricao": "Shadcn Icon Stack for isometric icons, layered icon illustrations, and empty-state visuals.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 6,
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "exporta": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "teclas": [],
+      "linhas": 94
+    },
+    {
+      "nome": "icon-tile",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Icon Tile",
+      "descricao": "Shadcn Icon Tile that wraps an icon in a consistent square surface for list rows, feature cards, and empty states.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 17,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 2,
+      "exporta": [],
+      "estadosData": [
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 129
+    },
+    {
+      "nome": "kanban",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Kanban",
+      "descricao": "A drag-and-drop kanban component designed for seamless item organization across customizable columns.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 6,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "class-variance-authority",
+        "sonner"
+      ],
+      "custoEmDependencia": 6,
+      "exporta": [],
+      "estadosData": [
+        "disabled",
+        "dragging",
+        "slot",
+        "value"
+      ],
+      "estadosEmitidos": [
+        "disabled",
+        "dragging",
+        "slot",
+        "value"
+      ],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 952
+    },
+    {
+      "nome": "number-field",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Number Field",
+      "descricao": "A numeric input element with increment and decrement buttons, and a scrub area.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 6,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@hookform/resolvers",
+        "class-variance-authority",
+        "react-hook-form",
+        "sonner",
+        "zod"
+      ],
+      "custoEmDependencia": 6,
+      "exporta": [],
+      "estadosData": [
+        "disabled",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "teclas": [],
+      "linhas": 271
+    },
+    {
+      "nome": "phone-input",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Phone Input",
+      "descricao": "A phone number input component with country selection and validation.",
+      "intencao": "We used the [react-phone-number-input](https://gitlab.com/catamphetamine/react-phone-number-input) library to create this component.",
+      "intencaoCompleta": 132,
+      "temFonte": true,
+      "composicoes": 8,
+      "dependenciasExternas": [
+        "react-phone-number-input"
+      ],
+      "custoEmDependencia": 1,
+      "exporta": [],
+      "estadosData": [
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [],
+      "estadosReagidos": [
+        "pressed",
+        "slot"
+      ],
+      "teclas": [],
+      "linhas": 230
+    },
+    {
+      "nome": "rating",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Rating",
+      "descricao": "A customizable star rating component that supports read-only display and interactive input modes.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 9,
+      "dependenciasExternas": [
+        "class-variance-authority",
+        "sonner"
+      ],
+      "custoEmDependencia": 2,
+      "exporta": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 183
+    },
+    {
+      "nome": "scrollspy",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Scrollspy",
+      "descricao": "Dynamically highlights navigation to indicate current visible section in viewport during page scroll",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 2,
+      "dependenciasExternas": [],
+      "custoEmDependencia": 0,
+      "exporta": [
+        "Scrollspy"
+      ],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "teclas": [],
+      "linhas": 242
+    },
+    {
+      "nome": "sortable",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Sortable",
+      "descricao": "A drag-and-drop sortable component designed for seamless item reordering with vertical, grid, and nested layouts.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 8,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "class-variance-authority",
+        "sonner"
+      ],
+      "custoEmDependencia": 6,
+      "exporta": [],
+      "estadosData": [
+        "disabled",
+        "dragging",
+        "slot",
+        "value"
+      ],
+      "estadosEmitidos": [
+        "disabled",
+        "dragging",
+        "slot",
+        "value"
+      ],
+      "estadosReagidos": [],
+      "teclas": [],
+      "linhas": 463
+    },
+    {
+      "nome": "stepper",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Stepper",
+      "descricao": "A step-by-step process for users to navigate through a series of steps.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 15,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 2,
+      "exporta": [],
+      "estadosData": [
+        "loading",
+        "orientation",
+        "slot",
+        "state"
+      ],
+      "estadosEmitidos": [
+        "loading",
+        "orientation",
+        "slot",
+        "state"
+      ],
+      "estadosReagidos": [
+        "orientation",
+        "state"
+      ],
+      "teclas": [],
+      "linhas": 475
+    },
+    {
+      "nome": "timeline",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Timeline",
+      "descricao": "A visual representation of events in chronological order.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 12,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "custoEmDependencia": 2,
+      "exporta": [],
+      "estadosData": [
+        "completed",
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "completed",
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "completed",
+        "orientation",
+        "slot"
+      ],
+      "teclas": [],
+      "linhas": 259
+    },
+    {
+      "nome": "tree",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "titulo": "Tree",
+      "descricao": "A customizable tree component for React.",
+      "intencao": "",
+      "intencaoCompleta": 0,
+      "temFonte": true,
+      "composicoes": 7,
+      "dependenciasExternas": [
+        "@base-ui/react",
+        "@headless-tree/core",
+        "@headless-tree/react"
+      ],
+      "custoEmDependencia": 3,
+      "exporta": [],
+      "estadosData": [
+        "disabled",
+        "drag-target",
+        "focus",
+        "folder",
+        "search-match",
+        "selected",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "drag-target",
+        "focus",
+        "folder",
+        "search-match",
+        "selected",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "drag-target",
+        "folder",
+        "search-match",
+        "selected"
+      ],
+      "teclas": [],
+      "linhas": 245
+    }
+  ]
+}

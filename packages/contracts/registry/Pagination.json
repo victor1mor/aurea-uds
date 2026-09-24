@@ -1,0 +1,70 @@
+{
+  "name": "Pagination",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Navigate across pages of content.",
+  "icon": "arrow--right",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "disabled"
+  ],
+  "tokens": [
+    "--border",
+    "--muted-foreground",
+    "--primary",
+    "--primary-foreground",
+    "--radius-control"
+  ],
+  "a11y": {
+    "role": "navigation",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab",
+      "Enter",
+      "Space"
+    ],
+    "apg": "No APG pattern for pagination; the practice adopted is a <nav> with an accessible name holding two real buttons. Previous and Next disable themselves at the ends, so the keyboard never reaches a control that would do nothing. The page counter between them is a Badge — text, not a target.",
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which activate the focused page button and change the page. There are deliberately no arrow keys: the pages are a row of buttons in document order, not a widget that owns a roving selection. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Table",
+      "DataGrid"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#Pagination"
+  },
+  "props": [
+    {
+      "name": "page",
+      "type": "number",
+      "default": "—",
+      "description": "The current page, counting from 1."
+    },
+    {
+      "name": "total",
+      "type": "number",
+      "default": "—",
+      "description": "How many PAGES there are, not how many rows. Previous and Next disable themselves at the ends."
+    },
+    {
+      "name": "onPageChange",
+      "type": "(page: number) => void",
+      "default": "—",
+      "description": "Receives the page to go to, already computed. Controlled: the component does not hold the number, because whoever fetches the data is the one who knows it."
+    }
+  ]
+}

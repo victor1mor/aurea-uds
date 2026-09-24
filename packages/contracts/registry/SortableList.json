@@ -1,0 +1,75 @@
+{
+  "name": "SortableList",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Reorder by dragging — and by keyboard, which is the reason it may exist at all.",
+  "icon": "drag--horizontal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "grabbed"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--card",
+    "--muted-foreground",
+    "--primary",
+    "--radius-lg",
+    "--radius-sm",
+    "--shadow-lg"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "There is no APG pattern for drag and drop. The keyboard protocol is the one the market settled on — Space picks up, arrows move, Space drops, Escape puts it back — and every step is announced in a polite live region, because someone who cannot see the list gets no confirmation otherwise. The handle is a real button, so it is in the tab order; dragging is never the only way.",
+    "keyboard": [
+      "Space",
+      "Enter",
+      "ArrowUp",
+      "ArrowDown",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: all five — Space, Enter, ArrowUp, ArrowDown, Escape. The measurement needed the protocol's FIRST step to be played first: keyboard dragging has two beats — Space picks the item up, and only then do the arrows move it. Measuring from a handle that has not grabbed anything measures the first beat and calls the other three inert, which is what the first run reported. The probe now presses Space before measuring (preparaTeclas), the same fix the TreeView bank needed for the same reason."
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": [
+      "drag--horizontal"
+    ]
+  },
+  "related": {
+    "components": [
+      "DataList",
+      "TreeView"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/data-display-client.tsx#SortableList"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{id, label}>",
+      "default": "—",
+      "description": "The rows, in the order they are shown. Data and not children, the same idiom as Timeline, Stepper and Sidebar."
+    },
+    {
+      "name": "onReorder",
+      "type": "(from: number, to: number) => void",
+      "default": "—",
+      "description": "Called with the two indexes. The list is controlled and keeps no order of its own — the keyboard path and the pointer path call this same callback, so there are never two sources of truth about the order."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Sortable list",
+      "description": "Accessible name of the list."
+    }
+  ]
+}

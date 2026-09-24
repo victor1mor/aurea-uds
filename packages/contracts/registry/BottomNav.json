@@ -1,0 +1,141 @@
+{
+  "name": "BottomNav",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Floating bar pinned to the bottom that holds an application's top-level navigation.",
+  "icon": "menu",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "floating",
+    "edge",
+    "flat",
+    "surface",
+    "pill",
+    "dock"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "item-hover",
+    "item-focus",
+    "item-current",
+    "item-badge"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--card-foreground",
+    "--control-h-lg",
+    "--foreground",
+    "--background",
+    "--danger-400",
+    "--icon-lg",
+    "--muted-foreground",
+    "--primary",
+    "--primary-emphasis",
+    "--primary-foreground",
+    "--radius-full",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--radius-card",
+    "--radius-control",
+    "--secondary",
+    "--space-05",
+    "--space-1",
+    "--space-4",
+    "--text-xs",
+    "--weight-medium",
+    "--z-sticky"
+  ],
+  "a11y": {
+    "role": "navigation",
+    "apg": "No APG pattern covers site navigation, and that absence is the decision — the same one Sidebar records. What is adopted: native links inside a <nav>, natural Tab order, and aria-current=\"page\" on the current item. What is deliberately NOT adopted is the Tabs pattern: a tab swaps a panel inside the page, a bottom bar changes page. Giving role=\"tablist\" to a menu makes the screen reader promise arrow keys that lead nowhere. A page usually carries a Sidebar or a Topbar as well, so name the landmark when there is more than one.",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which activate the focused destination. Space was delivered by the component and NOT declared before this measurement — the same direction as G-A11Y-04, and the reason this gate exists. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AppShell",
+      "Sidebar",
+      "Topbar",
+      "Tabs"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#BottomNav"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "SidebarItem[]",
+      "default": "—",
+      "description": "The navigation, as data — the SAME type Sidebar takes, on purpose: one list feeds the sidebar on desktop and the bar on the phone, and two lists of one menu drift apart. Each item is {id, label, href?, icon?, badge?, onClick?}. A nested `items` is ignored here: a bottom bar is flat. `badge` hangs off the icon's top corner and is sized against it (16px on a 24px icon, the ratio measured in shipping apps); pass an EMPTY badge (`badge: \"\"`) to get the plain dot that means \"something new\"."
+    },
+    {
+      "name": "current",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the item you are on. It gets aria-current=\"page\", which is also what the skin paints — one source for both, so they cannot drift apart."
+    },
+    {
+      "name": "variant",
+      "type": "\"floating\" | \"edge\"",
+      "default": "\"floating\"",
+      "description": "Where the BAR sits: floating as a loose pill, or edge against the screen with a hairline above it. It says nothing about how the current item is marked — that is `indicator`, and keeping the two apart is the whole point of the 20/08/2026 rewrite. The four names of 17/08/2026 (flat, surface, pill, dock) are still accepted and map onto the pair; they are deprecated, not removed."
+    },
+    {
+      "name": "indicator",
+      "type": "\"none\" | \"subtle\" | \"pill\" | \"circle\" | \"circle-raised\" | \"circle-bold\" | \"circle-outline\"",
+      "default": "\"none\"",
+      "description": "The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; the three circles wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is the only solid fill, so it is the only one that flips the whole foreground. Every indicator keeps every label visible."
+    },
+    {
+      "name": "width",
+      "type": "\"full\" | \"content\"",
+      "default": "\"full\"",
+      "description": "How wide the floating pill is. `full` spans the screen minus the margin, as it always has; `content` sizes the pill to its items and centres it. Items then measure their own content instead of sharing the width equally, with the item's own touch target (--control-h-lg) as the minimum. Ignored on `edge`, which sits against the screen edge and stays full width."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Main\"",
+      "description": "Accessible name of the <nav>. Two navigation landmarks with the same name fail axe, and a page with a bottom bar usually has a Topbar or Sidebar too — name it."
+    }
+  ],
+  "notes": [
+    "A dot badge (`badge: \"\"`) has NO accessible name — there is nothing to read. Put the meaning in the item's label instead: `label: <>Updates <span className=\"sr-only\">(new)</span></>`. A numbered badge announces itself.",
+    "The floating bar keeps clear of the iPhone home indicator with `margin-bottom: calc(--space-4 + env(safe-area-inset-bottom))` — OUTSIDE the pill, since 0.8.8; before that the inset was padding and the pill grew down behind the system area. `edge` keeps it as padding, `max(--space-1, env(safe-area-inset-bottom))`, because it sits against the edge. Either only has an effect if YOUR page declares `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">`; without it env() returns 0 and you get the normal spacing — it degrades, it does not break. Aurea does not write your meta tag.",
+    "Positioning is `sticky`, not `fixed`: it stays inside its container, so it cannot cover a page it does not own, and it falls back to static when there is nothing to scroll."
+  ],
+  "axes": {
+    "indicator": [
+      "circle",
+      "circle-bold",
+      "circle-outline",
+      "circle-raised",
+      "none",
+      "pill",
+      "subtle"
+    ],
+    "width": [
+      "content",
+      "full"
+    ]
+  },
+  "variantProp": "variant"
+}

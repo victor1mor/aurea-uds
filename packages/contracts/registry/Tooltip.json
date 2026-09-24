@@ -1,0 +1,76 @@
+{
+  "name": "Tooltip",
+  "category": "Overlays",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Brief label revealed on hover or focus.",
+  "icon": "help",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "open",
+    "closed"
+  ],
+  "tokens": [
+    "--border",
+    "--foreground",
+    "--leading-normal",
+    "--radius-md",
+    "--shadow-md",
+    "--surface-inset",
+    "--text-xs",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "tooltip",
+    "apg": "tooltip",
+    "keyboard": [
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Popover"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#Tooltip"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye."
+    },
+    {
+      "name": "content",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The hint. Short, and never the only place the information lives: a tooltip is a description, and it must hold nothing focusable."
+    },
+    {
+      "name": "side",
+      "type": "top | right | bottom | left",
+      "default": "top",
+      "description": "Preferred side; it flips when there is no room."
+    }
+  ],
+  "axes": {
+    "side": [
+      "bottom",
+      "left",
+      "right",
+      "top"
+    ]
+  }
+}

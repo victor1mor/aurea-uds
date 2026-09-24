@@ -1,0 +1,82 @@
+{
+  "name": "Prose",
+  "category": "Data Display",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "The skin for long-form text. It is not the parser — that stays yours.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--text-base",
+    "--text-3xl",
+    "--text-2xl",
+    "--text-xl",
+    "--text-lg",
+    "--text-md",
+    "--text-sm",
+    "--leading-relaxed",
+    "--leading-tight",
+    "--weight-semibold",
+    "--font-code",
+    "--border",
+    "--border-strong",
+    "--surface-2",
+    "--muted-foreground",
+    "--subtle-foreground",
+    "--radius-card",
+    "--radius-lg",
+    "--radius-xs"
+  ],
+  "a11y": {
+    "role": null,
+    "apg": "No pattern and no interaction: this is a container that styles the elements a parser already produced. The heading levels, the table headers and the alt text come from the content, so its accessibility is the content's — which is why Prose never rewrites the markup it is given.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "CodeBlock",
+      "Table",
+      "Image"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Prose"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The rendered article. Bring your own Markdown renderer — react-markdown, MDX, or the HTML your CMS already returns. Prose styles h1-h4, p, a, ul, ol, li, blockquote, code, pre, img, hr, figcaption, table, th and td, all scoped under .prose."
+    },
+    {
+      "name": "dangerouslySetInnerHTML",
+      "type": "{__html: string}",
+      "default": "—",
+      "description": "Accepted because it is a div, and it is the most likely way to use this. SANITISE FIRST — with DOMPurify or your framework's sanitiser. Aurea styles the text; it cannot and must not decide what is safe to render."
+    },
+    {
+      "name": "--prose-measure",
+      "type": "CSS custom property",
+      "default": "68ch",
+      "description": "The reading measure. Long lines are hard to track back to the next one, so the text caps its own width rather than filling the container. Set it, or set it to none if the page already constrains the column."
+    },
+    {
+      "name": "--font-editorial",
+      "type": "CSS custom property",
+      "default": "not applied",
+      "description": "IBM Plex Serif ships with the fonts package and Prose deliberately does NOT switch to it: serif body text is an appearance decision, and those go to the owner of the design system with a before and after, never into a component by default. Point font-family at this token on .prose if you want it."
+    }
+  ]
+}

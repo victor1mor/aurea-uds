@@ -1,0 +1,116 @@
+{
+  "name": "ToggleGroup",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Several toggles sharing one state, with arrow-key navigation between them.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variantProp": "orientation",
+  "variants": [
+    "horizontal",
+    "vertical"
+  ],
+  "sizes": [],
+  "responsive": {
+    "orientation": "behavioral"
+  },
+  "states": [
+    "default",
+    "pressed",
+    "disabled",
+    "focus-visible"
+  ],
+  "tokens": [
+    "--space-1"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "toolbar",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowLeft, ArrowRight, Home, End, Enter, Space. Enter, Space were delivered by the component and NOT declared before this measurement — the same direction as G-A11Y-04. Declared and not confirmed in this snapshot: ArrowUp, ArrowDown. Absence of an observable change does not prove absence of effect — a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/toggle-group",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Toggle",
+      "SegmentedControl",
+      "ButtonGroup"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#ToggleGroup"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The Toggles that share the state."
+    },
+    {
+      "name": "value",
+      "type": "string[]",
+      "default": "—",
+      "description": "Controlled selection. An array even in single mode, which is the engine's shape."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string[]",
+      "default": "—",
+      "description": "Seeds the selection without controlling it."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string[]) => void",
+      "default": "—",
+      "description": "Fires with the new selection."
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "default": "false",
+      "description": "More than one toggle pressed at a time."
+    },
+    {
+      "name": "orientation",
+      "type": "Responsive<Orientation>",
+      "default": "horizontal",
+      "description": "Stacks the toggles, and the arrow keys follow the axis. Responsive."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the group. Without it the group is a set of buttons with no subject."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Turns every toggle off at once."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

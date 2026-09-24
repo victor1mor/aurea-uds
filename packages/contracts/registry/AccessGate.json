@@ -1,0 +1,81 @@
+{
+  "name": "AccessGate",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Hides an action the user cannot take, or shows it inert with the reason.",
+  "icon": "locked",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "hide",
+    "disable"
+  ],
+  "sizes": [],
+  "states": [
+    "allowed",
+    "denied"
+  ],
+  "tokens": [
+    "--border",
+    "--popover",
+    "--popover-foreground",
+    "--radius-md",
+    "--text-xs",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "none",
+    "apg": "No role and no box of its own: it renders the child, a replacement, or the child made inert. What it does carry is the accessibility decision. In disable mode it sets aria-disabled and never disabled — measured on 2026-08-13, a disabled control leaves the tab order, so the reason hung on it is never read by anyone using a keyboard, and the span wrapper other libraries document fixes the pointer and not the keyboard. Hiding is the safer default when the action would mean nothing to this user; disabling is right when they should know it exists and why it is closed.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button",
+      "Tooltip"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#AccessGate"
+  },
+  "props": [
+    {
+      "name": "allowed",
+      "type": "boolean",
+      "default": "—",
+      "description": "REQUIRED, and it is an ANSWER, not a question: Aurea holds no rules, roles or policies. You decide, from whatever your app uses, and pass the result. THIS IS NOT SECURITY — hiding a button stops nobody from calling the API. The server is what refuses; this only avoids offering what would be refused."
+    },
+    {
+      "name": "children",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "REQUIRED. A single element — the action being gated. When allowed, it comes through untouched, with no wrapper."
+    },
+    {
+      "name": "mode",
+      "type": "hide | disable",
+      "default": "hide",
+      "description": "hide removes the action from the DOM, which is what @casl/react does and the right default when the action would mean nothing to this user. disable keeps it visible and inert, for when they should know it exists — react-admin is the reference that lets you pick, and the pick is the whole reason this component exists."
+    },
+    {
+      "name": "reason",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED when mode is disable, and the type enforces it: an action that says \"no\" without saying why is worse than one that is simply absent. It is shown in a Tooltip on the inert control."
+    },
+    {
+      "name": "fallback",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Only in hide mode: what takes the place of the action. Use it for a read-only rendering of the same information, not for a second \"you cannot do this\" message."
+    }
+  ],
+  "variantProp": "mode"
+}

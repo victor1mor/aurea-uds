@@ -1,0 +1,206 @@
+{
+  "name": "IconButton",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Icon-only button with a required accessible label.",
+  "icon": "maximize",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "danger",
+    "danger-ghost",
+    "danger-outline",
+    "ghost",
+    "link",
+    "link-danger",
+    "link-primary",
+    "nav",
+    "outline",
+    "primary",
+    "primary-ghost",
+    "primary-outline",
+    "secondary"
+  ],
+  "sizes": [
+    "lg",
+    "md",
+    "sm",
+    "xl",
+    "xs"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "axes": {
+    "appearance": [
+      "ghost",
+      "link",
+      "nav",
+      "outline",
+      "solid"
+    ],
+    "tone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  },
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--accent",
+    "--accent-foreground",
+    "--border-strong",
+    "--control-h-lg",
+    "--control-h-md",
+    "--control-h-sm",
+    "--danger-400",
+    "--destructive",
+    "--destructive-foreground",
+    "--duration-fast",
+    "--ease-standard",
+    "--foreground",
+    "--primary",
+    "--primary-foreground",
+    "--primary-hover",
+    "--radius-control",
+    "--radius-md",
+    "--radius-sm",
+    "--secondary",
+    "--secondary-foreground",
+    "--secondary-hover",
+    "--text-base",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "button",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 27/08/2026. Both confirmed: it is a real <button>, and the platform delivers the two keys. The bank needs a handler with an observable effect — a button whose onClick does nothing reads as an inert key in a DOM snapshot, which is a limitation of the method and not of the component."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#IconButton"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. Becomes aria-label: an icon with no text has no accessible name without it."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Carbon glyph, from the contract's allowlist."
+    },
+    {
+      "name": "variant",
+      "type": "ButtonVariant",
+      "default": "ghost",
+      "description": "Same eleven variants as Button. Ghost by default, so a row of them stays quiet."
+    },
+    {
+      "name": "appearance",
+      "type": "solid | outline | ghost | link | nav",
+      "default": "ghost",
+      "description": "Herdado do Button. Quanto peso a caixa tem; o default aqui é ghost."
+    },
+    {
+      "name": "tone",
+      "type": "neutral | brand | danger | success | warning | info",
+      "default": "neutral",
+      "description": "Herdado do Button. O que a cor significa; todas as células existem."
+    },
+    {
+      "name": "size",
+      "type": "xs | sm | md | lg | xl",
+      "default": "md",
+      "description": "Square target: the width follows the same density token as the height."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "description": "Spinner in place of the glyph, aria-busy set, interaction blocked."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "—",
+      "description": "Renders an anchor with the same skin, like Button."
+    },
+    {
+      "name": "leadingIcon",
+      "type": "IconName",
+      "default": "—",
+      "description": "A second glyph before the main one. Rare on an icon button, and it is here because the type is shared with Button."
+    },
+    {
+      "name": "trailingIcon",
+      "type": "IconName",
+      "default": "—",
+      "description": "A glyph after the main one — a chevron on a button that opens a menu, for instance."
+    },
+    {
+      "name": "kbd",
+      "type": "string",
+      "default": "—",
+      "description": "Shows the shortcut inside the button AND announces it with aria-keyshortcuts. Showing it without announcing would be decoration."
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "default": "false",
+      "description": "Fills the width of the container instead of hugging the glyph."
+    },
+    {
+      "name": "grow",
+      "type": "boolean",
+      "default": "false",
+      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow (C-03). `fullWidth` asks for the whole line instead."
+    },
+    {
+      "name": "target",
+      "type": "HTMLAttributeAnchorTarget",
+      "default": "—",
+      "description": "Link attribute, only with `href` (C-13). It always reached the <a> at runtime; now the type accepts it, so target=\"_blank\" compiles."
+    },
+    {
+      "name": "rel",
+      "type": "string",
+      "default": "—",
+      "description": "Link attribute, only with `href` (C-13)."
+    },
+    {
+      "name": "download",
+      "type": "boolean | string",
+      "default": "—",
+      "description": "Link attribute, only with `href` (C-13)."
+    }
+  ]
+}

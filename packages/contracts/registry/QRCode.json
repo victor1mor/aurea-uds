@@ -1,0 +1,78 @@
+{
+  "name": "QRCode",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Scannable QR code rendered as a styled SVG with Aurea soft geometry.",
+  "icon": "grid",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {"size": "visual"},
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--border",
+    "--qr-module",
+    "--qr-quiet",
+    "--qr-size",
+    "--radius-card",
+    "--space-3"
+  ],
+  "a11y": {
+    "role": "img",
+    "apg": "No APG pattern: a QR code is an image. It carries role=\"img\", an aria-label and a <title>, because a scannable square is worth nothing to someone who cannot point a camera at it — always also offer the value it encodes as text or as a link nearby. The dark core is fixed and does not follow the theme: inverting it in dark mode breaks decoding on some readers.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "qr",
+    "icons": []
+  },
+  "related": {
+    "components": [],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/qrcode.tsx#QRCode"
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. What the code encodes. It is also what the default accessible name reads out, so a reader that cannot scan still gets the payload."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg",
+      "default": "md",
+      "description": "7.5rem, 10rem or 15rem, quiet zone included (the box is border-box). A free number is deliberately gone — it forced raw pixels on you. For an odd size, such as print, override --qr-size in CSS. PICK BY SCANNING, NOT BY LAYOUT: what decides is how many pixels each module gets, and below roughly 4 an ordinary phone camera starts to miss it. Measured on a short URL (33 modules across, quiet zone included): sm gives 2.85 px per module, md 4.06, lg 6.48 — sm is already under the line, and a longer payload makes every one of them worse, because more data means more modules in the same box."
+    },
+    {
+      "name": "ecc",
+      "type": "low | medium | quartile | high",
+      "default": "quartile",
+      "description": "Error correction. Higher than the usual default on purpose: round dots cover less area than squares, so more correction is what keeps this skin scannable."
+    },
+    {
+      "name": "quietZone",
+      "type": "number",
+      "default": "4",
+      "description": "Blank border in modules, not pixels — it is part of the matrix, not of the layout. Four is the specified minimum; below it, scanners start failing."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"QR code: {value}\"",
+      "description": "Accessible name. Replace the default when the value is a long opaque token and the purpose is what matters — \"Ticket for row 12\", not the token."
+    }
+  ]
+}

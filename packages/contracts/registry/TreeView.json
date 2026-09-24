@@ -1,0 +1,93 @@
+{
+  "name": "TreeView",
+  "category": "Navigation",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Hierarchical, expandable tree of items.",
+  "icon": "tree-view",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "expanded",
+    "selected",
+    "focus"
+  ],
+  "tokens": [
+    "--control-h-md",
+    "--duration-fast",
+    "--focus-strong",
+    "--foreground",
+    "--muted-foreground",
+    "--primary",
+    "--radius-sm",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--surface-3"
+  ],
+  "a11y": {
+    "role": "tree",
+    "apg": "tree view",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowRight",
+      "ArrowLeft",
+      "Home",
+      "End",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 27/08/2026. Home, End, Enter and Space were delivered by the component and NOT declared — the same direction as G-A11Y-04. The measurement is per starting position: the component keeps the active item in its own state, so the probe prepares with one ArrowDown (the component's own flow) instead of focusing a DOM node, or the arrows appear inert. ArrowRight was confirmed from the first item, where a node with children exists."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "DataList"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#TreeView"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "TreeNode[]",
+      "default": "—",
+      "description": "The tree: {id, label, icon?, children?}. Nesting is by containment — the group lives inside its treeitem, with no aria-owns to keep in sync."
+    },
+    {
+      "name": "defaultExpandedIds",
+      "type": "string[]",
+      "default": "—",
+      "description": "Which nodes start open. Only the initial value: after that the tree owns its own expansion."
+    },
+    {
+      "name": "onSelect",
+      "type": "(node: TreeNode) => void",
+      "default": "—",
+      "description": "The whole node, not just the id — you rarely want only the id."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Tree\"",
+      "description": "Accessible name of the root."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the root <ul>, which is the element with role=\"tree\"."
+    }
+  ]
+}

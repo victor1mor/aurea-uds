@@ -1,0 +1,100 @@
+{
+  "name": "Collapsible",
+  "category": "Disclosure",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "One section that opens and closes, with the open state owned by the app.",
+  "icon": "chevron--down",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "open",
+    "closed",
+    "disabled",
+    "hover",
+    "focus-visible"
+  ],
+  "tokens": [
+    "--control-h-sm",
+    "--duration-fast",
+    "--ease-standard",
+    "--foreground",
+    "--primary",
+    "--space-2",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "disclosure",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/collapsible",
+    "icons": [
+      "chevron--down"
+    ]
+  },
+  "related": {
+    "components": [
+      "Accordion",
+      "Sidebar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/disclosure.tsx#Collapsible"
+  },
+  "props": [
+    {
+      "name": "trigger",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What you click to open and close. It becomes the button, and the chevron is added in front of it."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The panel's content. It stays in the DOM when closed, so in-page search still finds it."
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled open state."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "default": "false",
+      "description": "Starts open without controlling it. Do not switch this after mount on an uncontrolled Collapsible — the engine warns about it in as many words."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "default": "—",
+      "description": "Fires with the new state, from the trigger or from the keyboard."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "The trigger stays focusable and inert, so keyboard users still find out the section exists."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ]
+}

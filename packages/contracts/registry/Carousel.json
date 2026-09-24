@@ -1,0 +1,83 @@
+{
+  "name": "Carousel",
+  "category": "Media",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Slides that snap, with arrows and dots. The scroll container is the engine.",
+  "icon": "image",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "current",
+    "disabled"
+  ],
+  "tokens": [
+    "--border",
+    "--primary",
+    "--radius-card",
+    "--radius-full"
+  ],
+  "a11y": {
+    "role": "region",
+    "apg": "carousel",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: ArrowRight, which scrolls the track and moves aria-current onto the next indicator. There is no onKeyDown in this component and that is the design: the track is a native scroll container with tabIndex 0, so the arrows are the platform's, and what the snapshot can see of them is the indicator that the scroll listener updates. Directly measured the same day: ArrowRight took scrollLeft from 0 to 1228. Declared and not confirmed in this snapshot: ArrowLeft and Home, which from the first slide have nowhere to go, and End. The scroll is smooth, so this bank waits 1200ms instead of 120ms — with the default wait all four arrows read as inert on a component that answers them. Absence of an observable change does not prove absence of effect: a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": [
+      "chevron--left",
+      "chevron--right"
+    ]
+  },
+  "related": {
+    "components": [
+      "MediaPlayer"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/media-client.tsx#Carousel"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "One node per slide. Each child is wrapped in a group with aria-roledescription=\"slide\" and the label \"Slide 3 of 8\", so the count is never the consumer's job to keep in sync."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Carousel",
+      "description": "Accessible name of the region. Give it a real one — \"Product photos\" — because a page with two carousels announces two identical regions otherwise."
+    },
+    {
+      "name": "controls",
+      "type": "boolean",
+      "default": "true",
+      "description": "Previous/next arrows. They disable themselves at each end, measured from the scroll position — not from the slide index, which would be wrong whenever more than one slide fits."
+    },
+    {
+      "name": "indicators",
+      "type": "boolean",
+      "default": "true",
+      "description": "The row of dots. Each is a 24x24 target (WCAG 2.2 AA 2.5.8) with an 8px mark drawn in ::before."
+    },
+    {
+      "name": "--carousel-slide",
+      "type": "CSS custom property",
+      "default": "100%",
+      "description": "How wide a slide is, and therefore how many are visible at once. It is CSS and not a prop because that is a layout decision of the page: set it to 50% for two at a time. Same escape valve as --qr-size and --media-h."
+    }
+  ]
+}

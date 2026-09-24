@@ -1,0 +1,37 @@
+{
+  "name": "useAureaTheme",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Ready",
+  "summary": "Read theme and density straight from the document, and set them — for a host that owns the <html> attributes.",
+  "icon": "light",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "dark",
+    "light"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "Le' o `data-theme`/`data-density` do <html> por `useSyncExternalStore` com MutationObserver, entao acompanha quem mudar o atributo por fora. NAO e' o `useTheme`: aquele le' do provider e serve quem deixa a Aurea guardar a escolha; este serve quem ja' tem o proprio dono do atributo. Os dois convivem desde o merge de 28/08/2026 porque os dois sao publicos — qual usar depende de quem manda no <html>."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/system.tsx#useAureaTheme"
+  }
+}

@@ -1,0 +1,10 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function DiamondOutline({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {strokeWidth: "0", d: "m29.3906,14.5269L17.4731,2.6094c-.406-.4062-.9397-.6094-1.4731-.6094s-1.0671.2031-1.4731.6094L2.6094,14.5269c-.4062.4062-.6094.9395-.6094,1.4731s.2031,1.0669.6094,1.4731l11.9175,11.9175c.406.4062.9397.6094,1.4731.6094s1.0671-.2031,1.4731-.6094l11.9175-11.9175c.4062-.4062.6094-.9395.6094-1.4731s-.2031-1.0669-.6094-1.4731Zm-13.3906,13.5088L3.9646,16,16,3.9644l12.0356,12.0356-12.0356,12.0356Z", fill: color})
+  );
+}

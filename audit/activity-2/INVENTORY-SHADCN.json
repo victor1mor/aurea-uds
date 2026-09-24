@@ -1,0 +1,4703 @@
+{
+  "fonte": "shadcn-ui",
+  "caminho": "Referencia/ui-main",
+  "commit": "4e88ab8",
+  "medidoEm": "2026-08-27",
+  "metodo": "registry.json (manifesto declarado) + leitura dos fontes das três bases",
+  "totais": {
+    "itensNoManifesto": 411,
+    "porTipo": {
+      "registry:style": 2,
+      "registry:ui": 54,
+      "registry:block": 97,
+      "registry:lib": 1,
+      "registry:hook": 1,
+      "registry:theme": 5,
+      "registry:example": 238,
+      "registry:internal": 13
+    },
+    "componentesDistintos": 62,
+    "porMotor": {
+      "aria": 59,
+      "base": 62,
+      "radix": 61
+    },
+    "nosTresMotores": 59,
+    "comCva": 15,
+    "comTamanho": 5,
+    "slotsDistintos": 355,
+    "estadosDistintos": 50
+  },
+  "motores": {
+    "ordem": [
+      "aria",
+      "base",
+      "radix"
+    ],
+    "assimetricos": [
+      {
+        "nome": "menubar",
+        "presenteEm": [
+          "base",
+          "radix"
+        ]
+      },
+      {
+        "nome": "navigation-menu",
+        "presenteEm": [
+          "base",
+          "radix"
+        ]
+      },
+      {
+        "nome": "toast",
+        "presenteEm": [
+          "base"
+        ]
+      }
+    ]
+  },
+  "componentes": [
+    {
+      "nome": "accordion",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-accordion"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "accordion"
+      ],
+      "subcomponentes": [
+        "Accordion",
+        "AccordionContent",
+        "AccordionItem",
+        "AccordionTrigger"
+      ],
+      "slots": [
+        "accordion",
+        "accordion-content",
+        "accordion-item",
+        "accordion-trigger",
+        "accordion-trigger-icon"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "ending-style",
+        "slot",
+        "starting-style"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "ending-style",
+        "starting-style"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 89
+    },
+    {
+      "nome": "alert",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Alert",
+        "AlertAction",
+        "AlertDescription",
+        "AlertTitle"
+      ],
+      "slots": [
+        "alert",
+        "alert-action",
+        "alert-description",
+        "alert-title"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "destructive"
+        ]
+      },
+      "variantes": [
+        "default",
+        "destructive"
+      ],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 73
+    },
+    {
+      "nome": "alert-dialog",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-alert-dialog"
+      ],
+      "dependeDeOutrosItens": [
+        "button"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "alert-dialog"
+      ],
+      "subcomponentes": [
+        "AlertDialog",
+        "AlertDialogAction",
+        "AlertDialogCancel",
+        "AlertDialogContent",
+        "AlertDialogDescription",
+        "AlertDialogFooter",
+        "AlertDialogHeader",
+        "AlertDialogMedia",
+        "AlertDialogOverlay",
+        "AlertDialogPortal",
+        "AlertDialogTitle",
+        "AlertDialogTrigger"
+      ],
+      "slots": [
+        "alert-dialog",
+        "alert-dialog-action",
+        "alert-dialog-cancel",
+        "alert-dialog-content",
+        "alert-dialog-description",
+        "alert-dialog-footer",
+        "alert-dialog-header",
+        "alert-dialog-media",
+        "alert-dialog-overlay",
+        "alert-dialog-portal",
+        "alert-dialog-title",
+        "alert-dialog-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "size"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 176
+    },
+    {
+      "nome": "aspect-ratio",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-aspect-ratio"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "AspectRatio"
+      ],
+      "slots": [
+        "aspect-ratio"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 23
+    },
+    {
+      "nome": "attachment",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Attachment",
+        "AttachmentAction",
+        "AttachmentActions",
+        "AttachmentContent",
+        "AttachmentDescription",
+        "AttachmentGroup",
+        "AttachmentMedia",
+        "AttachmentTitle",
+        "AttachmentTrigger"
+      ],
+      "slots": [
+        "attachment",
+        "attachment-action",
+        "attachment-actions",
+        "attachment-content",
+        "attachment-description",
+        "attachment-group",
+        "attachment-media",
+        "attachment-title"
+      ],
+      "eixos": {
+        "size": [
+          "default",
+          "sm",
+          "xs"
+        ],
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "variantes": [],
+      "tamanhos": [
+        "default",
+        "sm",
+        "xs"
+      ],
+      "outrosEixos": [
+        "orientation"
+      ],
+      "estadosData": [
+        "orientation",
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "size",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "slot",
+        "state"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 210
+    },
+    {
+      "nome": "avatar",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-avatar"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "avatar"
+      ],
+      "subcomponentes": [
+        "Avatar",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "AvatarGroupCount",
+        "AvatarImage"
+      ],
+      "slots": [
+        "avatar",
+        "avatar-badge",
+        "avatar-fallback",
+        "avatar-group",
+        "avatar-group-count",
+        "avatar-image"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "size",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 111
+    },
+    {
+      "nome": "badge",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-slot"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Badge"
+      ],
+      "slots": [],
+      "eixos": {
+        "variant": [
+          "default",
+          "destructive",
+          "ghost",
+          "link",
+          "outline",
+          "secondary"
+        ]
+      },
+      "variantes": [
+        "default",
+        "destructive",
+        "ghost",
+        "link",
+        "outline",
+        "secondary"
+      ],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 49
+    },
+    {
+      "nome": "breadcrumb",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-slot"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Breadcrumb",
+        "BreadcrumbEllipsis",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbList",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator"
+      ],
+      "slots": [
+        "breadcrumb",
+        "breadcrumb-ellipsis",
+        "breadcrumb-item",
+        "breadcrumb-list",
+        "breadcrumb-page",
+        "breadcrumb-separator"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "current",
+        "disabled",
+        "hidden",
+        "label"
+      ],
+      "usaCva": false,
+      "linhas": 138
+    },
+    {
+      "nome": "bubble",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Bubble",
+        "BubbleContent",
+        "BubbleGroup",
+        "BubbleReactions"
+      ],
+      "slots": [
+        "bubble",
+        "bubble-group",
+        "bubble-reactions"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "destructive",
+          "ghost",
+          "muted",
+          "outline",
+          "secondary",
+          "tinted"
+        ]
+      },
+      "variantes": [
+        "default",
+        "destructive",
+        "ghost",
+        "muted",
+        "outline",
+        "secondary",
+        "tinted"
+      ],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "align",
+        "side",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "align",
+        "side",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 122
+    },
+    {
+      "nome": "button",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-slot"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "button"
+      ],
+      "subcomponentes": [
+        "Button"
+      ],
+      "slots": [
+        "button"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "destructive",
+          "ghost",
+          "link",
+          "outline",
+          "secondary"
+        ],
+        "size": [
+          "default",
+          "icon",
+          "icon-lg",
+          "icon-sm",
+          "icon-xs",
+          "lg",
+          "sm",
+          "xs"
+        ]
+      },
+      "variantes": [
+        "default",
+        "destructive",
+        "ghost",
+        "link",
+        "outline",
+        "secondary"
+      ],
+      "tamanhos": [
+        "default",
+        "icon",
+        "icon-lg",
+        "icon-sm",
+        "icon-xs",
+        "lg",
+        "sm",
+        "xs"
+      ],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 52
+    },
+    {
+      "nome": "button-group",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [
+        "button",
+        "separator"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "ButtonGroup",
+        "ButtonGroupSeparator",
+        "ButtonGroupText"
+      ],
+      "slots": [
+        "button-group",
+        "button-group-separator"
+      ],
+      "eixos": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [
+        "orientation"
+      ],
+      "estadosData": [
+        "horizontal",
+        "orientation",
+        "slot",
+        "vertical"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "horizontal",
+        "slot",
+        "vertical"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 88
+    },
+    {
+      "nome": "calendar",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "react-day-picker@latest",
+        "date-fns"
+      ],
+      "dependeDeOutrosItens": [
+        "button"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Calendar",
+        "CalendarDayButton"
+      ],
+      "slots": [
+        "calendar"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "day",
+        "focused",
+        "range-end",
+        "range-middle",
+        "range-start",
+        "selected",
+        "selected-single",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "day",
+        "range-end",
+        "range-middle",
+        "range-start",
+        "selected-single",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "focused",
+        "range-end",
+        "range-middle",
+        "range-start",
+        "selected",
+        "selected-single",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 246
+    },
+    {
+      "nome": "card",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Card",
+        "CardAction",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardTitle"
+      ],
+      "slots": [
+        "card",
+        "card-action",
+        "card-content",
+        "card-description",
+        "card-footer",
+        "card-header",
+        "card-title"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 95
+    },
+    {
+      "nome": "carousel",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "embla-carousel-react"
+      ],
+      "dependeDeOutrosItens": [
+        "button"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Carousel",
+        "CarouselContent",
+        "CarouselItem",
+        "CarouselNext",
+        "CarouselPrevious"
+      ],
+      "slots": [
+        "carousel",
+        "carousel-content",
+        "carousel-item",
+        "carousel-next",
+        "carousel-previous"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "roledescription"
+      ],
+      "usaCva": false,
+      "linhas": 257
+    },
+    {
+      "nome": "chart",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "recharts@2.15.4",
+        "lucide-react"
+      ],
+      "dependeDeOutrosItens": [
+        "card"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "ChartContainer",
+        "ChartLegendContent",
+        "ChartTooltipContent"
+      ],
+      "slots": [
+        "chart"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "chart",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "chart",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "chart"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 371
+    },
+    {
+      "nome": "checkbox",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-checkbox"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "checkbox"
+      ],
+      "subcomponentes": [
+        "Checkbox"
+      ],
+      "slots": [
+        "checkbox",
+        "checkbox-indicator"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 35
+    },
+    {
+      "nome": "collapsible",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-collapsible"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "collapsible"
+      ],
+      "subcomponentes": [
+        "Collapsible",
+        "CollapsibleContent",
+        "CollapsibleTrigger"
+      ],
+      "slots": [
+        "collapsible",
+        "collapsible-content",
+        "collapsible-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 22
+    },
+    {
+      "nome": "combobox",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [
+        "raiz"
+      ],
+      "subcomponentes": [
+        "ComboboxChip",
+        "ComboboxChips",
+        "ComboboxChipsInput",
+        "ComboboxClear",
+        "ComboboxCollection",
+        "ComboboxContent",
+        "ComboboxEmpty",
+        "ComboboxGroup",
+        "ComboboxInput",
+        "ComboboxItem",
+        "ComboboxLabel",
+        "ComboboxList",
+        "ComboboxSeparator",
+        "ComboboxTrigger",
+        "ComboboxValue"
+      ],
+      "slots": [
+        "combobox-chip",
+        "combobox-chip-input",
+        "combobox-chip-remove",
+        "combobox-chips",
+        "combobox-clear",
+        "combobox-collection",
+        "combobox-content",
+        "combobox-empty",
+        "combobox-group",
+        "combobox-item",
+        "combobox-label",
+        "combobox-list",
+        "combobox-separator",
+        "combobox-trigger",
+        "combobox-value",
+        "input-group-button"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "chips",
+        "disabled",
+        "pressed",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "chips",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "chips",
+        "disabled",
+        "pressed",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 324
+    },
+    {
+      "nome": "command",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "cmdk"
+      ],
+      "dependeDeOutrosItens": [
+        "dialog"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Command",
+        "CommandDialog",
+        "CommandEmpty",
+        "CommandGroup",
+        "CommandInput",
+        "CommandItem",
+        "CommandList",
+        "CommandSeparator",
+        "CommandShortcut"
+      ],
+      "slots": [
+        "command",
+        "command-empty",
+        "command-group",
+        "command-input",
+        "command-input-wrapper",
+        "command-item",
+        "command-list",
+        "command-separator",
+        "command-shortcut"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "checked",
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "checked",
+        "disabled",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 205
+    },
+    {
+      "nome": "context-menu",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-context-menu"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "context-menu"
+      ],
+      "subcomponentes": [
+        "ContextMenu",
+        "ContextMenuCheckboxItem",
+        "ContextMenuContent",
+        "ContextMenuGroup",
+        "ContextMenuItem",
+        "ContextMenuLabel",
+        "ContextMenuPortal",
+        "ContextMenuRadioGroup",
+        "ContextMenuRadioItem",
+        "ContextMenuSeparator",
+        "ContextMenuShortcut",
+        "ContextMenuSub",
+        "ContextMenuSubContent",
+        "ContextMenuSubTrigger",
+        "ContextMenuTrigger"
+      ],
+      "slots": [
+        "context-menu",
+        "context-menu-checkbox-item",
+        "context-menu-content",
+        "context-menu-group",
+        "context-menu-item",
+        "context-menu-label",
+        "context-menu-portal",
+        "context-menu-radio-group",
+        "context-menu-radio-item",
+        "context-menu-separator",
+        "context-menu-shortcut",
+        "context-menu-sub",
+        "context-menu-sub-content",
+        "context-menu-sub-trigger",
+        "context-menu-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "disabled",
+        "inset",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "inset",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 286
+    },
+    {
+      "nome": "dialog",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-dialog"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "dialog"
+      ],
+      "subcomponentes": [
+        "Dialog",
+        "DialogClose",
+        "DialogContent",
+        "DialogDescription",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogOverlay",
+        "DialogPortal",
+        "DialogTitle",
+        "DialogTrigger"
+      ],
+      "slots": [
+        "dialog",
+        "dialog-close",
+        "dialog-content",
+        "dialog-description",
+        "dialog-footer",
+        "dialog-header",
+        "dialog-overlay",
+        "dialog-portal",
+        "dialog-title",
+        "dialog-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 157
+    },
+    {
+      "nome": "direction",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [
+        "direction-provider"
+      ],
+      "subcomponentes": [],
+      "slots": [],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 7
+    },
+    {
+      "nome": "drawer",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "vaul",
+        "@radix-ui/react-dialog"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "drawer"
+      ],
+      "subcomponentes": [
+        "Drawer",
+        "DrawerClose",
+        "DrawerContent",
+        "DrawerDescription",
+        "DrawerFooter",
+        "DrawerHeader",
+        "DrawerOverlay",
+        "DrawerPortal",
+        "DrawerSwipeHandle",
+        "DrawerTitle",
+        "DrawerTrigger"
+      ],
+      "slots": [
+        "drawer",
+        "drawer-close",
+        "drawer-content",
+        "drawer-description",
+        "drawer-footer",
+        "drawer-header",
+        "drawer-overlay",
+        "drawer-popup",
+        "drawer-portal",
+        "drawer-swipe-handle",
+        "drawer-title",
+        "drawer-trigger",
+        "drawer-viewport"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "ending-style",
+        "modal",
+        "nested-drawer-open",
+        "nested-drawer-swiping",
+        "slot",
+        "snap-points",
+        "starting-style",
+        "swipe-axis",
+        "swipe-direction",
+        "swiping"
+      ],
+      "estadosEmitidos": [
+        "modal",
+        "slot",
+        "snap-points",
+        "swipe-axis"
+      ],
+      "estadosReagidos": [
+        "ending-style",
+        "modal",
+        "nested-drawer-open",
+        "nested-drawer-swiping",
+        "snap-points",
+        "starting-style",
+        "swipe-axis",
+        "swipe-direction",
+        "swiping"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "usaCva": false,
+      "linhas": 229
+    },
+    {
+      "nome": "dropdown-menu",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-dropdown-menu"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "menu"
+      ],
+      "subcomponentes": [
+        "DropdownMenu",
+        "DropdownMenuCheckboxItem",
+        "DropdownMenuContent",
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuLabel",
+        "DropdownMenuPortal",
+        "DropdownMenuRadioGroup",
+        "DropdownMenuRadioItem",
+        "DropdownMenuSeparator",
+        "DropdownMenuShortcut",
+        "DropdownMenuSub",
+        "DropdownMenuSubContent",
+        "DropdownMenuSubTrigger",
+        "DropdownMenuTrigger"
+      ],
+      "slots": [
+        "dropdown-menu",
+        "dropdown-menu-checkbox-item",
+        "dropdown-menu-checkbox-item-indicator",
+        "dropdown-menu-content",
+        "dropdown-menu-group",
+        "dropdown-menu-item",
+        "dropdown-menu-label",
+        "dropdown-menu-portal",
+        "dropdown-menu-radio-group",
+        "dropdown-menu-radio-item",
+        "dropdown-menu-radio-item-indicator",
+        "dropdown-menu-separator",
+        "dropdown-menu-shortcut",
+        "dropdown-menu-sub",
+        "dropdown-menu-sub-content",
+        "dropdown-menu-sub-trigger",
+        "dropdown-menu-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "closed",
+        "disabled",
+        "inset",
+        "popup-open",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "inset",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "closed",
+        "disabled",
+        "popup-open"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 286
+    },
+    {
+      "nome": "empty",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Empty",
+        "EmptyContent",
+        "EmptyDescription",
+        "EmptyHeader",
+        "EmptyMedia",
+        "EmptyTitle"
+      ],
+      "slots": [
+        "empty",
+        "empty-content",
+        "empty-description",
+        "empty-header",
+        "empty-icon",
+        "empty-title"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "icon"
+        ]
+      },
+      "variantes": [
+        "default",
+        "icon"
+      ],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 105
+    },
+    {
+      "nome": "field",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [
+        "label",
+        "separator"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Field",
+        "FieldContent",
+        "FieldDescription",
+        "FieldError",
+        "FieldGroup",
+        "FieldLabel",
+        "FieldLegend",
+        "FieldSeparator",
+        "FieldSet",
+        "FieldTitle"
+      ],
+      "slots": [
+        "field",
+        "field-content",
+        "field-description",
+        "field-error",
+        "field-group",
+        "field-label",
+        "field-legend",
+        "field-separator",
+        "field-separator-content",
+        "field-set"
+      ],
+      "eixos": {
+        "orientation": [
+          "horizontal",
+          "responsive",
+          "vertical"
+        ]
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [
+        "orientation"
+      ],
+      "estadosData": [
+        "content",
+        "orientation",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "content",
+        "orientation",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 225
+    },
+    {
+      "nome": "hover-card",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-hover-card"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "preview-card"
+      ],
+      "subcomponentes": [
+        "HoverCard",
+        "HoverCardContent",
+        "HoverCardTrigger"
+      ],
+      "slots": [
+        "hover-card",
+        "hover-card-content",
+        "hover-card-portal",
+        "hover-card-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 52
+    },
+    {
+      "nome": "input",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "input"
+      ],
+      "subcomponentes": [
+        "Input"
+      ],
+      "slots": [
+        "input"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 21
+    },
+    {
+      "nome": "input-group",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [
+        "button",
+        "input",
+        "textarea"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "InputGroup",
+        "InputGroupAddon",
+        "InputGroupButton",
+        "InputGroupInput",
+        "InputGroupText",
+        "InputGroupTextarea"
+      ],
+      "slots": [
+        "input-group",
+        "input-group-addon",
+        "input-group-control"
+      ],
+      "eixos": {
+        "align": [
+          "block-end",
+          "block-start",
+          "inline-end",
+          "inline-start"
+        ]
+      },
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [
+        "align"
+      ],
+      "estadosData": [
+        "align",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "align",
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 150
+    },
+    {
+      "nome": "input-otp",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "input-otp"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "InputOTP",
+        "InputOTPGroup",
+        "InputOTPSeparator",
+        "InputOTPSlot"
+      ],
+      "slots": [
+        "input-otp",
+        "input-otp-group",
+        "input-otp-separator",
+        "input-otp-slot"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "active",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "active"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 93
+    },
+    {
+      "nome": "item",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [
+        "separator"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Item",
+        "ItemActions",
+        "ItemContent",
+        "ItemDescription",
+        "ItemFooter",
+        "ItemGroup",
+        "ItemHeader",
+        "ItemMedia",
+        "ItemSeparator",
+        "ItemTitle"
+      ],
+      "slots": [
+        "item-actions",
+        "item-content",
+        "item-description",
+        "item-footer",
+        "item-group",
+        "item-header",
+        "item-media",
+        "item-separator",
+        "item-title"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "muted",
+          "outline"
+        ],
+        "size": [
+          "default",
+          "sm",
+          "xs"
+        ]
+      },
+      "variantes": [
+        "default",
+        "muted",
+        "outline"
+      ],
+      "tamanhos": [
+        "default",
+        "sm",
+        "xs"
+      ],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 201
+    },
+    {
+      "nome": "kbd",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Kbd",
+        "KbdGroup"
+      ],
+      "slots": [
+        "kbd",
+        "kbd-group"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 27
+    },
+    {
+      "nome": "label",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-label"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Label"
+      ],
+      "slots": [
+        "label"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "disabled",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 21
+    },
+    {
+      "nome": "marker",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Marker",
+        "MarkerContent",
+        "MarkerIcon"
+      ],
+      "slots": [
+        "marker-content",
+        "marker-icon"
+      ],
+      "eixos": {
+        "variant": [
+          "border",
+          "default",
+          "separator"
+        ]
+      },
+      "variantes": [
+        "border",
+        "default",
+        "separator"
+      ],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "usaCva": true,
+      "linhas": 65
+    },
+    {
+      "nome": "menubar",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-menubar"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "menu",
+        "menubar"
+      ],
+      "subcomponentes": [
+        "Menubar",
+        "MenubarCheckboxItem",
+        "MenubarContent",
+        "MenubarGroup",
+        "MenubarItem",
+        "MenubarLabel",
+        "MenubarMenu",
+        "MenubarPortal",
+        "MenubarRadioGroup",
+        "MenubarRadioItem",
+        "MenubarSeparator",
+        "MenubarShortcut",
+        "MenubarSub",
+        "MenubarSubContent",
+        "MenubarSubTrigger",
+        "MenubarTrigger"
+      ],
+      "slots": [
+        "menubar",
+        "menubar-checkbox-item",
+        "menubar-content",
+        "menubar-group",
+        "menubar-item",
+        "menubar-label",
+        "menubar-menu",
+        "menubar-portal",
+        "menubar-radio-group",
+        "menubar-radio-item",
+        "menubar-separator",
+        "menubar-shortcut",
+        "menubar-sub",
+        "menubar-sub-content",
+        "menubar-sub-trigger",
+        "menubar-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "disabled",
+        "inset",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "inset",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 282
+    },
+    {
+      "nome": "message",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Message",
+        "MessageAvatar",
+        "MessageContent",
+        "MessageFooter",
+        "MessageGroup",
+        "MessageHeader"
+      ],
+      "slots": [
+        "message",
+        "message-avatar",
+        "message-content",
+        "message-footer",
+        "message-group",
+        "message-header"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "align",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "align",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "align"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 93
+    },
+    {
+      "nome": "message-scroller",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "MessageScroller",
+        "MessageScrollerButton",
+        "MessageScrollerContent",
+        "MessageScrollerItem",
+        "MessageScrollerProvider",
+        "MessageScrollerViewport"
+      ],
+      "slots": [
+        "message-scroller",
+        "message-scroller-button",
+        "message-scroller-content",
+        "message-scroller-item",
+        "message-scroller-viewport"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "active",
+        "autoscrolling",
+        "direction",
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "direction",
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "active",
+        "autoscrolling",
+        "direction"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 140
+    },
+    {
+      "nome": "native-select",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "NativeSelect",
+        "NativeSelectOptGroup",
+        "NativeSelectOption"
+      ],
+      "slots": [
+        "native-select",
+        "native-select-icon",
+        "native-select-optgroup",
+        "native-select-option",
+        "native-select-wrapper"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "usaCva": false,
+      "linhas": 71
+    },
+    {
+      "nome": "navigation-menu",
+      "motores": [
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-navigation-menu"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "navigation-menu"
+      ],
+      "subcomponentes": [
+        "NavigationMenu",
+        "NavigationMenuContent",
+        "NavigationMenuIndicator",
+        "NavigationMenuItem",
+        "NavigationMenuLink",
+        "NavigationMenuList",
+        "NavigationMenuPositioner",
+        "NavigationMenuTrigger"
+      ],
+      "slots": [
+        "navigation-menu",
+        "navigation-menu-content",
+        "navigation-menu-indicator",
+        "navigation-menu-item",
+        "navigation-menu-link",
+        "navigation-menu-list",
+        "navigation-menu-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "activation-direction",
+        "ending-style",
+        "instant",
+        "slot",
+        "starting-style"
+      ],
+      "estadosEmitidos": [
+        "activation-direction",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "ending-style",
+        "instant",
+        "slot",
+        "starting-style"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "usaCva": true,
+      "linhas": 174
+    },
+    {
+      "nome": "pagination",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [
+        "button"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Pagination",
+        "PaginationContent",
+        "PaginationEllipsis",
+        "PaginationItem",
+        "PaginationLink",
+        "PaginationNext",
+        "PaginationPrevious"
+      ],
+      "slots": [
+        "pagination",
+        "pagination-content",
+        "pagination-ellipsis",
+        "pagination-item",
+        "pagination-link"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "active",
+        "icon",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "active",
+        "icon",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "current",
+        "label"
+      ],
+      "usaCva": false,
+      "linhas": 157
+    },
+    {
+      "nome": "popover",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-popover"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "popover"
+      ],
+      "subcomponentes": [
+        "Popover",
+        "PopoverContent",
+        "PopoverDescription",
+        "PopoverHeader",
+        "PopoverTitle",
+        "PopoverTrigger"
+      ],
+      "slots": [
+        "popover",
+        "popover-content",
+        "popover-description",
+        "popover-header",
+        "popover-title",
+        "popover-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 91
+    },
+    {
+      "nome": "progress",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-progress"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "progress"
+      ],
+      "subcomponentes": [
+        "Progress",
+        "ProgressIndicator",
+        "ProgressLabel",
+        "ProgressTrack",
+        "ProgressValue"
+      ],
+      "slots": [
+        "progress",
+        "progress-indicator",
+        "progress-label",
+        "progress-track",
+        "progress-value"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 81
+    },
+    {
+      "nome": "questionnaire",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Questionnaire",
+        "QuestionnaireActions",
+        "QuestionnaireChoice",
+        "QuestionnaireChoiceDescription",
+        "QuestionnaireChoices",
+        "QuestionnaireDescription",
+        "QuestionnaireError",
+        "QuestionnaireInput",
+        "QuestionnaireItem",
+        "QuestionnaireNext",
+        "QuestionnairePrevious",
+        "QuestionnaireProgress",
+        "QuestionnaireSkip",
+        "QuestionnaireSubmit",
+        "QuestionnaireTitle"
+      ],
+      "slots": [
+        "questionnaire",
+        "questionnaire-actions",
+        "questionnaire-choice",
+        "questionnaire-choice-description",
+        "questionnaire-choice-indicator",
+        "questionnaire-choice-indicator-check",
+        "questionnaire-choice-indicator-dot",
+        "questionnaire-choice-input",
+        "questionnaire-choice-label",
+        "questionnaire-choice-shortcut",
+        "questionnaire-choices",
+        "questionnaire-description",
+        "questionnaire-error",
+        "questionnaire-input",
+        "questionnaire-input-wrapper",
+        "questionnaire-item",
+        "questionnaire-next",
+        "questionnaire-previous",
+        "questionnaire-progress",
+        "questionnaire-skip",
+        "questionnaire-submit",
+        "questionnaire-title"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "disabled",
+        "shortcut",
+        "size",
+        "slot",
+        "type",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "shortcut",
+        "type"
+      ],
+      "ariaEmitidos": [
+        "hidden"
+      ],
+      "usaCva": false,
+      "linhas": 336
+    },
+    {
+      "nome": "radio-group",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-radio-group"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "radio",
+        "radio-group"
+      ],
+      "subcomponentes": [
+        "RadioGroup",
+        "RadioGroupItem"
+      ],
+      "slots": [
+        "radio-group",
+        "radio-group-indicator",
+        "radio-group-item"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 39
+    },
+    {
+      "nome": "resizable",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "react-resizable-panels"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "ResizableHandle",
+        "ResizablePanel",
+        "ResizablePanelGroup"
+      ],
+      "slots": [
+        "resizable-handle",
+        "resizable-panel",
+        "resizable-panel-group"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "orientation"
+      ],
+      "usaCva": false,
+      "linhas": 51
+    },
+    {
+      "nome": "scroll-area",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-scroll-area"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "scroll-area"
+      ],
+      "subcomponentes": [
+        "ScrollArea",
+        "ScrollBar"
+      ],
+      "slots": [
+        "scroll-area",
+        "scroll-area-scrollbar",
+        "scroll-area-thumb",
+        "scroll-area-viewport"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "orientation",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 56
+    },
+    {
+      "nome": "select",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-select"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "select"
+      ],
+      "subcomponentes": [
+        "SelectContent",
+        "SelectGroup",
+        "SelectItem",
+        "SelectLabel",
+        "SelectScrollDownButton",
+        "SelectScrollUpButton",
+        "SelectSeparator",
+        "SelectTrigger",
+        "SelectValue"
+      ],
+      "slots": [
+        "select-content",
+        "select-group",
+        "select-item",
+        "select-label",
+        "select-scroll-down-button",
+        "select-scroll-up-button",
+        "select-separator",
+        "select-trigger",
+        "select-value"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "align-trigger",
+        "disabled",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "align-trigger",
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "align-trigger",
+        "disabled",
+        "slot"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 221
+    },
+    {
+      "nome": "separator",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-separator"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "separator"
+      ],
+      "subcomponentes": [
+        "Separator"
+      ],
+      "slots": [
+        "separator"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "horizontal",
+        "slot",
+        "vertical"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "horizontal",
+        "vertical"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 26
+    },
+    {
+      "nome": "sheet",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-dialog"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "dialog"
+      ],
+      "subcomponentes": [
+        "Sheet",
+        "SheetClose",
+        "SheetContent",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetOverlay",
+        "SheetPortal",
+        "SheetTitle",
+        "SheetTrigger"
+      ],
+      "slots": [
+        "sheet",
+        "sheet-close",
+        "sheet-content",
+        "sheet-description",
+        "sheet-footer",
+        "sheet-header",
+        "sheet-overlay",
+        "sheet-portal",
+        "sheet-title",
+        "sheet-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "ending-style",
+        "side",
+        "slot",
+        "starting-style"
+      ],
+      "estadosEmitidos": [
+        "side",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "ending-style",
+        "side",
+        "starting-style"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 141
+    },
+    {
+      "nome": "sidebar",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "dependeDeOutrosItens": [
+        "button",
+        "separator",
+        "sheet",
+        "tooltip",
+        "input",
+        "use-mobile",
+        "skeleton"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "merge-props",
+        "use-render"
+      ],
+      "subcomponentes": [
+        "Sidebar",
+        "SidebarContent",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarHeader",
+        "SidebarInput",
+        "SidebarInset",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubItem",
+        "SidebarProvider",
+        "SidebarRail",
+        "SidebarSeparator",
+        "SidebarTrigger"
+      ],
+      "slots": [
+        "sidebar",
+        "sidebar-container",
+        "sidebar-content",
+        "sidebar-footer",
+        "sidebar-gap",
+        "sidebar-group",
+        "sidebar-group-content",
+        "sidebar-header",
+        "sidebar-inner",
+        "sidebar-input",
+        "sidebar-inset",
+        "sidebar-menu",
+        "sidebar-menu-badge",
+        "sidebar-menu-item",
+        "sidebar-menu-skeleton",
+        "sidebar-menu-sub",
+        "sidebar-menu-sub-item",
+        "sidebar-rail",
+        "sidebar-separator",
+        "sidebar-trigger",
+        "sidebar-wrapper"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "outline"
+        ],
+        "size": [
+          "default",
+          "lg",
+          "sm"
+        ]
+      },
+      "variantes": [
+        "default",
+        "outline"
+      ],
+      "tamanhos": [
+        "default",
+        "lg",
+        "sm"
+      ],
+      "outrosEixos": [],
+      "estadosData": [
+        "collapsible",
+        "mobile",
+        "side",
+        "sidebar",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "collapsible",
+        "mobile",
+        "side",
+        "sidebar",
+        "slot",
+        "state",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "collapsible",
+        "side",
+        "state",
+        "variant"
+      ],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "usaCva": true,
+      "linhas": 730
+    },
+    {
+      "nome": "skeleton",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Skeleton"
+      ],
+      "slots": [
+        "skeleton"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 14
+    },
+    {
+      "nome": "slider",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-slider"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "slider"
+      ],
+      "subcomponentes": [
+        "Slider"
+      ],
+      "slots": [
+        "slider",
+        "slider-range",
+        "slider-thumb",
+        "slider-track"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "disabled",
+        "horizontal",
+        "slot",
+        "vertical"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled",
+        "horizontal",
+        "vertical"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 53
+    },
+    {
+      "nome": "sonner",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "sonner",
+        "next-themes"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [],
+      "slots": [],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [],
+      "estadosEmitidos": [],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 86
+    },
+    {
+      "nome": "spinner",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "class-variance-authority"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Spinner"
+      ],
+      "slots": [
+        "spinner"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [
+        "label"
+      ],
+      "usaCva": false,
+      "linhas": 22
+    },
+    {
+      "nome": "switch",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-switch"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "switch"
+      ],
+      "subcomponentes": [
+        "Switch"
+      ],
+      "slots": [
+        "switch",
+        "switch-thumb"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "disabled",
+        "size",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "size",
+        "slot"
+      ],
+      "estadosReagidos": [
+        "disabled"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 33
+    },
+    {
+      "nome": "table",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Table",
+        "TableBody",
+        "TableCaption",
+        "TableCell",
+        "TableFooter",
+        "TableHead",
+        "TableHeader",
+        "TableRow"
+      ],
+      "slots": [
+        "table",
+        "table-body",
+        "table-caption",
+        "table-cell",
+        "table-container",
+        "table-footer",
+        "table-head",
+        "table-header",
+        "table-row"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 102
+    },
+    {
+      "nome": "tabs",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-tabs"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "tabs"
+      ],
+      "subcomponentes": [
+        "Tabs",
+        "TabsContent",
+        "TabsList",
+        "TabsTrigger"
+      ],
+      "slots": [
+        "tabs",
+        "tabs-content",
+        "tabs-list",
+        "tabs-trigger"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "line"
+        ]
+      },
+      "variantes": [
+        "default",
+        "line"
+      ],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "active",
+        "horizontal",
+        "orientation",
+        "slot",
+        "variant"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "slot",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "active",
+        "horizontal",
+        "variant"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 83
+    },
+    {
+      "nome": "textarea",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [],
+      "subcomponentes": [
+        "Textarea"
+      ],
+      "slots": [
+        "textarea"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 19
+    },
+    {
+      "nome": "toast",
+      "motores": [
+        "base"
+      ],
+      "exclusivoDe": "base",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": false,
+      "dependencias": [],
+      "dependeDeOutrosItens": [],
+      "arquivos": 0,
+      "primitivesDoMotor": [
+        "toast"
+      ],
+      "subcomponentes": [
+        "Toast",
+        "ToastAction",
+        "ToastClose",
+        "ToastContent",
+        "ToastDescription",
+        "ToastIcon",
+        "ToastList",
+        "ToastPortal",
+        "ToastProvider",
+        "ToastTitle",
+        "ToastViewport",
+        "Toaster"
+      ],
+      "slots": [
+        "toast",
+        "toast-action",
+        "toast-close",
+        "toast-content",
+        "toast-description",
+        "toast-icon",
+        "toast-portal",
+        "toast-title",
+        "toast-viewport"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "behind",
+        "ending-style",
+        "expanded",
+        "limited",
+        "slot",
+        "starting-style",
+        "swipe-direction"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "behind",
+        "ending-style",
+        "expanded",
+        "limited",
+        "starting-style",
+        "swipe-direction"
+      ],
+      "ariaEmitidos": [
+        "hidden",
+        "label"
+      ],
+      "usaCva": false,
+      "linhas": 279
+    },
+    {
+      "nome": "toggle",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-toggle"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "toggle"
+      ],
+      "subcomponentes": [
+        "Toggle"
+      ],
+      "slots": [
+        "toggle"
+      ],
+      "eixos": {
+        "variant": [
+          "default",
+          "outline"
+        ],
+        "size": [
+          "default",
+          "lg",
+          "sm"
+        ]
+      },
+      "variantes": [
+        "default",
+        "outline"
+      ],
+      "tamanhos": [
+        "default",
+        "lg",
+        "sm"
+      ],
+      "outrosEixos": [],
+      "estadosData": [
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [],
+      "ariaEmitidos": [],
+      "usaCva": true,
+      "linhas": 45
+    },
+    {
+      "nome": "toggle-group",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-toggle-group"
+      ],
+      "dependeDeOutrosItens": [
+        "toggle"
+      ],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "toggle",
+        "toggle-group"
+      ],
+      "subcomponentes": [
+        "ToggleGroup",
+        "ToggleGroupItem"
+      ],
+      "slots": [
+        "toggle-group",
+        "toggle-group-item"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "orientation",
+        "size",
+        "slot",
+        "spacing",
+        "variant",
+        "vertical"
+      ],
+      "estadosEmitidos": [
+        "orientation",
+        "size",
+        "slot",
+        "spacing",
+        "variant"
+      ],
+      "estadosReagidos": [
+        "spacing",
+        "variant",
+        "vertical"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 90
+    },
+    {
+      "nome": "tooltip",
+      "motores": [
+        "aria",
+        "base",
+        "radix"
+      ],
+      "exclusivoDe": "N/A",
+      "medidoEm": "base",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "noManifesto": true,
+      "dependencias": [
+        "@radix-ui/react-tooltip"
+      ],
+      "dependeDeOutrosItens": [],
+      "arquivos": 1,
+      "primitivesDoMotor": [
+        "tooltip"
+      ],
+      "subcomponentes": [
+        "Tooltip",
+        "TooltipContent",
+        "TooltipProvider",
+        "TooltipTrigger"
+      ],
+      "slots": [
+        "tooltip",
+        "tooltip-content",
+        "tooltip-provider",
+        "tooltip-trigger"
+      ],
+      "eixos": {},
+      "variantes": [],
+      "tamanhos": [],
+      "outrosEixos": [],
+      "estadosData": [
+        "side",
+        "slot"
+      ],
+      "estadosEmitidos": [
+        "slot"
+      ],
+      "estadosReagidos": [
+        "side"
+      ],
+      "ariaEmitidos": [],
+      "usaCva": false,
+      "linhas": 67
+    }
+  ],
+  "blocos": [
+    {
+      "nome": "dashboard-01",
+      "titulo": "N/A",
+      "descricao": "A dashboard with sidebar, charts and data table.",
+      "arquivos": 11,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "label",
+        "chart",
+        "card",
+        "select",
+        "tabs",
+        "table",
+        "toggle-group",
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "drawer",
+        "input",
+        "avatar",
+        "sheet",
+        "sonner"
+      ]
+    },
+    {
+      "nome": "sidebar-01",
+      "titulo": "N/A",
+      "descricao": "A simple sidebar with navigation grouped by section.",
+      "arquivos": 4,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "label",
+        "dropdown-menu"
+      ]
+    },
+    {
+      "nome": "sidebar-02",
+      "titulo": "N/A",
+      "descricao": "A sidebar with collapsible sections.",
+      "arquivos": 4,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "label",
+        "dropdown-menu"
+      ]
+    },
+    {
+      "nome": "sidebar-03",
+      "titulo": "N/A",
+      "descricao": "A sidebar with submenus.",
+      "arquivos": 2,
+      "compoe": [
+        "sidebar",
+        "breadcrumb"
+      ]
+    },
+    {
+      "nome": "sidebar-04",
+      "titulo": "N/A",
+      "descricao": "A floating sidebar with submenus.",
+      "arquivos": 2,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator"
+      ]
+    },
+    {
+      "nome": "sidebar-05",
+      "titulo": "N/A",
+      "descricao": "A sidebar with collapsible submenus.",
+      "arquivos": 3,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "label",
+        "collapsible"
+      ]
+    },
+    {
+      "nome": "sidebar-06",
+      "titulo": "N/A",
+      "descricao": "A sidebar with submenus as dropdowns.",
+      "arquivos": 4,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "card",
+        "dropdown-menu"
+      ]
+    },
+    {
+      "nome": "sidebar-07",
+      "titulo": "N/A",
+      "descricao": "A sidebar that collapses to icons.",
+      "arquivos": 6,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "collapsible",
+        "dropdown-menu",
+        "avatar"
+      ]
+    },
+    {
+      "nome": "sidebar-08",
+      "titulo": "N/A",
+      "descricao": "An inset sidebar with secondary navigation.",
+      "arquivos": 6,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "collapsible",
+        "dropdown-menu",
+        "avatar"
+      ]
+    },
+    {
+      "nome": "sidebar-09",
+      "titulo": "N/A",
+      "descricao": "Collapsible nested sidebars.",
+      "arquivos": 3,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "collapsible",
+        "dropdown-menu",
+        "avatar",
+        "switch",
+        "label"
+      ]
+    },
+    {
+      "nome": "sidebar-10",
+      "titulo": "N/A",
+      "descricao": "A sidebar in a popover.",
+      "arquivos": 8,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "popover",
+        "collapsible",
+        "dropdown-menu"
+      ]
+    },
+    {
+      "nome": "sidebar-11",
+      "titulo": "N/A",
+      "descricao": "A sidebar with a collapsible file tree.",
+      "arquivos": 2,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "collapsible"
+      ]
+    },
+    {
+      "nome": "sidebar-12",
+      "titulo": "N/A",
+      "descricao": "A sidebar with a calendar.",
+      "arquivos": 5,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "collapsible",
+        "calendar",
+        "dropdown-menu",
+        "avatar"
+      ]
+    },
+    {
+      "nome": "sidebar-13",
+      "titulo": "N/A",
+      "descricao": "A sidebar in a dialog.",
+      "arquivos": 2,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "button",
+        "dialog"
+      ]
+    },
+    {
+      "nome": "sidebar-14",
+      "titulo": "N/A",
+      "descricao": "A sidebar on the right.",
+      "arquivos": 2,
+      "compoe": [
+        "sidebar",
+        "breadcrumb"
+      ]
+    },
+    {
+      "nome": "sidebar-15",
+      "titulo": "N/A",
+      "descricao": "A left and right sidebar.",
+      "arquivos": 11,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "popover",
+        "collapsible",
+        "dropdown-menu",
+        "calendar",
+        "avatar"
+      ]
+    },
+    {
+      "nome": "sidebar-16",
+      "titulo": "N/A",
+      "descricao": "A sidebar with a sticky site header.",
+      "arquivos": 8,
+      "compoe": [
+        "sidebar",
+        "breadcrumb",
+        "separator",
+        "collapsible",
+        "dropdown-menu",
+        "avatar",
+        "button",
+        "label"
+      ]
+    },
+    {
+      "nome": "login-01",
+      "titulo": "N/A",
+      "descricao": "A simple login form.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "login-02",
+      "titulo": "N/A",
+      "descricao": "A two column login page with a cover image.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "login-03",
+      "titulo": "N/A",
+      "descricao": "A login page with a muted background color.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "login-04",
+      "titulo": "N/A",
+      "descricao": "A login page with form and image.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "login-05",
+      "titulo": "N/A",
+      "descricao": "A simple email-only login page.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "signup-01",
+      "titulo": "N/A",
+      "descricao": "A simple signup form.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "card",
+        "input",
+        "label"
+      ]
+    },
+    {
+      "nome": "signup-02",
+      "titulo": "N/A",
+      "descricao": "A two column signup page with a cover image.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "signup-03",
+      "titulo": "N/A",
+      "descricao": "A signup page with a muted background color.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "signup-04",
+      "titulo": "N/A",
+      "descricao": "A signup page with form and image.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "field"
+      ]
+    },
+    {
+      "nome": "signup-05",
+      "titulo": "N/A",
+      "descricao": "A simple signup form with social providers.",
+      "arquivos": 2,
+      "compoe": [
+        "button",
+        "input",
+        "label"
+      ]
+    },
+    {
+      "nome": "chart-area-axes",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-default",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-gradient",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-icons",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-interactive",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart",
+        "select"
+      ]
+    },
+    {
+      "nome": "chart-area-legend",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-linear",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-stacked-expand",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-stacked",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-area-step",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-active",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-default",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-horizontal",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-interactive",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-label-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-label",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-mixed",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-multiple",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-negative",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-bar-stacked",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-default",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-dots-colors",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-dots-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-dots",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-interactive",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-label-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-label",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-linear",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-multiple",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-line-step",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-donut-active",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-donut-text",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-donut",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-interactive",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-label-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-label-list",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-label",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-legend",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-separator-none",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-simple",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-pie-stacked",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-default",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-dots",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-grid-circle-fill",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-grid-circle-no-lines",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-grid-circle",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-grid-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-grid-fill",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-grid-none",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-icons",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-label-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-legend",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-lines-only",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-multiple",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radar-radius",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radial-grid",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radial-label",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radial-shape",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radial-simple",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radial-stacked",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-radial-text",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-default",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-indicator-line",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-indicator-none",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-label-none",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-label-custom",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-label-formatter",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-formatter",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-icons",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    },
+    {
+      "nome": "chart-tooltip-advanced",
+      "titulo": "N/A",
+      "descricao": "N/A",
+      "arquivos": 1,
+      "compoe": [
+        "card",
+        "chart"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "name": "ConfirmDialog",
+  "category": "Overlays",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Alert dialog for a decision that cannot be taken back.",
+  "icon": "warning",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "sizes": [],
+  "states": [
+    "closed",
+    "open"
+  ],
+  "tokens": [
+    "--border",
+    "--overlay",
+    "--popover",
+    "--popover-foreground",
+    "--radius-card",
+    "--shadow-lg",
+    "--space-2",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "alertdialog",
+    "apg": "alertdialog",
+    "keyboard": [
+      "Tab",
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Dialog",
+      "Drawer"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#ConfirmDialog"
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "REQUIRED. You own the state, as in Dialog and Drawer."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. The question, in the words of the thing at stake — \"Delete this article?\", not \"Are you sure?\"."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED, and it is a prop rather than children because it is the node behind aria-describedby: only what goes through it gets announced. Say what is lost and whether it comes back."
+    },
+    {
+      "name": "confirmLabel",
+      "type": "string",
+      "default": "\"Continue\"",
+      "description": "Name the action, not the agreement: \"Delete\" tells the reader what the button does; \"OK\" makes them remember the title."
+    },
+    {
+      "name": "cancelLabel",
+      "type": "string",
+      "default": "\"Cancel\"",
+      "description": "The way out. It is the focused control when the dialog opens."
+    },
+    {
+      "name": "destructive",
+      "type": "boolean",
+      "default": "false",
+      "description": "Turns the confirm button danger. Use it when the action destroys data — not for merely important ones, or the colour stops meaning anything."
+    },
+    {
+      "name": "onConfirm",
+      "type": "() => void",
+      "default": "—",
+      "description": "REQUIRED. Fires only on the confirm button. Nothing else in this dialog can reach it."
+    },
+    {
+      "name": "onCancel",
+      "type": "() => void",
+      "default": "—",
+      "description": "REQUIRED. Fires on the cancel button and on Escape. A click outside does NOT close this dialog — that is the difference from Dialog, and it is why an accidental click cannot answer for the user."
+    }
+  ],
+  "variants": []
+}

@@ -1,0 +1,82 @@
+{
+  "name": "Topbar",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Floating full-width top panel: brand lockup plus search, actions and account.",
+  "icon": "menu",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "floating",
+    "flush",
+    "pill"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "wrapped"
+  ],
+  "tokens": [
+    "--background",
+    "--border",
+    "--card",
+    "--card-foreground",
+    "--radius-card",
+    "--radius-control",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-5",
+    "--space-8",
+    "--topbar-height",
+    "--z-sticky"
+  ],
+  "a11y": {
+    "role": "banner",
+    "apg": "No APG pattern: a banner is a landmark, not a widget. The role comes from the <header> element, so it is a banner only while it is not nested inside another sectioning element — which is how the AppShell places it. Keyboard behaviour belongs to what you put inside. The drawer toggle the shell injects is a button with popovertarget, and the browser is what supplies its aria-expanded.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AppShell",
+      "Sidebar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Topbar"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "floating | flush | pill",
+      "default": "floating",
+      "description": "The skin. floating is a detached card; flush merges into the background so the bar frames the window; pill is a centred capsule for a site header — not for a shell, because search plus density plus theme plus command do not fit in a capsule."
+    },
+    {
+      "name": "brand",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The lockup. It lives here and not in the sidebar: the top crosses the full width and the side panel starts below it. Inside a shell this is also where the drawer toggle sits, injected before what you pass."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Everything beside the brand: sections, search, actions, account. Presentational — the bar never decides what collapses. It wraps by content, so text at 200% breaks it to a second line instead of overflowing; hide what is secondary with hide-below-md/lg."
+    },
+    {
+      "name": "divider",
+      "type": "boolean",
+      "default": "false",
+      "description": "Only on `flush` (B-07): a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends."
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "EventStream",
+  "summary": "What happened, in order, live.",
+  "icon": "activity",
+  "states": [
+    "info",
+    "success",
+    "warning",
+    "danger",
+    "following"
+  ],
+  "tokens": [
+    "--danger-400",
+    "--font-code",
+    "--muted-foreground",
+    "--radius-full",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground",
+    "--success-400",
+    "--text-xs",
+    "--tracking-wider",
+    "--warning-400"
+  ],
+  "a11y": {
+    "role": "feed",
+    "apg": "feed — a list of articles the reader moves through, each with its own title, time and severity",
+    "keyboard": []
+  },
+  "related": {
+    "components": [
+      "LogStream",
+      "Timeline",
+      "HealthMatrix"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#EventStream"
+  },
+  "props": [
+    {
+      "name": "events",
+      "type": "StreamEvent[]",
+      "default": "—",
+      "description": "Consecutive events sharing a `group` are rendered under one heading. This is NOT LogStream, and the difference is the ROLE, not the look: `role=\"log\"` is for text output that piles up; an event has structure — title, time, severity — so it is `role=\"feed\"`."
+    },
+    {
+      "name": "follow",
+      "type": "boolean",
+      "default": "false",
+      "description": "Scrolls to the newest event. Opt-in, and deliberately so: without it whoever is reading the top misses what arrives, but WITH it and no control, whoever is reading the middle gets dragged down."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Events\"",
+      "description": "Accessible name of the feed."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the feed."
+    }
+  ]
+}

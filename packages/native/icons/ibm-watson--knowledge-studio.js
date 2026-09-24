@@ -1,0 +1,22 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Circle, Path} from "react-native-svg";
+
+export default function IbmWatsonKnowledgeStudio({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M20 25H27V27H20z", fill: color}),
+    React.createElement(Path, {d: "M22 29H25V31H22z", fill: color}),
+    React.createElement(Path, {d: "M27,23h-2c0-1.1,0.4-2,1.2-2.8l0.5-0.5c0.8-0.8,1.3-2,1.3-3.2c0-2.5-2-4.5-4.5-4.5S19,14,19,16.5c0,1.2,0.5,2.3,1.3,3.2\tl0.5,0.5C21.6,21,22,21.9,22,23h-2c0-0.5-0.2-1-0.6-1.4l-0.5-0.5c-1.2-1.2-1.9-2.9-1.9-4.6c0-3.6,2.9-6.5,6.5-6.5s6.5,2.9,6.5,6.5\tc0,1.7-0.7,3.4-1.9,4.6l-0.5,0.5C27.2,22,27,22.5,27,23z", fill: color}),
+    React.createElement(Path, {d: "M6 22H14V24H6z", fill: color}),
+    React.createElement(Circle, {cx: "12", cy: "19", r: "1", fill: color}),
+    React.createElement(Path, {d: "M6 18H9V20H6z", fill: color}),
+    React.createElement(Path, {d: "M6 14H13V16H6z", fill: color}),
+    React.createElement(Path, {d: "M10 10H17V12H10z", fill: color}),
+    React.createElement(Circle, {cx: "7", cy: "11", r: "1", fill: color}),
+    React.createElement(Path, {d: "M16 6H20V8H16z", fill: color}),
+    React.createElement(Circle, {cx: "13", cy: "7", r: "1", fill: color}),
+    React.createElement(Path, {d: "M6 6H10V8H6z", fill: color}),
+    React.createElement(Path, {d: "M18,28H4V4l18,0v4h2V4c0-1.1-0.9-2-2-2H4C2.9,2,2,2.9,2,4v24c0,1.1,0.9,2,2,2h14V28z", fill: color})
+  );
+}

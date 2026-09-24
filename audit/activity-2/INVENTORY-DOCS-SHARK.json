@@ -1,0 +1,3036 @@
+{
+ "_gerado": "2026-08-27",
+ "_fonte": "Shark UI",
+ "_metodo": "camada de DOCUMENTAÇÃO (§11), lida da web. Complementa o inventário de CÓDIGO — não o substitui, e não substitui a leitura humana.",
+ "_controle": "button: 2 trechos + 0 seções conhecidas",
+ "paginas": 86,
+ "comErro": 0,
+ "porPagina": {
+  "accordion": {
+   "secoes": [
+    "Accordion",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Examples",
+    "Non-collapsible",
+    "Multiple",
+    "Card",
+    "API Reference",
+    "Accordion",
+    "AccordionItem",
+    "AccordionTrigger",
+    "AccordionContent"
+   ],
+   "composicao": "Accordion └── AccordionItem ├── AccordionTrigger └── AccordionContent Usage # import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@/components/ui/accordion\" ; < Accordion > < AccordionItem value = \"item-1\" > < AccordionTrigger > Is it accessible? </ AccordionTrigger > < AccordionContent > Yes. It adheres to the WAI-ARIA design pattern. </ AccordionContent > </ AccordionIt",
+   "achados": {
+    "composicao": [
+     "Prop Type Default value string[] - defaultValue string[] - collapsible boolean true multiple boolean false onValueChange ValueChangeDetails - className string - asChild boolean false AccordionItem # Single accordion item.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4368
+  },
+  "action-bar": {
+   "secoes": [
+    "Action Bar",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "Positioning",
+    "Gutter",
+    "Close Trigger",
+    "With Dialog",
+    "With Menu",
+    "Table",
+    "Custom Spacing",
+    "API Reference",
+    "ActionBar",
+    "ActionBarContent",
+    "ActionBarTrigger",
+    "ActionBarValue",
+    "ActionBarSeparator",
+    "ActionBarBody",
+    "ActionBarClose"
+   ],
+   "composicao": "ActionBar ├── ActionBarTrigger └── ActionBarContent ├── ActionBarValue ├── ActionBarSeparator ├── ActionBarBody │ ├── Button ├── ActionBarSeparator └── ActionBarClose Usage # import { ArchiveIcon, DownloadIcon, PencilIcon, Trash2Icon, XIcon, } from \"lucide-react\" ; import { ActionBar, ActionBarBody, ActionBarClose, ActionBarContent, ActionBarSeparator, ActionBarTrigger, ActionBarValue, } from \"@/c",
+   "achados": {
+    "aria": [
+     "Prop Type Default className string - aria-label string - asChild boolean - CSS variable Default --space --spacing(2) ActionBarTrigger # Button that opens the action bar."
+    ],
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Prop Type Default className string - aria-label string - asChild boolean - CSS variable Default --space --spacing(2) ActionBarTrigger # Button that opens the action bar.",
+     "Prop Type Default className string - asChild boolean - ActionBarValue # Displays the selection count.",
+     "Prop Type Default count number - label string - className string - asChild boolean - ActionBarSeparator # Vertical rule.",
+     "Prop Type Default className string - asChild boolean - ActionBarBody # Flex row for primary actions.",
+     "Prop Type Default className string - asChild boolean - ActionBarClose # Closes the action bar.",
+     "Prop Type Default className string - asChild boolean - Previous page Accordion Next page Alert Dialog On This Page Installation Anatomy Usage Controlled Examples Positioning Gutter Close Trigger With Dialog With Menu Table Custom Spacing API Reference ActionBar ActionBarContent ActionBarTrigger ActionBarValue ActionBarSeparator ActionBarBody ActionBarClose"
+    ]
+   },
+   "caracteres": 4800
+  },
+  "alert": {
+   "secoes": [
+    "Alert",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Variants",
+    "Default",
+    "Info",
+    "Warning",
+    "Success",
+    "Destructive",
+    "Examples",
+    "With icon",
+    "With action",
+    "Custom color",
+    "API Reference",
+    "Alert",
+    "AlertTitle",
+    "AlertDescription",
+    "AlertAction"
+   ],
+   "composicao": "Alert ├── Icon ├── AlertTitle ├── AlertDescription └── AlertAction Usage # import { Alert, AlertTitle, AlertDescription, AlertAction, } from \"@/components/ui/alert\" ; < Alert > < AlertTitle >Heads up!</ AlertTitle > < AlertDescription >You can add icons to alerts.</ AlertDescription > < AlertAction > < Button size = \"xs\" variant = \"ghost\" >Dismiss</ Button > < Button size = \"xs\" >Update</ Button >",
+   "achados": {
+    "composicao": [
+     "Prop Type Default variant \"default\" | \"info\" | \"warning\" | \"success\" | \"destructive\" \"default\" className string - asChild boolean false AlertTitle # Title text.",
+     "Prop Type Default className string - asChild boolean false AlertDescription # Description text.",
+     "Prop Type Default className string - asChild boolean false AlertAction # Container for action buttons.",
+     "Prop Type Default className string - asChild boolean false Previous page Alert Dialog Next page Announcement On This Page Installation Anatomy Usage Variants Default Info Warning Success Destructive Examples With icon With action Custom color API Reference Alert AlertTitle AlertDescription AlertAction"
+    ]
+   },
+   "caracteres": 3473
+  },
+  "alert-dialog": {
+   "secoes": [
+    "Alert Dialog",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Title Description",
+    "Using props",
+    "Using components",
+    "Examples",
+    "Destructive",
+    "API Reference",
+    "AlertDialogAction",
+    "AlertDialogCancel"
+   ],
+   "composicao": "AlertDialog ├── AlertDialogTrigger └── AlertDialogContent ├── AlertDialogHeader │ ├── AlertDialogTitle │ └── AlertDialogDescription ├── AlertDialogBody ├── AlertDialogFooter │ ├── AlertDialogCancel │ └── AlertDialogAction └── AlertDialogClose Usage # import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogBody, AlertDial",
+   "achados": {
+    "composicao": [
+     "Prop Type Default variant \"default\" | \"destructive\" \"default\" className string - asChild boolean false AlertDialogCancel # Cancel action.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Dialog API Reference ."
+    ]
+   },
+   "caracteres": 3901
+  },
+  "announcement": {
+   "secoes": [
+    "Announcement",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Variants",
+    "Info",
+    "Success",
+    "Warning",
+    "Destructive",
+    "Examples",
+    "With icon",
+    "With link",
+    "Without Badge",
+    "API Reference",
+    "Announcement",
+    "AnnouncementTitle"
+   ],
+   "composicao": "Announcement ├── Badge └── AnnouncementTitle Usage # import { Announcement, AnnouncementTitle, } from \"@/components/ui/announcement\" ; < Announcement > < Badge > < SparklesIcon /> </ Badge > < AnnouncementTitle >New feature added</ AnnouncementTitle > </ Announcement > Variants # Info # Preview Code Maintenance Scheduled downtime tonight 2–4 AM UTC. No action needed. Success # Preview Code Deploye",
+   "achados": {
+    "composicao": [
+     "Examples # With icon # Preview Code New features Dark mode and 12 new components available With link # The asChild prop renders a link with announcement styling.",
+     "Prop Type Default role \"status\" | \"alert\" \"status\" className string - asChild boolean false AnnouncementTitle # Main title or message of the announcement.",
+     "Prop Type Default className string - asChild boolean false Previous page Alert Next page Aspect Ratio On This Page Installation Anatomy Usage Variants Info Success Warning Destructive Examples With icon With link Without Badge API Reference Announcement AnnouncementTitle"
+    ]
+   },
+   "caracteres": 2950
+  },
+  "aspect-ratio": {
+   "secoes": [
+    "Aspect Ratio",
+    "Installation",
+    "Usage",
+    "Examples",
+    "Square",
+    "Portrait",
+    "Video",
+    "Responsive",
+    "API Reference",
+    "AspectRatio"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "Preview Code 16:9 → 1:1 You can use breakpoint utilities to change the aspect ratio at different screen sizes.",
+     "Prop Type Default className string - asChild boolean false Attribute Description --ratio 1 Previous page Announcement Next page Autocomplete On This Page Installation Usage Examples Square Portrait Video Responsive API Reference AspectRatio"
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false Attribute Description --ratio 1 Previous page Announcement Next page Autocomplete On This Page Installation Usage Examples Square Portrait Video Responsive API Reference AspectRatio"
+    ]
+   },
+   "caracteres": 2175
+  },
+  "autocomplete": {
+   "secoes": [
+    "Autocomplete",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Invalid",
+    "Disabled",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "Group",
+    "With Field",
+    "With clear button",
+    "With trigger",
+    "With start icon",
+    "API Reference",
+    "Autocomplete",
+    "AutocompleteInput",
+    "AutocompleteContent",
+    "AutocompleteGroup",
+    "AutocompleteGroupLabel",
+    "AutocompleteItem",
+    "AutocompleteEmpty"
+   ],
+   "composicao": "Autocomplete ├── AutocompleteInput └── AutocompleteContent ├── AutocompleteEmpty └── AutocompleteList └── AutocompleteGroup ├── AutocompleteGroupLabel └── AutocompleteItem Usage # import { useFilter, useListCollection } from \"@ark-ui/react\" ; import { Autocomplete, AutocompleteContent, AutocompleteEmpty, AutocompleteGroup, AutocompleteInput, AutocompleteItem, AutocompleteList, } from \"@/components",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean - AutocompleteGroup # Groups related items.",
+     "Prop Type Default className string - asChild boolean - AutocompleteItem # Single selectable option in the dropdown list.",
+     "Prop Type Default item T required className string - asChild boolean - AutocompleteEmpty # Shown when no options match the current filter.",
+     "Prop Type Default className string - asChild boolean - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4831
+  },
+  "avatar": {
+   "secoes": [
+    "Avatar",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "Avatar Group",
+    "Badge",
+    "Badge with Icon",
+    "Fallback with Icon",
+    "Avatar Group Count",
+    "Avatar Group Count Icon",
+    "Avatar with Popover",
+    "Avatar with Hover Card",
+    "Custom Size",
+    "Custom Radius",
+    "API Reference",
+    "Avatar",
+    "AvatarImage",
+    "AvatarFallback",
+    "AvatarGroup",
+    "AvatarGroupCount",
+    "AvatarBadge"
+   ],
+   "composicao": "Avatar ├── AvatarImage └── AvatarFallback AvatarGroup ├── AvatarGroupCount └── Avatar ├── AvatarImage ├── AvatarFallback └── AvatarBadge Usage # import { Avatar, AvatarImage, AvatarFallback } from \"@/components/ui/avatar\" ; < Avatar > < AvatarImage src = \"https://github.com/vinihvc.png\" /> < AvatarFallback >VV</ AvatarFallback > </ Avatar > Sizes # Small # Preview Code VV Medium # Preview Code VV ",
+   "achados": {
+    "responsivo": [
+     "Preview Code VV You can use breakpoint utilities to change the size at different screen sizes.",
+     "Preview Code VV CN SA PV You can use breakpoint utilities to change the radius at different screen sizes."
+    ],
+    "composicao": [
+     "Prop Type Default size \"sm\" | \"md\" | \"lg\" \"md\" className string - asChild boolean false AvatarImage # Profile image.",
+     "Prop Type Default className string - asChild boolean false AvatarFallback # Shown when the image fails to load or is loading.",
+     "Prop Type Default className string - asChild boolean false AvatarGroup # Groups avatars with overlap and optional count badge.",
+     "Prop Type Default className string - asChild boolean false AvatarGroupCount # Shows \"+N\" when more avatars exist than displayed.",
+     "Prop Type Default className string - asChild boolean false AvatarBadge # Status or indicator badge overlaid on the avatar corner.",
+     "Prop Type Default variant \"default\" | \"success\" | \"info\" | \"warning\" | \"destructive\" \"default\" className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3889
+  },
+  "badge": {
+   "secoes": [
+    "Badge",
+    "Installation",
+    "Usage",
+    "Variants",
+    "Default",
+    "Secondary",
+    "Outline",
+    "Success",
+    "Info",
+    "Warning",
+    "Destructive",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Pill",
+    "Examples",
+    "With link",
+    "With icon",
+    "With spinner",
+    "Custom color",
+    "API Reference",
+    "Badge"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Preview Code Badge Examples # With link # The asChild prop renders another element with badge styling."
+    ]
+   },
+   "caracteres": 2615
+  },
+  "bottom-navigation": {
+   "secoes": [
+    "Bottom Navigation",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Disclaimer",
+    "Examples",
+    "Icon only",
+    "With links",
+    "API Reference",
+    "BottomNavigation",
+    "BottomNavigationList",
+    "BottomNavigationItem",
+    "BottomNavigationItemIcon",
+    "BottomNavigationItemLabel"
+   ],
+   "composicao": "BottomNavigation └── BottomNavigationList └── BottomNavigationItem ├── BottomNavigationItemIcon └── BottomNavigationItemLabel Usage # import { BottomNavigation, BottomNavigationList, BottomNavigationItem, BottomNavigationItemIcon, BottomNavigationItemLabel, } from \"@/components/ui/bottom-navigation\" ; < BottomNavigation defaultValue = \"home\" > < BottomNavigationList > < BottomNavigationItem value ",
+   "achados": {
+    "aria": [
+     "Examples # Icon only # Use aria-label on the BottomNavigationItem to give the item a label for screen readers."
+    ],
+    "composicao": [
+     "Preview Code With links # Use the asChild prop on BottomNavigationItem with Link .",
+     "Prop Type Default value string - defaultValue string - onValueChange (details: ValueChangeDetails) => void - className string - asChild boolean false BottomNavigationList # Fixed bar at the bottom.",
+     "Prop Type Default className string - asChild boolean false BottomNavigationItem # Single navigation link or button.",
+     "Prop Type Default value string required disabled boolean false className string - asChild boolean false BottomNavigationItemIcon # Holds the item icon.",
+     "Prop Type Default className string - asChild boolean false BottomNavigationItemLabel # Holds the item label text.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3646
+  },
+  "breadcrumb": {
+   "secoes": [
+    "Breadcrumb",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "With custom separator",
+    "With links",
+    "Collapsed",
+    "With menu",
+    "API Reference",
+    "Breadcrumb",
+    "BreadcrumbList",
+    "BreadcrumbItem",
+    "BreadcrumbLink",
+    "BreadcrumbPage",
+    "BreadcrumbSeparator",
+    "BreadcrumbEllipsis"
+   ],
+   "composicao": "Breadcrumb └── BreadcrumbList └── BreadcrumbItem ├── BreadcrumbLink ├── BreadcrumbPage ├── BreadcrumbSeparator └── BreadcrumbEllipsis Usage # import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from \"@/components/ui/breadcrumb\" ; < Breadcrumb > < BreadcrumbList > < BreadcrumbItem > < BreadcrumbLink href = \"/\" >Home</ BreadcrumbLink > </ Bread",
+   "achados": {
+    "aria": [
+     "Not a link; marked with aria-current=\"page\" for accessibility."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false BreadcrumbList # Ordered list of breadcrumb segments.",
+     "Prop Type Default className string - asChild boolean false BreadcrumbItem # Wraps a single breadcrumb link or page.",
+     "Prop Type Default className string - asChild boolean false BreadcrumbLink # Link to a parent page in the hierarchy.",
+     "Prop Type Default href string - className string - asChild boolean false BreadcrumbPage # Current page.",
+     "Prop Type Default className string - asChild boolean false BreadcrumbSeparator # Visual separator between segments.",
+     "Prop Type Default children React.ReactNode ChevronRight className string - asChild boolean false BreadcrumbEllipsis # Shows when middle segments are collapsed."
+    ],
+    "acessibilidade": [
+     "Not a link; marked with aria-current=\"page\" for accessibility."
+    ]
+   },
+   "caracteres": 3522
+  },
+  "button": {
+   "secoes": [
+    "Button",
+    "Installation",
+    "Usage",
+    "Link",
+    "States",
+    "Disabled",
+    "Loading",
+    "Variants",
+    "Default",
+    "Outline",
+    "Secondary",
+    "Ghost",
+    "Link",
+    "Destructive",
+    "Sizes",
+    "Extra Small",
+    "Small",
+    "Large",
+    "Extra Large",
+    "Pill",
+    "Disabling click effect",
+    "Examples",
+    "Icon only",
+    "With icon",
+    "Touch hitbox",
+    "Custom color",
+    "API Reference"
+   ],
+   "composicao": null,
+   "achados": {
+    "toque": [
+     "Preview Code With icon # Preview Code Add Settings Favorite Download Visit website Touch hitbox # For increasing the tap target area, use Hitbox ."
+    ],
+    "composicao": [
+     "Preview Code Button Installation # CLI Manual pnpm bun npm yarn pnpm dlx shadcn@latest add @shark/button Usage # import { Button } from \"@/components/ui/button\" ; < Button >Button</ Button > Link # The asChild prop renders another element with button styling."
+    ]
+   },
+   "caracteres": 2951
+  },
+  "button-group": {
+   "secoes": [
+    "Button Group",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Accessibility",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "Nested",
+    "Separator",
+    "With Input",
+    "With Menu",
+    "With Popover",
+    "API Reference",
+    "ButtonGroup",
+    "ButtonGroupSeparator"
+   ],
+   "composicao": "ButtonGroup └── Button or Input ├── ButtonGroupText └── ButtonGroupSeparator Usage # import { ButtonGroup, ButtonGroupSeparator, } from \"@/components/ui/button-group\" ; < ButtonGroup > < Button > Archive </ Button > < ButtonGroupSeparator /> < Button > Report </ Button > </ ButtonGroup > Accessibility # Use aria-label or aria-labelledby to label the group. < ButtonGroup aria-label = \"Media control",
+   "achados": {
+    "aria": [
+     "< ButtonGroup aria-label = \"Media controls\" > < Button >Play</ Button > < Button >Pause</ Button > </ ButtonGroup > Orientation # Horizontal # Preview Code Vertical # Preview Code Examples # Nested # Preview Code Separator # Buttons with variant outline do not need a separator since they have a border."
+    ],
+    "composicao": [
+     "Prop Type Default orientation \"horizontal\" | \"vertical\" \"horizontal\" className string - asChild boolean false ButtonGroupSeparator # Visual divider between buttons.",
+     "Prop Type Default orientation \"horizontal\" | \"vertical\" \"vertical\" className string - asChild boolean false Previous page Breadcrumb Next page Button On This Page Installation Anatomy Usage Accessibility Orientation Horizontal Vertical Examples Nested Separator With Input With Menu With Popover API Reference ButtonGroup ButtonGroupSeparator"
+    ],
+    "acessibilidade": [
+     "Uses fieldset for accessibility when applicable.",
+     "Prop Type Default orientation \"horizontal\" | \"vertical\" \"vertical\" className string - asChild boolean false Previous page Breadcrumb Next page Button On This Page Installation Anatomy Usage Accessibility Orientation Horizontal Vertical Examples Nested Separator With Input With Menu With Popover API Reference ButtonGroup ButtonGroupSeparator"
+    ]
+   },
+   "caracteres": 2887
+  },
+  "calendar": {
+   "secoes": [
+    "Calendar",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "Date Range",
+    "Month and Year Selector",
+    "With Presets",
+    "Multiple Months",
+    "Min and Max",
+    "Select Today",
+    "Fixed Weeks",
+    "Booked Dates",
+    "Custom Cell Size",
+    "API Reference",
+    "Calendar",
+    "CalendarViewControl",
+    "CalendarMonthSelect",
+    "CalendarYearSelect",
+    "CalendarTable",
+    "CalendarWeekDays",
+    "CalendarTableDays",
+    "CalendarTableNextMonth",
+    "CalendarTableCell"
+   ],
+   "composicao": "Calendar ├── CalendarViewControl │ ├── CalendarPrevTrigger │ ├── CalendarMonthSelect │ ├── CalendarYearSelect │ ├── CalendarViewDate │ └── CalendarNextTrigger └── CalendarTable ├── CalendarWeekDays └── CalendarTableDays Usage # import { Calendar, CalendarNextTrigger, CalendarPrevTrigger, CalendarTable, CalendarTableDays, CalendarViewControl, CalendarViewDate, CalendarWeekDays, } from \"@/components",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false CalendarMonthSelect # Month selector dropdown.",
+     "Prop Type Default className string - asChild boolean false CalendarWeekDays # Header row with week day names (Sun–Sat)."
+    ]
+   },
+   "caracteres": 14883
+  },
+  "card": {
+   "secoes": [
+    "Card",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Title Description",
+    "Using props",
+    "Using components",
+    "Examples",
+    "Product card",
+    "Icon card",
+    "Custom spacing",
+    "API Reference",
+    "Card",
+    "CardMedia",
+    "CardHeader",
+    "CardTitle",
+    "CardDescription",
+    "CardAction",
+    "CardContent",
+    "CardFooter"
+   ],
+   "composicao": "Card ├── CardMedia ├── CardHeader │ ├── CardTitle │ ├── CardDescription │ └── CardAction ├── CardContent └── CardFooter Usage # import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, CardAction, CardMedia, } from \"@/components/ui/card\" ; < Card > < CardMedia /> < CardHeader > < CardTitle /> < CardDescription /> < CardAction /> </ CardHeader > < CardContent /> < CardFooter ",
+   "achados": {
+    "responsivo": [
+     "Preview Code Login to your account Enter your email and check your inbox Sign Up Email Login Login with Google You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false CSS Variable Default --space --spacing(6) CardMedia # Image, video, or media area.",
+     "Prop Type Default variant \"default\" | \"icon\" | \"image\" \"default\" className string - asChild boolean false CardHeader # Header area.",
+     "Prop Type Default title string - description string - className string - asChild boolean false CardTitle # Card title or heading.",
+     "Prop Type Default className string - asChild boolean false CardDescription # Card description or body text.",
+     "Prop Type Default className string - asChild boolean false CardAction # Action button or link in the card header.",
+     "Prop Type Default className string - asChild boolean false CardContent # Main body content of the card."
+    ]
+   },
+   "caracteres": 4405
+  },
+  "carousel": {
+   "secoes": [
+    "Carousel",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Thumbnail Indicators",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "Autoplay",
+    "Loop",
+    "Controlled",
+    "Slides Per Page",
+    "Spacing",
+    "Mouse Drag",
+    "API Reference",
+    "Carousel",
+    "CarouselContent",
+    "CarouselItem",
+    "CarouselControl",
+    "CarouselPrevious",
+    "CarouselNext",
+    "CarouselIndicatorGroup",
+    "CarouselIndicator"
+   ],
+   "composicao": "Carousel ├── CarouselContent │ └── CarouselItem ├── CarouselControl │ ├── CarouselPrevious │ └── CarouselNext └── CarouselIndicatorGroup └── CarouselIndicator Usage # import { Carousel, CarouselControl, CarouselItem, CarouselContent, CarouselIndicator, CarouselIndicatorGroup, CarouselNext, CarouselPrevious, } from \"@/components/ui/carousel\" ; < Carousel > < CarouselControl > < CarouselPrevious >Pr",
+   "achados": {
+    "toque": [
+     "Preview Code 1 2 3 4 5 6 7 8 Mouse Drag # To allow mouse drag, set the allowMouseDrag prop on Carousel .",
+     "Previous page Card Next page Chart On This Page Installation Anatomy Usage Orientation Horizontal Vertical Thumbnail Indicators Horizontal Vertical Examples Autoplay Loop Controlled Slides Per Page Spacing Mouse Drag API Reference Carousel CarouselContent CarouselItem CarouselControl CarouselPrevious CarouselNext CarouselIndicatorGroup CarouselIndicator"
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false CarouselItem # Wraps a single slide.",
+     "Prop Type Default index number required snapAlign \"start\" | \"center\" | \"end\" \"start\" className string - asChild boolean false CarouselControl # Holds prev/next navigation buttons.",
+     "Prop Type Default className string - asChild boolean false CarouselPrevious # Goes to the previous slide.",
+     "Prop Type Default className string - asChild boolean false CarouselIndicator # Indicator for a slide.",
+     "Prop Type Default index number required readOnly boolean false className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4587
+  },
+  "chart": {
+   "secoes": [
+    "Chart",
+    "Installation",
+    "Anatomy",
+    "Component",
+    "Usage",
+    "Start with data",
+    "Add a chart config",
+    "Render the chart",
+    "Add a grid",
+    "Add an axis",
+    "Add a tooltip",
+    "Add a legend",
+    "Chart config",
+    "Theming",
+    "CSS variables",
+    "Hex, HSL, or OKLCH",
+    "Applying colors in markup and data",
+    "Tooltip",
+    "Tooltip props",
+    "Custom label and name keys",
+    "Legend",
+    "Custom name key",
+    "Accessibility"
+   ],
+   "composicao": "ChartContainer ├── ChartStyle ├── Recharts surface (BarChart, LineChart, …) ├── ChartTooltip │ └── ChartTooltipContent └── ChartLegend └── ChartLegendContent Component # These pieces follow the familiar shadcn/ui chart pattern—container, tooltips, and legend helpers around standard Recharts charts—restyled and wired to Shark UI tokens and imports so the result feels native to this kit. import { Ba",
+   "achados": {
+    "responsivo": [
+     "import { type ChartConfig } from \"@/components/ui/chart\" const chartConfig = { desktop: { label: \"Desktop\" , color: \"#2563eb\" , }, mobile: { label: \"Mobile\" , color: \"#60a5fa\" , }, } satisfies ChartConfig Render the chart # Pass config into ChartContainer .",
+     "Give the container a minimum height (for example min-h-[200px] ) or a fixed height so Recharts can measure the SVG responsively."
+    ],
+    "acessibilidade": [
+     "< BarChart accessibilityLayer data = { chartData } > { /* children */ } </ BarChart > < LineChart accessibilityLayer data = { chartData } > { /* children */ } </ LineChart > For every prop on primitives such as Bar , Line , or XAxis , refer to the Recharts API reference .",
+     "Previous page Carousel Next page Checkbox On This Page Installation Anatomy Component Usage Start with data Add a chart config Render the chart Add a grid Add an axis Add a tooltip Add a legend Chart config Theming CSS variables Hex, HSL, or OKLCH Applying colors in markup and data Tooltip Tooltip props Custom label and name keys Legend Custom name key Accessibility"
+    ]
+   },
+   "caracteres": 11790
+  },
+  "checkbox": {
+   "secoes": [
+    "Checkbox",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Invalid",
+    "Disabled",
+    "Examples",
+    "With Description",
+    "Indeterminate",
+    "Group",
+    "Card Style",
+    "API Reference",
+    "Checkbox",
+    "CheckboxGroup"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3135
+  },
+  "circular-progress": {
+   "secoes": [
+    "Circular Progress",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "With value",
+    "Indeterminate",
+    "Custom Size",
+    "Custom Thickness",
+    "API Reference",
+    "CircularProgress",
+    "CircularProgressValue"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2447
+  },
+  "circular-slider": {
+   "secoes": [
+    "Circular Slider",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Examples",
+    "Size",
+    "Thickness",
+    "With markers",
+    "With step",
+    "Show value",
+    "Custom markers",
+    "API Reference",
+    "CircularSlider",
+    "CircularSliderValue"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2932
+  },
+  "clipboard": {
+   "secoes": [
+    "Clipboard",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "Icon Only",
+    "Different Icons",
+    "Value Text",
+    "Custom Timeout",
+    "API Reference",
+    "Clipboard",
+    "ClipboardTrigger",
+    "ClipboardInput",
+    "ClipboardIndicator",
+    "ClipboardValue"
+   ],
+   "composicao": "Clipboard ├── ClipboardTrigger │ └── ClipboardIndicator ├── ClipboardInput └── ClipboardValue Usage # import { Clipboard, ClipboardTrigger, ClipboardIndicator } from \"@/components/ui/clipboard\" ; < Clipboard value = \"https://x.com/vinihvc\" > < ClipboardTrigger asChild > < Button size = \"icon-md\" > < ClipboardIndicator /> </ Button > </ ClipboardTrigger > </ Clipboard > Controlled # Preview Code Ch",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false ClipboardInput # Input showing the value to copy.",
+     "Prop Type Default className string - asChild boolean false ClipboardIndicator # Icon that changes based on copy state.",
+     "Prop Type Default size \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" \"md\" className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3093
+  },
+  "collapsible": {
+   "secoes": [
+    "Collapsible",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Examples",
+    "Nested",
+    "Partial Collapse",
+    "API Reference",
+    "Collapsible",
+    "CollapsibleTrigger",
+    "CollapsibleContent",
+    "CollapsibleIndicator"
+   ],
+   "composicao": "Collapsible ├── CollapsibleTrigger └── CollapsibleContent Usage # import { Collapsible, CollapsibleTrigger, CollapsibleContent } from \"@/components/ui/collapsible\" ; < Collapsible > < CollapsibleTrigger >Can I use this in my project?</ CollapsibleTrigger > < CollapsibleContent > Yes. Free to use for personal and commercial projects. No attribution required. </ CollapsibleContent > </ Collapsible >",
+   "achados": {
+    "teclado": [
+     "Collapse (cannot be focused when collapsed) Accessibility Notice Interactive elements (links, buttons, inputs) within the collapsed area automatically become inaccesible to prevent keyboard navigation to hidden content."
+    ],
+    "composicao": [
+     "Use asChild for custom trigger elements.",
+     "Prop Type Default className string - asChild boolean false CollapsibleContent # Holds the content that expands and collapses.",
+     "Prop Type Default className string - asChild boolean false CollapsibleIndicator # Chevron or icon that rotates to indicate open/closed state.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ],
+    "acessibilidade": [
+     "Collapse (cannot be focused when collapsed) Accessibility Notice Interactive elements (links, buttons, inputs) within the collapsed area automatically become inaccesible to prevent keyboard navigation to hidden content."
+    ]
+   },
+   "caracteres": 3853
+  },
+  "color-picker": {
+   "secoes": [
+    "Color Picker",
+    "Installation",
+    "Modes",
+    "Input",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Invalid",
+    "Disabled",
+    "Examples",
+    "With Field",
+    "Channel Editing",
+    "With Swatch",
+    "With Popover",
+    "Compact",
+    "Popover",
+    "Anatomy",
+    "Usage",
+    "States",
+    "Disabled",
+    "Examples",
+    "With Eye Dropper",
+    "With Channel Editing",
+    "With Only Sliders",
+    "With Swatch Picker",
+    "Color Swatch Picker",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Examples",
+    "Custom Size",
+    "Custom Radius",
+    "Custom Indicator",
+    "Area",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Color Channels",
+    "With Dots",
+    "Slider",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Examples",
+    "Alpha Channel",
+    "HSL Channels",
+    "HSBA Channels",
+    "RGB Channels",
+    "Vertical",
+    "Custom spacing",
+    "API Reference",
+    "ColorPicker",
+    "ColorPickerTrigger",
+    "ColorPickerContent",
+    "ColorPickerControl",
+    "ColorPickerView",
+    "ColorPickerArea",
+    "ColorPickerAreaThumb",
+    "ColorPickerSlider",
+    "ColorPickerTransparencyGrid",
+    "ColorPickerEyeDropperTrigger",
+    "ColorPickerInput",
+    "ColorPickerSwatchPreview",
+    "ColorPickerSwatchGroup",
+    "ColorPickerSwatchTrigger",
+    "ColorPickerSwatch",
+    "ColorPickerSwatchIndicator",
+    "ColorPickerValue",
+    "ColorPickerValueSwatch",
+    "parseColor"
+   ],
+   "composicao": "ColorPicker ├── ColorPickerControl │ └── InputGroup │ ├── ColorPickerTrigger │ │ └── ColorPickerSwatchPreview │ └── ColorPickerInput └── ColorPickerContent ├── ColorPickerArea │ └── ColorPickerAreaThumb └── ColorPickerView └── ColorPickerSlider Usage # import { ColorPicker, ColorPickerInput, } from \"@/components/ui/color-picker\" ; < ColorPicker > < ColorPickerInput asChild channel = \"hex\" > < Inpu",
+   "achados": {
+    "responsivo": [
+     "Preview Code You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false ColorPickerContent # Holds the color picker popover.",
+     "Use asChild with a custom input.",
+     "Prop Type Default channel \"hex\" | \"hexa\" | \"red\" | \"green\" | \"blue\" | \"hue\" | \"saturation\" | \"brightness\" | \"lightness\" | \"alpha\" \"hex\" asChild boolean false ColorPickerSwatchPreview # Compact swatch that displays the current color."
+    ]
+   },
+   "caracteres": 11463
+  },
+  "combobox": {
+   "secoes": [
+    "Combobox",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Size",
+    "Small",
+    "Medium",
+    "Large",
+    "States",
+    "Invalid",
+    "Disabled",
+    "Examples",
+    "Auto highlight",
+    "Group",
+    "With Field",
+    "Scrollable",
+    "Multiple",
+    "With clear button",
+    "With start icon",
+    "API Reference",
+    "Combobox",
+    "ComboboxControl",
+    "ComboboxInput",
+    "ComboboxTrigger",
+    "ComboboxClear",
+    "ComboboxContent",
+    "ComboboxList",
+    "ComboboxItem",
+    "ComboboxGroup",
+    "ComboboxGroupLabel",
+    "ComboboxEmpty"
+   ],
+   "composicao": "Combobox ├── ComboboxInput └── ComboboxContent ├── ComboboxEmpty └── ComboboxList └── ComboboxGroup ├── ComboboxGroupLabel └── ComboboxItem Usage # import { useFilter, useListCollection } from \"@ark-ui/react\" ; import { Combobox, ComboboxContent, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList, } from \"@/components/ui/combobox\" ; const { contains } = useFilter ({ sensitivity: \"base\" }); c",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean - ComboboxInput # Input with dropdown trigger and optional clear button.",
+     "Prop Type Default className string - asChild boolean - ComboboxClear # Button to clear the input value.",
+     "Prop Type Default asChild boolean - ComboboxContent # Holds the dropdown options.",
+     "Prop Type Default className string - asChild boolean - ComboboxList # Wraps the list of options.",
+     "Prop Type Default className string - asChild boolean - ComboboxItem # A single selectable option.",
+     "Prop Type Default item T required className string - asChild boolean - ComboboxGroup # Groups related options under an optional heading."
+    ]
+   },
+   "caracteres": 5249
+  },
+  "command": {
+   "secoes": [
+    "Command",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "With Dialog",
+    "Groups",
+    "Shortcuts",
+    "With Footer",
+    "Scrollable",
+    "API Reference",
+    "Command",
+    "CommandDialog",
+    "CommandDialogTrigger",
+    "CommandDialogContent",
+    "CommandInput",
+    "CommandContent",
+    "CommandList",
+    "CommandEmpty",
+    "CommandGroup",
+    "CommandGroupLabel",
+    "CommandItem",
+    "CommandSeparator",
+    "CommandShortcut",
+    "CommandFooter"
+   ],
+   "composicao": "Command ├── CommandInput ├── CommandList │ ├── CommandEmpty │ └── CommandGroup │ ├── CommandGroupLabel │ └── CommandItem ├── CommandSeparator ├── CommandShortcut └── CommandFooter Usage # import { useFilter, useListCollection } from \"@ark-ui/react\" ; import { Command, CommandContent, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from \"@/components/ui/command\" ; const { cont",
+   "achados": {
+    "teclado": [
+     "Preview Code Fruit Apple Banana Cherry Countries United States United Kingdom Germany Shortcuts # Display keyboard shortcuts next to items with CommandShortcut .",
+     "Preview Code App Settings ⌘, Keyboard Shortcuts ⌘K Help ⌘?",
+     "Prop Type Default className string - CommandShortcut # Keyboard shortcut hint shown next to a command."
+    ],
+    "composicao": [
+     "Prop Type Default asChild boolean false className string - CommandDialogContent # Container for the command palette inside the dialog.",
+     "Prop Type Default className string - asChild boolean - CommandEmpty # Content when no items match the filter.",
+     "asChild boolean - CommandGroup # Groups related items.",
+     "Prop Type Default heading string | ReactNode - className string - asChild boolean - CommandGroupLabel # Label for a group.",
+     "Prop Type Default className string - asChild boolean - CommandItem # A single command or action in the palette."
+    ]
+   },
+   "caracteres": 6059
+  },
+  "context-menu": {
+   "secoes": [
+    "Context Menu",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "API Reference",
+    "ContextTrigger"
+   ],
+   "composicao": "ContextMenu ├── ContextMenuTrigger └── ContextMenuContent ├── ContextMenuGroup ├── ContextMenuItem ├── ContextMenuCheckboxItem ├── ContextMenuRadioGroup │ └── ContextMenuRadioItem ├── ContextMenuSub │ ├── ContextMenuSubTrigger │ └── ContextMenuSubContent ├── ContextMenuSeparator └── ContextMenuShortcut Usage # import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItemGroup, Cont",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Menu API Reference ."
+    ]
+   },
+   "caracteres": 2657
+  },
+  "data-list": {
+   "secoes": [
+    "Data List",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "Info Tip",
+    "Separator",
+    "API Reference",
+    "DataList",
+    "DataListItem",
+    "DataListItemLabel",
+    "DataListItemValue"
+   ],
+   "composicao": "DataList └── DataListItem ├── DataListItemLabel └── DataListItemValue Usage # import { DataList, DataListItem, DataListItemLabel, DataListItemValue, } from \"@/components/ui/data-list\" ; < DataList > < DataListItem > < DataListItemLabel >Name</ DataListItemLabel > < DataListItemValue >John Doe</ DataListItemValue > </ DataListItem > < DataListItem > < DataListItemLabel >Email</ DataListItemLabel > ",
+   "achados": {
+    "composicao": [
+     "Prop Type Default orientation \"horizontal\" | \"vertical\" \"horizontal\" className string - asChild boolean false DataListItem # Single label-value row.",
+     "Prop Type Default className string - asChild boolean false DataListItemLabel # Label or key for the row.",
+     "Prop Type Default className string - asChild boolean false DataListItemValue # Value or content for the row.",
+     "Prop Type Default className string - asChild boolean false Previous page Context Menu Next page Date Input On This Page Installation Anatomy Usage Orientation Horizontal Vertical Examples Info Tip Separator API Reference DataList DataListItem DataListItemLabel DataListItemValue"
+    ]
+   },
+   "caracteres": 3144
+  },
+  "date-input": {
+   "secoes": [
+    "Date Input",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "With Field",
+    "Granularity",
+    "Time Only",
+    "Range",
+    "Min and Max",
+    "Leading Zeros",
+    "With Clear Button",
+    "Custom Separator",
+    "API Reference",
+    "DateInput"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3535
+  },
+  "date-picker": {
+   "secoes": [
+    "Date Picker",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Input",
+    "Range",
+    "Time",
+    "With Presets",
+    "Custom format",
+    "API Reference",
+    "DatePicker",
+    "DatePickerTrigger",
+    "DatePickerInput",
+    "DatePickerContent",
+    "DatePickerValue",
+    "DatePickerTimer",
+    "DatePickerPresetTrigger"
+   ],
+   "composicao": "DatePicker ├── DatePickerTrigger └── DatePickerContent ── (Calendar components) Usage # import { DatePicker, DatePickerCalendar, DatePickerClearTrigger, DatePickerContent, DatePickerControl, DatePickerInput, DatePickerLabel, DatePickerPositioner, DatePickerTrigger, } from \"@/components/ui/date-picker\" ; < DatePicker selectionMode = \"single\" > < DatePickerLabel >Pick a date</ DatePickerLabel > < Da",
+   "achados": {
+    "composicao": [
+     "button Prop Type Default asChild boolean - className string - DatePickerInput # Input with calendar icon that opens the date picker on click.",
+     "span Prop Type Default placeholder string - className string - asChild boolean - DatePickerTimer # Time input for selecting hour and minute.",
+     "button Prop Type Default className string - value DateValue[] - asChild boolean - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4349
+  },
+  "dialog": {
+   "secoes": [
+    "Dialog",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Title Description",
+    "Using props",
+    "Using components",
+    "Size",
+    "Examples",
+    "Scrollable",
+    "No Close Button",
+    "Close behavior",
+    "Open from Menu",
+    "Non-Modal",
+    "Initial Focus",
+    "Nested",
+    "Custom spacing",
+    "API Reference",
+    "Dialog",
+    "DialogTrigger",
+    "DialogContent",
+    "DialogHeader",
+    "DialogBody",
+    "DialogFooter",
+    "DialogTitle",
+    "DialogDescription",
+    "DialogClose",
+    "DialogOverlay"
+   ],
+   "composicao": "Dialog ├── DialogTrigger └── DialogContent ├── DialogHeader │ ├── DialogTitle │ └── DialogDescription ├── DialogBody └── DialogFooter └── DialogClose Usage # import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose, } from \"@/components/ui/dialog\" ; < Dialog > < DialogTrigger /> < DialogContent > < DialogHeader > < DialogTit",
+   "achados": {
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Use asChild for custom trigger elements.",
+     "Prop Type Default asChild boolean false className string - DialogContent # Holds the dialog panel.",
+     "Prop Type Default asChild boolean false className string - DialogDescription # Accessible description for the dialog.",
+     "Prop Type Default asChild boolean false className string - DialogClose # Closes the dialog on click.",
+     "Use asChild for custom close elements.",
+     "Prop Type Default asChild boolean false className string - DialogOverlay # Dimmed overlay behind the dialog panel."
+    ],
+    "acessibilidade": [
+     "Prop Type Default className string - DialogTitle # Accessible title for the dialog.",
+     "Prop Type Default asChild boolean false className string - DialogDescription # Accessible description for the dialog."
+    ]
+   },
+   "caracteres": 6060
+  },
+  "drawer": {
+   "secoes": [
+    "Drawer",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Title Description",
+    "Using props",
+    "Using components",
+    "Examples",
+    "Inset Variant",
+    "Swipe Directions",
+    "Snap Points",
+    "Non-Modal",
+    "Close button",
+    "No Drag Area",
+    "Non Draggable",
+    "Custom spacing",
+    "API Reference",
+    "Drawer",
+    "DrawerTrigger",
+    "DrawerContent",
+    "DrawerHeader",
+    "DrawerTitle",
+    "DrawerDescription",
+    "DrawerBody",
+    "DrawerFooter",
+    "DrawerClose"
+   ],
+   "composicao": "Drawer ├── DrawerTrigger └── DrawerContent ├── DrawerGrabber ├── drawer-main │ ├── DrawerHeader │ ├── DrawerBody │ └── DrawerFooter │ └── DrawerClose Usage # import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter, DrawerClose, } from \"@/components/ui/drawer\" ; < Drawer > < DrawerTrigger /> < DrawerContent > < DrawerHeader > < DrawerTit",
+   "achados": {
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "toque": [
+     "Preview Code Open Swipe Directions # Control which direction the drawer slides and swipes using swipeDirection on the root.",
+     "Preview Code Open No Drag Area # Apply the data-no-drag attribute to any element inside the drawer to prevent dragging from starting on it.",
+     "Preview Code Open Non Draggable # Set draggable={false} on DrawerContent to disable drag-to-dismiss on the panel.",
+     "Supports swipe-to-close; direction inherited from root swipeDirection .",
+     "Previous page Dialog Next page Editable On This Page Installation Anatomy Usage Controlled Title & Description Using props Using components Examples Inset Variant Swipe Directions Snap Points Non-Modal Close button No Drag Area Non Draggable Custom spacing API Reference Drawer DrawerTrigger DrawerContent DrawerHeader DrawerTitle DrawerDescription DrawerBody DrawerFooter DrawerClose"
+    ],
+    "composicao": [
+     "Use asChild for custom trigger elements.",
+     "Prop Type Default asChild boolean false className string - DrawerContent # Holds the drawer panel.",
+     "Prop Type Default asChild boolean false className string - DrawerDescription # Accessible description for the drawer.",
+     "Prop Type Default asChild boolean false className string - DrawerBody # Scrollable body content.",
+     "Use asChild for custom close elements.",
+     "Prop Type Default asChild boolean false className string - For a complete list of props, see the Ark UI documentation ."
+    ],
+    "acessibilidade": [
+     "Prop Type Default title string - description string - className string - DrawerTitle # Accessible title for the drawer.",
+     "Prop Type Default asChild boolean false className string - DrawerDescription # Accessible description for the drawer."
+    ]
+   },
+   "caracteres": 6171
+  },
+  "editable": {
+   "secoes": [
+    "Editable",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Modes",
+    "Focus",
+    "Click",
+    "Double-Click",
+    "None",
+    "Sizes",
+    "Small",
+    "Large",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "With Textarea",
+    "Without Controls",
+    "API Reference",
+    "Editable",
+    "EditableArea",
+    "EditableInput",
+    "EditablePreview",
+    "EditableControl",
+    "EditableEditTrigger",
+    "EditableCancelTrigger",
+    "EditableSubmitTrigger"
+   ],
+   "composicao": "Editable ├── EditableArea │ ├── EditablePreview │ └── EditableInput └── EditableControl ├── EditableEditTrigger ├── EditableCancelTrigger └── EditableSubmitTrigger Usage # import { Editable, EditableArea, EditableInput, EditablePreview, EditableControl, EditableCancelTrigger, EditableSubmitTrigger, EditableEditTrigger, } from \"@/components/ui/editable\" ; < Editable > < EditableArea > < EditableInp",
+   "achados": {
+    "composicao": [
+     "Prop Type Default activationMode focus | dblclick | click | none 'focus' orientation \"horizontal\" | \"vertical\" \"horizontal\" submitMode both | enter | blur | none 'both' asChild boolean - className string - EditableArea # Wraps the input and preview views.",
+     "Prop Type Default asChild boolean - className string - EditableInput # Input shown when editing.",
+     "Use asChild for custom input elements.",
+     "Prop Type Default asChild boolean - className string - EditablePreview # Shows the value when not editing.",
+     "Prop Type Default asChild boolean - size \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" \"md\" className string - EditableControl # Holds edit/cancel/submit control buttons.",
+     "Prop Type Default asChild boolean - className string - EditableEditTrigger # Enters edit mode on click."
+    ]
+   },
+   "caracteres": 5572
+  },
+  "field": {
+   "secoes": [
+    "Field",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Input",
+    "Autocomplete",
+    "Combobox",
+    "Combobox Multiple",
+    "Textarea",
+    "Select",
+    "Checkbox",
+    "Checkbox Group",
+    "Radio Group",
+    "Switch",
+    "Slider",
+    "Number Input",
+    "Field Group",
+    "API Reference",
+    "Field",
+    "FieldSet",
+    "FieldLegend",
+    "FieldGroup",
+    "FieldContent",
+    "FieldLabel",
+    "FieldRequiredIndicator",
+    "FieldTitle",
+    "FieldDescription",
+    "FieldSeparator",
+    "FieldHelper",
+    "FieldError"
+   ],
+   "composicao": "FieldSet ├── FieldLegend └── FieldGroup ├── Field ├── FieldLabel │ └── FieldRequiredIndicator ├── FieldTitle ├── FieldDescription ├── FieldSeparator ├── FieldHelper └── FieldError Usage # import { Field, FieldLabel, FieldInput, FieldHelper, FieldError } from \"@/components/ui/field\" ; < Field > < FieldLabel >Email</ FieldLabel > < FieldInput /> < FieldHelper >Enter your email address</ FieldHelper ",
+   "achados": {
+    "responsivo": [
+     "Prop Type Default orientation \"vertical\" | \"horizontal\" | \"responsive\" \"vertical\" reverse boolean false invalid boolean - disabled boolean - required boolean - readOnly boolean - asChild boolean - className string - FieldSet # Groups related form controls semantically."
+    ],
+    "composicao": [
+     "Prop Type Default orientation \"vertical\" | \"horizontal\" | \"responsive\" \"vertical\" reverse boolean false invalid boolean - disabled boolean - required boolean - readOnly boolean - asChild boolean - className string - FieldSet # Groups related form controls semantically.",
+     "Prop Type Default asChild boolean - className string - FieldRequiredIndicator # Prop Type Default children ReactNode \"*\" className string - asChild boolean - FieldTitle # Title wrapper for grouped field content."
+    ]
+   },
+   "caracteres": 4996
+  },
+  "file-upload": {
+   "secoes": [
+    "File Upload",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Multiple Files",
+    "Trigger only",
+    "Dropzone only",
+    "Accepted Files",
+    "With Field",
+    "Custom Preview",
+    "Media Capture",
+    "Directory Upload",
+    "Clear Trigger",
+    "Custom spacing",
+    "API Reference",
+    "FileUpload",
+    "FileUploadTrigger",
+    "FileUploadDropzone",
+    "FileUploadDropzoneIcon",
+    "FileUploadTitle",
+    "FileUploadDescription",
+    "FileUploadHelper",
+    "FileUploadList",
+    "FileUploadItemGroup",
+    "FileUploadItem",
+    "FileUploadItemPreview",
+    "FileUploadItemPreviewImage",
+    "FileUploadItemName",
+    "FileUploadItemSize",
+    "FileUploadItemDeleteTrigger",
+    "FileUploadClearTrigger",
+    "useFileUploadContext"
+   ],
+   "composicao": "FileUpload ├── FileUploadTrigger ├── FileUploadDropzone │ ├── FileUploadDropzoneIcon │ ├── FileUploadTitle │ ├── FileUploadDescription │ └── FileUploadHelper ├── FileUploadItemGroup │ └── FileUploadList │ └── FileUploadItem │ ├── FileUploadItemPreview │ │ └── FileUploadItemPreviewImage │ ├── FileUploadItemName │ ├── FileUploadItemSize │ └── FileUploadItemDeleteTrigger └── FileUploadClearTrigger Us",
+   "achados": {
+    "responsivo": [
+     "Preview Code Take a picture The capture prop is only supported on mobile devices.",
+     "Preview Code Drop your files here You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "toque": [
+     "Trigger only # Preview Code Browse files Dropzone only # Use FileUploadDropzone to enable drag-and-drop.",
+     "It exposes a data-dragging attribute for styling the drag state.",
+     "Prop Type Default asChild boolean - className string - FileUploadDropzone # Drop zone for drag-and-drop."
+    ],
+    "composicao": [
+     "Prop Type Default asChild boolean - className string - FileUploadDropzone # Drop zone for drag-and-drop.",
+     "Prop Type Default asChild boolean - disableClick boolean - className string - Attribute Default --space --spacing(8) FileUploadDropzoneIcon # Icon shown in the dropzone.",
+     "Prop Type Default asChild boolean - type \"accepted\" | \"rejected\" - className string - FileUploadItem # Single uploaded file with preview and remove button.",
+     "Prop Type Default file File required asChild boolean - className string - FileUploadItemPreview # Preview container for a file.",
+     "Prop Type Default asChild boolean - type string '.*' className string - FileUploadItemPreviewImage # Image thumbnail for image files.",
+     "Prop Type Default asChild boolean - className string - FileUploadItemName # Shows the file name."
+    ]
+   },
+   "caracteres": 7827
+  },
+  "float": {
+   "secoes": [
+    "Float",
+    "Installation",
+    "Usage",
+    "Placement",
+    "API Reference",
+    "Float"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2014
+  },
+  "floating-panel": {
+   "secoes": [
+    "Floating Panel",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Controlled Size",
+    "Controlled Position",
+    "Custom spacing",
+    "API Reference",
+    "FloatingPanel",
+    "FloatingPanelTrigger",
+    "FloatingPanelContent",
+    "FloatingPanelHeader",
+    "FloatingPanelTitle",
+    "FloatingPanelBody",
+    "FloatingPanelCloseTrigger"
+   ],
+   "composicao": "FloatingPanel ├── FloatingPanelTrigger └── FloatingPanelContent ├── FloatingPanelDragTrigger ├── FloatingPanelHeader │ ├── FloatingPanelControl │ │ ├── FloatingPanelMinimize │ │ ├── FloatingPanelMaximize │ │ └── FloatingPanelRestore │ ├── FloatingPanelTitle │ ├── FloatingPanelResizeTrigger │ ├── FloatingPanelStageTrigger │ └── FloatingPanelCloseTrigger ├── FloatingPanelBody └── FloatingPanelFooter",
+   "achados": {
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "toque": [
+     "Manages panel position and drag state.",
+     "Acts as drag handle for repositioning."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false FloatingPanelContent # Holds the panel content.",
+     "Prop Type Default className string - asChild boolean false FloatingPanelBody # Scrollable body content.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4329
+  },
+  "frame": {
+   "secoes": [
+    "Frame",
+    "Section title",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Title Description",
+    "Using props",
+    "Using components",
+    "Examples",
+    "Separated Panels",
+    "Separated panel",
+    "Separated panel",
+    "API Reference",
+    "Frame",
+    "FramePanel",
+    "FrameHeader",
+    "FrameTitle",
+    "FrameDescription",
+    "FrameFooter"
+   ],
+   "composicao": "Frame ├── FramePanel └── FrameHeader ├── FrameTitle ├── FrameDescription └── FrameFooter Usage # import { Frame, FrameHeader, FrameTitle, FrameDescription, FramePanel, FrameFooter, } from \"@/components/ui/frame\" ; < Frame > < FrameHeader > < FrameTitle >Title</ FrameTitle > < FrameDescription >Description</ FrameDescription > </ FrameHeader > < FramePanel >Content</ FramePanel > < FrameFooter >Foo",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false FramePanel # A single panel with optional header and footer.",
+     "Prop Type Default className string - asChild boolean false FrameHeader # Header area for the panel.",
+     "Prop Type Default className string - asChild boolean false FrameTitle # Panel title or heading.",
+     "Prop Type Default className string - asChild boolean false FrameDescription # Panel description or subtitle.",
+     "Prop Type Default className string - asChild boolean false FrameFooter # Footer area for the panel.",
+     "Prop Type Default className string - asChild boolean false Previous page Floating Panel Next page Hint On This Page Installation Anatomy Usage Title & Description Using props Using components Examples Separated Panels API Reference Frame FramePanel FrameHeader FrameTitle FrameDescription FrameFooter"
+    ]
+   },
+   "caracteres": 3576
+  },
+  "hint": {
+   "secoes": [
+    "Hint",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Hint vs Tooltip",
+    "Controlled",
+    "Examples",
+    "Positions",
+    "API Reference",
+    "Hint",
+    "HintTrigger",
+    "HintContent",
+    "HintArrow"
+   ],
+   "composicao": "Hint ├── HintTrigger └── HintContent Usage # import { Hint, HintTrigger, HintContent } from \"@/components/ui/hint\" ; < Hint > < HintTrigger /> < HintContent /> </ Hint > Hint vs Tooltip # Hint : A lightweight, minimal tooltip that shows information, no external dependencies. Tooltip : A more complex component that provides a more full-featured tooltip with a variety of options. Controlled # Pass o",
+   "achados": {
+    "composicao": [
+     "Button by default; use asChild for custom elements.",
+     "Prop Type Default className string - asChild boolean - HintContent # Hint content shown in a popover on hover or focus.",
+     "Prop Type Default lazyMount boolean true unmountOnExit boolean true className string - asChild boolean - HintArrow # Arrow pointing to the trigger."
+    ]
+   },
+   "caracteres": 2893
+  },
+  "hover-card": {
+   "secoes": [
+    "Hover Card",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Triggers Delays",
+    "Positioning",
+    "Controlled",
+    "Disabled",
+    "API Reference",
+    "HoverCard",
+    "HoverCardTrigger",
+    "HoverCardContent",
+    "HoverCardArrow"
+   ],
+   "composicao": "HoverCard ├── HoverCardTrigger └── HoverCardContent Usage # import { HoverCard, HoverCardContent, HoverCardTrigger, } from \"@/components/ui/hover-card\" ; < HoverCard > < HoverCardTrigger /> < HoverCardContent > { /* Content */ } </ HoverCardContent > </ HoverCard > Triggers Delays # The openDelay and closeDelay props control the delay before the hover card opens and closes respectively. Default va",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean - HoverCardContent # Content shown in a popover when hover card is open.",
+     "Prop Type Default className string - asChild boolean - HoverCardArrow # Optional arrow pointing toward the trigger.",
+     "Prop Type Default className string - asChild boolean - Attribute Default --arrow-background var(--popover) --arrow-size calc(1.5 * var(--spacing)) For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3274
+  },
+  "image-cropper": {
+   "secoes": [
+    "Image Cropper",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Aspect ratio",
+    "Circle crop",
+    "Initial crop",
+    "Controlled zoom",
+    "Zoom limits",
+    "Min and max size",
+    "Fixed crop area",
+    "API Reference",
+    "ImageCropper",
+    "ImageCropperImage",
+    "ImageCropperSelection"
+   ],
+   "composicao": "ImageCropper ├── ImageCropperImage ├── ImageCropperSelection ├── ImageCropperHandle └── ImageCropperGrid Usage # import { ImageCropper, ImageCropperImage, ImageCropperSelection, } from \"@/components/ui/image-cropper\" ; < ImageCropper > < ImageCropperImage alt = \"Crop me\" src = \"/image.jpg\" /> < ImageCropperSelection /> </ ImageCropper > Examples # Aspect ratio # Use the aspectRatio to lock the cro",
+   "achados": {},
+   "caracteres": 3692
+  },
+  "input": {
+   "secoes": [
+    "Input",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "With Field",
+    "Field Group",
+    "File",
+    "Inline",
+    "Grid",
+    "Badge",
+    "Input Group",
+    "Button Group",
+    "API Reference",
+    "Input"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3204
+  },
+  "input-group": {
+   "secoes": [
+    "Input Group",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Align",
+    "inline-start",
+    "inline-end",
+    "block-start",
+    "block-end",
+    "Size",
+    "Small",
+    "Medium",
+    "Large",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Examples",
+    "With Tooltip",
+    "With Button",
+    "With Menu",
+    "With Badge",
+    "With Keyboard Shortcut",
+    "With Inner Label",
+    "With Spinner",
+    "With Number Field",
+    "With Input Group",
+    "Password Strength Checker",
+    "API Reference",
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupText",
+    "InputGroupInput",
+    "InputGroupTextarea"
+   ],
+   "composicao": "InputGroup ├── InputGroupAddon ├── InputGroupButton ├── InputGroupText ├── InputGroupInput └── InputGroupTextarea Usage # import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea, } from \"@/components/ui/input-group\" ; < InputGroup > < InputGroupInput /> < InputGroupAddon > < InputGroupText >https://</ InputGroupText > </ InputGroupAddon > </ Inpu",
+   "achados": {},
+   "caracteres": 4430
+  },
+  "input-otp": {
+   "secoes": [
+    "Input OTP",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Examples",
+    "Four Digits",
+    "Separator",
+    "With Placeholder",
+    "Blur on Complete",
+    "Mask",
+    "Custom Size",
+    "API Reference",
+    "InputOTP",
+    "InputOTPSlot",
+    "InputOTPSeparator"
+   ],
+   "composicao": "InputOTP ├── InputOTPSlot └── InputOTPSeparator Usage # import { InputOTP, InputOTPSeparator, InputOTPSlot, } from \"@/components/ui/input-otp\" ; < InputOTP > < InputOTPSlot index = { 0 } /> < InputOTPSlot index = { 1 } /> < InputOTPSlot index = { 2 } /> < InputOTPSeparator /> < InputOTPSlot index = { 3 } /> < InputOTPSlot index = { 4 } /> < InputOTPSlot index = { 5 } /> </ InputOTP > Controlled # ",
+   "achados": {
+    "composicao": [
+     "Preview Code With Placeholder # Use the placeholder prop to show a placeholder in each slot.",
+     "Preview Code Custom Size # Pass *:data-[slot=input-otp-input]:size-* and *:data-[slot=input-otp-input]:text-* to InputOTP to override slot dimensions and text size.",
+     "Preview Code API Reference # InputOTP # Prop Type Default withFakeCaret boolean false value string - defaultValue string - onValueChange ({ value, valueAsString }) => void - disabled boolean - invalid boolean - otp boolean true blurOnComplete boolean - mask boolean - InputOTPSlot # Single OTP slot.",
+     "Use index to specify position, 0 is the first slot."
+    ]
+   },
+   "caracteres": 3352
+  },
+  "item": {
+   "secoes": [
+    "Item",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Variant",
+    "Default",
+    "Outline",
+    "Muted",
+    "Custom spacing",
+    "Examples",
+    "Icon",
+    "Avatar",
+    "Image",
+    "Group",
+    "Header",
+    "Link",
+    "Dropdown",
+    "API Reference",
+    "Item",
+    "ItemGroup",
+    "ItemSeparator",
+    "ItemMedia",
+    "ItemContent",
+    "ItemTitle",
+    "ItemDescription",
+    "ItemActions",
+    "ItemHeader",
+    "ItemFooter"
+   ],
+   "composicao": "ItemGroup ├── ItemSeparator └── Item ├── ItemMedia ├── ItemHeader ├── ItemContent │ ├── ItemTitle │ └── ItemDescription ├── ItemActions └── ItemFooter Usage # import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle, } from \"@/components/ui/item\" ; < Item > < ItemMedia /> < ItemContent > < ItemTitle /> < ItemDescription /> </ ItemContent > < ItemActions /> </ Item > Variant #",
+   "achados": {
+    "aria": [
+     "Has role=\"list\" for accessibility."
+    ],
+    "responsivo": [
+     "Responsive spacing Wider from `md` up with `md:[--space:--spacing(5)]`.",
+     "You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Link # Use the asChild prop to render the item as a link.",
+     "Prop Type Default variant \"default\" | \"outline\" | \"muted\" \"default\" asChild boolean false className string - Attribute Default --space --spacing(3) ItemGroup # Groups related items with consistent spacing.",
+     "Prop Type Default className string - asChild boolean false ItemSeparator # Horizontal divider between items in a group.",
+     "Prop Type Default className string - asChild boolean false ItemMedia # Avatar, icon, or image for the item.",
+     "Prop Type Default variant \"default\" | \"icon\" | \"image\" \"default\" className string - asChild boolean false ItemContent # Wraps the item title and description text.",
+     "Prop Type Default className string - asChild boolean false ItemTitle # Primary title or heading for the item."
+    ],
+    "acessibilidade": [
+     "Has role=\"list\" for accessibility."
+    ]
+   },
+   "caracteres": 5465
+  },
+  "kbd": {
+   "secoes": [
+    "Kbd",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Variant",
+    "Outline",
+    "Examples",
+    "Group",
+    "Input Group",
+    "Button",
+    "Tooltip",
+    "API Reference",
+    "Kbd",
+    "KbdGroup"
+   ],
+   "composicao": "KbdGroup ├── Kbd └── Kbd Usage # import { Kbd, KbdGroup } from \"@/components/ui\" ; < KbdGroup > < Kbd >⌘</ Kbd > < Kbd >K</ Kbd > </ KbdGroup > Variant # Outline # Preview Code K ⌘ ⌃ Examples # Group # Use KbdGroup to group keys into a single shortcut. Preview Code Use Ctrl + K to open the command palette Input Group # Use Kbd inside InputGroup addons to show shortcut hints next to inputs. Preview",
+   "achados": {
+    "teclado": [
+     "Preview Code K ⌘ ⌃ ⇧ ⌘ + K Installation # CLI Manual pnpm bun npm yarn pnpm dlx shadcn@latest add @shark/kbd Anatomy # Kbd KbdGroup ├── Kbd └── Kbd Usage # import { Kbd, KbdGroup } from \"@/components/ui\" ; < KbdGroup > < Kbd >⌘</ Kbd > < Kbd >K</ Kbd > </ KbdGroup > Variant # Outline # Preview Code K ⌘ ⌃ Examples # Group # Use KbdGroup to group keys into a single shortcut.",
+     "Preview Code Use Ctrl + K to open the command palette Input Group # Use Kbd inside InputGroup addons to show shortcut hints next to inputs.",
+     "Preview Code ⌘ K Button # Add shortcut hints to buttons with Kbd or KbdGroup .",
+     "Preview Code Save Ctrl+S Tooltip # Show keyboard shortcuts in Tooltip content.",
+     "Prop Type Default variant \"default\" | \"outline\" \"default\" className string - asChild boolean false KbdGroup # Groups multiple keys into one shortcut."
+    ],
+    "composicao": [
+     "Prop Type Default variant \"default\" | \"outline\" \"default\" className string - asChild boolean false KbdGroup # Groups multiple keys into one shortcut.",
+     "Prop Type Default className string - asChild boolean false Previous page Item Next page Link Overlay On This Page Installation Anatomy Usage Variant Outline Examples Group Input Group Button Tooltip API Reference Kbd KbdGroup"
+    ]
+   },
+   "caracteres": 2367
+  },
+  "link-overlay": {
+   "secoes": [
+    "Link Overlay",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Accessibility",
+    "Link",
+    "Examples",
+    "Article",
+    "A11y Link Overlay",
+    "Always use Link",
+    "API Reference",
+    "LinkBox",
+    "LinkOverlay"
+   ],
+   "composicao": "LinkBox └── LinkOverlay Usage # import { LinkBox, LinkOverlay } from \"@/components/ui/link-overlay\" ; < LinkBox > < h2 > < LinkOverlay href = \"/blog/post-1\" > Blog Post Title </ LinkOverlay > </ h2 > </ LinkBox > Accessibility # Wrapping a whole card in <a> — Screen readers announce all card content as link text (verbose, confusing). LinkOverlay — Keeps the link on the heading only. Announcements ",
+   "achados": {
+    "aria": [
+     "Preview Code 3 days ago A11y Link Overlay Learn how to construct a screen reader friendly link overlay for accessibility and usability."
+    ],
+    "composicao": [
+     "Link # The asChild prop renders another element with link overlay styling.",
+     "API Reference # LinkBox # Prop Type Default className string - asChild boolean false LinkOverlay # Prop Type Default href string required className string - asChild boolean false Previous page Kbd Next page Listbox On This Page Installation Anatomy Usage Accessibility Link Examples Article Always use Link API Reference LinkBox LinkOverlay"
+    ],
+    "acessibilidade": [
+     "Preview Code 3 days ago A11y Link Overlay Learn how to construct a screen reader friendly link overlay for accessibility and usability.",
+     "API Reference # LinkBox # Prop Type Default className string - asChild boolean false LinkOverlay # Prop Type Default href string required className string - asChild boolean false Previous page Kbd Next page Listbox On This Page Installation Anatomy Usage Accessibility Link Examples Article Always use Link API Reference LinkBox LinkOverlay"
+    ]
+   },
+   "caracteres": 3373
+  },
+  "listbox": {
+   "secoes": [
+    "Listbox",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Orientation",
+    "Horizontal",
+    "Selection Mode",
+    "Multiple",
+    "Extended",
+    "None",
+    "Examples",
+    "With Icon",
+    "With Description",
+    "Image Explorer",
+    "Mountain Landscape",
+    "Transfer List",
+    "Grouping",
+    "With Filter",
+    "With Popover",
+    "Grid Layout",
+    "API Reference",
+    "Listbox",
+    "ListboxContent",
+    "ListboxItem",
+    "ListboxItemText",
+    "ListboxItemIndicator",
+    "ListboxItemGroup",
+    "ListboxItemGroupLabel",
+    "ListboxValueText",
+    "ListboxEmpty",
+    "ListboxShortcut"
+   ],
+   "composicao": "Listbox ├── ListboxValueText └── ListboxContent ├── ListboxEmpty └── ListboxItemGroup ├── ListboxItemGroupLabel └── ListboxItem ├── ListboxItemText ├── ListboxItemIndicator └── ListboxShortcut Usage # import { createListCollection } from \"@ark-ui/react\" ; import { Listbox, ListboxContent, ListboxItem, ListboxLabel, } from \"@/components/ui/listbox\" ; const collection = createListCollection ({ items",
+   "achados": {
+    "teclado": [
+     "Manages selection state and keyboard navigation.",
+     "Prop Type Default asChild boolean - className string - ListboxShortcut # Optional keyboard shortcut hint shown next to an item."
+    ],
+    "composicao": [
+     "Prop Type Default asChild boolean - className string - ListboxItem # A single selectable list option.",
+     "Prop Type Default item T required variant \"default\" | \"destructive\" \"default\" asChild boolean - highlightOnHover boolean - ListboxItemText # Text content for a list item.",
+     "Prop Type Default asChild boolean - className string - ListboxItemIndicator # Checkmark or icon shown when the item is selected.",
+     "Prop Type Default children ReactNode CheckIcon asChild boolean - className string - ListboxItemGroup # Groups related options.",
+     "Prop Type Default heading string - asChild boolean - className string - ListboxItemGroupLabel # Label for a group.",
+     "Prop Type Default asChild boolean - className string - ListboxValueText # Shows the selected value(s) as text."
+    ]
+   },
+   "caracteres": 6386
+  },
+  "marquee": {
+   "secoes": [
+    "Marquee",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "Pause on hover",
+    "Reverse",
+    "Auto fill",
+    "Spacing",
+    "Fade",
+    "Custom speed",
+    "API Reference",
+    "Marquee",
+    "MarqueeContent",
+    "MarqueeItem"
+   ],
+   "composicao": "Marquee ├── MarqueeContent └── MarqueeItem Usage # import { Marquee, MarqueeContent, MarqueeItem, } from \"@/components/ui/marquee\" ; < Marquee > < MarqueeContent > < MarqueeItem /> < MarqueeItem /> < MarqueeItem /> </ MarqueeContent > </ Marquee > Orientation # Use the orientation prop to control the orientation of the marquee. Horizontal # Preview Code Vertical # Preview Code Examples # Pause on ",
+   "achados": {
+    "responsivo": [
+     "Manages the scrolling viewport and animation.",
+     "Prop Type Default orientation \"horizontal\" | \"vertical\" \"horizontal\" speed number 50 spacing string \"16px\" showEdges boolean true autoFill boolean false pauseOnInteraction boolean false reverse boolean false className string - MarqueeContent # Viewport wrapper."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean - MarqueeItem # Single item in the scrolling marquee.",
+     "Prop Type Default className string - asChild boolean - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3191
+  },
+  "menu": {
+   "secoes": [
+    "Menu",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Positioning",
+    "Examples",
+    "Nested Menu",
+    "Icons",
+    "Shortcuts",
+    "Checkboxes",
+    "Radio Group",
+    "With Link",
+    "With Group Label",
+    "With Separator",
+    "Quick Items",
+    "Scrollable",
+    "Open a Dialog",
+    "Destructive",
+    "API Reference",
+    "Menu",
+    "MenuTrigger",
+    "MenuContent",
+    "MenuItem",
+    "MenuCheckboxItem",
+    "MenuRadioGroup",
+    "MenuRadioItem",
+    "MenuGroup",
+    "MenuGroupLabel",
+    "MenuSeparator",
+    "MenuQuickItem",
+    "MenuSub / MenuSubTrigger / MenuSubContent",
+    "MenuShortcut",
+    "MenuArrow"
+   ],
+   "composicao": "Menu ├── MenuTrigger └── MenuPositioner └── MenuContent ├── MenuGroup │ └── MenuGroupLabel ├── MenuItem ├── MenuQuickItem ├── MenuCheckboxItem ├── MenuRadioGroup │ └── MenuRadioItem ├── MenuSub │ ├── MenuSubTrigger │ └── MenuSubContent ├── MenuSeparator ├── MenuShortcut └── MenuArrow Usage # import { Menu, MenuCheckboxItem, MenuContent, MenuGroup, MenuItem, MenuQuickItem, MenuRadioGroup, MenuRadio",
+   "achados": {
+    "teclado": [
+     "Preview Code Open Shortcuts # Use MenuShortcut to show keyboard hints next to menu items.",
+     "MenuShortcut # Optional keyboard shortcut hint displayed next to a menu item."
+    ],
+    "composicao": [
+     "Preview Code Open With Link # Use the asChild prop on MenuItem with a anchor element to render a link.",
+     "Use asChild to delegate to a child element.",
+     "Prop Type Default asChild boolean - MenuContent # Holds menu options.",
+     "Prop Type Default asChild boolean - className string - MenuItem # A single selectable menu option.",
+     "Supports asChild for custom elements.",
+     "Prop Type Default value string required variant \"default\" | \"destructive\" \"default\" asChild boolean - disabled boolean - closeOnSelect boolean - onSelect VoidFunction - MenuCheckboxItem # A menu option with a checkbox."
+    ]
+   },
+   "caracteres": 6481
+  },
+  "native-select": {
+   "secoes": [
+    "Native Select",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Native Select vs Select",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "States",
+    "Controlled",
+    "Disabled",
+    "Invalid",
+    "Examples",
+    "Groups",
+    "With Field",
+    "API Reference",
+    "NativeSelect",
+    "NativeSelectOptGroup",
+    "NativeSelectOption"
+   ],
+   "composicao": "NativeSelect ├── NativeSelectOption └── NativeSelectOptGroup └── NativeSelectOption Usage # import { NativeSelect, NativeSelectOptGroup, NativeSelectOption, } from \"@/components/ui/native-select\" ; < NativeSelect > < NativeSelectOptGroup label = \"Group 1\" > < NativeSelectOption value = \"1\" >Option 1</ NativeSelectOption > < NativeSelectOption value = \"2\" >Option 2</ NativeSelectOption > < NativeSe",
+   "achados": {
+    "acessibilidade": [
+     "Preview Code Select an option Banana Mango Pineapple Carrot Potato Tomato With Field # Wrap in Field with FieldLabel and FieldDescription for proper labeling and accessibility."
+    ]
+   },
+   "caracteres": 3709
+  },
+  "number-input": {
+   "secoes": [
+    "Number Input",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "Field Only",
+    "With Field",
+    "With Input Group",
+    "With Scrub",
+    "With Range",
+    "With Formatted Value",
+    "With Step",
+    "Mouse Wheel",
+    "API Reference",
+    "NumberInput",
+    "NumberInputGroup",
+    "NumberInputDecrement",
+    "NumberInputIncrement",
+    "NumberInputInput",
+    "NumberInputScrubber"
+   ],
+   "composicao": "NumberInput └── NumberInputGroup ├── NumberInputDecrement ├── NumberInputInput ├── NumberInputIncrement └── NumberInputScrubber Usage # import { NumberInput, NumberInputGroup, NumberInputInput, NumberInputIncrement, NumberInputDecrement } from \"@/comopnents/ui/number-input\" ; < NumberInput > < NumberInputGroup > < NumberInputInput /> < NumberInputIncrement /> < NumberInputDecrement /> </ NumberInp",
+   "achados": {
+    "toque": [
+     "Preview Code € EUR With Scrub # Use the NumberInputScrubber to drag the label to change the value.",
+     "Prop Type Default size \"sm\" | \"md\" | \"lg\" \"md\" className string - asChild boolean false NumberInputScrubber # Drag area for scrubbing the value."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false NumberInputDecrement # Decreases the value by the step amount.",
+     "Prop Type Default className string - asChild boolean false NumberInputIncrement # Increases the value by the step amount.",
+     "Prop Type Default className string - asChild boolean false NumberInputInput # Numeric input.",
+     "Prop Type Default size \"sm\" | \"md\" | \"lg\" \"md\" className string - asChild boolean false NumberInputScrubber # Drag area for scrubbing the value.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4758
+  },
+  "pagination": {
+   "secoes": [
+    "Pagination",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "Page Range",
+    "With Links",
+    "Table",
+    "API Reference",
+    "Pagination"
+   ],
+   "composicao": "Pagination ├── PaginationPrevious ├── PaginationItems └── PaginationNext Usage # import { Pagination, PaginationItems, PaginationNext, PaginationPrevious, } from \"@/components/ui/pagination\" ; < Pagination > < PaginationPrevious /> < PaginationItems /> < PaginationNext /> </ Pagination > Controlled # Use page and onPageChange to control the current page. Preview Code Previous 1 2 3 4 5 Next Page 1",
+   "achados": {},
+   "caracteres": 2618
+  },
+  "password-input": {
+   "secoes": [
+    "Password Input",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "Autocomplete",
+    "Controlled Visibility",
+    "Auto Hide",
+    "Custom Indicator",
+    "With Field",
+    "API Reference",
+    "PasswordInput",
+    "PasswordInputGroup",
+    "PasswordInputInput",
+    "PasswordInputTrigger",
+    "PasswordInputIndicator"
+   ],
+   "composicao": "PasswordInput └── PasswordInputGroup ├── PasswordInputInput └── PasswordInputTrigger Usage # import { PasswordInput, PasswordInputGroup, PasswordInputInput, PasswordInputTrigger, } from \"@/components/ui/password-input\" ; < PasswordInput > < PasswordInputGroup > < PasswordInputInput placeholder = \"Enter password\" /> < PasswordInputTrigger /> </ PasswordInputGroup > </ PasswordInput > Controlled # U",
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false PasswordInputInput # Password field.",
+     "Prop Type Default size \"sm\" | \"md\" | \"lg\" \"md\" className string - asChild boolean false PasswordInputTrigger # Button that toggles visibility."
+    ]
+   },
+   "caracteres": 4445
+  },
+  "popover": {
+   "secoes": [
+    "Popover",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Positioning",
+    "Title Description",
+    "Using props",
+    "Using components",
+    "Examples",
+    "Non-modal",
+    "Nested",
+    "Anchor",
+    "Close button",
+    "Close behavior",
+    "Scrollable",
+    "Inside dialog",
+    "Custom spacing",
+    "API Reference",
+    "Popover",
+    "PopoverTrigger",
+    "PopoverAnchor",
+    "PopoverContent",
+    "PopoverHeader",
+    "PopoverTitle",
+    "PopoverDescription",
+    "PopoverBody",
+    "PopoverFooter",
+    "PopoverClose",
+    "PopoverArrow"
+   ],
+   "composicao": "Popover ├── PopoverTrigger └── PopoverContent ├── PopoverHeader │ ├── PopoverTitle │ └── PopoverDescription ├── PopoverBody ├── PopoverFooter └── PopoverClose Usage # import { Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverTitle, PopoverDescription, PopoverBody, PopoverFooter, PopoverClose, } from \"@/components/ui/popover\" ; < Popover > < PopoverTrigger /> < PopoverContent > < Popo",
+   "achados": {
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Use asChild for custom trigger elements.",
+     "Prop Type Default asChild boolean - PopoverAnchor # Element the popover is positioned relative to.",
+     "Prop Type Default asChild boolean - PopoverContent # Holds the popover panel content.",
+     "Prop Type Default asChild boolean - className string - PopoverDescription # Accessible description for the popover panel.",
+     "Prop Type Default asChild boolean - className string - PopoverBody # Scrollable content area.",
+     "Use asChild for custom close elements."
+    ],
+    "acessibilidade": [
+     "Prop Type Default title string - description string - className string - PopoverTitle # Accessible title for the popover panel.",
+     "Prop Type Default asChild boolean - className string - PopoverDescription # Accessible description for the popover panel."
+    ]
+   },
+   "caracteres": 5930
+  },
+  "progress": {
+   "secoes": [
+    "Progress",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "With label",
+    "Indeterminate",
+    "API Reference",
+    "Progress"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2471
+  },
+  "prose": {
+   "secoes": [
+    "Prose",
+    "Taxing Laughter: The Joke Tax Chronicles",
+    "The King&#x27;s Plan",
+    "The Joke Tax",
+    "Jokester&#x27;s Revolt",
+    "The People&#x27;s Rebellion",
+    "Installation",
+    "Usage",
+    "Undo prose styles",
+    "Davy Jones&#x27; locker",
+    "Davy Jones&#x27; locker",
+    "Examples",
+    "H1",
+    "Taxing Laughter: The Joke Tax Chronicles",
+    "H2",
+    "The People of the Kingdom",
+    "H3",
+    "The Joke Tax",
+    "H4",
+    "People stopped telling jokes",
+    "H5",
+    "People stopped telling jokes",
+    "H6",
+    "People stopped telling jokes",
+    "Paragraph",
+    "Blockquote",
+    "Table",
+    "List",
+    "Ordered list",
+    "Link",
+    "Media",
+    "Kbd",
+    "Inline code",
+    "Separator",
+    "Definition list",
+    "Details",
+    "Mark",
+    "Small",
+    "API Reference",
+    "Prose"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false Previous page Progress Next page QR Code On This Page Installation Usage Undo prose styles Examples H1 H2 H3 H4 H5 H6 Paragraph Blockquote Table List Ordered list Link Media Kbd Inline code Separator Definition list Details Mark Small API Reference Prose"
+    ]
+   },
+   "caracteres": 6188
+  },
+  "qr-code": {
+   "secoes": [
+    "QR Code",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Size",
+    "Examples",
+    "With an overlay",
+    "Error correction",
+    "Download",
+    "API Reference",
+    "QrCode",
+    "QrCodeFrame",
+    "QrCodeOverlay",
+    "QrCodeDownload"
+   ],
+   "composicao": "QrCode ├── QrCodeFrame ├── QrCodeOverlay └── QrCodeDownload Usage # import { QrCode, QrCodeFrame, QrCodeOverlay, QrCodeDownload, } from \"@/components/ui/qr-code\" ; < QrCode > < QrCodeFrame /> < QrCodeOverlay /> < QrCodeDownload /> </ QrCode > Size # Override the size with the --qr-code-size CSS variable on QrCode For example, --qr-code-size:6rem for small, --qr-code-size:10rem for large Preview Co",
+   "achados": {
+    "composicao": [
+     "Prop Type Default value string - defaultValue string - onValueChange (details: ValueChangeDetails) => void - encoding QrCodeGenerateOptions - pixelSize number - className string - asChild boolean - Attribute Default --qr-code-size --spacing(32) --qr-code-overlay-size calc(var(--qr-code-size)/4) QrCodeFrame # SVG containing the QR pattern.",
+     "Prop Type Default className string - asChild boolean - QrCodeOverlay # Optional center overlay on top of the QR pattern.",
+     "Prop Type Default className string - asChild boolean - QrCodeDownload # Downloads the QR code as an image file.",
+     "Prop Type Default fileName string - mimeType DataUrlType - quality number - className string - asChild boolean - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3434
+  },
+  "radio-group": {
+   "secoes": [
+    "Radio Group",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Invalid",
+    "Disabled",
+    "Examples",
+    "With Description",
+    "Card Style",
+    "API Reference",
+    "RadioGroup",
+    "RadioGroupItem"
+   ],
+   "composicao": "RadioGroup └── RadioGroupItem Usage # import { RadioGroup, RadioGroupItem, } from \"@/components/ui/radio-group\" ; < RadioGroup > < RadioGroupItem value = \"item-1\" > { /* label */ } </ RadioGroupItem > < RadioGroupItem value = \"item-2\" > { /* label */ } </ RadioGroupItem > </ RadioGroup > Controlled # Use the value and onValueChange props to control the radio group. Preview Code Select the option c",
+   "achados": {},
+   "caracteres": 3277
+  },
+  "rating": {
+   "secoes": [
+    "Rating",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Readonly",
+    "Disabled",
+    "Examples",
+    "Half star",
+    "Count",
+    "Testimonial",
+    "Customize size",
+    "Custom icon",
+    "Custom color",
+    "API Reference",
+    "Rating"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Preview Code Custom icon # Compose the rating with a different icon."
+    ]
+   },
+   "caracteres": 2939
+  },
+  "resizable": {
+   "secoes": [
+    "Resizable",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Examples",
+    "Handle",
+    "Min / Max Size",
+    "Multiple Panels",
+    "API Reference",
+    "Resizable",
+    "ResizablePanel",
+    "ResizableResizeTrigger"
+   ],
+   "composicao": "Resizable ├── ResizablePanel └── ResizableResizeTrigger Usage # import { Resizable, ResizablePanel, ResizableResizeTrigger, } from \"@/components/ui/resizable\" ; < Resizable > < ResizablePanel id = \"1\" /> < ResizableResizeTrigger id = \"1:2\" /> < ResizablePanel id = \"2\" /> </ Resizable > Orientation # Use the orientation prop to control the orientation of the resizable panels. Horizontal # Set orien",
+   "achados": {
+    "composicao": [
+     "Prop Type Default id string - asChild boolean false className string - ResizableResizeTrigger # Draggable handle between panels for resizing.",
+     "Prop Type Default id ${string}:${string} - withHandle boolean false disabled boolean - asChild boolean false className string - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3402
+  },
+  "scroll-area": {
+   "secoes": [
+    "Scroll Area",
+    "Tags",
+    "Installation",
+    "Usage",
+    "Examples",
+    "Scroll Fade",
+    "Tags",
+    "Horizontal Scroll",
+    "Both Scrollbars",
+    "Nested",
+    "API Reference",
+    "ScrollArea"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 6098
+  },
+  "segment-group": {
+   "secoes": [
+    "Segment Group",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Disabled Item",
+    "Variant",
+    "Default",
+    "Underline",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Vertical with Underline",
+    "Examples",
+    "Indicator on Hover",
+    "Custom Indicator",
+    "API Reference",
+    "SegmentGroup",
+    "SegmentGroupIndicator",
+    "SegmentGroupItem",
+    "SegmentGroupItemText"
+   ],
+   "composicao": "SegmentGroup └── SegmentGroupItem └── SegmentGroupItemText Usage # import { SegmentGroup, SegmentGroupIndicator, SegmentGroupItem, SegmentGroupItemText, } from \"@/components/ui/segment-group\" ; < SegmentGroup > < SegmentGroupIndicator /> < SegmentGroupItem value = \"profile\" > < SegmentGroupItemText /> </ SegmentGroupItem > < SegmentGroupItem value = \"account\" > < SegmentGroupItemText /> </ Segment",
+   "achados": {
+    "composicao": [
+     "Preview Code Profile Account Security Notifications Custom Indicator # Use *:data-[slot=segment-group-indicator]:bg-* classes to change the color of the indicator.",
+     "Prop Type Default defaultValue string - value string - onValueChange (details: ValueChangeDetails) => void - orientation \"horizontal\" | \"vertical\" \"horizontal\" variant \"default\" | \"underline\" \"default\" disabled boolean - className string - asChild boolean - SegmentGroupIndicator # Visual indicator that moves to the selected segment(s).",
+     "Prop Type Default asChild boolean - className string - SegmentGroupItem # Single segment option.",
+     "Prop Type Default value string - disabled boolean - className string - asChild boolean - SegmentGroupItemText # Text label for a segment.",
+     "Prop Type Default className string - asChild boolean - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 4173
+  },
+  "select": {
+   "secoes": [
+    "Select",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Size",
+    "Small",
+    "Medium",
+    "Large",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Examples",
+    "Multiple",
+    "Grouping",
+    "With Field",
+    "Max Selection",
+    "Scrollable",
+    "Empty",
+    "API Reference",
+    "Select",
+    "SelectTrigger",
+    "SelectValue",
+    "SelectContent",
+    "SelectClearTrigger",
+    "SelectGroup",
+    "SelectGroupLabel",
+    "SelectItem",
+    "SelectEmpty"
+   ],
+   "composicao": "Select ├── SelectTrigger │ └── SelectValue └── SelectContent ├── SelectEmpty ├── SelectClearTrigger ├── SelectGroup │ ├── SelectGroupLabel │ └── SelectItem └── SelectItem Usage # import { createListCollection } from \"@ark-ui/react\" ; import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from \"@/components/ui/select\" ; const collection = createListCollection ({ items: [ \"Option ",
+   "achados": {
+    "composicao": [
+     "Prop Type Default size \"sm\" | \"md\" | \"lg\" \"md\" showClear boolean false className string - asChild boolean - SelectValue # Shows the selected value or placeholder.",
+     "Prop Type Default placeholder string - className string - asChild boolean - SelectContent # Holds the dropdown options.",
+     "Prop Type Default className string - asChild boolean - SelectClearTrigger # Button to clear the selected value.",
+     "Prop Type Default className string - asChild boolean - SelectGroup # Groups related options under an optional heading.",
+     "Prop Type Default heading string | ReactNode - className string - asChild boolean - SelectGroupLabel # Label for an option group.",
+     "Prop Type Default className string - asChild boolean - SelectItem # A single selectable option in the dropdown."
+    ]
+   },
+   "caracteres": 5489
+  },
+  "separator": {
+   "secoes": [
+    "Separator",
+    "Shark UI",
+    "Installation",
+    "Usage",
+    "Examples",
+    "Vertical",
+    "Menu",
+    "List",
+    "API Reference",
+    "Separator"
+   ],
+   "composicao": null,
+   "achados": {
+    "acessibilidade": [
+     "A collection of accessible, beautiful, and customizable components."
+    ]
+   },
+   "caracteres": 2152
+  },
+  "sheet": {
+   "secoes": [
+    "Sheet",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Sides",
+    "Examples",
+    "Inset Variant",
+    "Scrollable",
+    "No Close Button",
+    "Close behavior",
+    "Non-Modal",
+    "Custom spacing",
+    "API Reference",
+    "Sheet",
+    "SheetTrigger",
+    "SheetContent",
+    "SheetHeader",
+    "SheetBody",
+    "SheetFooter",
+    "SheetTitle",
+    "SheetDescription",
+    "SheetClose",
+    "SheetOverlay",
+    "SheetPositioner"
+   ],
+   "composicao": "Sheet ├── SheetTrigger └── SheetContent ├── SheetHeader │ ├── SheetTitle │ └── SheetDescription ├── SheetBody └── SheetFooter └── SheetClose Usage # import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from \"@/components/ui/sheet\" ; < Sheet > < SheetTrigger >Open</ SheetTrigger > < SheetContent > < SheetHeader > < SheetTitle >Sheet Title</ SheetTitle > < SheetDes",
+   "achados": {
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ],
+    "composicao": [
+     "Use asChild for custom triggers.",
+     "Prop Type Default asChild boolean false className string - SheetContent # Holds the sheet panel.",
+     "Prop Type Default asChild boolean false className string - SheetDescription # Accessible description.",
+     "Prop Type Default asChild boolean false className string - SheetClose # Closes the sheet on click.",
+     "Prop Type Default asChild boolean false className string - SheetOverlay # Dimmed overlay behind the sheet."
+    ],
+    "acessibilidade": [
+     "Prop Type Default className string - SheetTitle # Accessible title.",
+     "Prop Type Default asChild boolean false className string - SheetDescription # Accessible description."
+    ]
+   },
+   "caracteres": 5304
+  },
+  "sidebar": {
+   "secoes": [
+    "Sidebar",
+    "Installation",
+    "Anatomy",
+    "Structure",
+    "Usage",
+    "Controlled",
+    "Theming",
+    "Variable Reference",
+    "Styling",
+    "Keyboard shortcut",
+    "API Reference",
+    "SidebarProvider",
+    "Width",
+    "Sidebar",
+    "Collapsible modes",
+    "useSidebar",
+    "SidebarHeader",
+    "SidebarFooter",
+    "SidebarContent",
+    "SidebarGroup",
+    "SidebarMenu",
+    "SidebarMenuButton",
+    "SidebarMenuAction",
+    "SidebarMenuSub",
+    "SidebarMenuBadge",
+    "SidebarMenuSkeleton",
+    "SidebarTrigger",
+    "SidebarRail"
+   ],
+   "composicao": "SidebarProvider ├── Sidebar │ ├── SidebarHeader │ ├── SidebarContent │ │ └── SidebarGroup │ │ ├── SidebarGroupLabel │ │ ├── SidebarGroupAction │ │ ├── SidebarGroupContent │ │ └── SidebarMenu │ │ ├── SidebarMenuItem │ │ │ ├── SidebarMenuButton │ │ │ ├── SidebarMenuAction │ │ │ └── SidebarMenuBadge │ │ └── SidebarMenuSub │ │ ├── SidebarMenuSubButton │ │ └── SidebarMenuSubItem │ ├── SidebarFooter │ ├",
+   "achados": {
+    "responsivo": [
+     "Override per layout with CSS variables on the provider: < SidebarProvider style = { { \"--sidebar-width\" : \"20rem\" , \"--sidebar-width-mobile\" : \"20rem\" , } as React .",
+     "CSSProperties } > < Sidebar /> </ SidebarProvider > Attribute Default --sidebar-width 16rem --sidebar-width-mobile 18rem --sidebar-width-icon 3rem Sidebar # Primary column component: desktop fixed strip + mobile sheet (via Sheet ).",
+     "openMobile boolean Mobile sheet visibility.",
+     "isMobile boolean Breakpoint-derived mobile flag.",
+     "toggleSidebar () => void Toggles desktop or mobile as appropriate."
+    ],
+    "composicao": [
+     "SidebarFooter # Sticky bottom slot—profile, settings entry, sign-out, etc.",
+     "map (( project ) => ( < SidebarMenuItem key = { project.name } > < SidebarMenuButton asChild > < a href = { project.url } > < project.icon /> < span > { project.name } </ span > </ a > </ SidebarMenuButton > </ SidebarMenuItem > )) } </ SidebarMenu > SidebarMenuButton # Default renders a Button ; use asChild for links.",
+     "< SidebarMenuButton asChild isActive > < a href = \"#\" >Home</ a > </ SidebarMenuButton > SidebarMenuAction # Icon-only or compact action aligned to a row.",
+     "< SidebarMenuItem > < SidebarMenuButton asChild > < a href = \"#\" > < Home /> < span >Home</ span > </ a > </ SidebarMenuButton > < SidebarMenuAction > < Plus /> < span className = \"sr-only\" >Add project</ span > </ SidebarMenuAction > </ SidebarMenuItem > SidebarMenuSub # Nested list hanging off a parent item."
+    ],
+    "acessibilidade": [
+     "import { useSidebar } from \"@/components/ui/sidebar\" ; export function CustomTrigger () { const { toggleSidebar } = useSidebar (); return < button type = \"button\" onClick = { toggleSidebar } >Toggle</ button >; } Prefer SidebarTrigger when you want the default styling and accessibility bundle."
+    ]
+   },
+   "caracteres": 11853
+  },
+  "signature-pad": {
+   "secoes": [
+    "Signature Pad",
+    "Installation",
+    "Usage",
+    "Examples",
+    "Image preview",
+    "With field",
+    "API Reference",
+    "SignaturePad"
+   ],
+   "composicao": null,
+   "achados": {
+    "acessibilidade": [
+     "Preview Code Signature Image preview With field # Wrap the signature pad in a Field with FieldLabel and FieldHelper for accessible form integration."
+    ]
+   },
+   "caracteres": 2378
+  },
+  "skeleton": {
+   "secoes": [
+    "Skeleton",
+    "Installation",
+    "Usage",
+    "Examples",
+    "Skeleton",
+    "Circle",
+    "Text",
+    "Loading cards",
+    "API Reference",
+    "Skeleton",
+    "SkeletonCircle",
+    "SkeletonText"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Prop Type Default className string - asChild boolean - SkeletonCircle # Circular loading placeholder.",
+     "Prop Type Default className string - asChild boolean - SkeletonText # Multi-line text placeholder.",
+     "Prop Type Default lines number 2 className string - asChild boolean - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 2368
+  },
+  "skip-nav": {
+   "secoes": [
+    "Skip Nav",
+    "Main Content",
+    "Installation",
+    "Usage",
+    "API Reference",
+    "SkipNavLink",
+    "SkipNavContent"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Click on the \"Preview\" tab and use the tab key to see the skip to content link."
+    ]
+   },
+   "caracteres": 2233
+  },
+  "slider": {
+   "secoes": [
+    "Slider",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "With label and value",
+    "Range",
+    "Vertical",
+    "Disabled",
+    "Min and max",
+    "Marks",
+    "Step",
+    "API Reference",
+    "Slider",
+    "SliderLabel",
+    "SliderValue"
+   ],
+   "composicao": null,
+   "achados": {
+    "acessibilidade": [
+     "Preview Code Greater than 80 Temperature 40 ❌ Examples # With label and value # Use <Field> , <SliderLabel> , and <SliderValue> for accessible labelling and to show the current value."
+    ]
+   },
+   "caracteres": 3277
+  },
+  "spinner": {
+   "secoes": [
+    "Spinner",
+    "Installation",
+    "Usage",
+    "Customization",
+    "Examples",
+    "Size",
+    "Badge",
+    "Input Group",
+    "API Reference",
+    "Spinner"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Prop Type Default className string - aria-label string \"Loading\" Previous page Slider Next page Status On This Page Installation Usage Customization Examples Size Badge Input Group API Reference Spinner"
+    ]
+   },
+   "caracteres": 2110
+  },
+  "status": {
+   "secoes": [
+    "Status",
+    "Installation",
+    "Usage",
+    "Variants",
+    "Default",
+    "Info",
+    "Success",
+    "Warning",
+    "Destructive",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "With Badge",
+    "With Icon",
+    "Custom Size",
+    "Custom Color",
+    "API Reference",
+    "Status"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Prop Type Default variant \"success\" | \"info\" | \"warning\" | \"destructive\" \"success\" size \"sm\" | \"md\" | \"lg\" \"md\" className string - asChild boolean false Previous page Spinner Next page Steps On This Page Installation Usage Variants Default Info Success Warning Destructive Sizes Small Medium Large With Badge With Icon Custom Size Custom Color API Reference Status"
+    ]
+   },
+   "caracteres": 2324
+  },
+  "steps": {
+   "secoes": [
+    "Steps",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Title",
+    "Description",
+    "Vertical",
+    "Loading",
+    "Controlled",
+    "Custom Icon",
+    "API Reference",
+    "Steps",
+    "StepsList"
+   ],
+   "composicao": "Steps ├── StepsList │ └── StepsItem │ ├── StepsTrigger │ ├── StepsIndicator │ ├── StepsSeparator │ ├── StepsTitle │ └── StepsDescription ├── StepsContent ├── StepsCompletedContent ├── StepsPrevious └── StepsNext Usage # import { Steps, StepsList, StepsItem, StepsTrigger, StepsSeparator, StepsIndicator, StepsTitle, StepsDescription, StepsContent, StepsCompletedContent, StepsNext, StepsPrevious } fr",
+   "achados": {},
+   "caracteres": 3578
+  },
+  "switch": {
+   "secoes": [
+    "Switch",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Invalid",
+    "Examples",
+    "Disabled",
+    "With Description",
+    "Card Style",
+    "Form Integration",
+    "Customizing Size",
+    "API Reference",
+    "Switch"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3074
+  },
+  "table": {
+   "secoes": [
+    "Table",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Accessibility",
+    "Examples",
+    "Striped",
+    "With footer",
+    "With actions",
+    "With action bar",
+    "With context menu",
+    "Disable row hover",
+    "API Reference",
+    "Table",
+    "TableHeader",
+    "TableBody",
+    "TableFooter",
+    "TableRow",
+    "TableHead",
+    "TableCell",
+    "TableCaption"
+   ],
+   "composicao": "Table ├── TableCaption ├── TableHeader │ └── TableRow │ └── TableHead ├── TableBody │ └── TableRow │ └── TableCell └── TableFooter └── TableRow └── TableCell Usage # import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow, TableFooter, } from \"@/components/ui/table\" ; < Table > < TableCaption /> < TableHeader > < TableRow > < TableHead /> < TableHead /> </ TableRow > <",
+   "achados": {
+    "teclado": [
+     "Item Qty Unit price Amount Wireless mouse 2 $ 29.99 $ 59.98 Mechanical keyboard 1 $ 149.99 $ 149.99 USB-C hub 3 $ 45.00 $ 135.00 Total $379.47 With actions # Add an actions column with buttons per row."
+    ],
+    "composicao": [
+     "Prop Type Default variant \"plain\" | \"striped\" \"plain\" isHoverable boolean true className string - asChild boolean false TableHeader # Table header row group.",
+     "Prop Type Default className string - asChild boolean false TableBody # Table body row group.",
+     "Prop Type Default className string - asChild boolean false TableFooter # Table footer row group for totals or summary rows.",
+     "Prop Type Default className string - asChild boolean false TableRow # A single table row.",
+     "Prop Type Default className string - asChild boolean false TableHead # Header cell for column titles.",
+     "Prop Type Default className string - asChild boolean false TableCell # Data cell for body or footer rows."
+    ],
+    "acessibilidade": [
+     "Prop Type Default className string - asChild boolean false TableCaption # Accessible caption describing the table.",
+     "Prop Type Default className string - asChild boolean false Previous page Switch Next page Tabs On This Page Installation Anatomy Usage Accessibility Examples Striped With footer With actions With action bar With context menu Disable row hover API Reference Table TableHeader TableBody TableFooter TableRow TableHead TableCell TableCaption"
+    ]
+   },
+   "caracteres": 5553
+  },
+  "tabs": {
+   "secoes": [
+    "Tabs",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Variant",
+    "Default",
+    "Underline",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "States",
+    "Disabled",
+    "Examples",
+    "Vertical with underline",
+    "With icons",
+    "API Reference",
+    "Tabs",
+    "TabsList",
+    "TabsTrigger",
+    "TabsContent"
+   ],
+   "composicao": "Tabs ├── TabsList │ └── TabsTrigger └── TabsContent Usage # import { Tabs, TabsList, TabsTrigger, TabsContent } from \"@/components/ui/tabs\" ; < Tabs > < TabsList > < TabsTrigger value = \"1\" >Tab 1</ TabsTrigger > < TabsTrigger value = \"2\" >Tab 2</ TabsTrigger > </ TabsList > < TabsContent value = \"1\" >Tab 1 content</ TabsContent > < TabsContent value = \"2\" >Tab 2 content</ TabsContent > </ Tabs > ",
+   "achados": {},
+   "caracteres": 3879
+  },
+  "tags-input": {
+   "secoes": [
+    "Tags Input",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "Blur Behavior",
+    "Controlled Input Value",
+    "Delimiter",
+    "Disabled Editing",
+    "Max Tag Length",
+    "Max With Overflow",
+    "Paste Behavior",
+    "Sanitize",
+    "Validation",
+    "With Combobox",
+    "With Field",
+    "API Reference",
+    "TagsInput",
+    "TagsInputInput",
+    "TagsInputItem",
+    "TagsInputClearTrigger"
+   ],
+   "composicao": "TagsInput └── TagsInputContext └── TagsInputItem Usage # import { TagsInput, TagsInputContext, TagsInputItem, } from \"@/components/ui/tags-input\" ; < TagsInput defaultValue = { [ \"React\" , \"Solid\" ] } > < TagsInputContext > { ({ value }) => value. map (( value , index ) => ( < TagsInputItem index = { index } key = { value } value = { value } > { value } </ TagsInputItem > )) } </ TagsInputContext ",
+   "achados": {
+    "teclado": [
+     "Supports data-highlighted when navigated by keyboard."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean - For the full list of props and context methods, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 5592
+  },
+  "textarea": {
+   "secoes": [
+    "Textarea",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Invalid",
+    "Examples",
+    "Autoresize",
+    "With Field",
+    "With Input Group",
+    "Form Integration",
+    "API Reference",
+    "Textarea"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2671
+  },
+  "timer": {
+   "secoes": [
+    "Timer",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Orientation",
+    "Vertical",
+    "Horizontal",
+    "Examples",
+    "Countdown",
+    "Date-based",
+    "Interval",
+    "Pomodoro",
+    "Custom separator",
+    "API Reference",
+    "Timer",
+    "TimerArea",
+    "TimerItemGroup",
+    "TimerItemLabel",
+    "TimerItem",
+    "TimerSeparator",
+    "TimerControl",
+    "TimerActionTrigger",
+    "TimerStart",
+    "TimerPause",
+    "TimerResume",
+    "TimerReset",
+    "TimerRestart",
+    "TimerPlay",
+    "remainingMsUntilDate"
+   ],
+   "composicao": "Timer ├── TimerArea │ ├── TimerItemGroup │ │ ├── TimerItem │ │ └── TimerItemLabel │ ├── TimerSeparator └── TimerControl ├── TimerActionTrigger ├── TimerStart ├── TimerPause ├── TimerResume ├── TimerReset ├── TimerRestart └── TimerPlay Usage # import { Timer, TimerArea, TimerItem, TimerItemGroup, TimerItemLabel, TimerSeparator, TimerControl, TimerActionTrigger, TimerStart, TimerPause, TimerResume, ",
+   "achados": {
+    "aria": [
+     "Prop Type Default targetMs number 0 startMs number 0 countdown boolean false interval number 1000 autoStart boolean false onTick (details: TickDetails) => void - onComplete () => void - TimerArea # Live region that exposes the formatted time to assistive tech and lays out digit groups."
+    ],
+    "composicao": [
+     "Prop Type Default className string - asChild boolean false TimerItemGroup # Groups a TimerItem with its TimerItemLabel and sets stack direction via orientation .",
+     "Prop Type Default orientation \"horizontal\" | \"vertical\" \"vertical\" className string - asChild boolean false TimerItemLabel # Caption for the adjacent TimerItem (for example, “minutes”).",
+     "Prop Type Default className string - asChild boolean false TimerItem # Renders one time field from the current timer value.",
+     "Prop Type Default type \"days\" | \"hours\" | \"minutes\" | \"seconds\" | \"milliseconds\" \"seconds\" asChild boolean false TimerSeparator # Visual delimiter between item groups (defaults to : when children are omitted).",
+     "Prop Type Default className string - asChild boolean false TimerControl # Toolbar row for timer action controls.",
+     "Prop Type Default className string - asChild boolean false TimerActionTrigger # Button that dispatches a timer action."
+    ]
+   },
+   "caracteres": 6519
+  },
+  "toast": {
+   "secoes": [
+    "Toast",
+    "Installation",
+    "Usage",
+    "Deduplication",
+    "Placement",
+    "Max toasts",
+    "Examples",
+    "Variants",
+    "Promise",
+    "Action",
+    "Duration",
+    "Not Closable",
+    "API Reference",
+    "Toaster",
+    "toast"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3641
+  },
+  "toggle": {
+   "secoes": [
+    "Toggle",
+    "Installation",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "Variants",
+    "Default",
+    "Outline",
+    "Sizes",
+    "Small",
+    "Medium",
+    "Large",
+    "Examples",
+    "Icon Group",
+    "API Reference",
+    "Toggle",
+    "ToggleIndicator"
+   ],
+   "composicao": null,
+   "achados": {
+    "composicao": [
+     "Use asChild for custom elements.",
+     "Prop Type Default variant \"outline\" | \"ghost\" \"ghost\" size \"sm\" | \"md\" | \"lg\" \"md\" pressed boolean - defaultPressed boolean false disabled boolean false onPressedChange (details: PressedChangeDetails) => void - className string - asChild boolean false ToggleIndicator # Icon or indicator shown when toggle is active.",
+     "Prop Type Default className string - asChild boolean false For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 2730
+  },
+  "toggle-group": {
+   "secoes": [
+    "Toggle Group",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "States",
+    "Disabled",
+    "With disabled toggle",
+    "Orientation",
+    "Horizontal",
+    "Vertical",
+    "Variant",
+    "Ghost",
+    "Outline",
+    "Examples",
+    "With spacing",
+    "Single selection",
+    "Custom toggle group",
+    "API Reference",
+    "ToggleGroup",
+    "ToggleGroupItem"
+   ],
+   "composicao": "ToggleGroup └── ToggleGroupItem Usage # import { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\" ; < ToggleGroup > < ToggleGroupItem value = \"1\" >Item 1</ ToggleGroupItem > < ToggleGroupItem value = \"2\" >Item 2</ ToggleGroupItem > </ ToggleGroup > Controlled # Use the value and onValueChange props to control the toggle group state programmatically. Preview Code bold States # Dis",
+   "achados": {
+    "aria": [
+     "Prop Type Default value string required disabled boolean false className string - aria-label string - For a complete list of props, see the Ark UI documentation ."
+    ]
+   },
+   "caracteres": 3588
+  },
+  "toggle-tooltip": {
+   "secoes": [
+    "Toggle Tooltip",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Tooltip vs Toggle Tooltip",
+    "Use Toggle Tooltip when",
+    "Toggle Tooltip behavior",
+    "Consider Tooltip when",
+    "Positioning",
+    "API Reference",
+    "ToggleTooltip",
+    "ToggleTooltipTrigger",
+    "ToggleTooltipContent",
+    "ToggleTooltipArrow"
+   ],
+   "composicao": "ToggleTooltip ├── ToggleTooltipTrigger └── ToggleTooltipContent Usage # import { ToggleTooltip, ToggleTooltipContent, ToggleTooltipTrigger, } from \"@/components/ui/toggle-tooltip\" ; < ToggleTooltip > < ToggleTooltipTrigger /> < ToggleTooltipContent > Hover or click to see this content. </ ToggleTooltipContent > </ ToggleTooltip > Tooltip vs Toggle Tooltip # You're viewing Toggle Tooltip —a popover",
+   "achados": {
+    "teclado": [
+     "Toggle Tooltip behavior # Touch and keyboard — Opens on click as well as hover, so touch and keyboard users can access the content."
+    ],
+    "aria": [
+     "Use it when the content is essential and should be accessible to everyone, including touch users and screen readers.",
+     "The content is essential and should be accessible to touch users and screen readers.",
+     "Screen reader exposure — Content is exposed to assistive technologies.",
+     "Icon-only triggers — Add an aria-label when the trigger is an icon without visible text."
+    ],
+    "toque": [
+     "Use it when the content is essential and should be accessible to everyone, including touch users and screen readers.",
+     "The content is essential and should be accessible to touch users and screen readers.",
+     "Toggle Tooltip behavior # Touch and keyboard — Opens on click as well as hover, so touch and keyboard users can access the content.",
+     "Touch users don't need to access it—tooltips only open on hover/focus."
+    ],
+    "composicao": [
+     "Button by default; use asChild for custom elements.",
+     "Prop Type Default className string - asChild boolean - ToggleTooltipContent # Tooltip content shown in a popover on click.",
+     "Prop Type Default className string - asChild boolean - ToggleTooltipArrow # Optional arrow pointing to the trigger.",
+     "Prop Type Default className string - asChild boolean - Attribute Default --arrow-background var(--foreground) --arrow-size calc(1.5 * var(--spacing)) For a complete list of props, see the Ark UI documentation ."
+    ],
+    "acessibilidade": [
+     "Use it when the content is essential and should be accessible to everyone, including touch users and screen readers.",
+     "The content is essential and should be accessible to touch users and screen readers."
+    ]
+   },
+   "caracteres": 4231
+  },
+  "tooltip": {
+   "secoes": [
+    "Tooltip",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Tooltip vs Toggle Tooltip",
+    "Use Tooltip when",
+    "Tooltip behavior",
+    "Consider Toggle Tooltip when",
+    "Positioning",
+    "Examples",
+    "With Keyboard Shortcut",
+    "Disabled Button",
+    "API Reference",
+    "Tooltip",
+    "TooltipTrigger",
+    "TooltipContent",
+    "TooltipArrow"
+   ],
+   "composicao": "Tooltip ├── TooltipTrigger └── TooltipContent Usage # import { Tooltip, TooltipContent, TooltipTrigger } from \"@/components/ui/tooltip\" ; < Tooltip > < TooltipTrigger >Hover me</ TooltipTrigger > < TooltipContent > { /* Content */ } </ TooltipContent > </ Tooltip > Tooltip vs Toggle Tooltip # You're viewing Tooltip —a label that shows on hover or focus. Use it when the content is supplementary and",
+   "achados": {
+    "teclado": [
+     "The content is non-essential —nice-to-have clarity for sighted mouse/keyboard users.",
+     "Preview Code left top bottom right Examples # With Keyboard Shortcut # Preview Code Add to library Disabled Button # Show a tooltip on a disabled button by wrapping it with a span.",
+     "Previous page Toggle Next page Tour On This Page Installation Anatomy Usage Tooltip vs Toggle Tooltip Use Tooltip when Tooltip behavior Consider Toggle Tooltip when Positioning Examples With Keyboard Shortcut Disabled Button API Reference Tooltip TooltipTrigger TooltipContent TooltipArrow"
+    ],
+    "aria": [
+     "The content is essential and should be accessible to touch users and screen readers."
+    ],
+    "toque": [
+     "Use it when the content is supplementary and non-essential, and you're okay with touch users not having access.",
+     "You're okay with touch users not seeing it —tooltips only open on hover/focus, not on tap.",
+     "Tooltip behavior # Hover or focus only — Opens on hover/focus; touch users cannot access it.",
+     "The content is essential and should be accessible to touch users and screen readers."
+    ],
+    "composicao": [
+     "Button by default; use asChild for custom elements.",
+     "Prop Type Default asChild boolean - TooltipContent # Tooltip content shown in a popover on hover or focus.",
+     "Prop Type Default className string - asChild boolean - TooltipArrow # Optional arrow pointing to the trigger.",
+     "Prop Type Default asChild boolean - Attribute Default --arrow-background var(--foreground) --arrow-size calc(1.5 * var(--spacing)) For a complete list of props, see the Ark UI documentation ."
+    ],
+    "acessibilidade": [
+     "The content is essential and should be accessible to touch users and screen readers."
+    ]
+   },
+   "caracteres": 4295
+  },
+  "tour": {
+   "secoes": [
+    "Tour",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Examples",
+    "Step Types",
+    "Progress",
+    "Skip",
+    "Keyboard Navigation",
+    "Events",
+    "Wait for Click",
+    "Wait for Input",
+    "Wait for Element",
+    "Async",
+    "Custom spacing",
+    "API Reference",
+    "Tour",
+    "TourTrigger",
+    "TourContent",
+    "TourHeader",
+    "TourTitle",
+    "TourDescription",
+    "TourProgressText",
+    "TourFooter",
+    "TourActions",
+    "TourPreviousStep",
+    "TourNextStep",
+    "TourClose",
+    "useTourContext"
+   ],
+   "composicao": "Tour ├── TourTrigger ├── TourActionTrigger ├── TourOverlay └── TourContent ├── TourSpotlight ├── TourHeader │ ├── TourProgressText │ ├── TourTitle │ └── TourDescription ├── TourBody ├── TourFooter │ ├── TourActions │ ├── TourPreviousStep │ └── TourNextStep └── TourClose Usage # import { Tour, TourTrigger, TourContent, TourHeader, TourProgressText, TourTitle, TourDescription, TourFooter, TourNextSt",
+   "achados": {
+    "teclado": [
+     "Preview Code Start Tour Item 1 Item 2 Item 3 Keyboard Navigation # Enable arrow key navigation between tour steps using the keyboardNavigation prop.",
+     "Preview Code Start Tour Use arrow keys to navigate, Escape to close Step 1 Step 2 Step 3 Events # Listen to tour lifecycle events like onStepChange and onStatusChange to track user progress.",
+     "Previous page Tooltip Next page Tree View On This Page Installation Anatomy Usage Examples Step Types Progress Skip Keyboard Navigation Events Wait for Click Wait for Input Wait for Element Async Custom spacing API Reference Tour TourTrigger TourContent TourHeader TourTitle TourDescription TourProgressText TourFooter TourActions TourPreviousStep TourNextStep TourClose useTourContext"
+    ],
+    "responsivo": [
+     "Preview Code Open You can use breakpoint utilities to change the internal spacing at different screen sizes."
+    ]
+   },
+   "caracteres": 5439
+  },
+  "tree-view": {
+   "secoes": [
+    "Tree View",
+    "Installation",
+    "Anatomy",
+    "Usage",
+    "Controlled",
+    "Examples",
+    "Multiple selection",
+    "With Context Menu",
+    "Renaming nodes",
+    "With checkboxes",
+    "Links",
+    "Docs",
+    "Mini Editor",
+    "Custom icons",
+    "Folder icons",
+    "Single item icon",
+    "With file extensions",
+    "API Reference",
+    "TreeView",
+    "TreeViewLabel",
+    "TreeViewTree",
+    "TreeViewNode",
+    "TreeViewBranch",
+    "TreeViewBranchItem",
+    "TreeViewBranchContent",
+    "TreeViewContent",
+    "TreeViewItem",
+    "TreeViewCheckbox",
+    "createTreeCollection",
+    "createFileIcons"
+   ],
+   "composicao": "TreeView ├── TreeViewLabel └── TreeViewTree └── TreeViewNode ├── TreeViewBranch │ ├── TreeViewBranchItem │ │ └── TreeViewBranchIndicator │ └── TreeViewBranchContent │ └── TreeViewNode … └── TreeViewContent └── TreeViewItem └── TreeViewCheckbox Usage # import { TreeView, TreeViewLabel, TreeViewTree, TreeViewNode, TreeViewBranch, TreeViewBranchItem, TreeViewBranchContent, TreeViewContent, TreeViewIt",
+   "achados": {
+    "composicao": [
+     "Use asChild on TreeViewContent and wrap an <a> element with TreeViewItem inside.",
+     "Prop Type Default asChild boolean false className string - TreeViewTree # Wraps the root-level tree nodes.",
+     "Prop Type Default asChild boolean false className string - TreeViewNode # Provides tree node context.",
+     "Prop Type Default asChild boolean false className string - TreeViewBranchItem # Clickable area to expand or collapse a branch.",
+     "Prop Type Default asChild boolean false icon React.JSX.ElementType | null FolderIcon expandedIcon React.JSX.ElementType | null FolderOpenIcon className string - TreeViewBranchContent # Holds the branch children.",
+     "Prop Type Default asChild boolean false className string - TreeViewContent # Wrapper for leaf (non-expandable) items."
+    ]
+   },
+   "caracteres": 8696
+  }
+ }
+}

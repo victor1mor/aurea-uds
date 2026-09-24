@@ -1,0 +1,49 @@
+{
+  "name": "Label",
+  "category": "Inputs",
+  "layer": "Primitive",
+  "maturity": "Ready",
+  "summary": "The field label on its own, for when you are not using Field.",
+  "icon": "tag",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--foreground",
+    "--text-sm",
+    "--weight-semibold"
+  ],
+  "a11y": {
+    "role": "label",
+    "apg": "n-a",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Field",
+      "Input"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Label"
+  },
+  "props": [
+    {
+      "name": "htmlFor",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the control this labels. Without it the label names nothing — use Field when you want that wiring done for you."
+    }
+  ]
+}

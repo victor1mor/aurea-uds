@@ -1,0 +1,46 @@
+{
+  "name": "useDensity",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Read the current density and switch it, from anywhere inside AureaProvider.",
+  "icon": "settings",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "compact",
+    "comfortable",
+    "spacious"
+  ],
+  "tokens": [
+    "--control-h-md",
+    "--row-h",
+    "--card-pad",
+    "--section-gap"
+  ],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "densidade muda ALTURA de alvo de toque: em compact o controle vai a 2rem, e o WCAG 2.5.8 pede 24px de alvo — a escala compact respeita, mas quem compoe alvos menores por fora precisa conferir."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AureaProvider",
+      "useTheme"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#useDensity"
+  }
+}

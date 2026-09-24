@@ -1,0 +1,12 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function HospitalBed({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z", fill: color}),
+    React.createElement(Path, {d: "M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z", fill: color}),
+    React.createElement(Path, {d: "M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z", fill: color})
+  );
+}

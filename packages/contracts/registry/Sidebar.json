@@ -1,0 +1,117 @@
+{
+  "name": "Sidebar",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Floating side panel that holds the application's navigation.",
+  "icon": "side-panel--open",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "floating",
+    "flush"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "item-hover",
+    "item-focus",
+    "item-current",
+    "collapsed",
+    "drawer"
+  ],
+  "tokens": [
+    "--control-h-md",
+    "--foreground",
+    "--overlay",
+    "--radius-card",
+    "--radius-control",
+    "--secondary",
+    "--sidebar",
+    "--sidebar-border",
+    "--sidebar-foreground",
+    "--sidebar-rail",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--subtle-foreground",
+    "--text-sm",
+    "--text-xs",
+    "--topbar-height",
+    "--tracking-widest",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "complementary",
+    "apg": "No APG pattern covers site navigation, and that absence is the decision: the practice adopted is native links inside a <nav>, natural Tab order, and aria-current=\"page\" on the current item. A roving tabindex (the TreeView pattern) is deliberately NOT used — in a sidebar people expect Tab to walk the items one by one. The landmark comes from the element: <aside> is complementary and the <nav> is nested inside it, never around it. As a drawer it is the native popover, so Escape, click-outside and focus return come from the browser.",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab",
+      "Enter",
+      "Space",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 27/08/2026. Space was delivered and not declared — the items are real <button>s, so the platform gives Enter and Space. Escape is declared and inert here: it closes the drawer, and the bank mounts the expanded sidebar, where there is nothing to close."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AppShell",
+      "Topbar",
+      "TreeView"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#Sidebar"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "SidebarItem[]",
+      "default": "—",
+      "description": "The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}."
+    },
+    {
+      "name": "variant",
+      "type": "\"floating\" | \"flush\"",
+      "default": "floating",
+      "description": "floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping apps do — Cloudflare, Sophos, Claude's own app and HeroUI's dashboard were the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it."
+    },
+    {
+      "name": "current",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the item you are on. It gets aria-current=\"page\", which is also what the skin paints — one source for both, so they cannot drift apart."
+    },
+    {
+      "name": "collapsed",
+      "type": "boolean",
+      "default": "false",
+      "description": "Icon rail. Labels stay in the DOM as screen-reader-only text, and the panel narrows to --sidebar-rail. In AppShell, a floating rail keeps its outer margins in the grid track; flush uses the token as the raw track width. Controlled by you: the sidebar never decides on its own when to collapse."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Sidebar\"",
+      "description": "Accessible name of the <nav> that `items` renders. Two navigation landmarks with the same name fail axe, so name it when a page has more than one."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Escape hatch, not legacy: when the list comes from a router or a CMS, pass your own markup and the <nav> and its label are yours. Rendered after `items` when both are given."
+    }
+  ],
+  "notes": [
+    "The sidebar is the only component allowed to be flush, and it is opt-in. Cards, dialogs and panels keep the floating surface the design system is built on — this exception was granted explicitly, for this component, and it does not generalise. Having the variant and using it are two different things: Aurea's own pages are floating throughout, and flush exists for the applications that want it.",
+    "The rows inside keep their 18px radius in BOTH variants. The concentric rule (child radius = parent radius - padding) is written as calc() against --radius-card, not against the panel's own radius, so a flush panel with radius 0 does not drag the rows to zero with it. That rule describes a CARD-shaped panel; a flush panel is a different case."
+  ]
+}

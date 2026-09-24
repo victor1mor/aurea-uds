@@ -1,0 +1,99 @@
+{
+  "name": "Card",
+  "category": "Layout",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Floating surface that groups related content.",
+  "icon": "catalog",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "base",
+    "raised",
+    "interactive",
+    "inset",
+    "selected",
+    "danger"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--card",
+    "--card-foreground",
+    "--card-pad",
+    "--danger-400",
+    "--danger-bg",
+    "--duration-fast",
+    "--muted-foreground",
+    "--primary-outline",
+    "--radius-card",
+    "--secondary",
+    "--surface-2",
+    "--text-base",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No APG pattern and no role: a Card is a <div> that draws a surface. Giving it role=\"region\" would put an unnamed landmark in the tree on every card of a grid. When the whole card is a target, the interactive element goes INSIDE it — the `interactive` variant paints the surface, it does not make the div a button."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AppShell",
+      "KPI"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Card"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "base | raised | interactive | inset | selected | danger",
+      "default": "base",
+      "description": "Which surface it is. `interactive` is the only one that answers the pointer, so use it only when the whole card really is a target; `inset` recesses instead of floating, which is what a panel inside a card wants."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The content. Padding comes from --card-pad and the 22px radius from --radius-card; neither is a prop, because the floating surface is the identity of the system."
+    },
+    {
+      "name": "render",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "The ELEMENT the card renders as, with the Aurea surface merged into it. Required when variant is \"interactive\": a card that is a target has to be a real target — <button> for an action, <a href> for navigation — and only you know which. tabIndex on a <div> would give focus with no role, no key and no accessible name."
+    },
+    {
+      "name": "padding",
+      "type": "\"normal\" | \"none\"",
+      "default": "\"normal\"",
+      "description": "none removes the inner padding so media bleeds to the edge (C-05); the 22 radius stays and clips the media."
+    },
+    {
+      "name": "orientation",
+      "type": "\"vertical\" | \"horizontal\"",
+      "default": "\"vertical\"",
+      "description": "`horizontal` is the LIST mode (A-14, from the Card spec approved on 22/09/2026): Card.Media on the left at thumbnail width (96, --space-24 — the size-24 of HeroUI's horizontal example) and the content beside it. In one app's list mode the cover took the full width (954 × 1,431 px): one card per screen."
+    },
+    {
+      "name": "Card.Media",
+      "type": "component",
+      "default": "—",
+      "description": "The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033)."
+    }
+  ]
+}

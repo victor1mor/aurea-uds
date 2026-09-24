@@ -1,0 +1,37 @@
+{
+  "name": "@aurea-uds/icons",
+  "version": "0.10.0",
+  "description": "O arquivo de ícones do Carbon que a Aurea UDS desenha com <use href>. A atribuição está no NOTICE.",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "icons",
+    "carbon"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/icons"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/icons#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "NOTICE"
+  ],
+  "exports": {
+    "./sprite": "./dist/aurea-icons.svg"
+  },
+  "scripts": {
+    "build": "node build-icons.mjs"
+  },
+  "devDependencies": {
+    "@carbon/icons": "11.84.0"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "name": "OTPField",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "One box per character, for a verification code the user types or pastes.",
+  "icon": "password",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "focus",
+    "filled",
+    "complete",
+    "disabled",
+    "invalid"
+  ],
+  "tokens": [
+    "--space-2",
+    "--control-h-md",
+    "--font-code",
+    "--field-bg",
+    "--border-strong",
+    "--radius-control"
+  ],
+  "a11y": {
+    "role": "textbox",
+    "apg": "none: the practice adopted is one labelled input per character with autocomplete=\"one-time-code\", which is what lets the phone offer the SMS code",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "Home",
+      "Backspace",
+      "Delete"
+    ],
+    "keyboardNote": "Measured in a browser on 22/08/2026. ArrowUp and Home move focus between the character boxes and were missing here. Note the measurement only works on a field that already has content: an empty OTP field pins focus to the first empty box by construction — that is where you must type — and no arrow moves anywhere. Measuring it pristine measured a state in which almost nothing can happen."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/otp-field",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Input",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#OTPField"
+  },
+  "props": [
+    {
+      "name": "length",
+      "type": "number",
+      "default": "—",
+      "description": "REQUIRED. How many characters the code has. Without it the field cannot know when it is complete."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "Controlled or uncontrolled. The whole code as one string, not one value per box."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Fires on every character, including when a full code is pasted at once."
+    },
+    {
+      "name": "mask",
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides the characters, the way a password does."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the group — what the code is for."
+    },
+    {
+      "name": "disabled / required",
+      "type": "boolean",
+      "default": "false",
+      "description": "Standard form states, forwarded to every box."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one."
+    }
+  ]
+}

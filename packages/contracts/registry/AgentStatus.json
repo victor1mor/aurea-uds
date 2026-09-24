@@ -1,0 +1,75 @@
+{
+  "category": "AI & Agents",
+  "layer": "Primitive",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Status",
+      "AgentCard"
+    ],
+    "patterns": []
+  },
+  "name": "AgentStatus",
+  "summary": "The state of an agent, in one fixed vocabulary.",
+  "icon": "activity",
+  "states": [
+    "idle",
+    "thinking",
+    "running",
+    "paused",
+    "error",
+    "completed"
+  ],
+  "tokens": [
+    "--space-1",
+    "--space-2"
+  ],
+  "a11y": {
+    "role": null,
+    "apg": "none — it is text with a decorative dot, exactly like Status",
+    "keyboard": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#AgentStatus"
+  },
+  "props": [
+    {
+      "name": "state",
+      "type": "\"idle\" | \"thinking\" | \"running\" | \"paused\" | \"error\" | \"completed\"",
+      "default": "\"idle\"",
+      "description": "The six states come measured from the reference, not invented here. Each maps to a Status variant instead of a loose colour: the reference writes `text-yellow-500` inside the component, and colour inside a component is what this design system forbids."
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Overrides the built-in wording. The default is translated; replace it when your domain calls the state something else."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the status element."
+    }
+  ],
+  "axes": {
+    "state": [
+      "completed",
+      "error",
+      "idle",
+      "paused",
+      "running",
+      "thinking"
+    ]
+  }
+}

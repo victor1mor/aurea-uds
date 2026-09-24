@@ -1,0 +1,5266 @@
+{
+  "_gerado": "node audit/activity-2/inventory-radix.mjs",
+  "_fidelidade": "MENOR que a do inventário da base-ui, e de propósito: a radix escreve o estado inline no JSX (`data-state={open ? 'open' : 'closed'}`), sem enum e sem documentação por membro. O nome do atributo e os literais do ternário são extraíveis; a DESCRIÇÃO não existe na fonte, e sai INCONCLUSIVO em vez de inventada.",
+  "proveniencia": "radix-ui/primitives @ f7ecd5a",
+  "licenca": "MIT",
+  "totais": {
+    "primitives": 59,
+    "comAnatomiaComposta": 26,
+    "comParControlado": 20,
+    "comContratoDeTeclado": 24,
+    "atributosDeEstadoDistintos": 18,
+    "comAsChild": 19
+  },
+  "itens": [
+    {
+      "NOME": "accessible-icon",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "AccessibleIcon"
+      ],
+      "ANATOMIA": "AccessibleIcon",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "AccessibleIconProps": [
+          "children",
+          "label"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-visually-hidden"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "accordion",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Content",
+        "Header",
+        "Item",
+        "Trigger"
+      ],
+      "ANATOMIA": "Content › Header › Item › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "AccordionSingleProps": [
+          "type"
+        ],
+        "AccordionMultipleProps": [
+          "type"
+        ],
+        "AccordionImplSingleProps": [
+          "collapsible",
+          "defaultValue",
+          "value"
+        ],
+        "AccordionImplMultipleProps": [
+          "defaultValue",
+          "value"
+        ],
+        "AccordionImplProps": [
+          "dir",
+          "disabled",
+          "orientation"
+        ],
+        "AccordionItemProps": [
+          "disabled",
+          "value"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "region"
+        ],
+        "atributos": [
+          "aria-disabled",
+          "aria-labelledby"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-collapsible",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-id",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "alert-dialog",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Action",
+        "Cancel",
+        "Content",
+        "Description",
+        "Overlay",
+        "Portal",
+        "Title",
+        "Trigger"
+      ],
+      "ANATOMIA": "Action › Cancel › Content › Description › Overlay › Portal › Title › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "AlertDialogTriggerProps": [
+          "props"
+        ],
+        "AlertDialogOverlayProps": [
+          "cancelRef"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": [
+          "alertdialog"
+        ],
+        "atributos": "N/A"
+      },
+      "TOUCH": [
+        "PointerDownOutside"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-dialog"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "announce",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Announce"
+      ],
+      "ANATOMIA": "Announce",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "AnnounceProps": [
+          "children",
+          "regionIdentifier",
+          "role",
+          "type"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-live"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "arrow",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Arrow"
+      ],
+      "ANATOMIA": "Arrow",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "aspect-ratio",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "AspectRatio"
+      ],
+      "ANATOMIA": "AspectRatio",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "AspectRatioProps": [
+          "ratio"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "avatar",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Fallback",
+        "Image"
+      ],
+      "ANATOMIA": "Fallback › Image",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "AvatarProps": [
+          "onLoadingStatusChange"
+        ],
+        "AvatarFallbackProps": [
+          "delayMs"
+        ]
+      },
+      "EVENTOS": [
+        "onLoadingStatusChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive/is-development",
+        "@radix-ui/react-context",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "checkbox",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Indicator"
+      ],
+      "ANATOMIA": "Indicator",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "CheckboxProviderProps": [
+          "checked",
+          "children",
+          "defaultChecked",
+          "disabled",
+          "form",
+          "name",
+          "required",
+          "value"
+        ],
+        "CheckboxTriggerProps": [
+          "children"
+        ],
+        "CheckboxProps": [
+          "checked",
+          "defaultChecked",
+          "required"
+        ],
+        "CheckboxIndicatorProps": [
+          "forceMount"
+        ],
+        "CheckboxBubbleInputProps": [
+          "margin",
+          "opacity",
+          "pointerEvents",
+          "position",
+          "transform"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "checked / defaultChecked"
+      ],
+      "TECLADO": [
+        "Enter"
+      ],
+      "TECLADO_SUPRIMIDO": [
+        "Enter"
+      ],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)"
+      ],
+      "ARIA": {
+        "papeis": [
+          "checkbox"
+        ],
+        "atributos": [
+          "aria-checked",
+          "aria-required"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-size"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "collapsible",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Content",
+        "Trigger"
+      ],
+      "ANATOMIA": "Content › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "CollapsibleProps": [
+          "defaultOpen",
+          "disabled",
+          "open"
+        ],
+        "CollapsibleTriggerProps": [
+          "forceMount"
+        ],
+        "CollapsibleContentImplProps": [
+          "present"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-controls",
+          "aria-expanded"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-id",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "collection",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "CollectionProps": [
+          "scope"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-slot"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "compose-refs",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "context",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "context-menu",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Arrow",
+        "CheckboxItem",
+        "Content",
+        "Group",
+        "Item",
+        "ItemIndicator",
+        "Label",
+        "Portal",
+        "RadioGroup",
+        "RadioItem",
+        "Separator",
+        "Sub",
+        "SubContent",
+        "SubTrigger",
+        "Trigger"
+      ],
+      "ANATOMIA": "Arrow › CheckboxItem › Content › Group › Item › ItemIndicator › Label › Portal › RadioGroup › RadioItem › Separator › Sub › SubContent › SubTrigger › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "closed",
+            "open"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ContextMenuProps": [
+          "children",
+          "dir",
+          "modal",
+          "open"
+        ],
+        "ContextMenuTriggerProps": [
+          "disabled"
+        ],
+        "ContextMenuPortalProps": [
+          "props"
+        ],
+        "ContextMenuItemIndicatorProps": [
+          "props"
+        ],
+        "ContextMenuArrowProps": [
+          "children",
+          "defaultOpen",
+          "open"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [
+        "PointerCancel",
+        "PointerDown",
+        "PointerMove",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/primitive/is-development",
+        "@radix-ui/react-context",
+        "@radix-ui/react-menu",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "dialog",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Close",
+        "Content",
+        "Description",
+        "Overlay",
+        "Portal",
+        "Title",
+        "Trigger"
+      ],
+      "ANATOMIA": "Close › Content › Description › Overlay › Portal › Title › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "DialogProps": [
+          "children",
+          "defaultOpen",
+          "modal",
+          "open"
+        ],
+        "DialogTriggerProps": [
+          "forceMount"
+        ],
+        "DialogPortalProps": [
+          "children",
+          "container",
+          "forceMount"
+        ],
+        "DialogOverlayProps": [
+          "forceMount"
+        ],
+        "DialogOverlayImplProps": [
+          "forceMount"
+        ],
+        "DialogContentTypeProps": [
+          "onCloseAutoFocus",
+          "onOpenAutoFocus",
+          "trapFocus"
+        ],
+        "DialogTitleProps": [
+          "children",
+          "contentName",
+          "docsSlug",
+          "titleName"
+        ]
+      },
+      "EVENTOS": [
+        "onCloseAutoFocus",
+        "onOpenAutoFocus"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "dialog"
+        ],
+        "atributos": [
+          "aria-controls",
+          "aria-describedby",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-labelledby"
+        ]
+      },
+      "TOUCH": [
+        "PointerDownOutside"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-focus-guards",
+        "@radix-ui/react-focus-scope",
+        "@radix-ui/react-id",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "direction",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "DirectionProviderProps": [
+          "children",
+          "dir"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "dismissable-layer",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Branch",
+        "DismissableLayer"
+      ],
+      "ANATOMIA": "Branch › DismissableLayer",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "DismissableLayerProps": [
+          "deferPointerDownOutside",
+          "disableOutsidePointerEvents",
+          "onDismiss",
+          "onEscapeKeyDown",
+          "onFocusOutside",
+          "onInteractOutside",
+          "onPointerDownOutside"
+        ]
+      },
+      "EVENTOS": [
+        "onDismiss",
+        "onEscapeKeyDown",
+        "onFocusOutside",
+        "onInteractOutside",
+        "onPointerDownOutside"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [
+        "Escape"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [
+        "PointerDownCapture",
+        "PointerDownOutside"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "dropdown-menu",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Arrow",
+        "CheckboxItem",
+        "Content",
+        "Group",
+        "Item",
+        "ItemIndicator",
+        "Label",
+        "Portal",
+        "RadioGroup",
+        "RadioItem",
+        "Separator",
+        "Sub",
+        "SubContent",
+        "SubTrigger",
+        "Trigger"
+      ],
+      "ANATOMIA": "Arrow › CheckboxItem › Content › Group › Item › ItemIndicator › Label › Portal › RadioGroup › RadioItem › Separator › Sub › SubContent › SubTrigger › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "closed",
+            "open"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "DropdownMenuProps": [
+          "children",
+          "defaultOpen",
+          "dir",
+          "modal",
+          "open"
+        ],
+        "DropdownMenuTriggerProps": [
+          "props"
+        ],
+        "DropdownMenuContentProps": [
+          "props"
+        ],
+        "DropdownMenuItemIndicatorProps": [
+          "props"
+        ],
+        "DropdownMenuArrowProps": [
+          "children",
+          "defaultOpen",
+          "open"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": [
+        "ArrowDown",
+        "Enter"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-controls",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-labelledby"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-id",
+        "@radix-ui/react-menu",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "focus-guards",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "FocusGuards"
+      ],
+      "ANATOMIA": "FocusGuards",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "FocusGuardsProps": [
+          "children"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "focus-scope",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "FocusScope"
+      ],
+      "ANATOMIA": "FocusScope",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "FocusScopeProps": [
+          "branches",
+          "loop",
+          "onMountAutoFocus",
+          "onUnmountAutoFocus",
+          "trapped"
+        ],
+        "FocusScopeBranchProviderProps": [
+          "children",
+          "registry"
+        ]
+      },
+      "EVENTOS": [
+        "onMountAutoFocus",
+        "onUnmountAutoFocus"
+      ],
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [
+        "Tab"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "form",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Control",
+        "Field",
+        "Label",
+        "Message",
+        "Submit",
+        "ValidityState"
+      ],
+      "ANATOMIA": "Control › Field › Label › Message › Submit › ValidityState",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-valid",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-invalid",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "FormFieldProps": [
+          "name",
+          "serverInvalid"
+        ],
+        "FormLabelProps": [
+          "name"
+        ],
+        "FormControlProps": [
+          "badInput",
+          "id",
+          "name",
+          "patternMismatch",
+          "rangeOverflow",
+          "rangeUnderflow",
+          "stepMismatch",
+          "tooLong",
+          "tooShort",
+          "typeMismatch",
+          "valid",
+          "valueMissing"
+        ],
+        "FormMessageProps": [
+          "forceMatch",
+          "match",
+          "name"
+        ],
+        "FormBuiltInMessageProps": [
+          "forceMatch",
+          "match",
+          "name"
+        ],
+        "FormCustomMessageProps": [
+          "forceMatch",
+          "match",
+          "name"
+        ],
+        "FormMessageImplProps": [
+          "name"
+        ],
+        "FormValidityStateProps": [
+          "name"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-describedby",
+          "aria-invalid"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-id",
+        "@radix-ui/react-label",
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "hover-card",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Arrow",
+        "Content",
+        "Portal",
+        "Trigger"
+      ],
+      "ANATOMIA": "Arrow › Content › Portal › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "closed",
+            "open"
+          ],
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "HoverCardProps": [
+          "children",
+          "closeDelay",
+          "defaultOpen",
+          "onOpenChange",
+          "open",
+          "openDelay"
+        ],
+        "HoverCardTriggerProps": [
+          "forceMount"
+        ],
+        "HoverCardPortalProps": [
+          "children",
+          "container",
+          "forceMount"
+        ],
+        "HoverCardContentProps": [
+          "forceMount"
+        ],
+        "HoverCardContentImplProps": [
+          "onEscapeKeyDown",
+          "onFocusOutside",
+          "onInteractOutside",
+          "onPointerDownOutside"
+        ]
+      },
+      "EVENTOS": [
+        "onEscapeKeyDown",
+        "onFocusOutside",
+        "onInteractOutside",
+        "onOpenChange",
+        "onPointerDownOutside"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerDownOutside",
+        "PointerEnter",
+        "PointerLeave",
+        "TouchStart"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-focus-scope",
+        "@radix-ui/react-popper",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "id",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "label",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Label"
+      ],
+      "ANATOMIA": "Label",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "menu",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Anchor",
+        "Arrow",
+        "CheckboxItem",
+        "Content",
+        "Group",
+        "Item",
+        "ItemIndicator",
+        "Label",
+        "Portal",
+        "RadioGroup",
+        "RadioItem",
+        "Separator",
+        "Sub",
+        "SubContent",
+        "SubTrigger"
+      ],
+      "ANATOMIA": "Anchor › Arrow › CheckboxItem › Content › Group › Item › ItemIndicator › Label › Portal › RadioGroup › RadioItem › Separator › Sub › SubContent › SubTrigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-highlighted",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "MenuProps": [
+          "children",
+          "dir",
+          "modal",
+          "open"
+        ],
+        "MenuAnchorProps": [
+          "forceMount"
+        ],
+        "MenuPortalProps": [
+          "children",
+          "container",
+          "forceMount"
+        ],
+        "MenuContentProps": [
+          "forceMount"
+        ],
+        "MenuContentImplProps": [
+          "loop",
+          "onCloseAutoFocus",
+          "onEntryFocus",
+          "onEscapeKeyDown",
+          "onFocusOutside",
+          "onInteractOutside",
+          "onPointerDownOutside"
+        ],
+        "MenuGroupProps": [
+          "onSelect"
+        ],
+        "MenuItemImplProps": [
+          "disabled",
+          "textValue"
+        ],
+        "MenuCheckboxItemProps": [
+          "checked",
+          "onCheckedChange"
+        ],
+        "MenuRadioGroupProps": [
+          "onValueChange",
+          "value"
+        ],
+        "MenuRadioItemProps": [
+          "value"
+        ],
+        "MenuItemIndicatorProps": [
+          "forceMount"
+        ],
+        "MenuSeparatorProps": [
+          "contentId",
+          "trigger",
+          "triggerId"
+        ],
+        "MenuSubProps": [
+          "children",
+          "open"
+        ],
+        "MenuSubTriggerProps": [
+          "align",
+          "area",
+          "forceMount"
+        ]
+      },
+      "EVENTOS": [
+        "onCheckedChange",
+        "onCloseAutoFocus",
+        "onEntryFocus",
+        "onEscapeKeyDown",
+        "onFocusOutside",
+        "onInteractOutside",
+        "onPointerDownOutside",
+        "onSelect",
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter",
+        "Home",
+        "End",
+        "PageUp",
+        "PageDown",
+        "Tab"
+      ],
+      "TECLADO_SUPRIMIDO": [
+        "Tab"
+      ],
+      "TECLADO_SO_CITADA": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter",
+        "Home",
+        "End",
+        "PageUp",
+        "PageDown"
+      ],
+      "FOCO": [
+        "escopo de foco",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "group",
+          "menu",
+          "menuitem",
+          "menuitemcheckbox",
+          "menuitemradio",
+          "separator"
+        ],
+        "atributos": [
+          "aria-checked",
+          "aria-controls",
+          "aria-disabled",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-labelledby",
+          "aria-orientation"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerDownOutside",
+        "PointerGraceIntentChange",
+        "PointerLeave",
+        "PointerMove",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-focus-guards",
+        "@radix-ui/react-focus-scope",
+        "@radix-ui/react-id",
+        "@radix-ui/react-popper",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-use-callback-ref"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "menubar",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Arrow",
+        "CheckboxItem",
+        "Content",
+        "Group",
+        "Item",
+        "ItemIndicator",
+        "Label",
+        "Menu",
+        "Portal",
+        "RadioGroup",
+        "RadioItem",
+        "Separator",
+        "Sub",
+        "SubContent",
+        "SubTrigger",
+        "Trigger"
+      ],
+      "ANATOMIA": "Arrow › CheckboxItem › Content › Group › Item › ItemIndicator › Label › Menu › Portal › RadioGroup › RadioItem › Separator › Sub › SubContent › SubTrigger › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-highlighted",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": [
+            "closed",
+            "open"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "MenubarProps": [
+          "defaultValue",
+          "dir",
+          "loop",
+          "onValueChange",
+          "value"
+        ],
+        "MenubarMenuProps": [
+          "children",
+          "value"
+        ],
+        "MenubarSeparatorProps": [
+          "children",
+          "defaultOpen",
+          "open"
+        ]
+      },
+      "EVENTOS": [
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue",
+        "open / defaultOpen"
+      ],
+      "TECLADO": [
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "menubar",
+          "menuitem"
+        ],
+        "atributos": [
+          "aria-controls",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-labelledby"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerEnter"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-id",
+        "@radix-ui/react-menu",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "navigation-menu",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Content",
+        "Indicator",
+        "Item",
+        "Link",
+        "List",
+        "Sub",
+        "Trigger",
+        "Viewport"
+      ],
+      "ANATOMIA": "Content › Indicator › Item › Link › List › Sub › Trigger › Viewport",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-active",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": [
+            "hidden",
+            "visible"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-motion",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "NavigationMenuProps": [
+          "activationMode",
+          "defaultValue",
+          "delayDuration",
+          "dir",
+          "onValueChange",
+          "orientation",
+          "skipDelayDuration",
+          "value"
+        ],
+        "NavigationMenuSubProps": [
+          "activationMode",
+          "defaultValue",
+          "disableToggle",
+          "onValueChange",
+          "orientation",
+          "value"
+        ],
+        "NavigationMenuProviderPrivateProps": [
+          "activationMode",
+          "children",
+          "dir",
+          "isRootMenu",
+          "orientation",
+          "rootNavigationMenu",
+          "scope",
+          "value"
+        ],
+        "NavigationMenuProviderProps": [
+          "props"
+        ],
+        "NavigationMenuListProps": [
+          "contentRef",
+          "focusProxyRef",
+          "triggerRef",
+          "value",
+          "wasEscapeCloseRef"
+        ],
+        "NavigationMenuItemProps": [
+          "value"
+        ],
+        "NavigationMenuLinkProps": [
+          "active",
+          "onSelect"
+        ],
+        "NavigationMenuIndicatorProps": [
+          "forceMount"
+        ],
+        "NavigationMenuIndicatorImplProps": [
+          "height",
+          "left",
+          "offset",
+          "position",
+          "props",
+          "size",
+          "top",
+          "transform",
+          "width"
+        ],
+        "NavigationMenuContentProps": [
+          "forceMount"
+        ],
+        "ViewportContentMounterProps": [
+          "forceMount"
+        ],
+        "NavigationMenuContentImplPrivateProps": [
+          "focusProxyRef",
+          "triggerRef",
+          "value",
+          "wasEscapeCloseRef"
+        ],
+        "NavigationMenuContentImplProps": [
+          "bubbles",
+          "cancelable",
+          "props"
+        ],
+        "NavigationMenuViewportProps": [
+          "forceMount"
+        ],
+        "NavigationMenuViewportImplProps": [
+          "pointerEvents",
+          "props"
+        ],
+        "NavigationMenuViewportItemProps": [
+          "contentRef",
+          "isActive",
+          "onActiveContentChange"
+        ],
+        "FocusGroupProps": [
+          "acceptNode"
+        ]
+      },
+      "EVENTOS": [
+        "onActiveContentChange",
+        "onSelect",
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End",
+        "Tab"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight"
+      ],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-controls",
+          "aria-current",
+          "aria-expanded",
+          "aria-label",
+          "aria-labelledby",
+          "aria-owns"
+        ]
+      },
+      "TOUCH": [
+        "PointerDownOutside",
+        "PointerEnter",
+        "PointerLeave",
+        "PointerMove"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-id",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect",
+        "@radix-ui/react-use-previous",
+        "@radix-ui/react-visually-hidden"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "one-time-password-field",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "HiddenInput",
+        "Input",
+        "OneTimePasswordField"
+      ],
+      "ANATOMIA": "HiddenInput › Input › OneTimePasswordField",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-lpignore",
+          "valores": [
+            "true"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-protonpass-ignore",
+          "valores": [
+            "true"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-bwignore",
+          "valores": [
+            "true"
+          ],
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "OneTimePasswordFieldOwnProps": [
+          "autoComplete",
+          "autoFocus",
+          "autoSubmit",
+          "defaultValue",
+          "dir",
+          "disabled",
+          "form",
+          "name",
+          "onAutoSubmit",
+          "onValueChange",
+          "orientation",
+          "placeholder",
+          "readOnly",
+          "sanitizeValue",
+          "type",
+          "validationType",
+          "value"
+        ],
+        "OneTimePasswordFieldProps": [
+          "caller",
+          "defaultProp",
+          "onChange",
+          "prop",
+          "sanitizeValue",
+          "value"
+        ],
+        "OneTimePasswordFieldInputProps": [
+          "index",
+          "onInvalidChange"
+        ]
+      },
+      "EVENTOS": [
+        "onAutoSubmit",
+        "onChange",
+        "onInvalidChange",
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "Enter",
+        "Backspace",
+        "Delete"
+      ],
+      "TECLADO_SUPRIMIDO": [
+        "Enter"
+      ],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "group"
+        ],
+        "atributos": [
+          "aria-label"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/number",
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-is-hydrated"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "password-toggle-field",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Icon",
+        "Input",
+        "PasswordToggleField",
+        "Slot",
+        "Toggle"
+      ],
+      "ANATOMIA": "Icon › Input › PasswordToggleField › Slot › Toggle",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "PasswordToggleFieldProps": [
+          "children",
+          "defaultVisible",
+          "id",
+          "onVisibilityChange",
+          "visible"
+        ],
+        "PasswordToggleFieldOwnProps": [
+          "autoComplete"
+        ],
+        "PasswordToggleFieldInputProps": [
+          "autoComplete"
+        ],
+        "PasswordToggleFieldToggleProps": [
+          "hidden",
+          "visible"
+        ],
+        "PasswordToggleFieldSlotRenderProps": [
+          "render"
+        ],
+        "PasswordToggleFieldIconProps": [
+          "hidden",
+          "visible"
+        ]
+      },
+      "EVENTOS": [
+        "onVisibilityChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-controls",
+          "aria-hidden",
+          "aria-label"
+        ]
+      },
+      "TOUCH": [
+        "PointerCancel",
+        "PointerDown",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/primitive/is-development",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-id",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-effect-event",
+        "@radix-ui/react-use-is-hydrated"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "popover",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Anchor",
+        "Arrow",
+        "Close",
+        "Content",
+        "Description",
+        "Portal",
+        "Title",
+        "Trigger"
+      ],
+      "ANATOMIA": "Anchor › Arrow › Close › Content › Description › Portal › Title › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "PopoverProps": [
+          "children",
+          "defaultOpen",
+          "modal",
+          "onOpenChange",
+          "open"
+        ],
+        "PopoverAnchorProps": [
+          "forceMount"
+        ],
+        "PopoverPortalProps": [
+          "children",
+          "container",
+          "forceMount"
+        ],
+        "PopoverContentProps": [
+          "forceMount"
+        ],
+        "PopoverContentTypeProps": [
+          "branchNodes",
+          "branchRegistry",
+          "onCloseAutoFocus",
+          "onOpenAutoFocus",
+          "trapFocus"
+        ]
+      },
+      "EVENTOS": [
+        "onCloseAutoFocus",
+        "onOpenAutoFocus",
+        "onOpenChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "dialog"
+        ],
+        "atributos": [
+          "aria-controls",
+          "aria-describedby",
+          "aria-expanded",
+          "aria-haspopup",
+          "aria-labelledby"
+        ]
+      },
+      "TOUCH": [
+        "PointerDownOutside"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-focus-guards",
+        "@radix-ui/react-focus-scope",
+        "@radix-ui/react-id",
+        "@radix-ui/react-popper",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "popper",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Anchor",
+        "Arrow",
+        "Content"
+      ],
+      "ANATOMIA": "Anchor › Arrow › Content",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-side",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-align",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "PopperProps": [
+          "children"
+        ],
+        "PopperAnchorProps": [
+          "virtualRef"
+        ],
+        "PopperContentProps": [
+          "align",
+          "alignOffset",
+          "arrowPadding",
+          "avoidCollisions",
+          "collisionBoundary",
+          "collisionPadding",
+          "hideWhenDetached",
+          "onPlaced",
+          "side",
+          "sideOffset",
+          "sticky",
+          "updatePositionStrategy"
+        ],
+        "PopperArrowProps": [
+          "bottom",
+          "display",
+          "left",
+          "position",
+          "right",
+          "top",
+          "transform",
+          "transformOrigin",
+          "visibility"
+        ]
+      },
+      "EVENTOS": [
+        "onPlaced"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-arrow",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-layout-effect",
+        "@radix-ui/react-use-size",
+        "@radix-ui/rect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "portal",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Portal"
+      ],
+      "ANATOMIA": "Portal",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "PortalProps": [
+          "container"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "presence",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Presence",
+        "Root"
+      ],
+      "ANATOMIA": "Presence › Root",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "PresenceProps": [
+          "children",
+          "present"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [
+        "useStateMachine"
+      ],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "primitive",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Primitive"
+      ],
+      "ANATOMIA": "Primitive",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [
+        "PointerDown"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-slot"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "progress",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Indicator"
+      ],
+      "ANATOMIA": "Indicator",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-value",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-max",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ProgressProps": [
+          "max",
+          "value"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": [
+          "progressbar"
+        ],
+        "atributos": [
+          "aria-valuemax",
+          "aria-valuemin",
+          "aria-valuenow",
+          "aria-valuetext"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-context",
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "radio-group",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Indicator",
+        "Item"
+      ],
+      "ANATOMIA": "Indicator › Item",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "RadioGroupProps": [
+          "defaultValue",
+          "dir",
+          "disabled",
+          "form",
+          "loop",
+          "name",
+          "onValueChange",
+          "orientation",
+          "required",
+          "value"
+        ],
+        "RadioGroupItemProviderProps": [
+          "children",
+          "disabled",
+          "value"
+        ],
+        "RadioGroupItemProps": [
+          "value"
+        ],
+        "RadioGroupItemBubbleInputProps": [
+          "props"
+        ],
+        "RadioProviderProps": [
+          "checked",
+          "children",
+          "disabled",
+          "form",
+          "name",
+          "required",
+          "value"
+        ],
+        "RadioTriggerProps": [
+          "children"
+        ],
+        "RadioProps": [
+          "checked",
+          "required"
+        ],
+        "RadioIndicatorProps": [
+          "forceMount"
+        ],
+        "RadioBubbleInputProps": [
+          "margin",
+          "opacity",
+          "pointerEvents",
+          "position",
+          "transform"
+        ]
+      },
+      "EVENTOS": [
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter"
+      ],
+      "TECLADO_SUPRIMIDO": [
+        "Enter"
+      ],
+      "TECLADO_SO_CITADA": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight"
+      ],
+      "FOCO": [
+        "controla tabIndex (roving)"
+      ],
+      "ARIA": {
+        "papeis": [
+          "radio",
+          "radiogroup"
+        ],
+        "atributos": [
+          "aria-checked",
+          "aria-orientation",
+          "aria-required"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-size"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "radix-ui",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "escopo de foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-accessible-icon",
+        "@radix-ui/react-accordion",
+        "@radix-ui/react-alert-dialog",
+        "@radix-ui/react-arrow",
+        "@radix-ui/react-aspect-ratio",
+        "@radix-ui/react-avatar",
+        "@radix-ui/react-checkbox",
+        "@radix-ui/react-collapsible",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-context-menu",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-dropdown-menu",
+        "@radix-ui/react-focus-guards",
+        "@radix-ui/react-focus-scope",
+        "@radix-ui/react-form",
+        "@radix-ui/react-hover-card",
+        "@radix-ui/react-label",
+        "@radix-ui/react-menu",
+        "@radix-ui/react-menubar",
+        "@radix-ui/react-navigation-menu",
+        "@radix-ui/react-one-time-password-field",
+        "@radix-ui/react-password-toggle-field",
+        "@radix-ui/react-popover",
+        "@radix-ui/react-popper",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-progress",
+        "@radix-ui/react-radio-group",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-scroll-area",
+        "@radix-ui/react-select",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slider",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-switch",
+        "@radix-ui/react-tabs",
+        "@radix-ui/react-toast",
+        "@radix-ui/react-toggle",
+        "@radix-ui/react-toggle-group",
+        "@radix-ui/react-toolbar",
+        "@radix-ui/react-tooltip",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-effect-event",
+        "@radix-ui/react-use-escape-keydown",
+        "@radix-ui/react-use-is-hydrated",
+        "@radix-ui/react-use-layout-effect",
+        "@radix-ui/react-use-size",
+        "@radix-ui/react-visually-hidden"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "roving-focus",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Item"
+      ],
+      "ANATOMIA": "Item",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "RovingFocusGroupProps": [
+          "currentTabStopId",
+          "defaultCurrentTabStopId",
+          "onCurrentTabStopIdChange",
+          "onEntryFocus",
+          "preventScrollOnEntryFocus"
+        ],
+        "RovingFocusItemProps": [
+          "active",
+          "children",
+          "focusable",
+          "tabStopId"
+        ]
+      },
+      "EVENTOS": [
+        "onCurrentTabStopIdChange",
+        "onEntryFocus"
+      ],
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Tab"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco"
+      ],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-id",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-is-hydrated",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "scroll-area",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Content",
+        "Corner",
+        "Scrollbar",
+        "Thumb",
+        "Viewport"
+      ],
+      "ANATOMIA": "Content › Corner › Scrollbar › Thumb › Viewport",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "hidden",
+            "visible"
+          ],
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ScrollAreaProps": [
+          "dir",
+          "scrollHideDelay",
+          "type"
+        ],
+        "ScrollAreaViewportProps": [
+          "disableImplicitContentElement",
+          "nonce"
+        ],
+        "ScrollAreaScrollbarProps": [
+          "forceMount"
+        ],
+        "ScrollAreaScrollbarHoverProps": [
+          "forceMount"
+        ],
+        "ScrollAreaScrollbarScrollProps": [
+          "forceMount"
+        ],
+        "ScrollAreaScrollbarAutoProps": [
+          "forceMount"
+        ],
+        "ScrollAreaScrollbarVisibleProps": [
+          "orientation"
+        ],
+        "ScrollAreaScrollbarAxisProps": [
+          "bottom",
+          "content",
+          "left",
+          "paddingEnd",
+          "paddingStart",
+          "right",
+          "scrollbar",
+          "size",
+          "viewport"
+        ],
+        "ScrollAreaThumbProps": [
+          "forceMount"
+        ],
+        "ScrollAreaThumbImplProps": [
+          "bottom",
+          "height",
+          "left",
+          "position",
+          "right",
+          "width"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerDownCapture",
+        "PointerEnter",
+        "PointerLeave",
+        "PointerMove",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [
+        "useStateMachine"
+      ],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/number",
+        "@radix-ui/primitive",
+        "@radix-ui/primitive/is-development",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "select",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Arrow",
+        "Content",
+        "Group",
+        "Icon",
+        "Item",
+        "ItemIndicator",
+        "ItemText",
+        "Label",
+        "Portal",
+        "ScrollDownButton",
+        "ScrollUpButton",
+        "Separator",
+        "Trigger",
+        "Value",
+        "Viewport"
+      ],
+      "ANATOMIA": "Arrow › Content › Group › Icon › Item › ItemIndicator › ItemText › Label › Portal › ScrollDownButton › ScrollUpButton › Separator › Trigger › Value › Viewport",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "closed",
+            "open"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-placeholder",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-highlighted",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": [
+            "checked",
+            "unchecked"
+          ],
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ControlledClearableSelectProps": [
+          "defaultValue",
+          "onValueChange",
+          "value"
+        ],
+        "ControlledUnclearableSelectProps": [
+          "defaultValue",
+          "onValueChange",
+          "value"
+        ],
+        "UncontrolledSelectProps": [
+          "defaultValue",
+          "onValueChange",
+          "value"
+        ],
+        "SelectSharedProps": [
+          "autoComplete",
+          "children",
+          "defaultOpen",
+          "dir",
+          "disabled",
+          "form",
+          "name",
+          "open",
+          "required"
+        ],
+        "SelectProviderProps": [
+          "defaultValue",
+          "value"
+        ],
+        "SelectTriggerProps": [
+          "placeholder",
+          "x",
+          "y"
+        ],
+        "SelectIconProps": [
+          "forceMount"
+        ],
+        "SelectPortalProps": [
+          "children",
+          "container",
+          "forceMount"
+        ],
+        "SelectContentProps": [
+          "forceMount"
+        ],
+        "SelectContentFragmentProps": [
+          "fragment"
+        ],
+        "SelectContentImplProps": [
+          "onCloseAutoFocus",
+          "onEscapeKeyDown",
+          "onPointerDownOutside",
+          "position"
+        ],
+        "SelectItemAlignedPositionProps": [
+          "boxSizing",
+          "display",
+          "flexDirection",
+          "maxHeight",
+          "position",
+          "props",
+          "zIndex"
+        ],
+        "SelectPopperPositionProps": [
+          "boxSizing"
+        ],
+        "SelectViewportProps": [
+          "nonce"
+        ],
+        "SelectGroupProps": [
+          "disabled",
+          "isSelected",
+          "textId",
+          "value"
+        ],
+        "SelectItemProps": [
+          "disabled",
+          "textValue",
+          "value"
+        ]
+      },
+      "EVENTOS": [
+        "onCloseAutoFocus",
+        "onEscapeKeyDown",
+        "onPointerDownOutside",
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue",
+        "open / defaultOpen"
+      ],
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "Enter",
+        "Home",
+        "End",
+        "Tab"
+      ],
+      "TECLADO_SUPRIMIDO": [
+        "Tab"
+      ],
+      "TECLADO_SO_CITADA": [
+        "Enter"
+      ],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "escopo de foco",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "combobox",
+          "group",
+          "listbox",
+          "option",
+          "presentation"
+        ],
+        "atributos": [
+          "aria-autocomplete",
+          "aria-controls",
+          "aria-disabled",
+          "aria-expanded",
+          "aria-labelledby",
+          "aria-required",
+          "aria-selected"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerDownOutside",
+        "PointerLeave",
+        "PointerMove",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/number",
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-focus-guards",
+        "@radix-ui/react-focus-scope",
+        "@radix-ui/react-id",
+        "@radix-ui/react-popper",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect",
+        "@radix-ui/react-use-previous",
+        "@radix-ui/react-visually-hidden"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "separator",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Separator"
+      ],
+      "ANATOMIA": "Separator",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "SeparatorProps": [
+          "decorative",
+          "orientation"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "slider",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Range",
+        "Thumb",
+        "Track"
+      ],
+      "ANATOMIA": "Range › Thumb › Track",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "SliderProps": [
+          "defaultValue",
+          "dir",
+          "disabled",
+          "form",
+          "inverted",
+          "max",
+          "min",
+          "minStepsBetweenThumbs",
+          "name",
+          "orientation",
+          "preserveThumbOrder",
+          "step",
+          "value"
+        ],
+        "SliderOrientationProps": [
+          "dir"
+        ],
+        "SliderImplProps": [
+          "form",
+          "index",
+          "isFormControl",
+          "name",
+          "percent",
+          "size",
+          "thumb",
+          "value"
+        ],
+        "SliderThumbProviderProps": [
+          "children",
+          "name"
+        ],
+        "SliderThumbTriggerProps": [
+          "name",
+          "position",
+          "transform"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End",
+        "PageUp",
+        "PageDown"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "PageUp",
+        "PageDown"
+      ],
+      "FOCO": [
+        "controla tabIndex (roving)"
+      ],
+      "ARIA": {
+        "papeis": [
+          "slider"
+        ],
+        "atributos": [
+          "aria-disabled",
+          "aria-label",
+          "aria-orientation",
+          "aria-valuemax",
+          "aria-valuemin",
+          "aria-valuenow"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerMove",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/number",
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-previous",
+        "@radix-ui/react-use-size"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "slot",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Slot"
+      ],
+      "ANATOMIA": "Slot",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-compose-refs"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "switch",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Thumb"
+      ],
+      "ANATOMIA": "Thumb",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "SwitchProviderProps": [
+          "checked",
+          "children",
+          "defaultChecked",
+          "disabled",
+          "form",
+          "name",
+          "required",
+          "value"
+        ],
+        "SwitchTriggerProps": [
+          "children"
+        ],
+        "SwitchProps": [
+          "checked",
+          "defaultChecked",
+          "required"
+        ],
+        "SwitchThumbProps": [
+          "margin",
+          "opacity",
+          "pointerEvents",
+          "position",
+          "transform"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "checked / defaultChecked"
+      ],
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)"
+      ],
+      "ARIA": {
+        "papeis": [
+          "switch"
+        ],
+        "atributos": [
+          "aria-checked",
+          "aria-required"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-size"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "tabs",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Content",
+        "List",
+        "Trigger"
+      ],
+      "ANATOMIA": "Content › List › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-state",
+          "valores": [
+            "active",
+            "inactive"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "TabsProps": [
+          "activationMode",
+          "defaultValue",
+          "dir",
+          "onValueChange",
+          "orientation",
+          "value"
+        ],
+        "TabsListProps": [
+          "loop"
+        ],
+        "TabsTriggerProps": [
+          "value"
+        ],
+        "TabsContentProps": [
+          "forceMount",
+          "value"
+        ]
+      },
+      "EVENTOS": [
+        "onValueChange"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": [
+        "Enter"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "tab",
+          "tablist",
+          "tabpanel"
+        ],
+        "atributos": [
+          "aria-controls",
+          "aria-labelledby",
+          "aria-orientation",
+          "aria-selected"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-id",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "toast",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Action",
+        "Close",
+        "Description",
+        "Root",
+        "Title",
+        "Toast",
+        "Viewport"
+      ],
+      "ANATOMIA": "Action › Close › Description › Root › Title › Toast › Viewport",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "closed",
+            "open"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-swipe-direction",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-swipe",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ToastProviderProps": [
+          "announcerContainer",
+          "children",
+          "duration",
+          "label",
+          "swipeDirection",
+          "swipeThreshold"
+        ],
+        "ToastViewportProps": [
+          "hotkey",
+          "label"
+        ],
+        "ToastProps": [
+          "defaultOpen",
+          "forceMount",
+          "open"
+        ],
+        "ToastImplProps": [
+          "duration",
+          "onEscapeKeyDown",
+          "type"
+        ],
+        "ToastAnnounceProps": [
+          "children"
+        ],
+        "ToastTitleProps": [
+          "altText"
+        ],
+        "ToastCloseProps": [
+          "altText"
+        ]
+      },
+      "EVENTOS": [
+        "onEscapeKeyDown"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": [
+        "Escape",
+        "Tab"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [
+        "controla tabIndex (roving)",
+        "move o foco"
+      ],
+      "ARIA": {
+        "papeis": [
+          "region",
+          "status"
+        ],
+        "atributos": [
+          "aria-label",
+          "aria-live"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerMove",
+        "PointerUp"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-collection",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-callback-ref",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect",
+        "@radix-ui/react-visually-hidden"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "toggle",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Toggle"
+      ],
+      "ANATOMIA": "Toggle",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": [
+            "off",
+            "on"
+          ],
+          "descricao": "INCONCLUSIVO"
+        },
+        {
+          "atributo": "data-disabled",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ToggleProps": [
+          "defaultPressed",
+          "pressed"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": [
+        "pressed / defaultPressed"
+      ],
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": [
+          "aria-pressed"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "toggle-group",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "Item"
+      ],
+      "ANATOMIA": "Item",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": {
+        "ToggleGroupSingleProps": [
+          "type"
+        ],
+        "ToggleGroupMultipleProps": [
+          "type"
+        ],
+        "ToggleGroupImplSingleProps": [
+          "defaultValue",
+          "value"
+        ],
+        "ToggleGroupImplMultipleProps": [
+          "defaultValue",
+          "value"
+        ],
+        "ToggleGroupImplProps": [
+          "dir",
+          "disabled",
+          "loop",
+          "orientation",
+          "rovingFocus"
+        ],
+        "ToggleGroupItemProps": [
+          "value"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "value / defaultValue"
+      ],
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": [
+          "radiogroup",
+          "toolbar"
+        ],
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-toggle",
+        "@radix-ui/react-use-controllable-state"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "toolbar",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Button",
+        "Link",
+        "Separator",
+        "ToggleGroup",
+        "ToggleItem"
+      ],
+      "ANATOMIA": "Button › Link › Separator › ToggleGroup › ToggleItem",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": [
+        "horizontal",
+        "vertical"
+      ],
+      "ESTADOS": [
+        {
+          "atributo": "data-orientation",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "ToolbarProps": [
+          "dir",
+          "loop",
+          "orientation"
+        ],
+        "ToolbarSeparatorProps": [
+          "props"
+        ]
+      },
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": [
+          "toolbar"
+        ],
+        "atributos": [
+          "aria-orientation"
+        ]
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "lê a direção",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-context",
+        "@radix-ui/react-direction",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-roving-focus",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-toggle-group"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "tooltip",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "composto",
+      "SUBCOMPONENTES": [
+        "Arrow",
+        "Content",
+        "Portal",
+        "Root",
+        "Tooltip",
+        "Trigger"
+      ],
+      "ANATOMIA": "Arrow › Content › Portal › Root › Tooltip › Trigger",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": [
+        {
+          "atributo": "data-state",
+          "valores": "INCONCLUSIVO",
+          "descricao": "INCONCLUSIVO"
+        }
+      ],
+      "PROPS_RELEVANTES": {
+        "TooltipProviderProps": [
+          "children",
+          "delayDuration",
+          "disableHoverableContent",
+          "skipDelayDuration"
+        ],
+        "TooltipProps": [
+          "children",
+          "defaultOpen",
+          "delayDuration",
+          "disableHoverableContent",
+          "onOpenChange",
+          "open"
+        ],
+        "TooltipTriggerProps": [
+          "forceMount"
+        ],
+        "TooltipPortalProps": [
+          "children",
+          "container",
+          "forceMount"
+        ],
+        "TooltipContentProps": [
+          "forceMount"
+        ],
+        "TooltipContentImplProps": [
+          "onEscapeKeyDown",
+          "onPointerDownOutside"
+        ],
+        "TooltipArrowProps": [
+          "default"
+        ]
+      },
+      "EVENTOS": [
+        "onEscapeKeyDown",
+        "onOpenChange",
+        "onPointerDownOutside"
+      ],
+      "COMPOSICAO": "peças compostas pelo consumidor",
+      "SLOTS": "prop `asChild` (funde no filho)",
+      "CONTROLLED_UNCONTROLLED": [
+        "open / defaultOpen"
+      ],
+      "TECLADO": [],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [
+        "Space"
+      ],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": [
+          "tooltip"
+        ],
+        "atributos": [
+          "aria-describedby"
+        ]
+      },
+      "TOUCH": [
+        "PointerDown",
+        "PointerDownOutside",
+        "PointerInTransitChange",
+        "PointerLeave",
+        "PointerMove"
+      ],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "estado exposto para CSS animar",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive",
+        "@radix-ui/react-compose-refs",
+        "@radix-ui/react-context",
+        "@radix-ui/react-dismissable-layer",
+        "@radix-ui/react-id",
+        "@radix-ui/react-popper",
+        "@radix-ui/react-portal",
+        "@radix-ui/react-presence",
+        "@radix-ui/react-primitive",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-use-controllable-state",
+        "@radix-ui/react-use-layout-effect",
+        "@radix-ui/react-visually-hidden"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-callback-ref",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-controllable-state",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [
+        "useControllableState",
+        "useControllableStateReducer"
+      ],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/primitive/is-development",
+        "@radix-ui/react-use-effect-event",
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-effect-event",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [
+        "useEffectEvent"
+      ],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-escape-keydown",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": [
+        "Escape"
+      ],
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-use-callback-ref"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-is-hydrated",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [
+        "useIsHydrated"
+      ],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-layout-effect",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-previous",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-rect",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/rect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "use-size",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": "N/A",
+      "ANATOMIA": "N/A",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-use-layout-effect"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    },
+    {
+      "NOME": "visually-hidden",
+      "CATEGORIA": "INCONCLUSIVO",
+      "FAMILIA": "radix primitives",
+      "PRIMITIVE": true,
+      "COMPONENTE": "peça única",
+      "SUBCOMPONENTES": [
+        "VisuallyHidden"
+      ],
+      "ANATOMIA": "VisuallyHidden",
+      "VARIANTES": "N/A",
+      "TAMANHOS": "N/A",
+      "DENSIDADES": "N/A",
+      "ORIENTACOES": "N/A",
+      "ESTADOS": "N/A",
+      "PROPS_RELEVANTES": "N/A",
+      "EVENTOS": "N/A",
+      "COMPOSICAO": "peça única",
+      "SLOTS": "N/A",
+      "CONTROLLED_UNCONTROLLED": "N/A",
+      "TECLADO": "N/A",
+      "TECLADO_SUPRIMIDO": [],
+      "TECLADO_SO_CITADA": [],
+      "FOCO": [],
+      "ARIA": {
+        "papeis": "N/A",
+        "atributos": "N/A"
+      },
+      "TOUCH": [],
+      "RESPONSIVIDADE": "N/A",
+      "MOTION": "N/A",
+      "RTL": "N/A",
+      "I18N": "N/A",
+      "THEMING": "N/A",
+      "TOKENS": "N/A",
+      "EXEMPLOS": "N/A",
+      "DEMOS": 0,
+      "BLOCKS_RELACIONADOS": "N/A",
+      "PATTERNS_RELACIONADOS": "N/A",
+      "TEMPLATES_RELACIONADOS": "N/A",
+      "HOOKS": [],
+      "UTILITIES": "N/A",
+      "DEPENDENCIAS": [
+        "@radix-ui/react-primitive"
+      ],
+      "LICENCA": "MIT",
+      "PROVENIENCIA": "radix-ui/primitives @ f7ecd5a",
+      "OBSERVACOES": "",
+      "_fidelidade": "estados INFERIDOS de JSX inline, não declarados — ver o cabeçalho do extrator"
+    }
+  ]
+}

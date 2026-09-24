@@ -1,0 +1,70 @@
+{
+  "name": "Form",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Shows the error and collects the values. It does not decide what an error is.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--space-5"
+  ],
+  "a11y": {
+    "role": "form",
+    "apg": "The native <form>. What matters is where the error lands: an external error given by name reaches the CONTROL, which is the focal node — it gets aria-invalid and aria-describedby pointing at the message. Measured on 2026-08-13, the failure mode this avoids is the worst of both worlds: red on screen and valid in the accessibility tree, which is what happens when the message renders next to a control the engine was never told about.",
+    "keyboard": [
+      "Tab",
+      "Enter"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter, which submits from a field inside the form. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Field",
+      "Input",
+      "Button"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#Form"
+  },
+  "props": [
+    {
+      "name": "errors",
+      "type": "Record<string, string | string[]>",
+      "default": "—",
+      "description": "Errors you already decided, keyed by the Field's name. AUREA VALIDATES NOTHING: no schema, no rules, no resolver, no field state. Validate wherever it suits you — a schema on the client, a server action, the API's answer — and hand the result over. That is why no form library is a dependency here: marrying one would force every project using Aurea to adopt it, including those that already validate another way."
+    },
+    {
+      "name": "onSubmit",
+      "type": "(values) => void",
+      "default": "—",
+      "description": "Fires with the collected values, already gathered from the named controls. The native submit is prevented for you."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Fields and the submit button. The form only stacks them with breathing room — arranging beyond that is Stack and Grid's job, not a third way of doing layout."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the <form>. Every other form attribute passes through."
+    }
+  ]
+}

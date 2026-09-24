@@ -1,0 +1,79 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "TaskQueue",
+  "summary": "The work queue: what is waiting, what is running, what failed.",
+  "icon": "list",
+  "states": [
+    "queued",
+    "running",
+    "completed",
+    "failed",
+    "blocked",
+    "paused"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--muted-foreground",
+    "--radius-card",
+    "--space-2",
+    "--space-3",
+    "--text-sm",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "none — it is an ordered list, and order is the queue's meaning",
+    "keyboard": []
+  },
+  "related": {
+    "components": [
+      "Status",
+      "Badge",
+      "Progress",
+      "InvocationPanel"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#TaskQueue"
+  },
+  "props": [
+    {
+      "name": "tasks",
+      "type": "QueueTask[]",
+      "default": "—",
+      "description": "The queue. Six states and three priority steps, measured from the reference. The reference's task carries 15 fields and five of them belong to OTHER components in this same family — token and cost are ModelUsage and CostMeter, checkpoints are TraceTimeline, assignee is AgentCard. Absorbing them here would make the queue answer for four contracts and none of them properly."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Task queue\"",
+      "description": "Accessible name of the list."
+    },
+    {
+      "name": "onRetry",
+      "type": "(task: QueueTask) => void",
+      "default": "—",
+      "description": "Shows a retry button on failed tasks only. Without it a failure is reported and cannot be acted on."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the list."
+    }
+  ]
+}

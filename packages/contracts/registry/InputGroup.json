@@ -1,0 +1,62 @@
+{
+  "name": "InputGroup",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "The box that looks like a field and holds the control plus whatever is glued to it.",
+  "icon": "link",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "disabled",
+    "invalid"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--control-h-lg",
+    "--control-h-md",
+    "--control-h-sm",
+    "--duration-fast",
+    "--field-bg",
+    "--focus-strong",
+    "--radius-control"
+  ],
+  "a11y": {
+    "role": "generic",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "o foco é do CONTROLE; o anel aparece na moldura por :focus-within, porque o contorno do campo de dentro ficaria escondido atrás da borda do grupo"
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "InputGroupAddon",
+      "Input",
+      "PasswordField",
+      "SearchField"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#InputGroup"
+  },
+  "props": [
+    {
+      "name": "width",
+      "type": "string",
+      "default": "—",
+      "description": "Takes the group out of 100% (A-08): \"20rem\" for a measure, \"auto\" for the content size. With it the group also stops growing in a row."
+    }
+  ]
+}

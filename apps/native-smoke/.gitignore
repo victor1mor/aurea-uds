@@ -1,0 +1,11 @@
+# Os tarballs sao GERADOS por `node preparar.mjs` a partir dos pacotes deste repositorio.
+# Nao entram no git: seriam copias binarias de codigo que ja esta' versionado ao lado, e
+# envelheceriam em silencio a cada mudanca em packages/.
+vendor/
+node_modules/
+.expo/
+android/
+ios/
+package-lock.json
+.bundle-conferencia/
+versao.json

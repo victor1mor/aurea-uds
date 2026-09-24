@@ -1,0 +1,137 @@
+{
+  "name": "AppShell",
+  "category": "Layout",
+  "layer": "Shell",
+  "maturity": "Stable",
+  "summary": "Application frame: sidebar, topbar and main content.",
+  "icon": "dashboard",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "nav-expanded",
+    "nav-collapsed"
+  ],
+  "props": [
+    {
+      "name": "brand",
+      "type": "ReactNode",
+      "description": "Logotype and product name. Lives in the topbar, beside the navigation toggle."
+    },
+    {
+      "name": "navigation",
+      "type": "ReactNode",
+      "description": "The sidebar content, usually a <nav>. The shell never invents one, so the landmark and its label are yours."
+    },
+    {
+      "name": "navItems",
+      "type": "SidebarItem[]",
+      "description": "The sidebar list, handed to the Sidebar the shell already creates — same shape as Sidebar items. Use this instead of passing a second <Sidebar> as navigation: that nests two panels, two borders and two 22px radii, and with the 0.8.8 type scale the inner one clips its text. When navigation is also given, the list comes first."
+    },
+    {
+      "name": "currentNavId",
+      "type": "string",
+      "description": "The id of the current item in navItems. Marked with aria-current=\"page\" and the selected skin."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "description": "Accessible name of the <nav> built from navItems. Falls back to the sidebarLabel string."
+    },
+    {
+      "name": "topbar",
+      "type": "ReactNode",
+      "description": "What sits in the topbar next to the brand: sections, search, actions."
+    },
+    {
+      "name": "topbarVariant",
+      "type": "\"floating\" | \"flush\"",
+      "default": "\"floating\"",
+      "description": "Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it."
+    },
+    {
+      "name": "sidebarVariant",
+      "type": "\"floating\" | \"flush\"",
+      "default": "\"floating\"",
+      "description": "Skin of the sidebar, forwarded to it. flush is the one exception this design system makes to its floating surfaces: the panel sits against the edges, takes the full height and is separated from the content by a single rule. Without this prop the variant would be unreachable for anyone composing through the shell, which is the normal path."
+    },
+    {
+      "name": "sidebarCollapsed",
+      "type": "boolean",
+      "default": "false",
+      "description": "Narrows the sidebar panel to --sidebar-rail. A floating panel keeps its two outer margins in the grid track; flush uses the token as the raw track width. Controlled by you, like the palette's open: the shell does not decide when to collapse, and does not draw the button that does."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "description": "Page content. Rendered inside the <main> the shell owns."
+    },
+    {
+      "name": "topbarDivider",
+      "type": "boolean",
+      "default": "false",
+      "description": "Passes Topbar's `divider` to the flush bar the shell builds (B-07)."
+    },
+    {
+      "name": "contentVariant",
+      "type": "\"surface\" | \"plain\"",
+      "default": "\"surface\"",
+      "description": "`plain` removes the box around the content area (B-10). `.content` is a card — same background, border and radius as `.card` — so every Card inside became a box inside an identical box; an app spent 14 !important to erase it. The margin stays."
+    }
+  ],
+  "tokens": [
+    "--background",
+    "--border",
+    "--card",
+    "--card-foreground",
+    "--overlay",
+    "--radius-card",
+    "--sidebar-rail",
+    "--sidebar-width",
+    "--space-4",
+    "--space-6"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [
+      "Escape",
+      "Tab"
+    ],
+    "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+    "notes": "Below the lg breakpoint (1024px) the sidebar becomes a drawer: a native popover invoked by the topbar toggle. Escape, click-outside and aria-expanded on the toggle are native; AppShell normalises entry and focus return across Chromium, Firefox and WebKit. Non-modal by design — focus is not trapped, so no modality is declared that is not delivered.",
+    "nota": "Escape closes the navigation drawer; Tab moves into the drawer right after the toggle. This sentence used to live inside a11y.keyboard, where it counted as two declared keys and no reader of the contract could find it."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Card",
+      "Sidebar",
+      "Toolbar",
+      "Topbar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/layout-client.tsx#AppShell"
+  },
+  "axes": {
+    "sidebarVariant": [
+      "floating",
+      "flush"
+    ],
+    "topbarVariant": [
+      "floating",
+      "flush"
+    ],
+    "contentVariant": [
+      "plain",
+      "surface"
+    ]
+  }
+}

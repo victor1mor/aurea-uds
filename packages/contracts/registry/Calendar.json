@@ -1,0 +1,128 @@
+{
+  "name": "Calendar",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "summary": "Month grid for picking a day, a range, or several days.",
+  "icon": "calendar",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "selected",
+    "today",
+    "outside",
+    "disabled",
+    "hidden"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--control-h-md",
+    "--control-h-sm",
+    "--foreground",
+    "--icon-sm",
+    "--muted-foreground",
+    "--primary",
+    "--primary-foreground",
+    "--radius-card",
+    "--radius-control",
+    "--secondary",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground",
+    "--surface-1",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--weight-regular"
+  ],
+  "a11y": {
+    "role": "grid",
+    "apg": "grid. The engine ships the pattern: the month is a table with role=grid, every day is a real button inside a gridcell with aria-selected, the month name is announced through role=status aria-live, and the weekday header is aria-hidden because the day buttons already carry the full date in their label.",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 27/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). All ten declared keys were confirmed to move the focused day. The bank mounts with mode=\"single\": without a mode, react-day-picker renders days as text in <td> and there is no button to focus."
+  },
+  "dependencies": {
+    "engine": "react-day-picker",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Input",
+      "Field",
+      "Popover",
+      "Button"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/calendar.tsx#Calendar"
+  },
+  "props": [
+    {
+      "name": "mode",
+      "type": "\"single\" | \"range\" | \"multiple\"",
+      "default": "none",
+      "description": "What a click does. `single` picks one day, `range` picks a start and an end, `multiple` collects days that need not touch."
+    },
+    {
+      "name": "selected",
+      "type": "Date | DateRange | Date[]",
+      "default": "none",
+      "description": "The current selection. Its shape follows `mode`."
+    },
+    {
+      "name": "onSelect",
+      "type": "(value) => void",
+      "default": "none",
+      "description": "Called with the new selection. Without it the calendar is read-only, which is a legitimate use: a month with days marked."
+    },
+    {
+      "name": "disabled",
+      "type": "Matcher | Matcher[]",
+      "default": "none",
+      "description": "Days that cannot be picked — a date, a range, `{before}`/`{after}`, weekdays, or a function. This is what a native date input cannot do, and the reason this component exists."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "none",
+      "description": "Names the whole calendar, for when the month name is not enough to tell it apart — two of them side by side would both announce \"August 2026\". Inside a popover the trigger already says it, so leave it out."
+    },
+    {
+      "name": "showOutsideDays",
+      "type": "boolean",
+      "default": "true",
+      "description": "Fills the first and last week with the neighbouring month's days. On by default: a grid with holes at the edges shifts shape when the month changes."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "none",
+      "description": "Added to the calendar box."
+    },
+    {
+      "name": "…DayPicker",
+      "type": "ComponentProps<typeof DayPicker>",
+      "default": "none",
+      "description": "Everything else goes to the engine — `numberOfMonths`, `month`, `locale`, `weekStartsOn`, `fromDate`/`toDate`, `modifiers`. `classNames` merges over the Aurea names instead of replacing them."
+    }
+  ]
+}

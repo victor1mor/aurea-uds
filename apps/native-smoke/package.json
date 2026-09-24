@@ -1,0 +1,27 @@
+{
+  "name": "aurea-native-smoke",
+  "version": "0.0.0",
+  "private": true,
+  "description": "App DESCARTAVEL para provar o Lote 0 do NATIVE.md num Android de verdade. Nao e' produto, nao e' o Lote 1, e nao entra em release nenhum.",
+  "main": "index.js",
+  "scripts": {
+    "preparar": "node preparar.mjs",
+    "start": "expo start",
+    "android": "expo run:android"
+  },
+  "dependencies": {
+    "@aurea-uds/fonts": "file:./vendor/aurea-uds-fonts.tgz",
+    "@aurea-uds/native": "file:./vendor/aurea-uds-native.tgz",
+    "@aurea-uds/tokens": "file:./vendor/aurea-uds-tokens.tgz",
+    "expo": "~57.0.19",
+    "expo-font": "~57.0.3",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-svg": "15.15.4"
+  },
+  "devDependencies": {
+    "@expo/ngrok": "^4.1.0"
+  }
+}

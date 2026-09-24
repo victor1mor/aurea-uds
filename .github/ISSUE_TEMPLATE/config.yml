@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Falha de segurança
+    url: https://github.com/victor1mor/aurea-uds/security/advisories/new
+    about: Relate em particular, não num problema público.

@@ -1,0 +1,83 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "MemoryLedger",
+  "summary": "What the agent stored, recalled or forgot — and where it came from.",
+  "icon": "notebook",
+  "states": [
+    "added",
+    "updated",
+    "recalled",
+    "forgotten"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--font-code",
+    "--muted-foreground",
+    "--radius-card",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground",
+    "--text-sm",
+    "--text-xs",
+    "--tracking-wider"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "disclosure — provenance is a native <details>, so opening and closing is the platform's, keyboard included. Ordered list because the order is the ledger.",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter, which opens a record's detail — a native <details>/<summary> again. Space is declared and did not toggle it in Chromium build 1194; see InterAgentMessage for the direct measurement."
+  },
+  "related": {
+    "components": [
+      "DataGrid",
+      "Timeline",
+      "AgentInspector"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#MemoryLedger"
+  },
+  "props": [
+    {
+      "name": "records",
+      "type": "MemoryRecord[]",
+      "default": "—",
+      "description": "One entry per posting, not per memory. A ledger is append-only: \"forgotten\" does not drop the row, it records the forgetting — and that row is exactly what you go looking for when an agent stops knowing something."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Memory ledger\"",
+      "description": "Accessible name of the list."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the list."
+    }
+  ],
+  "notes": [
+    "The only component of Part H with no open-source reference: Letta's ADE ships only its server, mem0's OpenMemory is being discontinued, and mem0's own panel is cloud-only. Measured 08/08/2026, reconfirmed 09/08/2026. It is built from registered research plus composition — the research is in REFERENCES.md.",
+    "The three scopes (episodic, semantic, procedural) are the vocabulary that became standard across vendors in 2026. Letta's three tiers (core, recall, archival) were deliberately left out: they are one product's architecture, and freezing them here would tie the contract to a single vendor.",
+    "It does NOT wrap DataGrid. data-grid.tsx lives in its own subpath because it carries @tanstack/react-table as an OPTIONAL peer (check 19), and agents.tsx ships through the light barrel — importing it would make anyone who installed the library for the Button start needing the table. Sorting and filtering a ledger is composed in the application; the catalogue example shows it."
+  ]
+}

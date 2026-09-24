@@ -1,0 +1,88 @@
+{
+  "name": "Image",
+  "category": "Media",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "An image that reserves its box before the bytes arrive, and falls back when they never do.",
+  "icon": "image",
+  "platforms": {
+    "web": "stable",
+    "native": "supported"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "broken"
+  ],
+  "tokens": [
+    "--radius-lg",
+    "--surface-3",
+    "--muted-foreground"
+  ],
+  "a11y": {
+    "role": "img",
+    "apg": "No interaction: an image is not a widget. alt is the accessible name and survives the broken state, where the element becomes a span with role=\"img\" carrying the same text.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": [
+      "image"
+    ]
+  },
+  "related": {
+    "components": [
+      "Gallery",
+      "Carousel",
+      "Avatar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/media-client.tsx#Image"
+  },
+  "props": [
+    {
+      "name": "src",
+      "type": "string",
+      "default": "—",
+      "description": "The image. Every <img> attribute is forwarded, srcset and sizes included — the point of this component is not to wrap them, it is to reserve the box around them."
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name. It survives the broken state: the fallback box keeps role=\"img\" with this text, which is what the browser's broken-image glyph throws away."
+    },
+    {
+      "name": "ratio",
+      "type": "string",
+      "default": "auto",
+      "description": "CSS aspect-ratio, as text: \"16/9\", \"1/1\", \"4/5\". This is the layout-shift fix — without a reserved box the image measures zero until it loads and the page jumps. Leave it off when you pass width and height, because then the browser already knows the intrinsic ratio."
+    },
+    {
+      "name": "fit",
+      "type": "cover | contain",
+      "default": "cover",
+      "description": "cover fills the reserved box and crops; contain shows the whole picture inside it and drops the background, which is what an enlarged photo wants."
+    },
+    {
+      "name": "render",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "Swap the <img> for someone else's — typically the framework's own optimised Image. Ours keeps the skin and the reserved box; theirs keeps the CDN, the srcset generation and the loader. Same render prop the engine uses elsewhere in this library."
+    },
+    {
+      "name": "loading",
+      "type": "lazy | eager",
+      "default": "lazy",
+      "description": "Defaulted, not forced. An image above the fold should be eager — a lazy hero delays the largest paint."
+    }
+  ],
+  "axes": {
+    "fit": [
+      "contain",
+      "cover"
+    ]
+  }
+}

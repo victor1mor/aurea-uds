@@ -1,0 +1,176 @@
+{
+  "name": "Badge",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Short metadata label or status marker.",
+  "icon": "tag",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "neutral",
+    "primary",
+    "info",
+    "success",
+    "warning",
+    "danger",
+    "running",
+    "paused",
+    "offline",
+    "review"
+  ],
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "dot",
+    "count",
+    "count-over-max",
+    "count-zero-hidden",
+    "anchored",
+    "anchored-on-circle",
+    "invisible"
+  ],
+  "tokens": [
+    "--background",
+    "--border",
+    "--danger-400",
+    "--danger-bg",
+    "--info-400",
+    "--info-bg",
+    "--media-foreground",
+    "--media-track",
+    "--oracle-300",
+    "--oracle-400",
+    "--primary",
+    "--primary-emphasis",
+    "--primary-outline",
+    "--radius-control",
+    "--radius-full",
+    "--secondary",
+    "--secondary-foreground",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-5",
+    "--space-6",
+    "--space-7",
+    "--space-05",
+    "--success-400",
+    "--success-bg",
+    "--text-sm",
+    "--text-xs",
+    "--warning-400",
+    "--warning-bg"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No APG pattern and no role: a badge is a <span> of text, and native semantics are the right answer. Colour is never the only signal — the word inside carries the meaning, so a badge read aloud says the same thing it shows. It is not focusable and has no keyboard interaction; a badge you can click is a Button."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Alert"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Badge"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "neutral | primary | info | success | warning | danger | running | paused | offline | review",
+      "default": "neutral",
+      "description": "Tone of the label. The four operational ones exist because the state of a job is metadata as often as it is a condition; when it is a condition standing on its own, use Status."
+    },
+    {
+      "name": "emphasis",
+      "type": "soft | outline | solid",
+      "default": "soft",
+      "description": "How loud the tone is. `soft` is the tinted pill you already know; `outline` is contour only; `solid` fills with the accent and is what a notification counter wants. All 36 combinations of variant × emphasis × theme were measured for contrast — the lowest is 5.6:1, and the skin spec keeps it that way."
+    },
+    {
+      "name": "size",
+      "type": "xs | sm | md | lg",
+      "default": "md",
+      "description": "`md` is the historical size and did not move, so nothing that already uses Badge changed. `xs` (16px, borderless) is the counter that rides on an icon — it is what BottomNav asks for; `sm` sits between them; `lg` is for a standalone label. Every size is its OWN class, never a contextual override: `geometry.spec` holds `.badge` to one height per page, and a rule that shrank it by context reproved — correctly."
+    },
+    {
+      "name": "dot",
+      "type": "boolean",
+      "default": "false",
+      "description": "A status dot before the text, inheriting the current colour. With `anchor` and nothing to show, the dot IS the badge — the plain 8px mark that means \"something new\"."
+    },
+    {
+      "name": "leading / trailing",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that ADR-0026 saved."
+    },
+    {
+      "name": "image / imageAlt",
+      "type": "string",
+      "default": "—",
+      "description": "A round picture at the start — an avatar or a flag. Empty alt when it is decorative, which is the usual case beside a name."
+    },
+    {
+      "name": "count / max / showZero",
+      "type": "number / number / boolean",
+      "default": "— / 99 / false",
+      "description": "Numeric content. Over `max` it reads `99+`. Zero hides itself unless `showZero`, because an empty inbox does not deserve a mark. `formatBadgeCount(count, max)` is exported so the accessible name can say the same string the eye sees."
+    },
+    {
+      "name": "fit",
+      "type": "\"auto\" | \"content\"",
+      "default": "\"auto\"",
+      "description": "`content` keeps the badge as wide as its text even inside a column. The default follows the container, and that was measured: `.stack` declares no `align-items`, so a badge inside it stretches (300 px in a 300 px column, 55 px loose in a block). Implemented as `inline-size: fit-content`, not `align-self`, so a badge in a row keeps its vertical centring. Ignored with `anchor`. The native Badge takes the same prop."
+    },
+    {
+      "name": "anchor",
+      "type": "top-end | top-start | bottom-end | bottom-start",
+      "default": "—",
+      "description": "Switches to the OVERLAY shape: `children` becomes the thing being decorated (a bell, an avatar, a menu row) and the badge hangs off that corner. Without it, `children` is the pill's content and nothing about the old usage changes."
+    },
+    {
+      "name": "anchorShape",
+      "type": "square | circle",
+      "default": "square",
+      "description": "`circle` pulls the badge 14% back into the corner — MUI's `overlap`, and the number is theirs, measured in their source. Without it a counter on a round avatar floats off the edge."
+    },
+    {
+      "name": "invisible",
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides the overlay without moving the child. Use it when the count is loading rather than absent."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component."
+    },
+    {
+      "name": "badgeContent",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What the overlay shows when it is not a number. Named after MUI's prop and not `content`, which collides with the HTML attribute of that name."
+    }
+  ],
+  "notes": [
+    "ANCHORED BADGES ARE aria-hidden, and that is the documented pattern, not an oversight: the count belongs in the accessible name of the thing it decorates — `aria-label=\"Inbox, 4 unread messages\"`. A bell announced as \"bell 8\" tells nobody what the 8 is.",
+    "The cutout ring around an anchored badge defaults to `--background`. Inside a card the surface behind it is `--card`, and CSS cannot guess that — override `--badge-ring` on the container.",
+    "NO DISMISS BUTTON, and two independent reasons agree: DIRECTION §3.6 reserves removable classification for `Tag`, and a handler in JSX would force `\"use client\"` on the pure-markup module. `Tag` does not exist in Aurea yet — a real gap this reading found."
+  ]
+}

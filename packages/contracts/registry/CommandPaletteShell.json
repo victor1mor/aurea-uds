@@ -1,0 +1,78 @@
+{
+  "name": "CommandPaletteShell",
+  "category": "Navigation",
+  "layer": "Shell",
+  "maturity": "Stable",
+  "summary": "Overlay shell for a searchable command palette.",
+  "icon": "terminal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "open",
+    "closed"
+  ],
+  "tokens": [
+    "--border",
+    "--foreground",
+    "--muted-foreground",
+    "--overlay",
+    "--popover",
+    "--popover-foreground",
+    "--radius-card",
+    "--shadow-lg",
+    "--surface-3"
+  ],
+  "a11y": {
+    "role": "dialog",
+    "apg": "dialog (modal) + combobox",
+    "keyboard": [
+      "ArrowDown",
+      "Enter",
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Dialog",
+      "Combobox"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#CommandPaletteShell"
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled. Closed it renders null, so nothing is left in the DOM to be tabbed into."
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "default": "—",
+      "description": "The value of the search field. Controlled, because the filtering is yours."
+    },
+    {
+      "name": "onQueryChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Every keystroke."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The results, rendered by you. The shell owns the surface and the field; matching is domain knowledge and does not belong to a design system."
+    }
+  ]
+}

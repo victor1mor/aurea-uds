@@ -1,0 +1,20 @@
+* text=auto eol=lf
+*.svg -diff
+*.woff2 binary
+
+# ── Estatística de linguagem do GitHub ──────────────────────────────────────
+# A barra de linguagens conta BYTES, e este repositório commita a saída do build:
+# 184 páginas de catálogo geradas (8,7 MB) contra 43 arquivos de TypeScript de
+# fonte (0,29 MB). Sem estas linhas o GitHub anuncia "HTML", que é o bolo, não a
+# fôrma. `linguist-generated` tira da conta E recolhe o diff, que é o que se quer
+# de um arquivo que ninguém edita à mão — quem edita a saída reprova no gate
+# `dist == build`.
+#
+# Regerar qualquer um deles: `pnpm build`.
+apps/catalog/**/*.html   linguist-generated=true
+apps/catalog/assets/*    linguist-generated=true
+apps/docs/index.html     linguist-generated=true
+packages/*/dist/**       linguist-generated=true
+
+# Congelado, não gerado: é a referência visual de origem, e o CLAUDE.md proíbe
+# editá-la. Não é código do projeto, então não conta como linguagem dele.

@@ -1,0 +1,88 @@
+{
+  "name": "BlockEditor",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "The frame around content blocks — order, handle, removal, and the slot where your own editor goes. Aurea does not own the rich text.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "grabbed"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--card",
+    "--muted-foreground",
+    "--primary",
+    "--radius-lg",
+    "--radius-sm",
+    "--shadow-lg"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "There is no APG pattern for drag and drop, and none for a block editor. The keyboard protocol is the one the market settled on and the one SortableList already ships — Space picks a block up, arrows move it, Space drops it, Escape puts it back — because both components share the same useReorder. Every step is announced in a polite live region. Position is not only announced: it is baked into the accessible name of the handle and the remove button, so \"Reorder, Image 2 of 5\" is true whenever focus lands there rather than only at the moment it changed. Dragging is never the only way.",
+    "keyboard": [
+      "Space",
+      "Enter",
+      "ArrowUp",
+      "ArrowDown",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: all five — Space, Enter, ArrowUp, ArrowDown, Escape. Like the SortableList, the measurement had to play the protocol's first beat first: Space picks the block up, and only then do the arrows move it. The two components share the protocol — useReorder, extracted in item N1 when this became its second owner — and they now share the bank's preparation for the same reason."
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": [
+      "drag--horizontal",
+      "trash-can"
+    ]
+  },
+  "related": {
+    "components": [
+      "SortableList",
+      "Prose",
+      "Image",
+      "Textarea"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#BlockEditor"
+  },
+  "props": [
+    {
+      "name": "blocks",
+      "type": "Array<{id, kind?, children}>",
+      "default": "—",
+      "description": "The blocks, in the order they are shown. `children` is your block — a textarea, your rich text editor, a figure with a caption. `kind` names it for a screen reader (\"Image\", \"Quote\"); it falls back to a generic \"Block\"."
+    },
+    {
+      "name": "onReorder",
+      "type": "(from: number, to: number) => void",
+      "default": "—",
+      "description": "Called with the two indexes. The editor is controlled and keeps no order of its own — the keyboard path and the pointer path call this same callback, so there are never two sources of truth."
+    },
+    {
+      "name": "onRemove",
+      "type": "(index: number) => void",
+      "default": "—",
+      "description": "Optional. Omit it and no remove button is rendered — a button that cannot do anything is a focus target that lies to whoever uses the keyboard, which is the defect the Gallery measured in item L2."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Content blocks",
+      "description": "Accessible name of the list."
+    }
+  ],
+  "notes": [
+    "This component does NOT own the rich text. There is no bold, no italic, no bubble menu and no formatting toolbar — that engine stays with you, and ADR-0025 has the four measurements behind that decision. The most important one is security: a browser does not sanitize pasted HTML, so whoever owns the editing surface owns the XSS. Aurea cannot decide what is safe to render inside your domain.",
+    "There is no insert affordance, and that is deliberate rather than missing: adding a block is appending to your own collection, and the reorder here carries the new block to any position."
+  ]
+}

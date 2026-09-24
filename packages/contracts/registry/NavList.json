@@ -1,0 +1,86 @@
+{
+  "name": "NavList",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A list of tappable rows that open something: leading icon, label, an optional second line, an optional trailing value, and the chevron that says \"this goes somewhere\". The brick of every settings screen.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "row-hover",
+    "row-focus",
+    "row-disabled"
+  ],
+  "tokens": [
+    "--control-h-lg",
+    "--foreground",
+    "--muted-foreground",
+    "--radius-control",
+    "--secondary",
+    "--space-05",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--target-min",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "No APG pattern covers a list of in-page destinations, and that absence is the decision — the same one Sidebar and BottomNav record. What is adopted: a real <ul> of <li>, one native link or button per row, and natural Tab order. What is deliberately NOT adopted is a landmark: Sidebar and BottomNav are app chrome and live in <nav>, but this is content inside the page, and a third <nav> on one screen only adds noise for landmark navigation. Also NOT adopted is aria-current: there is nothing to be \"current\" in a list you enter and come back from.",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which follow the focused row. There are no arrow keys on purpose — arrows belong to a widget that owns a selection, and this is a list of links; a row marked disabled stays focusable and inert (aria-disabled), so keyboard users still find out it exists. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component. (That sentence used to live INSIDE a11y.keyboard, where it counted as a declared key and no measurement could ever reach it — check 30b now rejects prose in that list.)"
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": [
+      "chevron--right"
+    ]
+  },
+  "related": {
+    "components": [
+      "Sidebar",
+      "BottomNav",
+      "DataList",
+      "Card",
+      "Badge",
+      "Status"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#NavList"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "NavListItem[]",
+      "default": "—",
+      "description": "The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, href?, onClick?, disabled?}. `description` is the second line and it is optional on purpose: a settings row often needs it (\"Notifications\" / \"Push, email\") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the <ul>. The list paints no surface of its own — wrap it in Card when the design calls for a grouped panel."
+    }
+  ],
+  "notes": [
+    "The list does NOT paint a surface and has no divider between rows. Both are decisions: Card already gives the floating panel, and the row highlight in this design system is the pill (the same one Sidebar uses) — a pill with a rule under it contradicts itself, because the rule promises a grid and the pill promises a target.",
+    "The trailing value and the chevron never shrink; the text does, with an ellipsis. A clipped value lies (\"R$ 1.2\" for \"R$ 1.234\") and a clipped chevron stops saying the row opens.",
+    "On a coarse pointer the row grows to --target-min (44px), which is WCAG 2.5.5 and the size Apple HIG and Material both land on. The whole row is the target — never the chevron.",
+    "The chevron only appears on a row that has a destination (`href`). An action row — sign out, export — carries none, because the arrow promises the row opens something. There is no prop to choose: the data that already exists decides.",
+    "The panel that holds the list tightens its padding: a Card whose direct child is a NavList drops to --space-1. The 20px of --card-pad is CONTENT padding, and it left the row highlight floating in the middle of a big box — 88% of the width, with the text starting 65px from the edge. The panel gives almost nothing and the row gives the rest, which is the anatomy the reference navigation panels use: the item carries the inset, the container does not."
+  ]
+}

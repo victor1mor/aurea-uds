@@ -1,0 +1,30 @@
+{
+  "name": "@aurea-uds/contracts",
+  "version": "0.10.0",
+  "description": "O contrato do projeto Aurea UDS, em JSON legível por máquina.",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "contract"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/contracts"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/contracts#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "*.json"
+  ],
+  "exports": {
+    "./contract": "./aurea.contract.json",
+    "./api-surface": "./api-surface.json"
+  }
+}

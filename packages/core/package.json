@@ -1,0 +1,34 @@
+{
+  "name": "@aurea-uds/core",
+  "version": "0.10.0",
+  "description": "A folha de estilo da Aurea UDS e o comportamento em JavaScript puro. Importe @aurea-uds/fonts/css antes deste.",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "css",
+    "design-tokens"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./css": {
+      "types": "./dist/aurea.css.d.ts",
+      "default": "./dist/aurea.css"
+    },
+    "./js": "./dist/aurea.js"
+  }
+}

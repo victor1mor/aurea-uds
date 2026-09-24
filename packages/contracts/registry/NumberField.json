@@ -1,0 +1,142 @@
+{
+  "name": "NumberField",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Numeric field with decrease and increase controls, for a quantity you nudge.",
+  "icon": "add",
+  "platforms": {
+    "web": "stable",
+    "native": "supported"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "focus",
+    "disabled",
+    "invalid",
+    "readonly",
+    "at-min",
+    "at-max"
+  ],
+  "tokens": [
+    "--space-1",
+    "--space-16",
+    "--control-h-md",
+    "--radius-control",
+    "--field-bg",
+    "--border-strong"
+  ],
+  "a11y": {
+    "role": "textbox",
+    "apg": "spinbutton, and the engine deliberately does NOT use role=spinbutton. Measured on 31/07/2026: it renders type=text with inputMode=numeric and aria-roledescription=\"Number field\". A native number input brings tiny stepper targets, wheel-scroll accidents and no locale parsing; this keeps the keyboard contract and drops those.",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowUp, ArrowDown, Home, End. Declared and not confirmed in this snapshot: PageUp, PageDown. Absence of an observable change does not prove absence of effect — a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/number-field",
+    "icons": [
+      "add",
+      "subtract"
+    ]
+  },
+  "related": {
+    "components": [
+      "Input",
+      "Range",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#NumberField"
+  },
+  "props": [
+    {
+      "name": "value / defaultValue",
+      "type": "number | null",
+      "default": "none",
+      "description": "Controlled or uncontrolled. `null` means empty, which is not the same as zero."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: number | null) => void",
+      "default": "none",
+      "description": "Fires with the parsed number, or null when the field is cleared."
+    },
+    {
+      "name": "min / max",
+      "type": "number",
+      "default": "none",
+      "description": "Bounds. The engine clamps and disables the control that would cross them."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "default": "1",
+      "description": "How much each press moves the value."
+    },
+    {
+      "name": "format",
+      "type": "Intl.NumberFormatOptions",
+      "default": "—",
+      "description": "Currency, percent or unit, formatted by the platform's Intl — {style: \"currency\", currency: \"BRL\"} replaces the money-formatting library a consumer would otherwise install for this alone. The engine formats when focus LEAVES the field, which is what accessibility guidance recommends and the opposite of a live mask."
+    },
+    {
+      "name": "locale",
+      "type": "string",
+      "default": "the browser's",
+      "description": "Which locale formats the number. Pass it when the value's locale is a property of the data (a price in BRL) rather than of the reader."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Form field name. It is also what makes the engine render the hidden input carrying the RAW number, so what a form submits is 1234.5 and never the formatted text."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "none",
+      "description": "Accessible name of the field. Use with `Field` when there is a visible label."
+    },
+    {
+      "name": "disabled / readOnly / required",
+      "type": "boolean",
+      "default": "false",
+      "description": "Standard form states, forwarded to the input and to both buttons."
+    },
+    {
+      "name": "scrubbable / scrubDirection",
+      "type": "boolean / 'horizontal' | 'vertical'",
+      "default": "false / horizontal",
+      "description": "Opt-in drag handle: pulling it changes the value, which beats forty clicks on + over a wide range. Purely additive — the two buttons, the arrow keys and Home/End are untouched, and the handle itself is aria-hidden because dragging is a pointer gesture with no keyboard equivalent to promise. The axis is a class, not a data attribute: the engine does not publish direction."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one."
+    }
+  ],
+  "axes": {
+    "scrubDirection": [
+      "horizontal",
+      "vertical"
+    ]
+  }
+}

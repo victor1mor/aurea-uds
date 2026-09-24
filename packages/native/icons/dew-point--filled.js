@@ -1,0 +1,11 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function DewPointFilled({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M24,10a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,24,10Zm0-6a2,2,0,1,0,2,2A2.0021,2.0021,0,0,0,24,4Z", fill: color}),
+    React.createElement(Path, {d: "M14.5,30A5.4962,5.4962,0,0,1,9,24.52c0-3.4426,4.3442-21.0141,4.5293-21.76a1,1,0,0,1,1.9414,0C15.6558,3.5059,20,21.0774,20,24.52A5.4962,5.4962,0,0,1,14.5,30Z", fill: color})
+  );
+}

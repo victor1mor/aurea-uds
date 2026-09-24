@@ -1,0 +1,47 @@
+{
+  "name": "DataList",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Key/value or item list for structured data.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--muted-foreground",
+    "--space-2",
+    "--space-6"
+  ],
+  "a11y": {
+    "role": "list",
+    "keyboard": [],
+    "apg": "No APG pattern and no keyboard: it is a real <dl>, so the pairing between term and value lives in the markup and survives with the stylesheet off."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Table",
+      "Timeline"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#DataList"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{term: ReactNode; value: ReactNode}>",
+      "default": "—",
+      "description": "Term and value pairs, rendered as a real <dl>. The pairing is in the markup, so it survives with the stylesheet off and reads correctly to a screen reader."
+    }
+  ]
+}

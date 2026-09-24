@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Aurea Smoke",
+    "slug": "aurea-native-smoke",
+    "version": "0.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "android": {
+      "package": "dev.aureauds.smoke"
+    },
+    "ios": {
+      "bundleIdentifier": "dev.aureauds.smoke"
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
+  }
+}

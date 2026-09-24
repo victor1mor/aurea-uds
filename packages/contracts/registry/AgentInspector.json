@@ -1,0 +1,72 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Card",
+      "DataList",
+      "AgentCard"
+    ],
+    "patterns": []
+  },
+  "name": "AgentInspector",
+  "summary": "The detail of one agent: configuration, tools, instructions.",
+  "icon": "settings",
+  "states": [
+    "default",
+    "with-sections"
+  ],
+  "tokens": [
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--subtle-foreground",
+    "--text-xs",
+    "--tracking-wider"
+  ],
+  "a11y": {
+    "role": "region",
+    "apg": "none — a labelled region, so a screen reader can jump to it",
+    "keyboard": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#AgentInspector"
+  },
+  "props": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Names the panel, and names the region for a screen reader when it is a string."
+    },
+    {
+      "name": "sections",
+      "type": "Array<{ label: string; items: Array<{ term: string; value: ReactNode }> }>",
+      "default": "—",
+      "description": "Labelled groups of term and value, each one a DataList — the anatomy of the reference's DetailsView, using the component that already exists here."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Free body under the sections, for inspecting what the record did not foresee."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the panel."
+    }
+  ]
+}

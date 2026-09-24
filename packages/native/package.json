@@ -1,0 +1,85 @@
+{
+  "name": "@aurea-uds/native",
+  "version": "0.10.0",
+  "description": "A Aurea UDS para React Native: o provider de tema e densidade, os componentes e os ícones do Carbon sobre react-native-svg.",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "react-native",
+    "expo",
+    "icons",
+    "theme"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/native"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/native#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./system": {
+      "types": "./dist/sistema.d.ts",
+      "import": "./dist/sistema.js"
+    },
+    "./icons": {
+      "types": "./icons/index.d.ts",
+      "import": "./icons/index.js"
+    },
+    "./icons/*": {
+      "types": "./icons/*.d.ts",
+      "import": "./icons/*.js"
+    }
+  },
+  "files": [
+    "dist",
+    "icons",
+    "NOTICE"
+  ],
+  "scripts": {
+    "build": "node build-icons-native.mjs && tsc",
+    "build:icons": "node build-icons-native.mjs"
+  },
+  "dependencies": {
+    "@aurea-uds/tokens": "workspace:^"
+  },
+  "peerDependencies": {
+    "@react-native-community/datetimepicker": ">=8",
+    "expo-image-picker": ">=16",
+    "react": ">=19",
+    "react-native": ">=0.76",
+    "react-native-safe-area-context": ">=5",
+    "react-native-svg": ">=15"
+  },
+  "devDependencies": {
+    "@carbon/icons": "11.84.0",
+    "@react-native-community/datetimepicker": "9.1.0",
+    "expo-image-picker": "57.0.15",
+    "react": "^19.2.0",
+    "react-native": "^0.87.1",
+    "react-native-safe-area-context": "^5.9.1",
+    "react-native-svg": "^15.15.5"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-community/datetimepicker": {
+      "optional": true
+    },
+    "expo-image-picker": {
+      "optional": true
+    }
+  }
+}

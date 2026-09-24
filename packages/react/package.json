@@ -1,0 +1,184 @@
+{
+  "name": "@aurea-uds/react",
+  "version": "0.10.0",
+  "description": "Os componentes React da Aurea UDS. Importe @aurea-uds/fonts/css e @aurea-uds/core/css junto.",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "react",
+    "components",
+    "ui"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/react#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./actions": {
+      "types": "./dist/actions.d.ts",
+      "import": "./dist/actions.js"
+    },
+    "./inputs": {
+      "types": "./dist/inputs.d.ts",
+      "import": "./dist/inputs.js"
+    },
+    "./navigation": {
+      "types": "./dist/navigation.d.ts",
+      "import": "./dist/navigation.js"
+    },
+    "./overlays": {
+      "types": "./dist/overlays.d.ts",
+      "import": "./dist/overlays.js"
+    },
+    "./disclosure": {
+      "types": "./dist/disclosure.d.ts",
+      "import": "./dist/disclosure.js"
+    },
+    "./feedback": {
+      "types": "./dist/feedback.d.ts",
+      "import": "./dist/feedback.js"
+    },
+    "./data-display": {
+      "types": "./dist/data-display.d.ts",
+      "import": "./dist/data-display.js"
+    },
+    "./identity": {
+      "types": "./dist/identity.d.ts",
+      "import": "./dist/identity.js"
+    },
+    "./media": {
+      "types": "./dist/media.d.ts",
+      "import": "./dist/media.js"
+    },
+    "./code": {
+      "types": "./dist/code.d.ts",
+      "import": "./dist/code.js"
+    },
+    "./communication": {
+      "types": "./dist/communication.d.ts",
+      "import": "./dist/communication.js"
+    },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "import": "./dist/layout.js"
+    },
+    "./system": {
+      "types": "./dist/system.d.ts",
+      "import": "./dist/system.js"
+    },
+    "./code-editor": {
+      "types": "./dist/code-editor.d.ts",
+      "import": "./dist/code-editor.js"
+    },
+    "./data-grid": {
+      "types": "./dist/data-grid.d.ts",
+      "import": "./dist/data-grid.js"
+    },
+    "./qrcode": {
+      "types": "./dist/qrcode.d.ts",
+      "import": "./dist/qrcode.js"
+    },
+    "./chart": {
+      "types": "./dist/chart.d.ts",
+      "import": "./dist/chart.js"
+    },
+    "./calendar": {
+      "types": "./dist/calendar.d.ts",
+      "import": "./dist/calendar.js"
+    },
+    "./graph": {
+      "types": "./dist/graph.d.ts",
+      "import": "./dist/graph.js"
+    },
+    "./agents": {
+      "types": "./dist/agents.d.ts",
+      "import": "./dist/agents.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.6.0"
+  },
+  "peerDependencies": {
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/state": "^6.7.1",
+    "@codemirror/view": "^6.43.6",
+    "@lezer/highlight": "^1.2.3",
+    "@tanstack/react-table": "^8.21.3",
+    "@xyflow/react": "^12.11.2",
+    "codemirror": "^6.0.2",
+    "qr": "^0.6.0",
+    "react": ">=19",
+    "react-day-picker": "^10.0.1",
+    "react-dom": ">=19",
+    "recharts": "^3.10.1"
+  },
+  "peerDependenciesMeta": {
+    "@codemirror/language": {
+      "optional": true
+    },
+    "@codemirror/state": {
+      "optional": true
+    },
+    "@codemirror/view": {
+      "optional": true
+    },
+    "@lezer/highlight": {
+      "optional": true
+    },
+    "@tanstack/react-table": {
+      "optional": true
+    },
+    "react-day-picker": {
+      "optional": true
+    },
+    "recharts": {
+      "optional": true
+    },
+    "codemirror": {
+      "optional": true
+    },
+    "qr": {
+      "optional": true
+    },
+    "@xyflow/react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/state": "^6.7.1",
+    "@codemirror/view": "^6.43.6",
+    "@lezer/highlight": "^1.2.3",
+    "@tanstack/react-table": "8.21.3",
+    "codemirror": "^6.0.2",
+    "qr": "^0.6.0",
+    "react": "^19.2.0",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "^19.2.0",
+    "recharts": "^3.10.1"
+  }
+}

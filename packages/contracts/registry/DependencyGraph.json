@@ -1,0 +1,130 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "n-a"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": "@xyflow/react",
+    "icons": []
+  },
+  "name": "DependencyGraph",
+  "summary": "Who depends on whom, on a canvas you can pan, zoom and build on.",
+  "icon": "flow",
+  "states": [
+    "selected",
+    "connectable",
+    "draggable"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--foreground",
+    "--muted-foreground",
+    "--primary",
+    "--radius-card",
+    "--space-05",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground",
+    "--surface-2",
+    "--text-sm",
+    "--text-xs",
+    "--tracking-wider",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "none — a labelled group holding the canvas. Each node is a real <button> when selectable, with aria-pressed: the reference calls real-HTML nodes the win over a canvas renderer, because a node painted on canvas exists for neither the keyboard nor the screen reader.",
+    "keyboard": [
+      "Tab",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which select the focused node. The first run reported zero of three for the same reason as the Gallery — the bank started on the node that was already selected. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+  },
+  "related": {
+    "components": [
+      "TraceTimeline",
+      "InterAgentMessage",
+      "AutomationCard"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/graph.tsx#DependencyGraph"
+  },
+  "props": [
+    {
+      "name": "nodes",
+      "type": "GraphNodeItem[]",
+      "default": "—",
+      "description": "The vocabulary is ours, not the engine's. x and y are optional: without them a layered longest-path layout runs, because the engine positions nothing on its own and a graph with no coordinates piles every node at 0,0."
+    },
+    {
+      "name": "edges",
+      "type": "GraphEdgeItem[]",
+      "default": "—",
+      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types."
+    },
+    {
+      "name": "selectedId",
+      "type": "string | null",
+      "default": "—",
+      "description": "Controlled selection."
+    },
+    {
+      "name": "onSelect",
+      "type": "(id: string) => void",
+      "default": "—",
+      "description": "Without it nodes are plain text instead of buttons — a control that does nothing does not get drawn."
+    },
+    {
+      "name": "connectable",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows the connection handles. Off by default: a handle hanging off a read-only graph is an affordance lying — it promises a drag that goes nowhere."
+    },
+    {
+      "name": "onConnect",
+      "type": "(edge: {from: string; to: string}) => void",
+      "default": "—",
+      "description": "Fires when someone draws a new edge."
+    },
+    {
+      "name": "onNodeMove",
+      "type": "(id: string, pos: {x: number; y: number}) => void",
+      "default": "—",
+      "description": "Enables dragging and reports where the node landed. Whoever passes x and y back keeps the position; that is what lets a builder store what the person arranged without fighting the automatic layout."
+    },
+    {
+      "name": "height",
+      "type": "string",
+      "default": "\"28rem\"",
+      "description": "A canvas needs a definite height or it collapses. A CSS length, not a number — check 23."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Dependency graph\"",
+      "description": "Accessible name of the group."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the canvas wrapper."
+    }
+  ],
+  "notes": [
+    "Ships from its own subpath: import {DependencyGraph} from \"@aurea-uds/react/graph\". @xyflow/react is an OPTIONAL peer, so nobody who installed the library for the Button pays for it.",
+    "The consumer must also import the engine's structural stylesheet once, and it must sit in a cascade layer BELOW ours: `@layer motor, aurea;` then `@import \"@xyflow/react/dist/base.css\" layer(motor);`. Unlayered CSS beats layered CSS regardless of specificity, and the Aurea core lives in `@layer aurea` — imported loose, the engine overrides our skin. Measured 09/08/2026: the attribution link kept the engine's hardcoded #999 and failed colour contrast even though our rule was more specific. Only `base.css`: `dist/style.css` is the engine's own identity — 3px radius, #1a192b, shadows, white nodes — and it never enters.",
+    "Scope is smaller than the engine's: no minimap, no panels, no resizable nodes, no rectangle selection, and no <Controls/>. The control buttons only get colour from style.css, and writing .react-flow__* rules into our core would plant a class no component here produces — exactly what check 15 exists to stop.",
+    "The layout is a layered longest-path pass written here, because the engine takes x/y ready-made. It does NOT minimise edge crossings: fine for dependency graphs of dozens of nodes, not for thousands. The upgrade path is elkjs — a NEW dependency, which needs authorisation rather than smuggling.",
+    "The preview on the catalogue page is REAL, server-rendered. That needs three things on every node — initialWidth, initialHeight and an explicit handles array — plus the initial viewport on the provider. Without them the engine has nothing to measure and draws nothing. An earlier version of this ficha claimed a graph could not exist in static HTML; that was a conclusion, not a measurement, and it was wrong."
+  ]
+}

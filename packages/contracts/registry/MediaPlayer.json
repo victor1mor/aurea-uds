@@ -1,0 +1,117 @@
+{
+  "name": "MediaPlayer",
+  "category": "Media",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Video/audio player with full controls.",
+  "icon": "play",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "kind": [
+      "audio",
+      "video"
+    ]
+  },
+  "states": [
+    "playing",
+    "paused",
+    "buffering"
+  ],
+  "tokens": [
+    "--border",
+    "--font-code",
+    "--font-ui",
+    "--foreground",
+    "--media-buffered",
+    "--media-canvas",
+    "--media-caption-bg",
+    "--media-foreground",
+    "--media-muted",
+    "--media-scrim",
+    "--media-track",
+    "--muted-foreground",
+    "--primary",
+    "--radius-card",
+    "--radius-full",
+    "--radius-lg",
+    "--radius-md",
+    "--radius-sm",
+    "--secondary",
+    "--shadow-lg",
+    "--surface-3",
+    "--surface-hover",
+    "--text-base",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "group",
+    "keyboard": [
+      "Space",
+      "ArrowLeft",
+      "ArrowRight"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "MediaPlayerShell"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/media-client.tsx#MediaPlayer"
+  },
+  "props": [
+    {
+      "name": "src",
+      "type": "string",
+      "default": "—",
+      "description": "The media. Any <video> attribute is accepted and forwarded."
+    },
+    {
+      "name": "kind",
+      "type": "video | audio",
+      "default": "video",
+      "description": "Audio swaps the picture for a placeholder with the title, and drops the full-screen button — there is nothing to enlarge."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Shown over the video and used as the accessible name of the control group when it is a string. It deliberately shadows the HTML title attribute: a tooltip on a player is not what you want."
+    },
+    {
+      "name": "subtitle",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Second line under the title."
+    },
+    {
+      "name": "poster",
+      "type": "string",
+      "default": "—",
+      "description": "Still frame before playback. Video only."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Where <track> elements go. Captions are read from the element's textTracks, so the CC button appears only when a track actually exists."
+    },
+    {
+      "name": "onPlay",
+      "type": "(e: SyntheticEvent) => void",
+      "default": "—",
+      "description": "Your media handlers are COMPOSED with the internal ones, never replacing them — the same holds for onPause, onEnded, onTimeUpdate, onLoadedMetadata, onDurationChange, onProgress and onVolumeChange. An external onPlay that replaced ours would leave the button reading \"Play\" during playback."
+    }
+  ]
+}

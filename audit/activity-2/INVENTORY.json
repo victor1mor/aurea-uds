@@ -1,0 +1,6355 @@
+{
+  "_gerado": "node audit/activity-2/inventory.mjs — enumerado da fonte de verdade de cada projeto",
+  "_regra": "Isto é COBERTURA, não amostra (§10). Nenhum item foi escolhido a dedo; a lista é a enumeração completa do que cada projeto expõe na fonte declarada em `fonteDeVerdade`.",
+  "_proveniencia": "Os commits de cada referência estão em audit/activity-2/02-FONTES.md",
+  "totais": {
+    "base-ui": 47,
+    "radix": 59,
+    "shadcn-ui": 396,
+    "untitled-ui": 34,
+    "kibo": 44,
+    "reui": 94,
+    "media-chrome": 34,
+    "mui": 154,
+    "shark-ui": 113,
+    "aurea": 80
+  },
+  "fontes": {
+    "base-ui": {
+      "projeto": "mui/base-ui",
+      "papel": "o motor que a Aurea JÁ usa — comportamento, teclado, ARIA",
+      "fonteDeVerdade": "packages/react/src/<primitive>/",
+      "itens": [
+        {
+          "nome": "accordion",
+          "chave": "accordion",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "alert-dialog",
+          "chave": "alert-dialog",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "autocomplete",
+          "chave": "autocomplete",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "avatar",
+          "chave": "avatar",
+          "tipo": "primitive",
+          "partes": [
+            "Avatar.spec"
+          ]
+        },
+        {
+          "nome": "button",
+          "chave": "button",
+          "tipo": "primitive",
+          "partes": [
+            "Button.spec",
+            "Button.test",
+            "Button",
+            "ButtonDataAttributes"
+          ]
+        },
+        {
+          "nome": "checkbox",
+          "chave": "checkbox",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "checkbox-group",
+          "chave": "checkbox-group",
+          "tipo": "primitive",
+          "partes": [
+            "CheckboxGroup.test",
+            "CheckboxGroup"
+          ]
+        },
+        {
+          "nome": "collapsible",
+          "chave": "collapsible",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "combobox",
+          "chave": "combobox",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "context-menu",
+          "chave": "context-menu",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "csp-provider",
+          "chave": "csp-provider",
+          "tipo": "primitive",
+          "partes": [
+            "CSPProvider.test",
+            "CSPProvider"
+          ]
+        },
+        {
+          "nome": "dialog",
+          "chave": "dialog",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "direction-provider",
+          "chave": "direction-provider",
+          "tipo": "primitive",
+          "partes": [
+            "DirectionProvider.spec",
+            "DirectionProvider.test",
+            "DirectionProvider"
+          ]
+        },
+        {
+          "nome": "drawer",
+          "chave": "drawer",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "field",
+          "chave": "field",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "fieldset",
+          "chave": "fieldset",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "floating-ui-react",
+          "chave": "floating-ui-react",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "form",
+          "chave": "form",
+          "tipo": "primitive",
+          "partes": [
+            "Form.spec",
+            "Form.test",
+            "Form"
+          ]
+        },
+        {
+          "nome": "input",
+          "chave": "input",
+          "tipo": "primitive",
+          "partes": [
+            "Input.spec",
+            "Input.test",
+            "Input"
+          ]
+        },
+        {
+          "nome": "internals",
+          "chave": "internals",
+          "tipo": "primitive",
+          "partes": [
+            "PrehydrationScript"
+          ]
+        },
+        {
+          "nome": "menu",
+          "chave": "menu",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "menubar",
+          "chave": "menubar",
+          "tipo": "primitive",
+          "partes": [
+            "Menubar.test",
+            "Menubar"
+          ]
+        },
+        {
+          "nome": "merge-props",
+          "chave": "merge-props",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "meter",
+          "chave": "meter",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "navigation-menu",
+          "chave": "navigation-menu",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "number-field",
+          "chave": "number-field",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "otp-field",
+          "chave": "otp-field",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "popover",
+          "chave": "popover",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "preview-card",
+          "chave": "preview-card",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "progress",
+          "chave": "progress",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "radio",
+          "chave": "radio",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "radio-group",
+          "chave": "radio-group",
+          "tipo": "primitive",
+          "partes": [
+            "RadioGroup.spec",
+            "RadioGroup.test",
+            "RadioGroup"
+          ]
+        },
+        {
+          "nome": "scroll-area",
+          "chave": "scroll-area",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "select",
+          "chave": "select",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "separator",
+          "chave": "separator",
+          "tipo": "primitive",
+          "partes": [
+            "Separator.test",
+            "Separator"
+          ]
+        },
+        {
+          "nome": "slider",
+          "chave": "slider",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "switch",
+          "chave": "switch",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "tabs",
+          "chave": "tabs",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "toast",
+          "chave": "toast",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "toggle",
+          "chave": "toggle",
+          "tipo": "primitive",
+          "partes": [
+            "Toggle.test",
+            "Toggle"
+          ]
+        },
+        {
+          "nome": "toggle-group",
+          "chave": "toggle-group",
+          "tipo": "primitive",
+          "partes": [
+            "ToggleGroup.spec",
+            "ToggleGroup.test",
+            "ToggleGroup"
+          ]
+        },
+        {
+          "nome": "toolbar",
+          "chave": "toolbar",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "tooltip",
+          "chave": "tooltip",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "types",
+          "chave": "types",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "unstable-use-media-query",
+          "chave": "unstable-use-media-query",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "use-render",
+          "chave": "use-render",
+          "tipo": "primitive",
+          "partes": []
+        },
+        {
+          "nome": "utils",
+          "chave": "utils",
+          "tipo": "primitive",
+          "partes": [
+            "FloatingPortalLite",
+            "FocusGuard",
+            "InternalBackdrop"
+          ]
+        }
+      ]
+    },
+    "radix": {
+      "projeto": "radix-ui/primitives",
+      "papel": "a origem do headless que o ecossistema copiou",
+      "fonteDeVerdade": "packages/react/<primitive>/",
+      "itens": [
+        {
+          "nome": "accessible-icon",
+          "chave": "accessible-icon",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "accordion",
+          "chave": "accordion",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "alert-dialog",
+          "chave": "alert-dialog",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "announce",
+          "chave": "announce",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "arrow",
+          "chave": "arrow",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "aspect-ratio",
+          "chave": "aspect-ratio",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "avatar",
+          "chave": "avatar",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "checkbox",
+          "chave": "checkbox",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "collapsible",
+          "chave": "collapsible",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "collection",
+          "chave": "collection",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "compose-refs",
+          "chave": "compose-refs",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "context",
+          "chave": "context",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "context-menu",
+          "chave": "context-menu",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "dialog",
+          "chave": "dialog",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "direction",
+          "chave": "direction",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "dismissable-layer",
+          "chave": "dismissable-layer",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "dropdown-menu",
+          "chave": "dropdown-menu",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "focus-guards",
+          "chave": "focus-guards",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "focus-scope",
+          "chave": "focus-scope",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "form",
+          "chave": "form",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "hover-card",
+          "chave": "hover-card",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "id",
+          "chave": "id",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "label",
+          "chave": "label",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "menu",
+          "chave": "menu",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "menubar",
+          "chave": "menubar",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "navigation-menu",
+          "chave": "navigation-menu",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "one-time-password-field",
+          "chave": "one-time-password-field",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "password-toggle-field",
+          "chave": "password-toggle-field",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "popover",
+          "chave": "popover",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "popper",
+          "chave": "popper",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "portal",
+          "chave": "portal",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "presence",
+          "chave": "presence",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "primitive",
+          "chave": "primitive",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "progress",
+          "chave": "progress",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "radio-group",
+          "chave": "radio-group",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "radix-ui",
+          "chave": "radix-ui",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "roving-focus",
+          "chave": "roving-focus",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "scroll-area",
+          "chave": "scroll-area",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "select",
+          "chave": "select",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "separator",
+          "chave": "separator",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "slider",
+          "chave": "slider",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "slot",
+          "chave": "slot",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "switch",
+          "chave": "switch",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "tabs",
+          "chave": "tabs",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "toast",
+          "chave": "toast",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "toggle",
+          "chave": "toggle",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "toggle-group",
+          "chave": "toggle-group",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "toolbar",
+          "chave": "toolbar",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "tooltip",
+          "chave": "tooltip",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-callback-ref",
+          "chave": "use-callback-ref",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-controllable-state",
+          "chave": "use-controllable-state",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-effect-event",
+          "chave": "use-effect-event",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-escape-keydown",
+          "chave": "use-escape-keydown",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-is-hydrated",
+          "chave": "use-is-hydrated",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-layout-effect",
+          "chave": "use-layout-effect",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-previous",
+          "chave": "use-previous",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-rect",
+          "chave": "use-rect",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "use-size",
+          "chave": "use-size",
+          "tipo": "primitive"
+        },
+        {
+          "nome": "visually-hidden",
+          "chave": "visually-hidden",
+          "tipo": "primitive"
+        }
+      ]
+    },
+    "shadcn-ui": {
+      "projeto": "shadcn-ui/ui",
+      "papel": "decomposição em peças, registry, CLI, fronteira servidor/cliente",
+      "fonteDeVerdade": "apps/v4/registry.json (itens já tipados pelo projeto)",
+      "itens": [
+        {
+          "nome": "accordion",
+          "chave": "accordion",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-accordion"
+          ]
+        },
+        {
+          "nome": "accordion-demo",
+          "chave": "accordion-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "alert",
+          "chave": "alert",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "alert-demo",
+          "chave": "alert-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "alert-destructive",
+          "chave": "alert-destructive",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "alert-dialog",
+          "chave": "alert-dialog",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-alert-dialog"
+          ]
+        },
+        {
+          "nome": "alert-dialog-demo",
+          "chave": "alert-dialog-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "aspect-ratio",
+          "chave": "aspect-ratio",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-aspect-ratio"
+          ]
+        },
+        {
+          "nome": "aspect-ratio-demo",
+          "chave": "aspect-ratio-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "avatar",
+          "chave": "avatar",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-avatar"
+          ]
+        },
+        {
+          "nome": "avatar-demo",
+          "chave": "avatar-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "badge",
+          "chave": "badge",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-slot"
+          ]
+        },
+        {
+          "nome": "badge-demo",
+          "chave": "badge-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "badge-destructive",
+          "chave": "badge-destructive",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "badge-outline",
+          "chave": "badge-outline",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "badge-secondary",
+          "chave": "badge-secondary",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "breadcrumb",
+          "chave": "breadcrumb",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-slot"
+          ]
+        },
+        {
+          "nome": "breadcrumb-demo",
+          "chave": "breadcrumb-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "breadcrumb-dropdown",
+          "chave": "breadcrumb-dropdown",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "breadcrumb-ellipsis",
+          "chave": "breadcrumb-ellipsis",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "breadcrumb-link",
+          "chave": "breadcrumb-link",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "breadcrumb-responsive",
+          "chave": "breadcrumb-responsive",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "breadcrumb-separator",
+          "chave": "breadcrumb-separator",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button",
+          "chave": "button",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-slot"
+          ]
+        },
+        {
+          "nome": "button-as-child",
+          "chave": "button-as-child",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-default",
+          "chave": "button-default",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-demo",
+          "chave": "button-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-destructive",
+          "chave": "button-destructive",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-ghost",
+          "chave": "button-ghost",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group",
+          "chave": "button-group",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "button-group-demo",
+          "chave": "button-group-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-dropdown",
+          "chave": "button-group-dropdown",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-input",
+          "chave": "button-group-input",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-input-group",
+          "chave": "button-group-input-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-nested",
+          "chave": "button-group-nested",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-orientation",
+          "chave": "button-group-orientation",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-popover",
+          "chave": "button-group-popover",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-select",
+          "chave": "button-group-select",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-separator",
+          "chave": "button-group-separator",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-size",
+          "chave": "button-group-size",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-group-split",
+          "chave": "button-group-split",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-icon",
+          "chave": "button-icon",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-link",
+          "chave": "button-link",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-loading",
+          "chave": "button-loading",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-outline",
+          "chave": "button-outline",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-rounded",
+          "chave": "button-rounded",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-secondary",
+          "chave": "button-secondary",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-size",
+          "chave": "button-size",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "button-with-icon",
+          "chave": "button-with-icon",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "calendar",
+          "chave": "calendar",
+          "tipo": "ui",
+          "deps": [
+            "react-day-picker@latest",
+            "date-fns"
+          ]
+        },
+        {
+          "nome": "calendar-demo",
+          "chave": "calendar-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "calendar-hijri",
+          "chave": "calendar-hijri",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "card",
+          "chave": "card",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "card-demo",
+          "chave": "card-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "card-with-form",
+          "chave": "card-with-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "carousel",
+          "chave": "carousel",
+          "tipo": "ui",
+          "deps": [
+            "embla-carousel-react"
+          ]
+        },
+        {
+          "nome": "carousel-api",
+          "chave": "carousel-api",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "carousel-demo",
+          "chave": "carousel-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "carousel-orientation",
+          "chave": "carousel-orientation",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "carousel-plugin",
+          "chave": "carousel-plugin",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "carousel-size",
+          "chave": "carousel-size",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "carousel-spacing",
+          "chave": "carousel-spacing",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart",
+          "chave": "chart",
+          "tipo": "ui",
+          "deps": [
+            "recharts@2.15.4",
+            "lucide-react"
+          ]
+        },
+        {
+          "nome": "chart-area-axes",
+          "chave": "chart-area-axes",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-default",
+          "chave": "chart-area-default",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-gradient",
+          "chave": "chart-area-gradient",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-icons",
+          "chave": "chart-area-icons",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-interactive",
+          "chave": "chart-area-interactive",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-legend",
+          "chave": "chart-area-legend",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-linear",
+          "chave": "chart-area-linear",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-stacked",
+          "chave": "chart-area-stacked",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-stacked-expand",
+          "chave": "chart-area-stacked-expand",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-area-step",
+          "chave": "chart-area-step",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-active",
+          "chave": "chart-bar-active",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-default",
+          "chave": "chart-bar-default",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-demo",
+          "chave": "chart-bar-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-demo-axis",
+          "chave": "chart-bar-demo-axis",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-demo-grid",
+          "chave": "chart-bar-demo-grid",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-demo-legend",
+          "chave": "chart-bar-demo-legend",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-demo-tooltip",
+          "chave": "chart-bar-demo-tooltip",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-horizontal",
+          "chave": "chart-bar-horizontal",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-interactive",
+          "chave": "chart-bar-interactive",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-label",
+          "chave": "chart-bar-label",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-label-custom",
+          "chave": "chart-bar-label-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-mixed",
+          "chave": "chart-bar-mixed",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-multiple",
+          "chave": "chart-bar-multiple",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-negative",
+          "chave": "chart-bar-negative",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-bar-stacked",
+          "chave": "chart-bar-stacked",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-default",
+          "chave": "chart-line-default",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-dots",
+          "chave": "chart-line-dots",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-dots-colors",
+          "chave": "chart-line-dots-colors",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-dots-custom",
+          "chave": "chart-line-dots-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-interactive",
+          "chave": "chart-line-interactive",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-label",
+          "chave": "chart-line-label",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-label-custom",
+          "chave": "chart-line-label-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-linear",
+          "chave": "chart-line-linear",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-multiple",
+          "chave": "chart-line-multiple",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-line-step",
+          "chave": "chart-line-step",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-donut",
+          "chave": "chart-pie-donut",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-donut-active",
+          "chave": "chart-pie-donut-active",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-donut-text",
+          "chave": "chart-pie-donut-text",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-interactive",
+          "chave": "chart-pie-interactive",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-label",
+          "chave": "chart-pie-label",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-label-custom",
+          "chave": "chart-pie-label-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-label-list",
+          "chave": "chart-pie-label-list",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-legend",
+          "chave": "chart-pie-legend",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-separator-none",
+          "chave": "chart-pie-separator-none",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-simple",
+          "chave": "chart-pie-simple",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-pie-stacked",
+          "chave": "chart-pie-stacked",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-default",
+          "chave": "chart-radar-default",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-dots",
+          "chave": "chart-radar-dots",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-grid-circle",
+          "chave": "chart-radar-grid-circle",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-grid-circle-fill",
+          "chave": "chart-radar-grid-circle-fill",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-grid-circle-no-lines",
+          "chave": "chart-radar-grid-circle-no-lines",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-grid-custom",
+          "chave": "chart-radar-grid-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-grid-fill",
+          "chave": "chart-radar-grid-fill",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-grid-none",
+          "chave": "chart-radar-grid-none",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-icons",
+          "chave": "chart-radar-icons",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-label-custom",
+          "chave": "chart-radar-label-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-legend",
+          "chave": "chart-radar-legend",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-lines-only",
+          "chave": "chart-radar-lines-only",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-multiple",
+          "chave": "chart-radar-multiple",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radar-radius",
+          "chave": "chart-radar-radius",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radial-grid",
+          "chave": "chart-radial-grid",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radial-label",
+          "chave": "chart-radial-label",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radial-shape",
+          "chave": "chart-radial-shape",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radial-simple",
+          "chave": "chart-radial-simple",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radial-stacked",
+          "chave": "chart-radial-stacked",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-radial-text",
+          "chave": "chart-radial-text",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-advanced",
+          "chave": "chart-tooltip-advanced",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-default",
+          "chave": "chart-tooltip-default",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-demo",
+          "chave": "chart-tooltip-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-formatter",
+          "chave": "chart-tooltip-formatter",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-icons",
+          "chave": "chart-tooltip-icons",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-indicator-line",
+          "chave": "chart-tooltip-indicator-line",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-indicator-none",
+          "chave": "chart-tooltip-indicator-none",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-label-custom",
+          "chave": "chart-tooltip-label-custom",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-label-formatter",
+          "chave": "chart-tooltip-label-formatter",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "chart-tooltip-label-none",
+          "chave": "chart-tooltip-label-none",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "checkbox",
+          "chave": "checkbox",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-checkbox"
+          ]
+        },
+        {
+          "nome": "checkbox-demo",
+          "chave": "checkbox-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "checkbox-disabled",
+          "chave": "checkbox-disabled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "checkbox-form-multiple",
+          "chave": "checkbox-form-multiple",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "checkbox-form-single",
+          "chave": "checkbox-form-single",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "checkbox-with-text",
+          "chave": "checkbox-with-text",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "collapsible",
+          "chave": "collapsible",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-collapsible"
+          ]
+        },
+        {
+          "nome": "collapsible-demo",
+          "chave": "collapsible-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "combobox-demo",
+          "chave": "combobox-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "combobox-dropdown-menu",
+          "chave": "combobox-dropdown-menu",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "combobox-form",
+          "chave": "combobox-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "combobox-popover",
+          "chave": "combobox-popover",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "combobox-responsive",
+          "chave": "combobox-responsive",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "command",
+          "chave": "command",
+          "tipo": "ui",
+          "deps": [
+            "cmdk"
+          ]
+        },
+        {
+          "nome": "command-demo",
+          "chave": "command-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "command-dialog",
+          "chave": "command-dialog",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "context-menu",
+          "chave": "context-menu",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-context-menu"
+          ]
+        },
+        {
+          "nome": "context-menu-demo",
+          "chave": "context-menu-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "dashboard-01",
+          "chave": "dashboard-01",
+          "tipo": "block",
+          "deps": [
+            "@dnd-kit/core",
+            "@dnd-kit/modifiers",
+            "@dnd-kit/sortable",
+            "@dnd-kit/utilities",
+            "@tanstack/react-table",
+            "zod",
+            "@tabler/icons-react"
+          ]
+        },
+        {
+          "nome": "data-table-demo",
+          "chave": "data-table-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "date-picker-demo",
+          "chave": "date-picker-demo",
+          "tipo": "example",
+          "deps": [
+            "date-fns"
+          ]
+        },
+        {
+          "nome": "date-picker-form",
+          "chave": "date-picker-form",
+          "tipo": "example",
+          "deps": [
+            "date-fns"
+          ]
+        },
+        {
+          "nome": "date-picker-with-presets",
+          "chave": "date-picker-with-presets",
+          "tipo": "example",
+          "deps": [
+            "date-fns"
+          ]
+        },
+        {
+          "nome": "date-picker-with-range",
+          "chave": "date-picker-with-range",
+          "tipo": "example",
+          "deps": [
+            "date-fns"
+          ]
+        },
+        {
+          "nome": "dialog",
+          "chave": "dialog",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-dialog"
+          ]
+        },
+        {
+          "nome": "dialog-close-button",
+          "chave": "dialog-close-button",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "dialog-demo",
+          "chave": "dialog-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "drawer",
+          "chave": "drawer",
+          "tipo": "ui",
+          "deps": [
+            "vaul",
+            "@radix-ui/react-dialog"
+          ]
+        },
+        {
+          "nome": "drawer-demo",
+          "chave": "drawer-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "drawer-dialog",
+          "chave": "drawer-dialog",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "dropdown-menu",
+          "chave": "dropdown-menu",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-dropdown-menu"
+          ]
+        },
+        {
+          "nome": "dropdown-menu-checkboxes",
+          "chave": "dropdown-menu-checkboxes",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "dropdown-menu-demo",
+          "chave": "dropdown-menu-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "dropdown-menu-dialog",
+          "chave": "dropdown-menu-dialog",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "dropdown-menu-radio-group",
+          "chave": "dropdown-menu-radio-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty",
+          "chave": "empty",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "empty-avatar",
+          "chave": "empty-avatar",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty-avatar-group",
+          "chave": "empty-avatar-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty-background",
+          "chave": "empty-background",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty-demo",
+          "chave": "empty-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty-icon",
+          "chave": "empty-icon",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty-input-group",
+          "chave": "empty-input-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "empty-outline",
+          "chave": "empty-outline",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field",
+          "chave": "field",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "field-checkbox",
+          "chave": "field-checkbox",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-choice-card",
+          "chave": "field-choice-card",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-demo",
+          "chave": "field-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-fieldset",
+          "chave": "field-fieldset",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-group",
+          "chave": "field-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-input",
+          "chave": "field-input",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-radio",
+          "chave": "field-radio",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-responsive",
+          "chave": "field-responsive",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-select",
+          "chave": "field-select",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-slider",
+          "chave": "field-slider",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-switch",
+          "chave": "field-switch",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "field-textarea",
+          "chave": "field-textarea",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "form",
+          "chave": "form",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-label",
+            "@radix-ui/react-slot",
+            "@hookform/resolvers",
+            "zod",
+            "react-hook-form"
+          ]
+        },
+        {
+          "nome": "form-rhf-array",
+          "chave": "form-rhf-array",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-checkbox",
+          "chave": "form-rhf-checkbox",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-complex",
+          "chave": "form-rhf-complex",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-demo",
+          "chave": "form-rhf-demo",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-input",
+          "chave": "form-rhf-input",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-password",
+          "chave": "form-rhf-password",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-radiogroup",
+          "chave": "form-rhf-radiogroup",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-select",
+          "chave": "form-rhf-select",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-switch",
+          "chave": "form-rhf-switch",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-rhf-textarea",
+          "chave": "form-rhf-textarea",
+          "tipo": "example",
+          "deps": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-array",
+          "chave": "form-tanstack-array",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-checkbox",
+          "chave": "form-tanstack-checkbox",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-complex",
+          "chave": "form-tanstack-complex",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-demo",
+          "chave": "form-tanstack-demo",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-input",
+          "chave": "form-tanstack-input",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-radiogroup",
+          "chave": "form-tanstack-radiogroup",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-select",
+          "chave": "form-tanstack-select",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-switch",
+          "chave": "form-tanstack-switch",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "form-tanstack-textarea",
+          "chave": "form-tanstack-textarea",
+          "tipo": "example",
+          "deps": [
+            "@tanstack/react-form",
+            "zod"
+          ]
+        },
+        {
+          "nome": "hover-card",
+          "chave": "hover-card",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-hover-card"
+          ]
+        },
+        {
+          "nome": "hover-card-demo",
+          "chave": "hover-card-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input",
+          "chave": "input",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "input-demo",
+          "chave": "input-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-disabled",
+          "chave": "input-disabled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-file",
+          "chave": "input-file",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-form",
+          "chave": "input-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group",
+          "chave": "input-group",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "input-group-button",
+          "chave": "input-group-button",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-button-group",
+          "chave": "input-group-button-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-custom",
+          "chave": "input-group-custom",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-demo",
+          "chave": "input-group-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-dropdown",
+          "chave": "input-group-dropdown",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-icon",
+          "chave": "input-group-icon",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-label",
+          "chave": "input-group-label",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-spinner",
+          "chave": "input-group-spinner",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-text",
+          "chave": "input-group-text",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-textarea",
+          "chave": "input-group-textarea",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-group-tooltip",
+          "chave": "input-group-tooltip",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-otp",
+          "chave": "input-otp",
+          "tipo": "ui",
+          "deps": [
+            "input-otp"
+          ]
+        },
+        {
+          "nome": "input-otp-controlled",
+          "chave": "input-otp-controlled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-otp-demo",
+          "chave": "input-otp-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-otp-form",
+          "chave": "input-otp-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-otp-pattern",
+          "chave": "input-otp-pattern",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-otp-separator",
+          "chave": "input-otp-separator",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-with-button",
+          "chave": "input-with-button",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-with-label",
+          "chave": "input-with-label",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "input-with-text",
+          "chave": "input-with-text",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item",
+          "chave": "item",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "item-avatar",
+          "chave": "item-avatar",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-demo",
+          "chave": "item-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-dropdown",
+          "chave": "item-dropdown",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-group",
+          "chave": "item-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-header",
+          "chave": "item-header",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-icon",
+          "chave": "item-icon",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-image",
+          "chave": "item-image",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-link",
+          "chave": "item-link",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-size",
+          "chave": "item-size",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "item-variant",
+          "chave": "item-variant",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "kbd",
+          "chave": "kbd",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "kbd-button",
+          "chave": "kbd-button",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "kbd-demo",
+          "chave": "kbd-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "kbd-group",
+          "chave": "kbd-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "kbd-input-group",
+          "chave": "kbd-input-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "kbd-tooltip",
+          "chave": "kbd-tooltip",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "label",
+          "chave": "label",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-label"
+          ]
+        },
+        {
+          "nome": "label-demo",
+          "chave": "label-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "login-01",
+          "chave": "login-01",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "login-02",
+          "chave": "login-02",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "login-03",
+          "chave": "login-03",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "login-04",
+          "chave": "login-04",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "login-05",
+          "chave": "login-05",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "menubar",
+          "chave": "menubar",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-menubar"
+          ]
+        },
+        {
+          "nome": "menubar-demo",
+          "chave": "menubar-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "mode-toggle",
+          "chave": "mode-toggle",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "native-select",
+          "chave": "native-select",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "native-select-demo",
+          "chave": "native-select-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "native-select-disabled",
+          "chave": "native-select-disabled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "native-select-groups",
+          "chave": "native-select-groups",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "native-select-invalid",
+          "chave": "native-select-invalid",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "navigation-menu",
+          "chave": "navigation-menu",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-navigation-menu"
+          ]
+        },
+        {
+          "nome": "navigation-menu-demo",
+          "chave": "navigation-menu-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "pagination",
+          "chave": "pagination",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "pagination-demo",
+          "chave": "pagination-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "popover",
+          "chave": "popover",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-popover"
+          ]
+        },
+        {
+          "nome": "popover-demo",
+          "chave": "popover-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "progress",
+          "chave": "progress",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-progress"
+          ]
+        },
+        {
+          "nome": "progress-demo",
+          "chave": "progress-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "radio-group",
+          "chave": "radio-group",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-radio-group"
+          ]
+        },
+        {
+          "nome": "radio-group-demo",
+          "chave": "radio-group-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "radio-group-form",
+          "chave": "radio-group-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "resizable",
+          "chave": "resizable",
+          "tipo": "ui",
+          "deps": [
+            "react-resizable-panels"
+          ]
+        },
+        {
+          "nome": "resizable-demo",
+          "chave": "resizable-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "resizable-demo-with-handle",
+          "chave": "resizable-demo-with-handle",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "resizable-handle",
+          "chave": "resizable-handle",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "resizable-vertical",
+          "chave": "resizable-vertical",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "scroll-area",
+          "chave": "scroll-area",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-scroll-area"
+          ]
+        },
+        {
+          "nome": "scroll-area-demo",
+          "chave": "scroll-area-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "scroll-area-horizontal-demo",
+          "chave": "scroll-area-horizontal-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "select",
+          "chave": "select",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-select"
+          ]
+        },
+        {
+          "nome": "select-demo",
+          "chave": "select-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "select-form",
+          "chave": "select-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "select-scrollable",
+          "chave": "select-scrollable",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "separator",
+          "chave": "separator",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-separator"
+          ]
+        },
+        {
+          "nome": "separator-demo",
+          "chave": "separator-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "sheet",
+          "chave": "sheet",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-dialog"
+          ]
+        },
+        {
+          "nome": "sheet-demo",
+          "chave": "sheet-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "sheet-side",
+          "chave": "sheet-side",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "sidebar",
+          "chave": "sidebar",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-slot",
+            "class-variance-authority",
+            "lucide-react"
+          ]
+        },
+        {
+          "nome": "sidebar-01",
+          "chave": "sidebar-01",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-02",
+          "chave": "sidebar-02",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-03",
+          "chave": "sidebar-03",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-04",
+          "chave": "sidebar-04",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-05",
+          "chave": "sidebar-05",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-06",
+          "chave": "sidebar-06",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-07",
+          "chave": "sidebar-07",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-08",
+          "chave": "sidebar-08",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-09",
+          "chave": "sidebar-09",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-10",
+          "chave": "sidebar-10",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-11",
+          "chave": "sidebar-11",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-12",
+          "chave": "sidebar-12",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-13",
+          "chave": "sidebar-13",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-14",
+          "chave": "sidebar-14",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-15",
+          "chave": "sidebar-15",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "sidebar-16",
+          "chave": "sidebar-16",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "signup-01",
+          "chave": "signup-01",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "signup-02",
+          "chave": "signup-02",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "signup-03",
+          "chave": "signup-03",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "signup-04",
+          "chave": "signup-04",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "signup-05",
+          "chave": "signup-05",
+          "tipo": "block",
+          "deps": []
+        },
+        {
+          "nome": "skeleton",
+          "chave": "skeleton",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "skeleton-card",
+          "chave": "skeleton-card",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "skeleton-demo",
+          "chave": "skeleton-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "slider",
+          "chave": "slider",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-slider"
+          ]
+        },
+        {
+          "nome": "slider-demo",
+          "chave": "slider-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "sonner",
+          "chave": "sonner",
+          "tipo": "ui",
+          "deps": [
+            "sonner",
+            "next-themes"
+          ]
+        },
+        {
+          "nome": "sonner-demo",
+          "chave": "sonner-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "sonner-types",
+          "chave": "sonner-types",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner",
+          "chave": "spinner",
+          "tipo": "ui",
+          "deps": [
+            "class-variance-authority"
+          ]
+        },
+        {
+          "nome": "spinner-badge",
+          "chave": "spinner-badge",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-basic",
+          "chave": "spinner-basic",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-button",
+          "chave": "spinner-button",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-color",
+          "chave": "spinner-color",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-custom",
+          "chave": "spinner-custom",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-demo",
+          "chave": "spinner-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-empty",
+          "chave": "spinner-empty",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-input-group",
+          "chave": "spinner-input-group",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-item",
+          "chave": "spinner-item",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "spinner-size",
+          "chave": "spinner-size",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "switch",
+          "chave": "switch",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-switch"
+          ]
+        },
+        {
+          "nome": "switch-demo",
+          "chave": "switch-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "switch-form",
+          "chave": "switch-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "table",
+          "chave": "table",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "table-demo",
+          "chave": "table-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "tabs",
+          "chave": "tabs",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-tabs"
+          ]
+        },
+        {
+          "nome": "tabs-demo",
+          "chave": "tabs-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "textarea",
+          "chave": "textarea",
+          "tipo": "ui",
+          "deps": []
+        },
+        {
+          "nome": "textarea-demo",
+          "chave": "textarea-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "textarea-disabled",
+          "chave": "textarea-disabled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "textarea-form",
+          "chave": "textarea-form",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "textarea-with-button",
+          "chave": "textarea-with-button",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "textarea-with-label",
+          "chave": "textarea-with-label",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "textarea-with-text",
+          "chave": "textarea-with-text",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "theme-gray",
+          "chave": "theme-gray",
+          "tipo": "theme",
+          "deps": []
+        },
+        {
+          "nome": "theme-neutral",
+          "chave": "theme-neutral",
+          "tipo": "theme",
+          "deps": []
+        },
+        {
+          "nome": "theme-slate",
+          "chave": "theme-slate",
+          "tipo": "theme",
+          "deps": []
+        },
+        {
+          "nome": "theme-stone",
+          "chave": "theme-stone",
+          "tipo": "theme",
+          "deps": []
+        },
+        {
+          "nome": "theme-zinc",
+          "chave": "theme-zinc",
+          "tipo": "theme",
+          "deps": []
+        },
+        {
+          "nome": "toggle",
+          "chave": "toggle",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-toggle"
+          ]
+        },
+        {
+          "nome": "toggle-demo",
+          "chave": "toggle-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-disabled",
+          "chave": "toggle-disabled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group",
+          "chave": "toggle-group",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-toggle-group"
+          ]
+        },
+        {
+          "nome": "toggle-group-demo",
+          "chave": "toggle-group-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group-disabled",
+          "chave": "toggle-group-disabled",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group-lg",
+          "chave": "toggle-group-lg",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group-outline",
+          "chave": "toggle-group-outline",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group-single",
+          "chave": "toggle-group-single",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group-sm",
+          "chave": "toggle-group-sm",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-group-spacing",
+          "chave": "toggle-group-spacing",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-lg",
+          "chave": "toggle-lg",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-outline",
+          "chave": "toggle-outline",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-sm",
+          "chave": "toggle-sm",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "toggle-with-text",
+          "chave": "toggle-with-text",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "tooltip",
+          "chave": "tooltip",
+          "tipo": "ui",
+          "deps": [
+            "@radix-ui/react-tooltip"
+          ]
+        },
+        {
+          "nome": "tooltip-demo",
+          "chave": "tooltip-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-blockquote",
+          "chave": "typography-blockquote",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-demo",
+          "chave": "typography-demo",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-h1",
+          "chave": "typography-h1",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-h2",
+          "chave": "typography-h2",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-h3",
+          "chave": "typography-h3",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-h4",
+          "chave": "typography-h4",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-inline-code",
+          "chave": "typography-inline-code",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-large",
+          "chave": "typography-large",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-lead",
+          "chave": "typography-lead",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-list",
+          "chave": "typography-list",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-muted",
+          "chave": "typography-muted",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-p",
+          "chave": "typography-p",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-small",
+          "chave": "typography-small",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "typography-table",
+          "chave": "typography-table",
+          "tipo": "example",
+          "deps": []
+        },
+        {
+          "nome": "use-mobile",
+          "chave": "use-mobile",
+          "tipo": "hook",
+          "deps": []
+        },
+        {
+          "nome": "utils",
+          "chave": "utils",
+          "tipo": "lib",
+          "deps": [
+            "clsx",
+            "tailwind-merge"
+          ]
+        }
+      ]
+    },
+    "untitled-ui": {
+      "projeto": "untitleduico/react",
+      "papel": "escala de tamanhos, proporção, estados esquecidos",
+      "fonteDeVerdade": "components/<família>/<componente>/",
+      "itens": [
+        {
+          "nome": "app-navigation",
+          "chave": "app-navigation",
+          "tipo": "application",
+          "partes": [
+            "header-navigation.demo",
+            "header-navigation.story",
+            "header-navigation",
+            "sidebar-navigation-base",
+            "sidebar-navigation.demo",
+            "sidebar-navigation.story"
+          ]
+        },
+        {
+          "nome": "carousel",
+          "chave": "carousel",
+          "tipo": "application",
+          "partes": [
+            "carousel-base",
+            "carousel.demo",
+            "carousel.story"
+          ]
+        },
+        {
+          "nome": "charts",
+          "chave": "charts",
+          "tipo": "application",
+          "partes": [
+            "activity-gauges.demo",
+            "activity-gauges.story",
+            "bar-charts.demo",
+            "bar-charts.story",
+            "charts-base",
+            "line-charts.demo",
+            "line-charts.story",
+            "pie-charts.demo",
+            "pie-charts.story",
+            "progress-circles.demo",
+            "progress-circles.story",
+            "radar-charts.demo",
+            "radar-charts.story"
+          ]
+        },
+        {
+          "nome": "date-picker",
+          "chave": "date-picker",
+          "tipo": "application",
+          "partes": [
+            "calendar",
+            "cell",
+            "date-picker.demo",
+            "date-picker.story",
+            "date-picker",
+            "date-range-picker",
+            "range-calendar"
+          ]
+        },
+        {
+          "nome": "empty-state",
+          "chave": "empty-state",
+          "tipo": "application",
+          "partes": [
+            "empty-state"
+          ]
+        },
+        {
+          "nome": "file-upload",
+          "chave": "file-upload",
+          "tipo": "application",
+          "partes": [
+            "draggable",
+            "file-upload-base",
+            "file-upload.demo",
+            "file-upload.story"
+          ]
+        },
+        {
+          "nome": "loading-indicator",
+          "chave": "loading-indicator",
+          "tipo": "application",
+          "partes": [
+            "loading-indicator.demo",
+            "loading-indicator.story",
+            "loading-indicator"
+          ]
+        },
+        {
+          "nome": "modals",
+          "chave": "modals",
+          "tipo": "application",
+          "partes": [
+            "modal"
+          ]
+        },
+        {
+          "nome": "pagination",
+          "chave": "pagination",
+          "tipo": "application",
+          "partes": [
+            "pagination-base",
+            "pagination-dot",
+            "pagination-line",
+            "pagination.demo",
+            "pagination.story",
+            "pagination"
+          ]
+        },
+        {
+          "nome": "slideout-menus",
+          "chave": "slideout-menus",
+          "tipo": "application",
+          "partes": [
+            "slideout-menu"
+          ]
+        },
+        {
+          "nome": "table",
+          "chave": "table",
+          "tipo": "application",
+          "partes": [
+            "table.demo",
+            "table.story",
+            "table"
+          ]
+        },
+        {
+          "nome": "tabs",
+          "chave": "tabs",
+          "tipo": "application",
+          "partes": [
+            "tabs.demo",
+            "tabs.story",
+            "tabs"
+          ]
+        },
+        {
+          "nome": "avatar",
+          "chave": "avatar",
+          "tipo": "base",
+          "partes": [
+            "avatar-label-group",
+            "avatar-profile-photo",
+            "avatar.demo",
+            "avatar.story",
+            "avatar"
+          ]
+        },
+        {
+          "nome": "badges",
+          "chave": "badges",
+          "tipo": "base",
+          "partes": [
+            "badge-groups.demo",
+            "badge-groups.story",
+            "badge-groups",
+            "badges.demo",
+            "badges.story",
+            "badges"
+          ]
+        },
+        {
+          "nome": "button-group",
+          "chave": "button-group",
+          "tipo": "base",
+          "partes": [
+            "button-group.demo",
+            "button-group.story",
+            "button-group"
+          ]
+        },
+        {
+          "nome": "buttons",
+          "chave": "buttons",
+          "tipo": "base",
+          "partes": [
+            "app-store-buttons-outline",
+            "app-store-buttons.demo",
+            "app-store-buttons.story",
+            "app-store-buttons",
+            "button-utility",
+            "button",
+            "buttons.demo",
+            "buttons.story",
+            "close-button",
+            "social-button",
+            "social-buttons.demo",
+            "social-buttons.story",
+            "social-logos"
+          ]
+        },
+        {
+          "nome": "checkbox",
+          "chave": "checkbox",
+          "tipo": "base",
+          "partes": [
+            "checkbox.demo",
+            "checkbox.story",
+            "checkbox"
+          ]
+        },
+        {
+          "nome": "dropdown",
+          "chave": "dropdown",
+          "tipo": "base",
+          "partes": [
+            "dropdown-account-breadcrumb",
+            "dropdown-account-button",
+            "dropdown-account-card-md",
+            "dropdown-account-card-sm",
+            "dropdown-account-card-xs",
+            "dropdown-avatar",
+            "dropdown-button-advanced",
+            "dropdown-button-link",
+            "dropdown-button-simple",
+            "dropdown-context-menu-advanced",
+            "dropdown-context-menu-simple",
+            "dropdown-icon-advanced",
+            "dropdown-icon-simple",
+            "dropdown-integration",
+            "dropdown-search-advanced",
+            "dropdown-search-simple",
+            "dropdown.story",
+            "dropdown"
+          ]
+        },
+        {
+          "nome": "file-upload-trigger",
+          "chave": "file-upload-trigger",
+          "tipo": "base",
+          "partes": [
+            "file-upload-trigger"
+          ]
+        },
+        {
+          "nome": "form",
+          "chave": "form",
+          "tipo": "base",
+          "partes": [
+            "form",
+            "hook-form"
+          ]
+        },
+        {
+          "nome": "input",
+          "chave": "input",
+          "tipo": "base",
+          "partes": [
+            "hint-text",
+            "input-date",
+            "input-file",
+            "input-group",
+            "input-number",
+            "input-payment",
+            "input-tags-outer",
+            "input-tags",
+            "input",
+            "inputs.demo",
+            "inputs.story",
+            "label",
+            "pin-input.demo",
+            "pin-input.story",
+            "pin-input"
+          ]
+        },
+        {
+          "nome": "progress-indicators",
+          "chave": "progress-indicators",
+          "tipo": "base",
+          "partes": [
+            "progress-circles",
+            "progress-indicators.demo",
+            "progress-indicators.story",
+            "progress-indicators",
+            "simple-circle"
+          ]
+        },
+        {
+          "nome": "radio-buttons",
+          "chave": "radio-buttons",
+          "tipo": "base",
+          "partes": [
+            "radio-buttons.demo",
+            "radio-buttons.story",
+            "radio-buttons"
+          ]
+        },
+        {
+          "nome": "select",
+          "chave": "select",
+          "tipo": "base",
+          "partes": [
+            "combobox",
+            "multi-select",
+            "popover",
+            "select-item",
+            "select-native",
+            "select-shared",
+            "select.demo",
+            "select.story",
+            "select",
+            "tag-select"
+          ]
+        },
+        {
+          "nome": "slider",
+          "chave": "slider",
+          "tipo": "base",
+          "partes": [
+            "slider.demo",
+            "slider.story",
+            "slider"
+          ]
+        },
+        {
+          "nome": "tags",
+          "chave": "tags",
+          "tipo": "base",
+          "partes": [
+            "tags.demo",
+            "tags.story",
+            "tags"
+          ]
+        },
+        {
+          "nome": "textarea",
+          "chave": "textarea",
+          "tipo": "base",
+          "partes": [
+            "textarea.demo",
+            "textarea.story",
+            "textarea"
+          ]
+        },
+        {
+          "nome": "toggle",
+          "chave": "toggle",
+          "tipo": "base",
+          "partes": [
+            "toggle.demo",
+            "toggle.story",
+            "toggle"
+          ]
+        },
+        {
+          "nome": "tooltip",
+          "chave": "tooltip",
+          "tipo": "base",
+          "partes": [
+            "tooltip.demo",
+            "tooltip.story",
+            "tooltip"
+          ]
+        },
+        {
+          "nome": "featured-icon",
+          "chave": "featured-icon",
+          "tipo": "foundations",
+          "partes": [
+            "featured-icon.demo",
+            "featured-icon.story",
+            "featured-icon"
+          ]
+        },
+        {
+          "nome": "integration-icons",
+          "chave": "integration-icons",
+          "tipo": "foundations",
+          "partes": [
+            "bolt-icon",
+            "chatgpt-icon",
+            "claude-icon",
+            "cursor-icon",
+            "figma-icon",
+            "gemini-icon",
+            "github-icon",
+            "grok-icon",
+            "index",
+            "integration-icons.story",
+            "lovable-icon",
+            "nextjs-icon",
+            "perplexity-icon",
+            "react-icon",
+            "replit-icon",
+            "tailwind-css-icon",
+            "v0-icon",
+            "vite-icon"
+          ]
+        },
+        {
+          "nome": "logo",
+          "chave": "logo",
+          "tipo": "foundations",
+          "partes": [
+            "untitledui-logo-minimal",
+            "untitledui-logo"
+          ]
+        },
+        {
+          "nome": "payment-icons",
+          "chave": "payment-icons",
+          "tipo": "foundations",
+          "partes": [
+            "affirm-icon",
+            "afterpay-icon",
+            "alipay-icon",
+            "amazon-icon",
+            "amex-icon",
+            "apple-pay-icon",
+            "ayden-icon",
+            "bancontact-icon",
+            "binance-pay-icon",
+            "bitcoin-cash-icon",
+            "bitcoin-icon",
+            "bitpay-icon",
+            "braintree-icon",
+            "cash-app-pay-icon",
+            "citadele-icon",
+            "coinbase-icon",
+            "diners-club-icon",
+            "discover-icon",
+            "elo-icon",
+            "etherium-icon",
+            "forbrugsforeningen-icon",
+            "giropay-icon",
+            "google-pay-icon",
+            "ideal-icon",
+            "index",
+            "interac-icon",
+            "jcb-icon",
+            "klarna-icon",
+            "lightcoin-icon",
+            "maestro-icon",
+            "mastercard-icon",
+            "payment-icons.story",
+            "payoneer-icon",
+            "paypal-icon",
+            "paysafe-icon",
+            "qiwi-icon",
+            "razorpay-icon",
+            "revolut-icon",
+            "ru-pay-icon",
+            "samsung-pay-icon",
+            "sepa-icon",
+            "shop-pay-icon",
+            "shopee-pay-icon",
+            "skrill-icon",
+            "sofort-icon",
+            "stripe-icon",
+            "union-pay-icon",
+            "upi-icon",
+            "venmo-icon",
+            "verifone-icon",
+            "visa-icon",
+            "we-chat-icon",
+            "we-chat-pay-icon",
+            "webmoney-icon",
+            "wise-icon",
+            "yandex-icon",
+            "zelle-icon",
+            "zip-pay-icon"
+          ]
+        },
+        {
+          "nome": "social-icons",
+          "chave": "social-icons",
+          "tipo": "foundations",
+          "partes": [
+            "angel-list",
+            "apple",
+            "clubhouse",
+            "discord",
+            "dribbble",
+            "facebook",
+            "figma",
+            "github",
+            "google",
+            "index",
+            "instagram",
+            "layers",
+            "linkedin",
+            "pinterest",
+            "reddit",
+            "signal",
+            "snapchat",
+            "telegram",
+            "tiktok",
+            "tumblr",
+            "twitter",
+            "x",
+            "youtube"
+          ]
+        }
+      ]
+    },
+    "kibo": {
+      "projeto": "haydenbleasel/kibo",
+      "papel": "anatomia de componente raro — gantt, kanban, editor, dropzone, tree",
+      "fonteDeVerdade": "packages/<componente>/",
+      "itens": [
+        {
+          "nome": "announcement",
+          "chave": "announcement",
+          "tipo": "component"
+        },
+        {
+          "nome": "avatar-stack",
+          "chave": "avatar-stack",
+          "tipo": "component"
+        },
+        {
+          "nome": "banner",
+          "chave": "banner",
+          "tipo": "component"
+        },
+        {
+          "nome": "calendar",
+          "chave": "calendar",
+          "tipo": "component"
+        },
+        {
+          "nome": "choicebox",
+          "chave": "choicebox",
+          "tipo": "component"
+        },
+        {
+          "nome": "code-block",
+          "chave": "code-block",
+          "tipo": "component"
+        },
+        {
+          "nome": "color-picker",
+          "chave": "color-picker",
+          "tipo": "component"
+        },
+        {
+          "nome": "combobox",
+          "chave": "combobox",
+          "tipo": "component"
+        },
+        {
+          "nome": "comparison",
+          "chave": "comparison",
+          "tipo": "component"
+        },
+        {
+          "nome": "contribution-graph",
+          "chave": "contribution-graph",
+          "tipo": "component"
+        },
+        {
+          "nome": "credit-card",
+          "chave": "credit-card",
+          "tipo": "component"
+        },
+        {
+          "nome": "cursor",
+          "chave": "cursor",
+          "tipo": "component"
+        },
+        {
+          "nome": "deck",
+          "chave": "deck",
+          "tipo": "component"
+        },
+        {
+          "nome": "dialog-stack",
+          "chave": "dialog-stack",
+          "tipo": "component"
+        },
+        {
+          "nome": "dropzone",
+          "chave": "dropzone",
+          "tipo": "component"
+        },
+        {
+          "nome": "editor",
+          "chave": "editor",
+          "tipo": "component"
+        },
+        {
+          "nome": "gantt",
+          "chave": "gantt",
+          "tipo": "component"
+        },
+        {
+          "nome": "glimpse",
+          "chave": "glimpse",
+          "tipo": "component"
+        },
+        {
+          "nome": "image-crop",
+          "chave": "image-crop",
+          "tipo": "component"
+        },
+        {
+          "nome": "image-zoom",
+          "chave": "image-zoom",
+          "tipo": "component"
+        },
+        {
+          "nome": "kanban",
+          "chave": "kanban",
+          "tipo": "component"
+        },
+        {
+          "nome": "list",
+          "chave": "list",
+          "tipo": "component"
+        },
+        {
+          "nome": "marquee",
+          "chave": "marquee",
+          "tipo": "component"
+        },
+        {
+          "nome": "mini-calendar",
+          "chave": "mini-calendar",
+          "tipo": "component"
+        },
+        {
+          "nome": "patterns",
+          "chave": "patterns",
+          "tipo": "component"
+        },
+        {
+          "nome": "pill",
+          "chave": "pill",
+          "tipo": "component"
+        },
+        {
+          "nome": "qr-code",
+          "chave": "qr-code",
+          "tipo": "component"
+        },
+        {
+          "nome": "rating",
+          "chave": "rating",
+          "tipo": "component"
+        },
+        {
+          "nome": "reel",
+          "chave": "reel",
+          "tipo": "component"
+        },
+        {
+          "nome": "relative-time",
+          "chave": "relative-time",
+          "tipo": "component"
+        },
+        {
+          "nome": "sandbox",
+          "chave": "sandbox",
+          "tipo": "component"
+        },
+        {
+          "nome": "shadcn-ui",
+          "chave": "shadcn-ui",
+          "tipo": "component"
+        },
+        {
+          "nome": "snippet",
+          "chave": "snippet",
+          "tipo": "component"
+        },
+        {
+          "nome": "spinner",
+          "chave": "spinner",
+          "tipo": "component"
+        },
+        {
+          "nome": "status",
+          "chave": "status",
+          "tipo": "component"
+        },
+        {
+          "nome": "stories",
+          "chave": "stories",
+          "tipo": "component"
+        },
+        {
+          "nome": "table",
+          "chave": "table",
+          "tipo": "component"
+        },
+        {
+          "nome": "tags",
+          "chave": "tags",
+          "tipo": "component"
+        },
+        {
+          "nome": "theme-switcher",
+          "chave": "theme-switcher",
+          "tipo": "component"
+        },
+        {
+          "nome": "ticker",
+          "chave": "ticker",
+          "tipo": "component"
+        },
+        {
+          "nome": "tree",
+          "chave": "tree",
+          "tipo": "component"
+        },
+        {
+          "nome": "typescript-config",
+          "chave": "typescript-config",
+          "tipo": "component"
+        },
+        {
+          "nome": "typography",
+          "chave": "typography",
+          "tipo": "component"
+        },
+        {
+          "nome": "video-player",
+          "chave": "video-player",
+          "tipo": "component"
+        }
+      ]
+    },
+    "reui": {
+      "projeto": "keenthemes/reui",
+      "projetoNota": "o `components/ui/` da raiz é o chrome do site de documentação, não a biblioteca",
+      "papel": "terceira leitura de anatomia, blocos compostos, data e IA",
+      "fonteDeVerdade": "registry-reui/bases/base/{components,reui}/",
+      "itens": [
+        {
+          "nome": "accordion",
+          "chave": "accordion",
+          "tipo": "component"
+        },
+        {
+          "nome": "alert",
+          "chave": "alert",
+          "tipo": "component"
+        },
+        {
+          "nome": "alert",
+          "chave": "alert",
+          "tipo": "reui"
+        },
+        {
+          "nome": "alert-dialog",
+          "chave": "alert-dialog",
+          "tipo": "component"
+        },
+        {
+          "nome": "aspect-ratio",
+          "chave": "aspect-ratio",
+          "tipo": "component"
+        },
+        {
+          "nome": "autocomplete",
+          "chave": "autocomplete",
+          "tipo": "component"
+        },
+        {
+          "nome": "autocomplete",
+          "chave": "autocomplete",
+          "tipo": "reui"
+        },
+        {
+          "nome": "avatar",
+          "chave": "avatar",
+          "tipo": "component"
+        },
+        {
+          "nome": "badge",
+          "chave": "badge",
+          "tipo": "component"
+        },
+        {
+          "nome": "badge",
+          "chave": "badge",
+          "tipo": "reui"
+        },
+        {
+          "nome": "breadcrumb",
+          "chave": "breadcrumb",
+          "tipo": "component"
+        },
+        {
+          "nome": "button",
+          "chave": "button",
+          "tipo": "component"
+        },
+        {
+          "nome": "button-group",
+          "chave": "button-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "calendar",
+          "chave": "calendar",
+          "tipo": "component"
+        },
+        {
+          "nome": "card",
+          "chave": "card",
+          "tipo": "component"
+        },
+        {
+          "nome": "carousel",
+          "chave": "carousel",
+          "tipo": "component"
+        },
+        {
+          "nome": "cascader",
+          "chave": "cascader",
+          "tipo": "component"
+        },
+        {
+          "nome": "cascader",
+          "chave": "cascader",
+          "tipo": "reui"
+        },
+        {
+          "nome": "chart",
+          "chave": "chart",
+          "tipo": "component"
+        },
+        {
+          "nome": "checkbox",
+          "chave": "checkbox",
+          "tipo": "component"
+        },
+        {
+          "nome": "collapsible",
+          "chave": "collapsible",
+          "tipo": "component"
+        },
+        {
+          "nome": "combobox",
+          "chave": "combobox",
+          "tipo": "component"
+        },
+        {
+          "nome": "command",
+          "chave": "command",
+          "tipo": "component"
+        },
+        {
+          "nome": "context-menu",
+          "chave": "context-menu",
+          "tipo": "component"
+        },
+        {
+          "nome": "data-grid",
+          "chave": "data-grid",
+          "tipo": "component"
+        },
+        {
+          "nome": "data-grid",
+          "chave": "data-grid",
+          "tipo": "reui"
+        },
+        {
+          "nome": "date-selector",
+          "chave": "date-selector",
+          "tipo": "component"
+        },
+        {
+          "nome": "date-selector",
+          "chave": "date-selector",
+          "tipo": "reui"
+        },
+        {
+          "nome": "dialog",
+          "chave": "dialog",
+          "tipo": "component"
+        },
+        {
+          "nome": "drawer",
+          "chave": "drawer",
+          "tipo": "component"
+        },
+        {
+          "nome": "dropdown-menu",
+          "chave": "dropdown-menu",
+          "tipo": "component"
+        },
+        {
+          "nome": "empty",
+          "chave": "empty",
+          "tipo": "component"
+        },
+        {
+          "nome": "event-calendar",
+          "chave": "event-calendar",
+          "tipo": "component"
+        },
+        {
+          "nome": "event-calendar",
+          "chave": "event-calendar",
+          "tipo": "reui"
+        },
+        {
+          "nome": "field",
+          "chave": "field",
+          "tipo": "component"
+        },
+        {
+          "nome": "file-upload",
+          "chave": "file-upload",
+          "tipo": "component"
+        },
+        {
+          "nome": "filters",
+          "chave": "filters",
+          "tipo": "component"
+        },
+        {
+          "nome": "filters",
+          "chave": "filters",
+          "tipo": "reui"
+        },
+        {
+          "nome": "frame",
+          "chave": "frame",
+          "tipo": "component"
+        },
+        {
+          "nome": "frame",
+          "chave": "frame",
+          "tipo": "reui"
+        },
+        {
+          "nome": "gantt",
+          "chave": "gantt",
+          "tipo": "component"
+        },
+        {
+          "nome": "gantt",
+          "chave": "gantt",
+          "tipo": "reui"
+        },
+        {
+          "nome": "hover-card",
+          "chave": "hover-card",
+          "tipo": "component"
+        },
+        {
+          "nome": "icon-stack",
+          "chave": "icon-stack",
+          "tipo": "component"
+        },
+        {
+          "nome": "icon-stack",
+          "chave": "icon-stack",
+          "tipo": "reui"
+        },
+        {
+          "nome": "icon-tile",
+          "chave": "icon-tile",
+          "tipo": "component"
+        },
+        {
+          "nome": "icon-tile",
+          "chave": "icon-tile",
+          "tipo": "reui"
+        },
+        {
+          "nome": "input",
+          "chave": "input",
+          "tipo": "component"
+        },
+        {
+          "nome": "input-group",
+          "chave": "input-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "input-otp",
+          "chave": "input-otp",
+          "tipo": "component"
+        },
+        {
+          "nome": "item",
+          "chave": "item",
+          "tipo": "component"
+        },
+        {
+          "nome": "kanban",
+          "chave": "kanban",
+          "tipo": "component"
+        },
+        {
+          "nome": "kanban",
+          "chave": "kanban",
+          "tipo": "reui"
+        },
+        {
+          "nome": "kbd",
+          "chave": "kbd",
+          "tipo": "component"
+        },
+        {
+          "nome": "label",
+          "chave": "label",
+          "tipo": "component"
+        },
+        {
+          "nome": "menubar",
+          "chave": "menubar",
+          "tipo": "component"
+        },
+        {
+          "nome": "native-select",
+          "chave": "native-select",
+          "tipo": "component"
+        },
+        {
+          "nome": "navigation-menu",
+          "chave": "navigation-menu",
+          "tipo": "component"
+        },
+        {
+          "nome": "number-field",
+          "chave": "number-field",
+          "tipo": "component"
+        },
+        {
+          "nome": "number-field",
+          "chave": "number-field",
+          "tipo": "reui"
+        },
+        {
+          "nome": "pagination",
+          "chave": "pagination",
+          "tipo": "component"
+        },
+        {
+          "nome": "phone-input",
+          "chave": "phone-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "phone-input",
+          "chave": "phone-input",
+          "tipo": "reui"
+        },
+        {
+          "nome": "popover",
+          "chave": "popover",
+          "tipo": "component"
+        },
+        {
+          "nome": "progress",
+          "chave": "progress",
+          "tipo": "component"
+        },
+        {
+          "nome": "radio-group",
+          "chave": "radio-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "rating",
+          "chave": "rating",
+          "tipo": "component"
+        },
+        {
+          "nome": "rating",
+          "chave": "rating",
+          "tipo": "reui"
+        },
+        {
+          "nome": "resizable",
+          "chave": "resizable",
+          "tipo": "component"
+        },
+        {
+          "nome": "scroll-area",
+          "chave": "scroll-area",
+          "tipo": "component"
+        },
+        {
+          "nome": "scrollspy",
+          "chave": "scrollspy",
+          "tipo": "component"
+        },
+        {
+          "nome": "scrollspy",
+          "chave": "scrollspy",
+          "tipo": "reui"
+        },
+        {
+          "nome": "select",
+          "chave": "select",
+          "tipo": "component"
+        },
+        {
+          "nome": "separator",
+          "chave": "separator",
+          "tipo": "component"
+        },
+        {
+          "nome": "sheet",
+          "chave": "sheet",
+          "tipo": "component"
+        },
+        {
+          "nome": "skeleton",
+          "chave": "skeleton",
+          "tipo": "component"
+        },
+        {
+          "nome": "slider",
+          "chave": "slider",
+          "tipo": "component"
+        },
+        {
+          "nome": "sonner",
+          "chave": "sonner",
+          "tipo": "component"
+        },
+        {
+          "nome": "sortable",
+          "chave": "sortable",
+          "tipo": "component"
+        },
+        {
+          "nome": "sortable",
+          "chave": "sortable",
+          "tipo": "reui"
+        },
+        {
+          "nome": "spinner",
+          "chave": "spinner",
+          "tipo": "component"
+        },
+        {
+          "nome": "stepper",
+          "chave": "stepper",
+          "tipo": "component"
+        },
+        {
+          "nome": "stepper",
+          "chave": "stepper",
+          "tipo": "reui"
+        },
+        {
+          "nome": "switch",
+          "chave": "switch",
+          "tipo": "component"
+        },
+        {
+          "nome": "table",
+          "chave": "table",
+          "tipo": "component"
+        },
+        {
+          "nome": "tabs",
+          "chave": "tabs",
+          "tipo": "component"
+        },
+        {
+          "nome": "textarea",
+          "chave": "textarea",
+          "tipo": "component"
+        },
+        {
+          "nome": "timeline",
+          "chave": "timeline",
+          "tipo": "component"
+        },
+        {
+          "nome": "timeline",
+          "chave": "timeline",
+          "tipo": "reui"
+        },
+        {
+          "nome": "toggle",
+          "chave": "toggle",
+          "tipo": "component"
+        },
+        {
+          "nome": "toggle-group",
+          "chave": "toggle-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "tooltip",
+          "chave": "tooltip",
+          "tipo": "component"
+        },
+        {
+          "nome": "tree",
+          "chave": "tree",
+          "tipo": "component"
+        },
+        {
+          "nome": "tree",
+          "chave": "tree",
+          "tipo": "reui"
+        }
+      ]
+    },
+    "media-chrome": {
+      "projeto": "muxinc/media-chrome",
+      "papel": "anatomia de player e de biblioteca de mídia",
+      "fonteDeVerdade": "src/js/<custom-element>.ts",
+      "itens": [
+        {
+          "nome": "media-airplay-button",
+          "chave": "media-airplay-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-captions-button",
+          "chave": "media-captions-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-cast-button",
+          "chave": "media-cast-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-chrome-button",
+          "chave": "media-chrome-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-chrome-dialog",
+          "chave": "media-chrome-dialog",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-chrome-range",
+          "chave": "media-chrome-range",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-container",
+          "chave": "media-container",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-control-bar",
+          "chave": "media-control-bar",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-controller",
+          "chave": "media-controller",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-duration-display",
+          "chave": "media-duration-display",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-error-dialog",
+          "chave": "media-error-dialog",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-fullscreen-button",
+          "chave": "media-fullscreen-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-gesture-receiver",
+          "chave": "media-gesture-receiver",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-keyboard-shortcuts-dialog",
+          "chave": "media-keyboard-shortcuts-dialog",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-live-button",
+          "chave": "media-live-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-loading-indicator",
+          "chave": "media-loading-indicator",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-loop-button",
+          "chave": "media-loop-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-mute-button",
+          "chave": "media-mute-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-pip-button",
+          "chave": "media-pip-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-play-button",
+          "chave": "media-play-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-playback-rate-button",
+          "chave": "media-playback-rate-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-poster-image",
+          "chave": "media-poster-image",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-preview-chapter-display",
+          "chave": "media-preview-chapter-display",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-preview-thumbnail",
+          "chave": "media-preview-thumbnail",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-preview-time-display",
+          "chave": "media-preview-time-display",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-seek-backward-button",
+          "chave": "media-seek-backward-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-seek-forward-button",
+          "chave": "media-seek-forward-button",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-text-display",
+          "chave": "media-text-display",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-theme-element",
+          "chave": "media-theme-element",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-theme",
+          "chave": "media-theme",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-time-display",
+          "chave": "media-time-display",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-time-range",
+          "chave": "media-time-range",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-tooltip",
+          "chave": "media-tooltip",
+          "tipo": "custom-element"
+        },
+        {
+          "nome": "media-volume-range",
+          "chave": "media-volume-range",
+          "tipo": "custom-element"
+        }
+      ]
+    },
+    "mui": {
+      "projeto": "mui/material-ui",
+      "papel": "catálogo de estados e anatomia madura; a mais completa em cobertura",
+      "fonteDeVerdade": "packages/mui-material/src/<Componente>/",
+      "itens": [
+        {
+          "nome": "Accordion",
+          "chave": "accordion",
+          "tipo": "component"
+        },
+        {
+          "nome": "AccordionActions",
+          "chave": "accordion-actions",
+          "tipo": "component"
+        },
+        {
+          "nome": "AccordionDetails",
+          "chave": "accordion-details",
+          "tipo": "component"
+        },
+        {
+          "nome": "AccordionSummary",
+          "chave": "accordion-summary",
+          "tipo": "component"
+        },
+        {
+          "nome": "Alert",
+          "chave": "alert",
+          "tipo": "component"
+        },
+        {
+          "nome": "AlertTitle",
+          "chave": "alert-title",
+          "tipo": "component"
+        },
+        {
+          "nome": "AppBar",
+          "chave": "app-bar",
+          "tipo": "component"
+        },
+        {
+          "nome": "Autocomplete",
+          "chave": "autocomplete",
+          "tipo": "component"
+        },
+        {
+          "nome": "Avatar",
+          "chave": "avatar",
+          "tipo": "component"
+        },
+        {
+          "nome": "AvatarGroup",
+          "chave": "avatar-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "Backdrop",
+          "chave": "backdrop",
+          "tipo": "component"
+        },
+        {
+          "nome": "Badge",
+          "chave": "badge",
+          "tipo": "component"
+        },
+        {
+          "nome": "BottomNavigation",
+          "chave": "bottom-navigation",
+          "tipo": "component"
+        },
+        {
+          "nome": "BottomNavigationAction",
+          "chave": "bottom-navigation-action",
+          "tipo": "component"
+        },
+        {
+          "nome": "Box",
+          "chave": "box",
+          "tipo": "component"
+        },
+        {
+          "nome": "Breadcrumbs",
+          "chave": "breadcrumbs",
+          "tipo": "component"
+        },
+        {
+          "nome": "Button",
+          "chave": "button",
+          "tipo": "component"
+        },
+        {
+          "nome": "ButtonBase",
+          "chave": "button-base",
+          "tipo": "component"
+        },
+        {
+          "nome": "ButtonGroup",
+          "chave": "button-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "Card",
+          "chave": "card",
+          "tipo": "component"
+        },
+        {
+          "nome": "CardActionArea",
+          "chave": "card-action-area",
+          "tipo": "component"
+        },
+        {
+          "nome": "CardActions",
+          "chave": "card-actions",
+          "tipo": "component"
+        },
+        {
+          "nome": "CardContent",
+          "chave": "card-content",
+          "tipo": "component"
+        },
+        {
+          "nome": "CardHeader",
+          "chave": "card-header",
+          "tipo": "component"
+        },
+        {
+          "nome": "CardMedia",
+          "chave": "card-media",
+          "tipo": "component"
+        },
+        {
+          "nome": "Checkbox",
+          "chave": "checkbox",
+          "tipo": "component"
+        },
+        {
+          "nome": "Chip",
+          "chave": "chip",
+          "tipo": "component"
+        },
+        {
+          "nome": "CircularProgress",
+          "chave": "circular-progress",
+          "tipo": "component"
+        },
+        {
+          "nome": "ClickAwayListener",
+          "chave": "click-away-listener",
+          "tipo": "component"
+        },
+        {
+          "nome": "Collapse",
+          "chave": "collapse",
+          "tipo": "component"
+        },
+        {
+          "nome": "Container",
+          "chave": "container",
+          "tipo": "component"
+        },
+        {
+          "nome": "CssBaseline",
+          "chave": "css-baseline",
+          "tipo": "component"
+        },
+        {
+          "nome": "DefaultPropsProvider",
+          "chave": "default-props-provider",
+          "tipo": "component"
+        },
+        {
+          "nome": "Dialog",
+          "chave": "dialog",
+          "tipo": "component"
+        },
+        {
+          "nome": "DialogActions",
+          "chave": "dialog-actions",
+          "tipo": "component"
+        },
+        {
+          "nome": "DialogContent",
+          "chave": "dialog-content",
+          "tipo": "component"
+        },
+        {
+          "nome": "DialogContentText",
+          "chave": "dialog-content-text",
+          "tipo": "component"
+        },
+        {
+          "nome": "DialogTitle",
+          "chave": "dialog-title",
+          "tipo": "component"
+        },
+        {
+          "nome": "Divider",
+          "chave": "divider",
+          "tipo": "component"
+        },
+        {
+          "nome": "Drawer",
+          "chave": "drawer",
+          "tipo": "component"
+        },
+        {
+          "nome": "Fab",
+          "chave": "fab",
+          "tipo": "component"
+        },
+        {
+          "nome": "Fade",
+          "chave": "fade",
+          "tipo": "component"
+        },
+        {
+          "nome": "FilledInput",
+          "chave": "filled-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "FormControl",
+          "chave": "form-control",
+          "tipo": "component"
+        },
+        {
+          "nome": "FormControlLabel",
+          "chave": "form-control-label",
+          "tipo": "component"
+        },
+        {
+          "nome": "FormGroup",
+          "chave": "form-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "FormHelperText",
+          "chave": "form-helper-text",
+          "tipo": "component"
+        },
+        {
+          "nome": "FormLabel",
+          "chave": "form-label",
+          "tipo": "component"
+        },
+        {
+          "nome": "GlobalStyles",
+          "chave": "global-styles",
+          "tipo": "component"
+        },
+        {
+          "nome": "Grid",
+          "chave": "grid",
+          "tipo": "component"
+        },
+        {
+          "nome": "Grow",
+          "chave": "grow",
+          "tipo": "component"
+        },
+        {
+          "nome": "Icon",
+          "chave": "icon",
+          "tipo": "component"
+        },
+        {
+          "nome": "IconButton",
+          "chave": "icon-button",
+          "tipo": "component"
+        },
+        {
+          "nome": "ImageList",
+          "chave": "image-list",
+          "tipo": "component"
+        },
+        {
+          "nome": "ImageListItem",
+          "chave": "image-list-item",
+          "tipo": "component"
+        },
+        {
+          "nome": "ImageListItemBar",
+          "chave": "image-list-item-bar",
+          "tipo": "component"
+        },
+        {
+          "nome": "InitColorSchemeScript",
+          "chave": "init-color-scheme-script",
+          "tipo": "component"
+        },
+        {
+          "nome": "Input",
+          "chave": "input",
+          "tipo": "component"
+        },
+        {
+          "nome": "InputAdornment",
+          "chave": "input-adornment",
+          "tipo": "component"
+        },
+        {
+          "nome": "InputBase",
+          "chave": "input-base",
+          "tipo": "component"
+        },
+        {
+          "nome": "InputLabel",
+          "chave": "input-label",
+          "tipo": "component"
+        },
+        {
+          "nome": "LinearProgress",
+          "chave": "linear-progress",
+          "tipo": "component"
+        },
+        {
+          "nome": "Link",
+          "chave": "link",
+          "tipo": "component"
+        },
+        {
+          "nome": "List",
+          "chave": "list",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListItem",
+          "chave": "list-item",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListItemAvatar",
+          "chave": "list-item-avatar",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListItemButton",
+          "chave": "list-item-button",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListItemIcon",
+          "chave": "list-item-icon",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListItemSecondaryAction",
+          "chave": "list-item-secondary-action",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListItemText",
+          "chave": "list-item-text",
+          "tipo": "component"
+        },
+        {
+          "nome": "ListSubheader",
+          "chave": "list-subheader",
+          "tipo": "component"
+        },
+        {
+          "nome": "Menu",
+          "chave": "menu",
+          "tipo": "component"
+        },
+        {
+          "nome": "MenuItem",
+          "chave": "menu-item",
+          "tipo": "component"
+        },
+        {
+          "nome": "MenuList",
+          "chave": "menu-list",
+          "tipo": "component"
+        },
+        {
+          "nome": "MobileStepper",
+          "chave": "mobile-stepper",
+          "tipo": "component"
+        },
+        {
+          "nome": "Modal",
+          "chave": "modal",
+          "tipo": "component"
+        },
+        {
+          "nome": "NativeSelect",
+          "chave": "native-select",
+          "tipo": "component"
+        },
+        {
+          "nome": "NoSsr",
+          "chave": "no-ssr",
+          "tipo": "component"
+        },
+        {
+          "nome": "OutlinedInput",
+          "chave": "outlined-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "OverridableComponent",
+          "chave": "overridable-component",
+          "tipo": "component"
+        },
+        {
+          "nome": "Pagination",
+          "chave": "pagination",
+          "tipo": "component"
+        },
+        {
+          "nome": "PaginationItem",
+          "chave": "pagination-item",
+          "tipo": "component"
+        },
+        {
+          "nome": "Paper",
+          "chave": "paper",
+          "tipo": "component"
+        },
+        {
+          "nome": "PigmentContainer",
+          "chave": "pigment-container",
+          "tipo": "component"
+        },
+        {
+          "nome": "PigmentGrid",
+          "chave": "pigment-grid",
+          "tipo": "component"
+        },
+        {
+          "nome": "PigmentStack",
+          "chave": "pigment-stack",
+          "tipo": "component"
+        },
+        {
+          "nome": "Popover",
+          "chave": "popover",
+          "tipo": "component"
+        },
+        {
+          "nome": "Popper",
+          "chave": "popper",
+          "tipo": "component"
+        },
+        {
+          "nome": "Portal",
+          "chave": "portal",
+          "tipo": "component"
+        },
+        {
+          "nome": "Radio",
+          "chave": "radio",
+          "tipo": "component"
+        },
+        {
+          "nome": "RadioGroup",
+          "chave": "radio-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "Rating",
+          "chave": "rating",
+          "tipo": "component"
+        },
+        {
+          "nome": "ScopedCssBaseline",
+          "chave": "scoped-css-baseline",
+          "tipo": "component"
+        },
+        {
+          "nome": "Select",
+          "chave": "select",
+          "tipo": "component"
+        },
+        {
+          "nome": "Skeleton",
+          "chave": "skeleton",
+          "tipo": "component"
+        },
+        {
+          "nome": "Slide",
+          "chave": "slide",
+          "tipo": "component"
+        },
+        {
+          "nome": "Slider",
+          "chave": "slider",
+          "tipo": "component"
+        },
+        {
+          "nome": "Snackbar",
+          "chave": "snackbar",
+          "tipo": "component"
+        },
+        {
+          "nome": "SnackbarContent",
+          "chave": "snackbar-content",
+          "tipo": "component"
+        },
+        {
+          "nome": "SpeedDial",
+          "chave": "speed-dial",
+          "tipo": "component"
+        },
+        {
+          "nome": "SpeedDialAction",
+          "chave": "speed-dial-action",
+          "tipo": "component"
+        },
+        {
+          "nome": "SpeedDialIcon",
+          "chave": "speed-dial-icon",
+          "tipo": "component"
+        },
+        {
+          "nome": "Stack",
+          "chave": "stack",
+          "tipo": "component"
+        },
+        {
+          "nome": "Step",
+          "chave": "step",
+          "tipo": "component"
+        },
+        {
+          "nome": "StepButton",
+          "chave": "step-button",
+          "tipo": "component"
+        },
+        {
+          "nome": "StepConnector",
+          "chave": "step-connector",
+          "tipo": "component"
+        },
+        {
+          "nome": "StepContent",
+          "chave": "step-content",
+          "tipo": "component"
+        },
+        {
+          "nome": "StepIcon",
+          "chave": "step-icon",
+          "tipo": "component"
+        },
+        {
+          "nome": "StepLabel",
+          "chave": "step-label",
+          "tipo": "component"
+        },
+        {
+          "nome": "Stepper",
+          "chave": "stepper",
+          "tipo": "component"
+        },
+        {
+          "nome": "SvgIcon",
+          "chave": "svg-icon",
+          "tipo": "component"
+        },
+        {
+          "nome": "SwipeableDrawer",
+          "chave": "swipeable-drawer",
+          "tipo": "component"
+        },
+        {
+          "nome": "Switch",
+          "chave": "switch",
+          "tipo": "component"
+        },
+        {
+          "nome": "Tab",
+          "chave": "tab",
+          "tipo": "component"
+        },
+        {
+          "nome": "TabScrollButton",
+          "chave": "tab-scroll-button",
+          "tipo": "component"
+        },
+        {
+          "nome": "Table",
+          "chave": "table",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableBody",
+          "chave": "table-body",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableCell",
+          "chave": "table-cell",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableContainer",
+          "chave": "table-container",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableFooter",
+          "chave": "table-footer",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableHead",
+          "chave": "table-head",
+          "tipo": "component"
+        },
+        {
+          "nome": "TablePagination",
+          "chave": "table-pagination",
+          "tipo": "component"
+        },
+        {
+          "nome": "TablePaginationActions",
+          "chave": "table-pagination-actions",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableRow",
+          "chave": "table-row",
+          "tipo": "component"
+        },
+        {
+          "nome": "TableSortLabel",
+          "chave": "table-sort-label",
+          "tipo": "component"
+        },
+        {
+          "nome": "Tabs",
+          "chave": "tabs",
+          "tipo": "component"
+        },
+        {
+          "nome": "TextField",
+          "chave": "text-field",
+          "tipo": "component"
+        },
+        {
+          "nome": "TextareaAutosize",
+          "chave": "textarea-autosize",
+          "tipo": "component"
+        },
+        {
+          "nome": "ToggleButton",
+          "chave": "toggle-button",
+          "tipo": "component"
+        },
+        {
+          "nome": "ToggleButtonGroup",
+          "chave": "toggle-button-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "Toolbar",
+          "chave": "toolbar",
+          "tipo": "component"
+        },
+        {
+          "nome": "Tooltip",
+          "chave": "tooltip",
+          "tipo": "component"
+        },
+        {
+          "nome": "Typography",
+          "chave": "typography",
+          "tipo": "component"
+        },
+        {
+          "nome": "Unstable_TrapFocus",
+          "chave": "unstable-trap-focus",
+          "tipo": "component"
+        },
+        {
+          "nome": "Zoom",
+          "chave": "zoom",
+          "tipo": "component"
+        },
+        {
+          "nome": "className",
+          "chave": "class-name",
+          "tipo": "component"
+        },
+        {
+          "nome": "colors",
+          "chave": "colors",
+          "tipo": "component"
+        },
+        {
+          "nome": "darkScrollbar",
+          "chave": "dark-scrollbar",
+          "tipo": "component"
+        },
+        {
+          "nome": "generateUtilityClass",
+          "chave": "generate-utility-class",
+          "tipo": "component"
+        },
+        {
+          "nome": "generateUtilityClasses",
+          "chave": "generate-utility-classes",
+          "tipo": "component"
+        },
+        {
+          "nome": "internal",
+          "chave": "internal",
+          "tipo": "component"
+        },
+        {
+          "nome": "locale",
+          "chave": "locale",
+          "tipo": "component"
+        },
+        {
+          "nome": "styles",
+          "chave": "styles",
+          "tipo": "component"
+        },
+        {
+          "nome": "themeCssVarsAugmentation",
+          "chave": "theme-css-vars-augmentation",
+          "tipo": "component"
+        },
+        {
+          "nome": "transitions",
+          "chave": "transitions",
+          "tipo": "component"
+        },
+        {
+          "nome": "types",
+          "chave": "types",
+          "tipo": "component"
+        },
+        {
+          "nome": "useAutocomplete",
+          "chave": "use-autocomplete",
+          "tipo": "component"
+        },
+        {
+          "nome": "useLazyRipple",
+          "chave": "use-lazy-ripple",
+          "tipo": "component"
+        },
+        {
+          "nome": "useMediaQuery",
+          "chave": "use-media-query",
+          "tipo": "component"
+        },
+        {
+          "nome": "usePagination",
+          "chave": "use-pagination",
+          "tipo": "component"
+        },
+        {
+          "nome": "useScrollTrigger",
+          "chave": "use-scroll-trigger",
+          "tipo": "component"
+        },
+        {
+          "nome": "utils",
+          "chave": "utils",
+          "tipo": "component"
+        },
+        {
+          "nome": "version",
+          "chave": "version",
+          "tipo": "component"
+        },
+        {
+          "nome": "zero-styled",
+          "chave": "zero-styled",
+          "tipo": "component"
+        }
+      ]
+    },
+    "shark-ui": {
+      "projeto": "sharkui-inc/shark-ui",
+      "projetoNota": "o `components/` da raiz é o chrome do site de documentação, não a biblioteca",
+      "papel": "amplitude, construção de design system, componentes raros",
+      "fonteDeVerdade": "registry/manifest/<x>.ts + registry/react/{blocks,templates,hooks}/",
+      "itens": [
+        {
+          "nome": "accordion",
+          "chave": "accordion",
+          "tipo": "component"
+        },
+        {
+          "nome": "action-bar",
+          "chave": "action-bar",
+          "tipo": "component"
+        },
+        {
+          "nome": "ai",
+          "chave": "ai",
+          "tipo": "template"
+        },
+        {
+          "nome": "alert",
+          "chave": "alert",
+          "tipo": "component"
+        },
+        {
+          "nome": "alert-dialog",
+          "chave": "alert-dialog",
+          "tipo": "component"
+        },
+        {
+          "nome": "announcement",
+          "chave": "announcement",
+          "tipo": "component"
+        },
+        {
+          "nome": "aspect-ratio",
+          "chave": "aspect-ratio",
+          "tipo": "component"
+        },
+        {
+          "nome": "auth",
+          "chave": "auth",
+          "tipo": "template"
+        },
+        {
+          "nome": "autocomplete",
+          "chave": "autocomplete",
+          "tipo": "component"
+        },
+        {
+          "nome": "avatar",
+          "chave": "avatar",
+          "tipo": "component"
+        },
+        {
+          "nome": "badge",
+          "chave": "badge",
+          "tipo": "component"
+        },
+        {
+          "nome": "blog",
+          "chave": "blog",
+          "tipo": "template"
+        },
+        {
+          "nome": "bottom-navigation",
+          "chave": "bottom-navigation",
+          "tipo": "component"
+        },
+        {
+          "nome": "breadcrumb",
+          "chave": "breadcrumb",
+          "tipo": "component"
+        },
+        {
+          "nome": "button",
+          "chave": "button",
+          "tipo": "component"
+        },
+        {
+          "nome": "button-group",
+          "chave": "button-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "calendar",
+          "chave": "calendar",
+          "tipo": "component"
+        },
+        {
+          "nome": "card",
+          "chave": "card",
+          "tipo": "component"
+        },
+        {
+          "nome": "carousel",
+          "chave": "carousel",
+          "tipo": "component"
+        },
+        {
+          "nome": "chart",
+          "chave": "chart",
+          "tipo": "component"
+        },
+        {
+          "nome": "chart",
+          "chave": "chart",
+          "tipo": "block"
+        },
+        {
+          "nome": "checkbox",
+          "chave": "checkbox",
+          "tipo": "component"
+        },
+        {
+          "nome": "circular-progress",
+          "chave": "circular-progress",
+          "tipo": "component"
+        },
+        {
+          "nome": "circular-slider",
+          "chave": "circular-slider",
+          "tipo": "component"
+        },
+        {
+          "nome": "client-only",
+          "chave": "client-only",
+          "tipo": "component"
+        },
+        {
+          "nome": "clipboard",
+          "chave": "clipboard",
+          "tipo": "component"
+        },
+        {
+          "nome": "collapsible",
+          "chave": "collapsible",
+          "tipo": "component"
+        },
+        {
+          "nome": "color-picker",
+          "chave": "color-picker",
+          "tipo": "component"
+        },
+        {
+          "nome": "combobox",
+          "chave": "combobox",
+          "tipo": "component"
+        },
+        {
+          "nome": "command",
+          "chave": "command",
+          "tipo": "component"
+        },
+        {
+          "nome": "context-menu",
+          "chave": "context-menu",
+          "tipo": "component"
+        },
+        {
+          "nome": "dashboard",
+          "chave": "dashboard",
+          "tipo": "template"
+        },
+        {
+          "nome": "data-list",
+          "chave": "data-list",
+          "tipo": "component"
+        },
+        {
+          "nome": "date-input",
+          "chave": "date-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "date-picker",
+          "chave": "date-picker",
+          "tipo": "component"
+        },
+        {
+          "nome": "dialog",
+          "chave": "dialog",
+          "tipo": "component"
+        },
+        {
+          "nome": "download-trigger",
+          "chave": "download-trigger",
+          "tipo": "component"
+        },
+        {
+          "nome": "drawer",
+          "chave": "drawer",
+          "tipo": "component"
+        },
+        {
+          "nome": "ecommerce",
+          "chave": "ecommerce",
+          "tipo": "template"
+        },
+        {
+          "nome": "editable",
+          "chave": "editable",
+          "tipo": "component"
+        },
+        {
+          "nome": "email",
+          "chave": "email",
+          "tipo": "template"
+        },
+        {
+          "nome": "field",
+          "chave": "field",
+          "tipo": "component"
+        },
+        {
+          "nome": "file-upload",
+          "chave": "file-upload",
+          "tipo": "component"
+        },
+        {
+          "nome": "float",
+          "chave": "float",
+          "tipo": "component"
+        },
+        {
+          "nome": "floating-panel",
+          "chave": "floating-panel",
+          "tipo": "component"
+        },
+        {
+          "nome": "format",
+          "chave": "format",
+          "tipo": "component"
+        },
+        {
+          "nome": "frame",
+          "chave": "frame",
+          "tipo": "component"
+        },
+        {
+          "nome": "highlight",
+          "chave": "highlight",
+          "tipo": "component"
+        },
+        {
+          "nome": "hint",
+          "chave": "hint",
+          "tipo": "component"
+        },
+        {
+          "nome": "hitbox",
+          "chave": "hitbox",
+          "tipo": "component"
+        },
+        {
+          "nome": "hover-card",
+          "chave": "hover-card",
+          "tipo": "component"
+        },
+        {
+          "nome": "image-cropper",
+          "chave": "image-cropper",
+          "tipo": "component"
+        },
+        {
+          "nome": "input",
+          "chave": "input",
+          "tipo": "component"
+        },
+        {
+          "nome": "input-group",
+          "chave": "input-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "input-otp",
+          "chave": "input-otp",
+          "tipo": "component"
+        },
+        {
+          "nome": "item",
+          "chave": "item",
+          "tipo": "component"
+        },
+        {
+          "nome": "json-tree-view",
+          "chave": "json-tree-view",
+          "tipo": "component"
+        },
+        {
+          "nome": "kbd",
+          "chave": "kbd",
+          "tipo": "component"
+        },
+        {
+          "nome": "landing",
+          "chave": "landing",
+          "tipo": "template"
+        },
+        {
+          "nome": "link-overlay",
+          "chave": "link-overlay",
+          "tipo": "component"
+        },
+        {
+          "nome": "listbox",
+          "chave": "listbox",
+          "tipo": "component"
+        },
+        {
+          "nome": "locale",
+          "chave": "locale",
+          "tipo": "component"
+        },
+        {
+          "nome": "marquee",
+          "chave": "marquee",
+          "tipo": "component"
+        },
+        {
+          "nome": "menu",
+          "chave": "menu",
+          "tipo": "component"
+        },
+        {
+          "nome": "native-select",
+          "chave": "native-select",
+          "tipo": "component"
+        },
+        {
+          "nome": "number-input",
+          "chave": "number-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "pagination",
+          "chave": "pagination",
+          "tipo": "component"
+        },
+        {
+          "nome": "password-input",
+          "chave": "password-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "podcast",
+          "chave": "podcast",
+          "tipo": "template"
+        },
+        {
+          "nome": "popover",
+          "chave": "popover",
+          "tipo": "component"
+        },
+        {
+          "nome": "presence",
+          "chave": "presence",
+          "tipo": "component"
+        },
+        {
+          "nome": "progress",
+          "chave": "progress",
+          "tipo": "component"
+        },
+        {
+          "nome": "prose",
+          "chave": "prose",
+          "tipo": "component"
+        },
+        {
+          "nome": "qr-code",
+          "chave": "qr-code",
+          "tipo": "component"
+        },
+        {
+          "nome": "radio-group",
+          "chave": "radio-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "rating",
+          "chave": "rating",
+          "tipo": "component"
+        },
+        {
+          "nome": "rating-group",
+          "chave": "rating-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "resizable",
+          "chave": "resizable",
+          "tipo": "component"
+        },
+        {
+          "nome": "scroll-area",
+          "chave": "scroll-area",
+          "tipo": "component"
+        },
+        {
+          "nome": "segment-group",
+          "chave": "segment-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "select",
+          "chave": "select",
+          "tipo": "component"
+        },
+        {
+          "nome": "separator",
+          "chave": "separator",
+          "tipo": "component"
+        },
+        {
+          "nome": "sheet",
+          "chave": "sheet",
+          "tipo": "component"
+        },
+        {
+          "nome": "show",
+          "chave": "show",
+          "tipo": "component"
+        },
+        {
+          "nome": "sidebar",
+          "chave": "sidebar",
+          "tipo": "component"
+        },
+        {
+          "nome": "sidebar",
+          "chave": "sidebar",
+          "tipo": "block"
+        },
+        {
+          "nome": "signature-pad",
+          "chave": "signature-pad",
+          "tipo": "component"
+        },
+        {
+          "nome": "skeleton",
+          "chave": "skeleton",
+          "tipo": "component"
+        },
+        {
+          "nome": "skip-nav",
+          "chave": "skip-nav",
+          "tipo": "component"
+        },
+        {
+          "nome": "slider",
+          "chave": "slider",
+          "tipo": "component"
+        },
+        {
+          "nome": "spinner",
+          "chave": "spinner",
+          "tipo": "component"
+        },
+        {
+          "nome": "status",
+          "chave": "status",
+          "tipo": "component"
+        },
+        {
+          "nome": "steps",
+          "chave": "steps",
+          "tipo": "component"
+        },
+        {
+          "nome": "style",
+          "chave": "style",
+          "tipo": "component"
+        },
+        {
+          "nome": "swap",
+          "chave": "swap",
+          "tipo": "component"
+        },
+        {
+          "nome": "switch",
+          "chave": "switch",
+          "tipo": "component"
+        },
+        {
+          "nome": "table",
+          "chave": "table",
+          "tipo": "component"
+        },
+        {
+          "nome": "tabs",
+          "chave": "tabs",
+          "tipo": "component"
+        },
+        {
+          "nome": "tags-input",
+          "chave": "tags-input",
+          "tipo": "component"
+        },
+        {
+          "nome": "task-manager",
+          "chave": "task-manager",
+          "tipo": "template"
+        },
+        {
+          "nome": "textarea",
+          "chave": "textarea",
+          "tipo": "component"
+        },
+        {
+          "nome": "timer",
+          "chave": "timer",
+          "tipo": "component"
+        },
+        {
+          "nome": "toast",
+          "chave": "toast",
+          "tipo": "component"
+        },
+        {
+          "nome": "toggle",
+          "chave": "toggle",
+          "tipo": "component"
+        },
+        {
+          "nome": "toggle-group",
+          "chave": "toggle-group",
+          "tipo": "component"
+        },
+        {
+          "nome": "toggle-tooltip",
+          "chave": "toggle-tooltip",
+          "tipo": "component"
+        },
+        {
+          "nome": "tooltip",
+          "chave": "tooltip",
+          "tipo": "component"
+        },
+        {
+          "nome": "tour",
+          "chave": "tour",
+          "tipo": "component"
+        },
+        {
+          "nome": "tree-view",
+          "chave": "tree-view",
+          "tipo": "component"
+        },
+        {
+          "nome": "ui",
+          "chave": "ui",
+          "tipo": "component"
+        },
+        {
+          "nome": "use-is-mobile",
+          "chave": "use-is-mobile",
+          "tipo": "component"
+        },
+        {
+          "nome": "use-is-mobile",
+          "chave": "use-is-mobile",
+          "tipo": "hook"
+        },
+        {
+          "nome": "utils",
+          "chave": "utils",
+          "tipo": "component"
+        }
+      ]
+    },
+    "aurea": {
+      "projeto": "victor1mor/aurea-uds",
+      "papel": "nós",
+      "fonteDeVerdade": "packages/contracts/registry/<Componente>.json (gateado contra o compilador)",
+      "itens": [
+        {
+          "nome": "Accordion",
+          "chave": "accordion",
+          "tipo": "disclosure"
+        },
+        {
+          "nome": "Alert",
+          "chave": "alert",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "AppShell",
+          "chave": "app-shell",
+          "tipo": "layout"
+        },
+        {
+          "nome": "AureaProvider",
+          "chave": "aurea-provider",
+          "tipo": "system"
+        },
+        {
+          "nome": "Avatar",
+          "chave": "avatar",
+          "tipo": "identity"
+        },
+        {
+          "nome": "AvatarGroup",
+          "chave": "avatar-group",
+          "tipo": "identity"
+        },
+        {
+          "nome": "Badge",
+          "chave": "badge",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "Banner",
+          "chave": "banner",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "Breadcrumb",
+          "chave": "breadcrumb",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "Button",
+          "chave": "button",
+          "tipo": "actions"
+        },
+        {
+          "nome": "ButtonGroup",
+          "chave": "button-group",
+          "tipo": "actions"
+        },
+        {
+          "nome": "Calendar",
+          "chave": "calendar",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Card",
+          "chave": "card",
+          "tipo": "layout"
+        },
+        {
+          "nome": "Chart",
+          "chave": "chart",
+          "tipo": "data display"
+        },
+        {
+          "nome": "ChartLegend",
+          "chave": "chart-legend",
+          "tipo": "data display"
+        },
+        {
+          "nome": "ChartTooltip",
+          "chave": "chart-tooltip",
+          "tipo": "data display"
+        },
+        {
+          "nome": "Checkbox",
+          "chave": "checkbox",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Cluster",
+          "chave": "cluster",
+          "tipo": "layout"
+        },
+        {
+          "nome": "CodeBlock",
+          "chave": "code-block",
+          "tipo": "code"
+        },
+        {
+          "nome": "CodeEditor",
+          "chave": "code-editor",
+          "tipo": "code"
+        },
+        {
+          "nome": "Collapsible",
+          "chave": "collapsible",
+          "tipo": "disclosure"
+        },
+        {
+          "nome": "Combobox",
+          "chave": "combobox",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "CommandPaletteShell",
+          "chave": "command-palette-shell",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "ContextMenu",
+          "chave": "context-menu",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "DataGrid",
+          "chave": "data-grid",
+          "tipo": "data display"
+        },
+        {
+          "nome": "DataList",
+          "chave": "data-list",
+          "tipo": "data display"
+        },
+        {
+          "nome": "Dialog",
+          "chave": "dialog",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "Drawer",
+          "chave": "drawer",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "DropdownMenu",
+          "chave": "dropdown-menu",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "EmptyState",
+          "chave": "empty-state",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "Field",
+          "chave": "field",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "FileInput",
+          "chave": "file-input",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Grid",
+          "chave": "grid",
+          "tipo": "layout"
+        },
+        {
+          "nome": "HoverCard",
+          "chave": "hover-card",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "Icon",
+          "chave": "icon",
+          "tipo": "system"
+        },
+        {
+          "nome": "IconButton",
+          "chave": "icon-button",
+          "tipo": "actions"
+        },
+        {
+          "nome": "Input",
+          "chave": "input",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "KPI",
+          "chave": "kpi",
+          "tipo": "data display"
+        },
+        {
+          "nome": "Kbd",
+          "chave": "kbd",
+          "tipo": "data display"
+        },
+        {
+          "nome": "LogStream",
+          "chave": "log-stream",
+          "tipo": "code"
+        },
+        {
+          "nome": "MediaPlayer",
+          "chave": "media-player",
+          "tipo": "media"
+        },
+        {
+          "nome": "MediaPlayerShell",
+          "chave": "media-player-shell",
+          "tipo": "media"
+        },
+        {
+          "nome": "Menubar",
+          "chave": "menubar",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "MessageComposer",
+          "chave": "message-composer",
+          "tipo": "communication"
+        },
+        {
+          "nome": "MessageList",
+          "chave": "message-list",
+          "tipo": "communication"
+        },
+        {
+          "nome": "MultiCombobox",
+          "chave": "multi-combobox",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "NotificationCenter",
+          "chave": "notification-center",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "NumberField",
+          "chave": "number-field",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "OTPField",
+          "chave": "otp-field",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Pagination",
+          "chave": "pagination",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "Popover",
+          "chave": "popover",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "Progress",
+          "chave": "progress",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "QRCode",
+          "chave": "qr-code",
+          "tipo": "data display"
+        },
+        {
+          "nome": "Radio",
+          "chave": "radio",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Range",
+          "chave": "range",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "SearchField",
+          "chave": "search-field",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "SegmentedControl",
+          "chave": "segmented-control",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Select",
+          "chave": "select",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Separator",
+          "chave": "separator",
+          "tipo": "layout"
+        },
+        {
+          "nome": "Sidebar",
+          "chave": "sidebar",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "Skeleton",
+          "chave": "skeleton",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "Spinner",
+          "chave": "spinner",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "Stack",
+          "chave": "stack",
+          "tipo": "layout"
+        },
+        {
+          "nome": "Status",
+          "chave": "status",
+          "tipo": "feedback"
+        },
+        {
+          "nome": "Stepper",
+          "chave": "stepper",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "Switch",
+          "chave": "switch",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Table",
+          "chave": "table",
+          "tipo": "data display"
+        },
+        {
+          "nome": "TableOfContents",
+          "chave": "table-of-contents",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "Tabs",
+          "chave": "tabs",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "Textarea",
+          "chave": "textarea",
+          "tipo": "inputs"
+        },
+        {
+          "nome": "Timeline",
+          "chave": "timeline",
+          "tipo": "data display"
+        },
+        {
+          "nome": "Toggle",
+          "chave": "toggle",
+          "tipo": "actions"
+        },
+        {
+          "nome": "ToggleGroup",
+          "chave": "toggle-group",
+          "tipo": "actions"
+        },
+        {
+          "nome": "Toolbar",
+          "chave": "toolbar",
+          "tipo": "actions"
+        },
+        {
+          "nome": "ToolbarButton",
+          "chave": "toolbar-button",
+          "tipo": "actions"
+        },
+        {
+          "nome": "ToolbarGroup",
+          "chave": "toolbar-group",
+          "tipo": "actions"
+        },
+        {
+          "nome": "ToolbarSeparator",
+          "chave": "toolbar-separator",
+          "tipo": "actions"
+        },
+        {
+          "nome": "Tooltip",
+          "chave": "tooltip",
+          "tipo": "overlays"
+        },
+        {
+          "nome": "Topbar",
+          "chave": "topbar",
+          "tipo": "navigation"
+        },
+        {
+          "nome": "TreeView",
+          "chave": "tree-view",
+          "tipo": "navigation"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "name": "Checkbox",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Binary or tri-state selection control.",
+  "icon": "checkmark",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "lg",
+    "md",
+    "sm"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "checked",
+    "indeterminate",
+    "focus",
+    "disabled",
+    "invalid"
+  ],
+  "tokens": [
+    "--control-selected",
+    "--control-selected-foreground",
+    "--focus-strong",
+    "--foreground"
+  ],
+  "a11y": {
+    "role": "checkbox",
+    "apg": "checkbox",
+    "keyboard": [
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Space."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Radio",
+      "Switch"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Checkbox"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED, and inside the <label>: the whole row is the target, not just the 16px box."
+    },
+    {
+      "name": "labelHidden",
+      "type": "boolean",
+      "default": "false",
+      "description": "Keeps the label in the DOM but out of sight — for a table selection column."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Second line under the label, for the consequence of ticking it."
+    },
+    {
+      "name": "checked / defaultChecked",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled or uncontrolled. For a third state use indeterminate on the input."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step. It is not the HTML size attribute, which does not exist on a checkbox anyway."
+    }
+  ]
+}

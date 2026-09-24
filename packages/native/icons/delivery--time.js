@@ -1,0 +1,10 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function DeliveryTime({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M16,30c-7.7197,0-14-6.2803-14-14S8.2803,2,16,2s14,6.2803,14,14-6.2803,14-14,14ZM16,4c-6.6167,0-12,5.3833-12,12s5.3833,12,12,12,12-5.3828,12-12-5.3828-12-12-12ZM20.293,21.707l-5.293-5.293V7h2v8.5859l4.707,4.707-1.4141,1.4141ZM13,17h-2v-2h2v2ZM9,17h-2v-2h2v2Z", fill: color})
+  );
+}

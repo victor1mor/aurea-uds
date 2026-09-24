@@ -1,0 +1,108 @@
+{
+  "category": "AI & Agents",
+  "layer": "Component",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Card",
+      "Avatar",
+      "AgentStatus"
+    ],
+    "patterns": []
+  },
+  "name": "AgentCard",
+  "summary": "Who an agent is, what state it is in, and what it can do.",
+  "icon": "user--avatar",
+  "states": [
+    "default",
+    "with-state",
+    "with-capabilities"
+  ],
+  "tokens": [
+    "--border",
+    "--muted-foreground",
+    "--radius-control",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "article",
+    "apg": "none — it is a card, and the heading inside it carries the name",
+    "keyboard": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#AgentCard"
+  },
+  "props": [
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Required. Also feeds the avatar fallback, so a card never shows an empty circle."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "One line about what the agent is for."
+    },
+    {
+      "name": "avatarSrc",
+      "type": "string",
+      "default": "—",
+      "description": "Optional portrait; without it the initials stand in."
+    },
+    {
+      "name": "model",
+      "type": "string",
+      "default": "—",
+      "description": "Which model is behind it, shown as secondary text. A string and not an enum: the list changes faster than this library ships."
+    },
+    {
+      "name": "state",
+      "type": "AgentState",
+      "default": "—",
+      "description": "Renders an AgentStatus in the header. Omit it and the header simply has no state."
+    },
+    {
+      "name": "capabilities",
+      "type": "AgentCapability[]",
+      "default": "—",
+      "description": "What the agent can do, as pills. `description` becomes the tooltip; the icon is optional."
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Your buttons, in the footer. The reference dispatches actions by STRING (`onAction(action: string)`), which trades the compiler for a verbal agreement — here whoever builds the button already knows what it does."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the card."
+    }
+  ],
+  "axes": {
+    "state": [
+      "completed",
+      "error",
+      "idle",
+      "paused",
+      "running",
+      "thinking"
+    ]
+  }
+}

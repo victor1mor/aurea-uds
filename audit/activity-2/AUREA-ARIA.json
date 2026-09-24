@@ -1,0 +1,611 @@
+{
+  "_gerado": "node scripts/measure-aurea-aria.mjs",
+  "_metodo": "renderToStaticMarkup do starter/exemplo de cada componente, atributos role e aria-* colhidos do DOM. Portal não renderiza em estático — nesses casos o preview é só o disparador, e o registro diz isso em vez de reportar lista vazia.",
+  "componentes": {
+    "Accordion": {
+      "aria": [],
+      "motivo": null
+    },
+    "Alert": {
+      "aria": [
+        "aria-hidden",
+        "role:alert",
+        "role:status"
+      ],
+      "motivo": null
+    },
+    "AppShell": {
+      "aria": [
+        "aria-current",
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "AureaProvider": {
+      "aria": [
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "Avatar": {
+      "aria": [],
+      "motivo": null
+    },
+    "Badge": {
+      "aria": [],
+      "motivo": null
+    },
+    "Banner": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "role:status"
+      ],
+      "motivo": null
+    },
+    "Breadcrumb": {
+      "aria": [
+        "aria-current",
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Card": {
+      "aria": [],
+      "motivo": null
+    },
+    "Calendar": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "aria-live",
+        "aria-multiselectable",
+        "aria-selected",
+        "role:grid",
+        "role:gridcell",
+        "role:group",
+        "role:status"
+      ],
+      "motivo": null
+    },
+    "Chart": {
+      "aria": [
+        "aria-label",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "ChartLegend": {
+      "aria": [
+        "aria-label",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "ChartTooltip": {
+      "aria": [
+        "aria-label",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "CodeBlock": {
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "CodeEditor": {
+      "aria": [],
+      "motivo": null
+    },
+    "Cluster": {
+      "aria": [],
+      "motivo": null
+    },
+    "CommandPaletteShell": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "role:dialog"
+      ],
+      "motivo": null
+    },
+    "ContextMenu": {
+      "aria": [
+        "aria-haspopup",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "DataGrid": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "role:region"
+      ],
+      "motivo": null
+    },
+    "DataList": {
+      "aria": [],
+      "motivo": null
+    },
+    "Dialog": {
+      "aria": [],
+      "motivo": null
+    },
+    "Drawer": {
+      "aria": [],
+      "motivo": null
+    },
+    "DropdownMenu": {
+      "aria": [
+        "aria-haspopup",
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "EmptyState": {
+      "aria": [
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "Grid": {
+      "aria": [],
+      "motivo": null
+    },
+    "Icon": {
+      "aria": [
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "KPI": {
+      "aria": [],
+      "motivo": null
+    },
+    "Kbd": {
+      "aria": [],
+      "motivo": null
+    },
+    "LogStream": {
+      "aria": [
+        "aria-live",
+        "role:log"
+      ],
+      "motivo": null
+    },
+    "MediaPlayer": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "aria-valuetext",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "MediaPlayerShell": {
+      "aria": [],
+      "motivo": null
+    },
+    "MessageComposer": {
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "MessageList": {
+      "aria": [
+        "aria-label",
+        "aria-live",
+        "role:log"
+      ],
+      "motivo": null
+    },
+    "NotificationCenter": {
+      "aria": [
+        "aria-expanded",
+        "aria-haspopup",
+        "aria-hidden",
+        "aria-label",
+        "aria-live",
+        "role:status"
+      ],
+      "motivo": null
+    },
+    "Pagination": {
+      "aria": [
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Popover": {
+      "aria": [
+        "aria-expanded",
+        "aria-haspopup"
+      ],
+      "motivo": null
+    },
+    "Progress": {
+      "aria": [
+        "aria-label",
+        "aria-valuemax",
+        "aria-valuemin",
+        "aria-valuenow",
+        "role:progressbar"
+      ],
+      "motivo": null
+    },
+    "QRCode": {
+      "aria": [
+        "aria-label",
+        "role:img"
+      ],
+      "motivo": null
+    },
+    "Skeleton": {
+      "aria": [
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "Stack": {
+      "aria": [],
+      "motivo": null
+    },
+    "Table": {
+      "aria": [
+        "aria-label",
+        "role:region"
+      ],
+      "motivo": null
+    },
+    "TableOfContents": {
+      "aria": [
+        "aria-current",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Tabs": {
+      "aria": [
+        "aria-disabled",
+        "aria-label",
+        "aria-selected",
+        "role:tab",
+        "role:tablist",
+        "role:tabpanel"
+      ],
+      "motivo": null
+    },
+    "AvatarGroup": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "Stepper": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "role:list",
+        "role:listitem"
+      ],
+      "motivo": null
+    },
+    "Menubar": {
+      "aria": [
+        "aria-disabled",
+        "aria-haspopup",
+        "aria-label",
+        "aria-orientation",
+        "role:menubar",
+        "role:menuitem"
+      ],
+      "motivo": null
+    },
+    "AspectRatio": {
+      "aria": [],
+      "motivo": null
+    },
+    "useTheme": {
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "useDensity": {
+      "aria": [
+        "aria-label",
+        "aria-pressed",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "useToast": {
+      "aria": [],
+      "motivo": null
+    },
+    "useAureaStrings": {
+      "aria": null,
+      "motivo": "sem render (embed/prerender)"
+    },
+    "useSpriteUrl": {
+      "aria": null,
+      "motivo": "sem render (embed/prerender)"
+    },
+    "InputGroup": {
+      "aria": [
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "InputGroupAddon": {
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Label": {
+      "aria": [],
+      "motivo": null
+    },
+    "PasswordField": {
+      "aria": [
+        "aria-controls",
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Collapsible": {
+      "aria": [
+        "aria-controls",
+        "aria-disabled",
+        "aria-expanded",
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "Separator": {
+      "aria": [
+        "aria-orientation",
+        "role:separator"
+      ],
+      "motivo": null
+    },
+    "ToggleGroup": {
+      "aria": [
+        "aria-disabled",
+        "aria-label",
+        "aria-pressed",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "Toggle": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "aria-pressed"
+      ],
+      "motivo": null
+    },
+    "Spinner": {
+      "aria": [
+        "aria-label",
+        "role:status"
+      ],
+      "motivo": null
+    },
+    "NumberField": {
+      "aria": [
+        "aria-controls",
+        "aria-disabled",
+        "aria-hidden",
+        "aria-label",
+        "aria-roledescription",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "OTPField": {
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "HoverCard": {
+      "aria": [],
+      "motivo": null
+    },
+    "Timeline": {
+      "aria": [],
+      "motivo": null
+    },
+    "Tooltip": {
+      "aria": [
+        "aria-describedby",
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Topbar": {
+      "aria": [],
+      "motivo": null
+    },
+    "TreeView": {
+      "aria": [
+        "aria-expanded",
+        "aria-hidden",
+        "aria-label",
+        "aria-labelledby",
+        "aria-level",
+        "aria-selected",
+        "role:group",
+        "role:tree",
+        "role:treeitem"
+      ],
+      "motivo": null
+    },
+    "Button": {
+      "aria": [],
+      "motivo": null
+    },
+    "ButtonGroup": {
+      "aria": [
+        "aria-label",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "Checkbox": {
+      "aria": [],
+      "motivo": null
+    },
+    "Combobox": {
+      "aria": null,
+      "motivo": "sem render (embed/prerender)"
+    },
+    "Field": {
+      "aria": [
+        "aria-describedby"
+      ],
+      "motivo": null
+    },
+    "FileInput": {
+      "aria": null,
+      "motivo": "sem render (embed/prerender)"
+    },
+    "IconButton": {
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Input": {
+      "aria": [
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "MultiCombobox": {
+      "aria": null,
+      "motivo": "sem render (embed/prerender)"
+    },
+    "Radio": {
+      "aria": [],
+      "motivo": null
+    },
+    "Range": {
+      "aria": [],
+      "motivo": null
+    },
+    "SearchField": {
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "SegmentedControl": {
+      "aria": [
+        "aria-label",
+        "aria-pressed",
+        "role:group"
+      ],
+      "motivo": null
+    },
+    "Select": {
+      "aria": [
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Sidebar": {
+      "aria": [
+        "aria-current",
+        "aria-hidden",
+        "aria-label",
+        "role:presentation"
+      ],
+      "motivo": null
+    },
+    "Status": {
+      "aria": [
+        "aria-hidden"
+      ],
+      "motivo": null
+    },
+    "Switch": {
+      "aria": [
+        "role:switch"
+      ],
+      "motivo": null
+    },
+    "Textarea": {
+      "aria": [
+        "aria-label"
+      ],
+      "motivo": null
+    },
+    "Toolbar": {
+      "aria": [
+        "aria-disabled",
+        "aria-label",
+        "aria-orientation",
+        "aria-pressed",
+        "role:group",
+        "role:separator",
+        "role:toolbar"
+      ],
+      "motivo": null
+    },
+    "ToolbarButton": {
+      "aria": [
+        "aria-disabled",
+        "aria-label",
+        "aria-orientation",
+        "aria-pressed",
+        "role:toolbar"
+      ],
+      "motivo": null
+    },
+    "ToolbarGroup": {
+      "aria": [
+        "aria-disabled",
+        "aria-label",
+        "aria-orientation",
+        "aria-pressed",
+        "role:group",
+        "role:separator",
+        "role:toolbar"
+      ],
+      "motivo": null
+    },
+    "ToolbarSeparator": {
+      "aria": [
+        "aria-disabled",
+        "aria-label",
+        "aria-orientation",
+        "aria-pressed",
+        "role:separator",
+        "role:toolbar"
+      ],
+      "motivo": null
+    }
+  }
+}

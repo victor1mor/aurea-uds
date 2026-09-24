@@ -1,0 +1,10 @@
+// GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
+// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+import * as React from "react";
+import Svg, {Path} from "react-native-svg";
+
+export default function MappingShow({size = 32, color = "#000000", ...rest}) {
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
+    React.createElement(Path, {d: "M30,4v4c0,1.1-.9,2-2,2h-4c-1.1,0-2-.9-2-2v-1h-2l-6.2,12.8c-.2.7-1,1.2-1.8,1.2h-2v1c0,1.1-.9,2-2,2h-4c-1.1,0-2-.9-2-2v-4c0-1.1.9-2,2-2h4c1.1,0,2,.9,2,2v1h2l5.8-12h-7.8v1c0,1.1-.9,2-2,2h-4c-1.1,0-2-.9-2-2v-4c0-1.1.9-2,2-2h4c1.1,0,2,.9,2,2v1h12v-1c0-1.1.9-2,2-2h4c1.1,0,2,.9,2,2ZM8,4h-4v4h4v-4ZM8,18h-4v4h4v-4ZM28,4h-4v4h4v-4ZM22,22c-1.103,0-2,.8975-2,2s.897,2,2,2,2-.8975,2-2-.897-2-2-2ZM29.7769,23.4785c-1.4229-3.3287-4.4761-5.4785-7.7769-5.4785s-6.3538,2.1499-7.7769,5.4785l-.2231.5215.2231.5215c1.4231,3.3287,4.4761,5.4785,7.7769,5.4785s6.354-2.1499,7.7769-5.4785l.2231-.5215-.2231-.5215ZM22,28c-2.2056,0-4-1.7944-4-4s1.7944-4,4-4,4,1.7944,4,4-1.7944,4-4,4Z", fill: color})
+  );
+}

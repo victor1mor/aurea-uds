@@ -1,0 +1,68 @@
+{
+  "category": "AI & Agents",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "name": "HealthMatrix",
+  "summary": "What is up, in a grid.",
+  "icon": "data--view",
+  "states": [
+    "operational",
+    "degraded",
+    "down",
+    "maintenance",
+    "unknown"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--radius-card",
+    "--space-1",
+    "--space-3",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "none — a labelled list, each cell carrying its own Status",
+    "keyboard": []
+  },
+  "related": {
+    "components": [
+      "Status",
+      "EventStream"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/agents.tsx#HealthMatrix"
+  },
+  "props": [
+    {
+      "name": "entries",
+      "type": "HealthEntry[]",
+      "default": "—",
+      "description": "Five states, the standard status-page vocabulary measured from the reference: operational, degraded, down, maintenance, unknown. Each cell carries a Status, so the state is a word and not only a colour."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Health\"",
+      "description": "Accessible name of the grid."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the grid."
+    }
+  ]
+}

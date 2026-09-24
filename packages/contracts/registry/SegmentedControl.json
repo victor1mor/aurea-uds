@@ -1,0 +1,81 @@
+{
+  "name": "SegmentedControl",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Choose one option from a compact inline set.",
+  "icon": "switcher",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "selected",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--foreground",
+    "--muted",
+    "--muted-foreground",
+    "--radius-control",
+    "--secondary"
+  ],
+  "a11y": {
+    "role": "radiogroup",
+    "apg": "radio group. Single choice among a few visible options is a radio group, not a row of independent toggles — that was finding M20, closed by ADR-0016 on 07/08/2026. Each option is a <button role=\"radio\"> with aria-checked, the group is one tab stop, and the arrows both move and select. The engine ships the pattern; the skin is ours.",
+    "keyboard": [
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowLeft, ArrowRight, ArrowUp, ArrowDown. Declared and not confirmed in this snapshot: Home, End — absence of an observable change does not prove absence of effect; a generic DOM snapshot can prove a key does something, never that it does not. Tab is not measurable here by construction: it moves focus anywhere on the page, so it never distinguishes one component from another. This note is NOT the one the other lineage carried: that one measured a role=\"group\" row of aria-pressed buttons, and ADR-0016 replaced it with the engine's radio group. Keeping the old prose would have been a measurement of a component that no longer exists."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/radio-group",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Radio",
+      "Tabs"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#SegmentedControl"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{value, label}>",
+      "default": "—",
+      "description": "The options. Two to five: past that it is a Select, not a segmented control."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "The selected value. Controlled by design — one of many always has an owner."
+    },
+    {
+      "name": "onChange",
+      "type": "(v: string) => void",
+      "default": "—",
+      "description": "Fires with the new value."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the set."
+    }
+  ]
+}

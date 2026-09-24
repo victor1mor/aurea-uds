@@ -1,0 +1,91 @@
+{
+  "name": "Radio",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Single choice within a group.",
+  "icon": "pending--filled",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "lg",
+    "md",
+    "sm"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "checked",
+    "focus",
+    "disabled",
+    "invalid"
+  ],
+  "tokens": [
+    "--control-selected",
+    "--focus-strong",
+    "--foreground"
+  ],
+  "a11y": {
+    "role": "radio",
+    "apg": "radio group",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 22/08/2026, and the measurement corrected the reading BOTH ways: native radios move on Left/Right as well as Up/Down, which the ficha was missing — and Home/End do nothing, which the APG text would have had us add wrongly."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Checkbox",
+      "SegmentedControl"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Radio"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. One radio per option, all sharing the same name."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "What groups the set. Without it every radio is its own group and two can be on."
+    },
+    {
+      "name": "checked / defaultChecked",
+      "type": "boolean",
+      "default": "—",
+      "description": "Controlled or uncontrolled."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled; the option keeps its place in the list."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step."
+    }
+  ]
+}

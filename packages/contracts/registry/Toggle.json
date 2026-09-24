@@ -1,0 +1,119 @@
+{
+  "name": "Toggle",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Two-state button that stays pressed, for a setting you flip in place.",
+  "icon": "checkmark",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "pressed",
+    "hover",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--secondary",
+    "--primary",
+    "--foreground",
+    "--radius-control",
+    "--control-h-md"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "button (toggle button)",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/toggle",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button",
+      "Switch",
+      "SegmentedControl"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#Toggle"
+  },
+  "props": [
+    {
+      "name": "pressed / defaultPressed",
+      "type": "boolean",
+      "default": "none",
+      "description": "Controlled or uncontrolled. The engine keeps aria-pressed in sync; you never set it."
+    },
+    {
+      "name": "onPressedChange",
+      "type": "(pressed: boolean) => void",
+      "default": "none",
+      "description": "Fires with the new state. Pair with `pressed` for the controlled form."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "none",
+      "description": "Glyph shown before the label, or alone when there are no children."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "none",
+      "description": "REQUIRED and non-blank when there is no visible text: an icon-only toggle with no name is unusable by screen reader. Since 2026-08-12 the ToggleProps union rejects omitted, boolean and nullish children unless label is present. Blank labels, empty strings, arrays, Fragments and decorative-only elements need a runtime guard because TypeScript/ReactNode cannot encode whether arbitrary content will render text; they emit console.error too. A custom child that receives apparently visible children but discards them remains the consumer's responsibility (AUD-0003)."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "Matches the button scale, so a toggle sits level with the controls beside it."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Ignores interaction and dims the control."
+    },
+    {
+      "name": "children",
+      "type": "ToggleChildren | never",
+      "default": "—",
+      "description": "What the toggle shows. With children you may omit label; with no children label is REQUIRED, because a bare icon with no accessible name is a control nobody can announce. The type enforces it — the form without a name does not compile."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    }
+  ],
+  "notes": [
+    "THE LABEL MUST NOT CHANGE between the two states. If the text turns from \"Mute\" into \"Unmute\", or \"Play\" into \"Pause\", this is the wrong component — use a Button. A screen reader reads the new label and the pressed state at the same time, and the listener cannot tell whether the button describes what it IS or what it WILL DO. The rule is the W3C APG's and Adobe Spectrum's, and it is the one rule that decides between Toggle and Button.",
+    "Button also accepts `pressed`. It is DEPRECATED since 0.4.0 and goes away in 1.0: two ways to make the same control is the \"which one do I use?\" that marks a duplicated feature."
+  ]
+}

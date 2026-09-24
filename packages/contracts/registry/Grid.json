@@ -1,0 +1,69 @@
+{
+  "name": "Grid",
+  "category": "Layout",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Two-dimensional layout primitive.",
+  "icon": "grid",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [
+    "--space-4"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "Layout primitive, no role and no keyboard: it is a <div> with CSS grid. Deliberately NOT role=\"grid\" — that is the ARIA pattern for a data grid with cell navigation, which is DataGrid. Same word, different thing."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Stack",
+      "Cluster"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Grid"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Responsive columns with no breakpoints: each one is at least --grid-min wide (15rem by default) and they fill the row, with --space-4 between them."
+    },
+    {
+      "name": "gap",
+      "type": "\"tight\" | \"normal\" | \"loose\"",
+      "default": "\"normal\"",
+      "description": "Three steps and no others (ADR-0051): tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
+    },
+    {
+      "name": "min",
+      "type": "string",
+      "default": "\"15rem\"",
+      "description": "The minimum column width, as a CSS length (\"10rem\", \"155px\"). It is the --grid-min the CSS always read and no type exposed."
+    },
+    {
+      "name": "columns",
+      "type": "number",
+      "default": "—",
+      "description": "A fixed number of equal columns. With it, `min` stops applying."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Where you set --grid-min for a denser or a wider grid. That variable is the adjustment knob, the same idea as --qr-size on QRCode: a column count as a prop would freeze a number that the container is the one who knows."
+    }
+  ]
+}

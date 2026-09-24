@@ -1,0 +1,81 @@
+{
+  "name": "Toolbar",
+  "category": "Actions",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Container of actions with roving-tabindex keyboard navigation.",
+  "icon": "settings",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "horizontal",
+    "vertical"
+  ],
+  "variantProp": "orientation",
+  "sizes": [],
+  "responsive": {
+    "orientation": "behavioral"
+  },
+  "states": [],
+  "tokens": [
+    "--border",
+    "--radius-control",
+    "--radius-lg",
+    "--secondary"
+  ],
+  "a11y": {
+    "role": "toolbar",
+    "apg": "toolbar",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End",
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space. Enter, Space were delivered by the component and NOT declared before this measurement — the same direction as G-A11Y-04. Declared and not confirmed in this snapshot: ArrowLeft, ArrowRight, Home, End. Absence of an observable change does not prove absence of effect — a generic DOM snapshot can prove a key does something, never that it does not."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ToolbarButton",
+      "ButtonGroup"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#Toolbar"
+  },
+  "props": [
+    {
+      "name": "orientation",
+      "type": "horizontal | vertical",
+      "default": "horizontal",
+      "description": "Vertical stacks the buttons and swaps which arrows navigate."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Toolbar",
+      "description": "Accessible name of the toolbar. Two toolbars on a page must not share one."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "ToolbarButton, ToolbarGroup and ToolbarSeparator."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes on the surface."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@aurea-uds/fonts",
+  "version": "0.10.0",
+  "description": "IBM Plex para a Aurea: WOFF2 para a web (@aurea-uds/fonts/css) e TTF para React Native (@aurea-uds/fonts/native).",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "fonts",
+    "ibm-plex",
+    "react-native"
+  ],
+  "license": "OFL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/fonts"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/fonts#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "files",
+    "files-native"
+  ],
+  "exports": {
+    "./css": {
+      "types": "./dist/fonts.css.d.ts",
+      "default": "./dist/fonts.css"
+    },
+    "./native": {
+      "types": "./dist/fonts.native.d.ts",
+      "default": "./dist/fonts.native.js"
+    }
+  },
+  "scripts": {
+    "build": "node build-fonts.mjs"
+  }
+}

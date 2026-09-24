@@ -1,0 +1,95 @@
+{
+  "name": "Status",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Operational condition of a thing: a coloured dot plus a readable label.",
+  "icon": "connection-signal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "neutral",
+    "online",
+    "offline",
+    "busy",
+    "away",
+    "running",
+    "success",
+    "warning",
+    "danger",
+    "info"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "waiting_user",
+    "waiting_approval",
+    "waiting_dependency",
+    "offline",
+    "stale",
+    "partial",
+    "degraded"
+  ],
+  "tokens": [
+    "--danger-400",
+    "--foreground",
+    "--info-400",
+    "--muted-foreground",
+    "--space-2",
+    "--subtle-foreground",
+    "--success-400",
+    "--text-sm",
+    "--warning-400"
+  ],
+  "a11y": {
+    "role": null,
+    "apg": "No APG pattern and no role, on purpose. A Status is text with a decorative dot, so the <span> carries no role and the dot is aria-hidden. role=\"status\" is deliberately NOT used: that is a live region, and it would make every static indicator on a page announce itself when it renders. If a condition CHANGES and the change must be spoken, wrap it in your own live region — that is a property of the moment, not of the component. Colour is never the only signal (WCAG 1.4.1): the label states the condition, and offline is a hollow dot so it does not collapse onto neutral in the light theme.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Badge"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#Status"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "neutral | online | offline | busy | away | running | success | warning | danger | info",
+      "default": "neutral",
+      "description": "Which condition, and therefore which dot. The operational names (online/busy/away) and the semantic ones (success/warning/danger) map to the same theme-aware tokens — pick the vocabulary of your domain."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The label, and it is not optional in practice: it is what carries the meaning when the colour cannot."
+    },
+    {
+      "name": "state",
+      "type": "waiting_user | waiting_approval | waiting_dependency | offline | stale | partial | degraded",
+      "default": "—",
+      "description": "Universal state (Part J) — an axis of its own alongside `variant`: the variant is the colour of the dot, the state is the condition. It sets `data-state` and, when no `variant` is given, derives one: `offline` keeps the hollow dot it has always had, the other six fall back to severity. With no children the label comes from the shared string table, so the same condition reads the same on every screen."
+    }
+  ],
+  "axes": {
+    "state": [
+      "degraded",
+      "offline",
+      "partial",
+      "stale",
+      "waiting_approval",
+      "waiting_dependency",
+      "waiting_user"
+    ]
+  }
+}

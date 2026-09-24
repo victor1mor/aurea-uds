@@ -1,0 +1,93 @@
+{
+  "name": "DropdownMenu",
+  "category": "Overlays",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Menu of actions triggered by a control.",
+  "icon": "overflow-menu--horizontal",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "side": [
+      "bottom",
+      "left",
+      "right",
+      "top"
+    ]
+  },
+  "states": [
+    "checked",
+    "closed",
+    "highlighted",
+    "open",
+    "popup-open"
+  ],
+  "tokens": [
+    "--border",
+    "--control-h-md",
+    "--foreground",
+    "--popover",
+    "--popover-foreground",
+    "--radius-lg",
+    "--radius-sm",
+    "--shadow-lg",
+    "--surface-3",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "menu",
+    "apg": "menu",
+    "keyboard": [
+      "ArrowDown",
+      "ArrowUp",
+      "Space",
+      "Enter",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 22/08/2026 (tests/visual/teclado-motor.spec.ts), not read off the APG. ArrowUp opens the menu with focus on the LAST item and Space opens it with focus on the first — both were missing from this ficha, and both are how the engine behaves. The measured evidence is aria-expanded=true plus focus landing on a .menu-item."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ContextMenu",
+      "Popover"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#DropdownMenu"
+  },
+  "props": [
+    {
+      "name": "trigger",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "The element that opens the menu. Usually a Button or an IconButton."
+    },
+    {
+      "name": "items",
+      "type": "Array<MenuItemDef | \"separator\">",
+      "default": "—",
+      "description": "The menu, as data: {label, onClick?, disabled?, leadingIcon?}. The literal string \"separator\" draws a rule — a separator is not an item, so it never takes focus."
+    },
+    {
+      "name": "side",
+      "type": "top | right | bottom | left",
+      "default": "bottom",
+      "description": "Preferred side; it flips when there is no room."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "Accessible name of the menu itself. Worth setting when a page has more than one — otherwise a screen reader lists several menus with nothing to tell them apart."
+    }
+  ]
+}

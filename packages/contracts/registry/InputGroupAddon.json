@@ -1,0 +1,68 @@
+{
+  "name": "InputGroupAddon",
+  "category": "Inputs",
+  "layer": "Primitive",
+  "maturity": "Ready",
+  "summary": "What sits glued to the control inside an InputGroup: a glyph, a prefix, a button.",
+  "icon": "add",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "side": [
+      "end",
+      "start"
+    ],
+    "layout": [
+      "block",
+      "inline"
+    ]
+  },
+  "responsive": {
+    "layout": "visual"
+  },
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--subtle-foreground"
+  ],
+  "a11y": {
+    "role": "generic",
+    "apg": "n-a",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "InputGroup"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#InputGroupAddon"
+  },
+  "props": [
+    {
+      "name": "side",
+      "type": "AddonSide",
+      "default": "start",
+      "description": "Which end of the group the addon is glued to. It is LOGICAL, not physical: in RTL \"start\" is the right-hand side."
+    },
+    {
+      "name": "layout",
+      "type": "Responsive<AddonLayout>",
+      "default": "inline",
+      "description": "\"block\" puts the addon on its own line above or below the control instead of beside it — the shape a filter bar takes when it runs out of width. Responsive, so it can be inline on a wide screen and block on a narrow one."
+    }
+  ]
+}

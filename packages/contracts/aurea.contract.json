@@ -1,0 +1,3702 @@
+{
+  "name": "Aurea — Universal Design System",
+  "version": "0.10.0",
+  "status": "organized-source-of-truth",
+  "language": "pt-BR",
+  "fonts": {
+    "ui": "IBM Plex Sans",
+    "editorial": "IBM Plex Serif",
+    "code": "IBM Plex Mono"
+  },
+  "iconSystem": {
+    "library": "Carbon Icons",
+    "embedded": true,
+    "license": "Apache-2.0",
+    "allowedIcons": [
+      "home",
+      "dashboard",
+      "menu",
+      "close",
+      "search",
+      "filter",
+      "settings",
+      "overflow-menu--horizontal",
+      "chevron--down",
+      "chevron--left",
+      "chevron--right",
+      "arrow--left",
+      "arrow--right",
+      "arrow--up-right",
+      "launch",
+      "maximize",
+      "minimize",
+      "side-panel--open",
+      "side-panel--close",
+      "switcher",
+      "grid",
+      "add",
+      "subtract",
+      "checkmark",
+      "edit",
+      "trash-can",
+      "copy",
+      "copy--link",
+      "save",
+      "download",
+      "upload",
+      "restart",
+      "play",
+      "pause",
+      "stop",
+      "undo",
+      "redo",
+      "renew",
+      "reset",
+      "send",
+      "share",
+      "export",
+      "import-export",
+      "document",
+      "document--blank",
+      "document--attachment",
+      "folder",
+      "folder--open",
+      "folder--tree",
+      "catalog",
+      "notebook",
+      "bookmark",
+      "pin",
+      "favorite",
+      "star",
+      "tag",
+      "attachment",
+      "image",
+      "video",
+      "volume--up",
+      "volume--mute",
+      "closed-caption",
+      "rewind--10",
+      "forward--10",
+      "microphone",
+      "user--avatar",
+      "user--multiple",
+      "user--admin",
+      "group--account",
+      "email",
+      "notification",
+      "notification--new",
+      "chat",
+      "chat--launch",
+      "message-queue",
+      "webhook",
+      "link",
+      "unlink",
+      "phone",
+      "collaborate",
+      "events",
+      "information",
+      "information--filled",
+      "warning",
+      "warning--alt--filled",
+      "error",
+      "error--filled",
+      "checkmark--filled",
+      "pending",
+      "pending--filled",
+      "in-progress",
+      "locked",
+      "unlocked",
+      "security",
+      "password",
+      "power",
+      "activity",
+      "time",
+      "time--filled",
+      "analytics",
+      "chart--bar",
+      "chart--line",
+      "chart--area",
+      "chart--network",
+      "chart--scatter",
+      "database--postgreSQL",
+      "data--view",
+      "data--structured",
+      "data--connected",
+      "cloud",
+      "cloud--offline",
+      "cloud--monitoring",
+      "network--3",
+      "connection-signal",
+      "connection-signal--off",
+      "API--1",
+      "api--key",
+      "code",
+      "code-block",
+      "terminal",
+      "debug",
+      "AI",
+      "ai-agent-invocation",
+      "ai-generate",
+      "ai-recommend",
+      "ai--observability",
+      "workflow-automation",
+      "task",
+      "task--complete",
+      "task--progress",
+      "task--settings",
+      "list",
+      "list--checked",
+      "tree-view",
+      "branch",
+      "function",
+      "machine-learning-model",
+      "flow",
+      "rule",
+      "events--alt",
+      "event",
+      "event--warning",
+      "calendar",
+      "calendar--add",
+      "help",
+      "help--filled",
+      "light",
+      "moon",
+      "view",
+      "view--off",
+      "zoom--in",
+      "zoom--out",
+      "zoom--fit",
+      "drag--horizontal",
+      "color-palette",
+      "accessibility",
+      "keyboard",
+      "meter",
+      "progress-bar--round"
+    ],
+    "sizes": [
+      16,
+      20,
+      24,
+      32
+    ],
+    "rule": "Use somente nomes presentes no registro deste arquivo. Não desenhar SVG avulso."
+  },
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "densities": [
+    "compact",
+    "comfortable",
+    "spacious"
+  ],
+  "distribution": {
+    "packages": [
+      "@aurea-uds/contracts",
+      "@aurea-uds/tokens",
+      "@aurea-uds/core",
+      "@aurea-uds/fonts",
+      "@aurea-uds/icons",
+      "@aurea-uds/react",
+      "@aurea-uds/native"
+    ],
+    "rule": "Artefatos derivam dos pacotes do monorepo; não editar manualmente fora deles.",
+    "mode": "workspace-packages",
+    "commands": {
+      "verify": "pnpm validate"
+    },
+    "consumption": {
+      "contract": "importar @aurea-uds/contracts/contract",
+      "tokens": "para consumir só tokens, importar @aurea-uds/tokens/css uma vez; @aurea-uds/core/css já os inclui",
+      "icons": "embutir o sprite de @aurea-uds/icons/sprite uma vez e referenciar símbolos por id",
+      "css": "importar @aurea-uds/core/css",
+      "react": "importar componentes de @aurea-uds/react",
+      "native": "alvo React Native: importar AureaProvider/useAureaTokens de @aurea-uds/native, as fontes .ttf de @aurea-uds/fonts/native, e cada icone pelo caminho profundo @aurea-uds/native/icons/<nome> — o barril nao e' a forma documentada (ADR-0038)"
+    }
+  },
+  "breakpoints": {
+    "sm": 640,
+    "md": 768,
+    "lg": 1024,
+    "xl": 1280,
+    "2xl": 1536
+  },
+  "componentRules": {
+    "Button": {
+      "variants": [
+        "primary",
+        "secondary",
+        "outline",
+        "ghost",
+        "danger"
+      ],
+      "sizes": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "disabled",
+        "loading"
+      ]
+    },
+    "IconButton": {
+      "variants": [
+        "secondary",
+        "outline",
+        "ghost",
+        "danger"
+      ],
+      "sizes": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "Badge": {
+      "variants": [
+        "neutral",
+        "primary",
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "running",
+        "paused",
+        "offline",
+        "review"
+      ]
+    },
+    "Input": {
+      "sizes": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "states": [
+        "default",
+        "focus",
+        "disabled",
+        "invalid",
+        "readonly"
+      ]
+    },
+    "Card": {
+      "variants": [
+        "base",
+        "raised",
+        "interactive",
+        "inset",
+        "selected",
+        "danger"
+      ]
+    },
+    "Navigation": [
+      "Topbar",
+      "Sidebar",
+      "Breadcrumb",
+      "Tabs",
+      "Pagination",
+      "Stepper",
+      "CommandPalette"
+    ],
+    "Feedback": [
+      "Alert",
+      "Toast",
+      "Tooltip",
+      "Popover",
+      "Dialog",
+      "Drawer",
+      "Progress",
+      "Skeleton",
+      "EmptyState"
+    ],
+    "DataDisplay": [
+      "KPI",
+      "Table",
+      "DataList",
+      "Avatar",
+      "Timeline",
+      "Accordion",
+      "Chart",
+      "CodeBlock",
+      "LogStream"
+    ],
+    "Media": [
+      "MediaPlayer",
+      "MediaControls",
+      "SeekBar",
+      "VolumeControl",
+      "TimeDisplay",
+      "MediaMenu",
+      "CaptionTrack",
+      "MediaState",
+      "CompactPlayer",
+      "CaptureTranscript"
+    ],
+    "UniversalDomain": [
+      "AgentCard",
+      "AgentStatus",
+      "AgentInspector",
+      "InvocationPanel",
+      "TaskQueue",
+      "EventStream",
+      "MemoryLedger",
+      "ToolPermission",
+      "HumanApproval",
+      "AutomationCard",
+      "ModelUsage",
+      "HealthMatrix",
+      "DependencyGraph",
+      "TraceTimeline",
+      "InterAgentMessage",
+      "CostMeter"
+    ]
+  },
+  "hardRules": [
+    "Consultar este arquivo antes de qualquer alteração de interface.",
+    "Usar somente tokens semânticos definidos neste arquivo.",
+    "O amarelo primário oklch(0.795 0.184 86.047) é invariável nos temas dark e light.",
+    "Botões textuais usam formato cápsula; botões de ícone usam quadrado arredondado.",
+    "Inputs e selects usam formato cápsula; textareas usam raio de 16px.",
+    "Cards, dialogs, toasts, demos e painéis usam raio de 22px e superfícies sólidas.",
+    "A sidebar é um único painel arredondado com menu accent subtle.",
+    "Não usar gradientes decorativos, paletas alternativas ou cores hardcoded.",
+    "A escala chart-1 a chart-5 é a única escala categórica/sequencial azul.",
+    "IBM Plex e Carbon são overrides deliberados; não trocar sem atualizar este contrato.",
+    "Consumidores usam somente os pacotes @aurea-uds do monorepo; cópias manuais são proibidas.",
+    "Quando faltar um padrão, atualizar primeiro este arquivo e depois a aplicação.",
+    "Players usam exclusivamente os tokens --media-*; controles permanecem escuros e legíveis nos dois temas.",
+    "Composed application patterns are optional recipes over generic components, never product-specific widgets.",
+    "Every composed pattern defines regions, actions, variants, states, transitions, behavior, event payloads, and accessibility.",
+    "WCAG 2.2 AA, 320 CSS pixel reflow, visible focus, reduced motion, and keyboard parity are release gates.",
+    "Any drag interaction has a single-pointer and keyboard alternative."
+  ],
+  "referencePreset": {
+    "code": "legacy-reference.html",
+    "role": "non-normative geometry provenance",
+    "resolvedBy": "brandOverrides",
+    "nonNormative": true
+  },
+  "brandOverrides": {
+    "fonts": [
+      "IBM Plex Sans",
+      "IBM Plex Serif",
+      "IBM Plex Mono"
+    ],
+    "icons": "Carbon Icons embedded",
+    "primaryLockedAcrossThemes": "oklch(0.795 0.184 86.047)"
+  },
+  "mediaRules": {
+    "layouts": [
+      "immersive",
+      "inline",
+      "compact"
+    ],
+    "states": [
+      "idle",
+      "loading",
+      "buffering",
+      "playing",
+      "paused",
+      "ended",
+      "error"
+    ],
+    "controls": [
+      "play-pause",
+      "rewind-10",
+      "forward-10",
+      "seek",
+      "volume-mute",
+      "captions",
+      "speed",
+      "picture-in-picture",
+      "fullscreen"
+    ],
+    "theme": "A superfície de mídia e seus controles permanece escura nos temas dark e light.",
+    "accessibility": [
+      "Controles de ícone exigem nome acessível.",
+      "Controles permanecem visíveis durante foco e navegação por teclado.",
+      "Hover nunca é o único meio de descobrir um controle.",
+      "No mobile, controles opcionais migram para o menu sem remover a função."
+    ]
+  },
+  "operationalPatterns": {
+    "states": [
+      "accepted",
+      "running",
+      "waiting_user",
+      "waiting_approval",
+      "waiting_dependency",
+      "completed",
+      "failed",
+      "cancelled",
+      "interrupted"
+    ],
+    "patterns": {
+      "RunSession": {
+        "variants": [
+          "session",
+          "run",
+          "turn",
+          "tool_call",
+          "command",
+          "test",
+          "build",
+          "deploy",
+          "checkpoint",
+          "receipt"
+        ],
+        "behavior": [
+          "resumable from checkpoint",
+          "interrupt does not erase receipt",
+          "cancel emits terminal receipt",
+          "approval is explicit"
+        ],
+        "events": [
+          {
+            "name": "run.accepted",
+            "when": "after the accepted state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "run.progress",
+            "when": "after the progress state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "tool.call",
+            "when": "after the call state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "command.started",
+            "when": "after the started state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "test.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "build.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "deploy.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "checkpoint.saved",
+            "when": "after the saved state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "approval.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "run.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "run.failed",
+            "when": "after the failed state change",
+            "payloadRequired": [
+              "error_code",
+              "retryable"
+            ]
+          }
+        ],
+        "accessibility": [
+          "state is text and color",
+          "actions have accessible names",
+          "focus returns after approval dialog"
+        ],
+        "states": [
+          "accepted",
+          "running",
+          "waiting_user",
+          "waiting_approval",
+          "waiting_dependency",
+          "completed",
+          "failed",
+          "cancelled",
+          "interrupted"
+        ],
+        "regions": [
+          "session_header",
+          "turn_stream",
+          "tool_panel",
+          "checkpoint",
+          "receipt",
+          "actions"
+        ],
+        "actions": [
+          "start",
+          "resume",
+          "interrupt",
+          "cancel",
+          "retry",
+          "fork",
+          "approve",
+          "reject"
+        ],
+        "initialState": "accepted",
+        "terminalStates": [
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "transitions": [
+          {
+            "from": "accepted",
+            "action": "start",
+            "to": "running"
+          },
+          {
+            "from": "running",
+            "action": "request_approval",
+            "to": "waiting_approval"
+          },
+          {
+            "from": "waiting_approval",
+            "action": "approve",
+            "to": "running"
+          },
+          {
+            "from": "running",
+            "action": "interrupt",
+            "to": "interrupted"
+          },
+          {
+            "from": "interrupted",
+            "action": "resume",
+            "to": "running"
+          },
+          {
+            "from": "running",
+            "action": "complete",
+            "to": "completed"
+          },
+          {
+            "from": "running",
+            "action": "fail",
+            "to": "failed"
+          },
+          {
+            "from": "failed",
+            "action": "retry",
+            "to": "running"
+          },
+          {
+            "from": "running",
+            "action": "cancel",
+            "to": "cancelled"
+          }
+        ]
+      },
+      "ResourceWorkbench": {
+        "variants": [
+          "workspace",
+          "file",
+          "cloud",
+          "document",
+          "ocr",
+          "transfer",
+          "artifact"
+        ],
+        "behavior": [
+          "resume validates checksum",
+          "conflict requires preview",
+          "restore keeps provenance"
+        ],
+        "events": [
+          {
+            "name": "resource.discovered",
+            "when": "after the discovered state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "transfer.progress",
+            "when": "after the progress state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "transfer.resumed",
+            "when": "after the resumed state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "checksum.verified",
+            "when": "after the verified state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "conflict.detected",
+            "when": "after the detected state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "artifact.created",
+            "when": "after the created state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "resource.restored",
+            "when": "after the restored state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "progress announces percent and phase",
+          "conflict actions are keyboard reachable"
+        ],
+        "states": [
+          "idle",
+          "discovering",
+          "transferring",
+          "paused",
+          "verifying",
+          "conflict",
+          "completed",
+          "failed"
+        ],
+        "regions": [
+          "source",
+          "collection",
+          "preview",
+          "transfer_queue",
+          "provenance",
+          "actions"
+        ],
+        "actions": [
+          "discover",
+          "transfer",
+          "pause",
+          "resume",
+          "verify",
+          "resolve",
+          "restore"
+        ],
+        "initialState": "idle",
+        "terminalStates": [
+          "completed",
+          "failed"
+        ],
+        "transitions": [
+          {
+            "from": "idle",
+            "action": "discover",
+            "to": "discovering"
+          },
+          {
+            "from": "discovering",
+            "action": "transfer",
+            "to": "transferring"
+          },
+          {
+            "from": "transferring",
+            "action": "pause",
+            "to": "paused"
+          },
+          {
+            "from": "paused",
+            "action": "resume",
+            "to": "transferring"
+          },
+          {
+            "from": "transferring",
+            "action": "verify",
+            "to": "verifying"
+          },
+          {
+            "from": "verifying",
+            "action": "complete",
+            "to": "completed"
+          },
+          {
+            "from": "transferring",
+            "action": "detect_conflict",
+            "to": "conflict"
+          },
+          {
+            "from": "conflict",
+            "action": "resolve",
+            "to": "transferring"
+          },
+          {
+            "from": "transferring",
+            "action": "fail",
+            "to": "failed"
+          }
+        ]
+      },
+      "ConversationChannel": {
+        "variants": [
+          "thread",
+          "message",
+          "composer",
+          "attachment",
+          "delivery",
+          "pairing",
+          "comment",
+          "mention",
+          "reaction",
+          "presence",
+          "assignment",
+          "sharing",
+          "activity"
+        ],
+        "behavior": [
+          "identity and channel are explicit",
+          "draft survives transient failure",
+          "delivery and read status stay separate",
+          "presence never implies permission",
+          "comments anchor to stable content",
+          "offline collaboration reconciles with preview",
+          "sharing exposes audience and access level"
+        ],
+        "events": [
+          {
+            "name": "message.queued",
+            "when": "after the queued state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "message.sent",
+            "when": "after the sent state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "message.delivered",
+            "when": "after the delivered state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "message.read",
+            "when": "after the read state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "comment.created",
+            "when": "after the created state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "mention.created",
+            "when": "after the created state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "presence.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "assignment.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "share.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "pairing.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "pairing.confirmed",
+            "when": "after the confirmed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "composer has label",
+          "attachments expose type and removal",
+          "status is not color-only",
+          "presence and unread status are textual",
+          "comment threads have headings",
+          "focus reaches newly created content only on request"
+        ],
+        "states": [
+          "draft",
+          "queued",
+          "sent",
+          "delivered",
+          "read",
+          "failed",
+          "unpaired"
+        ],
+        "regions": [
+          "channel_identity",
+          "thread",
+          "message_list",
+          "composer",
+          "attachments",
+          "activity"
+        ],
+        "actions": [
+          "compose",
+          "send",
+          "retry",
+          "attach",
+          "comment",
+          "mention",
+          "react",
+          "assign",
+          "share",
+          "pair"
+        ],
+        "initialState": "draft",
+        "terminalStates": [],
+        "transitions": [
+          {
+            "from": "draft",
+            "action": "send",
+            "to": "queued"
+          },
+          {
+            "from": "queued",
+            "action": "accept",
+            "to": "sent"
+          },
+          {
+            "from": "sent",
+            "action": "deliver",
+            "to": "delivered"
+          },
+          {
+            "from": "delivered",
+            "action": "read",
+            "to": "read"
+          },
+          {
+            "from": "queued",
+            "action": "fail",
+            "to": "failed"
+          },
+          {
+            "from": "failed",
+            "action": "retry",
+            "to": "queued"
+          },
+          {
+            "from": "unpaired",
+            "action": "pair",
+            "to": "draft"
+          }
+        ]
+      },
+      "ReviewCompare": {
+        "variants": [
+          "diff",
+          "patch",
+          "test",
+          "rollback",
+          "ocr_review",
+          "import_reconcile"
+        ],
+        "behavior": [
+          "preview before mutation",
+          "apply records receipt",
+          "rollback targets the receipt"
+        ],
+        "events": [
+          {
+            "name": "review.opened",
+            "when": "after the opened state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "patch.applied",
+            "when": "after the applied state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "test.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "rollback.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "reconciliation.resolved",
+            "when": "after the resolved state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "diff has textual additions and deletions",
+          "decision is keyboard reachable",
+          "test result is announced"
+        ],
+        "states": [
+          "idle",
+          "previewing",
+          "changed",
+          "testing",
+          "approved",
+          "rejected",
+          "applied",
+          "rolled_back",
+          "failed"
+        ],
+        "regions": [
+          "source",
+          "comparison",
+          "decision",
+          "test_result",
+          "receipt"
+        ],
+        "actions": [
+          "preview",
+          "approve",
+          "reject",
+          "apply",
+          "test",
+          "rollback",
+          "resolve"
+        ],
+        "initialState": "idle",
+        "terminalStates": [
+          "rejected",
+          "applied",
+          "rolled_back",
+          "failed"
+        ],
+        "transitions": [
+          {
+            "from": "idle",
+            "action": "preview",
+            "to": "previewing"
+          },
+          {
+            "from": "previewing",
+            "action": "change",
+            "to": "changed"
+          },
+          {
+            "from": "changed",
+            "action": "test",
+            "to": "testing"
+          },
+          {
+            "from": "testing",
+            "action": "approve",
+            "to": "approved"
+          },
+          {
+            "from": "approved",
+            "action": "apply",
+            "to": "applied"
+          },
+          {
+            "from": "previewing",
+            "action": "reject",
+            "to": "rejected"
+          },
+          {
+            "from": "applied",
+            "action": "rollback",
+            "to": "rolled_back"
+          },
+          {
+            "from": "testing",
+            "action": "fail",
+            "to": "failed"
+          }
+        ]
+      },
+      "CaptureTranscript": {
+        "variants": [
+          "audio",
+          "voice",
+          "recording",
+          "segment",
+          "transcription",
+          "transcript"
+        ],
+        "behavior": [
+          "recording requires consent",
+          "transcript keeps provenance",
+          "review precedes persistence"
+        ],
+        "events": [
+          {
+            "name": "capture.started",
+            "when": "after the started state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "capture.paused",
+            "when": "after the paused state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "segment.created",
+            "when": "after the created state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "transcript.previewed",
+            "when": "after the previewed state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "transcript.confirmed",
+            "when": "after the confirmed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "recording state is announced",
+          "controls remain visible on focus",
+          "transcript supports keyboard review"
+        ],
+        "states": [
+          "idle",
+          "requesting_permission",
+          "recording",
+          "paused",
+          "processing",
+          "review",
+          "completed",
+          "failed"
+        ],
+        "regions": [
+          "consent",
+          "capture_controls",
+          "timeline",
+          "transcript",
+          "provenance",
+          "review"
+        ],
+        "actions": [
+          "request_permission",
+          "start",
+          "pause",
+          "resume",
+          "stop",
+          "review",
+          "confirm",
+          "discard"
+        ],
+        "initialState": "idle",
+        "terminalStates": [
+          "completed",
+          "failed"
+        ],
+        "transitions": [
+          {
+            "from": "idle",
+            "action": "request_permission",
+            "to": "requesting_permission"
+          },
+          {
+            "from": "requesting_permission",
+            "action": "grant",
+            "to": "recording"
+          },
+          {
+            "from": "recording",
+            "action": "pause",
+            "to": "paused"
+          },
+          {
+            "from": "paused",
+            "action": "resume",
+            "to": "recording"
+          },
+          {
+            "from": "recording",
+            "action": "stop",
+            "to": "processing"
+          },
+          {
+            "from": "processing",
+            "action": "preview",
+            "to": "review"
+          },
+          {
+            "from": "review",
+            "action": "confirm",
+            "to": "completed"
+          },
+          {
+            "from": "processing",
+            "action": "fail",
+            "to": "failed"
+          }
+        ]
+      }
+    },
+    "coverage": {
+      "agent-operations-console": [
+        "AppShell",
+        "RunSession",
+        "AnalyticsWorkbench",
+        "ReviewCompare"
+      ],
+      "identity-access-suite": [
+        "IdentityAccess",
+        "RunSession",
+        "ReviewCompare",
+        "CollectionWorkbench"
+      ],
+      "messaging-collaboration": [
+        "ConversationChannel",
+        "CollectionWorkbench",
+        "RunSession"
+      ],
+      "browser-resource-shell": [
+        "AppShell",
+        "ResourceWorkbench",
+        "RunSession",
+        "ReviewCompare"
+      ],
+      "content-document-suite": [
+        "ContentWorkbench",
+        "ResourceWorkbench",
+        "ReviewCompare",
+        "CaptureTranscript"
+      ],
+      "resource-management-suite": [
+        "ResourceWorkbench",
+        "CollectionWorkbench",
+        "RunSession"
+      ],
+      "developer-workbench": [
+        "AppShell",
+        "ResourceWorkbench",
+        "ContentWorkbench",
+        "RunSession",
+        "ReviewCompare"
+      ],
+      "finance-transactions": [
+        "CollectionWorkbench",
+        "AnalyticsWorkbench",
+        "TransactionFlow",
+        "ReviewCompare",
+        "ResourceWorkbench"
+      ],
+      "media-capture-suite": [
+        "MediaLibrary",
+        "CaptureTranscript",
+        "ResourceWorkbench",
+        "CollectionWorkbench"
+      ]
+    },
+    "rule": "São composições opcionais sobre fundamentos genéricos; nomes de produtos não criam componentes novos."
+  },
+  "patternContract": {
+    "requiredFields": [
+      "variants",
+      "states",
+      "regions",
+      "actions",
+      "behavior",
+      "transitions",
+      "events",
+      "accessibility",
+      "initialState",
+      "terminalStates"
+    ],
+    "eventNaming": "lowercase dot-separated domain event",
+    "eventEnvelope": {
+      "required": [
+        "id",
+        "type",
+        "occurred_at",
+        "subject_id",
+        "data"
+      ],
+      "optional": [
+        "actor_id",
+        "correlation_id",
+        "causation_id",
+        "schema_version"
+      ]
+    },
+    "transitionShape": [
+      "from",
+      "action",
+      "to"
+    ],
+    "rule": "Every composed pattern is optional, generic, and implementable without product-specific widgets."
+  },
+  "applicationPatterns": {
+    "states": [
+      "booting",
+      "loading",
+      "ready",
+      "empty",
+      "partial",
+      "refreshing",
+      "stale",
+      "offline",
+      "syncing",
+      "conflict",
+      "unauthorized",
+      "forbidden",
+      "not_found",
+      "rate_limited",
+      "error",
+      "success"
+    ],
+    "patterns": {
+      "AppShell": {
+        "variants": [
+          "public",
+          "app",
+          "admin",
+          "workspace",
+          "mobile",
+          "sidebar",
+          "topbar",
+          "bottom_nav",
+          "split_view",
+          "command_surface"
+        ],
+        "states": [
+          "booting",
+          "ready",
+          "offline",
+          "degraded",
+          "locked"
+        ],
+        "behavior": [
+          "navigation adapts without losing destinations",
+          "global status and identity remain visible",
+          "dirty work blocks accidental navigation"
+        ],
+        "events": [
+          {
+            "name": "shell.ready",
+            "when": "after the ready state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "navigation.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "command.opened",
+            "when": "after the opened state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "connection.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "session.locked",
+            "when": "after the locked state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "skip link reaches main content",
+          "landmarks and current location are announced",
+          "mobile navigation traps and restores focus"
+        ],
+        "regions": [
+          "skip_link",
+          "global_navigation",
+          "context_header",
+          "main",
+          "utility",
+          "status"
+        ],
+        "actions": [
+          "navigate",
+          "open_command",
+          "switch_context",
+          "lock",
+          "reconnect"
+        ],
+        "initialState": "booting",
+        "terminalStates": [
+          "locked"
+        ],
+        "transitions": [
+          {
+            "from": "booting",
+            "action": "initialize",
+            "to": "ready"
+          },
+          {
+            "from": "ready",
+            "action": "lose_connection",
+            "to": "offline"
+          },
+          {
+            "from": "offline",
+            "action": "reconnect",
+            "to": "ready"
+          },
+          {
+            "from": "ready",
+            "action": "degrade",
+            "to": "degraded"
+          },
+          {
+            "from": "degraded",
+            "action": "recover",
+            "to": "ready"
+          },
+          {
+            "from": "ready",
+            "action": "lock",
+            "to": "locked"
+          }
+        ]
+      },
+      "CollectionWorkbench": {
+        "variants": [
+          "table",
+          "list",
+          "grid",
+          "gallery",
+          "lightbox",
+          "board",
+          "tree",
+          "calendar",
+          "map",
+          "matrix",
+          "master_detail",
+          "inspector",
+          "settings"
+        ],
+        "states": [
+          "loading",
+          "ready",
+          "empty",
+          "no_results",
+          "partial",
+          "refreshing",
+          "error"
+        ],
+        "behavior": [
+          "search filter facet sort and saved view compose independently",
+          "selection enables explicit bulk actions",
+          "pagination or virtualization preserves position",
+          "view changes preserve query state"
+        ],
+        "events": [
+          {
+            "name": "collection.loaded",
+            "when": "after the loaded state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "query.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "view.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "selection.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "bulk.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "page.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "item.opened",
+            "when": "after the opened state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          }
+        ],
+        "accessibility": [
+          "result count and updates are announced",
+          "sorting exposes direction",
+          "grid and drag interactions have keyboard alternatives",
+          "selection is not color-only"
+        ],
+        "regions": [
+          "title",
+          "toolbar",
+          "filters",
+          "results",
+          "selection_actions",
+          "pagination",
+          "inspector"
+        ],
+        "actions": [
+          "search",
+          "filter",
+          "facet",
+          "sort",
+          "save_view",
+          "change_view",
+          "select",
+          "bulk",
+          "open",
+          "page"
+        ],
+        "initialState": "loading",
+        "terminalStates": [],
+        "transitions": [
+          {
+            "from": "loading",
+            "action": "load",
+            "to": "ready"
+          },
+          {
+            "from": "loading",
+            "action": "resolve_empty",
+            "to": "empty"
+          },
+          {
+            "from": "ready",
+            "action": "query_no_results",
+            "to": "no_results"
+          },
+          {
+            "from": "ready",
+            "action": "refresh",
+            "to": "refreshing"
+          },
+          {
+            "from": "refreshing",
+            "action": "complete",
+            "to": "ready"
+          },
+          {
+            "from": "refreshing",
+            "action": "partial",
+            "to": "partial"
+          },
+          {
+            "from": "loading",
+            "action": "fail",
+            "to": "error"
+          },
+          {
+            "from": "error",
+            "action": "retry",
+            "to": "loading"
+          }
+        ]
+      },
+      "FormFlow": {
+        "variants": [
+          "form",
+          "wizard",
+          "survey",
+          "onboarding",
+          "checkout",
+          "bulk_edit"
+        ],
+        "states": [
+          "pristine",
+          "editing",
+          "invalid",
+          "saving",
+          "saved",
+          "submitting",
+          "submitted",
+          "conflict",
+          "error"
+        ],
+        "behavior": [
+          "validation occurs at field and summary levels",
+          "draft and autosave disclose status",
+          "review precedes consequential submission",
+          "back navigation preserves entered data"
+        ],
+        "events": [
+          {
+            "name": "form.started",
+            "when": "after the started state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "field.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "draft.saved",
+            "when": "after the saved state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "validation.failed",
+            "when": "after the failed state change",
+            "payloadRequired": [
+              "error_code",
+              "retryable"
+            ]
+          },
+          {
+            "name": "step.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "form.submitted",
+            "when": "after the submitted state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "form.abandoned",
+            "when": "after the abandoned state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "labels instructions and errors are programmatic",
+          "error summary links to fields",
+          "authentication avoids cognitive-function tests",
+          "required state is not color-only"
+        ],
+        "regions": [
+          "instructions",
+          "error_summary",
+          "fields",
+          "progress",
+          "review",
+          "actions",
+          "save_status"
+        ],
+        "actions": [
+          "edit",
+          "validate",
+          "save_draft",
+          "back",
+          "next",
+          "review",
+          "submit",
+          "discard"
+        ],
+        "initialState": "pristine",
+        "terminalStates": [
+          "submitted"
+        ],
+        "transitions": [
+          {
+            "from": "pristine",
+            "action": "edit",
+            "to": "editing"
+          },
+          {
+            "from": "editing",
+            "action": "validate_invalid",
+            "to": "invalid"
+          },
+          {
+            "from": "invalid",
+            "action": "edit",
+            "to": "editing"
+          },
+          {
+            "from": "editing",
+            "action": "save",
+            "to": "saving"
+          },
+          {
+            "from": "saving",
+            "action": "complete",
+            "to": "saved"
+          },
+          {
+            "from": "editing",
+            "action": "submit",
+            "to": "submitting"
+          },
+          {
+            "from": "submitting",
+            "action": "complete",
+            "to": "submitted"
+          },
+          {
+            "from": "submitting",
+            "action": "conflict",
+            "to": "conflict"
+          },
+          {
+            "from": "submitting",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      },
+      "ContentWorkbench": {
+        "variants": [
+          "rich_text",
+          "markdown",
+          "code",
+          "document",
+          "cms",
+          "docs",
+          "blog",
+          "portfolio",
+          "preview"
+        ],
+        "states": [
+          "loading",
+          "editing",
+          "dirty",
+          "autosaving",
+          "saved",
+          "review",
+          "published",
+          "conflict",
+          "error"
+        ],
+        "behavior": [
+          "source preview outline and assets remain synchronized",
+          "version history supports compare and restore",
+          "publish is separate from save"
+        ],
+        "events": [
+          {
+            "name": "content.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "draft.saved",
+            "when": "after the saved state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "preview.updated",
+            "when": "after the updated state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "review.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "version.restored",
+            "when": "after the restored state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "content.published",
+            "when": "after the published state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "toolbar has keyboard navigation",
+          "editing mode is announced",
+          "structure is available without visual styling",
+          "autosave status uses a live region"
+        ],
+        "regions": [
+          "outline",
+          "editor",
+          "toolbar",
+          "assets",
+          "preview",
+          "versions",
+          "publish_status"
+        ],
+        "actions": [
+          "edit",
+          "save",
+          "preview",
+          "request_review",
+          "publish",
+          "restore"
+        ],
+        "initialState": "loading",
+        "terminalStates": [
+          "published"
+        ],
+        "transitions": [
+          {
+            "from": "loading",
+            "action": "load",
+            "to": "saved"
+          },
+          {
+            "from": "saved",
+            "action": "edit",
+            "to": "editing"
+          },
+          {
+            "from": "editing",
+            "action": "change",
+            "to": "dirty"
+          },
+          {
+            "from": "dirty",
+            "action": "autosave",
+            "to": "autosaving"
+          },
+          {
+            "from": "autosaving",
+            "action": "complete",
+            "to": "saved"
+          },
+          {
+            "from": "saved",
+            "action": "request_review",
+            "to": "review"
+          },
+          {
+            "from": "review",
+            "action": "publish",
+            "to": "published"
+          },
+          {
+            "from": "autosaving",
+            "action": "conflict",
+            "to": "conflict"
+          },
+          {
+            "from": "autosaving",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      },
+      "VisualBuilder": {
+        "variants": [
+          "workflow",
+          "automation",
+          "pipeline",
+          "diagram",
+          "whiteboard",
+          "layout"
+        ],
+        "states": [
+          "idle",
+          "editing",
+          "validating",
+          "invalid",
+          "running",
+          "paused",
+          "completed",
+          "failed"
+        ],
+        "behavior": [
+          "palette canvas inspector and run history are separable regions",
+          "undo redo and versioning cover structural edits",
+          "connect and move actions have non-drag alternatives",
+          "credentials are referenced never exposed"
+        ],
+        "events": [
+          {
+            "name": "node.added",
+            "when": "after the added state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "node.connected",
+            "when": "after the connected state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "node.configured",
+            "when": "after the configured state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "graph.validated",
+            "when": "after the validated state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "version.saved",
+            "when": "after the saved state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "run.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "run.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "run.failed",
+            "when": "after the failed state change",
+            "payloadRequired": [
+              "error_code",
+              "retryable"
+            ]
+          }
+        ],
+        "accessibility": [
+          "canvas has an equivalent ordered outline",
+          "nodes and ports have accessible names",
+          "keyboard can add connect move delete and configure",
+          "validation errors link to nodes"
+        ],
+        "regions": [
+          "palette",
+          "canvas",
+          "outline",
+          "inspector",
+          "variables",
+          "run_history",
+          "actions"
+        ],
+        "actions": [
+          "add",
+          "connect",
+          "configure",
+          "move",
+          "delete",
+          "undo",
+          "redo",
+          "validate",
+          "run",
+          "pause"
+        ],
+        "initialState": "idle",
+        "terminalStates": [
+          "completed",
+          "failed"
+        ],
+        "transitions": [
+          {
+            "from": "idle",
+            "action": "edit",
+            "to": "editing"
+          },
+          {
+            "from": "editing",
+            "action": "validate",
+            "to": "validating"
+          },
+          {
+            "from": "validating",
+            "action": "reject",
+            "to": "invalid"
+          },
+          {
+            "from": "invalid",
+            "action": "edit",
+            "to": "editing"
+          },
+          {
+            "from": "validating",
+            "action": "accept",
+            "to": "idle"
+          },
+          {
+            "from": "idle",
+            "action": "run",
+            "to": "running"
+          },
+          {
+            "from": "running",
+            "action": "pause",
+            "to": "paused"
+          },
+          {
+            "from": "paused",
+            "action": "resume",
+            "to": "running"
+          },
+          {
+            "from": "running",
+            "action": "complete",
+            "to": "completed"
+          },
+          {
+            "from": "running",
+            "action": "fail",
+            "to": "failed"
+          }
+        ]
+      },
+      "AnalyticsWorkbench": {
+        "variants": [
+          "dashboard",
+          "explore",
+          "report",
+          "realtime",
+          "funnel",
+          "cohort"
+        ],
+        "states": [
+          "loading",
+          "ready",
+          "empty",
+          "partial",
+          "refreshing",
+          "stale",
+          "error"
+        ],
+        "behavior": [
+          "time range filters and segments apply consistently",
+          "drilldown preserves context and supports return",
+          "visualization always has a tabular alternative",
+          "export records scope and freshness"
+        ],
+        "events": [
+          {
+            "name": "range.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "filter.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "segment.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "drilldown.opened",
+            "when": "after the opened state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "annotation.created",
+            "when": "after the created state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "report.exported",
+            "when": "after the exported state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "data.refreshed",
+            "when": "after the refreshed state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "charts have summaries and data tables",
+          "updates are announced without stealing focus",
+          "color is not the sole series distinction"
+        ],
+        "regions": [
+          "kpis",
+          "time_range",
+          "filters",
+          "segments",
+          "visualization",
+          "data_table",
+          "annotations",
+          "export"
+        ],
+        "actions": [
+          "change_range",
+          "filter",
+          "segment",
+          "compare",
+          "drilldown",
+          "annotate",
+          "export",
+          "refresh"
+        ],
+        "initialState": "loading",
+        "terminalStates": [],
+        "transitions": [
+          {
+            "from": "loading",
+            "action": "load",
+            "to": "ready"
+          },
+          {
+            "from": "loading",
+            "action": "resolve_empty",
+            "to": "empty"
+          },
+          {
+            "from": "ready",
+            "action": "refresh",
+            "to": "refreshing"
+          },
+          {
+            "from": "refreshing",
+            "action": "complete",
+            "to": "ready"
+          },
+          {
+            "from": "refreshing",
+            "action": "partial",
+            "to": "partial"
+          },
+          {
+            "from": "ready",
+            "action": "become_stale",
+            "to": "stale"
+          },
+          {
+            "from": "stale",
+            "action": "refresh",
+            "to": "refreshing"
+          },
+          {
+            "from": "loading",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      },
+      "MediaLibrary": {
+        "variants": [
+          "audio",
+          "video",
+          "image",
+          "playlist",
+          "queue",
+          "channel"
+        ],
+        "states": [
+          "loading",
+          "ready",
+          "empty",
+          "playing",
+          "paused",
+          "buffering",
+          "offline",
+          "error"
+        ],
+        "behavior": [
+          "library queue playback and item detail share one selection",
+          "resume position and history are explicit",
+          "chapters tracks captions quality and devices are optional capabilities",
+          "bulk organize never interrupts playback"
+        ],
+        "events": [
+          {
+            "name": "media.opened",
+            "when": "after the opened state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "queue.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "playlist.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "chapter.selected",
+            "when": "after the selected state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "track.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "playback.resumed",
+            "when": "after the resumed state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "media.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "all transport controls have names and state",
+          "captions transcript and audio description are discoverable",
+          "gallery selection works by keyboard",
+          "autoplay never surprises"
+        ],
+        "regions": [
+          "library",
+          "item_detail",
+          "player",
+          "queue",
+          "tracks",
+          "chapters",
+          "history",
+          "actions"
+        ],
+        "actions": [
+          "play",
+          "pause",
+          "seek",
+          "queue",
+          "playlist",
+          "chapter",
+          "track",
+          "resume",
+          "favorite"
+        ],
+        "initialState": "loading",
+        "terminalStates": [],
+        "transitions": [
+          {
+            "from": "loading",
+            "action": "load",
+            "to": "ready"
+          },
+          {
+            "from": "loading",
+            "action": "resolve_empty",
+            "to": "empty"
+          },
+          {
+            "from": "ready",
+            "action": "play",
+            "to": "playing"
+          },
+          {
+            "from": "playing",
+            "action": "pause",
+            "to": "paused"
+          },
+          {
+            "from": "paused",
+            "action": "play",
+            "to": "playing"
+          },
+          {
+            "from": "playing",
+            "action": "buffer",
+            "to": "buffering"
+          },
+          {
+            "from": "buffering",
+            "action": "resume",
+            "to": "playing"
+          },
+          {
+            "from": "playing",
+            "action": "lose_connection",
+            "to": "offline"
+          },
+          {
+            "from": "loading",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      },
+      "IdentityAccess": {
+        "variants": [
+          "sign_in",
+          "sign_up",
+          "mfa",
+          "recovery",
+          "profile",
+          "organization",
+          "roles"
+        ],
+        "states": [
+          "anonymous",
+          "authenticating",
+          "challenged",
+          "authenticated",
+          "expired",
+          "locked",
+          "error"
+        ],
+        "behavior": [
+          "identity organization and active role are explicit",
+          "privilege elevation requires confirmation",
+          "session expiry preserves safe drafts",
+          "secrets remain masked and copy is deliberate"
+        ],
+        "events": [
+          {
+            "name": "auth.started",
+            "when": "after the started state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "challenge.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "auth.succeeded",
+            "when": "after the succeeded state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "auth.failed",
+            "when": "after the failed state change",
+            "payloadRequired": [
+              "error_code",
+              "retryable"
+            ]
+          },
+          {
+            "name": "session.expired",
+            "when": "after the expired state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "role.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "recovery.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "authentication supports password managers and paste",
+          "errors do not reveal account existence",
+          "focus reaches the first invalid field",
+          "timeouts and reauthentication are announced"
+        ],
+        "regions": [
+          "identity",
+          "credentials",
+          "challenge",
+          "recovery",
+          "session",
+          "organization",
+          "roles"
+        ],
+        "actions": [
+          "sign_in",
+          "challenge",
+          "recover",
+          "switch_role",
+          "sign_out"
+        ],
+        "initialState": "anonymous",
+        "terminalStates": [
+          "locked"
+        ],
+        "transitions": [
+          {
+            "from": "anonymous",
+            "action": "sign_in",
+            "to": "authenticating"
+          },
+          {
+            "from": "authenticating",
+            "action": "challenge",
+            "to": "challenged"
+          },
+          {
+            "from": "challenged",
+            "action": "verify",
+            "to": "authenticated"
+          },
+          {
+            "from": "authenticating",
+            "action": "succeed",
+            "to": "authenticated"
+          },
+          {
+            "from": "authenticating",
+            "action": "fail",
+            "to": "error"
+          },
+          {
+            "from": "authenticated",
+            "action": "expire",
+            "to": "expired"
+          },
+          {
+            "from": "expired",
+            "action": "sign_in",
+            "to": "authenticating"
+          },
+          {
+            "from": "authenticated",
+            "action": "lock",
+            "to": "locked"
+          },
+          {
+            "from": "authenticated",
+            "action": "sign_out",
+            "to": "anonymous"
+          }
+        ]
+      },
+      "TransactionFlow": {
+        "variants": [
+          "cart",
+          "order",
+          "invoice",
+          "payment",
+          "subscription",
+          "refund",
+          "reconciliation"
+        ],
+        "states": [
+          "draft",
+          "pending",
+          "processing",
+          "requires_action",
+          "settled",
+          "failed",
+          "cancelled",
+          "refunded",
+          "disputed"
+        ],
+        "behavior": [
+          "amount currency fees and consequences appear before commit",
+          "idempotent submission prevents duplicates",
+          "immutable receipt follows every terminal result",
+          "reversal and dispute preserve the original transaction"
+        ],
+        "events": [
+          {
+            "name": "transaction.started",
+            "when": "after the started state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "amount.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "payment.authorized",
+            "when": "after the authorized state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "transaction.settled",
+            "when": "after the settled state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "transaction.failed",
+            "when": "after the failed state change",
+            "payloadRequired": [
+              "error_code",
+              "retryable"
+            ]
+          },
+          {
+            "name": "refund.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "reconciliation.completed",
+            "when": "after the completed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "totals and errors are textual",
+          "review step prevents financial mistakes",
+          "status updates use live regions",
+          "numeric input supports locale"
+        ],
+        "regions": [
+          "items",
+          "amounts",
+          "payment",
+          "review",
+          "status",
+          "receipt",
+          "reversal"
+        ],
+        "actions": [
+          "create",
+          "review",
+          "authorize",
+          "cancel",
+          "refund",
+          "reconcile"
+        ],
+        "initialState": "draft",
+        "terminalStates": [
+          "settled",
+          "failed",
+          "cancelled",
+          "refunded"
+        ],
+        "transitions": [
+          {
+            "from": "draft",
+            "action": "submit",
+            "to": "pending"
+          },
+          {
+            "from": "pending",
+            "action": "process",
+            "to": "processing"
+          },
+          {
+            "from": "processing",
+            "action": "require_action",
+            "to": "requires_action"
+          },
+          {
+            "from": "requires_action",
+            "action": "authorize",
+            "to": "processing"
+          },
+          {
+            "from": "processing",
+            "action": "settle",
+            "to": "settled"
+          },
+          {
+            "from": "processing",
+            "action": "fail",
+            "to": "failed"
+          },
+          {
+            "from": "pending",
+            "action": "cancel",
+            "to": "cancelled"
+          },
+          {
+            "from": "settled",
+            "action": "refund",
+            "to": "refunded"
+          },
+          {
+            "from": "settled",
+            "action": "dispute",
+            "to": "disputed"
+          }
+        ]
+      },
+      "SchedulePlanner": {
+        "variants": [
+          "calendar",
+          "agenda",
+          "timeline",
+          "booking",
+          "recurrence",
+          "availability"
+        ],
+        "states": [
+          "loading",
+          "ready",
+          "empty",
+          "selecting",
+          "conflict",
+          "confirmed",
+          "cancelled",
+          "error"
+        ],
+        "behavior": [
+          "timezone and locale remain visible",
+          "recurrence has a human-readable summary",
+          "conflicts offer alternatives",
+          "drag scheduling has form and keyboard equivalents"
+        ],
+        "events": [
+          {
+            "name": "range.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "slot.selected",
+            "when": "after the selected state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "conflict.detected",
+            "when": "after the detected state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "booking.confirmed",
+            "when": "after the confirmed state change",
+            "payloadRequired": [
+              "result_id"
+            ]
+          },
+          {
+            "name": "event.rescheduled",
+            "when": "after the rescheduled state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "reminder.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "event.cancelled",
+            "when": "after the cancelled state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "calendar has agenda alternative",
+          "dates and times are spoken unambiguously",
+          "keyboard can create move and resize events"
+        ],
+        "regions": [
+          "timezone",
+          "calendar",
+          "agenda",
+          "availability",
+          "details",
+          "conflicts",
+          "actions"
+        ],
+        "actions": [
+          "select_slot",
+          "create",
+          "reschedule",
+          "repeat",
+          "remind",
+          "cancel"
+        ],
+        "initialState": "loading",
+        "terminalStates": [
+          "confirmed",
+          "cancelled"
+        ],
+        "transitions": [
+          {
+            "from": "loading",
+            "action": "load",
+            "to": "ready"
+          },
+          {
+            "from": "loading",
+            "action": "resolve_empty",
+            "to": "empty"
+          },
+          {
+            "from": "ready",
+            "action": "select",
+            "to": "selecting"
+          },
+          {
+            "from": "selecting",
+            "action": "detect_conflict",
+            "to": "conflict"
+          },
+          {
+            "from": "conflict",
+            "action": "select",
+            "to": "selecting"
+          },
+          {
+            "from": "selecting",
+            "action": "confirm",
+            "to": "confirmed"
+          },
+          {
+            "from": "confirmed",
+            "action": "cancel",
+            "to": "cancelled"
+          },
+          {
+            "from": "loading",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      },
+      "SpatialWorkbench": {
+        "variants": [
+          "map",
+          "list_map",
+          "route",
+          "layers",
+          "geofence",
+          "location_picker"
+        ],
+        "states": [
+          "loading",
+          "ready",
+          "locating",
+          "route_ready",
+          "offline",
+          "permission_denied",
+          "error"
+        ],
+        "behavior": [
+          "map selection is mirrored in a list",
+          "location permission is contextual and revocable",
+          "routes expose steps and alternatives",
+          "offline mode discloses data freshness"
+        ],
+        "events": [
+          {
+            "name": "location.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "location.selected",
+            "when": "after the selected state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "layer.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "route.calculated",
+            "when": "after the calculated state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "viewport.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "geofence.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          }
+        ],
+        "accessibility": [
+          "all map actions have list or form equivalents",
+          "markers have accessible names",
+          "zoom is not the only way to reach detail"
+        ],
+        "regions": [
+          "map",
+          "equivalent_list",
+          "layers",
+          "route_steps",
+          "details",
+          "permissions",
+          "actions"
+        ],
+        "actions": [
+          "locate",
+          "select",
+          "route",
+          "toggle_layer",
+          "geofence",
+          "recenter"
+        ],
+        "initialState": "loading",
+        "terminalStates": [
+          "permission_denied"
+        ],
+        "transitions": [
+          {
+            "from": "loading",
+            "action": "load",
+            "to": "ready"
+          },
+          {
+            "from": "ready",
+            "action": "locate",
+            "to": "locating"
+          },
+          {
+            "from": "locating",
+            "action": "grant",
+            "to": "ready"
+          },
+          {
+            "from": "locating",
+            "action": "deny",
+            "to": "permission_denied"
+          },
+          {
+            "from": "ready",
+            "action": "route",
+            "to": "route_ready"
+          },
+          {
+            "from": "ready",
+            "action": "lose_connection",
+            "to": "offline"
+          },
+          {
+            "from": "offline",
+            "action": "reconnect",
+            "to": "ready"
+          },
+          {
+            "from": "loading",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      },
+      "DeviceControl": {
+        "variants": [
+          "fleet",
+          "detail",
+          "telemetry",
+          "command",
+          "calibration",
+          "alerts"
+        ],
+        "states": [
+          "unknown",
+          "online",
+          "degraded",
+          "offline",
+          "updating",
+          "calibrating",
+          "alert",
+          "error"
+        ],
+        "behavior": [
+          "telemetry timestamp and confidence are visible",
+          "commands show target scope and expected effect",
+          "unsafe actions require gated confirmation",
+          "calibration retains defaults and rollback"
+        ],
+        "events": [
+          {
+            "name": "device.selected",
+            "when": "after the selected state change",
+            "payloadRequired": [
+              "target_id"
+            ]
+          },
+          {
+            "name": "telemetry.updated",
+            "when": "after the updated state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "command.requested",
+            "when": "after the requested state change",
+            "payloadRequired": [
+              "request_id",
+              "scope"
+            ]
+          },
+          {
+            "name": "command.acknowledged",
+            "when": "after the acknowledged state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          },
+          {
+            "name": "calibration.changed",
+            "when": "after the changed state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "firmware.updated",
+            "when": "after the updated state change",
+            "payloadRequired": [
+              "previous",
+              "current"
+            ]
+          },
+          {
+            "name": "alert.acknowledged",
+            "when": "after the acknowledged state change",
+            "payloadRequired": [
+              "subject_id"
+            ]
+          }
+        ],
+        "accessibility": [
+          "status is text and color",
+          "live telemetry can be paused",
+          "controls expose current value and unit",
+          "critical alerts do not rely on sound"
+        ],
+        "regions": [
+          "fleet",
+          "device_detail",
+          "telemetry",
+          "commands",
+          "calibration",
+          "alerts",
+          "audit"
+        ],
+        "actions": [
+          "select",
+          "command",
+          "confirm",
+          "calibrate",
+          "update",
+          "acknowledge",
+          "pause_live"
+        ],
+        "initialState": "unknown",
+        "terminalStates": [],
+        "transitions": [
+          {
+            "from": "unknown",
+            "action": "connect",
+            "to": "online"
+          },
+          {
+            "from": "online",
+            "action": "degrade",
+            "to": "degraded"
+          },
+          {
+            "from": "degraded",
+            "action": "recover",
+            "to": "online"
+          },
+          {
+            "from": "online",
+            "action": "disconnect",
+            "to": "offline"
+          },
+          {
+            "from": "online",
+            "action": "update",
+            "to": "updating"
+          },
+          {
+            "from": "updating",
+            "action": "complete",
+            "to": "online"
+          },
+          {
+            "from": "online",
+            "action": "calibrate",
+            "to": "calibrating"
+          },
+          {
+            "from": "calibrating",
+            "action": "complete",
+            "to": "online"
+          },
+          {
+            "from": "online",
+            "action": "raise_alert",
+            "to": "alert"
+          },
+          {
+            "from": "alert",
+            "action": "acknowledge",
+            "to": "online"
+          },
+          {
+            "from": "online",
+            "action": "fail",
+            "to": "error"
+          }
+        ]
+      }
+    },
+    "archetypes": {
+      "public_site": {
+        "patterns": [
+          "AppShell",
+          "ContentWorkbench",
+          "FormFlow"
+        ],
+        "capabilities": [
+          "landing",
+          "docs",
+          "blog",
+          "portfolio",
+          "search",
+          "conversion"
+        ],
+        "invariants": [
+          "public content works without authentication",
+          "reading order survives reflow"
+        ]
+      },
+      "docs_cms": {
+        "patterns": [
+          "AppShell",
+          "ContentWorkbench",
+          "CollectionWorkbench"
+        ],
+        "capabilities": [
+          "search",
+          "outline",
+          "assets",
+          "versioning",
+          "publishing"
+        ],
+        "invariants": [
+          "save is distinct from publish",
+          "restores preserve version provenance"
+        ]
+      },
+      "saas_admin": {
+        "patterns": [
+          "AppShell",
+          "CollectionWorkbench",
+          "FormFlow",
+          "IdentityAccess"
+        ],
+        "capabilities": [
+          "navigation",
+          "CRUD",
+          "settings",
+          "roles"
+        ],
+        "invariants": [
+          "writes expose validation and result",
+          "active organization and role stay visible"
+        ]
+      },
+      "dashboard_bi": {
+        "patterns": [
+          "AppShell",
+          "AnalyticsWorkbench",
+          "CollectionWorkbench"
+        ],
+        "capabilities": [
+          "KPI",
+          "time range",
+          "segments",
+          "drilldown",
+          "export"
+        ],
+        "invariants": [
+          "every chart has a tabular alternative",
+          "filter scope persists through drilldown"
+        ]
+      },
+      "catalog_gallery": {
+        "patterns": [
+          "CollectionWorkbench",
+          "MediaLibrary",
+          "FormFlow"
+        ],
+        "capabilities": [
+          "facets",
+          "saved views",
+          "gallery",
+          "lightbox",
+          "selection",
+          "bulk actions"
+        ],
+        "invariants": [
+          "view changes preserve the query",
+          "selection remains explicit across pagination"
+        ]
+      },
+      "media_streaming": {
+        "patterns": [
+          "MediaLibrary",
+          "CaptureTranscript",
+          "ResourceWorkbench"
+        ],
+        "capabilities": [
+          "library",
+          "queue",
+          "playlist",
+          "tracks",
+          "chapters",
+          "resume"
+        ],
+        "invariants": [
+          "library actions never interrupt playback unexpectedly",
+          "capture requires consent and provenance"
+        ]
+      },
+      "workflow_automation": {
+        "patterns": [
+          "VisualBuilder",
+          "RunSession",
+          "ReviewCompare"
+        ],
+        "capabilities": [
+          "node graph",
+          "variables",
+          "credentials",
+          "debug",
+          "run history"
+        ],
+        "invariants": [
+          "credentials are referenced never displayed",
+          "canvas actions have keyboard alternatives"
+        ]
+      },
+      "developer_tools": {
+        "patterns": [
+          "AppShell",
+          "ResourceWorkbench",
+          "ContentWorkbench",
+          "RunSession",
+          "ReviewCompare"
+        ],
+        "capabilities": [
+          "workspace",
+          "files",
+          "editor",
+          "terminal",
+          "tests",
+          "builds",
+          "artifacts",
+          "rollback"
+        ],
+        "invariants": [
+          "all outputs share correlation IDs",
+          "dangerous commands disclose scope before execution"
+        ]
+      },
+      "file_cloud": {
+        "patterns": [
+          "CollectionWorkbench",
+          "ResourceWorkbench"
+        ],
+        "capabilities": [
+          "browse",
+          "transfer",
+          "resume",
+          "checksum",
+          "conflict",
+          "restore"
+        ],
+        "invariants": [
+          "resume validates checksum",
+          "restore retains provenance"
+        ]
+      },
+      "messaging_social": {
+        "patterns": [
+          "ConversationChannel",
+          "CollectionWorkbench",
+          "MediaLibrary"
+        ],
+        "capabilities": [
+          "threads",
+          "delivery",
+          "presence",
+          "comments",
+          "mentions",
+          "sharing"
+        ],
+        "invariants": [
+          "presence never grants permission",
+          "delivery and read state remain distinct"
+        ]
+      },
+      "commerce_finance": {
+        "patterns": [
+          "TransactionFlow",
+          "AnalyticsWorkbench",
+          "IdentityAccess",
+          "ReviewCompare"
+        ],
+        "capabilities": [
+          "cart",
+          "order",
+          "payment",
+          "invoice",
+          "subscription",
+          "refund",
+          "reconciliation"
+        ],
+        "invariants": [
+          "consequential writes are idempotent",
+          "terminal results produce immutable receipts"
+        ]
+      },
+      "booking_calendar": {
+        "patterns": [
+          "SchedulePlanner",
+          "FormFlow",
+          "TransactionFlow",
+          "IdentityAccess"
+        ],
+        "capabilities": [
+          "availability",
+          "recurrence",
+          "timezone",
+          "confirmation",
+          "payment"
+        ],
+        "invariants": [
+          "timezone is visible before confirmation",
+          "conflicts offer an alternate slot"
+        ]
+      },
+      "maps_logistics": {
+        "patterns": [
+          "SpatialWorkbench",
+          "CollectionWorkbench",
+          "ResourceWorkbench",
+          "SchedulePlanner"
+        ],
+        "capabilities": [
+          "maps",
+          "routes",
+          "layers",
+          "tracking",
+          "ETA"
+        ],
+        "invariants": [
+          "map selection mirrors a list",
+          "offline freshness is explicit"
+        ]
+      },
+      "iot_control": {
+        "patterns": [
+          "DeviceControl",
+          "AnalyticsWorkbench",
+          "RunSession",
+          "ReviewCompare"
+        ],
+        "capabilities": [
+          "fleet",
+          "telemetry",
+          "commands",
+          "alerts",
+          "calibration"
+        ],
+        "invariants": [
+          "unsafe commands are gated",
+          "telemetry always carries time and unit"
+        ]
+      },
+      "agent_ai": {
+        "patterns": [
+          "RunSession",
+          "ConversationChannel",
+          "ResourceWorkbench",
+          "ReviewCompare"
+        ],
+        "capabilities": [
+          "turns",
+          "tools",
+          "approval",
+          "receipts",
+          "provenance"
+        ],
+        "invariants": [
+          "approval is explicit",
+          "a terminal run cannot lose its receipt"
+        ]
+      },
+      "project_crm_erp": {
+        "patterns": [
+          "CollectionWorkbench",
+          "FormFlow",
+          "SchedulePlanner",
+          "ConversationChannel",
+          "VisualBuilder"
+        ],
+        "capabilities": [
+          "records",
+          "pipeline",
+          "assignments",
+          "history",
+          "automation"
+        ],
+        "invariants": [
+          "history is append-only for audited changes",
+          "bulk scope is shown before mutation"
+        ]
+      },
+      "education": {
+        "patterns": [
+          "ContentWorkbench",
+          "MediaLibrary",
+          "FormFlow",
+          "SchedulePlanner",
+          "AnalyticsWorkbench"
+        ],
+        "capabilities": [
+          "lessons",
+          "assessment",
+          "progress",
+          "sessions"
+        ],
+        "invariants": [
+          "progress is available without color",
+          "media has captions or transcript"
+        ]
+      },
+      "personal_productivity": {
+        "patterns": [
+          "AppShell",
+          "CollectionWorkbench",
+          "SchedulePlanner",
+          "ContentWorkbench"
+        ],
+        "capabilities": [
+          "tasks",
+          "notes",
+          "calendar",
+          "offline draft"
+        ],
+        "invariants": [
+          "offline edits remain recoverable",
+          "navigation preserves dirty work"
+        ]
+      },
+      "mobile_pwa": {
+        "patterns": [
+          "AppShell",
+          "FormFlow",
+          "CollectionWorkbench"
+        ],
+        "capabilities": [
+          "reflow",
+          "touch",
+          "offline",
+          "installable shell"
+        ],
+        "invariants": [
+          "all features work at 320 CSS pixels",
+          "touch and keyboard keep parity"
+        ]
+      },
+      "support_service": {
+        "patterns": [
+          "ConversationChannel",
+          "CollectionWorkbench",
+          "SchedulePlanner",
+          "RunSession"
+        ],
+        "capabilities": [
+          "inbox",
+          "case history",
+          "SLA",
+          "escalation"
+        ],
+        "invariants": [
+          "case and channel identity remain visible",
+          "escalation records reason and owner"
+        ]
+      },
+      "regulated_records": {
+        "patterns": [
+          "IdentityAccess",
+          "CollectionWorkbench",
+          "FormFlow",
+          "ReviewCompare"
+        ],
+        "capabilities": [
+          "consent",
+          "audit",
+          "error prevention",
+          "retention"
+        ],
+        "invariants": [
+          "least privilege is visible",
+          "consequential submission includes review and receipt"
+        ]
+      },
+      "creative_workspace": {
+        "patterns": [
+          "VisualBuilder",
+          "ContentWorkbench",
+          "MediaLibrary",
+          "ConversationChannel"
+        ],
+        "capabilities": [
+          "canvas",
+          "assets",
+          "versions",
+          "comments",
+          "review"
+        ],
+        "invariants": [
+          "every canvas operation has an outline alternative",
+          "versions support compare and restore"
+        ]
+      },
+      "observability_ops": {
+        "patterns": [
+          "AnalyticsWorkbench",
+          "RunSession",
+          "ResourceWorkbench",
+          "DeviceControl"
+        ],
+        "capabilities": [
+          "telemetry",
+          "logs",
+          "alerts",
+          "remediation"
+        ],
+        "invariants": [
+          "live updates can be paused",
+          "remediation links to alert and receipt"
+        ]
+      }
+    },
+    "rule": "Archetypes are recipes of optional patterns, never new component families.",
+    "recipeContract": {
+      "requiredFields": [
+        "patterns",
+        "capabilities",
+        "invariants"
+      ],
+      "rule": "Every announced archetype references existing patterns and states implementation invariants."
+    }
+  },
+  "universalCapabilities": {
+    "accessibility": {
+      "target": "WCAG 2.2 AA",
+      "requirements": [
+        "semantic HTML before ARIA",
+        "visible focus is never fully obscured",
+        "keyboard parity for pointer and drag actions",
+        "minimum 24 CSS pixel target with 44 CSS pixel touch recommendation",
+        "320 CSS pixel reflow without loss",
+        "status messages announced without focus theft",
+        "reduced motion and forced colors supported"
+      ]
+    },
+    "responsive": {
+      "viewports": [
+        320,
+        640,
+        768,
+        1024,
+        1280,
+        1536
+      ],
+      "requirements": [
+        "content reflows before horizontal page scroll",
+        "navigation adapts without losing destinations",
+        "dense data may scroll inside a labelled region",
+        "touch and keyboard keep feature parity"
+      ]
+    },
+    "data": {
+      "requirements": [
+        "loading empty no-results partial stale and error states",
+        "search sort filter facet pagination virtualization and bulk selection compose",
+        "import export and destructive mutation expose scope and receipt"
+      ]
+    },
+    "resilience": {
+      "requirements": [
+        "draft autosave retry resume undo restore and conflict preview",
+        "offline and stale data are explicit",
+        "idempotency for consequential writes"
+      ]
+    },
+    "internationalization": {
+      "requirements": [
+        "locale-aware date time number currency and pluralization",
+        "timezone is explicit when relevant",
+        "RTL and text expansion do not reorder meaning"
+      ]
+    },
+    "privacySecurity": {
+      "requirements": [
+        "secrets masked by default",
+        "least privilege and session expiry visible",
+        "consent and provenance for capture",
+        "privileged writes gated and receipted"
+      ]
+    },
+    "interaction": {
+      "requirements": [
+        "copy paste undo redo multiselect and shortcuts follow platform conventions",
+        "hover is never the only discovery mechanism",
+        "frequent keyboard actions do not animate",
+        "focus is restored after overlays"
+      ]
+    },
+    "performanceMotion": {
+      "requirements": [
+        "interaction motion stays at or below 300ms",
+        "transform and opacity preferred for motion",
+        "large collections define pagination or virtualization",
+        "live updates can be paused"
+      ]
+    }
+  }
+}

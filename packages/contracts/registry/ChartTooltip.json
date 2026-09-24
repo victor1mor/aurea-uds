@@ -1,0 +1,66 @@
+{
+  "name": "ChartTooltip",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Values under the pointer, on the same tooltip surface as the rest of Aurea.",
+  "icon": "chart--line",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "active",
+    "inactive"
+  ],
+  "tokens": [
+    "--border-strong",
+    "--foreground",
+    "--secondary",
+    "--space-1",
+    "--text-xs",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "tooltip",
+    "apg": "none as a widget: the value box follows the pointer and is not focusable. What a keyboard or screen reader user gets instead is the engine's accessibility layer on the chart itself, which announces each point as the arrow keys move through it.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "recharts",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Chart",
+      "ChartLegend",
+      "Tooltip"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/chart.tsx#ChartTooltip"
+  },
+  "props": [
+    {
+      "name": "defaultIndex",
+      "type": "number",
+      "default": "none",
+      "description": "Pins the tooltip to one data point instead of following the pointer. Written for a page with no pointer — a static preview, a print, a screenshot."
+    },
+    {
+      "name": "cursor",
+      "type": "object | false",
+      "default": "the Aurea cursor line",
+      "description": "The mark the engine draws under the pointer. `false` removes it."
+    },
+    {
+      "name": "…Tooltip",
+      "type": "ComponentProps<typeof Tooltip>",
+      "default": "none",
+      "description": "Everything else goes to the engine's Tooltip. `content` is the exception: it is what this component IS, so passing it would replace the Aurea surface."
+    }
+  ]
+}

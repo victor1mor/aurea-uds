@@ -1,0 +1,1794 @@
+{
+ "_gerado": "2026-08-22",
+ "_fonte": "MUI Material",
+ "_metodo": "camada de DOCUMENTAÇÃO (§11), lida da web. Complementa o inventário de CÓDIGO — não o substitui, e não substitui a leitura humana.",
+ "_controle": "button: 3 trechos + 0 seções conhecidas",
+ "paginas": 60,
+ "comErro": 1,
+ "porPagina": {
+  "accordion": {
+   "secoes": [
+    "Accordion",
+    "Introduction",
+    "Accordion 1",
+    "Accordion 2",
+    "Accordion Actions",
+    "Basics",
+    "Expand icon",
+    "Accordion 1",
+    "Accordion 2",
+    "Expanded by default",
+    "Expanded by default",
+    "Header",
+    "Transition",
+    "Custom transition using Fade",
+    "Default transition using Collapse",
+    "Disabled item",
+    "Accordion 1",
+    "Accordion 2",
+    "Disabled Accordion",
+    "Controlled Accordion",
+    "General settings I am an accordion",
+    "Users You are currently not an owner",
+    "Personal data",
+    "Customization",
+    "Only one expanded at a time",
+    "Collapsible Group Item #1",
+    "Collapsible Group Item #2",
+    "Collapsible Group Item #3",
+    "Changing heading level",
+    "Performance",
+    "Accessibility",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "< Accordion slotProps = { { heading : { component : 'h4' } } } > < AccordionSummary expandIcon = { < ExpandMoreIcon /> } aria-controls = \" panel1-content \" id = \" panel1-header \" > Accordion </ AccordionSummary > < AccordionDetails > Lorem ipsum dolor sit amet , consectetur adipiscing elit .",
+     "The Accordion component then derives the necessary aria-labelledby and id from its content.",
+     "< Accordion > < AccordionSummary id = \" panel-header \" aria-controls = \" panel-content \" > Header </ AccordionSummary > < AccordionDetails > Lorem ipsum dolor sit amet , consectetur adipiscing elit .",
+     "< div class = \" MuiAccordion-root \" > < h3 class = \" MuiAccordion-heading \" > < button class = \" MuiButtonBase-root MuiAccordionSummary-root \" aria-expanded = \" \" > < !"
+    ],
+    "acessibilidade": [
+     "• Blog • Store Contents Introduction Basics Expand icon Expanded by default Transition Disabled item Controlled Accordion Customization Only one expanded at a time Changing heading level Performance Accessibility Anatomy API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 8885
+  },
+  "alert": {
+   "secoes": [
+    "Alert",
+    "Introduction",
+    "Usage",
+    "Basics",
+    "Severity",
+    "Variants",
+    "Filled",
+    "Outlined",
+    "Color",
+    "Actions",
+    "Icons",
+    "Customization",
+    "Titles",
+    "Transitions",
+    "Accessibility",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Re-open Accessibility Here are some factors to consider to ensure that your Alert is accessible: Because alerts are not intended to interfere with the use of the app, your Alert component should never affect the keyboard focus.",
+     "If an alert contains an action, that action must have a tabindex of 0 so it can be reached by keyboard-only users."
+    ],
+    "aria": [
+     "By default, the Alert renders an element with the role=\"alert\" , which is the same as using aria-live=\"assertive\" and aria-atomic=\"true\" .",
+     "Less urgent messages should use a less aggressive method, such as overriding the default role with a role=\"status\" .",
+     "Dynamically rendered alerts are announced by screen readers; alerts that are already present on the page when it loads are not announced.",
+     "Color does not add meaning to the UI for users who require assistive technology.",
+     "You must ensure that any information conveyed through color is also denoted in other ways, such as within the text of the alert itself, or with additional hidden text that&#39;s read by screen readers."
+    ],
+    "acessibilidade": [
+     "Re-open Accessibility Here are some factors to consider to ensure that your Alert is accessible: Because alerts are not intended to interfere with the use of the app, your Alert component should never affect the keyboard focus.",
+     "• Blog • Store Contents Introduction Usage Basics Severity Variants Color Actions Icons Customization Titles Transitions Accessibility Anatomy API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 12472
+  },
+  "app-bar": {
+   "secoes": [
+    "App Bar",
+    "Basic App bar",
+    "App bar with menu",
+    "App bar with responsive menu",
+    "App bar with search field",
+    "Responsive App bar with Drawer",
+    "App bar with a primary search field",
+    "Dense (desktop only)",
+    "Prominent",
+    "Bottom App bar",
+    "Fixed placement",
+    "Scrolling",
+    "Hide App bar",
+    "Elevate App bar",
+    "Back to top",
+    "useScrollTrigger([options]) = trigger",
+    "Arguments",
+    "Returns",
+    "Examples",
+    "Enable color on dark",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "Markdown View as Markdown Feedback Bundle size Source Material Design Figma Sketch Basic App bar News Login App bar with menu Logout Photos App bar with responsive menu LOGO LOGO Products Pricing Blog App bar with search field A side searchbar.",
+     "MUI Responsive App bar with Drawer App bar with a primary search field A primary searchbar."
+    ]
+   },
+   "caracteres": 5810
+  },
+  "autocomplete": {
+   "secoes": [
+    "Autocomplete",
+    "Combo box",
+    "Options structure",
+    "Playground",
+    "Country select",
+    "Controlled states",
+    "Free solo",
+    "Search input",
+    "Creatable",
+    "Grouped",
+    "Disabled options",
+    "useAutocomplete",
+    "Customized hook",
+    "Asynchronous requests",
+    "Load on open",
+    "Search as you type",
+    "Google Maps place",
+    "Infinite loading",
+    "Single value rendering",
+    "Multiple values",
+    "Fixed options",
+    "Selection indicators",
+    "Limit tags",
+    "Sizes",
+    "Customization",
+    "Custom input",
+    "Globally customized options",
+    "GitHub&#39;s picker",
+    "Hint",
+    "Highlights",
+    "Custom filter",
+    "createFilterOptions(config) = filterOptions",
+    "Arguments",
+    "Returns",
+    "Advanced",
+    "Virtualization",
+    "Events",
+    "Limitations",
+    "autocomplete/autofill",
+    "iOS VoiceOver",
+    "ListboxComponent",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "This ensures the correct behavior of the scroll, for example when using the keyboard to navigate."
+    ],
+    "aria": [
+     "iOS VoiceOver VoiceOver on iOS Safari doesn&#39;t support the aria-owns attribute very well."
+    ],
+    "toque": [
+     "resetHighlightOnMouseLeave to clear mouse-created highlights when the pointer leaves the popup."
+    ],
+    "acessibilidade": [
+     "These props should be spread onto the rendered component for proper accessibility.",
+     "Accessibility (WAI-ARIA: https://www.w3.org/WAI/ARIA/apg/patterns/combobox/ ) We encourage the usage of a label for the textbox."
+    ]
+   },
+   "caracteres": 22537
+  },
+  "avatar": {
+   "secoes": [
+    "Avatar",
+    "Image avatars",
+    "Letter avatars",
+    "Sizes",
+    "Icon avatars",
+    "Variants",
+    "Fallbacks",
+    "Grouped",
+    "Total avatars",
+    "Custom surplus",
+    "Spacing",
+    "With badge",
+    "Avatar upload",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 10122
+  },
+  "backdrop": {
+   "secoes": [
+    "Backdrop",
+    "Example",
+    "Transitions",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 2627
+  },
+  "badge": {
+   "secoes": [
+    "Badge",
+    "Usage guidelines",
+    "Badge content",
+    "Dot badge",
+    "Visibility",
+    "Maximum value",
+    "Customization",
+    "Color",
+    "Badge alignment",
+    "Badge overlap",
+    "Custom styles",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "For example, use aria-label=\"Inbox, 4 unread messages\" instead of aria-label=\"Inbox\" on the target element.",
+     "4 Edit code < IconButton aria-label = \" show 4 unread messages \" > < Badge badgeContent = { 4 } color = \" primary \" > < MailIcon /> </ Badge > </ IconButton > <IconButton aria-label=\"show 4 unread messages\"> <Badge badgeContent={4} color=\"primary\"> <MailIcon /> </Badge> </IconButton> Press Enter to start editing Dot badge Use variant=\"dot\" for a compact status indicator without a count.",
+     "Edit code < IconButton aria-label = \" show new notifications \" > < Badge color = \" secondary \" variant = \" dot \" > < NotificationsIcon /> </ Badge > </ IconButton > <IconButton aria-label=\"show new notifications\"> <Badge color=\"secondary\" variant=\"dot\"> <NotificationsIcon /> </Badge> </IconButton> Press Enter to start editing Visibility Control badge visibility with the invisible prop.",
+     "Vertical Top Bottom Horizontal Right Left 1 12 99+ 999+ < IconButton aria-label = \" show 12 unread messages \" > < Badge badgeContent = { 12 } color = \" secondary \" anchorOrigin = { { vertical : 'top' , horizontal : 'right' , } } > < MailIcon /> </ Badge > </ IconButton > Badge overlap Use the overlap prop when the wrapped element is circular."
+    ],
+    "acessibilidade": [
+     "Label the element that owns the badge : A badge is a visual cue tied to another element, so its meaning should be part of that element&#39;s accessible name."
+    ]
+   },
+   "caracteres": 7918
+  },
+  "bottom-navigation": {
+   "secoes": [
+    "Bottom Navigation",
+    "Bottom navigation",
+    "Bottom navigation with no label",
+    "Fixed positioning",
+    "Third-party routing library",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3326
+  },
+  "box": {
+   "secoes": [
+    "Box",
+    "Introduction",
+    "Usage",
+    "Basics",
+    "Customization",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "acessibilidade": [
+     "Components like Container , Stack and Paper , by contrast, feature usage-specific props that make them ideal for certain use cases: Container for main layout orientation, Stack for one-dimensional layouts, and Paper for elevated surfaces."
+    ]
+   },
+   "caracteres": 4240
+  },
+  "breadcrumbs": {
+   "secoes": [
+    "Breadcrumbs",
+    "Basic breadcrumbs",
+    "Active last breadcrumb",
+    "Custom separator",
+    "Breadcrumbs with icons",
+    "Collapsed breadcrumbs",
+    "Condensed with menu",
+    "Customization",
+    "Integration with react-router",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "To prevent screen reader announcement of the visual separators between links, they are hidden with aria-hidden .",
+     "A nav element labeled with aria-label identifies the structure as a breadcrumb trail and makes it a navigation landmark so that it is easy to locate."
+    ],
+    "acessibilidade": [
+     "The accessibility of this component relies on: The set of links is structured using an ordered list ( <ol> element).",
+     "• Blog • Store Contents Basic breadcrumbs Active last breadcrumb Custom separator Breadcrumbs with icons Collapsed breadcrumbs Condensed with menu Customization Integration with react-router Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 6049
+  },
+  "button": {
+   "secoes": [
+    "Button",
+    "Basic button",
+    "Text button",
+    "Contained button",
+    "Outlined button",
+    "Handling clicks",
+    "Color",
+    "Sizes",
+    "Buttons with icons and label",
+    "Icon button",
+    "Sizes",
+    "Colors",
+    "Loading",
+    "Badge",
+    "File upload",
+    "Loading",
+    "Rendering non-native buttons",
+    "Customization",
+    "Complex button",
+    "Third-party routing library",
+    "Limitations",
+    "Cursor not-allowed",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "( isFetching && { loading : true } ) } > // ❌ Don't do this Copy Copied (or C ) Rendering non-native buttons The nativeButton prop can be used to allow buttons to remain keyboard accessible when passing a React component to the component prop that renders a non-interactive element like a <div> ."
+    ],
+    "toque": [
+     "Limitations Cursor not-allowed The ButtonBase component sets pointer-events: none; on disabled buttons, which prevents the appearance of a disabled cursor.",
+     "You can remove the pointer-events style on the disabled state of the <button> element: .MuiButtonBase-root:disabled { cursor : not-allowed ; pointer-events : auto ; } Copy Copied (or C ) However: You should add pointer-events: none; back when you need to display tooltips on disabled elements ."
+    ],
+    "acessibilidade": [
+     "( isFetching && { loading : true } ) } > // ❌ Don't do this Copy Copied (or C ) Rendering non-native buttons The nativeButton prop can be used to allow buttons to remain keyboard accessible when passing a React component to the component prop that renders a non-interactive element like a <div> ."
+    ]
+   },
+   "caracteres": 12895
+  },
+  "button-group": {
+   "secoes": [
+    "Button Group",
+    "Basic button group",
+    "Button variants",
+    "Sizes and colors",
+    "Vertical group",
+    "Split button",
+    "Disabled elevation",
+    "Loading",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 5035
+  },
+  "card": {
+   "secoes": [
+    "Card",
+    "Introduction",
+    "Basics",
+    "Outlined Card",
+    "Complex Interaction",
+    "Media",
+    "Primary action",
+    "UI Controls",
+    "Active state styles",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "It can be problematic in some situations, for example, you might want to display a video or a responsive image."
+    ]
+   },
+   "caracteres": 5312
+  },
+  "checkbox": {
+   "secoes": [
+    "Checkbox",
+    "Basic checkboxes",
+    "Label",
+    "Size",
+    "Color",
+    "Icon",
+    "Controlled",
+    "Indeterminate",
+    "FormGroup",
+    "Label placement",
+    "Customization",
+    "When to use",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "In this case, you can apply the additional attribute (for example aria-label , aria-labelledby , title ) via the slotProps.input prop.",
+     "< Checkbox value = \" checkedA \" slotProps = { { input : { 'aria-label' : 'Checkbox A' } , } } /> Copy Copied (or C ) API See the documentation below for a complete reference to all of the props and classes available to the components mentioned here."
+    ],
+    "acessibilidade": [
+     "It has no accessibility or UX implications.",
+     "Switches Accessibility (WAI-ARIA: https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/ ) All form controls should have labels, and this includes radio buttons, checkboxes, and switches.",
+     "• Blog • Store Contents Basic checkboxes Label Size Color Icon Controlled Indeterminate FormGroup Label placement Customization When to use Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 7250
+  },
+  "chip": {
+   "secoes": [
+    "Chip",
+    "Basic chip",
+    "Chip actions",
+    "Clickable",
+    "Deletable",
+    "Clickable and deletable",
+    "Clickable link",
+    "Custom delete icon",
+    "Chip adornments",
+    "Avatar chip",
+    "Icon chip",
+    "Color chip",
+    "Sizes chip",
+    "Multiline chip",
+    "Chip array",
+    "Chip playground",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "foco": [
+     "Angular jQuery Polymer React Vue.js Chip playground Chip Component variant filled outlined color default primary secondary error info success warning size medium small icon none icon avatar none letter img onDelete none default custom < Chip /> Accessibility If the Chip is deletable or clickable then it is a button in tab order."
+    ],
+    "acessibilidade": [
+     "Angular jQuery Polymer React Vue.js Chip playground Chip Component variant filled outlined color default primary secondary error info success warning size medium small icon none icon avatar none letter img onDelete none default custom < Chip /> Accessibility If the Chip is deletable or clickable then it is a button in tab order.",
+     "• Blog • Store Contents Basic chip Chip actions Clickable Deletable Clickable and deletable Clickable link Custom delete icon Chip adornments Avatar chip Icon chip Color chip Sizes chip Multiline chip Chip array Chip playground Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 8088
+  },
+  "click-away-listener": {
+   "secoes": [
+    "Click-Away Listener",
+    "Introduction",
+    "Basics",
+    "Import",
+    "Customization",
+    "Use with Portal",
+    "Listening for leading events",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "This can result in screen readers announcing that the child is clickable, even though this onClick handler has no effect on the child itself.",
+     "To prevent this behavior, add role=\"presentation\" to the child element: < ClickAwayListener > < div role = \" presentation \" > < h1 > non - interactive heading </ h1 > </ div > </ ClickAwayListener > Copy Copied (or C ) This is also required to fix a known issue in NVDA when using Firefox that prevents the announcement of alert messages—see this GitHub issue for details."
+    ],
+    "toque": [
+     "</Box> </Portal> ) : null} </div> </ClickAwayListener> Press Enter to start editing Listening for leading events By default, the Click-Away Listener component responds to trailing events —the end of a click or touch.",
+     "You can set the component to listen for leading events (the start of a click or touch) using the mouseEvent and touchEvent props, as shown in the following demo: When the component is set to listen for leading events, interactions with the scrollbar are ignored."
+    ],
+    "acessibilidade": [
+     "</Box> ) : null} </Box> </ClickAwayListener> Press Enter to start editing Accessibility By default, Click-Away Listener adds an onClick handler to its child.",
+     "• Blog • Store Contents Introduction Basics Import Customization Use with Portal Listening for leading events Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 5418
+  },
+  "components": {
+   "erro": "Error: 404 em https://mui.com/material-ui/react-components/"
+  },
+  "container": {
+   "secoes": [
+    "Container",
+    "Fluid",
+    "Fixed",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "< Container maxWidth = \" sm \" > Copy Copied (or C ) Fixed If you prefer to design for a fixed set of sizes instead of trying to accommodate a fully fluid viewport, you can set the fixed prop.",
+     "The max-width matches the min-width of the current breakpoint."
+    ]
+   },
+   "caracteres": 1975
+  },
+  "css-baseline": {
+   "secoes": [
+    "CSS Baseline",
+    "Global reset",
+    "Scoping on children",
+    "Approach",
+    "Page",
+    "Layout",
+    "Scrollbars",
+    "Color scheme",
+    "Typography",
+    "Customization",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "acessibilidade": [
+     "The colors of the scrollbars can be customized to improve the contrast (especially on Windows)."
+    ]
+   },
+   "caracteres": 5011
+  },
+  "dialog": {
+   "secoes": [
+    "Dialog",
+    "Introduction",
+    "Basics",
+    "Alerts",
+    "Transitions",
+    "Form dialogs",
+    "Customization",
+    "Full-screen dialogs",
+    "Optional sizes",
+    "Responsive full-screen",
+    "Confirmation dialogs",
+    "Non-modal dialog",
+    "Draggable dialog",
+    "Scrolling long content",
+    "Performance",
+    "Limitations",
+    "Supplementary projects",
+    "material-ui-confirm",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Use role=\"alertdialog\" to create an Alert Dialog.",
+     "This provides assistive technologies the correct purpose of the Dialog."
+    ],
+    "responsivo": [
+     "Open max-width dialog Responsive full-screen You may make a dialog responsively full screen using useMediaQuery .",
+     "down ( 'md' ) ) ; return < Dialog fullScreen = { fullScreen } /> ; } Copy Copied (or C ) Open responsive dialog Confirmation dialogs Confirmation dialogs require users to explicitly confirm their choice before an option is committed.",
+     "Open draggable dialog Scrolling long content When dialogs become too long for the user&#39;s viewport or device, they scroll.",
+     "• Blog • Store Contents Introduction Basics Alerts Transitions Form dialogs Customization Full-screen dialogs Optional sizes Responsive full-screen Confirmation dialogs Non-modal dialog Draggable dialog Scrolling long content Performance Limitations Supplementary projects material-ui-confirm Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "toque": [
+     "For example, if your site prompts for potential subscribers to fill in their email address, they can fill out the email field and touch &#39;Submit&#39;."
+    ],
+    "acessibilidade": [
+     "Accessibility Follow the Modal accessibility section .",
+     "• Blog • Store Contents Introduction Basics Alerts Transitions Form dialogs Customization Full-screen dialogs Optional sizes Responsive full-screen Confirmation dialogs Non-modal dialog Draggable dialog Scrolling long content Performance Limitations Supplementary projects material-ui-confirm Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 7276
+  },
+  "divider": {
+   "secoes": [
+    "Divider",
+    "Introduction",
+    "Basics",
+    "Variants",
+    "Orientation",
+    "Flex item",
+    "With children",
+    "Customization",
+    "Use with a List",
+    "Icon grouping",
+    "Accessibility",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Accessibility Due to its implicit role of separator , the Divider, which is a <hr> element, will be announced by screen readers as a \"Horizontal Splitter\" (or vertical, if you&#39;re using the orientation prop).",
+     "If you&#39;re using it as a purely stylistic element, we recommend setting aria-hidden=\"true\" which will make screen readers bypass it.",
+     "< Divider aria-hidden = \" true \" /> Copy Copied (or C ) If you&#39;re using the Divider to wrap other elements, such as text or chips, we recommend changing its rendered element to a plain <div> using the component prop, and setting role=\"presentation\" .",
+     "This ensures that it&#39;s not announced by screen readers while still preserving the semantics of the elements inside it."
+    ],
+    "acessibilidade": [
+     "When using vertical orientation, the Divider renders a <div> with the corresponding accessibility attributes instead of <hr> to adhere to the WAI-ARIA spec .",
+     "Accessibility Due to its implicit role of separator , the Divider, which is a <hr> element, will be announced by screen readers as a \"Horizontal Splitter\" (or vertical, if you&#39;re using the orientation prop).",
+     "• Blog • Store Contents Introduction Basics Variants Orientation Flex item With children Customization Use with a List Icon grouping Accessibility Anatomy API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 5413
+  },
+  "drawer": {
+   "secoes": [
+    "Drawer",
+    "Temporary drawer",
+    "Anchor",
+    "Swipeable",
+    "Swipeable edge",
+    "Keep mounted",
+    "Transition",
+    "Responsive drawer",
+    "Persistent drawer",
+    "Mini variant drawer",
+    "Permanent drawer",
+    "Full-height navigation",
+    "Clipped under the app bar",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "Some low-end mobile devices won&#39;t be able to follow the fingers at 60 FPS.",
+     "If you are on mobile, you can open the demo in CodeSandbox (\"edit\" icon) and swipe.",
+     "Responsive drawer You can use the temporary variant to display a drawer for small screens and permanent for a drawer for wider screens.",
+     "When the drawer is outside of the page grid and opens, the drawer forces other content to change size and adapt to the smaller viewport.",
+     "Persistent navigation drawers are acceptable for all sizes larger than mobile.",
+     "• Blog • Store Contents Temporary drawer Anchor Swipeable Swipeable edge Keep mounted Transition Responsive drawer Persistent drawer Mini variant drawer Permanent drawer Full-height navigation Clipped under the app bar API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "toque": [
+     "iOS has a \"swipe to go back\" feature that interferes with the discovery feature, so discovery has to be disabled.",
+     "If you are on mobile, you can open the demo in CodeSandbox (\"edit\" icon) and swipe."
+    ]
+   },
+   "caracteres": 7741
+  },
+  "floating-action-button": {
+   "secoes": [
+    "Floating Action Button",
+    "Basic FAB",
+    "Size",
+    "Animation",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 4403
+  },
+  "grid": {
+   "secoes": [
+    "Grid",
+    "How it works",
+    "Fluid grids",
+    "Basic grid",
+    "Multiple breakpoints",
+    "Spacing",
+    "Row and column spacing",
+    "Responsive values",
+    "Interactive",
+    "Auto-layout",
+    "Variable width content",
+    "Nested grid",
+    "Inheriting spacing",
+    "Inheriting columns",
+    "Columns",
+    "Offset",
+    "Custom breakpoints",
+    "TypeScript",
+    "Customization",
+    "Centered elements",
+    "Full border",
+    "Half border",
+    "Limitations",
+    "Column direction",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "The columns can be configured with multiple breakpoints to specify the column span of each child.",
+     "There are five default grid breakpoints: xs, sm, md, lg, and xl.",
+     "If you need custom breakpoints, check out custom breakpoints grid .",
+     "You can give integer values for each breakpoint, to indicate how many of the 12 available columns are occupied by the component when the viewport width satisfies the breakpoint constraints .",
+     "A fluid grid&#39;s layout can use breakpoints to determine if the layout needs to change dramatically.",
+     "Width values apply to all wider breakpoints, and larger breakpoints override those given to smaller breakpoints."
+    ]
+   },
+   "caracteres": 14801
+  },
+  "image-list": {
+   "secoes": [
+    "Image List",
+    "Standard image list",
+    "Quilted image list",
+    "Woven image list",
+    "Masonry image list",
+    "Image list with title bars",
+    "Title bar below image (standard)",
+    "Title bar below image (masonry)",
+    "Custom image list",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 7648
+  },
+  "init-color-scheme-script": {
+   "secoes": [
+    "InitColorSchemeScript",
+    "Introduction",
+    "Basics",
+    "Next.js App Router",
+    "Next.js Pages Router",
+    "Customization",
+    "Class attribute",
+    "Arbitrary attribute",
+    "Default mode",
+    "Caveats",
+    "Attribute",
+    "Default mode",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 4997
+  },
+  "link": {
+   "secoes": [
+    "Links",
+    "Basic links",
+    "Underline",
+    "Third-party routing library",
+    "Accessibility",
+    "Keyboard accessibility",
+    "Screen reader accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "info ( \"I'm a button.\" ) ; } } > Button Link </ Link > <Link component=\"button\" variant=\"body2\" onClick={() => { console.info(\"I'm a button.\"); }} > Button Link </Link> Press Enter to start editing Keyboard accessibility Interactive elements should receive focus in a coherent order when the user presses the Tab key.",
+     "• Blog • Store Contents Basic links Underline Third-party routing library Accessibility Keyboard accessibility Screen reader accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "aria": [
+     "Screen reader accessibility When a link receives focus, screen readers should announce a descriptive link name.",
+     "If the link opens in a new window or browser tab, add an aria-label to inform screen reader users—for example, \"To learn more, visit the About page which opens in a new window.\" API See the documentation below for a complete reference to all of the props and classes available to the components mentioned here.",
+     "• Blog • Store Contents Basic links Underline Third-party routing library Accessibility Keyboard accessibility Screen reader accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "acessibilidade": [
+     "Accessibility (WAI-ARIA: https://www.w3.org/WAI/ARIA/apg/patterns/link/ ) When providing the content for the link, avoid generic descriptions like \"click here\" or \"go to\".",
+     "info ( \"I'm a button.\" ) ; } } > Button Link </ Link > <Link component=\"button\" variant=\"body2\" onClick={() => { console.info(\"I'm a button.\"); }} > Button Link </Link> Press Enter to start editing Keyboard accessibility Interactive elements should receive focus in a coherent order when the user presses the Tab key.",
+     "Screen reader accessibility When a link receives focus, screen readers should announce a descriptive link name.",
+     "• Blog • Store Contents Basic links Underline Third-party routing library Accessibility Keyboard accessibility Screen reader accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 4534
+  },
+  "list": {
+   "secoes": [
+    "Lists",
+    "Introduction",
+    "Basics",
+    "Nested List",
+    "Folder List",
+    "Interactive",
+    "Selected ListItem",
+    "Align list items",
+    "List Controls",
+    "Checkbox",
+    "Switch",
+    "Sticky subheader",
+    "Inset List Item",
+    "Gutterless list",
+    "Virtualized List",
+    "Customization",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 7145
+  },
+  "masonry": {
+   "secoes": [
+    "Masonry",
+    "Basic masonry",
+    "Image masonry",
+    "Items with variable height",
+    "Accordion 1",
+    "Accordion 2",
+    "Accordion 3",
+    "Accordion 4",
+    "Accordion 5",
+    "Accordion 6",
+    "Accordion 7",
+    "Accordion 8",
+    "Accordion 9",
+    "Accordion 10",
+    "Columns",
+    "Spacing",
+    "Sequential",
+    "Server-side rendering",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 7518
+  },
+  "menu": {
+   "secoes": [
+    "Menu",
+    "Introduction",
+    "Basic menu",
+    "Icon menu",
+    "Dense menu",
+    "Selected menu",
+    "Checkbox and radio menu items",
+    "Positioned menu",
+    "Composition with Menu List",
+    "Account menu",
+    "Customization",
+    "Max height menu",
+    "Limitations",
+    "Change transition",
+    "Context menu",
+    "Grouped Menu",
+    "Supplementary projects",
+    "material-ui-popup-state",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "For these roles, the selected prop drives aria-checked , so assistive technologies announce the checked state."
+    ],
+    "responsivo": [
+     "Dashboard Icon menu In desktop viewport, padding is increased to give more space to the menu."
+    ],
+    "composicao": [
+     "Menu List (optional): Alternative composable container for Menu Items—see Composition with Menu List for details.",
+     "For instance, you can display the menu on top of the anchor: Dashboard Composition with Menu List The Menu component uses the Popover component internally.",
+     "The Menu List component lets you compose your own menu for these kinds of use cases—its primary purpose is to handle focus.",
+     "See the demo below for an example of composition that uses Menu List and replaces the Menu&#39;s default Popover with a Popper component instead: Profile My account Logout Dashboard Account menu Menu content can be mixed with other components like Avatar .",
+     "You can use the same list composition features with the MenuItem component: 🎨 If you are looking for inspiration, you can check MUI Treasury&#39;s customization examples .",
+     "• Blog • Store Contents Introduction Basic menu Icon menu Dense menu Selected menu Checkbox and radio menu items Positioned menu Composition with Menu List Account menu Customization Max height menu Limitations Change transition Context menu Grouped Menu Supplementary projects material-ui-popup-state API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 7319
+  },
+  "menubar": {
+   "secoes": [
+    "Menubar",
+    "Usage",
+    "Basic menubar",
+    "Shortcut hints",
+    "Checkbox items",
+    "Radio group items",
+    "Icon menu items",
+    "Group labels",
+    "Base UI API",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "File Help Shortcut hints Display keyboard shortcuts alongside menu items using the hint prop.",
+     "• Blog • Store Contents Usage Basic menubar Shortcut hints Checkbox items Radio group items Icon menu items Group labels Base UI API API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 3261
+  },
+  "modal": {
+   "secoes": [
+    "Modal",
+    "Basic modal",
+    "Nested modal",
+    "Transitions",
+    "Performance",
+    "Server-side modal",
+    "Server-side modal",
+    "Limitations",
+    "Focus trap",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "foco": [
+     "Limitations Focus trap The modal moves the focus back to the body of the component if the focus tries to escape it.",
+     "• Blog • Store Contents Basic modal Nested modal Transitions Performance Server-side modal Limitations Focus trap Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "aria": [
+     "Open modal Edit code < Button onClick = { handleOpen } > Open modal </ Button > < Modal open = { open } onClose = { handleClose } aria-labelledby = \" parent-modal-title \" aria-describedby = \" parent-modal-description \" > < Box sx = { { ...",
+     "</ p > < ChildModal /> </ Box > </ Modal > <Button onClick={handleOpen}>Open modal</Button> <Modal open={open} onClose={handleClose} aria-labelledby=\"parent-modal-title\" aria-describedby=\"parent-modal-description\" > <Box sx={{ ...style, width: 400 }}> <h2 id=\"parent-modal-title\">Text in a modal</h2> <p id=\"parent-modal-description\"> Duis mollis, est non commodo luctus, nisi erat porttitor ligula.",
+     "In the event the users need to interact with another part of the page, for example with a chatbot window, you can disable the behavior: < Modal disableEnforceFocus /> Copy Copied (or C ) Accessibility (WAI-ARIA: https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ ) Be sure to add aria-labelledby=\"id...\" , referencing the modal title, to the Modal .",
+     "Additionally, you may give a description of your modal with the aria-describedby=\"id...\" prop on the Modal .",
+     "< Modal aria-labelledby = \" modal-title \" aria-describedby = \" modal-description \" > < h2 id = \" modal-title \" > My Title </ h2 > < p id = \" modal-description \" > My Description </ p > </ Modal > Copy Copied (or C ) The WAI-ARIA Authoring Practices can help you set the initial focus on the most relevant element, based on your modal content."
+    ],
+    "responsivo": [
+     "If you need to make the content available to search engines or render expensive component trees inside your modal while optimizing for interaction responsiveness it might be a good idea to change this default behavior by enabling the keepMounted prop: < Modal keepMounted /> Copy Copied (or C ) Open modal As with any performance optimization, this is not a silver bullet."
+    ],
+    "acessibilidade": [
+     "This is done for accessibility purposes.",
+     "In the event the users need to interact with another part of the page, for example with a chatbot window, you can disable the behavior: < Modal disableEnforceFocus /> Copy Copied (or C ) Accessibility (WAI-ARIA: https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ ) Be sure to add aria-labelledby=\"id...\" , referencing the modal title, to the Modal .",
+     "• Blog • Store Contents Basic modal Nested modal Transitions Performance Server-side modal Limitations Focus trap Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 7455
+  },
+  "no-ssr": {
+   "secoes": [
+    "No SSR",
+    "Introduction",
+    "Basics",
+    "Import",
+    "Customization",
+    "Delay client-side rendering",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 3295
+  },
+  "number-field": {
+   "secoes": [
+    "Number Field",
+    "Installation",
+    "Usage",
+    "Outlined field",
+    "Spinner field",
+    "Base UI API",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "toque": [
+     "This is ideal for touch devices and narrow ranges of values."
+    ]
+   },
+   "caracteres": 4350
+  },
+  "pagination": {
+   "secoes": [
+    "Pagination",
+    "Basic pagination",
+    "Outlined pagination",
+    "Rounded pagination",
+    "Pagination size",
+    "Buttons",
+    "Custom icons",
+    "Pagination ranges",
+    "Controlled pagination",
+    "Router integration",
+    "usePagination",
+    "Table pagination",
+    "Accessibility",
+    "ARIA",
+    "Keyboard",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "foco": [
+     "Keyboard The pagination items are in tab order, with a tabindex of \"0\"."
+    ],
+    "teclado": [
+     "Keyboard The pagination items are in tab order, with a tabindex of \"0\".",
+     "• Blog • Store Contents Basic pagination Outlined pagination Rounded pagination Pagination size Buttons Custom icons Pagination ranges Controlled pagination Router integration usePagination Table pagination Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "aria": [
+     "Accessibility ARIA The root node has a role of \"navigation\" and aria-label \"pagination navigation\" by default.",
+     "The page items have an aria-label that identifies the purpose of the item (\"go to first page\", \"go to previous page\", \"go to page 1\" etc.)."
+    ],
+    "acessibilidade": [
+     "Accessibility ARIA The root node has a role of \"navigation\" and aria-label \"pagination navigation\" by default.",
+     "• Blog • Store Contents Basic pagination Outlined pagination Rounded pagination Pagination size Buttons Custom icons Pagination ranges Controlled pagination Router integration usePagination Table pagination Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 7703
+  },
+  "paper": {
+   "secoes": [
+    "Paper",
+    "Introduction",
+    "Component",
+    "Customization",
+    "Elevation",
+    "Variants",
+    "Corners",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 4395
+  },
+  "popover": {
+   "secoes": [
+    "Popover",
+    "Basic Popover",
+    "Anchor playground",
+    "Mouse hover interaction",
+    "Virtual element",
+    "Transitions",
+    "Supplementary projects",
+    "material-ui-popup-state",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 5084
+  },
+  "popper": {
+   "secoes": [
+    "Popper",
+    "Basic Popper",
+    "Transitions",
+    "Positioned popper",
+    "Scroll playground",
+    "Prevent Overflow",
+    "Flip",
+    "Arrow",
+    "Virtual element",
+    "Supplementary projects",
+    "material-ui-popup-state",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Markdown View as Markdown Feedback Bundle size Source Basic Popper Toggle Popper Edit code < button aria-describedby = { id } type = \" button \" onClick = { handleClick } > Toggle Popper </ button > < Popper id = { id } open = { open } anchorEl = { anchorEl } > < Box sx = { { border : 1 , p : 1 , bgcolor : 'background.paper' } } > The content of the Popper .",
+     "</ Box > </ Popper > <button aria-describedby={id} type=\"button\" onClick={handleClick}> Toggle Popper </button> <Popper id={id} open={open} anchorEl={anchorEl}> <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}> The content of the Popper.",
+     "Toggle Popper Edit code < button aria-describedby = { id } type = \" button \" onClick = { handleClick } > Toggle Popper </ button > < Popper id = { id } open = { open } anchorEl = { anchorEl } transition > { ( { TransitionProps } ) => ( < Fade { ...",
+     "</ Box > </ Fade > ) } </ Popper > <button aria-describedby={id} type=\"button\" onClick={handleClick}> Toggle Popper </button> <Popper id={id} open={open} anchorEl={anchorEl} transition> {({ TransitionProps }) => ( <Fade {...TransitionProps} timeout={350}> <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}> The content of the Popper.",
+     "</ Box > </ Fade > ) } </ Popper > <button aria-describedby={id} type=\"button\" onClick={handleClick}> Toggle Popper </button> <Popper id={id} open={open} anchorEl={anchorEl} transition> {({ TransitionProps }) => ( <Fade {...TransitionProps}> <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}> The content of the Popper."
+    ],
+    "responsivo": [
+     "The placement of the popper updates with the available area in the viewport."
+    ],
+    "composicao": [
+     "</Box> </Popper> Press Enter to start editing Transitions The open/close state of the popper can be animated with a render prop child and a transition component."
+    ]
+   },
+   "caracteres": 7110
+  },
+  "portal": {
+   "secoes": [
+    "Portal",
+    "Introduction",
+    "Basics",
+    "Import",
+    "Customization",
+    "Server-side Portals",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 4011
+  },
+  "progress": {
+   "secoes": [
+    "Progress",
+    "Circular",
+    "Circular indeterminate",
+    "Circular color",
+    "Circular size",
+    "Circular determinate",
+    "Circular custom scale",
+    "Circular track",
+    "Interactive integration",
+    "Circular with label",
+    "Linear",
+    "Linear indeterminate",
+    "Linear query",
+    "Linear color",
+    "Linear determinate",
+    "Linear buffer",
+    "Linear with label",
+    "Linear with custom value text",
+    "Customization",
+    "Delaying appearance",
+    "Accessibility",
+    "Limitations",
+    "High CPU load",
+    "High frequency updates",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Edit code < CircularProgress variant = \" determinate \" min = { 10 } max = { 20 } value = { progress } aria-label = \" Loading \" /> <CircularProgress variant=\"determinate\" min={10} max={20} value={progress} aria-label=\"Loading\" /> Press Enter to start editing Circular track To have the circular track always visible, pass the enableTrackSlot prop.",
+     "Edit code < LinearProgress aria-label = \" Loading… \" /> <LinearProgress aria-label=\"Loading…\" /> Press Enter to start editing Linear query To reverse the direction of the indeterminate animation, use the query value for the variant prop.",
+     "Edit code < LinearProgress variant = \" determinate \" value = { progress } aria-label = \" Export data \" /> <LinearProgress variant=\"determinate\" value={progress} aria-label=\"Export data\" /> Press Enter to start editing Linear buffer Use the buffer value for the variant prop to show a buffer progress alongside the actual progress value.",
+     "Edit code < LinearProgress variant = \" buffer \" value = { progress } valueBuffer = { buffer } aria-label = \" Loading… \" /> <LinearProgress variant=\"buffer\" value={progress} valueBuffer={buffer} aria-label=\"Loading…\" /> Press Enter to start editing Linear with label The progress value can also be displayed alongside the progress bar.",
+     "Uploading photos… 10% Edit code < LinearProgressWithLabelAndValue value = { progress } /> <LinearProgressWithLabelAndValue value={progress} /> Press Enter to start editing Linear with custom value text By default, the progress value is read by assistive technology as percentages.",
+     "Use aria-valuetext when the progress value does not involve percentages."
+    ],
+    "acessibilidade": [
+     "Loading Simulate a load Accessibility Progress bars must be given an accessible name by either setting aria-labelledby that points to the id of a visible text label, or using the aria-label attribute."
+    ]
+   },
+   "caracteres": 10559
+  },
+  "radio-button": {
+   "secoes": [
+    "Radio Group",
+    "Radio group",
+    "Direction",
+    "Controlled",
+    "Standalone radio buttons",
+    "Size",
+    "Color",
+    "Label placement",
+    "Show error",
+    "Customization",
+    "useRadioGroup",
+    "API",
+    "Returns",
+    "Example",
+    "When to use",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Markdown View as Markdown Feedback Bundle size Source WAI-ARIA Material Design Figma Sketch Radio group RadioGroup is a helpful wrapper used to group Radio components that provides an easier API, and proper keyboard accessibility to the group."
+    ],
+    "aria": [
+     "In this case, you can apply the additional attribute (for example aria-label , aria-labelledby , title ) via the slotProps.input property.",
+     "< Radio value = \" radioA \" slotProps = { { input : { 'aria-label' : 'Radio A' } , } } /> Copy Copied (or C ) API See the documentation below for a complete reference to all of the props and classes available to the components mentioned here."
+    ],
+    "acessibilidade": [
+     "Markdown View as Markdown Feedback Bundle size Source WAI-ARIA Material Design Figma Sketch Radio group RadioGroup is a helpful wrapper used to group Radio components that provides an easier API, and proper keyboard accessibility to the group.",
+     "Radio Buttons Accessibility (WAI-ARIA: https://www.w3.org/WAI/ARIA/apg/patterns/radio/ ) All form controls should have labels, and this includes radio buttons, checkboxes, and switches.",
+     "• Blog • Store Contents Radio group Direction Controlled Standalone radio buttons Size Color Label placement Show error Customization useRadioGroup API When to use Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 9310
+  },
+  "rating": {
+   "secoes": [
+    "Rating",
+    "Basic rating",
+    "Rating precision",
+    "Hover feedback",
+    "Sizes",
+    "Customization",
+    "Radio group",
+    "Accessibility",
+    "ARIA",
+    "Keyboard",
+    "Testing",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Keyboard Because the rating component uses radio buttons, keyboard interaction follows the native browser behavior.",
+     "• Blog • Store Contents Basic rating Rating precision Hover feedback Sizes Customization Radio group Accessibility ARIA Keyboard Testing API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "acessibilidade": [
+     "This is important to meet WCAG 2.2 Success Criterion 1.4.1 .",
+     "• Blog • Store Contents Basic rating Rating precision Hover feedback Sizes Customization Radio group Accessibility ARIA Keyboard Testing API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 9223
+  },
+  "select": {
+   "secoes": [
+    "Select",
+    "Basic select",
+    "Advanced features",
+    "Props",
+    "Variants",
+    "Labels and helper text",
+    "Auto width",
+    "Small Size",
+    "Other props",
+    "Native select",
+    "TextField",
+    "Customization",
+    "Multiple select",
+    "Default",
+    "Selection indicators",
+    "Chip",
+    "Placeholder",
+    "Native",
+    "Controlling the open state",
+    "With a dialog",
+    "Grouping",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "This can come from an associated visible label, such as an InputLabel linked to the Select with labelId or from adding an aria-label prop to the input element props ( inputProps ).",
+     "If more information is needed, provide a helper text element and link it to the Select using aria-describedby .",
+     "Age ​ Age Visible label and helper text None ​ aria-label and helper text Auto width Age ​ Age Small Size Age ​ Age Other props Age ​ Age Disabled Age ​ Age Error Age ​ Age Read only Age * ​ Age * * Required Native select As the user experience can be improved on mobile using the native select of the platform, we allow such pattern."
+    ],
+    "responsivo": [
+     "Markdown View as Markdown Feedback Bundle size Source WAI-ARIA Material Design Figma Sketch Basic select Menus are positioned under their emitting elements, unless they are close to the bottom of the viewport.",
+     "Age ​ Age Visible label and helper text None ​ aria-label and helper text Auto width Age ​ Age Small Size Age ​ Age Other props Age ​ Age Disabled Age ​ Age Error Age ​ Age Read only Age * ​ Age * * Required Native select As the user experience can be improved on mobile using the native select of the platform, we allow such pattern."
+    ],
+    "acessibilidade": [
+     "Labels and helper text Select always needs an accessible name.",
+     "Grouping Option 1 Option 2 Option 3 Option 4 Grouping Grouping ​ Grouping Accessibility To properly label your Select input you need an extra element with an id that contains a label.",
+     "• Blog • Store Contents Basic select Advanced features Props Variants Labels and helper text Auto width Small Size Other props Native select TextField Customization Multiple select Default Selection indicators Chip Placeholder Native Controlling the open state With a dialog Grouping Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 8542
+  },
+  "skeleton": {
+   "secoes": [
+    "Skeleton",
+    "Usage",
+    "Variants",
+    "Animations",
+    "Pulsate example",
+    "Wave example",
+    "Inferring dimensions",
+    "Color",
+    "Accessibility",
+    "ARIA",
+    "Keyboard",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Keyboard The skeleton is not focusable.",
+     "• Blog • Store Contents Usage Variants Animations Pulsate example Wave example Inferring dimensions Color Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "responsivo": [
+     "You can improve the perceived responsiveness of the page by using skeletons."
+    ],
+    "acessibilidade": [
+     "Edit code < Skeleton sx = { { bgcolor : 'grey.900' } } variant = \" rectangular \" width = { 210 } height = { 118 } /> <Skeleton sx={{ bgcolor: 'grey.900' }} variant=\"rectangular\" width={210} height={118} /> Press Enter to start editing Accessibility Skeleton screens provide an alternative to the traditional spinner method.",
+     "• Blog • Store Contents Usage Variants Animations Pulsate example Wave example Inferring dimensions Color Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 5657
+  },
+  "slider": {
+   "secoes": [
+    "Slider",
+    "Continuous sliders",
+    "Sizes",
+    "Discrete sliders",
+    "Small steps",
+    "Custom marks",
+    "Restricted values",
+    "Label always visible",
+    "Range slider",
+    "Minimum distance",
+    "Slider with input field",
+    "Color",
+    "Customization",
+    "Music player",
+    "Vertical sliders",
+    "Marks placement",
+    "Track",
+    "Removed track",
+    "Inverted track",
+    "Non-linear scale",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Volume Color Edit code < Slider aria-label = \" Temperature \" defaultValue = { 30 } getAriaValueText = { valuetext } color = \" secondary \" /> <Slider aria-label=\"Temperature\" defaultValue={30} getAriaValueText={valuetext} color=\"secondary\" /> Press Enter to start editing Customization Here are some examples of customizing the component.",
+     "30 30 0°C 20°C 37°C 100°C 20 37 Chrome versions below 124 implement aria-orientation incorrectly for vertical sliders and expose them as &#39;horizontal&#39; in the accessibility tree.",
+     "However, you need to make sure that: Each thumb has a user-friendly label ( aria-label , aria-labelledby or getAriaLabel prop).",
+     "You can change the name with the getAriaValueText or aria-valuetext prop."
+    ],
+    "toque": [
+     "By default, when you move the pointer over a thumb while dragging another thumb, the active thumb will swap to the hovered thumb."
+    ],
+    "acessibilidade": [
+     "30 30 0°C 20°C 37°C 100°C 20 37 Chrome versions below 124 implement aria-orientation incorrectly for vertical sliders and expose them as &#39;horizontal&#39; in the accessibility tree.",
+     "• Blog • Store Contents Continuous sliders Sizes Discrete sliders Small steps Custom marks Restricted values Label always visible Range slider Minimum distance Slider with input field Color Customization Music player Vertical sliders Marks placement Track Removed track Inverted track Non-linear scale Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 10718
+  },
+  "snackbar": {
+   "secoes": [
+    "Snackbar",
+    "Introduction",
+    "Usage",
+    "Basics",
+    "Import",
+    "Position",
+    "Content",
+    "Automatic dismiss",
+    "Transitions",
+    "Customization",
+    "Preventing default click away event",
+    "Use with Alerts",
+    "Use with Floating Action Buttons",
+    "Common examples",
+    "Consecutive Snackbars",
+    "Supplementary components",
+    "notistack",
+    "Accessibility",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "</Alert> </Snackbar> Press Enter to start editing Use with Floating Action Buttons If you&#39;re using a Floating Action Button on mobile, Material Design recommends positioning snackbars directly above it, as shown in the demo below: Common examples Consecutive Snackbars This demo shows how to display multiple Snackbars without stacking them by using a consecutive animation."
+    ],
+    "acessibilidade": [
+     "Snackbars also differ from Dialogs in that Snackbars are not intended to convey critical information or block the user from interacting with the rest of the app; Dialogs, by contrast, require input from the user in order to be dismissed.",
+     "Accessibility The user should be able to dismiss Snackbars by pressing Escape .",
+     "• Blog • Store Contents Introduction Usage Basics Import Position Content Automatic dismiss Transitions Customization Preventing default click away event Use with Alerts Use with Floating Action Buttons Common examples Consecutive Snackbars Supplementary components notistack Accessibility Anatomy API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 8860
+  },
+  "speed-dial": {
+   "secoes": [
+    "Speed Dial",
+    "Basic speed dial",
+    "Playground",
+    "Controlled speed dial",
+    "Custom close icon",
+    "Persistent action tooltips",
+    "Transitions",
+    "Accessibility",
+    "ARIA",
+    "Required",
+    "Provided",
+    "Keyboard",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Keyboard The speed dial opens on focus.",
+     "This enables the expected behavior for the actual or perceived orientation of the speed dial, for example for a screen reader user who perceives the speed dial as a drop-down menu.) The Escape key closes the speed dial and, if a speed dial action was focused, returns focus to the Fab.",
+     "• Blog • Store Contents Basic speed dial Playground Controlled speed dial Custom close icon Persistent action tooltips Transitions Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "aria": [
+     "Provided The Fab has aria-haspopup , aria-expanded and aria-controls attributes.",
+     "The speed dial actions container has role=\"menu\" and aria-orientation set according to the direction.",
+     "The speed dial actions have role=\"menuitem\" , and an aria-describedby attribute that references the associated tooltip.",
+     "This enables the expected behavior for the actual or perceived orientation of the speed dial, for example for a screen reader user who perceives the speed dial as a drop-down menu.) The Escape key closes the speed dial and, if a speed dial action was focused, returns focus to the Fab."
+    ],
+    "toque": [
+     "Persistent action tooltips The SpeedDialActions tooltips can be displayed persistently so that users don&#39;t have to long-press to see the tooltip on touch devices."
+    ],
+    "acessibilidade": [
+     "Accessibility ARIA Required You should provide an ariaLabel for the speed dial component.",
+     "• Blog • Store Contents Basic speed dial Playground Controlled speed dial Custom close icon Persistent action tooltips Transitions Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 3805
+  },
+  "stack": {
+   "secoes": [
+    "Stack",
+    "Introduction",
+    "Basics",
+    "Stack vs. Grid",
+    "Direction",
+    "Dividers",
+    "Responsive values",
+    "Flexbox gap",
+    "Interactive demo",
+    "Customization",
+    "Limitations",
+    "Margin on the children",
+    "white-space: nowrap",
+    "Anatomy",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "Grid Direction Dividers Responsive values Flexbox gap Interactive demo Customization Limitations Margin on the children white-space: nowrap Anatomy API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 8610
+  },
+  "stepper": {
+   "secoes": [
+    "Stepper",
+    "Introduction",
+    "Basics",
+    "Horizontal stepper",
+    "Linear",
+    "Non-linear",
+    "Alternative label",
+    "Error step",
+    "Customized horizontal stepper",
+    "Vertical stepper",
+    "Alternative label",
+    "Transition",
+    "Performance",
+    "Mobile stepper",
+    "Text",
+    "Dots",
+    "Progress",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "From an accessibility standpoint, this means that each StepButton requires an aria-controls attribute pointing at the content section element."
+    ],
+    "responsivo": [
+     "Types of Steps : Editable, Non-editable, Mobile, Optional Types of Steppers : Horizontal, Vertical, Linear, Non-linear Markdown View as Markdown Feedback Bundle size Source Material Design Figma Sketch This component is no longer documented in the Material Design guidelines , but Material UI will continue to support it.",
+     "It supports horizontal and vertical orientation for desktop and mobile viewports.",
+     "See mobile steps for its inspiration.",
+     "The mobile stepper supports three variants to display progress through the available steps: text, dots, and progress.",
+     "<MobileStepper /> <Step /> <StepButton /> <StepConnector /> <StepContent /> <StepIcon /> <StepLabel /> <Stepper /> Edit this page Was this page helpful?",
+     "• Blog • Store Contents Introduction Basics Horizontal stepper Linear Non-linear Alternative label Error step Customized horizontal stepper Vertical stepper Alternative label Transition Performance Mobile stepper Text Dots Progress API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "acessibilidade": [
+     "From an accessibility standpoint, this means that each StepButton requires an aria-controls attribute pointing at the content section element."
+    ]
+   },
+   "caracteres": 8756
+  },
+  "switch": {
+   "secoes": [
+    "Switch",
+    "Basic switches",
+    "Label",
+    "Size",
+    "Color",
+    "Controlled",
+    "Switches with FormGroup",
+    "Customization",
+    "Label placement",
+    "When to use",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "In this case, you can apply the additional attribute (for example aria-label , aria-labelledby , title ) via the slotProps.input prop.",
+     "< Switch value = \" checkedA \" slotProps = { { input : { 'aria-label' : 'Switch A' } } } /> Copy Copied (or C ) API See the documentation below for a complete reference to all of the props and classes available to the components mentioned here."
+    ],
+    "responsivo": [
+     "Switches are the preferred way to adjust settings on mobile."
+    ],
+    "acessibilidade": [
+     "Switches Accessibility All form controls should have labels, and this includes radio buttons, checkboxes, and switches.",
+     "• Blog • Store Contents Basic switches Label Size Color Controlled Switches with FormGroup Customization Label placement When to use Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 5291
+  },
+  "table": {
+   "secoes": [
+    "Table",
+    "Introduction",
+    "Basic table",
+    "Data table",
+    "Dense table",
+    "Sorting selecting",
+    "Customization",
+    "Custom pagination options",
+    "Custom pagination actions",
+    "Sticky header",
+    "Column grouping",
+    "Collapsible table",
+    "Spanning table",
+    "Virtualized table",
+    "Accessibility",
+    "Caption",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "Most screen readers announce the content of captions."
+    ],
+    "acessibilidade": [
+     "• Blog • Store Contents Introduction Basic table Data table Dense table Sorting & selecting Customization Custom pagination options Custom pagination actions Sticky header Column grouping Collapsible table Spanning table Virtualized table Accessibility Caption API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 9517
+  },
+  "tabs": {
+   "secoes": [
+    "Tabs",
+    "Introduction",
+    "Basics",
+    "Experimental API",
+    "Wrapped labels",
+    "Colored tab",
+    "Disabled tab",
+    "Fixed tabs",
+    "Full width",
+    "Centered",
+    "Scrollable tabs",
+    "Automatic scroll buttons",
+    "Forced scroll buttons",
+    "Prevent scroll buttons",
+    "Customization",
+    "Vertical tabs",
+    "Nav tabs",
+    "Third-party routing library",
+    "Icon tabs",
+    "Icon position",
+    "Accessibility",
+    "Keyboard navigation",
+    "Demo",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Responsible for handling focus and keyboard navigation between tabs.",
+     "Keyboard navigation The components implement keyboard navigation using the \"manual activation\" behavior.",
+     "Demo The following two demos only differ in their keyboard navigation behavior.",
+     "Focus a tab and navigate with arrow keys to notice the difference, for example Arrow Left ."
+    ],
+    "aria": [
+     "Item One Item Two Item Three Item One Edit code < Box sx = { { borderBottom : 1 , borderColor : 'divider' } } > < Tabs value = { value } onChange = { handleChange } aria-label = \" basic tabs example \" > < Tab label = \" Item One \" { ...",
+     "Tab s need to be connected to their corresponding [role=\"tabpanel\"] by setting the correct id , aria-controls and aria-labelledby ."
+    ],
+    "acessibilidade": [
+     "a11yProps ( 0 ) } /> < Tab label = \" Item Two \" { ...",
+     "a11yProps ( 1 ) } /> < Tab label = \" Item Three \" { ..."
+    ]
+   },
+   "caracteres": 15829
+  },
+  "text-field": {
+   "secoes": [
+    "Text Field",
+    "Basic TextField",
+    "Form props",
+    "Controlling the HTML input",
+    "Validation",
+    "Multiline",
+    "Select",
+    "Icons",
+    "Input Adornments",
+    "Customizing adornments",
+    "Sizes",
+    "Margin",
+    "Full width",
+    "Uncontrolled vs. Controlled",
+    "Components",
+    "Inputs",
+    "Color",
+    "Customization",
+    "Using the styled API",
+    "Using the theme style overrides API",
+    "useFormControl",
+    "Performance",
+    "Limitations",
+    "Shrink",
+    "Floating label",
+    "type= number",
+    "Helper text",
+    "Integration with 3rd party input libraries",
+    "Accessibility",
+    "Supplementary projects",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "< TextField slotProps = { { htmlInput : { 'data-testid' : '…' } } } /> Copy Copied (or C ) The rendered HTML input will look like this: < input aria-invalid = \" false \" class = \" MuiInputBase-input MuiOutlinedInput-input \" type = \" text \" data-testid = \" … \" /> Copy Copied (or C ) slotProps.htmlInput is not the same as slotProps.input .",
+     "The underlying DOM nodes should have this structure: < div class = \" form-control \" > < label for = \" my-input \" > Email address </ label > < input id = \" my-input \" aria-describedby = \" my-helper-text \" /> < span id = \" my-helper-text \" > We'll never share your email .",
+     "If you are composing the component: < FormControl > < InputLabel htmlFor = \" my-input \" > Email address </ InputLabel > < Input id = \" my-input \" aria-describedby = \" my-helper-text \" /> < FormHelperText id = \" my-helper-text \" > We'll never share your email ."
+    ],
+    "composicao": [
+     "You can use composition to build custom components and give your app a unique feel."
+    ],
+    "acessibilidade": [
+     "other } /> ; } ) ; // usage < TextField slotProps = { { input : { inputComponent : MyInputComponent , inputProps : { component : SomeThirdPartyComponent , } , } , } } / > ; Copy Copied (or C ) Accessibility In order for the text field to be accessible, the input should be linked to the label and the helper text .",
+     "Controlled Components Inputs Color Customization Using the styled API Using the theme style overrides API useFormControl Performance Limitations Shrink Floating label type=\"number\" Helper text Integration with 3rd party input libraries Accessibility Supplementary projects API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 20367
+  },
+  "textarea-autosize": {
+   "secoes": [
+    "Textarea Autosize",
+    "Introduction",
+    "Basics",
+    "Import",
+    "Minimum height",
+    "Maximum height",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Its height automatically adjusts as a response to keyboard inputs and window resizing events."
+    ],
+    "aria": [
+     "Edit code < TextareaAutosize maxRows = { 4 } aria-label = \" maximum height \" placeholder = \" Maximum 4 rows \" defaultValue = \" Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    ]
+   },
+   "caracteres": 3126
+  },
+  "timeline": {
+   "secoes": [
+    "Timeline",
+    "Basic timeline",
+    "Left-positioned timeline",
+    "Alternating timeline",
+    "Reverse Alternating timeline",
+    "Color",
+    "Outlined",
+    "Opposite content",
+    "Customization",
+    "Alignment",
+    "Left-aligned",
+    "Right-aligned",
+    "Left-aligned with no opposite content",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {},
+   "caracteres": 4082
+  },
+  "toggle-button": {
+   "secoes": [
+    "Toggle Button",
+    "Exclusive selection",
+    "Multiple selection",
+    "Size",
+    "Color",
+    "Vertical buttons",
+    "Enforce value set",
+    "Standalone toggle button",
+    "Customization",
+    "Spacing",
+    "Horizontal Spacing",
+    "Vertical Spacing",
+    "Accessibility",
+    "ARIA",
+    "Keyboard",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "teclado": [
+     "Keyboard The group uses a single tab stop.",
+     "Use the left and right arrow keys to move focus in a horizontal group, or the up and down arrow keys in a vertical group.",
+     "• Blog • Store Contents Exclusive selection Multiple selection Size Color Vertical buttons Enforce value set Standalone toggle button Customization Spacing Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ],
+    "aria": [
+     "control } aria-label = \" Small sizes \" > { children } </ ToggleButtonGroup > < ToggleButtonGroup { ...",
+     "control } aria-label = \" Medium sizes \" > { children } </ ToggleButtonGroup > < ToggleButtonGroup size = \" large \" { ...",
+     "Horizontal Spacing Vertical Spacing Accessibility ARIA ToggleButtonGroup has role=\"group\" .",
+     "You should provide an accessible label with aria-label=\"label\" , aria-labelledby=\"id\" or <label> .",
+     "ToggleButton sets aria-pressed=\"<bool>\" according to the button state.",
+     "You should label each button with aria-label ."
+    ],
+    "acessibilidade": [
+     "Horizontal Spacing Vertical Spacing Accessibility ARIA ToggleButtonGroup has role=\"group\" .",
+     "You should provide an accessible label with aria-label=\"label\" , aria-labelledby=\"id\" or <label> .",
+     "• Blog • Store Contents Exclusive selection Multiple selection Size Color Vertical buttons Enforce value set Standalone toggle button Customization Spacing Accessibility ARIA Keyboard API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 6393
+  },
+  "tooltip": {
+   "secoes": [
+    "Tooltip",
+    "Basic tooltip",
+    "Labels and descriptions",
+    "Positioned tooltips",
+    "Customization",
+    "Arrow tooltips",
+    "Distance from anchor",
+    "Custom child element",
+    "Triggers",
+    "Controlled tooltips",
+    "Variable width",
+    "Interactive",
+    "Disabled elements",
+    "Transitions",
+    "Follow cursor",
+    "Virtual element",
+    "Showing and hiding",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "aria": [
+     "If the trigger already has either visible text or an aria-label , use the tooltip as a description and pass the describeChild prop."
+    ],
+    "responsivo": [
+     "On mobile, the tooltip is displayed when the user longpresses the element and hides after a delay of 1500ms."
+    ],
+    "toque": [
+     "The touch action requires a long press due to the enterTouchDelay prop being set to 700 ms by default.",
+     "Hover or touch Focus or touch Hover Click Controlled tooltips You can use the open , onOpen and onClose props to control the behavior of the tooltip."
+    ],
+    "acessibilidade": [
+     "For example, in the element below, the title acts as an accessible description: < button title = \" some more information \" > A button </ button > Copy Copied (or C ) If you want the tooltip to act as an accessible description, you can pass the describeChild prop.",
+     "In that case, the child would have no accessible name and the tooltip would violate WCAG 2.2 Success Criterion 2.5.3 .",
+     "• Blog • Store Contents Basic tooltip Labels and descriptions Positioned tooltips Customization Arrow tooltips Distance from anchor Custom child element Triggers Controlled tooltips Variable width Interactive Disabled elements Transitions Follow cursor Virtual element Showing and hiding Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 11044
+  },
+  "transfer-list": {
+   "secoes": [
+    "Transfer List",
+    "Basic transfer list",
+    "Enhanced transfer list",
+    "Limitations",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "If mobile support is important for you, have a look at #27579 ."
+    ],
+    "composicao": [
+     "The demos are based on composition."
+    ]
+   },
+   "caracteres": 2491
+  },
+  "typography": {
+   "secoes": [
+    "Typography",
+    "Roboto font",
+    "Google Web Fonts",
+    "Component",
+    "Usage",
+    "h1. Heading",
+    "h2. Heading",
+    "h3. Heading",
+    "h4. Heading",
+    "h5. Heading",
+    "h6. Heading",
+    "Theme keys",
+    "Customization",
+    "Adding disabling variants",
+    "Changing the semantic element",
+    "sx prop",
+    "Accessibility",
+    "API"
+   ],
+   "composicao": null,
+   "achados": {
+    "acessibilidade": [
+     "Below is an example of how to apply margin using this prop: < Typography sx = { { m : 2 } } /> Copy Copied (or C ) Accessibility Key factors to follow for an accessible typography: Color .",
+     "Provide enough contrast between text and its background, check out the minimum recommended WCAG 2.2 color contrast ratio (4.5:1).",
+     "• Blog • Store Contents Roboto font Google Web Fonts Component Usage Theme keys Customization Adding & disabling variants Changing the semantic element sx prop Accessibility API Become a Diamond sponsor MUI stands in solidarity with Ukraine."
+    ]
+   },
+   "caracteres": 5845
+  },
+  "use-media-query": {
+   "secoes": [
+    "useMediaQuery",
+    "Basic media query",
+    "Using breakpoint helpers",
+    "Using JavaScript syntax",
+    "Testing",
+    "Client-side only rendering",
+    "Server-side rendering",
+    "Migrating from withWidth()",
+    "API",
+    "useMediaQuery(query, [options]) = matches",
+    "Arguments",
+    "Returns",
+    "Examples"
+   ],
+   "composicao": null,
+   "achados": {
+    "responsivo": [
+     "Media queries in React for responsive design - Material UI Skip to content 🚀 Material UI and MUI X v9 are out!",
+     "Using breakpoint helpers You can use Material UI&#39;s breakpoint helpers as follows: import { useTheme } from '@mui/material/styles' ; import useMediaQuery from '@mui/material/useMediaQuery' ; function MyComponent ( ) { const theme = useTheme ( ) ; const matches = useMediaQuery ( theme .",
+     "up ( 'sm' ) ) ; return < span > { ` theme.breakpoints.up('sm') matches: ${ matches } ` } </ span > ; } Copy Copied (or C ) theme.breakpoints.up('sm') matches: false Alternatively, you can use a callback function, accepting the theme as a first argument: import useMediaQuery from '@mui/material/useMediaQuery' ; function MyComponent ( ) { const matches = useMediaQuery ( ( theme ) => theme .",
+     "up ( 'sm' ) ) ; return < span > { ` theme.breakpoints.up('sm') matches: ${ matches } ` } </ span > ; } Copy Copied (or C ) ⚠️ There is no default theme support, you have to inject it in a parent theme provider.",
+     "For instance, you could use: <Box display> themes.breakpoints.up(x) or sx prop If none of the above alternatives are an option, you can proceed reading this section of the documentation.",
+     "width : deviceType === 'mobile' ?"
+    ]
+   },
+   "caracteres": 9801
+  }
+ }
+}

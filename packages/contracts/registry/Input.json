@@ -1,0 +1,108 @@
+{
+  "name": "Input",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Single-line text entry control.",
+  "icon": "edit",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "focus",
+    "disabled",
+    "invalid",
+    "readonly"
+  ],
+  "tokens": [
+    "--border",
+    "--border-strong",
+    "--control-h-md",
+    "--control-h-sm",
+    "--danger-400",
+    "--duration-fast",
+    "--field-bg",
+    "--foreground",
+    "--radius-control",
+    "--subtle-foreground"
+  ],
+  "a11y": {
+    "role": "textbox",
+    "keyboard": [
+      "Tab",
+      "Shift+Tab"
+    ],
+    "apg": "No APG pattern, and that is the answer: it is a native <input>, so selection, editing, undo, autofill, the software keyboard and every input type the platform knows come from the browser. Wrapping it in Field is what gives it a name and ties hint and error through aria-describedby. A control that needs a role is not this one.",
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: nothing beyond the platform's own. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component. (Space is also out of the count in a text field: the space bar types a space and changes the value, so the snapshot would see a change for any printable key.)"
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Field",
+      "Textarea",
+      "SearchField"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#Input"
+  },
+  "props": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "text",
+      "description": "Native type. date, time, color and file use the browser's own widget, themed by tokens."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string | number",
+      "default": "—",
+      "description": "Controlled or uncontrolled, as in plain React. The component adds no state of its own."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "—",
+      "description": "An example of the value, never a substitute for the label."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled: skipped by the keyboard and not submitted."
+    },
+    {
+      "name": "formatOnBlur",
+      "type": "(value: string) => string",
+      "default": "—",
+      "description": "Normalises the value AFTER focus leaves the field — a licence plate, a document number, a phone. It deliberately does not mask while you type: the USWDS ships its input mask with a recorded WCAG 2.1 AA failure, MUI dropped masked date fields in v6 because the text leaks between sections, and a live mask makes the screen reader announce what was typed while the field shows something else. Aurea supplies the moment; the format stays yours, because plates and documents are country rules. The formatted text becomes the element's own value — nothing is painted over it — and your onChange is called with it, so controlled fields work."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes on the field. Every native attribute of the element passes through: name, required, autoComplete, pattern, min/max, and the rest."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<FieldSize>",
+      "default": "md",
+      "description": "The system's size step (sm/md/lg), NOT the HTML size attribute — that one is a width in characters and it is deliberately shadowed here, because two meanings for one prop name is worse than losing the native one."
+    }
+  ]
+}

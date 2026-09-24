@@ -1,0 +1,72 @@
+{
+  "name": "ButtonGroup",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Coordinated group of related buttons.",
+  "icon": "switcher",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "responsive": {
+    "orientation": "visual"
+  },
+  "states": [],
+  "tokens": [
+    "--radius-control"
+  ],
+  "a11y": {
+    "role": "group",
+    "keyboard": [],
+    "apg": "No APG pattern: it is a <div> that joins adjacent buttons into one capsule. It adds no roving tabindex on purpose — the buttons stay independent tab stops, which is what a group of separate actions should be. A single choice among options is SegmentedControl, which IS a radiogroup."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button",
+      "Toolbar"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#ButtonGroup"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Options",
+      "description": "Accessible name of the group. Falls back to the i18n string, but a real name beats a generic one."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Buttons of the same kind. Mixing controls here breaks the promise of a group."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes on the wrapper."
+    },
+    {
+      "name": "orientation",
+      "type": "Responsive<Orientation>",
+      "default": "horizontal",
+      "description": "Stacks the buttons instead of lining them up. Visual only — it changes no order, no semantics and no keyboard — so it resolves in the CSS layer and costs no observer."
+    }
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  }
+}

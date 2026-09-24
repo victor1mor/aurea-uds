@@ -1,0 +1,18 @@
+{
+  "_porque": "Valor de IDENTIDADE e de ESPACAMENTO novo tem de vir de token (CLAUDE.md; AUREA.md 2.6). Estes sao os valores HISTORICOS que ficam, por eixo. O gate (validate.py, check 12) falha se a contagem SUBIR e avisa quando CAI, para o ganho ser travado aqui. Contagem so na FONTE e fora de comentario: dist, catalog.css e docs.html sao copias e contariam o mesmo defeito tres vezes (erro de magnitude da auditoria de 26/07/2026, achado A6), e valor citado em prosa nao e' valor aplicado. A Fase 4 derrubou o espacamento de 291 para 128 ao mover o CSS de docs; a Fase 6 acrescentou os quatro eixos de identidade (achado M1) e zerou peso de fonte e entrelinha ao criar os tokens que faltavam. apps/docs/docs.css fica FORA de proposito: e' o chrome da pagina manual, que esta' para ser aposentada.",
+  "_como_regerar": "python scripts/validate.py --write-raw-px-baseline",
+  "_gerado_em": "2026-07-30",
+  "arquivos": {
+    "packages/core/src/aurea.css": 109,
+    "scripts/build-catalog.mjs": 0,
+    "apps/catalog/content/**/*.mjs": 0,
+    "core: raio cru": 5,
+    "core: tamanho de fonte cru": 5,
+    "core: peso de fonte cru": 0,
+    "core: entrelinha cru": 0
+  },
+  "_eixos_sem_catraca": {
+    "z-index": "1/2/3 locais dentro de um componente sao empilhamento LOCAL, nao a escala --z-* de overlay; gatear isso confundiria os dois.",
+    "font-size 10px e 11px": "abaixo do menor degrau da escala (--text-xs = 12px). Precisa de decisao de design: criar degrau ou arredondar. Ficou na catraca (nao sobe) sem ser resolvido."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "name": "ChartLegend",
+  "category": "Data Display",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "Which colour is which series, as a plain list under the chart.",
+  "icon": "chart--bar",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--muted-foreground",
+    "--radius-sm",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "list",
+    "apg": "none: a legend is a list of names and colours, not a widget. It is a real <ul> so the reader hears how many series there are, and each name is text — the colour is never the only thing that identifies a series.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "recharts",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Chart",
+      "ChartTooltip"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/chart.tsx#ChartLegend"
+  },
+  "props": [
+    {
+      "name": "payload",
+      "type": "Array<{value, color}>",
+      "default": "the series, in the engine's order",
+      "description": "The entries to list. Worth passing: as of recharts 3.10.1 the engine sorts its own payload alphabetically by dataKey, so the legend does not follow the order the series were declared in. This prop is the way to fix that from the outside."
+    },
+    {
+      "name": "verticalAlign",
+      "type": "\"top\" | \"bottom\"",
+      "default": "\"bottom\"",
+      "description": "Which side of the drawing the list sits on."
+    },
+    {
+      "name": "…Legend",
+      "type": "LegendProps",
+      "default": "none",
+      "description": "Everything else goes to the engine's Legend. `content` is the exception: it is what this component IS."
+    }
+  ]
+}

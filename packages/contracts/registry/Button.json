@@ -1,0 +1,234 @@
+{
+  "name": "Button",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Trigger for an action or navigation. The primary interactive control.",
+  "icon": "add",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "danger",
+    "danger-ghost",
+    "danger-outline",
+    "ghost",
+    "link",
+    "link-danger",
+    "link-primary",
+    "nav",
+    "outline",
+    "primary",
+    "primary-ghost",
+    "primary-outline",
+    "secondary"
+  ],
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg",
+    "xl"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "axes": {
+    "appearance": [
+      "ghost",
+      "link",
+      "nav",
+      "outline",
+      "solid"
+    ],
+    "tone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  },
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "pressed",
+    "disabled",
+    "loading"
+  ],
+  "tokens": [
+    "--accent",
+    "--accent-foreground",
+    "--border-strong",
+    "--control-h-lg",
+    "--control-h-md",
+    "--control-h-sm",
+    "--control-h-xl",
+    "--control-h-xs",
+    "--danger-400",
+    "--destructive",
+    "--destructive-foreground",
+    "--duration-fast",
+    "--ease-standard",
+    "--font-code",
+    "--foreground",
+    "--info",
+    "--info-foreground",
+    "--info-hover",
+    "--primary",
+    "--primary-foreground",
+    "--primary-hover",
+    "--radius-control",
+    "--radius-full",
+    "--radius-md",
+    "--radius-sm",
+    "--secondary",
+    "--secondary-foreground",
+    "--secondary-hover",
+    "--success",
+    "--success-foreground",
+    "--success-hover",
+    "--text-base",
+    "--text-sm",
+    "--text-xs",
+    "--warning",
+    "--warning-foreground",
+    "--warning-hover"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "button",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-08-27 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "IconButton",
+      "ButtonGroup"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#Button"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav",
+      "default": "secondary",
+      "description": "Atalho para o par (appearance, tone). Os treze nomes continuam valendo e pintam exatamente o mesmo; a API de dois eixos é appearance + tone."
+    },
+    {
+      "name": "appearance",
+      "type": "solid | outline | ghost | link | nav",
+      "default": "solid",
+      "description": "Quanto peso a caixa tem. nav é aparência própria (item de navegação), não um tom."
+    },
+    {
+      "name": "tone",
+      "type": "neutral | brand | danger | success | warning | info",
+      "default": "neutral",
+      "description": "O que a cor significa. Todos os tons funcionam em todas as aparências, inclusive preenchido — cada um tem par cor+texto próprio por tema."
+    },
+    {
+      "name": "size",
+      "type": "xs | sm | md | lg | xl",
+      "default": "md",
+      "description": "Height comes from the density tokens; the pill radius never changes."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "—",
+      "description": "Renders an <a> with the same skin. A button that navigates is a link."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows the spinner, sets aria-busy and blocks interaction. The label stays."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native disabled: the control leaves the tab order entirely. With href it becomes aria-disabled, since a link has no disabled state. USE IT WHEN THERE IS NOTHING TO EXPLAIN — measured on 2026-08-13, a disabled button cannot be focused, so a Tooltip hung on it is never read by anyone navigating with a keyboard, and wrapping it in a span (what other libraries document) fixes the pointer and not the keyboard, because the span comes in at tabIndex -1."
+    },
+    {
+      "name": "aria-disabled",
+      "type": "boolean",
+      "default": "—",
+      "description": "Inert but REACHABLE: the control keeps its place in the tab order and announces itself as disabled, and this component blocks activation — the attribute is semantics only, so leaving it to the browser would announce \"disabled\" on a button that still acts. Use it when there IS a why to tell, and put the why in a Tooltip, which now reaches. There is no permission component in Aurea and there will not be one: hiding an action is {can ? … : …} in your own code, and hiding a button is not security — see ADR-0023."
+    },
+    {
+      "name": "leadingIcon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Carbon glyph before the label."
+    },
+    {
+      "name": "trailingIcon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Carbon glyph after the label."
+    },
+    {
+      "name": "type",
+      "type": "button | submit | reset",
+      "default": "button",
+      "description": "Deliberately not submit: a Cancel inside a form must not fire the main action."
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "default": "false",
+      "description": "Stretches to the container. Only the width changes — the pill radius is invariant."
+    },
+    {
+      "name": "pressed",
+      "type": "boolean",
+      "default": "—",
+      "description": "DEPRECATED since 0.4.0, removed in 1.0 — use `<Toggle>`. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. Twelve reference libraries were read on 18/08/2026 (MUI, Fluent 2, React Aria, Spectrum, Carbon, Radix/Base UI, shadcn, ReUI, PrimeReact, HeroUI, Cedar, W3C APG) and NONE puts the pressed state on the plain button. Toggle state via aria-pressed: on shows the raised capsule with a yellow underline."
+    },
+    {
+      "name": "kbd",
+      "type": "string",
+      "default": "—",
+      "description": "Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts."
+    },
+    {
+      "name": "grow",
+      "type": "boolean",
+      "default": "false",
+      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow (C-03). `fullWidth` asks for the whole line instead."
+    },
+    {
+      "name": "target",
+      "type": "HTMLAttributeAnchorTarget",
+      "default": "—",
+      "description": "Link attribute, only with `href` (C-13). It always reached the <a> at runtime; now the type accepts it, so target=\"_blank\" compiles."
+    },
+    {
+      "name": "rel",
+      "type": "string",
+      "default": "—",
+      "description": "Link attribute, only with `href` (C-13)."
+    },
+    {
+      "name": "download",
+      "type": "boolean | string",
+      "default": "—",
+      "description": "Link attribute, only with `href` (C-13)."
+    }
+  ]
+}

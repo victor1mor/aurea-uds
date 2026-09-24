@@ -1,0 +1,56 @@
+{
+  "name": "Breadcrumb",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Trail showing the current location in a hierarchy.",
+  "icon": "folder--tree",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "current"
+  ],
+  "tokens": [
+    "--foreground",
+    "--muted-foreground",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "navigation",
+    "apg": "breadcrumb",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Tabs",
+      "Pagination"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#Breadcrumb"
+  },
+  "props": [
+    {
+      "name": "items",
+      "type": "Array<{label: ReactNode; href?: string}>",
+      "default": "—",
+      "description": "The trail, in order. An item with no href renders as a <strong> carrying aria-current=\"page\" instead of a link — the last crumb is where you already are, and a link to the current page is one more thing to skip."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Breadcrumb\"",
+      "description": "Accessible name of the <nav>. Two navigation landmarks sharing a name fail axe."
+    }
+  ]
+}

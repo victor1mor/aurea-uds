@@ -1,0 +1,34 @@
+{
+  "name": "usePortalContainer",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Ready",
+  "summary": "The node every Aurea popup is mounted into, as configured once on AureaProvider.",
+  "icon": "settings",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "Sem valor, o motor monta no document.body — que e' o que permite empilhar e posicionar sem herdar overflow nem transform. Com valor, o popup fica DENTRO de um marco do consumidor, o que importa para quem navega por landmark."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#usePortalContainer"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "name": "MediaEmbed",
+  "category": "Media",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "A third-party video page (YouTube, Vimeo) inside the Aurea frame, loaded only when asked for.",
+  "icon": "video",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {},
+  "states": [
+    "facade",
+    "loaded"
+  ],
+  "tokens": [
+    "--border",
+    "--control-h-lg",
+    "--foreground",
+    "--icon-sm",
+    "--media-canvas",
+    "--media-foreground",
+    "--media-scrim",
+    "--muted-foreground",
+    "--primary",
+    "--primary-foreground",
+    "--radius-card",
+    "--radius-full",
+    "--shadow-lg",
+    "--space-1",
+    "--space-2",
+    "--text-sm"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "button",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "Measured in a browser on 2026-09-24 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: Enter, Space — both swap the facade for the frame and move focus into it. The facade is a native <button>, so there is no engine keyboard; once the frame loads, the keyboard belongs to the provider's page, which this library cannot measure."
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": [
+      "play--filled--alt",
+      "launch"
+    ]
+  },
+  "related": {
+    "components": [
+      "MediaPlayer",
+      "AspectRatio"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/media-client.tsx#MediaEmbed"
+  },
+  "props": [
+    {
+      "name": "src",
+      "type": "string",
+      "default": "—",
+      "description": "The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "—",
+      "description": "Required. The accessible name of the frame — an unnamed iframe fails axe, so the type refuses to compile without it."
+    },
+    {
+      "name": "poster",
+      "type": "string",
+      "default": "—",
+      "description": "Still image for the facade. With it, nothing from the provider loads until the play button is pressed; without it, the frame loads lazily right away."
+    },
+    {
+      "name": "ratio",
+      "type": "string",
+      "default": "16/9",
+      "description": "Box proportion in CSS syntax. Reserved before anything loads, so the page does not jump."
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "—",
+      "description": "The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect."
+    },
+    {
+      "name": "autoplay",
+      "type": "boolean",
+      "default": "true",
+      "description": "With a poster, start playing after the click by adding autoplay=1 to the address (YouTube and Vimeo read the same key). The person already asked to play."
+    }
+  ]
+}

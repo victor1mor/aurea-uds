@@ -1,0 +1,111 @@
+{
+  "name": "Alert",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Inline message that stays in context.",
+  "icon": "warning",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "info",
+    "success",
+    "warning",
+    "danger"
+  ],
+  "sizes": [],
+  "states": [
+    "waiting_user",
+    "waiting_approval",
+    "waiting_dependency",
+    "offline",
+    "stale",
+    "partial",
+    "degraded"
+  ],
+  "tokens": [
+    "--border",
+    "--danger-400",
+    "--danger-bg",
+    "--info-400",
+    "--info-bg",
+    "--muted-foreground",
+    "--radius-lg",
+    "--secondary",
+    "--success-400",
+    "--success-bg",
+    "--text-sm",
+    "--warning-400",
+    "--warning-bg"
+  ],
+  "a11y": {
+    "role": "alert",
+    "keyboard": [],
+    "apg": "The APG pattern is Alert. `danger` renders role=\"alert\", which interrupts the screen reader; the other three render role=\"status\", which waits for a pause. No keyboard interaction: an Alert is read, not operated — one that can be dismissed is a Banner."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Banner",
+      "Badge"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/feedback-client.tsx#Alert"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "info | success | warning | danger",
+      "default": "info",
+      "description": "Tone and, with it, the live region: `danger` renders role=\"alert\", which interrupts the screen reader; the other three render role=\"status\", which waits for a pause. Colour is never the only signal — what carries the meaning is the text."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Rendered as a <strong> above the body. Optional on purpose: a one-line alert reads better without one."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The message. An Alert stays in the reading flow, in context — a page-width warning is a Banner and a transient one is a Toast."
+    },
+    {
+      "name": "state",
+      "type": "waiting_user | waiting_approval | waiting_dependency | offline | stale | partial | degraded",
+      "default": "—",
+      "description": "Universal state (Part J) — an axis of its own alongside `variant`, because the two answer different questions: `variant` is how serious this is, `state` is what is happening. Merging them would put “out of date” next to “danger” and force the caller to pick one. It sets `data-state`, derives the severity when no `variant` is given — waiting states inform, the rest warn, and none of the seven is `danger`, because in all seven the screen still works — and supplies the message when there are no children."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "Overrides the glyph. The icon is a FUNCTION of the variant by default, because a system that makes you remember which glyph means \"danger\" ends up with four answers to the same question."
+    },
+    {
+      "name": "onDismiss",
+      "type": "() => void",
+      "default": "—",
+      "description": "Adds the close button on the third track of the grid. Without it that track holds an empty span, so the body keeps the same width either way."
+    }
+  ],
+  "axes": {
+    "state": [
+      "degraded",
+      "offline",
+      "partial",
+      "stale",
+      "waiting_approval",
+      "waiting_dependency",
+      "waiting_user"
+    ]
+  }
+}

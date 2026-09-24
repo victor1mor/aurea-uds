@@ -1,0 +1,81 @@
+{
+  "name": "Popover",
+  "category": "Overlays",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Anchored floating surface with content or interaction.",
+  "icon": "information",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "side": [
+      "bottom",
+      "left",
+      "right",
+      "top"
+    ]
+  },
+  "states": [
+    "open",
+    "closed"
+  ],
+  "tokens": [
+    "--border",
+    "--popover",
+    "--popover-foreground",
+    "--radius-card",
+    "--shadow-lg",
+    "--z-modal"
+  ],
+  "a11y": {
+    "role": "dialog",
+    "apg": "dialog (non-modal)",
+    "keyboard": [
+      "Escape"
+    ]
+  },
+  "dependencies": {
+    "engine": "@base-ui/react",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Tooltip",
+      "DropdownMenu"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/overlays.tsx#Popover"
+  },
+  "props": [
+    {
+      "name": "trigger",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "One element, and it becomes the trigger — the engine merges the ref and the ARIA into it instead of wrapping it, so your button stays your button."
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Optional heading inside the panel, rendered as a <strong>."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The content. This is the overlay that may hold focus and interactive elements; a Tooltip may not."
+    },
+    {
+      "name": "side",
+      "type": "top | right | bottom | left",
+      "default": "bottom",
+      "description": "Preferred side. It flips on its own when there is no room, so this is a preference, not a promise."
+    }
+  ]
+}

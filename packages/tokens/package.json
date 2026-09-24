@@ -1,0 +1,42 @@
+{
+  "name": "@aurea-uds/tokens",
+  "version": "0.10.0",
+  "description": "Os tokens da Aurea UDS: a fonte em DTCG e as variáveis CSS geradas dela.",
+  "keywords": [
+    "aurea",
+    "design-system",
+    "design-tokens",
+    "dtcg"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor1mor/aurea-uds.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/victor1mor/aurea-uds/tree/main/packages/tokens#readme",
+  "bugs": {
+    "url": "https://github.com/victor1mor/aurea-uds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit --module ESNext --moduleResolution bundler --target ES2022 css-import.type-test.ts"
+  },
+  "exports": {
+    "./css": {
+      "types": "./dist/aurea.tokens.css.d.ts",
+      "default": "./dist/aurea.tokens.css"
+    },
+    "./json": "./src/aurea.tokens.json",
+    "./native": {
+      "types": "./dist/aurea.tokens.native.d.ts",
+      "default": "./dist/aurea.tokens.native.js"
+    }
+  }
+}

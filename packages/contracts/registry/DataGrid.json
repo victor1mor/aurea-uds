@@ -1,0 +1,329 @@
+{
+  "name": "DataGrid",
+  "category": "Data Display",
+  "layer": "Composite",
+  "maturity": "Stable",
+  "summary": "Interactive grid with navigation, sort and selection.",
+  "icon": "data--view",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "sorted",
+    "filtered",
+    "row-selected",
+    "empty",
+    "bulk-selected",
+    "sticky-header",
+    "column-hidden",
+    "column-resizing",
+    "loading",
+    "stale",
+    "partial",
+    "error",
+    "detail-open",
+    "waiting_user",
+    "waiting_approval",
+    "waiting_dependency",
+    "offline",
+    "degraded"
+  ],
+  "tokens": [
+    "--border",
+    "--card",
+    "--focus",
+    "--focus-strong",
+    "--muted-foreground",
+    "--primary",
+    "--radius-card",
+    "--radius-sm",
+    "--row-h",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-4",
+    "--space-6",
+    "--subtle-foreground"
+  ],
+  "a11y": {
+    "role": "grid",
+    "apg": "grid",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End",
+      "Control+Home",
+      "Control+End",
+      "PageUp",
+      "PageDown",
+      "Enter",
+      "F2",
+      "Escape"
+    ],
+    "keyboardNote": "Measured in a browser on 28/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts), from TWO starting cells, and 9 of the 13 keys here moved the DOM: ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Home, End, PageUp, PageDown, Enter. Two starting cells because one is not enough on a widget with EDGES — from the corner, ArrowLeft and Home have nowhere to go, and that is inertia of the position, not of the component. What the snapshot method cannot reach, and why: Escape only acts from INSIDE a cell's widget, which is a two-step the snapshot does not do; F2, Control+Home and Control+End are not in the probe's candidate key list (it presses unmodified keys). All four are covered by behavioural tests in tests/unit/components.test.tsx, which press the key and assert where focus landed — key handling is not layout, so jsdom is a fair instrument for it. This ficha has a history worth keeping: it used to declare role \"grid\", apg \"grid\" and four arrow keys that were measured INERT on 27/08 — a plain <table> with no onKeyDown and no tabIndex on any cell. It was corrected that day to role \"table\" with keyboard [], and G-A11Y-07 built the real APG grid on 28/08. Focus model: the whole grid is ONE tab stop (roving tabindex over cells, header row included); arrows move cell to cell without wrapping; Home/End go to the ends of the ROW and Control+Home/Control+End to the ends of the GRID; PageUp/PageDown jump 10 rows; Enter and F2 move focus into the cell's widget and Escape returns to the cell. Inside a widget the keys belong to it — the grid does not intercept. Row selection is announced with aria-selected, which is only valid because the role is grid. Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts): the nine keys above moved the DOM again, from the same two starting cells. This re-measurement exists because the merge of the two lineages reverted this ficha to role \"table\" with keyboard [] — the description of the component BEFORE G-A11Y-07 — while the merged code still shipped the grid. The ficha was promising less than the component delivers, which is the same defect in the opposite direction."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Table",
+      "Pagination"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/data-grid.tsx#DataGrid"
+  },
+  "props": [
+    {
+      "name": "data",
+      "type": "T[]",
+      "default": "—",
+      "description": "The rows. Sorted, filtered and paged in memory by default; pass the `manual*` flags when the server already did that work and `data` is a single page."
+    },
+    {
+      "name": "columns",
+      "type": "Array<ColumnDef<T, any>>",
+      "default": "—",
+      "description": "TanStack Table column definitions, re-exported from this subpath so you do not add the dependency yourself."
+    },
+    {
+      "name": "getRowId",
+      "type": "(row: T, index: number) => string",
+      "default": "—",
+      "description": "Pass it whenever `selectable` is on. Without a stable id TanStack keys selection by INDEX, so replacing or reordering `data` makes a checkbox follow the position and tick a different record. The grid covers the safe half on its own — it clears the selection when `data` changes — but only an id makes selection survive the change."
+    },
+    {
+      "name": "selectable",
+      "type": "boolean",
+      "default": "false",
+      "description": "Adds the checkbox column, header included."
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(rows: T[]) => void",
+      "default": "—",
+      "description": "Receives the ORIGINAL rows, taken before filtering and paging — so a selection does not vanish because you typed in the filter. Under `manualPagination` it can only hand you rows from the page in memory; use `onRowSelectionChange` there, which gives ids."
+    },
+    {
+      "name": "sorting",
+      "type": "SortingState",
+      "default": "—",
+      "description": "Controlled sort. Passing it hands the decision to you: the grid stops moving on its own and only reports through `onSortingChange`, so you can validate, confirm or wait for a request before letting it change."
+    },
+    {
+      "name": "onSortingChange",
+      "type": "(sorting: SortingState) => void",
+      "default": "—",
+      "description": "Fires on every header click, controlled or not. Alone it does not make the grid controlled — `sorting` does."
+    },
+    {
+      "name": "globalFilter",
+      "type": "string",
+      "default": "—",
+      "description": "Controlled value of the search field. Same rule as `sorting`: with it, typing reports and nothing narrows until you say so."
+    },
+    {
+      "name": "onGlobalFilterChange",
+      "type": "(filter: string) => void",
+      "default": "—",
+      "description": "Fires on every keystroke in the search field."
+    },
+    {
+      "name": "page",
+      "type": "number",
+      "default": "—",
+      "description": "Controlled page, 1-based — the same counting the visible Pagination uses, not the engine's 0-based index. A position in a list, not a dimension."
+    },
+    {
+      "name": "onPageChange",
+      "type": "(page: number) => void",
+      "default": "—",
+      "description": "Receives the 1-based page the reader asked for."
+    },
+    {
+      "name": "rowSelection",
+      "type": "RowSelectionState",
+      "default": "—",
+      "description": "Controlled selection, keyed by row id — so it survives paging and reloading, which a list of rows cannot. Pair it with `getRowId`."
+    },
+    {
+      "name": "onRowSelectionChange",
+      "type": "(selection: RowSelectionState) => void",
+      "default": "—",
+      "description": "The id map, every time it changes. This is the selection API for server-side data; `onSelectionChange` is the convenience one for a set held in memory."
+    },
+    {
+      "name": "manualSorting",
+      "type": "boolean",
+      "default": "false",
+      "description": "The server sorted. The grid stops sorting in memory but still marks the sorted column with `aria-sort`, so the reader is told what changed."
+    },
+    {
+      "name": "manualFiltering",
+      "type": "boolean",
+      "default": "false",
+      "description": "The server filtered. Typing reports and nothing is hidden locally."
+    },
+    {
+      "name": "manualPagination",
+      "type": "boolean",
+      "default": "false",
+      "description": "The server paged, and `data` is one page. Requires `rowCount`: without it there is no way to know how many pages exist and the pagination disappears from the screen."
+    },
+    {
+      "name": "bulkActions",
+      "type": "Array<{ id: string; label: string; icon?: string; onAction: (rows: T[], clear: () => void) => void }>",
+      "default": "—",
+      "description": "Turns a selection into something you can act on: a toolbar appears with the count, the actions, and a way to clear. `onAction` receives the ORIGINAL rows — taken before filtering, so acting on what the filter hid is still possible — and the `clear` function, so an action can drop the selection once it has run. No bar is drawn without a selection: it is the state, not decoration."
+    },
+    {
+      "name": "filters",
+      "type": "Array<{ column: string; label: string; facet?: boolean; options?: Array<{ value: string; label: string }> }>",
+      "default": "—",
+      "description": "Adds a filter row inside the table header, one control per declared column, aligned with the column because the table is what aligns it. `facet: true` gives a multi-select built from the values present in the data, each option carrying its count. Declare `options` when a value must stay on the list even with no rows behind it — the difference between \"no cancelled ones\" and \"cancelled does not exist\"."
+    },
+    {
+      "name": "columnFilters",
+      "type": "ColumnFiltersState",
+      "default": "—",
+      "description": "Controlled per-column filters, same rule as `sorting`: with it, typing and picking report and nothing narrows until you say so. To put it in the address bar, `gridStateToParams` and `gridStateFromParams` are the format — imported from the package root, not from this subpath, because the code that reads a URL runs on the server and this subpath is client-only. The grid never writes the URL itself: only you know whether a change should push a history entry or replace one."
+    },
+    {
+      "name": "onColumnFiltersChange",
+      "type": "(filters: ColumnFiltersState) => void",
+      "default": "—",
+      "description": "Fires whenever a column filter changes, controlled or not."
+    },
+    {
+      "name": "rowCount",
+      "type": "number",
+      "default": "—",
+      "description": "Total rows on the server, used to compute the page count under `manualPagination`. A count, not a dimension."
+    },
+    {
+      "name": "stickyHeader",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API."
+    },
+    {
+      "name": "hideableColumns",
+      "type": "boolean",
+      "default": "false",
+      "description": "Adds a picker that turns columns on and off — the same multi-select the facet filter uses, because choosing several from a list is that component. When it is the only control, the search field keeps the full width it always had; the two only share a row when both are there."
+    },
+    {
+      "name": "columnVisibility",
+      "type": "VisibilityState",
+      "default": "—",
+      "description": "Controlled map of column id to visible. It is a plain serialisable object, which is what makes the choice persistable — where it is persisted (local storage, user profile, the URL) is yours to decide, exactly as in F4."
+    },
+    {
+      "name": "onColumnVisibilityChange",
+      "type": "(visibility: VisibilityState) => void",
+      "default": "—",
+      "description": "Fires whenever a column is shown or hidden."
+    },
+    {
+      "name": "resizableColumns",
+      "type": "boolean",
+      "default": "false",
+      "description": "Adds a drag handle at the trailing edge of each header cell. The handle is a real button and answers the ARROW KEYS as well — 16px a press — because the engine only gives dragging, and a column you can only resize with a mouse is a feature that excludes people."
+    },
+    {
+      "name": "columnSizing",
+      "type": "ColumnSizingState",
+      "default": "—",
+      "description": "Controlled map of column id to width in pixels. Serialisable, same rule as `columnVisibility`."
+    },
+    {
+      "name": "onColumnSizingChange",
+      "type": "(sizing: ColumnSizingState) => void",
+      "default": "—",
+      "description": "Fires while dragging and on each arrow key."
+    },
+    {
+      "name": "state",
+      "type": "\"loading\" | \"error\" | \"waiting_user\" | \"waiting_approval\" | \"waiting_dependency\" | \"offline\" | \"stale\" | \"partial\" | \"degraded\"",
+      "default": "—",
+      "description": "Says out loud what is going on with the data. `stale` and `partial` keep the rows on screen and label them, because a table showing old data without saying so is worse than an empty one. `error` uses `role=\"alert\"` so it interrupts a screen reader; the other two use `role=\"status\"` and wait for the next pause. `loading` never blanks rows that are already there — reloading is no reason to take away what someone was reading — and only draws skeleton rows when there is nothing to show. Since Part J the seven universal states are accepted here too, under the names the contract gives them — `stale` and `partial` already had them, which is why nothing was renamed. `loading` and `error` stay specific to this grid on purpose: in all seven universal states the screen still works, and with no rows at all it does not. The grid keeps its own three sentences because they talk about rows, and more specific wins over more general; the shared wording covers the four it did not have."
+    },
+    {
+      "name": "stateMessage",
+      "type": "string",
+      "default": "—",
+      "description": "Replaces the built-in sentence. Only you know what actually failed: \"the billing service is down\" beats \"the rows could not be loaded\"."
+    },
+    {
+      "name": "renderDetail",
+      "type": "(row: T) => ReactNode",
+      "default": "—",
+      "description": "Adds a trailing column with a Details button per row, and opens what you return in a panel BESIDE the list — the list stays on screen, which is the point. The trigger is a button and not a clickable row: a row is not a focus target, and turning it into one means inventing a role, a tabindex and a key that a button already is. Closed, the markup is exactly what it was without this prop."
+    },
+    {
+      "name": "detailRowId",
+      "type": "string | null",
+      "default": "—",
+      "description": "Controlled id of the row whose panel is open. Same rule as every other axis here."
+    },
+    {
+      "name": "onDetailRowIdChange",
+      "type": "(id: string | null) => void",
+      "default": "—",
+      "description": "Fires when a panel opens or closes."
+    },
+    {
+      "name": "onExport",
+      "type": "(rows: T[], scope: { count: number; filtered: boolean; selected: boolean }) => void",
+      "default": "—",
+      "description": "Draws a button whose LABEL states the scope — \"Export 47 filtered rows\", never a bare \"Export\", because the bare word hides the question that matters. Precedence follows what the person just did: a selection wins over a filter, a filter wins over everything. The grid produces no file: format, encoding and transport are yours, the same boundary the upload queue draws."
+    },
+    {
+      "name": "filterable",
+      "type": "boolean",
+      "default": "false",
+      "description": "Draws the search field that filters across every column."
+    },
+    {
+      "name": "pageSize",
+      "type": "number",
+      "default": "—",
+      "description": "Rows per page; passing it is what turns pagination on. A count of rows, not a dimension — there is nothing to measure here."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "\"Table\"",
+      "description": "Accessible name of the scrollable region around the table. That region is focusable on purpose, so a table wider than the screen can be scrolled with the arrow keys — the same wrapper the plain Table uses. Cell-by-cell arrow navigation is the APG grid pattern and this component does NOT implement it: it is a table with interactive controls in it, which is what the header buttons and the checkboxes are."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "On the grid wrapper."
+    }
+  ],
+  "axes": {
+    "state": [
+      "degraded",
+      "error",
+      "loading",
+      "offline",
+      "partial",
+      "stale",
+      "waiting_approval",
+      "waiting_dependency",
+      "waiting_user"
+    ]
+  }
+}

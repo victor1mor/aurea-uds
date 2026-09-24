@@ -1,0 +1,36 @@
+{
+  "name": "useSpriteUrl",
+  "kind": "hook",
+  "category": "System",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Read where the provider is loading icon glyphs from.",
+  "icon": "image",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [],
+  "tokens": [],
+  "a11y": {
+    "role": "n-a",
+    "apg": "n-a",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Icon",
+      "AureaProvider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#useSpriteUrl"
+  }
+}
