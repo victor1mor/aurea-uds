@@ -41,6 +41,10 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   são os arquivos (este, o `CHANGELOG.md`, as ADRs).
 - **Falar em jargão** (ordem de 14/09/2026: *"seja direto"*). Se a palavra precisa de tradução,
   ela já está errada — escreva a tradução e apague a palavra.
+- **Escrever horário no fuso errado** (ordem do Victor, 24/09/2026). O Victor está no fuso **−3
+  (horário de Brasília)**. Todo horário que se escreve para ele — agendamento, publicação, prazo —
+  vai **no fuso dele**. O relógio dos servidores e o GitHub usam UTC: converta antes de escrever
+  (UTC 21:06 = 18:06 para ele).
 - **Hesitar em pergunta de sim ou não sobre o código.** Mede-se, e a primeira palavra é **sim** ou
   **não**.
 - **Tratar resumo de busca como fonte.** A fonte é a página. Sobre interface de terceiros (Expo,
