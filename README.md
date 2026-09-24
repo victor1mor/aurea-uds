@@ -123,6 +123,16 @@ Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou
 URL resultante. Numa página que embute os ícones como `<symbol>`, passe `spriteUrl=""` para a
 referência ficar local — é o que o catálogo faz.
 
+**O nome do ícone é checado pelo TypeScript**: `<Icon name="chevron-down">` (um traço só; o do
+Carbon é `chevron--down`) não compila, nem em `leadingIcon`, `icon` ou qualquer prop que recebe
+ícone. Quem usa um sprite próprio declara os nomes dele **uma vez**:
+
+```tsx
+declare module "@aurea-uds/react" {
+  interface AureaIconNames { marca: true }
+}
+```
+
 ### Overlays acessíveis
 
 Prender o foco, fechar com Esc, devolver o foco e travar a rolagem vêm do

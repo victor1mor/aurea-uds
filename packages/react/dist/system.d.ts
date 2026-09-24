@@ -25,7 +25,8 @@ export declare function useAureaTheme(): {
     setDensity: (d: AureaDensity) => void;
     toggleTheme: () => void;
 };
-export type IconName = string;
+export type { IconName, CarbonIconName, AureaIconNames } from "./icon-names.js";
+import type { IconName } from "./icon-names.js";
 export type IconSize = "sm" | "md" | "lg" | "xl";
 export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
     name: IconName;

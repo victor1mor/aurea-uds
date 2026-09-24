@@ -4,9 +4,10 @@ export type AureaIconComponent = (props: {
     size?: number;
     color?: string;
 }) => React.ReactElement;
-/** Nome do glifo, no vocabulário do Carbon — o MESMO do sprite da web (check 38). */
-export type IconName = string;
-export type AureaIconRegistry = Readonly<Record<IconName, AureaIconComponent>>;
+export type { IconName, CarbonIconName, AureaIconNames } from "./icon-names.js";
+import type { IconName } from "./icon-names.js";
+/** Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. */
+export type AureaIconRegistry = Readonly<Partial<Record<IconName, AureaIconComponent>>>;
 /**
  * Declara o registro. É uma função de identidade tipada, e ela existe por um motivo prático:
  * escrita como constante no módulo do app, a referência é estável — e um registro recriado a cada
@@ -96,4 +97,3 @@ export interface IconProps {
  * um aviso nomeando o ícone e o caminho do import que resolve.
  */
 export declare function Icon({ name, size, color, icons, label }: IconProps): React.JSX.Element | null;
-export {};

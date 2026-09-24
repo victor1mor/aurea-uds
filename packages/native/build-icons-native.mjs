@@ -26,6 +26,7 @@ import {readFileSync, writeFileSync, readdirSync, rmSync, mkdirSync} from "node:
 import {createRequire} from "node:module";
 import {dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
+import {escreverNomesDeIcone} from "../../scripts/icon-names.mjs";
 
 const require = createRequire(import.meta.url);
 const carbonDir = dirname(require.resolve("@carbon/icons/package.json"));
@@ -206,5 +207,8 @@ writeFileSync(join(saidaDir, "index.js"),
 writeFileSync(join(saidaDir, "index.d.ts"),
   CABECALHO
   + barril.map(({nome, comp}) => `export {default as ${comp}} from "./${nome}.js";`).join("\n") + "\n");
+
+// A-04: a mesma lista, como tipo, para o `<Icon name>` do nativo recusar nome que não existe.
+escreverNomesDeIcone(barril.map(({nome}) => nome), join(raiz, "src", "icon-names.ts"));
 
 console.log(`build-icons-native: wrote ${barril.length} icons -> ${saidaDir}`);

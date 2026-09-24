@@ -15,6 +15,27 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [Não publicada] — Lote 3, em andamento
+
+Ainda **sem número**: a versão sobe nos nove arquivos quando o lote fechar. Por ora, o que já
+entrou na branch.
+
+### ⚠ Mudou — leia antes de atualizar
+
+- **A-04 · o nome do ícone é checado pelo TypeScript, na web e no nativo.** `IconName` deixou de
+  ser `string` e passou a ser a lista dos 2571 nomes do Carbon, gerada da mesma fonte que monta o
+  sprite e os ícones do nativo. `<Icon name="chevron-down">` (um traço só; o certo é
+  `chevron--down`) compilava e não desenhava nada; agora não compila, em toda prop que recebe
+  ícone. No nativo a chave do registro (`criarRegistroDeIcones`) também é conferida.
+  - **Pode quebrar a compilação de quem passa ícone numa variável `string`.** Tipe a variável
+    como `IconName`.
+  - **Sprite próprio ou glifo de `criarGlifo`:** declare os nomes uma vez, em
+    `interface AureaIconNames` (exemplo no `README.md` de cada pacote).
+  - Medido antes: 359 nomes de ícone escritos nos exemplos, fichas e documentos, **nenhum**
+    errado. O defeito era o tipo, não um nome.
+
+---
+
 ## [0.10.0] — 2026-09-24
 
 ✅ **PUBLICADA em 24/09/2026, nos sete pacotes, pelo terminal do Victor.** Não conferida no

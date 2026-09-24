@@ -852,6 +852,16 @@ poda nenhuma: módulo que não é importado não entra no grafo.
 Os nomes são **os mesmos do sprite da web**, e um gate cobra isso (check 38): o que `<Icon name>`
 desenha lá, `icons/<nome>` desenha aqui.
 
+**O nome é checado pelo TypeScript** (desde a A-04): `<Icon name="chevron-down">`, com um traço
+só, não compila, e a chave do registro também é conferida. Um glifo próprio (`criarGlifo`) entra
+declarando o nome **uma vez**:
+
+```tsx
+declare module "@aurea-uds/native" {
+  interface AureaIconNames { marca: true }
+}
+```
+
 ## O que este pacote não faz
 
 - **Não promete paridade** com a web. O React Native não tem `<p>`, cascata de tipografia,

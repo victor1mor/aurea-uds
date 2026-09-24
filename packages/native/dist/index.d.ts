@@ -7,7 +7,7 @@ export { criarFolha, comOpacidade } from "./estilos.js";
 export { Text } from "./text.js";
 export type { TextProps, AureaTextFont, AureaTextLeading, AureaTextSize, AureaTextTone, AureaTextWeight, } from "./text.js";
 export { Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo } from "./icon.js";
-export type { IconProps, IconName, AureaIconComponent, AureaIconRegistry, AureaIconSize, AureaGlifoDesenho, AureaGlifoCaminho, AureaGlifoCirculo, AureaGlifoRetangulo, } from "./icon.js";
+export type { IconProps, IconName, CarbonIconName, AureaIconNames, AureaIconComponent, AureaIconRegistry, AureaIconSize, AureaGlifoDesenho, AureaGlifoCaminho, AureaGlifoCirculo, AureaGlifoRetangulo, } from "./icon.js";
 export { Screen } from "./screen.js";
 export type { ScreenProps, AureaScreenBackground, AureaScreenEdge } from "./screen.js";
 export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
+import type { IconName } from "./icon-names.js";
 import { type AureaFieldSize } from "./inputs.js";
 /** Os separadores de um locale, derivados de um número-sonda. */
 export type AureaSeparadores = {
@@ -71,13 +72,12 @@ export interface NumberFieldProps {
     keyboardType?: "numeric" | "decimal-pad" | "number-pad" | "numbers-and-punctuation";
     /** Os glifos dos botões. Registre-os, ou passe `false` para tirar os dois. */
     icons?: {
-        increment: IconNameLocal;
-        decrement: IconNameLocal;
+        increment: IconName;
+        decrement: IconName;
     } | false;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
-type IconNameLocal = string;
 /**
  * O número que se digita OU se empurra de um em um.
  *
@@ -116,4 +116,3 @@ type IconNameLocal = string;
  * partir de outros dois funcionar.
  */
 export declare function NumberField({ value, defaultValue, onValueChange, min, max, step, format, locale, disabled, readOnly, size, fullWidth, label, placeholder, keyboardType, icons, style, testID, }: NumberFieldProps): React.JSX.Element;
-export {};

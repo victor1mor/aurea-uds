@@ -47,7 +47,8 @@ export type {
 
 export {Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo} from "./icon.js";
 export type {
-  IconProps, IconName, AureaIconComponent, AureaIconRegistry, AureaIconSize,
+  IconProps, IconName, CarbonIconName, AureaIconNames, AureaIconComponent, AureaIconRegistry,
+  AureaIconSize,
   AureaGlifoDesenho, AureaGlifoCaminho, AureaGlifoCirculo, AureaGlifoRetangulo,
 } from "./icon.js";
 
