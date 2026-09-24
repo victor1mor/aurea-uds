@@ -34,7 +34,7 @@ componente, para as duas não divergirem.
 
 As fichas de cada componente moram no repositório, não neste pacote. Elas geram o catálogo e
 deixam o validador conferir a biblioteca contra ela mesma; nada fora do build as usa. Se você
-precisar delas, abra um problema pedindo, e elas ganham uma entrada. A superfície da API acima é a
+precisar delas, abra uma issue pedindo, e elas ganham uma entrada. A superfície da API acima é a
 parte dessa resposta de que uma ferramenta precisa, e é por isso que ela vai no pacote.
 
 ## Licença

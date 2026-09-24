@@ -7,7 +7,7 @@ Só a versão mais recente publicada no npm recebe conserto de segurança. A ver
 
 ## Como relatar uma falha
 
-**Não abra um problema público.** Use o relato privado do GitHub: na aba **Security** do
+**Não abra uma issue pública.** Use o *private vulnerability reporting* do GitHub: na aba **Security** do
 repositório, **Report a vulnerability**. Só o mantenedor lê.
 
 Diga:

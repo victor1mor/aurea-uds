@@ -28,14 +28,14 @@ um ícone. As frases padrão são em inglês; `strings={ptBR}` as troca pelas em
 
 ## Importar por categoria
 
-A entrada principal funciona, mas cada categoria é também uma entrada própria, para você levar uma
+O entry point principal funciona, mas cada categoria é também um entry point próprio, para você levar uma
 parte do sistema sem o resto:
 
 ```js
 import {Button} from "@aurea-uds/react/actions";
 ```
 
-Seis módulos trazem um motor opcional e por isso ficam **fora da entrada principal** — importar um
+Seis módulos trazem uma engine opcional e por isso ficam **fora do entry point principal** — importar um
 `Button` nunca pode puxar uma dependência que você não instalou:
 
 | Importe | Exige que você instale |
@@ -66,7 +66,7 @@ function BotaoSalvar() {
 }
 ```
 
-A pilha se desenha sozinha: o `AureaProvider` já monta a área dos avisos, então não há
+A pilha se desenha sozinha: o `AureaProvider` já monta o viewport dos toasts, então não há
 `<Toaster/>` para posicionar nem um segundo provider para instalar.
 
 | Hook | O que entrega |
@@ -74,7 +74,7 @@ A pilha se desenha sozinha: o `AureaProvider` já monta a área dos avisos, ent�
 | `useToast()` | `add({title, description, type})`, mais `close(id)` e a lista viva. A fila é a do Base UI |
 | `useAureaTheme()` | lê e muda **os dois** eixos no `<html>`: `theme` (`dark`/`light`) e `density`. `theme` é `null` no servidor — não desenhe o que depende do tema até ele deixar de ser |
 | `useAureaStrings()` | o dicionário de frases, somado ao que você passou ao provider |
-| `useSpriteUrl()` | de onde o arquivo de ícones está sendo carregado |
+| `useSpriteUrl()` | de onde o sprite de ícones está sendo carregado |
 
 ## Requisitos
 

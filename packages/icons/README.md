@@ -1,8 +1,8 @@
 # @aurea-uds/icons
 
-O arquivo de ícones de onde a **Aurea UDS** desenha. Os glifos são os
+O sprite de ícones de onde a **Aurea UDS** desenha. Os glifos são os
 [Carbon Icons](https://carbondesignsystem.com/elements/icons/library/) da IBM; este pacote só os
-junta num único SVG.
+junta num único sprite SVG.
 
 ```bash
 pnpm add @aurea-uds/icons
