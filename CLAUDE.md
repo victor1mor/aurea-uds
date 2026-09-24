@@ -41,6 +41,10 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   são os arquivos (este, o `CHANGELOG.md`, as ADRs).
 - **Falar em jargão** (ordem de 14/09/2026: *"seja direto"*). Se a palavra precisa de tradução,
   ela já está errada — escreva a tradução e apague a palavra.
+- **Escrever horário no fuso errado** (ordem do Victor, 24/09/2026). O Victor está no fuso **−3
+  (horário de Brasília)**. Todo horário que se escreve para ele — agendamento, publicação, prazo —
+  vai **no fuso dele**. O relógio dos servidores e o GitHub usam UTC: converta antes de escrever
+  (UTC 21:06 = 18:06 para ele).
 - **Hesitar em pergunta de sim ou não sobre o código.** Mede-se, e a primeira palavra é **sim** ou
   **não**.
 - **Tratar resumo de busca como fonte.** A fonte é a página. Sobre interface de terceiros (Expo,
@@ -105,8 +109,6 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 - `Select` e `Combobox` lado a lado mostram o vazio de jeitos diferentes. Observação do app.
 - C-06 (`option` sem estilo no escuro) provavelmente morreu com o `Select` novo. **Medir antes de
   fechar.**
-- 16 fotos de referência do `catalog.spec.ts` estão velhas (de 11/09/2026) e reprovam igual no
-  `main` limpo. Regravar pede olhar cada uma antes.
 - O nativo **nunca rodou num iPhone**. Antes de prometer a `1.0`, rodar o teste de aparelho no iOS.
 
 ### Como cada lote anda
