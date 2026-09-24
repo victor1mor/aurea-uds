@@ -4,11 +4,11 @@ A Aurea é mantida pelo Victor, e é ele quem decide. Contribuição é bem-vind
 **a identidade visual não está em discussão** (a seção 5 do [`CLAUDE.md`](CLAUDE.md) diz o que ela
 é). Pedido para trocar o amarelo, os raios, a letra ou a densidade vai ser fechado.
 
-O projeto é escrito em **português**: problemas, pedidos de junção, comentários e documentos.
+O projeto é escrito em **português**: issues, pull requests, comentários e documentos.
 
 ## Antes de começar
 
-- **Problema ou ideia:** abra um problema antes de escrever código. Diga o que você tentou, o que
+- **Bug ou ideia:** abra uma issue antes de escrever código. Diga o que você tentou, o que
   esperava e o que aconteceu, e se é na **web** ou no **nativo** — as duas bibliotecas são
   diferentes.
 - **Componente novo:** leia o [`docs/BUILDING.md`](docs/BUILDING.md) primeiro. Componente não
@@ -25,7 +25,7 @@ pnpm install
 pnpm build
 ```
 
-## Verificar antes de abrir o pedido
+## Verificar antes de abrir o pull request
 
 Rode, um por linha:
 
@@ -38,12 +38,12 @@ node scripts/check-pack.mjs
 
 O `validate.py` confere, entre outras coisas, que nenhum nome privado do mantenedor entrou no
 código. A lista desses nomes **não é pública**: sem ela o validador reprova, avisando. Para rodar
-sem a lista na sua máquina, declare `AUREA_SEM_LISTA=1`. No pedido de junção vindo de um fork, a
-verificação automática também roda sem a lista; a conferência com ela fica com o mantenedor.
+sem a lista na sua máquina, declare `AUREA_SEM_LISTA=1`. No pull request vindo de um fork, o CI
+também roda sem a lista; a conferência com ela fica com o mantenedor.
 
-## As regras que um pedido de junção precisa cumprir
+## As regras que um pull request precisa cumprir
 
-- **Todo número de geometria sai de um token.** Pixel cru no CSS reprova na verificação.
+- **Todo número de geometria sai de um token.** Pixel cru no CSS reprova no CI.
 - **Conserto vem com o teste que falha no defeito antigo**, no mesmo commit. Teste que passa com o
   defeito dentro não prova nada.
 - **Mudou a API de um componente? Mude a ficha** em `packages/contracts/registry/`. O validador

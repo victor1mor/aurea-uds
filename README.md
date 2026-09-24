@@ -1,7 +1,7 @@
 # Aurea
 
 **Aurea Universal Design System** — um design system com duas saídas: a **web** (React e CSS) e o
-**telefone** (React Native). A aparência é uma só, e ela não muda de um lado para o outro.
+**mobile** (React Native). A aparência é uma só, e ela não muda de um lado para o outro.
 
 ## A identidade
 
@@ -33,7 +33,7 @@ de comportamento em JavaScript puro.
 O conjunto de ícones de `@aurea-uds/icons` é um arquivo estático: copie `dist/aurea-icons.svg` para
 onde o seu app serve arquivos e aponte o `AureaProvider` para ele.
 
-**Para o telefone (React Native):** é outro pacote, `@aurea-uds/native`, publicado desde
+**Para mobile (React Native):** é outro pacote, `@aurea-uds/native`, publicado desde
 11/09/2026. A lista de componentes dele **não é a da web com itens a menos**: é outra, com
 instalação e dependências próprias. Comece pelo
 [`packages/native/README.md`](packages/native/README.md) e não instale os pacotes da web.
@@ -41,7 +41,7 @@ instalação e dependências próprias. Comece pelo
 ## Usar em HTML
 
 Carregue as fontes **antes** do core. HTML puro não entende nome de pacote (`@aurea-uds/...`):
-aponte para o arquivo instalado (ajuste o caminho) ou sirva o `dist` por um empacotador.
+aponte para o arquivo instalado (ajuste o caminho) ou sirva o `dist` por um bundler.
 
 ```html
 <html data-theme="dark" data-density="comfortable">
@@ -51,7 +51,7 @@ aponte para o arquivo instalado (ajuste o caminho) ou sirva o `dist` por um empa
 </html>
 ```
 
-Com empacotador, prefira as entradas: `import "@aurea-uds/fonts/css"` e `"@aurea-uds/core/css"`.
+Com bundler, prefira os entry points: `import "@aurea-uds/fonts/css"` e `"@aurea-uds/core/css"`.
 
 ## Usar em React
 
@@ -59,7 +59,7 @@ Exige React 19 ou mais novo: os componentes recebem `ref` como prop comum, que �
 React 19.
 
 Envolva a aplicação no `AureaProvider`. Ele entrega as frases padrão, diz aos componentes onde está o
-arquivo de ícones e monta o que as dicas e os avisos flutuantes usam.
+sprite de ícones e monta o que os tooltips e os toasts usam.
 
 ```tsx
 import { AureaProvider, ptBR } from "@aurea-uds/react";
@@ -74,21 +74,21 @@ export default function App() {
 **As frases padrão são em inglês.** Para português, passe `strings={ptBR}`, como acima, ou troque
 frases soltas: `<AureaProvider strings={{ close: "Fechar" }}>`.
 
-### Componentes de servidor
+### Server Components
 
-A entrada principal é um módulo de **servidor**, então importar dela num componente de servidor do
-React funciona. Os módulos interativos carregam `"use client"` sozinhos, e três ficam no servidor: a
-entrada principal, o `Accordion` (só marcação) e as funções de apoio — `cx`, `defaultStrings`,
+O entry point principal é um módulo de **servidor**, então importar dele num Server Component
+funciona. Os módulos interativos carregam `"use client"` sozinhos, e três ficam no servidor: o
+entry point principal, o `Accordion` (só marcação) e as funções de apoio — `cx`, `defaultStrings`,
 `ptBR`, `defaultSpriteUrl` —, que por isso podem ser *chamadas* no servidor.
 
 Duas aplicações de prova são construídas a cada verificação — uma num framework com componentes de
-servidor, outra num empacotador só de cliente —, e o build reprova se uma diretiva faltar ou
+servidor, outra num bundler só de cliente —, e o build reprova se uma diretiva faltar ou
 aparecer onde não precisa.
 
-### Seis módulos com motor opcional, cada um na sua entrada
+### Seis módulos com engine opcional, cada um no seu entry point
 
-`@aurea-uds/react` tem **uma** dependência obrigatória: `@base-ui/react`. Seis módulos precisam de um
-motor mais pesado, e cada motor é declarado como **dependência opcional**, para o resto da biblioteca
+`@aurea-uds/react` tem **uma** dependência obrigatória: `@base-ui/react`. Seis módulos precisam de uma
+engine mais pesada, e cada uma é declarada como **optional peer dependency**, para o resto da biblioteca
 não custar nada:
 
 | Componente | Importe de | Instale junto |
@@ -100,16 +100,16 @@ não custar nada:
 | `Chart`, `ChartLegend`, `ChartTooltip` | `@aurea-uds/react/chart` | `recharts` |
 | `DependencyGraph` | `@aurea-uds/react/graph` | `@xyflow/react` |
 
-Eles **não** saem pela entrada principal: se saíssem, importar um `Button` carregaria uma
+Eles **não** saem pelo entry point principal: se saíssem, importar um `Button` carregaria uma
 dependência que você não instalou, e a importação quebraria.
 
-Todo o resto está na entrada principal e também por categoria (`@aurea-uds/react/actions`,
+Todo o resto está no entry point principal e também por categoria (`@aurea-uds/react/actions`,
 `/inputs`, `/navigation`, `/overlays`, `/disclosure`, `/feedback`, `/data-display`, `/identity`,
-`/media`, `/code`, `/communication`, `/layout`, `/system`, `/agents`) — a mesma divisão das fichas.
-O pacote é ESM com `sideEffects: false`, então o empacotador descarta o que você não importa de
-qualquer jeito; as entradas por categoria servem para ler e para adotar por partes.
+`/media`, `/code`, `/communication`, `/layout`, `/system`, `/agents`) — a mesma divisão do registry.
+O pacote é ESM com `sideEffects: false`, então o bundler descarta o que você não importa de
+qualquer jeito; os entry points por categoria servem para ler e para adotar por partes.
 
-### Ícones: aponte o provider para o seu arquivo
+### Ícones: aponte o provider para o seu sprite
 
 O `Icon` desenha um glifo como `<use href="{spriteUrl}#i-{nome}">`. O padrão é `/aurea-icons.svg`,
 que só funciona quando o app é servido na raiz do domínio. **Se não for o seu caso, configure uma
@@ -123,7 +123,7 @@ Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou
 URL resultante. Numa página que embute os ícones como `<symbol>`, passe `spriteUrl=""` para a
 referência ficar local — é o que o catálogo faz.
 
-### Janelas e camadas acessíveis
+### Overlays acessíveis
 
 Prender o foco, fechar com Esc, devolver o foco e travar a rolagem vêm do
 [Base UI](https://base-ui.com): `Dialog`, `Drawer`, `Tooltip`, `Popover`, `DropdownMenu`,
@@ -134,14 +134,14 @@ Prender o foco, fechar com Esc, devolver o foco e travar a rolagem vêm do
 `useAureaTheme()` lê e escreve os dois eixos que a Aurea põe no `<html>`: `data-theme` e
 `data-density`. Ele lê o DOM em vez de guardar estado próprio, então segue quem de fato muda o
 atributo. `theme` é `null` enquanto não se sabe — no servidor não dá para saber, e fingir o
-contrário causa divergência na hidratação.
+contrário causa hydration mismatch.
 
 **Ele não guarda nada, de propósito.** Lembrar a preferência é trabalho da aplicação. Para guardar,
 seguir o sistema e evitar o piscar na carga, o [`next-themes`](https://github.com/pacocoursey/next-themes)
 já faz tudo e escreve `data-theme` no `<html>` — o mesmo atributo que a Aurea lê. O que nenhuma
 biblioteca de tema cobre é a **densidade**, que é eixo da Aurea; é para isso que o hook existe.
 
-### Direita para a esquerda
+### RTL
 
 O CSS usa propriedades lógicas no eixo da linha e se espelha sozinho. São dois passos:
 
@@ -151,7 +151,7 @@ O CSS usa propriedades lógicas no eixo da linha e se espelha sozinho. São dois
 ```
 
 O provider não mexe no DOM: pôr `dir` no `<html>` é da aplicação. Não se espelham, de propósito: o
-visto do `Checkbox`, o indicador de carregamento (glifos desenhados com borda) e o
+visto do `Checkbox`, o spinner (glifos desenhados com borda) e o
 `Drawer side="left"|"right"` (o nome promete um lado físico).
 
 ## Ver o catálogo
@@ -173,17 +173,17 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-373 páginas geradas — 125 de componente, 204 de padrão, 15 de bloco, 23 de receita e 6 índices de área — a partir de 116 fichas. Toda página traz o mesmo miolo: trilha, prévia, o código que a produz, instalação, procedência e anterior/próximo. 27 componentes têm conteúdo escrito à mão; os outros 98 trazem uma página inicial — a prévia real e o código, ainda sem exemplos extras. 116 componentes publicam a tabela de props.
+373 páginas geradas — 125 de componente, 204 de padrão, 15 de bloco, 23 de receita e 6 índices de área — a partir de 116 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 27 componentes têm conteúdo escrito à mão; os outros 98 trazem um starter — o preview real e o código, ainda sem exemplos extras. 116 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza
 
-- `apps/catalog`: o catálogo, **gerado** a partir das fichas por `scripts/build-catalog.mjs`;
+- `apps/catalog`: o catálogo, **gerado** a partir do registry por `scripts/build-catalog.mjs`;
 - `packages/tokens`: os tokens no formato DTCG 2025.10 e o CSS gerado;
 - `packages/fonts`: as fontes IBM Plex (WOFF2) e o `fonts.css`;
-- `packages/contracts`: o contrato do projeto e uma ficha por componente;
+- `packages/contracts`: o contrato do projeto e o registry (uma ficha por componente);
 - `packages/core`: o CSS gerado (tokens e componentes) e o comportamento em JavaScript puro;
-- `packages/icons`: o arquivo de ícones do Carbon;
+- `packages/icons`: o sprite de ícones do Carbon;
 - `packages/react`: os componentes React, tipados;
 - `packages/native`: os componentes React Native;
 - [`decisions/`](decisions/README.md): as decisões registradas (ADRs);
@@ -192,7 +192,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 ## Contribuir
 
 Leia o [CONTRIBUTING.md](CONTRIBUTING.md). Para relatar uma falha de segurança, siga o
-[SECURITY.md](SECURITY.md) — não abra um problema público.
+[SECURITY.md](SECURITY.md) — não abra uma issue pública.
 
 ## Licença
 

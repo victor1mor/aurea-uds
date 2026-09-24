@@ -18,11 +18,11 @@ O JavaScript não faz nada sem DOM, então é seguro importá-lo durante a rende
 ## O que tem aqui
 
 Toda regra de que o sistema precisa, e nada além. Enfeite de documentação e maquete de produto já
-moraram aqui; saíram, e uma verificação os mantém fora — uma classe desta folha tem de ser uma que
+moraram aqui; saíram, e um check os mantém fora — uma classe desta folha tem de ser uma que
 algum componente de fato produz.
 
 Os valores vêm do `@aurea-uds/tokens`. Um pixel cru de espaço, raio, tamanho de letra, peso ou
-altura de linha reprova numa verificação automática, e não numa revisão.
+altura de linha reprova no CI, e não numa revisão.
 
 ## Tema e densidade
 

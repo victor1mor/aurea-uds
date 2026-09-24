@@ -11,8 +11,8 @@ import "@aurea-uds/fonts/css";  // ANTES do @aurea-uds/core/css
 ```
 
 A ordem importa: o core só declara `--font-ui`, `--font-editorial` e `--font-code`, e é este
-pacote que faz esses nomes apontarem para arquivos de verdade. Importe o core primeiro e a primeira
-pintura cai numa fonte do sistema.
+pacote que faz esses nomes apontarem para arquivos de verdade. Importe o core primeiro e o first
+paint cai numa fonte do sistema.
 
 Três famílias, porque o sistema usa as três: **Sans** para a interface, **Serif** para texto
 editorial, **Mono** para código.

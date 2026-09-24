@@ -24,7 +24,7 @@ regras.
 | Raio | `--radius-sm` … `--radius-card`, `--radius-control` | px | `--radius-card` (22px) e `--radius-control` (999px) são identidade — conferidos |
 | Borda | `--border-width` | px | |
 | Sombra | `--shadow-md`, `--shadow-lg` | sombra | os degraus `xs`/`sm` saíram na Fase 6: os dois eram `none` e ninguém usava |
-| Camada | `--z-sticky` … `--z-toast` | número | para empilhar CAMADAS FLUTUANTES. `z-index: 1/2/3` local, dentro de um componente, não é este eixo |
+| Camada | `--z-sticky` … `--z-toast` | número | para empilhar OVERLAYS. `z-index: 1/2/3` local, dentro de um componente, não é este eixo |
 | Movimento | `--duration-*`, `--ease-*` | duração / curva | |
 | Tamanho de ícone | `--icon-sm` … `--icon-xl` | rem | criado na Fase 6; em rem para o glifo acompanhar a letra |
 | Área de toque | `--target-min` | rem | 44px com raiz de 16px — WCAG 2.5.5/2.5.8 |
@@ -80,7 +80,7 @@ check 3 do `validate.py` reprova pelo valor canônico, não só pelo nome do tok
 Letra, espaço, tamanho de ícone, altura de controle, largura da lateral e altura da barra do topo
 são **rem**, para que quem dobra a letra do navegador ganhe controles maiores em vez de texto
 cortado (WCAG 1.4.4, achado M12). A conversão de px foi exata (px÷16), então nada se moveu no
-tamanho de raiz padrão — as 52 fotos de referência provam.
+tamanho de raiz padrão — os 52 baselines de screenshot provam.
 
 Os raios ficam em **px**: um canto é forma física, não texto, e escalá-lo com a letra faz a cápsula
 deixar de ser cápsula.

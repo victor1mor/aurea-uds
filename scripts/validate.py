@@ -1953,9 +1953,9 @@ def render_readme_block(s):
     return (f"\n{s['paginas_total']} páginas geradas — {p['component']} de componente, "
             f"{p['pattern']} de padrão, {p['block']} de bloco, {p['recipe']} de receita e "
             f"{p['area']} índices de área — a partir de {s['fichas']} fichas. "
-            f"Toda página traz o mesmo miolo: trilha, prévia, o código que a produz, instalação, "
+            f"Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, "
             f"procedência e anterior/próximo. {s['conteudo_rico']} componentes têm conteúdo "
-            f"escrito à mão; os outros {s['starters']} trazem uma página inicial — a prévia real e "
+            f"escrito à mão; os outros {s['starters']} trazem um starter — o preview real e "
             f"o código, ainda sem exemplos extras. {s['props']} componentes publicam a tabela de "
             f"props.\n")
 

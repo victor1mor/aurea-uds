@@ -88,9 +88,9 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 ### O próximo passo
 
-1. **A abertura do repositório** (decidida em 24/09/2026): repositório público novo, com um
-   commit só; o diário fica no privado; tudo em português. Os passos de limpeza estão feitos
-   neste repositório. Falta o Victor criar o público.
+1. **O repositório está aberto desde 24/09/2026**, com um commit só. O histórico antigo e o diário
+   ficaram no privado (`aurea-uds-privado`), que não recebe mais envios. Termos técnicos
+   consagrados ficam em inglês (mobile, bundler, pull request, issue) — decisão do Victor, 24/09.
 2. **A sessão do app adota as peças novas** e mede no aparelho.
 3. **O Lote 3 espera um "pode":** M-01 (`render` em todos) · M-02 (`classNames` por parte) · B-02
    (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco com uma linha).

@@ -1,5 +1,5 @@
 ---
-name: Problema
+name: Bug
 about: Algo não funciona como a documentação diz
 ---
 

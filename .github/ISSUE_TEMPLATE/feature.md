@@ -1,5 +1,5 @@
 ---
-name: Ideia ou peça nova
+name: Sugestão de feature
 about: Uma prop, um componente ou uma mudança que falta
 ---
 

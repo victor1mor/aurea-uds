@@ -1,7 +1,7 @@
 {
   "name": "@aurea-uds/icons",
   "version": "0.10.0",
-  "description": "O arquivo de ícones do Carbon que a Aurea UDS desenha com <use href>. A atribuição está no NOTICE.",
+  "description": "O sprite de ícones do Carbon que a Aurea UDS desenha com <use href>. A atribuição está no NOTICE.",
   "keywords": [
     "aurea",
     "design-system",
