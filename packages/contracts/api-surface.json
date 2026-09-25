@@ -7167,7 +7167,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ label: ReactNode; href?: string; }>",
+              "type": "BreadcrumbItem[]",
               "values": null
             },
             {

@@ -7,7 +7,7 @@ import React, { useRef } from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
 import { useValorResponsivo } from "./responsivo-runtime.js";
-import { cx, useAureaStrings, usePortalContainer } from "./internal.js";
+import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
 import { Kbd } from "./markup.js";
 import { Icon } from "./system.js";
 import { Button } from "./actions.js";
@@ -26,7 +26,7 @@ export function Stepper({ items, label, className }) {
             return _jsx("div", { role: "listitem", className: cx("step", st !== "default" && `step-${st}`), "aria-current": st === "active" ? "step" : undefined, children: it.onClick ? _jsx("button", { type: "button", className: "step-trigger", onClick: it.onClick, children: miolo }) : miolo }, n);
         }) });
 }
-export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "chevron--right", size: "sm" }), " ", i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
+export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "chevron--right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
 export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { className: "tabs", "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
 export function Pagination({ page, total, onPageChange }) { const s = useAureaStrings(); return _jsxs("nav", { className: "pagination", "aria-label": s.paginationLabel, children: [_jsx(Button, { variant: "ghost", size: "sm", disabled: page <= 1, onClick: () => onPageChange(page - 1), children: s.previous }), _jsxs(Badge, { variant: "primary", children: [page, " / ", total] }), _jsx(Button, { variant: "ghost", size: "sm", disabled: page >= total, onClick: () => onPageChange(page + 1), children: s.next })] }); }
 export function TableOfContents({ items, current, label, className, ...props }) {
@@ -178,13 +178,15 @@ function sidebarList(items, ctx, sub, labelledBy) {
             // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
             // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
             const oculto = (no) => ctx.collapsed ? _jsx("span", { className: "sr-only", children: no }) : no;
-            if (filhos && !it.href && !it.onClick)
+            if (filhos && !it.href && !it.onClick && !it.render)
                 return _jsxs("li", { children: [_jsx("p", { id: lid, className: cx("sidebar-group-label", ctx.collapsed && "sr-only"), children: it.label }), sidebarList(filhos, ctx, false, lid)] }, it.id);
             const ativo = it.id === ctx.current;
             const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
-            const alvo = it.href
-                ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo })
-                : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo });
+            const alvo = it.render
+                ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a")
+                : it.href
+                    ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo })
+                    : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo });
             // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
             // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
             // isso com tooltip no `NavButton`, e é o que falta para um trilho de ícone não virar adivinhação.
@@ -238,17 +240,21 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             // `size="lg"` porque a proporção contra o contador foi medida: 24 para 16, razão 0,67.
             const marca = _jsxs("span", { className: "bottom-nav-mark", children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg" }), it.badge != null && _jsx("span", { className: "bottom-nav-badge", children: it.badge })] });
             const miolo = _jsxs(_Fragment, { children: [marca, _jsx("span", { className: "bottom-nav-label", children: it.label })] });
-            return it.href
-                ? _jsx("a", { href: it.href, className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id)
-                : _jsx("button", { type: "button", className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id);
+            return it.render
+                ? _jsx(React.Fragment, { children: fundirRender(it.render, { className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a") }, it.id)
+                : it.href
+                    ? _jsx("a", { href: it.href, className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id)
+                    : _jsx("button", { type: "button", className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id);
         }) });
 }
 export function NavList({ items, className, ...props }) {
     return _jsx("ul", { className: cx("nav-list", className), ...props, children: items.map(it => {
-            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), it.href && _jsx(Icon, { name: "chevron--right", size: "sm", className: "nav-list-chevron" })] });
-            return _jsx("li", { children: it.href && !it.disabled
-                    ? _jsx("a", { href: it.href, className: "nav-list-row", onClick: it.onClick, children: miolo })
-                    : _jsx("button", { type: "button", className: "nav-list-row", "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : it.onClick, children: miolo }) }, it.id);
+            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), (it.href || it.render) && _jsx(Icon, { name: "chevron--right", size: "sm", className: "nav-list-chevron" })] });
+            return _jsx("li", { children: it.render && !it.disabled
+                    ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, children: miolo }, "a")
+                    : it.href && !it.disabled
+                        ? _jsx("a", { href: it.href, className: "nav-list-row", onClick: it.onClick, children: miolo })
+                        : _jsx("button", { type: "button", className: "nav-list-row", "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : it.onClick, children: miolo }) }, it.id);
         }) });
 }
 export function CommandPalette({ open, onClose, items, placeholder, label }) {

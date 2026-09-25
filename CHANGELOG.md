@@ -68,6 +68,15 @@ entrou na branch.
 
 ### Adicionado
 
+- **M-01 · `render` no `Button`, no `IconButton` e nos itens de navegação** (`Sidebar`,
+  `BottomNav`, `NavList`, `Breadcrumb`) — decisão do Victor, 25/09/2026: só onde o app precisa do
+  link do roteador. `render={<Link href="/relatorios" />}` desenha o link do roteador com a pele e
+  o conteúdo da peça; o destino é do elemento. No botão desativado ou carregando, o clique é barrado
+  também no elemento. O HeroUI 3.2.6 não tem `render`; o idioma é o da Base UI, que a Aurea já usa
+  no `Card` (`fundirRender`).
+- **M-02 (`classNames` por parte) não entra**: o HeroUI tirou isso na versão atual, e abriria a
+  aparência das peças por dentro. Decisão do Victor, 25/09/2026.
+
 - **B-02 · `Text`, `Heading`, `Paragraph` e `Code`, na web e no nativo**, no molde do HeroUI 3.2.6
   (decisão do Victor, 25/09/2026: HeroUI sempre primeiro). Uma **lista fechada de papéis** em vez
   de tamanhos soltos: título 1 a 6, texto, texto pequeno, texto mínimo e código. Cor só normal ou

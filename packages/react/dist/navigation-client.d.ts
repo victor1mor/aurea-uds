@@ -13,11 +13,13 @@ export declare function Stepper({ items, label, className }: {
     label?: string;
     className?: string;
 }): React.JSX.Element;
+export interface BreadcrumbItem {
+    label: ReactNode;
+    href?: string;
+    render?: ReactElement;
+}
 export declare function Breadcrumb({ items, label }: {
-    items: Array<{
-        label: ReactNode;
-        href?: string;
-    }>;
+    items: BreadcrumbItem[];
     label?: string;
 }): React.JSX.Element;
 export type TabsOrientation = "horizontal" | "vertical";
@@ -70,6 +72,8 @@ export interface SidebarItem {
     badge?: ReactNode;
     onClick?: () => void;
     items?: SidebarItem[];
+    /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
+    render?: ReactElement;
 }
 export type SidebarVariant = "floating" | "flush";
 export declare function Sidebar({ items, current, collapsed, variant, label, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
@@ -102,6 +106,8 @@ export interface NavListItem {
     href?: string;
     onClick?: () => void;
     disabled?: boolean;
+    /** O link do roteador do app (M-01). Linha com `render` é linha com destino: leva a seta, como a com `href`. */
+    render?: ReactElement;
 }
 export declare function NavList({ items, className, ...props }: HTMLAttributes<HTMLUListElement> & RefAttributes<HTMLUListElement> & {
     items: NavListItem[];

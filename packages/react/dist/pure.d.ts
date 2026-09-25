@@ -2,7 +2,7 @@ import { type ReactElement } from "react";
 export declare const cx: (...v: Array<string | false | null | undefined>) => string;
 export declare function fundirRender(render: ReactElement | undefined, props: {
     className?: string;
-} & object, padrao?: string): ReactElement;
+} & Record<string, unknown>, padrao?: string): ReactElement;
 export type AureaTheme = "dark" | "light";
 export type AureaDensity = "compact" | "comfortable" | "spacious";
 export type UniversalState = "waiting_user" | "waiting_approval" | "waiting_dependency" | "offline" | "stale" | "partial" | "degraded";

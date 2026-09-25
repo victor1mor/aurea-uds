@@ -38,7 +38,7 @@ export const cx=(...v:Array<string|false|null|undefined>)=>v.filter(Boolean).joi
 // o `DropdownMenu`, o `Popover` e o `Combobox` já usam com a Base UI (`render={<Button/>}`), e é
 // a primeira parcela do `G-API-02` — o padrão "o motor entrega e a Aurea não passa adiante".
 export function fundirRender(
-  render: ReactElement | undefined, props: {className?: string} & object, padrao = "div",
+  render: ReactElement | undefined, props: {className?: string} & Record<string, unknown>, padrao = "div",
 ): ReactElement {
   if (!render) return createElement(padrao, props);
   // As props do elemento de quem chama vêm DEPOIS das nossas, para que ele possa sobrescrever

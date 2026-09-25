@@ -200,6 +200,12 @@
       "type": "boolean | string",
       "default": "—",
       "description": "Link attribute, only with `href` (C-13)."
+    },
+    {
+      "name": "render",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "M-01: the element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
     }
   ]
 }

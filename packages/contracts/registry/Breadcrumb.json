@@ -42,9 +42,9 @@
   "props": [
     {
       "name": "items",
-      "type": "Array<{label: ReactNode; href?: string}>",
+      "type": "Array<{label: ReactNode; href?: string; render?: ReactElement}>",
       "default": "—",
-      "description": "The trail, in order. An item with no href renders as a <strong> carrying aria-current=\"page\" instead of a link — the last crumb is where you already are, and a link to the current page is one more thing to skip."
+      "description": "The trail, in order. An item with no href renders as a <strong> carrying aria-current=\"page\" instead of a link — the last crumb is where you already are, and a link to the current page is one more thing to skip. M-01: an item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content."
     },
     {
       "name": "label",
