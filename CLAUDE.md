@@ -67,6 +67,10 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
 - Quando divergem, vale o de cima. Na dúvida, pergunte antes de escolher.
 - ⚠ **O HeroUI não manda na identidade da Aurea** (seção 5). Dele se copia o desenho da peça; a
   aparência continua sendo a nossa.
+- **HeroUI sempre primeiro** (ordem do Victor, 25/09/2026): *"HeroUI sempre vamos dar prioridade
+  a ele"*. Quando ele **não tem** a peça que estamos criando, ela se cria **pensando como ele
+  criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea. Ele é a
+  referência mesmo onde não tem o componente.
 
 ---
 
@@ -101,12 +105,33 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    parte) · B-02 (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco
    com uma linha). Na leitura de 24/09/2026, ele vem **antes** da `1.0`, porque muda a estrutura
    das peças.
-   - **A-04 feito** na branch `claude/friendly-cerf-ctu0v7`, sem pedido de junção: sai junto com o
-     resto do lote. Pode quebrar a compilação de quem passa ícone numa variável `string`.
-   - **Os outros quatro esperam a ficha** do documento de achados. O HeroUI 3.2.6 não tem `render`
-     nem `classNames` (M-01, M-02 vêm só do consumidor); tem `Heading`/`Paragraph`/`Code` (B-02) e
-     um anel de foco único, `focus-ring` (B-09).
-4. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
+   - Tudo na branch `claude/friendly-cerf-ctu0v7`, sem pedido de junção: sai junto, no fim do lote.
+   - **A-04 feito.** Pode quebrar a compilação de quem passa ícone numa variável `string`.
+   - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
+     `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.
+   - **ADR-0052 feita e aprovada pela imagem** (25/09/2026): o botão só de ícone é redondo.
+   - **B-02 no modelo do HeroUI** (decisão do Victor, 25/09/2026): lista fechada de papéis
+     (título 1–6, texto, texto pequeno, texto mínimo, código), mais `Heading`, `Paragraph` e
+     `Code`, nos dois alvos. O `Text` do nativo que já existe fica.
+   - **M-01 e M-02 esperam a ficha.** O HeroUI 3.2.6 não tem `render` nem `classNames`.
+4. **Lote E** (nativo, achados do app de 25/09/2026) — na fila, sem "pode" para consertar ainda.
+   Todos a medir contra o código antes de aceitar:
+   - **E1** · `Button`: o texto sai com entrelinha 1,0 (`leading: "none"`) e no Android a perna das
+     letras (g, p, ç) é cortada.
+   - **E2** · `Button`: o `Pressable` tem `alignSelf: "flex-start"`, que vence o `alignItems:
+     "center"` do pai. No `EmptyState` o botão fica à esquerda e o resto no meio.
+   - **E3** · `SegmentedControl`: vem dentro de um rolador horizontal da largura toda, e os
+     segmentos ficam presos à esquerda. Um `Cluster justify="center"` em volta não muda nada. Falta
+     prop de alinhamento.
+   - **E4** · `Select`: a lista não rola no Android e a folha desce atrás dos botões do sistema.
+     **Causa não confirmada**, pede teste no aparelho. Pesa porque há listas de mais de 200 itens.
+   - **E5** · `Radio`: a bolinha fica presa no topo do texto (`alignItems: "flex-start"` e
+     `marginTop: 1`), em vez de centralizada na altura. Falta prop de alinhamento.
+   - **E6** · `Combobox`: sem `keyboardType` no campo de busca; para digitar um número abre o
+     teclado de letras.
+   - **E7** · **decisão, não defeito:** dentro do `Card variant="brand"` todo botão sai com a tinta
+     escura do cartão e o `tone` é ignorado (`pintarSobreAMarca`). Só muda se o Victor quiser.
+5. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
 
 ### Pendências soltas, sem lote nem decisão
