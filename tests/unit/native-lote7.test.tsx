@@ -164,19 +164,19 @@ describe("Combobox — a lista e o que ela monta", () => {
     expect(ultimo("Modal").visible).toBe(false);
   });
 
-  // 🔴 O DEFEITO ESTRUTURAL QUE O `Select` LEVOU DUAS RODADAS PARA FECHAR (`inputs.tsx:626-633`):
-  // um `View` sem manipulador não vira responder, o toque atravessa para o `Pressable` do fundo e
-  // **tocar no corpo da folha a fecha**. Aqui seria pior que lá: tocar para posicionar o cursor
-  // no campo de busca fecharia a folha inteira.
-  it("o corpo da folha para o toque antes de ele chegar ao fundo", () => {
+  // 🔴 O DEFEITO ESTRUTURAL QUE O `Select` LEVOU DUAS RODADAS PARA FECHAR: tocar no corpo da
+  // folha a fechava. Aqui seria pior: tocar para posicionar o cursor no campo de busca fecharia a
+  // folha inteira. A garantia é ESTRUTURAL — o fundo tocável é irmão da folha, não ancestral.
+  // ~~O corpo reivindica o toque~~ saiu no E4 (25/09/2026): no Android um `View` dono do toque
+  // intercepta os movimentos seguintes, e a lista de dentro não rolava (visto pelo app).
+  it("o fundo que fecha não envolve a folha, e a folha não reivindica o toque", () => {
     render(<Envolve><Combobox items={CATALOGO} testID="cb" /></Envolve>);
-    // ⚠ O corpo da folha é `Animated.View` desde que ela ganhou o arrasto (12/09/2026) — este
-    // teste procurava só em `View` e reprovou código CERTO. **Procurar o COMPORTAMENTO, não o
-    // primitivo**: é a segunda vez neste arquivo que a pergunta errada reprova o conserto.
-    const corpo = [...__instancias("View"), ...__instancias("Animated.View")]
-      .find((p) => p.onStartShouldSetResponder);
-    expect(corpo).toBeDefined();
-    expect((corpo!.onStartShouldSetResponder as () => boolean)()).toBe(true);
+    const fundo = __instancias("Pressable").find((p) => p.testID === "cb-fundo");
+    expect(fundo).toBeDefined();
+    expect(fundo!.children).toBeUndefined();
+    const reivindicam = [...__instancias("View"), ...__instancias("Animated.View")]
+      .filter((p) => typeof p.onStartShouldSetResponder === "function");
+    expect(reivindicam).toHaveLength(0);
   });
 });
 

@@ -68,6 +68,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // folha, e ele leva `search` — que mapeia nos dois.
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { IconButton } from "./actions.js";
 import { criarFolha } from "./estilos.js";
 import { Spinner } from "./feedback.js";
@@ -202,7 +203,7 @@ const folha = criarFolha((t) => ({
  * na web e pela mesma razão do achado I1 da auditoria: um componente com a sua própria cópia do
  * estado é a segunda fonte de verdade que ninguém sabe que existe.
  */
-export function Combobox({ items, value, onValueChange, onSearchChange, searchDelay = ESPERA_PADRAO, loading, onEndReached, placeholder, searchPlaceholder, empty, clearable = true, draggable = true, disabled, size, chevron = "chevron--down", searchIcon = "search", style, testID, }) {
+export function Combobox({ items, value, onValueChange, onSearchChange, searchDelay = ESPERA_PADRAO, loading, onEndReached, placeholder, searchPlaceholder, empty, clearable = true, draggable = true, disabled, size, chevron = "chevron--down", searchIcon = "search", searchKeyboardType, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
@@ -297,7 +298,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                     peleDaMarca,
                     inativo && s.desabilitado,
                     style,
-                ], children: [_jsx(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: value?.label }, accessibilityState: { disabled: !!inativo, expanded: aberto }, style: s.gatilho, children: _jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: value ? "default" : "subtle", numberOfLines: 1, style: { flex: 1, minWidth: 0 }, children: value?.label ?? placeholder ?? "" }) }), _jsxs(View, { style: s.acoes, children: [clearable && value != null && !inativo && (_jsx(IconButton, { name: "close", label: strings.comboboxClear, appearance: "ghost", size: "sm", onPress: () => onValueChange?.(null), testID: testID ? `${testID}-limpar` : undefined })), chevron && (_jsx(Pressable, { accessible: false, disabled: inativo, style: s.setaToque, onPress: inativo ? undefined : () => setAberto(true), testID: testID ? `${testID}-seta` : undefined, children: _jsx(Icon, { name: chevron, size: "sm", color: t.color.subtleForeground }) }))] })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: fechar, children: _jsxs(KeyboardAvoiding, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: fechar, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { style: [s.lista, { transform: [{ translateY: arrasto }] }], onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, onStartShouldSetResponder: () => true, children: [_jsx(View, { style: s.puxadorArea, ...(draggable ? gestos.panHandlers : null), accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) }), _jsxs(View, { style: [s.grupo, { height: alturaDoTamanho(t, tam) }], ...(draggable ? gestos.panHandlers : null), children: [searchIcon && _jsx(Icon, { name: searchIcon, size: "sm", color: t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-busca` : undefined, value: texto, onChangeText: digitar, placeholder: searchPlaceholder ?? strings.comboboxSearch, placeholderTextColor: t.color.subtleForeground, 
+                ], children: [_jsx(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: value?.label }, accessibilityState: { disabled: !!inativo, expanded: aberto }, style: s.gatilho, children: _jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: value ? "default" : "subtle", numberOfLines: 1, style: { flex: 1, minWidth: 0 }, children: value?.label ?? placeholder ?? "" }) }), _jsxs(View, { style: s.acoes, children: [clearable && value != null && !inativo && (_jsx(IconButton, { name: "close", label: strings.comboboxClear, appearance: "ghost", size: "sm", onPress: () => onValueChange?.(null), testID: testID ? `${testID}-limpar` : undefined })), chevron && (_jsx(Pressable, { accessible: false, disabled: inativo, style: s.setaToque, onPress: inativo ? undefined : () => setAberto(true), testID: testID ? `${testID}-seta` : undefined, children: _jsx(Icon, { name: chevron, size: "sm", color: t.color.subtleForeground }) }))] })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: fechar, children: _jsxs(KeyboardAvoiding, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: fechar, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { style: [s.lista, { transform: [{ translateY: arrasto }] }], onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, children: [_jsx(View, { style: s.puxadorArea, ...(draggable ? gestos.panHandlers : null), accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) }), _jsxs(View, { style: [s.grupo, { height: alturaDoTamanho(t, tam) }], ...(draggable ? gestos.panHandlers : null), children: [searchIcon && _jsx(Icon, { name: searchIcon, size: "sm", color: t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-busca` : undefined, value: texto, onChangeText: digitar, placeholder: searchPlaceholder ?? strings.comboboxSearch, placeholderTextColor: t.color.subtleForeground, 
                                                 // ⚠ `autoFocus` é o que faz a folha valer a pena: abrir um campo de busca e
                                                 // exigir um segundo toque para o teclado subir é um toque a mais em cada
                                                 // cadastro. O foco entra com a folha; o teclado vem junto.
@@ -307,7 +308,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                                                 // `returnKeyType="search"` troca o "enter" do teclado pela lupa. É pista de
                                                 // plataforma, não decoração: diz à pessoa que aquele campo é de busca antes de
                                                 // ela digitar a primeira letra.
-                                                returnKeyType: "search", style: [
+                                                returnKeyType: "search", keyboardType: searchKeyboardType, style: [
                                                     s.campoDeTexto,
                                                     { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
                                                         color: t.color.foreground },
@@ -319,7 +320,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                                                 s.opcao,
                                                 item.value === value?.value && s.opcaoEscolhida,
                                                 item.disabled && s.desabilitado,
-                                            ], children: _jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }) })) })] })] }) }) })] }));
+                                            ], children: _jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }) })) }), _jsx(SafeAreaView, { edges: ["bottom"] })] })] }) }) })] }));
 }
 // ── A DOBRA DE ACENTO, e por que ela é sondada em vez de presumida ───────────────────────────
 // Buscar "acucar" tem de achar "açúcar" — num catálogo em português, exigir o acento certo é

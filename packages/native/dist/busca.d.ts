@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type StyleProp, type ViewStyle } from "react-native";
+import { type TextInputProps, type StyleProp, type ViewStyle } from "react-native";
 import { type IconName } from "./icon.js";
 import { type AureaFieldSize } from "./inputs.js";
 /** Uma linha do catálogo. **Mesma forma da web** (`ComboboxOption`), mais o `disabled` que o `Select` daqui já tinha. */
@@ -59,6 +59,13 @@ export interface ComboboxProps {
     chevron?: IconName | false;
     /** O glifo da lupa no campo da folha. Registre-o, ou passe `false`. */
     searchIcon?: IconName | false;
+    /**
+     * O teclado do campo de busca da folha — E6, 25/09/2026. Para buscar um ANO ou um código, passe
+     * `"number-pad"`: sem isto abre o teclado de letras. É o `keyboardType` do `TextInput`, com o
+     * mesmo prefixo `search` do `searchPlaceholder` e do `searchIcon`, que também são do campo da
+     * folha e não do gatilho. Padrão: o teclado de texto.
+     */
+    searchKeyboardType?: TextInputProps["keyboardType"];
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -91,7 +98,7 @@ export interface ComboboxProps {
  * na web e pela mesma razão do achado I1 da auditoria: um componente com a sua própria cópia do
  * estado é a segunda fonte de verdade que ninguém sabe que existe.
  */
-export declare function Combobox({ items, value, onValueChange, onSearchChange, searchDelay, loading, onEndReached, placeholder, searchPlaceholder, empty, clearable, draggable, disabled, size, chevron, searchIcon, style, testID, }: ComboboxProps): React.JSX.Element;
+export declare function Combobox({ items, value, onValueChange, onSearchChange, searchDelay, loading, onEndReached, placeholder, searchPlaceholder, empty, clearable, draggable, disabled, size, chevron, searchIcon, searchKeyboardType, style, testID, }: ComboboxProps): React.JSX.Element;
 export interface SearchFieldProps {
     value?: string;
     onChangeText?: (v: string) => void;

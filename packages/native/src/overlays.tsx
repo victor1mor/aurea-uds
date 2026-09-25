@@ -59,6 +59,7 @@ import {
   Animated, Easing, Modal, PanResponder, Pressable, ScrollView, View,
   type StyleProp, type ViewStyle,
 } from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {Button} from "./actions.js";
 import {criarFolha} from "./estilos.js";
 import {IconButton} from "./actions.js";
@@ -139,8 +140,14 @@ const DURACAO = 280;
 // afirmação mais forte que "passou no teste", mas não é o vidro. Foi exatamente confiar em
 // "passou no teste" que produziu a primeira tentativa.
 //
-// O `naoAtravessa` FICA no painel como segunda linha: agora é redundante, e redundância que
-// não custa nada num caminho que já falhou uma vez se paga.
+// ~~O `naoAtravessa` FICA no painel como segunda linha: agora é redundante, e redundância que
+// não custa nada num caminho que já falhou uma vez se paga.~~ — **E4, 25/09/2026: ela CUSTAVA.**
+// No Android, um `View` que vira dono do toque pelo JavaScript passa a interceptar os movimentos
+// seguintes (`JSResponderHandler.onInterceptTouchEvent`), e o `ScrollView` de dentro deixa de
+// rolar. O app viu a lista do `Select` e a do `Combobox` sem rolar; a suspeita não está confirmada
+// no aparelho, mas a linha era redundante por construção e saiu dos painéis que têm rolagem dentro
+// (`Dialog`, `Drawer`, `Select`, `Combobox`). Fica no `ConfirmDialog` (sem fundo tocável e sem
+// rolagem) e no `BottomSheet`, onde os `panHandlers` do arrasto já a sobrescrevem.
 //
 // ⚠ Vale para os QUATRO que têm esta forma: `Dialog`, `Drawer`, `BottomSheet` e o `Select` do
 // Lote 4 (`inputs.tsx`). O `ConfirmDialog` é imune desde que nasceu — o fundo dele não tem
@@ -196,7 +203,7 @@ export function Dialog({
       <View style={[s.fundo, s.centro]}>
         <Pressable style={s.fundoDeToque} onPress={onClose} accessible={false}
                    testID={testID ? `${testID}-fundo` : undefined} />
-        <View {...naoAtravessa} style={[s.superficie, style]}>
+        <View style={[s.superficie, style]}>
           <View style={s.cabecalho}>
             <Text size="lg" weight={600} accessibilityRole="header" style={s.titulo}>{title}</Text>
             <IconButton name="close" label={strings.close} appearance="ghost" size="sm"
@@ -363,7 +370,6 @@ export function Drawer({
         <Pressable style={s.fundoDeToque} onPress={onClose} accessible={false}
                    testID={testID ? `${testID}-fundo` : undefined} />
         <Animated.View
-          {...naoAtravessa}
           style={[
             s.gaveta, side === "right" ? s.gavetaDireita : s.gavetaEsquerda,
             {transform: [{translateX: desloca}]}, style,
@@ -483,6 +489,9 @@ export function BottomSheet({
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>
             {children}
           </Corpo>
+          {/* E4: o recuo da barra de botões do Android — o mesmo `SafeAreaView` do `Select` e do
+              `Combobox`, que recua só o que a folha fica de fato atrás dela. */}
+          <SafeAreaView edges={["bottom"]} />
         </Animated.View>
       </View>
     </Modal>

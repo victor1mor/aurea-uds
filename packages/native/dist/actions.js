@@ -146,7 +146,13 @@ export function Button({ children, appearance = "solid", tone = "neutral", size 
             s.alvo, fullWidth && s.alvoLargura,
             tocando && s.pressionado, disabled && s.inerte,
         ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa], children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
-                    ? _jsx(Text, { size: FONTE[size], weight: 500, leading: "none", style: { color: corDoTexto }, children: children })
+                    // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão do HeroUI Native
+                    // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e o IBM
+                    // Plex precisa de 1,3 em para caber inteiro (sobe 1,025 e desce 0,275): no Android o RN
+                    // corta o que passa da linha, e a perna do g, do p e do ç sumia. Cabe em todo tamanho e
+                    // densidade (medido): `xs`/`sm` têm linha de 21 e o menor botão mede 24 (compacto); os
+                    // maiores têm linha de 24 e medem 32 ou mais.
+                    ? _jsx(Text, { size: FONTE[size], weight: 500, leading: "normal", style: { color: corDoTexto }, children: children })
                     : children, trailingIcon ? _jsx(Icon, { name: trailingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, trailing ?? null] }) }));
 }
 /**
