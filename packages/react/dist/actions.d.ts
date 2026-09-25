@@ -80,6 +80,9 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: IconName;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
+export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
+}
+export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export declare function ButtonGroup({ label, orientation, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label?: string;
     orientation?: Responsive<Orientation>;

@@ -10,7 +10,7 @@ import {Toggle as BaseToggle} from "@base-ui/react/toggle";
 import {ToggleGroup as BaseToggleGroup} from "@base-ui/react/toggle-group";
 import {cx, useAureaStrings} from "./internal.js";
 import {Kbd} from "./markup.js";
-import {Icon, type IconName} from "./system.js";
+import {Icon, useAureaTheme, type IconName} from "./system.js";
 
 // A ordem do nome segue a FAMÍLIA, e a inconsistência é herdada: em `outline`/`ghost` o tom vem
 // primeiro (`danger-outline`, `primary-outline`); em `link` vem depois (`link-danger`), porque ali
@@ -191,6 +191,19 @@ export interface IconButtonProps extends Omit<ButtonProps,"children">{label:stri
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} {...props}><Icon name={icon}/></Button>});
+// ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone. É peça
+// EXCLUSIVA da Aurea — o HeroUI 3.2.6 não tem troca de tema —, então nasce pensando como ele
+// criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.
+// Mostra o tema para onde se VAI: no claro a LUA, escura; no escuro o SOL, amarelo. As duas
+// combinações se enxergam (tinta escura sobre o claro, o amarelo da marca sobre o escuro), e é por
+// isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
+// Fechado como o HeroUI faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
+// do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
+export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth">{}
+export const ThemeToggle=forwardRef<HTMLButtonElement,ThemeToggleProps>(function ThemeToggle({className,...props},ref){
+  const {theme,toggleTheme}=useAureaTheme();const s=useAureaStrings();const escuro=theme==="dark";
+  return <IconButton ref={ref} icon={escuro?"sun":"moon"} label={escuro?s.themeToLight:s.themeToDark}
+    className={cx(escuro?"theme-toggle-sun":"theme-toggle-moon",className)} onClick={toggleTheme} {...props}/>});
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem
 // noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por

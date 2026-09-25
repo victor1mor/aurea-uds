@@ -88,6 +88,9 @@ export interface AureaStrings {
   comboboxEmpty: string;
   /** O botão que desfaz a escolha do `Combobox`. Mesmo nome da web. */
   comboboxClear: string;
+  /** O nome do `ThemeToggle` quando ele leva ao tema escuro, e ao claro. Mesmos nomes da web. */
+  themeToDark: string;
+  themeToLight: string;
   /** O que o `Combobox` anuncia enquanto a busca remota não voltou. Mesmo nome da web. */
   comboboxLoading: string;
   /**
@@ -134,6 +137,8 @@ export const defaultStrings: AureaStrings = {
   decrement: "Decrease",
   comboboxEmpty: "No results",
   comboboxClear: "Clear selection",
+  themeToDark: "Switch to dark theme",
+  themeToLight: "Switch to light theme",
   comboboxLoading: "Loading…",
   comboboxSearch: "Search",
   searchClear: "Clear search",
@@ -173,6 +178,8 @@ export const ptBR: AureaStrings = {
   decrement: "Diminuir",
   comboboxEmpty: "Nenhum resultado",
   comboboxClear: "Limpar seleção",
+  themeToDark: "Mudar para o tema escuro",
+  themeToLight: "Mudar para o tema claro",
   comboboxLoading: "Carregando…",
   comboboxSearch: "Buscar",
   searchClear: "Limpar busca",

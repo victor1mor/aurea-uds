@@ -4,7 +4,7 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 36,
-    "componentes": 124,
+    "componentes": 125,
     "hooks": 9,
     "aliasesLiterais": 60,
     "propsDistintas": 242
@@ -3514,6 +3514,25 @@
               "optional": false,
               "type": "IconName",
               "values": null
+            }
+          ]
+        },
+        {
+          "name": "ThemeToggle",
+          "kind": "const",
+          "propsType": "ThemeToggleProps",
+          "props": [
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<ComponentSize>",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
             }
           ]
         },

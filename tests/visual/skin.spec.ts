@@ -2851,3 +2851,28 @@ for (const theme of ["dark", "light"] as const) {
     expect(m.codigo.raio).not.toBe("0px");
   });
 }
+
+// ── ThemeToggle (25/09/2026) · a cor no glifo sai do token ──────────────────────────────────
+// A lua na tinta do texto, o sol no amarelo da marca. O HTML do servidor sai sempre com a lua (o
+// tema se lê do `<html>` no cliente), então o sol é o mesmo botão com a classe do sol.
+const BOTAO_TEMA = renderToStaticMarkup(h(A.ThemeToggle, null));
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: ThemeToggle · lua na tinta, sol no amarelo · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__tema-${theme}`;
+    const sol = BOTAO_TEMA.replace("theme-toggle-moon", "theme-toggle-sun").replace("#i-moon", "#i-sun");
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body><div id="lua">${BOTAO_TEMA}</div><div id="sol">${sol}</div></body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    const m = await p.evaluate(() => {
+      const sonda = (css: string) => { const s = document.createElement("span"); s.style.color = css;
+        document.body.append(s); const v = getComputedStyle(s).color; s.remove(); return v; };
+      const cor = (id: string) => getComputedStyle(document.querySelector(`#${id} .icon`)!).color;
+      return {lua: cor("lua"), sol: cor("sol"), tinta: sonda("var(--foreground)"), amarelo: sonda("var(--primary)")};
+    });
+    expect(m.lua).toBe(m.tinta);
+    expect(m.sol).toBe(m.amarelo);
+    expect(m.sol).not.toBe(m.lua);
+  });
+}

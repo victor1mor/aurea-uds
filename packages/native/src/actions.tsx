@@ -24,7 +24,7 @@ import {Pressable, View, type PressableProps} from "react-native";
 import {criarFolha, REACAO_AO_TOQUE} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
 import {Text} from "./text.js";
-import {useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
+import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 /** Quanto peso a caixa tem. */
@@ -261,10 +261,16 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export function IconButton({
+export function IconButton(props: IconButtonProps) {
+  return <BotaoDeIcone {...props} />;
+}
+
+/** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
+ *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
+function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
-  icons, pressed, disabled, ...rest
-}: IconButtonProps) {
+  icons, pressed, disabled, corDoIcone, ...rest
+}: IconButtonProps & {corDoIcone?: string}) {
   const t = useAureaTokens();
   const s = folha(t);
   const marca = useSobreAMarca();
@@ -293,8 +299,29 @@ export function IconButton({
       ]}
       {...rest}>
       <View style={[s.caixa, caixa]}>
-        <Icon name={name} size={ICONE[size]} color={appearance === "solid" ? cor.texto : cor.sobre} icons={icons} />
+        <Icon name={name} size={ICONE[size]} icons={icons}
+              color={corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre} />
       </View>
     </Pressable>
+  );
+}
+
+// ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone — o
+// irmão do da web. Peça EXCLUSIVA da Aurea (o HeroUI Native não tem troca de tema), pensada como
+// ele faria: um só-ícone, sem cor solta. Mostra o tema para onde se VAI: no claro a LUA, na tinta
+// do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` saem do registro do
+// app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
+/** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {}
+export function ThemeToggle(props: ThemeToggleProps) {
+  const {theme, toggleTheme} = useAureaTheme();
+  const t = useAureaTokens();
+  const s = useAureaStrings();
+  const escuro = theme === "dark";
+  return (
+    <BotaoDeIcone {...props} name={escuro ? "sun" : "moon"}
+      label={escuro ? s.themeToLight : s.themeToDark}
+      corDoIcone={escuro ? t.color.primary : t.color.foreground}
+      onPress={toggleTheme} />
   );
 }

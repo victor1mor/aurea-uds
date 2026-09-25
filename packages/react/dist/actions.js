@@ -11,7 +11,7 @@ import { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import { cx, useAureaStrings } from "./internal.js";
 import { Kbd } from "./markup.js";
-import { Icon } from "./system.js";
+import { Icon, useAureaTheme } from "./system.js";
 // O dicionário que desachata o enum. É a ÚNICA fonte da correspondência: o gate do
 // `validate.py` lê daqui para provar que todo par ou tem regra no core ou está declarado
 // ausente com motivo, e a ficha do registry declara os mesmos dois eixos.
@@ -131,6 +131,12 @@ export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, 
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 export const IconButton = forwardRef(function IconButton({ label, icon, variant = "ghost", className, ...props }, ref) { return _jsx(Button, { ref: ref, variant: variant, className: cx("btn-icon", className), "aria-label": label, ...props, children: _jsx(Icon, { name: icon }) }); });
+export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
+    const { theme, toggleTheme } = useAureaTheme();
+    const s = useAureaStrings();
+    const escuro = theme === "dark";
+    return _jsx(IconButton, { ref: ref, icon: escuro ? "sun" : "moon", label: escuro ? s.themeToLight : s.themeToDark, className: cx(escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), onClick: toggleTheme, ...props });
+});
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem
 // noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por

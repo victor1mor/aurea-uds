@@ -37,7 +37,7 @@ export { Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo } from ".
 // autorizada pelo Victor em 03/09/2026 depois de o lote parar por ela (`BUILDING.md` §3).
 export { Screen } from "./screen.js";
 export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";
-export { Button, IconButton } from "./actions.js";
+export { Button, IconButton, ThemeToggle } from "./actions.js";
 // ── Lote 2 — o painel, que é só leitura ────────────────────────────────────────────────────
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";
 export { Badge, Status, Avatar, KPI, formatarContagem } from "./display.js";

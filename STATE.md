@@ -13,12 +13,12 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Métrica | Valor |
 |---|---|
-| Componentes exportados por `@aurea-uds/react` | 120 |
-| Fichas de registry | 120 |
+| Componentes exportados por `@aurea-uds/react` | 121 |
+| Fichas de registry | 121 |
 | Hooks públicos com ficha | 9 |
-| Maturidade declarada nas fichas | Ready 42 · Stable 87 |
+| Maturidade declarada nas fichas | Ready 42 · Stable 88 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 580 |
+| Classes declaradas no CSS do core | 582 |
 
 ## Tokens
 
@@ -33,44 +33,44 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Tipo de página | Quantidade |
 |---|---|
-| Componente | 129 |
+| Componente | 130 |
 | Pattern | 204 |
 | Block | 15 |
 | Recipe | 23 |
 | Índice de área | 6 |
-| **Total** | **377** |
+| **Total** | **378** |
 
 ## Cobertura das fichas
 
 | Campo | Fichas que declaram |
 |---|---|
-| `props` (contrato de API publicado) | 120 de 120 |
-| `variants` | 15 de 120 |
-| `sizes` | 21 de 120 |
-| `states` | 103 de 120 |
-| `tokens` | 121 de 120 |
-| `a11y.apg` | 125 de 120 |
+| `props` (contrato de API publicado) | 121 de 121 |
+| `variants` | 15 de 121 |
+| `sizes` | 22 de 121 |
+| `states` | 104 de 121 |
+| `tokens` | 122 de 121 |
+| `a11y.apg` | 126 de 121 |
 
 ## Conteúdo do catálogo
 
 | Origem | Arquivos |
 |---|---|
-| Componentes com conteúdo próprio | 27 de 120 |
-| Componentes com starter (preview + código mínimos) | 102 de 120 |
+| Componentes com conteúdo próprio | 27 de 121 |
+| Componentes com starter (preview + código mínimos) | 103 de 121 |
 | Patterns com conteúdo | 77 |
 | Blocks com conteúdo | 2 |
 | Receitas com preview | 23 de 23 |
 
 Todo item tem preview e código — é o núcleo do modelo de página decidido na
-[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 102 componentes de
-starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 120: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
+[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 103 componentes de
+starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 121: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
 
 ## Garantias automáticas
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1215 |
-| Componentes citados nos testes unitários | 127 de 120 |
+| Chamadas de `test()` nos testes unitários | 1222 |
+| Componentes citados nos testes unitários | 128 de 121 |
 | Specs de navegador (Playwright) | 22 |
 | Baselines de screenshot no repositório | 44 |
 | Baselines `-linux.png` (o que a CI compara) | 22 |

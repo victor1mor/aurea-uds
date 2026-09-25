@@ -684,6 +684,12 @@ img,svg { display:block; }
 /* xs e xl também precisam de largura: sem isto a altura mudava e a largura ficava na do
    md, e o alvo só-ícone deixava de ser quadrado (achado na onda Actions, 24/07). */
 .btn-icon.btn-xl { width:var(--control-h-xl); }
+/* ThemeToggle (25/09/2026): a cor no ícone mostra o tema para onde se vai. No claro a LUA, na tinta
+   do texto; no escuro o SOL, no amarelo da marca — as duas combinações se enxergam, e é por isso
+   que o botão nunca mostra a lua no escuro nem o sol no claro. Mais específico que o `.btn:hover`,
+   então a cor fica também com o mouse em cima. */
+.theme-toggle-moon .icon { color:var(--foreground); }
+.theme-toggle-sun .icon { color:var(--primary); }
 /* wrap, não estoura: os botões do grupo são pills com gap (não segmentos colados), então
    quebrar linha em tela estreita preserva o visual. Único gap de eixo horizontal que a
    auditoria da Etapa 3 achou sem proteção — o resto já rola (tabela) ou já quebra (toolbar). */

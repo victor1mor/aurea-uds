@@ -277,6 +277,14 @@ export default {
       h("blockquote", null, "Everyone enjoys a good joke, so it is only fair that they pay."),
       h("ul", null, h("li", null, "Puns: 5 coins"), h("li", null, "One-liners: 20 coins"))),
   },
+  // ThemeToggle (25/09/2026): a prévia troca o tema do catálogo DE VERDADE — é a prova de que o
+  // botão manda no `<html>`, e de que o ícone muda de cor junto (lua escura, sol amarelo).
+  ThemeToggle: {
+    description: "The light/dark switch, with colour in the glyph: a dark moon in the light theme, "
+      + "the brand yellow sun in the dark one. It shows where it goes, and its name says so.",
+    code: `<ThemeToggle />`,
+    render: () => h(A.ThemeToggle, null),
+  },
   // Tipografia (B-02, 25/09/2026), no molde do HeroUI 3.2.6: uma lista fechada de papéis. As
   // prévias mostram a lista INTEIRA de cada peça, porque o que se escolhe é o papel — ver todos lado
   // a lado é o que ensina que não existe "um tamanho entre o h3 e o h4".

@@ -18,7 +18,8 @@ em inglês e ficam como estão: são registro.
 ## [Unreleased]
 
 Nada além da `0.12.0`, logo abaixo, que está pronta e não publicada. As peças novas dela são
-`Text`, `Heading`, `Paragraph` e `Code` (B-02). Quando o Victor publicar, esta seção fica vazia.
+`Text`, `Heading`, `Paragraph` e `Code` (B-02), e o `ThemeToggle`. Quando o Victor publicar, esta
+seção fica vazia.
 
 ---
 
@@ -79,6 +80,12 @@ do botão redondo e do B-02 foram aprovadas pelo Victor.
 
 
 ### Adicionado
+
+- **`ThemeToggle`, na web e no nativo** (pedido do Victor, 25/09/2026): o botão de claro e escuro
+  com cor no ícone. No tema claro mostra a **lua, na tinta do texto**; no escuro, o **sol, no
+  amarelo da marca** — o tema para onde se vai, e o nome dele diz isso ("Mudar para o tema
+  escuro"). É um só-ícone redondo, sem cor solta. Peça exclusiva da Aurea: o HeroUI não tem troca
+  de tema. ⚠ No nativo, os glifos `moon` e `sun` saem do registro do app, como os do `Alert`.
 
 - **M-01 · `render` no `Button`, no `IconButton` e nos itens de navegação** (`Sidebar`,
   `BottomNav`, `NavList`, `Breadcrumb`) — decisão do Victor, 25/09/2026: só onde o app precisa do

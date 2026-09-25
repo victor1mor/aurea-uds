@@ -3695,3 +3695,16 @@ de fontes, e não o Menlo que o HeroUI Native usa no iOS.
 
 **O que não entrou:** o `Prose` do HeroUI — a Aurea já tinha o dela (L5). E a `color` segue a
 lista dele (`default`/`muted`), e não os nove `tone` do `Text` nativo antigo, que fica como está.
+
+## `ThemeToggle` — 25/09/2026 · pedido do Victor
+
+**Peça exclusiva da Aurea.** O HeroUI não tem troca de tema: conferido nos pacotes publicados — o
+`@heroui/react` 3.2.6 tem `switch` e `toggle-button`, o `heroui-native` 1.0.10 tem `switch` e
+`theme-background`, e nenhum é o botão de claro e escuro. Pela regra de 25/09/2026, ela nasce
+**pensando como o HeroUI criaria**: um só-ícone (o `IconButton` da Aurea, redondo pela ADR-0052),
+sem cor solta, com o nome dizendo para onde vai.
+
+**O que é nosso:** mostrar o tema de DESTINO (a lua no claro, o sol no escuro), e a cor no glifo —
+a lua na tinta do texto (`--foreground`) e o sol no amarelo da marca (`--primary`). As duas
+combinações se enxergam; a inversa (sol amarelo no claro, lua escura no escuro) não existe de
+propósito. Glifos do Carbon: `moon` e `sun`.

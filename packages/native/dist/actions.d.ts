@@ -65,4 +65,8 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export declare function IconButton({ name, label, appearance, tone, size, icons, pressed, disabled, ...rest }: IconButtonProps): React.JSX.Element;
+export declare function IconButton(props: IconButtonProps): React.JSX.Element;
+/** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {
+}
+export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;

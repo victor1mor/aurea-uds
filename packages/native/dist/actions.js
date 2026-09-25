@@ -25,7 +25,7 @@ import { Pressable, View } from "react-native";
 import { criarFolha, REACAO_AO_TOQUE } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
-import { useAureaTokens, useSobreAMarca } from "./theme.js";
+import { useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
 const ALTURA = {
     xs: "controlHXs", sm: "controlHSm", md: "controlHMd", lg: "controlHLg", xl: "controlHXl",
 };
@@ -182,7 +182,12 @@ export function Button({ children, appearance = "solid", tone = "neutral", size 
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export function IconButton({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, ...rest }) {
+export function IconButton(props) {
+    return _jsx(BotaoDeIcone, { ...props });
+}
+/** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
+ *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
+function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const marca = useSobreAMarca();
@@ -200,5 +205,12 @@ export function IconButton({ name, label, appearance = "ghost", tone = "neutral"
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
             s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,
-        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], color: appearance === "solid" ? cor.texto : cor.sobre, icons: icons }) }) }));
+        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, color: corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre }) }) }));
+}
+export function ThemeToggle(props) {
+    const { theme, toggleTheme } = useAureaTheme();
+    const t = useAureaTokens();
+    const s = useAureaStrings();
+    const escuro = theme === "dark";
+    return (_jsx(BotaoDeIcone, { ...props, name: escuro ? "sun" : "moon", label: escuro ? s.themeToLight : s.themeToDark, corDoIcone: escuro ? t.color.primary : t.color.foreground, onPress: toggleTheme }));
 }

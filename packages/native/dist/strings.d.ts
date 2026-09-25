@@ -62,6 +62,9 @@ export interface AureaStrings {
     comboboxEmpty: string;
     /** O botão que desfaz a escolha do `Combobox`. Mesmo nome da web. */
     comboboxClear: string;
+    /** O nome do `ThemeToggle` quando ele leva ao tema escuro, e ao claro. Mesmos nomes da web. */
+    themeToDark: string;
+    themeToLight: string;
     /** O que o `Combobox` anuncia enquanto a busca remota não voltou. Mesmo nome da web. */
     comboboxLoading: string;
     /**

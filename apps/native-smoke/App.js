@@ -36,7 +36,7 @@ import {
   Heading, Paragraph,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, IconButton, Input,
   KPI, KeyboardAvoiding, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
-  Spinner, Stack, Status, Stepper, Switch, Table, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
+  Spinner, Stack, Status, Stepper, Switch, Table, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
   // porque o app tem o mesmo problema em toda tela de lançamento — e aqui servem de SONDA:
@@ -89,6 +89,9 @@ import IconError from "@aurea-uds/native/icons/error";
 import IconSearch from "@aurea-uds/native/icons/search";
 import IconSubtract from "@aurea-uds/native/icons/subtract";
 import IconImage from "@aurea-uds/native/icons/image";
+// O `ThemeToggle` desenha a lua e o sol do registro, como o `Alert` desenha os glifos dele.
+import IconMoon from "@aurea-uds/native/icons/moon";
+import IconSun from "@aurea-uds/native/icons/sun";
 
 const ICONES = criarRegistroDeIcones({
   "add": IconAdd,
@@ -109,6 +112,8 @@ const ICONES = criarRegistroDeIcones({
   "search": IconSearch,
   "subtract": IconSubtract,
   "image": IconImage,
+  "moon": IconMoon,
+  "sun": IconSun,
 });
 
 // R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.
@@ -1321,6 +1326,11 @@ function BlocosLoteE({t}) {
   const [lembrar, setLembrar] = React.useState(true);
   return (
     <>
+      <Bloco t={t} n="TT" titulo="O botão de tema tem cor no ícone?"
+        criterio={"No tema claro: a LUA, escura. Toque: o app vai para o escuro e o botão vira o SOL, "
+          + "amarelo. Toque de novo: volta. O botão é redondo."}>
+        <ThemeToggle />
+      </Bloco>
       <Bloco t={t} n="E2" titulo="O botão obedece quem está em volta?"
         criterio={"No estado vazio, o botão fica NO MEIO, junto do título e do texto. Nas três colunas: "
           + "sem align o botão ocupa a largura toda (como na web); com align=\"start\" fica do tamanho "

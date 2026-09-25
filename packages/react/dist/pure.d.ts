@@ -173,6 +173,8 @@ export interface AureaStrings {
     navigationToggle: string;
     sidebarLabel: string;
     bottomNavLabel: string;
+    themeToDark: string;
+    themeToLight: string;
     universalState: Record<UniversalState, string>;
 }
 export declare const defaultStrings: AureaStrings;
