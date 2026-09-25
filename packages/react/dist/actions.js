@@ -3,7 +3,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import React, { useRef, forwardRef } from "react";
+import React, { useRef, forwardRef, cloneElement } from "react";
 import { classesResponsivas, ehResponsivo, peleDoEixo, soOValor, valorBase } from "./pure.js";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
@@ -11,7 +11,7 @@ import { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import { cx, useAureaStrings } from "./internal.js";
 import { Kbd } from "./markup.js";
-import { Icon } from "./system.js";
+import { Icon, useAureaTheme } from "./system.js";
 // O dicionário que desachata o enum. É a ÚNICA fonte da correspondência: o gate do
 // `validate.py` lê daqui para provar que todo par ou tem regra no core ou está declarado
 // ausente com motivo, e a ficha do registry declara os mesmos dois eixos.
@@ -45,7 +45,7 @@ export function buttonSkin(variant, appearance, tone) {
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button = forwardRef(function Button({ variant, appearance, tone, size = "md", loading, leadingIcon, trailingIcon, className, children, disabled, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant, appearance, tone, size = "md", loading, leadingIcon, trailingIcon, className, children, disabled, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, ...props }, ref) {
     // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
     // SOMATIVO por construção: valor simples continua emitindo `btn-sm`, byte por byte a mesma classe
     // de antes, e por isso nenhuma baseline se mexe. Só o valor responsivo entra pela camada genérica
@@ -75,6 +75,13 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     // também precisa ser barrado. `stopPropagation` evita o handler de bolha em um ancestral.
     const bloqueia = (e) => { e.preventDefault(); e.stopPropagation(); };
     const eventos = (off || inerte) ? { onClick: bloqueia, onClickCapture: bloqueia } : { onClick: onClick, onClickCapture: onClickCapture };
+    // M-01: com `render`, o elemento de quem chama é o botão. Os atributos dele vêm por cima dos nossos
+    // (como no `fundirRender`), a classe soma, o conteúdo é o do botão — e, desativado ou carregando,
+    // o bloqueio vem POR ÚLTIMO: nenhum `onClick` do elemento passa.
+    if (render) {
+        const dele = (render.props ?? {});
+        return cloneElement(render, { ref, ...shared, ...props, ...dele, className: cx(cls, dele.className), ...((off || inerte) ? { "aria-disabled": true, onClick: bloqueia, onClickCapture: bloqueia } : { onClick: dele.onClick ?? onClick, onClickCapture: dele.onClickCapture ?? onClickCapture }), children: inner });
+    }
     if (href !== undefined)
         return _jsx("a", { ref: ref, className: cls, target: target, rel: rel, download: download, ...shared, ...props, ...(off ? { "aria-disabled": true } : { href }), ...eventos, children: inner });
     return _jsx("button", { ref: ref, type: type, className: cls, disabled: off, "aria-disabled": inerte || undefined, "aria-pressed": pressed, ...shared, ...(inerte ? { onClick: bloqueia, onClickCapture: bloqueia } : { onClick, onClickCapture }), ...props, children: inner });
@@ -124,6 +131,12 @@ export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, 
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 export const IconButton = forwardRef(function IconButton({ label, icon, variant = "ghost", className, ...props }, ref) { return _jsx(Button, { ref: ref, variant: variant, className: cx("btn-icon", className), "aria-label": label, ...props, children: _jsx(Icon, { name: icon }) }); });
+export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
+    const { theme, toggleTheme } = useAureaTheme();
+    const s = useAureaStrings();
+    const escuro = theme === "dark";
+    return _jsx(IconButton, { ref: ref, icon: escuro ? "light--filled" : "asleep--filled", label: escuro ? s.themeToLight : s.themeToDark, className: cx(escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), onClick: toggleTheme, ...props });
+});
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem
 // noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por

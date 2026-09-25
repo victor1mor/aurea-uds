@@ -77,7 +77,7 @@
       "name": "items",
       "type": "SidebarItem[]",
       "default": "—",
-      "description": "The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}."
+      "description": "The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. M-01: an item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content."
     },
     {
       "name": "variant",

@@ -2776,3 +2776,103 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.menu.sepCor, "e tem cor").not.toBe("rgba(0, 0, 0, 0)");
   });
 }
+
+// ── B-02 · Text, Heading, Paragraph e Code (25/09/2026) ────────────────────────────────────
+// O `tipografia.test.tsx` prova o elemento e a classe; aqui se prova que a classe FAZ alguma coisa
+// com só o core carregado (QUALITY.md 8b): trocar qualquer regra do bloco TIPOGRAFIA por `{ }`
+// reprova. Todo número é lido do token por sonda, e não escrito aqui.
+const TIPO = renderToStaticMarkup(h("div", null,
+  ...[1, 2, 3, 4, 5, 6].map(n => h(A.Heading, {key: n, level: n as 1, id: `h${n}`}, `Título ${n}`)),
+  h(A.Paragraph, {key: "pb", id: "pb"}, "Texto corrido de exemplo."),
+  h(A.Paragraph, {key: "ps", id: "ps", size: "sm"}, "Texto pequeno."),
+  h(A.Paragraph, {key: "px", id: "px", size: "xs"}, "Texto mínimo."),
+  h(A.Text, {key: "tm", id: "tm", color: "muted"}, "apagado"),
+  h(A.Text, {key: "tb", id: "tb", weight: "bold"}, "negrito"),
+  h(A.Text, {key: "tt", id: "tt", truncate: true}, "uma linha só, cortada com reticências quando não cabe"),
+  h(A.Code, {key: "c", id: "c"}, "npm i")));
+
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: B-02 · Text, Heading, Paragraph e Code saem do token · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__tipo-${theme}`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head>
+        <link rel="stylesheet" href="/packages/fonts/dist/fonts.css">
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body style="width:600px">${TIPO}</body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    const m = await p.evaluate(() => {
+      const cs = (id: string) => getComputedStyle(document.getElementById(id)!);
+      const sonda = (css: string, prop: string) => {
+        const s = document.createElement("div");
+        s.style.cssText = `position:absolute;visibility:hidden;${css}`;
+        document.body.append(s);
+        const v = getComputedStyle(s).getPropertyValue(prop);
+        s.remove();
+        return v;
+      };
+      const px = (token: string) => parseFloat(sonda(`font-size:var(${token})`, "font-size"));
+      return {
+        titulos: [1, 2, 3, 4, 5, 6].map(n => ({fs: parseFloat(cs(`h${n}`).fontSize), peso: cs(`h${n}`).fontWeight,
+          margem: cs(`h${n}`).marginBlockStart})),
+        escala: ["--text-4xl", "--text-3xl", "--text-2xl", "--text-xl", "--text-lg", "--text-base"].map(px),
+        corpo: ["pb", "ps", "px"].map(id => ({fs: parseFloat(cs(id).fontSize), lh: parseFloat(cs(id).lineHeight),
+          margem: cs(id).marginBlockStart})),
+        corpoEscala: ["--text-base", "--text-sm", "--text-xs"].map(px),
+        relaxada: parseFloat(sonda("line-height:var(--leading-relaxed)", "line-height")) || 0,
+        apagado: cs("tm").color, apagadoToken: sonda("color:var(--muted-foreground)", "color"),
+        normal: cs("pb").color, normalToken: sonda("color:var(--foreground)", "color"),
+        negrito: cs("tb").fontWeight,
+        corte: {ws: cs("tt").whiteSpace, of: cs("tt").overflow, to: cs("tt").textOverflow},
+        codigo: {fundo: cs("c").backgroundColor, fundoToken: sonda("background-color:var(--surface-2)", "background-color"),
+          fonte: cs("c").fontFamily, fonteToken: sonda("font-family:var(--font-code)", "font-family"),
+          fs: parseFloat(cs("c").fontSize), raio: cs("c").borderTopLeftRadius},
+        textSm: px("--text-sm"),
+      };
+    });
+    m.titulos.forEach((t, i) => {
+      expect(t.fs, `h${i + 1}`).toBe(m.escala[i]);
+      expect(t.peso, `h${i + 1} seminegrito`).toBe("600");
+      expect(t.margem, `h${i + 1} sem a margem do navegador`).toBe("0px");
+    });
+    m.corpo.forEach((c, i) => {
+      expect(c.fs).toBe(m.corpoEscala[i]);
+      // `--leading-relaxed` é 1,7: a entrelinha do texto corrido é 1,7 × o tamanho
+      expect(Math.abs(c.lh - c.fs * 1.7)).toBeLessThan(0.51);
+      expect(c.margem).toBe("0px");
+    });
+    expect(m.normal).toBe(m.normalToken);
+    expect(m.apagado).toBe(m.apagadoToken);
+    expect(m.apagado).not.toBe(m.normal);
+    expect(m.negrito).toBe("700");
+    expect(m.corte).toEqual({ws: "nowrap", of: "hidden", to: "ellipsis"});
+    expect(m.codigo.fundo).toBe(m.codigo.fundoToken);
+    expect(m.codigo.fonte).toBe(m.codigo.fonteToken);
+    expect(m.codigo.fs).toBe(m.textSm);
+    expect(m.codigo.raio).not.toBe("0px");
+  });
+}
+
+// ── ThemeToggle (25/09/2026) · a cor no glifo sai do token ──────────────────────────────────
+// A lua na tinta do texto, o sol no amarelo da marca. O HTML do servidor sai sempre com a lua (o
+// tema se lê do `<html>` no cliente), então o sol é o mesmo botão com a classe do sol.
+const BOTAO_TEMA = renderToStaticMarkup(h(A.ThemeToggle, null));
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: ThemeToggle · lua na tinta, sol no amarelo · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__tema-${theme}`;
+    const sol = BOTAO_TEMA.replace("theme-toggle-moon", "theme-toggle-sun").replace("#i-asleep--filled", "#i-light--filled");
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body><div id="lua">${BOTAO_TEMA}</div><div id="sol">${sol}</div></body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    const m = await p.evaluate(() => {
+      const sonda = (css: string) => { const s = document.createElement("span"); s.style.color = css;
+        document.body.append(s); const v = getComputedStyle(s).color; s.remove(); return v; };
+      const cor = (id: string) => getComputedStyle(document.querySelector(`#${id} .icon`)!).color;
+      return {lua: cor("lua"), sol: cor("sol"), tinta: sonda("var(--foreground)"), amarelo: sonda("var(--primary)")};
+    });
+    expect(m.lua).toBe(m.tinta);
+    expect(m.sol).toBe(m.amarelo);
+    expect(m.sol).not.toBe(m.lua);
+  });
+}

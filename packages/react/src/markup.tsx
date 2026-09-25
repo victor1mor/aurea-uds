@@ -175,6 +175,32 @@ export function Timeline({items}:{items:Array<{title:ReactNode;description?:Reac
 // o que é seguro renderizar. Está dito na ficha, em voz alta.
 export function Prose({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("prose",className)} {...props}/>}
 
+// ── Tipografia: Text, Heading, Paragraph e Code — B-02, 25/09/2026 ─────────────────────────────
+// No molde do HeroUI 3.2.6 (`Typography` e os atalhos `Heading`, `Paragraph`, `Code`), por ordem
+// do Victor: HeroUI sempre primeiro. A forma é a dele — uma LISTA FECHADA de papéis, e não
+// tamanhos soltos: quem usa escolhe "título 2", nunca "25px". É a resposta de fundação à ordem de
+// 19/09/2026, "existem variações demais". Os números são nossos, todos de token (`aurea.css`,
+// bloco TIPOGRAFIA). Como no HeroUI, o `Text` não troca de elemento: é um `<span>`; parágrafo,
+// título e código têm peça própria, com o elemento certo para o leitor de tela.
+export type TypographyType="body"|"body-sm"|"body-xs"|"code"|"h1"|"h2"|"h3"|"h4"|"h5"|"h6";
+export type TypographyColor="default"|"muted";
+export type TypographyWeight="normal"|"medium"|"semibold"|"bold";
+export type TypographyAlign="start"|"center"|"end"|"justify";
+export type HeadingLevel=1|2|3|4|5|6;
+export type ParagraphSize="base"|"sm"|"xs";
+interface TypographyBase{align?:TypographyAlign;color?:TypographyColor;weight?:TypographyWeight;truncate?:boolean}
+const tipografia=(tipo:TypographyType,{align,color,weight,truncate}:TypographyBase,className?:string)=>
+  cx("typography",`typography-${tipo}`,color==="muted"&&"typography-muted",weight&&`typography-weight-${weight}`,align&&`typography-align-${align}`,truncate&&"typography-truncate",className);
+export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>,"color">,RefAttributes<HTMLSpanElement>,TypographyBase{type?:TypographyType}
+export function Text({type="body",align,color,weight,truncate,className,...props}:TextProps){return <span className={tipografia(type,{align,color,weight,truncate},className)} {...props}/>}
+export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>,"color">,RefAttributes<HTMLHeadingElement>,TypographyBase{level?:HeadingLevel}
+// O nível decide o elemento E o tamanho, como no HeroUI: um `h2` tem a cara de título 2.
+export function Heading({level=1,align,color,weight,truncate,className,...props}:HeadingProps){const Tag=`h${level}` as "h1";return <Tag className={tipografia(`h${level}`,{align,color,weight,truncate},className)} {...props}/>}
+export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>,"color">,RefAttributes<HTMLParagraphElement>,TypographyBase{size?:ParagraphSize}
+export function Paragraph({size="base",align,color,weight,truncate,className,...props}:ParagraphProps){return <p className={tipografia(size==="base"?"body":`body-${size}`,{align,color,weight,truncate},className)} {...props}/>}
+export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>,"color">,RefAttributes<HTMLElement>,TypographyBase{}
+export function Code({align,color,weight,truncate,className,...props}:CodeProps){return <code className={tipografia("code",{align,color,weight,truncate},className)} {...props}/>}
+
 // ── Feedback ─────────────────────────────────────────────────────────────────────────────────
 // ── BADGE ────────────────────────────────────────────────────────────────────────────────────
 // Reescrito em 17/08/2026 lendo, no fonte local, a `badges.tsx` da Untitled UI e a `Badge.js` da

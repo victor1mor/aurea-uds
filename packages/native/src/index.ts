@@ -40,14 +40,17 @@ export type {
 // problema que os componentes daqui — e a medição em aparelho mostrou que ele é real.
 export {criarFolha, comOpacidade} from "./estilos.js";
 
-export {Text} from "./text.js";
+export {Text, Heading, Paragraph, Code} from "./text.js";
 export type {
   TextProps, AureaTextFont, AureaTextLeading, AureaTextSize, AureaTextTone, AureaTextWeight,
+  AureaTextType, HeadingProps, ParagraphProps, CodeProps, AureaTypographyColor,
+  AureaTypographyWeight, AureaTypographyAlign,
 } from "./text.js";
 
 export {Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo} from "./icon.js";
 export type {
-  IconProps, IconName, AureaIconComponent, AureaIconRegistry, AureaIconSize,
+  IconProps, IconName, CarbonIconName, AureaIconNames, AureaIconComponent, AureaIconRegistry,
+  AureaIconSize,
   AureaGlifoDesenho, AureaGlifoCaminho, AureaGlifoCirculo, AureaGlifoRetangulo,
 } from "./icon.js";
 
@@ -58,13 +61,13 @@ export type {ScreenProps, AureaScreenBackground, AureaScreenEdge} from "./screen
 
 export {Stack, Cluster, Grid, Card, Separator} from "./layout.js";
 export type {
-  StackProps, ClusterProps, AureaClusterAlign, AureaClusterJustify,
+  StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify,
   GridProps, CardProps, SeparatorProps, AureaCardVariant,
 } from "./layout.js";
 
-export {Button, IconButton} from "./actions.js";
+export {Button, IconButton, ThemeToggle} from "./actions.js";
 export type {
-  ButtonProps, IconButtonProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone,
+  ButtonProps, IconButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone,
 } from "./actions.js";
 
 // ── Lote 2 — o painel, que é só leitura ────────────────────────────────────────────────────

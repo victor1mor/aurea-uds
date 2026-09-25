@@ -1,0 +1,99 @@
+{
+  "name": "Code",
+  "category": "Data Display",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A short piece of code inside a sentence. For a block of code use CodeBlock.",
+  "icon": "code",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "color": [
+      "default",
+      "muted"
+    ],
+    "weight": [
+      "normal",
+      "medium",
+      "semibold",
+      "bold"
+    ],
+    "align": [
+      "start",
+      "center",
+      "end",
+      "justify"
+    ]
+  },
+  "states": [],
+  "tokens": [
+    "--foreground",
+    "--muted-foreground",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-semibold",
+    "--weight-bold",
+    "--font-code",
+    "--text-sm",
+    "--surface-2",
+    "--radius-xs",
+    "--space-05",
+    "--space-1"
+  ],
+  "a11y": {
+    "role": "code",
+    "apg": "A native code element. No interaction. For a multi-line block with copy and highlighting, CodeBlock.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Text",
+      "CodeBlock",
+      "Kbd"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Code"
+  },
+  "props": [
+    {
+      "name": "color",
+      "type": "\"default\" | \"muted\"",
+      "default": "\"default\"",
+      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+    },
+    {
+      "name": "weight",
+      "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "default": "— (the role's own)",
+      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\" | \"justify\"",
+      "default": "— (inherited)",
+      "description": "Text alignment. start and end follow the writing direction, so the same value mirrors in RTL."
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "default": "false",
+      "description": "One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The text."
+    }
+  ]
+}

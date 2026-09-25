@@ -46,6 +46,8 @@
 import * as React from "react";
 import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-native";
 import {IconButton} from "./actions.js";
+// Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
+import type {IconName} from "./icon-names.js";
 import {criarFolha} from "./estilos.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
@@ -258,14 +260,11 @@ export interface NumberFieldProps {
    */
   keyboardType?: "numeric" | "decimal-pad" | "number-pad" | "numbers-and-punctuation";
   /** Os glifos dos botões. Registre-os, ou passe `false` para tirar os dois. */
-  icons?: {increment: IconNameLocal; decrement: IconNameLocal} | false;
+  icons?: {increment: IconName; decrement: IconName} | false;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
-// O tipo do nome de ícone vem do módulo de ícones; declarado localmente para não importar o
-// módulo inteiro só pelo tipo (é `string`, e o `IconName` de lá é exatamente isso).
-type IconNameLocal = string;
 
 /**
  * O número que se digita OU se empurra de um em um.

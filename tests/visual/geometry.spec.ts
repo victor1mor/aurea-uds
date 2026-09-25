@@ -228,3 +228,118 @@ for (const theme of ["dark", "light"] as const) {
     expect(cores.length, `mais de uma cor de foco: ${JSON.stringify(cores)}`).toBe(1);
   });
 }
+
+// ── B-09 · as peças que a amostra acima não via (24/09/2026) ─────────────────────────────
+// O teste de cima mede seis peças, e as que ficavam de fora fugiam do contrato em silêncio: a
+// região de tabela e a `DataGrid` tinham um halo de `--focus` a 38% no lugar da linha, o player
+// tinha outra cor e 3px, a alça de redimensionar 1px. Aqui cada uma é medida com foco REAL de
+// teclado. A cor esperada é a do `--focus-strong` NO LUGAR da peça, lida por uma sonda irmã: é
+// isso que deixa o player redefinir o token (fundo quase preto nos dois temas) sem regra à parte.
+// O `check 44` do validate.py lê as regras; este mede o que o navegador desenha.
+const FORA_DA_AMOSTRA = `
+<div style="padding:24px;display:grid;gap:24px">
+  <div class="table-wrap table-region" tabindex="0" role="region" aria-label="Tabela">
+    <table class="table"><thead><tr><th>Coluna</th></tr></thead><tbody><tr><td>Valor</td></tr></tbody></table>
+  </div>
+  <div class="datagrid">
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Grade">
+      <table class="table"><thead><tr><th>Nome<button class="datagrid-resizer" type="button" aria-label="Largura"></button></th></tr></thead>
+      <tbody><tr><td>Valor</td></tr></tbody></table>
+    </div>
+  </div>
+  <div class="media-player"><div class="media-controls">
+    <div class="media-seek"><input type="range" aria-label="Posição"></div>
+    <button class="btn btn-ghost" type="button">Tocar</button>
+  </div></div>
+  <div class="tree-item" tabindex="0" role="treeitem" aria-selected="false"><div class="tree-node">Pasta</div></div>
+  <div class="notification-item" tabindex="0">Aviso</div>
+  <!-- o item de menu destacado E em foco de teclado: é o caso em que a regra do destaque apagava a linha -->
+  <div class="menu" role="menu" aria-label="Menu"><div class="menu-item" role="menuitem" tabindex="0" data-highlighted>Duplicar</div></div>
+</div>`;
+
+for (const theme of ["dark", "light"] as const) {
+  test(`foco · B-09 · a linha do token também fora da amostra · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__foco-b09`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body>${FORA_DA_AMOSTRA}</body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+
+    const vistos: Array<Record<string, string>> = [];
+    for (let i = 0; i < 12; i++) {
+      await p.keyboard.press("Tab");
+      const r = await p.evaluate(() => {
+        const el = document.activeElement as HTMLElement;
+        if (!el || el === document.body) return null;
+        // no item de árvore a linha é do filho `.tree-node` (a regra é `.tree-item:focus-visible > .tree-node`)
+        const alvo = el.classList.contains("tree-item") ? el.querySelector<HTMLElement>(".tree-node")! : el;
+        const cs = getComputedStyle(alvo);
+        // a cor que o token vale AQUI: uma sonda no mesmo pai pinta `color: var(--focus-strong)`
+        const sonda = document.createElement("span");
+        sonda.style.color = "var(--focus-strong)";
+        alvo.parentElement!.appendChild(sonda);
+        const esperada = getComputedStyle(sonda).color;
+        sonda.style.color = "var(--primary)";
+        const primaria = getComputedStyle(sonda).color;
+        sonda.remove();
+        const raiz = getComputedStyle(document.documentElement);
+        return {alvo: el.tagName.toLowerCase() + "." + (el.className || "—"),
+          estilo: cs.outlineStyle, largura: cs.outlineWidth, offset: cs.outlineOffset,
+          cor: cs.outlineColor, esperada, primaria, sombra: cs.boxShadow,
+          token: raiz.getPropertyValue("--focus-width").trim(),
+          afastamento: raiz.getPropertyValue("--focus-offset").trim()};
+      });
+      if (r) vistos.push(r);
+    }
+    const nomes = vistos.map(v => v.alvo).join(" · ");
+    for (const alvo of ["table-region", "datagrid-resizer", "tree-item", "notification-item", "menu-item"]) {
+      expect(nomes, `${alvo} não recebeu foco de teclado`).toContain(alvo);
+    }
+    expect(vistos.some(v => v.alvo === "input.—"), "o controle de posição do player não recebeu foco").toBe(true);
+
+    for (const v of vistos) {
+      const quem = JSON.stringify(v);
+      expect(v.estilo, `linha de foco ausente: ${quem}`).toBe("solid");
+      expect(v.largura, `espessura fora do token: ${quem}`).toBe(v.token);
+      expect([v.afastamento, `-${v.afastamento}`], `afastamento fora do contrato: ${quem}`).toContain(v.offset);
+      expect(v.cor, `cor fora do --focus-strong do lugar: ${quem}`).toBe(v.esperada);
+      expect(v.sombra, `sombra no lugar da linha: ${quem}`).toBe("none");
+    }
+    // o player redefine o token: dentro dele o foco é o amarelo, nos DOIS temas
+    for (const v of vistos.filter(v => v.alvo === "input.—" || v.alvo.startsWith("button.btn"))) {
+      expect(v.cor, `no player o foco é --primary: ${JSON.stringify(v)}`).toBe(v.primaria);
+    }
+  });
+}
+
+// ── ADR-0052 · o botão só de ícone é REDONDO (25/09/2026) ──────────────────────────────────
+// Redondo = quadrado (largura igual à altura) com raio de pelo menos metade do lado. Os CINCO
+// tamanhos: o `btn-xl` escapou da primeira passada desta mudança, e só a lista inteira o pega. As duas
+// metades importam: raio 999 num botão mais largo que alto dá pílula, não círculo — foi o que a
+// medição achou no `.media-control` (38×36, pelo recheio lateral) antes de ele perder o recheio.
+// Mede nas três densidades, porque a altura do botão muda com elas.
+for (const density of ["compact", "comfortable", "spacious"] as const) {
+  test(`botão só de ícone é redondo · ${density}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__icone-redondo`;
+    const ic = `<svg class="icon" aria-hidden="true" viewBox="0 0 32 32"></svg>`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="dark" data-density="${density}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head><body>
+        ${["btn-xs", "btn-sm", "", "btn-lg", "btn-xl"].map(t =>
+          `<button class="btn btn-ghost btn-icon ${t}" type="button" aria-label="x">${ic}</button>`).join("")}
+        <div class="media-player"><div class="media-controls"><div class="media-control-row"><div class="media-control-group">
+          <button class="media-control" type="button" aria-label="Tocar">${ic}</button>
+        </div></div></div></div></body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    const botoes = await p.$$eval("button", bs => bs.map(b => {
+      const c = b.getBoundingClientRect();
+      return {quem: b.className, w: c.width, h: c.height, raio: parseFloat(getComputedStyle(b).borderTopLeftRadius)};
+    }));
+    expect(botoes.length).toBe(6);
+    for (const b of botoes) {
+      expect(b.w, `não é quadrado: ${JSON.stringify(b)}`).toBe(b.h);
+      expect(b.raio, `raio menor que metade do lado: ${JSON.stringify(b)}`).toBeGreaterThanOrEqual(b.h / 2);
+    }
+  });
+}

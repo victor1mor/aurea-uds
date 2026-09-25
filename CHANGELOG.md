@@ -15,6 +15,103 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [Unreleased]
+
+Nada além da `0.12.0`, logo abaixo, que está pronta e não publicada. As peças novas dela são
+`Text`, `Heading`, `Paragraph` e `Code` (B-02), e o `ThemeToggle`. Quando o Victor publicar, esta
+seção fica vazia.
+
+---
+
+## [0.12.0] — 2026-09-25
+
+⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+
+É o **Lote 3** inteiro: A-04, B-09 (com os menus), o botão só de ícone redondo (ADR-0052), B-02,
+E2 e M-01 — o M-02 foi descartado. Sobe o número do meio porque **pode quebrar**: o A-04 recusa
+nome de ícone escrito numa variável `string`, o E2 faz o botão do nativo esticar numa coluna sem
+alinhamento, e o botão só de ícone muda de forma. As imagens de antes e depois do B-09, dos menus,
+do botão redondo e do B-02 foram aprovadas pelo Victor.
+
+### ⚠ Mudou — leia antes de atualizar
+
+- **A-04 · o nome do ícone é checado pelo TypeScript, na web e no nativo.** `IconName` deixou de
+  ser `string` e passou a ser a lista dos 2571 nomes do Carbon, gerada da mesma fonte que monta o
+  sprite e os ícones do nativo. `<Icon name="chevron-down">` (um traço só; o certo é
+  `chevron--down`) compilava e não desenhava nada; agora não compila, em toda prop que recebe
+  ícone. No nativo a chave do registro (`criarRegistroDeIcones`) também é conferida.
+  - **Pode quebrar a compilação de quem passa ícone numa variável `string`.** Tipe a variável
+    como `IconName`.
+  - **Sprite próprio ou glifo de `criarGlifo`:** declare os nomes uma vez, em
+    `interface AureaIconNames` (exemplo no `README.md` de cada pacote).
+  - Medido antes: 359 nomes de ícone escritos nos exemplos, fichas e documentos, **nenhum**
+    errado. O defeito era o tipo, não um nome.
+- **B-09 · o foco é uma linha só, e ela sai de dois tokens novos:** `--focus-width` e
+  `--focus-offset` (2px e 2px, os números do contrato que já existia). Mudar o foco do sistema
+  inteiro é mudar uma linha. Toda regra de foco do core passou a usá-los. Duas coisas mudam na tela:
+  - **Tabela com rolagem (`.table-region`) e `DataGrid`:** o foco era um halo claro de `--focus` a
+    38%, difícil de ver. Agora é a linha de foco, por dentro, como o HeroUI 3.2.6 faz nas tabelas.
+  - **Player de vídeo (`MediaPlayer`), tema claro:** o foco dos controles era marrom escuro em cima
+    do fundo quase preto do player, e sumia. Agora é o amarelo, nos dois temas: o player redefine
+    `--focus-strong` em vez de ter uma regra de foco à parte.
+  - **Menus, foco de teclado:** o item em foco era só o fundo cinza, igual ao do mouse em cima;
+    uma regra do destaque apagava a linha. Agora leva a linha de foco por dentro, como o `menu-item`
+    do HeroUI 3.2.6. Com o mouse, continua só o fundo. Onde o foco fica no campo (`Combobox`,
+    `CommandPalette`), o destaque continua sendo o fundo: ali o item nunca recebe o foco.
+  - Pequenos, sem mudar o desenho: o controle de posição do player perdeu 1px de afastamento (3 →
+    2), e a alça de redimensionar colunas da `DataGrid` desenha a linha por dentro (era 1px fora).
+  - **Controle:** o `check 44` do `validate.py` lê toda regra de foco do core e reprova linha, cor
+    ou afastamento escrito à mão e sombra no lugar da linha. O teste de navegador do contrato de
+    foco mede também as peças que a amostra antiga não via. Os dois foram provados contra o CSS
+    antigo.
+- **E2 · o `Button` do nativo obedece o pai**, como o do HeroUI Native e o `.btn` da web num
+  `.stack` (decisão do Victor, 25/09/2026). Saiu o `alignSelf: "flex-start"` que vencia a
+  centralização de quem estava em volta: no `EmptyState` o botão ficava à esquerda e o resto no
+  meio. ⚠ **A consequência:** numa coluna sem alinhamento o botão agora ocupa a largura toda — no
+  rodapé do `Screen`, na ação do cartão da marca e em qualquer coluna do app. "Do tamanho do texto"
+  se diz no pai: o `Stack` do nativo ganhou o `align` da web (`start`, `center`, `end`,
+  `stretch`; novo tipo `AureaStackAlign`). O `IconButton` tem largura fixa, como o só-ícone do
+  HeroUI, e nunca estica.
+- **O botão só de ícone é redondo**, em todos os tamanhos, na web e no nativo
+  ([ADR-0052](decisions/0052-o-botao-so-de-icone-e-redondo.md), decisão do Victor, 25/09/2026).
+  Era um quadrado de canto 10px (6px nos dois menores). Vale para todo `IconButton`, os botões de
+  fechar e os controles do player, que também perderam o recheio lateral para ficarem quadrados
+  (eram 38×36). É como o HeroUI 3.2.6 faz.
+
+
+### Adicionado
+
+- **`ThemeToggle`, na web e no nativo** (pedido do Victor, 25/09/2026): o botão de claro e escuro
+  com cor no ícone. No tema claro mostra a **lua, na tinta do texto**; no escuro, o **sol, no
+  amarelo da marca** — o tema para onde se vai, e o nome dele diz isso ("Mudar para o tema
+  escuro"). É um só-ícone redondo, sem cor solta. Peça exclusiva da Aurea: o HeroUI não tem troca
+  de tema. Os glifos são os CHEIOS do Carbon (a lua de contorno ficava branca por dentro).
+  ⚠ No nativo, `asleep--filled` (lua) e `light--filled` (sol) saem do registro do app, como os
+  do `Alert`.
+
+- **M-01 · `render` no `Button`, no `IconButton` e nos itens de navegação** (`Sidebar`,
+  `BottomNav`, `NavList`, `Breadcrumb`) — decisão do Victor, 25/09/2026: só onde o app precisa do
+  link do roteador. `render={<Link href="/relatorios" />}` desenha o link do roteador com a pele e
+  o conteúdo da peça; o destino é do elemento. No botão desativado ou carregando, o clique é barrado
+  também no elemento. O HeroUI 3.2.6 não tem `render`; o idioma é o da Base UI, que a Aurea já usa
+  no `Card` (`fundirRender`).
+- **M-02 (`classNames` por parte) não entra**: o HeroUI tirou isso na versão atual, e abriria a
+  aparência das peças por dentro. Decisão do Victor, 25/09/2026.
+
+- **B-02 · `Text`, `Heading`, `Paragraph` e `Code`, na web e no nativo**, no molde do HeroUI 3.2.6
+  (decisão do Victor, 25/09/2026: HeroUI sempre primeiro). Uma **lista fechada de papéis** em vez
+  de tamanhos soltos: título 1 a 6, texto, texto pequeno, texto mínimo e código. Cor só normal ou
+  apagada (`color="muted"`), quatro pesos, alinhamento e corte em uma linha (`truncate`).
+  - `Heading level={2}` renderiza um `h2` com a cara de título 2; o nível é o desenho, como no
+    HeroUI. `Paragraph size="sm"` é um `p` de 14px. `Code` é um `code` com a pele do código do
+    `Prose`. `Text` é um `span` com o papel que você escolher.
+  - Os números são de token: a escala de letras (ADR-0050), `--leading-relaxed` no texto,
+    `--leading-tight` e `--tracking-tight` nos títulos.
+  - **No nativo o `Text` que já existia fica como está**, com as opções soltas; ganhou só o
+    `type`, o mesmo papel da web. `Heading`, `Paragraph` e `Code` são novos lá também.
+
+---
+
 ## [0.11.0] — 2026-09-25
 
 ⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
@@ -1353,7 +1450,7 @@ dates nor the camera installs nothing extra and sees no warning.
 
 ---
 
-## [Unreleased]
+## ~~[Unreleased]~~ — notas escritas depois da 0.6.0, que saíram na 0.7.0 (título corrigido em 25/09/2026)
 
 No published code changed. What follows is documentation, one decision, and one gate — recorded
 here because the next release must not go out without the privacy fix below being understood.

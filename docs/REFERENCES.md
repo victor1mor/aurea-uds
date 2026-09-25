@@ -3331,7 +3331,7 @@ exatamente o defeito que este documento existe para não ter.
 |---|---|
 | `.stack` · `.cluster` · `.grid` | `packages/core/src/aurea.css` — flex/gap e o `auto-fill` do grid |
 | `.btn` e os cinco `.btn-*` | idem: alturas de token, `padding-inline` 10/12/15/20/26, `gap` 6/8/10 |
-| `.btn-icon` | raio `--radius-md`/`--radius-sm`, **não** o pill |
+| `.btn-icon` | ~~raio `--radius-md`/`--radius-sm`, **não** o pill~~ — desde 25/09/2026 é redondo, o raio da cápsula ([ADR-0052](../decisions/0052-o-botao-so-de-icone-e-redondo.md)) |
 | `variant` × `appearance` × `tone` | ficha do `Button`: *"`variant` é atalho para o par"* — ADR-0044 |
 | a decisão de não ter `gap` | ficha do `Stack`: *"um primitivo que aceita qualquer espaçamento é como um sistema deixa de ter espaçamento"* |
 
@@ -3674,3 +3674,37 @@ componente: não dá para saber daqui como a HeroUI resolve teclado, ordem de fo
 ou caso de borda de digitação. Para isso é preciso o fonte, que exige a pasta ausente.
 
 **As outras seis referências do `BUILDING.md` §1 continuam não consultadas.**
+
+## Tipografia — `Text`, `Heading`, `Paragraph` e `Code` — 25/09/2026 · B-02
+
+**Referência:** o HeroUI, por ordem do Victor de 25/09/2026 (*"HeroUI sempre vamos dar prioridade
+a ele"*). Lido no pacote publicado, baixado com `npm pack`, não de memória. Nenhuma linha copiada:
+a Aurea tira a FORMA e reescreve com os próprios tokens.
+
+| lido | onde | o que a Aurea tirou |
+|---|---|---|
+| `@heroui/react` 3.2.6 · `components/typography/typography.d.ts` | a API da web | `Typography` com `type`, `align`, `color`, `weight`, `truncate`; `Heading` com `level` 1–6 (o nível é elemento **e** tamanho, sem `size` à parte); `Paragraph` com `size` `base`/`sm`/`xs`; `Code`. O `Typography` **não** troca de elemento (`elementType` fica de fora) — o nosso `Text` também não |
+| `@heroui/styles` 3.2.6 · `dist/components/typography.css` | os números da web | títulos `4xl`…`base` em seminegrito com `tracking-tight`; texto `base`/`sm`/`xs` com entrelinha 28/24/20; código `sm` mono com fundo e canto |
+| `heroui-native` 1.0.10 · `src/components/text/` e `src/styles/components/text.css` | a API e os números do telefone | a MESMA lista de papéis, mas os atalhos recebem `type` (`Heading type="h2"`, `Paragraph type="body-sm"`), e não `level`/`size`; o `Heading` marca `accessibilityRole="header"` sozinho; os números são os da web (o `Typography` dele **não** sobe o degrau que o resto do telefone sobe, ADR-0050) |
+
+**O que ficou nosso:** todos os números saem de token — a escala de letras (ADR-0050), a entrelinha
+`--leading-relaxed` (1,7, dando 27/24/20 contra 28/24/20), `--leading-tight` e `--tracking-tight`
+(−0,01em, e não os −0,025em do Tailwind) nos títulos, e a pele do código é a do `code` do `.prose`
+(`--surface-2`, `--radius-xs`, `--space-05`/`--space-1`). A fonte mono é a IBM Plex Mono do pacote
+de fontes, e não o Menlo que o HeroUI Native usa no iOS.
+
+**O que não entrou:** o `Prose` do HeroUI — a Aurea já tinha o dela (L5). E a `color` segue a
+lista dele (`default`/`muted`), e não os nove `tone` do `Text` nativo antigo, que fica como está.
+
+## `ThemeToggle` — 25/09/2026 · pedido do Victor
+
+**Peça exclusiva da Aurea.** O HeroUI não tem troca de tema: conferido nos pacotes publicados — o
+`@heroui/react` 3.2.6 tem `switch` e `toggle-button`, o `heroui-native` 1.0.10 tem `switch` e
+`theme-background`, e nenhum é o botão de claro e escuro. Pela regra de 25/09/2026, ela nasce
+**pensando como o HeroUI criaria**: um só-ícone (o `IconButton` da Aurea, redondo pela ADR-0052),
+sem cor solta, com o nome dizendo para onde vai.
+
+**O que é nosso:** mostrar o tema de DESTINO (a lua no claro, o sol no escuro), e a cor no glifo —
+a lua na tinta do texto (`--foreground`) e o sol no amarelo da marca (`--primary`). As duas
+combinações se enxergam; a inversa (sol amarelo no claro, lua escura no escuro) não existe de
+propósito. Glifos do Carbon, os CHEIOS (escolha do Victor, 25/09/2026: a lua de contorno ficava branca por dentro): `asleep--filled` (lua) e `light--filled` (sol).

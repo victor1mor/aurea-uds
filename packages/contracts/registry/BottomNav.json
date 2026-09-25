@@ -84,7 +84,7 @@
       "name": "items",
       "type": "SidebarItem[]",
       "default": "—",
-      "description": "The navigation, as data — the SAME type Sidebar takes, on purpose: one list feeds the sidebar on desktop and the bar on the phone, and two lists of one menu drift apart. Each item is {id, label, href?, icon?, badge?, onClick?}. A nested `items` is ignored here: a bottom bar is flat. `badge` hangs off the icon's top corner and is sized against it (16px on a 24px icon, the ratio measured in shipping apps); pass an EMPTY badge (`badge: \"\"`) to get the plain dot that means \"something new\"."
+      "description": "The navigation, as data — the SAME type Sidebar takes, on purpose: one list feeds the sidebar on desktop and the bar on the phone, and two lists of one menu drift apart. Each item is {id, label, href?, icon?, badge?, onClick?}. A nested `items` is ignored here: a bottom bar is flat. `badge` hangs off the icon's top corner and is sized against it (16px on a 24px icon, the ratio measured in shipping apps); pass an EMPTY badge (`badge: \"\"`) to get the plain dot that means \"something new\". M-01: an item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content."
     },
     {
       "name": "current",

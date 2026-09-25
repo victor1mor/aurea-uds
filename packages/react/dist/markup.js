@@ -64,6 +64,12 @@ export function Timeline({ items }) { return _jsx("ol", { className: "timeline",
 // `dangerouslySetInnerHTML` tem de SANITIZAR antes. A Aurea desenha o texto; ela não pode decidir
 // o que é seguro renderizar. Está dito na ficha, em voz alta.
 export function Prose({ className, ...props }) { return _jsx("div", { className: cx("prose", className), ...props }); }
+const tipografia = (tipo, { align, color, weight, truncate }, className) => cx("typography", `typography-${tipo}`, color === "muted" && "typography-muted", weight && `typography-weight-${weight}`, align && `typography-align-${align}`, truncate && "typography-truncate", className);
+export function Text({ type = "body", align, color, weight, truncate, className, ...props }) { return _jsx("span", { className: tipografia(type, { align, color, weight, truncate }, className), ...props }); }
+// O nível decide o elemento E o tamanho, como no HeroUI: um `h2` tem a cara de título 2.
+export function Heading({ level = 1, align, color, weight, truncate, className, ...props }) { const Tag = `h${level}`; return _jsx(Tag, { className: tipografia(`h${level}`, { align, color, weight, truncate }, className), ...props }); }
+export function Paragraph({ size = "base", align, color, weight, truncate, className, ...props }) { return _jsx("p", { className: tipografia(size === "base" ? "body" : `body-${size}`, { align, color, weight, truncate }, className), ...props }); }
+export function Code({ align, color, weight, truncate, className, ...props }) { return _jsx("code", { className: tipografia("code", { align, color, weight, truncate }, className), ...props }); }
 // `max` com `+` é o idioma universal do contador (MUI, Ant, Material 3). Exportada porque quem
 // escreve o nome acessível precisa do MESMO texto — "99+ unread" tem de bater com o que se vê.
 export function formatBadgeCount(count, max = 99) { return count > max ? `${max}+` : String(count); }

@@ -32,10 +32,11 @@ import {useFonts} from "expo-font";
 import {SafeAreaProvider, useSafeAreaInsets} from "react-native-safe-area-context";
 
 import {
-  Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox,
+  Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox, Code,
+  Heading, Paragraph,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, IconButton, Input,
   KPI, KeyboardAvoiding, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
-  Spinner, Stack, Status, Stepper, Switch, Table, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
+  Spinner, Stack, Status, Stepper, Switch, Table, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
   // porque o app tem o mesmo problema em toda tela de lançamento — e aqui servem de SONDA:
@@ -88,6 +89,9 @@ import IconError from "@aurea-uds/native/icons/error";
 import IconSearch from "@aurea-uds/native/icons/search";
 import IconSubtract from "@aurea-uds/native/icons/subtract";
 import IconImage from "@aurea-uds/native/icons/image";
+// O `ThemeToggle` desenha a lua e o sol do registro, como o `Alert` desenha os glifos dele.
+import IconAsleepFilled from "@aurea-uds/native/icons/asleep--filled";
+import IconLightFilled from "@aurea-uds/native/icons/light--filled";
 
 const ICONES = criarRegistroDeIcones({
   "add": IconAdd,
@@ -108,6 +112,8 @@ const ICONES = criarRegistroDeIcones({
   "search": IconSearch,
   "subtract": IconSubtract,
   "image": IconImage,
+  "asleep--filled": IconAsleepFilled,
+  "light--filled": IconLightFilled,
 });
 
 // R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.
@@ -254,6 +260,21 @@ function Tela({irParaScreen, irParaLote2}) {
         <Text style={{color: t.color.mutedForeground, fontSize: t.size.textLg}}>
           Sem fontFamily — fonte do sistema
         </Text>
+      </Bloco>
+
+      {/* ── 1b ── B-02 ────────────────────────────────────────────────────── */}
+      <Bloco t={t} n="1b" titulo="Os papéis de texto (B-02) crescem em degraus que se enxergam?"
+        criterio={"Os seis títulos têm de DIMINUIR a cada linha, sem dois iguais, e em seminegrito. "
+          + "Os três parágrafos são 16, 14 e 12 — o do meio NÃO pode ser do tamanho do primeiro "
+          + "(seria o degrau a mais do `size`, que o papel não usa). O código tem fundo e fonte mono; "
+          + "no leitor de tela, só os títulos são anunciados como título."}>
+        {["h1", "h2", "h3", "h4", "h5", "h6"].map((h) => (
+          <Heading key={h} type={h}>{h.toUpperCase()} · Relatórios</Heading>
+        ))}
+        <Paragraph>Texto corrido — o relatório da semana está pronto.</Paragraph>
+        <Paragraph type="body-sm">Texto pequeno — gerado às 09:40.</Paragraph>
+        <Paragraph type="body-xs" color="muted">Texto mínimo, apagado — valores arredondados.</Paragraph>
+        <Paragraph>Rode <Code>pnpm build</Code> antes de publicar.</Paragraph>
       </Bloco>
 
       {/* ── E ── os achados do app de 25/09/2026 ─────────────────────────── */}
@@ -1305,6 +1326,22 @@ function BlocosLoteE({t}) {
   const [lembrar, setLembrar] = React.useState(true);
   return (
     <>
+      <Bloco t={t} n="TT" titulo="O botão de tema tem cor no ícone?"
+        criterio={"No tema claro: a LUA, escura. Toque: o app vai para o escuro e o botão vira o SOL, "
+          + "amarelo. Toque de novo: volta. O botão é redondo."}>
+        <ThemeToggle />
+      </Bloco>
+      <Bloco t={t} n="E2" titulo="O botão obedece quem está em volta?"
+        criterio={"No estado vazio, o botão fica NO MEIO, junto do título e do texto. Nas três colunas: "
+          + "sem align o botão ocupa a largura toda (como na web); com align=\"start\" fica do tamanho "
+          + "do texto, à esquerda; com align=\"center\", do tamanho do texto, no meio. O botão "
+          + "redondo nunca estica."}>
+        <EmptyState title="Nenhum gasto ainda" description="Os lançamentos aparecem aqui."
+          action={<Button tone="brand" appearance="solid">Lançar um gasto</Button>} />
+        <Stack><Button>Sem align</Button><IconButton name="add" label="Adicionar" /></Stack>
+        <Stack align="start"><Button>align start</Button></Stack>
+        <Stack align="center"><Button>align center</Button></Stack>
+      </Bloco>
       <Bloco t={t} n="E1" titulo="A perna das letras aparece inteira no botão?"
         criterio={"No Android, o g de \"gasto\", o p de \"pago\" e o ç de \"Lançar\" têm de "
           + "aparecer INTEIROS, sem corte embaixo, nos cinco tamanhos."}>

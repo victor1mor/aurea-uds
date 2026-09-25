@@ -157,7 +157,10 @@ function AureaToastViewport(){
   return <BaseToast.Portal container={portal}><BaseToast.Viewport className="toast-stack"><AureaToastList/></BaseToast.Viewport></BaseToast.Portal>;
 }
 
-export type IconName=string;
+// A-04: o nome é checado pelo TypeScript. A lista é GERADA do mesmo @carbon/icons que monta o
+// sprite (`packages/icons/build-icons.mjs`); nome próprio do app entra por `AureaIconNames`.
+export type {IconName,CarbonIconName,AureaIconNames} from "./icon-names.js";
+import type {IconName} from "./icon-names.js";
 // A escala de GLIFO é própria (`--icon-*`) e começa em `sm`: não existe `--icon-xs`. Emitir um
 // degrau `xs` aqui seria desenhar por simetria com o botão, e a medição de 22/08 mostrou que as
 // duas escalas nem sequer reagem à densidade do mesmo jeito.

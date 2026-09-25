@@ -9,6 +9,7 @@ import {readFileSync, writeFileSync, readdirSync} from "node:fs";
 import {createRequire} from "node:module";
 import {dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
+import {escreverNomesDeIcone} from "../../scripts/icon-names.mjs";
 
 const require = createRequire(import.meta.url);
 const carbonDir = dirname(require.resolve("@carbon/icons/package.json"));
@@ -27,4 +28,8 @@ const symbols = files.map((file) => {
 
 const sprite = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${symbols.join("")}</svg>`;
 writeFileSync(outFile, sprite);
+// A-04: a mesma lista, como tipo, para o `<Icon name>` do pacote React recusar nome que não
+// existe no sprite. Mora no `src/` do React porque é ele quem a publica.
+const nomes = files.map((f) => f.replace(/\.svg$/, ""));
+escreverNomesDeIcone(nomes, join(dirname(fileURLToPath(import.meta.url)), "..", "react", "src", "icon-names.ts"));
 console.log(`build-icons: wrote ${files.length} icons -> ${outFile}`);

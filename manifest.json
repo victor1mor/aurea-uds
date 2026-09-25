@@ -20,7 +20,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -30,7 +30,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -40,7 +40,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -50,7 +50,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -59,7 +59,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -76,7 +76,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -118,7 +118,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.11.0",
+      "version": "0.12.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -157,6 +157,7 @@
     "ChartTooltip",
     "Checkbox",
     "Cluster",
+    "Code",
     "CodeBlock",
     "CodeEditor",
     "Collapsible",
@@ -181,6 +182,7 @@
     "Form",
     "Gallery",
     "Grid",
+    "Heading",
     "HealthMatrix",
     "HoverCard",
     "HumanApproval",
@@ -210,6 +212,7 @@
     "NumberField",
     "OTPField",
     "Pagination",
+    "Paragraph",
     "PasswordField",
     "Popover",
     "Progress",
@@ -233,7 +236,9 @@
     "TableOfContents",
     "Tabs",
     "TaskQueue",
+    "Text",
     "Textarea",
+    "ThemeToggle",
     "Timeline",
     "Toggle",
     "ToggleGroup",
@@ -257,46 +262,46 @@
     "useValorResponsivo"
   ],
   "state": {
-    "componentes": 116,
-    "fichas": 116,
+    "componentes": 121,
+    "fichas": 121,
     "hooks": 9,
-    "paginas_total": 373,
+    "paginas_total": 378,
     "paginas": {
-      "component": 125,
+      "component": 130,
       "pattern": 204,
       "block": 15,
       "recipe": 23,
       "area": 6
     },
     "conteudo_rico": 27,
-    "starters": 98,
+    "starters": 103,
     "receitas_com_preview": 23,
     "patterns_content": 77,
     "blocks_content": 2,
     "receitas": 23,
-    "props": 116,
+    "props": 121,
     "variants": 15,
-    "sizes": 20,
-    "states": 103,
-    "tokens_ficha": 117,
-    "apg": 121,
+    "sizes": 22,
+    "states": 104,
+    "tokens_ficha": 122,
+    "apg": 126,
     "maturidade": {
       "Ready": 42,
-      "Stable": 83
+      "Stable": 88
     },
-    "testes_unit": 1183,
-    "componentes_citados_no_teste": 123,
+    "testes_unit": 1222,
+    "componentes_citados_no_teste": 128,
     "specs_visuais": 22,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 559,
-    "token_declaracoes": 407,
-    "token_nomes": 189,
-    "token_usados": 140,
-    "token_sem_uso": 49
+    "classes_core": 582,
+    "token_declaracoes": 409,
+    "token_nomes": 191,
+    "token_usados": 143,
+    "token_sem_uso": 48
   },
   "gates": {
-    "validate": 39,
+    "validate": 40,
     "playwrightSpecs": 22
   }
 }

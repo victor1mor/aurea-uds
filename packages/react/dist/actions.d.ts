@@ -1,4 +1,4 @@
-import React, { type ButtonHTMLAttributes, type HTMLAttributes, type RefAttributes } from "react";
+import React, { type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
 import { type IconName } from "./system.js";
 export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav";
@@ -27,6 +27,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     /** C-03 (24/09/2026): numa fila (`Cluster`), divide o espaço em partes iguais com os outros botões
      *  que também têm `grow`. O `fullWidth` não serve ali: ele pede a linha inteira. */
     grow?: boolean;
+    /** M-01 (25/09/2026): o elemento que o botão desenha no lugar do `<button>`/`<a>` — o link do
+     *  roteador do app, por exemplo: `render={<Link href="/relatorios" />}`. O elemento recebe a pele,
+     *  o conteúdo (ícones, texto, atalho) e os atributos do botão; o destino é dele. Desativado ou
+     *  carregando, o clique é BARRADO também nele, como no link desativado (AUD-0004). */
+    render?: ReactElement;
     /** C-13 (24/09/2026): atributos de LINK, que só valem com `href` — sem ele são ignorados. Antes
      *  chegavam ao `<a>` em tempo de execução, mas o tipo não os aceitava, e `target="_blank"` não
      *  compilava. */
@@ -75,6 +80,9 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: IconName;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
+export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
+}
+export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export declare function ButtonGroup({ label, orientation, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label?: string;
     orientation?: Responsive<Orientation>;

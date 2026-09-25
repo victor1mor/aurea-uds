@@ -8,7 +8,7 @@ body { margin:0; background:var(--background); color:var(--foreground); font-fam
 ::selection { background:var(--selection); }
 button,input,textarea,select { font:inherit; }
 button,a,[role="button"],input,textarea,select { outline:none; }
-:focus-visible { outline:2px solid var(--focus-strong); outline-offset:2px; box-shadow:none; border-color:var(--focus-strong)!important; }
+:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); box-shadow:none; border-color:var(--focus-strong)!important; }
 button { color:inherit; }
 /* O link NÃO é `--primary`. Medido em 22/08/2026 com o axe e depois à mão: o amarelo da
    marca sobre o fundo do tema CLARO dá 1,73:1, e o AA de texto (WCAG 1.4.3) pede 4,5:1 —
@@ -564,7 +564,7 @@ img,svg { display:block; }
    rolar a página lateralmente ao focar. Aparece no foco, que é o único momento em que precisa
    aparecer. */
 .skip-link { position:fixed; inset-block-start:var(--space-2); inset-inline-start:var(--space-2); z-index:calc(var(--z-toast) + 1); display:inline-flex; align-items:center; height:var(--control-h-md); padding:0 var(--space-4); border-radius:var(--radius-control); background:var(--primary); color:var(--primary-foreground); font-size:var(--text-sm); font-weight:var(--weight-semibold); line-height:var(--leading-none); text-decoration:none; transform:translateY(-160%); transition:transform var(--duration-fast) var(--ease-standard); }
-.skip-link:focus-visible { transform:translateY(0); outline:2px solid var(--focus-strong); outline-offset:2px; }
+.skip-link:focus-visible { transform:translateY(0); outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .btn-primary { --btn-bg:var(--primary); --btn-fg:var(--primary-foreground); --btn-border:transparent; }
 .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:var(--primary-hover); --btn-border:transparent; }
 .btn-secondary { --btn-bg:var(--secondary); --btn-fg:var(--secondary-foreground); --btn-border:transparent; }
@@ -675,12 +675,21 @@ img,svg { display:block; }
 .btn-outline.btn-tone-warning { --btn-border:var(--warning); }
 .btn-tone-warning:not(.btn-link):not(.btn-solid):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--warning) 14%, transparent); }
 .btn-nav:hover:not(:disabled):not([aria-disabled="true"]) { --btn-fg:var(--foreground); }
-.btn-icon { width:var(--control-h-md); padding:0; border-radius:var(--radius-md); }
-.btn-icon.btn-xs { width:var(--control-h-xs); border-radius:var(--radius-sm); }
-.btn-icon.btn-sm { width:var(--control-h-sm); border-radius:var(--radius-sm); } .btn-icon.btn-lg { width:var(--control-h-lg); border-radius:var(--radius-md); }
+/* O botão só de ícone é REDONDO, em todos os tamanhos — decisão do Victor, 25/09/2026
+   (ADR-0052). Era um quadrado de canto 10px (6px nos dois menores). O HeroUI 3.2.6 faz o botão só
+   de ícone redondo, e os botões de texto da Aurea já são cápsula: o de ícone era o único quadrado. */
+.btn-icon { width:var(--control-h-md); padding:0; border-radius:var(--radius-full); }
+.btn-icon.btn-xs { width:var(--control-h-xs); }
+.btn-icon.btn-sm { width:var(--control-h-sm); } .btn-icon.btn-lg { width:var(--control-h-lg); }
 /* xs e xl também precisam de largura: sem isto a altura mudava e a largura ficava na do
    md, e o alvo só-ícone deixava de ser quadrado (achado na onda Actions, 24/07). */
-.btn-icon.btn-xl { width:var(--control-h-xl); border-radius:var(--radius-md); }
+.btn-icon.btn-xl { width:var(--control-h-xl); }
+/* ThemeToggle (25/09/2026): a cor no ícone mostra o tema para onde se vai. No claro a LUA, na tinta
+   do texto; no escuro o SOL, no amarelo da marca — as duas combinações se enxergam, e é por isso
+   que o botão nunca mostra a lua no escuro nem o sol no claro. Mais específico que o `.btn:hover`,
+   então a cor fica também com o mouse em cima. */
+.theme-toggle-moon .icon { color:var(--foreground); }
+.theme-toggle-sun .icon { color:var(--primary); }
 /* wrap, não estoura: os botões do grupo são pills com gap (não segmentos colados), então
    quebrar linha em tela estreita preserva o visual. Único gap de eixo horizontal que a
    auditoria da Etapa 3 achou sem proteção — o resto já rola (tabela) ou já quebra (toolbar). */
@@ -797,7 +806,7 @@ img,svg { display:block; }
    contorno do input de dentro ficaria escondido atrás da borda do grupo. */
 .input-group { display:flex; flex-wrap:wrap; align-items:center; inline-size:100%; min-inline-size:0; min-block-size:var(--control-h-md); background:var(--field-bg); border:1px solid var(--border-strong); border-radius:var(--radius-control); transition:border-color var(--duration-fast),box-shadow var(--duration-fast); }
 .input-group:hover { border-color:var(--border); }
-.input-group:focus-within { outline:2px solid var(--focus-strong); outline-offset:2px; }
+.input-group:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .input-group:has(.input-sm) { min-block-size:var(--control-h-sm); }
 .input-group:has(.input-lg) { min-block-size:var(--control-h-lg); }
 /* O controle dentro do grupo abre mão da própria moldura: quem desenha a caixa é o grupo. */
@@ -932,7 +941,7 @@ img,svg { display:block; }
 .control-mark-lg { --step-h:var(--control-h-lg); }
 .checkbox .control-mark { border-radius:5px; } .radio .control-mark { border-radius:50%; }
 .checkbox input:checked + .control-mark { background:var(--control-selected); border-color:var(--control-selected); color:var(--control-selected-foreground); }
-.checkbox input:focus-visible + .control-mark,.radio input:focus-visible + .control-mark,.switch input:focus-visible + .switch-track { outline:2px solid var(--focus-strong); outline-offset:2px; }
+.checkbox input:focus-visible + .control-mark,.radio input:focus-visible + .control-mark,.switch input:focus-visible + .switch-track { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .checkbox input:checked + .control-mark:after { content:""; width:8px; height:4px; border-left:2px solid currentColor; border-bottom:2px solid currentColor; transform:rotate(-45deg) translateY(-1px); }
 .radio input:checked + .control-mark:after { content:""; width:8px; height:8px; border-radius:50%; background:var(--control-selected); }
 .switch { display:inline-flex; align-items:center; gap:10px; cursor:pointer; } .switch input { position:absolute; opacity:0; }
@@ -1465,7 +1474,11 @@ img,svg { display:block; }
    estética: é CLS. O exemplo de playlist do `media-chrome` declara o mesmo com o motivo escrito —
    sem proporção fixa, um player com `preload=none` mede zero até a mídia chegar e a página SALTA.
    Tirar a proporção sem fixar a altura devolve o salto. */
-.media-player { position:relative; isolation:isolate; overflow:hidden; min-height:var(--media-h,360px); aspect-ratio:var(--media-ar,16/9); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--media-canvas); color:var(--media-foreground); }
+/* A cor do foco no player é a do contexto, não uma regra à parte (B-09, 24/09/2026). O fundo do
+   player é quase preto nos DOIS temas (`--media-canvas`), e o `--focus-strong` do tema claro é
+   escuro: o foco dos controles sumia no tema claro. Redefinir o token aqui conserta todos os
+   controles de uma vez e deixa a linha de foco (espessura, afastamento) com a regra global. */
+.media-player { --focus-strong:var(--primary); position:relative; isolation:isolate; overflow:hidden; min-height:var(--media-h,360px); aspect-ratio:var(--media-ar,16/9); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--media-canvas); color:var(--media-foreground); }
 .media-viewport { position:absolute; inset:0; display:grid; place-items:center; background:var(--media-canvas); }
 .media-fill { width:100%; height:100%; object-fit:contain; } /* vídeo React preenche o viewport (auditoria 18/07, M14) */
 .media-placeholder { display:grid; place-items:center; gap:10px; color:var(--media-muted); text-align:center; }
@@ -1485,10 +1498,10 @@ img,svg { display:block; }
 .media-seek input::-webkit-slider-thumb { width:14px; height:14px; margin-top:-5px; appearance:none; border:2px solid var(--media-foreground); border-radius:50%; background:var(--primary); }
 .media-seek input::-moz-range-track { height:4px; background:transparent; }
 .media-seek input::-moz-range-thumb { width:12px; height:12px; border:2px solid var(--media-foreground); border-radius:50%; background:var(--primary); }
-.media-seek input:focus-visible { outline:2px solid var(--primary); outline-offset:3px; box-shadow:none; }
+.media-seek input:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); box-shadow:none; }
 .media-control-row,.media-control-group { display:flex; align-items:center; gap:4px; }
 .media-control-row { min-width:0; justify-content:space-between; }
-.media-control { min-width:36px; height:36px; display:inline-grid; place-items:center; padding:0 8px; border:1px solid transparent; border-radius:var(--radius-md); background:transparent; color:var(--media-foreground); cursor:pointer; }
+.media-control { min-width:36px; height:36px; display:inline-grid; place-items:center; padding:0; border:1px solid transparent; border-radius:var(--radius-full); background:transparent; color:var(--media-foreground); cursor:pointer; }
 .media-control:hover,.media-control.active { background:var(--media-track); color:var(--primary); }
 .media-time { padding:0 7px; color:var(--media-muted); font:var(--text-xs) var(--font-code); white-space:nowrap; }
 .media-volume { width:82px; accent-color:var(--primary); }
@@ -1552,6 +1565,37 @@ img,svg { display:block; }
    qualquer forma — ele é `buttonface`, não transparente. */
 .gallery-tile:not(.is-selected) { background:transparent; color:var(--muted-foreground); }
 .gallery-caption { font-size:var(--text-sm); }
+
+/* TIPOGRAFIA (B-02, 25/09/2026) — `Text`, `Heading`, `Paragraph` e `Code`, no molde do HeroUI
+   3.2.6 (`typography.css`), por ordem do Victor: HeroUI sempre primeiro. O que vem dele é a FORMA:
+   uma LISTA FECHADA de papéis em vez de tamanhos soltos (título 1–6, texto, texto pequeno, texto
+   mínimo, código), cor só normal ou apagada, quatro pesos. O que é nosso são os números, todos de
+   token: a escala de letras é a dele desde a ADR-0050, a entrelinha do texto é `--leading-relaxed`
+   (27, 24 e 20px, contra os 28, 24 e 20 dele) e o código reusa a pele do `code` do `.prose`.
+   A margem vai a zero porque `h1`…`h6` e `p` trazem a do navegador; o espaço entre blocos é de
+   quem os empilha (`Stack`), não do texto. */
+.typography { margin:0; color:var(--foreground); }
+.typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6 { font-weight:var(--weight-semibold); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); }
+.typography-h1 { font-size:var(--text-4xl); }
+.typography-h2 { font-size:var(--text-3xl); }
+.typography-h3 { font-size:var(--text-2xl); }
+.typography-h4 { font-size:var(--text-xl); }
+.typography-h5 { font-size:var(--text-lg); }
+.typography-h6 { font-size:var(--text-base); }
+.typography-body { font-size:var(--text-base); line-height:var(--leading-relaxed); }
+.typography-body-sm { font-size:var(--text-sm); line-height:var(--leading-relaxed); }
+.typography-body-xs { font-size:var(--text-xs); line-height:var(--leading-relaxed); }
+.typography-code { padding:var(--space-05) var(--space-1); border-radius:var(--radius-xs); background:var(--surface-2); font-family:var(--font-code); font-size:var(--text-sm); }
+.typography-muted { color:var(--muted-foreground); }
+.typography-weight-normal { font-weight:var(--weight-regular); }
+.typography-weight-medium { font-weight:var(--weight-medium); }
+.typography-weight-semibold { font-weight:var(--weight-semibold); }
+.typography-weight-bold { font-weight:var(--weight-bold); }
+.typography-align-start { text-align:start; }
+.typography-align-center { text-align:center; }
+.typography-align-end { text-align:end; }
+.typography-align-justify { text-align:justify; }
+.typography-truncate { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* PROSA (PLANO-1.0, item L5). É a PELE do texto longo, não o parser — quem transforma Markdown em
    elementos é o consumidor. Aqui só se decide como esses elementos se leem.
@@ -1724,7 +1768,15 @@ img,svg { display:block; }
    DropdownMenu, ContextMenu, Menubar e a lista da CommandPalette. */
 .menu { --menu-px:10px; z-index:var(--z-modal); min-width:200px; max-width:min(320px,calc(100vw - 32px)); padding:var(--space-1); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
 .menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,10px); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; cursor:pointer; }
-.menu-item[data-highlighted],.menu-item:hover:not([data-disabled]) { background:var(--surface-3); outline:none; }
+.menu-item[data-highlighted],.menu-item:hover:not([data-disabled]) { background:var(--surface-3); }
+/* Foco de TECLADO no item: a linha de foco, por dentro, porque a lista recorta o que passa da borda
+   (B-09 e a ordem de 25/09/2026, "HeroUI sempre primeiro": o `menu-item` do HeroUI 3.2.6 leva o
+   `status-focused` no foco de teclado). Até aqui a regra de cima apagava a linha com
+   `outline:none` e vencia a global: com o teclado, o item em foco era só o fundo cinza — igual ao
+   do mouse em cima. O mouse continua só com o fundo: `:focus-visible` não acende por ponteiro.
+   ⚠ Onde o foco fica no CAMPO (`Combobox`, `CommandPalette`: o item é destacado por
+   `aria-activedescendant`), o item nunca tem `:focus-visible`, e o destaque continua sendo o fundo. */
+.menu-item:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .menu-item[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
 /* CommandPalette (M6): a lista dentro da paleta. Reusa `.menu` e `.menu-item` — a paleta nao
    inventa uma segunda pele de lista, que e o defeito que a `.table-region` cobrou caro. O que se
@@ -1774,7 +1826,7 @@ img,svg { display:block; }
 .menubar-trigger { display:inline-flex; align-items:center; min-block-size:var(--control-h-sm); padding-inline:var(--space-3); border:0; border-radius:var(--radius-control); background:transparent; color:var(--foreground); font:inherit; font-size:var(--text-sm); font-weight:var(--weight-medium); white-space:nowrap; cursor:pointer; }
 .menubar-trigger:hover { background:var(--surface-hover); }
 .menubar-trigger[data-popup-open] { background:var(--secondary); color:var(--primary); }
-.menubar-trigger:focus-visible { outline:2px solid var(--focus-strong); outline-offset:2px; }
+.menubar-trigger:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 /* Combobox: reaproveita .menu/.menu-item; só dimensionamento e a coluna do check são próprios.
    --anchor-width e --available-height vêm do positioner do Base UI. */
 .combobox-group { position:relative; display:flex; align-items:center; }
@@ -1800,7 +1852,7 @@ img,svg { display:block; }
 /* MultiCombobox (Fase 4) — chips de multi-seleção + grupos. Espaçamento novo tokenizado. */
 .combobox-multi { display:flex; align-items:center; gap:var(--space-2); width:100%; min-width:0; min-height:var(--control-h-md); padding:var(--space-1) var(--space-2); background:var(--field-bg); border:1px solid var(--border-strong); border-radius:var(--radius-control); transition:border-color var(--duration-fast); }
 .combobox-multi:hover { border-color:var(--border); }
-.combobox-multi:focus-within { outline:2px solid var(--focus-strong); outline-offset:2px; border-color:var(--focus-strong); }
+.combobox-multi:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); border-color:var(--focus-strong); }
 .combobox-multi>.combobox-actions { position:static; inset-inline-end:auto; }
 /* o campo de chips não é `.input`, então a regra de :disabled dos campos não o alcança. Quem
    marca aqui é o `data-disabled` que o Base UI põe no InputGroup a partir do estado da Root. */
@@ -1826,7 +1878,7 @@ img,svg { display:block; }
    o arrastar-soltar é reforço. Espaçamento novo tokenizado; superfície = card. */
 .dropzone { display:flex; flex-direction:column; align-items:center; gap:var(--space-2); padding:var(--space-8) var(--space-6); text-align:center; color:var(--muted-foreground); background:var(--surface-inset); border:1px dashed var(--border-strong); border-radius:var(--radius-card); cursor:pointer; transition:border-color var(--duration-fast),background-color var(--duration-fast); }
 .dropzone:hover { border-color:var(--border); }
-.dropzone:focus-within { outline:2px solid var(--focus-strong); outline-offset:2px; border-color:var(--focus-strong); }
+.dropzone:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); border-color:var(--focus-strong); }
 .dropzone[data-dragging="true"] { border-style:solid; border-color:var(--primary); background:var(--surface-2); }
 .dropzone strong { color:var(--foreground); }
 .dropzone-icon { color:var(--primary); }
@@ -1905,7 +1957,7 @@ img,svg { display:block; }
 .tree-item { outline:none; }
 .tree-node { display:flex; align-items:center; gap:var(--space-2); min-height:var(--control-h-md); padding-block:var(--space-1); padding-inline-end:var(--space-3); border-radius:var(--radius-sm); color:var(--foreground); cursor:pointer; user-select:none; }
 .tree-node:hover { background:var(--surface-3); }
-.tree-item:focus-visible > .tree-node { outline:2px solid var(--focus-strong); outline-offset:-2px; }
+.tree-item:focus-visible > .tree-node { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .tree-node[data-selected] { background:color-mix(in srgb,var(--primary) 14%,transparent); }
 .tree-twist { flex:none; color:var(--muted-foreground); transition:transform var(--duration-fast); }
 .tree-item[aria-expanded="true"] > .tree-node > .tree-twist { transform:rotate(90deg); }
@@ -1928,7 +1980,7 @@ img,svg { display:block; }
 .notification-item { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:baseline; column-gap:var(--space-3); row-gap:var(--space-1); width:100%; padding:var(--space-3); border:0; border-radius:var(--radius-sm); background:none; color:var(--foreground); font:inherit; text-align:start; }
 button.notification-item { cursor:pointer; }
 button.notification-item:hover { background:var(--surface-3); }
-.notification-item:focus-visible { outline:2px solid var(--focus-strong); outline-offset:-2px; }
+.notification-item:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .notification-dot { grid-row:1/-1; align-self:center; width:8px; height:8px; border-radius:50%; background:var(--primary); }
 .notification-item[data-read] .notification-dot { visibility:hidden; }
 .notification-item-title { grid-column:2; display:flex; align-items:center; gap:var(--space-2); min-width:0; font-size:var(--text-sm); font-weight:var(--weight-medium); }
@@ -1951,14 +2003,14 @@ button.notification-item:hover { background:var(--surface-3); }
    selecionada usa data-selected (o estado acessível é o checkbox da linha).
    Espaço novo tokenizado. */
 .datagrid { display:grid; gap:var(--space-3); }
-.datagrid > .table-wrap:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in oklab,var(--focus) 38%,transparent); }
+.datagrid > .table-wrap:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); box-shadow:none; }
 .datagrid > .pagination { justify-self:end; }
 /* Fix aditivo: os 34px dos botões numéricos do .pagination esmagavam os botões
    de TEXTO (Anterior/Próxima) do Pagination React. Não muda os numéricos. */
 /* text-transform/letter-spacing: o UA reseta nos <button>; herdar explícito
    para o cabeçalho ordenável ficar idêntico ao th estático. */
 .datagrid-sort { display:inline-flex; align-items:center; gap:var(--space-1); padding:0; border:0; background:none; color:inherit; font:inherit; text-transform:inherit; letter-spacing:inherit; cursor:pointer; }
-.datagrid-sort:focus-visible { outline:2px solid var(--focus-strong); outline-offset:2px; border-radius:var(--radius-sm); }
+.datagrid-sort:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); border-radius:var(--radius-sm); }
 .datagrid-sort-icon { flex:none; color:var(--subtle-foreground); }
 th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
 .datagrid-selcol { width:1%; white-space:nowrap; }
@@ -1999,7 +2051,7 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
 .datagrid thead th:has(> .datagrid-resizer) { position:relative; }
 .datagrid-resizer { position:absolute; inset-block:0; inset-inline-end:0; inline-size:var(--space-1); padding:0; border:0; background:none; cursor:col-resize; touch-action:none; }
 .datagrid-resizer:hover, .datagrid-resizer:focus-visible { background:var(--primary); }
-.datagrid-resizer:focus-visible { outline:2px solid var(--focus-strong); outline-offset:1px; }
+.datagrid-resizer:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 
 /* F8: o esqueleto dentro da célula. Sem altura própria ele mede zero — a `.skeleton`
    é uma <div> vazia — e a linha de carregamento sairia rasa demais para parecer uma
@@ -2257,7 +2309,7 @@ button.graph-node-body { cursor:pointer; }
    mora na cápsula, então é ela que precisa crescer — o filho estica atrás. */
 @media (pointer:coarse) { .btn:not(.btn-link),.tabs,.segmented,.pagination button,.schedule-grid button,.media-control,.nav-list-row { min-height:var(--target-min); } .btn-icon,.media-control { min-width:var(--target-min); } }
 @media (forced-colors:active) {
-  :focus-visible { outline:2px solid CanvasText; outline-offset:2px; box-shadow:none; }
+  :focus-visible { outline:var(--focus-width) solid CanvasText; outline-offset:var(--focus-offset); box-shadow:none; }
   .badge,.pattern-gallery button[aria-pressed="true"],.device-grid button[aria-pressed="true"] { border:1px solid CanvasText; }
 }
 
@@ -2265,9 +2317,12 @@ button.graph-node-body { cursor:pointer; }
 /* Aurea v1.7 stabilization patch — visual design unchanged. */
 .badge-running{background:var(--success-bg);color:var(--success-400);border-color:color-mix(in oklab,var(--success-400) 32%,transparent)}
 /* superfície (overflow, borda, fundo, raio) mora junto com a do `.table-wrap` lá em cima — aqui
-   fica só o que é DESTA região: ela é focável, e o anel dela é o box-shadow abaixo. */
+   fica só o que é DESTA região: ela é focável, e o foco dela é a linha de dentro, abaixo. Era um
+   halo de `--focus` a 38% (B-09, 24/09/2026): claro demais para se ver, e fora do contrato de foco.
+   A linha vai para DENTRO porque a região é o próprio contêiner recortado — como no HeroUI 3.2.6,
+   que desenha o foco da tabela com `inset 0 0 0 2px var(--focus)`. */
 .table-region{outline:none}
-.table-region:focus-visible{box-shadow:0 0 0 3px color-mix(in oklab,var(--focus) 38%,transparent)}
+.table-region:focus-visible{outline:var(--focus-width) solid var(--focus-strong);outline-offset:calc(-1 * var(--focus-width));box-shadow:none}
 /* CONTAINER QUERY, e não breakpoint de viewport — Parte D, item D3 (08/08/2026).
    Era `@media (max-width:400px)`, o último dos seis legados do achado M13. Trocar por um degrau
    da escala (639px) teria resolvido o gate e mantido o defeito: a largura que aperta os

@@ -1,0 +1,99 @@
+{
+  "name": "ThemeToggle",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "The light/dark switch, with colour in the glyph: a dark moon in the light theme, the brand yellow sun in the dark one.",
+  "icon": "maximize",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [
+    "lg",
+    "md",
+    "sm",
+    "xl",
+    "xs"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "axes": {},
+  "states": [
+    "light",
+    "dark"
+  ],
+  "tokens": [
+    "--accent",
+    "--accent-foreground",
+    "--border-strong",
+    "--control-h-lg",
+    "--control-h-md",
+    "--control-h-sm",
+    "--danger-400",
+    "--destructive",
+    "--destructive-foreground",
+    "--duration-fast",
+    "--ease-standard",
+    "--foreground",
+    "--primary",
+    "--primary-foreground",
+    "--primary-hover",
+    "--radius-control",
+    "--radius-full",
+    "--secondary",
+    "--secondary-foreground",
+    "--secondary-hover",
+    "--text-base",
+    "--text-sm",
+    "--text-xs"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "button",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "A native <button> (the IconButton). Its name says where it goes — \"Switch to dark theme\" / \"Switch to light theme\" — and changes with the theme."
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": [
+      "asleep--filled",
+      "light--filled"
+    ]
+  },
+  "related": {
+    "components": [
+      "IconButton",
+      "AureaProvider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#ThemeToggle"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "default": "\"md\"",
+      "description": "The IconButton size. The button is round, like every icon-only button (ADR-0052)."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Blocks the switch."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the button."
+    }
+  ]
+}

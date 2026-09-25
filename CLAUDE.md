@@ -69,7 +69,8 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   aparência continua sendo a nossa.
 - **HeroUI sempre primeiro** (ordem do Victor, 25/09/2026): *"HeroUI sempre vamos dar prioridade
   a ele"*. Quando ele **não tem** a peça que estamos criando, ela se cria **pensando como ele
-  criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea.
+  criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea. Ele é a
+  referência mesmo onde não tem o componente.
 - **As medidas vêm do HeroUI** (ordem do Victor, 25/09/2026): *"não vamos ficar inventando
   medidas, se HeroUI já tem vamos usar as deles, que já é validado; só criamos medidas e tamanho em
   componente exclusivo nosso"*. Recheio, altura, letra, linha e vão de peça que o HeroUI tem se
@@ -109,12 +110,21 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    parte) · B-02 (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco
    com uma linha). Na leitura de 24/09/2026, ele vem **antes** da `1.0`, porque muda a estrutura
    das peças.
-   - **A-04 feito** na branch `claude/friendly-cerf-ctu0v7`, sem pedido de junção: sai junto com o
-     resto do lote. Pode quebrar a compilação de quem passa ícone numa variável `string`.
-   - **Os outros quatro esperam a ficha** do documento de achados. O HeroUI 3.2.6 não tem `render`
-     nem `classNames` (M-01, M-02 vêm só do consumidor); tem `Heading`/`Paragraph`/`Code` (B-02) e
-     um anel de foco único, `focus-ring` (B-09).
-4. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
+   - **Lote 3 FECHADO em 25/09/2026, na versão `0.12.0`**, na branch `claude/friendly-cerf-ctu0v7`.
+     O E2 e o M-01 entraram nele, e o `ThemeToggle` também (botão de claro e escuro: lua cheia
+     escura no claro, sol cheio amarelo no escuro — aprovado pela imagem em 25/09/2026). **Empurrada
+     com o "pode" de 25/09/2026, com o pedido de junção aberto.** Falta o Victor juntar e publicar.
+   - **A-04 feito.** Pode quebrar a compilação de quem passa ícone numa variável `string`.
+   - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
+     `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.
+   - **ADR-0052 feita e aprovada pela imagem** (25/09/2026): o botão só de ícone é redondo.
+   - **B-02 feito e aprovado pela imagem**, no modelo do HeroUI (25/09/2026): lista fechada de papéis
+     (título 1–6, texto, texto pequeno, texto mínimo, código), mais `Heading`, `Paragraph` e
+     `Code`, nos dois alvos. O `Text` do nativo que já existe fica.
+   - **M-01 só em `Button`, `IconButton` e itens de navegação; M-02 descartado; E2 entra aqui**
+     (decisões do Victor, 25/09/2026 — ver "Lote E e decisões", abaixo).
+4. **Lote E** saiu na `0.11.0` — ver "Lote E e decisões de 25/09/2026", abaixo.
+5. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
 
 ### Lote E e decisões de 25/09/2026

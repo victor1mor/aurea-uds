@@ -123,6 +123,16 @@ Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou
 URL resultante. Numa página que embute os ícones como `<symbol>`, passe `spriteUrl=""` para a
 referência ficar local — é o que o catálogo faz.
 
+**O nome do ícone é checado pelo TypeScript**: `<Icon name="chevron-down">` (um traço só; o do
+Carbon é `chevron--down`) não compila, nem em `leadingIcon`, `icon` ou qualquer prop que recebe
+ícone. Quem usa um sprite próprio declara os nomes dele **uma vez**:
+
+```tsx
+declare module "@aurea-uds/react" {
+  interface AureaIconNames { marca: true }
+}
+```
+
 ### Overlays acessíveis
 
 Prender o foco, fechar com Esc, devolver o foco e travar a rolagem vêm do
@@ -173,7 +183,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-373 páginas geradas — 125 de componente, 204 de padrão, 15 de bloco, 23 de receita e 6 índices de área — a partir de 116 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 27 componentes têm conteúdo escrito à mão; os outros 98 trazem um starter — o preview real e o código, ainda sem exemplos extras. 116 componentes publicam a tabela de props.
+378 páginas geradas — 130 de componente, 204 de padrão, 15 de bloco, 23 de receita e 6 índices de área — a partir de 121 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 27 componentes têm conteúdo escrito à mão; os outros 103 trazem um starter — o preview real e o código, ainda sem exemplos extras. 121 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

@@ -2,7 +2,7 @@
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import React, {useRef, forwardRef, type ButtonHTMLAttributes, type HTMLAttributes, type RefAttributes} from "react";
+import React, {useRef, forwardRef, cloneElement, type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes} from "react";
 import {classesResponsivas, ehResponsivo, peleDoEixo, soOValor, valorBase, type Orientation, type Responsive} from "./pure.js";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Toolbar as BaseToolbar} from "@base-ui/react/toolbar";
@@ -10,7 +10,7 @@ import {Toggle as BaseToggle} from "@base-ui/react/toggle";
 import {ToggleGroup as BaseToggleGroup} from "@base-ui/react/toggle-group";
 import {cx, useAureaStrings} from "./internal.js";
 import {Kbd} from "./markup.js";
-import {Icon, type IconName} from "./system.js";
+import {Icon, useAureaTheme, type IconName} from "./system.js";
 
 // A ordem do nome segue a FAMÍLIA, e a inconsistência é herdada: em `outline`/`ghost` o tom vem
 // primeiro (`danger-outline`, `primary-outline`); em `link` vem depois (`link-danger`), porque ali
@@ -65,6 +65,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
   /** C-03 (24/09/2026): numa fila (`Cluster`), divide o espaço em partes iguais com os outros botões
    *  que também têm `grow`. O `fullWidth` não serve ali: ele pede a linha inteira. */
   grow?:boolean;
+  /** M-01 (25/09/2026): o elemento que o botão desenha no lugar do `<button>`/`<a>` — o link do
+   *  roteador do app, por exemplo: `render={<Link href="/relatorios" />}`. O elemento recebe a pele,
+   *  o conteúdo (ícones, texto, atalho) e os atributos do botão; o destino é dele. Desativado ou
+   *  carregando, o clique é BARRADO também nele, como no link desativado (AUD-0004). */
+  render?:ReactElement;
   /** C-13 (24/09/2026): atributos de LINK, que só valem com `href` — sem ele são ignorados. Antes
    *  chegavam ao `<a>` em tempo de execução, mas o tipo não os aceitava, e `target="_blank"` não
    *  compilava. */
@@ -85,7 +90,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant,appearance,tone,size="md",loading,leadingIcon,trailingIcon,className,children,disabled,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,...props},ref){
+export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant,appearance,tone,size="md",loading,leadingIcon,trailingIcon,className,children,disabled,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,...props},ref){
 // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
 // SOMATIVO por construção: valor simples continua emitindo `btn-sm`, byte por byte a mesma classe
 // de antes, e por isso nenhuma baseline se mexe. Só o valor responsivo entra pela camada genérica
@@ -117,6 +122,10 @@ const shared={"aria-keyshortcuts":kbd||undefined,"aria-busy":loading||undefined}
 // também precisa ser barrado. `stopPropagation` evita o handler de bolha em um ancestral.
 const bloqueia=(e:React.MouseEvent<HTMLAnchorElement>)=>{e.preventDefault();e.stopPropagation()};
 const eventos=(off||inerte)?{onClick:bloqueia,onClickCapture:bloqueia}:{onClick:onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>,onClickCapture:onClickCapture as unknown as React.MouseEventHandler<HTMLAnchorElement>};
+// M-01: com `render`, o elemento de quem chama é o botão. Os atributos dele vêm por cima dos nossos
+// (como no `fundirRender`), a classe soma, o conteúdo é o do botão — e, desativado ou carregando,
+// o bloqueio vem POR ÚLTIMO: nenhum `onClick` do elemento passa.
+if(render){const dele=(render.props??{}) as Record<string,unknown>;return cloneElement(render as ReactElement<Record<string,unknown>>,{ref,...shared,...props,...dele,className:cx(cls,dele.className as string|undefined),...((off||inerte)?{"aria-disabled":true,onClick:bloqueia,onClickCapture:bloqueia}:{onClick:dele.onClick??onClick,onClickCapture:dele.onClickCapture??onClickCapture}),children:inner})}
 if(href!==undefined)return <a ref={ref as unknown as React.Ref<HTMLAnchorElement>} className={cls} target={target} rel={rel} download={download} {...shared} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>&RefAttributes<HTMLAnchorElement>)} {...(off?{"aria-disabled":true}:{href})} {...eventos}>{inner}</a>;
 return <button ref={ref} type={type} className={cls} disabled={off} aria-disabled={inerte||undefined} aria-pressed={pressed} {...shared} {...(inerte?{onClick:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>,onClickCapture:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>}:{onClick,onClickCapture})} {...props}>{inner}</button>});
 
@@ -182,6 +191,19 @@ export interface IconButtonProps extends Omit<ButtonProps,"children">{label:stri
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} {...props}><Icon name={icon}/></Button>});
+// ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone. É peça
+// EXCLUSIVA da Aurea — o HeroUI 3.2.6 não tem troca de tema —, então nasce pensando como ele
+// criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.
+// Mostra o tema para onde se VAI: no claro a LUA, escura; no escuro o SOL, amarelo. As duas
+// combinações se enxergam (tinta escura sobre o claro, o amarelo da marca sobre o escuro), e é por
+// isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
+// Fechado como o HeroUI faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
+// do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
+export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth">{}
+export const ThemeToggle=forwardRef<HTMLButtonElement,ThemeToggleProps>(function ThemeToggle({className,...props},ref){
+  const {theme,toggleTheme}=useAureaTheme();const s=useAureaStrings();const escuro=theme==="dark";
+  return <IconButton ref={ref} icon={escuro?"light--filled":"asleep--filled"} label={escuro?s.themeToLight:s.themeToDark}
+    className={cx(escuro?"theme-toggle-sun":"theme-toggle-moon",className)} onClick={toggleTheme} {...props}/>});
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem
 // noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por

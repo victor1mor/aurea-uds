@@ -24,7 +24,7 @@ import {Pressable, View, type PressableProps} from "react-native";
 import {criarFolha, REACAO_AO_TOQUE} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
 import {Text} from "./text.js";
-import {useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
+import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 /** Quanto peso a caixa tem. */
@@ -133,7 +133,12 @@ const folha = criarFolha((t: AureaTokens) => ({
   // pinta fundo, borda e raio é a `caixa` interna, com a altura do token. O botão continua com
   // 36 dp de desenho e passa a ter 44 de alvo — e o leitor de tela enxerga os 44, porque o
   // elemento acessível é o `Pressable`, não um retângulo invisível ao lado dele.
-  alvo: {minHeight: t.size.targetMin, justifyContent: "center", alignSelf: "flex-start"},
+  // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como no HeroUI Native (`button.css`
+  // não fixa alinhamento) e como o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, e ele
+  // vencia o `alignItems: "center"` do pai: o botão do `EmptyState` ficava à esquerda com o resto
+  // no meio. ⚠ A consequência, decidida pelo Victor: numa coluna sem alinhamento o botão ESTICA,
+  // como na web. "Do tamanho do texto" se diz no pai — `Stack align="start"`.
+  alvo: {minHeight: t.size.targetMin, justifyContent: "center"},
   alvoLargura: {alignSelf: "stretch"},
   caixa: {
     flexDirection: "row", alignItems: "center", justifyContent: "center",
@@ -247,18 +252,25 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
 }
 
 /**
- * Botão quadrado, só glifo.
+ * Botão REDONDO, só glifo.
  *
- * O raio NÃO é o pill: o core usa `--radius-md` no `.btn-icon` (e `--radius-sm` nos dois menores),
- * porque um quadrado com raio 999 vira círculo. Medido lá, não escolhido aqui.
+ * O raio é o da cápsula (`radiusControl`, 999) num quadrado, e um quadrado com raio 999 é um
+ * círculo — o mesmo que o `.btn-icon` do core faz. Decisão do Victor, 25/09/2026 (ADR-0052): era
+ * `--radius-md`/`--radius-sm`, e o HeroUI 3.2.6 faz o botão só de ícone redondo.
  *
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export function IconButton({
+export function IconButton(props: IconButtonProps) {
+  return <BotaoDeIcone {...props} />;
+}
+
+/** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
+ *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
+function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
-  icons, pressed, disabled, ...rest
-}: IconButtonProps) {
+  icons, pressed, disabled, corDoIcone, ...rest
+}: IconButtonProps & {corDoIcone?: string}) {
   const t = useAureaTokens();
   const s = folha(t);
   const marca = useSobreAMarca();
@@ -268,7 +280,7 @@ export function IconButton({
 
   const caixa = React.useMemo(() => ({
     height: lado, width: lado, paddingHorizontal: 0,
-    borderRadius: size === "xs" || size === "sm" ? t.size.radiusSm : t.size.radiusMd,
+    borderRadius: t.size.radiusControl,
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
     borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
   }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
@@ -280,13 +292,36 @@ export function IconButton({
       accessibilityLabel={label}
       accessibilityState={{disabled: !!disabled, ...(pressed === undefined ? null : {checked: pressed})}}
       style={({pressed: tocando}) => [
-        s.alvo, {minWidth: t.size.targetMin, alignItems: "center"},
+        // Largura FIXA, como o só-ícone do HeroUI (`.button--icon-only`: `w-10`): ele nunca estica,
+        // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
+        s.alvo, {width: Math.max(lado, t.size.targetMin), alignItems: "center"},
         tocando && s.pressionado, disabled && s.inerte,
       ]}
       {...rest}>
       <View style={[s.caixa, caixa]}>
-        <Icon name={name} size={ICONE[size]} color={appearance === "solid" ? cor.texto : cor.sobre} icons={icons} />
+        <Icon name={name} size={ICONE[size]} icons={icons}
+              color={corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre} />
       </View>
     </Pressable>
+  );
+}
+
+// ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone — o
+// irmão do da web. Peça EXCLUSIVA da Aurea (o HeroUI Native não tem troca de tema), pensada como
+// ele faria: um só-ícone, sem cor solta. Mostra o tema para onde se VAI: no claro a LUA, na tinta
+// do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `asleep--filled` e `light--filled` saem do registro do
+// app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
+/** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {}
+export function ThemeToggle(props: ThemeToggleProps) {
+  const {theme, toggleTheme} = useAureaTheme();
+  const t = useAureaTokens();
+  const s = useAureaStrings();
+  const escuro = theme === "dark";
+  return (
+    <BotaoDeIcone {...props} name={escuro ? "light--filled" : "asleep--filled"}
+      label={escuro ? s.themeToLight : s.themeToDark}
+      corDoIcone={escuro ? t.color.primary : t.color.foreground}
+      onPress={toggleTheme} />
   );
 }

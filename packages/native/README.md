@@ -862,6 +862,16 @@ const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
 const ICONES = criarRegistroDeIcones({...OS_DO_APP, logo: Logo});
 ```
 
+**O nome é checado pelo TypeScript** (desde a A-04): `<Icon name="chevron-down">`, com um traço
+só, não compila, e a chave do registro também é conferida. Um glifo próprio entra declarando o
+nome **uma vez**:
+
+```tsx
+declare module "@aurea-uds/native" {
+  interface AureaIconNames { logo: true }
+}
+```
+
 ## O que este pacote não faz
 
 - **Não promete paridade** com a web. O React Native não tem `<p>`, cascata de tipografia,

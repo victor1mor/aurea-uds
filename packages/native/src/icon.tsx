@@ -24,9 +24,13 @@ import {useAureaTokens} from "./theme.js";
 
 /** O que cada módulo de `icons/*` exporta por padrão. */
 export type AureaIconComponent = (props: {size?: number; color?: string}) => React.ReactElement;
-/** Nome do glifo, no vocabulário do Carbon — o MESMO do sprite da web (check 38). */
-export type IconName = string;
-export type AureaIconRegistry = Readonly<Record<IconName, AureaIconComponent>>;
+// A-04: nome do glifo, no vocabulário do Carbon — o MESMO do sprite da web (check 38) —, checado
+// pelo TypeScript. A lista é GERADA por `build-icons-native.mjs`; o glifo próprio do app
+// (`criarGlifo`) entra declarando o nome em `AureaIconNames`.
+export type {IconName, CarbonIconName, AureaIconNames} from "./icon-names.js";
+import type {IconName} from "./icon-names.js";
+/** Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. */
+export type AureaIconRegistry = Readonly<Partial<Record<IconName, AureaIconComponent>>>;
 
 /**
  * Declara o registro. É uma função de identidade tipada, e ela existe por um motivo prático:

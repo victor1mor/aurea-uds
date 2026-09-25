@@ -7,7 +7,7 @@ import {Tabs as BaseTabs} from "@base-ui/react/tabs";
 import {Autocomplete as BaseAutocomplete} from "@base-ui/react/autocomplete";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {type Responsive} from "./pure.js";
-import {cx, useAureaStrings, usePortalContainer} from "./internal.js";
+import {cx, fundirRender, useAureaStrings, usePortalContainer} from "./internal.js";
 import {Kbd} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {Button} from "./actions.js";
@@ -45,7 +45,12 @@ return <div key={n} role="listitem" className={cx("step",st!=="default"&&`step-$
 </div>})}
 </div>}
 
-export function Breadcrumb({items,label}:{items:Array<{label:ReactNode;href?:string}>;label?:string}){const s=useAureaStrings();return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name="chevron--right" size="sm"/>} {i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
+// M-01 (25/09/2026): `render` no item de navegação — o link do roteador do app (`<Link href/>`)
+// recebe a pele e o conteúdo do item, pelo `fundirRender` que o `Card` já usa. Com `render`, quem
+// traz o destino é o elemento, e o `href` do item fica sem uso. Decisão do Victor: `render` só no
+// `Button`, no `IconButton` e nos itens de navegação — onde o app precisa do roteador.
+export interface BreadcrumbItem{label:ReactNode;href?:string;render?:ReactElement}
+export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name="chevron--right" size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
 // ── REPORTADO no merge de 28/08/2026 ────────────────────────────────────────────────────────
 // `orientation`, `activateOnFocus` e `loopFocus` estavam na outra linhagem e sumiram quando este
 // arquivo entrou inteiro da `main` — ele não existia lá e por isso não deu conflito nenhum. A
@@ -229,7 +234,9 @@ export function TreeView({items,defaultExpandedIds,onSelect,label,className}:{it
 // TECLADO: não há padrão APG para navegação de site — o que existe é link em `<nav>`, ordem de
 // Tab nativa e `aria-current="page"` no atual. Roving tabindex aqui seria copiar o TreeView
 // para um lugar onde ele atrapalha: numa lateral o usuário ESPERA tabular item a item.
-export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconName;badge?:ReactNode;onClick?:()=>void;items?:SidebarItem[]}
+export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconName;badge?:ReactNode;onClick?:()=>void;items?:SidebarItem[];
+  /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
+  render?:ReactElement}
 type SidebarCtx={baseId:string;current?:string;collapsed?:boolean};
 function sidebarList(items:SidebarItem[],ctx:SidebarCtx,sub?:boolean,labelledBy?:string):ReactElement{
 return <ul className={cx("sidebar-list",sub&&"sidebar-sub")} aria-labelledby={labelledBy}>
@@ -239,13 +246,15 @@ const filhos=it.items?.length?it.items:undefined;
 // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
 // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
 const oculto=(no:ReactNode)=>ctx.collapsed?<span className="sr-only">{no}</span>:no;
-if(filhos&&!it.href&&!it.onClick)return <li key={it.id}>
+if(filhos&&!it.href&&!it.onClick&&!it.render)return <li key={it.id}>
 <p id={lid} className={cx("sidebar-group-label",ctx.collapsed&&"sr-only")}>{it.label}</p>
 {sidebarList(filhos,ctx,false,lid)}
 </li>;
 const ativo=it.id===ctx.current;
 const miolo=<>{it.icon&&<Icon name={it.icon}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
-const alvo=it.href
+const alvo=it.render
+?fundirRender(it.render,{id:lid,className:"sidebar-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")
+:it.href
 ?<a id={lid} href={it.href} className="sidebar-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</a>
 :<button id={lid} type="button" className="sidebar-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</button>;
 // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
@@ -364,7 +373,9 @@ const marca=<span className="bottom-nav-mark">
 {it.badge!=null&&<span className="bottom-nav-badge">{it.badge}</span>}
 </span>;
 const miolo=<>{marca}<span className="bottom-nav-label">{it.label}</span></>;
-return it.href
+return it.render
+?<React.Fragment key={it.id}>{fundirRender(it.render,{className:"bottom-nav-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")}</React.Fragment>
+:it.href
 ?<a key={it.id} href={it.href} className="bottom-nav-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</a>
 :<button key={it.id} type="button" className="bottom-nav-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</button>;
 })}
@@ -406,7 +417,9 @@ return it.href
 // porque a medição de 13/08/2026 já está escrita no core (ao lado de `.btn:disabled`): `:disabled`
 // TIRA o controle da ordem de foco e quem usa teclado nunca descobre que a linha existe.
 // `aria-disabled` mantém focável e inerte, e o manipulador é que não é passado.
-export interface NavListItem{id:string;label:ReactNode;description?:ReactNode;value?:ReactNode;icon?:IconName;href?:string;onClick?:()=>void;disabled?:boolean}
+export interface NavListItem{id:string;label:ReactNode;description?:ReactNode;value?:ReactNode;icon?:IconName;href?:string;onClick?:()=>void;disabled?:boolean;
+  /** O link do roteador do app (M-01). Linha com `render` é linha com destino: leva a seta, como a com `href`. */
+  render?:ReactElement}
 export function NavList({items,className,...props}:HTMLAttributes<HTMLUListElement>&RefAttributes<HTMLUListElement>&{items:NavListItem[]}){
 return <ul className={cx("nav-list",className)} {...props}>
 {items.map(it=>{
@@ -417,9 +430,11 @@ const miolo=<>
 {it.description!=null&&<span className="nav-list-description">{it.description}</span>}
 </span>
 {it.value!=null&&<span className="nav-list-value">{it.value}</span>}
-{it.href&&<Icon name="chevron--right" size="sm" className="nav-list-chevron"/>}
+{(it.href||it.render)&&<Icon name="chevron--right" size="sm" className="nav-list-chevron"/>}
 </>;
-return <li key={it.id}>{it.href&&!it.disabled
+return <li key={it.id}>{it.render&&!it.disabled
+?fundirRender(it.render,{className:"nav-list-row",onClick:it.onClick,children:miolo},"a")
+:it.href&&!it.disabled
 ?<a href={it.href} className="nav-list-row" onClick={it.onClick}>{miolo}</a>
 :<button type="button" className="nav-list-row" aria-disabled={it.disabled||undefined} onClick={it.disabled?undefined:it.onClick}>{miolo}</button>}</li>;
 })}

@@ -3141,6 +3141,61 @@ if _ALVO43.is_dir():
         )
 
 
+# ── 44. o foco é UMA linha, e ela sai dos tokens ─────────────────────────────────────────────
+# B-09, 24/09/2026. O contrato de foco existe desde a Fase 5 (`geometry.spec.ts`: uma cor, 2px,
+# linha de contorno, afastamento +2px ou -2px), mas o teste de navegador mede SEIS peças. As que
+# ficavam fora da amostra fugiam em silêncio: a `.table-region` e a `DataGrid` tinham um halo de
+# `--focus` a 38% no lugar da linha, o player tinha outra cor e 3px de afastamento, a alça de
+# redimensionar 1px. Este check lê TODA regra de foco do core, sem amostra.
+#
+# A regra: dentro de `:focus-visible`/`:focus-within`, a linha é `var(--focus-width) solid` na cor
+# `--focus-strong` (ou `CanvasText`, no modo de alto contraste do sistema); o afastamento é
+# `var(--focus-offset)` ou, dentro de contêiner recortado, `calc(-1 * var(--focus-width))`; e
+# sombra não faz papel de linha. Cor diferente por CONTEXTO se faz redefinindo `--focus-strong`
+# no contêiner (é o que o `.media-player` faz), nunca com uma regra de foco à parte.
+_CSS44 = root / "packages/core/src/aurea.css"
+# `outline:none` numa regra de foco só onde o anel MUDOU de lugar, com o motivo escrito.
+_SEM_LINHA44 = {
+    ".input-group>.input:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
+    ".input-group>.select:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
+    ".input-group>.textarea:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
+    ".combobox-chip-input:focus-visible": "o anel é da moldura (`.combobox-multi:focus-within`)",
+}
+_LINHA44 = re.compile(r"^var\(--focus-width\)\s+solid\s+(var\(--focus-strong\)|CanvasText)$")
+_OFFSET44 = {"var(--focus-offset)", "calc(-1 * var(--focus-width))"}
+if _CSS44.is_file():
+    _css44 = re.sub(r"/\*.*?\*/", "", _CSS44.read_text(encoding="utf8"), flags=re.S)
+    _maus44 = []
+    for _m44 in re.finditer(r"([^{}]+)\{([^{}]*)\}", _css44):
+        _sel44 = " ".join(_m44.group(1).split())
+        if ":focus-visible" not in _sel44 and ":focus-within" not in _sel44:
+            continue
+        _decl44 = {}
+        for _d44 in _m44.group(2).split(";"):
+            if ":" in _d44:
+                _k44, _v44 = _d44.split(":", 1)
+                _decl44[_k44.strip()] = " ".join(_v44.replace("!important", "").split())
+        _partes44 = [p.strip() for p in _sel44.split(",")]
+        if "outline" in _decl44:
+            _v44 = _decl44["outline"]
+            if _v44 == "none":
+                _sem44 = [p for p in _partes44 if p.replace(" ", "") not in _SEM_LINHA44]
+                if _sem44:
+                    _maus44.append(f"`{_sel44}` apaga a linha de foco (`outline:none`) sem motivo registrado")
+            elif not _LINHA44.match(_v44):
+                _maus44.append(f"`{_sel44}` desenha o foco como `outline:{_v44}`")
+        if "outline-offset" in _decl44 and _decl44["outline-offset"] not in _OFFSET44:
+            _maus44.append(f"`{_sel44}` afasta o foco com `outline-offset:{_decl44['outline-offset']}`")
+        if "box-shadow" in _decl44 and _decl44["box-shadow"] != "none":
+            _maus44.append(f"`{_sel44}` usa sombra no lugar da linha de foco")
+    if _maus44:
+        errors.append(
+            "check 44: " + "; ".join(_maus44) + ". O foco é uma linha só: "
+            "`outline:var(--focus-width) solid var(--focus-strong)` com `outline-offset:var(--focus-offset)` "
+            "(ou `calc(-1 * var(--focus-width))` dentro de contêiner recortado). Cor por contexto "
+            "se faz redefinindo `--focus-strong` no contêiner, como o `.media-player`"
+        )
+
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")
 print("Aurea validation:", "OK" if not errors else "FAILED")

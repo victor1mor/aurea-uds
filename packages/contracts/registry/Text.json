@@ -1,0 +1,128 @@
+{
+  "name": "Text",
+  "category": "Data Display",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Text in one of a closed list of roles — a heading level, body text or code — never a loose size. The HeroUI Typography model.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "type": [
+      "body",
+      "body-sm",
+      "body-xs",
+      "code",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6"
+    ],
+    "color": [
+      "default",
+      "muted"
+    ],
+    "weight": [
+      "normal",
+      "medium",
+      "semibold",
+      "bold"
+    ],
+    "align": [
+      "start",
+      "center",
+      "end",
+      "justify"
+    ]
+  },
+  "states": [],
+  "tokens": [
+    "--foreground",
+    "--muted-foreground",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-semibold",
+    "--weight-bold",
+    "--text-4xl",
+    "--text-3xl",
+    "--text-2xl",
+    "--text-xl",
+    "--text-lg",
+    "--text-base",
+    "--text-sm",
+    "--text-xs",
+    "--leading-tight",
+    "--leading-relaxed",
+    "--tracking-tight",
+    "--font-code",
+    "--surface-2",
+    "--radius-xs",
+    "--space-05",
+    "--space-1"
+  ],
+  "a11y": {
+    "role": null,
+    "apg": "No pattern: a span with a type role. For a paragraph, a heading or code use Paragraph, Heading or Code, which render the element a screen reader expects; Text is for a run of text inside something else.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Heading",
+      "Paragraph",
+      "Code",
+      "Prose"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Text"
+  },
+  "props": [
+    {
+      "name": "type",
+      "type": "\"body\" | \"body-sm\" | \"body-xs\" | \"code\" | \"h1\" … \"h6\"",
+      "default": "\"body\"",
+      "description": "The role. The list is closed on purpose, like HeroUI's: pick \"h2\" or \"body-sm\", never a pixel size. Only the look changes — the element stays a span, so a visual h2 is not a heading for a screen reader (use Heading for that)."
+    },
+    {
+      "name": "color",
+      "type": "\"default\" | \"muted\"",
+      "default": "\"default\"",
+      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+    },
+    {
+      "name": "weight",
+      "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "default": "— (the role's own)",
+      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\" | \"justify\"",
+      "default": "— (inherited)",
+      "description": "Text alignment. start and end follow the writing direction, so the same value mirrors in RTL."
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "default": "false",
+      "description": "One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The text."
+    }
+  ]
+}
