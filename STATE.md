@@ -24,9 +24,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Métrica | Valor |
 |---|---|
-| Declarações emitidas | 407 |
-| Nomes distintos | 189 |
-| Nomes referenciados pelo core | 140 |
+| Declarações emitidas | 409 |
+| Nomes distintos | 191 |
+| Nomes referenciados pelo core | 142 |
 | Nomes nunca referenciados pelo core | 49 |
 
 ## Catálogo gerado

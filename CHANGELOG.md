@@ -33,6 +33,20 @@ entrou na branch.
     `interface AureaIconNames` (exemplo no `README.md` de cada pacote).
   - Medido antes: 359 nomes de ícone escritos nos exemplos, fichas e documentos, **nenhum**
     errado. O defeito era o tipo, não um nome.
+- **B-09 · o foco é uma linha só, e ela sai de dois tokens novos:** `--focus-width` e
+  `--focus-offset` (2px e 2px, os números do contrato que já existia). Mudar o foco do sistema
+  inteiro é mudar uma linha. Toda regra de foco do core passou a usá-los. Duas coisas mudam na tela:
+  - **Tabela com rolagem (`.table-region`) e `DataGrid`:** o foco era um halo claro de `--focus` a
+    38%, difícil de ver. Agora é a linha de foco, por dentro, como o HeroUI 3.2.6 faz nas tabelas.
+  - **Player de vídeo (`MediaPlayer`), tema claro:** o foco dos controles era marrom escuro em cima
+    do fundo quase preto do player, e sumia. Agora é o amarelo, nos dois temas: o player redefine
+    `--focus-strong` em vez de ter uma regra de foco à parte.
+  - Pequenos, sem mudar o desenho: o controle de posição do player perdeu 1px de afastamento (3 →
+    2), e a alça de redimensionar colunas da `DataGrid` desenha a linha por dentro (era 1px fora).
+  - **Controle:** o `check 44` do `validate.py` lê toda regra de foco do core e reprova linha, cor
+    ou afastamento escrito à mão e sombra no lugar da linha. O teste de navegador do contrato de
+    foco mede também as peças que a amostra antiga não via. Os dois foram provados contra o CSS
+    antigo.
 
 ---
 

@@ -70,6 +70,8 @@ export const base = {
   "radiusControl": 999,
   "radiusFull": 999,
   "borderWidth": 1,
+  "focusWidth": 2,
+  "focusOffset": 2,
   "opacityDisabled": 0.5,
   "shadowMd": {
     "offsetX": 0,

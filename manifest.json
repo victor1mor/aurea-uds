@@ -290,13 +290,13 @@
     "baselines": 44,
     "baselines_linux": 22,
     "classes_core": 559,
-    "token_declaracoes": 407,
-    "token_nomes": 189,
-    "token_usados": 140,
+    "token_declaracoes": 409,
+    "token_nomes": 191,
+    "token_usados": 142,
     "token_sem_uso": 49
   },
   "gates": {
-    "validate": 39,
+    "validate": 40,
     "playwrightSpecs": 22
   }
 }

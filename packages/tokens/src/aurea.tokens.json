@@ -314,6 +314,22 @@
         "unit": "px"
       }
     },
+    "focus-width": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$description": "A espessura da linha de foco, a mesma em todo o sistema — B-09, 24/09/2026. Mudar o foco inteiro é mudar esta linha. A cor é --focus-strong. O HeroUI 3.2.6 faz igual: um anel só (`focus-ring`), 2px."
+    },
+    "focus-offset": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$description": "O afastamento da linha de foco, para fora da peça — B-09. Dentro de contêiner recortado (linha de tabela, item de árvore) a linha vai para DENTRO: calc(-1 * var(--focus-width)). O HeroUI 3.2.6 tem o mesmo número: --ring-offset-width: 2px."
+    },
     "opacity-disabled": {
       "$type": "number",
       "$value": 0.5,
