@@ -408,3 +408,20 @@ export const Linking = {
   openSettings: () => { __chamadasDeSistema.push("openSettings"); return Promise.resolve(); },
   openURL: (u: string) => { __chamadasDeSistema.push("openURL:" + u); return Promise.resolve(); },
 };
+
+// E10 (0.12.1): o `RecuoDaFolha` ouve o teclado para zerar o recuo quando ele abre. O dublê
+// guarda os ouvintes e deixa o teste disparar os avisos.
+type OuvinteDeTeclado = () => void;
+const ouvintesDeTeclado = new Map<string, Set<OuvinteDeTeclado>>();
+export const Keyboard = {
+  addListener(evento: string, f: OuvinteDeTeclado) {
+    const lista = ouvintesDeTeclado.get(evento) ?? new Set<OuvinteDeTeclado>();
+    lista.add(f); ouvintesDeTeclado.set(evento, lista);
+    return {remove: () => { lista.delete(f); }};
+  },
+  dismiss() {},
+};
+/** Dispara um aviso do teclado ("keyboardDidShow", "keyboardDidHide"). */
+export function __avisarTeclado(evento: string): void {
+  for (const f of ouvintesDeTeclado.get(evento) ?? []) f();
+}

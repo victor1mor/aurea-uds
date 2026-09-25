@@ -1,9 +1,10 @@
 // Lote E — os achados do app de 25/09/2026, no nativo. Cada teste escolhe a entrada que reprova
 // no código de antes.
-import {render} from "@testing-library/react";
+import {act, render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
 import * as React from "react";
-import {StyleSheet, __instancias} from "./native-stubs/react-native";
+import {StyleSheet, __avisarTeclado, __instancias} from "./native-stubs/react-native";
+import {SafeAreaInsetsContext, __definirMetricasIniciais} from "./native-stubs/react-native-safe-area-context";
 import {AureaProvider, Badge, BottomSheet, Button, Card, Checkbox, Combobox, Radio, Select, SegmentedControl, Tabs, resolverTokens} from "../../packages/native/src/index.js";
 
 const t = resolverTokens("dark", "comfortable");
@@ -73,27 +74,60 @@ describe("E5 · Radio e Checkbox: a marca na altura do texto", () => {
 // do sistema. Suspeita do app, NÃO confirmada no aparelho: um `View` em volta da lista reivindicava
 // o toque, e no Android o dono do toque intercepta os movimentos seguintes. O aceite de verdade é o
 // bloco E4 do `apps/native-smoke` (50 itens, rolar até o último). Aqui se cobra o que o código
-// promete: ninguém em volta da lista reivindica o toque, e as três folhas de baixo recuam a borda
-// de baixo com o `SafeAreaView` (a mesma peça do `Screen`).
+// promete: ninguém em volta da lista reivindica o toque. ~~e as três folhas de baixo recuam a borda
+// de baixo com o `SafeAreaView`~~ — o `SafeAreaView` não recuava dentro do `Modal`; ver o E10 abaixo.
 const CINQUENTA = Array.from({length: 50}, (_, i) => ({value: `v${i}`, label: `Item ${i + 1}`}));
 const reivindicam = () => [...__instancias("View"), ...__instancias("Animated.View")]
   .filter((p) => typeof p.onStartShouldSetResponder === "function");
-const recuoDeBaixo = () => __instancias("SafeAreaView").filter((p) =>
-  Array.isArray(p.edges) && p.edges.length === 1 && p.edges[0] === "bottom");
-describe("E4 · as folhas de baixo: a lista rola e não fica atrás dos botões do sistema", () => {
-  it("Select: nada em volta da lista reivindica o toque, e a folha recua a borda de baixo", () => {
+describe("E4 · as folhas de baixo: nada em volta da lista reivindica o toque", () => {
+  it("Select", () => {
     render(<Envolve><Select items={CINQUENTA} value="v0" label="Ano" /></Envolve>);
     expect(reivindicam()).toHaveLength(0);
-    expect(recuoDeBaixo()).toHaveLength(1);
   });
-  it("Combobox: o mesmo", () => {
+  it("Combobox", () => {
     render(<Envolve><Combobox items={CINQUENTA} /></Envolve>);
     expect(reivindicam()).toHaveLength(0);
-    expect(recuoDeBaixo()).toHaveLength(1);
   });
-  it("BottomSheet: recua a borda de baixo também", () => {
-    render(<Envolve><BottomSheet open onClose={() => {}} title="Filtros">x</BottomSheet></Envolve>);
-    expect(recuoDeBaixo()).toHaveLength(1);
+});
+
+// E10 (0.12.1) · as folhas desciam atrás dos botões do Android. Causa lida no fonte da biblioteca
+// (5.9.1): dentro do `Modal` o `SafeAreaView` não acha o provider, mede a si mesmo, e com altura 0
+// não calcula recuo nenhum — e o do `Combobox` e o do `BottomSheet` eram vazios. Agora o recuo vem
+// do contexto do React (como no HeroUI Native) e vira um espaço de altura conhecida no fim da folha.
+// Entrada que reprova no código de antes: um recuo de 48 no contexto — antes nada media 48.
+const RECUO = 48;
+const espacos = (h: number) => __instancias("View").filter((p) => StyleSheet.flatten(p.style)?.height === h);
+const FOLHAS: [string, () => React.ReactElement][] = [
+  ["Select", () => <Select items={CINQUENTA} value="v0" label="Ano" />],
+  ["Combobox", () => <Combobox items={CINQUENTA} />],
+  ["BottomSheet", () => <BottomSheet open onClose={() => {}} title="Filtros">x</BottomSheet>],
+];
+describe("E10 · as folhas de baixo terminam acima da barra do sistema", () => {
+  it.each(FOLHAS)("%s: o recuo do contexto vira espaço no fim da folha", (_n, folha) => {
+    render(<Envolve><SafeAreaInsetsContext.Provider value={{top: 0, right: 0, bottom: RECUO, left: 0}}>
+      {folha()}</SafeAreaInsetsContext.Provider></Envolve>);
+    expect(espacos(RECUO)).toHaveLength(1);
+    expect(__instancias("SafeAreaView")).toHaveLength(0);
+  });
+  it.each(FOLHAS)("%s: sem provider no app, vale a medida da abertura", (_n, folha) => {
+    __definirMetricasIniciais(30);
+    render(<Envolve>{folha()}</Envolve>);
+    expect(espacos(30)).toHaveLength(1);
+  });
+  it.each(FOLHAS)("%s: a folha cobre a tela toda, e é por isso que o recuo da janela é o dela", (_n, folha) => {
+    render(<Envolve>{folha()}</Envolve>);
+    const modal = __instancias("Modal").at(-1)!;
+    expect(modal.navigationBarTranslucent).toBe(true);
+    expect(modal.statusBarTranslucent).toBe(true);
+  });
+  it("Combobox: com o teclado aberto a folha sobe acima dele, e o recuo vai a zero", () => {
+    render(<Envolve><SafeAreaInsetsContext.Provider value={{top: 0, right: 0, bottom: RECUO, left: 0}}>
+      <Combobox items={CINQUENTA} /></SafeAreaInsetsContext.Provider></Envolve>);
+    expect(espacos(RECUO)).toHaveLength(1);
+    act(() => __avisarTeclado("keyboardDidShow"));
+    expect(StyleSheet.flatten(__instancias("View").filter((p) => "height" in (StyleSheet.flatten(p.style) ?? {})).at(-1)?.style).height).toBe(0);
+    act(() => __avisarTeclado("keyboardDidHide"));
+    expect(StyleSheet.flatten(__instancias("View").filter((p) => "height" in (StyleSheet.flatten(p.style) ?? {})).at(-1)?.style).height).toBe(RECUO);
   });
 });
 

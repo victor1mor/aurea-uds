@@ -63,8 +63,8 @@ afterEach(() => {
 // (ver `native-stubs/react-native.ts`). Sem esta limpeza, uma instância de um teste vaza no
 // seguinte — e o segundo passaria lendo o primeiro, que é a pior forma de um teste passar.
 import {__limpar} from "./native-stubs/react-native";
-import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
-beforeEach(() => { __limpar(); __definirInsets({}); });
+import {__definirInsets, __definirMetricasIniciais} from "./native-stubs/react-native-safe-area-context";
+beforeEach(() => { __limpar(); __definirInsets({}); __definirMetricasIniciais(null); });
 
 // `__DEV__` é global do React Native e não existe no vitest. Os componentes do alvo nativo o
 // consultam para avisar em desenvolvimento (o `Icon` com nome fora do registro, por exemplo), e

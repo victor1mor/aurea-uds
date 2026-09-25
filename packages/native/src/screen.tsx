@@ -37,8 +37,8 @@
 // suportado** na soma. Os tokens da Aurea são todos numéricos (dp), então isto não morde aqui —
 // mas morde quem passar `padding: "5%"` no `style`.
 import * as React from "react";
-import {RefreshControl, ScrollView, View, type ViewProps} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
+import {Keyboard, RefreshControl, ScrollView, View, type ViewProps} from "react-native";
+import {SafeAreaInsetsContext, SafeAreaView, initialWindowMetrics} from "react-native-safe-area-context";
 import {useBottomNavSpace} from "./barranav.js";
 import {criarFolha} from "./estilos.js";
 import {useAureaTokens} from "./theme.js";
@@ -228,4 +228,51 @@ function Rodape({dentroDoRespiro, pegaABorda, respiroDaBarra, children}: {
   // o inset duas vezes.
   if (pegaABorda || respiroDaBarra > 0) return <View style={recuo}>{children}</View>;
   return <SafeAreaView edges={["bottom"]} style={recuo}>{children}</SafeAreaView>;
+}
+
+// ── E10 · O RECUO DAS FOLHAS DE BAIXO (`Select`, `Combobox`, `BottomSheet`) ──────────────────
+// 🔴 DENTRO DE UM `Modal`, O `SafeAreaView` NÃO SERVE, e a razão foi lida no fonte da biblioteca
+// (`SafeAreaView.kt` e `SafeAreaUtils.kt`, versão 5.9.1), não presumida:
+//
+//     findProvider(): sobe pelos pais atrás de um `SafeAreaProvider`; sem achar, usa A SI MESMO.
+//     getSafeAreaInsets(view): if (view.height == 0) return null   // "ainda sem layout"
+//
+// O `Modal` é outra janela do Android: o `SafeAreaProvider` do app não é pai de nada lá dentro.
+// Então a peça mede a si mesma — e a da 0.11.0 era VAZIA, de altura 0, esperando o recuo para
+// ganhar altura. Nunca ganhava: o recuo ficava em zero e o último item, atrás dos botões do
+// sistema (achado E10 do app).
+//
+// A saída é a do HeroUI Native (`select.tsx`, `useSafeAreaInsets`): o número vem do CONTEXTO
+// do React, que atravessa o `Modal`, e vira um espaço de altura conhecida no fim da folha. Sem
+// `SafeAreaProvider` no app, vale a medida da abertura (`initialWindowMetrics`), que a
+// biblioteca calcula sem provider — e o componente não quebra quem não tem provider.
+// ⚠ As três folhas cobrem a tela toda (`navigationBarTranslucent`): é o que faz o recuo do
+// contexto, que é o da janela do app, ser exatamente o que a folha fica atrás da barra.
+
+/** O recuo de baixo do sistema (barra de botões ou de gestos), em dp. */
+export function useRecuoDoSistema(): number {
+  const doContexto = React.useContext(SafeAreaInsetsContext);
+  return (doContexto ?? initialWindowMetrics?.insets)?.bottom ?? 0;
+}
+
+/** O teclado está aberto? Pelos avisos do próprio React Native. */
+function useTecladoAberto(): boolean {
+  const [aberto, setAberto] = React.useState(false);
+  React.useEffect(() => {
+    const mostra = Keyboard.addListener("keyboardDidShow", () => setAberto(true));
+    const esconde = Keyboard.addListener("keyboardDidHide", () => setAberto(false));
+    return () => { mostra.remove(); esconde.remove(); };
+  }, []);
+  return aberto;
+}
+
+/**
+ * O espaço do recuo do sistema no fim de uma folha de baixo. Uso interno.
+ * `comTeclado`: com o teclado aberto a folha sobe acima dele e deixa de ficar atrás da barra do
+ * sistema, e o espaço vai a zero — senão sobraria uma faixa vazia entre a lista e o teclado.
+ */
+export function RecuoDaFolha({comTeclado = false}: {comTeclado?: boolean}) {
+  const recuo = useRecuoDoSistema();
+  const teclado = useTecladoAberto();
+  return <View style={{height: comTeclado && teclado ? 0 : recuo}} />;
 }

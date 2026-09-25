@@ -68,13 +68,13 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // folha, e ele leva `search` — que mapeia nos dois.
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { IconButton } from "./actions.js";
 import { criarFolha } from "./estilos.js";
 import { Spinner } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { KeyboardAvoiding, useCampo } from "./inputs.js";
 import { useReduceMotion } from "./movimento.js";
+import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, ForaDaMarca, usePeleSobreAMarca } from "./theme.js";
 // As mesmas contas do `inputs.tsx`, e elas são repetidas AQUI de propósito: exportá-las de lá
@@ -328,7 +328,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                                                 s.opcao,
                                                 item.value === value?.value && s.opcaoEscolhida,
                                                 item.disabled && s.desabilitado,
-                                            ], children: _jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }) })) }), _jsx(SafeAreaView, { edges: ["bottom"] })] })] }) }) })] }));
+                                            ], children: _jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }) })) }), _jsx(RecuoDaFolha, { comTeclado: true })] })] }) }) })] }));
 }
 // ── A DOBRA DE ACENTO, e por que ela é sondada em vez de presumida ───────────────────────────
 // Buscar "acucar" tem de achar "açúcar" — num catálogo em português, exigir o acento certo é
