@@ -57,22 +57,6 @@ export interface BadgeProps extends ViewProps {
     invisible?: boolean;
     children?: React.ReactNode;
 }
-/**
- * A pílula pequena — rótulo, contagem ou ponto.
- *
- * ⚠ **Ancorado, o número é DECORATIVO para o leitor de tela.** Ele some da árvore, e quem carrega
- * a informação é o rótulo de quem foi decorado. Sem isso o leitor anuncia *"sino, 8"* e a pessoa
- * não sabe o que é o 8 — regra lida em três fontes de acessibilidade em 17/08/2026 e registrada
- * no fonte da web. **Quem usa contagem ancorada escreve o rótulo do alvo**, sempre:
- *
- *     <Badge count={8} anchor="top-end">
- *       <IconButton name="notification" label="Avisos, 8 não lidos" onPress={abrir} />
- *     </Badge>
- *
- * ⚠ **`image`/`imageAlt` da web NÃO atravessaram.** Nenhuma das sete telas do consumidor medido
- * usa selo com miniatura, e prop sem consumidor é superfície pública para manter de graça. Volta
- * quando houver tela que peça.
- */
 export declare function Badge({ tone, emphasis, size, dot, count, max, showZero, leading, trailing, fit, anchor, badgeContent, invisible, children, style, ...rest }: BadgeProps): React.JSX.Element;
 export type AureaStatusVariant = "neutral" | "online" | "offline" | "busy" | "away" | "success" | "warning" | "danger" | "info";
 export interface StatusProps extends ViewProps {

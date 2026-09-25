@@ -1336,6 +1336,31 @@ function BlocosLoteE({t}) {
           description="Um aviso por conta, às 9h, até ela ser marcada como paga."
           onChange={() => setLembrar(false)} />
       </Bloco>
+      <Bloco t={t} n="E7" titulo="Dentro do cartão amarelo, o verde e o vermelho aparecem?"
+        criterio={"\"Confirmar\" é VERDE com contorno escuro — o formato do botão tem de aparecer nos "
+          + "dois temas. \"Agora não\" (sem fundo) continua na tinta escura: vermelho no amarelo não se lê."}>
+        <Card variant="brand" action={<Button appearance="solid" tone="success">Confirmar</Button>}>
+          <Text style={{color: t.color.primaryForeground, fontSize: t.size.textBase}}>Você rodou 1.240 km?</Text>
+        </Card>
+        <Card variant="brand" action={<Button appearance="ghost" tone="danger">Agora não</Button>}>
+          <Text style={{color: t.color.primaryForeground, fontSize: t.size.textBase}}>Trocar o óleo?</Text>
+        </Card>
+      </Bloco>
+      <Bloco t={t} n="E1b" titulo="O selo mostra a letra inteira, nas medidas do HeroUI?"
+        criterio={"O g e o p inteiros nos quatro tamanhos. sm, md e lg têm as medidas do Chip do HeroUI "
+          + "Native (20, 28 e 36 de altura, mais a borda); o xs é o contador sobre ícone, 16 de altura."}>
+        <View style={{flexDirection: "row", gap: t.size.space2, alignItems: "center", flexWrap: "wrap"}}>
+          <Badge size="xs" count={3} tone="danger" />
+          <Badge size="sm">pago</Badge>
+          <Badge size="md" tone="success">pago em agosto</Badge>
+          <Badge size="lg" tone="warning">pagamento</Badge>
+        </View>
+      </Bloco>
+      <Bloco t={t} n="E8" titulo="O X e a setinha ficam na mesma altura?"
+        criterio={"Com o ano já escolhido: o centro do X e o da setinha na MESMA altura, e os dois no "
+          + "centro da altura do campo. No Android a setinha ficava uns 5 pontos mais baixa."}>
+        <Combobox placeholder="Ano" items={CINQUENTA} value={CINQUENTA[11]} onValueChange={() => {}} />
+      </Bloco>
       <Bloco t={t} n="E6" titulo="A busca do ano abre o teclado de NÚMEROS?"
         criterio={"Abra o \"Ano (Combobox)\" do bloco E4: o teclado que sobe tem de ser o de números."}>
         <Text style={{color: t.color.mutedForeground}}>Ver o Combobox do bloco E4.</Text>

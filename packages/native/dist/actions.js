@@ -82,12 +82,24 @@ function pintar(t, tone) {
  *   sobre o amarelo, que é o único desenho que se enxerga nos dois temas;
  * - **contornado e sem fundo** — contorno e letra viram a tinta.
  *
- * ⚠ **O tom pedido é IGNORADO aqui**, como já acontece no `Text`: um `tone="danger"` sobre o
- * amarelo mede menos que a norma, e obedecer entregaria um botão ilegível em nome da obediência.
+ * ~~⚠ **O tom pedido é IGNORADO aqui**~~ — **E7, 25/09/2026: no botão CHEIO com tom, ele vale.**
+ * O Victor quis as cores (confirmar em verde, "agora não" em vermelho). Medido antes, nos dois
+ * temas: a letra sobre o próprio fundo do botão passa sempre (sucesso 6,3 e 9,39; perigo 4,57 e
+ * 6,32), mas o FUNDO do botão contra o amarelo não se distingue (sucesso no escuro **1,00**,
+ * perigo 1,51, aviso 1,36; no claro perigo 2,50) — o formato sumiria. Então o botão cheio com tom
+ * mantém a cor dele e ganha **contorno na tinta do cartão** (4,54 contra o amarelo): a cor diz o
+ * que ele faz, o contorno diz onde ele está.
+ *
+ * ⚠ **No contornado e no sem fundo o tom continua ignorado**: ali a letra colorida fica direto
+ * sobre o amarelo, e nenhum tom passa de 4,5 — obedecer entregaria um botão ilegível. O neutro e
+ * o da marca também seguem na tinta (neutro 1,61; marca é amarelo no amarelo, 1,00).
  */
-function pintarSobreAMarca(base, marca) {
+const TONS_COM_COR = new Set(["success", "danger", "warning", "info"]);
+function pintarSobreAMarca(base, marca, tone, appearance) {
     if (marca == null)
         return base;
+    if (appearance === "solid" && TONS_COM_COR.has(tone))
+        return { ...base, contorno: marca.tinta };
     return { solido: marca.tinta, texto: marca.fundo, sobre: marca.tinta };
 }
 const folha = criarFolha((t) => ({
@@ -131,16 +143,16 @@ export function Button({ children, appearance = "solid", tone = "neutral", size 
     const t = useAureaTokens();
     const s = folha(t);
     const marca = useSobreAMarca();
-    const cor = pintarSobreAMarca(pintar(t, tone), marca);
+    const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
     const corDaBorda = marca?.tinta ?? t.color.border;
     const caixa = React.useMemo(() => ({
         height: t.size[ALTURA[size]],
         paddingHorizontal: PADDING[size],
         gap: GAP[size],
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
-        borderColor: appearance === "outline" ? corDaBorda : "transparent",
+        borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
         ...(fullWidth ? { flex: 1 } : null),
-    }), [t, size, appearance, cor.solido, corDaBorda, fullWidth]);
+    }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth]);
     const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
     return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, accessibilityState: { disabled: !!disabled, ...(pressed === undefined ? null : { checked: pressed }) }, style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
@@ -168,15 +180,15 @@ export function IconButton({ name, label, appearance = "ghost", tone = "neutral"
     const t = useAureaTokens();
     const s = folha(t);
     const marca = useSobreAMarca();
-    const cor = pintarSobreAMarca(pintar(t, tone), marca);
+    const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
     const corDaBorda = marca?.tinta ?? t.color.border;
     const lado = t.size[ALTURA[size]];
     const caixa = React.useMemo(() => ({
         height: lado, width: lado, paddingHorizontal: 0,
         borderRadius: size === "xs" || size === "sm" ? t.size.radiusSm : t.size.radiusMd,
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
-        borderColor: appearance === "outline" ? corDaBorda : "transparent",
-    }), [t, lado, size, appearance, cor.solido, corDaBorda]);
+        borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
+    }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
     return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: label, accessibilityState: { disabled: !!disabled, ...(pressed === undefined ? null : { checked: pressed }) }, style: ({ pressed: tocando }) => [
             s.alvo, { minWidth: t.size.targetMin, alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,

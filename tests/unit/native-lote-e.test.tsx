@@ -4,7 +4,7 @@ import {render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
 import * as React from "react";
 import {StyleSheet, __instancias} from "./native-stubs/react-native";
-import {AureaProvider, BottomSheet, Button, Checkbox, Combobox, Radio, Select, SegmentedControl, Tabs, resolverTokens} from "../../packages/native/src/index.js";
+import {AureaProvider, Badge, BottomSheet, Button, Card, Checkbox, Combobox, Radio, Select, SegmentedControl, Tabs, resolverTokens} from "../../packages/native/src/index.js";
 
 const t = resolverTokens("dark", "comfortable");
 const Envolve = ({children}: {children: React.ReactNode}) => <AureaProvider>{children}</AureaProvider>;
@@ -108,5 +108,85 @@ describe("E6 · Combobox: o teclado do campo de busca", () => {
   it("sem ele, o teclado de texto de sempre", () => {
     render(<Envolve><Combobox items={CINQUENTA} testID="cb" /></Envolve>);
     expect(busca()?.keyboardType).toBeUndefined();
+  });
+});
+
+// E8 · com algo escolhido, o X e a setinha do Combobox ficavam em alturas diferentes no Android.
+// Medido no Yoga 3 (o motor do RN), não no dublê: com `height: "100%"` numa fila sem altura, a
+// errata de compatibilidade dava à seta 25 de altura e o centro dela 5 abaixo do X. O conserto
+// dá à seta a MESMA caixa do X (altura mínima `targetMin`, conteúdo no meio). Aqui se cobra a
+// forma que garante isso; a prova de aparelho é o bloco E8 do `apps/native-smoke`.
+describe("E8 · Combobox: o X e a setinha no mesmo centro", () => {
+  it("a seta tem a caixa de toque do X: targetMin de altura mínima, sem altura em porcentagem", () => {
+    render(<Envolve><Combobox items={CINQUENTA} value={CINQUENTA[0]} testID="cb" /></Envolve>);
+    const seta = StyleSheet.flatten(__instancias("Pressable").find((p) => p.testID === "cb-seta")?.style);
+    const xAlvo = StyleSheet.flatten(__instancias("Pressable").find((p) => p.testID === "cb-limpar")?.style);
+    expect(seta.height).toBeUndefined();
+    expect(seta.minHeight).toBe(t.size.targetMin);
+    expect(seta.justifyContent).toBe("center");
+    expect(xAlvo.minHeight).toBe(seta.minHeight);
+  });
+});
+
+// Badge · o mesmo corte do E1 (entrelinha 1,0), e as medidas passam a ser as do `Chip` do HeroUI
+// Native (ordem do Victor de 25/09/2026: "se o HeroUI já tem, vamos usar as deles"). O `xs` não
+// existe no HeroUI e fica com a medida nossa (16 de altura), só com a linha consertada.
+describe("Badge · as medidas do Chip do HeroUI Native, e a letra inteira", () => {
+  const letra = () => estiloDo("Text");
+  const selo = () => estiloDo("View", (p) => {
+    const e = StyleSheet.flatten(p.style);
+    return !!e && e.borderRadius === t.size.radiusControl;
+  });
+  it.each([
+    ["sm", "textXs", "space4", "space2", "space05"],
+    ["md", "textSm", "space5", "space3", "space1"],
+  ] as const)("%s: letra, linha e recheio do HeroUI", (size, fonte, linha, px, py) => {
+    render(<Envolve><Badge size={size}>Pago</Badge></Envolve>);
+    expect(letra().fontSize).toBe(t.size[fonte]);
+    expect(letra().lineHeight).toBe(t.size[linha]);
+    expect(letra().lineHeight).toBeGreaterThanOrEqual(letra().fontSize * 1.3);
+    expect(selo().paddingHorizontal).toBe(t.size[px]);
+    expect(selo().paddingVertical).toBe(t.size[py]);
+  });
+  it("lg: letra 16, linha 24, recheio 16 × 6 (6 = space1 × 1,5, a conta do HeroUI)", () => {
+    render(<Envolve><Badge size="lg">Pago</Badge></Envolve>);
+    expect(letra().fontSize).toBe(t.size.textBase);
+    expect(letra().lineHeight).toBe(t.size.space6);
+    expect(selo().paddingHorizontal).toBe(t.size.space4);
+    expect(selo().paddingVertical).toBe(t.size.space1 * 1.5);
+  });
+  it("xs é nosso: 16 de altura, letra 12 e linha 16", () => {
+    render(<Envolve><Badge size="xs" count={3} /></Envolve>);
+    expect(letra().fontSize).toBe(t.size.textXs);
+    expect(letra().lineHeight).toBe(t.size.space4);
+    expect(selo().minHeight).toBe(t.size.space4);
+  });
+});
+
+// E7 · dentro do `Card variant="brand"` todo botão saía na tinta do cartão, e o tom era ignorado.
+// O Victor quis as cores. Medido: a letra sobre o próprio fundo passa em todo tom e tema, mas o
+// fundo contra o amarelo não se distingue (sucesso no escuro 1,00). Então o botão CHEIO com tom
+// mantém a cor e ganha contorno na tinta; o contornado e o sem fundo seguem na tinta (a letra
+// colorida direto no amarelo não passa de 4,5).
+describe("E7 · os tons dentro do cartão da marca", () => {
+  const caixaDo = (texto: string) => {
+    const views = __instancias("View").map((v) => StyleSheet.flatten(v.style)).filter((e) => e && e.height && e.paddingHorizontal);
+    return views.at(-1) ?? {};
+  };
+  it("cheio com tom: a cor do tom, com contorno na tinta do cartão", () => {
+    render(<Envolve><Card variant="brand" action={<Button appearance="solid" tone="success">Confirmar</Button>} /></Envolve>);
+    const c = caixaDo("Confirmar");
+    expect(c.backgroundColor).toBe(t.color.success);
+    expect(c.borderColor).toBe(t.color.primaryForeground);
+  });
+  it("sem fundo com tom: continua na tinta (a letra colorida não se lê no amarelo)", () => {
+    render(<Envolve><Card variant="brand" action={<Button appearance="ghost" tone="danger">Agora não</Button>} /></Envolve>);
+    expect(estiloDo("Text").color).toBe(t.color.primaryForeground);
+  });
+  it("fora do cartão nada muda: cheio verde sem contorno", () => {
+    render(<Envolve><Button appearance="solid" tone="success">Confirmar</Button></Envolve>);
+    const c = caixaDo("Confirmar");
+    expect(c.backgroundColor).toBe(t.color.success);
+    expect(c.borderColor).toBe("transparent");
   });
 });

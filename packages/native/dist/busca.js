@@ -131,7 +131,15 @@ const folha = criarFolha((t) => ({
     // para abrir. `accessible={false}` no JSX porque o gatilho JÁ anuncia tudo: um segundo botão
     // aqui seria a mesma informação duas vezes. O `Icon` sem rótulo já se esconde sozinho
     // (`icon.tsx:104`), então não sobra nada para o leitor de tela tropeçar.
-    setaToque: { height: "100%", justifyContent: "center" },
+    // E8 (25/09/2026): a seta tem a MESMA caixa de toque do X — `targetMin` (44) de altura mínima,
+    // conteúdo no meio —, e duas caixas iguais numa fila centralizada têm o mesmo centro, com ou
+    // sem o X. Era `height: "100%"`, e a fila `acoes` não tem altura: medido no Yoga 3 (o motor do
+    // RN), com a errata de compatibilidade (`Errata.All`) o 100% se resolvia errado — a seta ficava
+    // com 25 de altura e o centro dela 5 abaixo do centro do X e do campo, que é o que o app viu no
+    // Android. Nos outros modos o defeito some. Com a caixa igual, os três centros coincidem nas 18
+    // combinações medidas (3 erratas × campo de 32/36/40 × com e sem X), e o toque da seta sobe de
+    // 16 para 44 de altura.
+    setaToque: { minHeight: t.size.targetMin, justifyContent: "center" },
     // A folha, com a mesma anatomia da do `Select` (`inputs.tsx:98-113`) — e é de propósito que
     // sejam iguais: são o mesmo gesto, e duas folhas diferentes para o mesmo gesto é como uma
     // biblioteca deixa de ter linguagem.
