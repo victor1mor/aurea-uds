@@ -92,14 +92,27 @@ function pintar(t: AureaTokens, tone: AureaButtonTone) {
  *   sobre o amarelo, que é o único desenho que se enxerga nos dois temas;
  * - **contornado e sem fundo** — contorno e letra viram a tinta.
  *
- * ⚠ **O tom pedido é IGNORADO aqui**, como já acontece no `Text`: um `tone="danger"` sobre o
- * amarelo mede menos que a norma, e obedecer entregaria um botão ilegível em nome da obediência.
+ * ~~⚠ **O tom pedido é IGNORADO aqui**~~ — **E7, 25/09/2026: no botão CHEIO com tom, ele vale.**
+ * O Victor quis as cores (confirmar em verde, "agora não" em vermelho). Medido antes, nos dois
+ * temas: a letra sobre o próprio fundo do botão passa sempre (sucesso 6,3 e 9,39; perigo 4,57 e
+ * 6,32), mas o FUNDO do botão contra o amarelo não se distingue (sucesso no escuro **1,00**,
+ * perigo 1,51, aviso 1,36; no claro perigo 2,50) — o formato sumiria. Então o botão cheio com tom
+ * mantém a cor dele e ganha **contorno na tinta do cartão** (4,54 contra o amarelo): a cor diz o
+ * que ele faz, o contorno diz onde ele está.
+ *
+ * ⚠ **No contornado e no sem fundo o tom continua ignorado**: ali a letra colorida fica direto
+ * sobre o amarelo, e nenhum tom passa de 4,5 — obedecer entregaria um botão ilegível. O neutro e
+ * o da marca também seguem na tinta (neutro 1,61; marca é amarelo no amarelo, 1,00).
  */
+const TONS_COM_COR = new Set<AureaButtonTone>(["success", "danger", "warning", "info"]);
 function pintarSobreAMarca(
   base: {solido: string; texto: string; sobre: string},
   marca: SobreAMarcaValor | null,
-): {solido: string; texto: string; sobre: string} {
+  tone: AureaButtonTone,
+  appearance: AureaButtonAppearance,
+): {solido: string; texto: string; sobre: string; contorno?: string} {
   if (marca == null) return base;
+  if (appearance === "solid" && TONS_COM_COR.has(tone)) return {...base, contorno: marca.tinta};
   return {solido: marca.tinta, texto: marca.fundo, sobre: marca.tinta};
 }
 
@@ -183,7 +196,7 @@ export function Button({
   const t = useAureaTokens();
   const s = folha(t);
   const marca = useSobreAMarca();
-  const cor = pintarSobreAMarca(pintar(t, tone), marca);
+  const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
   const corDaBorda = marca?.tinta ?? t.color.border;
 
   const caixa = React.useMemo(() => ({
@@ -191,9 +204,9 @@ export function Button({
     paddingHorizontal: PADDING[size],
     gap: GAP[size],
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
-    borderColor: appearance === "outline" ? corDaBorda : "transparent",
+    borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
     ...(fullWidth ? {flex: 1} : null),
-  }), [t, size, appearance, cor.solido, corDaBorda, fullWidth]);
+  }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth]);
 
   const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
 
@@ -212,7 +225,13 @@ export function Button({
         {leading ?? null}
         {leadingIcon ? <Icon name={leadingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
         {typeof children === "string"
-          ? <Text size={FONTE[size]} weight={500} leading="none" style={{color: corDoTexto}}>{children}</Text>
+          // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão do HeroUI Native
+          // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e o IBM
+          // Plex precisa de 1,3 em para caber inteiro (sobe 1,025 e desce 0,275): no Android o RN
+          // corta o que passa da linha, e a perna do g, do p e do ç sumia. Cabe em todo tamanho e
+          // densidade (medido): `xs`/`sm` têm linha de 21 e o menor botão mede 24 (compacto); os
+          // maiores têm linha de 24 e medem 32 ou mais.
+          ? <Text size={FONTE[size]} weight={500} leading="normal" style={{color: corDoTexto}}>{children}</Text>
           : children}
         {trailingIcon ? <Icon name={trailingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
         {trailing ?? null}
@@ -244,7 +263,7 @@ export function IconButton({
   const t = useAureaTokens();
   const s = folha(t);
   const marca = useSobreAMarca();
-  const cor = pintarSobreAMarca(pintar(t, tone), marca);
+  const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
   const corDaBorda = marca?.tinta ?? t.color.border;
   const lado = t.size[ALTURA[size]];
 
@@ -252,8 +271,8 @@ export function IconButton({
     height: lado, width: lado, paddingHorizontal: 0,
     borderRadius: t.size.radiusControl,
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
-    borderColor: appearance === "outline" ? corDaBorda : "transparent",
-  }), [t, lado, size, appearance, cor.solido, corDaBorda]);
+    borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
+  }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
 
   return (
     <Pressable

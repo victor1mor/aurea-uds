@@ -413,12 +413,12 @@ export function Stepper({ items, label, doneIcon = "checkmark", errorIcon = "err
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export function Tabs({ tabs, value, onChange, label, style, ...rest }) {
+export function Tabs({ tabs, value, onChange, label, justify, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
     const aberta = tabs.find((it) => it.id === value);
-    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { children: _jsx(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: s.abas, children: tabs.map((it) => {
+    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: s.abas, children: tabs.map((it) => {
                         const ativa = it.id === value;
                         return (_jsx(Pressable, { onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", accessibilityState: { selected: ativa, disabled: !!it.disabled }, accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.abaDeTab, ativa && s.abaDeTabAtiva, it.disabled && { opacity: t.size.opacityDisabled }], children: typeof it.label === "string"
                                 ? _jsx(Text, { size: "sm", weight: ativa ? 600 : 400, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })

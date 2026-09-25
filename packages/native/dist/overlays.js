@@ -57,6 +57,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // mesma função interna com uma largura diferente.
 import * as React from "react";
 import { Animated, Easing, Modal, PanResponder, Pressable, ScrollView, View, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "./actions.js";
 import { criarFolha } from "./estilos.js";
 import { IconButton } from "./actions.js";
@@ -133,8 +134,14 @@ const DURACAO = 280;
 // afirmação mais forte que "passou no teste", mas não é o vidro. Foi exatamente confiar em
 // "passou no teste" que produziu a primeira tentativa.
 //
-// O `naoAtravessa` FICA no painel como segunda linha: agora é redundante, e redundância que
-// não custa nada num caminho que já falhou uma vez se paga.
+// ~~O `naoAtravessa` FICA no painel como segunda linha: agora é redundante, e redundância que
+// não custa nada num caminho que já falhou uma vez se paga.~~ — **E4, 25/09/2026: ela CUSTAVA.**
+// No Android, um `View` que vira dono do toque pelo JavaScript passa a interceptar os movimentos
+// seguintes (`JSResponderHandler.onInterceptTouchEvent`), e o `ScrollView` de dentro deixa de
+// rolar. O app viu a lista do `Select` e a do `Combobox` sem rolar; a suspeita não está confirmada
+// no aparelho, mas a linha era redundante por construção e saiu dos painéis que têm rolagem dentro
+// (`Dialog`, `Drawer`, `Select`, `Combobox`). Fica no `ConfirmDialog` (sem fundo tocável e sem
+// rolagem) e no `BottomSheet`, onde os `panHandlers` do arrasto já a sobrescrevem.
 //
 // ⚠ Vale para os QUATRO que têm esta forma: `Dialog`, `Drawer`, `BottomSheet` e o `Select` do
 // Lote 4 (`inputs.tsx`). O `ConfirmDialog` é imune desde que nasceu — o fundo dele não tem
@@ -157,7 +164,7 @@ export function Dialog({ open, title, children, footer, onClose, scroll = true, 
     const s = folha(t);
     const strings = useAureaStrings();
     const Corpo = scroll ? ScrollView : View;
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: [s.fundo, s.centro], children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(View, { ...naoAtravessa, style: [s.superficie, style], children: [_jsxs(View, { style: s.cabecalho, children: [_jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }), _jsx(IconButton, { name: "close", label: strings.close, appearance: "ghost", size: "sm", onPress: onClose })] }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), footer ? _jsx(View, { style: s.rodape, children: footer }) : null] })] }) }) }));
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: [s.fundo, s.centro], children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(View, { style: [s.superficie, style], children: [_jsxs(View, { style: s.cabecalho, children: [_jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }), _jsx(IconButton, { name: "close", label: strings.close, appearance: "ghost", size: "sm", onPress: onClose })] }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), footer ? _jsx(View, { style: s.rodape, children: footer }) : null] })] }) }) }));
 }
 /**
  * A decisão que não se desfaz.
@@ -229,7 +236,7 @@ export function Drawer({ open, title, children, onClose, side = "right", scroll 
         inputRange: [0, 1],
         outputRange: [side === "right" ? 480 : -480, 0],
     });
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "none", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, style: [
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "none", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { style: [
                             s.gaveta, side === "right" ? s.gavetaDireita : s.gavetaEsquerda,
                             { transform: [{ translateX: desloca }] }, style,
                         ], children: [_jsxs(View, { style: s.cabecalho, children: [_jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }), _jsx(IconButton, { name: "close", label: strings.close, appearance: "ghost", size: "sm", onPress: onClose })] }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children })] })] }) }) }));
@@ -287,5 +294,5 @@ export function BottomSheet({ open, title, children, onClose, grabber = true, dr
             }).start();
         },
     }), [draggable, onClose, arrasto, reduzir, t.easing.easeEmphasized]);
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, ...gestos.panHandlers, onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, style: [s.folhaBaixo, { transform: [{ translateY: arrasto }] }, style], children: [grabber ? (_jsx(View, { style: s.puxadorArea, accessible: false, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) })) : null, title ? (_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) })) : null, _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children })] })] }) }) }));
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, ...gestos.panHandlers, onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, style: [s.folhaBaixo, { transform: [{ translateY: arrasto }] }, style], children: [grabber ? (_jsx(View, { style: s.puxadorArea, accessible: false, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) })) : null, title ? (_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) })) : null, _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), _jsx(SafeAreaView, { edges: ["bottom"] })] })] }) }) }));
 }

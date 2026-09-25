@@ -74,6 +74,81 @@ entrou na branch.
 
 ---
 
+## [0.11.0] — 2026-09-25
+
+⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+
+É o **Lote E**: os achados do app de 25/09/2026, todos no nativo. Sai separado do Lote 3, a partir
+do `main`, porque são defeitos que o app sente hoje. Sobe o número do meio por causa de **uma**
+mudança de aparência que não é acréscimo, o E5 — a regra da
+[ADR-0014](decisions/0014-primeira-versao-publica-0-1-0.md), no precedente da `0.10.0`.
+
+### ⚠ Mudou — leia antes de atualizar
+
+- **E5 · a marca do `Radio` e do `Checkbox` fica no MEIO da altura do texto**, como no HeroUI
+  Native (`radio.css` e `control-field.css`: `align-items: center`). Ficava presa no topo do
+  rótulo, com um `marginTop: 1` fixo. Para rótulo longo, de várias linhas, `align="start"` põe a
+  marca no meio da **primeira** linha, pela conta dos tokens.
+- **`Badge` · as medidas do `Chip` do HeroUI Native** (ordem do Victor de 25/09/2026: *"se o
+  HeroUI já tem, vamos usar as deles"*). `sm` 8 × 2 de recheio, letra 12, linha 16; `md` 12 × 4,
+  letra 14, linha 20; `lg` 16 × 6, letra 16, linha 24; 4 de vão. As alturas passam a ser as do
+  HeroUI mais a borda de 1 da Aurea: pequeno 20 → 22, médio 24 → 30, grande 28 → 38. O raio continua a
+  cápsula da Aurea. O `xs` (contador sobre ícone) não existe no HeroUI e fica com 16 de altura,
+  agora com letra 12. Motivo de fundo: o texto saía com entrelinha 1,0, e no Android o g e o p
+  eram cortados — a mesma causa do E1.
+- **E7 · dentro do `Card variant="brand"`, o botão cheio com tom mantém a cor** (sucesso, perigo,
+  aviso, informação) e ganha contorno na tinta do cartão. Medido: a letra sobre o próprio fundo
+  passa em todo tom e tema, mas o fundo contra o amarelo não se distingue (sucesso no escuro
+  1,00) — o contorno (4,54) mostra onde o botão está. O contornado e o sem fundo seguem na tinta:
+  a letra colorida direto no amarelo não passa de 4,5.
+- **E4 · as três folhas de baixo (`Select`, `Combobox`, `BottomSheet`) recuam a borda de baixo**
+  com o `SafeAreaView` da `react-native-safe-area-context`, a mesma peça do `Screen`: recuam só o
+  que a folha fica de fato atrás da barra de botões do Android, e zero quando não fica. O app via a
+  lista descer atrás dos botões do sistema.
+
+### Corrigido
+
+- **E1 · o `Button` cortava a perna das letras** (g, p, ç) no Android. O rótulo saía com
+  entrelinha 1,0; o IBM Plex precisa de 1,3 em para caber inteiro, e o React Native do Android
+  corta o que passa da linha. Agora é a entrelinha normal (1,5), como o rótulo do botão do HeroUI
+  Native. Cabe em todo tamanho e densidade: os dois menores têm linha de 21 e o menor botão mede
+  24 (compacto); os maiores têm linha de 24 e medem 32 ou mais.
+  - O `Badge` tinha o mesmo defeito, e foi junto (ver "Mudou").
+- **E4 · a lista do `Select` e a do `Combobox` não rolavam no Android.** ⚠ **Causa não
+  confirmada no aparelho.** Um `View` em volta da lista reivindicava o toque
+  (`onStartShouldSetResponder`), e no Android o dono do toque intercepta os movimentos seguintes
+  (`JSResponderHandler.onInterceptTouchEvent`): o `ScrollView` de dentro não os recebia. A linha
+  era redundante desde 10/09/2026 (o fundo que fecha virou irmão da folha, e é isso que impede o
+  toque no corpo de fechá-la) e saiu das quatro peças que têm rolagem dentro: `Select`,
+  `Combobox`, `Dialog` e `Drawer`. O aceite é o bloco E4 do `apps/native-smoke`: abrir a lista de
+  50 e rolar até o último.
+
+- **E8 · no `Combobox` com algo escolhido, o X e a setinha ficavam em alturas diferentes** no
+  Android: a setinha, uns 5 pontos mais baixa. Medido no Yoga 3, o motor de layout do React
+  Native: a seta tinha `height: "100%"` numa fila sem altura, e com a errata de compatibilidade
+  (`Errata.All`) isso lhe dava 25 de altura e o centro fora do lugar. Agora ela tem a mesma caixa
+  de toque do X (altura mínima de 44, conteúdo no meio): os três centros — X, seta e campo —
+  coincidem nas 18 combinações medidas, e o toque da seta sobe de 16 para 44 de altura.
+
+### Adicionado
+
+- **E3 · `justify` no `SegmentedControl` e nas `Tabs`** (`start`, o padrão · `center` · `end`):
+  onde a fila fica quando cabe na linha. Os dois moram no mesmo rolador horizontal, e a fila
+  ficava colada à esquerda; um `Cluster justify="center"` em volta não mudava nada (medido pelo
+  app: rolador 335, fileira 281). O nome é o do `Cluster`. Novo tipo exportado: `AureaFilaJustify`.
+- **E5 · `align` no `Radio` e no `Checkbox`** (`center`, o padrão · `start`).
+- **E6 · `searchKeyboardType` no `Combobox`**: o teclado do campo de busca da folha. Para buscar
+  um ano, `"number-pad"`; sem ele, o teclado de texto de sempre.
+
+### Ficou para o Lote 3
+
+- **E2 · o `Button` não obedece a centralização de quem está em volta** (`alignSelf:
+  "flex-start"`). Decisão do Victor, 25/09/2026: seguir o HeroUI Native (o botão obedece o pai).
+  Como isso faz o botão esticar dentro de um `Stack` sem alinhamento, vai no Lote 3, junto com um
+  `align` no `Stack` do nativo.
+
+---
+
 ## [0.10.1] — 2026-09-24
 
 ✅ **PUBLICADA em 24/09/2026, nos sete pacotes, pelo terminal do Victor.** Não conferida no

@@ -55,13 +55,18 @@ describe("Dialog — o Modal é o motor, e o botão VOLTAR é o Escape", () => {
     expect(fechar).toHaveBeenCalledTimes(1);
   });
 
-  // DEFEITO MUITO VISÍVEL, e ele é do MODELO DE TOQUE do RN, não do nosso desenho: um `View` sem
-  // manipulador não vira responder, então o toque no CORPO da caixa atravessaria para o
-  // `Pressable` do fundo e a fecharia. A superfície tem de reivindicar o toque.
-  it("a superfície reivindica o toque, para o corpo não fechar a caixa", () => {
+  // DEFEITO MUITO VISÍVEL: tocar no CORPO da caixa não pode fechá-la. A garantia é ESTRUTURAL
+  // desde 10/09/2026 — o `Pressable` do fundo é IRMÃO da superfície, não ancestral, então o toque
+  // no corpo não tem o fundo no caminho. ~~A superfície tem de reivindicar o toque~~: isso era a
+  // segunda linha, redundante, e saiu no E4 (25/09/2026), porque no Android um `View` dono do
+  // toque intercepta os movimentos e a rolagem de dentro para. O teste cobra as duas metades.
+  it("o fundo que fecha não envolve a superfície, e a superfície não reivindica o toque", () => {
     render(<Envolve><Dialog open title="Título" onClose={() => {}} /></Envolve>);
+    const fundo = todos("Pressable").find((p) => p.accessible === false && typeof p.onPress === "function");
+    expect(fundo).toBeDefined();
+    expect(fundo!.children).toBeUndefined();
     const reivindicam = todos("View").filter((p) => typeof p.onStartShouldSetResponder === "function");
-    expect(reivindicam.length).toBeGreaterThan(0);
+    expect(reivindicam).toHaveLength(0);
   });
 
   it("sem `footer` o rodapé não é desenhado — nem vazio", () => {

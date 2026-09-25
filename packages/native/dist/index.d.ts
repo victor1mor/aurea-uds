@@ -42,3 +42,4 @@ export { NumberField, formatarNumero, lerNumero, separadoresDoLocale } from "./n
 export type { NumberFieldProps, AureaSeparadores } from "./numero.js";
 export { Image, Gallery } from "./midia.js";
 export type { ImageProps, GalleryProps, AureaGalleryItem, AureaImageSource, } from "./midia.js";
+export type { AureaFilaJustify } from "./rolagem.js";

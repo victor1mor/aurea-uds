@@ -31,7 +31,16 @@ export interface FilaRolanteProps {
   /** Estilo do invólucro externo, não do conteúdo. */
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  /**
+   * Onde a fila fica quando CABE — E3, 25/09/2026. `start` (o padrão, o de sempre), `center` ou
+   * `end`. Quando não cabe, ela rola, e o alinhamento deixa de existir: começa no início.
+   */
+  justify?: AureaFilaJustify;
 }
+
+/** Onde a fila fica, na linha, quando cabe. O nome é o do `Cluster` (R-09): o eixo da fileira. */
+export type AureaFilaJustify = "start" | "center" | "end";
+const JUSTIFICAR = {center: "center", end: "flex-end"} as const;
 
 /**
  * Uma linha que rola para o lado quando não cabe, e que sabe QUANDO não cabe.
@@ -39,7 +48,7 @@ export interface FilaRolanteProps {
  * O componente fica com a informação em vez de adivinhar: `onLayout` dá a largura visível e
  * `onContentSizeChange` dá a do conteúdo. Com as duas, `transbordou` é uma conta, não um palpite.
  */
-export function FilaRolante({children, style, testID}: FilaRolanteProps) {
+export function FilaRolante({children, style, testID, justify = "start"}: FilaRolanteProps) {
   const [visivel, setVisivel] = React.useState(0);
   const [conteudo, setConteudo] = React.useState(0);
   const transbordou = conteudo > visivel && visivel > 0;
@@ -55,7 +64,11 @@ export function FilaRolante({children, style, testID}: FilaRolanteProps) {
       showsHorizontalScrollIndicator={transbordou}
       // Sem isto o conteúdo estica até a largura do rolador, e o respiro da cápsula aparece como
       // faixa vazia à direita quando os itens cabem.
-      contentContainerStyle={{flexGrow: 0}}
+      // E3: centralizar ou ir para o fim exige o contrário — o recipiente do conteúdo cresce até a
+      // largura do rolador (`flexGrow: 1`) e POSICIONA a cápsula lá dentro. Ela não estica: na
+      // fileira, o filho tem a largura dele. Medido pelo app: rolador 335 de largura, fileira 281,
+      // encostada à esquerda, e um `Cluster justify="center"` em volta não mudava nada.
+      contentContainerStyle={justify === "start" ? {flexGrow: 0} : {flexGrow: 1, justifyContent: JUSTIFICAR[justify]}}
       style={style}>
       {children}
     </ScrollView>

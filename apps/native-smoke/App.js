@@ -272,6 +272,9 @@ function Tela({irParaScreen, irParaLote2}) {
         <Paragraph>Rode <Code>pnpm build</Code> antes de publicar.</Paragraph>
       </Bloco>
 
+      {/* ── E ── os achados do app de 25/09/2026 ─────────────────────────── */}
+      <BlocosLoteE t={t} />
+
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
         criterio={"Os quatro têm de aparecer NA COR DO TEXTO, não pretos e não vazios. O do meio é o "
@@ -1305,6 +1308,80 @@ function TelaDasMilLinhas({t, onFechar, linhas}) {
           keyExtractor={(l) => l.id} />
       </View>
     </Dialog>
+  );
+}
+
+// Lote E (25/09/2026). Cada bloco é o TESTE DE ACEITE de um achado do app, escrito na tela.
+// O E4 é o único cuja causa NÃO está confirmada: é este bloco que confirma ou desmente.
+const CINQUENTA = Array.from({length: 50}, (_, i) => ({value: String(2026 - i), label: String(2026 - i)}));
+function BlocosLoteE({t}) {
+  const [periodo, setPeriodo] = React.useState("m");
+  const [ano, setAno] = React.useState(undefined);
+  const [anoBusca, setAnoBusca] = React.useState(null);
+  const [lembrar, setLembrar] = React.useState(true);
+  return (
+    <>
+      <Bloco t={t} n="E1" titulo="A perna das letras aparece inteira no botão?"
+        criterio={"No Android, o g de \"gasto\", o p de \"pago\" e o ç de \"Lançar\" têm de "
+          + "aparecer INTEIROS, sem corte embaixo, nos cinco tamanhos."}>
+        {["xs", "sm", "md", "lg", "xl"].map((size) => (
+          <Button key={size} size={size} tone="brand" appearance="solid">Lançar um gasto pago</Button>
+        ))}
+      </Bloco>
+      <Bloco t={t} n="E3" titulo="O controle fica no MEIO quando pedido?"
+        criterio={"O de cima fica à esquerda (o padrão, como sempre). O de baixo tem justify=\"center\" "
+          + "e tem de ficar CENTRALIZADO na largura."}>
+        <SegmentedControl label="Período" value={periodo} onChange={setPeriodo}
+          items={[{value: "s", label: "Semana"}, {value: "m", label: "Mês"}, {value: "a", label: "Ano"}, {value: "t", label: "Tudo"}]} />
+        <SegmentedControl label="Período, no meio" value={periodo} onChange={setPeriodo} justify="center"
+          items={[{value: "s", label: "Semana"}, {value: "m", label: "Mês"}, {value: "a", label: "Ano"}, {value: "t", label: "Tudo"}]} />
+      </Bloco>
+      <Bloco t={t} n="E4" titulo="A lista de 50 rola até o último, e fica acima dos botões do sistema?"
+        criterio={"⚠ CAUSA NÃO CONFIRMADA — este é o teste que decide. No Android: abra cada lista, role "
+          + "até o 1977 (o último) e escolha. A folha não pode ficar atrás dos botões do sistema."}>
+        <Select label="Ano (Select)" placeholder="Escolha o ano" items={CINQUENTA} value={ano} onChange={setAno} />
+        <Combobox placeholder="Ano (Combobox)" items={CINQUENTA} value={anoBusca} onValueChange={setAnoBusca}
+          searchKeyboardType="number-pad" />
+      </Bloco>
+      <Bloco t={t} n="E5" titulo="A bolinha fica no meio do texto?"
+        criterio={"O primeiro rádio e a caixa têm a marca no MEIO da altura do texto. O último tem "
+          + "align=\"start\": a marca no meio da PRIMEIRA linha."}>
+        <Radio label="Me lembre às 9h" checked={lembrar} onChange={() => setLembrar(true)} />
+        <Checkbox label="Repetir toda semana" checked={lembrar} onChange={setLembrar} />
+        <Radio align="start" label="Me lembre no dia do vencimento" checked={!lembrar}
+          description="Um aviso por conta, às 9h, até ela ser marcada como paga."
+          onChange={() => setLembrar(false)} />
+      </Bloco>
+      <Bloco t={t} n="E7" titulo="Dentro do cartão amarelo, o verde e o vermelho aparecem?"
+        criterio={"\"Confirmar\" é VERDE com contorno escuro — o formato do botão tem de aparecer nos "
+          + "dois temas. \"Agora não\" (sem fundo) continua na tinta escura: vermelho no amarelo não se lê."}>
+        <Card variant="brand" action={<Button appearance="solid" tone="success">Confirmar</Button>}>
+          <Text style={{color: t.color.primaryForeground, fontSize: t.size.textBase}}>Você rodou 1.240 km?</Text>
+        </Card>
+        <Card variant="brand" action={<Button appearance="ghost" tone="danger">Agora não</Button>}>
+          <Text style={{color: t.color.primaryForeground, fontSize: t.size.textBase}}>Trocar o óleo?</Text>
+        </Card>
+      </Bloco>
+      <Bloco t={t} n="E1b" titulo="O selo mostra a letra inteira, nas medidas do HeroUI?"
+        criterio={"O g e o p inteiros nos quatro tamanhos. sm, md e lg têm as medidas do Chip do HeroUI "
+          + "Native (20, 28 e 36 de altura, mais a borda); o xs é o contador sobre ícone, 16 de altura."}>
+        <View style={{flexDirection: "row", gap: t.size.space2, alignItems: "center", flexWrap: "wrap"}}>
+          <Badge size="xs" count={3} tone="danger" />
+          <Badge size="sm">pago</Badge>
+          <Badge size="md" tone="success">pago em agosto</Badge>
+          <Badge size="lg" tone="warning">pagamento</Badge>
+        </View>
+      </Bloco>
+      <Bloco t={t} n="E8" titulo="O X e a setinha ficam na mesma altura?"
+        criterio={"Com o ano já escolhido: o centro do X e o da setinha na MESMA altura, e os dois no "
+          + "centro da altura do campo. No Android a setinha ficava uns 5 pontos mais baixa."}>
+        <Combobox placeholder="Ano" items={CINQUENTA} value={CINQUENTA[11]} onValueChange={() => {}} />
+      </Bloco>
+      <Bloco t={t} n="E6" titulo="A busca do ano abre o teclado de NÚMEROS?"
+        criterio={"Abra o \"Ano (Combobox)\" do bloco E4: o teclado que sobe tem de ser o de números."}>
+        <Text style={{color: t.color.mutedForeground}}>Ver o Combobox do bloco E4.</Text>
+      </Bloco>
+    </>
   );
 }
 

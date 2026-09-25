@@ -71,6 +71,11 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   a ele"*. Quando ele **não tem** a peça que estamos criando, ela se cria **pensando como ele
   criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea. Ele é a
   referência mesmo onde não tem o componente.
+- **As medidas vêm do HeroUI** (ordem do Victor, 25/09/2026): *"não vamos ficar inventando
+  medidas, se HeroUI já tem vamos usar as deles, que já é validado; só criamos medidas e tamanho em
+  componente exclusivo nosso"*. Recheio, altura, letra, linha e vão de peça que o HeroUI tem se
+  leem no pacote dele (`@heroui/styles` na web, `heroui-native` no telefone) e se escrevem com os
+  tokens que dão o mesmo número. A identidade (seção 5: raio, cor, fonte) continua nossa.
 
 ---
 
@@ -110,29 +115,26 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
      `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.
    - **ADR-0052 feita e aprovada pela imagem** (25/09/2026): o botão só de ícone é redondo.
-   - **B-02 no modelo do HeroUI** (decisão do Victor, 25/09/2026): lista fechada de papéis
+   - **B-02 feito e aprovado pela imagem**, no modelo do HeroUI (25/09/2026): lista fechada de papéis
      (título 1–6, texto, texto pequeno, texto mínimo, código), mais `Heading`, `Paragraph` e
      `Code`, nos dois alvos. O `Text` do nativo que já existe fica.
-   - **M-01 e M-02 esperam a ficha.** O HeroUI 3.2.6 não tem `render` nem `classNames`.
-4. **Lote E** (nativo, achados do app de 25/09/2026) — na fila, sem "pode" para consertar ainda.
-   Todos a medir contra o código antes de aceitar:
-   - **E1** · `Button`: o texto sai com entrelinha 1,0 (`leading: "none"`) e no Android a perna das
-     letras (g, p, ç) é cortada.
-   - **E2** · `Button`: o `Pressable` tem `alignSelf: "flex-start"`, que vence o `alignItems:
-     "center"` do pai. No `EmptyState` o botão fica à esquerda e o resto no meio.
-   - **E3** · `SegmentedControl`: vem dentro de um rolador horizontal da largura toda, e os
-     segmentos ficam presos à esquerda. Um `Cluster justify="center"` em volta não muda nada. Falta
-     prop de alinhamento.
-   - **E4** · `Select`: a lista não rola no Android e a folha desce atrás dos botões do sistema.
-     **Causa não confirmada**, pede teste no aparelho. Pesa porque há listas de mais de 200 itens.
-   - **E5** · `Radio`: a bolinha fica presa no topo do texto (`alignItems: "flex-start"` e
-     `marginTop: 1`), em vez de centralizada na altura. Falta prop de alinhamento.
-   - **E6** · `Combobox`: sem `keyboardType` no campo de busca; para digitar um número abre o
-     teclado de letras.
-   - **E7** · **decisão, não defeito:** dentro do `Card variant="brand"` todo botão sai com a tinta
-     escura do cartão e o `tone` é ignorado (`pintarSobreAMarca`). Só muda se o Victor quiser.
+   - **M-01 só em `Button`, `IconButton` e itens de navegação; M-02 descartado; E2 entra aqui**
+     (decisões do Victor, 25/09/2026 — ver "Lote E e decisões", abaixo).
+4. **Lote E** saiu na `0.11.0` — ver "Lote E e decisões de 25/09/2026", abaixo.
 5. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
+
+### Lote E e decisões de 25/09/2026
+
+- **`0.11.0` · Lote E** (achados do app de 25/09/2026, nativo) no pedido de junção #6: E1, E3, E4
+  (causa não confirmada no aparelho), E5, E6, E7, E8 e o `Badge` com as medidas do `Chip` do
+  HeroUI Native. O aceite de aparelho são os blocos E1–E8 do `apps/native-smoke`.
+- **Para o Lote 3** (decisões do Victor, 25/09/2026): **E2**, o `Button` do nativo obedece o pai,
+  como no HeroUI, com um `align` no `Stack` do nativo · **M-01** (`render`) só no `Button`, no
+  `IconButton` e nos itens de navegação · **M-02** (`classNames` por parte) **descartado**: o
+  HeroUI tirou isso na versão atual, e abriria a aparência das peças por dentro.
+- **A medir:** as medidas das peças da WEB contra o `@heroui/styles`, pela regra das medidas.
+  O `Badge` do nativo foi o primeiro a passar; a web não foi medida.
 
 ### Pendências soltas, sem lote nem decisão
 

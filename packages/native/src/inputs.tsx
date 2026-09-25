@@ -43,8 +43,9 @@ import {
   type KeyboardTypeOptions, type StyleProp, type TextInputProps, type TextStyle,
   type ViewProps, type ViewStyle,
 } from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {comOpacidade, criarFolha} from "./estilos.js";
-import {FilaRolante} from "./rolagem.js";
+import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
 import {useReduceMotion} from "./movimento.js";
@@ -93,11 +94,14 @@ const folha = criarFolha((t: AureaTokens) => ({
   encaixe: {flexDirection: "row", alignItems: "center", flexShrink: 0, gap: t.size.space1},
 
   marcaBase: {
-    alignItems: "center", justifyContent: "center", marginTop: 1,
+    alignItems: "center", justifyContent: "center",
     borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
     backgroundColor: t.color.fieldBg,
   },
-  linhaDeControle: {flexDirection: "row", alignItems: "flex-start", gap: 9},
+  // E5: a marca no MEIO da altura do texto, como o HeroUI Native. Era `flex-start` com um
+  // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
+  linhaDeControle: {flexDirection: "row", alignItems: "center", gap: 9},
+  linhaNoTopo: {alignItems: "flex-start"},
 
   trilho: {borderRadius: t.size.radiusFull, backgroundColor: t.color.muted,
            borderWidth: t.size.borderWidth, borderColor: t.color.border, justifyContent: "center"},
@@ -511,6 +515,12 @@ interface ControleProps {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   /**
+   * Onde a marca fica na altura do texto — E5, 25/09/2026. `center` (o padrão) põe a marca no meio
+   * do bloco, como o HeroUI Native (`radio.css` e `control-field.css`: `align-items: center`).
+   * `start` a põe no meio da PRIMEIRA linha, para rótulo longo, de várias linhas.
+   */
+  align?: "center" | "start";
+  /**
    * O nome para quem usa leitor de tela, quando ele NÃO deve aparecer escrito no controle.
    *
    * É o caso de uma linha de `NavList`: o nome já está na linha, então repeti-lo no `label` o
@@ -678,6 +688,7 @@ export type RadioProps = ControleProps;
 
 function ControleMarcado({
   papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel,
+  align = "center",
 }: ControleProps & {papel: "checkbox" | "radio"}) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -690,6 +701,10 @@ function ControleMarcado({
   // A marca é METADE da altura do controle — `aurea.css:871`, e é o que faz ela crescer junto
   // com a densidade sem token próprio.
   const lado = alturaDoTamanho(t, tam) / 2;
+  // `start`: o meio da marca no meio da PRIMEIRA linha do rótulo. A linha é a do `Text size="sm"`
+  // do rótulo (entrelinha normal), então a conta sai dos mesmos tokens que desenham o texto.
+  const linha = t.size.textBase * t.size.leadingNormal;
+  const noTopo = align === "start" ? {marginTop: Math.max(0, (linha - lado) / 2)} : null;
 
   return (
     <Pressable
@@ -703,9 +718,9 @@ function ControleMarcado({
       // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
       accessibilityLabel={accessibilityLabel ?? (typeof label === "string" ? label : campo?.label)}
       accessibilityHint={typeof description === "string" ? description : campo?.hint}
-      style={[s.linhaDeControle, inativo && s.desabilitado, style]}>
+      style={[s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style]}>
       <View style={[
-        s.marcaBase,
+        s.marcaBase, noTopo,
         {width: lado, height: lado,
          borderRadius: papel === "radio" ? t.size.radiusFull : 5},
         checked && {backgroundColor: t.color.controlSelected, borderColor: t.color.controlSelected},
@@ -867,6 +882,8 @@ export interface SegmentedControlProps extends ViewProps {
   /** Nome do grupo para o leitor de tela. */
   label?: string;
   disabled?: boolean;
+  /** Onde o controle fica quando cabe na linha: `start` (padrão), `center` ou `end` (E3). */
+  justify?: AureaFilaJustify;
 }
 
 /**
@@ -878,7 +895,7 @@ export interface SegmentedControlProps extends ViewProps {
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
 export function SegmentedControl({
-  items, value, onChange, label, disabled, style, ...rest
+  items, value, onChange, label, disabled, justify, style, ...rest
 }: SegmentedControlProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -896,7 +913,7 @@ export function SegmentedControl({
     // O sinal de "tem mais" e a razão de não usar borda esmaecida estão no `rolagem.tsx`.
     // ⚠ A opacidade de desabilitado fica SÓ na cápsula. Pô-la aqui também multiplicaria
     // 0,5 por 0,5 — o controle sumiria em vez de esmaecer.
-    <FilaRolante>
+    <FilaRolante justify={justify}>
       <View
         accessibilityRole="radiogroup"
         accessibilityLabel={label ?? campo?.label}
@@ -1029,12 +1046,17 @@ export function Select({
         <View style={s.fundoDaLista}>
           {/* 🔴 O FUNDO TOCÁVEL É IRMÃO, NÃO ANCESTRAL — ver o comentário abaixo. */}
           <Pressable style={s.fundoDeToque} onPress={() => setAberto(false)} accessible={false} />
-          {/* ⚠ `onStartShouldSetResponder` NÃO é enfeite, e este era um DEFEITO: um `View` sem
-              manipulador não vira responder, então o toque atravessava para o `Pressable` de
-              cima e **tocar no corpo da folha a fechava**. Achado ao escrever os overlays do
-              Lote 5, que têm a mesma forma — e a regra do `CLAUDE.md` ("correção local é
-              proibida sem responder quem mais tem esse problema") trouxe a correção até aqui. */}
-          <View style={s.lista} onStartShouldSetResponder={() => true}>
+          {/* E4 (25/09/2026): a lista NÃO reivindica mais o toque. O `onStartShouldSetResponder`
+              que morava aqui (conserto de 09/09) ficou redundante em 10/09, quando o fundo tocável
+              virou IRMÃO da folha — o toque na lista não tem o fundo no caminho, por construção.
+              E ele era o suspeito de a lista não rolar no Android: um `View` que vira dono do
+              toque pelo JavaScript passa a INTERCEPTAR os movimentos seguintes no Android
+              (`JSResponderHandler.onInterceptTouchEvent`), e o `ScrollView` de dentro não os
+              recebe. Suspeita do app, não confirmada no aparelho: o aceite é o bloco E4 do
+              `apps/native-smoke` (50 itens, rolar até o último).
+              A borda de baixo é um `SafeAreaView`, a mesma peça do `Screen`: recua só o que a
+              folha fica atrás da barra de botões do sistema. */}
+          <SafeAreaView edges={["bottom"]} style={s.lista}>
             <ScrollView>
               {items.map((it) => (
                 <Pressable
@@ -1048,7 +1070,7 @@ export function Select({
                 </Pressable>
               ))}
             </ScrollView>
-          </View>
+          </SafeAreaView>
         </View>
       </Modal>
       </ForaDaMarca>
