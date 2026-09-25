@@ -35,7 +35,7 @@ import {
   Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, IconButton, Input,
   KPI, KeyboardAvoiding, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
-  Spinner, Stack, Status, Stepper, Switch, Table, Timeline, ToastHost, Topbar, criarRegistroDeIcones,
+  Spinner, Stack, Status, Stepper, Switch, Table, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
   // porque o app tem o mesmo problema em toda tela de lançamento — e aqui servem de SONDA:
@@ -108,6 +108,15 @@ const ICONES = criarRegistroDeIcones({
   "search": IconSearch,
   "subtract": IconSubtract,
   "image": IconImage,
+});
+
+// R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.
+// Um círculo e um visto, sem preenchimento. Se o traço não chegar ao aparelho, a caixa fica VAZIA;
+// se o `fill: "none"` não chegar, o círculo vira uma bola cheia e o visto some dentro dela.
+const GLIFO_TRACO = criarGlifo({
+  fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round",
+  circles: [{cx: 16, cy: 16, r: 12}],
+  paths: ["M10.5 16.5l3.5 3.5 7.5-8"],
 });
 
 const AMARELO_ESPERADO = "#f0b100";
@@ -249,13 +258,14 @@ function Tela({irParaScreen, irParaLote2}) {
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
-        criterio={"Os três têm de aparecer NA COR DO TEXTO, não pretos e não vazios. O do meio é o "
+        criterio={"Os quatro têm de aparecer NA COR DO TEXTO, não pretos e não vazios. O do meio é o "
           + "que importa mais: `checkmark--filled` tem um contorno interno com fill=\"none\", e se "
           + "o gerador tivesse pintado esse miolo o visto sumiria dentro de um círculo cheio."}>
         <View style={s.icones}>
           <Glifo t={t} nome="add" Comp={IconAdd} prova="um path simples" />
           <Glifo t={t} nome="checkmark--filled" Comp={IconCheckmarkFilled} prova='o fill="none"' />
           <Glifo t={t} nome="calendar--add--alt" Comp={IconCalendarAddAlt} prova="o <switch> do Illustrator" />
+          <Glifo t={t} nome="criarGlifo a traço" Comp={GLIFO_TRACO} prova="círculo VAZADO e visto de traço redondo" />
         </View>
         <View style={s.icones}>
           <IconAdd size={t.size.iconSm} color={t.color.primary} />
