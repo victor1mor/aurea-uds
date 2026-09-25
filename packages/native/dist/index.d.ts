@@ -11,7 +11,7 @@ export type { IconProps, IconName, CarbonIconName, AureaIconNames, AureaIconComp
 export { Screen } from "./screen.js";
 export type { ScreenProps, AureaScreenBackground, AureaScreenEdge } from "./screen.js";
 export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";
-export type { StackProps, ClusterProps, AureaClusterAlign, AureaClusterJustify, GridProps, CardProps, SeparatorProps, AureaCardVariant, } from "./layout.js";
+export type { StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify, GridProps, CardProps, SeparatorProps, AureaCardVariant, } from "./layout.js";
 export { Button, IconButton } from "./actions.js";
 export type { ButtonProps, IconButtonProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, } from "./actions.js";
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";

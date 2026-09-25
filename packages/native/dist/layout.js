@@ -59,10 +59,11 @@ const folha = criarFolha((t) => ({
     // A ação fica embaixo, separada pelo mesmo respiro que o resto da casa usa entre blocos.
     acaoDaMarca: { marginTop: t.size.space3 },
 }));
+const ALINHAR_COLUNA = { start: "flex-start", center: "center", end: "flex-end", stretch: "stretch" };
 /** Coluna com `--space-4` entre os filhos. **Sem prop de espaçamento, de propósito.** */
-export function Stack({ style, ...rest }) {
+export function Stack({ align, style, ...rest }) {
     const s = folha(useAureaTokens());
-    return _jsx(View, { style: [s.stack, style], ...rest });
+    return _jsx(View, { style: [s.stack, align != null && { alignItems: ALINHAR_COLUNA[align] }, style], ...rest });
 }
 const ALINHAR = { start: "flex-start", center: "center", end: "flex-end", baseline: "baseline" };
 const JUSTIFICAR = { start: "flex-start", center: "center", end: "flex-end", between: "space-between" };

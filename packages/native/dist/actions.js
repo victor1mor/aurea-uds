@@ -119,7 +119,12 @@ const folha = criarFolha((t) => ({
     // pinta fundo, borda e raio é a `caixa` interna, com a altura do token. O botão continua com
     // 36 dp de desenho e passa a ter 44 de alvo — e o leitor de tela enxerga os 44, porque o
     // elemento acessível é o `Pressable`, não um retângulo invisível ao lado dele.
-    alvo: { minHeight: t.size.targetMin, justifyContent: "center", alignSelf: "flex-start" },
+    // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como no HeroUI Native (`button.css`
+    // não fixa alinhamento) e como o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, e ele
+    // vencia o `alignItems: "center"` do pai: o botão do `EmptyState` ficava à esquerda com o resto
+    // no meio. ⚠ A consequência, decidida pelo Victor: numa coluna sem alinhamento o botão ESTICA,
+    // como na web. "Do tamanho do texto" se diz no pai — `Stack align="start"`.
+    alvo: { minHeight: t.size.targetMin, justifyContent: "center" },
     alvoLargura: { alignSelf: "stretch" },
     caixa: {
         flexDirection: "row", alignItems: "center", justifyContent: "center",
@@ -191,7 +196,9 @@ export function IconButton({ name, label, appearance = "ghost", tone = "neutral"
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
     }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
     return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: label, accessibilityState: { disabled: !!disabled, ...(pressed === undefined ? null : { checked: pressed }) }, style: ({ pressed: tocando }) => [
-            s.alvo, { minWidth: t.size.targetMin, alignItems: "center" },
+            // Largura FIXA, como o só-ícone do HeroUI (`.button--icon-only`: `w-10`): ele nunca estica,
+            // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
+            s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,
         ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], color: appearance === "solid" ? cor.texto : cor.sobre, icons: icons }) }) }));
 }

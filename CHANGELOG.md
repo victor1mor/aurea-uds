@@ -51,6 +51,14 @@ entrou na branch.
     ou afastamento escrito à mão e sombra no lugar da linha. O teste de navegador do contrato de
     foco mede também as peças que a amostra antiga não via. Os dois foram provados contra o CSS
     antigo.
+- **E2 · o `Button` do nativo obedece o pai**, como o do HeroUI Native e o `.btn` da web num
+  `.stack` (decisão do Victor, 25/09/2026). Saiu o `alignSelf: "flex-start"` que vencia a
+  centralização de quem estava em volta: no `EmptyState` o botão ficava à esquerda e o resto no
+  meio. ⚠ **A consequência:** numa coluna sem alinhamento o botão agora ocupa a largura toda — no
+  rodapé do `Screen`, na ação do cartão da marca e em qualquer coluna do app. "Do tamanho do texto"
+  se diz no pai: o `Stack` do nativo ganhou o `align` da web (`start`, `center`, `end`,
+  `stretch`; novo tipo `AureaStackAlign`). O `IconButton` tem largura fixa, como o só-ícone do
+  HeroUI, e nunca estica.
 - **O botão só de ícone é redondo**, em todos os tamanhos, na web e no nativo
   ([ADR-0052](decisions/0052-o-botao-so-de-icone-e-redondo.md), decisão do Victor, 25/09/2026).
   Era um quadrado de canto 10px (6px nos dois menores). Vale para todo `IconButton`, os botões de

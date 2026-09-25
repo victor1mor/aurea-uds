@@ -1,13 +1,21 @@
 import * as React from "react";
 import { type ViewProps } from "react-native";
+/** Eixo cruzado do `Stack` — os MESMOS valores do `Stack` da web (B-01). */
+export type AureaStackAlign = "start" | "center" | "end" | "stretch";
 export interface StackProps extends ViewProps {
     children?: React.ReactNode;
+    /**
+     * Eixo cruzado (o horizontal). Padrão `stretch`: os filhos ocupam a largura, como sempre e como
+     * na web. E2, 25/09/2026: desde que o `Button` passou a obedecer o pai (como no HeroUI Native e
+     * na web), é aqui que se diz "botão do tamanho do texto" (`start`) ou "no meio" (`center`).
+     */
+    align?: AureaStackAlign;
 }
 /** Coluna com `--space-4` entre os filhos. **Sem prop de espaçamento, de propósito.** */
-export declare function Stack({ style, ...rest }: StackProps): React.JSX.Element;
+export declare function Stack({ align, style, ...rest }: StackProps): React.JSX.Element;
 export type AureaClusterAlign = "start" | "center" | "end" | "baseline";
 export type AureaClusterJustify = "start" | "center" | "end" | "between";
-export interface ClusterProps extends StackProps {
+export interface ClusterProps extends Omit<StackProps, "align"> {
     /** Eixo cruzado (o vertical). Padrão `center`, o `align-items:center` do `.cluster`. */
     align?: AureaClusterAlign;
     /** Eixo principal (o horizontal). Padrão `start`. `between` espalha o que sobrar entre os itens. */

@@ -1321,6 +1321,17 @@ function BlocosLoteE({t}) {
   const [lembrar, setLembrar] = React.useState(true);
   return (
     <>
+      <Bloco t={t} n="E2" titulo="O botão obedece quem está em volta?"
+        criterio={"No estado vazio, o botão fica NO MEIO, junto do título e do texto. Nas três colunas: "
+          + "sem align o botão ocupa a largura toda (como na web); com align=\"start\" fica do tamanho "
+          + "do texto, à esquerda; com align=\"center\", do tamanho do texto, no meio. O botão "
+          + "redondo nunca estica."}>
+        <EmptyState title="Nenhum gasto ainda" description="Os lançamentos aparecem aqui."
+          action={<Button tone="brand" appearance="solid">Lançar um gasto</Button>} />
+        <Stack><Button>Sem align</Button><IconButton name="add" label="Adicionar" /></Stack>
+        <Stack align="start"><Button>align start</Button></Stack>
+        <Stack align="center"><Button>align center</Button></Stack>
+      </Bloco>
       <Bloco t={t} n="E1" titulo="A perna das letras aparece inteira no botão?"
         criterio={"No Android, o g de \"gasto\", o p de \"pago\" e o ç de \"Lançar\" têm de "
           + "aparecer INTEIROS, sem corte embaixo, nos cinco tamanhos."}>
