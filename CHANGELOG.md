@@ -17,7 +17,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.10.1] — 2026-09-24
 
-⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+✅ **PUBLICADA em 24/09/2026, nos sete pacotes, pelo terminal do Victor.** Não conferida no
+registro, de propósito: logo depois do publish nenhuma leitura de registro decide.
 
 Uma peça só, e só acréscimo: **R-05, a metade que faltava.** Sai sozinha, sem o Lote 3, porque
 sem ela o app não abre: o logotipo dele é desenhado a traço, e a trava do app barra o
