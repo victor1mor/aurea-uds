@@ -87,6 +87,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.8.13` + `0.8.14` | Lote 4 (nativo) inteiro: R-01 a R-10 |
 | `0.9.0` | Lote 2, primeira leva: B-01, A-08, C-01, C-03, C-04, C-05, C-07, C-13, B-03 |
 | `0.10.0` | Lote 2, segunda leva: B-07, B-10, B-12, A-05, A-14 — junção `5ca8d3e` (pedido #16). **Publicada em 24/09/2026**, pelo terminal do Victor |
+| `0.10.1` | R-05, a metade que faltava: `criarGlifo` desenha a traço — pedido #4 do repositório público. **Publicada em 24/09/2026**, pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -96,9 +97,15 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    ficaram no privado (`aurea-uds-privado`), que não recebe mais envios. Termos técnicos
    consagrados ficam em inglês (mobile, bundler, pull request, issue) — decisão do Victor, 24/09.
 2. **A sessão do app adota as peças novas** e mede no aparelho.
-3. **O Lote 3 espera um "pode":** M-01 (`render` em todos) · M-02 (`classNames` por parte) · B-02
-   (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco com uma linha).
-   Na leitura de 24/09/2026, ele vem **antes** da `1.0`, porque muda a estrutura das peças.
+3. **Lote 3 — "pode" dado em 24/09/2026:** M-01 (`render` em todos) · M-02 (`classNames` por
+   parte) · B-02 (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco
+   com uma linha). Na leitura de 24/09/2026, ele vem **antes** da `1.0`, porque muda a estrutura
+   das peças.
+   - **A-04 feito** na branch `claude/friendly-cerf-ctu0v7`, sem pedido de junção: sai junto com o
+     resto do lote. Pode quebrar a compilação de quem passa ícone numa variável `string`.
+   - **Os outros quatro esperam a ficha** do documento de achados. O HeroUI 3.2.6 não tem `render`
+     nem `classNames` (M-01, M-02 vêm só do consumidor); tem `Heading`/`Paragraph`/`Code` (B-02) e
+     um anel de foco único, `focus-ring` (B-09).
 4. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
 
@@ -150,6 +157,10 @@ para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
   prova em contrário** — nunca a máquina dele.
 - **Verificação é local antes de empurrar.** No repositório privado a CI estava parada por limite
   de gasto; no público, o GitHub Actions é gratuito.
+- **A pasta local do Victor foi refeita em 24/09/2026 a partir do público.** A antiga apontava para
+  o `aurea-uds-privado`, e o `git pull` respondia "Already up to date" puxando do repositório que
+  não recebe mais nada. Se um `git pull` dele não trouxer o que foi juntado, a primeira pergunta é
+  `git remote -v`.
 
 ---
 
