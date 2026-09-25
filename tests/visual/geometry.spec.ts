@@ -253,6 +253,8 @@ const FORA_DA_AMOSTRA = `
   </div></div>
   <div class="tree-item" tabindex="0" role="treeitem" aria-selected="false"><div class="tree-node">Pasta</div></div>
   <div class="notification-item" tabindex="0">Aviso</div>
+  <!-- o item de menu destacado E em foco de teclado: é o caso em que a regra do destaque apagava a linha -->
+  <div class="menu" role="menu" aria-label="Menu"><div class="menu-item" role="menuitem" tabindex="0" data-highlighted>Duplicar</div></div>
 </div>`;
 
 for (const theme of ["dark", "light"] as const) {
@@ -291,7 +293,7 @@ for (const theme of ["dark", "light"] as const) {
       if (r) vistos.push(r);
     }
     const nomes = vistos.map(v => v.alvo).join(" · ");
-    for (const alvo of ["table-region", "datagrid-resizer", "tree-item", "notification-item"]) {
+    for (const alvo of ["table-region", "datagrid-resizer", "tree-item", "notification-item", "menu-item"]) {
       expect(nomes, `${alvo} não recebeu foco de teclado`).toContain(alvo);
     }
     expect(vistos.some(v => v.alvo === "input.—"), "o controle de posição do player não recebeu foco").toBe(true);

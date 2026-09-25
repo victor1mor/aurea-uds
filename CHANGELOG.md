@@ -41,6 +41,10 @@ entrou na branch.
   - **Player de vídeo (`MediaPlayer`), tema claro:** o foco dos controles era marrom escuro em cima
     do fundo quase preto do player, e sumia. Agora é o amarelo, nos dois temas: o player redefine
     `--focus-strong` em vez de ter uma regra de foco à parte.
+  - **Menus, foco de teclado:** o item em foco era só o fundo cinza, igual ao do mouse em cima;
+    uma regra do destaque apagava a linha. Agora leva a linha de foco por dentro, como o `menu-item`
+    do HeroUI 3.2.6. Com o mouse, continua só o fundo. Onde o foco fica no campo (`Combobox`,
+    `CommandPalette`), o destaque continua sendo o fundo: ali o item nunca recebe o foco.
   - Pequenos, sem mudar o desenho: o controle de posição do player perdeu 1px de afastamento (3 →
     2), e a alça de redimensionar colunas da `DataGrid` desenha a linha por dentro (era 1px fora).
   - **Controle:** o `check 44` do `validate.py` lê toda regra de foco do core e reprova linha, cor

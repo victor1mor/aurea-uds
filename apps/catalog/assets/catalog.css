@@ -2678,7 +2678,15 @@ img,svg { display:block; }
    DropdownMenu, ContextMenu, Menubar e a lista da CommandPalette. */
 .menu { --menu-px:10px; z-index:var(--z-modal); min-width:200px; max-width:min(320px,calc(100vw - 32px)); padding:var(--space-1); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
 .menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,10px); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; cursor:pointer; }
-.menu-item[data-highlighted],.menu-item:hover:not([data-disabled]) { background:var(--surface-3); outline:none; }
+.menu-item[data-highlighted],.menu-item:hover:not([data-disabled]) { background:var(--surface-3); }
+/* Foco de TECLADO no item: a linha de foco, por dentro, porque a lista recorta o que passa da borda
+   (B-09 e a ordem de 25/09/2026, "HeroUI sempre primeiro": o `menu-item` do HeroUI 3.2.6 leva o
+   `status-focused` no foco de teclado). Até aqui a regra de cima apagava a linha com
+   `outline:none` e vencia a global: com o teclado, o item em foco era só o fundo cinza — igual ao
+   do mouse em cima. O mouse continua só com o fundo: `:focus-visible` não acende por ponteiro.
+   ⚠ Onde o foco fica no CAMPO (`Combobox`, `CommandPalette`: o item é destacado por
+   `aria-activedescendant`), o item nunca tem `:focus-visible`, e o destaque continua sendo o fundo. */
+.menu-item:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .menu-item[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
 /* CommandPalette (M6): a lista dentro da paleta. Reusa `.menu` e `.menu-item` — a paleta nao
    inventa uma segunda pele de lista, que e o defeito que a `.table-region` cobrou caro. O que se
