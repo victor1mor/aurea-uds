@@ -309,7 +309,7 @@ function BotaoDeIcone({
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone — o
 // irmão do da web. Peça EXCLUSIVA da Aurea (o HeroUI Native não tem troca de tema), pensada como
 // ele faria: um só-ícone, sem cor solta. Mostra o tema para onde se VAI: no claro a LUA, na tinta
-// do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` saem do registro do
+// do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `asleep--filled` e `light--filled` saem do registro do
 // app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
 export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {}
@@ -319,7 +319,7 @@ export function ThemeToggle(props: ThemeToggleProps) {
   const s = useAureaStrings();
   const escuro = theme === "dark";
   return (
-    <BotaoDeIcone {...props} name={escuro ? "sun" : "moon"}
+    <BotaoDeIcone {...props} name={escuro ? "light--filled" : "asleep--filled"}
       label={escuro ? s.themeToLight : s.themeToDark}
       corDoIcone={escuro ? t.color.primary : t.color.foreground}
       onPress={toggleTheme} />

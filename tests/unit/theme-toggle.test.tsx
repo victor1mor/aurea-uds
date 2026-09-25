@@ -15,7 +15,7 @@ describe("ThemeToggle · web", () => {
     document.documentElement.dataset.theme = "light";
     const {container} = render(<AureaProvider strings={ptBR}><ThemeToggle /></AureaProvider>);
     const b = container.querySelector("button")!;
-    expect(glifo(b)).toContain("#i-moon");
+    expect(glifo(b)).toContain("#i-asleep--filled");
     expect(b.classList.contains("theme-toggle-moon")).toBe(true);
     expect(b.classList.contains("btn-icon")).toBe(true);
     expect(b.getAttribute("aria-label")).toBe("Mudar para o tema escuro");
@@ -26,14 +26,14 @@ describe("ThemeToggle · web", () => {
     await act(async () => { fireEvent.click(container.querySelector("button")!); });
     const b = container.querySelector("button")!;
     expect(document.documentElement.dataset.theme).toBe("dark");
-    expect(glifo(b)).toContain("#i-sun");
+    expect(glifo(b)).toContain("#i-light--filled");
     expect(b.classList.contains("theme-toggle-sun")).toBe(true);
     expect(b.getAttribute("aria-label")).toBe("Mudar para o tema claro");
   });
   it("sem provider também troca, pelo atributo do <html>", async () => {
     document.documentElement.dataset.theme = "dark";
     const {container} = render(<ThemeToggle />);
-    expect(glifo(container.querySelector("button")!)).toContain("#i-sun");
+    expect(glifo(container.querySelector("button")!)).toContain("#i-light--filled");
     await act(async () => { fireEvent.click(container.querySelector("button")!); });
     expect(document.documentElement.dataset.theme).toBe("light");
   });

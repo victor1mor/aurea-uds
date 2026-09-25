@@ -90,8 +90,8 @@ import IconSearch from "@aurea-uds/native/icons/search";
 import IconSubtract from "@aurea-uds/native/icons/subtract";
 import IconImage from "@aurea-uds/native/icons/image";
 // O `ThemeToggle` desenha a lua e o sol do registro, como o `Alert` desenha os glifos dele.
-import IconMoon from "@aurea-uds/native/icons/moon";
-import IconSun from "@aurea-uds/native/icons/sun";
+import IconAsleepFilled from "@aurea-uds/native/icons/asleep--filled";
+import IconLightFilled from "@aurea-uds/native/icons/light--filled";
 
 const ICONES = criarRegistroDeIcones({
   "add": IconAdd,
@@ -112,8 +112,8 @@ const ICONES = criarRegistroDeIcones({
   "search": IconSearch,
   "subtract": IconSubtract,
   "image": IconImage,
-  "moon": IconMoon,
-  "sun": IconSun,
+  "asleep--filled": IconAsleepFilled,
+  "light--filled": IconLightFilled,
 });
 
 // R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.

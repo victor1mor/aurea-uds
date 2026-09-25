@@ -212,5 +212,5 @@ export function ThemeToggle(props) {
     const t = useAureaTokens();
     const s = useAureaStrings();
     const escuro = theme === "dark";
-    return (_jsx(BotaoDeIcone, { ...props, name: escuro ? "sun" : "moon", label: escuro ? s.themeToLight : s.themeToDark, corDoIcone: escuro ? t.color.primary : t.color.foreground, onPress: toggleTheme }));
+    return (_jsx(BotaoDeIcone, { ...props, name: escuro ? "light--filled" : "asleep--filled", label: escuro ? s.themeToLight : s.themeToDark, corDoIcone: escuro ? t.color.primary : t.color.foreground, onPress: toggleTheme }));
 }

@@ -2859,7 +2859,7 @@ const BOTAO_TEMA = renderToStaticMarkup(h(A.ThemeToggle, null));
 for (const theme of ["dark", "light"] as const) {
   test(`pele: ThemeToggle · lua na tinta, sol no amarelo · ${theme}`, async ({page: p, baseURL}) => {
     const url = `${baseURL}/__tema-${theme}`;
-    const sol = BOTAO_TEMA.replace("theme-toggle-moon", "theme-toggle-sun").replace("#i-moon", "#i-sun");
+    const sol = BOTAO_TEMA.replace("theme-toggle-moon", "theme-toggle-sun").replace("#i-asleep--filled", "#i-light--filled");
     await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
       body: `<!doctype html><html data-theme="${theme}"><head>
         <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>

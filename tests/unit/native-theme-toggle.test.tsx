@@ -10,7 +10,7 @@ import {AureaProvider, Card, Button, ThemeToggle, criarRegistroDeIcones, resolve
 const vistos: Array<[string, string | undefined]> = [];
 const Lua = ({color}: {color?: string}) => { vistos.push(["moon", color]); return null; };
 const Sol = ({color}: {color?: string}) => { vistos.push(["sun", color]); return null; };
-const ICONES = criarRegistroDeIcones({moon: Lua as never, sun: Sol as never});
+const ICONES = criarRegistroDeIcones({"asleep--filled": Lua as never, "light--filled": Sol as never});
 const ultimo = () => vistos.at(-1);
 const botao = () => __instancias("Pressable").filter((p) => p.accessibilityRole === "button").at(-1)!;
 

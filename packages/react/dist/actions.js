@@ -135,7 +135,7 @@ export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props
     const { theme, toggleTheme } = useAureaTheme();
     const s = useAureaStrings();
     const escuro = theme === "dark";
-    return _jsx(IconButton, { ref: ref, icon: escuro ? "sun" : "moon", label: escuro ? s.themeToLight : s.themeToDark, className: cx(escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), onClick: toggleTheme, ...props });
+    return _jsx(IconButton, { ref: ref, icon: escuro ? "light--filled" : "asleep--filled", label: escuro ? s.themeToLight : s.themeToDark, className: cx(escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), onClick: toggleTheme, ...props });
 });
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem

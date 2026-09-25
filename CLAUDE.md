@@ -111,7 +111,9 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    com uma linha). Na leitura de 24/09/2026, ele vem **antes** da `1.0`, porque muda a estrutura
    das peças.
    - **Lote 3 FECHADO em 25/09/2026, na versão `0.12.0`**, na branch `claude/friendly-cerf-ctu0v7`.
-     Espera o "pode" do Victor para o push e o pedido de junção. O E2 e o M-01 entraram nele.
+     O E2 e o M-01 entraram nele, e o `ThemeToggle` também (botão de claro e escuro: lua cheia
+     escura no claro, sol cheio amarelo no escuro — aprovado pela imagem em 25/09/2026). **Empurrada
+     com o "pode" de 25/09/2026, com o pedido de junção aberto.** Falta o Victor juntar e publicar.
    - **A-04 feito.** Pode quebrar a compilação de quem passa ícone numa variável `string`.
    - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
      `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.

@@ -3707,4 +3707,4 @@ sem cor solta, com o nome dizendo para onde vai.
 **O que é nosso:** mostrar o tema de DESTINO (a lua no claro, o sol no escuro), e a cor no glifo —
 a lua na tinta do texto (`--foreground`) e o sol no amarelo da marca (`--primary`). As duas
 combinações se enxergam; a inversa (sol amarelo no claro, lua escura no escuro) não existe de
-propósito. Glifos do Carbon: `moon` e `sun`.
+propósito. Glifos do Carbon, os CHEIOS (escolha do Victor, 25/09/2026: a lua de contorno ficava branca por dentro): `asleep--filled` (lua) e `light--filled` (sol).

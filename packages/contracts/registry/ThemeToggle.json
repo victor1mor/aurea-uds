@@ -62,8 +62,8 @@
   "dependencies": {
     "engine": "none",
     "icons": [
-      "moon",
-      "sun"
+      "asleep--filled",
+      "light--filled"
     ]
   },
   "related": {
