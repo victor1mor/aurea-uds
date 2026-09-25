@@ -31,7 +31,7 @@ export { resolverTokens } from "./tokens.js";
 // A fábrica de folhas memoizada por (tema, densidade). Pública porque o consumidor tem o mesmo
 // problema que os componentes daqui — e a medição em aparelho mostrou que ele é real.
 export { criarFolha, comOpacidade } from "./estilos.js";
-export { Text } from "./text.js";
+export { Text, Heading, Paragraph, Code } from "./text.js";
 export { Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo } from "./icon.js";
 // A ÚNICA peça do Lote 1 com dependência de terceiro — `react-native-safe-area-context`,
 // autorizada pelo Victor em 03/09/2026 depois de o lote parar por ela (`BUILDING.md` §3).

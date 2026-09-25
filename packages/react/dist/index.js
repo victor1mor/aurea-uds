@@ -51,7 +51,7 @@ export { ContainerScope, useValorResponsivo } from "./responsivo-runtime.js";
 // inteiro). O que muda é de ONDE ele vem — do módulo com a diretiva —, e aí ele volta a chegar
 // como referência de CLIENTE e os 118,5 KB voltam com ele. Não é um erro: é o ganho do item O1
 // se desfazendo em silêncio. É isso, exatamente isso, que o check 35 pega.
-export { AspectRatio, InputGroup, InputGroupAddon, Label, Card, Stack, Cluster, Grid, KPI, DataList, Timeline, Prose, Badge, Progress, Skeleton, AvatarGroup, LogStream, MediaPlayerShell, Topbar, Kbd, Textarea, Checkbox, Radio, Switch, Range, formatBadgeCount } from "./markup.js";
+export { AspectRatio, InputGroup, InputGroupAddon, Label, Card, Stack, Cluster, Grid, KPI, DataList, Timeline, Prose, Text, Heading, Paragraph, Code, Badge, Progress, Skeleton, AvatarGroup, LogStream, MediaPlayerShell, Topbar, Kbd, Textarea, Checkbox, Radio, Switch, Range, formatBadgeCount } from "./markup.js";
 export * from "./system.js";
 export * from "./actions.js";
 export * from "./feedback.js";

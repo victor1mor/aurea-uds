@@ -1560,6 +1560,37 @@ img,svg { display:block; }
 .gallery-tile:not(.is-selected) { background:transparent; color:var(--muted-foreground); }
 .gallery-caption { font-size:var(--text-sm); }
 
+/* TIPOGRAFIA (B-02, 25/09/2026) — `Text`, `Heading`, `Paragraph` e `Code`, no molde do HeroUI
+   3.2.6 (`typography.css`), por ordem do Victor: HeroUI sempre primeiro. O que vem dele é a FORMA:
+   uma LISTA FECHADA de papéis em vez de tamanhos soltos (título 1–6, texto, texto pequeno, texto
+   mínimo, código), cor só normal ou apagada, quatro pesos. O que é nosso são os números, todos de
+   token: a escala de letras é a dele desde a ADR-0050, a entrelinha do texto é `--leading-relaxed`
+   (27, 24 e 20px, contra os 28, 24 e 20 dele) e o código reusa a pele do `code` do `.prose`.
+   A margem vai a zero porque `h1`…`h6` e `p` trazem a do navegador; o espaço entre blocos é de
+   quem os empilha (`Stack`), não do texto. */
+.typography { margin:0; color:var(--foreground); }
+.typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6 { font-weight:var(--weight-semibold); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); }
+.typography-h1 { font-size:var(--text-4xl); }
+.typography-h2 { font-size:var(--text-3xl); }
+.typography-h3 { font-size:var(--text-2xl); }
+.typography-h4 { font-size:var(--text-xl); }
+.typography-h5 { font-size:var(--text-lg); }
+.typography-h6 { font-size:var(--text-base); }
+.typography-body { font-size:var(--text-base); line-height:var(--leading-relaxed); }
+.typography-body-sm { font-size:var(--text-sm); line-height:var(--leading-relaxed); }
+.typography-body-xs { font-size:var(--text-xs); line-height:var(--leading-relaxed); }
+.typography-code { padding:var(--space-05) var(--space-1); border-radius:var(--radius-xs); background:var(--surface-2); font-family:var(--font-code); font-size:var(--text-sm); }
+.typography-muted { color:var(--muted-foreground); }
+.typography-weight-normal { font-weight:var(--weight-regular); }
+.typography-weight-medium { font-weight:var(--weight-medium); }
+.typography-weight-semibold { font-weight:var(--weight-semibold); }
+.typography-weight-bold { font-weight:var(--weight-bold); }
+.typography-align-start { text-align:start; }
+.typography-align-center { text-align:center; }
+.typography-align-end { text-align:end; }
+.typography-align-justify { text-align:justify; }
+.typography-truncate { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
 /* PROSA (PLANO-1.0, item L5). É a PELE do texto longo, não o parser — quem transforma Markdown em
    elementos é o consumidor. Aqui só se decide como esses elementos se leem.
 

@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 36,
-    "componentes": 120,
+    "componentes": 124,
     "hooks": 9,
-    "aliasesLiterais": 55,
-    "propsDistintas": 236
+    "aliasesLiterais": 60,
+    "propsDistintas": 242
   },
   "aliases": {
     "ButtonVariant": {
@@ -2939,6 +2939,64 @@
         "center",
         "end",
         "between"
+      ]
+    },
+    "TypographyType": {
+      "module": "markup",
+      "raw": "\"body\" | \"body-sm\" | \"body-xs\" | \"code\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
+      "union": [
+        "body",
+        "body-sm",
+        "body-xs",
+        "code",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6"
+      ]
+    },
+    "TypographyColor": {
+      "module": "markup",
+      "raw": "\"default\" | \"muted\"",
+      "union": [
+        "default",
+        "muted"
+      ]
+    },
+    "TypographyWeight": {
+      "module": "markup",
+      "raw": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "union": [
+        "normal",
+        "medium",
+        "semibold",
+        "bold"
+      ]
+    },
+    "TypographyAlign": {
+      "module": "markup",
+      "raw": "\"start\" | \"center\" | \"end\" | \"justify\"",
+      "union": [
+        "start",
+        "center",
+        "end",
+        "justify"
+      ]
+    },
+    "HeadingLevel": {
+      "module": "markup",
+      "raw": "1 | 2 | 3 | 4 | 5 | 6",
+      "union": null
+    },
+    "ParagraphSize": {
+      "module": "markup",
+      "raw": "\"base\" | \"sm\" | \"xs\"",
+      "union": [
+        "base",
+        "sm",
+        "xs"
       ]
     },
     "BadgeEmphasis": {
@@ -6401,6 +6459,50 @@
           "props": []
         },
         {
+          "name": "Code",
+          "kind": "function",
+          "propsType": "CodeProps",
+          "props": [
+            {
+              "name": "align",
+              "optional": true,
+              "type": "TypographyAlign",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "justify"
+              ]
+            },
+            {
+              "name": "color",
+              "optional": true,
+              "type": "TypographyColor",
+              "values": [
+                "default",
+                "muted"
+              ]
+            },
+            {
+              "name": "weight",
+              "optional": true,
+              "type": "TypographyWeight",
+              "values": [
+                "normal",
+                "medium",
+                "semibold",
+                "bold"
+              ]
+            },
+            {
+              "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "DataList",
           "kind": "function",
           "propsType": null,
@@ -6418,6 +6520,56 @@
           "kind": "function",
           "propsType": "GridProps",
           "props": []
+        },
+        {
+          "name": "Heading",
+          "kind": "function",
+          "propsType": "HeadingProps",
+          "props": [
+            {
+              "name": "align",
+              "optional": true,
+              "type": "TypographyAlign",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "justify"
+              ]
+            },
+            {
+              "name": "color",
+              "optional": true,
+              "type": "TypographyColor",
+              "values": [
+                "default",
+                "muted"
+              ]
+            },
+            {
+              "name": "weight",
+              "optional": true,
+              "type": "TypographyWeight",
+              "values": [
+                "normal",
+                "medium",
+                "semibold",
+                "bold"
+              ]
+            },
+            {
+              "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "level",
+              "optional": true,
+              "type": "HeadingLevel",
+              "values": null
+            }
+          ]
         },
         {
           "name": "InputGroup",
@@ -6521,6 +6673,60 @@
           "props": []
         },
         {
+          "name": "Paragraph",
+          "kind": "function",
+          "propsType": "ParagraphProps",
+          "props": [
+            {
+              "name": "align",
+              "optional": true,
+              "type": "TypographyAlign",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "justify"
+              ]
+            },
+            {
+              "name": "color",
+              "optional": true,
+              "type": "TypographyColor",
+              "values": [
+                "default",
+                "muted"
+              ]
+            },
+            {
+              "name": "weight",
+              "optional": true,
+              "type": "TypographyWeight",
+              "values": [
+                "normal",
+                "medium",
+                "semibold",
+                "bold"
+              ]
+            },
+            {
+              "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ParagraphSize",
+              "values": [
+                "base",
+                "sm",
+                "xs"
+              ]
+            }
+          ]
+        },
+        {
           "name": "Progress",
           "kind": "function",
           "propsType": null,
@@ -6615,6 +6821,67 @@
                 "sm",
                 "md",
                 "lg"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Text",
+          "kind": "function",
+          "propsType": "TextProps",
+          "props": [
+            {
+              "name": "align",
+              "optional": true,
+              "type": "TypographyAlign",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "justify"
+              ]
+            },
+            {
+              "name": "color",
+              "optional": true,
+              "type": "TypographyColor",
+              "values": [
+                "default",
+                "muted"
+              ]
+            },
+            {
+              "name": "weight",
+              "optional": true,
+              "type": "TypographyWeight",
+              "values": [
+                "normal",
+                "medium",
+                "semibold",
+                "bold"
+              ]
+            },
+            {
+              "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "type",
+              "optional": true,
+              "type": "TypographyType",
+              "values": [
+                "body",
+                "body-sm",
+                "body-xs",
+                "code",
+                "h1",
+                "h2",
+                "h3",
+                "h4",
+                "h5",
+                "h6"
               ]
             }
           ]

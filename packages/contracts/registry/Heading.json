@@ -1,0 +1,115 @@
+{
+  "name": "Heading",
+  "category": "Data Display",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A heading, h1 to h6. The level picks both the element and the size, as in HeroUI.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "level": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "color": [
+      "default",
+      "muted"
+    ],
+    "weight": [
+      "normal",
+      "medium",
+      "semibold",
+      "bold"
+    ],
+    "align": [
+      "start",
+      "center",
+      "end",
+      "justify"
+    ]
+  },
+  "states": [],
+  "tokens": [
+    "--foreground",
+    "--muted-foreground",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-semibold",
+    "--weight-bold",
+    "--text-4xl",
+    "--text-3xl",
+    "--text-2xl",
+    "--text-xl",
+    "--text-lg",
+    "--text-base",
+    "--leading-tight",
+    "--tracking-tight"
+  ],
+  "a11y": {
+    "role": "heading",
+    "apg": "Native h1–h6, so the level is the outline a screen reader navigates by. Keep levels in order on the page; do not skip one to get a smaller look.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Text",
+      "Paragraph",
+      "Prose"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Heading"
+  },
+  "props": [
+    {
+      "name": "level",
+      "type": "1 | 2 | 3 | 4 | 5 | 6",
+      "default": "1",
+      "description": "The heading level: it renders h1…h6 and takes that role's size (4xl down to base, semibold, tight leading). There is no separate size prop, as in HeroUI — the level is the design."
+    },
+    {
+      "name": "color",
+      "type": "\"default\" | \"muted\"",
+      "default": "\"default\"",
+      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+    },
+    {
+      "name": "weight",
+      "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "default": "— (the role's own)",
+      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\" | \"justify\"",
+      "default": "— (inherited)",
+      "description": "Text alignment. start and end follow the writing direction, so the same value mirrors in RTL."
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "default": "false",
+      "description": "One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The text."
+    }
+  ]
+}

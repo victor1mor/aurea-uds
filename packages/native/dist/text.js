@@ -66,6 +66,15 @@ const TAMANHO = {
 const ENTRELINHA = {
     none: "leadingNone", tight: "leadingTight", normal: "leadingNormal", relaxed: "leadingRelaxed",
 };
+const titulo = (tamanho) => ({ tamanho, peso: 600, entrelinha: "leadingTight", fonte: "ui", junto: true });
+const PAPEL = {
+    h1: titulo("text4xl"), h2: titulo("text3xl"), h3: titulo("text2xl"),
+    h4: titulo("textXl"), h5: titulo("textLg"), h6: titulo("textBase"),
+    body: { tamanho: "textBase", peso: 400, entrelinha: "leadingRelaxed", fonte: "ui" },
+    "body-sm": { tamanho: "textSm", peso: 400, entrelinha: "leadingRelaxed", fonte: "ui" },
+    "body-xs": { tamanho: "textXs", peso: 400, entrelinha: "leadingRelaxed", fonte: "ui" },
+    code: { tamanho: "textSm", peso: 400, entrelinha: "leadingNormal", fonte: "code" },
+};
 const COR = {
     default: "foreground", muted: "mutedForeground", subtle: "subtleForeground",
     // ⚠ `primary` e `link` são o MESMO amarelo em matiz, e NÃO são intercambiáveis.
@@ -94,12 +103,22 @@ const folha = criarFolha((t) => {
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */
-export function Text({ size = "md", weight = 400, font = "ui", tone = "default", leading = "normal", italic = false, align, tracking, style, ...rest }) {
+export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone = "default", leading, italic = false, align, tracking: trackingPedido, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const sobreAMarca = useSobreAMarca();
+    // Sem `type`, os padrões de sempre (`md`, 400, `ui`, `normal`) — nada muda para quem já usa.
+    const papel = type ? PAPEL[type] : undefined;
+    const weight = pesoPedido ?? papel?.peso ?? 400;
+    const font = fontePedida ?? papel?.fonte ?? "ui";
+    const tracking = trackingPedido ?? (papel?.junto ? "tight" : undefined);
     const proprio = React.useMemo(() => {
-        const fontSize = t.size[TAMANHO[size]] ?? t.size.textBase;
+        const fontSize = size
+            ? t.size[TAMANHO[size]] ?? t.size.textBase
+            : papel ? t.size[papel.tamanho] ?? t.size.textBase : t.size[TAMANHO.md];
+        const razao = leading
+            ? t.size[ENTRELINHA[leading]] ?? t.size.leadingNormal
+            : papel ? t.size[papel.entrelinha] ?? t.size.leadingNormal : t.size.leadingNormal;
         const escala = t.font[font];
         // O itálico é UMA fonte, não um estilo sintético: `fontStyle:"italic"` faria o sistema
         // inclinar o desenho reto, e o Plex tem itálico desenhado. Só o `ui` o tem — nos outros
@@ -109,13 +128,18 @@ export function Text({ size = "md", weight = 400, font = "ui", tone = "default",
             fontFamily: familia,
             fontSize,
             // `lineHeight` no RN é ABSOLUTO (dp), não múltiplo — os tokens de entrelinha são razão.
-            lineHeight: fontSize * (t.size[ENTRELINHA[leading]] ?? t.size.leadingNormal),
+            lineHeight: fontSize * razao,
             // `letterSpacing` também é absoluto: o token é razão de `em` e multiplica o tamanho.
             // É a impedância que a Etapa 2 mediu e resolveu emitindo razão em vez de dp.
             ...(tracking ? { letterSpacing: fontSize * t.tracking[`tracking${tracking[0].toUpperCase()}${tracking.slice(1)}`] } : null),
             ...(align ? { textAlign: align } : null),
+            // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (HeroUI Native).
+            ...(type === "code" ? {
+                alignSelf: "flex-start", backgroundColor: t.color.surface2, borderRadius: t.size.radiusXs,
+                paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
+            } : null),
         };
-    }, [t, size, weight, font, leading, italic, align, tracking]);
+    }, [t, type, papel, size, weight, font, leading, italic, align, tracking]);
     // 🔴 SOBRE UMA SUPERFÍCIE DA MARCA A COR É FORÇADA, e ela vence até o tom explícito.
     // Medido contra o `primary` nos dois temas: texto comum dá **1,83 no escuro**, esmaecido
     // **1,35**, e `danger` menos ainda. **Nenhum tom alcança os 4,5 da norma sobre o amarelo** —
@@ -125,4 +149,21 @@ export function Text({ size = "md", weight = 400, font = "ui", tone = "default",
     // texto esmaecido. A hierarquia sai de PESO e TAMANHO.
     // ⚠ E `style` continua por último de propósito: quem passa cor à mão assume a conta.
     return _jsx(TextRN, { style: [s[tone], sobreAMarca && { color: sobreAMarca.tinta }, proprio, style], ...rest });
+}
+const PESO = { normal: 400, medium: 500, semibold: 600, bold: 700 };
+const ALINHA = { start: "left", center: "center", end: "right", justify: "justify" };
+function papelDe(type, { color, weight, align, truncate, style, ...rest }) {
+    return (_jsx(Text, { ...rest, type: type, tone: color === "muted" ? "muted" : "default", weight: weight ? PESO[weight] : undefined, numberOfLines: truncate ? 1 : rest.numberOfLines, style: [align ? { textAlign: ALINHA[align] } : null, style] }));
+}
+/** Título. Marca `accessibilityRole="header"` sozinho, como o HeroUI Native. */
+export function Heading({ type = "h1", accessibilityRole = "header", ...rest }) {
+    return papelDe(type, { accessibilityRole, ...rest });
+}
+/** Parágrafo de texto corrido, em três tamanhos: 16, 14 e 12. */
+export function Paragraph({ type = "body", ...rest }) {
+    return papelDe(type, rest);
+}
+/** Um trecho curto de código no meio da frase, com a fonte mono e o fundo do `code` da web. */
+export function Code(props) {
+    return papelDe("code", props);
 }

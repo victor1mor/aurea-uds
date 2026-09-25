@@ -1,0 +1,107 @@
+{
+  "name": "Paragraph",
+  "category": "Data Display",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A paragraph of body text in one of three sizes.",
+  "icon": "document",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [
+    "base",
+    "sm",
+    "xs"
+  ],
+  "axes": {
+    "color": [
+      "default",
+      "muted"
+    ],
+    "weight": [
+      "normal",
+      "medium",
+      "semibold",
+      "bold"
+    ],
+    "align": [
+      "start",
+      "center",
+      "end",
+      "justify"
+    ]
+  },
+  "states": [],
+  "tokens": [
+    "--foreground",
+    "--muted-foreground",
+    "--weight-regular",
+    "--weight-medium",
+    "--weight-semibold",
+    "--weight-bold",
+    "--text-base",
+    "--text-sm",
+    "--text-xs",
+    "--leading-relaxed"
+  ],
+  "a11y": {
+    "role": "paragraph",
+    "apg": "A native p. No interaction.",
+    "keyboard": []
+  },
+  "dependencies": {
+    "engine": "none",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Text",
+      "Heading",
+      "Prose"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Paragraph"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "\"base\" | \"sm\" | \"xs\"",
+      "default": "\"base\"",
+      "description": "Body text at 16, 14 or 12px, all with relaxed leading. The same three sizes HeroUI's Paragraph has."
+    },
+    {
+      "name": "color",
+      "type": "\"default\" | \"muted\"",
+      "default": "\"default\"",
+      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+    },
+    {
+      "name": "weight",
+      "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "default": "— (the role's own)",
+      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\" | \"justify\"",
+      "default": "— (inherited)",
+      "description": "Text alignment. start and end follow the writing direction, so the same value mirrors in RTL."
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "default": "false",
+      "description": "One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The text."
+    }
+  ]
+}

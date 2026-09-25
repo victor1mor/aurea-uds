@@ -13,12 +13,12 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Métrica | Valor |
 |---|---|
-| Componentes exportados por `@aurea-uds/react` | 116 |
-| Fichas de registry | 116 |
+| Componentes exportados por `@aurea-uds/react` | 120 |
+| Fichas de registry | 120 |
 | Hooks públicos com ficha | 9 |
-| Maturidade declarada nas fichas | Ready 42 · Stable 83 |
+| Maturidade declarada nas fichas | Ready 42 · Stable 87 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 559 |
+| Classes declaradas no CSS do core | 580 |
 
 ## Tokens
 
@@ -26,51 +26,51 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 |---|---|
 | Declarações emitidas | 409 |
 | Nomes distintos | 191 |
-| Nomes referenciados pelo core | 142 |
-| Nomes nunca referenciados pelo core | 49 |
+| Nomes referenciados pelo core | 143 |
+| Nomes nunca referenciados pelo core | 48 |
 
 ## Catálogo gerado
 
 | Tipo de página | Quantidade |
 |---|---|
-| Componente | 125 |
+| Componente | 129 |
 | Pattern | 204 |
 | Block | 15 |
 | Recipe | 23 |
 | Índice de área | 6 |
-| **Total** | **373** |
+| **Total** | **377** |
 
 ## Cobertura das fichas
 
 | Campo | Fichas que declaram |
 |---|---|
-| `props` (contrato de API publicado) | 116 de 116 |
-| `variants` | 15 de 116 |
-| `sizes` | 20 de 116 |
-| `states` | 103 de 116 |
-| `tokens` | 117 de 116 |
-| `a11y.apg` | 121 de 116 |
+| `props` (contrato de API publicado) | 120 de 120 |
+| `variants` | 15 de 120 |
+| `sizes` | 21 de 120 |
+| `states` | 103 de 120 |
+| `tokens` | 121 de 120 |
+| `a11y.apg` | 125 de 120 |
 
 ## Conteúdo do catálogo
 
 | Origem | Arquivos |
 |---|---|
-| Componentes com conteúdo próprio | 27 de 116 |
-| Componentes com starter (preview + código mínimos) | 98 de 116 |
+| Componentes com conteúdo próprio | 27 de 120 |
+| Componentes com starter (preview + código mínimos) | 102 de 120 |
 | Patterns com conteúdo | 77 |
 | Blocks com conteúdo | 2 |
 | Receitas com preview | 23 de 23 |
 
 Todo item tem preview e código — é o núcleo do modelo de página decidido na
-[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 98 componentes de
-starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 116: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
+[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 102 componentes de
+starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 120: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
 
 ## Garantias automáticas
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1171 |
-| Componentes citados nos testes unitários | 123 de 116 |
+| Chamadas de `test()` nos testes unitários | 1187 |
+| Componentes citados nos testes unitários | 127 de 120 |
 | Specs de navegador (Playwright) | 22 |
 | Baselines de screenshot no repositório | 44 |
 | Baselines `-linux.png` (o que a CI compara) | 22 |

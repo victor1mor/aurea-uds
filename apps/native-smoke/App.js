@@ -32,7 +32,8 @@ import {useFonts} from "expo-font";
 import {SafeAreaProvider, useSafeAreaInsets} from "react-native-safe-area-context";
 
 import {
-  Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox,
+  Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox, Code,
+  Heading, Paragraph,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, IconButton, Input,
   KPI, KeyboardAvoiding, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
   Spinner, Stack, Status, Stepper, Switch, Table, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
@@ -254,6 +255,21 @@ function Tela({irParaScreen, irParaLote2}) {
         <Text style={{color: t.color.mutedForeground, fontSize: t.size.textLg}}>
           Sem fontFamily — fonte do sistema
         </Text>
+      </Bloco>
+
+      {/* ── 1b ── B-02 ────────────────────────────────────────────────────── */}
+      <Bloco t={t} n="1b" titulo="Os papéis de texto (B-02) crescem em degraus que se enxergam?"
+        criterio={"Os seis títulos têm de DIMINUIR a cada linha, sem dois iguais, e em seminegrito. "
+          + "Os três parágrafos são 16, 14 e 12 — o do meio NÃO pode ser do tamanho do primeiro "
+          + "(seria o degrau a mais do `size`, que o papel não usa). O código tem fundo e fonte mono; "
+          + "no leitor de tela, só os títulos são anunciados como título."}>
+        {["h1", "h2", "h3", "h4", "h5", "h6"].map((h) => (
+          <Heading key={h} type={h}>{h.toUpperCase()} · Relatórios</Heading>
+        ))}
+        <Paragraph>Texto corrido — o relatório da semana está pronto.</Paragraph>
+        <Paragraph type="body-sm">Texto pequeno — gerado às 09:40.</Paragraph>
+        <Paragraph type="body-xs" color="muted">Texto mínimo, apagado — valores arredondados.</Paragraph>
+        <Paragraph>Rode <Code>pnpm build</Code> antes de publicar.</Paragraph>
       </Bloco>
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}

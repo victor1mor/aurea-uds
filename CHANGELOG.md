@@ -15,7 +15,7 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [Não publicada] — Lote 3, em andamento
+## [Unreleased] — Lote 3, em andamento
 
 Ainda **sem número**: a versão sobe nos nove arquivos quando o lote fechar. Por ora, o que já
 entrou na branch.
@@ -56,6 +56,21 @@ entrou na branch.
   Era um quadrado de canto 10px (6px nos dois menores). Vale para todo `IconButton`, os botões de
   fechar e os controles do player, que também perderam o recheio lateral para ficarem quadrados
   (eram 38×36). É como o HeroUI 3.2.6 faz.
+
+
+### Adicionado
+
+- **B-02 · `Text`, `Heading`, `Paragraph` e `Code`, na web e no nativo**, no molde do HeroUI 3.2.6
+  (decisão do Victor, 25/09/2026: HeroUI sempre primeiro). Uma **lista fechada de papéis** em vez
+  de tamanhos soltos: título 1 a 6, texto, texto pequeno, texto mínimo e código. Cor só normal ou
+  apagada (`color="muted"`), quatro pesos, alinhamento e corte em uma linha (`truncate`).
+  - `Heading level={2}` renderiza um `h2` com a cara de título 2; o nível é o desenho, como no
+    HeroUI. `Paragraph size="sm"` é um `p` de 14px. `Code` é um `code` com a pele do código do
+    `Prose`. `Text` é um `span` com o papel que você escolher.
+  - Os números são de token: a escala de letras (ADR-0050), `--leading-relaxed` no texto,
+    `--leading-tight` e `--tracking-tight` nos títulos.
+  - **No nativo o `Text` que já existia fica como está**, com as opções soltas; ganhou só o
+    `type`, o mesmo papel da web. `Heading`, `Paragraph` e `Code` são novos lá também.
 
 ---
 

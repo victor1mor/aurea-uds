@@ -40,9 +40,11 @@ export type {
 // problema que os componentes daqui — e a medição em aparelho mostrou que ele é real.
 export {criarFolha, comOpacidade} from "./estilos.js";
 
-export {Text} from "./text.js";
+export {Text, Heading, Paragraph, Code} from "./text.js";
 export type {
   TextProps, AureaTextFont, AureaTextLeading, AureaTextSize, AureaTextTone, AureaTextWeight,
+  AureaTextType, HeadingProps, ParagraphProps, CodeProps, AureaTypographyColor,
+  AureaTypographyWeight, AureaTypographyAlign,
 } from "./text.js";
 
 export {Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo} from "./icon.js";
