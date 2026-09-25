@@ -28,12 +28,30 @@ import { useAureaTokens } from "./theme.js";
  * render invalidaria o `useMemo` de todo componente que o recebe.
  */
 export const criarRegistroDeIcones = (r) => r;
+/** `"currentColor"` vira a cor do `Icon`; o resto passa como veio. */
+const tinta = (v, color) => (v === "currentColor" ? color : v);
+/** A tinta final de uma forma: a dela, senão a do desenho, senão a cor do `Icon` no `fill`. */
+function pintar(forma, desenho, color) {
+    const stroke = tinta(forma.stroke ?? desenho.stroke, color);
+    return {
+        fill: tinta(forma.fill ?? desenho.fill, color) ?? color,
+        ...(stroke !== undefined && {
+            stroke,
+            strokeWidth: forma.strokeWidth ?? desenho.strokeWidth,
+            strokeLinecap: forma.strokeLinecap ?? desenho.strokeLinecap,
+            strokeLinejoin: forma.strokeLinejoin ?? desenho.strokeLinejoin,
+        }),
+    };
+}
 /**
  * Um glifo PRÓPRIO do app — um logotipo, por exemplo — desenhado pela Aurea a partir dos dados
  * do desenho. R-05, 24/09/2026.
  *
  * ```tsx
  * const Marca = criarGlifo({viewBox: "0 0 64 64", circles: [{cx: 32, cy: 32, r: 30}], paths: ["M…"]});
+ * // a traço: a tinta no desenho inteiro, como no `<svg>` raiz
+ * const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
+ *                          strokeLinecap: "round", paths: ["M…"]});
  * const ICONES = criarRegistroDeIcones({...OS_DO_APP, marca: Marca});
  * <Icon name="marca" size="xl" />
  * ```
@@ -51,9 +69,9 @@ export const criarRegistroDeIcones = (r) => r;
  */
 export function criarGlifo(desenho) {
     const { viewBox = "0 0 32 32", rects = [], circles = [], paths = [] } = desenho;
-    const Glifo = ({ size = 32, color = "#000000" }) => (_jsxs(Svg, { width: size, height: size, viewBox: viewBox, children: [rects.map((r, i) => _jsx(Rect, { ...r, fill: r.fill ?? color }, `r${i}`)), circles.map((c, i) => _jsx(Circle, { ...c, fill: c.fill ?? color }, `c${i}`)), paths.map((p, i) => {
+    const Glifo = ({ size = 32, color = "#000000" }) => (_jsxs(Svg, { width: size, height: size, viewBox: viewBox, children: [rects.map((r, i) => _jsx(Rect, { ...r, ...pintar(r, desenho, color) }, `r${i}`)), circles.map((c, i) => _jsx(Circle, { ...c, ...pintar(c, desenho, color) }, `c${i}`)), paths.map((p, i) => {
                 const c = typeof p === "string" ? { d: p } : p;
-                return _jsx(Path, { ...c, fill: c.fill ?? color }, `p${i}`);
+                return _jsx(Path, { ...c, ...pintar(c, desenho, color) }, `p${i}`);
             })] }));
     return Glifo;
 }

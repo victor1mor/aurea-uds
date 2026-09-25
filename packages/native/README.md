@@ -852,13 +852,23 @@ poda nenhuma: módulo que não é importado não entra no grafo.
 Os nomes são **os mesmos do sprite da web**, e um gate cobra isso (check 38): o que `<Icon name>`
 desenha lá, `icons/<nome>` desenha aqui.
 
+**Um glifo próprio** (o logotipo do app) sai de `criarGlifo`, sem o app importar o
+`react-native-svg`: retângulos, círculos e caminhos, preenchidos ou a traço. A tinta usa os nomes
+do SVG, e `"currentColor"` é a cor do `Icon`:
+
+```tsx
+const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
+                         strokeLinecap: "round", paths: ["M…"]});
+const ICONES = criarRegistroDeIcones({...OS_DO_APP, logo: Logo});
+```
+
 **O nome é checado pelo TypeScript** (desde a A-04): `<Icon name="chevron-down">`, com um traço
-só, não compila, e a chave do registro também é conferida. Um glifo próprio (`criarGlifo`) entra
-declarando o nome **uma vez**:
+só, não compila, e a chave do registro também é conferida. Um glifo próprio entra declarando o
+nome **uma vez**:
 
 ```tsx
 declare module "@aurea-uds/native" {
-  interface AureaIconNames { marca: true }
+  interface AureaIconNames { logo: true }
 }
 ```
 

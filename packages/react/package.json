@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/react",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Os componentes React da Aurea UDS. Importe @aurea-uds/fonts/css e @aurea-uds/core/css junto.",
   "keywords": [
     "aurea",

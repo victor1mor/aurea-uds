@@ -195,3 +195,53 @@ describe("R-05 · `criarGlifo`", () => {
     expect(__instancias("Svg").at(-1)?.viewBox).toBe("0 0 32 32");
   });
 });
+
+// ═════════════════════════════════════════════════════════════════════════════════════════════
+// R-05, a metade que faltava: o TRAÇO. O logotipo do app é desenhado a traço, e a `criarGlifo`
+// só preenchia. As entradas foram escolhidas para reprovar no código antigo: `"currentColor"`
+// e a tinta no desenho inteiro. Um `stroke` fixo na própria forma NÃO serve de prova, porque o
+// código antigo já o repassava ao `Path` por acidente (pelo `{...c}`), só que sem tipo.
+describe("R-05 · `criarGlifo` a traço", () => {
+  it("a tinta no desenho inteiro vale para todas as formas, e `currentColor` é a cor do tema", () => {
+    const Logo = criarGlifo({
+      fill: "none", stroke: "currentColor", strokeWidth: 2,
+      strokeLinecap: "round", strokeLinejoin: "round",
+      circles: [{cx: 16, cy: 16, r: 12}],
+      paths: ["M8 16h16"],
+    });
+    render(<AureaProvider theme="light" icons={criarRegistroDeIcones({x: Logo})}>
+      <Icon name="x" /></AureaProvider>);
+    for (const forma of [__instancias("Circle").at(-1), __instancias("Path").at(-1)]) {
+      expect(forma?.fill).toBe("none");
+      expect(forma?.stroke).toBe(claro.color.foreground);
+      expect(forma?.strokeWidth).toBe(2);
+      expect(forma?.strokeLinecap).toBe("round");
+      expect(forma?.strokeLinejoin).toBe("round");
+    }
+  });
+
+  it("a tinta da forma vence a do desenho, e o traço segue o `color` do `Icon`", () => {
+    const Logo = criarGlifo({
+      fill: "none", stroke: "currentColor", strokeWidth: 2,
+      rects: [{x: 0, y: 0, width: 32, height: 32, stroke: "#ff0000", strokeWidth: 4}],
+      paths: [{d: "M0 0", fill: "currentColor"}],
+    });
+    render(<AureaProvider theme="light" icons={criarRegistroDeIcones({x: Logo})}>
+      <Icon name="x" color="#123456" /></AureaProvider>);
+    const ret = __instancias("Rect").at(-1);
+    expect(ret?.stroke).toBe("#ff0000");
+    expect(ret?.strokeWidth).toBe(4);
+    expect(ret?.fill).toBe("none");
+    const cam = __instancias("Path").at(-1);
+    expect(cam?.stroke).toBe("#123456");
+    expect(cam?.fill).toBe("#123456");
+  });
+
+  it("sem `stroke`, nada muda: sem traço, e o preenchimento na cor do tema", () => {
+    render(<AureaProvider theme="light" icons={criarRegistroDeIcones({x: criarGlifo({paths: ["M0 0"]})})}>
+      <Icon name="x" /></AureaProvider>);
+    const cam = __instancias("Path").at(-1);
+    expect(cam?.fill).toBe(claro.color.foreground);
+    expect(cam && "stroke" in cam).toBe(false);
+  });
+});

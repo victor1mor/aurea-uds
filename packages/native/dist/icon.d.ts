@@ -14,10 +14,25 @@ export type AureaIconRegistry = Readonly<Partial<Record<IconName, AureaIconCompo
  * render invalidaria o `useMemo` de todo componente que o recebe.
  */
 export declare const criarRegistroDeIcones: <T extends AureaIconRegistry>(r: T) => T;
-/** Uma forma do glifo. Sem `fill`, ela pinta com a cor que o `Icon` passar (a do tema, por padrão). */
+/**
+ * A tinta de uma forma. Sem `fill`, ela pinta com a cor que o `Icon` passar (a do tema, por
+ * padrão). Os nomes são os do SVG, para quem copia de um arquivo `.svg` copiar sem traduzir.
+ *
+ * **`"currentColor"`** em `fill` ou `stroke` quer dizer "a cor do `Icon`", como na web — e é o que
+ * faz um desenho a traço trocar de cor com o tema.
+ */
 interface Pintura {
-    /** Cor fixa desta forma, ou `"none"` para não pintar. Sem isto, a forma segue o `color`. */
+    /** Cor fixa desta forma, `"currentColor"`, ou `"none"` para não pintar. Sem isto, segue o `color`. */
     fill?: string;
+    /**
+     * Cor do TRAÇO. Sem isto não há traço. Desenho só de traço leva `fill: "none"`, como no SVG.
+     * R-05, a metade que faltava.
+     */
+    stroke?: string;
+    /** Espessura do traço, na unidade do `viewBox`: cresce e encolhe junto com o glifo. */
+    strokeWidth?: number;
+    strokeLinecap?: "butt" | "round" | "square";
+    strokeLinejoin?: "miter" | "round" | "bevel";
 }
 export interface AureaGlifoCaminho extends Pintura {
     d: string;
@@ -35,7 +50,11 @@ export interface AureaGlifoRetangulo extends Pintura {
     height: number;
     rx?: number;
 }
-export interface AureaGlifoDesenho {
+/**
+ * A tinta declarada aqui vale para TODAS as formas, como os atributos no `<svg>` raiz de um
+ * arquivo. A tinta de cada forma vence a do desenho.
+ */
+export interface AureaGlifoDesenho extends Pintura {
     /** Padrão `"0 0 32 32"`, a caixa dos glifos do Carbon. */
     viewBox?: string;
     rects?: readonly AureaGlifoRetangulo[];
@@ -49,6 +68,9 @@ export interface AureaGlifoDesenho {
  *
  * ```tsx
  * const Marca = criarGlifo({viewBox: "0 0 64 64", circles: [{cx: 32, cy: 32, r: 30}], paths: ["M…"]});
+ * // a traço: a tinta no desenho inteiro, como no `<svg>` raiz
+ * const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
+ *                          strokeLinecap: "round", paths: ["M…"]});
  * const ICONES = criarRegistroDeIcones({...OS_DO_APP, marca: Marca});
  * <Icon name="marca" size="xl" />
  * ```
