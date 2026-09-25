@@ -310,3 +310,34 @@ for (const theme of ["dark", "light"] as const) {
     }
   });
 }
+
+// ── ADR-0052 · o botão só de ícone é REDONDO (25/09/2026) ──────────────────────────────────
+// Redondo = quadrado (largura igual à altura) com raio de pelo menos metade do lado. Os CINCO
+// tamanhos: o `btn-xl` escapou da primeira passada desta mudança, e só a lista inteira o pega. As duas
+// metades importam: raio 999 num botão mais largo que alto dá pílula, não círculo — foi o que a
+// medição achou no `.media-control` (38×36, pelo recheio lateral) antes de ele perder o recheio.
+// Mede nas três densidades, porque a altura do botão muda com elas.
+for (const density of ["compact", "comfortable", "spacious"] as const) {
+  test(`botão só de ícone é redondo · ${density}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__icone-redondo`;
+    const ic = `<svg class="icon" aria-hidden="true" viewBox="0 0 32 32"></svg>`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="dark" data-density="${density}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head><body>
+        ${["btn-xs", "btn-sm", "", "btn-lg", "btn-xl"].map(t =>
+          `<button class="btn btn-ghost btn-icon ${t}" type="button" aria-label="x">${ic}</button>`).join("")}
+        <div class="media-player"><div class="media-controls"><div class="media-control-row"><div class="media-control-group">
+          <button class="media-control" type="button" aria-label="Tocar">${ic}</button>
+        </div></div></div></div></body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    const botoes = await p.$$eval("button", bs => bs.map(b => {
+      const c = b.getBoundingClientRect();
+      return {quem: b.className, w: c.width, h: c.height, raio: parseFloat(getComputedStyle(b).borderTopLeftRadius)};
+    }));
+    expect(botoes.length).toBe(6);
+    for (const b of botoes) {
+      expect(b.w, `não é quadrado: ${JSON.stringify(b)}`).toBe(b.h);
+      expect(b.raio, `raio menor que metade do lado: ${JSON.stringify(b)}`).toBeGreaterThanOrEqual(b.h / 2);
+    }
+  });
+}

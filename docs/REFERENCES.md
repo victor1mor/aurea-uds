@@ -3331,7 +3331,7 @@ exatamente o defeito que este documento existe para não ter.
 |---|---|
 | `.stack` · `.cluster` · `.grid` | `packages/core/src/aurea.css` — flex/gap e o `auto-fill` do grid |
 | `.btn` e os cinco `.btn-*` | idem: alturas de token, `padding-inline` 10/12/15/20/26, `gap` 6/8/10 |
-| `.btn-icon` | raio `--radius-md`/`--radius-sm`, **não** o pill |
+| `.btn-icon` | ~~raio `--radius-md`/`--radius-sm`, **não** o pill~~ — desde 25/09/2026 é redondo, o raio da cápsula ([ADR-0052](../decisions/0052-o-botao-so-de-icone-e-redondo.md)) |
 | `variant` × `appearance` × `tone` | ficha do `Button`: *"`variant` é atalho para o par"* — ADR-0044 |
 | a decisão de não ter `gap` | ficha do `Stack`: *"um primitivo que aceita qualquer espaçamento é como um sistema deixa de ter espaçamento"* |
 

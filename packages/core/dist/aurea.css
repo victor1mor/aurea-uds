@@ -1102,12 +1102,15 @@ img,svg { display:block; }
 .btn-outline.btn-tone-warning { --btn-border:var(--warning); }
 .btn-tone-warning:not(.btn-link):not(.btn-solid):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--warning) 14%, transparent); }
 .btn-nav:hover:not(:disabled):not([aria-disabled="true"]) { --btn-fg:var(--foreground); }
-.btn-icon { width:var(--control-h-md); padding:0; border-radius:var(--radius-md); }
-.btn-icon.btn-xs { width:var(--control-h-xs); border-radius:var(--radius-sm); }
-.btn-icon.btn-sm { width:var(--control-h-sm); border-radius:var(--radius-sm); } .btn-icon.btn-lg { width:var(--control-h-lg); border-radius:var(--radius-md); }
+/* O botão só de ícone é REDONDO, em todos os tamanhos — decisão do Victor, 25/09/2026
+   (ADR-0052). Era um quadrado de canto 10px (6px nos dois menores). O HeroUI 3.2.6 faz o botão só
+   de ícone redondo, e os botões de texto da Aurea já são cápsula: o de ícone era o único quadrado. */
+.btn-icon { width:var(--control-h-md); padding:0; border-radius:var(--radius-full); }
+.btn-icon.btn-xs { width:var(--control-h-xs); }
+.btn-icon.btn-sm { width:var(--control-h-sm); } .btn-icon.btn-lg { width:var(--control-h-lg); }
 /* xs e xl também precisam de largura: sem isto a altura mudava e a largura ficava na do
    md, e o alvo só-ícone deixava de ser quadrado (achado na onda Actions, 24/07). */
-.btn-icon.btn-xl { width:var(--control-h-xl); border-radius:var(--radius-md); }
+.btn-icon.btn-xl { width:var(--control-h-xl); }
 /* wrap, não estoura: os botões do grupo são pills com gap (não segmentos colados), então
    quebrar linha em tela estreita preserva o visual. Único gap de eixo horizontal que a
    auditoria da Etapa 3 achou sem proteção — o resto já rola (tabela) ou já quebra (toolbar). */
@@ -1919,7 +1922,7 @@ img,svg { display:block; }
 .media-seek input:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); box-shadow:none; }
 .media-control-row,.media-control-group { display:flex; align-items:center; gap:4px; }
 .media-control-row { min-width:0; justify-content:space-between; }
-.media-control { min-width:36px; height:36px; display:inline-grid; place-items:center; padding:0 8px; border:1px solid transparent; border-radius:var(--radius-md); background:transparent; color:var(--media-foreground); cursor:pointer; }
+.media-control { min-width:36px; height:36px; display:inline-grid; place-items:center; padding:0; border:1px solid transparent; border-radius:var(--radius-full); background:transparent; color:var(--media-foreground); cursor:pointer; }
 .media-control:hover,.media-control.active { background:var(--media-track); color:var(--primary); }
 .media-time { padding:0 7px; color:var(--media-muted); font:var(--text-xs) var(--font-code); white-space:nowrap; }
 .media-volume { width:82px; accent-color:var(--primary); }

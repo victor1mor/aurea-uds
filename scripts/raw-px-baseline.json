@@ -3,7 +3,7 @@
   "_como_regerar": "python scripts/validate.py --write-raw-px-baseline",
   "_gerado_em": "2026-07-30",
   "arquivos": {
-    "packages/core/src/aurea.css": 109,
+    "packages/core/src/aurea.css": 108,
     "scripts/build-catalog.mjs": 0,
     "apps/catalog/content/**/*.mjs": 0,
     "core: raio cru": 5,

@@ -47,6 +47,11 @@ entrou na branch.
     ou afastamento escrito à mão e sombra no lugar da linha. O teste de navegador do contrato de
     foco mede também as peças que a amostra antiga não via. Os dois foram provados contra o CSS
     antigo.
+- **O botão só de ícone é redondo**, em todos os tamanhos, na web e no nativo
+  ([ADR-0052](decisions/0052-o-botao-so-de-icone-e-redondo.md), decisão do Victor, 25/09/2026).
+  Era um quadrado de canto 10px (6px nos dois menores). Vale para todo `IconButton`, os botões de
+  fechar e os controles do player, que também perderam o recheio lateral para ficarem quadrados
+  (eram 38×36). É como o HeroUI 3.2.6 faz.
 
 ---
 

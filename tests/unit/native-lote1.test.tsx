@@ -247,13 +247,13 @@ describe("Button e IconButton", () => {
     expect(props("Pressable").accessibilityRole).toBe("button");
   });
 
-  // DEFEITO: o quadrado do IconButton virar círculo. O core usa `--radius-md`/`--radius-sm` no
-  // `.btn-icon` justamente por isso — medido lá, não escolhido aqui.
-  it("IconButton não usa o raio pill", () => {
-    render(<Envolve><IconButton name="add" label="a" icons={ICONES} /></Envolve>);
+  // O IconButton é REDONDO em todos os tamanhos (ADR-0052, 25/09/2026): quadrado com o raio da
+  // cápsula, como o `.btn-icon` do core. Até a 0.10.1 era `radiusMd`/`radiusSm`, e este teste
+  // cobrava o contrário — ele reprova no código antigo.
+  it.each(["xs", "sm", "md", "lg", "xl"] as const)("IconButton %s é redondo: quadrado com o raio da cápsula", (size) => {
+    render(<Envolve><IconButton name="add" label="a" size={size} icons={ICONES} /></Envolve>);
     const caixa = estilo("View");
-    expect(caixa.borderRadius).toBe(tokens.size.radiusMd);
-    expect(caixa.borderRadius).not.toBe(999);
+    expect(caixa.borderRadius).toBe(tokens.size.radiusControl);
     expect(caixa.width).toBe(caixa.height);
   });
 });

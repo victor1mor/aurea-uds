@@ -228,10 +228,11 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
 }
 
 /**
- * Botão quadrado, só glifo.
+ * Botão REDONDO, só glifo.
  *
- * O raio NÃO é o pill: o core usa `--radius-md` no `.btn-icon` (e `--radius-sm` nos dois menores),
- * porque um quadrado com raio 999 vira círculo. Medido lá, não escolhido aqui.
+ * O raio é o da cápsula (`radiusControl`, 999) num quadrado, e um quadrado com raio 999 é um
+ * círculo — o mesmo que o `.btn-icon` do core faz. Decisão do Victor, 25/09/2026 (ADR-0052): era
+ * `--radius-md`/`--radius-sm`, e o HeroUI 3.2.6 faz o botão só de ícone redondo.
  *
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
@@ -249,7 +250,7 @@ export function IconButton({
 
   const caixa = React.useMemo(() => ({
     height: lado, width: lado, paddingHorizontal: 0,
-    borderRadius: size === "xs" || size === "sm" ? t.size.radiusSm : t.size.radiusMd,
+    borderRadius: t.size.radiusControl,
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
     borderColor: appearance === "outline" ? corDaBorda : "transparent",
   }), [t, lado, size, appearance, cor.solido, corDaBorda]);
