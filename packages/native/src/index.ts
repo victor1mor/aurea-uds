@@ -202,3 +202,7 @@ export {Image, Gallery} from "./midia.js";
 export type {
   ImageProps, GalleryProps, AureaGalleryItem, AureaImageSource,
 } from "./midia.js";
+
+// E3 (25/09/2026): onde o `SegmentedControl` e as `Tabs` ficam quando cabem na linha. Só o TIPO:
+// a `FilaRolante` continua fora da porta da frente.
+export type {AureaFilaJustify} from "./rolagem.js";

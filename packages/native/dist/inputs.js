@@ -39,6 +39,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { comOpacidade, criarFolha } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
@@ -79,11 +80,14 @@ const folha = criarFolha((t) => ({
     campoNoGrupo: { flex: 1, minWidth: 0, paddingVertical: 0, textAlignVertical: "center" },
     encaixe: { flexDirection: "row", alignItems: "center", flexShrink: 0, gap: t.size.space1 },
     marcaBase: {
-        alignItems: "center", justifyContent: "center", marginTop: 1,
+        alignItems: "center", justifyContent: "center",
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
         backgroundColor: t.color.fieldBg,
     },
-    linhaDeControle: { flexDirection: "row", alignItems: "flex-start", gap: 9 },
+    // E5: a marca no MEIO da altura do texto, como o HeroUI Native. Era `flex-start` com um
+    // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
+    linhaDeControle: { flexDirection: "row", alignItems: "center", gap: 9 },
+    linhaNoTopo: { alignItems: "flex-start" },
     trilho: { borderRadius: t.size.radiusFull, backgroundColor: t.color.muted,
         borderWidth: t.size.borderWidth, borderColor: t.color.border, justifyContent: "center" },
     polegar: { position: "absolute", left: 3, borderRadius: t.size.radiusFull },
@@ -327,7 +331,7 @@ export function PasswordField({ defaultVisible = false, size, disabled, autoCapi
     const inativo = disabled ?? campo?.disabled;
     return (_jsxs(InputGroup, { size: tam, disabled: inativo, testID: testID, children: [leading ? _jsx(InputGroupAddon, { children: leading }) : null, _jsx(Input, { ...rest, size: tam, disabled: inativo, autoCapitalize: autoCapitalize, secureTextEntry: !visivel, style: style, testID: testID ? `${testID}-campo` : undefined }), _jsx(InputGroupAddon, { children: _jsx(IconButton, { name: visivel ? "view--off" : "view", label: visivel ? strings.passwordHide : strings.passwordShow, appearance: "ghost", size: tam === "lg" ? "md" : "sm", disabled: inativo, icons: icons, onPress: () => setVisivel(v => !v), testID: testID ? `${testID}-olho` : undefined }) })] }));
 }
-function ControleMarcado({ papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, }) {
+function ControleMarcado({ papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
     const s = folha(t);
     const campo = useCampo();
@@ -339,12 +343,16 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
     // A marca é METADE da altura do controle — `aurea.css:871`, e é o que faz ela crescer junto
     // com a densidade sem token próprio.
     const lado = alturaDoTamanho(t, tam) / 2;
+    // `start`: o meio da marca no meio da PRIMEIRA linha do rótulo. A linha é a do `Text size="sm"`
+    // do rótulo (entrelinha normal), então a conta sai dos mesmos tokens que desenham o texto.
+    const linha = t.size.textBase * t.size.leadingNormal;
+    const noTopo = align === "start" ? { marginTop: Math.max(0, (linha - lado) / 2) } : null;
     return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => onChange?.(!checked), disabled: inativo, accessibilityRole: papel, accessibilityState: { checked: !!checked, disabled: !!inativo }, 
         // ⚠ O `accessibilityLabel` de fora vence o `label` escrito, e existe para o caso em que o
         // nome JÁ está na tela ao lado — uma linha de `NavList`, por exemplo. Sem ele, ou o nome
         // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
-        accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, style: [s.linhaDeControle, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
-                    s.marcaBase,
+        accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
+                    s.marcaBase, noTopo,
                     { width: lado, height: lado,
                         borderRadius: papel === "radio" ? t.size.radiusFull : 5 },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: t.color.controlSelected },
@@ -452,12 +460,12 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
  * há teclado aqui**, então o que resta é o que já se faz à mão: papel de grupo de rádio, um
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
-export function SegmentedControl({ items, value, onChange, label, disabled, style, ...rest }) {
+export function SegmentedControl({ items, value, onChange, label, disabled, justify, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const campo = useCampo();
     const inativo = disabled ?? campo?.disabled;
-    return (_jsx(FilaRolante, { children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
+    return (_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
                 const ativo = it.value === value;
                 return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", accessibilityState: { checked: ativo, disabled: !!inativo }, accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, ativo && s.segmentoAtivo], children: [typeof it.label === "string"
                             ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
@@ -519,7 +527,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
                     peleDaMarca,
                     inativo && s.desabilitado,
                     style,
-                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsx(View, { style: s.lista, onStartShouldSetResponder: () => true, children: _jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", accessibilityState: { selected: it.value === value, disabled: !!it.disabled }, style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }) })] }) }) })] }));
+                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsx(SafeAreaView, { edges: ["bottom"], style: s.lista, children: _jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", accessibilityState: { selected: it.value === value, disabled: !!it.disabled }, style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }) })] }) }) })] }));
 }
 /**
  * A pilha de campos, com o respiro do `--space-5`.

@@ -36,7 +36,7 @@ import {Badge} from "./display.js";
 import {comOpacidade, criarFolha} from "./estilos.js";
 import {Icon, type IconName} from "./icon.js";
 import {Card} from "./layout.js";
-import {FilaRolante} from "./rolagem.js";
+import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -663,6 +663,8 @@ export interface TabsProps extends ViewProps {
   onChange?: (id: string) => void;
   /** Nome da fila de abas para o leitor de tela. */
   label?: string;
+  /** Onde a fila de abas fica quando cabe: `start` (padrão), `center` ou `end` (E3). */
+  justify?: AureaFilaJustify;
 }
 
 /**
@@ -698,7 +700,7 @@ export interface TabsProps extends ViewProps {
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export function Tabs({tabs, value, onChange, label, style, ...rest}: TabsProps) {
+export function Tabs({tabs, value, onChange, label, justify, style, ...rest}: TabsProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
@@ -714,7 +716,7 @@ export function Tabs({tabs, value, onChange, label, style, ...rest}: TabsProps) 
           não achava a terceira. **Quem nomeou foi o consumidor, pedindo outra coisa** (a fila de
           opções do `SegmentedControl`), e a regra *"quem mais tem esse problema?"* trouxe até
           aqui. A `FilaRolante` é a mesma peça nos dois. */}
-      <FilaRolante>
+      <FilaRolante justify={justify}>
         <View accessibilityRole="tablist" accessibilityLabel={label ?? strings.tabsLabel}
               style={s.abas}>
           {tabs.map((it) => {

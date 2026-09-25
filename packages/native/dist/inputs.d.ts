@@ -1,5 +1,6 @@
 import * as React from "react";
 import { TextInput, type KeyboardTypeOptions, type StyleProp, type TextInputProps, type TextStyle, type ViewProps, type ViewStyle } from "react-native";
+import { type AureaFilaJustify } from "./rolagem.js";
 import { type AureaIconRegistry, type IconName } from "./icon.js";
 export type AureaFieldSize = "sm" | "md" | "lg";
 type ContextoDeCampo = {
@@ -151,6 +152,12 @@ interface ControleProps {
     style?: StyleProp<ViewStyle>;
     testID?: string;
     /**
+     * Onde a marca fica na altura do texto — E5, 25/09/2026. `center` (o padrão) põe a marca no meio
+     * do bloco, como o HeroUI Native (`radio.css` e `control-field.css`: `align-items: center`).
+     * `start` a põe no meio da PRIMEIRA linha, para rótulo longo, de várias linhas.
+     */
+    align?: "center" | "start";
+    /**
      * O nome para quem usa leitor de tela, quando ele NÃO deve aparecer escrito no controle.
      *
      * É o caso de uma linha de `NavList`: o nome já está na linha, então repeti-lo no `label` o
@@ -275,6 +282,8 @@ export interface SegmentedControlProps extends ViewProps {
     /** Nome do grupo para o leitor de tela. */
     label?: string;
     disabled?: boolean;
+    /** Onde o controle fica quando cabe na linha: `start` (padrão), `center` ou `end` (E3). */
+    justify?: AureaFilaJustify;
 }
 /**
  * Um de poucos, lado a lado.
@@ -284,7 +293,7 @@ export interface SegmentedControlProps extends ViewProps {
  * há teclado aqui**, então o que resta é o que já se faz à mão: papel de grupo de rádio, um
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
-export declare function SegmentedControl({ items, value, onChange, label, disabled, style, ...rest }: SegmentedControlProps): React.JSX.Element;
+export declare function SegmentedControl({ items, value, onChange, label, disabled, justify, style, ...rest }: SegmentedControlProps): React.JSX.Element;
 export interface SelectProps {
     items: Array<{
         value: string;

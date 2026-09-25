@@ -30,18 +30,27 @@ import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
     // ── Badge ──────────────────────────────────────────────────────────────────────────────────
-    // `3px 9px` de padding e `gap:6` são crus no CSS e entram como estão: são a medida da peça na
-    // web, e arredondá-los para token faria a mesma pílula ter duas larguras nos dois alvos.
+    // 🔴 AS MEDIDAS SÃO AS DO `Chip` DO HeroUI NATIVE (1.0.10, `chip.css`) — ordem do Victor de
+    // 25/09/2026: "se o HeroUI já tem, vamos usar as deles". Recheio, letra, linha e vão:
+    //     sm  8 × 2  · letra 12 · linha 16        md  12 × 4 · letra 14 · linha 20
+    //     lg  16 × 6 · letra 16 · linha 24        vão 4 entre ponto, texto e adornos
+    // Até a 0.10.1 eram `3px 9px` e `gap:6` crus, e o texto saía com entrelinha 1,0: no Android a
+    // perna do g e do p era cortada (a mesma causa do E1 no `Button`). A linha do HeroUI é ≥ 1,33 ×
+    // a letra, e o IBM Plex precisa de 1,3. O raio continua a cápsula da Aurea (identidade) e a
+    // borda continua nossa.
+    // ⚠ O `xs` NÃO existe no HeroUI (é o contador sobre ícone): fica a medida nossa, 16 de altura,
+    // agora com letra 12 e linha 16 para caber a letra inteira.
     selo: {
-        flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6,
-        minHeight: t.size.space6, paddingVertical: 3, paddingHorizontal: 9,
+        flexDirection: "row", alignItems: "center", justifyContent: "center", gap: t.size.space1,
+        paddingVertical: t.size.space1, paddingHorizontal: t.size.space3,
         borderWidth: t.size.borderWidth, borderRadius: t.size.radiusControl,
         backgroundColor: t.color.secondary, borderColor: t.color.border,
     },
     selo_xs: { minHeight: t.size.space4, paddingVertical: 0, paddingHorizontal: t.size.space1, borderWidth: 0 },
-    selo_sm: { minHeight: t.size.space5, paddingVertical: 0, paddingHorizontal: t.size.space2 },
+    selo_sm: { paddingVertical: t.size.space05, paddingHorizontal: t.size.space2 },
     selo_md: {},
-    selo_lg: { minHeight: t.size.space7, paddingVertical: 0, paddingHorizontal: t.size.space3 },
+    // 6 de recheio vertical: no HeroUI é `calc(var(--spacing) * 1.5)`, e `--spacing` é o `space1`.
+    selo_lg: { paddingVertical: t.size.space1 * 1.5, paddingHorizontal: t.size.space4 },
     ponto: { width: t.size.space2, height: t.size.space2, borderRadius: t.size.radiusFull },
     // `fit="content"` (R-01): o mesmo `alignSelf` que a âncora abaixo já usa para não esticar.
     justo: { alignSelf: "flex-start" },
@@ -85,6 +94,11 @@ export const formatarContagem = (count, max = 99) => count > max ? `${max}+` : S
  * usa selo com miniatura, e prop sem consumidor é superfície pública para manter de graça. Volta
  * quando houver tela que peça.
  */
+/** A letra e a linha do selo, do `Chip` do HeroUI Native (ver a folha). O token direto, e não o
+ *  `size` do `Text`, que no telefone sobe um degrau (ADR-0050) — o HeroUI não sobe no chip. */
+const LETRA_DO_SELO = (t, size) => size === "lg" ? { fontSize: t.size.textBase, lineHeight: t.size.space6 }
+    : size === "md" ? { fontSize: t.size.textSm, lineHeight: t.size.space5 }
+        : { fontSize: t.size.textXs, lineHeight: t.size.space4 };
 export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, count, max = 99, showZero, leading, trailing, fit = "auto", anchor, badgeContent, invisible, children, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
@@ -123,7 +137,7 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
             style,
         ], ...(anchor ? { accessibilityElementsHidden: true,
             importantForAccessibility: "no-hide-descendants" } : rest), children: [dot && !soPonto && _jsx(View, { style: [s.ponto, { backgroundColor: corDoTexto }] }), !soPonto && leading, typeof miolo === "string" || typeof miolo === "number"
-                ? _jsx(Text, { size: size === "lg" ? "sm" : "xs", weight: 500, leading: "none", style: { color: corDoTexto }, children: miolo })
+                ? _jsx(Text, { weight: 500, style: [LETRA_DO_SELO(t, size), { color: corDoTexto }], children: miolo })
                 : miolo, !soPonto && trailing] }));
     if (!anchor)
         return selo;

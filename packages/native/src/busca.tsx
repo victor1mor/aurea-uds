@@ -67,9 +67,10 @@
 // folha, e ele leva `search` — que mapeia nos dois.
 import * as React from "react";
 import {
-  Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View,
+  Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, type TextInputProps,
   type StyleProp, type ViewStyle,
 } from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {IconButton} from "./actions.js";
 import {criarFolha} from "./estilos.js";
 import {Spinner} from "./feedback.js";
@@ -140,7 +141,15 @@ const folha = criarFolha((t: AureaTokens) => ({
   // para abrir. `accessible={false}` no JSX porque o gatilho JÁ anuncia tudo: um segundo botão
   // aqui seria a mesma informação duas vezes. O `Icon` sem rótulo já se esconde sozinho
   // (`icon.tsx:104`), então não sobra nada para o leitor de tela tropeçar.
-  setaToque: {height: "100%", justifyContent: "center"},
+  // E8 (25/09/2026): a seta tem a MESMA caixa de toque do X — `targetMin` (44) de altura mínima,
+  // conteúdo no meio —, e duas caixas iguais numa fila centralizada têm o mesmo centro, com ou
+  // sem o X. Era `height: "100%"`, e a fila `acoes` não tem altura: medido no Yoga 3 (o motor do
+  // RN), com a errata de compatibilidade (`Errata.All`) o 100% se resolvia errado — a seta ficava
+  // com 25 de altura e o centro dela 5 abaixo do centro do X e do campo, que é o que o app viu no
+  // Android. Nos outros modos o defeito some. Com a caixa igual, os três centros coincidem nas 18
+  // combinações medidas (3 erratas × campo de 32/36/40 × com e sem X), e o toque da seta sobe de
+  // 16 para 44 de altura.
+  setaToque: {minHeight: t.size.targetMin, justifyContent: "center"},
 
   // A folha, com a mesma anatomia da do `Select` (`inputs.tsx:98-113`) — e é de propósito que
   // sejam iguais: são o mesmo gesto, e duas folhas diferentes para o mesmo gesto é como uma
@@ -243,6 +252,13 @@ export interface ComboboxProps {
   chevron?: IconName | false;
   /** O glifo da lupa no campo da folha. Registre-o, ou passe `false`. */
   searchIcon?: IconName | false;
+  /**
+   * O teclado do campo de busca da folha — E6, 25/09/2026. Para buscar um ANO ou um código, passe
+   * `"number-pad"`: sem isto abre o teclado de letras. É o `keyboardType` do `TextInput`, com o
+   * mesmo prefixo `search` do `searchPlaceholder` e do `searchIcon`, que também são do campo da
+   * folha e não do gatilho. Padrão: o teclado de texto.
+   */
+  searchKeyboardType?: TextInputProps["keyboardType"];
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -279,7 +295,7 @@ export interface ComboboxProps {
 export function Combobox({
   items, value, onValueChange, onSearchChange, searchDelay = ESPERA_PADRAO, loading,
   onEndReached, placeholder, searchPlaceholder, empty, clearable = true, draggable = true,
-  disabled, size, chevron = "chevron--down", searchIcon = "search", style, testID,
+  disabled, size, chevron = "chevron--down", searchIcon = "search", searchKeyboardType, style, testID,
 }: ComboboxProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -424,16 +440,15 @@ export function Combobox({
             do teclado: a pessoa digita e não vê resultado nenhum. É a peça que bloqueia o
             cadastro, no sistema em que ninguém deste projeto testou. */}
         <KeyboardAvoiding style={s.fundoDaLista}>
-          {/* O fundo tocável é IRMÃO, não ancestral — e o `onStartShouldSetResponder` abaixo é o
-              par dele. Os dois juntos são a correção de 10/09/2026 do `Select`: sem o segundo, um
-              `View` não vira responder, o toque atravessa para este `Pressable` e **tocar no
-              corpo da folha a fechava**. Aqui o defeito seria pior: tocar para posicionar o
-              cursor no campo de busca fecharia a folha. */}
+          {/* O fundo tocável é IRMÃO, não ancestral: é isso que impede que tocar no corpo da folha
+              a feche (correção de 10/09/2026 do `Select`). Aqui o defeito seria pior: tocar para
+              posicionar o cursor no campo de busca fecharia a folha. */}
           <Pressable style={s.fundoDeToque} onPress={fechar} accessible={false}
                      testID={testID ? `${testID}-fundo` : undefined} />
+          {/* E4: a folha NÃO reivindica mais o toque — ver o `Select` (`inputs.tsx`), mesma causa
+              suspeita e mesma razão de ser seguro: o fundo é irmão. */}
           <Animated.View style={[s.lista, {transform: [{translateY: arrasto}]}]}
-                         onLayout={(e) => { altura.current = e.nativeEvent.layout.height; }}
-                         onStartShouldSetResponder={() => true}>
+                         onLayout={(e) => { altura.current = e.nativeEvent.layout.height; }}>
             {/* 🔴 O PUXADOR E O ARRASTO SÃO A SAÍDA DO iOS, e eles são cópia deliberada do
                 `BottomSheet` (`overlays.tsx:433-470`) — mesma medida, mesmo limiar, mesma curva.
                 ⚠ **O gesto mora SÓ no cabeçalho, e essa é a diferença em relação ao Lote 5.**
@@ -466,6 +481,7 @@ export function Combobox({
                 // plataforma, não decoração: diz à pessoa que aquele campo é de busca antes de
                 // ela digitar a primeira letra.
                 returnKeyType="search"
+                keyboardType={searchKeyboardType}
                 style={[
                   s.campoDeTexto,
                   {fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
@@ -523,6 +539,9 @@ export function Combobox({
                 </Pressable>
               )}
             />
+            {/* E4: o recuo da barra de botões do Android, só o que a folha fica atrás dela. Com o
+                teclado aberto a folha sobe, deixa de ficar atrás da barra, e o recuo vai a zero. */}
+            <SafeAreaView edges={["bottom"]} />
           </Animated.View>
         </KeyboardAvoiding>
       </Modal>

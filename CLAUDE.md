@@ -67,6 +67,14 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
 - Quando divergem, vale o de cima. Na dúvida, pergunte antes de escolher.
 - ⚠ **O HeroUI não manda na identidade da Aurea** (seção 5). Dele se copia o desenho da peça; a
   aparência continua sendo a nossa.
+- **HeroUI sempre primeiro** (ordem do Victor, 25/09/2026): *"HeroUI sempre vamos dar prioridade
+  a ele"*. Quando ele **não tem** a peça que estamos criando, ela se cria **pensando como ele
+  criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea.
+- **As medidas vêm do HeroUI** (ordem do Victor, 25/09/2026): *"não vamos ficar inventando
+  medidas, se HeroUI já tem vamos usar as deles, que já é validado; só criamos medidas e tamanho em
+  componente exclusivo nosso"*. Recheio, altura, letra, linha e vão de peça que o HeroUI tem se
+  leem no pacote dele (`@heroui/styles` na web, `heroui-native` no telefone) e se escrevem com os
+  tokens que dão o mesmo número. A identidade (seção 5: raio, cor, fonte) continua nossa.
 
 ---
 
@@ -108,6 +116,18 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
      um anel de foco único, `focus-ring` (B-09).
 4. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
+
+### Lote E e decisões de 25/09/2026
+
+- **`0.11.0` · Lote E** (achados do app de 25/09/2026, nativo) no pedido de junção #6: E1, E3, E4
+  (causa não confirmada no aparelho), E5, E6, E7, E8 e o `Badge` com as medidas do `Chip` do
+  HeroUI Native. O aceite de aparelho são os blocos E1–E8 do `apps/native-smoke`.
+- **Para o Lote 3** (decisões do Victor, 25/09/2026): **E2**, o `Button` do nativo obedece o pai,
+  como no HeroUI, com um `align` no `Stack` do nativo · **M-01** (`render`) só no `Button`, no
+  `IconButton` e nos itens de navegação · **M-02** (`classNames` por parte) **descartado**: o
+  HeroUI tirou isso na versão atual, e abriria a aparência das peças por dentro.
+- **A medir:** as medidas das peças da WEB contra o `@heroui/styles`, pela regra das medidas.
+  O `Badge` do nativo foi o primeiro a passar; a web não foi medida.
 
 ### Pendências soltas, sem lote nem decisão
 

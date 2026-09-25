@@ -1,6 +1,7 @@
 import * as React from "react";
 import { type ViewProps } from "react-native";
 import { type IconName } from "./icon.js";
+import { type AureaFilaJustify } from "./rolagem.js";
 export interface AureaNavItem {
     id: string;
     label: React.ReactNode;
@@ -197,6 +198,8 @@ export interface TabsProps extends ViewProps {
     onChange?: (id: string) => void;
     /** Nome da fila de abas para o leitor de tela. */
     label?: string;
+    /** Onde a fila de abas fica quando cabe: `start` (padrão), `center` ou `end` (E3). */
+    justify?: AureaFilaJustify;
 }
 /**
  * As abas DENTRO da tela — trocar o painel, não trocar de página.
@@ -231,4 +234,4 @@ export interface TabsProps extends ViewProps {
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export declare function Tabs({ tabs, value, onChange, label, style, ...rest }: TabsProps): React.JSX.Element;
+export declare function Tabs({ tabs, value, onChange, label, justify, style, ...rest }: TabsProps): React.JSX.Element;

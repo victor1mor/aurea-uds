@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/native",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "A Aurea UDS para React Native: o provider de tema e densidade, os componentes e os ícones do Carbon sobre react-native-svg.",
   "keywords": [
     "aurea",
