@@ -15,10 +15,22 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [Unreleased] — Lote 3, em andamento
+## [Unreleased]
 
-Ainda **sem número**: a versão sobe nos nove arquivos quando o lote fechar. Por ora, o que já
-entrou na branch.
+Nada além da `0.12.0`, logo abaixo, que está pronta e não publicada. As peças novas dela são
+`Text`, `Heading`, `Paragraph` e `Code` (B-02). Quando o Victor publicar, esta seção fica vazia.
+
+---
+
+## [0.12.0] — 2026-09-25
+
+⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+
+É o **Lote 3** inteiro: A-04, B-09 (com os menus), o botão só de ícone redondo (ADR-0052), B-02,
+E2 e M-01 — o M-02 foi descartado. Sobe o número do meio porque **pode quebrar**: o A-04 recusa
+nome de ícone escrito numa variável `string`, o E2 faz o botão do nativo esticar numa coluna sem
+alinhamento, e o botão só de ícone muda de forma. As imagens de antes e depois do B-09, dos menus,
+do botão redondo e do B-02 foram aprovadas pelo Victor.
 
 ### ⚠ Mudou — leia antes de atualizar
 
@@ -1429,7 +1441,7 @@ dates nor the camera installs nothing extra and sees no warning.
 
 ---
 
-## [Unreleased]
+## ~~[Unreleased]~~ — notas escritas depois da 0.6.0, que saíram na 0.7.0 (título corrigido em 25/09/2026)
 
 No published code changed. What follows is documentation, one decision, and one gate — recorded
 here because the next release must not go out without the privacy fix below being understood.

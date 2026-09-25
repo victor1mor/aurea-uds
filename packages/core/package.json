@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/core",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "O CSS da Aurea UDS e o comportamento em JavaScript puro. Importe @aurea-uds/fonts/css antes deste.",
   "keywords": [
     "aurea",

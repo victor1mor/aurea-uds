@@ -1,11 +1,11 @@
 {
   "_porque": "A superficie que os seis pacotes REALMENTE publicaram no npm, congelada. Existe porque o CHANGELOG.md apodrece em silencio: entre 31/07 e 11/08/2026 entraram 27 componentes e 39 props sem uma linha de nota, e nenhum gate viu. O check 31 compara esta lista com packages/contracts/registry e exige que todo componente que entrou DEPOIS esteja citado no corpo do [Unreleased] do CHANGELOG.md. E' o achado I1 (numero escrito a mao que ninguem confere) aplicado a nota de release.",
   "_como_regerar": "NAO se regera a cada sessao — este arquivo e' um marco de RELEASE. Ele so muda quando uma versao nova e' publicada no npm: nesse momento, `git show <commit-do-publish>:manifest.json` da a lista, e a versao/commit/data abaixo passam a ser os do release novo. Regerar fora de um release apaga a divida em vez de cobra-la. O campo  aponta para o COMMIT DE RELEASE, e ele so' pode ser gravado num commit SEGUINTE: um hash nao cabe dentro do proprio commit que o produz. Tentar por amend gera um hash novo e o campo passa a apontar para um commit que deixou de existir — medido em 30/08/2026.",
-  "_de_onde_veio": "manifest.json desta arvore no commit do release da 0.6.0 — o manifest.json e gerado e gateado pelo check 20, entao a lista e medida, nao digitada. A da 0.5.0 veio de 68f7677; a da 0.3.0, do manifest daquele release; a da 0.2.0, de 450d8df; a da 0.1.0, de a0dd056. Regravado em 25/09/2026 a partir de `git show 84447cb:manifest.json`, o commit de onde a 0.10.1 foi publicada (junção do pedido #4 do repositório público): a lista estava em dia menos o MediaEmbed (N-10, publicado na 0.8.11), e o cabeçalho ainda dizia 0.6.0.",
+  "_de_onde_veio": "manifest.json desta arvore no commit do release da 0.6.0 — o manifest.json e gerado e gateado pelo check 20, entao a lista e medida, nao digitada. A da 0.5.0 veio de 68f7677; a da 0.3.0, do manifest daquele release; a da 0.2.0, de 450d8df; a da 0.1.0, de a0dd056. Regravado em 25/09/2026 a partir de `git show 84447cb:manifest.json`, o commit de onde a 0.10.1 foi publicada (junção do pedido #4 do repositório público): a lista estava em dia menos o MediaEmbed (N-10, publicado na 0.8.11), e o cabeçalho ainda dizia 0.6.0. Regravado de novo em 25/09/2026 a partir de `git show 261d636:manifest.json`, a junção do pedido #6 de onde a 0.11.0 foi publicada (nenhuma peça nova nela).",
   "_limite_declarado": "Cobra COMPONENTE (nome de ficha), que e' o eixo mais grosso e o mais barato de medir. NAO cobra prop nova, token novo, subpath novo nem classe removida: um changelog pode passar neste gate e ainda estar incompleto. Cobrir prop exigiria diff de assinatura contra o commit do release, e o validador nao le git de proposito (roda em tarball). Ampliar isto e' trabalho de quando doer.",
-  "version": "0.10.1",
-  "commit": "84447cb3",
-  "date": "2026-09-24",
+  "version": "0.11.0",
+  "commit": "261d636d",
+  "date": "2026-09-25",
   "components": [
     "AccessGate",
     "Accordion",

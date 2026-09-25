@@ -110,7 +110,8 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    parte) · B-02 (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco
    com uma linha). Na leitura de 24/09/2026, ele vem **antes** da `1.0`, porque muda a estrutura
    das peças.
-   - Tudo na branch `claude/friendly-cerf-ctu0v7`, sem pedido de junção: sai junto, no fim do lote.
+   - **Lote 3 FECHADO em 25/09/2026, na versão `0.12.0`**, na branch `claude/friendly-cerf-ctu0v7`.
+     Espera o "pode" do Victor para o push e o pedido de junção. O E2 e o M-01 entraram nele.
    - **A-04 feito.** Pode quebrar a compilação de quem passa ícone numa variável `string`.
    - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
      `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.
