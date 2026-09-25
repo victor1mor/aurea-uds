@@ -17,15 +17,50 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada além da `0.12.0`, logo abaixo, que está pronta e não publicada. As peças novas dela são
-`Text`, `Heading`, `Paragraph` e `Code` (B-02), e o `ThemeToggle`. Quando o Victor publicar, esta
-seção fica vazia.
+Nada além da `0.12.1` e da `0.12.0`, logo abaixo, prontas e não publicadas. As peças novas delas
+são `Text`, `Heading`, `Paragraph` e `Code` (B-02), o `ThemeToggle` e, no nativo, o `LinkButton`.
+Quando o Victor publicar, esta seção fica vazia.
+
+---
+
+## [0.12.1] — 2026-09-25
+
+⏳ **Não publicada.** Vem depois da `0.12.0`: o push espera o Victor juntar e publicar aquela. Só
+o nativo muda. Achados E9, E10 e E4b do app, de 25/09/2026.
+
+### Consertado
+
+- **E10 · as folhas de baixo (`Select`, `Combobox`, `BottomSheet`) desciam atrás dos botões do
+  Android.** Causa lida no fonte do `react-native-safe-area-context` 5.9.1 (`SafeAreaView.kt`,
+  `SafeAreaUtils.kt`): dentro de um `Modal` o `SafeAreaView` não acha o `SafeAreaProvider` do app,
+  mede a si mesmo, e com altura 0 não calcula recuo nenhum. O do `Combobox` e o do `BottomSheet`
+  eram vazios — o recuo da `0.11.0` ficava em zero. Agora o recuo vem do contexto do React, como no
+  `Select` do HeroUI Native, e vira um espaço no fim da folha. Sem `SafeAreaProvider` no app, vale a
+  medida da abertura (`initialWindowMetrics`). O `Select` passa a cobrir a tela toda, como as outras
+  duas, e o `Combobox` zera o recuo com o teclado aberto. Aceite de aparelho: bloco E10 do
+  `apps/native-smoke`, com a navegação de 3 botões e com a de gestos.
+
+### Adicionado
+
+- **E9 · `LinkButton`, no nativo.** O botão-texto que encosta na margem: é o `LinkButton` do
+  HeroUI Native, um `Button` sem fundo, sem recuo dos lados, sem borda e sem altura fixa. A área
+  de toque continua com 44 de altura. Como todo botão, obedece o pai: encostado na margem é
+  `Stack align="start"`.
+
+### Diagnóstico, sem conserto
+
+- **E4b · a lista do `Combobox` não rola no Android** (a do `Select` passou a rolar na `0.11.0`).
+  A suspeita de a lista crescer do tamanho do conteúdo foi medida no motor de layout do React
+  Native e **não se confirmou**: a lista fica limitada (614 de altura para 2400 de conteúdo). O
+  bloco E4b do `apps/native-smoke` abre seis cópias da folha, cada uma sem uma diferença em
+  relação ao `Select`; o resultado no aparelho decide o conserto.
 
 ---
 
 ## [0.12.0] — 2026-09-25
 
-⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+⏳ **Não publicada.** Empurrada em 25/09/2026, no pedido de junção #8; juntar e publicar é do
+Victor.
 
 É o **Lote 3** inteiro: A-04, B-09 (com os menus), o botão só de ícone redondo (ADR-0052), B-02,
 E2 e M-01 — o M-02 foi descartado. Sobe o número do meio porque **pode quebrar**: o A-04 recusa

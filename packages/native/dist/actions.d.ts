@@ -49,7 +49,11 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
  * descreve: lá, um botão desabilitado some da ordem de foco e a explicação pendurada nele não é
  * lida por ninguém. Aqui não há o dilema, então não há o par `aria-disabled` — um só basta.
  */
-export declare function Button({ children, appearance, tone, size, leadingIcon, trailingIcon, leading, trailing, icons, fullWidth, pressed, disabled, accessibilityLabel, ...rest }: ButtonProps): React.JSX.Element;
+export declare function Button(props: ButtonProps): React.JSX.Element;
+export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth"> {
+}
+/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
+export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
     name: IconName;
     /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
