@@ -49,15 +49,19 @@ export interface GridProps extends ViewProps {
  * sozinho e ESTICA a última linha. **No React Native não existe CSS Grid**: o layout é flexbox e
  * nada mais (medido no contrato do `react-native`; não há `display:grid`).
  *
- * O que se faz aqui é o mais próximo honesto: `flexWrap` com uma largura mínima por filho. A
- * diferença visível é uma só, e fica declarada em vez de escondida — **os itens da última linha
- * não esticam para preencher a sobra**. Quem precisa de célula elástica passa `flexGrow: 1` no
- * filho; é decisão de tela, não do primitivo.
+ * ~~O que se faz aqui é o mais próximo honesto: `flexWrap` com uma largura mínima por filho. A
+ * diferença visível é uma só (…) os itens da última linha não esticam para preencher a sobra.~~
+ * **E11 (0.12.1):** a diferença era maior do que a declarada — nenhuma linha repartia a sobra.
+ * Com `minColumnWidth={150}` numa linha de 372 ficavam duas colunas de 150 e 56 vazios (medido no
+ * Yoga). Agora a grade mede a própria largura (`onLayout`) e faz a conta do `auto-fill` da web:
+ * cabem `⌊(largura + vão) / (mínimo + vão)⌋` colunas, e a sobra se reparte entre elas. Na última
+ * linha a célula continua do tamanho de UMA coluna, como na web. Antes da medida (o primeiro
+ * quadro), vale a largura mínima de sempre.
  *
  * O `min(…, 100%)` da web tem par aqui: `maxWidth: "100%"` no filho, para a coluna não estourar o
  * contêiner quando o texto cresce — a mesma lição que a Fase 11 registrou no CSS.
  */
-export declare function Grid({ minColumnWidth, style, children, ...rest }: GridProps): React.JSX.Element;
+export declare function Grid({ minColumnWidth, style, children, onLayout, ...rest }: GridProps): React.JSX.Element;
 /** Qual superfície o cartão é. Mesmos seis nomes da ficha da web. */
 export interface SeparatorProps extends ViewProps {
     orientation?: "horizontal" | "vertical";

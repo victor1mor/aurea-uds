@@ -124,9 +124,9 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
      `Code`, nos dois alvos. O `Text` do nativo que já existe fica.
    - **M-01 só em `Button`, `IconButton` e itens de navegação; M-02 descartado; E2 entra aqui**
      (decisões do Victor, 25/09/2026 — ver "Lote E e decisões", abaixo).
-   - **`0.12.1` pronta na branch, só local** (25/09/2026, com "pode"): E10 (recuo de baixo das
-     três folhas), E9 (`LinkButton` no nativo) e o diagnóstico E4b no `apps/native-smoke`. O push
-     espera o Victor juntar e publicar a `0.12.0` (pedido #8), senão entraria no mesmo pedido.
+   - **`0.12.1` pronta, no pedido #9** (25–26/09/2026, com "pode"): E10 (recuo de baixo das
+     três folhas), E9 (`LinkButton` no nativo), E11 (`Grid` reparte a sobra) e o diagnóstico E4b
+     no `apps/native-smoke`. Pedido #9. A `0.12.0` foi juntada (pedido #8) e falta publicar.
      **E4b sem causa:** o motor de layout desmentiu a suspeita da altura; quem decide é o bloco
      E4b no aparelho (R0 a R5).
 4. **Lote E** saiu na `0.11.0` — ver "Lote E e decisões de 25/09/2026", abaixo.

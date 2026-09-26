@@ -26,7 +26,7 @@ Quando o Victor publicar, esta seção fica vazia.
 ## [0.12.1] — 2026-09-25
 
 ⏳ **Não publicada.** Vem depois da `0.12.0`: o push espera o Victor juntar e publicar aquela. Só
-o nativo muda. Achados E9, E10 e E4b do app, de 25/09/2026.
+o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2026.
 
 ### Consertado
 
@@ -39,6 +39,14 @@ o nativo muda. Achados E9, E10 e E4b do app, de 25/09/2026.
   medida da abertura (`initialWindowMetrics`). O `Select` passa a cobrir a tela toda, como as outras
   duas, e o `Combobox` zera o recuo com o teclado aberto. Aceite de aparelho: bloco E10 do
   `apps/native-smoke`, com a navegação de 3 botões e com a de gestos.
+
+- **E11 · o `Grid` do nativo não repartia a sobra entre as colunas.** Com `minColumnWidth={150}`
+  numa linha de 372 (tela de 412) ficavam duas colunas de 150 e 56 pontos vazios — medido no motor
+  de layout. A web usa `repeat(auto-fill, minmax(min, 1fr))`, que reparte. Agora a grade mede a
+  própria largura e faz a mesma conta: o mínimo continua decidindo quantas colunas cabem, a sobra
+  se reparte entre elas, e a célula sozinha da última linha fica do tamanho de uma coluna, como na
+  web. No primeiro quadro, antes da medida, vale a largura mínima de sempre. O filho continua
+  esticando na altura (C14). Aceite de aparelho: bloco E11 do `apps/native-smoke`.
 
 ### Adicionado
 
