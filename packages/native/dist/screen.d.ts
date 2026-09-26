@@ -66,3 +66,13 @@ export interface ScreenProps extends ViewProps {
  * nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
  */
 export declare function Screen({ edges, padded, scroll, background, onRefresh, refreshing, footer, style, children, ...rest }: ScreenProps): React.JSX.Element;
+/** O recuo de baixo do sistema (barra de botões ou de gestos), em dp. */
+export declare function useRecuoDoSistema(): number;
+/**
+ * O espaço do recuo do sistema no fim de uma folha de baixo. Uso interno.
+ * `comTeclado`: com o teclado aberto a folha sobe acima dele e deixa de ficar atrás da barra do
+ * sistema, e o espaço vai a zero — senão sobraria uma faixa vazia entre a lista e o teclado.
+ */
+export declare function RecuoDaFolha({ comTeclado }: {
+    comTeclado?: boolean;
+}): React.JSX.Element;

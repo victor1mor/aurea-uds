@@ -22,7 +22,10 @@
 // de memória. As quatro perguntas do Lote 0 estão no NATIVE.md §7; as TRÊS do `Screen` estão no
 // README daqui e repetidas em cada bloco abaixo.
 import * as React from "react";
-import {Platform, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions} from "react-native";
+import {
+  Animated, FlatList, KeyboardAvoidingView, Modal, PanResponder, Platform, Pressable, ScrollView,
+  StyleSheet, Text, TextInput, View, useWindowDimensions,
+} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {useFonts} from "expo-font";
 // O `SafeAreaProvider` NÃO é exigido pelo `Screen` — o `SafeAreaView` dele é view nativa e lê o
@@ -35,7 +38,7 @@ import {
   Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox, Code,
   Heading, Paragraph,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, IconButton, Input,
-  KPI, KeyboardAvoiding, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
+  KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
   Spinner, Stack, Status, Stepper, Switch, Table, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
@@ -279,6 +282,7 @@ function Tela({irParaScreen, irParaLote2}) {
 
       {/* ── E ── os achados do app de 25/09/2026 ─────────────────────────── */}
       <BlocosLoteE t={t} />
+      <Blocos0121 t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1401,6 +1405,100 @@ function BlocosLoteE({t}) {
       <Bloco t={t} n="E6" titulo="A busca do ano abre o teclado de NÚMEROS?"
         criterio={"Abra o \"Ano (Combobox)\" do bloco E4: o teclado que sobe tem de ser o de números."}>
         <Text style={{color: t.color.mutedForeground}}>Ver o Combobox do bloco E4.</Text>
+      </Bloco>
+    </>
+  );
+}
+
+// 0.12.1 (25/09/2026). E9 e E10 são aceites de conserto; o E4b é DIAGNÓSTICO: a causa de a lista
+// do `Combobox` não rolar no Android não está achada, e o motor de layout desmentiu a suspeita
+// da altura (a lista fica limitada: 614 de altura para 2400 de conteúdo). A folha abaixo é uma
+// CÓPIA da do `Combobox` (`busca.tsx`), peça por peça, e cada botão abre a cópia sem UMA das
+// diferenças que ela tem em relação ao `Select`. A primeira abre a cópia inteira: se ELA rolar, a
+// cópia não é fiel e o diagnóstico não vale.
+const DIAGNOSTICOS = [
+  {id: "R0", nome: "Cópia inteira (tem de NÃO rolar, como o Combobox)", tira: null},
+  {id: "R1", nome: "Sem o teclado abrir sozinho", tira: "teclado"},
+  {id: "R2", nome: "Sem a peça que sobe com o teclado", tira: "kav"},
+  {id: "R3", nome: "Lista simples no lugar da de catálogo", tira: "flatlist"},
+  {id: "R4", nome: "Sem o arrasto para fechar", tira: "arrasto"},
+  {id: "R5", nome: "Folha que não cobre a barra do sistema", tira: "translucida"},
+];
+function FolhaDeDiagnostico({t, tira, aberta, fechar}) {
+  const arrasto = React.useRef(new Animated.Value(0)).current;
+  const gestos = React.useMemo(() => PanResponder.create({
+    onMoveShouldSetPanResponder: (_e, g) => g.dy > 6,
+    onPanResponderMove: (_e, g) => { if (g.dy > 0) arrasto.setValue(g.dy); },
+    onPanResponderRelease: () => arrasto.setValue(0),
+  }), [arrasto]);
+  const maos = tira === "arrasto" ? null : gestos.panHandlers;
+  const Envolta = tira === "kav" ? View : KeyboardAvoidingView;
+  const envoltaProps = tira === "kav" ? {} : {behavior: Platform.OS === "ios" ? "padding" : "height"};
+  const item = ({item: it}) => (
+    <Pressable onPress={fechar} style={{minHeight: t.size.controlHLg, justifyContent: "center",
+      paddingHorizontal: t.size.space4, paddingVertical: t.size.space2}}>
+      <Text style={{color: t.color.foreground, fontSize: t.size.textBase}}>{it.label}</Text>
+    </Pressable>
+  );
+  return (
+    <Modal visible={aberta} transparent animationType="slide" onRequestClose={fechar}
+      statusBarTranslucent={tira !== "translucida"} navigationBarTranslucent={tira !== "translucida"}>
+      <Envolta {...envoltaProps} style={{flex: 1, justifyContent: "flex-end", backgroundColor: "#00000080"}}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={fechar} accessible={false} />
+        <Animated.View style={{maxHeight: "90%", backgroundColor: t.color.popover,
+          borderTopLeftRadius: t.size.radiusCard, borderTopRightRadius: t.size.radiusCard,
+          borderWidth: t.size.borderWidth, borderColor: t.color.border, transform: [{translateY: arrasto}]}}>
+          <View style={{alignItems: "center", paddingVertical: t.size.space2}} {...maos}>
+            {/* A medida do puxador do `Combobox` (`busca.tsx`), copiada. */}
+            <View style={{width: 40, height: 4, borderRadius: t.size.radiusFull, backgroundColor: t.color.borderStrong}} />
+          </View>
+          <View style={{height: t.size.controlHMd, marginHorizontal: t.size.space4, justifyContent: "center"}} {...maos}>
+            <TextInput autoFocus={tira !== "teclado"} placeholder="Buscar" keyboardType="number-pad"
+              placeholderTextColor={t.color.subtleForeground} style={{color: t.color.foreground}} />
+          </View>
+          {tira === "flatlist"
+            ? <ScrollView keyboardShouldPersistTaps="handled">{CINQUENTA.map((it) => <React.Fragment key={it.value}>{item({item: it})}</React.Fragment>)}</ScrollView>
+            : <FlatList data={CINQUENTA} keyExtractor={(i) => i.value} keyboardShouldPersistTaps="handled" renderItem={item} />}
+        </Animated.View>
+      </Envolta>
+    </Modal>
+  );
+}
+function Blocos0121({t}) {
+  const [aberta, setAberta] = React.useState(null);
+  const [ano, setAno] = React.useState(undefined);
+  const [anoBusca, setAnoBusca] = React.useState(null);
+  const [folha, setFolha] = React.useState(false);
+  return (
+    <>
+      <Bloco t={t} n="E9" titulo="O botão-texto encosta na margem?"
+        criterio={"A borda esquerda de \"Escolher pela marca\" e de \"Não encontrei\" fica na MESMA "
+          + "linha da borda esquerda do rótulo \"Placa\". O toque continua fácil (44 de altura)."}>
+        <Stack align="start">
+          <Field label="Placa"><Input placeholder="ABC1D23" /></Field>
+          <LinkButton tone="brand">Escolher pela marca</LinkButton>
+          <LinkButton>Não encontrei. Cadastrar à mão</LinkButton>
+        </Stack>
+      </Bloco>
+      <Bloco t={t} n="E10" titulo="O fim da lista fica ACIMA dos botões do sistema?"
+        criterio={"Teste com a navegação de 3 botões E com a de gestos. Role cada lista até o 1977: ele "
+          + "fica inteiro acima da barra do sistema e dá para tocar. O fundo da folha pode ir até a borda."}>
+        <Select label="Ano (Select)" placeholder="Escolha o ano" items={CINQUENTA} value={ano} onChange={setAno} />
+        <Combobox placeholder="Ano (Combobox)" items={CINQUENTA} value={anoBusca} onValueChange={setAnoBusca} />
+        <Button onPress={() => setFolha(true)}>Abrir a folha de baixo (BottomSheet)</Button>
+        <BottomSheet open={folha} onClose={() => setFolha(false)} title="Filtros">
+          {CINQUENTA.slice(0, 12).map((it) => <Text key={it.value} style={{color: t.color.foreground}}>{it.label}</Text>)}
+        </BottomSheet>
+      </Bloco>
+      <Bloco t={t} n="E4b" titulo="DIAGNÓSTICO: qual destas listas rola?"
+        criterio={"No ANDROID. Abra cada uma e tente arrastar a lista com o dedo, SEM digitar. Anote qual "
+          + "rola e qual não rola, e mande a lista (ex.: R0 não, R1 sim…). A R0 tem de NÃO rolar."}>
+        {DIAGNOSTICOS.map((d) => (
+          <Button key={d.id} appearance="outline" onPress={() => setAberta(d.id)}>{`${d.id} · ${d.nome}`}</Button>
+        ))}
+        {DIAGNOSTICOS.map((d) => (
+          <FolhaDeDiagnostico key={d.id} t={t} tira={d.tira} aberta={aberta === d.id} fechar={() => setAberta(null)} />
+        ))}
       </Bloco>
     </>
   );

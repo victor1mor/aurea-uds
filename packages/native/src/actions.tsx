@@ -193,11 +193,16 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
  * descreve: lá, um botão desabilitado some da ordem de foco e a explicação pendurada nele não é
  * lida por ninguém. Aqui não há o dilema, então não há o par `aria-disabled` — um só basta.
  */
-export function Button({
+export function Button(props: ButtonProps) {
+  return <CorpoDoBotao {...props} />;
+}
+
+/** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
+function CorpoDoBotao({
   children, appearance = "solid", tone = "neutral", size = "md",
   leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed,
-  disabled, accessibilityLabel, ...rest
-}: ButtonProps) {
+  disabled, accessibilityLabel, semRecuo = false, ...rest
+}: ButtonProps & {semRecuo?: boolean}) {
   const t = useAureaTokens();
   const s = folha(t);
   const marca = useSobreAMarca();
@@ -211,7 +216,10 @@ export function Button({
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
     borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
     ...(fullWidth ? {flex: 1} : null),
-  }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth]);
+    // `.link-button__root` do HeroUI Native: `height: auto; padding: 0`, e o `.button__root` já
+    // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
+    ...(semRecuo ? {height: undefined, paddingHorizontal: 0, borderWidth: 0} : null),
+  }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
 
   const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
 
@@ -243,6 +251,21 @@ export function Button({
       </View>
     </Pressable>
   );
+}
+
+// ── LinkButton (E9, 0.12.1) ──────────────────────────────────────────────────────────────────
+// O botão-texto que encosta na margem: "Escolher pela marca", "Não encontrei. Cadastrar à mão". É
+// o `LinkButton` do HeroUI Native (`link-button.tsx` + `link-button.css`, 1.0.10): o `Button` sem
+// fundo, com `height: auto; padding: 0`, e a variante travada — quem quer caixa usa o `Button`.
+// ⚠ A área de toque não encolhe: o alvo continua com `targetMin` (44) de altura, e só o desenho
+// perde o recuo. ⚠ Como todo `Button`, ele obedece o pai (E2): numa coluna que estica, o texto vai
+// para o meio; encostado na margem é `Stack align="start"`.
+
+export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth"> {}
+
+/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
+export function LinkButton(props: LinkButtonProps) {
+  return <CorpoDoBotao {...props} appearance="ghost" semRecuo />;
 }
 
 export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {

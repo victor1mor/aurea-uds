@@ -70,13 +70,13 @@ import {
   Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, type TextInputProps,
   type StyleProp, type ViewStyle,
 } from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
 import {IconButton} from "./actions.js";
 import {criarFolha} from "./estilos.js";
 import {Spinner} from "./feedback.js";
 import {Icon, type IconName} from "./icon.js";
 import {KeyboardAvoiding, useCampo, type AureaFieldSize} from "./inputs.js";
 import {useReduceMotion} from "./movimento.js";
+import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, ForaDaMarca, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -539,9 +539,9 @@ export function Combobox({
                 </Pressable>
               )}
             />
-            {/* E4: o recuo da barra de botões do Android, só o que a folha fica atrás dela. Com o
-                teclado aberto a folha sobe, deixa de ficar atrás da barra, e o recuo vai a zero. */}
-            <SafeAreaView edges={["bottom"]} />
+            {/* E10: o recuo da barra do sistema (`RecuoDaFolha`, `screen.tsx`). Com o teclado
+                aberto a folha sobe, deixa de ficar atrás da barra, e o recuo vai a zero. */}
+            <RecuoDaFolha comTeclado />
           </Animated.View>
         </KeyboardAvoiding>
       </Modal>

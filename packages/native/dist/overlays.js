@@ -57,10 +57,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // mesma função interna com uma largura diferente.
 import * as React from "react";
 import { Animated, Easing, Modal, PanResponder, Pressable, ScrollView, View, } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "./actions.js";
 import { criarFolha } from "./estilos.js";
 import { IconButton } from "./actions.js";
+import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, ForaDaMarca } from "./theme.js";
 import { useReduceMotion } from "./movimento.js";
@@ -294,5 +294,5 @@ export function BottomSheet({ open, title, children, onClose, grabber = true, dr
             }).start();
         },
     }), [draggable, onClose, arrasto, reduzir, t.easing.easeEmphasized]);
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, ...gestos.panHandlers, onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, style: [s.folhaBaixo, { transform: [{ translateY: arrasto }] }, style], children: [grabber ? (_jsx(View, { style: s.puxadorArea, accessible: false, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) })) : null, title ? (_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) })) : null, _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), _jsx(SafeAreaView, { edges: ["bottom"] })] })] }) }) }));
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, ...gestos.panHandlers, onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, style: [s.folhaBaixo, { transform: [{ translateY: arrasto }] }, style], children: [grabber ? (_jsx(View, { style: s.puxadorArea, accessible: false, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) })) : null, title ? (_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) })) : null, _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), _jsx(RecuoDaFolha, {})] })] }) }) }));
 }

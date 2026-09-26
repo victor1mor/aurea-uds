@@ -43,12 +43,12 @@ import {
   type KeyboardTypeOptions, type StyleProp, type TextInputProps, type TextStyle,
   type ViewProps, type ViewStyle,
 } from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
 import {comOpacidade, criarFolha} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
 import {useReduceMotion} from "./movimento.js";
+import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -1039,8 +1039,8 @@ export function Select({
       </Pressable>
 
       <ForaDaMarca>
-      <Modal visible={aberto} transparent animationType="slide"
-             onRequestClose={() => setAberto(false)}>
+      <Modal visible={aberto} transparent animationType="slide" statusBarTranslucent
+             navigationBarTranslucent onRequestClose={() => setAberto(false)}>
         {/* O toque fora fecha — é o que a pessoa espera de uma folha, e o `onRequestClose` acima
             é o BOTÃO VOLTAR do Android, que sem isso deixaria a folha presa. */}
         <View style={s.fundoDaLista}>
@@ -1054,9 +1054,9 @@ export function Select({
               (`JSResponderHandler.onInterceptTouchEvent`), e o `ScrollView` de dentro não os
               recebe. Suspeita do app, não confirmada no aparelho: o aceite é o bloco E4 do
               `apps/native-smoke` (50 itens, rolar até o último).
-              A borda de baixo é um `SafeAreaView`, a mesma peça do `Screen`: recua só o que a
-              folha fica atrás da barra de botões do sistema. */}
-          <SafeAreaView edges={["bottom"]} style={s.lista}>
+              E10: a borda de baixo é o `RecuoDaFolha` (`screen.tsx`), igual nas três folhas. O
+              `SafeAreaView` da 0.11.0 não recuava dentro do `Modal` — a razão está lá. */}
+          <View style={s.lista}>
             <ScrollView>
               {items.map((it) => (
                 <Pressable
@@ -1070,7 +1070,8 @@ export function Select({
                 </Pressable>
               ))}
             </ScrollView>
-          </SafeAreaView>
+            <RecuoDaFolha />
+          </View>
         </View>
       </Modal>
       </ForaDaMarca>

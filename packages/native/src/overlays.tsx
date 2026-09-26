@@ -59,10 +59,10 @@ import {
   Animated, Easing, Modal, PanResponder, Pressable, ScrollView, View,
   type StyleProp, type ViewStyle,
 } from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
 import {Button} from "./actions.js";
 import {criarFolha} from "./estilos.js";
 import {IconButton} from "./actions.js";
+import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, ForaDaMarca} from "./theme.js";
 import {useReduceMotion} from "./movimento.js";
@@ -489,9 +489,9 @@ export function BottomSheet({
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>
             {children}
           </Corpo>
-          {/* E4: o recuo da barra de botões do Android — o mesmo `SafeAreaView` do `Select` e do
-              `Combobox`, que recua só o que a folha fica de fato atrás dela. */}
-          <SafeAreaView edges={["bottom"]} />
+          {/* E10: o recuo da barra do sistema — o mesmo `RecuoDaFolha` do `Select` e do
+              `Combobox` (`screen.tsx`, onde está por que o `SafeAreaView` não servia aqui). */}
+          <RecuoDaFolha />
         </Animated.View>
       </View>
     </Modal>

@@ -144,7 +144,11 @@ const folha = criarFolha((t) => ({
  * descreve: lá, um botão desabilitado some da ordem de foco e a explicação pendurada nele não é
  * lida por ninguém. Aqui não há o dilema, então não há o par `aria-disabled` — um só basta.
  */
-export function Button({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, ...rest }) {
+export function Button(props) {
+    return _jsx(CorpoDoBotao, { ...props });
+}
+/** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
+function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, semRecuo = false, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const marca = useSobreAMarca();
@@ -157,7 +161,10 @@ export function Button({ children, appearance = "solid", tone = "neutral", size 
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
         ...(fullWidth ? { flex: 1 } : null),
-    }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth]);
+        // `.link-button__root` do HeroUI Native: `height: auto; padding: 0`, e o `.button__root` já
+        // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
+        ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
+    }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
     const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
     return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, accessibilityState: { disabled: !!disabled, ...(pressed === undefined ? null : { checked: pressed }) }, style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
@@ -171,6 +178,10 @@ export function Button({ children, appearance = "solid", tone = "neutral", size 
                     // maiores têm linha de 24 e medem 32 ou mais.
                     ? _jsx(Text, { size: FONTE[size], weight: 500, leading: "normal", style: { color: corDoTexto }, children: children })
                     : children, trailingIcon ? _jsx(Icon, { name: trailingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, trailing ?? null] }) }));
+}
+/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
+export function LinkButton(props) {
+    return _jsx(CorpoDoBotao, { ...props, appearance: "ghost", semRecuo: true });
 }
 /**
  * Botão REDONDO, só glifo.

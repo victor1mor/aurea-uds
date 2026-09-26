@@ -39,12 +39,12 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { comOpacidade, criarFolha } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
 import { useReduceMotion } from "./movimento.js";
+import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca } from "./theme.js";
 const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
@@ -527,7 +527,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
                     peleDaMarca,
                     inativo && s.desabilitado,
                     style,
-                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsx(SafeAreaView, { edges: ["bottom"], style: s.lista, children: _jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", accessibilityState: { selected: it.value === value, disabled: !!it.disabled }, style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }) })] }) }) })] }));
+                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsxs(View, { style: s.lista, children: [_jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", accessibilityState: { selected: it.value === value, disabled: !!it.disabled }, style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }), _jsx(RecuoDaFolha, {})] })] }) }) })] }));
 }
 /**
  * A pilha de campos, com o respiro do `--space-5`.
