@@ -37,7 +37,7 @@ import {SafeAreaProvider, useSafeAreaInsets} from "react-native-safe-area-contex
 import {
   Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox, Code,
   Heading, Paragraph,
-  ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, IconButton, Input,
+  ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, Grid, IconButton, Input,
   KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
   Spinner, Stack, Status, Stepper, Switch, Table, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
@@ -1489,6 +1489,16 @@ function Blocos0121({t}) {
         <BottomSheet open={folha} onClose={() => setFolha(false)} title="Filtros">
           {CINQUENTA.slice(0, 12).map((it) => <Text key={it.value} style={{color: t.color.foreground}}>{it.label}</Text>)}
         </BottomSheet>
+      </Bloco>
+      <Bloco t={t} n="E11" titulo="As duas colunas ocupam a largura toda?"
+        criterio={"Grade com mínimo de 150 e quatro cartões: duas colunas IGUAIS, e a da direita encosta "
+          + "na borda direita do cartão deste bloco — sem faixa vazia. \"Abastecimento\" cabe inteiro, "
+          + "sem quebrar no meio da palavra."}>
+        <Grid minColumnWidth={150}>
+          {["Abastecimento", "Manutenção", "Seguro", "Multas"].map((n) => (
+            <Card key={n}><Text style={{color: t.color.foreground, fontSize: t.size.textSm}}>{n}</Text></Card>
+          ))}
+        </Grid>
       </Bloco>
       <Bloco t={t} n="E4b" titulo="DIAGNÓSTICO: qual destas listas rola?"
         criterio={"No ANDROID. Abra cada uma e tente arrastar a lista com o dedo, SEM digitar. Anote qual "

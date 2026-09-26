@@ -11,7 +11,7 @@
 // do `Stack` na web escreve o porquê — *"um primitivo de layout que aceita qualquer espaçamento é
 // como um sistema deixa de ter espaçamento"*. Reabrir isso no nativo criaria dois sistemas.
 import * as React from "react";
-import {Pressable, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
+import {Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 // `ref` chega por PROPS, sem `forwardRef` — e' o padrao do React 19, e e' o que o
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
@@ -138,21 +138,46 @@ export interface GridProps extends ViewProps {
  * sozinho e ESTICA a última linha. **No React Native não existe CSS Grid**: o layout é flexbox e
  * nada mais (medido no contrato do `react-native`; não há `display:grid`).
  *
- * O que se faz aqui é o mais próximo honesto: `flexWrap` com uma largura mínima por filho. A
- * diferença visível é uma só, e fica declarada em vez de escondida — **os itens da última linha
- * não esticam para preencher a sobra**. Quem precisa de célula elástica passa `flexGrow: 1` no
- * filho; é decisão de tela, não do primitivo.
+ * ~~O que se faz aqui é o mais próximo honesto: `flexWrap` com uma largura mínima por filho. A
+ * diferença visível é uma só (…) os itens da última linha não esticam para preencher a sobra.~~
+ * **E11 (0.12.1):** a diferença era maior do que a declarada — nenhuma linha repartia a sobra.
+ * Com `minColumnWidth={150}` numa linha de 372 ficavam duas colunas de 150 e 56 vazios (medido no
+ * Yoga). Agora a grade mede a própria largura (`onLayout`) e faz a conta do `auto-fill` da web:
+ * cabem `⌊(largura + vão) / (mínimo + vão)⌋` colunas, e a sobra se reparte entre elas. Na última
+ * linha a célula continua do tamanho de UMA coluna, como na web. Antes da medida (o primeiro
+ * quadro), vale a largura mínima de sempre.
  *
  * O `min(…, 100%)` da web tem par aqui: `maxWidth: "100%"` no filho, para a coluna não estourar o
  * contêiner quando o texto cresce — a mesma lição que a Fase 11 registrou no CSS.
  */
-export function Grid({minColumnWidth = 240, style, children, ...rest}: GridProps) {
-  const s = folha(useAureaTokens());
-  const celula = React.useMemo(
-    () => ({flexGrow: 0, flexShrink: 1, flexBasis: minColumnWidth, minWidth: minColumnWidth, maxWidth: "100%" as const}),
-    [minColumnWidth]);
+export function Grid({minColumnWidth = 240, style, children, onLayout, ...rest}: GridProps) {
+  const t = useAureaTokens();
+  const s = folha(t);
+  const [largura, setLargura] = React.useState<number | null>(null);
+  const plano = (StyleSheet.flatten([s.grid, style]) ?? {}) as Record<string, unknown>;
+  const vao = numero(plano.columnGap) ?? numero(plano.gap) ?? t.size.space4;
+  // A largura por dentro: o `onLayout` dá a de fora, e o recuo e a borda do `style` saem dela.
+  const recuo = (numero(plano.paddingLeft) ?? numero(plano.paddingHorizontal) ?? numero(plano.padding) ?? 0)
+    + (numero(plano.paddingRight) ?? numero(plano.paddingHorizontal) ?? numero(plano.padding) ?? 0)
+    + (numero(plano.borderLeftWidth) ?? numero(plano.borderWidth) ?? 0)
+    + (numero(plano.borderRightWidth) ?? numero(plano.borderWidth) ?? 0);
+  const celula = React.useMemo(() => {
+    if (largura == null || largura <= 0) {
+      return {flexGrow: 0, flexShrink: 1, flexBasis: minColumnWidth, minWidth: minColumnWidth, maxWidth: "100%" as const};
+    }
+    // `repeat(auto-fill, minmax(min(mínimo, 100%), 1fr))` da web, em conta.
+    const colunas = Math.max(1, Math.floor((largura + vao) / (minColumnWidth + vao)));
+    const coluna = (largura - vao * (colunas - 1)) / colunas;
+    // ⚠ A base vai ARREDONDADA PARA BAIXO e o teto é o número exato: o motor arredonda cada
+    // largura ao pixel do aparelho, e duas colunas exatas podiam somar um fio a mais que a linha
+    // e cair uma para a linha de baixo. Com a base menor elas sempre cabem, e o `flexGrow` as
+    // leva até o teto — a linha cheia fecha certo, e a célula sozinha da última linha para no
+    // tamanho de uma coluna.
+    return {flexGrow: 1, flexShrink: 1, flexBasis: Math.floor(coluna), maxWidth: coluna, minWidth: 0};
+  }, [largura, minColumnWidth, vao]);
   return (
-    <View style={[s.grid, style]} {...rest}>
+    <View style={[s.grid, style]} {...rest}
+      onLayout={(e) => { setLargura(e.nativeEvent.layout.width - recuo); onLayout?.(e); }}>
       {React.Children.map(children, (filho) => {
         if (!React.isValidElement(filho)) return filho;
         // 🔴 O `flexGrow: 1` É O ITEM C14, e ele existe porque a célula NÃO basta.
@@ -180,6 +205,9 @@ export function Grid({minColumnWidth = 240, style, children, ...rest}: GridProps
     </View>
   );
 }
+
+/** O número de um estilo, ou nada — porcentagem e `"auto"` não entram na conta da grade. */
+const numero = (v: unknown): number | undefined => (typeof v === "number" ? v : undefined);
 
 /** Qual superfície o cartão é. Mesmos seis nomes da ficha da web. */
 export interface SeparatorProps extends ViewProps {
