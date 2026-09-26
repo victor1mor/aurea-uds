@@ -97,6 +97,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.9.0` | Lote 2, primeira leva: B-01, A-08, C-01, C-03, C-04, C-05, C-07, C-13, B-03 |
 | `0.10.0` | Lote 2, segunda leva: B-07, B-10, B-12, A-05, A-14 — junção `5ca8d3e` (pedido #16). **Publicada em 24/09/2026**, pelo terminal do Victor |
 | `0.10.1` | R-05, a metade que faltava: `criarGlifo` desenha a traço — pedido #4 do repositório público. **Publicada em 24/09/2026**, pelo terminal do Victor |
+| `0.11.0` | Lote E (nativo): E1, E3, E4, E5, E6, E7, E8 e o `Badge` nas medidas do HeroUI — pedido #6. **Publicada em 25/09/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -134,9 +135,10 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 ### Lote E e decisões de 25/09/2026
 
-- **`0.11.0` · Lote E** (achados do app de 25/09/2026, nativo) no pedido de junção #6: E1, E3, E4
-  (causa não confirmada no aparelho), E5, E6, E7, E8 e o `Badge` com as medidas do `Chip` do
-  HeroUI Native. O aceite de aparelho são os blocos E1–E8 do `apps/native-smoke`.
+- **`0.11.0` · Lote E** (achados do app de 25/09/2026, nativo), **publicada em 25/09/2026 sem o
+  aceite de aparelho**: E1, E3, E4, E5, E6, E7, E8 e o `Badge` com as medidas do `Chip` do HeroUI
+  Native. **Pendente:** a sessão do app medir no aparelho, ou rodar os blocos E1–E8 do
+  `apps/native-smoke`. O **E4** decide a causa (suspeita, não medida); o E7 e o E8 são desenho.
 - **Para o Lote 3** (decisões do Victor, 25/09/2026): **E2**, o `Button` do nativo obedece o pai,
   como no HeroUI, com um `align` no `Stack` do nativo · **M-01** (`render`) só no `Button`, no
   `IconButton` e nos itens de navegação · **M-02** (`classNames` por parte) **descartado**: o

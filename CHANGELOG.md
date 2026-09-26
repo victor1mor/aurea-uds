@@ -149,7 +149,13 @@ do botão redondo e do B-02 foram aprovadas pelo Victor.
 
 ## [0.11.0] — 2026-09-25
 
-⏳ **Não publicada.** Espera o "pode" do Victor para o push, e o publish é dele.
+✅ **PUBLICADA em 25/09/2026, nos sete pacotes, pelo terminal do Victor.** Não conferida no
+registro, de propósito: logo depois do publish nenhuma leitura de registro decide.
+
+⚠ **Publicada sem o aceite de aparelho.** Os blocos E1–E8 do `apps/native-smoke` não rodaram
+antes. O que só o aparelho confirma: o **E4** (a causa de a lista não rolar é suspeita, não
+medida), o **E7** (o botão verde com contorno sobre o amarelo) e o **E8** (medido no Yoga, não no
+Android). Quem mede é a sessão do app, com a 0.11.0 instalada.
 
 É o **Lote E**: os achados do app de 25/09/2026, todos no nativo. Sai separado do Lote 3, a partir
 do `main`, porque são defeitos que o app sente hoje. Sobe o número do meio por causa de **uma**
