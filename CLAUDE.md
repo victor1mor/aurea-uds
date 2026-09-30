@@ -100,6 +100,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.11.0` | Lote E (nativo): E1, E3, E4, E5, E6, E7, E8 e o `Badge` nas medidas do HeroUI — pedido #6. **Publicada em 25/09/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.12.0` | Lote 3: A-04, B-09, ADR-0052, B-02, E2, M-01 e o `ThemeToggle` — pedido #8. **Não saiu sozinha**: foi publicada dentro da `0.12.1` |
 | `0.12.1` | E9 (`LinkButton`), E10 (recuo das folhas), E11 (`Grid` reparte a sobra) — pedidos #9 e #10. **Publicada em 26/09/2026**, pelo terminal do Victor. Leva a `0.12.0` junto |
+| `0.12.2` | O `BottomNav` mais baixo, na web e no nativo (aprovado pela imagem) e dois patches de segurança da CI — pedido #11. **Publicada em 30/09/2026**, pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -312,7 +313,9 @@ outros projetos dele** (ordem de 31/08/2026). Falar do consumidor numa conversa 
 
 ## 9. Ferramentas
 
-- pnpm 11 (workspace em `pnpm-workspace.yaml`).
+- pnpm 12 (workspace em `pnpm-workspace.yaml`), desde 30/09/2026. O aviso "Update available" do
+  pnpm não é ordem de atualizar: a versão sobe junto no `packageManager`, no `pnpm-lock.yaml` e na CI,
+  com "pode", depois de testada numa cópia.
 - TypeScript 7 strict (o binário `tsc` é o compilador nativo; usar a linha de comando).
 - Python para scripts utilitários (`python`, não `python3`, no Windows).
 - ⚠ **O terminal do Victor é o Windows PowerShell 5.1, que não aceita `&&`.** E `;` **não é
