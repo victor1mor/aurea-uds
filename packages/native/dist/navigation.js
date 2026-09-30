@@ -78,7 +78,9 @@ const folha = criarFolha((t) => ({
     barra_content: { alignSelf: "center" },
     aba: {
         flex: 1, minWidth: 0, alignItems: "center", justifyContent: "center",
-        gap: t.size.space1, minHeight: t.size.controlHLg, padding: t.size.space1,
+        // `space05` e não `space1` — a barra mais baixa (30/09/2026, pedido do Victor, aprovado pela
+        // imagem). Com a moldura de 32 e o vão de 4 eram 9 entre o ícone e o rótulo; ver `marca`.
+        gap: t.size.space05, minHeight: t.size.controlHLg, padding: t.size.space1,
         borderRadius: t.size.radiusControl,
     },
     // Com a pílula do tamanho do conteúdo, `flex: 1` MATA as abas: no RN ele é base ZERO, e a soma
@@ -266,7 +268,10 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                         backgroundColor: t.color.primary,
                     },
                 ], children: [_jsxs(View, { style: [
-                            s.marca, redondo && s.marcaRedonda,
+                            // A moldura de 32 só serve aos indicadores redondos, em que ela VIRA o círculo. Nos
+                            // outros ela era folga vazia em volta do ícone de 24: fica da altura dele. A largura
+                            // continua 32, que é o canto do contador. Igual na web (`aurea.css`).
+                            s.marca, redondo ? s.marcaRedonda : { height: t.size.iconLg },
                             ativo && indicator === "circle" && { backgroundColor: comOpacidade(t.color.primary, 0.14) },
                             ativo && indicator === "circle-raised" && {
                                 backgroundColor: t.color.popover, boxShadow: [t.shadow.shadowMd],

@@ -17,6 +17,27 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+Nada além da `0.12.2`, logo abaixo, pronta e não publicada.
+
+---
+
+## [0.12.2] — 2026-09-30
+
+⏳ **Não publicada.** Muda a web e o nativo.
+
+### Mudou
+
+- **O `BottomNav` ficou mais baixo, na web e no nativo** (pedido do Victor, 30/09/2026, aprovado
+  pela imagem: *"ele é muito largo, e é assim por conta da distância entre o ícone em cima e o
+  texto embaixo"*). O ícone de 24 ficava dentro de uma moldura de 32, com mais um vão de 4 até o
+  rótulo — 9 pontos medidos entre um e outro. Fora dos indicadores redondos a moldura passa a ter
+  a altura do ícone, e o vão cai para `--space-05`: **a barra vai de 75 para 65 de altura** e o
+  ícone fica a 3 do rótulo. Nos indicadores redondos (`circle`, `circle-raised`,
+  `circle-outline`, `circle-bold`) a moldura de 32 continua, porque é ela que vira o círculo. A
+  largura da moldura continua 32 (é o canto do contador), e a área de toque continua com
+  `--control-h-lg` de altura mínima. Na web, a barra sem classe de indicador (a do HTML puro)
+  também encolhe.
+
 ### Removido
 
 - **As seis cópias de diagnóstico do E4b (R0 a R5) saíram do `apps/native-smoke`.** O E4b fechou

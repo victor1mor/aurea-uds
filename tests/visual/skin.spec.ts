@@ -2876,3 +2876,46 @@ for (const theme of ["dark", "light"] as const) {
     expect(m.sol).not.toBe(m.lua);
   });
 }
+
+// ── BottomNav mais baixo (30/09/2026) · a moldura só tem 32 onde vira círculo ─────────────────
+// Pedido do Victor, aprovado pela imagem: a barra era alta por causa da folga entre o ícone e o
+// rótulo — 4 em cima e 4 embaixo do ícone de 24 dentro da moldura de 32, mais o vão de 4: 9
+// medidos. Fora dos indicadores redondos a moldura fica da altura do ícone e o vão é `--space-05`.
+// A entrada tem de exercitar os DOIS lados: um indicador que encolhe e um redondo que não pode.
+const ITENS_DA_BARRA = [
+  {id: "a", label: "Início", icon: "home"}, {id: "b", label: "Relatórios", icon: "chart--line"},
+  {id: "c", label: "Gastos", icon: "wallet"}, {id: "d", label: "Perfil", icon: "user"},
+] as never;
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: BottomNav · ícone colado ao rótulo, moldura redonda preservada · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__barra-${theme}`;
+    const barra = (indicator: string) =>
+      renderToStaticMarkup(h(A.BottomNav, {items: ITENS_DA_BARRA, current: "c", indicator} as never));
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body><div id="nenhum">${barra("none")}</div><div id="pilula">${barra("pill")}</div>
+        <div id="circulo">${barra("circle")}</div><div id="negrito">${barra("circle-bold")}</div></body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    const m = await p.evaluate(() => {
+      const sonda = (css: string) => { const s = document.createElement("div"); s.style.height = css;
+        document.body.append(s); const v = s.getBoundingClientRect().height; s.remove(); return v; };
+      const medir = (id: string) => {
+        const item = document.querySelector(`#${id} .bottom-nav-item`)!;
+        const marca = item.querySelector(".bottom-nav-mark")!.getBoundingClientRect();
+        const icone = item.querySelector(".icon")!.getBoundingClientRect();
+        const rotulo = item.querySelector(".bottom-nav-label")!.getBoundingClientRect();
+        return {marca: marca.height, iconeAoRotulo: rotulo.top - icone.bottom,
+                gap: parseFloat(getComputedStyle(item).rowGap)};
+      };
+      return {nenhum: medir("nenhum"), pilula: medir("pilula"), circulo: medir("circulo"), negrito: medir("negrito"),
+              iconeLg: sonda("var(--icon-lg)"), anel: sonda("2rem"), vao: sonda("var(--space-05)")};
+    });
+    for (const k of ["nenhum", "pilula"] as const) {
+      expect(m[k].marca).toBe(m.iconeLg);
+      expect(m[k].gap).toBe(m.vao);
+      expect(m[k].iconeAoRotulo).toBeLessThanOrEqual(m.vao + 0.5);
+    }
+    for (const k of ["circulo", "negrito"] as const) expect(m[k].marca).toBe(m.anel);
+  });
+}
