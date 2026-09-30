@@ -18,7 +18,8 @@ O projeto é escrito em **português**: issues, pull requests, comentários e do
 
 ## Preparar a máquina
 
-- Node 24, pnpm 11 e Python 3.
+- Node 24, pnpm 12 e Python 3. O `pnpm` de outra versão troca sozinho para a do projeto
+  (campo `packageManager` do `package.json`).
 
 ```bash
 pnpm install

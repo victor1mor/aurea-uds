@@ -30,6 +30,7 @@ melhor aqui: `node_modules` por pacote com links, o que torna **detectável** a 
 pacote usa sem declarar — exatamente o erro que a Fase 9 estava caçando ao tornar CodeMirror,
 react-table e `qr` peers opcionais.
 
-**Consequência:** o repositório exige pnpm 11 (`packageManager` no `package.json` da raiz), e a
+**Consequência:** o repositório exige ~~pnpm 11~~ **pnpm 12** (desde 30/09/2026, com o "pode" do
+Victor; a medição está no `CHANGELOG.md`) (`packageManager` no `package.json` da raiz), e a
 CI usa a mesma versão. Quem rodar `npm install` aqui produz uma árvore diferente da que os gates
 verificam.
