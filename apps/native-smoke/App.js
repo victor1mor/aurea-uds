@@ -22,10 +22,7 @@
 // de memória. As quatro perguntas do Lote 0 estão no NATIVE.md §7; as TRÊS do `Screen` estão no
 // README daqui e repetidas em cada bloco abaixo.
 import * as React from "react";
-import {
-  Animated, FlatList, KeyboardAvoidingView, Modal, PanResponder, Platform, Pressable, ScrollView,
-  StyleSheet, Text, TextInput, View, useWindowDimensions,
-} from "react-native";
+import {Platform, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {useFonts} from "expo-font";
 // O `SafeAreaProvider` NÃO é exigido pelo `Screen` — o `SafeAreaView` dele é view nativa e lê o
@@ -1410,62 +1407,10 @@ function BlocosLoteE({t}) {
   );
 }
 
-// 0.12.1 (25/09/2026). E9 e E10 são aceites de conserto; o E4b é DIAGNÓSTICO: a causa de a lista
-// do `Combobox` não rolar no Android não está achada, e o motor de layout desmentiu a suspeita
-// da altura (a lista fica limitada: 614 de altura para 2400 de conteúdo). A folha abaixo é uma
-// CÓPIA da do `Combobox` (`busca.tsx`), peça por peça, e cada botão abre a cópia sem UMA das
-// diferenças que ela tem em relação ao `Select`. A primeira abre a cópia inteira: se ELA rolar, a
-// cópia não é fiel e o diagnóstico não vale.
-const DIAGNOSTICOS = [
-  {id: "R0", nome: "Cópia inteira (tem de NÃO rolar, como o Combobox)", tira: null},
-  {id: "R1", nome: "Sem o teclado abrir sozinho", tira: "teclado"},
-  {id: "R2", nome: "Sem a peça que sobe com o teclado", tira: "kav"},
-  {id: "R3", nome: "Lista simples no lugar da de catálogo", tira: "flatlist"},
-  {id: "R4", nome: "Sem o arrasto para fechar", tira: "arrasto"},
-  {id: "R5", nome: "Folha que não cobre a barra do sistema", tira: "translucida"},
-];
-function FolhaDeDiagnostico({t, tira, aberta, fechar}) {
-  const arrasto = React.useRef(new Animated.Value(0)).current;
-  const gestos = React.useMemo(() => PanResponder.create({
-    onMoveShouldSetPanResponder: (_e, g) => g.dy > 6,
-    onPanResponderMove: (_e, g) => { if (g.dy > 0) arrasto.setValue(g.dy); },
-    onPanResponderRelease: () => arrasto.setValue(0),
-  }), [arrasto]);
-  const maos = tira === "arrasto" ? null : gestos.panHandlers;
-  const Envolta = tira === "kav" ? View : KeyboardAvoidingView;
-  const envoltaProps = tira === "kav" ? {} : {behavior: Platform.OS === "ios" ? "padding" : "height"};
-  const item = ({item: it}) => (
-    <Pressable onPress={fechar} style={{minHeight: t.size.controlHLg, justifyContent: "center",
-      paddingHorizontal: t.size.space4, paddingVertical: t.size.space2}}>
-      <Text style={{color: t.color.foreground, fontSize: t.size.textBase}}>{it.label}</Text>
-    </Pressable>
-  );
-  return (
-    <Modal visible={aberta} transparent animationType="slide" onRequestClose={fechar}
-      statusBarTranslucent={tira !== "translucida"} navigationBarTranslucent={tira !== "translucida"}>
-      <Envolta {...envoltaProps} style={{flex: 1, justifyContent: "flex-end", backgroundColor: "#00000080"}}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={fechar} accessible={false} />
-        <Animated.View style={{maxHeight: "90%", backgroundColor: t.color.popover,
-          borderTopLeftRadius: t.size.radiusCard, borderTopRightRadius: t.size.radiusCard,
-          borderWidth: t.size.borderWidth, borderColor: t.color.border, transform: [{translateY: arrasto}]}}>
-          <View style={{alignItems: "center", paddingVertical: t.size.space2}} {...maos}>
-            {/* A medida do puxador do `Combobox` (`busca.tsx`), copiada. */}
-            <View style={{width: 40, height: 4, borderRadius: t.size.radiusFull, backgroundColor: t.color.borderStrong}} />
-          </View>
-          <View style={{height: t.size.controlHMd, marginHorizontal: t.size.space4, justifyContent: "center"}} {...maos}>
-            <TextInput autoFocus={tira !== "teclado"} placeholder="Buscar" keyboardType="number-pad"
-              placeholderTextColor={t.color.subtleForeground} style={{color: t.color.foreground}} />
-          </View>
-          {tira === "flatlist"
-            ? <ScrollView keyboardShouldPersistTaps="handled">{CINQUENTA.map((it) => <React.Fragment key={it.value}>{item({item: it})}</React.Fragment>)}</ScrollView>
-            : <FlatList data={CINQUENTA} keyExtractor={(i) => i.value} keyboardShouldPersistTaps="handled" renderItem={item} />}
-        </Animated.View>
-      </Envolta>
-    </Modal>
-  );
-}
+// 0.12.1 (25/09/2026). Os aceites de aparelho dos consertos E9, E10 e E11. ~~O E4b era
+// diagnóstico~~ — fechou em 30/09/2026 sem defeito (a lista testada no app era curta), e as seis
+// cópias da folha do `Combobox` (R0 a R5) saíram daqui.
 function Blocos0121({t}) {
-  const [aberta, setAberta] = React.useState(null);
   const [ano, setAno] = React.useState(undefined);
   const [anoBusca, setAnoBusca] = React.useState(null);
   const [folha, setFolha] = React.useState(false);
@@ -1499,16 +1444,6 @@ function Blocos0121({t}) {
             <Card key={n}><Text style={{color: t.color.foreground, fontSize: t.size.textSm}}>{n}</Text></Card>
           ))}
         </Grid>
-      </Bloco>
-      <Bloco t={t} n="E4b" titulo="DIAGNÓSTICO: qual destas listas rola?"
-        criterio={"No ANDROID. Abra cada uma e tente arrastar a lista com o dedo, SEM digitar. Anote qual "
-          + "rola e qual não rola, e mande a lista (ex.: R0 não, R1 sim…). A R0 tem de NÃO rolar."}>
-        {DIAGNOSTICOS.map((d) => (
-          <Button key={d.id} appearance="outline" onPress={() => setAberta(d.id)}>{`${d.id} · ${d.nome}`}</Button>
-        ))}
-        {DIAGNOSTICOS.map((d) => (
-          <FolhaDeDiagnostico key={d.id} t={t} tira={d.tira} aberta={aberta === d.id} fechar={() => setAberta(null)} />
-        ))}
       </Bloco>
     </>
   );

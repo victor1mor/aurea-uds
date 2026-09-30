@@ -17,16 +17,20 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada além da `0.12.1` e da `0.12.0`, logo abaixo, prontas e não publicadas. As peças novas delas
-são `Text`, `Heading`, `Paragraph` e `Code` (B-02), o `ThemeToggle` e, no nativo, o `LinkButton`.
-Quando o Victor publicar, esta seção fica vazia.
+### Removido
+
+- **As seis cópias de diagnóstico do E4b (R0 a R5) saíram do `apps/native-smoke`.** O E4b fechou
+  sem defeito (ver a `0.12.1`), e o app de teste fica só com o que ainda é aceite. Nenhum pacote
+  muda.
 
 ---
 
 ## [0.12.1] — 2026-09-25
 
-⏳ **Não publicada.** Vem depois da `0.12.0`: o push espera o Victor juntar e publicar aquela. Só
-o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2026.
+✅ **PUBLICADA em 26/09/2026, às 13:00 (Brasília), nos sete pacotes, pelo terminal do Victor** —
+do commit `49c8104` (junção do pedido #10). O pacote publicado foi baixado e conferido em
+30/09/2026: o E9, o E10 e o E11 estão dentro dele. Leva junto tudo da `0.12.0`, que não saiu
+sozinha no npm. Só o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2026.
 
 ### Consertado
 
@@ -57,7 +61,10 @@ o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2026.
 
 ### Diagnóstico, sem conserto
 
-- **E4b · a lista do `Combobox` não rola no Android** (a do `Select` passou a rolar na `0.11.0`).
+- ~~**E4b · a lista do `Combobox` não rola no Android**~~ — **fechado em 30/09/2026 sem defeito:**
+  a lista rola. No app, a lista testada era curta (poucos anos ou modelos), e não havia o que rolar.
+  O registro abaixo fica como estava.
+  **E4b · a lista do `Combobox` não rola no Android** (a do `Select` passou a rolar na `0.11.0`).
   A suspeita de a lista crescer do tamanho do conteúdo foi medida no motor de layout do React
   Native e **não se confirmou**: a lista fica limitada (614 de altura para 2400 de conteúdo). O
   bloco E4b do `apps/native-smoke` abre seis cópias da folha, cada uma sem uma diferença em
@@ -67,8 +74,8 @@ o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2026.
 
 ## [0.12.0] — 2026-09-25
 
-⏳ **Não publicada.** Empurrada em 25/09/2026, no pedido de junção #8; juntar e publicar é do
-Victor.
+**Não saiu sozinha no npm.** Juntada em 25/09/2026 (pedido #8), e o conteúdo dela foi publicado
+dentro da `0.12.1`, em 26/09/2026.
 
 É o **Lote 3** inteiro: A-04, B-09 (com os menus), o botão só de ícone redondo (ADR-0052), B-02,
 E2 e M-01 — o M-02 foi descartado. Sobe o número do meio porque **pode quebrar**: o A-04 recusa
