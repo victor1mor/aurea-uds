@@ -23,7 +23,9 @@ overrides:
   # esta' certo: divida de seguranca conhecida nao dorme no repositorio.
   # 7.29.0 e' o patch e cabe no `^7.25.0` que o jsdom pede — sem bump maior.
   # Sai quando o jsdom subir sozinho para a linha 8.x.
-  undici: '^7.29.0'
+  # 30/09/2026: mais dois `high` na mesma linha (GHSA-rfgv-xxqx-mfg5 e GHSA-w293-vg96-wgc3),
+  # corrigidos na 7.29.1. Continua cabendo no `^7.25.0` do jsdom.
+  undici: '^7.29.1'
   # GHSA-2v37-7h3g-55p8 (alto): nanoid <3.3.17 entra em laco infinito quando um
   # gerador customizado recebe size zero. NAO veio do @xyflow/react — medido com
   # `pnpm why nanoid` em 09/08/2026: os dois caminhos sao postcss, um por vite
@@ -31,6 +33,12 @@ overrides:
   # que apareceu quando a auditoria voltou a rodar, e o gate da CI reprova em `high`.
   # 3.3.17 e' o patch e cabe no intervalo que o postcss pede — sem bump maior.
   nanoid: '^3.3.17'
+  # GHSA-6j4f-fj2g-mc7p e GHSA-qhr7-859c-m2p7 (altos, 30/09/2026): brace-expansion >=4.0.0
+  # <5.0.11. Chega por UM caminho, de ferramenta — @aurea-uds/native (devDependencies) >
+  # @react-native-community/datetimepicker > expo > @expo/cli > ... > minimatch 10 > brace-expansion.
+  # Nao sai em pacote publicado. 5.0.11 e' o patch e cabe no `^5.0.8` que o minimatch 10.2.6 pede — sem
+  # bump maior. O seletor pega SO essa linha: as linhas 1.x e 2.x, de outros minimatch, ficam.
+  'brace-expansion@>=4.0.0 <5.0.11': '^5.0.11'
 
 auditConfig:
   # DUAS VULNERABILIDADES `high` SEM PATCH PUBLICADO, aceitas em 02/09/2026 com registro.

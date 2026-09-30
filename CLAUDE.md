@@ -98,6 +98,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.10.0` | Lote 2, segunda leva: B-07, B-10, B-12, A-05, A-14 — junção `5ca8d3e` (pedido #16). **Publicada em 24/09/2026**, pelo terminal do Victor |
 | `0.10.1` | R-05, a metade que faltava: `criarGlifo` desenha a traço — pedido #4 do repositório público. **Publicada em 24/09/2026**, pelo terminal do Victor |
 | `0.11.0` | Lote E (nativo): E1, E3, E4, E5, E6, E7, E8 e o `Badge` nas medidas do HeroUI — pedido #6. **Publicada em 25/09/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
+| `0.12.0` | Lote 3: A-04, B-09, ADR-0052, B-02, E2, M-01 e o `ThemeToggle` — pedido #8. **Não saiu sozinha**: foi publicada dentro da `0.12.1` |
+| `0.12.1` | E9 (`LinkButton`), E10 (recuo das folhas), E11 (`Grid` reparte a sobra) — pedidos #9 e #10. **Publicada em 26/09/2026**, pelo terminal do Victor. Leva a `0.12.0` junto |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -114,7 +116,7 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
    - **Lote 3 FECHADO em 25/09/2026, na versão `0.12.0`**, na branch `claude/friendly-cerf-ctu0v7`.
      O E2 e o M-01 entraram nele, e o `ThemeToggle` também (botão de claro e escuro: lua cheia
      escura no claro, sol cheio amarelo no escuro — aprovado pela imagem em 25/09/2026). **Empurrada
-     com o "pode" de 25/09/2026, com o pedido de junção aberto.** Falta o Victor juntar e publicar.
+     com o "pode" de 25/09/2026, juntada no pedido #8 e publicada dentro da `0.12.1`.**
    - **A-04 feito.** Pode quebrar a compilação de quem passa ícone numa variável `string`.
    - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
      `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.
@@ -124,11 +126,11 @@ O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
      `Code`, nos dois alvos. O `Text` do nativo que já existe fica.
    - **M-01 só em `Button`, `IconButton` e itens de navegação; M-02 descartado; E2 entra aqui**
      (decisões do Victor, 25/09/2026 — ver "Lote E e decisões", abaixo).
-   - **`0.12.1` pronta, no pedido #9** (25–26/09/2026, com "pode"): E10 (recuo de baixo das
-     três folhas), E9 (`LinkButton` no nativo), E11 (`Grid` reparte a sobra) e o diagnóstico E4b
-     no `apps/native-smoke`. Pedido #9. A `0.12.0` foi juntada (pedido #8) e falta publicar.
-     **E4b sem causa:** o motor de layout desmentiu a suspeita da altura; quem decide é o bloco
-     E4b no aparelho (R0 a R5).
+   - **`0.12.1` publicada em 26/09/2026** (pedidos #9 e #10): E10 (recuo de baixo das três
+     folhas), E9 (`LinkButton` no nativo) e E11 (`Grid` reparte a sobra). **Falta o aceite de
+     aparelho** dos blocos E9, E10 e E11 do `apps/native-smoke`.
+     **E4b fechado sem defeito (30/09/2026):** a lista do `Combobox` rola; a testada no app era
+     curta. As cópias de diagnóstico R0 a R5 saíram do `apps/native-smoke`.
 4. **Lote E** saiu na `0.11.0` — ver "Lote E e decisões de 25/09/2026", abaixo.
 5. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
