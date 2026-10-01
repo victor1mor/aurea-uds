@@ -17,6 +17,17 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site sem o script da Cloudflare
+
+- **Medido no site no ar (01/10/2026):** a Cloudflare põe um script de estatística dela
+  (`static.cloudflareinsights.com`) em toda página que um navegador pede. O `curl` comum não via.
+  A trava proíbe recurso de fora.
+- `scripts/montar-site.mjs` grava um `_headers` com `Cache-Control: ... no-transform`, que impede a
+  injeção pelo lado do site, mesmo que a estatística seja religada no painel.
+- `node scripts/montar-site.mjs --conferir <endereço>` lê o site publicado como um navegador e
+  reprova recurso de fora. Roda no fim do `.github/workflows/site.yml`. Provado contra o defeito:
+  reprovou as 3 páginas do site de hoje.
+
 ### O site, aureauds.dev (Fase 1)
 
 - **O catálogo vira o site.** As 130 peças da web, vivas, em `aureauds.dev`. Nada novo se constrói
