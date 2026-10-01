@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Badge } from "./display.js";
-import { comOpacidade, criarFolha, estadoAcessivel } from "./estilos.js";
+import { comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
 import { FilaRolante } from "./rolagem.js";
@@ -133,6 +133,24 @@ const folha = criarFolha((t) => ({
         paddingHorizontal: 14, borderRadius: t.size.radiusControl,
     },
     abaDeTabAtiva: { backgroundColor: t.color.secondary },
+    // `variant="secondary"` (R-12, 01/10/2026): o `secondary` do HeroUI Native 1.0.10
+    // (`styles/components/tabs.css`), com o fio da casa no lugar do indicador azul deles.
+    //   .tabs__list--variant-secondary  padding 0 · border-bottom 1px, cor da borda
+    //   .tabs__list                     gap `* 1` → space1
+    //   .tabs__trigger                  padding-inline `* 3` → space3 · padding-block `* 1.5`
+    //                                   → space1 + space05. Rótulo `text-base` + entrelinha 1.5 dá
+    //                                   36, que é o `controlHMd`: a altura da fila da cápsula, então
+    //                                   trocar de variante não muda a altura da fila.
+    //   .tabs__indicator--variant-secondary  border-bottom 2px na cor de destaque → `fioDoEscolhido`
+    abasSecundarias: {
+        flexDirection: "row", gap: t.size.space1,
+        borderBottomWidth: t.size.borderWidth, borderColor: t.color.border,
+    },
+    abaSecundaria: {
+        alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
+        paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
+    },
+    fioDaAba: fioDoEscolhido(t),
     painel: { marginTop: t.size.space3 },
     // ── Stepper ────────────────────────────────────────────────────────────────────────────────
     trilha: { flexDirection: "row" },
@@ -418,16 +436,21 @@ export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circl
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export function Tabs({ tabs, value, onChange, label, justify, style, ...rest }) {
+export function Tabs({ tabs, value, onChange, label, justify, variant = "primary", style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
     const aberta = tabs.find((it) => it.id === value);
-    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: s.abas, children: tabs.map((it) => {
+    const secundaria = variant === "secondary";
+    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? s.abasSecundarias : s.abas, children: tabs.map((it) => {
                         const ativa = it.id === value;
-                        return (_jsx(Pressable, { onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.abaDeTab, ativa && s.abaDeTabAtiva, it.disabled && { opacity: t.size.opacityDisabled }], children: typeof it.label === "string"
-                                ? _jsx(Text, { size: "sm", weight: ativa ? 600 : 400, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
-                                : it.label }, it.id));
+                        return (_jsxs(Pressable, { onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
+                                secundaria ? s.abaSecundaria : s.abaDeTab,
+                                ativa && !secundaria && s.abaDeTabAtiva,
+                                it.disabled && { opacity: t.size.opacityDisabled },
+                            ], children: [typeof it.label === "string"
+                                    ? _jsx(Text, { size: "sm", weight: ativa ? 600 : 400, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
+                                    : it.label, ativa && secundaria && _jsx(View, { style: s.fioDaAba })] }, it.id));
                     }) }) }), aberta
                 ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content }))
                 : null] }));

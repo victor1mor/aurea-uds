@@ -43,7 +43,7 @@ import {
   type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle,
   type ViewProps, type ViewStyle,
 } from "react-native";
-import {comOpacidade, criarFolha, estadoAcessivel} from "./estilos.js";
+import {criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
@@ -115,20 +115,9 @@ const folha = criarFolha((t: AureaTokens) => ({
   segmento: {flex: 1, alignItems: "center", justifyContent: "center",
              paddingHorizontal: 14, borderRadius: t.size.radiusControl},
   segmentoAtivo: {backgroundColor: t.color.secondary},
-  // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4.
-  // O `aurea.css:958-960` põe este fio em TODOS os selecionados da casa (`.is-selected`, aba
-  // ativa, botão alternado e `.segmented button.active`), e o bloco de comentário acima dele
-  // diz por quê, com data: *"Item de nav ativo, aba ativa, item de lista lateral e botão
-  // alternado ligado mostram o MESMO sinal (…) Um usuário aprende uma vez e reconhece em todo
-  // lugar (pedido do Victor, 24/07)."*
-  // Os três números saem daquela linha, não de mim: altura 2 (fração de pixel borra), recuo 15,
-  // e o amarelo a 75% (cheio ele grita mais que o próprio rótulo).
-  // ⚠ Em segmento estreito o recuo de 15 de cada lado zera a largura e o fio some — **e é o
-  // mesmo comportamento da web**, onde `inset-inline:15px` num box estreito não desenha nada.
-  fioDoSegmento: {
-    position: "absolute", left: 15, right: 15, bottom: 0, height: 2,
-    borderRadius: t.size.radiusFull, backgroundColor: comOpacidade(t.color.primary, 0.75),
-  },
+  // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
+  // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
+  fioDoSegmento: fioDoEscolhido(t),
 
   formulario: {gap: t.size.space5},
 
@@ -825,6 +814,14 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
   invalid?: boolean;
   /** O lado da marca só neste item; sem ele, vale o do grupo. */
   indicatorPlacement?: AureaRadioIndicatorPlacement;
+  /**
+   * Um ícone antes do texto (R-19, 01/10/2026). O HeroUI não tem esta prop: no `RadioGroup.Item`
+   * dele o ícone entra como mais um filho, e a Aurea traduz filho livre em nome de ícone, como em
+   * todo o resto. Tamanho `iconLg` (24, o mesmo da marca; o HeroUI usa 22 nos ícones de lista, que
+   * não existe aqui — escolha do Victor), vão de 12 até o texto. Na opção escolhida sai a forma
+   * cheia (ADR-0053), se o registro a tiver.
+   */
+  icon?: IconName;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -850,7 +847,8 @@ function RaizDoGrupoDeRadio({
 }
 
 function ItemDoGrupoDeRadio({
-  value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest
+  value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel,
+  ...rest
 }: RadioGroupItemProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -867,8 +865,12 @@ function ItemDoGrupoDeRadio({
     <View key="texto" style={{flex: 1, minWidth: 0}}>
       {typeof label === "string"
         ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
+      {/* 🔴 Era `size="sm"`, que no telefone é **16** (o mapa da ADR-0050 sobe um degrau) — e o
+          comentário do topo sempre disse `text-sm`, o 14 do `description.css` do HeroUI. Medido
+          na vitrine de 01/10/2026: rótulo e descrição saíam do mesmo tamanho. `xs` é o 14, o
+          mesmo do `Checkbox` e do `Switch`. */}
       {description != null && (typeof description === "string"
-        ? <Text size="sm" tone="muted">{description}</Text> : description)}
+        ? <Text size="xs" tone="muted">{description}</Text> : description)}
     </View>
   );
   const marcaDesenhada = (
@@ -882,6 +884,12 @@ function ItemDoGrupoDeRadio({
       {escolhido && <View style={{width: ponto, height: ponto, borderRadius: t.size.radiusFull,
                                   backgroundColor: t.color.controlSelectedForeground}} />}
     </View>
+  );
+  // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
+  // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
+  const glifo = icon != null && (
+    <Icon key="icone" name={icon} size="lg" weight={escolhido ? "fill" : "regular"}
+          color={erro ? perigo : t.color.foreground} />
   );
   return (
     <Pressable
@@ -897,9 +905,10 @@ function ItemDoGrupoDeRadio({
         inativo && s.desabilitado, style,
       ]}
       {...rest}>
-      {/* A ordem é a do HeroUI: o lado da marca sai da ordem dos dois filhos. Com a marca no
-          início, o vão de 12 continua entre ela e o texto, e o texto ocupa o resto da linha. */}
-      {noInicio ? [marcaDesenhada, texto] : [texto, marcaDesenhada]}
+      {/* A ordem é a do HeroUI: o lado da marca sai da ordem dos filhos. Com a marca no início,
+          o vão de 12 continua entre ela e o texto, e o texto ocupa o resto da linha. O ícone
+          fica sempre colado ANTES do texto, como o `ListGroup.ItemPrefix` deles. */}
+      {noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada]}
     </Pressable>
   );
 }

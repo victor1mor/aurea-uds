@@ -515,7 +515,7 @@ ls packages/contracts/registry/ | grep -iE 'text|head|title|typo'
   → ContextMenu, Prose, Textarea      (nenhum componente de texto)
 ```
 
-Na web a tipografia **cai por cascata**: `body { font-family:var(--font-ui); font-size:var(--text-md) }`
+Na web a tipografia **cai por cascata**: `body { font-family:var(--font-ui); font-size:var(--text-sm) }`
 no `aurea.css:7`, e todo `<p>`/`<span>`/`<h1>` herda. O `Prose` é a pele do texto longo, não a
 primitiva — a própria ficha diz *"não é o parser"*.
 

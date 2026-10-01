@@ -53,10 +53,25 @@ import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
-const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
-  s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
-const fonteDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
-  s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg : t.size.textBase;  // ADR-0050: um degrau acima da web
+/**
+ * Os tamanhos do `NumberField`: os três do campo e mais o `display` (R-16, 01/10/2026), o número
+ * grande de destaque. Nenhuma referência da fila tem esse tamanho (o `NumberField` do HeroUI web
+ * só tem `variant`; o telefone dele nem tem a peça; o ReUI também não), então ele é peça nossa —
+ * e as medidas saem de escalas que JÁ existem, nenhuma nova:
+ *   letra    `text3xl` (30) em seminegrito — o título 2 (`h2` do B-02). Escolha do Victor.
+ *   altura   `controlHXl` — o degrau seguinte da escala de altura dos controles, que muda com a
+ *            densidade como as outras três.
+ *   largura  `space24` (96): o `space16` (64) do campo comum não cabe "1.234" em 30.
+ *   botões   os do `lg`, o maior do `IconButton`.
+ */
+export type AureaNumberFieldSize = AureaFieldSize | "display";
+
+const alturaDoTamanho = (t: AureaTokens, s: AureaNumberFieldSize) =>
+  s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg
+    : s === "display" ? t.size.controlHXl : t.size.controlHMd;
+const fonteDoTamanho = (t: AureaTokens, s: AureaNumberFieldSize) =>
+  s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg
+    : s === "display" ? t.size.text3xl : t.size.textBase;  // ADR-0050: um degrau acima da web
 
 const folha = criarFolha((t: AureaTokens) => ({
   // 🔴 ELE ESTICAVA, E NÃO DEVIA — achado em 12/09/2026, olhando a primeira imagem da vitrine.
@@ -85,6 +100,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     paddingVertical: 0, textAlignVertical: "center",
   },
   campoLargo: {width: undefined, flex: 1, minWidth: t.size.space16},
+  campoDisplay: {width: t.size.space24},
   invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
   desabilitado: {opacity: t.size.opacityDisabled},
 }));
@@ -241,7 +257,11 @@ export interface NumberFieldProps {
   disabled?: boolean;
   /** Mostra o valor e não deixa editar — os botões também somem. */
   readOnly?: boolean;
-  size?: AureaFieldSize;
+  /**
+   * `sm` · `md` · `lg`, como os outros campos, e `display`: o número grande de destaque, com a
+   * letra do título 2 (30). Ver `AureaNumberFieldSize`. Moeda em `display` pede `fullWidth`.
+   */
+  size?: AureaNumberFieldSize;
   /**
    * Ocupa a largura disponível em vez de abraçar o conteúdo. Padrão **false**.
    *
@@ -313,7 +333,8 @@ export function NumberField({
   const peleDaMarca = usePeleSobreAMarca();
   const strings = useAureaStrings();
   const campo = useCampo();
-  const tam = size ?? campo?.size ?? "md";
+  const tam: AureaNumberFieldSize = size ?? campo?.size ?? "md";
+  const tamDoBotao: AureaFieldSize = tam === "display" ? "lg" : tam;
   const inativo = disabled ?? campo?.disabled;
 
   const [interno, setInterno] = React.useState<number | null>(defaultValue ?? null);
@@ -429,7 +450,7 @@ export function NumberField({
           style={[s.grupo, fullWidth && s.grupoLargo, inativo && s.desabilitado, style]}>
       {mostrarBotoes && (
         <IconButton
-          name={icons.decrement} label={strings.decrement} appearance="ghost" size={tam}
+          name={icons.decrement} label={strings.decrement} appearance="ghost" size={tamDoBotao}
           disabled={inativo || noLimite(-1)}
           onPress={() => empurrar(-1)}
           testID={testID ? `${testID}-menos` : undefined} />
@@ -452,9 +473,10 @@ export function NumberField({
         aria-invalid={campo?.invalido}
         style={[
           s.campo,
+          tam === "display" && s.campoDisplay,
           fullWidth && s.campoLargo,
           {height: alturaDoTamanho(t, tam), fontSize: fonteDoTamanho(t, tam),
-           fontFamily: t.font.ui[400], color: t.color.foreground},
+           fontFamily: t.font.ui[tam === "display" ? 600 : 400], color: t.color.foreground},
           campo?.invalido && s.invalido,
           // A ORDEM IMPORTA e é a mesma do `Input` do Lote 4: o inválido vem antes, o foco
           // depois. Um campo inválido que está sendo corrigido tem de mostrar que está ativo —
@@ -469,7 +491,7 @@ export function NumberField({
       />
       {mostrarBotoes && (
         <IconButton
-          name={icons.increment} label={strings.increment} appearance="ghost" size={tam}
+          name={icons.increment} label={strings.increment} appearance="ghost" size={tamDoBotao}
           disabled={inativo || noLimite(1)}
           onPress={() => empurrar(1)}
           testID={testID ? `${testID}-mais` : undefined} />

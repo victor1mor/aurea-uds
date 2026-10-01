@@ -166,8 +166,21 @@ function paraCss(estilo: unknown): Record<string, unknown> {
   // É a mesma armadilha que este repositório documenta em três gates diferentes — medir a
   // intenção em vez do resultado. A imagem foi o único controle que pegou.
   if (saida.borderStyle == null &&
-      (saida.borderWidth != null || saida.borderTopWidth != null ||
-       saida.borderBottomWidth != null)) saida.borderStyle = "solid";
+      (saida.borderWidth != null || saida.borderTopWidth != null || saida.borderBottomWidth != null ||
+       saida.borderLeftWidth != null || saida.borderRightWidth != null)) {
+    saida.borderStyle = "solid";
+    // 🔴 E O LADO SEM LARGURA É ZERO NO RN, MAS "MEDIUM" (3px) NO CSS — achado pela imagem do
+    // `<Tabs variant="secondary">` em 01/10/2026: só o `borderBottomWidth` declarado, e a vitrine
+    // desenhou uma caixa com borda grossa nos quatro lados. Com `solid` ligado aqui, cada lado
+    // que o componente não declarou tem de ser escrito como 0, que é o que o aparelho faz.
+    if (saida.borderWidth == null) {
+      for (const lado of ["Top", "Right", "Bottom", "Left"]) saida[`border${lado}Width`] ??= 0;
+    }
+  }
+  // 🔴 NO RN TODA VIEW É `position: relative` POR PADRÃO; no CSS é `static`. Achado pela mesma
+  // imagem: o fio amarelo da aba (`absolute`, `bottom: 0`) não se ancorava na aba, e sumia dela.
+  // Sem isto, todo filho `absolute` da vitrine se mede contra um ancestral errado.
+  if (saida.position == null) saida.position = "relative";
   // O `flexShrink` do RN é 0 por padrão; o do CSS é 1. Sem fixar isto, caixa com altura definida
   // encolhe no navegador e não encolhe no aparelho — divergência que a vitrine inventaria.
   if (saida.flexShrink == null && saida.flex == null) saida.flexShrink = 0;

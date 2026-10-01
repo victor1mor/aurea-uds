@@ -322,13 +322,13 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                                                         color: t.color.foreground },
                                                 ] }), texto.length > 0 && (_jsx(IconButton, { name: "x", label: strings.searchClear, appearance: "ghost", size: "sm", onPress: () => digitar(""), testID: testID ? `${testID}-busca-limpar` : undefined }))] }), loading && (_jsx(View, { style: s.carregando, children: _jsx(Spinner, { label: strings.comboboxLoading }) })), nada && (_jsx(View, { style: s.vazio, children: typeof empty === "string" || empty == null
                                             ? _jsx(Text, { size: "sm", tone: "muted", children: empty ?? strings.comboboxEmpty })
-                                            : empty })), _jsx(FlatList, { data: filtrados, keyExtractor: (i) => i.value, keyboardShouldPersistTaps: "handled", onEndReached: onEndReached, onEndReachedThreshold: ANTECEDENCIA_DE_PAGINA, renderItem: ({ item }) => (_jsx(Pressable, { disabled: item.disabled, onPress: () => { onValueChange?.(item); fechar(); }, accessibilityRole: "menuitem", ...estadoAcessivel({
+                                            : empty })), _jsx(FlatList, { data: filtrados, keyExtractor: (i) => i.value, keyboardShouldPersistTaps: "handled", onEndReached: onEndReached, onEndReachedThreshold: ANTECEDENCIA_DE_PAGINA, renderItem: ({ item }) => (_jsxs(Pressable, { disabled: item.disabled, onPress: () => { onValueChange?.(item); fechar(); }, accessibilityRole: "menuitem", ...estadoAcessivel({
                                                 selected: item.value === value?.value, disabled: !!item.disabled,
-                                            }), style: [
+                                            }), accessibilityHint: item.description, style: [
                                                 s.opcao,
                                                 item.value === value?.value && s.opcaoEscolhida,
                                                 item.disabled && s.desabilitado,
-                                            ], children: _jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }) })) }), _jsx(RecuoDaFolha, { comTeclado: true })] })] }) }) })] }));
+                                            ], children: [_jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }), item.description != null && (_jsx(Text, { size: "xs", tone: "muted", children: item.description }))] })) }), _jsx(RecuoDaFolha, { comTeclado: true })] })] }) }) })] }));
 }
 // ── A DOBRA DE ACENTO, e por que ela é sondada em vez de presumida ───────────────────────────
 // Buscar "acucar" tem de achar "açúcar" — num catálogo em português, exigir o acento certo é

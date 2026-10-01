@@ -34,6 +34,23 @@ export declare function criarFolha<T extends NamedStyles<T> | NamedStyles<Record
  */
 export declare const comOpacidade: (cor: string, pct: number) => string;
 /**
+ * 🔴 O FIO AMARELO DO ESCOLHIDO — o sinal único da casa para "este é o escolhido".
+ *
+ * O `aurea.css:1037-1039` põe este fio em TODOS os selecionados (`.is-selected`, botão alternado,
+ * `.segmented button.active`, item ativo da lateral), e o comentário de lá diz por quê: *"Um
+ * usuário aprende uma vez e reconhece em todo lugar (pedido do Victor, 24/07)."* Os três números
+ * saem daquela linha, não daqui: altura 2 (fração de pixel borra), recuo 15 de cada lado
+ * (`inset-inline:15px`), e o amarelo a 75% (cheio ele grita mais que o próprio rótulo).
+ *
+ * ⚠ **Morava dentro do `SegmentedControl` e mudou de casa em 01/10/2026**, quando a aba de
+ * `<Tabs variant="secondary">` (R-12) passou a precisar do mesmo fio. Copiar os números para o
+ * segundo arquivo é o defeito que o `CLAUDE.md` nomeia. Quem desenha o fio, desenha este.
+ *
+ * ⚠ Em peça estreita o recuo de 15 de cada lado zera a largura e o fio some — **e é o mesmo
+ * comportamento da web**, onde `inset-inline:15px` numa caixa estreita não desenha nada.
+ */
+export declare const fioDoEscolhido: (t: AureaTokens) => ViewStyle;
+/**
  * A reação ao TOQUE de tudo que é alvo inteiro — hoje o `Button`, o `IconButton` e o `Card` com
  * `onPress`. Os números são os do core: `.btn:active { transform:scale(.97); opacity:.9 }` e
  * `.btn:disabled { opacity:.45 }`.

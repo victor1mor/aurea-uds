@@ -200,7 +200,16 @@ export interface TabsProps extends ViewProps {
     label?: string;
     /** Onde a fila de abas fica quando cabe: `start` (padrão), `center` ou `end` (E3). */
     justify?: AureaFilaJustify;
+    /**
+     * O jeito da fila, com os nomes do HeroUI (R-12, 01/10/2026):
+     * - `primary` (padrão): a cápsula, com a aba aberta num fundo `secondary`.
+     * - `secondary`: sem cápsula — um fio fino embaixo da fila inteira e o **fio amarelo** da casa
+     *   embaixo da aba aberta, o mesmo do `SegmentedControl`.
+     */
+    variant?: AureaTabsVariant;
 }
+/** Os dois jeitos da fila de abas, com os nomes do `Tabs` do HeroUI Native. */
+export type AureaTabsVariant = "primary" | "secondary";
 /**
  * As abas DENTRO da tela — trocar o painel, não trocar de página.
  *
@@ -234,4 +243,4 @@ export interface TabsProps extends ViewProps {
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export declare function Tabs({ tabs, value, onChange, label, justify, style, ...rest }: TabsProps): React.JSX.Element;
+export declare function Tabs({ tabs, value, onChange, label, justify, variant, style, ...rest }: TabsProps): React.JSX.Element;

@@ -39,7 +39,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
-import { comOpacidade, criarFolha, estadoAcessivel } from "./estilos.js";
+import { criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -99,20 +99,9 @@ const folha = criarFolha((t) => ({
     segmento: { flex: 1, alignItems: "center", justifyContent: "center",
         paddingHorizontal: 14, borderRadius: t.size.radiusControl },
     segmentoAtivo: { backgroundColor: t.color.secondary },
-    // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4.
-    // O `aurea.css:958-960` põe este fio em TODOS os selecionados da casa (`.is-selected`, aba
-    // ativa, botão alternado e `.segmented button.active`), e o bloco de comentário acima dele
-    // diz por quê, com data: *"Item de nav ativo, aba ativa, item de lista lateral e botão
-    // alternado ligado mostram o MESMO sinal (…) Um usuário aprende uma vez e reconhece em todo
-    // lugar (pedido do Victor, 24/07)."*
-    // Os três números saem daquela linha, não de mim: altura 2 (fração de pixel borra), recuo 15,
-    // e o amarelo a 75% (cheio ele grita mais que o próprio rótulo).
-    // ⚠ Em segmento estreito o recuo de 15 de cada lado zera a largura e o fio some — **e é o
-    // mesmo comportamento da web**, onde `inset-inline:15px` num box estreito não desenha nada.
-    fioDoSegmento: {
-        position: "absolute", left: 15, right: 15, bottom: 0, height: 2,
-        borderRadius: t.size.radiusFull, backgroundColor: comOpacidade(t.color.primary, 0.75),
-    },
+    // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
+    // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
+    fioDoSegmento: fioDoEscolhido(t),
     formulario: { gap: t.size.space5 },
     // A folha do `Select`: no RN não existe `<select>`, então a lista é um `Modal` — que é
     // exatamente o "motor novo sobre `Modal`" que a §5.2.4 previu.
@@ -388,7 +377,7 @@ function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, or
     const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid, indicatorPlacement }), [value, onValueChange, disabled, invalid, indicatorPlacement]);
     return (_jsx(GrupoDeRadio.Provider, { value: contexto, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled }), style: [{ gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column" }, style], ...rest, children: children }) }));
 }
-function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest }) {
+function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const grupo = React.useContext(GrupoDeRadio);
@@ -403,7 +392,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
     const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
     const texto = (label != null || description != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
                 ? _jsx(Text, { size: "base", weight: 500, tone: erro ? "danger" : "default", children: label }) : label, description != null && (typeof description === "string"
-                ? _jsx(Text, { size: "sm", tone: "muted", children: description }) : description)] }, "texto"));
+                ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }, "texto"));
     const marcaDesenhada = (_jsx(View, { style: [
             s.marcaBase,
             { width: marca, height: marca, borderRadius: t.size.radiusFull },
@@ -412,11 +401,14 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
                 borderColor: erro ? perigo : t.color.controlSelected },
         ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, borderRadius: t.size.radiusFull,
                 backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
+    // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
+    // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
+    const glifo = icon != null && (_jsx(Icon, { name: icon, size: "lg", weight: escolhido ? "fill" : "regular", color: erro ? perigo : t.color.foreground }, "icone"));
     return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: escolhido, disabled: !!inativo }), accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
             { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
                 gap: t.size.space3, minHeight: t.size.targetMin },
             inativo && s.desabilitado, style,
-        ], ...rest, children: noInicio ? [marcaDesenhada, texto] : [texto, marcaDesenhada] }));
+        ], ...rest, children: noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada] }));
 }
 /**
  * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.

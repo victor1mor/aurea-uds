@@ -15,8 +15,9 @@ describe("ADR-0050 · a escala de letras é a do HeroUI", () => {
       valor("text-xs"), valor("text-sm"), valor("text-base"), valor("text-lg"), valor("text-xl"),
       valor("text-2xl"), valor("text-3xl"), valor("text-4xl"), valor("text-5xl"),
     ]).toEqual(["0.75rem", "0.875rem", "1rem", "1.125rem", "1.25rem", "1.5rem", "1.875rem", "2.25rem", "3rem"]);
-    // `md` não existe no Tailwind; aqui ele é o corpo das peças da web, e por isso é 14.
-    expect(valor("text-md")).toBe("0.875rem");
+    // `md` não existe no Tailwind. Desde a R-10 (01/10/2026) ele é APELIDO do `sm` (14), e não
+    // um número próprio que coincidia: cada nome da escala, um tamanho. Sai na 1.0.
+    expect(valor("text-md")).toBe("var(--text-sm)");
   });
 
   test("web: a peça é 14 e o apoio 12; o botão pequeno NÃO desce para 12 (no HeroUI ele é 14)", () => {

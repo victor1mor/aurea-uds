@@ -6,6 +6,12 @@ import { type AureaFieldSize } from "./inputs.js";
 export interface AureaComboboxItem {
     value: string;
     label: string;
+    /**
+     * Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg") — R-14, 01/10/2026. É o
+     * `Select.ItemDescription` do HeroUI Native 1.0.10 (`styles/components/select.css:117`): letra
+     * `text-sm` (14), cor apagada. A busca continua olhando só o `label`.
+     */
+    description?: string;
     disabled?: boolean;
 }
 export interface ComboboxProps {

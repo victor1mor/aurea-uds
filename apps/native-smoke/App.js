@@ -37,7 +37,7 @@ import {
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, Grid, IconButton, Input,
   RadioGroup, Separator,
   KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
-  Spinner, Stack, Status, Stepper, Switch, Table, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
+  Spinner, Stack, Status, Stepper, Switch, Table, Tabs, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
   // porque o app tem o mesmo problema em toda tela de lançamento — e aqui servem de SONDA:
@@ -100,6 +100,10 @@ import IconMoon from "@aurea-uds/native/icons/moon";
 import IconMoonFill from "@aurea-uds/native/icons/moon-fill";
 import IconSun from "@aurea-uds/native/icons/sun";
 import IconSunFill from "@aurea-uds/native/icons/sun-fill";
+import IconTruck from "@aurea-uds/native/icons/truck";
+import IconTruckFill from "@aurea-uds/native/icons/truck-fill";
+import IconStorefront from "@aurea-uds/native/icons/storefront";
+import IconStorefrontFill from "@aurea-uds/native/icons/storefront-fill";
 
 const ICONES = criarRegistroDeIcones({
   "plus": IconPlus, "calendar-plus": IconCalendarPlus,
@@ -115,6 +119,8 @@ const ICONES = criarRegistroDeIcones({
   "check": IconCheck, "caret-right": IconCaretRight,
   "magnifying-glass": IconMagnifyingGlass, "minus": IconMinus, "image": IconImage,
   "moon": IconMoon, "moon-fill": IconMoonFill, "sun": IconSun, "sun-fill": IconSunFill,
+  "truck": IconTruck, "truck-fill": IconTruckFill,
+  "storefront": IconStorefront, "storefront-fill": IconStorefrontFill,
 });
 
 // R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.
@@ -282,6 +288,7 @@ function Tela({irParaScreen, irParaLote2}) {
       <BlocosLoteE t={t} />
       <Blocos0121 t={t} />
       <BlocoRadioGroup t={t} />
+      <BlocosLoteF t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1363,7 +1370,10 @@ function BlocosLoteE({t}) {
       <Bloco t={t} n="E4" titulo="A lista de 50 rola até o último, e fica acima dos botões do sistema?"
         criterio={"⚠ CAUSA NÃO CONFIRMADA — este é o teste que decide. No Android: abra cada lista, role "
           + "até o 1977 (o último) e escolha. A folha não pode ficar atrás dos botões do sistema."}>
-        <Select label="Ano (Select)" placeholder="Escolha o ano" items={CINQUENTA} value={ano} onChange={setAno} />
+        {/* O nome vem do `Field`: o `Select` não tem `label` (o `conferir-props.mjs` reprovava). */}
+        <Field label="Ano (Select)">
+          <Select placeholder="Escolha o ano" items={CINQUENTA} value={ano} onChange={setAno} />
+        </Field>
         <Combobox placeholder="Ano (Combobox)" items={CINQUENTA} value={anoBusca} onValueChange={setAnoBusca}
           searchKeyboardType="number-pad" />
       </Bloco>
@@ -1444,6 +1454,58 @@ function BlocoRadioGroup({t}) {
   );
 }
 
+// Lote F (01/10/2026): R-12, R-14, R-16 e R-19, aprovados pelas pranchas. O R-10 não tem bloco:
+// ele não muda nada na tela (o `textMd` continua 14, agora como apelido do `textSm`).
+function BlocosLoteF({t}) {
+  const [aba, setAba] = React.useState("geral");
+  const [item, setItem] = React.useState(null);
+  const [qtd, setQtd] = React.useState(42);
+  const [entrega, setEntrega] = React.useState("normal");
+  return (
+    <>
+      <Bloco t={t} n="LF-12" titulo="As abas sublinhadas: fio fino embaixo da fila, fio amarelo embaixo da aberta?"
+        criterio={"Sem cápsula atrás das abas. Uma linha fina, cinza, embaixo da fila inteira. Embaixo da "
+          + "aba aberta, o fio AMARELO curto, o mesmo do SegmentedControl. Toque em outra aba: o fio "
+          + "vai junto. A altura da fila é a mesma da cápsula do bloco de cima."}>
+        <Tabs variant="secondary" value={aba} onChange={setAba} tabs={[
+          {id: "geral", label: "Geral", content: <Paragraph>Conteúdo da aba Geral.</Paragraph>},
+          {id: "aparencia", label: "Aparência", content: <Paragraph>Conteúdo da aba Aparência.</Paragraph>},
+          {id: "avisos", label: "Avisos", content: <Paragraph>Conteúdo da aba Avisos.</Paragraph>},
+        ]} />
+      </Bloco>
+      <Bloco t={t} n="LF-14" titulo="O item do Combobox mostra a segunda linha, menor e apagada?"
+        criterio={"Abra a lista. \"Açúcar cristal\" tem, embaixo, \"Pacote de 1 kg\" em letra MENOR "
+          + "e cinza. \"Açúcar mascavo\" não tem segunda linha, e a linha dele é mais baixa."}>
+        <Field label="Item">
+          <Combobox value={item} onValueChange={setItem} placeholder="Buscar item" items={[
+            {value: "1", label: "Açúcar cristal", description: "Pacote de 1 kg"},
+            {value: "2", label: "Açúcar mascavo"},
+            {value: "3", label: "Açúcar refinado", description: "Caixa com 12 pacotes"},
+          ]} />
+        </Field>
+      </Bloco>
+      <Bloco t={t} n="LF-16" titulo="O NumberField grande (display): número de título, botões grandes?"
+        criterio={"O número tem letra de TÍTULO (30, seminegrito), maior que o do lg logo abaixo. Os "
+          + "botões − e + são do tamanho do lg. Toque em + e −: o número muda e continua centrado."}>
+        <NumberField size="display" value={qtd} onValueChange={setQtd} min={0} label="Quantidade" />
+        <NumberField size="lg" value={qtd} onValueChange={setQtd} min={0} label="Quantidade, lg" />
+      </Bloco>
+      <Bloco t={t} n="LF-19" titulo="O ícone da opção: antes do texto, 24, cheio na escolhida?"
+        criterio={"Cada opção tem o ícone À ESQUERDA do texto. Na escolhida o ícone é CHEIO; nas outras, "
+          + "vazado. A descrição (\"Em 5 a 7 dias úteis\") é MENOR que o rótulo (\"Normal\") — antes "
+          + "saíam do mesmo tamanho. Toque em outra linha: a marca e o ícone cheio mudam juntos."}>
+        <Card>
+          <RadioGroup label="Forma de entrega, com ícone" value={entrega} onValueChange={setEntrega}>
+            <RadioGroup.Item value="normal" icon="truck" label="Normal" description="Em 5 a 7 dias úteis" />
+            <Separator />
+            <RadioGroup.Item value="retirar" icon="storefront" label="Retirar na loja" description="No mesmo dia" />
+          </RadioGroup>
+        </Card>
+      </Bloco>
+    </>
+  );
+}
+
 function Blocos0121({t}) {
   const [ano, setAno] = React.useState(undefined);
   const [anoBusca, setAnoBusca] = React.useState(null);
@@ -1462,7 +1524,10 @@ function Blocos0121({t}) {
       <Bloco t={t} n="E10" titulo="O fim da lista fica ACIMA dos botões do sistema?"
         criterio={"Teste com a navegação de 3 botões E com a de gestos. Role cada lista até o 1977: ele "
           + "fica inteiro acima da barra do sistema e dá para tocar. O fundo da folha pode ir até a borda."}>
-        <Select label="Ano (Select)" placeholder="Escolha o ano" items={CINQUENTA} value={ano} onChange={setAno} />
+        {/* O nome vem do `Field`: o `Select` não tem `label` (o `conferir-props.mjs` reprovava). */}
+        <Field label="Ano (Select)">
+          <Select placeholder="Escolha o ano" items={CINQUENTA} value={ano} onChange={setAno} />
+        </Field>
         <Combobox placeholder="Ano (Combobox)" items={CINQUENTA} value={anoBusca} onValueChange={setAnoBusca} />
         <Button onPress={() => setFolha(true)}>Abrir a folha de baixo (BottomSheet)</Button>
         <BottomSheet open={folha} onClose={() => setFolha(false)} title="Filtros">
