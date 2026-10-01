@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "The command palette with the engine wired up: type, filter, run.",
-  "icon": "search",
+  "icon": "magnifying-glass",
   "platforms": {
     "web": "stable",
     "native": "planned"

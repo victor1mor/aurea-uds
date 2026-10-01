@@ -36,8 +36,9 @@ export interface TextProps extends TextPropsRN {
  * Texto da Aurea. Sem provider acima, `useAureaTokens` levanta — de propósito: um padrão
  * silencioso aqui desenharia o app inteiro no tema errado sem nada acusar.
  *
- * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** No IBM Plex
- * só Regular, Italic e Bold moram na família "IBM Plex Sans"; Medium e SemiBold são famílias
+ * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** Na Atkinson
+ * Hyperlegible (como era na IBM Plex) só Regular, Italic e Bold moram na família "Atkinson
+ * Hyperlegible Next"; Medium e SemiBold são famílias
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */

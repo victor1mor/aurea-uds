@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Switch between peer views in the same context.",
-  "icon": "switcher",
+  "icon": "squares-four",
   "platforms": {
     "web": "stable",
     "native": "planned"

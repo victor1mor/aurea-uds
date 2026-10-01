@@ -1,10 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function ThumbsDown({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M30,16V9a7.0078,7.0078,0,0,0-7-7H2V16H8.4648l3.5774,5.3662.8453,5.9165A2.0094,2.0094,0,0,0,14.8672,29H17a3.0033,3.0033,0,0,0,3-3V20h6A4.0045,4.0045,0,0,0,30,16ZM8,14H4V4H8Zm20,2a2.0025,2.0025,0,0,1-2,2H18v8a1.0008,1.0008,0,0,1-1,1H14.8672l-.9094-6.3662L10,14.6973V4H23a5.0057,5.0057,0,0,1,5,5Z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M239.82,157l-12-96A24,24,0,0,0,204,40H32A16,16,0,0,0,16,56v88a16,16,0,0,0,16,16H75.06l37.78,75.58A8,8,0,0,0,120,240a40,40,0,0,0,40-40V184h56a24,24,0,0,0,23.82-27ZM72,144H32V56H72Zm150,21.29a7.88,7.88,0,0,1-6,2.71H152a8,8,0,0,0-8,8v24a24,24,0,0,1-19.29,23.54L88,150.11V56H204a8,8,0,0,1,7.94,7l12,96A7.87,7.87,0,0,1,222,165.29Z", fill: color})
   );
 }

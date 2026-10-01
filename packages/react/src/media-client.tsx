@@ -71,7 +71,7 @@ export function MediaPlayer({kind="video",src,poster,title,subtitle,className,ch
   const MediaTag:any=kind==="audio"?"audio":"video";
   return <div ref={boxRef} className={cx("media-player",className)} role="group" aria-label={typeof title==="string"?title:s.mediaPlayer}>
     <div className="media-viewport">
-      {kind==="audio"&&<div className="media-placeholder"><Icon name="volume--up"/>{title&&<strong>{title}</strong>}{subtitle&&<span>{subtitle}</span>}</div>}
+      {kind==="audio"&&<div className="media-placeholder"><Icon name="speaker-high"/>{title&&<strong>{title}</strong>}{subtitle&&<span>{subtitle}</span>}</div>}
       {/* AUD-0005 (12/08/2026): `onClick` é destrinchado das props para poder ser COMPOSTO com o
           togglePlay no vídeo — clicar na imagem dá play, e o callback do consumidor roda antes.
           No áudio não há alternância por clique (o elemento não tem superfície), e o callback
@@ -92,15 +92,15 @@ export function MediaPlayer({kind="video",src,poster,title,subtitle,className,ch
       <div className="media-control-row">
         <div className="media-control-group">
           <button className="media-control" type="button" aria-label={playing?s.mediaPause:s.mediaPlay} onClick={togglePlay}><Icon name={playing?"pause":"play"}/></button>
-          <button className="media-control" type="button" aria-label={s.mediaSkipBack} onClick={()=>skip(-10)}><Icon name="rewind--10"/></button>
-          <button className="media-control" type="button" aria-label={s.mediaSkipForward} onClick={()=>skip(10)}><Icon name="forward--10"/></button>
+          <button className="media-control" type="button" aria-label={s.mediaSkipBack} onClick={()=>skip(-10)}><Icon name="clock-counter-clockwise"/></button>
+          <button className="media-control" type="button" aria-label={s.mediaSkipForward} onClick={()=>skip(10)}><Icon name="clock-clockwise"/></button>
           <span className="media-time">{clockTime(current)} / {clockTime(duration)}</span>
         </div>
         <div className="media-control-group">
-          <button className="media-control" type="button" aria-label={muted?s.mediaUnmute:s.mediaMute} onClick={toggleMute}><Icon name={muted||volume===0?"volume--mute":"volume--up"}/></button>
+          <button className="media-control" type="button" aria-label={muted?s.mediaUnmute:s.mediaMute} onClick={toggleMute}><Icon name={muted||volume===0?"speaker-slash":"speaker-high"}/></button>
           <input className="media-volume" type="range" min={0} max={100} value={volPct} aria-label={s.mediaVolume} aria-valuetext={`${volPct}%`} onChange={e=>setVol(Number(e.target.value)/100)}/>
-          {hasCaptions&&<button className={cx("media-control",captionsOn&&"active")} type="button" aria-label={captionsOn?s.mediaCaptionsHide:s.mediaCaptionsShow} aria-pressed={captionsOn} onClick={toggleCaptions}><Icon name="closed-caption"/></button>}
-          {kind==="video"&&<button className="media-control" type="button" aria-label={fullscreen?s.mediaFullscreenExit:s.mediaFullscreenEnter} onClick={toggleFullscreen}><Icon name={fullscreen?"minimize":"maximize"}/></button>}
+          {hasCaptions&&<button className={cx("media-control",captionsOn&&"active")} type="button" aria-label={captionsOn?s.mediaCaptionsHide:s.mediaCaptionsShow} aria-pressed={captionsOn} onClick={toggleCaptions}><Icon name="closed-captioning"/></button>}
+          {kind==="video"&&<button className="media-control" type="button" aria-label={fullscreen?s.mediaFullscreenExit:s.mediaFullscreenEnter} onClick={toggleFullscreen}><Icon name={fullscreen?"arrows-in":"arrows-out"}/></button>}
         </div>
       </div>
     </div>
@@ -160,10 +160,10 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
         ?<iframe ref={frameRef} src={endereco} title={title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowFullScreen {...rest}/>
         :<button type="button" className="media-embed-facade" aria-label={`${s.mediaPlay}: ${title}`} onClick={()=>{setAtivo(true);setClicou(true)}}>
           <img src={poster} alt="" loading="lazy" decoding="async"/>
-          <span className="media-embed-play" aria-hidden="true"><Icon name="play--filled--alt"/></span>
+          <span className="media-embed-play" aria-hidden="true"><Icon name="play-circle" weight="fill"/></span>
         </button>}
     </div>
-    {href&&<a className="media-embed-link" href={href} target="_blank" rel="noopener"><Icon name="launch"/>{s.mediaEmbedOpen}</a>}
+    {href&&<a className="media-embed-link" href={href} target="_blank" rel="noopener"><Icon name="arrow-square-out"/>{s.mediaEmbedOpen}</a>}
   </div>;
 }
 
@@ -379,11 +379,11 @@ export function Carousel({children,label,controls=true,indicators=true,className
       {slides.map((slide,i)=><div key={i} className="carousel-slide" role="group" aria-roledescription="slide" aria-label={`${s.carouselSlide} ${i+1} ${s.positionOf} ${slides.length}`}>{slide}</div>)}
     </div>
     {(controls||indicators)&&<div className="carousel-controls">
-      {controls&&<IconButton icon="chevron--left" label={s.carouselPrev} size="sm" disabled={pos.inicio} onClick={()=>irPara(pos.indice-1)}/>}
+      {controls&&<IconButton icon="caret-left" label={s.carouselPrev} size="sm" disabled={pos.inicio} onClick={()=>irPara(pos.indice-1)}/>}
       {/* O ponto é `<button>` de 24px com o desenho de 8px no `::before`: alvo menor que 24×24 é
           reprovação do WCAG 2.2 AA (2.5.8), e é o tamanho que uma fila de pontos convida a errar. */}
       {indicators&&<div className="carousel-dots">{slides.map((_,i)=><button key={i} type="button" className="carousel-dot" aria-current={i===pos.indice?"true":undefined} aria-label={`${s.carouselSlide} ${i+1}`} onClick={()=>irPara(i)}/>)}</div>}
-      {controls&&<IconButton icon="chevron--right" label={s.carouselNext} size="sm" disabled={pos.fim} onClick={()=>irPara(pos.indice+1)}/>}
+      {controls&&<IconButton icon="caret-right" label={s.carouselNext} size="sm" disabled={pos.fim} onClick={()=>irPara(pos.indice+1)}/>}
     </div>}
   </div>;
 }

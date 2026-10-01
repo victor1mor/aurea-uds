@@ -27,7 +27,7 @@ describe("E2 · o Button obedece o pai", () => {
     expect(alvo().alignSelf).toBeUndefined();
   });
   it("IconButton tem largura fixa, como o só-ícone do HeroUI: nunca estica", () => {
-    render(<Envolve><IconButton name="add" label="Adicionar" /></Envolve>);
+    render(<Envolve><IconButton name="plus" label="Adicionar" /></Envolve>);
     expect(alvo().alignSelf).toBeUndefined();
     expect(alvo().width).toBe(Math.max(t.size.controlHMd, t.size.targetMin));
   });

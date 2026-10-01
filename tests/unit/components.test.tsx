@@ -173,14 +173,14 @@ describe("Button nav + IconButton", () => {
   });
 
   test("IconButton é ghost por default — ícone-ação solto não tem caixa", () => {
-    wrap(<IconButton label="Open menu" icon="menu" />);
+    wrap(<IconButton label="Open menu" icon="list" />);
     const btn = screen.getByRole("button", {name: "Open menu"});
     expect(btn).toHaveClass("btn-ghost");
     expect(btn).not.toHaveClass("btn-secondary");
   });
 
   test("mas aceita variant quando o consumidor quer a caixa", () => {
-    wrap(<IconButton label="Filter" icon="filter" variant="secondary" />);
+    wrap(<IconButton label="Filter" icon="funnel" variant="secondary" />);
     expect(screen.getByRole("button", {name: "Filter"})).toHaveClass("btn-secondary");
   });
 });
@@ -781,12 +781,12 @@ describe("FileInput", () => {
 
 const ARVORE: import("../../packages/react/src/index").TreeNode[] = [
   {id: "src", label: "src", icon: "folder", children: [
-    {id: "index", label: "index.tsx", icon: "document"},
+    {id: "index", label: "index.tsx", icon: "file-text"},
     {id: "comp", label: "components", icon: "folder", children: [
-      {id: "button", label: "Button.tsx", icon: "document"},
+      {id: "button", label: "Button.tsx", icon: "file-text"},
     ]},
   ]},
-  {id: "readme", label: "README.md", icon: "document"},
+  {id: "readme", label: "README.md", icon: "file-text"},
 ];
 
 describe("TreeView", () => {
@@ -2399,7 +2399,7 @@ describe("DataGrid — ação em lote (F5)", () => {
     const user = userEvent.setup();
     const onAction = vi.fn();
     wrap(<DataGrid data={TAREFAS} columns={COLS_TAREFA} selectable getRowId={r => r.id}
-      bulkActions={[{id: "del", label: "Delete", icon: "trash-can", onAction}]} />);
+      bulkActions={[{id: "del", label: "Delete", icon: "trash", onAction}]} />);
 
     await marcarPrimeira(user);
     const barra = screen.getByRole("toolbar", {name: "Bulk actions"});
@@ -3033,7 +3033,7 @@ describe("Button/IconButton: link desabilitado não executa a ação (AUD-0004)"
   test("IconButton herda a correção — ele é um Button por dentro", async () => {
     const user = userEvent.setup();
     const espia = vi.fn();
-    wrap(<IconButton href="/ir" disabled icon="close" label="Fechar" onClick={espia} />);
+    wrap(<IconButton href="/ir" disabled icon="x" label="Fechar" onClick={espia} />);
     // por rótulo, e não por papel: sem `href` o `<a>` NÃO é um link (papel genérico) nem é
     // focável. É o comportamento documentado do ramo desabilitado — `<a>` não tem `disabled` —,
     // e foi este teste que me obrigou a olhar: eu tinha pedido `role="link"` e ele não existe.
@@ -3247,7 +3247,7 @@ describe("Sidebar — flutuante por padrão, rente como variante", () => {
 describe("Sidebar — a lista", () => {
   const ITENS: SidebarItem[] = [
     {id: "mail", label: "Mail", items: [
-      {id: "inbox", label: "Inbox", icon: "email", href: "/inbox", items: [
+      {id: "inbox", label: "Inbox", icon: "envelope-simple", href: "/inbox", items: [
         {id: "unread", label: "Unread", href: "/inbox/unread"}]},
       {id: "archive", label: "Archive", href: "/archive"}]},
   ];
@@ -3296,7 +3296,7 @@ describe("Sidebar — a lista", () => {
   // e deixa uma coluna de ícones anônimos para quem usa leitor de tela.
   test("recolhida, o rótulo sai da TELA e não do DOM", () => {
     const {container} = wrap(
-      <Sidebar collapsed items={[{id: "i", label: "Inbox", icon: "email", href: "#", badge: "9"}]} />);
+      <Sidebar collapsed items={[{id: "i", label: "Inbox", icon: "envelope-simple", href: "#", badge: "9"}]} />);
     expect(container.querySelector(".sidebar")).toHaveClass("sidebar-collapsed");
     const rotulo = container.querySelector(".sidebar-label")!;
     expect(rotulo).toHaveClass("sr-only");
@@ -3406,8 +3406,8 @@ describe("Badge — chip e sobreposto", () => {
 // item ser LINK, e o atual sair de `aria-current` — que é de onde a pele também sai.
 describe("BottomNav — a barra de aplicativo", () => {
   const ITENS: SidebarItem[] = [
-    {id: "home", label: "Home", icon: "home", href: "/"},
-    {id: "rides", label: "Rides", icon: "meter", href: "/rides", badge: "3"},
+    {id: "home", label: "Home", icon: "house", href: "/"},
+    {id: "rides", label: "Rides", icon: "gauge", href: "/rides", badge: "3"},
     {id: "me", label: "Profile", icon: "user", href: "/me"},
   ];
 
@@ -3518,7 +3518,7 @@ describe("BottomNav — a barra de aplicativo", () => {
 
   test("badge vazio vira ponto: sem texto, e ainda assim renderizado", () => {
     const {container} = wrap(
-      <BottomNav items={[{id: "a", label: "Updates", icon: "home", href: "#", badge: ""}]} />);
+      <BottomNav items={[{id: "a", label: "Updates", icon: "house", href: "#", badge: ""}]} />);
     const ponto = container.querySelector(".bottom-nav-badge")!;
     expect(ponto).toBeInTheDocument();
     expect(ponto).toBeEmptyDOMElement();
@@ -3569,7 +3569,7 @@ describe("Separator — a régua entre coisas", () => {
 describe("NavList — a linha de lista tocável", () => {
   const ITENS: NavListItem[] = [
     {id: "profile", label: "Profile", description: "Name, photo", icon: "user", href: "/me"},
-    {id: "alerts", label: "Notifications", value: "On", icon: "notification", href: "/alerts"},
+    {id: "alerts", label: "Notifications", value: "On", icon: "bell", href: "/alerts"},
     {id: "plan", label: "Plan", value: "Free", href: "/plan"},
   ];
 

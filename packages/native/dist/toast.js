@@ -202,9 +202,9 @@ export function Toast({ toast, onClose }) {
             { opacity: entrada, transform: [{ translateY: entrada.interpolate({
                             inputRange: [0, 1], outputRange: [12, 0],
                         }) }] },
-        ], testID: `toast-${toast.id}`, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "sm", weight: 600, children: toast.title }), toast.description != null
+        ], testID: `toast-${toast.id}`, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone, weight: toast.icon ? undefined : "fill" }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "sm", weight: 600, children: toast.title }), toast.description != null
                         ? (typeof toast.description === "string"
                             ? _jsx(Text, { size: "sm", tone: "muted", children: toast.description })
                             : toast.description)
-                        : null] }), toast.action, _jsx(IconButton, { name: "close", label: strings.dismissNotification, appearance: "ghost", size: "sm", onPress: onClose })] }));
+                        : null] }), toast.action, _jsx(IconButton, { name: "x", label: strings.dismissNotification, appearance: "ghost", size: "sm", onPress: onClose })] }));
 }

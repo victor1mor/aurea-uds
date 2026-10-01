@@ -1,11 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function Scooter({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M26,28a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,26,28Zm0-6a2,2,0,1,0,2,2A2.0023,2.0023,0,0,0,26,22Z", fill: color}),
-    React.createElement(Path, {d: "M24,8H18v2h6a1,1,0,0,1,0,2H21a1,1,0,0,0-.98,1.1963l.9241,4.6211L18.4338,22h-2.69l-2.5723-8.5752A1.988,1.988,0,0,0,11.2559,12H6v2h5.2561l.6,2H7a5.0057,5.0057,0,0,0-5,5v2a1,1,0,0,0,1,1H4a4,4,0,0,0,8,0h7a1,1,0,0,0,.8574-.4854l3-5a1,1,0,0,0,.1231-.7109L22.22,14H24a3,3,0,0,0,0-6ZM8,26a2.0025,2.0025,0,0,1-2-2h4A2.0025,2.0025,0,0,1,8,26ZM4,22V21a3.0033,3.0033,0,0,1,3-3h5.4561l1.2,4Z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M212,136c-1.18,0-2.35.06-3.51.17l-32.9-98.7A8,8,0,0,0,168,32H136a8,8,0,0,0,0,16h26.23l17.44,52.31L124.21,168H79.77a36,36,0,1,0-1.83,16H128a8,8,0,0,0,6.19-2.93l51.46-62.81,7.66,23A36,36,0,1,0,212,136ZM44,192a20,20,0,1,1,20-20A20,20,0,0,1,44,192Zm168,0a20,20,0,1,1,20-20A20,20,0,0,1,212,192Z", fill: color})
   );
 }

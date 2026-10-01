@@ -14,7 +14,7 @@
   },
   "name": "ModelUsage",
   "summary": "Consumption split by model: which one took how much.",
-  "icon": "chart--bar",
+  "icon": "chart-bar",
   "states": [],
   "tokens": [
     "--primary",

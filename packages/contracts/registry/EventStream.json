@@ -14,7 +14,7 @@
   },
   "name": "EventStream",
   "summary": "What happened, in order, live.",
-  "icon": "activity",
+  "icon": "pulse",
   "states": [
     "info",
     "success",

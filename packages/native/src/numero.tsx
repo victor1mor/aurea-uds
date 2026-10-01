@@ -306,7 +306,7 @@ export interface NumberFieldProps {
 export function NumberField({
   value, defaultValue, onValueChange, min, max, step = 1, format, locale,
   disabled, readOnly, size, fullWidth = false, label, placeholder, keyboardType,
-  icons = {increment: "add", decrement: "subtract"}, style, testID,
+  icons = {increment: "plus", decrement: "minus"}, style, testID,
 }: NumberFieldProps) {
   const t = useAureaTokens();
   const s = folha(t);

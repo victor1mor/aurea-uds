@@ -81,8 +81,8 @@ export interface AlertProps extends ViewProps {
  * este módulo — seria trazer ícone ao grafo do bundler pelas costas do consumidor, que é a
  * cláusula 4 da ADR-0038. Registre-os:
  *
- *     import InformationFilled from "@aurea-uds/native/icons/information--filled";
- *     const ICONES = criarRegistroDeIcones({"information--filled": InformationFilled, …});
+ *     import InformationFilled from "@aurea-uds/native/icons/info";
+ *     const ICONES = criarRegistroDeIcones({"info": InformationFilled, …});
  */
 export declare function Alert({ variant, state, title, icon, onDismiss, children, style, accessibilityLabel, accessibilityHint, ...rest }: AlertProps): React.JSX.Element;
 export interface EmptyStateProps {

@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Anchored floating surface with content or interaction.",
-  "icon": "information",
+  "icon": "info",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -3,9 +3,9 @@
 :root{
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
-  --font-ui:"IBM Plex Sans","Segoe UI",sans-serif;
-  --font-editorial:"IBM Plex Serif",Georgia,serif;
-  --font-code:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
+  --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
+  --font-editorial:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
+  --font-code:"Atkinson Hyperlegible Mono",SFMono-Regular,Consolas,monospace;
   --text-xs:0.75rem;
   --text-sm:0.875rem;
   --text-md:0.875rem;
@@ -425,7 +425,7 @@
   --card-pad:1.5rem;
   --section-gap:2rem;
 }
-/* Aurea core — component styles. Built with @aurea-uds/tokens into dist/aurea.css. Load @aurea-uds/fonts/css for IBM Plex. */
+/* Aurea core — component styles. Built with @aurea-uds/tokens into dist/aurea.css. Load @aurea-uds/fonts/css for Atkinson Hyperlegible (ADR-0053). */
 /* ========================================================================== */
 /* 02. RESET, ACESSIBILIDADE E BASE                                            */
 /* ========================================================================== */
@@ -2048,9 +2048,9 @@ img,svg { display:block; }
    interface e é pequeno para ler artigo. A entrelinha é `--leading-relaxed`, que existe no token
    e não tinha uso. A MEDIDA de linha é `--prose-measure`, no idioma das outras válvulas.
 
-   A FONTE não muda: `--font-editorial` (IBM Plex Serif) existe e está sem uso, e usá-la aqui
-   seria decisão de APARÊNCIA que o BUILDING.md §3.1 manda levar ao Victor com imagem do antes e
-   do depois. Quem quiser serifa na prosa aponta a variável; a Aurea não decide isso sozinha. */
+   A FONTE não muda: a prosa usa a do texto. ~~`--font-editorial` (IBM Plex Serif) existe e está
+   sem uso~~ — desde a ADR-0053 (01/10/2026) a Plex Serif saiu, e `--font-editorial` é apelido da
+   fonte do texto (Atkinson Hyperlegible Next), mantido só para não quebrar quem o usa; sai na 1.0. */
 .prose { max-width:var(--prose-measure,68ch); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .prose > * + * { margin-block-start:var(--space-4); }
 .prose > h2,.prose > h3,.prose > h4 { margin-block-start:var(--space-8); }

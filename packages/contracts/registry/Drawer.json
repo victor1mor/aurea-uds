@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Panel that slides in from a screen edge.",
-  "icon": "side-panel--close",
+  "icon": "sidebar-simple",
   "platforms": {
     "web": "stable",
     "native": "planned"

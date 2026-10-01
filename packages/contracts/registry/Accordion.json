@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Stack of expandable/collapsible sections.",
-  "icon": "chevron--down",
+  "icon": "caret-down",
   "platforms": {
     "web": "stable",
     "native": "planned"

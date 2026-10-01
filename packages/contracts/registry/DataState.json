@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "One region, four faces: loading, failed, empty, or the content itself.",
-  "icon": "data--view",
+  "icon": "table",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -5,7 +5,7 @@
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read the current density and switch it, from anywhere inside AureaProvider.",
-  "icon": "settings",
+  "icon": "gear",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -14,7 +14,7 @@
   },
   "name": "CostMeter",
   "summary": "Spend against a ceiling, with the soft and hard limits kept apart.",
-  "icon": "meter",
+  "icon": "gauge",
   "states": [
     "under",
     "near",

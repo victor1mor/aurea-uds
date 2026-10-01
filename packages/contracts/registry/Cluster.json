@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Horizontal wrapping/layout primitive.",
-  "icon": "drag--horizontal",
+  "icon": "dots-six",
   "platforms": {
     "web": "stable",
     "native": "planned"

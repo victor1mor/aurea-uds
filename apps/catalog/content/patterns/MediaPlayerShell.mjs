@@ -34,7 +34,7 @@ export default [
   <div className="media-controls">
     <div className="media-control-row">
       <button type="button" className="media-control" aria-label="Stop"><Icon name="stop" /></button>
-      <button type="button" className="media-control" aria-label="Mute"><Icon name="volume--up" /></button>
+      <button type="button" className="media-control" aria-label="Mute"><Icon name="speaker-high" /></button>
     </div>
   </div>
 </MediaPlayerShell>`,
@@ -51,7 +51,7 @@ export default [
           h("button", {type: "button", className: "media-control", "aria-label": "Stop"},
             h(A.Icon, {name: "stop"})),
           h("button", {type: "button", className: "media-control", "aria-label": "Mute"},
-            h(A.Icon, {name: "volume--up"})))))),
+            h(A.Icon, {name: "speaker-high"})))))),
   },
   {
     variant: "Frame",
@@ -75,14 +75,14 @@ export default [
     uses: ["MediaPlayerShell", "Icon", "Button"],
     code: `<MediaPlayerShell>
   <div className="media-placeholder">
-    <Icon name="warning--alt" />
+    <Icon name="warning" />
     <strong>Stream unavailable</strong>
     <Button size="sm" variant="secondary" onClick={retry}>Try again</Button>
   </div>
 </MediaPlayerShell>`,
     render: () => h("div", {style: cheio}, h(A.MediaPlayerShell, null,
       h("div", {style: centro},
-        h("span", {className: "media-placeholder"}, h(A.Icon, {name: "warning--alt"})),
+        h("span", {className: "media-placeholder"}, h(A.Icon, {name: "warning"})),
         h("strong", null, "Stream unavailable"),
         h(A.Button, {size: "sm", variant: "secondary"}, "Try again")))),
   },

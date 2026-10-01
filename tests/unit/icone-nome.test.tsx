@@ -1,7 +1,7 @@
 // A-04 · o nome do ícone é checado pelo TypeScript, na web e no nativo.
 //
 // Até a 0.10.0 `IconName` era `string` nos dois alvos: `<Icon name="chevron-down">` (um traço só;
-// o do Carbon é `chevron--down`) compilava e não desenhava nada. A regra mora no TIPO, e tipo não
+// o do Carbon é `caret-down`) compilava e não desenhava nada. A regra mora no TIPO, e tipo não
 // se prova no vitest: quem prova são as duas sondas, compiladas pelo `tsc` de verdade.
 //
 // Provado contra o defeito: com `IconName = string` de volta no `icon-names.ts` gerado, as duas
@@ -14,7 +14,7 @@ const tsc = (dir: string) =>
   spawnSync(process.execPath, ["node_modules/typescript/bin/tsc", "-p", dir], {encoding: "utf8"});
 
 describe("A-04 · nome de ícone checado pelo TypeScript", () => {
-  it("web: nome errado reprova; nome do Carbon e nome declarado pelo app passam", () => {
+  it("web: nome errado reprova; nome do Phosphor e nome declarado pelo app passam", () => {
     const r = tsc("tests/unit/tipos-web");
     expect(r.stdout + r.stderr).toBe("");
     expect(r.status).toBe(0);
@@ -32,6 +32,6 @@ describe("A-04 · nome de ícone checado pelo TypeScript", () => {
     const web = readFileSync("packages/react/src/icon-names.ts", "utf8");
     const nativo = readFileSync("packages/native/src/icon-names.ts", "utf8");
     expect(nativo).toBe(web);
-    expect(web).toContain('| "chevron--down"');
+    expect(web).toContain('| "caret-down"');
   });
 });

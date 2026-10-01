@@ -1,15 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function List({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M10 6H28V8H10z", fill: color}),
-    React.createElement(Path, {d: "M10 24H28V26H10z", fill: color}),
-    React.createElement(Path, {d: "M10 15H28V17H10z", fill: color}),
-    React.createElement(Path, {d: "M4 15H6V17H4z", fill: color}),
-    React.createElement(Path, {d: "M4 6H6V8H4z", fill: color}),
-    React.createElement(Path, {d: "M4 24H6V26H4z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z", fill: color})
   );
 }

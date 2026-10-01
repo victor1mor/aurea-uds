@@ -1,14 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function Drone({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M7,12a5,5,0,1,1,5-5H10a3,3,0,1,0-3,3Z", fill: color}),
-    React.createElement(Path, {d: "M25,12V10a3,3,0,1,0-3-3H20a5,5,0,1,1,5,5Z", fill: color}),
-    React.createElement(Path, {d: "M7,30A5,5,0,0,1,7,20v2a3,3,0,1,0,3,3h2A5.0055,5.0055,0,0,1,7,30Z", fill: color}),
-    React.createElement(Path, {d: "M25,30a5.0055,5.0055,0,0,1-5-5h2a3,3,0,1,0,3-3V20a5,5,0,0,1,0,10Z", fill: color}),
-    React.createElement(Path, {d: "M20,18.5859V13.4141L25.707,7.707a1,1,0,1,0-1.414-1.414l-4.4995,4.5a3.9729,3.9729,0,0,0-7.587,0L7.707,6.293a.9994.9994,0,0,0-1.414,0h0a.9994.9994,0,0,0,0,1.414L12,13.4141v5.1718L6.293,24.293a.9994.9994,0,0,0,0,1.414h0a.9994.9994,0,0,0,1.414,0l4.5-4.5a3.9729,3.9729,0,0,0,7.587,0l4.4995,4.5a1,1,0,0,0,1.414-1.414ZM18,20a2,2,0,0,1-4,0V12a2,2,0,0,1,4,0Z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M189.66,66.34a8,8,0,0,0-11.32,0L148.69,96H107.31L77.66,66.34A8,8,0,0,0,66.34,77.66L96,107.31v41.38L66.34,178.34a8,8,0,0,0,11.32,11.32L107.31,160h41.38l29.65,29.66a8,8,0,0,0,11.32-11.32L160,148.69V107.31l29.66-29.65A8,8,0,0,0,189.66,66.34ZM112,112h32v32H112Zm26.51-50.67a44,44,0,1,1,56.16,56.16A7.86,7.86,0,0,1,192,118a8,8,0,0,1-2.67-15.54,28,28,0,1,0-35.74-35.74,8,8,0,1,1-15.08-5.34ZM224,180a44,44,0,0,1-85.49,14.67,8,8,0,0,1,15.08-5.34,28,28,0,1,0,35.74-35.74,8,8,0,0,1,5.34-15.08A44.07,44.07,0,0,1,224,180ZM117.49,194.67a44,44,0,1,1-56.16-56.16,8,8,0,0,1,5.34,15.08,28,28,0,1,0,35.74,35.74,8,8,0,0,1,15.08,5.34ZM32,76a44,44,0,0,1,85.49-14.67,8,8,0,1,1-15.08,5.34,28,28,0,1,0-35.74,35.74A8,8,0,0,1,64,118a7.86,7.86,0,0,1-2.67-.46A44.07,44.07,0,0,1,32,76Z", fill: color})
   );
 }

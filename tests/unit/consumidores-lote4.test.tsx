@@ -13,7 +13,7 @@ const regra = (seletor: string) => {
   return css.slice(i, css.indexOf("}", i));
 };
 const ITENS = [
-  {id: "inicio", label: "Início", icon: "home", href: "#inicio"},
+  {id: "inicio", label: "Início", icon: "house", href: "#inicio"},
   {id: "perfil", label: "Perfil", icon: "user", href: "#perfil"},
 ];
 const nav = () => screen.getByRole("navigation");

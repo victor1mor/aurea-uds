@@ -5,7 +5,7 @@
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.",
-  "icon": "task--settings",
+  "icon": "faders",
   "platforms": {
     "web": "stable",
     "native": "planned"

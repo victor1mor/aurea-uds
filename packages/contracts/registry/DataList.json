@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Key/value or item list for structured data.",
-  "icon": "list",
+  "icon": "list-bullets",
   "platforms": {
     "web": "stable",
     "native": "planned"

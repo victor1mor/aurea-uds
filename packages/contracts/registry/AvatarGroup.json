@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Overlapping stack of avatars, with a count for the ones that do not fit.",
-  "icon": "user--multiple",
+  "icon": "users",
   "platforms": {
     "web": "stable",
     "native": "planned"

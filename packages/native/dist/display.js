@@ -36,7 +36,8 @@ const folha = criarFolha((t) => ({
     //     lg  16 × 6 · letra 16 · linha 24        vão 4 entre ponto, texto e adornos
     // Até a 0.10.1 eram `3px 9px` e `gap:6` crus, e o texto saía com entrelinha 1,0: no Android a
     // perna do g e do p era cortada (a mesma causa do E1 no `Button`). A linha do HeroUI é ≥ 1,33 ×
-    // a letra, e o IBM Plex precisa de 1,3. O raio continua a cápsula da Aurea (identidade) e a
+    // a letra, e a letra precisa de 1,3 (a IBM Plex e a Atkinson Hyperlegible da ADR-0053, medidas
+    // na tabela `hhea`). O raio continua a cápsula da Aurea (identidade) e a
     // borda continua nossa.
     // ⚠ O `xs` NÃO existe no HeroUI (é o contador sobre ícone): fica a medida nossa, 16 de altura,
     // agora com letra 12 e linha 16 para caber a letra inteira.
@@ -87,7 +88,7 @@ export const formatarContagem = (count, max = 99) => count > max ? `${max}+` : S
  * no fonte da web. **Quem usa contagem ancorada escreve o rótulo do alvo**, sempre:
  *
  *     <Badge count={8} anchor="top-end">
- *       <IconButton name="notification" label="Avisos, 8 não lidos" onPress={abrir} />
+ *       <IconButton name="bell" label="Avisos, 8 não lidos" onPress={abrir} />
  *     </Badge>
  *
  * ⚠ **`image`/`imageAlt` da web NÃO atravessaram.** Nenhuma das sete telas do consumidor medido

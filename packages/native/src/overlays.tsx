@@ -206,7 +206,7 @@ export function Dialog({
         <View style={[s.superficie, style]}>
           <View style={s.cabecalho}>
             <Text size="lg" weight={600} accessibilityRole="header" style={s.titulo}>{title}</Text>
-            <IconButton name="close" label={strings.close} appearance="ghost" size="sm"
+            <IconButton name="x" label={strings.close} appearance="ghost" size="sm"
                         onPress={onClose} />
           </View>
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>
@@ -376,7 +376,7 @@ export function Drawer({
           ]}>
           <View style={s.cabecalho}>
             <Text size="lg" weight={600} accessibilityRole="header" style={s.titulo}>{title}</Text>
-            <IconButton name="close" label={strings.close} appearance="ghost" size="sm"
+            <IconButton name="x" label={strings.close} appearance="ghost" size="sm"
                         onPress={onClose} />
           </View>
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>

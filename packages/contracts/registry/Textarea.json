@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Multi-line text entry control.",
-  "icon": "document",
+  "icon": "file-text",
   "platforms": {
     "web": "stable",
     "native": "planned"

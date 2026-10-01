@@ -164,10 +164,10 @@ export function Progress({ value, label, style, testID }) {
 }
 /** Mesmos quatro glifos do `feedback-client.tsx:43`. */
 export const ICONE_DA_VARIANTE = {
-    info: "information--filled",
-    success: "checkmark--filled",
-    warning: "warning--alt--filled",
-    danger: "error--filled",
+    info: "info",
+    success: "check-circle",
+    warning: "warning",
+    danger: "x-circle",
 };
 /**
  * O aviso em linha.
@@ -181,8 +181,8 @@ export const ICONE_DA_VARIANTE = {
  * este módulo — seria trazer ícone ao grafo do bundler pelas costas do consumidor, que é a
  * cláusula 4 da ADR-0038. Registre-os:
  *
- *     import InformationFilled from "@aurea-uds/native/icons/information--filled";
- *     const ICONES = criarRegistroDeIcones({"information--filled": InformationFilled, …});
+ *     import InformationFilled from "@aurea-uds/native/icons/info";
+ *     const ICONES = criarRegistroDeIcones({"info": InformationFilled, …});
  */
 export function Alert({ variant, state, title, icon, onDismiss, children, style, 
 // 🔴 ESTES DOIS SAEM DO RESTO DE PROPÓSITO, e é consequência do conserto abaixo: a moldura
@@ -203,9 +203,9 @@ accessibilityLabel, accessibilityHint, ...rest }) {
     , { 
         // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
         // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
-        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, s[`alerta_${v}`], style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "sm", weight: 600, children: title }), children != null
+        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, s[`alerta_${v}`], style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "sm", weight: 600, children: title }), children != null
                                 ? (typeof children === "string" ? _jsx(Text, { size: "sm", tone: "muted", children: children }) : children)
-                                : state ? _jsx(Text, { size: "sm", tone: "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(IconButton, { appearance: "ghost", size: "sm", name: "close", label: strings.close, onPress: onDismiss }) : null] }));
+                                : state ? _jsx(Text, { size: "sm", tone: "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(IconButton, { appearance: "ghost", size: "sm", name: "x", label: strings.close, onPress: onDismiss }) : null] }));
 }
 /**
  * O nada, dito com jeito.
@@ -215,7 +215,7 @@ accessibilityLabel, accessibilityHint, ...rest }) {
  * `heading-order` do axe pega. **No React Native não há hierarquia de títulos**: um `Text` é um
  * `Text`. A prop não teria efeito, e prop sem efeito é promessa falsa.
  */
-export function EmptyState({ icon = "document--blank", title, description, action, state, style, testID, }) {
+export function EmptyState({ icon = "file", title, description, action, state, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();

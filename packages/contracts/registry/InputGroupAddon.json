@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Ready",
   "summary": "What sits glued to the control inside an InputGroup: a glyph, a prefix, a button.",
-  "icon": "add",
+  "icon": "plus",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -3,18 +3,18 @@
 // A **cláusula 4 da ADR-0038** manda: *"`<Icon name>` continua existindo, para a paridade de API
 // com a web — mas como REGISTRO QUE O APP MONTA com o que usa, nunca como mapa dos 2856, que
 // anularia tudo acima"*. "Tudo acima" é a cláusula 1: o caminho profundo
-// (`@aurea-uds/native/icons/add`) não depende do tree-shaking do Metro, que é experimental.
+// (`@aurea-uds/native/icons/plus`) não depende do tree-shaking do Metro, que é experimental.
 //
 // Então este arquivo **não importa ícone nenhum**. Ele recebe os que o app já importou.
 //
-//     import Add from "@aurea-uds/native/icons/add";
-//     import ChevronDown from "@aurea-uds/native/icons/chevron--down";
+//     import Plus from "@aurea-uds/native/icons/plus";
+//     import CaretDown from "@aurea-uds/native/icons/caret-down";
 //
-//     const ICONES = criarRegistroDeIcones({add: Add, "chevron--down": ChevronDown});
-//     <AureaProvider icons={ICONES}>          // ou <Icon icons={ICONES} name="add" />
+//     const ICONES = criarRegistroDeIcones({plus: Plus, "caret-down": CaretDown});
+//     <AureaProvider icons={ICONES}>          // ou <Icon icons={ICONES} name="plus" />
 //
 // **Por que ter `<Icon name>` se o caminho profundo já funciona?** Porque as fichas da Aurea
-// falam em nome de ícone (`leadingIcon: IconName`), e um `Button` que recebe `"add"` precisa de
+// falam em nome de ícone (`leadingIcon: IconName`), e um `Button` que recebe `"plus"` precisa de
 // alguém que saiba desenhá-lo. Sem o registro, cada componente que aceita ícone teria de receber
 // um componente — o que empurra a decisão para a tela, uma prop de cada vez.
 import * as React from "react";
@@ -24,13 +24,18 @@ import {useAureaTokens} from "./theme.js";
 
 /** O que cada módulo de `icons/*` exporta por padrão. */
 export type AureaIconComponent = (props: {size?: number; color?: string}) => React.ReactElement;
-// A-04: nome do glifo, no vocabulário do Carbon — o MESMO do sprite da web (check 38) —, checado
-// pelo TypeScript. A lista é GERADA por `build-icons-native.mjs`; o glifo próprio do app
-// (`criarGlifo`) entra declarando o nome em `AureaIconNames`.
-export type {IconName, CarbonIconName, AureaIconNames} from "./icon-names.js";
-import type {IconName} from "./icon-names.js";
-/** Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. */
-export type AureaIconRegistry = Readonly<Partial<Record<IconName, AureaIconComponent>>>;
+// A-04: nome do glifo, no vocabulário do Phosphor (ADR-0053) — o MESMO do sprite da web (check
+// 38) —, checado pelo TypeScript. A lista é GERADA por `build-icons-native.mjs`; o glifo próprio
+// do app (`criarGlifo`) entra declarando o nome em `AureaIconNames`.
+export type {IconName, PhosphorIconName, AureaIconNames, IconWeight} from "./icon-names.js";
+import type {IconName, IconWeight, PhosphorIconName} from "./icon-names.js";
+/**
+ * Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. A forma cheia
+ * (o item escolhido, ADR-0053) entra com o sufixo `-fill`, como o arquivo:
+ * `{"house": House, "house-fill": HouseFill}`.
+ */
+export type AureaIconRegistry =
+  Readonly<Partial<Record<IconName | `${PhosphorIconName}-fill`, AureaIconComponent>>>;
 
 /**
  * Declara o registro. É uma função de identidade tipada, e ela existe por um motivo prático:
@@ -153,6 +158,11 @@ export interface IconProps {
   /** Registro local, quando não há um em contexto — ou para sobrepor o do provider. */
   icons?: AureaIconRegistry;
   /**
+   * `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Ela é a chave `<nome>-fill`
+   * do registro; se o app não a registrou, sai o glifo regular, em vez de nada.
+   */
+  weight?: IconWeight;
+  /**
    * Rótulo para leitor de tela. **Sem ele o ícone é decorativo** e some da árvore de
    * acessibilidade, que é o correto quando há texto ao lado dizendo a mesma coisa.
    */
@@ -174,11 +184,12 @@ const ESCALA: Record<AureaIconSize, string> = {
  * vazio pareceria um glifo de verdade numa tela cheia, e passaria por revisão. Em `__DEV__` sai
  * um aviso nomeando o ícone e o caminho do import que resolve.
  */
-export function Icon({name, size = "md", color, icons, label}: IconProps) {
+export function Icon({name, size = "md", color, icons, label, weight}: IconProps) {
   const t = useAureaTokens();
   const doContexto = React.useContext(Contexto);
-  const registro = icons ?? doContexto;
-  const Glifo = registro?.[name];
+  // Lido como mapa de texto: a chave `-fill` não é um `IconName`, e o tipo do registro já a aceita.
+  const registro = (icons ?? doContexto) as Readonly<Record<string, AureaIconComponent | undefined>> | null;
+  const Glifo = (weight === "fill" ? registro?.[`${name}-fill`] : undefined) ?? registro?.[name];
 
   if (!Glifo) {
     if (__DEV__) {
@@ -187,8 +198,8 @@ export function Icon({name, size = "md", color, icons, label}: IconProps) {
         `acrescente ao registro:\n` +
         `  import Glifo from "@aurea-uds/native/icons/${name}";\n` +
         `  criarRegistroDeIcones({"${name}": Glifo, …})\n` +
-        `O barril "@aurea-uds/native/icons" existe mas NÃO é a forma documentada: ele traz os ` +
-        `2571 ao grafo do bundler (ADR-0038, cláusula 1).`);
+        `O barril "@aurea-uds/native/icons" existe mas NÃO é a forma documentada: ele traz ` +
+        `todos os ícones ao grafo do bundler (ADR-0038, cláusula 1).`);
     }
     return null;
   }

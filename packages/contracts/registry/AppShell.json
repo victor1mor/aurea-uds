@@ -4,7 +4,7 @@
   "layer": "Shell",
   "maturity": "Stable",
   "summary": "Application frame: sidebar, topbar and main content.",
-  "icon": "dashboard",
+  "icon": "squares-four",
   "platforms": {
     "web": "stable",
     "native": "planned"

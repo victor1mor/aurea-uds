@@ -14,7 +14,7 @@
 //         nunca como prova de layout final.
 //   NÃO é · substituto do `apps/native-smoke/`, que roda no Android de verdade.
 //
-// A tipografia é a IBM Plex servida dos `.woff2` do próprio repositório — no aparelho quem serve
+// A tipografia é a Atkinson Hyperlegible (ADR-0053) servida dos `.woff2` do próprio repositório — no aparelho quem serve
 // são os `.ttf` do `@aurea-uds/fonts/native`. Mesma família, arquivo diferente.
 import {render, act} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
@@ -29,31 +29,31 @@ import {
   Textarea, Card, Text as AureaText, criarRegistroDeIcones, ptBR,
 } from "../../packages/native/src/index.js";
 
-// 🔴 OS GLIFOS SÃO CARBON DE VERDADE — e a primeira vitrine os desenhava como QUADRADOS CINZA.
+// 🔴 OS GLIFOS SÃO OS DE VERDADE — e a primeira vitrine os desenhava como QUADRADOS CINZA.
 //
 // O efeito era pior do que "feio": o `+` e o `−` saíam **idênticos**, a lupa, o `x` e a seta
-// também. Carbon Icons é identidade declarada INTOCÁVEL no `CLAUDE.md`, e a imagem que deveria
-// prová-la não mostrava nenhum.
+// também. Os ícones são identidade declarada no `CLAUDE.md` §5, e a imagem que deveria prová-los
+// não mostrava nenhum.
 //
-// O desenho sai do MESMO lugar que o `build-icons-native.mjs` usa — `@carbon/icons/svg/32/` —,
-// então é o mesmo caminho do glifo que vai para o aparelho. O que muda é só o destino: aqui
-// vira `<svg>` do DOM, lá vira `react-native-svg`.
-// © IBM Corp., Apache-2.0 — o mesmo crédito que o `NOTICE` do pacote já carrega.
-const svgDoCarbon = (nome: string): string => {
-  const dir = dirname(createRequire(import.meta.url).resolve("@carbon/icons/package.json"));
-  const bruto = readFileSync(resolve(dir, "svg", "32", `${nome}.svg`), "utf-8");
+// O desenho sai do MESMO lugar que o `build-icons-native.mjs` usa — o Regular do
+// `@phosphor-icons/core` (ADR-0053) —, então é o mesmo caminho do glifo que vai para o aparelho.
+// O que muda é só o destino: aqui vira `<svg>` do DOM, lá vira `react-native-svg`.
+// Phosphor Icons, MIT — o mesmo crédito que o `NOTICE` do pacote já carrega.
+const svgDoPhosphor = (nome: string): string => {
+  const dir = dirname(dirname(createRequire(import.meta.url).resolve("@phosphor-icons/core")));
+  const bruto = readFileSync(resolve(dir, "assets", "regular", `${nome}.svg`), "utf-8");
   // Só o miolo: o `<svg>` de fora é reescrito com o tamanho e a cor que o componente pediu.
   return bruto.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
 };
 
 const glifoDe = (nome: string) => {
-  const miolo = svgDoCarbon(nome);
+  const miolo = svgDoPhosphor(nome);
   const Glifo = ({size, color}: {size?: number; color?: string}) =>
     React.createElement("span", {
       style: {display: "inline-flex", width: size ?? 16, height: size ?? 16,
               color: color ?? "currentColor", flex: "none"},
       dangerouslySetInnerHTML: {
-        __html: `<svg viewBox="0 0 32 32" width="${size ?? 16}" height="${size ?? 16}" ` +
+        __html: `<svg viewBox="0 0 256 256" width="${size ?? 16}" height="${size ?? 16}" ` +
                 `fill="currentColor" aria-hidden="true">${miolo}</svg>`,
       },
     });
@@ -61,8 +61,8 @@ const glifoDe = (nome: string) => {
 };
 
 const ICONES = criarRegistroDeIcones({
-  "chevron--down": glifoDe("chevron--down"), search: glifoDe("search"),
-  close: glifoDe("close"), add: glifoDe("add"), subtract: glifoDe("subtract"),
+  "caret-down": glifoDe("caret-down"), "magnifying-glass": glifoDe("magnifying-glass"),
+  "x": glifoDe("x"), "plus": glifoDe("plus"), "minus": glifoDe("minus"),
   image: glifoDe("image"),
 });
 
@@ -252,7 +252,7 @@ describe("vitrine do alvo nativo", () => {
       "Image e Gallery — com bytes de verdade, e um substituto",
       "A foto do topo e as duas primeiras miniaturas carregam. A terceira está quebrada de " +
       "propósito: ela cai no substituto, que mantém a caixa reservada, o raio e o glifo " +
-      "`image` do Carbon — e continua sendo a imagem para quem usa leitor de tela, com o mesmo " +
+      "`image` do Phosphor — e continua sendo a imagem para quem usa leitor de tela, com o mesmo " +
       "texto alternativo. A do meio está escolhida (`selected`), e leva a cápsula da casa.",
       () => (
         <Card>
@@ -298,15 +298,15 @@ describe("vitrine do alvo nativo", () => {
 <meta charset="utf-8">
 <title>Vitrine — alvo nativo, Lote 7</title>
 <style>
-  @font-face { font-family:"IBM Plex Sans"; font-weight:400;
-    src:url("file://${fontes}/ibm-plex-sans-400-normal.woff2") format("woff2"); }
-  @font-face { font-family:"IBM Plex Sans"; font-weight:500;
-    src:url("file://${fontes}/ibm-plex-sans-500-normal.woff2") format("woff2"); }
-  @font-face { font-family:"IBM Plex Sans"; font-weight:600;
-    src:url("file://${fontes}/ibm-plex-sans-600-normal.woff2") format("woff2"); }
+  @font-face { font-family:"Atkinson Hyperlegible Next"; font-weight:400;
+    src:url("file://${fontes}/atkinson-hyperlegible-next-400-normal.woff2") format("woff2"); }
+  @font-face { font-family:"Atkinson Hyperlegible Next"; font-weight:500;
+    src:url("file://${fontes}/atkinson-hyperlegible-next-500-normal.woff2") format("woff2"); }
+  @font-face { font-family:"Atkinson Hyperlegible Next"; font-weight:600;
+    src:url("file://${fontes}/atkinson-hyperlegible-next-600-normal.woff2") format("woff2"); }
   * { box-sizing:border-box; }
   body { margin:0; padding:32px; background:#16171a; color:#e8e8ea;
-         font:14px/1.5 "IBM Plex Sans", system-ui, sans-serif; }
+         font:14px/1.5 "Atkinson Hyperlegible Next", system-ui, sans-serif; }
   h1 { font-size:22px; margin:0 0 6px; }
   .aviso { max-width:980px; margin:0 0 28px; padding:14px 16px; border-radius:12px;
            background:#2a2418; border:1px solid #6b5a1f; color:#e8d9a8; font-size:13px; }
@@ -330,8 +330,8 @@ describe("vitrine do alvo nativo", () => {
   <code>packages/native/src/</code> calculou a partir dos tokens reais — cor, raio, altura,
   borda, espaçamento, peso. Nada aqui foi desenhado à mão.<br><br>
   <b>O que ela NÃO é:</b> o aparelho. O layout é do flexbox do <b>navegador</b>, não do Yoga do
-  React&nbsp;Native. Os glifos são Carbon de verdade, lidos de
-  <code>@carbon/icons/svg/32/</code> — o mesmo arquivo que gera o do aparelho —, mas desenhados
+  React&nbsp;Native. Os glifos são Phosphor de verdade, lidos de
+  <code>@phosphor-icons/core/assets/regular/</code> — o mesmo arquivo que gera o do aparelho —, mas desenhados
   aqui como <code>&lt;svg&gt;</code> do DOM, não pelo <code>react-native-svg</code>. Vale como
   prova de <b>valor</b> — "esta borda é <code>focusStrong</code>?", "este raio
   é 22?" —, nunca como prova de layout final. O aparelho continua sendo o

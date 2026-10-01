@@ -56,6 +56,6 @@ export function MessageComposer({onSend,placeholder,label,icon,sendLabel,disable
       {icon&&<InputGroupAddon><Icon name={icon}/></InputGroupAddon>}
       <input className="input" value={text} disabled={disabled} placeholder={placeholder} aria-label={label??s.chatMessage} onChange={e=>setText(e.target.value)}/>
     </InputGroup>
-    <IconButton type="submit" variant="primary" icon="send" label={sendLabel??s.chatSend} disabled={disabled||!text.trim()}/>
+    <IconButton type="submit" variant="primary" icon="paper-plane-tilt" label={sendLabel??s.chatSend} disabled={disabled||!text.trim()}/>
   </form>;
 }

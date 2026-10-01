@@ -157,7 +157,7 @@ export function TaskQueue({tasks,label,onRetry,className,...props}:OlHTMLAttribu
         <span className="task-title">{t.title}</span>
         {t.priority&&<Badge variant={t.priority==="high"?"warning":"neutral"}>{s.taskPriority[t.priority]}</Badge>}
         <Status variant={TAREFA[t.state]}>{s.taskState[t.state]}</Status>
-        {t.state==="failed"&&onRetry&&<IconButton variant="ghost" size="sm" icon="restart" label={`${s.uploadRetry} ${t.title}`} onClick={()=>onRetry(t)}/>}
+        {t.state==="failed"&&onRetry&&<IconButton variant="ghost" size="sm" icon="arrow-counter-clockwise" label={`${s.uploadRetry} ${t.title}`} onClick={()=>onRetry(t)}/>}
       </div>
       {t.description&&<p className="task-desc">{t.description}</p>}
       {/* a barra só existe RODANDO: barra parada em 0% de uma tarefa na fila diz que
@@ -546,7 +546,7 @@ export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttr
               direção — que é o dado deste componente — se perderia no espaço entre os dois. */}
           <span className="agent-message-route" role="group" aria-label={`${m.from} ${s.agentMessageTo} ${destino}`}>
             <strong>{m.from}</strong>
-            <Icon name="arrow--right" size="sm" className="agent-message-arrow"/>
+            <Icon name="arrow-right" size="sm" className="agent-message-arrow"/>
             {m.to?<strong>{m.to}</strong>:<span className="hint">{destino}</span>}
           </span>
           <Badge variant={RECADO[m.kind??"handoff"]}>{s.agentMessageKind[m.kind??"handoff"]}</Badge>

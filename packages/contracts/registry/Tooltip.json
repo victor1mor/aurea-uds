@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Brief label revealed on hover or focus.",
-  "icon": "help",
+  "icon": "question",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -5,7 +5,7 @@ const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(
 // O botão do sino é marcação crua de propósito: o que se mostra aqui é o BADGE, e um IconButton
 // de verdade traria o foco e o hover dele para a foto. A classe é a mesma que o core já publica.
 const sino = (rotulo) => h("button", {className: "btn btn-icon btn-secondary", "aria-label": rotulo},
-  h(Icon, {name: "notification"}));
+  h(Icon, {name: "bell"}));
 
 export default {
   description:
@@ -47,13 +47,13 @@ export default {
       description: "A status dot, a round picture, or a glyph before and after the text.",
       code: `<Badge size="sm" dot variant="success">Online</Badge>
 <Badge size="md" image="/ana.jpg" imageAlt="">Ana</Badge>
-<Badge size="lg" trailing={<Icon name="arrow--right" />}>Next</Badge>`,
+<Badge size="lg" trailing={<Icon name="arrow-right" />}>Next</Badge>`,
       render: () => h("div", {style: row},
         h(Badge, {size: "sm", dot: true, variant: "success"}, "Online"),
         h(Badge, {size: "md"}, "Default"),
         h(Badge, {size: "lg"}, "Large"),
         h(Badge, {dot: true, variant: "danger"}, "Failed"),
-        h(Badge, {trailing: h(Icon, {name: "arrow--right"})}, "Next")),
+        h(Badge, {trailing: h(Icon, {name: "arrow-right"})}, "Next")),
     },
     {
       title: "Counting, and the ceiling",
@@ -76,7 +76,7 @@ export default {
         "Pass the thing being decorated as children. The count goes in ITS accessible name; the "
         + "badge itself is hidden from screen readers.",
       code: `<Badge anchor="top-end" count={8} emphasis="solid" variant="danger">
-  <IconButton icon="notification" label="Notifications, 8 unread" />
+  <IconButton icon="bell" label="Notifications, 8 unread" />
 </Badge>`,
       render: () => h("div", {style: row},
         h(Badge, {anchor: "top-end", count: 8, emphasis: "solid", variant: "danger"},

@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Combobox that accepts multiple selected values.",
-  "icon": "list--checked",
+  "icon": "list-checks",
   "platforms": {
     "web": "stable",
     "native": "planned"

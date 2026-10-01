@@ -1,20 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function Calculator({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M26,4V28H6V4H26m0-2H6A2,2,0,0,0,4,4V28a2,2,0,0,0,2,2H26a2,2,0,0,0,2-2V4A2,2,0,0,0,26,2Z", fill: color}),
-    React.createElement(Path, {d: "M9 23H11V25H9z", fill: color}),
-    React.createElement(Path, {d: "M21 23H23V25H21z", fill: color}),
-    React.createElement(Path, {d: "M9 18H11V20H9z", fill: color}),
-    React.createElement(Path, {d: "M21 18H23V20H21z", fill: color}),
-    React.createElement(Path, {d: "M9 13H11V15H9z", fill: color}),
-    React.createElement(Path, {d: "M15 23H17V25H15z", fill: color}),
-    React.createElement(Path, {d: "M15 18H17V20H15z", fill: color}),
-    React.createElement(Path, {d: "M15 13H17V15H15z", fill: color}),
-    React.createElement(Path, {d: "M21 13H23V15H21z", fill: color}),
-    React.createElement(Path, {d: "M9 7H23V10H9z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M80,120h96a8,8,0,0,0,8-8V64a8,8,0,0,0-8-8H80a8,8,0,0,0-8,8v48A8,8,0,0,0,80,120Zm8-48h80v32H88ZM200,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V40A16,16,0,0,0,200,24Zm0,192H56V40H200ZM100,148a12,12,0,1,1-12-12A12,12,0,0,1,100,148Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,140,148Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,180,148Zm-80,40a12,12,0,1,1-12-12A12,12,0,0,1,100,188Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,140,188Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,180,188Z", fill: color})
   );
 }

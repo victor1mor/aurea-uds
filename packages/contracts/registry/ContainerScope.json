@@ -4,7 +4,7 @@
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "Declares an Aurea container: the box that container-responsive values measure themselves against.",
-  "icon": "maximize",
+  "icon": "arrows-out",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -541,7 +541,7 @@ export interface InputGroupProps extends ViewProps {
  * A caixa de campo que aceita coisas dentro — glifo na frente, botão atrás, os dois.
  *
  *     <InputGroup>
- *       <InputGroupAddon><Icon name="email" size="sm" /></InputGroupAddon>
+ *       <InputGroupAddon><Icon name="envelope-simple" size="sm" /></InputGroupAddon>
  *       <Input value={email} onChangeText={setEmail} keyboardType="email-address" />
  *     </InputGroup>
  *
@@ -627,20 +627,20 @@ export interface PasswordFieldProps extends Omit<InputProps, "secureTextEntry" |
    * desmontar a peça e remontar à mão, perdendo o olho, o rótulo que anuncia o estado e o
    * `autoCapitalize` que nasce em `none`.
    *
-   *     <PasswordField leading={<Icon name="locked" size="sm" />} … />
+   *     <PasswordField leading={<Icon name="lock" size="sm" />} … />
    */
   leading?: React.ReactNode;
   /**
    * O registro de glifos, quando o do `AureaProvider` não tem os dois que este componente usa.
    *
    * 🔴 **ELE PRECISA DE DOIS ÍCONES, e isto não estava escrito em lugar nenhum — defeito da
-   * `0.8.2`:** o olho é `view` e `view--off`. Se faltarem no registro, **o botão fica invisível**
+   * `0.8.2`:** o olho é `eye` e `eye-slash`. Se faltarem no registro, **o botão fica invisível**
    * e o aviso sai só em desenvolvimento: em produção a pessoa simplesmente não consegue ver a
    * senha que digitou, sem nada na tela explicando.
    *
-   *     import Olho from "@aurea-uds/native/icons/view";
-   *     import OlhoOff from "@aurea-uds/native/icons/view--off";
-   *     const ICONES = criarRegistroDeIcones({view: Olho, "view--off": OlhoOff});
+   *     import Olho from "@aurea-uds/native/icons/eye";
+   *     import OlhoOff from "@aurea-uds/native/icons/eye-slash";
+   *     const ICONES = criarRegistroDeIcones({eye: Olho, "eye-slash": OlhoOff});
    *     // no provider, junto dos outros — ou aqui: <PasswordField icons={ICONES} />
    */
   icons?: AureaIconRegistry;
@@ -669,7 +669,7 @@ export function PasswordField({
       />
       <InputGroupAddon>
         <IconButton
-          name={visivel ? "view--off" : "view"}
+          name={visivel ? "eye-slash" : "eye"}
           label={visivel ? strings.passwordHide : strings.passwordShow}
           appearance="ghost"
           size={tam === "lg" ? "md" : "sm"}
@@ -1155,7 +1155,7 @@ export interface SelectProps {
  * O `Combobox` usa `FlatList` e aceita busca remota.
  */
 export function Select({
-  items, value, onChange, placeholder, disabled, size, chevron = "chevron--down", style, testID,
+  items, value, onChange, placeholder, disabled, size, chevron = "caret-down", style, testID,
 }: SelectProps) {
   const t = useAureaTokens();
   const s = folha(t);

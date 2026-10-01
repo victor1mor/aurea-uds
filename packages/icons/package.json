@@ -1,12 +1,12 @@
 {
   "name": "@aurea-uds/icons",
-  "version": "0.12.4",
-  "description": "O sprite de ícones do Carbon que a Aurea UDS desenha com <use href>. A atribuição está no NOTICE.",
+  "version": "0.13.0",
+  "description": "O sprite de ícones do Phosphor (Regular e Fill) que a Aurea UDS desenha com <use href>, e a tabela de nomes do Carbon para o Phosphor. A atribuição está no NOTICE.",
   "keywords": [
     "aurea",
     "design-system",
     "icons",
-    "carbon"
+    "phosphor"
   ],
   "license": "Apache-2.0",
   "repository": {
@@ -23,15 +23,17 @@
   },
   "files": [
     "dist",
-    "NOTICE"
+    "NOTICE",
+    "carbon-para-phosphor.json"
   ],
   "exports": {
-    "./sprite": "./dist/aurea-icons.svg"
+    "./sprite": "./dist/aurea-icons.svg",
+    "./carbon-para-phosphor.json": "./carbon-para-phosphor.json"
   },
   "scripts": {
     "build": "node build-icons.mjs"
   },
   "devDependencies": {
-    "@carbon/icons": "11.84.0"
+    "@phosphor-icons/core": "2.1.1"
   }
 }

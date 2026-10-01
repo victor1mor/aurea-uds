@@ -117,14 +117,14 @@ export default {
       title: "With icons",
       description: "Carbon glyphs on either side. The icon never replaces the label — it repeats it.",
       code: [
-        '<Button leadingIcon="add">New item</Button>',
-        '<Button variant="outline" trailingIcon="chevron--down">Sort by</Button>',
-        '<Button variant="danger" leadingIcon="trash-can">Delete</Button>',
+        '<Button leadingIcon="plus">New item</Button>',
+        '<Button variant="outline" trailingIcon="caret-down">Sort by</Button>',
+        '<Button variant="danger" leadingIcon="trash">Delete</Button>',
       ].join("\n"),
       render: () => h("div", {style: row},
-        h(Button, {leadingIcon: "add"}, "New item"),
-        h(Button, {variant: "outline", trailingIcon: "chevron--down"}, "Sort by"),
-        h(Button, {variant: "danger", leadingIcon: "trash-can"}, "Delete")),
+        h(Button, {leadingIcon: "plus"}, "New item"),
+        h(Button, {variant: "outline", trailingIcon: "caret-down"}, "Sort by"),
+        h(Button, {variant: "danger", leadingIcon: "trash"}, "Delete")),
     },
     {
       title: "With shortcut",
@@ -140,8 +140,8 @@ export default {
     {
       title: "As a link",
       description: "With href it renders an anchor wearing the same skin: a button that navigates is a link, and the reader announces it as one.",
-      code: '<Button variant="outline" href="/docs" trailingIcon="arrow--right">Read the docs</Button>',
-      render: () => h(Button, {variant: "outline", href: "./index.html", trailingIcon: "chevron--down"}, "Read the docs"),
+      code: '<Button variant="outline" href="/docs" trailingIcon="arrow-right">Read the docs</Button>',
+      render: () => h(Button, {variant: "outline", href: "./index.html", trailingIcon: "caret-down"}, "Read the docs"),
     },
     {
       title: "Full width",

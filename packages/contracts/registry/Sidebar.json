@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Floating side panel that holds the application's navigation.",
-  "icon": "side-panel--open",
+  "icon": "sidebar-simple",
   "platforms": {
     "web": "stable",
     "native": "planned"

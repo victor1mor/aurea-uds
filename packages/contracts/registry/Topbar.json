@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Floating full-width top panel: brand lockup plus search, actions and account.",
-  "icon": "menu",
+  "icon": "list",
   "platforms": {
     "web": "stable",
     "native": "planned"

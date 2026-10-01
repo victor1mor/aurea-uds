@@ -14,7 +14,7 @@
   },
   "name": "InvocationPanel",
   "summary": "One execution: what was asked, the steps, what came out.",
-  "icon": "flow",
+  "icon": "flow-arrow",
   "states": [
     "idle",
     "running",

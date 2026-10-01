@@ -1,12 +1,12 @@
 {
   "name": "@aurea-uds/fonts",
-  "version": "0.12.4",
-  "description": "IBM Plex para a Aurea: WOFF2 para a web (@aurea-uds/fonts/css) e TTF para React Native (@aurea-uds/fonts/native).",
+  "version": "0.13.0",
+  "description": "Atkinson Hyperlegible Next e Mono para a Aurea: WOFF2 para a web (@aurea-uds/fonts/css) e TTF para React Native (@aurea-uds/fonts/native).",
   "keywords": [
     "aurea",
     "design-system",
     "fonts",
-    "ibm-plex",
+    "atkinson-hyperlegible",
     "react-native"
   ],
   "license": "OFL-1.1",

@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Text field with an autocomplete listbox.",
-  "icon": "search",
+  "icon": "magnifying-glass",
   "platforms": {
     "web": "stable",
     "native": "supported"

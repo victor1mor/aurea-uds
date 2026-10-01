@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Visual divider between toolbar groups.",
-  "icon": "subtract",
+  "icon": "minus",
   "platforms": {
     "web": "stable",
     "native": "planned"

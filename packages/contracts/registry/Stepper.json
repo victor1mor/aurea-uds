@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Progress through numbered steps, for a task that happens in a fixed order.",
-  "icon": "task--progress",
+  "icon": "circle-notch",
   "platforms": {
     "web": "stable",
     "native": "planned"

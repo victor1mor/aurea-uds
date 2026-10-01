@@ -49,8 +49,10 @@ registro não está completo — copiar estrutura é uma coisa, copiar código �
 | [Recharts](https://recharts.org) | motor de gráfico (não é referência visual: é dependência, peer opcional) | MIT | 01/08/2026 |
 | [react-day-picker](https://daypicker.dev) | motor de calendário (não é referência visual: é dependência, peer opcional) | MIT | 01/08/2026 |
 | [Carbon Design System](https://carbondesignsystem.com) | anatomia de Accordion e de empty state (Fase 11) | Apache-2.0 | 30/07/2026 |
-| [Carbon Icons](https://carbondesignsystem.com/elements/icons/library/) | os glifos | Apache-2.0 | `packages/icons/NOTICE` |
-| [IBM Plex](https://www.ibm.com/plex/) | as três famílias tipográficas | OFL-1.1 | `packages/fonts/LICENSE` |
+| [Phosphor Icons](https://phosphoricons.com) | os glifos, Regular e Fill (desde 01/10/2026, ADR-0053) | MIT | `packages/icons/NOTICE` |
+| [Atkinson Hyperlegible Next e Mono](https://github.com/googlefonts/atkinson-hyperlegible-next) | as duas famílias tipográficas (desde 01/10/2026, ADR-0053) | OFL-1.1 | `packages/fonts/LICENSE` |
+| ~~[Carbon Icons](https://carbondesignsystem.com/elements/icons/library/)~~ | ~~os glifos~~ — até a `0.12.4` | Apache-2.0 | — |
+| ~~[IBM Plex](https://www.ibm.com/plex/)~~ | ~~as três famílias tipográficas~~ — até a `0.12.4` | OFL-1.1 | — |
 
 ---
 
@@ -3707,4 +3709,4 @@ sem cor solta, com o nome dizendo para onde vai.
 **O que é nosso:** mostrar o tema de DESTINO (a lua no claro, o sol no escuro), e a cor no glifo —
 a lua na tinta do texto (`--foreground`) e o sol no amarelo da marca (`--primary`). As duas
 combinações se enxergam; a inversa (sol amarelo no claro, lua escura no escuro) não existe de
-propósito. Glifos do Carbon, os CHEIOS (escolha do Victor, 25/09/2026: a lua de contorno ficava branca por dentro): `asleep--filled` (lua) e `light--filled` (sol).
+propósito. Glifos do Carbon, os CHEIOS (escolha do Victor, 25/09/2026: a lua de contorno ficava branca por dentro): `asleep--filled` (lua) e `light--filled` (sol). **Desde a ADR-0053 (01/10/2026):** o Phosphor, também cheios — `moon` e `sun` em `weight="fill"`.

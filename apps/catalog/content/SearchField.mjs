@@ -59,9 +59,9 @@ export default {
     {
       title: "As a filter",
       description: "Same control, different glyph: what it does to the list is filter, not search.",
-      code: '<SearchField icon="filter" placeholder="Filter by name…" />',
+      code: '<SearchField icon="funnel" placeholder="Filter by name…" />',
       render: () => h("div", {style: stack},
-        h(SearchField, {icon: "filter", placeholder: "Filter by name…"})),
+        h(SearchField, {icon: "funnel", placeholder: "Filter by name…"})),
     },
     {
       title: "With an action",

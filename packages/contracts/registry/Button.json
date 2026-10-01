@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Trigger for an action or navigation. The primary interactive control.",
-  "icon": "add",
+  "icon": "plus",
   "platforms": {
     "web": "stable",
     "native": "planned"

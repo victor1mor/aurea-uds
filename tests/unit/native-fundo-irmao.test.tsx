@@ -26,7 +26,7 @@ import {
 } from "../../packages/native/src/index.js";
 
 const Glifo = () => null;
-const ICONES = criarRegistroDeIcones({close: Glifo, "chevron--down": Glifo, checkmark: Glifo});
+const ICONES = criarRegistroDeIcones({"x": Glifo, "caret-down": Glifo, "check": Glifo});
 const Envolve = ({children}: {children?: React.ReactNode}) =>
   <AureaProvider icons={ICONES}>{children}</AureaProvider>;
 

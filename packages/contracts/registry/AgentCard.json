@@ -22,7 +22,7 @@
   },
   "name": "AgentCard",
   "summary": "Who an agent is, what state it is in, and what it can do.",
-  "icon": "user--avatar",
+  "icon": "user-circle",
   "states": [
     "default",
     "with-state",

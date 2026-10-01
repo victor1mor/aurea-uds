@@ -8,7 +8,7 @@ pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 
 ## Uso
 
-Carregue as fontes **antes** da folha de estilo — o core não embute mais a IBM Plex.
+Carregue as fontes **antes** da folha de estilo — o core não embute fonte nenhuma.
 
 ```js
 import "@aurea-uds/fonts/css";

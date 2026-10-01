@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Placeholder for an empty or zero-result view.",
-  "icon": "folder--open",
+  "icon": "folder-open",
   "platforms": {
     "web": "stable",
     "native": "planned"

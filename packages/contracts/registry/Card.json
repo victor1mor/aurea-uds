@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Floating surface that groups related content.",
-  "icon": "catalog",
+  "icon": "books",
   "platforms": {
     "web": "stable",
     "native": "planned"

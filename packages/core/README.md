@@ -8,7 +8,7 @@ pnpm add @aurea-uds/core @aurea-uds/fonts
 ```
 
 ```js
-import "@aurea-uds/fonts/css";  // antes do core: ele não embute mais a IBM Plex
+import "@aurea-uds/fonts/css";  // antes do core: ele não embute fonte nenhuma
 import "@aurea-uds/core/css";
 import "@aurea-uds/core/js";    // opcional — abas, abrir e fechar e afins, sem React
 ```

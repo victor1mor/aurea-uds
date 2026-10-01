@@ -171,8 +171,10 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
             tocando && s.pressionado, disabled && s.inerte,
         ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa], children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
                     // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão do HeroUI Native
-                    // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e o IBM
-                    // Plex precisa de 1,3 em para caber inteiro (sobe 1,025 e desce 0,275): no Android o RN
+                    // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e a letra
+                    // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a
+                    // Atkinson Hyperlegible (ADR-0053) sobe 0,984 e desce 0,316, o mesmo 1,3 (medido na
+                    // tabela `hhea` dos dois arquivos, 01/10/2026): no Android o RN
                     // corta o que passa da linha, e a perna do g, do p e do ç sumia. Cabe em todo tamanho e
                     // densidade (medido): `xs`/`sm` têm linha de 21 e o menor botão mede 24 (compacto); os
                     // maiores têm linha de 24 e medem 32 ou mais.
@@ -198,7 +200,7 @@ export function IconButton(props) {
 }
 /** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
-function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, ...rest }) {
+function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const marca = useSobreAMarca();
@@ -216,12 +218,12 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
             s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,
-        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, color: corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre }) }) }));
+        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, weight: pesoDoIcone, color: corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre }) }) }));
 }
 export function ThemeToggle(props) {
     const { theme, toggleTheme } = useAureaTheme();
     const t = useAureaTokens();
     const s = useAureaStrings();
     const escuro = theme === "dark";
-    return (_jsx(BotaoDeIcone, { ...props, name: escuro ? "light--filled" : "asleep--filled", label: escuro ? s.themeToLight : s.themeToDark, corDoIcone: escuro ? t.color.primary : t.color.foreground, onPress: toggleTheme }));
+    return (_jsx(BotaoDeIcone, { ...props, name: escuro ? "sun" : "moon", label: escuro ? s.themeToLight : s.themeToDark, corDoIcone: escuro ? t.color.primary : t.color.foreground, pesoDoIcone: "fill", onPress: toggleTheme }));
 }

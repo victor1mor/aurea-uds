@@ -42,10 +42,11 @@ export type AureaFontScale = Record<400 | 500 | 600 | 700, string> & {
  * 03/09/2026 no `@aurea-uds/fonts/native`:
  *
  *     ui         400  400i  500  600  700
- *     editorial            500  600  700      ← não há 400
+ *     editorial  400       500  600  700      ← apelido do `ui` desde a ADR-0053 (sai na 1.0)
  *     code       400       500  600           ← não há 700
  *
- * É a grade que o IBM Plex desenha, não um esquecimento nosso.
+ * É a grade dos arquivos de fonte, não um esquecimento nosso. Até a 0.12.4 o `editorial` era a
+ * IBM Plex Serif, sem 400; a ADR-0053 tirou a serifada e o deixou apontando para a Atkinson.
  */
 export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "400i", string>>;
 
@@ -68,7 +69,7 @@ export type AureaTokens = {
   remInDp: number;
 };
 
-/** O mapa que o consumidor injeta para o texto sair no IBM Plex. Ver `AureaProviderProps`. */
+/** O mapa que o consumidor injeta para o texto sair na Atkinson Hyperlegible. Ver `AureaProviderProps`. */
 export type AureaFontFamilies = {ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput};
 
 type Cor = {hex: string; p3: string; oklch: string | null};
@@ -148,7 +149,7 @@ export function resolverTokens(
   }
 
   // Sem mapa injetado, a família CRUA do token preenche os quatro pesos: é o token dizendo
-  // "IBM Plex Sans", que no aparelho vira Regular ou fonte de sistema. Honesto e previsível —
+  // "Atkinson Hyperlegible Next", que no aparelho vira Regular ou fonte de sistema. Honesto e previsível —
   // e é por isso que o `fontFamilies` do provider existe.
   const font = {
     ui: normalizarEscala(fontFamilies?.ui, texto.fontUi ?? "System"),

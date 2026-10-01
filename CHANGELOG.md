@@ -17,7 +17,83 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada ainda.
+Nada além da `0.13.0`, logo abaixo, pronta e não publicada.
+
+---
+
+## [0.13.0] — 2026-10-01
+
+⏳ **Não publicada.** **QUEBRA** em todo app que usa ícone. É a troca de fonte e de ícones da
+[ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md), decisão do Victor
+de 01/10/2026: a letra passa a ser a **Atkinson Hyperlegible Next** (e a **Mono** para código), e
+os ícones passam a ser o **Phosphor**, no peso Regular, com a forma **cheia** no item escolhido.
+Mexe nos sete pacotes.
+
+### ⚠ Quebra — o que o app precisa fazer
+
+1. **Trocar os nomes de ícone.** Os nomes são os do Phosphor, e os do Carbon não compilam mais
+   (desde a A-04 o nome é conferido pelo TypeScript). A tabela
+   `@aurea-uds/icons/carbon-para-phosphor.json` traz os **260** nomes do Carbon que a Aurea e os
+   apps conhecidos usavam, com o novo. Os mais comuns: `close` → `x`, `add` → `plus`,
+   `chevron--down` → `caret-down`, `search` → `magnifying-glass`, `settings` → `gear`,
+   `home` → `house`, `trash-can` → `trash`, `checkmark` → `check`, `menu` → `list`,
+   `notification` → `bell`. Os `*--filled` viram o mesmo nome em `weight="fill"`.
+   - ⚠ Seis nomes existem **nos dois** com desenhos diferentes, e por isso **compilam e saem
+     errados**: `list`, `notification`, `radio`, `subtract`, `tree` e `video`. Troque-os pela
+     tabela mesmo sem erro do compilador (`list` do Carbon é `list-bullets`; `list` do Phosphor é o
+     menu de três traços).
+2. **Web:** copiar o sprite novo (`@aurea-uds/icons/dist/aurea-icons.svg`) para onde o app o
+   serve. O id do símbolo é `i-<nome>` e, na forma cheia, `i-<nome>-fill`.
+3. **Nativo:** trocar os imports profundos (`@aurea-uds/native/icons/plus`, não mais
+   `.../icons/add`) e as chaves do registro. Para o item escolhido, os avisos e o `ThemeToggle`
+   saírem cheios, registrar também a forma cheia: `{house: House, "house-fill": HouseFill}`. Sem
+   ela, sai a regular.
+4. **Tipo:** `CarbonIconName` saiu; o tipo é `PhosphorIconName`.
+5. **Fonte:** nada a fazer além de atualizar o `@aurea-uds/fonts`. No nativo, o `AUREA_FONTS` e o
+   `FONT_FAMILIES` já trazem os nomes novos (`AtkinsonHyperlegibleNext-SemiBold`…).
+
+### Mudado
+
+- **Ícones: Phosphor no lugar do Carbon** (`@phosphor-icons/core` 2.1.1, MIT), nos dois alvos e
+  pela mesma fonte. São **1.433** ícones, cada um em duas formas (regular e `-fill`): 2.866
+  símbolos no sprite e 2.866 componentes em `@aurea-uds/native/icons/*`. O sprite fica com
+  1.281.765 bytes, contra 1.265.973 do Carbon.
+  - Os **79 logotipos de marca** do Phosphor (`apple-logo`, `gitlab-logo-simple`…) ficam fora,
+    pelo `CLAUDE.md` §5. O check 38 do `validate.py` e um teste cobram isso.
+  - O traço do Regular é o mesmo do Carbon de hoje: 1/16 do tamanho (1 px a 16), medido no
+    desenho do sinal de menos de cada coleção.
+- **O item escolhido desenha o ícone cheio:** `Sidebar` e `BottomNav` na web, `BottomNav` no
+  nativo.
+- **Continuam cheios** os que já eram cheios no Carbon: os glifos de variante do `Alert` e do
+  `Toast`, a lua e o sol do `ThemeToggle` (aprovados pela imagem em 25/09/2026), o visto de envio
+  concluído do `FileInput` e o play do `MediaEmbed`. O ícone que o consumidor escolhe sai como ele
+  pediu.
+- **Fonte: Atkinson Hyperlegible Next e Mono no lugar da IBM Plex** (SIL OFL 1.1, sem nome
+  reservado). Oito arquivos em dois formatos: o `.woff2` só com o alfabeto latino para a web, o
+  `.ttf` completo para o aparelho, gerados das fontes variáveis do Google Fonts com um peso fixo
+  por arquivo. A altura da letra é a mesma da Plex (1,3 em: sobe 0,984 e desce 0,316), então as
+  entrelinhas que cabiam continuam cabendo.
+- **A IBM Plex Serif saiu.** `--font-editorial` e o papel `editorial` do nativo continuam
+  existindo como **apelido da fonte do texto**, para não quebrar quem os usa; saem na `1.0`.
+
+### Adicionado
+
+- **`weight` no `Icon`**, nos dois alvos: `"regular"` (o padrão) ou `"fill"`. Na web, um nome
+  próprio do app pedido em `fill` sai no regular, em vez de um `<use>` vazio. Tipo `IconWeight`.
+- **A tabela `carbon-para-phosphor.json`** no `@aurea-uds/icons`, publicada.
+- **Controle:** `tests/unit/icone-cheio.test.tsx` (o item escolhido cheio na web e no nativo, e a
+  volta para o regular), mais casos novos em `theme-toggle`, `native-theme-toggle` e
+  `grade-do-core`. Os 8 casos novos que cobram a forma cheia **reprovam** com o peso desligado.
+  Os testes do gerador nativo cobram a cor em cada traço, a forma cheia como arquivo próprio e a
+  ausência de logotipos.
+
+### O que falta
+
+- **As fotos de referência dos testes visuais** mudam todas (fonte e ícones). Precisam ser
+  regeradas no contêiner da CI, pelo fluxo de atualização.
+- **O teste de aparelho:** os blocos 2 (os ícones) e o de fontes do `apps/native-smoke`.
+- **O peso do ícone pequeno** (ADR-0053): por ora o Regular em todos os tamanhos, que tem o traço
+  de hoje. O Victor decide se o tamanho 16 usa o Bold.
 
 ---
 

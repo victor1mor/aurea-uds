@@ -21,7 +21,7 @@ if(!copyable)return pre;
 const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();(window as any).Aurea?.copy?.(e.currentTarget)??navigator.clipboard?.writeText(children)};
 return <div className={cx("code-block-wrap",className)} data-aurea-copy-scope>
 <button type="button" className="btn btn-icon btn-ghost copy-code" data-aurea-copy aria-label={s.copyCode} onClick={onCopy}>
-<Icon name="copy" size="sm" className="c-copy"/><Icon name="checkmark" size="sm" className="c-done"/></button>
+<Icon name="copy" size="sm" className="c-copy"/><Icon name="check" size="sm" className="c-done"/></button>
 {pre}</div>
 }
 

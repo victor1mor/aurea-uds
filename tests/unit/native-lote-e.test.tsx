@@ -12,7 +12,8 @@ const Envolve = ({children}: {children: React.ReactNode}) => <AureaProvider>{chi
 const estiloDo = (primitivo: string, filtro: (p: Record<string, unknown>) => boolean = () => true) =>
   StyleSheet.flatten((__instancias(primitivo).filter(filtro).at(-1) ?? {}).style);
 
-// E1 · a perna das letras. O IBM Plex sobe 1,025 em e desce 0,275 em: precisa de 1,3 em de linha
+// E1 · a perna das letras. A letra precisa de 1,3 em de linha (a IBM Plex subia 1,025 e descia
+// 0,275; a Atkinson Hyperlegible da ADR-0053 sobe 0,984 e desce 0,316, o mesmo total)
 // para caber inteiro, e no Android o React Native corta o que passa. Com entrelinha 1,0 o "g" do
 // "Lançar um gasto" perdia a perna.
 describe("E1 · Button: a entrelinha do rótulo cabe a letra inteira", () => {

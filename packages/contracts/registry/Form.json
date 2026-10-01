@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Shows the error and collects the values. It does not decide what an error is.",
-  "icon": "document",
+  "icon": "file-text",
   "platforms": {
     "web": "stable",
     "native": "planned"

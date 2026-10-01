@@ -20,9 +20,9 @@ import {
 const claro = resolverTokens("light", "comfortable");
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones(
-  {view: Glifo, "view--off": Glifo, locked: Glifo, add: Glifo, close: Glifo,
-   "chevron--down": Glifo, "information--filled": Glifo, "warning--filled": Glifo,
-   "checkmark--filled": Glifo, "error--filled": Glifo});
+  {"eye": Glifo, "eye-slash": Glifo, "lock": Glifo, "plus": Glifo, "x": Glifo,
+   "caret-down": Glifo, "info": Glifo, "warning-circle": Glifo,
+   "check-circle": Glifo, "x-circle": Glifo});
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider theme="light" icons={ICONES}>{children}</AureaProvider>;
 
@@ -71,7 +71,7 @@ describe("1 · o tom da marca escrevendo texto", () => {
   // O `IconButton` pinta o GLIFO com a mesma cor do texto — então ele herda o conserto.
   it("o IconButton segue a mesma regra", () => {
     render(<Envolve>
-      <IconButton appearance="ghost" tone="brand" name="add" label="Somar" testID="ib" />
+      <IconButton appearance="ghost" tone="brand" name="plus" label="Somar" testID="ib" />
     </Envolve>);
     expect(porID("Pressable", "ib").accessibilityLabel).toBe("Somar");
   });
@@ -129,7 +129,7 @@ describe("3 · o Input parou de descartar props", () => {
 
 describe("4 · o olho da senha e o registro de glifos", () => {
   it("o PasswordField aceita um registro próprio", () => {
-    const local = criarRegistroDeIcones({view: Glifo, "view--off": Glifo});
+    const local = criarRegistroDeIcones({"eye": Glifo, "eye-slash": Glifo});
     render(<AureaProvider theme="light"><PasswordField testID="p" icons={local} /></AureaProvider>);
     expect(porID("Pressable", "p-olho").accessibilityLabel).toBeTruthy();
   });

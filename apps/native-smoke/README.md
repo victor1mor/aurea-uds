@@ -260,13 +260,13 @@ O Victor rodou num Android. **As quatro perguntas passaram**, e a tela provou ma
 | # | resultado |
 |---|---|
 | 1 | cinco pesos distintos, e a linha de **controle** diferente das quatro |
-| 2 | ícones na cor do texto; o `checkmark--filled` com o **visto vazado** |
+| 2 | ícones na cor do texto; o `check-circle` com o **visto vazado** |
 | 3 | **182 ms** (tema + `spacious`) e **161 ms** (`compact`), sem piscar |
 | 4 | `primary` **#f0b100** = esperado — **✓ bate** |
 
 Além disso: Serif e Mono corretos, a grade de fontes fechada
 (`IBMPlexSerif-Medium` e `IBMPlexMono-SemiBold` onde o IBM Plex não tem peso), o
-`calendar--add--alt` do `<switch>` desenhado, a densidade **mudando o layout de verdade**, e a
+`calendar-plus` do `<switch>` desenhado, a densidade **mudando o layout de verdade**, e a
 identidade atravessando — amarelo, raio 22px, pill de 999px.
 
 **Este app cumpriu o que existia para cumprir.** Ele continua aqui para a próxima vez que a
@@ -452,7 +452,7 @@ carregou, e o problema é o `useFonts`, não o nome.
 ### 2. Os ícones desenham, e na cor certa?
 
 **Passa:** os três aparecem na cor do texto (não pretos num tema claro), e crescem na fileira de
-tamanhos abaixo. O do meio (`checkmark--filled`) é um **círculo cheio com um visto vazado dentro**.
+tamanhos abaixo. O do meio (`check-circle`) é um **círculo cheio com um visto vazado dentro**.
 
 **Reprova:** o do meio aparece como **círculo totalmente cheio, sem o visto**. Isso significa que o
 miolo `fill="none"` foi pintado — o defeito que o gerador foi escrito para evitar.
@@ -489,7 +489,7 @@ Escrever este app já respondeu mais do que se esperava. Tudo abaixo saiu de
 |---|---|
 | os três pacotes **instalam** como tarball | sim, `npm install` limpo |
 | o `exports` com `./icons/*` **resolve no Metro** | sim — era cláusula 1 da ADR-0038, nunca testada |
-| o **caminho profundo poda** | **723 módulos**. Os 3 ícones importados estão no bundle; `logo--kubernetes` e `wikis` **não** |
+| o **caminho profundo poda** | **723 módulos**. Os 3 ícones importados estão no bundle; `cube` e `wikis` **não** |
 | o `require()` dos `.ttf` **resolve** | sim, os 11 viram assets do bundle |
 | os **nomes PostScript** chegam ao bundle | `IBMPlexSans-SemiBold`, `IBMPlexSerif-Medium`, `IBMPlexMono-Regular` |
 | bundle de bytecode (`.hbc`) | 1,7 MB |

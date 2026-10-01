@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "A paragraph of body text in one of three sizes.",
-  "icon": "document",
+  "icon": "file-text",
   "platforms": {
     "web": "stable",
     "native": "stable"

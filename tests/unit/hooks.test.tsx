@@ -93,7 +93,7 @@ test("useSpriteUrl: é a mesma origem que o Icon usa", () => {
   const {container} = render(
     <AureaProvider spriteUrl="/cdn/aurea.svg">
       <MostraSprite />
-      <Icon name="checkmark" />
+      <Icon name="check" />
     </AureaProvider>,
   );
   const doHook = screen.getByTestId("sprite").textContent;
@@ -101,6 +101,6 @@ test("useSpriteUrl: é a mesma origem que o Icon usa", () => {
   // O `i-` é a convenção de id DENTRO do sprite, e é do `Icon`; o hook devolve só a origem. O
   // que este teste amarra é a ORIGEM ser a mesma nos dois, que é o que quebraria se um lado
   // passasse a ler outro contexto.
-  expect(doIcone).toBe(`${doHook}#i-checkmark`);
+  expect(doIcone).toBe(`${doHook}#i-check`);
   expect(doIcone!.startsWith(doHook!)).toBe(true);
 });

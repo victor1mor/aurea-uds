@@ -49,7 +49,7 @@
     "font-ui": {
       "$type": "fontFamily",
       "$value": [
-        "IBM Plex Sans",
+        "Atkinson Hyperlegible Next",
         "Segoe UI",
         "sans-serif"
       ]
@@ -57,15 +57,15 @@
     "font-editorial": {
       "$type": "fontFamily",
       "$value": [
-        "IBM Plex Serif",
-        "Georgia",
-        "serif"
+        "Atkinson Hyperlegible Next",
+        "Segoe UI",
+        "sans-serif"
       ]
     },
     "font-code": {
       "$type": "fontFamily",
       "$value": [
-        "IBM Plex Mono",
+        "Atkinson Hyperlegible Mono",
         "SFMono-Regular",
         "Consolas",
         "monospace"

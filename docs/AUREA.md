@@ -41,7 +41,7 @@ A equação que define tudo:
   organização (categoria, maturidade, plataformas) mostra isso desde o começo.
 - **Identidade inegociável** (detalhe em `CLAUDE.md`): superfícies flutuantes; raio
   22px em card/dialog; pill nos controles; amarelo `oklch(0.795 0.184 86.047)`
-  invariável; IBM Plex; Carbon Icons; sem gradiente; dark/light equivalentes;
+  invariável; Atkinson Hyperlegible e ícones Phosphor (ADR-0053; antes de 01/10/2026, IBM Plex e Carbon); sem gradiente; dark/light equivalentes;
   densidades compact/comfortable/spacious. Nada disso muda sem autorização.
 
 ---
@@ -104,7 +104,7 @@ idêntica em estrutura. A pele é sempre Aurea.
 > aqui fica só o que não é contável — o que ainda dói e por quê.
 
 **Sólido (Fases 0–5, no `origin`):**
-- Monorepo pnpm: `tokens` (DTCG), `core` (CSS gerado), `fonts`, `icons` (Carbon),
+- Monorepo pnpm: `tokens` (DTCG), `core` (CSS gerado), `fonts`, `icons` (Phosphor, desde a ADR-0053),
   `contracts` (contrato + registry), `react` (componentes tipados) — contagens em `STATE.md`.
 - Identidade travada e validada por gate. CI (validate, build git-clean, SHA-pin,
   audit). TS7 strict.

@@ -132,7 +132,9 @@ seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 **Phosphor Regular**, e a fonte passa a ser a **Atkinson Hyperlegible Next**
 ([ADR-0053](../decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). A R-17 se
 resolve com a troca: o Phosphor tem coroa e moto. A troca é um lote próprio, com "pode"; a ADR
-lista o que ele obriga e as quatro perguntas abertas. O texto abaixo é a análise que levou à
+lista o que ele obriga. Das quatro perguntas, três foram respondidas em 01/10/2026 (Fill no
+item escolhido, Atkinson Hyperlegible Mono, IBM Plex Serif sai); falta o peso do ícone pequeno,
+já medido. O texto abaixo é a análise que levou à
 decisão, mantida como registro.
 
 O Victor: *"temos um pacote grande e mesmo assim faltou; poderíamos substituir o pacote, ou
@@ -245,7 +247,7 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 1. ~~Publicar a `0.12.4` (R-20)~~ — publicada em 01/10/2026. Falta rodar o teste de aparelho (§3).
 2. Decisões rápidas do nativo: R-10, R-13, R-19, R-11.
 3. **Lote da troca de fonte e ícones** (ADR-0053): antes da `1.0`, porque quebra todo nome de
-   ícone. Primeiro as quatro perguntas da ADR.
+   ícone. Falta só o peso do ícone pequeno (ADR-0053).
 4. Acréscimos do nativo que o app já espera: R-12, R-14, R-15, R-16.
 5. Web: C-08 e M-03 fecham sem código; C-11, B-05, B-06 + N-01 + N-03 num lote só (paginação).
 6. Lote 5 (peças novas da web) depois da `1.0`, como o `CLAUDE.md` já diz.

@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Single choice within a group.",
-  "icon": "pending--filled",
+  "icon": "hourglass",
   "platforms": {
     "web": "stable",
     "native": "planned"

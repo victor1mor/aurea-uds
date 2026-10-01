@@ -68,7 +68,7 @@ pnpm add @aurea-uds/native react-native-svg react-native-safe-area-context
 
 Quatro **peers obrigatórios**: `react` (≥19), `react-native` (≥0.76, pela Nova Arquitetura),
 `react-native-svg` (≥15, pelos ícones) e `react-native-safe-area-context` (≥5, pelo `Screen`).
-Para o texto sair no IBM Plex, some `@aurea-uds/fonts`.
+Para o texto sair na Atkinson Hyperlegible (a fonte da Aurea desde a ADR-0053), some `@aurea-uds/fonts`.
 
 O último costuma **já estar instalado**: `react-navigation` e `expo-router` o arrastam. Declará-lo
 como peer não adiciona peso ao app — só diz o que já ia estar lá.
@@ -115,7 +115,7 @@ function Cartao() {
         <Text size="lg" weight={600}>Aurea</Text>
         <Text tone="muted">O `Card` já traz raio, superfície e sombra do tema.</Text>
         <Cluster>
-          <Button tone="brand" leadingIcon="add">Novo</Button>
+          <Button tone="brand" leadingIcon="plus">Novo</Button>
           <Button appearance="outline">Cancelar</Button>
         </Cluster>
       </Stack>
@@ -265,7 +265,7 @@ configuração — e ela existe porque filtrar de novo o que o servidor devolveu
 | espera antes de chamar `onSearchChange` | **250 ms**. `searchDelay={0}` desliga |
 | onde se digita | **dentro da folha**, não no gatilho — o teclado ocupa metade da tela |
 | `value` | o **item inteiro**: numa busca remota a lista some debaixo da escolha |
-| ícones a registrar | `chevron--down`, `search`, `close` |
+| ícones a registrar | `caret-down`, `search`, `close` |
 
 ### `SearchField` — filtrar o que já está na tela
 
@@ -740,8 +740,8 @@ continua. Quem pediu menos movimento não pediu que o aviso ficasse para sempre.
 <BottomNav
   current={aba}
   items={[
-    {id: "painel", label: "Painel", icon: "dashboard", onPress: () => ir("painel")},
-    {id: "avisos", label: "Avisos", icon: "notification", badge: 8, onPress: () => ir("avisos")},
+    {id: "painel", label: "Painel", icon: "squares-four", onPress: () => ir("painel")},
+    {id: "avisos", label: "Avisos", icon: "bell", badge: 8, onPress: () => ir("avisos")},
   ]} />
 ```
 
@@ -812,15 +812,15 @@ em `false` tocaria um quadro de animação na cara de quem pediu que não tocass
 
 ⚠ **`children` como FUNÇÃO** existe para o conteúdo caro não ser construído atrás de um esqueleto.
 
-⚠ **O `Alert` precisa dos glifos de variante no registro** (`information--filled`,
-`checkmark--filled`, `warning--alt--filled`, `error--filled`). Este pacote não os importa por
+⚠ **O `Alert` precisa dos glifos de variante no registro** (`info`,
+`check-circle`, `warning`, `x-circle`). Este pacote não os importa por
 você — seria trazer ícone ao grafo do bundler pelas suas costas (ADR-0038, cláusula 4).
 
 ### O selo ancorado, e o rótulo que ele exige
 
 ```tsx
 <Badge count={8} anchor="top-end">
-  <IconButton name="notification" label="Avisos, 8 não lidos" onPress={abrir} />
+  <IconButton name="bell" label="Avisos, 8 não lidos" onPress={abrir} />
 </Badge>
 ```
 
@@ -829,25 +829,36 @@ de quem foi decorado. Sem isso o leitor de tela anuncia *"sino, 8"* e ninguém s
 
 ## Ícones
 
-Um componente por ícone, gerado do SVG do `@carbon/icons` sobre `react-native-svg`
-([ADR-0038](../../decisions/0038-um-componente-por-icone-sobre-react-native-svg.md)).
+Um componente por ícone e por peso, gerado do SVG do `@phosphor-icons/core` sobre
+`react-native-svg` ([ADR-0038](../../decisions/0038-um-componente-por-icone-sobre-react-native-svg.md),
+[ADR-0053](../../decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). Cada ícone tem
+duas formas: a regular (`icons/house`) e a cheia (`icons/house-fill`), que é a do item escolhido e
+a dos avisos.
 
 **A forma documentada é o caminho profundo:**
 
 ```tsx
-import Add from "@aurea-uds/native/icons/add";
-import ChevronDown from "@aurea-uds/native/icons/chevron--down";
+import Plus from "@aurea-uds/native/icons/plus";
+import CaretDown from "@aurea-uds/native/icons/caret-down";
 
-<Add size={size.iconMd} color={color.foreground} />
+<Plus size={size.iconMd} color={color.foreground} />
 ```
 
 Importar 40 ícones carrega 40. **O barril (`@aurea-uds/native/icons`) existe, mas não é a forma
-documentada:** ele traz os 2571 ao grafo do bundler a menos que o tree-shaking do Metro
+documentada:** ele traz todos os ícones ao grafo do bundler a menos que o tree-shaking do Metro
 — experimental, três flags, só em produção — esteja ligado. O caminho profundo não depende de
 poda nenhuma: módulo que não é importado não entra no grafo.
 
-`color` **não herda**: `currentColor` não existe no React Native, e o desenho do Carbon não traz
-`fill` nenhum. O padrão é preto explícito — passe a cor do tema.
+`color` **não herda**: `currentColor` não existe no React Native, e o desenho do Phosphor pinta com
+`currentColor`. O padrão é preto explícito — passe a cor do tema.
+
+**A forma cheia entra no registro com o sufixo `-fill`**, como o arquivo:
+`criarRegistroDeIcones({house: House, "house-fill": HouseFill})`. Os componentes pedem a cheia no
+item escolhido (`BottomNav`), nos avisos (`Alert`, `Toast`) e no `ThemeToggle`; se ela não estiver
+no registro, sai a regular.
+
+**Vindo do Carbon:** os nomes mudaram todos. A tabela `@aurea-uds/icons/carbon-para-phosphor.json`
+traz os nomes antigos com os novos.
 
 Os nomes são **os mesmos do sprite da web**, e um gate cobra isso (check 38): o que `<Icon name>`
 desenha lá, `icons/<nome>` desenha aqui.
@@ -892,4 +903,4 @@ limiar do perceptível. Não é evitável hoje — é teto de plataforma, e est�
 
 ## Licença
 
-Apache-2.0. Os glifos são do `@carbon/icons` (IBM Corp., Apache-2.0) — ver `NOTICE`.
+Apache-2.0. Os glifos são do `@phosphor-icons/core` (Phosphor Icons, MIT) — ver `NOTICE`.

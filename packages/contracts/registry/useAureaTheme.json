@@ -5,7 +5,7 @@
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "Read theme and density straight from the document, and set them — for a host that owns the <html> attributes.",
-  "icon": "light",
+  "icon": "sun",
   "platforms": {
     "web": "stable",
     "native": "planned"

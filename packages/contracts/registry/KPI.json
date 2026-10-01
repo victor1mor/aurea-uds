@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Single headline metric with optional delta.",
-  "icon": "analytics",
+  "icon": "chart-line-up",
   "platforms": {
     "web": "stable",
     "native": "planned"

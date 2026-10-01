@@ -153,6 +153,10 @@ function AureaToastViewport() {
     const portal = usePortalContainer();
     return _jsx(BaseToast.Portal, { container: portal, children: _jsx(BaseToast.Viewport, { className: "toast-stack", children: _jsx(AureaToastList, {}) }) });
 }
+import { NOMES_PHOSPHOR } from "./icon-names.js";
 // spriteUrl aqui é OVERRIDE local (dois sprites na mesma página, por exemplo). O normal é
 // não passar nada e deixar o AureaProvider dizer de onde vêm os glifos.
-export function Icon({ name, spriteUrl, size, className, ...props }) { const base = useSpriteUrl(); return _jsx("svg", { "aria-hidden": "true", className: cx("icon", peleDoEixo("icon", size), className), ...props, children: _jsx("use", { href: `${spriteUrl ?? base}#i-${name}` }) }); }
+// A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
+// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
+const idDoIcone = (name, weight = "regular") => weight === "fill" && NOMES_PHOSPHOR.has(name) ? `i-${name}-fill` : `i-${name}`;
+export function Icon({ name, spriteUrl, size, weight, className, ...props }) { const base = useSpriteUrl(); return _jsx("svg", { "aria-hidden": "true", className: cx("icon", peleDoEixo("icon", size), className), ...props, children: _jsx("use", { href: `${spriteUrl ?? base}#${idDoIcone(name, weight)}` }) }); }

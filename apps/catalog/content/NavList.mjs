@@ -44,14 +44,14 @@ export default {
       code: `<Card>
   <NavList items={[
     {id: "profile", label: "Profile", description: "Name, photo, handle", icon: "user", href: "/profile"},
-    {id: "alerts", label: "Notifications", description: "Push, email", icon: "notification", value: "On", href: "/alerts"},
+    {id: "alerts", label: "Notifications", description: "Push, email", icon: "bell", value: "On", href: "/alerts"},
     {id: "plan", label: "Plan", icon: "wallet", value: <Badge size="xs">Free</Badge>, href: "/plan"},
     {id: "sync", label: "Sync", icon: "cloud", value: <Status tone="success">Live</Status>, href: "/sync"},
   ]} />
 </Card>`,
       render: () => demo({items: [
         {id: "profile", label: "Profile", description: "Name, photo, handle", icon: "user", href: "#"},
-        {id: "alerts", label: "Notifications", description: "Push, email", icon: "notification", value: "On", href: "#"},
+        {id: "alerts", label: "Notifications", description: "Push, email", icon: "bell", value: "On", href: "#"},
         {id: "plan", label: "Plan", icon: "wallet", value: h(Badge, {size: "xs"}, "Free"), href: "#"},
         {id: "sync", label: "Sync", icon: "cloud", value: h(Status, {tone: "success"}, "Live"), href: "#"},
       ]}),
@@ -82,14 +82,14 @@ export default {
       code: `<Card>
   <NavList items={[
     {id: "export", label: "Export data", description: "Sends a copy by email", icon: "download", onClick: startExport},
-    {id: "beta", label: "Beta features", description: "Not on your plan", icon: "flash", disabled: true},
-    {id: "out", label: "Sign out", icon: "logout", onClick: signOut},
+    {id: "beta", label: "Beta features", description: "Not on your plan", icon: "lightning", disabled: true},
+    {id: "out", label: "Sign out", icon: "sign-out", onClick: signOut},
   ]} />
 </Card>`,
       render: () => demo({items: [
         {id: "export", label: "Export data", description: "Sends a copy by email", icon: "download"},
-        {id: "beta", label: "Beta features", description: "Not on your plan", icon: "flash", disabled: true},
-        {id: "out", label: "Sign out", icon: "logout"},
+        {id: "beta", label: "Beta features", description: "Not on your plan", icon: "lightning", disabled: true},
+        {id: "out", label: "Sign out", icon: "sign-out"},
       ]}),
     },
   ],

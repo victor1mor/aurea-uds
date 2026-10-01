@@ -14,7 +14,7 @@
   },
   "name": "DependencyGraph",
   "summary": "Who depends on whom, on a canvas you can pan, zoom and build on.",
-  "icon": "flow",
+  "icon": "flow-arrow",
   "states": [
     "selected",
     "connectable",

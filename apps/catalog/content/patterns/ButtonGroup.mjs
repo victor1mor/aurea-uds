@@ -53,14 +53,14 @@ export default [
     uses: ["ButtonGroup", "IconButton"],
     code: [
       '<ButtonGroup label="Share">',
-      '  <IconButton icon="copy--link" label="Copy link" />',
-      '  <IconButton icon="email" label="Send by e-mail" />',
+      '  <IconButton icon="link-simple" label="Copy link" />',
+      '  <IconButton icon="envelope-simple" label="Send by e-mail" />',
       '  <IconButton icon="download" label="Download" />',
       '</ButtonGroup>',
     ].join("\n"),
     render: () => h(ButtonGroup, {label: "Share"},
-      h(IconButton, {icon: "copy--link", label: "Copy link"}),
-      h(IconButton, {icon: "email", label: "Send by e-mail"}),
+      h(IconButton, {icon: "link-simple", label: "Copy link"}),
+      h(IconButton, {icon: "envelope-simple", label: "Send by e-mail"}),
       h(IconButton, {icon: "download", label: "Download"})),
   },
 ];

@@ -25,12 +25,14 @@ export declare function useAureaTheme(): {
     setDensity: (d: AureaDensity) => void;
     toggleTheme: () => void;
 };
-export type { IconName, CarbonIconName, AureaIconNames } from "./icon-names.js";
-import type { IconName } from "./icon-names.js";
+export type { IconName, PhosphorIconName, AureaIconNames, IconWeight } from "./icon-names.js";
+import { type IconName, type IconWeight } from "./icon-names.js";
 export type IconSize = "sm" | "md" | "lg" | "xl";
 export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
     name: IconName;
     spriteUrl?: string;
     size?: Responsive<IconSize>;
+    /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
+    weight?: IconWeight;
 }
-export declare function Icon({ name, spriteUrl, size, className, ...props }: IconProps): React.JSX.Element;
+export declare function Icon({ name, spriteUrl, size, weight, className, ...props }: IconProps): React.JSX.Element;

@@ -120,7 +120,7 @@ test("cada família emite a PRÓPRIA classe no valor simples — a pele não é 
   // Três bases diferentes, e a generalização preguiçosa (`btn-sm` para todo mundo) morre aqui.
   const {container} = wrap(<>
     <Checkbox label="a" size="sm"/><Switch label="b" size="lg"/>
-    <Avatar fallback="AB" size="sm"/><Icon name="add" size="xl"/><Spinner size="lg" decorative/>
+    <Avatar fallback="AB" size="sm"/><Icon name="plus" size="xl"/><Spinner size="lg" decorative/>
   </>);
   expect(container.querySelector(".control-mark")!.className).toContain("control-mark-sm");
   expect(container.querySelector(".switch-track")!.className).toContain("switch-track-lg");
@@ -143,7 +143,7 @@ test("valor responsivo entra pela camada genérica nas três famílias", () => {
   const {container} = wrap(<>
     <Checkbox label="a" size={{base: "sm", container: {sm: "lg"}}}/>
     <Avatar fallback="AB" size={{base: "sm", viewport: {lg: "lg"}}}/>
-    <Icon name="add" size={{base: "sm", container: {md: "xl"}}}/>
+    <Icon name="plus" size={{base: "sm", container: {md: "xl"}}}/>
   </>);
   const mark = container.querySelector(".control-mark")!.className;
   expect(mark).toContain("size-sm");

@@ -135,7 +135,10 @@ export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props
     const { theme, toggleTheme } = useAureaTheme();
     const s = useAureaStrings();
     const escuro = theme === "dark";
-    return _jsx(IconButton, { ref: ref, icon: escuro ? "light--filled" : "asleep--filled", label: escuro ? s.themeToLight : s.themeToDark, className: cx(escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), onClick: toggleTheme, ...props });
+    // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
+    // sol cheios, como os do Carbon aprovados pela imagem em 25/09/2026). O `IconButton` público não
+    // tem peso de ícone.
+    return _jsx(Button, { ref: ref, variant: "ghost", className: cx("btn-icon", escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), "aria-label": escuro ? s.themeToLight : s.themeToDark, onClick: toggleTheme, ...props, children: _jsx(Icon, { name: escuro ? "sun" : "moon", weight: "fill" }) });
 });
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem

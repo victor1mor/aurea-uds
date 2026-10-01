@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Two-dimensional layout primitive.",
-  "icon": "grid",
+  "icon": "grid-four",
   "platforms": {
     "web": "stable",
     "native": "planned"

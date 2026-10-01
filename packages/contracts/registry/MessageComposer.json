@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Input surface for composing a message.",
-  "icon": "send",
+  "icon": "paper-plane-tilt",
   "platforms": {
     "web": "stable",
     "native": "planned"

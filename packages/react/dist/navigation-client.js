@@ -21,12 +21,12 @@ export function Stepper({ items, label, className }) {
     const s = useAureaStrings();
     return _jsx("div", { role: "list", "aria-label": label ?? s.stepperLabel, className: cx("stepper", className), children: items.map((it, n) => {
             const st = it.state ?? "default";
-            const marca = st === "done" ? _jsx(Icon, { name: "checkmark" }) : st === "error" ? _jsx(Icon, { name: "error" }) : n + 1;
+            const marca = st === "done" ? _jsx(Icon, { name: "check" }) : st === "error" ? _jsx(Icon, { name: "x-circle" }) : n + 1;
             const miolo = _jsxs(_Fragment, { children: [_jsx("span", { className: "step-dot", children: marca }), _jsx("strong", { children: it.label }), it.optional && _jsx("small", { className: "step-optional", children: it.optional })] });
             return _jsx("div", { role: "listitem", className: cx("step", st !== "default" && `step-${st}`), "aria-current": st === "active" ? "step" : undefined, children: it.onClick ? _jsx("button", { type: "button", className: "step-trigger", onClick: it.onClick, children: miolo }) : miolo }, n);
         }) });
 }
-export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "chevron--right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
+export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "caret-right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
 export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { className: "tabs", "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
 export function Pagination({ page, total, onPageChange }) { const s = useAureaStrings(); return _jsxs("nav", { className: "pagination", "aria-label": s.paginationLabel, children: [_jsx(Button, { variant: "ghost", size: "sm", disabled: page <= 1, onClick: () => onPageChange(page - 1), children: s.previous }), _jsxs(Badge, { variant: "primary", children: [page, " / ", total] }), _jsx(Button, { variant: "ghost", size: "sm", disabled: page >= total, onClick: () => onPageChange(page + 1), children: s.next })] }); }
 export function TableOfContents({ items, current, label, className, ...props }) {
@@ -167,7 +167,7 @@ export function TreeView({ items, defaultExpandedIds, onSelect, label, className
     const renderNodes = (nodes, level) => (_jsx("ul", { ref: level === 1 ? rootRef : undefined, className: cx(level === 1 ? "tree" : "tree-group", level === 1 && className), role: level === 1 ? "tree" : "group", "aria-label": level === 1 ? (label ?? s.treeLabel) : undefined, onKeyDown: level === 1 ? onKeyDown : undefined, children: nodes.map(node => {
             const hasChildren = !!node.children?.length, isOpen = expanded.has(node.id), isSelected = selected === node.id, labelId = baseId + node.id;
             return _jsxs("li", { className: "tree-item", role: "treeitem", "data-tree-id": node.id, "aria-level": level, "aria-expanded": hasChildren ? isOpen : undefined, "aria-selected": isSelected, "aria-labelledby": labelId, tabIndex: node.id === effectiveActive ? 0 : -1, children: [_jsxs("span", { className: "tree-node", "data-selected": isSelected || undefined, style: { paddingInlineStart: `calc(var(--space-3) + ${level - 1} * var(--space-4))` }, onClick: () => { focusId(node.id); select(node); if (hasChildren)
-                            toggle(node.id, !isOpen); }, children: [hasChildren ? _jsx(Icon, { name: "chevron--right", size: "sm", className: "tree-twist" }) : _jsx("span", { className: "tree-indent", "aria-hidden": "true" }), node.icon && _jsx(Icon, { name: node.icon, size: "sm" }), _jsx("span", { id: labelId, className: "tree-label", children: node.label })] }), hasChildren && isOpen && renderNodes(node.children, level + 1)] }, node.id);
+                            toggle(node.id, !isOpen); }, children: [hasChildren ? _jsx(Icon, { name: "caret-right", size: "sm", className: "tree-twist" }) : _jsx("span", { className: "tree-indent", "aria-hidden": "true" }), node.icon && _jsx(Icon, { name: node.icon, size: "sm" }), _jsx("span", { id: labelId, className: "tree-label", children: node.label })] }), hasChildren && isOpen && renderNodes(node.children, level + 1)] }, node.id);
         }) }));
     return renderNodes(items, 1);
 }
@@ -181,7 +181,8 @@ function sidebarList(items, ctx, sub, labelledBy) {
             if (filhos && !it.href && !it.onClick && !it.render)
                 return _jsxs("li", { children: [_jsx("p", { id: lid, className: cx("sidebar-group-label", ctx.collapsed && "sr-only"), children: it.label }), sidebarList(filhos, ctx, false, lid)] }, it.id);
             const ativo = it.id === ctx.current;
-            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
+            // O item escolhido desenha o ícone CHEIO (ADR-0053).
+            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon, weight: ativo ? "fill" : undefined }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
             const alvo = it.render
                 ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a")
                 : it.href
@@ -238,7 +239,8 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             // texto. A caixa é o que dá ao contador um canto para se ancorar — e nos quatro indicadores
             // redondos é ela que VIRA o círculo, com o rótulo embaixo, fora dele.
             // `size="lg"` porque a proporção contra o contador foi medida: 24 para 16, razão 0,67.
-            const marca = _jsxs("span", { className: "bottom-nav-mark", children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg" }), it.badge != null && _jsx("span", { className: "bottom-nav-badge", children: it.badge })] });
+            // O item escolhido desenha o ícone CHEIO (ADR-0053).
+            const marca = _jsxs("span", { className: "bottom-nav-mark", children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", weight: ativo ? "fill" : undefined }), it.badge != null && _jsx("span", { className: "bottom-nav-badge", children: it.badge })] });
             const miolo = _jsxs(_Fragment, { children: [marca, _jsx("span", { className: "bottom-nav-label", children: it.label })] });
             return it.render
                 ? _jsx(React.Fragment, { children: fundirRender(it.render, { className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a") }, it.id)
@@ -249,7 +251,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
 }
 export function NavList({ items, className, ...props }) {
     return _jsx("ul", { className: cx("nav-list", className), ...props, children: items.map(it => {
-            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), (it.href || it.render) && _jsx(Icon, { name: "chevron--right", size: "sm", className: "nav-list-chevron" })] });
+            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), (it.href || it.render) && _jsx(Icon, { name: "caret-right", size: "sm", className: "nav-list-chevron" })] });
             return _jsx("li", { children: it.render && !it.disabled
                     ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, children: miolo }, "a")
                     : it.href && !it.disabled

@@ -14,7 +14,7 @@
   },
   "name": "AutomationCard",
   "summary": "A rule that runs on its own: when this, then that — and a switch.",
-  "icon": "workflow-automation",
+  "icon": "flow-arrow",
   "states": [
     "enabled",
     "disabled",

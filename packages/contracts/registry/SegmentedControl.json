@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Choose one option from a compact inline set.",
-  "icon": "switcher",
+  "icon": "squares-four",
   "platforms": {
     "web": "stable",
     "native": "planned"

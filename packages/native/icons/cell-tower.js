@@ -1,12 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function CellTower({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M25 11 25 16 17 16 17 11 15 11 15 16 7 16 7 11 5 11 5 23 7 23 7 18 10 18 10 30 12 30 12 18 15 18 15 23 17 23 17 18 20 18 20 30 22 30 22 18 25 18 25 23 27 23 27 11z", fill: color}),
-    React.createElement(Path, {d: "M16,6c-1.7,0-3.2,0.7-4.2,1.8l1.4,1.4C13.9,8.4,14.9,8,16,8s2.1,0.4,2.8,1.2l1.4-1.4C19.2,6.7,17.7,6,16,6z", fill: color}),
-    React.createElement(Path, {d: "M8.9,4.9l1.4,1.4C11.8,4.9,13.8,4,16,4s4.2,0.9,5.7,2.3l1.4-1.4C21.3,3.1,18.8,2,16,2S10.7,3.1,8.9,4.9z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M135.16,84.42a8,8,0,0,0-14.32,0l-72,144a8,8,0,0,0,14.31,7.16L77,208h102.1l13.79,27.58A8,8,0,0,0,200,240a8,8,0,0,0,7.15-11.58ZM128,105.89,155.06,160H100.94ZM85,192l8-16h70.1l8,16Zm74.54-98.26a32,32,0,1,0-63,0,8,8,0,1,1-15.74,2.85,48,48,0,1,1,94.46,0,8,8,0,0,1-7.86,6.58,8.74,8.74,0,0,1-1.43-.13A8,8,0,0,1,159.49,93.74ZM64.15,136.21a80,80,0,1,1,127.7,0,8,8,0,0,1-12.76-9.65,64,64,0,1,0-102.18,0,8,8,0,0,1-12.76,9.65Z", fill: color})
   );
 }

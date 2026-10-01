@@ -295,7 +295,7 @@ export interface ComboboxProps {
 export function Combobox({
   items, value, onValueChange, onSearchChange, searchDelay = ESPERA_PADRAO, loading,
   onEndReached, placeholder, searchPlaceholder, empty, clearable = true, draggable = true,
-  disabled, size, chevron = "chevron--down", searchIcon = "search", searchKeyboardType, style, testID,
+  disabled, size, chevron = "caret-down", searchIcon = "magnifying-glass", searchKeyboardType, style, testID,
 }: ComboboxProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -408,7 +408,7 @@ export function Combobox({
         </Pressable>
         <View style={s.acoes}>
           {clearable && value != null && !inativo && (
-            <IconButton name="close" label={strings.comboboxClear} appearance="ghost" size="sm"
+            <IconButton name="x" label={strings.comboboxClear} appearance="ghost" size="sm"
                         onPress={() => onValueChange?.(null)}
                         testID={testID ? `${testID}-limpar` : undefined} />
           )}
@@ -489,7 +489,7 @@ export function Combobox({
                 ]}
               />
               {texto.length > 0 && (
-                <IconButton name="close" label={strings.searchClear} appearance="ghost" size="sm"
+                <IconButton name="x" label={strings.searchClear} appearance="ghost" size="sm"
                             onPress={() => digitar("")}
                             testID={testID ? `${testID}-busca-limpar` : undefined} />
               )}
@@ -608,7 +608,7 @@ export interface SearchFieldProps {
  */
 export function SearchField({
   value, onChangeText, onSearchChange, searchDelay = ESPERA_PADRAO, placeholder, disabled, size,
-  icon = "search", clearable = true, onSubmit, style, testID,
+  icon = "magnifying-glass", clearable = true, onSubmit, style, testID,
 }: SearchFieldProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -687,7 +687,7 @@ export function SearchField({
         ]}
       />
       {clearable && texto.length > 0 && !inativo && (
-        <IconButton name="close" label={strings.searchClear} appearance="ghost" size="sm"
+        <IconButton name="x" label={strings.searchClear} appearance="ghost" size="sm"
                     onPress={() => digitar("")}
                     testID={testID ? `${testID}-limpar` : undefined} />
       )}

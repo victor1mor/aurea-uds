@@ -151,8 +151,8 @@ describe("AureaProvider", () => {
   });
 
   // DEFEITO ACHADO EM 03/09/2026 ao escrever o app de smoke test — e é o mais silencioso de todos.
-  // O pacote de fontes emite uma grade PARCIAL, porque é a grade que o IBM Plex desenha:
-  // `editorial` não tem 400 e `code` não tem 700. O tipo prometia os quatro pesos para os três
+  // O pacote de fontes emitia uma grade PARCIAL, porque era a grade que a IBM Plex desenhava:
+  // `editorial` não tinha 400 e `code` não tem 700 (o `code` continua assim na Atkinson). O tipo prometia os quatro pesos para os três
   // papéis, então `font.editorial[400]` compilava e devolvia `undefined` — e `fontFamily:
   // undefined` cai na fonte de sistema SEM LEVANTAR. A tela pareceria certa num peso e errada
   // noutro, que é o defeito mais caro deste alvo: não some e não acusa.
@@ -185,15 +185,17 @@ describe("AureaProvider", () => {
     const bloco = /const FONT_FAMILIES = (\{[\s\S]*?\n\});/.exec(gerado)![1];
     const mapa = JSON.parse(bloco);
     // A grade é parcial na fonte — se um dia deixar de ser, este teste avisa que a normalização
-    // pode não ser mais necessária.
-    expect(Object.keys(mapa.editorial)).not.toContain("400");
+    // pode não ser mais necessária. Desde a ADR-0053 o `editorial` é apelido do `ui` (sem
+    // itálico) e passou a ter 400; o `code` continua sem 700.
     expect(Object.keys(mapa.code)).not.toContain("700");
+    expect(mapa.editorial).toEqual(Object.fromEntries(
+      Object.entries(mapa.ui as Record<string, string>).filter(([k]) => !k.endsWith("i"))));
 
     const t = resolverTokens("dark", "comfortable", mapa);
-    expect(t.font.editorial[400]).toBe("IBMPlexSerif-Medium");
-    expect(t.font.code[700]).toBe("IBMPlexMono-SemiBold");
-    expect(t.font.ui[600]).toBe("IBMPlexSans-SemiBold");
-    expect(t.font.ui.italic).toBe("IBMPlexSans-Italic");
+    expect(t.font.editorial[400]).toBe("AtkinsonHyperlegibleNext-Regular");
+    expect(t.font.code[700]).toBe("AtkinsonHyperlegibleMono-SemiBold");
+    expect(t.font.ui[600]).toBe("AtkinsonHyperlegibleNext-SemiBold");
+    expect(t.font.ui.italic).toBe("AtkinsonHyperlegibleNext-Italic");
   });
 
   // DEFEITO SILENCIOSO, e é o pior deste lote: sem o mapa de famílias o texto sai em fonte de
@@ -201,19 +203,19 @@ describe("AureaProvider", () => {
   // FAMÍLIAS PRÓPRIAS no .ttf, medido na tabela `name`. O app parece certo e não é.
   it("sem fontFamilies devolve a família pedida; com o mapa, o nome PostScript", () => {
     const {unmount} = render(<AureaProvider><Sonda /></AureaProvider>);
-    expect(screen.getByTestId("fonte")).toHaveTextContent("IBM Plex Sans");
+    expect(screen.getByTestId("fonte")).toHaveTextContent("Atkinson Hyperlegible Next");
     unmount();
 
     const mapa = {
-      ui: {400: "IBMPlexSans-Regular", 500: "IBMPlexSans-Medium",
-           600: "IBMPlexSans-SemiBold", 700: "IBMPlexSans-Bold"},
-      editorial: {400: "IBMPlexSerif-Regular", 500: "IBMPlexSerif-Medium",
-                  600: "IBMPlexSerif-SemiBold", 700: "IBMPlexSerif-Bold"},
-      code: {400: "IBMPlexMono-Regular", 500: "IBMPlexMono-Medium",
-             600: "IBMPlexMono-SemiBold", 700: "IBMPlexMono-Bold"},
+      ui: {400: "AtkinsonHyperlegibleNext-Regular", 500: "AtkinsonHyperlegibleNext-Medium",
+           600: "AtkinsonHyperlegibleNext-SemiBold", 700: "AtkinsonHyperlegibleNext-Bold"},
+      editorial: {400: "AtkinsonHyperlegibleNext-Regular", 500: "AtkinsonHyperlegibleNext-Medium",
+                  600: "AtkinsonHyperlegibleNext-SemiBold", 700: "AtkinsonHyperlegibleNext-Bold"},
+      code: {400: "AtkinsonHyperlegibleMono-Regular", 500: "AtkinsonHyperlegibleMono-Medium",
+             600: "AtkinsonHyperlegibleMono-SemiBold", 700: "AtkinsonHyperlegibleMono-Bold"},
     } as const;
     render(<AureaProvider fontFamilies={mapa}><Sonda /></AureaProvider>);
-    expect(screen.getByTestId("fonte")).toHaveTextContent("IBMPlexSans-SemiBold");
+    expect(screen.getByTestId("fonte")).toHaveTextContent("AtkinsonHyperlegibleNext-SemiBold");
   });
 });
 
@@ -232,32 +234,27 @@ describe("ícones nativos — o que o gerador não pode errar em silêncio", () 
     expect(web.length).toBeGreaterThan(2500);
   });
 
-  // DEFEITO: injetar `fill` por cima do que já existe. `fill="none"` é o contorno INTERNO dos
-  // glifos "filled" — 91 ocorrências medidas —, e pintá-lo cobre o desenho. Este teste é a
-  // metade que faltava na cláusula 2 da ADR-0038: injetar onde FALTA, nunca por cima.
-  it("preserva fill=\"none\" e injeta a cor só onde o fill falta", async () => {
-    const {default: CheckmarkFilled} = await import(
-      "../../packages/native/icons/checkmark--filled.js");
-    const el = CheckmarkFilled({color: "#f0b100"}) as {props: {children: unknown[]}};
-    const filhos = el.props.children as {props: {fill: string}}[];
-    expect(filhos).toHaveLength(2);
-    expect(filhos[0].props.fill).toBe("#f0b100"); // sem fill na fonte -> recebe a cor
-    expect(filhos[1].props.fill).toBe("none");    // fill="none" na fonte -> intocado
+  // DEFEITO: o glifo sair PRETO no aparelho. O Phosphor põe `fill="currentColor"` na raiz do SVG
+  // e nada nos traços; `currentColor` não existe no React Native. Cada `Path` tem de receber a
+  // cor que o `Icon` passa (ADR-0053).
+  it("cada traço recebe a cor do Icon", async () => {
+    const {default: House} = await import("../../packages/native/icons/house.js");
+    const el = House({color: "#f0b100"}) as {props: {children: unknown}};
+    const filhos = [el.props.children].flat() as {props: {fill: string}}[];
+    expect(filhos.length).toBeGreaterThan(0);
+    for (const f of filhos) expect(f.props.fill).toBe("#f0b100");
   });
 
-  // DEFEITO: `<foreignObject>` (placeholder 1x1 do Illustrator, em 10 arquivos) atravessar para
-  // o react-native-svg, que não o desenha. O `<switch>` tem de ser desdobrado como o navegador
-  // faz, mantendo o `<g>`.
-  it("desdobra o switch do Illustrator, mantendo o <g>", async () => {
-    const {default: CalendarAddAlt} = await import(
-      "../../packages/native/icons/calendar--add--alt.js");
-    // ⚠ `displayName` e não o tipo cru: o dublê de `react-native-svg` deixou de ser STRING em
-    // 09/09/2026 e passou a registrar props, porque o `Chart` calcula geometria e o teste dele
-    // precisa do VALOR das props, não só do nome do elemento. O fato provado aqui é o mesmo —
-    // o filho é um `G` — e a força da asserção não mudou.
-    const el = CalendarAddAlt({}) as {props: {children: {type: {displayName: string}; props: {children: unknown[]}}}};
-    expect(el.props.children.type.displayName).toBe("G");
-    expect(el.props.children.props.children).toHaveLength(3);
+  // DEFEITO: a forma cheia (o item escolhido, ADR-0053) sair igual à regular, ou não existir.
+  // É um arquivo próprio, com o nome do regular mais `-fill`, e o desenho é outro.
+  it("a forma cheia é um arquivo próprio, com outro desenho", async () => {
+    const {default: House} = await import("../../packages/native/icons/house.js");
+    const {default: HouseFill} = await import("../../packages/native/icons/house-fill.js");
+    const d = (C: typeof House) =>
+      ([(C({}) as {props: {children: unknown}}).props.children].flat() as {props: {d: string}}[])
+        .map((p) => p.props.d).join("|");
+    expect(HouseFill.name).toBe("HouseFill");
+    expect(d(HouseFill)).not.toBe(d(House));
   });
 
   // 🔴 A VARREDURA DOS 2571 SAIU DESTE ARQUIVO — 11/09/2026, e foi para o `check 38` do
@@ -283,45 +280,47 @@ describe("ícones nativos — o que o gerador não pode errar em silêncio", () 
   // formato do elemento React, e é o tipo de coisa que o vitest faz melhor que um script Python.
   // Corpus grande é do validador; comportamento de componente é do teste.
 
-  // DEFEITO: um nome de ícone que não vira identificador JS válido (`4K`) quebra o barril.
-  it("nome que abre com dígito vira identificador válido", async () => {
-    const mod = await import("../../packages/native/icons/4K.js");
-    expect(mod.default.name).toBe("Icon4K");
+  // DEFEITO: marca registrada de terceiro entrar numa biblioteca Apache-2.0 (CLAUDE.md §5). O
+  // Phosphor traz 79 logotipos (`apple-logo`, `google-logo`…); o gerador os deixa de fora.
+  it("nenhum logotipo de marca entra", () => {
+    expect(nomes.filter((n) => /-logo(-|$)/.test(n))).toEqual([]);
     const barril = readFileSync(`${dir}/index.js`, "utf8");
-    expect(barril).toContain('export {default as Icon4K} from "./4K.js";');
+    expect(barril).not.toContain("-logo");
   });
 
-  // DEFEITO: o barril virar a forma documentada. Ele traz os 2571 ao grafo do Metro, cujo
+  // DEFEITO: o barril virar a forma documentada. Ele traz todos os ícones ao grafo do Metro, cujo
   // tree-shaking é experimental — a cláusula 1 da ADR-0038 existe por isso.
   it("o barril avisa que não é a forma documentada", () => {
     const barril = readFileSync(`${dir}/index.js`, "utf8");
     expect(barril).toContain("NÃO É A FORMA DOCUMENTADA");
-    expect(barril).toContain("@aurea-uds/native/icons/add");
+    expect(barril).toContain("@aurea-uds/native/icons/plus");
   });
 
   // DEFEITO: o tamanho não escalar, ou o ícone perder o viewBox e sair cortado.
-  it("size vira width/height e o viewBox continua 32", async () => {
-    const {default: Add} = await import("../../packages/native/icons/add.js");
-    const el = Add({size: 16}) as {props: {width: number; height: number; viewBox: string}};
-    expect(el.props).toMatchObject({width: 16, height: 16, viewBox: "0 0 32 32"});
-    expect((Add({}) as {props: {width: number}}).props.width).toBe(32);
+  it("size vira width/height e o viewBox é o do desenho, 256", async () => {
+    const {default: Plus} = await import("../../packages/native/icons/plus.js");
+    const el = Plus({size: 16}) as {props: {width: number; height: number; viewBox: string}};
+    expect(el.props).toMatchObject({width: 16, height: 16, viewBox: "0 0 256 256"});
+    expect((Plus({}) as {props: {width: number}}).props.width).toBe(32);
   });
 });
 
 describe("fontes nativas", () => {
-  // DEFEITO: o alvo nativo ficar para trás do web. São os MESMOS 11 estilos, em outro formato.
-  it("11 .ttf, um por .woff2, e todos com nome PostScript distinto", async () => {
+  // DEFEITO: o alvo nativo ficar para trás do web. São os MESMOS 8 estilos, em outro formato
+  // (ADR-0053: Atkinson Hyperlegible Next em 5, Mono em 3; a IBM Plex tinha 11, com a Serif).
+  it("8 .ttf, um por .woff2, e todos com nome PostScript distinto", async () => {
     const woff2 = readdirSync(RAIZ + "packages/fonts/files").filter((f) => f.endsWith(".woff2"));
     const ttf = readdirSync(RAIZ + "packages/fonts/files-native").filter((f) => f.endsWith(".ttf"));
-    expect(ttf).toHaveLength(11);
+    expect(ttf).toHaveLength(8);
     expect(ttf.map((f) => f.replace(/\.ttf$/, "")).sort())
       .toEqual(woff2.map((f) => f.replace(/\.woff2$/, "")).sort());
 
     const gerado = readFileSync(RAIZ + "packages/fonts/dist/fonts.native.js", "utf8");
     const chaves = [...gerado.matchAll(/^  "([^"]+)": require/gm)].map((m) => m[1]);
-    expect(chaves).toHaveLength(11);
-    expect(new Set(chaves).size).toBe(11);
+    expect(chaves).toHaveLength(8);
+    expect(new Set(chaves).size).toBe(8);
     // O nome MEDIDO na tabela `name`, não escrito à mão — se o gerador voltar a inventar, muda.
-    expect(chaves).toContain("IBMPlexSans-SemiBold");
+    expect(chaves).toContain("AtkinsonHyperlegibleNext-SemiBold");
+    expect(chaves).toContain("AtkinsonHyperlegibleMono-Regular");
   });
 });

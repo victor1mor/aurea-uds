@@ -9,8 +9,8 @@
 - cartões, janelas e painéis com raio de 22 px;
 - botões de texto, campos, filtros e abas em cápsula;
 - o amarelo principal é o mesmo nos temas claro e escuro;
-- IBM Plex Sans, Serif e Mono;
-- ícones do Carbon;
+- a letra é a Atkinson Hyperlegible Next (e a Mono para código), feita para quem enxerga pouco;
+- ícones do Phosphor, com a forma cheia no item escolhido;
 - três densidades: compacta, confortável e espaçosa;
 - nenhum gradiente. Todo valor de cor, raio, letra e espaço sai de um token.
 
@@ -123,8 +123,8 @@ Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou
 URL resultante. Numa página que embute os ícones como `<symbol>`, passe `spriteUrl=""` para a
 referência ficar local — é o que o catálogo faz.
 
-**O nome do ícone é checado pelo TypeScript**: `<Icon name="chevron-down">` (um traço só; o do
-Carbon é `chevron--down`) não compila, nem em `leadingIcon`, `icon` ou qualquer prop que recebe
+**O nome do ícone é checado pelo TypeScript**: `<Icon name="chevron-down">` (o nome do Phosphor é
+`caret-down`) não compila, nem em `leadingIcon`, `icon` ou qualquer prop que recebe
 ícone. Quem usa um sprite próprio declara os nomes dele **uma vez**:
 
 ```tsx
@@ -190,10 +190,10 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 
 - `apps/catalog`: o catálogo, **gerado** a partir do registry por `scripts/build-catalog.mjs`;
 - `packages/tokens`: os tokens no formato DTCG 2025.10 e o CSS gerado;
-- `packages/fonts`: as fontes IBM Plex (WOFF2) e o `fonts.css`;
+- `packages/fonts`: a Atkinson Hyperlegible Next e Mono (WOFF2 e TTF) e o `fonts.css`;
 - `packages/contracts`: o contrato do projeto e o registry (uma ficha por componente);
 - `packages/core`: o CSS gerado (tokens e componentes) e o comportamento em JavaScript puro;
-- `packages/icons`: o sprite de ícones do Carbon;
+- `packages/icons`: o sprite de ícones do Phosphor e a tabela de nomes do Carbon para o Phosphor;
 - `packages/react`: os componentes React, tipados;
 - `packages/native`: os componentes React Native;
 - [`decisions/`](decisions/README.md): as decisões registradas (ADRs);
@@ -206,5 +206,5 @@ Leia o [CONTRIBUTING.md](CONTRIBUTING.md). Para relatar uma falha de segurança,
 
 ## Licença
 
-Apache 2.0 — veja o [LICENSE](LICENSE) e o [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (IBM Plex
-sob OFL 1.1, Carbon Icons sob Apache 2.0).
+Apache 2.0 — veja o [LICENSE](LICENSE) e o [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (Atkinson
+Hyperlegible sob OFL 1.1, Phosphor Icons sob MIT).

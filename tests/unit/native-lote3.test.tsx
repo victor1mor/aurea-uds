@@ -21,8 +21,8 @@ import {
 const tokens = resolverTokens("dark", "comfortable");
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones({
-  "dashboard": Glifo, "notification": Glifo, "chevron--right": Glifo,
-  "checkmark": Glifo, "error": Glifo,
+  "squares-four": Glifo, "bell": Glifo, "caret-right": Glifo,
+  "check": Glifo, "x-circle": Glifo,
 });
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider icons={ICONES}>{children}</AureaProvider>;
@@ -31,8 +31,8 @@ const props = (primitivo: string, n = 0) => __instancias(primitivo)[n] ?? {};
 const estilo = (primitivo: string, n = 0) => StyleSheet.flatten(props(primitivo, n).style);
 
 const ABAS = [
-  {id: "painel", label: "Painel", icon: "dashboard"},
-  {id: "avisos", label: "Avisos", icon: "notification", badge: 8},
+  {id: "painel", label: "Painel", icon: "squares-four"},
+  {id: "avisos", label: "Avisos", icon: "bell", badge: 8},
 ];
 
 describe("BottomNav — a pele da navegação, não a navegação", () => {
@@ -148,7 +148,7 @@ describe("NavList — a lista de destinos DENTRO da página", () => {
   // lista de destinos em que nada abre nada nunca foi o caso real.
   // O caso SEM `onPress` tem teste próprio, em `native-pedidos-do-app.test.tsx`.
   const ITENS = [
-    {id: "conta", label: "Conta", description: "nome e e-mail", icon: "dashboard",
+    {id: "conta", label: "Conta", description: "nome e e-mail", icon: "squares-four",
      onPress: () => {}},
     {id: "sair", label: "Sair", disabled: true, onPress: () => {}},
   ];
