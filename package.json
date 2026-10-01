@@ -9,7 +9,7 @@
   },
   "type": "module",
   "license": "Apache-2.0",
-  "packageManager": "pnpm@11.16.0",
+  "packageManager": "pnpm@12.8.1",
   "scripts": {
     "build:tokens": "node scripts/build-tokens.mjs && pnpm --dir packages/tokens typecheck",
     "build:icons": "node packages/icons/build-icons.mjs",

@@ -17,13 +17,25 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada além da `0.12.2`, logo abaixo, pronta e não publicada.
+Nenhum pacote muda.
+
+### Ferramenta
+
+- **O projeto passa para o pnpm 12.8.1** (era 11.16.0), com o "pode" do Victor de 30/09/2026.
+  Testado antes numa cópia separada: instalação, conferência de vulnerabilidades, build,
+  `validate.py`, os 1733 testes e o `check-pack` passaram com a 12. O `pnpm-lock.yaml` só ganha
+  o bloco do próprio pnpm no topo; nenhuma dependência do projeto muda. Das cinco mudanças que
+  quebram compatibilidade na 12 (lidas no `CHANGELOG.md` do pacote `pnpm@12.8.1`), nenhuma toca
+  o projeto: não há configuração desconhecida no `pnpm-workspace.yaml`, nem dependência vinda do
+  GitHub, nem `engineStrict`. Um `pnpm` 11 instalado na máquina troca sozinho para a 12, pelo
+  `packageManager`.
 
 ---
 
 ## [0.12.2] — 2026-09-30
 
-⏳ **Não publicada.** Muda a web e o nativo.
+✅ **PUBLICADA em 30/09/2026, às 20:30 (Brasília), nos sete pacotes, pelo terminal do Victor** —
+do commit `081bec8` (junção do pedido #11). Muda a web e o nativo.
 
 ### Mudou
 
