@@ -3209,6 +3209,79 @@ if _CSS44.is_file():
             "se faz redefinindo `--focus-strong` no contêiner, como o `.media-player`"
         )
 
+# ── 45. o site é feito só com a Aurea ─────────────────────────────────────────────────────────
+# Ordem do Victor, 01/10/2026: o site (aureauds.dev) tem uma TRAVA — não se constrói nada nele que
+# não venha da Aurea. O site é o catálogo (`apps/catalog`), montado por `scripts/montar-site.mjs` e
+# publicado pelo `.github/workflows/site.yml` depois da CI verde no `main`.
+#
+# Duas metades:
+# 1. IMPORTAÇÕES do código que gera e roda o site: só a Aurea (`@aurea-uds/*` ou caminho relativo
+#    que fica dentro do repositório, fora de `node_modules`), o `node:*`, e as dependências que o
+#    `@aurea-uds/react` DECLARA (lidas do `package.json` dele, não escritas aqui) — porque o site
+#    roda as peças, e as peças precisam delas. Ferramenta de montagem entra só por nome, com motivo.
+# 2. RECURSO DE FORA nas páginas e folhas geradas: nenhum script, folha, imagem, vídeo ou moldura de
+#    outro endereço, nem `import` de `https://`. O `montar-site.mjs` confere o mesmo na publicação;
+#    aqui a CI pega antes da junção.
+_FERRAMENTAS45 = {
+    "vite": "monta a parte viva do catálogo (`apps/catalog/vite.config.ts`)",
+    "@vitejs/plugin-react": "idem",
+    "jsdom": "monta o HTML dos gráficos no build (`scripts/build-catalog.mjs`)",
+}
+_PKG45 = root / "packages/react/package.json"
+_CAT45 = root / "apps/catalog"
+if _PKG45.is_file() and _CAT45.is_dir():
+    _pj45 = json.loads(_PKG45.read_text(encoding="utf8"))
+    _decl45 = set(_pj45.get("dependencies", {})) | set(_pj45.get("peerDependencies", {}))
+    _fontes45 = [root / f"scripts/{n}" for n in ("build-catalog.mjs", "page-model.mjs", "montar-site.mjs", "token-value.mjs")]
+    _fontes45 += sorted(p for p in _CAT45.rglob("*") if p.suffix in {".mjs", ".js", ".ts", ".tsx", ".jsx"} and "node_modules" not in p.parts)
+    # Só importação de verdade: no começo da linha, ou `import("...")`. Exemplo de código dentro de
+    # texto (`code: \`import ...\``) não começa a linha e não conta.
+    _imp45 = re.compile(
+        r"""^[ \t]*(?:import|export)\b[^;'"`]*?\bfrom\s*["']([^"']+)["']|^[ \t]*import\s*["']([^"']+)["']|\bimport\(\s*["']([^"']+)["']\s*\)""",
+        re.M,
+    )
+    _maus45 = []
+    for _f45 in _fontes45:
+        if not _f45.is_file():
+            continue
+        for _m45 in _imp45.finditer(_f45.read_text(encoding="utf8")):
+            _e45 = next(g for g in _m45.groups() if g)
+            _rel45 = _f45.relative_to(root).as_posix()
+            if _e45.startswith("."):
+                _alvo45 = (_f45.parent / _e45).resolve()
+                try:
+                    _dentro45 = _alvo45.relative_to(root.resolve())
+                except ValueError:
+                    _maus45.append(f"`{_rel45}` importa `{_e45}`, fora do repositório")
+                    continue
+                if "node_modules" in _dentro45.parts:
+                    _maus45.append(f"`{_rel45}` importa `{_e45}` de dentro de `node_modules`")
+                continue
+            if _e45.startswith("node:") or _e45.startswith("@aurea-uds/"):
+                continue
+            _nome45 = "/".join(_e45.split("/")[:2]) if _e45.startswith("@") else _e45.split("/")[0]
+            if _nome45 in _decl45 or _nome45 in _FERRAMENTAS45:
+                continue
+            _maus45.append(f"`{_rel45}` importa `{_e45}`, que não é da Aurea nem dependência do `@aurea-uds/react`")
+    _ext45 = [
+        re.compile(r"""<(script|link|img|iframe|source|video|audio|embed|object)\b[^>]*?\b(src|href|data)\s*=\s*["']\s*(https?:)?//[^"']+""", re.I),
+        re.compile(r"""url\(\s*["']?\s*(https?:)?//[^)"']+""", re.I),
+        re.compile(r"""@import\s+(url\()?\s*["']?\s*(https?:)?//""", re.I),
+        re.compile(r"""(\bfrom\s*|\bimport\(\s*)["']\s*(https?:)?//[^"']+""", re.I),
+    ]
+    for _f45 in sorted(p for p in _CAT45.rglob("*") if p.suffix in {".html", ".css"} and "node_modules" not in p.parts):
+        _t45 = _f45.read_text(encoding="utf8")
+        for _r45 in _ext45:
+            for _m45 in _r45.finditer(_t45):
+                _maus45.append(f"`{_f45.relative_to(root).as_posix()}` puxa recurso de fora: `{_m45.group(0)[:80]}`")
+    if _maus45:
+        errors.append(
+            "check 45: " + "; ".join(_maus45[:10]) + (f" (e mais {len(_maus45) - 10})" if len(_maus45) > 10 else "")
+            + ". O site é feito só com a Aurea (ordem do Victor, 01/10/2026): o que ele usa vem de "
+            "`@aurea-uds/*`, do próprio repositório ou de uma dependência que o `@aurea-uds/react` "
+            "declara, e é servido do próprio domínio. Peça que falta se cria NA Aurea, não no site"
+        )
+
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")
 print("Aurea validation:", "OK" if not errors else "FAILED")

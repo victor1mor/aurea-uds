@@ -34,3 +34,7 @@ tmp-vitrine/
 # A lista de nomes privados do validate.py (check 1). Nunca vai para o git.
 .nomes-privados
 __pycache__/
+
+# O site em aureauds.dev: montado por `node scripts/montar-site.mjs` a partir de apps/catalog.
+site-dist/
+.wrangler/

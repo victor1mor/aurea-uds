@@ -1,0 +1,16 @@
+// Aurea — o site em aureauds.dev: um Worker só de arquivos estáticos na Cloudflare (sem `main`).
+// Quem publica é o GitHub (.github/workflows/site.yml), com `wrangler deploy`, depois que a CI do
+// `main` passa. A pasta `site-dist/` sai de `node scripts/montar-site.mjs` e não é commitada.
+// Os dois domínios são "custom domains": a Cloudflare cria o registro de DNS sozinha, e para isso
+// o nome não pode ter registro A/AAAA/CNAME antes (os do estacionamento da Namecheap saíram).
+{
+  "name": "aurea-uds",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./site-dist"
+  },
+  "routes": [
+    {"pattern": "aureauds.dev", "custom_domain": true},
+    {"pattern": "www.aureauds.dev", "custom_domain": true}
+  ]
+}

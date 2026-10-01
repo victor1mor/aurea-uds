@@ -1,0 +1,39 @@
+name: Site
+
+# Publica o catálogo em aureauds.dev (Cloudflare) DEPOIS que a CI do `main` passa. Uma CI vermelha
+# não publica nada: o site mostra sempre o último `main` verde. Também dá para disparar à mão.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          # o commit que a CI aprovou, não o que o `main` virou depois
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # o passo de publicar não precisa da chave do git
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - name: Montar site-dist (só o catálogo gerado; recusa recurso de fora)
+        run: node scripts/montar-site.mjs
+      - name: Publicar na Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4.146.0 deploy
