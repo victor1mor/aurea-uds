@@ -35,6 +35,7 @@ import {
   Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox, Code,
   Heading, Paragraph,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, Grid, IconButton, Input,
+  RadioGroup, Separator,
   KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
   Spinner, Stack, Status, Stepper, Switch, Table, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
@@ -280,6 +281,7 @@ function Tela({irParaScreen, irParaLote2}) {
       {/* ── E ── os achados do app de 25/09/2026 ─────────────────────────── */}
       <BlocosLoteE t={t} />
       <Blocos0121 t={t} />
+      <BlocoRadioGroup t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1410,6 +1412,38 @@ function BlocosLoteE({t}) {
 // 0.12.1 (25/09/2026). Os aceites de aparelho dos consertos E9, E10 e E11. ~~O E4b era
 // diagnóstico~~ — fechou em 30/09/2026 sem defeito (a lista testada no app era curta), e as seis
 // cópias da folha do `Combobox` (R0 a R5) saíram daqui.
+// RadioGroup (01/10/2026): o do HeroUI Native, dentro de um cartão com separadores, como no
+// exemplo dele. Aceite: tocar troca a escolha, e as medidas batem com a imagem do HeroUI.
+function BlocoRadioGroup({t}) {
+  const [entrega, setEntrega] = React.useState("normal");
+  return (
+    <Bloco t={t} n="RG" titulo="O grupo de rádio escolhe um só, e cada linha inteira é tocável?"
+      criterio={"Toque em qualquer ponto de uma linha (no texto também): a marca amarela passa para ela e "
+        + "sai da anterior. No primeiro cartão a marca fica À DIREITA; no segundo, NO INÍCIO, com o texto "
+        + "alinhado depois dela. A segunda linha está desligada."}>
+      <Card>
+        <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
+          <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
+          <Separator />
+          <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" disabled />
+          <Separator />
+          <RadioGroup.Item value="amanha" label="Amanhã" description="No próximo dia útil" />
+        </RadioGroup>
+      </Card>
+      <Card>
+        <RadioGroup label="Forma de entrega, marca no início" value={entrega} onValueChange={setEntrega}
+          indicatorPlacement="start">
+          <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
+          <Separator />
+          <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" disabled />
+          <Separator />
+          <RadioGroup.Item value="amanha" label="Amanhã" description="No próximo dia útil" />
+        </RadioGroup>
+      </Card>
+    </Bloco>
+  );
+}
+
 function Blocos0121({t}) {
   const [ano, setAno] = React.useState(undefined);
   const [anoBusca, setAnoBusca] = React.useState(null);

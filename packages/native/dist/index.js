@@ -59,7 +59,7 @@ export { BottomNav, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
 // ⚠ O `Field` NÃO nomeia o controle por referência, como o `<label for>` da web: ele empurra o
 // nome, a dica e o estado de inválido para o controle por CONTEXTO. É a tradução que decidiu o
 // lote — o RN não tem `id` nem `htmlFor`.
-export { Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, SegmentedControl, Form, KeyboardAvoiding, useCampo, } from "./inputs.js";
+export { Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, RadioGroup, SegmentedControl, Form, KeyboardAvoiding, useCampo, } from "./inputs.js";
 // ⚠ O GRUPO e o campo de SENHA entraram depois do Lote 4, medidos pelo app na tela de entrar
 // (15/09/2026): o campo não tinha onde encaixar glifo, e `secureTextEntry` esconde a senha sem
 // dar botão para mostrá-la. **Os dois já existiam na web desde 29/08/2026** — a falta era só

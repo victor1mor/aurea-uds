@@ -114,12 +114,12 @@ export type {
 // nome, a dica e o estado de inválido para o controle por CONTEXTO. É a tradução que decidiu o
 // lote — o RN não tem `id` nem `htmlFor`.
 export {
-  Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, SegmentedControl, Form,
+  Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, RadioGroup, SegmentedControl, Form,
   KeyboardAvoiding, useCampo,
 } from "./inputs.js";
 export type {
   FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps,
-  RadioProps, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize,
+  RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize,
 } from "./inputs.js";
 
 // ⚠ O GRUPO e o campo de SENHA entraram depois do Lote 4, medidos pelo app na tela de entrar

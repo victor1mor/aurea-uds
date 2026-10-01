@@ -382,6 +382,56 @@ export function Checkbox(p) { return _jsx(ControleMarcado, { ...p, papel: "check
  * estado do app — quem sabe qual está escolhido é o `useState` da tela, e `checked` sai dele.
  */
 export function Radio(p) { return _jsx(ControleMarcado, { ...p, papel: "radio" }); }
+const GrupoDeRadio = React.createContext(null);
+function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement, style, children, ...rest }) {
+    const t = useAureaTokens();
+    const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid, indicatorPlacement }), [value, onValueChange, disabled, invalid, indicatorPlacement]);
+    return (_jsx(GrupoDeRadio.Provider, { value: contexto, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label, accessibilityState: { disabled: !!disabled }, style: [{ gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column" }, style], ...rest, children: children }) }));
+}
+function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest }) {
+    const t = useAureaTokens();
+    const s = folha(t);
+    const grupo = React.useContext(GrupoDeRadio);
+    if (__DEV__ && !grupo)
+        console.warn("Aurea: RadioGroup.Item fora de um RadioGroup não escolhe nada.");
+    const escolhido = grupo?.value === value;
+    const inativo = disabled ?? grupo?.disabled;
+    const erro = invalid ?? grupo?.invalid;
+    const perigo = t.color.danger400 ?? t.color.destructive;
+    const marca = t.size.space6;
+    const ponto = t.size.space2 + t.size.space05;
+    const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
+    const texto = (label != null || description != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
+                ? _jsx(Text, { size: "base", weight: 500, tone: erro ? "danger" : "default", children: label }) : label, description != null && (typeof description === "string"
+                ? _jsx(Text, { size: "sm", tone: "muted", children: description }) : description)] }, "texto"));
+    const marcaDesenhada = (_jsx(View, { style: [
+            s.marcaBase,
+            { width: marca, height: marca, borderRadius: t.size.radiusFull },
+            erro && { borderColor: perigo, backgroundColor: "transparent" },
+            escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
+                borderColor: erro ? perigo : t.color.controlSelected },
+        ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, borderRadius: t.size.radiusFull,
+                backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
+    return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", accessibilityState: { checked: escolhido, disabled: !!inativo }, accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
+            { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+                gap: t.size.space3, minHeight: t.size.targetMin },
+            inativo && s.desabilitado, style,
+        ], ...rest, children: noInicio ? [marcaDesenhada, texto] : [texto, marcaDesenhada] }));
+}
+/**
+ * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
+ *
+ *     <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
+ *       <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
+ *       <Separator />
+ *       <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" />
+ *     </RadioGroup>
+ *
+ * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
+ * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada. Com
+ * `indicatorPlacement="start"` a marca vai para o início da linha.
+ */
+export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoDeRadio });
 /**
  * O interruptor.
  *
