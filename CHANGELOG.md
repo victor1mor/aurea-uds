@@ -17,7 +17,17 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada ainda.
+### O site, aureauds.dev (Fase 1)
+
+- **O catálogo vira o site.** As 130 peças da web, vivas, em `aureauds.dev`. Nada novo se constrói
+  para o site: `scripts/montar-site.mjs` copia as páginas geradas de `apps/catalog` para
+  `site-dist/`.
+- **Publica sozinho**: o `.github/workflows/site.yml` roda depois da CI verde no `main` e manda
+  para a Cloudflare (Workers com arquivos estáticos, plano gratuito), com o `wrangler.jsonc`.
+- **A trava (check 45 do `validate.py`)**: o site só importa a Aurea, o próprio repositório e as
+  dependências que o `@aurea-uds/react` declara; e nenhuma página puxa script, folha, imagem ou
+  moldura de outro endereço. O `montar-site.mjs` confere a segunda metade de novo na publicação.
+- Não muda nenhum pacote publicado.
 
 ---
 

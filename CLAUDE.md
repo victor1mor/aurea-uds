@@ -211,6 +211,13 @@ para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
 
 ## 4. Publicar e empurrar
 
+- **O site `aureauds.dev` é o catálogo, e publica sozinho** (decisão do Victor, 01/10/2026). Depois
+  da CI verde no `main`, o `.github/workflows/site.yml` monta `site-dist/` (`scripts/montar-site.mjs`)
+  e manda para a Cloudflare (Workers, plano gratuito). Os segredos `CLOUDFLARE_API_TOKEN` e
+  `CLOUDFLARE_ACCOUNT_ID` vivem só nas configurações do GitHub; **nunca** na conversa nem em arquivo.
+  - **A trava** (ordem do Victor, 01/10/2026): o site é feito **só com a Aurea**. O check 45
+    reprova importação de fora (vale o que o `@aurea-uds/react` declara) e recurso de outro
+    endereço. Peça que falta no site se cria **na Aurea**, nunca no site.
 - **Publicar é um comando, da raiz: `node scripts/publicar.mjs`.** Com `--dry-run` ele confere
   tudo e não publica. O `npm login` e o publish são do Victor; agente roda só o `--dry-run`.
   - O script empacota com `pnpm` (que traduz o `workspace:` das dependências internas) e publica o

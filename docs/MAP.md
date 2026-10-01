@@ -25,6 +25,7 @@ documento, quase certamente está editando a **saída** — e o gate vai reprova
 | regerar os ícones do nativo | `packages/native/build-icons-native.mjs` (a fonte é o `@phosphor-icons/core`, a mesma do sprite web — ADR-0053) | `pnpm build:icons-native`; o check 38 compara os dois alvos |
 | trocar/acrescentar uma fonte | `packages/fonts/build-fonts.mjs` + os binários em `files/` (web) **e** `files-native/` (nativo) | `pnpm build:fonts`; o check 37 reprova se um lado ficar para trás |
 | registrar uma decisão | `decisions/` | tabela no `decisions/README.md` |
+| mexer no site (aureauds.dev) | o site **é o catálogo**: mexe-se em `apps/catalog/content/` e nos geradores; `scripts/montar-site.mjs` só copia para `site-dist/`; `wrangler.jsonc` e `.github/workflows/site.yml` publicam | o check 45 reprova o que não vem da Aurea; publica sozinho depois da CI verde no `main` |
 
 ## Os pacotes, e o que cada um deve
 
