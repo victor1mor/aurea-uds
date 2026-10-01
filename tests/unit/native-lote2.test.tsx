@@ -26,7 +26,7 @@ const tokens = resolverTokens("dark", "comfortable");
 // avisaria em `__DEV__` a cada montagem, enchendo a saída de ruído que não é achado.
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones(Object.fromEntries(
-  [...Object.values(ICONE_DA_VARIANTE), "document--blank", "close"].map((n) => [n, Glifo]),
+  [...Object.values(ICONE_DA_VARIANTE), "file", "close"].map((n) => [n, Glifo]),
 ));
 
 const Envolve = ({children}: {children: React.ReactNode}) =>

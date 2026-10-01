@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Text field specialized for search, with clear affordance.",
-  "icon": "search",
+  "icon": "magnifying-glass",
   "platforms": {
     "web": "stable",
     "native": "supported"

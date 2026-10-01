@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Floating bar pinned to the bottom that holds an application's top-level navigation.",
-  "icon": "menu",
+  "icon": "list",
   "platforms": {
     "web": "stable",
     "native": "planned"

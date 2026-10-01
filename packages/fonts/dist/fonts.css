@@ -1,12 +1,9 @@
-/* Aurea fonts — IBM Plex (IBM Corp., SIL OFL 1.1). Generated from files/. Do not edit. */
-@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("../files/ibm-plex-sans-400-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Sans";font-style:italic;font-weight:400;font-display:swap;src:url("../files/ibm-plex-sans-400-italic.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("../files/ibm-plex-sans-500-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url("../files/ibm-plex-sans-600-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:700;font-display:swap;src:url("../files/ibm-plex-sans-700-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Serif";font-style:normal;font-weight:500;font-display:swap;src:url("../files/ibm-plex-serif-500-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Serif";font-style:normal;font-weight:600;font-display:swap;src:url("../files/ibm-plex-serif-600-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Serif";font-style:normal;font-weight:700;font-display:swap;src:url("../files/ibm-plex-serif-700-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400;font-display:swap;src:url("../files/ibm-plex-mono-400-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url("../files/ibm-plex-mono-500-normal.woff2") format("woff2");}
-@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:600;font-display:swap;src:url("../files/ibm-plex-mono-600-normal.woff2") format("woff2");}
+/* Aurea fonts — Atkinson Hyperlegible Next e Mono (SIL OFL 1.1). Generated from files/. Do not edit. */
+@font-face{font-family:"Atkinson Hyperlegible Next";font-style:normal;font-weight:400;font-display:swap;src:url("../files/atkinson-hyperlegible-next-400-normal.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Next";font-style:italic;font-weight:400;font-display:swap;src:url("../files/atkinson-hyperlegible-next-400-italic.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Next";font-style:normal;font-weight:500;font-display:swap;src:url("../files/atkinson-hyperlegible-next-500-normal.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Next";font-style:normal;font-weight:600;font-display:swap;src:url("../files/atkinson-hyperlegible-next-600-normal.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Next";font-style:normal;font-weight:700;font-display:swap;src:url("../files/atkinson-hyperlegible-next-700-normal.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Mono";font-style:normal;font-weight:400;font-display:swap;src:url("../files/atkinson-hyperlegible-mono-400-normal.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Mono";font-style:normal;font-weight:500;font-display:swap;src:url("../files/atkinson-hyperlegible-mono-500-normal.woff2") format("woff2");}
+@font-face{font-family:"Atkinson Hyperlegible Mono";font-style:normal;font-weight:600;font-display:swap;src:url("../files/atkinson-hyperlegible-mono-600-normal.woff2") format("woff2");}

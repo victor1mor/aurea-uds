@@ -4,7 +4,7 @@
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Carbon icon primitive rendered from a sprite.",
-  "icon": "color-palette",
+  "icon": "palette",
   "platforms": {
     "web": "stable",
     "native": "planned"

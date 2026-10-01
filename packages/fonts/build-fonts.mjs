@@ -6,6 +6,13 @@
 // IBM Plex simplesmente não aparece no aparelho e o app cai na fonte de sistema, que é a
 // identidade que o CLAUDE.md declara intocável.
 //
+// ADR-0053 (01/10/2026): a fonte é a Atkinson Hyperlegible Next (texto) e a Atkinson Hyperlegible
+// Mono (código), as duas sob a SIL OFL 1.1. A IBM Plex saiu, a Serif junto. Os arquivos foram
+// gerados das fontes variáveis do Google Fonts (`ofl/atkinsonhyperlegiblenext` e
+// `ofl/atkinsonhyperlegiblemono`), um peso fixo por arquivo: o `.ttf` completo para o aparelho,
+// e o `.woff2` só com o alfabeto latino (o mesmo intervalo do subset `latin` do fontsource, que
+// era o que a web servia da Plex).
+//
 // O nome de cada fonte no alvo nativo é MEDIDO, não escrito à mão: o iOS registra a fonte pelo
 // nome PostScript, que mora na tabela `name` do próprio arquivo. Escrever "IBMPlexSans-SemiBold"
 // numa constante seria uma segunda verdade sobre um byte que já existe no binário.
@@ -16,25 +23,27 @@ import {dirname, join} from "node:path";
 const dir = dirname(fileURLToPath(import.meta.url));
 mkdirSync(join(dir, "dist"), {recursive: true});
 
-// file -> @font-face metadata. IBM Plex, IBM Corp., SIL Open Font License 1.1.
-// `role` é o token de tipografia que a fonte serve (--font-ui / --font-editorial / --font-code),
-// e existe para o alvo nativo poder indexar por papel em vez de por nome de família.
+// file -> @font-face metadata. Atkinson Hyperlegible Next e Mono, SIL Open Font License 1.1.
+// `role` é o token de tipografia que a fonte serve (--font-ui / --font-code), e existe para o
+// alvo nativo poder indexar por papel em vez de por nome de família.
+//
+// ⚠ O papel `editorial` NÃO tem arquivo desde a ADR-0053: a IBM Plex Serif saiu, e a Atkinson
+// não tem serifada. Ele continua existindo como APELIDO do `ui` (os mesmos arquivos), para não
+// quebrar quem o usa — o `--font-editorial` do core e o `font.editorial` do nativo. Sai na 1.0.
+const UI = "Atkinson Hyperlegible Next", CODIGO = "Atkinson Hyperlegible Mono";
 const FONTS = [
-  {file: "ibm-plex-sans-400-normal.woff2",  family: "IBM Plex Sans",  role: "ui",        weight: 400, style: "normal"},
-  {file: "ibm-plex-sans-400-italic.woff2",  family: "IBM Plex Sans",  role: "ui",        weight: 400, style: "italic"},
-  {file: "ibm-plex-sans-500-normal.woff2",  family: "IBM Plex Sans",  role: "ui",        weight: 500, style: "normal"},
-  {file: "ibm-plex-sans-600-normal.woff2",  family: "IBM Plex Sans",  role: "ui",        weight: 600, style: "normal"},
-  {file: "ibm-plex-sans-700-normal.woff2",  family: "IBM Plex Sans",  role: "ui",        weight: 700, style: "normal"},
-  {file: "ibm-plex-serif-500-normal.woff2", family: "IBM Plex Serif", role: "editorial", weight: 500, style: "normal"},
-  {file: "ibm-plex-serif-600-normal.woff2", family: "IBM Plex Serif", role: "editorial", weight: 600, style: "normal"},
-  {file: "ibm-plex-serif-700-normal.woff2", family: "IBM Plex Serif", role: "editorial", weight: 700, style: "normal"},
-  {file: "ibm-plex-mono-400-normal.woff2",  family: "IBM Plex Mono",  role: "code",      weight: 400, style: "normal"},
-  {file: "ibm-plex-mono-500-normal.woff2",  family: "IBM Plex Mono",  role: "code",      weight: 500, style: "normal"},
-  {file: "ibm-plex-mono-600-normal.woff2",  family: "IBM Plex Mono",  role: "code",      weight: 600, style: "normal"},
+  {file: "atkinson-hyperlegible-next-400-normal.woff2", family: UI,     role: "ui",   weight: 400, style: "normal"},
+  {file: "atkinson-hyperlegible-next-400-italic.woff2", family: UI,     role: "ui",   weight: 400, style: "italic"},
+  {file: "atkinson-hyperlegible-next-500-normal.woff2", family: UI,     role: "ui",   weight: 500, style: "normal"},
+  {file: "atkinson-hyperlegible-next-600-normal.woff2", family: UI,     role: "ui",   weight: 600, style: "normal"},
+  {file: "atkinson-hyperlegible-next-700-normal.woff2", family: UI,     role: "ui",   weight: 700, style: "normal"},
+  {file: "atkinson-hyperlegible-mono-400-normal.woff2", family: CODIGO, role: "code", weight: 400, style: "normal"},
+  {file: "atkinson-hyperlegible-mono-500-normal.woff2", family: CODIGO, role: "code", weight: 500, style: "normal"},
+  {file: "atkinson-hyperlegible-mono-600-normal.woff2", family: CODIGO, role: "code", weight: 600, style: "normal"},
 ];
 
 // ── alvo WEB ───────────────────────────────────────────────────────────────
-let css = "/* Aurea fonts — IBM Plex (IBM Corp., SIL OFL 1.1). Generated from files/. Do not edit. */\n";
+let css = "/* Aurea fonts — Atkinson Hyperlegible Next e Mono (SIL OFL 1.1). Generated from files/. Do not edit. */\n";
 for (const f of FONTS) {
   if (!existsSync(join(dir, "files", f.file))) throw new Error("missing font file: " + f.file);
   css += `@font-face{font-family:"${f.family}";font-style:${f.style};font-weight:${f.weight};`
@@ -104,29 +113,31 @@ const porPapel = {};
 for (const m of medidos) {
   (porPapel[m.role] ??= {})[`${m.weight}${m.style === "italic" ? "i" : ""}`] = m.postscript;
 }
+// `editorial` é apelido do `ui` desde a ADR-0053 (ver o comentário da lista FONTS). Sem itálico,
+// como a serifada que ele substitui não tinha.
+porPapel.editorial = Object.fromEntries(Object.entries(porPapel.ui).filter(([k]) => !k.endsWith("i")));
 
 const cab = `// Aurea — alvo NATIVO das fontes. GERADO por packages/fonts/build-fonts.mjs. NÃO EDITAR.
 //
 // Lote 0 do NATIVE.md (§5.2.1). O React Native não lê woff2, então o alvo web não atravessa:
-// estes são os MESMOS 11 estilos da web, em .ttf estático.
+// estes são os MESMOS estilos da web, em .ttf estático.
 //
 // ⚠ NÃO use \`fontWeight\` para escolher o peso. MEDIDO na tabela \`name\` de cada arquivo:
-// só Regular, Italic e Bold moram na família "IBM Plex Sans" — o Medium está em "IBM Plex Sans
-// Medium" e o SemiBold em "IBM Plex Sans SemiBold", cada um uma FAMÍLIA PRÓPRIA. É o formato
-// RIBBI, e vale para as três famílias. Pedir \`fontFamily:"IBM Plex Sans"\` + \`fontWeight:"600"\`
-// devolve o Regular sintetizado, não o SemiBold desenhado.
+// só Regular, Italic e Bold moram na família "Atkinson Hyperlegible Next" — o Medium está em
+// "Atkinson Hyperlegible Next Medium" e o SemiBold em "… SemiBold", cada um uma FAMÍLIA PRÓPRIA.
+// É o formato RIBBI, e vale para as duas famílias (era assim também na IBM Plex). Pedir a família
+// + \`fontWeight:"600"\` devolve o Regular sintetizado, não o SemiBold desenhado.
 //
 // A forma correta é uma só: \`fontFamily\` recebe o NOME POSTSCRIPT, que é a chave deste mapa.
 // O \`FONT_FAMILIES\` abaixo faz essa tradução por papel de tipografia e peso.
 //
 //   import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 //   const [pronto] = useFonts(AUREA_FONTS);              // expo-font
-//   <Text style={{fontFamily: FONT_FAMILIES.ui["600"]}}> // "IBMPlexSans-SemiBold"
+//   <Text style={{fontFamily: FONT_FAMILIES.ui["600"]}}> // "AtkinsonHyperlegibleNext-SemiBold"
 //
 // Glifos: estes .ttf são COMPLETOS, enquanto o alvo web serve o subset \`latin\`. Mesma origem
-// de desenho (medido: o woff2 do repositório é byte a byte o \`latin\` do fontsource, e os dois
-// vêm do Google Fonts), tamanhos diferentes — no nativo a fonte é asset local do bundle, não
-// transferência de rede por página.
+// de desenho (as fontes variáveis do Google Fonts, um peso fixo por arquivo), tamanhos diferentes
+// — no nativo a fonte é asset local do bundle, não transferência de rede por página.
 `;
 
 let njs = cab + "\n";

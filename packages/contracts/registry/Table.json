@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Presents rows and columns of data.",
-  "icon": "data--structured",
+  "icon": "tree-structure",
   "platforms": {
     "web": "stable",
     "native": "planned"

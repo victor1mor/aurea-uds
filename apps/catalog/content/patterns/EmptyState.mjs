@@ -26,12 +26,12 @@ export default [
     description: "Different from an empty account: here there IS data, the query just missed it. The action clears the filter instead of creating something — offering Create here sends people down the wrong path.",
     uses: ["EmptyState", "Button"],
     code: `<EmptyState
-  icon="search"
+  icon="magnifying-glass"
   title="No members match “curator”"
   description="Check the spelling, or clear the filter to see all 9 members."
   action={<Button variant="outline" onClick={clear}>Clear filter</Button>}
 />`,
-    render: () => h(A.EmptyState, {titleAs: "p", icon: "search", title: "No members match \u201Ccurator\u201D",
+    render: () => h(A.EmptyState, {titleAs: "p", icon: "magnifying-glass", title: "No members match \u201Ccurator\u201D",
       description: "Check the spelling, or clear the filter to see all 9 members.",
       action: h(A.Button, {variant: "outline"}, "Clear filter")}),
   },

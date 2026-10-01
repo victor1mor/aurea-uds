@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Actions menu opened by right-click or long-press.",
-  "icon": "menu",
+  "icon": "list",
   "platforms": {
     "web": "stable",
     "native": "planned"

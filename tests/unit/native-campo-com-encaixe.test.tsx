@@ -18,7 +18,7 @@ import {
 
 const tokens = resolverTokens("dark", "comfortable");
 const Glifo = () => null;
-const ICONES = criarRegistroDeIcones({email: Glifo, view: Glifo, "view--off": Glifo});
+const ICONES = criarRegistroDeIcones({"envelope-simple": Glifo, "eye": Glifo, "eye-slash": Glifo});
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider icons={ICONES}>{children}</AureaProvider>;
 
@@ -103,7 +103,7 @@ describe("InputGroup — a caixa passa a ser dele", () => {
 
   it("o nome do Field continua chegando no campo dentro do grupo", () => {
     render(<Envolve>
-      <Field label="E-mail"><InputGroup><InputGroupAddon><Icon name="email" /></InputGroupAddon><Input /></InputGroup></Field>
+      <Field label="E-mail"><InputGroup><InputGroupAddon><Icon name="envelope-simple" /></InputGroupAddon><Input /></InputGroup></Field>
     </Envolve>);
     expect(props("TextInput").accessibilityLabel).toBe("E-mail");
   });
@@ -119,7 +119,7 @@ describe("InputGroup — a caixa passa a ser dele", () => {
 describe("InputGroupAddon — o encaixe", () => {
   it("não encolhe quando o campo cresce", () => {
     render(<Envolve>
-      <InputGroup><InputGroupAddon testID="e"><Icon name="email" /></InputGroupAddon><Input /></InputGroup>
+      <InputGroup><InputGroupAddon testID="e"><Icon name="envelope-simple" /></InputGroupAddon><Input /></InputGroup>
     </Envolve>);
     expect(StyleSheet.flatten(porID("View", "e").style).flexShrink).toBe(0);
   });
@@ -128,7 +128,7 @@ describe("InputGroupAddon — o encaixe", () => {
   // trocar a linha por algo que reordene, este teste reprova.
   it("a posição é a da escrita: encaixe antes do campo vem antes", () => {
     render(<Envolve>
-      <InputGroup testID="g"><InputGroupAddon testID="e"><Icon name="email" /></InputGroupAddon><Input /></InputGroup>
+      <InputGroup testID="g"><InputGroupAddon testID="e"><Icon name="envelope-simple" /></InputGroupAddon><Input /></InputGroup>
     </Envolve>);
     const filhos = React.Children.toArray((porID("View", "g").children as React.ReactNode));
     expect(filhos.length).toBeGreaterThan(0);

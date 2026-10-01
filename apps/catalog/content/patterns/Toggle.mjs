@@ -10,10 +10,10 @@ export default [
     name: "A button that stays pressed",
     description: "Two states the user flips and reads back from the button itself. It is not a Switch: a switch applies a setting, a toggle marks the thing under the cursor.",
     uses: ["Toggle"],
-    code: `<Toggle icon="text--bold" label="Bold" defaultPressed />
-<Toggle icon="text--italic" label="Italic" />`,
+    code: `<Toggle icon="text-b" label="Bold" defaultPressed />
+<Toggle icon="text-italic" label="Italic" />`,
     render: () => h("div", {style: {display: "flex", gap: "var(--space-1)"}},
-      h(A.Toggle, {icon: "text--bold", label: "Bold", defaultPressed: true}),
-      h(A.Toggle, {icon: "text--italic", label: "Italic"})),
+      h(A.Toggle, {icon: "text-b", label: "Bold", defaultPressed: true}),
+      h(A.Toggle, {icon: "text-italic", label: "Italic"})),
   },
 ];

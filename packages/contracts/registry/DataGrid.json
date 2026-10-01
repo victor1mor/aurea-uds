@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Interactive grid with navigation, sort and selection.",
-  "icon": "data--view",
+  "icon": "table",
   "platforms": {
     "web": "stable",
     "native": "planned"

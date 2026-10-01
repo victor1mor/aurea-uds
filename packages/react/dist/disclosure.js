@@ -17,5 +17,5 @@ export function Accordion({ items }) { return _jsx("div", { className: "accordio
 // A API é a daqui: `trigger` é dado, o conteúdo são os filhos. Não é a API composta da referência
 // (Root/Trigger/Panel) — quem quiser compor esse nível usa o motor direto.
 export function Collapsible({ trigger, children, open, defaultOpen, onOpenChange, disabled, className }) {
-    return _jsxs(BaseCollapsible.Root, { open: open, defaultOpen: defaultOpen, onOpenChange: soOValor(onOpenChange), disabled: disabled, className: cx("collapsible", className), children: [_jsxs(BaseCollapsible.Trigger, { className: "collapsible-trigger", children: [_jsx(Icon, { name: "chevron--down", size: "sm", className: "collapsible-chevron" }), trigger] }), _jsx(BaseCollapsible.Panel, { className: "collapsible-panel", children: children })] });
+    return _jsxs(BaseCollapsible.Root, { open: open, defaultOpen: defaultOpen, onOpenChange: soOValor(onOpenChange), disabled: disabled, className: cx("collapsible", className), children: [_jsxs(BaseCollapsible.Trigger, { className: "collapsible-trigger", children: [_jsx(Icon, { name: "caret-down", size: "sm", className: "collapsible-chevron" }), trigger] }), _jsx(BaseCollapsible.Panel, { className: "collapsible-panel", children: children })] });
 }

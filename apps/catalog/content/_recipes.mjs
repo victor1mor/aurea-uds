@@ -49,14 +49,14 @@ export default {
   <Badge variant="primary">New</Badge>
   <h2>Ship the interface, not the argument about it.</h2>
   <p>One system, two themes, three densities.</p>
-  <Button variant="primary" trailingIcon="arrow--right">Get started</Button>
+  <Button variant="primary" trailingIcon="arrow-right">Get started</Button>
   <Button variant="outline">Read the docs</Button>
 </Card>`,
     render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
       h(A.Badge, {variant: "primary"}, "New"),
       h("strong", null, "Ship the interface, not the argument about it."),
       h("span", {style: muted}, "One system, two themes, three densities."),
-      h("div", {style: row}, h(A.Button, {variant: "primary", trailingIcon: "arrow--right"}, "Get started"),
+      h("div", {style: row}, h(A.Button, {variant: "primary", trailingIcon: "arrow-right"}, "Get started"),
         h(A.Button, {variant: "outline"}, "Read the docs"))))),
   },
   docs_cms: {
@@ -81,7 +81,7 @@ export default {
     uses: ["Card", "SearchField", "Button", "Table", "Status", "Pagination"],
     code: `<Card>
   <SearchField placeholder="Filter members…" />
-  <Button variant="outline" leadingIcon="add">Invite</Button>
+  <Button variant="outline" leadingIcon="plus">Invite</Button>
   <Table caption="Workspace members">
     <thead><tr><th>Member</th><th>Role</th><th>State</th></tr></thead>
     <tbody>{members.map(m => (
@@ -96,7 +96,7 @@ export default {
     render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
       h("div", {style: between},
         h("div", {style: {flex: 1, minWidth: "12rem"}}, h(A.SearchField, {placeholder: "Filter members…"})),
-        h(A.Button, {variant: "outline", leadingIcon: "add"}, "Invite")),
+        h(A.Button, {variant: "outline", leadingIcon: "plus"}, "Invite")),
       h(A.Table, {caption: "Workspace members"},
         h("thead", null, h("tr", null, h("th", null, "Member"), h("th", null, "Role"), h("th", null, "State"))),
         h("tbody", null, ...[["Messenger", "Owner", "online"], ["Analyst", "Editor", "busy"],
@@ -393,14 +393,14 @@ export default {
   </Banner>
   <Checkbox label="Write the recipe previews" defaultChecked />
   <Checkbox label="Regenerate the 169 pages" />
-  <Button variant="ghost" leadingIcon="add">New task</Button>
+  <Button variant="ghost" leadingIcon="plus">New task</Button>
 </Card>`,
     render: () => h("div", {style: narrow}, h(A.Card, null, h("div", {style: stack},
       h(A.Banner, {variant: "info", title: "Offline draft saved"},
         "It syncs when the connection returns. Navigating away keeps it."),
       h(A.Checkbox, {label: "Write the recipe previews", defaultChecked: true}),
       h(A.Checkbox, {label: "Regenerate the 169 pages"}),
-      h(A.Button, {variant: "ghost", leadingIcon: "add"}, "New task")))),
+      h(A.Button, {variant: "ghost", leadingIcon: "plus"}, "New task")))),
   },
   mobile_pwa: {
     uses: ["Card", "Banner", "Field", "Input", "Button"],

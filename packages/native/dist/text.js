@@ -98,8 +98,9 @@ const folha = criarFolha((t) => {
  * Texto da Aurea. Sem provider acima, `useAureaTokens` levanta — de propósito: um padrão
  * silencioso aqui desenharia o app inteiro no tema errado sem nada acusar.
  *
- * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** No IBM Plex
- * só Regular, Italic e Bold moram na família "IBM Plex Sans"; Medium e SemiBold são famílias
+ * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** Na Atkinson
+ * Hyperlegible (como era na IBM Plex) só Regular, Italic e Bold moram na família "Atkinson
+ * Hyperlegible Next"; Medium e SemiBold são famílias
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */
@@ -121,7 +122,7 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
             : papel ? t.size[papel.entrelinha] ?? t.size.leadingNormal : t.size.leadingNormal;
         const escala = t.font[font];
         // O itálico é UMA fonte, não um estilo sintético: `fontStyle:"italic"` faria o sistema
-        // inclinar o desenho reto, e o Plex tem itálico desenhado. Só o `ui` o tem — nos outros
+        // inclinar o desenho reto, e a Atkinson tem itálico desenhado. Só o `ui` o tem — nos outros
         // papéis o pedido cai no peso pedido, que é o comportamento honesto.
         const familia = italic && escala.italic ? escala.italic : escala[weight];
         return {

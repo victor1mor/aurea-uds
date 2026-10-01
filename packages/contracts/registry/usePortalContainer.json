@@ -5,7 +5,7 @@
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "The node every Aurea popup is mounted into, as configured once on AureaProvider.",
-  "icon": "settings",
+  "icon": "gear",
   "platforms": {
     "web": "stable",
     "native": "planned"

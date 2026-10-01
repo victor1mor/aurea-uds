@@ -22,7 +22,7 @@ documento, quase certamente está editando a **saída** — e o gate vai reprova
 | mudar o texto de uma receita | `patterns/<arquétipo>.md` | check 9 valida contra o contrato |
 | adicionar um gate | `scripts/validate.py` (sem navegador) ou `tests/visual/*.spec.ts` (com) | **prove contra o defeito** (QUALITY.md #29) |
 | mexer no alvo NATIVO (tema, tokens resolvidos) | `packages/native/src/` — e **só** os três arquivos que já existem; componente novo é Lote 1, não autorizado | `pnpm build:native`; checks 37/38/39 |
-| regerar os ícones do nativo | `packages/native/build-icons-native.mjs` (a fonte é o `@carbon/icons`, a mesma do sprite web) | `pnpm build:icons-native`; o check 38 compara os dois alvos |
+| regerar os ícones do nativo | `packages/native/build-icons-native.mjs` (a fonte é o `@phosphor-icons/core`, a mesma do sprite web — ADR-0053) | `pnpm build:icons-native`; o check 38 compara os dois alvos |
 | trocar/acrescentar uma fonte | `packages/fonts/build-fonts.mjs` + os binários em `files/` (web) **e** `files-native/` (nativo) | `pnpm build:fonts`; o check 37 reprova se um lado ficar para trás |
 | registrar uma decisão | `decisions/` | tabela no `decisions/README.md` |
 
@@ -34,8 +34,8 @@ packages/
               visual. `/native` é dp, sem cascata, cor em 3      [ADR-0027]
               formas (hex/p3/oklch). Ver NATIVE.md Etapa 2.
   core/       o CSS do sistema + aurea.js (comportamento vanilla).
-  icons/      sprite Carbon.                                     [NOTICE obrigatório]
-  fonts/      IBM Plex empacotada.                               [ADR-0006]
+  icons/      sprite Phosphor (Regular e Fill).                  [NOTICE obrigatório]
+  fonts/      Atkinson Hyperlegible Next e Mono.                 [ADR-0006, ADR-0053]
   react/      os componentes, separados por categoria/fronteira. [ADR-0004, Fase 9]
               markup.tsx = os 22 de marcação pura, SEM diretiva.  [ADR-0026]
               <categoria>.tsx = VITRINE, só reexporta, sem

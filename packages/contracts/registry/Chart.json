@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Ready",
   "summary": "Sized, named surface that hosts a Recharts chart wearing Aurea tokens.",
-  "icon": "chart--area",
+  "icon": "chart-line",
   "platforms": {
     "web": "supported",
     "native": "planned"

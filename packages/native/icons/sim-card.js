@@ -1,11 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function SimCard({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M21,9H8a2.0023,2.0023,0,0,0-2,2V21a2.0023,2.0023,0,0,0,2,2H21a2.0023,2.0023,0,0,0,2-2V11A2.0023,2.0023,0,0,0,21,9Zm0,4H18V11h3Zm-3,2h3v2H18Zm-2-4V21H13V14a1,1,0,0,0-1-1H8V11Zm-5,6H8V15h3ZM8,19h3v2H8Zm10,2V19h3v2Z", fill: color}),
-    React.createElement(Path, {d: "M23.5317,27H4a2.0021,2.0021,0,0,1-2-2V7A2.0021,2.0021,0,0,1,4,5H28a2.0021,2.0021,0,0,1,2,2V19.6379a2.0044,2.0044,0,0,1-.4639,1.2808L25.0679,26.28A1.9944,1.9944,0,0,1,23.5317,27ZM4,7V25H23.5317L28,19.6379V7Z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM200,216H56V40h92.69L200,91.31V216ZM176,112H80a8,8,0,0,0-8,8v72a8,8,0,0,0,8,8h96a8,8,0,0,0,8-8V120A8,8,0,0,0,176,112Zm-8,72H152V152a8,8,0,0,0-16,0v32H120V152a8,8,0,0,0-16,0v32H88V128h80Z", fill: color})
   );
 }

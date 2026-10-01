@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "A third-party video page (YouTube, Vimeo) inside the Aurea frame, loaded only when asked for.",
-  "icon": "video",
+  "icon": "video-camera",
   "platforms": {
     "web": "stable",
     "native": "planned"

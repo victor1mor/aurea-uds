@@ -122,6 +122,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.12.2` | O `BottomNav` mais baixo, na web e no nativo (aprovado pela imagem) e dois patches de segurança da CI — pedido #11. **Publicada em 30/09/2026**, pelo terminal do Victor |
 | `0.12.3` | `RadioGroup` no nativo, no desenho do HeroUI, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
 | `0.12.4` | R-20: o estado chega ao leitor de tela da web em `aria-*` (os 26 pontos do nativo) — pedido #15. **Publicada em 01/10/2026**, pelo terminal do Victor |
+| `0.13.0` | A troca de fonte e ícones da ADR-0053: Atkinson Hyperlegible Next e Mono, ícones Phosphor com a forma cheia no item escolhido. **Quebra** nomes de ícone. **Pronta, não publicada**; faltam as fotos da CI e o aceite pela imagem |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -243,10 +244,10 @@ para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
   `data-brand`, nada muda. Trocar o amarelo do padrão é proibido.
 - ~~IBM Plex Sans / Serif / Mono; Carbon Icons~~ → **Atkinson Hyperlegible Next e ícones Phosphor
   Regular** (decisão do Victor, 01/10/2026,
-  [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). ⚠ **A troca
-  ainda não foi feita:** sai num lote próprio, com "pode". Até lá o código continua com IBM Plex e
-  Carbon. Decidido também: o item escolhido usa o Phosphor Fill, o código usa a Atkinson
-  Hyperlegible Mono, e a IBM Plex Serif sai. Aberto: o peso do ícone pequeno (ADR, "A medida").
+  [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). **Feita na
+  `0.13.0`** (01/10/2026), ainda não publicada. Decidido também: o item escolhido usa o Phosphor Fill, o código usa a Atkinson
+  Hyperlegible Mono, e a IBM Plex Serif sai (o `--font-editorial` fica como apelido da fonte do
+  texto até a `1.0`, para não quebrar quem o usa). Aberto: o peso do ícone pequeno (ADR, "A medida").
 - Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - Proibido: Material, Fluent, Bootstrap ou shadcn como aparência; caixas retangulares genéricas;
@@ -357,8 +358,8 @@ outros projetos dele** (ordem de 31/08/2026). Falar do consumidor numa conversa 
   equivalente**: ele segue depois de um erro, o que transforma uma cadeia de verificação em
   teatro. Para ele, **um comando por linha**; quando o comando é nosso, a ordem vai para dentro do
   script.
-- Licença Apache-2.0; IBM Plex sob OFL 1.1; Carbon Icons sob Apache-2.0. (Depois da troca da
-  ADR-0053: Atkinson Hyperlegible sob OFL 1.1; Phosphor sob MIT.)
+- Licença Apache-2.0; Atkinson Hyperlegible sob OFL 1.1; Phosphor Icons sob MIT (ADR-0053, desde a
+  `0.13.0`; até a `0.12.4`, IBM Plex e Carbon).
 
 ## 10. Decisões já tomadas pelo Victor (16/07/2026)
 

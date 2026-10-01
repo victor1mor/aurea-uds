@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Choose a single value from a closed list, in the Aurea skin.",
-  "icon": "chevron--down",
+  "icon": "caret-down",
   "platforms": {
     "web": "stable",
     "native": "planned"

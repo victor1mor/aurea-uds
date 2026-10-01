@@ -16,7 +16,7 @@
   },
   "name": "InterAgentMessage",
   "summary": "A message from one agent to another, where the direction is the data.",
-  "icon": "send",
+  "icon": "paper-plane-tilt",
   "states": [
     "request",
     "response",

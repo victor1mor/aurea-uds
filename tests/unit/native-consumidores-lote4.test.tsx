@@ -21,7 +21,7 @@ import {
 import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
 
 const claro = resolverTokens("light", "comfortable");
-const ICONES = criarRegistroDeIcones({home: () => null});
+const ICONES = criarRegistroDeIcones({"house": () => null});
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider theme="light" icons={ICONES}>{children}</AureaProvider>;
 
@@ -110,8 +110,8 @@ describe("R-04 · o `Card` responde ao toque com `onPress`", () => {
 // ═════════════════════════════════════════════════════════════════════════════════════════════
 
 const ITENS = [
-  {id: "inicio", label: "Início", icon: "home", onPress: () => {}},
-  {id: "perfil", label: "Perfil", icon: "home", onPress: () => {}},
+  {id: "inicio", label: "Início", icon: "house", onPress: () => {}},
+  {id: "perfil", label: "Perfil", icon: "house", onPress: () => {}},
 ];
 const barra = () => plano(__instancias("View").find((p) => p.testID === "nav")?.style);
 const abas = () => __instancias("Pressable").filter((p) => p.accessibilityRole === "link").map((p) => plano(p.style));

@@ -20,5 +20,5 @@ export function CodeBlock({ children, language = "text", copyable, className }) 
     if (!copyable)
         return pre;
     const onCopy = (e) => { e.stopPropagation(); window.Aurea?.copy?.(e.currentTarget) ?? navigator.clipboard?.writeText(children); };
-    return _jsxs("div", { className: cx("code-block-wrap", className), "data-aurea-copy-scope": true, children: [_jsxs("button", { type: "button", className: "btn btn-icon btn-ghost copy-code", "data-aurea-copy": true, "aria-label": s.copyCode, onClick: onCopy, children: [_jsx(Icon, { name: "copy", size: "sm", className: "c-copy" }), _jsx(Icon, { name: "checkmark", size: "sm", className: "c-done" })] }), pre] });
+    return _jsxs("div", { className: cx("code-block-wrap", className), "data-aurea-copy-scope": true, children: [_jsxs("button", { type: "button", className: "btn btn-icon btn-ghost copy-code", "data-aurea-copy": true, "aria-label": s.copyCode, onClick: onCopy, children: [_jsx(Icon, { name: "copy", size: "sm", className: "c-copy" }), _jsx(Icon, { name: "check", size: "sm", className: "c-done" })] }), pre] });
 }

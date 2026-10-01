@@ -26,7 +26,7 @@ const matriz = () =>
     secao("Toolbar — estados",
       h(Toolbar, {label: "Normal"},
         h(ToolbarGroup, {label: "Formato"},
-          h(ToolbarButton, {leadingIcon: "edit"}, "Editar"),
+          h(ToolbarButton, {leadingIcon: "pencil-simple"}, "Editar"),
           h(ToolbarButton, null, "Normal"),
         ),
         h(ToolbarSeparator, null),
@@ -52,7 +52,7 @@ const matriz = () =>
     ),
     secao("Banner — variantes",
       ...(["info", "success", "warning", "danger"] as const).map((v) =>
-        h(Banner, {key: v, variant: v, title: `Banner ${v}`, icon: "information", onDismiss: () => {}},
+        h(Banner, {key: v, variant: v, title: `Banner ${v}`, icon: "info", onDismiss: () => {}},
           h("p", null, "Texto de apoio do banner."))),
       h(Banner, {title: "Sem ícone e sem dispensar"},
         h("p", null, "Variação mínima: o grid não quebra sem as colunas laterais.")),

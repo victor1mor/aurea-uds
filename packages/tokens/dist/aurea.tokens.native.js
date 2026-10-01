@@ -31,9 +31,9 @@ export const base = {
     "p3": "color(display-p3 0.4225 0.2527 0.0951)",
     "oklch": "oklch(0.421 0.095 57.708)"
   },
-  "fontUi": "IBM Plex Sans",
-  "fontEditorial": "IBM Plex Serif",
-  "fontCode": "IBM Plex Mono",
+  "fontUi": "Atkinson Hyperlegible Next",
+  "fontEditorial": "Atkinson Hyperlegible Next",
+  "fontCode": "Atkinson Hyperlegible Mono",
   "textXs": 12,
   "textSm": 14,
   "textMd": 14,

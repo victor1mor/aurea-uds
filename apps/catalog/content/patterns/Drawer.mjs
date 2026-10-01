@@ -35,6 +35,6 @@ export default [
   <Field label="Owner"><Select>…</Select></Field>
   <Button variant="primary" fullWidth onClick={apply}>Apply</Button>
 </Drawer>`,
-    render: () => h(Button, {variant: "outline", leadingIcon: "filter"}, "Filters"),
+    render: () => h(Button, {variant: "outline", leadingIcon: "funnel"}, "Filters"),
   },
 ];

@@ -22,7 +22,7 @@
 import * as React from "react";
 import {Pressable, View, type PressableProps} from "react-native";
 import {criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
-import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
+import {Icon, type AureaIconRegistry, type IconName, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -239,8 +239,10 @@ function CorpoDoBotao({
         {leadingIcon ? <Icon name={leadingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
         {typeof children === "string"
           // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão do HeroUI Native
-          // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e o IBM
-          // Plex precisa de 1,3 em para caber inteiro (sobe 1,025 e desce 0,275): no Android o RN
+          // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e a letra
+          // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a
+          // Atkinson Hyperlegible (ADR-0053) sobe 0,984 e desce 0,316, o mesmo 1,3 (medido na
+          // tabela `hhea` dos dois arquivos, 01/10/2026): no Android o RN
           // corta o que passa da linha, e a perna do g, do p e do ç sumia. Cabe em todo tamanho e
           // densidade (medido): `xs`/`sm` têm linha de 21 e o menor botão mede 24 (compacto); os
           // maiores têm linha de 24 e medem 32 ou mais.
@@ -292,8 +294,8 @@ export function IconButton(props: IconButtonProps) {
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
 function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
-  icons, pressed, disabled, corDoIcone, ...rest
-}: IconButtonProps & {corDoIcone?: string}) {
+  icons, pressed, disabled, corDoIcone, pesoDoIcone, ...rest
+}: IconButtonProps & {corDoIcone?: string; pesoDoIcone?: IconWeight}) {
   const t = useAureaTokens();
   const s = folha(t);
   const marca = useSobreAMarca();
@@ -322,7 +324,7 @@ function BotaoDeIcone({
       ]}
       {...rest}>
       <View style={[s.caixa, caixa]}>
-        <Icon name={name} size={ICONE[size]} icons={icons}
+        <Icon name={name} size={ICONE[size]} icons={icons} weight={pesoDoIcone}
               color={corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre} />
       </View>
     </Pressable>
@@ -332,7 +334,7 @@ function BotaoDeIcone({
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone — o
 // irmão do da web. Peça EXCLUSIVA da Aurea (o HeroUI Native não tem troca de tema), pensada como
 // ele faria: um só-ícone, sem cor solta. Mostra o tema para onde se VAI: no claro a LUA, na tinta
-// do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `asleep--filled` e `light--filled` saem do registro do
+// do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` (na forma cheia, `moon-fill` e `sun-fill`) saem do registro do
 // app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
 export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {}
@@ -342,9 +344,9 @@ export function ThemeToggle(props: ThemeToggleProps) {
   const s = useAureaStrings();
   const escuro = theme === "dark";
   return (
-    <BotaoDeIcone {...props} name={escuro ? "light--filled" : "asleep--filled"}
+    <BotaoDeIcone {...props} name={escuro ? "sun" : "moon"}
       label={escuro ? s.themeToLight : s.themeToDark}
-      corDoIcone={escuro ? t.color.primary : t.color.foreground}
+      corDoIcone={escuro ? t.color.primary : t.color.foreground} pesoDoIcone="fill"
       onPress={toggleTheme} />
   );
 }

@@ -136,13 +136,13 @@ function App() {
         {[260, 520, 820].map(w => (
           <div key={w} className="container-scope" data-largura={w}
             style={{inlineSize: w, marginBottom: "1rem", border: "1px dashed var(--border)", padding: "0.5rem"}}>
-            <Button leadingIcon="add" size={{base: "xs", container: {xs: "sm", sm: "md", md: "lg"}}}>
+            <Button leadingIcon="plus" size={{base: "xs", container: {xs: "sm", sm: "md", md: "lg"}}}>
               botão com ícone
             </Button>
             <Checkbox label="marcação" size={{base: "sm", container: {sm: "md", md: "lg"}}} />
             <Switch label="trilho" size={{base: "sm", container: {sm: "md", md: "lg"}}} />
             <Avatar fallback="AB" size={{base: "sm", container: {sm: "md", md: "lg"}}} />
-            <Icon name="add" size={{base: "sm", container: {sm: "lg", md: "xl"}}} />
+            <Icon name="plus" size={{base: "sm", container: {sm: "lg", md: "xl"}}} />
           </div>
         ))}
       </section>
@@ -278,14 +278,14 @@ function App() {
       </section>
 
       <section data-probe="Toggle" data-ativado={ativado.toggle ?? 0}>
-        <Toggle label="Negrito" icon="add" onPressedChange={marca("toggle")} />
+        <Toggle label="Negrito" icon="plus" onPressedChange={marca("toggle")} />
       </section>
 
       <section data-probe="ToggleGroup" data-ativado={ativado.togglegroup ?? 0}>
         <ToggleGroup label="Alinhar">
-          <Toggle value="a" label="Um" icon="add" onPressedChange={marca("togglegroup")} />
-          <Toggle value="b" label="Dois" icon="close" onPressedChange={marca("togglegroup")} />
-          <Toggle value="c" label="Três" icon="add" onPressedChange={marca("togglegroup")} />
+          <Toggle value="a" label="Um" icon="plus" onPressedChange={marca("togglegroup")} />
+          <Toggle value="b" label="Dois" icon="x" onPressedChange={marca("togglegroup")} />
+          <Toggle value="c" label="Três" icon="plus" onPressedChange={marca("togglegroup")} />
         </ToggleGroup>
       </section>
 
@@ -379,8 +379,8 @@ function App() {
       </section>
 
       <section data-probe="IconButton" data-ativado={ativado.iconbutton ?? 0}>
-        <IconButton icon="add" label="Acrescentar" onClick={marca("iconbutton")} />
-        <IconButton icon="close" label="Fechar" onClick={marca("iconbutton")} />
+        <IconButton icon="plus" label="Acrescentar" onClick={marca("iconbutton")} />
+        <IconButton icon="x" label="Fechar" onClick={marca("iconbutton")} />
       </section>
 
       <section data-probe="DataGrid">
@@ -439,7 +439,7 @@ function App() {
       <section data-probe="BottomNav" data-ativado={ativado.bottomnav ?? 0}>
         <BottomNav current="b" items={[
           {id: "a", label: "Messenger", icon: "chat", onClick: marca("bottomnav")},
-          {id: "b", label: "Analyst", icon: "chart--line", onClick: marca("bottomnav")},
+          {id: "b", label: "Analyst", icon: "chart-line", onClick: marca("bottomnav")},
           {id: "c", label: "Curator", icon: "bookmark", onClick: marca("bottomnav")},
         ]} />
       </section>

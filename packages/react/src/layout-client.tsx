@@ -119,7 +119,7 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Topbar variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="menu" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Topbar><Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} collapsed={sidebarCollapsed} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main></div>}
+<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Topbar variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Topbar><Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} collapsed={sidebarCollapsed} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main></div>}
 
 // ── Separator ────────────────────────────────────────────────────────────────────────────────
 // A LINHA DO SISTEMA, e ela é de CLIENTE por necessidade, não por vizinhança.

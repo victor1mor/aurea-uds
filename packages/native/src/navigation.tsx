@@ -242,8 +242,8 @@ export interface BottomNavProps extends ViewProps {
  * <BottomNav
  *   current={aba}
  *   items={[
- *     {id: "painel", label: "Painel", icon: "dashboard", onPress: () => ir("painel")},
- *     {id: "avisos", label: "Avisos", icon: "notification", badge: 8, onPress: () => ir("avisos")},
+ *     {id: "painel", label: "Painel", icon: "squares-four", onPress: () => ir("painel")},
+ *     {id: "avisos", label: "Avisos", icon: "bell", badge: 8, onPress: () => ir("avisos")},
  *   ]} />
  * ```
  *
@@ -388,7 +388,8 @@ export function BottomNav({
                 borderWidth: t.size.borderWidth, borderColor: t.color.primaryEmphasis,
               },
             ]}>
-              {it.icon && <Icon name={it.icon} size="lg" color={corDoTexto} />}
+              {/* O item escolhido desenha o ícone CHEIO (ADR-0053). */}
+              {it.icon && <Icon name={it.icon} size="lg" color={corDoTexto} weight={ativo ? "fill" : undefined} />}
               {it.badge != null && it.badge !== false && (
                 <View style={s.contador}>
                   {/* O contador é DECORATIVO — quem carrega a informação é o rótulo da aba, e é
@@ -497,7 +498,7 @@ export interface NavListProps extends ViewProps {
  * ⚠ **Linha indisponível continua ALCANÇÁVEL pelo leitor de tela** (`accessibilityState.disabled`,
  * não sumir da árvore): quem usa leitor precisa descobrir que ela existe.
  */
-export function NavList({items, chevron = "chevron--right", style, ...rest}: NavListProps) {
+export function NavList({items, chevron = "caret-right", style, ...rest}: NavListProps) {
   const t = useAureaTokens();
   const s = folha(t);
   return (
@@ -598,7 +599,7 @@ export interface StepperProps extends ViewProps {
  * vocabulário — é o vocabulário que existe, e dizer isso é melhor que fingir paridade.
  */
 export function Stepper({
-  items, label, doneIcon = "checkmark", errorIcon = "error", style, ...rest
+  items, label, doneIcon = "check", errorIcon = "x-circle", style, ...rest
 }: StepperProps) {
   const t = useAureaTokens();
   const s = folha(t);

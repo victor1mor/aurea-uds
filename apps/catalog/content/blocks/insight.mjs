@@ -471,7 +471,7 @@ export function analyticsWorkbench(state) {
       // `label`. Embrulhar num segundo grupo com o MESMO nome criaria dois marcos homônimos, e
       // `getByRole` acharia os dois. Mesma escolha do `TreeView` no I3.
       vazio
-        ? regiao("Runs per day", h(EmptyState, {icon: "chart--line", title: "Nothing to plot", titleAs: "h2"}))
+        ? regiao("Runs per day", h(EmptyState, {icon: "chart-line", title: "Nothing to plot", titleAs: "h2"}))
         : h(Chart, {label: "Runs per day"},
             h(AreaChart, {data: SERIE},
               h(CartesianGrid, {vertical: false}),
@@ -1110,7 +1110,7 @@ export function visualBuilder(state) {
     regiao("Palette", h("div", {style: between},
       h("div", {style: row},
         ...["Input", "Task", "Branch", "Output"].map(t =>
-          h(Button, {key: t, variant: "outline", size: "sm", leadingIcon: "add"}, t))),
+          h(Button, {key: t, variant: "outline", size: "sm", leadingIcon: "plus"}, t))),
       h(Status, {variant: e.variant}, e.label))),
     // "validation errors link to nodes" — e o `Alert` `danger` é `role="alert"` sozinho.
     state === "invalid" ? h(Alert, {variant: "danger", title: "1 problem"}, ERRO.texto) : null,
@@ -1665,7 +1665,7 @@ const actions = allowedFrom(flow.state);   // idle -> ["run"]
 <div className="stack">
   {/* the palette adds by BUTTON: in a drag-only palette, whoever cannot drag builds nothing */}
   <div role="group" aria-label="Palette" className="cluster">
-    {kinds.map(k => <Button key={k} leadingIcon="add" onClick={() => add(k)}>{k}</Button>)}
+    {kinds.map(k => <Button key={k} leadingIcon="plus" onClick={() => add(k)}>{k}</Button>)}
     <Status variant={tone[flow.state]}>{label[flow.state]}</Status>
   </div>
 

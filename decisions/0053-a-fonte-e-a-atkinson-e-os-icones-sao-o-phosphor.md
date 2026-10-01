@@ -1,8 +1,8 @@
 # ADR-0053 — A fonte é a Atkinson Hyperlegible Next, e os ícones são o Phosphor Regular
 
 - **Data:** 01/10/2026
-- **Estado:** aceita · **a troca ainda não foi feita**. Ela sai num lote próprio, com o "pode"
-  do Victor. Até lá, o código continua com IBM Plex e Carbon.
+- **Estado:** aceita · **executada na `0.13.0`** (01/10/2026, "pode" do Victor: *"pode, faça
+  tudo"*), ainda não publicada. ~~A troca ainda não foi feita~~.
 - **Autoria:** decisão do Victor, olhando lado a lado seis fontes e sete coleções de ícones com
   as cores, as cápsulas e os cartões da Aurea. Nas palavras dele: *"vamos usar Phosphor Regular e
   Atkinson Hyperlegible Next"*.
@@ -111,3 +111,22 @@ Tudo nos arquivos publicados, baixados com `npm pack` em 01/10/2026.
 
 - **O peso do ícone pequeno:** Regular em todos os tamanhos (como o traço de hoje), ou Bold no
   `--icon-sm` (16)? A decisão é do Victor, olhando a foto.
+
+## Como a troca foi feita (0.13.0, 01/10/2026)
+
+- **Nomes:** os do Phosphor, sem tradução. A tabela `packages/icons/carbon-para-phosphor.json`
+  (publicada) leva os 260 nomes do Carbon que o repositório usava aos novos. Seis nomes existem nos
+  dois com desenhos diferentes (`list`, `notification`, `radio`, `subtract`, `tree`, `video`) e
+  compilam sem erro; foram trocados à mão, e o CHANGELOG avisa os apps.
+- **Forma cheia:** `weight="fill"` no `Icon`. Na web, o símbolo `i-<nome>-fill` do sprite; no
+  nativo, a chave `<nome>-fill` do registro, com volta para a regular se ela faltar. Usada no item
+  escolhido (`Sidebar` e `BottomNav`) e onde o Carbon já era cheio (avisos, `ThemeToggle`, envio
+  concluído, play), para a aparência aprovada não mudar.
+- **Logotipos de marca:** os 79 do Phosphor com `-logo` no nome ficam fora (CLAUDE.md §5). O
+  primeiro filtro olhava só o fim do nome e deixou passar `gitlab-logo-simple`; o teste pegou.
+- **Fonte editorial:** a IBM Plex Serif saiu. O `--font-editorial` e o papel `editorial` do nativo
+  ficaram como **apelido da fonte do texto**, porque removê-los quebraria a API do nativo
+  (`AureaFontFamilies.editorial`) e os títulos do catálogo. Saem na `1.0`. Escolha do agente para
+  não quebrar; **o Victor pode mandar remover já**.
+- **Altura da letra:** a Atkinson ocupa 1,3 em (sobe 0,984, desce 0,316), o mesmo total da Plex
+  (1,025 + 0,275). As entrelinhas do E1 continuam cabendo.

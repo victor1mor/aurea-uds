@@ -59,62 +59,62 @@ import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 // também são gerados —, então isto não acrescenta nenhuma condição nova.
 import VERSAO from "./versao.json";
 
-// O caminho PROFUNDO, que é a forma documentada pela ADR-0038. Importar do barril traria os 2571.
-// Os três primeiros não são aleatórios — cada um prova uma coisa que o gerador podia ter errado:
-import IconAdd from "@aurea-uds/native/icons/add";
-import IconCheckmarkFilled from "@aurea-uds/native/icons/checkmark--filled";
-import IconCalendarAddAlt from "@aurea-uds/native/icons/calendar--add--alt";
-// E estes cinco existem para o Lote 2: os quatro glifos de variante do `Alert` e o vazio do
-// `EmptyState`. O pacote NÃO os importa por você — seria trazer ícone ao grafo do bundler pelas
-// costas do consumidor (ADR-0038, cláusula 4). Esta lista é a prova de que a cláusula é usável.
-import IconInformationFilled from "@aurea-uds/native/icons/information--filled";
-import IconWarningAltFilled from "@aurea-uds/native/icons/warning--alt--filled";
-import IconErrorFilled from "@aurea-uds/native/icons/error--filled";
-import IconDocumentBlank from "@aurea-uds/native/icons/document--blank";
-import IconNotification from "@aurea-uds/native/icons/notification";
-// E estes quatro, para o modo `resto`: a barra inferior, a folha do `Select` e o X dos overlays.
-import IconDashboard from "@aurea-uds/native/icons/dashboard";
-import IconChevronDown from "@aurea-uds/native/icons/chevron--down";
-import IconClose from "@aurea-uds/native/icons/close";
-import IconList from "@aurea-uds/native/icons/list";
-// ⚠ E estes TRÊS são os PADRÕES de componentes do Lote 3, achados rodando no aparelho em
-// 09/09/2026: o `NavList` cai em `chevron--right`, e o `Stepper` em `checkmark`/`error`. Eles não
-// aparecem em nenhuma prop escrita aqui — vêm do valor padrão lá dentro —, e é por isso que o
-// aviso do `Icon` existe: ele diz o nome que falta e o import exato. Funcionou.
-import IconCheckmark from "@aurea-uds/native/icons/checkmark";
-import IconChevronRight from "@aurea-uds/native/icons/chevron--right";
-import IconError from "@aurea-uds/native/icons/error";
-// E estes TRÊS são do Lote 7: a lupa do `SearchField` e da folha do `Combobox`, o `−` do
-// `NumberField` (o `+` já estava) e o glifo do substituto da `Image` — que é o único que
-// aparece SÓ quando a foto quebra, e por isso é o mais fácil de esquecer.
-import IconSearch from "@aurea-uds/native/icons/search";
-import IconSubtract from "@aurea-uds/native/icons/subtract";
+// O caminho PROFUNDO, que é a forma documentada pela ADR-0038. Importar do barril traria todos.
+// Desde a ADR-0053 (01/10/2026) os glifos são do Phosphor, e cada um tem duas formas: a regular
+// (`house`) e a cheia (`house-fill`), que é a do item ESCOLHIDO e a dos avisos.
+import IconPlus from "@aurea-uds/native/icons/plus";
+import IconCalendarPlus from "@aurea-uds/native/icons/calendar-plus";
+// Os quatro glifos de variante do `Alert` e o vazio do `EmptyState` (Lote 2). O pacote NÃO os
+// importa por você — seria trazer ícone ao grafo do bundler pelas costas do consumidor (ADR-0038,
+// cláusula 4). O `Alert` pede a forma CHEIA; sem ela no registro, sai a regular.
+import IconInfo from "@aurea-uds/native/icons/info";
+import IconInfoFill from "@aurea-uds/native/icons/info-fill";
+import IconCheckCircle from "@aurea-uds/native/icons/check-circle";
+import IconCheckCircleFill from "@aurea-uds/native/icons/check-circle-fill";
+import IconWarning from "@aurea-uds/native/icons/warning";
+import IconWarningFill from "@aurea-uds/native/icons/warning-fill";
+import IconXCircle from "@aurea-uds/native/icons/x-circle";
+import IconXCircleFill from "@aurea-uds/native/icons/x-circle-fill";
+import IconFile from "@aurea-uds/native/icons/file";
+// A barra inferior (o item escolhido desenha a forma cheia), a folha do `Select` e o X dos overlays.
+import IconBell from "@aurea-uds/native/icons/bell";
+import IconBellFill from "@aurea-uds/native/icons/bell-fill";
+import IconSquaresFour from "@aurea-uds/native/icons/squares-four";
+import IconSquaresFourFill from "@aurea-uds/native/icons/squares-four-fill";
+import IconListBullets from "@aurea-uds/native/icons/list-bullets";
+import IconListBulletsFill from "@aurea-uds/native/icons/list-bullets-fill";
+import IconCaretDown from "@aurea-uds/native/icons/caret-down";
+import IconX from "@aurea-uds/native/icons/x";
+// ⚠ Os PADRÕES de componentes do Lote 3, achados rodando no aparelho em 09/09/2026: o `NavList`
+// cai em `caret-right`, e o `Stepper` em `check`/`x-circle`. Eles não aparecem em nenhuma prop
+// escrita aqui — vêm do valor padrão lá dentro —, e é por isso que o aviso do `Icon` existe.
+import IconCheck from "@aurea-uds/native/icons/check";
+import IconCaretRight from "@aurea-uds/native/icons/caret-right";
+// Do Lote 7: a lupa do `SearchField` e da folha do `Combobox`, o `−` do `NumberField` e o glifo
+// do substituto da `Image` — que aparece SÓ quando a foto quebra, e por isso é o mais esquecido.
+import IconMagnifyingGlass from "@aurea-uds/native/icons/magnifying-glass";
+import IconMinus from "@aurea-uds/native/icons/minus";
 import IconImage from "@aurea-uds/native/icons/image";
-// O `ThemeToggle` desenha a lua e o sol do registro, como o `Alert` desenha os glifos dele.
-import IconAsleepFilled from "@aurea-uds/native/icons/asleep--filled";
-import IconLightFilled from "@aurea-uds/native/icons/light--filled";
+// O `ThemeToggle` desenha a lua e o sol CHEIOS (aprovados pela imagem em 25/09/2026).
+import IconMoon from "@aurea-uds/native/icons/moon";
+import IconMoonFill from "@aurea-uds/native/icons/moon-fill";
+import IconSun from "@aurea-uds/native/icons/sun";
+import IconSunFill from "@aurea-uds/native/icons/sun-fill";
 
 const ICONES = criarRegistroDeIcones({
-  "add": IconAdd,
-  "checkmark--filled": IconCheckmarkFilled,
-  "calendar--add--alt": IconCalendarAddAlt,
-  "information--filled": IconInformationFilled,
-  "warning--alt--filled": IconWarningAltFilled,
-  "error--filled": IconErrorFilled,
-  "document--blank": IconDocumentBlank,
-  "notification": IconNotification,
-  "dashboard": IconDashboard,
-  "chevron--down": IconChevronDown,
-  "close": IconClose,
-  "list": IconList,
-  "checkmark": IconCheckmark,
-  "chevron--right": IconChevronRight,
-  "error": IconError,
-  "search": IconSearch,
-  "subtract": IconSubtract,
-  "image": IconImage,
-  "asleep--filled": IconAsleepFilled,
-  "light--filled": IconLightFilled,
+  "plus": IconPlus, "calendar-plus": IconCalendarPlus,
+  "info": IconInfo, "info-fill": IconInfoFill,
+  "check-circle": IconCheckCircle, "check-circle-fill": IconCheckCircleFill,
+  "warning": IconWarning, "warning-fill": IconWarningFill,
+  "x-circle": IconXCircle, "x-circle-fill": IconXCircleFill,
+  "file": IconFile,
+  "bell": IconBell, "bell-fill": IconBellFill,
+  "squares-four": IconSquaresFour, "squares-four-fill": IconSquaresFourFill,
+  "list-bullets": IconListBullets, "list-bullets-fill": IconListBulletsFill,
+  "caret-down": IconCaretDown, "x": IconX,
+  "check": IconCheck, "caret-right": IconCaretRight,
+  "magnifying-glass": IconMagnifyingGlass, "minus": IconMinus, "image": IconImage,
+  "moon": IconMoon, "moon-fill": IconMoonFill, "sun": IconSun, "sun-fill": IconSunFill,
 });
 
 // R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.
@@ -242,13 +242,13 @@ function Tela({irParaScreen, irParaLote2}) {
           400 Italic — o único itálico do pacote
         </Text>
         <Text style={s.nota}>
-          `editorial[400]` e `code[700]` NÃO existem no IBM Plex — o provider fecha a grade caindo
-          para o peso mais próximo. Aqui isso dá {t.font.editorial[400]} e {t.font.code[700]};
-          nenhum dos dois pode sair vazio.
+          `code[700]` NÃO existe na Atkinson Hyperlegible Mono — o provider fecha a grade caindo
+          para o peso mais próximo. Aqui isso dá {t.font.code[700]}; não pode sair vazio. O
+          `editorial` é apelido do texto desde a ADR-0053: {t.font.editorial[400]}.
         </Text>
         <Text style={{color: t.color.foreground, fontSize: t.size.textLg,
                       fontFamily: t.font.editorial[700], marginTop: t.size.space2}}>
-          Serif 700 — IBM Plex Serif
+          Editorial 700 — a mesma Atkinson do texto (a serifada saiu)
         </Text>
         <Text style={{color: t.color.foreground, fontSize: t.size.textMd,
                       fontFamily: t.font.code[400]}}>
@@ -285,20 +285,20 @@ function Tela({irParaScreen, irParaLote2}) {
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
-        criterio={"Os quatro têm de aparecer NA COR DO TEXTO, não pretos e não vazios. O do meio é o "
-          + "que importa mais: `checkmark--filled` tem um contorno interno com fill=\"none\", e se "
-          + "o gerador tivesse pintado esse miolo o visto sumiria dentro de um círculo cheio."}>
+        criterio={"Os quatro têm de aparecer NA COR DO TEXTO, não pretos e não vazios (ADR-0053: "
+          + "Phosphor). O do meio é o que importa mais: `check-circle` (regular, um anel com o "
+          + "visto) e `check-circle-fill` (cheio, o visto vazado) têm de sair DIFERENTES."}>
         <View style={s.icones}>
-          <Glifo t={t} nome="add" Comp={IconAdd} prova="um path simples" />
-          <Glifo t={t} nome="checkmark--filled" Comp={IconCheckmarkFilled} prova='o fill="none"' />
-          <Glifo t={t} nome="calendar--add--alt" Comp={IconCalendarAddAlt} prova="o <switch> do Illustrator" />
+          <Glifo t={t} nome="plus" Comp={IconPlus} prova="um path simples" />
+          <Glifo t={t} nome="check-circle" Comp={IconCheckCircle} prova="a forma regular" />
+          <Glifo t={t} nome="check-circle-fill" Comp={IconCheckCircleFill} prova="a forma cheia" />
           <Glifo t={t} nome="criarGlifo a traço" Comp={GLIFO_TRACO} prova="círculo VAZADO e visto de traço redondo" />
         </View>
         <View style={s.icones}>
-          <IconAdd size={t.size.iconSm} color={t.color.primary} />
-          <IconAdd size={t.size.iconMd} color={t.color.primary} />
-          <IconAdd size={t.size.iconLg} color={t.color.primary} />
-          <IconAdd size={t.size.iconXl} color={t.color.primary} />
+          <IconPlus size={t.size.iconSm} color={t.color.primary} />
+          <IconPlus size={t.size.iconMd} color={t.color.primary} />
+          <IconPlus size={t.size.iconLg} color={t.color.primary} />
+          <IconPlus size={t.size.iconXl} color={t.color.primary} />
         </View>
         <Text style={s.nota}>
           A escala acima é `iconSm/Md/Lg/Xl` do tema ({t.size.iconSm}/{t.size.iconMd}/
@@ -339,7 +339,7 @@ function Tela({irParaScreen, irParaLote2}) {
         </Text>
         {Array.from({length: 40}, (_, i) => (
           <View key={i} style={s.linha}>
-            <IconCheckmarkFilled size={t.size.iconSm} color={t.color.primary} />
+            <IconCheckCircleFill size={t.size.iconSm} color={t.color.primary} />
             <Text style={{color: t.color.foreground, fontSize: t.size.textMd,
                           fontFamily: t.font.ui[400], flex: 1}}>
               linha {String(i + 1).padStart(2, "0")} — altura de controle {t.size.controlHMd} dp
@@ -599,13 +599,13 @@ function SmokeDoLote2({ir}) {
             + "O zero SOME (é o de baixo, que não deve aparecer)."}>
           <View style={s.icones}>
             <Badge count={8} anchor="top-end">
-              <IconButton name="notification" label="Avisos, 8 não lidos" onPress={() => {}} />
+              <IconButton name="bell" label="Avisos, 8 não lidos" onPress={() => {}} />
             </Badge>
             <Badge count={120} anchor="top-end">
-              <IconButton name="notification" label="Avisos, 120 não lidos" onPress={() => {}} />
+              <IconButton name="bell" label="Avisos, 120 não lidos" onPress={() => {}} />
             </Badge>
             <Badge count={0} anchor="top-end">
-              <IconButton name="notification" label="Avisos, nenhum não lido" onPress={() => {}} />
+              <IconButton name="bell" label="Avisos, nenhum não lido" onPress={() => {}} />
             </Badge>
           </View>
           <View style={s.icones}>
@@ -660,7 +660,7 @@ function SmokeDoLote2({ir}) {
             + "mostra alerta vermelho, `empty` mostra o vazio. Mas em `stale` e `offline` o "
             + "NÚMERO TEM DE CONTINUAR NA TELA, com o aviso EM CIMA dele — se o número sumir, o "
             + "componente trocou informação parcial por informação nenhuma."}>
-          <DataState state={estado} emptyIcon="document--blank">
+          <DataState state={estado} emptyIcon="file">
             {() => (
               <Card>
                 <Text style={s.h2}>R$ 1,20 por km</Text>
@@ -683,7 +683,7 @@ function SmokeDoLote2({ir}) {
           </View>
           <EmptyState
             title="Nada por aqui"
-            description="O ícone acima é o `document--blank`, e o texto está centrado." />
+            description="O ícone acima é o `file`, e o texto está centrado." />
         </Bloco>
 
         <Text style={s.rodape}>
@@ -1078,8 +1078,8 @@ function SmokeDoResto({ir}) {
               ]} />
             <NavList
               items={[
-                {id: "1", label: "Lançamentos", icon: "list"},
-                {id: "2", label: "Ajustes", icon: "dashboard"},
+                {id: "1", label: "Lançamentos", icon: "list-bullets"},
+                {id: "2", label: "Ajustes", icon: "squares-four"},
               ]} />
           </Bloco>
 
@@ -1244,8 +1244,8 @@ function SmokeDoResto({ir}) {
       <BottomNav
         current={aba}
         items={[
-          {id: "painel", label: "Painel", icon: "dashboard", onPress: () => setAba("painel")},
-          {id: "avisos", label: "Avisos", icon: "notification", badge: 128, onPress: () => setAba("avisos")},
+          {id: "painel", label: "Painel", icon: "squares-four", onPress: () => setAba("painel")},
+          {id: "avisos", label: "Avisos", icon: "bell", badge: 128, onPress: () => setAba("avisos")},
         ]} />
 
       <Dialog open={dialogo === "dialog"} title="Editar lançamento"
@@ -1341,7 +1341,7 @@ function BlocosLoteE({t}) {
           + "redondo nunca estica."}>
         <EmptyState title="Nenhum gasto ainda" description="Os lançamentos aparecem aqui."
           action={<Button tone="brand" appearance="solid">Lançar um gasto</Button>} />
-        <Stack><Button>Sem align</Button><IconButton name="add" label="Adicionar" /></Stack>
+        <Stack><Button>Sem align</Button><IconButton name="plus" label="Adicionar" /></Stack>
         <Stack align="start"><Button>align start</Button></Stack>
         <Stack align="center"><Button>align center</Button></Stack>
       </Bloco>

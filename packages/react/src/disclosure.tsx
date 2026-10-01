@@ -23,7 +23,7 @@ export function Accordion({items}:{items:Array<{id:string;title:ReactNode;conten
 // (Root/Trigger/Panel) — quem quiser compor esse nível usa o motor direto.
 export function Collapsible({trigger,children,open,defaultOpen,onOpenChange,disabled,className}:{trigger:ReactNode;children:ReactNode;open?:boolean;defaultOpen?:boolean;onOpenChange?:(open:boolean)=>void;disabled?:boolean;className?:string}){
   return <BaseCollapsible.Root open={open} defaultOpen={defaultOpen} onOpenChange={soOValor(onOpenChange)} disabled={disabled} className={cx("collapsible",className)}>
-    <BaseCollapsible.Trigger className="collapsible-trigger"><Icon name="chevron--down" size="sm" className="collapsible-chevron"/>{trigger}</BaseCollapsible.Trigger>
+    <BaseCollapsible.Trigger className="collapsible-trigger"><Icon name="caret-down" size="sm" className="collapsible-chevron"/>{trigger}</BaseCollapsible.Trigger>
     <BaseCollapsible.Panel className="collapsible-panel">{children}</BaseCollapsible.Panel>
   </BaseCollapsible.Root>;
 }

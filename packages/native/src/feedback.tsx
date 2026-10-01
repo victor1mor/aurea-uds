@@ -249,10 +249,10 @@ export type AureaAlertVariant = "info" | "success" | "warning" | "danger";
 
 /** Mesmos quatro glifos do `feedback-client.tsx:43`. */
 export const ICONE_DA_VARIANTE: Readonly<Record<AureaAlertVariant, IconName>> = {
-  info: "information--filled",
-  success: "checkmark--filled",
-  warning: "warning--alt--filled",
-  danger: "error--filled",
+  info: "info",
+  success: "check-circle",
+  warning: "warning",
+  danger: "x-circle",
 };
 
 export interface AlertProps extends ViewProps {
@@ -277,8 +277,8 @@ export interface AlertProps extends ViewProps {
  * este módulo — seria trazer ícone ao grafo do bundler pelas costas do consumidor, que é a
  * cláusula 4 da ADR-0038. Registre-os:
  *
- *     import InformationFilled from "@aurea-uds/native/icons/information--filled";
- *     const ICONES = criarRegistroDeIcones({"information--filled": InformationFilled, …});
+ *     import InformationFilled from "@aurea-uds/native/icons/info";
+ *     const ICONES = criarRegistroDeIcones({"info": InformationFilled, …});
  */
 export function Alert({
   variant, state, title, icon, onDismiss, children, style,
@@ -339,7 +339,7 @@ export function Alert({
       // uma coisa errada, e aqui diria uma que quebra.
         {...(v === "danger" ? {accessibilityRole: "alert"} : null)}
         style={s.grupoDoAlerta}>
-        <Icon name={icon ?? ICONE_DA_VARIANTE[v]} size="md" color={corDoIcone} />
+        <Icon name={icon ?? ICONE_DA_VARIANTE[v]} size="md" color={corDoIcone} weight={icon ? undefined : "fill"} />
         <View style={s.corpoDoAlerta}>
           {title != null && <Text size="sm" weight={600}>{title}</Text>}
           {children != null
@@ -349,7 +349,7 @@ export function Alert({
       </View>
       {/* ⚠ Era `label="Close"` literal, e ficava em inglês num app em português — a tabela de
           frases não tinha `close` até o Lote 5 criá-la para o `Dialog`. Corrigido junto. */}
-      {onDismiss ? <IconButton appearance="ghost" size="sm" name="close" label={strings.close} onPress={onDismiss} /> : null}
+      {onDismiss ? <IconButton appearance="ghost" size="sm" name="x" label={strings.close} onPress={onDismiss} /> : null}
     </View>
   );
 }
@@ -377,7 +377,7 @@ export interface EmptyStateProps {
  * `Text`. A prop não teria efeito, e prop sem efeito é promessa falsa.
  */
 export function EmptyState({
-  icon = "document--blank", title, description, action, state, style, testID,
+  icon = "file", title, description, action, state, style, testID,
 }: EmptyStateProps) {
   const t = useAureaTokens();
   const s = folha(t);

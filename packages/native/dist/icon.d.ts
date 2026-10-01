@@ -4,10 +4,14 @@ export type AureaIconComponent = (props: {
     size?: number;
     color?: string;
 }) => React.ReactElement;
-export type { IconName, CarbonIconName, AureaIconNames } from "./icon-names.js";
-import type { IconName } from "./icon-names.js";
-/** Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. */
-export type AureaIconRegistry = Readonly<Partial<Record<IconName, AureaIconComponent>>>;
+export type { IconName, PhosphorIconName, AureaIconNames, IconWeight } from "./icon-names.js";
+import type { IconName, IconWeight, PhosphorIconName } from "./icon-names.js";
+/**
+ * Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. A forma cheia
+ * (o item escolhido, ADR-0053) entra com o sufixo `-fill`, como o arquivo:
+ * `{"house": House, "house-fill": HouseFill}`.
+ */
+export type AureaIconRegistry = Readonly<Partial<Record<IconName | `${PhosphorIconName}-fill`, AureaIconComponent>>>;
 /**
  * Declara o registro. É uma função de identidade tipada, e ela existe por um motivo prático:
  * escrita como constante no módulo do app, a referência é estável — e um registro recriado a cada
@@ -102,6 +106,11 @@ export interface IconProps {
     /** Registro local, quando não há um em contexto — ou para sobrepor o do provider. */
     icons?: AureaIconRegistry;
     /**
+     * `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Ela é a chave `<nome>-fill`
+     * do registro; se o app não a registrou, sai o glifo regular, em vez de nada.
+     */
+    weight?: IconWeight;
+    /**
      * Rótulo para leitor de tela. **Sem ele o ícone é decorativo** e some da árvore de
      * acessibilidade, que é o correto quando há texto ao lado dizendo a mesma coisa.
      */
@@ -118,4 +127,4 @@ export interface IconProps {
  * vazio pareceria um glifo de verdade numa tela cheia, e passaria por revisão. Em `__DEV__` sai
  * um aviso nomeando o ícone e o caminho do import que resolve.
  */
-export declare function Icon({ name, size, color, icons, label }: IconProps): React.JSX.Element | null;
+export declare function Icon({ name, size, color, icons, label, weight }: IconProps): React.JSX.Element | null;

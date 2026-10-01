@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Numeric field with decrease and increase controls, for a quantity you nudge.",
-  "icon": "add",
+  "icon": "plus",
   "platforms": {
     "web": "stable",
     "native": "supported"

@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Icon-only button with a required accessible label.",
-  "icon": "maximize",
+  "icon": "arrows-out",
   "platforms": {
     "web": "stable",
     "native": "planned"

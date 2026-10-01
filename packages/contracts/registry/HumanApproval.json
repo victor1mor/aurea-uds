@@ -14,7 +14,7 @@
   },
   "name": "HumanApproval",
   "summary": "The gate: what is about to happen, and a person's decision.",
-  "icon": "rule",
+  "icon": "ruler",
   "states": [
     "pending",
     "approved",

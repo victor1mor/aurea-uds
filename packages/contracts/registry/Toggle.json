@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Two-state button that stays pressed, for a setting you flip in place.",
-  "icon": "checkmark",
+  "icon": "check",
   "platforms": {
     "web": "stable",
     "native": "planned"

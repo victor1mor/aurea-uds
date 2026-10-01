@@ -19,7 +19,7 @@ async function semViolacao(el: Element) {
 
 describe("Toggle", () => {
   test("anuncia o estado por aria-pressed, e o motor o mantém", async () => {
-    wrap(<Toggle icon="favorite" label="Favourite" />);
+    wrap(<Toggle icon="heart" label="Favourite" />);
     const b = screen.getByRole("button", {name: "Favourite"});
     // aria-pressed é o que faz um botão de dois estados EXISTIR para leitor de tela; sem ele
     // é um botão comum que muda de cor.
@@ -34,7 +34,7 @@ describe("Toggle", () => {
   });
 
   test("desabilitado não alterna", async () => {
-    wrap(<Toggle icon="pin" label="Pin" disabled />);
+    wrap(<Toggle icon="push-pin" label="Pin" disabled />);
     const b = screen.getByRole("button", {name: "Pin"});
     await userEvent.click(b);
     expect(b).toHaveAttribute("aria-pressed", "false");
@@ -53,11 +53,11 @@ describe("Toggle", () => {
     ["array vazio", []],
     ["Fragment vazio", <></>],
     ["texto vazio", ""],
-    ["ícone decorativo", <Icon name="checkmark" />],
+    ["ícone decorativo", <Icon name="check" />],
     ["elemento aria-hidden", <span aria-hidden="true">Oculto</span>],
   ])("AUD-0003: children %s sem label avisa alto", (_caso, children) => {
     const erro = vi.spyOn(console, "error").mockImplementation(() => {});
-    const semNome = {icon: "checkmark", children} as unknown as React.ComponentProps<typeof Toggle>;
+    const semNome = {icon: "check", children} as unknown as React.ComponentProps<typeof Toggle>;
     const {unmount} = wrap(<Toggle {...semNome} />);
     expect(erro).toHaveBeenCalledWith(expect.stringContaining("nome acessível"));
     // e o botão realmente está anônimo — é o dano que o aviso denuncia
@@ -68,7 +68,7 @@ describe("Toggle", () => {
 
   test("com label e sem children, o nome vem do label — o caso legítimo do ícone-only", () => {
     const erro = vi.spyOn(console, "error").mockImplementation(() => {});
-    wrap(<Toggle icon="favorite" label="Favourite" />);
+    wrap(<Toggle icon="heart" label="Favourite" />);
     expect(screen.getByRole("button", {name: "Favourite"})).toBeInTheDocument();
     // o aviso NÃO pode disparar aqui, senão ele viraria ruído que ninguém lê
     expect(erro).not.toHaveBeenCalled();
@@ -85,7 +85,7 @@ describe("Toggle", () => {
 
   test.each(["", "   "])("label vazio ou só espaço também denuncia o botão anônimo", label => {
     const erro = vi.spyOn(console, "error").mockImplementation(() => {});
-    const {unmount} = wrap(<Toggle icon="favorite" label={label} />);
+    const {unmount} = wrap(<Toggle icon="heart" label={label} />);
     expect(erro).toHaveBeenCalledWith(expect.stringContaining("nome acessível"));
     expect(screen.getByRole("button")).toHaveAccessibleName("");
     unmount();

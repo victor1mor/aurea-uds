@@ -139,7 +139,7 @@ return <button ref={ref} type={type} className={cls} disabled={off} aria-disable
 // `className` e `children` como FUNÇÃO do estado, e espalhar a superfície do <button> em cima
 // disso colide. É o mesmo caminho que Dialog, Popover e Combobox já seguem aqui.
 // AUD-0003 (12/08/2026): `label` era OPCIONAL e o contrato dizia que ele é obrigatório sem texto
-// visível. `<Toggle icon="checkmark"/>` compilava e produzia um `<button>` focável sem `children`,
+// visível. `<Toggle icon="check"/>` compilava e produzia um `<button>` focável sem `children`,
 // sem `aria-label` e sem nome acessível nenhum — operável pelo mouse, inexistente para leitor de
 // tela. O tipo passa a cobrar a regra em vez de descrevê-la: ou há `children`, ou há `label`.
 interface ToggleBase{pressed?:boolean;defaultPressed?:boolean;onPressedChange?:(pressed:boolean)=>void;/** O que identifica este toggle DENTRO de um ToggleGroup — sem ele o grupo não sabe qual botão
@@ -202,8 +202,11 @@ export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function I
 export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth">{}
 export const ThemeToggle=forwardRef<HTMLButtonElement,ThemeToggleProps>(function ThemeToggle({className,...props},ref){
   const {theme,toggleTheme}=useAureaTheme();const s=useAureaStrings();const escuro=theme==="dark";
-  return <IconButton ref={ref} icon={escuro?"light--filled":"asleep--filled"} label={escuro?s.themeToLight:s.themeToDark}
-    className={cx(escuro?"theme-toggle-sun":"theme-toggle-moon",className)} onClick={toggleTheme} {...props}/>});
+  // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
+  // sol cheios, como os do Carbon aprovados pela imagem em 25/09/2026). O `IconButton` público não
+  // tem peso de ícone.
+  return <Button ref={ref} variant="ghost" className={cx("btn-icon",escuro?"theme-toggle-sun":"theme-toggle-moon",className)}
+    aria-label={escuro?s.themeToLight:s.themeToDark} onClick={toggleTheme} {...props}><Icon name={escuro?"sun":"moon"} weight="fill"/></Button>});
 // ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
 // `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem
 // noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por

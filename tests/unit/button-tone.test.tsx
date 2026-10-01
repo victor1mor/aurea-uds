@@ -60,7 +60,7 @@ test("os dois eixos caem na classe antiga quando a célula já existia", () => {
 test("um eixo sozinho modifica o par do atalho, não o substitui", () => {
   expect(buttonSkin("outline", undefined, "danger")).toBe("btn-danger-outline");
   expect(buttonSkin("danger", "ghost", undefined)).toBe("btn-danger-ghost");
-  const {container} = wrap(<IconButton label="apagar" icon="trash-can" tone="danger" />);
+  const {container} = wrap(<IconButton label="apagar" icon="trash" tone="danger" />);
   expect(container.querySelector("button")!.className).toContain("btn-danger-ghost");
 });
 

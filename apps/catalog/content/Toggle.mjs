@@ -48,9 +48,9 @@ export default {
       title: "Icon only, with a name",
       description: "No visible text means label is required — it becomes the accessible name. "
         + "Note the name says what the control IS (\"Mute\"), not what pressing it will do.",
-      code: '<Toggle icon="volume--mute" label="Mute" />',
+      code: '<Toggle icon="speaker-slash" label="Mute" />',
       render: () => h("div", {style: row},
-        h(Toggle, {icon: "volume--mute", label: "Mute"}),
+        h(Toggle, {icon: "speaker-slash", label: "Mute"}),
         h(Toggle, {icon: "star", label: "Favourite", defaultPressed: true})),
       note: "This catalog page is static HTML, so the preview shows the two states side by side "
         + "instead of switching. Pressing is real in your app, not here.",

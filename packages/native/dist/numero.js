@@ -243,7 +243,7 @@ const paraEdicao = (n, locale) => {
  * campo obedece ao `value` e mostra o número novo formatado, que é o que faz um campo calculado a
  * partir de outros dois funcionar.
  */
-export function NumberField({ value, defaultValue, onValueChange, min, max, step = 1, format, locale, disabled, readOnly, size, fullWidth = false, label, placeholder, keyboardType, icons = { increment: "add", decrement: "subtract" }, style, testID, }) {
+export function NumberField({ value, defaultValue, onValueChange, min, max, step = 1, format, locale, disabled, readOnly, size, fullWidth = false, label, placeholder, keyboardType, icons = { increment: "plus", decrement: "minus" }, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();

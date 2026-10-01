@@ -10,22 +10,23 @@ declare module "../../../packages/react/src/index.js" {
 
 export const bons = (
   <>
-    <Icon name="add" />
-    <Icon name="chevron--down" />
+    <Icon name="plus" />
+    <Icon name="caret-down" />
     <Icon name="marca-da-sonda" spriteUrl="/meu-sprite.svg" />
-    <IconButton icon="close" label="Fechar" />
-    <Button leadingIcon="add">Novo</Button>
-    <EmptyState icon="document--blank" title="Nada aqui" />
+    <Icon name="house" weight="fill" />
+    <IconButton icon="x" label="Fechar" />
+    <Button leadingIcon="plus">Novo</Button>
+    <EmptyState icon="file" title="Nada aqui" />
   </>
 );
 
 export const maus = (
   <>
-    {/* @ts-expect-error — um traço só: o nome do Carbon é `chevron--down` */}
-    <Icon name="chevron-down" />
+    {/* @ts-expect-error — dois traços era o jeito do Carbon; no Phosphor é `caret-down` (ADR-0053) */}
+    <Icon name="caret--down" />
     {/* @ts-expect-error — nome que não existe nem foi declarado pelo app */}
     <IconButton icon="adicionar" label="Adicionar" />
-    {/* @ts-expect-error — a checagem vale em toda prop que recebe ícone, não só no `Icon` */}
-    <Button leadingIcon="plus">Novo</Button>
+    {/* @ts-expect-error — o nome antigo do Carbon reprova em toda prop que recebe ícone: agora é `plus` */}
+    <Button leadingIcon="add">Novo</Button>
   </>
 );

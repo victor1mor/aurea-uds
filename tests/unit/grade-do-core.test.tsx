@@ -112,9 +112,11 @@ test("o ícone do Alert é escolhido pela variante e o consumidor pode trocá-lo
     // o href traz o caminho do sprite na frente; o que se cobra é o GLIFO
     return container.querySelector(".alert > .icon use")!.getAttribute("href")!.replace(/^.*#/, "#");
   };
-  expect(glifo(<A.Alert variant="danger">x</A.Alert>)).toBe("#i-error--filled");
-  expect(glifo(<A.Alert variant="success">x</A.Alert>)).toBe("#i-checkmark--filled");
-  expect(glifo(<A.Alert variant="warning" icon="idea">x</A.Alert>)).toBe("#i-idea");
+  // ADR-0053: o glifo da VARIANTE sai na forma cheia, como os `*--filled` do Carbon que ele
+  // substitui; o glifo que o consumidor escolhe sai como ele pediu, no regular.
+  expect(glifo(<A.Alert variant="danger">x</A.Alert>)).toBe("#i-x-circle-fill");
+  expect(glifo(<A.Alert variant="success">x</A.Alert>)).toBe("#i-check-circle-fill");
+  expect(glifo(<A.Alert variant="warning" icon="lightbulb">x</A.Alert>)).toBe("#i-lightbulb");
 });
 
 // A classe órfã é o sintoma que precede quase toda aridade errada: o componente marca o estado

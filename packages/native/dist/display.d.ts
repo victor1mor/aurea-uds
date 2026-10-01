@@ -20,7 +20,7 @@ export interface BadgeProps extends ViewProps {
     /** Um ponto antes do texto. Sozinho (sem conteúdo), o selo VIRA o ponto. */
     dot?: boolean;
     /**
-     * Conteúdo antes do texto — na prática, um glifo (`<Icon name="checkmark" size="sm" />`).
+     * Conteúdo antes do texto — na prática, um glifo (`<Icon name="check" size="sm" />`).
      *
      * ⚠ **É NÓ e não nome de ícone, e a razão é a mesma da web** (`markup.tsx:126`): o `Icon` vive
      * noutro módulo, e receber o nome obrigaria este arquivo a importá-lo — trazendo o registro de

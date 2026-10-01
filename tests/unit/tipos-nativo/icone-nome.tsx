@@ -14,17 +14,19 @@ export const registro = criarRegistroDeIcones({"marca-da-sonda": Marca});
 
 export const bons = (
   <>
-    <Icon name="add" />
-    <Icon name="chevron--down" />
+    <Icon name="plus" />
+    <Icon name="caret-down" />
     <Icon name="marca-da-sonda" />
-    <IconButton name="close" label="Fechar" />
+    <IconButton name="x" label="Fechar" />
   </>
 );
 
 export const maus = (
   <>
-    {/* @ts-expect-error — um traço só: o nome do Carbon é `chevron--down` */}
-    <Icon name="chevron-down" />
+    {/* @ts-expect-error — dois traços era o jeito do Carbon; no Phosphor é `caret-down` (ADR-0053) */}
+    <Icon name="caret--down" />
+    {/* @ts-expect-error — o nome antigo do Carbon reprova: agora é `plus` */}
+    <Icon name="add" />
     {/* @ts-expect-error — nome que não existe nem foi declarado pelo app */}
     <IconButton name="adicionar" label="Adicionar" />
   </>
@@ -32,3 +34,8 @@ export const maus = (
 
 // @ts-expect-error — chave do registro com erro de digitação também reprova
 export const registroMau = criarRegistroDeIcones({"chevron-down": Marca});
+
+// A forma cheia entra no registro com o sufixo `-fill`, como o arquivo (ADR-0053)…
+export const registroCheio = criarRegistroDeIcones({house: Marca, "house-fill": Marca});
+// @ts-expect-error — …e só nome do Phosphor tem forma cheia: o nome próprio do app não tem
+export const registroCheioMau = criarRegistroDeIcones({"marca-da-sonda-fill": Marca});

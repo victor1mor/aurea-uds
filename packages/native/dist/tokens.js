@@ -89,7 +89,7 @@ export function resolverTokens(theme, density, fontFamilies) {
         // que some daqui some do app sem ninguém acusar.
     }
     // Sem mapa injetado, a família CRUA do token preenche os quatro pesos: é o token dizendo
-    // "IBM Plex Sans", que no aparelho vira Regular ou fonte de sistema. Honesto e previsível —
+    // "Atkinson Hyperlegible Next", que no aparelho vira Regular ou fonte de sistema. Honesto e previsível —
     // e é por isso que o `fontFamilies` do provider existe.
     const font = {
         ui: normalizarEscala(fontFamilies?.ui, texto.fontUi ?? "System"),

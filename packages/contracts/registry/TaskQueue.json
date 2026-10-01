@@ -14,7 +14,7 @@
   },
   "name": "TaskQueue",
   "summary": "The work queue: what is waiting, what is running, what failed.",
-  "icon": "list",
+  "icon": "list-bullets",
   "states": [
     "queued",
     "running",

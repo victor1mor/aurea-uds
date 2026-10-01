@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Chronological sequence of events.",
-  "icon": "time",
+  "icon": "clock",
   "platforms": {
     "web": "stable",
     "native": "planned"

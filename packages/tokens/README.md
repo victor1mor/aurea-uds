@@ -17,7 +17,7 @@ regras.
 | Cor | `--<semântico>`, `--<família>-<degrau>` | oklch / hex | o semântico vem primeiro; um degrau da rampa serve para montar um semântico, não para usar direto |
 | Espaço | `--space-0` … `--space-24` | rem | escala com saltos de propósito — nem todo inteiro existe |
 | Tamanho de letra | `--text-xs` … `--text-5xl` | rem | |
-| Família de letra | `--font-ui`, `--font-editorial`, `--font-code` | — | IBM Plex Sans / Serif / Mono |
+| Família de letra | `--font-ui`, `--font-editorial`, `--font-code` | — | Atkinson Hyperlegible Next / Next (apelido, ADR-0053) / Mono |
 | Peso de letra | `--weight-regular` … `--weight-bold` | número | criado na Fase 6; o eixo não existia |
 | Altura de linha | `--leading-none` … `--leading-relaxed` | número | `--leading-none` existe para componentes cuja ALTURA é contrato |
 | Espaçamento entre letras | `--tracking-tight` … `--tracking-widest` | em | criado na Fase 6 |

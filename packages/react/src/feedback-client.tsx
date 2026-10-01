@@ -40,8 +40,8 @@ export type AlertVariant="info"|"success"|"warning"|"danger";
 // caso é específico. O Banner NÃO ganha o mesmo padrão de propósito: ele não existe na
 // referência e o aviso de largura de página nem sempre quer glifo — a assimetria é decidida,
 // não herdada.
-const ICONE_DA_VARIANTE:Record<AlertVariant,IconName>={info:"information--filled",
-success:"checkmark--filled",warning:"warning--alt--filled",danger:"error--filled"};
+const ICONE_DA_VARIANTE:Record<AlertVariant,IconName>={info:"info",
+success:"check-circle",warning:"warning",danger:"x-circle"};
 // A grade do `.alert` tem TRÊS trilhas (auto 1fr auto): ícone, corpo, ação. Uma versão anterior
 // emitia o título solto na trilha 1 — a do ícone — e o corpo como item anônimo. Medido no
 // navegador em 21/08/2026: o título ocupava a coluna do ícone e crescia com o próprio texto,
@@ -56,11 +56,11 @@ success:"checkmark--filled",warning:"warning--alt--filled",danger:"error--filled
 // universal. Quem passa só `state` recebe a cor derivada da gravidade e o rótulo universal
 // quando não há filho; quem passa os dois manda, porque só o consumidor sabe se aquele
 // "esperando" dele é grave.
-export function Alert({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="close" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+export function Alert({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios
 // preservam as 3 colunas do grid quando não há ícone ou botão de dispensar.
 export type BannerVariant=AlertVariant;
-export function Banner({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:BannerVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="close" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+export function Banner({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:BannerVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
 // A barra grampeava 0..100 e o `aria-valuenow` NÃO — medido ao publicar o contrato de API na
 // Parte E: com value=150 o desenho parava em 100% e o leitor de tela anunciava "150 de 100".
 // A causa é a de sempre: o grampo existia num lugar só. Agora é UMA expressão que serve os dois,
@@ -118,7 +118,7 @@ export function DataState({state,message,skeleton,emptyTitle,emptyIcon,action,ch
   if(state)return caixa(<><Alert variant={stateSeverity(state)} state={state}>{message}</Alert>{conteudo()}</>);
   return caixa(conteudo());
 }
-export function EmptyState({icon="document--blank",title,titleAs:TitleTag="h3",description,action,state}:{icon?:IconName;title:ReactNode;titleAs?:"h2"|"h3"|"h4"|"p";description?:ReactNode;action?:ReactNode;state?:UniversalState}){const s=useAureaStrings();const desc=description??(state?s.universalState[state]:null);return <div className="empty-state" data-state={state}><Icon name={icon} size="xl"/><TitleTag className="empty-title">{title}</TitleTag>{desc&&<p className="muted">{desc}</p>}{action}</div>}
+export function EmptyState({icon="file",title,titleAs:TitleTag="h3",description,action,state}:{icon?:IconName;title:ReactNode;titleAs?:"h2"|"h3"|"h4"|"p";description?:ReactNode;action?:ReactNode;state?:UniversalState}){const s=useAureaStrings();const desc=description??(state?s.universalState[state]:null);return <div className="empty-state" data-state={state}><Icon name={icon} size="xl"/><TitleTag className="empty-title">{title}</TitleTag>{desc&&<p className="muted">{desc}</p>}{action}</div>}
 
 
 
@@ -140,7 +140,7 @@ function groupNotifications(items:NotificationItem[]):Array<{label?:string;items
   }
   return out;
 }
-export function NotificationCenter({items,onItemClick,onMarkAllRead,label,icon="notification",side="bottom"}:{items:NotificationItem[];onItemClick?:(item:NotificationItem)=>void;onMarkAllRead?:()=>void;label?:string;icon?:IconName;side?:OverlaySide}){
+export function NotificationCenter({items,onItemClick,onMarkAllRead,label,icon="bell",side="bottom"}:{items:NotificationItem[];onItemClick?:(item:NotificationItem)=>void;onMarkAllRead?:()=>void;label?:string;icon?:IconName;side?:OverlaySide}){
   const s=useAureaStrings();
   const portal=usePortalContainer();
   const title=label??s.notificationsLabel;

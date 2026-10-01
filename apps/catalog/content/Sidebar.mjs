@@ -51,10 +51,10 @@ const moldura = (props, rotulo = "Sidebar") => {
 const demo = (props) => moldura(props);
 
 const ITENS = [
-  {id: "button", label: "Button", icon: "add", href: "../button.html",
+  {id: "button", label: "Button", icon: "plus", href: "../button.html",
     badge: h(Badge, {variant: "primary"}, "12")},
-  {id: "navlist", label: "NavList", icon: "list", href: "../navlist.html"},
-  {id: "sidebar", label: "Sidebar", icon: "side-panel--open", href: "../sidebar.html"},
+  {id: "navlist", label: "NavList", icon: "list-bullets", href: "../navlist.html"},
+  {id: "sidebar", label: "Sidebar", icon: "sidebar-simple", href: "../sidebar.html"},
 ];
 
 export default {
@@ -93,9 +93,9 @@ export default {
   label="Components"
   current="button"
   items={[
-    {id: "button", label: "Button", icon: "add", href: "../button.html", badge: <Badge variant="primary">12</Badge>},
-    {id: "navlist", label: "NavList", icon: "list", href: "../navlist.html"},
-    {id: "sidebar", label: "Sidebar", icon: "side-panel--open", href: "../sidebar.html"},
+    {id: "button", label: "Button", icon: "plus", href: "../button.html", badge: <Badge variant="primary">12</Badge>},
+    {id: "navlist", label: "NavList", icon: "list-bullets", href: "../navlist.html"},
+    {id: "sidebar", label: "Sidebar", icon: "sidebar-simple", href: "../sidebar.html"},
   ]}
 />`,
       embed: true,
@@ -112,8 +112,8 @@ export default {
   current="sidebar"
   items={[
     {id: "components", label: "Components", items: [
-      {id: "button", label: "Button", icon: "add", href: "../button.html"},
-      {id: "navigation", label: "Navigation", icon: "list", href: "../navlist.html", items: [
+      {id: "button", label: "Button", icon: "plus", href: "../button.html"},
+      {id: "navigation", label: "Navigation", icon: "list-bullets", href: "../navlist.html", items: [
         {id: "navlist", label: "NavList", href: "../navlist.html"},
         {id: "sidebar", label: "Sidebar", href: "../sidebar.html"},
       ]},
@@ -129,8 +129,8 @@ export default {
         label: "Catalog", current: "sidebar",
         items: [
           {id: "components", label: "Components", items: [
-            {id: "button", label: "Button", icon: "add", href: "../button.html"},
-            {id: "navigation", label: "Navigation", icon: "list", href: "../navlist.html", items: [
+            {id: "button", label: "Button", icon: "plus", href: "../button.html"},
+            {id: "navigation", label: "Navigation", icon: "list-bullets", href: "../navlist.html", items: [
               {id: "navlist", label: "NavList", href: "../navlist.html"},
               {id: "sidebar", label: "Sidebar", href: "../sidebar.html"},
             ]},

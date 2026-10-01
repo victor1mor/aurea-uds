@@ -58,7 +58,7 @@ export function SortableList({items,onReorder,label,className,...props}:Sortable
             aria-describedby={`${bid}ajuda`} aria-pressed={r.pego===i}
             onKeyDown={e=>r.teclado(e,i)} onPointerDown={e=>r.ponteiroBaixo(e,i)}
             onPointerMove={r.ponteiroMove} onPointerUp={r.ponteiroSolta} onPointerCancel={r.ponteiroSolta}>
-            <Icon name="drag--horizontal"/><span className="sr-only">{s.sortableHandle}</span>
+            <Icon name="dots-six"/><span className="sr-only">{s.sortableHandle}</span>
           </button>
           <span id={lid} className="sortable-label">{it.label}</span>
         </li>;

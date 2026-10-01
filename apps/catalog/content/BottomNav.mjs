@@ -34,17 +34,17 @@ const demo = (props) => h(Barra, props);
 // quem tiver de fato um alerta.
 const ITENS = [
   {id: "garage", label: "Garage", icon: "car"},
-  {id: "fuel", label: "Fuel", icon: "gas-station",
+  {id: "fuel", label: "Fuel", icon: "gas-pump",
     badge: h(Badge, {size: "xs", variant: "primary", emphasis: "solid"}, "3")},
-  {id: "service", label: "Service", icon: "tools"},
+  {id: "service", label: "Service", icon: "wrench"},
   {id: "me", label: "Profile", icon: "user"},
 ];
 
 const CODIGO_ITENS = `const items = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
-  {id: "fuel", label: "Fuel", icon: "gas-station", href: "/fuel",
+  {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
     badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
-  {id: "service", label: "Service", icon: "tools", href: "/service"},
+  {id: "service", label: "Service", icon: "wrench", href: "/service"},
   {id: "me", label: "Profile", icon: "user", href: "/me"},
 ];`;
 
@@ -149,15 +149,15 @@ export default {
   current={route}
   items={[
     {id: "garage", label: "Garage", icon: "car", href: "/"},
-    {id: "fuel", label: <>Fuel <span className="sr-only">(new)</span></>, icon: "gas-station", href: "/fuel", badge: ""},
+    {id: "fuel", label: <>Fuel <span className="sr-only">(new)</span></>, icon: "gas-pump", href: "/fuel", badge: ""},
   ]}
 />`,
       embed: true,
       render: () => demo({variant: "edge", label: "Garage dot", inicial: "garage", items: [
         {id: "garage", label: "Garage", icon: "car"},
         {id: "fuel", label: h("span", null, "Fuel ", h("span", {className: "sr-only"}, "(new)")),
-          icon: "gas-station", badge: ""},
-        {id: "service", label: "Service", icon: "tools"},
+          icon: "gas-pump", badge: ""},
+        {id: "service", label: "Service", icon: "wrench"},
         {id: "me", label: "Profile", icon: "user"}]}),
     },
     {
@@ -171,8 +171,8 @@ export default {
   current={route}
   items={[
     {id: "garage", label: "Garage", icon: "car", onClick: () => go("/")},
-    {id: "fuel", label: "Fuel", icon: "gas-station", onClick: () => go("/fuel")},
-    {id: "service", label: "Service", icon: "tools", onClick: () => go("/service")},
+    {id: "fuel", label: "Fuel", icon: "gas-pump", onClick: () => go("/fuel")},
+    {id: "service", label: "Service", icon: "wrench", onClick: () => go("/service")},
   ]}
 />`,
       embed: true,

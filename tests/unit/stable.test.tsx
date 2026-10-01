@@ -232,7 +232,7 @@ test("Field + Combobox: a injeção alcança o input, que é o nó focal", async
 });
 
 test("Icon: é decorativo por padrão — sai do leitor de tela", async () => {
-  const {container} = wrap(<Icon name="add" />);
+  const {container} = wrap(<Icon name="plus" />);
   const svg = container.querySelector("svg");
   // ícone que repete o rótulo do botão e é anunciado gera leitura dobrada
   expect(svg).toHaveAttribute("aria-hidden", "true");

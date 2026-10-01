@@ -5,7 +5,7 @@
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read the string dictionary the provider is using, to translate your own labels with it.",
-  "icon": "settings",
+  "icon": "gear",
   "platforms": {
     "web": "stable",
     "native": "planned"

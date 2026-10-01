@@ -17,15 +17,15 @@ export default [
     note: PORTAL,
     code: `<DropdownMenu
   label="Row actions"
-  trigger={<IconButton icon="overflow-menu--horizontal" label="Row actions" />}
+  trigger={<IconButton icon="dots-three" label="Row actions" />}
   items={[
-    {label: "Rename", leadingIcon: "edit"},
+    {label: "Rename", leadingIcon: "pencil-simple"},
     {label: "Duplicate", leadingIcon: "copy"},
     "separator",
-    {label: "Delete", leadingIcon: "trash-can"},
+    {label: "Delete", leadingIcon: "trash"},
   ]}
 />`,
-    render: () => h(IconButton, {icon: "overflow-menu--horizontal", label: "Row actions"}),
+    render: () => h(IconButton, {icon: "dots-three", label: "Row actions"}),
   },
   {
     variant: "Split action",
@@ -37,13 +37,13 @@ export default [
   <Button variant="primary">Export CSV</Button>
   <DropdownMenu
     label="Other formats"
-    trigger={<IconButton variant="primary" icon="chevron--down" label="Other formats" />}
+    trigger={<IconButton variant="primary" icon="caret-down" label="Other formats" />}
     items={[{label: "Export JSON"}, {label: "Export Parquet"}]}
   />
 </ButtonGroup>`,
     render: () => h("div", {style: {display: "flex", gap: "var(--space-1)"}},
       h(Button, {variant: "primary"}, "Export CSV"),
-      h(IconButton, {variant: "primary", icon: "chevron--down", label: "Other formats"})),
+      h(IconButton, {variant: "primary", icon: "caret-down", label: "Other formats"})),
   },
   {
     variant: "View menu",

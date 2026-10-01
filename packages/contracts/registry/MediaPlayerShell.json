@@ -4,7 +4,7 @@
   "layer": "Shell",
   "maturity": "Stable",
   "summary": "Layout shell hosting a media player and its chrome.",
-  "icon": "video",
+  "icon": "video-camera",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -11,8 +11,8 @@ import {AureaProvider, BottomNav, criarRegistroDeIcones, resolverTokens} from ".
 
 const t = resolverTokens("dark", "comfortable");
 const Glifo = () => null;
-const ICONES = criarRegistroDeIcones({home: Glifo as never, wallet: Glifo as never});
-const ITENS = [{id: "a", label: "Início", icon: "home"}, {id: "b", label: "Gastos", icon: "wallet", badge: 3}] as never;
+const ICONES = criarRegistroDeIcones({"house": Glifo as never, wallet: Glifo as never});
+const ITENS = [{id: "a", label: "Início", icon: "house"}, {id: "b", label: "Gastos", icon: "wallet", badge: 3}] as never;
 const estilos = () => __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {});
 // A moldura é a única caixa de largura 32 da barra.
 const molduras = () => estilos().filter((e) => e.width === 32);

@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "The frame around content blocks — order, handle, removal, and the slot where your own editor goes. Aurea does not own the rich text.",
-  "icon": "document",
+  "icon": "file-text",
   "platforms": {
     "web": "stable",
     "native": "planned"

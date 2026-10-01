@@ -134,7 +134,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
  */
-export function PhotoInput({ value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true, onPermissionDenied, addIcon = "camera", removeIcon = "close", style, testID, }) {
+export function PhotoInput({ value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true, onPermissionDenied, addIcon = "camera", removeIcon = "x", style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();

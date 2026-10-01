@@ -284,7 +284,7 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
         })}]},
       ]}
       testID={`toast-${toast.id}`}>
-      {glifo ? <Icon name={glifo} size="md" color={corDoIcone} /> : null}
+      {glifo ? <Icon name={glifo} size="md" color={corDoIcone} weight={toast.icon ? undefined : "fill"} /> : null}
       <View style={s.texto}>
         <Text size="sm" weight={600}>{toast.title}</Text>
         {toast.description != null
@@ -294,7 +294,7 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
           : null}
       </View>
       {toast.action}
-      <IconButton name="close" label={strings.dismissNotification} appearance="ghost" size="sm"
+      <IconButton name="x" label={strings.dismissNotification} appearance="ghost" size="sm"
                   onPress={onClose} />
     </Animated.View>
   );

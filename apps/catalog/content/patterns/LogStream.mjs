@@ -52,7 +52,7 @@ export default [
     <Status variant="danger">Failed</Status>
   </div>
   <LogStream lines={lines} />
-  <Button size="sm" variant="secondary" leadingIcon="restart">Run again</Button>
+  <Button size="sm" variant="secondary" leadingIcon="arrow-counter-clockwise">Run again</Button>
 </Card>`,
     render: () => h("div", {style: cheio}, h(A.Card, null,
       // `--space-2` e não `--space-3` nos dois respiros: a prévia media 358px numa caixa de
@@ -66,6 +66,6 @@ export default [
         {time: "03:01:12", level: "warn", text: "retrying source 3 of 9"},
         {time: "03:01:44", level: "error", text: "source 3 unreachable after 3 attempts"}]}),
       h("div", {style: {marginTop: "var(--space-2)"}},
-        h(A.Button, {size: "sm", variant: "secondary", leadingIcon: "restart"}, "Run again")))),
+        h(A.Button, {size: "sm", variant: "secondary", leadingIcon: "arrow-counter-clockwise"}, "Run again")))),
   },
 ];

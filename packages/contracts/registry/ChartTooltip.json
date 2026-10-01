@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Values under the pointer, on the same tooltip surface as the rest of Aurea.",
-  "icon": "chart--line",
+  "icon": "chart-line",
   "platforms": {
     "web": "supported",
     "native": "planned"

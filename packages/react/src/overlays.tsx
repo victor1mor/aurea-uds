@@ -32,7 +32,7 @@ export function Dialog({open,title,children,footer,onClose,size="md",dismissible
   return <BaseDialog.Root open={open} disablePointerDismissal={!dismissible} onOpenChange={o=>{if(!o&&dismissible)onClose()}}>
     <BaseDialog.Portal container={portal}><BaseDialog.Backdrop className="dialog-backdrop"/>
       <BaseDialog.Popup className={cx("dialog",size!=="md"&&`dialog-${size}`)}>
-        <header><BaseDialog.Title render={<h2/>}>{title}</BaseDialog.Title><BaseDialog.Close className="btn btn-ghost btn-icon" aria-label={s.close} disabled={!dismissible}><Icon name="close"/></BaseDialog.Close></header>
+        <header><BaseDialog.Title render={<h2/>}>{title}</BaseDialog.Title><BaseDialog.Close className="btn btn-ghost btn-icon" aria-label={s.close} disabled={!dismissible}><Icon name="x"/></BaseDialog.Close></header>
         <div className="dialog-body">{children}</div>{footer&&<footer>{footer}</footer>}
       </BaseDialog.Popup>
     </BaseDialog.Portal>
@@ -83,7 +83,7 @@ export function ConfirmDialog({open,title,description,confirmLabel,cancelLabel,d
     </BaseAlertDialog.Portal>
   </BaseAlertDialog.Root>;
 }
-export function Drawer({open,title,children,onClose,side="right"}:{open:boolean;title:ReactNode;children:ReactNode;onClose:()=>void;side?:"left"|"right"}){const s=useAureaStrings();const portal=usePortalContainer();return <BaseDialog.Root open={open} onOpenChange={o=>{if(!o)onClose()}}><BaseDialog.Portal container={portal}><BaseDialog.Backdrop className="drawer-backdrop"/><BaseDialog.Popup className={cx("drawer",`drawer-${side}`)}><header><BaseDialog.Title render={<h2/>}>{title}</BaseDialog.Title><BaseDialog.Close className="btn btn-ghost btn-icon" aria-label={s.close}><Icon name="close"/></BaseDialog.Close></header>{children}</BaseDialog.Popup></BaseDialog.Portal></BaseDialog.Root>}
+export function Drawer({open,title,children,onClose,side="right"}:{open:boolean;title:ReactNode;children:ReactNode;onClose:()=>void;side?:"left"|"right"}){const s=useAureaStrings();const portal=usePortalContainer();return <BaseDialog.Root open={open} onOpenChange={o=>{if(!o)onClose()}}><BaseDialog.Portal container={portal}><BaseDialog.Backdrop className="drawer-backdrop"/><BaseDialog.Popup className={cx("drawer",`drawer-${side}`)}><header><BaseDialog.Title render={<h2/>}>{title}</BaseDialog.Title><BaseDialog.Close className="btn btn-ghost btn-icon" aria-label={s.close}><Icon name="x"/></BaseDialog.Close></header>{children}</BaseDialog.Popup></BaseDialog.Portal></BaseDialog.Root>}
 
 // AccessGate (M4): a ação que o usuário não pode fazer. A Aurea NÃO decide permissão — quem
 // decide é o consumidor, e `allowed` é a resposta dele já pronta. O que este componente carrega é
@@ -232,7 +232,7 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{r
       // É o que dá `aria-haspopup`, a seta para a direita e o fechamento em cascata de graça.
       return <BaseMenu.SubmenuRoot key={i}>
         <BaseMenu.SubmenuTrigger className="menu-item" disabled={sm.disabled}>
-          {dentro(sm)}<Icon name="chevron--right" size="sm" className="menu-seta"/>
+          {dentro(sm)}<Icon name="caret-right" size="sm" className="menu-seta"/>
         </BaseMenu.SubmenuTrigger>
         <BaseMenu.Portal container={portal}><BaseMenu.Positioner side="inline-end" sideOffset={4}>
           <BaseMenu.Popup className="menu">{renderMenuItems(sm.items,portal)}</BaseMenu.Popup>
@@ -248,7 +248,7 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{r
       return <BaseMenu.CheckboxItem key={i} className="menu-item" disabled={c.disabled}
         checked={c.checked} defaultChecked={c.defaultChecked}
         onCheckedChange={v=>c.onCheckedChange?.(v)}>
-        {marca(<BaseMenu.CheckboxItemIndicator><Icon name="checkmark" size="sm"/></BaseMenu.CheckboxItemIndicator>)}
+        {marca(<BaseMenu.CheckboxItemIndicator><Icon name="check" size="sm"/></BaseMenu.CheckboxItemIndicator>)}
         {dentro(c)}</BaseMenu.CheckboxItem>;
     }
     case "link":{

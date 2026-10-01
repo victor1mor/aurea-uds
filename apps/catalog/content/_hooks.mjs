@@ -63,7 +63,7 @@ function ThemeToggle() {
   // theme is null until the DOM is known. Draw nothing that depends on it before that,
   // or the server and the client disagree and React complains about hydration.
   if (!theme) return null;
-  return <IconButton icon={theme === "dark" ? "light" : "asleep"}
+  return <IconButton icon={theme === "dark" ? "sun" : "moon"}
                      label="Toggle theme" onClick={toggleTheme}/>;
 }`,
     notes: [
@@ -96,7 +96,7 @@ function ThemeToggle() {
 <AureaProvider spriteUrl="/aurea-icons.svg">{app}</AureaProvider>
 
 // Icon takes a local override when a page genuinely has two sprites.
-<Icon name="add" spriteUrl="/other-sprite.svg"/>`,
+<Icon name="plus" spriteUrl="/other-sprite.svg"/>`,
     notes: [
       ["Rarely needed directly", "Icon already reads it. It is here for the case where you draw a <use> yourself."],
     ],

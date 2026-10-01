@@ -61,16 +61,16 @@ export default [
     uses: ["InputGroup", "InputGroupAddon", "Textarea", "IconButton"],
     code: `<InputGroup>
   <InputGroupAddon side="start" layout="block">
-    <IconButton icon="text--bold" label="Bold" size="sm" />
-    <IconButton icon="text--italic" label="Italic" size="sm" />
+    <IconButton icon="text-b" label="Bold" size="sm" />
+    <IconButton icon="text-italic" label="Italic" size="sm" />
     <IconButton icon="link" label="Link" size="sm" />
   </InputGroupAddon>
   <Textarea aria-label="Notes" rows={3} defaultValue="" />
 </InputGroup>`,
     render: () => h("div", {style: {width: "min(520px,100%)"}}, h(A.InputGroup, null,
       h(A.InputGroupAddon, {side: "start", layout: "block"},
-        h(A.IconButton, {icon: "text--bold", label: "Bold", size: "sm"}),
-        h(A.IconButton, {icon: "text--italic", label: "Italic", size: "sm"}),
+        h(A.IconButton, {icon: "text-b", label: "Bold", size: "sm"}),
+        h(A.IconButton, {icon: "text-italic", label: "Italic", size: "sm"}),
         h(A.IconButton, {icon: "link", label: "Link", size: "sm"})),
       h(A.Textarea, {"aria-label": "Notes", rows: 3}))),
   },

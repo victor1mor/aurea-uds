@@ -20,7 +20,7 @@ export function Dialog({ open, title, children, footer, onClose, size = "md", di
     const s = useAureaStrings();
     const portal = usePortalContainer();
     return _jsx(BaseDialog.Root, { open: open, disablePointerDismissal: !dismissible, onOpenChange: o => { if (!o && dismissible)
-            onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("dialog", size !== "md" && `dialog-${size}`), children: [_jsxs("header", { children: [_jsx(BaseDialog.Title, { render: _jsx("h2", {}), children: title }), _jsx(BaseDialog.Close, { className: "btn btn-ghost btn-icon", "aria-label": s.close, disabled: !dismissible, children: _jsx(Icon, { name: "close" }) })] }), _jsx("div", { className: "dialog-body", children: children }), footer && _jsx("footer", { children: footer })] })] }) });
+            onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("dialog", size !== "md" && `dialog-${size}`), children: [_jsxs("header", { children: [_jsx(BaseDialog.Title, { render: _jsx("h2", {}), children: title }), _jsx(BaseDialog.Close, { className: "btn btn-ghost btn-icon", "aria-label": s.close, disabled: !dismissible, children: _jsx(Icon, { name: "x" }) })] }), _jsx("div", { className: "dialog-body", children: children }), footer && _jsx("footer", { children: footer })] })] }) });
 }
 // ConfirmDialog (M5): a decisão que não se fecha por engano. NÃO é um Dialog com dois botões —
 // é `role="alertdialog"`, e a diferença é de comportamento, não de aparência: o Base UI tira do
@@ -58,7 +58,7 @@ export function ConfirmDialog({ open, title, description, confirmLabel, cancelLa
             onCancel(); }, children: _jsxs(BaseAlertDialog.Portal, { container: portal, children: [_jsx(BaseAlertDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseAlertDialog.Popup, { className: "dialog dialog-confirm", initialFocus: seguro, children: [_jsx("header", { children: _jsx(BaseAlertDialog.Title, { render: _jsx("h2", {}), children: title }) }), _jsx(BaseAlertDialog.Description, { className: "dialog-body", children: description }), _jsxs("footer", { children: [_jsx(Button, { ref: seguro, variant: "secondary", onClick: onCancel, children: cancelLabel ?? s.confirmCancel }), _jsx(Button, { variant: destructive ? "danger" : "primary", onClick: onConfirm, children: confirmLabel ?? s.confirmProceed })] })] })] }) });
 }
 export function Drawer({ open, title, children, onClose, side = "right" }) { const s = useAureaStrings(); const portal = usePortalContainer(); return _jsx(BaseDialog.Root, { open: open, onOpenChange: o => { if (!o)
-        onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "drawer-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("drawer", `drawer-${side}`), children: [_jsxs("header", { children: [_jsx(BaseDialog.Title, { render: _jsx("h2", {}), children: title }), _jsx(BaseDialog.Close, { className: "btn btn-ghost btn-icon", "aria-label": s.close, children: _jsx(Icon, { name: "close" }) })] }), children] })] }) }); }
+        onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "drawer-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("drawer", `drawer-${side}`), children: [_jsxs("header", { children: [_jsx(BaseDialog.Title, { render: _jsx("h2", {}), children: title }), _jsx(BaseDialog.Close, { className: "btn btn-ghost btn-icon", "aria-label": s.close, children: _jsx(Icon, { name: "x" }) })] }), children] })] }) }); }
 export function AccessGate({ allowed, children, ...resto }) {
     if (allowed)
         return children;
@@ -114,7 +114,7 @@ function renderMenuItems(items, portal) {
                 const sm = it;
                 // O submenu é uma RAIZ própria com gatilho próprio — não é um item que "abre outro menu".
                 // É o que dá `aria-haspopup`, a seta para a direita e o fechamento em cascata de graça.
-                return _jsxs(BaseMenu.SubmenuRoot, { children: [_jsxs(BaseMenu.SubmenuTrigger, { className: "menu-item", disabled: sm.disabled, children: [dentro(sm), _jsx(Icon, { name: "chevron--right", size: "sm", className: "menu-seta" })] }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { side: "inline-end", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(sm.items, portal) }) }) })] }, i);
+                return _jsxs(BaseMenu.SubmenuRoot, { children: [_jsxs(BaseMenu.SubmenuTrigger, { className: "menu-item", disabled: sm.disabled, children: [dentro(sm), _jsx(Icon, { name: "caret-right", size: "sm", className: "menu-seta" })] }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { side: "inline-end", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(sm.items, portal) }) }) })] }, i);
             }
             case "checkbox": {
                 const c = it;
@@ -123,7 +123,7 @@ function renderMenuItems(items, portal) {
                 // assinatura pública da Aurea mudar junto com uma versão do motor. Mesma decisão do
                 // `onValueChange` do grupo de rádio. O teste pegou: sem o embrulho, o `vi.fn()` recebia um
                 // `PointerEvent` de brinde.
-                return _jsxs(BaseMenu.CheckboxItem, { className: "menu-item", disabled: c.disabled, checked: c.checked, defaultChecked: c.defaultChecked, onCheckedChange: v => c.onCheckedChange?.(v), children: [marca(_jsx(BaseMenu.CheckboxItemIndicator, { children: _jsx(Icon, { name: "checkmark", size: "sm" }) })), dentro(c)] }, i);
+                return _jsxs(BaseMenu.CheckboxItem, { className: "menu-item", disabled: c.disabled, checked: c.checked, defaultChecked: c.defaultChecked, onCheckedChange: v => c.onCheckedChange?.(v), children: [marca(_jsx(BaseMenu.CheckboxItemIndicator, { children: _jsx(Icon, { name: "check", size: "sm" }) })), dentro(c)] }, i);
             }
             case "link": {
                 const l = it;

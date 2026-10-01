@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Vertical spacing/layout primitive.",
-  "icon": "list",
+  "icon": "list-bullets",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -467,8 +467,8 @@ if contract:
 
 # ── 10. licenças nos pacotes (auditoria 18/07/2026, ALTO 6) ────────
 # Cada pacote publicável leva a própria LICENSE (npm inclui LICENSE sempre;
-# NOTICE precisa estar em "files"). Fontes = OFL com o copyright da IBM;
-# ícones = Apache + NOTICE de atribuição Carbon.
+# NOTICE precisa estar em "files"). Fontes = OFL com o copyright da Atkinson Hyperlegible;
+# ícones = NOTICE de atribuição do Phosphor (MIT). Até a 0.12.4 eram IBM Plex e Carbon (ADR-0053).
 for pkg_dir in sorted((root / "packages").iterdir()):
     pj = pkg_dir / "package.json"
     if not pj.is_file():
@@ -481,11 +481,15 @@ for pkg_dir in sorted((root / "packages").iterdir()):
 fonts_lic = (root / "packages/fonts/LICENSE")
 if fonts_lic.is_file():
     lic_text = fonts_lic.read_text(encoding="utf-8")
-    if "SIL OPEN FONT LICENSE" not in lic_text or "IBM Corp" not in lic_text:
-        errors.append("fonts/LICENSE: não é a OFL da IBM Plex")
+    if ("SIL OPEN FONT LICENSE" not in lic_text.upper()
+            or "Atkinson Hyperlegible Next Project Authors" not in lic_text
+            or "Atkinson Hyperlegible Mono Project Authors" not in lic_text):
+        errors.append("fonts/LICENSE: não é a OFL da Atkinson Hyperlegible Next e Mono (ADR-0053)")
 icons_manifest = json.loads((root / "packages/icons/package.json").read_text(encoding="utf-8"))
 if not (root / "packages/icons/NOTICE").is_file():
-    errors.append("icons: sem NOTICE de atribuição Carbon")
+    errors.append("icons: sem NOTICE de atribuição do Phosphor")
+elif "Phosphor" not in (root / "packages/icons/NOTICE").read_text(encoding="utf-8"):
+    errors.append("icons: o NOTICE não credita o Phosphor Icons (MIT), de onde vêm os glifos (ADR-0053)")
 elif "NOTICE" not in icons_manifest.get("files", []):
     errors.append("icons: NOTICE fora de \"files\" (não entraria no tarball)")
 
@@ -2129,8 +2133,8 @@ def project_manifest(s):
         "schemaVersion": "1.0",
         "project": {"name": "Aurea Universal Design System", "short": "Aurea UDS",
                     "npmScope": "@aurea-uds", "license": "Apache-2.0",
-                    "thirdParty": [{"name": "IBM Plex", "license": "OFL-1.1"},
-                                   {"name": "Carbon Icons", "license": "Apache-2.0"}]},
+                    "thirdParty": [{"name": "Atkinson Hyperlegible", "license": "OFL-1.1"},
+                                   {"name": "Phosphor Icons", "license": "MIT"}]},
         "packages": pkgs,
         "components": reg,
         "state": s,
@@ -2561,7 +2565,7 @@ _woff2 = sorted(p.stem for p in (_fdir / "files").glob("*.woff2"))
 _ttf = sorted(p.stem for p in (_fdir / "files-native").glob("*.ttf"))
 if not _ttf:
     errors.append("check 37: packages/fonts/files-native/ não tem .ttf — o React Native NÃO LÊ "
-                  "woff2, e sem eles o IBM Plex não aparece no aparelho (NATIVE.md §5.2.1)")
+                  "woff2, e sem eles a fonte da Aurea não aparece no aparelho (NATIVE.md §5.2.1)")
 elif _ttf != _woff2:
     _faltam = sorted(set(_woff2) - set(_ttf))
     _sobram = sorted(set(_ttf) - set(_woff2))
@@ -2589,7 +2593,8 @@ elif _ttf:
                           f"existe — o `require` do Metro falharia no app do consumidor")
 
 # ── 38. os ícones do nativo são os MESMOS do sprite da web ─────────────────
-# ADR-0038. Uma fonte (`@carbon/icons`), dois alvos — o mesmo desenho da Etapa 2 para os tokens.
+# ADR-0038. Uma fonte (desde a ADR-0053, o `@phosphor-icons/core`; antes, o `@carbon/icons`), dois
+# alvos — o mesmo desenho da Etapa 2 para os tokens.
 # O defeito: o gerador nativo fica para trás, o app pede um ícone que a web tem e ele não existe.
 # É `import` de módulo inexistente, ou seja, quebra em runtime no aparelho, não no build daqui.
 _idir = root / "packages/native/icons"
@@ -2602,6 +2607,14 @@ elif _sprite.is_file():
                                             _sprite.read_text(encoding="utf-8"))}
     _nat = {p.stem for p in _idir.glob("*.js") if p.stem not in ("index", "props")}
     _so_web, _so_nat = sorted(_web - _nat), sorted(_nat - _web)
+    # CLAUDE.md §5: marca registrada de terceiro não entra numa biblioteca Apache-2.0. O Phosphor
+    # traz 79 logotipos (`apple-logo`, `gitlab-logo-simple`…); os geradores os deixam de fora, e
+    # este check cobra que continue assim nos dois alvos (ADR-0053).
+    _logos = sorted(n for n in (_web | _nat) if re.search(r"-logo(-|$)", n))
+    if _logos:
+        errors.append(f"check 38: {len(_logos)} logotipo(s) de marca no conjunto de ícones — "
+                      f"{', '.join(_logos[:5])}. Marca de terceiro não entra (CLAUDE.md §5); o "
+                      f"filtro mora em `nomesDoPhosphor` (packages/icons/build-icons.mjs)")
     if _so_web or _so_nat:
         errors.append("check 38: os dois alvos de ícone divergem — "
                       + (f"só no sprite: {', '.join(_so_web[:5])} (+{max(0, len(_so_web) - 5)}). "
@@ -2622,7 +2635,7 @@ elif _sprite.is_file():
     # ⚠ A GUARDA DE TOTALIDADE E' OBRIGATORIA e a razao e' historica: a versao vitest deste
     # invariante passava VERDE sobre varredura vazia, porque "nenhum culpado" e "nao olhei nada"
     # sao o mesmo resultado. Aqui o check 38 acima ja' cobra que o conjunto de nomes seja IGUAL
-    # ao do sprite (2571), entao uma pasta vazia reprova por lá antes — mas dizer isso por
+    # ao do sprite, entao uma pasta vazia reprova por lá antes — mas dizer isso por
     # escrito e' mais barato que redescobrir.
     if _icones_maus:
         errors.append(f"check 38: {len(_icones_maus)} icone(s) gerado(s) com foreignObject ou "

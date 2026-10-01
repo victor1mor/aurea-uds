@@ -25,5 +25,5 @@ export function MessageComposer({ onSend, placeholder, label, icon, sendLabel, d
     const [text, setText] = React.useState("");
     const submit = (e) => { e.preventDefault(); const t = text.trim(); if (!t)
         return; onSend(t); setText(""); };
-    return _jsxs("form", { className: cx("message-composer", className), onSubmit: submit, children: [_jsxs(InputGroup, { children: [icon && _jsx(InputGroupAddon, { children: _jsx(Icon, { name: icon }) }), _jsx("input", { className: "input", value: text, disabled: disabled, placeholder: placeholder, "aria-label": label ?? s.chatMessage, onChange: e => setText(e.target.value) })] }), _jsx(IconButton, { type: "submit", variant: "primary", icon: "send", label: sendLabel ?? s.chatSend, disabled: disabled || !text.trim() })] });
+    return _jsxs("form", { className: cx("message-composer", className), onSubmit: submit, children: [_jsxs(InputGroup, { children: [icon && _jsx(InputGroupAddon, { children: _jsx(Icon, { name: icon }) }), _jsx("input", { className: "input", value: text, disabled: disabled, placeholder: placeholder, "aria-label": label ?? s.chatMessage, onChange: e => setText(e.target.value) })] }), _jsx(IconButton, { type: "submit", variant: "primary", icon: "paper-plane-tilt", label: sendLabel ?? s.chatSend, disabled: disabled || !text.trim() })] });
 }

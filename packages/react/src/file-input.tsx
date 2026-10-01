@@ -272,7 +272,7 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
         aria-invalid={rejected.length>0||undefined}
         aria-describedby={rejected.length>0?rejected.map((_,n)=>`${inputId}-rejeitado-${n}`).join(" "):undefined}
         onChange={e=>{add(e.target.files);e.target.value=""}}/>
-      <Icon name="cloud--upload" size="xl" className="dropzone-icon"/>
+      <Icon name="cloud-arrow-up" size="xl" className="dropzone-icon"/>
       <strong>{s.fileDropPrompt}</strong>
       {hint&&<span className="dropzone-hint">{hint}</span>}
     </label>
@@ -292,32 +292,32 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
           {/* G3: a prévia entra NO LUGAR do ícone, no mesmo espaço — a linha não muda
               de altura por causa dela. `alt` vazio porque o nome do arquivo está ao
               lado: descrever a imagem duas vezes só atrapalha quem ouve. */}
-          {previa?<img className="file-thumb" src={previa} alt=""/>:<Icon name="document"/>}
+          {previa?<img className="file-thumb" src={previa} alt=""/>:<Icon name="file-text"/>}
           <span className="file-name">{name}</span>
           {status==="uploading"?<>
             {/* progressbar APG: valor conta pelo leitor; o cancelar aborta a requisição. */}
             <div className="progress file-progress" role="progressbar" aria-label={`${s.uploadSending} ${name}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}><span style={{width:`${pct}%`}}/></div>
             <IconButton variant="ghost" size="sm" icon="pause" label={`${s.uploadPause} ${name}`} onClick={()=>pausar(id)}/>
-            <IconButton variant="ghost" size="sm" icon="close" label={`${s.uploadCancel} ${name}`} onClick={()=>abortId(id)}/>
+            <IconButton variant="ghost" size="sm" icon="x" label={`${s.uploadCancel} ${name}`} onClick={()=>abortId(id)}/>
           </>:status==="paused"?<>
             <span className="file-size">{s.uploadPaused} · {Math.round(progress*100)}%</span>
             <IconButton variant="ghost" size="sm" icon="play" label={`${s.uploadResume} ${name}`} onClick={()=>retomar({id,file,name,bytes,status,progress,restored})}/>
-            <IconButton variant="ghost" size="sm" icon="close" label={`${s.fileRemove} ${name}`} onClick={()=>remove(id)}/>
+            <IconButton variant="ghost" size="sm" icon="x" label={`${s.fileRemove} ${name}`} onClick={()=>remove(id)}/>
           </>:(status==="error"||status==="canceled")?<>
             <span className="field-error">{erro??(status==="error"?s.uploadError:s.uploadCanceled)}</span>
             {/* item restaurado não tem os bytes: oferecer "repetir" seria oferecer um
                 botão que falha. Some, e a ficha diz por quê. */}
-            {file&&<IconButton variant="ghost" size="sm" icon="restart" label={`${s.uploadRetry} ${name}`} onClick={()=>startUpload(id,file)}/>}
-            <IconButton variant="ghost" size="sm" icon="close" label={`${s.fileRemove} ${name}`} onClick={()=>remove(id)}/>
+            {file&&<IconButton variant="ghost" size="sm" icon="arrow-counter-clockwise" label={`${s.uploadRetry} ${name}`} onClick={()=>startUpload(id,file)}/>}
+            <IconButton variant="ghost" size="sm" icon="x" label={`${s.fileRemove} ${name}`} onClick={()=>remove(id)}/>
           </>:<>
-            {status==="done"&&<Icon name="checkmark--filled"/>}
+            {status==="done"&&<Icon name="check-circle" weight="fill"/>}
             <span className="file-size">{formatSize(bytes)}</span>
             {/* G4: os 8 primeiros dígitos bastam para conferir de olho; o valor
                 inteiro sai na fila, para quem precisa comparar de verdade. */}
             {soma&&<span className="file-checksum" title={`${s.uploadChecksum}: ${soma}`}>{soma.slice(0,8)}</span>}
             {/* ponytail: remover leva o foco ao body; aceitável p/ UI de entrada, o
                 aria-live anuncia a remoção. */}
-            <IconButton variant="ghost" size="sm" icon="close" label={`${s.fileRemove} ${name}`} onClick={()=>remove(id)}/>
+            <IconButton variant="ghost" size="sm" icon="x" label={`${s.fileRemove} ${name}`} onClick={()=>remove(id)}/>
           </>}
         </li>;
       })}

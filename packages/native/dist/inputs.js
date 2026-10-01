@@ -282,7 +282,7 @@ export function Textarea({ rows, size, style, ...rest }) {
  * A caixa de campo que aceita coisas dentro — glifo na frente, botão atrás, os dois.
  *
  *     <InputGroup>
- *       <InputGroupAddon><Icon name="email" size="sm" /></InputGroupAddon>
+ *       <InputGroupAddon><Icon name="envelope-simple" size="sm" /></InputGroupAddon>
  *       <Input value={email} onChangeText={setEmail} keyboardType="email-address" />
  *     </InputGroup>
  *
@@ -329,7 +329,7 @@ export function PasswordField({ defaultVisible = false, size, disabled, autoCapi
     const [visivel, setVisivel] = React.useState(defaultVisible);
     const tam = size ?? campo?.size ?? "md";
     const inativo = disabled ?? campo?.disabled;
-    return (_jsxs(InputGroup, { size: tam, disabled: inativo, testID: testID, children: [leading ? _jsx(InputGroupAddon, { children: leading }) : null, _jsx(Input, { ...rest, size: tam, disabled: inativo, autoCapitalize: autoCapitalize, secureTextEntry: !visivel, style: style, testID: testID ? `${testID}-campo` : undefined }), _jsx(InputGroupAddon, { children: _jsx(IconButton, { name: visivel ? "view--off" : "view", label: visivel ? strings.passwordHide : strings.passwordShow, appearance: "ghost", size: tam === "lg" ? "md" : "sm", disabled: inativo, icons: icons, onPress: () => setVisivel(v => !v), testID: testID ? `${testID}-olho` : undefined }) })] }));
+    return (_jsxs(InputGroup, { size: tam, disabled: inativo, testID: testID, children: [leading ? _jsx(InputGroupAddon, { children: leading }) : null, _jsx(Input, { ...rest, size: tam, disabled: inativo, autoCapitalize: autoCapitalize, secureTextEntry: !visivel, style: style, testID: testID ? `${testID}-campo` : undefined }), _jsx(InputGroupAddon, { children: _jsx(IconButton, { name: visivel ? "eye-slash" : "eye", label: visivel ? strings.passwordHide : strings.passwordShow, appearance: "ghost", size: tam === "lg" ? "md" : "sm", disabled: inativo, icons: icons, onPress: () => setVisivel(v => !v), testID: testID ? `${testID}-olho` : undefined }) })] }));
 }
 function ControleMarcado({ papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
@@ -559,7 +559,7 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
  * para unidades, estados e tipos; um catálogo de milhares de linhas aqui não fica lento, trava.
  * O `Combobox` usa `FlatList` e aceita busca remota.
  */
-export function Select({ items, value, onChange, placeholder, disabled, size, chevron = "chevron--down", style, testID, }) {
+export function Select({ items, value, onChange, placeholder, disabled, size, chevron = "caret-down", style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();

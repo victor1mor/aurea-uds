@@ -24,7 +24,7 @@ import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
 const claro = resolverTokens("light", "comfortable");
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones({
-  "chevron--right": Glifo, checkmark: Glifo, add: Glifo,
+  "caret-right": Glifo, "check": Glifo, "plus": Glifo,
 });
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider theme="light" icons={ICONES}>{children}</AureaProvider>;
@@ -401,8 +401,8 @@ const GlifoQueAnota = ({color}: {size?: number; color?: string}) => {
   return null as unknown as React.ReactElement;
 };
 const ICONES_ANOTADOS = criarRegistroDeIcones({
-  add: GlifoQueAnota, subtract: GlifoQueAnota, checkmark: GlifoQueAnota,
-  "chevron--down": GlifoQueAnota, "chevron--right": GlifoQueAnota,
+  "plus": GlifoQueAnota, "minus": GlifoQueAnota, "check": GlifoQueAnota,
+  "caret-down": GlifoQueAnota, "caret-right": GlifoQueAnota,
 });
 const EnvolveAnotado = ({children}: {children: React.ReactNode}) =>
   <AureaProvider theme="light" icons={ICONES_ANOTADOS}>{children}</AureaProvider>;
@@ -452,7 +452,7 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
     RegistroDeGlifos.length = 0;
     render(
       <EnvolveAnotado>
-        <Card variant="brand" action={<IconButton name="checkmark" label="Confirmar" />} />
+        <Card variant="brand" action={<IconButton name="check" label="Confirmar" />} />
       </EnvolveAnotado>);
     expect(RegistroDeGlifos).toContain(claro.color.primaryForeground);
     expect(RegistroDeGlifos).not.toContain(claro.color.foreground);

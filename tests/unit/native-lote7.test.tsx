@@ -25,7 +25,7 @@ import {
 const tokens = resolverTokens("dark", "comfortable");
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones({
-  "chevron--down": Glifo, search: Glifo, close: Glifo, add: Glifo, subtract: Glifo, image: Glifo,
+  "caret-down": Glifo, "magnifying-glass": Glifo, "x": Glifo, "plus": Glifo, "minus": Glifo, image: Glifo,
 });
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider icons={ICONES}>{children}</AureaProvider>;

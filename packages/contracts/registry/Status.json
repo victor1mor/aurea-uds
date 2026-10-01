@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Operational condition of a thing: a coloured dot plus a readable label.",
-  "icon": "connection-signal",
+  "icon": "wifi-high",
   "platforms": {
     "web": "stable",
     "native": "planned"

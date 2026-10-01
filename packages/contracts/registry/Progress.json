@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Determinate progress bar.",
-  "icon": "progress-bar--round",
+  "icon": "spinner",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -155,7 +155,7 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   // alvo exige inventar papel, tabindex e tecla; um <button> já é tudo isso.
   const colunas=React.useMemo<Array<ColumnDef<T,any>>>(()=>renderDetail?[...allColumns,{
     id:"detail",enableSorting:false,enableHiding:false,header:()=>null,
-    cell:({row})=><IconButton icon="chevron--right" label={s.dataGridDetails} size="sm" variant="ghost"
+    cell:({row})=><IconButton icon="caret-right" label={s.dataGridDetails} size="sm" variant="ghost"
       aria-expanded={detailRowId===row.id} onClick={()=>setDetailRowId(detailRowId===row.id?null:row.id)}/>,
   }]:allColumns,[allColumns,renderDetail,detailRowId,s]);
   // A função acima precisa da tabela, e a tabela é o que esta chamada devolve: a referência fecha o
@@ -291,7 +291,7 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
     }
   };
   const rove=(r:number,c:number)=>eff.r===r&&eff.c===c?0:-1;
-  const sortIcon=(dir:false|"asc"|"desc")=>dir==="asc"?"chevron--sort--up":dir==="desc"?"chevron--sort--down":"chevron--sort";
+  const sortIcon=(dir:false|"asc"|"desc")=>dir==="asc"?"caret-up":dir==="desc"?"caret-down":"caret-up-down";
   // F5: a barra de lote. Duas referências independentes (Activepieces e Kaneo) chegam
   // à MESMA anatomia — contagem, divisória, ações, e um jeito de limpar —, então é
   // ela que entra. O que não entra é o resto das duas: barra `position:fixed` sobre a
@@ -434,7 +434,7 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
         {tabela}
         <aside className="datagrid-detail" aria-label={s.dataGridDetailPanel}>
           <div className="datagrid-detail-head">
-            <IconButton icon="close" label={s.close} size="sm" variant="ghost" onClick={()=>setDetailRowId(null)}/>
+            <IconButton icon="x" label={s.close} size="sm" variant="ghost" onClick={()=>setDetailRowId(null)}/>
           </div>
           {renderDetail(linhaAberta.original)}
         </aside>

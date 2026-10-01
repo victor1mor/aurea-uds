@@ -33,7 +33,7 @@ import * as barril from "../../packages/native/src/index.js";
 const tokens = resolverTokens("dark", "comfortable");
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones({
-  "calendar": Glifo, "camera": Glifo, "close": Glifo, "warning--alt--filled": Glifo,
+  "calendar": Glifo, "camera": Glifo, "x": Glifo, "warning": Glifo,
 });
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider icons={ICONES}>{children}</AureaProvider>;

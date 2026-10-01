@@ -4,7 +4,7 @@
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Hides an action the user cannot take, or shows it inert with the reason.",
-  "icon": "locked",
+  "icon": "lock",
   "platforms": {
     "web": "stable",
     "native": "planned"

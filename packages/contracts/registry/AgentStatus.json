@@ -21,7 +21,7 @@
   },
   "name": "AgentStatus",
   "summary": "The state of an agent, in one fixed vocabulary.",
-  "icon": "activity",
+  "icon": "pulse",
   "states": [
     "idle",
     "thinking",

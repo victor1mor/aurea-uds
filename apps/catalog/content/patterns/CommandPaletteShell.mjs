@@ -71,11 +71,11 @@ export default [
     code: `<CommandPaletteShell open={open} query={query} onQueryChange={setQuery}>
   {shown.length
     ? <div className="menu">{shown.map(renderCommand)}</div>
-    : <EmptyState icon="search" title="No command matches" description="Try a shorter word." />}
+    : <EmptyState icon="magnifying-glass" title="No command matches" description="Try a shorter word." />}
 </CommandPaletteShell>`,
     render: () => h("div", {style: caixa}, h(A.CommandPaletteShell,
       {open: true, query: "zzz", onQueryChange: () => {}},
-      h(A.EmptyState, {titleAs: "p", icon: "search", title: "No command matches",
+      h(A.EmptyState, {titleAs: "p", icon: "magnifying-glass", title: "No command matches",
         description: "Try a shorter word."}))),
   },
 ];

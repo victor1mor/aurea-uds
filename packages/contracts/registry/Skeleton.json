@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Placeholder shown while content loads.",
-  "icon": "pending",
+  "icon": "hourglass",
   "platforms": {
     "web": "stable",
     "native": "planned"

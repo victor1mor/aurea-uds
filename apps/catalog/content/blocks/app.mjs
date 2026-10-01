@@ -135,11 +135,11 @@ export default [
     code: `<Card>
   <EmptyState icon="folder" title="No projects yet"
     description="A project holds your components, tokens and releases."
-    action={<Button variant="primary" leadingIcon="add">New project</Button>} />
+    action={<Button variant="primary" leadingIcon="plus">New project</Button>} />
 </Card>`,
     render: () => h("div", {style: {width: "min(520px,100%)"}}, h(Card, null,
-      h(EmptyState, {icon: "document--blank", title: "No projects yet", titleAs: "h2",
+      h(EmptyState, {icon: "file", title: "No projects yet", titleAs: "h2",
         description: "A project holds your components, tokens and releases.",
-        action: h(Button, {variant: "primary", leadingIcon: "add"}, "New project")}))),
+        action: h(Button, {variant: "primary", leadingIcon: "plus"}, "New project")}))),
   },
 ];

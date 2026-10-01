@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Form-field wrapper: label, control, description and error.",
-  "icon": "document--blank",
+  "icon": "file",
   "platforms": {
     "web": "stable",
     "native": "planned"

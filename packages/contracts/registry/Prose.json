@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "The skin for long-form text. It is not the parser — that stays yours.",
-  "icon": "document",
+  "icon": "file-text",
   "platforms": {
     "web": "stable",
     "native": "planned"

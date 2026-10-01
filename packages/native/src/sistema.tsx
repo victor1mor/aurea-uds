@@ -224,7 +224,7 @@ export interface PhotoInputProps {
  */
 export function PhotoInput({
   value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true,
-  onPermissionDenied, addIcon = "camera", removeIcon = "close", style, testID,
+  onPermissionDenied, addIcon = "camera", removeIcon = "x", style, testID,
 }: PhotoInputProps) {
   const t = useAureaTokens();
   const s = folha(t);

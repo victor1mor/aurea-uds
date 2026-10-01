@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "A list of tappable rows that open something: leading icon, label, an optional second line, an optional trailing value, and the chevron that says \"this goes somewhere\". The brick of every settings screen.",
-  "icon": "list",
+  "icon": "list-bullets",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -56,7 +56,7 @@ const muted = {margin: "var(--space-1) 0 0", color: "var(--muted-foreground)", f
 // ("Without Tag") viram id/âncora — sem isto sairia id com espaço, que é HTML inválido.
 const slug = name => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const INSTALL_CMD = "pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts";
-// A ordem importa: as fontes ANTES do core (o core não embute mais IBM Plex).
+// A ordem importa: as fontes ANTES do core (o core não embute fonte nenhuma).
 const IMPORT_CSS = 'import "@aurea-uds/fonts/css";\nimport "@aurea-uds/core/css";';
 
 // ── registry + conteúdo ───────────────────────────────────────────────────────
@@ -916,7 +916,9 @@ function navGroups(groups, activeHref) {
       ...items.map(([text, href, icon]) => h("a", {key: href, href: `./${href}`,
         className: href === activeHref ? "active" : undefined,
         ...(href === activeHref ? {"aria-current": "page"} : {})},
-        icon ? h(A.Icon, {name: icon, size: "sm"}) : null, h("span", null, text))))));
+        // o item escolhido desenha o glifo CHEIO, como no `Sidebar` (ADR-0053).
+        icon ? h(A.Icon, {name: icon, size: "sm", weight: href === activeHref ? "fill" : undefined}) : null,
+        h("span", null, text))))));
 }
 const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
 const mark = h("svg", {width: 26, height: 26, viewBox: "0 0 1000 1000", "aria-hidden": "true", style: {flex: "none"}},
@@ -944,8 +946,8 @@ function shell(activeName, inner, section = "components", sideNav = null) {
         h("option", {value: "lory"}, "Lory")),
       // toggle de tema: dois ícones, o CSS mostra o oposto do tema atual; catalog.js alterna.
       h("button", {className: "btn btn-icon btn-ghost", id: "theme-toggle", type: "button", "aria-label": "Toggle light / dark theme"},
-        h(A.Icon, {name: "light", className: "t-sun"}),
-        h(A.Icon, {name: "asleep", className: "t-moon"}))));
+        h(A.Icon, {name: "sun", weight: "fill", className: "t-sun"}),
+        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"}))));
   // Categoria NÃO é título de documento: como <h4> ela vinha antes do <h1> da página e quem
   // navega por títulos no leitor de tela começava no meio da lateral. Vira grupo rotulado.
   const nav = sideNav || navGroups(cats.map(cat => [cat, byCat[cat].map(f => [f.name, `${slug(f.name)}.html`, f.icon])]),
@@ -1275,9 +1277,9 @@ const iconOf = name => fichas.find(f => f.name === name)?.icon;
 const patternsNav = active => navGroups(Object.entries(patternsByComponent)
   .map(([cmp, list]) => [cmp, list.map(p => [p.name, `${p.slug}.html`, iconOf(cmp)])]), active);
 const blocksNav = active => navGroups(Object.entries(blocksByCategory)
-  .map(([cat, list]) => [cat, list.map(b => [b.name, `${b.slug}.html`, iconOf(b.uses?.[0]) || "catalog"])]), active);
+  .map(([cat, list]) => [cat, list.map(b => [b.name, `${b.slug}.html`, iconOf(b.uses?.[0]) || "books"])]), active);
 const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
-const recipesNav = active => navGroups([["Archetypes", archetypeIds.map(id => [recipeTitle(id), `recipe-${slug(id)}.html`, "catalog"])]], active);
+const recipesNav = active => navGroups([["Archetypes", archetypeIds.map(id => [recipeTitle(id), `recipe-${slug(id)}.html`, "books"])]], active);
 
 // As páginas são montadas ANTES de escrever, porque o sprite é medido no HTML de todas elas.
 const paginas = [

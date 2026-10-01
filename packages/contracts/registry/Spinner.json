@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Indeterminate activity indicator for a wait with no known end.",
-  "icon": "renew",
+  "icon": "arrows-clockwise",
   "platforms": {
     "web": "stable",
     "native": "planned"

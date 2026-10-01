@@ -16,10 +16,10 @@ export default [
     uses: ["ContextMenu", "Card"],
     note: PORTAL,
     code: `<ContextMenu label="Item actions" items={[
-  {label: "Rename", leadingIcon: "edit"},
+  {label: "Rename", leadingIcon: "pencil-simple"},
   {label: "Move to…", leadingIcon: "folder"},
   "separator",
-  {label: "Delete", leadingIcon: "trash-can"},
+  {label: "Delete", leadingIcon: "trash"},
 ]}>
   <Card>Right-click this card, or focus it and press Shift+F10.</Card>
 </ContextMenu>`,

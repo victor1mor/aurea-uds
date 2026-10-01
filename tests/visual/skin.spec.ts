@@ -55,8 +55,8 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h(A.CommandPaletteShell, {key: "c", open: true, query: "", onQueryChange: () => {}},
     h("div", {className: "menu"}, h("button", {className: "menu-item", type: "button"}, "Go to Button"))),
   // ── Lote 1 do BUILDING.md ────────────────────────────────────────────────────────────
-  h(A.Toggle, {key: "t1", icon: "favorite", label: "Favourite", defaultPressed: true}),
-  h(A.Toggle, {key: "t2", icon: "pin", label: "Pin"}),
+  h(A.Toggle, {key: "t1", icon: "heart", label: "Favourite", defaultPressed: true}),
+  h(A.Toggle, {key: "t2", icon: "push-pin", label: "Pin"}),
   h("div", {key: "sp"},
     h(A.Spinner, {}), h(A.Spinner, {size: "md"}), h(A.Spinner, {size: "lg"})),
   h(A.NumberField, {key: "nf", defaultValue: 1, min: 0, max: 9, label: "Quantity"}),
@@ -128,22 +128,22 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h("div", {key: "shellA", className: "app-shell"},
     h(A.Sidebar, {label: "Skin", current: "inbox", items: [
       {id: "mail", label: "Mail", items: [
-        {id: "inbox", label: "Inbox", icon: "email", href: "#", items: [
+        {id: "inbox", label: "Inbox", icon: "envelope-simple", href: "#", items: [
           {id: "unread", label: "Unread", href: "#"}]},
         {id: "archive", label: "Archive", icon: "archive", href: "#"}]}]}),
     h("main", {className: "content"},
       h(A.Sidebar, {label: "Skin rail", collapsed: true, items: [
-        {id: "inbox", label: "Inbox", icon: "email", href: "#"}]}))),
+        {id: "inbox", label: "Inbox", icon: "envelope-simple", href: "#"}]}))),
   h("div", {key: "shellB", className: "app-shell"},
     h(A.Sidebar, {label: "Skin rail direto", collapsed: true, items: [
-      {id: "inbox", label: "Inbox", icon: "email", href: "#"}]})),
+      {id: "inbox", label: "Inbox", icon: "envelope-simple", href: "#"}]})),
   // A VARIANTE RENTE entra aqui para a prop não virar enfeite: se `floating` e `flush`
   // desenharem igual, a prop é decoração — é a mesma regra que as variantes da barra inferior
   // pagaram. Rótulo PRÓPRIO: dois landmarks de navegação com o mesmo nome reprovam em
   // `landmark-unique`, e o default de todos é o mesmo.
   h("div", {key: "shellC", className: "app-shell"},
     h(A.Sidebar, {label: "Skin rente", variant: "flush", current: "inbox", items: [
-      {id: "inbox", label: "Inbox", icon: "email", href: "#"}]})),
+      {id: "inbox", label: "Inbox", icon: "envelope-simple", href: "#"}]})),
   // ── A barra inferior (17/08/2026) ────────────────────────────────────────────────────
   // Ela usa o MESMO tipo do Sidebar, então o que a pele tem de provar é a diferença: o item
   // vira COLUNA (ícone sobre rótulo) e os itens dividem a largura. Sem essas duas regras, o
@@ -152,15 +152,15 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   // não tem a caixa de 24px do componente — e por isso o gate de "o contador não cobre o rótulo"
   // passou verde com o defeito na tela. Fixture mais fraco que o uso real é gate que mente.
   h(A.BottomNav, {key: "bnav", indicator: "circle", label: "Skin bottom", current: "rides", items: [
-    {id: "home", label: "Home", icon: "home", href: "#"},
-    {id: "rides", label: "Rides", icon: "meter", href: "#",
+    {id: "home", label: "Home", icon: "house", href: "#"},
+    {id: "rides", label: "Rides", icon: "gauge", href: "#",
       badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")},
     {id: "me", label: "Profile", icon: "user", href: "#"}]}),
   // A `flat` é o padrão, e é a de 3 dos 4 aplicativos medidos. O item do meio leva o contador
   // como PONTO (`badge: ""`), que é como YouTube e WhatsApp dizem "tem coisa nova".
   h(A.BottomNav, {key: "bnavf", variant: "edge", label: "Skin bottom edge", current: "rides",
-    items: [{id: "home", label: "Home", icon: "home", href: "#"},
-      {id: "rides", label: "Rides", icon: "meter", href: "#", badge: ""},
+    items: [{id: "home", label: "Home", icon: "house", href: "#"},
+      {id: "rides", label: "Rides", icon: "gauge", href: "#", badge: ""},
       {id: "me", label: "Profile", icon: "user", href: "#"}]}),
   // As duas variantes de pílula. Elas entram porque a promessa delas é de PELE: barra em pílula
   // e item atual PREENCHIDO. Sem regra, as três variantes desenham igual e a prop vira enfeite —
@@ -168,12 +168,12 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   // O acessório vai no item ATUAL de propósito: é ali que ele cai em cima do amarelo, e é o
   // caso que o Victor achou invisível em 17/08/2026.
   h(A.BottomNav, {key: "bnavp", indicator: "pill", label: "Skin bottom pill", current: "rides",
-    items: [{id: "home", label: "Home", icon: "home", href: "#"},
-      {id: "rides", label: "Rides", icon: "meter", href: "#",
+    items: [{id: "home", label: "Home", icon: "house", href: "#"},
+      {id: "rides", label: "Rides", icon: "gauge", href: "#",
         badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")}]}),
   h(A.BottomNav, {key: "bnavd", indicator: "circle-bold", label: "Skin bottom bold", current: "rides",
-    items: [{id: "home", label: "Home", icon: "home", href: "#"},
-      {id: "rides", label: "Rides", icon: "meter", href: "#",
+    items: [{id: "home", label: "Home", icon: "house", href: "#"},
+      {id: "rides", label: "Rides", icon: "gauge", href: "#",
         badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")}]}),
   // ── A RÉGUA (18/08/2026) ─────────────────────────────────────────────────────────────
   // DOIS casos de vertical, e o segundo é o que engana. No flex row ela tem `align-self:stretch` e
@@ -205,8 +205,8 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
       // O rótulo longo é o item do teste: com o `min-width:0` ausente ele empurraria o valor e a
       // seta para fora da linha em vez de reticenciar.
       {id: "alerts", label: "Notifications and delivery preferences", description: "Push, email",
-        icon: "notification", value: h(A.Badge, {size: "xs"}, "4"), href: "#"},
-      {id: "beta", label: "Beta features", description: "Not on your plan", icon: "flash",
+        icon: "bell", value: h(A.Badge, {size: "xs"}, "4"), href: "#"},
+      {id: "beta", label: "Beta features", description: "Not on your plan", icon: "lightning",
         disabled: true}]}))),
   // O DEFEITO ANTIGO que a barra inferior desenterrou: acessório sobre a MARCA. Um badge
   // primário dentro de um botão primário media contraste 1 (amarelo sobre amarelo, invisível)
@@ -269,14 +269,14 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.MultiCombobox, {key: "mc", label: "Tags", items: [{value: "a", label: "A"}], defaultValue: ["a"]}),
     h(A.FileInput, {key: "fi", label: "Files"}),
     // ── Ações ──────────────────────────────────────────────────────────────────────────
-    h(A.IconButton, {key: "ib", icon: "add", label: "Add"}),
+    h(A.IconButton, {key: "ib", icon: "plus", label: "Add"}),
     h(A.ButtonGroup, {key: "bg"}, h(A.Button, {key: 1}, "One"), h(A.Button, {key: 2}, "Two")),
     h(A.Toolbar, {key: "tb", label: "Skin"},
       h(A.ToolbarGroup, {key: "g", label: "Edit"},
-        h(A.ToolbarButton, {key: 1, icon: "add", label: "Add"}),
+        h(A.ToolbarButton, {key: 1, icon: "plus", label: "Add"}),
         h(A.ToolbarButton, {key: 2, icon: "copy", label: "Copy"})),
       h(A.ToolbarSeparator, {key: "s"}),
-      h(A.ToolbarButton, {key: 3, icon: "trash-can", label: "Delete"})),
+      h(A.ToolbarButton, {key: 3, icon: "trash", label: "Delete"})),
     h(A.Pagination, {key: "pn", page: 2, total: 5, onPageChange: () => {}}),
     // ── Dados e navegação ──────────────────────────────────────────────────────────────
     h(A.Table, {key: "tbl", caption: "Runs"},
@@ -333,7 +333,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.AgentStatus, {key: "as", state: "running"}),
     h(A.AgentCard, {key: "ac", name: "Curator", model: "opus-5", state: "paused",
       description: "Keeps the library tidy.",
-      capabilities: [{name: "search", icon: "search"}, {name: "summarise"}]}),
+      capabilities: [{name: "search", icon: "magnifying-glass"}, {name: "summarise"}]}),
     h(A.AgentInspector, {key: "ai", title: "Curator",
       sections: [{label: "Configuration", items: [{term: "Model", value: "opus-5"}]}]}),
     // ── Parte H, grupo H.b: a execução ─────────────────────────────────────────────────
@@ -454,7 +454,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // uma segunda pele de lista, e que a linha tem as tres colunas (icone, rotulo, atalho).
     h("div", {key: "cmd", className: "menu command-list"},
       h("div", {className: "menu-item command-item"},
-        h(A.Icon, {name: "search"}), h("span", {className: "command-item-label"}, "Go to Button"),
+        h(A.Icon, {name: "magnifying-glass"}), h("span", {className: "command-item-label"}, "Go to Button"),
         h(A.Kbd, null, "K"))),
     // Form: a pele dele e SO empilhamento — sem borda, sem fundo, sem largura. Se crescer, vira
     // uma terceira maneira de fazer layout e briga com Stack e Grid.
@@ -491,7 +491,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
       h("ul", {className: "sortable-list"},
         h("li", {className: "sortable-item", "data-grabbed": ""},
           h("button", {type: "button", className: "sortable-handle", "aria-pressed": "true"},
-            h(A.Icon, {name: "drag--horizontal"})),
+            h(A.Icon, {name: "dots-six"})),
           h("span", {className: "sortable-label"}, "Pego")))),
     // BlockEditor (N1). Herda as duas regras de comportamento da lista ordenável — é o mesmo
     // `useReorder` — e traz uma terceira que é só daqui: `min-width:0` no corpo do bloco. Sem ela
@@ -509,7 +509,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
         h("li", {className: "block-item", "data-grabbed": ""},
           h("div", {className: "block-rail"},
             h("button", {type: "button", className: "block-handle", "aria-pressed": "true"},
-              h(A.Icon, {name: "drag--horizontal"}))),
+              h(A.Icon, {name: "dots-six"}))),
           h("div", {className: "block-body"}, "Pego")))),
     // Prose (L5), e junto dela a PROVA DA TRAVA do item. Os três elementos com `data-fora` são
     // irmãos da prosa, não filhos: se qualquer regra de `.prose` for escrita sem escopo, eles
@@ -1544,7 +1544,7 @@ for (const theme of ["dark", "light"] as const) {
                       // compara com o TOKEN resolvido em vez de adivinhar o nome da fonte na pilha —
                       // foi assim que a primeira versão desta asserção reprovou por engano.
                       // As ASPAS caem junto com o espaço, e isso é do item K1: o Chromium devolve
-                      // `"IBM Plex Mono",…` no estilo computado e o WebKit devolve `IBM Plex Mono,…`.
+                      // `"Atkinson Hyperlegible Mono",…` no estilo computado e o WebKit devolve `Atkinson Hyperlegible Mono,…`.
                       // Normalizar os dois lados mantém o que a asserção quer dizer (é a mono do
                       // sistema, não a de texto) sem cobrar um detalhe de serialização de motor.
                       // As outras quatro comparações de fonte deste arquivo usam `toContain` e já
@@ -1729,8 +1729,8 @@ for (const theme of ["dark", "light"] as const) {
               codigoPaiFs: parseFloat(est(".prose p").fontSize),
               codigoFonte: est(".prose p code").fontFamily,
               // A fonte do token se resolve numa SONDA, pelo mesmo motivo da cor: o valor
-              // computado normaliza as aspas (`IBM Plex Mono, …`) e o texto cru do token não
-              // (`"IBM Plex Mono",…`). Comparar computado com texto de token reprova por
+              // computado normaliza as aspas (`Atkinson Hyperlegible Mono, …`) e o texto cru do token não
+              // (`"Atkinson Hyperlegible Mono",…`). Comparar computado com texto de token reprova por
               // serialização, não por pele — medido em 15/08/2026.
               monoToken: (() => {
                 const sonda = document.createElement("div");
@@ -2389,7 +2389,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.cluster.display, "o Cluster é flex").toBe("flex");
     expect(e.cluster.quebra, "o Cluster QUEBRA — sem isso ele é a fonte mais barata de rolagem lateral")
       .toBe("wrap");
-    expect(e.kbd.fonte, "o Kbd usa a fonte de código").toContain("IBM Plex Mono");
+    expect(e.kbd.fonte, "o Kbd usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
     expect(e.kbd.borda, "o Kbd é uma tecla: tem borda").toBeGreaterThan(0);
 
     // 28. Formulários: hint, erro e rótulo não podem medir a mesma cor — foi o achado A12.
@@ -2455,7 +2455,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.topbar.alt, "e mede --topbar-height").toBe(e.topbar.topbarH);
 
     // 31. Código, comunicação e mídia.
-    expect(e.codeBlock.fonte, "o CodeBlock usa a fonte de código").toContain("IBM Plex Mono");
+    expect(e.codeBlock.fonte, "o CodeBlock usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
     expect(e.codeBlock.over, "código longo rola dentro do bloco em vez de esticar a página")
       .toBe("auto");
     expect(e.codeBlock.botaoPos, "o botão de copiar flutua sobre o código").toBe("absolute");
@@ -2474,7 +2474,7 @@ for (const theme of ["dark", "light"] as const) {
       .toBeGreaterThan(200);
     expect(e.log.erroCor, "o nível `error` tem de PINTAR — era a mesma cor da linha normal")
       .not.toBe(e.log.normalCor);
-    expect(e.log.fonte, "o log usa a fonte de código").toContain("IBM Plex Mono");
+    expect(e.log.fonte, "o log usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
     expect(e.mensagem.balaoRaio, "o balão de mensagem tem cápsula própria").toBeGreaterThan(0);
     expect(e.mensagem.balaoBg, "e superfície própria, senão a mensagem some no fundo")
       .not.toBe("rgba(0, 0, 0, 0)");
@@ -2859,7 +2859,7 @@ const BOTAO_TEMA = renderToStaticMarkup(h(A.ThemeToggle, null));
 for (const theme of ["dark", "light"] as const) {
   test(`pele: ThemeToggle · lua na tinta, sol no amarelo · ${theme}`, async ({page: p, baseURL}) => {
     const url = `${baseURL}/__tema-${theme}`;
-    const sol = BOTAO_TEMA.replace("theme-toggle-moon", "theme-toggle-sun").replace("#i-asleep--filled", "#i-light--filled");
+    const sol = BOTAO_TEMA.replace("theme-toggle-moon", "theme-toggle-sun").replace("#i-moon", "#i-sun");
     await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
       body: `<!doctype html><html data-theme="${theme}"><head>
         <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
@@ -2883,7 +2883,7 @@ for (const theme of ["dark", "light"] as const) {
 // medidos. Fora dos indicadores redondos a moldura fica da altura do ícone e o vão é `--space-05`.
 // A entrada tem de exercitar os DOIS lados: um indicador que encolhe e um redondo que não pode.
 const ITENS_DA_BARRA = [
-  {id: "a", label: "Início", icon: "home"}, {id: "b", label: "Relatórios", icon: "chart--line"},
+  {id: "a", label: "Início", icon: "house"}, {id: "b", label: "Relatórios", icon: "chart-line"},
   {id: "c", label: "Gastos", icon: "wallet"}, {id: "d", label: "Perfil", icon: "user"},
 ] as never;
 for (const theme of ["dark", "light"] as const) {

@@ -10,7 +10,7 @@
       "vertical"
     ]
   },
-  "icon": "meter",
+  "icon": "gauge",
   "platforms": {
     "web": "stable",
     "native": "planned"

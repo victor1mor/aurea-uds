@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Represents a user or entity with image or initials.",
-  "icon": "user--avatar",
+  "icon": "user-circle",
   "platforms": {
     "web": "stable",
     "native": "planned"

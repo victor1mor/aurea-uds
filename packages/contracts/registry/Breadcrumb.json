@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Trail showing the current location in a hierarchy.",
-  "icon": "folder--tree",
+  "icon": "tree-view",
   "platforms": {
     "web": "stable",
     "native": "planned"

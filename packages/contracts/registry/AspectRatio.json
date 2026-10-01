@@ -4,7 +4,7 @@
   "layer": "Primitive",
   "maturity": "Ready",
   "summary": "A box that keeps its proportion, whatever the width.",
-  "icon": "zoom--fit",
+  "icon": "arrows-in-simple",
   "platforms": {
     "web": "stable",
     "native": "planned"

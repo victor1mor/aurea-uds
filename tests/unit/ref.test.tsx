@@ -37,7 +37,7 @@ const CASOS: Array<[string, () => React.ReactElement, React.RefObject<any>, stri
   add("Alert", "DIV", r => <Alert ref={r} variant="info" title="Oi">texto</Alert>);
   add("Banner", "DIV", r => <Banner ref={r} title="Oi">texto</Banner>);
   add("Button", "BUTTON", r => <Button ref={r}>ok</Button>);
-  add("IconButton", "BUTTON", r => <IconButton ref={r} label="Fechar" icon="close" />);
+  add("IconButton", "BUTTON", r => <IconButton ref={r} label="Fechar" icon="x" />);
   add("Input", "INPUT", r => <Input ref={r} />);
   add("Range", "INPUT", r => <Range ref={r} />);
   add("Select", "BUTTON", r => <Select ref={r}><option>a</option></Select>);   // o gatilho, desde 24/09/2026

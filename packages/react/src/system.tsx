@@ -157,18 +157,23 @@ function AureaToastViewport(){
   return <BaseToast.Portal container={portal}><BaseToast.Viewport className="toast-stack"><AureaToastList/></BaseToast.Viewport></BaseToast.Portal>;
 }
 
-// A-04: o nome é checado pelo TypeScript. A lista é GERADA do mesmo @carbon/icons que monta o
-// sprite (`packages/icons/build-icons.mjs`); nome próprio do app entra por `AureaIconNames`.
-export type {IconName,CarbonIconName,AureaIconNames} from "./icon-names.js";
-import type {IconName} from "./icon-names.js";
+// A-04: o nome é checado pelo TypeScript. A lista é GERADA do mesmo @phosphor-icons/core que monta
+// o sprite (`packages/icons/build-icons.mjs`, ADR-0053); nome próprio do app entra por `AureaIconNames`.
+export type {IconName,PhosphorIconName,AureaIconNames,IconWeight} from "./icon-names.js";
+import {NOMES_PHOSPHOR,type IconName,type IconWeight} from "./icon-names.js";
 // A escala de GLIFO é própria (`--icon-*`) e começa em `sm`: não existe `--icon-xs`. Emitir um
 // degrau `xs` aqui seria desenhar por simetria com o botão, e a medição de 22/08 mostrou que as
 // duas escalas nem sequer reagem à densidade do mesmo jeito.
 export type IconSize="sm"|"md"|"lg"|"xl";
-export interface IconProps extends React.SVGAttributes<SVGSVGElement>{name:IconName;spriteUrl?:string;size?:Responsive<IconSize>}
+export interface IconProps extends React.SVGAttributes<SVGSVGElement>{name:IconName;spriteUrl?:string;size?:Responsive<IconSize>;
+  /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
+  weight?:IconWeight}
 // spriteUrl aqui é OVERRIDE local (dois sprites na mesma página, por exemplo). O normal é
 // não passar nada e deixar o AureaProvider dizer de onde vêm os glifos.
-export function Icon({name,spriteUrl,size,className,...props}:IconProps){const base=useSpriteUrl();return <svg aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}><use href={`${spriteUrl??base}#i-${name}`}/></svg>}
+// A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
+// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
+const idDoIcone=(name:string,weight:IconWeight="regular")=>weight==="fill"&&NOMES_PHOSPHOR.has(name)?`i-${name}-fill`:`i-${name}`;
+export function Icon({name,spriteUrl,size,weight,className,...props}:IconProps){const base=useSpriteUrl();return <svg aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}><use href={`${spriteUrl??base}#${idDoIcone(name,weight)}`}/></svg>}
 
 // "nav" = item de navegação; marque o atual com aria-current="page" (texto amarelo +
 // traço embaixo, e o leitor de tela anuncia a página atual). Ver .btn-nav no core.

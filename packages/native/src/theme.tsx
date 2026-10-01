@@ -71,8 +71,9 @@ export type AureaProviderProps = {
    */
   defaultDensity?: AureaDensity;
   /**
-   * O mapa `papel -> peso -> família` que faz o texto sair no IBM Plex. Sem ele, o tema devolve a
-   * família PEDIDA ("IBM Plex Sans"), que no aparelho vira fonte de sistema para todo peso que
+   * O mapa `papel -> peso -> família` que faz o texto sair na Atkinson Hyperlegible. Sem ele, o
+   * tema devolve a família PEDIDA ("Atkinson Hyperlegible Next"), que no aparelho vira fonte de
+   * sistema para todo peso que
    * não seja Regular/Italic/Bold — **medido na tabela `name` dos .ttf**: Medium e SemiBold são
    * famílias próprias, não pesos da mesma família (ADR-0039).
    *
@@ -88,8 +89,8 @@ export type AureaProviderProps = {
    * O registro de ícones que `<Icon name>` e os botões consultam. Montado pelo app com o que ele
    * usa — **nunca** o mapa dos 2571, que anularia a poda (ADR-0038, cláusula 4).
    *
-   *     import Add from "@aurea-uds/native/icons/add";
-   *     const ICONES = criarRegistroDeIcones({add: Add});
+   *     import Add from "@aurea-uds/native/icons/plus";
+   *     const ICONES = criarRegistroDeIcones({"plus": Add});
    *     <AureaProvider icons={ICONES}>
    */
   icons?: AureaIconRegistry;

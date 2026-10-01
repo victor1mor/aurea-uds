@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Prominent message spanning a wide region.",
-  "icon": "notification",
+  "icon": "bell",
   "platforms": {
     "web": "stable",
     "native": "planned"

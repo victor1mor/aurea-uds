@@ -34,7 +34,7 @@ export default [
     code: `<AppShell
   brand={<strong>Acme</strong>}
   navigation={<nav aria-label="Sections"><a href="/inbox" aria-current="page">Inbox</a><a href="/archive">Archive</a></nav>}
-  topbar={<><IconButton icon="notification" label="Notifications" /><Button variant="primary" size="sm">New</Button></>}
+  topbar={<><IconButton icon="bell" label="Notifications" /><Button variant="primary" size="sm">New</Button></>}
 >
   <h1>Inbox</h1>
   <p>Nothing needs your attention.</p>
@@ -43,7 +43,7 @@ export default [
       brand: h("strong", null, "Acme"),
       navigation: nav(["Inbox", true], ["Archive"], ["Settings"]),
       topbar: h("div", {style: {display: "flex", gap: "var(--space-2)", alignItems: "center"}},
-        h(A.IconButton, {icon: "notification", label: "Notifications"}),
+        h(A.IconButton, {icon: "bell", label: "Notifications"}),
         h(A.Button, {variant: "primary", size: "sm"}, "New")),
     }, h("h1", null, "Inbox"), h("p", {className: "muted"}, "Nothing needs your attention.")),
   },

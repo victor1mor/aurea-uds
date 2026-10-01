@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "In-page index of a document's sections. Sticky beside the content, marks the section in view.",
-  "icon": "list",
+  "icon": "list-bullets",
   "platforms": {
     "web": "stable",
     "native": "planned"

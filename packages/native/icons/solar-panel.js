@@ -1,15 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function SolarPanel({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M30,26V14H13V26h5v2H2v2H30V28H25V26Zm-5-2V21h3v3Zm-2-3v3H20V21Zm-3-2V16h3v3Zm8,0H25V16h3ZM18,16v3H15V16Zm-3,8V21h3v3Zm8,4H20V26h3Z", fill: color}),
-    React.createElement(Path, {d: "M9.3328,14.981A4,4,0,1,1,16,12H14a2,2,0,1,0-3.3333,1.4907Z", fill: color}),
-    React.createElement(Path, {d: "M11 2H13V6H11z", fill: color}),
-    React.createElement(Path, {d: "M2 11H6V13H2z", fill: color}),
-    React.createElement(Path, {d: "M5.343 4.343H7.343V8.343H5.343z", transform: "rotate(-45 6.343 6.343)", fill: color}),
-    React.createElement(Path, {d: "M16.657 4.343H18.657V8.343H16.657z", transform: "rotate(225 17.657 6.343)", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M32,104a8,8,0,0,1,8-8H56a8,8,0,0,1,0,16H40A8,8,0,0,1,32,104ZM71.43,58.75A8,8,0,0,0,82.75,47.43L71.43,36.12A8,8,0,0,0,60.12,47.43ZM128,40a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V32A8,8,0,0,0,128,40Zm50.91,21.09a8,8,0,0,0,5.66-2.34l11.31-11.32a8,8,0,0,0-11.31-11.31L173.25,47.43a8,8,0,0,0,5.66,13.66ZM192,104a8,8,0,0,0,8,8h16a8,8,0,0,0,0-16H200A8,8,0,0,0,192,104ZM88,112a8,8,0,0,0,8-8,32,32,0,0,1,64,0,8,8,0,0,0,16,0,48,48,0,0,0-96,0A8,8,0,0,0,88,112ZM238.91,220a8,8,0,0,1-6.91,4H24a8,8,0,0,1-7-11.94l40.69-72a8,8,0,0,1,7-4.06H191.3a8,8,0,0,1,7,4.06l40.69,72A8,8,0,0,1,238.91,220Zm-52.27-68H162.27l3.48,16h29.93Zm-37.26,16-3.48-16H110.1l-3.48,16Zm-46.24,16-5.21,24h60.14l-5.21-24ZM60.32,168H90.25l3.48-16H69.36ZM37.71,208H81.55l5.22-24H51.28Zm180.58,0-13.57-24H169.23l5.22,24Z", fill: color})
   );
 }

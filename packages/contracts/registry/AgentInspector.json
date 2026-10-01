@@ -22,7 +22,7 @@
   },
   "name": "AgentInspector",
   "summary": "The detail of one agent: configuration, tools, instructions.",
-  "icon": "settings",
+  "icon": "gear",
   "states": [
     "default",
     "with-sections"

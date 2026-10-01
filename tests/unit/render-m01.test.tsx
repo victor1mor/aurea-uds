@@ -13,7 +13,7 @@ const P = ({children}: {children: React.ReactNode}) => <AureaProvider>{children}
 
 describe("M-01 · Button e IconButton com render", () => {
   it("o Link do roteador vira o botão: pele, conteúdo e destino dele", () => {
-    const {container} = montar(<P><Button render={<Link to="/relatorios" />} leadingIcon="add" tone="brand">Novo</Button></P>);
+    const {container} = montar(<P><Button render={<Link to="/relatorios" />} leadingIcon="plus" tone="brand">Novo</Button></P>);
     const a = container.querySelector("a[data-roteador]") as HTMLAnchorElement;
     expect(a).not.toBeNull();
     expect(a.getAttribute("href")).toBe("/relatorios");
@@ -43,7 +43,7 @@ describe("M-01 · Button e IconButton com render", () => {
     expect(clicou).toHaveBeenCalledTimes(1);
   });
   it("IconButton passa o render adiante, com o nome acessível", () => {
-    const {container} = montar(<P><IconButton icon="add" label="Adicionar" render={<Link to="/novo" />} /></P>);
+    const {container} = montar(<P><IconButton icon="plus" label="Adicionar" render={<Link to="/novo" />} /></P>);
     const a = container.querySelector("a")!;
     expect(a.classList.contains("btn-icon")).toBe(true);
     expect(a.getAttribute("aria-label")).toBe("Adicionar");

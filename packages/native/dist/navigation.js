@@ -151,8 +151,8 @@ const folha = criarFolha((t) => ({
  * <BottomNav
  *   current={aba}
  *   items={[
- *     {id: "painel", label: "Painel", icon: "dashboard", onPress: () => ir("painel")},
- *     {id: "avisos", label: "Avisos", icon: "notification", badge: 8, onPress: () => ir("avisos")},
+ *     {id: "painel", label: "Painel", icon: "squares-four", onPress: () => ir("painel")},
+ *     {id: "avisos", label: "Avisos", icon: "bell", badge: 8, onPress: () => ir("avisos")},
  *   ]} />
  * ```
  *
@@ -279,7 +279,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                             ativo && indicator === "circle-outline" && {
                                 borderWidth: t.size.borderWidth, borderColor: t.color.primaryEmphasis,
                             },
-                        ], children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", color: corDoTexto }), it.badge != null && it.badge !== false && (_jsx(View, { style: s.contador, children: typeof it.badge === "number"
+                        ], children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", color: corDoTexto, weight: ativo ? "fill" : undefined }), it.badge != null && it.badge !== false && (_jsx(View, { style: s.contador, children: typeof it.badge === "number"
                                     ? _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", count: it.badge })
                                     : _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", dot: true }) }))] }), typeof it.label === "string"
                         ? _jsx(Text, { size: "xs", weight: ativo ? 500 : 400, numberOfLines: 1, style: { color: corDoTexto }, children: it.label })
@@ -322,7 +322,7 @@ export function Topbar({ variant = "floating", inset = "bar", brand, children, s
  * ⚠ **Linha indisponível continua ALCANÇÁVEL pelo leitor de tela** (`accessibilityState.disabled`,
  * não sumir da árvore): quem usa leitor precisa descobrir que ela existe.
  */
-export function NavList({ items, chevron = "chevron--right", style, ...rest }) {
+export function NavList({ items, chevron = "caret-right", style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     return (_jsx(View, { accessibilityRole: "list", style: [s.lista, style], ...rest, children: items.map((it) => {
@@ -360,7 +360,7 @@ export function NavList({ items, chevron = "chevron--right", style, ...rest }) {
  * próximo é `accessibilityState={{selected}}`, que é o que os leitores anunciam. Não é o mesmo
  * vocabulário — é o vocabulário que existe, e dizer isso é melhor que fingir paridade.
  */
-export function Stepper({ items, label, doneIcon = "checkmark", errorIcon = "error", style, ...rest }) {
+export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circle", style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();

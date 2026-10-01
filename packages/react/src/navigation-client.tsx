@@ -38,7 +38,7 @@ export function Stepper({items,label,className}:{items:StepItem[];label?:string;
 const s=useAureaStrings();
 return <div role="list" aria-label={label??s.stepperLabel} className={cx("stepper",className)}>
 {items.map((it,n)=>{const st=it.state??"default";
-const marca=st==="done"?<Icon name="checkmark"/>:st==="error"?<Icon name="error"/>:n+1;
+const marca=st==="done"?<Icon name="check"/>:st==="error"?<Icon name="x-circle"/>:n+1;
 const miolo=<><span className="step-dot">{marca}</span><strong>{it.label}</strong>{it.optional&&<small className="step-optional">{it.optional}</small>}</>;
 return <div key={n} role="listitem" className={cx("step",st!=="default"&&`step-${st}`)} aria-current={st==="active"?"step":undefined}>
 {it.onClick?<button type="button" className="step-trigger" onClick={it.onClick}>{miolo}</button>:miolo}
@@ -50,7 +50,7 @@ return <div key={n} role="listitem" className={cx("step",st!=="default"&&`step-$
 // traz o destino é o elemento, e o `href` do item fica sem uso. Decisão do Victor: `render` só no
 // `Button`, no `IconButton` e nos itens de navegação — onde o app precisa do roteador.
 export interface BreadcrumbItem{label:ReactNode;href?:string;render?:ReactElement}
-export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name="chevron--right" size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
+export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name="caret-right" size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
 // ── REPORTADO no merge de 28/08/2026 ────────────────────────────────────────────────────────
 // `orientation`, `activateOnFocus` e `loopFocus` estavam na outra linhagem e sumiram quando este
 // arquivo entrou inteiro da `main` — ele não existia lá e por isso não deu conflito nenhum. A
@@ -196,7 +196,7 @@ export function TreeView({items,defaultExpandedIds,onSelect,label,className}:{it
         return <li key={node.id} className="tree-item" role="treeitem" data-tree-id={node.id} aria-level={level} aria-expanded={hasChildren?isOpen:undefined} aria-selected={isSelected} aria-labelledby={labelId} tabIndex={node.id===effectiveActive?0:-1}>
           <span className="tree-node" data-selected={isSelected||undefined} style={{paddingInlineStart:`calc(var(--space-3) + ${level-1} * var(--space-4))`}}
             onClick={()=>{focusId(node.id);select(node);if(hasChildren)toggle(node.id,!isOpen)}}>
-            {hasChildren?<Icon name="chevron--right" size="sm" className="tree-twist"/>:<span className="tree-indent" aria-hidden="true"/>}
+            {hasChildren?<Icon name="caret-right" size="sm" className="tree-twist"/>:<span className="tree-indent" aria-hidden="true"/>}
             {node.icon&&<Icon name={node.icon} size="sm"/>}
             <span id={labelId} className="tree-label">{node.label}</span>
           </span>
@@ -251,7 +251,8 @@ if(filhos&&!it.href&&!it.onClick&&!it.render)return <li key={it.id}>
 {sidebarList(filhos,ctx,false,lid)}
 </li>;
 const ativo=it.id===ctx.current;
-const miolo=<>{it.icon&&<Icon name={it.icon}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
+// O item escolhido desenha o ícone CHEIO (ADR-0053).
+const miolo=<>{it.icon&&<Icon name={it.icon} weight={ativo?"fill":undefined}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
 const alvo=it.render
 ?fundirRender(it.render,{id:lid,className:"sidebar-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")
 :it.href
@@ -368,8 +369,9 @@ const ativo=it.id===current;
 // texto. A caixa é o que dá ao contador um canto para se ancorar — e nos quatro indicadores
 // redondos é ela que VIRA o círculo, com o rótulo embaixo, fora dele.
 // `size="lg"` porque a proporção contra o contador foi medida: 24 para 16, razão 0,67.
+// O item escolhido desenha o ícone CHEIO (ADR-0053).
 const marca=<span className="bottom-nav-mark">
-{it.icon&&<Icon name={it.icon} size="lg"/>}
+{it.icon&&<Icon name={it.icon} size="lg" weight={ativo?"fill":undefined}/>}
 {it.badge!=null&&<span className="bottom-nav-badge">{it.badge}</span>}
 </span>;
 const miolo=<>{marca}<span className="bottom-nav-label">{it.label}</span></>;
@@ -430,7 +432,7 @@ const miolo=<>
 {it.description!=null&&<span className="nav-list-description">{it.description}</span>}
 </span>
 {it.value!=null&&<span className="nav-list-value">{it.value}</span>}
-{(it.href||it.render)&&<Icon name="chevron--right" size="sm" className="nav-list-chevron"/>}
+{(it.href||it.render)&&<Icon name="caret-right" size="sm" className="nav-list-chevron"/>}
 </>;
 return <li key={it.id}>{it.render&&!it.disabled
 ?fundirRender(it.render,{className:"nav-list-row",onClick:it.onClick,children:miolo},"a")

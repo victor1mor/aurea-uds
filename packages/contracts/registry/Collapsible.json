@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Ready",
   "summary": "One section that opens and closes, with the open state owned by the app.",
-  "icon": "chevron--down",
+  "icon": "caret-down",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Scannable QR code rendered as a styled SVG with Aurea soft geometry.",
-  "icon": "grid",
+  "icon": "grid-four",
   "platforms": {
     "web": "stable",
     "native": "planned"

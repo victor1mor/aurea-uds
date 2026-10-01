@@ -36,8 +36,8 @@ export interface BottomNavProps extends ViewProps {
  * <BottomNav
  *   current={aba}
  *   items={[
- *     {id: "painel", label: "Painel", icon: "dashboard", onPress: () => ir("painel")},
- *     {id: "avisos", label: "Avisos", icon: "notification", badge: 8, onPress: () => ir("avisos")},
+ *     {id: "painel", label: "Painel", icon: "squares-four", onPress: () => ir("painel")},
+ *     {id: "avisos", label: "Avisos", icon: "bell", badge: 8, onPress: () => ir("avisos")},
  *   ]} />
  * ```
  *

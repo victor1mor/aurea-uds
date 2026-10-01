@@ -12,9 +12,9 @@ export default [
     uses: ["Topbar", "IconButton"],
     code: `<Topbar brand={<strong>Aurea UDS</strong>}>
   <SearchField aria-label="Search" placeholder="Search…" />
-  <IconButton icon="light" label="Switch to light" onClick={toggleTheme} />
+  <IconButton icon="sun" label="Switch to light" onClick={toggleTheme} />
 </Topbar>`,
     render: () => h("div", {style: {width: "100%"}}, h(A.Topbar, {brand: h("strong", null, "Aurea UDS")},
-      h(A.IconButton, {icon: "light", label: "Switch to light"}))),
+      h(A.IconButton, {icon: "sun", label: "Switch to light"}))),
   },
 ];

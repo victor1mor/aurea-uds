@@ -37,12 +37,12 @@ export default {
       title: "With icons",
       description: "Glyph plus word: in a dense bar the icon speeds the scan and the label keeps the meaning.",
       code: [
-        '<ToolbarButton leadingIcon="undo">Undo</ToolbarButton>',
-        '<ToolbarButton leadingIcon="redo">Redo</ToolbarButton>',
+        '<ToolbarButton leadingIcon="arrow-counter-clockwise">Undo</ToolbarButton>',
+        '<ToolbarButton leadingIcon="arrow-clockwise">Redo</ToolbarButton>',
       ].join("\n"),
       render: () => h(Toolbar, {label: "History"},
-        h(ToolbarButton, {leadingIcon: "undo"}, "Undo"),
-        h(ToolbarButton, {leadingIcon: "redo"}, "Redo")),
+        h(ToolbarButton, {leadingIcon: "arrow-counter-clockwise"}, "Undo"),
+        h(ToolbarButton, {leadingIcon: "arrow-clockwise"}, "Redo")),
     },
     {
       title: "A destructive action in the bar",
@@ -50,12 +50,12 @@ export default {
       code: [
         '<ToolbarButton>Duplicate</ToolbarButton>',
         '<ToolbarSeparator />',
-        '<ToolbarButton variant="danger-ghost" leadingIcon="trash-can">Delete</ToolbarButton>',
+        '<ToolbarButton variant="danger-ghost" leadingIcon="trash">Delete</ToolbarButton>',
       ].join("\n"),
       render: () => h(Toolbar, {label: "Row"},
         h(ToolbarButton, null, "Duplicate"),
         h(ToolbarSeparator),
-        h(ToolbarButton, {variant: "danger-ghost", leadingIcon: "trash-can"}, "Delete")),
+        h(ToolbarButton, {variant: "danger-ghost", leadingIcon: "trash"}, "Delete")),
     },
   ],
 };

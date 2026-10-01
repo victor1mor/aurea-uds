@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Container of actions with roving-tabindex keyboard navigation.",
-  "icon": "settings",
+  "icon": "gear",
   "platforms": {
     "web": "stable",
     "native": "planned"

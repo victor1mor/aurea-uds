@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Modal surface that interrupts for a focused task.",
-  "icon": "maximize",
+  "icon": "arrows-out",
   "platforms": {
     "web": "stable",
     "native": "planned"

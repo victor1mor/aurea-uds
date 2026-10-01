@@ -11,10 +11,6 @@ packages:
   # `watchFolders` no Metro, e uma falha de configuracao do bundler nao ensina nada sobre a
   # fundacao nativa — que e' a unica coisa que aquele app existe para medir.
   - '!apps/native-smoke'
-allowBuilds:
-  # false de propósito: o postinstall do @carbon/icons é `ibmtelemetry` (liga
-  # pra IBM no install). Só lemos os SVGs — o build dele não é necessário.
-  '@carbon/icons': false
 
 overrides:
   # CVE GHSA-4cwx-7wf7-3272 (alto): undici >=7.0.0 <7.29.0 vaza informacao entre

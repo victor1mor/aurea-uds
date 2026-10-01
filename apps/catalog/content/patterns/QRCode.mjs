@@ -22,7 +22,7 @@ export default [
     code: '<QRCode value="https://aureauds.dev" />\n<Button variant="outline" leadingIcon="download">Download</Button>',
     render: () => h("div", {style: col},
       h(QRCode, {value: "https://aureauds.dev", label: "Aurea UDS site"}),
-      h(Button, {variant: "outline", leadingIcon: "add"}, "Download")),
+      h(Button, {variant: "outline", leadingIcon: "plus"}, "Download")),
   },
   {
     variant: "Rounded",

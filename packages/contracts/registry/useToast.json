@@ -5,7 +5,7 @@
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Raise a transient notification from anywhere inside AureaProvider.",
-  "icon": "notification",
+  "icon": "bell",
   "platforms": {
     "web": "stable",
     "native": "planned"

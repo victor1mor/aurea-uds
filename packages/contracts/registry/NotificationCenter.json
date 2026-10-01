@@ -4,7 +4,7 @@
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Inbox surface aggregating notifications.",
-  "icon": "notification--new",
+  "icon": "bell-ringing",
   "platforms": {
     "web": "stable",
     "native": "planned"

@@ -1,23 +1,10 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
-// Glifo do @carbon/icons (IBM Corp., Apache-2.0) — ver NOTICE. Desenho copiado sem alteração.
+// Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 import * as React from "react";
 import Svg, {Path} from "react-native-svg";
 
 export default function QrCode({size = 32, color = "#000000", ...rest}) {
-  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 32 32", ...rest},
-    React.createElement(Path, {d: "M24 26H26V28H24z", transform: "rotate(-90 25 27)", fill: color}),
-    React.createElement(Path, {d: "M18 22H20V24H18z", transform: "rotate(-90 19 23)", fill: color}),
-    React.createElement(Path, {d: "M18 30 22 30 22 28 20 28 20 26 18 26 18 30z", fill: color}),
-    React.createElement(Path, {d: "M25 23H29V25H25z", transform: "rotate(-90 27 24)", fill: color}),
-    React.createElement(Path, {d: "M28 26 30 26 30 30 26 30 26 28 28 28 28 26z", fill: color}),
-    React.createElement(Path, {d: "M26 20 26 18 30 18 30 22 28 22 28 20 26 20z", fill: color}),
-    React.createElement(Path, {d: "M24 20 22 20 22 24 20 24 20 26 24 26 24 20z", fill: color}),
-    React.createElement(Path, {d: "M19 17H21V21H19z", transform: "rotate(-90 20 19)", fill: color}),
-    React.createElement(Path, {d: "M6 22H10V26H6z", fill: color}),
-    React.createElement(Path, {d: "M14,30H2V18H14ZM4,28h8V20H4Z", fill: color}),
-    React.createElement(Path, {d: "M22 6H26V10H22z", fill: color}),
-    React.createElement(Path, {d: "M30,14H18V2H30ZM20,12h8V4H20Z", fill: color}),
-    React.createElement(Path, {d: "M6 6H10V10H6z", fill: color}),
-    React.createElement(Path, {d: "M14,14H2V2H14ZM4,12h8V4H4Z", fill: color})
+  return React.createElement(Svg, {width: size, height: size, viewBox: "0 0 256 256", ...rest},
+    React.createElement(Path, {d: "M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm0,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48ZM200,40H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-64,72V144a8,8,0,0,1,16,0v32a8,8,0,0,1-16,0Zm80-16a8,8,0,0,1-8,8H184v40a8,8,0,0,1-8,8H144a8,8,0,0,1,0-16h24V144a8,8,0,0,1,16,0v8h24A8,8,0,0,1,216,160Zm0,32v16a8,8,0,0,1-16,0V192a8,8,0,0,1,16,0Z", fill: color})
   );
 }

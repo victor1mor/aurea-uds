@@ -50,7 +50,7 @@ describe("criarFolha — a lição que o aparelho ensinou", () => {
 
 describe("Text — a primitiva que a web não precisou ter", () => {
   // DEFEITO SILENCIOSO, e é o que a ADR-0039 existe para impedir: escolher o peso por
-  // `fontWeight`. No IBM Plex o SemiBold é FAMÍLIA própria — `fontWeight:"600"` devolveria o
+  // `fontWeight`. Na Atkinson Hyperlegible (como na IBM Plex) o SemiBold é FAMÍLIA própria — `fontWeight:"600"` devolveria o
   // Regular sintetizado, e a tela pareceria quase certa.
   it("escolhe o peso por fontFamily, e NUNCA emite fontWeight", () => {
     const mapa = {
@@ -134,7 +134,7 @@ describe("layout", () => {
 });
 
 const ICONES = criarRegistroDeIcones({
-  add: ({size, color}: {size?: number; color?: string}) =>
+  "plus": ({size, color}: {size?: number; color?: string}) =>
     React.createElement("Svg", {testID: "glifo", width: size, fill: color}),
 });
 
@@ -171,11 +171,11 @@ describe("Icon — o registro que o app monta", () => {
   // DEFEITO: o ícone decorativo ser anunciado pelo leitor de tela junto com o texto ao lado —
   // a mesma coisa dita duas vezes.
   it("sem label é decorativo; com label vira imagem anunciada", () => {
-    const {unmount} = render(<Envolve><Icon name="add" icons={ICONES} /></Envolve>);
+    const {unmount} = render(<Envolve><Icon name="plus" icons={ICONES} /></Envolve>);
     expect(props("View").importantForAccessibility).toBe("no-hide-descendants");
     expect(props("View").accessibilityLabel).toBeUndefined();
     unmount();
-    render(<Envolve><Icon name="add" icons={ICONES} label="Adicionar" /></Envolve>);
+    render(<Envolve><Icon name="plus" icons={ICONES} label="Adicionar" /></Envolve>);
     expect(props("View", 1).accessibilityLabel).toBe("Adicionar");
     expect(props("View", 1).accessibilityRole).toBe("image");
   });
@@ -189,7 +189,7 @@ describe("IconRegistryProvider", () => {
     render(
       <AureaProvider>
         <IconRegistryProvider registry={ICONES}>
-          <Icon name="add" label="Adicionar" />
+          <Icon name="plus" label="Adicionar" />
         </IconRegistryProvider>
       </AureaProvider>);
     expect(props("View").accessibilityLabel).toBe("Adicionar");
@@ -242,7 +242,7 @@ describe("Button e IconButton", () => {
   // DEFEITO: um botão só de glifo sem rótulo — mudo para quem não o vê. O tipo torna `label`
   // obrigatório, e este teste prova que ele chega ao leitor de tela.
   it("IconButton leva o rótulo obrigatório para a acessibilidade", () => {
-    render(<Envolve><IconButton name="add" label="Adicionar" icons={ICONES} /></Envolve>);
+    render(<Envolve><IconButton name="plus" label="Adicionar" icons={ICONES} /></Envolve>);
     expect(props("Pressable").accessibilityLabel).toBe("Adicionar");
     expect(props("Pressable").accessibilityRole).toBe("button");
   });
@@ -251,7 +251,7 @@ describe("Button e IconButton", () => {
   // cápsula, como o `.btn-icon` do core. Até a 0.10.1 era `radiusMd`/`radiusSm`, e este teste
   // cobrava o contrário — ele reprova no código antigo.
   it.each(["xs", "sm", "md", "lg", "xl"] as const)("IconButton %s é redondo: quadrado com o raio da cápsula", (size) => {
-    render(<Envolve><IconButton name="add" label="a" size={size} icons={ICONES} /></Envolve>);
+    render(<Envolve><IconButton name="plus" label="a" size={size} icons={ICONES} /></Envolve>);
     const caixa = estilo("View");
     expect(caixa.borderRadius).toBe(tokens.size.radiusControl);
     expect(caixa.width).toBe(caixa.height);

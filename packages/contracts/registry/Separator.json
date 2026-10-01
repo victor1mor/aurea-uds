@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "A rule between things. Horizontal or vertical, one hairline in the border colour — the thing a sidebar uses between sections and a toolbar uses between groups.",
-  "icon": "subtract",
+  "icon": "minus",
   "platforms": {
     "web": "stable",
     "native": "planned"

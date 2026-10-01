@@ -4,7 +4,7 @@
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Reorder by dragging — and by keyboard, which is the reason it may exist at all.",
-  "icon": "drag--horizontal",
+  "icon": "dots-six",
   "platforms": {
     "web": "stable",
     "native": "planned"

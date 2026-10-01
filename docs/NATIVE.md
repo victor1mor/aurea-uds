@@ -4,6 +4,11 @@
 - **Estado:** nasceu como **proposta**; em 15/08/2026 o Victor autorizou e fechou as **Etapas 1,
   2 e 3** ([ADR-0027](../decisions/0027-a-cor-no-alvo-nativo.md) ·
   [ADR-0028](../decisions/0028-unistyles-como-motor-de-estilo-nativo.md)).
+⚠ **01/10/2026 — ADR-0053:** a fonte passou a ser a **Atkinson Hyperlegible Next e Mono** e os ícones
+o **Phosphor** (regular e `-fill`). As menções à IBM Plex e ao Carbon abaixo são **registro** do
+Lote 0 e do que se mediu na época; o que vale hoje está na ADR, no `packages/fonts/README.md` e no
+`packages/native/README.md` (seção "Ícones").
+
 🔴 **AS TRÊS LINHAS QUE VINHAM AQUI ESTAVAM TODAS FALSAS, e ficaram falsas por onze dias.** Elas
 diziam *"do Lote 1 em diante continua NÃO AUTORIZADO"*, *"o `check 39` reprova se
 `packages/native/src/` ganhar qualquer arquivo além dos três"* e *"nenhuma linha de componente foi
@@ -639,7 +644,7 @@ interface**, como o lote exigia. O que existe agora, e cada número sai de coman
 | | |
 |---|---|
 | `@aurea-uds/fonts/native` | 11 `.ttf` (1,91 MB) + o mapa de nomes **medido** na tabela `name` — [ADR-0039](../decisions/0039-uma-familia-por-peso-no-nativo.md) |
-| `@aurea-uds/native/icons/*` | **2571** ícones sobre `react-native-svg`, gerados do Carbon — ADR-0038 |
+| `@aurea-uds/native/icons/*` | ~~**2571** ícones sobre `react-native-svg`, gerados do Carbon~~ → **1.433 ícones em duas formas (regular e `-fill`)**, gerados do Phosphor desde 01/10/2026 (ADR-0053) — ADR-0038 |
 | `@aurea-uds/native` | `AureaProvider` · `useAureaTheme` · `useAureaTokens` · `resolverTokens` — ADR-0037 |
 | gates novos | **check 37** (fontes) · **38** (ícones) · **39** (o Lote 0 não vira Lote 1 sozinho) |
 | testes | **18** novos, cada um provado contra o defeito que ele pega |

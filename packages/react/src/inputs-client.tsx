@@ -229,7 +229,7 @@ export interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 // `.input-wrap-end` para o botão do PasswordField —, e o grupo é a terceira vez virando uma. O
 // merge das duas linhagens tinha trazido de volta a versão com `.input-wrap`, contra um core
 // que já não a pinta.
-export function SearchField({icon="search",className,size,width,...props}:SearchFieldProps){return <InputGroup className={className} width={width}><InputGroupAddon><Icon name={icon} size={valorBase(size)==="sm"?"sm":undefined}/></InputGroupAddon><Input type="search" size={size} {...props}/></InputGroup>}
+export function SearchField({icon="magnifying-glass",className,size,width,...props}:SearchFieldProps){return <InputGroup className={className} width={width}><InputGroupAddon><Icon name={icon} size={valorBase(size)==="sm"?"sm":undefined}/></InputGroupAddon><Input type="search" size={size} {...props}/></InputGroup>}
 // labelHidden: coluna de seleção de tabela precisa do rótulo POR LINHA para o leitor de
 // tela ("Select Analyst"), mas mostrá-lo engorda a coluna. O rótulo continua no DOM, só
 // sai da tela (.sr-only) — nunca trocar por aria-label solto num <label> visível vazio.
@@ -274,12 +274,12 @@ return <BaseNumberField.Root id={id} name={name} value={value} defaultValue={def
     E o cursor virtual PRECISA de conteúdo: o Pointer Lock esconde o ponteiro do sistema e
     desenha este elemento no lugar; vazio, o arraste fica sem cursor nenhum. */}
 {scrubbable&&<BaseNumberField.ScrubArea className={cx("number-field-scrub",scrubDirection==="vertical"&&"number-field-scrub-vertical")} direction={scrubDirection} aria-hidden="true">
-  <Icon name="draggable" aria-hidden={true}/>
-  <BaseNumberField.ScrubAreaCursor className="number-field-scrub-cursor"><Icon name="draggable" aria-hidden={true}/></BaseNumberField.ScrubAreaCursor>
+  <Icon name="dots-six-vertical" aria-hidden={true}/>
+  <BaseNumberField.ScrubAreaCursor className="number-field-scrub-cursor"><Icon name="dots-six-vertical" aria-hidden={true}/></BaseNumberField.ScrubAreaCursor>
 </BaseNumberField.ScrubArea>}
-<BaseNumberField.Decrement className="btn btn-ghost btn-icon" aria-label={s.decrement}><Icon name="subtract"/></BaseNumberField.Decrement>
+<BaseNumberField.Decrement className="btn btn-ghost btn-icon" aria-label={s.decrement}><Icon name="minus"/></BaseNumberField.Decrement>
 <BaseNumberField.Input className="input number-field-input" aria-label={label}/>
-<BaseNumberField.Increment className="btn btn-ghost btn-icon" aria-label={s.increment}><Icon name="add"/></BaseNumberField.Increment>
+<BaseNumberField.Increment className="btn btn-ghost btn-icon" aria-label={s.increment}><Icon name="plus"/></BaseNumberField.Increment>
 </BaseNumberField.Group></BaseNumberField.Root>}
 
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta
@@ -369,7 +369,7 @@ const ehAgrupado=(items:ComboboxOption[]|ComboboxOptGroup[]):items is ComboboxOp
 // da grade — a de 16px — e quebrava em duas ou três linhas. O invólucro fica montado sempre, como
 // o `.menu-mark` do `Menu` já faz, e o indicador aparece e some DENTRO dele.
 const renderComboboxItem=(item:ComboboxOption)=><BaseCombobox.Item key={item.value} value={item} className="menu-item combobox-item">
-  <span className="combobox-check" aria-hidden="true"><BaseCombobox.ItemIndicator><Icon name="checkmark" size="sm"/></BaseCombobox.ItemIndicator></span>
+  <span className="combobox-check" aria-hidden="true"><BaseCombobox.ItemIndicator><Icon name="check" size="sm"/></BaseCombobox.ItemIndicator></span>
   <span>{item.label}</span>
 </BaseCombobox.Item>;
 const listaCombobox=(items:ComboboxOption[]|ComboboxOptGroup[])=><BaseCombobox.List>
@@ -403,8 +403,8 @@ export function Combobox({items,value,onValueChange,placeholder,label,empty,disa
       <BaseCombobox.InputGroup className="combobox-group">
         <BaseCombobox.Input id={inputId} placeholder={placeholder} className={cx("input",peleDoEixo("input",size))} aria-describedby={descrito} aria-invalid={invalido} aria-label={rotulo}/>
         <span className="combobox-actions">
-          <BaseCombobox.Clear render={<IconButton variant="ghost" size="sm" icon="close" label={s.comboboxClear}/>}/>
-          <BaseCombobox.Trigger render={<IconButton variant="ghost" size="sm" icon="chevron--down" label={s.comboboxOpen}/>}/>
+          <BaseCombobox.Clear render={<IconButton variant="ghost" size="sm" icon="x" label={s.comboboxClear}/>}/>
+          <BaseCombobox.Trigger render={<IconButton variant="ghost" size="sm" icon="caret-down" label={s.comboboxOpen}/>}/>
         </span>
       </BaseCombobox.InputGroup>
     </div>
@@ -441,15 +441,15 @@ export function MultiCombobox({items,value,onValueChange,onInputChange,loading,p
             {(selected:ComboboxOption[])=><>
               {selected.map((item:ComboboxOption)=><BaseCombobox.Chip key={item.value} className="combobox-chip">
                 {item.label}
-                <BaseCombobox.ChipRemove className="combobox-chip-remove" aria-label={`${s.comboboxRemove} ${item.label}`}><Icon name="close" size="sm"/></BaseCombobox.ChipRemove>
+                <BaseCombobox.ChipRemove className="combobox-chip-remove" aria-label={`${s.comboboxRemove} ${item.label}`}><Icon name="x" size="sm"/></BaseCombobox.ChipRemove>
               </BaseCombobox.Chip>)}
               <BaseCombobox.Input id={inputId} placeholder={selected.length?undefined:placeholder} className="combobox-chip-input" aria-describedby={descrito} aria-invalid={invalido} aria-label={rotulo}/>
             </>}
           </BaseCombobox.Value>
         </BaseCombobox.Chips>
         <span className="combobox-actions">
-          <BaseCombobox.Clear render={<IconButton variant="ghost" size="sm" icon="close" label={s.comboboxClear}/>}/>
-          <BaseCombobox.Trigger render={<IconButton variant="ghost" size="sm" icon="chevron--down" label={s.comboboxOpen}/>}/>
+          <BaseCombobox.Clear render={<IconButton variant="ghost" size="sm" icon="x" label={s.comboboxClear}/>}/>
+          <BaseCombobox.Trigger render={<IconButton variant="ghost" size="sm" icon="caret-down" label={s.comboboxOpen}/>}/>
         </span>
       </BaseCombobox.InputGroup>
     </div>
@@ -500,7 +500,7 @@ function opcoesDosFilhos(children:ReactNode):(SelectOption|SelectOptGroup)[]{
   return lista;
 }
 const itemDoSelect=(o:SelectOption)=><BaseSelect.Item key={o.value} value={o.value} disabled={o.disabled} className="menu-item combobox-item">
-  <span className="combobox-check" aria-hidden="true"><BaseSelect.ItemIndicator><Icon name="checkmark" size="sm"/></BaseSelect.ItemIndicator></span>
+  <span className="combobox-check" aria-hidden="true"><BaseSelect.ItemIndicator><Icon name="check" size="sm"/></BaseSelect.ItemIndicator></span>
   <BaseSelect.ItemText>{o.label}</BaseSelect.ItemText>
 </BaseSelect.Item>;
 export const Select=forwardRef<HTMLButtonElement,SelectProps>(function Select({items,children,value,defaultValue,onChange,onValueChange,placeholder,name,required,disabled,size,className,...props},ref){
@@ -595,11 +595,11 @@ export function BlockEditor({blocks,onReorder,onRemove,label,className,...props}
               aria-describedby={`${bid}ajuda`} aria-pressed={r.pego===i}
               onKeyDown={e=>r.teclado(e,i)} onPointerDown={e=>r.ponteiroBaixo(e,i)}
               onPointerMove={r.ponteiroMove} onPointerUp={r.ponteiroSolta} onPointerCancel={r.ponteiroSolta}>
-              <Icon name="drag--horizontal"/><span className="sr-only">{s.sortableHandle}</span>
+              <Icon name="dots-six"/><span className="sr-only">{s.sortableHandle}</span>
             </button>
             {onRemove&&<button type="button" id={rid} className="block-remove" aria-labelledby={`${rid} ${kid}`}
               onClick={()=>onRemove(i)}>
-              <Icon name="trash-can"/><span className="sr-only">{s.blockRemove}</span>
+              <Icon name="trash"/><span className="sr-only">{s.blockRemove}</span>
             </button>}
           </div>
           <div className="block-body">{b.children}</div>
@@ -639,7 +639,7 @@ export function PasswordField({className,size,defaultVisible=false,id,...props}:
     <Input id={campoId} type={visivel?"text":"password"} className={peleDoEixo("input",size)||undefined} autoComplete="current-password" {...props}/>
     <InputGroupAddon side="end" layout="inline">
       <IconButton variant="ghost" size={valorBase(size)==="lg"?"md":"sm"}
-        icon={visivel?"view--off":"view"} label={visivel?s.passwordHide:s.passwordShow}
+        icon={visivel?"eye-slash":"eye"} label={visivel?s.passwordHide:s.passwordShow}
         aria-controls={campoId} onClick={()=>setVisivel(v=>!v)}/>
     </InputGroupAddon>
   </InputGroup>;

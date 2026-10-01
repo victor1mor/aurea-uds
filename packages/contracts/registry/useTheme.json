@@ -5,7 +5,7 @@
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read the current theme and switch it, from anywhere inside AureaProvider.",
-  "icon": "light",
+  "icon": "sun",
   "platforms": {
     "web": "stable",
     "native": "planned"

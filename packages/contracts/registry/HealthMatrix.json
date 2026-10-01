@@ -14,7 +14,7 @@
   },
   "name": "HealthMatrix",
   "summary": "What is up, in a grid.",
-  "icon": "data--view",
+  "icon": "table",
   "states": [
     "operational",
     "degraded",

@@ -2,9 +2,9 @@
 :root{
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
-  --font-ui:"IBM Plex Sans","Segoe UI",sans-serif;
-  --font-editorial:"IBM Plex Serif",Georgia,serif;
-  --font-code:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
+  --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
+  --font-editorial:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
+  --font-code:"Atkinson Hyperlegible Mono",SFMono-Regular,Consolas,monospace;
   --text-xs:0.75rem;
   --text-sm:0.875rem;
   --text-md:0.875rem;

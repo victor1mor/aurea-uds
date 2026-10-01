@@ -117,7 +117,7 @@ export default {
   <App />
 </AureaProvider>`,
     render: () => h(A.AureaProvider, {spriteUrl: ""}, h("div", {style: row},
-      h(A.Icon, {name: "checkmark"}), h("span", null, "Icons resolve through the provider."))),
+      h(A.Icon, {name: "check"}), h("span", null, "Icons resolve through the provider."))),
   },
   Avatar: {
     code: `<Avatar fallback="AU" />
@@ -125,11 +125,11 @@ export default {
     render: () => h("div", {style: row}, h(A.Avatar, {fallback: "AU"}), h(A.Avatar, {fallback: "VM", size: "lg"})),
   },
   Banner: {
-    code: `<Banner variant="success" title="Saved" icon="checkmark" onDismiss={() => setShown(false)}>
+    code: `<Banner variant="success" title="Saved" icon="check" onDismiss={() => setShown(false)}>
   Your changes are live.
 </Banner>`,
     render: () => h("div", {style: wide}, h(A.Banner, {variant: "success", title: "Saved",
-      icon: "checkmark", onDismiss: () => {}}, "Your changes are live.")),
+      icon: "check", onDismiss: () => {}}, "Your changes are live.")),
   },
   Breadcrumb: {
     code: `<Breadcrumb items={[
@@ -471,13 +471,13 @@ export default {
       + "runs, so one that navigates does not leave the palette over the new screen. For a "
       + "palette whose chrome you compose yourself, the Shell is next door.",
     install: 'import {CommandPalette} from "@aurea-uds/react";',
-    code: `<Button leadingIcon="search" kbd="⌘K" onClick={() => setOpen(true)}>Search</Button>
+    code: `<Button leadingIcon="magnifying-glass" kbd="⌘K" onClick={() => setOpen(true)}>Search</Button>
 
 <CommandPalette open={open} onClose={() => setOpen(false)} items={[
-  {id: "button", label: "Go to Button", icon: "arrow--right", run: () => go("/button")},
-  {id: "theme", label: "Toggle theme", icon: "asleep", kbd: "⌘T", run: toggleTheme},
+  {id: "button", label: "Go to Button", icon: "arrow-right", run: () => go("/button")},
+  {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", run: toggleTheme},
 ]} />`,
-    render: () => h(A.Button, {leadingIcon: "search", kbd: "⌘K"}, "Search"),
+    render: () => h(A.Button, {leadingIcon: "magnifying-glass", kbd: "⌘K"}, "Search"),
   },
   CommandPaletteShell: {
     description: "Non-modal by design: you own open and query. For a modal palette, put it "
@@ -506,15 +506,15 @@ export default {
   ContextMenu: {
     note: PORTAL,
     code: `<ContextMenu label="Row actions" items={[
-  {label: "Rename", leadingIcon: "edit"},
+  {label: "Rename", leadingIcon: "pencil-simple"},
   "separator",
-  {label: "Delete", leadingIcon: "trash-can"},
+  {label: "Delete", leadingIcon: "trash"},
 ]}>
   <Card>Right-click me, or focus and press Shift+F10.</Card>
 </ContextMenu>`,
     render: () => h("div", {style: wide}, h(A.ContextMenu, {label: "Row actions", items: [
-      {label: "Rename", leadingIcon: "edit"}, "separator",
-      {label: "Delete", leadingIcon: "trash-can"},
+      {label: "Rename", leadingIcon: "pencil-simple"}, "separator",
+      {label: "Delete", leadingIcon: "trash"},
     ]}, h(A.Card, null, "Right-click me, or focus and press Shift+F10."))),
   },
   DataGrid: {
@@ -629,29 +629,29 @@ export default {
     note: PORTAL,
     code: `<DropdownMenu
   label="Record actions"
-  trigger={<Button variant="outline" trailingIcon="chevron--down">Actions</Button>}
+  trigger={<Button variant="outline" trailingIcon="caret-down">Actions</Button>}
   items={[
     {label: "Duplicate", leadingIcon: "copy"},
-    {label: "Rename", leadingIcon: "edit"},
+    {label: "Rename", leadingIcon: "pencil-simple"},
     "separator",
-    {label: "Delete", leadingIcon: "trash-can"},
+    {label: "Delete", leadingIcon: "trash"},
   ]}
 />`,
     render: () => h(A.DropdownMenu, {label: "Record actions",
-      trigger: h(A.Button, {variant: "outline", trailingIcon: "chevron--down"}, "Actions"),
-      items: [{label: "Duplicate", leadingIcon: "copy"}, {label: "Rename", leadingIcon: "edit"},
-        "separator", {label: "Delete", leadingIcon: "trash-can"}]}),
+      trigger: h(A.Button, {variant: "outline", trailingIcon: "caret-down"}, "Actions"),
+      items: [{label: "Duplicate", leadingIcon: "copy"}, {label: "Rename", leadingIcon: "pencil-simple"},
+        "separator", {label: "Delete", leadingIcon: "trash"}]}),
   },
   EmptyState: {
     code: `<EmptyState
   titleAs="h2"
   title="No results"
   description="Try a different filter."
-  action={<Button variant="primary" leadingIcon="add">New project</Button>}
+  action={<Button variant="primary" leadingIcon="plus">New project</Button>}
 />`,
     render: () => h("div", {style: wide}, h(A.EmptyState, {titleAs: "h2", title: "No results",
       description: "Try a different filter.",
-      action: h(A.Button, {variant: "primary", leadingIcon: "add"}, "New project")})),
+      action: h(A.Button, {variant: "primary", leadingIcon: "plus"}, "New project")})),
   },
   Form: {
     description: "Aurea shows the error; you decide what an error is. Pass what you already "
@@ -683,11 +683,11 @@ export default {
   Icon: {
     description: "One <svg><use> pointing at the shared Carbon sprite. The sprite URL comes "
       + "from the AureaProvider, never from the call site.",
-    code: `<Icon name="search" />
-<Icon name="add" size="lg" />
-<Icon name="checkmark" size="xl" />`,
-    render: () => h("div", {style: row}, h(A.Icon, {name: "search"}),
-      h(A.Icon, {name: "add", size: "lg"}), h(A.Icon, {name: "checkmark", size: "xl"})),
+    code: `<Icon name="magnifying-glass" />
+<Icon name="plus" size="lg" />
+<Icon name="check" size="xl" />`,
+    render: () => h("div", {style: row}, h(A.Icon, {name: "magnifying-glass"}),
+      h(A.Icon, {name: "plus", size: "lg"}), h(A.Icon, {name: "check", size: "xl"})),
   },
   KPI: {
     code: `<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" />`,
@@ -757,7 +757,7 @@ export default {
     // regra dessa superfície.
     code: `<MediaPlayerShell role="group" aria-label="Camera 3">
   <div className="media-viewport">
-    <div className="media-placeholder"><Icon name="video" /><strong>Standing by</strong></div>
+    <div className="media-placeholder"><Icon name="video-camera" /><strong>Standing by</strong></div>
   </div>
   <div className="media-overlay-title">
     <div><strong>Camera 3</strong><span>Loading dock</span></div>
@@ -771,8 +771,8 @@ export default {
         <span className="media-time">LIVE</span>
       </div>
       <div className="media-control-group">
-        <button className="media-control" type="button" aria-label="Mute"><Icon name="volume--up" /></button>
-        <button className="media-control" type="button" aria-label="Full screen"><Icon name="maximize" /></button>
+        <button className="media-control" type="button" aria-label="Mute"><Icon name="speaker-high" /></button>
+        <button className="media-control" type="button" aria-label="Full screen"><Icon name="arrows-out" /></button>
       </div>
     </div>
   </div>
@@ -785,7 +785,7 @@ export default {
       h(A.MediaPlayerShell, {role: "group", "aria-label": "Camera 3"},
         h("div", {className: "media-viewport"},
           h("div", {className: "media-placeholder"},
-            h(A.Icon, {name: "video"}), h("strong", null, "Standing by"))),
+            h(A.Icon, {name: "video-camera"}), h("strong", null, "Standing by"))),
         h("div", {className: "media-overlay-title"},
           h("div", null, h("strong", null, "Camera 3"), h("span", null, "Loading dock")),
           h(A.Badge, {variant: "danger"}, "on air")),
@@ -797,9 +797,9 @@ export default {
               h("span", {className: "media-time"}, "LIVE")),
             h("div", {className: "media-control-group"},
               h("button", {className: "media-control", type: "button", "aria-label": "Mute"},
-                h(A.Icon, {name: "volume--up"})),
+                h(A.Icon, {name: "speaker-high"})),
               h("button", {className: "media-control", type: "button", "aria-label": "Full screen"},
-                h(A.Icon, {name: "maximize"}))))))),
+                h(A.Icon, {name: "arrows-out"}))))))),
   },
   MessageComposer: {
     code: `<MessageComposer
@@ -873,11 +873,11 @@ export default {
   model="opus-5"
   state="running"
   description="Keeps the reference library tidy."
-  capabilities={[{name: "search", icon: "search"}, {name: "summarise"}]}
+  capabilities={[{name: "search", icon: "magnifying-glass"}, {name: "summarise"}]}
 />`,
     render: () => h(A.AgentCard, {name: "Curator", model: "opus-5", state: "running",
       description: "Keeps the reference library tidy.",
-      capabilities: [{name: "search", icon: "search"}, {name: "summarise"}]}),
+      capabilities: [{name: "search", icon: "magnifying-glass"}, {name: "summarise"}]}),
   },
   AgentInspector: {
     install: 'import {AgentInspector} from "@aurea-uds/react";',
@@ -1266,11 +1266,11 @@ export default {
 // Use este quando a APLICAÇÃO é dona do data-theme; use useTheme quando
 // quem guarda a escolha é o AureaProvider.
 <IconButton
-  icon={theme === "light" ? "moon" : "light"}
+  icon={theme === "light" ? "moon" : "sun"}
   label={theme === "light" ? "Switch to dark" : "Switch to light"}
   onClick={toggleTheme}
 />`,
-    render: () => h(A.IconButton, {icon: "light", label: "Switch to dark"}),
+    render: () => h(A.IconButton, {icon: "sun", label: "Switch to dark"}),
   },
   usePortalContainer: {
     code: `// Configurado UMA vez, no provider — não é prop de componente.
@@ -1292,14 +1292,14 @@ const container = usePortalContainer();`,
     code: `const {theme, toggleTheme} = useTheme();
 
 <IconButton
-  icon={theme === "light" ? "moon" : "light"}
+  icon={theme === "light" ? "moon" : "sun"}
   label={theme === "light" ? "Switch to dark" : "Switch to light"}
   onClick={toggleTheme}
 />`,
     // O rótulo diz a AÇÃO, não o estado: um botão rotulado "Dark" não diz se liga ou desliga,
     // e um leitor de tela anuncia exatamente o rótulo. É a mesma regra do `passwordShow`.
     note: "Reads and writes data-theme on the document root, so the whole page follows. A static page has no provider, so the button here is only the shape.",
-    render: () => h(A.IconButton, {icon: "light", label: "Switch to light"}),
+    render: () => h(A.IconButton, {icon: "sun", label: "Switch to light"}),
   },
 
   useDensity: {
@@ -1362,11 +1362,11 @@ const container = usePortalContainer();`,
   },
 
   InputGroupAddon: {
-    code: `<InputGroupAddon side="start" layout="inline"><Icon name="search" /></InputGroupAddon>
+    code: `<InputGroupAddon side="start" layout="inline"><Icon name="magnifying-glass" /></InputGroupAddon>
 <InputGroupAddon side="end" layout="inline">.00</InputGroupAddon>`,
     render: () => h("div", {style: {width: "min(360px, 100%)"}},
       h(A.InputGroup, null,
-        h(A.InputGroupAddon, null, h(A.Icon, {name: "search"})),
+        h(A.InputGroupAddon, null, h(A.Icon, {name: "magnifying-glass"})),
         h(A.Input, {placeholder: "Search", "aria-label": "Search"}),
         h(A.InputGroupAddon, {side: "end", layout: "inline"}, "\u2318K"))),
   },

@@ -14,7 +14,7 @@
   },
   "name": "TraceTimeline",
   "summary": "How long each step took, as a waterfall.",
-  "icon": "meter",
+  "icon": "gauge",
   "states": [
     "default",
     "nested",

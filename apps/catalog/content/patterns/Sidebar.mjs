@@ -26,9 +26,9 @@ export default [
   label="Main"
   current="runs"
   items={[
-    {id: "overview", label: "Overview", icon: "dashboard", href: "#"},
+    {id: "overview", label: "Overview", icon: "squares-four", href: "#"},
     {id: "runs", label: "Runs", icon: "play", href: "#"},
-    {id: "members", label: "Members", icon: "user--multiple", href: "#"},
+    {id: "members", label: "Members", icon: "users", href: "#"},
   ]}
 />`,
     render: () => h("div", {style: {width: "min(260px,100%)"}}, h(A.Sidebar, {
@@ -38,8 +38,8 @@ export default [
       // filho do AppShell e o landmark está certo, que é o que o `code` mostra.
       role: "presentation",
       label: "Main", current: "runs", items: [
-        {id: "overview", label: "Overview", icon: "dashboard", href: "#"},
+        {id: "overview", label: "Overview", icon: "squares-four", href: "#"},
         {id: "runs", label: "Runs", icon: "play", href: "#"},
-        {id: "members", label: "Members", icon: "user--multiple", href: "#"}]})),
+        {id: "members", label: "Members", icon: "users", href: "#"}]})),
   },
 ];
