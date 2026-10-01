@@ -21,7 +21,7 @@
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton} from "./actions.js";
-import {criarFolha} from "./estilos.js";
+import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Icon, type IconName} from "./icon.js";
 import {useReduceMotion} from "./movimento.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
@@ -432,7 +432,7 @@ export function DataState({
   const strings = useAureaStrings();
   const conteudo = () => (typeof children === "function" ? children() : children);
   const caixa = (dentro: React.ReactNode, ocupado?: boolean) => (
-    <View accessibilityState={ocupado ? {busy: true} : undefined} style={[s.regiao, style]} {...rest}>
+    <View {...estadoAcessivel(ocupado ? {busy: true} : undefined)} style={[s.regiao, style]} {...rest}>
       {dentro}
     </View>
   );

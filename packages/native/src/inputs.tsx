@@ -43,7 +43,7 @@ import {
   type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle,
   type ViewProps, type ViewStyle,
 } from "react-native";
-import {comOpacidade, criarFolha} from "./estilos.js";
+import {comOpacidade, criarFolha, estadoAcessivel} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
@@ -424,7 +424,7 @@ export function Input({
       // atravessa. Sem isto, o campo é um nó anônimo para o leitor de tela.
       accessibilityLabel={campo?.label}
       accessibilityHint={campo?.hint}
-      accessibilityState={{disabled: !!inativo}}
+      {...estadoAcessivel({disabled: !!inativo})}
       aria-invalid={campo?.invalido}
       style={[
         // DENTRO DE UM GRUPO o campo não desenha caixa nenhuma: borda, fundo, altura, respiro,
@@ -712,7 +712,7 @@ function ControleMarcado({
       onPress={inativo ? undefined : () => onChange?.(!checked)}
       disabled={inativo}
       accessibilityRole={papel}
-      accessibilityState={{checked: !!checked, disabled: !!inativo}}
+      {...estadoAcessivel({checked: !!checked, disabled: !!inativo})}
       // ⚠ O `accessibilityLabel` de fora vence o `label` escrito, e existe para o caso em que o
       // nome JÁ está na tela ao lado — uma linha de `NavList`, por exemplo. Sem ele, ou o nome
       // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
@@ -840,7 +840,7 @@ function RaizDoGrupoDeRadio({
       <View
         accessibilityRole="radiogroup"
         accessibilityLabel={label}
-        accessibilityState={{disabled: !!disabled}}
+        {...estadoAcessivel({disabled: !!disabled})}
         style={[{gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column"}, style]}
         {...rest}>
         {children}
@@ -888,7 +888,7 @@ function ItemDoGrupoDeRadio({
       onPress={inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value)}
       disabled={inativo}
       accessibilityRole="radio"
-      accessibilityState={{checked: escolhido, disabled: !!inativo}}
+      {...estadoAcessivel({checked: escolhido, disabled: !!inativo})}
       accessibilityLabel={accessibilityLabel ?? (typeof label === "string" ? label : undefined)}
       accessibilityHint={typeof description === "string" ? description : undefined}
       style={[
@@ -978,7 +978,7 @@ export function Switch({
       onPress={inativo ? undefined : () => onChange?.(!checked)}
       disabled={inativo}
       accessibilityRole="switch"
-      accessibilityState={{checked: !!checked, disabled: !!inativo}}
+      {...estadoAcessivel({checked: !!checked, disabled: !!inativo})}
       // O `accessibilityLabel` de fora vence o `label` escrito — ver a prop, em `ControleProps`.
       accessibilityLabel={accessibilityLabel ?? (typeof label === "string" ? label : campo?.label)}
       // Mesma regra do `ControleMarcado`: a descrição vira DICA quando é texto. Sem isto ela
@@ -1083,7 +1083,7 @@ export function SegmentedControl({
               onPress={inativo ? undefined : () => onChange?.(it.value)}
               disabled={inativo}
               accessibilityRole="radio"
-              accessibilityState={{checked: ativo, disabled: !!inativo}}
+              {...estadoAcessivel({checked: ativo, disabled: !!inativo})}
               accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
               style={[s.segmento, ativo && s.segmentoAtivo]}>
             {typeof it.label === "string"
@@ -1176,7 +1176,7 @@ export function Select({
         accessibilityLabel={campo?.label}
         accessibilityHint={campo?.hint}
         accessibilityValue={{text: escolhido?.label}}
-        accessibilityState={{disabled: !!inativo, expanded: aberto}}
+        {...estadoAcessivel({disabled: !!inativo, expanded: aberto})}
         style={[
           s.caixa,
           {flexDirection: "row", alignItems: "center", justifyContent: "space-between",
@@ -1220,7 +1220,7 @@ export function Select({
                   disabled={it.disabled}
                   onPress={() => { onChange?.(it.value); setAberto(false); }}
                   accessibilityRole="menuitem"
-                  accessibilityState={{selected: it.value === value, disabled: !!it.disabled}}
+                  {...estadoAcessivel({selected: it.value === value, disabled: !!it.disabled})}
                   style={[s.opcao, it.disabled && s.desabilitado]}>
                   <Text size="md" weight={it.value === value ? 600 : 400}>{it.label}</Text>
                 </Pressable>

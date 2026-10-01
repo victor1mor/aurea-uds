@@ -39,7 +39,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
-import { comOpacidade, criarFolha } from "./estilos.js";
+import { comOpacidade, criarFolha, estadoAcessivel } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -219,7 +219,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
         }, 
         // O nome e a dica vêm do `Field` — ver o bloco acima sobre por que a ligação da web não
         // atravessa. Sem isto, o campo é um nó anônimo para o leitor de tela.
-        accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityState: { disabled: !!inativo }, "aria-invalid": campo?.invalido, style: [
+        accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), "aria-invalid": campo?.invalido, style: [
             // DENTRO DE UM GRUPO o campo não desenha caixa nenhuma: borda, fundo, altura, respiro,
             // inválido, foco e desabilitado passam a ser do grupo. Manter qualquer um dos dois
             // desenhando daria borda dentro de borda — que é exatamente o defeito que o `.input-group
@@ -347,7 +347,7 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
     // do rótulo (entrelinha normal), então a conta sai dos mesmos tokens que desenham o texto.
     const linha = t.size.textBase * t.size.leadingNormal;
     const noTopo = align === "start" ? { marginTop: Math.max(0, (linha - lado) / 2) } : null;
-    return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => onChange?.(!checked), disabled: inativo, accessibilityRole: papel, accessibilityState: { checked: !!checked, disabled: !!inativo }, 
+    return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => onChange?.(!checked), disabled: inativo, accessibilityRole: papel, ...estadoAcessivel({ checked: !!checked, disabled: !!inativo }), 
         // ⚠ O `accessibilityLabel` de fora vence o `label` escrito, e existe para o caso em que o
         // nome JÁ está na tela ao lado — uma linha de `NavList`, por exemplo. Sem ele, ou o nome
         // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
@@ -386,7 +386,7 @@ const GrupoDeRadio = React.createContext(null);
 function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement, style, children, ...rest }) {
     const t = useAureaTokens();
     const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid, indicatorPlacement }), [value, onValueChange, disabled, invalid, indicatorPlacement]);
-    return (_jsx(GrupoDeRadio.Provider, { value: contexto, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label, accessibilityState: { disabled: !!disabled }, style: [{ gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column" }, style], ...rest, children: children }) }));
+    return (_jsx(GrupoDeRadio.Provider, { value: contexto, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled }), style: [{ gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column" }, style], ...rest, children: children }) }));
 }
 function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest }) {
     const t = useAureaTokens();
@@ -412,7 +412,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
                 borderColor: erro ? perigo : t.color.controlSelected },
         ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, borderRadius: t.size.radiusFull,
                 backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
-    return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", accessibilityState: { checked: escolhido, disabled: !!inativo }, accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
+    return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: escolhido, disabled: !!inativo }), accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
             { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
                 gap: t.size.space3, minHeight: t.size.targetMin },
             inativo && s.desabilitado, style,
@@ -469,7 +469,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         a.start();
         return () => a.stop();
     }, [checked, pos, reduzir]);
-    return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => onChange?.(!checked), disabled: inativo, accessibilityRole: "switch", accessibilityState: { checked: !!checked, disabled: !!inativo }, 
+    return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => onChange?.(!checked), disabled: inativo, accessibilityRole: "switch", ...estadoAcessivel({ checked: !!checked, disabled: !!inativo }), 
         // O `accessibilityLabel` de fora vence o `label` escrito — ver a prop, em `ControleProps`.
         accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), 
         // Mesma regra do `ControleMarcado`: a descrição vira DICA quando é texto. Sem isto ela
@@ -517,7 +517,7 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
     const inativo = disabled ?? campo?.disabled;
     return (_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
                 const ativo = it.value === value;
-                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", accessibilityState: { checked: ativo, disabled: !!inativo }, accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, ativo && s.segmentoAtivo], children: [typeof it.label === "string"
+                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, ativo && s.segmentoAtivo], children: [typeof it.label === "string"
                             ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
                                 // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
                                 // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
@@ -568,7 +568,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
     const inativo = disabled ?? campo?.disabled;
     const [aberto, setAberto] = React.useState(false);
     const escolhido = items.find((i) => i.value === value);
-    return (_jsxs(_Fragment, { children: [_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: escolhido?.label }, accessibilityState: { disabled: !!inativo, expanded: aberto }, style: [
+    return (_jsxs(_Fragment, { children: [_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: escolhido?.label }, ...estadoAcessivel({ disabled: !!inativo, expanded: aberto }), style: [
                     s.caixa,
                     { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
                         height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam) },
@@ -577,7 +577,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
                     peleDaMarca,
                     inativo && s.desabilitado,
                     style,
-                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsxs(View, { style: s.lista, children: [_jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", accessibilityState: { selected: it.value === value, disabled: !!it.disabled }, style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }), _jsx(RecuoDaFolha, {})] })] }) }) })] }));
+                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsxs(View, { style: s.lista, children: [_jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", ...estadoAcessivel({ selected: it.value === value, disabled: !!it.disabled }), style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }), _jsx(RecuoDaFolha, {})] })] }) }) })] }));
 }
 /**
  * A pilha de campos, com o respiro do `--space-5`.

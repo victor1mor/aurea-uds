@@ -22,7 +22,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { criarFolha } from "./estilos.js";
+import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { useReduceMotion } from "./movimento.js";
 import { gravidadeDoEstado } from "./strings.js";
@@ -239,7 +239,7 @@ export function DataState({ state, message, skeleton, emptyTitle, emptyIcon, act
     const s = folha(t);
     const strings = useAureaStrings();
     const conteudo = () => (typeof children === "function" ? children() : children);
-    const caixa = (dentro, ocupado) => (_jsx(View, { accessibilityState: ocupado ? { busy: true } : undefined, style: [s.regiao, style], ...rest, children: dentro }));
+    const caixa = (dentro, ocupado) => (_jsx(View, { ...estadoAcessivel(ocupado ? { busy: true } : undefined), style: [s.regiao, style], ...rest, children: dentro }));
     if (state === "loading")
         return caixa(skeleton ?? _jsx(Skeleton, { height: t.size.space8 }), true);
     if (state === "error") {

@@ -36,7 +36,7 @@ import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community
 import * as ImagePicker from "expo-image-picker";
 import { IconButton } from "./actions.js";
 import { Avatar } from "./display.js";
-import { criarFolha } from "./estilos.js";
+import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Alert } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { useCampo } from "./inputs.js";
@@ -107,7 +107,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
         setAbertoNoIOS(true);
     }, [value, mode, minimumDate, maximumDate, receber]);
     const mostrarSeletorIOS = abertoNoIOS && Platform.OS !== "android";
-    return (_jsxs(_Fragment, { children: [_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : abrir, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: value ? texto : undefined }, accessibilityState: { disabled: !!inativo }, style: [
+    return (_jsxs(_Fragment, { children: [_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : abrir, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: value ? texto : undefined }, ...estadoAcessivel({ disabled: !!inativo }), style: [
                     s.gatilho,
                     { height: alturaDoTamanho(t, tam),
                         paddingHorizontal: tam === "sm" ? t.size.space3 : tam === "lg" ? t.size.space4 : 13 },
@@ -166,5 +166,5 @@ export function PhotoInput({ value = [], onChange, max = 1, source = "camera", d
             .map((a) => ({ uri: a.uri, width: a.width, height: a.height }));
         onChange?.([...value, ...novas]);
     }, [source, max, value, onChange, onPermissionDenied]);
-    return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: s.galeria, children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Avatar, { source: foto.uri, size: "lg", alt: "" }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "ghost", size: "sm", name: removeIcon, label: strings.photoRemove, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, foto.uri))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityState: { disabled: !!inativo }, style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] })] }));
+    return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: s.galeria, children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Avatar, { source: foto.uri, size: "lg", alt: "" }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "ghost", size: "sm", name: removeIcon, label: strings.photoRemove, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, foto.uri))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, ...estadoAcessivel({ disabled: !!inativo }), style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] })] }));
 }

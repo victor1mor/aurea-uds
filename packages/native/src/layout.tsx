@@ -16,7 +16,7 @@ import {Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewSt
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
-import {criarFolha, REACAO_AO_TOQUE} from "./estilos.js";
+import {criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Text} from "./text.js";
 import {useAureaTokens, SobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -347,7 +347,7 @@ export function Card({variant, style, ...rest}: CardProps) {
         onPress={onPress}
         disabled={disabled}
         accessibilityRole="button"
-        accessibilityState={{disabled: !!disabled}}
+        {...estadoAcessivel({disabled: !!disabled})}
         style={({pressed: tocando}) => [
           s.cardBase, s[`card_${pele}`],
           tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,

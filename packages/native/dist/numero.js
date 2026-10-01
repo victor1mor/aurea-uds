@@ -47,7 +47,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Platform, TextInput, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { criarFolha } from "./estilos.js";
+import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { useCampo } from "./inputs.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca } from "./theme.js";
 const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
@@ -358,7 +358,7 @@ export function NumberField({ value, defaultValue, onValueChange, min, max, step
     return (_jsxs(View, { testID: testID, style: [s.grupo, fullWidth && s.grupoLargo, inativo && s.desabilitado, style], children: [mostrarBotoes && (_jsx(IconButton, { name: icons.decrement, label: strings.decrement, appearance: "ghost", size: tam, disabled: inativo || noLimite(-1), onPress: () => empurrar(-1), testID: testID ? `${testID}-menos` : undefined })), _jsx(TextInput, { testID: testID ? `${testID}-campo` : undefined, value: mostrar, onChangeText: digitar, onFocus: () => { setFocado(true); setEmEdicao(paraEdicao(numero, locale)); }, onBlur: () => { setFocado(false); confirmar(); }, editable: !inativo && !readOnly, placeholder: placeholder, placeholderTextColor: peleDaMarca?.color ?? t.color.subtleForeground, keyboardType: keyboardType ?? tecladoPadrao, 
                 // O nome vem do `Field`, como em todo controle deste pacote — e `label` cobre quem usa o
                 // campo solto. Sem um dos dois, é um nó anônimo para o leitor de tela.
-                accessibilityLabel: label ?? campo?.label, accessibilityHint: campo?.hint, accessibilityState: { disabled: !!inativo }, "aria-invalid": campo?.invalido, style: [
+                accessibilityLabel: label ?? campo?.label, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), "aria-invalid": campo?.invalido, style: [
                     s.campo,
                     fullWidth && s.campoLargo,
                     { height: alturaDoTamanho(t, tam), fontSize: fonteDoTamanho(t, tam),

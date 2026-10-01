@@ -54,7 +54,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Pressable, View } from "react-native";
 import Svg, { Circle, G, Line, Path, Rect, Text as SvgText } from "react-native-svg";
-import { criarFolha } from "./estilos.js";
+import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 /** A altura padrão, igual ao `--chart-h,220px` do `aurea.css:1329`. */
@@ -187,7 +187,7 @@ export function Chart({ labels, series, label, mark = "line", height = ALTURA, y
                                             const v = serie.data[selecionado];
                                             return v == null ? null : (_jsx(Circle, { cx: x(selecionado), cy: y(v), r: 4, fill: cores[n], stroke: t.color.card, strokeWidth: 2 }, n));
                                         })] })) : null] }) })) : null, largura > 0 ? (_jsx(View, { style: { position: "absolute", left: CALHA.esquerda, top: CALHA.topo,
-                            width: areaL, height: areaA, flexDirection: "row" }, children: labels.map((rotulo, i) => (_jsx(Pressable, { onPress: () => tocar(i), accessibilityRole: "button", accessibilityState: { selected: selecionado === i }, accessibilityLabel: [
+                            width: areaL, height: areaA, flexDirection: "row" }, children: labels.map((rotulo, i) => (_jsx(Pressable, { onPress: () => tocar(i), accessibilityRole: "button", ...estadoAcessivel({ selected: selecionado === i }), accessibilityLabel: [
                                 rotulo,
                                 ...series.map((serie) => {
                                     const v = serie.data[i];

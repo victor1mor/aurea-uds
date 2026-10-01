@@ -35,7 +35,7 @@ import RNDateTimePicker, {DateTimePickerAndroid} from "@react-native-community/d
 import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "./actions.js";
 import {Avatar} from "./display.js";
-import {criarFolha} from "./estilos.js";
+import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Alert} from "./feedback.js";
 import {Icon, type IconName} from "./icon.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
@@ -149,7 +149,7 @@ export function DatePicker({
         accessibilityLabel={campo?.label}
         accessibilityHint={campo?.hint}
         accessibilityValue={{text: value ? texto : undefined}}
-        accessibilityState={{disabled: !!inativo}}
+        {...estadoAcessivel({disabled: !!inativo})}
         style={[
           s.gatilho,
           {height: alturaDoTamanho(t, tam),
@@ -293,7 +293,7 @@ export function PhotoInput({
             disabled={inativo}
             accessibilityRole="button"
             accessibilityLabel={campo?.label}
-            accessibilityState={{disabled: !!inativo}}
+            {...estadoAcessivel({disabled: !!inativo})}
             style={[s.adicionar, inativo && s.desabilitado]}>
             {addIcon && <Icon name={addIcon} size="lg" color={t.color.subtleForeground} />}
           </Pressable>

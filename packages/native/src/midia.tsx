@@ -40,7 +40,7 @@ import {
   Image as ImageRN, Pressable, View,
   type ImageSourcePropType, type ImageStyle, type StyleProp, type ViewStyle,
 } from "react-native";
-import {criarFolha} from "./estilos.js";
+import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Icon, type IconName} from "./icon.js";
 import {Grid} from "./layout.js";
 import {Dialog} from "./overlays.js";
@@ -282,7 +282,7 @@ export function Gallery({
               // `alt=""` acima). Sem legenda, o nome é o `alt`.
               accessibilityLabel={temLegenda && typeof item.caption === "string"
                 ? item.caption : item.alt}
-              accessibilityState={{selected: item.id === selected}}
+              {...estadoAcessivel({selected: item.id === selected})}
               style={[s.ladrilho, item.id === selected && s.ladrilhoEscolhido]}>
               {miolo}
             </Pressable>
