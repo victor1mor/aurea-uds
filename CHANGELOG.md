@@ -17,13 +17,17 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada além da `0.12.3`, logo abaixo, pronta e não publicada.
+Nada ainda.
 
 ---
 
-## [0.12.3] — 2026-10-01
+## [0.12.3] — 2026-09-30
 
-⏳ **Não publicada.** Só o nativo muda.
+✅ **PUBLICADA em 30/09/2026, por volta das 21:50 (Brasília), nos sete pacotes, pelo terminal do
+Victor** — do commit `db97454` (junção do pedido #13). A hora é a da mensagem dele: às 21:54 o
+registro ainda não mostrava a versão, e logo depois de um publish nenhuma leitura de registro
+decide. A data do cabeçalho foi escrita primeiro como 01/10 (o dia no relógio do servidor) e
+corrigida para o dia no fuso do Victor. Só o nativo muda.
 
 ### Adicionado
 
