@@ -48,7 +48,7 @@ import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-n
 import {IconButton} from "./actions.js";
 // Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
 import type {IconName} from "./icon-names.js";
-import {criarFolha} from "./estilos.js";
+import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -448,7 +448,7 @@ export function NumberField({
         // campo solto. Sem um dos dois, é um nó anônimo para o leitor de tela.
         accessibilityLabel={label ?? campo?.label}
         accessibilityHint={campo?.hint}
-        accessibilityState={{disabled: !!inativo}}
+        {...estadoAcessivel({disabled: !!inativo})}
         aria-invalid={campo?.invalido}
         style={[
           s.campo,

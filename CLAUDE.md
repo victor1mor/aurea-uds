@@ -102,8 +102,13 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.12.1` | E9 (`LinkButton`), E10 (recuo das folhas), E11 (`Grid` reparte a sobra) — pedidos #9 e #10. **Publicada em 26/09/2026**, pelo terminal do Victor. Leva a `0.12.0` junto |
 | `0.12.2` | O `BottomNav` mais baixo, na web e no nativo (aprovado pela imagem) e dois patches de segurança da CI — pedido #11. **Publicada em 30/09/2026**, pelo terminal do Victor |
 | `0.12.3` | `RadioGroup` no nativo, no desenho do HeroUI, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
+| `0.12.4` | R-20: o estado chega ao leitor de tela da web em `aria-*` (os 26 pontos do nativo). **Pronta, não publicada** |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
+
+**A fila inteira, com a pesquisa de como o HeroUI (ou o ReUI) faz cada item, está em
+[`docs/FILA.md`](docs/FILA.md)** — fotografia de 01/10/2026. Comece por ela; peça ao Victor o
+documento de achados mais novo para conferir se ela envelheceu.
 
 ### O próximo passo
 

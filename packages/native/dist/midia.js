@@ -38,7 +38,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //                     e serve ao mesmo caso real: o consumidor que já usa `expo-image`.
 import * as React from "react";
 import { Image as ImageRN, Pressable, View, } from "react-native";
-import { criarFolha } from "./estilos.js";
+import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Grid } from "./layout.js";
 import { Dialog } from "./overlays.js";
@@ -176,6 +176,6 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = 1, min
                         // Com legenda, o nome do ladrilho é a legenda e a imagem já saiu da árvore (o
                         // `alt=""` acima). Sem legenda, o nome é o `alt`.
                         accessibilityLabel: temLegenda && typeof item.caption === "string"
-                            ? item.caption : item.alt, accessibilityState: { selected: item.id === selected }, style: [s.ladrilho, item.id === selected && s.ladrilhoEscolhido], children: miolo }, item.id));
+                            ? item.caption : item.alt, ...estadoAcessivel({ selected: item.id === selected }), style: [s.ladrilho, item.id === selected && s.ladrilhoEscolhido], children: miolo }, item.id));
                 }) }), zoom && (_jsx(Dialog, { open: aberto != null, title: aberto ? (typeof aberto.caption === "string" ? aberto.caption : aberto.alt) : "", onClose: () => setAmpliado(null), testID: testID ? `${testID}-ampliada` : undefined, children: aberto && _jsx(Image, { source: aberto.source, alt: aberto.alt, fit: "contain", ratio: ratio }) }))] }));
 }

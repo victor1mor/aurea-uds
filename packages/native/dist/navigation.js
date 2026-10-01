@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Badge } from "./display.js";
-import { comOpacidade, criarFolha } from "./estilos.js";
+import { comOpacidade, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
 import { FilaRolante } from "./rolagem.js";
@@ -258,7 +258,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                                 : t.color.foreground;
             return (_jsxs(Pressable, { onPress: it.onPress, disabled: it.disabled, 
                 // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
-                accessibilityRole: "link", accessibilityState: { selected: ativo, disabled: !!it.disabled }, style: [
+                accessibilityRole: "link", ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }), style: [
                     s.aba, justa && s.aba_content,
                     indicator === "subtle" && { borderRadius: t.size.radiusCard - t.size.space1 },
                     ativo && (indicator === "subtle" || indicator === "pill")
@@ -350,7 +350,7 @@ export function NavList({ items, chevron = "chevron--right", style, ...rest }) {
                                 ? _jsx(Text, { size: "xs", tone: "muted", numberOfLines: 1, children: it.description })
                                 : it.description)] }), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron
                         && _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground })] }));
-            return (_jsxs(View, { style: [s.linha, it.disabled && { opacity: t.size.opacityDisabled }], children: [temAcao ? (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, accessibilityRole: "link", accessibilityState: { disabled: !!it.disabled }, style: s.linhaMiolo, children: miolo })) : (_jsx(View, { accessible: true, accessibilityState: { disabled: !!it.disabled }, style: s.linhaMiolo, children: miolo })), !valorEhTexto && it.value != null ? it.value : null] }, it.id));
+            return (_jsxs(View, { style: [s.linha, it.disabled && { opacity: t.size.opacityDisabled }], children: [temAcao ? (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, accessibilityRole: "link", ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })) : (_jsx(View, { accessible: true, ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })), !valorEhTexto && it.value != null ? it.value : null] }, it.id));
         }) }));
 }
 /**
@@ -382,7 +382,7 @@ export function Stepper({ items, label, doneIcon = "checkmark", errorIcon = "err
                         : it.label, it.optional != null && (typeof it.optional === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", align: "center", children: it.optional })
                         : it.optional)] }));
-            return it.onPress ? (_jsx(Pressable, { onPress: it.onPress, accessibilityRole: "button", accessibilityState: { selected: st === "active" }, style: s.passo, children: miolo }, n)) : (_jsx(View, { accessible: true, accessibilityState: { selected: st === "active" }, style: s.passo, children: miolo }, n));
+            return it.onPress ? (_jsx(Pressable, { onPress: it.onPress, accessibilityRole: "button", ...estadoAcessivel({ selected: st === "active" }), style: s.passo, children: miolo }, n)) : (_jsx(View, { accessible: true, ...estadoAcessivel({ selected: st === "active" }), style: s.passo, children: miolo }, n));
         }) }));
 }
 /**
@@ -425,7 +425,7 @@ export function Tabs({ tabs, value, onChange, label, justify, style, ...rest }) 
     const aberta = tabs.find((it) => it.id === value);
     return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: s.abas, children: tabs.map((it) => {
                         const ativa = it.id === value;
-                        return (_jsx(Pressable, { onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", accessibilityState: { selected: ativa, disabled: !!it.disabled }, accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.abaDeTab, ativa && s.abaDeTabAtiva, it.disabled && { opacity: t.size.opacityDisabled }], children: typeof it.label === "string"
+                        return (_jsx(Pressable, { onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.abaDeTab, ativa && s.abaDeTabAtiva, it.disabled && { opacity: t.size.opacityDisabled }], children: typeof it.label === "string"
                                 ? _jsx(Text, { size: "sm", weight: ativa ? 600 : 400, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
                                 : it.label }, it.id));
                     }) }) }), aberta

@@ -53,7 +53,7 @@
 import * as React from "react";
 import {Pressable, View, type StyleProp, type ViewStyle} from "react-native";
 import Svg, {Circle, G, Line, Path, Rect, Text as SvgText} from "react-native-svg";
-import {criarFolha} from "./estilos.js";
+import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -374,7 +374,7 @@ export function Chart({
                 key={i}
                 onPress={() => tocar(i)}
                 accessibilityRole="button"
-                accessibilityState={{selected: selecionado === i}}
+                {...estadoAcessivel({selected: selecionado === i})}
                 accessibilityLabel={[
                   rotulo,
                   ...series.map((serie) => {

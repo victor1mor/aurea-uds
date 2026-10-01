@@ -58,4 +58,57 @@ export declare const REACAO_AO_TOQUE: {
         readonly opacity: 0.45;
     };
 };
+/** O estado que o leitor de tela anuncia. Mesmas chaves do `accessibilityState` do React Native. */
+export type EstadoAcessivel = {
+    checked?: boolean | "mixed";
+    selected?: boolean;
+    disabled?: boolean;
+    expanded?: boolean;
+    busy?: boolean;
+    /** O botão que liga e desliga. No aparelho vira `checked`; na web vira `aria-pressed`. */
+    pressed?: boolean;
+};
+/**
+ * O estado para o leitor de tela, dito **duas vezes**: em `accessibilityState` (o aparelho) e em
+ * `aria-*` (a web).
+ *
+ * EXISTE POR UMA MEDIÇÃO (R-20, 01/10/2026). O `react-native-web` 0.21.3 **não lê**
+ * `accessibilityState`: o `createDOMProps` dele só conhece `aria-checked`, `aria-selected`,
+ * `aria-disabled`, `aria-expanded` e `aria-busy` (e os `accessibilityChecked` e afins, que estão
+ * para sair). Com só o `accessibilityState`, o `RadioGroup` aberto no navegador saía sem
+ * `aria-checked`, e o leitor de tela não dizia qual opção estava marcada.
+ *
+ * O React Native 0.87 aceita as mesmas `aria-*` e as junta ao `accessibilityState` com o mesmo
+ * valor, então o aparelho não muda.
+ *
+ * ⚠ `pressed` (o botão de ligar e desligar) é a exceção: no aparelho continua `checked`, como
+ * sempre foi; na web vira `aria-pressed`, porque `aria-checked` num `button` o leitor ignora. Os
+ * tipos do React Native não têm `aria-pressed`; o aparelho descarta a propriedade que não conhece.
+ *
+ * Uso: `<Pressable {...estadoAcessivel({checked, disabled})} />`. Ferramenta de dentro: **não
+ * sai pela porta da frente do pacote.**
+ */
+export declare function estadoAcessivel(estado: EstadoAcessivel | undefined): {
+    accessibilityState: undefined;
+    "aria-checked"?: undefined;
+    "aria-selected"?: undefined;
+    "aria-disabled"?: undefined;
+    "aria-expanded"?: undefined;
+    "aria-busy"?: undefined;
+    "aria-pressed"?: undefined;
+} | {
+    accessibilityState: {
+        checked?: boolean | "mixed";
+        selected?: boolean;
+        disabled?: boolean;
+        expanded?: boolean;
+        busy?: boolean;
+    };
+    "aria-checked": "mixed" | boolean | undefined;
+    "aria-selected": boolean | undefined;
+    "aria-disabled": boolean | undefined;
+    "aria-expanded": boolean | undefined;
+    "aria-busy": boolean | undefined;
+    "aria-pressed": boolean | undefined;
+};
 export {};

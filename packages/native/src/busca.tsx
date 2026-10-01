@@ -71,7 +71,7 @@ import {
   type StyleProp, type ViewStyle,
 } from "react-native";
 import {IconButton} from "./actions.js";
-import {criarFolha} from "./estilos.js";
+import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Spinner} from "./feedback.js";
 import {Icon, type IconName} from "./icon.js";
 import {KeyboardAvoiding, useCampo, type AureaFieldSize} from "./inputs.js";
@@ -398,7 +398,7 @@ export function Combobox({
           accessibilityLabel={campo?.label}
           accessibilityHint={campo?.hint}
           accessibilityValue={{text: value?.label}}
-          accessibilityState={{disabled: !!inativo, expanded: aberto}}
+          {...estadoAcessivel({disabled: !!inativo, expanded: aberto})}
           style={s.gatilho}>
           <Text size={tam === "sm" ? "xs" : tam === "lg" ? "base" : "md"}
                 tone={value ? "default" : "subtle"} numberOfLines={1}
@@ -525,9 +525,9 @@ export function Combobox({
                   disabled={item.disabled}
                   onPress={() => { onValueChange?.(item); fechar(); }}
                   accessibilityRole="menuitem"
-                  accessibilityState={{
+                  {...estadoAcessivel({
                     selected: item.value === value?.value, disabled: !!item.disabled,
-                  }}
+                  })}
                   style={[
                     s.opcao,
                     item.value === value?.value && s.opcaoEscolhida,
@@ -679,7 +679,7 @@ export function SearchField({
         accessibilityRole="search"
         accessibilityLabel={campo?.label ?? placeholder}
         accessibilityHint={campo?.hint}
-        accessibilityState={{disabled: !!inativo}}
+        {...estadoAcessivel({disabled: !!inativo})}
         style={[
           s.campoDeTexto,
           {fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],

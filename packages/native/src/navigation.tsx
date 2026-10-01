@@ -33,7 +33,7 @@ import {
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Badge} from "./display.js";
-import {comOpacidade, criarFolha} from "./estilos.js";
+import {comOpacidade, criarFolha, estadoAcessivel} from "./estilos.js";
 import {Icon, type IconName} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -364,7 +364,7 @@ export function BottomNav({
             disabled={it.disabled}
             // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
             accessibilityRole="link"
-            accessibilityState={{selected: ativo, disabled: !!it.disabled}}
+            {...estadoAcessivel({selected: ativo, disabled: !!it.disabled})}
             style={[
               s.aba, justa && s.aba_content,
               indicator === "subtle" && {borderRadius: t.size.radiusCard - t.size.space1},
@@ -547,7 +547,7 @@ export function NavList({items, chevron = "chevron--right", style, ...rest}: Nav
                 onPress={it.onPress}
                 disabled={it.disabled}
                 accessibilityRole="link"
-                accessibilityState={{disabled: !!it.disabled}}
+                {...estadoAcessivel({disabled: !!it.disabled})}
                 style={s.linhaMiolo}>
                 {miolo}
               </Pressable>
@@ -556,7 +556,7 @@ export function NavList({items, chevron = "chevron--right", style, ...rest}: Nav
               // como UMA leitura — sem ele, ícone, rótulo e descrição virariam três paradas.
               <View
                 accessible
-                accessibilityState={{disabled: !!it.disabled}}
+                {...estadoAcessivel({disabled: !!it.disabled})}
                 style={s.linhaMiolo}>
                 {miolo}
               </View>
@@ -636,12 +636,12 @@ export function Stepper({
           <Pressable
             key={n} onPress={it.onPress}
             accessibilityRole="button"
-            accessibilityState={{selected: st === "active"}}
+            {...estadoAcessivel({selected: st === "active"})}
             style={s.passo}>
             {miolo}
           </Pressable>
         ) : (
-          <View key={n} accessible accessibilityState={{selected: st === "active"}} style={s.passo}>
+          <View key={n} accessible {...estadoAcessivel({selected: st === "active"})} style={s.passo}>
             {miolo}
           </View>
         );
@@ -732,7 +732,7 @@ export function Tabs({tabs, value, onChange, label, justify, style, ...rest}: Ta
                 onPress={it.disabled ? undefined : () => onChange?.(it.id)}
                 disabled={it.disabled}
                 accessibilityRole="tab"
-                accessibilityState={{selected: ativa, disabled: !!it.disabled}}
+                {...estadoAcessivel({selected: ativa, disabled: !!it.disabled})}
                 accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
                 style={[s.abaDeTab, ativa && s.abaDeTabAtiva, it.disabled && {opacity: t.size.opacityDisabled}]}>
                 {typeof it.label === "string"

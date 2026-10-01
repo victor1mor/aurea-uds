@@ -17,7 +17,35 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada ainda.
+Nada além da `0.12.4`, logo abaixo, pronta e não publicada.
+
+---
+
+## [0.12.4] — 2026-10-01
+
+⏳ **Não publicada.** Só o nativo muda. Nenhuma API muda.
+
+### Corrigido
+
+- **R-20 · o leitor de tela da web não ouvia o estado das peças do nativo.** O app que roda o
+  nativo no navegador (pelo `react-native-web`) tinha o `RadioGroup` sem `aria-checked`: o leitor
+  de tela não dizia qual opção estava marcada. **A causa foi medida no código publicado:** o
+  `react-native-web` 0.21.3 não lê `accessibilityState` — o `createDOMProps` dele só conhece
+  `aria-checked`, `aria-selected`, `aria-disabled`, `aria-expanded` e `aria-busy`. O defeito não
+  era só do `RadioGroup`: os **26** pontos do nativo que diziam um estado o diziam só pelo
+  `accessibilityState`, em 20 peças (`Button`, `IconButton`, `Input`, `Radio`, `Checkbox`,
+  `RadioGroup`, `Switch`, `SegmentedControl`, `Select`, `Combobox`, `SearchField`, `NumberField`,
+  `Card`, `Tabs`, `BottomNav`, `NavList`, `Stepper`, `Chart`, `Gallery`, `DataState`) e nas duas
+  de `@aurea-uds/native/system` (`DatePicker`, `PhotoInput`).
+  Agora todas passam por uma função de dentro, `estadoAcessivel`, que diz o estado **nas duas
+  formas, com o mesmo valor**. O React Native 0.87 aceita as mesmas `aria-*`, então o aparelho não
+  muda.
+  - ⚠ O botão de ligar e desligar (`pressed` no `Button` e no `IconButton`) continua `checked` no
+    aparelho, como sempre foi, e na web vira `aria-pressed` — `aria-checked` num botão o leitor
+    ignora.
+  - **Controle:** `tests/unit/native-r20-aria.test.tsx`, 5 testes, provados contra o defeito (os
+    5 reprovam no código antigo). O último lê os fontes do nativo e reprova se alguma peça nova
+    escrever `accessibilityState={` cru, sem a forma da web.
 
 ---
 

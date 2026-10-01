@@ -17,7 +17,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
-import { criarFolha, REACAO_AO_TOQUE } from "./estilos.js";
+import { criarFolha, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
 import { Text } from "./text.js";
 import { useAureaTokens, SobreAMarca } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -203,7 +203,7 @@ export function Card({ variant, style, ...rest }) {
     const { action, children, onPress, disabled, ...resto } = rest;
     if (onPress != null) {
         const pele = variant ?? "interactive";
-        return (_jsx(Pressable, { onPress: onPress, disabled: disabled, accessibilityRole: "button", accessibilityState: { disabled: !!disabled }, style: ({ pressed: tocando }) => [
+        return (_jsx(Pressable, { onPress: onPress, disabled: disabled, accessibilityRole: "button", ...estadoAcessivel({ disabled: !!disabled }), style: ({ pressed: tocando }) => [
                 s.cardBase, s[`card_${pele}`],
                 tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
                 style,

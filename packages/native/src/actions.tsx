@@ -21,7 +21,7 @@
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import {Pressable, View, type PressableProps} from "react-native";
-import {criarFolha, REACAO_AO_TOQUE} from "./estilos.js";
+import {criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
@@ -228,7 +228,7 @@ function CorpoDoBotao({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      accessibilityState={{disabled: !!disabled, ...(pressed === undefined ? null : {checked: pressed})}}
+      {...estadoAcessivel({disabled: !!disabled, pressed})}
       style={({pressed: tocando}) => [
         s.alvo, fullWidth && s.alvoLargura,
         tocando && s.pressionado, disabled && s.inerte,
@@ -313,7 +313,7 @@ function BotaoDeIcone({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityState={{disabled: !!disabled, ...(pressed === undefined ? null : {checked: pressed})}}
+      {...estadoAcessivel({disabled: !!disabled, pressed})}
       style={({pressed: tocando}) => [
         // Largura FIXA, como o só-ícone do HeroUI (`.button--icon-only`: `w-10`): ele nunca estica,
         // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
