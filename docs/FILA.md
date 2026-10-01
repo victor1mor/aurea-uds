@@ -1,6 +1,7 @@
 # A fila — o que falta, e como o HeroUI faz cada item
 
-**Fotografia de 01/10/2026**, feita na sessão que fechou a R-20 (versão `0.12.4`). Fonte: o
+**Fotografia de 01/10/2026**, feita na sessão que fechou a R-20 (versão `0.12.4`), e atualizada no
+mesmo dia pelo Lote F do nativo (versão `0.14.0`, ver §0). Fonte: o
 documento de achados dos consumidores, que vive com o Victor (ver `CLAUDE.md` §3), conferido ID a
 ID contra o `CHANGELOG.md`. **Peça ao Victor a versão mais nova antes de confiar nesta lista** —
 ela envelhece a cada lote.
@@ -31,6 +32,7 @@ dois tem — cria-se *"pensando como o HeroUI criaria"*.
 |---|---|---|
 | `0.12.4` | **R-20**: o estado (`marcado`, `escolhido`, `desligado`, `aberto`, `ocupado`) chega ao leitor de tela da **web** em `aria-*`. Os 26 pontos do nativo | **publicada em 01/10/2026** (pedido #15), pelo terminal do Victor. Falta conferir no app, na web |
 | `0.13.0` | **ADR-0053**: a fonte é a Atkinson Hyperlegible Next e Mono, e os ícones são o Phosphor, com a forma cheia no item escolhido. Resolve a **R-17** (o Phosphor tem coroa e moto). **Quebra** nomes de ícone | **publicada em 01/10/2026** (pedido #17, fotos da CI nos #18 e #19), pelo terminal do Victor. Falta o teste de aparelho e os apps trocarem os nomes |
+| `0.14.0` | **Lote F do nativo**: R-10 (`text-md` vira apelido de `text-sm`, sai na 1.0), R-12 (`Tabs variant="secondary"`), R-14 (`description` no item do `Combobox`), R-16 (`NumberField size="display"`, letra 30), R-19 (`icon` no `RadioGroup.Item`, 24). De passagem: a descrição do `RadioGroup` saía em 16 e passou a 14 | **feita em 01/10/2026, NÃO publicada**. Propostas aprovadas pelas pranchas (*"ok, 30 e 24"*); falta o Victor ver o antes e depois, o "pode" do envio e o aceite de aparelho (blocos LF do `apps/native-smoke`) |
 
 **Decisão do Victor, 01/10/2026:** *"o restante vamos usar HeroUI como referência"*. As
 decisões da seção 1 (R-10, R-11, R-13, R-19) e as medidas da seção 2 seguem a recomendação
@@ -42,7 +44,10 @@ seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 
 ## 1. Nativo — decisões que são do Victor
 
-### R-10 · `textSm` e `textMd` valem os dois 14
+### ~~R-10 · `textSm` e `textMd` valem os dois 14~~ — feito na `0.14.0`
+
+✅ O `text-md` aponta para o `text-sm` (`"$value": "{text-sm}"`), com `$deprecated`; sai na 1.0.
+O CSS da Aurea passou a usar `--text-sm`. Nada muda na tela.
 
 - **[HeroUI]** O `heroui-native` usa a escala do Tailwind: `text-xs` 12 · `text-sm` 14 ·
   `text-base` 16 · `text-lg` 18 · `text-xl` 20 · `text-2xl` 24. **Não existe `text-md`.**
@@ -71,7 +76,10 @@ seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 - **Pergunta ao Victor:** com **uma** série, o padrão passa a ser o amarelo primário (o app já
   passa `t.color.primary` em toda chamada)? Com duas ou mais, a rampa azul continua.
 
-### R-19 · ícone em cada opção do `RadioGroup`
+### ~~R-19 · ícone em cada opção do `RadioGroup`~~ — feito na `0.14.0`
+
+✅ `icon?: IconName` no `RadioGroup.Item`: 24 (`iconLg`, escolha do Victor — o HeroUI usa 22 nos
+ícones de lista, que não existe na Aurea), antes do texto, vão de 12, cheio na opção escolhida.
 
 - **[HeroUI]** Ele não tem prop de ícone: o `RadioGroup.Item` aceita **filhos livres**
   (`<View><Label/><Description/></View><Radio/>`), e o ícone entra como mais um filho
@@ -84,7 +92,10 @@ seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 
 ## 2. Nativo — peças a acrescentar (só acrescentam)
 
-### R-12 · `Tabs` sem o fio amarelo
+### ~~R-12 · `Tabs` sem o fio amarelo~~ — feito na `0.14.0`
+
+✅ `<Tabs variant="secondary">`, com o fio da casa (`fioDoEscolhido`, a mesma peça do
+`SegmentedControl`). ⚠ **A web não tem a variante**; ver §6.
 
 - **[HeroUI]** `Tabs` tem `variant: 'primary' | 'secondary'` (`tabs.types.ts:30`). O
   `secondary` é exatamente o pedido: a lista com **fio de 1** embaixo (`border-bottom-width: 1px`,
@@ -93,7 +104,10 @@ seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 - **Recomendação:** `<Tabs variant="secondary">` — o nome do HeroUI, não o `indicator="line"` da
   ficha. O fio de 2 em `primaryEmphasis`, como o `SegmentedControl`.
 
-### R-14 · item do `Combobox` sem segunda linha
+### ~~R-14 · item do `Combobox` sem segunda linha~~ — feito na `0.14.0`
+
+✅ `description?: string` no `AureaComboboxItem`: 14, apagada. ⚠ **O `Combobox` da web não tem**
+(`ComboboxOption` é `{value, label}`); ver §6.
 
 - **[HeroUI]** No telefone, o `Select` tem `Select.ItemDescription`: letra `--text-sm`, linha
   `1.375`, cor apagada (`styles/components/select.css:117`). Na web, o item da lista aceita
@@ -111,7 +125,10 @@ seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
   do app pede 112 — **maior que o maior do ReUI** (56). Perguntar ao Victor se 112 é medida ou
   desenho solto antes de criar escala nova.
 
-### R-16 · `NumberField` só até `lg`
+### ~~R-16 · `NumberField` só até `lg`~~ — feito na `0.14.0`
+
+✅ `size="display"`: letra `text3xl` (30, seminegrito, escolha do Victor), altura `controlHXl`,
+largura `space24`, botões do `lg`.
 
 - **[ninguém]** O `NumberField` do HeroUI web tem só `variant` (`primary`/`secondary`), sem
   tamanho grande (`number-field.css:179`). O telefone não tem `NumberField`. O ReUI tem
@@ -179,6 +196,13 @@ juntar, mas juntar acredito que os traços iriam destoar"*. Medido nos pacotes b
 
 ---
 
+### Achado de passagem (01/10/2026), sem lote
+
+- **A descrição do `Toast` do nativo sai em 16**: `Text size="sm"` (`toast.tsx:292`), e no telefone
+  o `sm` é 16 (ADR-0050). O HeroUI Native usa `text-sm`, 14 (`styles/components/toast.css:47`). É o
+  mesmo defeito que a `0.14.0` corrigiu no `RadioGroup`. A descrição do `Dialog` está certa
+  (`md` → 16, e o HeroUI usa `text-base`, 16).
+
 ## 3. Nativo — teste de aparelho que falta
 
 Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos:
@@ -190,6 +214,8 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 4. **E7** e **E8** — `0.11.0`, publicados sem o aceite.
 5. **R-20** no navegador: abrir o app na web e conferir `aria-checked` na opção marcada.
 6. **iPhone: nunca rodou.** Antes de prometer a `1.0`.
+7. **LF-12, LF-14, LF-16 e LF-19** (`Tabs` secundário, segunda linha do `Combobox`, `NumberField`
+   grande, ícone no `RadioGroup`) — `0.14.0`.
 
 ## 4. Do app, não da Aurea
 
@@ -223,6 +249,8 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 | B-11 | campos irmãos não alinham | **[ninguém]** | `subgrid` no `Grid`; medir antes |
 | B-13 | `DependencyGraph` sem estado na aresta | **[ninguém]** — peça só nossa | acréscimo de `id`/`selected` |
 | C-06 | `option` sem estilo no escuro | — | **medir**: provavelmente morreu com o `Select` novo |
+| — | `Tabs` sem `variant="secondary"` na web | **[HeroUI]** `.tabs--secondary` no `@heroui/styles` 3.2.6 (`tabs.css:246`) | paridade com o nativo (R-12, `0.14.0`); a web hoje só tem a cápsula |
+| — | item do `Combobox` sem `description` na web | **[HeroUI]** o item da lista aceita `Description` | paridade com o nativo (R-14, `0.14.0`) |
 | C-08 | `Button` com vão fixo de 8 | **[HeroUI]** também fixo: `gap-2` (8) em **todos** os tamanhos (`button.css:5`; `--sm` e `--lg` não mexem no vão) | **fechar sem mudar** — igual ao HeroUI |
 | C-11 | `Tooltip` em texto só abre pelo teclado com `tabIndex` | **[HeroUI]** o `Tooltip.Trigger` põe ele mesmo o foco: `useFocusable` + `role="button"` (`tooltip.js:138-153`) | o gatilho da Aurea faz o mesmo |
 | C-12 | sprite de ícones de 1,27 MB | **[HeroUI]** um componente por ícone, importado um a um | ícone por arquivo na web, como o nativo já faz (`icons/*`) |
@@ -246,9 +274,12 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 ## 8. Ordem sugerida (a decidir com o Victor)
 
 1. ~~Publicar a `0.12.4` (R-20)~~ — publicada em 01/10/2026. Falta rodar o teste de aparelho (§3).
-2. Decisões rápidas do nativo: R-10, R-13, R-19, R-11.
+2. Decisões rápidas do nativo: ~~R-10, R-19~~ (`0.14.0`). Faltam: **R-11** (pedir ao Victor o
+   texto da ficha: a "saída 2" muda a forma de usar os ícones) e **R-13** (descer a fila de
+   referências — Shark UI, Untitled UI, MUI — antes de propor a cor).
 3. **Lote da troca de fonte e ícones** (ADR-0053): antes da `1.0`, porque quebra todo nome de
    ícone. Falta só o peso do ícone pequeno (ADR-0053).
-4. Acréscimos do nativo que o app já espera: R-12, R-14, R-15, R-16.
+4. Acréscimos do nativo que o app já espera: ~~R-12, R-14, R-16~~ (`0.14.0`). Falta a **R-15**,
+   que espera a resposta do Victor: os 112 do desenho do app são medida ou desenho solto?
 5. Web: C-08 e M-03 fecham sem código; C-11, B-05, B-06 + N-01 + N-03 num lote só (paginação).
 6. Lote 5 (peças novas da web) depois da `1.0`, como o `CLAUDE.md` já diz.

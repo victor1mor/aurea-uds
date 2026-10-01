@@ -198,6 +198,12 @@ const folha = criarFolha((t: AureaTokens) => ({
 export interface AureaComboboxItem {
   value: string;
   label: string;
+  /**
+   * Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg") — R-14, 01/10/2026. É o
+   * `Select.ItemDescription` do HeroUI Native 1.0.10 (`styles/components/select.css:117`): letra
+   * `text-sm` (14), cor apagada. A busca continua olhando só o `label`.
+   */
+  description?: string;
   disabled?: boolean;
 }
 
@@ -528,6 +534,7 @@ export function Combobox({
                   {...estadoAcessivel({
                     selected: item.value === value?.value, disabled: !!item.disabled,
                   })}
+                  accessibilityHint={item.description}
                   style={[
                     s.opcao,
                     item.value === value?.value && s.opcaoEscolhida,
@@ -536,6 +543,11 @@ export function Combobox({
                   <Text size="md" weight={item.value === value?.value ? 600 : 400}>
                     {item.label}
                   </Text>
+                  {/* `xs` é o 14 no telefone (o mapa da ADR-0050 sobe um degrau): o `text-sm`
+                      do HeroUI, o mesmo da descrição do `Checkbox` e do `RadioGroup`. */}
+                  {item.description != null && (
+                    <Text size="xs" tone="muted">{item.description}</Text>
+                  )}
                 </Pressable>
               )}
             />

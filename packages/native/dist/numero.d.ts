@@ -2,6 +2,18 @@ import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
 import type { IconName } from "./icon-names.js";
 import { type AureaFieldSize } from "./inputs.js";
+/**
+ * Os tamanhos do `NumberField`: os três do campo e mais o `display` (R-16, 01/10/2026), o número
+ * grande de destaque. Nenhuma referência da fila tem esse tamanho (o `NumberField` do HeroUI web
+ * só tem `variant`; o telefone dele nem tem a peça; o ReUI também não), então ele é peça nossa —
+ * e as medidas saem de escalas que JÁ existem, nenhuma nova:
+ *   letra    `text3xl` (30) em seminegrito — o título 2 (`h2` do B-02). Escolha do Victor.
+ *   altura   `controlHXl` — o degrau seguinte da escala de altura dos controles, que muda com a
+ *            densidade como as outras três.
+ *   largura  `space24` (96): o `space16` (64) do campo comum não cabe "1.234" em 30.
+ *   botões   os do `lg`, o maior do `IconButton`.
+ */
+export type AureaNumberFieldSize = AureaFieldSize | "display";
 /** Os separadores de um locale, derivados de um número-sonda. */
 export type AureaSeparadores = {
     decimal: string;
@@ -52,7 +64,11 @@ export interface NumberFieldProps {
     disabled?: boolean;
     /** Mostra o valor e não deixa editar — os botões também somem. */
     readOnly?: boolean;
-    size?: AureaFieldSize;
+    /**
+     * `sm` · `md` · `lg`, como os outros campos, e `display`: o número grande de destaque, com a
+     * letra do título 2 (30). Ver `AureaNumberFieldSize`. Moeda em `display` pede `fullWidth`.
+     */
+    size?: AureaNumberFieldSize;
     /**
      * Ocupa a largura disponível em vez de abraçar o conteúdo. Padrão **false**.
      *

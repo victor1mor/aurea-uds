@@ -18,7 +18,6 @@
     "--text-2xl",
     "--text-xl",
     "--text-lg",
-    "--text-md",
     "--text-sm",
     "--leading-relaxed",
     "--leading-tight",

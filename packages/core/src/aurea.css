@@ -4,7 +4,7 @@
 /* ========================================================================== */
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
-body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-ui); font-size:var(--text-md); line-height:var(--leading-normal); }
+body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-ui); font-size:var(--text-sm); line-height:var(--leading-normal); }
 ::selection { background:var(--selection); }
 button,input,textarea,select { font:inherit; }
 button,a,[role="button"],input,textarea,select { outline:none; }
@@ -1617,7 +1617,7 @@ img,svg { display:block; }
    nenhum gate viu, porque os checks 15 e 18 comparam CLASSE e seletor de elemento não tem
    nenhuma. Escrever `blockquote{...}` aqui repetiria o Lote 4 com outro elemento.
 
-   O tamanho sobe para `--text-base`: o corpo do documento é `--text-md` (14px), que serve a
+   O tamanho sobe para `--text-base`: o corpo do documento é `--text-sm` (14px), que serve a
    interface e é pequeno para ler artigo. A entrelinha é `--leading-relaxed`, que existe no token
    e não tinha uso. A MEDIDA de linha é `--prose-measure`, no idioma das outras válvulas.
 
@@ -1647,7 +1647,7 @@ img,svg { display:block; }
 /* A tabela da prosa NÃO é a tabela de dados: sem `min-width:720px`, sem faixa de cabeçalho em
    caixa alta e sem hover de linha. Uma tabela de três colunas no meio de um artigo não é uma
    grade — forçá-la a 720px é exatamente o defeito que o calendário sofreu. */
-.prose table { width:100%; border-collapse:collapse; font-size:var(--text-md); }
+.prose table { width:100%; border-collapse:collapse; font-size:var(--text-sm); }
 .prose th,.prose td { padding:var(--space-2) var(--space-3); text-align:start; border-block-end:1px solid var(--border); }
 .prose th { color:var(--subtle-foreground); font-weight:var(--weight-semibold); }
 

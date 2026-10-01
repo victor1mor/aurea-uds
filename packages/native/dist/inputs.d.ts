@@ -282,10 +282,18 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
     invalid?: boolean;
     /** O lado da marca só neste item; sem ele, vale o do grupo. */
     indicatorPlacement?: AureaRadioIndicatorPlacement;
+    /**
+     * Um ícone antes do texto (R-19, 01/10/2026). O HeroUI não tem esta prop: no `RadioGroup.Item`
+     * dele o ícone entra como mais um filho, e a Aurea traduz filho livre em nome de ícone, como em
+     * todo o resto. Tamanho `iconLg` (24, o mesmo da marca; o HeroUI usa 22 nos ícones de lista, que
+     * não existe aqui — escolha do Victor), vão de 12 até o texto. Na opção escolhida sai a forma
+     * cheia (ADR-0053), se o registro a tiver.
+     */
+    icon?: IconName;
     style?: StyleProp<ViewStyle>;
 }
 declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, indicatorPlacement, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
-declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest }: RadioGroupItemProps): React.JSX.Element;
+declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, ...rest }: RadioGroupItemProps): React.JSX.Element;
 /**
  * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
  *

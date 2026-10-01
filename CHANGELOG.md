@@ -42,6 +42,68 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.14.0] — 2026-10-01
+
+⏳ **NÃO PUBLICADA.** Lote F do nativo: os acréscimos R-10, R-12, R-14, R-16 e R-19 da fila
+(`docs/FILA.md`), cada um no desenho do HeroUI Native 1.0.10 quando ele tem a peça. As propostas
+foram aprovadas pelo Victor pelas pranchas de 01/10/2026 (*"ok, 30 e 24"*). Nada quebra: tudo é
+prop nova, e sem ela a peça sai como antes — exceto a descrição do `RadioGroup` (ver
+"Corrigido"). Mexe no nativo, nos tokens e numa linha do CSS da web.
+
+### Adicionado
+
+- **`<Tabs variant="secondary">`, no nativo (R-12).** O `secondary` do `Tabs` do HeroUI: sem a
+  cápsula, um fio fino de 1 embaixo da fila inteira (cor `border`) e o **fio amarelo** da casa
+  embaixo da aba aberta. Recheio da aba do HeroUI (12 dos lados, 6 em cima e embaixo, nos
+  `space3` e `space1 + space05`), e a altura da fila igual à da cápsula (`controlHMd`). Sem
+  `variant`, ou com `"primary"`, é a cápsula de sempre. Tipo novo: `AureaTabsVariant`.
+- **`description` no item do `Combobox`, no nativo (R-14).** A segunda linha do
+  `Select.ItemDescription` do HeroUI: letra 14, apagada, embaixo do rótulo. Vira a dica do item
+  para o leitor de tela. A busca continua olhando só o `label`.
+- **`<NumberField size="display">`, no nativo (R-16).** O número grande de destaque. Nenhuma
+  referência da fila tem esse tamanho, então é peça nossa, feita com escalas que já existem:
+  letra do título 2 (`text3xl`, 30, seminegrito — escolha do Victor), altura `controlHXl` (o
+  degrau seguinte dos controles, que muda com a densidade), largura `space24` (96, para caber
+  "1.234") e os botões do `lg`. Tipo novo: `AureaNumberFieldSize`.
+- **`icon` no `RadioGroup.Item`, no nativo (R-19).** O HeroUI põe o ícone como mais um filho do
+  item; aqui é nome de ícone, como em todo o resto. Fica antes do texto, com 24 (`iconLg`, escolha
+  do Victor; o HeroUI usa 22 nos ícones de lista, que não existe na Aurea) e vão de 12, na cor do
+  rótulo. Na opção escolhida sai a forma cheia (ADR-0053), se o registro tiver `<nome>-fill`.
+
+### Mudado
+
+- **`text-md` vira apelido de `text-sm` (R-10).** Os dois já valiam 14 (ADR-0050); agora o
+  `text-md` aponta para o `text-sm` em vez de repetir o número, e leva `$deprecated` no arquivo de
+  tokens. **Nada muda na tela.** ⚠ **Aviso: o `text-md` (e o `textMd` do nativo) sai na `1.0`.**
+  Troque por `text-sm`. O CSS da Aurea já não usa o nome velho: o `body` e a tabela da `.prose`
+  passaram para `--text-sm`.
+- **O fio amarelo do escolhido virou uma peça só no nativo** (`fioDoEscolhido`, em `estilos.ts`),
+  usada pelo `SegmentedControl` e pela aba do `Tabs` secundário. Os números são os mesmos da web
+  (`aurea.css:1039`): altura 2, recuo 15, amarelo a 75%.
+
+### Corrigido
+
+- **A descrição do `RadioGroup` saía em 16, do tamanho do rótulo.** O comentário do código sempre
+  disse `text-sm` (o 14 do `description.css` do HeroUI), mas o `Text size="sm"` do nativo é 16 (o
+  mapa da ADR-0050 sobe um degrau no telefone). Agora é `xs`, que é o 14, o mesmo do `Checkbox` e
+  do `Switch`. Achado na vitrine de 01/10/2026, ao lado da imagem do HeroUI.
+  **Quem mais tem:** a descrição do `Toast` do nativo usa o mesmo `size="sm"` (16) e o HeroUI usa
+  14 (`toast.css`). Fica anotado na fila, sem mexer neste lote.
+
+### Testes e aparelho
+
+- `tests/unit/native-lote-f.test.tsx`: 19 testes. **14 reprovam o código de antes do lote**;
+  os outros 5 travam o que não podia mudar (a cápsula, o fio do `SegmentedControl`, o `lg`).
+- O dublê da vitrine (`tests/unit/native-stubs/react-native.ts`) desenhava errado duas coisas que
+  o aparelho faz certo, e a imagem do `Tabs` secundário pegou as duas: lado de borda sem largura
+  saía com 3px (o padrão do CSS; no RN é 0), e filho `absolute` não se ancorava no pai (no RN
+  toda `View` é `relative`). Só a vitrine muda; os testes não leem esse caminho.
+- Aceite de aparelho: blocos **LF-12, LF-14, LF-16 e LF-19** do `apps/native-smoke`. No mesmo
+  app, os dois `<Select label=…>` dos blocos E4 e E10 passaram para dentro de um `Field`: o `Select`
+  não tem `label`, e o `conferir-props.mjs` reprovava desde a `0.11.0`.
+
+---
+
 ## [0.13.0] — 2026-10-01
 
 ✅ **PUBLICADA em 01/10/2026, por volta das 13:30 (Brasília), nos sete pacotes, pelo terminal do

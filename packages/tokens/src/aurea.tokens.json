@@ -87,11 +87,9 @@
     },
     "text-md": {
       "$type": "dimension",
-      "$value": {
-        "value": 0.875,
-        "unit": "rem"
-      },
-      "$description": "Vale o MESMO que o text-sm (14), de propósito — ADR-0050, escolha 1: o md é o texto base das páginas da web, e o texto base das peças do HeroUI é 14. Os dois nomes continuam para não quebrar quem usa. Código novo usa text-sm. R-10, 24/09/2026."
+      "$value": "{text-sm}",
+      "$deprecated": "Use text-sm. Sai na 1.0 (R-10, 01/10/2026).",
+      "$description": "APELIDO do text-sm (14), e não um degrau: o HeroUI não tem md, e cada nome da escala é um tamanho só (R-10). Até 01/10/2026 era um 0.875rem próprio, que valia o mesmo por coincidência escrita (ADR-0050, escolha 1). Continua existindo para não quebrar quem usa; sai na 1.0. Código novo usa text-sm."
     },
     "text-base": {
       "$type": "dimension",

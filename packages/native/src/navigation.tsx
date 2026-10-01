@@ -33,7 +33,7 @@ import {
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Badge} from "./display.js";
-import {comOpacidade, criarFolha, estadoAcessivel} from "./estilos.js";
+import {comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {Icon, type IconName} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -168,6 +168,24 @@ const folha = criarFolha((t: AureaTokens) => ({
     paddingHorizontal: 14, borderRadius: t.size.radiusControl,
   },
   abaDeTabAtiva: {backgroundColor: t.color.secondary},
+  // `variant="secondary"` (R-12, 01/10/2026): o `secondary` do HeroUI Native 1.0.10
+  // (`styles/components/tabs.css`), com o fio da casa no lugar do indicador azul deles.
+  //   .tabs__list--variant-secondary  padding 0 · border-bottom 1px, cor da borda
+  //   .tabs__list                     gap `* 1` → space1
+  //   .tabs__trigger                  padding-inline `* 3` → space3 · padding-block `* 1.5`
+  //                                   → space1 + space05. Rótulo `text-base` + entrelinha 1.5 dá
+  //                                   36, que é o `controlHMd`: a altura da fila da cápsula, então
+  //                                   trocar de variante não muda a altura da fila.
+  //   .tabs__indicator--variant-secondary  border-bottom 2px na cor de destaque → `fioDoEscolhido`
+  abasSecundarias: {
+    flexDirection: "row", gap: t.size.space1,
+    borderBottomWidth: t.size.borderWidth, borderColor: t.color.border,
+  },
+  abaSecundaria: {
+    alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
+    paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
+  },
+  fioDaAba: fioDoEscolhido(t),
   painel: {marginTop: t.size.space3},
 
   // ── Stepper ────────────────────────────────────────────────────────────────────────────────
@@ -671,7 +689,17 @@ export interface TabsProps extends ViewProps {
   label?: string;
   /** Onde a fila de abas fica quando cabe: `start` (padrão), `center` ou `end` (E3). */
   justify?: AureaFilaJustify;
+  /**
+   * O jeito da fila, com os nomes do HeroUI (R-12, 01/10/2026):
+   * - `primary` (padrão): a cápsula, com a aba aberta num fundo `secondary`.
+   * - `secondary`: sem cápsula — um fio fino embaixo da fila inteira e o **fio amarelo** da casa
+   *   embaixo da aba aberta, o mesmo do `SegmentedControl`.
+   */
+  variant?: AureaTabsVariant;
 }
+
+/** Os dois jeitos da fila de abas, com os nomes do `Tabs` do HeroUI Native. */
+export type AureaTabsVariant = "primary" | "secondary";
 
 /**
  * As abas DENTRO da tela — trocar o painel, não trocar de página.
@@ -706,11 +734,14 @@ export interface TabsProps extends ViewProps {
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export function Tabs({tabs, value, onChange, label, justify, style, ...rest}: TabsProps) {
+export function Tabs({
+  tabs, value, onChange, label, justify, variant = "primary", style, ...rest
+}: TabsProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
   const aberta = tabs.find((it) => it.id === value);
+  const secundaria = variant === "secondary";
 
   return (
     <View style={style} {...rest}>
@@ -724,7 +755,7 @@ export function Tabs({tabs, value, onChange, label, justify, style, ...rest}: Ta
           aqui. A `FilaRolante` é a mesma peça nos dois. */}
       <FilaRolante justify={justify}>
         <View accessibilityRole="tablist" accessibilityLabel={label ?? strings.tabsLabel}
-              style={s.abas}>
+              style={secundaria ? s.abasSecundarias : s.abas}>
           {tabs.map((it) => {
             const ativa = it.id === value;
             return (
@@ -735,13 +766,18 @@ export function Tabs({tabs, value, onChange, label, justify, style, ...rest}: Ta
                 accessibilityRole="tab"
                 {...estadoAcessivel({selected: ativa, disabled: !!it.disabled})}
                 accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
-                style={[s.abaDeTab, ativa && s.abaDeTabAtiva, it.disabled && {opacity: t.size.opacityDisabled}]}>
+                style={[
+                  secundaria ? s.abaSecundaria : s.abaDeTab,
+                  ativa && !secundaria && s.abaDeTabAtiva,
+                  it.disabled && {opacity: t.size.opacityDisabled},
+                ]}>
                 {typeof it.label === "string"
                   ? <Text size="sm" weight={ativa ? 600 : 400}
                           style={{color: ativa ? t.color.foreground : t.color.mutedForeground}}>
                       {it.label}
                     </Text>
                   : it.label}
+                {ativa && secundaria && <View style={s.fioDaAba} />}
               </Pressable>
             );
           })}

@@ -106,7 +106,7 @@ export type {
   BottomNavProps, TopbarProps, NavListProps, StepperProps,
   AureaNavItem, AureaNavListItem, AureaStepItem, AureaStepState,
   AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset,
-  TabsProps, AureaTabItem,
+  TabsProps, AureaTabItem, AureaTabsVariant,
 } from "./navigation.js";
 
 // ── Lote 4 — os formulários ────────────────────────────────────────────────────────────────
@@ -195,7 +195,7 @@ export type {ComboboxProps, SearchFieldProps, AureaComboboxItem} from "./busca.j
 // escrever: `lerNumero` converte de novo o que a pessoa digitou. Os dois auxiliares são públicos
 // porque o app tem o mesmo problema em toda tela de lançamento.
 export {NumberField, formatarNumero, lerNumero, separadoresDoLocale} from "./numero.js";
-export type {NumberFieldProps, AureaSeparadores} from "./numero.js";
+export type {NumberFieldProps, AureaSeparadores, AureaNumberFieldSize} from "./numero.js";
 
 // ⚠ O `Image` NÃO é o `Image` do React Native com outra pele: ele **reserva a caixa** antes dos
 // bytes e **cai para um substituto** quando eles não vêm — as duas coisas que a ficha da web

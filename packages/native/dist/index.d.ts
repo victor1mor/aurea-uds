@@ -23,7 +23,7 @@ export { defaultStrings, ptBR, gravidadeDoEstado, AUREA_UNIVERSAL_STATES } from 
 export type { AureaStrings, AureaUniversalState } from "./strings.js";
 export { useReduceMotion } from "./movimento.js";
 export { BottomNav, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
-export type { BottomNavProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, } from "./navigation.js";
+export type { BottomNavProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, AureaTabsVariant, } from "./navigation.js";
 export { Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, RadioGroup, SegmentedControl, Form, KeyboardAvoiding, useCampo, } from "./inputs.js";
 export type { FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps, RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize, } from "./inputs.js";
 export { InputGroup, InputGroupAddon, PasswordField, useGrupoDeCampo } from "./inputs.js";
@@ -39,7 +39,7 @@ export type { ChartProps, ChartLegendProps, AureaSeries, AureaChartMark } from "
 export { Combobox, SearchField } from "./busca.js";
 export type { ComboboxProps, SearchFieldProps, AureaComboboxItem } from "./busca.js";
 export { NumberField, formatarNumero, lerNumero, separadoresDoLocale } from "./numero.js";
-export type { NumberFieldProps, AureaSeparadores } from "./numero.js";
+export type { NumberFieldProps, AureaSeparadores, AureaNumberFieldSize } from "./numero.js";
 export { Image, Gallery } from "./midia.js";
 export type { ImageProps, GalleryProps, AureaGalleryItem, AureaImageSource, } from "./midia.js";
 export type { AureaFilaJustify } from "./rolagem.js";

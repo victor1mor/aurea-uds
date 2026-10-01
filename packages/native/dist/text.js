@@ -3,7 +3,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 //
 // É o **bloqueio 3** da §5.2 do NATIVE.md, e a razão dele é estrutural, não de escopo:
 //
-//   web:    body { font-family:var(--font-ui); font-size:var(--text-md);
+//   web:    body { font-family:var(--font-ui); font-size:var(--text-sm);
 //                  line-height:var(--leading-normal) }        ← e TODO <p>/<span>/<h1> herda
 //   nativo: não há cascata de estilo de texto através de `View`, e não há `<p>`.
 //

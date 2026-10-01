@@ -161,6 +161,9 @@ documento de achados mais novo para conferir se ela envelheceu.
 4. **Lote E** saiu na `0.11.0` — ver "Lote E e decisões de 25/09/2026", abaixo.
 5. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
+6. **Lote F (nativo) feito em 01/10/2026, na `0.14.0`, NÃO publicada:** R-10, R-12, R-14, R-16,
+   R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). O que falta da fila está no
+   [`docs/FILA.md`](docs/FILA.md) §8.
 
 ### Lote E e decisões de 25/09/2026
 
