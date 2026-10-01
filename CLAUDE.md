@@ -101,6 +101,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.12.0` | Lote 3: A-04, B-09, ADR-0052, B-02, E2, M-01 e o `ThemeToggle` — pedido #8. **Não saiu sozinha**: foi publicada dentro da `0.12.1` |
 | `0.12.1` | E9 (`LinkButton`), E10 (recuo das folhas), E11 (`Grid` reparte a sobra) — pedidos #9 e #10. **Publicada em 26/09/2026**, pelo terminal do Victor. Leva a `0.12.0` junto |
 | `0.12.2` | O `BottomNav` mais baixo, na web e no nativo (aprovado pela imagem) e dois patches de segurança da CI — pedido #11. **Publicada em 30/09/2026**, pelo terminal do Victor |
+| `0.12.3` | `RadioGroup` no nativo, no desenho do HeroUI, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
