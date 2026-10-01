@@ -71,6 +71,25 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   a ele"*. Quando ele **não tem** a peça que estamos criando, ela se cria **pensando como ele
   criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea. Ele é a
   referência mesmo onde não tem o componente.
+- **Quando o HeroUI não tem a peça, a consulta segue esta fila** (ordem do Victor, 01/10/2026),
+  e para no primeiro que tiver:
+
+  > **HeroUI → ReUI → Shark UI → Untitled UI → MUI**
+
+  | # | referência | onde ler | base | licença (conferida em 01/10/2026) |
+  |---|---|---|---|---|
+  | 1 | **HeroUI** | `npm pack @heroui/styles` · `npm pack heroui-native` | React Aria (web) | MIT |
+  | 2 | **ReUI** | `reui.io/docs/components/*` | shadcn, Base UI ou Radix | MIT nos abertos; os "Pro" são pagos e não entram |
+  | 3 | **Shark UI** | `shark.vini.one/docs` | Ark UI + Tailwind | MIT |
+  | 4 | **Untitled UI** | `untitledui.com/react` | React Aria + Tailwind | MIT nos abertos; o "PRO" é pago e não entra |
+  | 5 | **MUI** | `mui.com` · `npm pack @mui/material` | próprio | MIT |
+
+  - De todos se lê **anatomia, nomes, estados e comportamento**. A aparência é sempre a da Aurea
+    (seção 5) — e o MUI é **Material**, que a seção 5 proíbe como aparência: dele, só o
+    comportamento.
+  - Medida (recheio, altura, vão) vem **só do HeroUI**, pela regra abaixo. Dos outros quatro,
+    número nenhum entra sem passar pelos tokens que já existem.
+  - Copiar continua exigindo ordem do Victor e crédito no `docs/REFERENCES.md` (seção 7).
 - **As medidas vêm do HeroUI** (ordem do Victor, 25/09/2026): *"não vamos ficar inventando
   medidas, se HeroUI já tem vamos usar as deles, que já é validado; só criamos medidas e tamanho em
   componente exclusivo nosso"*. Recheio, altura, letra, linha e vão de peça que o HeroUI tem se
@@ -102,7 +121,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.12.1` | E9 (`LinkButton`), E10 (recuo das folhas), E11 (`Grid` reparte a sobra) — pedidos #9 e #10. **Publicada em 26/09/2026**, pelo terminal do Victor. Leva a `0.12.0` junto |
 | `0.12.2` | O `BottomNav` mais baixo, na web e no nativo (aprovado pela imagem) e dois patches de segurança da CI — pedido #11. **Publicada em 30/09/2026**, pelo terminal do Victor |
 | `0.12.3` | `RadioGroup` no nativo, no desenho do HeroUI, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
-| `0.12.4` | R-20: o estado chega ao leitor de tela da web em `aria-*` (os 26 pontos do nativo). **Pronta, não publicada** |
+| `0.12.4` | R-20: o estado chega ao leitor de tela da web em `aria-*` (os 26 pontos do nativo) — pedido #15. **Publicada em 01/10/2026**, pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -172,6 +191,10 @@ documento de achados mais novo para conferir se ela envelheceu.
 4. Verificar: `python scripts/validate.py` · `pnpm build` · `npx vitest run` ·
    `node scripts/check-pack.mjs` · `node scripts/publicar.mjs --dry-run` · e no navegador os
    testes do Playwright (Chromium em `/opt/pw-browsers/chromium` nas sessões de nuvem).
+   - ⚠ **`--write-manifest` e `--write-state` regravam e ENCERRAM o script, sem conferir nada**
+     — e juntos, só o primeiro roda. Rode cada um **sozinho**, e depois o `validate.py` **puro**:
+     só a linha `Aurea validation: OK` prova a conferência. Em 01/10/2026 a `0.12.4` foi
+     verificada com os dois juntos, o `STATE.md` ficou velho e o `main` ficou vermelho.
 5. **Desenhar antes e depois e mostrar ao Victor.** Só está aprovado depois que ele vê; teste
    verde não é aprovação.
 6. Levantar a versão nos **nove** arquivos (`package.json` da raiz, os sete pacotes e

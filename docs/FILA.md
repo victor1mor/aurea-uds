@@ -6,7 +6,10 @@ ID contra o `CHANGELOG.md`. **Peça ao Victor a versão mais nova antes de confi
 ela envelhece a cada lote.
 
 A pesquisa segue a ordem do `CLAUDE.md` §2: **primeiro o HeroUI**; só onde ele não tem a peça,
-o **ReUI** (pedido do Victor, 01/10/2026). Nada aqui é da memória:
+o **ReUI**. Desde 01/10/2026 a fila de referências tem cinco degraus — **HeroUI → ReUI → Shark UI
+→ Untitled UI → MUI** (ordem do Victor; tabela no `CLAUDE.md` §2). Esta pesquisa foi feita antes
+e só desceu até o ReUI: onde está **[ninguém]**, ainda falta olhar Shark UI, Untitled UI e MUI.
+Nada aqui é da memória:
 
 - HeroUI lido nos pacotes baixados com `npm pack` em 01/10/2026: `heroui-native` **1.0.10** (o
   telefone), `@heroui/react` e `@heroui/styles` **3.2.6** (a web). O arquivo está ao lado de cada
@@ -22,11 +25,17 @@ dois tem — cria-se *"pensando como o HeroUI criaria"*.
 
 ---
 
-## 0. Feito e ainda não publicado
+## 0. O que saiu desde esta fotografia
 
-| versão | o quê | falta |
+| versão | o quê | estado |
 |---|---|---|
-| `0.12.4` | **R-20**: o estado (`marcado`, `escolhido`, `desligado`, `aberto`, `ocupado`) chega ao leitor de tela da **web** em `aria-*`. Os 26 pontos do nativo | "pode" para empurrar, junção, publicação pelo Victor |
+| `0.12.4` | **R-20**: o estado (`marcado`, `escolhido`, `desligado`, `aberto`, `ocupado`) chega ao leitor de tela da **web** em `aria-*`. Os 26 pontos do nativo | **publicada em 01/10/2026** (pedido #15), pelo terminal do Victor. Falta conferir no app, na web |
+
+**Decisão do Victor, 01/10/2026:** *"o restante vamos usar HeroUI como referência"*. As
+decisões da seção 1 (R-10, R-11, R-13, R-19) e as medidas da seção 2 seguem a recomendação
+escrita aqui, que já é a do HeroUI. Onde o HeroUI não tem nada (o 112 da R-15, a cor padrão da
+R-13), desce-se a fila de referências do `CLAUDE.md` §2 antes de inventar. Cada lote ainda pede o
+seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 
 ---
 
@@ -117,6 +126,38 @@ dois tem — cria-se *"pensando como o HeroUI criaria"*.
 - **Pergunta ao Victor:** copiar a coroa do Gravity (com crédito) ou o app desenhar com
   `criarGlifo` (depende da R-11)?
 
+#### Trocar o pacote de ícones, juntar dois, ou completar o Carbon? (aberto, 01/10/2026)
+
+O Victor: *"temos um pacote grande e mesmo assim faltou; poderíamos substituir o pacote, ou
+juntar, mas juntar acredito que os traços iriam destoar"*. Medido nos pacotes baixados com
+`npm pack`, em 01/10/2026:
+
+| coleção | nomes | grade | desenho | coroa? | licença |
+|---|---|---|---|---|---|
+| **Carbon** (o nosso), `@carbon/icons` 11.89.0 | 2.766 (a Aurea está na **11.84.0**, com 2.706) | 32 | **formas cheias**, cantos retos | **não**, em versão nenhuma; tem `gem`, `diamond--solid`, `trophy` | Apache-2.0 |
+| Lucide, `lucide-static` 1.49.0 | 2.121 | 24 | **traço de 2**, pontas redondas | sim | ISC |
+| Phosphor, `@phosphor-icons/core` 2.1.1 | 1.512, em **6 pesos** (fino a cheio) | 256 | traço ou cheio, conforme o peso | sim | MIT |
+| Tabler, `@tabler/icons` 3.48.0 | contorno + cheio | 24 | traço de 2 | sim | MIT |
+
+- **Juntar destoa — o Victor tem razão, e se mede:** o Carbon desenha forma cheia numa grade de
+  32 (`svg/32/car.svg` é um `path` preenchido); o Lucide e o Tabler desenham **traço** de 2 numa
+  grade de 24 (`stroke-width="2"`, `stroke-linecap="round"`). Lado a lado, um ícone fica mais
+  grosso e mais redondo que o outro.
+- **O Carbon é largo, mas não é para o app de consumo:** 275 dos 2.766 nomes são de produto da
+  IBM, logotipo ou nuvem (`ibm--*`, `logo--*`, `watson*`, `cloud*`). Para veículo tem `car`,
+  `scooter`, `bicycle`, `gas-station`, `fuel-can`, `road`, `tools` — e não tem moto.
+- **Trocar o pacote** muda a identidade (o `CLAUDE.md` §5 diz *Carbon Icons*) e quebra a
+  compilação de todo app que usa ícone: desde a A-04 o nome é conferido pelo TypeScript, e os
+  nomes mudam todos.
+- **Recomendação (a decidir):**
+  1. **Agora:** subir o Carbon de 11.84 para 11.89 (+60 nomes, sem quebrar nada) e desenhar as
+     poucas faltas **na gramática do Carbon** (grade de 32, forma cheia), num conjunto próprio da
+     Aurea com o mesmo tipo de nome. A coroa é a primeira.
+  2. **Trocar só se a lista de faltas for longa.** Falta a lista: hoje só a coroa está anotada.
+     Se trocar, o candidato é o **Phosphor** — tem o peso cheio (próximo do Carbon) e o fino, e é
+     MIT.
+- **Pergunta ao Victor:** quais ícones faltaram, além da coroa? A sessão do app tem a lista.
+
 ### R-18 · `Timeline` com cara de estrada (opcional)
 
 - **[ReUI]** `Timeline` com partes `TimelineItem`, `TimelineHeader`, `TimelineDate`,
@@ -194,7 +235,7 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 
 ## 8. Ordem sugerida (a decidir com o Victor)
 
-1. Publicar a `0.12.4` (R-20) e rodar o teste de aparelho (§3).
+1. ~~Publicar a `0.12.4` (R-20)~~ — publicada em 01/10/2026. Falta rodar o teste de aparelho (§3).
 2. Decisões rápidas do nativo: R-10, R-13, R-19, R-11.
 3. Acréscimos do nativo que o app já espera: R-12, R-14, R-15, R-16.
 4. Web: C-08 e M-03 fecham sem código; C-11, B-05, B-06 + N-01 + N-03 num lote só (paginação).
