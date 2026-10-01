@@ -241,7 +241,12 @@ para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
   cada MARCA** ([ADR-0036](decisions/0036-marca-e-um-eixo-e-o-amarelo-continua-invariavel.md)).
   Marca é um eixo próprio (`data-brand`), ortogonal a `data-theme`, e **redefine só COR**. Sem
   `data-brand`, nada muda. Trocar o amarelo do padrão é proibido.
-- IBM Plex Sans / Serif / Mono; Carbon Icons; sem gradientes (nem funcionais).
+- ~~IBM Plex Sans / Serif / Mono; Carbon Icons~~ → **Atkinson Hyperlegible Next e ícones Phosphor
+  Regular** (decisão do Victor, 01/10/2026,
+  [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). ⚠ **A troca
+  ainda não foi feita:** sai num lote próprio, com "pode". Até lá o código continua com IBM Plex e
+  Carbon, e quatro perguntas da ADR estão abertas.
+- Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - Proibido: Material, Fluent, Bootstrap ou shadcn como aparência; caixas retangulares genéricas;
   trocar paleta, raios, tipografia ou densidade sem autorização.
@@ -351,7 +356,8 @@ outros projetos dele** (ordem de 31/08/2026). Falar do consumidor numa conversa 
   equivalente**: ele segue depois de um erro, o que transforma uma cadeia de verificação em
   teatro. Para ele, **um comando por linha**; quando o comando é nosso, a ordem vai para dentro do
   script.
-- Licença Apache-2.0; IBM Plex sob OFL 1.1; Carbon Icons sob Apache-2.0.
+- Licença Apache-2.0; IBM Plex sob OFL 1.1; Carbon Icons sob Apache-2.0. (Depois da troca da
+  ADR-0053: Atkinson Hyperlegible sob OFL 1.1; Phosphor sob MIT.)
 
 ## 10. Decisões já tomadas pelo Victor (16/07/2026)
 

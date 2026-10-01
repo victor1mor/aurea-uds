@@ -116,6 +116,7 @@ de 86 KB que ninguém consumia). Ficam aqui contabilizadas, com onde vivem e que
 | **A escala de letras é a do HeroUI, nos dois alvos** (substitui a 0049) | 24/09/2026 | [ADR-0050](0050-a-escala-de-letras-e-a-do-heroui.md) | os dez `text-*` do `aurea.tokens.json` + o mapa `TAMANHO` do `packages/native/src/text.tsx` + `tests/unit/escala-heroui.test.tsx` |
 | **O espaçamento dos primitivos de layout tem três degraus** (afrouxa a regra da ficha do `Stack`) | 24/09/2026 | [ADR-0051](0051-o-espacamento-dos-primitivos-tem-tres-degraus.md) | `Stack`, `Cluster` e `Grid` no `markup.tsx` + as classes `*-gap-*` do `aurea.css` + as três fichas |
 | **O botão só de ícone é redondo** (muda a aparência publicada) | 25/09/2026 | [ADR-0052](0052-o-botao-so-de-icone-e-redondo.md) | `.btn-icon` e `.media-control` do `aurea.css` + o `IconButton` do `packages/native/src/actions.tsx` + `geometry.spec.ts` + `native-lote1.test.tsx` |
+| **A fonte é a Atkinson Hyperlegible Next, e os ícones são o Phosphor Regular** (muda a identidade; a troca ainda não foi feita) | 01/10/2026 | [ADR-0053](0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md) | a seção 5 do `CLAUDE.md`; os controles entram com o lote da troca |
 | `.empty-state` é centralizado, ao contrário do Carbon | Fase 11 | `REFERENCES.md` (a razão: coerência com `.notification-empty` e `.datagrid-empty`, que já estão em produção) | `tests/visual/skin.spec.ts` |
 
 **Ainda abertas, e portanto sem ADR:** a **D2** (índice reverso "Used here" — metade já entrou
