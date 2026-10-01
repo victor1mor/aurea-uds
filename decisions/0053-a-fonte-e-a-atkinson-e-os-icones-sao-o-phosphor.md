@@ -81,13 +81,33 @@ Tudo nos arquivos publicados, baixados com `npm pack` em 01/10/2026.
    - as medidas que dependem da largura da letra se medem de novo.
 3. **Uma versão do meio que quebra** (`0.x` com aviso, ADR-0014), antes da `1.0`.
 
-## O que ainda falta decidir (perguntas ao Victor)
+## Respostas do Victor (01/10/2026)
 
-1. **Item escolhido:** a recomendação foi Regular no uso normal e **Fill** no item escolhido
-   (aba ativa, item de menu atual). A decisão disse só "Phosphor Regular". Usa o Fill no
-   escolhido, ou é Regular em tudo?
-2. **Fonte de código:** o par natural é a **Atkinson Hyperlegible Mono** (OFL). Confirmar.
-3. **Fonte editorial:** o `--font-editorial` (IBM Plex Serif) existe e está **sem uso** (lido no
-   `aurea.css`, linha 1624). A Atkinson não tem serifada. Remove, ou fica?
-4. **Ícone pequeno:** o Regular é traço médio. Nos tamanhos pequenos (16) pode ficar fino. Medir
-   na vitrine antes de decidir se o tamanho pequeno usa o Bold.
+1. **Item escolhido** (aba ativa, item atual do menu, da barra de baixo): **Phosphor Fill**, o
+   cheio. O resto fica no Regular.
+2. **Fonte de código:** **Atkinson Hyperlegible Mono**, sim.
+3. **Fonte editorial:** **remove.** O `--font-editorial` (IBM Plex Serif) estava sem uso (lido
+   no `aurea.css`, linha 1624), e a IBM Plex Serif sai do `@aurea-uds/fonts` junto com a troca.
+4. **Ícone pequeno:** *"mede"*. Medido abaixo; **a escolha do peso continua aberta**.
+
+## A medida do ícone pequeno (01/10/2026)
+
+**A espessura do traço**, lida no desenho do sinal de menos de cada coleção:
+
+| coleção | traço no desenho | fração do tamanho | a 16 | a 20 | a 24 |
+|---|---|---|---|---|---|
+| Carbon (hoje), `svg/32/subtract.svg` | 2 numa grade de 32 (`H24V17H8`) | 1/16 | 1 px | 1,25 px | 1,5 px |
+| Phosphor Regular, `regular/minus.svg` | 16 numa grade de 256 | 1/16 | 1 px | 1,25 px | 1,5 px |
+| Phosphor Bold, `bold/minus-bold.svg` | 24 numa grade de 256 | 3/32 | 1,5 px | 1,875 px | 2,25 px |
+
+- **O Regular tem exatamente o traço do Carbon de hoje**, em todos os tamanhos. Trocar Carbon
+  por Regular não afina nada; o ícone pequeno de hoje já tem 1 px de traço.
+- O Bold é uma vez e meia mais grosso.
+- Foto dos três nos tamanhos da Aurea (`--icon-sm` 16, `--icon-md` 20, `--icon-lg` 24), nos dois
+  temas, sem ampliação suave: mostrada ao Victor em 01/10/2026. A Aurea desenha os ícones a partir
+  do `svg/32` do Carbon (`packages/icons/build-icons.mjs`, linha 5).
+
+## O que ainda falta decidir
+
+- **O peso do ícone pequeno:** Regular em todos os tamanhos (como o traço de hoje), ou Bold no
+  `--icon-sm` (16)? A decisão é do Victor, olhando a foto.

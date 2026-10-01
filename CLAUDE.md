@@ -245,7 +245,8 @@ para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
   Regular** (decisão do Victor, 01/10/2026,
   [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). ⚠ **A troca
   ainda não foi feita:** sai num lote próprio, com "pode". Até lá o código continua com IBM Plex e
-  Carbon, e quatro perguntas da ADR estão abertas.
+  Carbon. Decidido também: o item escolhido usa o Phosphor Fill, o código usa a Atkinson
+  Hyperlegible Mono, e a IBM Plex Serif sai. Aberto: o peso do ícone pequeno (ADR, "A medida").
 - Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - Proibido: Material, Fluent, Bootstrap ou shadcn como aparência; caixas retangulares genéricas;
