@@ -23,7 +23,8 @@ Nada além da `0.13.0`, logo abaixo, pronta e não publicada.
 
 ## [0.13.0] — 2026-10-01
 
-⏳ **Não publicada.** **QUEBRA** em todo app que usa ícone. É a troca de fonte e de ícones da
+⏳ **Não publicada.** Aprovada pela imagem pelo Victor e juntada em 01/10/2026, por volta das 11:00
+(Brasília), no pedido #17 (`e5a9025`). **QUEBRA** em todo app que usa ícone. É a troca de fonte e de ícones da
 [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md), decisão do Victor
 de 01/10/2026: a letra passa a ser a **Atkinson Hyperlegible Next** (e a **Mono** para código), e
 os ícones passam a ser o **Phosphor**, no peso Regular, com a forma **cheia** no item escolhido.
