@@ -66,7 +66,12 @@ O CSS da Aurea passou a usar `--text-sm`. Nada muda na tela.
   `criarRegistroDeIcones` (já é genérico). Assim o app tipa o logotipo sem mexer na Aurea, e a
   trava dele não precisa abrir exceção. É mudança de API (acréscimo): precisa de "pode".
 
-### R-13 · `Chart` sem `color` sai azul
+### ~~R-13 · `Chart` sem `color` sai azul~~ — fechada sem código (decisão do Victor, 01/10/2026)
+
+✅ **A Aurea fica como está** (o azul da rampa, começando pelo `chart2`), que é o que a referência
+faz e passa no contraste nos dois temas. **O app troca `t.color.primary` por
+`t.color.primaryEmphasis`** quando quiser a cor da marca: o `primary` mede 1,91 no tema claro. A
+pesquisa que levou à decisão está abaixo.
 
 - **[ninguém]** O HeroUI aberto não tem gráfico. O ReUI também não. O shadcn (que o ReUI segue)
   **não tem cor padrão**: cada série recebe a cor na configuração (`var(--chart-1)` …
@@ -100,7 +105,7 @@ O CSS da Aurea passou a usar `--text-sm`. Nada muda na tela.
   no tema claro. Se o app quer a cor da marca, o token é o `primaryEmphasis`. Tornar o amarelo o
   padrão de uma série só quebraria a regra do `--chart-1` (*"two charts on the same page give the
   same series the same colour"*): a mesma série mudaria de cor entre um gráfico de uma série e
-  outro de duas. **Decisão do Victor, pendente.**
+  outro de duas. **Decidido pelo Victor em 01/10/2026: fecha assim.**
 
 ### ~~R-19 · ícone em cada opção do `RadioGroup`~~ — feito na `0.14.0`
 
@@ -247,6 +252,8 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 
 - **R-07** (a cor do círculo atrás do ícone) e **R-08** (`width="content"`): a Aurea já entrega;
   falta o app adotar.
+- **R-13**: o app passa `t.color.primary` ao `Chart`, que mede 1,91 de contraste no tema claro
+  (o mínimo é 3). Trocar por `t.color.primaryEmphasis` (9,39 no escuro, 8,67 no claro).
 
 ---
 
@@ -301,8 +308,8 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 
 1. ~~Publicar a `0.12.4` (R-20)~~ — publicada em 01/10/2026. Falta rodar o teste de aparelho (§3).
 2. Decisões rápidas do nativo: ~~R-10, R-19~~ (`0.14.0`). Faltam: **R-11** (pedir ao Victor o
-   texto da ficha: a "saída 2" muda a forma de usar os ícones) e **R-13** (pesquisa feita em
-   01/10/2026, ver a R-13: a recomendação é fechar sem código; falta a decisão do Victor).
+   texto da ficha: a "saída 2" muda a forma de usar os ícones). ~~R-13~~ fechada sem código em
+   01/10/2026: a Aurea fica no azul, e o app passa `primaryEmphasis` (ver a R-13).
 3. **Lote da troca de fonte e ícones** (ADR-0053): antes da `1.0`, porque quebra todo nome de
    ícone. Falta só o peso do ícone pequeno (ADR-0053).
 4. Acréscimos do nativo que o app já espera: ~~R-12, R-14, R-16~~ (`0.14.0`). Falta a **R-15**,
