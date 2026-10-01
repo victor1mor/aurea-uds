@@ -781,11 +781,15 @@ export function Radio(p: RadioProps) { return <ControleMarcado {...p} papel="rad
 // ⚠ A marca do `Radio` solto continua do tamanho dele (metade da altura do controle): o grupo é
 // peça nova, e as medidas da peça nova vêm do HeroUI.
 
+/** De que lado da linha a marca fica: `end` (padrão, como o exemplo do HeroUI) ou `start`. */
+export type AureaRadioIndicatorPlacement = "start" | "end";
+
 interface ContextoDoGrupo {
   value?: string;
   onValueChange?: (value: string) => void;
   disabled?: boolean;
   invalid?: boolean;
+  indicatorPlacement?: AureaRadioIndicatorPlacement;
 }
 const GrupoDeRadio = React.createContext<ContextoDoGrupo | null>(null);
 
@@ -801,6 +805,12 @@ export interface RadioGroupProps extends ViewProps {
   label?: string;
   /** `vertical` (padrão) ou `horizontal`, como o HeroUI. */
   orientation?: "vertical" | "horizontal";
+  /**
+   * De que lado fica a marca, em todos os itens: `end` (padrão) ou `start`. O HeroUI decide isso
+   * pela ORDEM dos filhos do item (`<Radio />` antes ou depois do texto); aqui o texto é prop, então
+   * o lado vira uma lista fechada de duas opções, com o nome que o HeroUI usa para posição.
+   */
+  indicatorPlacement?: AureaRadioIndicatorPlacement;
   children?: React.ReactNode;
 }
 
@@ -813,15 +823,18 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
   disabled?: boolean;
   /** Erro só neste item. */
   invalid?: boolean;
+  /** O lado da marca só neste item; sem ele, vale o do grupo. */
+  indicatorPlacement?: AureaRadioIndicatorPlacement;
   style?: StyleProp<ViewStyle>;
 }
 
 function RaizDoGrupoDeRadio({
-  value, onValueChange, disabled, invalid, label, orientation = "vertical", style, children, ...rest
+  value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement,
+  style, children, ...rest
 }: RadioGroupProps) {
   const t = useAureaTokens();
-  const contexto = React.useMemo(() => ({value, onValueChange, disabled, invalid}),
-    [value, onValueChange, disabled, invalid]);
+  const contexto = React.useMemo(() => ({value, onValueChange, disabled, invalid, indicatorPlacement}),
+    [value, onValueChange, disabled, invalid, indicatorPlacement]);
   return (
     <GrupoDeRadio.Provider value={contexto}>
       <View
@@ -837,7 +850,7 @@ function RaizDoGrupoDeRadio({
 }
 
 function ItemDoGrupoDeRadio({
-  value, label, description, disabled, invalid, style, accessibilityLabel, ...rest
+  value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest
 }: RadioGroupItemProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -849,6 +862,27 @@ function ItemDoGrupoDeRadio({
   const perigo = t.color.danger400 ?? t.color.destructive;
   const marca = t.size.space6;
   const ponto = t.size.space2 + t.size.space05;
+  const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
+  const texto = (label != null || description != null) && (
+    <View key="texto" style={{flex: 1, minWidth: 0}}>
+      {typeof label === "string"
+        ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
+      {description != null && (typeof description === "string"
+        ? <Text size="sm" tone="muted">{description}</Text> : description)}
+    </View>
+  );
+  const marcaDesenhada = (
+    <View key="marca" style={[
+      s.marcaBase,
+      {width: marca, height: marca, borderRadius: t.size.radiusFull},
+      erro && {borderColor: perigo, backgroundColor: "transparent"},
+      escolhido && {backgroundColor: erro ? perigo : t.color.controlSelected,
+                    borderColor: erro ? perigo : t.color.controlSelected},
+    ]}>
+      {escolhido && <View style={{width: ponto, height: ponto, borderRadius: t.size.radiusFull,
+                                  backgroundColor: t.color.controlSelectedForeground}} />}
+    </View>
+  );
   return (
     <Pressable
       onPress={inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value)}
@@ -863,24 +897,9 @@ function ItemDoGrupoDeRadio({
         inativo && s.desabilitado, style,
       ]}
       {...rest}>
-      {(label != null || description != null) && (
-        <View style={{flex: 1, minWidth: 0}}>
-          {typeof label === "string"
-            ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
-          {description != null && (typeof description === "string"
-            ? <Text size="sm" tone="muted">{description}</Text> : description)}
-        </View>
-      )}
-      <View style={[
-        s.marcaBase,
-        {width: marca, height: marca, borderRadius: t.size.radiusFull},
-        erro && {borderColor: perigo, backgroundColor: "transparent"},
-        escolhido && {backgroundColor: erro ? perigo : t.color.controlSelected,
-                      borderColor: erro ? perigo : t.color.controlSelected},
-      ]}>
-        {escolhido && <View style={{width: ponto, height: ponto, borderRadius: t.size.radiusFull,
-                                    backgroundColor: t.color.controlSelectedForeground}} />}
-      </View>
+      {/* A ordem é a do HeroUI: o lado da marca sai da ordem dos dois filhos. Com a marca no
+          início, o vão de 12 continua entre ela e o texto, e o texto ocupa o resto da linha. */}
+      {noInicio ? [marcaDesenhada, texto] : [texto, marcaDesenhada]}
     </Pressable>
   );
 }
@@ -895,7 +914,8 @@ function ItemDoGrupoDeRadio({
  *     </RadioGroup>
  *
  * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
- * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada.
+ * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada. Com
+ * `indicatorPlacement="start"` a marca vai para o início da linha.
  */
 export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, {Item: ItemDoGrupoDeRadio});
 

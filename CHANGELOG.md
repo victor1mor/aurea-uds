@@ -32,7 +32,9 @@ Nada além da `0.12.3`, logo abaixo, pronta e não publicada.
   inteira tocável, com o texto à esquerda e a marca à direita. As medidas são as do HeroUI, nos
   tokens que dão o mesmo número: vão de 12 (`space3`), marca de 24 (`space6`), ponto de 10, rótulo
   `base` médio e descrição `sm` apagada. A marca escolhida é a cor da seleção. Tem `disabled` e
-  `invalid` no grupo e no item, `orientation` e nome para o leitor de tela (`label`). Os filhos são
+  `invalid` no grupo e no item, `orientation`, nome para o leitor de tela (`label`) e
+  `indicatorPlacement` (`end`, o padrão, ou `start`, a marca no início da linha — no grupo ou só
+  num item; o HeroUI decide isso pela ordem dos filhos do item). Os filhos são
   livres: cabe um `Separator` entre os itens e o grupo inteiro num `Card`, como no exemplo do
   HeroUI. A marca do `Radio` solto não muda. Aceite de aparelho: bloco RG do `apps/native-smoke`.
 

@@ -119,7 +119,7 @@ export {
 } from "./inputs.js";
 export type {
   FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps,
-  RadioProps, RadioGroupProps, RadioGroupItemProps, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize,
+  RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize,
 } from "./inputs.js";
 
 // ⚠ O GRUPO e o campo de SENHA entraram depois do Lote 4, medidos pelo app na tela de entrar

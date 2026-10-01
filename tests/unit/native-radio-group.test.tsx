@@ -94,3 +94,22 @@ describe("RadioGroup · as medidas do HeroUI", () => {
     for (const e of marcas().slice(-3)) expect(e.borderColor).toBe(perigo);
   });
 });
+
+describe("RadioGroup · indicatorPlacement (a marca no início ou no fim)", () => {
+  const ordem = (p: Record<string, unknown>) =>
+    ([p.children].flat(3) as Array<{key?: string} | false | null>).filter(Boolean).map((c) => (c as {key?: string}).key);
+  it("sem nada, a marca fica no fim, como o exemplo do HeroUI", () => {
+    render(<Envolve><Entrega /></Envolve>);
+    expect(ordem(itens().at(-1)!)).toEqual(["texto", "marca"]);
+  });
+  it("no grupo, `start` põe a marca no início de todos os itens", () => {
+    render(<Envolve><RadioGroup value="a" indicatorPlacement="start">
+      <RadioGroup.Item value="a" label="A" /><RadioGroup.Item value="b" label="B" /></RadioGroup></Envolve>);
+    for (const x of itens().slice(-2)) expect(ordem(x)).toEqual(["marca", "texto"]);
+  });
+  it("o item pode trocar só o dele", () => {
+    render(<Envolve><RadioGroup value="a" indicatorPlacement="start">
+      <RadioGroup.Item value="a" label="A" /><RadioGroup.Item value="b" label="B" indicatorPlacement="end" /></RadioGroup></Envolve>);
+    expect(itens().slice(-2).map(ordem)).toEqual([["marca", "texto"], ["texto", "marca"]]);
+  });
+});

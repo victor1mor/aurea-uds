@@ -249,6 +249,8 @@ export declare function Checkbox(p: CheckboxProps): React.JSX.Element;
  * estado do app — quem sabe qual está escolhido é o `useState` da tela, e `checked` sai dele.
  */
 export declare function Radio(p: RadioProps): React.JSX.Element;
+/** De que lado da linha a marca fica: `end` (padrão, como o exemplo do HeroUI) ou `start`. */
+export type AureaRadioIndicatorPlacement = "start" | "end";
 export interface RadioGroupProps extends ViewProps {
     /** O valor do item escolhido. Controlado: quem guarda é a tela. */
     value?: string;
@@ -261,6 +263,12 @@ export interface RadioGroupProps extends ViewProps {
     label?: string;
     /** `vertical` (padrão) ou `horizontal`, como o HeroUI. */
     orientation?: "vertical" | "horizontal";
+    /**
+     * De que lado fica a marca, em todos os itens: `end` (padrão) ou `start`. O HeroUI decide isso
+     * pela ORDEM dos filhos do item (`<Radio />` antes ou depois do texto); aqui o texto é prop, então
+     * o lado vira uma lista fechada de duas opções, com o nome que o HeroUI usa para posição.
+     */
+    indicatorPlacement?: AureaRadioIndicatorPlacement;
     children?: React.ReactNode;
 }
 export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "style" | "disabled"> {
@@ -272,10 +280,12 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
     disabled?: boolean;
     /** Erro só neste item. */
     invalid?: boolean;
+    /** O lado da marca só neste item; sem ele, vale o do grupo. */
+    indicatorPlacement?: AureaRadioIndicatorPlacement;
     style?: StyleProp<ViewStyle>;
 }
-declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
-declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, style, accessibilityLabel, ...rest }: RadioGroupItemProps): React.JSX.Element;
+declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, indicatorPlacement, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
+declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest }: RadioGroupItemProps): React.JSX.Element;
 /**
  * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
  *
@@ -286,7 +296,8 @@ declare function ItemDoGrupoDeRadio({ value, label, description, disabled, inval
  *     </RadioGroup>
  *
  * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
- * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada.
+ * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada. Com
+ * `indicatorPlacement="start"` a marca vai para o início da linha.
  */
 export declare const RadioGroup: typeof RaizDoGrupoDeRadio & {
     Item: typeof ItemDoGrupoDeRadio;

@@ -383,12 +383,12 @@ export function Checkbox(p) { return _jsx(ControleMarcado, { ...p, papel: "check
  */
 export function Radio(p) { return _jsx(ControleMarcado, { ...p, papel: "radio" }); }
 const GrupoDeRadio = React.createContext(null);
-function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation = "vertical", style, children, ...rest }) {
+function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement, style, children, ...rest }) {
     const t = useAureaTokens();
-    const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid }), [value, onValueChange, disabled, invalid]);
+    const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid, indicatorPlacement }), [value, onValueChange, disabled, invalid, indicatorPlacement]);
     return (_jsx(GrupoDeRadio.Provider, { value: contexto, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label, accessibilityState: { disabled: !!disabled }, style: [{ gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column" }, style], ...rest, children: children }) }));
 }
-function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, style, accessibilityLabel, ...rest }) {
+function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, style, accessibilityLabel, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const grupo = React.useContext(GrupoDeRadio);
@@ -400,20 +400,23 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, styl
     const perigo = t.color.danger400 ?? t.color.destructive;
     const marca = t.size.space6;
     const ponto = t.size.space2 + t.size.space05;
-    return (_jsxs(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", accessibilityState: { checked: escolhido, disabled: !!inativo }, accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
+    const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
+    const texto = (label != null || description != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
+                ? _jsx(Text, { size: "base", weight: 500, tone: erro ? "danger" : "default", children: label }) : label, description != null && (typeof description === "string"
+                ? _jsx(Text, { size: "sm", tone: "muted", children: description }) : description)] }, "texto"));
+    const marcaDesenhada = (_jsx(View, { style: [
+            s.marcaBase,
+            { width: marca, height: marca, borderRadius: t.size.radiusFull },
+            erro && { borderColor: perigo, backgroundColor: "transparent" },
+            escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
+                borderColor: erro ? perigo : t.color.controlSelected },
+        ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, borderRadius: t.size.radiusFull,
+                backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
+    return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", accessibilityState: { checked: escolhido, disabled: !!inativo }, accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
             { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
                 gap: t.size.space3, minHeight: t.size.targetMin },
             inativo && s.desabilitado, style,
-        ], ...rest, children: [(label != null || description != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
-                        ? _jsx(Text, { size: "base", weight: 500, tone: erro ? "danger" : "default", children: label }) : label, description != null && (typeof description === "string"
-                        ? _jsx(Text, { size: "sm", tone: "muted", children: description }) : description)] })), _jsx(View, { style: [
-                    s.marcaBase,
-                    { width: marca, height: marca, borderRadius: t.size.radiusFull },
-                    erro && { borderColor: perigo, backgroundColor: "transparent" },
-                    escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
-                        borderColor: erro ? perigo : t.color.controlSelected },
-                ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, borderRadius: t.size.radiusFull,
-                        backgroundColor: t.color.controlSelectedForeground } }) })] }));
+        ], ...rest, children: noInicio ? [marcaDesenhada, texto] : [texto, marcaDesenhada] }));
 }
 /**
  * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
@@ -425,7 +428,8 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, styl
  *     </RadioGroup>
  *
  * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
- * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada.
+ * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada. Com
+ * `indicatorPlacement="start"` a marca vai para o início da linha.
  */
 export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoDeRadio });
 /**

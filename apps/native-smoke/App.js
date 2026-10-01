@@ -1419,9 +1419,20 @@ function BlocoRadioGroup({t}) {
   return (
     <Bloco t={t} n="RG" titulo="O grupo de rádio escolhe um só, e cada linha inteira é tocável?"
       criterio={"Toque em qualquer ponto de uma linha (no texto também): a marca amarela passa para ela e "
-        + "sai da anterior. A marca fica À DIREITA, o texto à esquerda. A segunda linha está desligada."}>
+        + "sai da anterior. No primeiro cartão a marca fica À DIREITA; no segundo, NO INÍCIO, com o texto "
+        + "alinhado depois dela. A segunda linha está desligada."}>
       <Card>
         <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
+          <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
+          <Separator />
+          <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" disabled />
+          <Separator />
+          <RadioGroup.Item value="amanha" label="Amanhã" description="No próximo dia útil" />
+        </RadioGroup>
+      </Card>
+      <Card>
+        <RadioGroup label="Forma de entrega, marca no início" value={entrega} onValueChange={setEntrega}
+          indicatorPlacement="start">
           <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
           <Separator />
           <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" disabled />

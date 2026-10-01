@@ -25,7 +25,7 @@ export { useReduceMotion } from "./movimento.js";
 export { BottomNav, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
 export type { BottomNavProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, } from "./navigation.js";
 export { Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, RadioGroup, SegmentedControl, Form, KeyboardAvoiding, useCampo, } from "./inputs.js";
-export type { FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps, RadioProps, RadioGroupProps, RadioGroupItemProps, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize, } from "./inputs.js";
+export type { FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps, RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize, } from "./inputs.js";
 export { InputGroup, InputGroupAddon, PasswordField, useGrupoDeCampo } from "./inputs.js";
 export type { InputGroupProps, InputGroupAddonProps, PasswordFieldProps } from "./inputs.js";
 export { Dialog, ConfirmDialog, Drawer, BottomSheet } from "./overlays.js";
