@@ -17,13 +17,15 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada além da `0.12.4`, logo abaixo, pronta e não publicada.
+Nada ainda.
 
 ---
 
 ## [0.12.4] — 2026-10-01
 
-⏳ **Não publicada.** Só o nativo muda. Nenhuma API muda.
+✅ **PUBLICADA em 01/10/2026, por volta das 09:00 (Brasília), nos sete pacotes, pelo terminal do
+Victor** — do commit `d25b6cc` (junção do pedido #15). A hora é a da mensagem dele. Só o nativo
+muda. Nenhuma API muda.
 
 ### Corrigido
 
