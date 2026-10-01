@@ -40,7 +40,7 @@ import * as React from "react";
 import {
   Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable,
   ScrollView, TextInput, View,
-  type KeyboardTypeOptions, type StyleProp, type TextInputProps, type TextStyle,
+  type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle,
   type ViewProps, type ViewStyle,
 } from "react-native";
 import {comOpacidade, criarFolha} from "./estilos.js";
@@ -762,6 +762,142 @@ export function Checkbox(p: CheckboxProps) { return <ControleMarcado {...p} pape
  * estado do app — quem sabe qual está escolhido é o `useState` da tela, e `checked` sai dele.
  */
 export function Radio(p: RadioProps) { return <ControleMarcado {...p} papel="radio" />; }
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// RadioGroup (01/10/2026, pedido do Victor)
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+//
+// O `RadioGroup` do HeroUI Native 1.0.10 (`radio-group.tsx`, `radio-group.css`, `radio.css`,
+// `label.css`, `description.css`), com a aparência da Aurea. A anatomia é a dele: o grupo guarda a
+// escolha, e cada `RadioGroup.Item` é a linha inteira tocável — o texto à esquerda, a marca à
+// direita (`justify-content: space-between`). O que muda é só a forma de escrever o texto: lá o
+// item recebe `<Label>` e `<Description>` como filhos; aqui são as props `label` e `description`,
+// como no `Radio` que já existe neste pacote.
+//
+// As medidas são as do HeroUI, nos tokens que dão o mesmo número: vão de 12 entre as linhas e
+// entre o texto e a marca (`calc(var(--spacing) * 3)` → `space3`); marca de 24 (`* 6` → `space6`);
+// ponto de 10 (`* 2.5` → `space2 + space05`); rótulo `text-base` médio, descrição `text-sm`
+// apagada. A cor é nossa: a marca escolhida é a da seleção (`controlSelected`), como o `Radio`.
+// ⚠ A marca do `Radio` solto continua do tamanho dele (metade da altura do controle): o grupo é
+// peça nova, e as medidas da peça nova vêm do HeroUI.
+
+interface ContextoDoGrupo {
+  value?: string;
+  onValueChange?: (value: string) => void;
+  disabled?: boolean;
+  invalid?: boolean;
+}
+const GrupoDeRadio = React.createContext<ContextoDoGrupo | null>(null);
+
+export interface RadioGroupProps extends ViewProps {
+  /** O valor do item escolhido. Controlado: quem guarda é a tela. */
+  value?: string;
+  onValueChange?: (value: string) => void;
+  /** Desliga o grupo inteiro. */
+  disabled?: boolean;
+  /** Pinta o grupo de erro (marca e rótulo na cor de perigo), como o `isInvalid` do HeroUI. */
+  invalid?: boolean;
+  /** O nome do grupo para quem usa leitor de tela ("Forma de entrega"). */
+  label?: string;
+  /** `vertical` (padrão) ou `horizontal`, como o HeroUI. */
+  orientation?: "vertical" | "horizontal";
+  children?: React.ReactNode;
+}
+
+export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "style" | "disabled"> {
+  /** O valor que este item escreve no grupo quando é tocado. */
+  value: string;
+  label?: React.ReactNode;
+  description?: React.ReactNode;
+  /** Desliga só este item. */
+  disabled?: boolean;
+  /** Erro só neste item. */
+  invalid?: boolean;
+  style?: StyleProp<ViewStyle>;
+}
+
+function RaizDoGrupoDeRadio({
+  value, onValueChange, disabled, invalid, label, orientation = "vertical", style, children, ...rest
+}: RadioGroupProps) {
+  const t = useAureaTokens();
+  const contexto = React.useMemo(() => ({value, onValueChange, disabled, invalid}),
+    [value, onValueChange, disabled, invalid]);
+  return (
+    <GrupoDeRadio.Provider value={contexto}>
+      <View
+        accessibilityRole="radiogroup"
+        accessibilityLabel={label}
+        accessibilityState={{disabled: !!disabled}}
+        style={[{gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column"}, style]}
+        {...rest}>
+        {children}
+      </View>
+    </GrupoDeRadio.Provider>
+  );
+}
+
+function ItemDoGrupoDeRadio({
+  value, label, description, disabled, invalid, style, accessibilityLabel, ...rest
+}: RadioGroupItemProps) {
+  const t = useAureaTokens();
+  const s = folha(t);
+  const grupo = React.useContext(GrupoDeRadio);
+  if (__DEV__ && !grupo) console.warn("Aurea: RadioGroup.Item fora de um RadioGroup não escolhe nada.");
+  const escolhido = grupo?.value === value;
+  const inativo = disabled ?? grupo?.disabled;
+  const erro = invalid ?? grupo?.invalid;
+  const perigo = t.color.danger400 ?? t.color.destructive;
+  const marca = t.size.space6;
+  const ponto = t.size.space2 + t.size.space05;
+  return (
+    <Pressable
+      onPress={inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value)}
+      disabled={inativo}
+      accessibilityRole="radio"
+      accessibilityState={{checked: escolhido, disabled: !!inativo}}
+      accessibilityLabel={accessibilityLabel ?? (typeof label === "string" ? label : undefined)}
+      accessibilityHint={typeof description === "string" ? description : undefined}
+      style={[
+        {flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+         gap: t.size.space3, minHeight: t.size.targetMin},
+        inativo && s.desabilitado, style,
+      ]}
+      {...rest}>
+      {(label != null || description != null) && (
+        <View style={{flex: 1, minWidth: 0}}>
+          {typeof label === "string"
+            ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
+          {description != null && (typeof description === "string"
+            ? <Text size="sm" tone="muted">{description}</Text> : description)}
+        </View>
+      )}
+      <View style={[
+        s.marcaBase,
+        {width: marca, height: marca, borderRadius: t.size.radiusFull},
+        erro && {borderColor: perigo, backgroundColor: "transparent"},
+        escolhido && {backgroundColor: erro ? perigo : t.color.controlSelected,
+                      borderColor: erro ? perigo : t.color.controlSelected},
+      ]}>
+        {escolhido && <View style={{width: ponto, height: ponto, borderRadius: t.size.radiusFull,
+                                    backgroundColor: t.color.controlSelectedForeground}} />}
+      </View>
+    </Pressable>
+  );
+}
+
+/**
+ * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
+ *
+ *     <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
+ *       <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
+ *       <Separator />
+ *       <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" />
+ *     </RadioGroup>
+ *
+ * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
+ * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada.
+ */
+export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, {Item: ItemDoGrupoDeRadio});
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // Switch

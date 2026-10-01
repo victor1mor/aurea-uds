@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextInput, type KeyboardTypeOptions, type StyleProp, type TextInputProps, type TextStyle, type ViewProps, type ViewStyle } from "react-native";
+import { TextInput, type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle, type ViewProps, type ViewStyle } from "react-native";
 import { type AureaFilaJustify } from "./rolagem.js";
 import { type AureaIconRegistry, type IconName } from "./icon.js";
 export type AureaFieldSize = "sm" | "md" | "lg";
@@ -249,6 +249,48 @@ export declare function Checkbox(p: CheckboxProps): React.JSX.Element;
  * estado do app — quem sabe qual está escolhido é o `useState` da tela, e `checked` sai dele.
  */
 export declare function Radio(p: RadioProps): React.JSX.Element;
+export interface RadioGroupProps extends ViewProps {
+    /** O valor do item escolhido. Controlado: quem guarda é a tela. */
+    value?: string;
+    onValueChange?: (value: string) => void;
+    /** Desliga o grupo inteiro. */
+    disabled?: boolean;
+    /** Pinta o grupo de erro (marca e rótulo na cor de perigo), como o `isInvalid` do HeroUI. */
+    invalid?: boolean;
+    /** O nome do grupo para quem usa leitor de tela ("Forma de entrega"). */
+    label?: string;
+    /** `vertical` (padrão) ou `horizontal`, como o HeroUI. */
+    orientation?: "vertical" | "horizontal";
+    children?: React.ReactNode;
+}
+export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "style" | "disabled"> {
+    /** O valor que este item escreve no grupo quando é tocado. */
+    value: string;
+    label?: React.ReactNode;
+    description?: React.ReactNode;
+    /** Desliga só este item. */
+    disabled?: boolean;
+    /** Erro só neste item. */
+    invalid?: boolean;
+    style?: StyleProp<ViewStyle>;
+}
+declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
+declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, style, accessibilityLabel, ...rest }: RadioGroupItemProps): React.JSX.Element;
+/**
+ * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
+ *
+ *     <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
+ *       <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
+ *       <Separator />
+ *       <RadioGroup.Item value="expressa" label="Expressa" description="Em 2 a 3 dias úteis" />
+ *     </RadioGroup>
+ *
+ * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
+ * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada.
+ */
+export declare const RadioGroup: typeof RaizDoGrupoDeRadio & {
+    Item: typeof ItemDoGrupoDeRadio;
+};
 /**
  * ⚠ **Ele TIRAVA a `description`, e passou a aceitá-la em 17/09/2026** — pedido do consumidor
  * (uma linha de explicação embaixo de "Desbloqueio por digital", no Perfil).

@@ -17,7 +17,24 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nenhum pacote muda.
+Nada além da `0.12.3`, logo abaixo, pronta e não publicada.
+
+---
+
+## [0.12.3] — 2026-10-01
+
+⏳ **Não publicada.** Só o nativo muda.
+
+### Adicionado
+
+- **`RadioGroup`, no nativo** (pedido do Victor, 01/10/2026). É o `RadioGroup` do HeroUI Native
+  1.0.10, com a aparência da Aurea: o grupo guarda a escolha, e cada `RadioGroup.Item` é a linha
+  inteira tocável, com o texto à esquerda e a marca à direita. As medidas são as do HeroUI, nos
+  tokens que dão o mesmo número: vão de 12 (`space3`), marca de 24 (`space6`), ponto de 10, rótulo
+  `base` médio e descrição `sm` apagada. A marca escolhida é a cor da seleção. Tem `disabled` e
+  `invalid` no grupo e no item, `orientation` e nome para o leitor de tela (`label`). Os filhos são
+  livres: cabe um `Separator` entre os itens e o grupo inteiro num `Card`, como no exemplo do
+  HeroUI. A marca do `Radio` solto não muda. Aceite de aparelho: bloco RG do `apps/native-smoke`.
 
 ### Ferramenta
 
