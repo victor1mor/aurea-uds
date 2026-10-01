@@ -17,14 +17,16 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-Nada além da `0.13.0`, logo abaixo, pronta e não publicada.
+Nada ainda.
 
 ---
 
 ## [0.13.0] — 2026-10-01
 
-⏳ **Não publicada.** Aprovada pela imagem pelo Victor e juntada em 01/10/2026, por volta das 11:00
-(Brasília), no pedido #17 (`e5a9025`). **QUEBRA** em todo app que usa ícone. É a troca de fonte e de ícones da
+✅ **PUBLICADA em 01/10/2026, por volta das 13:30 (Brasília), nos sete pacotes, pelo terminal do
+Victor** — do commit `a100bc7` (junção do pedido #19, com as fotos de referência da CI). A hora é a
+da mensagem dele. Aprovada pela imagem e juntada antes, por volta das 11:00, no pedido #17
+(`e5a9025`). **QUEBRA** em todo app que usa ícone. É a troca de fonte e de ícones da
 [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md), decisão do Victor
 de 01/10/2026: a letra passa a ser a **Atkinson Hyperlegible Next** (e a **Mono** para código), e
 os ícones passam a ser o **Phosphor**, no peso Regular, com a forma **cheia** no item escolhido.

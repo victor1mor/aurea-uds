@@ -30,6 +30,7 @@ dois tem — cria-se *"pensando como o HeroUI criaria"*.
 | versão | o quê | estado |
 |---|---|---|
 | `0.12.4` | **R-20**: o estado (`marcado`, `escolhido`, `desligado`, `aberto`, `ocupado`) chega ao leitor de tela da **web** em `aria-*`. Os 26 pontos do nativo | **publicada em 01/10/2026** (pedido #15), pelo terminal do Victor. Falta conferir no app, na web |
+| `0.13.0` | **ADR-0053**: a fonte é a Atkinson Hyperlegible Next e Mono, e os ícones são o Phosphor, com a forma cheia no item escolhido. Resolve a **R-17** (o Phosphor tem coroa e moto). **Quebra** nomes de ícone | **publicada em 01/10/2026** (pedido #17, fotos da CI nos #18 e #19), pelo terminal do Victor. Falta o teste de aparelho e os apps trocarem os nomes |
 
 **Decisão do Victor, 01/10/2026:** *"o restante vamos usar HeroUI como referência"*. As
 decisões da seção 1 (R-10, R-11, R-13, R-19) e as medidas da seção 2 seguem a recomendação
