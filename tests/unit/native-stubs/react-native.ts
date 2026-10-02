@@ -189,6 +189,10 @@ function paraCss(estilo: unknown): Record<string, unknown> {
   // `circle-bold`. No RN, `flex: 0` é "inflexível, use a `width`" (o círculo de 56); no CSS,
   // `flex: 0` é `0 1 0%`: base ZERO, e o item encolhe até virar um risco. A tradução segue o Yoga:
   // positivo → `n 1 0%`, zero → `0 0 auto`, negativo → `0 1 auto`.
+  // ⚠ E por seguir o Yoga, esta tradução ESCONDEU o mesmo defeito no navegador: o
+  // `react-native-web` 0.21.3 NÃO faz esta conta — passa `flex: 0` cru para o CSS — e o círculo
+  // virou risco no app rodando no navegador (foto do Victor, 02/10/2026). A biblioteca não escreve
+  // mais `flex: 0` nem `flex` negativo; quem cobra é `native-flex-navegador.test.tsx`.
   if (typeof saida.flex === "number") {
     const n = saida.flex;
     saida.flex = n > 0 ? `${n} 1 0%` : n === 0 ? "0 0 auto" : "0 1 auto";
