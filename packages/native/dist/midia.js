@@ -177,5 +177,16 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = 1, min
                         // `alt=""` acima). Sem legenda, o nome é o `alt`.
                         accessibilityLabel: temLegenda && typeof item.caption === "string"
                             ? item.caption : item.alt, ...estadoAcessivel({ selected: item.id === selected }), style: [s.ladrilho, item.id === selected && s.ladrilhoEscolhido], children: miolo }, item.id));
-                }) }), zoom && (_jsx(Dialog, { open: aberto != null, title: aberto ? (typeof aberto.caption === "string" ? aberto.caption : aberto.alt) : "", onClose: () => setAmpliado(null), testID: testID ? `${testID}-ampliada` : undefined, children: aberto && _jsx(Image, { source: aberto.source, alt: aberto.alt, fit: "contain", ratio: ratio }) }))] }));
+                }) }), zoom && (_jsx(FotoAmpliada, { source: aberto?.source, title: aberto ? (typeof aberto.caption === "string" ? aberto.caption : aberto.alt) : "", alt: aberto?.alt ?? "", ratio: ratio, onClose: () => setAmpliado(null), testID: testID ? `${testID}-ampliada` : undefined }))] }));
+}
+/**
+ * A foto grande, no `Dialog` — a da `Gallery` e, desde a R-22 (02/10/2026), a do `PhotoInput`.
+ * Morava dentro da `Gallery`; duas cópias do zoom é o defeito que o `CLAUDE.md` nomeia, e o dia em
+ * que uma das duas muda e a outra não. Não sai pelo barril: é peça de dentro.
+ *
+ * ⚠ Aberta quando há `source`. O `Dialog` fica montado e fechado no resto do tempo — é o contrato
+ * dele, e o `Modal` do RN não desenha nada fechado.
+ */
+export function FotoAmpliada({ source, title, alt, ratio, onClose, testID }) {
+    return (_jsx(Dialog, { open: source != null, title: title, onClose: onClose, testID: testID, children: source != null && _jsx(Image, { source: source, alt: alt, fit: "contain", ratio: ratio }) }));
 }

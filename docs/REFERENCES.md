@@ -3738,3 +3738,15 @@ aprovada pelo Victor no lugar de uma linha com cara de estrada, que o app achou 
 **`expo-document-picker`** entra como peer **opcional** e num caminho só dele,
 `@aurea-uds/native/system/file` — não no `/system`, para quem usa o `DatePicker` não ter de
 instalar o seletor de arquivos (é a cláusula da ADR-0038, a mesma do `/system`).
+
+### R-22 — o `PhotoInput` abre a foto (02/10/2026)
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| `heroui-native` 1.0.10, `close-button.tsx` e `close-button.css` | MIT | o X é um `Button` `sm`, só ícone, `tertiary` (com fundo), 32 de altura, glifo de 18 | o X com fundo: o `IconButton` `sm` da Aurea (30), `solid` |
+| `heroui-native` 1.0.10, `avatar.css:26-29` | MIT | `Avatar` `lg` = 64 | a miniatura e o botão de pôr foto (`space16`) |
+| `@aurea-uds/native`, `Gallery` (`midia.tsx`) | Apache-2.0 (nosso) | o zoom: `Dialog` + `Image` `contain` | o mesmo zoom, agora `FotoAmpliada`, nas duas peças |
+
+O HeroUI não tem seletor de foto; a peça segue pensada como ele faria, com as medidas das peças
+que ele tem.
+

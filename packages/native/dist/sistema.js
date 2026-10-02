@@ -35,11 +35,11 @@ import { Linking, Platform, Pressable, View } from "react-native";
 import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { IconButton } from "./actions.js";
-import { Avatar } from "./display.js";
 import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Alert } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { useCampo } from "./inputs.js";
+import { FotoAmpliada, Image } from "./midia.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -50,16 +50,28 @@ const folha = criarFolha((t) => ({
     },
     invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
     desabilitado: { opacity: t.size.opacityDisabled },
-    galeria: { flexDirection: "row", flexWrap: "wrap", gap: t.size.space2 },
-    miniatura: { position: "relative" },
-    remover: { position: "absolute", top: -t.size.space2, right: -t.size.space2 },
+    // R-22 (02/10/2026), a "B" da prancha: miniatura QUADRADA de 64 — o `Avatar` `lg` do HeroUI
+    // Native, e a medida que o botão de pôr foto passou a ter também (era 72, número à mão) — e o X
+    // TODO FORA da foto. O X é o `IconButton` `sm` (30) com fundo; a área de toque dele é de 44
+    // (`targetMin`), com o desenho no centro, então o deslocamento que põe o canto do DESENHO no
+    // canto da foto é (30 + 44) / 2. A grade deixa esse espaço em cima, à direita e entre as linhas,
+    // porque no Android o toque fora da caixa do pai não chega.
+    galeria: {
+        flexDirection: "row", flexWrap: "wrap", columnGap: t.size.space4,
+        rowGap: foraDoX(t) + t.size.space2,
+    },
+    comX: { paddingTop: foraDoX(t), paddingRight: foraDoX(t) },
+    miniatura: { position: "relative", width: t.size.space16 },
+    remover: { position: "absolute", top: -foraDoX(t), right: -foraDoX(t) },
     adicionar: {
         alignItems: "center", justifyContent: "center", gap: t.size.space1,
-        width: 72, height: 72, borderRadius: t.size.radiusMd,
+        width: t.size.space16, height: t.size.space16, borderRadius: t.size.radiusLg,
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
         borderStyle: "dashed", backgroundColor: t.color.fieldBg,
     },
 }));
+/** Quanto o X do `PhotoInput` sai da foto: metade do desenho (30) mais metade do alvo (44). */
+const foraDoX = (t) => (t.size.controlHSm + Math.max(t.size.controlHSm, t.size.targetMin)) / 2;
 const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
 /**
  * O campo de data — **a nossa pele, o calendário DELES**.
@@ -133,6 +145,18 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
  * | **quantas** cabem? | uma | `max` |
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
+ *
+ * **R-22 (02/10/2026), achado do app: a pessoa não conseguia OLHAR a foto que escolheu.** A
+ * miniatura era um `Avatar` redondo de 42, sem toque, e o X (sem fundo, só 8 para fora) cobria
+ * metade dela. Agora, na "B" da prancha escolhida pelo Victor:
+ *
+ * | | |
+ * |---|---|
+ * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` do HeroUI) |
+ * | tocar nela | abre a foto grande, no MESMO zoom da `Gallery` (`FotoAmpliada`) |
+ * | o X | com fundo, TODO fora da foto, no canto de cima à direita |
+ * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |
+ * | inativo | a foto ainda abre (olhar não muda nada); o X não remove |
  */
 export function PhotoInput({ value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true, onPermissionDenied, addIcon = "camera", removeIcon = "x", style, testID, }) {
     const t = useAureaTokens();
@@ -141,7 +165,12 @@ export function PhotoInput({ value = [], onChange, max = 1, source = "camera", d
     const campo = useCampo();
     const inativo = disabled ?? campo?.disabled;
     const [negadoDeVez, setNegadoDeVez] = React.useState(false);
+    const [aberta, setAberta] = React.useState(null);
     const cheio = value.length >= max;
+    // "Foto 2 de 3": a posição entre as que EXISTEM, e não entre as que cabem (`max`).
+    const nomeDa = (n) => value.length > 1
+        ? `${strings.photo} ${n + 1} ${strings.positionOf} ${value.length}` : strings.photo;
+    const fotoAberta = aberta != null ? value[aberta] : undefined;
     const escolher = React.useCallback(async () => {
         if (source === "camera") {
             const atual = await ImagePicker.getCameraPermissionsAsync();
@@ -166,5 +195,7 @@ export function PhotoInput({ value = [], onChange, max = 1, source = "camera", d
             .map((a) => ({ uri: a.uri, width: a.width, height: a.height }));
         onChange?.([...value, ...novas]);
     }, [source, max, value, onChange, onPermissionDenied]);
-    return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: s.galeria, children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Avatar, { source: foto.uri, size: "lg", alt: "" }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "ghost", size: "sm", name: removeIcon, label: strings.photoRemove, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, foto.uri))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, ...estadoAcessivel({ disabled: !!inativo }), style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] })] }));
+    return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: [s.galeria, value.length > 0 && s.comX], children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Pressable, { onPress: () => setAberta(n), accessibilityRole: "imagebutton", accessibilityLabel: nomeDa(n), accessibilityHint: strings.photoOpen, children: _jsx(Image, { source: foto.uri, alt: "", ratio: 1 }) }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "solid", size: "sm", name: removeIcon, label: `${strings.photoRemove} ${n + 1}`, disabled: inativo, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, `${foto.uri}-${n}`))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label ?? strings.photoAdd, ...estadoAcessivel({ disabled: !!inativo }), style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] }), _jsx(FotoAmpliada, { source: fotoAberta?.uri, title: aberta != null ? nomeDa(aberta) : "", alt: aberta != null ? nomeDa(aberta) : "", 
+                // A proporção da foto, quando a câmera a deu: a grande aparece inteira, sem tarja à toa.
+                ratio: fotoAberta?.width && fotoAberta.height ? fotoAberta.width / fotoAberta.height : 1, onClose: () => setAberta(null) })] }));
 }

@@ -34,7 +34,7 @@ dois tem — cria-se *"pensando como o HeroUI criaria"*.
 | `0.13.0` | **ADR-0053**: a fonte é a Atkinson Hyperlegible Next e Mono, e os ícones são o Phosphor, com a forma cheia no item escolhido. Resolve a **R-17** (o Phosphor tem coroa e moto). **Quebra** nomes de ícone | **publicada em 01/10/2026** (pedido #17, fotos da CI nos #18 e #19), pelo terminal do Victor. Falta o teste de aparelho e os apps trocarem os nomes |
 | `0.14.0` | **Lote F do nativo**: R-10 (`text-md` vira apelido de `text-sm`, sai na 1.0), R-12 (`Tabs variant="secondary"`), R-14 (`description` no item do `Combobox`), R-16 (`NumberField size="display"`, letra 30), R-19 (`icon` no `RadioGroup.Item`, 24). De passagem: a descrição do `RadioGroup` saía em 16 e passou a 14 | **publicada dentro da `0.14.1`, em 02/10/2026**, pelo terminal do Victor. Antes e depois aprovados pela imagem. Falta o aceite de aparelho (blocos LF do `apps/native-smoke`) |
 | `0.14.1` | O `IconButton` ocupado (web) mostra só a rodinha, no centro, e o `Button` ocupado troca o ícone da frente pela rodinha | **publicada em 02/10/2026** (pedidos #24 e #25), pelo terminal do Victor |
-| `0.15.0` | **R-11** (toda prop de ícone do nativo aceita o próprio desenho do app, `AureaIcon`) · **R-15** (o glifo do `EmptyState` numa moldura redonda) · **R-18** (`Timeline` com `icon`, `tone`, `trailing`, `between`) · **R-21** (`FileInput` em `/system/file`) · **E13** (`useNativeDriver` só fora do navegador) | **feita em 02/10/2026, NÃO publicada**. Escolhas do Victor nas pranchas: *"1 c, 2 sim, 3 sim"*. Falta o aceite de aparelho (blocos R-11, R-15, R-18 e R-21 do `apps/native-smoke`) |
+| `0.15.0` | **R-11** (toda prop de ícone do nativo aceita o próprio desenho do app, `AureaIcon`) · **R-15** (o glifo do `EmptyState` numa moldura redonda) · **R-18** (`Timeline` com `icon`, `tone`, `trailing`, `between`) · **R-21** (`FileInput` em `/system/file`) · **R-22** (o `PhotoInput` abre a foto; miniatura quadrada, X fora) · **E13** (`useNativeDriver` só fora do navegador) | **feita em 02/10/2026, NÃO publicada**. Escolhas do Victor nas pranchas: *"1 c, 2 sim, 3 sim"* e *"B pode seguir"*. Falta o aceite de aparelho (blocos R-11, R-15, R-18, R-21 e R-22 do `apps/native-smoke`) |
 
 **Decisão do Victor, 01/10/2026:** *"o restante vamos usar HeroUI como referência"*. As
 decisões da seção 1 (R-10, R-11, R-13, R-19) e as medidas da seção 2 seguem a recomendação
@@ -251,6 +251,16 @@ aviso em vermelho embaixo. Proposta aprovada pelo Victor (*"3 sim"*).
 - **[ReUI]** `File Upload`: `accept`, `maxSize`, `maxFiles`, `multiple`. Os dois primeiros nomes
   entraram (são também os da web); o limite ficou `max`, como no `PhotoInput`.
 
+### ~~R-22 · o `PhotoInput` não abre a foto~~ — feito na `0.15.0`
+
+✅ A "B" da prancha (*"B pode seguir"*): miniatura quadrada de 64 (o `Avatar` `lg` do HeroUI
+Native), do tamanho do botão de pôr foto; tocar abre a foto grande no zoom da `Gallery`; o X com
+fundo, todo fora da foto. Leitor de tela: *"Foto 2 de 3"* (a posição entre as que existem; com
+uma só, *"Foto"*), *"Abre a foto"*, *"Remover foto 2"*.
+
+- **[HeroUI]** não tem seletor de foto. O X é o `CloseButton` dele traduzido: botão pequeno, só
+  ícone, com fundo (`close-button.tsx`: `size="sm"`, 32). Na Aurea, o `IconButton` `sm` (30).
+
 ---
 
 ### Achado de passagem (01/10/2026), sem lote
@@ -273,9 +283,9 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 6. **iPhone: nunca rodou.** Antes de prometer a `1.0`.
 7. **LF-12, LF-14, LF-16 e LF-19** (`Tabs` secundário, segunda linha do `Combobox`, `NumberField`
    grande, ícone no `RadioGroup`) — `0.14.0`.
-8. **R-11, R-15, R-18 e R-21** (o desenho do app nas peças, a moldura do vazio, a linha do tempo
-   nova e o seletor de arquivo; o R-21 pede um PDF menor e um maior que 1 MB no telefone) —
-   `0.15.0`.
+8. **R-11, R-15, R-18, R-21 e R-22** (o desenho do app nas peças, a moldura do vazio, a linha do
+   tempo nova, o seletor de arquivo e a foto que abre; o R-21 pede um PDF menor e um maior que
+   1 MB no telefone) — `0.15.0`.
 
 ## 4. Do app, não da Aurea
 
@@ -345,6 +355,6 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 3. **Lote da troca de fonte e ícones** (ADR-0053): antes da `1.0`, porque quebra todo nome de
    ícone. Falta só o peso do ícone pequeno (ADR-0053).
 4. Acréscimos do nativo que o app já espera: ~~R-12, R-14, R-16~~ (`0.14.0`) · ~~R-15, R-18,
-   R-21~~ (`0.15.0`). A seção 2 do nativo está fechada, fora a R-17; falta o aceite de aparelho (§3).
+   R-21, R-22~~ (`0.15.0`). A seção 2 do nativo está fechada, fora a R-17; falta o aceite de aparelho (§3).
 5. Web: C-08 e M-03 fecham sem código; C-11, B-05, B-06 + N-01 + N-03 num lote só (paginação).
 6. Lote 5 (peças novas da web) depois da `1.0`, como o `CLAUDE.md` já diz.

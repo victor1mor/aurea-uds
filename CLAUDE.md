@@ -170,9 +170,10 @@ documento de achados mais novo para conferir se ela envelheceu.
 7. **`0.15.0`, feita em 02/10/2026, NÃO publicada:** R-11 (toda prop de ícone do nativo aceita
    o próprio desenho do app, `AureaIcon`) · R-15 (o glifo do `EmptyState` numa moldura redonda —
    a "C" da prancha; a `illustration` foi reprovada e saiu) · R-18 (`Timeline` com `icon`, `tone`,
-   `trailing` e `between`) · R-21 (`FileInput` em `/system/file`) · E13 (no navegador, o nativo
-   manda `useNativeDriver: false`). Escolhas do Victor: *"1 c, 2 sim, 3 sim"*. Falta o aceite de
-   aparelho dos blocos R-11, R-15, R-18 e R-21.
+   `trailing` e `between`) · R-21 (`FileInput` em `/system/file`) · R-22 (o `PhotoInput` abre a
+   foto; miniatura quadrada de 64, X todo fora) · E13 (no navegador, o nativo manda
+   `useNativeDriver: false`). Escolhas do Victor: *"1 c, 2 sim, 3 sim"* e *"B pode seguir"*. Falta
+   o aceite de aparelho dos blocos R-11, R-15, R-18, R-21 e R-22.
 
 ### Lote E e decisões de 25/09/2026
 

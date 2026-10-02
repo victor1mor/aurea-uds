@@ -32,8 +32,18 @@ export interface AureaStrings {
     cameraDenied: string;
     /** O botão que leva às configurações do app. */
     openSettings: string;
-    /** O rótulo do botão que tira uma foto anexada. */
+    /** O rótulo do botão que tira uma foto anexada. O número da foto vem depois (R-22). */
     photoRemove: string;
+    /**
+     * O nome de cada miniatura do `PhotoInput` (R-22): *"Foto 2 de 3"* — com uma foto só, só
+     * *"Foto"*. O `positionOf` é a mesma chave da web.
+     */
+    photo: string;
+    positionOf: string;
+    /** O que a miniatura faz, dito pelo leitor de tela depois do nome (R-22). */
+    photoOpen: string;
+    /** O nome do botão de pôr foto quando ele não está num `Field` (R-22): sem isto, ficava mudo. */
+    photoAdd: string;
     /**
      * O botão que revela a senha no `PasswordField`, e o que a esconde de volta. Mesmos nomes da
      * web (`pure.tsx`), porque é a mesma peça com a mesma decisão: **o rótulo é que anuncia o

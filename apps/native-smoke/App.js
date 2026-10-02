@@ -62,6 +62,9 @@ import VERSAO from "./versao.json";
 // instalar o `expo-document-picker`. O seletor de arquivos vem no Expo Go ("Included in Expo Go",
 // na página da Expo).
 import {FileInput} from "@aurea-uds/native/system/file";
+// R-22 (02/10/2026): o `PhotoInput` vem do `/system`, que importa também o seletor de data. Os dois
+// módulos vêm no Expo Go ("Included in Expo Go", nas páginas da Expo).
+import {PhotoInput} from "@aurea-uds/native/system";
 
 // O caminho PROFUNDO, que é a forma documentada pela ADR-0038. Importar do barril traria todos.
 // Desde a ADR-0053 (01/10/2026) os glifos são do Phosphor, e cada um tem duas formas: a regular
@@ -297,6 +300,7 @@ function Tela({irParaScreen, irParaLote2}) {
       <BlocosLoteF t={t} />
       <BlocoR11R15 t={t} />
       <BlocoR21 t={t} />
+      <BlocoR22 t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1521,6 +1525,26 @@ function BlocoR21({t}) {
       <Field label="Documento">
         <FileInput value={arquivos} onChange={setArquivos} accept="application/pdf"
           maxSize={1024 * 1024} />
+      </Field>
+    </Bloco>
+  );
+}
+
+// R-22 (02/10/2026), a "B" da prancha: tocar na foto abre a foto grande; miniatura quadrada de 64;
+// o X com fundo, todo fora da foto. Começa com as duas fotos da vitrine, para não depender da galeria
+// do telefone; o botão de pôr foto abre a galeria.
+function BlocoR22({t}) {
+  const [fotos, setFotos] = React.useState([
+    {uri: FOTO_A, width: 120, height: 90}, {uri: FOTO_B, width: 120, height: 90},
+  ]);
+  return (
+    <Bloco t={t} n="R-22" titulo="Tocar na foto abre a foto grande, e o X não cobre a foto?"
+      criterio={"1) Duas miniaturas QUADRADAS, do tamanho do botão da câmera, com cantos arredondados. "
+        + "2) O X de cada uma, num círculo com fundo, fica TODO fora da foto, no canto de cima à "
+        + "direita. 3) Tocar numa foto abre a foto grande, inteira; voltar fecha. 4) O X tira a "
+        + "foto. 5) Com o leitor de tela: \"Foto 1 de 2\", \"Abre a foto\"; o X, \"Remover foto 1\"."}>
+      <Field label="Fotos">
+        <PhotoInput value={fotos} onChange={setFotos} max={5} source="library" />
       </Field>
     </Bloco>
   );

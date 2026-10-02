@@ -410,8 +410,13 @@ nega. Cada pergunta ficou com um padrão, e **cada padrão tem uma saída**:
 | e se a pessoa **negar**? | pergunta de novo na próxima vez, enquanto o sistema deixar | `onPermissionDenied` |
 | e se negar **de vez** (`canAskAgain: false`)? | um `Alert` de aviso + botão para as configurações | `offerSettings={false}` |
 | câmera ou galeria? | **câmera** | `source="library"` |
-| como remover? | um `IconButton` no canto de cada miniatura | `removeIcon` |
+| como remover? | um X com fundo, **todo fora** da foto, no canto de cima à direita (R-22) | `removeIcon` |
 | quantas cabem? | **uma** | `max` |
+| como **olhar** a foto? | tocar na miniatura abre a foto grande, no mesmo zoom da `Gallery` (R-22) | — |
+
+**Desde a `0.15.0` (R-22)**, a miniatura é quadrada de 64 (o `Avatar` `lg` do HeroUI Native), do
+tamanho do botão de pôr foto. O leitor de tela ouve *"Foto 2 de 3"* e *"Abre a foto"*; o X,
+*"Remover foto 2"*. Com o campo inativo, a foto ainda abre e o X não remove.
 
 ⚠ **O gatilho some ao atingir o limite**, em vez de ficar aceso e não fazer nada — botão que
 existe e não responde é o defeito, não a proteção.

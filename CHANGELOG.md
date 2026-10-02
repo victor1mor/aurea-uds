@@ -60,9 +60,10 @@ em inglês e ficam como estão: são registro.
 
 ## [0.15.0] — 2026-10-02
 
-⏳ **NÃO PUBLICADA.** Cinco achados do app, todos no nativo: R-11, R-15, R-18 e R-21 da fila, e a
-E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11) e *"1 c, 2 sim,
-3 sim"* (R-15, R-18, R-21). Só acrescenta — fora a aparência do `EmptyState`, que ganha a moldura.
+⏳ **NÃO PUBLICADA.** Seis achados do app, todos no nativo: R-11, R-15, R-18, R-21 e R-22 da fila,
+e a E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11), *"1 c, 2 sim,
+3 sim"* (R-15, R-18, R-21) e *"B pode seguir"* (R-22). Só acrescenta — fora a aparência do
+`EmptyState` (ganha a moldura) e a do `PhotoInput` (miniatura quadrada e X fora da foto).
 
 ### Adicionado
 
@@ -87,7 +88,7 @@ E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11) e
   errado, é recusado, com o aviso em vermelho embaixo (as frases da web). ⚠ **Caminho só dele**, e
   não o `/system`: lá, todo app que usa o `DatePicker` teria de instalar o seletor de arquivos.
 - **Frases novas:** `fileChoose`, `fileRemove`, `fileTooLarge`, `fileWrongType` (as três últimas
-  iguais às da web).
+  iguais às da web); `photo`, `positionOf` (a da web), `photoOpen`, `photoAdd` (R-22).
 
 ### Mudado
 
@@ -96,8 +97,18 @@ E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11) e
   `mutedForeground`. Era o "ícone pequeno e solto" do achado. A `illustration` (o desenho do app,
   de 112) foi reprovada na prancha e não entra.
 
+- **O `PhotoInput` deixa OLHAR a foto (R-22).** A miniatura era um `Avatar` redondo de 42, sem
+  toque, e o X (sem fundo, só 8 para fora) cobria metade dela. Agora, na "B" da prancha: miniatura
+  quadrada de 64 (o `Avatar` `lg` do HeroUI Native, a `Image` da `Gallery`), do tamanho do botão de
+  pôr foto (que era 72, número à mão); tocar abre a foto grande no MESMO zoom da `Gallery`; o X tem
+  fundo e fica todo fora da foto — o canto do desenho dele no canto da foto, medido. O leitor de
+  tela ouve *"Foto 2 de 3"* e *"Abre a foto"*; o X, *"Remover foto 2"*.
+
 ### Corrigido
 
+- **O botão de pôr foto do `PhotoInput` tinha nome só dentro de um `Field`** (R-22). Fora dele, o
+  leitor de tela ouvia "botão" e nada mais; agora ouve *"Adicionar foto"*.
+- **Com o `PhotoInput` inativo, o X ainda removia a foto.** Agora não remove; olhar a foto continua.
 - **No navegador, o nativo não pede mais o motor nativo de animação (E13).** Oito pontos de cinco
   arquivos (`Spinner`, `Skeleton`, `Switch`, `Drawer`, `BottomSheet`, `Combobox`, `Toast`) ligavam
   `useNativeDriver: true` sempre, e o React Native Web avisava no console *"`useNativeDriver` is not
@@ -108,7 +119,8 @@ E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11) e
 
 - As cores por tom saíram de dentro do `Badge` para `acentoDoTom`/`fundoDoTom`, porque a moldura
   usa as mesmas. A altura e o recheio do campo (`alturaDoTamanho`, `respiroDoTamanho`) saem do
-  `inputs.tsx` para o `FileInput` não copiar os números.
+  `inputs.tsx` para o `FileInput` não copiar os números. O zoom da `Gallery` virou `FotoAmpliada`,
+  que o `PhotoInput` usa também.
 
 ### Testes e aparelho
 
@@ -119,11 +131,15 @@ E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11) e
 - `tests/unit/native-r18.test.tsx`: 11 testes; 9 reprovam o código de antes, e um trava as cores
   do `Badge`.
 - `tests/unit/native-r21.test.tsx`: 22 testes, um por decisão de fluxo, mais a porta própria.
+- `tests/unit/native-r22.test.tsx`: 13 testes, os 13 reprovam o código de antes — entre eles a
+  medida de que o desenho do X não toca a foto. Os dois testes do `PhotoInput` que achavam o X pelo
+  nome sem número passaram a achar pelo começo do nome.
 - `tests/unit/native-e13.test.tsx`: 22 testes — as sete peças no Android, no iOS e no navegador,
   e uma trava que reprova `useNativeDriver` escrito à mão. Com o código de antes, 8 reprovam.
-- `apps/native-smoke`: blocos **R-11**, **R-15**, **R-18** e **R-21** (este pede um PDF menor e um
-  maior que 1 MB no telefone; o seletor vem no Expo Go). O `conferir-props.mjs` passou a conferir
-  o `FileInput`.
+- `apps/native-smoke`: blocos **R-11**, **R-15**, **R-18**, **R-21** (pede um PDF menor e um
+  maior que 1 MB no telefone; o seletor vem no Expo Go) e **R-22** (o app de teste passa a ter o
+  seletor de foto e o de data, que vêm no Expo Go). O `conferir-props.mjs` passou a conferir o
+  `FileInput` e o `PhotoInput`.
 - A vitrine (o dublê que vira imagem) passou a cortar linha: ignorava o `numberOfLines`, e a
   prancha do `FileInput` mostrou o nome comprido quebrando em três linhas. O navegador só corta no
   fim; o corte no meio é do aparelho.

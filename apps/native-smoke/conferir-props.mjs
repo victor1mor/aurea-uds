@@ -40,7 +40,9 @@ const MODULOS = ["busca.tsx", "numero.tsx", "midia.tsx", "inputs.tsx", "layout.t
                  "overlays.tsx", "data.tsx", "navigation.tsx", "display.tsx", "feedback.tsx",
                  "actions.tsx", "text.tsx", "screen.tsx", "chart.tsx",
                  // R-21 (02/10/2026): o `FileInput`, que o app importa de `/system/file`.
-                 "arquivo.tsx"];
+                 "arquivo.tsx",
+                 // R-22 (02/10/2026): o `PhotoInput`, que o app importa de `/system`.
+                 "sistema.tsx"];
 
 // 🔴 AS BASES DO REACT NATIVE, LIDAS DO PACOTE INSTALADO — não escritas aqui.
 //
@@ -186,7 +188,7 @@ const TAGS = {
   Badge: "BadgeProps", Status: "StatusProps", Progress: "ProgressProps", Avatar: "AvatarProps",
   EmptyState: "EmptyStateProps", DataState: "DataStateProps", Spinner: "SpinnerProps",
   Skeleton: "SkeletonProps", Button: "ButtonProps", IconButton: "IconButtonProps",
-  FileInput: "FileInputProps",
+  FileInput: "FileInputProps", PhotoInput: "PhotoInputProps",
 };
 
 // `children` e `key` não moram nas interfaces — são do React, e valem em todo elemento.

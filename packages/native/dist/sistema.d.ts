@@ -78,5 +78,17 @@ export interface PhotoInputProps {
  * | **quantas** cabem? | uma | `max` |
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
+ *
+ * **R-22 (02/10/2026), achado do app: a pessoa não conseguia OLHAR a foto que escolheu.** A
+ * miniatura era um `Avatar` redondo de 42, sem toque, e o X (sem fundo, só 8 para fora) cobria
+ * metade dela. Agora, na "B" da prancha escolhida pelo Victor:
+ *
+ * | | |
+ * |---|---|
+ * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` do HeroUI) |
+ * | tocar nela | abre a foto grande, no MESMO zoom da `Gallery` (`FotoAmpliada`) |
+ * | o X | com fundo, TODO fora da foto, no canto de cima à direita |
+ * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |
+ * | inativo | a foto ainda abre (olhar não muda nada); o X não remove |
  */
 export declare function PhotoInput({ value, onChange, max, source, disabled, offerSettings, onPermissionDenied, addIcon, removeIcon, style, testID, }: PhotoInputProps): React.JSX.Element;

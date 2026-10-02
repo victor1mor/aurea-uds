@@ -165,15 +165,17 @@ describe("PhotoInput — o fluxo que eu recomendei adiar", () => {
 
   // DECISÃO 5: no limite o gatilho SOME, em vez de ficar aceso e não fazer nada — que é a pior
   // das duas, porque parece defeito.
+  // Desde a R-22 a miniatura também é tocável e o X leva o número da foto: o gatilho se acha
+  // pelo nome dele (`photoAdd`, fora de um `Field`).
   it("no limite, o gatilho some", () => {
     render(<Envolve><PhotoInput value={[{uri: "a"}]} max={1} /></Envolve>);
     const gatilhos = __instancias("Pressable")
-      .filter((p) => p.accessibilityLabel !== defaultStrings.photoRemove);
+      .filter((p) => p.accessibilityLabel === defaultStrings.photoAdd);
     expect(gatilhos).toHaveLength(0);
 
     render(<Envolve><PhotoInput value={[{uri: "a"}]} max={2} /></Envolve>);
     const depois = __instancias("Pressable")
-      .filter((p) => p.accessibilityLabel !== defaultStrings.photoRemove);
+      .filter((p) => p.accessibilityLabel === defaultStrings.photoAdd);
     expect(depois.length).toBeGreaterThan(0);
   });
 
@@ -183,7 +185,7 @@ describe("PhotoInput — o fluxo que eu recomendei adiar", () => {
     const mudar = vi.fn();
     render(<Envolve><PhotoInput value={[{uri: "a"}, {uri: "b"}]} max={3} onChange={mudar} /></Envolve>);
     const remover = __instancias("Pressable")
-      .filter((p) => p.accessibilityLabel === defaultStrings.photoRemove);
+      .filter((p) => String(p.accessibilityLabel).startsWith(defaultStrings.photoRemove));
     expect(remover).toHaveLength(2);
     act(() => { (remover[0].onPress as () => void)(); });
     expect(mudar).toHaveBeenCalledWith([{uri: "b"}]);

@@ -58,8 +58,18 @@ export interface AureaStrings {
   cameraDenied: string;
   /** O botão que leva às configurações do app. */
   openSettings: string;
-  /** O rótulo do botão que tira uma foto anexada. */
+  /** O rótulo do botão que tira uma foto anexada. O número da foto vem depois (R-22). */
   photoRemove: string;
+  /**
+   * O nome de cada miniatura do `PhotoInput` (R-22): *"Foto 2 de 3"* — com uma foto só, só
+   * *"Foto"*. O `positionOf` é a mesma chave da web.
+   */
+  photo: string;
+  positionOf: string;
+  /** O que a miniatura faz, dito pelo leitor de tela depois do nome (R-22). */
+  photoOpen: string;
+  /** O nome do botão de pôr foto quando ele não está num `Field` (R-22): sem isto, ficava mudo. */
+  photoAdd: string;
   /**
    * O botão que revela a senha no `PasswordField`, e o que a esconde de volta. Mesmos nomes da
    * web (`pure.tsx`), porque é a mesma peça com a mesma decisão: **o rótulo é que anuncia o
@@ -136,6 +146,10 @@ export const defaultStrings: AureaStrings = {
   cameraDenied: "Camera access is off. Turn it on in Settings to attach a photo.",
   openSettings: "Open Settings",
   photoRemove: "Remove photo",
+  photo: "Photo",
+  positionOf: "of",
+  photoOpen: "Opens the photo",
+  photoAdd: "Add photo",
   passwordShow: "Show password",
   passwordHide: "Hide password",
   close: "Close",
@@ -181,6 +195,10 @@ export const ptBR: AureaStrings = {
   cameraDenied: "O acesso à câmera está desligado. Ligue nas configurações para anexar uma foto.",
   openSettings: "Abrir configurações",
   photoRemove: "Remover foto",
+  photo: "Foto",
+  positionOf: "de",
+  photoOpen: "Abre a foto",
+  photoAdd: "Adicionar foto",
   passwordShow: "Mostrar senha",
   passwordHide: "Ocultar senha",
   close: "Fechar",
