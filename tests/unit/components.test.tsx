@@ -98,6 +98,32 @@ describe("Button — API do exemplar", () => {
     expect(el).toHaveAttribute("aria-busy", "true");
   });
 
+  // 🔴 01/10/2026, achado pelo Victor no aureauds.dev: ocupado, o `IconButton` mostrava a rodinha E
+  // o glifo, e a rodinha saía 4px para fora do botão. Ocupado TROCA o ícone (como o HeroUI faz).
+  test("ocupado, o IconButton mostra só a rodinha — sem o glifo e sem invólucro vazio", () => {
+    wrap(<IconButton icon="floppy-disk" label="Salvando" loading />);
+    const el = screen.getByRole("button", {name: "Salvando"});
+    expect(el).toHaveAttribute("aria-busy", "true");
+    expect([...el.children].map((c) => c.className)).toEqual(["spinner"]);
+    expect(el.querySelector(".icon")).toBeNull();
+  });
+
+  test("fora do estado ocupado, o IconButton continua com o glifo dentro do invólucro de sempre", () => {
+    wrap(<IconButton icon="floppy-disk" label="Salvar" />);
+    const el = screen.getByRole("button", {name: "Salvar"});
+    expect(el.children).toHaveLength(1);
+    expect(el.children[0].tagName).toBe("SPAN");
+    expect(el.children[0].querySelector(".icon")).not.toBeNull();
+  });
+
+  test("ocupado, a rodinha toma o lugar do ícone da frente; o texto fica", () => {
+    wrap(<Button leadingIcon="upload-simple" loading>Enviando…</Button>);
+    const el = screen.getByRole("button", {name: "Enviando…"});
+    expect(el.querySelector(".spinner")).not.toBeNull();
+    expect(el.querySelector(".icon")).toBeNull();
+    expect(el).toHaveTextContent("Enviando…");
+  });
+
   test("as cinco alturas e as onze variantes viram classe, e md/secondary não sujam o markup", () => {
     wrap(<><Button size="xs" variant="link-danger">A</Button><Button>B</Button></>);
     expect(screen.getByRole("button", {name: "A"})).toHaveClass("btn-xs", "btn-link-danger");
