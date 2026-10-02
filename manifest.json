@@ -67,13 +67,15 @@
       ],
       "optionalPeers": [
         "@react-native-community/datetimepicker",
+        "expo-document-picker",
         "expo-image-picker"
       ],
       "entryPoints": [
         ".",
         "./icons",
         "./icons/*",
-        "./system"
+        "./system",
+        "./system/file"
       ]
     },
     "@aurea-uds/react": {
@@ -290,7 +292,7 @@
       "Ready": 42,
       "Stable": 88
     },
-    "testes_unit": 1293,
+    "testes_unit": 1327,
     "componentes_citados_no_teste": 128,
     "specs_visuais": 22,
     "baselines": 44,

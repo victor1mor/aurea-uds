@@ -917,6 +917,7 @@ em **13 de 13**.
 |---|---|---|---|---|
 | `DatePicker` | `@react-native-community/datetimepicker` | **MIT** | 9.1.0 | **opcional** |
 | `PhotoInput` | `expo-image-picker` | **MIT** | ~57.0.15 | **opcional** |
+| `FileInput` (R-21, `0.15.0`) | `expo-document-picker` | **MIT** | ~57.0.1 | **opcional**, e num caminho só dele: `@aurea-uds/native/system/file` |
 
 ⚠ **Os dois NÃO saem pelo barril principal.** Eles vivem em `@aurea-uds/native/system`, pela
 mesma razão que os 2571 ícones vivem em `./icons/*` — **ADR-0038**: sair pelo barril traria os

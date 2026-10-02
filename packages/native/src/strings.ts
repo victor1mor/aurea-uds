@@ -109,6 +109,17 @@ export interface AureaStrings {
   searchClear: string;
   /** O nome da grade de fotos da `Gallery`. Mesmo nome da web. */
   galleryLabel: string;
+  /**
+   * O texto do gatilho do `FileInput` (R-21). **Não existe na web**: lá a área de soltar diz
+   * *"Arraste arquivos aqui ou clique para selecionar"*, e no telefone não há o que arrastar.
+   */
+  fileChoose: string;
+  /** O botão que tira um arquivo escolhido; o nome do arquivo vem depois. Mesmo nome da web. */
+  fileRemove: string;
+  /** O aviso do arquivo maior que o `maxSize`. Mesmo nome — e mesma frase — da web. */
+  fileTooLarge: string;
+  /** O aviso do arquivo de um tipo que o `accept` não aceita. Mesmo nome e frase da web. */
+  fileWrongType: string;
   /** A frase de cada estado universal. */
   universalState: Record<AureaUniversalState, string>;
 }
@@ -143,6 +154,10 @@ export const defaultStrings: AureaStrings = {
   comboboxSearch: "Search",
   searchClear: "Clear search",
   galleryLabel: "Gallery",
+  fileChoose: "Choose file",
+  fileRemove: "Remove",
+  fileTooLarge: "File exceeds the size limit",
+  fileWrongType: "File type not allowed",
   universalState: {
     waiting_user: "Waiting for someone to act.",
     waiting_approval: "Waiting for approval.",
@@ -184,6 +199,10 @@ export const ptBR: AureaStrings = {
   comboboxSearch: "Buscar",
   searchClear: "Limpar busca",
   galleryLabel: "Galeria",
+  fileChoose: "Escolher arquivo",
+  fileRemove: "Remover",
+  fileTooLarge: "Arquivo maior que o limite",
+  fileWrongType: "Tipo de arquivo não aceito",
   universalState: {
     waiting_user: "Esperando alguém agir.",
     waiting_approval: "Esperando aprovação.",

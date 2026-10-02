@@ -50,6 +50,25 @@ export const comOpacidade = (cor, pct) => /^#[0-9a-fA-F]{6}$/.test(cor)
     ? cor + Math.round(Math.max(0, Math.min(1, pct)) * 255).toString(16).padStart(2, "0")
     : cor;
 /**
+ * A cor FORTE de um tom: o texto do selo, o ícone da moldura.
+ *
+ * ⚠ **Morava dentro do `Badge` e mudou de casa em 02/10/2026**, quando a moldura do ícone (R-15 e
+ * R-18) passou a precisar da mesma cor por tom. Duas cópias do mapa é o defeito que o `CLAUDE.md`
+ * nomeia — e o dia em que um tom novo entra numa só.
+ */
+export const acentoDoTom = (t, tom) => tom === "primary" ? t.color.primaryEmphasis
+    : tom === "info" ? t.color.info400 ?? t.color.info
+        : tom === "success" ? t.color.success400 ?? t.color.success
+            : tom === "warning" ? t.color.warning400 ?? t.color.warning
+                : tom === "danger" ? t.color.danger400 ?? t.color.destructive
+                    : t.color.secondaryForeground;
+/** O fundo SUAVE de um tom (`--<tom>-bg`). `primary` e `neutral` não têm token: `undefined`. */
+export const fundoDoTom = (t, tom) => tom === "info" ? t.color.infoBg
+    : tom === "success" ? t.color.successBg
+        : tom === "warning" ? t.color.warningBg
+            : tom === "danger" ? t.color.dangerBg
+                : undefined;
+/**
  * 🔴 O FIO AMARELO DO ESCOLHIDO — o sinal único da casa para "este é o escolhido".
  *
  * O `aurea.css:1037-1039` põe este fio em TODOS os selecionados (`.is-selected`, botão alternado,

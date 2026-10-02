@@ -55,11 +55,14 @@ import type {AureaTokens} from "./tokens.js";
 
 export type AureaFieldSize = "sm" | "md" | "lg";
 
-const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
+// `alturaDoTamanho` e `respiroDoTamanho` saem do arquivo (não do pacote) desde 02/10/2026: o
+// `FileInput` (R-21) desenha um gatilho com a medida do campo, e copiar os números para lá é o
+// defeito que o `CLAUDE.md` nomeia.
+export const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
 const fonteDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg : t.size.textBase;  // ADR-0050: um degrau acima da web
-const respiroDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
+export const respiroDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.space3 : s === "lg" ? t.size.space4 : 13;
 
 const folha = criarFolha((t: AureaTokens) => ({

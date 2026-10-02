@@ -58,6 +58,10 @@ import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 // ⚠ Não está no git (é gerado). O app já não roda sem `preparar.mjs` — os tarballs do `vendor/`
 // também são gerados —, então isto não acrescenta nenhuma condição nova.
 import VERSAO from "./versao.json";
+// R-21 (02/10/2026): o `FileInput` mora num caminho SÓ DELE, para quem usa o `DatePicker` não ter de
+// instalar o `expo-document-picker`. O seletor de arquivos vem no Expo Go ("Included in Expo Go",
+// na página da Expo).
+import {FileInput} from "@aurea-uds/native/system/file";
 
 // O caminho PROFUNDO, que é a forma documentada pela ADR-0038. Importar do barril traria todos.
 // Desde a ADR-0053 (01/10/2026) os glifos são do Phosphor, e cada um tem duas formas: a regular
@@ -76,6 +80,8 @@ import IconWarningFill from "@aurea-uds/native/icons/warning-fill";
 import IconXCircle from "@aurea-uds/native/icons/x-circle";
 import IconXCircleFill from "@aurea-uds/native/icons/x-circle-fill";
 import IconFile from "@aurea-uds/native/icons/file";
+import IconFileText from "@aurea-uds/native/icons/file-text";
+import IconPaperclip from "@aurea-uds/native/icons/paperclip";
 // A barra inferior (o item escolhido desenha a forma cheia), a folha do `Select` e o X dos overlays.
 import IconBell from "@aurea-uds/native/icons/bell";
 import IconBellFill from "@aurea-uds/native/icons/bell-fill";
@@ -111,7 +117,7 @@ const ICONES = criarRegistroDeIcones({
   "check-circle": IconCheckCircle, "check-circle-fill": IconCheckCircleFill,
   "warning": IconWarning, "warning-fill": IconWarningFill,
   "x-circle": IconXCircle, "x-circle-fill": IconXCircleFill,
-  "file": IconFile,
+  "file": IconFile, "file-text": IconFileText, "paperclip": IconPaperclip,
   "bell": IconBell, "bell-fill": IconBellFill,
   "squares-four": IconSquaresFour, "squares-four-fill": IconSquaresFourFill,
   "list-bullets": IconListBullets, "list-bullets-fill": IconListBulletsFill,
@@ -290,6 +296,7 @@ function Tela({irParaScreen, irParaLote2}) {
       <BlocoRadioGroup t={t} />
       <BlocosLoteF t={t} />
       <BlocoR11R15 t={t} />
+      <BlocoR21 t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1457,8 +1464,9 @@ function BlocoRadioGroup({t}) {
 
 // Lote F (01/10/2026): R-12, R-14, R-16 e R-19, aprovados pelas pranchas. O R-10 não tem bloco:
 // ele não muda nada na tela (o `textMd` continua 14, agora como apelido do `textSm`).
-// R-11 e R-15 (02/10/2026): o desenho do app entra direto, sem registro nem nome declarado, como
-// no HeroUI. O desenho é o GLIFO_TRACO, feito com `criarGlifo` (o mesmo caminho do logotipo do app).
+// R-11, R-15 e R-18 (02/10/2026): o desenho do app entra direto, sem registro nem nome declarado,
+// como no HeroUI. O desenho é o GLIFO_TRACO, feito com `criarGlifo` (o mesmo caminho do logotipo
+// do app). A R-15 e a R-18 põem o glifo numa moldura redonda (a "C" da prancha).
 function BlocoR11R15({t}) {
   const [aba, setAba] = React.useState("inicio");
   return (
@@ -1475,14 +1483,46 @@ function BlocoR11R15({t}) {
           {id: "avisos", label: "Avisos", icon: "bell", onPress: () => setAba("avisos")},
         ]} />
       </Bloco>
-      <Bloco t={t} n="R-15" titulo="O estado vazio mostra o desenho GRANDE do app?"
-        criterio={"Um desenho de 112 em cima do título, no lugar do ícone pequeno de sempre. Embaixo, "
-          + "para comparar, o estado vazio sem desenho, com o ícone pequeno."}>
-        <EmptyState title="Nenhuma viagem" description="As viagens aparecem aqui."
-          illustration={<Icon name={GLIFO_TRACO} size={112} color={t.color.mutedForeground} />} />
+      <Bloco t={t} n="R-15" titulo="O glifo do estado vazio está numa moldura redonda?"
+        criterio={"Um círculo cinza de 64 com o glifo de 32 no meio, em cima do título — nos dois "
+          + "estados vazios. O de cima usa o desenho do app; o de baixo, o glifo de sempre (arquivo)."}>
+        <EmptyState title="Nenhum pedido" description="Os pedidos aparecem aqui." icon={GLIFO_TRACO} />
         <EmptyState title="Nada aqui" />
       </Bloco>
+      <Bloco t={t} n="R-18" titulo="A linha do tempo diz o que houve entre dois registros?"
+        criterio={"Molduras redondas de 40: a de cima VERDE, a do meio AMARELA, e o terceiro item com "
+          + "o ponto amarelo no centro da mesma coluna. O valor à direita do título. Entre os itens, "
+          + "ao lado da linha, \"6 dias depois\" e \"9 dias depois\"; depois do último, nada. "
+          + "A linha passa por TRÁS das molduras, sem aparecer através delas."}>
+        <Timeline items={[
+          {title: "Entrega", description: "28/09", icon: "truck", tone: "success",
+           trailing: "R$ 216,00", between: "6 dias depois"},
+          {title: "Retirada na loja", description: "22/09", icon: "storefront",
+           tone: "primary", trailing: "R$ 460,00", between: "9 dias depois"},
+          {title: "Sem ícone", description: "13/09", trailing: "R$ 198,00",
+           between: "não pode aparecer"},
+        ]} />
+      </Bloco>
     </>
+  );
+}
+
+// R-21 (02/10/2026): escolher arquivo do aparelho. O limite de 1 MB é para dar para provar a recusa
+// com qualquer PDF maior que isso que esteja no telefone.
+function BlocoR21({t}) {
+  const [arquivos, setArquivos] = React.useState([]);
+  return (
+    <Bloco t={t} n="R-21" titulo="Escolher arquivo abre o seletor do sistema e volta com o arquivo?"
+      criterio={"1) Tocar em \"Escolher arquivo\": abre o seletor do sistema, só com PDF. "
+        + "2) Cancelar: nada muda. 3) Um PDF pequeno: aparece a linha com nome, tamanho e um X; "
+        + "nome comprido corta no MEIO e o \".pdf\" continua à vista; o botão de escolher some. "
+        + "4) X: o arquivo sai e o botão volta. 5) Um PDF MAIOR que 1 MB: recusado, com \"Arquivo "
+        + "maior que o limite\" em vermelho embaixo, e a borda do botão vermelha."}>
+      <Field label="Documento">
+        <FileInput value={arquivos} onChange={setArquivos} accept="application/pdf"
+          maxSize={1024 * 1024} />
+      </Field>
+    </Bloco>
   );
 }
 

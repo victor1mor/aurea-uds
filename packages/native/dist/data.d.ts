@@ -1,5 +1,7 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
+import type { AureaBadgeTone } from "./display.js";
+import type { AureaIcon } from "./icon.js";
 type Virtualizavel = {
     /** Vira `FlatList`. ⚠ Então este componente é o rolador — não o ponha dentro de `<Screen scroll>`. */
     virtualized?: boolean;
@@ -9,6 +11,22 @@ export type AureaTimelineItem = {
     description?: React.ReactNode;
     /** Nó, não string: uma data absoluta e uma relativa são igualmente bem-vindas — como na web. */
     time?: React.ReactNode;
+    /**
+     * R-18, 02/10/2026: o glifo numa moldura redonda, no lugar do ponto. Moldura de 40 (o `Avatar`
+     * `sm` do HeroUI Native) e glifo de 20. Basta um item com `icon` para a coluna inteira ter a
+     * largura da moldura — os itens sem ícone ficam com o ponto, no centro dela.
+     */
+    icon?: AureaIcon;
+    /** A cor da moldura, com o vocabulário do `Badge`. Sem `icon`, não faz nada. Padrão: `neutral`. */
+    tone?: AureaBadgeTone;
+    /** O que vai à DIREITA do título — um valor, um selo. */
+    trailing?: React.ReactNode;
+    /**
+     * O que aconteceu ENTRE este item e o próximo, escrito ao lado da linha: *"6 dias depois"*,
+     * *"3 h depois"*. Proposta aprovada na prancha de 02/10/2026: a linha deixa de ser enfeite e
+     * passa a dizer alguma coisa. No último item não aparece, porque não há próximo.
+     */
+    between?: React.ReactNode;
 };
 export interface TimelineProps extends Virtualizavel {
     items: readonly AureaTimelineItem[];

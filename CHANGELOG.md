@@ -60,9 +60,9 @@ em inglês e ficam como estão: são registro.
 
 ## [0.15.0] — 2026-10-02
 
-⏳ **NÃO PUBLICADA.** R-11 e R-15 da fila, as duas do jeito do HeroUI, que não usa nome de ícone
-nem tem tamanho pronto: o app passa o próprio desenho. Decisão do Victor de 02/10/2026 (*"sim pode
-seguir"*). Só o nativo muda. E a E13, achado do app: o aviso de `useNativeDriver` no navegador.
+⏳ **NÃO PUBLICADA.** Cinco achados do app, todos no nativo: R-11, R-15, R-18 e R-21 da fila, e a
+E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11) e *"1 c, 2 sim,
+3 sim"* (R-15, R-18, R-21). Só acrescenta — fora a aparência do `EmptyState`, que ganha a moldura.
 
 ### Adicionado
 
@@ -74,11 +74,27 @@ seguir"*). Só o nativo muda. E a E13, achado do app: o aviso de `useNativeDrive
   app barrava. O desenho recebe o `size` e a `color` que a peça pedir. Nome que não existe continua
   reprovando no TypeScript. ⚠ O desenho passado direto não tem forma cheia no item escolhido (a
   forma cheia mora no registro, como `<nome>-fill`).
-- **`illustration` no `EmptyState` do nativo (R-15).** O desenho do app no lugar do ícone, do
-  tamanho que ele quiser. O app pedia 112, maior que tudo que a fila de referências tem (o ícone em
-  moldura do ReUI vai até 56), então a Aurea não cria escala: abre o espaço, como o HeroUI (o
-  `EmptyState` dele só recebe filhos). O nome é o do Untitled UI (`EmptyState.Illustration`), o
-  primeiro da fila que dá nome a essa parte. Sem ela, nada muda.
+- **`Timeline` do nativo com `icon`, `tone`, `trailing` e `between` (R-18).** O `icon` põe o glifo
+  numa moldura redonda de 40 (o `Avatar` `sm` do HeroUI Native) no lugar do ponto; o `tone` pinta
+  a moldura com as cores do `Badge`; o `trailing` vai à direita do título (um valor); o `between`
+  diz o que aconteceu entre um item e o próximo, ao lado da linha (*"6 dias depois"*) — a proposta
+  da prancha, no lugar de uma linha com cara de estrada. Basta um item com `icon` para a coluna
+  inteira ter a largura da moldura. Sem nenhum `icon`, nada muda.
+- **`FileInput` no nativo (R-21), em `@aurea-uds/native/system/file`.** Escolher arquivo do
+  aparelho pelo seletor do sistema (`expo-document-picker`, peer **opcional** `>=12`). Devolve
+  `{uri, name, size, mimeType}`, nunca o conteúdo. `accept`, `max` (1), `maxSize`, `disabled`,
+  `addIcon`, `fileIcon`, `removeIcon`. Cancelar não muda nada; maior que o `maxSize`, ou do tipo
+  errado, é recusado, com o aviso em vermelho embaixo (as frases da web). ⚠ **Caminho só dele**, e
+  não o `/system`: lá, todo app que usa o `DatePicker` teria de instalar o seletor de arquivos.
+- **Frases novas:** `fileChoose`, `fileRemove`, `fileTooLarge`, `fileWrongType` (as três últimas
+  iguais às da web).
+
+### Mudado
+
+- **O glifo do `EmptyState` do nativo fica numa moldura redonda (R-15).** Moldura de 64 (o
+  `Avatar` `lg` do HeroUI Native), fundo `muted`; o glifo continua com 32, agora na cor
+  `mutedForeground`. Era o "ícone pequeno e solto" do achado. A `illustration` (o desenho do app,
+  de 112) foi reprovada na prancha e não entra.
 
 ### Corrigido
 
@@ -88,16 +104,29 @@ seguir"*). Só o nativo muda. E a E13, achado do app: o aviso de `useNativeDrive
   supported"* (0.21.3, `NativeAnimatedHelper.js:429`). Agora os oito leem `driverNativo()`, do
   `movimento.ts`: `Platform.OS !== "web"`. No aparelho nada muda.
 
+### Por dentro
+
+- As cores por tom saíram de dentro do `Badge` para `acentoDoTom`/`fundoDoTom`, porque a moldura
+  usa as mesmas. A altura e o recheio do campo (`alturaDoTamanho`, `respiroDoTamanho`) saem do
+  `inputs.tsx` para o `FileInput` não copiar os números.
+
 ### Testes e aparelho
 
-- `tests/unit/native-r11-r15.test.tsx`: 6 testes; 5 reprovam o código de antes (o desenho direto
-  não aparecia e a `illustration` era ignorada), o 6º trava o ícone de sempre do `EmptyState`.
-- `tests/unit/tipos-nativo/icone-componente.tsx`: a sonda de tipo, compilada pelo `tsc` de verdade
-  (o `icone-nome.test.tsx` compila a pasta). Com o tipo antigo, dá 19 erros.
+- `tests/unit/native-r11-r15.test.tsx`: 7 testes; com o código de antes, o desenho direto não
+  aparecia e o glifo do vazio saía solto.
+- `tests/unit/tipos-nativo/icone-componente.tsx`: a sonda de tipo da R-11, compilada pelo `tsc` de
+  verdade. Com o tipo antigo, dá 19 erros.
+- `tests/unit/native-r18.test.tsx`: 11 testes; 9 reprovam o código de antes, e um trava as cores
+  do `Badge`.
+- `tests/unit/native-r21.test.tsx`: 22 testes, um por decisão de fluxo, mais a porta própria.
 - `tests/unit/native-e13.test.tsx`: 22 testes — as sete peças no Android, no iOS e no navegador,
-  e uma trava que reprova `useNativeDriver` escrito à mão. Com o código de antes, 8 reprovam (as
-  sete do navegador e a trava, que acha os oito pontos).
-- Aceite de aparelho: blocos **R-11** e **R-15** do `apps/native-smoke`.
+  e uma trava que reprova `useNativeDriver` escrito à mão. Com o código de antes, 8 reprovam.
+- `apps/native-smoke`: blocos **R-11**, **R-15**, **R-18** e **R-21** (este pede um PDF menor e um
+  maior que 1 MB no telefone; o seletor vem no Expo Go). O `conferir-props.mjs` passou a conferir
+  o `FileInput`.
+- A vitrine (o dublê que vira imagem) passou a cortar linha: ignorava o `numberOfLines`, e a
+  prancha do `FileInput` mostrou o nome comprido quebrando em três linhas. O navegador só corta no
+  fim; o corte no meio é do aparelho.
 
 ---
 

@@ -86,17 +86,12 @@ export interface AlertProps extends ViewProps {
  */
 export declare function Alert({ variant, state, title, icon, onDismiss, children, style, accessibilityLabel, accessibilityHint, ...rest }: AlertProps): React.JSX.Element;
 export interface EmptyStateProps {
-    icon?: AureaIcon;
     /**
-     * O desenho do APP no lugar do ícone, do tamanho que ele quiser — R-15, 02/10/2026. O desenho do
-     * app pedia 112, maior que tudo que a fila de referências tem (o ícone em moldura do ReUI vai até
-     * 56), então a Aurea não cria escala: abre o espaço, como o HeroUI faz (o `EmptyState` dele só
-     * recebe filhos). O nome é o do Untitled UI (`EmptyState.Illustration`), o primeiro da fila que
-     * dá nome a essa parte. Com ela, o `icon` não desenha.
-     *
-     *     <EmptyState title="Nenhuma viagem" illustration={<Icon name={Estrada} size={112} />} />
+     * O glifo, dentro de uma moldura redonda — R-15, 02/10/2026, escolhida pelo Victor na prancha
+     * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` do HeroUI) e glifo de 32, o de antes. O desenho
+     * do próprio app entra aqui também (`icon={Logo}`, R-11).
      */
-    illustration?: React.ReactNode;
+    icon?: AureaIcon;
     title: React.ReactNode;
     description?: React.ReactNode;
     action?: React.ReactNode;
@@ -112,7 +107,7 @@ export interface EmptyStateProps {
  * `heading-order` do axe pega. **No React Native não há hierarquia de títulos**: um `Text` é um
  * `Text`. A prop não teria efeito, e prop sem efeito é promessa falsa.
  */
-export declare function EmptyState({ icon, illustration, title, description, action, state, style, testID, }: EmptyStateProps): React.JSX.Element;
+export declare function EmptyState({ icon, title, description, action, state, style, testID, }: EmptyStateProps): React.JSX.Element;
 export type AureaDataStateValue = "loading" | "error" | "empty" | AureaUniversalState;
 export interface DataStateProps extends Omit<ViewProps, "children"> {
     state?: AureaDataStateValue;

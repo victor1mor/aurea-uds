@@ -57,6 +57,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { FlatList, Pressable, View, useWindowDimensions, } from "react-native";
 import { criarFolha } from "./estilos.js";
+import { IconeEmMoldura } from "./moldura.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -79,6 +80,14 @@ const folha = criarFolha((t) => ({
         borderWidth: t.size.space05, borderColor: t.color.surface1,
     },
     colunaDoEvento: { flex: 1, minWidth: 0, gap: t.size.space05 },
+    // R-18: o ponto centrado na coluna da moldura, quando a lista tem molduras.
+    colunaDoPonto: { width: t.size.space10, alignItems: "center", flexGrow: 0, flexShrink: 0 },
+    linhaDoTitulo: {
+        flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between",
+        gap: t.size.space2,
+    },
+    tituloQueEncolhe: { flexShrink: 1 },
+    entre: { flexDirection: "row", alignItems: "center" },
     // ── DataList ──
     pares: { gap: t.size.space2 },
     parEmpilhado: { gap: t.size.space05 },
@@ -123,23 +132,39 @@ const EMPILHA_ABAIXO_DE = 640;
 export function Timeline({ items, virtualized = false, style, testID }) {
     const t = useAureaTokens();
     const s = folha(t);
-    const desenhar = React.useCallback((item) => (_jsxs(View, { style: s.evento, children: [_jsx(View, { style: s.ponto }), _jsxs(View, { style: s.colunaDoEvento, children: [typeof item.title === "string"
-                        ? _jsx(Text, { size: "md", weight: 600, children: item.title }) : item.title, item.description != null
-                        ? (typeof item.description === "string"
-                            ? _jsx(Text, { size: "sm", tone: "muted", children: item.description }) : item.description)
-                        : null, item.time != null
-                        ? (typeof item.time === "string"
-                            ? _jsx(Text, { size: "xs", tone: "muted", children: item.time }) : item.time)
-                        : null] })] })), [s]);
+    // A coluna do marcador tem a largura da moldura quando ALGUM item tem ícone: senão os títulos
+    // ficariam em colunas diferentes conforme o item. O trilho vai ao centro dela.
+    const comMoldura = items.some((i) => i.icon != null);
+    const marcador = comMoldura ? t.size.space10 : t.size.space3;
+    const desenhar = React.useCallback((item, n) => {
+        const titulo = typeof item.title === "string"
+            ? _jsx(Text, { size: "md", weight: 600, style: s.tituloQueEncolhe, children: item.title }) : item.title;
+        const ponto = item.icon != null
+            ? _jsx(IconeEmMoldura, { icon: item.icon, tone: item.tone, moldura: t.size.space10, glifo: t.size.iconMd, sobre: t.color.surface1 })
+            : comMoldura ? _jsx(View, { style: s.colunaDoPonto, children: _jsx(View, { style: s.ponto }) })
+                : _jsx(View, { style: s.ponto });
+        const entre = item.between != null && n < items.length - 1 ? (_jsx(View, { style: [s.entre, { paddingLeft: marcador + t.size.space3 }], children: typeof item.between === "string"
+                ? _jsx(Text, { size: "xs", tone: "muted", children: item.between }) : item.between })) : null;
+        return (_jsxs(_Fragment, { children: [_jsxs(View, { style: s.evento, children: [ponto, _jsxs(View, { style: s.colunaDoEvento, children: [item.trailing != null ? (_jsxs(View, { style: s.linhaDoTitulo, children: [titulo, typeof item.trailing === "string"
+                                            ? _jsx(Text, { size: "md", weight: 600, children: item.trailing }) : item.trailing] })) : titulo, item.description != null
+                                    ? (typeof item.description === "string"
+                                        ? _jsx(Text, { size: "sm", tone: "muted", children: item.description }) : item.description)
+                                    : null, item.time != null
+                                    ? (typeof item.time === "string"
+                                        ? _jsx(Text, { size: "xs", tone: "muted", children: item.time }) : item.time)
+                                    : null] })] }), entre] }));
+    }, [s, t, comMoldura, marcador, items.length]);
     if (virtualized) {
-        return (_jsx(FlatList, { accessibilityRole: "list", data: items, keyExtractor: (_, n) => String(n), renderItem: ({ item }) => desenhar(item), ItemSeparatorComponent: () => _jsx(View, { style: { height: t.size.space5 } }), 
+        return (_jsx(FlatList, { accessibilityRole: "list", data: items, keyExtractor: (_, n) => String(n), 
+            // O `between` mora dentro da célula, então leva o mesmo vão que o separador dá entre elas.
+            renderItem: ({ item, index }) => _jsx(View, { style: s.trilha, children: desenhar(item, index) }), ItemSeparatorComponent: () => _jsx(View, { style: { height: t.size.space5 } }), 
             // ⚠ O trilho NÃO entra no modo virtualizado, e isso é honesto em vez de quebrado: ele é
             // uma linha absoluta do topo ao pé da lista INTEIRA, e no `FlatList` a lista inteira não
             // existe — só a janela. Desenhá-lo daria um trilho que começa e termina no lugar errado
             // conforme se rola. Os pontos continuam, e são eles que marcam os eventos.
             style: style, testID: testID }));
     }
-    return (_jsxs(View, { accessibilityRole: "list", style: [s.trilha, style], testID: testID, children: [items.length > 0 ? _jsx(View, { style: s.trilho }) : null, items.map((item, n) => _jsx(React.Fragment, { children: desenhar(item) }, n))] }));
+    return (_jsxs(View, { accessibilityRole: "list", style: [s.trilha, style], testID: testID, children: [items.length > 0 ? _jsx(View, { style: [s.trilho, comMoldura && { left: marcador / 2 }] }) : null, items.map((item, n) => _jsx(React.Fragment, { children: desenhar(item, n) }, n))] }));
 }
 /**
  * Os pares termo → valor.

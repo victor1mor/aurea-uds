@@ -215,6 +215,16 @@ export function criarPrimitivo(nome: string) {
           (extra.style as Record<string, unknown>).color = props.placeholderTextColor;
         }
       }
+      // O CORTE DE LINHA — 02/10/2026, R-21. O `numberOfLines` é do RN e some no `paraCss`, e a
+      // prancha do `FileInput` mostrou o nome comprido QUEBRANDO em três linhas, quando a peça
+      // pede uma. Aqui vira o par do CSS. ⚠ O navegador só corta no FIM: o `ellipsizeMode="middle"`
+      // do aparelho não tem par, e a imagem diz isso em vez de fingir.
+      if (nome === "Text" && typeof props.numberOfLines === "number" && props.numberOfLines > 0) {
+        Object.assign(extra.style as Record<string, unknown>, props.numberOfLines === 1
+          ? {whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}
+          : {display: "-webkit-box", WebkitLineClamp: props.numberOfLines,
+             WebkitBoxOrient: "vertical", overflow: "hidden"});
+      }
       // 🔴 O `Image` PRECISA VIRAR `<img>` NA VITRINE, e a imagem de 12/09/2026 provou por quê:
       // desenhado como `div`, ele não carrega byte nenhum — as fotos saíam como caixas cinzas e
       // a prancha que existia para provar "exibir imagem" não provava nada. O `source` do RN é

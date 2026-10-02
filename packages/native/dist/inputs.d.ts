@@ -2,7 +2,10 @@ import * as React from "react";
 import { TextInput, type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle, type ViewProps, type ViewStyle } from "react-native";
 import { type AureaFilaJustify } from "./rolagem.js";
 import { type AureaIconRegistry, type AureaIcon } from "./icon.js";
+import type { AureaTokens } from "./tokens.js";
 export type AureaFieldSize = "sm" | "md" | "lg";
+export declare const alturaDoTamanho: (t: AureaTokens, s: AureaFieldSize) => number;
+export declare const respiroDoTamanho: (t: AureaTokens, s: AureaFieldSize) => number;
 type ContextoDeCampo = {
     label?: string;
     hint?: string;

@@ -33,6 +33,18 @@ export declare function criarFolha<T extends NamedStyles<T> | NamedStyles<Record
  * um ícone) não tinha como escrevê-lo sem número à mão. O `check 39` cobra o teste dele.
  */
 export declare const comOpacidade: (cor: string, pct: number) => string;
+/** O tom de cor com significado — o vocabulário do `Badge` (`AureaBadgeTone`). */
+export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
+/**
+ * A cor FORTE de um tom: o texto do selo, o ícone da moldura.
+ *
+ * ⚠ **Morava dentro do `Badge` e mudou de casa em 02/10/2026**, quando a moldura do ícone (R-15 e
+ * R-18) passou a precisar da mesma cor por tom. Duas cópias do mapa é o defeito que o `CLAUDE.md`
+ * nomeia — e o dia em que um tom novo entra numa só.
+ */
+export declare const acentoDoTom: (t: AureaTokens, tom: TomDeCor) => string;
+/** O fundo SUAVE de um tom (`--<tom>-bg`). `primary` e `neutral` não têm token: `undefined`. */
+export declare const fundoDoTom: (t: AureaTokens, tom: TomDeCor) => string | undefined;
 /**
  * 🔴 O FIO AMARELO DO ESCOLHIDO — o sinal único da casa para "este é o escolhido".
  *

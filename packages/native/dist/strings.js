@@ -56,6 +56,10 @@ export const defaultStrings = {
     comboboxSearch: "Search",
     searchClear: "Clear search",
     galleryLabel: "Gallery",
+    fileChoose: "Choose file",
+    fileRemove: "Remove",
+    fileTooLarge: "File exceeds the size limit",
+    fileWrongType: "File type not allowed",
     universalState: {
         waiting_user: "Waiting for someone to act.",
         waiting_approval: "Waiting for approval.",
@@ -96,6 +100,10 @@ export const ptBR = {
     comboboxSearch: "Buscar",
     searchClear: "Limpar busca",
     galleryLabel: "Galeria",
+    fileChoose: "Escolher arquivo",
+    fileRemove: "Remover",
+    fileTooLarge: "Arquivo maior que o limite",
+    fileWrongType: "Tipo de arquivo não aceito",
     universalState: {
         waiting_user: "Esperando alguém agir.",
         waiting_approval: "Esperando aprovação.",

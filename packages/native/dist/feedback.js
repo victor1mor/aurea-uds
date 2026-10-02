@@ -24,6 +24,7 @@ import { Animated, Easing, View } from "react-native";
 import { IconButton } from "./actions.js";
 import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
+import { IconeEmMoldura } from "./moldura.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
 import { gravidadeDoEstado } from "./strings.js";
 import { Text } from "./text.js";
@@ -215,12 +216,12 @@ accessibilityLabel, accessibilityHint, ...rest }) {
  * `heading-order` do axe pega. **No React Native não há hierarquia de títulos**: um `Text` é um
  * `Text`. A prop não teria efeito, e prop sem efeito é promessa falsa.
  */
-export function EmptyState({ icon = "file", illustration, title, description, action, state, style, testID, }) {
+export function EmptyState({ icon = "file", title, description, action, state, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
     const desc = description ?? (state ? strings.universalState[state] : null);
-    return (_jsxs(View, { testID: testID, style: [s.vazio, style], children: [illustration ?? _jsx(Icon, { name: icon, size: "xl", color: t.color.subtleForeground }), typeof title === "string"
+    return (_jsxs(View, { testID: testID, style: [s.vazio, style], children: [_jsx(IconeEmMoldura, { icon: icon, moldura: t.size.space16, glifo: t.size.iconXl }), typeof title === "string"
                 ? _jsx(Text, { size: "base", weight: 600, leading: "tight", align: "center", children: title })
                 : title, desc != null && (typeof desc === "string"
                 ? _jsx(Text, { size: "sm", tone: "muted", align: "center", children: desc })

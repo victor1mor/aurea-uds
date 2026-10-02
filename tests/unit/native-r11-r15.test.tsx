@@ -2,10 +2,11 @@
 // o app passa o próprio desenho.
 //   R-11 · toda prop de ícone aceita o NOME de um glifo ou o próprio DESENHO (`AureaIcon`). O tipo
 //          é provado pela sonda `tipos-nativo/icone-componente.tsx`; aqui, que o desenho aparece.
-//   R-15 · o `EmptyState` ganha `illustration`: o desenho do app no lugar do ícone, do tamanho que
-//          ele quiser (o app pedia 112; nenhuma referência da fila tem esse número).
+//   R-15 · o glifo do `EmptyState` ganha uma moldura redonda (a "C" da prancha de 02/10/2026,
+//          escolhida pelo Victor): 64 de moldura, o `Avatar` `lg` do HeroUI, e o glifo de 32 de antes.
 // Provado contra o defeito: com o código de antes, o desenho passado direto não aparece (o `Icon`
-// procurava a função no registro e não desenhava nada) e a `illustration` era ignorada.
+// procurava a função no registro e não desenhava nada), e o glifo do vazio saía solto, sem
+// moldura, na cor `subtleForeground`.
 import {render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
 import * as React from "react";
@@ -50,19 +51,25 @@ describe("R-11 · o ícone pode ser o próprio desenho do app", () => {
   });
 });
 
-describe("R-15 · EmptyState com o desenho do app", () => {
-  it("a illustration toma o lugar do ícone, no tamanho que o app deu", () => {
-    const ICONES = criarRegistroDeIcones({file: desenho("file")});
-    render(
-      <AureaProvider icons={ICONES}>
-        <EmptyState title="Nenhuma viagem" illustration={<Icon name={desenho("estrada")} size={112} />} />
-      </AureaProvider>);
-    expect(estilo(vistos("estrada").at(-1)!).width).toBe(112);
-    expect(vistos("file")).toHaveLength(0);
+describe("R-15 · o glifo do EmptyState numa moldura redonda", () => {
+  const moldura = () => __instancias("View").map(estilo).filter((e) =>
+    e.width === t.size.space16 && e.height === t.size.space16 && e.borderRadius === t.size.radiusFull);
+  it("a moldura tem 64 (o `space16`), é redonda e tem o fundo `muted`", () => {
+    render(<AureaProvider><EmptyState title="Nada aqui" icon={Logo} /></AureaProvider>);
+    const m = moldura();
+    expect(m).toHaveLength(1);
+    expect(m[0].backgroundColor).toBe(t.color.muted);
   });
-  it("sem illustration, continua o ícone de sempre (o `file`, em xl)", () => {
+  it("o glifo continua com 32 (o `iconXl`) e passa à cor `mutedForeground`", () => {
+    render(<AureaProvider><EmptyState title="Nada aqui" icon={Logo} /></AureaProvider>);
+    const e = estilo(vistos("logo").at(-1)!);
+    expect(e.width).toBe(t.size.iconXl);
+    expect(e.backgroundColor).toBe(t.color.mutedForeground);
+  });
+  it("sem `icon`, a moldura leva o `file` de sempre", () => {
     const ICONES = criarRegistroDeIcones({file: desenho("file")});
     render(<AureaProvider icons={ICONES}><EmptyState title="Nada aqui" /></AureaProvider>);
     expect(estilo(vistos("file").at(-1)!).width).toBe(t.size.iconXl);
+    expect(moldura()).toHaveLength(1);
   });
 });
