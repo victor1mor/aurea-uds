@@ -22,7 +22,7 @@
 // perderia o cartão, que é metade do que ela é.
 import * as React from "react";
 import {Image, View, type ImageSourcePropType, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
-import {criarFolha} from "./estilos.js";
+import {acentoDoTom, criarFolha, fundoDoTom} from "./estilos.js";
 import {Card} from "./layout.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
 import {Text} from "./text.js";
@@ -176,17 +176,8 @@ export function Badge({
   const t = useAureaTokens();
   const s = folha(t);
 
-  const acento = tone === "primary" ? t.color.primaryEmphasis
-    : tone === "info" ? t.color.info400 ?? t.color.info
-    : tone === "success" ? t.color.success400 ?? t.color.success
-    : tone === "warning" ? t.color.warning400 ?? t.color.warning
-    : tone === "danger" ? t.color.danger400 ?? t.color.destructive
-    : t.color.secondaryForeground;
-  const fundoDoTom = tone === "info" ? t.color.infoBg
-    : tone === "success" ? t.color.successBg
-    : tone === "warning" ? t.color.warningBg
-    : tone === "danger" ? t.color.dangerBg
-    : undefined;
+  const acento = acentoDoTom(t, tone);
+  const fundo = fundoDoTom(t, tone);
 
   const pele: ViewStyle = emphasis === "solid"
     ? {backgroundColor: acento, borderColor: "transparent"}
@@ -194,7 +185,7 @@ export function Badge({
       ? {backgroundColor: "transparent", borderColor: acento}
       : tone === "neutral"
         ? {}
-        : {backgroundColor: fundoDoTom, borderColor: acento};
+        : {backgroundColor: fundo, borderColor: acento};
   const corDoTexto = emphasis === "solid" ? t.color.background
     : tone === "neutral" ? t.color.secondaryForeground : acento;
 

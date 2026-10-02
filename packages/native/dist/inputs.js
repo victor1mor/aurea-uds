@@ -43,13 +43,16 @@ import { criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
-import { useReduceMotion } from "./movimento.js";
+import { useReduceMotion, driverNativo } from "./movimento.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca } from "./theme.js";
-const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
+// `alturaDoTamanho` e `respiroDoTamanho` saem do arquivo (não do pacote) desde 02/10/2026: o
+// `FileInput` (R-21) desenha um gatilho com a medida do campo, e copiar os números para lá é o
+// defeito que o `CLAUDE.md` nomeia.
+export const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
 const fonteDoTamanho = (t, s) => s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg : t.size.textBase; // ADR-0050: um degrau acima da web
-const respiroDoTamanho = (t, s) => s === "sm" ? t.size.space3 : s === "lg" ? t.size.space4 : 13;
+export const respiroDoTamanho = (t, s) => s === "sm" ? t.size.space3 : s === "lg" ? t.size.space4 : 13;
 const folha = criarFolha((t) => ({
     campo: { gap: 7 },
     rotulo: { flexDirection: "row", justifyContent: "space-between", gap: 12 },
@@ -457,7 +460,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         }
         if (reduzir === null)
             return;
-        const a = Animated.timing(pos, { toValue: destino, duration: 160, useNativeDriver: true });
+        const a = Animated.timing(pos, { toValue: destino, duration: 160, useNativeDriver: driverNativo() });
         a.start();
         return () => a.stop();
     }, [checked, pos, reduzir]);

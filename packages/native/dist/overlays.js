@@ -63,7 +63,7 @@ import { IconButton } from "./actions.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, ForaDaMarca } from "./theme.js";
-import { useReduceMotion } from "./movimento.js";
+import { useReduceMotion, driverNativo } from "./movimento.js";
 const folha = criarFolha((t) => ({
     fundo: { flex: 1, backgroundColor: t.color.overlay },
     // 🔴 O FUNDO TOCÁVEL VIROU IRMÃO, NÃO ANCESTRAL — 10/09/2026, e a razão está no bloco
@@ -226,7 +226,7 @@ export function Drawer({ open, title, children, onClose, side = "right", scroll 
             return;
         }
         const laco = Animated.timing(progresso, {
-            toValue: 1, duration: DURACAO, useNativeDriver: true,
+            toValue: 1, duration: DURACAO, useNativeDriver: driverNativo(),
             easing: Easing.bezier(...t.easing.easeEmphasized),
         });
         laco.start();
@@ -289,7 +289,7 @@ export function BottomSheet({ open, title, children, onClose, grabber = true, dr
                 return;
             }
             Animated.timing(arrasto, {
-                toValue: 0, duration: DURACAO, useNativeDriver: true,
+                toValue: 0, duration: DURACAO, useNativeDriver: driverNativo(),
                 easing: Easing.bezier(...t.easing.easeEmphasized),
             }).start();
         },

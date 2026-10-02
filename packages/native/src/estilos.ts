@@ -76,6 +76,32 @@ export const comOpacidade = (cor: string, pct: number): string =>
     ? cor + Math.round(Math.max(0, Math.min(1, pct)) * 255).toString(16).padStart(2, "0")
     : cor;
 
+/** O tom de cor com significado — o vocabulário do `Badge` (`AureaBadgeTone`). */
+export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
+
+/**
+ * A cor FORTE de um tom: o texto do selo, o ícone da moldura.
+ *
+ * ⚠ **Morava dentro do `Badge` e mudou de casa em 02/10/2026**, quando a moldura do ícone (R-15 e
+ * R-18) passou a precisar da mesma cor por tom. Duas cópias do mapa é o defeito que o `CLAUDE.md`
+ * nomeia — e o dia em que um tom novo entra numa só.
+ */
+export const acentoDoTom = (t: AureaTokens, tom: TomDeCor): string =>
+  tom === "primary" ? t.color.primaryEmphasis
+    : tom === "info" ? t.color.info400 ?? t.color.info
+    : tom === "success" ? t.color.success400 ?? t.color.success
+    : tom === "warning" ? t.color.warning400 ?? t.color.warning
+    : tom === "danger" ? t.color.danger400 ?? t.color.destructive
+    : t.color.secondaryForeground;
+
+/** O fundo SUAVE de um tom (`--<tom>-bg`). `primary` e `neutral` não têm token: `undefined`. */
+export const fundoDoTom = (t: AureaTokens, tom: TomDeCor): string | undefined =>
+  tom === "info" ? t.color.infoBg
+    : tom === "success" ? t.color.successBg
+    : tom === "warning" ? t.color.warningBg
+    : tom === "danger" ? t.color.dangerBg
+    : undefined;
+
 /**
  * 🔴 O FIO AMARELO DO ESCOLHIDO — o sinal único da casa para "este é o escolhido".
  *

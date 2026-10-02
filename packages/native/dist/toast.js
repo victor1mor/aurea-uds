@@ -60,7 +60,7 @@ import { IconButton } from "./actions.js";
 import { criarFolha } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { ICONE_DA_VARIANTE } from "./feedback.js";
-import { useReduceMotion } from "./movimento.js";
+import { useReduceMotion, driverNativo } from "./movimento.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -185,7 +185,7 @@ export function Toast({ toast, onClose }) {
             return;
         }
         const laco = Animated.timing(entrada, {
-            toValue: 1, duration: ENTRADA, useNativeDriver: true,
+            toValue: 1, duration: ENTRADA, useNativeDriver: driverNativo(),
             easing: Easing.bezier(...t.easing.easeEmphasized),
         });
         laco.start();

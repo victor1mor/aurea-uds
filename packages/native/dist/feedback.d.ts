@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewProps, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type IconName, type AureaIcon } from "./icon.js";
 import { type AureaUniversalState } from "./strings.js";
 export type AureaSpinnerSize = "sm" | "md" | "lg";
 export interface SpinnerProps {
@@ -65,7 +65,7 @@ export interface AlertProps extends ViewProps {
     /** Um dos sete estados universais. Ele **escolhe a variante** e escreve o texto padrão. */
     state?: AureaUniversalState;
     title?: React.ReactNode;
-    icon?: IconName;
+    icon?: AureaIcon;
     onDismiss?: () => void;
     children?: React.ReactNode;
 }
@@ -86,7 +86,12 @@ export interface AlertProps extends ViewProps {
  */
 export declare function Alert({ variant, state, title, icon, onDismiss, children, style, accessibilityLabel, accessibilityHint, ...rest }: AlertProps): React.JSX.Element;
 export interface EmptyStateProps {
-    icon?: IconName;
+    /**
+     * O glifo, dentro de uma moldura redonda — R-15, 02/10/2026, escolhida pelo Victor na prancha
+     * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` do HeroUI) e glifo de 32, o de antes. O desenho
+     * do próprio app entra aqui também (`icon={Logo}`, R-11).
+     */
+    icon?: AureaIcon;
     title: React.ReactNode;
     description?: React.ReactNode;
     action?: React.ReactNode;
@@ -110,7 +115,7 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
     /** Substitui o esqueleto padrão de `loading`. */
     skeleton?: React.ReactNode;
     emptyTitle?: React.ReactNode;
-    emptyIcon?: IconName;
+    emptyIcon?: AureaIcon;
     action?: React.ReactNode;
     /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
     children: React.ReactNode | (() => React.ReactNode);

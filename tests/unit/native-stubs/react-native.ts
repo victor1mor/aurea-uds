@@ -50,6 +50,7 @@ export function __limpar(): void {
   larguraDaJanela = 360;
   registro.clear();
   lacos.length = 0;
+  configsDeAnimacao.length = 0;
   reduzirMovimento = false;
   plataforma = "android";
   __chamadasDeSistema.length = 0;
@@ -214,6 +215,16 @@ export function criarPrimitivo(nome: string) {
           (extra.style as Record<string, unknown>).color = props.placeholderTextColor;
         }
       }
+      // O CORTE DE LINHA — 02/10/2026, R-21. O `numberOfLines` é do RN e some no `paraCss`, e a
+      // prancha do `FileInput` mostrou o nome comprido QUEBRANDO em três linhas, quando a peça
+      // pede uma. Aqui vira o par do CSS. ⚠ O navegador só corta no FIM: o `ellipsizeMode="middle"`
+      // do aparelho não tem par, e a imagem diz isso em vez de fingir.
+      if (nome === "Text" && typeof props.numberOfLines === "number" && props.numberOfLines > 0) {
+        Object.assign(extra.style as Record<string, unknown>, props.numberOfLines === 1
+          ? {whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}
+          : {display: "-webkit-box", WebkitLineClamp: props.numberOfLines,
+             WebkitBoxOrient: "vertical", overflow: "hidden"});
+      }
       // 🔴 O `Image` PRECISA VIRAR `<img>` NA VITRINE, e a imagem de 12/09/2026 provou por quê:
       // desenhado como `div`, ele não carrega byte nenhum — as fotos saíam como caixas cinzas e
       // a prancha que existia para provar "exibir imagem" não provava nada. O `source` do RN é
@@ -268,6 +279,11 @@ type Laco = {parado: boolean};
 const lacos: Laco[] = [];
 /** Os laços que foram INICIADOS desde o último `__limpar()`. */
 export function __animacoes(): Laco[] { return lacos; }
+// E13 (02/10/2026): a configuração de cada `Animated.timing` pedido, para o teste perguntar o
+// `useNativeDriver` que a peça mandou — no navegador ele tem de ser `false`.
+const configsDeAnimacao: Array<Record<string, unknown>> = [];
+/** As configurações passadas a `Animated.timing` desde o último `__limpar()`. */
+export function __configsDeAnimacao(): Array<Record<string, unknown>> { return configsDeAnimacao; }
 
 class ValorAnimado {
   constructor(public valor: number) {}
@@ -295,7 +311,7 @@ export const Animated = {
   Value: ValorAnimado,
   View: criarPrimitivo("Animated.View"),
   Text: criarPrimitivo("Animated.Text"),
-  timing: () => criarLaco(),
+  timing: (_valor: unknown, cfg: Record<string, unknown>) => { configsDeAnimacao.push(cfg); return criarLaco(); },
   sequence: () => criarLaco(),
   loop: (_animacao: unknown) => criarLaco(),
 };
@@ -403,13 +419,14 @@ export const Modal = (props: Props) => {
 (Modal as {displayName?: string}).displayName = "Modal";
 export const KeyboardAvoidingView = criarPrimitivo("KeyboardAvoidingView");
 
-let plataforma: "ios" | "android" = "android";
+// O `"web"` entrou com a E13 (02/10/2026): é o que o React Native Web responde no navegador.
+let plataforma: "ios" | "android" | "web" = "android";
 /** Troca a plataforma que o proximo render vai ler. */
-export function __definirPlataforma(v: "ios" | "android"): void { plataforma = v; }
+export function __definirPlataforma(v: "ios" | "android" | "web"): void { plataforma = v; }
 export const Platform = {
   get OS() { return plataforma; },
-  select: <T,>(m: {ios?: T; android?: T; default?: T}) =>
-    (plataforma === "ios" ? m.ios : m.android) ?? m.default,
+  select: <T,>(m: {ios?: T; android?: T; web?: T; default?: T}) =>
+    (plataforma === "ios" ? m.ios : plataforma === "web" ? m.web : m.android) ?? m.default,
 };
 
 export type KeyboardTypeOptions = string;

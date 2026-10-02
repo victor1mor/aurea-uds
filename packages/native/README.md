@@ -73,17 +73,19 @@ Para o texto sair na Atkinson Hyperlegible (a fonte da Aurea desde a ADR-0053), 
 O último costuma **já estar instalado**: `react-navigation` e `expo-router` o arrastam. Declará-lo
 como peer não adiciona peso ao app — só diz o que já ia estar lá.
 
-E **dois peers OPCIONAIS**, marcados como tal em `peerDependenciesMeta` — quem não usa data nem
-câmera não instala nada e não vê aviso:
+E **três peers OPCIONAIS**, marcados como tal em `peerDependenciesMeta` — quem não usa data,
+câmera nem arquivo não instala nada e não vê aviso. Instale só o da peça que usar:
 
 ```sh
 pnpm add @react-native-community/datetimepicker expo-image-picker
+pnpm add expo-document-picker
 ```
 
 | | | |
 |---|---|---|
 | `@react-native-community/datetimepicker` | ≥8 | MIT · só para o `DatePicker` |
 | `expo-image-picker` | ≥16 | MIT · só para o `PhotoInput` |
+| `expo-document-picker` | ≥12 | MIT · só para o `FileInput`, que sai por `@aurea-uds/native/system/file` |
 
 ## Tema × densidade
 
@@ -408,8 +410,13 @@ nega. Cada pergunta ficou com um padrão, e **cada padrão tem uma saída**:
 | e se a pessoa **negar**? | pergunta de novo na próxima vez, enquanto o sistema deixar | `onPermissionDenied` |
 | e se negar **de vez** (`canAskAgain: false`)? | um `Alert` de aviso + botão para as configurações | `offerSettings={false}` |
 | câmera ou galeria? | **câmera** | `source="library"` |
-| como remover? | um `IconButton` no canto de cada miniatura | `removeIcon` |
+| como remover? | um X com fundo, **todo fora** da foto, no canto de cima à direita (R-22) | `removeIcon` |
 | quantas cabem? | **uma** | `max` |
+| como **olhar** a foto? | tocar na miniatura abre a foto grande, no mesmo zoom da `Gallery` (R-22) | — |
+
+**Desde a `0.15.0` (R-22)**, a miniatura é quadrada de 64 (o `Avatar` `lg` do HeroUI Native), do
+tamanho do botão de pôr foto. O leitor de tela ouve *"Foto 2 de 3"* e *"Abre a foto"*; o X,
+*"Remover foto 2"*. Com o campo inativo, a foto ainda abre e o X não remove.
 
 ⚠ **O gatilho some ao atingir o limite**, em vez de ficar aceso e não fazer nada — botão que
 existe e não responde é o defeito, não a proteção.
@@ -419,6 +426,39 @@ errada é um diálogo assustador que o app não precisava mostrar.
 
 As frases (`cameraDenied`, `openSettings`, `photoRemove`, `datePlaceholder`) saem da tabela de
 **Frases** — ver a seção abaixo.
+
+### `FileInput` — escolher arquivo (R-21, `0.15.0`)
+
+Ele mora num caminho **só dele**, e não no `/system`:
+
+```tsx
+import {FileInput} from "@aurea-uds/native/system/file";
+
+<Field label="Documento">
+  <FileInput value={arquivos} onChange={setArquivos} accept="application/pdf"
+             maxSize={10 * 1024 * 1024} />
+</Field>
+```
+
+⚠ **O caminho próprio é o que faz "opcional" ser verdade.** Se ele morasse no `/system`, todo app
+que usa o `DatePicker` teria de instalar o `expo-document-picker`, ou a montagem falharia. Só quem
+importa `/system/file` precisa dele.
+
+| a pergunta | o que ficou | como mudar |
+|---|---|---|
+| o que volta? | `{uri, name, size, mimeType}` — o endereço local, **não o conteúdo** | — |
+| a pessoa **cancelou**? | nada muda | — |
+| passou do **tamanho**? | recusado, com *"Arquivo maior que o limite: nome"* em vermelho embaixo | `maxSize` |
+| **tipo** errado? | o seletor filtra; a peça confere de novo e recusa | `accept` |
+| o tamanho **não veio**? | aceito: não há o que medir, e o servidor confere | — |
+| **quantos** cabem? | um; no limite o gatilho some, como no `PhotoInput` | `max` |
+| **nome comprido**? | corta no meio (`relat…2026.pdf`): a extensão continua à vista | — |
+
+Para o leitor de tela: o gatilho é um botão com o nome do `Field` e o texto *"Escolher arquivo"*;
+cada arquivo lê *"nome, tamanho"*; o X lê *"Remover nome"*; a recusa é anunciada.
+
+As frases `fileChoose`, `fileRemove`, `fileTooLarge` e `fileWrongType` saem da tabela de **Frases**;
+as três últimas são as mesmas da web.
 
 ## Gráfico
 
@@ -555,6 +595,14 @@ botão e não faria nada.
 ```tsx
 <Timeline items={[{title: "Criado", description: "pelo app", time: "08/09 14:20"}]} />
 
+// R-18 (0.15.0): ícone em moldura, cor por tom, valor à direita e o que houve entre dois itens.
+<Timeline items={[
+  {title: "Pedido enviado", description: "28/09", icon: "truck", tone: "success",
+   trailing: "R$ 216,00", between: "6 dias depois"},
+  {title: "Pagamento", description: "22/09", icon: "storefront", tone: "primary",
+   trailing: "R$ 460,00"},
+]} />
+
 <DataList items={[{term: "Quilometragem", value: "12,4 km/l"}]} />
 ```
 
@@ -566,6 +614,10 @@ num painel de oito pares perde qual valor era de qual termo.
 ⚠ **Ele empilha abaixo de 640dp, no mesmo ponto da web.** O comentário do CSS registra o defeito
 que a regra evita: a 320px a coluna do valor resolvia em **0px** e jogava o texto para fora da
 página. `layout="inline"` / `"stacked"` força, contra a largura.
+
+⚠ **Basta um item com `icon` para a coluna inteira ter a largura da moldura** (40): os itens sem
+ícone ficam com o ponto, no centro dela, e a linha passa pelo centro das molduras. O `between` não
+aparece depois do último item, porque não há próximo.
 
 ⚠ **No `Timeline` a contagem e a posição NÃO são anunciadas**, e é escolha. Na web ele é um
 `<ol>`, e a ficha diz que o leitor anuncia "1 de 40" de graça; aqui esse "de graça" não existe e

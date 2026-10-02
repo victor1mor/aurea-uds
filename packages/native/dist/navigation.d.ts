@@ -1,11 +1,11 @@
 import * as React from "react";
 import { type ViewProps } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 import { type AureaFilaJustify } from "./rolagem.js";
 export interface AureaNavItem {
     id: string;
     label: React.ReactNode;
-    icon?: IconName;
+    icon?: AureaIcon;
     /** O contador de não lidos. Número vira selo; `true` vira ponto. */
     badge?: number | boolean;
     onPress?: () => void;
@@ -142,14 +142,14 @@ export interface AureaNavListItem {
     description?: React.ReactNode;
     /** O valor à direita — um número, um estado, uma data. */
     value?: React.ReactNode;
-    icon?: IconName;
+    icon?: AureaIcon;
     onPress?: () => void;
     disabled?: boolean;
 }
 export interface NavListProps extends ViewProps {
     items: AureaNavListItem[];
     /** O glifo de "isto abre", à direita. Registre-o, ou passe `false`. */
-    chevron?: IconName | false;
+    chevron?: AureaIcon | false;
 }
 /**
  * A lista de destinos DENTRO da página — a tela de ajustes, não a moldura do app.
@@ -174,8 +174,8 @@ export interface StepperProps extends ViewProps {
     items: AureaStepItem[];
     label?: string;
     /** Glifos de `done` e `error`. Registre-os, ou o passo mostra o número. */
-    doneIcon?: IconName | false;
-    errorIcon?: IconName | false;
+    doneIcon?: AureaIcon | false;
+    errorIcon?: AureaIcon | false;
 }
 /**
  * A trilha de passos — o onboarding de 3 passos que o consumidor já tem.

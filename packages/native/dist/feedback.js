@@ -24,7 +24,8 @@ import { Animated, Easing, View } from "react-native";
 import { IconButton } from "./actions.js";
 import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
-import { useReduceMotion } from "./movimento.js";
+import { IconeEmMoldura } from "./moldura.js";
+import { useReduceMotion, driverNativo } from "./movimento.js";
 import { gravidadeDoEstado } from "./strings.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
@@ -96,7 +97,7 @@ export function Spinner({ size = "sm", label, decorative, style, testID }) {
         if (reduzir !== false)
             return;
         const laco = Animated.loop(Animated.timing(giro, {
-            toValue: 1, duration: 700, easing: Easing.linear, useNativeDriver: true,
+            toValue: 1, duration: 700, easing: Easing.linear, useNativeDriver: driverNativo(),
         }));
         laco.start();
         // Sem o `stop` o laço sobrevive à desmontagem e continua acordando o JS — o vazamento
@@ -137,8 +138,8 @@ export function Skeleton({ width, height, radius, style, testID }) {
         // 1,35 s no total, com o vale em .55 na METADE — é o `@keyframes skeleton-pulse` do
         // `aurea.css:1112` lido literalmente: 675 ms para descer e 675 para voltar.
         const laco = Animated.loop(Animated.sequence([
-            Animated.timing(opacidade, { toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
-            Animated.timing(opacidade, { toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+            Animated.timing(opacidade, { toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo() }),
+            Animated.timing(opacidade, { toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo() }),
         ]));
         laco.start();
         return () => laco.stop();
@@ -220,7 +221,7 @@ export function EmptyState({ icon = "file", title, description, action, state, s
     const s = folha(t);
     const strings = useAureaStrings();
     const desc = description ?? (state ? strings.universalState[state] : null);
-    return (_jsxs(View, { testID: testID, style: [s.vazio, style], children: [_jsx(Icon, { name: icon, size: "xl", color: t.color.subtleForeground }), typeof title === "string"
+    return (_jsxs(View, { testID: testID, style: [s.vazio, style], children: [_jsx(IconeEmMoldura, { icon: icon, moldura: t.size.space16, glifo: t.size.iconXl }), typeof title === "string"
                 ? _jsx(Text, { size: "base", weight: 600, leading: "tight", align: "center", children: title })
                 : title, desc != null && (typeof desc === "string"
                 ? _jsx(Text, { size: "sm", tone: "muted", align: "center", children: desc })

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
-import type { IconName } from "./icon-names.js";
+import type { AureaIcon } from "./icon.js";
 import { type AureaFieldSize } from "./inputs.js";
 /**
  * Os tamanhos do `NumberField`: os três do campo e mais o `display` (R-16, 01/10/2026), o número
@@ -88,8 +88,8 @@ export interface NumberFieldProps {
     keyboardType?: "numeric" | "decimal-pad" | "number-pad" | "numbers-and-punctuation";
     /** Os glifos dos botões. Registre-os, ou passe `false` para tirar os dois. */
     icons?: {
-        increment: IconName;
-        decrement: IconName;
+        increment: AureaIcon;
+        decrement: AureaIcon;
     } | false;
     style?: StyleProp<ViewStyle>;
     testID?: string;

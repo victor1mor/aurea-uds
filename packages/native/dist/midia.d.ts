@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 /** URL ou `require()` de um asset local — as duas formas do `Image` do RN, como no `Avatar`. */
 export type AureaImageSource = ImageSourcePropType | string;
 export interface ImageProps {
@@ -17,7 +17,7 @@ export interface ImageProps {
     /** O que aparece no lugar quando o bitmap não vem. Sem ele, o glifo `image` sobre a caixa reservada. */
     fallback?: React.ReactNode;
     /** O glifo do substituto. Registre-o, ou passe `false`. */
-    fallbackIcon?: IconName | false;
+    fallbackIcon?: AureaIcon | false;
     /**
      * Desenha OUTRO componente de imagem com a nossa pele — é o caso do consumidor que já usa
      * `expo-image` por cache de disco.
@@ -96,3 +96,20 @@ export interface GalleryProps {
  * um alvo que engana quem navega por leitor de tela — mesma decisão da web, mesma razão.
  */
 export declare function Gallery({ items, label, selected, onSelect, zoom, ratio, minTileWidth, style, testID, }: GalleryProps): React.JSX.Element;
+/**
+ * A foto grande, no `Dialog` — a da `Gallery` e, desde a R-22 (02/10/2026), a do `PhotoInput`.
+ * Morava dentro da `Gallery`; duas cópias do zoom é o defeito que o `CLAUDE.md` nomeia, e o dia em
+ * que uma das duas muda e a outra não. Não sai pelo barril: é peça de dentro.
+ *
+ * ⚠ Aberta quando há `source`. O `Dialog` fica montado e fechado no resto do tempo — é o contrato
+ * dele, e o `Modal` do RN não desenha nada fechado.
+ */
+export declare function FotoAmpliada({ source, title, alt, ratio, onClose, testID }: {
+    source?: AureaImageSource;
+    /** O título da janela: uma caixa sem nome anuncia só "janela". */
+    title: string;
+    alt: string;
+    ratio?: number | string;
+    onClose: () => void;
+    testID?: string;
+}): React.JSX.Element;

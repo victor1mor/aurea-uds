@@ -3710,3 +3710,43 @@ sem cor solta, com o nome dizendo para onde vai.
 a lua na tinta do texto (`--foreground`) e o sol no amarelo da marca (`--primary`). As duas
 combinações se enxergam; a inversa (sol amarelo no claro, lua escura no escuro) não existe de
 propósito. Glifos do Carbon, os CHEIOS (escolha do Victor, 25/09/2026: a lua de contorno ficava branca por dentro): `asleep--filled` (lua) e `light--filled` (sol). **Desde a ADR-0053 (01/10/2026):** o Phosphor, também cheios — `moon` e `sun` em `weight="fill"`.
+
+## A moldura do ícone, a linha do tempo e o `FileInput` do nativo — 02/10/2026 · R-15, R-18, R-21
+
+Três achados do app, decididos pelo Victor nas pranchas de 02/10/2026 (*"1 c, 2 sim, 3 sim"*). Só
+leitura: nenhuma linha de terceiro foi copiada.
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| `heroui-native` 1.0.10, `avatar.css:16-29` e `avatar.constants.ts` | MIT | `Avatar` `sm` 40, `md` 48, `lg` 64, raio cheio; a variante `soft` pinta o fundo com o tom a 15% | as molduras: 64 na tela vazia (`space16`), 40 na linha do tempo (`space10`) |
+| ReUI `Icon Tile` (`reui.io`) | MIT | `xl` 56/28, `default` 40/18: o glifo perto da metade da moldura | o glifo na metade: `iconXl` 32 e `iconMd` 20 |
+| `@aurea-uds/core`, `aurea.css:1064` (`.badge-primary`) | Apache-2.0 (nosso) | o fundo do amarelo é `color-mix(primary 10%)` | o fundo da moldura `primary` |
+| ReUI `File Upload` (`reui.io/docs/components/base/file-upload`) | MIT | `accept`, `maxSize`, `maxFiles`, `multiple`, `onFilesChange` | os nomes `accept` e `maxSize` (os mesmos do `FileInput` da web); o limite fica `max`, o nome do `PhotoInput` |
+| `expo-document-picker` 57.0.3 e 12.0.1, `build/types.d.ts` | MIT | `getDocumentAsync({type, multiple, copyToCacheDirectory})`; o resultado `{canceled: true, assets: null}` ou `{canceled: false, assets}`, igual nas duas | o peer opcional `>=12`; a peça lê `uri`, `name`, `size`, `mimeType` |
+| `docs.expo.dev/versions/latest/sdk/document-picker` | — | *"Included in Expo Go"*; o SDK 57 fixa `~57.0.1` | o bloco R-21 do `apps/native-smoke` roda no Expo Go |
+| `@aurea-uds/react`, `file-input.tsx` | Apache-2.0 (nosso) | `formatSize`, e as frases `fileTooLarge`, `fileWrongType`, `fileRemove` | a mesma conta e as mesmas frases no nativo |
+
+**O HeroUI não tem as três peças** (conferido nos pacotes: nem `file`, nem `timeline`, nem ícone em
+moldura no `heroui-native` 1.0.10 e no `@heroui/styles` 3.2.6). Pela regra de 25/09/2026, elas
+nascem pensando como ele: as medidas da peça redonda que ele TEM (o `Avatar`), e a lista fechada de
+tons do `Badge` da Aurea.
+
+**O que é nosso:** o `between` da `Timeline` — o texto do que aconteceu entre dois registros, ao
+lado da linha (*"6 dias depois"*). Nenhuma referência da fila tem isso; é a proposta da prancha,
+aprovada pelo Victor no lugar de uma linha com cara de estrada, que o app achou na concorrência.
+
+**`expo-document-picker`** entra como peer **opcional** e num caminho só dele,
+`@aurea-uds/native/system/file` — não no `/system`, para quem usa o `DatePicker` não ter de
+instalar o seletor de arquivos (é a cláusula da ADR-0038, a mesma do `/system`).
+
+### R-22 — o `PhotoInput` abre a foto (02/10/2026)
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| `heroui-native` 1.0.10, `close-button.tsx` e `close-button.css` | MIT | o X é um `Button` `sm`, só ícone, `tertiary` (com fundo), 32 de altura, glifo de 18 | o X com fundo: o `IconButton` `sm` da Aurea (30), `solid` |
+| `heroui-native` 1.0.10, `avatar.css:26-29` | MIT | `Avatar` `lg` = 64 | a miniatura e o botão de pôr foto (`space16`) |
+| `@aurea-uds/native`, `Gallery` (`midia.tsx`) | Apache-2.0 (nosso) | o zoom: `Dialog` + `Image` `contain` | o mesmo zoom, agora `FotoAmpliada`, nas duas peças |
+
+O HeroUI não tem seletor de foto; a peça segue pensada como ele faria, com as medidas das peças
+que ele tem.
+

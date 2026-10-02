@@ -52,6 +52,10 @@ function pintar(forma, desenho, color) {
  * // a traço: a tinta no desenho inteiro, como no `<svg>` raiz
  * const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
  *                          strokeLinecap: "round", paths: ["M…"]});
+ * // o caminho curto (R-11, 02/10/2026): o desenho entra direto em qualquer prop de ícone
+ * <Icon name={Marca} size="xl" />
+ * <BottomNav items={[{id: "inicio", label: "Início", icon: Marca}]} />
+ * // o caminho do registro, para usar por NOME (pede `AureaIconNames`)
  * const ICONES = criarRegistroDeIcones({...OS_DO_APP, marca: Marca});
  * <Icon name="marca" size="xl" />
  * ```
@@ -99,7 +103,10 @@ export function Icon({ name, size = "md", color, icons, label, weight }) {
     const doContexto = React.useContext(Contexto);
     // Lido como mapa de texto: a chave `-fill` não é um `IconName`, e o tipo do registro já a aceita.
     const registro = (icons ?? doContexto);
-    const Glifo = (weight === "fill" ? registro?.[`${name}-fill`] : undefined) ?? registro?.[name];
+    // O desenho passado direto (R-11) não consulta o registro.
+    const Glifo = typeof name === "function"
+        ? name
+        : (weight === "fill" ? registro?.[`${name}-fill`] : undefined) ?? registro?.[name];
     if (!Glifo) {
         if (__DEV__) {
             console.warn(`Aurea Icon: "${name}" não está no registro. Importe-o pelo caminho profundo e ` +

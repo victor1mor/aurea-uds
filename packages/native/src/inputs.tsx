@@ -46,8 +46,8 @@ import {
 import {criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
-import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
-import {useReduceMotion} from "./movimento.js";
+import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
+import {useReduceMotion, driverNativo} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca} from "./theme.js";
@@ -55,11 +55,14 @@ import type {AureaTokens} from "./tokens.js";
 
 export type AureaFieldSize = "sm" | "md" | "lg";
 
-const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
+// `alturaDoTamanho` e `respiroDoTamanho` saem do arquivo (não do pacote) desde 02/10/2026: o
+// `FileInput` (R-21) desenha um gatilho com a medida do campo, e copiar os números para lá é o
+// defeito que o `CLAUDE.md` nomeia.
+export const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
 const fonteDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg : t.size.textBase;  // ADR-0050: um degrau acima da web
-const respiroDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
+export const respiroDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.space3 : s === "lg" ? t.size.space4 : 13;
 
 const folha = criarFolha((t: AureaTokens) => ({
@@ -821,7 +824,7 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
    * não existe aqui — escolha do Victor), vão de 12 até o texto. Na opção escolhida sai a forma
    * cheia (ADR-0053), se o registro a tiver.
    */
-  icon?: IconName;
+  icon?: AureaIcon;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -976,7 +979,7 @@ export function Switch({
     const destino = checked ? 1 : 0;
     if (reduzir === true) { pos.setValue(destino); return; }
     if (reduzir === null) return;
-    const a = Animated.timing(pos, {toValue: destino, duration: 160, useNativeDriver: true});
+    const a = Animated.timing(pos, {toValue: destino, duration: 160, useNativeDriver: driverNativo()});
     a.start();
     return () => a.stop();
   }, [checked, pos, reduzir]);
@@ -1139,7 +1142,7 @@ export interface SelectProps {
   disabled?: boolean;
   size?: AureaFieldSize;
   /** O glifo da seta. Registre-o, ou passe `false`. */
-  chevron?: IconName | false;
+  chevron?: AureaIcon | false;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }

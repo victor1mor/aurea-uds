@@ -34,7 +34,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Badge} from "./display.js";
 import {comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {Text} from "./text.js";
@@ -225,7 +225,7 @@ const folha = criarFolha((t: AureaTokens) => ({
 export interface AureaNavItem {
   id: string;
   label: React.ReactNode;
-  icon?: IconName;
+  icon?: AureaIcon;
   /** O contador de não lidos. Número vira selo; `true` vira ponto. */
   badge?: number | boolean;
   onPress?: () => void;
@@ -494,7 +494,7 @@ export interface AureaNavListItem {
   description?: React.ReactNode;
   /** O valor à direita — um número, um estado, uma data. */
   value?: React.ReactNode;
-  icon?: IconName;
+  icon?: AureaIcon;
   onPress?: () => void;
   disabled?: boolean;
 }
@@ -502,7 +502,7 @@ export interface AureaNavListItem {
 export interface NavListProps extends ViewProps {
   items: AureaNavListItem[];
   /** O glifo de "isto abre", à direita. Registre-o, ou passe `false`. */
-  chevron?: IconName | false;
+  chevron?: AureaIcon | false;
 }
 
 /**
@@ -605,8 +605,8 @@ export interface StepperProps extends ViewProps {
   items: AureaStepItem[];
   label?: string;
   /** Glifos de `done` e `error`. Registre-os, ou o passo mostra o número. */
-  doneIcon?: IconName | false;
-  errorIcon?: IconName | false;
+  doneIcon?: AureaIcon | false;
+  errorIcon?: AureaIcon | false;
 }
 
 /**

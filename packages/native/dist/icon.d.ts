@@ -4,6 +4,17 @@ export type AureaIconComponent = (props: {
     size?: number;
     color?: string;
 }) => React.ReactElement;
+/**
+ * Um ícone: o NOME de um glifo do registro (`"truck"`) ou o próprio DESENHO (`Logo`) — R-11,
+ * 02/10/2026. É o jeito do HeroUI: lá nenhuma peça recebe nome de ícone, o app põe o componente
+ * dele dentro. Aqui os dois valem em toda prop de ícone, e o desenho dispensa registro e
+ * `declare module`: o logotipo do app entra como `icon={Logo}`, com o `Logo` de `criarGlifo` ou o
+ * `default` de um `icons/*`. Ele recebe o `size` e a `color` que a peça pedir.
+ *
+ * ⚠ O desenho passado direto não tem forma cheia: no item escolhido ele sai igual (a forma cheia
+ * mora no registro, como `<nome>-fill`).
+ */
+export type AureaIcon = IconName | AureaIconComponent;
 export type { IconName, PhosphorIconName, AureaIconNames, IconWeight } from "./icon-names.js";
 import type { IconName, IconWeight, PhosphorIconName } from "./icon-names.js";
 /**
@@ -75,6 +86,10 @@ export interface AureaGlifoDesenho extends Pintura {
  * // a traço: a tinta no desenho inteiro, como no `<svg>` raiz
  * const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
  *                          strokeLinecap: "round", paths: ["M…"]});
+ * // o caminho curto (R-11, 02/10/2026): o desenho entra direto em qualquer prop de ícone
+ * <Icon name={Marca} size="xl" />
+ * <BottomNav items={[{id: "inicio", label: "Início", icon: Marca}]} />
+ * // o caminho do registro, para usar por NOME (pede `AureaIconNames`)
  * const ICONES = criarRegistroDeIcones({...OS_DO_APP, marca: Marca});
  * <Icon name="marca" size="xl" />
  * ```
@@ -99,7 +114,8 @@ export declare function IconRegistryProvider({ registry, children }: {
 /** A escala de glifo dos tokens. Começa em `sm`: **não existe `--icon-xs`** — como na web. */
 export type AureaIconSize = "sm" | "md" | "lg" | "xl";
 export interface IconProps {
-    name: IconName;
+    /** O nome de um glifo do registro, ou o próprio desenho (`AureaIcon`, R-11). */
+    name: AureaIcon;
     size?: AureaIconSize | number;
     /** Padrão: a cor de texto do tema. Ver a nota sobre herança abaixo. */
     color?: string;

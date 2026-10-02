@@ -167,6 +167,13 @@ documento de achados mais novo para conferir se ela envelheceu.
    R-16, R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). **Falta o aceite de
    aparelho** dos blocos LF do `apps/native-smoke`. O que falta da fila está no
    [`docs/FILA.md`](docs/FILA.md) §8.
+7. **`0.15.0`, feita em 02/10/2026, NÃO publicada:** R-11 (toda prop de ícone do nativo aceita
+   o próprio desenho do app, `AureaIcon`) · R-15 (o glifo do `EmptyState` numa moldura redonda —
+   a "C" da prancha; a `illustration` foi reprovada e saiu) · R-18 (`Timeline` com `icon`, `tone`,
+   `trailing` e `between`) · R-21 (`FileInput` em `/system/file`) · R-22 (o `PhotoInput` abre a
+   foto; miniatura quadrada de 64, X todo fora) · E13 (no navegador, o nativo manda
+   `useNativeDriver: false`). Escolhas do Victor: *"1 c, 2 sim, 3 sim"* e *"B pode seguir"*. Falta
+   o aceite de aparelho dos blocos R-11, R-15, R-18, R-21 e R-22.
 
 ### Lote E e decisões de 25/09/2026
 
@@ -344,9 +351,12 @@ outros projetos dele** (ordem de 31/08/2026). Falar do consumidor numa conversa 
 ## 8. O alvo nativo, o que não é óbvio
 
 - **Quantos componentes existem se mede:** os valores com inicial maiúscula exportados por
-  `packages/native/src/index.ts` e `sistema.tsx`, menos os dois provedores e as duas constantes.
+  `packages/native/src/index.ts`, `sistema.tsx` e `arquivo.tsx` (desde a `0.15.0`), menos os dois
+  provedores e as duas constantes.
 - **`DatePicker` e `PhotoInput` não saem pela porta da frente do pacote:** vivem em
   `@aurea-uds/native/system`, como os ícones vivem em `@aurea-uds/native/icons/*` (ADR-0038).
+  O **`FileInput`** (R-21, `0.15.0`) vive num caminho só dele, `@aurea-uds/native/system/file`:
+  no `/system`, todo app do `DatePicker` teria de instalar o `expo-document-picker`.
 - **A `Table` do nativo não é uma tabela:** cada linha vira um cartão, e a API é `columns` + `rows`.
 - **O `Chart` do nativo é o único cuja geometria é nossa** (ADR-0041). Com duas ou mais séries a
   legenda não desliga: a paleta `--chart-*` é uma rampa de um azul só.

@@ -37,7 +37,7 @@ import {
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, Grid, IconButton, Input,
   RadioGroup, Separator,
   KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
-  Spinner, Stack, Status, Stepper, Switch, Table, Tabs, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
+  Icon, Spinner, Stack, Status, Stepper, Switch, Table, Tabs, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
   // porque o app tem o mesmo problema em toda tela de lançamento — e aqui servem de SONDA:
@@ -58,6 +58,13 @@ import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 // ⚠ Não está no git (é gerado). O app já não roda sem `preparar.mjs` — os tarballs do `vendor/`
 // também são gerados —, então isto não acrescenta nenhuma condição nova.
 import VERSAO from "./versao.json";
+// R-21 (02/10/2026): o `FileInput` mora num caminho SÓ DELE, para quem usa o `DatePicker` não ter de
+// instalar o `expo-document-picker`. O seletor de arquivos vem no Expo Go ("Included in Expo Go",
+// na página da Expo).
+import {FileInput} from "@aurea-uds/native/system/file";
+// R-22 (02/10/2026): o `PhotoInput` vem do `/system`, que importa também o seletor de data. Os dois
+// módulos vêm no Expo Go ("Included in Expo Go", nas páginas da Expo).
+import {PhotoInput} from "@aurea-uds/native/system";
 
 // O caminho PROFUNDO, que é a forma documentada pela ADR-0038. Importar do barril traria todos.
 // Desde a ADR-0053 (01/10/2026) os glifos são do Phosphor, e cada um tem duas formas: a regular
@@ -76,6 +83,8 @@ import IconWarningFill from "@aurea-uds/native/icons/warning-fill";
 import IconXCircle from "@aurea-uds/native/icons/x-circle";
 import IconXCircleFill from "@aurea-uds/native/icons/x-circle-fill";
 import IconFile from "@aurea-uds/native/icons/file";
+import IconFileText from "@aurea-uds/native/icons/file-text";
+import IconPaperclip from "@aurea-uds/native/icons/paperclip";
 // A barra inferior (o item escolhido desenha a forma cheia), a folha do `Select` e o X dos overlays.
 import IconBell from "@aurea-uds/native/icons/bell";
 import IconBellFill from "@aurea-uds/native/icons/bell-fill";
@@ -111,7 +120,7 @@ const ICONES = criarRegistroDeIcones({
   "check-circle": IconCheckCircle, "check-circle-fill": IconCheckCircleFill,
   "warning": IconWarning, "warning-fill": IconWarningFill,
   "x-circle": IconXCircle, "x-circle-fill": IconXCircleFill,
-  "file": IconFile,
+  "file": IconFile, "file-text": IconFileText, "paperclip": IconPaperclip,
   "bell": IconBell, "bell-fill": IconBellFill,
   "squares-four": IconSquaresFour, "squares-four-fill": IconSquaresFourFill,
   "list-bullets": IconListBullets, "list-bullets-fill": IconListBulletsFill,
@@ -289,6 +298,9 @@ function Tela({irParaScreen, irParaLote2}) {
       <Blocos0121 t={t} />
       <BlocoRadioGroup t={t} />
       <BlocosLoteF t={t} />
+      <BlocoR11R15 t={t} />
+      <BlocoR21 t={t} />
+      <BlocoR22 t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1456,6 +1468,88 @@ function BlocoRadioGroup({t}) {
 
 // Lote F (01/10/2026): R-12, R-14, R-16 e R-19, aprovados pelas pranchas. O R-10 não tem bloco:
 // ele não muda nada na tela (o `textMd` continua 14, agora como apelido do `textSm`).
+// R-11, R-15 e R-18 (02/10/2026): o desenho do app entra direto, sem registro nem nome declarado,
+// como no HeroUI. O desenho é o GLIFO_TRACO, feito com `criarGlifo` (o mesmo caminho do logotipo
+// do app). A R-15 e a R-18 põem o glifo numa moldura redonda (a "C" da prancha).
+function BlocoR11R15({t}) {
+  const [aba, setAba] = React.useState("inicio");
+  return (
+    <>
+      <Bloco t={t} n="R-11" titulo="O desenho do app aparece onde antes só entrava nome de ícone?"
+        criterio={"Os três mostram o MESMO desenho (círculo vazado com um visto): sozinho, num botão "
+          + "redondo, e na aba \"Início\" da barra de baixo. Se algum ficar VAZIO, o desenho não chegou."}>
+        <View style={{flexDirection: "row", gap: 16, alignItems: "center"}}>
+          <Icon name={GLIFO_TRACO} size="xl" />
+          <IconButton name={GLIFO_TRACO} label="Logotipo" appearance="outline" />
+        </View>
+        <BottomNav current={aba} width="content" items={[
+          {id: "inicio", label: "Início", icon: GLIFO_TRACO, onPress: () => setAba("inicio")},
+          {id: "avisos", label: "Avisos", icon: "bell", onPress: () => setAba("avisos")},
+        ]} />
+      </Bloco>
+      <Bloco t={t} n="R-15" titulo="O glifo do estado vazio está numa moldura redonda?"
+        criterio={"Um círculo cinza de 64 com o glifo de 32 no meio, em cima do título — nos dois "
+          + "estados vazios. O de cima usa o desenho do app; o de baixo, o glifo de sempre (arquivo)."}>
+        <EmptyState title="Nenhum pedido" description="Os pedidos aparecem aqui." icon={GLIFO_TRACO} />
+        <EmptyState title="Nada aqui" />
+      </Bloco>
+      <Bloco t={t} n="R-18" titulo="A linha do tempo diz o que houve entre dois registros?"
+        criterio={"Molduras redondas de 40: a de cima VERDE, a do meio AMARELA, e o terceiro item com "
+          + "o ponto amarelo no centro da mesma coluna. O valor à direita do título. Entre os itens, "
+          + "ao lado da linha, \"6 dias depois\" e \"9 dias depois\"; depois do último, nada. "
+          + "A linha passa por TRÁS das molduras, sem aparecer através delas."}>
+        <Timeline items={[
+          {title: "Entrega", description: "28/09", icon: "truck", tone: "success",
+           trailing: "R$ 216,00", between: "6 dias depois"},
+          {title: "Retirada na loja", description: "22/09", icon: "storefront",
+           tone: "primary", trailing: "R$ 460,00", between: "9 dias depois"},
+          {title: "Sem ícone", description: "13/09", trailing: "R$ 198,00",
+           between: "não pode aparecer"},
+        ]} />
+      </Bloco>
+    </>
+  );
+}
+
+// R-21 (02/10/2026): escolher arquivo do aparelho. O limite de 1 MB é para dar para provar a recusa
+// com qualquer PDF maior que isso que esteja no telefone.
+function BlocoR21({t}) {
+  const [arquivos, setArquivos] = React.useState([]);
+  return (
+    <Bloco t={t} n="R-21" titulo="Escolher arquivo abre o seletor do sistema e volta com o arquivo?"
+      criterio={"1) Tocar em \"Escolher arquivo\": abre o seletor do sistema, só com PDF. "
+        + "2) Cancelar: nada muda. 3) Um PDF pequeno: aparece a linha com nome, tamanho e um X; "
+        + "nome comprido corta no MEIO e o \".pdf\" continua à vista; o botão de escolher some. "
+        + "4) X: o arquivo sai e o botão volta. 5) Um PDF MAIOR que 1 MB: recusado, com \"Arquivo "
+        + "maior que o limite\" em vermelho embaixo, e a borda do botão vermelha."}>
+      <Field label="Documento">
+        <FileInput value={arquivos} onChange={setArquivos} accept="application/pdf"
+          maxSize={1024 * 1024} />
+      </Field>
+    </Bloco>
+  );
+}
+
+// R-22 (02/10/2026), a "B" da prancha: tocar na foto abre a foto grande; miniatura quadrada de 64;
+// o X com fundo, todo fora da foto. Começa com as duas fotos da vitrine, para não depender da galeria
+// do telefone; o botão de pôr foto abre a galeria.
+function BlocoR22({t}) {
+  const [fotos, setFotos] = React.useState([
+    {uri: FOTO_A, width: 120, height: 90}, {uri: FOTO_B, width: 120, height: 90},
+  ]);
+  return (
+    <Bloco t={t} n="R-22" titulo="Tocar na foto abre a foto grande, e o X não cobre a foto?"
+      criterio={"1) Duas miniaturas QUADRADAS, do tamanho do botão da câmera, com cantos arredondados. "
+        + "2) O X de cada uma, num círculo com fundo, fica TODO fora da foto, no canto de cima à "
+        + "direita. 3) Tocar numa foto abre a foto grande, inteira; voltar fecha. 4) O X tira a "
+        + "foto. 5) Com o leitor de tela: \"Foto 1 de 2\", \"Abre a foto\"; o X, \"Remover foto 1\"."}>
+      <Field label="Fotos">
+        <PhotoInput value={fotos} onChange={setFotos} max={5} source="library" />
+      </Field>
+    </Bloco>
+  );
+}
+
 function BlocosLoteF({t}) {
   const [aba, setAba] = React.useState("geral");
   const [item, setItem] = React.useState(null);

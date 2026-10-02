@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 import { type AureaFieldSize } from "./inputs.js";
 export interface DatePickerProps {
     value?: Date;
@@ -14,7 +14,7 @@ export interface DatePickerProps {
     /** Como a data vira texto no gatilho. Padrão: o formato do aparelho. */
     format?: (d: Date) => string;
     placeholder?: string;
-    icon?: IconName | false;
+    icon?: AureaIcon | false;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -56,8 +56,8 @@ export interface PhotoInputProps {
     offerSettings?: boolean;
     /** Avisado quando a permissão foi negada — o app pode querer contar uma história própria. */
     onPermissionDenied?: () => void;
-    addIcon?: IconName | false;
-    removeIcon?: IconName;
+    addIcon?: AureaIcon | false;
+    removeIcon?: AureaIcon;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -78,5 +78,17 @@ export interface PhotoInputProps {
  * | **quantas** cabem? | uma | `max` |
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
+ *
+ * **R-22 (02/10/2026), achado do app: a pessoa não conseguia OLHAR a foto que escolheu.** A
+ * miniatura era um `Avatar` redondo de 42, sem toque, e o X (sem fundo, só 8 para fora) cobria
+ * metade dela. Agora, na "B" da prancha escolhida pelo Victor:
+ *
+ * | | |
+ * |---|---|
+ * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` do HeroUI) |
+ * | tocar nela | abre a foto grande, no MESMO zoom da `Gallery` (`FotoAmpliada`) |
+ * | o X | com fundo, TODO fora da foto, no canto de cima à direita |
+ * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |
+ * | inativo | a foto ainda abre (olhar não muda nada); o X não remove |
  */
 export declare function PhotoInput({ value, onChange, max, source, disabled, offerSettings, onPermissionDenied, addIcon, removeIcon, style, testID, }: PhotoInputProps): React.JSX.Element;

@@ -41,7 +41,7 @@ import {
   type ImageSourcePropType, type ImageStyle, type StyleProp, type ViewStyle,
 } from "react-native";
 import {criarFolha, estadoAcessivel} from "./estilos.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type AureaIcon} from "./icon.js";
 import {Grid} from "./layout.js";
 import {Dialog} from "./overlays.js";
 import {Text} from "./text.js";
@@ -101,7 +101,7 @@ export interface ImageProps {
   /** O que aparece no lugar quando o bitmap não vem. Sem ele, o glifo `image` sobre a caixa reservada. */
   fallback?: React.ReactNode;
   /** O glifo do substituto. Registre-o, ou passe `false`. */
-  fallbackIcon?: IconName | false;
+  fallbackIcon?: AureaIcon | false;
   /**
    * Desenha OUTRO componente de imagem com a nossa pele — é o caso do consumidor que já usa
    * `expo-image` por cache de disco.
@@ -294,16 +294,40 @@ export function Gallery({
           `Modal` do RN não desenha nada nesse estado. O título é a legenda, e o texto alternativo
           quando não há legenda: uma caixa sem nome anuncia só "janela". */}
       {zoom && (
-        <Dialog
-          open={aberto != null}
+        <FotoAmpliada
+          source={aberto?.source}
           title={aberto ? (typeof aberto.caption === "string" ? aberto.caption : aberto.alt) : ""}
+          alt={aberto?.alt ?? ""}
+          ratio={ratio}
           onClose={() => setAmpliado(null)}
-          testID={testID ? `${testID}-ampliada` : undefined}>
-          {/* `contain` e não `cover`: cortar a imagem que a pessoa pediu para VER é o oposto do
-              que ela pediu. Mesma linha da web. */}
-          {aberto && <Image source={aberto.source} alt={aberto.alt} fit="contain" ratio={ratio} />}
-        </Dialog>
+          testID={testID ? `${testID}-ampliada` : undefined} />
       )}
     </>
+  );
+}
+
+/**
+ * A foto grande, no `Dialog` — a da `Gallery` e, desde a R-22 (02/10/2026), a do `PhotoInput`.
+ * Morava dentro da `Gallery`; duas cópias do zoom é o defeito que o `CLAUDE.md` nomeia, e o dia em
+ * que uma das duas muda e a outra não. Não sai pelo barril: é peça de dentro.
+ *
+ * ⚠ Aberta quando há `source`. O `Dialog` fica montado e fechado no resto do tempo — é o contrato
+ * dele, e o `Modal` do RN não desenha nada fechado.
+ */
+export function FotoAmpliada({source, title, alt, ratio, onClose, testID}: {
+  source?: AureaImageSource;
+  /** O título da janela: uma caixa sem nome anuncia só "janela". */
+  title: string;
+  alt: string;
+  ratio?: number | string;
+  onClose: () => void;
+  testID?: string;
+}) {
+  return (
+    <Dialog open={source != null} title={title} onClose={onClose} testID={testID}>
+      {/* `contain` e não `cover`: cortar a imagem que a pessoa pediu para VER é o oposto do que
+          ela pediu. Mesma linha da web. */}
+      {source != null && <Image source={source} alt={alt} fit="contain" ratio={ratio} />}
+    </Dialog>
   );
 }

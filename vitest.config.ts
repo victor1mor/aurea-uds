@@ -22,6 +22,8 @@ export default defineConfig({
       // resolveria o import.
       "@react-native-community/datetimepicker": fileURLToPath(new URL("./tests/unit/native-stubs/datetimepicker.ts", import.meta.url)),
       "expo-image-picker": fileURLToPath(new URL("./tests/unit/native-stubs/expo-image-picker.ts", import.meta.url)),
+      // R-21 (02/10/2026): o seletor de arquivos do `FileInput`, nativo como os dois de cima.
+      "expo-document-picker": fileURLToPath(new URL("./tests/unit/native-stubs/expo-document-picker.ts", import.meta.url)),
       "react-native-safe-area-context": fileURLToPath(new URL("./tests/unit/native-stubs/react-native-safe-area-context.ts", import.meta.url)),
       "react-native-svg": fileURLToPath(new URL("./tests/unit/native-stubs/react-native-svg.ts", import.meta.url)),
       "react-native": fileURLToPath(new URL("./tests/unit/native-stubs/react-native.ts", import.meta.url)),

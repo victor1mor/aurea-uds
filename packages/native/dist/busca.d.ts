@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type TextInputProps, type StyleProp, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 import { type AureaFieldSize } from "./inputs.js";
 /** Uma linha do catálogo. **Mesma forma da web** (`ComboboxOption`), mais o `disabled` que o `Select` daqui já tinha. */
 export interface AureaComboboxItem {
@@ -62,9 +62,9 @@ export interface ComboboxProps {
     disabled?: boolean;
     size?: AureaFieldSize;
     /** O glifo da seta. Registre-o, ou passe `false`. */
-    chevron?: IconName | false;
+    chevron?: AureaIcon | false;
     /** O glifo da lupa no campo da folha. Registre-o, ou passe `false`. */
-    searchIcon?: IconName | false;
+    searchIcon?: AureaIcon | false;
     /**
      * O teclado do campo de busca da folha — E6, 25/09/2026. Para buscar um ANO ou um código, passe
      * `"number-pad"`: sem isto abre o teclado de letras. É o `keyboardType` do `TextInput`, com o
@@ -115,7 +115,7 @@ export interface SearchFieldProps {
     disabled?: boolean;
     size?: AureaFieldSize;
     /** O glifo da lupa. Padrão `search`; `false` tira. */
-    icon?: IconName | false;
+    icon?: AureaIcon | false;
     /** Mostra o botão de limpar quando há texto. Padrão **true**. */
     clearable?: boolean;
     onSubmit?: () => void;

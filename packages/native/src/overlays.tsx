@@ -65,7 +65,7 @@ import {IconButton} from "./actions.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, ForaDaMarca} from "./theme.js";
-import {useReduceMotion} from "./movimento.js";
+import {useReduceMotion, driverNativo} from "./movimento.js";
 import type {AureaTokens} from "./tokens.js";
 
 const folha = criarFolha((t: AureaTokens) => ({
@@ -350,7 +350,7 @@ export function Drawer({
     // silêncio é o certo. Animar no escuro é tocar um quadro na cara de quem pediu que não.
     if (reduzir !== false) { progresso.setValue(1); return; }
     const laco = Animated.timing(progresso, {
-      toValue: 1, duration: DURACAO, useNativeDriver: true,
+      toValue: 1, duration: DURACAO, useNativeDriver: driverNativo(),
       easing: Easing.bezier(...t.easing.easeEmphasized),
     });
     laco.start();
@@ -454,7 +454,7 @@ export function BottomSheet({
           if (g.dy > limiar || g.vy > 1.2) { onClose(); return; }
           if (reduzir !== false) { arrasto.setValue(0); return; }
           Animated.timing(arrasto, {
-            toValue: 0, duration: DURACAO, useNativeDriver: true,
+            toValue: 0, duration: DURACAO, useNativeDriver: driverNativo(),
             easing: Easing.bezier(...t.easing.easeEmphasized),
           }).start();
         },

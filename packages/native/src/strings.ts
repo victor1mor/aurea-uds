@@ -58,8 +58,18 @@ export interface AureaStrings {
   cameraDenied: string;
   /** O botão que leva às configurações do app. */
   openSettings: string;
-  /** O rótulo do botão que tira uma foto anexada. */
+  /** O rótulo do botão que tira uma foto anexada. O número da foto vem depois (R-22). */
   photoRemove: string;
+  /**
+   * O nome de cada miniatura do `PhotoInput` (R-22): *"Foto 2 de 3"* — com uma foto só, só
+   * *"Foto"*. O `positionOf` é a mesma chave da web.
+   */
+  photo: string;
+  positionOf: string;
+  /** O que a miniatura faz, dito pelo leitor de tela depois do nome (R-22). */
+  photoOpen: string;
+  /** O nome do botão de pôr foto quando ele não está num `Field` (R-22): sem isto, ficava mudo. */
+  photoAdd: string;
   /**
    * O botão que revela a senha no `PasswordField`, e o que a esconde de volta. Mesmos nomes da
    * web (`pure.tsx`), porque é a mesma peça com a mesma decisão: **o rótulo é que anuncia o
@@ -109,6 +119,17 @@ export interface AureaStrings {
   searchClear: string;
   /** O nome da grade de fotos da `Gallery`. Mesmo nome da web. */
   galleryLabel: string;
+  /**
+   * O texto do gatilho do `FileInput` (R-21). **Não existe na web**: lá a área de soltar diz
+   * *"Arraste arquivos aqui ou clique para selecionar"*, e no telefone não há o que arrastar.
+   */
+  fileChoose: string;
+  /** O botão que tira um arquivo escolhido; o nome do arquivo vem depois. Mesmo nome da web. */
+  fileRemove: string;
+  /** O aviso do arquivo maior que o `maxSize`. Mesmo nome — e mesma frase — da web. */
+  fileTooLarge: string;
+  /** O aviso do arquivo de um tipo que o `accept` não aceita. Mesmo nome e frase da web. */
+  fileWrongType: string;
   /** A frase de cada estado universal. */
   universalState: Record<AureaUniversalState, string>;
 }
@@ -125,6 +146,10 @@ export const defaultStrings: AureaStrings = {
   cameraDenied: "Camera access is off. Turn it on in Settings to attach a photo.",
   openSettings: "Open Settings",
   photoRemove: "Remove photo",
+  photo: "Photo",
+  positionOf: "of",
+  photoOpen: "Opens the photo",
+  photoAdd: "Add photo",
   passwordShow: "Show password",
   passwordHide: "Hide password",
   close: "Close",
@@ -143,6 +168,10 @@ export const defaultStrings: AureaStrings = {
   comboboxSearch: "Search",
   searchClear: "Clear search",
   galleryLabel: "Gallery",
+  fileChoose: "Choose file",
+  fileRemove: "Remove",
+  fileTooLarge: "File exceeds the size limit",
+  fileWrongType: "File type not allowed",
   universalState: {
     waiting_user: "Waiting for someone to act.",
     waiting_approval: "Waiting for approval.",
@@ -166,6 +195,10 @@ export const ptBR: AureaStrings = {
   cameraDenied: "O acesso à câmera está desligado. Ligue nas configurações para anexar uma foto.",
   openSettings: "Abrir configurações",
   photoRemove: "Remover foto",
+  photo: "Foto",
+  positionOf: "de",
+  photoOpen: "Abre a foto",
+  photoAdd: "Adicionar foto",
   passwordShow: "Mostrar senha",
   passwordHide: "Ocultar senha",
   close: "Fechar",
@@ -184,6 +217,10 @@ export const ptBR: AureaStrings = {
   comboboxSearch: "Buscar",
   searchClear: "Limpar busca",
   galleryLabel: "Galeria",
+  fileChoose: "Escolher arquivo",
+  fileRemove: "Remover",
+  fileTooLarge: "Arquivo maior que o limite",
+  fileWrongType: "Tipo de arquivo não aceito",
   universalState: {
     waiting_user: "Esperando alguém agir.",
     waiting_approval: "Esperando aprovação.",

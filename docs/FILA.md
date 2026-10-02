@@ -34,10 +34,11 @@ dois tem — cria-se *"pensando como o HeroUI criaria"*.
 | `0.13.0` | **ADR-0053**: a fonte é a Atkinson Hyperlegible Next e Mono, e os ícones são o Phosphor, com a forma cheia no item escolhido. Resolve a **R-17** (o Phosphor tem coroa e moto). **Quebra** nomes de ícone | **publicada em 01/10/2026** (pedido #17, fotos da CI nos #18 e #19), pelo terminal do Victor. Falta o teste de aparelho e os apps trocarem os nomes |
 | `0.14.0` | **Lote F do nativo**: R-10 (`text-md` vira apelido de `text-sm`, sai na 1.0), R-12 (`Tabs variant="secondary"`), R-14 (`description` no item do `Combobox`), R-16 (`NumberField size="display"`, letra 30), R-19 (`icon` no `RadioGroup.Item`, 24). De passagem: a descrição do `RadioGroup` saía em 16 e passou a 14 | **publicada dentro da `0.14.1`, em 02/10/2026**, pelo terminal do Victor. Antes e depois aprovados pela imagem. Falta o aceite de aparelho (blocos LF do `apps/native-smoke`) |
 | `0.14.1` | O `IconButton` ocupado (web) mostra só a rodinha, no centro, e o `Button` ocupado troca o ícone da frente pela rodinha | **publicada em 02/10/2026** (pedidos #24 e #25), pelo terminal do Victor |
+| `0.15.0` | **R-11** (toda prop de ícone do nativo aceita o próprio desenho do app, `AureaIcon`) · **R-15** (o glifo do `EmptyState` numa moldura redonda) · **R-18** (`Timeline` com `icon`, `tone`, `trailing`, `between`) · **R-21** (`FileInput` em `/system/file`) · **R-22** (o `PhotoInput` abre a foto; miniatura quadrada, X fora) · **E13** (`useNativeDriver` só fora do navegador) | **feita em 02/10/2026, NÃO publicada**. Escolhas do Victor nas pranchas: *"1 c, 2 sim, 3 sim"* e *"B pode seguir"*. Falta o aceite de aparelho (blocos R-11, R-15, R-18, R-21 e R-22 do `apps/native-smoke`) |
 
 **Decisão do Victor, 01/10/2026:** *"o restante vamos usar HeroUI como referência"*. As
 decisões da seção 1 (R-10, R-11, R-13, R-19) e as medidas da seção 2 seguem a recomendação
-escrita aqui, que já é a do HeroUI. Onde o HeroUI não tem nada (o 112 da R-15, a cor padrão da
+escrita aqui, que já é a do HeroUI. Onde o HeroUI não tem nada (~~o 112 da R-15~~, a cor padrão da
 R-13), desce-se a fila de referências do `CLAUDE.md` §2 antes de inventar. Cada lote ainda pede o
 seu "pode". **Os ícones (R-17) ficaram em aberto** — ver a R-17.
 
@@ -59,7 +60,11 @@ O CSS da Aurea passou a usar `--text-sm`. Nada muda na tela.
 - O que a tela mostra já segue a [ADR-0050](../decisions/0050-a-escala-de-letras-e-a-do-heroui.md);
   só os nomes dos tokens ficaram para trás.
 
-### R-11 · nome de ícone próprio: a doc manda `declare module`, a trava do app barra
+### ~~R-11 · nome de ícone próprio: a doc manda `declare module`, a trava do app barra~~ — feito na `0.15.0`
+
+✅ Do jeito do HeroUI (decisão do Victor, 02/10/2026): em vez de tipar o nome a partir do registro,
+toda prop de ícone aceita o próprio desenho (`icon={Logo}`). O app não declara nome nenhum.
+⚠ **A web ainda só aceita nome** (ver §6).
 
 - **[ninguém]** O HeroUI não tem registro de ícones: os ícones dele são componentes soltos
   (`@heroui/react/dist/components/icons.js`, um `svg` por função).
@@ -146,7 +151,12 @@ pesquisa que levou à decisão está abaixo.
   `Description`.
 - **Recomendação:** `description?: string` no `AureaComboboxItem`, com essas medidas nos tokens.
 
-### R-15 · `EmptyState` com ícone pequeno e solto
+### ~~R-15 · `EmptyState` com ícone pequeno e solto~~ — feito na `0.15.0`
+
+✅ O glifo numa **moldura redonda**: 64 (o `Avatar` `lg` do HeroUI Native, `space16`), fundo
+`muted`, e o glifo de 32 de antes, na cor `mutedForeground`. É a "C" da prancha de 02/10/2026,
+escolhida pelo Victor (*"1 c"*). ~~`illustration` (o desenho do app, de 112)~~ — **reprovada** na
+mesma prancha, e saiu antes de publicar. ⚠ **A web não tem a moldura** (§6).
 
 - **[HeroUI]** O `EmptyState` dele é mínimo (`empty-state.css`: só recuo de 8, letra pequena,
   apagada) — é o recheio do vazio de uma lista, sem ícone.
@@ -217,14 +227,39 @@ juntar, mas juntar acredito que os traços iriam destoar"*. Medido nos pacotes b
      MIT.
 - **Pergunta ao Victor:** quais ícones faltaram, além da coroa? A sessão do app tem a lista.
 
-### R-18 · `Timeline` com cara de estrada (opcional)
+### ~~R-18 · `Timeline` com cara de estrada (opcional)~~ — feito na `0.15.0`, de outro jeito
+
+✅ **Sem a estrada**: o Victor achou a linha com cara de estrada na concorrência (02/10/2026). A
+proposta aprovada pela prancha (*"2 sim"*) faz a linha dizer alguma coisa: `between`, o que
+aconteceu entre um item e o próximo (*"6 dias depois"*), ao lado da linha. Mais `icon` (o glifo
+numa moldura de 40, o `Avatar` `sm` do HeroUI Native), `tone` (a cor da moldura, a do `Badge`) e
+`trailing` (o valor à direita do título). ⚠ **A web não tem** (§6).
 
 - **[ReUI]** `Timeline` com partes `TimelineItem`, `TimelineHeader`, `TimelineDate`,
-  `TimelineTitle`, `TimelineIndicator`, `TimelineSeparator`, `TimelineContent`; `orientation`
-  vertical ou horizontal; `value` = o passo atual. Nove exemplos, entre eles "alternating" (os
-  itens dos dois lados da linha) — o mais perto da estrada.
-- **Recomendação:** `variant="road"` na `Timeline` de hoje, com a disposição alternada do ReUI.
-  Baixa prioridade (a ficha diz "acabamento").
+  `TimelineTitle`, `TimelineIndicator`, `TimelineSeparator`, `TimelineContent`. Nenhuma tem o
+  texto entre dois itens: o `between` é nosso.
+
+### ~~R-21 · o nativo não tem como escolher arquivo~~ — feito na `0.15.0`
+
+✅ `FileInput`, em `@aurea-uds/native/system/file` (um caminho só dele, para quem usa o
+`DatePicker` não ter de instalar o `expo-document-picker`). `value`/`onChange` com
+`{uri, name, size, mimeType}`, `accept`, `max` (1), `maxSize`, `disabled`, `addIcon`, `fileIcon`,
+`removeIcon`. Cancelar não muda nada; maior que o `maxSize` ou do tipo errado é recusado, com o
+aviso em vermelho embaixo. Proposta aprovada pelo Victor (*"3 sim"*).
+
+- **[HeroUI]** não tem, nem no telefone nem na web (medido nos pacotes).
+- **[ReUI]** `File Upload`: `accept`, `maxSize`, `maxFiles`, `multiple`. Os dois primeiros nomes
+  entraram (são também os da web); o limite ficou `max`, como no `PhotoInput`.
+
+### ~~R-22 · o `PhotoInput` não abre a foto~~ — feito na `0.15.0`
+
+✅ A "B" da prancha (*"B pode seguir"*): miniatura quadrada de 64 (o `Avatar` `lg` do HeroUI
+Native), do tamanho do botão de pôr foto; tocar abre a foto grande no zoom da `Gallery`; o X com
+fundo, todo fora da foto. Leitor de tela: *"Foto 2 de 3"* (a posição entre as que existem; com
+uma só, *"Foto"*), *"Abre a foto"*, *"Remover foto 2"*.
+
+- **[HeroUI]** não tem seletor de foto. O X é o `CloseButton` dele traduzido: botão pequeno, só
+  ícone, com fundo (`close-button.tsx`: `size="sm"`, 32). Na Aurea, o `IconButton` `sm` (30).
 
 ---
 
@@ -248,6 +283,9 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 6. **iPhone: nunca rodou.** Antes de prometer a `1.0`.
 7. **LF-12, LF-14, LF-16 e LF-19** (`Tabs` secundário, segunda linha do `Combobox`, `NumberField`
    grande, ícone no `RadioGroup`) — `0.14.0`.
+8. **R-11, R-15, R-18, R-21 e R-22** (o desenho do app nas peças, a moldura do vazio, a linha do
+   tempo nova, o seletor de arquivo e a foto que abre; o R-21 pede um PDF menor e um maior que
+   1 MB no telefone) — `0.15.0`.
 
 ## 4. Do app, não da Aurea
 
@@ -285,6 +323,10 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 | C-06 | `option` sem estilo no escuro | — | **medir**: provavelmente morreu com o `Select` novo |
 | — | `Tabs` sem `variant="secondary"` na web | **[HeroUI]** `.tabs--secondary` no `@heroui/styles` 3.2.6 (`tabs.css:246`) | paridade com o nativo (R-12, `0.14.0`); a web hoje só tem a cápsula |
 | — | item do `Combobox` sem `description` na web | **[HeroUI]** o item da lista aceita `Description` | paridade com o nativo (R-14, `0.14.0`) |
+| — | prop de ícone só aceita nome na web | **[HeroUI]** nenhuma peça recebe nome; o app passa o componente | paridade com o nativo (R-11, `0.15.0`) |
+| — | `EmptyState` sem a moldura do glifo na web | **[HeroUI]** o `EmptyState` só recebe filhos | paridade com o nativo (R-15, `0.15.0`): moldura de 64, glifo de 32 |
+| — | `Timeline` da web só tem `title`, `description` e `time` | **[ninguém]** — o `between` é nosso | paridade com o nativo (R-18, `0.15.0`): `icon`, `tone`, `trailing`, `between` |
+| — | 8 fichas da web ainda falam de ícone do **Carbon** (`EmptyState` diz que o padrão é `document--blank`; é `file`) | — | corrigir o texto das fichas `AureaProvider`, `Banner`, `Button`, `EmptyState`, `Icon`, `IconButton`, `MessageComposer` e `NotificationCenter` |
 | C-08 | `Button` com vão fixo de 8 | **[HeroUI]** também fixo: `gap-2` (8) em **todos** os tamanhos (`button.css:5`; `--sm` e `--lg` não mexem no vão) | **fechar sem mudar** — igual ao HeroUI |
 | C-11 | `Tooltip` em texto só abre pelo teclado com `tabIndex` | **[HeroUI]** o `Tooltip.Trigger` põe ele mesmo o foco: `useFocusable` + `role="button"` (`tooltip.js:138-153`) | o gatilho da Aurea faz o mesmo |
 | C-12 | sprite de ícones de 1,27 MB | **[HeroUI]** um componente por ícone, importado um a um | ícone por arquivo na web, como o nativo já faz (`icons/*`) |
@@ -308,12 +350,11 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 ## 8. Ordem sugerida (a decidir com o Victor)
 
 1. ~~Publicar a `0.12.4` (R-20)~~ — publicada em 01/10/2026. Falta rodar o teste de aparelho (§3).
-2. Decisões rápidas do nativo: ~~R-10, R-19~~ (`0.14.0`). Faltam: **R-11** (pedir ao Victor o
-   texto da ficha: a "saída 2" muda a forma de usar os ícones). ~~R-13~~ fechada sem código em
-   01/10/2026: a Aurea fica no azul, e o app passa `primaryEmphasis` (ver a R-13).
+2. Decisões rápidas do nativo: ~~R-10, R-19~~ (`0.14.0`) · ~~R-11~~ (`0.15.0`) · ~~R-13~~ fechada
+   sem código em 01/10/2026: a Aurea fica no azul, e o app passa `primaryEmphasis` (ver a R-13).
 3. **Lote da troca de fonte e ícones** (ADR-0053): antes da `1.0`, porque quebra todo nome de
    ícone. Falta só o peso do ícone pequeno (ADR-0053).
-4. Acréscimos do nativo que o app já espera: ~~R-12, R-14, R-16~~ (`0.14.0`). Falta a **R-15**,
-   que espera a resposta do Victor: os 112 do desenho do app são medida ou desenho solto?
+4. Acréscimos do nativo que o app já espera: ~~R-12, R-14, R-16~~ (`0.14.0`) · ~~R-15, R-18,
+   R-21, R-22~~ (`0.15.0`). A seção 2 do nativo está fechada, fora a R-17; falta o aceite de aparelho (§3).
 5. Web: C-08 e M-03 fecham sem código; C-11, B-05, B-06 + N-01 + N-03 num lote só (paginação).
 6. Lote 5 (peças novas da web) depois da `1.0`, como o `CLAUDE.md` já diz.

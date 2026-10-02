@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type PressableProps } from "react-native";
-import { type AureaIconRegistry, type IconName } from "./icon.js";
+import { type AureaIconRegistry, type AureaIcon } from "./icon.js";
 /** Quanto peso a caixa tem. */
 export type AureaButtonAppearance = "solid" | "outline" | "ghost";
 /** O que a cor significa. Mesmos nomes da web (ADR-0044). */
@@ -12,8 +12,8 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
     appearance?: AureaButtonAppearance;
     tone?: AureaButtonTone;
     size?: AureaButtonSize;
-    leadingIcon?: IconName;
-    trailingIcon?: IconName;
+    leadingIcon?: AureaIcon;
+    trailingIcon?: AureaIcon;
     /**
      * Um desenho QUALQUER na frente do texto, para quando a marca não pode ser um ícone nosso.
      *
@@ -55,7 +55,7 @@ export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullW
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
 export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
-    name: IconName;
+    name: AureaIcon;
     /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
     label: string;
 }

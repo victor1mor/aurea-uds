@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/native",
-  "version": "0.14.1",
+  "version": "0.15.0",
   "description": "A Aurea UDS para React Native: o provider de tema e densidade, os componentes e os ícones do Phosphor sobre react-native-svg.",
   "keywords": [
     "aurea",
@@ -36,6 +36,10 @@
       "types": "./dist/sistema.d.ts",
       "import": "./dist/sistema.js"
     },
+    "./system/file": {
+      "types": "./dist/arquivo.d.ts",
+      "import": "./dist/arquivo.js"
+    },
     "./icons": {
       "types": "./icons/index.d.ts",
       "import": "./icons/index.js"
@@ -59,6 +63,7 @@
   },
   "peerDependencies": {
     "@react-native-community/datetimepicker": ">=8",
+    "expo-document-picker": ">=12",
     "expo-image-picker": ">=16",
     "react": ">=19",
     "react-native": ">=0.76",
@@ -68,6 +73,7 @@
   "devDependencies": {
     "@phosphor-icons/core": "2.1.1",
     "@react-native-community/datetimepicker": "9.1.0",
+    "expo-document-picker": "57.0.3",
     "expo-image-picker": "57.0.15",
     "react": "^19.2.0",
     "react-native": "^0.87.1",
@@ -76,6 +82,9 @@
   },
   "peerDependenciesMeta": {
     "@react-native-community/datetimepicker": {
+      "optional": true
+    },
+    "expo-document-picker": {
       "optional": true
     },
     "expo-image-picker": {

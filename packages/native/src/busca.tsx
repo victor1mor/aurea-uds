@@ -73,9 +73,9 @@ import {
 import {IconButton} from "./actions.js";
 import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Spinner} from "./feedback.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type AureaIcon} from "./icon.js";
 import {KeyboardAvoiding, useCampo, type AureaFieldSize} from "./inputs.js";
-import {useReduceMotion} from "./movimento.js";
+import {useReduceMotion, driverNativo} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, ForaDaMarca, usePeleSobreAMarca} from "./theme.js";
@@ -255,9 +255,9 @@ export interface ComboboxProps {
   disabled?: boolean;
   size?: AureaFieldSize;
   /** O glifo da seta. Registre-o, ou passe `false`. */
-  chevron?: IconName | false;
+  chevron?: AureaIcon | false;
   /** O glifo da lupa no campo da folha. Registre-o, ou passe `false`. */
-  searchIcon?: IconName | false;
+  searchIcon?: AureaIcon | false;
   /**
    * O teclado do campo de busca da folha — E6, 25/09/2026. Para buscar um ANO ou um código, passe
    * `"number-pad"`: sem isto abre o teclado de letras. É o `keyboardType` do `TextInput`, com o
@@ -366,7 +366,7 @@ export function Combobox({
       if (g.dy > limiar || g.vy > 1.2) { fechar(); return; }
       if (reduzir !== false) { arrasto.setValue(0); return; }
       Animated.timing(arrasto, {
-        toValue: 0, duration: t.size.durationSlow, useNativeDriver: true,
+        toValue: 0, duration: t.size.durationSlow, useNativeDriver: driverNativo(),
         easing: Easing.bezier(...t.easing.easeEmphasized),
       }).start();
     },
@@ -596,7 +596,7 @@ export interface SearchFieldProps {
   disabled?: boolean;
   size?: AureaFieldSize;
   /** O glifo da lupa. Padrão `search`; `false` tira. */
-  icon?: IconName | false;
+  icon?: AureaIcon | false;
   /** Mostra o botão de limpar quando há texto. Padrão **true**. */
   clearable?: boolean;
   onSubmit?: () => void;

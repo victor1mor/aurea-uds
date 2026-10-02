@@ -58,7 +58,10 @@ import {
   FlatList, Pressable, View, useWindowDimensions,
   type StyleProp, type ViewStyle,
 } from "react-native";
+import type {AureaBadgeTone} from "./display.js";
 import {criarFolha} from "./estilos.js";
+import type {AureaIcon} from "./icon.js";
+import {IconeEmMoldura} from "./moldura.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -83,6 +86,14 @@ const folha = criarFolha((t: AureaTokens) => ({
     borderWidth: t.size.space05, borderColor: t.color.surface1,
   },
   colunaDoEvento: {flex: 1, minWidth: 0, gap: t.size.space05},
+  // R-18: o ponto centrado na coluna da moldura, quando a lista tem molduras.
+  colunaDoPonto: {width: t.size.space10, alignItems: "center", flexGrow: 0, flexShrink: 0},
+  linhaDoTitulo: {
+    flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between",
+    gap: t.size.space2,
+  },
+  tituloQueEncolhe: {flexShrink: 1},
+  entre: {flexDirection: "row", alignItems: "center"},
 
   // ── DataList ──
   pares: {gap: t.size.space2},
@@ -139,6 +150,22 @@ export type AureaTimelineItem = {
   description?: React.ReactNode;
   /** Nó, não string: uma data absoluta e uma relativa são igualmente bem-vindas — como na web. */
   time?: React.ReactNode;
+  /**
+   * R-18, 02/10/2026: o glifo numa moldura redonda, no lugar do ponto. Moldura de 40 (o `Avatar`
+   * `sm` do HeroUI Native) e glifo de 20. Basta um item com `icon` para a coluna inteira ter a
+   * largura da moldura — os itens sem ícone ficam com o ponto, no centro dela.
+   */
+  icon?: AureaIcon;
+  /** A cor da moldura, com o vocabulário do `Badge`. Sem `icon`, não faz nada. Padrão: `neutral`. */
+  tone?: AureaBadgeTone;
+  /** O que vai à DIREITA do título — um valor, um selo. */
+  trailing?: React.ReactNode;
+  /**
+   * O que aconteceu ENTRE este item e o próximo, escrito ao lado da linha: *"6 dias depois"*,
+   * *"3 h depois"*. Proposta aprovada na prancha de 02/10/2026: a linha deixa de ser enfeite e
+   * passa a dizer alguma coisa. No último item não aparece, porque não há próximo.
+   */
+  between?: React.ReactNode;
 };
 
 export interface TimelineProps extends Virtualizavel {
@@ -167,24 +194,51 @@ export interface TimelineProps extends Virtualizavel {
 export function Timeline({items, virtualized = false, style, testID}: TimelineProps) {
   const t = useAureaTokens();
   const s = folha(t);
+  // A coluna do marcador tem a largura da moldura quando ALGUM item tem ícone: senão os títulos
+  // ficariam em colunas diferentes conforme o item. O trilho vai ao centro dela.
+  const comMoldura = items.some((i) => i.icon != null);
+  const marcador = comMoldura ? t.size.space10 : t.size.space3;
 
-  const desenhar = React.useCallback((item: AureaTimelineItem) => (
-    <View style={s.evento}>
-      <View style={s.ponto} />
-      <View style={s.colunaDoEvento}>
-        {typeof item.title === "string"
-          ? <Text size="md" weight={600}>{item.title}</Text> : item.title}
-        {item.description != null
-          ? (typeof item.description === "string"
-              ? <Text size="sm" tone="muted">{item.description}</Text> : item.description)
-          : null}
-        {item.time != null
-          ? (typeof item.time === "string"
-              ? <Text size="xs" tone="muted">{item.time}</Text> : item.time)
-          : null}
+  const desenhar = React.useCallback((item: AureaTimelineItem, n: number) => {
+    const titulo = typeof item.title === "string"
+      ? <Text size="md" weight={600} style={s.tituloQueEncolhe}>{item.title}</Text> : item.title;
+    const ponto = item.icon != null
+      ? <IconeEmMoldura icon={item.icon} tone={item.tone} moldura={t.size.space10}
+                        glifo={t.size.iconMd} sobre={t.color.surface1} />
+      : comMoldura ? <View style={s.colunaDoPonto}><View style={s.ponto} /></View>
+      : <View style={s.ponto} />;
+    const entre = item.between != null && n < items.length - 1 ? (
+      <View style={[s.entre, {paddingLeft: marcador + t.size.space3}]}>
+        {typeof item.between === "string"
+          ? <Text size="xs" tone="muted">{item.between}</Text> : item.between}
       </View>
-    </View>
-  ), [s]);
+    ) : null;
+    return (
+      <>
+        <View style={s.evento}>
+          {ponto}
+          <View style={s.colunaDoEvento}>
+            {item.trailing != null ? (
+              <View style={s.linhaDoTitulo}>
+                {titulo}
+                {typeof item.trailing === "string"
+                  ? <Text size="md" weight={600}>{item.trailing}</Text> : item.trailing}
+              </View>
+            ) : titulo}
+            {item.description != null
+              ? (typeof item.description === "string"
+                  ? <Text size="sm" tone="muted">{item.description}</Text> : item.description)
+              : null}
+            {item.time != null
+              ? (typeof item.time === "string"
+                  ? <Text size="xs" tone="muted">{item.time}</Text> : item.time)
+              : null}
+          </View>
+        </View>
+        {entre}
+      </>
+    );
+  }, [s, t, comMoldura, marcador, items.length]);
 
   if (virtualized) {
     return (
@@ -192,7 +246,8 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
         accessibilityRole="list"
         data={items as AureaTimelineItem[]}
         keyExtractor={(_, n) => String(n)}
-        renderItem={({item}) => desenhar(item)}
+        // O `between` mora dentro da célula, então leva o mesmo vão que o separador dá entre elas.
+        renderItem={({item, index}) => <View style={s.trilha}>{desenhar(item, index)}</View>}
         ItemSeparatorComponent={() => <View style={{height: t.size.space5}} />}
         // ⚠ O trilho NÃO entra no modo virtualizado, e isso é honesto em vez de quebrado: ele é
         // uma linha absoluta do topo ao pé da lista INTEIRA, e no `FlatList` a lista inteira não
@@ -205,8 +260,8 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
 
   return (
     <View accessibilityRole="list" style={[s.trilha, style]} testID={testID}>
-      {items.length > 0 ? <View style={s.trilho} /> : null}
-      {items.map((item, n) => <React.Fragment key={n}>{desenhar(item)}</React.Fragment>)}
+      {items.length > 0 ? <View style={[s.trilho, comMoldura && {left: marcador / 2}]} /> : null}
+      {items.map((item, n) => <React.Fragment key={n}>{desenhar(item, n)}</React.Fragment>)}
     </View>
   );
 }

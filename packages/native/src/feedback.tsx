@@ -22,8 +22,9 @@ import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton} from "./actions.js";
 import {criarFolha, estadoAcessivel} from "./estilos.js";
-import {Icon, type IconName} from "./icon.js";
-import {useReduceMotion} from "./movimento.js";
+import {Icon, type IconName, type AureaIcon} from "./icon.js";
+import {IconeEmMoldura} from "./moldura.js";
+import {useReduceMotion, driverNativo} from "./movimento.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
@@ -120,7 +121,7 @@ export function Spinner({size = "sm", label, decorative, style, testID}: Spinner
     // animar nesse vão é animar na cara de quem talvez tenha pedido que não.
     if (reduzir !== false) return;
     const laco = Animated.loop(Animated.timing(giro, {
-      toValue: 1, duration: 700, easing: Easing.linear, useNativeDriver: true,
+      toValue: 1, duration: 700, easing: Easing.linear, useNativeDriver: driverNativo(),
     }));
     laco.start();
     // Sem o `stop` o laço sobrevive à desmontagem e continua acordando o JS — o vazamento
@@ -184,8 +185,8 @@ export function Skeleton({width, height, radius, style, testID}: SkeletonProps) 
     // 1,35 s no total, com o vale em .55 na METADE — é o `@keyframes skeleton-pulse` do
     // `aurea.css:1112` lido literalmente: 675 ms para descer e 675 para voltar.
     const laco = Animated.loop(Animated.sequence([
-      Animated.timing(opacidade, {toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: true}),
-      Animated.timing(opacidade, {toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: true}),
+      Animated.timing(opacidade, {toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo()}),
+      Animated.timing(opacidade, {toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo()}),
     ]));
     laco.start();
     return () => laco.stop();
@@ -260,7 +261,7 @@ export interface AlertProps extends ViewProps {
   /** Um dos sete estados universais. Ele **escolhe a variante** e escreve o texto padrão. */
   state?: AureaUniversalState;
   title?: React.ReactNode;
-  icon?: IconName;
+  icon?: AureaIcon;
   onDismiss?: () => void;
   children?: React.ReactNode;
 }
@@ -359,7 +360,12 @@ export function Alert({
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
 export interface EmptyStateProps {
-  icon?: IconName;
+  /**
+   * O glifo, dentro de uma moldura redonda — R-15, 02/10/2026, escolhida pelo Victor na prancha
+   * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` do HeroUI) e glifo de 32, o de antes. O desenho
+   * do próprio app entra aqui também (`icon={Logo}`, R-11).
+   */
+  icon?: AureaIcon;
   title: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
@@ -385,7 +391,7 @@ export function EmptyState({
   const desc = description ?? (state ? strings.universalState[state] : null);
   return (
     <View testID={testID} style={[s.vazio, style]}>
-      <Icon name={icon} size="xl" color={t.color.subtleForeground} />
+      <IconeEmMoldura icon={icon} moldura={t.size.space16} glifo={t.size.iconXl} />
       {typeof title === "string"
         ? <Text size="base" weight={600} leading="tight" align="center">{title}</Text>
         : title}
@@ -410,7 +416,7 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
   /** Substitui o esqueleto padrão de `loading`. */
   skeleton?: React.ReactNode;
   emptyTitle?: React.ReactNode;
-  emptyIcon?: IconName;
+  emptyIcon?: AureaIcon;
   action?: React.ReactNode;
   /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
   children: React.ReactNode | (() => React.ReactNode);

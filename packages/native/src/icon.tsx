@@ -24,6 +24,18 @@ import {useAureaTokens} from "./theme.js";
 
 /** O que cada módulo de `icons/*` exporta por padrão. */
 export type AureaIconComponent = (props: {size?: number; color?: string}) => React.ReactElement;
+
+/**
+ * Um ícone: o NOME de um glifo do registro (`"truck"`) ou o próprio DESENHO (`Logo`) — R-11,
+ * 02/10/2026. É o jeito do HeroUI: lá nenhuma peça recebe nome de ícone, o app põe o componente
+ * dele dentro. Aqui os dois valem em toda prop de ícone, e o desenho dispensa registro e
+ * `declare module`: o logotipo do app entra como `icon={Logo}`, com o `Logo` de `criarGlifo` ou o
+ * `default` de um `icons/*`. Ele recebe o `size` e a `color` que a peça pedir.
+ *
+ * ⚠ O desenho passado direto não tem forma cheia: no item escolhido ele sai igual (a forma cheia
+ * mora no registro, como `<nome>-fill`).
+ */
+export type AureaIcon = IconName | AureaIconComponent;
 // A-04: nome do glifo, no vocabulário do Phosphor (ADR-0053) — o MESMO do sprite da web (check
 // 38) —, checado pelo TypeScript. A lista é GERADA por `build-icons-native.mjs`; o glifo próprio
 // do app (`criarGlifo`) entra declarando o nome em `AureaIconNames`.
@@ -108,6 +120,10 @@ function pintar(forma: Pintura, desenho: Pintura, color: string) {
  * // a traço: a tinta no desenho inteiro, como no `<svg>` raiz
  * const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
  *                          strokeLinecap: "round", paths: ["M…"]});
+ * // o caminho curto (R-11, 02/10/2026): o desenho entra direto em qualquer prop de ícone
+ * <Icon name={Marca} size="xl" />
+ * <BottomNav items={[{id: "inicio", label: "Início", icon: Marca}]} />
+ * // o caminho do registro, para usar por NOME (pede `AureaIconNames`)
  * const ICONES = criarRegistroDeIcones({...OS_DO_APP, marca: Marca});
  * <Icon name="marca" size="xl" />
  * ```
@@ -151,7 +167,8 @@ export function IconRegistryProvider(
 export type AureaIconSize = "sm" | "md" | "lg" | "xl";
 
 export interface IconProps {
-  name: IconName;
+  /** O nome de um glifo do registro, ou o próprio desenho (`AureaIcon`, R-11). */
+  name: AureaIcon;
   size?: AureaIconSize | number;
   /** Padrão: a cor de texto do tema. Ver a nota sobre herança abaixo. */
   color?: string;
@@ -189,7 +206,10 @@ export function Icon({name, size = "md", color, icons, label, weight}: IconProps
   const doContexto = React.useContext(Contexto);
   // Lido como mapa de texto: a chave `-fill` não é um `IconName`, e o tipo do registro já a aceita.
   const registro = (icons ?? doContexto) as Readonly<Record<string, AureaIconComponent | undefined>> | null;
-  const Glifo = (weight === "fill" ? registro?.[`${name}-fill`] : undefined) ?? registro?.[name];
+  // O desenho passado direto (R-11) não consulta o registro.
+  const Glifo = typeof name === "function"
+    ? name
+    : (weight === "fill" ? registro?.[`${name}-fill`] : undefined) ?? registro?.[name];
 
   if (!Glifo) {
     if (__DEV__) {
