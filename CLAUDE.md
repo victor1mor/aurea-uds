@@ -125,6 +125,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.13.0` | A troca de fonte e ícones da ADR-0053: Atkinson Hyperlegible Next e Mono, ícones Phosphor com a forma cheia no item escolhido. **Quebra** nomes de ícone. Aprovada pela imagem (pedido #17) e, com as fotos da CI (pedidos #18 e #19), **publicada em 01/10/2026**, pelo terminal do Victor |
 | `0.14.0` | Lote F (nativo): R-10, R-12, R-14, R-16, R-19 — pedido #22. **Não saiu sozinha**: foi publicada dentro da `0.14.1` |
 | `0.14.1` | O `IconButton` ocupado mostra só a rodinha, no centro (web) — pedido #24; a CI de volta ao verde (aceite do `node-forge`, espera de transição) — pedido #25. **Publicada em 02/10/2026**, pelo terminal do Victor. Leva a `0.14.0` junto |
+| `0.15.0` | Nativo: R-11 (o desenho do app em toda prop de ícone), R-15 (moldura no `EmptyState`), R-18 (`Timeline` com `icon`, `tone`, `trailing`, `between`), R-21 (`FileInput` em `/system/file`), R-22 (o `PhotoInput` abre a foto), E13 — pedido #27. **Publicada em 02/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -167,7 +168,7 @@ documento de achados mais novo para conferir se ela envelheceu.
    R-16, R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). **Falta o aceite de
    aparelho** dos blocos LF do `apps/native-smoke`. O que falta da fila está no
    [`docs/FILA.md`](docs/FILA.md) §8.
-7. **`0.15.0`, feita em 02/10/2026, NÃO publicada:** R-11 (toda prop de ícone do nativo aceita
+7. **`0.15.0`, publicada em 02/10/2026** (pedido #27), pelo terminal do Victor: R-11 (toda prop de ícone do nativo aceita
    o próprio desenho do app, `AureaIcon`) · R-15 (o glifo do `EmptyState` numa moldura redonda —
    a "C" da prancha; a `illustration` foi reprovada e saiu) · R-18 (`Timeline` com `icon`, `tone`,
    `trailing` e `between`) · R-21 (`FileInput` em `/system/file`) · R-22 (o `PhotoInput` abre a
