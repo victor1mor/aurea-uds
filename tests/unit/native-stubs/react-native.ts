@@ -185,6 +185,14 @@ function paraCss(estilo: unknown): Record<string, unknown> {
   // O `flexShrink` do RN é 0 por padrão; o do CSS é 1. Sem fixar isto, caixa com altura definida
   // encolhe no navegador e não encolhe no aparelho — divergência que a vitrine inventaria.
   if (saida.flexShrink == null && saida.flex == null) saida.flexShrink = 0;
+  // O `flex` NUMÉRICO também diverge — 02/10/2026, achado pela prancha do `BottomNav`
+  // `circle-bold`. No RN, `flex: 0` é "inflexível, use a `width`" (o círculo de 56); no CSS,
+  // `flex: 0` é `0 1 0%`: base ZERO, e o item encolhe até virar um risco. A tradução segue o Yoga:
+  // positivo → `n 1 0%`, zero → `0 0 auto`, negativo → `0 1 auto`.
+  if (typeof saida.flex === "number") {
+    const n = saida.flex;
+    saida.flex = n > 0 ? `${n} 1 0%` : n === 0 ? "0 0 auto" : "0 1 auto";
+  }
   return saida;
 }
 
