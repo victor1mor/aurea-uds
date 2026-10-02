@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 import { type AureaFieldSize } from "./inputs.js";
 export interface DatePickerProps {
     value?: Date;
@@ -14,7 +14,7 @@ export interface DatePickerProps {
     /** Como a data vira texto no gatilho. Padrão: o formato do aparelho. */
     format?: (d: Date) => string;
     placeholder?: string;
-    icon?: IconName | false;
+    icon?: AureaIcon | false;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -56,8 +56,8 @@ export interface PhotoInputProps {
     offerSettings?: boolean;
     /** Avisado quando a permissão foi negada — o app pode querer contar uma história própria. */
     onPermissionDenied?: () => void;
-    addIcon?: IconName | false;
-    removeIcon?: IconName;
+    addIcon?: AureaIcon | false;
+    removeIcon?: AureaIcon;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 import { type AureaAlertVariant } from "./feedback.js";
 /** As mesmas quatro faces do `AureaToastType` da web (`system.tsx:65`). */
 export type AureaToastType = AureaAlertVariant;
@@ -17,7 +17,7 @@ export interface AureaToastInput {
     /** Uma ação curta — "Desfazer". Ver o aviso sobre `duration` acima. */
     action?: React.ReactNode;
     /** Deixe de fora para não desenhar ícone nenhum; sem isto vem o do tipo. */
-    icon?: IconName | false;
+    icon?: AureaIcon | false;
 }
 export interface AureaToast extends AureaToastInput {
     id: string;

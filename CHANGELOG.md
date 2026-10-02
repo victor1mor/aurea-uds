@@ -58,6 +58,38 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.15.0] — 2026-10-02
+
+⏳ **NÃO PUBLICADA.** R-11 e R-15 da fila, as duas do jeito do HeroUI, que não usa nome de ícone
+nem tem tamanho pronto: o app passa o próprio desenho. Decisão do Victor de 02/10/2026 (*"sim pode
+seguir"*). Só o nativo muda, e só acrescenta.
+
+### Adicionado
+
+- **Toda prop de ícone do nativo aceita o próprio desenho (R-11).** O tipo novo `AureaIcon` é o
+  nome de um glifo (`"truck"`) ou o componente (`Logo`, de `criarGlifo` ou de um `icons/*`). Vale
+  nas 23 props de ícone (o `Icon`, o `IconButton`, os itens do `BottomNav` e do `NavList`, o
+  `Alert`, o `EmptyState`, o `RadioGroup.Item`…), porque todas passam pelo `Icon`. O logotipo do
+  app entra como `icon={Logo}`, sem registrar nome e sem `declare module`, que era o que a trava do
+  app barrava. O desenho recebe o `size` e a `color` que a peça pedir. Nome que não existe continua
+  reprovando no TypeScript. ⚠ O desenho passado direto não tem forma cheia no item escolhido (a
+  forma cheia mora no registro, como `<nome>-fill`).
+- **`illustration` no `EmptyState` do nativo (R-15).** O desenho do app no lugar do ícone, do
+  tamanho que ele quiser. O app pedia 112, maior que tudo que a fila de referências tem (o ícone em
+  moldura do ReUI vai até 56), então a Aurea não cria escala: abre o espaço, como o HeroUI (o
+  `EmptyState` dele só recebe filhos). O nome é o do Untitled UI (`EmptyState.Illustration`), o
+  primeiro da fila que dá nome a essa parte. Sem ela, nada muda.
+
+### Testes e aparelho
+
+- `tests/unit/native-r11-r15.test.tsx`: 6 testes; 5 reprovam o código de antes (o desenho direto
+  não aparecia e a `illustration` era ignorada), o 6º trava o ícone de sempre do `EmptyState`.
+- `tests/unit/tipos-nativo/icone-componente.tsx`: a sonda de tipo, compilada pelo `tsc` de verdade
+  (o `icone-nome.test.tsx` compila a pasta). Com o tipo antigo, dá 19 erros.
+- Aceite de aparelho: blocos **R-11** e **R-15** do `apps/native-smoke`.
+
+---
+
 ## [0.14.1] — 2026-10-01
 
 ✅ **PUBLICADA em 02/10/2026, por volta das 06:30 (Brasília), nos sete pacotes, pelo terminal do

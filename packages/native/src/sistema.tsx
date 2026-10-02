@@ -37,7 +37,7 @@ import {IconButton} from "./actions.js";
 import {Avatar} from "./display.js";
 import {criarFolha, estadoAcessivel} from "./estilos.js";
 import {Alert} from "./feedback.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type AureaIcon} from "./icon.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
@@ -81,7 +81,7 @@ export interface DatePickerProps {
   /** Como a data vira texto no gatilho. Padrão: o formato do aparelho. */
   format?: (d: Date) => string;
   placeholder?: string;
-  icon?: IconName | false;
+  icon?: AureaIcon | false;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -198,8 +198,8 @@ export interface PhotoInputProps {
   offerSettings?: boolean;
   /** Avisado quando a permissão foi negada — o app pode querer contar uma história própria. */
   onPermissionDenied?: () => void;
-  addIcon?: IconName | false;
-  removeIcon?: IconName;
+  addIcon?: AureaIcon | false;
+  removeIcon?: AureaIcon;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }

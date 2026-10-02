@@ -57,7 +57,7 @@ import {Animated, Easing, View, type StyleProp, type ViewStyle} from "react-nati
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {IconButton} from "./actions.js";
 import {criarFolha} from "./estilos.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type AureaIcon} from "./icon.js";
 import {ICONE_DA_VARIANTE, type AureaAlertVariant} from "./feedback.js";
 import {useReduceMotion} from "./movimento.js";
 import {Text} from "./text.js";
@@ -110,7 +110,7 @@ export interface AureaToastInput {
   /** Uma ação curta — "Desfazer". Ver o aviso sobre `duration` acima. */
   action?: React.ReactNode;
   /** Deixe de fora para não desenhar ícone nenhum; sem isto vem o do tipo. */
-  icon?: IconName | false;
+  icon?: AureaIcon | false;
 }
 
 export interface AureaToast extends AureaToastInput {

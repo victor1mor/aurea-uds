@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type AureaIcon } from "./icon.js";
 /** URL ou `require()` de um asset local — as duas formas do `Image` do RN, como no `Avatar`. */
 export type AureaImageSource = ImageSourcePropType | string;
 export interface ImageProps {
@@ -17,7 +17,7 @@ export interface ImageProps {
     /** O que aparece no lugar quando o bitmap não vem. Sem ele, o glifo `image` sobre a caixa reservada. */
     fallback?: React.ReactNode;
     /** O glifo do substituto. Registre-o, ou passe `false`. */
-    fallbackIcon?: IconName | false;
+    fallbackIcon?: AureaIcon | false;
     /**
      * Desenha OUTRO componente de imagem com a nossa pele — é o caso do consumidor que já usa
      * `expo-image` por cache de disco.

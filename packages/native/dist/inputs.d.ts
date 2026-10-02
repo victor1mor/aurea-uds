@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TextInput, type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle, type ViewProps, type ViewStyle } from "react-native";
 import { type AureaFilaJustify } from "./rolagem.js";
-import { type AureaIconRegistry, type IconName } from "./icon.js";
+import { type AureaIconRegistry, type AureaIcon } from "./icon.js";
 export type AureaFieldSize = "sm" | "md" | "lg";
 type ContextoDeCampo = {
     label?: string;
@@ -289,7 +289,7 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
      * não existe aqui — escolha do Victor), vão de 12 até o texto. Na opção escolhida sai a forma
      * cheia (ADR-0053), se o registro a tiver.
      */
-    icon?: IconName;
+    icon?: AureaIcon;
     style?: StyleProp<ViewStyle>;
 }
 declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, indicatorPlacement, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
@@ -367,7 +367,7 @@ export interface SelectProps {
     disabled?: boolean;
     size?: AureaFieldSize;
     /** O glifo da seta. Registre-o, ou passe `false`. */
-    chevron?: IconName | false;
+    chevron?: AureaIcon | false;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }

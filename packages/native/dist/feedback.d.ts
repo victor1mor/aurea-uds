@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewProps, type ViewStyle } from "react-native";
-import { type IconName } from "./icon.js";
+import { type IconName, type AureaIcon } from "./icon.js";
 import { type AureaUniversalState } from "./strings.js";
 export type AureaSpinnerSize = "sm" | "md" | "lg";
 export interface SpinnerProps {
@@ -65,7 +65,7 @@ export interface AlertProps extends ViewProps {
     /** Um dos sete estados universais. Ele **escolhe a variante** e escreve o texto padrão. */
     state?: AureaUniversalState;
     title?: React.ReactNode;
-    icon?: IconName;
+    icon?: AureaIcon;
     onDismiss?: () => void;
     children?: React.ReactNode;
 }
@@ -86,7 +86,17 @@ export interface AlertProps extends ViewProps {
  */
 export declare function Alert({ variant, state, title, icon, onDismiss, children, style, accessibilityLabel, accessibilityHint, ...rest }: AlertProps): React.JSX.Element;
 export interface EmptyStateProps {
-    icon?: IconName;
+    icon?: AureaIcon;
+    /**
+     * O desenho do APP no lugar do ícone, do tamanho que ele quiser — R-15, 02/10/2026. O desenho do
+     * app pedia 112, maior que tudo que a fila de referências tem (o ícone em moldura do ReUI vai até
+     * 56), então a Aurea não cria escala: abre o espaço, como o HeroUI faz (o `EmptyState` dele só
+     * recebe filhos). O nome é o do Untitled UI (`EmptyState.Illustration`), o primeiro da fila que
+     * dá nome a essa parte. Com ela, o `icon` não desenha.
+     *
+     *     <EmptyState title="Nenhuma viagem" illustration={<Icon name={Estrada} size={112} />} />
+     */
+    illustration?: React.ReactNode;
     title: React.ReactNode;
     description?: React.ReactNode;
     action?: React.ReactNode;
@@ -102,7 +112,7 @@ export interface EmptyStateProps {
  * `heading-order` do axe pega. **No React Native não há hierarquia de títulos**: um `Text` é um
  * `Text`. A prop não teria efeito, e prop sem efeito é promessa falsa.
  */
-export declare function EmptyState({ icon, title, description, action, state, style, testID, }: EmptyStateProps): React.JSX.Element;
+export declare function EmptyState({ icon, illustration, title, description, action, state, style, testID, }: EmptyStateProps): React.JSX.Element;
 export type AureaDataStateValue = "loading" | "error" | "empty" | AureaUniversalState;
 export interface DataStateProps extends Omit<ViewProps, "children"> {
     state?: AureaDataStateValue;
@@ -110,7 +120,7 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
     /** Substitui o esqueleto padrão de `loading`. */
     skeleton?: React.ReactNode;
     emptyTitle?: React.ReactNode;
-    emptyIcon?: IconName;
+    emptyIcon?: AureaIcon;
     action?: React.ReactNode;
     /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
     children: React.ReactNode | (() => React.ReactNode);

@@ -167,6 +167,9 @@ documento de achados mais novo para conferir se ela envelheceu.
    R-16, R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). **Falta o aceite de
    aparelho** dos blocos LF do `apps/native-smoke`. O que falta da fila está no
    [`docs/FILA.md`](docs/FILA.md) §8.
+7. **R-11 e R-15 feitas em 02/10/2026, na `0.15.0`, NÃO publicada**, do jeito do HeroUI: toda prop
+   de ícone do nativo aceita o próprio desenho do app (`AureaIcon`), e o `EmptyState` ganha
+   `illustration`. Falta o aceite de aparelho dos blocos R-11 e R-15.
 
 ### Lote E e decisões de 25/09/2026
 

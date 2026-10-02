@@ -37,7 +37,7 @@ import {
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, Grid, IconButton, Input,
   RadioGroup, Separator,
   KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
-  Spinner, Stack, Status, Stepper, Switch, Table, Tabs, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
+  Icon, Spinner, Stack, Status, Stepper, Switch, Table, Tabs, ThemeToggle, Timeline, ToastHost, Topbar, criarGlifo, criarRegistroDeIcones,
   useAureaTheme, useAureaTokens, useReduceMotion, useToast, ptBR,
   // Os cinco do Lote 7, mais os dois auxiliares públicos do `NumberField`. Eles são públicos
   // porque o app tem o mesmo problema em toda tela de lançamento — e aqui servem de SONDA:
@@ -289,6 +289,7 @@ function Tela({irParaScreen, irParaLote2}) {
       <Blocos0121 t={t} />
       <BlocoRadioGroup t={t} />
       <BlocosLoteF t={t} />
+      <BlocoR11R15 t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1456,6 +1457,35 @@ function BlocoRadioGroup({t}) {
 
 // Lote F (01/10/2026): R-12, R-14, R-16 e R-19, aprovados pelas pranchas. O R-10 não tem bloco:
 // ele não muda nada na tela (o `textMd` continua 14, agora como apelido do `textSm`).
+// R-11 e R-15 (02/10/2026): o desenho do app entra direto, sem registro nem nome declarado, como
+// no HeroUI. O desenho é o GLIFO_TRACO, feito com `criarGlifo` (o mesmo caminho do logotipo do app).
+function BlocoR11R15({t}) {
+  const [aba, setAba] = React.useState("inicio");
+  return (
+    <>
+      <Bloco t={t} n="R-11" titulo="O desenho do app aparece onde antes só entrava nome de ícone?"
+        criterio={"Os três mostram o MESMO desenho (círculo vazado com um visto): sozinho, num botão "
+          + "redondo, e na aba \"Início\" da barra de baixo. Se algum ficar VAZIO, o desenho não chegou."}>
+        <View style={{flexDirection: "row", gap: 16, alignItems: "center"}}>
+          <Icon name={GLIFO_TRACO} size="xl" />
+          <IconButton name={GLIFO_TRACO} label="Logotipo" appearance="outline" />
+        </View>
+        <BottomNav current={aba} width="content" items={[
+          {id: "inicio", label: "Início", icon: GLIFO_TRACO, onPress: () => setAba("inicio")},
+          {id: "avisos", label: "Avisos", icon: "bell", onPress: () => setAba("avisos")},
+        ]} />
+      </Bloco>
+      <Bloco t={t} n="R-15" titulo="O estado vazio mostra o desenho GRANDE do app?"
+        criterio={"Um desenho de 112 em cima do título, no lugar do ícone pequeno de sempre. Embaixo, "
+          + "para comparar, o estado vazio sem desenho, com o ícone pequeno."}>
+        <EmptyState title="Nenhuma viagem" description="As viagens aparecem aqui."
+          illustration={<Icon name={GLIFO_TRACO} size={112} color={t.color.mutedForeground} />} />
+        <EmptyState title="Nada aqui" />
+      </Bloco>
+    </>
+  );
+}
+
 function BlocosLoteF({t}) {
   const [aba, setAba] = React.useState("geral");
   const [item, setItem] = React.useState(null);

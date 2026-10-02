@@ -22,7 +22,7 @@
 import * as React from "react";
 import {Pressable, View, type PressableProps} from "react-native";
 import {criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
-import {Icon, type AureaIconRegistry, type IconName, type IconWeight} from "./icon.js";
+import {Icon, type AureaIconRegistry, type AureaIcon, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -155,8 +155,8 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   appearance?: AureaButtonAppearance;
   tone?: AureaButtonTone;
   size?: AureaButtonSize;
-  leadingIcon?: IconName;
-  trailingIcon?: IconName;
+  leadingIcon?: AureaIcon;
+  trailingIcon?: AureaIcon;
   /**
    * Um desenho QUALQUER na frente do texto, para quando a marca não pode ser um ícone nosso.
    *
@@ -271,7 +271,7 @@ export function LinkButton(props: LinkButtonProps) {
 }
 
 export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
-  name: IconName;
+  name: AureaIcon;
   /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
   label: string;
 }

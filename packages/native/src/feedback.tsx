@@ -22,7 +22,7 @@ import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton} from "./actions.js";
 import {criarFolha, estadoAcessivel} from "./estilos.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {useReduceMotion} from "./movimento.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
 import {Text} from "./text.js";
@@ -260,7 +260,7 @@ export interface AlertProps extends ViewProps {
   /** Um dos sete estados universais. Ele **escolhe a variante** e escreve o texto padrão. */
   state?: AureaUniversalState;
   title?: React.ReactNode;
-  icon?: IconName;
+  icon?: AureaIcon;
   onDismiss?: () => void;
   children?: React.ReactNode;
 }
@@ -359,7 +359,17 @@ export function Alert({
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
 export interface EmptyStateProps {
-  icon?: IconName;
+  icon?: AureaIcon;
+  /**
+   * O desenho do APP no lugar do ícone, do tamanho que ele quiser — R-15, 02/10/2026. O desenho do
+   * app pedia 112, maior que tudo que a fila de referências tem (o ícone em moldura do ReUI vai até
+   * 56), então a Aurea não cria escala: abre o espaço, como o HeroUI faz (o `EmptyState` dele só
+   * recebe filhos). O nome é o do Untitled UI (`EmptyState.Illustration`), o primeiro da fila que
+   * dá nome a essa parte. Com ela, o `icon` não desenha.
+   *
+   *     <EmptyState title="Nenhuma viagem" illustration={<Icon name={Estrada} size={112} />} />
+   */
+  illustration?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
@@ -377,7 +387,7 @@ export interface EmptyStateProps {
  * `Text`. A prop não teria efeito, e prop sem efeito é promessa falsa.
  */
 export function EmptyState({
-  icon = "file", title, description, action, state, style, testID,
+  icon = "file", illustration, title, description, action, state, style, testID,
 }: EmptyStateProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -385,7 +395,7 @@ export function EmptyState({
   const desc = description ?? (state ? strings.universalState[state] : null);
   return (
     <View testID={testID} style={[s.vazio, style]}>
-      <Icon name={icon} size="xl" color={t.color.subtleForeground} />
+      {illustration ?? <Icon name={icon} size="xl" color={t.color.subtleForeground} />}
       {typeof title === "string"
         ? <Text size="base" weight={600} leading="tight" align="center">{title}</Text>
         : title}
@@ -410,7 +420,7 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
   /** Substitui o esqueleto padrão de `loading`. */
   skeleton?: React.ReactNode;
   emptyTitle?: React.ReactNode;
-  emptyIcon?: IconName;
+  emptyIcon?: AureaIcon;
   action?: React.ReactNode;
   /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
   children: React.ReactNode | (() => React.ReactNode);

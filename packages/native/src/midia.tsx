@@ -41,7 +41,7 @@ import {
   type ImageSourcePropType, type ImageStyle, type StyleProp, type ViewStyle,
 } from "react-native";
 import {criarFolha, estadoAcessivel} from "./estilos.js";
-import {Icon, type IconName} from "./icon.js";
+import {Icon, type AureaIcon} from "./icon.js";
 import {Grid} from "./layout.js";
 import {Dialog} from "./overlays.js";
 import {Text} from "./text.js";
@@ -101,7 +101,7 @@ export interface ImageProps {
   /** O que aparece no lugar quando o bitmap não vem. Sem ele, o glifo `image` sobre a caixa reservada. */
   fallback?: React.ReactNode;
   /** O glifo do substituto. Registre-o, ou passe `false`. */
-  fallbackIcon?: IconName | false;
+  fallbackIcon?: AureaIcon | false;
   /**
    * Desenha OUTRO componente de imagem com a nossa pele — é o caso do consumidor que já usa
    * `expo-image` por cache de disco.

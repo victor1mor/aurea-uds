@@ -46,7 +46,7 @@ import {
 import {criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
-import {Icon, type AureaIconRegistry, type IconName} from "./icon.js";
+import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
 import {useReduceMotion} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
@@ -821,7 +821,7 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
    * não existe aqui — escolha do Victor), vão de 12 até o texto. Na opção escolhida sai a forma
    * cheia (ADR-0053), se o registro a tiver.
    */
-  icon?: IconName;
+  icon?: AureaIcon;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -1139,7 +1139,7 @@ export interface SelectProps {
   disabled?: boolean;
   size?: AureaFieldSize;
   /** O glifo da seta. Registre-o, ou passe `false`. */
-  chevron?: IconName | false;
+  chevron?: AureaIcon | false;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
