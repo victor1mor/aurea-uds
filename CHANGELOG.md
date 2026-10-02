@@ -17,6 +17,22 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### A CI de volta ao verde (01/10/2026, à noite)
+
+- **Auditoria de dependências:** um alerta novo, publicado no meio da CI do pedido #24, deixou a
+  auditoria vermelha sem nenhuma dependência nossa ter mudado — no pedido e no `main`. É o
+  `node-forge` (GHSA-86w9-cpqp-85rv, grave, sem versão corrigida), que só chega por
+  devDependencies do `@aurea-uds/native` (Expo CLI) e não entra em tarball nenhum. Aceito com
+  registro em `pnpm-workspace.yaml` e condição de saída no check 40 do `validate.py` (qualquer
+  `node-forge` 1.4.1 em diante), provada contra uma árvore com a 1.4.1.
+- **Espera de transição nos testes de cor:** a varredura do catálogo trocava para o tema claro e
+  esperava 250ms fixos. Na CI do pedido #23 o WebKit passou disso, e o axe acusou contraste baixo
+  no item ativo do topo — num catálogo idêntico ao que tinha passado antes. Reproduzido no Chromium
+  com a transição alongada: a espera fixa dá a mesma acusação; esperar as transições TERMINAREM dá
+  zero. A espera nova (`tests/visual/esperar-transicoes.ts`) entrou nos quatro testes que medem cor
+  depois de trocar o tema: `catalog-sweep`, `catalog`, `marca` e `tone-contrast`.
+- Não muda nenhum pacote publicado.
+
 ### O site sem o script da Cloudflare
 
 - **Medido no site no ar (01/10/2026):** a Cloudflare põe um script de estatística dela

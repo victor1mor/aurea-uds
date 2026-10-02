@@ -61,3 +61,11 @@ auditConfig:
   ignoreGhsas:
     - GHSA-w3rx-r6r6-pgpr
     - GHSA-5p2g-fcmc-qvqq
+    # node-forge (high, CWE-347), aceita pelo Victor em 01/10/2026, com o mesmo registro
+    # das duas de cima. Publicada no meio da CI do pedido #24; o `main` reprovou junto.
+    #   • sem correcao: "patched: none", e a ultima publicada (1.4.0) esta' na faixa <=1.4.0;
+    #   • so' devDependencies do @aurea-uds/native (expo-image-picker e datetimepicker > expo >
+    #     @expo/cli > node-forge); o `check-pack.mjs` passa e nenhum tarball a contem;
+    #   • roda no Expo CLI do APP (assinatura de build iOS e de atualizacao), nunca na Aurea.
+    # SAI quando o node-forge publicar a correcao e o Expo subir — ai vira override.
+    - GHSA-86w9-cpqp-85rv

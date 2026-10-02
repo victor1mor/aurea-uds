@@ -2762,6 +2762,10 @@ _SAIDA = {
     # 02/09/2026: a última versão PUBLICADA era a 2.0.2, então não havia para onde subir.
     "GHSA-w3rx-r6r6-pgpr": ("image-size", (2, 0, 3)),
     "GHSA-5p2g-fcmc-qvqq": ("image-size", (2, 0, 3)),
+    # node-forge, aceito em 01/10/2026: devDependencies do @aurea-uds/native > expo > @expo/cli.
+    # Medido no mesmo dia: o advisory diz "patched: none" e a faixa afetada é <=1.4.0, que é a
+    # última publicada. Qualquer 1.4.1 em diante sai da faixa — é a condição de saída.
+    "GHSA-86w9-cpqp-85rv": ("node-forge", (1, 4, 1)),
 }
 _ws = root / "pnpm-workspace.yaml"
 _lock = root / "pnpm-lock.yaml"

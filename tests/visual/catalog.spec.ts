@@ -1,4 +1,5 @@
 import {test, expect} from "@playwright/test";
+import {esperarTransicoes} from "./esperar-transicoes";
 
 // Gate visual do CATÁLOGO. Até aqui as 147 páginas não tinham baseline nenhuma: regressão de
 // pixel só era pega no olho do Victor, e o catálogo é a superfície que ele revisa. Cobre UMA
@@ -29,7 +30,7 @@ for (const theme of ["dark", "light"] as const) {
         // senão a captura pega valores interpolados e a baseline fica instável.
         if (theme === "light") {
           await p.evaluate(() => { document.documentElement.dataset.theme = "light"; });
-          await p.waitForTimeout(600);
+          await esperarTransicoes(p);
         }
         // O topo é sticky: quando o Playwright rola o recorte para dentro da tela, a barra passa
         // POR CIMA da primeira faixa dele e a captura muda conforme a posição de rolagem — 26px

@@ -1,4 +1,5 @@
 import {test, expect} from "@playwright/test";
+import {esperarTransicoes} from "./esperar-transicoes";
 
 // GATE DE CONTRASTE DA MATRIZ DE TOM — aparência × tom, nos dois temas, no navegador de verdade.
 //
@@ -56,7 +57,7 @@ for (const tema of ["dark", "light"] as const) {
     await page.goto("/apps/catalog/button.html");
     if (tema === "light") {
       await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
-      await page.waitForTimeout(600);
+      await esperarTransicoes(page);
     }
     const medidas = await page.evaluate(({APARENCIAS, TONS, fonte}) => {
       const skin = new Function("a", "t", `return (${fonte})(a,t)`) as (a: string, t: string) => string;
@@ -129,7 +130,7 @@ for (const tema of ["dark", "light"] as const) {
   test(`contraste · papéis de texto sobre superfícies · tema ${tema}`, async ({page}) => {
     await page.goto("/apps/catalog/button.html");
     await page.evaluate(t => { document.documentElement.dataset.theme = t; }, tema);
-    await page.waitForTimeout(600);
+    await esperarTransicoes(page);
 
     // `getPropertyValue` devolve o token CRU, e `--link` no escuro vale `var(--brand-yellow)` —
     // que não é cor nenhuma fora de contexto. Quem resolve `var()` é o navegador: aplica-se o
@@ -177,7 +178,7 @@ for (const tema of ["dark", "light"] as const) {
       p.innerHTML = 'prosa com <a href="#" id="prova-a">um link</a> dentro';
       document.body.append(p);
     }, tema);
-    await page.waitForTimeout(400);
+    await esperarTransicoes(page);
     const {link, fundo, corpo} = await page.evaluate(() => {
       const a = document.getElementById("prova-a")!;
       let n: HTMLElement | null = a.parentElement, bg = "";
