@@ -58,6 +58,41 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.16.1] — 2026-10-02
+
+⏳ **NÃO PUBLICADA.** Conserto do `BottomNav` `circle-bold`, visto pelo Victor no app rodando no
+navegador: o círculo amarelo do item escolhido virava um **risco** fino, com o ícone espremido no
+meio. Aprovado pela imagem (antes e depois no `react-native-web` de verdade). Nenhuma API muda.
+Leva a `0.16.0` junto, se ela não tiver saído antes.
+
+### Consertado
+
+- **Nativo, no navegador: o círculo do `circle-bold` encolhia até 8 de largura.** O item escolhido
+  dizia `flex: 0` com `width: 56`. No aparelho (Yoga) isso é "inflexível, use a largura" e o
+  círculo saía certo; o `react-native-web` 0.21.3 passa `flex: 0` cru para o CSS
+  (`createReactDOMStyle.js`), onde ele vale `0 1 0%`, e o item encolhia até o próprio recheio.
+  Medido no navegador: `flex: 0 1 0%` e 8 de largura. Agora o item diz por extenso
+  `flexGrow: 0, flexShrink: 0, flexBasis: "auto"` — o `flex:none` da web —, e mede 56 nos dois.
+- **Web e nativo, na barra estreita (`width="content"`): o rótulo dentro do círculo cortava.** No
+  `content` o item ganha `space3` dos lados, e dentro dos 56 sobravam 32 para o rótulo: "Avisos"
+  (35) saía "Avis…". O item escolhido do `circle-bold` volta ao recheio de sempre (`space1`).
+- ⚠ **O dublê dos testes do nativo escondeu o primeiro defeito**: ele traduz `flex` como o Yoga, e
+  foi corrigido nesta mesma data achando que o risco era só dele. Agora o comentário dele avisa
+  que o `react-native-web` não faz a mesma conta.
+
+### Para o app
+
+- Para a barra menos larga: `width="content"` (existe desde a R-08) — com 3 itens, 187 de largura
+  em vez de 268.
+
+### Testes
+
+- `tests/unit/native-flex-navegador.test.tsx`: o círculo escolhido inflexível por extenso e com
+  56; o recheio dos lados `space1` nas duas larguras; e uma trava em todo fonte do nativo — nenhum
+  `flex: 0` nem `flex` negativo (era o único lugar). Com o código antigo, 4 reprovam.
+- `tests/visual/geometry.spec.ts` (roda na CI): o rótulo "Avisos" cabe no círculo nas duas
+  larguras. Com a folha antiga o `content` reprova (35 contra 32).
+
 ## [0.16.0] — 2026-10-02
 
 ⏳ **NÃO PUBLICADA.** Uma mudança de identidade, decidida pelo Victor olhando o app no tema claro:

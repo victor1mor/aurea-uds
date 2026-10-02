@@ -1,6 +1,9 @@
 import {test, expect} from "@playwright/test";
 import {readdirSync} from "node:fs";
 import {join} from "node:path";
+import {createElement as el} from "react";
+import {renderToStaticMarkup} from "react-dom/server";
+import * as A from "../../packages/react/dist/index.js";
 
 // GEOMETRIA. Compara estilo COMPUTADO, não pixel — independe de plataforma, então vale
 // como gate duro no CI Linux, igual ao rtl.spec e ao status.spec.
@@ -365,5 +368,35 @@ for (const density of ["compact", "comfortable", "spacious"] as const) {
       expect(b.w, `não é quadrado: ${JSON.stringify(b)}`).toBe(b.h);
       expect(b.raio, `raio menor que metade do lado: ${JSON.stringify(b)}`).toBeGreaterThanOrEqual(b.h / 2);
     }
+  });
+}
+
+// ── BottomNav `circle-bold` · o rótulo cabe no círculo também no `width="content"` (02/10/2026) ──
+// No `content` o item ganha `space-3` dos lados, e dentro dos 56 do círculo sobravam 32 para o
+// rótulo: "Avisos" pede 35 e saía "Avis…". Medido antes do conserto: `scrollWidth` 35 contra
+// `clientWidth` 32. O mesmo defeito estava no nativo (`native-flex-navegador.test.tsx`). A fonte
+// entra porque é ela que dá a largura do rótulo.
+for (const width of ["full", "content"] as const) {
+  test(`BottomNav circle-bold: o rótulo cabe no círculo · ${width}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__bottomnav-bold-${width}`;
+    const nav = renderToStaticMarkup(el(A.AureaProvider, {spriteUrl: ""}, el(A.BottomNav, {
+      indicator: "circle-bold", width, current: "avisos", label: "Menu",
+      items: [{id: "lista", label: "Lista", icon: "list-bullets", href: "#"},
+        {id: "avisos", label: "Avisos", icon: "bell", href: "#"},
+        {id: "perfil", label: "Perfil", icon: "user", href: "#"}]})));
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="dark"><head>
+        <link rel="stylesheet" href="/packages/fonts/dist/fonts.css">
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body style="width:300px">${nav}</body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    await p.evaluate(() => document.fonts.ready);
+    const m = await p.$eval(".bottom-nav-item[aria-current]", (it) => {
+      const rot = it.querySelector(".bottom-nav-label")!;
+      return {largura: it.getBoundingClientRect().width, rotulo: [rot.scrollWidth, rot.clientWidth], texto: rot.textContent};
+    });
+    expect(m.texto).toBe("Avisos");
+    expect(m.largura, JSON.stringify(m)).toBe(56);
+    expect(m.rotulo[0], `o rótulo não cabe no círculo: ${JSON.stringify(m)}`).toBeLessThanOrEqual(m.rotulo[1]);
   });
 }

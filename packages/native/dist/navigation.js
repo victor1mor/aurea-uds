@@ -281,9 +281,19 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                     indicator === "subtle" && { borderRadius: t.size.radiusCard - t.size.space1 },
                     ativo && (indicator === "subtle" || indicator === "pill")
                         && { backgroundColor: comOpacidade(t.color.primary, 0.12) },
+                    // O círculo é o `flex:none; width:var(--bottomnav-bold,3.5rem)` da web (`aurea.css`,
+                    // `.bottom-nav-ind-circle-bold`): não cresce, não encolhe, 56 de largura.
+                    // 🔴 Escrito por EXTENSO, e não `flex: 0` — defeito visto pelo Victor no app rodando
+                    // no navegador (02/10/2026): o `react-native-web` 0.21.3 passa `flex: 0` cru para o
+                    // CSS, onde ele vale `0 1 0%`, e o círculo encolhia até o recheio (8 de largura, um
+                    // risco amarelo). No Yoga `flex: 0` é "inflexível"; as três por extenso valem o mesmo
+                    // nos dois. Quem cobra: `tests/unit/native-flex-navegador.test.tsx`.
+                    // E o recheio dos lados volta a `space1` (o da `aba`): no `content` ele era `space3`,
+                    // e dentro dos 56 sobravam 32 para o rótulo — "Avisos" saía "Avi…". Igual na web.
                     ativo && indicator === "circle-bold" && {
-                        flex: 0, width: 56, borderRadius: t.size.radiusFull,
-                        backgroundColor: t.color.primary,
+                        flexGrow: 0, flexShrink: 0, flexBasis: "auto", width: 56,
+                        paddingHorizontal: t.size.space1,
+                        borderRadius: t.size.radiusFull, backgroundColor: t.color.primary,
                     },
                 ], children: [_jsxs(View, { style: [
                             // A moldura de 32 só serve aos indicadores redondos, em que ela VIRA o círculo. Nos

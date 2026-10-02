@@ -445,7 +445,10 @@ img,svg { display:block; }
 /* 3.5rem = 56px, e também é número de fora: é a largura do indicador ativo do Material 3
    Expressive (56dp) e a altura do indicador expandido na mesma doc. É a única forma aqui que
    envolve ícone E rótulo, então usa a medida expandida e não a de 32. */
-.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { flex:none; width:var(--bottomnav-bold,3.5rem); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
+/* `padding-inline: space-1` — o recheio de sempre do item (`.bottom-nav-item`). No `width="content"`
+   o item ganha `space-3` dos lados, e dentro dos 56 sobravam 32 para o rótulo: "Avisos" (35)
+   saía "Avis…". Medido em 02/10/2026, no navegador e no nativo; igual no `navigation.tsx`. */
+.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { flex:none; width:var(--bottomnav-bold,3.5rem); padding-inline:var(--space-1); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .icon { opacity:1; }
 /* O contador do `circle-bold` INVERTE, como o do `.btn-primary`, e a volta atrás está medida.
    Tentei em 20/08/2026 deixá-lo dourado com um anel da cor da barra em volta — é o que as telas

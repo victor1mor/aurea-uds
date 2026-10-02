@@ -177,8 +177,13 @@ documento de achados mais novo para conferir se ela envelheceu.
    o aceite de aparelho dos blocos R-11, R-15, R-18, R-21 e R-22.
 8. **`0.16.0`, feita em 02/10/2026, NÃO publicada:** no tema claro, a letra de destaque passa do
    marrom ao amarelo escurecido `#826202` ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)),
-   a "D" da prancha (*"D"*). As fotos do catálogo do tema claro mudam: rodar o `visual-update` da
-   CI antes de juntar.
+   a "D" da prancha (*"D"*). As fotos do catálogo vieram da CI no pedido #30 (o `main` voltou ao
+   verde em 02/10/2026).
+9. **`0.16.1`, feita em 02/10/2026, NÃO publicada** (leva a `0.16.0` junto, se ela não tiver
+   saído antes): o círculo do `BottomNav` `circle-bold` virava um risco no app rodando no
+   navegador — o `react-native-web` passa `flex: 0` cru para o CSS. E na barra estreita
+   (`width="content"`) o rótulo cortava dentro do círculo, na web e no nativo. Aprovado pela
+   imagem (*"pode"*). Para a barra menos larga, o app passa `width="content"`.
 
 ### Lote E e decisões de 25/09/2026
 
