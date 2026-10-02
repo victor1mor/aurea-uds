@@ -47,7 +47,7 @@ import {criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
-import {useReduceMotion} from "./movimento.js";
+import {useReduceMotion, driverNativo} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca} from "./theme.js";
@@ -976,7 +976,7 @@ export function Switch({
     const destino = checked ? 1 : 0;
     if (reduzir === true) { pos.setValue(destino); return; }
     if (reduzir === null) return;
-    const a = Animated.timing(pos, {toValue: destino, duration: 160, useNativeDriver: true});
+    const a = Animated.timing(pos, {toValue: destino, duration: 160, useNativeDriver: driverNativo()});
     a.start();
     return () => a.stop();
   }, [checked, pos, reduzir]);

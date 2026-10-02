@@ -73,7 +73,7 @@ import { criarFolha, estadoAcessivel } from "./estilos.js";
 import { Spinner } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { KeyboardAvoiding, useCampo } from "./inputs.js";
-import { useReduceMotion } from "./movimento.js";
+import { useReduceMotion, driverNativo } from "./movimento.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, ForaDaMarca, usePeleSobreAMarca } from "./theme.js";
@@ -283,7 +283,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                 return;
             }
             Animated.timing(arrasto, {
-                toValue: 0, duration: t.size.durationSlow, useNativeDriver: true,
+                toValue: 0, duration: t.size.durationSlow, useNativeDriver: driverNativo(),
                 easing: Easing.bezier(...t.easing.easeEmphasized),
             }).start();
         },

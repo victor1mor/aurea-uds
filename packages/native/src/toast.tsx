@@ -59,7 +59,7 @@ import {IconButton} from "./actions.js";
 import {criarFolha} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {ICONE_DA_VARIANTE, type AureaAlertVariant} from "./feedback.js";
-import {useReduceMotion} from "./movimento.js";
+import {useReduceMotion, driverNativo} from "./movimento.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -255,7 +255,7 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
   React.useEffect(() => {
     if (reduzir !== false) { entrada.setValue(1); return; }
     const laco = Animated.timing(entrada, {
-      toValue: 1, duration: ENTRADA, useNativeDriver: true,
+      toValue: 1, duration: ENTRADA, useNativeDriver: driverNativo(),
       easing: Easing.bezier(...t.easing.easeEmphasized),
     });
     laco.start();

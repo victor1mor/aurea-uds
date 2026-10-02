@@ -169,7 +169,8 @@ documento de achados mais novo para conferir se ela envelheceu.
    [`docs/FILA.md`](docs/FILA.md) §8.
 7. **R-11 e R-15 feitas em 02/10/2026, na `0.15.0`, NÃO publicada**, do jeito do HeroUI: toda prop
    de ícone do nativo aceita o próprio desenho do app (`AureaIcon`), e o `EmptyState` ganha
-   `illustration`. Falta o aceite de aparelho dos blocos R-11 e R-15.
+   `illustration`. Falta o aceite de aparelho dos blocos R-11 e R-15. A **E13** entra junto: no
+   navegador, o nativo manda `useNativeDriver: false` (`driverNativo()`, em `movimento.ts`).
 
 ### Lote E e decisões de 25/09/2026
 

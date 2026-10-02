@@ -62,7 +62,7 @@ em inglês e ficam como estão: são registro.
 
 ⏳ **NÃO PUBLICADA.** R-11 e R-15 da fila, as duas do jeito do HeroUI, que não usa nome de ícone
 nem tem tamanho pronto: o app passa o próprio desenho. Decisão do Victor de 02/10/2026 (*"sim pode
-seguir"*). Só o nativo muda, e só acrescenta.
+seguir"*). Só o nativo muda. E a E13, achado do app: o aviso de `useNativeDriver` no navegador.
 
 ### Adicionado
 
@@ -80,12 +80,23 @@ seguir"*). Só o nativo muda, e só acrescenta.
   `EmptyState` dele só recebe filhos). O nome é o do Untitled UI (`EmptyState.Illustration`), o
   primeiro da fila que dá nome a essa parte. Sem ela, nada muda.
 
+### Corrigido
+
+- **No navegador, o nativo não pede mais o motor nativo de animação (E13).** Oito pontos de cinco
+  arquivos (`Spinner`, `Skeleton`, `Switch`, `Drawer`, `BottomSheet`, `Combobox`, `Toast`) ligavam
+  `useNativeDriver: true` sempre, e o React Native Web avisava no console *"`useNativeDriver` is not
+  supported"* (0.21.3, `NativeAnimatedHelper.js:429`). Agora os oito leem `driverNativo()`, do
+  `movimento.ts`: `Platform.OS !== "web"`. No aparelho nada muda.
+
 ### Testes e aparelho
 
 - `tests/unit/native-r11-r15.test.tsx`: 6 testes; 5 reprovam o código de antes (o desenho direto
   não aparecia e a `illustration` era ignorada), o 6º trava o ícone de sempre do `EmptyState`.
 - `tests/unit/tipos-nativo/icone-componente.tsx`: a sonda de tipo, compilada pelo `tsc` de verdade
   (o `icone-nome.test.tsx` compila a pasta). Com o tipo antigo, dá 19 erros.
+- `tests/unit/native-e13.test.tsx`: 22 testes — as sete peças no Android, no iOS e no navegador,
+  e uma trava que reprova `useNativeDriver` escrito à mão. Com o código de antes, 8 reprovam (as
+  sete do navegador e a trava, que acha os oito pontos).
 - Aceite de aparelho: blocos **R-11** e **R-15** do `apps/native-smoke`.
 
 ---

@@ -43,7 +43,7 @@ import { criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
-import { useReduceMotion } from "./movimento.js";
+import { useReduceMotion, driverNativo } from "./movimento.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca } from "./theme.js";
@@ -457,7 +457,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         }
         if (reduzir === null)
             return;
-        const a = Animated.timing(pos, { toValue: destino, duration: 160, useNativeDriver: true });
+        const a = Animated.timing(pos, { toValue: destino, duration: 160, useNativeDriver: driverNativo() });
         a.start();
         return () => a.stop();
     }, [checked, pos, reduzir]);

@@ -14,7 +14,7 @@
 //
 // A pergunta é do sistema: iOS "Reduzir movimento", Android "Remover animações".
 import * as React from "react";
-import {AccessibilityInfo} from "react-native";
+import {AccessibilityInfo, Platform} from "react-native";
 
 /**
  * `true` quando a pessoa pediu menos movimento, `false` quando não, **`null` enquanto o sistema
@@ -42,4 +42,19 @@ export function useReduceMotion(): boolean | null {
     return () => { vivo = false; inscricao?.remove?.(); };
   }, []);
   return reduzir;
+}
+
+/**
+ * O `useNativeDriver` de toda animação da Aurea — E13, 02/10/2026.
+ *
+ * No aparelho, `true`: a animação roda fora do JS. **No navegador não existe esse motor**: o
+ * React Native Web (0.21.3, `NativeAnimatedHelper.js:429`) avisa no console *"`useNativeDriver`
+ * is not supported"* toda vez que recebe `true`, e anima pelo JS do mesmo jeito. Então lá vai
+ * `false`, dito com todas as letras (sem a chave, ele avisa outra coisa: *"was not specified"*).
+ *
+ * Função, e não constante, para o teste conseguir trocar a plataforma entre um caso e outro.
+ * Quem pega o `useNativeDriver: true` escrito à mão é o `native-e13.test.tsx`.
+ */
+export function driverNativo(): boolean {
+  return Platform.OS !== "web";
 }
