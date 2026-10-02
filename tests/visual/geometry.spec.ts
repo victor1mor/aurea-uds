@@ -313,6 +313,30 @@ for (const theme of ["dark", "light"] as const) {
   });
 }
 
+// ── O botão só de ícone OCUPADO: a rodinha fica DENTRO e no CENTRO (01/10/2026) ────────────
+// Achado pelo Victor no aureauds.dev/iconbutton: a rodinha entrava ao lado do glifo, e num botão
+// de 36 os dois não cabiam. Medido antes do conserto: botão de 638 a 674, rodinha de 634 a 650 —
+// 4px FORA, à esquerda —, e o disquete ainda visível. Mede na página do catálogo, que é a que o
+// site publica.
+test("botão só de ícone ocupado: só a rodinha, dentro do botão e no centro", async ({page: p, baseURL}) => {
+  await p.goto(`${baseURL}/apps/catalog/iconbutton.html`, {waitUntil: "networkidle"});
+  const ocupados = await p.$$eval('.btn-icon[aria-busy="true"]', bs => bs.map(b => {
+    const c = b.getBoundingClientRect(), r = b.querySelector(".spinner")?.getBoundingClientRect();
+    return {quem: b.outerHTML.slice(0, 120), glifo: !!b.querySelector(".icon"),
+      botao: [c.left, c.right, c.top, c.bottom], rodinha: r ? [r.left, r.right, r.top, r.bottom] : null};
+  }));
+  expect(ocupados.length).toBeGreaterThan(0);
+  for (const o of ocupados) {
+    const q = JSON.stringify(o);
+    expect(o.glifo, `o glifo continua ao lado da rodinha: ${q}`).toBe(false);
+    expect(o.rodinha, `sem rodinha: ${q}`).not.toBeNull();
+    const [bl, br, bt, bb] = o.botao, [rl, rr, rt, rb] = o.rodinha!;
+    expect(rl >= bl && rr <= br && rt >= bt && rb <= bb, `a rodinha sai do botão: ${q}`).toBe(true);
+    expect(Math.abs((rl + rr) / 2 - (bl + br) / 2), `fora do centro na horizontal: ${q}`).toBeLessThanOrEqual(1);
+    expect(Math.abs((rt + rb) / 2 - (bt + bb) / 2), `fora do centro na vertical: ${q}`).toBeLessThanOrEqual(1);
+  }
+});
+
 // ── ADR-0052 · o botão só de ícone é REDONDO (25/09/2026) ──────────────────────────────────
 // Redondo = quadrado (largura igual à altura) com raio de pelo menos metade do lado. Os CINCO
 // tamanhos: o `btn-xl` escapou da primeira passada desta mudança, e só a lista inteira o pega. As duas

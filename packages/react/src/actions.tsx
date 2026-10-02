@@ -102,7 +102,15 @@ const cls=cx("btn",buttonSkin(variant,appearance,tone),
   responsivo?classesResponsivas("size",size):(base!=="md"&&`btn-${base}`),
   fullWidth&&"btn-block",grow&&"btn-grow",className);
 // kbd dentro do botão: mostra o atalho E o anuncia (aria-keyshortcuts), senão é enfeite.
-const inner=<>{loading&&<span className="spinner"/>}{leadingIcon&&<Icon name={leadingIcon}/>}<span>{children}</span>{kbd&&<Kbd>{kbd}</Kbd>}{trailingIcon&&<Icon name={trailingIcon}/>}</>;
+// 🔴 OCUPADO TROCA, NÃO ACRESCENTA (01/10/2026, achado pelo Victor no aureauds.dev): a rodinha
+// entrava ANTES do ícone, e no `IconButton` — 36 de largura fixa — rodinha e glifo não cabiam:
+// medido no catálogo, a rodinha começava 4px FORA do botão, à esquerda, com o disquete ainda ao
+// lado. O HeroUI troca (exemplo "Loading State" da doc do Button 3.2.6:
+// `isPending ? <Spinner/> : <Paperclip/>`). Aqui também: ocupado, a rodinha toma o lugar do ícone
+// da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
+// empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
+const temConteudo=children!=null&&children!==false;
+const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={leadingIcon}/>}{(temConteudo||!loading)&&<span>{children}</span>}{kbd&&<Kbd>{kbd}</Kbd>}{trailingIcon&&<Icon name={trailingIcon}/>}</>;
 // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
 // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
 // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
@@ -190,7 +198,8 @@ export interface IconButtonProps extends Omit<ButtonProps,"children">{label:stri
 // default ghost (não secondary): um ícone-ação solto — hambúrguer, tema, fechar — é sem
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
-export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} {...props}><Icon name={icon}/></Button>});
+// Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
+export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,loading,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} loading={loading} {...props}>{loading?null:<Icon name={icon}/>}</Button>});
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone. É peça
 // EXCLUSIVA da Aurea — o HeroUI 3.2.6 não tem troca de tema —, então nasce pensando como ele
 // criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.

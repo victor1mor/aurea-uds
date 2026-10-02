@@ -55,7 +55,15 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     const base = valorBase(size) ?? "md";
     const cls = cx("btn", buttonSkin(variant, appearance, tone), responsivo ? classesResponsivas("size", size) : (base !== "md" && `btn-${base}`), fullWidth && "btn-block", grow && "btn-grow", className);
     // kbd dentro do botão: mostra o atalho E o anuncia (aria-keyshortcuts), senão é enfeite.
-    const inner = _jsxs(_Fragment, { children: [loading && _jsx("span", { className: "spinner" }), leadingIcon && _jsx(Icon, { name: leadingIcon }), _jsx("span", { children: children }), kbd && _jsx(Kbd, { children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
+    // 🔴 OCUPADO TROCA, NÃO ACRESCENTA (01/10/2026, achado pelo Victor no aureauds.dev): a rodinha
+    // entrava ANTES do ícone, e no `IconButton` — 36 de largura fixa — rodinha e glifo não cabiam:
+    // medido no catálogo, a rodinha começava 4px FORA do botão, à esquerda, com o disquete ainda ao
+    // lado. O HeroUI troca (exemplo "Loading State" da doc do Button 3.2.6:
+    // `isPending ? <Spinner/> : <Paperclip/>`). Aqui também: ocupado, a rodinha toma o lugar do ícone
+    // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
+    // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
+    const temConteudo = children != null && children !== false;
+    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
     // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
     // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
     // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
@@ -130,7 +138,8 @@ export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, 
 // default ghost (não secondary): um ícone-ação solto — hambúrguer, tema, fechar — é sem
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
-export const IconButton = forwardRef(function IconButton({ label, icon, variant = "ghost", className, ...props }, ref) { return _jsx(Button, { ref: ref, variant: variant, className: cx("btn-icon", className), "aria-label": label, ...props, children: _jsx(Icon, { name: icon }) }); });
+// Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
+export const IconButton = forwardRef(function IconButton({ label, icon, variant = "ghost", className, loading, ...props }, ref) { return _jsx(Button, { ref: ref, variant: variant, className: cx("btn-icon", className), "aria-label": label, loading: loading, ...props, children: loading ? null : _jsx(Icon, { name: icon }) }); });
 export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
     const { theme, toggleTheme } = useAureaTheme();
     const s = useAureaStrings();

@@ -42,6 +42,34 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.14.1] — 2026-10-01
+
+⏳ **NÃO PUBLICADA.** Um conserto na web, achado pelo Victor no `aureauds.dev/iconbutton`: o
+`IconButton` ocupado mostrava um *"colchetes girando"* para fora do botão. Só o `@aurea-uds/react`
+muda de comportamento.
+
+### Corrigido
+
+- **Ocupado (`loading`), o `IconButton` mostra só a rodinha, no centro.** A rodinha entrava AO
+  LADO do glifo, e num botão de 36 os dois não cabiam. Medido no catálogo antes do conserto: botão
+  de 638 a 674, rodinha de 634 a 650 (4px fora do botão, à esquerda), e o disquete ainda visível.
+  O HeroUI troca o ícone pela rodinha (exemplo "Loading State" da doc do `Button` 3.2.6:
+  `isPending ? <Spinner/> : <Paperclip/>`), e agora a Aurea também.
+- **Quem mais tinha: o `Button` ocupado com `leadingIcon`.** Mostrava rodinha, ícone e texto juntos;
+  agora a rodinha toma o lugar do ícone da frente, e o texto fica. O `ToolbarButton` usa o `Button`
+  por dentro e herda o conserto. O `IconButton` do nativo não tem estado ocupado e não muda.
+- Fora do estado ocupado o HTML do botão é o mesmo de antes.
+
+### Testes
+
+- `tests/unit/components.test.tsx`: 3 testes novos; os 2 do comportamento novo reprovam o código
+  de antes, o 3º trava o `IconButton` em repouso.
+- `tests/visual/geometry.spec.ts`: na página do catálogo, a rodinha do botão ocupado fica dentro do
+  botão e a menos de 1px do centro, e o glifo não aparece. Reprovou o catálogo de antes (rodinha em
+  633, botão em 638).
+
+---
+
 ## [0.14.0] — 2026-10-01
 
 ⏳ **NÃO PUBLICADA.** Lote F do nativo: os acréscimos R-10, R-12, R-14, R-16 e R-19 da fila
