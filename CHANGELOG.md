@@ -60,7 +60,13 @@ em inglês e ficam como estão: são registro.
 
 ## [0.15.0] — 2026-10-02
 
-⏳ **NÃO PUBLICADA.** Seis achados do app, todos no nativo: R-11, R-15, R-18, R-21 e R-22 da fila,
+✅ **PUBLICADA em 02/10/2026, por volta das 14:15 (Brasília), nos sete pacotes, pelo terminal do
+Victor** — do commit `d8d47d5` (junção do pedido #27, com a CI do `main` e o site verdes). A hora é
+a da mensagem dele (*"pronto, publicado."*). Antes, um `git pull` parou por uma alteração local do
+`pnpm-lock.yaml` e a publicação pulou tudo (a árvore ainda era a `0.14.1`); com `git stash` o
+`pull` passou.
+
+Seis achados do app, todos no nativo: R-11, R-15, R-18, R-21 e R-22 da fila,
 e a E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-11), *"1 c, 2 sim,
 3 sim"* (R-15, R-18, R-21) e *"B pode seguir"* (R-22). Só acrescenta — fora a aparência do
 `EmptyState` (ganha a moldura) e a do `PhotoInput` (miniatura quadrada e X fora da foto).
