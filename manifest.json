@@ -20,7 +20,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -30,7 +30,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -40,7 +40,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -50,7 +50,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -60,7 +60,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -79,7 +79,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -121,7 +121,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.15.0",
+      "version": "0.16.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -292,16 +292,16 @@
       "Ready": 42,
       "Stable": 88
     },
-    "testes_unit": 1340,
+    "testes_unit": 1344,
     "componentes_citados_no_teste": 128,
     "specs_visuais": 22,
     "baselines": 44,
     "baselines_linux": 22,
     "classes_core": 582,
-    "token_declaracoes": 409,
-    "token_nomes": 191,
+    "token_declaracoes": 410,
+    "token_nomes": 192,
     "token_usados": 142,
-    "token_sem_uso": 49
+    "token_sem_uso": 50
   },
   "gates": {
     "validate": 41,

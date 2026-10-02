@@ -3,6 +3,7 @@
 :root{
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
+  --brand-yellow-text:oklch(0.516 0.105 86.047);
   --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
   --font-editorial:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
   --font-code:"Atkinson Hyperlegible Mono",SFMono-Regular,Consolas,monospace;
@@ -246,8 +247,8 @@
   --secondary-hover:var(--surface-hover);
   --focus:var(--primary);
   --focus-strong:var(--brand-yellow-foreground);
-  --primary-emphasis:var(--brand-yellow-foreground);
-  --primary-outline:var(--brand-yellow-foreground);
+  --primary-emphasis:var(--brand-yellow-text);
+  --primary-outline:var(--brand-yellow-text);
   --control-selected:var(--brand-yellow-foreground);
   --control-selected-foreground:oklch(0.985 0 0);
   --success-400:var(--success);

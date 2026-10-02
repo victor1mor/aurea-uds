@@ -46,6 +46,18 @@
         ]
       }
     },
+    "brand-yellow-text": {
+      "$type": "color",
+      "$description": "O amarelo da marca como LETRA ou ÍCONE sobre fundo claro (ADR-0054, 02/10/2026). Mesmo matiz do --primary (86), escurecido até 4,5:1 no pior fundo do tema claro — o #ebebeb com o véu de 10% do selo. O amarelo puro mede 1,9:1 no branco e some; o marrom (`brand-yellow-foreground`) passava, mas é outra cor.",
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.516,
+          0.105,
+          86.047
+        ]
+      }
+    },
     "font-ui": {
       "$type": "fontFamily",
       "$value": [
@@ -2186,11 +2198,11 @@
       },
       "primary-emphasis": {
         "$type": "color",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow-text}"
       },
       "primary-outline": {
         "$type": "color",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow-text}"
       },
       "control-selected": {
         "$type": "color",

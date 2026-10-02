@@ -175,6 +175,10 @@ documento de achados mais novo para conferir se ela envelheceu.
    foto; miniatura quadrada de 64, X todo fora) · E13 (no navegador, o nativo manda
    `useNativeDriver: false`). Escolhas do Victor: *"1 c, 2 sim, 3 sim"* e *"B pode seguir"*. Falta
    o aceite de aparelho dos blocos R-11, R-15, R-18, R-21 e R-22.
+8. **`0.16.0`, feita em 02/10/2026, NÃO publicada:** no tema claro, a letra de destaque passa do
+   marrom ao amarelo escurecido `#826202` ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)),
+   a "D" da prancha (*"D"*). As fotos do catálogo do tema claro mudam: rodar o `visual-update` da
+   CI antes de juntar.
 
 ### Lote E e decisões de 25/09/2026
 
@@ -269,6 +273,10 @@ para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
   `0.13.0`**, publicada em 01/10/2026. Decidido também: o item escolhido usa o Phosphor Fill, o código usa a Atkinson
   Hyperlegible Mono, e a IBM Plex Serif sai (o `--font-editorial` fica como apelido da fonte do
   texto até a `1.0`, para não quebrar quem o usa). Aberto: o peso do ícone pequeno (ADR, "A medida").
+- **No tema claro, o amarelo como LETRA ou ÍCONE é o `brand-yellow-text`** (`#826202`, o mesmo
+  matiz, escurecido até 4,5:1 no pior fundo), e não o marrom (decisão do Victor, 02/10/2026,
+  [ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)). Onde o amarelo é
+  FUNDO, é o amarelo de verdade. O foco e o controle marcado continuam no marrom.
 - Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - Proibido: Material, Fluent, Bootstrap ou shadcn como aparência; caixas retangulares genéricas;

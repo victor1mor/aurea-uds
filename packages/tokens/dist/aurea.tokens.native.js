@@ -31,6 +31,11 @@ export const base = {
     "p3": "color(display-p3 0.4225 0.2527 0.0951)",
     "oklch": "oklch(0.421 0.095 57.708)"
   },
+  "brandYellowText": {
+    "hex": "#826202",
+    "p3": "color(display-p3 0.4921 0.3908 0.1193)",
+    "oklch": "oklch(0.516 0.105 86.047)"
+  },
   "fontUi": "Atkinson Hyperlegible Next",
   "fontEditorial": "Atkinson Hyperlegible Next",
   "fontCode": "Atkinson Hyperlegible Mono",
@@ -797,9 +802,9 @@ export const themes = {
       "oklch": "oklch(0.145 0 0)"
     },
     "sidebarPrimary": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#826202",
+      "p3": "color(display-p3 0.4921 0.3908 0.1193)",
+      "oklch": "oklch(0.516 0.105 86.047)"
     },
     "sidebarPrimaryForeground": {
       "hex": "#733e0a",
@@ -902,14 +907,14 @@ export const themes = {
       "oklch": "oklch(0.421 0.095 57.708)"
     },
     "primaryEmphasis": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#826202",
+      "p3": "color(display-p3 0.4921 0.3908 0.1193)",
+      "oklch": "oklch(0.516 0.105 86.047)"
     },
     "primaryOutline": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#826202",
+      "p3": "color(display-p3 0.4921 0.3908 0.1193)",
+      "oklch": "oklch(0.516 0.105 86.047)"
     },
     "controlSelected": {
       "hex": "#733e0a",

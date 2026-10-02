@@ -58,6 +58,42 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.16.0] — 2026-10-02
+
+⏳ **NÃO PUBLICADA.** Uma mudança de identidade, decidida pelo Victor olhando o app no tema claro:
+*"esse marrom me incomoda muito, quero amarelo como no modo escuro"* — a "D" da prancha
+([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)). Muda a aparência
+do tema claro na web e no nativo; nenhuma API muda.
+
+### Mudado
+
+- **No tema claro, a letra e o ícone de destaque passam do marrom ao amarelo escurecido.** Os
+  tokens `primary-emphasis` e `primary-outline` do claro apontam para o novo `brand-yellow-text`,
+  `oklch(0.516 0.105 86.047)` (`#826202`) — o mesmo matiz do amarelo primário, escurecido até
+  4,5:1 no pior fundo do tema claro (o `#ebebeb` com o véu de 10% do selo). Antes era o
+  `brand-yellow-foreground`, o marrom `#733e0a`. Aparece no item escolhido do `BottomNav` sem
+  indicador, no selo `primary`, no texto `primary` do app, no contorno do cartão escolhido.
+  ⚠ **O amarelo puro como letra no claro não dá**: mede 1,9:1 no branco.
+- **Não mudam:** o amarelo primário; o escuro (lá a letra já é o amarelo puro, 11:1); o anel de
+  foco e o controle marcado do claro (continuam no marrom, que garante a borda); o texto SOBRE o
+  amarelo; as marcas (`data-brand`).
+
+### Para o app
+
+- A outra metade da "D" é o amarelo de verdade onde ele é FUNDO: no `BottomNav`,
+  `indicator="circle-bold"` (o item escolhido num círculo amarelo) — já existe.
+
+### Testes
+
+- `tests/unit/amarelo-no-claro.test.tsx`: 4 testes. Com o marrom de antes, 2 reprovam (o matiz era
+  57,7, não 86). O de contraste reprova o amarelo puro e o `#8e6b01` da prancha, que dava 4,14:1
+  nos fundos cinza.
+- Na web: `tone-contrast.spec.ts` (6 de 6) e o axe do `catalog-sweep.spec.ts`, nos dois temas.
+- A vitrine do nativo passou a traduzir o `flex` numérico do React Native (`flex: 0` no RN é
+  "use a `width`"; no CSS é base zero) — o círculo do `circle-bold` saía como um risco na imagem.
+
+---
+
 ## [0.15.0] — 2026-10-02
 
 ✅ **PUBLICADA em 02/10/2026, por volta das 14:15 (Brasília), nos sete pacotes, pelo terminal do
