@@ -60,7 +60,11 @@ em inglês e ficam como estão: são registro.
 
 ## [0.14.1] — 2026-10-01
 
-⏳ **NÃO PUBLICADA.** Um conserto na web, achado pelo Victor no `aureauds.dev/iconbutton`: o
+✅ **PUBLICADA em 02/10/2026, por volta das 06:30 (Brasília), nos sete pacotes, pelo terminal do
+Victor** — do commit `b6fdb62` (junção do pedido #25, com a CI do `main` verde). A hora é a da
+mensagem dele (*"publicar: os 7 em 0.14.1"*). **Leva a `0.14.0` junto**, que não saiu sozinha.
+
+Um conserto na web, achado pelo Victor no `aureauds.dev/iconbutton`: o
 `IconButton` ocupado mostrava um *"colchetes girando"* para fora do botão. Só o `@aurea-uds/react`
 muda de comportamento.
 
@@ -88,7 +92,9 @@ muda de comportamento.
 
 ## [0.14.0] — 2026-10-01
 
-⏳ **NÃO PUBLICADA.** Lote F do nativo: os acréscimos R-10, R-12, R-14, R-16 e R-19 da fila
+✅ **Não saiu sozinha: foi publicada dentro da `0.14.1`**, em 02/10/2026. Em 02/10/2026, às 06:33
+(Brasília), a lista de versões do registro ia até a `0.13.0`, horas depois de a `0.14.0` ficar
+pronta no `main`. Lote F do nativo: os acréscimos R-10, R-12, R-14, R-16 e R-19 da fila
 (`docs/FILA.md`), cada um no desenho do HeroUI Native 1.0.10 quando ele tem a peça. As propostas
 foram aprovadas pelo Victor pelas pranchas de 01/10/2026 (*"ok, 30 e 24"*). Nada quebra: tudo é
 prop nova, e sem ela a peça sai como antes — exceto a descrição do `RadioGroup` (ver
