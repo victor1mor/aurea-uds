@@ -1,5 +1,6 @@
 import {test, expect, type Page} from "@playwright/test";
 import {readFileSync} from "node:fs";
+import {esperarTransicoes} from "./esperar-transicoes";
 
 // ── O EIXO DE MARCA, medido na tela (ADR-0036) ──────────────────────────────────────
 // Nasceu de dois defeitos do mesmo dia, 20/08/2026, e os dois passaram por TODOS os gates que
@@ -46,8 +47,9 @@ async function medir(page: Page, marca: string, tema: string): Promise<Medida> {
     document.documentElement.dataset.theme = t;
   }, [marca, tema]);
   // O tema tem transição declarada; ler no mesmo quadro devolve a cor ANTIGA e o teste mede o
-  // estado errado sem falhar. Já custou uma sessão inteira — está registrado no protocolo.
-  await page.waitForTimeout(350);
+  // estado errado sem falhar. Já custou uma sessão inteira — está registrado no protocolo. E
+  // tempo fixo também não serve: espera-se a transição TERMINAR (`esperar-transicoes.ts`).
+  await esperarTransicoes(page);
   return page.evaluate(() => {
     const cv = document.createElement("canvas");
     cv.width = cv.height = 1;
@@ -133,7 +135,7 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
         delete document.documentElement.dataset.brand;
         document.documentElement.dataset.theme = t;
       }, tema);
-      await page.waitForTimeout(300);
+      await esperarTransicoes(page);
       cores.push(await page.evaluate(() =>
         getComputedStyle(document.documentElement).getPropertyValue("--primary").trim()));
     }
@@ -149,7 +151,7 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
       document.documentElement.dataset.brand = "lory";
       document.documentElement.dataset.theme = "light";
     });
-    await page.waitForTimeout(300);
+    await esperarTransicoes(page);
     const cor = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("--primary").trim());
     expect(cor).not.toContain("0.795");
@@ -182,7 +184,7 @@ test.describe("marca · o crachá semântico se lê em toda combinação", () =>
           else delete document.documentElement.dataset.brand;
           document.documentElement.dataset.theme = t;
         }, [marca, tema]);
-        await page.waitForTimeout(350);   // a transição de cor do core; ver o comentário em `medir`
+        await esperarTransicoes(page);   // a transição de cor do core; ver `esperar-transicoes.ts`
         const razoes = await page.evaluate((sems) => {
           const cv = document.createElement("canvas");
           cv.width = cv.height = 1;

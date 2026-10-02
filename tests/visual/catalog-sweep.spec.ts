@@ -4,6 +4,7 @@ import {join} from "node:path";
 // O MESMO dado que o gerador consome (ADR-0001, Fase 7). Um gate que declarasse suas próprias
 // seções seria um segundo modelo escondido — e é a divergência que o achado I2 mediu.
 import {allowed, required, SELECTOR, pageType} from "../../scripts/page-model.mjs";
+import {esperarTransicoes} from "./esperar-transicoes";
 
 // VARREDURA de TODAS as páginas do catálogo. O gate de screenshot cobre uma página por TIPO; a
 // auditoria de 26/07/2026 provou que isso não basta — rolagem lateral em 320px, violação de
@@ -220,9 +221,10 @@ test.describe("catálogo · varredura de todas as páginas", () => {
         await page.goto(url(f));
         if (theme === "light") {
           await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
-          // a transição de cor do core interpola por ~150ms; medir antes disso lê cor
-          // intermediária e inventa violação de contraste que não existe.
-          await page.waitForTimeout(250);
+          // a transição de cor do core interpola; medir antes de ela TERMINAR lê cor
+          // intermediária e inventa violação de contraste que não existe. Tempo fixo não serve:
+          // na CI do pedido #23 o WebKit passou dos 250ms (ver `esperar-transicoes.ts`).
+          await esperarTransicoes(page);
         }
         await page.addScriptTag({path: AXE});
         const v = await page.evaluate(async () => {
