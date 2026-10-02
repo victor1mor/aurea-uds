@@ -123,6 +123,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.12.3` | `RadioGroup` no nativo, no desenho do HeroUI, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
 | `0.12.4` | R-20: o estado chega ao leitor de tela da web em `aria-*` (os 26 pontos do nativo) — pedido #15. **Publicada em 01/10/2026**, pelo terminal do Victor |
 | `0.13.0` | A troca de fonte e ícones da ADR-0053: Atkinson Hyperlegible Next e Mono, ícones Phosphor com a forma cheia no item escolhido. **Quebra** nomes de ícone. Aprovada pela imagem (pedido #17) e, com as fotos da CI (pedidos #18 e #19), **publicada em 01/10/2026**, pelo terminal do Victor |
+| `0.14.0` | Lote F (nativo): R-10, R-12, R-14, R-16, R-19 — pedido #22. **Não saiu sozinha**: foi publicada dentro da `0.14.1` |
+| `0.14.1` | O `IconButton` ocupado mostra só a rodinha, no centro (web) — pedido #24; a CI de volta ao verde (aceite do `node-forge`, espera de transição) — pedido #25. **Publicada em 02/10/2026**, pelo terminal do Victor. Leva a `0.14.0` junto |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -161,8 +163,9 @@ documento de achados mais novo para conferir se ela envelheceu.
 4. **Lote E** saiu na `0.11.0` — ver "Lote E e decisões de 25/09/2026", abaixo.
 5. **Lote 5** (componentes novos e o resto): N-01 a N-09 · B-11 · B-13 · C-11 · C-12 · C-14 ·
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
-6. **Lote F (nativo) feito em 01/10/2026, na `0.14.0`, NÃO publicada:** R-10, R-12, R-14, R-16,
-   R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). O que falta da fila está no
+6. **Lote F (nativo), `0.14.0`, publicado dentro da `0.14.1` em 02/10/2026:** R-10, R-12, R-14,
+   R-16, R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). **Falta o aceite de
+   aparelho** dos blocos LF do `apps/native-smoke`. O que falta da fila está no
    [`docs/FILA.md`](docs/FILA.md) §8.
 
 ### Lote E e decisões de 25/09/2026
