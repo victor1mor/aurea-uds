@@ -82,10 +82,15 @@ em inglês e ficam como estão: são registro.
 
 ## [0.16.1] — 2026-10-02
 
-⏳ **NÃO PUBLICADA.** Conserto do `BottomNav` `circle-bold`, visto pelo Victor no app rodando no
+✅ **Publicada em 03/10/2026, por volta das 08:40 (Brasília)**, pelo terminal do Victor, da junção
+do pedido #33 (com a CI do `main` e o site verdes). A ficha do registro marca seis dos sete pacotes
+entre 08:38 e 08:40; o `@aurea-uds/native` só apareceu na consulta das 08:46 — o
+registro atrasa, e leitura logo depois de publicar não decide nada.
+
+Conserto do `BottomNav` `circle-bold`, visto pelo Victor no app rodando no
 navegador: o círculo amarelo do item escolhido virava um **risco** fino, com o ícone espremido no
 meio. Aprovado pela imagem (antes e depois no `react-native-web` de verdade). Nenhuma API muda.
-Leva a `0.16.0` junto, se ela não tiver saído antes.
+A `0.16.0` saiu antes, sozinha.
 
 ### Consertado
 
@@ -117,7 +122,10 @@ Leva a `0.16.0` junto, se ela não tiver saído antes.
 
 ## [0.16.0] — 2026-10-02
 
-⏳ **NÃO PUBLICADA.** Uma mudança de identidade, decidida pelo Victor olhando o app no tema claro:
+✅ **Publicada sozinha em 02/10/2026, por volta das 19:45 (Brasília)**, pelo terminal do Victor — a
+ficha do registro marca os sete pacotes entre 19:45 e 19:54, lida na manhã seguinte.
+
+Uma mudança de identidade, decidida pelo Victor olhando o app no tema claro:
 *"esse marrom me incomoda muito, quero amarelo como no modo escuro"* — a "D" da prancha
 ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)). Muda a aparência
 do tema claro na web e no nativo; nenhuma API muda.
