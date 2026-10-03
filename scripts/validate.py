@@ -2766,6 +2766,9 @@ _SAIDA = {
     # Medido no mesmo dia: o advisory diz "patched: none" e a faixa afetada é <=1.4.0, que é a
     # última publicada. Qualquer 1.4.1 em diante sai da faixa — é a condição de saída.
     "GHSA-86w9-cpqp-85rv": ("node-forge", (1, 4, 1)),
+    # braces, achado em 03/10/2026: só ferramenta de desenvolvimento (micromatch > braces).
+    # Medido no mesmo dia: "patched: none", faixa <=3.0.3, e a 3.0.3 é a última publicada.
+    "GHSA-vfj7-8cjw-p6xm": ("braces", (3, 0, 4)),
 }
 _ws = root / "pnpm-workspace.yaml"
 _lock = root / "pnpm-lock.yaml"

@@ -31,6 +31,12 @@ em inglês e ficam como estão: são registro.
   só uma vez, avisa no log da CI, e reprova se cair de novo. Controle:
   `tests/unit/abrir-pagina.test.tsx` (com o `goto` puro, a página que cai uma vez reprova; e a
   varredura não pode voltar a abrir página sem o `abrir`).
+- **Auditoria de dependências: o `braces` aceito com registro**, como o `node-forge` em
+  01/10/2026. Um alerta grave novo (GHSA-vfj7-8cjw-p6xm, CVE-2026-93687) reprovou a CI do pedido
+  #32 sem nenhuma dependência nossa mudar. Não há versão corrigida (a 3.0.3 é a última, e está na
+  faixa); ele só vive em ferramenta de desenvolvimento (`micromatch`, sob Vite, Vitest e Metro), e
+  `pnpm why braces --prod` dá zero nos sete pacotes. O check 40 cobra a saída: reprova quando
+  chegar a 3.0.4 — provado com a 3.0.4 posta à força na árvore.
 - Não muda nenhum pacote publicado.
 
 ### A CI de volta ao verde (01/10/2026, à noite)
