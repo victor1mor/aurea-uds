@@ -71,7 +71,11 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "caret-right",
+      "download",
+      "x"
+    ]
   },
   "related": {
     "components": [

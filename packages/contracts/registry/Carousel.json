@@ -35,8 +35,8 @@
   "dependencies": {
     "engine": "none",
     "icons": [
-      "chevron--left",
-      "chevron--right"
+      "caret-left",
+      "caret-right"
     ]
   },
   "related": {
