@@ -17,6 +17,22 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### A CI mais curta, e a queda do WebKit (03/10/2026)
+
+- **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
+  `ci.yml`). Dentro do `visual` os três rodavam um depois do outro, e só ela levava 45 a 47 min
+  (rodadas #69 e #70). Nada deixa de ser testado; a CI passa a esperar o navegador mais lento.
+  ⚠ Os minutos da CI deste repositório não saem da cota: repositório público, máquina padrão do
+  GitHub (conferido na página de cobrança do GitHub em 03/10/2026).
+- **A página em que o WebKit quebra por dentro é aberta de novo, uma vez só.** Em 3 de 4 rodadas
+  (#67, #69, #70) a varredura do WebKit morreu com `page.goto: WebKit encountered an internal
+  error`, cada vez numa página diferente — defeito do WebKit do Playwright no Linux
+  (microsoft/playwright#42803 e #34450). `tests/visual/abrir-pagina.ts` repete só essa mensagem,
+  só uma vez, avisa no log da CI, e reprova se cair de novo. Controle:
+  `tests/unit/abrir-pagina.test.tsx` (com o `goto` puro, a página que cai uma vez reprova; e a
+  varredura não pode voltar a abrir página sem o `abrir`).
+- Não muda nenhum pacote publicado.
+
 ### A CI de volta ao verde (01/10/2026, à noite)
 
 - **Auditoria de dependências:** um alerta novo, publicado no meio da CI do pedido #24, deixou a
