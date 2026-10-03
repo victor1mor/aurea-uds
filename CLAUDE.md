@@ -126,6 +126,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.14.0` | Lote F (nativo): R-10, R-12, R-14, R-16, R-19 — pedido #22. **Não saiu sozinha**: foi publicada dentro da `0.14.1` |
 | `0.14.1` | O `IconButton` ocupado mostra só a rodinha, no centro (web) — pedido #24; a CI de volta ao verde (aceite do `node-forge`, espera de transição) — pedido #25. **Publicada em 02/10/2026**, pelo terminal do Victor. Leva a `0.14.0` junto |
 | `0.15.0` | Nativo: R-11 (o desenho do app em toda prop de ícone), R-15 (moldura no `EmptyState`), R-18 (`Timeline` com `icon`, `tone`, `trailing`, `between`), R-21 (`FileInput` em `/system/file`), R-22 (o `PhotoInput` abre a foto), E13 — pedido #27. **Publicada em 02/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
+| `0.16.0` | No tema claro, a letra de destaque é o amarelo escurecido `#826202` ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)) — pedido #29, fotos da CI no #30. **Publicada em 02/10/2026**, pelo terminal do Victor |
+| `0.16.1` | O círculo do `BottomNav` `circle-bold` não vira risco no navegador, e o rótulo cabe nele na barra estreita (web e nativo) — pedido #31. A CI em paralelo e o aceite do `braces` (#32, #33) não mudam pacote. **Publicada em 03/10/2026**, pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -175,12 +177,12 @@ documento de achados mais novo para conferir se ela envelheceu.
    foto; miniatura quadrada de 64, X todo fora) · E13 (no navegador, o nativo manda
    `useNativeDriver: false`). Escolhas do Victor: *"1 c, 2 sim, 3 sim"* e *"B pode seguir"*. Falta
    o aceite de aparelho dos blocos R-11, R-15, R-18, R-21 e R-22.
-8. **`0.16.0`, feita em 02/10/2026, NÃO publicada:** no tema claro, a letra de destaque passa do
+8. **`0.16.0`, publicada em 02/10/2026** (por volta das 19:45, Brasília), pelo terminal do Victor: no tema claro, a letra de destaque passa do
    marrom ao amarelo escurecido `#826202` ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)),
    a "D" da prancha (*"D"*). As fotos do catálogo vieram da CI no pedido #30 (o `main` voltou ao
    verde em 02/10/2026).
-9. **`0.16.1`, feita em 02/10/2026, NÃO publicada** (leva a `0.16.0` junto, se ela não tiver
-   saído antes): o círculo do `BottomNav` `circle-bold` virava um risco no app rodando no
+9. **`0.16.1`, publicada em 03/10/2026** (por volta das 08:40, Brasília), pelo terminal do Victor,
+   da junção do pedido #33: o círculo do `BottomNav` `circle-bold` virava um risco no app rodando no
    navegador — o `react-native-web` passa `flex: 0` cru para o CSS. E na barra estreita
    (`width="content"`) o rótulo cortava dentro do círculo, na web e no nativo. Aprovado pela
    imagem (*"pode"*). Para a barra menos larga, o app passa `width="content"`.
