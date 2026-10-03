@@ -304,7 +304,7 @@
     "token_sem_uso": 50
   },
   "gates": {
-    "validate": 41,
+    "validate": 42,
     "playwrightSpecs": 26
   }
 }

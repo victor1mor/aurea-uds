@@ -47,7 +47,13 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "check-circle",
+      "info",
+      "warning",
+      "x",
+      "x-circle"
+    ]
   },
   "related": {
     "components": [

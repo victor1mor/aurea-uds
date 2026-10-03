@@ -46,7 +46,7 @@
   "dependencies": {
     "engine": null,
     "icons": [
-      "chevron--right"
+      "caret-right"
     ]
   },
   "related": {

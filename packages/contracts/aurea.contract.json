@@ -342,13 +342,13 @@
     "Consultar este arquivo antes de qualquer alteração de interface.",
     "Usar somente tokens semânticos definidos neste arquivo.",
     "O amarelo primário oklch(0.795 0.184 86.047) é invariável nos temas dark e light.",
-    "Botões textuais usam formato cápsula; botões de ícone usam quadrado arredondado.",
+    "Botões textuais usam formato cápsula; botões só de ícone são redondos: largura igual à altura e o raio da cápsula (ADR-0052).",
     "Inputs e selects usam formato cápsula; textareas usam raio de 16px.",
     "Cards, dialogs, toasts, demos e painéis usam raio de 22px e superfícies sólidas.",
     "A sidebar é um único painel arredondado com menu accent subtle.",
     "Não usar gradientes decorativos, paletas alternativas ou cores hardcoded.",
     "A escala chart-1 a chart-5 é a única escala categórica/sequencial azul.",
-    "IBM Plex e Carbon são overrides deliberados; não trocar sem atualizar este contrato.",
+    "Atkinson Hyperlegible Next (texto), Atkinson Hyperlegible Mono (código) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0053); não trocar sem atualizar este contrato.",
     "Consumidores usam somente os pacotes @aurea-uds do monorepo; cópias manuais são proibidas.",
     "Quando faltar um padrão, atualizar primeiro este arquivo e depois a aplicação.",
     "Players usam exclusivamente os tokens --media-*; controles permanecem escuros e legíveis nos dois temas.",
@@ -365,11 +365,10 @@
   },
   "brandOverrides": {
     "fonts": [
-      "IBM Plex Sans",
-      "IBM Plex Serif",
-      "IBM Plex Mono"
+      "Atkinson Hyperlegible Next",
+      "Atkinson Hyperlegible Mono"
     ],
-    "icons": "Carbon Icons embedded",
+    "icons": "Phosphor Icons embedded (Regular; Fill on the selected item)",
     "primaryLockedAcrossThemes": "oklch(0.795 0.184 86.047)"
   },
   "mediaRules": {

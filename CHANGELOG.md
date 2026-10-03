@@ -135,6 +135,35 @@ nova, e não correção, porque entram props.** Nada sai nem muda de nome.
 - `AureaStrings` ganhou duas chaves. Quem monta o objeto INTEIRO com esse tipo precisa acrescentar
   `sidebarCollapse` e `sidebarExpand`; quem passa só parte ao `AureaProvider` não muda nada.
 
+### O que a troca para o Phosphor deixou para trás (pedido #37, 03/10/2026)
+
+- **Nomes do Carbon em 12 fichas.** O `dependencies.icons` ainda tinha 18 nomes que a `0.13.0`
+  (ADR-0053) trocou no código e no sprite: os de hífen duplo (`chevron--right`, `view--off`,
+  `play--filled--alt`…) e os de uma palavra (`trash-can`, `launch`, `add`, `view`, `checkmark`,
+  `error`). Mais um 19º, que existe nas duas bibliotecas: o `NumberField` declarava `subtract` e
+  desenha `minus`. Cada nome novo foi lido no código e conferido contra a
+  `packages/icons/carbon-para-phosphor.json`; os 19 batem nos dois.
+- **Ícones que faltavam em 22 fichas.** O campo nunca tinha sido cobrado no outro sentido: o
+  `Dialog` não listava o `x` de fechar, o `Alert` não listava os quatro da variante, os três menus
+  não listavam a seta do submenu nem o `check`… Agora 34 das 130 fichas têm ícone, 71 nomes ao
+  todo, e cada lista é exatamente o que o componente desenha.
+- **Controle: check 46 do `validate.py`.** Lê o código do pacote react sem os comentários, acha
+  onde cada declaração começa e termina, e segue os ajudantes do mesmo arquivo que o componente
+  chama. Reprova: nome fora do `icon-names.ts`; nome na ficha que o componente não desenha; ícone
+  que ele desenha e a ficha não lista; e ícone fixo que nenhuma ficha alcança (a guarda do sentido
+  inverso). Provado contra as fichas antigas (os 19 nomes e as 22 incompletas) e por cinco
+  mutações: ficha sem um ícone, ícone de outro componente do mesmo arquivo, ajudante exportado,
+  parêntese sem par, e o campo lido com o nome errado.
+- **O contrato** (`aurea.contract.json`): o `hardRules` dizia que o botão de ícone é "quadrado
+  arredondado" (é redondo desde a ADR-0052) e que "IBM Plex e Carbon" são a marca; o
+  `brandOverrides` listava as três IBM Plex e o Carbon. Agora: Atkinson Hyperlegible Next e Mono,
+  e Phosphor (ADR-0053); a IBM Plex Serif sai. As outras regras foram conferidas contra os tokens
+  e continuam valendo.
+- **O catálogo:** o estado vazio do player, no bloco de insight, pedia o ícone `media--library`,
+  que não existe. Agora é `playlist`.
+- Muda o `@aurea-uds/contracts` (as fichas e o contrato). Juntado no `main` antes do Lote G, e
+  sai junto com ele.
+
 ### Achados abertos, fora deste lote
 
 - **No tema claro, a barra amarela padrão mede 1,61:1 contra o trilho** (o mínimo para peça gráfica
@@ -143,7 +172,6 @@ nova, e não correção, porque entram props.** Nada sai nem muda de nome.
 - **O empacotador do app reescreve `:dir(rtl)`** como lista de idiomas, e a regra deixa de pegar
   (medido no Vite). As duas regras deste lote foram escritas sem `:dir`; as cinco que já existiam
   (`Badge` e `TreeView`) ficaram para uma tarefa à parte.
-- Onze fichas ainda listam ícones pelo nome do Carbon (anterior à `0.13.0`).
 
 ### Para o app
 

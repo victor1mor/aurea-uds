@@ -46,8 +46,8 @@
   "dependencies": {
     "engine": "none",
     "icons": [
-      "play--filled--alt",
-      "launch"
+      "play-circle",
+      "arrow-square-out"
     ]
   },
   "related": {

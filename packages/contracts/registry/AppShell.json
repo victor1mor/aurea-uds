@@ -127,7 +127,8 @@
     "engine": null,
     "icons": [
       "caret-left",
-      "caret-right"
+      "caret-right",
+      "list"
     ]
   },
   "related": {

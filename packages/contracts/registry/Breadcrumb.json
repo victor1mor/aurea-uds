@@ -27,7 +27,9 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "caret-right"
+    ]
   },
   "related": {
     "components": [

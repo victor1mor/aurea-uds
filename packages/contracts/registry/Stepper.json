@@ -41,8 +41,8 @@
   "dependencies": {
     "engine": null,
     "icons": [
-      "checkmark",
-      "error"
+      "check",
+      "x-circle"
     ]
   },
   "related": {

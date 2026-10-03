@@ -44,8 +44,9 @@
   "dependencies": {
     "engine": "@base-ui/react/number-field",
     "icons": [
-      "add",
-      "subtract"
+      "plus",
+      "minus",
+      "dots-six-vertical"
     ]
   },
   "related": {

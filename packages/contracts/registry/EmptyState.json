@@ -34,7 +34,9 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "file"
+    ]
   },
   "related": {
     "components": [

@@ -47,7 +47,9 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "x"
+    ]
   },
   "related": {
     "components": [

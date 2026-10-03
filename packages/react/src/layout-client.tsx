@@ -174,8 +174,9 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // A seta aponta para onde a lateral vai: recolher é para o começo da linha, abrir é para o fim. Na
   // escrita da direita para a esquerda o começo é a direita — pela direção do provedor, e não por
   // `:dir(rtl)` na folha (ver a nota do `.sidebar-toggle` no core).
+  // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
+  // ícones que o shell desenha.
   const paraOComeco=!efetiva, direita=useDirection()==="rtl";
-  const seta=paraOComeco===direita?"caret-right":"caret-left";
   return <div className={cx("app-shell",topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
@@ -183,7 +184,7 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Topbar variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Topbar>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={seta} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main></div>}
+<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Topbar variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Topbar>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main></div>}
 
 // ── Separator ────────────────────────────────────────────────────────────────────────────────
 // A LINHA DO SISTEMA, e ela é de CLIENTE por necessidade, não por vizinhança.
