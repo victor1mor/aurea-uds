@@ -10,7 +10,9 @@
   "sizes": [],
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "arrow-counter-clockwise"
+    ]
   },
   "name": "TaskQueue",
   "summary": "The work queue: what is waiting, what is running, what failed.",

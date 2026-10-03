@@ -39,8 +39,8 @@
   "dependencies": {
     "engine": "none",
     "icons": [
-      "drag--horizontal",
-      "trash-can"
+      "dots-six",
+      "trash"
     ]
   },
   "related": {

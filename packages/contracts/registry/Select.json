@@ -52,7 +52,7 @@
   "dependencies": {
     "engine": "@base-ui/react",
     "icons": [
-      "checkmark"
+      "check"
     ]
   },
   "related": {

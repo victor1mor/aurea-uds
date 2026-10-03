@@ -56,7 +56,11 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": []
+    "icons": [
+      "caret-down",
+      "check",
+      "x"
+    ]
   },
   "related": {
     "components": [

@@ -106,7 +106,9 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "list"
+    ]
   },
   "related": {
     "components": [

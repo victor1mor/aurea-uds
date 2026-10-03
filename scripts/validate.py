@@ -522,7 +522,8 @@ REQUIRED = ["name", "category", "layer", "maturity", "summary", "icon", "platfor
             "variants", "sizes", "states", "tokens", "a11y", "dependencies",
             "related", "source"]
 # O ícone da ficha é o que a lateral do catálogo mostra: tem de existir no sprite E na
-# allowlist do contrato (159 glifos Carbon) — senão a nav renderiza um buraco.
+# allowlist do contrato — senão a nav renderiza um buraco. ~~(159 glifos Carbon)~~ Desde a 0.13.0
+# (ADR-0053) são nomes do Phosphor. Os de `dependencies.icons` são o check 46.
 ALLOWED_ICONS = set(json.loads((root / "packages/contracts/aurea.contract.json")
                               .read_text(encoding="utf-8"))["iconSystem"]["allowedIcons"])
 defined_tokens = set(re.findall(r"(--[a-z0-9-]+)\s*:", css))  # css = core (§3)
@@ -3288,6 +3289,216 @@ if _PKG45.is_file() and _CAT45.is_dir():
             "`@aurea-uds/*`, do próprio repositório ou de uma dependência que o `@aurea-uds/react` "
             "declara, e é servido do próprio domínio. Peça que falta se cria NA Aurea, não no site"
         )
+
+# ── 46. a lista de ícones da ficha é EXATAMENTE o que o componente desenha ────────────────────
+# Defeito medido em 03/10/2026: a 0.13.0 (ADR-0053) trocou o Carbon pelo Phosphor no código e no
+# sprite, e o `dependencies.icons` de 12 fichas ficou com 18 nomes do Carbon (`chevron--right`,
+# `trash-can`, `view--off`…). Nenhum gate lia esse campo; o check 11 só confere o `icon` da lateral.
+# Havia um 19º que a lista do Phosphor sozinha não pega: o `NumberField` declarava `subtract`, que
+# EXISTE no Phosphor (é a subtração de formas), mas o componente desenha `minus`. E o outro sentido
+# nunca tinha sido cobrado: 22 fichas deixavam de fora ícone que o componente desenha (o `x` de
+# fechar do `Dialog`, os quatro do `Alert`…). Ordem do Victor, 03/10/2026: os dois sentidos.
+#
+# "Ícone fixo" é nome do Phosphor escrito no código numa destas posições:
+#   - o `name=` de um `<Icon>`;
+#   - `icon=`, `leadingIcon=`, `trailingIcon=` (atributo ou valor-padrão de prop), ou `icon:` em objeto;
+#   - qualquer valor de constante tipada com `IconName` (o `ICONE_DA_VARIANTE` do `Alert`).
+# Valor com condição (`playing?"pause":"play"`) conta os dois lados.
+# O ESCOPO do componente é a declaração dele mais os ajudantes NÃO exportados do mesmo arquivo que
+# ela chama, em cadeia: o `check` do `Select` mora no `itemDoSelect`. Exportado não se segue, porque
+# tem ficha própria. Comentário não conta: a primeira medida, feita sem esta leitura, achou um
+# `check` no `Button` que era comentário.
+#
+# Reprova:
+# 1. nome fora do `NOMES_PHOSPHOR` do `icon-names.ts` (a mesma lista que o TypeScript usa);
+# 2. nome na ficha que o escopo do componente não desenha;
+# 3. ícone fixo do escopo que a ficha não lista;
+# 4. ícone fixo do pacote que escopo nenhum alcança (ajudante exportado, ou componente sem ficha).
+#    É a guarda do item 3: sem ela, o que a leitura não enxerga passaria calado.
+# Guardas de totalidade: lista do Phosphor ilegível; arquivo que a leitura não consegue delimitar
+# (chave, aspa ou crase sem par); nenhum ícone lido nas fichas ou no código. "Nenhum culpado" e "não
+# olhei nada" dão o mesmo resultado.
+# NÃO pega: ícone que chega por variável sem o tipo `IconName`; ícone que um componente mostra por
+# meio de OUTRO componente da Aurea (fica na ficha do outro); e o alvo nativo — o campo descreve o
+# pacote react.
+_DECL46 = re.compile(r"(?:export\s+)?(?:default\s+)?(?:async\s+)?"
+                     r"(?:function|const|let|var|class|type|interface|enum|declare|import)\b")
+_NOME46 = re.compile(r"(export\s+)?(?:default\s+)?(?:async\s+)?(?:function|const|let|var|class)\s+"
+                     r"([A-Za-z_$][\w$]*)")
+_LIT46 = re.compile(r"\"([a-z0-9-]+)\"")
+_ATRIB46 = re.compile(r"\b(?:icon|leadingIcon|trailingIcon)\s*[=:]\s*(?=[\"{])")
+
+
+def _ler46(texto):
+    """Apaga os comentários (com espaço, para as posições não mudarem) e acha onde começa cada
+    declaração de topo. Devolve (texto sem comentário, inícios, as chaves fecharam?)."""
+    out = list(texto)
+    n, i, prof, tpl, em_tpl, inicios = len(texto), 0, 0, [], False, []
+    while i < n:
+        c = texto[i]
+        if em_tpl:  # dentro de crase: só a crase final e o `${` importam
+            if c == "\\":
+                i += 2
+                continue
+            if c == "`":
+                em_tpl = False
+            elif c == "$" and texto[i + 1:i + 2] == "{":
+                tpl.append(prof)
+                prof += 1
+                em_tpl = False
+                i += 1
+            i += 1
+            continue
+        if prof == 0 and (i == 0 or texto[i - 1] == "\n") and _DECL46.match(texto, i):
+            inicios.append(i)
+        if c == "/" and texto[i + 1:i + 2] in ("/", "*"):
+            j = (texto.find("\n", i) if texto[i + 1] == "/" else texto.find("*/", i + 2) + 2)
+            j = n if j < (i + 2) else j
+            out[i:j] = [" " if ch != "\n" else ch for ch in texto[i:j]]
+            i = j
+            continue
+        if c in "\"'":
+            j = i + 1
+            while j < n and texto[j] not in (c, "\n"):
+                j += 2 if texto[j] == "\\" else 1
+            # String de JS não atravessa linha: aspa sem par na mesma linha é apóstrofo de texto JSX.
+            i = j + 1 if j < n and texto[j] == c else i + 1
+            continue
+        if c == "`":
+            em_tpl = True
+        elif c in "({[":
+            prof += 1
+        elif c in ")}]":
+            prof -= 1
+            if c == "}" and tpl and tpl[-1] == prof:
+                tpl.pop()
+                em_tpl = True
+        i += 1
+    return "".join(out), inicios, prof == 0 and not em_tpl and not tpl
+
+
+def _valor46(t, i):
+    """O valor que começa em t[i]: um "literal", ou uma {expressão} com as chaves balanceadas."""
+    if t[i] == '"':
+        return t[i:t.find('"', i + 1) + 1]
+    prof = 0
+    for j in range(i, len(t)):
+        prof += {"{": 1, "}": -1}.get(t[j], 0)
+        if prof == 0:
+            return t[i:j + 1]
+    return ""
+
+
+def _icones46(trecho, tipado):
+    """Os ícones fixos de um trecho já sem comentário."""
+    if tipado:
+        return {x for x in _LIT46.findall(trecho) if x in _nomes46}
+    valores = [_valor46(trecho, m.end()) for m in _ATRIB46.finditer(trecho)]
+    for m in re.finditer(r"<Icon\b", trecho):
+        j, prof = m.end(), 0
+        while j < len(trecho) and not (trecho[j] == ">" and prof == 0):
+            prof += {"{": 1, "}": -1}.get(trecho[j], 0)
+            j += 1
+        tag = trecho[m.end():j]
+        valores += [_valor46(tag, mm.end()) for mm in re.finditer(r"\bname\s*=\s*(?=[\"{])", tag)]
+    return {x for v in valores for x in _LIT46.findall(v) if x in _nomes46}
+
+
+_ICN46 = root / "packages/react/src/icon-names.ts"
+_m46 = (re.search(r"NOMES_PHOSPHOR\b[^=]*=\s*new Set\((\[.*?\])\)", _ICN46.read_text(encoding="utf-8"), re.S)
+        if _ICN46.is_file() else None)
+_nomes46 = set(json.loads(_m46.group(1))) if _m46 else set()
+if not _nomes46:
+    errors.append("check 46: não consegui ler o `NOMES_PHOSPHOR` de packages/react/src/icon-names.ts "
+                  "— sem a lista, nenhum nome de ícone das fichas é conferido")
+else:
+    # arquivo → {declaração de topo: (exportada?, trecho sem comentário, tipada com IconName?)}
+    _arqs46 = {}
+    for _fp46 in sorted((root / "packages/react/src").glob("*.tsx")):
+        _t46 = _fp46.read_text(encoding="utf-8")
+        _limpo46, _ini46, _ok46 = _ler46(_t46)
+        if not _ok46:
+            errors.append(f"check 46: não consegui delimitar as declarações de `{_fp46.name}` (chave, "
+                          "aspa ou crase sem par) — os ícones dele ficaram sem conferência")
+            continue
+        _decl46 = {}
+        for _k46, _i46 in enumerate(_ini46):
+            _mn46 = _NOME46.match(_limpo46, _i46)
+            if not _mn46:
+                continue
+            _fim46 = _ini46[_k46 + 1] if _k46 + 1 < len(_ini46) else len(_t46)
+            _tipo46 = re.match(r"\s*:\s*([^=(]*)=", _limpo46[_mn46.end():_fim46])
+            _decl46[_mn46.group(2)] = (bool(_mn46.group(1)), _limpo46[_i46:_fim46],
+                                       bool(_tipo46 and "IconName" in _tipo46.group(1)))
+        _arqs46[_fp46.name] = _decl46
+    _onde46 = {}
+    for _a46, _decl46 in _arqs46.items():
+        for _n46, (_exp46, _, _) in _decl46.items():
+            if _exp46:
+                _onde46.setdefault(_n46, _a46)
+    _alcance46 = {_a46: set() for _a46 in _arqs46}
+
+    def _desenha46(arq, nome):
+        """Os ícones fixos do escopo: a declaração e os ajudantes não exportados que ela chama."""
+        decl, vistos, fila, achou = _arqs46[arq], {nome}, [nome], set()
+        while fila:
+            _, trecho, tipado = decl[fila.pop()]
+            achou |= _icones46(trecho, tipado)
+            for ident in set(re.findall(r"[A-Za-z_$][\w$]*", trecho)) - vistos:
+                if ident in decl and not decl[ident][0]:
+                    vistos.add(ident)
+                    fila.append(ident)
+        _alcance46[arq] |= vistos
+        return achou
+
+    _lidos46, _desenhados46 = 0, 0
+    _fora46, _sem_uso46, _falta46 = [], [], []
+    for _fp46 in sorted((root / "packages/contracts/registry").glob("*.json")):
+        try:
+            _f46 = json.loads(_fp46.read_text(encoding="utf-8"))
+        except Exception:
+            continue  # JSON inválido já reprova no check 11
+        _ic46 = (_f46.get("dependencies") or {}).get("icons") or []
+        if not isinstance(_ic46, list):
+            _fora46.append(f"{_fp46.stem}: `dependencies.icons` não é lista")
+            continue
+        _nome46 = _f46.get("name", _fp46.stem)
+        _desenho46 = _desenha46(_onde46[_nome46], _nome46) if _nome46 in _onde46 else set()
+        _desenhados46 += len(_desenho46)
+        for _n46 in _ic46:
+            _lidos46 += 1
+            if _n46 not in _nomes46:
+                _fora46.append(f"{_fp46.stem}: `{_n46}`")
+            elif _n46 not in _desenho46:
+                _sem_uso46.append(f"{_fp46.stem}: `{_n46}`")
+        _faltam46 = sorted(_desenho46 - set(_ic46))
+        if _faltam46:
+            _falta46.append(f"{_fp46.stem}: " + ", ".join(f"`{x}`" for x in _faltam46))
+    _orfaos46 = []
+    for _a46, _decl46 in _arqs46.items():
+        for _n46, (_, _trecho46, _tipado46) in _decl46.items():
+            if _n46 not in _alcance46[_a46]:
+                _ic46 = _icones46(_trecho46, _tipado46)
+                if _ic46:
+                    _orfaos46.append(f"`{_a46}` → {_n46} ({', '.join(sorted(_ic46))})")
+    if _lidos46 == 0 or _desenhados46 == 0:
+        errors.append(f"check 46: {_lidos46} nome(s) lido(s) nas fichas e {_desenhados46} ícone(s) "
+                      "fixo(s) achado(s) no código — um dos dois zerado é varredura cega, não pacote limpo")
+    if _fora46:
+        errors.append(f"check 46: {len(_fora46)} nome(s) de ícone em `dependencies.icons` fora do "
+                      f"Phosphor — {', '.join(_fora46)}. Desde a 0.13.0 (ADR-0053) a lista válida é a "
+                      "do `icon-names.ts`; nome do Carbon se traduz pela "
+                      "`packages/icons/carbon-para-phosphor.json` e se confere no código do componente")
+    if _sem_uso46:
+        errors.append(f"check 46: {len(_sem_uso46)} ícone(s) na ficha que o componente não desenha — "
+                      f"{', '.join(_sem_uso46)}. A ficha copia o nome do código, não o contrário")
+    if _falta46:
+        errors.append(f"check 46: {len(_falta46)} ficha(s) sem ícone que o componente desenha — "
+                      f"{'; '.join(_falta46)}. Todo ícone fixo do componente entra em `dependencies.icons`")
+    if _orfaos46:
+        errors.append(f"check 46: ícone fixo que nenhuma ficha alcança — {'; '.join(_orfaos46)}. Ou é "
+                      "componente sem ficha, ou ajudante exportado/de outro arquivo que a leitura não "
+                      "segue: a ficha de quem o usa ficaria sem ele, calada")
 
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")

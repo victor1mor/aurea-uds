@@ -29,7 +29,10 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "check",
+      "copy"
+    ]
   },
   "related": {
     "components": [

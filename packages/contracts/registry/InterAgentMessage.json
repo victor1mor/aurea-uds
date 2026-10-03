@@ -11,7 +11,7 @@
   "dependencies": {
     "engine": null,
     "icons": [
-      "arrow--right"
+      "arrow-right"
     ]
   },
   "name": "InterAgentMessage",

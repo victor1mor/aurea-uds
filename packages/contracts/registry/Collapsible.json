@@ -40,7 +40,7 @@
   "dependencies": {
     "engine": "@base-ui/react/collapsible",
     "icons": [
-      "chevron--down"
+      "caret-down"
     ]
   },
   "related": {

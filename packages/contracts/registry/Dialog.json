@@ -41,7 +41,9 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": []
+    "icons": [
+      "x"
+    ]
   },
   "related": {
     "components": [

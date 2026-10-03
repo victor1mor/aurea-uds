@@ -59,7 +59,17 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": []
+    "icons": [
+      "arrows-in",
+      "arrows-out",
+      "clock-clockwise",
+      "clock-counter-clockwise",
+      "closed-captioning",
+      "pause",
+      "play",
+      "speaker-high",
+      "speaker-slash"
+    ]
   },
   "related": {
     "components": [

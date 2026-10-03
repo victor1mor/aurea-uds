@@ -1003,7 +1003,7 @@ export function mediaLibrary(state) {
           h("span", {className: "hint"}, i.id === SELECAO ? `${i.meta} · selected` : i.meta)))),
       h(Status, e.state ? {state: e.state} : {variant: e.variant}, e.label))),
     vazio
-      ? regiao("Player", h(EmptyState, {icon: "media--library", title: "Nothing to play yet", titleAs: "h2"}))
+      ? regiao("Player", h(EmptyState, {icon: "playlist", title: "Nothing to play yet", titleAs: "h2"}))
       // O `MediaPlayer` é `role="group"` nomeado pelo próprio `title`, então ele É a região —
       // mesma escolha do `Chart` no I4 e do `HealthMatrix` no I6.
       : h(MediaPlayer, {kind: "audio", title: ITEM.titulo, subtitle: "Measuring instead of counting"}),
