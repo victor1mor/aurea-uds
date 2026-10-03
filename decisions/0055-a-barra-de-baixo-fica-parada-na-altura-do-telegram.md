@@ -1,7 +1,7 @@
 # ADR-0055 — A barra de baixo fica parada, na altura do Telegram
 
 - **Data:** 03/10/2026
-- **Estado:** aceita · executada na `0.17.0`, não publicada.
+- **Estado:** aceita · executada na `0.17.0`, publicada em 03/10/2026.
 - **Autoria:** decisão do Victor, olhando a bancada com o código real rodando no navegador:
   *"me incomoda o bottom nav todo se mexer quando [clica] no botão, quero ele estático, apenas os
   botões dinâmicos"*; *"ainda acho ele muito largo comparado a bottomnav como do telegram"* —
