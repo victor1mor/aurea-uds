@@ -69,3 +69,12 @@ auditConfig:
     #   • roda no Expo CLI do APP (assinatura de build iOS e de atualizacao), nunca na Aurea.
     # SAI quando o node-forge publicar a correcao e o Expo subir — ai vira override.
     - GHSA-86w9-cpqp-85rv
+    # braces (high, CVE-2026-93687), achada pela CI do pedido #32 em 03/10/2026; o `main`
+    # reprova junto. Mesmo registro das de cima:
+    #   • sem correcao: "patched: none", e a ultima publicada (3.0.3) esta' na faixa <=3.0.3;
+    #   • so' ferramenta de desenvolvimento (micromatch > braces, sob vite, vitest, metro);
+    #     `pnpm why braces --prod` da' zero nos sete pacotes, e nenhum tarball a contem;
+    #   • derruba o processo com um padrao de chaves aninhado de proposito — padrao que so'
+    #     sai da configuracao do proprio repositorio.
+    # SAI quando o braces publicar a correcao (3.0.4 em diante) — ai vira override.
+    - GHSA-vfj7-8cjw-p6xm
