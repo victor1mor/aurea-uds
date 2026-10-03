@@ -58,11 +58,16 @@ export default {
     "TWO AXES, and they do not mix. `variant` says where the bar sits — `edge` against the "
     + "screen, `floating` as a loose pill. `indicator` says what SHAPE marks the current item. "
     + "The meaning never changes with the shape: current is always gold.",
-    "Seven indicators: none, subtle, pill, circle, circle-raised, circle-bold, circle-outline. "
-    + "Everything else is shared — touch target, icon frame, typography, badge anchoring, safe "
-    + "area. That is what makes them variants of one component instead of four components.",
-    "Every item keeps its label, in every indicator. Icon-only navigation only works when the "
-    + "symbols are unmistakable, and Garage/Fuel/Service are not.",
+    "Nine indicators: none, subtle, pill, circle, circle-raised, circle-bold, circle-outline, "
+    + "capsule, expand. Everything else is shared — touch target, icon frame, typography, badge "
+    + "anchoring, safe area. That is what makes them variants of one component instead of nine.",
+    "The bar stands still when you pick another destination. No size depends on which item is "
+    + "current — not the item, not the label weight — so only the paint moves. The one item that "
+    + "grows is the current one in `expand`, and it grows into a FIXED slot: the buttons shift, "
+    + "the bar does not.",
+    "Every item keeps its label, in every indicator but `expand`. Icon-only navigation only works "
+    + "when the symbols are unmistakable, and Garage/Fuel/Service are not. In `expand` the other "
+    + "items keep their name for the screen reader only.",
     "The container is a <nav> landmark and each item is a link — not a tab. A tab swaps a panel "
     + "inside the page; a bottom bar changes page. Giving role=\"tablist\" to a menu makes the "
     + "screen reader promise arrow keys that lead nowhere.",
@@ -137,6 +142,22 @@ export default {
       code: `<BottomNav indicator="circle-outline" label="Garage" current={route} items={items} />`,
       embed: true,
       render: () => demo({indicator: "circle-outline", label: "Garage ring", inicial: "fuel"}),
+    },
+    {
+      title: "Floating capsule — the Material 3 Expressive shape",
+      description: "A 56 × 32 gold capsule behind the icon only, the active indicator of Material 3 "
+        + "Expressive. The label stays below it, so the shape never stretches with a long name.",
+      code: `<BottomNav indicator="capsule" label="Garage" current={route} items={items} />`,
+      embed: true,
+      render: () => demo({indicator: "capsule", label: "Garage capsule", inicial: "fuel"}),
+    },
+    {
+      title: "Floating expand — only the current item says its name",
+      description: "The other items show the icon alone; the current one becomes a gold capsule "
+        + "with the name beside the icon. Its slot is fixed, so the bar never changes size.",
+      code: `<BottomNav indicator="expand" label="Garage" current={route} items={items} />`,
+      embed: true,
+      render: () => demo({indicator: "expand", label: "Garage expand", inicial: "fuel"}),
     },
     {
       title: "A dot, when there is no number",

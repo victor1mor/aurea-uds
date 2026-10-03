@@ -241,7 +241,12 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             // `size="lg"` porque a proporção contra o contador foi medida: 24 para 16, razão 0,67.
             // O item escolhido desenha o ícone CHEIO (ADR-0053).
             const marca = _jsxs("span", { className: "bottom-nav-mark", children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", weight: ativo ? "fill" : undefined }), it.badge != null && _jsx("span", { className: "bottom-nav-badge", children: it.badge })] });
-            const miolo = _jsxs(_Fragment, { children: [marca, _jsx("span", { className: "bottom-nav-label", children: it.label })] });
+            // O DISCO DO `circle-bold` é uma caixa DENTRO do item, em todos os itens (03/10/2026): quando o
+            // disco ERA o item escolhido, ele media 56 e os outros o conteúdo, e trocar de aba mudava a
+            // largura da barra. Agora o item mede o mesmo escolhido ou não; só a pintura muda.
+            // No `expand` o nome dos não escolhidos sai da TELA e fica para o leitor de tela: a `.sr-only`.
+            const corpo = _jsxs(_Fragment, { children: [marca, _jsx("span", { className: cx("bottom-nav-label", ind === "expand" && !ativo && "sr-only"), children: it.label })] });
+            const miolo = ind === "circle-bold" ? _jsx("span", { className: "bottom-nav-disc", children: corpo }) : corpo;
             return it.render
                 ? _jsx(React.Fragment, { children: fundirRender(it.render, { className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a") }, it.id)
                 : it.href

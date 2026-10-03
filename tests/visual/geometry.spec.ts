@@ -391,12 +391,105 @@ for (const width of ["full", "content"] as const) {
         <body style="width:300px">${nav}</body></html>`}));
     await p.goto(url, {waitUntil: "networkidle"});
     await p.evaluate(() => document.fonts.ready);
+    // Desde 03/10/2026 o círculo é o `.bottom-nav-disc` DENTRO do item (a barra parada, logo
+    // abaixo): é ele que tem os 56.
     const m = await p.$eval(".bottom-nav-item[aria-current]", (it) => {
-      const rot = it.querySelector(".bottom-nav-label")!;
-      return {largura: it.getBoundingClientRect().width, rotulo: [rot.scrollWidth, rot.clientWidth], texto: rot.textContent};
+      const rot = it.querySelector(".bottom-nav-label")!, disco = it.querySelector(".bottom-nav-disc")!;
+      return {largura: disco.getBoundingClientRect().width, rotulo: [rot.scrollWidth, rot.clientWidth], texto: rot.textContent};
     });
     expect(m.texto).toBe("Avisos");
     expect(m.largura, JSON.stringify(m)).toBe(56);
     expect(m.rotulo[0], `o rótulo não cabe no círculo: ${JSON.stringify(m)}`).toBeLessThanOrEqual(m.rotulo[1]);
+  });
+}
+
+// A BARRA FICA PARADA QUANDO SE TROCA DE ABA — pedido do Victor, 03/10/2026: *"me incomoda o
+// bottom nav todo se mexer [...] quero ele estático, apenas os botões dinâmicos"*. Medido antes do
+// conserto, na bancada e aqui: com `circle-bold` e `width="content"` a barra ia de 249 a 257 de
+// largura conforme a aba escolhida, e por estar no centro, andava inteira. Duas causas: o item
+// escolhido do `circle-bold` tinha medida própria (56, contra o conteúdo dos outros), e o rótulo
+// escolhido engrossava (`--weight-medium`), o que alarga o texto em QUALQUER indicador.
+// A prova é a do enunciado: para cada aba escolhida, o retângulo da barra e o de cada botão são os
+// mesmos. Só a pintura muda. O expande (`expand`) é o único em que o botão escolhido cresce, e
+// nele a prova é a da barra, não a dos botões.
+// A ALTURA DO TELEGRAM — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo comparado a
+// bottomnav como do telegram"*, e "largo" é a grossura. Medido no fonte do Telegram para Android
+// 12.10.6: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. Aqui: 56 nos
+// indicadores sem moldura, e 64 — a altura do Material 3 Expressive — nos que têm a moldura de 32
+// em volta do ícone. E o nome cabe na própria caixa: a linha justa demais cortava a perna do "j".
+test("BottomNav: a altura do Telegram, o nome inteiro e colado no ícone", async ({page: p, baseURL}) => {
+  const itens = [{id: "inicio", label: "Início", icon: "house", href: "#"},
+    {id: "ajustes", label: "Ajustes", icon: "gear", href: "#"}, {id: "perfil", label: "Perfil", icon: "user", href: "#"}];
+  // E o nome COLADO no ícone (03/10/2026, *"o texto pode ficar mais próximo do ícone"*): o topo
+  // da caixa do nome é o fim da caixa do ícone, sem vão. No `circle-bold` a moldura tem a altura
+  // do ícone (o círculo é o disco), e a barra fica em 58.
+  const ALTURA: Record<string, number> = {none: 54, subtle: 54, pill: 54, expand: 54,
+    circle: 62, "circle-raised": 62, "circle-outline": 62, "circle-bold": 58, capsule: 62};
+  const barras = Object.keys(ALTURA).map((indicator) => `<div data-ind="${indicator}">${
+    renderToStaticMarkup(el(A.AureaProvider, {spriteUrl: ""}, el(A.BottomNav, {
+      indicator, width: "content", current: "ajustes", label: "Menu", items: itens})))}</div>`).join("");
+  const url = `${baseURL}/__bottomnav-altura`;
+  await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+    body: `<!doctype html><html data-theme="dark"><head>
+      <link rel="stylesheet" href="/packages/fonts/dist/fonts.css">
+      <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+      <body style="width:360px">${barras}</body></html>`}));
+  await p.goto(url, {waitUntil: "networkidle"});
+  await p.evaluate(() => document.fonts.ready);
+  const medidas = await p.$$eval("[data-ind]", (caixas) => caixas.map((c) => {
+    const nav = c.querySelector("nav")!;
+    const nomes = [...nav.querySelectorAll(".bottom-nav-label:not(.sr-only)")];
+    const vaos = [...nav.querySelectorAll(".bottom-nav-item")].flatMap((it) => {
+      const nome = it.querySelector(".bottom-nav-label:not(.sr-only)");
+      return nome ? [nome.getBoundingClientRect().top - it.querySelector(".bottom-nav-mark")!.getBoundingClientRect().bottom] : [];
+    });
+    return {ind: (c as HTMLElement).dataset.ind!, altura: nav.getBoundingClientRect().height,
+      cortados: nomes.filter((n) => n.scrollHeight > n.clientHeight).map((n) => n.textContent),
+      vaos: (c as HTMLElement).dataset.ind === "expand" ? [] : vaos};
+  }));
+  const errados = medidas.flatMap((m) => [
+    ...(m.altura > ALTURA[m.ind] + 0.5 ? [`${m.ind}: ${m.altura.toFixed(1)} de altura, o teto é ${ALTURA[m.ind]}`] : []),
+    ...(m.cortados.length ? [`${m.ind}: o nome não cabe em pé (${m.cortados.join(", ")})`] : []),
+    ...(m.vaos.some((v) => Math.abs(v) > 0.5) ? [`${m.ind}: vão entre o ícone e o nome (${m.vaos.map((v) => v.toFixed(1)).join(", ")})`] : []),
+  ]);
+  expect(errados, errados.join("\n")).toEqual([]);
+});
+
+const INDICADORES_BN = ["none", "subtle", "pill", "circle", "circle-raised", "circle-outline", "circle-bold",
+  "capsule", "expand"] as const;
+for (const width of ["full", "content"] as const) {
+  test(`BottomNav: a barra não se mexe quando se troca de aba · ${width}`, async ({page: p, baseURL}) => {
+    const itens = [{id: "inicio", label: "Início", icon: "house", href: "#"},
+      {id: "lista", label: "Lista", icon: "list-bullets", href: "#"},
+      {id: "avisos", label: "Avisos", icon: "bell", href: "#", badge: el(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")},
+      {id: "perfil", label: "Perfil", icon: "user", href: "#"}];
+    const barras = INDICADORES_BN.flatMap((indicator) => itens.map((atual) => `<div data-ind="${indicator}" data-atual="${atual.id}">${
+      renderToStaticMarkup(el(A.AureaProvider, {spriteUrl: ""}, el(A.BottomNav, {
+        indicator, width, current: atual.id, label: "Menu", items: itens})))}</div>`)).join("");
+    const url = `${baseURL}/__bottomnav-parada-${width}`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="dark"><head>
+        <link rel="stylesheet" href="/packages/fonts/dist/fonts.css">
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body style="width:360px">${barras}</body></html>`}));
+    await p.goto(url, {waitUntil: "networkidle"});
+    await p.evaluate(() => document.fonts.ready);
+    const medidas = await p.$$eval("[data-ind]", (caixas) => caixas.map((c) => {
+      const nav = c.querySelector("nav")!, x0 = c.getBoundingClientRect().left;
+      // Os dois eixos: a barra presa embaixo que cresce para cima também "se mexe".
+      const y0 = c.getBoundingClientRect().top;
+      const r = (e: Element) => { const q = e.getBoundingClientRect();
+        return `${(q.left - x0).toFixed(1)}+${q.width.toFixed(1)}/${(q.top - y0).toFixed(1)}+${q.height.toFixed(1)}`; };
+      return {ind: (c as HTMLElement).dataset.ind!, barra: r(nav),
+        botoes: [...nav.querySelectorAll(".bottom-nav-item")].map(r).join(" ")};
+    }));
+    const errados: string[] = [];
+    for (const ind of INDICADORES_BN) {
+      const deste = medidas.filter((m) => m.ind === ind);
+      const barras = new Set(deste.map((m) => m.barra)), botoes = new Set(deste.map((m) => m.botoes));
+      if (barras.size > 1) errados.push(`${ind}: a barra muda (${[...barras].join(" | ")})`);
+      if (botoes.size > 1 && ind !== "expand") errados.push(`${ind}: os botões andam (${[...botoes].join(" | ")})`);
+    }
+    expect(errados, errados.join("\n")).toEqual([]);
   });
 }

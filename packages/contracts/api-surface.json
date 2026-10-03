@@ -1971,7 +1971,7 @@
     },
     "BottomNavIndicator": {
       "module": "navigation-client",
-      "raw": "\"none\" | \"subtle\" | \"pill\" | \"circle\" | \"circle-raised\" | \"circle-bold\" | \"circle-outline\"",
+      "raw": "\"none\" | \"subtle\" | \"pill\" | \"circle\" | \"circle-raised\" | \"circle-bold\" | \"circle-outline\" | \"capsule\" | \"expand\"",
       "union": [
         "none",
         "subtle",
@@ -1979,7 +1979,9 @@
         "circle",
         "circle-raised",
         "circle-bold",
-        "circle-outline"
+        "circle-outline",
+        "capsule",
+        "expand"
       ]
     },
     "BottomNavWidth": {
@@ -6035,7 +6037,9 @@
                 "circle",
                 "circle-raised",
                 "circle-bold",
-                "circle-outline"
+                "circle-outline",
+                "capsule",
+                "expand"
               ]
             },
             {

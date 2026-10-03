@@ -128,6 +128,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.15.0` | Nativo: R-11 (o desenho do app em toda prop de ícone), R-15 (moldura no `EmptyState`), R-18 (`Timeline` com `icon`, `tone`, `trailing`, `between`), R-21 (`FileInput` em `/system/file`), R-22 (o `PhotoInput` abre a foto), E13 — pedido #27. **Publicada em 02/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.16.0` | No tema claro, a letra de destaque é o amarelo escurecido `#826202` ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)) — pedido #29, fotos da CI no #30. **Publicada em 02/10/2026**, pelo terminal do Victor |
 | `0.16.1` | O círculo do `BottomNav` `circle-bold` não vira risco no navegador, e o rótulo cabe nele na barra estreita (web e nativo) — pedido #31. A CI em paralelo e o aceite do `braces` (#32, #33) não mudam pacote. **Publicada em 03/10/2026**, pelo terminal do Victor |
+| `0.17.0` | O `BottomNav` parado ao trocar de aba, na altura do Telegram, com o nome colado no ícone, e os indicadores novos `capsule` e `expand` ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md)). Aprovada pela bancada (*"PERFEITO! pode. aprovado"*). **Feita em 03/10/2026, NÃO publicada** |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -186,6 +187,13 @@ documento de achados mais novo para conferir se ela envelheceu.
    navegador — o `react-native-web` passa `flex: 0` cru para o CSS. E na barra estreita
    (`width="content"`) o rótulo cortava dentro do círculo, na web e no nativo. Aprovado pela
    imagem (*"pode"*). Para a barra menos larga, o app passa `width="content"`.
+10. **`0.17.0`, feita em 03/10/2026, NÃO publicada** ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md)):
+   o `BottomNav` não anda mais quando se troca de aba (o nome escolhido engrossava, e o círculo do
+   `circle-bold` era o próprio item); fica na altura do Telegram (54 a 62, era 73), com o nome
+   colado no ícone; e ganha `capsule` (Material 3 Expressive) e `expand` (só o escolhido mostra o
+   nome — exceção, por ordem do Victor, à regra "o nome nunca some"). A "B" da bancada já existia:
+   é o `pill`. O app não muda nada para a barra parar e afinar. Falta o aceite de aparelho (bloco
+   `0.17` do `apps/native-smoke`).
 
 ### Lote E e decisões de 25/09/2026
 
@@ -231,6 +239,11 @@ documento de achados mais novo para conferir se ela envelheceu.
 
 **Duas regras do Victor, de 23/09/2026:** o `main` fica **sempre** atualizado (lote aprovado vai
 para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
+
+**E a de 03/10/2026, para o `BottomNav`:** *"agora só vai ser aprovado e enviado para git quando eu
+ver funcionando"*. Imagem parada não basta: ele vê a peça RODANDO, com toque (a bancada com o
+código real no `react-native-web`, publicada como página), e só depois do "pode" dele ela entra
+no git.
 
 ---
 

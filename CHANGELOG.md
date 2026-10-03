@@ -80,6 +80,77 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.17.0] — 2026-10-03
+
+⏳ **Feita em 03/10/2026, NÃO publicada.** Aprovada pela bancada do Victor, com o código real
+rodando no navegador (*"a palavra agora é PERFEITO! pode. aprovado"*). Falta o aceite de aparelho
+(bloco `0.17` do `apps/native-smoke`). Decisão: [ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md).
+
+O `BottomNav` refeito pelo que o Victor viu no app: *"me incomoda o bottom nav todo se mexer"*,
+*"ainda acho ele muito largo comparado a bottomnav como do telegram"* ("largo" é a grossura) e
+*"o texto pode ficar mais próximo do ícone"*. **Versão nova, e não correção, porque entram dois
+nomes de indicador.** Nada sai nem muda de nome.
+
+### Consertado
+
+- **Web e nativo: a barra andava quando se trocava de aba.** Medido na bancada: no `circle-bold`
+  com `width="content"` (o que o app usa) ela ia de 249 a 257 de largura e, por estar no centro,
+  andava inteira. Duas causas, nos dois alvos:
+  1. o nome escolhido engrossava (`--weight-medium` só nele), e texto mais grosso é mais largo —
+     na web isso mexia a barra nos sete indicadores;
+  2. o círculo do `circle-bold` ERA o item escolhido: ele media 56 e os outros, o conteúdo.
+  Agora nenhuma medida depende de o item estar escolhido; só a pintura muda. O peso do nome é o
+  médio em todos, e o círculo do `circle-bold` é um disco DENTRO do item, em todos os itens
+  (`.bottom-nav-disc` na web), amarelo só no escolhido.
+
+### Mudou (aparência)
+
+- **A barra ficou mais baixa: a altura do Telegram.** Medido no fonte do Telegram para Android
+  12.10.6: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. Antes, 73 no
+  `circle-bold` do app. Agora, nos dois alvos: **54** no `none`, `subtle`, `pill` e `expand`;
+  **58** no `circle-bold`; **62** no `circle`, `circle-raised`, `circle-outline` e `capsule`, que
+  têm a moldura de 32 em volta do ícone.
+  - o nome sai em 12 numa linha de 16 (o tamanho mais `space1`); no nativo era 14 com linha de 21;
+  - o recheio de cima e de baixo do botão cai de `space1` para `space05`;
+  - o nome encosta no ícone (vão zero; era `space05`): de tinta a tinta, 6 a 7 no `pill` e no
+    `circle-bold`, como no Telegram (eram 9 e 13);
+  - no `circle-bold` a moldura de 32 sai (o círculo é o disco, 56 × 48).
+- O nome dos itens NÃO escolhidos passa a ter o peso médio, o mesmo do escolhido.
+
+### Adicionado
+
+- **`indicator="capsule"`**, o Material 3 Expressive: cápsula amarela de 56 × 32 só atrás do
+  ícone, em todos os itens, pintada só no escolhido; o nome embaixo, fora dela. O contador fica no
+  canto do ícone, e não da cápsula, e inverte sobre o amarelo (web), como no `circle-bold`.
+- **`indicator="expand"`**: os outros itens só com o ícone; o escolhido vira cápsula amarela com o
+  nome ao lado, em 14. A vaga do escolhido é FIXA (136: ícone + `space2` + 80 para o nome +
+  `space3` dos dois lados), então os botões andam e a barra não. Nome maior que 80 termina em "…".
+  ⚠ É a exceção, por ordem do Victor, à regra "o nome nunca some" (auditoria de 20/08/2026): o
+  nome dos não escolhidos sai da tela e fica para o leitor de tela (`.sr-only` na web,
+  `accessibilityLabel` no nativo).
+- A "B" da bancada (véu suave em volta do ícone e do nome) já existia: é o `indicator="pill"`.
+
+### Para o app
+
+- Nada a mudar para a barra parar e afinar: basta a versão. Para trocar a forma, o app passa
+  `indicator="capsule"`, `"pill"` ou `"expand"`.
+
+### Testes
+
+- `tests/visual/geometry.spec.ts` (roda na CI): **a barra não se mexe** — para cada aba escolhida,
+  o retângulo da barra e o de cada botão, nos dois eixos, nos nove indicadores e nas duas larguras.
+  Com a folha antiga, os sete indicadores reprovam no `content` e o `circle-bold` no `full`. E
+  **a altura do Telegram, o nome inteiro e colado no ícone**: com a folha antiga, 62 e 70 de
+  altura e 2 de vão.
+- `tests/unit/native-bottomnav-parada.test.tsx`: as mesmas travas no nativo, pelas medidas que o
+  código pede (o dublê não mede texto) — toda caixa e todo nome com as mesmas medidas em qualquer
+  escolha; a vaga fixa do `expand`; a cápsula 56 × 32; o nome 12 numa linha de 16; o recheio
+  `space05`. Com o código antigo, 27 reprovam.
+- Atualizados, com a data e o motivo: `native-flex-navegador` (o círculo é o disco),
+  `native-bottomnav-baixa` (vão zero; a moldura do `circle-bold` é a do ícone) e o
+  `skin.spec.ts` (contraste e contador da `capsule` e do `expand`; o amarelo do `circle-bold` mora
+  no disco).
+
 ## [0.16.1] — 2026-10-02
 
 ✅ **Publicada em 03/10/2026, por volta das 08:40 (Brasília)**, pelo terminal do Victor, da junção

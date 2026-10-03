@@ -354,7 +354,7 @@ img,svg { display:block; }
    nativo (`navigation.tsx`). ~~A folga de 4dp do M3 entre o indicador e o rótulo~~ vale só para
    os redondos agora. */
 .bottom-nav-mark { height:var(--icon-lg); }
-.bottom-nav-ind-circle .bottom-nav-mark, .bottom-nav-ind-circle-raised .bottom-nav-mark, .bottom-nav-ind-circle-outline .bottom-nav-mark, .bottom-nav-ind-circle-bold .bottom-nav-mark { height:var(--bottomnav-ring); }
+.bottom-nav-ind-circle .bottom-nav-mark, .bottom-nav-ind-circle-raised .bottom-nav-mark, .bottom-nav-ind-circle-outline .bottom-nav-mark { height:var(--bottomnav-ring); }
 /* `inline-flex` no envoltório: como `<span>` solto ele é caixa de LINHA, e mede a entrelinha do
    item (18px) em vez do contador que carrega (16px). A diferença não aparece na tela — aparece
    na medição, e medição errada é o que faz a razão parecer 0,75 quando é 0,67. */
@@ -379,7 +379,30 @@ img,svg { display:block; }
    O FOCO CONTINUA, e a diferença não é de gosto: `:focus-visible` é o que o teclado enxerga, vem
    do contrato de foco global e o `geometry.spec` cobra. Tirar hover é tirar enfeite; tirar foco
    seria tirar acesso. */
-.bottom-nav-item[aria-current] { color:var(--foreground); font-weight:var(--weight-medium); }
+/* O PESO DO RÓTULO NÃO MUDA COM A ESCOLHA — 03/10/2026, pedido do Victor: *"quero ele estático,
+   apenas os botões dinâmicos"*. Era `--weight-medium` só no escolhido, e texto mais grosso é texto
+   mais LARGO: no `width="content"` a barra mudava de largura a cada toque, nos sete indicadores
+   (medido: 247,7 contra 249,0). Agora todos os rótulos são `--weight-medium` — o "Label medium" do
+   Material 3, que no Expressive também deixou de engrossar o escolhido. O que marca a escolha é a
+   cor, o ícone cheio e a forma. Quem cobra: `geometry.spec`, "a barra não se mexe". */
+.bottom-nav-item { font-weight:var(--weight-medium); }
+/* A ALTURA DO TELEGRAM — 03/10/2026, pedido do Victor (*"ainda acho ele muito largo comparado a
+   bottomnav como do telegram"*; "largo" é a grossura). Medido no fonte do Telegram para Android
+   12.10.6: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. O recheio de cima
+   e de baixo cai de `--space-1` para `--space-05`, e a linha do nome é a do Telegram: o tamanho
+   mais `--space-1` (12 + 4). Com a do corpo (1,5) ela media 18; com a `--leading-tight` (14,4) a
+   perna do "j" passava 1 da caixa, e a caixa corta (`overflow:hidden`, para as reticências).
+   Fica 56 nos indicadores sem moldura e 64 nos que têm a de 32 — a altura do Material 3
+   Expressive. O mesmo no `navigation.tsx`. */
+.bottom-nav-item { padding-block:var(--space-05); }
+/* O NOME COLADO NO ÍCONE — 03/10/2026, pedido do Victor (*"o texto pode ficar mais próximo do
+   ícone"*): vão ZERO, como no Telegram, em que o nome começa onde a caixa do ícone acaba. O
+   `--space-05` de 30/09/2026 somava 2 aos 2 de folga da linha do nome: medido de tinta a tinta,
+   eram 9 no `pill` e 13 no `circle-bold`. No `circle-bold` a moldura de 32 também sai (logo
+   abaixo): lá o círculo é o disco, não ela. */
+.bottom-nav-item, .bottom-nav-disc { gap:0; }
+.bottom-nav-label { line-height:calc(1em + var(--space-1)); }
+.bottom-nav-item[aria-current] { color:var(--foreground); }
 .bottom-nav-item[aria-current] .icon { opacity:1; }
 /* ── A GRAMÁTICA: DOIS EIXOS, E ELES NÃO SE MISTURAM ────────────────────────────────
    Reescrito em 20/08/2026 pela auditoria de UI/UX do BottomNav que o Victor encomendou.
@@ -448,7 +471,15 @@ img,svg { display:block; }
 /* `padding-inline: space-1` — o recheio de sempre do item (`.bottom-nav-item`). No `width="content"`
    o item ganha `space-3` dos lados, e dentro dos 56 sobravam 32 para o rótulo: "Avisos" (35)
    saía "Avis…". Medido em 02/10/2026, no navegador e no nativo; igual no `navigation.tsx`. */
-.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { flex:none; width:var(--bottomnav-bold,3.5rem); padding-inline:var(--space-1); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
+/* ~~O disco ERA o item escolhido~~ (até a `0.16.1`): ele media 56 e os outros mediam o conteúdo,
+   então trocar de aba mudava a largura da barra (249 a 257 no app, medido em 03/10/2026) e, no
+   `full`, os outros itens andavam. Agora o disco é uma caixa DENTRO do item (`.bottom-nav-disc`),
+   em todos os itens, e o recheio passa do item para ele: o item mede o mesmo escolhido ou não, e a
+   altura da barra não muda. O mesmo no `navigation.tsx`. */
+.bottom-nav.bottom-nav-ind-circle-bold .bottom-nav-item { padding:0; }
+.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; min-height:var(--control-h-lg); padding:var(--space-1); border-radius:var(--radius-full); }
+.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { color:var(--primary-foreground); }
+.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-disc { background:var(--primary); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .icon { opacity:1; }
 /* O contador do `circle-bold` INVERTE, como o do `.btn-primary`, e a volta atrás está medida.
    Tentei em 20/08/2026 deixá-lo dourado com um anel da cor da barra em volta — é o que as telas
@@ -457,6 +488,36 @@ img,svg { display:block; }
    se esconde. Fio fino não substitui contraste quando as duas cores são claras. */
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .badge { background:var(--primary-foreground); color:var(--primary); border-color:transparent; }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-badge { color:var(--primary-foreground); }
+/* ── CÁPSULA (`capsule`) — a "A" da bancada do Victor, 03/10/2026: o Material 3 Expressive ────
+   A moldura do ícone vira a cápsula de 56 × 32 do indicador ativo do M3 Expressive
+   (`--bottomnav-bold` × `--bottomnav-ring`), em TODOS os itens; só a do escolhido é pintada, de
+   amarelo sólido. O rótulo fica embaixo, fora dela — é isso que a separa do antigo bloco amarelo
+   que a auditoria de 20/08/2026 recusou (achado 5): a forma não estica com o nome.
+   O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada ele ficaria solto,
+   longe do sino. São os (56 − 32) / 2 a mais para dentro. E ele INVERTE sobre o amarelo, pela
+   mesma razão medida do `circle-bold`, logo acima. */
+.bottom-nav-ind-capsule .bottom-nav-mark { width:var(--bottomnav-bold,3.5rem); height:var(--bottomnav-ring); border-radius:var(--radius-full); }
+.bottom-nav-ind-capsule .bottom-nav-badge { inset-inline-end:calc((var(--bottomnav-bold,3.5rem) - var(--bottomnav-ring)) / 2 - var(--space-05)); }
+.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .bottom-nav-mark { background:var(--primary); color:var(--primary-foreground); }
+.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .icon { opacity:1; }
+.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .badge { background:var(--primary-foreground); color:var(--primary); border-color:transparent; }
+/* No `content`, o recheio de sempre (`--space-1`) e não o `--space-3`: com ele cada item teria 80. */
+.bottom-nav-content:not(.bottom-nav-edge).bottom-nav-ind-capsule .bottom-nav-item { padding-inline:var(--space-1); }
+/* ── EXPANDE (`expand`) — a "C" da bancada do Victor, 03/10/2026 ───────────────────────────────
+   Os outros itens mostram só o ícone; o escolhido vira cápsula amarela com o nome ao lado.
+   ⚠ É a exceção à regra "o rótulo nunca some" (auditoria de 20/08/2026, achado 6/7), por ordem do
+   Victor: o nome dos não escolhidos sai da TELA e fica para o leitor de tela (o componente põe a
+   `.sr-only` nele), então o link continua com nome.
+   É o ÚNICO em que o botão escolhido cresce — os botões andam, a BARRA não: a vaga do escolhido é
+   FIXA, e não do tamanho do nome. Ícone + vão (`--space-2`) + lugar do nome (`--space-20`) +
+   recheio (`--space-3` dos dois lados) = 136. Nome maior que 80 termina em "…". */
+.bottom-nav-ind-expand .bottom-nav-item { flex-direction:row; gap:var(--space-2); min-width:var(--target-min); min-height:var(--target-min); padding:0; }
+.bottom-nav-ind-expand .bottom-nav-mark { width:var(--icon-lg); }
+.bottom-nav-ind-expand .bottom-nav-label { font-size:var(--text-sm); }
+.bottom-nav-ind-expand .bottom-nav-item[aria-current] { flex:none; inline-size:calc(var(--icon-lg) + var(--space-2) + var(--space-20) + 2 * var(--space-3)); padding-inline:var(--space-3); background:var(--primary); color:var(--primary-foreground); }
+.bottom-nav-ind-expand .bottom-nav-item[aria-current] .icon { opacity:1; }
+.bottom-nav-ind-expand .bottom-nav-item[aria-current] .badge { background:var(--primary-foreground); color:var(--primary); border-color:transparent; }
+.bottom-nav-content:not(.bottom-nav-edge).bottom-nav-ind-expand .bottom-nav-item:not([aria-current]) { flex:none; inline-size:var(--target-min); padding-inline:0; }
 
 /* ── A LINHA DE LISTA TOCÁVEL (§4.3 do CONSUMIDOR-1) ──────────────────────────
    A LISTA NÃO PINTA SUPERFÍCIE. Quem dá o card é o `Card`, e repintar aqui seria um segundo

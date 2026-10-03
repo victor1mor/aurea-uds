@@ -124,10 +124,12 @@
   ],
   "axes": {
     "indicator": [
+      "capsule",
       "circle",
       "circle-bold",
       "circle-outline",
       "circle-raised",
+      "expand",
       "none",
       "pill",
       "subtle"
