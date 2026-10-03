@@ -82,7 +82,11 @@ em inglês e ficam como estão: são registro.
 
 ## [0.17.0] — 2026-10-03
 
-⏳ **Feita em 03/10/2026, NÃO publicada.** Aprovada pela bancada do Victor, com o código real
+✅ **Publicada em 03/10/2026, por volta das 16:50 (Brasília)**, pelo terminal do Victor, da junção
+do pedido #35 (com a CI do `main` verde, rodada #78). A ficha do registro marca seis dos sete pacotes
+entre 16:50 e 16:52; o `@aurea-uds/native` só apareceu às 16:58 — o registro atrasa.
+
+Aprovada pela bancada do Victor, com o código real
 rodando no navegador (*"a palavra agora é PERFEITO! pode. aprovado"*). Falta o aceite de aparelho
 (bloco `0.17` do `apps/native-smoke`). Decisão: [ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md).
 
