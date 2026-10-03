@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type ViewProps } from "react-native";
+import { type ImageSourcePropType, type ViewProps } from "react-native";
 import { type AureaIcon } from "./icon.js";
 import { type AureaFilaJustify } from "./rolagem.js";
 export interface AureaNavItem {
@@ -136,6 +136,11 @@ export interface TopbarProps extends ViewProps {
  * e quem nomeia a tela é o conteúdo dela.
  */
 export declare function Topbar({ variant, inset, brand, children, style, ...rest }: TopbarProps): React.JSX.Element;
+/** Um sinal da linha (AN-04): fixada, silenciada. O `label` não aparece; é o que o leitor de tela lê. */
+export interface AureaNavListIndicator {
+    icon: AureaIcon;
+    label: string;
+}
 export interface AureaNavListItem {
     id: string;
     label: React.ReactNode;
@@ -145,6 +150,16 @@ export interface AureaNavListItem {
     icon?: AureaIcon;
     onPress?: () => void;
     disabled?: boolean;
+    /**
+     * A foto da linha (AN-04, 03/10/2026) — o formato do `Avatar` daqui (`source`, `fallback`), no
+     * tamanho dele de sempre, o mesmo da web. Toma o lugar do `icon`.
+     */
+    avatar?: {
+        source?: ImageSourcePropType | string;
+        fallback?: React.ReactNode;
+    };
+    /** Os sinais ao lado do `value` (AN-04): pequenos e apagados, cada um com nome. */
+    indicators?: AureaNavListIndicator[];
 }
 export interface NavListProps extends ViewProps {
     items: AureaNavListItem[];

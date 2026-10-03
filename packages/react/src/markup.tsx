@@ -147,22 +147,32 @@ export interface ClusterProps extends DivProps{
   wrap?:boolean;
 }
 export function Cluster({gap,align,justify,wrap,className,...props}:ClusterProps){return <div className={cx("cluster",gap&&gap!=="normal"&&`cluster-gap-${gap}`,align&&align!=="center"&&`cluster-align-${align}`,justify&&justify!=="start"&&`cluster-justify-${justify}`,wrap===false&&"cluster-nowrap",className)} {...props}/>}
+/**
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026). O HeroUI não tem `Grid`, e nenhum dos
+ * quatro números é novo: cada um já mede uma grade ou uma caixa da Aurea (ver `.grid-min-*` no CSS).
+ * `md` é o padrão de sempre.
+ */
+export type GridMin="xs"|"sm"|"md"|"lg";
+const GRID_MIN=new Set<string>(["xs","sm","md","lg"]);
 export interface GridProps extends DivProps{
   /** `tight` (--space-2), `normal` (o de sempre, --space-4) ou `loose` (--space-6). */
   gap?:LayoutGap;
   /**
-   * Largura mínima de cada coluna, em unidade de CSS (`"10rem"`, `"155px"`). Padrão `15rem`. É o
-   * `--grid-min` que o CSS sempre leu e que nenhum tipo mostrava.
+   * Largura mínima de cada coluna. Por nome (AN-08): `xs` 8rem, `sm` 12rem, `md` 15rem (o padrão)
+   * ou `lg` 20rem. Ou em unidade de CSS (`"10rem"`, `"155px"`) — o `--grid-min` que o CSS sempre
+   * leu. Até a 0.17, `"sm"` passava pelo tipo e a grade virava UMA coluna, sem aviso.
    */
-  min?:string;
+  min?:GridMin|(string&{});
   /** Número fixo de colunas, iguais. Com ele, `min` deixa de valer. */
   columns?:number;
 }
 export function Grid({gap,min,columns,className,style,...props}:GridProps){
-  const vars=min!=null||columns!=null
-    ?{...(min!=null?{"--grid-min":min}:{}),...(columns!=null?{"--grid-cols":String(columns)}:{}),...style} as React.CSSProperties
+  const nome=min!=null&&GRID_MIN.has(min);
+  const medida=min!=null&&!nome?min:undefined;
+  const vars=medida!=null||columns!=null
+    ?{...(medida!=null?{"--grid-min":medida}:{}),...(columns!=null?{"--grid-cols":String(columns)}:{}),...style} as React.CSSProperties
     :style;
-  return <div className={cx("grid",gap&&gap!=="normal"&&`grid-gap-${gap}`,columns!=null&&"grid-fixed",className)} style={vars} {...props}/>}
+  return <div className={cx("grid",gap&&gap!=="normal"&&`grid-gap-${gap}`,nome&&min!=="md"&&`grid-min-${min}`,columns!=null&&"grid-fixed",className)} style={vars} {...props}/>}
 
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({label,value,trend,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label:ReactNode;value:ReactNode;trend?:ReactNode}){return <Card className={cx("kpi",className)} {...props}><span className="muted">{label}</span><strong>{value}</strong>{trend&&<small>{trend}</small>}</Card>}
@@ -284,7 +294,37 @@ export function Badge({variant="neutral",emphasis="soft",size="md",dot,leading,t
   // botão do sino é anunciado "sino 8" e ninguém sabe o que é o 8.
   return <span className="badge-anchor">{children}{!escondido&&React.cloneElement(chip,{"aria-hidden":true})}</span>;
 }
-export function Progress({value,label}: {value:number;label?:string}){const pct=Math.max(0,Math.min(100,value));return <div><div className="progress" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}><span style={{width:`${pct}%`}}/></div></div>}
+/** O tom da barra: a mesma lista fechada do `ButtonTone`. Pausado é `neutral`; falha é `danger`. */
+export type ProgressTone="brand"|"neutral"|"success"|"warning"|"danger"|"info";
+export interface ProgressProps{
+  /** 0 a 100; fora disso é grampeado. **Sem `value`, a barra é indeterminada** (AN-07): o total
+   *  ainda não se sabe, e um pedaço corre pelo trilho, no lugar de um 0% que parece parado. */
+  value?:number;
+  /** O nome que o leitor de tela anuncia. Não aparece. */
+  label?:string;
+  /** O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo
+   *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
+  detail?:ReactNode;
+  tone?:ProgressTone;
+  className?:string;
+}
+// AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
+// de antes, mais a classe da caixa de fora. A anatomia é a do `ProgressBar` do HeroUI 3.2.6: a
+// saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
+export function Progress({value,label,detail,tone="brand",className}:ProgressProps){
+  const semTotal=value==null||Number.isNaN(value);
+  const pct=semTotal?undefined:Math.max(0,Math.min(100,value));
+  const temApoio=detail!=null&&detail!==false&&detail!=="";
+  // Texto vai no `aria-valuetext`, e o desenho dele sai do leitor de tela para não ser lido duas
+  // vezes. Apoio que não é texto (um ícone, um link) fica onde está, para o leitor achar sozinho.
+  const emTexto=temApoio&&(typeof detail==="string"||typeof detail==="number")?String(detail):undefined;
+  const valuetext=emTexto==null?undefined:pct==null?emTexto:`${pct}%, ${emTexto}`;
+  return <div className={cx("progress-field",className)}>
+    {temApoio&&<div className="progress-detail" aria-hidden={emTexto!=null||undefined}>{detail}</div>}
+    <div className={cx("progress",semTotal&&"progress-indeterminate",tone!=="brand"&&`progress-tone-${tone}`)} role="progressbar"
+      aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-valuetext={valuetext}>
+      <span style={pct==null?undefined:{width:`${pct}%`}}/></div>
+  </div>}
 export function Skeleton({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("skeleton",className)} aria-hidden="true" {...props}/>}
 
 // ── Identity ─────────────────────────────────────────────────────────────────────────────────

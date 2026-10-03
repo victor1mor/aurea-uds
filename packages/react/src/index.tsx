@@ -56,7 +56,7 @@ export {AspectRatio, InputGroup, InputGroupAddon, Label,
   Badge, Progress, Skeleton,
   AvatarGroup, LogStream, MediaPlayerShell, Topbar, Kbd, Textarea, Checkbox, Radio,
   Switch, Range, formatBadgeCount, type BadgeVariant, type BadgeEmphasis, type BadgeSize,
-  type BadgePlacement, type BadgeProps, type AvatarSize, type TopbarVariant,
+  type BadgePlacement, type BadgeProps, type ProgressProps, type ProgressTone, type AvatarSize, type TopbarVariant,
   type TextProps, type HeadingProps, type ParagraphProps, type CodeProps, type TypographyType,
   type TypographyColor, type TypographyWeight, type TypographyAlign, type HeadingLevel, type ParagraphSize} from "./markup.js";
 export * from "./system.js";

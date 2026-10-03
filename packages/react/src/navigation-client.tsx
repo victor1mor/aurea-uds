@@ -17,6 +17,7 @@ import {SearchField} from "./inputs.js";
 // importa `internal`, `system` e `actions` — todos anteriores —, então não há ciclo: o que
 // mudou foi a ORDEM documentada, que colocava overlays no "resto" sem motivo medido.
 import {Tooltip} from "./overlays.js";
+import {Avatar} from "./identity-client.js";
 
 // Stepper (Lote 2 do BUILDING.md). Registro honesto da pesquisa: das QUATRO referências locais,
 // NENHUMA tem stepper — nem o Base UI, nem o shadcn, nem o Untitled, nem o Kibo. A única fonte
@@ -426,18 +427,31 @@ return it.render
 // porque a medição de 13/08/2026 já está escrita no core (ao lado de `.btn:disabled`): `:disabled`
 // TIRA o controle da ordem de foco e quem usa teclado nunca descobre que a linha existe.
 // `aria-disabled` mantém focável e inerte, e o manipulador é que não é passado.
+//
+// AN-04 (03/10/2026): a foto e os sinais. Um consumidor monta com o `NavList` a lista de conversas
+// (`description` = a última mensagem, `value` = as não lidas), e faltavam a foto de quem fala e os
+// sinais de fixada e silenciada. Só acrescenta: sem `avatar` nem `indicators`, a linha é a de antes.
+export interface NavListIndicator{icon:IconName;
+  /** O que o sinal quer dizer ("Fixada"). Sai da tela e fica para o leitor de tela. */
+  label:string}
 export interface NavListItem{id:string;label:ReactNode;description?:ReactNode;value?:ReactNode;icon?:IconName;href?:string;onClick?:()=>void;disabled?:boolean;
   /** O link do roteador do app (M-01). Linha com `render` é linha com destino: leva a seta, como a com `href`. */
-  render?:ReactElement}
+  render?:ReactElement;
+  /** A foto da linha (AN-04) — o mesmo formato do `ChatMessage.avatar`. Toma o lugar do `icon`. */
+  avatar?:{src?:string;fallback?:ReactNode};
+  /** Os sinais ao lado do `value` (AN-04): fixada, silenciada. Pequenos e apagados, cada um com nome. */
+  indicators?:NavListIndicator[]}
 export function NavList({items,className,...props}:HTMLAttributes<HTMLUListElement>&RefAttributes<HTMLUListElement>&{items:NavListItem[]}){
 return <ul className={cx("nav-list",className)} {...props}>
 {items.map(it=>{
 const miolo=<>
-{it.icon&&<Icon name={it.icon}/>}
+{it.avatar?<Avatar src={it.avatar.src} fallback={it.avatar.fallback}/>:it.icon&&<Icon name={it.icon}/>}
 <span className="nav-list-text">
 <span className="nav-list-label">{it.label}</span>
 {it.description!=null&&<span className="nav-list-description">{it.description}</span>}
 </span>
+{it.indicators&&it.indicators.length>0&&<span className="nav-list-indicators">{it.indicators.map(x=>
+  <span key={x.label}><Icon name={x.icon} size="sm"/><span className="sr-only">{x.label}</span></span>)}</span>}
 {it.value!=null&&<span className="nav-list-value">{it.value}</span>}
 {(it.href||it.render)&&<Icon name="caret-right" size="sm" className="nav-list-chevron"/>}
 </>;

@@ -4,7 +4,8 @@
 mesmo dia pelo Lote F do nativo (versão `0.14.0`, ver §0). Fonte: o
 documento de achados dos consumidores, que vive com o Victor (ver `CLAUDE.md` §3), conferido ID a
 ID contra o `CHANGELOG.md`. **Peça ao Victor a versão mais nova antes de confiar nesta lista** —
-ela envelhece a cada lote.
+ela envelhece a cada lote. **Em 03/10/2026** entraram os oito pedidos de um consumidor novo, da
+web (§9), conferidos contra a `0.17.0`.
 
 A pesquisa segue a ordem do `CLAUDE.md` §2: **primeiro o HeroUI**; só onde ele não tem a peça,
 o **ReUI**. Desde 01/10/2026 a fila de referências tem cinco degraus — **HeroUI → ReUI → Shark UI
@@ -361,3 +362,26 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
    R-21, R-22~~ (`0.15.0`). A seção 2 do nativo está fechada, fora a R-17; falta o aceite de aparelho (§3).
 5. Web: C-08 e M-03 fecham sem código; C-11, B-05, B-06 + N-01 + N-03 num lote só (paginação).
 6. Lote 5 (peças novas da web) depois da `1.0`, como o `CLAUDE.md` já diz.
+7. **Lote G** (§9), com "pode" de 03/10/2026: AN-07, AN-08, AN-04 e AN-01 — **feito na `0.18.0`**
+   (03/10/2026) e aprovado pela bancada (*"pode, aprovado o lote G"*). Depois, o **Lote H** (a conversa longa): AN-02,
+   AN-03, AN-05 e AN-06.
+
+---
+
+## 9. Pedidos de um consumidor novo, da web (03/10/2026)
+
+Um app de web que estava sendo refeito só com a Aurea (`@aurea-uds/react` **0.15.0**) listou o
+que ela não atende. Os oito foram **reconferidos no código da `0.17.0`** em 03/10/2026: nenhum
+existe ainda. O nome do app e o assunto dele ficam fora daqui (`CLAUDE.md` §6); a forma
+atravessa — uma conversa com centenas de milhares de mensagens, uma galeria de milhares de itens.
+
+| ID | o que falta | o HeroUI (`@heroui/react` 3.2.x) | lote |
+|---|---|---|---|
+| AN-01 | o menu lateral do `AppShell` não tem botão de recolher, e não recolhe sozinho em tela média: só vira gaveta abaixo de 1024. O modo trilha existe (`sidebarCollapsed`, `.sidebar-collapsed`), mas só controlado e sem gatilho. Pedido: gatilho embutido na junção do menu com o conteúdo, aberto ↔ trilha, trilha sozinha em largura média, controlado e não controlado, nome em dica na trilha, sem quebrar quem já usa `sidebarCollapsed` | **[ninguém]** — não tem moldura de app | G · **feito na `0.18.0`** |
+| AN-02 | o `MessageList` não serve para conversa longa: falta o lado (minha × dos outros), anexo e álbum, cabeçalho de resposta e de encaminhada, separador de dia, carregar as antigas ao chegar no topo sem pular, e lista virtualizada (hoje toda mensagem vira DOM) | **[ninguém]** — não tem conversa | H |
+| AN-03 | o `MessageComposer` só manda texto (`onSend(text)`): falta anexo (reusar o `FileInput`), responder com a prévia acima do campo, e editar | **[ninguém]** | H |
+| AN-04 | o item de lista (`NavListItem`) só aceita ícone por nome: falta foto (`avatar`, o mesmo formato do `ChatMessage.avatar`) e sinais ao lado do `value` (fixado, silenciado) | o `ListBoxItem` aceita qualquer conteúdo | G · **feito na `0.18.0`** |
+| AN-05 | a `Gallery` tem uma seleção só (`selected: string`), item sem tipo nem duração de vídeo, e não carrega por partes | **[ninguém]** | H |
+| AN-06 | o `TreeView` pede todos os filhos prontos: falta carregar ao abrir (`hasChildren` + `onExpand` assíncrono, com o nó em "carregando") e o nó selecionado controlado (`selectedId`) | **[ninguém]** | H |
+| AN-07 | o `Progress` não tem estado indeterminado (sem total, ele mostra 0%, como se estivesse parado), nem texto de apoio (velocidade, tempo, bytes), nem tom de pausado e de falha | **[HeroUI]** `ProgressBar` com `color` (`accent`, `default`, `success`, `warning`, `danger`) e `size` (`sm`, `md`, `lg`); o motor dele (React Aria) tem `isIndeterminate` | G · **feito na `0.18.0`** |
+| AN-08 | reforço da C-10: o `Grid.min` só aceita medida escrita, e a trava do app reprova medida escrita. Medido no app: `min="sm"` passou pelo tipo e a grade virou **uma coluna só**, sem aviso. Pedido: a escala da Aurea (`xs`, `sm`, `md`, `lg`), ligada a token | — (o HeroUI não tem `Grid`) | G · **feito na `0.18.0`** |

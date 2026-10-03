@@ -49,9 +49,9 @@
     },
     {
       "name": "min",
-      "type": "string",
-      "default": "\"15rem\"",
-      "description": "The minimum column width, as a CSS length (\"10rem\", \"155px\"). It is the --grid-min the CSS always read and no type exposed."
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | string",
+      "default": "\"md\"",
+      "description": "The minimum column width. By name (AN-08): xs 8rem, sm 12rem, md 15rem (the default) or lg 20rem — each a number the system already uses (the Gallery tile, the health matrix cell, the Grid default, the xs dialog). Or as a CSS length (\"10rem\", \"155px\"), the --grid-min the CSS always read. Until 0.17, \"sm\" type-checked and collapsed the grid to a single column."
     },
     {
       "name": "columns",

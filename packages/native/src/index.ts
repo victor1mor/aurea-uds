@@ -62,7 +62,7 @@ export type {ScreenProps, AureaScreenBackground, AureaScreenEdge} from "./screen
 export {Stack, Cluster, Grid, Card, Separator} from "./layout.js";
 export type {
   StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify,
-  GridProps, CardProps, SeparatorProps, AureaCardVariant,
+  GridProps, CardProps, SeparatorProps, AureaCardVariant, AureaGridMin,
 } from "./layout.js";
 
 export {Button, IconButton, LinkButton, ThemeToggle} from "./actions.js";
@@ -75,7 +75,7 @@ export {Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARI
   from "./feedback.js";
 export type {
   SpinnerProps, SkeletonProps, ProgressProps, AlertProps, EmptyStateProps, DataStateProps,
-  AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue,
+  AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue, AureaProgressTone,
 } from "./feedback.js";
 
 export {Badge, Status, Avatar, KPI, formatarContagem} from "./display.js";
@@ -104,7 +104,7 @@ export {useReduceMotion} from "./movimento.js";
 export {BottomNav, Topbar, NavList, Stepper, Tabs} from "./navigation.js";
 export type {
   BottomNavProps, TopbarProps, NavListProps, StepperProps,
-  AureaNavItem, AureaNavListItem, AureaStepItem, AureaStepState,
+  AureaNavItem, AureaNavListItem, AureaNavListIndicator, AureaStepItem, AureaStepState,
   AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset,
   TabsProps, AureaTabItem, AureaTabsVariant,
 } from "./navigation.js";

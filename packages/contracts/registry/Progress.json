@@ -3,7 +3,7 @@
   "category": "Feedback",
   "layer": "Component",
   "maturity": "Stable",
-  "summary": "Determinate progress bar.",
+  "summary": "Progress bar: determinate, or indeterminate when the total is not known yet, with a supporting detail and a tone.",
   "icon": "spinner",
   "platforms": {
     "web": "stable",
@@ -12,16 +12,26 @@
   "variants": [],
   "sizes": [],
   "states": [
-    "determinate"
+    "determinate",
+    "indeterminate"
   ],
   "tokens": [
     "--primary",
-    "--surface-3"
+    "--surface-3",
+    "--muted-foreground",
+    "--success",
+    "--warning",
+    "--destructive",
+    "--info",
+    "--opacity-disabled",
+    "--space-1",
+    "--text-sm",
+    "--weight-medium"
   ],
   "a11y": {
     "role": "progressbar",
     "keyboard": [],
-    "apg": "The APG pattern is Meter/Progressbar: role=\"progressbar\" with aria-valuemin, aria-valuemax and aria-valuenow, all three present. No keyboard interaction — a progress bar reports, it does not accept input. That is what separates it from Range, which is a slider."
+    "apg": "The APG pattern is Meter/Progressbar: role=\"progressbar\" with aria-valuemin and aria-valuemax, and aria-valuenow only when the value is known. Indeterminate omits aria-valuenow, so the bar never announces a 0% it does not mean. A text detail travels in aria-valuetext (\"64%, 2.3 MB/s\") and its drawn copy is hidden from the screen reader, so it is heard once. No keyboard interaction — a progress bar reports, it does not accept input. That is what separates it from Range, which is a slider."
   },
   "dependencies": {
     "engine": null,
@@ -41,13 +51,41 @@
       "name": "value",
       "type": "number",
       "default": "—",
-      "description": "Percentage, 0 to 100. Clamped once and used for both the fill and aria-valuenow, so what is drawn and what is announced cannot drift apart. There is no indeterminate mode: when the total is unknown, use Spinner."
+      "description": "Percentage, 0 to 100. Clamped once and used for both the fill and aria-valuenow, so what is drawn and what is announced cannot drift apart. Without a value the bar is indeterminate (AN-07): a piece two fifths wide runs across the track — HeroUI's numbers, 1.5 s — instead of a 0% that reads as stalled. With reduced motion it does not run: the whole bar, dimmed, never a still piece that would read as 40% done."
     },
     {
       "name": "label",
       "type": "string",
       "default": "—",
-      "description": "Accessible name of the bar. Without it the screen reader announces a bare number with no subject."
+      "description": "Accessible name of the bar. Not drawn. Without it the screen reader announces a bare number with no subject."
+    },
+    {
+      "name": "detail",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Supporting text above the track, on the end side — HeroUI's ProgressBar.Output: speed, time left, bytes. Small, muted, tabular figures. As text it also becomes aria-valuetext; anything else (a link) stays where it is for the screen reader to reach."
+    },
+    {
+      "name": "tone",
+      "type": "brand | neutral | success | warning | danger | info",
+      "default": "brand",
+      "description": "What the fill colour means — the same closed list as Button's tone. Paused is neutral; failed is danger. Every tone keeps 3:1 against the track in both themes, except brand in the light theme (the brand gold is a fill, ADR-0054)."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Goes on the outer box, the one that holds the detail and the track."
     }
-  ]
+  ],
+  "axes": {
+    "tone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  }
 }

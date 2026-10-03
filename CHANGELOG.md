@@ -80,6 +80,97 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.18.0] — 2026-10-03
+
+⏳ **Não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador
+(*"pode, aprovado o lote G"*, 03/10/2026).
+
+O **Lote G**: quatro pedidos de um consumidor novo, da web, que estava refazendo um app só com a
+Aurea (`docs/FILA.md` §9) — AN-07, AN-08, AN-04 e AN-01, com o "pode" de 03/10/2026. **Versão
+nova, e não correção, porque entram props.** Nada sai nem muda de nome.
+
+### Adicionado
+
+- **AN-07 · `Progress` sem total, com apoio e com tom (web e nativo).**
+  - `value` passa a ser opcional. **Sem ele a barra é indeterminada**: um pedaço de 2/5 corre de
+    fora a fora em 1,5 s, nos números do `ProgressBar` do HeroUI 3.2.6, e o `aria-valuenow` (no
+    nativo, o `now`) não sai. Antes, sem total, ela mostrava 0% — parecia parada. Com menos
+    movimento o pedaço não corre: a barra inteira, apagada (`--opacity-disabled`), e nunca um
+    pedaço parado, que leria como 40% feito.
+  - `detail`: o texto de apoio no alto, à direita — o `ProgressBar.Output` do HeroUI —, `text-sm`
+    médio e apagado, com algarismos de largura igual. Em texto, ele vai no `aria-valuetext` ("64%,
+    2,3 MB/s") e o desenho dele sai do leitor de tela, para ser ouvido uma vez só.
+  - `tone`: `brand` (o padrão), `neutral`, `success`, `warning`, `danger`, `info` — a lista do
+    `ButtonTone`. Pausado é `neutral`; falha é `danger`. Cada tom mede de 4,00 a 8,34:1 contra o
+    trilho, nos dois temas.
+- **AN-08 · `Grid` com `min` por nome (web; no nativo, `minColumnWidth`).** `xs` 8rem, `sm` 12rem,
+  `md` 15rem (o padrão) e `lg` 20rem. Nenhum número é novo: são a miniatura da `Gallery`, a célula
+  da `HealthMatrix`, o padrão do `Grid` e o `Dialog` `xs` (o `max-w-xs` do HeroUI). Medida escrita
+  continua valendo. Medido no app: `min="sm"` passava pelo tipo e a grade virava **uma coluna só**.
+- **AN-04 · `NavList` com foto e sinais (web e nativo).** `avatar` (o formato do
+  `ChatMessage.avatar`; no nativo, o do `Avatar` daqui) toma o lugar do ícone; `indicators`
+  (`[{icon, label}]`) põe sinais pequenos e apagados antes do valor — fixada, silenciada —, e o
+  `label` de cada um é o que o leitor de tela ouve ("Ana Até amanhã Fixada Silenciada 3", medido
+  no Chromium).
+- **AN-01 · `AppShell` com o botão de recolher** ([ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)). `sidebarCollapsible` desenha o botão no alto da junção do menu com o conteúdo (o
+  lugar que o Victor marcou) e recolhe a lateral sozinha entre 1024 e 1279 de largura;
+  `defaultSidebarCollapsed` e `onSidebarCollapsedChange` completam o par controlado/não controlado.
+  A referência é a `Sidebar` do shadcn que o ReUI usa no `c-sidebar-2` (o HeroUI não tem moldura
+  de app). Sem a prop, o shell é o de antes.
+- Textos novos: `sidebarCollapse` ("Recolher o menu") e `sidebarExpand` ("Abrir o menu").
+
+### Consertado
+
+- **A gaveta recolhida era uma gaveta de ícones sem nome.** Abaixo de 1024, com `sidebarCollapsed`,
+  a lateral abria como trilha, com os nomes em `.sr-only`. Agora a gaveta nunca é trilha, controlada
+  ou não.
+- **Na escrita da direita para a esquerda o conteúdo encostava na borda da página** e deixava 32 de
+  vão na junção: a margem do `.content` era física. Passou a ser lógica; na esquerda para a direita
+  nada muda.
+- A ficha do `BottomNav` não listava `capsule` e `expand` no tipo do `indicator`, e ainda dizia que
+  todo indicador mostra o nome (o `expand` esconde, desde a `0.17.0`).
+
+### ⚠ Pode quebrar a compilação
+
+- `AureaStrings` ganhou duas chaves. Quem monta o objeto INTEIRO com esse tipo precisa acrescentar
+  `sidebarCollapse` e `sidebarExpand`; quem passa só parte ao `AureaProvider` não muda nada.
+
+### Achados abertos, fora deste lote
+
+- **No tema claro, a barra amarela padrão mede 1,61:1 contra o trilho** (o mínimo para peça gráfica
+  é 3:1, WCAG 1.4.11). Vem da primeira barra. O amarelo como fundo é identidade (ADR-0054); a
+  decisão é do Victor.
+- **O empacotador do app reescreve `:dir(rtl)`** como lista de idiomas, e a regra deixa de pegar
+  (medido no Vite). As duas regras deste lote foram escritas sem `:dir`; as cinco que já existiam
+  (`Badge` e `TreeView`) ficaram para uma tarefa à parte.
+- Onze fichas ainda listam ícones pelo nome do Carbon (anterior à `0.13.0`).
+
+### Para o app
+
+- Barra sem total: `<Progress label="Contando arquivos" detail="1.204 arquivos" />`; pausada:
+  `tone="neutral"`; falhou: `tone="danger"`.
+- Grade: `<Grid min="sm">`.
+- Lista de conversas: `avatar={{src, fallback}}` e `indicators={[{icon: "push-pin", label: "Fixada"}]}`.
+- Moldura: `<AppShell sidebarCollapsible …>`; para guardar a preferência, `defaultSidebarCollapsed`
+  + `onSidebarCollapsedChange`.
+
+### Testes
+
+Cada teste novo foi rodado contra o código de antes e reprova:
+
+- `tests/unit/progress-an07.test.tsx` (web, 9 de 11) e `tests/unit/native-progress-an07.test.tsx`
+  (nativo, 12 de 13); `tests/visual/progress.spec.ts` — o pedaço corre de fora a fora, ao contrário
+  na direita para a esquerda, e para com menos movimento (provados também sem a regra de cada um);
+  `tests/visual/tone-contrast.spec.ts` ganhou o preenchimento contra o trilho.
+- `tests/unit/grid-min-an08.test.tsx` (9 de 10) e `tests/visual/grid-min.spec.ts` (a folha de antes
+  dá uma coluna para todo nome).
+- `tests/unit/navlist-an04.test.tsx` (5 de 7) e `tests/visual/navlist-an04.spec.ts` (o nome que o
+  Chromium calcula, e o lugar de cada peça).
+- `tests/unit/appshell-an01.test.tsx` (4 de 5) e `tests/visual/appshell-an01.spec.ts` (9 de 9), no
+  banco novo `apps/keyboard-probe/shell.html`, que monta o shell de verdade.
+- Os que passam no código antigo são as travas de "sem a prop nova, nada muda".
+- Aparelho: blocos `AN-07`, `AN-08` e `AN-04` no `apps/native-smoke`.
+
 ## [0.17.0] — 2026-10-03
 
 ✅ **Publicada em 03/10/2026, por volta das 16:50 (Brasília)**, pelo terminal do Victor, da junção

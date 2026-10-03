@@ -3,12 +3,14 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Separator as BaseSeparator } from "@base-ui/react/separator";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { cx, useAureaStrings } from "./internal.js";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { ESCALA } from "./escala.js";
 import { IconButton } from "./actions.js";
+import { Tooltip } from "./overlays.js";
 import { Sidebar, Topbar } from "./navigation.js";
 // ── Auxiliar de topo: mora ANTES do primeiro export, e a posição é obrigatória ───────────────
 // O check 22 mede o corpo de um componente do `export` dele até o PRÓXIMO export — fatia longa
@@ -120,10 +122,64 @@ function useGavetaFechaNoDesktop() {
 // fundo, borda e raio do `.card`), e todo `Card` lá dentro virava caixa dentro de caixa igual — um
 // app gastou 14 `!important` para apagá-la. `surface`, a caixa, continua o padrão.
 // B-07: `topbarDivider` repassa a linha de baixo para a barra `flush` que o shell monta.
-export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, sidebarVariant, sidebarCollapsed, contentVariant = "surface", children, className, ...props }) {
+// AN-01 (03/10/2026): O BOTÃO DE RECOLHER E A TRILHA SOZINHA. Um consumidor viu numa janela de 1508:
+// a lateral sempre aberta, sem botão, e diminuir a janela não a recolhia — só virava gaveta abaixo de
+// 1024. O modo trilha existia (`sidebarCollapsed`, `.sidebar-collapsed`), mas só controlado e sem
+// gatilho. A referência é a `Sidebar` do shadcn que o ReUI usa no `c-sidebar-2` (o HeroUI não tem
+// moldura de app): estado aberto/recolhido, controlado e não controlado, um gatilho, e o nome em
+// dica na trilha. O lugar do botão é o que o Victor marcou: no alto, na junção do menu com o
+// conteúdo. E a trilha sozinha em tela média vem do pedido — a referência não a tem.
+//
+// Tudo LIGADO por `sidebarCollapsible`: sem ele o shell é o de antes, e quem já usa
+// `sidebarCollapsed` com o próprio botão não ganha um segundo.
+const MEDIA_MEDIA = `(min-width: ${ESCALA.lg}px) and (max-width: ${ESCALA.xl - 1}px)`;
+const MEDIA_ESTREITA = `(max-width: ${ESCALA.lg - 1}px)`;
+// A largura pela API do navegador, e não por `resize`: o `useSyncExternalStore` dá a resposta certa
+// já no primeiro desenho do lado do cliente, e no servidor (sem janela) diz "não" — a folha cuida da
+// tela estreita sozinha, então o HTML do servidor não mostra nada errado.
+function useLargura(query) {
+    return useSyncExternalStore((avisar) => {
+        if (typeof window === "undefined" || typeof window.matchMedia !== "function")
+            return () => { };
+        const mq = window.matchMedia(query);
+        mq.addEventListener?.("change", avisar);
+        return () => mq.removeEventListener?.("change", avisar);
+    }, () => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia(query).matches, () => false);
+}
+export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, sidebarVariant, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant = "surface", children, className, ...props }) {
     const s = useAureaStrings();
     useGavetaFechaNoDesktop();
-    return _jsxs("div", { className: cx("app-shell", topbarVariant === "flush" && "app-shell-flush", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsx(Topbar, { variant: topbarVariant, divider: topbarDivider, brand: _jsxs(_Fragment, { children: [_jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID }), brand] }), children: topbar }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, collapsed: sidebarCollapsed, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] });
+    const controlado = sidebarCollapsed !== undefined;
+    // `null` = ninguém escolheu, e vale a largura.
+    const [escolha, setEscolha] = useState(defaultSidebarCollapsed ?? null);
+    const media = useLargura(MEDIA_MEDIA), estreita = useLargura(MEDIA_ESTREITA);
+    const recolhida = controlado ? !!sidebarCollapsed : (escolha ?? (!!sidebarCollapsible && media));
+    // NA GAVETA A LATERAL NUNCA É TRILHA. Abaixo de 1024 ela abre por cima de tudo, com espaço para o
+    // nome; recolhida ali, era uma gaveta de ícones sem nome — também para quem já passava
+    // `sidebarCollapsed` (medido em 03/10/2026, na mesma conferência).
+    const efetiva = recolhida && !estreita;
+    const aviso = useRef(onSidebarCollapsedChange);
+    aviso.current = onSidebarCollapsedChange;
+    // Cruzar 1280 é mudar de contexto: a escolha da pessoa sai e a largura volta a mandar. Pelo
+    // evento do navegador, e não comparando desenhos, para a hidratação não contar como cruzamento.
+    useEffect(() => {
+        if (!sidebarCollapsible || typeof window === "undefined" || typeof window.matchMedia !== "function")
+            return;
+        const mq = window.matchMedia(MEDIA_MEDIA);
+        const aoCruzar = (e) => { if (!controlado)
+            setEscolha(null); aviso.current?.(e.matches); };
+        mq.addEventListener?.("change", aoCruzar);
+        return () => mq.removeEventListener?.("change", aoCruzar);
+    }, [sidebarCollapsible, controlado]);
+    const alternar = () => { const nova = !recolhida; if (!controlado)
+        setEscolha(nova); onSidebarCollapsedChange?.(nova); };
+    const rotulo = efetiva ? s.sidebarExpand : s.sidebarCollapse;
+    // A seta aponta para onde a lateral vai: recolher é para o começo da linha, abrir é para o fim. Na
+    // escrita da direita para a esquerda o começo é a direita — pela direção do provedor, e não por
+    // `:dir(rtl)` na folha (ver a nota do `.sidebar-toggle` no core).
+    const paraOComeco = !efetiva, direita = useDirection() === "rtl";
+    const seta = paraOComeco === direita ? "caret-right" : "caret-left";
+    return _jsxs("div", { className: cx("app-shell", topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsx(Topbar, { variant: topbarVariant, divider: topbarDivider, brand: _jsxs(_Fragment, { children: [_jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID }), brand] }), children: topbar }), sidebarCollapsible && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: seta, label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] });
 }
 export function Separator({ orientation, spacing = "none", className, ...props }) {
     const ancora = useRef(null);

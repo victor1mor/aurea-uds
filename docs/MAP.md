@@ -54,8 +54,13 @@ packages/
 Dependência entre os módulos do pacote React é um **DAG**, e a ordem é:
 
 ```
-pure → internal → system → actions → overlays → feedback → inputs → navigation → layout → data-display → resto
+pure → internal → system → actions → overlays → identity → feedback → inputs → navigation → layout → data-display → resto
 ```
+
+**`identity` saiu do "resto" e entrou antes de `navigation` em 03/10/2026** (AN-04), pela mesma
+razão do `overlays` logo abaixo: a linha do `NavList` ganhou foto, e a foto é o `Avatar`, que mora
+no `identity-client.tsx`. Conferido antes de mover: ele importa só `pure` e `internal` (e um
+**tipo** do `markup`, que some na compilação), então não há ciclo.
 
 **`overlays` saiu do "resto" e entrou depois de `actions` em 18/08/2026**, e a mudança é de
 DOCUMENTO, não de código: ele sempre importou só `internal`, `system` e `actions`. Estava listado

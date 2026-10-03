@@ -2,7 +2,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
-import { Badge } from "./display.js";
+import { Avatar, Badge } from "./display.js";
 import { comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
@@ -175,6 +175,8 @@ const folha = criarFolha((t) => ({
     // Nenhuma medida nova: `flex`, `minWidth` e o MESMO `gap` da moldura.
     linhaMiolo: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space3 },
     linhaTexto: { flex: 1, minWidth: 0 },
+    // AN-04: os sinais, com o vão de dentro do texto (`space1`), como o `.nav-list-indicators` da web.
+    sinais: { flexDirection: "row", alignItems: "center", gap: t.size.space1 },
     // ── Tabs ───────────────────────────────────────────────────────────────────────────────────
     // A cápsula é a MESMA do `SegmentedControl`, e o CSS diz isso em voz alta no comentário de
     // cima do `.tabs` (`aurea.css:1114`): *"Mesma regra da .segmented"*. Os três números vêm de
@@ -462,10 +464,12 @@ export function NavList({ items, chevron = "caret-right", style, ...rest }) {
             //   • valor em COMPONENTE fica FORA, irmão do miolo, porque pode ser tocável.
             const temAcao = typeof it.onPress === "function";
             const valorEhTexto = typeof it.value === "string" || typeof it.value === "number";
-            const miolo = (_jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon, size: "md", color: t.color.foreground }), _jsxs(View, { style: s.linhaTexto, children: [typeof it.label === "string"
+            const miolo = (_jsxs(_Fragment, { children: [it.avatar
+                        ? _jsx(Avatar, { source: it.avatar.source, fallback: it.avatar.fallback })
+                        : it.icon && _jsx(Icon, { name: it.icon, size: "md", color: t.color.foreground }), _jsxs(View, { style: s.linhaTexto, children: [typeof it.label === "string"
                                 ? _jsx(Text, { size: "sm", numberOfLines: 1, children: it.label }) : it.label, it.description != null && (typeof it.description === "string"
                                 ? _jsx(Text, { size: "xs", tone: "muted", numberOfLines: 1, children: it.description })
-                                : it.description)] }), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron
+                                : it.description)] }), it.indicators && it.indicators.length > 0 && (_jsx(View, { style: s.sinais, children: it.indicators.map((x) => (_jsx(View, { accessibilityLabel: x.label, children: _jsx(Icon, { name: x.icon, size: "sm", color: t.color.mutedForeground }) }, x.label))) })), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron
                         && _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground })] }));
             return (_jsxs(View, { style: [s.linha, it.disabled && { opacity: t.size.opacityDisabled }], children: [temAcao ? (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, accessibilityRole: "link", ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })) : (_jsx(View, { accessible: true, ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })), !valorEhTexto && it.value != null ? it.value : null] }, it.id));
         }) }));

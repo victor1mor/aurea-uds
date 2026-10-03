@@ -57,6 +57,25 @@ export default {
       ]}),
     },
     {
+      title: "A list of conversations",
+      description: "AN-04: a photo at the start, in place of the icon, and small signs before the "
+        + "value — pinned, muted. Each sign has a name the screen reader reads; it is not drawn.",
+      code: `<Card>
+  <NavList items={[
+    {id: "ana", label: "Ana", description: "See you tomorrow", avatar: {src: ana, fallback: "AN"},
+      indicators: [{icon: "push-pin", label: "Pinned"}], value: <Badge size="xs">3</Badge>, href: "/chat/ana"},
+    {id: "team", label: "Design team", description: "Bia: the new deck is up", avatar: {fallback: "DT"},
+      indicators: [{icon: "bell-slash", label: "Muted"}], href: "/chat/team"},
+  ]} />
+</Card>`,
+      render: () => demo({items: [
+        {id: "ana", label: "Ana", description: "See you tomorrow", avatar: {fallback: "AN"},
+          indicators: [{icon: "push-pin", label: "Pinned"}], value: h(Badge, {size: "xs"}, "3"), href: "#"},
+        {id: "team", label: "Design team", description: "Bia: the new deck is up", avatar: {fallback: "DT"},
+          indicators: [{icon: "bell-slash", label: "Muted"}], href: "#"},
+      ]}),
+    },
+    {
       title: "Just label and chevron",
       description: "The second line, the value and the icon are all optional. A row that only "
         + "goes somewhere carries only the name and the arrow.",

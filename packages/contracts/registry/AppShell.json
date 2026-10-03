@@ -62,7 +62,25 @@
       "name": "sidebarCollapsed",
       "type": "boolean",
       "default": "false",
-      "description": "Narrows the sidebar panel to --sidebar-rail. A floating panel keeps its two outer margins in the grid track; flush uses the token as the raw track width. Controlled by you, like the palette's open: the shell does not decide when to collapse, and does not draw the button that does."
+      "description": "Narrows the sidebar panel to --sidebar-rail. A floating panel keeps its two outer margins in the grid track; flush uses the token as the raw track width. Controlled by you, like the palette's open: the shell does not decide when to collapse. Without sidebarCollapsible it draws no button; with it, the button calls onSidebarCollapsedChange and you decide. Below 1024px the drawer is never a rail, controlled or not (AN-01): collapsed inside the drawer it was a column of unnamed icons."
+    },
+    {
+      "name": "sidebarCollapsible",
+      "type": "boolean",
+      "default": "false",
+      "description": "AN-01: draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the shadcn Sidebar that ReUI's c-sidebar-2 uses (HeroUI has no app frame)."
+    },
+    {
+      "name": "defaultSidebarCollapsed",
+      "type": "boolean",
+      "default": "—",
+      "description": "AN-01: starts collapsed without controlling it. The person's choice holds until the window crosses 1280px; then the width decides again."
+    },
+    {
+      "name": "onSidebarCollapsedChange",
+      "type": "(collapsed: boolean) => void",
+      "default": "—",
+      "description": "AN-01: called on every change — the button, or the width crossing 1280px. Keeping the preference is the app's job, as before."
     },
     {
       "name": "children",
@@ -97,6 +115,7 @@
   "a11y": {
     "role": null,
     "keyboard": [
+      "Enter",
       "Escape",
       "Tab"
     ],
@@ -106,7 +125,10 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "caret-left",
+      "caret-right"
+    ]
   },
   "related": {
     "components": [

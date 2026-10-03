@@ -494,6 +494,14 @@ img,svg { display:block; }
 .cluster-justify-center { justify-content:center; } .cluster-justify-end { justify-content:flex-end; } .cluster-justify-between { justify-content:space-between; }
 .cluster-nowrap { flex-wrap:nowrap; }
 .grid-fixed { grid-template-columns:repeat(var(--grid-cols,1),minmax(0,1fr)); }
+/* AN-08 (03/10/2026): a largura mínima da coluna, por nome — a trava de um consumidor reprova medida
+   escrita, e `min="sm"` virava UMA coluna sem aviso (o `--grid-min` inválido derruba a regra inteira).
+   O HeroUI não tem `Grid`; nenhum número é novo, cada um já mede uma grade ou uma caixa daqui:
+     xs  8rem — a miniatura da `.gallery` (`--gallery-min`)
+     sm 12rem — a célula da `.health-matrix`
+     md 15rem — o padrão do `.grid`, logo acima (sem classe)
+     lg 20rem — o `.dialog-xs`, o `max-w-xs` do HeroUI */
+.grid-min-xs { --grid-min:8rem; } .grid-min-sm { --grid-min:12rem; } .grid-min-lg { --grid-min:20rem; }
 
 /* ========================================================================== */
 /* 03. APP SHELL E DOCUMENTAÇÃO                                                */
@@ -587,7 +595,10 @@ img,svg { display:block; }
    encostado, não sobre a lateral — a rente já encosta sozinha. */
 .app-shell-flush .sidebar:not(.sidebar-flush) { --shell-top:calc(var(--topbar-height) + var(--space-05)); margin-block-start:var(--space-05); }
 .app-shell-flush .content { margin-block-start:var(--space-05); }
-.content { min-width:0; margin:var(--space-4) var(--space-4) var(--space-4) 0; padding:var(--space-6); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); }
+/* A margem é LÓGICA desde 03/10/2026 (AN-01): era `margin:space-4 space-4 space-4 0`, física, e na
+   escrita da direita para a esquerda o conteúdo encostava na borda da página e deixava 32 de vão na
+   junção com a lateral. Medido no banco da moldura; na esquerda para a direita nada muda. */
+.content { min-width:0; margin-block:var(--space-4); margin-inline:0 var(--space-4); padding:var(--space-6); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); }
 /* contentVariant="plain" (B-10): a área de conteúdo sem caixa. Os `Card` da tela passam a ser as
    únicas superfícies. A margem continua: é ela que afasta o conteúdo da lateral e da barra. */
 .content-plain { padding:0; border:0; border-radius:0; background:none; color:inherit; }
@@ -717,6 +728,33 @@ img,svg { display:block; }
    nada. Gate nenhum via, porque `sidebar.html` não tem baseline de pixel. */
 .app-shell:has(> .sidebar-collapsed) { --sidebar-track:calc(var(--sidebar-rail) + var(--space-4)*2); }
 .app-shell:has(> .sidebar-collapsed.sidebar-flush) { --sidebar-track:var(--sidebar-rail); }
+/* AN-01 (03/10/2026): O BOTÃO DE RECOLHER, no alto da junção do menu com o conteúdo — o lugar que o
+   Victor marcou. Só com `sidebarCollapsible`, e por isso mora sob `.app-shell-collapsible`: o
+   `.app-shell` cru (o catálogo escrito à mão o usa como raiz) não muda.
+   O botão é um item da grade na MESMA célula da lateral, e por isso a lateral e o conteúdo ganham
+   lugar escrito: sem ele, o posicionamento automático da grade empurraria a lateral para a coluna
+   do conteúdo. A caixa do botão é de tamanho zero na borda da coluna e copia da lateral a margem de
+   cima e o `--shell-top`, então gruda junto quando a página rola; o botão se centra nela.
+   No alto: o centro do botão na altura do centro do primeiro item da lateral (borda + `space-1` +
+   metade do `control-h-md`). Na junção: no meio do vão de `space-4` entre as duas caixas, ou em cima
+   do fio, na lateral rente. */
+.app-shell-collapsible > .sidebar { grid-column:1; grid-row:2; }
+.app-shell-collapsible > .content { grid-column:2; grid-row:2; }
+.sidebar-toggle-slot { --toggle-top:calc(var(--topbar-height) + var(--space-4)*2); --toggle-x:calc(var(--space-4) / -2); --toggle-edge:var(--border-width);
+  grid-column:1; grid-row:2; justify-self:end; align-self:start; position:sticky; top:var(--toggle-top); z-index:var(--z-sticky); width:0; height:0; margin-block-start:var(--space-4); }
+.app-shell-flush > .sidebar-toggle-slot { --toggle-top:calc(var(--topbar-height) + var(--space-05)); margin-block-start:var(--space-05); }
+.app-shell-collapsible:has(> .sidebar-flush) > .sidebar-toggle-slot { --toggle-top:var(--topbar-height); --toggle-x:0px; --toggle-edge:0px; margin-block-start:0; }
+/* O botão se centra por conta, com o lado dele escrito, e não por `translate` — que é físico e pede
+   `:dir(rtl)` para virar, e o empacotador do app reescreve `:dir()` (medido no Vite, 03/10/2026).
+   Com as margens lógicas ele vira sozinho. O lado é o `control-h-xs` do `IconButton size="xs"`, e o
+   alvo de toque com o dedo (`target-min`, a mesma troca do `.btn-icon` lá embaixo). A seta, quem
+   vira é o React, pela direção do provedor. */
+.sidebar-toggle-slot > .btn.sidebar-toggle { --toggle-size:var(--control-h-xs); --btn-bg:var(--card); --btn-border:var(--border-strong); position:absolute; inline-size:var(--toggle-size); block-size:var(--toggle-size); min-inline-size:0; min-block-size:0;
+  inset-block-start:calc(var(--toggle-edge) + var(--space-1) + var(--control-h-md) / 2 - var(--toggle-size) / 2); inset-inline-start:calc(var(--toggle-x) - var(--toggle-size) / 2); }
+@media (pointer:coarse) { .sidebar-toggle-slot > .btn.sidebar-toggle { --toggle-size:var(--target-min); } }
+@media (max-width:1023px) {
+  .sidebar-toggle-slot { display:none; }
+  .app-shell-collapsible > .sidebar, .app-shell-collapsible > .content { grid-column:auto; grid-row:auto; } }
 
 /* ── Navegação inferior — o vocabulário de APLICATIVO ───────────────────────────────
    Lacuna estrutural medida no `CONSUMIDOR-1.md` §4.1: `.topbar` e `.sidebar` são
@@ -979,6 +1017,11 @@ img,svg { display:block; }
 /* O VALOR E A SETA NÃO ENCOLHEM: valor cortado MENTE (um "R$ 1.2" no lugar de "R$ 1.234"), e seta
    cortada deixa de dizer que a linha abre. Quem cede espaço é o texto, que reticencia dizendo. */
 .nav-list-value { flex:none; color:var(--muted-foreground); font-size:var(--text-sm); }
+/* AN-04 (03/10/2026): os sinais ao lado do valor — fixada, silenciada. Pequenos (`sm`), apagados como o
+   valor, e o vão é o mesmo de dentro do texto (`space-1`). A foto é o `.avatar` de sempre. */
+.nav-list-indicators { flex:none; display:inline-flex; align-items:center; gap:var(--space-1); color:var(--muted-foreground); }
+.nav-list-indicators>span { display:inline-flex; }
+.nav-list-row>.avatar { flex:none; }
 .nav-list-row .nav-list-chevron { flex:none; opacity:.6; }
 @media (hover:hover) and (pointer:fine) { .nav-list-row:hover { background:var(--secondary); } }
 /* `aria-disabled` e NÃO `:disabled` — a razão está escrita ao lado de `.btn:disabled`, medida em
@@ -1691,6 +1734,28 @@ img,svg { display:block; }
 @media (max-width:640px) { .banner { grid-template-columns:auto minmax(0,1fr); } .banner>:last-child { grid-column:2; justify-self:start; } }
 .progress { height:8px; overflow:hidden; border-radius:999px; background:var(--surface-3); }
 .progress>span { display:block; height:100%; border-radius:inherit; background:var(--primary); }
+/* AN-07 (03/10/2026): a caixa de fora, o texto de apoio e o tom. A anatomia é a do `ProgressBar` do
+   HeroUI 3.2.6 (`@heroui/styles`, progress-bar.css): a saída no alto à direita, `text-sm` médio com
+   algarismos de largura igual, e `gap-1` até o trilho. O tom é a lista fechada do `ButtonTone`:
+   pausado é `neutral`, falha é `danger`. */
+.progress-field { display:grid; gap:var(--space-1); }
+.progress-detail { justify-self:end; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); font-variant-numeric:tabular-nums; }
+.progress-tone-neutral>span { background:var(--muted-foreground); }
+.progress-tone-success>span { background:var(--success); }
+.progress-tone-warning>span { background:var(--warning); }
+.progress-tone-danger>span { background:var(--destructive); }
+.progress-tone-info>span { background:var(--info); }
+/* Sem total, um pedaço de 2/5 corre pelo trilho: os números do HeroUI (`w-2/5`, de -100% a 350% da
+   própria largura, 1,5 s, a curva dele). O HeroUI anda com `translateX`; aqui anda a MARGEM LÓGICA
+   (de -40% a 140% do trilho, o mesmo percurso), para correr ao contrário na escrita da direita para
+   a esquerda sem `:dir(rtl)` — o empacotador do app reescreve `:dir()` como lista de idiomas e a
+   regra deixa de pegar (medido no Vite, 03/10/2026). O pedaço tem 8 de altura: a conta por quadro é
+   desprezível.
+   Com menos movimento ele não corre: a barra inteira, apagada — nunca um pedaço parado, que leria
+   como 40% feito. */
+.progress-indeterminate>span { width:40%; animation:progress-indeterminate 1.5s cubic-bezier(0.65,0,0.35,1) infinite; }
+@keyframes progress-indeterminate { from { margin-inline-start:-40%; } to { margin-inline-start:140%; } }
+@media (prefers-reduced-motion:reduce) { .progress-indeterminate>span { width:100%; animation:none; opacity:var(--opacity-disabled); } }
 /* DataState (M3): a região que troca de cara. Ela NÃO desenha nada próprio — só empilha o que
    já existe (esqueleto, alerta, estado vazio, conteúdo) com respiro entre eles. Se ganhar borda
    ou fundo, viram duas superfícies para a mesma coisa — o defeito que a `.table-region` cobrou. */

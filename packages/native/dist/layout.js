@@ -86,6 +86,7 @@ export function Cluster({ align, justify, wrap, style, ...rest }) {
             style,
         ], ...rest }));
 }
+const REM_DA_COLUNA = { xs: 8, sm: 12, md: 15, lg: 20 };
 /**
  * Colunas que se acomodam sem breakpoint.
  *
@@ -106,9 +107,10 @@ export function Cluster({ align, justify, wrap, style, ...rest }) {
  * O `min(…, 100%)` da web tem par aqui: `maxWidth: "100%"` no filho, para a coluna não estourar o
  * contêiner quando o texto cresce — a mesma lição que a Fase 11 registrou no CSS.
  */
-export function Grid({ minColumnWidth = 240, style, children, onLayout, ...rest }) {
+export function Grid({ minColumnWidth: pedido = 240, style, children, onLayout, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
+    const minColumnWidth = typeof pedido === "number" ? pedido : REM_DA_COLUNA[pedido] * t.remInDp;
     const [largura, setLargura] = React.useState(null);
     const plano = (StyleSheet.flatten([s.grid, style]) ?? {});
     const vao = numero(plano.columnGap) ?? numero(plano.gap) ?? t.size.space4;
