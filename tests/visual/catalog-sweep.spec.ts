@@ -5,6 +5,7 @@ import {join} from "node:path";
 // seções seria um segundo modelo escondido — e é a divergência que o achado I2 mediu.
 import {allowed, required, SELECTOR, pageType} from "../../scripts/page-model.mjs";
 import {esperarTransicoes} from "./esperar-transicoes";
+import {abrir} from "./abrir-pagina";
 
 // VARREDURA de TODAS as páginas do catálogo. O gate de screenshot cobre uma página por TIPO; a
 // auditoria de 26/07/2026 provou que isso não basta — rolagem lateral em 320px, violação de
@@ -20,6 +21,11 @@ const DIR = join(process.cwd(), "apps/catalog");
 const PAGES = [...readdirSync(DIR).filter(f => f.endsWith(".html")).sort(),
   ...readdirSync(join(DIR, "embeds")).filter(f => f.endsWith(".html")).sort().map(f => `embeds/${f}`)];
 const url = (f: string) => `/apps/catalog/${f}`;
+// A queda do WebKit que `abrir` repete fica escrita no relatório e no log — para se medir.
+const avisar = (texto: string) => {
+  test.info().annotations.push({type: "queda-do-webkit", description: texto});
+  console.log(`::warning::${texto}`);
+};
 
 // A escala Tailwind travada pelo gate do projeto, mais os dois extremos reais de celular.
 const WIDTHS = [320, 375, 640, 768, 1024, 1280, 1536];
@@ -31,7 +37,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   test("nenhuma página rola de lado, em nenhuma largura", async ({page}) => {
     const falhas: string[] = [];
     for (const f of PAGES) {
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       for (const width of WIDTHS) {
         await page.setViewportSize({width, height: 900});
         const over = await page.evaluate(() =>
@@ -58,7 +64,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     await page.setViewportSize({width: 1440, height: 761});
     const falhas: string[] = [];
     for (const f of PAGES) {
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       const caixas = await page.evaluate(() => [...document.querySelectorAll(".demo-panel")]
         .map((el, i) => ({i, excesso: el.scrollHeight - el.clientHeight,
           conteudo: Math.round(el.firstElementChild?.getBoundingClientRect().height ?? 0)}))
@@ -84,7 +90,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     await page.setViewportSize({width: 1280, height: 720});
     const falhas: string[] = [];
     for (const f of PAGES) {
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       const presos = await page.evaluate(() => {
         const vp = {w: innerWidth, h: innerHeight};
         const achados: {painel: number; classe: string; w: number; h: number}[] = [];
@@ -113,7 +119,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     const falhas: string[] = [];
     await page.setViewportSize({width: 1280, height: 900});
     for (const f of PAGES) {
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       const over = await page.evaluate(() => {
         document.documentElement.style.fontSize = "32px"; // 200% de 16px
         const x = document.documentElement.scrollWidth - document.documentElement.clientWidth;
@@ -135,7 +141,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     for (const f of PAGES) {
       const tipo = pageType(f);
       if (!tipo) continue;                     // índice de área não é item (ADR-0001)
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       for (const secao of required(tipo)) {
         if (await page.locator(SELECTOR[secao]).count() === 0) {
           falhas.push(`${f} (${tipo}): falta a seção "${secao}" (${SELECTOR[secao]})`);
@@ -158,7 +164,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     const falhas: string[] = [];
     await page.setViewportSize({width: 375, height: 812});
     for (const f of PAGES) {
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       const y = await page.evaluate(() => {
         const h1 = document.querySelector("h1");
         return h1 ? Math.round(h1.getBoundingClientRect().top + scrollY) : null;
@@ -172,7 +178,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   test("hierarquia de títulos: um h1, sem salto de nível", async ({page}) => {
     const falhas: string[] = [];
     for (const f of PAGES) {
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       const problema = await page.evaluate(() => {
         const hs = [...document.querySelectorAll("h1,h2,h3,h4,h5,h6")].map(h => +h.tagName[1]);
         const h1 = hs.filter(n => n === 1).length;
@@ -207,7 +213,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     page.on("response", r => { if (r.status() >= 400) falhas.push(`${r.status()}: ${r.url()}`); });
     for (const f of PAGES) {
       const antes = falhas.length;
-      await page.goto(url(f));
+      await abrir(page, url(f), avisar);
       await page.waitForTimeout(60);
       for (let i = antes; i < falhas.length; i++) falhas[i] = `${f} → ${falhas[i]}`;
     }
@@ -218,7 +224,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     test(`axe sem violação em todas as páginas · tema ${theme}`, async ({page}) => {
       const falhas: string[] = [];
       for (const f of PAGES) {
-        await page.goto(url(f));
+        await abrir(page, url(f), avisar);
         if (theme === "light") {
           await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
           // a transição de cor do core interpola; medir antes de ela TERMINAR lê cor
