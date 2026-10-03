@@ -175,6 +175,15 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     items: [{id: "home", label: "Home", icon: "house", href: "#"},
       {id: "rides", label: "Rides", icon: "gauge", href: "#",
         badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")}]}),
+  // 03/10/2026: as duas formas novas, as duas com o contador SOBRE o amarelo sólido no escolhido.
+  h(A.BottomNav, {key: "bnavc", indicator: "capsule", label: "Skin bottom capsule", current: "rides",
+    items: [{id: "home", label: "Home", icon: "house", href: "#"},
+      {id: "rides", label: "Rides", icon: "gauge", href: "#",
+        badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")}]}),
+  h(A.BottomNav, {key: "bnave", indicator: "expand", label: "Skin bottom expand", current: "rides",
+    items: [{id: "home", label: "Home", icon: "house", href: "#"},
+      {id: "rides", label: "Rides", icon: "gauge", href: "#",
+        badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")}]}),
   // ── A RÉGUA (18/08/2026) ─────────────────────────────────────────────────────────────
   // DOIS casos de vertical, e o segundo é o que engana. No flex row ela tem `align-self:stretch` e
   // estica pela altura dos IRMÃOS — tem altura com ou sem piso, então esse caso NÃO prova o piso.
@@ -888,11 +897,14 @@ for (const theme of ["dark", "light"] as const) {
                 const barra = document.querySelector(sel)!;
                 const at = barra.querySelector(".bottom-nav-item[aria-current]")!;
                 const cx2 = barra.querySelector(".bottom-nav-item:not([aria-current])")!;
-                const r = at.getBoundingClientRect();
+                // Desde 03/10/2026 o amarelo do `circle-bold` mora no DISCO dentro do item (a
+                // barra parada, `geometry.spec`): é ele que se mede.
+                const pintado = at.querySelector(".bottom-nav-disc") ?? at;
+                const r = pintado.getBoundingClientRect();
                 return {
                   raio: parseFloat(getComputedStyle(barra).borderTopLeftRadius),
                   direcao: getComputedStyle(cx2).flexDirection,
-                  atualBg: getComputedStyle(at).backgroundColor,
+                  atualBg: getComputedStyle(pintado).backgroundColor,
                   atualFg: getComputedStyle(at).color,
                   redondo: Math.abs(r.width - r.height) < 1,
                   rotulosOcultos: [...barra.querySelectorAll(".bottom-nav-label.sr-only")].length,
@@ -924,7 +936,8 @@ for (const theme of ["dark", "light"] as const) {
                 };
               };
               return {circulo: caso(".bottom-nav-ind-circle"),
-                pill: caso(".bottom-nav-ind-pill"), bold: caso(".bottom-nav-ind-circle-bold")};
+                pill: caso(".bottom-nav-ind-pill"), bold: caso(".bottom-nav-ind-circle-bold"),
+                capsule: caso(".bottom-nav-ind-capsule"), expand: caso(".bottom-nav-ind-expand")};
             })(),
             // O PONTO: sem número não há caixa, e a razão contra o ícone é a medida que o
             // Victor cobrou — nos quatro aplicativos o contador é MENOR que o ícone.
@@ -1031,14 +1044,18 @@ for (const theme of ["dark", "light"] as const) {
                   contra: razao(fBadge, fundo),
                 };
               };
-              const noAtual = (sel: string) => {
+              // O fundo que fica DEBAIXO do contador: o disco no `circle-bold`, a cápsula na
+              // `capsule`, o próprio item nos outros.
+              const noAtual = (sel: string, debaixo?: string) => {
                 const it = document.querySelector(`${sel} .bottom-nav-item[aria-current]`)!;
-                return par(it.querySelector(".badge")!, it);
+                return par(it.querySelector(".badge")!, debaixo ? it.querySelector(debaixo)! : it);
               };
               const btn = document.querySelector(".btn-primary:has(.badge)")!;
               return {
                 pill: noAtual(".bottom-nav-ind-pill"),
-                "circle-bold": noAtual(".bottom-nav-ind-circle-bold"),
+                "circle-bold": noAtual(".bottom-nav-ind-circle-bold", ".bottom-nav-disc"),
+                capsule: noAtual(".bottom-nav-ind-capsule", ".bottom-nav-mark"),
+                expand: noAtual(".bottom-nav-ind-expand"),
                 botao: par(btn.querySelector(".badge")!, btn),
               };
             })(),
@@ -2218,7 +2235,7 @@ for (const theme of ["dark", "light"] as const) {
     // esta trava nasceu para pegar. Medido em 20/08/2026 com badge `danger solid`: 2,38 no tema
     // claro, e a tela mostra um disco vermelho legível sobre amarelo pálido. Subir a tinta para
     // 22% foi tentado e PIOROU — aproximar o fundo do tom do contador não separa, aproxima.
-    for (const onde of ["circle-bold", "botao"] as const) {
+    for (const onde of ["circle-bold", "capsule", "expand", "botao"] as const) {
       expect(bn.contraste[onde].contra, `${onde}: sobre preenchimento sólido o acessório tem de `
         + "se separar — sem isso ele existe no DOM e não na tela").toBeGreaterThanOrEqual(3);
     }
@@ -2880,7 +2897,8 @@ for (const theme of ["dark", "light"] as const) {
 // ── BottomNav mais baixo (30/09/2026) · a moldura só tem 32 onde vira círculo ─────────────────
 // Pedido do Victor, aprovado pela imagem: a barra era alta por causa da folga entre o ícone e o
 // rótulo — 4 em cima e 4 embaixo do ícone de 24 dentro da moldura de 32, mais o vão de 4: 9
-// medidos. Fora dos indicadores redondos a moldura fica da altura do ícone e o vão é `--space-05`.
+// medidos. Fora dos indicadores redondos a moldura fica da altura do ícone e o vão é `--space-05`
+// (zero desde 03/10/2026, ver abaixo).
 // A entrada tem de exercitar os DOIS lados: um indicador que encolhe e um redondo que não pode.
 const ITENS_DA_BARRA = [
   {id: "a", label: "Início", icon: "house"}, {id: "b", label: "Relatórios", icon: "chart-line"},
@@ -2911,11 +2929,17 @@ for (const theme of ["dark", "light"] as const) {
       return {nenhum: medir("nenhum"), pilula: medir("pilula"), circulo: medir("circulo"), negrito: medir("negrito"),
               iconeLg: sonda("var(--icon-lg)"), anel: sonda("2rem"), vao: sonda("var(--space-05)")};
     });
+    // ~~vão `--space-05`~~ → ZERO desde 03/10/2026, pedido do Victor: *"o texto pode ficar mais
+    // próximo do ícone"* — como no Telegram, o nome começa onde a caixa do ícone acaba.
     for (const k of ["nenhum", "pilula"] as const) {
       expect(m[k].marca).toBe(m.iconeLg);
-      expect(m[k].gap).toBe(m.vao);
-      expect(m[k].iconeAoRotulo).toBeLessThanOrEqual(m.vao + 0.5);
+      expect(m[k].gap).toBe(0);
+      expect(m[k].iconeAoRotulo).toBeLessThanOrEqual(0.5);
     }
-    for (const k of ["circulo", "negrito"] as const) expect(m[k].marca).toBe(m.anel);
+    expect(m.circulo.marca).toBe(m.anel);
+    // E o `circle-bold` saiu da lista dos redondos no mesmo dia: o círculo dele é o DISCO em volta
+    // do ícone e do nome, e a moldura fica da altura do ícone, para o nome encostar nele.
+    expect(m.negrito.marca).toBe(m.iconeLg);
+    expect(m.negrito.iconeAoRotulo).toBeLessThanOrEqual(0.5);
   });
 }

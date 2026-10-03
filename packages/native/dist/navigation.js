@@ -80,7 +80,18 @@ const folha = criarFolha((t) => ({
         flex: 1, minWidth: 0, alignItems: "center", justifyContent: "center",
         // `space05` e não `space1` — a barra mais baixa (30/09/2026, pedido do Victor, aprovado pela
         // imagem). Com a moldura de 32 e o vão de 4 eram 9 entre o ícone e o rótulo; ver `marca`.
-        gap: t.size.space05, minHeight: t.size.controlHLg, padding: t.size.space1,
+        // O NOME COLADO NO ÍCONE — 03/10/2026, pedido do Victor (*"o texto pode ficar mais próximo do
+        // ícone"*): vão ZERO, como no Telegram, em que o nome começa onde a caixa do ícone acaba. O
+        // `space05` daqui (30/09/2026) somava 2 aos 2 de folga da própria linha do nome; medido na
+        // bancada, eram 9 de tinta a tinta no `pill` e 13 no `circle-bold`.
+        gap: 0, minHeight: t.size.controlHLg,
+        // 🔴 A ALTURA DO TELEGRAM — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo
+        // comparado a bottomnav como do telegram"*, e "largo" é a grossura. Medido no fonte do
+        // Telegram para Android 12.10.6 (`DialogsActivity.MAIN_TABS_HEIGHT = 56`, `GlassTabView`): a
+        // pílula tem 56; o botão, 48; o ícone, 24; o nome, 12. A nossa media 73 no `circle-bold`. O
+        // recheio de cima e de baixo cai de `space1` para `space05`, e o nome sai em 12 com a
+        // entrelinha justa (ver o `Text` do rótulo). Igual na web (`aurea.css`).
+        paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
         borderRadius: t.size.radiusControl,
     },
     // Com a pílula do tamanho do conteúdo, `flex: 1` MATA as abas: no RN ele é base ZERO, e a soma
@@ -100,6 +111,57 @@ const folha = criarFolha((t) => ({
         width: 32, height: 32, borderRadius: t.size.radiusControl },
     marcaRedonda: { borderRadius: t.size.radiusFull },
     contador: { position: "absolute", top: -t.size.space05, right: -t.size.space05 },
+    // ── A BARRA FICA PARADA QUANDO SE TROCA DE ABA — pedido do Victor, 03/10/2026 ──────────────
+    // *"me incomoda o bottom nav todo se mexer [...] quero ele estático, apenas os botões
+    // dinâmicos"*. Medido na bancada com o `react-native-web`: no `circle-bold` com
+    // `width="content"` a barra ia de 249 a 257 de largura conforme a aba escolhida, e por estar no
+    // centro, andava inteira. A regra daqui para baixo: NENHUMA medida depende de o item estar
+    // escolhido. Só a pintura muda. Quem cobra: `tests/unit/native-bottomnav-parada.test.tsx`.
+    //
+    // `circle-bold`: o disco amarelo é uma caixa DENTRO do item, de 56 (o `--bottomnav-bold` do
+    // `aurea.css`), em TODOS os itens. Antes o disco ERA o item escolhido: ele media 56 e os outros
+    // mediam o conteúdo, então a soma mudava com a escolha. O recheio passa do item para o disco,
+    // e a altura da barra não muda.
+    aba_disco: { paddingHorizontal: 0, paddingVertical: 0 },
+    // Sem a moldura de 32 (é o disco que desenha a forma, e não ela) e sem vão, o nome fica colado
+    // no ícone; o recheio de cima e de baixo volta a `space1` para o disco continuar quase redondo
+    // (56 × 48).
+    disco: {
+        alignItems: "center", justifyContent: "center", gap: 0,
+        width: 56, minHeight: t.size.controlHLg, borderRadius: t.size.radiusFull,
+        paddingHorizontal: t.size.space1, paddingVertical: t.size.space1,
+    },
+    // `capsule` (a "A" da bancada, o Material 3 Expressive): a moldura do ícone vira a cápsula de
+    // 56 × 32 do indicador ativo dele — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
+    // `aurea.css`, em todos os itens. O rótulo fica embaixo, fora dela.
+    marcaCapsula: { width: 56, height: 32, borderRadius: t.size.radiusFull },
+    // O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada (item não
+    // escolhido) ele ficaria solto, longe do sino. São os (56 − 32) / 2 a mais para dentro.
+    contadorCapsula: { right: (56 - 32) / 2 - t.size.space05 },
+    // No `content` o item tem a largura da cápsula mais o recheio de sempre (`space1`), e não o
+    // `space3` do `aba_content`: com ele cada item teria 80 e a barra, 340.
+    aba_capsula_content: { paddingHorizontal: t.size.space1 },
+    // `expand` (a "C" da bancada): os outros itens mostram só o ícone; o escolhido vira cápsula
+    // amarela com o nome ao lado. É o ÚNICO em que o botão escolhido cresce — os botões andam, e a
+    // BARRA não: a vaga do escolhido é FIXA, e não do tamanho do nome. Ícone (24) + vão (`space2`)
+    // + lugar do nome (`space20`, 80) + recheio (`space3` dos dois lados) = 136. Nome maior que 80
+    // termina em "…". Medir o nome de cada aba daria uma barra que muda com a lista; esta não muda.
+    aba_expande: {
+        flexDirection: "row", gap: t.size.space2, paddingVertical: 0, paddingHorizontal: 0,
+        minHeight: t.size.targetMin, minWidth: t.size.targetMin,
+    },
+    aba_expande_outro_content: { flexGrow: 0, flexShrink: 0, flexBasis: "auto", width: t.size.targetMin },
+    aba_expande_escolhido: {
+        flexGrow: 0, flexShrink: 0, flexBasis: "auto",
+        width: t.size.iconLg + t.size.space2 + t.size.space20 + t.size.space3 * 2,
+        paddingHorizontal: t.size.space3, backgroundColor: t.color.primary,
+    },
+    // A moldura do ícone no `expand` tem a largura do ícone: o contador pendura nele e o nome vem
+    // logo ao lado — com 32 de moldura sobrava folga dos dois lados do ícone dentro da cápsula.
+    marcaExpande: { width: t.size.iconLg },
+    // O nome do item que NÃO é texto, nos não escolhidos do `expand`: fora da tela e sem ocupar
+    // lugar, mas na árvore — o texto simples vira `accessibilityLabel` do item.
+    rotuloEscondido: { position: "absolute", opacity: 0 },
     // ── NavList ────────────────────────────────────────────────────────────────────────────────
     lista: { gap: t.size.space05 },
     linha: {
@@ -241,6 +303,9 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
     const strings = useAureaStrings();
     const inset = useSafeAreaInsets();
     const redondo = indicator.startsWith("circle");
+    const disco = indicator === "circle-bold";
+    const capsula = indicator === "capsule";
+    const expande = indicator === "expand";
     const anotar = useAnotarBottomNav();
     const flutua = variant !== "edge";
     const justa = flutua && width === "content";
@@ -270,48 +335,72 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             const ativo = it.id === current;
             const corDoTexto = !ativo ? t.color.mutedForeground
                 : indicator === "none" ? t.color.primaryEmphasis
-                    : indicator === "circle-bold" ? t.color.primaryForeground
+                    : indicator === "circle-bold" || indicator === "expand" ? t.color.primaryForeground
                         : indicator === "subtle" || indicator === "pill" ? t.color.primaryEmphasis
                             : redondo ? t.color.primaryEmphasis
                                 : t.color.foreground;
-            return (_jsxs(Pressable, { onPress: it.onPress, disabled: it.disabled, 
+            // Na `capsule` o ícone está SOBRE o amarelo e o rótulo não: cada um tem a sua cor.
+            const corDoIcone = ativo && capsula ? t.color.primaryForeground : corDoTexto;
+            // No `expand` o nome só aparece no escolhido; nos outros ele vira o nome do item para o
+            // leitor de tela (o texto simples) ou fica na árvore sem ocupar lugar (o que não é texto).
+            const nomeVisivel = !expande || ativo;
+            const marca = (_jsxs(View, { style: [
+                    // A moldura de 32 só serve aos indicadores redondos, em que ela VIRA o círculo. Nos
+                    // outros ela era folga vazia em volta do ícone de 24: fica da altura dele. A largura
+                    // continua 32, que é o canto do contador. Igual na web (`aurea.css`).
+                    // No `circle-bold` a moldura NÃO é o círculo (é o disco, em volta do ícone E do nome):
+                    // ela fica da altura do ícone, e o nome encosta nele.
+                    s.marca, redondo && !disco ? s.marcaRedonda : { height: t.size.iconLg },
+                    capsula && s.marcaCapsula, expande && s.marcaExpande,
+                    ativo && indicator === "circle" && { backgroundColor: comOpacidade(t.color.primary, 0.14) },
+                    ativo && indicator === "circle-raised" && {
+                        backgroundColor: t.color.popover, boxShadow: [t.shadow.shadowMd],
+                    },
+                    ativo && indicator === "circle-outline" && {
+                        borderWidth: t.size.borderWidth, borderColor: t.color.primaryEmphasis,
+                    },
+                    ativo && capsula && { backgroundColor: t.color.primary },
+                ], children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", color: corDoIcone, weight: ativo ? "fill" : undefined }), it.badge != null && it.badge !== false && (_jsx(View, { style: [s.contador, capsula && s.contadorCapsula], children: typeof it.badge === "number"
+                            ? _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", count: it.badge })
+                            : _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", dot: true }) }))] }));
+            // 🔴 O PESO DO RÓTULO NÃO MUDA COM A ESCOLHA (03/10/2026). Era 500 no escolhido e 400 nos
+            // outros, e texto mais grosso é texto mais LARGO: no `content` a barra mudava de largura a
+            // cada toque, em todos os indicadores. Agora é 500 em todos — o "Label medium" do Material
+            // 3, que também deixou de engrossar o escolhido no Expressive pela mesma razão. O que marca
+            // a escolha é a cor, o ícone cheio e a forma. No `expand` o nome é `sm`: ao lado do ícone,
+            // e não embaixo dele.
+            const rotulo = typeof it.label === "string"
+                ? (nomeVisivel
+                    // 12 numa linha de 16, o do Telegram — e o `text-xs` da web. Antes era o `xs` do `Text`
+                    // nativo, que sobe para 14 (ADR-0050) com linha de 21: era o que mais engrossava a
+                    // barra. A linha é o tamanho mais `space1`, como na web: com a entrelinha justa (14,4)
+                    // a perna do "j" passava da caixa. No `expand` o nome vai ao lado do ícone, em 14.
+                    ? _jsx(Text, { type: expande ? "body-sm" : "body-xs", weight: 500, numberOfLines: 1, style: [{ color: corDoTexto, lineHeight: (expande ? t.size.textSm : t.size.textXs) + t.size.space1 },
+                            expande && { flexShrink: 1 }], children: it.label })
+                    : null)
+                : (nomeVisivel ? it.label : _jsx(View, { style: s.rotuloEscondido, children: it.label }));
+            return (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, 
                 // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
-                accessibilityRole: "link", ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }), style: [
+                accessibilityRole: "link", accessibilityLabel: !nomeVisivel && typeof it.label === "string" ? it.label : undefined, ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }), style: [
                     s.aba, justa && s.aba_content,
                     indicator === "subtle" && { borderRadius: t.size.radiusCard - t.size.space1 },
                     ativo && (indicator === "subtle" || indicator === "pill")
                         && { backgroundColor: comOpacidade(t.color.primary, 0.12) },
-                    // O círculo é o `flex:none; width:var(--bottomnav-bold,3.5rem)` da web (`aurea.css`,
-                    // `.bottom-nav-ind-circle-bold`): não cresce, não encolhe, 56 de largura.
-                    // 🔴 Escrito por EXTENSO, e não `flex: 0` — defeito visto pelo Victor no app rodando
+                    disco && s.aba_disco,
+                    capsula && justa && s.aba_capsula_content,
+                    // 🔴 Larguras por EXTENSO, e não `flex: 0` — defeito visto pelo Victor no app rodando
                     // no navegador (02/10/2026): o `react-native-web` 0.21.3 passa `flex: 0` cru para o
-                    // CSS, onde ele vale `0 1 0%`, e o círculo encolhia até o recheio (8 de largura, um
-                    // risco amarelo). No Yoga `flex: 0` é "inflexível"; as três por extenso valem o mesmo
-                    // nos dois. Quem cobra: `tests/unit/native-flex-navegador.test.tsx`.
-                    // E o recheio dos lados volta a `space1` (o da `aba`): no `content` ele era `space3`,
-                    // e dentro dos 56 sobravam 32 para o rótulo — "Avisos" saía "Avi…". Igual na web.
-                    ativo && indicator === "circle-bold" && {
-                        flexGrow: 0, flexShrink: 0, flexBasis: "auto", width: 56,
-                        paddingHorizontal: t.size.space1,
-                        borderRadius: t.size.radiusFull, backgroundColor: t.color.primary,
-                    },
-                ], children: [_jsxs(View, { style: [
-                            // A moldura de 32 só serve aos indicadores redondos, em que ela VIRA o círculo. Nos
-                            // outros ela era folga vazia em volta do ícone de 24: fica da altura dele. A largura
-                            // continua 32, que é o canto do contador. Igual na web (`aurea.css`).
-                            s.marca, redondo ? s.marcaRedonda : { height: t.size.iconLg },
-                            ativo && indicator === "circle" && { backgroundColor: comOpacidade(t.color.primary, 0.14) },
-                            ativo && indicator === "circle-raised" && {
-                                backgroundColor: t.color.popover, boxShadow: [t.shadow.shadowMd],
-                            },
-                            ativo && indicator === "circle-outline" && {
-                                borderWidth: t.size.borderWidth, borderColor: t.color.primaryEmphasis,
-                            },
-                        ], children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", color: corDoTexto, weight: ativo ? "fill" : undefined }), it.badge != null && it.badge !== false && (_jsx(View, { style: s.contador, children: typeof it.badge === "number"
-                                    ? _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", count: it.badge })
-                                    : _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", dot: true }) }))] }), typeof it.label === "string"
-                        ? _jsx(Text, { size: "xs", weight: ativo ? 500 : 400, numberOfLines: 1, style: { color: corDoTexto }, children: it.label })
-                        : it.label] }, it.id));
+                    // CSS, onde ele vale `0 1 0%`, e a peça encolhia até o recheio. No Yoga `flex: 0` é
+                    // "inflexível"; as três por extenso valem o mesmo nos dois.
+                    // Quem cobra: `tests/unit/native-flex-navegador.test.tsx`.
+                    expande && s.aba_expande,
+                    expande && !ativo && justa && s.aba_expande_outro_content,
+                    expande && ativo && s.aba_expande_escolhido,
+                ], children: disco
+                    // O disco do `circle-bold`: 56 de largura em todos os itens, amarelo só no escolhido.
+                    // É o `.bottom-nav-disc` da web.
+                    ? _jsxs(View, { style: [s.disco, ativo && { backgroundColor: t.color.primary }], children: [marca, rotulo] })
+                    : _jsxs(_Fragment, { children: [marca, rotulo] }) }, it.id));
         }) }));
 }
 /**

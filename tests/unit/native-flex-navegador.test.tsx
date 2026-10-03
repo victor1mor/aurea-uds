@@ -10,7 +10,8 @@
 //
 // Por isso a prova é por ESTILO, e não pela vitrine: o dublê segue o Yoga e escondeu o defeito.
 // As travas reprovam o código de antes:
-//   1. o círculo escolhido diz `flexGrow: 0, flexShrink: 0, flexBasis: "auto"`, e não `flex: 0`;
+//   1. ~~o círculo escolhido diz `flexGrow: 0, flexShrink: 0, flexBasis: "auto"`~~ — desde
+//      03/10/2026 o círculo é um disco de 56 DENTRO do item, sem `flex` nenhum (a barra parada);
 //   2. no `content`, o recheio dos lados do círculo é `space1` (era `space3`: o rótulo cortava);
 //   3. nenhum fonte do nativo escreve `flex: 0` nem `flex` negativo (quem mais tem o problema).
 import {render} from "@testing-library/react";
@@ -32,21 +33,29 @@ const escolhida = () => {
   return StyleSheet.flatten(typeof p?.style === "function" ? p.style({pressed: false}) : p?.style) ?? {};
 };
 
+// Desde 03/10/2026 o círculo é um DISCO dentro do item, em todos os itens (a barra parada,
+// `native-bottomnav-parada.test.tsx`): o item não tem mais medida própria quando escolhido, e o
+// disco não é peça flexível — ele mede 56 por `width`, sem `flex` nenhum para o navegador ler mal.
+const discos = () => __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {})
+  .filter((e) => e.width === 56 && e.borderRadius === t.size.radiusFull);
+
 describe("BottomNav circle-bold · o círculo não encolhe no navegador", () => {
-  it.each(["full", "content"] as const)("largura %s: inflexível por extenso, 56 de largura", (width) => {
+  it.each(["full", "content"] as const)("largura %s: um disco de 56 em cada item, amarelo só no escolhido", (width) => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="b" indicator="circle-bold" width={width} /></AureaProvider>);
+    const d = discos();
+    expect(d).toHaveLength(3);
+    expect(d.map((x) => x.backgroundColor)).toEqual([undefined, t.color.primary, undefined]);
+    for (const x of d) expect([x.flex, x.flexGrow, x.flexShrink, x.flexBasis]).toEqual([undefined, undefined, undefined, undefined]);
+    // E o item escolhido não pode ter `flex` zero: no navegador ele viraria `0 1 0%`.
     const e = escolhida();
-    expect(e.width).toBe(56);
-    expect([e.flexGrow, e.flexShrink, e.flexBasis]).toEqual([0, 0, "auto"]);
-    // O `flex: 1` da aba comum não pode sobrar por baixo: no navegador ele viraria `1 1 0%`.
     expect(e.flex === undefined || e.flex > 0 ? "ok" : `flex: ${e.flex}`).toBe("ok");
-    expect(e.flex).not.toBe(0);
   });
-  // O segundo defeito, achado pela mesma bancada: no `content` a aba ganha `space3` dos lados, e
-  // dentro dos 56 sobravam 32 para o rótulo — "Avisos" (35) saía "Avi…", no nativo e na web.
-  it.each(["full", "content"] as const)("largura %s: o recheio dos lados é space1, e o rótulo cabe", (width) => {
+  // O segundo defeito da 0.16.1: no `content` o recheio dos lados era `space3`, e dentro dos 56
+  // sobravam 32 para o rótulo — "Avisos" (35) saía "Avi…". O recheio agora é do disco: `space1`.
+  it.each(["full", "content"] as const)("largura %s: o recheio dos lados do disco é space1, e o rótulo cabe", (width) => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="b" indicator="circle-bold" width={width} /></AureaProvider>);
-    expect(escolhida().paddingHorizontal ?? escolhida().padding).toBe(t.size.space1);
+    for (const x of discos()) expect(x.paddingHorizontal).toBe(t.size.space1);
+    expect(escolhida().paddingHorizontal).toBe(0);
   });
 });
 

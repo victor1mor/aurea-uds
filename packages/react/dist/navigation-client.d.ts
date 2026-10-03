@@ -84,7 +84,7 @@ export declare function Sidebar({ items, current, collapsed, variant, label, chi
     label?: string;
 }): React.JSX.Element;
 export type BottomNavVariant = "floating" | "edge";
-export type BottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-bold" | "circle-outline";
+export type BottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-bold" | "circle-outline" | "capsule" | "expand";
 export type BottomNavWidth = "full" | "content";
 /** @deprecated Os quatro nomes de 17/08/2026. Use `variant` + `indicator`. */
 export type BottomNavVariantLegacy = "flat" | "surface" | "pill" | "dock";

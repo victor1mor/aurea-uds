@@ -1,7 +1,7 @@
 // BottomNav mais baixo (30/09/2026, pedido do Victor, aprovado pela imagem). A barra era alta por
 // causa da folga entre o ícone e o rótulo: o ícone de 24 dentro de uma moldura de 32, mais o vão
 // de 4 — 9 medidos entre um e outro. Fora dos indicadores redondos a moldura fica da altura do
-// ícone e o vão do item é `space05`; nos redondos a moldura de 32 fica, porque ela vira o
+// ícone e o vão do item é `space05` (zero desde 03/10/2026); nos redondos a moldura de 32 fica, porque ela vira o
 // círculo. A entrada exercita os dois lados. O mesmo conserto está na web (`aurea.css`).
 import {render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
@@ -26,13 +26,23 @@ describe("BottomNav · a barra mais baixa", () => {
     expect(m).toHaveLength(2);
     for (const x of m) expect(x.height).toBe(t.size.iconLg);
   });
-  it.each(["circle", "circle-raised", "circle-outline", "circle-bold"] as const)("%s: a moldura continua 32, é ela que vira o círculo", (indicator) => {
+  it.each(["circle", "circle-raised", "circle-outline"] as const)("%s: a moldura continua 32, é ela que vira o círculo", (indicator) => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator={indicator} /></AureaProvider>);
     for (const x of molduras()) expect(x.height).toBe(32);
   });
-  it("o vão entre o ícone e o rótulo é space05", () => {
+  // ~~O `circle-bold` estava na lista acima~~ — desde 03/10/2026 o círculo dele é o DISCO em volta
+  // do ícone e do nome, e a moldura fica da altura do ícone, para o nome encostar nele.
+  it("circle-bold: a moldura tem a altura do ícone (quem é o círculo é o disco)", () => {
+    render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="circle-bold" /></AureaProvider>);
+    const m = molduras();
+    expect(m).toHaveLength(2);
+    for (const x of m) expect(x.height).toBe(t.size.iconLg);
+  });
+  // ~~`space05`~~ (30/09/2026) → ZERO em 03/10/2026, pedido do Victor: *"o texto pode ficar mais
+  // próximo do ícone"*. Como no Telegram, o nome começa onde a caixa do ícone acaba.
+  it("o vão entre o ícone e o rótulo é zero", () => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" /></AureaProvider>);
-    for (const a of abas()) expect(a.gap).toBe(t.size.space05);
+    for (const a of abas()) expect(a.gap).toBe(0);
   });
   it("a área de toque não encolhe: a aba continua com controlHLg de altura mínima", () => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" /></AureaProvider>);

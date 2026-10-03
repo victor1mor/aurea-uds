@@ -340,7 +340,9 @@ return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`
 // Button na ADR-0032: quebrar assinatura publicada sem aviso é o defeito, não a limpeza.
 //   flat -> edge/none · surface -> floating/circle · pill -> floating/pill · dock -> floating/circle
 export type BottomNavVariant="floating"|"edge";
-export type BottomNavIndicator="none"|"subtle"|"pill"|"circle"|"circle-raised"|"circle-bold"|"circle-outline";
+// `capsule` e `expand` entraram em 03/10/2026, da bancada do Victor: a cápsula amarela só atrás do
+// ícone (o Material 3 Expressive) e o item escolhido que vira cápsula com o nome ao lado.
+export type BottomNavIndicator="none"|"subtle"|"pill"|"circle"|"circle-raised"|"circle-bold"|"circle-outline"|"capsule"|"expand";
 // A LARGURA É UM TERCEIRO EIXO, e não um nome de variant — R-08, 24/09/2026 (*"ficou super
 // largo"*). `content` põe a pílula do tamanho das abas, no centro. Vale só quando a barra flutua:
 // a `edge` encosta na borda e continua da largura da tela.
@@ -374,7 +376,12 @@ const marca=<span className="bottom-nav-mark">
 {it.icon&&<Icon name={it.icon} size="lg" weight={ativo?"fill":undefined}/>}
 {it.badge!=null&&<span className="bottom-nav-badge">{it.badge}</span>}
 </span>;
-const miolo=<>{marca}<span className="bottom-nav-label">{it.label}</span></>;
+// O DISCO DO `circle-bold` é uma caixa DENTRO do item, em todos os itens (03/10/2026): quando o
+// disco ERA o item escolhido, ele media 56 e os outros o conteúdo, e trocar de aba mudava a
+// largura da barra. Agora o item mede o mesmo escolhido ou não; só a pintura muda.
+// No `expand` o nome dos não escolhidos sai da TELA e fica para o leitor de tela: a `.sr-only`.
+const corpo=<>{marca}<span className={cx("bottom-nav-label",ind==="expand"&&!ativo&&"sr-only")}>{it.label}</span></>;
+const miolo=ind==="circle-bold"?<span className="bottom-nav-disc">{corpo}</span>:corpo;
 return it.render
 ?<React.Fragment key={it.id}>{fundirRender(it.render,{className:"bottom-nav-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")}</React.Fragment>
 :it.href

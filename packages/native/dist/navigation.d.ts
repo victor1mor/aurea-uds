@@ -14,7 +14,7 @@ export interface AureaNavItem {
 export type AureaBottomNavVariant = "floating" | "edge";
 /** Quanto a pílula ocupa: a tela menos a margem (`full`, o de sempre) ou só as abas (`content`). */
 export type AureaBottomNavWidth = "full" | "content";
-export type AureaBottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-outline" | "circle-bold";
+export type AureaBottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-outline" | "circle-bold" | "capsule" | "expand";
 export interface BottomNavProps extends ViewProps {
     items: AureaNavItem[];
     /** O `id` do item corrente. */

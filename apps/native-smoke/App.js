@@ -301,6 +301,7 @@ function Tela({irParaScreen, irParaLote2}) {
       <BlocoR11R15 t={t} />
       <BlocoR21 t={t} />
       <BlocoR22 t={t} />
+      <BlocoBarraParada t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1546,6 +1547,38 @@ function BlocoR22({t}) {
       <Field label="Fotos">
         <PhotoInput value={fotos} onChange={setFotos} max={5} source="library" />
       </Field>
+    </Bloco>
+  );
+}
+
+// 0.17.0 (03/10/2026): a barra de baixo PARADA quando se troca de aba, na altura do Telegram, com o
+// nome colado no ícone — e as duas formas novas, `capsule` e `expand`. Aprovado pela bancada
+// (*"a palavra agora é PERFEITO! pode. aprovado"*); falta o aparelho. A barra flutua por cima da
+// tela, então cada uma mora num palco com altura e `position: relative` — o palco faz o papel da
+// tela. No aparelho ela sobe também a folga do sistema, como num app.
+const ABAS_DA_BARRA = [
+  {id: "painel", label: "Painel", icon: "squares-four"}, {id: "lista", label: "Lista", icon: "list-bullets"},
+  {id: "avisos", label: "Avisos", icon: "bell", badge: 3}, {id: "loja", label: "Loja", icon: "storefront"},
+];
+function PalcoDaBarra({t, indicator}) {
+  const [atual, setAtual] = React.useState("avisos");
+  return (
+    <View style={{height: t.size.space20 * 2, position: "relative", overflow: "hidden",
+      borderRadius: t.size.radiusCard, backgroundColor: t.color.background}}>
+      <Text style={{color: t.color.mutedForeground, padding: t.size.space3}}>{indicator}</Text>
+      <BottomNav indicator={indicator} width="content" label={`Barra ${indicator}`} current={atual}
+        items={ABAS_DA_BARRA.map((a) => ({...a, onPress: () => setAtual(a.id)}))} />
+    </View>
+  );
+}
+function BlocoBarraParada({t}) {
+  return (
+    <Bloco t={t} n="0.17" titulo="A barra de baixo fica PARADA quando você troca de aba?"
+      criterio={"Em cada uma das quatro: 1) Toque nas abas, uma de cada vez. A barra NÃO muda de largura "
+        + "nem anda de lado; só o escolhido muda de cor e de forma. No expand, os botões andam, a "
+        + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra do "
+        + "Telegram; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
+      {["circle-bold", "capsule", "pill", "expand"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
     </Bloco>
   );
 }
