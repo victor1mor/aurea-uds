@@ -104,7 +104,8 @@ em inglês e ficam como estão: são registro.
     passa nos quatro que o aparelho mostrou redondos.
   - Quem mais: o `Checkbox`, o `Radio` e o `Switch` foram conferidos pela mesma regra — a marca e o
     trilho têm borda e fundo permanentes, e o ✓ e o ponto do rádio nascem já pintados.
-  - **Falta o aparelho:** o bloco novo `0.19.1`, no topo do `apps/native-smoke`, mostra os cinco.
+  - **Aceito no aparelho Android do Victor** em 04/10/2026, no bloco novo `0.19.1` do topo do
+    `apps/native-smoke` (*"deu certo"*), com os cinco indicadores.
 
 ## [0.19.0] — 2026-10-04
 

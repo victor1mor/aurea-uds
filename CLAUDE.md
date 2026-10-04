@@ -218,8 +218,9 @@ documento de achados mais novo para conferir se ela envelheceu.
    `circle-outline`). ⚠ **A regra que custou caro:** no React Native, caixa que só tem
    `borderRadius` e ganha cor DEPOIS de montada não recebe o raio no Android (react-native#52415,
    aberto) — ela leva `collapsable={false}`, ou cor/borda desde o começo. Quem cobra:
-   `tests/unit/native-capsula-android.test.tsx`. Falta o aparelho (bloco `0.19.1`, no topo do
-   `apps/native-smoke`).
+   `tests/unit/native-capsula-android.test.tsx`. **Aceito no aparelho Android do Victor** em
+   04/10/2026 (bloco `0.19.1`, no topo do `apps/native-smoke`: *"deu certo"*). Falta a junção e a
+   publicação, junto com a `0.19.0`.
 
 ### Lote E e decisões de 25/09/2026
 
