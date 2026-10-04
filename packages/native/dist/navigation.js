@@ -346,7 +346,23 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             // No `expand` o nome só aparece no escolhido; nos outros ele vira o nome do item para o
             // leitor de tela (o texto simples) ou fica na árvore sem ocupar lugar (o que não é texto).
             const nomeVisivel = !expande || ativo;
-            const marca = (_jsxs(View, { style: [
+            // 🔴 `collapsable={false}` NAS DUAS CAIXAS QUE RECEBEM A PINTURA (a moldura do ícone e o disco
+            // do `circle-bold`) — defeito visto pelo Victor no Android em 04/10/2026, no app e no
+            // `apps/native-smoke` (bloco 0.17): o `circle-bold` e o `capsule` saíam QUADRADOS; o `pill`
+            // e o `expand`, redondos. A causa, lida no fonte do `react-native@0.86.3`:
+            //   1. caixa que só tem `borderRadius`, sem cor nem borda, NÃO vira caixa nativa: o Fabric a
+            //      achata no pai (`ViewShadowNode.cpp:70-74` — o raio não está na lista do `formsView`);
+            //   2. ela nasce no Android quando ganha a cor, ao ser escolhida — e nessa hora o raio não
+            //      chega: é o defeito aberto react-native#52415 ("border radius is not set for views that
+            //      initially has a transparent background color and transitions to an opaque color");
+            //   3. o `pill` e o `expand` pintam o `Pressable`, que existe sempre (tem toque): o raio
+            //      entra na criação e a cor herda dele depois (`BackgroundStyleApplicator.kt:656-670`).
+            // Com `collapsable={false}` a caixa existe desde a montagem, como o `Pressable`. Vale para os
+            // cinco indicadores que pintam esta moldura ou o disco (`circle`, `circle-raised`,
+            // `circle-outline`, `circle-bold`, `capsule`). O `react-native-web` ignora a prop (ela não
+            // está na lista de props que o `View` dele repassa ao DOM). Quem cobra:
+            // `tests/unit/native-capsula-android.test.tsx`.
+            const marca = (_jsxs(View, { collapsable: false, style: [
                     // A moldura de 32 só serve aos indicadores redondos, em que ela VIRA o círculo. Nos
                     // outros ela era folga vazia em volta do ícone de 24: fica da altura dele. A largura
                     // continua 32, que é o canto do contador. Igual na web (`aurea.css`).
@@ -401,7 +417,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                 ], children: disco
                     // O disco do `circle-bold`: 56 de largura em todos os itens, amarelo só no escolhido.
                     // É o `.bottom-nav-disc` da web.
-                    ? _jsxs(View, { style: [s.disco, ativo && { backgroundColor: t.color.primary }], children: [marca, rotulo] })
+                    ? _jsxs(View, { collapsable: false, style: [s.disco, ativo && { backgroundColor: t.color.primary }], children: [marca, rotulo] })
                     : _jsxs(_Fragment, { children: [marca, rotulo] }) }, it.id));
         }) }));
 }
