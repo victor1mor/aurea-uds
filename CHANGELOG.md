@@ -82,8 +82,14 @@ em inglês e ficam como estão: são registro.
 
 ## [0.18.0] — 2026-10-03
 
-⏳ **Não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador
-(*"pode, aprovado o lote G"*, 03/10/2026).
+✅ **Publicada em 03/10/2026, por volta das 22:18 (Brasília)**, pelo terminal do Victor, da junção
+do pedido #38. A ficha do registro marca seis dos sete pacotes entre 22:17 e 22:18; o
+`@aurea-uds/native` apareceu às 22:21. A CI do `main` (rodada #86) ainda rodava na hora da
+publicação — montagem, validação, pacotes e testes já tinham passado — e terminou verde às 22:34.
+
+Aprovada pela bancada do Victor, com o código real rodando no navegador
+(*"pode, aprovado o lote G"*, 03/10/2026). Falta o aceite de aparelho (blocos AN-07, AN-08 e AN-04
+do `apps/native-smoke`).
 
 O **Lote G**: quatro pedidos de um consumidor novo, da web, que estava refazendo um app só com a
 Aurea (`docs/FILA.md` §9) — AN-07, AN-08, AN-04 e AN-01, com o "pode" de 03/10/2026. **Versão
