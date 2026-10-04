@@ -11,13 +11,26 @@
   },
   "variants": [],
   "sizes": [],
+  "axes": {
+    "selectionMode": [
+      "multiple",
+      "single"
+    ]
+  },
   "states": [
-    "current"
+    "current",
+    "pressed",
+    "loading"
   ],
   "tokens": [
     "--radius-lg",
     "--muted-foreground",
-    "--text-sm"
+    "--text-sm",
+    "--space-2",
+    "--space-3",
+    "--icon-sm",
+    "--media-scrim",
+    "--media-foreground"
   ],
   "a11y": {
     "role": "list",
@@ -31,7 +44,9 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": []
+    "icons": [
+      "play"
+    ]
   },
   "related": {
     "components": [
@@ -47,9 +62,9 @@
   "props": [
     {
       "name": "items",
-      "type": "Array<{id, src, alt, caption?}>",
+      "type": "Array<{id, src, alt, caption?, kind?, duration?}>",
       "default": "—",
-      "description": "The pictures, as data — the same idiom as Timeline, DataList and Stepper. Each tile renders an <Image>, so the reserved box and the broken-source fallback come with it."
+      "description": "The pictures, as data — the same idiom as Timeline, DataList and Stepper. Each tile renders an <Image>, so the reserved box and the broken-source fallback come with it. `kind: \"video\"` puts the house Badge on the photo, with `duration` (seconds) as m:ss — the media player's format — and \"Video\" for screen readers. Without `kind`, it is a photo, as before."
     },
     {
       "name": "selected",
@@ -62,6 +77,42 @@
       "type": "(id: string) => void",
       "default": "—",
       "description": "Called on click. Without it and without zoom the tiles are not buttons at all — a button that does nothing is a focus stop that lies to anyone on a keyboard."
+    },
+    {
+      "name": "selectionMode",
+      "type": "\"single\" | \"multiple\"",
+      "default": "\"single\"",
+      "description": "HeroUI's name for it. With \"multiple\", every tile is a toggle button (aria-pressed) with the same .is-selected mark as everywhere else, clicking marks instead of zooming, and the chosen ids come from selectedIds."
+    },
+    {
+      "name": "selectedIds",
+      "type": "string[]",
+      "default": "—",
+      "description": "The chosen tiles when selectionMode is \"multiple\". The gallery keeps no choice of its own, as with `selected`."
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(ids: string[]) => void",
+      "default": "—",
+      "description": "The new list after a tile is toggled, in the order they were chosen. The same name as DataGrid."
+    },
+    {
+      "name": "hasMore",
+      "type": "boolean",
+      "default": "false",
+      "description": "There is more after the last tile. A row after the grid (HeroUI's Table.LoadMore measure, py-3) is watched, and calls onReachEnd when it enters the screen."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "description": "A part is on its way: the row shows the Spinner, the list is aria-busy, and onReachEnd is not called again until it ends."
+    },
+    {
+      "name": "onReachEnd",
+      "type": "() => void",
+      "default": "—",
+      "description": "Called when the end row is on screen and nothing is loading. If the new part does not fill the screen, it is called again."
     },
     {
       "name": "zoom",

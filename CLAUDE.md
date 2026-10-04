@@ -201,9 +201,18 @@ documento de achados mais novo para conferir se ela envelheceu.
    com `avatar` e `indicators`) e AN-01 (o `AppShell` com o botão de recolher na junção e a trilha
    sozinha entre 1024 e 1279 — [ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)).
    O shell vivo se mede no banco novo `apps/keyboard-probe/shell.html`. Falta o aceite de aparelho
-   (blocos AN-07, AN-08 e AN-04 do `apps/native-smoke`). Depois: o Lote H (AN-02,
-   AN-03, AN-05, AN-06). ⚠ O empacotador do app reescreve `:dir(rtl)` e a regra deixa de pegar:
+   (blocos AN-07, AN-08 e AN-04 do `apps/native-smoke`). ⚠ O empacotador do app reescreve `:dir(rtl)` e a regra deixa de pegar:
    na folha do core, direção se resolve com propriedade lógica, não com `:dir()`.
+12. **`0.19.0`, o Lote H, feito em 04/10/2026 e ainda não publicado** — os quatro pedidos que
+   faltavam do consumidor novo da web (`docs/FILA.md` §9): AN-06 (`TreeView` que carrega ao abrir,
+   `selectedId`), AN-05 (`Gallery` com escolha em lote, vídeo e carga por partes), AN-03
+   (`MessageComposer` que anexa, responde e edita) e AN-02 (`MessageList` para conversa longa). **Sem
+   dependência nova**: a conversa é uma janela que o app troca pelas pontas, e a Aurea não deixa a
+   tela pular (decisão do Victor, [ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)).
+   Medido montado no banco `apps/keyboard-probe/lote-h.html` (`tests/visual/lote-h.spec.ts`). Aprovado
+   pela bancada (*"Pode"*, 04/10/2026), com o item da árvore em cápsula, pedido dele olhando a
+   bancada. Falta a junção e a publicação. As seis regras de `:dir(rtl)` que sobraram (`Badge`, `Select`,
+   `Switch`) ficaram para depois, por decisão dele (`docs/FILA.md` §6, D-01).
 
 ### Lote E e decisões de 25/09/2026
 

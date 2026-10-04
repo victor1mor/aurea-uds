@@ -10,6 +10,8 @@ import {IconButton} from "./actions.js";
 // A galeria AMPLIA num Dialog, e o Dialog já existe (trava do item L2). O import é para `overlays`,
 // que como este módulo mora no "resto" do DAG e não importa `media` — não há ciclo.
 import {Dialog} from "./overlays.js";
+// AN-05: o tempo do vídeo e a linha de "carregando mais" reusam peças que já existem.
+import {Badge, Spinner} from "./feedback.js";
 
 // MediaPlayer (Fase 5): headless sobre <video>/<audio> nativos — o MOTOR de mídia é
 // o browser; o componente só liga estado (play/tempo/buffer/volume/legenda) às
@@ -247,30 +249,71 @@ export function Image({ratio,fit,alt,className,style,render,onError,...props}:Im
 // SEM roving tabindex, e é decisão: numa grade de fotos a pessoa ESPERA tabular foto a foto, como
 // na lateral (a razão está escrita no `Sidebar`). Roving aqui copiaria o `TreeView` para onde ele
 // atrapalha.
-export interface GalleryItem{id:string;src:string;alt:string;caption?:ReactNode}
-export interface GalleryProps extends Omit<HTMLAttributes<HTMLUListElement>,"onSelect">,RefAttributes<HTMLUListElement>{items:GalleryItem[];label?:string;selected?:string;onSelect?:(id:string)=>void;zoom?:boolean;ratio?:string}
-export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",className,...props}:GalleryProps){
+//
+// AN-05 (Lote H, 04/10/2026) — ACERVO GRANDE, só acrescentando. A galeria de uma conversa tem
+// milhares de itens de tipos misturados, e o app antigo marcava vários para baixar em lote. O
+// HeroUI 3.2.6 não tem galeria; o desenho segue o que ele faz nas coleções que tem:
+//   • SELEÇÃO MÚLTIPLA é `selectionMode="multiple"`, o nome do `ListBox`/`Table` dele. Os escolhidos
+//     são `selectedIds` + `onSelectionChange` — o nome do `DataGrid` daqui —, e a galeria continua
+//     sem guardar escolha nenhuma. Cada ladrilho vira botão de alternar (`aria-pressed`) com a MESMA
+//     marca de escolhido da casa (`.is-selected`): uma linguagem só. Ao escolher em lote, clicar
+//     marca; não amplia.
+//   • VÍDEO é `kind="video"` com `duration` em segundos. O tempo sai no `Badge` que já existe, por
+//     cima da foto, com as cores do reprodutor (`--media-*`) e o formato dele (`m:ss`).
+//   • CARREGAR POR PARTES é `hasMore` + `onReachEnd`, com `loading`. É o `Table.LoadMore` do HeroUI
+//     (`onLoadMore` + `isLoading`) com o nome que o consumidor pediu: uma linha depois da grade que,
+//     ao entrar na tela, avisa. Carregando, ela mostra a rodinha, a lista fica `aria-busy`, e o
+//     aviso não se repete. A medida da linha é a do HeroUI (`py-3`, centrada).
+//     O observador renasce quando a lista cresce ou a carga termina: se a parte nova não encheu a
+//     tela, a linha continua à vista e avisa de novo — sem isso a galeria parava ali.
+// Sem virtualização (decisão do Victor, 04/10/2026): as fotos já carregam só quando aparecem
+// (`loading="lazy"` do `Image`).
+export type GalleryItemKind="image"|"video";
+export interface GalleryItem{id:string;src:string;alt:string;caption?:ReactNode;kind?:GalleryItemKind;duration?:number}
+export interface GalleryProps extends Omit<HTMLAttributes<HTMLUListElement>,"onSelect">,RefAttributes<HTMLUListElement>{items:GalleryItem[];label?:string;selected?:string;onSelect?:(id:string)=>void;zoom?:boolean;ratio?:string;selectionMode?:"single"|"multiple";selectedIds?:string[];onSelectionChange?:(ids:string[])=>void;hasMore?:boolean;loading?:boolean;onReachEnd?:()=>void}
+export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",selectionMode="single",selectedIds,onSelectionChange,hasMore,loading,onReachEnd,className,...props}:GalleryProps){
   const s=useAureaStrings();
   const [ampliado,setAmpliado]=React.useState<string|null>(null);
-  const interativo=!!onSelect||!!zoom;
+  const multipla=selectionMode==="multiple";
+  const interativo=!!onSelect||!!zoom||multipla;
   const aberto=items.find(i=>i.id===ampliado);
+  const escolhidos=new Set(selectedIds);
+  const alternar=(id:string)=>onSelectionChange?.(escolhidos.has(id)?(selectedIds??[]).filter(x=>x!==id):[...(selectedIds??[]),id]);
+  const fimRef=React.useRef<HTMLDivElement>(null);
+  const avisar=React.useRef(onReachEnd);
+  avisar.current=onReachEnd;
+  React.useEffect(()=>{
+    const fim=fimRef.current;
+    if(!fim||!hasMore||loading||typeof IntersectionObserver==="undefined")return;
+    const obs=new IntersectionObserver(entradas=>{if(entradas.some(e=>e.isIntersecting))avisar.current?.()});
+    obs.observe(fim);
+    return ()=>obs.disconnect();
+  },[hasMore,loading,items.length]);
   return <>
-    <ul className={cx("gallery",className)} aria-label={label??s.galleryLabel} {...props}>
+    <ul className={cx("gallery",className)} aria-label={label??s.galleryLabel} aria-busy={loading||undefined} {...props}>
       {items.map(i=>{
         // LEGENDA VISÍVEL TORNA A MINIATURA DECORATIVA, e quem exigiu isso foi o axe, não a
         // teoria: com `alt` e legenda dizendo a mesma coisa, ele reprova `image-redundant-alt` e o
         // leitor de tela anuncia o texto DUAS vezes seguidas. É a regra de figura com legenda do
         // WAI — quando o texto ao lado já diz, a imagem entra com `alt=""`. O `alt` de verdade não
         // se perde: ele continua nomeando a foto AMPLIADA, que é onde não há legenda ao lado.
-        const miolo=<><Image src={i.src} alt={i.caption!=null?"":i.alt} ratio={ratio}/>{i.caption!=null&&<span className="gallery-caption">{i.caption}</span>}</>;
+        const foto=<Image src={i.src} alt={i.caption!=null?"":i.alt} ratio={ratio}/>;
+        const video=i.kind==="video";
+        const miolo=<>{video
+          ?<span className="gallery-media">{foto}<Badge className="gallery-duration"><Icon name="play" size="sm"/><span className="sr-only">{` ${s.galleryVideo}, `}</span>{i.duration!=null&&clockTime(i.duration)}</Badge></span>
+          :foto}{i.caption!=null&&<span className="gallery-caption">{i.caption}</span>}</>;
+        const marcado=multipla?escolhidos.has(i.id):i.id===selected;
         return <li key={i.id} className="gallery-item">
           {interativo
-            ?<button type="button" className={cx("gallery-tile",i.id===selected&&"is-selected")} aria-current={i.id===selected?"true":undefined}
-              onClick={()=>{onSelect?.(i.id);if(zoom)setAmpliado(i.id)}}>{miolo}</button>
+            ?(multipla
+              ?<button type="button" className={cx("gallery-tile",marcado&&"is-selected")} aria-pressed={marcado} onClick={()=>alternar(i.id)}>{miolo}</button>
+              :<button type="button" className={cx("gallery-tile",marcado&&"is-selected")} aria-current={marcado?"true":undefined}
+                onClick={()=>{onSelect?.(i.id);if(zoom)setAmpliado(i.id)}}>{miolo}</button>)
             :miolo}
         </li>;
       })}
     </ul>
+    {hasMore&&<div ref={fimRef} className="gallery-more">{loading&&<Spinner/>}</div>}
     {/* O Dialog fica montado e fechado quando não há foto ampliada — é o contrato dele, e o motor
         não desenha nada nesse estado. O título é a legenda, e o texto alternativo quando não há
         legenda: um diálogo sem nome acessível é o defeito que o catalog-sweep pegaria.
@@ -279,7 +322,7 @@ export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",classNam
         do fonte — então o nome da prop de abertura, citado aqui, fez a classe de mesmo nome do
         core parecer produzida por este pacote. É a terceira vez que um gate deste repositório lê
         prosa como se fosse código, e as outras duas estão escritas no validate.py. */}
-    {zoom&&<Dialog open={!!aberto} title={aberto?(aberto.caption??aberto.alt):""} onClose={()=>setAmpliado(null)}>
+    {zoom&&!multipla&&<Dialog open={!!aberto} title={aberto?(aberto.caption??aberto.alt):""} onClose={()=>setAmpliado(null)}>
       {aberto&&<Image src={aberto.src} alt={aberto.alt} fit="contain"/>}
     </Dialog>}
   </>;

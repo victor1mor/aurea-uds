@@ -56,11 +56,14 @@ export interface TreeNode {
     label: ReactNode;
     icon?: IconName;
     children?: TreeNode[];
+    hasChildren?: boolean;
 }
-export declare function TreeView({ items, defaultExpandedIds, onSelect, label, className }: {
+export declare function TreeView({ items, defaultExpandedIds, onSelect, onExpand, selectedId, label, className }: {
     items: TreeNode[];
     defaultExpandedIds?: string[];
     onSelect?: (node: TreeNode) => void;
+    onExpand?: (node: TreeNode) => void | Promise<unknown>;
+    selectedId?: string | null;
     label?: string;
     className?: string;
 }): ReactElement<unknown, string | React.JSXElementConstructor<any>>;

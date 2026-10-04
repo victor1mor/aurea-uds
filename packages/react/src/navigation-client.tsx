@@ -4,6 +4,7 @@
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {useRef, type HTMLAttributes, type RefAttributes, type ReactNode, type ReactElement} from "react";
 import {Tabs as BaseTabs} from "@base-ui/react/tabs";
+import {useDirection} from "@base-ui/react/direction-provider";
 import {Autocomplete as BaseAutocomplete} from "@base-ui/react/autocomplete";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {type Responsive} from "./pure.js";
@@ -11,7 +12,7 @@ import {cx, fundirRender, useAureaStrings, usePortalContainer} from "./internal.
 import {Kbd} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {Button} from "./actions.js";
-import {Badge} from "./feedback.js";
+import {Badge, Spinner} from "./feedback.js";
 import {SearchField} from "./inputs.js";
 // `overlays` PASSOU A VIR ANTES de `navigation` no DAG (18/08/2026, MAP.md §DAG). Ele só
 // importa `internal`, `system` e `actions` — todos anteriores —, então não há ciclo: o que
@@ -150,8 +151,19 @@ function useSecaoEmVista(items:TocItem[],ligado:boolean,nav:React.RefObject<HTML
 // O nome acessível de cada nó vem de aria-labelledby (só o rótulo da linha) para
 // não engolir os filhos aninhados; o grupo fica DENTRO do treeitem (posse por
 // contenção, sem aria-owns).
-export interface TreeNode{id:string;label:ReactNode;icon?:IconName;children?:TreeNode[]}
+//
+// AN-06 (Lote H, 04/10/2026) — CARGA AO ABRIR E SELEÇÃO CONTROLADA, só acrescentando. Um consumidor
+// tem dois casos em que os filhos só se sabem ao abrir o nó (os tópicos de um grupo, as pastas do
+// servidor ao escolher um destino). O HeroUI 3.2.6 não tem árvore; o motor dele (React Aria) chama
+// isso de `hasChildItems` — "tem filhos, mesmo que ainda não carregados" — e o ReUI (headless-tree)
+// de `isItemFolder` + `isLoading()`. Aqui: `hasChildren` diz que o nó abre antes de ter filhos;
+// `onExpand` é chamado a cada abertura e, se devolver promessa e o nó ainda não tiver filhos, o nó
+// mostra a rodinha no lugar da seta e fica `aria-busy` até ela terminar. Os filhos chegam pelo
+// próprio `items` (o dado é do consumidor). Promessa recusada FECHA o nó: abrir de novo tenta de
+// novo. `selectedId` controla o escolhido, como no `DependencyGraph`; sem ele, nada muda.
+export interface TreeNode{id:string;label:ReactNode;icon?:IconName;children?:TreeNode[];hasChildren?:boolean}
 type FlatNode={node:TreeNode;level:number;parentId?:string};
+const temFilhos=(node:TreeNode)=>!!node.children?.length||!!node.hasChildren;
 function flattenVisible(nodes:TreeNode[],expanded:Set<string>,level=1,parentId?:string,acc:FlatNode[]=[]):FlatNode[]{
   for(const node of nodes){
     acc.push({node,level,parentId});
@@ -159,49 +171,64 @@ function flattenVisible(nodes:TreeNode[],expanded:Set<string>,level=1,parentId?:
   }
   return acc;
 }
-export function TreeView({items,defaultExpandedIds,onSelect,label,className}:{items:TreeNode[];defaultExpandedIds?:string[];onSelect?:(node:TreeNode)=>void;label?:string;className?:string}){
+export function TreeView({items,defaultExpandedIds,onSelect,onExpand,selectedId,label,className}:{items:TreeNode[];defaultExpandedIds?:string[];onSelect?:(node:TreeNode)=>void;onExpand?:(node:TreeNode)=>void|Promise<unknown>;selectedId?:string|null;label?:string;className?:string}){
   const s=useAureaStrings();
   const baseId=React.useId();
   const [expanded,setExpanded]=React.useState(()=>new Set(defaultExpandedIds));
-  const [selected,setSelected]=React.useState<string|undefined>();
+  const [selectedInterno,setSelected]=React.useState<string|undefined>();
+  const selected=selectedId!==undefined?(selectedId??undefined):selectedInterno;
+  const [carregando,setCarregando]=React.useState<ReadonlySet<string>>(()=>new Set());
   const [active,setActive]=React.useState<string|undefined>(()=>items[0]?.id);
   const rootRef=React.useRef<HTMLUListElement>(null);
+  const rtl=useDirection()==="rtl";
   const visible=flattenVisible(items,expanded);
   // Roving tab stop derivado: se o nó ativo saiu do conjunto visível (dados
   // trocados, nó removido), o primeiro visível volta a ser tabulável — senão a
   // árvore inteira fica tabIndex=-1 e some da ordem do Tab (auditoria, MÉDIO 1).
   const effectiveActive=active!==undefined&&visible.some(v=>v.node.id===active)?active:visible[0]?.node.id;
   const focusId=(id:string)=>{setActive(id);(rootRef.current?.querySelector(`[data-tree-id="${CSS.escape(id)}"]`) as HTMLElement|null)?.focus()};
-  const toggle=(id:string,open:boolean)=>setExpanded(prev=>{const n=new Set(prev);if(open)n.add(id);else n.delete(id);return n});
-  const select=(node:TreeNode)=>{setSelected(node.id);onSelect?.(node)};
+  const marcar=(id:string,open:boolean)=>setExpanded(prev=>{const n=new Set(prev);if(open)n.add(id);else n.delete(id);return n});
+  const tirarDaCarga=(id:string)=>setCarregando(prev=>{const n=new Set(prev);n.delete(id);return n});
+  const toggle=(node:TreeNode,open:boolean)=>{
+    marcar(node.id,open);
+    if(!open||!onExpand)return;
+    const r=onExpand(node);
+    if(node.children?.length||!r||typeof (r as Promise<unknown>).then!=="function")return;
+    setCarregando(prev=>new Set(prev).add(node.id));
+    (r as Promise<unknown>).then(()=>tirarDaCarga(node.id),()=>{tirarDaCarga(node.id);marcar(node.id,false)});
+  };
+  const select=(node:TreeNode)=>{if(selectedId===undefined)setSelected(node.id);onSelect?.(node)};
   const onKeyDown=(e:React.KeyboardEvent<HTMLUListElement>)=>{
     const idx=visible.findIndex(v=>v.node.id===effectiveActive);
     if(idx<0)return;
-    const cur=visible[idx],hasChildren=!!cur.node.children?.length,isOpen=expanded.has(cur.node.id);
-    const rtl=getComputedStyle(e.currentTarget).direction==="rtl";
-    const expandKey=rtl?"ArrowLeft":"ArrowRight",collapseKey=rtl?"ArrowRight":"ArrowLeft";
+    const cur=visible[idx],hasChildren=temFilhos(cur.node),isOpen=expanded.has(cur.node.id);
+    const rtlDom=getComputedStyle(e.currentTarget).direction==="rtl";
+    const expandKey=rtlDom?"ArrowLeft":"ArrowRight",collapseKey=rtlDom?"ArrowRight":"ArrowLeft";
     switch(e.key){
       case "ArrowDown":e.preventDefault();if(idx<visible.length-1)focusId(visible[idx+1].node.id);break;
       case "ArrowUp":e.preventDefault();if(idx>0)focusId(visible[idx-1].node.id);break;
-      case expandKey:e.preventDefault();if(hasChildren&&!isOpen)toggle(cur.node.id,true);else if(hasChildren&&isOpen)focusId(cur.node.children![0].id);break;
-      case collapseKey:e.preventDefault();if(hasChildren&&isOpen)toggle(cur.node.id,false);else if(cur.parentId)focusId(cur.parentId);break;
+      case expandKey:e.preventDefault();if(hasChildren&&!isOpen)toggle(cur.node,true);else if(isOpen&&cur.node.children?.length)focusId(cur.node.children[0].id);break;
+      case collapseKey:e.preventDefault();if(hasChildren&&isOpen)toggle(cur.node,false);else if(cur.parentId)focusId(cur.parentId);break;
       case "Home":e.preventDefault();focusId(visible[0].node.id);break;
       case "End":e.preventDefault();focusId(visible[visible.length-1].node.id);break;
-      case "Enter":case " ":e.preventDefault();select(cur.node);if(hasChildren)toggle(cur.node.id,!isOpen);break;
+      case "Enter":case " ":e.preventDefault();select(cur.node);if(hasChildren)toggle(cur.node,!isOpen);break;
     }
   };
   const renderNodes=(nodes:TreeNode[],level:number):ReactElement=>(
     <ul ref={level===1?rootRef:undefined} className={cx(level===1?"tree":"tree-group",level===1&&className)} role={level===1?"tree":"group"} aria-label={level===1?(label??s.treeLabel):undefined} onKeyDown={level===1?onKeyDown:undefined}>
       {nodes.map(node=>{
-        const hasChildren=!!node.children?.length,isOpen=expanded.has(node.id),isSelected=selected===node.id,labelId=baseId+node.id;
-        return <li key={node.id} className="tree-item" role="treeitem" data-tree-id={node.id} aria-level={level} aria-expanded={hasChildren?isOpen:undefined} aria-selected={isSelected} aria-labelledby={labelId} tabIndex={node.id===effectiveActive?0:-1}>
+        const hasChildren=temFilhos(node),isOpen=expanded.has(node.id),isSelected=selected===node.id,isLoading=isOpen&&carregando.has(node.id),labelId=baseId+node.id;
+        return <li key={node.id} className="tree-item" role="treeitem" data-tree-id={node.id} aria-level={level} aria-expanded={hasChildren?isOpen:undefined} aria-selected={isSelected} aria-busy={isLoading||undefined} aria-labelledby={labelId} tabIndex={node.id===effectiveActive?0:-1}>
           <span className="tree-node" data-selected={isSelected||undefined} style={{paddingInlineStart:`calc(var(--space-3) + ${level-1} * var(--space-4))`}}
-            onClick={()=>{focusId(node.id);select(node);if(hasChildren)toggle(node.id,!isOpen)}}>
-            {hasChildren?<Icon name="caret-right" size="sm" className="tree-twist"/>:<span className="tree-indent" aria-hidden="true"/>}
+            onClick={()=>{focusId(node.id);select(node);if(hasChildren)toggle(node,!isOpen)}}>
+            {/* Carregando, a rodinha ocupa o lugar da seta, do mesmo tamanho (`--icon-sm`): a linha
+                não anda quando os filhos chegam. Ela é decorativa — quem anuncia é o `aria-busy`
+                do nó, e o leitor de tela já está nele. */}
+            {isLoading?<Spinner decorative className="tree-twist"/>:hasChildren?<Icon name="caret-right" size="sm" className={cx("tree-twist",rtl&&"tree-twist-rtl")}/>:<span className="tree-indent" aria-hidden="true"/>}
             {node.icon&&<Icon name={node.icon} size="sm"/>}
             <span id={labelId} className="tree-label">{node.label}</span>
           </span>
-          {hasChildren&&isOpen&&renderNodes(node.children!,level+1)}
+          {isOpen&&!!node.children?.length&&renderNodes(node.children,level+1)}
         </li>;
       })}
     </ul>

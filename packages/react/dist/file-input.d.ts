@@ -26,6 +26,7 @@ export declare function matchesAccept(file: {
     name: string;
     type: string;
 }, accept?: string): boolean;
+export declare function formatSize(bytes: number): string;
 export declare function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum }: {
     accept?: string;
     maxSize?: number;

@@ -6,8 +6,8 @@
     "modulos": 36,
     "componentes": 126,
     "hooks": 9,
-    "aliasesLiterais": 63,
-    "propsDistintas": 241
+    "aliasesLiterais": 65,
+    "propsDistintas": 257
   },
   "aliases": {
     "ButtonVariant": {
@@ -192,6 +192,14 @@
       "module": "calendar",
       "raw": "React.ComponentProps<typeof DayPicker> & { label?: string; }",
       "union": null
+    },
+    "ChatDirection": {
+      "module": "communication",
+      "raw": "\"incoming\" | \"outgoing\"",
+      "union": [
+        "incoming",
+        "outgoing"
+      ]
     },
     "Breakpoint": {
       "module": "escala",
@@ -1957,6 +1965,14 @@
         "block"
       ]
     },
+    "GalleryItemKind": {
+      "module": "media-client",
+      "raw": "\"image\" | \"video\"",
+      "union": [
+        "image",
+        "video"
+      ]
+    },
     "StepState": {
       "module": "navigation-client",
       "raw": "\"default\" | \"active\" | \"done\" | \"error\"",
@@ -3390,7 +3406,7 @@
             {
               "name": "onSend",
               "optional": false,
-              "type": "(text: string) => void",
+              "type": "(text: string, details?: MessageSendDetails) => void",
               "values": null
             },
             {
@@ -3428,13 +3444,43 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "attach",
+              "optional": true,
+              "type": "boolean | ComposerAttach",
+              "values": null
+            },
+            {
+              "name": "replyTo",
+              "optional": true,
+              "type": "ComposerReply | null",
+              "values": null
+            },
+            {
+              "name": "onCancelReply",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "editing",
+              "optional": true,
+              "type": "ComposerEdit | null",
+              "values": null
+            },
+            {
+              "name": "onCancelEdit",
+              "optional": true,
+              "type": "() => void",
+              "values": null
             }
           ]
         },
         {
           "name": "MessageList",
           "kind": "function",
-          "propsType": null,
+          "propsType": "MessageListProps",
           "props": [
             {
               "name": "messages",
@@ -3452,6 +3498,48 @@
               "name": "className",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "hasMoreBefore",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "hasMoreAfter",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "loadingBefore",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "loadingAfter",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onReachStart",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onReachEnd",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onOpenAttachment",
+              "optional": true,
+              "type": "(message: ChatMessage, attachment: MessageAttachment) => void",
               "values": null
             }
           ]
@@ -5943,6 +6031,45 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "selectionMode",
+              "optional": true,
+              "type": "\"single\" | \"multiple\"",
+              "values": [
+                "single",
+                "multiple"
+              ]
+            },
+            {
+              "name": "selectedIds",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "onSelectionChange",
+              "optional": true,
+              "type": "(ids: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "hasMore",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "loading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onReachEnd",
+              "optional": true,
+              "type": "() => void",
+              "values": null
             }
           ]
         },
@@ -6370,6 +6497,18 @@
               "name": "onSelect",
               "optional": true,
               "type": "(node: TreeNode) => void",
+              "values": null
+            },
+            {
+              "name": "onExpand",
+              "optional": true,
+              "type": "(node: TreeNode) => void | Promise<unknown>",
+              "values": null
+            },
+            {
+              "name": "selectedId",
+              "optional": true,
+              "type": "string | null",
               "values": null
             },
             {

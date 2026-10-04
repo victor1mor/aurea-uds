@@ -80,6 +80,86 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.19.0] — 2026-10-04
+
+⏳ **Ainda não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador
+(*"Pode"*, 04/10/2026, depois de pedir o item da árvore em cápsula). Falta a junção e a publicação,
+pelo terminal dele.
+
+O **Lote H**: os quatro pedidos que faltavam do consumidor novo da web (`docs/FILA.md` §9) — AN-06,
+AN-05, AN-03 e AN-02, com o "pode" de 03/10/2026. **Versão nova, e não correção, porque entram
+props.** Nada sai nem muda de nome, e **nenhuma dependência entra** (decisão do Victor,
+[ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)). O HeroUI 3.2.6 não
+tem nenhuma das quatro peças; os nomes e as medidas vêm das coleções que ele tem (o `Table.LoadMore`,
+o `selectionMode`) e do ReUI.
+
+### Adicionado
+
+- **AN-06 · `TreeView` que carrega ao abrir, com o escolhido de fora.**
+  - `hasChildren` no nó: ele abre antes de ter filhos (o `hasChildItems` do React Aria).
+  - `onExpand(node)`: chamado a cada abertura. Se devolver promessa e o nó ainda não tiver filhos, o
+    nó fica `aria-busy`, com a rodinha no lugar da seta, até ela terminar; os filhos chegam pelo
+    próprio `items`. Promessa recusada fecha o nó, e abrir de novo tenta de novo.
+  - `selectedId` (`string | null`): o escolhido controlado, como no `DependencyGraph`.
+- **AN-05 · `Gallery` para acervo grande.**
+  - `selectionMode="multiple"` + `selectedIds` + `onSelectionChange`: cada ladrilho vira botão de
+    alternar (`aria-pressed`), com a marca de escolhido de sempre (`.is-selected`). Escolhendo em
+    lote, clicar marca e não amplia.
+  - `kind: "video"` e `duration` (segundos) no item: o `Badge` da casa no canto da foto, sobre o véu
+    do reprodutor (`--media-scrim`), com o tempo em `m:ss` e "Vídeo" para o leitor de tela (o nome
+    medido no Chromium: "Item 2 Vídeo, 0:32").
+  - `hasMore` + `onReachEnd` + `loading`: uma linha depois da grade avisa ao entrar na tela, na
+    medida do `Table.LoadMore` do HeroUI (`--space-3` em cima e embaixo). Carregando, ela mostra a
+    rodinha e não avisa de novo; se a parte nova não enche a tela, avisa outra vez.
+- **AN-03 · `MessageComposer` que anexa, responde e edita.**
+  - `attach` (`true` ou `{accept, maxSize, multiple}`): um clipe dentro do campo. Os arquivos ficam
+    numa faixa acima do campo, na mesma moldura, com a linha do `FileInput` (nome, tamanho,
+    miniatura de imagem, remover) e o filtro e as frases dele. Com anexo, texto vazio pode ir.
+  - `replyTo` + `onCancelReply`: a citação de quem e do começo da mensagem, com o X; `editing` +
+    `onCancelEdit`: o texto antigo no campo, e o enviar vira salvar. Esc cancela os dois.
+  - `onSend` ganha o segundo argumento `{files, replyToId, editingId}` — **só quando uma prop nova
+    está em uso**: quem conferia `onSend("texto")` continua recebendo exatamente isso.
+- **AN-02 · `MessageList` para conversa longa.**
+  - Na mensagem: `direction` (`incoming` / `outgoing` — a minha no fim da linha, sem avatar, tingida
+    da marca), `forwardedFrom`, `replyTo` (a mesma citação do compositor), `attachments` (foto e
+    vídeo viram álbum na `Gallery`, com ampliar; arquivo vira a linha do `FileInput`, com link de
+    baixar), `edited` ("editada" ao lado da hora) e `day` (o separador entra quando o dia muda).
+  - `onOpenAttachment`: o app abre a foto ou o vídeo do álbum no lugar do ampliar.
+  - **Toda mensagem ganha `data-message-id`**, com ou sem as props novas — é por ele que a conta de
+    não pular acha a mensagem, e é por ele que o app pula para uma mensagem (a fixada). Nenhum pixel
+    muda; no catálogo, as cinco páginas com conversa mudam só nesse atributo.
+  - **A janela deslizante** ([ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)):
+    `hasMoreBefore` + `onReachStart` + `loadingBefore` em cima, `hasMoreAfter` + `onReachEnd` +
+    `loadingAfter` embaixo. O app guarda umas mil mensagens e troca pelas pontas; a Aurea **não
+    deixa a tela pular** (a mensagem que começa no alto fica no lugar, até quando uma foto cresce
+    depois), abre no fim e acompanha quem está no fim. Medido no Chromium: 1.000 mensagens na tela
+    abrem em 0,3 s; 50.000, em 10,7 s, com a rolagem travando.
+  - Com a janela, a lista deixa de ser região viva e um anunciador lê só a mensagem que chega no
+    fim — senão as antigas carregadas em cima seriam lidas em voz alta.
+
+### Corrigido
+
+- **A seta do `TreeView` na escrita da direita para a esquerda** virava por `:dir(rtl)`, que o
+  empacotador do app reescreve (o defeito do Lote G). Agora vira pela direção do provedor
+  (`.tree-twist-rtl`), e gira pela propriedade `rotate`. **Sobram seis regras com `:dir(rtl)`, em
+  três peças** (as quatro do `Badge` ancorado, a do `Select` e a do `Switch`; medido sem os
+  comentários da folha): ficam na fila por decisão do Victor (`docs/FILA.md` §6, D-01).
+
+- **O item da `TreeView` é cápsula.** O escolhido e o realce de passar o mouse tinham raio de 8
+  (`--radius-sm`); agora têm o `--radius-control`, como os campos, as abas e os botões de texto —
+  regra do Victor, olhando a bancada em 04/10/2026. Medido no Chromium: o raio é pelo menos a
+  metade da altura (com o raio antigo, o teste reprova: 8 para 36).
+
+### Como foi verificado
+
+- Cada teste novo **reprova o código de antes**, rodado contra ele; só passa no antigo a trava de
+  "nada muda" de cada peça: `arvore-an06` (10 de 11 reprovam), `galeria-an05` (6 de 8),
+  `compositor-an03` (5 de 6), `conversa-an02` (7 de 8).
+- `tests/visual/lote-h.spec.ts`, no banco novo `apps/keyboard-probe/lote-h.html` (5.000 mensagens,
+  2.000 itens, pastas que carregam): 7 de 7 no Chromium; o mesmo banco montado com o código da
+  `0.18.0` reprova os 7. A conta de não pular foi provada desligando-a (reprovam os dois testes de
+  "não pular") e desligando o acompanhamento por tamanho (reprovam "abre no fim" e "acompanha").
+
 ## [0.18.0] — 2026-10-03
 
 ✅ **Publicada em 03/10/2026, por volta das 22:18 (Brasília)**, pelo terminal do Victor, da junção

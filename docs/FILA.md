@@ -336,6 +336,7 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 | C-12 | sprite de ícones de 1,27 MB | **[HeroUI]** um componente por ícone, importado um a um | ícone por arquivo na web, como o nativo já faz (`icons/*`) |
 | C-14 | `DataGrid` preso ao TanStack Table 8 | **[ReUI]** a grade dele já usa o **TanStack Table 9**. No npm: `latest` = **9.2.4**; a Aurea pede `^8.21.3` (`packages/react/package.json`) | subir para a 9 numa cópia, com "pode" (muda a dependência) |
 | M-03 | tema por componente | **[HeroUI]** não tem: as variantes só trocam variáveis de CSS (`button.css`: *"Color variants - only set custom property values"*) | fechar como "igual ao HeroUI" ou decidir |
+| D-01 | seis regras da folha ainda viram por `:dir(rtl)`, que o empacotador do app reescreve como lista de idiomas (o defeito do Lote G): as quatro do `Badge` ancorado (`.badge-at-*`), a do `Select` (a seta) e a do `Switch` (a bolinha ligada). A do `TreeView` saiu na `0.19.0` | — | a direção pelo provedor (`useDirection`) ou propriedade lógica, como o `AppShell` e o `TreeView`. **Decisão do Victor, 04/10/2026: fica para depois**, fora do Lote H |
 | M-04 | variantes em lista fechada | **[HeroUI]** a lista é fechada no componente, mas o `@heroui/styles` exporta `buttonVariants` (feito com `tailwind-variants`) para quem quer estender | decidir: expor as classes BEM como API documentada |
 
 ## 7. Pendências soltas (do `CLAUDE.md` §3)
@@ -364,7 +365,9 @@ Rodar `node apps/native-smoke/rodar.mjs` na máquina do Victor e olhar os blocos
 6. Lote 5 (peças novas da web) depois da `1.0`, como o `CLAUDE.md` já diz.
 7. **Lote G** (§9), com "pode" de 03/10/2026: AN-07, AN-08, AN-04 e AN-01 — **feito na `0.18.0`**
    (03/10/2026), aprovado pela bancada (*"pode, aprovado o lote G"*) e **publicado em 03/10/2026**. Depois, o **Lote H** (a conversa longa): AN-02,
-   AN-03, AN-05 e AN-06.
+   AN-03, AN-05 e AN-06 — **feito na `0.19.0`** (04/10/2026) e aprovado pela bancada (*"Pode"*,
+   04/10/2026). Falta a publicação. Sem virtualização: a conversa é uma janela que o app troca pelas pontas
+   ([ADR-0057](../decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)).
 
 ---
 
@@ -378,10 +381,10 @@ atravessa — uma conversa com centenas de milhares de mensagens, uma galeria de
 | ID | o que falta | o HeroUI (`@heroui/react` 3.2.x) | lote |
 |---|---|---|---|
 | AN-01 | o menu lateral do `AppShell` não tem botão de recolher, e não recolhe sozinho em tela média: só vira gaveta abaixo de 1024. O modo trilha existe (`sidebarCollapsed`, `.sidebar-collapsed`), mas só controlado e sem gatilho. Pedido: gatilho embutido na junção do menu com o conteúdo, aberto ↔ trilha, trilha sozinha em largura média, controlado e não controlado, nome em dica na trilha, sem quebrar quem já usa `sidebarCollapsed` | **[ninguém]** — não tem moldura de app | G · **publicado na `0.18.0`** |
-| AN-02 | o `MessageList` não serve para conversa longa: falta o lado (minha × dos outros), anexo e álbum, cabeçalho de resposta e de encaminhada, separador de dia, carregar as antigas ao chegar no topo sem pular, e lista virtualizada (hoje toda mensagem vira DOM) | **[ninguém]** — não tem conversa | H |
-| AN-03 | o `MessageComposer` só manda texto (`onSend(text)`): falta anexo (reusar o `FileInput`), responder com a prévia acima do campo, e editar | **[ninguém]** | H |
+| AN-02 | o `MessageList` não serve para conversa longa: falta o lado (minha × dos outros), anexo e álbum, cabeçalho de resposta e de encaminhada, separador de dia, carregar as antigas ao chegar no topo sem pular, e lista virtualizada (hoje toda mensagem vira DOM) | **[ninguém]** — não tem conversa | H · **feito na `0.19.0`**, aprovado pela bancada |
+| AN-03 | o `MessageComposer` só manda texto (`onSend(text)`): falta anexo (reusar o `FileInput`), responder com a prévia acima do campo, e editar | **[ninguém]** | H · **feito na `0.19.0`**, aprovado pela bancada |
 | AN-04 | o item de lista (`NavListItem`) só aceita ícone por nome: falta foto (`avatar`, o mesmo formato do `ChatMessage.avatar`) e sinais ao lado do `value` (fixado, silenciado) | o `ListBoxItem` aceita qualquer conteúdo | G · **publicado na `0.18.0`** |
-| AN-05 | a `Gallery` tem uma seleção só (`selected: string`), item sem tipo nem duração de vídeo, e não carrega por partes | **[ninguém]** | H |
-| AN-06 | o `TreeView` pede todos os filhos prontos: falta carregar ao abrir (`hasChildren` + `onExpand` assíncrono, com o nó em "carregando") e o nó selecionado controlado (`selectedId`) | **[ninguém]** | H |
+| AN-05 | a `Gallery` tem uma seleção só (`selected: string`), item sem tipo nem duração de vídeo, e não carrega por partes | **[ninguém]** | H · **feito na `0.19.0`**, aprovado pela bancada |
+| AN-06 | o `TreeView` pede todos os filhos prontos: falta carregar ao abrir (`hasChildren` + `onExpand` assíncrono, com o nó em "carregando") e o nó selecionado controlado (`selectedId`) | **[ninguém]** | H · **feito na `0.19.0`**, aprovado pela bancada |
 | AN-07 | o `Progress` não tem estado indeterminado (sem total, ele mostra 0%, como se estivesse parado), nem texto de apoio (velocidade, tempo, bytes), nem tom de pausado e de falha | **[HeroUI]** `ProgressBar` com `color` (`accent`, `default`, `success`, `warning`, `danger`) e `size` (`sm`, `md`, `lg`); o motor dele (React Aria) tem `isIndeterminate` | G · **publicado na `0.18.0`** |
 | AN-08 | reforço da C-10: o `Grid.min` só aceita medida escrita, e a trava do app reprova medida escrita. Medido no app: `min="sm"` passou pelo tipo e a grade virou **uma coluna só**, sem aviso. Pedido: a escala da Aurea (`xs`, `sm`, `md`, `lg`), ligada a token | — (o HeroUI não tem `Grid`) | G · **publicado na `0.18.0`** |

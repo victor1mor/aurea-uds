@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aurea — Lote H</title>
+<style>
+  /* Só a moldura do banco, com os tokens da Aurea. A conversa rola num contêiner próprio, sem a
+     âncora do navegador — é o caso que prova a conta da Aurea (ver src/lote-h.tsx). */
+  .lote-h { display:grid; gap:var(--space-4); max-inline-size:52rem; margin-inline:auto; padding:var(--space-4); }
+  .lote-h-topo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); justify-content:space-between; }
+  .lote-h-conversa { display:grid; gap:var(--space-3); }
+  .lote-h-rolador { block-size:60vh; overflow-y:auto; overflow-anchor:none; padding:var(--space-3); border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--card); }
+  .lote-h-acoes { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-block-end:var(--space-3); }
+  .hint { color:var(--muted-foreground); font-size:var(--text-sm); }
+  pre.hint { white-space:pre-wrap; margin:0; }
+</style></head>
+<body><div id="root"></div><script type="module" src="/src/lote-h.tsx"></script></body>
+</html>
