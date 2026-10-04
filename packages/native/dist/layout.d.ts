@@ -33,12 +33,19 @@ export interface ClusterProps extends Omit<StackProps, "align"> {
  * Sem nenhuma das três, nada muda.
  */
 export declare function Cluster({ align, justify, wrap, style, ...rest }: ClusterProps): React.JSX.Element;
+/**
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026), os mesmos quatro da web (`.grid-min-*`
+ * no `aurea.css`): `xs` 8rem, `sm` 12rem, `md` 15rem (o padrão) e `lg` 20rem. Em rem, porque é rem
+ * na web; o `remInDp` do token faz a conta.
+ */
+export type AureaGridMin = "xs" | "sm" | "md" | "lg";
 export interface GridProps extends ViewProps {
     /**
-     * Largura mínima de cada coluna, em dp. O equivalente do `--grid-min` da web, cujo padrão é
-     * `15rem` — e `1rem = 16dp`, medido, então **240**.
+     * Largura mínima de cada coluna, em dp, ou por nome (`xs`, `sm`, `md`, `lg` — AN-08). O
+     * equivalente do `--grid-min` da web, cujo padrão é `15rem` — e `1rem = 16dp`, medido, então
+     * **240**.
      */
-    minColumnWidth?: number;
+    minColumnWidth?: number | AureaGridMin;
     children?: React.ReactNode;
 }
 /**
@@ -61,7 +68,7 @@ export interface GridProps extends ViewProps {
  * O `min(…, 100%)` da web tem par aqui: `maxWidth: "100%"` no filho, para a coluna não estourar o
  * contêiner quando o texto cresce — a mesma lição que a Fase 11 registrou no CSS.
  */
-export declare function Grid({ minColumnWidth, style, children, onLayout, ...rest }: GridProps): React.JSX.Element;
+export declare function Grid({ minColumnWidth: pedido, style, children, onLayout, ...rest }: GridProps): React.JSX.Element;
 /** Qual superfície o cartão é. Mesmos seis nomes da ficha da web. */
 export interface SeparatorProps extends ViewProps {
     orientation?: "horizontal" | "vertical";

@@ -851,10 +851,6 @@ export default {
     render: () => h(A.Popover, {title: "Filters", trigger: h(A.Button, {variant: "outline"}, "Filters")},
       h(A.Checkbox, {label: "Only mine"})),
   },
-  Progress: {
-    code: `<Progress value={64} label="Uploading" />`,
-    render: () => h("div", {style: wide}, h(A.Progress, {value: 64, label: "Uploading"})),
-  },
   // Parte H — a camada operacional (09/08/2026). Os três primeiros da família.
   AgentStatus: {
     install: 'import {AgentStatus} from "@aurea-uds/react";',

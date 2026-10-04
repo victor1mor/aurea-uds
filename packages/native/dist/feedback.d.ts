@@ -43,20 +43,38 @@ export interface SkeletonProps {
  * aqui): anunciar "caixa" três vezes enquanto a tela carrega não ajuda ninguém.
  */
 export declare function Skeleton({ width, height, radius, style, testID }: SkeletonProps): React.JSX.Element;
+/** O tom da barra: a mesma lista fechada do `tone` do `Button`. Pausado é `neutral`; falha é `danger`. */
+export type AureaProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 export interface ProgressProps {
-    /** 0 a 100. Fora disso é grampeado, como na web (`Math.max(0, Math.min(100, value))`). */
-    value: number;
+    /**
+     * 0 a 100. Fora disso é grampeado, como na web (`Math.max(0, Math.min(100, value))`).
+     * **Sem `value`, a barra é indeterminada** (AN-07): o total ainda não se sabe, e um pedaço corre
+     * pelo trilho, no lugar de um 0% que parece parado.
+     */
+    value?: number;
     label?: string;
+    /**
+     * O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo que
+     * falta, bytes. Em texto, ele vai junto no `accessibilityValue`. É texto: a barra é um elemento
+     * só para o leitor de tela, e coisa tocável dentro dela some no iPhone (`check 43`).
+     */
+    detail?: React.ReactNode;
+    tone?: AureaProgressTone;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
 /**
- * A barra determinada. Só ela — **não há variante indeterminada**, nem na web.
+ * A barra de progresso — determinada, ou indeterminada quando não há `value` (AN-07, 03/10/2026).
  *
  * O papel é `progressbar` e o valor vai no `accessibilityValue`: sem isso o leitor de tela
  * anuncia que existe uma barra e não diz em quanto ela está, que é a única informação que ela tem.
+ * Sem total, não há `now` — a barra não finge um 0%.
+ *
+ * Sem total, um pedaço de 2/5 corre de -100% a 350% da própria largura em 1,5 s, na curva do
+ * `ProgressBar` do HeroUI 3.2.6 — os mesmos números da web. Quando a pessoa pede menos movimento
+ * ele não corre: a barra inteira, apagada, e nunca um pedaço parado, que leria como 40% feito.
  */
-export declare function Progress({ value, label, style, testID }: ProgressProps): React.JSX.Element;
+export declare function Progress({ value, label, detail, tone, style, testID }: ProgressProps): React.JSX.Element;
 export type AureaAlertVariant = "info" | "success" | "warning" | "danger";
 /** Mesmos quatro glifos do `feedback-client.tsx:43`. */
 export declare const ICONE_DA_VARIANTE: Readonly<Record<AureaAlertVariant, IconName>>;

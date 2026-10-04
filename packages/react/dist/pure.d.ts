@@ -172,6 +172,8 @@ export interface AureaStrings {
     tocLabel: string;
     navigationToggle: string;
     sidebarLabel: string;
+    sidebarCollapse: string;
+    sidebarExpand: string;
     bottomNavLabel: string;
     themeToDark: string;
     themeToLight: string;

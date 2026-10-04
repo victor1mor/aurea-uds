@@ -121,12 +121,21 @@ export function Cluster({align, justify, wrap, style, ...rest}: ClusterProps) {
   );
 }
 
+/**
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026), os mesmos quatro da web (`.grid-min-*`
+ * no `aurea.css`): `xs` 8rem, `sm` 12rem, `md` 15rem (o padrão) e `lg` 20rem. Em rem, porque é rem
+ * na web; o `remInDp` do token faz a conta.
+ */
+export type AureaGridMin = "xs" | "sm" | "md" | "lg";
+const REM_DA_COLUNA: Readonly<Record<AureaGridMin, number>> = {xs: 8, sm: 12, md: 15, lg: 20};
+
 export interface GridProps extends ViewProps {
   /**
-   * Largura mínima de cada coluna, em dp. O equivalente do `--grid-min` da web, cujo padrão é
-   * `15rem` — e `1rem = 16dp`, medido, então **240**.
+   * Largura mínima de cada coluna, em dp, ou por nome (`xs`, `sm`, `md`, `lg` — AN-08). O
+   * equivalente do `--grid-min` da web, cujo padrão é `15rem` — e `1rem = 16dp`, medido, então
+   * **240**.
    */
-  minColumnWidth?: number;
+  minColumnWidth?: number | AureaGridMin;
   children?: React.ReactNode;
 }
 
@@ -150,9 +159,10 @@ export interface GridProps extends ViewProps {
  * O `min(…, 100%)` da web tem par aqui: `maxWidth: "100%"` no filho, para a coluna não estourar o
  * contêiner quando o texto cresce — a mesma lição que a Fase 11 registrou no CSS.
  */
-export function Grid({minColumnWidth = 240, style, children, onLayout, ...rest}: GridProps) {
+export function Grid({minColumnWidth: pedido = 240, style, children, onLayout, ...rest}: GridProps) {
   const t = useAureaTokens();
   const s = folha(t);
+  const minColumnWidth = typeof pedido === "number" ? pedido : REM_DA_COLUNA[pedido] * t.remInDp;
   const [largura, setLargura] = React.useState<number | null>(null);
   const plano = (StyleSheet.flatten([s.grid, style]) ?? {}) as Record<string, unknown>;
   const vao = numero(plano.columnGap) ?? numero(plano.gap) ?? t.size.space4;

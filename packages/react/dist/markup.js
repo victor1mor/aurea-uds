@@ -48,11 +48,14 @@ function CardMedia({ className, ...props }) { return _jsx("div", { className: cx
 Card.Media = CardMedia;
 export function Stack({ gap, align, className, ...props }) { return _jsx("div", { className: cx("stack", gap && gap !== "normal" && `stack-gap-${gap}`, align && align !== "stretch" && `stack-align-${align}`, className), ...props }); }
 export function Cluster({ gap, align, justify, wrap, className, ...props }) { return _jsx("div", { className: cx("cluster", gap && gap !== "normal" && `cluster-gap-${gap}`, align && align !== "center" && `cluster-align-${align}`, justify && justify !== "start" && `cluster-justify-${justify}`, wrap === false && "cluster-nowrap", className), ...props }); }
+const GRID_MIN = new Set(["xs", "sm", "md", "lg"]);
 export function Grid({ gap, min, columns, className, style, ...props }) {
-    const vars = min != null || columns != null
-        ? { ...(min != null ? { "--grid-min": min } : {}), ...(columns != null ? { "--grid-cols": String(columns) } : {}), ...style }
+    const nome = min != null && GRID_MIN.has(min);
+    const medida = min != null && !nome ? min : undefined;
+    const vars = medida != null || columns != null
+        ? { ...(medida != null ? { "--grid-min": medida } : {}), ...(columns != null ? { "--grid-cols": String(columns) } : {}), ...style }
         : style;
-    return _jsx("div", { className: cx("grid", gap && gap !== "normal" && `grid-gap-${gap}`, columns != null && "grid-fixed", className), style: vars, ...props });
+    return _jsx("div", { className: cx("grid", gap && gap !== "normal" && `grid-gap-${gap}`, nome && min !== "md" && `grid-min-${min}`, columns != null && "grid-fixed", className), style: vars, ...props });
 }
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({ label, value, trend, className, ...props }) { return _jsxs(Card, { className: cx("kpi", className), ...props, children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), trend && _jsx("small", { children: trend })] }); }
@@ -88,7 +91,19 @@ export function Badge({ variant = "neutral", emphasis = "soft", size = "md", dot
     // botão do sino é anunciado "sino 8" e ninguém sabe o que é o 8.
     return _jsxs("span", { className: "badge-anchor", children: [children, !escondido && React.cloneElement(chip, { "aria-hidden": true })] });
 }
-export function Progress({ value, label }) { const pct = Math.max(0, Math.min(100, value)); return _jsx("div", { children: _jsx("div", { className: "progress", role: "progressbar", "aria-label": label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, children: _jsx("span", { style: { width: `${pct}%` } }) }) }); }
+// AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
+// de antes, mais a classe da caixa de fora. A anatomia é a do `ProgressBar` do HeroUI 3.2.6: a
+// saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
+export function Progress({ value, label, detail, tone = "brand", className }) {
+    const semTotal = value == null || Number.isNaN(value);
+    const pct = semTotal ? undefined : Math.max(0, Math.min(100, value));
+    const temApoio = detail != null && detail !== false && detail !== "";
+    // Texto vai no `aria-valuetext`, e o desenho dele sai do leitor de tela para não ser lido duas
+    // vezes. Apoio que não é texto (um ícone, um link) fica onde está, para o leitor achar sozinho.
+    const emTexto = temApoio && (typeof detail === "string" || typeof detail === "number") ? String(detail) : undefined;
+    const valuetext = emTexto == null ? undefined : pct == null ? emTexto : `${pct}%, ${emTexto}`;
+    return _jsxs("div", { className: cx("progress-field", className), children: [temApoio && _jsx("div", { className: "progress-detail", "aria-hidden": emTexto != null || undefined, children: detail }), _jsx("div", { className: cx("progress", semTotal && "progress-indeterminate", tone !== "brand" && `progress-tone-${tone}`), role: "progressbar", "aria-label": label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-valuetext": valuetext, children: _jsx("span", { style: pct == null ? undefined : { width: `${pct}%` } }) })] });
+}
 export function Skeleton({ className, ...props }) { return _jsx("div", { className: cx("skeleton", className), "aria-hidden": "true", ...props }); }
 // ── Identity ─────────────────────────────────────────────────────────────────────────────────
 // `React.Children` não é hook — é utilitário de leitura de `children`, e roda no servidor.

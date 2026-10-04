@@ -18,7 +18,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Hooks públicos com ficha | 9 |
 | Maturidade declarada nas fichas | Ready 42 · Stable 88 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 585 |
+| Classes declaradas no CSS do core | 600 |
 
 ## Tokens
 
@@ -55,23 +55,23 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Origem | Arquivos |
 |---|---|
-| Componentes com conteúdo próprio | 27 de 121 |
-| Componentes com starter (preview + código mínimos) | 103 de 121 |
+| Componentes com conteúdo próprio | 28 de 121 |
+| Componentes com starter (preview + código mínimos) | 102 de 121 |
 | Patterns com conteúdo | 77 |
 | Blocks com conteúdo | 2 |
 | Receitas com preview | 23 de 23 |
 
 Todo item tem preview e código — é o núcleo do modelo de página decidido na
-[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 103 componentes de
+[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 102 componentes de
 starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 121: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
 
 ## Garantias automáticas
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1363 |
+| Chamadas de `test()` nos testes unitários | 1391 |
 | Componentes citados nos testes unitários | 128 de 121 |
-| Specs de navegador (Playwright) | 22 |
+| Specs de navegador (Playwright) | 26 |
 | Baselines de screenshot no repositório | 44 |
 | Baselines `-linux.png` (o que a CI compara) | 22 |
 

@@ -11,11 +11,11 @@ export type { IconProps, IconName, PhosphorIconName, AureaIconNames, IconWeight,
 export { Screen } from "./screen.js";
 export type { ScreenProps, AureaScreenBackground, AureaScreenEdge } from "./screen.js";
 export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";
-export type { StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify, GridProps, CardProps, SeparatorProps, AureaCardVariant, } from "./layout.js";
+export type { StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify, GridProps, CardProps, SeparatorProps, AureaCardVariant, AureaGridMin, } from "./layout.js";
 export { Button, IconButton, LinkButton, ThemeToggle } from "./actions.js";
 export type { ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, } from "./actions.js";
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";
-export type { SpinnerProps, SkeletonProps, ProgressProps, AlertProps, EmptyStateProps, DataStateProps, AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue, } from "./feedback.js";
+export type { SpinnerProps, SkeletonProps, ProgressProps, AlertProps, EmptyStateProps, DataStateProps, AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue, AureaProgressTone, } from "./feedback.js";
 export { Badge, Status, Avatar, KPI, formatarContagem } from "./display.js";
 export type { BadgeProps, StatusProps, AvatarProps, KPIProps, AureaBadgeAnchor, AureaBadgeEmphasis, AureaBadgeFit, AureaBadgeSize, AureaBadgeTone, AureaStatusVariant, AureaAvatarSize, } from "./display.js";
 export { useAureaStrings } from "./theme.js";
@@ -23,7 +23,7 @@ export { defaultStrings, ptBR, gravidadeDoEstado, AUREA_UNIVERSAL_STATES } from 
 export type { AureaStrings, AureaUniversalState } from "./strings.js";
 export { useReduceMotion } from "./movimento.js";
 export { BottomNav, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
-export type { BottomNavProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, AureaTabsVariant, } from "./navigation.js";
+export type { BottomNavProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaNavListIndicator, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, AureaTabsVariant, } from "./navigation.js";
 export { Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, RadioGroup, SegmentedControl, Form, KeyboardAvoiding, useCampo, } from "./inputs.js";
 export type { FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps, RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize, } from "./inputs.js";
 export { InputGroup, InputGroupAddon, PasswordField, useGrupoDeCampo } from "./inputs.js";

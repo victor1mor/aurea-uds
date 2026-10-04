@@ -19,6 +19,7 @@
   ],
   "tokens": [
     "--control-h-lg",
+    "--control-h-md",
     "--foreground",
     "--muted-foreground",
     "--radius-control",
@@ -55,7 +56,8 @@
       "DataList",
       "Card",
       "Badge",
-      "Status"
+      "Status",
+      "Avatar"
     ],
     "patterns": []
   },
@@ -67,7 +69,7 @@
       "name": "items",
       "type": "NavListItem[]",
       "default": "—",
-      "description": "The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, href?, onClick?, disabled?}. `description` is the second line and it is optional on purpose: a settings row often needs it (\"Notifications\" / \"Push, email\") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled. M-01: an item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content."
+      "description": "The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, avatar?, indicators?, href?, onClick?, disabled?}. `description` is the second line and it is optional on purpose: a settings row often needs it (\"Notifications\" / \"Push, email\") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled. M-01: an item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. AN-04: `avatar` ({src?, fallback?}, the same shape as ChatMessage.avatar) puts a photo at the start of the row, in place of the icon. `indicators` ([{icon, label}]) are small muted signs before the value — pinned, muted — and each label is read by the screen reader, not drawn."
     },
     {
       "name": "className",

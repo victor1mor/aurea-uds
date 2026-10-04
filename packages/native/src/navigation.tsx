@@ -29,10 +29,10 @@
 // deste módulo — a de acessibilidade, logo abaixo.
 import * as React from "react";
 import {
-  Pressable, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
+  Pressable, View, type ImageSourcePropType, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
-import {Badge} from "./display.js";
+import {Avatar, Badge} from "./display.js";
 import {comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
@@ -210,6 +210,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   // Nenhuma medida nova: `flex`, `minWidth` e o MESMO `gap` da moldura.
   linhaMiolo: {flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space3},
   linhaTexto: {flex: 1, minWidth: 0},
+  // AN-04: os sinais, com o vão de dentro do texto (`space1`), como o `.nav-list-indicators` da web.
+  sinais: {flexDirection: "row", alignItems: "center", gap: t.size.space1},
 
   // ── Tabs ───────────────────────────────────────────────────────────────────────────────────
   // A cápsula é a MESMA do `SegmentedControl`, e o CSS diz isso em voz alta no comentário de
@@ -592,6 +594,12 @@ export function Topbar({variant = "floating", inset = "bar", brand, children, st
 // NavList
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
+/** Um sinal da linha (AN-04): fixada, silenciada. O `label` não aparece; é o que o leitor de tela lê. */
+export interface AureaNavListIndicator {
+  icon: AureaIcon;
+  label: string;
+}
+
 export interface AureaNavListItem {
   id: string;
   label: React.ReactNode;
@@ -601,6 +609,13 @@ export interface AureaNavListItem {
   icon?: AureaIcon;
   onPress?: () => void;
   disabled?: boolean;
+  /**
+   * A foto da linha (AN-04, 03/10/2026) — o formato do `Avatar` daqui (`source`, `fallback`), no
+   * tamanho dele de sempre, o mesmo da web. Toma o lugar do `icon`.
+   */
+  avatar?: {source?: ImageSourcePropType | string; fallback?: React.ReactNode};
+  /** Os sinais ao lado do `value` (AN-04): pequenos e apagados, cada um com nome. */
+  indicators?: AureaNavListIndicator[];
 }
 
 export interface NavListProps extends ViewProps {
@@ -649,7 +664,9 @@ export function NavList({items, chevron = "caret-right", style, ...rest}: NavLis
         const valorEhTexto = typeof it.value === "string" || typeof it.value === "number";
         const miolo = (
           <>
-            {it.icon && <Icon name={it.icon} size="md" color={t.color.foreground} />}
+            {it.avatar
+              ? <Avatar source={it.avatar.source} fallback={it.avatar.fallback} />
+              : it.icon && <Icon name={it.icon} size="md" color={t.color.foreground} />}
             <View style={s.linhaTexto}>
               {typeof it.label === "string"
                 ? <Text size="sm" numberOfLines={1}>{it.label}</Text> : it.label}
@@ -657,6 +674,17 @@ export function NavList({items, chevron = "caret-right", style, ...rest}: NavLis
                 ? <Text size="xs" tone="muted" numberOfLines={1}>{it.description}</Text>
                 : it.description)}
             </View>
+            {/* AN-04: o nome de cada sinal vai no próprio sinal. A linha é UMA leitura (ou um
+                `Pressable`), e o leitor de tela junta os nomes de dentro — "Ana, Fixada, 3". */}
+            {it.indicators && it.indicators.length > 0 && (
+              <View style={s.sinais}>
+                {it.indicators.map((x) => (
+                  <View key={x.label} accessibilityLabel={x.label}>
+                    <Icon name={x.icon} size="sm" color={t.color.mutedForeground} />
+                  </View>
+                ))}
+              </View>
+            )}
             {valorEhTexto && <Text size="sm" tone="muted">{it.value}</Text>}
             {/* ⚠ A seta só aparece com ação. Seta em linha que não abre nada é promessa falsa. */}
             {temAcao && chevron

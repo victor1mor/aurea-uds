@@ -198,3 +198,36 @@ for (const tema of ["dark", "light"] as const) {
       .toBeGreaterThanOrEqual(1.4);
   });
 }
+
+// ── o TOM do `Progress` (AN-07, 03/10/2026): o preenchimento contra o trilho ──────────────────
+// 3:1 = SC 1.4.11: o preenchimento é a informação da barra, e o que se compara é ele contra o
+// trilho em que ele corre. Medido em 03/10/2026, no escuro de 5,23 (`danger`) a 8,34 (`info`); no
+// claro de 4,00 (`danger`) a 6,80 (`neutral`).
+//
+// ⚠ `brand` no tema claro NÃO entra, e não por esquecimento: o amarelo da marca mede **1,61:1**
+// contra o trilho claro, desde a primeira barra — anterior a este lote. Ele é FUNDO (ADR-0054: onde o
+// amarelo é fundo, é o amarelo de verdade), e mexer nele é identidade. Fica aberto para o Victor.
+const TONS_DA_BARRA = ["brand", "neutral", "success", "warning", "danger", "info"] as const;
+for (const tema of ["dark", "light"] as const) {
+  test(`contraste · Progress · o preenchimento contra o trilho · tema ${tema}`, async ({page}) => {
+    await page.goto("/apps/catalog/button.html");
+    await page.evaluate(t => { document.documentElement.dataset.theme = t; }, tema);
+    await esperarTransicoes(page);
+    const cores = await page.evaluate(tons => Object.fromEntries(tons.map(t => {
+      const barra = document.createElement("div");
+      barra.className = `progress progress-tone-${t}`;
+      barra.innerHTML = "<span></span>";
+      document.body.append(barra);
+      const par = [getComputedStyle(barra.firstElementChild!).backgroundColor, getComputedStyle(barra).backgroundColor];
+      barra.remove();
+      return [t, par];
+    })), [...TONS_DA_BARRA]);
+    // Controle: se dois tons pintam igual, a classe não chegou e o teste mede o amarelo seis vezes.
+    expect(new Set(Object.values(cores).map(([f]) => f)).size).toBe(TONS_DA_BARRA.length);
+    for (const t of TONS_DA_BARRA) {
+      if (tema === "light" && t === "brand") continue;
+      const r = razao(cores[t][0], cores[t][1]);
+      expect(r, `${t}: preenchimento a ${r.toFixed(2)}:1 do trilho (SC 1.4.11 pede 3)`).toBeGreaterThanOrEqual(3);
+    }
+  });
+}

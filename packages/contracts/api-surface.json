@@ -6,8 +6,8 @@
     "modulos": 36,
     "componentes": 126,
     "hooks": 9,
-    "aliasesLiterais": 61,
-    "propsDistintas": 242
+    "aliasesLiterais": 63,
+    "propsDistintas": 241
   },
   "aliases": {
     "ButtonVariant": {
@@ -1811,6 +1811,16 @@
         "between"
       ]
     },
+    "GridMin": {
+      "module": "markup",
+      "raw": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "xs",
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
     "TypographyType": {
       "module": "markup",
       "raw": "\"body\" | \"body-sm\" | \"body-xs\" | \"code\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
@@ -1904,6 +1914,18 @@
       "union": [
         "auto",
         "content"
+      ]
+    },
+    "ProgressTone": {
+      "module": "markup",
+      "raw": "\"brand\" | \"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\"",
+      "union": [
+        "brand",
+        "neutral",
+        "success",
+        "warning",
+        "danger",
+        "info"
       ]
     },
     "RangeOrientation": {
@@ -5110,12 +5132,6 @@
               ]
             },
             {
-              "name": "sidebarCollapsed",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
               "name": "contentVariant",
               "optional": true,
               "type": "\"surface\" | \"plain\"",
@@ -5627,16 +5643,23 @@
         {
           "name": "Progress",
           "kind": "function",
-          "propsType": null,
+          "propsType": "ProgressProps",
           "props": [
             {
-              "name": "value",
-              "optional": false,
-              "type": "number",
-              "values": null
+              "name": "tone",
+              "optional": true,
+              "type": "ProgressTone",
+              "values": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger",
+                "info"
+              ]
             },
             {
-              "name": "label",
+              "name": "className",
               "optional": true,
               "type": "string",
               "values": null

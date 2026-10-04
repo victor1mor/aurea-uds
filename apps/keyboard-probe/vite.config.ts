@@ -7,5 +7,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "./",
-  build: {outDir: "out", emptyOutDir: true},
+  // Duas páginas: o banco de teclado e, desde 03/10/2026 (AN-01), o da moldura (`shell.html`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html"}}},
 });

@@ -46,6 +46,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ── Progress ───────────────────────────────────────────────────────────────────────────────
   trilho: {height: 8, borderRadius: t.size.radiusFull, backgroundColor: t.color.surface3, overflow: "hidden"},
   preenchimento: {height: "100%", borderRadius: t.size.radiusFull, backgroundColor: t.color.primary},
+  // AN-07: a caixa com o texto de apoio em cima — a grade do HeroUI, `gap-1` até o trilho, a saída
+  // à direita em algarismos de largura igual.
+  campoProgresso: {gap: t.size.space1},
+  apoioProgresso: {alignSelf: "flex-end"},
+  algarismos: {fontVariant: ["tabular-nums"]},
 
   // ── Alert ──────────────────────────────────────────────────────────────────────────────────
   // A web usa GRADE de três trilhas (ícone, corpo, ação). Aqui é linha de flex com o corpo
@@ -212,32 +217,96 @@ export function Skeleton({width, height, radius, style, testID}: SkeletonProps) 
 // Progress
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
+/** O tom da barra: a mesma lista fechada do `tone` do `Button`. Pausado é `neutral`; falha é `danger`. */
+export type AureaProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
+
 export interface ProgressProps {
-  /** 0 a 100. Fora disso é grampeado, como na web (`Math.max(0, Math.min(100, value))`). */
-  value: number;
+  /**
+   * 0 a 100. Fora disso é grampeado, como na web (`Math.max(0, Math.min(100, value))`).
+   * **Sem `value`, a barra é indeterminada** (AN-07): o total ainda não se sabe, e um pedaço corre
+   * pelo trilho, no lugar de um 0% que parece parado.
+   */
+  value?: number;
   label?: string;
+  /**
+   * O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo que
+   * falta, bytes. Em texto, ele vai junto no `accessibilityValue`. É texto: a barra é um elemento
+   * só para o leitor de tela, e coisa tocável dentro dela some no iPhone (`check 43`).
+   */
+  detail?: React.ReactNode;
+  tone?: AureaProgressTone;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
+const COR_DO_TOM: Readonly<Record<AureaProgressTone, string>> = {
+  brand: "primary", neutral: "mutedForeground", success: "success",
+  warning: "warning", danger: "destructive", info: "info",
+};
+
 /**
- * A barra determinada. Só ela — **não há variante indeterminada**, nem na web.
+ * A barra de progresso — determinada, ou indeterminada quando não há `value` (AN-07, 03/10/2026).
  *
  * O papel é `progressbar` e o valor vai no `accessibilityValue`: sem isso o leitor de tela
  * anuncia que existe uma barra e não diz em quanto ela está, que é a única informação que ela tem.
+ * Sem total, não há `now` — a barra não finge um 0%.
+ *
+ * Sem total, um pedaço de 2/5 corre de -100% a 350% da própria largura em 1,5 s, na curva do
+ * `ProgressBar` do HeroUI 3.2.6 — os mesmos números da web. Quando a pessoa pede menos movimento
+ * ele não corre: a barra inteira, apagada, e nunca um pedaço parado, que leria como 40% feito.
  */
-export function Progress({value, label, style, testID}: ProgressProps) {
-  const s = folha(useAureaTokens());
-  const pct = Math.max(0, Math.min(100, value));
+export function Progress({value, label, detail, tone = "brand", style, testID}: ProgressProps) {
+  const t = useAureaTokens();
+  const s = folha(t);
+  const reduzir = useReduceMotion();
+  const semTotal = value == null || Number.isNaN(value);
+  const pct = semTotal ? undefined : Math.max(0, Math.min(100, value));
+  const cor = t.color[COR_DO_TOM[tone]];
+  const temApoio = detail != null && detail !== false && detail !== "";
+  const emTexto = temApoio && (typeof detail === "string" || typeof detail === "number") ? String(detail) : undefined;
+
+  // A largura do trilho, para o pedaço saber quanto andar. O `translateX` do RN não aceita
+  // porcentagem, e a do CSS é da própria peça — aqui ela vira conta: 2/5 do trilho.
+  const [largura, setLargura] = React.useState(0);
+  const corrida = React.useRef(new Animated.Value(0)).current;
+  const corre = semTotal && reduzir === false && largura > 0;
+  React.useEffect(() => {
+    // `reduzir === false`, e não `!reduzir`: enquanto é `null` o sistema ainda não respondeu.
+    if (!corre) return;
+    corrida.setValue(0);
+    const laco = Animated.loop(Animated.timing(corrida, {
+      toValue: 1, duration: 1500, easing: Easing.bezier(0.65, 0, 0.35, 1), useNativeDriver: driverNativo(),
+    }));
+    laco.start();
+    return () => laco.stop();
+  }, [corrida, corre, largura]);
+
+  const pedaco = largura * 0.4;
+  const preenchimento = !semTotal
+    ? <View style={[s.preenchimento, {width: `${pct}%`, backgroundColor: cor}]} />
+    : corre
+      ? <Animated.View style={[s.preenchimento, {width: pedaco, backgroundColor: cor},
+          {transform: [{translateX: corrida.interpolate({inputRange: [0, 1], outputRange: [-pedaco, pedaco * 3.5]})}]}]} />
+      : <View style={[s.preenchimento, {width: "100%", backgroundColor: cor, opacity: t.size.opacityDisabled}]} />;
+
+  const valor = semTotal
+    ? (emTexto != null ? {text: emTexto} : undefined)
+    : {min: 0, max: 100, now: pct, ...(emTexto != null && {text: `${pct}%, ${emTexto}`})};
+  const papel = {
+    testID, accessible: true, accessibilityRole: "progressbar" as const,
+    accessibilityLabel: label, accessibilityValue: valor,
+  };
+  const medir = semTotal ? (e: {nativeEvent: {layout: {width: number}}}) => setLargura(e.nativeEvent.layout.width) : undefined;
+
+  if (!temApoio) {
+    return <View {...papel} onLayout={medir} style={[s.trilho, style]}>{preenchimento}</View>;
+  }
   return (
-    <View
-      testID={testID}
-      accessible
-      accessibilityRole="progressbar"
-      accessibilityLabel={label}
-      accessibilityValue={{min: 0, max: 100, now: pct}}
-      style={[s.trilho, style]}>
-      <View style={[s.preenchimento, {width: `${pct}%`}]} />
+    <View {...papel} style={[s.campoProgresso, style]}>
+      {emTexto != null
+        ? <Text type="body-sm" weight={500} tone="muted" style={[s.apoioProgresso, s.algarismos]}>{emTexto}</Text>
+        : <View style={s.apoioProgresso}>{detail}</View>}
+      <View onLayout={medir} style={s.trilho}>{preenchimento}</View>
     </View>
   );
 }

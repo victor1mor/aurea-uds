@@ -47,14 +47,21 @@ export interface ClusterProps extends DivProps {
     wrap?: boolean;
 }
 export declare function Cluster({ gap, align, justify, wrap, className, ...props }: ClusterProps): React.JSX.Element;
+/**
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026). O HeroUI não tem `Grid`, e nenhum dos
+ * quatro números é novo: cada um já mede uma grade ou uma caixa da Aurea (ver `.grid-min-*` no CSS).
+ * `md` é o padrão de sempre.
+ */
+export type GridMin = "xs" | "sm" | "md" | "lg";
 export interface GridProps extends DivProps {
     /** `tight` (--space-2), `normal` (o de sempre, --space-4) ou `loose` (--space-6). */
     gap?: LayoutGap;
     /**
-     * Largura mínima de cada coluna, em unidade de CSS (`"10rem"`, `"155px"`). Padrão `15rem`. É o
-     * `--grid-min` que o CSS sempre leu e que nenhum tipo mostrava.
+     * Largura mínima de cada coluna. Por nome (AN-08): `xs` 8rem, `sm` 12rem, `md` 15rem (o padrão)
+     * ou `lg` 20rem. Ou em unidade de CSS (`"10rem"`, `"155px"`) — o `--grid-min` que o CSS sempre
+     * leu. Até a 0.17, `"sm"` passava pelo tipo e a grade virava UMA coluna, sem aviso.
      */
-    min?: string;
+    min?: GridMin | (string & {});
     /** Número fixo de colunas, iguais. Com ele, `min` deixa de valer. */
     columns?: number;
 }
@@ -139,10 +146,21 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     badgeContent?: ReactNode;
 }
 export declare function Badge({ variant, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
-export declare function Progress({ value, label }: {
-    value: number;
+/** O tom da barra: a mesma lista fechada do `ButtonTone`. Pausado é `neutral`; falha é `danger`. */
+export type ProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
+export interface ProgressProps {
+    /** 0 a 100; fora disso é grampeado. **Sem `value`, a barra é indeterminada** (AN-07): o total
+     *  ainda não se sabe, e um pedaço corre pelo trilho, no lugar de um 0% que parece parado. */
+    value?: number;
+    /** O nome que o leitor de tela anuncia. Não aparece. */
     label?: string;
-}): React.JSX.Element;
+    /** O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo
+     *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
+    detail?: ReactNode;
+    tone?: ProgressTone;
+    className?: string;
+}
+export declare function Progress({ value, label, detail, tone, className }: ProgressProps): React.JSX.Element;
 export declare function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export declare function AvatarGroup({ children, max, total, label, size, className }: {
     children: ReactNode;

@@ -88,6 +88,8 @@ import IconPaperclip from "@aurea-uds/native/icons/paperclip";
 // A barra inferior (o item escolhido desenha a forma cheia), a folha do `Select` e o X dos overlays.
 import IconBell from "@aurea-uds/native/icons/bell";
 import IconBellFill from "@aurea-uds/native/icons/bell-fill";
+import IconBellSlash from "@aurea-uds/native/icons/bell-slash";
+import IconPushPin from "@aurea-uds/native/icons/push-pin";
 import IconSquaresFour from "@aurea-uds/native/icons/squares-four";
 import IconSquaresFourFill from "@aurea-uds/native/icons/squares-four-fill";
 import IconListBullets from "@aurea-uds/native/icons/list-bullets";
@@ -121,7 +123,7 @@ const ICONES = criarRegistroDeIcones({
   "warning": IconWarning, "warning-fill": IconWarningFill,
   "x-circle": IconXCircle, "x-circle-fill": IconXCircleFill,
   "file": IconFile, "file-text": IconFileText, "paperclip": IconPaperclip,
-  "bell": IconBell, "bell-fill": IconBellFill,
+  "bell": IconBell, "bell-fill": IconBellFill, "bell-slash": IconBellSlash, "push-pin": IconPushPin,
   "squares-four": IconSquaresFour, "squares-four-fill": IconSquaresFourFill,
   "list-bullets": IconListBullets, "list-bullets-fill": IconListBulletsFill,
   "caret-down": IconCaretDown, "x": IconX,
@@ -302,6 +304,9 @@ function Tela({irParaScreen, irParaLote2}) {
       <BlocoR21 t={t} />
       <BlocoR22 t={t} />
       <BlocoBarraParada t={t} />
+      <BlocoProgresso t={t} />
+      <BlocoGradePorNome t={t} />
+      <BlocoConversas t={t} />
 
       {/* ── 2 ─────────────────────────────────────────────────────────────── */}
       <Bloco t={t} n="2" titulo="Os ícones desenham, e na cor pedida?"
@@ -1579,6 +1584,62 @@ function BlocoBarraParada({t}) {
         + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra do "
         + "Telegram; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
       {["circle-bold", "capsule", "pill", "expand"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
+    </Bloco>
+  );
+}
+
+function BlocoGradePorNome({t}) {
+  // AN-08 (03/10/2026): a largura mínima da coluna por nome, os mesmos quatro da web.
+  return (
+    <Bloco t={t} n="AN-08" titulo="A grade por nome: xs dá duas colunas no telefone em pé, lg dá uma?"
+      criterio={"1) A de cima (xs, 128): DUAS colunas com o telefone em pé. 2) A de baixo (lg, 320): UMA "
+        + "coluna em pé. 3) Deitado, as duas ganham colunas. As colunas de cada linha têm a mesma largura."}>
+      {["xs", "lg"].map((nome) => (
+        <Grid key={nome} minColumnWidth={nome}>
+          {["Um", "Dois", "Três", "Quatro"].map((x) => <Card key={x}><Paragraph>{`${nome} · ${x}`}</Paragraph></Card>)}
+        </Grid>
+      ))}
+    </Bloco>
+  );
+}
+
+function BlocoConversas({t}) {
+  // AN-04 (03/10/2026): a foto no começo da linha e os sinais antes do valor.
+  return (
+    <Bloco t={t} n="AN-04" titulo="A lista de conversas: foto no começo, alfinete e sino cortado antes do número?"
+      criterio={"1) Cada linha começa por uma foto redonda (a primeira com imagem, a segunda com as letras "
+        + "DT), no lugar do ícone. 2) Antes do 3, um alfinete pequeno e apagado; na segunda, um sino "
+        + "cortado. 3) Com o leitor de tela, a primeira linha diz \"Ana, Até amanhã, Fixada, 3\"."}>
+      <Card>
+        <NavList items={[
+          {id: "ana", label: "Ana", description: "Até amanhã", avatar: {source: FOTO_A, fallback: "AN"},
+            indicators: [{icon: "push-pin", label: "Fixada"}], value: "3", onPress: () => {}},
+          {id: "time", label: "Time de design", description: "Bia: o deck novo subiu", avatar: {fallback: "DT"},
+            indicators: [{icon: "bell-slash", label: "Silenciada"}], onPress: () => {}},
+        ]} />
+      </Card>
+    </Bloco>
+  );
+}
+
+function BlocoProgresso({t}) {
+  // AN-07 (03/10/2026): sem total, a barra CORRE; o apoio no alto à direita; a cor de pausado e de falha.
+  const [total, setTotal] = React.useState(false);
+  return (
+    <Bloco t={t} n="AN-07" titulo="A barra sem total corre, de fora a fora?"
+      criterio={"1) A primeira barra: um pedaço amarelo entra pela esquerda e sai pela direita, sem parar. "
+        + "Com \"Reduzir movimento\" (iPhone) ou \"Remover animações\" (Android) ligado, ela fica cheia "
+        + "e apagada, PARADA. 2) Toque em \"Chegou o total\": ela para de correr e mostra 30%. 3) O texto "
+        + "de apoio fica em cima, à direita, menor e apagado. 4) As cores: cinza (pausado), verde, laranja "
+        + "e vermelho (falhou)."}>
+      <Progress value={total ? 30 : undefined} label="Contando arquivos" detail={total ? "30 de 100" : "1.204 arquivos"} />
+      <Button size="sm" appearance="outline" onPress={() => setTotal((x) => !x)}>
+        {total ? "Voltar a contar" : "Chegou o total"}
+      </Button>
+      <Progress value={40} label="Pausado" tone="neutral" detail="Pausado" />
+      <Progress value={100} label="Pronto" tone="success" detail="Pronto" />
+      <Progress value={72} label="Disco" tone="warning" detail="72% cheio" />
+      <Progress value={58} label="Envio" tone="danger" detail="Falhou em 58%" />
     </Bloco>
   );
 }

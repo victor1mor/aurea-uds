@@ -17,6 +17,7 @@ import { SearchField } from "./inputs.js";
 // importa `internal`, `system` e `actions` — todos anteriores —, então não há ciclo: o que
 // mudou foi a ORDEM documentada, que colocava overlays no "resto" sem motivo medido.
 import { Tooltip } from "./overlays.js";
+import { Avatar } from "./identity-client.js";
 export function Stepper({ items, label, className }) {
     const s = useAureaStrings();
     return _jsx("div", { role: "list", "aria-label": label ?? s.stepperLabel, className: cx("stepper", className), children: items.map((it, n) => {
@@ -256,7 +257,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
 }
 export function NavList({ items, className, ...props }) {
     return _jsx("ul", { className: cx("nav-list", className), ...props, children: items.map(it => {
-            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), (it.href || it.render) && _jsx(Icon, { name: "caret-right", size: "sm", className: "nav-list-chevron" })] });
+            const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback }) : it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.indicators && it.indicators.length > 0 && _jsx("span", { className: "nav-list-indicators", children: it.indicators.map(x => _jsxs("span", { children: [_jsx(Icon, { name: x.icon, size: "sm" }), _jsx("span", { className: "sr-only", children: x.label })] }, x.label)) }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), (it.href || it.render) && _jsx(Icon, { name: "caret-right", size: "sm", className: "nav-list-chevron" })] });
             return _jsx("li", { children: it.render && !it.disabled
                     ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, children: miolo }, "a")
                     : it.href && !it.disabled

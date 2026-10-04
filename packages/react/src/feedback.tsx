@@ -3,4 +3,5 @@
 // chegar como cliente por vizinhança (ADR-0026; o check 26b reprova quem a puser de volta aqui).
 export * from "./feedback-client.js";
 export {Badge, formatBadgeCount, Progress, Skeleton,
-  type BadgeVariant, type BadgeEmphasis, type BadgeSize, type BadgePlacement, type BadgeProps} from "./markup.js";
+  type BadgeVariant, type BadgeEmphasis, type BadgeSize, type BadgePlacement, type BadgeProps,
+  type ProgressProps, type ProgressTone} from "./markup.js";

@@ -97,6 +97,11 @@ export declare function BottomNav({ items, current, variant, indicator, width, l
     width?: BottomNavWidth;
     label?: string;
 }): React.JSX.Element;
+export interface NavListIndicator {
+    icon: IconName;
+    /** O que o sinal quer dizer ("Fixada"). Sai da tela e fica para o leitor de tela. */
+    label: string;
+}
 export interface NavListItem {
     id: string;
     label: ReactNode;
@@ -108,6 +113,13 @@ export interface NavListItem {
     disabled?: boolean;
     /** O link do roteador do app (M-01). Linha com `render` é linha com destino: leva a seta, como a com `href`. */
     render?: ReactElement;
+    /** A foto da linha (AN-04) — o mesmo formato do `ChatMessage.avatar`. Toma o lugar do `icon`. */
+    avatar?: {
+        src?: string;
+        fallback?: ReactNode;
+    };
+    /** Os sinais ao lado do `value` (AN-04): fixada, silenciada. Pequenos e apagados, cada um com nome. */
+    indicators?: NavListIndicator[];
 }
 export declare function NavList({ items, className, ...props }: HTMLAttributes<HTMLUListElement> & RefAttributes<HTMLUListElement> & {
     items: NavListItem[];
