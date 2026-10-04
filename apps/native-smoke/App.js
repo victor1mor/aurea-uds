@@ -244,6 +244,8 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <BlocoCapsulaAndroid t={t} />
+
       <Bloco t={t} n="1" titulo="Os cinco pesos são distintos?"
         criterio={"Regular, Medium, SemiBold e Bold têm de parecer DIFERENTES entre si, e o itálico "
           + "inclinado. Se saírem todos iguais, o nome PostScript não resolveu e a ADR-0039 está "
@@ -1584,6 +1586,24 @@ function BlocoBarraParada({t}) {
         + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra do "
         + "Telegram; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
       {["circle-bold", "capsule", "pill", "expand"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
+    </Bloco>
+  );
+}
+
+// 0.19.1 (04/10/2026): a CÁPSULA QUE SAÍA QUADRADA NO ANDROID. O Victor viu, no app e no bloco 0.17
+// daqui, o circle-bold e o capsule com o canto reto, e o pill e o expand redondos. A caixa amarela
+// só virava caixa nativa ao ganhar a cor, e nessa hora o raio não chegava (react-native#52415). Os
+// CINCO indicadores que pintam essa caixa estão aqui, e não só os dois que ele viu: circle,
+// circle-raised e circle-outline têm o mesmo defeito, e nunca tinham passado pelo aparelho.
+// Fica no TOPO da lista, para ser o primeiro a aparecer.
+function BlocoCapsulaAndroid({t}) {
+  return (
+    <Bloco t={t} n="0.19.1" titulo="No Android, o escolhido é REDONDO em todas as cinco barras?"
+      criterio={"Em cada uma das cinco: 1) Toque em cada aba, uma de cada vez. 2) O fundo do escolhido "
+        + "(amarelo, apagado ou com sombra) e o contorno do circle-outline são REDONDOS: cápsula no "
+        + "capsule, disco no circle-bold, círculo nos outros três — nunca um quadrado. 3) Volte à "
+        + "primeira aba e confira de novo."}>
+      {["capsule", "circle-bold", "circle", "circle-raised", "circle-outline"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
     </Bloco>
   );
 }

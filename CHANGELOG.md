@@ -80,6 +80,32 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.19.1] — 2026-10-04
+
+⏳ **Ainda não publicada.** Se a `0.19.0` não tiver sido publicada antes, ela sai dentro desta
+(como a `0.12.0` e a `0.14.0`).
+
+### Corrigido
+
+- **No Android, o escolhido do `BottomNav` saía QUADRADO** no `capsule` e no `circle-bold` —
+  visto pelo Victor em 04/10/2026, no app e no bloco `0.17` do `apps/native-smoke`, com o `pill` e o
+  `expand` redondos. A causa, lida no fonte do `react-native@0.86.3`:
+  1. a caixa que recebe a pintura só tinha `borderRadius`, sem cor nem borda, e caixa assim não vira
+     caixa nativa — o Fabric a achata no pai (`ViewShadowNode.cpp:70-74`);
+  2. ela nascia no Android quando ganhava a cor, ao ser escolhida, e nessa hora o raio não chegava —
+     o defeito aberto react-native#52415;
+  3. o `pill` e o `expand` escapavam porque pintam o `Pressable`, que existe sempre.
+  - Agora a moldura do ícone e o disco do `circle-bold` levam `collapsable={false}` e existem desde a
+    montagem, como o `Pressable`. Vale para os **cinco** indicadores que pintam essa caixa: `capsule`,
+    `circle-bold`, `circle`, `circle-raised` e `circle-outline` (os três últimos nunca tinham passado
+    pelo aparelho). O `react-native-web` ignora a prop; a web nunca teve o defeito (é CSS).
+  - Quem cobra: `tests/unit/native-capsula-android.test.tsx` — toda caixa redonda cuja pintura muda
+    com a escolha tem de existir desde a montagem. O código de antes reprova exatamente nos cinco, e
+    passa nos quatro que o aparelho mostrou redondos.
+  - Quem mais: o `Checkbox`, o `Radio` e o `Switch` foram conferidos pela mesma regra — a marca e o
+    trilho têm borda e fundo permanentes, e o ✓ e o ponto do rádio nascem já pintados.
+  - **Falta o aparelho:** o bloco novo `0.19.1`, no topo do `apps/native-smoke`, mostra os cinco.
+
 ## [0.19.0] — 2026-10-04
 
 ⏳ **Ainda não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador

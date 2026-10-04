@@ -213,6 +213,13 @@ documento de achados mais novo para conferir se ela envelheceu.
    pela bancada (*"Pode"*, 04/10/2026), com o item da árvore em cápsula, pedido dele olhando a
    bancada. Falta a junção e a publicação. As seis regras de `:dir(rtl)` que sobraram (`Badge`, `Select`,
    `Switch`) ficaram para depois, por decisão dele (`docs/FILA.md` §6, D-01).
+13. **`0.19.1`, feita em 04/10/2026 e ainda não publicada:** no Android o escolhido do `BottomNav`
+   saía quadrado no `capsule` e no `circle-bold` (e, pela mesma causa, no `circle`, `circle-raised` e
+   `circle-outline`). ⚠ **A regra que custou caro:** no React Native, caixa que só tem
+   `borderRadius` e ganha cor DEPOIS de montada não recebe o raio no Android (react-native#52415,
+   aberto) — ela leva `collapsable={false}`, ou cor/borda desde o começo. Quem cobra:
+   `tests/unit/native-capsula-android.test.tsx`. Falta o aparelho (bloco `0.19.1`, no topo do
+   `apps/native-smoke`).
 
 ### Lote E e decisões de 25/09/2026
 
