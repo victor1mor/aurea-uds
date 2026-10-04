@@ -1,8 +1,8 @@
 # ADR-0056 — A lateral recolhe por um botão na junção, e sozinha em tela média
 
 - **Data:** 03/10/2026
-- **Estado:** aceita · feita na `0.18.0`, aprovada pela bancada com o código real rodando
-  (*"pode, aprovado o lote G"*, 03/10/2026). Ainda não publicada.
+- **Estado:** aceita · executada na `0.18.0`, aprovada pela bancada com o código real rodando
+  (*"pode, aprovado o lote G"*, 03/10/2026) e publicada em 03/10/2026.
 - **Origem:** AN-01, pedido de um consumidor novo da web (`docs/FILA.md` §9). O Victor viu numa
   janela de 1508 × 757: a lateral sempre aberta, sem botão, e diminuir a janela não a recolhia — só
   virava gaveta abaixo de 1024. Ele marcou o lugar do botão: *no alto, na junção entre o menu e a
