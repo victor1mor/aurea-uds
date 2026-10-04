@@ -82,8 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.19.1] — 2026-10-04
 
-⏳ **Ainda não publicada.** Se a `0.19.0` não tiver sido publicada antes, ela sai dentro desta
-(como a `0.12.0` e a `0.14.0`).
+✅ **Publicada em 04/10/2026, por volta das 18:38 (Brasília)**, pelo terminal do Victor, da junção
+do pedido #41. Leva a `0.19.0` junto (como a `0.12.0` e a `0.14.0`).
 
 ### Corrigido
 
@@ -109,9 +109,9 @@ em inglês e ficam como estão: são registro.
 
 ## [0.19.0] — 2026-10-04
 
-⏳ **Ainda não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador
-(*"Pode"*, 04/10/2026, depois de pedir o item da árvore em cápsula). Falta a junção e a publicação,
-pelo terminal dele.
+✅ **Não saiu sozinha: foi publicada dentro da `0.19.1`**, em 04/10/2026, da junção do pedido #40.
+Aprovada pela bancada do Victor, com o código real rodando no navegador (*"Pode"*, 04/10/2026,
+depois de pedir o item da árvore em cápsula).
 
 O **Lote H**: os quatro pedidos que faltavam do consumidor novo da web (`docs/FILA.md` §9) — AN-06,
 AN-05, AN-03 e AN-02, com o "pode" de 03/10/2026. **Versão nova, e não correção, porque entram

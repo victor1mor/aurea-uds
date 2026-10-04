@@ -130,6 +130,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.16.1` | O círculo do `BottomNav` `circle-bold` não vira risco no navegador, e o rótulo cabe nele na barra estreita (web e nativo) — pedido #31. A CI em paralelo e o aceite do `braces` (#32, #33) não mudam pacote. **Publicada em 03/10/2026**, pelo terminal do Victor |
 | `0.17.0` | O `BottomNav` parado ao trocar de aba, na altura do Telegram, com o nome colado no ícone, e os indicadores novos `capsule` e `expand` ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md)). Aprovada pela bancada (*"PERFEITO! pode. aprovado"*) — pedido #35. **Publicada em 03/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.18.0` | Lote G, de um consumidor novo da web: AN-07 (`Progress` sem total, com `detail` e `tone`), AN-08 (`Grid` com `min` por nome), AN-04 (`NavList` com `avatar` e `indicators`) e AN-01 (`AppShell` com o botão de recolher — [ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)); junto, as fichas com o Phosphor (pedido #37). Aprovada pela bancada (*"pode, aprovado o lote G"*) — pedido #38. **Publicada em 03/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
+| `0.19.0` | Lote H, do consumidor novo da web: AN-06 (`TreeView` que carrega ao abrir), AN-05 (`Gallery` em lote), AN-03 (`MessageComposer` que anexa, responde e edita), AN-02 (`MessageList` para conversa longa — [ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)). Aprovada pela bancada (*"Pode"*) — pedido #40. **Não saiu sozinha**: foi publicada dentro da `0.19.1` |
+| `0.19.1` | A cápsula do `BottomNav` saía quadrada no Android (`collapsable={false}`), aceita no aparelho (*"deu certo"*) — pedido #41. **Publicada em 04/10/2026**, pelo terminal do Victor. Leva a `0.19.0` junto |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -203,7 +205,7 @@ documento de achados mais novo para conferir se ela envelheceu.
    O shell vivo se mede no banco novo `apps/keyboard-probe/shell.html`. Falta o aceite de aparelho
    (blocos AN-07, AN-08 e AN-04 do `apps/native-smoke`). ⚠ O empacotador do app reescreve `:dir(rtl)` e a regra deixa de pegar:
    na folha do core, direção se resolve com propriedade lógica, não com `:dir()`.
-12. **`0.19.0`, o Lote H, feito em 04/10/2026 e ainda não publicado** — os quatro pedidos que
+12. **`0.19.0`, o Lote H, publicado dentro da `0.19.1` em 04/10/2026** (pedido #40) — os quatro pedidos que
    faltavam do consumidor novo da web (`docs/FILA.md` §9): AN-06 (`TreeView` que carrega ao abrir,
    `selectedId`), AN-05 (`Gallery` com escolha em lote, vídeo e carga por partes), AN-03
    (`MessageComposer` que anexa, responde e edita) e AN-02 (`MessageList` para conversa longa). **Sem
@@ -211,16 +213,15 @@ documento de achados mais novo para conferir se ela envelheceu.
    tela pular (decisão do Victor, [ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)).
    Medido montado no banco `apps/keyboard-probe/lote-h.html` (`tests/visual/lote-h.spec.ts`). Aprovado
    pela bancada (*"Pode"*, 04/10/2026), com o item da árvore em cápsula, pedido dele olhando a
-   bancada. Falta a junção e a publicação. As seis regras de `:dir(rtl)` que sobraram (`Badge`, `Select`,
+   bancada. As seis regras de `:dir(rtl)` que sobraram (`Badge`, `Select`,
    `Switch`) ficaram para depois, por decisão dele (`docs/FILA.md` §6, D-01).
-13. **`0.19.1`, feita em 04/10/2026 e ainda não publicada:** no Android o escolhido do `BottomNav`
+13. **`0.19.1`, publicada em 04/10/2026** (por volta das 18:38, Brasília), pelo terminal do Victor, da junção do pedido #41: no Android o escolhido do `BottomNav`
    saía quadrado no `capsule` e no `circle-bold` (e, pela mesma causa, no `circle`, `circle-raised` e
    `circle-outline`). ⚠ **A regra que custou caro:** no React Native, caixa que só tem
    `borderRadius` e ganha cor DEPOIS de montada não recebe o raio no Android (react-native#52415,
    aberto) — ela leva `collapsable={false}`, ou cor/borda desde o começo. Quem cobra:
    `tests/unit/native-capsula-android.test.tsx`. **Aceito no aparelho Android do Victor** em
-   04/10/2026 (bloco `0.19.1`, no topo do `apps/native-smoke`: *"deu certo"*). Falta a junção e a
-   publicação, junto com a `0.19.0`.
+   04/10/2026 (bloco `0.19.1`, no topo do `apps/native-smoke`: *"deu certo"*). Leva a `0.19.0` junto.
 
 ### Lote E e decisões de 25/09/2026
 
