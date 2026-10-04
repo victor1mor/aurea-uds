@@ -11,6 +11,8 @@ import { IconButton } from "./actions.js";
 // A galeria AMPLIA num Dialog, e o Dialog já existe (trava do item L2). O import é para `overlays`,
 // que como este módulo mora no "resto" do DAG e não importa `media` — não há ciclo.
 import { Dialog } from "./overlays.js";
+// AN-05: o tempo do vídeo e a linha de "carregando mais" reusam peças que já existem.
+import { Badge, Spinner } from "./feedback.js";
 // MediaPlayer (Fase 5): headless sobre <video>/<audio> nativos — o MOTOR de mídia é
 // o browser; o componente só liga estado (play/tempo/buffer/volume/legenda) às
 // classes .media-* já existentes. Sem CSS estrutural novo: o vídeo preenche o
@@ -143,23 +145,45 @@ export function Image({ ratio, fit, alt, className, style, render, onError, ...p
         return _jsx("span", { className: cx("image", "image-broken", fit === "contain" && "image-contain", className), style: estilo, role: "img", "aria-label": alt, children: _jsx(Icon, { name: "image" }) });
     return elemento;
 }
-export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1", className, ...props }) {
+export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1", selectionMode = "single", selectedIds, onSelectionChange, hasMore, loading, onReachEnd, className, ...props }) {
     const s = useAureaStrings();
     const [ampliado, setAmpliado] = React.useState(null);
-    const interativo = !!onSelect || !!zoom;
+    const multipla = selectionMode === "multiple";
+    const interativo = !!onSelect || !!zoom || multipla;
     const aberto = items.find(i => i.id === ampliado);
-    return _jsxs(_Fragment, { children: [_jsx("ul", { className: cx("gallery", className), "aria-label": label ?? s.galleryLabel, ...props, children: items.map(i => {
+    const escolhidos = new Set(selectedIds);
+    const alternar = (id) => onSelectionChange?.(escolhidos.has(id) ? (selectedIds ?? []).filter(x => x !== id) : [...(selectedIds ?? []), id]);
+    const fimRef = React.useRef(null);
+    const avisar = React.useRef(onReachEnd);
+    avisar.current = onReachEnd;
+    React.useEffect(() => {
+        const fim = fimRef.current;
+        if (!fim || !hasMore || loading || typeof IntersectionObserver === "undefined")
+            return;
+        const obs = new IntersectionObserver(entradas => { if (entradas.some(e => e.isIntersecting))
+            avisar.current?.(); });
+        obs.observe(fim);
+        return () => obs.disconnect();
+    }, [hasMore, loading, items.length]);
+    return _jsxs(_Fragment, { children: [_jsx("ul", { className: cx("gallery", className), "aria-label": label ?? s.galleryLabel, "aria-busy": loading || undefined, ...props, children: items.map(i => {
                     // LEGENDA VISÍVEL TORNA A MINIATURA DECORATIVA, e quem exigiu isso foi o axe, não a
                     // teoria: com `alt` e legenda dizendo a mesma coisa, ele reprova `image-redundant-alt` e o
                     // leitor de tela anuncia o texto DUAS vezes seguidas. É a regra de figura com legenda do
                     // WAI — quando o texto ao lado já diz, a imagem entra com `alt=""`. O `alt` de verdade não
                     // se perde: ele continua nomeando a foto AMPLIADA, que é onde não há legenda ao lado.
-                    const miolo = _jsxs(_Fragment, { children: [_jsx(Image, { src: i.src, alt: i.caption != null ? "" : i.alt, ratio: ratio }), i.caption != null && _jsx("span", { className: "gallery-caption", children: i.caption })] });
+                    const foto = _jsx(Image, { src: i.src, alt: i.caption != null ? "" : i.alt, ratio: ratio });
+                    const video = i.kind === "video";
+                    const miolo = _jsxs(_Fragment, { children: [video
+                                ? _jsxs("span", { className: "gallery-media", children: [foto, _jsxs(Badge, { className: "gallery-duration", children: [_jsx(Icon, { name: "play", size: "sm" }), _jsx("span", { className: "sr-only", children: ` ${s.galleryVideo}, ` }), i.duration != null && clockTime(i.duration)] })] })
+                                : foto, i.caption != null && _jsx("span", { className: "gallery-caption", children: i.caption })] });
+                    const marcado = multipla ? escolhidos.has(i.id) : i.id === selected;
                     return _jsx("li", { className: "gallery-item", children: interativo
-                            ? _jsx("button", { type: "button", className: cx("gallery-tile", i.id === selected && "is-selected"), "aria-current": i.id === selected ? "true" : undefined, onClick: () => { onSelect?.(i.id); if (zoom)
-                                    setAmpliado(i.id); }, children: miolo })
+                            ? (multipla
+                                ? _jsx("button", { type: "button", className: cx("gallery-tile", marcado && "is-selected"), "aria-pressed": marcado, onClick: () => alternar(i.id), children: miolo })
+                                : _jsx("button", { type: "button", className: cx("gallery-tile", marcado && "is-selected"), "aria-current": marcado ? "true" : undefined, onClick: () => { onSelect?.(i.id); if (zoom)
+                                        setAmpliado(i.id); }, children: miolo }))
                             : miolo }, i.id);
-                }) }), zoom && _jsx(Dialog, { open: !!aberto, title: aberto ? (aberto.caption ?? aberto.alt) : "", onClose: () => setAmpliado(null), children: aberto && _jsx(Image, { src: aberto.src, alt: aberto.alt, fit: "contain" }) })] });
+                }) }), hasMore && _jsx("div", { ref: fimRef, className: "gallery-more", children: loading && _jsx(Spinner, {}) }), zoom && !multipla && _jsx(Dialog, { open: !!aberto, title: aberto ? (aberto.caption ?? aberto.alt) : "", onClose: () => setAmpliado(null), children: aberto && _jsx(Image, { src: aberto.src, alt: aberto.alt, fit: "contain" }) })] });
 }
 // ── Carousel (PLANO-1.0, item L1) ────────────────────────────────────────────────────────────
 // MARCAÇÃO, NÃO MOTOR — e a pergunta que o item mandava decidir primeiro ("se `scroll-snap` do

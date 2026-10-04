@@ -5,13 +5,14 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, { useRef } from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
 import { Kbd } from "./markup.js";
 import { Icon } from "./system.js";
 import { Button } from "./actions.js";
-import { Badge } from "./feedback.js";
+import { Badge, Spinner } from "./feedback.js";
 import { SearchField } from "./inputs.js";
 // `overlays` PASSOU A VIR ANTES de `navigation` no DAG (18/08/2026, MAP.md §DAG). Ele só
 // importa `internal`, `system` e `actions` — todos anteriores —, então não há ciclo: o que
@@ -90,6 +91,7 @@ function useSecaoEmVista(items, ligado, nav) {
     }, [ids, ligado]);
     return ligado ? atual : undefined;
 }
+const temFilhos = (node) => !!node.children?.length || !!node.hasChildren;
 function flattenVisible(nodes, expanded, level = 1, parentId, acc = []) {
     for (const node of nodes) {
         acc.push({ node, level, parentId });
@@ -98,31 +100,46 @@ function flattenVisible(nodes, expanded, level = 1, parentId, acc = []) {
     }
     return acc;
 }
-export function TreeView({ items, defaultExpandedIds, onSelect, label, className }) {
+export function TreeView({ items, defaultExpandedIds, onSelect, onExpand, selectedId, label, className }) {
     const s = useAureaStrings();
     const baseId = React.useId();
     const [expanded, setExpanded] = React.useState(() => new Set(defaultExpandedIds));
-    const [selected, setSelected] = React.useState();
+    const [selectedInterno, setSelected] = React.useState();
+    const selected = selectedId !== undefined ? (selectedId ?? undefined) : selectedInterno;
+    const [carregando, setCarregando] = React.useState(() => new Set());
     const [active, setActive] = React.useState(() => items[0]?.id);
     const rootRef = React.useRef(null);
+    const rtl = useDirection() === "rtl";
     const visible = flattenVisible(items, expanded);
     // Roving tab stop derivado: se o nó ativo saiu do conjunto visível (dados
     // trocados, nó removido), o primeiro visível volta a ser tabulável — senão a
     // árvore inteira fica tabIndex=-1 e some da ordem do Tab (auditoria, MÉDIO 1).
     const effectiveActive = active !== undefined && visible.some(v => v.node.id === active) ? active : visible[0]?.node.id;
     const focusId = (id) => { setActive(id); rootRef.current?.querySelector(`[data-tree-id="${CSS.escape(id)}"]`)?.focus(); };
-    const toggle = (id, open) => setExpanded(prev => { const n = new Set(prev); if (open)
+    const marcar = (id, open) => setExpanded(prev => { const n = new Set(prev); if (open)
         n.add(id);
     else
         n.delete(id); return n; });
-    const select = (node) => { setSelected(node.id); onSelect?.(node); };
+    const tirarDaCarga = (id) => setCarregando(prev => { const n = new Set(prev); n.delete(id); return n; });
+    const toggle = (node, open) => {
+        marcar(node.id, open);
+        if (!open || !onExpand)
+            return;
+        const r = onExpand(node);
+        if (node.children?.length || !r || typeof r.then !== "function")
+            return;
+        setCarregando(prev => new Set(prev).add(node.id));
+        r.then(() => tirarDaCarga(node.id), () => { tirarDaCarga(node.id); marcar(node.id, false); });
+    };
+    const select = (node) => { if (selectedId === undefined)
+        setSelected(node.id); onSelect?.(node); };
     const onKeyDown = (e) => {
         const idx = visible.findIndex(v => v.node.id === effectiveActive);
         if (idx < 0)
             return;
-        const cur = visible[idx], hasChildren = !!cur.node.children?.length, isOpen = expanded.has(cur.node.id);
-        const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
-        const expandKey = rtl ? "ArrowLeft" : "ArrowRight", collapseKey = rtl ? "ArrowRight" : "ArrowLeft";
+        const cur = visible[idx], hasChildren = temFilhos(cur.node), isOpen = expanded.has(cur.node.id);
+        const rtlDom = getComputedStyle(e.currentTarget).direction === "rtl";
+        const expandKey = rtlDom ? "ArrowLeft" : "ArrowRight", collapseKey = rtlDom ? "ArrowRight" : "ArrowLeft";
         switch (e.key) {
             case "ArrowDown":
                 e.preventDefault();
@@ -137,14 +154,14 @@ export function TreeView({ items, defaultExpandedIds, onSelect, label, className
             case expandKey:
                 e.preventDefault();
                 if (hasChildren && !isOpen)
-                    toggle(cur.node.id, true);
-                else if (hasChildren && isOpen)
+                    toggle(cur.node, true);
+                else if (isOpen && cur.node.children?.length)
                     focusId(cur.node.children[0].id);
                 break;
             case collapseKey:
                 e.preventDefault();
                 if (hasChildren && isOpen)
-                    toggle(cur.node.id, false);
+                    toggle(cur.node, false);
                 else if (cur.parentId)
                     focusId(cur.parentId);
                 break;
@@ -161,14 +178,14 @@ export function TreeView({ items, defaultExpandedIds, onSelect, label, className
                 e.preventDefault();
                 select(cur.node);
                 if (hasChildren)
-                    toggle(cur.node.id, !isOpen);
+                    toggle(cur.node, !isOpen);
                 break;
         }
     };
     const renderNodes = (nodes, level) => (_jsx("ul", { ref: level === 1 ? rootRef : undefined, className: cx(level === 1 ? "tree" : "tree-group", level === 1 && className), role: level === 1 ? "tree" : "group", "aria-label": level === 1 ? (label ?? s.treeLabel) : undefined, onKeyDown: level === 1 ? onKeyDown : undefined, children: nodes.map(node => {
-            const hasChildren = !!node.children?.length, isOpen = expanded.has(node.id), isSelected = selected === node.id, labelId = baseId + node.id;
-            return _jsxs("li", { className: "tree-item", role: "treeitem", "data-tree-id": node.id, "aria-level": level, "aria-expanded": hasChildren ? isOpen : undefined, "aria-selected": isSelected, "aria-labelledby": labelId, tabIndex: node.id === effectiveActive ? 0 : -1, children: [_jsxs("span", { className: "tree-node", "data-selected": isSelected || undefined, style: { paddingInlineStart: `calc(var(--space-3) + ${level - 1} * var(--space-4))` }, onClick: () => { focusId(node.id); select(node); if (hasChildren)
-                            toggle(node.id, !isOpen); }, children: [hasChildren ? _jsx(Icon, { name: "caret-right", size: "sm", className: "tree-twist" }) : _jsx("span", { className: "tree-indent", "aria-hidden": "true" }), node.icon && _jsx(Icon, { name: node.icon, size: "sm" }), _jsx("span", { id: labelId, className: "tree-label", children: node.label })] }), hasChildren && isOpen && renderNodes(node.children, level + 1)] }, node.id);
+            const hasChildren = temFilhos(node), isOpen = expanded.has(node.id), isSelected = selected === node.id, isLoading = isOpen && carregando.has(node.id), labelId = baseId + node.id;
+            return _jsxs("li", { className: "tree-item", role: "treeitem", "data-tree-id": node.id, "aria-level": level, "aria-expanded": hasChildren ? isOpen : undefined, "aria-selected": isSelected, "aria-busy": isLoading || undefined, "aria-labelledby": labelId, tabIndex: node.id === effectiveActive ? 0 : -1, children: [_jsxs("span", { className: "tree-node", "data-selected": isSelected || undefined, style: { paddingInlineStart: `calc(var(--space-3) + ${level - 1} * var(--space-4))` }, onClick: () => { focusId(node.id); select(node); if (hasChildren)
+                            toggle(node, !isOpen); }, children: [isLoading ? _jsx(Spinner, { decorative: true, className: "tree-twist" }) : hasChildren ? _jsx(Icon, { name: "caret-right", size: "sm", className: cx("tree-twist", rtl && "tree-twist-rtl") }) : _jsx("span", { className: "tree-indent", "aria-hidden": "true" }), node.icon && _jsx(Icon, { name: node.icon, size: "sm" }), _jsx("span", { id: labelId, className: "tree-label", children: node.label })] }), isOpen && !!node.children?.length && renderNodes(node.children, level + 1)] }, node.id);
         }) }));
     return renderNodes(items, 1);
 }

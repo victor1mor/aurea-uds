@@ -11,21 +11,39 @@
   },
   "variants": [],
   "sizes": [],
-  "states": [],
+  "states": [
+    "default",
+    "incoming",
+    "outgoing",
+    "edited",
+    "forwarded",
+    "reply",
+    "loading"
+  ],
   "tokens": [
     "--radius-lg",
     "--secondary",
     "--space-2",
-    "--space-3"
+    "--space-3",
+    "--control-h-md",
+    "--radius-xs",
+    "--primary",
+    "--muted-foreground",
+    "--text-sm",
+    "--space-1",
+    "--icon-sm"
   ],
   "a11y": {
     "role": "log",
     "keyboard": [],
-    "apg": "No APG pattern: the container is role=\"log\" with aria-live=\"polite\", which is the practice for a conversation — it is read in the order it arrives. This differs from NotificationCenter on purpose: a feed you revisit at your own pace must NOT be a live region. Nothing is focusable."
+    "apg": "No APG pattern: the container is role=\"log\" with aria-live=\"polite\", which is the practice for a conversation — it is read in the order it arrives. This differs from NotificationCenter on purpose: a feed you revisit at your own pace must NOT be a live region. The list itself has nothing focusable; an album brings the Gallery's buttons and a file brings a plain download link, in document order. With the window on (onReachStart or onReachEnd), the list stops being a live region (aria-live=\"off\") — otherwise fifty older messages loaded on top would all be read out — and a separate status reads only the message that arrives at the end, the NotificationCenter idiom."
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "file-text",
+      "share-fat"
+    ]
   },
   "related": {
     "components": [
@@ -41,7 +59,49 @@
       "name": "messages",
       "type": "ChatMessage[]",
       "default": "—",
-      "description": "The conversation, as data: {id, body, author?, time?, avatar?, status?}. Transport and state are yours; this renders."
+      "description": "The conversation, as data: {id, body, author?, time?, avatar?, status?}. Transport and state are yours; this renders. Since 0.19 a message may also carry direction (\"incoming\" | \"outgoing\"), forwardedFrom, replyTo {id, author?, body}, attachments [{id, kind: \"image\" | \"video\" | \"file\", src?, alt?, name?, bytes?, duration?, href?}], edited and day. Photos and videos become an album in the Gallery (zoom included); files become FileInput's row, with a download link when href is given. A day separator appears whenever day changes from one message to the next; its text is the app's."
+    },
+    {
+      "name": "hasMoreBefore",
+      "type": "boolean",
+      "default": "false",
+      "description": "There are older messages above. A row at the top (HeroUI's Table.LoadMore measure) calls onReachStart when it enters the screen."
+    },
+    {
+      "name": "onReachStart",
+      "type": "() => void",
+      "default": "—",
+      "description": "Load older messages. When they arrive on top, the message that was at the top of the screen stays exactly where it was. Turns the window on."
+    },
+    {
+      "name": "loadingBefore",
+      "type": "boolean",
+      "default": "false",
+      "description": "Older messages are on their way: the top row shows the Spinner, the list is aria-busy, and onReachStart is not called again until it ends."
+    },
+    {
+      "name": "hasMoreAfter",
+      "type": "boolean",
+      "default": "false",
+      "description": "There are newer messages below that the app dropped to keep its window small (about a thousand). The bottom row calls onReachEnd."
+    },
+    {
+      "name": "onReachEnd",
+      "type": "() => void",
+      "default": "—",
+      "description": "Bring newer messages back. Turns the window on."
+    },
+    {
+      "name": "loadingAfter",
+      "type": "boolean",
+      "default": "false",
+      "description": "Newer messages are on their way: the bottom row shows the Spinner."
+    },
+    {
+      "name": "onOpenAttachment",
+      "type": "(message: ChatMessage, attachment: MessageAttachment) => void",
+      "default": "—",
+      "description": "Called when a photo or video of an album is clicked, instead of the built-in zoom — for a player, or the app's own viewer."
     },
     {
       "name": "label",

@@ -88,6 +88,7 @@ export interface AureaStrings {
     carouselPrev: string;
     carouselNext: string;
     galleryLabel: string;
+    galleryVideo: string;
     sortableLabel: string;
     sortableHandle: string;
     sortableHelp: string;
@@ -166,6 +167,15 @@ export interface AureaStrings {
     chatLabel: string;
     chatMessage: string;
     chatSend: string;
+    chatAttach: string;
+    chatAttachments: string;
+    chatReplyTo: string;
+    chatReplyCancel: string;
+    chatEditing: string;
+    chatEditCancel: string;
+    chatSave: string;
+    chatEdited: string;
+    chatForwardedFrom: string;
     qrCode: string;
     chartLabel: string;
     copyCode: string;

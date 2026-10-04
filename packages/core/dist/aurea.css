@@ -2027,6 +2027,40 @@ img,svg { display:block; }
 /* Chat React (Fase 5.4): estrutura fixa em classe, não inline (auditoria 18/07, M14). */
 .message-status { display:flex; align-items:center; flex-wrap:wrap; gap:var(--space-3); margin-block-start:var(--space-2); }
 .message-composer { display:flex; align-items:center; gap:var(--space-3); flex-wrap:nowrap; } .message-composer .input-group { flex:1; min-width:0; }
+/* AN-03 (Lote H, 04/10/2026). A FAIXA ACIMA DO CAMPO é o adorno em bloco da casa, empilhado: a
+   citação (responder ou editar) em cima, os anexos embaixo. Com ela o grupo vira superfície (raio
+   de cartão, a regra do adorno em bloco) e o botão de enviar desce para a linha do campo, onde
+   está o texto — sem faixa, nada muda.
+   A CITAÇÃO é a da prosa: o fio no começo da linha, apagado, com o recuo de dentro. O fio tem a
+   espessura do `blockquote` da `.prose` (2), escrita a partir do `--border-width`. O título leva o
+   peso médio, e o corpo fica numa linha só, com reticências. Ela serve também ao cabeçalho de
+   resposta do `MessageList` (AN-02). */
+.message-composer:has(.message-composer-context) { align-items:flex-end; }
+.message-composer-context { flex-direction:column; align-items:stretch; gap:var(--space-2); color:var(--foreground); }
+.message-composer-context > .file-list { margin:0; }
+.message-quote { display:flex; align-items:center; gap:var(--space-2); padding-inline-start:var(--space-3); border-inline-start:calc(var(--border-width) * 2) solid var(--border-strong); color:var(--muted-foreground); font-size:var(--text-sm); }
+.message-quote > .icon { flex:none; }
+.message-quote-text { display:grid; flex:1; min-inline-size:0; }
+.message-quote-title { color:var(--foreground); font-weight:var(--weight-medium); }
+.message-quote-body { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* AN-02 (Lote H, 04/10/2026). O LADO DA MENSAGEM. Quem declara `direction` ganha a bolha do
+   tamanho do texto e uma folga do lado oposto igual ao avatar mais o vão (`--control-h-md` +
+   `--space-3`): a conversa fica em duas margens, como em todo app de mensagem. Quem não declara
+   continua como antes, com a bolha na largura toda.
+   A MINHA vai para o fim, sem avatar, com o canto pequeno (`--radius-xs`, os mesmos 6 da bolha de
+   sempre) do lado dela, e o fundo tingido da marca — o mesmo tom do nó escolhido do `TreeView`, que
+   já é a forma desta folha de dizer "é seu" sem o amarelo cheio. Os cantos são lógicos: viram
+   sozinhos na escrita da direita para a esquerda.
+   O ÁLBUM é a `Gallery`, e a medida dela: no máximo duas miniaturas por linha (`--gallery-min` ×2
+   mais o vão), e `auto-fit` para uma foto só ocupar a largura. */
+.message-in { padding-inline-end:calc(var(--control-h-md) + var(--space-3)); }
+.message-out { grid-template-columns:minmax(0,1fr); padding-inline-start:calc(var(--control-h-md) + var(--space-3)); }
+.message-in > .message-bubble { justify-self:start; border-radius:var(--radius-lg); border-start-start-radius:var(--radius-xs); }
+.message-out > .message-bubble { justify-self:end; border-radius:var(--radius-lg); border-start-end-radius:var(--radius-xs); background:color-mix(in srgb,var(--primary) 14%,transparent); }
+.message-day { display:flex; justify-content:center; }
+.message-forwarded { display:flex; align-items:center; gap:var(--space-1); color:var(--muted-foreground); font-size:var(--text-sm); }
+.message-bubble > .message-forwarded, .message-bubble > .message-quote, .message-bubble > .message-album, .message-bubble > .file-list { margin-block:0 var(--space-2); }
+.message-album { inline-size:min(100%, calc(var(--gallery-min,8rem) * 2 + var(--space-3))); grid-template-columns:repeat(auto-fit,minmax(var(--gallery-min,8rem),1fr)); }
 
 /* ========================================================================== */
 /* 07. MÍDIA                                                                   */
@@ -2133,6 +2167,17 @@ img,svg { display:block; }
    qualquer forma — ele é `buttonface`, não transparente. */
 .gallery-tile:not(.is-selected) { background:transparent; color:var(--muted-foreground); }
 .gallery-caption { font-size:var(--text-sm); }
+/* AN-05 (Lote H, 04/10/2026). O VÍDEO não inventa peça: é o `Badge` da casa, pousado no canto do
+   fim da foto, com as cores do reprodutor: o véu (`--media-scrim`, preto a 82%) e a letra dele
+   (`--media-foreground`). O `--media-track` que o `.media-player` dá ao `Badge` é branco a 18% e só
+   funciona sobre o véu: sobre foto clara, o tempo sumia (visto no banco em 04/10/2026). O canto é lógico (`inset-inline-end`), então vira sozinho na escrita da
+   direita para a esquerda; o recuo do canto é `--space-2`.
+   A LINHA DE "CARREGANDO MAIS" tem a medida do `Table.LoadMore` do HeroUI (`py-3`, centrada): é
+   ela que o observador vigia, então existe também parada, sem a rodinha. A do `MessageList` (AN-02),
+   nas duas pontas da conversa, é a mesma linha. */
+.gallery-media { position:relative; display:block; }
+.gallery-media > .gallery-duration { position:absolute; inset-block-end:var(--space-2); inset-inline-end:var(--space-2); border-color:var(--media-scrim); background:var(--media-scrim); color:var(--media-foreground); }
+.gallery-more,.message-more { display:flex; align-items:center; justify-content:center; min-block-size:var(--icon-sm); padding-block:var(--space-3); color:var(--muted-foreground); }
 
 /* TIPOGRAFIA (B-02, 25/09/2026) — `Text`, `Heading`, `Paragraph` e `Code`, no molde do HeroUI
    3.2.6 (`typography.css`), por ordem do Victor: HeroUI sempre primeiro. O que vem dele é a FORMA:
@@ -2520,22 +2565,30 @@ img,svg { display:block; }
 /* TreeView (Fase 4) — árvore headless própria (Base UI 1.6 não tem tree).
    role=tree/treeitem/group + roving tabindex vêm do React; aqui só a pele.
    A indentação por nível é padding-inline-start inline (style). Espaço novo
-   tokenizado; a linha não é pill (radius-sm, como o .menu-item). */
+   tokenizado. A linha é CÁPSULA (`--radius-control`): o escolhido e o realce de passar o mouse
+   são cápsula, como os campos, as abas e os botões de texto — regra do Victor, dita olhando a
+   bancada do Lote H em 04/10/2026. Antes era `--radius-sm` (8). O texto do nó é uma linha só
+   (`.tree-label` não quebra), então a cápsula não deforma. */
 .tree, .tree-group { margin:0; padding:0; list-style:none; }
 .tree-item { outline:none; }
-.tree-node { display:flex; align-items:center; gap:var(--space-2); min-height:var(--control-h-md); padding-block:var(--space-1); padding-inline-end:var(--space-3); border-radius:var(--radius-sm); color:var(--foreground); cursor:pointer; user-select:none; }
+.tree-node { display:flex; align-items:center; gap:var(--space-2); min-height:var(--control-h-md); padding-block:var(--space-1); padding-inline-end:var(--space-3); border-radius:var(--radius-control); color:var(--foreground); cursor:pointer; user-select:none; }
 .tree-node:hover { background:var(--surface-3); }
 .tree-item:focus-visible > .tree-node { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .tree-node[data-selected] { background:color-mix(in srgb,var(--primary) 14%,transparent); }
-.tree-twist { flex:none; color:var(--muted-foreground); transition:transform var(--duration-fast); }
-.tree-item[aria-expanded="true"] > .tree-node > .tree-twist { transform:rotate(90deg); }
-.tree-item[aria-expanded="false"]:dir(rtl) > .tree-node > .tree-twist { transform:rotate(180deg); }
+/* A seta gira pela propriedade `rotate`, e não por `transform`: assim a rodinha que ocupa o lugar
+   dela enquanto o nó carrega (AN-06) continua girando pela animação dela, que é `transform`.
+   Na escrita da direita para a esquerda a seta fechada aponta para a esquerda. Quem diz a direção é
+   o React, pela direção do provedor (`.tree-twist-rtl`), e não `:dir(rtl)` — o empacotador do app
+   reescreve `:dir()` como lista de idiomas e a regra deixa de pegar (medido no Vite, 03/10/2026). */
+.tree-twist { flex:none; color:var(--muted-foreground); transition:rotate var(--duration-fast); }
+.tree-twist-rtl { rotate:180deg; }
+.tree-item[aria-expanded="true"] > .tree-node > .tree-twist { rotate:90deg; }
 .tree-indent { flex:none; width:1rem; }
 .tree-label { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* NotificationCenter (Fase 4) — compõe o .popover; aqui só o gatilho com count,
    o cabeçalho e as linhas do feed. Espaço novo tokenizado; a linha usa radius-sm
-   (não é pill, como o .menu-item/.tree-node). O painel NÃO é live region — a
+   (não é pill, como o .menu-item; o .tree-node virou cápsula em 04/10/2026). O painel NÃO é live region — a
    chegada é anunciada por um role=status à parte no React. */
 .notification-trigger { position:relative; display:inline-flex; }
 .notification-count { position:absolute; inset-block-start:-4px; inset-inline-end:-4px; display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 var(--space-1); border-radius:var(--radius-control); background:var(--primary); color:var(--primary-foreground); font-size:var(--text-xs); font-weight:var(--weight-semibold); line-height:var(--leading-none); pointer-events:none; }

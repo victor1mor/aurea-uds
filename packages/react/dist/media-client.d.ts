@@ -27,11 +27,14 @@ export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
     render?: React.ReactElement;
 }
 export declare function Image({ ratio, fit, alt, className, style, render, onError, ...props }: ImageProps): React.JSX.Element;
+export type GalleryItemKind = "image" | "video";
 export interface GalleryItem {
     id: string;
     src: string;
     alt: string;
     caption?: ReactNode;
+    kind?: GalleryItemKind;
+    duration?: number;
 }
 export interface GalleryProps extends Omit<HTMLAttributes<HTMLUListElement>, "onSelect">, RefAttributes<HTMLUListElement> {
     items: GalleryItem[];
@@ -40,8 +43,14 @@ export interface GalleryProps extends Omit<HTMLAttributes<HTMLUListElement>, "on
     onSelect?: (id: string) => void;
     zoom?: boolean;
     ratio?: string;
+    selectionMode?: "single" | "multiple";
+    selectedIds?: string[];
+    onSelectionChange?: (ids: string[]) => void;
+    hasMore?: boolean;
+    loading?: boolean;
+    onReachEnd?: () => void;
 }
-export declare function Gallery({ items, label, selected, onSelect, zoom, ratio, className, ...props }: GalleryProps): React.JSX.Element;
+export declare function Gallery({ items, label, selected, onSelect, zoom, ratio, selectionMode, selectedIds, onSelectionChange, hasMore, loading, onReachEnd, className, ...props }: GalleryProps): React.JSX.Element;
 export interface CarouselProps extends Omit<HTMLAttributes<HTMLDivElement>, "children">, RefAttributes<HTMLDivElement> {
     children?: ReactNode;
     label?: string;

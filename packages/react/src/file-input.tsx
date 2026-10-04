@@ -90,7 +90,9 @@ async function somaSha256(file:File):Promise<string|undefined>{
 // nova, zero branch novo.
 const ATIVOS=new Set<UploadStatus>(["pending","uploading","paused"]);
 const restaurar=(q:FileQueueItem):FileEntry=>({...q,restored:true,status:ATIVOS.has(q.status)?"canceled":q.status});
-function formatSize(bytes:number):string{
+// Exportada para dentro do pacote (não sai no barril): o `MessageComposer` mostra o tamanho do
+// anexo no mesmo formato da fila daqui (AN-03).
+export function formatSize(bytes:number):string{
   if(bytes<1024)return `${bytes} B`;
   const units=["KB","MB","GB"];let n=bytes/1024,i=0;
   while(n>=1024&&i<units.length-1){n/=1024;i++}

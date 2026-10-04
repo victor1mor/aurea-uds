@@ -3750,3 +3750,33 @@ instalar o seletor de arquivos (é a cláusula da ADR-0038, a mesma do `/system`
 O HeroUI não tem seletor de foto; a peça segue pensada como ele faria, com as medidas das peças
 que ele tem.
 
+
+## A conversa longa, o compositor, a galeria grande e a árvore que carrega — 04/10/2026 · Lote H (AN-02, AN-03, AN-05, AN-06)
+
+Quatro pedidos de um consumidor novo da web (`docs/FILA.md` §9), com o "pode" do Victor de
+03/10/2026. Só leitura: nenhuma linha de terceiro foi copiada.
+
+**O HeroUI não tem as quatro peças** (conferido no pacote: `@heroui/react` e `@heroui/styles` 3.2.6,
+baixados com `npm pack` em 04/10/2026 — nem árvore, nem galeria, nem conversa, nem compositor). Pela
+regra de 25/09/2026 elas crescem pensando como ele: os nomes e a medida vêm das coleções que ele TEM.
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| `@heroui/react` 3.2.6, `table/table.d.ts` e `table.js` (`Table.LoadMore`, sobre o `TableLoadMoreItem` do React Aria) | MIT | o carregar por partes é uma linha-sentinela com `onLoadMore` + `isLoading` | a linha das pontas da `Gallery` e do `MessageList`, e o "não avisa de novo enquanto carrega" |
+| `@heroui/styles` 3.2.6, `table.css:380-396` | MIT | `.table__load-more` `py-3`, centrada; o conteúdo `gap-2` `py-2` | `.gallery-more` e `.message-more`: `--space-3` em cima e embaixo, centradas |
+| `@heroui/react` 3.2.6, `list-box`/`table` (`selectionMode`, `selectedKeys`, `onSelectionChange`) | MIT | a seleção múltipla é `selectionMode="multiple"` | o nome `selectionMode` na `Gallery`; os escolhidos são `selectedIds` + `onSelectionChange` (o nome do `DataGrid` daqui) |
+| React Aria, página `react-aria.adobe.com/Tree` (o motor do HeroUI) | Apache-2.0 | `hasChildItems` — *"Whether this item has children, even if not loaded yet"* —, `selectedKeys`, `expandedKeys`, `onExpandedChange` | a ideia do `hasChildren` do `TreeView` |
+| ReUI `tree` (`reui.io/r/styles/base-nova/tree.json`), sobre o headless-tree | MIT | `isItemFolder` antes de carregar; `item.isLoading()`; a página do headless-tree (`headless-tree.lukasbach.com/features/async-dataloader`) confirma `getChildren` assíncrono ao abrir | o nó em "carregando" (`aria-busy`, a rodinha no lugar da seta) |
+| ReUI `c-attachment-2` (*"Composer tray with removable attachments"*) | MIT | a bandeja de anexos num adorno em bloco acima do campo, que só existe com conteúdo; uma região viva anuncia cada remoção | a faixa do `MessageComposer`, no adorno em bloco que a Aurea já tinha (G-AXIS-01) |
+| ReUI `c-message-1`, `c-message-5`, `c-message-scroller-1/3` | MIT | `Message` com `align` (o meu e o dos outros), anexo como filho da mensagem, rolagem que abre no fim | `direction`, `attachments` e a conversa que abre no fim |
+| `@aurea-uds/react`, `file-input.tsx` e `.prose blockquote` | Apache-2.0 (nosso) | `matchesAccept`, `formatSize`, `.file-item`, as frases de recusa e de aviso; o fio de citação de 2 | o anexo do compositor e da mensagem; a citação (`.message-quote`) |
+
+**Virtualização: lida e não usada** (decisão do Victor, [ADR-0057](../decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)).
+`@tanstack/react-virtual` 3.14.13 (MIT; o modo de conversa `anchorTo`/`followOnAppend` conferido no
+`index.d.ts` do pacote e no blog `tanstack.com/blog/tanstack-virtual-chat`, de 25/05/2026),
+`virtua` 0.52.10 (MIT) e `react-virtuoso` 4.18.16 (MIT; a "Message List" é paga). Pesos medidos com
+o esbuild, minificado + gzip, sem o React: 7,8 · 4,1 · 20,1 KB.
+
+**O que é nosso:** a conta de não pular (a mensagem que começa no alto da tela fica no lugar quando a
+janela troca pelas pontas ou alguma coisa cresce), e o anunciador que lê só a mensagem que chega —
+com a janela ligada, a lista deixa de ser região viva.
