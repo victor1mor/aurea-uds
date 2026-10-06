@@ -40,6 +40,11 @@ export type AureaPhoto = {
     uri: string;
     width?: number;
     height?: number;
+    /**
+     * Quando a foto foi TIRADA, lida do EXIF (R-23). Só vem com a prop `exif`, e fica vazia quando
+     * a foto não traz a data — a que passou pelo WhatsApp, por exemplo, perde o EXIF no caminho.
+     */
+    takenAt?: Date;
 };
 export interface PhotoInputProps {
     value?: AureaPhoto[];
@@ -56,6 +61,12 @@ export interface PhotoInputProps {
     offerSettings?: boolean;
     /** Avisado quando a permissão foi negada — o app pode querer contar uma história própria. */
     onPermissionDenied?: () => void;
+    /**
+     * Lê do EXIF a data em que a foto foi tirada e a entrega em `takenAt` (R-23). Desligado por
+     * padrão: ler o EXIF custa (no iPhone, a foto que está no iCloud desce inteira) e o app só
+     * paga quando precisa. Da galeria, é o que põe na ordem certa a foto que sobe dias depois.
+     */
+    exif?: boolean;
     addIcon?: AureaIcon | false;
     removeIcon?: AureaIcon;
     style?: StyleProp<ViewStyle>;
@@ -76,6 +87,8 @@ export interface PhotoInputProps {
  * | **câmera ou galeria?** | câmera, que é o que o plano pede | `source="library"` |
  * | como **remover**? | um `IconButton` no canto de cada miniatura | `removeIcon` |
  * | **quantas** cabem? | uma | `max` |
+ * | **várias de uma vez?** | da galeria, sim, quando cabe mais de uma (R-23) | `max` |
+ * | **a data** em que foi tirada? | não lê: ler o EXIF custa | `exif` → `takenAt` (R-23) |
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
  *
@@ -91,4 +104,4 @@ export interface PhotoInputProps {
  * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |
  * | inativo | a foto ainda abre (olhar não muda nada); o X não remove |
  */
-export declare function PhotoInput({ value, onChange, max, source, disabled, offerSettings, onPermissionDenied, addIcon, removeIcon, style, testID, }: PhotoInputProps): React.JSX.Element;
+export declare function PhotoInput({ value, onChange, max, source, disabled, offerSettings, onPermissionDenied, exif, addIcon, removeIcon, style, testID, }: PhotoInputProps): React.JSX.Element;

@@ -6,8 +6,8 @@
     "modulos": 36,
     "componentes": 126,
     "hooks": 9,
-    "aliasesLiterais": 65,
-    "propsDistintas": 257
+    "aliasesLiterais": 66,
+    "propsDistintas": 258
   },
   "aliases": {
     "ButtonVariant": {
@@ -1989,6 +1989,14 @@
       "union": [
         "horizontal",
         "vertical"
+      ]
+    },
+    "TabsPanel": {
+      "module": "navigation-client",
+      "raw": "\"card\" | \"plain\"",
+      "union": [
+        "card",
+        "plain"
       ]
     },
     "SidebarVariant": {
@@ -5063,6 +5071,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -6473,6 +6487,15 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "panel",
+              "optional": true,
+              "type": "TabsPanel",
+              "values": [
+                "card",
+                "plain"
+              ]
             }
           ]
         },

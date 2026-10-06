@@ -305,6 +305,14 @@
         "unit": "px"
       }
     },
+    "radius-sheet": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      },
+      "$description": "Os cantos de cima da folha que sobe de baixo (BottomSheet, e a lista do Select e do Combobox no nativo). 32 e não o 22 de painel: a folha acompanha o canto da tela do telefone. É o rounded-4xl do bottom-sheet do HeroUI Native 1.0.10. Decisão do Victor, 06/10/2026 (HER-03, ADR-0058)."
+    },
     "radius-control": {
       "$type": "dimension",
       "$value": {

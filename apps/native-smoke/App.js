@@ -244,6 +244,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <BlocoLoteI t={t} />
       <BlocoCapsulaAndroid t={t} />
 
       <Bloco t={t} n="1" titulo="Os cinco pesos são distintos?"
@@ -1586,6 +1587,44 @@ function BlocoBarraParada({t}) {
         + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra do "
         + "Telegram; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
       {["circle-bold", "capsule", "pill", "expand"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
+    </Bloco>
+  );
+}
+
+// 0.20.0 (06/10/2026): o LOTE I, o grupo 1 da fila. Três perguntas que só o aparelho responde:
+//   A5  · o segmentado não quebra o rótulo e, com `fullWidth`, ocupa a linha (o Yoga disse que sim);
+//   C9  · com `panel="plain"`, o cartão de dentro do `Tabs` alinha com o de fora;
+//   R-23 · a foto da galeria traz a data em que foi TIRADA (`exif`), e a galeria escolhe várias.
+// O canto contínuo (HER-01) só o iPhone desenha: no Android, nada pode mudar.
+function BlocoLoteI({t}) {
+  const per = ["Semana", "Mês", "Ano", "Tudo"].map((l) => ({value: l, label: l}));
+  const km = ["3.000 km", "6.000 km", "Outro"].map((l) => ({value: l, label: l}));
+  const [p, setP] = React.useState("Mês");
+  const [k, setK] = React.useState("3.000 km");
+  const [aba, setAba] = React.useState("r");
+  const [fotos, setFotos] = React.useState([]);
+  const cartao = (titulo) => <Card><Text style={{color: t.color.foreground}}>{titulo}</Text></Card>;
+  const conteudo = <Stack gap="sm">{cartao("Dentro do Tabs")}</Stack>;
+  return (
+    <Bloco t={t} n="0.20" titulo="Lote I: o segmentado, o painel do Tabs e a data da foto"
+      criterio={"1) Os dois segmentados de cima: nenhum rótulo em duas linhas. 2) Os dois de baixo "
+        + "(fullWidth) ocupam a linha inteira, sem quebrar. 3) O cartão \"Dentro do Tabs\" começa e "
+        + "termina na mesma linha do cartão \"Fora do Tabs\". 4) Toque no + da foto, escolha DUAS "
+        + "fotos de uma vez na galeria, uma tirada pelo celular e uma recebida pelo WhatsApp: a do "
+        + "celular mostra a data e a hora em que foi tirada; a do WhatsApp, \"sem data\"."}>
+      <SegmentedControl items={per} value={p} onChange={setP} label="Período" />
+      <SegmentedControl items={km} value={k} onChange={setK} label="Troca a cada" />
+      <SegmentedControl items={per} value={p} onChange={setP} label="Período" fullWidth />
+      <SegmentedControl items={km} value={k} onChange={setK} label="Troca a cada" fullWidth />
+      {cartao("Fora do Tabs")}
+      <Tabs value={aba} onChange={setAba} variant="secondary" panel="plain" label="Painel"
+        tabs={[{id: "r", label: "Resumo", content: conteudo}, {id: "h", label: "Histórico", content: conteudo}]} />
+      <PhotoInput source="library" max={3} exif value={fotos} onChange={setFotos} />
+      {fotos.map((f, n) => (
+        <Text key={f.uri} style={{color: t.color.foreground}}>
+          {`Foto ${n + 1}: ${f.takenAt ? f.takenAt.toLocaleString("pt-BR") : "sem data"}`}
+        </Text>
+      ))}
     </Bloco>
   );
 }

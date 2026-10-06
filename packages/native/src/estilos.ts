@@ -76,6 +76,26 @@ export const comOpacidade = (cor: string, pct: number): string =>
     ? cor + Math.round(Math.max(0, Math.min(1, pct)) * 255).toString(16).padStart(2, "0")
     : cor;
 
+/**
+ * 🍎 O CANTO DA APPLE — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
+ *
+ * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de
+ * começar de repente como um quarto de círculo. O `heroui-native` 1.0.10 o põe em 24 peças; a
+ * Aurea, até aqui, em nenhuma. Pela doc do React Native (tipos do 0.87.1), ele só vale no **iOS
+ * 13+**: o Android ignora, e o navegador também — o `react-native-web` 0.21 passa a propriedade
+ * adiante e o CSS não a conhece, sem erro. **No Android do Victor nada muda; no iPhone, muda.**
+ *
+ * ⚠ **Raio escrito fora daqui é defeito.** O `native-canto-continuo.test.tsx` lê o fonte do pacote
+ * e reprova `borderRadius` (ou um dos quatro cantos) escrito à mão — a regra *"quem mais tem esse
+ * problema?"* virando trava, para a próxima peça não nascer com o canto do Android no iPhone.
+ */
+export const canto = (raio: number, curva: "continuous" | "circular" = "continuous") =>
+  ({borderRadius: raio, borderCurve: curva}) as const;
+
+/** Os dois cantos de CIMA — a folha que sobe de baixo (`BottomSheet`, a lista do `Select`). */
+export const cantosDeCima = (raio: number) =>
+  ({borderTopLeftRadius: raio, borderTopRightRadius: raio, borderCurve: "continuous"}) as const;
+
 /** O tom de cor com significado — o vocabulário do `Badge` (`AureaBadgeTone`). */
 export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
 
@@ -120,7 +140,7 @@ export const fundoDoTom = (t: AureaTokens, tom: TomDeCor): string | undefined =>
  */
 export const fioDoEscolhido = (t: AureaTokens): ViewStyle => ({
   position: "absolute", left: 15, right: 15, bottom: 0, height: 2,
-  borderRadius: t.size.radiusFull, backgroundColor: comOpacidade(t.color.primary, 0.75),
+  ...canto(t.size.radiusFull), backgroundColor: comOpacidade(t.color.primary, 0.75),
 });
 
 /**

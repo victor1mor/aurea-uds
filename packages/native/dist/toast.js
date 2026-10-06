@@ -57,7 +57,7 @@ import * as React from "react";
 import { Animated, Easing, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { IconButton } from "./actions.js";
-import { criarFolha } from "./estilos.js";
+import { canto, criarFolha } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { ICONE_DA_VARIANTE } from "./feedback.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
@@ -74,7 +74,9 @@ const folha = criarFolha((t) => ({
         flexDirection: "row", alignItems: "center", gap: 11, padding: 14,
         maxWidth: 360, width: "100%", alignSelf: "flex-end",
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
-        borderRadius: t.size.radiusLg,
+        // HER-02 (06/10/2026): era `radiusLg` (16). O aviso é superfície flutuante, e superfície
+        // flutuante é 22 na identidade da Aurea (`CLAUDE.md` §5). O HeroUI usa 24.
+        ...canto(t.size.radiusCard),
         backgroundColor: t.color.popover,
         ...(t.shadow.shadowMd ? { boxShadow: [t.shadow.shadowMd] } : null),
     },

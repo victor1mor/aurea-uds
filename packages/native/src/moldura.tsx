@@ -17,7 +17,7 @@
 // Não sai pela porta da frente: é peça de dentro, do `EmptyState` e da `Timeline`.
 import * as React from "react";
 import {View} from "react-native";
-import {acentoDoTom, comOpacidade, fundoDoTom, type TomDeCor} from "./estilos.js";
+import {canto, acentoDoTom, comOpacidade, fundoDoTom, type TomDeCor} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {useAureaTokens} from "./theme.js";
 
@@ -42,7 +42,7 @@ export function IconeEmMoldura({icon, moldura, glifo, tone = "neutral", sobre}: 
     : tone === "primary" ? comOpacidade(t.color.primary, 0.1)
     : fundoDoTom(t, tone);
   const cor = tone === "neutral" ? t.color.mutedForeground : acentoDoTom(t, tone);
-  const redondo = {width: moldura, height: moldura, borderRadius: t.size.radiusFull, flexGrow: 0, flexShrink: 0};
+  const redondo = {width: moldura, height: moldura, ...canto(t.size.radiusFull), flexGrow: 0, flexShrink: 0};
   const circulo = (
     <View style={[redondo, {alignItems: "center", justifyContent: "center", backgroundColor: fundo}]}>
       <Icon name={icon} size={glifo} color={cor} />

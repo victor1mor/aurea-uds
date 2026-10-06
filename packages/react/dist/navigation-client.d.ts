@@ -23,7 +23,8 @@ export declare function Breadcrumb({ items, label }: {
     label?: string;
 }): React.JSX.Element;
 export type TabsOrientation = "horizontal" | "vertical";
-export declare function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus, loopFocus }: {
+export type TabsPanel = "card" | "plain";
+export declare function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus, loopFocus, panel }: {
     tabs: Array<{
         id: string;
         label: ReactNode;
@@ -35,6 +36,7 @@ export declare function Tabs({ tabs, value, onChange, label, orientation, activa
     orientation?: Responsive<TabsOrientation>;
     activateOnFocus?: boolean;
     loopFocus?: boolean;
+    panel?: TabsPanel;
 }): React.JSX.Element;
 export declare function Pagination({ page, total, onPageChange }: {
     page: number;

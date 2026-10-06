@@ -32,7 +32,7 @@ import * as React from "react";
 import {Pressable, View, type StyleProp, type ViewStyle} from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import {IconButton} from "./actions.js";
-import {criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {alturaDoTamanho, respiroDoTamanho, useCampo} from "./inputs.js";
 import {Text} from "./text.js";
@@ -45,7 +45,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   caixa: {
     flexDirection: "row", alignItems: "center", gap: t.size.space2,
     width: "100%", minWidth: 0, borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
   },
   invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
   desabilitado: {opacity: t.size.opacityDisabled},

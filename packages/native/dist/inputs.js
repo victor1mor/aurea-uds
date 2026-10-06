@@ -39,7 +39,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
-import { criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -59,12 +59,12 @@ const folha = criarFolha((t) => ({
     caixa: {
         width: "100%", minWidth: 0,
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
         color: t.color.foreground,
     },
     // O `.textarea` é o único da família com raio LG em vez do de controle: uma caixa alta em
     // pílula viraria uma cápsula, e o CSS já decidiu isso (`aurea.css:694`).
-    areaDeTexto: { minHeight: 104, paddingVertical: t.size.space3, borderRadius: t.size.radiusLg },
+    areaDeTexto: { minHeight: 104, paddingVertical: t.size.space3, ...canto(t.size.radiusLg) },
     invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
     desabilitado: { opacity: t.size.opacityDisabled },
     // O GRUPO é a mesma caixa do campo virada em LINHA, e os números são os mesmos: mesma borda,
@@ -73,7 +73,7 @@ const folha = criarFolha((t) => ({
     grupo: {
         flexDirection: "row", alignItems: "center", width: "100%", minWidth: 0,
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
         gap: t.size.space1,
     },
     // Dentro do grupo o campo perde a caixa e vira só o texto — a borda passou a ser do grupo.
@@ -91,16 +91,30 @@ const folha = criarFolha((t) => ({
     // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
     linhaDeControle: { flexDirection: "row", alignItems: "center", gap: 9 },
     linhaNoTopo: { alignItems: "flex-start" },
-    trilho: { borderRadius: t.size.radiusFull, backgroundColor: t.color.muted,
+    trilho: { ...canto(t.size.radiusFull), backgroundColor: t.color.muted,
         borderWidth: t.size.borderWidth, borderColor: t.color.border, justifyContent: "center" },
-    polegar: { position: "absolute", left: 3, borderRadius: t.size.radiusFull },
+    polegar: { position: "absolute", left: 3, ...canto(t.size.radiusFull) },
     segmentada: {
         flexDirection: "row", alignSelf: "flex-start", gap: 3, padding: 3,
-        minHeight: t.size.controlHMd, borderRadius: t.size.radiusControl,
+        minHeight: t.size.controlHMd, ...canto(t.size.radiusControl),
         backgroundColor: t.color.muted, borderWidth: t.size.borderWidth, borderColor: "transparent",
     },
-    segmento: { flex: 1, alignItems: "center", justifyContent: "center",
-        paddingHorizontal: 14, borderRadius: t.size.radiusControl },
+    // 🔴 A5 (06/10/2026): ERA `flex: 1`, E NO NAVEGADOR ISSO QUEBRAVA O RÓTULO EM DUAS LINHAS.
+    // O `react-native-web` passa `flex: 1` cru para o CSS, que é `1 1 0%`: a largura do texto é
+    // repartida em partes IGUAIS, e o rótulo maior não cabe na parte dele ("3.000 km" com 77). No
+    // aparelho não quebrava — medido no Yoga oficial, com e sem `flex: 1`, o segmento fica do
+    // tamanho do texto —, mas lá o `flex` também não fazia nada: a cápsula ficava com 245 de 343.
+    // Agora o segmento é do tamanho do rótulo, como a aba do `Tabs` e o `.segmented button` da web.
+    // Ocupar a linha é pedido explícito: `fullWidth`, abaixo.
+    segmento: { alignItems: "center", justifyContent: "center",
+        paddingHorizontal: 14, ...canto(t.size.radiusControl) },
+    // `fullWidth`: o segmento CRESCE a partir do rótulo (base `auto`) e nunca encolhe abaixo dele.
+    // É o `fullWidth` do `ToggleButtonGroup` do HeroUI 3.2.6, com uma diferença declarada: lá é
+    // `flex-1`, e o CSS segura o mínimo do texto sozinho (`min-width: auto`). O Yoga não tem esse
+    // mínimo, e base zero repartiria igual de novo — o defeito acima. Com base `auto`, os segmentos
+    // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
+    segmentoCheio: { flexGrow: 1, flexShrink: 0, flexBasis: "auto" },
+    segmentadaCheia: { flexGrow: 1 },
     segmentoAtivo: { backgroundColor: t.color.secondary },
     // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
     // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
@@ -112,7 +126,8 @@ const folha = criarFolha((t) => ({
     fundoDeToque: { position: "absolute", top: 0, right: 0, bottom: 0, left: 0 },
     lista: {
         maxHeight: "60%", paddingVertical: t.size.space2,
-        borderTopLeftRadius: t.size.radiusCard, borderTopRightRadius: t.size.radiusCard,
+        // HER-03 (ADR-0058): a folha que sobe de baixo tem 32, como a `BottomSheet`.
+        ...cantosDeCima(t.size.radiusSheet),
         backgroundColor: t.color.popover, borderWidth: t.size.borderWidth, borderColor: t.color.border,
     },
     opcao: { minHeight: t.size.controlHLg, justifyContent: "center",
@@ -346,12 +361,12 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
         accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
                     s.marcaBase, noTopo,
                     { width: lado, height: lado,
-                        borderRadius: papel === "radio" ? t.size.radiusFull : 5 },
+                        ...canto(papel === "radio" ? t.size.radiusFull : 5) },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: t.color.controlSelected },
                 ], children: checked && (papel === "radio"
                     // O ponto do rádio é 8×8 e da cor SELECIONADA, não da cor de primeiro plano — no CSS
                     // ele é `background: var(--control-selected)` sobre a marca já pintada.
-                    ? _jsx(View, { style: { width: 8, height: 8, borderRadius: t.size.radiusFull,
+                    ? _jsx(View, { style: { width: 8, height: 8, ...canto(t.size.radiusFull),
                             backgroundColor: t.color.controlSelectedForeground } })
                     // O visto da web é desenhado com DUAS BORDAS de um retângulo 8×4 girado −45°. Isso
                     // atravessa inteiro: `transform: rotate` e `borderLeftWidth`/`borderBottomWidth`
@@ -398,11 +413,11 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
                 ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }, "texto"));
     const marcaDesenhada = (_jsx(View, { style: [
             s.marcaBase,
-            { width: marca, height: marca, borderRadius: t.size.radiusFull },
+            { width: marca, height: marca, ...canto(t.size.radiusFull) },
             erro && { borderColor: perigo, backgroundColor: "transparent" },
             escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
                 borderColor: erro ? perigo : t.color.controlSelected },
-        ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, borderRadius: t.size.radiusFull,
+        ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
                 backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
     // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
     // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
@@ -505,14 +520,14 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
  * há teclado aqui**, então o que resta é o que já se faz à mão: papel de grupo de rádio, um
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
-export function SegmentedControl({ items, value, onChange, label, disabled, justify, style, ...rest }) {
+export function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const campo = useCampo();
     const inativo = disabled ?? campo?.disabled;
-    return (_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
+    return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
                 const ativo = it.value === value;
-                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, ativo && s.segmentoAtivo], children: [typeof it.label === "string"
+                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo], children: [typeof it.label === "string"
                             ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
                                 // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
                                 // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a

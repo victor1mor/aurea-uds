@@ -53,7 +53,7 @@
 import * as React from "react";
 import {Pressable, View, type StyleProp, type ViewStyle} from "react-native";
 import Svg, {Circle, G, Line, Path, Rect, Text as SvgText} from "react-native-svg";
-import {criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -117,7 +117,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   chave: {flexDirection: "row", alignItems: "center", gap: t.size.space2},
   amostra: {
     flexGrow: 0, flexShrink: 0,
-    width: 9, height: 9, borderRadius: t.size.radiusSm,
+    width: 9, height: 9, ...canto(t.size.radiusSm),
   },
   valores: {gap: t.size.space1},
   linhaDeValor: {flexDirection: "row", alignItems: "center", gap: t.size.space2},

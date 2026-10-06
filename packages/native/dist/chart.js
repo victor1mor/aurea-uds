@@ -54,7 +54,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Pressable, View } from "react-native";
 import Svg, { Circle, G, Line, Path, Rect, Text as SvgText } from "react-native-svg";
-import { criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 /** A altura padrão, igual ao `--chart-h,220px` do `aurea.css:1329`. */
@@ -70,7 +70,7 @@ const folha = criarFolha((t) => ({
     chave: { flexDirection: "row", alignItems: "center", gap: t.size.space2 },
     amostra: {
         flexGrow: 0, flexShrink: 0,
-        width: 9, height: 9, borderRadius: t.size.radiusSm,
+        width: 9, height: 9, ...canto(t.size.radiusSm),
     },
     valores: { gap: t.size.space1 },
     linhaDeValor: { flexDirection: "row", alignItems: "center", gap: t.size.space2 },

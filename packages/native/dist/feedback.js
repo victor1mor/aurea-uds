@@ -22,7 +22,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { IconeEmMoldura } from "./moldura.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
@@ -35,14 +35,17 @@ const folha = criarFolha((t) => ({
     // desenha a rosquinha do Material no Android e a coroa do iOS — duas aparências que não são a
     // Aurea, e o `CLAUDE.md` proíbe Material como aparência em voz alta. O anel é reprodutível
     // com borda, e `borderRightColor: transparent` existe no RN igual ao CSS.
-    anel: { borderWidth: 2, borderRightColor: "transparent", borderRadius: t.size.radiusFull },
+    // HER-01: a ÚNICA peça com o canto `circular`, declarada. O anel GIRA, e um contorno que não
+    // seja círculo perfeito balança ao girar. O `heroui-native` 1.0.10 também deixa o `Spinner` de
+    // fora das 24 peças com canto contínuo.
+    anel: { borderWidth: 2, borderRightColor: "transparent", ...canto(t.size.radiusFull, "circular") },
     // ── Skeleton ───────────────────────────────────────────────────────────────────────────────
     // O raio 7 é cru no CSS (`aurea.css:1111`) e entra aqui **como está**: inventar um token para
     // ele faria o nativo e a web desenharem cantos diferentes para a mesma peça.
-    esqueleto: { borderRadius: 7, backgroundColor: t.color.surface3 },
+    esqueleto: { ...canto(7), backgroundColor: t.color.surface3 },
     // ── Progress ───────────────────────────────────────────────────────────────────────────────
-    trilho: { height: 8, borderRadius: t.size.radiusFull, backgroundColor: t.color.surface3, overflow: "hidden" },
-    preenchimento: { height: "100%", borderRadius: t.size.radiusFull, backgroundColor: t.color.primary },
+    trilho: { height: 8, ...canto(t.size.radiusFull), backgroundColor: t.color.surface3, overflow: "hidden" },
+    preenchimento: { height: "100%", ...canto(t.size.radiusFull), backgroundColor: t.color.primary },
     // AN-07: a caixa com o texto de apoio em cima — a grade do HeroUI, `gap-1` até o trilho, a saída
     // à direita em algarismos de largura igual.
     campoProgresso: { gap: t.size.space1 },
@@ -56,7 +59,9 @@ const folha = criarFolha((t) => ({
     alerta: {
         flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
         paddingVertical: 14, paddingHorizontal: t.size.space4,
-        borderWidth: t.size.borderWidth, borderRadius: t.size.radiusLg,
+        // HER-02 (06/10/2026): era `radiusLg` (16). Painel é 22 na identidade da Aurea (`CLAUDE.md`
+        // §5), como o `Popover`, o `Dialog` e o `Banner`; o HeroUI 3.2.6 e o Native 1.0.10 usam 24.
+        borderWidth: t.size.borderWidth, ...canto(t.size.radiusCard),
         backgroundColor: t.color.secondary, borderColor: t.color.border,
     },
     // O GRUPO de leitura: ícone + texto, lidos como uma coisa só. Ele existe porque a moldura
@@ -152,7 +157,7 @@ export function Skeleton({ width, height, radius, style, testID }) {
     return (_jsx(Animated.View, { testID: testID, accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", style: [
             s.esqueleto,
             { width: width ?? "100%", height: height ?? t.size.space4 },
-            radius != null && { borderRadius: radius },
+            radius != null && { ...canto(radius) },
             { opacity: opacidade },
             style,
         ] }));

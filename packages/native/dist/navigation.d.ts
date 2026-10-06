@@ -222,9 +222,19 @@ export interface TabsProps extends ViewProps {
      *   embaixo da aba aberta, o mesmo do `SegmentedControl`.
      */
     variant?: AureaTabsVariant;
+    /**
+     * O painel (C9 e MNT-05, 06/10/2026):
+     * - `card` (padrão): um cartão `inset`, como sempre — o conteúdo entra o recheio do cartão.
+     * - `plain`: sem caixa. O conteúdo começa na mesma linha do que está fora do `Tabs`, como o
+     *   painel do HeroUI. É o caso de um conteúdo que já é cartão, tabela ou lista: dentro de um
+     *   painel-cartão, vira caixa dentro de caixa.
+     */
+    panel?: AureaTabsPanel;
 }
 /** Os dois jeitos da fila de abas, com os nomes do `Tabs` do HeroUI Native. */
 export type AureaTabsVariant = "primary" | "secondary";
+/** O painel do `Tabs`: cartão (padrão) ou sem caixa. O mesmo nome na web. */
+export type AureaTabsPanel = "card" | "plain";
 /**
  * As abas DENTRO da tela — trocar o painel, não trocar de página.
  *
@@ -258,4 +268,4 @@ export type AureaTabsVariant = "primary" | "secondary";
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export declare function Tabs({ tabs, value, onChange, label, justify, variant, style, ...rest }: TabsProps): React.JSX.Element;
+export declare function Tabs({ tabs, value, onChange, label, justify, variant, panel, style, ...rest }: TabsProps): React.JSX.Element;

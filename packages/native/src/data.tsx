@@ -59,7 +59,7 @@ import {
   type StyleProp, type ViewStyle,
 } from "react-native";
 import type {AureaBadgeTone} from "./display.js";
-import {criarFolha} from "./estilos.js";
+import {canto, criarFolha} from "./estilos.js";
 import type {AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
 import {Text} from "./text.js";
@@ -79,7 +79,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   evento: {flexDirection: "row", alignItems: "flex-start", gap: t.size.space3},
   ponto: {
     flexGrow: 0, flexShrink: 0,
-    width: t.size.space3, height: t.size.space3, borderRadius: t.size.radiusFull,
+    width: t.size.space3, height: t.size.space3, ...canto(t.size.radiusFull),
     marginTop: t.size.space1, backgroundColor: t.color.primary,
     // O halo do CSS é `box-shadow: 0 0 0 space-05 surface-1`. No RN sombra não faz anel —
     // uma BORDA da cor da superfície faz o mesmo buraco, e cresce o ponto pelo mesmo tanto.
@@ -107,7 +107,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   linha: {
     padding: t.size.space3, gap: t.size.space2,
     borderWidth: t.size.borderWidth, borderColor: t.color.border,
-    borderRadius: t.size.radiusLg, backgroundColor: t.color.card,
+    ...canto(t.size.radiusLg), backgroundColor: t.color.card,
   },
   linhaTocavel: {minHeight: t.size.targetMin ?? 44},
   celula: {flexDirection: "row", gap: t.size.space3, alignItems: "flex-start"},

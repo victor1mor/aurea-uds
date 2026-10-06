@@ -33,7 +33,7 @@ import {
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
-import {comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
+import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -54,7 +54,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     marginHorizontal: t.size.space4, marginTop: t.size.space4,
     paddingVertical: t.size.space2, paddingHorizontal: t.size.space4,
     borderWidth: t.size.borderWidth, borderColor: t.color.border,
-    borderRadius: t.size.radiusCard, backgroundColor: t.color.card,
+    ...canto(t.size.radiusCard), backgroundColor: t.color.card,
   },
   topo_flush: {paddingVertical: t.size.space2, paddingHorizontal: t.size.space5,
                backgroundColor: t.color.background},
@@ -67,7 +67,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     alignSelf: "center", marginTop: t.size.space4, justifyContent: "flex-start",
     gap: t.size.space2, padding: t.size.space2,
     borderWidth: t.size.borderWidth, borderColor: t.color.border,
-    borderRadius: t.size.radiusControl, backgroundColor: t.color.card,
+    ...canto(t.size.radiusControl), backgroundColor: t.color.card,
   },
 
   // ── BottomNav ──────────────────────────────────────────────────────────────────────────────
@@ -86,14 +86,14 @@ const folha = criarFolha((t: AureaTokens) => ({
     position: "absolute", bottom: 0, zIndex: t.size.zSticky,
     flexDirection: "row", gap: t.size.space1, margin: t.size.space4, padding: t.size.space1,
     borderWidth: t.size.borderWidth, borderColor: t.color.border,
-    borderRadius: t.size.radiusControl, backgroundColor: t.color.card,
+    ...canto(t.size.radiusControl), backgroundColor: t.color.card,
     boxShadow: [t.shadow.shadowMd],
   },
   // `edge` encosta na borda: sem margem, sem raio, só a linha de cima — e continua NO FLUXO,
   // porque uma barra encostada que flutuasse esconderia o fim da tela sem nada reservar.
   barra_edge: {
     position: "relative", left: undefined, right: undefined, bottom: undefined, zIndex: undefined,
-    margin: 0, paddingHorizontal: 0, borderRadius: 0, backgroundColor: t.color.background,
+    margin: 0, paddingHorizontal: 0, ...canto(0), backgroundColor: t.color.background,
     borderWidth: 0, borderTopWidth: t.size.borderWidth, boxShadow: undefined,
   },
   // A pílula CHEIA, de uma borda à outra menos a margem — o de sempre. Mora fora da `barra` para
@@ -125,7 +125,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     // recheio de cima e de baixo cai de `space1` para `space05`, e o nome sai em 12 com a
     // entrelinha justa (ver o `Text` do rótulo). Igual na web (`aurea.css`).
     paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
-    borderRadius: t.size.radiusControl,
+    ...canto(t.size.radiusControl),
   },
   // Com a pílula do tamanho do conteúdo, `flex: 1` MATA as abas: no RN ele é base ZERO, e a soma
   // de zeros é uma pílula de largura zero. Aqui cada aba mede o próprio conteúdo (base `auto`) e
@@ -141,8 +141,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   // Victor viu o contador cobrir o nome em 17/08/2026, e a pesquisa (Material 3 e os guias de
   // barra de abas do iOS) diz o mesmo: canto superior do ÍCONE, nunca sobre o texto.
   marca: {position: "relative", alignItems: "center", justifyContent: "center",
-          width: 32, height: 32, borderRadius: t.size.radiusControl},
-  marcaRedonda: {borderRadius: t.size.radiusFull},
+          width: 32, height: 32, ...canto(t.size.radiusControl)},
+  marcaRedonda: {...canto(t.size.radiusFull)},
   contador: {position: "absolute", top: -t.size.space05, right: -t.size.space05},
 
   // ── A BARRA FICA PARADA QUANDO SE TROCA DE ABA — pedido do Victor, 03/10/2026 ──────────────
@@ -162,13 +162,13 @@ const folha = criarFolha((t: AureaTokens) => ({
   // (56 × 48).
   disco: {
     alignItems: "center", justifyContent: "center", gap: 0,
-    width: 56, minHeight: t.size.controlHLg, borderRadius: t.size.radiusFull,
+    width: 56, minHeight: t.size.controlHLg, ...canto(t.size.radiusFull),
     paddingHorizontal: t.size.space1, paddingVertical: t.size.space1,
   },
   // `capsule` (a "A" da bancada, o Material 3 Expressive): a moldura do ícone vira a cápsula de
   // 56 × 32 do indicador ativo dele — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
   // `aurea.css`, em todos os itens. O rótulo fica embaixo, fora dela.
-  marcaCapsula: {width: 56, height: 32, borderRadius: t.size.radiusFull},
+  marcaCapsula: {width: 56, height: 32, ...canto(t.size.radiusFull)},
   // O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada (item não
   // escolhido) ele ficaria solto, longe do sino. São os (56 − 32) / 2 a mais para dentro.
   contadorCapsula: {right: (56 - 32) / 2 - t.size.space05},
@@ -203,7 +203,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     flexDirection: "row", alignItems: "center", gap: t.size.space3, width: "100%",
     minHeight: t.size.controlHLg,
     paddingVertical: t.size.space2, paddingHorizontal: t.size.space3,
-    borderRadius: t.size.radiusCard - t.size.space1,
+    ...canto(t.size.radiusCard - t.size.space1),
   },
   // O MIOLO da linha: ícone + texto (+ valor em texto) + seta. Ele é quem toca; o que vem
   // depois dele, na moldura, é IRMÃO — ver o comentário no componente.
@@ -219,7 +219,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // lá — `gap:3px; padding:3px` — e não de mim.
   abas: {
     flexDirection: "row", gap: 3, padding: 3,
-    minHeight: t.size.controlHMd, borderRadius: t.size.radiusControl,
+    minHeight: t.size.controlHMd, ...canto(t.size.radiusControl),
     backgroundColor: t.color.muted,
   },
   // `padding:0 14px` é literal no `.tab` (`aurea.css:1127`). A aba NÃO estica (nada de `flex`):
@@ -230,7 +230,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // silêncio, e o `tsc` só pegou porque são chaves do mesmo objeto.
   abaDeTab: {
     alignItems: "center", justifyContent: "center",
-    paddingHorizontal: 14, borderRadius: t.size.radiusControl,
+    paddingHorizontal: 14, ...canto(t.size.radiusControl),
   },
   abaDeTabAtiva: {backgroundColor: t.color.secondary},
   // `variant="secondary"` (R-12, 01/10/2026): o `secondary` do HeroUI Native 1.0.10
@@ -258,7 +258,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   passo: {flex: 1, alignItems: "center"},
   bolinha: {
     width: 32, height: 32, marginBottom: t.size.space2,
-    alignItems: "center", justifyContent: "center", borderRadius: t.size.radiusFull,
+    alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
     borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
     backgroundColor: t.color.surface1,
   },
@@ -526,7 +526,7 @@ export function BottomNav({
             {...estadoAcessivel({selected: ativo, disabled: !!it.disabled})}
             style={[
               s.aba, justa && s.aba_content,
-              indicator === "subtle" && {borderRadius: t.size.radiusCard - t.size.space1},
+              indicator === "subtle" && {...canto(t.size.radiusCard - t.size.space1)},
               ativo && (indicator === "subtle" || indicator === "pill")
                 && {backgroundColor: comOpacidade(t.color.primary, 0.12)},
               disco && s.aba_disco,
@@ -844,10 +844,20 @@ export interface TabsProps extends ViewProps {
    *   embaixo da aba aberta, o mesmo do `SegmentedControl`.
    */
   variant?: AureaTabsVariant;
+  /**
+   * O painel (C9 e MNT-05, 06/10/2026):
+   * - `card` (padrão): um cartão `inset`, como sempre — o conteúdo entra o recheio do cartão.
+   * - `plain`: sem caixa. O conteúdo começa na mesma linha do que está fora do `Tabs`, como o
+   *   painel do HeroUI. É o caso de um conteúdo que já é cartão, tabela ou lista: dentro de um
+   *   painel-cartão, vira caixa dentro de caixa.
+   */
+  panel?: AureaTabsPanel;
 }
 
 /** Os dois jeitos da fila de abas, com os nomes do `Tabs` do HeroUI Native. */
 export type AureaTabsVariant = "primary" | "secondary";
+/** O painel do `Tabs`: cartão (padrão) ou sem caixa. O mesmo nome na web. */
+export type AureaTabsPanel = "card" | "plain";
 
 /**
  * As abas DENTRO da tela — trocar o painel, não trocar de página.
@@ -883,7 +893,7 @@ export type AureaTabsVariant = "primary" | "secondary";
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
 export function Tabs({
-  tabs, value, onChange, label, justify, variant = "primary", style, ...rest
+  tabs, value, onChange, label, justify, variant = "primary", panel = "card", style, ...rest
 }: TabsProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -950,16 +960,23 @@ export function Tabs({
           Por isso o painel fica sem papel: papel que a plataforma rejeita derruba a tela, e
           inventar um "parecido" diria uma coisa errada — a mesma decisão do `Topbar`, da
           `Table` e do `Alert`. O `accessibilityLabel` fica: ele nomeia sem prometer semântica. */}
-      {aberta
-        ? (
-          <Card
-            variant="inset"
-            accessibilityLabel={typeof aberta.label === "string" ? aberta.label : undefined}
-            style={s.painel}>
-            {aberta.content}
-          </Card>
-        )
-        : null}
+      {/* C9 (06/10/2026): o app mediu o conteúdo 21 pontos para dentro (o recheio de 20 do
+          cartão + a borda de 1), e o `variant="secondary"` não mudava isso — o painel era cartão
+          nas DUAS variantes. Com `panel="plain"` ele é só o espaço de cima, sem caixa. */}
+      {aberta && panel === "plain" ? (
+        <View
+          accessibilityLabel={typeof aberta.label === "string" ? aberta.label : undefined}
+          style={s.painel}>
+          {aberta.content}
+        </View>
+      ) : aberta ? (
+        <Card
+          variant="inset"
+          accessibilityLabel={typeof aberta.label === "string" ? aberta.label : undefined}
+          style={s.painel}>
+          {aberta.content}
+        </Card>
+      ) : null}
     </View>
   );
 }

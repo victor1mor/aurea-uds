@@ -21,7 +21,7 @@
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import {Pressable, View, type PressableProps} from "react-native";
-import {criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type AureaIcon, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
@@ -142,7 +142,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   alvoLargura: {alignSelf: "stretch"},
   caixa: {
     flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderRadius: t.size.radiusControl,           // 999 — pill, identidade INTOCÁVEL
+    ...canto(t.size.radiusControl),           // 999 — pill, identidade INTOCÁVEL
     borderWidth: t.size.borderWidth,
   },
   // `.btn:active` e `.btn:disabled` do core — os números moram no `estilos.ts` desde que o
@@ -305,7 +305,7 @@ function BotaoDeIcone({
 
   const caixa = React.useMemo(() => ({
     height: lado, width: lado, paddingHorizontal: 0,
-    borderRadius: t.size.radiusControl,
+    ...canto(t.size.radiusControl),
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
     borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
   }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);

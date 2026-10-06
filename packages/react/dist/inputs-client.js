@@ -232,9 +232,13 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
 // é o rádio e o input é `aria-hidden`. Comportamento idêntico: Enter não seleciona, Espaço
 // seleciona, a seta move E seleciona. O que sai é a camada sintética que o motor punha por cima
 // da ativação nativa do `<button>`.
-export function SegmentedControl({ items, value, onChange, label }) {
+//
+// `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
+// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É o `fullWidth` do
+// `ToggleButtonGroup` do HeroUI 3.2.6.
+export function SegmentedControl({ items, value, onChange, label, fullWidth }) {
     const s = useAureaStrings();
-    return _jsx(BaseRadioGroup, { className: "segmented", "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
+    return _jsx(BaseRadioGroup, { className: fullWidth ? "segmented segmented-full" : "segmented", "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
 }
 const ehAgrupado = (items) => items != null && items.length > 0 && typeof items[0] === "object" && items[0] != null && "items" in items[0];
 // UM renderizador e UMA lista para os dois combobox: duas cópias da mesma árvore é como a

@@ -68,7 +68,7 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     id?: string;
     className?: string;
 }): React.JSX.Element;
-export declare function SegmentedControl({ items, value, onChange, label }: {
+export declare function SegmentedControl({ items, value, onChange, label, fullWidth }: {
     items: Array<{
         value: string;
         label: ReactNode;
@@ -76,6 +76,7 @@ export declare function SegmentedControl({ items, value, onChange, label }: {
     value: string;
     onChange: (v: string) => void;
     label?: string;
+    fullWidth?: boolean;
 }): React.JSX.Element;
 export interface ComboboxOption {
     value: string;
