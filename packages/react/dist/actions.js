@@ -58,8 +58,8 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     // 🔴 OCUPADO TROCA, NÃO ACRESCENTA (01/10/2026, achado pelo Victor no aureauds.dev): a rodinha
     // entrava ANTES do ícone, e no `IconButton` — 36 de largura fixa — rodinha e glifo não cabiam:
     // medido no catálogo, a rodinha começava 4px FORA do botão, à esquerda, com o disquete ainda ao
-    // lado. O HeroUI troca (exemplo "Loading State" da doc do Button 3.2.6:
-    // `isPending ? <Spinner/> : <Paperclip/>`). Aqui também: ocupado, a rodinha toma o lugar do ícone
+    // lado. A referência troca (no exemplo de estado ocupado da doc do botão dela, a rodinha
+    // entra no lugar do ícone). Aqui também: ocupado, a rodinha toma o lugar do ícone
     // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
     // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
     const temConteudo = children != null && children !== false;
@@ -67,7 +67,7 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
     // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
     // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
-    // embrulho de <span> que o MUI documenta resolve o ponteiro e não resolve o teclado (span nasce
+    // embrulho de <span> que uma das referências documenta resolve o ponteiro e não resolve o teclado (span nasce
     // com tabIndex -1, medido). Com `aria-disabled` o botão continua focável e anunciado como
     // desabilitado, e é ESTE componente que tem de barrar a ativação — o atributo é só semântica.
     // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
@@ -118,7 +118,7 @@ function temConteudoVisivel(children) {
 // ESTE é o toggle da Aurea. O `pressed` do `Button` está DEPRECIADO em favor dele (0.4.0,
 // sai na 1.0): as doze referências pesquisadas em 18/08/2026 têm componente separado, e
 // nenhuma põe o estado no botão comum.
-// E a REGRA QUE FALTAVA ESTAR ESCRITA AQUI, do Adobe Spectrum e do APG: **o rótulo não muda
+// E a REGRA QUE FALTAVA ESTAR ESCRITA AQUI, de uma das referências e do APG: **o rótulo não muda
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
@@ -145,7 +145,7 @@ export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props
     const s = useAureaStrings();
     const escuro = theme === "dark";
     // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
-    // sol cheios, como os do Carbon aprovados pela imagem em 25/09/2026). O `IconButton` público não
+    // sol cheios, como os do conjunto de ícones anterior, aprovados pela imagem em 25/09/2026). O `IconButton` público não
     // tem peso de ícone.
     return _jsx(Button, { ref: ref, variant: "ghost", className: cx("btn-icon", escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), "aria-label": escuro ? s.themeToLight : s.themeToDark, onClick: toggleTheme, ...props, children: _jsx(Icon, { name: escuro ? "sun" : "moon", weight: "fill" }) });
 });

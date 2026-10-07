@@ -69,7 +69,7 @@
       "name": "color",
       "type": "\"default\" | \"muted\"",
       "default": "\"default\"",
-      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+      "description": "Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
     },
     {
       "name": "weight",

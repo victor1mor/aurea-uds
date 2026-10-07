@@ -1,5 +1,5 @@
 "use client";
-// A diretiva na LINHA 1, como as referências a escrevem (Base UI e shadcn/ui, medidos em
+// A diretiva na LINHA 1, como as referências a escrevem (o Base UI e outra delas, medidos em
 // 06/08/2026) — Parte A do PLANO-1.0. Este módulo chama `createContext`, que é API só de
 // cliente: sem a diretiva, `import {Button} from "@aurea-uds/react"` dentro de um componente
 // de servidor quebrava na hora, e quebrava no consumidor.

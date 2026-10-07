@@ -1,6 +1,6 @@
 // HER-03 (06/10/2026, ADR-0058) · a folha que sobe de baixo tem 32 de canto, e não o 22 de painel.
 // Decisão do Victor olhando as duas na bancada (*"folha com 32"*): ela acompanha o canto da tela do
-// telefone. É o `rounded-4xl` do bottom-sheet do HeroUI Native 1.0.10, que usa a MESMA folha no
+// telefone. É o canto da folha de baixo da referência no nativo, que usa a MESMA folha no
 // `Select` e no `Menu` quando eles abrem por baixo.
 //
 // Quem mais tem esse problema? No nativo da Aurea, três peças sobem de baixo: a `BottomSheet`, a

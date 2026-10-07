@@ -30,8 +30,8 @@ import {Gallery} from "./media.js";
 // não dispara, pois a região só anuncia o que muda DEPOIS de existir no DOM.
 //
 // AN-02 (Lote H, 04/10/2026) — A CONVERSA LONGA, só acrescentando. Um consumidor mostra conversas
-// com centenas de milhares de mensagens. O HeroUI 3.2.6 não tem conversa; a anatomia é a do ReUI
-// (`Message` com `align`, `Bubble`, `Attachment`, `message-scroller`), com nomes da casa:
+// com centenas de milhares de mensagens. A referência principal não tem conversa;
+// a anatomia é a de outra das referências (mensagem com alinhamento, balão, anexo e rolagem de mensagens), com nomes da casa:
 //   • `direction` ("incoming" | "outgoing"): a minha vai para o fim da linha, sem avatar, com o
 //     canto pequeno do lado dela e o fundo tingido da marca (o mesmo tom do nó escolhido do
 //     `TreeView`). Quem declara o lado também ganha a folga do lado oposto, do tamanho do avatar.
@@ -44,7 +44,7 @@ import {Gallery} from "./media.js";
 //     Medido no Chromium: mil mensagens na tela abrem em 0,3 s; 50 mil, em 10,7 s, com a rolagem
 //     travando. Então o app guarda um pedaço (umas mil) e troca pelas pontas: `hasMoreBefore` +
 //     `onReachStart` em cima, `hasMoreAfter` + `onReachEnd` embaixo, com `loadingBefore` e
-//     `loadingAfter`. A linha de cada ponta é a do `Table.LoadMore` do HeroUI, como na `Gallery`.
+//     `loadingAfter`. A linha de cada ponta é a do "carregar mais" da tabela da referência, como na `Gallery`.
 //     O que é nosso é NÃO PULAR: a mensagem que estava no alto da tela continua no mesmo lugar
 //     quando entram antigas em cima ou saem recentes embaixo — guarda-se a posição dela a cada
 //     rolagem e, depois da troca, rola-se a diferença. Quem está no fim acompanha a que chega.
@@ -194,8 +194,8 @@ export function MessageList({messages,label,className,hasMoreBefore,hasMoreAfter
 // pois placeholder não serve de nome. ponytail: input de uma linha; textarea +
 // Shift+Enter quando surgir demanda de multilinha.
 //
-// AN-03 (Lote H, 04/10/2026) — ANEXAR, RESPONDER E EDITAR, só acrescentando. O HeroUI 3.2.6 não
-// tem compositor; o ReUI (`c-attachment-2`) põe a bandeja de anexos num adorno EM BLOCO acima do
+// AN-03 (Lote H, 04/10/2026) — ANEXAR, RESPONDER E EDITAR, só acrescentando. A referência
+// principal não tem compositor; um exemplo de outra das referências põe a bandeja de anexos num adorno EM BLOCO acima do
 // campo, que só existe quando tem conteúdo, e anuncia cada remoção numa região viva. A Aurea já
 // tinha o adorno em bloco (`side="start"` + `layout="block"`, G-AXIS-01); a faixa entra nele.
 //   • ANEXAR (`attach`) reaproveita o `FileInput` por dentro, e não a zona grande de soltar, que não

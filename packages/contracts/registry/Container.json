@@ -53,7 +53,7 @@
       "name": "size",
       "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
       "default": "\"xl\"",
-      "description": "How far the content grows, by the names of the breakpoint scale: sm 640, md 768, lg 1024, xl 1280 (the default, Untitled UI's max-w-container), 2xl 1536, or full with no cap (GAR-02, 06/10/2026)."
+      "description": "How far the content grows, by the names of the breakpoint scale: sm 640, md 768, lg 1024, xl 1280 (the default, one reference's max-w-container), 2xl 1536, or full with no cap (GAR-02, 06/10/2026)."
     },
     {
       "name": "children",

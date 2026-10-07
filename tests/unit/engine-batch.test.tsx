@@ -259,8 +259,8 @@ test("os três campos da família marcam inválido, não só dois", () => {
 
 // ── PasswordField ──────────────────────────────────────────────────────────
 
-// Gap achado pela comparação de FAMÍLIA de primitives (base-ui × radix), não pela triagem por
-// nome: `password-toggle-field` na radix e `password-input` no Shark UI são a mesma capacidade
+// Gap achado pela comparação de FAMÍLIA de primitives (base-ui × uma das referências), não pela triagem por
+// nome: o campo de senha de uma referência e o de outra são a mesma capacidade
 // com nomes que não casam, então a evidência ficou dividida e caiu abaixo do corte.
 //
 // As duas referências convergem na anatomia, e é o que se cobra aqui.

@@ -62,7 +62,7 @@
       "name": "spacing",
       "type": "\"sm\" | \"md\"",
       "default": "\"md\"",
-      "description": "The space above and below: md is --space-16 (64) and --space-24 (96) from the md breakpoint up; sm is half of that. Aurea's choice from existing tokens: HeroUI has no section, and Untitled UI's sections are paid and were not read."
+      "description": "The space above and below: md is --space-16 (64) and --space-24 (96) from the md breakpoint up; sm is half of that. Aurea's choice from existing tokens: none of the references had a section to read."
     },
     {
       "name": "theme",

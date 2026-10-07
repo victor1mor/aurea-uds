@@ -2,8 +2,8 @@
 //
 // Fechando o `G-AXIS-01`, a medição do `G-COMP-01` ganhou forma: a média de 0,86 composição por
 // componente escondia a distribuição real — **77 dos 90 componentes tinham ZERO**, e um punhado
-// carregava tudo. As referências não têm essa forma: kibo e reui estão em cobertura total, e a
-// shark só deixa infra de fora. O alvo, portanto, não é "subir a média": é **nenhum componente
+// carregava tudo. As referências não têm essa forma: duas delas estão em cobertura total, e uma
+// terceira só deixa infra de fora. O alvo, portanto, não é "subir a média": é **nenhum componente
 // em zero**. Este arquivo é parte dessa cobertura.
 import {createElement as h} from "react";
 import {Dialog, Button, Field, Input} from "../../../../packages/react/dist/index.js";

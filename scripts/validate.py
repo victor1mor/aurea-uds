@@ -21,9 +21,9 @@ a distribuição declarada no contrato igual aos pacotes públicos reais, e todo
 onde a versão mora declarando o mesmo número.
 Acrescentado pela linhagem da ATIVIDADE-2: EIXO do TypeScript == eixo da ficha (variante, tamanho
 e qualquer união literal em `axes`), estado que o core PINTA ⟷ estado que alguma ficha declara,
-paridade entre o que o runtime vanilla (`window.Aurea`) faz e o que o pacote React entrega, o
-estado de LEITURA da matriz do §13 (MATRIX-ESTADO.json) ⟷ a matriz gerada (MATRIX.json), e
-teclado declarado na ficha ⟷ rastro de medição no navegador (`keyboardNote`).
+paridade entre o que o runtime vanilla (`window.Aurea`) faz e o que o pacote React entrega, e
+teclado declarado na ficha ⟷ rastro de medição no navegador (`keyboardNote`). (Os checks 29 e
+31 vigiavam a matriz de comparação, que saiu do repositório em 07/10/2026.)
 
 Flags:
   --write-raw-px-baseline   regrava scripts/raw-px-baseline.json (check 12)
@@ -114,6 +114,53 @@ PATTERNS = [
     re.compile(r"(?<![A-Za-zÀ-ÿ0-9])(?i:" + re.escape(name) + r")(?![a-zà-ÿ0-9])")
     for name in PRIVATE
 ]
+
+
+# ── 1b. referência de construção não se publica — ordem do Victor, 07/10/2026 ───────────────
+# As bibliotecas e os apps que servem de MODELO de desenho orientam a construção, mas o nome e a
+# informação deles não entram em nada que a Aurea publica: nem no repositório, nem no site, nem
+# nos pacotes. A leitura de cada uma mora fora do repositório, com o Victor.
+#
+# A lista dos nomes também mora fora, pelo mesmo motivo — escrevê-la aqui seria publicá-la:
+#   1. a variável de ambiente AUREA_REFERENCIAS, nomes separados por ";" (segredo da CI);
+#   2. o arquivo `.referencias` na raiz, um nome por linha (máquina local; o git o ignora).
+# Mesma comparação dos nomes privados (palavra inteira, sem caixa, também no caminho), e o achado
+# sai como "#<índice>". Ficam de fora da lista, de propósito, as dependências de verdade, as
+# plataformas e os provedores que são função de uma peça (o `docs/REFERENCES.md` diz quais).
+def _carregar_referencias() -> list[str]:
+    bruto = os.environ.get("AUREA_REFERENCIAS", "")
+    arquivo = root / ".referencias"
+    if not bruto.strip() and arquivo.is_file():
+        bruto = arquivo.read_text(encoding="utf-8-sig").replace("\n", ";")
+    bruto = bruto.strip().strip("\"'")
+    return [n.strip() for n in bruto.split(";") if n.strip()]
+
+
+REFERENCIAS = _carregar_referencias()
+if not REFERENCIAS and not SEM_LISTA:
+    errors.append(
+        "check 1b: a lista de referências de construção não foi encontrada. Defina "
+        "AUREA_REFERENCIAS (nomes separados por ';') ou crie o arquivo .referencias na raiz, um "
+        "nome por linha. Sem ela, o gate de referências não roda — e ele não roda calado")
+# A fronteira DEPOIS do nome é mais estrita que a dos nomes privados: nenhuma letra, nem
+# maiúscula. A dos privados aceita maiúscula para pegar nome colado em camelCase; aqui isso fazia
+# uma sigla curta da lista casar com "MUITO" em caixa alta (medido em 07/10/2026, três arquivos).
+PATTERNS_REF = [
+    re.compile(r"(?<![A-Za-zÀ-ÿ0-9])(?i:" + re.escape(name) + r")(?![A-Za-zÀ-ÿ0-9])")
+    for name in REFERENCIAS
+]
+# Pacotes MONTADOS, com código de dependência dentro: o `live.js` do catálogo e a saída do
+# `keyboard-probe` levam o código do Base UI, cujo gerador de id tem um prefixo que casa com uma
+# sigla da lista. O código-fonte nosso que vai dentro deles já é varrido arquivo por arquivo.
+REF_FORA = {root / "apps/catalog/assets/live.js"}
+REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
+
+
+def scan_referencias(text: str) -> set[int]:
+    """Índices (na lista REFERENCIAS) achados no texto, com a mesma normalização do scan_text."""
+    text = unicodedata.normalize("NFKC", text).translate(INVISIBLE)
+    joined = re.sub(r"[\r\n]+", "", text)
+    return {i for i, pat in enumerate(PATTERNS_REF) if pat.search(text) or pat.search(joined)}
 
 
 # Qualquer LOCKFILE, e não só o do pnpm: o app de smoke test (`apps/native-smoke/`) é instalado
@@ -218,10 +265,16 @@ for dirpath, dirnames, filenames in os.walk(root):
         rel = path.relative_to(root)
         for i in scan_text(str(rel)):  # o CAMINHO também não pode conter nome
             errors.append(f"{rel}: nome privado #{i} no caminho")
+        _ref_ok = path not in REF_FORA and not any(d in path.parents for d in REF_FORA_DIRS)
+        for i in (scan_referencias(str(rel)) if _ref_ok else ()):
+            errors.append(f"{rel}: referência de construção #{i} no caminho (check 1b)")
         # O arquivo da lista contém a lista: varrê-lo reprovaria a si mesmo. Caminho EXATO na raiz.
-        if path == root / ".nomes-privados" or path.suffix.lower() in SKIP_EXTS:
+        if (path in (root / ".nomes-privados", root / ".referencias")
+                or path.suffix.lower() in SKIP_EXTS):
             continue
         text = BASE64_RE.sub("base64,", decode_any(path.read_bytes()))
+        for i in (scan_referencias(text) if _ref_ok else ()):
+            errors.append(f"{rel}: referência de construção #{i} (check 1b)")
         if path.name in LOCKFILES:
             text = TERCEIRO_LOCK_RE.sub("<pacote-de-terceiro>", text)
         for i in scan_text(text):
@@ -345,7 +398,7 @@ def _sem_comentario(texto):
 # ── 4b. escala de breakpoints (o "enraizar" da responsividade) ─────
 # Antes: 7 larguras na mão (400/640/800/820/821/1100/1366), sem sistema — a barra
 # estourava e nada obrigava um plano de tela estreita. Agora a escala é única
-# (Tailwind, padrão de mercado 2026 / base do Untitled UI), definida nos tokens.
+# (o padrão de mercado de 2026), definida nos tokens.
 # @media não lê var(), então o CSS usa o valor literal e ESTE gate garante a escala.
 bp_src = (root / "packages/tokens/dist/aurea.tokens.css").read_text(encoding="utf-8")
 SCALE = {int(v) for v in re.findall(r"--breakpoint-[a-z0-9]+:\s*(\d+)px", bp_src)}
@@ -503,7 +556,7 @@ elif "NOTICE" not in icons_manifest.get("files", []):
 # EIXO DE ESPÉCIE, criado em 21/08/2026 (ATIVIDADE-2, G-DX-01). O registry só modelava
 # COMPONENTE, e a biblioteca exporta três hooks públicos — `useToast`, `useAureaStrings`,
 # `useSpriteUrl` — que não tinham ficha, página nem exemplo. Não era buraco do toast: era uma
-# espécie de superfície que o modelo não previa. O shadcn/ui tipa `registry:hook` desde sempre.
+# espécie de superfície que o modelo não previa. Uma das referências tipa `registry:hook` desde sempre.
 # `kind` é opcional e o padrão é `component`, para as fichas que já existiam não mudarem.
 KIND = {"component", "hook"}
 MATURITY = {"Draft", "Ready", "Stable", "Universal", "Deprecated"}
@@ -981,18 +1034,10 @@ if not BUILT_PATH.is_file():
     errors.append("BUILDING.md: falta scripts/built-components.json — a lista dos componentes "
                   "construídos sob o procedimento não tem referência")
 
-# ── 21. componente novo tem referência externa registrada ──────────────────
-# `QUALITY.md` #2 existe desde a Fase 10 e era cobrado "por pessoa" — ou seja, por lembrança.
-# A causa raiz de retrabalho medida duas vezes em auditoria é sempre a mesma: componente montado
-# de memória. Aqui o registro deixa de ser intenção.
-_refs_txt = (root / "docs/REFERENCES.md").read_text(encoding="utf-8")
-_sem_ref = [c for c in CONSTRUIDOS if not _cita(_refs_txt, c)]
-if _sem_ref:
-    errors.append(
-        f"referência não registrada: {len(_sem_ref)} componente(s) construído(s) sob o "
-        f"BUILDING.md não aparecem no REFERENCES.md: {', '.join(_sem_ref)}. Componente sem "
-        f"referência registrada foi construído de memória — é o defeito que o procedimento "
-        f"existe para impedir.")
+# ── 21. (saiu em 07/10/2026) ──────────────────────────────────────────────
+# O registro da leitura de referência de cada componente mora fora do repositório, com o
+# Victor, e a conferência dele também (ordem do Victor, 07/10/2026: referência de construção
+# não se publica). A regra do QUALITY.md #2 continua valendo; quem a cobra é o script privado.
 
 # ── 22. componente novo tem ficha COMPLETA ─────────────────────────────────
 # Para os 65 antigos, `props` era opcional e 43 não tinham (achado M8, FECHADO na Parte E do
@@ -1285,8 +1330,8 @@ for fp in sorted((root / "packages/react/src").glob("*.tsx")):
     if motores:
         porques.append(f"importa {', '.join(motores)} (motor de cliente que não publica a diretiva)")
     # A diretiva tem de ser a PRIMEIRA linha, e não só existir no arquivo: ela é prólogo, e
-    # empacotador nenhum a reconhece depois de um `import`. É a posição que Base UI e shadcn/ui
-    # usam — a A1 mandou copiar a posição, não o código.
+    # empacotador nenhum a reconhece depois de um `import`. É a posição que o Base UI e uma das
+    # referências usam — a A1 mandou copiar a posição, não o código.
     tem = bool(DIRETIVA_RE.match(bruto.split("\n", 1)[0]))
     if porques and not tem:
         errors.append(
@@ -1809,9 +1854,8 @@ if len(_por_versao) > 1:
 # strikethrough é o marcador, e ele é verificável sem adivinhar intenção.
 DOCS_VIVOS = ["README.md", "docs/AUREA.md", "docs/BUILDING.md", "docs/QUALITY.md", "docs/MAP.md"]
 # O `BUILDING.md` fica fora da regra de CAMINHO, e a razão saiu da primeira execução desta trava:
-# ele descreve as dezesseis referências de terceiro pelos caminhos INTERNOS delas —
-# `packages/mui-material/src`, `apps/www/app/components`, `packages/web/src/features/agents` —, que
-# começam com os mesmos `apps/` e `packages/` que os nossos e nunca vão existir aqui. Distinguir
+# ele descrevia as referências de terceiro pelos caminhos INTERNOS delas, que começam com os
+# mesmos `apps/` e `packages/` que os nossos e nunca vão existir aqui. Distinguir
 # "caminho nosso" de "caminho da referência" exige entender a frase em volta, e trava que adivinha
 # intenção reprova o que está certo. Ele continua sob a regra de VERSÃO, que não tem essa ambiguidade.
 SEM_REGRA_DE_CAMINHO = {"docs/BUILDING.md"}
@@ -2304,69 +2348,6 @@ for _cap in sorted(_publicas):
         errors.append(f"core: window.Aurea.{_cap} aponta para '{_quem}', que o pacote React não "
                       f"exporta — a contraparte foi renomeada ou removida")
 
-# ── 29. o estado de LEITURA da matriz não se descola da matriz ─────────────
-# `audit/activity-2/MATRIX.json` é gerado — `node audit/activity-2/matrix.mjs` recalcula o
-# veredito de máquina do zero. A única coisa ali que NÃO se recalcula é `estado`: a leitura
-# humana de cada célula, escrita à mão em `MATRIX-ESTADO.json`, e sem a qual uma sessão que
-# lesse 63 células e acabasse os tokens perderia as 63.
-#
-# Duas camadas que podem se descolar, e as duas em silêncio:
-#
-#   ÓRFÃ         estado escrito à mão para uma célula que a matriz não produz mais — capacidade
-#                fora do CROSSREF, eixo renomeado, chave digitada errada. A leitura existe no
-#                arquivo, e a matriz não a usa.
-#   DESATUALIZADA  a matriz foi regerada e o veredito de máquina mudou POR BAIXO de uma leitura
-#                já feita (fonte nova na tabela FONTES, extrator corrigido, ficha alterada). A
-#                decisão continua exibida como se a evidência dela ainda existisse.
-#   FORA DE SINCRONIA  alguém editou `MATRIX-ESTADO.json` e não rodou `matrix.mjs`. O estado
-#                versionado diz uma coisa, a matriz versionada mostra outra.
-#
-# O teste `tests/unit/matriz-estado.test.tsx` prova o MECANISMO contra um fixture. Este check
-# prova os ARQUIVOS versionados — que é outro defeito, e o mecanismo certo apontado para um
-# arquivo desatualizado passaria naquele teste inteiro.
-_dir_m = root / "audit/activity-2"
-_arq_estado, _arq_matriz = _dir_m / "MATRIX-ESTADO.json", _dir_m / "MATRIX.json"
-if _arq_estado.exists() and _arq_matriz.exists():
-    _ESTADOS_LEITURA = {"PENDING", "IN_REVIEW", "CONFIRMED", "EQUIVALENT", "AUREA_SUPERA",
-                        "AUREA_INFERIOR", "N/A", "INCONCLUSIVE"}
-    _est = json.loads(_arq_estado.read_text(encoding="utf-8")).get("celulas", {})
-    _mat = json.loads(_arq_matriz.read_text(encoding="utf-8"))
-    # As células da matriz, recontadas AQUI a partir das linhas — não lidas de um campo que o
-    # próprio gerador escreveu. Campo resumido concorda consigo mesmo por construção.
-    _cels = {}
-    for _l in _mat.get("linhas", []):
-        for _eixo, _c in (_l.get("comparacao") or {}).items():
-            _cels[f"{_l['capacidade']}\u00b7{_eixo}"] = _c
-    for _k, _v in sorted(_est.items()):
-        if _v.get("estado") not in _ESTADOS_LEITURA:
-            errors.append(f"MATRIX-ESTADO.json: `{_k}` tem estado `{_v.get('estado')}`, fora do "
-                          f"vocabulário fechado ({' · '.join(sorted(_ESTADOS_LEITURA))})")
-            continue
-        for _campo in ("porque", "em"):
-            if not _v.get(_campo):
-                errors.append(f"MATRIX-ESTADO.json: `{_k}` está sem `{_campo}` — estado sem razão "
-                              f"e sem data é opinião anônima")
-        _c = _cels.get(_k)
-        if _c is None:
-            errors.append(f"MATRIX-ESTADO.json: `{_k}` é ÓRFÃ — a matriz não produz essa célula. "
-                          f"A leitura está no arquivo e a matriz não a usa. Corrija a chave "
-                          f"(`<capacidade>\u00b7<eixo>`) ou remova a linha registrando por quê")
-            continue
-        if _c.get("estado") != _v["estado"]:
-            errors.append(f"matriz: `{_k}` está `{_c.get('estado')}` em MATRIX.json e "
-                          f"`{_v['estado']}` em MATRIX-ESTADO.json — rode "
-                          f"`node audit/activity-2/matrix.mjs` e versione a saída")
-        _epoca = _v.get("veredictoNaEpoca")
-        if _epoca and _epoca != _c.get("veredito"):
-            errors.append(f"matriz: `{_k}` foi lida contra o veredito `{_epoca}` e hoje a máquina "
-                          f"diz `{_c.get('veredito')}` — a evidência mudou por baixo da decisão. "
-                          f"Releia a célula e atualize `veredictoNaEpoca`, ou o estado")
-    # E o caminho inverso: célula da matriz marcada como vinda do arquivo sem estar nele.
-    for _k, _c in sorted(_cels.items()):
-        if _c.get("_estadoOrigem") == "MATRIX-ESTADO.json" and _k not in _est:
-            errors.append(f"matriz: `{_k}` diz vir de MATRIX-ESTADO.json e não está lá — "
-                          f"MATRIX.json está velho: rode `node audit/activity-2/matrix.mjs`")
-
 # ── 30. teclado declarado é teclado MEDIDO ─────────────────────────────────
 # O `G-A11Y-07` mediu em 27/08/2026 o que estava por trás das fichas que declaravam
 # `a11y.keyboard`: **o `DataGrid` prometia `role: "grid"` e as quatro setas, e as quatro eram
@@ -2402,7 +2383,7 @@ TECLADO_SEM_MEDICAO = {
     "AppShell":            "casca de aplicação inteira: o teclado é o do link de pular e o das regiões",
     "CommandPaletteShell": "paleta que abre por atalho global — o banco precisa disparar o atalho",
     "NotificationCenter":  "painel que abre e tem lista dentro; dois níveis de foco",
-    "MediaPlayer":         "teclado do media-chrome, motor de terceiro, com estado de reprodução",
+    "MediaPlayer":         "teclado do player sobre o <video> nativo, com estado de reprodução",
     "TableOfContents":     "o teclado é o dos links; medir exige âncoras de verdade na página",
     "ToolbarButton":       "mora dentro do Toolbar, e o banco mede o grupo, não a peça isolada",
     "useToast":            "não é componente: é gancho, e o aviso vive num portal com tempo próprio",
@@ -2522,36 +2503,6 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
                 f"é de token de KeyboardEvent.key (modificador com '+'). Frase sobre teclado vai "
                 f"em `a11y.keyboardNote`, quando há medição atrás, ou em `a11y.nota`. Dentro da "
                 f"lista ela conta como tecla declarada e nenhuma medição pode alcançá-la")
-
-# ── 31. contagem publicada é contagem GERADA ───────────────────────────────
-# O CLAUDE.md manda não escrever contagem à mão em documento nenhum, e o `STATE.md` já é gerado
-# por causa disso. O placar da leitura da matriz não era, e falhou exatamente como previsto: o
-# commit que fechou o `G-A11Y-11` mudou uma célula e não mexeu no documento, então
-# `25-LEITURA-COMPLETA.md` passou a publicar 128/44 enquanto `MATRIX-ESTADO.json` dizia 129/43.
-# Um documento que conta errado não é documento desatualizado; é evidência falsa sobre o estado
-# do projeto, e esta auditoria inteira se apoia nesses números.
-# Agora o bloco é gerado por `matrix.mjs` e conferido aqui — as duas metades da mesma regra.
-_doc_leitura = root / "audit/activity-2/25-LEITURA-COMPLETA.md"
-_estado_json = root / "audit/activity-2/MATRIX-ESTADO.json"
-if _doc_leitura.exists() and _estado_json.exists():
-    _txt = _doc_leitura.read_text(encoding="utf-8")
-    _abre = "<!-- PLACAR:INICIO"
-    if _abre not in _txt:
-        errors.append("check 31: 25-LEITURA-COMPLETA.md perdeu o bloco PLACAR gerado — sem ele a "
-                      "contagem volta a ser escrita à mão, que é o defeito que este check existe "
-                      "para pegar")
-    else:
-        _cel = json.loads(_estado_json.read_text(encoding="utf-8")).get("celulas", {})
-        _cont = collections.Counter(v.get("estado") for v in _cel.values())
-        _bloco = _txt[_txt.index(_abre):_txt.index("<!-- PLACAR:FIM -->")]
-        if f"**{len(_cel)} de {len(_cel)} células**" not in _bloco:
-            errors.append(f"check 31: o placar publicado não bate com MATRIX-ESTADO.json, que tem "
-                          f"{len(_cel)} células. Rode `node audit/activity-2/matrix.mjs`")
-        for _e, _n in _cont.items():
-            if f"| `{_e}` | **{_n}** |" not in _bloco:
-                errors.append(f"check 31: o placar publicado não diz `{_e}` = {_n}, que é o que "
-                              f"MATRIX-ESTADO.json tem. Rode `node audit/activity-2/matrix.mjs` — "
-                              f"o bloco é GERADO, não se edita à mão")
 
 # ── 37. o alvo NATIVO das fontes não fica para trás do web ─────────────────
 # Lote 0 do NATIVE.md (§5.2.1), 02/09/2026. Mesmo desenho do check 36 e pela mesma razão: cobra
@@ -3067,7 +3018,7 @@ if _rel42.is_file():
 # A razão está escrita nas duas docs, lidas na fonte em 17/09/2026:
 #   React Native, sobre a prop `accessible`:
 #       "VoiceOver disallowing nested accessibility elements"
-#   Apple, sobre o que é uma peça marcada assim:
+#   a documentação de acessibilidade do iOS, sobre o que é uma peça marcada assim:
 #       "An individual view does not contain any other views that need to be accessible"
 #       "you need to make sure that the container view itself is not accessible"
 #

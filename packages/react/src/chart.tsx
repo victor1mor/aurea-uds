@@ -3,17 +3,17 @@
 // componente que precisa do `recharts`, que é peer OPCIONAL. Se morasse em data-display.tsx,
 // quem importa Table baixaria um motor de gráfico inteiro — que é o achado A5 visto de perto.
 //
-// NÃO ESCREVEMOS MOTOR DE GRÁFICO. Duas das quatro referências (shadcn/ui e Untitled UI React)
+// NÃO ESCREVEMOS MOTOR DE GRÁFICO. Duas das quatro referências
 // envelopam o MESMO motor, o Recharts, e nenhuma das quatro desenha eixo à mão. O que é nosso
 // aqui é só a pele: a caixa, o tooltip e a legenda. Escala, eixo, curva e interação são dele.
 //
 // O QUE FICOU DE FORA, e por quê (BUILDING.md passo 5 — escopo menor que o da referência):
-//   • o `ChartConfig` do shadcn (mapa dataKey → {label, color, theme}). MEDIDO em 01/08/2026: o
+//   • o `ChartConfig` de uma delas (mapa dataKey → {label, color, theme}). MEDIDO em 01/08/2026: o
 //     payload que o Recharts entrega ao `content` já traz `name` (do prop `name` da série) e
 //     `color` resolvido. O objeto de configuração é indireção para reconstruir o que já chega.
 //     E o eixo `theme:{light,dark}` não existe aqui: `var(--chart-2)` já troca com o data-theme.
 //   • o par `ChartTooltip`/`ChartTooltipContent`. No Recharts 2 o filho tinha de ser o
-//     componente DELES, o que forçava o shadcn a reexportar o primitivo e pôr a pele no
+//     componente DELES, o que forçava essa referência a reexportar o primitivo e pôr a pele no
 //     `content`. MEDIDO no 3.10.1: um componente NOSSO como filho é reconhecido. Então é uma
 //     peça só, não duas.
 //   • prop de altura. Dimensão não é número (check 23): a caixa mede pelo CSS (`.chart`), e

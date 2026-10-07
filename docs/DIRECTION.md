@@ -79,7 +79,7 @@ Os inventários são exemplos do que *poderia* povoar cada categoria — não um
 10. Observability       → logs, traces, metrics, health, incidents, SLO/SLA
 11. Communication       → Messaging · Inbox · Calls
 12. Collaboration       → cursores, comentários, presença, review/approval
-13. Workflow / PM       → Kanban, Gantt, board, automation (camada Kibo)
+13. Workflow / PM       → Kanban, Gantt, board, automation (camada de alto nível de uma das referências)
 14. Scheduling          → calendars, agenda, booking
 15. Maps & Location     → map, markers, routes, layers
 16. Commerce & Billing  → produto, carrinho, checkout, faturamento
@@ -95,9 +95,9 @@ Os inventários são exemplos do que *poderia* povoar cada categoria — não um
 ```
 
 Referências de organização (só organização, nunca cópia/identidade — AUREA.md §2):
-Untitled UI (foundations / base / application / examples / marketing), Kibo UI
-(components / blocks / patterns; componentes de alto nível como Gantt/Kanban),
-Carbon (patterns como combinação reutilizável).
+uma organiza em foundations / base / application / examples / marketing; outra em
+components / blocks / patterns (componentes de alto nível como Gantt/Kanban); uma
+terceira trata patterns como combinação reutilizável.
 
 ---
 

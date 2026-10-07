@@ -2,7 +2,7 @@ import {test, expect} from "@playwright/test";
 
 // G-AXIS-04 — a PROVA da arquitetura, e o gate contra regressão da API responsiva.
 //
-// O achado: a Radix Themes tem eixo responsivo em 47 de 50 componentes e a Aurea tinha ZERO. A
+// O achado: uma das referências tem eixo responsivo em 47 de 50 componentes e a Aurea tinha ZERO. A
 // decisão do Victor foi ter os DOIS mecanismos — viewport e container —, explícitos na API, com
 // abstração compartilhada antes dos componentes, CSS-first e sem nada observando largura.
 //

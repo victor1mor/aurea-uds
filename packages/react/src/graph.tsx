@@ -12,14 +12,14 @@
 //
 // ── O MOTOR, e por que este ──────────────────────────────────────────────────────────────
 // Autorizado pelo Victor em 09/08/2026, e a autorização foi RECONFIRMADA por medição depois de
-// eu mesmo levantar dúvida. A dúvida era boa e a resposta desfez: o `trace-graph-view/` do
-// langfuse — a referência mais próxima do domínio — desenha `<div>` posicionados por ELK e NÃO
+// eu mesmo levantar dúvida. A dúvida era boa e a resposta desfez: a vista de grafo de rastreio
+// da referência mais próxima do domínio desenha `<div>` posicionados por um motor de layout de terceiro e NÃO
 // usa React Flow, e o React Flow não faz layout nenhum, então adotá-lo não entrega um grafo
-// pronto. O que decidiu foi o ALVO, que o Victor nomeou: uma aplicação tipo n8n. Aí a conta
+// pronto. O que decidiu foi o ALVO, que o Victor nomeou: uma aplicação de automação de fluxos. Aí a conta
 // vira outra, e ela é medida:
-//   • a `activepieces-main`, que já está em `Referencia/` e é concorrente direta do n8n, usa
-//     `@xyflow/react` 12.3.5 — está no `package.json` dela;
-//   • o próprio n8n usa **Vue Flow**, o irmão Vue do React Flow, da mesma equipe xyflow.
+//   • uma das referências, que já está em `Referencia/` e é concorrente direta do líder desse tipo de aplicação, usa
+//     `@xyflow/react` — está no `package.json` dela;
+//   • o próprio líder usa o irmão Vue do React Flow, da mesma equipe xyflow.
 // Grafo de LEITURA não precisa de motor. EDITOR precisa, e o padrão de mercado para este
 // editor é o xyflow. Registro completo no `REFERENCES.md`.
 //
@@ -56,7 +56,7 @@ export interface GraphEdgeItem{id?:string;from:string;to:string;label?:string;an
 //
 // ponytail: sem minimização de cruzamento de arestas — grafo denso vai desenhar linhas se
 // cruzando, e isso é aceitável para dependência (dezenas de nós), não para mil. O caminho de
-// subida é o `elkjs`, que é o que o langfuse usa, e ele é DEPENDÊNCIA NOVA: entra com
+// subida é uma biblioteca de layout automático de grafos, a que a referência usa, e ela é DEPENDÊNCIA NOVA: entra com
 // autorização, não de contrabando.
 const LARGURA=180,ALTURA=52,VAO_X=90,VAO_Y=24;
 // O VÃO ENTRE COLUNAS CRESCE COM O RÓTULO (A-09, 23/09/2026). Com o rótulo legível, a primeira
@@ -114,12 +114,12 @@ function dispor(nodes:GraphNodeItem[],edges:GraphEdgeItem[]):{posicoes:Map<strin
 }
 
 // O nó é NOSSO, e é o ponto em que este componente deixa de ser "React Flow com outra cor".
-// O `GraphNode.tsx` do langfuse declara o motivo em uma linha — *"Real-HTML accessibility (the
-// win over the old canvas renderer)"* —: nó desenhado em canvas não existe para o teclado nem
+// O componente de nó da referência declara o motivo em uma linha — a acessibilidade de HTML de
+// verdade, que é a vantagem sobre o antigo desenho em canvas —: nó desenhado em canvas não existe para o teclado nem
 // para o leitor de tela. Aqui ele é `<button>` de verdade quando dá para selecionar.
 //
-// O que NÃO entrou: as DEZ cores por tipo de nó da referência (`AGENT` roxo, `TOOL` laranja,
-// `GENERATION` magenta…). É a quarta vez que esta parte recusa a mesma coisa. `kind` sai como
+// O que NÃO entrou: as DEZ cores por tipo de nó da referência (agente roxo, ferramenta laranja,
+// geração magenta…). É a quarta vez que esta parte recusa a mesma coisa. `kind` sai como
 // TEXTO, que é legível também por quem não separa as cores.
 function NoAurea({data}:NodeProps){
   const d=data as unknown as{label:string;kind?:string;detail?:ReactNode;selecionado?:boolean;aoSelecionar?:()=>void;conectavel?:boolean};

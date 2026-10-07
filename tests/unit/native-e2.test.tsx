@@ -1,5 +1,5 @@
-// E2 (Lote 3, decisão do Victor de 25/09/2026) · o `Button` do nativo obedece o pai, como o do
-// HeroUI Native e o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, que vencia o
+// E2 (Lote 3, decisão do Victor de 25/09/2026) · o `Button` do nativo obedece o pai, como o da
+// referência no nativo e o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, que vencia o
 // `alignItems: "center"` do pai: no `EmptyState` o botão ficava à esquerda e o resto no meio.
 // O dublê não calcula layout; o que se prova é o pedido ao motor. A prova de aparelho é o bloco
 // E2 do `apps/native-smoke`.
@@ -26,7 +26,7 @@ describe("E2 · o Button obedece o pai", () => {
     render(<Envolve><EmptyState title="Nada aqui" action={<Button>Lançar um gasto</Button>} /></Envolve>);
     expect(alvo().alignSelf).toBeUndefined();
   });
-  it("IconButton tem largura fixa, como o só-ícone do HeroUI: nunca estica", () => {
+  it("IconButton tem largura fixa, como o só-ícone da referência: nunca estica", () => {
     render(<Envolve><IconButton name="plus" label="Adicionar" /></Envolve>);
     expect(alvo().alignSelf).toBeUndefined();
     expect(alvo().width).toBe(Math.max(t.size.controlHMd, t.size.targetMin));

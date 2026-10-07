@@ -1,7 +1,7 @@
 // PADRÃO do arquivo de PATTERN — ver o cabeçalho de `Button.mjs`.
 //
 // Parte da cobertura do `G-COMP-01`: 77 dos 90 componentes tinham ZERO composição resolvida,
-// contra cobertura total no kibo e na reui. O alvo é nenhum componente em zero.
+// contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 //
 // O conteúdo vive num PORTAL: `renderToStaticMarkup` não renderiza portal (medido, 0 bytes).
 // O preview mostra o DISPARADOR real e o código a composição inteira — concessão declarada.

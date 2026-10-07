@@ -3,7 +3,7 @@
   "category": "Data Display",
   "layer": "Primitive",
   "maturity": "Stable",
-  "summary": "A heading, h1 to h6. The level picks both the element and the size, as in HeroUI.",
+  "summary": "A heading, h1 to h6. The level picks both the element and the size, as in the reference library.",
   "icon": "file-text",
   "platforms": {
     "web": "stable",
@@ -79,13 +79,13 @@
       "name": "level",
       "type": "1 | 2 | 3 | 4 | 5 | 6",
       "default": "1",
-      "description": "The heading level: it renders h1…h6 and takes that role's size (4xl down to base, semibold, tight leading). There is no separate size prop, as in HeroUI — the level is the design."
+      "description": "The heading level: it renders h1…h6 and takes that role's size (4xl down to base, semibold, tight leading). There is no separate size prop, as in the reference library — the level is the design."
     },
     {
       "name": "color",
       "type": "\"default\" | \"muted\"",
       "default": "\"default\"",
-      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+      "description": "Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
     },
     {
       "name": "weight",

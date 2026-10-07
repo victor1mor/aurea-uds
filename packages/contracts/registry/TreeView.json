@@ -67,7 +67,7 @@
       "name": "items",
       "type": "TreeNode[]",
       "default": "—",
-      "description": "The tree: {id, label, icon?, children?, hasChildren?}. Nesting is by containment — the group lives inside its treeitem, with no aria-owns to keep in sync. `hasChildren: true` makes a node openable before its children exist (React Aria calls it hasChildItems); the children arrive later through `items`."
+      "description": "The tree: {id, label, icon?, children?, hasChildren?}. Nesting is by containment — the group lives inside its treeitem, with no aria-owns to keep in sync. `hasChildren: true` makes a node openable before its children exist (one of the references calls it hasChildItems); the children arrive later through `items`."
     },
     {
       "name": "defaultExpandedIds",

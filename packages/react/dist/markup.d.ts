@@ -48,7 +48,7 @@ export interface ClusterProps extends DivProps {
 }
 export declare function Cluster({ gap, align, justify, wrap, className, ...props }: ClusterProps): React.JSX.Element;
 /**
- * A largura mínima da coluna, por nome — AN-08 (03/10/2026). O HeroUI não tem `Grid`, e nenhum dos
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026). A referência não tem `Grid`, e nenhum dos
  * quatro números é novo: cada um já mede uma grade ou uma caixa da Aurea (ver `.grid-min-*` no CSS).
  * `md` é o padrão de sempre.
  */
@@ -176,7 +176,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     dot?: boolean;
     leading?: ReactNode;
     trailing?: ReactNode;
-    /** Foto redonda no início — o `BadgeWithImage` da referência. */
+    /** Foto redonda no início — o selo com imagem da referência. */
     image?: string;
     imageAlt?: string;
     /** Conteúdo numérico. Passa por `max` e some em zero, salvo `showZero`. */
@@ -187,12 +187,12 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     fit?: BadgeFit;
     /** Liga o modo SOBREPOSTO e escolhe o canto. `children` passa a ser o que se decora. */
     anchor?: BadgePlacement;
-    /** `circle` recolhe o canto em 14% — é o `overlap` da MUI, para avatar redondo. */
+    /** `circle` recolhe o canto em 14% — é a sobreposição circular da referência, para avatar redondo. */
     anchorShape?: "square" | "circle";
     /** Esconde sem tirar o filho do lugar. */
     invisible?: boolean;
     /** Conteúdo do badge no modo sobreposto (no modo chip, quem manda é `children`).
-     *  Nome da MUI, e não `content`: este colide com o atributo HTML de mesmo nome. */
+     *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
     badgeContent?: ReactNode;
 }
 export declare function Badge({ variant, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
@@ -204,7 +204,7 @@ export interface ProgressProps {
     value?: number;
     /** O nome que o leitor de tela anuncia. Não aparece. */
     label?: string;
-    /** O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo
+    /** O texto de apoio, no alto à direita — a saída de texto da barra de progresso da referência: velocidade, tempo
      *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
     detail?: ReactNode;
     tone?: ProgressTone;

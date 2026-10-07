@@ -101,7 +101,7 @@
       "$type": "dimension",
       "$value": "{text-sm}",
       "$deprecated": "Use text-sm. Sai na 1.0 (R-10, 01/10/2026).",
-      "$description": "APELIDO do text-sm (14), e não um degrau: o HeroUI não tem md, e cada nome da escala é um tamanho só (R-10). Até 01/10/2026 era um 0.875rem próprio, que valia o mesmo por coincidência escrita (ADR-0050, escolha 1). Continua existindo para não quebrar quem usa; sai na 1.0. Código novo usa text-sm."
+      "$description": "APELIDO do text-sm (14), e não um degrau: a referência não tem md, e cada nome da escala é um tamanho só (R-10). Até 01/10/2026 era um 0.875rem próprio, que valia o mesmo por coincidência escrita (ADR-0050, escolha 1). Continua existindo para não quebrar quem usa; sai na 1.0. Código novo usa text-sm."
     },
     "text-base": {
       "$type": "dimension",
@@ -311,7 +311,7 @@
         "value": 32,
         "unit": "px"
       },
-      "$description": "Os cantos de cima da folha que sobe de baixo (BottomSheet, e a lista do Select e do Combobox no nativo). 32 e não o 22 de painel: a folha acompanha o canto da tela do telefone. É o rounded-4xl do bottom-sheet do HeroUI Native 1.0.10. Decisão do Victor, 06/10/2026 (HER-03, ADR-0058)."
+      "$description": "Os cantos de cima da folha que sobe de baixo (BottomSheet, e a lista do Select e do Combobox no nativo). 32 e não o 22 de painel: a folha acompanha o canto da tela do telefone. É o canto da folha de baixo da referência. Decisão do Victor, 06/10/2026 (HER-03, ADR-0058)."
     },
     "radius-control": {
       "$type": "dimension",
@@ -338,7 +338,7 @@
         "value": 2,
         "unit": "px"
       },
-      "$description": "A espessura da linha de foco, a mesma em todo o sistema — B-09, 24/09/2026. Mudar o foco inteiro é mudar esta linha. A cor é --focus-strong. O HeroUI 3.2.6 faz igual: um anel só (`focus-ring`), 2px."
+      "$description": "A espessura da linha de foco, a mesma em todo o sistema — B-09, 24/09/2026. Mudar o foco inteiro é mudar esta linha. A cor é --focus-strong. A referência faz igual: um anel só, 2px."
     },
     "focus-offset": {
       "$type": "dimension",
@@ -346,12 +346,12 @@
         "value": 2,
         "unit": "px"
       },
-      "$description": "O afastamento da linha de foco, para fora da peça — B-09. Dentro de contêiner recortado (linha de tabela, item de árvore) a linha vai para DENTRO: calc(-1 * var(--focus-width)). O HeroUI 3.2.6 tem o mesmo número: --ring-offset-width: 2px."
+      "$description": "O afastamento da linha de foco, para fora da peça — B-09. Dentro de contêiner recortado (linha de tabela, item de árvore) a linha vai para DENTRO: calc(-1 * var(--focus-width)). A referência tem o mesmo número: 2px."
     },
     "opacity-disabled": {
       "$type": "number",
       "$value": 0.5,
-      "$description": "A opacidade do que está desativado — R-07, 24/09/2026. É o único token de opacidade do HeroUI (`--disabled-opacity: 0.5` no @heroui/styles 3.2.6, usado 51 vezes) e o 0,5 que os campos, o menu e o Combobox da Aurea já usavam. O 0,45 do botão desativado (`.btn:disabled`) continua fora, de propósito: mudar é mudar a aparência publicada."
+      "$description": "A opacidade do que está desativado — R-07, 24/09/2026. É o único token de opacidade da referência (0.5 no pacote web dela, usado 51 vezes) e o 0,5 que os campos, o menu e o Combobox da Aurea já usavam. O 0,45 do botão desativado (`.btn:disabled`) continua fora, de propósito: mudar é mudar a aparência publicada."
     },
     "shadow-md": {
       "$type": "shadow",
@@ -487,7 +487,7 @@
     },
     "sidebar-rail": {
       "$type": "dimension",
-      "$description": "Panel width of the collapsed sidebar: the icon rail. 4.25rem = 68px, the number measured in the reference source on 18/08/2026 (sidebar-slim.tsx: MAIN_SIDEBAR_WIDTH = 68). The AppShell track adds the floating panel's two space-4 margins; the flush variant has no margin and uses this value raw. Reserving only 68px for a floating rail consumes 32px and leaves a 36px panel, which is the capsule defect this token and its track calculation prevent.",
+      "$description": "Panel width of the collapsed sidebar: the icon rail. 4.25rem = 68px, the number measured in the reference source on 18/08/2026. The AppShell track adds the floating panel's two space-4 margins; the flush variant has no margin and uses this value raw. Reserving only 68px for a floating rail consumes 32px and leaves a 36px panel, which is the capsule defect this token and its track calculation prevent.",
       "$value": {
         "value": 4.25,
         "unit": "rem"
@@ -508,7 +508,7 @@
       }
     },
     "breakpoint-2xs": {
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both.",
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both.",
       "$type": "dimension",
       "$value": {
         "value": 360,
@@ -516,7 +516,7 @@
       }
     },
     "breakpoint-xs": {
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both.",
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both.",
       "$type": "dimension",
       "$value": {
         "value": 480,
@@ -524,7 +524,7 @@
       }
     },
     "breakpoint-sm": {
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both.",
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both.",
       "$type": "dimension",
       "$value": {
         "value": 640,
@@ -537,7 +537,7 @@
         "value": 768,
         "unit": "px"
       },
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
     },
     "breakpoint-lg": {
       "$type": "dimension",
@@ -545,7 +545,7 @@
         "value": 1024,
         "unit": "px"
       },
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
     },
     "breakpoint-xl": {
       "$type": "dimension",
@@ -553,7 +553,7 @@
         "value": 1280,
         "unit": "px"
       },
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
     },
     "breakpoint-2xl": {
       "$type": "dimension",
@@ -561,7 +561,7 @@
         "value": 1536,
         "unit": "px"
       },
-      "$description": "Responsive scale (Tailwind, the de-facto 2026 standard; base of Untitled UI). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
+      "$description": "Responsive scale (the de-facto 2026 standard; base of one of the references). Mobile-first: a rule applies at this width and up. ONE scale for BOTH measurables (G-AXIS-04): a name always means the same number of pixels, and the API says whether those pixels are the viewport's or the container's — that is what keeps `md` from meaning two things. `2xs` and `xs` exist because containers are routinely narrower than any viewport: a sidebar is 300px and a card column is 400px, and without them the scale's floor (640) would put every container in the same bucket. @media/@container can't read var(), so CSS uses the literal value — validate.py check 4b guards the scale on both."
     },
     "control-h-xs": {
       "$type": "dimension",

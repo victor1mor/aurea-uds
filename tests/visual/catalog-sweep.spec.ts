@@ -27,7 +27,7 @@ const avisar = (texto: string) => {
   console.log(`::warning::${texto}`);
 };
 
-// A escala Tailwind travada pelo gate do projeto, mais os dois extremos reais de celular.
+// A escala de pontos de quebra travada pelo gate do projeto, mais os dois extremos reais de celular.
 const WIDTHS = [320, 375, 640, 768, 1024, 1280, 1536];
 const AXE = join(process.cwd(), "node_modules/.pnpm/axe-core@4.10.2/node_modules/axe-core/axe.min.js");
 

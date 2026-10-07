@@ -43,7 +43,7 @@ export function Dialog({ open, title, children, footer, onClose, size = "md", di
 // sobrevive a trocar um dos dois — e reprova quando os dois somem.
 //
 // ESCOPO MENOR que a referência (BUILDING.md §5): lá são nove peças compostas
-// (Root/Trigger/Content/Header/Title/Description/Footer/Cancel/Action). Aqui é uma prop `open`,
+// (raiz, gatilho, conteúdo, cabeçalho, título, descrição, rodapé, cancelar e ação). Aqui é uma prop `open`,
 // como no `Dialog` e no `Drawer` — a composição não acrescenta escolha nenhuma num diálogo cujo
 // corpo é uma frase e dois botões.
 //
@@ -78,7 +78,7 @@ export function Popover({ trigger, title, children, side = "bottom" }) { const p
 // não de aparência: a Tooltip é um RÓTULO curto (`role="tooltip"`, some ao mover o mouse); o
 // Popover abre por CLIQUE e pode conter foco; este é uma PRÉVIA rica que aparece ao repousar o
 // ponteiro sobre um link e cujo conteúdo é alcançável — o cartão de perfil ao passar sobre um
-// nome. As três referências que o têm chamam de hover-card ou preview-card e concordam nisso.
+// nome. As três referências que o têm chamam de cartão de sobrevoo ou de prévia e concordam nisso.
 // Superfície reusa `.popover` de propósito: é a mesma camada flutuante do sistema, e dar a ela
 // um segundo nome criaria duas peles para a mesma coisa.
 // Por depender de repouso do ponteiro, NÃO serve para informação essencial — quem navega só por

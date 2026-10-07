@@ -90,11 +90,11 @@ export function Timeline({ items }) { return _jsx("ol", { className: "timeline",
 export function Prose({ className, ...props }) { return _jsx("div", { className: cx("prose", className), ...props }); }
 const tipografia = (tipo, { align, color, weight, truncate }, className) => cx("typography", `typography-${tipo}`, color === "muted" && "typography-muted", weight && `typography-weight-${weight}`, align && `typography-align-${align}`, truncate && "typography-truncate", className);
 export function Text({ type = "body", align, color, weight, truncate, className, ...props }) { return _jsx("span", { className: tipografia(type, { align, color, weight, truncate }, className), ...props }); }
-// O nível decide o elemento E o tamanho, como no HeroUI: um `h2` tem a cara de título 2.
+// O nível decide o elemento E o tamanho, como na referência: um `h2` tem a cara de título 2.
 export function Heading({ level = 1, align, color, weight, truncate, className, ...props }) { const Tag = `h${level}`; return _jsx(Tag, { className: tipografia(`h${level}`, { align, color, weight, truncate }, className), ...props }); }
 export function Paragraph({ size = "base", align, color, weight, truncate, className, ...props }) { return _jsx("p", { className: tipografia(size === "base" ? "body" : `body-${size}`, { align, color, weight, truncate }, className), ...props }); }
 export function Code({ align, color, weight, truncate, className, ...props }) { return _jsx("code", { className: tipografia("code", { align, color, weight, truncate }, className), ...props }); }
-// `max` com `+` é o idioma universal do contador (MUI, Ant, Material 3). Exportada porque quem
+// `max` com `+` é o idioma universal do contador (três das referências o usam). Exportada porque quem
 // escreve o nome acessível precisa do MESMO texto — "99+ unread" tem de bater com o que se vê.
 export function formatBadgeCount(count, max = 99) { return count > max ? `${max}+` : String(count); }
 export function Badge({ variant = "neutral", emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, children, className, ...props }) {
@@ -105,15 +105,15 @@ export function Badge({ variant = "neutral", emphasis = "soft", size = "md", dot
     const chip = _jsxs("span", { className: cx("badge", variant !== "neutral" && `badge-${variant}`, emphasis !== "soft" && `badge-${emphasis}`, size !== "md" && `badge-${size}`, fit === "content" && !anchor && "badge-fit", anchor && `badge-overlay badge-at-${anchor}`, anchor && anchorShape === "circle" && "badge-on-circle", anchor && soPonto && "badge-is-dot", className), ...props, children: [dot && !soPonto && _jsx("span", { className: "badge-dot" }), image && _jsx("img", { className: "badge-image", src: image, alt: imageAlt ?? "" }), leading, miolo, trailing] });
     if (!anchor)
         return chip;
-    // Some em zero por padrão, como a MUI: caixa de entrada zerada não merece um "0" no canto.
+    // Some em zero por padrão, como na referência: caixa de entrada zerada não merece um "0" no canto.
     const escondido = invisible || (count === 0 && !showZero) || (miolo == null && !dot);
     // `aria-hidden` no contador, e o número vai para o nome de QUEM É DECORADO — regra da própria
-    // documentação da MUI e das três fontes de acessibilidade lidas em 17/08/2026. Sem isso, o
+    // documentação da referência e das três fontes de acessibilidade lidas em 17/08/2026. Sem isso, o
     // botão do sino é anunciado "sino 8" e ninguém sabe o que é o 8.
     return _jsxs("span", { className: "badge-anchor", children: [children, !escondido && React.cloneElement(chip, { "aria-hidden": true })] });
 }
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
-// de antes, mais a classe da caixa de fora. A anatomia é a do `ProgressBar` do HeroUI 3.2.6: a
+// de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
 export function Progress({ value, label, detail, tone = "brand", className }) {
     const semTotal = value == null || Number.isNaN(value);

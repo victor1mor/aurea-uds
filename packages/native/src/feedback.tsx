@@ -33,11 +33,11 @@ import type {AureaTokens} from "./tokens.js";
 const folha = criarFolha((t: AureaTokens) => ({
   // ── Spinner ────────────────────────────────────────────────────────────────────────────────
   // Um ANEL, e não o `ActivityIndicator` do React Native. Não é preferência: o `ActivityIndicator`
-  // desenha a rosquinha do Material no Android e a coroa do iOS — duas aparências que não são a
-  // Aurea, e o `CLAUDE.md` proíbe Material como aparência em voz alta. O anel é reprodutível
+  // desenha a rosquinha do sistema no Android e a coroa do iOS — duas aparências que não são a
+  // Aurea, e o `CLAUDE.md` proíbe a primeira como aparência em voz alta. O anel é reprodutível
   // com borda, e `borderRightColor: transparent` existe no RN igual ao CSS.
   // HER-01: a ÚNICA peça com o canto `circular`, declarada. O anel GIRA, e um contorno que não
-  // seja círculo perfeito balança ao girar. O `heroui-native` 1.0.10 também deixa o `Spinner` de
+  // seja círculo perfeito balança ao girar. A referência também deixa o `Spinner` de
   // fora das 24 peças com canto contínuo.
   anel: {borderWidth: 2, borderRightColor: "transparent", ...canto(t.size.radiusFull, "circular")},
 
@@ -49,7 +49,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ── Progress ───────────────────────────────────────────────────────────────────────────────
   trilho: {height: 8, ...canto(t.size.radiusFull), backgroundColor: t.color.surface3, overflow: "hidden"},
   preenchimento: {height: "100%", ...canto(t.size.radiusFull), backgroundColor: t.color.primary},
-  // AN-07: a caixa com o texto de apoio em cima — a grade do HeroUI, `gap-1` até o trilho, a saída
+  // AN-07: a caixa com o texto de apoio em cima — a grade da referência, o vão `space1` até o trilho, a saída
   // à direita em algarismos de largura igual.
   campoProgresso: {gap: t.size.space1},
   apoioProgresso: {alignSelf: "flex-end"},
@@ -64,7 +64,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
     paddingVertical: 14, paddingHorizontal: t.size.space4,
     // HER-02 (06/10/2026): era `radiusLg` (16). Painel é 22 na identidade da Aurea (`CLAUDE.md`
-    // §5), como o `Popover`, o `Dialog` e o `Banner`; o HeroUI 3.2.6 e o Native 1.0.10 usam 24.
+    // §5), como o `Popover`, o `Dialog` e o `Banner`; a referência usa 24 na web e no nativo.
     borderWidth: t.size.borderWidth, ...canto(t.size.radiusCard),
     backgroundColor: t.color.secondary, borderColor: t.color.border,
   },
@@ -234,7 +234,7 @@ export interface ProgressProps {
   value?: number;
   label?: string;
   /**
-   * O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo que
+   * O texto de apoio, no alto à direita — a saída de texto da barra de progresso da referência: velocidade, tempo que
    * falta, bytes. Em texto, ele vai junto no `accessibilityValue`. É texto: a barra é um elemento
    * só para o leitor de tela, e coisa tocável dentro dela some no iPhone (`check 43`).
    */
@@ -256,8 +256,8 @@ const COR_DO_TOM: Readonly<Record<AureaProgressTone, string>> = {
  * anuncia que existe uma barra e não diz em quanto ela está, que é a única informação que ela tem.
  * Sem total, não há `now` — a barra não finge um 0%.
  *
- * Sem total, um pedaço de 2/5 corre de -100% a 350% da própria largura em 1,5 s, na curva do
- * `ProgressBar` do HeroUI 3.2.6 — os mesmos números da web. Quando a pessoa pede menos movimento
+ * Sem total, um pedaço de 2/5 corre de -100% a 350% da própria largura em 1,5 s, na curva da
+ * barra de progresso da referência — os mesmos números da web. Quando a pessoa pede menos movimento
  * ele não corre: a barra inteira, apagada, e nunca um pedaço parado, que leria como 40% feito.
  */
 export function Progress({value, label, detail, tone = "brand", style, testID}: ProgressProps) {
@@ -378,7 +378,7 @@ export function Alert({
     // morava dentro de um recipiente marcado `accessible`, e **no iOS isso o apagava**.
     //
     // A doc do próprio React Native diz a razão em uma linha: *"VoiceOver disallowing nested
-    // accessibility elements"*. A da Apple diz o outro lado: *"An individual view does not contain
+    // accessibility elements"*. A do iOS diz o outro lado: *"An individual view does not contain
     // any other views that need to be accessible"* e *"you need to make sure that the container
     // view itself is not accessible"*.
     //
@@ -436,7 +436,7 @@ export function Alert({
 export interface EmptyStateProps {
   /**
    * O glifo, dentro de uma moldura redonda — R-15, 02/10/2026, escolhida pelo Victor na prancha
-   * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` do HeroUI) e glifo de 32, o de antes. O desenho
+   * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` da referência) e glifo de 32, o de antes. O desenho
    * do próprio app entra aqui também (`icon={Logo}`, R-11).
    */
   icon?: AureaIcon;

@@ -89,8 +89,8 @@ visualmente nos dois temas.
 
 ## 1b. SESSÃO DE 20/08/2026 — duas versões publicadas e o eixo de marca
 
-> **É AQUI QUE A PRÓXIMA SESSÃO COMEÇA A LER.** O trabalho seguinte está escrito em
-> [`ATIVIDADE-2.md`](../../docs/historia/ATIVIDADE-2.md) — a ordem do Victor de inventariar seis plataformas e
+> **É AQUI QUE A PRÓXIMA SESSÃO COMEÇA A LER.** O trabalho seguinte está escrito na
+> `ATIVIDADE-2`, no documento de referências, fora do repositório — a ordem do Victor de inventariar seis plataformas e
 > copiar em massa. **Nada dela foi começado.**
 
 ```
@@ -101,8 +101,8 @@ Arquivos analisados: STATE.md · PLANO-1.0.md · 02-ACHADOS.md · decisions/ · 
   packages/react/src/layout-client.tsx · packages/react/src/overlays.tsx ·
   packages/tokens/src/aurea.tokens.json · apps/catalog/content/BottomNav.mjs ·
   apps/catalog/content/blocks/insight.mjs · scripts/build-tokens.mjs · scripts/build-catalog.mjs ·
-  tests/visual/skin.spec.ts · Referencia/langfuse-main · Referencia/ui-main ·
-  Referencia/material-ui-master · o ui-kit-standalone da marca (fora do repo)
+  tests/visual/skin.spec.ts · três pastas de Referencia/ (os
+  nomes estão no documento de referências, fora do repositório) · o ui-kit-standalone da marca (fora do repo)
 
 Arquivos alterados: os seis package.json + a raiz + aurea.contract.json (versão) · CHANGELOG.md ·
   scripts/released-surface.json · packages/core/src/aurea.css · packages/tokens/src/aurea.tokens.json ·
@@ -118,7 +118,7 @@ O que mudou:
   2. O bloco `analytics-workbench` transbordava 23px — e o diagnóstico que eu dei primeiro
      estava ERRADO (ver Limitações).
   3. `BottomNav` reescrito em DOIS EIXOS (`variant` + `indicator`, sete indicadores), com as
-     medidas do Material 3 pesquisadas, rótulo visível em todos e sem realce de mouse.
+     medidas da referência pesquisadas, rótulo visível em todos e sem realce de mouse.
   4. A Aurea ganhou EIXO DE MARCA (`data-brand`) e a primeira marca, `lory` (ADR-0036).
   5. A lateral passou a se pintar com os tokens DELA — conserto que vale sem marca nenhuma.
   6. `pnpm build` passou a reconstruir o runtime do catálogo (`build:live` não era chamado por
@@ -143,7 +143,7 @@ Limitações:
   - Contraste sob `lory` não foi medido componente a componente.
   - O push segue suspenso: 166 commits locais. O npm tem o código; o GitHub não.
 
-Pendências: ATIVIDADE-2.md, inteira. E o `.doc-nav` continua sendo chrome do catálogo morando
+Pendências: ATIVIDADE-2 (no documento de referências, fora do repositório), inteira. E o `.doc-nav` continua sendo chrome do catálogo morando
   dentro do CSS do core (achado A6, nunca movido) — metade da confusão de especificidade do dia
   saiu daí.
 
@@ -151,7 +151,8 @@ Riscos: a marca `lory` foi corrigida TRÊS vezes olhando a tela, e as três corr
   Victor apontando, não de gate. A `marca.spec` cobre o que aprendi; não cobre o que eu ainda
   não sei que errei.
 
-Próxima tarefa exata: ATIVIDADE-2.md §5 passo 1 — conferir a licença das seis fontes externas e
+Próxima tarefa exata: ATIVIDADE-2 §5 passo 1 (no documento de referências, fora do
+  repositório) — conferir a licença das seis fontes externas e
   registrar o quadro no REFERENCES.md, ANTES de abrir código de qualquer uma.
 
 Critério de continuidade: a árvore está limpa, `validate.py` OK, e a `0.5.0` está no npm com os
@@ -207,7 +208,7 @@ mais, porque some em silêncio em vez de chamar atenção:
 ### O que conta como controle
 
 - **um caso conhecido a olho**, escrito no próprio extrator, que o faz falhar se discordar
-  (`inventory-heroui.mjs` contra `button.styles.ts`);
+  (o extrator do inventário da referência contra a folha de estilo do botão dela);
 - **um estado `NAO_TRIADA`/`INCONCLUSIVO`** que impede coisa nova de sumir em silêncio
   (`sweep-responsivo.mjs`);
 - **um teste com entrada e saída conhecidas** (`custo-responsivo.test.tsx`, que mede por ESCALA
@@ -492,7 +493,7 @@ medido é o workflow rodando com `container:` — se o `pnpm/action-setup` ou o 
 
 **O que a máquina Debian serve, e continua valendo:** `pnpm build` lá é **reprodutível** — árvore
 idêntica à do Windows, sem um arquivo modificado — e o `validate.py` passa. Vale como segunda
-opinião para tudo que não é pixel. O acesso é por chave (`~/.ssh/minipc_mythos`); o `node` do
+opinião para tudo que não é pixel. O acesso é por chave (a do minipc, em `~/.ssh/`; o nome do arquivo está com o Victor); o `node` do
 sistema é v20 e **não** roda o pnpm 11 — o que serve é `~/.local/node24/bin/node`.
 
 ### Chegar até lá — o que está escrito aqui e o que NÃO está (11/08/2026)
@@ -507,7 +508,7 @@ aponta quando for a hora.
 |---|---|
 | host / IP | **com o Victor.** O IP **muda** — o do `~/.ssh/config` já estava vencido em 08/08/2026, então confira antes de concluir que a máquina caiu |
 | usuário | **com o Victor** |
-| chave privada | já na máquina Windows: `~/.ssh/minipc_mythos`. **A senha que acompanha o dado de acesso não é necessária** e não deve ser digitada — a chave basta |
+| chave privada | já na máquina Windows, em `~/.ssh/` (o nome do arquivo está com o Victor). **A senha que acompanha o dado de acesso não é necessária** e não deve ser digitada — a chave basta |
 
 **O que vale saber antes do primeiro comando lá:**
 
@@ -739,15 +740,15 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > - **`Sidebar` RENTE por padrão**, `variant="floating"` preservando o desenho da `0.3.0`. Exceção
 >   autorizada à caixa flutuante, só para a lateral.
 > - **A folga do flutuante caiu de 16px para 4px**, e o número saiu do fonte deles
->   (`lg:py-1 lg:pl-1`, com o espaçador reservando `MAIN_SIDEBAR_WIDTH + 4` e o comentário
->   *"Add 4px to account for the padding in the sidebar wrapper"*). Com 16px o painel perdia 32px na
->   coluna reservada e o trilho virava cápsula.
-> - **O trilho caiu de 88px para 68px** (`--sidebar-rail` = 4.25rem), o número de
->   `sidebar-slim.tsx`. E a descrição do token estava **vencida** — dizia que a lateral gastava
+>   (4px de recheio em cima e à esquerda, com o espaçador reservando a largura da lateral mais 4
+>   e um comentário dizendo que os 4px compensam o recheio do invólucro da lateral). Com 16px o
+>   painel perdia 32px na coluna reservada e o trilho virava cápsula.
+> - **O trilho caiu de 88px para 68px** (`--sidebar-rail` = 4.25rem), o número da lateral
+>   estreita deles. E a descrição do token estava **vencida** — dizia que a lateral gastava
 >   `space-4` de margem de cada lado, o que deixou de ser verdade.
-> - **O item do trilho virou quadrado de 36px centrado** (`--control-h-md`), que é o `size-9` do
->   `NavButton` deles. Antes era 71×36 esticado.
-> - **O ícone do item foi de 16px para 20px** — o `size-5` deles, que é o nosso `--icon-md`.
+> - **O item do trilho virou quadrado de 36px centrado** (`--control-h-md`), que é o tamanho do
+>   botão de navegação deles. Antes era 71×36 esticado.
+> - **O ícone do item foi de 16px para 20px** — o tamanho de ícone deles, que é o nosso `--icon-md`.
 > - **`overlays` entrou antes de `feedback` no DAG** (`MAP.md`), porque o `Sidebar` recolhida precisa
 >   de `Tooltip`. Conferido antes de mover: `overlays` só importa `internal`, `system` e `actions`,
 >   então não há ciclo. **E corrigi um erro meu no caminho:** eu disse que `feedback → overlays` já
@@ -758,8 +759,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >
 > Ele reprovou as quatro combinações e disse: *"mais uma vez você mentiu, fez código usando seu
 > treinamento e não referência"*. **Estava certo.** Eu tinha o fonte deles em
-> `Referencia/react-main/react-main/components/application/app-navigation/` e **nunca abri**. Li o
-> CSS do HeroUI, medi larguras no site publicado, e inventei o resto.
+> `Referencia/`, na pasta de navegação de aplicativo, e **nunca abri**. Li o
+> CSS de uma das referências, medi larguras no site publicado, e inventei o resto.
 >
 > **A regra que nasceu disso, e ela é permanente:** toda entrega visual sai com **DOIS prints** — o
 > da referência (capturado por mim, não a imagem que ele mandou) e o nosso. E **pergunta minha vira
@@ -897,8 +898,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > ## ⚠ O QUE ESTÁ AUTORIZADO E NÃO COMEÇOU — é por aqui que a próxima sessão pega
 >
 > **1. O `Sidebar` RENTE.** O Victor abriu **exceção escrita à regra da caixa flutuante**, só para
-> a lateral, e confirmou com quatro referências reais: Cloudflare, Sophos, o app do Claude e o
-> painel do HeroUI. O que muda: `margin:var(--space-4)` → **0**, `border-radius:var(--radius-card)`
+> a lateral, e confirmou com quatro referências reais: três painéis de administração e o
+> painel de uma das bibliotecas de referência. O que muda: `margin:var(--space-4)` → **0**, `border-radius:var(--radius-card)`
 > → **0**, borda nos quatro lados → **só na direita**. A versão flutuante **continua existindo**,
 > como variante.
 >
@@ -909,15 +910,16 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > forma de CARD; painel rente é outro caso, e ali a linha **mantém os 18px** que já tem. Escreva
 > isso como adendo na ADR-0033 ao implementar.
 >
-> **2. As duas variantes que faltam** das cinco do Untitled UI: **Sections dividers** (a mais
-> direta — a régua já existe) e **Dual-tier** (duas colunas: trilho de ícones + painel largo).
+> **2. As duas variantes que faltam** das cinco de uma das referências: **a de divisórias entre
+> seções** (a mais direta — a régua já existe) e **a de dois níveis** (duas colunas: trilho de
+> ícones + painel largo).
 > As outras três já existem com moldura nova.
 >
 > **3. O cartão de conta.** O rodapé da lateral deles (avatar + nome + e-mail + gatilho). **Meça
 > antes de construir:** pode ser composição de `Avatar` + `IconButton`, não componente novo. E no
-> painel do HeroUI ele fica **em cima**, não embaixo — as duas posições existem.
+> painel da outra referência ele fica **em cima**, não embaixo — as duas posições existem.
 >
-> **4. Os featured cards** (doze). Quase todos são `Card` + conteúdo. Provavelmente **zero**
+> **4. Os cartões em destaque** (doze). Quase todos são `Card` + conteúdo. Provavelmente **zero**
 > componente novo — a medição decide.
 >
 > **O acordo sobre quantidade, e ele é regra:** ~**4 variantes** e **10+ exemplos**. Exemplo é
@@ -981,10 +983,10 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > 2. **"`Service` cortado é defeito do componente."** Errado — de 768px para cima o demo tem
 >    320–352px e nada corta. Era a caixa do catálogo.
 >
-> ## O HeroUI é a referência PRINCIPAL agora (declarado por ele em 18/08)
+> ## Uma das bibliotecas é a referência PRINCIPAL agora (declarado por ele em 18/08)
 >
-> Junto de MUI e ReUI, e o fonte está em **`Referencia/heroui-3`** (Apache-2.0 — a mesma licença
-> nossa). O padrão deles é **sistêmico**: `list-box-item.css` e `menu-item.css` têm a MESMA linha,
+> Junto de outras duas referências, e o fonte está na pasta local `Referencia/` (o caminho está no documento de referências, fora do repositório; Apache-2.0 — a mesma licença
+> nossa). O padrão deles é **sistêmico**: a folha do item de lista e a do item de menu têm a MESMA linha,
 > e o raio do item MUDA entre componentes porque cada painel tem raio próprio. Eles escrevem raio
 > como `calc()`, não como número — a mesma disciplina que a ADR-0033 adotou.
 >
@@ -993,19 +995,19 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > aparência. As duas coisas não cabem juntas — quem levanta a trava de identidade é ele, por
 > escrito, e isso vira ADR. A exceção do sidebar rente foi a primeira, e é a única até agora.
 >
-> ## ⇨ O QUE COPIAR DO HeroUI — quatro achados, autorizados por ele em 18/08/2026
+> ## ⇨ O QUE COPIAR DA REFERÊNCIA PRINCIPAL — quatro achados, autorizados por ele em 18/08/2026
 >
 > Saíram de um levantamento técnico do repositório deles que o Victor mandou. Ele disse **"vamos
 > fazer"**. Nenhum começou.
 >
 > **1. Eles NÃO TÊM TESTE — e isso muda o que "chegar no nível deles" significa.** O levantamento
-> não achou nenhum `*.test.*`, apesar de `@heroui/vitest` e `@testing-library/*` declarados. Nós
+> não achou nenhum `*.test.*`, apesar de um pacote próprio de Vitest e `@testing-library/*` declarados. Nós
 > temos **817** unitários e **143** de navegador. Então o alvo é **cobertura e acabamento**, não
 > rigor: nesse eixo já estamos à frente, e não se troca o nosso rigor pelo acabamento deles.
 > *(Ressalva honesta do levantamento: pode ser limite do índice consultado, não ausência real.)*
 >
-> **2. GERADOR DE COMPONENTE — o mais útil dos quatro, e o mais barato.** Eles têm
-> `packages/react/scripts/add-component.mjs`, que cria a pasta com todas as peças da convenção.
+> **2. GERADOR DE COMPONENTE — o mais útil dos quatro, e o mais barato.** Eles têm um script
+> de geração de componente no pacote React, que cria a pasta com todas as peças da convenção.
 > Aqui isso é feito **à mão**, e a sessão de 18/08 provou o custo: eu esqueci o reexport do barril
 > no `index.tsx` e **só o validador pegou** — sem ele, o `Separator` chegaria ao consumidor como
 > CLIENTE pelo módulo de categoria, desfazendo em silêncio a razão de ele ser puro.
@@ -1014,7 +1016,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > + conteúdo do catálogo + entrada no `REFERENCES.md`. São dez lugares; esquecer um é a regra, não
 > a exceção.
 >
-> **3. UM CSS POR COMPONENTE, com subpath próprio.** `@heroui/styles/components/button` deixa o
+> **3. UM CSS POR COMPONENTE, com subpath próprio.** O subpath de cada componente no pacote de estilos da referência deixa o
 > consumidor importar só o que usa. O nosso `aurea.css` é **um arquivo só**. É ideia boa e
 > **grande** — mexe no empacotamento, no `check-pack`, no gate de pixel e nos 20 subpaths. Fica
 > registrada como direção, **não** para agora, e provavelmente vira ADR antes de virar código.
@@ -1028,7 +1030,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > seguinte e evita a classe de erro que já aconteceu; depois **4**, que é mecânico e amplo; e **3**
 > só com ADR na frente. O **1** não é tarefa — é a régua que impede trocar rigor por aparência.
 >
-> ## Fila que ele declarou (18/08): Sidebar → BottomNav → app nativo do consumidor → nível do HeroUI
+> ## Fila que ele declarou (18/08): Sidebar → BottomNav → app nativo do consumidor → nível da referência principal
 >
 > `aureauds.dev` é dele, domínio e DNS já registrados, com intenção de publicar na **Vercel**.
 >
@@ -1055,8 +1057,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > **A TRAVA ME PEGOU MENTINDO ANTES DE PEGAR O DEFEITO, e é a lição mais cara do dia.** A primeira
 > versão dela passou **verde com o defeito reposto de propósito no CSS**. Motivo: ela media o fixture
 > do `skin.spec`, que tem **dois** itens — e com dois sobra espaço, então o defeito não existe. A
-> barra real tem **quatro** (o catálogo tem quatro; WhatsApp, YouTube, Mercado Livre e Shopee têm
-> quatro e cinco). A medida agora **completa o clone até quatro** num palco de 200px em vez de
+> barra real tem **quatro** (o catálogo tem quatro; os quatro apps de mercado usados de exemplo —
+> mensagens, vídeo e duas lojas — têm quatro e cinco). A medida agora **completa o clone até quatro** num palco de 200px em vez de
 > confiar no fixture. Com o defeito reposto ela reprova nomeando: `bottom-nav-pill:Rides`.
 >
 > **Por que 143/143 passava com o defeito na tela:** a asserção `sobreORotulo` **PULA** a checagem
@@ -1150,10 +1152,10 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > `SidebarItem`** da lateral. Tipo próprio obrigaria o consumidor a manter duas listas do mesmo
 > menu, e listas gêmeas divergem. Uma lista, duas peles.
 >
-> **Das nove pastas de `Referencia/`, UMA tinha o componente** (a MUI) — e o que veio dela foi só
-> anatomia. A raiz da MUI é `<div>` sem `<nav>`, sem `aria-label` e sem `aria-current`: mais fraca
+> **Das nove pastas de `Referencia/`, UMA tinha o componente** — e o que veio dela foi só
+> anatomia. A raiz dela é `<div>` sem `<nav>`, sem `aria-label` e sem `aria-current`: mais fraca
 > que a nossa própria `Sidebar`, então não entrou. O landmark, o link e o `aria-current="page"`
-> vieram de **pesquisa** (KendoReact, MDN, APG), pelo passo 4.
+> vieram de **pesquisa** (outra biblioteca de componentes, MDN, APG), pelo passo 4.
 >
 > **Duas coisas para quem for mexer na pele de novo, porque as duas custaram uma rodada:**
 > atalho `padding` com `var()` faz a longhand serializar **vazia** no CSSOM (é
@@ -1297,7 +1299,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >
 > ## Identidade — o Victor reforçou em 16/08, e nada muda
 >
-> **Tudo arredondado, inspiração Apple.** A Aurea já é isso por contrato: raio 22px nas
+> **Tudo arredondado, inspiração no iOS.** A Aurea já é isso por contrato: raio 22px nas
 > superfícies, pílula nos controles, sem gradiente. Ele mandou quatro referências visuais que
 > **coincidem** com o que existe. Vale a trava do [`BUILDING.md`](../../docs/BUILDING.md) §1: de
 > referência se extrai **anatomia**, nunca aparência.
@@ -1333,7 +1335,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > 1. **DEFEITO:** o contador da barra encolhia `.badge` por regra **contextual**
 >    (`.bottom-nav-badge .badge`). O mesmo nome medindo 16px numa página e 24px noutra é a
 >    correção local que o `CLAUDE.md` proíbe. Agora existe **`size="xs"`** (16px, sem borda) — o
->    mesmo `size="xs"` do ReUI que o Victor mandou — e a barra **pede** o tamanho.
+>    mesmo `size="xs"` da referência que o Victor mandou — e a barra **pede** o tamanho.
 > 2. **Não era defeito:** `sm`/`lg`/`overlay` declaram outro tamanho **por classe**, que é o
 >    propósito da escala. O seletor da trava passou a excluir quem declara tamanho próprio, e o
 >    contrato que ela protege continua inteiro: dois badges do MESMO tamanho na mesma página têm
@@ -1366,10 +1368,10 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > **`BottomNav`** fechou o §4.1 do `CONSUMIDOR-1` — a lacuna ESTRUTURAL.
 > [ADR-0030](../../decisions/0030-a-barra-inferior-reusa-o-item-da-lateral.md). Recebe o **mesmo
 > `SidebarItem`** da lateral: uma lista, duas peles. Quatro variantes, e **duas saem de aplicativo
-> que roda** — o Victor mandou prints de WhatsApp, YouTube, Mercado Livre e Shopee.
+> que roda** — o Victor mandou prints de quatro apps de mercado (mensagens, vídeo e duas lojas).
 >
 > **`Badge`** foi reescrito a pedido dele (*"o nosso atual é pobre"*): 14 capacidades, lidas no
-> fonte local da Untitled UI e da MUI. O registro completo está no `REFERENCES.md`.
+> fonte local de duas das referências. O registro completo está no `REFERENCES.md`.
 >
 > **TRÊS DEFEITOS ANTIGOS que esta construção desenterrou, e o padrão deles é o mesmo:**
 >
@@ -1518,7 +1520,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >    exatamente ela deixa passar?*
 > 5. **Busca de referência é `grep` de CONTEÚDO, não `find` de diretório.** No I5 eu procurei
 >    pastas chamadas `checkout|payment|invoice|cart`, conclui "uma referência em dezesseis" e
->    perdi o `order-summary` do tool-ui — 296 linhas, esquema Zod, e a melhor das duas. Pasta tem
+>    perdi o resumo de pedido de outra referência — 296 linhas, esquema de validação, e a melhor das duas. Pasta tem
 >    o nome que o autor escolheu; o conteúdo tem as palavras do domínio. Procure por `subtotal`,
 >    `refund`, `idempotenc`, e por nome de ARQUIVO, não só de pasta. Vale para o I6, I7 e I8.
 > 6. **O pane do navegador da sessão pode estar oculto**, e aí o `screenshot` expira ("the
@@ -1657,8 +1659,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > Arquivos analisados: aurea.contract.json (DeviceControl, MediaLibrary, VisualBuilder) ·
 >   packages/react/src/{agents,media,graph,inputs,layout}.tsx · packages/core/src/aurea.css
 >   (.media-player, .card-interactive, .health-matrix, .graph-node) · content/_starters.mjs
->   (MediaPlayer e DependencyGraph) · Referencia/: openstatus (incidents/dialog-confirm),
->   media-chrome (playlist, chapters, tracks, keyboard-shortcuts), xyflow
+>   (MediaPlayer e DependencyGraph) · Referencia/: uma pagina de status de servico (o dialogo
+>   de confirmacao de incidente), a referencia de midia (playlist, chapters, tracks, keyboard-shortcuts), xyflow
 > Arquivos alterados: content/blocks/insight.mjs (+3 composicoes) · tests/unit/composition.test.tsx
 >   (+3 describes) · packages/core/src/aurea.css (a valvula --media-h/--media-ar) + dist ·
 >   REFERENCES.md · PLANO-1.0.md · STATE.md/README/manifest (gerados) · 206 paginas do catalogo ·
@@ -1726,7 +1728,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   · tests/unit/composition.test.tsx · packages/react/src/{pure,feedback,data-display}.tsx
 >   · packages/core/src/aurea.css (.data-list, .stepper, .table) · patterns/commerce_finance.md
 >   · Referencia/: as 16 pastas varridas por checkout|payment|invoice|billing|transaction|cart,
->     e o template checkout do MUI lido inteiro (Checkout, Info, Review, PaymentForm)
+>     e o modelo de checkout de uma das referencias lido inteiro (os quatro arquivos dele)
 > Arquivos alterados: content/blocks/insight.mjs (+268) · tests/unit/composition.test.tsx (+165)
 >   · REFERENCES.md · PLANO-1.0.md · STATE.md + README (gerados) · manifest.json (gerado)
 >   · 203 paginas do catalogo regeradas · 2 baselines -win32
@@ -1764,16 +1766,16 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >
 > **CORREÇÃO, mesma sessão, e ela é o achado mais útil deste item:** a frase "uma referência de
 > anatomia em dezesseis" acima estava **errada**, e o erro era meu método de busca. Procurei por
-> **nome de pasta** e o componente certo se chama `order-summary` — nome diferente, mesma coisa.
+> **nome de pasta** e o componente certo tinha nome de resumo de pedido — nome diferente, mesma coisa.
 > Refeita por conteúdo (`grep` de `subtotal`, `idempotenc`, nome de arquivo com
-> `receipt|refund|price|amount`), a resposta é **duas de dezesseis**: o `checkout` do MUI e o
-> `order-summary` do **tool-ui**, este último com 296 linhas e um esquema Zod de 108.
+> `receipt|refund|price|amount`), a resposta é **duas de dezesseis**: o checkout de uma das referências e o
+> resumo de pedido de **outra**, este último com 296 linhas e um esquema de validação de 108.
 >
 > **A leitura tardia mudou código, o que prova que a busca ruim custou:** quantidade × unitário
 > separados, com o total da linha derivado (`2 × USD 24.00` → `USD 48.00`), porque `"2 seats"` ao
 > lado de um número não diz se o número é o assento ou os dois. Isso é anatomia, entrou, e tem
-> teste (`cents === qty * unit`). Mais uma confirmação independente: o
-> `variant: "summary" | "receipt"` deles **exige** a decisão no recibo e a **proíbe** no resumo — a
+> teste (`cents === qty * unit`). Mais uma confirmação independente: a
+> variante de resumo × recibo deles **exige** a decisão no recibo e a **proíbe** no resumo — a
 > mesma divisão que eu havia medido nas regiões do contrato.
 >
 > ### O `tabular-nums`: eu ia pedir autorização para pôr no core uma regra que não faz nada
@@ -1798,7 +1800,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >    autorização para violar a trava da própria casa, com a palavra "qualidade" na frase.
 > 2. **`font-variant-numeric` é TIPOGRAFIA**, a primeira coisa que o `BUILDING.md` §1 lista entre as
 >    que **nunca** se extraem de referência. A trava existia; passei por cima dela porque a
->    propriedade *parecia* técnica em vez de estética. O tool-ui roda outra fonte, onde ela
+>    propriedade *parecia* técnica em vez de estética. Essa outra referência roda outra fonte, onde ela
 >    provavelmente faz efeito — o que vale numa pilha não vale na outra.
 > 3. **O defeito que eu tinha visto na imagem nunca era esse:** o degrau de 74px entre os valores
 >    era o `max-content` de duas `.data-list` independentes, e já estava resolvido pelas faixas. Eu
@@ -1809,7 +1811,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > defeito — valem como seguro se as duas primeiras fontes falharem —, mas quem as ler não deve
 > concluir que elas alinham alguma coisa hoje. **Não mexi nelas:** custo zero e fora do escopo.
 >
-> **E a referência que existia foi mais útil pelo DEFEITO que pela anatomia.** O `checkout` do MUI
+> **E a referência que existia foi mais útil pelo DEFEITO que pela anatomia.** O `checkout` dessa referência
 > escreve o total à mão em quatro lugares, e os quatro números batem — hoje. Ver isso numa
 > biblioteca madura é o argumento mais forte que existe para o teste que compara o DOM contra a
 > soma: não é rigor de estilo, é o que impede a próxima mudança de preço de mentir em dois
@@ -1960,7 +1962,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   falhar. Fica declarado aqui porque nao ha como gatear o gate sem um segundo defeito plantado.
 > Proxima tarefa exata: **I4 `AnalyticsWorkbench`** — inalterada. Comecar pelo passo 1, e nele
 >   pela largura: o `Chart` e a `Table` na mesma composicao, e a `.table` exige 720px dos 856 do
->   painel. Referencia: `langfuse-main/web/src/features/dashboard`.
+>   painel. Referencia: o painel de metricas de uma das referencias.
 > Criterio de continuidade: arvore limpa e os cinco verdes acima.
 > ```
 >
@@ -2190,8 +2192,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   apps/catalog/content/blocks/{app,insight}.mjs (os 10 blocos, para medir se ja existia) ·
 >   packages/react/src/navigation.tsx (TreeView) · packages/contracts/registry/FileInput.json
 >   (a fila da Parte G) · packages/core/src/aurea.css (.table, .tree-label) · decisions/0002 ·
->   Referencia/kibo-main/packages/tree/index.tsx + packages/comparison/index.tsx ·
->   Referencia/react-main/components/application/file-upload/file-upload-base.tsx
+>   Referencia/: a arvore e a comparacao de uma das referencias ·
+>   o envio de arquivo de outra
 > Arquivos alterados: apps/catalog/content/blocks/insight.mjs · tests/unit/composition.test.tsx ·
 >   REFERENCES.md · PLANO-1.0.md · STATE.md · README.md · manifest.json · as 201 paginas do
 >   catalogo (geradas) · 2 baselines -win32 · este arquivo
@@ -2224,7 +2226,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > Proxima tarefa exata: **I4 `AnalyticsWorkbench`** — filtro temporal, indicadores, grafico e
 >   **a tabela equivalente**, que o enunciado diz nao ser opcional. Comecar pelo passo 1, e
 >   nele pela largura: o `Chart` e a `Table` na mesma composicao, e a `.table` exige 720px dos
->   856 do painel. Referencia: `langfuse-main/web/src/features/dashboard`.
+>   856 do painel. Referencia: o painel de metricas de uma das referencias.
 > Criterio de continuidade: arvore limpa e os cinco verdes acima.
 > ```
 >
@@ -2286,8 +2288,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   scripts/build-catalog.mjs (descoberta de blocos, usesChips) · scripts/validate.py (checks
 >   12 e 25, para saber o alcance deles em conteudo de catalogo) · packages/react/src/
 >   {code,feedback,agents}.tsx (CodeBlock, Alert/Status, HumanApproval) · decisions/0002 ·
->   Referencia/langfuse-main/web/src/components/DiffViewer.tsx + features/prompts/components/
->   PromptVersionDiffDialog.tsx · Referencia/kibo-main/apps/docs/examples/code-block-diff.tsx
+>   Referencia/: o visor de diferenca e o dialogo de diferenca entre versoes de uma das
+>   referencias · o exemplo de bloco de codigo com diferenca de outra
 > Arquivos alterados: apps/catalog/content/blocks/insight.mjs · tests/unit/composition.test.tsx ·
 >   REFERENCES.md · PLANO-1.0.md · STATE.md · README.md · manifest.json · as 200 paginas do
 >   catalogo (geradas) · 2 baselines -win32 · este arquivo
@@ -2318,8 +2320,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > Proxima tarefa exata: **I3 `ResourceWorkbench`** — arvore, lista/grade, previa, fila,
 >   verificacao, procedencia, conflito e restauracao. Comecar pelo passo 1 do BUILDING.md, e
 >   nele pela pergunta que pagou duas vezes seguidas: o bloco ja existe em
->   `content/blocks/*.mjs`? (no I1 existia, no I2 nao). Referencia: `kibo-main` (`tree`,
->   `table`) e `react-main/components/application/file-upload`; a fila e a verificacao ja
+>   `content/blocks/*.mjs`? (no I1 existia, no I2 nao). Referencia: uma das referencias (`tree`,
+>   `table`) e o envio de arquivo de outra; a fila e a verificacao ja
 >   existem como Parte G.
 > Criterio de continuidade: arvore limpa e os cinco verdes acima.
 > ```
@@ -2341,9 +2343,9 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > (*"apply records receipt"*), porque antes disso não houve mutação — e recibo de coisa que não
 > aconteceu é pior que recibo ausente, porque parece prova.
 >
-> **O achado da leitura das referências é sobre ELAS, e é o mais forte da sessão.** O `DiffViewer`
-> do Langfuse pinta a linha inteira e não escreve nada; o exemplo do Kibo marca com um comentário
-> `[!code ++]` que o Shiki **consome** e vira cor. **As duas reprovam a cláusula que o nosso
+> **O achado da leitura das referências é sobre ELAS, e é o mais forte da sessão.** O visor de
+> diferença de uma das referências pinta a linha inteira e não escreve nada; o exemplo de outra marca
+> com um comentário especial que o realçador de código **consome** e vira cor. **As duas reprovam a cláusula que o nosso
 > contrato exige** — *"diff has textual additions and deletions"* —, e quem não distingue as cores
 > não distingue o que entrou do que saiu (WCAG 1.4.1). A saída custou zero: o `+`/`-` da primeira
 > coluna do diff unificado é texto por construção. Registro em `REFERENCES.md`.
@@ -2439,7 +2441,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   depois. Comecar pelo passo 1 do BUILDING.md, que neste item ja pagou: MEDIR se o bloco ja
 >   existe em `content/blocks/*.mjs` antes de escrever um. O I1 achou um `Run session panel`
 >   escrito antes da Parte H, e reescreve-lo no lugar poupou uma pagina duplicada e um slug
->   novo. Referencia: `reui-main/components/blocks` para leitura de composicao.
+>   novo. Referencia: os blocos de uma das referencias para leitura de composicao.
 > Criterio de continuidade: arvore limpa e os cinco verdes acima.
 > ```
 >
@@ -2620,10 +2622,10 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   o significado. E' o mesmo limite declarado do check 22 (gate le o nosso fonte, nao a
 >   cabeca de quem escreve).
 > Proxima tarefa exata: **Parte I ou Parte K — a escolha e' do Victor.** Nenhuma comeca sem
->   "PODE IMPLEMENTAR". A **I** (8 itens, PLANO-1.0 §12) e' onde mora o n8n: o **I8
+>   "PODE IMPLEMENTAR". A **I** (8 itens, PLANO-1.0 §12) e' onde mora o editor de fluxo: o **I8
 >   `VisualBuilder`** compoe o `DependencyGraph` de 09/08 e o contrato exige dele "um caminho
 >   completo sem arrastar". O `I1 RunSession` e' o mais citado e puxa H.b e H.c, que existem.
->   **Aviso que continua valendo:** auto-arranjo de grafo e' `elkjs` — DEPENDENCIA NOVA, que
+>   **Aviso que continua valendo:** auto-arranjo de grafo e' uma biblioteca de layout de grafo — DEPENDENCIA NOVA, que
 >   pelo BUILDING.md §3.3 interrompe o lote e exige o Victor. A **K** (4 itens, §14) e' mais
 >   barata em codigo e mais cara em infra: o K1 (Firefox e WebKit) e' uma linha no
 >   playwright.config.ts e um lote de baselines novas, que saem do conteiner do minipc; o K2
@@ -2680,13 +2682,12 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >
 > ```
 > Tarefa: PLANO-1.0 Parte H — grupo H.e (H11·H12·H13) e grupo H.f (H14·H15·H16). A parte FECHA.
-> Arquivos analisados: Referencia/langfuse-main/.../dashboard/components/
->   {ModelUsageChart,ModelCostTable,TotalMetric,cards/BarListChartArea}.tsx, utils/numbers.ts,
->   features/automations/{AutomationSidebar,AutomationDetails}.tsx, trace-graph-view/GraphNode.tsx ·
->   agent-prism-main/.../{TokensBadge,PriceBadge}.tsx ·
->   agents-kit-main/.../{agent-status-panel,agent-orchestrator,agent-routing-hub}.tsx ·
->   xyflow-main/packages/{react/package.json,system/src/styles/*.css} ·
->   activepieces-main/packages/web/package.json (a medicao que fechou a decisao de motor) ·
+> Arquivos analisados: Referencia/: o painel de metricas (uso e custo por modelo, total, barras),
+>   os numeros, as automacoes e o no do grafo de rastreio de uma das referencias ·
+>   os selos de token e de preco de outra ·
+>   o painel de status, o orquestrador e o roteador de agentes de uma terceira ·
+>   o fonte do xyflow (packages/{react/package.json,system/src/styles/*.css}) ·
+>   o package.json web de um editor de automacao (a medicao que fechou a decisao de motor) ·
 >   as 9 LICENSE das referencias novas · MAP.md (o DAG) · packages/react/src/data-grid.tsx
 > Arquivos alterados: packages/react/src/{agents.tsx, graph.tsx (NOVO), pure.tsx} ·
 >   packages/react/package.json (peer opcional + subpath ./graph) · packages/core/src/aurea.css ·
@@ -2698,7 +2699,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   dependencia opcional do repositorio (@xyflow/react, subpath ./graph). E os 13 componentes
 >   de "AI & Agents" GANHARAM PAGINA no catalogo — nao tinham nenhuma.
 > Decisoes tomadas: o motor do H14 (autorizado pelo Victor, reaberto por medicao minha e
->   fechado pelo ALVO que ele nomeou: aplicacao tipo n8n). Tres ficam registradas sem precisar
+>   fechado pelo ALVO que ele nomeou: aplicacao de automacao por fluxo visual). Tres ficam registradas sem precisar
 >   dele: o MemoryLedger NAO envolve o DataGrid (check 19 vence o plano), o limite brando do
 >   CostMeter nao tem cor (no escuro --warning-400 E o amarelo da marca), e o DependencyGraph
 >   nao tem previa estatica (grafo mede o DOM).
@@ -2731,12 +2732,12 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >   outro. Ver `packages/react/src/data-grid.tsx` e as strings `dataGridStale`/`dataGridPartial`
 >   no `pure.tsx`.
 >
->   **I — Composicoes de aplicacao (8 itens, PLANO-1.0 §12).** Mais cara, e onde mora o n8n: o
+>   **I — Composicoes de aplicacao (8 itens, PLANO-1.0 §12).** Mais cara, e onde mora o editor de fluxo: o
 >   **I8 `VisualBuilder`** compoe o `DependencyGraph` que nasceu em 09/08 e o contrato exige dele
 >   "um caminho completo sem arrastar" — ou seja, teclado faz tudo que o arraste faz. O `I1
 >   RunSession` e' o mais citado pelo contrato e puxa H.b e H.c, que ja existem. Referencias:
->   `media-chrome-main` (midia), `kibo-main` (gantt/kanban/tree/editor), `reui-main/components/
->   blocks`. **Aviso:** se o I8 pedir auto-arranjo de grafo, isso e' o `elkjs` — DEPENDENCIA
+>   tres pastas de `Referencia/` — midia, gantt/kanban/tree/editor e blocks (os nomes estao no
+>   documento de referencias, fora do repositorio). **Aviso:** se o I8 pedir auto-arranjo de grafo, isso e' uma biblioteca de layout de grafo — DEPENDENCIA
 >   NOVA, e pelo `BUILDING.md` §3.3 interrompe o lote e exige o Victor.
 >
 >   Se ele nao disser qual, PERGUNTAR — nao escolher.
@@ -2758,7 +2759,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > superfície, `.status` dá o estado, `.data-list` dá o par termo/valor. O CSS novo é só arranjo.
 >
 > **Três coisas da referência ficaram de fora, e as três pelo mesmo motivo — ela decide o que não
-> é dela:** a cor solta (`text-yellow-500` dentro do componente; aqui vira variante do `Status`),
+> é dela:** a cor solta (uma classe de amarelo fixa dentro do componente; aqui vira variante do `Status`),
 > o despacho de ação por STRING (troca o compilador por acordo verbal), e um ícone por estado —
 > este último eu **cheguei a escrever**, e o mapa não renderizava nenhum. Código morto nascendo
 > junto com o componente; saiu antes do commit.
@@ -2781,7 +2782,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > ✅ **RESOLVIDO em 09/08/2026, à noite, com o Victor em casa.** As quatro se regeraram no
 > contêiner oficial no minipc, pela receita do §2 — nada de novo foi inventado. Transferência do
 > código por **git bundle** (segue valendo a ordem de zero push até a cota voltar), acesso por
-> chave `minipc_mythos`. Os números:
+> chave do minipc. Os números:
 >
 > - `--update-snapshots` no contêiner: **61/61**;
 > - conferência **sem** o flag, no mesmo contêiner: **61/61** — é isto que prova a baseline, não
@@ -2796,11 +2797,11 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > **H.b (09/08):** `InvocationPanel` e `TaskQueue`. Duas trocas de mecanismo, as duas para o lado
 > da plataforma — o passo dobrável é `<details>` nativo (a referência gasta um `Collapsible` de
 > biblioteca) e `running` marca `aria-busy` na região em vez de animar o rótulo com um
-> `TextShimmer`, que leitor de tela não alcança e que `prefers-reduced-motion` teria de desfazer.
+> brilho de texto animado, que leitor de tela não alcança e que `prefers-reduced-motion` teria de desfazer.
 >
-> **E o escopo do `TaskQueue` encolheu por FRONTEIRA, não por preguiça:** o `AgentTask` da
+> **E o escopo do `TaskQueue` encolheu por FRONTEIRA, não por preguiça:** o tipo de tarefa da
 > referência tem 15 campos e cinco pertencem a outros componentes desta mesma parte — token e
-> custo são H11 e H12, `checkpoints` é H9, `assignee` é H1. Absorvê-los faria a fila responder
+> custo são H11 e H12, os pontos de retomada são H9, o responsável é H1. Absorvê-los faria a fila responder
 > por quatro contratos e nenhum direito.
 >
 > **Um gate morreu em vez de explicar, e é o defeito que o E13 já tinha registrado:** o
@@ -2830,7 +2831,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > `role="log"` do `LogStream` (texto que se acumula); e `TraceTimeline` é cascata de DURAÇÕES
 > contra a coluna de MOMENTOS do `Timeline`.
 >
-> **A decisão maior foi recusar as ONZE cores por categoria de span** do `agent-prism`. Cor por
+> **A decisão maior foi recusar as ONZE cores por categoria de span** de uma das referências. Cor por
 > categoria numa paleta travada é ilegível para quem não separa as cores — mesmo defeito que o
 > H.a já tinha recusado. `kind` entra como texto.
 >
@@ -2840,8 +2841,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > porque largura sozinha não é lida por ninguém.
 >
 > **H.e (09/08):** `ModelUsage`, `CostMeter` e `MemoryLedger`. Terceira vez que a pergunta do
-> grupo é a mesma: **são o mesmo componente?** Na referência quase são — o `ModelUsageChart` e o
-> `ModelCostTable` mostram os dois `modelo × tokens × custo`. Separam-se por PAPEL: **fatia de uma
+> grupo é a mesma: **são o mesmo componente?** Na referência quase são — o gráfico de uso por modelo e a
+> tabela de custo por modelo mostram os dois `modelo × tokens × custo`. Separam-se por PAPEL: **fatia de uma
 > SOMA** (o teto é o próprio total) contra **fração de um TETO que vem de fora**. Trocar um pelo
 > outro mostra orçamento onde não existe orçamento.
 >
@@ -2921,17 +2922,18 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > não some e não muda de cor, ela **recua** — apagar o cartão esconderia justamente a regra que
 > alguém precisa achar para religar.
 >
-> **QUARTA recusa da mesma coisa:** as 6 cores por intenção do `agent-routing-hub`. Depois das 11
-> de span no H.d, das 6 de estado no H.a e das **10 por tipo de nó** que o `GraphNode` do langfuse
-> traz. `kind` sai como palavra, sempre.
+> **QUARTA recusa da mesma coisa:** as 6 cores por intenção do roteador de agentes de uma das
+> referências. Depois das 11 de span no H.d, das 6 de estado no H.a e das **10 por tipo de nó** que
+> o nó de grafo de outra referência traz. `kind` sai como palavra, sempre.
 >
 > **A decisão de motor do H14 foi reaberta por mim e fechada pelo VICTOR — com uma pergunta.**
-> Eu autorizei-me a duvidar depois de medir que o `trace-graph-view/` do langfuse não usa React
-> Flow e que o React Flow **não faz layout**. A pergunta dele desfez a dúvida porque trocou o
-> alvo: *"se a gente tentar usar a Aurea fazendo algo como um n8n vamos conseguir?"*. Grafo de
-> **leitura** não precisa de motor; **editor** precisa — e o padrão de mercado para este editor é
-> o xyflow, medido nos dois lados: a `activepieces-main`, que já está em `Referencia/` e é
-> concorrente direta do n8n, usa `@xyflow/react` 12.3.5; e o próprio n8n usa **Vue Flow**, da
+> Eu autorizei-me a duvidar depois de medir que a vista de grafo de rastreio de uma das
+> referências não usa React Flow e que o React Flow **não faz layout**. A pergunta dele desfez a
+> dúvida porque trocou o alvo: *"se a gente tentar usar a Aurea fazendo algo como [um editor de
+> automação por fluxo] vamos conseguir?"*. Grafo de **leitura** não precisa de motor; **editor**
+> precisa — e o padrão de mercado para este editor é o xyflow, medido nos dois lados: um editor
+> de automação de código aberto, que já está em `Referencia/` e concorre direto com o mais
+> conhecido do gênero, usa `@xyflow/react`; e esse mais conhecido usa a versão para Vue, da
 > mesma equipe. **A autorização dele estava certa; a minha ressalva valia para o outro alvo.**
 >
 > **O que entrou do motor, e o que nunca:** `base.css` (estrutura, tudo atrás de `var(--xy-*)`)
@@ -2974,14 +2976,14 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > `postcss`, um por `vite` e outro por `next`. Corrigido com `override`, no padrão do `undici`.
 >
 > **Próximo:** **I** ou **J**, e a escolha é do Victor. A **J** não tem dependência nova e fecha
-> os seis estados universais; a **I** tem o **I8 (`VisualBuilder`), que É o n8n** — ele compõe o
+> os seis estados universais; a **I** tem o **I8 (`VisualBuilder`), que É o editor de fluxo** — ele compõe o
 > `DependencyGraph` que acabou de nascer.
 
 > **09/08/2026 — a PARTE G FECHADA: os 6 itens.** `pnpm test` **272/272** · `playwright`
 > **61/61** · `validate.py` OK · `check-pack` OK · zero pixel.
 >
-> **O nosso já era maior que a referência.** O item de fila do Untitled UI expõe
-> `{name, size, progress, failed, onDelete}` e mais nada — sem cancelar, sem repetir, sem pausa. O
+> **O nosso já era maior que a referência.** O item de fila da referência expõe
+> nome, tamanho, progresso, falha e remoção, e mais nada — sem cancelar, sem repetir, sem pausa. O
 > `FileInput` já tinha os dois primeiros desde a Fase 5. Os seis itens saíram de DECISÃO, e cada
 > decisão veio com o limite declarado: `File` não volta de armazenamento (G1), pausar HTTP é
 > abortar (G2), `crypto.subtle` exige contexto seguro e o arquivo inteiro em memória (G4).
@@ -3004,7 +3006,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > Tarefa: PLANO-1.0 Parte F — os 11 itens, parte FECHADA
 > Arquivos analisados: packages/react/src/data-grid.tsx · packages/contracts/registry/DataGrid.json ·
 >   tests/unit/components.test.tsx · o fonte INSTALADO do @tanstack/table-core 8.21.3 ·
->   Referencia/{ui-main,kibo-main,react-main,reui-main,material-ui-master,base-ui-master,media-chrome-main}
+>   sete pastas de Referencia/ (os nomes estão no documento de referências, fora do repositório)
 > Arquivos alterados: data-grid.tsx · DataGrid.json · components.test.tsx · REFERENCES.md ·
 >   PLANO-1.0.md · STATE.md e manifest.json (gerados)
 > O que mudou: os quatro eixos aceitam valor+callback de fora, com o interno como default;
@@ -3027,9 +3029,9 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > Escrever máquina de estado nossa ao lado seria o padrão paralelo que o §1 recusa.
 >
 > **O passo 2 achou uma AUSÊNCIA, e ela desenhou a API:** nenhuma das sete referências expõe API
-> controlada por prop — o shadcn guarda tudo em `useState` dentro do exemplo, o Kibo põe a
-> ordenação num átomo global (jotai), o Untitled é envelope de React Aria (segundo motor headless,
-> já recusado no Lote 4) e o MUI **core não tem** grade (é do MUI X, outro repositório). Sem
+> controlada por prop — uma guarda tudo em `useState` dentro do exemplo, outra põe a
+> ordenação num átomo global de estado, outra é envelope de um segundo motor headless (já
+> recusado no Lote 4) e outra **não tem** grade no núcleo (fica num pacote à parte, outro repositório). Sem
 > anatomia para copiar, o vocabulário veio do motor.
 >
 > **Os dez testes foram provados contra o defeito, nos dois eixos:** com a prop de ordenação aceita
@@ -3048,8 +3050,8 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > `DataGrid.json` declara `a11y.role: "grid"` e quatro setas em `a11y.keyboard`. Medido no fonte:
 > o componente emite `role="region"` no embrulho rolável e um `<table>` **sem role** — cujo papel
 > implícito é `table`, não `grid` — e tem **zero** `onKeyDown`. Pelo APG, `grid` exige navegação
-> por célula com as setas; ela não existe. As referências que envelopam o mesmo motor (shadcn,
-> Kibo) também usam `<table>` simples.
+> por célula com as setas; ela não existe. As duas referências que envelopam o mesmo motor
+> também usam `<table>` simples.
 >
 > **A pergunta do §1 — quem MAIS tem esse problema? — foi feita, e a resposta corrigiu a medição.**
 > Um levantamento literal acusa **25 de 64** fichas com role que o nosso fonte não escreve, e o
@@ -3099,7 +3101,7 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 >
 > A barra de lote é `Toolbar` + `ToolbarButton` + `ToolbarSeparator` + `.hint`, todos já no
 > repositório: o `.toolbar` do core já é superfície flutuante em pílula com fundo próprio, e o
-> Base UI já dá o papel `toolbar` e as setas. As DUAS referências (Activepieces e Kaneo) desenham
+> Base UI já dá o papel `toolbar` e as setas. As DUAS referências desenham
 > a mesma barra à mão — e convergem na mesma anatomia, o que é o sinal de que ela é madura.
 > Ficaram de fora o `position:fixed` sobre a janela (decisão de APLICAÇÃO, e briga de z-index de
 > graça) e a animação por biblioteca de movimento (dependência nova para nada).
@@ -3129,10 +3131,10 @@ Medições independentes da auditoria que seguem válidas: contraste com 0 viola
 > [`PLANO-1.0.md`](../../docs/PLANO-1.0.md) libera todas. Três observações para a escolha:
 >
 > - a **F** (grade de dados, 11 itens) é a maior e a mais útil para superfície administrativa
->   real — e o `REFERENCES.md` já registra, na entrada do `Table`, que o
->   `react-main/components/application/table` é a referência a reler lá, com seleção e
+>   real — e o `REFERENCES.md` já registra, na entrada do `Table`, que a
+>   tabela de aplicação de uma das referências é a referência a reler lá, com seleção e
 >   ordenação prontas;
-> - a **G** tem o mesmo tipo de pista: o `application/file-upload` do Untitled (15,6 KB) é a
+> - a **G** tem o mesmo tipo de pista: o envio de arquivo da referência (15,6 KB) é a
 >   fila completa que a parte promete;
 > - a **H** continua exigindo uma decisão antes de começar — nenhuma das sete referências tem a
 >   camada operacional, e está escrito no enunciado dela.
@@ -3202,11 +3204,11 @@ organização `aurea-uds`. E desde então a construção passou a andar por **lo
 no molde do `DataGrid`. O registro completo do que foi medido está no
 [`REFERENCES.md`](../../docs/REFERENCES.md); em resumo:
 
-- **A decisão se confirmou sozinha:** duas das quatro referências (shadcn/ui e Untitled UI
-  React) envelopam o MESMO motor, e nenhuma das quatro escreve um. Base UI e Kibo não têm
-  gráfico.
-- **Escopo menor que o do shadcn:** o `ChartConfig` não entrou (o payload do motor já traz
-  `name` e `color` — medido), o par `Tooltip`/`TooltipContent` virou uma peça só (o Recharts 3
+- **A decisão se confirmou sozinha:** duas das quatro referências
+  envelopam o MESMO motor, e nenhuma das quatro escreve um. As outras duas (o Base UI e mais
+  uma) não têm gráfico.
+- **Escopo menor que o de uma das referências:** o objeto de configuração de gráfico dela não entrou (o payload do motor já traz
+  `name` e `color` — medido), o par dica/conteúdo da dica dela virou uma peça só (o Recharts 3
   reconhece um componente nosso como filho — medido, e fixado em teste porque o 2 não
   reconhecia), e não há prop de altura (check 23).
 - **Nenhum nome de classe do Recharts entrou no core.** A pele é escrita contra ELEMENTO
@@ -3238,13 +3240,13 @@ próprio (`@aurea-uds/react/calendar`) com peer **opcional**. Registro completo 
 
 - **Houve decisão de motor porque a resposta barata não existia:** o **Base UI não tem**
   calendário nem campo de data — medido na lista de exports do `1.6.0`, a versão mais recente.
-  Das outras três referências, o shadcn/ui usa react-day-picker, o Untitled UI usa React Aria
-  (recusado: segundo motor headless ao lado do Base UI é padrão paralelo) e o `calendar` do Kibo
+  Das outras três referências, uma usa react-day-picker, outra usa um segundo motor headless
+  (recusado: segundo motor headless ao lado do Base UI é padrão paralelo) e o `calendar` da terceira
   é **calendário de eventos**, outro componente.
 - **Ele renderiza no servidor** — 8618 bytes, `<table>` de verdade, 42 células. Ao contrário do
   Recharts, então o catálogo **não** precisou de prerender. Essa foi a primeira coisa medida, e é
   a lição do Lote 3 sendo cobrada antes de escolher.
-- **Não existe `DatePicker`**, e é decisão: seletor de data é `Popover` + `Calendar`, o shadcn
+- **Não existe `DatePicker`**, e é decisão: seletor de data é `Popover` + `Calendar`, a referência que usa react-day-picker
   também não tem componente-raiz para isso, e a composição virou **pattern**
   (`content/patterns/Calendar.mjs`, três previews).
 - **Três nomes renomeados, não 21.** O motor tem API de tema própria (`classNames`); só a raiz, o
@@ -3306,7 +3308,7 @@ sem exceção nenhuma.
 `Sidebar` era `<aside>{children}</aside>`. Item, grupo, rótulo de grupo e item atual existiam no
 core como `.doc-nav`/`.nav-group`, ou seja **chrome do catálogo** (achado A6): a peça estava no
 repositório e não era da biblioteca, então todo consumidor teria de reescrevê-la. Construída sob
-o `BUILDING.md`, com as três referências que a têm (shadcn/ui, Untitled UI, MUI) registradas no
+o `BUILDING.md`, com as três referências que a têm registradas no
 `REFERENCES.md`; as outras quatro **não têm** o componente, e isso está medido pasta a pasta lá.
 `Sidebar` e `Avatar` entraram em `built-components.json`; `Topbar`, `Status` e `QRCode` **não** —
 eles saíram de `Draft` por documentação, e entram junto com os outros no item **E15**.
@@ -3383,7 +3385,7 @@ baselines `-linux.png` do gate de pixel. Ver o bloco "Verificado verde ao fim da
 ### O que a Parte A entregou (06/08/2026)
 
 **A1 — 19 dos 22 módulos levam `"use client"` na primeira linha**, que é a posição das
-referências (Base UI e shadcn/ui, medidos). Ficam de servidor `disclosure.tsx` (marcação pura),
+referências (Base UI e mais uma, medidos). Ficam de servidor `disclosure.tsx` (marcação pura),
 `index.tsx` (o barril) e o `pure.tsx` novo. Não eram 13 de 20 como a medição de 02/08 dizia: ela
 não contava `useAureaStrings` e `useSpriteUrl`, que são hooks e sozinhos fazem cliente o
 `data-display`, o `layout`, o `chart` e o `qrcode`. **A lista mudou porque foi medida de novo,

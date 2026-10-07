@@ -21,8 +21,9 @@ import {Tooltip} from "./overlays.js";
 import {Avatar} from "./identity-client.js";
 
 // Stepper (Lote 2 do BUILDING.md). Registro honesto da pesquisa: das QUATRO referências locais,
-// NENHUMA tem stepper — nem o Base UI, nem o shadcn, nem o Untitled, nem o Kibo. A única fonte
-// é o MUI, e a própria página deles diz que o Material Design parou de documentar o padrão. Ou
+// NENHUMA tem stepper — nem o Base UI, nem as outras três. A única fonte é uma quinta
+// referência, e a própria página dela diz que o sistema de desenho em que ela se baseia parou de
+// documentar o padrão. Ou
 // seja: isto é menos padrão de mercado do que parece, e o que existe aqui é CSS órfão herdado
 // do kit de origem (`.step`, `.step-dot`) mais a página de docs manual que o usa.
 // Construído mesmo assim porque a pele já estava no core sem dono, e componente público sem
@@ -33,7 +34,7 @@ import {Avatar} from "./identity-client.js";
 // que o consumidor teria de manter em sincronia.
 //
 // Não existe padrão APG para stepper. A prática adotada é `role="list"` com `aria-current="step"`
-// na etapa atual, que é o que o MUI também faz.
+// na etapa atual, que é o que aquela quinta referência também faz.
 export type StepState="default"|"active"|"done"|"error";
 export interface StepItem{label:ReactNode;state?:StepState;optional?:ReactNode;onClick?:()=>void}
 export function Stepper({items,label,className}:{items:StepItem[];label?:string;className?:string}){
@@ -69,7 +70,7 @@ export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string})
 // ajusta as setas — a pele reage ao atributo, e não há CSS decidindo por um lado e JS por outro.
 export type TabsOrientation="horizontal"|"vertical";
 // `panel` (MNT-05 e C9, 06/10/2026): `card` (padrão) é o painel de sempre, um cartão `inset`;
-// `plain` tira a caixa, como o painel do HeroUI 3.2.6 (`.tabs__panel`, sem borda nem fundo). É o
+// `plain` tira a caixa, como o painel da referência (sem borda nem fundo). É o
 // caso de `Table` e `DataGrid`, que já têm moldura: dentro de um painel-cartão, caixa dentro de
 // caixa. O mesmo nome e os mesmos dois valores no nativo.
 export type TabsPanel="card"|"plain";
@@ -159,9 +160,9 @@ function useSecaoEmVista(items:TocItem[],ligado:boolean,nav:React.RefObject<HTML
 //
 // AN-06 (Lote H, 04/10/2026) — CARGA AO ABRIR E SELEÇÃO CONTROLADA, só acrescentando. Um consumidor
 // tem dois casos em que os filhos só se sabem ao abrir o nó (os tópicos de um grupo, as pastas do
-// servidor ao escolher um destino). O HeroUI 3.2.6 não tem árvore; o motor dele (React Aria) chama
-// isso de `hasChildItems` — "tem filhos, mesmo que ainda não carregados" — e o ReUI (headless-tree)
-// de `isItemFolder` + `isLoading()`. Aqui: `hasChildren` diz que o nó abre antes de ter filhos;
+// servidor ao escolher um destino). A referência não tem árvore; o motor dela tem um marcador
+// para isso — "tem filhos, mesmo que ainda não carregados" — e outra das referências marca o item
+// como pasta e pergunta se ele está carregando. Aqui: `hasChildren` diz que o nó abre antes de ter filhos;
 // `onExpand` é chamado a cada abertura e, se devolver promessa e o nó ainda não tiver filhos, o nó
 // mostra a rodinha no lugar da seta e fica `aria-busy` até ela terminar. Os filhos chegam pelo
 // próprio `items` (o dado é do consumidor). Promessa recusada FECHA o nó: abrir de novo tenta de
@@ -293,7 +294,7 @@ const alvo=it.render
 :<button id={lid} type="button" className="sidebar-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</button>;
 // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
 // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
-// isso com tooltip no `NavButton`, e é o que falta para um trilho de ícone não virar adivinhação.
+// isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
 // Só quando recolhida: com o rótulo visível ao lado, o tooltip repetiria o que já está na tela.
 // `side="right"` porque a lateral encosta na borda esquerda — para cima o balão sairia do trilho.
 return <li key={it.id}>
@@ -309,12 +310,12 @@ return <li key={it.id}>
 // não impede da gente ter outras variações para as pessoas que nos acharem no npm usarem".
 // Então `floating` é o padrão (o desenho da `0.3.0`, que segue publicado sem quebra) e `flush` é a
 // variante — a ÚNICA exceção à caixa flutuante desta casa, medida em quatro aplicativos que rodam
-// na mão: Cloudflare, Sophos, o app do Claude e o painel do HeroUI. Ver ADR-0034.
+// na mão, um deles o painel da própria referência de desenho. Ver ADR-0034.
 export type SidebarVariant="floating"|"flush";
 // A GAVETA FECHA AO ESCOLHER (A-06, 23/09/2026). Abaixo de lg a lateral do `AppShell` é popover,
 // e a biblioteca a abria e NUNCA a fechava por código: `hidePopover` tinha zero ocorrências. O
-// usuário tocava "Relatórios", a página trocava por baixo e a gaveta ficava na frente dela. Material 3,
-// Fluent 2 e o guia de gaveta do iOS fecham ao escolher. O fechamento mora NA LATERAL, e não no
+// usuário tocava "Relatórios", a página trocava por baixo e a gaveta ficava na frente dela. Duas das
+// referências de desenho e o guia de gaveta do iOS fecham ao escolher. O fechamento mora NA LATERAL, e não no
 // item, para valer também para a navegação que o consumidor escreve e passa como `children` — o
 // catálogo é um desses. Fora do popover (desktop, lateral solta) o teste de `:popover-open` falha e
 // nada acontece. O `try` é porque `:popover-open` é seletor desconhecido em motor antigo, e lá o
@@ -345,8 +346,8 @@ return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`
 //
 // NÃO É `Tabs`, e a distinção é a decisão: aba troca PAINEL dentro da página, barra inferior
 // troca de PÁGINA. Dar `role="tablist"` a um menu faz o leitor de tela prometer setas que não
-// levam a lugar nenhum. Foi o que a MUI evita por baixo (a dela é `<div>` de botões) e o que
-// a KendoReact escreve por cima: o contêiner é landmark `<nav>`, o item é link.
+// levam a lugar nenhum. Foi o que uma das referências evita por baixo (a dela é `<div>` de botões) e o que
+// outra escreve por cima: o contêiner é landmark `<nav>`, o item é link.
 // TECLADO: o mesmo do `Sidebar`, pela mesma razão — não há padrão APG para navegação de
 // site. Link em `<nav>`, ordem de Tab nativa, `aria-current="page"` no atual.
 // A GRAMÁTICA, reescrita em 20/08/2026 pela auditoria de UI/UX que o Victor encomendou.
@@ -374,7 +375,7 @@ return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`
 //   flat -> edge/none · surface -> floating/circle · pill -> floating/pill · dock -> floating/circle
 export type BottomNavVariant="floating"|"edge";
 // `capsule` e `expand` entraram em 03/10/2026, da bancada do Victor: a cápsula amarela só atrás do
-// ícone (o Material 3 Expressive) e o item escolhido que vira cápsula com o nome ao lado.
+// ícone (o modelo de uma das referências de desenho) e o item escolhido que vira cápsula com o nome ao lado.
 export type BottomNavIndicator="none"|"subtle"|"pill"|"circle"|"circle-raised"|"circle-bold"|"circle-outline"|"capsule"|"expand";
 // A LARGURA É UM TERCEIRO EIXO, e não um nome de variant — R-08, 24/09/2026 (*"ficou super
 // largo"*). `content` põe a pílula do tamanho das abas, no centro. Vale só quando a barra flutua:
@@ -399,8 +400,8 @@ return <nav className={cx("bottom-nav",layout==="edge"&&"bottom-nav-edge",layout
 const ativo=it.id===current;
 // O CONTADOR PENDURA NO ÍCONE, e é por isso que existe esta caixa. Pendurado no ITEM (a
 // primeira versão), `50%` cai no meio do RÓTULO quando o item é linha — o Victor viu o número
-// cobrir o nome inteiro em 17/08/2026. A pesquisa (Material 3 e os guias de barra de abas do
-// iOS) diz a mesma coisa: canto superior do ÍCONE, encostando na borda dele, nunca sobre o
+// cobrir o nome inteiro em 17/08/2026. A pesquisa (uma das referências de desenho e os guias de
+// barra de abas do iOS) diz a mesma coisa: canto superior do ÍCONE, encostando na borda dele, nunca sobre o
 // texto. A caixa é o que dá ao contador um canto para se ancorar — e nos quatro indicadores
 // redondos é ela que VIRA o círculo, com o rótulo embaixo, fora dele.
 // `size="lg"` porque a proporção contra o contador foi medida: 24 para 16, razão 0,67.
@@ -436,14 +437,14 @@ return it.render
 // E não é `DataList` (que é `<dl>`, termo e valor, e não se toca) nem `Table` (grade de dados) —
 // a `DIRECTION.md` §3.2 separa os dois pelo comportamento, não pela aparência.
 //
-// A SEGUNDA LINHA veio da REFERÊNCIA, não da minha cabeça: o `ListItemText` da MUI tem `primary`
-// e `secondary`, e tela de ajustes real usa as duas ("Notifications" / "Push, email"). Das nove
-// pastas de `Referencia/`, a MUI é a única com o componente maduro — o `base-ui`, que é o motor
+// A SEGUNDA LINHA veio da REFERÊNCIA, não da minha cabeça: o texto de item de lista de uma das referências
+// tem um texto principal e um secundário, e tela de ajustes real usa as duas ("Notifications" / "Push, email").
+// Das nove pastas de `Referencia/`, essa é a única com o componente maduro — o `base-ui`, que é o motor
 // que já usamos, só tem `useCompositeListItem`, que é navegação de MENU por teclado e não isto.
 //
-// O QUE NÃO ENTROU da MUI, pelo passo 5 do `BUILDING.md`: `dense`, `disableGutters`,
-// `alignItems`, `disableTypography`, `inset`, `autoFocus` e o `component` polimórfico. Os sete
-// existem por causa do sistema de estilo e de densidade DELA; aqui a densidade é global e o
+// O QUE NÃO ENTROU dessa referência, pelo passo 5 do `BUILDING.md`: as props de densidade, de margem
+// lateral, de alinhamento, de desligar a tipografia, de recuo, de foco automático e a do elemento
+// polimórfico. As sete existem por causa do sistema de estilo e de densidade DELA; aqui a densidade é global e o
 // elemento sai do `href`.
 //
 // A SETA SÓ APARECE EM LINHA QUE TEM DESTINO (`href`), e isto foi achado OLHANDO a página do

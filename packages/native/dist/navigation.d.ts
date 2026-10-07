@@ -216,7 +216,7 @@ export interface TabsProps extends ViewProps {
     /** Onde a fila de abas fica quando cabe: `start` (padrão), `center` ou `end` (E3). */
     justify?: AureaFilaJustify;
     /**
-     * O jeito da fila, com os nomes do HeroUI (R-12, 01/10/2026):
+     * O jeito da fila, com os nomes da referência (R-12, 01/10/2026):
      * - `primary` (padrão): a cápsula, com a aba aberta num fundo `secondary`.
      * - `secondary`: sem cápsula — um fio fino embaixo da fila inteira e o **fio amarelo** da casa
      *   embaixo da aba aberta, o mesmo do `SegmentedControl`.
@@ -226,12 +226,12 @@ export interface TabsProps extends ViewProps {
      * O painel (C9 e MNT-05, 06/10/2026):
      * - `card` (padrão): um cartão `inset`, como sempre — o conteúdo entra o recheio do cartão.
      * - `plain`: sem caixa. O conteúdo começa na mesma linha do que está fora do `Tabs`, como o
-     *   painel do HeroUI. É o caso de um conteúdo que já é cartão, tabela ou lista: dentro de um
+     *   painel da referência. É o caso de um conteúdo que já é cartão, tabela ou lista: dentro de um
      *   painel-cartão, vira caixa dentro de caixa.
      */
     panel?: AureaTabsPanel;
 }
-/** Os dois jeitos da fila de abas, com os nomes do `Tabs` do HeroUI Native. */
+/** Os dois jeitos da fila de abas, com os nomes do `Tabs` da referência. */
 export type AureaTabsVariant = "primary" | "secondary";
 /** O painel do `Tabs`: cartão (padrão) ou sem caixa. O mesmo nome na web. */
 export type AureaTabsPanel = "card" | "plain";
@@ -247,7 +247,7 @@ export type AureaTabsPanel = "card" | "plain";
  *
  * ⚠ **A fila ROLA na horizontal, e a web não rola — divergência deliberada, com fonte.** A
  * referência máxima de desenho deste projeto tem estados de rolagem na lista de abas
- * (`left-scroll`, `right-scroll`, `left-right-scroll` no inventário), e num telefone de 360dp
+ * (rolagem à esquerda, à direita e dos dois lados, no inventário), e num telefone de 360dp
  * quatro rótulos já não cabem. Espremer todas seria a outra saída, e ela apaga o rótulo — que é
  * o defeito que o app mediu no `SegmentedControl`. **A cápsula, o respiro e o raio continuam
  * sendo os do CSS**; o que muda é o transbordo.

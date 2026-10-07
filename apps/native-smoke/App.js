@@ -988,7 +988,7 @@ function SmokeDoLote7({ir}) {
             + "a) as duas primeiras miniaturas DESENHAM (são bytes de verdade, em `data:`, sem "
             + "rede);\n"
             + "b) a terceira aponta para um endereço que não existe: ela tem de virar o "
-            + "SUBSTITUTO — caixa do mesmo tamanho, mesmo raio, glifo `image` do Carbon dentro. "
+            + "SUBSTITUTO — caixa do mesmo tamanho, mesmo raio, glifo `image` dentro. "
             + "**Não pode sumir nem encolher a grade**, porque a caixa é reservada pela proporção "
             + "antes de qualquer byte chegar;\n"
             + "c) toque numa boa: abre no `Dialog` com `contain`. 🔴 **Tem de caber na tela "
@@ -1113,8 +1113,8 @@ function SmokeDoResto({ir}) {
           </Bloco>
 
           {/* ── 3 ─────────────────────────────────────────────────────────── */}
-          <Bloco t={t} n="3" titulo="O `Switch` é NOSSO, ou é o do Material?"
-            criterio={"O `Switch` do React Native traria o interruptor do Material, que a "
+          <Bloco t={t} n="3" titulo="O `Switch` é NOSSO, ou é o do Android?"
+            criterio={"O `Switch` do React Native traria o interruptor padrão do Android, que a "
               + "identidade proíbe. Este é desenhado com as medidas do CSS. Se ele parecer um "
               + "switch de Android, o componente errado entrou. O `Checkbox` e o `Radio` seguem "
               + "a mesma regra, e o `SegmentedControl` tem de estar em PILL (raio 999)."}>
@@ -1418,9 +1418,9 @@ function BlocosLoteE({t}) {
           <Text style={{color: t.color.primaryForeground, fontSize: t.size.textBase}}>Trocar o óleo?</Text>
         </Card>
       </Bloco>
-      <Bloco t={t} n="E1b" titulo="O selo mostra a letra inteira, nas medidas do HeroUI?"
-        criterio={"O g e o p inteiros nos quatro tamanhos. sm, md e lg têm as medidas do Chip do HeroUI "
-          + "Native (20, 28 e 36 de altura, mais a borda); o xs é o contador sobre ícone, 16 de altura."}>
+      <Bloco t={t} n="E1b" titulo="O selo mostra a letra inteira, nas medidas da referência?"
+        criterio={"O g e o p inteiros nos quatro tamanhos. sm, md e lg têm as medidas do Chip da referência "
+          + "(20, 28 e 36 de altura, mais a borda); o xs é o contador sobre ícone, 16 de altura."}>
         <View style={{flexDirection: "row", gap: t.size.space2, alignItems: "center", flexWrap: "wrap"}}>
           <Badge size="xs" count={3} tone="danger" />
           <Badge size="sm">pago</Badge>
@@ -1444,8 +1444,8 @@ function BlocosLoteE({t}) {
 // 0.12.1 (25/09/2026). Os aceites de aparelho dos consertos E9, E10 e E11. ~~O E4b era
 // diagnóstico~~ — fechou em 30/09/2026 sem defeito (a lista testada no app era curta), e as seis
 // cópias da folha do `Combobox` (R0 a R5) saíram daqui.
-// RadioGroup (01/10/2026): o do HeroUI Native, dentro de um cartão com separadores, como no
-// exemplo dele. Aceite: tocar troca a escolha, e as medidas batem com a imagem do HeroUI.
+// RadioGroup (01/10/2026): o da referência, dentro de um cartão com separadores, como no
+// exemplo dela. Aceite: tocar troca a escolha, e as medidas batem com a imagem da referência.
 function BlocoRadioGroup({t}) {
   const [entrega, setEntrega] = React.useState("normal");
   return (
@@ -1479,7 +1479,7 @@ function BlocoRadioGroup({t}) {
 // Lote F (01/10/2026): R-12, R-14, R-16 e R-19, aprovados pelas pranchas. O R-10 não tem bloco:
 // ele não muda nada na tela (o `textMd` continua 14, agora como apelido do `textSm`).
 // R-11, R-15 e R-18 (02/10/2026): o desenho do app entra direto, sem registro nem nome declarado,
-// como no HeroUI. O desenho é o GLIFO_TRACO, feito com `criarGlifo` (o mesmo caminho do logotipo
+// como na referência. O desenho é o GLIFO_TRACO, feito com `criarGlifo` (o mesmo caminho do logotipo
 // do app). A R-15 e a R-18 põem o glifo numa moldura redonda (a "C" da prancha).
 function BlocoR11R15({t}) {
   const [aba, setAba] = React.useState("inicio");
@@ -1560,7 +1560,7 @@ function BlocoR22({t}) {
   );
 }
 
-// 0.17.0 (03/10/2026): a barra de baixo PARADA quando se troca de aba, na altura do Telegram, com o
+// 0.17.0 (03/10/2026): a barra de baixo PARADA quando se troca de aba, na altura de referência, com o
 // nome colado no ícone — e as duas formas novas, `capsule` e `expand`. Aprovado pela bancada
 // (*"a palavra agora é PERFEITO! pode. aprovado"*); falta o aparelho. A barra flutua por cima da
 // tela, então cada uma mora num palco com altura e `position: relative` — o palco faz o papel da
@@ -1585,8 +1585,8 @@ function BlocoBarraParada({t}) {
     <Bloco t={t} n="0.17" titulo="A barra de baixo fica PARADA quando você troca de aba?"
       criterio={"Em cada uma das quatro: 1) Toque nas abas, uma de cada vez. A barra NÃO muda de largura "
         + "nem anda de lado; só o escolhido muda de cor e de forma. No expand, os botões andam, a "
-        + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra do "
-        + "Telegram; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
+        + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra de "
+        + "referência; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
       {["circle-bold", "capsule", "pill", "expand"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
     </Bloco>
   );
@@ -1639,8 +1639,8 @@ function BlocoLoteI({t}) {
       criterio={"1) Os dois segmentados de cima: nenhum rótulo em duas linhas. 2) Os dois de baixo "
         + "(fullWidth) ocupam a linha inteira, sem quebrar. 3) O cartão \"Dentro do Tabs\" começa e "
         + "termina na mesma linha do cartão \"Fora do Tabs\". 4) Toque no + da foto, escolha DUAS "
-        + "fotos de uma vez na galeria, uma tirada pelo celular e uma recebida pelo WhatsApp: a do "
-        + "celular mostra a data e a hora em que foi tirada; a do WhatsApp, \"sem data\"."}>
+        + "fotos de uma vez na galeria, uma tirada pelo celular e uma recebida por um aplicativo de mensagens: a do "
+        + "celular mostra a data e a hora em que foi tirada; a do aplicativo, \"sem data\"."}>
       <SegmentedControl items={per} value={p} onChange={setP} label="Período" />
       <SegmentedControl items={km} value={k} onChange={setK} label="Troca a cada" />
       <SegmentedControl items={per} value={p} onChange={setP} label="Período" fullWidth />

@@ -75,7 +75,7 @@ export default {
         "formatOnBlur normalises the value after focus leaves — it never masks while you type. " +
         "A live mask makes the screen reader announce what was typed while the field shows " +
         "something else; the US federal design system ships its input mask with a recorded WCAG " +
-        "2.1 AA failure, and MUI dropped masked date fields for the same reason. Type and paste " +
+        "2.1 AA failure, and one of the references dropped masked date fields for the same reason. Type and paste " +
         "freely; the formatted text becomes the field's own value, so there is nothing painted " +
         "over it and nothing hidden from a form.",
       code: [

@@ -3,7 +3,7 @@
   "category": "System",
   "layer": "Foundation",
   "maturity": "Stable",
-  "summary": "Carbon icon primitive rendered from a sprite.",
+  "summary": "Icon primitive rendered from a sprite.",
   "icon": "palette",
   "platforms": {
     "web": "stable",
@@ -57,7 +57,7 @@
       "name": "name",
       "type": "IconName",
       "default": "—",
-      "description": "The Carbon glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue."
+      "description": "The glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue."
     },
     {
       "name": "size",

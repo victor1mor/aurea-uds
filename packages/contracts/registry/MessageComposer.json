@@ -78,7 +78,7 @@
       "name": "icon",
       "type": "IconName",
       "default": "—",
-      "description": "Carbon glyph inside the field, before the text."
+      "description": "Glyph inside the field, before the text."
     },
     {
       "name": "sendLabel",

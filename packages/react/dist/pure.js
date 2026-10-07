@@ -9,8 +9,8 @@
 // módulos de cliente não precisarem saber da diferença; o barril (`index.tsx`, que também é de
 // servidor) importa DAQUI.
 //
-// Mesmo desenho da referência: no shadcn/ui o `cn` mora em `lib/utils.ts` sem diretiva, enquanto
-// 43 dos 57 componentes de `registry/bases/aria/ui` a declaram — medido em 06/08/2026.
+// Mesmo desenho da referência: nela a função de juntar classes mora num arquivo utilitário sem diretiva, enquanto
+// 43 dos 57 componentes dela a declaram — medido em 06/08/2026.
 //
 // `.tsx` sem JSX de propósito: os checks 11, 19 e 26 varrem `packages/react/src/*.tsx`, e um
 // `.ts` aqui seria um arquivo que gate nenhum enxerga.

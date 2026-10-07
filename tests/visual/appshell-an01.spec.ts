@@ -4,8 +4,8 @@ import {test, expect, type Page} from "@playwright/test";
 //
 // Um consumidor viu numa janela de 1508 × 757: a lateral sempre aberta, sem botão, e diminuir a
 // janela não a recolhia (só virava gaveta abaixo de 1024). O Victor marcou o lugar do botão: no
-// alto, na junção do menu com o conteúdo. A referência de comportamento é a `Sidebar` do shadcn que
-// o ReUI usa no `c-sidebar-2` (o HeroUI não tem moldura de app).
+// alto, na junção do menu com o conteúdo. A referência de comportamento é a `Sidebar` de uma das
+// referências, a mesma que outra usa num exemplo (a referência principal não tem moldura de app).
 //
 // O shell tem estado e efeito, então se mede montado de verdade: `apps/keyboard-probe/shell.html`,
 // construído pelo `pnpm build`. O código de antes reprova tudo: não havia botão.

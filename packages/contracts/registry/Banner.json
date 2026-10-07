@@ -77,7 +77,7 @@
       "name": "icon",
       "type": "IconName",
       "default": "—",
-      "description": "Carbon glyph in the leading column. Leave it out and the column still holds its place — an empty span keeps the three-column grid — so banners stacked together stay aligned."
+      "description": "Glyph in the leading column. Leave it out and the column still holds its place — an empty span keeps the three-column grid — so banners stacked together stay aligned."
     },
     {
       "name": "onDismiss",

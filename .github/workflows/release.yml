@@ -84,10 +84,11 @@ jobs:
 
       - name: Validate
         run: python scripts/validate.py
-        # A lista de nomes privados mora num SEGREDO do repositório, não no código. O GitHub não
-        # entrega segredo a pedido vindo de fork; só nesse caso o check 1 é declarado pulado.
+        # As listas de nomes privados e de referências de construção (check 1b) moram em SEGREDOS
+        # do repositório, não no código.
         env:
           AUREA_NOMES_PRIVADOS: ${{ secrets.AUREA_NOMES_PRIVADOS }}
+          AUREA_REFERENCIAS: ${{ secrets.AUREA_REFERENCIAS }}
 
       - name: Testes
         run: pnpm test

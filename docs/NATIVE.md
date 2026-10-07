@@ -108,7 +108,7 @@ limbo; o que ele **não** faz é começar.
 Logo `@aurea-uds/native` é um pacote **irmão**, não um wrapper do React web: componentes próprios
 sobre `View`/`Text`/`Pressable`, consumindo `@aurea-uds/tokens`.
 
-A opção (B) — "universal" via Tamagui — foi **recusada** na mesma decisão, porque trocaria o Base
+A opção (B) — "universal", via um kit de motor e componentes de terceiro — foi **recusada** na mesma decisão, porque trocaria o Base
 UI e o CSS do core inteiros pelo modelo de outra biblioteca. Só se reabre se o Victor quiser
 relitigar.
 
@@ -163,21 +163,23 @@ A pesquisa confirma, e pela razão certa: **o Unistyles não tem componentes** �
 que a ideia é você construir o seu design system em cima. É exatamente a relação que a Aurea tem
 com o Base UI na web.
 
-Números de desempenho publicados (iOS, quanto menor melhor): **StyleSheet 49,74 ms** · Uniwind Pro
-beta 57,11 ms · **Unistyles 66,40 ms** · Uniwind 81,36 ms · **NativeWind 197,22 ms**.
+Números de desempenho publicados (iOS, quanto menor melhor): **StyleSheet 49,74 ms** · um motor
+novo de utilitário, na versão paga em beta, 57,11 ms · **Unistyles 66,40 ms** · o mesmo motor novo,
+na versão gratuita, 81,36 ms · **outro motor de utilitário de classe 197,22 ms**.
 
-Novidade que não existia em 18/07: o **Uniwind**, do mesmo time do Unistyles, ligação Tailwind
-feita sobre Fabric. Não muda a recomendação — a Aurea não escreve utilitário Tailwind — mas
-importa por um motivo: ele tem **tier pago** ("Pro beta"), e o modelo comercial do fornecedor de
-uma dependência é coisa que se olha antes, não depois.
+Novidade que não existia em 18/07: o **motor novo de utilitário**, do mesmo time do Unistyles,
+ligação de utilitário de classe feita sobre Fabric. Não muda a recomendação — a Aurea não escreve
+utilitário de classe — mas importa por um motivo: ele tem **tier pago** (em beta), e o modelo
+comercial do fornecedor de uma dependência é coisa que se olha antes, não depois.
 
-**O NativeWind está fora** por medida, não por gosto: 4× o custo do StyleSheet, e o modelo dele é
-utilitário de classe — o mesmo que o `typography` do `ui-main` ensinou a recusar no item L5.
+**Esse outro motor de utilitário de classe está fora** por medida, não por gosto: 4× o custo do
+StyleSheet, e o modelo dele é utilitário de classe — o mesmo que a tipografia de uma das
+referências ensinou a recusar no item L5.
 
 ### O ponto que a pesquisa NÃO resolveu, e que decide 152 tokens
 
 **Nenhuma fonte confiável diz que o `StyleSheet` do React Native aceita `oklch()` nativamente.**
-O que se acha são **bibliotecas** anunciando suporte (styled-components/native, NativeWind, HeroUI)
+O que se acha são **bibliotecas** anunciando suporte (duas bibliotecas de estilo e uma das referências)
 — e biblioteca suportando não é plataforma suportando.
 
 Isso importa mais aqui do que importaria em outro projeto:
@@ -733,7 +735,7 @@ menor risco depois do chão. O risco que ele tinha era outro, e apareceu.
    cascata, então quem anima **pergunta**. Ele devolve `boolean | null`, e o `null` não é preguiça
    de tipo: `isReduceMotionEnabled()` é assíncrono, e começar em `false` faria **um quadro de
    animação tocar na cara de quem pediu que não tocasse**. Quem anima espera saber.
-3. **O `Spinner` NÃO é o `ActivityIndicator`.** Ele desenharia a rosquinha do Material no Android
+3. **O `Spinner` NÃO é o `ActivityIndicator`.** Ele desenharia a rosquinha nativa do Android
    e a coroa do iOS — duas aparências que o `CLAUDE.md` proíbe em voz alta. O anel de borda com
    `borderRightColor: transparent` reproduz o `.spinner` do CSS, e gira nos mesmos 700 ms.
 4. **O estado universal ACOMPANHA o dado no `DataState`, não o substitui.** `stale`, `partial` e
@@ -869,7 +871,7 @@ nome para quem usa leitor de tela — **um defeito que não aparece na tela e n�
 **Quatro coisas que o lote decidiu, e cada uma tem razão medida:**
 
 1. **O `Switch` não é o `Switch` do React Native** — mesma razão do `Spinner` no Lote 2: ele
-   traria o interruptor do Material no Android e o do iOS no iOS. As medidas são as do CSS:
+   traria o interruptor nativo de cada sistema, o do Android no Android e o do iOS no iOS. As medidas são as do CSS:
    trilho de `altura × 7/6` por `altura × 2/3`.
 2. **O `Select` é `button`, não `combobox`.** `combobox` promete um campo em que se DIGITA para
    filtrar; isto só abre uma lista. É o mesmo defeito do `tablist` no Lote 3, e a ficha da web
@@ -1038,20 +1040,20 @@ Onde só houve busca, está dito.
 
 | padrão | quem usa | mecanismo |
 |---|---|---|
-| **SVG por ícone** sobre `react-native-svg` | `heroui-native` (peer `^15.12.1`) · `@gluestack-ui/themed` (`>=13.4.0`) · `lucide-react-native` | um módulo por ícone; `sideEffects:false` para o bundler podar |
-| **fonte de ícone**, um pacote por família | `@react-native-vector-icons/*` | glifo no pipeline de **texto** do sistema |
-| **não entrega ícone** — recebe um renderizador | `react-native-paper` | `Settings.icon` é função de render (lido no fonte: `src/core/settings.tsx`) |
-| **SVG → fonte no build** | `react-native-nano-icons` **0.2.1** | converte no build e pinta como glifo nativo |
+| **SVG por ícone** sobre `react-native-svg` | uma das referências (peer `^15.12.1`) · uma biblioteca de componentes nativa (`>=13.4.0`) · uma biblioteca de ícones de traço | um módulo por ícone; `sideEffects:false` para o bundler podar |
+| **fonte de ícone**, um pacote por família | o sucessor, por família, de um pacote de fonte de ícone | glifo no pipeline de **texto** do sistema |
+| **não entrega ícone** — recebe um renderizador | outra biblioteca de componentes nativa | uma função de render de ícone nas configurações (lida no fonte) |
+| **SVG → fonte no build** | um gerador de fonte de ícone, anterior à `1.0` | converte no build e pinta como glifo nativo |
 
 Medições que sustentam a tabela:
 
-- `lucide-react-native@1.38.0`: **1792 módulos de ícone**, 48 MB desempacotado, `sideEffects:false`,
+- A biblioteca de ícones de traço: **1792 módulos de ícone**, 48 MB desempacotado, `sideEffects:false`,
   peer em `react-native-svg`. É a forma canônica do padrão 1.
-- **`react-native-vector-icons@10.3.0` está DEPRECADO no npm.** A mensagem do próprio registro:
-  *"has moved to a new model of per-icon-family packages"*. E, por busca, o `@expo/vector-icons`
+- **O pacote de fonte de ícone medido está DEPRECADO no npm.** A mensagem do próprio registro diz
+  que ele passou para pacotes por família de ícone. E, por busca, o `@expo/vector-icons`
   está no mesmo caminho.
-- `react-native-paper` **não tem peer de ícone nenhum** — confirmado no `peerDependencies` e no
-  fonte: o contexto tem `icon?: (props) => React.ReactNode`, com `MaterialCommunityIcon` de padrão.
+- A outra biblioteca de componentes nativa **não tem peer de ícone nenhum** — confirmado no `peerDependencies` e no
+  fonte: o contexto tem `icon?: (props) => React.ReactNode`, com o conjunto de ícones da própria biblioteca de padrão.
 
 ### Desempenho — e a fonte ganha, com uma condição
 
@@ -1065,23 +1067,23 @@ cresce com a contagem, e explode em lista longa. **O caso da Aurea aqui é o de 
 do consumidor tem 4 ícones na barra inferior e um por linha de lista.
 
 **O número mais forte que achei é do próprio fornecedor**, e por isso está marcado: o
-`react-native-nano-icons` publica um gráfico de **1000 ícones multicoloridos** em `ScrollView` e
+gerador de fonte de ícone publica um gráfico de **1000 ícones multicoloridos** em `ScrollView` e
 afirma ser **10–40× mais rápido** que o `react-native-svg`. É benchmark de quem vende, num cenário
 que **não é o nosso**. Não repito como se fosse medida nossa.
 
-### O `nano-icons` é sedutor e eu NÃO o recomendo — por três medições
+### O gerador de fonte de ícone é sedutor e eu NÃO o recomendo — por três medições
 
-Vem da **Software Mansion**, que mantém o próprio `react-native-svg` e o Reanimated. Isso lhe dá
-crédito, e foi o que me fez olhar. Três coisas o tiram da mesa hoje:
+Vem do mesmo time que mantém o próprio `react-native-svg` e outras bibliotecas centrais do React
+Native. Isso lhe dá crédito, e foi o que me fez olhar. Três coisas o tiram da mesa hoje:
 
-1. **Está em `0.2.1`.** Pré-1.0 como fundação de ícone de um design system é a aposta que a
+1. **Está em versão anterior à `1.0`.** Pré-1.0 como fundação de ícone de um design system é a aposta que a
    ADR-0028 ensinou a não fazer sem medir o custo.
 2. **Ele exige Expo.** O `peerDependencies` traz `expo: '*'` e `@expo/config: '>=9.0.0'`. A Aurea é
    biblioteca — forçar o framework do consumidor é o que a arquitetura da §2 recusa desde 18/07.
 3. **⚠ Ele degrada exatamente onde o Victor acabou de decidir investir.** A documentação dele diz
    que *"no Expo Go os ícones são renderizados com um `<Text>` de fallback"*. O Expo Go foi **a
    razão** de a [ADR-0037](../decisions/0037-stylesheet-puro-no-nativo-e-o-provider-e-nosso.md) trocar
-   o motor de estilo. Adotar o nano-icons devolveria pela porta dos ícones o problema que se acabou
+   o motor de estilo. Adotar o gerador de fonte de ícone devolveria pela porta dos ícones o problema que se acabou
    de tirar pela porta do estilo.
 
 **Fica na lista de vigiar, não na de adotar.** Reabre-se quando chegar a `1.0` e se soltar do Expo.
@@ -1105,12 +1107,12 @@ confirma a primeira metade e me faz largar a segunda**, porque o subconjunto cur
 problema que o bundler já resolve sozinho:
 
 > **Gerar um componente por ícone sobre `react-native-svg`, a partir do SVG do `@carbon/icons`** —
-> que é exatamente o que fazem os dois design systems nativos vivos que medi (heroui-native e
-> gluestack) e o `lucide-react-native`. Quem importa 40 ícones carrega 40.
+> que é exatamente o que fazem os dois design systems nativos vivos que medi (uma das referências e
+> uma biblioteca de componentes nativa) e a biblioteca de ícones de traço. Quem importa 40 ícones carrega 40.
 
 Duas peças acompanham, e as duas saem da pesquisa, não de gosto:
 
-- **A trava do Paper.** Aceitar um renderizador de ícone injetável — como `Settings.icon` — para o
+- **A trava de quem recebe renderizador.** Aceitar um renderizador de ícone injetável — como faz a outra biblioteca de componentes nativa — para o
   consumidor que já tem a própria pilha de ícone não ser obrigado a carregar a nossa. Custa pouco e
   é o padrão de quem tem mais quilometragem nisso.
 - **O `<Icon name>` continua existindo**, para não quebrar a paridade de API com a web, mas como
@@ -1130,7 +1132,7 @@ the fundamental structure of how Metro bundles code"*. Só passou a ligado por p
 **Consequência direta:** um barril com 2856 ícones seria uma aposta na configuração do bundler do
 consumidor. Se ele não podar, o app carrega os 2856.
 
-**E o mercado já resolveu isso, do jeito que dá para copiar.** O `lucide-react-native` declara:
+**E o mercado já resolveu isso, do jeito que dá para copiar.** A biblioteca de ícones de traço declara:
 
 ```
 exports: { ".": …, "./icons": …, "./icons/*": … }
@@ -1429,7 +1431,7 @@ o `NumberField` sem foco, o mesmo campo esticando em vez de abraçar, a folha do
 iOS, e dois números inventados (`"85%"`/`"45%"`).
 
 🔴 **Nenhum dos 1409 testes, do `validate.py`, do build ou da publicação pegou qualquer um deles.**
-Quem pegou foi o Victor **olhando imagem**, e o inventário da HeroUI. É a medida mais honesta do
+Quem pegou foi o Victor **olhando imagem**, e o inventário da referência. É a medida mais honesta do
 que a suíte cobre e do que ela não cobre: ela prova comportamento, e **não prova aparência**.
 
 **Conferido no REGISTRO, não no terminal** — e a diferença é o método, não a formalidade: os sete
@@ -1520,8 +1522,8 @@ declara `accessibilityRole="button"`.
 | `ReactViewManager.kt:96` | `view.isFocusable = accessible` | no Android é só foco |
 | `ReactViewGroup.kt:1048` | `safeAddChildrenForAccessibility(outChildren)` | e os filhos **continuam** na árvore — lá o "X" sempre foi alcançável |
 
-⚠ **A regra da Apple sobre elemento de acessibilidade não expor filhos NÃO foi lida na fonte
-dela** — o que foi lido é a linha do React Native que liga `accessible` a
+⚠ **A regra do iOS sobre elemento de acessibilidade não expor filhos NÃO foi lida na fonte
+original** — o que foi lido é a linha do React Native que liga `accessible` a
 `isAccessibilityElement`. Fica declarado em vez de disfarçado.
 
 ⚠ **O toque nunca esteve quebrado**, nos dois sistemas: numa disputa de toque o filho ganha do

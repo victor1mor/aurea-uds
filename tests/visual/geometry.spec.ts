@@ -412,12 +412,12 @@ for (const width of ["full", "content"] as const) {
 // A prova é a do enunciado: para cada aba escolhida, o retângulo da barra e o de cada botão são os
 // mesmos. Só a pintura muda. O expande (`expand`) é o único em que o botão escolhido cresce, e
 // nele a prova é a da barra, não a dos botões.
-// A ALTURA DO TELEGRAM — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo comparado a
-// bottomnav como do telegram"*, e "largo" é a grossura. Medido no fonte do Telegram para Android
-// 12.10.6: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. Aqui: 56 nos
-// indicadores sem moldura, e 64 — a altura do Material 3 Expressive — nos que têm a moldura de 32
-// em volta do ícone. E o nome cabe na própria caixa: a linha justa demais cortava a perna do "j".
-test("BottomNav: a altura do Telegram, o nome inteiro e colado no ícone", async ({page: p, baseURL}) => {
+// A ALTURA DE REFERÊNCIA — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo comparado a
+// bottomnav como do [app de referência]"*, e "largo" é a grossura. Medido no fonte do app de
+// referência para Android: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha
+// de 16. Aqui: 56 nos indicadores sem moldura, e 64 — a altura de outra referência de desenho —
+// nos que têm a moldura de 32 em volta do ícone. E o nome cabe na própria caixa: a linha justa demais cortava a perna do "j".
+test("BottomNav: a altura de referência, o nome inteiro e colado no ícone", async ({page: p, baseURL}) => {
   const itens = [{id: "inicio", label: "Início", icon: "house", href: "#"},
     {id: "ajustes", label: "Ajustes", icon: "gear", href: "#"}, {id: "perfil", label: "Perfil", icon: "user", href: "#"}];
   // E o nome COLADO no ícone (03/10/2026, *"o texto pode ficar mais próximo do ícone"*): o topo

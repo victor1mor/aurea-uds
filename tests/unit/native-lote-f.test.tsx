@@ -1,5 +1,5 @@
 // Lote F do nativo (01/10/2026) · R-10, R-12, R-14, R-16 e R-19, os acréscimos da fila
-// (`docs/FILA.md`), cada um no desenho do HeroUI Native 1.0.10 quando ele tem a peça. As propostas
+// (`docs/FILA.md`), cada um no desenho da referência no nativo quando ela tem a peça. As propostas
 // foram aprovadas pelo Victor pelas pranchas de 01/10/2026 ("ok, 30 e 24").
 //
 // Cada `describe` reprova o código de antes do lote: sem `variant` a fila de abas é sempre a
@@ -31,7 +31,7 @@ const ehFio = (e: Record<string, unknown>) =>
   && e.backgroundColor === comOpacidade(t.color.primary, 0.75);
 
 // ── R-12 · Tabs variant="secondary" ─────────────────────────────────────────────────────────
-describe("R-12 · Tabs: o jeito sublinhado do HeroUI, com o fio da casa", () => {
+describe("R-12 · Tabs: o jeito sublinhado da referência, com o fio da casa", () => {
   const abas = [
     {id: "geral", label: "Geral", content: null},
     {id: "aparencia", label: "Aparência", content: null},
@@ -61,7 +61,7 @@ describe("R-12 · Tabs: o jeito sublinhado do HeroUI, com o fio da casa", () => 
     expect(e.borderColor).toBe(t.color.border);
     expect(e.gap).toBe(t.size.space1);
   });
-  it("secondary: a aba tem o recheio do HeroUI (12 dos lados, 6 em cima e embaixo) e a altura da cápsula", () => {
+  it("secondary: a aba tem o recheio da referência (12 dos lados, 6 em cima e embaixo) e a altura da cápsula", () => {
     render(<Envolve><Tabs tabs={abas} value="geral" variant="secondary" /></Envolve>);
     const e = plano(tabs()[1]);
     expect(e.paddingHorizontal).toBe(t.size.space3);
@@ -83,7 +83,7 @@ describe("R-12 · Tabs: o jeito sublinhado do HeroUI, com o fio da casa", () => 
 });
 
 // ── R-14 · Combobox: segunda linha no item ───────────────────────────────────────────────────
-describe("R-14 · Combobox: description no item, como o Select.ItemDescription do HeroUI", () => {
+describe("R-14 · Combobox: description no item, como a descrição de item do Select da referência", () => {
   async function abrir() {
     render(<Envolve><Combobox testID="cb" value={null} items={[
       {value: "1", label: "Açúcar cristal", description: "Pacote de 1 kg"},
@@ -189,7 +189,7 @@ describe("R-19 · RadioGroup: ícone na opção", () => {
     expect(glifos("truck")).toHaveLength(0);
     expect(glifos("storefront").length).toBeGreaterThan(0);
   });
-  it("🔴 a descrição sai em 14 (o text-sm do HeroUI) e não em 16, que é o rótulo", () => {
+  it("🔴 a descrição sai em 14 (o tamanho da referência) e não em 16, que é o rótulo", () => {
     render(<Entrega />);
     const d = plano(__instancias("Text").filter((p) => p.children === "Em 5 a 7 dias úteis").at(-1)!);
     const r = plano(__instancias("Text").filter((p) => p.children === "Normal").at(-1)!);

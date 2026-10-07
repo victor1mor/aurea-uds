@@ -147,7 +147,7 @@
       "name": "anchorShape",
       "type": "square | circle",
       "default": "square",
-      "description": "`circle` pulls the badge 14% back into the corner — MUI's `overlap`, and the number is theirs, measured in their source. Without it a counter on a round avatar floats off the edge."
+      "description": "`circle` pulls the badge 14% back into the corner — the `overlap` of one of the references, and the number is theirs, measured in their source. Without it a counter on a round avatar floats off the edge."
     },
     {
       "name": "invisible",
@@ -165,7 +165,7 @@
       "name": "badgeContent",
       "type": "ReactNode",
       "default": "—",
-      "description": "What the overlay shows when it is not a number. Named after MUI's prop and not `content`, which collides with the HTML attribute of that name."
+      "description": "What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name."
     }
   ],
   "notes": [

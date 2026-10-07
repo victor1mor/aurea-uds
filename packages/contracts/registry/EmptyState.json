@@ -76,7 +76,7 @@
       "name": "icon",
       "type": "IconName",
       "default": "—",
-      "description": "Carbon glyph above the title, rendered at size xl. Defaults to `document--blank`."
+      "description": "Glyph above the title, rendered at size xl. Defaults to `document--blank`."
     },
     {
       "name": "state",

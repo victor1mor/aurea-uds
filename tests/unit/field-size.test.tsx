@@ -95,7 +95,7 @@ test("as regras de tamanho de campo existem, e nenhuma tem px cru", () => {
 
 // ── os controles de seleção: densidade e degrau ────────────────────────────
 
-// Achado ao cruzar a escala de tamanho da Untitled UI com a nossa: ela dá `sm|md` ao checkbox, ao
+// Achado ao cruzar a escala de tamanho de uma das referências com a nossa: ela dá `sm|md` ao checkbox, ao
 // radio e ao switch, e a Aurea não dava nada. Medindo o core, o problema era maior que a escala —
 // a marca era `18px` CRU e o trilho `42×24px` CRU, então os três **não acompanhavam a densidade**
 // enquanto o resto da linha do formulário acompanhava. É o achado A1 outra vez, noutro lugar.

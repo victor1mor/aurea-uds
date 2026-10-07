@@ -100,7 +100,7 @@
       "name": "description",
       "type": "ReactNode",
       "default": "—",
-      "description": "Help text that needs a sentence (B-12): it sits under the control and does not share the label's line. `hint` stays what it is, a short note beside the label. It is HeroUI's Description and the `description` this house's Checkbox already has. Joins aria-describedby in screen order: hint, description, error."
+      "description": "Help text that needs a sentence (B-12): it sits under the control and does not share the label's line. `hint` stays what it is, a short note beside the label. It is the reference library's Description and the `description` this house's Checkbox already has. Joins aria-describedby in screen order: hint, description, error."
     }
   ],
   "axes": {

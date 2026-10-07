@@ -1,6 +1,6 @@
 // E9 (0.12.1) · o botão sem fundo guardava o recuo dos lados (15 no `md`) e a borda transparente
 // de 1, e o texto começava 16 para dentro dos rótulos e campos da mesma coluna. O `LinkButton` é
-// o do HeroUI Native (1.0.10): `Button` ghost com `height: auto; padding: 0` e sem borda. O dublê
+// o da referência no nativo: `Button` ghost com `height: auto; padding: 0` e sem borda. O dublê
 // não calcula layout; prova-se o pedido ao motor. A prova de aparelho é o bloco E9 do native-smoke.
 import {render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";

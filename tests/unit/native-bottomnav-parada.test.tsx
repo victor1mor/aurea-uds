@@ -69,11 +69,11 @@ describe("BottomNav · a barra fica parada quando se troca de aba", () => {
       expect(c.rotulos).toEqual(a.rotulos);
     });
   }
-  it("o peso do rótulo é o mesmo escolhido ou não: 500 (o Label medium do Material 3)", () => {
+  it("o peso do rótulo é o mesmo escolhido ou não: 500 (o rótulo médio da referência de desenho)", () => {
     const {rotulos} = barra("none", "content", "b");
     expect(rotulos).toHaveLength(3);
     expect(new Set(rotulos).size).toBe(1);
-    // 12, o do Telegram e o `text-xs` da web (a altura do Telegram, logo abaixo).
+    // 12, o do app de referência e o `text-xs` da web (a altura de referência, logo abaixo).
     expect(rotulos[0]).toBe(`${t.size.textXs}/Ui500`);
   });
 });
@@ -124,12 +124,12 @@ describe("BottomNav · capsule: a cápsula de 56 × 32 em todos os itens, pintad
   });
 });
 
-// A ALTURA DO TELEGRAM — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo comparado a
-// bottomnav como do telegram"*, e "largo" é a grossura. Medido no fonte do Telegram para Android
-// 12.10.6: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. A nossa media 73 no
+// A ALTURA DE REFERÊNCIA — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo comparado a
+// bottomnav como do [app de referência]"*, e "largo" é a grossura. Medido no fonte do app de
+// referência para Android: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. A nossa media 73 no
 // `circle-bold` (na bancada, com o `react-native-web`): o nome saía em 14 com linha de 21, e havia 4
 // de recheio em cima e embaixo. O código de antes reprova as três travas.
-describe("BottomNav · a altura do Telegram", () => {
+describe("BottomNav · a altura de referência", () => {
   const estiloDoNome = (indicator: string) => {
     __limpar();
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator={indicator as never} /></AureaProvider>);

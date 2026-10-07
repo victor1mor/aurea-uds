@@ -113,7 +113,7 @@ export default {
     },
     {
       title: "Floating circle — the fill wraps only the icon",
-      description: "The label stays below the circle, outside it. This is what WhatsApp does, and "
+      description: "The label stays below the circle, outside it. This is what a messaging app does, and "
         + "it is the shape that survives long names.",
       code: `<BottomNav indicator="circle" label="Garage" current={route} items={items} />`,
       embed: true,
@@ -144,9 +144,9 @@ export default {
       render: () => demo({indicator: "circle-outline", label: "Garage ring", inicial: "fuel"}),
     },
     {
-      title: "Floating capsule — the Material 3 Expressive shape",
-      description: "A 56 × 32 gold capsule behind the icon only, the active indicator of Material 3 "
-        + "Expressive. The label stays below it, so the shape never stretches with a long name.",
+      title: "Floating capsule — a wide pill behind the icon",
+      description: "A 56 × 32 gold capsule behind the icon only, the active indicator of the design "
+        + "reference. The label stays below it, so the shape never stretches with a long name.",
       code: `<BottomNav indicator="capsule" label="Garage" current={route} items={items} />`,
       embed: true,
       render: () => demo({indicator: "capsule", label: "Garage capsule", inicial: "fuel"}),

@@ -6,7 +6,7 @@ import {
 
 // G-AXIS-01. Três eixos que existem na referência e faltavam em componente que já existe aqui:
 // orientação do `Field`, alinhamento em BLOCO do `InputGroupAddon`, orientação do `ButtonGroup`.
-// Achados no inventário do §9 da `shadcn`, e a `kibo` apontou o mesmo lugar por outro caminho —
+// Achados no §9 do inventário de uma das referências, e outra apontou o mesmo lugar por outro caminho —
 // `button-group` e `input-group` são os dois componentes com mais variantes de composição lá.
 //
 // A fonte do core, não o dist: o dist é cópia gerada, e teste que lê a cópia passa enquanto a

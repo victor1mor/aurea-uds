@@ -50,8 +50,8 @@ agregados, quatro telas) · configurações · onboarding · avisos · perfil e 
 | linha de perfil | 4 | **linha tocável com ícone, rótulo e seta** |
 | cartão do item | 1 | o cartão da entidade principal |
 
-**Primitivas instaladas** (shadcn/ui, base `neutral`, ícones lucide): accordion, alert, badge,
-button, card, checkbox, dialog, empty-state, input, label, select, **sonner** (toast), switch,
+**Primitivas instaladas** (uma biblioteca de componentes de mercado, paleta neutra, ícones de traço): accordion, alert, badge,
+button, card, checkbox, dialog, empty-state, input, label, select, **uma biblioteca de toast**, switch,
 table, tabs, textarea.
 
 ---
@@ -97,7 +97,7 @@ existe. Sobra a **linha de lista tocável** (4.3).
 
 **Existe: `BottomNav`**, autorizado pelo Victor nesta data e construído pelo procedimento do
 [`BUILDING.md`](BUILDING.md). O registro da referência está no
-[`REFERENCES.md`](REFERENCES.md) — uma das nove pastas tinha o componente (a MUI), e o que a
+[`REFERENCES.md`](REFERENCES.md) — uma das nove pastas tinha o componente, e o que a
 medição do passo 1 decidiu foi o tipo: ele recebe o **mesmo `SidebarItem`** da lateral, porque
 duas listas do mesmo menu divergem.
 
@@ -152,7 +152,7 @@ com seta que abrem uma subtela. É o tijolo de qualquer tela de ajustes.
 Registrado para ninguém gastar sessão reabrindo: máscara de moeda (ADR-0024 decidiu que não há
 componente, e por quê) · anexo de documento (`FileInput`) · limites de plano (`AccessGate`) ·
 estados de erro e vazio (`DataState`) · gráficos (`Chart`) · pesquisa em catálogo (`Combobox`) ·
-**toast (`useToast`, e o app pode largar o `sonner`)**.
+**toast (`useToast`, e o app pode largar a biblioteca de toast)**.
 
 **A lição que a 4.2 deixou, e ela vale para todo este documento:** ausência na ficha **não** é
 ausência no código. Este inventário foi levantado lendo o registry, que é a lista do que está
@@ -163,7 +163,7 @@ não tem", o comando é `grep` no `packages/react/src`, não `ls` no registry.
 
 ## 6. Identidade — nada a mudar, e é para continuar assim
 
-O Victor mandou quatro referências visuais e a instrução: **tudo arredondado, inspiração Apple.**
+O Victor mandou quatro referências visuais e a instrução: **tudo arredondado, inspiração no iOS.**
 
 A Aurea já é isso por contrato, e o `CLAUDE.md` trava: superfícies flutuantes com raio de 22px,
 controles em pílula (999px), sem gradientes. As referências **coincidem** com o que já existe.
@@ -188,7 +188,7 @@ resultado parecer com as imagens, a referência foi lida errado.
 
   **O que falta para o K4 fechar não está do lado dele. Está do nosso.** O consumidor vai usar a
   Aurea quando a Aurea estiver pronta — e "pronta" inclui as lacunas do §4, das quais **sobra uma**
-  (a 4.1 fechou em 17/08/2026). Enquanto o app dele usa shadcn/ui, isso descreve o **estado atual
+  (a 4.1 fechou em 17/08/2026). Enquanto o app dele usa outra biblioteca de componentes, isso descreve o **estado atual
   de uma migração que ainda não começou**, não uma dúvida sobre se o projeto conta.
 
   Escrito assim porque a versão anterior deste parágrafo dizia "candidato, não consumo" — e essa

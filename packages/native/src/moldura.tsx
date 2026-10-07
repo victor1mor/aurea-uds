@@ -4,12 +4,12 @@
 // pediam o ícone com um fundo atrás, em vez do glifo solto.
 //
 // ── DE ONDE VEM CADA NÚMERO ──────────────────────────────────────────────────────────────────
-// O HeroUI não tem "ícone em moldura", mas tem a peça redonda com ícone dentro: o `Avatar` do
-// HeroUI Native 1.0.10 (`avatar.css:16-29`): `sm` 40, `md` 48, `lg` 64, raio cheio, e a variante
-// `soft` pinta o fundo com a cor do tom (`:44-61`). As molduras daqui são essas: 40 no histórico,
+// A referência não tem "ícone em moldura", mas tem a peça redonda com ícone dentro: o avatar
+// dela: `sm` 40, `md` 48, `lg` 64, raio cheio, e a variante
+// suave pinta o fundo com a cor do tom. As molduras daqui são essas: 40 no histórico,
 // 64 na tela vazia (`space10` e `space16`).
-// O glifo vai na METADE da moldura (`iconMd` 20 e `iconXl` 32), a proporção do `Icon Tile` do ReUI
-// (`xl` 56/28) — o segundo da fila, que é quem tem a peça. O 32 é o glifo que o `EmptyState` já
+// O glifo vai na METADE da moldura (`iconMd` 20 e `iconXl` 32), a proporção do ícone em moldura de outra
+// referência (`xl` 56/28) — a segunda da fila, que é quem tem a peça. O 32 é o glifo que o `EmptyState` já
 // usava; ele só ganhou a moldura.
 // A cor é a do `Badge` (`acentoDoTom`/`fundoDoTom`). O `primary` não tem fundo suave em token e
 // leva o do `.badge-primary` da web (`aurea.css:1064`): o amarelo a 10%. O `neutral` é o `muted`.

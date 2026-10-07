@@ -285,7 +285,7 @@ export default {
     code: `<ThemeToggle />`,
     render: () => h(A.ThemeToggle, null),
   },
-  // Tipografia (B-02, 25/09/2026), no molde do HeroUI 3.2.6: uma lista fechada de papéis. As
+  // Tipografia (B-02, 25/09/2026), no molde da referência: uma lista fechada de papéis. As
   // prévias mostram a lista INTEIRA de cada peça, porque o que se escolhe é o papel — ver todos lado
   // a lado é o que ensina que não existe "um tamanho entre o h3 e o h4".
   Text: {
@@ -304,7 +304,7 @@ export default {
   Heading: {
     // Do 2 ao 6, e não do 1: uma página tem UM h1, e aqui ele é o título da própria página do
     // catálogo (a varredura cobra). É também a lição da peça — o h1 é o título da tela, uma vez só.
-    description: "A heading, h1 to h6. The level picks both the element and the size, as in HeroUI — "
+    description: "A heading, h1 to h6. The level picks both the element and the size, as in the reference library — "
       + "keep levels in order, and use level 1 once per page, for its title.",
     code: `<Heading level={2}>This month</Heading>
 <Heading level={3}>By team</Heading>
@@ -712,7 +712,7 @@ export default {
         h(A.Grid.Item, {span: {base: "12", viewport: {md: "5"}}}, h(A.Button, {variant: "primary-outline"}, "Its own theme")))))),
   },
   Icon: {
-    description: "One <svg><use> pointing at the shared Carbon sprite. The sprite URL comes "
+    description: "One <svg><use> pointing at the shared icon sprite. The sprite URL comes "
       + "from the AureaProvider, never from the call site.",
     code: `<Icon name="magnifying-glass" />
 <Icon name="plus" size="lg" />

@@ -83,7 +83,7 @@
       "name": "variant",
       "type": "\"floating\" | \"flush\"",
       "default": "floating",
-      "description": "floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping apps do — Cloudflare, Sophos, Claude's own app and HeroUI's dashboard were the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it."
+      "description": "floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping admin panels do — the reference library's own dashboard among the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it."
     },
     {
       "name": "current",

@@ -13,7 +13,7 @@ navega. Foi a primeira das duas lacunas que sobraram para o **K4**, e a autoriza
 ser a estrutural.
 
 Das nove pastas de `Referencia/`, **uma** tem o componente — medido com
-`find Referencia -iname "*bottom*nav*" -o -iname "*tabbar*"`, que devolve só a `material-ui-master`.
+`find Referencia -iname "*bottom*nav*" -o -iname "*tabbar*"`, que devolve só a pasta de uma delas.
 É o resultado esperado: as pastas são bibliotecas de desktop. Pela regra do
 [`BUILDING.md`](../docs/BUILDING.md) §1, zero na pasta manda **pesquisar**, e foi o que se fez.
 
@@ -55,7 +55,7 @@ parte veio inteira de pesquisa, pelo passo 4 do `BUILDING.md`.
 
 A barra nasceu como superfície flutuante de raio 22px, com o item atual pintado inteiro. Ele
 mandou primeiro quatro referências visuais (barra em pílula, item atual preenchido) e depois
-**prints que ele mesmo tirou** de WhatsApp, YouTube, Mercado Livre e Shopee.
+**prints que ele mesmo tirou** de quatro aplicativos: um de mensagens, um de vídeo e dois de compras.
 
 **O que os quatro aplicativos fazem IGUAL, e virou a base:** rótulo visível em **todo** item,
 ícone sobre rótulo, contador no canto do ícone, contador **menor** que o ícone (razão medida:
@@ -63,9 +63,9 @@ mandou primeiro quatro referências visuais (barra em pílula, item atual preenc
 
 **O que eles fazem diferente entre si, e virou `variant`:**
 
-- **`flat`** — 3 dos 4 (YouTube, Mercado Livre, Shopee): barra chapada de ponta a ponta, fio em
+- **`flat`** — 3 dos 4 (o de vídeo e os dois de compras): barra chapada de ponta a ponta, fio em
   cima, item atual **sem fundo**; o que marca é a cor. **É o padrão**, por ser a maioria medida.
-- **`surface`** — 1 dos 4 (WhatsApp): barra flutuante, e o realce envolve **só o ícone**, com o
+- **`surface`** — 1 dos 4 (o de mensagens): barra flutuante, e o realce envolve **só o ícone**, com o
   rótulo embaixo, fora dele. Pintar o item inteiro não aparece em aplicativo nenhum.
 - **`pill`** e **`dock`** — **nenhum dos 4**. Ficam porque o Victor pediu, e a ficha registra em
   voz alta que elas escondem rótulo e que aplicativo real não faz isso.
@@ -84,11 +84,11 @@ um menu faz o leitor de tela prometer navegação por setas que não leva a luga
 falsa é pior que ausência. Há asserção no teste unitário exatamente para isso, para que a
 "melhoria" não entre por descuido numa sessão futura.
 
-**A MUI não entrou nesta parte, e é a única referência que tinha o componente.** A raiz dela é uma
+**A referência que tinha o componente não entrou nesta parte, e era a única que o tinha.** A raiz dela é uma
 `<div>` sem `<nav>`, sem `aria-label` e sem `aria-current`; o item é `<button>`. Isso é mais fraco
 que a nossa própria `Sidebar`, então ficou de fora. O que entrou dela foi **anatomia**: item em
-coluna com ícone sobre rótulo, e itens dividindo a largura. A pesquisa (KendoReact, MDN
-`navigation role`, APG Landmarks) converge no contrário da MUI, e é o que foi adotado.
+coluna com ícone sobre rótulo, e itens dividindo a largura. A pesquisa (um kit de componentes comercial, MDN
+`navigation role`, APG Landmarks) converge no contrário dessa referência, e é o que foi adotado.
 
 ## Consequências
 

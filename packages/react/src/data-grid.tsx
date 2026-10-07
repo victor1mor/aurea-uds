@@ -29,8 +29,8 @@ export type {ColumnDef, SortingState, RowSelectionState, ColumnFiltersState, Vis
 //
 // Por que os nomes `manualSorting`/`manualFiltering`/`manualPagination` são os DO
 // MOTOR e não inventados aqui: as três referências de tabela foram medidas em
-// 08/08/2026 e NENHUMA expõe API controlada — o shadcn guarda tudo em useState
-// dentro do exemplo, o Kibo põe a ordenação num átomo global (jotai) e o Untitled
+// 08/08/2026 e NENHUMA expõe API controlada — uma guarda tudo em useState
+// dentro do exemplo, outra põe a ordenação num átomo de estado global e a terceira
 // é apresentação. Não havia anatomia para copiar; o vocabulário veio do contrato
 // do motor, que é o que o consumidor já lê na documentação dele.
 //
@@ -73,11 +73,11 @@ function GridCheck({label,indeterminate,...props}:InputHTMLAttributes<HTMLInputE
 // F3 (08/08/2026): filtro POR COLUNA, numa linha do próprio cabeçalho — cada
 // controle nasce alinhado com a sua coluna sem uma linha de layout, porque quem
 // alinha é a tabela. A alternativa era uma barra acima com os controles soltos,
-// que é o que o shadcn faz no exemplo dele e que reinventa o alinhamento à mão.
+// que é o que uma das referências faz no exemplo dela e que reinventa o alinhamento à mão.
 //
 // A faceta é um `MultiCombobox`, não um popover novo: escolher vários valores de
 // uma lista É esse componente, e ele já traz teclado, ARIA, portal e pele
-// gateados. O que o shadcn desenha com Popover + Command + Badge + Separator
+// gateados. O que essa referência desenha com popover, menu de comando, selo e divisória
 // (147 linhas) aqui é reuso.
 //
 // A contagem por opção vem de `getFacetedUniqueValues()` e entra no RÓTULO —
@@ -292,7 +292,7 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   };
   const rove=(r:number,c:number)=>eff.r===r&&eff.c===c?0:-1;
   const sortIcon=(dir:false|"asc"|"desc")=>dir==="asc"?"caret-up":dir==="desc"?"caret-down":"caret-up-down";
-  // F5: a barra de lote. Duas referências independentes (Activepieces e Kaneo) chegam
+  // F5: a barra de lote. Duas referências independentes chegam
   // à MESMA anatomia — contagem, divisória, ações, e um jeito de limpar —, então é
   // ela que entra. O que não entra é o resto das duas: barra `position:fixed` sobre a
   // janela inteira (decisão da APLICAÇÃO, não de um componente que o consumidor põe

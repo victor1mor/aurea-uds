@@ -9,8 +9,8 @@
 ## Contexto
 
 Em 18/08/2026 o Victor abriu uma exceção escrita à regra da caixa flutuante do `CLAUDE.md`: a
-lateral **pode** ser rente, e ele confirmou com quatro aplicativos que rodam na mão — Cloudflare,
-Sophos, o app do Claude e o painel do próprio HeroUI. Nenhum flutua a lateral.
+lateral **pode** ser rente, e ele confirmou com quatro painéis de administração que rodam na mão,
+um deles o da própria biblioteca de referência. Nenhum flutua a lateral.
 
 Na sessão de 19/08 essa autorização foi lida como **"troque o padrão"**. O `Sidebar` passou a nascer
 `flush`, e o flutuante virou `variant="floating"`.
@@ -77,9 +77,9 @@ páginas:
 
 | | de | para | fonte |
 |---|---:|---:|---|
-| trilho recolhido (`--sidebar-rail`) | 88px | 68px | `MAIN_SIDEBAR_WIDTH = 68` |
-| ícone do item | 16px | 20px | `size-5` = nosso `--icon-md` |
-| item do trilho | 71×36 esticado | 36×36 quadrado | `NavButton` icon-only é `size-9` |
+| trilho recolhido (`--sidebar-rail`) | 88px | 68px | a constante de largura do trilho da referência |
+| ícone do item | 16px | 20px | a classe de tamanho do ícone da referência = nosso `--icon-md` |
+| item do trilho | 71×36 esticado | 36×36 quadrado | o botão de navegação só de ícone da referência |
 
 O `Tooltip` do trilho recolhido também fica. O defeito então aberto foi fechado pela
 [ADR-0035](0035-sidebar-responsivo-sem-inventar-recursos.md): o trigger e o Base UI passaram a

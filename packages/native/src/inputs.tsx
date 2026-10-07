@@ -101,7 +101,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
     backgroundColor: t.color.fieldBg,
   },
-  // E5: a marca no MEIO da altura do texto, como o HeroUI Native. Era `flex-start` com um
+  // E5: a marca no MEIO da altura do texto, como a referência. Era `flex-start` com um
   // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
   linhaDeControle: {flexDirection: "row", alignItems: "center", gap: 9},
   // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
@@ -129,8 +129,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   segmento: {alignItems: "center", justifyContent: "center",
              paddingHorizontal: 14, ...canto(t.size.radiusControl)},
   // `fullWidth`: o segmento CRESCE a partir do rótulo (base `auto`) e nunca encolhe abaixo dele.
-  // É o `fullWidth` do `ToggleButtonGroup` do HeroUI 3.2.6, com uma diferença declarada: lá é
-  // `flex-1`, e o CSS segura o mínimo do texto sozinho (`min-width: auto`). O Yoga não tem esse
+  // É como o grupo de botões alternáveis da referência ocupa a linha, com uma diferença declarada: lá é
+  // `flex: 1`, e o CSS segura o mínimo do texto sozinho (`min-width: auto`). O Yoga não tem esse
   // mínimo, e base zero repartiria igual de novo — o defeito acima. Com base `auto`, os segmentos
   // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
   segmentoCheio: {flexGrow: 1, flexShrink: 0, flexBasis: "auto"},
@@ -352,8 +352,8 @@ export interface InputProps extends Omit<TextInputProps,
    * Normaliza o texto **quando o foco sai** — placa, documento, telefone.
    *
    * ⚠ **A Aurea entrega o MOMENTO, não o formato**, e isso é a [ADR-0024] inteira: formatar
-   * enquanto se digita é o defeito que o USWDS publicou com reprovação WCAG registrada e que o
-   * MUI abandonou na v6. O formato é conhecimento de DOMÍNIO — a Aurea não sabe o que é um
+   * enquanto se digita é o defeito que um design system público publicou com reprovação WCAG registrada e que uma
+   * das bibliotecas de referência abandonou. O formato é conhecimento de DOMÍNIO — a Aurea não sabe o que é um
    * documento válido em lugar nenhum, e uma tabela de formatos por país dentro de uma biblioteca
    * de interface envelhece sem ninguém perceber.
    *
@@ -527,7 +527,7 @@ interface ControleProps {
   testID?: string;
   /**
    * Onde a marca fica na altura do texto — E5, 25/09/2026. `center` (o padrão) põe a marca no meio
-   * do bloco, como o HeroUI Native (`radio.css` e `control-field.css`: `align-items: center`).
+   * do bloco, como a referência (`align-items: center` no rádio e no campo de controle dela).
    * `start` a põe no meio da PRIMEIRA linha, para rótulo longo, de várias linhas.
    */
   align?: "center" | "start";
@@ -778,21 +778,20 @@ export function Radio(p: RadioProps) { return <ControleMarcado {...p} papel="rad
 // RadioGroup (01/10/2026, pedido do Victor)
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 //
-// O `RadioGroup` do HeroUI Native 1.0.10 (`radio-group.tsx`, `radio-group.css`, `radio.css`,
-// `label.css`, `description.css`), com a aparência da Aurea. A anatomia é a dele: o grupo guarda a
+// O grupo de rádio da referência, com a aparência da Aurea. A anatomia é a dela: o grupo guarda a
 // escolha, e cada `RadioGroup.Item` é a linha inteira tocável — o texto à esquerda, a marca à
 // direita (`justify-content: space-between`). O que muda é só a forma de escrever o texto: lá o
-// item recebe `<Label>` e `<Description>` como filhos; aqui são as props `label` e `description`,
+// item recebe o rótulo e a descrição como componentes filhos; aqui são as props `label` e `description`,
 // como no `Radio` que já existe neste pacote.
 //
-// As medidas são as do HeroUI, nos tokens que dão o mesmo número: vão de 12 entre as linhas e
-// entre o texto e a marca (`calc(var(--spacing) * 3)` → `space3`); marca de 24 (`* 6` → `space6`);
-// ponto de 10 (`* 2.5` → `space2 + space05`); rótulo `text-base` médio, descrição `text-sm`
+// As medidas são as da referência, nos tokens que dão o mesmo número: vão de 12 entre as linhas e
+// entre o texto e a marca (3 unidades de espaço da referência → `space3`); marca de 24 (6 → `space6`);
+// ponto de 10 (2,5 → `space2 + space05`); rótulo `text-base` médio, descrição `text-sm`
 // apagada. A cor é nossa: a marca escolhida é a da seleção (`controlSelected`), como o `Radio`.
 // ⚠ A marca do `Radio` solto continua do tamanho dele (metade da altura do controle): o grupo é
-// peça nova, e as medidas da peça nova vêm do HeroUI.
+// peça nova, e as medidas da peça nova vêm da referência.
 
-/** De que lado da linha a marca fica: `end` (padrão, como o exemplo do HeroUI) ou `start`. */
+/** De que lado da linha a marca fica: `end` (padrão, como o exemplo da referência) ou `start`. */
 export type AureaRadioIndicatorPlacement = "start" | "end";
 
 /**
@@ -817,23 +816,23 @@ export interface RadioGroupProps extends ViewProps {
   onValueChange?: (value: string) => void;
   /** Desliga o grupo inteiro. */
   disabled?: boolean;
-  /** Pinta o grupo de erro (marca e rótulo na cor de perigo), como o `isInvalid` do HeroUI. */
+  /** Pinta o grupo de erro (marca e rótulo na cor de perigo), como o estado inválido da referência. */
   invalid?: boolean;
   /** O nome do grupo para quem usa leitor de tela ("Forma de entrega"). */
   label?: string;
-  /** `vertical` (padrão) ou `horizontal`, como o HeroUI. */
+  /** `vertical` (padrão) ou `horizontal`, como a referência. */
   orientation?: "vertical" | "horizontal";
   /**
-   * De que lado fica a marca, em todos os itens: `end` (padrão) ou `start`. O HeroUI decide isso
+   * De que lado fica a marca, em todos os itens: `end` (padrão) ou `start`. A referência decide isso
    * pela ORDEM dos filhos do item (`<Radio />` antes ou depois do texto); aqui o texto é prop, então
-   * o lado vira uma lista fechada de duas opções, com o nome que o HeroUI usa para posição.
+   * o lado vira uma lista fechada de duas opções, com o nome que a referência usa para posição.
    */
   indicatorPlacement?: AureaRadioIndicatorPlacement;
   /**
    * `card` faz de cada item um cartão de escolha (CHK-01, 06/10/2026): o cartão INTEIRO é a opção,
    * com o papel de rádio para o leitor de tela. A pele é a do `Card` — o cartão comum, e o cartão
-   * escolhido (`variant="selected"`) no item marcado. É como o HeroUI monta essa peça (o exemplo
-   * de `RadioGroup.Item` com uma superfície dentro); o Chakra a chama de `RadioCard`.
+   * escolhido (`variant="selected"`) no item marcado. É como a referência monta essa peça (o exemplo
+   * de `RadioGroup.Item` com uma superfície dentro); outra referência tem uma peça própria para isso.
    */
   variant?: AureaRadioGroupVariant;
   children?: React.ReactNode;
@@ -851,9 +850,9 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
   /** O lado da marca só neste item; sem ele, vale o do grupo. */
   indicatorPlacement?: AureaRadioIndicatorPlacement;
   /**
-   * Um ícone antes do texto (R-19, 01/10/2026). O HeroUI não tem esta prop: no `RadioGroup.Item`
-   * dele o ícone entra como mais um filho, e a Aurea traduz filho livre em nome de ícone, como em
-   * todo o resto. Tamanho `iconLg` (24, o mesmo da marca; o HeroUI usa 22 nos ícones de lista, que
+   * Um ícone antes do texto (R-19, 01/10/2026). A referência não tem esta prop: no `RadioGroup.Item`
+   * dela o ícone entra como mais um filho, e a Aurea traduz filho livre em nome de ícone, como em
+   * todo o resto. Tamanho `iconLg` (24, o mesmo da marca; a referência usa 22 nos ícones de lista, que
    * não existe aqui — escolha do Victor), vão de 12 até o texto. Na opção escolhida sai a forma
    * cheia (ADR-0053), se o registro a tiver.
    */
@@ -910,7 +909,7 @@ function ItemDoGrupoDeRadio({
       {typeof label === "string"
         ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
       {/* 🔴 Era `size="sm"`, que no telefone é **16** (o mapa da ADR-0050 sobe um degrau) — e o
-          comentário do topo sempre disse `text-sm`, o 14 do `description.css` do HeroUI. Medido
+          comentário do topo sempre disse `text-sm`, o 14 da descrição da referência. Medido
           na vitrine de 01/10/2026: rótulo e descrição saíam do mesmo tamanho. `xs` é o 14, o
           mesmo do `Checkbox` e do `Switch`. */}
       {description != null && (typeof description === "string"
@@ -958,16 +957,16 @@ function ItemDoGrupoDeRadio({
         inativo && s.desabilitado, style,
       ]}
       {...rest}>
-      {/* A ordem é a do HeroUI: o lado da marca sai da ordem dos filhos. Com a marca no início,
+      {/* A ordem é a da referência: o lado da marca sai da ordem dos filhos. Com a marca no início,
           o vão de 12 continua entre ela e o texto, e o texto ocupa o resto da linha. O ícone
-          fica sempre colado ANTES do texto, como o `ListGroup.ItemPrefix` deles. */}
+          fica sempre colado ANTES do texto, como o prefixo de item de lista dela. */}
       {noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada]}
     </Pressable>
   );
 }
 
 /**
- * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
+ * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` da referência.
  *
  *     <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
  *       <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
@@ -976,7 +975,7 @@ function ItemDoGrupoDeRadio({
  *     </RadioGroup>
  *
  * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
- * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada. Com
+ * como no exemplo da referência. Tocar no item já escolhido não muda nada. Com
  * `indicatorPlacement="start"` a marca vai para o início da linha.
  */
 export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, {Item: ItemDoGrupoDeRadio});
@@ -1000,7 +999,7 @@ export interface SwitchProps extends ControleProps {}
  * O interruptor.
  *
  * ⚠ **NÃO é o `Switch` do React Native**, pela mesma razão que o `Spinner` não é o
- * `ActivityIndicator`: aquele desenha o interruptor do Material no Android e o do iOS no iOS —
+ * `ActivityIndicator`: aquele desenha o interruptor do sistema no Android e o do iOS no iOS —
  * duas aparências que o `CLAUDE.md` proíbe em voz alta. As medidas aqui são as do CSS: trilho de
  * `altura × 7/6` por `altura × 2/3`, polegar com 3 de folga.
  *
@@ -1103,7 +1102,7 @@ export interface SegmentedControlProps extends ViewProps {
   /** Onde o controle fica quando cabe na linha: `start` (padrão), `center` ou `end` (E3). */
   justify?: AureaFilaJustify;
   /**
-   * Ocupa a linha inteira, repartindo a sobra entre os segmentos — o `fullWidth` do HeroUI (A5,
+   * Ocupa a linha inteira, repartindo a sobra entre os segmentos — como na referência (A5,
    * 06/10/2026). Nenhum segmento fica menor que o rótulo: quando as opções não cabem, o controle
    * rola, como sem a prop. Com `fullWidth`, o `justify` não tem efeito.
    */
@@ -1132,7 +1131,7 @@ export function SegmentedControl({
     //     aurea.css:2127, em tela de até 640px:
     //     .tabs,.pagination,.segmented { max-width:100%; overflow-x:auto; }
     // ⚠ **A primeira resposta que eu ia dar era criar um componente de "chips"** — e abrir a
-    // referência máxima desmontou isso: o `chip` de lá é um RÓTULO, sem estado de escolha. Um
+    // referência máxima desmontou isso: o chip de lá é um RÓTULO, sem estado de escolha. Um
     // terceiro jeito de escolher seria inventar o que já existe.
     // O sinal de "tem mais" e a razão de não usar borda esmaecida estão no `rolagem.tsx`.
     // ⚠ A opacidade de desabilitado fica SÓ na cápsula. Pô-la aqui também multiplicaria

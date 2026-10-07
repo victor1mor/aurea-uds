@@ -157,7 +157,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
       badge: h(A.Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")},
     {id: "me", label: "Profile", icon: "user", href: "#"}]}),
   // A `flat` é o padrão, e é a de 3 dos 4 aplicativos medidos. O item do meio leva o contador
-  // como PONTO (`badge: ""`), que é como YouTube e WhatsApp dizem "tem coisa nova".
+  // como PONTO (`badge: ""`), que é como um app de vídeo e um aplicativo de mensagens dizem "tem coisa nova".
   h(A.BottomNav, {key: "bnavf", variant: "edge", label: "Skin bottom edge", current: "rides",
     items: [{id: "home", label: "Home", icon: "house", href: "#"},
       {id: "rides", label: "Rides", icon: "gauge", href: "#", badge: ""},
@@ -562,7 +562,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // Carousel (L1): aqui a pele É o motor, então o que se mede não é aparência — é
     // comportamento. Se estas regras sumirem, o componente não fica feio: ele para de rolar,
     // para de encaixar e o ponto vira alvo de 8px, que reprova o WCAG 2.2 AA (2.5.8).
-    // A caixa é fixa em 480px e o slide é 50% dela — o caso `multiple` da referência, feito com
+    // A caixa é fixa em 480px e o slide é 50% dela — o caso de vários slides por vez da referência, feito com
     // uma variável de CSS e nenhuma prop.
     h("div", {key: "car", style: {width: "480px"}},
       h(A.Carousel, {label: "Product photos", style: {"--carousel-slide": "50%"} as CSSProperties},
@@ -974,7 +974,7 @@ for (const theme of ["dark", "light"] as const) {
                 // O FIXTURE TEM DOIS ITENS E A BARRA REAL TEM QUATRO — e com dois sobra espaço,
                 // então o defeito NÃO aparece. Foi assim que esta trava passou verde na primeira
                 // tentativa, com o defeito reposto de propósito no CSS. Os quatro aplicativos
-                // medidos (WhatsApp, YouTube, Mercado Livre, Shopee) têm 4 e 5; a página do
+                // medidos (um de mensagens, um de vídeo e duas lojas) têm 4 e 5; a página do
                 // catálogo tem 4. A medida completa o clone até QUATRO em vez de confiar no
                 // fixture: instrumento fraco é gate que mente, e este já mentiu uma vez.
                 const inativo = nav.querySelector(".bottom-nav-item:not([aria-current])");
@@ -993,7 +993,7 @@ for (const theme of ["dark", "light"] as const) {
               return sumiram;
             })(),
             // A `flat` NÃO pinta fundo no atual (3 dos 4); a `surface` pinta só a caixa do ÍCONE
-            // (o WhatsApp, que é o 4º) — e nunca o item inteiro, que não existe em lugar nenhum.
+            // (o aplicativo de mensagens, que é o 4º) — e nunca o item inteiro, que não existe em lugar nenhum.
             realce: (() => {
               const f = document.querySelector(".bottom-nav-edge .bottom-nav-item[aria-current]")!;
               const s2 = document.querySelector(".bottom-nav-ind-circle .bottom-nav-item[aria-current]")!;
@@ -2124,7 +2124,7 @@ for (const theme of ["dark", "light"] as const) {
       + "badge derrete no ícone, que foi o defeito que o Victor viu").not.toBe("none");
     expect(bl.ariaEscondido, "o sobreposto é decoração: o número mora no nome de quem é decorado")
       .toBe("true");
-    // O canto REDONDO recolhe 14% (o `overlap` da MUI). Sem isso o contador de um avatar fica
+    // O canto REDONDO recolhe 14% (a sobreposição circular da referência). Sem isso o contador de um avatar fica
     // solto fora do círculo — e é a única diferença entre as duas formas.
     expect(bl.circulo.passa, "circle recolhe o contador para dentro do canto")
       .toBeLessThan(bl.quadrado.passa);
@@ -2199,8 +2199,8 @@ for (const theme of ["dark", "light"] as const) {
       expect(c.noAlto, `${onde}: e no canto de CIMA, que é onde contador de aviso mora`).toBe(true);
     }
     // 25f. O TAMANHO do contador e o REALCE do atual (17/08/2026, terceira volta). Os dois
-    //      números saíram de aplicativo que roda — os prints de WhatsApp, YouTube, Mercado
-    //      Livre e Shopee. Antes: contador 18px sobre ícone 16px, razão 1,12, MAIOR que o
+    //      números saíram de aplicativo que roda — os prints de um aplicativo de mensagens, de
+    //      um de vídeo e de duas lojas. Antes: contador 18px sobre ícone 16px, razão 1,12, MAIOR que o
     //      ícone; e o realce pintava o item inteiro, que nenhum dos quatro faz.
     expect(bn.razaoContadorIcone, "o contador é MENOR que o ícone — nos quatro aplicativos "
       + "medidos a razão é ~0,67, e a primeira versão daqui era 1,12").toBeLessThan(0.8);
@@ -2221,7 +2221,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(bn.realce.flatCor, "flat: o que marca o atual é a COR").not.toBe(bn.realce.flatComumCor);
     expect(bn.realce.superficieItem, "surface: o item inteiro NÃO se pinta — pintar tudo não "
       + "existe em aplicativo nenhum dos quatro").toBe("rgba(0, 0, 0, 0)");
-    expect(bn.realce.superficieMarca, "surface: quem se pinta é a caixa do ÍCONE (o WhatsApp)")
+    expect(bn.realce.superficieMarca, "surface: quem se pinta é a caixa do ÍCONE (o aplicativo de mensagens)")
       .not.toBe("rgba(0, 0, 0, 0)");
     expect(bn.realce.rotuloForaDaMarca, "surface: e o rótulo fica FORA dela, embaixo").toBe(true);
     for (const [onde, c] of Object.entries(bn.contraste)) {
@@ -2252,8 +2252,8 @@ for (const theme of ["dark", "light"] as const) {
       .toBeGreaterThan(0);
     expect(lv.flutua.raio, "e tem raio de card").toBeGreaterThan(0);
     expect(lv.flutua.bordaEsquerda, "e borda nos quatro lados").toBeGreaterThan(0);
-    expect(lv.rente.margem, "rente NÃO tem margem — ela encosta na borda, que é o que Cloudflare, "
-      + "Sophos, o app do Claude e o painel do HeroUI fazem").toBe(0);
+    expect(lv.rente.margem, "rente NÃO tem margem — ela encosta na borda, que é o que os "
+      + "painéis de administração medidos e o painel da referência fazem").toBe(0);
     expect(lv.rente.raio, "e não tem raio: painel rente não é card").toBe(0);
     expect(lv.rente.bordaEsquerda, "nem borda do lado de fora").toBe(0);
     expect(lv.rente.bordaDireita, "o que separa do conteúdo é UM TRAÇO, não um vão")
@@ -2328,7 +2328,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(nl.setaEUltima, "e é o último elemento — se ela vier antes, o valor deixa de ser o "
       + "acessório e passa a parecer parte do destino").toBe(true);
 
-    // A segunda linha veio da MUI. Se desenhar igual ao rótulo, ela é enfeite.
+    // A segunda linha veio de uma das referências. Se desenhar igual ao rótulo, ela é enfeite.
     expect(nl.descFonte, "a segunda linha é MENOR que o rótulo").toBeLessThan(nl.rotuloFonte);
     expect(nl.descCor, "e apagada — ela é contexto, não título").toBe(nl.mutedCor);
 
@@ -2932,7 +2932,7 @@ for (const theme of ["dark", "light"] as const) {
               iconeLg: sonda("var(--icon-lg)"), anel: sonda("2rem"), vao: sonda("var(--space-05)")};
     });
     // ~~vão `--space-05`~~ → ZERO desde 03/10/2026, pedido do Victor: *"o texto pode ficar mais
-    // próximo do ícone"* — como no Telegram, o nome começa onde a caixa do ícone acaba.
+    // próximo do ícone"* — como no aplicativo de mensagens de referência, o nome começa onde a caixa do ícone acaba.
     for (const k of ["nenhum", "pilula"] as const) {
       expect(m[k].marca).toBe(m.iconeLg);
       expect(m[k].gap).toBe(0);

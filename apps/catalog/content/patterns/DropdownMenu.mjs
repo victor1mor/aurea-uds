@@ -1,7 +1,7 @@
 // PADRÃO do arquivo de PATTERN — ver o cabeçalho de `Button.mjs`.
 //
 // Parte da cobertura do `G-COMP-01`: a medição mostrou 77 dos 90 componentes com ZERO composição
-// resolvida, contra cobertura total no kibo e na reui. O alvo é nenhum componente em zero.
+// resolvida, contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 import {createElement as h} from "react";
 import {DropdownMenu, IconButton, Button} from "../../../../packages/react/dist/index.js";
 

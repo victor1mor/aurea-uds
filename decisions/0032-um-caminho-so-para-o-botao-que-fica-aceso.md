@@ -20,12 +20,11 @@ protocolo desta casa proíbe padrão paralelo.
 
 ## O que a pesquisa disse (18/08/2026, doze referências)
 
-MUI, Fluent 2, React Aria, Adobe Spectrum, Carbon, Radix/Base UI, shadcn, ReUI, PrimeReact, HeroUI,
-REI Cedar e o W3C APG. **Nenhuma põe o estado de pressionado no botão comum** — todas têm
-componente separado. A `PrimeReact` é a mais próxima do nosso: `pressed` + `onPressedChange`, que é
+Onze bibliotecas de referência, entre elas o Base UI, e o W3C APG. **Nenhuma põe o estado de
+pressionado no botão comum** — todas têm componente separado. Uma delas é a mais próxima do nosso: `pressed` + `onPressedChange`, que é
 exatamente a assinatura do nosso `Toggle`.
 
-E as três fontes de prática de depreciação (Procore CORE, EightShapes, Design Systems Collective)
+E as três fontes de prática de depreciação pesquisadas
 convergem: marca `@deprecated` numa versão **menor**, com a substituição escrita, e remove na
 **maior** seguinte. Nunca de repente.
 
@@ -40,7 +39,7 @@ permite quebrar antes da `1.0`: **este é o momento mais barato que vai existir*
 **3. Os dois exemplos de toggle saíram da página do `Button`** — ela estava ensinando um toggle
 falso — e o `Toggle` ganhou página de conteúdo própria, que nunca teve (era só starter).
 
-**4. E entra a regra que ninguém tinha escrito aqui, do W3C APG e do Adobe Spectrum: o rótulo NÃO
+**4. E entra a regra que ninguém tinha escrito aqui, do W3C APG e de uma das referências: o rótulo NÃO
 muda entre os estados.** Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é `Toggle` — é
 `Button`. Quem lê tela ouve o rótulo novo e o estado ao mesmo tempo e não sabe se o botão descreve
 o que **é** ou o que **fará**. Está escrita no fonte, na ficha e no catálogo.

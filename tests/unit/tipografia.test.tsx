@@ -1,4 +1,4 @@
-// B-02 na WEB · `Text`, `Heading`, `Paragraph` e `Code`, no molde do HeroUI 3.2.6. O que se prova
+// B-02 na WEB · `Text`, `Heading`, `Paragraph` e `Code`, no molde da referência. O que se prova
 // aqui é o ELEMENTO e a CLASSE: o elemento é o que o leitor de tela entende (h1…h6, p, code), e a
 // classe é o papel. O efeito das classes (tamanho, cor, fundo) é medido no navegador, no
 // `skin.spec.ts`, porque o jsdom não calcula CSS.

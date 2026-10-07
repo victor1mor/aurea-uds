@@ -53,10 +53,10 @@ import { useAureaTokens, useSobreAMarca } from "./theme.js";
 // linha ~29. Isso cabe em toda cápsula, MENOS o controle `sm` na densidade compacta (28 de
 // altura), que estoura por 1 ponto. Em 1,5× vários estouram — e isso já era verdade na escala
 // antiga.
-// ⚠ **ESCALA DO HEROUI, 24/09/2026 (ADR-0050, que substitui a 0049).** Os NÚMEROS são os da web —
-// 12 · 14 · 16 · 18 · 20 · 24 · 30 · 36 · 48, a escala do Tailwind que o HeroUI usa. O que muda no
-// telefone é o DEGRAU que cada papel pega, e isso também é do HeroUI, lido no pacote deles: na web
-// a peça é `text-sm` (14) e o apoio `text-xs` (12); no HeroUI Native a peça é `text-base` (16) e o
+// ⚠ **ESCALA DA REFERÊNCIA, 24/09/2026 (ADR-0050, que substitui a 0049).** Os NÚMEROS são os da
+// web — 12 · 14 · 16 · 18 · 20 · 24 · 30 · 36 · 48, a escala que a referência usa. O que muda no
+// telefone é o DEGRAU que cada papel pega, e isso também é da referência, lido no pacote dela: na
+// web a peça é `text-sm` (14) e o apoio `text-xs` (12); no nativo dela a peça é `text-base` (16) e o
 // apoio `text-sm` (14). Por isso aqui os nomes pequenos sobem UM degrau: o mesmo `size="sm"` que é
 // 14 na web é 16 no telefone. Os componentes não trocam de nome; o mapa é que traduz o papel.
 const TAMANHO = {
@@ -134,7 +134,7 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
             // É a impedância que a Etapa 2 mediu e resolveu emitindo razão em vez de dp.
             ...(tracking ? { letterSpacing: fontSize * t.tracking[`tracking${tracking[0].toUpperCase()}${tracking.slice(1)}`] } : null),
             ...(align ? { textAlign: align } : null),
-            // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (HeroUI Native).
+            // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (a referência).
             ...(type === "code" ? {
                 alignSelf: "flex-start", backgroundColor: t.color.surface2, ...canto(t.size.radiusXs),
                 paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
@@ -156,7 +156,7 @@ const ALINHA = { start: "left", center: "center", end: "right", justify: "justif
 function papelDe(type, { color, weight, align, truncate, style, ...rest }) {
     return (_jsx(Text, { ...rest, type: type, tone: color === "muted" ? "muted" : "default", weight: weight ? PESO[weight] : undefined, numberOfLines: truncate ? 1 : rest.numberOfLines, style: [align ? { textAlign: ALINHA[align] } : null, style] }));
 }
-/** Título. Marca `accessibilityRole="header"` sozinho, como o HeroUI Native. */
+/** Título. Marca `accessibilityRole="header"` sozinho, como a referência. */
 export function Heading({ type = "h1", accessibilityRole = "header", ...rest }) {
     return papelDe(type, { accessibilityRole, ...rest });
 }

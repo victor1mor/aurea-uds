@@ -197,9 +197,9 @@ com **só o core** — sem o chrome do catálogo, que é o mundo do consumidor:
 | `.command-overlay` | `position:static` — não cobria nada | `fixed`, `inset:0`, `--overlay` + blur, `z-modal` | `.dialog-backdrop` do core |
 | `.command-palette` | 810px de largura, sem superfície, sem raio, sem sombra | superfície flutuante: `--radius-card`, `--popover`, `--shadow-lg`, `width:min(680px,100%)` | a ficha do componente já listava esses tokens |
 | `.data-list` | `<dl>` cru: `dt`/`dd` empilhados, com o recuo de 40px do navegador | duas colunas (`max-content` + `1fr`), termo em `--muted-foreground` | `th` do core (o termo é secundário, o valor é o conteúdo) |
-| `.accordion` | `display:block`, sem divisória | coluna com `border-block` e divisória de 1px entre itens | Carbon, medido (`REFERENCES.md`) |
-| `.accordion > summary` | 21px — a altura do texto, nada mais | `min-height:var(--control-h-md)`, peso medium, hover em `--surface-hover` | Carbon: cabeçalho na altura de controle |
-| `.accordion-content` | `padding:0` — o corpo colava no título | respiro pequeno em cima, `--space-6` embaixo | Carbon: 8px / 24px |
+| `.accordion` | `display:block`, sem divisória | coluna com `border-block` e divisória de 1px entre itens | referência externa, medida (`REFERENCES.md`) |
+| `.accordion > summary` | 21px — a altura do texto, nada mais | `min-height:var(--control-h-md)`, peso medium, hover em `--surface-hover` | referência: cabeçalho na altura de controle |
+| `.accordion-content` | `padding:0` — o corpo colava no título | respiro pequeno em cima, `--space-6` embaixo | referência: 8px / 24px |
 | `.empty-state` | `display:block`, `padding:0`, alinhado à esquerda | coluna centralizada, `--space-10`/`--space-6`, `--muted-foreground` | `.notification-empty` e `.datagrid-empty`, que já respondiam isso assim |
 | `.empty-title` | o `h3` do **navegador** (16,38px) | `--text-base` + `--weight-semibold` + `--leading-tight` | — |
 
@@ -1272,7 +1272,7 @@ com `.badge → 24, 26px`.
   1023, 1024, 1100, 1366 px (+ `max-height:800px`). Seis são o legado congelado
   declarado em `validate.py:172` — `{400, 800, 820, 821, 1100, 1366}` — e governam
   `.app-shell`, `.media-*`, `.builder-*`, `.schedule-*`, `.spatial-*`.
-- **Impacto:** a escala Tailwind está travada por gate para o **novo**, mas o
+- **Impacto:** a escala sm–2xl está travada por gate para o **novo**, mas o
   comportamento real em telas médias é decidido pelo legado. Prever o layout exige
   conhecer as duas escalas.
 - **Nota:** o gate está correto — impede o legado de crescer. O achado é a dívida, não
@@ -1350,7 +1350,7 @@ com `.badge → 24, 26px`.
 | Fundações e regras visuais | PARCIAL | `CLAUDE.md` lista a identidade; o inventário de fundações não existia até esta auditoria |
 | Inventário de componentes com estado | PARCIAL | registry tem os dados; nenhuma vista humana |
 | Contrato de componente (anatomia, API, estados, a11y, aceite) | **AUSENTE** como doc; parcial como dado (21/65) |
-| Registro de referências externas | **AUSENTE** | `AUREA.md:83` cita Kibo/Untitled sem registrar o que foi analisado nem a conclusão |
+| Registro de referências externas | **AUSENTE** | `AUREA.md:83` cita duas referências sem registrar o que foi analisado nem a conclusão |
 | Registro de decisões (ADR com id/data/alternativas/consequências) | **AUSENTE** | decisões vivem em prosa numerada em `AUREA.md:194-197` e `:145-197`, sem data, alternativa ou consequência |
 | Estratégia de testes | PARCIAL | `ROADMAP.md:49-83` tem checklist de gates |
 | Critérios de qualidade objetivos | **AUSENTE** | não há definição de "componente concluído" |
@@ -1466,7 +1466,7 @@ Declarado para que a auditoria não pareça mais completa do que é.
 |---|---|
 | Leitor de tela real (NVDA/JAWS/VoiceOver) | BLOQUEADO — indisponível no ambiente. A a11y aqui é axe + medição de propriedade. Nome acessível, ordem de anúncio e experiência real de navegação **não** foram testados. |
 | Navegadores além do Chromium | BLOQUEADO — só Chromium instalado. Firefox/Safari não verificados. |
-| Referências externas (Kibo UI, Untitled UI) | Não acessadas nesta sessão. Nenhuma comparação é afirmada; o registro de referências fica AUSENTE por falta de análise. |
+| Referências externas (duas bibliotecas de referência) | Não acessadas nesta sessão. Nenhuma comparação é afirmada; o registro de referências fica AUSENTE por falta de análise. |
 | Leitura linha a linha de `index.tsx` e `aurea.css` | Auditados por medição e consulta dirigida. Achados de **estilo** de código (nomes, comentários, complexidade de função, legibilidade) não foram levantados. |
 | `ROADMAP.md` integral (61 KB) | Estrutura mapeada, seções de estado lidas; ~900 linhas de histórico não lidas. |
 | `apps/docs/index.html` integral (670 KB) | Tratado como superfície legada a aposentar; medido, não lido. |

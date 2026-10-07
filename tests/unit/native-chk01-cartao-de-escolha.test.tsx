@@ -1,6 +1,6 @@
 // CHK-01 (06/10/2026) · o cartão de escolha: o cartão INTEIRO é a opção. O app monta os Planos com
 // `Card variant="selected"` + `onPress`, e o leitor de tela anuncia "botão", não "opção 1 de 3": a
-// escolha não existe para quem não vê. O HeroUI não tem a peça pronta — ele a monta com um
+// escolha não existe para quem não vê. A referência não tem a peça pronta — ela a monta com um
 // `RadioGroup.Item` e uma superfície dentro —, e é assim que ela entra: `RadioGroup variant="card"`.
 //
 // O que este arquivo trava:

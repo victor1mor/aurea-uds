@@ -20,8 +20,8 @@ Três medições independentes, todas contra **mascarar enquanto se digita**:
 
 | Fonte | O que ela diz |
 |---|---|
-| **USWDS** — o design system do governo americano | publica o `Input mask` **com reprovação registrada em WCAG 2.1 AA**: *"recovering from an error is difficult due to lack of feedback"*. Não é que ninguém tenha feito: é que quem fez publicou o defeito junto |
-| **MUI** — a referência que o próprio item mandava ler | **abandonou** máscara nos campos de data na v6, e escreveu o motivo: o texto *"leaks to the previous sections"* ao editar o meio do valor. Há um vídeo no repositório deles chamado `masked-input-bad-ux.mp4` |
+| **Um design system de governo** | publica o componente de máscara **com reprovação registrada em WCAG 2.1 AA**: recuperar-se de um erro é difícil, por falta de retorno. Não é que ninguém tenha feito: é que quem fez publicou o defeito junto |
+| **A biblioteca de referência** que o próprio item mandava ler | **abandonou** máscara nos campos de data, e escreveu o motivo: ao editar o meio do valor, o texto vaza para as seções anteriores. Há um vídeo no repositório deles mostrando a má experiência da máscara |
 | prática corrente de acessibilidade | máscara ao vivo **descasa** o que o leitor de tela ANUNCIA (o que foi digitado) do que o campo MOSTRA (o que a máscara deixou passar). A recomendação é deixar digitar e colar à vontade e formatar **depois que o foco sai** |
 
 E o passo 1 achou metade do item **já paga e desligada**: o comentário do `NumberField`, escrito no
@@ -34,7 +34,7 @@ que é exatamente o momento que a pesquisa recomenda. A nossa casca simplesmente
 **Um componente `MaskedInput`, com padrão de máscara (`###-####`, `AAA-0A00`).** Rejeitada pelas
 três medições acima. O que se entregaria é o defeito documentado de outra pessoa, com a nossa marca.
 
-**Embrulhar uma biblioteca de máscara (`react-imask`, `react-number-format`).** Rejeitada duas
+**Embrulhar uma biblioteca de máscara de terceiros.** Rejeitada duas
 vezes: é dependência nova, que pelo `BUILDING.md` §3.3 interrompe o lote e exige o Victor — e o
 que ela entrega é justamente o comportamento que a pesquisa desaconselha.
 
@@ -79,5 +79,5 @@ foi digitado até o foco sair. É o defeito da máscara ao vivo escrito como ass
 ## Quando se revisa
 
 Se aparecer **medição** — não impressão — de que a formatação no blur atrapalha um caso real, ou
-se o padrão de acessibilidade mudar de recomendação. A reprovação do USWDS e o abandono do MUI são
+se o padrão de acessibilidade mudar de recomendação. A reprovação no design system de governo e o abandono da referência são
 o estado de 2026; se qualquer um dos dois se reverter com evidência, esta página volta à mesa.

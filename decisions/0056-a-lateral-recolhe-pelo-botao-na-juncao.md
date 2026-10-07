@@ -29,10 +29,10 @@
 
 ## As fontes
 
-O HeroUI não tem moldura de app. Na fila de referências (`CLAUDE.md` §2), o **ReUI** tem: o exemplo
-`c-sidebar-2` (*"Icon rail that collapses — labels give way to tooltips, with a rail and a trigger
-to drive it"*), montado sobre a `Sidebar` do shadcn (MIT), lida no código publicado em
-`reui.io/r/styles/base-nova/c-sidebar-2.json` e `ui.shadcn.com/r/styles/base-nova/sidebar.json`.
+A primeira da fila de referências (`CLAUDE.md` §2) não tem moldura de app. A **segunda** tem: um exemplo
+de trilha de ícones que recolhe (os nomes viram dica, com uma trilha e um gatilho para comandá-la),
+montado sobre a `Sidebar` de outra das referências (MIT), lida no código publicado
+das duas.
 Dela vieram o comportamento e os nomes: estado aberto/recolhido, `defaultOpen` + `open` +
 `onOpenChange`, um gatilho, e o nome em dica na trilha (que a `Sidebar` da Aurea já fazia). Nenhuma
 linha foi copiada, e nenhuma medida: tudo sai dos tokens que já existem.
@@ -40,12 +40,12 @@ linha foi copiada, e nenhuma medida: tudo sai dos tokens que já existem.
 ## Alternativas rejeitadas
 
 - **Ligado por padrão.** Mudaria a moldura de todo consumidor e o catálogo inteiro sem ele pedir.
-- **O gatilho no cabeçalho do conteúdo, como no shadcn.** O Victor marcou a junção.
-- **A faixa fina na borda da lateral (`SidebarRail` do shadcn).** É um segundo alvo para a mesma
+- **O gatilho no cabeçalho do conteúdo, como na outra referência.** O Victor marcou a junção.
+- **A faixa fina na borda da lateral, da outra referência.** É um segundo alvo para a mesma
   ação, só de mouse; o botão na junção já ocupa o lugar.
-- **O atalho Ctrl/Cmd+B do shadcn.** Ele escuta a janela inteira e cancela a tecla: num editor de
+- **O atalho Ctrl/Cmd+B da outra referência.** Ele escuta a janela inteira e cancela a tecla: num editor de
   texto (o `BlockEditor` daqui) roubaria o negrito.
-- **Guardar a escolha num cookie, como o shadcn.** Preferência é do app; a Aurea avisa.
+- **Guardar a escolha num cookie, como a outra referência.** Preferência é do app; a Aurea avisa.
 
 ## O que custou
 

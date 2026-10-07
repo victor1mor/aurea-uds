@@ -1,6 +1,6 @@
-// HER-01 (06/10/2026) · o canto da Apple. `borderCurve: "continuous"` é o canto do iPhone: a curva
-// entra no lado aos poucos, em vez de começar de repente como um quarto de círculo. O
-// `heroui-native` 1.0.10 o põe em 24 peças; a Aurea nativa, até aqui, em nenhuma (contado: 60
+// HER-01 (06/10/2026) · o canto contínuo do iOS. `borderCurve: "continuous"` é o canto do iPhone: a curva
+// entra no lado aos poucos, em vez de começar de repente como um quarto de círculo. A
+// referência (no nativo) o põe em 24 peças; a Aurea nativa, até aqui, em nenhuma (contado: 60
 // raios no fonte, zero `borderCurve`). Só o iOS 13+ mostra; o Android e o navegador ignoram.
 //
 // Todo raio do nativo passa agora por `canto()` (ou `cantosDeCima()`), em `estilos.ts`, que entrega
@@ -60,7 +60,7 @@ describe("HER-01 · todo raio do nativo passa por `canto()`", () => {
   });
 });
 
-describe("HER-01 · as peças montadas saem com o canto da Apple", () => {
+describe("HER-01 · as peças montadas saem com o canto contínuo do iOS", () => {
   const ICONES = criarRegistroDeIcones({});
   const comRaio = () => [...__instancias("View"), ...__instancias("Animated.View"),
     ...__instancias("Pressable"), ...__instancias("TextInput")]

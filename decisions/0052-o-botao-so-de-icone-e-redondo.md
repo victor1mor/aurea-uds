@@ -22,8 +22,8 @@ depois do B-09, no botão do player: *"botão pode ser redondo?"*.
 
 Medido antes de decidir:
 
-- **HeroUI 3.2.6** (`@heroui/styles`, `button.css`): o botão é `rounded-3xl` e o só de ícone
-  (`.button--icon-only`) tem largura igual à altura, `w-10` num `h-10`. É um círculo.
+- **A referência** (a folha do botão no pacote web dela): o botão é arredondado e o só de ícone
+  tem largura igual à altura. É um círculo.
 - **Aurea:** os botões de texto já são cápsula (seção 5 do `CLAUDE.md`). O de ícone era o único
   botão quadrado.
 
@@ -63,4 +63,4 @@ escolhidos do `Combobox` (`.combobox-chip-remove`).
 
 ## Revisão
 
-Reabre se o HeroUI deixar de fazer o botão só de ícone redondo, ou se o Victor pedir.
+Reabre se a referência deixar de fazer o botão só de ícone redondo, ou se o Victor pedir.

@@ -23,10 +23,10 @@ quem chegasse depois e visse os três subpaths de motor opcional já existindo.
 
 ### 1. A referência indicada não é o mesmo componente
 
-O `editor` de `Referencia/kibo-main/packages/editor` tem **39 exports** e **17 dependências**
-(TipTap 3.6.6, `@tiptap/pm`, lowlight, tippy.js, fuse.js, floating-ui). Medido export a export:
+O `editor` da referência indicada tem **39 exports** e **17 dependências**
+(um motor de texto rico de terceiro e as bibliotecas de apoio dele). Medido export a export:
 **18 dos 39 são de tabela**, e o resto é formatação inline e tipo de nó. É um editor de **documento
-único** sobre ProseMirror.
+único** sobre um motor de texto rico de terceiro.
 
 **Lista de blocos, reordenação e bloco de imagem com legenda não existem ali.** A primeira pergunta
 do [`BUILDING.md`](../docs/BUILDING.md) §2 passo 2 — *"é o mesmo componente?"* — responde **não**, e a
@@ -40,9 +40,9 @@ acessível. O buraco era **um**: a moldura.
 
 ### 3. O mercado, pesquisado e não lembrado
 
-**TipTap 3** é MIT no editor e pago na nuvem; continua ProseMirror por baixo · **BlockNote** é
-**MPL-2.0**, copyleft por arquivo, e a Aurea é Apache-2.0 · **Editor.js** é o modelo de blocos
-independentes · **Lexical** e **ProseMirror** são as bases que o mercado aponta como de vida longa.
+Dos motores pesquisados: um é MIT no editor e pago na nuvem, com outra base por baixo · outro é
+**MPL-2.0**, copyleft por arquivo, e a Aurea é Apache-2.0 · um terceiro é o modelo de blocos
+independentes · e duas bases são as que o mercado aponta como de vida longa.
 
 Na plataforma: **`contenteditable="plaintext-only"` virou Baseline Newly available**, e a
 **EditContext API não é Baseline** — só Chromium. O caminho nativo cobre texto simples; não cobre
@@ -51,7 +51,7 @@ texto rico.
 ### 4. Segurança — e é esta que fecha a porta
 
 O navegador **não sanitiza HTML colado**. Quem é dono da superfície de edição é dono do XSS de
-colagem, e a pesquisa confirma que ProseMirror e Lexical tratam o `contenteditable` como **alvo de
+colagem, e a pesquisa confirma que as duas bases de vida longa tratam o `contenteditable` como **alvo de
 renderização e nunca como fonte da verdade** exatamente por isso.
 
 A Aurea **não pode decidir o que é seguro renderizar** dentro do domínio do consumidor. É a mesma
@@ -76,7 +76,7 @@ Nos três, **o motor É o componente**: sem Recharts não há gráfico, sem Code
 código. Por isso cada um mora em subpath próprio, com peer opcional, e quem não usa não paga.
 
 Aqui o motor **não é** o componente. O que o item pede — "texto, imagem com legenda" — é moldura, e
-moldura não justifica ProseMirror no pacote de quem só quer montar um artigo. A fronteira é a
+moldura não justifica um motor de texto rico no pacote de quem só quer montar um artigo. A fronteira é a
 mesma dos três; o lado dela em que este caso cai é que muda.
 
 ## Consequências

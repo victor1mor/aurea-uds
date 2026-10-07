@@ -9,8 +9,8 @@
 // módulos de cliente não precisarem saber da diferença; o barril (`index.tsx`, que também é de
 // servidor) importa DAQUI.
 //
-// Mesmo desenho da referência: no shadcn/ui o `cn` mora em `lib/utils.ts` sem diretiva, enquanto
-// 43 dos 57 componentes de `registry/bases/aria/ui` a declaram — medido em 06/08/2026.
+// Mesmo desenho da referência: nela a função de juntar classes mora num arquivo utilitário sem diretiva, enquanto
+// 43 dos 57 componentes dela a declaram — medido em 06/08/2026.
 //
 // `.tsx` sem JSX de propósito: os checks 11, 19 e 26 varrem `packages/react/src/*.tsx`, e um
 // `.ts` aqui seria um arquivo que gate nenhum enxerga.
@@ -114,7 +114,7 @@ export const defaultSpriteUrl="/aurea-icons.svg";
 
 // ── EIXO RESPONSIVO — a abstração compartilhada do G-AXIS-04 ───────────────
 //
-// A Aurea tinha ZERO eixo responsivo e a Radix Themes tem em 47 de 50. A decisão do Victor foi
+// A Aurea tinha ZERO eixo responsivo e uma das referências tem em 47 de 50. A decisão do Victor foi
 // ter os DOIS mecanismos, explícitos na API, e construir a abstração ANTES dos componentes — para
 // não terminar com uma solução diferente por peça.
 //
@@ -302,13 +302,13 @@ export function gridStateFromParams(params:URLSearchParams,filters?:Array<{colum
 // ter URLs com vocabulário diferente.
 //
 // PESQUISADO antes de escrever, e o resultado foi de novo NEGATIVO — o mais útil deste item.
-// O `nuqs` é o gerenciador de estado em URL do mercado (adaptadores para Next, React Router,
-// TanStack Router e SPA puro, parsers tipados, Sentry/Supabase/Vercel/Clerk usando, mais de um
+// Existe um gerenciador de estado em URL que é o do mercado (adaptadores para os principais
+// frameworks e roteadores e para SPA puro, parsers tipados, produtos grandes usando, mais de um
 // milhão de downloads por semana). A Aurea NÃO vai escrever um concorrente disso, e nem poderia:
 // gerenciar exige mexer no histórico, e a decisão entre `push` e `replace` é do consumidor —
 // está registrada desde o F4, e errá-la enche o histórico de uma entrada por tecla digitada.
 //
-// O que fica aqui é o FORMATO, que é o que o `nuqs` não tem opinião sobre: como o estado dos
+// O que fica aqui é o FORMATO, que é o que esse gerenciador não tem opinião sobre: como o estado dos
 // componentes da Aurea vira busca. É por isso que estas funções não importam nada, não tocam em
 // `window` e vivem no módulo SEM diretiva — elas são chamadas ONDE A URL CHEGA, e num framework
 // de componentes de servidor isso é o servidor.

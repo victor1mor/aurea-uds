@@ -1,7 +1,7 @@
 // R-22 (02/10/2026) · o `PhotoInput` não deixava OLHAR a foto escolhida. A miniatura era um `Avatar`
 // redondo de 42 sem toque, e o X (sem fundo, só 8 para fora) cobria metade dela. Na "B" da prancha,
 // escolhida pelo Victor (*"B pode seguir"*):
-//   · miniatura QUADRADA de 64 (`space16`, o `Avatar` `lg` do HeroUI Native), a `Image` da `Gallery`;
+//   · miniatura QUADRADA de 64 (`space16`, o `Avatar` `lg` da referência no nativo), a `Image` da `Gallery`;
 //   · tocar abre a foto grande, no MESMO zoom da `Gallery`;
 //   · o X com fundo, TODO fora da foto;
 //   · leitor de tela: "Foto 2 de 3" e "Abre a foto"; o X, "Remover foto 2".

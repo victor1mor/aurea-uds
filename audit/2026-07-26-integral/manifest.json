@@ -185,7 +185,7 @@
     },
     {
       "id": "validate-4b",
-      "cobre": "breakpoint fora da escala Tailwind; legado congelado"
+      "cobre": "breakpoint fora da escala sm-2xl; legado congelado"
     },
     {
       "id": "validate-5",
@@ -317,6 +317,6 @@
   "lacunasDoPlano": [
     "distribuicao/publicacao — nenhuma fase; sem ela nao ha como instalar a Aurea",
     "trilha nativa (@aurea-uds/native) — nao existe; so os tokens atravessam para React Native",
-    "registro de referencias externas — deliverable pedido e NAO produzido (Kibo/Untitled nao acessados)"
+    "registro de referencias externas — deliverable pedido e NAO produzido (duas referencias nao acessadas)"
   ]
 }

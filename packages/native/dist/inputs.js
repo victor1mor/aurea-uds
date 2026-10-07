@@ -87,7 +87,7 @@ const folha = criarFolha((t) => ({
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
         backgroundColor: t.color.fieldBg,
     },
-    // E5: a marca no MEIO da altura do texto, como o HeroUI Native. Era `flex-start` com um
+    // E5: a marca no MEIO da altura do texto, como a referência. Era `flex-start` com um
     // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
     linhaDeControle: { flexDirection: "row", alignItems: "center", gap: 9 },
     // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
@@ -113,8 +113,8 @@ const folha = criarFolha((t) => ({
     segmento: { alignItems: "center", justifyContent: "center",
         paddingHorizontal: 14, ...canto(t.size.radiusControl) },
     // `fullWidth`: o segmento CRESCE a partir do rótulo (base `auto`) e nunca encolhe abaixo dele.
-    // É o `fullWidth` do `ToggleButtonGroup` do HeroUI 3.2.6, com uma diferença declarada: lá é
-    // `flex-1`, e o CSS segura o mínimo do texto sozinho (`min-width: auto`). O Yoga não tem esse
+    // É como o grupo de botões alternáveis da referência ocupa a linha, com uma diferença declarada: lá é
+    // `flex: 1`, e o CSS segura o mínimo do texto sozinho (`min-width: auto`). O Yoga não tem esse
     // mínimo, e base zero repartiria igual de novo — o defeito acima. Com base `auto`, os segmentos
     // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
     segmentoCheio: { flexGrow: 1, flexShrink: 0, flexBasis: "auto" },
@@ -441,7 +441,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
         ], ...rest, children: noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada] }));
 }
 /**
- * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
+ * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` da referência.
  *
  *     <RadioGroup label="Forma de entrega" value={entrega} onValueChange={setEntrega}>
  *       <RadioGroup.Item value="normal" label="Normal" description="Em 5 a 7 dias úteis" />
@@ -450,7 +450,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
  *     </RadioGroup>
  *
  * Os filhos são livres: entre os itens cabe um `Separator`, e o grupo inteiro cabe num `Card`,
- * como no exemplo do HeroUI. Tocar no item já escolhido não muda nada. Com
+ * como no exemplo da referência. Tocar no item já escolhido não muda nada. Com
  * `indicatorPlacement="start"` a marca vai para o início da linha.
  */
 export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoDeRadio });
@@ -458,7 +458,7 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoD
  * O interruptor.
  *
  * ⚠ **NÃO é o `Switch` do React Native**, pela mesma razão que o `Spinner` não é o
- * `ActivityIndicator`: aquele desenha o interruptor do Material no Android e o do iOS no iOS —
+ * `ActivityIndicator`: aquele desenha o interruptor do sistema no Android e o do iOS no iOS —
  * duas aparências que o `CLAUDE.md` proíbe em voz alta. As medidas aqui são as do CSS: trilho de
  * `altura × 7/6` por `altura × 2/3`, polegar com 3 de folga.
  *

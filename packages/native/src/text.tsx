@@ -37,7 +37,7 @@ export type AureaTextTone =
 export type AureaTextLeading = "none" | "tight" | "normal" | "relaxed";
 
 /**
- * O PAPEL do texto — B-02, 25/09/2026, no molde do `Typography` do HeroUI Native 1.0.10. Uma lista
+ * O PAPEL do texto — B-02, 25/09/2026, no molde do componente de tipografia da referência. Uma lista
  * fechada: título 1–6, texto, texto pequeno, texto mínimo e código.
  */
 export type AureaTextType =
@@ -45,8 +45,8 @@ export type AureaTextType =
 
 export interface TextProps extends TextPropsRN {
   /**
-   * O papel (B-02). Dá tamanho, peso, entrelinha e fonte de uma vez, com os números do HeroUI
-   * Native — os MESMOS da web, sem o degrau a mais do `size`. Uma opção solta passada junto
+   * O papel (B-02). Dá tamanho, peso, entrelinha e fonte de uma vez, com os números da
+   * referência — os MESMOS da web, sem o degrau a mais do `size`. Uma opção solta passada junto
    * (`size`, `weight`…) continua valendo por cima dele.
    */
   type?: AureaTextType;
@@ -92,10 +92,10 @@ export interface TextProps extends TextPropsRN {
 // linha ~29. Isso cabe em toda cápsula, MENOS o controle `sm` na densidade compacta (28 de
 // altura), que estoura por 1 ponto. Em 1,5× vários estouram — e isso já era verdade na escala
 // antiga.
-// ⚠ **ESCALA DO HEROUI, 24/09/2026 (ADR-0050, que substitui a 0049).** Os NÚMEROS são os da web —
-// 12 · 14 · 16 · 18 · 20 · 24 · 30 · 36 · 48, a escala do Tailwind que o HeroUI usa. O que muda no
-// telefone é o DEGRAU que cada papel pega, e isso também é do HeroUI, lido no pacote deles: na web
-// a peça é `text-sm` (14) e o apoio `text-xs` (12); no HeroUI Native a peça é `text-base` (16) e o
+// ⚠ **ESCALA DA REFERÊNCIA, 24/09/2026 (ADR-0050, que substitui a 0049).** Os NÚMEROS são os da
+// web — 12 · 14 · 16 · 18 · 20 · 24 · 30 · 36 · 48, a escala que a referência usa. O que muda no
+// telefone é o DEGRAU que cada papel pega, e isso também é da referência, lido no pacote dela: na
+// web a peça é `text-sm` (14) e o apoio `text-xs` (12); no nativo dela a peça é `text-base` (16) e o
 // apoio `text-sm` (14). Por isso aqui os nomes pequenos sobem UM degrau: o mesmo `size="sm"` que é
 // 14 na web é 16 no telefone. Os componentes não trocam de nome; o mapa é que traduz o papel.
 const TAMANHO: Record<AureaTextSize, string> = {
@@ -106,10 +106,10 @@ const ENTRELINHA: Record<AureaTextLeading, string> = {
   none: "leadingNone", tight: "leadingTight", normal: "leadingNormal", relaxed: "leadingRelaxed",
 };
 
-// Os papéis do B-02. Os números são os do HeroUI Native (`text.css` do heroui-native 1.0.10), lidos
+// Os papéis do B-02. Os números são os da referência (do pacote nativo dela), lidos
 // no pacote: títulos do `4xl` ao `base` em seminegrito; texto em `base`, `sm` e `xs`. ⚠ Aqui o
-// tamanho aponta para o TOKEN direto, e não para o `TAMANHO` acima: o HeroUI Native não sobe o
-// degrau no `Typography` (o `body-sm` dele é 14, como na web), então o papel também não sobe.
+// tamanho aponta para o TOKEN direto, e não para o `TAMANHO` acima: a referência não sobe o
+// degrau no componente de tipografia (o `body-sm` dela é 14, como na web), então o papel também não sobe.
 interface Papel { tamanho: string; peso: AureaTextWeight; entrelinha: string; fonte: AureaTextFont; junto?: true }
 const titulo = (tamanho: string): Papel => ({tamanho, peso: 600, entrelinha: "leadingTight", fonte: "ui", junto: true});
 const PAPEL: Record<AureaTextType, Papel> = {
@@ -185,7 +185,7 @@ export function Text({
       // É a impedância que a Etapa 2 mediu e resolveu emitindo razão em vez de dp.
       ...(tracking ? {letterSpacing: fontSize * t.tracking[`tracking${tracking[0].toUpperCase()}${tracking.slice(1)}`]} : null),
       ...(align ? {textAlign: align} : null),
-      // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (HeroUI Native).
+      // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (a referência).
       ...(type === "code" ? {
         alignSelf: "flex-start" as const, backgroundColor: t.color.surface2, ...canto(t.size.radiusXs),
         paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
@@ -206,9 +206,9 @@ export function Text({
 
 
 // ── Heading, Paragraph e Code — B-02, 25/09/2026 ───────────────────────────────────────────────
-// Os atalhos do `Typography` do HeroUI Native (`Typography.Heading`, `.Paragraph`, `.Code`), com
-// a API DELE: o papel entra por `type`, e não por `level`/`size` como no HeroUI da web. Cada alvo
-// segue o seu HeroUI. As opções são as mesmas quatro dele — cor, peso, alinhamento, corte —, todas
+// Os atalhos do componente de tipografia do nativo da referência (título, parágrafo e código),
+// com a API DELA: o papel entra por `type`, e não por `level`/`size` como na web dela. Cada alvo
+// segue a referência do seu lado. As opções são as mesmas quatro dela — cor, peso, alinhamento, corte —, todas
 // listas fechadas.
 export type AureaTypographyColor = "default" | "muted";
 export type AureaTypographyWeight = "normal" | "medium" | "semibold" | "bold";
@@ -216,7 +216,7 @@ export type AureaTypographyAlign = "start" | "center" | "end" | "justify";
 interface AureaTypographyBase extends Omit<TextPropsRN, "children"> {
   color?: AureaTypographyColor;
   weight?: AureaTypographyWeight;
-  /** `start`/`end` viram `left`/`right`, que o React Native já espelha em RTL (nota do HeroUI Native). */
+  /** `start`/`end` viram `left`/`right`, que o React Native já espelha em RTL (nota da referência). */
   align?: AureaTypographyAlign;
   /** Uma linha só, cortada com reticências (`numberOfLines={1}`). */
   truncate?: boolean;
@@ -234,7 +234,7 @@ function papelDe(type: AureaTextType, {color, weight, align, truncate, style, ..
 }
 
 export interface HeadingProps extends AureaTypographyBase { type?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" }
-/** Título. Marca `accessibilityRole="header"` sozinho, como o HeroUI Native. */
+/** Título. Marca `accessibilityRole="header"` sozinho, como a referência. */
 export function Heading({type = "h1", accessibilityRole = "header", ...rest}: HeadingProps) {
   return papelDe(type, {accessibilityRole, ...rest});
 }

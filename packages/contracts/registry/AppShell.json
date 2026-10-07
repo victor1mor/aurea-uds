@@ -68,7 +68,7 @@
       "name": "sidebarCollapsible",
       "type": "boolean",
       "default": "false",
-      "description": "AN-01: draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the shadcn Sidebar that ReUI's c-sidebar-2 uses (HeroUI has no app frame)."
+      "description": "AN-01: draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame)."
     },
     {
       "name": "defaultSidebarCollapsed",

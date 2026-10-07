@@ -75,9 +75,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
    *  compilava. */
   target?:React.HTMLAttributeAnchorTarget;rel?:string;download?:boolean|string;
   /**
-   * @deprecated Use `<Toggle>` instead. Pesquisado em 18/08/2026 nas doze referências (MUI,
-   * Fluent 2, React Aria, Spectrum, Carbon, Radix/Base UI, shadcn, ReUI, PrimeReact, HeroUI,
-   * Cedar, APG): **nenhuma** põe o estado de pressionado no botão comum — todas têm um
+   * @deprecated Use `<Toggle>` instead. Pesquisado em 18/08/2026 nas doze referências (entre
+   * elas o motor Base UI e o APG): **nenhuma** põe o estado de pressionado no botão comum — todas têm um
    * componente separado, e o nosso é o `Toggle`. Manter os dois é dois caminhos para a mesma
    * coisa, que é o "qual eu uso?" que denuncia recurso duplicado.
    * A diferença de verdade: aqui VOCÊ guarda o estado e isto só pinta e anuncia; o `Toggle`
@@ -105,8 +104,8 @@ const cls=cx("btn",buttonSkin(variant,appearance,tone),
 // 🔴 OCUPADO TROCA, NÃO ACRESCENTA (01/10/2026, achado pelo Victor no aureauds.dev): a rodinha
 // entrava ANTES do ícone, e no `IconButton` — 36 de largura fixa — rodinha e glifo não cabiam:
 // medido no catálogo, a rodinha começava 4px FORA do botão, à esquerda, com o disquete ainda ao
-// lado. O HeroUI troca (exemplo "Loading State" da doc do Button 3.2.6:
-// `isPending ? <Spinner/> : <Paperclip/>`). Aqui também: ocupado, a rodinha toma o lugar do ícone
+// lado. A referência troca (no exemplo de estado ocupado da doc do botão dela, a rodinha
+// entra no lugar do ícone). Aqui também: ocupado, a rodinha toma o lugar do ícone
 // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
 // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
 const temConteudo=children!=null&&children!==false;
@@ -114,7 +113,7 @@ const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={lead
 // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
 // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
 // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
-// embrulho de <span> que o MUI documenta resolve o ponteiro e não resolve o teclado (span nasce
+// embrulho de <span> que uma das referências documenta resolve o ponteiro e não resolve o teclado (span nasce
 // com tabIndex -1, medido). Com `aria-disabled` o botão continua focável e anunciado como
 // desabilitado, e é ESTE componente que tem de barrar a ativação — o atributo é só semântica.
 // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
@@ -178,7 +177,7 @@ return itens.some(item=>{
 // ESTE é o toggle da Aurea. O `pressed` do `Button` está DEPRECIADO em favor dele (0.4.0,
 // sai na 1.0): as doze referências pesquisadas em 18/08/2026 têm componente separado, e
 // nenhuma põe o estado no botão comum.
-// E a REGRA QUE FALTAVA ESTAR ESCRITA AQUI, do Adobe Spectrum e do APG: **o rótulo não muda
+// E a REGRA QUE FALTAVA ESTAR ESCRITA AQUI, de uma das referências e do APG: **o rótulo não muda
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
@@ -201,18 +200,18 @@ export interface IconButtonProps extends Omit<ButtonProps,"children">{label:stri
 // Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
 export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,loading,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} loading={loading} {...props}>{loading?null:<Icon name={icon}/>}</Button>});
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone. É peça
-// EXCLUSIVA da Aurea — o HeroUI 3.2.6 não tem troca de tema —, então nasce pensando como ele
-// criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.
+// EXCLUSIVA da Aurea — a referência não tem troca de tema —, então nasce
+// pensando como ela criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.
 // Mostra o tema para onde se VAI: no claro a LUA, escura; no escuro o SOL, amarelo. As duas
 // combinações se enxergam (tinta escura sobre o claro, o amarelo da marca sobre o escuro), e é por
 // isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
-// Fechado como o HeroUI faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
+// Fechado como a referência faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
 // do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
 export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth">{}
 export const ThemeToggle=forwardRef<HTMLButtonElement,ThemeToggleProps>(function ThemeToggle({className,...props},ref){
   const {theme,toggleTheme}=useAureaTheme();const s=useAureaStrings();const escuro=theme==="dark";
   // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
-  // sol cheios, como os do Carbon aprovados pela imagem em 25/09/2026). O `IconButton` público não
+  // sol cheios, como os do conjunto de ícones anterior, aprovados pela imagem em 25/09/2026). O `IconButton` público não
   // tem peso de ícone.
   return <Button ref={ref} variant="ghost" className={cx("btn-icon",escuro?"theme-toggle-sun":"theme-toggle-moon",className)}
     aria-label={escuro?s.themeToLight:s.themeToDark} onClick={toggleTheme} {...props}><Icon name={escuro?"sun":"moon"} weight="fill"/></Button>});

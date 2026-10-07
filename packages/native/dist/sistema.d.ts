@@ -42,7 +42,7 @@ export type AureaPhoto = {
     height?: number;
     /**
      * Quando a foto foi TIRADA, lida do EXIF (R-23). Só vem com a prop `exif`, e fica vazia quando
-     * a foto não traz a data — a que passou pelo WhatsApp, por exemplo, perde o EXIF no caminho.
+     * a foto não traz a data — a que passou por um aplicativo de mensagens, por exemplo, perde o EXIF no caminho.
      */
     takenAt?: Date;
 };
@@ -98,7 +98,7 @@ export interface PhotoInputProps {
  *
  * | | |
  * |---|---|
- * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` do HeroUI) |
+ * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` da referência) |
  * | tocar nela | abre a foto grande, no MESMO zoom da `Gallery` (`FotoAmpliada`) |
  * | o X | com fundo, TODO fora da foto, no canto de cima à direita |
  * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |

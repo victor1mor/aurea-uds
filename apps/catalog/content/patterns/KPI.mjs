@@ -1,7 +1,7 @@
 // PADRÃO do arquivo de PATTERN — ver o cabeçalho de `Button.mjs`.
 //
 // Parte da cobertura do `G-COMP-01`: 77 dos 90 componentes tinham ZERO composição resolvida,
-// contra cobertura total no kibo e na reui. O alvo é nenhum componente em zero.
+// contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 //
 // `trend` é ReactNode — texto ou elemento, não um objeto {value, direction}. A primeira versão
 // deste arquivo inventou o objeto e o build reprovou na hora (21/08/2026). É a razão de o gate

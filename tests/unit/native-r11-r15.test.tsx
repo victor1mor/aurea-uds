@@ -1,9 +1,9 @@
-// R-11 e R-15 (02/10/2026) · do jeito do HeroUI, que não usa nome de ícone nem tem tamanho pronto:
+// R-11 e R-15 (02/10/2026) · do jeito da referência, que não usa nome de ícone nem tem tamanho pronto:
 // o app passa o próprio desenho.
 //   R-11 · toda prop de ícone aceita o NOME de um glifo ou o próprio DESENHO (`AureaIcon`). O tipo
 //          é provado pela sonda `tipos-nativo/icone-componente.tsx`; aqui, que o desenho aparece.
 //   R-15 · o glifo do `EmptyState` ganha uma moldura redonda (a "C" da prancha de 02/10/2026,
-//          escolhida pelo Victor): 64 de moldura, o `Avatar` `lg` do HeroUI, e o glifo de 32 de antes.
+//          escolhida pelo Victor): 64 de moldura, o `Avatar` `lg` da referência, e o glifo de 32 de antes.
 // Provado contra o defeito: com o código de antes, o desenho passado direto não aparece (o `Icon`
 // procurava a função no registro e não desenhava nada), e o glifo do vazio saía solto, sem
 // moldura, na cor `subtleForeground`.

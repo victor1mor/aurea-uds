@@ -39,9 +39,9 @@ raio do card ou o padding do painel, a linha segue sozinha — número cravado d
 mesmo que `.card:has(> .nav-list)` já fazia. E a `.sidebar-group-label` passou a alinhar com o TEXTO
 do item (4 + 12 = 16px) em vez de com a borda.
 
-## O que a pesquisa confirmou (18/08/2026, `Referencia/heroui-3`, Apache-2.0)
+## O que a pesquisa confirmou (18/08/2026, na pasta da referência, Apache-2.0)
 
-O HeroUI faz a mesma conta, e o padrão é **sistêmico**:
+A referência faz a mesma conta, e o padrão é **sistêmico**:
 
 | Componente | Padding do painel | Raio do item |
 |---|---:|---:|

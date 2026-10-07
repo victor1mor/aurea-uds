@@ -1,7 +1,7 @@
-// Aurea — catálogo DOGFOODED (Fase 3). Uma PÁGINA POR COMPONENTE (modelo Kibo), gerada
+// Aurea — catálogo DOGFOODED (Fase 3). Uma PÁGINA POR COMPONENTE (modelo da referência), gerada
 // do registry + arquivos de conteúdo, renderizada com os próprios componentes Aurea.
 //
-// Organização = Kibo (página por item, sidebar hierárquica, Preview/Code, Installation,
+// Organização = a da referência (página por item, sidebar hierárquica, Preview/Code, Installation,
 // Features, Examples, prev/next). Aparência = Aurea (decisão do Victor, 24/07/2026).
 // Dados curtos vêm do registry; conteúdo rico vem de apps/catalog/content/<Name>.mjs (opcional
 // — sem ele a página usa o registry mais o starter de content/_starters.mjs). O modelo de
@@ -298,7 +298,7 @@ function demoBlock(render, code, anchor) {
     try { previewHtml = renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, render()), {identifierPrefix: `${id}-`}); }
     catch (e) { e.message = `demo que estourou:\n${code || "(sem código)"}\n\n${e.message}`; throw e; }
   }
-  // Uma aba só não é escolha nenhuma: sem código, o bloco é o painel puro (modelo Kibo).
+  // Uma aba só não é escolha nenhuma: sem código, o bloco é o painel puro (modelo da referência).
   const tab = (panel, label, on) => h("button", {key: panel, className: on ? "active" : undefined,
     type: "button", role: "tab", id: `${id}-${panel}`, "data-panel": panel,
     "aria-selected": on ? "true" : "false", "aria-controls": `${id}-${panel}-panel`, tabIndex: on ? 0 : -1}, label);
@@ -479,7 +479,7 @@ function componentPage(f, i) {
   const usa = f.related.components || [];
   return itemPage({
     // Hook não é componente, e o caminho tem de dizer isso: o `useToast` anunciado como
-    // "Components › Feedback" mente sobre o que a página é, e o §52 da ATIVIDADE-2 cobra que a
+    // "Components › Feedback" mente sobre o que a página é, e o §52 da ATIVIDADE-2 (no documento de referências, fora do repositório) cobra que a
     // documentação permita DESCOBRIR o que a coisa é antes de saber usá-la. A categoria continua
     // sendo a mesma — um hook de aviso mora ao lado do Alert e do Banner, que é onde se procura.
     trail: [{label: f.kind === "hook" ? "Hooks" : "Components", href: "./index.html"},
@@ -1018,20 +1018,20 @@ const chrome = `
    .chip-text: sem isto, a 320px o pill de "native: planned" perdia a borda direita. */
 .chip-status .status-label { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 /* O índice da página acompanha a rolagem à direita, e só a partir de xl — abaixo disso a
-   coluna roubaria largura do conteúdo (o Kibo esconde no mesmo ponto). */
+   coluna roubaria largura do conteúdo (a referência esconde no mesmo ponto). */
 .page-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-6); }
 .page-grid > .toc { display:none; }
 @media (min-width:1280px) { .page-grid { grid-template-columns:minmax(0,1fr) 180px; } .page-grid > .toc { display:grid; } }
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
 /* ALTURA IGUAL para todo demo, e sempre dentro da primeira tela (pedido do Victor: nada
-   de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem do Kibo; abaixo
+   de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem da referência; abaixo
    disso a caixa cede à janela — 19rem cobre topo + cabeçalho da página + respiro (o
    cabeçalho mais alto medido, o do Status, empurra o demo pra 277px). Numa mesma tela
    todos os demos continuam do mesmo tamanho, que é o ponto.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
 .demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
-/* A barra de abas ocupa a largura do card e as abas dividem 50/50 — é o que o Kibo faz
+/* A barra de abas ocupa a largura do card e as abas dividem 50/50 — é o que a referência faz
    (medido: barra w-full, 3px de padding, dois tabs flex:1). A peça é a .segmented da
    Aurea, esticada: pele pill nossa, comportamento de segmented control. */
 .demo-tabs { display:flex; padding:var(--space-2); border-bottom:1px solid var(--border); }

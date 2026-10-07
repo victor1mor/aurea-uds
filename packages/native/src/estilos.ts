@@ -77,10 +77,10 @@ export const comOpacidade = (cor: string, pct: number): string =>
     : cor;
 
 /**
- * 🍎 O CANTO DA APPLE — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
+ * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
  * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de
- * começar de repente como um quarto de círculo. O `heroui-native` 1.0.10 o põe em 24 peças; a
+ * começar de repente como um quarto de círculo. A referência o põe em 24 peças; a
  * Aurea, até aqui, em nenhuma. Pela doc do React Native (tipos do 0.87.1), ele só vale no **iOS
  * 13+**: o Android ignora, e o navegador também — o `react-native-web` 0.21 passa a propriedade
  * adiante e o CSS não a conhece, sem erro. **No Android do Victor nada muda; no iPhone, muda.**

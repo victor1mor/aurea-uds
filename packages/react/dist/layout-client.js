@@ -125,8 +125,8 @@ function useGavetaFechaNoDesktop() {
 // AN-01 (03/10/2026): O BOTÃO DE RECOLHER E A TRILHA SOZINHA. Um consumidor viu numa janela de 1508:
 // a lateral sempre aberta, sem botão, e diminuir a janela não a recolhia — só virava gaveta abaixo de
 // 1024. O modo trilha existia (`sidebarCollapsed`, `.sidebar-collapsed`), mas só controlado e sem
-// gatilho. A referência é a `Sidebar` do shadcn que o ReUI usa no `c-sidebar-2` (o HeroUI não tem
-// moldura de app): estado aberto/recolhido, controlado e não controlado, um gatilho, e o nome em
+// gatilho. A referência é a lateral de uma das referências, que outra delas usa num dos seus exemplos
+// (a referência principal não tem moldura de app): estado aberto/recolhido, controlado e não controlado, um gatilho, e o nome em
 // dica na trilha. O lugar do botão é o que o Victor marcou: no alto, na junção do menu com o
 // conteúdo. E a trilha sozinha em tela média vem do pedido — a referência não a tem.
 //

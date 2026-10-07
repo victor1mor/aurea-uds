@@ -81,13 +81,13 @@ const folha = criarFolha((t) => ({
         // `space05` e não `space1` — a barra mais baixa (30/09/2026, pedido do Victor, aprovado pela
         // imagem). Com a moldura de 32 e o vão de 4 eram 9 entre o ícone e o rótulo; ver `marca`.
         // O NOME COLADO NO ÍCONE — 03/10/2026, pedido do Victor (*"o texto pode ficar mais próximo do
-        // ícone"*): vão ZERO, como no Telegram, em que o nome começa onde a caixa do ícone acaba. O
+        // ícone"*): vão ZERO, como no app de referência, em que o nome começa onde a caixa do ícone acaba. O
         // `space05` daqui (30/09/2026) somava 2 aos 2 de folga da própria linha do nome; medido na
         // bancada, eram 9 de tinta a tinta no `pill` e 13 no `circle-bold`.
         gap: 0, minHeight: t.size.controlHLg,
-        // 🔴 A ALTURA DO TELEGRAM — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo
-        // comparado a bottomnav como do telegram"*, e "largo" é a grossura. Medido no fonte do
-        // Telegram para Android 12.10.6 (`DialogsActivity.MAIN_TABS_HEIGHT = 56`, `GlassTabView`): a
+        // 🔴 A ALTURA DE REFERÊNCIA — 03/10/2026, pedido do Victor: *"ainda acho ele muito largo
+        // comparado a bottomnav como [a do app de referência]"*, e "largo" é a grossura. Medido no
+        // fonte do app de referência para Android: a
         // pílula tem 56; o botão, 48; o ícone, 24; o nome, 12. A nossa media 73 no `circle-bold`. O
         // recheio de cima e de baixo cai de `space1` para `space05`, e o nome sai em 12 com a
         // entrelinha justa (ver o `Text` do rótulo). Igual na web (`aurea.css`).
@@ -105,8 +105,8 @@ const folha = criarFolha((t) => ({
     },
     // A CAIXA QUE ANCORA O CONTADOR, e ela existe por um defeito visto em tela: pendurado no ITEM,
     // o número cai no meio do RÓTULO. O `navigation-client.tsx:336` conta a história inteira — o
-    // Victor viu o contador cobrir o nome em 17/08/2026, e a pesquisa (Material 3 e os guias de
-    // barra de abas do iOS) diz o mesmo: canto superior do ÍCONE, nunca sobre o texto.
+    // Victor viu o contador cobrir o nome em 17/08/2026, e a pesquisa (uma referência de mercado e os
+    // guias de barra de abas do iOS) diz o mesmo: canto superior do ÍCONE, nunca sobre o texto.
     marca: { position: "relative", alignItems: "center", justifyContent: "center",
         width: 32, height: 32, ...canto(t.size.radiusControl) },
     marcaRedonda: { ...canto(t.size.radiusFull) },
@@ -131,8 +131,8 @@ const folha = criarFolha((t) => ({
         width: 56, minHeight: t.size.controlHLg, ...canto(t.size.radiusFull),
         paddingHorizontal: t.size.space1, paddingVertical: t.size.space1,
     },
-    // `capsule` (a "A" da bancada, o Material 3 Expressive): a moldura do ícone vira a cápsula de
-    // 56 × 32 do indicador ativo dele — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
+    // `capsule` (a "A" da bancada, de uma referência de mercado): a moldura do ícone vira a cápsula
+    // de 56 × 32 do indicador ativo dela — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
     // `aurea.css`, em todos os itens. O rótulo fica embaixo, fora dela.
     marcaCapsula: { width: 56, height: 32, ...canto(t.size.radiusFull) },
     // O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada (item não
@@ -197,15 +197,15 @@ const folha = criarFolha((t) => ({
         paddingHorizontal: 14, ...canto(t.size.radiusControl),
     },
     abaDeTabAtiva: { backgroundColor: t.color.secondary },
-    // `variant="secondary"` (R-12, 01/10/2026): o `secondary` do HeroUI Native 1.0.10
-    // (`styles/components/tabs.css`), com o fio da casa no lugar do indicador azul deles.
-    //   .tabs__list--variant-secondary  padding 0 · border-bottom 1px, cor da borda
-    //   .tabs__list                     gap `* 1` → space1
-    //   .tabs__trigger                  padding-inline `* 3` → space3 · padding-block `* 1.5`
+    // `variant="secondary"` (R-12, 01/10/2026): a variante secundária da referência,
+    // com o fio da casa no lugar do indicador azul dela.
+    //   fila (secundária)               padding 0 · border-bottom 1px, cor da borda
+    //   fila                            gap de 1 unidade → space1
+    //   aba                             padding-inline de 3 unidades → space3 · padding-block de 1,5
     //                                   → space1 + space05. Rótulo `text-base` + entrelinha 1.5 dá
     //                                   36, que é o `controlHMd`: a altura da fila da cápsula, então
     //                                   trocar de variante não muda a altura da fila.
-    //   .tabs__indicator--variant-secondary  border-bottom 2px na cor de destaque → `fioDoEscolhido`
+    //   indicador (secundária)          border-bottom 2px na cor de destaque → `fioDoEscolhido`
     abasSecundarias: {
         flexDirection: "row", gap: t.size.space1,
         borderBottomWidth: t.size.borderWidth, borderColor: t.color.border,
@@ -383,13 +383,14 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                             : _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", dot: true }) }))] }));
             // 🔴 O PESO DO RÓTULO NÃO MUDA COM A ESCOLHA (03/10/2026). Era 500 no escolhido e 400 nos
             // outros, e texto mais grosso é texto mais LARGO: no `content` a barra mudava de largura a
-            // cada toque, em todos os indicadores. Agora é 500 em todos — o "Label medium" do Material
-            // 3, que também deixou de engrossar o escolhido no Expressive pela mesma razão. O que marca
+            // cada toque, em todos os indicadores. Agora é 500 em todos — o rótulo médio de uma
+            // referência de mercado, que também deixou de engrossar o escolhido numa revisão posterior
+            // pela mesma razão. O que marca
             // a escolha é a cor, o ícone cheio e a forma. No `expand` o nome é `sm`: ao lado do ícone,
             // e não embaixo dele.
             const rotulo = typeof it.label === "string"
                 ? (nomeVisivel
-                    // 12 numa linha de 16, o do Telegram — e o `text-xs` da web. Antes era o `xs` do `Text`
+                    // 12 numa linha de 16, o do app de referência — e o `text-xs` da web. Antes era o `xs` do `Text`
                     // nativo, que sobe para 14 (ADR-0050) com linha de 21: era o que mais engrossava a
                     // barra. A linha é o tamanho mais `space1`, como na web: com a entrelinha justa (14,4)
                     // a perna do "j" passava da caixa. No `expand` o nome vai ao lado do ícone, em 14.
@@ -534,7 +535,7 @@ export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circl
  *
  * ⚠ **A fila ROLA na horizontal, e a web não rola — divergência deliberada, com fonte.** A
  * referência máxima de desenho deste projeto tem estados de rolagem na lista de abas
- * (`left-scroll`, `right-scroll`, `left-right-scroll` no inventário), e num telefone de 360dp
+ * (rolagem à esquerda, à direita e dos dois lados, no inventário), e num telefone de 360dp
  * quatro rótulos já não cabem. Espremer todas seria a outra saída, e ela apaga o rótulo — que é
  * o defeito que o app mediu no `SegmentedControl`. **A cápsula, o respiro e o raio continuam
  * sendo os do CSS**; o que muda é o transbordo.

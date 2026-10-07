@@ -27,7 +27,7 @@ export type AureaIconComponent = (props: {size?: number; color?: string}) => Rea
 
 /**
  * Um ícone: o NOME de um glifo do registro (`"truck"`) ou o próprio DESENHO (`Logo`) — R-11,
- * 02/10/2026. É o jeito do HeroUI: lá nenhuma peça recebe nome de ícone, o app põe o componente
+ * 02/10/2026. É o jeito da referência: lá nenhuma peça recebe nome de ícone, o app põe o componente
  * dele dentro. Aqui os dois valem em toda prop de ícone, e o desenho dispensa registro e
  * `declare module`: o logotipo do app entra como `icon={Logo}`, com o `Logo` de `criarGlifo` ou o
  * `default` de um `icons/*`. Ele recebe o `size` e a `color` que a peça pedir.

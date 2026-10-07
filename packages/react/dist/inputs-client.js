@@ -133,9 +133,9 @@ export function Field({ label, hint, description, error, children, className, id
 // Form (M1): o formulário que EXIBE erro, e não o que decide o que é erro.
 //
 // A divisão saiu de pesquisa e da medição dos consumidores (13/08/2026). O padrão de mercado é
-// `react-hook-form` + `zod`, e é o que o shadcn embrulha — mas embrulhar isso aqui obrigaria TODO
-// projeto que usa a Aurea a usar react-hook-form, inclusive os que já validam de outro jeito (um
-// consumidor real valida com zod em server action, sem biblioteca de formulário no cliente).
+// uma biblioteca de formulário com uma de esquema, e é o que uma das referências embrulha — mas embrulhar isso aqui obrigaria TODO
+// projeto que usa a Aurea a usar essa biblioteca de formulário, inclusive os que já validam de outro jeito (um
+// consumidor real valida com a biblioteca de esquema em server action, sem biblioteca de formulário no cliente).
 // Dependência nova também é decisão do Victor pelo BUILDING.md §3.3, e ela não foi necessária:
 // o `Form` do Base UI — motor que a Aurea JÁ paga desde a Fase 2 — declara no próprio tipo que
 // `errors` são "validation errors returned externally, typically after submission by a server or
@@ -234,8 +234,8 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
 // da ativação nativa do `<button>`.
 //
 // `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
-// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É o `fullWidth` do
-// `ToggleButtonGroup` do HeroUI 3.2.6.
+// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É como o grupo
+// de botões alternáveis da referência ocupa a linha.
 export function SegmentedControl({ items, value, onChange, label, fullWidth }) {
     const s = useAureaStrings();
     return _jsx(BaseRadioGroup, { className: fullWidth ? "segmented segmented-full" : "segmented", "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });

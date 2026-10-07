@@ -32,12 +32,12 @@ afirmação**. O detalhe inteiro está na §5.6 do `NATIVE.md`.
 
 | padrão | quem usa | mecanismo |
 |---|---|---|
-| **SVG por ícone** sobre `react-native-svg` | `heroui-native` (peer `^15.12.1`) · `@gluestack-ui/themed` (`>=13.4.0`) · `lucide-react-native` | um módulo por ícone |
-| fonte de ícone, um pacote por família | `@react-native-vector-icons/*` | glifo no pipeline de texto do SO |
-| não entrega ícone — recebe um renderizador | `react-native-paper` | `Settings.icon`, lido em `src/core/settings.tsx` |
-| SVG → fonte no build | `react-native-nano-icons` **0.2.1** | glifo nativo |
+| **SVG por ícone** sobre `react-native-svg` | o pacote nativo de uma das referências (peer `^15.12.1`) · uma biblioteca de componentes nativa (`>=13.4.0`) · uma biblioteca de ícones de traço | um módulo por ícone |
+| fonte de ícone, um pacote por família | o sucessor, por família, de um pacote de fonte de ícone | glifo no pipeline de texto do SO |
+| não entrega ícone — recebe um renderizador | outra biblioteca de componentes nativa | uma função de render de ícone nas configurações, lida no fonte |
+| SVG → fonte no build | um gerador de fonte de ícone, anterior à `1.0` | glifo nativo |
 
-**`react-native-vector-icons@10.3.0` está deprecado no próprio registro**, migrando para pacotes por
+**O pacote de fonte de ícone medido está deprecado no próprio registro**, migrando para pacotes por
 família.
 
 ### Os SVGs do Carbon convertem sem interpretação
@@ -68,7 +68,7 @@ structure of how Metro bundles code"*. Passou a ligado por padrão só no **SDK 
 
 Um barril com 2856 ícones seria, portanto, **aposta na configuração do bundler do consumidor**.
 
-**O `lucide-react-native` já resolveu isso**, e a solução está no `package.json` dele:
+**Uma biblioteca de ícones de traço já resolveu isso**, e a solução está no `package.json` dela:
 
 ```
 exports: { ".": …, "./icons": …, "./icons/*": … }
@@ -87,7 +87,7 @@ sobre `react-native-svg`.** Quatro cláusulas, e nenhuma é enfeite:
 2. **O gerador injeta a cor explicitamente.** `currentColor` aparece em **zero** dos 2856 arquivos —
    na web a cor vem da *ausência* de `fill`, herdada por CSS, e **no RN não há herança**. Sem
    injetar, todos os ícones saem pretos, e em silêncio.
-3. **A trava do Paper: um renderizador de ícone injetável.** O consumidor que já tem a própria pilha
+3. **A trava de quem recebe renderizador: um renderizador de ícone injetável.** O consumidor que já tem a própria pilha
    de ícone não é obrigado a carregar a nossa. É o padrão de quem tem mais quilometragem nisso.
 4. **`<Icon name>` continua existindo**, para a paridade de API com a web — mas como **registro que
    o app monta com o que usa**, nunca como mapa dos 2856, que anularia tudo acima.
@@ -96,8 +96,8 @@ O tamanho base é o **32**; os menores entram onde o Carbon os desenhou de prop�
 
 ## As alternativas, e por que cada uma caiu
 
-- **`react-native-nano-icons`** — o mais rápido dos medidos, e da Software Mansion, que mantém o
-  próprio `react-native-svg`. Cai por três medições: está em **`0.2.1`**; traz `expo` e
+- **O gerador de fonte de ícone** — o mais rápido dos medidos, e do mesmo time que mantém o
+  próprio `react-native-svg`. Cai por três medições: está em versão anterior à **`1.0`**; traz `expo` e
   `@expo/config` no `peerDependencies`, e a Aurea é biblioteca — forçar o framework do consumidor é
   o que a arquitetura do `NATIVE.md` §2 recusa desde 18/07; e **degrada para `<Text>` no Expo Go**,
   que foi *a razão* de a [ADR-0037](0037-stylesheet-puro-no-nativo-e-o-provider-e-nosso.md) trocar o
@@ -105,7 +105,7 @@ O tamanho base é o **32**; os menores entram onde o Carbon os desenhou de prop�
   acabou de tirar pela porta do estilo. **Fica na lista de vigiar**: reabre quando chegar à `1.0` e
   se soltar do Expo.
 - **Fonte de ícone própria** — mais barata em runtime, mas o padrão de mercado está migrando para
-  fora dela (o `react-native-vector-icons` deprecado é o sinal), e ela perde cor por parte.
+  fora dela (o pacote de fonte de ícone deprecado é o sinal), e ela perde cor por parte.
 - **Parser de SVG em runtime** — custo por render, para resolver um problema que o build resolve uma
   vez.
 - **Subconjunto curado** (o que eu mesmo levava à mesa antes da pesquisa) — resolve à mão, com uma
@@ -114,11 +114,11 @@ O tamanho base é o **32**; os menores entram onde o Carbon os desenhou de prop�
 ## Consequências
 
 - **`react-native-svg` entra como `peerDependency`** de `@aurea-uds/native`. É a mesma escolha do
-  `heroui-native` e do `gluestack`, então o consumidor típico já o tem.
+  pacote nativo da referência e de outra biblioteca de componentes nativa, então o consumidor típico já o tem.
 - **Um gerador novo**, irmão do `packages/icons/build-icons.mjs` que já consome esta mesma fonte
   para o sprite da web. **Uma fonte, dois alvos** — o mesmo desenho que a Etapa 2 usou para os
   tokens, e pelo mesmo motivo.
-- **O pacote fica grande em número de arquivos.** O `lucide-react-native` tem 1792 módulos e 48 MB
+- **O pacote fica grande em número de arquivos.** A biblioteca de ícones de traço medida tem 1792 módulos e 48 MB
   desempacotado; a nossa grade é maior. Isso pesa no tempo de build e no tarball, **não** no app do
   consumidor — que é justamente o que a cláusula 1 protege.
 - **O gate do `dist == build`** vale aqui como vale para os tokens: gerado que não bate com a fonte
@@ -159,7 +159,7 @@ medir**, e por isso está aqui como pendência e não como fato.
 
 ## Condição de revisão
 
-- **O `nano-icons` chegar à `1.0` e largar o peer de `expo`** — aí o custo de runtime volta à mesa,
+- **O gerador de fonte de ícone recusado chegar à `1.0` e largar o peer de `expo`** — aí o custo de runtime volta à mesa,
   e é ADR nova.
 - **A medição em aparelho reprovar o `react-native-svg`** na lista do consumidor — aí muda o
   *formato de saída* do gerador, não esta decisão.

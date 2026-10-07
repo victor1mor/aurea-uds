@@ -40,7 +40,7 @@ test("Progress sem total: um pedaço de 2/5 atravessa o trilho, de fora a fora",
   const inicio = await posicao(p, 0), meio = await posicao(p, 0.5), fim = await posicao(p, 0.9999);
   expect(inicio.nome).toBe("progress-indeterminate");
   expect(inicio.corta, "sem overflow:hidden o pedaço vaza da pílula").toBe("hidden");
-  // Começa inteiro antes da borda, termina inteiro depois: -100% e 350% da própria largura (HeroUI).
+  // Começa inteiro antes da borda, termina inteiro depois: -100% e 350% da própria largura (como na referência).
   expect([inicio.de, inicio.ate].map((x) => +x.toFixed(2))).toEqual([-0.4, 0]);
   expect([fim.de, fim.ate].map((x) => +x.toFixed(2))).toEqual([1.4, 1.8]);
   // E no meio da volta ele está DENTRO do trilho, à vista.

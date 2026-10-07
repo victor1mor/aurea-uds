@@ -200,8 +200,8 @@ export interface AureaComboboxItem {
   value: string;
   label: string;
   /**
-   * Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg") — R-14, 01/10/2026. É o
-   * `Select.ItemDescription` do HeroUI Native 1.0.10 (`styles/components/select.css:117`): letra
+   * Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg") — R-14, 01/10/2026. É a
+   * descrição de item do `Select` da referência (na folha de estilo do `Select` dela): letra
    * `text-sm` (14), cor apagada. A busca continua olhando só o `label`.
    */
   description?: string;
@@ -545,7 +545,7 @@ export function Combobox({
                     {item.label}
                   </Text>
                   {/* `xs` é o 14 no telefone (o mapa da ADR-0050 sobe um degrau): o `text-sm`
-                      do HeroUI, o mesmo da descrição do `Checkbox` e do `RadioGroup`. */}
+                      da referência, o mesmo da descrição do `Checkbox` e do `RadioGroup`. */}
                   {item.description != null && (
                     <Text size="xs" tone="muted">{item.description}</Text>
                   )}

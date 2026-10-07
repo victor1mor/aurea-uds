@@ -10,14 +10,14 @@ export type AureaTextFont = "ui" | "editorial" | "code";
 export type AureaTextTone = "default" | "muted" | "subtle" | "primary" | "link" | "danger" | "success" | "warning" | "info";
 export type AureaTextLeading = "none" | "tight" | "normal" | "relaxed";
 /**
- * O PAPEL do texto — B-02, 25/09/2026, no molde do `Typography` do HeroUI Native 1.0.10. Uma lista
+ * O PAPEL do texto — B-02, 25/09/2026, no molde do componente de tipografia da referência. Uma lista
  * fechada: título 1–6, texto, texto pequeno, texto mínimo e código.
  */
 export type AureaTextType = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "body" | "body-sm" | "body-xs" | "code";
 export interface TextProps extends TextPropsRN {
     /**
-     * O papel (B-02). Dá tamanho, peso, entrelinha e fonte de uma vez, com os números do HeroUI
-     * Native — os MESMOS da web, sem o degrau a mais do `size`. Uma opção solta passada junto
+     * O papel (B-02). Dá tamanho, peso, entrelinha e fonte de uma vez, com os números da
+     * referência — os MESMOS da web, sem o degrau a mais do `size`. Uma opção solta passada junto
      * (`size`, `weight`…) continua valendo por cima dele.
      */
     type?: AureaTextType;
@@ -49,7 +49,7 @@ export type AureaTypographyAlign = "start" | "center" | "end" | "justify";
 interface AureaTypographyBase extends Omit<TextPropsRN, "children"> {
     color?: AureaTypographyColor;
     weight?: AureaTypographyWeight;
-    /** `start`/`end` viram `left`/`right`, que o React Native já espelha em RTL (nota do HeroUI Native). */
+    /** `start`/`end` viram `left`/`right`, que o React Native já espelha em RTL (nota da referência). */
     align?: AureaTypographyAlign;
     /** Uma linha só, cortada com reticências (`numberOfLines={1}`). */
     truncate?: boolean;
@@ -58,7 +58,7 @@ interface AureaTypographyBase extends Omit<TextPropsRN, "children"> {
 export interface HeadingProps extends AureaTypographyBase {
     type?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
-/** Título. Marca `accessibilityRole="header"` sozinho, como o HeroUI Native. */
+/** Título. Marca `accessibilityRole="header"` sozinho, como a referência. */
 export declare function Heading({ type, accessibilityRole, ...rest }: HeadingProps): React.JSX.Element;
 export interface ParagraphProps extends AureaTypographyBase {
     type?: "body" | "body-sm" | "body-xs";

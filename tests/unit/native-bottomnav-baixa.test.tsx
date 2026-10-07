@@ -39,7 +39,7 @@ describe("BottomNav · a barra mais baixa", () => {
     for (const x of m) expect(x.height).toBe(t.size.iconLg);
   });
   // ~~`space05`~~ (30/09/2026) → ZERO em 03/10/2026, pedido do Victor: *"o texto pode ficar mais
-  // próximo do ícone"*. Como no Telegram, o nome começa onde a caixa do ícone acaba.
+  // próximo do ícone"*. Como no aplicativo de mensagens de referência, o nome começa onde a caixa do ícone acaba.
   it("o vão entre o ícone e o rótulo é zero", () => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" /></AureaProvider>);
     for (const a of abas()) expect(a.gap).toBe(0);

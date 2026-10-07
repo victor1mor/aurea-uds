@@ -7,8 +7,9 @@
 //
 // ── A ADR-0024 ATRAVESSA, E FOI CONFERIDA ANTES DE SE AFIRMAR ISSO ───────────────────────────
 // A decisão da web é *"a Aurea entrega o MOMENTO, não o formato"*: formatar no **blur**, nunca
-// enquanto se digita. As três medições que a sustentam (o `Input mask` do USWDS publicado com
-// reprovação WCAG registrada, o abandono da máscara pelo MUI na v6, a prática de acessibilidade)
+// enquanto se digita. As três medições que a sustentam (a máscara de entrada de um design system público, publicada com
+// reprovação WCAG registrada, o abandono da máscara por uma das bibliotecas de referência, a
+// prática de acessibilidade)
 // são sobre COMPORTAMENTO HUMANO, não sobre plataforma — então elas valem igual aqui, e não há
 // evidência nova que reabra a decisão (`decisions/README.md`).
 //
@@ -55,8 +56,9 @@ import type {AureaTokens} from "./tokens.js";
 
 /**
  * Os tamanhos do `NumberField`: os três do campo e mais o `display` (R-16, 01/10/2026), o número
- * grande de destaque. Nenhuma referência da fila tem esse tamanho (o `NumberField` do HeroUI web
- * só tem `variant`; o telefone dele nem tem a peça; o ReUI também não), então ele é peça nossa —
+ * grande de destaque. Nenhuma referência da fila tem esse tamanho (o `NumberField` da principal,
+ * na web, só tem `variant`; no telefone ela nem tem a peça; a segunda também não), então ele é
+ * peça nossa —
  * e as medidas saem de escalas que JÁ existem, nenhuma nova:
  *   letra    `text3xl` (30) em seminegrito — o título 2 (`h2` do B-02). Escolha do Victor.
  *   altura   `controlHXl` — o degrau seguinte da escala de altura dos controles, que muda com a
@@ -82,8 +84,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   // divergência do nosso próprio CSS, entregue sem declarar, e ela só apareceu quando houve
   // imagem para olhar.
   //
-  // ⚠ **A saída é o eixo da HeroUI, e não uma invenção minha:** o `number-field` deles publica
-  // `fullWidth: [base, false, group, true]` (`INVENTORY-HEROUI.json`, medido em 22/08/2026).
+  // ⚠ **A saída é o eixo da referência, e não uma invenção minha:** o campo numérico dela publica
+  // um eixo de largura cheia, ligado e desligado (no inventário da referência, medido em 22/08/2026).
   // Esticar ou abraçar é DECISÃO DE USO, então vira prop — com o padrão em abraçar, que é o que
   // o nosso CSS já dizia.
   grupo: {flexDirection: "row", alignItems: "center", gap: t.size.space1,
@@ -219,7 +221,7 @@ const prender = (n: number, min?: number, max?: number) => {
 
 // O texto que o campo mostra ENQUANTO SE EDITA: o número sem grupo e sem símbolo, com o separador
 // decimal do locale. É o oposto do que se mostra em repouso, e é a decisão da ADR-0024 — editar
-// "R$ 1.234,50" com o cursor no meio é o defeito que o MUI filmou.
+// "R$ 1.234,50" com o cursor no meio é o defeito que uma das bibliotecas de referência filmou.
 const paraEdicao = (n: number | null, locale?: string): string => {
   if (n == null) return "";
   const {decimal} = separadoresDoLocale(locale);
@@ -266,7 +268,7 @@ export interface NumberFieldProps {
    * Ocupa a largura disponível em vez de abraçar o conteúdo. Padrão **false**.
    *
    * O padrão segue o `.number-field` da web, que é `inline-flex` (`aurea.css:704`) — e o mesmo
-   * eixo existe na HeroUI (`fullWidth`, medido no inventário). **Ligue para moeda:** o campo em
+   * eixo existe na referência (medido no inventário). **Ligue para moeda:** o campo em
    * repouso tem `--space-16` (64dp), que cabe um contador e não cabe `R$ 1.234,50`.
    */
   fullWidth?: boolean;
@@ -427,9 +429,9 @@ export function NumberField({
 
   const mostrarBotoes = icons !== false && !readOnly;
 
-  // 🔴 ACHADO PELA REFERÊNCIA, e não por mim — 12/09/2026. O inventário da HeroUI que já morava
-  // no repositório (`audit/activity-2/INVENTORY-HEROUI.json`, medido em 22/08 sobre
-  // `@heroui/react@3.2.4`) lista os estados do `number-field` deles:
+  // 🔴 ACHADO PELA REFERÊNCIA, e não por mim — 12/09/2026. O inventário da referência que já
+  // morava no repositório (medido em 22/08 sobre o pacote dela) lista os estados
+  // do campo numérico dela:
   //
   //     disabled · focus-visible · FOCUS-WITHIN · hovered · invalid · pressed
   //
@@ -438,10 +440,10 @@ export function NumberField({
   // marca (`busca.tsx:520`). Inconsistência dentro da própria biblioteca, e invisível em teste
   // até alguém comparar com uma referência.
   //
-  // ⚠ **A BORDA vai no CAMPO, e não no grupo — e aqui a Aurea diverge da HeroUI de propósito.**
-  // Lá o `Group` carrega a caixa e o `Input` fica nu dentro dela. Aqui não: o `.number-field-group`
+  // ⚠ **A BORDA vai no CAMPO, e não no grupo — e aqui a Aurea diverge da referência de propósito.**
+  // Lá o grupo carrega a caixa e o campo fica nu dentro dela. Aqui não: o `.number-field-group`
   // do nosso CSS (`aurea.css:705`) é só `inline-flex` + `gap`, e quem tem borda é o `.input`
-  // (`aurea.css:685`), com os dois botões FORA dela. O estado que faltava é o deles; a geometria
+  // (`aurea.css:685`), com os dois botões FORA dela. O estado que faltava é o dela; a geometria
   // continua sendo a nossa.
   const [focado, setFocado] = React.useState(false);
 

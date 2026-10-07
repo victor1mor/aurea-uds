@@ -186,7 +186,7 @@ Distribuição de exemplos por página de componente:
 | Sombra | 4 (`--shadow-*`) | `--shadow-xs` nunca usado |
 | Camadas / z-index | 6 (`--z-*`) | 2 nunca usados; 10 `z-index` crus no core |
 | Duração / easing | 3 + 2 | `--duration-slow` nunca usado |
-| Breakpoint | 5 (Tailwind: sm/md/lg/xl/2xl) | travado por gate; 6 breakpoints legados congelados convivem |
+| Breakpoint | 5 (sm/md/lg/xl/2xl) | travado por gate; 6 breakpoints legados congelados convivem |
 | Densidade | 8 chaves × 3 densidades | idênticas nas três — paridade OK |
 | Tamanho de ícone | **0** | **AUSENTE** — `.icon-sm/lg/xl` em px cru |
 | Área mínima de toque | **0** | **AUSENTE** — resolvido em CSS por `@media (pointer:coarse){min-height:44px}` |
@@ -245,7 +245,7 @@ Ver achado A6.
 | `validate.py` check 1 | 27 nomes privados, com auto-teste, UTF-16, invisíveis, base64 | repo inteiro |
 | check 2–3 | JSON válido; tokens e seletores obrigatórios; **valor canônico** de amarelo/raios; comentários e chaves balanceados | core |
 | check 4 | ausência de `gradient(` | core + docs |
-| check 4b | breakpoint fora da escala Tailwind (legado congelado explicitado) | core |
+| check 4b | breakpoint fora da escala sm–2xl (legado congelado explicitado) | core |
 | check 5 | todo token do pacote existe no core | tokens ⟷ core |
 | check 6 | `dist == build` de core (CSS e JS) | core |
 | check 7–8 | contrato embutido nos docs == pacote; `<style>` dos docs == build | docs |

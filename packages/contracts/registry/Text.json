@@ -3,7 +3,7 @@
   "category": "Data Display",
   "layer": "Primitive",
   "maturity": "Stable",
-  "summary": "Text in one of a closed list of roles — a heading level, body text or code — never a loose size. The HeroUI Typography model.",
+  "summary": "Text in one of a closed list of roles — a heading level, body text or code — never a loose size. The reference library's Typography model.",
   "icon": "file-text",
   "platforms": {
     "web": "stable",
@@ -92,13 +92,13 @@
       "name": "type",
       "type": "\"body\" | \"body-sm\" | \"body-xs\" | \"code\" | \"h1\" … \"h6\"",
       "default": "\"body\"",
-      "description": "The role. The list is closed on purpose, like HeroUI's: pick \"h2\" or \"body-sm\", never a pixel size. Only the look changes — the element stays a span, so a visual h2 is not a heading for a screen reader (use Heading for that)."
+      "description": "The role. The list is closed on purpose, like the reference library's: pick \"h2\" or \"body-sm\", never a pixel size. Only the look changes — the element stays a span, so a visual h2 is not a heading for a screen reader (use Heading for that)."
     },
     {
       "name": "color",
       "type": "\"default\" | \"muted\"",
       "default": "\"default\"",
-      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+      "description": "Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
     },
     {
       "name": "weight",

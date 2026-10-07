@@ -247,7 +247,7 @@ export function Chart({
     // parava nela e **não alcançava nenhuma** — a pessoa ouvia o nome do gráfico e ZERO dado.
     //
     // A razão, lida na fonte e não lembrada: a doc do React Native diz *"VoiceOver disallowing
-    // nested accessibility elements"*; a da Apple diz *"An individual view does not contain any
+    // nested accessibility elements"*; a do iOS diz *"An individual view does not contain any
     // other views that need to be accessible"*. No Android nada disso aparecia — lá `accessible`
     // só liga `isFocusable` e os filhos continuam na árvore.
     //

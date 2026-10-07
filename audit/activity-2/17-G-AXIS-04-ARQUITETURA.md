@@ -114,7 +114,7 @@ até alguém redimensionar.
 ## 6. A varredura, e a segunda família
 
 `node scripts/sweep-responsivo.mjs` — re-executável, e a fonte é a **nossa** superfície
-(`api-surface.json`), não a lista da Radix: *"a Radix é evidência da necessidade, não teto"*.
+(`api-surface.json`), não a lista da referência: *"a referência é evidência da necessidade, não teto"*.
 
 | | |
 |---|---:|

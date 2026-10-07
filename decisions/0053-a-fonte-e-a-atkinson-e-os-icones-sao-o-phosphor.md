@@ -19,7 +19,7 @@ Duas queixas do Victor no mesmo dia:
 
 1. **Faltaram ícones.** O app precisou de uma coroa (R-17) e o Carbon não tem, em versão
    nenhuma. Também não tem moto.
-2. **A fonte incomodava.** A Aurea é arredondada como o HeroUI (cápsulas, cartões de 22), e a
+2. **A fonte incomodava.** A Aurea é arredondada como a referência (cápsulas, cartões de 22), e a
    IBM Plex tem cantos firmes e letra estreita.
 
 ## O que foi medido antes de decidir
@@ -32,9 +32,9 @@ Tudo nos arquivos publicados, baixados com `npm pack` em 01/10/2026.
 |---|---|---|---|---|---|
 | Carbon 11.89.0 (a Aurea estava na 11.84.0) | 2.766 | forma cheia, cantos retos, grade 32 | não | não | Apache-2.0 |
 | **Phosphor 2.1.1** | **1.512, em 6 pesos** | **traço redondo, grade 256** | **sim** | **sim** | **MIT** |
-| Lucide 1.49.0 | 2.121 | traço 2, grade 24 | sim | sim | ISC |
-| Tabler 3.48.0 | 5.166 de contorno + 1.054 cheios | traço 2, grade 24 | sim | sim | MIT |
-| Gravity UI 2.22.0 (o do HeroUI) | 799 | forma cheia, cantos redondos, grade 16 | só com diamante | não | MIT |
+| coleção de traço A | 2.121 | traço 2, grade 24 | sim | sim | ISC |
+| coleção de traço B | 5.166 de contorno + 1.054 cheios | traço 2, grade 24 | sim | sim | MIT |
+| a coleção que a documentação da referência usa | 799 | forma cheia, cantos redondos, grade 16 | só com diamante | não | MIT |
 
 - **Juntar duas coleções foi descartado:** o Carbon é forma cheia de canto reto, e as de traço
   têm ponta redonda. Lado a lado, destoam. O Victor apontou isso antes da medição.
@@ -49,19 +49,19 @@ Tudo nos arquivos publicados, baixados com `npm pack` em 01/10/2026.
 |---|---|---|---|
 | IBM Plex Sans (a atual) | — | IBM Plex Mono | OFL |
 | **Atkinson Hyperlegible Next** | **sim** | **Atkinson Hyperlegible Mono** | **OFL** |
-| Google Sans Flex | sim | Google Sans Code | OFL |
-| Geist | sim | Geist Mono | OFL |
-| Figtree | sim | nenhum | OFL |
-| Nunito Sans | não | nenhum | OFL |
+| fonte A | sim | a irmã de código dela | OFL |
+| fonte B | sim | a irmã mono dela | OFL |
+| fonte C | sim | nenhum | OFL |
+| fonte D | não | nenhum | OFL |
 
 - A Atkinson Hyperlegible leva o nome do fundador do Braille Institute e foi feita *"para
   aumentar a legibilidade para leitores com baixa visão"* (README do repositório
   `googlefonts/atkinson-hyperlegible-next`). Letras parecidas (`I l 1`, `O 0`) têm desenhos
   diferentes. O Victor tem baixa visão.
-- A Google Sans Flex era a outra finalista, por ter um controle de arredondamento. Perdeu para a
+- A fonte A era a outra finalista, por ter um controle de arredondamento. Perdeu para a
   legibilidade.
-- O HeroUI não decide nenhuma das duas coisas: o `@heroui/styles` usa a fonte do sistema, e a
-  documentação dele usa o Gravity UI, que tem só 799 ícones.
+- A referência não decide nenhuma das duas coisas: o pacote web dela usa a fonte do sistema, e a
+  documentação dela usa outra coleção de ícones, que tem só 799.
 
 ## O que a troca obriga (o lote)
 

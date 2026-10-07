@@ -99,7 +99,7 @@ describe("Button — API do exemplar", () => {
   });
 
   // 🔴 01/10/2026, achado pelo Victor no aureauds.dev: ocupado, o `IconButton` mostrava a rodinha E
-  // o glifo, e a rodinha saía 4px para fora do botão. Ocupado TROCA o ícone (como o HeroUI faz).
+  // o glifo, e a rodinha saía 4px para fora do botão. Ocupado TROCA o ícone (como a referência faz).
   test("ocupado, o IconButton mostra só a rodinha — sem o glifo e sem invólucro vazio", () => {
     wrap(<IconButton icon="floppy-disk" label="Salvando" loading />);
     const el = screen.getByRole("button", {name: "Salvando"});
@@ -2709,9 +2709,9 @@ describe("SortableList — arrastar precisa de alternativa sem arrastar (L3)", (
   });
 });
 
-// L6 — máscara no campo. A decisão é PESQUISADA: não se mascara enquanto se digita (o USWDS
-// publica o dele com reprovação de WCAG 2.1 AA registrada; o MUI abandonou máscara nos campos de
-// data na v6 e guardou um vídeo chamado `masked-input-bad-ux.mp4` explicando por quê; e máscara ao
+// L6 — máscara no campo. A decisão é PESQUISADA: não se mascara enquanto se digita (um design system
+// público publica o dele com reprovação de WCAG 2.1 AA registrada; uma das referências abandonou máscara nos campos de
+// data e guardou um vídeo explicando por quê; e máscara ao
 // vivo descasa o que o leitor de tela anuncia do que o campo mostra). A Aurea entrega o MOMENTO —
 // formatar quando o foco sai — e o formato continua sendo do consumidor, porque placa e documento
 // são regra de país.
@@ -3254,7 +3254,7 @@ describe("Sidebar — flutuante por padrão, rente como variante", () => {
 
   // A variante não pode atropelar o recolhido: as duas coisas são eixos diferentes.
   // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, o rótulo vira `.sr-only`: leitor de tela
-  // ouve, e quem ENXERGA fica com um ícone mudo. É o que o `NavButton` da referência resolve.
+  // ouve, e quem ENXERGA fica com um ícone mudo. É o que o botão de navegação da referência resolve.
   test("recolhida, cada item ganha tooltip — expandida, não", () => {
     const {container: trilho} = wrap(<Sidebar label="T" collapsed items={UM} />);
     expect(trilho.querySelector(".sidebar-item")).toHaveAttribute("aria-describedby");
@@ -3359,7 +3359,7 @@ describe("Badge — chip e sobreposto", () => {
     expect(container.querySelector(".badge")).toHaveTextContent(esperado);
   });
 
-  // Caixa de entrada zerada não merece uma marca. É o `showZero` da MUI, e o padrão é esconder.
+  // Caixa de entrada zerada não merece uma marca. Quem decide é o `showZero`, e o padrão é esconder.
   test("count=0 some no sobreposto, e aparece com showZero", () => {
     const {container: some} = wrap(<Badge anchor="top-end" count={0}><button>Inbox</button></Badge>);
     expect(some.querySelector(".badge")).toBeNull();
@@ -3374,7 +3374,7 @@ describe("Badge — chip e sobreposto", () => {
     expect(screen.getByRole("button", {name: "Inbox"})).toBeInTheDocument();
   });
 
-  // A regra de acessibilidade que a documentação da MUI e as três fontes lidas em 17/08/2026
+  // A regra de acessibilidade que a documentação de uma das referências e as três fontes lidas em 17/08/2026
   // dizem igual: o número é DECORAÇÃO, e o sentido dele mora no nome de quem é decorado.
   test("o sobreposto é aria-hidden — o número vai para o nome do pai", () => {
     const {container} = wrap(
@@ -3386,7 +3386,7 @@ describe("Badge — chip e sobreposto", () => {
     expect(screen.getByRole("button", {name: "Inbox, 8 unread messages"})).toBeInTheDocument();
   });
 
-  test("anchorShape=circle marca a classe do recuo — é o overlap da MUI", () => {
+  test("anchorShape=circle marca a classe do recuo — é a sobreposição circular da referência", () => {
     const {container} = wrap(
       <Badge anchor="bottom-end" anchorShape="circle" dot><Avatar name="Ana" /></Badge>);
     const b = container.querySelector(".badge")!;
@@ -4135,7 +4135,7 @@ describe("DataState — as quatro caras da mesma tela", () => {
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // M2 — o formato deixou de ser só da grade. Estas funções NÃO gerenciam a URL (isso é do
-// consumidor, e do `nuqs` se ele quiser um gerenciador): elas só dizem como o estado vira busca.
+// consumidor, e de um gerenciador de estado em URL se ele quiser um): elas só dizem como o estado vira busca.
 describe("screenState — o formato de uma TELA na URL", () => {
   test("ida e volta sem perda, com grade e tela juntas", () => {
     const estado = {

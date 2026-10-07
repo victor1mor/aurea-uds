@@ -55,8 +55,8 @@ estar toda verde: com o `--card-pad` de 20px o realce começava a 21px da borda,
 linha ocupava só **88%** da largura — realce flutuando no meio de uma caixa grande em vez de
 preencher o painel. `--card-pad` é padding de CONTEÚDO; lista de linhas tocáveis quer outra escala.
 
-A anatomia veio dos dois exemplos de `NavigationMenu` que ele mandou: o item leva `p-3` — que a
-nossa linha já tinha — e o **contêiner quase não leva nada**. Depois da regra: 97% da largura, e o
+A anatomia veio dos dois exemplos de menu de navegação que ele mandou: o item leva o recheio que a
+nossa linha já tinha, e o **contêiner quase não leva nada**. Depois da regra: 97% da largura, e o
 texto a 49px. **Filho DIRETO** de propósito: um card com layout grande e uma lista pequena dentro
 não pode perder o padding dele.
 
@@ -78,8 +78,8 @@ da ordem de foco e quem usa teclado **nunca descobre que a linha existe**. Com `
 a linha deixa de ser link, porque link desabilitado não existe em HTML.
 
 **6. O alvo de toque é a linha inteira, e cresce para 44px em ponteiro grosseiro.** Pesquisado em
-18/08/2026: WCAG 2.2 SC 2.5.8 (AA) pede 24×24 como **piso legal**, SC 2.5.5 (AAA) pede 44×44, o
-Apple HIG pede 44pt e o Material 3 pede 48dp. A Aurea já tinha o token (`--target-min` = 44px) e já
+18/08/2026: WCAG 2.2 SC 2.5.8 (AA) pede 24×24 como **piso legal**, SC 2.5.5 (AAA) pede 44×44, a
+diretriz de plataforma do iOS pede 44pt e a do Android pede 48dp. A Aurea já tinha o token (`--target-min` = 44px) e já
 tinha o mecanismo (`@media (pointer:coarse)`); a regra entrou **no bloco existente**, não num novo.
 
 ## Alternativas recusadas
@@ -95,8 +95,8 @@ que ela não usa, para servir uma lista que não é menu de aplicativo.
 **Ser landmark "por segurança".** Recusada: landmark a mais é ruído medível para quem navega por
 landmark, e o `role="list"` do `<ul>` já dá a estrutura.
 
-**Copiar a superfície de configuração da MUI** (`dense`, `disableGutters`, `alignItems`,
-`disableTypography`, `inset`, `autoFocus`, `component`). Recusada pelo passo 5 do `BUILDING.md`:
+**Copiar a superfície de configuração da referência** (sete props: densidade, margem lateral,
+alinhamento, tipografia, recuo, foco automático e o elemento renderizado). Recusada pelo passo 5 do `BUILDING.md`:
 os sete existem por causa do sistema de estilo e de densidade dela. Aqui a densidade é global e o
 elemento sai do `href`.
 
@@ -104,7 +104,7 @@ elemento sai do `href`.
 
 Componente novo em vez de pele — mais uma ficha, mais um teste, mais uma entrada de referência.
 E a **segunda linha** entrou mesmo sem o enunciado pedir (o §4.3 falava de "ícone, rótulo, valor
-opcional e seta"): ela veio do `ListItemText` da MUI, que é a única referência madura das 20
+opcional e seta"): ela veio do texto de item de lista de uma das referências, a única madura das 20
 pastas, e tela de ajustes real usa as duas linhas.
 
 ## Como isso é obrigado

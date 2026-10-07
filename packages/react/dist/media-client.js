@@ -189,13 +189,12 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1",
 // MARCAÇÃO, NÃO MOTOR — e a pergunta que o item mandava decidir primeiro ("se `scroll-snap` do
 // CSS cobre, o componente é marcação") foi respondida MEDINDO, não preferindo:
 //
-//   • as QUATRO referências embrulham o MESMO motor de terceiro, o `embla-carousel` — medido em
-//     15/08/2026 no `kibo-main/packages/shadcn-ui/.../carousel.tsx`, nas quatro bases do
-//     `ui-main` (`aria`, `base`, `radix`, `new-york-v4`), no `carousel-base.tsx` do `react-main`
-//     e no `activepieces-main`. Nenhuma escreve um motor; todas pagam o mesmo;
+//   • as QUATRO referências embrulham o MESMO motor de carrossel de terceiro — medido em
+//     15/08/2026 no fonte de cada uma, nas pastas de `Referencia/` (numa delas, nas quatro bases
+//     que ela oferece). Nenhuma escreve um motor; todas pagam o mesmo;
 //   • o `@base-ui/react` NÃO tem carrossel (medido: 46 pastas em `packages/react/src`, nenhuma
 //     é carousel — a mesma medição que abriu a decisão de motor do Calendar);
-//   • trazer o `embla` seria DEPENDÊNCIA NOVA, que pelo `BUILDING.md` §3.3 interrompe o lote e
+//   • trazer esse motor seria DEPENDÊNCIA NOVA, que pelo `BUILDING.md` §3.3 interrompe o lote e
 //     exige o Victor — para um componente que o navegador já sabe fazer;
 //   • e o caminho SEM JavaScript nenhum ainda não serve: `::scroll-button()`/`::scroll-marker()`
 //     (CSS Overflow 5) não são Baseline — pesquisado em 15/08/2026: Chrome/Edge 135+ têm,
@@ -203,7 +202,7 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1",
 //     Um design system não pode entregar controle que só funciona num navegador.
 //
 // Então o motor é o CONTÊINER DE ROLAGEM nativo com `scroll-snap`, que é Baseline há anos e dá
-// de graça o que o `embla` reimplementa: arrasto por toque com inércia, rolagem por roda e
+// de graça o que esse motor reimplementa: arrasto por toque com inércia, rolagem por roda e
 // teclado, e o encaixe no slide. O que sobra de JavaScript é o que o CSS ainda não tem — saber
 // em QUAL slide se está, para desenhar o ponto aceso e desabilitar a seta do fim.
 //
@@ -212,20 +211,20 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1",
 // `prefers-reduced-motion` que o core já tem (`scroll-behavior:auto!important`) alcança este
 // componente sem uma linha nova. Passar `behavior:"smooth"` daqui passaria POR CIMA dela.
 //
-// UM componente, não sete peças: `Carousel.Root/Content/Item/PrevTrigger/NextTrigger/
-// IndicatorGroup/Indicator` é a decomposição da referência, e aqui ela custaria sete fichas para
+// UM componente, não sete peças: raiz, conteúdo, item, seta de voltar, seta de avançar,
+// grupo de indicadores e indicador é a decomposição da referência, e aqui ela custaria sete fichas para
 // desenhar uma lista que rola. É o mesmo argumento que o `Stepper`, o `TreeView` e a `Sidebar`
 // já resolveram: quem embrulha cada slide é o componente, e por isso o rótulo "Slide 3 de 8"
 // nunca fica com o consumidor — que é onde ele seria esquecido.
 //
 // LIMITES DECLARADOS (todos são escopo menor que o da referência, `BUILDING.md` §Passo 5):
-//   • sem laço infinito, sem autoplay e sem arrasto com o MOUSE — os três são do `embla` e
+//   • sem laço infinito, sem autoplay e sem arrasto com o MOUSE — os três são do motor de terceiro e
 //     nenhum deles apareceu na medição dos consumidores; laço, ainda por cima, não existe em
 //     contêiner de rolagem nativo e voltaria a exigir motor;
 //   • sem eixo vertical: não há uso medido, e o sprite não tem chevron para cima (a allowlist
 //     do contrato tem `chevron--left/right/down`), então o eixo custaria glifo novo por nada;
 //   • quantos slides aparecem por vez é CSS, não prop: `--carousel-slide` (default `100%`) é a
-//     válvula no idioma do `--qr-size` e do `--datagrid-max-h`. É o caso `multiple` da
+//     válvula no idioma do `--qr-size` e do `--datagrid-max-h`. É o caso de vários slides por vez da
 //     referência, sem API nenhuma;
 //   • em RTL a rolagem vai para o lado certo (o deslocamento é medido pela borda inicial), mas
 //     o GLIFO da seta não espelha — é uma linha de CSS que ninguém pediu e que nenhum teste

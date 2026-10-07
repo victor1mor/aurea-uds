@@ -1,7 +1,7 @@
 // PADRÃO do arquivo de PATTERN (molde de referência — 24/07/2026).
 //
 // Pattern ≠ componente. O componente é a peça com API; o pattern é UMA composição
-// resolvida dela: Componente → Variante → Composição (modelo Kibo, vocabulário travado
+// resolvida dela: Componente → Variante → Composição (modelo de referência, vocabulário travado
 // no AUREA.md §4). Quem consome um pattern copia e cola; quem consome um componente
 // configura.
 //

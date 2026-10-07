@@ -16,9 +16,9 @@ export function Table({caption,children,className,...props}:HTMLAttributes<HTMLT
 // I8: arrastar precisa de alternativa sem arrastar. Por isso o caminho por TECLADO não é um
 // extra deste componente; é a razão pela qual ele pode existir.
 //
-// SEM DEPENDÊNCIA NOVA, e a alternativa foi medida: o `list` do `Referencia/kibo-main` é o
-// `@dnd-kit/core` (`useDraggable`/`useDroppable`/`DndContext`), e o `kanban` de lá é o mesmo
-// motor. Trazer o dnd-kit resolveria isto e obrigaria TODO consumidor a baixá-lo — e o
+// SEM DEPENDÊNCIA NOVA, e a alternativa foi medida: a lista de uma das referências é feita sobre uma
+// biblioteca de arrastar e soltar de terceiro, e o quadro kanban de lá é o mesmo
+// motor. Trazer essa biblioteca resolveria isto e obrigaria TODO consumidor a baixá-la — e o
 // `BUILDING.md` §3.3 manda parar e chamar o Victor antes de somar dependência. Aqui não fez
 // falta: o protocolo de teclado é uma máquina de três estados, e o ponteiro é PointerEvent.
 //
@@ -27,11 +27,11 @@ export function Table({caption,children,className,...props}:HTMLAttributes<HTMLT
 // cobre mouse, toque e caneta com o mesmo código, e é o que `touch-action:none` na alça
 // completa.
 //
-// O TECLADO segue a convenção que o mercado consolidou (é a do dnd-kit, e a que os guias de
+// O TECLADO segue a convenção que o mercado consolidou (é a das bibliotecas de arrastar e soltar, e a que os guias de
 // arrasto acessível descrevem): Espaço pega, setas movem, Espaço solta, Esc devolve ao lugar de
 // onde saiu. Cada passo é ANUNCIADO numa região viva — sem isso quem não vê a lista move o item
-// e não recebe confirmação nenhuma, que é o defeito que a reprovação do USWDS descreve no item
-// L6 ("recovering from an error is difficult due to lack of feedback").
+// e não recebe confirmação nenhuma, que é o defeito que a reprovação de um design system público descreve no item
+// L6 (sair de um erro fica difícil por falta de retorno).
 //
 // A LISTA É CONTROLADA: `items` e `onReorder(de, para)`. O componente não guarda ordem — quem
 // guarda é o consumidor, como no `selected` da `Gallery` e no `value` das `Tabs`. Mover no
