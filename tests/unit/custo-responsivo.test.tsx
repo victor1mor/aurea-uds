@@ -38,10 +38,17 @@ beforeEach(() => {
   });
 });
 
+// Toda raiz criada aqui é desmontada no fim do teste (06/10/2026): é o mesmo defeito que derrubou
+// a CI do pedido #45 no `ssr-responsivo.test.tsx`. Quem cobra: `raizes-desmontadas.test.tsx`.
+const raizes: Array<{unmount: () => void}> = [];
+afterEach(() => { act(() => { while (raizes.length) raizes.pop()!.unmount(); }); });
+
 const monta = (ui: React.ReactNode) => {
   const div = document.createElement("div");
   document.body.appendChild(div);
-  act(() => { createRoot(div).render(<AureaProvider>{ui}</AureaProvider>); });
+  const raiz = createRoot(div);
+  raizes.push(raiz);
+  act(() => { raiz.render(<AureaProvider>{ui}</AureaProvider>); });
   return div;
 };
 
