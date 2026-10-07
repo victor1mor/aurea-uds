@@ -86,9 +86,9 @@ em inglês e ficam como estão: são registro.
 
 ## [0.22.0] — 2026-10-06
 
-⏳ **Ainda não publicada, e AINDA NÃO APROVADA:** feita na madrugada de 06 para 07/10/2026 com o
-Victor dormindo, por ordem dele (*"pode fazer o K1 hoje"*). Falta ele ver a bancada. Vem depois da
-`0.21.0` (pedido #44).
+⏳ **Ainda não publicada.** Feita na madrugada de 06 para 07/10/2026 com o Victor dormindo, por
+ordem dele (*"pode fazer o K1 hoje"*). **Aprovada pela bancada em 07/10/2026** (*"aprovo"*). Vem
+depois da `0.21.0` (pedido #44); pedido #46.
 
 O **Lote K1**: as peças de leiaute de uma página de SITE, o primeiro bloco do grupo 2 da fila
 (GAR-02 a GAR-05). **Versão nova porque entram peças.** Nada sai nem muda de nome, e nenhuma

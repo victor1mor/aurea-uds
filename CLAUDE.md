@@ -243,8 +243,9 @@ documento de achados mais novo para conferir se ela envelheceu.
    navegador (`pnpm exec playwright test`), não só os unitários — o `skin.spec` do Lote I só foi
    pego assim. E a barra de cima do catálogo mostra a contagem de tokens: token novo muda a foto
    `topo` da CI.
-16. **`0.22.0`, o Lote K1, feito na madrugada de 06 para 07/10/2026 e AINDA NÃO APROVADO** — o
-   Victor mandou fazer (*"pode fazer o K1 hoje"*) e foi dormir; falta ele ver a bancada. A página de
+16. **`0.22.0`, o Lote K1, feito na madrugada de 06 para 07/10/2026 e ainda não publicado** — o
+   Victor mandou fazer (*"pode fazer o K1 hoje"*) e foi dormir; **aprovado pela bancada em
+   07/10/2026** (*"aprovo"*), pedido #46. A página de
    SITE, na web: `Container` (GAR-02), `Grid.Item span` pela camada responsiva (GAR-03, família
    `grid-span`), `Section` com `surface`, `spacing` e `theme` (GAR-04 e GAR-05). E o conserto do
    GAR-05: as 22 regras `[data-theme="light"] X` levam uma guarda de força zero e não vazam mais
