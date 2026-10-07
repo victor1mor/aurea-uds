@@ -80,6 +80,38 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.21.0] — 2026-10-06
+
+⏳ **Ainda não publicada.** Falta a aprovação do Victor na bancada, a junção e a publicação. Vem
+depois da `0.20.0` (pedido #43), que também não saiu.
+
+O **Lote J**: o resto do grupo 1 da fila (CHK-01) e o primeiro defeito do grupo 2, o site (GAR-08),
+com o plano do Victor da noite de 06/10/2026. **Versão nova porque entra prop.** Nada sai nem muda
+de nome, e nenhuma dependência entra.
+
+### Adicionado
+
+- **CHK-01 · O cartão de escolha: `RadioGroup variant="card"` (nativo).** O cartão INTEIRO é a
+  opção, com o papel de rádio para o leitor de tela. O app montava os Planos com `Card` + toque, e
+  cada cartão era anunciado como "botão". A pele é a do próprio `Card`: o comum, e o escolhido do
+  `variant="selected"` — a mesma, que mudou para `estilos.ts` (`peleDoCartao`,
+  `peleDoCartaoEscolhido`) para as duas peças não terem cópias dos números. A marca sobe para a
+  linha do título. O item ganha `children`: o conteúdo a mais (preço, lista) dentro do cartão. O
+  HeroUI não tem a peça pronta; ele a monta com um `RadioGroup.Item` e uma superfície dentro, e é
+  assim que ela entrou. Quem cobra: `tests/unit/native-chk01-cartao-de-escolha.test.tsx`.
+
+### Corrigido
+
+- **GAR-08 · O cartão clicável na horizontal perdia a coluna da foto (web).**
+  `.card-interactive { display:block }` vinha depois de `.card-horizontal { display:grid }`, com a
+  mesma força, e ganhava. Agora o bloco do clicável é só um padrão de força zero (`:where`), e a
+  orientação ganha sem depender da ordem das regras. Quem cobra:
+  `tests/visual/card-horizontal-clicavel.spec.ts` — no navegador, nos três motores.
+- **O cartão clicável e o item de menu que viram link saíam com o texto sublinhado (web).** Achado
+  ao medir o GAR-08: o `<a>` do `Card` com `render` e o `<a class="menu-item">` do `DropdownMenu`
+  com `href` herdavam o sublinhado do navegador. Os outros alvos que viram link já tiravam. Quem
+  cobra: `tests/visual/link-sem-sublinhado.spec.ts`, com toda classe da Aurea que vira `<a>`.
+
 ## [0.20.0] — 2026-10-06
 
 ⏳ **Ainda não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador

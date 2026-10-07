@@ -96,6 +96,26 @@ export const canto = (raio: number, curva: "continuous" | "circular" = "continuo
 export const cantosDeCima = (raio: number) =>
   ({borderTopLeftRadius: raio, borderTopRightRadius: raio, borderCurve: "continuous"}) as const;
 
+/**
+ * A PELE DO CARTÃO — o raio 22, o recheio, o fundo e a borda do `Card`; e a do cartão ESCOLHIDO
+ * (`variant="selected"`): a borda do contorno da marca sobre o fundo `surface2`.
+ *
+ * ⚠ **Moravam dentro do `layout.tsx` e mudaram de casa em 06/10/2026**, quando o cartão de escolha
+ * (CHK-01, `RadioGroup variant="card"`) passou a precisar da mesma pele: um cartão escolhido tem de
+ * parecer o cartão escolhido que o app já usa, e não um parecido. Duas cópias dos números é o
+ * defeito que o `CLAUDE.md` nomeia.
+ */
+export const peleDoCartao = (t: AureaTokens) => ({
+  ...canto(t.size.radiusCard),
+  padding: t.size.cardPad,
+  backgroundColor: t.color.card,
+  borderWidth: t.size.borderWidth,
+  borderColor: t.color.border,
+}) satisfies ViewStyle;
+
+export const peleDoCartaoEscolhido = (t: AureaTokens) =>
+  ({borderColor: t.color.primaryOutline, backgroundColor: t.color.surface2}) satisfies ViewStyle;
+
 /** O tom de cor com significado — o vocabulário do `Badge` (`AureaBadgeTone`). */
 export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
 

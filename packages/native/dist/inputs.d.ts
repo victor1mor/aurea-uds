@@ -254,6 +254,11 @@ export declare function Checkbox(p: CheckboxProps): React.JSX.Element;
 export declare function Radio(p: RadioProps): React.JSX.Element;
 /** De que lado da linha a marca fica: `end` (padrão, como o exemplo do HeroUI) ou `start`. */
 export type AureaRadioIndicatorPlacement = "start" | "end";
+/**
+ * O jeito dos itens (CHK-01, 06/10/2026): `list` (padrão) é a linha de sempre; `card` faz de cada
+ * item um CARTÃO inteiro tocável — o cartão de escolha.
+ */
+export type AureaRadioGroupVariant = "list" | "card";
 export interface RadioGroupProps extends ViewProps {
     /** O valor do item escolhido. Controlado: quem guarda é a tela. */
     value?: string;
@@ -272,6 +277,13 @@ export interface RadioGroupProps extends ViewProps {
      * o lado vira uma lista fechada de duas opções, com o nome que o HeroUI usa para posição.
      */
     indicatorPlacement?: AureaRadioIndicatorPlacement;
+    /**
+     * `card` faz de cada item um cartão de escolha (CHK-01, 06/10/2026): o cartão INTEIRO é a opção,
+     * com o papel de rádio para o leitor de tela. A pele é a do `Card` — o cartão comum, e o cartão
+     * escolhido (`variant="selected"`) no item marcado. É como o HeroUI monta essa peça (o exemplo
+     * de `RadioGroup.Item` com uma superfície dentro); o Chakra a chama de `RadioCard`.
+     */
+    variant?: AureaRadioGroupVariant;
     children?: React.ReactNode;
 }
 export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "style" | "disabled"> {
@@ -293,10 +305,17 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
      * cheia (ADR-0053), se o registro a tiver.
      */
     icon?: AureaIcon;
+    /**
+     * Conteúdo a mais, embaixo da descrição (CHK-01) — no cartão de escolha, o preço e a lista do
+     * que o plano inclui. É texto para LER: o item inteiro já é o alvo do toque, e um botão aqui
+     * dentro sumiria para o VoiceOver (a regra do `check 43`). O leitor de tela lê o `label` e a
+     * `description`; o que este conteúdo diz de essencial vai no `accessibilityLabel` do item.
+     */
+    children?: React.ReactNode;
     style?: StyleProp<ViewStyle>;
 }
-declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, indicatorPlacement, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
-declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, ...rest }: RadioGroupItemProps): React.JSX.Element;
+declare function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation, indicatorPlacement, variant, style, children, ...rest }: RadioGroupProps): React.JSX.Element;
+declare function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, children, ...rest }: RadioGroupItemProps): React.JSX.Element;
 /**
  * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` do HeroUI Native.
  *

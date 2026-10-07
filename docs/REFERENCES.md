@@ -3802,3 +3802,19 @@ terceiro foi copiada. Pacotes baixados com `npm pack` em 06/10/2026: `@heroui/st
 
 O HeroUI não tem `PhotoInput` nem segmentado no nativo; as duas peças seguem pensadas como ele
 faria, com os nomes das peças que ele tem.
+
+
+## O cartão de escolha e o cartão clicável na horizontal — 06/10/2026 · Lote J (CHK-01, GAR-08)
+
+Com o plano do Victor da noite de 06/10/2026. Só leitura: nenhuma linha de terceiro foi copiada.
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| `heroui-native` 1.0.10, `radio/radio.md` (exemplo "Render Function Children") e `styles/components/radio-group.css` | MIT | o cartão de escolha não é peça: é um `RadioGroup.Item` com uma superfície dentro (`p-3 rounded-2xl`, fundo `surface` quando escolhido); o grupo tem `gap` 12 | `RadioGroup variant="card"`: o item inteiro continua o rádio; o vão do grupo continua `space3` |
+| `@chakra-ui/react` 3.37.0, `CheckboxCard` e `RadioCard` (lidos na auditoria de 06/10/2026, no documento de achados do Victor; não relidos aqui) | MIT | "o cartão inteiro é a opção (marca no canto, título e descrição dentro)" | a marca no alto do cartão, na linha do título |
+| `@aurea-uds/native`, `Card` (`layout.tsx`) | Apache-2.0 (nosso) | a pele do cartão e a do escolhido (`variant="selected"`) | a MESMA pele no cartão de escolha — movida para `estilos.ts`, sem cópia dos números |
+| `@heroui/styles` 3.2.6, `card.css` e `link.css` | MIT | o cartão do HeroUI não tira sublinhado; quem tira é o reset do Tailwind (`a { text-decoration: inherit }`), que a Aurea não tem | `text-decoration:none` no `.card-interactive` e no `.menu-item`, como os outros alvos da Aurea que viram link |
+
+A medida do recheio do cartão é a do `Card` da Aurea (`cardPad`) e não o `p-3` do exemplo do HeroUI:
+o exemplo é uma composição de quem usa a biblioteca, não uma peça com medida própria, e o cartão
+escolhido tem de ser igual ao cartão escolhido que o app já usa.

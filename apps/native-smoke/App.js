@@ -244,6 +244,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <BlocoLoteJ t={t} />
       <BlocoLoteI t={t} />
       <BlocoCapsulaAndroid t={t} />
 
@@ -1587,6 +1588,34 @@ function BlocoBarraParada({t}) {
         + "barra não. 2) O nome fica colado embaixo do ícone. 3) A pill tem a altura da barra do "
         + "Telegram; o circle-bold, um pouco mais. 4) O contador 3 não encosta no nome."}>
       {["circle-bold", "capsule", "pill", "expand"].map((ind) => <PalcoDaBarra key={ind} t={t} indicator={ind} />)}
+    </Bloco>
+  );
+}
+
+// 0.21.0 (06/10/2026): o LOTE J — o cartão de escolha (CHK-01). O que só o aparelho responde: o
+// leitor de tela do Android anuncia cada cartão como OPÇÃO (rádio), marcada ou não, e não como
+// botão; e o cartão inteiro responde ao toque.
+function BlocoLoteJ({t}) {
+  const [plano, setPlano] = React.useState("pro");
+  const planos = [
+    {id: "gratis", nome: "Grátis", desc: "1 veículo", preco: "R$ 0"},
+    {id: "pro", nome: "Pro", desc: "Até 5 veículos", preco: "R$ 9,90 por mês"},
+    {id: "frota", nome: "Frota", desc: "Veículos sem limite", preco: "R$ 29,90 por mês"},
+  ];
+  return (
+    <Bloco t={t} n="0.21" titulo="Lote J: o cartão de escolha (os Planos)"
+      criterio={"1) Toque em qualquer ponto de um cartão (no preço, no canto): ele fica escolhido, "
+        + "com a borda amarela. 2) A bolinha fica na linha do nome do plano, e não no meio do cartão. "
+        + "3) Com o TalkBack ligado, cada cartão é lido como opção (\"botão de opção\"), com o nome, "
+        + "o preço e se está marcado — nunca só \"botão\"."}>
+      <RadioGroup label="Plano" variant="card" value={plano} onValueChange={setPlano}>
+        {planos.map((p) => (
+          <RadioGroup.Item key={p.id} value={p.id} label={p.nome} description={p.desc}
+            accessibilityLabel={`${p.nome}, ${p.preco}`}>
+            <Text style={{color: t.color.foreground, fontSize: t.size.textLg}}>{p.preco}</Text>
+          </RadioGroup.Item>
+        ))}
+      </RadioGroup>
     </Bloco>
   );
 }

@@ -39,7 +39,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -90,6 +90,10 @@ const folha = criarFolha((t) => ({
     // E5: a marca no MEIO da altura do texto, como o HeroUI Native. Era `flex-start` com um
     // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
     linhaDeControle: { flexDirection: "row", alignItems: "center", gap: 9 },
+    // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
+    // no alto, na linha do título.
+    itemCartao: { ...peleDoCartao(t), alignItems: "flex-start" },
+    itemCartaoEscolhido: peleDoCartaoEscolhido(t),
     linhaNoTopo: { alignItems: "flex-start" },
     trilho: { ...canto(t.size.radiusFull), backgroundColor: t.color.muted,
         borderWidth: t.size.borderWidth, borderColor: t.color.border, justifyContent: "center" },
@@ -390,12 +394,12 @@ export function Checkbox(p) { return _jsx(ControleMarcado, { ...p, papel: "check
  */
 export function Radio(p) { return _jsx(ControleMarcado, { ...p, papel: "radio" }); }
 const GrupoDeRadio = React.createContext(null);
-function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement, style, children, ...rest }) {
+function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement, variant = "list", style, children, ...rest }) {
     const t = useAureaTokens();
-    const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid, indicatorPlacement }), [value, onValueChange, disabled, invalid, indicatorPlacement]);
+    const contexto = React.useMemo(() => ({ value, onValueChange, disabled, invalid, indicatorPlacement, variant }), [value, onValueChange, disabled, invalid, indicatorPlacement, variant]);
     return (_jsx(GrupoDeRadio.Provider, { value: contexto, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled }), style: [{ gap: t.size.space3, flexDirection: orientation === "horizontal" ? "row" : "column" }, style], ...rest, children: children }) }));
 }
-function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, ...rest }) {
+function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, children, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const grupo = React.useContext(GrupoDeRadio);
@@ -408,9 +412,10 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
     const marca = t.size.space6;
     const ponto = t.size.space2 + t.size.space05;
     const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
-    const texto = (label != null || description != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
+    const cartao = grupo?.variant === "card";
+    const texto = (label != null || description != null || children != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
                 ? _jsx(Text, { size: "base", weight: 500, tone: erro ? "danger" : "default", children: label }) : label, description != null && (typeof description === "string"
-                ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }, "texto"));
+                ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description), children != null && _jsx(View, { style: { marginTop: t.size.space3 }, children: children })] }, "texto"));
     const marcaDesenhada = (_jsx(View, { style: [
             s.marcaBase,
             { width: marca, height: marca, ...canto(t.size.radiusFull) },
@@ -425,6 +430,13 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
     return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: escolhido, disabled: !!inativo }), accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
             { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
                 gap: t.size.space3, minHeight: t.size.targetMin },
+            // CHK-01: no cartão a marca sobe para a altura do título (o cartão pode ser alto — preço,
+            // lista —, e uma marca no meio dele não diz de quem é). A pele é a do `Card`, e ela existe
+            // DESDE A MONTAGEM, com fundo e borda: escolher só troca as cores. É a regra que a `0.19.1`
+            // pagou no Android — caixa que ganha a pintura depois de montada perde o raio.
+            cartao && s.itemCartao,
+            cartao && escolhido && s.itemCartaoEscolhido,
+            cartao && erro && { borderColor: perigo },
             inativo && s.desabilitado, style,
         ], ...rest, children: noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada] }));
 }
