@@ -28,8 +28,8 @@ Até umas mil mensagens não há problema nenhum. O problema é **deixar acumula
 
 1. **O app guarda uma janela** (umas mil mensagens) e a troca pelas pontas: ao chegar no alto,
    carrega as antigas e descarta as recentes do outro lado; ao descer, traz de volta. A Aurea só
-   avisa (`onReachStart`, `onReachEnd`) quando a linha de cada ponta entra na tela — a linha do
-   `Table.LoadMore` do HeroUI, a mesma da `Gallery` (AN-05).
+   avisa (`onReachStart`, `onReachEnd`) quando a linha de cada ponta entra na tela — a linha de
+   "carregar mais" da tabela da referência, a mesma da `Gallery` (AN-05).
 2. **O que é da Aurea é não pular.** A mensagem que começa no alto da tela fica no mesmo lugar
    quando entram antigas em cima, saem recentes embaixo, ou alguma coisa cresce depois de montar
    (a fonte, uma foto). A conta é guardar a posição dela a cada rolagem e rolar a diferença depois
@@ -42,14 +42,14 @@ Até umas mil mensagens não há problema nenhum. O problema é **deixar acumula
 
 ## Alternativas rejeitadas
 
-- **`@tanstack/react-virtual` 3.14.13** (MIT, 7,8 KB minificado + gzip, `npm audit` limpo). Tem o
-  modo de conversa oficial desde 25/05/2026 (`anchorTo: 'end'`, `followOnAppend`, conferidos no
+- **Uma biblioteca de virtualização** (MIT, 7,8 KB minificado + gzip, `npm audit` limpo). Tem o
+  modo de conversa oficial desde 25/05/2026 (ancorar no fim e acompanhar o que chega, conferidos no
   pacote baixado). Era a recomendação da sessão. **Rejeitada pelo Victor:** mais uma dependência, e a
   medida mostrou que ela não é necessária enquanto o app guarda uma janela.
-- **virtua 0.52** (MIT, 4,1 KB): ainda em `0.x`, com a API mudando.
-- **react-virtuoso 4.18** (MIT, 20,1 KB): a "Message List" dele, a peça de conversa, é paga.
+- **Outra, menor** (MIT, 4,1 KB): ainda em `0.x`, com a API mudando.
+- **Uma terceira** (MIT, 20,1 KB): a peça de conversa dela é paga.
 - **Virtualização escrita aqui:** com mensagens de alturas diferentes, segurar a posição ao carregar
-  as antigas é justamente o ponto difícil (o TanStack só o resolveu em maio de 2026). Seriam 300 a
+  as antigas é justamente o ponto difícil (a primeira biblioteca só o resolveu em maio de 2026). Seriam 300 a
   500 linhas de risco para um ganho que a janela já entrega.
 - **`content-visibility: auto`** (o navegador pula o desenho fora da tela). Medido: abre mais rápido
   (10 mil em 0,36 s), mas **piora** a rolagem (quadro médio de 16 para 38 ms com 10 mil; de 42 para

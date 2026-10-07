@@ -48,7 +48,7 @@ export interface ClusterProps extends DivProps {
 }
 export declare function Cluster({ gap, align, justify, wrap, className, ...props }: ClusterProps): React.JSX.Element;
 /**
- * A largura mínima da coluna, por nome — AN-08 (03/10/2026). O HeroUI não tem `Grid`, e nenhum dos
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026). A referência não tem `Grid`, e nenhum dos
  * quatro números é novo: cada um já mede uma grade ou uma caixa da Aurea (ver `.grid-min-*` no CSS).
  * `md` é o padrão de sempre.
  */
@@ -66,6 +66,56 @@ export interface GridProps extends DivProps {
     columns?: number;
 }
 export declare function Grid({ gap, min, columns, className, style, ...props }: GridProps): React.JSX.Element;
+export declare namespace Grid {
+    export { GridItem as Item };
+}
+/**
+ * Quantas colunas da grade o item ocupa — GAR-03 (06/10/2026). Texto, e não número, porque é o
+ * valor de um eixo responsivo, como `size` e `orientation`.
+ */
+export type GridSpan = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+export interface GridItemProps extends DivProps {
+    /**
+     * Quantas colunas o item ocupa (GAR-03). Com `<Grid columns={12}>` é o "7 de 12" de página de
+     * site. Responsivo, mobile-first: `{base: "12", viewport: {md: "7"}}` ocupa a linha inteira no
+     * estreito e 7 de 12 a partir do `md`. Sem `span`, uma coluna, como qualquer filho de grade.
+     */
+    span?: Responsive<GridSpan>;
+}
+/** O item da grade que sabe quantas colunas ocupa (GAR-03). Mora em `Grid.Item`, como `Card.Media`. */
+declare function GridItem({ span, className, ...props }: GridItemProps): React.JSX.Element;
+/** A largura máxima do `Container`, pelos nomes da escala de pontos. `xl` (1280) é o padrão. */
+export type ContainerSize = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
+    /** Até onde o conteúdo cresce: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280 (padrão) · `2xl` 1536 · `full` sem teto. */
+    size?: ContainerSize;
+}
+/**
+ * A largura de leitura de uma página de SITE: centrada, com teto e o respiro dos lados que cresce
+ * com a tela (16 no estreito, 32 a partir do `md`). É o que vai DENTRO de uma `Section`. O painel
+ * de aplicativo continua sendo o `AppShell`.
+ */
+export declare function Container({ size, className, ...props }: ContainerProps): React.JSX.Element;
+/** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
+export type SectionSurface = "background" | "card" | "inset";
+/** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
+export type SectionSpacing = "sm" | "md";
+export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement> {
+    surface?: SectionSurface;
+    spacing?: SectionSpacing;
+    /**
+     * Um tema só para esta faixa (GAR-05): `"dark"` faz uma faixa escura dentro de uma página clara,
+     * e o contrário. Fundo, letra e peças de dentro seguem o tema da faixa, e as regras de tema da
+     * página não vazam para dentro dela.
+     */
+    theme?: "light" | "dark";
+}
+/**
+ * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
+ * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
+ * quando ela for uma região que o leitor de tela deva listar.
+ */
+export declare function Section({ surface, spacing, theme, className, ...props }: SectionProps): React.JSX.Element;
 export declare function KPI({ label, value, trend, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label: ReactNode;
     value: ReactNode;
@@ -126,7 +176,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     dot?: boolean;
     leading?: ReactNode;
     trailing?: ReactNode;
-    /** Foto redonda no início — o `BadgeWithImage` da referência. */
+    /** Foto redonda no início — o selo com imagem da referência. */
     image?: string;
     imageAlt?: string;
     /** Conteúdo numérico. Passa por `max` e some em zero, salvo `showZero`. */
@@ -137,12 +187,12 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     fit?: BadgeFit;
     /** Liga o modo SOBREPOSTO e escolhe o canto. `children` passa a ser o que se decora. */
     anchor?: BadgePlacement;
-    /** `circle` recolhe o canto em 14% — é o `overlap` da MUI, para avatar redondo. */
+    /** `circle` recolhe o canto em 14% — é a sobreposição circular da referência, para avatar redondo. */
     anchorShape?: "square" | "circle";
     /** Esconde sem tirar o filho do lugar. */
     invisible?: boolean;
     /** Conteúdo do badge no modo sobreposto (no modo chip, quem manda é `children`).
-     *  Nome da MUI, e não `content`: este colide com o atributo HTML de mesmo nome. */
+     *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
     badgeContent?: ReactNode;
 }
 export declare function Badge({ variant, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
@@ -154,7 +204,7 @@ export interface ProgressProps {
     value?: number;
     /** O nome que o leitor de tela anuncia. Não aparece. */
     label?: string;
-    /** O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo
+    /** O texto de apoio, no alto à direita — a saída de texto da barra de progresso da referência: velocidade, tempo
      *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
     detail?: ReactNode;
     tone?: ProgressTone;

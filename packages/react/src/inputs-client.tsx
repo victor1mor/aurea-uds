@@ -42,7 +42,7 @@ export type FieldLabelWidth="auto"|(string&{});
 export interface FieldProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<HTMLDivElement>{label:string;hint?:ReactNode;error?:ReactNode;
   /** B-12 (24/09/2026): texto de ajuda que precisa de uma FRASE — mora embaixo do controle, onde
    *  cabe, e não divide a linha do rótulo. O `hint` continua o que é: nota curta ao lado do rótulo
-   *  ("opcional", "em MB"). É o lugar do `Description` do HeroUI e da `description` que o
+   *  ("opcional", "em MB"). É o lugar da descrição da referência e da `description` que o
    *  `Checkbox` desta casa já tem. Entra no `aria-describedby` na ordem da tela: hint, descrição,
    *  erro. */
   description?:ReactNode;name?:string;orientation?:Responsive<FieldOrientation>;labelWidth?:FieldLabelWidth}
@@ -165,9 +165,9 @@ export function Field({label,hint,description,error,children,className,id,name,o
 // Form (M1): o formulário que EXIBE erro, e não o que decide o que é erro.
 //
 // A divisão saiu de pesquisa e da medição dos consumidores (13/08/2026). O padrão de mercado é
-// `react-hook-form` + `zod`, e é o que o shadcn embrulha — mas embrulhar isso aqui obrigaria TODO
-// projeto que usa a Aurea a usar react-hook-form, inclusive os que já validam de outro jeito (um
-// consumidor real valida com zod em server action, sem biblioteca de formulário no cliente).
+// uma biblioteca de formulário com uma de esquema, e é o que uma das referências embrulha — mas embrulhar isso aqui obrigaria TODO
+// projeto que usa a Aurea a usar essa biblioteca de formulário, inclusive os que já validam de outro jeito (um
+// consumidor real valida com a biblioteca de esquema em server action, sem biblioteca de formulário no cliente).
 // Dependência nova também é decisão do Victor pelo BUILDING.md §3.3, e ela não foi necessária:
 // o `Form` do Base UI — motor que a Aurea JÁ paga desde a Fase 2 — declara no próprio tipo que
 // `errors` são "validation errors returned externally, typically after submission by a server or
@@ -180,12 +180,12 @@ export function Form({errors,onSubmit,children,className,...props}:Omit<React.Fo
 }
 // `formatOnBlur` é a metade de TEXTO do item L6 (máscara no campo), e a decisão de NÃO mascarar
 // enquanto se digita é pesquisada, não preferida — três medições independentes, em 15/08/2026:
-//   • o `Input mask` do **USWDS**, o design system do governo americano, é publicado com
-//     reprovação registrada em WCAG 2.1 AA: "recovering from an error is difficult due to lack of
-//     feedback". Não é que ninguém tenha feito; é que quem fez, publicou o defeito junto;
-//   • o **MUI** ABANDONOU máscara nos campos de data na v6 e escreveu por quê: o texto "leaks to
-//     the previous sections" ao editar o meio do valor. Há até um vídeo no repositório deles com
-//     o nome `masked-input-bad-ux.mp4` — foi a referência que o item mandava ler;
+//   • a máscara de entrada de um **design system público** é publicada com
+//     reprovação registrada em WCAG 2.1 AA: sair de um erro fica difícil por falta de
+//     retorno. Não é que ninguém tenha feito; é que quem fez, publicou o defeito junto;
+//   • uma das **referências** ABANDONOU máscara nos campos de data e escreveu por quê: o texto vaza
+//     para as seções anteriores ao editar o meio do valor. Há até um vídeo no repositório deles
+//     mostrando a máscara como experiência ruim — foi a referência que o item mandava ler;
 //   • a prática corrente diz o mesmo: máscara ao vivo descasa o que o leitor de tela ANUNCIA (o
 //     que foi digitado) do que o campo MOSTRA (o que a máscara deixou), e a recomendação é deixar
 //     digitar e colar à vontade, formatando DEPOIS que o foco sai.
@@ -335,8 +335,8 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 // da ativação nativa do `<button>`.
 //
 // `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
-// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É o `fullWidth` do
-// `ToggleButtonGroup` do HeroUI 3.2.6.
+// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É como o grupo
+// de botões alternáveis da referência ocupa a linha.
 export function SegmentedControl({items,value,onChange,label,fullWidth}:{items:Array<{value:string;label:ReactNode}>;value:string;onChange:(v:string)=>void;label?:string;fullWidth?:boolean}){
 const s=useAureaStrings();
 return <BaseRadioGroup className={fullWidth?"segmented segmented-full":"segmented"} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange(String(v))}>
@@ -544,20 +544,20 @@ export const Select=forwardRef<HTMLButtonElement,SelectProps>(function Select({i
 // devolveu, em quatro partes:
 //
 // 1. A REFERÊNCIA NÃO É O MESMO COMPONENTE, e essa é a primeira pergunta do `BUILDING.md` §2
-//    passo 2. O `editor` do `Referencia/kibo-main` tem 39 exports e é TipTap 3.6.6 sobre
-//    ProseMirror, com 17 dependências no `package.json` — e é um editor de DOCUMENTO ÚNICO:
+//    passo 2. O `editor` de uma das referências (na pasta `Referencia/`) tem 39 exports e é feito sobre um
+//    motor de texto rico de terceiro, com 17 dependências no `package.json` — e é um editor de DOCUMENTO ÚNICO:
 //    negrito, itálico, tabelas, menu-bolha. Ele não tem lista de blocos, não tem reordenação e
 //    não tem bloco de imagem com legenda. Anatomia de bloco, ali, não existe para copiar.
 // 2. EMBRULHAR O MOTOR CUSTARIA A TODO CONSUMIDOR. É a conta que o `Chart` e o `Calendar` já
 //    pagaram de propósito em subpath próprio — mas lá o motor ERA o componente. Aqui o que o
-//    item descreve ("texto, imagem com legenda") é moldura, e moldura não justifica ProseMirror
+//    item descreve ("texto, imagem com legenda") é moldura, e moldura não justifica um motor de texto rico
 //    no pacote de quem só quer um artigo.
 // 3. O QUE FALTAVA JÁ ESTAVA QUASE TODO AQUI, medido no passo 1: `Prose` (L5) desenha a saída,
 //    `Image` (L4) é o bloco de imagem, `Textarea` e `Field` são a entrada, `Toolbar` é a barra.
 //    O buraco era a MOLDURA — ordem, alça, remoção, e o lugar onde o editor do consumidor entra.
 // 4. SEGURANÇA, e esta é a razão que fecha a porta. Editor que é dono do texto rico é dono da
 //    colagem, e o navegador NÃO sanitiza HTML colado: quem cola vira XSS. A pesquisa de 15/08
-//    confirma que ProseMirror e Lexical tratam o `contenteditable` como ALVO de renderização e
+//    confirma que os motores de texto rico de mercado tratam o `contenteditable` como ALVO de renderização e
 //    nunca como fonte da verdade, justamente por isso. A Aurea não pode decidir o que é seguro
 //    renderizar no domínio do consumidor — é a mesma frase que a ficha do `Prose` já diz em voz
 //    alta. Entregando a moldura, a superfície de colagem continua com quem tem o contexto.
@@ -621,8 +621,8 @@ export function BlockEditor({blocks,onReorder,onRemove,label,className,...props}
 // ── PORTADO da linhagem da ATIVIDADE-2 no merge de 28/08/2026 ───────────────────────────────
 // Não existia na `main`. Fica no módulo de CLIENTE porque guarda estado (`useState` do
 // mostrar/ocultar); a moldura (`InputGroup`) vem do `markup`, que é servidor.
-// CAMPO DE SENHA com mostrar/ocultar. Duas das nove referências têm (radix `password-toggle-field`,
-// Shark UI `password-input`) e as duas convergem na anatomia: o campo, um botão ao FIM dele,
+// CAMPO DE SENHA com mostrar/ocultar. Duas das nove referências têm (com nomes diferentes
+// em cada uma) e as duas convergem na anatomia: o campo, um botão ao FIM dele,
 // `aria-controls` apontando para o campo, e o rótulo do botão mudando com o estado.
 //
 // O rótulo que muda é o anúncio — não há `aria-pressed`. Com os dois, o leitor de tela diz duas

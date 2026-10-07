@@ -75,7 +75,7 @@ const folha = criarFolha((t) => ({
         maxWidth: 360, width: "100%", alignSelf: "flex-end",
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
         // HER-02 (06/10/2026): era `radiusLg` (16). O aviso é superfície flutuante, e superfície
-        // flutuante é 22 na identidade da Aurea (`CLAUDE.md` §5). O HeroUI usa 24.
+        // flutuante é 22 na identidade da Aurea (`CLAUDE.md` §5). A referência usa 24.
         ...canto(t.size.radiusCard),
         backgroundColor: t.color.popover,
         ...(t.shadow.shadowMd ? { boxShadow: [t.shadow.shadowMd] } : null),

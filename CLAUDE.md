@@ -57,43 +57,37 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
 
 ## 2. A ordem das fontes — ordem do Victor, 24/09/2026
 
-> **Quem decide, nesta ordem:** **1.** o Victor · **2.** as pesquisas dele · **3.** o **HeroUI**.
+> **Quem decide, nesta ordem:** **1.** o Victor · **2.** as pesquisas dele · **3.** a **referência
+> principal de desenho**.
 
-- **O HeroUI é a fonte principal de desenho**: tamanho, anatomia, estado, espaçamento. Antes de
-  inventar, **ver como o HeroUI faz**.
-- **Leia no código publicado, não na memória.** O inventário versionado está em
-  [`audit/activity-2/INVENTORY-HEROUI.json`](audit/activity-2/INVENTORY-HEROUI.json). Para números,
-  baixe o pacote: `npm pack @heroui/styles` (web) e `npm pack heroui-native` (telefone).
+- **As referências de construção moram FORA do repositório** (ordem do Victor, 07/10/2026). Quais
+  são, a fila de consulta, onde ler cada uma, as licenças e os inventários estão no documento de
+  referências (`referencias/REFERENCIAS-DE-CONSTRUCAO.md`, na pasta do documento de achados do
+  Victor). **Leia antes de construir.**
+- ⚠ **Nome e informação de referência não entram em nada que a Aurea publica** — repositório,
+  site ou pacote. Nos arquivos, escreva "a referência". Quem cobra é o check 1b do
+  `validate.py`, com a lista fora do repositório (o `.referencias` local e o segredo
+  `AUREA_REFERENCIAS` da CI).
+- **A referência principal é a fonte principal de desenho**: tamanho, anatomia, estado,
+  espaçamento. Antes de inventar, **ver como ela faz**.
+- **Leia no código publicado dela, não na memória.** O documento de referências diz onde.
 - Quando divergem, vale o de cima. Na dúvida, pergunte antes de escolher.
-- ⚠ **O HeroUI não manda na identidade da Aurea** (seção 5). Dele se copia o desenho da peça; a
-  aparência continua sendo a nossa.
-- **HeroUI sempre primeiro** (ordem do Victor, 25/09/2026): *"HeroUI sempre vamos dar prioridade
-  a ele"*. Quando ele **não tem** a peça que estamos criando, ela se cria **pensando como ele
-  criaria** (nomes, anatomia, estados, lista fechada de opções), com a aparência da Aurea. Ele é a
-  referência mesmo onde não tem o componente.
-- **Quando o HeroUI não tem a peça, a consulta segue esta fila** (ordem do Victor, 01/10/2026),
-  e para no primeiro que tiver:
-
-  > **HeroUI → ReUI → Shark UI → Untitled UI → MUI**
-
-  | # | referência | onde ler | base | licença (conferida em 01/10/2026) |
-  |---|---|---|---|---|
-  | 1 | **HeroUI** | `npm pack @heroui/styles` · `npm pack heroui-native` | React Aria (web) | MIT |
-  | 2 | **ReUI** | `reui.io/docs/components/*` | shadcn, Base UI ou Radix | MIT nos abertos; os "Pro" são pagos e não entram |
-  | 3 | **Shark UI** | `shark.vini.one/docs` | Ark UI + Tailwind | MIT |
-  | 4 | **Untitled UI** | `untitledui.com/react` | React Aria + Tailwind | MIT nos abertos; o "PRO" é pago e não entra |
-  | 5 | **MUI** | `mui.com` · `npm pack @mui/material` | próprio | MIT |
-
-  - De todos se lê **anatomia, nomes, estados e comportamento**. A aparência é sempre a da Aurea
-    (seção 5) — e o MUI é **Material**, que a seção 5 proíbe como aparência: dele, só o
-    comportamento.
-  - Medida (recheio, altura, vão) vem **só do HeroUI**, pela regra abaixo. Dos outros quatro,
-    número nenhum entra sem passar pelos tokens que já existem.
+- ⚠ **A referência não manda na identidade da Aurea** (seção 5). Dela se copia o desenho da peça;
+  a aparência continua sendo a nossa.
+- **A referência principal sempre primeiro** (ordem do Victor, 25/09/2026). Quando ela **não
+  tem** a peça que estamos criando, a peça se cria **pensando como ela criaria** (nomes,
+  anatomia, estados, lista fechada de opções), com a aparência da Aurea. Ela é a referência mesmo
+  onde não tem o componente.
+- **Quando ela não tem a peça, a consulta segue a fila de referências** (ordem do Victor,
+  01/10/2026), que está no documento de referências, e para na primeira que tiver.
+  - De todas se lê **anatomia, nomes, estados e comportamento**. A aparência é sempre a da Aurea
+    (seção 5).
+  - Medida (recheio, altura, vão) vem **só da referência principal**, pela regra abaixo. Das
+    outras, número nenhum entra sem passar pelos tokens que já existem.
   - Copiar continua exigindo ordem do Victor e crédito no `docs/REFERENCES.md` (seção 7).
-- **As medidas vêm do HeroUI** (ordem do Victor, 25/09/2026): *"não vamos ficar inventando
-  medidas, se HeroUI já tem vamos usar as deles, que já é validado; só criamos medidas e tamanho em
-  componente exclusivo nosso"*. Recheio, altura, letra, linha e vão de peça que o HeroUI tem se
-  leem no pacote dele (`@heroui/styles` na web, `heroui-native` no telefone) e se escrevem com os
+- **As medidas vêm da referência principal** (ordem do Victor, 25/09/2026): medida que ela já tem,
+  validada, não se inventa; só se cria medida e tamanho em componente exclusivo nosso. Recheio,
+  altura, letra, linha e vão de peça que ela tem se leem no pacote dela e se escrevem com os
   tokens que dão o mesmo número. A identidade (seção 5: raio, cor, fonte) continua nossa.
 
 ---
@@ -111,16 +105,16 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.8.8` | Lote 1: A-01, A-06, A-07, A-09, A-10, A-11, C-09 |
 | `0.8.9` + `0.8.10` | A-03, C-10 · A-02 e B-08 (o `Select` com a aparência da Aurea) |
 | `0.8.11` | N-10: `MediaEmbed` |
-| `0.8.12` | escala de letras do HeroUI ([ADR-0050](decisions/0050-a-escala-de-letras-e-a-do-heroui.md)) |
+| `0.8.12` | escala de letras da referência ([ADR-0050](decisions/0050-a-escala-de-letras-vem-da-referencia.md)) |
 | `0.8.13` + `0.8.14` | Lote 4 (nativo) inteiro: R-01 a R-10 |
 | `0.9.0` | Lote 2, primeira leva: B-01, A-08, C-01, C-03, C-04, C-05, C-07, C-13, B-03 |
 | `0.10.0` | Lote 2, segunda leva: B-07, B-10, B-12, A-05, A-14 — junção `5ca8d3e` (pedido #16). **Publicada em 24/09/2026**, pelo terminal do Victor |
 | `0.10.1` | R-05, a metade que faltava: `criarGlifo` desenha a traço — pedido #4 do repositório público. **Publicada em 24/09/2026**, pelo terminal do Victor |
-| `0.11.0` | Lote E (nativo): E1, E3, E4, E5, E6, E7, E8 e o `Badge` nas medidas do HeroUI — pedido #6. **Publicada em 25/09/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
+| `0.11.0` | Lote E (nativo): E1, E3, E4, E5, E6, E7, E8 e o `Badge` nas medidas da referência — pedido #6. **Publicada em 25/09/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.12.0` | Lote 3: A-04, B-09, ADR-0052, B-02, E2, M-01 e o `ThemeToggle` — pedido #8. **Não saiu sozinha**: foi publicada dentro da `0.12.1` |
 | `0.12.1` | E9 (`LinkButton`), E10 (recuo das folhas), E11 (`Grid` reparte a sobra) — pedidos #9 e #10. **Publicada em 26/09/2026**, pelo terminal do Victor. Leva a `0.12.0` junto |
 | `0.12.2` | O `BottomNav` mais baixo, na web e no nativo (aprovado pela imagem) e dois patches de segurança da CI — pedido #11. **Publicada em 30/09/2026**, pelo terminal do Victor |
-| `0.12.3` | `RadioGroup` no nativo, no desenho do HeroUI, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
+| `0.12.3` | `RadioGroup` no nativo, no desenho da referência, com a marca no início ou no fim (aprovado pela imagem) — pedido #13. **Publicada em 30/09/2026**, pelo terminal do Victor |
 | `0.12.4` | R-20: o estado chega ao leitor de tela da web em `aria-*` (os 26 pontos do nativo) — pedido #15. **Publicada em 01/10/2026**, pelo terminal do Victor |
 | `0.13.0` | A troca de fonte e ícones da ADR-0053: Atkinson Hyperlegible Next e Mono, ícones Phosphor com a forma cheia no item escolhido. **Quebra** nomes de ícone. Aprovada pela imagem (pedido #17) e, com as fotos da CI (pedidos #18 e #19), **publicada em 01/10/2026**, pelo terminal do Victor |
 | `0.14.0` | Lote F (nativo): R-10, R-12, R-14, R-16, R-19 — pedido #22. **Não saiu sozinha**: foi publicada dentro da `0.14.1` |
@@ -128,16 +122,16 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.15.0` | Nativo: R-11 (o desenho do app em toda prop de ícone), R-15 (moldura no `EmptyState`), R-18 (`Timeline` com `icon`, `tone`, `trailing`, `between`), R-21 (`FileInput` em `/system/file`), R-22 (o `PhotoInput` abre a foto), E13 — pedido #27. **Publicada em 02/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.16.0` | No tema claro, a letra de destaque é o amarelo escurecido `#826202` ([ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)) — pedido #29, fotos da CI no #30. **Publicada em 02/10/2026**, pelo terminal do Victor |
 | `0.16.1` | O círculo do `BottomNav` `circle-bold` não vira risco no navegador, e o rótulo cabe nele na barra estreita (web e nativo) — pedido #31. A CI em paralelo e o aceite do `braces` (#32, #33) não mudam pacote. **Publicada em 03/10/2026**, pelo terminal do Victor |
-| `0.17.0` | O `BottomNav` parado ao trocar de aba, na altura do Telegram, com o nome colado no ícone, e os indicadores novos `capsule` e `expand` ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md)). Aprovada pela bancada (*"PERFEITO! pode. aprovado"*) — pedido #35. **Publicada em 03/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
+| `0.17.0` | O `BottomNav` parado ao trocar de aba, mais baixo, com o nome colado no ícone, e os indicadores novos `capsule` e `expand` ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-e-mais-baixa.md)). Aprovada pela bancada (*"PERFEITO! pode. aprovado"*) — pedido #35. **Publicada em 03/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.18.0` | Lote G, de um consumidor novo da web: AN-07 (`Progress` sem total, com `detail` e `tone`), AN-08 (`Grid` com `min` por nome), AN-04 (`NavList` com `avatar` e `indicators`) e AN-01 (`AppShell` com o botão de recolher — [ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)); junto, as fichas com o Phosphor (pedido #37). Aprovada pela bancada (*"pode, aprovado o lote G"*) — pedido #38. **Publicada em 03/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.19.0` | Lote H, do consumidor novo da web: AN-06 (`TreeView` que carrega ao abrir), AN-05 (`Gallery` em lote), AN-03 (`MessageComposer` que anexa, responde e edita), AN-02 (`MessageList` para conversa longa — [ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)). Aprovada pela bancada (*"Pode"*) — pedido #40. **Não saiu sozinha**: foi publicada dentro da `0.19.1` |
 | `0.19.1` | A cápsula do `BottomNav` saía quadrada no Android (`collapsable={false}`), aceita no aparelho (*"deu certo"*) — pedido #41. **Publicada em 04/10/2026**, pelo terminal do Victor. Leva a `0.19.0` junto |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
-**A fila inteira, com a pesquisa de como o HeroUI (ou o ReUI) faz cada item, está em
-[`docs/FILA.md`](docs/FILA.md)** — fotografia de 01/10/2026. Comece por ela; peça ao Victor o
-documento de achados mais novo para conferir se ela envelheceu.
+**A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
+repositório** (era o `docs/FILA.md`, fotografia de 01/10/2026; saiu em 07/10/2026 com as
+referências). Peça ao Victor o documento de achados mais novo para conferir se ela envelheceu.
 
 ### O próximo passo
 
@@ -155,9 +149,9 @@ documento de achados mais novo para conferir se ela envelheceu.
      com o "pode" de 25/09/2026, juntada no pedido #8 e publicada dentro da `0.12.1`.**
    - **A-04 feito.** Pode quebrar a compilação de quem passa ícone numa variável `string`.
    - **B-09 feito e aprovado pela imagem** (25/09/2026): foco de `--focus-width`/`--focus-offset`,
-     `check 44`. Os itens de menu ganham a linha de foco, como no HeroUI.
+     `check 44`. Os itens de menu ganham a linha de foco, como na referência.
    - **ADR-0052 feita e aprovada pela imagem** (25/09/2026): o botão só de ícone é redondo.
-   - **B-02 feito e aprovado pela imagem**, no modelo do HeroUI (25/09/2026): lista fechada de papéis
+   - **B-02 feito e aprovado pela imagem**, no modelo da referência (25/09/2026): lista fechada de papéis
      (título 1–6, texto, texto pequeno, texto mínimo, código), mais `Heading`, `Paragraph` e
      `Code`, nos dois alvos. O `Text` do nativo que já existe fica.
    - **M-01 só em `Button`, `IconButton` e itens de navegação; M-02 descartado; E2 entra aqui**
@@ -172,8 +166,8 @@ documento de achados mais novo para conferir se ela envelheceu.
    M-03 · M-04. Só acrescenta, então cabe depois da `1.0`.
 6. **Lote F (nativo), `0.14.0`, publicado dentro da `0.14.1` em 02/10/2026:** R-10, R-12, R-14,
    R-16, R-19 — propostas aprovadas pelas pranchas (*"ok, 30 e 24"*). **Falta o aceite de
-   aparelho** dos blocos LF do `apps/native-smoke`. O que falta da fila está no
-   [`docs/FILA.md`](docs/FILA.md) §8.
+   aparelho** dos blocos LF do `apps/native-smoke`. O que falta da fila está na
+   a fila de 01/10/2026 (fora do repositório), §8.
 7. **`0.15.0`, publicada em 02/10/2026** (pedido #27), pelo terminal do Victor: R-11 (toda prop de ícone do nativo aceita
    o próprio desenho do app, `AureaIcon`) · R-15 (o glifo do `EmptyState` numa moldura redonda —
    a "C" da prancha; a `illustration` foi reprovada e saiu) · R-18 (`Timeline` com `icon`, `tone`,
@@ -190,15 +184,15 @@ documento de achados mais novo para conferir se ela envelheceu.
    navegador — o `react-native-web` passa `flex: 0` cru para o CSS. E na barra estreita
    (`width="content"`) o rótulo cortava dentro do círculo, na web e no nativo. Aprovado pela
    imagem (*"pode"*). Para a barra menos larga, o app passa `width="content"`.
-10. **`0.17.0`, publicada em 03/10/2026** (por volta das 16:50, Brasília), pelo terminal do Victor, da junção do pedido #35 ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md)):
+10. **`0.17.0`, publicada em 03/10/2026** (por volta das 16:50, Brasília), pelo terminal do Victor, da junção do pedido #35 ([ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-e-mais-baixa.md)):
    o `BottomNav` não anda mais quando se troca de aba (o nome escolhido engrossava, e o círculo do
-   `circle-bold` era o próprio item); fica na altura do Telegram (54 a 62, era 73), com o nome
-   colado no ícone; e ganha `capsule` (Material 3 Expressive) e `expand` (só o escolhido mostra o
+   `circle-bold` era o próprio item); fica mais baixa (54 a 62, era 73), com o nome
+   colado no ícone; e ganha `capsule` e `expand` (só o escolhido mostra o
    nome — exceção, por ordem do Victor, à regra "o nome nunca some"). A "B" da bancada já existia:
    é o `pill`. O app não muda nada para a barra parar e afinar. Falta o aceite de aparelho (bloco
    `0.17` do `apps/native-smoke`).
 11. **`0.18.0`, publicada em 03/10/2026** (por volta das 22:18, Brasília), pelo terminal do Victor,
-   da junção do pedido #38 — o Lote G, aprovado pela bancada (*"pode, aprovado o lote G"*). Quatro pedidos de um consumidor novo, da web (`docs/FILA.md` §9): AN-07 (o
+   da junção do pedido #38 — o Lote G, aprovado pela bancada (*"pode, aprovado o lote G"*). Quatro pedidos de um consumidor novo, da web (a fila de 01/10/2026 (fora do repositório), §9): AN-07 (o
    `Progress` sem total, com `detail` e `tone`), AN-08 (`Grid` com `min` por nome), AN-04 (`NavList`
    com `avatar` e `indicators`) e AN-01 (o `AppShell` com o botão de recolher na junção e a trilha
    sozinha entre 1024 e 1279 — [ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)).
@@ -206,7 +200,7 @@ documento de achados mais novo para conferir se ela envelheceu.
    (blocos AN-07, AN-08 e AN-04 do `apps/native-smoke`). ⚠ O empacotador do app reescreve `:dir(rtl)` e a regra deixa de pegar:
    na folha do core, direção se resolve com propriedade lógica, não com `:dir()`.
 12. **`0.19.0`, o Lote H, publicado dentro da `0.19.1` em 04/10/2026** (pedido #40) — os quatro pedidos que
-   faltavam do consumidor novo da web (`docs/FILA.md` §9): AN-06 (`TreeView` que carrega ao abrir,
+   faltavam do consumidor novo da web (a fila de 01/10/2026 (fora do repositório), §9): AN-06 (`TreeView` que carrega ao abrir,
    `selectedId`), AN-05 (`Gallery` com escolha em lote, vídeo e carga por partes), AN-03
    (`MessageComposer` que anexa, responde e edita) e AN-02 (`MessageList` para conversa longa). **Sem
    dependência nova**: a conversa é uma janela que o app troca pelas pontas, e a Aurea não deixa a
@@ -214,7 +208,7 @@ documento de achados mais novo para conferir se ela envelheceu.
    Medido montado no banco `apps/keyboard-probe/lote-h.html` (`tests/visual/lote-h.spec.ts`). Aprovado
    pela bancada (*"Pode"*, 04/10/2026), com o item da árvore em cápsula, pedido dele olhando a
    bancada. As seis regras de `:dir(rtl)` que sobraram (`Badge`, `Select`,
-   `Switch`) ficaram para depois, por decisão dele (`docs/FILA.md` §6, D-01).
+   `Switch`) ficaram para depois, por decisão dele (a fila de 01/10/2026 (fora do repositório), §6, D-01).
 13. **`0.19.1`, publicada em 04/10/2026** (por volta das 18:38, Brasília), pelo terminal do Victor, da junção do pedido #41: no Android o escolhido do `BottomNav`
    saía quadrado no `capsule` e no `circle-bold` (e, pela mesma causa, no `circle`, `circle-raised` e
    `circle-outline`). ⚠ **A regra que custou caro:** no React Native, caixa que só tem
@@ -226,7 +220,7 @@ documento de achados mais novo para conferir se ela envelheceu.
    06/10/2026 (a fila agora mora no documento de achados do Victor, fora do repositório), com o
    "pode" do mesmo dia: A5 (o `SegmentedControl` do nativo não quebra o rótulo, e `fullWidth` nos dois
    alvos), C9 e MNT-05 (`panel="plain"` no `Tabs`, nos dois alvos), R-23 (`exif` → `takenAt` no
-   `PhotoInput`, e várias fotos de uma vez da galeria), HER-01 (o canto contínuo da Apple em todo o
+   `PhotoInput`, e várias fotos de uma vez da galeria), HER-01 (o canto contínuo do iOS em todo o
    nativo), HER-02 (`Alert` e `Toast` com 22, nos dois alvos) e HER-03 (a folha de baixo com 32,
    [ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)). ⚠ **A regra nova:** todo raio
    do nativo passa por `canto()` (`estilos.ts`); raio escrito à mão reprova em
@@ -243,18 +237,31 @@ documento de achados mais novo para conferir se ela envelheceu.
    navegador (`pnpm exec playwright test`), não só os unitários — o `skin.spec` do Lote I só foi
    pego assim. E a barra de cima do catálogo mostra a contagem de tokens: token novo muda a foto
    `topo` da CI.
+16. **`0.22.0`, o Lote K1, feito na madrugada de 06 para 07/10/2026 e ainda não publicado** — o
+   Victor mandou fazer (*"pode fazer o K1 hoje"*) e foi dormir; **aprovado pela bancada em
+   07/10/2026** (*"aprovo"*), pedido #46. A página de
+   SITE, na web: `Container` (GAR-02), `Grid.Item span` pela camada responsiva (GAR-03, família
+   `grid-span`), `Section` com `surface`, `spacing` e `theme` (GAR-04 e GAR-05). E o conserto do
+   GAR-05: as 22 regras `[data-theme="light"] X` levam uma guarda de força zero e não vazam mais
+   para dentro de uma faixa escura. ⚠ **Regra nova:** seletor de tema claro com descendente leva
+   a guarda — `tests/unit/tema-na-secao.test.tsx` reprova quem esquecer. O cabeçalho e o rodapé
+   de site (GAR-01 e GAR-06) ficaram para a próxima sessão, por decisão do Victor.
+
+**Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
+de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
+continua só com ele (o npm pede o segundo fator).
 
 ### Lote E e decisões de 25/09/2026
 
 - **`0.11.0` · Lote E** (achados do app de 25/09/2026, nativo), **publicada em 25/09/2026 sem o
-  aceite de aparelho**: E1, E3, E4, E5, E6, E7, E8 e o `Badge` com as medidas do `Chip` do HeroUI
-  Native. **Pendente:** a sessão do app medir no aparelho, ou rodar os blocos E1–E8 do
+  aceite de aparelho**: E1, E3, E4, E5, E6, E7, E8 e o `Badge` com as medidas do `Chip` da
+  referência (telefone). **Pendente:** a sessão do app medir no aparelho, ou rodar os blocos E1–E8 do
   `apps/native-smoke`. O **E4** decide a causa (suspeita, não medida); o E7 e o E8 são desenho.
 - **Para o Lote 3** (decisões do Victor, 25/09/2026): **E2**, o `Button` do nativo obedece o pai,
-  como no HeroUI, com um `align` no `Stack` do nativo · **M-01** (`render`) só no `Button`, no
-  `IconButton` e nos itens de navegação · **M-02** (`classNames` por parte) **descartado**: o
-  HeroUI tirou isso na versão atual, e abriria a aparência das peças por dentro.
-- **A medir:** as medidas das peças da WEB contra o `@heroui/styles`, pela regra das medidas.
+  como na referência, com um `align` no `Stack` do nativo · **M-01** (`render`) só no `Button`, no
+  `IconButton` e nos itens de navegação · **M-02** (`classNames` por parte) **descartado**: a
+  referência tirou isso na versão atual, e abriria a aparência das peças por dentro.
+- **A medir:** as medidas das peças da WEB contra o pacote da referência, pela regra das medidas.
   O `Badge` do nativo foi o primeiro a passar; a web não foi medida.
 
 ### Pendências soltas, sem lote nem decisão
@@ -269,7 +276,7 @@ documento de achados mais novo para conferir se ela envelheceu.
 ### Como cada lote anda
 
 1. Ler a ficha e **conferir contra o código** antes de aceitar.
-2. **Ver como o HeroUI faz.**
+2. **Ver como a referência faz** (documento de referências, seção 2).
 3. Consertar como **acréscimo**, com teste que **falha** no defeito antigo.
 4. Verificar: `python scripts/validate.py` · `pnpm build` · `npx vitest run` ·
    `node scripts/check-pack.mjs` · `node scripts/publicar.mjs --dry-run` · e no navegador os
@@ -350,10 +357,10 @@ no git.
   FUNDO, é o amarelo de verdade. O foco e o controle marcado continuam no marrom.
 - Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
-- Proibido: Material, Fluent, Bootstrap ou shadcn como aparência; caixas retangulares genéricas;
+- Proibido: a aparência de outro design system; caixas retangulares genéricas;
   trocar paleta, raios, tipografia ou densidade sem autorização.
-- **Marca registrada de terceiro não entra** numa biblioteca Apache-2.0 (logos de Google, Apple
-  etc.). O `Button` do nativo tem `leading`/`trailing` para o app pôr o desenho dele, e o slot **não tinge**
+- **Marca registrada de terceiro não entra** numa biblioteca Apache-2.0 (logos de
+  outras empresas). O `Button` do nativo tem `leading`/`trailing` para o app pôr o desenho dele, e o slot **não tinge**
   o que recebe.
 
 ---
@@ -416,7 +423,7 @@ outros projetos dele** (ordem de 31/08/2026). Falar do consumidor numa conversa 
 **Referências de desenho:**
 
 - A pasta `Referencia/` (código de terceiros) fica fora do git. **A pasta ausente não é desculpa**
-  (ordem de 12/09/2026): o inventário do HeroUI está versionado (seção 2).
+  (ordem de 12/09/2026): o inventário da referência principal está no documento de referências (seção 2).
 - **Copiar só quando o Victor mandar** (ordem de 20/08/2026). Sem ordem dele, o padrão é ler.
 - **A licença manda em cima da ordem.** Conferir o `LICENSE` antes de copiar; o
   [`docs/BUILDING.md`](docs/BUILDING.md) §2 tem as conhecidas. Código não-comercial ou AGPL não

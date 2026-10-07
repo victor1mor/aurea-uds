@@ -174,13 +174,13 @@
       "name": "leadingIcon",
       "type": "IconName",
       "default": "—",
-      "description": "Carbon glyph before the label."
+      "description": "Glyph before the label."
     },
     {
       "name": "trailingIcon",
       "type": "IconName",
       "default": "—",
-      "description": "Carbon glyph after the label."
+      "description": "Glyph after the label."
     },
     {
       "name": "type",
@@ -198,7 +198,7 @@
       "name": "pressed",
       "type": "boolean",
       "default": "—",
-      "description": "DEPRECATED since 0.4.0, removed in 1.0 — use `<Toggle>`. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. Twelve reference libraries were read on 18/08/2026 (MUI, Fluent 2, React Aria, Spectrum, Carbon, Radix/Base UI, shadcn, ReUI, PrimeReact, HeroUI, Cedar, W3C APG) and NONE puts the pressed state on the plain button. Toggle state via aria-pressed: on shows the raised capsule with a yellow underline."
+      "description": "DEPRECATED since 0.4.0, removed in 1.0 — use `<Toggle>`. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. Twelve reference libraries were read on 18/08/2026 (Base UI and the W3C APG among them) and NONE puts the pressed state on the plain button. Toggle state via aria-pressed: on shows the raised capsule with a yellow underline."
     },
     {
       "name": "kbd",

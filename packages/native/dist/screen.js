@@ -146,7 +146,7 @@ function Rodape({ dentroDoRespiro, pegaABorda, respiroDaBarra, children }) {
 // ganhar altura. Nunca ganhava: o recuo ficava em zero e o último item, atrás dos botões do
 // sistema (achado E10 do app).
 //
-// A saída é a do HeroUI Native (`select.tsx`, `useSafeAreaInsets`): o número vem do CONTEXTO
+// A saída é a da referência (`select.tsx`, `useSafeAreaInsets`): o número vem do CONTEXTO
 // do React, que atravessa o `Modal`, e vira um espaço de altura conhecida no fim da folha. Sem
 // `SafeAreaProvider` no app, vale a medida da abertura (`initialWindowMetrics`), que a
 // biblioteca calcula sem provider — e o componente não quebra quem não tem provider.

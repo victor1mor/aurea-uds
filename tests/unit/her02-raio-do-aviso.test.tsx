@@ -1,7 +1,7 @@
 // HER-02 (06/10/2026) · o `Alert` e o `Toast` tinham 16 de canto (`radius-lg`), nos dois alvos. A
 // identidade da Aurea (`CLAUDE.md` §5) diz *"superfícies flutuantes; cartões, janelas e painéis com
-// raio 22px"*, e o `Popover`, o `Dialog` e o `Banner` já usavam 22. Os dois eram os de fora. O
-// HeroUI 3.2.6 (web) e o Native 1.0.10 usam 24 nos dois; o 22 é o da casa.
+// raio 22px"*, e o `Popover`, o `Dialog` e o `Banner` já usavam 22. Os dois eram os de fora. A
+// referência, na web e no nativo, usa 24 nos dois; o 22 é o da casa.
 // Provado contra o defeito: com `--radius-lg`/`radiusLg` de volta, os quatro testes reprovam.
 import {render, act} from "@testing-library/react";
 import {describe, expect, it} from "vitest";

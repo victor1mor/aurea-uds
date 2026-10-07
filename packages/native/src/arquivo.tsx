@@ -5,10 +5,10 @@
 // Proposta aprovada pelo Victor em 02/10/2026 (*"3 sim"*).
 //
 // ── AS REFERÊNCIAS ───────────────────────────────────────────────────────────────────────────
-//   HeroUI   não tem: nem o `heroui-native` 1.0.10, nem o `@heroui/styles` 3.2.6 (medido nos pacotes).
-//   ReUI     tem (`reui.io/docs/components/base/file-upload`): `accept`, `maxSize`, `maxFiles`,
-//            `multiple`, `onFilesChange`. Daqui vêm `accept` e `maxSize`, que são também os nomes
-//            do `FileInput` da web. O limite é `max`, e não `maxFiles`: é o nome do `PhotoInput`,
+//   uma      não tem: nem o pacote do nativo dela, nem o da web — medido nos pacotes.
+//   outra    tem: tipos aceitos, tamanho máximo, número máximo de arquivos, vários de uma vez e
+//            o aviso de mudança. Daqui vêm `accept` e `maxSize`, que são também os nomes
+//            do `FileInput` da web. O limite é `max`, e não o nome que ela usa: é o nome do `PhotoInput`,
 //            o irmão que mora ao lado.
 //   web      o `FileInput` do `@aurea-uds/react`: as frases (`fileTooLarge`, `fileWrongType`,
 //            `fileRemove`) e a conta do tamanho (`formatSize`) são as de lá.

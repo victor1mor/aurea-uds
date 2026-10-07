@@ -17,9 +17,9 @@ comportamento que times inteiros mantêm.
 screenshot. A Fase 5 confirmou o risco por outro caminho — os quatro overlays estavam sem teste
 nenhum e havia um defeito real na Tooltip (achado A11).
 
-**B. Radix UI.** Considerada. Padrão de mercado por anos, mas em 2026 o desenvolvimento havia
-desacelerado enquanto o Base UI (do mesmo grupo do MUI, com gente do Radix) tomou o lugar de
-opção mantida e mais nova.
+**B. O motor headless que era a referência de mercado.** Considerada. Padrão de mercado por anos,
+mas em 2026 o desenvolvimento havia desacelerado enquanto o Base UI (do mesmo grupo de uma das
+bibliotecas de referência, com gente da alternativa B) tomou o lugar de opção mantida e mais nova.
 
 **C. Base UI (`@base-ui/react`).** Escolhida.
 

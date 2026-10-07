@@ -8,8 +8,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //
 // ── A ADR-0024 ATRAVESSA, E FOI CONFERIDA ANTES DE SE AFIRMAR ISSO ───────────────────────────
 // A decisão da web é *"a Aurea entrega o MOMENTO, não o formato"*: formatar no **blur**, nunca
-// enquanto se digita. As três medições que a sustentam (o `Input mask` do USWDS publicado com
-// reprovação WCAG registrada, o abandono da máscara pelo MUI na v6, a prática de acessibilidade)
+// enquanto se digita. As três medições que a sustentam (a máscara de entrada de um design system público, publicada com
+// reprovação WCAG registrada, o abandono da máscara por uma das bibliotecas de referência, a
+// prática de acessibilidade)
 // são sobre COMPORTAMENTO HUMANO, não sobre plataforma — então elas valem igual aqui, e não há
 // evidência nova que reabra a decisão (`decisions/README.md`).
 //
@@ -63,8 +64,8 @@ const folha = criarFolha((t) => ({
     // divergência do nosso próprio CSS, entregue sem declarar, e ela só apareceu quando houve
     // imagem para olhar.
     //
-    // ⚠ **A saída é o eixo da HeroUI, e não uma invenção minha:** o `number-field` deles publica
-    // `fullWidth: [base, false, group, true]` (`INVENTORY-HEROUI.json`, medido em 22/08/2026).
+    // ⚠ **A saída é o eixo da referência, e não uma invenção minha:** o campo numérico dela publica
+    // um eixo de largura cheia, ligado e desligado (no inventário da referência, medido em 22/08/2026).
     // Esticar ou abraçar é DECISÃO DE USO, então vira prop — com o padrão em abraçar, que é o que
     // o nosso CSS já dizia.
     grupo: { flexDirection: "row", alignItems: "center", gap: t.size.space1,
@@ -202,7 +203,7 @@ const prender = (n, min, max) => {
 };
 // O texto que o campo mostra ENQUANTO SE EDITA: o número sem grupo e sem símbolo, com o separador
 // decimal do locale. É o oposto do que se mostra em repouso, e é a decisão da ADR-0024 — editar
-// "R$ 1.234,50" com o cursor no meio é o defeito que o MUI filmou.
+// "R$ 1.234,50" com o cursor no meio é o defeito que uma das bibliotecas de referência filmou.
 const paraEdicao = (n, locale) => {
     if (n == null)
         return "";
@@ -342,9 +343,9 @@ export function NumberField({ value, defaultValue, onValueChange, min, max, step
         return direcao === 1 ? (max != null && base >= max) : (min != null && base <= min);
     };
     const mostrarBotoes = icons !== false && !readOnly;
-    // 🔴 ACHADO PELA REFERÊNCIA, e não por mim — 12/09/2026. O inventário da HeroUI que já morava
-    // no repositório (`audit/activity-2/INVENTORY-HEROUI.json`, medido em 22/08 sobre
-    // `@heroui/react@3.2.4`) lista os estados do `number-field` deles:
+    // 🔴 ACHADO PELA REFERÊNCIA, e não por mim — 12/09/2026. O inventário da referência que já
+    // morava no repositório (medido em 22/08 sobre o pacote dela) lista os estados
+    // do campo numérico dela:
     //
     //     disabled · focus-visible · FOCUS-WITHIN · hovered · invalid · pressed
     //
@@ -353,10 +354,10 @@ export function NumberField({ value, defaultValue, onValueChange, min, max, step
     // marca (`busca.tsx:520`). Inconsistência dentro da própria biblioteca, e invisível em teste
     // até alguém comparar com uma referência.
     //
-    // ⚠ **A BORDA vai no CAMPO, e não no grupo — e aqui a Aurea diverge da HeroUI de propósito.**
-    // Lá o `Group` carrega a caixa e o `Input` fica nu dentro dela. Aqui não: o `.number-field-group`
+    // ⚠ **A BORDA vai no CAMPO, e não no grupo — e aqui a Aurea diverge da referência de propósito.**
+    // Lá o grupo carrega a caixa e o campo fica nu dentro dela. Aqui não: o `.number-field-group`
     // do nosso CSS (`aurea.css:705`) é só `inline-flex` + `gap`, e quem tem borda é o `.input`
-    // (`aurea.css:685`), com os dois botões FORA dela. O estado que faltava é o deles; a geometria
+    // (`aurea.css:685`), com os dois botões FORA dela. O estado que faltava é o dela; a geometria
     // continua sendo a nossa.
     const [focado, setFocado] = React.useState(false);
     return (_jsxs(View, { testID: testID, style: [s.grupo, fullWidth && s.grupoLargo, inativo && s.desabilitado, style], children: [mostrarBotoes && (_jsx(IconButton, { name: icons.decrement, label: strings.decrement, appearance: "ghost", size: tamDoBotao, disabled: inativo || noLimite(-1), onPress: () => empurrar(-1), testID: testID ? `${testID}-menos` : undefined })), _jsx(TextInput, { testID: testID ? `${testID}-campo` : undefined, value: mostrar, onChangeText: digitar, onFocus: () => { setFocado(true); setEmEdicao(paraEdicao(numero, locale)); }, onBlur: () => { setFocado(false); confirmar(); }, editable: !inativo && !readOnly, placeholder: placeholder, placeholderTextColor: peleDaMarca?.color ?? t.color.subtleForeground, keyboardType: keyboardType ?? tecladoPadrao, 

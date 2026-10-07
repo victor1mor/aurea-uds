@@ -1,7 +1,7 @@
 // R-18 (02/10/2026) · a `Timeline` do nativo, na proposta aprovada pela prancha (*"2 sim"*): a
 // linha deixa de ser enfeite.
-//   · `icon` — o glifo numa moldura redonda no lugar do ponto: 40 (o `Avatar` `sm` do HeroUI
-//     Native) com glifo de 20;
+//   · `icon` — o glifo numa moldura redonda no lugar do ponto: 40 (o `Avatar` `sm` da referência
+//     no nativo) com glifo de 20;
 //   · `tone` — a cor da moldura, a mesma receita do `Badge`;
 //   · `trailing` — o que vai à direita do título;
 //   · `between` — o que aconteceu entre um item e o próximo, ao lado da linha.

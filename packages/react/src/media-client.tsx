@@ -174,8 +174,8 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
 // `--media-ar` no core: sem proporção reservada, a imagem mede ZERO até o byte chegar e a página
 // SALTA quando ele chega. `aspect-ratio` faz isso em uma propriedade.
 //
-// A referência aqui ensinou pelo AVESSO, e vale registrar: o `aspect-ratio` do
-// `Referencia/kibo-main` é o `AspectRatio` do Radix, um COMPONENTE que existe para emular a
+// A referência aqui ensinou pelo AVESSO, e vale registrar: o `aspect-ratio` de uma das
+// referências (na pasta `Referencia/`) vem da base técnica dela: um COMPONENTE que existe para emular a
 // proporção com o truque do `padding-bottom`. Isso era necessário antes de a propriedade CSS ser
 // Baseline; hoje não é, e copiar aquele desenho seria trazer um componente inteiro para fazer o
 // que uma linha de CSS faz. Por isso aqui não há `<AspectRatio>`: há `ratio`.
@@ -183,7 +183,7 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
 // O CUIDADO MEDIDO DO ITEM: um consumidor já usa o `<Image>` do framework dele (otimização,
 // `srcset` gerado, CDN), e o nosso não pode brigar com isso. Então o elemento é TROCÁVEL por
 // `render`, que é o idioma do motor que a Aurea já paga — o mesmo `useRender` que o
-// `ToolbarButton` daqui usa desde a Fase 2. `<Image render={<NextImage/>} ratio="16/9"/>` desenha
+// `ToolbarButton` daqui usa desde a Fase 2. `<Image render={<ImagemDoFramework/>} ratio="16/9"/>` desenha
 // o do framework com a nossa pele e a nossa proporção.
 //
 // O MARCADOR DE CARREGAMENTO NÃO TEM ESTADO, e isso foi decisão, não esquecimento: a caixa
@@ -195,7 +195,7 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
 // O QUE PRECISA DE ESTADO É O ERRO, e ele é dívida conhecida desta casa: o `Avatar` foi medido em
 // 31/07/2026 com `src` quebrado e NÃO caía no fallback — mostrava o glifo de imagem partida do
 // navegador. Aqui `onError` troca por uma caixa com o mesmo tamanho reservado e o `alt` como nome
-// acessível, que é a anatomia do `image-gallery` do `Referencia/tool-ui-main`.
+// acessível, que é a anatomia da galeria de imagens de uma das referências (na pasta `Referencia/`).
 //
 // `loading="lazy"` e `decoding="async"` como default, e são sobrescrevíveis: as props do
 // consumidor vêm depois no spread. Imagem de topo de página quer `loading="eager"`.
@@ -237,7 +237,7 @@ export function Image({ratio,fit,alt,className,style,render,onError,...props}:Im
 //
 // AMPLIAR É DIÁLOGO, E DIÁLOGO JÁ EXISTE — a trava escrita no próprio item. A ampliação abre o
 // `Dialog` daqui, com o motor, o foco preso e o Escape que ele já tem; não nasce uma segunda
-// superfície flutuante. É a mesma leitura que o `image-gallery` do `Referencia/tool-ui-main` faz
+// superfície flutuante. É a mesma leitura que a galeria de imagens daquela referência faz
 // com o `<dialog>` nativo: lá, ampliar é um diálogo com a foto, a legenda e um fechar.
 // A foto ampliada usa `fit="contain"`: cortar a imagem que a pessoa pediu para VER é o oposto do
 // que ela pediu.
@@ -251,19 +251,19 @@ export function Image({ratio,fit,alt,className,style,render,onError,...props}:Im
 // atrapalha.
 //
 // AN-05 (Lote H, 04/10/2026) — ACERVO GRANDE, só acrescentando. A galeria de uma conversa tem
-// milhares de itens de tipos misturados, e o app antigo marcava vários para baixar em lote. O
-// HeroUI 3.2.6 não tem galeria; o desenho segue o que ele faz nas coleções que tem:
-//   • SELEÇÃO MÚLTIPLA é `selectionMode="multiple"`, o nome do `ListBox`/`Table` dele. Os escolhidos
+// milhares de itens de tipos misturados, e o app antigo marcava vários para baixar em lote. A
+// referência não tem galeria; o desenho segue o que ela faz nas coleções que tem:
+//   • SELEÇÃO MÚLTIPLA é `selectionMode="multiple"`, como nas listas e tabelas dela. Os escolhidos
 //     são `selectedIds` + `onSelectionChange` — o nome do `DataGrid` daqui —, e a galeria continua
 //     sem guardar escolha nenhuma. Cada ladrilho vira botão de alternar (`aria-pressed`) com a MESMA
 //     marca de escolhido da casa (`.is-selected`): uma linguagem só. Ao escolher em lote, clicar
 //     marca; não amplia.
 //   • VÍDEO é `kind="video"` com `duration` em segundos. O tempo sai no `Badge` que já existe, por
 //     cima da foto, com as cores do reprodutor (`--media-*`) e o formato dele (`m:ss`).
-//   • CARREGAR POR PARTES é `hasMore` + `onReachEnd`, com `loading`. É o `Table.LoadMore` do HeroUI
-//     (`onLoadMore` + `isLoading`) com o nome que o consumidor pediu: uma linha depois da grade que,
+//   • CARREGAR POR PARTES é `hasMore` + `onReachEnd`, com `loading`. É o "carregar mais" da tabela da
+//     referência com o nome que o consumidor pediu: uma linha depois da grade que,
 //     ao entrar na tela, avisa. Carregando, ela mostra a rodinha, a lista fica `aria-busy`, e o
-//     aviso não se repete. A medida da linha é a do HeroUI (`py-3`, centrada).
+//     aviso não se repete. A medida da linha é a da referência (12 de recheio vertical, centrada).
 //     O observador renasce quando a lista cresce ou a carga termina: se a parte nova não encheu a
 //     tela, a linha continua à vista e avisa de novo — sem isso a galeria parava ali.
 // Sem virtualização (decisão do Victor, 04/10/2026): as fotos já carregam só quando aparecem
@@ -332,13 +332,12 @@ export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",selectio
 // MARCAÇÃO, NÃO MOTOR — e a pergunta que o item mandava decidir primeiro ("se `scroll-snap` do
 // CSS cobre, o componente é marcação") foi respondida MEDINDO, não preferindo:
 //
-//   • as QUATRO referências embrulham o MESMO motor de terceiro, o `embla-carousel` — medido em
-//     15/08/2026 no `kibo-main/packages/shadcn-ui/.../carousel.tsx`, nas quatro bases do
-//     `ui-main` (`aria`, `base`, `radix`, `new-york-v4`), no `carousel-base.tsx` do `react-main`
-//     e no `activepieces-main`. Nenhuma escreve um motor; todas pagam o mesmo;
+//   • as QUATRO referências embrulham o MESMO motor de carrossel de terceiro — medido em
+//     15/08/2026 no fonte de cada uma, nas pastas de `Referencia/` (numa delas, nas quatro bases
+//     que ela oferece). Nenhuma escreve um motor; todas pagam o mesmo;
 //   • o `@base-ui/react` NÃO tem carrossel (medido: 46 pastas em `packages/react/src`, nenhuma
 //     é carousel — a mesma medição que abriu a decisão de motor do Calendar);
-//   • trazer o `embla` seria DEPENDÊNCIA NOVA, que pelo `BUILDING.md` §3.3 interrompe o lote e
+//   • trazer esse motor seria DEPENDÊNCIA NOVA, que pelo `BUILDING.md` §3.3 interrompe o lote e
 //     exige o Victor — para um componente que o navegador já sabe fazer;
 //   • e o caminho SEM JavaScript nenhum ainda não serve: `::scroll-button()`/`::scroll-marker()`
 //     (CSS Overflow 5) não são Baseline — pesquisado em 15/08/2026: Chrome/Edge 135+ têm,
@@ -346,7 +345,7 @@ export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",selectio
 //     Um design system não pode entregar controle que só funciona num navegador.
 //
 // Então o motor é o CONTÊINER DE ROLAGEM nativo com `scroll-snap`, que é Baseline há anos e dá
-// de graça o que o `embla` reimplementa: arrasto por toque com inércia, rolagem por roda e
+// de graça o que esse motor reimplementa: arrasto por toque com inércia, rolagem por roda e
 // teclado, e o encaixe no slide. O que sobra de JavaScript é o que o CSS ainda não tem — saber
 // em QUAL slide se está, para desenhar o ponto aceso e desabilitar a seta do fim.
 //
@@ -355,20 +354,20 @@ export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",selectio
 // `prefers-reduced-motion` que o core já tem (`scroll-behavior:auto!important`) alcança este
 // componente sem uma linha nova. Passar `behavior:"smooth"` daqui passaria POR CIMA dela.
 //
-// UM componente, não sete peças: `Carousel.Root/Content/Item/PrevTrigger/NextTrigger/
-// IndicatorGroup/Indicator` é a decomposição da referência, e aqui ela custaria sete fichas para
+// UM componente, não sete peças: raiz, conteúdo, item, seta de voltar, seta de avançar,
+// grupo de indicadores e indicador é a decomposição da referência, e aqui ela custaria sete fichas para
 // desenhar uma lista que rola. É o mesmo argumento que o `Stepper`, o `TreeView` e a `Sidebar`
 // já resolveram: quem embrulha cada slide é o componente, e por isso o rótulo "Slide 3 de 8"
 // nunca fica com o consumidor — que é onde ele seria esquecido.
 //
 // LIMITES DECLARADOS (todos são escopo menor que o da referência, `BUILDING.md` §Passo 5):
-//   • sem laço infinito, sem autoplay e sem arrasto com o MOUSE — os três são do `embla` e
+//   • sem laço infinito, sem autoplay e sem arrasto com o MOUSE — os três são do motor de terceiro e
 //     nenhum deles apareceu na medição dos consumidores; laço, ainda por cima, não existe em
 //     contêiner de rolagem nativo e voltaria a exigir motor;
 //   • sem eixo vertical: não há uso medido, e o sprite não tem chevron para cima (a allowlist
 //     do contrato tem `chevron--left/right/down`), então o eixo custaria glifo novo por nada;
 //   • quantos slides aparecem por vez é CSS, não prop: `--carousel-slide` (default `100%`) é a
-//     válvula no idioma do `--qr-size` e do `--datagrid-max-h`. É o caso `multiple` da
+//     válvula no idioma do `--qr-size` e do `--datagrid-max-h`. É o caso de vários slides por vez da
 //     referência, sem API nenhuma;
 //   • em RTL a rolagem vai para o lado certo (o deslocamento é medido pela borda inicial), mas
 //     o GLIFO da seta não espelha — é uma linha de CSS que ninguém pediu e que nenhum teste

@@ -31,8 +31,8 @@ export default {
     + "something, and signing out opens nothing.",
     "A disabled row stays FOCUSABLE and inert (aria-disabled), because :disabled drops a control "
     + "out of the tab order and keyboard users never find out the row is there.",
-    "On a coarse pointer the whole row grows to 44px — WCAG 2.5.5, and the size Apple HIG and "
-    + "Material both land on. The target is the row, never the chevron.",
+    "On a coarse pointer the whole row grows to 44px — WCAG 2.5.5, and the size the iOS and "
+    + "Android guidelines both land on. The target is the row, never the chevron.",
     "The list paints no surface and draws no divider: Card already gives the grouped panel, and "
     + "the row highlight here is the pill — a pill with a rule under it contradicts itself.",
   ],

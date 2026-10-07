@@ -17,10 +17,10 @@ import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Icon, type IconName} from "./system.js";
 import {Button} from "./actions.js";
 
-// B-03 e C-07 (24/09/2026). `size` é a largura, e os números são decisão do Victor: as quatro do
-// HeroUI (320, 384, 448, 512 — `xs` a `lg`), mais `xl` (1024, o token `--breakpoint-lg`) para o
+// B-03 e C-07 (24/09/2026). `size` é a largura, e os números são decisão do Victor: as quatro da
+// referência (320, 384, 448, 512 — `xs` a `lg`), mais `xl` (1024, o token `--breakpoint-lg`) para o
 // detalhe largo que um app precisou, e `full`, a tela menos a margem de sempre, com o raio 22.
-// ⚠ **O PADRÃO MUDOU:** era 560 até a 0.8.14 e passou a ser o `md` do HeroUI, 448. Toda janela
+// ⚠ **O PADRÃO MUDOU:** era 560 até a 0.8.14 e passou a ser o `md` da referência, 448. Toda janela
 // que não escolhe tamanho fica 112 px mais estreita.
 //
 // `dismissible={false}` segura a janela aberta durante uma operação: nem Esc, nem clique fora, e o
@@ -58,7 +58,7 @@ export function Dialog({open,title,children,footer,onClose,size="md",dismissible
 // sobrevive a trocar um dos dois — e reprova quando os dois somem.
 //
 // ESCOPO MENOR que a referência (BUILDING.md §5): lá são nove peças compostas
-// (Root/Trigger/Content/Header/Title/Description/Footer/Cancel/Action). Aqui é uma prop `open`,
+// (raiz, gatilho, conteúdo, cabeçalho, título, descrição, rodapé, cancelar e ação). Aqui é uma prop `open`,
 // como no `Dialog` e no `Drawer` — a composição não acrescenta escolha nenhuma num diálogo cujo
 // corpo é uma frase e dois botões.
 //
@@ -91,14 +91,14 @@ export function Drawer({open,title,children,onClose,side="right"}:{open:boolean;
 //
 // Isto entrou depois de PESQUISAR, não de olhar a pasta — e a correção é do Victor, em
 // 13/08/2026. Nenhuma das cinco referências locais tem portão, e eu tratei isso como veredito;
-// não é. O padrão existe e tem nome no mercado: `<Can I="read" a="Post">` do @casl/react,
-// `useCanAccess`/`usePermissions` do react-admin, e o `<AccessGate resource=… mode="any">` que
+// não é. O padrão existe e tem nome no mercado: o componente de "pode" de uma biblioteca de
+// permissões, os ganchos de acesso de um framework de painel administrativo, e o portão por recurso que
 // os guias de painel administrativo de 2026 repetem. O que as referências locais não têm é
 // AUTORIZAÇÃO — e elas não têm porque não são a camada de UI única de ninguém. A Aurea é.
 //
 // A divisão que a pesquisa deixou clara, e que é o valor deste componente:
-//   • o CASL só ESCONDE (renderização condicional, o nó sai do DOM);
-//   • o react-admin deixa escolher esconder OU desabilitar.
+//   • a biblioteca de permissões só ESCONDE (renderização condicional, o nó sai do DOM);
+//   • o framework de painel deixa escolher esconder OU desabilitar.
 // Esconder some com a informação de que a ação existe; desabilitar sem motivo é pior ainda,
 // porque diz "não dá" e não diz por quê. Por isso `mode="disable"` EXIGE `reason` no tipo.
 //
@@ -130,7 +130,7 @@ export function Popover({trigger,title,children,side="bottom"}:{trigger:ReactEle
 // não de aparência: a Tooltip é um RÓTULO curto (`role="tooltip"`, some ao mover o mouse); o
 // Popover abre por CLIQUE e pode conter foco; este é uma PRÉVIA rica que aparece ao repousar o
 // ponteiro sobre um link e cujo conteúdo é alcançável — o cartão de perfil ao passar sobre um
-// nome. As três referências que o têm chamam de hover-card ou preview-card e concordam nisso.
+// nome. As três referências que o têm chamam de cartão de sobrevoo ou de prévia e concordam nisso.
 // Superfície reusa `.popover` de propósito: é a mesma camada flutuante do sistema, e dar a ela
 // um segundo nome criaria duas peles para a mesma coisa.
 // Por depender de repouso do ponteiro, NÃO serve para informação essencial — quem navega só por

@@ -2,7 +2,7 @@
 
 - **Data:** 06/10/2026
 - **Estado:** aceita · executada na `0.20.0` (ainda não publicada).
-- **Origem:** HER-03, da auditoria HeroUI × Aurea de 06/10/2026 (documento de achados do Victor,
+- **Origem:** HER-03, da auditoria referência × Aurea de 06/10/2026 (documento de achados do Victor,
   fora do repositório). Decisão do Victor olhando as duas versões na bancada do Lote I, com o
   código real rodando: *"folha com 32"*.
 - **Muda:** o token novo `radius-sheet` (32) e os cantos de cima das três folhas do nativo. Nenhuma
@@ -19,8 +19,8 @@ folha do `Combobox`. Quando a web ganhar a gaveta de baixo (WEB-06), ela usa o m
 
 ## As fontes
 
-- `heroui-native` 1.0.10, `styles/components/bottom-sheet.css`: os dois cantos de cima com
-  `--radius-4xl` = `calc(var(--radius) * 4)` = 32. O `Select`, o `Menu` e o `Popover` dele abrem
+- O pacote nativo da referência, na folha de estilo da folha de baixo: os dois cantos de cima com
+  o raio de quatro vezes o raio base dela = 32. O `Select`, o `Menu` e o `Popover` dele abrem
   como folha com a mesma peça (lido no pacote baixado com `npm pack` em 06/10/2026).
 - O número é o dele; o nome do token é da Aurea, no estilo dos outros raios com papel
   (`radius-card`, `radius-control`).

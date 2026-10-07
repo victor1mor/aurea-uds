@@ -36,11 +36,11 @@ estava incompleta e listava só duas exceções:
 
 | Pasta | Licença |
 |---|---|
-| `agent-prism-main`, `agent-elements-main`, `tool-ui-main`, `xyflow-main`, `kaneo-main` | MIT |
-| `langfuse-main` | MIT Expat **exceto** `ee/`, `web/src/ee/`, `worker/src/ee/` |
-| `activepieces-main` | MIT Expat **exceto** `packages/ee/` e `packages/server/api/src/app/ee` |
-| `openstatus-main` | AGPL-3.0 |
-| **`agents-kit-main`** | **Non-Commercial License** — uso comercial proibido sem autorização |
+| quatro pastas (nomes no documento de referências) e `xyflow-main` | MIT |
+| uma pasta (nome no documento de referências) | MIT Expat **exceto** as pastas `ee` (edição comercial) |
+| outra pasta (nome no documento de referências) | MIT Expat **exceto** as pastas `ee` (edição comercial) |
+| uma pasta (nome no documento de referências) | AGPL-3.0 |
+| **uma pasta (nome no documento de referências)** | **Non-Commercial License** — uso comercial proibido sem autorização |
 
 > **⚠ A REGRA MUDOU EM 20/08/2026 — copiar é permitido quando o Victor mandar.** Ele disse:
 > *"vamos copiar quando eu mandar; se tivéssemos feito isso teria evitado o desgaste do sidebar"*.
@@ -48,12 +48,12 @@ estava incompleta e listava só duas exceções:
 > proibição: sem ordem dele, lê-se; com ordem dele, copia-se.
 >
 > **O que NÃO afrouxou é a licença**, porque essa parte não é escolha nossa. A tabela acima decide:
-> `agents-kit-main` é **não-comercial** e `openstatus-main` é **AGPL-3.0** — nenhuma das duas entra
-> numa base Apache-2.0, nem sob ordem. As MIT e a Apache-2.0 (`heroui-3`) entram **com o aviso de
+> a pasta **não-comercial** e a **AGPL-3.0** — nenhuma das duas entra
+> numa base Apache-2.0, nem sob ordem. As MIT e a Apache-2.0 (a referência principal) entram **com o aviso de
 > copyright preservado**, crédito no `REFERENCES.md` e o que foi alterado declarado.
 
 As sete de 02/08/2026 são MIT. Nenhuma delas muda a regra, pelo motivo do parágrafo acima: nada é
-redistribuído e nenhuma linha literal entra. **A `agents-kit-main` merece o destaque mesmo assim**
+redistribuído e nenhuma linha literal entra. **A pasta não-comercial merece o destaque mesmo assim**
 — a Aurea é Apache-2.0 e comercialmente livre, e ela foi a referência principal de cinco itens da
 Parte H. Anatomia lida não é obra copiada; ainda assim, referência não-comercial num projeto que
 não é fica **registrada**, não subentendida.
@@ -61,12 +61,12 @@ não é fica **registrada**, não subentendida.
 | Pasta | O que é | Para que serve |
 |---|---|---|
 | `base-ui-master` | o motor que a Aurea **já usa** (`@base-ui/react`) | comportamento, teclado, ARIA. Se ele já entrega, não escrevemos |
-| `ui-main` | shadcn/ui | decomposição em peças, o padrão de envelopar biblioteca de terceiro, e a fronteira servidor/cliente |
-| `react-main` | Untitled UI React | escala de tamanhos, proporção, estados que a gente não lembrou. Forte em `table`, `file-upload`, `app-navigation`, `date-picker` |
-| `kibo-main` | Kibo UI | anatomia de componente raro: `dropzone`, `tree`, `gantt`, `kanban`, `editor`, `table` |
-| `reui-main` | ReUI | terceira leitura de anatomia, e blocos compostos |
-| `media-chrome-main` | Media Chrome | anatomia de player e de biblioteca de mídia |
-| `material-ui-master` | MUI (monorepo `9.3.1`) | catálogo de estados e anatomia madura — **157 componentes** em `packages/mui-material/src/`. É a mais completa em cobertura, e a mais distante em aparência |
+| (nome no documento de referências) | biblioteca de referência | decomposição em peças, o padrão de envelopar biblioteca de terceiro, e a fronteira servidor/cliente |
+| (nome no documento de referências) | biblioteca de referência | escala de tamanhos, proporção, estados que a gente não lembrou. Forte em tabela, envio de arquivo, navegação de aplicativo e seletor de data |
+| (nome no documento de referências) | biblioteca de referência | anatomia de componente raro: `dropzone`, `tree`, `gantt`, `kanban`, `editor`, `table` |
+| (nome no documento de referências) | biblioteca de referência | terceira leitura de anatomia, e blocos compostos |
+| (nome no documento de referências) | biblioteca de mídia de referência | anatomia de player e de biblioteca de mídia |
+| (nome no documento de referências) | biblioteca de referência (monorepo) | catálogo de estados e anatomia madura — **157 componentes** no pacote principal. É a mais completa em cobertura, e a mais distante em aparência |
 
 ### As de 08/08/2026 — a camada operacional e o grafo
 
@@ -75,23 +75,22 @@ local nenhuma. O caminho listado é onde a anatomia mora de verdade, medido ante
 
 | Pasta | O que é | Onde está a anatomia |
 |---|---|---|
-| `agents-kit-main` | agents-ui | `components/agents-ui/` — `agent-card`, `agent-status-panel`, `agent-task-queue`, `agent-tool-approval`, `agent-ops-monitor`, `agent-orchestrator`, `agent-routing-hub` |
-| `agent-prism-main` | AgentPrism (Evil Martians) | `packages/ui/src/components/` — `SpanCard/`, `TraceViewer/`, `TraceList/`, `DetailsView/`, `TokensBadge`, `PriceBadge` |
-| `agent-elements-main` | Agent Elements | `lib/agent-ui/components/tools/` — 10 tipos de ferramenta, `tool-approval-footer`, `tool-registry`; e `question/question-prompt` |
-| `tool-ui-main` | assistant-ui/tool-ui | `apps/www/app/components/` — terceira leitura de renderização de ferramenta |
-| `langfuse-main` | Langfuse | `web/src/features/` — `dashboard/components/ModelUsageChart` e `ModelCostTable`, `automations/`, `monitors/`, `trace-graph-view/`, `events/` |
-| `openstatus-main` | OpenStatus | `packages/ui/src/components/blocks/` — `status-component-group`, `status-component`, `status-bar`, `status-calendar`, `status-feed`, `status-events` |
-| `activepieces-main` | Activepieces | `packages/web/src/features/agents/` — `agent-timeline`, `agent-tools`, `ai-model`, `structured-output` |
+| (nome no documento de referências) | um kit de interface de agentes | cartão de agente, painel de estado, fila de tarefas, aprovação de ferramenta, monitor de operação, orquestrador e central de roteamento |
+| (nome no documento de referências) | um visualizador de rastros de agente | cartão de trecho, visualizador e lista de rastros, painel de detalhes, selos de tokens e de preço |
+| (nome no documento de referências) | elementos de interface de agente | 10 tipos de ferramenta, rodapé de aprovação, registro de ferramentas; e o pedido de pergunta |
+| (nome no documento de referências) | componentes de ferramenta para conversa com IA | terceira leitura de renderização de ferramenta |
+| (nome no documento de referências) | uma plataforma de observação de modelos de IA | gráfico de uso e tabela de custo por modelo, automações, monitores, grafo de rastro, eventos |
+| (nome no documento de referências) | uma página de status | grupo de componentes, componente, barra, calendário, feed e eventos de status |
+| (nome no documento de referências) | uma plataforma de automação | linha do tempo do agente, ferramentas do agente, modelo de IA, saída estruturada |
 | `xyflow-main` | React Flow | `packages/react/` — nó, aresta, conector, tela |
-| `kaneo-main` | Kaneo | `apps/web/src/components/` — fila com estado persistido: quadro, backlog, gantt |
+| (nome no documento de referências) | um gestor de projetos | fila com estado persistido: quadro, backlog, gantt |
 
-Chegaram junto três satélites de React Flow — `React-Flow-Tree-Boilerplate-main`,
-`vite-react-flow-template-main` e `React-flow-examples-apps-master` (este tem **um** arquivo, um
+Chegaram junto três satélites de React Flow, de terceiros (um deles tem **um** arquivo, um
 README). São modelos de partida, **não acrescentam anatomia** ao `xyflow-main` e podem ser
-apagados. O `react-flow-hero-exploration-main` fica: é o único com composição visual.
+apagados. Um quarto, de exploração visual, fica: é o único com composição visual.
 
-**Atenção ao caminho:** **todas** têm o conteúdo **um nível abaixo** (`ui-main/ui-main/…`) — a
-única exceção é a `material-ui-master`, com o conteúdo direto na pasta. Procurar no nível errado
+**Atenção ao caminho:** **todas** têm o conteúdo **um nível abaixo** (`<pasta>/<pasta>/…`) — a
+única exceção é a da referência de 157 componentes, com o conteúdo direto na pasta. Procurar no nível errado
 foi o que fez quatro lotes seguidos concluírem que as referências não existiam.
 
 Confirmar que existem antes de usar. Se sumirem, o Victor baixa de novo; **não invente um
@@ -102,12 +101,12 @@ substituto e não construa sem elas.**
 uma medido antes de entrar. Sobra **um**, e ele fica declarado no mesmo espírito, para ninguém
 procurar em vão:
 
-**`MemoryLedger` (H13) não tem referência, e não é por falta de procurar.** O ADE do Letta é a
-peça certa e **só o servidor é aberto**; o OpenMemory do mem0 está sendo descontinuado; o painel
-do mem0 é só na nuvem. Pelo passo 4, ele nasce de **pesquisa registrada** no
+**`MemoryLedger` (H13) não tem referência, e não é por falta de procurar.** O ambiente de agentes de
+uma plataforma de memória é a peça certa e **só o servidor é aberto**; o painel aberto de outra
+plataforma está sendo descontinuado, e o painel dela é só na nuvem. Pelo passo 4, ele nasce de **pesquisa registrada** no
 [`REFERENCES.md`](REFERENCES.md) — e por composição, não por invenção: livro-razão é tabela mais
-linha do tempo mais procedência, e a Aurea já tem `DataGrid`, `Timeline` e, no `agent-prism`, a
-anatomia de procedência (`DetailsView/`).
+linha do tempo mais procedência, e a Aurea já tem `DataGrid`, `Timeline` e, no visualizador de rastros de
+agente, a anatomia de procedência (o painel de detalhes).
 
 ### O que se extrai, e o que nunca
 
@@ -115,7 +114,7 @@ anatomia de procedência (`DetailsView/`).
 teclado, o que uma implementação madura documenta, e os casos de borda que a gente não pensou.
 
 **Nunca se extrai:** cor, raio, tipografia, espaçamento, sombra, "jeitão". A identidade é o
-`CLAUDE.md` e não se negocia com referência. Se o resultado parece Material ou shadcn, a
+`CLAUDE.md` e não se negocia com referência. Se o resultado parece uma das bibliotecas de mercado, a
 referência foi lida errado.
 
 Regra dita pelo Victor em 31/07/2026: *"tudo que eu te mandar de outros projetos é pra você
@@ -139,7 +138,7 @@ container do grupo sem regra no core.
 Só o componente da vez. Não ler as bibliotecas inteiras — é desperdício e não melhora a decisão.
 
 Primeira pergunta, sempre: **é o mesmo componente?** Nome igual não é componente igual. O
-"Stepper" do Kibo é campo numérico; o do MUI é assistente por etapas. Errar isso constrói a
+"Stepper" de uma referência é campo numérico; o de outra é assistente por etapas. Errar isso constrói a
 coisa errada com o nome certo.
 
 ### Passo 3 — Separar o que serve do que não serve

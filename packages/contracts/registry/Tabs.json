@@ -96,7 +96,7 @@
       "name": "panel",
       "type": "'card' | 'plain'",
       "default": "card",
-      "description": "The panel. `card` is an inset card, as always. `plain` drops the box, like HeroUI's panel: the content starts on the same line as what is outside the Tabs, with only the space-3 gap above it. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native (MNT-05 and C9, 06/10/2026)."
+      "description": "The panel. `card` is an inset card, as always. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-3 gap above it. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native (MNT-05 and C9, 06/10/2026)."
     }
   ],
   "axes": {

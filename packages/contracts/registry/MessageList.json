@@ -65,7 +65,7 @@
       "name": "hasMoreBefore",
       "type": "boolean",
       "default": "false",
-      "description": "There are older messages above. A row at the top (HeroUI's Table.LoadMore measure) calls onReachStart when it enters the screen."
+      "description": "There are older messages above. A row at the top (the measure of the reference library's load-more table row) calls onReachStart when it enters the screen."
     },
     {
       "name": "onReachStart",

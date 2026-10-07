@@ -78,7 +78,7 @@ de fonte que o `tokens.ts` documenta — não levanta e não some.
 ## Decisão
 
 1. **A ADR-0024 atravessa inteira.** Formatar no **blur**, nunca enquanto se digita. As três
-   medições que a sustentam (USWDS, MUI, prática de acessibilidade) são sobre comportamento
+   medições que a sustentam (outro design system, a biblioteca de referência, prática de acessibilidade) são sobre comportamento
    humano, não sobre plataforma — e não há evidência nova que as reabra.
 2. **A ida é o `Intl.NumberFormat` do aparelho**, com as mesmas props da web (`format`, `locale`)
    e o mesmo tipo (`Intl.NumberFormatOptions`). A Aurea não escreve formatador de moeda, aqui
@@ -105,7 +105,7 @@ Onze testes em `tests/unit/native-lote7.test.tsx`, nos blocos *"o formatador e a
 **Três deles foram provados CONTRA o defeito**, e não só contra o estado atual:
 
 - trocar a exibição para formatar ao vivo faz o campo mostrar `R$ 1.234,50` onde o teste exige
-  `1234,5` — é literalmente o defeito que o MUI filmou, reprovando;
+  `1234,5` — é literalmente o defeito que a referência filmou, reprovando;
 - emitir a string formatada em vez do número reprova a trava do item 6;
 - tirar a limpeza do estado de edição no blur reprova o item 1.
 

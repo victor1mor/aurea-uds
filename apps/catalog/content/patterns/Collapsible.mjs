@@ -1,7 +1,7 @@
 // PADRÃO do arquivo de PATTERN — ver o cabeçalho de `Button.mjs`.
 //
 // Parte da cobertura do `G-COMP-01`: 77 dos 90 componentes tinham ZERO composição resolvida,
-// contra cobertura total no kibo e na reui. O alvo é nenhum componente em zero.
+// contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 //
 // Collapsible ≠ Accordion. Um disparador, uma região, INDEPENDENTE — nada fecha porque outra
 // coisa abriu. O Accordion é o conjunto com essa regra; escolher errado entre os dois é o erro

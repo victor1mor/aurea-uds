@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 36,
-    "componentes": 126,
+    "componentes": 128,
     "hooks": 9,
-    "aliasesLiterais": 66,
-    "propsDistintas": 258
+    "aliasesLiterais": 70,
+    "propsDistintas": 282
   },
   "aliases": {
     "ButtonVariant": {
@@ -1829,6 +1829,53 @@
         "lg"
       ]
     },
+    "GridSpan": {
+      "module": "markup",
+      "raw": "\"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\" | \"11\" | \"12\"",
+      "union": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ]
+    },
+    "ContainerSize": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "union": [
+        "sm",
+        "md",
+        "lg",
+        "xl",
+        "2xl",
+        "full"
+      ]
+    },
+    "SectionSurface": {
+      "module": "markup",
+      "raw": "\"background\" | \"card\" | \"inset\"",
+      "union": [
+        "background",
+        "card",
+        "inset"
+      ]
+    },
+    "SectionSpacing": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\"",
+      "union": [
+        "sm",
+        "md"
+      ]
+    },
     "TypographyType": {
       "module": "markup",
       "raw": "\"body\" | \"body-sm\" | \"body-xs\" | \"code\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
@@ -2270,6 +2317,24 @@
               "values": null
             },
             {
+              "name": "grow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "render",
+              "optional": true,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "target",
+              "optional": true,
+              "type": "React.HTMLAttributeAnchorTarget",
+              "values": null
+            },
+            {
               "name": "rel",
               "optional": true,
               "type": "string",
@@ -2279,6 +2344,12 @@
               "name": "download",
               "optional": true,
               "type": "boolean | string",
+              "values": null
+            },
+            {
+              "name": "pressed",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -2404,6 +2475,24 @@
               "values": null
             },
             {
+              "name": "grow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "render",
+              "optional": true,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "target",
+              "optional": true,
+              "type": "React.HTMLAttributeAnchorTarget",
+              "values": null
+            },
+            {
               "name": "rel",
               "optional": true,
               "type": "string",
@@ -2413,6 +2502,12 @@
               "name": "download",
               "optional": true,
               "type": "boolean | string",
+              "values": null
+            },
+            {
+              "name": "pressed",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -2451,6 +2546,18 @@
                 "lg",
                 "xl"
               ]
+            },
+            {
+              "name": "grow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "pressed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -2475,6 +2582,12 @@
               "name": "onPressedChange",
               "optional": true,
               "type": "(pressed: boolean) => void",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
               "values": null
             },
             {
@@ -2704,6 +2817,24 @@
               "values": null
             },
             {
+              "name": "grow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "render",
+              "optional": true,
+              "type": "ReactElement",
+              "values": null
+            },
+            {
+              "name": "target",
+              "optional": true,
+              "type": "React.HTMLAttributeAnchorTarget",
+              "values": null
+            },
+            {
               "name": "rel",
               "optional": true,
               "type": "string",
@@ -2713,6 +2844,12 @@
               "name": "download",
               "optional": true,
               "type": "boolean | string",
+              "values": null
+            },
+            {
+              "name": "pressed",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -3382,9 +3519,33 @@
           "propsType": "CodeEditorProps",
           "props": [
             {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "extensions",
+              "optional": true,
+              "type": "Extension[]",
+              "values": null
+            },
+            {
               "name": "readOnly",
               "optional": true,
               "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ariaLabel",
+              "optional": true,
+              "type": "string",
               "values": null
             },
             {
@@ -4642,6 +4803,12 @@
               "optional": true,
               "type": "boolean | \"true\" | \"false\"",
               "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -4664,6 +4831,12 @@
             },
             {
               "name": "error",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
               "optional": true,
               "type": "ReactNode",
               "values": null
@@ -4814,6 +4987,12 @@
               "name": "\"aria-invalid\"",
               "optional": true,
               "type": "boolean | \"true\" | \"false\"",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -5040,6 +5219,12 @@
                 "md",
                 "lg"
               ]
+            },
+            {
+              "name": "width",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -5234,6 +5419,30 @@
               ]
             },
             {
+              "name": "sidebarCollapsed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "sidebarCollapsible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultSidebarCollapsed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onSidebarCollapsedChange",
+              "optional": true,
+              "type": "(collapsed: boolean) => void",
+              "values": null
+            },
+            {
               "name": "contentVariant",
               "optional": true,
               "type": "\"surface\" | \"plain\"",
@@ -5365,6 +5574,16 @@
               ]
             },
             {
+              "name": "emphasis",
+              "optional": true,
+              "type": "BadgeEmphasis",
+              "values": [
+                "soft",
+                "solid",
+                "outline"
+              ]
+            },
+            {
               "name": "size",
               "optional": true,
               "type": "BadgeSize",
@@ -5374,6 +5593,12 @@
                 "md",
                 "lg"
               ]
+            },
+            {
+              "name": "dot",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             },
             {
               "name": "leading",
@@ -5388,9 +5613,21 @@
               "values": null
             },
             {
+              "name": "image",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
               "name": "imageAlt",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "count",
+              "optional": true,
+              "type": "number",
               "values": null
             },
             {
@@ -5403,6 +5640,47 @@
               "name": "showZero",
               "optional": true,
               "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "fit",
+              "optional": true,
+              "type": "BadgeFit",
+              "values": [
+                "auto",
+                "content"
+              ]
+            },
+            {
+              "name": "anchor",
+              "optional": true,
+              "type": "BadgePlacement",
+              "values": [
+                "top-end",
+                "top-start",
+                "bottom-end",
+                "bottom-start"
+              ]
+            },
+            {
+              "name": "anchorShape",
+              "optional": true,
+              "type": "\"square\" | \"circle\"",
+              "values": [
+                "square",
+                "circle"
+              ]
+            },
+            {
+              "name": "invisible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "badgeContent",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             }
           ]
@@ -5472,7 +5750,46 @@
           "name": "Cluster",
           "kind": "function",
           "propsType": "ClusterProps",
-          "props": []
+          "props": [
+            {
+              "name": "gap",
+              "optional": true,
+              "type": "LayoutGap",
+              "values": [
+                "tight",
+                "normal",
+                "loose"
+              ]
+            },
+            {
+              "name": "align",
+              "optional": true,
+              "type": "ClusterAlign",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "baseline"
+              ]
+            },
+            {
+              "name": "justify",
+              "optional": true,
+              "type": "ClusterJustify",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "between"
+              ]
+            },
+            {
+              "name": "wrap",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
         },
         {
           "name": "Code",
@@ -5519,6 +5836,26 @@
           ]
         },
         {
+          "name": "Container",
+          "kind": "function",
+          "propsType": "ContainerProps",
+          "props": [
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ContainerSize",
+              "values": [
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "full"
+              ]
+            }
+          ]
+        },
+        {
           "name": "DataList",
           "kind": "function",
           "propsType": null,
@@ -5535,7 +5872,30 @@
           "name": "Grid",
           "kind": "function",
           "propsType": "GridProps",
-          "props": []
+          "props": [
+            {
+              "name": "gap",
+              "optional": true,
+              "type": "LayoutGap",
+              "values": [
+                "tight",
+                "normal",
+                "loose"
+              ]
+            },
+            {
+              "name": "min",
+              "optional": true,
+              "type": "GridMin | (string & {})",
+              "values": null
+            },
+            {
+              "name": "columns",
+              "optional": true,
+              "type": "number",
+              "values": null
+            }
+          ]
         },
         {
           "name": "Heading",
@@ -5748,6 +6108,24 @@
           "propsType": "ProgressProps",
           "props": [
             {
+              "name": "value",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "detail",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
               "name": "tone",
               "optional": true,
               "type": "ProgressTone",
@@ -5814,6 +6192,41 @@
           ]
         },
         {
+          "name": "Section",
+          "kind": "function",
+          "propsType": "SectionProps",
+          "props": [
+            {
+              "name": "surface",
+              "optional": true,
+              "type": "SectionSurface",
+              "values": [
+                "background",
+                "card",
+                "inset"
+              ]
+            },
+            {
+              "name": "spacing",
+              "optional": true,
+              "type": "SectionSpacing",
+              "values": [
+                "sm",
+                "md"
+              ]
+            },
+            {
+              "name": "theme",
+              "optional": true,
+              "type": "\"light\" | \"dark\"",
+              "values": [
+                "light",
+                "dark"
+              ]
+            }
+          ]
+        },
+        {
           "name": "Skeleton",
           "kind": "function",
           "propsType": null,
@@ -5823,7 +6236,29 @@
           "name": "Stack",
           "kind": "function",
           "propsType": "StackProps",
-          "props": []
+          "props": [
+            {
+              "name": "gap",
+              "optional": true,
+              "type": "LayoutGap",
+              "values": [
+                "tight",
+                "normal",
+                "loose"
+              ]
+            },
+            {
+              "name": "align",
+              "optional": true,
+              "type": "StackAlign",
+              "values": [
+                "start",
+                "center",
+                "end",
+                "stretch"
+              ]
+            }
+          ]
         },
         {
           "name": "Switch",
@@ -6119,7 +6554,44 @@
           "name": "MediaEmbed",
           "kind": "function",
           "propsType": "MediaEmbedProps",
-          "props": []
+          "props": [
+            {
+              "name": "src",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "title",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "poster",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "ratio",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "href",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "autoplay",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
         },
         {
           "name": "MediaPlayer",
@@ -7166,6 +7638,15 @@
                 "md",
                 "lg",
                 "xl"
+              ]
+            },
+            {
+              "name": "weight",
+              "optional": true,
+              "type": "IconWeight",
+              "values": [
+                "regular",
+                "fill"
               ]
             }
           ]

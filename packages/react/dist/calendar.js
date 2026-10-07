@@ -13,9 +13,9 @@ import { cx } from "./internal.js";
 const NOMES = { months: "calendar-months", month_caption: "calendar-caption" };
 export function Calendar({ label, className, classNames, ...props }) {
     const grade = _jsx(DayPicker
-    // Grade cheia por padrão, como o shadcn: mês com buraco nas pontas treme ao trocar de mês.
+    // Grade cheia por padrão, como naquela referência: mês com buraco nas pontas treme ao trocar de mês.
     , { 
-        // Grade cheia por padrão, como o shadcn: mês com buraco nas pontas treme ao trocar de mês.
+        // Grade cheia por padrão, como naquela referência: mês com buraco nas pontas treme ao trocar de mês.
         showOutsideDays: true, ...props, classNames: { ...NOMES, root: cx("calendar", className), ...classNames } });
     // O motor já nomeia a GRADE com o mês ("August 2026"). O que ele não sabe é para que serve
     // ESTE calendário — "de" e "até" lado a lado soariam os dois "August 2026". É o que `label`

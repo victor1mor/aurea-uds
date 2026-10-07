@@ -57,7 +57,13 @@
       "name": "columns",
       "type": "number",
       "default": "—",
-      "description": "A fixed number of equal columns. With it, `min` stops applying."
+      "description": "A fixed number of equal columns. With it, `min` stops applying. With 12, Grid.Item's `span` gives the 7-of-12 layout of a website page."
+    },
+    {
+      "name": "Grid.Item span",
+      "type": "Responsive<\"1\" | … | \"12\">",
+      "default": "—",
+      "description": "Grid.Item is a grid child that knows how many columns it takes (GAR-03, 06/10/2026). Responsive and mobile-first: span={{base: \"12\", viewport: {md: \"7\"}}} takes the whole row on a narrow screen and 7 of 12 from md up. By container too ({base, container: {sm: …}}). Without span, one column, like any grid child."
     },
     {
       "name": "className",
@@ -65,5 +71,12 @@
       "default": "—",
       "description": "Where you set --grid-min for a denser or a wider grid. That variable is the adjustment knob, the same idea as --qr-size on QRCode: a column count as a prop would freeze a number that the container is the one who knows."
     }
-  ]
+  ],
+  "axes": {
+    "gap": [
+      "loose",
+      "normal",
+      "tight"
+    ]
+  }
 }

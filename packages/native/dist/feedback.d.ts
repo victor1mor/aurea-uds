@@ -54,7 +54,7 @@ export interface ProgressProps {
     value?: number;
     label?: string;
     /**
-     * O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo que
+     * O texto de apoio, no alto à direita — a saída de texto da barra de progresso da referência: velocidade, tempo que
      * falta, bytes. Em texto, ele vai junto no `accessibilityValue`. É texto: a barra é um elemento
      * só para o leitor de tela, e coisa tocável dentro dela some no iPhone (`check 43`).
      */
@@ -70,8 +70,8 @@ export interface ProgressProps {
  * anuncia que existe uma barra e não diz em quanto ela está, que é a única informação que ela tem.
  * Sem total, não há `now` — a barra não finge um 0%.
  *
- * Sem total, um pedaço de 2/5 corre de -100% a 350% da própria largura em 1,5 s, na curva do
- * `ProgressBar` do HeroUI 3.2.6 — os mesmos números da web. Quando a pessoa pede menos movimento
+ * Sem total, um pedaço de 2/5 corre de -100% a 350% da própria largura em 1,5 s, na curva da
+ * barra de progresso da referência — os mesmos números da web. Quando a pessoa pede menos movimento
  * ele não corre: a barra inteira, apagada, e nunca um pedaço parado, que leria como 40% feito.
  */
 export declare function Progress({ value, label, detail, tone, style, testID }: ProgressProps): React.JSX.Element;
@@ -106,7 +106,7 @@ export declare function Alert({ variant, state, title, icon, onDismiss, children
 export interface EmptyStateProps {
     /**
      * O glifo, dentro de uma moldura redonda — R-15, 02/10/2026, escolhida pelo Victor na prancha
-     * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` do HeroUI) e glifo de 32, o de antes. O desenho
+     * (*"1 c"*). Moldura de 64 (o `Avatar` `lg` da referência) e glifo de 32, o de antes. O desenho
      * do próprio app entra aqui também (`icon={Logo}`, R-11).
      */
     icon?: AureaIcon;

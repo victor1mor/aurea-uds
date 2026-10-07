@@ -2,12 +2,12 @@
 //
 // Um arquivo por componente, em apps/catalog/content/<Name>.mjs. O registry dá os DADOS
 // curtos (categoria, tokens, a11y, plataformas, props); ESTE arquivo dá o conteúdo RICO que
-// o modelo Kibo pede: descrição longa, instalação, features e vários exemplos.
+// o modelo de referência pede: descrição longa, instalação, features e vários exemplos.
 //
 // Cada exemplo traz `code` (o que o consumidor escreveria — vai no painel Code) e `render`
 // (o elemento de verdade — vai no painel Preview). Os dois andam juntos: o Preview é
 // dogfooded (componente Aurea real), o Code é o texto que o gera. Mantê-los em sincronia
-// é do autor (padrão shadcn/Kibo). Componente interativo: `render` pode ser null (só Code).
+// é do autor (padrão das referências). Componente interativo: `render` pode ser null (só Code).
 //
 // Button é o EXEMPLAR (AUREA.md, regra do exemplar): o rigor daqui é o piso dos outros —
 // API na ficha, um exemplo por recurso, nada prometido na Features que não tenha exemplo.
@@ -115,7 +115,7 @@ export default {
     },
     {
       title: "With icons",
-      description: "Carbon glyphs on either side. The icon never replaces the label — it repeats it.",
+      description: "Glyphs on either side. The icon never replaces the label — it repeats it.",
       code: [
         '<Button leadingIcon="plus">New item</Button>',
         '<Button variant="outline" trailingIcon="caret-down">Sort by</Button>',

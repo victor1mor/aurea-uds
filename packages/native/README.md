@@ -212,7 +212,7 @@ leitor anuncia.
 
 | | |
 |---|---|
-| `Switch` | **não é o do React Native** — aquele traz o interruptor do Material. Medidas do CSS |
+| `Switch` | **não é o do React Native** — aquele traz o interruptor de cada sistema. Medidas do CSS |
 | `Select` | não existe `<select>` no RN: é `Modal` + folha que sobe. O papel é `button`, não `combobox` — `combobox` promete um campo em que se digita |
 | `Form` | é só o respiro. Não há `<form>`, `submit` nem validação de plataforma; o erro de cada campo vai no `Field` |
 | `Field` | sem `orientation="horizontal"` — numa tela de 360dp a grade de `12rem` deixa o controle com menos de metade da largura |
@@ -300,8 +300,8 @@ devolve texto.
 
 ⚠ **Formata no BLUR, e só no blur** ([ADR-0024](../../decisions/0024-mascara-de-campo-e-o-momento-nao-o-formato.md)
 e [ADR-0042](../../decisions/0042-o-intl-e-o-formatador-do-nativo-e-a-volta-e-nossa.md)). Enquanto
-o campo tem foco, ele mostra exatamente o que foi digitado. Máscara ao vivo é o defeito que o
-USWDS publicou com reprovação WCAG registrada e que o MUI abandonou na v6.
+o campo tem foco, ele mostra exatamente o que foi digitado. Máscara ao vivo é o defeito que
+outro design system publicou com reprovação WCAG registrada e que uma das bibliotecas de referência abandonou.
 
 ⚠ **`notation: "compact"` é recusado** — quebrado no motor JS do RN nos dois sistemas. Sai aviso em
 `__DEV__` e a opção é ignorada; o resto do formato sobrevive.
@@ -414,7 +414,7 @@ nega. Cada pergunta ficou com um padrão, e **cada padrão tem uma saída**:
 | quantas cabem? | **uma** | `max` |
 | como **olhar** a foto? | tocar na miniatura abre a foto grande, no mesmo zoom da `Gallery` (R-22) | — |
 
-**Desde a `0.15.0` (R-22)**, a miniatura é quadrada de 64 (o `Avatar` `lg` do HeroUI Native), do
+**Desde a `0.15.0` (R-22)**, a miniatura é quadrada de 64 (o `Avatar` `lg` da referência), do
 tamanho do botão de pôr foto. O leitor de tela ouve *"Foto 2 de 3"* e *"Abre a foto"*; o X,
 *"Remover foto 2"*. Com o campo inativo, a foto ainda abre e o X não remove.
 

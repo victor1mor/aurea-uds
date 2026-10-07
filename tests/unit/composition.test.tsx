@@ -139,7 +139,7 @@ describe("I2 · ReviewCompare", () => {
   });
 
   // "diff has textual additions and deletions" — contract.accessibility. É a cláusula em que
-  // as duas referências reprovam (Langfuse pinta a linha, Kibo deixa o Shiki consumir o
+  // as duas referências reprovam (uma pinta a linha, a outra deixa o realçador de sintaxe consumir o
   // marcador), então é a que mais precisa de gate: sem ele, a primeira pessoa que trocar o
   // `+`/`-` por uma classe de cor passa.
   test("adições e remoções são TEXTO, e o resumo é contado do próprio diff", () => {
@@ -434,7 +434,7 @@ describe("I5 · TransactionFlow", () => {
   });
 
   // O TOTAL É SOMADO. Este é o teste que reprova quem escrever o número ao lado dos números que
-  // ele soma — que é o que a referência madura faz: o `checkout` do MUI tem `$144.97` literal em
+  // ele soma — que é o que a referência madura faz: o exemplo de checkout dela tem o total literal em
   // dois arquivos, mais os quatro preços que deveriam somar nele. Aqui a conta é em INTEIRO
   // (não existe decimal nativo em JavaScript) e o DOM é comparado contra ela.
   test.each(TX.states as string[])("%s: o total é a soma dos itens mais as taxas", state => {
@@ -442,7 +442,7 @@ describe("I5 · TransactionFlow", () => {
     const somaTaxas = transactionAmounts.fees.reduce((t: number, f: {cents: number}) => t + f.cents, 0);
     expect(transactionAmounts.subtotal).toBe(somaItens);
     // E cada linha é quantidade × unitário — a conta que o rótulo mostra tem de ser a que o valor
-    // diz. Anatomia do `order-summary` do tool-ui (`lineTotal = unitPrice * quantity`), e é o que
+    // diz. Anatomia do resumo de pedido de uma das referências (total da linha = unitário × quantidade), e é o que
     // impede "2 seats" ao lado de um número que ninguém sabe se é o assento ou os dois.
     for (const i of transactionAmounts.items as Array<{qty: number; unit: number; cents: number}>)
       expect(i.cents, 'linha que não é quantidade × unitário').toBe(i.qty * i.unit);
@@ -547,7 +547,7 @@ describe("I5 · TransactionFlow", () => {
 
   // A composição NÃO pede segredo financeiro. Não é preferência de desenho: sob o PCI DSS 4.0.1
   // o campo de cartão é do provedor (iframe ou redirecionamento), e a referência que tinha a
-  // anatomia — o template `checkout` do MUI — pede número, CVV, validade e nome no próprio
+  // anatomia — o modelo de checkout dela — pede número, CVV, validade e nome no próprio
   // formulário. Este teste reprova quem trouxer isso para dentro.
   test.each(TX.states as string[])("%s: nenhum campo de dado financeiro na composição", state => {
     const {container} = render(transactionFlow(state));

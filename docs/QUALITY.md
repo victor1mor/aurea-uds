@@ -16,12 +16,14 @@ canônico na Fase 10, corrigido onde a execução mostrou que a proposta estava 
 | # | Critério | Quem cobra |
 |---|---|---|
 | 1 | Nome, `category` e `layer` decididos conforme `DIRECTION.md` | check 11 (enums) |
-| 2 | Referência externa analisada e **registrada** em `REFERENCES.md` — anatomia, estados, teclado | **check 21** (para componente construído sob o `BUILDING.md`) |
+| 2 | Referência externa analisada e **registrada** no documento de referências, fora do repositório — anatomia, estados, teclado | o script de conferência do Victor, fora do repositório (até 07/10/2026, o check 21) |
 | 3 | Padrão APG identificado, ou a ausência registrada junto da prática adotada | pessoa; o campo `a11y.apg` da ficha |
 
 O item 2 é o que impede construir de memória. O procedimento está em
-[`BUILDING.md`](BUILDING.md); o registro, em `REFERENCES.md`. Deixou de ser cobrado por lembrança
-em 31/07/2026, quando a biblioteca foi publicada e construir errado passou a custar versão.
+[`BUILDING.md`](BUILDING.md). O registro de cada leitura mora fora do repositório, com o Victor,
+desde 07/10/2026 (ordem dele: referência de construção não se publica); até essa data ficava no
+`REFERENCES.md`. Deixou de ser cobrado por lembrança em 31/07/2026, quando a biblioteca foi
+publicada e construir errado passou a custar versão.
 
 ## Para ser FUNCIONAL
 

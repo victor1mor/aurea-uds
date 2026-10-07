@@ -8,13 +8,13 @@
 // `DIRECTION.md` se declara "ilustrativo, não-vinculante", então tirar dali uma
 // categoria é decisão, não dedução.
 //
-// PROCEDÊNCIA (BUILDING.md passo 2): estes três saem de `agents-kit-main`
-// (`components/agents-ui/agent-card.tsx`, `agent-status-panel.tsx`) e do `DetailsView/`
-// do `agent-prism-main`. As sete referências antigas NÃO têm esta família — foi por
+// PROCEDÊNCIA (BUILDING.md passo 2): estes três saem de uma referência de agentes (o cartão
+// de agente e o painel de estado) e da vista de detalhes
+// de outra. As sete referências antigas NÃO têm esta família — foi por
 // isso que a Parte H ficou bloqueada até 08/08/2026.
 //
-// Escopo menor que o da referência (passo 5): o `AgentCard` de lá despacha ações por
-// STRING (`onAction: (action: string) => void`), o que troca o compilador por um acordo
+// Escopo menor que o da referência (passo 5): o cartão de lá despacha ações por
+// STRING (uma função que recebe o nome da ação como texto), o que troca o compilador por um acordo
 // verbal. Aqui as ações entram como nó, e quem monta o botão sabe o que ele faz.
 import React, {type HTMLAttributes, type OlHTMLAttributes, type ReactNode, type RefAttributes} from "react";
 import {cx, useAureaStrings} from "./internal.js";
@@ -27,7 +27,7 @@ import {Button, IconButton} from "./actions.js";
 
 // Os seis estados são os da referência, medidos — não inventados aqui. O que muda é
 // que cada um vira uma VARIANTE do `Status` que já existe, em vez de uma cor solta:
-// a referência escreve `text-yellow-500` no componente, e cor em componente é o que a
+// a referência escreve a cor amarela direto no componente, e cor em componente é o que a
 // identidade da Aurea proíbe.
 export type AgentState="idle"|"thinking"|"running"|"paused"|"error"|"completed";
 // Só a variante: o `Status` já desenha o ponto, e um ícone ao lado dele seria a mesma
@@ -71,7 +71,7 @@ export function AgentCard({name,description,avatarSrc,model,state,capabilities,a
 }
 
 // AgentInspector — o detalhe: configuração, ferramentas, instruções.
-// A anatomia é a do `DetailsView/` do `agent-prism`: cabeçalho + seções rotuladas, com
+// A anatomia é a da vista de detalhes de uma das referências de agentes: cabeçalho + seções rotuladas, com
 // o valor cru disponível. Aqui as seções são `DataList`, que já existe e já tem pele —
 // e o corpo livre entra como filho, para inspecionar o que a ficha não previu.
 //
@@ -97,9 +97,9 @@ export function AgentInspector({title,sections,children,className,...props}:HTML
 // ─────────────────────────────────────────────────────────────────────────────
 // H.b — a execução: uma invocação, e a fila de trabalho.
 //
-// PROCEDÊNCIA: `agent-elements-main/lib/agent-ui/components/tools/tool-row-base.tsx`
+// PROCEDÊNCIA: a linha de ferramenta de uma referência de agentes
 // (a linha de passo, dobrável, com rótulo de "rodando" e de "pronto") e
-// `agents-kit-main/components/agents-ui/agent-task-queue.tsx` (os seis estados de
+// a fila de tarefas de outra (os seis estados de
 // tarefa e a prioridade em três degraus).
 
 export interface InvocationStep{id:string;label:string;detail?:string;state?:"running"|"done"|"error";content?:ReactNode}
@@ -108,10 +108,10 @@ export interface InvocationStep{id:string;label:string;detail?:string;state?:"ru
 //
 // O passo que tem corpo é um `<details>` nativo, o mesmo idioma do `Accordion`: dobrar
 // e desdobrar já é comportamento de plataforma, com teclado e ARIA, e a referência
-// gasta um `Collapsible` de biblioteca para chegar no mesmo lugar.
+// gasta um componente dobrável de biblioteca para chegar no mesmo lugar.
 //
 // `running` marca `aria-busy` na região INTEIRA em vez de animar o texto. A referência
-// usa um `TextShimmer` — animação em cima do rótulo — e isso é decoração que um leitor
+// usa um brilho que corre pelo texto — animação em cima do rótulo — e isso é decoração que um leitor
 // de tela não alcança e que `prefers-reduced-motion` teria de desfazer.
 //
 // Entrada e saída são `group` NOMEADO, e não `<h3>` — mesmo defeito e mesma correção do
@@ -144,10 +144,10 @@ export interface QueueTask{id:string;title:string;description?:string;state:Task
 
 // TaskQueue — a fila de trabalho.
 //
-// ESCOPO MENOR QUE O DA REFERÊNCIA, e por fronteira, não por preguiça: o `AgentTask` de
+// ESCOPO MENOR QUE O DA REFERÊNCIA, e por fronteira, não por preguiça: a tarefa de
 // lá tem 15 campos, e cinco deles pertencem a OUTROS componentes desta mesma parte —
-// `metrics.tokens` e `metrics.cost` são o `ModelUsage` (H11) e o `CostMeter` (H12),
-// `checkpoints` é o `TraceTimeline` (H9), `assignee` é o `AgentCard` (H1). Absorvê-los
+// a contagem de tokens e o custo são o `ModelUsage` (H11) e o `CostMeter` (H12),
+// os pontos de controle são o `TraceTimeline` (H9), o responsável é o `AgentCard` (H1). Absorvê-los
 // aqui faria a fila responder por quatro contratos e nenhum deles direito.
 export function TaskQueue({tasks,label,onRetry,className,...props}:OlHTMLAttributes<HTMLOListElement>&RefAttributes<HTMLOListElement>&{tasks:QueueTask[];label?:string;onRetry?:(task:QueueTask)=>void}){
   const s=useAureaStrings();
@@ -170,13 +170,13 @@ export function TaskQueue({tasks,label,onRetry,className,...props}:OlHTMLAttribu
 // ─────────────────────────────────────────────────────────────────────────────
 // H.c — a governança da ação: o que precisa de gente, e o que a ferramenta pode.
 //
-// PROCEDÊNCIA: `agents-kit-main/components/agents-ui/agent-tool-approval.tsx` (o
+// PROCEDÊNCIA: a aprovação de ferramenta de uma referência de agentes (o
 // pedido com risco, parâmetros e razão; o histórico com decisão e ator) e
-// `agent-elements-main/lib/agent-ui/components/tools/tool-approval-footer.tsx` (o par
+// o rodapé de aprovação de outra (o par
 // aprovar/negar que, depois de decidido, vira o RESULTADO em vez de sumir).
 //
-// A referência junta as duas coisas num componente só, com um interruptor "always
-// allow" dentro do diálogo de aprovação. Aqui são DOIS, porque são duas decisões com
+// A referência junta as duas coisas num componente só, com um interruptor de "sempre
+// permitir" dentro do diálogo de aprovação. Aqui são DOIS, porque são duas decisões com
 // tempos diferentes: aprovar é sobre ESTA ação, permitir é sobre TODAS as próximas —
 // e misturá-las é como se concede permissão permanente sem perceber.
 
@@ -238,10 +238,9 @@ export function ToolPermission({tools,onChange,label,className,...props}:HTMLAtt
 // ─────────────────────────────────────────────────────────────────────────────
 // H.d — a observação: o que aconteceu, quanto demorou, e o que está de pé.
 //
-// PROCEDÊNCIA: `openstatus-main/packages/ui/src/components/blocks/status-feed.tsx` e
-// `status-component-group.tsx` (o feed de eventos e a grade de saúde) e
-// `agent-prism-main/packages/ui/src/components/SpanCard/SpanCardTimeline.tsx` (a
-// barra posicionada dentro de uma janela `minStart`/`maxEnd`).
+// PROCEDÊNCIA: uma referência de página de status (o feed de eventos e a grade de saúde) e
+// a linha do tempo de spans de uma referência de agentes (a
+// barra posicionada dentro de uma janela de início mínimo e fim máximo).
 
 export type EventSeverity="info"|"success"|"warning"|"danger";
 export interface StreamEvent{id:string;title:ReactNode;time?:ReactNode;severity?:EventSeverity;detail?:ReactNode;group?:string}
@@ -298,7 +297,7 @@ export interface TraceSpan{id:string;label:ReactNode;start:number;end:number;kin
 // (end-start)/(max-min) de largura.
 //
 // O que NÃO entrou: as ONZE cores por categoria de span da referência
-// (`llm_call`, `tool_execution`, `retrieval`…). Cor por categoria numa paleta travada é
+// (chamada de modelo, execução de ferramenta, busca…). Cor por categoria numa paleta travada é
 // o mesmo defeito que o H.a recusou; `kind` entra como TEXTO, que é legível também por
 // quem não distingue as cores.
 export function TraceTimeline({spans,label,className,...props}:OlHTMLAttributes<HTMLOListElement>&RefAttributes<HTMLOListElement>&{spans:TraceSpan[];label?:string}){
@@ -345,14 +344,14 @@ export function HealthMatrix({entries,label,className,...props}:HTMLAttributes<H
 // ─────────────────────────────────────────────────────────────────────────────
 // H.e — custo e memória: quanto se consumiu, contra que teto, e o que ficou guardado.
 //
-// PROCEDÊNCIA: `langfuse-main/web/src/features/dashboard/components/` — o
-// `ModelUsageChart.tsx` (a métrica total no topo e a quebra por modelo), o
-// `ModelCostTable.tsx` (as colunas modelo × tokens × custo, com o número à direita), o
-// `TotalMetric.tsx` (número grande + descrição, e é UMA linha de arranjo) e o
-// `cards/BarListChartArea.tsx` (a lista de barras horizontais com rótulo de valor).
-// Mais `agent-prism-main/packages/ui/src/components/{TokensBadge,PriceBadge}.tsx` — o par
-// de unidades desta família, contagem e preço — e `agents-kit-main/components/agents-ui/
-// agent-status-panel.tsx`, que traz a tarifa por 1k tokens com entrada e saída separadas.
+// PROCEDÊNCIA: o painel de uma referência de observabilidade de LLM — o
+// gráfico de uso por modelo (a métrica total no topo e a quebra por modelo), a
+// tabela de custo por modelo (as colunas modelo × tokens × custo, com o número à direita), a
+// métrica total (número grande + descrição, e é UMA linha de arranjo) e a
+// lista de barras (a lista de barras horizontais com rótulo de valor).
+// Mais os selos de tokens e de preço de uma referência de agentes — o par
+// de unidades desta família, contagem e preço — e o painel de estado de agente de outra,
+// que traz a tarifa por 1k tokens com entrada e saída separadas.
 //
 // O `MemoryLedger` NÃO TEM REFERÊNCIA, e é o caso declarado no `BUILDING.md` §1: nasce de
 // pesquisa registrada no `REFERENCES.md` e de composição. A pesquisa está lá com data.
@@ -360,10 +359,10 @@ export function HealthMatrix({entries,label,className,...props}:HTMLAttributes<H
 // Formatação de número: `Intl` é a plataforma, e o locale entra como prop com default
 // FIXO. O default fixo é o que mantém a saída determinística no SSR do catálogo e no gate
 // de pixel — locale do ambiente mudaria o texto entre a máquina e a CI. A referência faz
-// igual: o `costFormatter` do langfuse é `Intl.NumberFormat("en-US")` pregado, medido em
-// `web/src/utils/numbers.ts`.
+// igual: o formatador de custo dela é `Intl.NumberFormat("en-US")` pregado, medido no
+// fonte dela.
 const compacto=(n:number,locale:string)=>new Intl.NumberFormat(locale,{notation:"compact",maximumFractionDigits:2}).format(n);
-// Duas casas fixas é o que o `costFormatter` da referência usa, e aqui isso MENTE: custo de
+// Duas casas fixas é o que o formatador de custo da referência usa, e aqui isso MENTE: custo de
 // modelo cai em fração de centavo o tempo todo, e "$0.00" para um gasto real de US$ 0,004
 // apaga o número justamente no componente que existe para vigiá-lo.
 const dinheiro=(n:number,currency:string,locale:string)=>new Intl.NumberFormat(locale,{style:"currency",currency,minimumFractionDigits:2,maximumFractionDigits:n!==0&&Math.abs(n)<0.01?6:2}).format(n);
@@ -378,8 +377,8 @@ export interface ModelUsageEntry{id:string;model:string;provider?:string;tokens?
 // levou quanto". No `CostMeter` o teto vem de fora, e a pergunta é "quanto ainda cabe".
 // Trocar um pelo outro é mostrar orçamento onde não existe orçamento nenhum.
 //
-// ESCOPO MENOR QUE O DA REFERÊNCIA (passo 5): as quatro abas de lá (`Cost by model`,
-// `Cost by type`, `Usage by model`, `Usage by type`) existem porque são quatro CONSULTAS
+// ESCOPO MENOR QUE O DA REFERÊNCIA (passo 5): as quatro abas de lá (custo e uso,
+// cada um por modelo e por tipo) existem porque são quatro CONSULTAS
 // diferentes no produto dela. Aqui a dimensão é uma prop e os dados chegam prontos. Também
 // ficaram fora o seletor de modelos em popover e a série temporal — a série é o `Chart`,
 // que já existe, e embutir um segundo gráfico aqui duplicaria aquele contrato.
@@ -388,7 +387,7 @@ export function ModelUsage({entries,metric="tokens",label,currency="USD",locale=
   const valor=(e:ModelUsageEntry)=>(metric==="cost"?e.cost:metric==="requests"?e.requests:e.tokens)??0;
   const fmt=(n:number)=>metric==="cost"?dinheiro(n,currency,locale):compacto(n,locale);
   const total=entries.reduce((a,e)=>a+valor(e),0);
-  // Ordem decrescente pela métrica, como a referência (`orderBy` em `ModelCostTable`): uma
+  // Ordem decrescente pela métrica, como a referência (a ordenação da tabela de custo dela): uma
   // lista de barras fora de ordem obriga a varrer tudo para achar o maior, que é a única
   // coisa que ela existe para responder de relance. Cópia, não `sort` no array de quem chamou.
   const linhas=[...entries].sort((a,b)=>valor(b)-valor(a));
@@ -421,10 +420,10 @@ export type CostState="under"|"near"|"over";
 
 // CostMeter — o gasto contra um TETO.
 //
-// Os dois limites são os do LiteLLM, que é o padrão de mercado de controle de custo de LLM
+// Os dois limites são os do padrão de mercado de controle de custo de LLM,
 // medido em 09/08/2026 (pesquisa registrada no `REFERENCES.md`): o limite RÍGIDO bloqueia,
-// o limite BRANDO só avisa. Nenhuma das nove referências locais tem orçamento — o langfuse
-// OSS mostra custo e não teto —, então isto veio pelo passo 4 do `BUILDING.md`, pesquisado
+// o limite BRANDO só avisa. Nenhuma das nove referências locais tem orçamento — a referência
+// de observabilidade, na versão aberta, mostra custo e não teto —, então isto veio pelo passo 4 do `BUILDING.md`, pesquisado
 // antes de escrever, e não de memória.
 //
 // Sem `softLimit` NÃO EXISTE estado de aviso. A tentação era derivar um em 80% do teto;
@@ -458,7 +457,7 @@ export function CostMeter({spent,limit,softLimit,currency="USD",locale="en-US",p
 
 // As três ESPÉCIES de memória — episódica, semântica, procedural — são o vocabulário que
 // virou padrão de mercado em 2026, medido na pesquisa registrada no `REFERENCES.md`. Os
-// três níveis do Letta (`core`/`recall`/`archival`) ficaram de fora de propósito: são a
+// três níveis de um produto de memória de agentes ficaram de fora de propósito: são a
 // arquitetura de UM produto, e travá-los aqui amarraria o contrato a um fornecedor.
 export type MemoryScope="episodic"|"semantic"|"procedural";
 // E as quatro OPERAÇÕES são o que faz disto um livro-razão e não uma lista: o registro é de
@@ -471,9 +470,9 @@ export interface MemoryRecord{id:string;content:ReactNode;scope:MemoryScope;oper
 
 // MemoryLedger — o que o agente guardou, esqueceu ou lembrou, e DE ONDE veio.
 //
-// É o único da Parte H sem referência no mundo aberto: o ADE do Letta só abre o servidor, o
-// OpenMemory do mem0 está sendo descontinuado e o painel do mem0 é só na nuvem. Medido em
-// 08/08/2026 e reconfirmado em 09/08.
+// É o único da Parte H sem referência no mundo aberto: dos produtos de memória de agentes
+// pesquisados, um só abre o servidor, e o outro tem a versão aberta sendo descontinuada e o
+// painel só na nuvem. Medido em 08/08/2026 e reconfirmado em 09/08.
 //
 // Livro-razão é APENDE-SÓ, e é isso que o separa de uma lista de memórias: `forgotten` não
 // tira a linha, registra o esquecimento. Uma tela que apaga a linha ao esquecer perde
@@ -494,8 +493,8 @@ export function MemoryLedger({records,label,className,...props}:OlHTMLAttributes
         <span className="memory-content">{r.content}</span>
         {r.time&&<time className="memory-time">{r.time}</time>}
       </div>
-      {/* A PROCEDÊNCIA é o terceiro pedaço da composição, e a anatomia é a do `DetailsView/`
-          do agent-prism: dobrada por padrão, `<details>` nativo como no `InvocationPanel`.
+      {/* A PROCEDÊNCIA é o terceiro pedaço da composição, e a anatomia é a da vista de
+          detalhes de uma das referências de agentes: dobrada por padrão, `<details>` nativo como no `InvocationPanel`.
           Uma memória sem origem não é auditável, e origem aberta o tempo todo empurra o
           conteúdo — que é o que se lê primeiro — para fora da tela. */}
       {(r.source||r.details?.length)&&<details className="memory-provenance">
@@ -510,11 +509,11 @@ export function MemoryLedger({records,label,className,...props}:OlHTMLAttributes
 // ─────────────────────────────────────────────────────────────────────────────
 // H.f — a relação: quem falou com quem, e a regra que dispara sozinha.
 //
-// PROCEDÊNCIA: `agents-kit-main/components/agents-ui/agent-orchestrator.tsx` (o
-// `CommLogEntry` — `{id, timestamp, from, to, message}` — que é o registro de conversa entre
-// agentes) e `agent-routing-hub.tsx` (a RAZÃO do encaminhamento: intenção, confiança e o
-// texto do porquê). Mais `langfuse-main/web/src/features/automations/` — o `AutomationSidebar`
-// e o `AutomationDetails`, de onde sai a anatomia da regra: gatilho com fonte de evento e
+// PROCEDÊNCIA: o orquestrador de uma referência de agentes (a
+// entrada de registro — identificador, hora, remetente, destinatário e mensagem — que é o registro de conversa entre
+// agentes) e o painel de encaminhamento dela (a RAZÃO do encaminhamento: intenção, confiança e o
+// texto do porquê). Mais a área de automações da referência de observabilidade — a lateral
+// e o detalhe de automação, de onde sai a anatomia da regra: gatilho com fonte de evento e
 // estado, ação com tipo, e o interruptor que liga e desliga.
 
 export type MessageKind="request"|"response"|"handoff"|"broadcast"|"error";
@@ -530,8 +529,8 @@ export interface AgentMessage{id:string;from:string;to?:string;body:ReactNode;ti
 // tem um remetente e um destinatário, e é a passagem entre os dois que se está lendo. Um
 // `MessageList` com dois autores não diz quem entregou o quê a quem.
 //
-// O que NÃO entrou: as seis cores por intenção do `agent-routing-hub` (`technical` ciano,
-// `billing` âmbar, `sales` ardósia…). É a TERCEIRA vez que esta parte recusa a mesma coisa —
+// O que NÃO entrou: as seis cores por intenção do painel de encaminhamento da referência (ciano,
+// âmbar, ardósia…). É a TERCEIRA vez que esta parte recusa a mesma coisa —
 // depois das onze de span no H.d e das seis de estado no H.a. Cor por categoria numa paleta
 // travada não é legível para quem não separa as cores. A `kind` entra como palavra, num selo.
 export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttributes<HTMLOListElement>&RefAttributes<HTMLOListElement>&{messages:AgentMessage[];label?:string}){
@@ -565,7 +564,7 @@ export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttr
 
 // AutomationCard — a regra que roda sozinha: QUANDO isto, ENTÃO aquilo.
 //
-// A anatomia é a do `AutomationSidebar` do langfuse, medida: nome, gatilho (fonte de evento) e
+// A anatomia é a da lateral de automações da referência de observabilidade, medida: nome, gatilho (fonte de evento) e
 // ação (tipo), mais o estado ativo/inativo. É isso que separa este cartão do `AgentCard`, que é
 // identidade, e da `TaskQueue`, que é trabalho enfileirado: uma automação é uma REGRA, e regra
 // é uma condição e uma consequência.

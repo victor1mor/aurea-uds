@@ -80,7 +80,7 @@ describe("Progress · o texto de apoio", () => {
     expect(papel().accessibilityValue).toEqual({text: "1.204 arquivos"});
   });
 
-  it("o vão até o trilho é o `gap-1` do HeroUI", () => {
+  it("o vão até o trilho é o `gap-1` da referência", () => {
     render(<Envolve><Progress value={10} detail="10 s" /></Envolve>);
     expect(estilo(papel()).gap).toBe(t.size.space1);
   });

@@ -94,7 +94,7 @@
       "name": "icon",
       "type": "IconName",
       "default": "notification",
-      "description": "Carbon glyph on the trigger."
+      "description": "Glyph on the trigger."
     },
     {
       "name": "side",

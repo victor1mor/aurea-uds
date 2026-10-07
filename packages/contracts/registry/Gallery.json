@@ -82,7 +82,7 @@
       "name": "selectionMode",
       "type": "\"single\" | \"multiple\"",
       "default": "\"single\"",
-      "description": "HeroUI's name for it. With \"multiple\", every tile is a toggle button (aria-pressed) with the same .is-selected mark as everywhere else, clicking marks instead of zooming, and the chosen ids come from selectedIds."
+      "description": "The reference library's name for it. With \"multiple\", every tile is a toggle button (aria-pressed) with the same .is-selected mark as everywhere else, clicking marks instead of zooming, and the chosen ids come from selectedIds."
     },
     {
       "name": "selectedIds",
@@ -100,7 +100,7 @@
       "name": "hasMore",
       "type": "boolean",
       "default": "false",
-      "description": "There is more after the last tile. A row after the grid (HeroUI's Table.LoadMore measure, py-3) is watched, and calls onReachEnd when it enters the screen."
+      "description": "There is more after the last tile. A row after the grid (the measure of the reference library's load-more table row) is watched, and calls onReachEnd when it enters the screen."
     },
     {
       "name": "loading",

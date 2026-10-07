@@ -7,7 +7,7 @@ import {Chart, ChartTooltip, ChartLegend} from "../../packages/react/src/chart";
 
 // Lote 3 do BUILDING.md. O que este arquivo protege é a APOSTA do desenho: as três peças são só
 // pele, e para isso o Recharts precisa reconhecer um componente NOSSO como filho do gráfico.
-// No Recharts 2 ele não reconhecia — era por isso que o shadcn tinha de reexportar o primitivo
+// No Recharts 2 ele não reconhecia — era por isso que uma das referências tinha de reexportar o primitivo
 // e pôr a pele no `content`, virando duas peças por peça. Medido no 3.10.1 (01/08/2026): passa
 // a reconhecer. Se uma versão futura voltar atrás, o tooltip e a legenda somem sem erro nenhum,
 // e é este arquivo que grita.

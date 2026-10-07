@@ -1,7 +1,7 @@
 // PADRÃO do arquivo de PATTERN — ver o cabeçalho de `Button.mjs`.
 //
 // Parte da cobertura do `G-COMP-01`: 77 dos 90 componentes tinham ZERO composição resolvida,
-// contra cobertura total no kibo e na reui. O alvo é nenhum componente em zero.
+// contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 //
 // `items` e não `<Step>` como filho: é o idioma da casa (Timeline, DataList, Breadcrumb) e
 // resolve de graça a numeração, que sai do índice e não de uma prop a manter em sincronia.

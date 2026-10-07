@@ -108,7 +108,7 @@ geometry · responsividade · teclado · acessibilidade · dark/light ·
    primeiro (fundação organizacional) → i18n inglês → MVP faltante (Sidebar/
    Topbar/Status/QRCode) → app dogfooding → patterns → blocks.
 
-**Referências de ORGANIZAÇÃO (não de cor/identidade):** Kibo UI, Untitled UI
+**Referências de ORGANIZAÇÃO (não de cor/identidade):** duas bibliotecas de referência
 (taxonomia, page model, patterns granulares). Identidade continua Aurea.
 Os requisitos que originaram este brief vieram de notas locais do Victor (21–22/07/2026).
 
@@ -133,7 +133,7 @@ organização." Leitura região a região:
 - Categorias com ícone Carbon, cada uma expansível (chevron): Foundations,
   Inputs, Navigation, Data Display, Feedback, Overlays, Media, Identity,
   Platform Adapters.
-- Profundidade granular estilo Kibo: **Categoria → Componente → Variante →
+- Profundidade granular estilo da referência: **Categoria → Componente → Variante →
   Estado/Composição**. Exemplos visíveis:
   - Data Display → Table → Selectable → **Pagination** (selecionado)
   - Identity → QRCode → Rounded → **Downloadable** (selecionado, ponto amarelo)

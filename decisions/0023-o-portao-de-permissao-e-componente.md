@@ -22,10 +22,10 @@ PESQUISAR na internet, validar que é prática atual". Eu tratei a ausência na 
 pulei o passo. A ausência é um dado; não é a resposta.
 
 **O que a pesquisa devolveu (13/08/2026):** o portão existe, tem nome e é padrão corrente.
-`<Can I="read" a="Post">` do `@casl/react`; `useCanAccess`/`usePermissions` do react-admin;
-`<AccessGate resource=… mode="any">` repetido nos guias de painel administrativo. E devolveu
-também a divisão que virou o desenho: **o CASL só esconde**, o **react-admin deixa escolher**
-esconder ou desabilitar.
+um componente de portão numa biblioteca de autorização; ganchos de permissão num framework de
+painel administrativo; `<AccessGate resource=… mode="any">` repetido nos guias de painel
+administrativo. E devolveu também a divisão que virou o desenho: **a biblioteca de autorização
+só esconde**, o **framework de painel deixa escolher** esconder ou desabilitar.
 
 **Por que as cinco referências locais não têm, então:** porque nenhuma delas é a camada de UI
 única de ninguém — são bibliotecas de componente, e autorização é do app. A Aurea é outra coisa:
@@ -39,8 +39,7 @@ dependia da pergunta "é componente?", e continua valendo palavra por palavra ab
 ## O que a medição achou, antes de escrever qualquer coisa
 
 **Nenhuma das cinco referências tem portão de permissão.** Medido em 13/08/2026, procurando pasta
-com nome de permissão, gate, can ou rbac em `ui-main`, `kibo-main`, `react-main`, `reui-main` e
-`material-ui-master`: **zero** em todas. Não é lacuna nossa — é que isso não é componente de
+com nome de permissão, gate, can ou rbac nas pastas das cinco referências: **zero** em todas. Não é lacuna nossa — é que isso não é componente de
 biblioteca de interface. `{pode ? <Button/> : null}` é uma linha do consumidor, e uma biblioteca
 que a embrulha só troca uma linha por uma dependência.
 
@@ -51,7 +50,7 @@ aparece mas não pode ser usada, a pessoa precisa saber POR QUÊ. E aí havia de
 |---|---|
 | `Tooltip` em `<Button disabled>` — foco chega? | **não.** `disabled` tira o botão da ordem de foco |
 | … e a dica abre? | **não.** Sem foco não há dica; quem usa teclado nunca lê o motivo |
-| Embrulho de `<span>` (o que o MUI documenta) | resolve o **ponteiro**; o span nasce com `tabIndex -1`, então **não** resolve o teclado |
+| Embrulho de `<span>` (o que uma das referências documenta) | resolve o **ponteiro**; o span nasce com `tabIndex -1`, então **não** resolve o teclado |
 | `aria-disabled` passado pelo consumidor | o atributo chegava ao DOM e **o clique continuava executando** |
 
 A última linha é a mais séria: `aria-disabled` é só semântica, e quem tem de barrar a ativação é

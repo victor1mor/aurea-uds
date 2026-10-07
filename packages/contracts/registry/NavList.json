@@ -81,7 +81,7 @@
   "notes": [
     "The list does NOT paint a surface and has no divider between rows. Both are decisions: Card already gives the floating panel, and the row highlight in this design system is the pill (the same one Sidebar uses) — a pill with a rule under it contradicts itself, because the rule promises a grid and the pill promises a target.",
     "The trailing value and the chevron never shrink; the text does, with an ellipsis. A clipped value lies (\"R$ 1.2\" for \"R$ 1.234\") and a clipped chevron stops saying the row opens.",
-    "On a coarse pointer the row grows to --target-min (44px), which is WCAG 2.5.5 and the size Apple HIG and Material both land on. The whole row is the target — never the chevron.",
+    "On a coarse pointer the row grows to --target-min (44px), which is WCAG 2.5.5 and the size the iOS and Android guidelines both land on. The whole row is the target — never the chevron.",
     "The chevron only appears on a row that has a destination (`href`). An action row — sign out, export — carries none, because the arrow promises the row opens something. There is no prop to choose: the data that already exists decides.",
     "The panel that holds the list tightens its padding: a Card whose direct child is a NavList drops to --space-1. The 20px of --card-pad is CONTENT padding, and it left the row highlight floating in the middle of a big box — 88% of the width, with the text starting 65px from the edge. The panel gives almost nothing and the row gives the rest, which is the anatomy the reference navigation panels use: the item carries the inset, the container does not."
   ]

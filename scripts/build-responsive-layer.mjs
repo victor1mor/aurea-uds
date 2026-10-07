@@ -118,6 +118,12 @@ const EIXO_REGRA = {
   "input-group-addon": {
     "inline": "inline-size:auto; justify-content:normal;",
     "block":  "inline-size:100%; justify-content:flex-start;"},
+  // GAR-03 (06/10/2026): quantas das colunas da grade o item ocupa — o "7 de 12" de site, que o
+  // `Grid` só fazia em colunas iguais. Doze valores, e nenhum é o base: `Grid.Item` sem `span`
+  // ocupa uma coluna, como qualquer filho de grade. O padrão de uso é mobile-first —
+  // `span={{base: "12", viewport: {md: "7"}}}`: inteiro no estreito, 7 de 12 a partir do `md`.
+  "grid-span": Object.fromEntries(Array.from({length: 12}, (_, i) =>
+    [String(i + 1), `grid-column:span ${i + 1} / span ${i + 1};`])),
 };
 
 // E os DESCENDENTES. O seletor deles é `.<base>-<valor> <filho>`, e não `.<base>-<valor>`.

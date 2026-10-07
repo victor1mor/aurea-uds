@@ -1,6 +1,6 @@
 // A VARREDURA das props elegíveis a eixo responsivo — G-AXIS-04, a etapa depois da prova.
 //
-// O Victor foi explícito sobre a fonte: *"não quero limitar isso aos 47 casos da Radix: a Radix é
+// O Victor foi explícito sobre a fonte: *"não quero limitar isso aos 47 casos da referência: a referência é
 // evidência da necessidade, não teto da Aurea."* Então a varredura sai da NOSSA superfície
 // publicada (`api-surface.json`, derivada da emissão do compilador), não da lista dela.
 //

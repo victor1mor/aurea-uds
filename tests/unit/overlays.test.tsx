@@ -339,7 +339,7 @@ describe("ConfirmDialog — a decisão não se toma por acidente", () => {
 describe("M4 — ação indisponível com o motivo alcançável", () => {
   // O DEFEITO, medido em 13/08/2026: `disabled` tira o botão da ordem de foco. Quem navega por
   // teclado não chega nele, então a dica pendurada ali não é lida por ninguém. O embrulho de
-  // <span> que o MUI documenta resolve o ponteiro e não resolve isto — o span nasce tabIndex -1.
+  // <span> que uma das referências documenta resolve o ponteiro e não resolve isto — o span nasce tabIndex -1.
   test("disabled: o foco NÃO chega, então a explicação não chega", async () => {
     const u = userEvent.setup();
     wrap(<><Button>Antes</Button>
@@ -369,8 +369,8 @@ describe("M4 — ação indisponível com o motivo alcançável", () => {
   });
 });
 
-// AccessGate — o portão. Nasceu de PESQUISA (o padrão existe: `Can` do CASL, `useCanAccess` do
-// react-admin, `AccessGate` dos guias de painel), não da pasta de referências, que não tem
+// AccessGate — o portão. Nasceu de PESQUISA (o padrão existe: numa biblioteca de permissões, num
+// framework de painel administrativo e nos guias de painel), não da pasta de referências, que não tem
 // nenhum. O que se cobra aqui é a escolha entre sumir e aparecer inerte COM motivo.
 describe("AccessGate — sumir ou aparecer inerte, com o motivo", () => {
   test("permitido: entrega o filho intacto, sem embrulho", () => {

@@ -4,8 +4,8 @@
 // painel era um `Card variant="inset"` nas DUAS variantes (recheio `cardPad`, 20, + borda, 1).
 // É o mesmo pedido da MNT-05 na web.
 //
-// No HeroUI o painel não é caixa: no Native 1.0.10 o `Tabs.Content` não tem estilo nenhum; na web,
-// o `.tabs__panel` é só `p-2`. Agora `panel="plain"` tira a caixa; o padrão continua o cartão.
+// Na referência o painel não é caixa: no nativo o conteúdo da aba não tem estilo nenhum; na web,
+// o painel é só um recheio de 8. Agora `panel="plain"` tira a caixa; o padrão continua o cartão.
 // Provado contra o defeito: com o painel sempre `Card` (o código de antes), os testes do `plain`
 // reprovam — sobra o recheio de 20 e o fundo `surfaceInset`.
 import {render} from "@testing-library/react";

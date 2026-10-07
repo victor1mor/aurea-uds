@@ -50,8 +50,8 @@ const folha = criarFolha((t) => ({
     },
     invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
     desabilitado: { opacity: t.size.opacityDisabled },
-    // R-22 (02/10/2026), a "B" da prancha: miniatura QUADRADA de 64 — o `Avatar` `lg` do HeroUI
-    // Native, e a medida que o botão de pôr foto passou a ter também (era 72, número à mão) — e o X
+    // R-22 (02/10/2026), a "B" da prancha: miniatura QUADRADA de 64 — o `Avatar` `lg` da
+    // referência, e a medida que o botão de pôr foto passou a ter também (era 72, número à mão) — e o X
     // TODO FORA da foto. O X é o `IconButton` `sm` (30) com fundo; a área de toque dele é de 44
     // (`targetMin`), com o desenho no centro, então o deslocamento que põe o canto do DESENHO no
     // canto da foto é (30 + 44) / 2. A grade deixa esse espaço em cima, à direita e entre as linhas,
@@ -184,7 +184,7 @@ function dataDaFoto(exif) {
  *
  * | | |
  * |---|---|
- * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` do HeroUI) |
+ * | miniatura | quadrada de 64, a `Image` da `Gallery` (o `Avatar` `lg` da referência) |
  * | tocar nela | abre a foto grande, no MESMO zoom da `Gallery` (`FotoAmpliada`) |
  * | o X | com fundo, TODO fora da foto, no canto de cima à direita |
  * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |

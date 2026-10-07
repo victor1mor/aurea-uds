@@ -1,5 +1,5 @@
-// RadioGroup do nativo (01/10/2026) · o `RadioGroup` do HeroUI Native 1.0.10, com a aparência da
-// Aurea. As medidas são as dele, nos tokens que dão o mesmo número: vão 12 (`space3`), marca 24
+// RadioGroup do nativo (01/10/2026) · o grupo de rádio da referência no nativo, com a aparência da
+// Aurea. As medidas são as dela, nos tokens que dão o mesmo número: vão 12 (`space3`), marca 24
 // (`space6`), ponto 10 (`space2 + space05`). O dublê não calcula layout; prova-se o pedido ao motor
 // e o contrato de acessibilidade. A prova de aparelho é o bloco RG do `apps/native-smoke`.
 import {act, render} from "@testing-library/react";
@@ -64,7 +64,7 @@ describe("RadioGroup · escolha", () => {
   });
 });
 
-describe("RadioGroup · as medidas do HeroUI", () => {
+describe("RadioGroup · as medidas da referência", () => {
   it("a linha: texto à esquerda, marca à direita, vão de 12 e alvo de toque mínimo", () => {
     render(<Envolve><Entrega /></Envolve>);
     const e = estilo(itens().at(-1)!);
@@ -98,7 +98,7 @@ describe("RadioGroup · as medidas do HeroUI", () => {
 describe("RadioGroup · indicatorPlacement (a marca no início ou no fim)", () => {
   const ordem = (p: Record<string, unknown>) =>
     ([p.children].flat(3) as Array<{key?: string} | false | null>).filter(Boolean).map((c) => (c as {key?: string}).key);
-  it("sem nada, a marca fica no fim, como o exemplo do HeroUI", () => {
+  it("sem nada, a marca fica no fim, como o exemplo da referência", () => {
     render(<Envolve><Entrega /></Envolve>);
     expect(ordem(itens().at(-1)!)).toEqual(["texto", "marca"]);
   });

@@ -192,23 +192,23 @@ describe("PasswordField — a senha e o olho", () => {
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // O BOTÃO COM MARCA DE FORA — a segunda falta que o app mediu, e a única resposta possível a ela.
 //
-// ⚠ **A Aurea NÃO tem, e não vai ter, o logo do Google nem o da Apple.** Não é esquecimento nem
-// preguiça: o Google proíbe redesenhar o "G" e manda usar o arquivo do pacote dele; a Apple
-// proíbe usar o logo sem licença escrita. Nossos 2571 ícones são cópia do Carbon, que tem 46
-// logos de marca — e nenhum dos dois está lá, pela mesma razão. Então a marca entra pelo app, e
+// ⚠ **A Aurea NÃO tem, e não vai ter, logo de outra empresa.** Não é esquecimento nem
+// preguiça: há dona de marca que proíbe redesenhar o logo e manda usar o arquivo do pacote dela, e há
+// a que proíbe usar o logo sem licença escrita. Nossos 2866 ícones são cópia do Phosphor SEM os
+// logotipos de marca dele, que ficaram de fora de propósito (`THIRD_PARTY_NOTICES.md`), pela mesma razão. Então a marca entra pelo app, e
 // o que se prova aqui é que ela CABE.
 describe("Button — a marca que vem de fora", () => {
   it("aceita um desenho qualquer na frente e atrás", () => {
     const Marca = () => null;
     render(<Envolve>
-      <Button leading={<Marca />} trailing={<Marca />} testID="b">Entrar com Google</Button>
+      <Button leading={<Marca />} trailing={<Marca />} testID="b">Entrar com a conta do serviço</Button>
     </Envolve>);
     const filhos = React.Children.toArray(porID("Pressable", "b").children as React.ReactNode);
     expect(filhos.length).toBeGreaterThan(0);
   });
 
-  // O QUE ESTE TESTE PROTEGE: alguém "melhorar" o slot tingindo o que entra nele. Tingir o "G"
-  // do Google é exatamente o que a regra dele proíbe.
+  // O QUE ESTE TESTE PROTEGE: alguém "melhorar" o slot tingindo o que entra nele. Tingir o logo
+  // de outra empresa é exatamente o que a regra dela proíbe.
   it("não tinge o que entra pelo slot", () => {
     const Marca = (p: {color?: string}) => { vistoColor = p.color; return null; };
     let vistoColor: string | undefined = "nao rodou";

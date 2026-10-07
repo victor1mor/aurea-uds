@@ -8,7 +8,7 @@
 // React Native): com ou sem `flex: 1`, o segmento fica do tamanho do texto —, mas a cápsula
 // também não ocupava a linha (245 de 343). Agora:
 //   · o segmento é do tamanho do rótulo, como a aba do `Tabs` e o `.segmented button` da web;
-//   · `fullWidth` (o nome do HeroUI) ocupa a linha: o rolador, a cápsula e cada segmento crescem,
+//   · `fullWidth` (o nome da referência) ocupa a linha: o rolador, a cápsula e cada segmento crescem,
 //     e o segmento cresce a PARTIR do rótulo (base `auto`), nunca abaixo dele.
 // Provado contra o defeito: com o `flex: 1` de volta no estilo `segmento`, o primeiro teste reprova.
 import {render} from "@testing-library/react";
@@ -65,8 +65,8 @@ describe("A5 · `fullWidth` ocupa a linha sem quebrar o rótulo", () => {
     for (const e of segmentos()) expect(e.flexGrow).toBe(1);
   });
 
-  // O segmento cresce a PARTIR do rótulo: base `auto` e sem encolher. Base zero (o `flex-1` do
-  // HeroUI, que no CSS tem o mínimo do texto e no Yoga não tem) repartiria igual de novo.
+  // O segmento cresce a PARTIR do rótulo: base `auto` e sem encolher. Base zero (o `flex-1` da
+  // referência, que no CSS tem o mínimo do texto e no Yoga não tem) repartiria igual de novo.
   it("cada segmento cresce a partir do rótulo e nunca encolhe abaixo dele", () => {
     render(<Envolve><SegmentedControl items={PERIODOS} value="Mês" fullWidth /></Envolve>);
     for (const e of segmentos()) {

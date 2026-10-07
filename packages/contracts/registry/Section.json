@@ -1,0 +1,92 @@
+{
+  "name": "Section",
+  "category": "Layout",
+  "layer": "Primitive",
+  "maturity": "Ready",
+  "summary": "An edge-to-edge band of a website page, with its own surface, site spacing and, optionally, its own theme.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variantProp": "surface",
+  "sizeProp": "spacing",
+  "variants": [
+    "background",
+    "card",
+    "inset"
+  ],
+  "sizes": [
+    "sm",
+    "md"
+  ],
+  "states": [],
+  "tokens": [
+    "--background",
+    "--card",
+    "--card-foreground",
+    "--foreground",
+    "--space-12",
+    "--space-16",
+    "--space-24",
+    "--space-8",
+    "--surface-inset"
+  ],
+  "a11y": {
+    "role": "region",
+    "keyboard": [],
+    "apg": "A <section> element. It is only announced as a region (a landmark) when it has an accessible name, so give the band a heading and point aria-labelledby at it when screen-reader users should be able to jump to it. No keyboard interaction: it is a layout band."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Container",
+      "Grid"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Section"
+  },
+  "props": [
+    {
+      "name": "surface",
+      "type": "\"background\" | \"card\" | \"inset\"",
+      "default": "\"background\"",
+      "description": "The band's background: the page's (the default), a card surface, or the recessed inset surface (GAR-04, 06/10/2026)."
+    },
+    {
+      "name": "spacing",
+      "type": "\"sm\" | \"md\"",
+      "default": "\"md\"",
+      "description": "The space above and below: md is --space-16 (64) and --space-24 (96) from the md breakpoint up; sm is half of that. Aurea's choice from existing tokens: none of the references had a section to read."
+    },
+    {
+      "name": "theme",
+      "type": "\"light\" | \"dark\"",
+      "default": "—",
+      "description": "A theme for this band only (GAR-05): theme=\"dark\" makes a dark band inside a light page, and the other way round. The background, the text and every piece inside follow the band's theme, and the page's light-theme rules do not leak into it."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The band's content, usually inside a Container."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes on the <section>."
+    }
+  ],
+  "axes": {
+    "theme": [
+      "dark",
+      "light"
+    ]
+  }
+}

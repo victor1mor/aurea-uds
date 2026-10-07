@@ -163,7 +163,7 @@ describe("Checkbox e Radio — o mesmo desenho, duas semânticas", () => {
 });
 
 describe("Switch — o interruptor que é NOSSO", () => {
-  // DEFEITO: usar o `Switch` do React Native. Ele desenha o interruptor do Material no Android e
+  // DEFEITO: usar o `Switch` do React Native. Ele desenha o interruptor do Android no Android e
   // o do iOS no iOS — duas aparências que o CLAUDE.md proíbe em voz alta.
   it("não é o Switch da plataforma: é Pressable com papel de switch", () => {
     render(<Envolve><Switch label="Lembrar" /></Envolve>);

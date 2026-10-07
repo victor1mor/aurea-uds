@@ -246,7 +246,7 @@ describe("NumberField — ele ESTICAVA, e o nosso CSS diz que abraça", () => {
     expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).flex).toBeUndefined();
   });
 
-  // O eixo é o da HeroUI (`fullWidth`, medido no inventário) — esticar é decisão de USO.
+  // O eixo é o da referência (medido no inventário) — esticar é decisão de USO.
   it("`fullWidth` estica, e é o que moeda formatada precisa", () => {
     render(<Envolve><NumberField value={3} fullWidth testID="nf" /></Envolve>);
     expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).flex).toBe(1);
@@ -364,8 +364,8 @@ describe("o formatador e a volta", () => {
 describe("NumberField — formata no blur, e SÓ no blur", () => {
   // 🔴 O DEFEITO QUE A ADR-0024 EXISTE PARA IMPEDIR, e ele PASSA em inspeção visual: formatar ao
   // vivo deixa a tela bonita e descasa o que o leitor de tela anuncia (o que foi digitado) do que
-  // o campo mostra (o que a máscara deixou passar). O USWDS publicou o defeito junto com o
-  // componente; o MUI abandonou a máscara na v6 por causa dele.
+  // o campo mostra (o que a máscara deixou passar). Um design system público publicou o defeito junto com o
+  // componente; uma das referências abandonou a máscara por causa dele.
   it("enquanto se digita, o campo mostra EXATAMENTE o que foi digitado", async () => {
     render(
       <Envolve>
@@ -463,9 +463,9 @@ describe("NumberField — os botões, que são o contador acumulado", () => {
 
 describe("NumberField — o foco, achado pela REFERÊNCIA", () => {
   // 🔴 ESTE DEFEITO NÃO FOI ACHADO POR MIM, E É O PONTO. Ele passou por 47 testes, pelo
-  // `validate.py`, pelo build e pela publicação. Quem o achou foi o inventário da HeroUI que já
-  // estava no repositório — `audit/activity-2/INVENTORY-HEROUI.json`, medido em 22/08/2026 sobre
-  // `@heroui/react@3.2.4`, que lista os estados do `number-field` deles:
+  // `validate.py`, pelo build e pela publicação. Quem o achou foi o inventário de uma das referências que
+  // já estava no repositório, medido em 22/08/2026 sobre o pacote dela, que lista
+  // os estados do campo numérico dela:
   //
   //     disabled · focus-visible · FOCUS-WITHIN · hovered · invalid · pressed
   //
@@ -506,8 +506,8 @@ describe("NumberField — o foco, achado pela REFERÊNCIA", () => {
   // exatamente aí.** Ela lia a borda no `TextInput` dos três e o `SearchField` devolveu
   // `undefined`. Não era defeito do componente: ali a borda mora no GRUPO, porque ele tem lupa e
   // botão de limpar dentro da mesma caixa — é o `.input-group:focus-within` do nosso CSS
-  // (`aurea.css:743`), e é a mesma estrutura que a HeroUI usa no `search-field` dela
-  // (`Root · Group · Input · ClearButton`, com `focus-within` no Group).
+  // (`aurea.css:743`), e é a mesma estrutura que a referência usa no campo de busca dela
+  // (raiz, grupo, campo e botão de limpar, com `focus-within` no grupo).
   //
   // Os outros dois são `.input:focus-visible` (`aurea.css`), com a borda no próprio campo. **Duas
   // anatomias, um token** — e o teste tem de perguntar ao nó certo em cada uma, senão ele reprova

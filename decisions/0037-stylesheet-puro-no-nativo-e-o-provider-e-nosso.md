@@ -74,7 +74,7 @@ dois campos num objeto. Não há seis temas a registrar, nem eixo a esconder do 
   plataforma.
 - **O mais rápido dos medidos**, pelos números publicados.
 - **Nenhum fornecedor no caminho crítico.** A 0028 já tinha olhado o modelo comercial do time do
-  Unistyles (o Uniwind tem tier pago) e registrado que isso se olha antes.
+  Unistyles (outro produto do mesmo time tem tier pago) e registrado que isso se olha antes.
 
 **Custa:**
 
@@ -88,8 +88,8 @@ dois campos num objeto. Não há seis temas a registrar, nem eixo a esconder do 
 ## O que NÃO muda, e é bom deixar escrito
 
 - **A filosofia continua a mesma, e é a razão de a 0028 ter escolhido o Unistyles em primeiro
-  lugar:** o motor não traz componentes. O `StyleSheet` traz menos ainda. A recusa ao Tamagui
-  (18/07/2026) e ao NativeWind continua valendo pelos mesmos motivos — disputar a identidade e
+  lugar:** o motor não traz componentes. O `StyleSheet` traz menos ainda. A recusa a um kit de motor e
+  componentes (18/07/2026) e a um motor de utilitário de classe continua valendo pelos mesmos motivos — disputar a identidade e
   modelo de utilitário de classe.
 - **A cor não muda.** A [ADR-0027](0027-a-cor-no-alvo-nativo.md) mediu que o interpretador de cor
   do React Native recusa gamute largo, e o Unistyles usava **o mesmo** interpretador. Trocar de
@@ -151,4 +151,4 @@ o outro lado:
 
 **O custo de sair continua limitado, nos dois sentidos.** Os tokens são nossos, os componentes
 seriam nossos, e o que se troca é a camada de tema. Não é aprisionamento de identidade — que era o
-risco do Tamagui, e continua sendo o motivo de ele estar fora.
+risco do kit de motor e componentes recusado em 18/07/2026, e continua sendo o motivo de ele estar fora.

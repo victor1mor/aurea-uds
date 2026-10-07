@@ -7,8 +7,8 @@ export interface AureaComboboxItem {
     value: string;
     label: string;
     /**
-     * Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg") — R-14, 01/10/2026. É o
-     * `Select.ItemDescription` do HeroUI Native 1.0.10 (`styles/components/select.css:117`): letra
+     * Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg") — R-14, 01/10/2026. É a
+     * descrição de item do `Select` da referência (na folha de estilo do `Select` dela): letra
      * `text-sm` (14), cor apagada. A busca continua olhando só o `label`.
      */
     description?: string;

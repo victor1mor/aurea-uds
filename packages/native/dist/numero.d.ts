@@ -4,8 +4,9 @@ import type { AureaIcon } from "./icon.js";
 import { type AureaFieldSize } from "./inputs.js";
 /**
  * Os tamanhos do `NumberField`: os três do campo e mais o `display` (R-16, 01/10/2026), o número
- * grande de destaque. Nenhuma referência da fila tem esse tamanho (o `NumberField` do HeroUI web
- * só tem `variant`; o telefone dele nem tem a peça; o ReUI também não), então ele é peça nossa —
+ * grande de destaque. Nenhuma referência da fila tem esse tamanho (o `NumberField` da principal,
+ * na web, só tem `variant`; no telefone ela nem tem a peça; a segunda também não), então ele é
+ * peça nossa —
  * e as medidas saem de escalas que JÁ existem, nenhuma nova:
  *   letra    `text3xl` (30) em seminegrito — o título 2 (`h2` do B-02). Escolha do Victor.
  *   altura   `controlHXl` — o degrau seguinte da escala de altura dos controles, que muda com a
@@ -73,7 +74,7 @@ export interface NumberFieldProps {
      * Ocupa a largura disponível em vez de abraçar o conteúdo. Padrão **false**.
      *
      * O padrão segue o `.number-field` da web, que é `inline-flex` (`aurea.css:704`) — e o mesmo
-     * eixo existe na HeroUI (`fullWidth`, medido no inventário). **Ligue para moeda:** o campo em
+     * eixo existe na referência (medido no inventário). **Ligue para moeda:** o campo em
      * repouso tem `--space-16` (64dp), que cabe um contador e não cabe `R$ 1.234,50`.
      */
     fullWidth?: boolean;

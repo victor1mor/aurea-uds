@@ -110,10 +110,16 @@
       "type": "string",
       "default": "—",
       "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference."
     }
   ],
   "notes": [
-    "THE LABEL MUST NOT CHANGE between the two states. If the text turns from \"Mute\" into \"Unmute\", or \"Play\" into \"Pause\", this is the wrong component — use a Button. A screen reader reads the new label and the pressed state at the same time, and the listener cannot tell whether the button describes what it IS or what it WILL DO. The rule is the W3C APG's and Adobe Spectrum's, and it is the one rule that decides between Toggle and Button.",
+    "THE LABEL MUST NOT CHANGE between the two states. If the text turns from \"Mute\" into \"Unmute\", or \"Play\" into \"Pause\", this is the wrong component — use a Button. A screen reader reads the new label and the pressed state at the same time, and the listener cannot tell whether the button describes what it IS or what it WILL DO. The rule is the W3C APG's and one of the references', and it is the one rule that decides between Toggle and Button.",
     "Button also accepts `pressed`. It is DEPRECATED since 0.4.0 and goes away in 1.0: two ways to make the same control is the \"which one do I use?\" that marks a duplicated feature."
   ]
 }

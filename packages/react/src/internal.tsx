@@ -1,5 +1,5 @@
 "use client";
-// A diretiva na LINHA 1, como as referências a escrevem (Base UI e shadcn/ui, medidos em
+// A diretiva na LINHA 1, como as referências a escrevem (o Base UI e outra delas, medidos em
 // 06/08/2026) — Parte A do PLANO-1.0. Este módulo chama `createContext`, que é API só de
 // cliente: sem a diretiva, `import {Button} from "@aurea-uds/react"` dentro de um componente
 // de servidor quebrava na hora, e quebrava no consumidor.
@@ -79,7 +79,7 @@ export const usePortalContainer=()=>useContext(PortalContext);
 // correção entre em uma só delas. A DOM do SortableList não mudou nesta extração — quem prova
 // isso são o gate de pixel e o `skin.spec`, que medem a saída e não a origem.
 //
-// O protocolo é o que o mercado consolidou (é o do dnd-kit, e o que os guias de arrasto
+// O protocolo é o que o mercado consolidou (é o das bibliotecas de arrastar e soltar, e o que os guias de arrasto
 // acessível descrevem): Espaço pega, setas movem, Espaço solta, Esc devolve ao lugar de onde
 // saiu. Cada passo é ANUNCIADO — sem isso quem não vê a lista move o item e não recebe
 // confirmação nenhuma.

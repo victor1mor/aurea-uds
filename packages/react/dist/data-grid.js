@@ -25,8 +25,8 @@ import { IconButton } from "./actions.js";
 //
 // Por que os nomes `manualSorting`/`manualFiltering`/`manualPagination` são os DO
 // MOTOR e não inventados aqui: as três referências de tabela foram medidas em
-// 08/08/2026 e NENHUMA expõe API controlada — o shadcn guarda tudo em useState
-// dentro do exemplo, o Kibo põe a ordenação num átomo global (jotai) e o Untitled
+// 08/08/2026 e NENHUMA expõe API controlada — uma guarda tudo em useState
+// dentro do exemplo, outra põe a ordenação num átomo de estado global e a terceira
 // é apresentação. Não havia anatomia para copiar; o vocabulário veio do contrato
 // do motor, que é o que o consumidor já lê na documentação dele.
 //
@@ -316,7 +316,7 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
     };
     const rove = (r, c) => eff.r === r && eff.c === c ? 0 : -1;
     const sortIcon = (dir) => dir === "asc" ? "caret-up" : dir === "desc" ? "caret-down" : "caret-up-down";
-    // F5: a barra de lote. Duas referências independentes (Activepieces e Kaneo) chegam
+    // F5: a barra de lote. Duas referências independentes chegam
     // à MESMA anatomia — contagem, divisória, ações, e um jeito de limpar —, então é
     // ela que entra. O que não entra é o resto das duas: barra `position:fixed` sobre a
     // janela inteira (decisão da APLICAÇÃO, não de um componente que o consumidor põe

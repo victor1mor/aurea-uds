@@ -15,8 +15,8 @@ export default {
     "THE LABEL MUST NOT CHANGE between the two states. If the text turns from \"Mute\" into "
     + "\"Unmute\", or \"Play\" into \"Pause\", this is the wrong component: use a Button. A screen "
     + "reader reads the new label and the state at the same time, and the listener cannot tell "
-    + "whether the button describes what it IS or what it WILL DO. The rule is the APG's and Adobe "
-    + "Spectrum's, and it is the one rule that decides between the two components.",
+    + "whether the button describes what it IS or what it WILL DO. The rule is the APG's and one of "
+    + "the references', and it is the one rule that decides between the two components.",
     "Icon only needs a name: pass label. Without visible children and without label the component "
     + "writes to the console, because an anonymous button is a dead end for a screen reader.",
     "It is not a Switch and not a Checkbox. A switch is a setting that applies immediately; a "

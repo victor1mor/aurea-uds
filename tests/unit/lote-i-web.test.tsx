@@ -1,5 +1,5 @@
 // Lote I, o lado da WEB (06/10/2026). Os pedidos vieram do nativo (A5 e C9), e a web leva as
-// mesmas props com os mesmos nomes — a regra do HeroUI de um nome só nos dois alvos (DOC-11):
+// mesmas props com os mesmos nomes — a regra da referência de um nome só nos dois alvos (DOC-11):
 //   · `SegmentedControl fullWidth`: ocupa a linha; cada segmento cresce a partir do rótulo
 //     (`flex:1 0 auto`) e não encolhe abaixo dele. O padrão não muda;
 //   · `Tabs panel="plain"`: o painel sem caixa (a MNT-05, que já pedia isso na web). O padrão

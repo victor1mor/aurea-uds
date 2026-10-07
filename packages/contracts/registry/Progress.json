@@ -51,7 +51,7 @@
       "name": "value",
       "type": "number",
       "default": "—",
-      "description": "Percentage, 0 to 100. Clamped once and used for both the fill and aria-valuenow, so what is drawn and what is announced cannot drift apart. Without a value the bar is indeterminate (AN-07): a piece two fifths wide runs across the track — HeroUI's numbers, 1.5 s — instead of a 0% that reads as stalled. With reduced motion it does not run: the whole bar, dimmed, never a still piece that would read as 40% done."
+      "description": "Percentage, 0 to 100. Clamped once and used for both the fill and aria-valuenow, so what is drawn and what is announced cannot drift apart. Without a value the bar is indeterminate (AN-07): a piece two fifths wide runs across the track — the reference library's numbers, 1.5 s — instead of a 0% that reads as stalled. With reduced motion it does not run: the whole bar, dimmed, never a still piece that would read as 40% done."
     },
     {
       "name": "label",
@@ -63,7 +63,7 @@
       "name": "detail",
       "type": "ReactNode",
       "default": "—",
-      "description": "Supporting text above the track, on the end side — HeroUI's ProgressBar.Output: speed, time left, bytes. Small, muted, tabular figures. As text it also becomes aria-valuetext; anything else (a link) stays where it is for the screen reader to reach."
+      "description": "Supporting text above the track, on the end side — the reference library's ProgressBar.Output: speed, time left, bytes. Small, muted, tabular figures. As text it also becomes aria-valuetext; anything else (a link) stays where it is for the screen reader to reach."
     },
     {
       "name": "tone",

@@ -119,7 +119,7 @@ const folha = criarFolha((t) => ({
     // pinta fundo, borda e raio é a `caixa` interna, com a altura do token. O botão continua com
     // 36 dp de desenho e passa a ter 44 de alvo — e o leitor de tela enxerga os 44, porque o
     // elemento acessível é o `Pressable`, não um retângulo invisível ao lado dele.
-    // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como no HeroUI Native (`button.css`
+    // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como na referência (a folha do botão dela
     // não fixa alinhamento) e como o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, e ele
     // vencia o `alignItems: "center"` do pai: o botão do `EmptyState` ficava à esquerda com o resto
     // no meio. ⚠ A consequência, decidida pelo Victor: numa coluna sem alinhamento o botão ESTICA,
@@ -161,7 +161,7 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
         ...(fullWidth ? { flex: 1 } : null),
-        // `.link-button__root` do HeroUI Native: `height: auto; padding: 0`, e o `.button__root` já
+        // A regra do botão-link da referência: `height: auto; padding: 0`, e a do botão dela já
         // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
         ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
     }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
@@ -170,8 +170,8 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
             s.alvo, fullWidth && s.alvoLargura,
             tocando && s.pressionado, disabled && s.inerte,
         ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa], children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
-                    // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão do HeroUI Native
-                    // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e a letra
+                    // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão da referência
+                    // (a folha do botão dela usa a entrelinha de cada degrau da escala). Era `none` (1,0), e a letra
                     // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a
                     // Atkinson Hyperlegible (ADR-0053) sobe 0,984 e desce 0,316, o mesmo 1,3 (medido na
                     // tabela `hhea` dos dois arquivos, 01/10/2026): no Android o RN
@@ -181,7 +181,7 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
                     ? _jsx(Text, { size: FONTE[size], weight: 500, leading: "normal", style: { color: corDoTexto }, children: children })
                     : children, trailingIcon ? _jsx(Icon, { name: trailingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, trailing ?? null] }) }));
 }
-/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
+/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export function LinkButton(props) {
     return _jsx(CorpoDoBotao, { ...props, appearance: "ghost", semRecuo: true });
 }
@@ -190,7 +190,7 @@ export function LinkButton(props) {
  *
  * O raio é o da cápsula (`radiusControl`, 999) num quadrado, e um quadrado com raio 999 é um
  * círculo — o mesmo que o `.btn-icon` do core faz. Decisão do Victor, 25/09/2026 (ADR-0052): era
- * `--radius-md`/`--radius-sm`, e o HeroUI 3.2.6 faz o botão só de ícone redondo.
+ * `--radius-md`/`--radius-sm`, e a referência faz o botão só de ícone redondo.
  *
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
@@ -214,7 +214,7 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
     }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
     return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
-            // Largura FIXA, como o só-ícone do HeroUI (`.button--icon-only`: `w-10`): ele nunca estica,
+            // Largura FIXA, como o só-ícone da referência: ele nunca estica,
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
             s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,

@@ -150,7 +150,7 @@ framework** — 63 páginas de componente + índice à época (contagem atual em
 A moldura é dogfooded (AppShell, Topbar, Sidebar, Badge, Status).
 
 - **Etapa 1** ✅ — catálogo gerado do registry (63 fichas, 27 previews). `402a66d`
-- **Etapa 2** ✅ — uma página por componente, page model do Kibo: breadcrumb →
+- **Etapa 2** ✅ — uma página por componente, page model da referência: breadcrumb →
   header → Preview/Code → Installation → Reference → Features → Examples →
   prev/next. Conteúdo rico por componente em `apps/catalog/content/<Name>.mjs`
   (molde: `Button.mjs`); os demais caem no fallback do registry. `eadcaf8`
@@ -522,7 +522,7 @@ usar o nativo (regra: feature de plataforma antes de lib). Registrar a decisão.
 Base UI 1.6.0 **não tem date component público** — nenhum export `calendar`/
 `date-field`/`date-picker`, só `internals/temporal` + adapters date-fns/luxon
 (maquinaria interna instável; Calendar/DateField primitives ainda são issue
-aberta, mui/base-ui#1709). Os peers `date-fns`/`@date-fns/tz` seguem **não
+aberta, o defeito #1709 do Base UI). Os peers `date-fns`/`@date-fns/tz` seguem **não
 instalados**. `<input type="date"/"datetime-local">` com `.input` cobre:
 teclado, leitor de tela e localização vêm do browser.
 

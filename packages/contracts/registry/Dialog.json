@@ -90,7 +90,7 @@
       "name": "size",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
       "default": "\"md\"",
-      "description": "The width (B-03), chosen by Victor: HeroUI's four (xs 320, sm 384, md 448, lg 512), then xl (1024, the --breakpoint-lg token) for a wide detail view, and full — the screen minus the usual margin, keeping the 22 radius. The default became HeroUI's md, 448; up to 0.8.14 every dialog was 560."
+      "description": "The width (B-03), chosen by Victor: the reference library's four (xs 320, sm 384, md 448, lg 512), then xl (1024, the --breakpoint-lg token) for a wide detail view, and full — the screen minus the usual margin, keeping the 22 radius. The default became the reference library's md, 448; up to 0.8.14 every dialog was 560."
     },
     {
       "name": "dismissible",

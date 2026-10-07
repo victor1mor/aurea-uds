@@ -133,7 +133,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // pinta fundo, borda e raio é a `caixa` interna, com a altura do token. O botão continua com
   // 36 dp de desenho e passa a ter 44 de alvo — e o leitor de tela enxerga os 44, porque o
   // elemento acessível é o `Pressable`, não um retângulo invisível ao lado dele.
-  // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como no HeroUI Native (`button.css`
+  // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como na referência (a folha do botão dela
   // não fixa alinhamento) e como o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, e ele
   // vencia o `alignItems: "center"` do pai: o botão do `EmptyState` ficava à esquerda com o resto
   // no meio. ⚠ A consequência, decidida pelo Victor: numa coluna sem alinhamento o botão ESTICA,
@@ -160,19 +160,19 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   /**
    * Um desenho QUALQUER na frente do texto, para quando a marca não pode ser um ícone nosso.
    *
-   * ⚠ **Ele existe por causa de MARCA REGISTRADA, não por conveniência.** O botão "Entrar com
-   * Google" e o "Entrar com Apple" exigem o desenho oficial de cada um, e nenhum dos dois pode
-   * viver dentro desta biblioteca: o Google proíbe redesenhar e manda usar o arquivo do pacote
-   * dele; a Apple proíbe usar o logo sem licença escrita. **Então a marca entra pelo app**, e o
+   * ⚠ **Ele existe por causa de MARCA REGISTRADA, não por conveniência.** Os botões de entrar com
+   * a conta de outras empresas exigem o desenho oficial de cada uma, e nenhum deles pode
+   * viver dentro desta biblioteca: uma delas proíbe redesenhar e manda usar o arquivo do pacote
+   * dela; outra proíbe usar o logo sem licença escrita. **Então a marca entra pelo app**, e o
    * que a Aurea dá é a cápsula em volta.
    *
-   *     <Button appearance="outline" leading={<RNImage source={logoGoogle} style={{width: 18, height: 18}} />}>
-   *       Entrar com Google
+   *     <Button appearance="outline" leading={<RNImage source={logoDoServico} style={{width: 18, height: 18}} />}>
+   *       Entrar com a conta do serviço
    *     </Button>
    *
    * ⚠ **A cor do texto NÃO atravessa para cá** — o que entra desenha a própria cor, e é assim
-   * que tem de ser: a marca do Google tem cor fixa, e tingi-la seria justamente o que a regra
-   * dele proíbe. Um `leadingIcon` nosso continua herdando a cor do botão.
+   * que tem de ser: a marca da empresa tem cor fixa, e tingi-la seria justamente o que a regra
+   * dela proíbe. Um `leadingIcon` nosso continua herdando a cor do botão.
    */
   leading?: React.ReactNode;
   /** O mesmo, do outro lado. */
@@ -216,7 +216,7 @@ function CorpoDoBotao({
     backgroundColor: appearance === "solid" ? cor.solido : "transparent",
     borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
     ...(fullWidth ? {flex: 1} : null),
-    // `.link-button__root` do HeroUI Native: `height: auto; padding: 0`, e o `.button__root` já
+    // A regra do botão-link da referência: `height: auto; padding: 0`, e a do botão dela já
     // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
     ...(semRecuo ? {height: undefined, paddingHorizontal: 0, borderWidth: 0} : null),
   }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
@@ -238,8 +238,8 @@ function CorpoDoBotao({
         {leading ?? null}
         {leadingIcon ? <Icon name={leadingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
         {typeof children === "string"
-          // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão do HeroUI Native
-          // (`button.css`: `line-height: var(--text-*--line-height)`). Era `none` (1,0), e a letra
+          // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão da referência
+          // (a folha do botão dela usa a entrelinha de cada degrau da escala). Era `none` (1,0), e a letra
           // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a
           // Atkinson Hyperlegible (ADR-0053) sobe 0,984 e desce 0,316, o mesmo 1,3 (medido na
           // tabela `hhea` dos dois arquivos, 01/10/2026): no Android o RN
@@ -257,7 +257,7 @@ function CorpoDoBotao({
 
 // ── LinkButton (E9, 0.12.1) ──────────────────────────────────────────────────────────────────
 // O botão-texto que encosta na margem: "Escolher pela marca", "Não encontrei. Cadastrar à mão". É
-// o `LinkButton` do HeroUI Native (`link-button.tsx` + `link-button.css`, 1.0.10): o `Button` sem
+// o `LinkButton` da referência (o componente e a folha de estilo dele): o `Button` sem
 // fundo, com `height: auto; padding: 0`, e a variante travada — quem quer caixa usa o `Button`.
 // ⚠ A área de toque não encolhe: o alvo continua com `targetMin` (44) de altura, e só o desenho
 // perde o recuo. ⚠ Como todo `Button`, ele obedece o pai (E2): numa coluna que estica, o texto vai
@@ -265,7 +265,7 @@ function CorpoDoBotao({
 
 export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth"> {}
 
-/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
+/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export function LinkButton(props: LinkButtonProps) {
   return <CorpoDoBotao {...props} appearance="ghost" semRecuo />;
 }
@@ -281,7 +281,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  *
  * O raio é o da cápsula (`radiusControl`, 999) num quadrado, e um quadrado com raio 999 é um
  * círculo — o mesmo que o `.btn-icon` do core faz. Decisão do Victor, 25/09/2026 (ADR-0052): era
- * `--radius-md`/`--radius-sm`, e o HeroUI 3.2.6 faz o botão só de ícone redondo.
+ * `--radius-md`/`--radius-sm`, e a referência faz o botão só de ícone redondo.
  *
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
@@ -317,7 +317,7 @@ function BotaoDeIcone({
       accessibilityLabel={label}
       {...estadoAcessivel({disabled: !!disabled, pressed})}
       style={({pressed: tocando}) => [
-        // Largura FIXA, como o só-ícone do HeroUI (`.button--icon-only`: `w-10`): ele nunca estica,
+        // Largura FIXA, como o só-ícone da referência: ele nunca estica,
         // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
         s.alvo, {width: Math.max(lado, t.size.targetMin), alignItems: "center"},
         tocando && s.pressionado, disabled && s.inerte,
@@ -332,8 +332,8 @@ function BotaoDeIcone({
 }
 
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone — o
-// irmão do da web. Peça EXCLUSIVA da Aurea (o HeroUI Native não tem troca de tema), pensada como
-// ele faria: um só-ícone, sem cor solta. Mostra o tema para onde se VAI: no claro a LUA, na tinta
+// irmão do da web. Peça EXCLUSIVA da Aurea (a referência não tem troca de tema), pensada como
+// ela faria: um só-ícone, sem cor solta. Mostra o tema para onde se VAI: no claro a LUA, na tinta
 // do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` (na forma cheia, `moon-fill` e `sun-fill`) saem do registro do
 // app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */

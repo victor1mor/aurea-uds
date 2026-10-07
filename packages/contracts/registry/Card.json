@@ -87,7 +87,7 @@
       "name": "orientation",
       "type": "\"vertical\" | \"horizontal\"",
       "default": "\"vertical\"",
-      "description": "`horizontal` is the LIST mode (A-14, from the Card spec approved on 22/09/2026): Card.Media on the left at thumbnail width (96, --space-24 — the size-24 of HeroUI's horizontal example) and the content beside it. In one app's list mode the cover took the full width (954 × 1,431 px): one card per screen."
+      "description": "`horizontal` is the LIST mode (A-14, from the Card spec approved on 22/09/2026): Card.Media on the left at thumbnail width (96, --space-24 — the size-24 of the reference library's horizontal example) and the content beside it. In one app's list mode the cover took the full width (954 × 1,431 px): one card per screen."
     },
     {
       "name": "Card.Media",

@@ -38,10 +38,12 @@ jobs:
 
       - name: Validate (nomes privados, tokens, dist==build, licenças, sem gradientes)
         run: python scripts/validate.py
-        # A lista de nomes privados mora num SEGREDO do repositório, não no código. O GitHub não
-        # entrega segredo a pedido vindo de fork; só nesse caso o check 1 é declarado pulado.
+        # As listas de nomes privados e de referências de construção (check 1b) moram em SEGREDOS
+        # do repositório, não no código. O GitHub não entrega segredo a pedido vindo de fork; só
+        # nesse caso os checks 1 e 1b são declarados pulados.
         env:
           AUREA_NOMES_PRIVADOS: ${{ secrets.AUREA_NOMES_PRIVADOS }}
+          AUREA_REFERENCIAS: ${{ secrets.AUREA_REFERENCIAS }}
           AUREA_SEM_LISTA: ${{ github.event.pull_request.head.repo.fork && '1' || '' }}
 
       # Inclui build:catalog — as 169 páginas são geradas aqui. Com o passo seguinte

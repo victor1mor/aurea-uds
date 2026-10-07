@@ -1,7 +1,7 @@
 # ADR-0049 — A escala de letras tem cinco degraus que se enxergam, e os dez nomes continuam
 
 - **Data:** 19/09/2026
-- **Estado:** ~~aceita~~ **substituída pela [ADR-0050](0050-a-escala-de-letras-e-a-do-heroui.md) em 24/09/2026**
+- **Estado:** ~~aceita~~ **substituída pela [ADR-0050](0050-a-escala-de-letras-vem-da-referencia.md) em 24/09/2026**
 - **Autoria:** decisão do Victor, olhando o app no aparelho — *"o tamanho das fontes: existem
   variações demais, fica muito estranho"* —, levada por ele ao consumidor como item **C15** e
   autorizada depois da medição abaixo.

@@ -52,7 +52,7 @@ export {ContainerScope, useValorResponsivo} from "./responsivo-runtime.js";
 // como referência de CLIENTE e os 118,5 KB voltam com ele. Não é um erro: é o ganho do item O1
 // se desfazendo em silêncio. É isso, exatamente isso, que o check 35 pega.
 export {AspectRatio, InputGroup, InputGroupAddon, Label,
-  Card, Stack, Cluster, Grid, KPI, DataList, Timeline, Prose, Text, Heading, Paragraph, Code,
+  Card, Stack, Cluster, Grid, Container, Section, KPI, DataList, Timeline, Prose, Text, Heading, Paragraph, Code,
   Badge, Progress, Skeleton,
   AvatarGroup, LogStream, MediaPlayerShell, Topbar, Kbd, Textarea, Checkbox, Radio,
   Switch, Range, formatBadgeCount, type BadgeVariant, type BadgeEmphasis, type BadgeSize,

@@ -285,7 +285,7 @@ export default {
     code: `<ThemeToggle />`,
     render: () => h(A.ThemeToggle, null),
   },
-  // Tipografia (B-02, 25/09/2026), no molde do HeroUI 3.2.6: uma lista fechada de papéis. As
+  // Tipografia (B-02, 25/09/2026), no molde da referência: uma lista fechada de papéis. As
   // prévias mostram a lista INTEIRA de cada peça, porque o que se escolhe é o papel — ver todos lado
   // a lado é o que ensina que não existe "um tamanho entre o h3 e o h4".
   Text: {
@@ -304,7 +304,7 @@ export default {
   Heading: {
     // Do 2 ao 6, e não do 1: uma página tem UM h1, e aqui ele é o título da própria página do
     // catálogo (a varredura cobra). É também a lição da peça — o h1 é o título da tela, uma vez só.
-    description: "A heading, h1 to h6. The level picks both the element and the size, as in HeroUI — "
+    description: "A heading, h1 to h6. The level picks both the element and the size, as in the reference library — "
       + "keep levels in order, and use level 1 once per page, for its title.",
     code: `<Heading level={2}>This month</Heading>
 <Heading level={3}>By team</Heading>
@@ -680,8 +680,39 @@ export default {
     render: () => h("div", {style: {width: "100%"}}, h(A.Grid, null,
       h(A.Card, null, "One"), h(A.Card, null, "Two"), h(A.Card, null, "Three"))),
   },
+  // GAR-02 a GAR-05 (06/10/2026): a página de site. A prévia mostra as três peças juntas, porque é
+  // assim que elas trabalham: a faixa de ponta a ponta, o container de leitura, e a grade de 12.
+  Container: {
+    description: "The reading width of a website page: centred, capped at 1280 by default, with a "
+      + "side gutter of 16 that grows to 32 from the md breakpoint. It goes inside a Section.",
+    code: `<Container>
+  <Heading level={2}>Fichas técnicas</Heading>
+</Container>`,
+    render: () => h("div", {style: {width: "100%"}}, h(A.Container, {size: "sm"},
+      h(A.Card, null, "Content, centred and capped"))),
+  },
+  Section: {
+    description: "An edge-to-edge band of a website page, with its own surface and site spacing. "
+      + "theme=\"dark\" makes a dark band inside a light page; nothing of the page's light theme leaks in.",
+    code: `<Section theme="dark" aria-labelledby="t-app">
+  <Container>
+    <Grid columns={12}>
+      <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
+        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+      </Grid.Item>
+      <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
+        <Button tone="brand">Baixar</Button>
+      </Grid.Item>
+    </Grid>
+  </Container>
+</Section>`,
+    render: () => h("div", {style: {width: "100%"}}, h(A.Section, {theme: "dark", spacing: "sm"},
+      h(A.Container, null, h(A.Grid, {columns: 12},
+        h(A.Grid.Item, {span: {base: "12", viewport: {md: "7"}}}, h("strong", null, "A dark band")),
+        h(A.Grid.Item, {span: {base: "12", viewport: {md: "5"}}}, h(A.Button, {variant: "primary-outline"}, "Its own theme")))))),
+  },
   Icon: {
-    description: "One <svg><use> pointing at the shared Carbon sprite. The sprite URL comes "
+    description: "One <svg><use> pointing at the shared icon sprite. The sprite URL comes "
       + "from the AureaProvider, never from the call site.",
     code: `<Icon name="magnifying-glass" />
 <Icon name="plus" size="lg" />

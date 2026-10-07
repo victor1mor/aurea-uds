@@ -68,8 +68,8 @@ export type TopbarVariant="floating"|"flush"|"pill";
 // A-14 (24/09/2026), da especificação do `Card` aprovada pelo Victor em 22/09: `orientation=
 // "horizontal"` é o modo LISTA — a mídia (`Card.Media`) à esquerda, com a largura de miniatura, e
 // o conteúdo ao lado. No modo lista de um app a capa ocupava a largura toda (954 × 1.431 px) e cada
-// cartão virava um pôster: um por tela. A medida é a do exemplo horizontal do HeroUI (a imagem
-// `size-24` = 96, e `gap-4` = 16), que é o nosso `--space-24`. O padrão continua vertical.
+// cartão virava um pôster: um por tela. A medida é a do exemplo horizontal da referência (a imagem
+// de 96, e o vão de 16), que é o nosso `--space-24`. O padrão continua vertical.
 type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal"};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
@@ -110,7 +110,7 @@ export interface StackProps extends DivProps{
 }
 export function Stack({gap,align,className,...props}:StackProps){return <div className={cx("stack",gap&&gap!=="normal"&&`stack-gap-${gap}`,align&&align!=="stretch"&&`stack-align-${align}`,className)} {...props}/>}
 // SEPARATOR — a régua entre coisas. Faltava: a Aurea só tinha `.prose hr` (preso à prosa) e o
-// `ToolbarSeparator` (preso ao Toolbar). Untitled UI precisa dela para a variante de seções da
+// `ToolbarSeparator` (preso ao Toolbar). Uma das referências precisa dela para a variante de seções da
 // lateral, e ela serve em todo lugar.
 //
 // É `<hr>`, e isso é decisão medida em 18/08/2026. O motor que já usamos ENTREGA um `Separator` —
@@ -124,10 +124,10 @@ export function Stack({gap,align,className,...props}:StackProps){return <div cla
 // e o APG avisa que ARIA a mais é pior que ARIA nenhuma. O papel `separator` também tem orientação
 // HORIZONTAL por padrão: por isso `aria-orientation` só aparece quando é vertical.
 //
-// O que NÃO entrou, pelo passo 5: as três tonalidades do HeroUI (`secondary`/`tertiary`) — a Aurea
-// tem um `--border` e inventar escala de tom aqui seria copiar o sistema de token deles. E o
-// separador COM RÓTULO no meio ("or", uma data numa conversa), que eles têm em
-// `separator__container` + `__line` + `__content`: é outra estrutura (o `<hr>` não carrega texto),
+// O que NÃO entrou, pelo passo 5: as três tonalidades da referência (`secondary`/`tertiary`) — a Aurea
+// tem um `--border` e inventar escala de tom aqui seria copiar o sistema de token dela. E o
+// separador COM RÓTULO no meio ("or", uma data numa conversa), que ela monta com
+// um contêiner, as linhas e o conteúdo: é outra estrutura (o `<hr>` não carrega texto),
 // ninguém pediu ainda, e fica registrado aqui como o próximo degrau se alguém precisar.
 // O `Separator` SAIU daqui em 29/08/2026, e a razão é o gate que provou a decisão errada.
 // Ele era um <hr> com orientação estática, e o `comportamental.multi-motor.spec.ts` — a prova
@@ -148,7 +148,7 @@ export interface ClusterProps extends DivProps{
 }
 export function Cluster({gap,align,justify,wrap,className,...props}:ClusterProps){return <div className={cx("cluster",gap&&gap!=="normal"&&`cluster-gap-${gap}`,align&&align!=="center"&&`cluster-align-${align}`,justify&&justify!=="start"&&`cluster-justify-${justify}`,wrap===false&&"cluster-nowrap",className)} {...props}/>}
 /**
- * A largura mínima da coluna, por nome — AN-08 (03/10/2026). O HeroUI não tem `Grid`, e nenhum dos
+ * A largura mínima da coluna, por nome — AN-08 (03/10/2026). A referência não tem `Grid`, e nenhum dos
  * quatro números é novo: cada um já mede uma grade ou uma caixa da Aurea (ver `.grid-min-*` no CSS).
  * `md` é o padrão de sempre.
  */
@@ -173,6 +173,66 @@ export function Grid({gap,min,columns,className,style,...props}:GridProps){
     ?{...(medida!=null?{"--grid-min":medida}:{}),...(columns!=null?{"--grid-cols":String(columns)}:{}),...style} as React.CSSProperties
     :style;
   return <div className={cx("grid",gap&&gap!=="normal"&&`grid-gap-${gap}`,nome&&min!=="md"&&`grid-min-${min}`,columns!=null&&"grid-fixed",className)} style={vars} {...props}/>}
+/**
+ * Quantas colunas da grade o item ocupa — GAR-03 (06/10/2026). Texto, e não número, porque é o
+ * valor de um eixo responsivo, como `size` e `orientation`.
+ */
+export type GridSpan="1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"|"11"|"12";
+export interface GridItemProps extends DivProps{
+  /**
+   * Quantas colunas o item ocupa (GAR-03). Com `<Grid columns={12}>` é o "7 de 12" de página de
+   * site. Responsivo, mobile-first: `{base: "12", viewport: {md: "7"}}` ocupa a linha inteira no
+   * estreito e 7 de 12 a partir do `md`. Sem `span`, uma coluna, como qualquer filho de grade.
+   */
+  span?:Responsive<GridSpan>;
+}
+/** O item da grade que sabe quantas colunas ocupa (GAR-03). Mora em `Grid.Item`, como `Card.Media`. */
+function GridItem({span,className,...props}:GridItemProps){
+  return <div className={cx("grid-item",peleDoEixo("grid-span",span,"","grid-span"),className)} {...props}/>}
+Grid.Item=GridItem;
+
+// ── Página de site: Container e Section (GAR-02, GAR-04, GAR-05 — 06/10/2026) ───────────────
+// A referência principal não tem nenhum dos dois. Na fila de referências, a primeira que tem o
+// container usa largura máxima de 1280px e respiro de 16 que vai a 32 a partir do ponto médio, e outra tem o
+// contêiner com largura máxima por ponto da escala. As seções daquela primeira são pagas e não foram
+// lidas: o respiro da `Section` é escolha da Aurea, com tokens que já existem (ver o `aurea.css`).
+/** A largura máxima do `Container`, pelos nomes da escala de pontos. `xl` (1280) é o padrão. */
+export type ContainerSize="sm"|"md"|"lg"|"xl"|"2xl"|"full";
+// `HTMLAttributes` + `RefAttributes` escritos aqui, e não o `DivProps`: o `build-api-surface` não
+// enxerga as props de quem estende o `DivProps` (o `Grid` sai vazio no `api-surface.json` pelo mesmo
+// motivo), e o check 11 confere o `size` da ficha contra o tipo por esse arquivo.
+export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement>{
+  /** Até onde o conteúdo cresce: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280 (padrão) · `2xl` 1536 · `full` sem teto. */
+  size?:ContainerSize;
+}
+/**
+ * A largura de leitura de uma página de SITE: centrada, com teto e o respiro dos lados que cresce
+ * com a tela (16 no estreito, 32 a partir do `md`). É o que vai DENTRO de uma `Section`. O painel
+ * de aplicativo continua sendo o `AppShell`.
+ */
+export function Container({size="xl",className,...props}:ContainerProps){
+  return <div className={cx("container",size!=="xl"&&`container-${size}`,className)} {...props}/>}
+/** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
+export type SectionSurface="background"|"card"|"inset";
+/** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
+export type SectionSpacing="sm"|"md";
+export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement>{
+  surface?:SectionSurface;
+  spacing?:SectionSpacing;
+  /**
+   * Um tema só para esta faixa (GAR-05): `"dark"` faz uma faixa escura dentro de uma página clara,
+   * e o contrário. Fundo, letra e peças de dentro seguem o tema da faixa, e as regras de tema da
+   * página não vazam para dentro dela.
+   */
+  theme?:"light"|"dark";
+}
+/**
+ * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
+ * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
+ * quando ela for uma região que o leitor de tela deva listar.
+ */
+export function Section({surface="background",spacing="md",theme,className,...props}:SectionProps){
+  return <section data-theme={theme} className={cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`,className)} {...props}/>}
 
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({label,value,trend,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label:ReactNode;value:ReactNode;trend?:ReactNode}){return <Card className={cx("kpi",className)} {...props}><span className="muted">{label}</span><strong>{value}</strong>{trend&&<small>{trend}</small>}</Card>}
@@ -186,11 +246,11 @@ export function Timeline({items}:{items:Array<{title:ReactNode;description?:Reac
 export function Prose({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("prose",className)} {...props}/>}
 
 // ── Tipografia: Text, Heading, Paragraph e Code — B-02, 25/09/2026 ─────────────────────────────
-// No molde do HeroUI 3.2.6 (`Typography` e os atalhos `Heading`, `Paragraph`, `Code`), por ordem
-// do Victor: HeroUI sempre primeiro. A forma é a dele — uma LISTA FECHADA de papéis, e não
+// No molde da referência (o componente de tipografia e os atalhos `Heading`, `Paragraph`, `Code`),
+// por ordem do Victor: a referência sempre primeiro. A forma é a dela — uma LISTA FECHADA de papéis, e não
 // tamanhos soltos: quem usa escolhe "título 2", nunca "25px". É a resposta de fundação à ordem de
 // 19/09/2026, "existem variações demais". Os números são nossos, todos de token (`aurea.css`,
-// bloco TIPOGRAFIA). Como no HeroUI, o `Text` não troca de elemento: é um `<span>`; parágrafo,
+// bloco TIPOGRAFIA). Como na referência, o `Text` não troca de elemento: é um `<span>`; parágrafo,
 // título e código têm peça própria, com o elemento certo para o leitor de tela.
 export type TypographyType="body"|"body-sm"|"body-xs"|"code"|"h1"|"h2"|"h3"|"h4"|"h5"|"h6";
 export type TypographyColor="default"|"muted";
@@ -204,7 +264,7 @@ const tipografia=(tipo:TypographyType,{align,color,weight,truncate}:TypographyBa
 export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>,"color">,RefAttributes<HTMLSpanElement>,TypographyBase{type?:TypographyType}
 export function Text({type="body",align,color,weight,truncate,className,...props}:TextProps){return <span className={tipografia(type,{align,color,weight,truncate},className)} {...props}/>}
 export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>,"color">,RefAttributes<HTMLHeadingElement>,TypographyBase{level?:HeadingLevel}
-// O nível decide o elemento E o tamanho, como no HeroUI: um `h2` tem a cara de título 2.
+// O nível decide o elemento E o tamanho, como na referência: um `h2` tem a cara de título 2.
 export function Heading({level=1,align,color,weight,truncate,className,...props}:HeadingProps){const Tag=`h${level}` as "h1";return <Tag className={tipografia(`h${level}`,{align,color,weight,truncate},className)} {...props}/>}
 export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>,"color">,RefAttributes<HTMLParagraphElement>,TypographyBase{size?:ParagraphSize}
 export function Paragraph({size="base",align,color,weight,truncate,className,...props}:ParagraphProps){return <p className={tipografia(size==="base"?"body":`body-${size}`,{align,color,weight,truncate},className)} {...props}/>}
@@ -213,12 +273,12 @@ export function Code({align,color,weight,truncate,className,...props}:CodeProps)
 
 // ── Feedback ─────────────────────────────────────────────────────────────────────────────────
 // ── BADGE ────────────────────────────────────────────────────────────────────────────────────
-// Reescrito em 17/08/2026 lendo, no fonte local, a `badges.tsx` da Untitled UI e a `Badge.js` da
-// MUI. O anterior era UMA forma, UM tamanho e seis cores — e o Victor tinha razão: pobre.
+// Reescrito em 17/08/2026 lendo, no fonte local, o selo de uma das referências e o
+// de outra. O anterior era UMA forma, UM tamanho e seis cores — e o Victor tinha razão: pobre.
 //
 // AS DUAS PEÇAS QUE AS REFERÊNCIAS CHAMAM PELO MESMO NOME, e que aqui viram UM componente:
-//   • o CHIP  — a Untitled UI, o ReUI, o nosso de antes: metadado curto numa pílula.
-//   • o SOBREPOSTO — a MUI: contador no canto de OUTRA coisa (sino, avatar, item de menu).
+//   • o CHIP  — duas das referências e o nosso de antes: metadado curto numa pílula.
+//   • o SOBREPOSTO — a segunda dessas duas referências: contador no canto de OUTRA coisa (sino, avatar, item de menu).
 // A chave é `anchor`. Sem ela, `children` é o conteúdo do chip — o uso de sempre, intacto. Com
 // ela, `children` é o que se decora e o conteúdo vem de `count`/`content`/`dot`.
 //
@@ -238,7 +298,7 @@ export type BadgePlacement="top-end"|"top-start"|"bottom-end"|"bottom-start";
 // segue o recipiente — medido: numa `.stack` o `.badge` estica (300 px numa coluna de 300), porque
 // ela não declara `align-items`. O mesmo acontece no nativo; a prop é igual nos dois alvos.
 export type BadgeFit="auto"|"content";
-// `max` com `+` é o idioma universal do contador (MUI, Ant, Material 3). Exportada porque quem
+// `max` com `+` é o idioma universal do contador (três das referências o usam). Exportada porque quem
 // escreve o nome acessível precisa do MESMO texto — "99+ unread" tem de bater com o que se vê.
 export function formatBadgeCount(count:number,max=99){return count>max?`${max}+`:String(count)}
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttributes<HTMLSpanElement>{
@@ -250,7 +310,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
   dot?:boolean;
   leading?:ReactNode;
   trailing?:ReactNode;
-  /** Foto redonda no início — o `BadgeWithImage` da referência. */
+  /** Foto redonda no início — o selo com imagem da referência. */
   image?:string;
   imageAlt?:string;
   /** Conteúdo numérico. Passa por `max` e some em zero, salvo `showZero`. */
@@ -261,12 +321,12 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
   fit?:BadgeFit;
   /** Liga o modo SOBREPOSTO e escolhe o canto. `children` passa a ser o que se decora. */
   anchor?:BadgePlacement;
-  /** `circle` recolhe o canto em 14% — é o `overlap` da MUI, para avatar redondo. */
+  /** `circle` recolhe o canto em 14% — é a sobreposição circular da referência, para avatar redondo. */
   anchorShape?:"square"|"circle";
   /** Esconde sem tirar o filho do lugar. */
   invisible?:boolean;
   /** Conteúdo do badge no modo sobreposto (no modo chip, quem manda é `children`).
-   *  Nome da MUI, e não `content`: este colide com o atributo HTML de mesmo nome. */
+   *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
   badgeContent?:ReactNode;
 }
 export function Badge({variant="neutral",emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,children,className,...props}:BadgeProps){
@@ -287,10 +347,10 @@ export function Badge({variant="neutral",emphasis="soft",size="md",dot,leading,t
     {trailing}
   </span>;
   if(!anchor)return chip;
-  // Some em zero por padrão, como a MUI: caixa de entrada zerada não merece um "0" no canto.
+  // Some em zero por padrão, como na referência: caixa de entrada zerada não merece um "0" no canto.
   const escondido=invisible||(count===0&&!showZero)||(miolo==null&&!dot);
   // `aria-hidden` no contador, e o número vai para o nome de QUEM É DECORADO — regra da própria
-  // documentação da MUI e das três fontes de acessibilidade lidas em 17/08/2026. Sem isso, o
+  // documentação da referência e das três fontes de acessibilidade lidas em 17/08/2026. Sem isso, o
   // botão do sino é anunciado "sino 8" e ninguém sabe o que é o 8.
   return <span className="badge-anchor">{children}{!escondido&&React.cloneElement(chip,{"aria-hidden":true})}</span>;
 }
@@ -302,14 +362,14 @@ export interface ProgressProps{
   value?:number;
   /** O nome que o leitor de tela anuncia. Não aparece. */
   label?:string;
-  /** O texto de apoio, no alto à direita — o `ProgressBar.Output` do HeroUI: velocidade, tempo
+  /** O texto de apoio, no alto à direita — a saída de texto da barra de progresso da referência: velocidade, tempo
    *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
   detail?:ReactNode;
   tone?:ProgressTone;
   className?:string;
 }
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
-// de antes, mais a classe da caixa de fora. A anatomia é a do `ProgressBar` do HeroUI 3.2.6: a
+// de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
 export function Progress({value,label,detail,tone="brand",className}:ProgressProps){
   const semTotal=value==null||Number.isNaN(value);
@@ -391,8 +451,8 @@ export function Range({orientation,className,...props}:InputHTMLAttributes<HTMLI
 // porque nenhum deles usa hook: são marcação e `cx`, então chegam como componente de SERVIDOR,
 // que é o ganho do item O1.
 
-// TAMANHO DE CAMPO (G-FORM-01). Três degraus, que é onde as referências convergem: Untitled UI
-// dá sm/md/lg ao input e ao select, a MUI dá small/medium ao InputBase. Não são os cinco do
+// TAMANHO DE CAMPO (G-FORM-01). Três degraus, que é onde as referências convergem: uma
+// dá sm/md/lg ao input e ao select, outra dá small/medium ao campo base. Não são os cinco do
 // botão — campo com xs não cabe texto digitável, e xl é caixa de busca de página inteira, que é
 // composição e não tamanho. `Extract` em vez de união solta para o degrau ser O MESMO do botão:
 // um `sm` de campo e um `sm` de botão ao lado têm de medir igual (§23 e §132 da ATIVIDADE-2).
@@ -408,9 +468,9 @@ export type FieldSize=Extract<ComponentSize,"sm"|"md"|"lg">;
 export function Label({htmlFor,className,children,...props}:HTMLAttributes<HTMLLabelElement>&RefAttributes<HTMLLabelElement>&{htmlFor?:string}){return <label htmlFor={htmlFor} className={cx("label",className)} {...props}>{children}</label>}
 
 // `orientation` (G-AXIS-01): a linha do formulário de configurações — rótulo à esquerda,
-// controle à direita — só saía da Aurea com CSS ad hoc. A `shadcn` tem um terceiro valor,
+// controle à direita — só saía da Aurea com CSS ad hoc. Uma das referências tem um terceiro valor,
 // `responsive`, que NÃO entrou aqui e a ausência é medida: lá ele depende de uma container query
-// com contêiner NOMEADO (`@md/field-group`), declarado por um componente `FieldGroup` que a Aurea
+// com contêiner NOMEADO, declarado por um componente de grupo de campos que a Aurea
 // não tem. Um elemento não consulta o próprio tamanho, então `responsive` sem esse componente
 // seria media query de viewport — que responde a pergunta errada, porque quem aperta o campo é o
 // cartão em volta dele, não a janela. Fica em `G-AXIS-02`.

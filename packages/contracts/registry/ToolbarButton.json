@@ -202,6 +202,12 @@
       "type": "boolean | string",
       "default": "—",
       "description": "Link attribute, only with `href` (C-13)."
+    },
+    {
+      "name": "render",
+      "type": "ReactElement",
+      "default": "—",
+      "description": "Inherited from Button (M-01): the element that renders the button — the router's link, for example — receiving the Aurea skin and the content."
     }
   ]
 }

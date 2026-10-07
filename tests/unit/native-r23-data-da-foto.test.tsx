@@ -79,7 +79,7 @@ describe("R-23 · com `exif`, a data em que a foto foi tirada", () => {
   });
 
   it.each([
-    ["sem EXIF (a foto que passou pelo WhatsApp)", null],
+    ["sem EXIF (a foto que passou por um aplicativo de mensagens)", null],
     ["sem a etiqueta da data", {Make: "Apple"}],
     ["a câmera sem relógio, que escreve zeros", {DateTimeOriginal: "0000:00:00 00:00:00"}],
     ["texto que não é data", {DateTimeOriginal: "ontem"}],

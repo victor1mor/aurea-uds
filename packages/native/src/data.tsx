@@ -152,7 +152,7 @@ export type AureaTimelineItem = {
   time?: React.ReactNode;
   /**
    * R-18, 02/10/2026: o glifo numa moldura redonda, no lugar do ponto. Moldura de 40 (o `Avatar`
-   * `sm` do HeroUI Native) e glifo de 20. Basta um item com `icon` para a coluna inteira ter a
+   * `sm` da referência) e glifo de 20. Basta um item com `icon` para a coluna inteira ter a
    * largura da moldura — os itens sem ícone ficam com o ponto, no centro dela.
    */
   icon?: AureaIcon;

@@ -90,7 +90,7 @@
       "name": "formatOnBlur",
       "type": "(value: string) => string",
       "default": "—",
-      "description": "Normalises the value AFTER focus leaves the field — a licence plate, a document number, a phone. It deliberately does not mask while you type: the USWDS ships its input mask with a recorded WCAG 2.1 AA failure, MUI dropped masked date fields in v6 because the text leaks between sections, and a live mask makes the screen reader announce what was typed while the field shows something else. Aurea supplies the moment; the format stays yours, because plates and documents are country rules. The formatted text becomes the element's own value — nothing is painted over it — and your onChange is called with it, so controlled fields work."
+      "description": "Normalises the value AFTER focus leaves the field — a licence plate, a document number, a phone. It deliberately does not mask while you type: another design system ships its input mask with a recorded WCAG 2.1 AA failure, one of the references dropped masked date fields because the text leaks between sections, and a live mask makes the screen reader announce what was typed while the field shows something else. Aurea supplies the moment; the format stays yours, because plates and documents are country rules. The formatted text becomes the element's own value — nothing is painted over it — and your onChange is called with it, so controlled fields work."
     },
     {
       "name": "className",

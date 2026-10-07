@@ -63,7 +63,7 @@ export interface StackProps extends ViewProps {
   children?: React.ReactNode;
   /**
    * Eixo cruzado (o horizontal). Padrão `stretch`: os filhos ocupam a largura, como sempre e como
-   * na web. E2, 25/09/2026: desde que o `Button` passou a obedecer o pai (como no HeroUI Native e
+   * na web. E2, 25/09/2026: desde que o `Button` passou a obedecer o pai (como na referência e
    * na web), é aqui que se diz "botão do tamanho do texto" (`start`) ou "no meio" (`center`).
    */
   align?: AureaStackAlign;
@@ -334,8 +334,8 @@ export type CardProps = CardDaMarca | CardComum | CardTocavel;
  * nem link. O cartão vira UM elemento para o leitor de tela, e no iPhone quem é elemento **não
  * expõe os filhos**: o botão de dentro existiria na tela e não existiria para o VoiceOver. É o
  * defeito que o `check 43` guarda no nosso código, e aqui ele não alcança, porque o conteúdo é
- * do app. ⚠ **O exemplo do HeroUI faz exatamente isso** (`PressableFeedback` em volta de um
- * `Card` com `Button` dentro, `heroui-native@1.0.10`) — é o ponto em que a referência não serve.
+ * do app. ⚠ **O exemplo da biblioteca de referência faz exatamente isso** (uma superfície tocável em
+ * volta de um `Card` com `Button` dentro) — é o ponto em que a referência não serve.
  * Cartão com duas ações não tem `onPress`: cada ação é um botão dentro de um cartão comum.
  */
 export function Card({variant, style, ...rest}: CardProps) {

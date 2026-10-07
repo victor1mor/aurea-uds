@@ -11,7 +11,7 @@
 //
 // O MOTOR, e por que este: o Base UI — que já é dependência dura daqui — **não tem** calendário
 // nem campo de data. Medido em 01/08/2026 na lista de exports do 1.6.0, que é a versão mais
-// recente. Então o motor era decisão aberta, e a resposta é a mesma do shadcn/ui: react-day-picker.
+// recente. Então o motor era decisão aberta, e a resposta é a mesma de uma das referências: react-day-picker.
 //
 // O que foi medido antes de escolher (o registro completo está no REFERENCES.md):
 //   • renderiza no SERVIDOR — 8618 bytes, <table> de verdade, 42 células. Ao contrário do
@@ -21,10 +21,10 @@
 //   • tem API de tema PRÓPRIA (`classNames`), que é o que permite manter todo nome `rdp-*`
 //     fora do nosso CSS — mesma saída da pele do CodeEditor, que vem pelo EditorView.theme.
 //
-// O que NÃO entrou: `react-aria-components` (a escolha do Untitled UI). Trazer um segundo motor
+// O que NÃO entrou: o motor headless que outra das referências escolheu. Trazer um segundo motor
 // headless para conviver com o Base UI é criar padrão paralelo, que o protocolo proíbe.
 //
-// E o que NÃO se constrói aqui: um `DatePicker`. O shadcn não tem componente-raiz para isso e
+// E o que NÃO se constrói aqui: um `DatePicker`. Aquela mesma referência não tem componente-raiz para isso e
 // diz por quê — seletor de data é composição de Popover com calendário, e a Aurea já tem os
 // dois. A composição está registrada como PATTERN, que é o veículo da casa para isso.
 import React from "react";
@@ -45,7 +45,7 @@ const NOMES = {months: "calendar-months", month_caption: "calendar-caption"};
 
 export function Calendar({label, className, classNames, ...props}: CalendarProps) {
   const grade = <DayPicker
-    // Grade cheia por padrão, como o shadcn: mês com buraco nas pontas treme ao trocar de mês.
+    // Grade cheia por padrão, como naquela referência: mês com buraco nas pontas treme ao trocar de mês.
     showOutsideDays
     {...props}
     classNames={{...NOMES, root: cx("calendar", className), ...classNames}}

@@ -39,9 +39,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     rel?: string;
     download?: boolean | string;
     /**
-     * @deprecated Use `<Toggle>` instead. Pesquisado em 18/08/2026 nas doze referências (MUI,
-     * Fluent 2, React Aria, Spectrum, Carbon, Radix/Base UI, shadcn, ReUI, PrimeReact, HeroUI,
-     * Cedar, APG): **nenhuma** põe o estado de pressionado no botão comum — todas têm um
+     * @deprecated Use `<Toggle>` instead. Pesquisado em 18/08/2026 nas doze referências (entre
+     * elas o motor Base UI e o APG): **nenhuma** põe o estado de pressionado no botão comum — todas têm um
      * componente separado, e o nosso é o `Toggle`. Manter os dois é dois caminhos para a mesma
      * coisa, que é o "qual eu uso?" que denuncia recurso duplicado.
      * A diferença de verdade: aqui VOCÊ guarda o estado e isto só pinta e anuncia; o `Toggle`

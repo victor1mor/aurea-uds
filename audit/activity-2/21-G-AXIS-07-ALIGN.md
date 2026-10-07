@@ -81,13 +81,13 @@ Medido nos inventários:
 
 | referência | o que tem |
 |---|---|
-| **shadcn/ui** | `InputGroupAddon` com o eixo **idêntico**: `align: [block-end, block-start, inline-end, inline-start]` |
-| **Shark UI** | `InputGroupAddon`, com `align` como estado de dado |
-| **MUI** | `InputAdornment` com `position: [end, start]` — duas faixas, sem banda de bloco |
-| **Untitled UI** | componentes separados (`LeadingIcon`, `TrailingButton`) — não é eixo |
+| **referência A** | `InputGroupAddon` com o eixo **idêntico**: `align: [block-end, block-start, inline-end, inline-start]` |
+| **referência B** | `InputGroupAddon`, com `align` como estado de dado |
+| **referência C** | `InputAdornment` com `position: [end, start]` — duas faixas, sem banda de bloco |
+| **referência D** | componentes separados (`LeadingIcon`, `TrailingButton`) — não é eixo |
 | **Base UI** | `InputGroup`, sem eixo de alinhamento |
 
-O eixo existe e converge — a Aurea o herdou de shadcn. **Nenhuma delas o faz responsivo**, então
+O eixo existe e converge — a Aurea o herdou da referência A. **Nenhuma delas o faz responsivo**, então
 aqui não é alcançar: é passar à frente, como no resto do eixo responsivo.
 
 ### 7. A API continuaria coerente?

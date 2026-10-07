@@ -164,10 +164,10 @@ const ESTADO_REVIEW = {
 };
 
 // "diff has textual additions and deletions" — contract.accessibility, e é a única cláusula
-// em que as DUAS referências reprovam, medido em 10/08/2026. O `DiffViewer` do Langfuse
-// pinta a linha inteira (`bg-green-500/30` de um lado, `bg-destructive/60` do outro) e não
-// escreve nada; o exemplo de diff do Kibo marca a linha com um comentário `[!code ++]` que o
-// Shiki CONSOME e converte em cor. Nos dois, quem não distingue as cores não distingue o que
+// em que as DUAS referências reprovam, medido em 10/08/2026. O visualizador de diff de uma delas
+// pinta a linha inteira (verde de um lado, a cor destrutiva do outro) e não
+// escreve nada; o exemplo de diff da outra referência marca a linha com um comentário que o
+// realçador de código dela CONSOME e converte em cor. Nos dois, quem não distingue as cores não distingue o que
 // entrou do que saiu — WCAG 1.4.1.
 // Aqui o marcador é o `+`/`-` da primeira coluna, que é o formato do diff unificado: texto
 // por construção, zero linha de CSS, e legível por leitor de tela sem nenhuma pele.
@@ -544,8 +544,8 @@ const ESTADO_TX = {
 // ── o dinheiro ───────────────────────────────────────────────────────────────
 // PESQUISADO em 11/08/2026 pelo passo 4 do BUILDING.md, porque aqui não havia anatomia para
 // copiar: das dezesseis referências, NENHUMA tem composição de transação (medido — só o
-// template `checkout` do MUI, mais um banner de cobrança no Langfuse e ícones de bandeira no
-// Untitled UI). O registro completo está no REFERENCES.md; o que decidiu o código é isto:
+// modelo de página de pagamento de uma delas, mais um banner de cobrança num painel de terceiros
+// e ícones de bandeira em outra referência). O registro completo está no REFERENCES.md; o que decidiu o código é isto:
 //
 // 1. VALOR É INTEIRO EM UNIDADE MENOR. `Decimal` do TC39 está em stage 1 e `Amount` em stage 2
 //    — em 08/2026 não existe decimal nativo em JavaScript, então centavo inteiro segue sendo a
@@ -554,11 +554,12 @@ const ESTADO_TX = {
 //    quatro moedas, e a cláusula do contrato é "amount CURRENCY fees … appear before commit":
 //    com o código a moeda aparece em cada linha, sem uma linha extra dizendo qual é.
 // 3. O TOTAL É SOMADO, NUNCA ESCRITO. É o achado I1 desta auditoria com dinheiro em cima — e a
-//    referência mostra o custo: o `checkout` do MUI escreve `$134.98`, `$9.99` e `$144.97` como
-//    literais no Review, e o total ainda uma quarta vez no Checkout (`activeStep >= 2 ?
-//    '$144.97' : '$134.98'`). Os quatro batem hoje; mudar o preço de um item faz o total mentir.
-// QUANTIDADE E UNITÁRIO SEPARADOS, e o total da linha é DERIVADO — anatomia do `order-summary`
-// do tool-ui (`lineTotal = item.unitPrice * quantity`, com a quantidade na descrição). A primeira
+//    referência mostra o custo: aquele modelo de pagamento escreve os preços e o total como
+//    literais na tela de revisão, e o total ainda uma quarta vez na tela final, escolhido pelo
+//    passo em que se está. Os quatro batem hoje; mudar o preço de um item faz o total mentir.
+// QUANTIDADE E UNITÁRIO SEPARADOS, e o total da linha é DERIVADO — anatomia do resumo de pedido
+// de uma biblioteca de terceiros (o total da linha é o unitário vezes a quantidade, com a
+// quantidade na descrição). A primeira
 // versão daqui escrevia `{label: "Professional plan · 2 seats", cents: 4800}`: quem lê não sabe
 // se 48,00 é o assento ou os dois, e conta de dinheiro ambígua é a que gera contestação. Agora o
 // rótulo mostra `2 × USD 24.00` e o valor é o total da linha, então a conta se audita na tela.
@@ -588,8 +589,8 @@ const CHAVE = "idem_7f3c9a";
 // "method by reference": o método é um RÓTULO de algo guardado no provedor, e esta composição
 // não tem campo de cartão — nem número, nem CVV, nem validade. Não é preferência de desenho: o
 // PCI DSS 4.0.1 (vigente desde 04/2025) tira a página do comerciante do escopo justamente
-// quando os campos são do provedor (iframe ou redirecionamento); o template `checkout` do MUI
-// pede os quatro campos no próprio formulário, com um "remember credit card details", e é
+// quando os campos são do provedor (iframe ou redirecionamento); o modelo de pagamento da referência
+// pede os quatro campos no próprio formulário, com a opção de lembrar os dados do cartão, e é
 // exatamente a parte que NÃO entra. A regra já estava escrita em `patterns/commerce_finance.md`
 // — o que a pesquisa de 11/08 acrescentou foi a verificação de que ela segue valendo.
 const CARTAO = "Visa ending 4242";
@@ -676,7 +677,7 @@ export function transactionFlow(state) {
   // acontece quando não cabe.
   //
   // SEM `tabular-nums`, e a ausência é MEDIDA — porque eu o tinha posto aqui antes de medir.
-  // O `order-summary` do tool-ui põe `tabular-nums` em cada valor, e eu copiei. Medido no
+  // O resumo de pedido de terceiros põe `tabular-nums` em cada valor, e eu copiei. Medido no
   // navegador em 11/08/2026, largura dos dez dígitos por fonte:
   //   IBM Plex Sans → 1 largura com e sem a propriedade   (no-op)
   //   Segoe UI, o primeiro fallback → 1 e 1               (no-op)
@@ -802,7 +803,7 @@ const CALIBRACAO = {atual: "+0.4 °C", padrao: "0.0 °C"};
 // O portão de comando inseguro. `HumanApproval` já é o portão desta casa (I1), e ele traz risco,
 // descrição e detalhes — que é exatamente "commands show target scope and expected effect" mais
 // "unsafe actions require gated confirmation" numa peça só. Anatomia conferida no
-// `dialog-confirm.tsx` do OpenStatus, que nomeia o tipo de confirmação e mantém o portão ABERTO
+// diálogo de confirmação de um projeto de terceiros, que nomeia o tipo de confirmação e mantém o portão ABERTO
 // no erro para a ação poder ser repetida.
 const ESCOPO = "Pump A3 only · 1 of 3 devices";
 const EFEITO = "Firmware 2.5.0 · the pump stops for ~40 s, then resumes.";

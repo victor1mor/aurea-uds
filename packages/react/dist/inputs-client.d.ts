@@ -11,7 +11,7 @@ export interface FieldProps extends HTMLAttributes<HTMLDivElement>, RefAttribute
     error?: ReactNode;
     /** B-12 (24/09/2026): texto de ajuda que precisa de uma FRASE — mora embaixo do controle, onde
      *  cabe, e não divide a linha do rótulo. O `hint` continua o que é: nota curta ao lado do rótulo
-     *  ("opcional", "em MB"). É o lugar do `Description` do HeroUI e da `description` que o
+     *  ("opcional", "em MB"). É o lugar da descrição da referência e da `description` que o
      *  `Checkbox` desta casa já tem. Entra no `aria-describedby` na ordem da tela: hint, descrição,
      *  erro. */
     description?: ReactNode;

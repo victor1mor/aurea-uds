@@ -3,7 +3,7 @@
 - **Data:** 20/08/2026
 - **Estado:** aceita · aplicada
 - **Autoria:** decisão explícita do Victor. Ele perguntou *"a aurea pode ter temas? tipo atual é
-  padrão e criar outros, como heroUI tem?"*, mandou criar a marca **`lory`** com as cores do
+  padrão e criar outros, como [a referência] tem?"*, mandou criar a marca **`lory`** com as cores do
   consumidor dela, e escolheu, entre as opções apresentadas, **só cor** e **ADR emendando a
   regra**.
 - **Emenda:** a linha do [`CLAUDE.md`](../CLAUDE.md) que diz *"Amarelo primário
@@ -23,7 +23,7 @@ lugares deste repositório:
 2. **O consumidor sobrescrever token na mão.** Vira segunda verdade: a paleta da marca viveria
    num CSS do projeto dele, fora do gate, e divergiria da Aurea na primeira mudança.
 
-**O que foi medido antes de decidir:** o `ui-kit-standalone` da marca usa **a mesma mecânica**
+**O que foi medido antes de decidir:** o kit de interface da marca usa **a mesma mecânica**
 que a Aurea — `data-theme="light|dark"` e `data-density` no `<html>`, cor em OKLCH, escala de
 espaçamento e raio em variável. Não havia arquitetura para inventar; faltava **um eixo**.
 
@@ -32,10 +32,10 @@ espaçamento e raio em variável. Não havia arquitetura para inventar; faltava 
 **Um tema `lory` ao lado de `dark` e `light`.** Rejeitada: a marca precisa de claro **e** escuro.
 Um terceiro valor no mesmo eixo obrigaria a escolher entre a marca dela e o tema do usuário.
 
-**Marca trocando também tipografia, raio e ícone.** Oferecida ao Victor e recusada por ele. Sora e
-Inter exigiriam empacotar duas famílias novas com licença própria; o raio de card de 26px
-desmontaria a regra de pílula dentro do tema; e os 38 ícones estilo Lucide do kit contra os 2.571
-Carbon da Aurea seria trocar cobertura por estilo. **Marca é paleta** — é o que o HeroUI faz.
+**Marca trocando também tipografia, raio e ícone.** Oferecida ao Victor e recusada por ele. As duas
+fontes do kit exigiriam empacotar duas famílias novas com licença própria; o raio de card de 26px
+desmontaria a regra de pílula dentro do tema; e os 38 ícones de traço do kit contra os 2.571
+Carbon da Aurea seria trocar cobertura por estilo. **Marca é paleta** — é o que a referência faz.
 
 **Editar a regra direto no `CLAUDE.md`, sem ADR.** Recusada por ele, e com razão: decisão de
 identidade sem registro é exatamente o que esta pasta existe para impedir.
@@ -63,7 +63,7 @@ data-brand="lory"            ×  data-theme="dark" | "light"
 
 ## A marca `lory`
 
-60 tokens por tema, lidos do `ui-kit-standalone` que o Victor enviou em 20/08/2026 — **lidos, não
+60 tokens por tema, lidos do kit de interface da marca que o Victor enviou em 20/08/2026 — **lidos, não
 inventados**. Primário `#FF6600` no claro (`oklch(0.682 0.197 44.5)`) e um laranja mais claro no
 escuro (`oklch(0.72 0.19 48)`), porque o kit deles já resolve isso assim.
 

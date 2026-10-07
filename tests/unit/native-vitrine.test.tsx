@@ -119,9 +119,9 @@ describe("vitrine do alvo nativo", () => {
   it("gera a página com o código real", async () => {
     // ── 1 · O ACHADO DO DIA, lado a lado ─────────────────────────────────────────────────────
     // Esquerda: como o `NumberField` saiu na `0.8.0` publicada — sem foco nenhum.
-    // Direita: com foco, depois do conserto que a HeroUI obrigou.
+    // Direita: com foco, depois do conserto que a referência obrigou.
     await prancha(
-      "NumberField — o defeito que a HeroUI achou",
+      "NumberField — o defeito que a referência achou",
       "À esquerda, em repouso: a borda é `borderStrong`. À direita, com foco: `focusStrong`. " +
       "Na 0.8.0 publicada as DUAS eram iguais — este campo era o único do pacote sem foco.",
       () => (

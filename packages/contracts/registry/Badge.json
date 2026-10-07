@@ -147,7 +147,7 @@
       "name": "anchorShape",
       "type": "square | circle",
       "default": "square",
-      "description": "`circle` pulls the badge 14% back into the corner — MUI's `overlap`, and the number is theirs, measured in their source. Without it a counter on a round avatar floats off the edge."
+      "description": "`circle` pulls the badge 14% back into the corner — the `overlap` of one of the references, and the number is theirs, measured in their source. Without it a counter on a round avatar floats off the edge."
     },
     {
       "name": "invisible",
@@ -165,12 +165,33 @@
       "name": "badgeContent",
       "type": "ReactNode",
       "default": "—",
-      "description": "What the overlay shows when it is not a number. Named after MUI's prop and not `content`, which collides with the HTML attribute of that name."
+      "description": "What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name."
     }
   ],
   "notes": [
     "ANCHORED BADGES ARE aria-hidden, and that is the documented pattern, not an oversight: the count belongs in the accessible name of the thing it decorates — `aria-label=\"Inbox, 4 unread messages\"`. A bell announced as \"bell 8\" tells nobody what the 8 is.",
     "The cutout ring around an anchored badge defaults to `--background`. Inside a card the surface behind it is `--card`, and CSS cannot guess that — override `--badge-ring` on the container.",
     "NO DISMISS BUTTON, and two independent reasons agree: DIRECTION §3.6 reserves removable classification for `Tag`, and a handler in JSX would force `\"use client\"` on the pure-markup module. `Tag` does not exist in Aurea yet — a real gap this reading found."
-  ]
+  ],
+  "axes": {
+    "anchor": [
+      "bottom-end",
+      "bottom-start",
+      "top-end",
+      "top-start"
+    ],
+    "anchorShape": [
+      "circle",
+      "square"
+    ],
+    "emphasis": [
+      "outline",
+      "soft",
+      "solid"
+    ],
+    "fit": [
+      "auto",
+      "content"
+    ]
+  }
 }

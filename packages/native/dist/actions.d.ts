@@ -17,19 +17,19 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
     /**
      * Um desenho QUALQUER na frente do texto, para quando a marca não pode ser um ícone nosso.
      *
-     * ⚠ **Ele existe por causa de MARCA REGISTRADA, não por conveniência.** O botão "Entrar com
-     * Google" e o "Entrar com Apple" exigem o desenho oficial de cada um, e nenhum dos dois pode
-     * viver dentro desta biblioteca: o Google proíbe redesenhar e manda usar o arquivo do pacote
-     * dele; a Apple proíbe usar o logo sem licença escrita. **Então a marca entra pelo app**, e o
+     * ⚠ **Ele existe por causa de MARCA REGISTRADA, não por conveniência.** Os botões de entrar com
+     * a conta de outras empresas exigem o desenho oficial de cada uma, e nenhum deles pode
+     * viver dentro desta biblioteca: uma delas proíbe redesenhar e manda usar o arquivo do pacote
+     * dela; outra proíbe usar o logo sem licença escrita. **Então a marca entra pelo app**, e o
      * que a Aurea dá é a cápsula em volta.
      *
-     *     <Button appearance="outline" leading={<RNImage source={logoGoogle} style={{width: 18, height: 18}} />}>
-     *       Entrar com Google
+     *     <Button appearance="outline" leading={<RNImage source={logoDoServico} style={{width: 18, height: 18}} />}>
+     *       Entrar com a conta do serviço
      *     </Button>
      *
      * ⚠ **A cor do texto NÃO atravessa para cá** — o que entra desenha a própria cor, e é assim
-     * que tem de ser: a marca do Google tem cor fixa, e tingi-la seria justamente o que a regra
-     * dele proíbe. Um `leadingIcon` nosso continua herdando a cor do botão.
+     * que tem de ser: a marca da empresa tem cor fixa, e tingi-la seria justamente o que a regra
+     * dela proíbe. Um `leadingIcon` nosso continua herdando a cor do botão.
      */
     leading?: React.ReactNode;
     /** O mesmo, do outro lado. */
@@ -52,7 +52,7 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
 export declare function Button(props: ButtonProps): React.JSX.Element;
 export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth"> {
 }
-/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` do HeroUI. */
+/** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
     name: AureaIcon;
@@ -64,7 +64,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  *
  * O raio é o da cápsula (`radiusControl`, 999) num quadrado, e um quadrado com raio 999 é um
  * círculo — o mesmo que o `.btn-icon` do core faz. Decisão do Victor, 25/09/2026 (ADR-0052): era
- * `--radius-md`/`--radius-sm`, e o HeroUI 3.2.6 faz o botão só de ícone redondo.
+ * `--radius-md`/`--radius-sm`, e a referência faz o botão só de ícone redondo.
  *
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.

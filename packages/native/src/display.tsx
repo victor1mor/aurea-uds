@@ -31,16 +31,16 @@ import type {AureaTokens} from "./tokens.js";
 
 const folha = criarFolha((t: AureaTokens) => ({
   // ── Badge ──────────────────────────────────────────────────────────────────────────────────
-  // 🔴 AS MEDIDAS SÃO AS DO `Chip` DO HeroUI NATIVE (1.0.10, `chip.css`) — ordem do Victor de
-  // 25/09/2026: "se o HeroUI já tem, vamos usar as deles". Recheio, letra, linha e vão:
+  // 🔴 AS MEDIDAS SÃO AS DO CHIP DA REFERÊNCIA — ordem do Victor de
+  // 25/09/2026: "se [a referência] já tem, vamos usar as [dela]". Recheio, letra, linha e vão:
   //     sm  8 × 2  · letra 12 · linha 16        md  12 × 4 · letra 14 · linha 20
   //     lg  16 × 6 · letra 16 · linha 24        vão 4 entre ponto, texto e adornos
   // Até a 0.10.1 eram `3px 9px` e `gap:6` crus, e o texto saía com entrelinha 1,0: no Android a
-  // perna do g e do p era cortada (a mesma causa do E1 no `Button`). A linha do HeroUI é ≥ 1,33 ×
+  // perna do g e do p era cortada (a mesma causa do E1 no `Button`). A linha da referência é ≥ 1,33 ×
   // a letra, e a letra precisa de 1,3 (a IBM Plex e a Atkinson Hyperlegible da ADR-0053, medidas
   // na tabela `hhea`). O raio continua a cápsula da Aurea (identidade) e a
   // borda continua nossa.
-  // ⚠ O `xs` NÃO existe no HeroUI (é o contador sobre ícone): fica a medida nossa, 16 de altura,
+  // ⚠ O `xs` NÃO existe na referência (é o contador sobre ícone): fica a medida nossa, 16 de altura,
   // agora com letra 12 e linha 16 para caber a letra inteira.
   selo: {
     flexDirection: "row", alignItems: "center", justifyContent: "center", gap: t.size.space1,
@@ -51,7 +51,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   selo_xs: {minHeight: t.size.space4, paddingVertical: 0, paddingHorizontal: t.size.space1, borderWidth: 0},
   selo_sm: {paddingVertical: t.size.space05, paddingHorizontal: t.size.space2},
   selo_md: {},
-  // 6 de recheio vertical: no HeroUI é `calc(var(--spacing) * 1.5)`, e `--spacing` é o `space1`.
+  // 6 de recheio vertical: na referência é 1,5 vez a unidade de espaço dela, e essa unidade é o `space1`.
   selo_lg: {paddingVertical: t.size.space1 * 1.5, paddingHorizontal: t.size.space4},
   ponto: {width: t.size.space2, height: t.size.space2, ...canto(t.size.radiusFull)},
   // `fit="content"` (R-01): o mesmo `alignSelf` que a âncora abaixo já usa para não esticar.
@@ -162,8 +162,8 @@ export interface BadgeProps extends ViewProps {
  * usa selo com miniatura, e prop sem consumidor é superfície pública para manter de graça. Volta
  * quando houver tela que peça.
  */
-/** A letra e a linha do selo, do `Chip` do HeroUI Native (ver a folha). O token direto, e não o
- *  `size` do `Text`, que no telefone sobe um degrau (ADR-0050) — o HeroUI não sobe no chip. */
+/** A letra e a linha do selo, do chip da referência (ver a folha). O token direto, e não o
+ *  `size` do `Text`, que no telefone sobe um degrau (ADR-0050) — a referência não sobe no chip. */
 const LETRA_DO_SELO = (t: AureaTokens, size: string) =>
   size === "lg" ? {fontSize: t.size.textBase, lineHeight: t.size.space6}
   : size === "md" ? {fontSize: t.size.textSm, lineHeight: t.size.space5}

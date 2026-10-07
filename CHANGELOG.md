@@ -17,6 +17,10 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### Componentes novos, ainda não publicados (06/10/2026)
+
+- `Container` e `Section`, da página de site — entram na `0.22.0`, descrita na seção dela abaixo.
+
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -80,6 +84,70 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.22.0] — 2026-10-06
+
+⏳ **Ainda não publicada.** Feita na madrugada de 06 para 07/10/2026 com o Victor dormindo, por
+ordem dele (*"pode fazer o K1 hoje"*). **Aprovada pela bancada em 07/10/2026** (*"aprovo"*). Vem
+depois da `0.21.0` (pedido #44); pedido #46.
+
+O **Lote K1**: as peças de leiaute de uma página de SITE, o primeiro bloco do grupo 2 da fila
+(GAR-02 a GAR-05). **Versão nova porque entram peças.** Nada sai nem muda de nome, e nenhuma
+dependência entra. A referência não tem nenhuma das três; as medidas são tokens que já existiam.
+
+### Adicionado
+
+- **GAR-02 · `Container` (web).** A largura de leitura de uma página de site: centrada, com teto
+  (`size`: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280, o padrão · `2xl` 1536 · `full`) e respiro
+  dos lados de 16 que vira 32 a partir do `md`. O 1280 é o da largura máxima de contêiner de uma das referências.
+- **GAR-03 · `Grid.Item` com `span` (web).** O item diz quantas das 12 colunas ocupa:
+  `<Grid columns={12}><Grid.Item span={{base: "12", viewport: {md: "7"}}}>`. Entra pela camada
+  responsiva que já existia (`vp-*` por tela, `ct-*` por contêiner), com a família nova
+  `grid-span`.
+- **GAR-04 · `Section` (web).** A faixa de ponta a ponta de uma página de site: `<section>` com
+  `surface` (`background`, `card`, `inset`) e `spacing` (`md`: 64 e 96 a partir do `md`; `sm`: a
+  metade).
+- **GAR-05 · `Section theme` (web).** `theme="dark"` faz uma faixa escura dentro de uma página
+  clara, e o contrário.
+
+### Corrigido
+
+- **GAR-05 · As regras de tema claro vazavam para dentro de uma faixa escura (web).** Os 22
+  seletores `[data-theme="light"] X` do core continuavam valendo dentro de
+  `<section data-theme="dark">`: o botão de contorno, o rótulo de seção e o escolhido saíam com a
+  tinta do claro sobre o fundo escuro. Cada um leva agora a guarda de força zero
+  `:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)`: a precedência
+  entre as regras não muda, e numa página sem faixa escura o computado é o mesmo. O `@scope` foi
+  lido e não usado — a proximidade dele passa por cima da ordem das regras. Limite declarado:
+  quatro níveis alternados não são cobertos. Quem cobra: `tests/visual/tema-na-secao.spec.ts`
+  (nos três navegadores) e `tests/unit/tema-na-secao.test.tsx` (regra nova sem a guarda reprova).
+- **O gerador do `api-surface.json` perdia as props com comentário de documentação.** O
+  `scripts/build-api-surface.mjs` lia o `/** … */` antes da prop como parte dela, e a prop sumia
+  da superfície — por isso a conferência das fichas não pegava nada nesses componentes. Agora ele
+  tira os comentários antes de ler. Com a superfície completa, nove fichas ganharam o que faltava
+  (`Badge`, `Cluster`, `Grid`, `Icon`, `IconButton`, `Stack`, `ThemeToggle`, `Toggle` e
+  `ToolbarButton`). Nada muda em pacote publicado.
+
+### Retirado
+
+- **Nome e informação das referências de desenho saíram de tudo o que a Aurea publica** (ordem
+  do Victor, 07/10/2026): *"eles são referência aqui na construção não era pra publicar"*. As
+  bibliotecas, as bases técnicas delas e os apps usados como modelo orientam a construção, mas não
+  aparecem mais no repositório, no site nem nos pacotes. Nos comentários, no JSDoc (que vai para os
+  `.d.ts` publicados), nas fichas, nos testes, nas decisões e neste CHANGELOG, o nome virou "a
+  referência". Nenhum número, nenhuma API e nenhum comportamento mudou: só texto.
+  - Duas decisões mudaram de nome de arquivo: a [ADR-0050](decisions/0050-a-escala-de-letras-vem-da-referencia.md)
+    e a [ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-e-mais-baixa.md). O teste da escala
+    de letras agora é `tests/unit/escala-de-letras.test.tsx`.
+  - Saíram do repositório, e ficam com o Victor: a matriz de comparação com as referências e os
+    inventários delas (`audit/activity-2`, menos os documentos do eixo responsivo e o
+    `AUREA-ARIA.json`), os cinco testes dessa matriz, a `docs/FILA.md`, a
+    `docs/historia/ATIVIDADE-2.md` e o registro completo das leituras. O `docs/REFERENCES.md` agora
+    lista só o código de terceiros que entra na Aurea (as dependências) e as licenças.
+  - Saíram também os checks 21, 29 e 31 do `validate.py`, que vigiavam esse registro e a matriz.
+  - **Check 1b novo:** reprova nome de referência que volte a qualquer arquivo. A lista mora fora
+    do repositório — o arquivo `.referencias` na máquina local e o segredo `AUREA_REFERENCIAS` da CI.
+    Provado contra o defeito: um arquivo com um nome da lista faz a validação reprovar.
+
 ## [0.21.0] — 2026-10-06
 
 ⏳ **Ainda não publicada.** Falta a aprovação do Victor na bancada, a junção e a publicação. Vem
@@ -96,8 +164,8 @@ de nome, e nenhuma dependência entra.
   cada cartão era anunciado como "botão". A pele é a do próprio `Card`: o comum, e o escolhido do
   `variant="selected"` — a mesma, que mudou para `estilos.ts` (`peleDoCartao`,
   `peleDoCartaoEscolhido`) para as duas peças não terem cópias dos números. A marca sobe para a
-  linha do título. O item ganha `children`: o conteúdo a mais (preço, lista) dentro do cartão. O
-  HeroUI não tem a peça pronta; ele a monta com um `RadioGroup.Item` e uma superfície dentro, e é
+  linha do título. O item ganha `children`: o conteúdo a mais (preço, lista) dentro do cartão. A
+  referência não tem a peça pronta; ela a monta com um `RadioGroup.Item` e uma superfície dentro, e é
   assim que ela entrou. Quem cobra: `tests/unit/native-chk01-cartao-de-escolha.test.tsx`.
 
 ### Corrigido
@@ -120,7 +188,7 @@ e a `0.19.1` ao lado (*"pode, folha com 32"*, 06/10/2026). Falta a junção e a 
 O **Lote I**: o grupo 1 da fila de 06/10/2026 — o que o app do consumidor de celular viu no aparelho
 e o que destrava função nova nele. Seis itens, com o "pode" de 06/10/2026. **Versão nova, e não
 correção, porque entram props.** Nada sai nem muda de nome, e **nenhuma dependência entra**. Cada
-prop nova sai com o mesmo nome na web e no nativo, como no HeroUI.
+prop nova sai com o mesmo nome na web e no nativo, como na referência.
 
 ### Corrigido
 
@@ -135,14 +203,14 @@ prop nova sai com o mesmo nome na web e no nativo, como no HeroUI.
 
 ### Adicionado
 
-- **A5 · `fullWidth` no `SegmentedControl`, web e nativo** — o nome do `ToggleButtonGroup` do HeroUI
-  3.2.6. O controle ocupa a linha, e cada segmento cresce a partir do rótulo (base `auto`; na web,
+- **A5 · `fullWidth` no `SegmentedControl`, web e nativo** — o nome que o grupo de botões de alternar da
+  referência usa. O controle ocupa a linha, e cada segmento cresce a partir do rótulo (base `auto`; na web,
   `flex:1 0 auto`), sem encolher abaixo dele. Medido na bancada: 328 de 328, numa linha. Quando as
   opções não cabem, rola, como sem a prop.
 - **C9 e MNT-05 · `panel` no `Tabs`, web e nativo: `"card"` (padrão) ou `"plain"`.** O app mediu o
   conteúdo 21 pontos para dentro, e o `variant="secondary"` não mudava isso: o painel era um cartão
   `inset` nas duas variantes (recheio 20 + borda 1). Com `panel="plain"` o painel é só o espaço de
-  cima (`space3`), sem caixa — como o painel do HeroUI. Medido na bancada: o cartão de dentro passa
+  cima (`space3`), sem caixa — como o painel da referência. Medido na bancada: o cartão de dentro passa
   de 37/286 para 16/328, igual ao de fora. Na web, a classe nova é `.tabs-panel`.
 - **R-23 · `exif` no `PhotoInput`: a data em que a foto foi tirada, em `takenAt`.** Desligado por
   padrão. Lê `DateTimeOriginal` (com o fuso `OffsetTimeOriginal` quando o iPhone manda; sem fuso,
@@ -154,21 +222,21 @@ prop nova sai com o mesmo nome na web e no nativo, como no HeroUI.
 
 ### Mudado
 
-- **HER-01 · O canto contínuo da Apple em todo o nativo.** Todo raio do pacote passa por `canto()` e
+- **HER-01 · O canto contínuo do iOS em todo o nativo.** Todo raio do pacote passa por `canto()` e
   `cantosDeCima()` (`estilos.ts`), que entregam o raio e `borderCurve: "continuous"` juntos — o canto
-  do iPhone, que o `heroui-native` 1.0.10 põe em 24 peças. Eram 60 raios e nenhum canto contínuo.
+  do iPhone, que o pacote nativo da referência põe em 24 peças. Eram 60 raios e nenhum canto contínuo.
   **Só o iOS 13+ desenha; o Android e o navegador não mudam.** O anel do `Spinner` fica `circular`,
   declarado: ele gira. Quem cobra: `tests/unit/native-canto-continuo.test.tsx` — reprova raio escrito
   à mão em qualquer fonte do pacote, com arquivo e linha.
 - **HER-02 · `Alert` e `Toast` com 22 de canto (eram 16), web e nativo.** 22 é o raio de painel da
-  Aurea (`CLAUDE.md` §5), o mesmo do `Popover`, do `Dialog` e do `Banner`; o HeroUI usa 24. Quem
+  Aurea (`CLAUDE.md` §5), o mesmo do `Popover`, do `Dialog` e do `Banner`; a referência usa 24. Quem
   cobra: `tests/unit/her02-raio-do-aviso.test.tsx`. As fotos da CI não mudam: nenhuma página
   fotografada tem `Alert` ou `Toast` (conferido no HTML das oito páginas e na matriz).
 - **HER-03 · A folha que sobe de baixo com 32 de canto (era 22), no nativo** — decisão do Victor
   olhando as duas na bancada (*"folha com 32"*,
   [ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)). Vale para a `BottomSheet`, a
-  lista do `Select` e a folha do `Combobox`, as três que sobem de baixo. É o 32 do bottom-sheet do
-  HeroUI Native. Token novo: `radius-sheet` (`radiusSheet` no nativo, `--radius-sheet` na web, para a
+  lista do `Select` e a folha do `Combobox`, as três que sobem de baixo. É o 32 da folha de baixo do
+  pacote nativo da referência. Token novo: `radius-sheet` (`radiusSheet` no nativo, `--radius-sheet` na web, para a
   gaveta de baixo que a web ainda não tem). Quem cobra: `tests/unit/native-her03-folha.test.tsx`.
 
 ## [0.19.1] — 2026-10-04
@@ -207,14 +275,14 @@ depois de pedir o item da árvore em cápsula).
 O **Lote H**: os quatro pedidos que faltavam do consumidor novo da web (`docs/FILA.md` §9) — AN-06,
 AN-05, AN-03 e AN-02, com o "pode" de 03/10/2026. **Versão nova, e não correção, porque entram
 props.** Nada sai nem muda de nome, e **nenhuma dependência entra** (decisão do Victor,
-[ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)). O HeroUI 3.2.6 não
-tem nenhuma das quatro peças; os nomes e as medidas vêm das coleções que ele tem (o `Table.LoadMore`,
-o `selectionMode`) e do ReUI.
+[ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)). A referência não
+tem nenhuma das quatro peças; os nomes e as medidas vêm das coleções que ela tem (a linha de
+carregar mais da tabela, o modo de escolha) e da segunda referência da fila.
 
 ### Adicionado
 
 - **AN-06 · `TreeView` que carrega ao abrir, com o escolhido de fora.**
-  - `hasChildren` no nó: ele abre antes de ter filhos (o `hasChildItems` do React Aria).
+  - `hasChildren` no nó: ele abre antes de ter filhos (como a prop equivalente da base técnica da referência).
   - `onExpand(node)`: chamado a cada abertura. Se devolver promessa e o nó ainda não tiver filhos, o
     nó fica `aria-busy`, com a rodinha no lugar da seta, até ela terminar; os filhos chegam pelo
     próprio `items`. Promessa recusada fecha o nó, e abrir de novo tenta de novo.
@@ -227,7 +295,7 @@ o `selectionMode`) e do ReUI.
     do reprodutor (`--media-scrim`), com o tempo em `m:ss` e "Vídeo" para o leitor de tela (o nome
     medido no Chromium: "Item 2 Vídeo, 0:32").
   - `hasMore` + `onReachEnd` + `loading`: uma linha depois da grade avisa ao entrar na tela, na
-    medida do `Table.LoadMore` do HeroUI (`--space-3` em cima e embaixo). Carregando, ela mostra a
+    medida da linha de carregar mais da tabela da referência (`--space-3` em cima e embaixo). Carregando, ela mostra a
     rodinha e não avisa de novo; se a parte nova não enche a tela, avisa outra vez.
 - **AN-03 · `MessageComposer` que anexa, responde e edita.**
   - `attach` (`true` ou `{accept, maxSize, multiple}`): um clipe dentro do campo. Os arquivos ficam
@@ -297,11 +365,11 @@ nova, e não correção, porque entram props.** Nada sai nem muda de nome.
 
 - **AN-07 · `Progress` sem total, com apoio e com tom (web e nativo).**
   - `value` passa a ser opcional. **Sem ele a barra é indeterminada**: um pedaço de 2/5 corre de
-    fora a fora em 1,5 s, nos números do `ProgressBar` do HeroUI 3.2.6, e o `aria-valuenow` (no
+    fora a fora em 1,5 s, nos números da barra de progresso da referência, e o `aria-valuenow` (no
     nativo, o `now`) não sai. Antes, sem total, ela mostrava 0% — parecia parada. Com menos
     movimento o pedaço não corre: a barra inteira, apagada (`--opacity-disabled`), e nunca um
     pedaço parado, que leria como 40% feito.
-  - `detail`: o texto de apoio no alto, à direita — o `ProgressBar.Output` do HeroUI —, `text-sm`
+  - `detail`: o texto de apoio no alto, à direita — o texto de saída da barra de progresso da referência —, `text-sm`
     médio e apagado, com algarismos de largura igual. Em texto, ele vai no `aria-valuetext` ("64%,
     2,3 MB/s") e o desenho dele sai do leitor de tela, para ser ouvido uma vez só.
   - `tone`: `brand` (o padrão), `neutral`, `success`, `warning`, `danger`, `info` — a lista do
@@ -309,7 +377,7 @@ nova, e não correção, porque entram props.** Nada sai nem muda de nome.
     trilho, nos dois temas.
 - **AN-08 · `Grid` com `min` por nome (web; no nativo, `minColumnWidth`).** `xs` 8rem, `sm` 12rem,
   `md` 15rem (o padrão) e `lg` 20rem. Nenhum número é novo: são a miniatura da `Gallery`, a célula
-  da `HealthMatrix`, o padrão do `Grid` e o `Dialog` `xs` (o `max-w-xs` do HeroUI). Medida escrita
+  da `HealthMatrix`, o padrão do `Grid` e o `Dialog` `xs` (a largura máxima `xs` da referência). Medida escrita
   continua valendo. Medido no app: `min="sm"` passava pelo tipo e a grade virava **uma coluna só**.
 - **AN-04 · `NavList` com foto e sinais (web e nativo).** `avatar` (o formato do
   `ChatMessage.avatar`; no nativo, o do `Avatar` daqui) toma o lugar do ícone; `indicators`
@@ -319,8 +387,8 @@ nova, e não correção, porque entram props.** Nada sai nem muda de nome.
 - **AN-01 · `AppShell` com o botão de recolher** ([ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)). `sidebarCollapsible` desenha o botão no alto da junção do menu com o conteúdo (o
   lugar que o Victor marcou) e recolhe a lateral sozinha entre 1024 e 1279 de largura;
   `defaultSidebarCollapsed` e `onSidebarCollapsedChange` completam o par controlado/não controlado.
-  A referência é a `Sidebar` do shadcn que o ReUI usa no `c-sidebar-2` (o HeroUI não tem moldura
-  de app). Sem a prop, o shell é o de antes.
+  O modelo é a lateral de uma das referências, que a segunda da fila usa num bloco de exemplo (a
+  primeira não tem moldura de app). Sem a prop, o shell é o de antes.
 - Textos novos: `sidebarCollapse` ("Recolher o menu") e `sidebarExpand` ("Abrir o menu").
 
 ### Consertado
@@ -411,10 +479,10 @@ entre 16:50 e 16:52; o `@aurea-uds/native` só apareceu às 16:58 — o registro
 
 Aprovada pela bancada do Victor, com o código real
 rodando no navegador (*"a palavra agora é PERFEITO! pode. aprovado"*). Falta o aceite de aparelho
-(bloco `0.17` do `apps/native-smoke`). Decisão: [ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-na-altura-do-telegram.md).
+(bloco `0.17` do `apps/native-smoke`). Decisão: [ADR-0055](decisions/0055-a-barra-de-baixo-fica-parada-e-mais-baixa.md).
 
 O `BottomNav` refeito pelo que o Victor viu no app: *"me incomoda o bottom nav todo se mexer"*,
-*"ainda acho ele muito largo comparado a bottomnav como do telegram"* ("largo" é a grossura) e
+*"ainda acho ele muito largo comparado a bottomnav como do [a referência]"* ("largo" é a grossura) e
 *"o texto pode ficar mais próximo do ícone"*. **Versão nova, e não correção, porque entram dois
 nomes de indicador.** Nada sai nem muda de nome.
 
@@ -432,21 +500,21 @@ nomes de indicador.** Nada sai nem muda de nome.
 
 ### Mudou (aparência)
 
-- **A barra ficou mais baixa: a altura do Telegram.** Medido no fonte do Telegram para Android
-  12.10.6: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. Antes, 73 no
+- **A barra ficou mais baixa: a altura de referência.** Medido no fonte de um aplicativo de
+  mensagens para Android: pílula de 56, botão de 48, ícone de 24, nome de 12 numa linha de 16. Antes, 73 no
   `circle-bold` do app. Agora, nos dois alvos: **54** no `none`, `subtle`, `pill` e `expand`;
   **58** no `circle-bold`; **62** no `circle`, `circle-raised`, `circle-outline` e `capsule`, que
   têm a moldura de 32 em volta do ícone.
   - o nome sai em 12 numa linha de 16 (o tamanho mais `space1`); no nativo era 14 com linha de 21;
   - o recheio de cima e de baixo do botão cai de `space1` para `space05`;
   - o nome encosta no ícone (vão zero; era `space05`): de tinta a tinta, 6 a 7 no `pill` e no
-    `circle-bold`, como no Telegram (eram 9 e 13);
+    `circle-bold`, como no aplicativo de mensagens (eram 9 e 13);
   - no `circle-bold` a moldura de 32 sai (o círculo é o disco, 56 × 48).
 - O nome dos itens NÃO escolhidos passa a ter o peso médio, o mesmo do escolhido.
 
 ### Adicionado
 
-- **`indicator="capsule"`**, o Material 3 Expressive: cápsula amarela de 56 × 32 só atrás do
+- **`indicator="capsule"`**, o da diretriz de desenho do Android: cápsula amarela de 56 × 32 só atrás do
   ícone, em todos os itens, pintada só no escolhido; o nome embaixo, fora dela. O contador fica no
   canto do ícone, e não da cápsula, e inverte sobre o amarelo (web), como no `circle-bold`.
 - **`indicator="expand"`**: os outros itens só com o ícone; o escolhido vira cápsula amarela com o
@@ -467,7 +535,7 @@ nomes de indicador.** Nada sai nem muda de nome.
 - `tests/visual/geometry.spec.ts` (roda na CI): **a barra não se mexe** — para cada aba escolhida,
   o retângulo da barra e o de cada botão, nos dois eixos, nos nove indicadores e nas duas larguras.
   Com a folha antiga, os sete indicadores reprovam no `content` e o `circle-bold` no `full`. E
-  **a altura do Telegram, o nome inteiro e colado no ícone**: com a folha antiga, 62 e 70 de
+  **a altura de referência, o nome inteiro e colado no ícone**: com a folha antiga, 62 e 70 de
   altura e 2 de vão.
 - `tests/unit/native-bottomnav-parada.test.tsx`: as mesmas travas no nativo, pelas medidas que o
   código pede (o dublê não mede texto) — toda caixa e todo nome com as mesmas medidas em qualquer
@@ -581,7 +649,7 @@ e a E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-1
   reprovando no TypeScript. ⚠ O desenho passado direto não tem forma cheia no item escolhido (a
   forma cheia mora no registro, como `<nome>-fill`).
 - **`Timeline` do nativo com `icon`, `tone`, `trailing` e `between` (R-18).** O `icon` põe o glifo
-  numa moldura redonda de 40 (o `Avatar` `sm` do HeroUI Native) no lugar do ponto; o `tone` pinta
+  numa moldura redonda de 40 (o `Avatar` `sm` do pacote nativo da referência) no lugar do ponto; o `tone` pinta
   a moldura com as cores do `Badge`; o `trailing` vai à direita do título (um valor); o `between`
   diz o que aconteceu entre um item e o próximo, ao lado da linha (*"6 dias depois"*) — a proposta
   da prancha, no lugar de uma linha com cara de estrada. Basta um item com `icon` para a coluna
@@ -598,13 +666,13 @@ e a E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-1
 ### Mudado
 
 - **O glifo do `EmptyState` do nativo fica numa moldura redonda (R-15).** Moldura de 64 (o
-  `Avatar` `lg` do HeroUI Native), fundo `muted`; o glifo continua com 32, agora na cor
+  `Avatar` `lg` do pacote nativo da referência), fundo `muted`; o glifo continua com 32, agora na cor
   `mutedForeground`. Era o "ícone pequeno e solto" do achado. A `illustration` (o desenho do app,
   de 112) foi reprovada na prancha e não entra.
 
 - **O `PhotoInput` deixa OLHAR a foto (R-22).** A miniatura era um `Avatar` redondo de 42, sem
   toque, e o X (sem fundo, só 8 para fora) cobria metade dela. Agora, na "B" da prancha: miniatura
-  quadrada de 64 (o `Avatar` `lg` do HeroUI Native, a `Image` da `Gallery`), do tamanho do botão de
+  quadrada de 64 (o `Avatar` `lg` do pacote nativo da referência, a `Image` da `Gallery`), do tamanho do botão de
   pôr foto (que era 72, número à mão); tocar abre a foto grande no MESMO zoom da `Gallery`; o X tem
   fundo e fica todo fora da foto — o canto do desenho dele no canto da foto, medido. O leitor de
   tela ouve *"Foto 2 de 3"* e *"Abre a foto"*; o X, *"Remover foto 2"*.
@@ -666,8 +734,8 @@ muda de comportamento.
 - **Ocupado (`loading`), o `IconButton` mostra só a rodinha, no centro.** A rodinha entrava AO
   LADO do glifo, e num botão de 36 os dois não cabiam. Medido no catálogo antes do conserto: botão
   de 638 a 674, rodinha de 634 a 650 (4px fora do botão, à esquerda), e o disquete ainda visível.
-  O HeroUI troca o ícone pela rodinha (exemplo "Loading State" da doc do `Button` 3.2.6:
-  `isPending ? <Spinner/> : <Paperclip/>`), e agora a Aurea também.
+  A referência troca o ícone pela rodinha (no exemplo de estado ocupado da documentação do botão
+  dela), e agora a Aurea também.
 - **Quem mais tinha: o `Button` ocupado com `leadingIcon`.** Mostrava rodinha, ícone e texto juntos;
   agora a rodinha toma o lugar do ícone da frente, e o texto fica. O `ToolbarButton` usa o `Button`
   por dentro e herda o conserto. O `IconButton` do nativo não tem estado ocupado e não muda.
@@ -688,29 +756,29 @@ muda de comportamento.
 ✅ **Não saiu sozinha: foi publicada dentro da `0.14.1`**, em 02/10/2026. Em 02/10/2026, às 06:33
 (Brasília), a lista de versões do registro ia até a `0.13.0`, horas depois de a `0.14.0` ficar
 pronta no `main`. Lote F do nativo: os acréscimos R-10, R-12, R-14, R-16 e R-19 da fila
-(`docs/FILA.md`), cada um no desenho do HeroUI Native 1.0.10 quando ele tem a peça. As propostas
+(`docs/FILA.md`), cada um no desenho do pacote nativo da referência, quando ele tem a peça. As propostas
 foram aprovadas pelo Victor pelas pranchas de 01/10/2026 (*"ok, 30 e 24"*). Nada quebra: tudo é
 prop nova, e sem ela a peça sai como antes — exceto a descrição do `RadioGroup` (ver
 "Corrigido"). Mexe no nativo, nos tokens e numa linha do CSS da web.
 
 ### Adicionado
 
-- **`<Tabs variant="secondary">`, no nativo (R-12).** O `secondary` do `Tabs` do HeroUI: sem a
+- **`<Tabs variant="secondary">`, no nativo (R-12).** O `secondary` do `Tabs` da referência: sem a
   cápsula, um fio fino de 1 embaixo da fila inteira (cor `border`) e o **fio amarelo** da casa
-  embaixo da aba aberta. Recheio da aba do HeroUI (12 dos lados, 6 em cima e embaixo, nos
+  embaixo da aba aberta. Recheio da aba da referência (12 dos lados, 6 em cima e embaixo, nos
   `space3` e `space1 + space05`), e a altura da fila igual à da cápsula (`controlHMd`). Sem
   `variant`, ou com `"primary"`, é a cápsula de sempre. Tipo novo: `AureaTabsVariant`.
-- **`description` no item do `Combobox`, no nativo (R-14).** A segunda linha do
-  `Select.ItemDescription` do HeroUI: letra 14, apagada, embaixo do rótulo. Vira a dica do item
+- **`description` no item do `Combobox`, no nativo (R-14).** A segunda linha da
+  descrição de item da lista da referência: letra 14, apagada, embaixo do rótulo. Vira a dica do item
   para o leitor de tela. A busca continua olhando só o `label`.
 - **`<NumberField size="display">`, no nativo (R-16).** O número grande de destaque. Nenhuma
   referência da fila tem esse tamanho, então é peça nossa, feita com escalas que já existem:
   letra do título 2 (`text3xl`, 30, seminegrito — escolha do Victor), altura `controlHXl` (o
   degrau seguinte dos controles, que muda com a densidade), largura `space24` (96, para caber
   "1.234") e os botões do `lg`. Tipo novo: `AureaNumberFieldSize`.
-- **`icon` no `RadioGroup.Item`, no nativo (R-19).** O HeroUI põe o ícone como mais um filho do
+- **`icon` no `RadioGroup.Item`, no nativo (R-19).** A referência põe o ícone como mais um filho do
   item; aqui é nome de ícone, como em todo o resto. Fica antes do texto, com 24 (`iconLg`, escolha
-  do Victor; o HeroUI usa 22 nos ícones de lista, que não existe na Aurea) e vão de 12, na cor do
+  do Victor; a referência usa 22 nos ícones de lista, que não existe na Aurea) e vão de 12, na cor do
   rótulo. Na opção escolhida sai a forma cheia (ADR-0053), se o registro tiver `<nome>-fill`.
 
 ### Mudado
@@ -727,11 +795,11 @@ prop nova, e sem ela a peça sai como antes — exceto a descrição do `RadioGr
 ### Corrigido
 
 - **A descrição do `RadioGroup` saía em 16, do tamanho do rótulo.** O comentário do código sempre
-  disse `text-sm` (o 14 do `description.css` do HeroUI), mas o `Text size="sm"` do nativo é 16 (o
+  disse `text-sm` (o 14 da folha de descrição da referência), mas o `Text size="sm"` do nativo é 16 (o
   mapa da ADR-0050 sobe um degrau no telefone). Agora é `xs`, que é o 14, o mesmo do `Checkbox` e
-  do `Switch`. Achado na vitrine de 01/10/2026, ao lado da imagem do HeroUI.
-  **Quem mais tem:** a descrição do `Toast` do nativo usa o mesmo `size="sm"` (16) e o HeroUI usa
-  14 (`toast.css`). Fica anotado na fila, sem mexer neste lote.
+  do `Switch`. Achado na vitrine de 01/10/2026, ao lado da imagem da referência.
+  **Quem mais tem:** a descrição do `Toast` do nativo usa o mesmo `size="sm"` (16) e a referência usa
+  14 (na folha do aviso dela). Fica anotado na fila, sem mexer neste lote.
 
 ### Testes e aparelho
 
@@ -866,16 +934,16 @@ corrigida para o dia no fuso do Victor. Só o nativo muda.
 
 ### Adicionado
 
-- **`RadioGroup`, no nativo** (pedido do Victor, 01/10/2026). É o `RadioGroup` do HeroUI Native
-  1.0.10, com a aparência da Aurea: o grupo guarda a escolha, e cada `RadioGroup.Item` é a linha
-  inteira tocável, com o texto à esquerda e a marca à direita. As medidas são as do HeroUI, nos
+- **`RadioGroup`, no nativo** (pedido do Victor, 01/10/2026). É o `RadioGroup` do pacote nativo da referência,
+  com a aparência da Aurea: o grupo guarda a escolha, e cada `RadioGroup.Item` é a linha
+  inteira tocável, com o texto à esquerda e a marca à direita. As medidas são as da referência, nos
   tokens que dão o mesmo número: vão de 12 (`space3`), marca de 24 (`space6`), ponto de 10, rótulo
   `base` médio e descrição `sm` apagada. A marca escolhida é a cor da seleção. Tem `disabled` e
   `invalid` no grupo e no item, `orientation`, nome para o leitor de tela (`label`) e
   `indicatorPlacement` (`end`, o padrão, ou `start`, a marca no início da linha — no grupo ou só
-  num item; o HeroUI decide isso pela ordem dos filhos do item). Os filhos são
-  livres: cabe um `Separator` entre os itens e o grupo inteiro num `Card`, como no exemplo do
-  HeroUI. A marca do `Radio` solto não muda. Aceite de aparelho: bloco RG do `apps/native-smoke`.
+  num item; a referência decide isso pela ordem dos filhos do item). Os filhos são
+  livres: cabe um `Separator` entre os itens e o grupo inteiro num `Card`, como no exemplo da
+  referência. A marca do `Radio` solto não muda. Aceite de aparelho: bloco RG do `apps/native-smoke`.
 
 ### Ferramenta
 
@@ -930,7 +998,7 @@ sozinha no npm. Só o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2
   `SafeAreaUtils.kt`): dentro de um `Modal` o `SafeAreaView` não acha o `SafeAreaProvider` do app,
   mede a si mesmo, e com altura 0 não calcula recuo nenhum. O do `Combobox` e o do `BottomSheet`
   eram vazios — o recuo da `0.11.0` ficava em zero. Agora o recuo vem do contexto do React, como no
-  `Select` do HeroUI Native, e vira um espaço no fim da folha. Sem `SafeAreaProvider` no app, vale a
+  `Select` do pacote nativo da referência, e vira um espaço no fim da folha. Sem `SafeAreaProvider` no app, vale a
   medida da abertura (`initialWindowMetrics`). O `Select` passa a cobrir a tela toda, como as outras
   duas, e o `Combobox` zera o recuo com o teclado aberto. Aceite de aparelho: bloco E10 do
   `apps/native-smoke`, com a navegação de 3 botões e com a de gestos.
@@ -946,7 +1014,7 @@ sozinha no npm. Só o nativo muda. Achados E9, E10, E11 e E4b do app, de 25/09/2
 ### Adicionado
 
 - **E9 · `LinkButton`, no nativo.** O botão-texto que encosta na margem: é o `LinkButton` do
-  HeroUI Native, um `Button` sem fundo, sem recuo dos lados, sem borda e sem altura fixa. A área
+  pacote nativo da referência, um `Button` sem fundo, sem recuo dos lados, sem borda e sem altura fixa. A área
   de toque continua com 44 de altura. Como todo botão, obedece o pai: encostado na margem é
   `Stack align="start"`.
 
@@ -991,13 +1059,13 @@ do botão redondo e do B-02 foram aprovadas pelo Victor.
   `--focus-offset` (2px e 2px, os números do contrato que já existia). Mudar o foco do sistema
   inteiro é mudar uma linha. Toda regra de foco do core passou a usá-los. Duas coisas mudam na tela:
   - **Tabela com rolagem (`.table-region`) e `DataGrid`:** o foco era um halo claro de `--focus` a
-    38%, difícil de ver. Agora é a linha de foco, por dentro, como o HeroUI 3.2.6 faz nas tabelas.
+    38%, difícil de ver. Agora é a linha de foco, por dentro, como a referência faz nas tabelas.
   - **Player de vídeo (`MediaPlayer`), tema claro:** o foco dos controles era marrom escuro em cima
     do fundo quase preto do player, e sumia. Agora é o amarelo, nos dois temas: o player redefine
     `--focus-strong` em vez de ter uma regra de foco à parte.
   - **Menus, foco de teclado:** o item em foco era só o fundo cinza, igual ao do mouse em cima;
-    uma regra do destaque apagava a linha. Agora leva a linha de foco por dentro, como o `menu-item`
-    do HeroUI 3.2.6. Com o mouse, continua só o fundo. Onde o foco fica no campo (`Combobox`,
+    uma regra do destaque apagava a linha. Agora leva a linha de foco por dentro, como o item de menu
+    da referência. Com o mouse, continua só o fundo. Onde o foco fica no campo (`Combobox`,
     `CommandPalette`), o destaque continua sendo o fundo: ali o item nunca recebe o foco.
   - Pequenos, sem mudar o desenho: o controle de posição do player perdeu 1px de afastamento (3 →
     2), e a alça de redimensionar colunas da `DataGrid` desenha a linha por dentro (era 1px fora).
@@ -1005,19 +1073,19 @@ do botão redondo e do B-02 foram aprovadas pelo Victor.
     ou afastamento escrito à mão e sombra no lugar da linha. O teste de navegador do contrato de
     foco mede também as peças que a amostra antiga não via. Os dois foram provados contra o CSS
     antigo.
-- **E2 · o `Button` do nativo obedece o pai**, como o do HeroUI Native e o `.btn` da web num
+- **E2 · o `Button` do nativo obedece o pai**, como o do pacote nativo da referência e o `.btn` da web num
   `.stack` (decisão do Victor, 25/09/2026). Saiu o `alignSelf: "flex-start"` que vencia a
   centralização de quem estava em volta: no `EmptyState` o botão ficava à esquerda e o resto no
   meio. ⚠ **A consequência:** numa coluna sem alinhamento o botão agora ocupa a largura toda — no
   rodapé do `Screen`, na ação do cartão da marca e em qualquer coluna do app. "Do tamanho do texto"
   se diz no pai: o `Stack` do nativo ganhou o `align` da web (`start`, `center`, `end`,
-  `stretch`; novo tipo `AureaStackAlign`). O `IconButton` tem largura fixa, como o só-ícone do
-  HeroUI, e nunca estica.
+  `stretch`; novo tipo `AureaStackAlign`). O `IconButton` tem largura fixa, como o só-ícone da
+  referência, e nunca estica.
 - **O botão só de ícone é redondo**, em todos os tamanhos, na web e no nativo
   ([ADR-0052](decisions/0052-o-botao-so-de-icone-e-redondo.md), decisão do Victor, 25/09/2026).
   Era um quadrado de canto 10px (6px nos dois menores). Vale para todo `IconButton`, os botões de
   fechar e os controles do player, que também perderam o recheio lateral para ficarem quadrados
-  (eram 38×36). É como o HeroUI 3.2.6 faz.
+  (eram 38×36). É como a referência faz.
 
 
 ### Adicionado
@@ -1025,7 +1093,7 @@ do botão redondo e do B-02 foram aprovadas pelo Victor.
 - **`ThemeToggle`, na web e no nativo** (pedido do Victor, 25/09/2026): o botão de claro e escuro
   com cor no ícone. No tema claro mostra a **lua, na tinta do texto**; no escuro, o **sol, no
   amarelo da marca** — o tema para onde se vai, e o nome dele diz isso ("Mudar para o tema
-  escuro"). É um só-ícone redondo, sem cor solta. Peça exclusiva da Aurea: o HeroUI não tem troca
+  escuro"). É um só-ícone redondo, sem cor solta. Peça exclusiva da Aurea: a referência não tem troca
   de tema. Os glifos são os CHEIOS do Carbon (a lua de contorno ficava branca por dentro).
   ⚠ No nativo, `asleep--filled` (lua) e `light--filled` (sol) saem do registro do app, como os
   do `Alert`.
@@ -1034,17 +1102,17 @@ do botão redondo e do B-02 foram aprovadas pelo Victor.
   `BottomNav`, `NavList`, `Breadcrumb`) — decisão do Victor, 25/09/2026: só onde o app precisa do
   link do roteador. `render={<Link href="/relatorios" />}` desenha o link do roteador com a pele e
   o conteúdo da peça; o destino é do elemento. No botão desativado ou carregando, o clique é barrado
-  também no elemento. O HeroUI 3.2.6 não tem `render`; o idioma é o da Base UI, que a Aurea já usa
+  também no elemento. A referência não tem `render`; o idioma é o da Base UI, que a Aurea já usa
   no `Card` (`fundirRender`).
-- **M-02 (`classNames` por parte) não entra**: o HeroUI tirou isso na versão atual, e abriria a
+- **M-02 (`classNames` por parte) não entra**: a referência tirou isso na versão atual, e abriria a
   aparência das peças por dentro. Decisão do Victor, 25/09/2026.
 
-- **B-02 · `Text`, `Heading`, `Paragraph` e `Code`, na web e no nativo**, no molde do HeroUI 3.2.6
-  (decisão do Victor, 25/09/2026: HeroUI sempre primeiro). Uma **lista fechada de papéis** em vez
+- **B-02 · `Text`, `Heading`, `Paragraph` e `Code`, na web e no nativo**, no molde da referência
+  (decisão do Victor, 25/09/2026: a referência sempre primeiro). Uma **lista fechada de papéis** em vez
   de tamanhos soltos: título 1 a 6, texto, texto pequeno, texto mínimo e código. Cor só normal ou
   apagada (`color="muted"`), quatro pesos, alinhamento e corte em uma linha (`truncate`).
-  - `Heading level={2}` renderiza um `h2` com a cara de título 2; o nível é o desenho, como no
-    HeroUI. `Paragraph size="sm"` é um `p` de 14px. `Code` é um `code` com a pele do código do
+  - `Heading level={2}` renderiza um `h2` com a cara de título 2; o nível é o desenho, como na
+    referência. `Paragraph size="sm"` é um `p` de 14px. `Code` é um `code` com a pele do código do
     `Prose`. `Text` é um `span` com o papel que você escolher.
   - Os números são de token: a escala de letras (ADR-0050), `--leading-relaxed` no texto,
     `--leading-tight` e `--tracking-tight` nos títulos.
@@ -1070,15 +1138,15 @@ mudança de aparência que não é acréscimo, o E5 — a regra da
 
 ### ⚠ Mudou — leia antes de atualizar
 
-- **E5 · a marca do `Radio` e do `Checkbox` fica no MEIO da altura do texto**, como no HeroUI
-  Native (`radio.css` e `control-field.css`: `align-items: center`). Ficava presa no topo do
+- **E5 · a marca do `Radio` e do `Checkbox` fica no MEIO da altura do texto**, como no pacote
+  nativo da referência (as folhas do rádio e do campo de controle dela: `align-items: center`). Ficava presa no topo do
   rótulo, com um `marginTop: 1` fixo. Para rótulo longo, de várias linhas, `align="start"` põe a
   marca no meio da **primeira** linha, pela conta dos tokens.
-- **`Badge` · as medidas do `Chip` do HeroUI Native** (ordem do Victor de 25/09/2026: *"se o
-  HeroUI já tem, vamos usar as deles"*). `sm` 8 × 2 de recheio, letra 12, linha 16; `md` 12 × 4,
-  letra 14, linha 20; `lg` 16 × 6, letra 16, linha 24; 4 de vão. As alturas passam a ser as do
-  HeroUI mais a borda de 1 da Aurea: pequeno 20 → 22, médio 24 → 30, grande 28 → 38. O raio continua a
-  cápsula da Aurea. O `xs` (contador sobre ícone) não existe no HeroUI e fica com 16 de altura,
+- **`Badge` · as medidas do `Chip` do pacote nativo da referência** (ordem do Victor de 25/09/2026: *"se o
+  [a referência] já tem, vamos usar as deles"*). `sm` 8 × 2 de recheio, letra 12, linha 16; `md` 12 × 4,
+  letra 14, linha 20; `lg` 16 × 6, letra 16, linha 24; 4 de vão. As alturas passam a ser as da
+  referência mais a borda de 1 da Aurea: pequeno 20 → 22, médio 24 → 30, grande 28 → 38. O raio continua a
+  cápsula da Aurea. O `xs` (contador sobre ícone) não existe na referência e fica com 16 de altura,
   agora com letra 12. Motivo de fundo: o texto saía com entrelinha 1,0, e no Android o g e o p
   eram cortados — a mesma causa do E1.
 - **E7 · dentro do `Card variant="brand"`, o botão cheio com tom mantém a cor** (sucesso, perigo,
@@ -1095,8 +1163,8 @@ mudança de aparência que não é acréscimo, o E5 — a regra da
 
 - **E1 · o `Button` cortava a perna das letras** (g, p, ç) no Android. O rótulo saía com
   entrelinha 1,0; o IBM Plex precisa de 1,3 em para caber inteiro, e o React Native do Android
-  corta o que passa da linha. Agora é a entrelinha normal (1,5), como o rótulo do botão do HeroUI
-  Native. Cabe em todo tamanho e densidade: os dois menores têm linha de 21 e o menor botão mede
+  corta o que passa da linha. Agora é a entrelinha normal (1,5), como o rótulo do botão do pacote
+  nativo da referência. Cabe em todo tamanho e densidade: os dois menores têm linha de 21 e o menor botão mede
   24 (compacto); os maiores têm linha de 24 e medem 32 ou mais.
   - O `Badge` tinha o mesmo defeito, e foi junto (ver "Mudou").
 - **E4 · a lista do `Select` e a do `Combobox` não rolavam no Android.** ⚠ **Causa não
@@ -1128,7 +1196,7 @@ mudança de aparência que não é acréscimo, o E5 — a regra da
 ### Ficou para o Lote 3
 
 - **E2 · o `Button` não obedece a centralização de quem está em volta** (`alignSelf:
-  "flex-start"`). Decisão do Victor, 25/09/2026: seguir o HeroUI Native (o botão obedece o pai).
+  "flex-start"`). Decisão do Victor, 25/09/2026: seguir o pacote nativo da referência (o botão obedece o pai).
   Como isso faz o botão esticar dentro de um `Stack` sem alinhamento, vai no Lote 3, junto com um
   `align` no `Stack` do nativo.
 
@@ -1189,7 +1257,7 @@ mudança de aparência que não é acréscimo (regra da
 - **B-12 · `Field description`** — a frase de apoio EMBAIXO do controle, ligada por
   `aria-describedby` na ordem dica, descrição, erro. A `hint` continua ao lado do rótulo.
 - **A-14 · `Card orientation="horizontal"` e `Card.Media`** — o modo lista: capa à esquerda com
-  **96** de largura (o `size-24` do exemplo horizontal do `heroui-native`, que é também o nosso
+  **96** de largura (a largura do exemplo horizontal do pacote nativo da referência, que é também o nosso
   `--space-24`) e o texto à direita. Na vertical, `Card.Media` como primeiro filho encosta na borda
   de cima, recortada no raio 22.
 
@@ -1222,8 +1290,8 @@ número do meio, e não só o último, por causa de **uma** mudança que não é
 ### ⚠ Mudou — leia antes de atualizar
 
 - **A janela (`Dialog`) sem tamanho escolhido passou de 560 para 448 de largura.** Decisão do
-  Victor: as larguras agora são as do HeroUI (`xs` 320 · `sm` 384 · `md` 448 · `lg` 512), mais
-  `xl` 1024 e `full`, e o padrão é o `md` do HeroUI. Toda janela que não passa `size` fica **112
+  Victor: as larguras agora são as da referência (`xs` 320 · `sm` 384 · `md` 448 · `lg` 512), mais
+  `xl` 1024 e `full`, e o padrão é o `md` da referência. Toda janela que não passa `size` fica **112
   px mais estreita**. Quem precisa da largura antiga passa `size="lg"` (512), a mais próxima. O
   `ConfirmDialog` continua com 420, mais estreito que a janela comum.
 
@@ -1274,8 +1342,8 @@ R-07 2, R-06 1, R-05 1), e a R-10. Desenho de antes e depois aprovado pelo Victo
   propõe para a web na B-01, de propósito. Sem as props, nada muda.
 - **R-02 · `Topbar inset` (`bar` · `page` · `none`)**, só na `flush`. `page` recua o mesmo 16 da
   `Screen`, e o título alinha com o conteúdo; o padrão continua 20.
-- **R-07 · token `opacity-disabled` (0,5)** — o único token de opacidade do HeroUI
-  (`--disabled-opacity: 0.5`, 51 usos no `@heroui/styles` 3.2.6) e o 0,5 que os campos, o menu e o
+- **R-07 · token `opacity-disabled` (0,5)** — o único token de opacidade da referência
+  (0,5, com 51 usos no pacote web dela) e o 0,5 que os campos, o menu e o
   `Combobox` da Aurea já usavam. Na web e no nativo esses pontos passam a ler o token; **nenhum
   valor mudou**. ⚠ O 0,45 do botão desativado continua fora: mudar é mudar a aparência publicada.
   E o **`comOpacidade` sai pela porta da frente** do `@aurea-uds/native`.
@@ -1325,7 +1393,7 @@ R-04 e R-08. A R-03 cai junto com a R-08.
     (`REACAO_AO_TOQUE`, no `estilos.ts`), e o `Button` lê de lá.
   - ⚠ **Uma regra o tipo não cobre:** cartão com `onPress` não pode ter coisa tocável dentro. O
     conteúdo é do app, e o `check 43` não o alcança.
-  - ⚠ **O HeroUI não serve de modelo aqui:** o exemplo oficial do `heroui-native@1.0.10` põe um
+  - ⚠ **A referência não serve de modelo aqui:** o exemplo oficial do pacote nativo dela põe um
     `Button` dentro do cartão tocável — o defeito que o `check 43` barra.
 - **R-08 · `width="content"` no `BottomNav`, na web e no nativo.** A barra fica do tamanho das
   abas, no centro, em vez de ir de uma borda à outra. Só na `floating`; na `edge` a prop é
@@ -1366,19 +1434,19 @@ R-04 e R-08. A R-03 cai junto com a R-08.
 
 ### Mudou
 
-- **A escala de letras passa a ser a do HeroUI** ([ADR-0050](decisions/0050-a-escala-de-letras-e-a-do-heroui.md),
+- **A escala de letras passa a ser a da referência** ([ADR-0050](decisions/0050-a-escala-de-letras-vem-da-referencia.md),
   que substitui a 0049). Os números viram **12 · 14 · 16 · 18 · 20 · 24 · 30 · 36 · 48**, a escala
-  do Tailwind que o HeroUI usa, lida no pacote publicado deles.
+  do framework de CSS que a referência usa, lida no pacote publicado dela.
   - **Web:** as peças voltam a **14** (botão, campo, Select, abas, lateral, rótulo) e o apoio a
     **12** (selo, etiqueta, erro de campo). O botão e o campo pequenos ficam em 14, e não em 12,
-    como no HeroUI. O título de cartão fica em 14 com peso médio. **No telefone, o texto digitado
+    como na referência. O título de cartão fica em 14 com peso médio. **No telefone, o texto digitado
     nos campos sobe para 16**, que é a regra deles e evita o Safari ampliar a página sozinho.
   - **Nativo:** as peças ficam em **16** e o apoio em **14**, um degrau acima da web, como o
-    HeroUI Native. Os componentes não mudaram de `size`: quem traduz é o mapa do `text.tsx`.
+    pacote nativo da referência. Os componentes não mudaram de `size`: quem traduz é o mapa do `text.tsx`.
   - ⚠ **O que muda para quem consome:** na web, o texto das peças fica menor que na `0.8.8`–`0.8.11`
     (16 → 14). O `md`, que é o corpo do `body`, também vai para 14. Os títulos grandes quase não
     mudam: `lg` 20 → 18, `2xl` 25 → 24, `3xl` 31 → 30.
-  - Controle: `tests/unit/escala-heroui.test.tsx`. Voltar o mapa do nativo para a escala antiga
+  - Controle: `tests/unit/escala-de-letras.test.tsx`. Voltar o mapa do nativo para a escala antiga
     faz ele falhar.
 
 ## [0.8.11] — 2026-09-24
@@ -1757,7 +1825,7 @@ coisa tocável dentro", e uma lista de treze pedidos medidos contra o código.
   dentro**.
 
   As duas docs, lidas na fonte: o React Native chama de *"VoiceOver disallowing nested
-  accessibility elements"*; a Apple diz *"An individual view does not contain any other views
+  accessibility elements"*; a documentação do iOS diz *"An individual view does not contain any other views
   that need to be accessible"*.
 
   **Provado em quatro direções**, e **achou mais dois** no dia em que nasceu.
@@ -1948,20 +2016,19 @@ only hint of which field the keyboard is feeding disappears the moment you put a
 Android fix of 2026-09-09 (`paddingVertical: 0` + `textAlignVertical`) crosses into the group, with
 a test of its own.
 
-### Not added, on purpose — the Google and Apple logos
+### Not added, on purpose — other companies' logos
 
-The app asked for them. They are **not coming**, and the reason is not technical.
+The app asked for two of them. They are **not coming**, and the reason is not technical.
 
-Measured: `@carbon/icons` 11.84.0 ships **46 brand logos** and **neither Google nor Apple is among
-them**; the `apple` icon that does exist is filed under Enterprise/Commerce with the alias
-*"fruit"* — it is the fruit. Read at the source, not from memory: Google requires its own asset
-bundle and forbids redrawing the mark (*"you can't change the size or color of the Google 'G'
-logo"*); Apple forbids the logo outright (*"You may not use the Apple Logo … except pursuant to an
-express written trademark license from Apple"*).
+Measured: `@carbon/icons` 11.84.0 ships **46 brand logos** and **neither of the two is among
+them**; the one icon that shares a name with one of those companies is filed under
+Enterprise/Commerce with the alias *"fruit"* — it is the fruit. Read at the source, not from
+memory: one company requires its own asset bundle and forbids redrawing the mark or changing its
+size or colour; the other forbids the logo outright without a written trademark license.
 
 **A trademark does not go into an Apache-2.0 library.** What shipped instead is `leading`/`trailing`
 on `Button`: the capsule is ours, the mark comes from the app — and the slot **does not tint** what
-it receives, with a test, because tinting the "G" is exactly what Google's rule forbids.
+it receives, with a test, because tinting the mark is exactly what the first company's rule forbids.
 
 ### Verified
 
@@ -1986,7 +2053,7 @@ name.
 not by the 1409 tests, not by `validate.py`, not by the build, and not by the release itself.**
 
 Four defects reached `0.8.0` in `@aurea-uds/native`. Three were found when the maintainer asked for
-visual proof and the in-repo HeroUI inventory was finally opened; the fourth was found by asking
+visual proof and the in-repo inventory of the reference library was finally opened; the fourth was found by asking
 *"you do remember these run on iOS too?"*.
 
 ### Fixed — `@aurea-uds/native`
@@ -1999,7 +2066,7 @@ visual proof and the in-repo HeroUI inventory was finally opened; the fourth was
   (`aurea.css:704-706`) and hugs its content; this one had `flex: 1` and filled the row, leaving the
   `−` and `+` thrown to the edges. It now hugs by default and takes a **`fullWidth`** prop for the
   case that needs the width (formatted currency does not fit in 64dp — not here and not on the web).
-  The axis is HeroUI's own (`number-field` publishes `fullWidth`), not an invention.
+  The axis is the reference library's own (its number field publishes `fullWidth`), not an invention.
 - **The `Combobox` sheet was blind on iOS.** The sheet was not wrapped in `KeyboardAvoiding`, on the
   written reasoning that the keyboard metrics do not arrive inside a `Modal` — **which looked at the
   wrong platform.** Android already resizes the window (`adjustResize`); **iOS does not**, so a 90%
@@ -2627,8 +2694,7 @@ which side each piece came from where that matters.
 - **`Sidebar` gained a `flush` variant — the one exception this design system makes to its
   floating-surface rule.** Opt-in: `variant="flush"` sits the panel against the edges, takes the
   full height and separates it from the content by a single rule instead of a gap. Measured on
-  18/08/2026 against four shipping apps — Cloudflare, Sophos, Claude's own app and HeroUI's
-  dashboard — none of which floats its sidebar.
+  18/08/2026 against four shipping admin dashboards, none of which floats its sidebar.
 
   **The default is unchanged: the sidebar still floats**, exactly as published in `0.3.0` (margin,
   card radius, border on all four sides). Nothing about an existing `Sidebar` looks different
@@ -2642,10 +2708,10 @@ which side each piece came from where that matters.
 
   **The icon rail is 68px, not 88px** (`--sidebar-rail` is now `4.25rem`), and the rail item is a
   36px SQUARE, centred, instead of a 71×36 stretched row. Both numbers were read in the reference
-  source (`MAIN_SIDEBAR_WIDTH = 68`, `NavButton` icon-only is `size-9`). A rail wider than its item
+  source (the sidebar width constant is 68, and the icon-only nav button is 36). A rail wider than its item
   stretches the item into a capsule, which is the defect these two numbers fix.
 
-  **The item icon went from 16px to 20px** — `--icon-md`, which is exactly their `size-5`.
+  **The item icon went from 16px to 20px** — `--icon-md`, which is exactly the reference's icon size.
 
   **And the collapsed rail now carries a Tooltip with the item name.** Collapsed, the label becomes
   `.sr-only`: a screen reader still hears it and a sighted user was left with a mute icon. This
@@ -2659,8 +2725,8 @@ which side each piece came from where that matters.
 ### Deprecated
 
 - **`Button`'s `pressed` prop, in favour of `<Toggle>`.** Removed in `1.0`; it still works today.
-  Twelve reference libraries were read on 18/08/2026 — MUI, Fluent 2, React Aria, Adobe Spectrum,
-  Carbon, Radix/Base UI, shadcn, ReUI, PrimeReact, HeroUI, Cedar and the W3C APG — and **none of
+  Twelve references were read on 18/08/2026 — eleven reference libraries, Base UI among them, and
+  the W3C APG — and **none of
   them puts the pressed state on the plain button**: every one has a separate component, and ours
   is `Toggle`. Two ways to build the same control is the "which one do I use?" that marks a
   duplicated feature.
@@ -2672,7 +2738,7 @@ which side each piece came from where that matters.
   Also: the two toggle examples left the Button catalog page — they were teaching a fake toggle —
   and `Toggle` got its own rich page, which it never had.
 
-  **And a rule nobody had written down here, from the APG and Adobe Spectrum: the label must not
+  **And a rule nobody had written down here, from the APG and one of the references: the label must not
   change between states.** "Mute"/"Unmute" or "Play"/"Pause" is not a toggle, it is a Button.
 
 ### Added
@@ -2711,7 +2777,7 @@ which side each piece came from where that matters.
   screen only adds noise for landmark navigation, and there is nothing to be "current" in a list
   you enter and come back from.
 
-  The second line came from MUI's `ListItemText` (`primary`/`secondary`), the only mature
+  The second line came from the list-item text of one of the references (a primary and a secondary line), the only mature
   reference among the nine folders — Base UI, the engine already in use, has no such component.
   A disabled row is `aria-disabled`, not `:disabled`, because `:disabled` drops the row out of the
   tab order and a keyboard user never finds out it exists. On a coarse pointer the whole row grows
@@ -2726,13 +2792,12 @@ which side each piece came from where that matters.
 
 - **`Badge` rewritten — it was one shape, one size and six colours.** Nothing that already uses it
   changed: `md` is still the historical size, `soft` is still the historical tone, and `children`
-  is still the content. What it gained, read from the local sources of Untitled UI's `badges.tsx`
-  and MUI's `Badge.js`:
+  is still the content. What it gained, read from the local sources of two of the references:
 
   `emphasis` (soft · outline · solid) · `size` (sm · md · lg) · `dot` · `leading`/`trailing`
   nodes · `image`/`imageAlt` · `count` with `max` (`99+`) and `showZero` · `anchor` on any of four
   corners, which turns it into the counter that rides on the corner of a child · `anchorShape`
-  (`circle` pulls it 14% back, MUI's `overlap`) · `invisible` · and a cutout ring in the surface
+  (`circle` pulls it 14% back, as in one of the references) · `invisible` · and a cutout ring in the surface
   colour, overridable with `--badge-ring`.
 
   Also exported: **`formatBadgeCount(count, max)`**, so the accessible name can say the same
@@ -2784,9 +2849,10 @@ which side each piece came from where that matters.
   and `dock` hid all of them; icon-only navigation only works when the symbols are unmistakable.
 
   **The measurements are researched, not invented:** the icon frame is `2rem` (32px), which is
-  the Material 3 active-indicator height over a 24dp icon; the gap from icon to label is 4px,
-  M3's own; the `circle-bold` circle is `3.5rem` (56px), M3 Expressive's expanded indicator. The
-  touch target stays on the item (`--control-h-lg`), against Apple's 44pt minimum.
+  the Android design guideline's active-indicator height over a 24dp icon; the gap from icon to label is 4px,
+  that guideline's own; the `circle-bold` circle is `3.5rem` (56px), the expanded indicator of its
+  latest revision. The touch target stays on the item (`--control-h-lg`), against the iOS
+  guideline's 44pt minimum.
 
   **The bar no longer paints a hover background.** It is phone chrome; a finger has no hover, and
   the grey shape it drew was the same shape the `subtle` indicator uses for "you are here".
@@ -2836,10 +2902,10 @@ slot where **your** editor goes.
 no italic, no bubble menu, no formatting toolbar. [ADR-0025](decisions/0025-editor-por-blocos-sem-motor.md)
 has the four measurements behind it; the one that closed the door is security. A browser does not
 sanitize pasted HTML, so whoever owns the editing surface owns the paste XSS — which is why
-ProseMirror and Lexical both treat `contenteditable` as a render target and never as the source of
+two established rich-text engines both treat `contenteditable` as a render target and never as the source of
 truth. Aurea cannot decide what is safe to render inside your domain.
 
-**No new dependency.** Kibo's editor is TipTap 3.6.6 over ProseMirror with 17 dependencies, and 18
+**No new dependency.** The reference library's editor is built on a third-party rich-text engine, with 17 dependencies, and 18
 of its 39 exports are table controls — it is a single-document editor, not a block list, so the
 anatomy this item needed was not in the reference the item itself pointed at. That is recorded
 rather than quietly worked around.
@@ -2864,7 +2930,7 @@ next arrow key moves its neighbour; arrows must do nothing while nothing is pick
 component hijacks ordinary navigation; and without the announcements someone who cannot see the
 list gets no confirmation at all.
 
-**No new dependency.** Kibo's list and kanban are both `@dnd-kit/core`, and adopting it would make
+**No new dependency.** The reference library's list and kanban are both built on a third-party drag-and-drop library, and adopting it would make
 every consumer download it. Pointer events cover mouse, touch and pen in the same code — and that
 choice is measured, not stylistic: HTML5 drag and drop fires on **no** touch device, which would
 have left phones unable to reorder at all. The `touch-action: none` on the handle is the mandatory
@@ -2949,8 +3015,8 @@ one — ours keeps the skin and the box, yours keeps the CDN and the `srcset`.
 
 #### `Carousel` — the scroll container is the engine
 
-Four references, one engine: shadcn (all four bases), Untitled UI, Kibo and Activepieces all wrap
-`embla-carousel`. Base UI has no carousel — measured: 46 modules, none of them one. Buying a
+Four references, one engine: all four wrap the same third-party carousel library (one of them in all four of its
+bases). Base UI has no carousel — measured: 46 modules, none of them one. Buying a
 carousel engine for something the browser already does was not worth a new dependency, so this is a
 native scroll container with `scroll-snap`: touch dragging with inertia, wheel, keyboard and the
 snap itself all come from the platform. React only works out **which slide you are on**, which is
@@ -3007,7 +3073,7 @@ children drifts out of sync with the filter.
 Closing happens **before** the command runs, so a command that navigates does not leave the palette
 floating over the new screen.
 
-**No new dependency.** The market answer is `cmdk`, which is what shadcn wraps — but
+**No new dependency.** The market answer is a dedicated command-menu library, which is what one of the references wraps — but
 `@base-ui/react` has `autocomplete`, and its `Input`, `List`, `Popup`, `Empty` and `Collection` are
 literally the same modules `Combobox` already uses here. A second filtered-list engine was not worth
 buying.
@@ -3024,7 +3090,7 @@ nothing: no schema, no rules, no resolver, no field state. Validate wherever sui
 the client, a server action, the API's answer — and hand the result over.
 
 **No form library became a dependency, and none was needed.** The market pattern is
-`react-hook-form` + `zod`, which is exactly what shadcn's `form.tsx` exists to wrap — but marrying
+a form-state library plus a schema validator, which is exactly what one reference's form component exists to wrap — but marrying
 it would force every project using Aurea to adopt it, including those already validating another
 way. Meanwhile `@base-ui/react`, the engine Aurea has paid for since Phase 2, already types its
 `Form.errors` as *"validation errors returned externally, typically after submission by a server or
@@ -3044,8 +3110,8 @@ short keys join the grid's five: `tab`, `view`, `detail`.
 **These do not manage the URL, and never will.** Managing means touching history, and the choice
 between `push` and `replace` belongs to the consumer — registered here since F4, and getting it
 wrong fills the back button with one entry per keystroke in a filter. If you want a manager,
-[`nuqs`](https://nuqs.dev) is the one the market settled on. What lives here is the *format*, which
-is what `nuqs` has no opinion about.
+use a URL query-state library; the market has settled on one. What lives here is the *format*, which
+is what such a manager has no opinion about.
 
 They import nothing, touch no `window`, and live in the module without the `"use client"` directive,
 because they are called where the URL arrives — which on a server-components framework is the
@@ -3063,7 +3129,7 @@ changes the attribute is followed — a script in the `<head>`, `window.Aurea`, 
 produces a hydration mismatch.
 
 **It persists nothing, on purpose.** Remembering a preference is the application's job.
-[`next-themes`](https://github.com/pacocoursey/next-themes) already does persistence, system
+An established theme library already does persistence, system
 preference, cross-tab sync and the no-flash inline script, and it writes `data-theme` on `<html>` —
 the same attribute Aurea reads, so they compose with no glue at all. What no theme library covers is
 **density**, and that is what this hook is really for.
@@ -3088,8 +3154,8 @@ rendered before its data exists. Aurea holds no data engine — no retry, no inv
 
 Aurea holds no rules, roles or policies: you pass `allowed` as an answer you already computed. What
 the component carries is the choice people get wrong — `mode="hide"` removes the action (what
-`@casl/react` does, and the right default when it would mean nothing to this user), `mode="disable"`
-keeps it visible and inert (what `react-admin` lets you pick, and the right call when they should
+a permissions library does, and the right default when it would mean nothing to this user), `mode="disable"`
+keeps it visible and inert (what an admin framework lets you pick, and the right call when they should
 know it exists). In disable mode `reason` is **required by the type**: an action that says no
 without saying why is worse than one that is simply absent.
 
@@ -3155,10 +3221,10 @@ that never needed the browser — whichever import path you use.
 #### Masking a field: `Input.formatOnBlur`, and `NumberField.format` / `locale` / `name`
 
 No mask component, and the reason is researched rather than preferred. Three independent
-measurements say the same thing: the **USWDS** ships its input mask with a recorded **WCAG 2.1 AA
-failure** ("recovering from an error is difficult due to lack of feedback"); **MUI dropped** masked
-date fields in v6 because the text "leaks to the previous sections" while you edit — their repo
-still carries a video named `masked-input-bad-ux.mp4`; and a live mask makes a screen reader
+measurements say the same thing: a **public-sector design system** ships its input mask with a recorded **WCAG 2.1 AA
+failure** (recovering from an error is hard for lack of feedback); **the reference library dropped** masked
+date fields because, while you edit, the typed text spills into the neighbouring sections — their repo
+still carries a video recording that bad experience; and a live mask makes a screen reader
 announce what was typed while the field shows what the mask allowed.
 
 So Aurea ships the **moment**, not the format. `Input.formatOnBlur` normalises the value after
@@ -3572,8 +3638,8 @@ on several buttons describes independent toggles. Finding M20, decided in
   uma linha. Medido no navegador — com 999px numa caixa alta as laterais viram semicírculos do
   tamanho da caixa e o texto do campo colide com a curva.
 
-  Não entrou o `responsive` do `Field`. Na referência ele depende de uma container query com
-  contêiner nomeado, declarada por um `FieldGroup` que a Aurea não tem — e sem esse componente
+  Não entrou a orientação responsiva do campo. Na referência ela depende de uma container query com
+  contêiner nomeado, declarada por um componente de grupo de campos que a Aurea não tem — e sem esse componente
   "responsivo" só poderia significar viewport, que é a pergunta errada: quem aperta o campo é o
   cartão em volta, não a janela.
 
@@ -3616,7 +3682,7 @@ on several buttons describes independent toggles. Finding M20, decided in
   implementações divergentes da mesma coisa neste repositório.
 
 - **195 composições prontas, sobre 77 componentes.** Eram 76 sobre 13. A medição que reformulou
-  o trabalho não foi a média (0,86 por componente contra 20,8 do kibo) e sim o **formato dela**:
+  o trabalho não foi a média (0,86 por componente contra 20,8 de uma das referências) e sim o **formato dela**:
   **77 dos 90 componentes tinham ZERO**. O alvo virou "nenhum componente em zero", que se
   verifica em vez de se estimar. Os 13 que seguem sem composição própria são os 6 hooks mais o
   `AureaProvider` — que não emitem marcação — e 6 primitivos medidos **dentro** das composições

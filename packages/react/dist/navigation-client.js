@@ -208,7 +208,7 @@ function sidebarList(items, ctx, sub, labelledBy) {
                     : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo });
             // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
             // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
-            // isso com tooltip no `NavButton`, e é o que falta para um trilho de ícone não virar adivinhação.
+            // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
             // Só quando recolhida: com o rótulo visível ao lado, o tooltip repetiria o que já está na tela.
             // `side="right"` porque a lateral encosta na borda esquerda — para cima o balão sairia do trilho.
             return _jsxs("li", { children: [ctx.collapsed ? _jsx(Tooltip, { content: it.label, side: "right", children: alvo }) : alvo, filhos && sidebarList(filhos, ctx, true, lid)] }, it.id);
@@ -216,8 +216,8 @@ function sidebarList(items, ctx, sub, labelledBy) {
 }
 // A GAVETA FECHA AO ESCOLHER (A-06, 23/09/2026). Abaixo de lg a lateral do `AppShell` é popover,
 // e a biblioteca a abria e NUNCA a fechava por código: `hidePopover` tinha zero ocorrências. O
-// usuário tocava "Relatórios", a página trocava por baixo e a gaveta ficava na frente dela. Material 3,
-// Fluent 2 e o guia de gaveta do iOS fecham ao escolher. O fechamento mora NA LATERAL, e não no
+// usuário tocava "Relatórios", a página trocava por baixo e a gaveta ficava na frente dela. Duas das
+// referências de desenho e o guia de gaveta do iOS fecham ao escolher. O fechamento mora NA LATERAL, e não no
 // item, para valer também para a navegação que o consumidor escreve e passa como `children` — o
 // catálogo é um desses. Fora do popover (desktop, lateral solta) o teste de `:popover-open` falha e
 // nada acontece. O `try` é porque `:popover-open` é seletor desconhecido em motor antigo, e lá o
@@ -252,8 +252,8 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             const ativo = it.id === current;
             // O CONTADOR PENDURA NO ÍCONE, e é por isso que existe esta caixa. Pendurado no ITEM (a
             // primeira versão), `50%` cai no meio do RÓTULO quando o item é linha — o Victor viu o número
-            // cobrir o nome inteiro em 17/08/2026. A pesquisa (Material 3 e os guias de barra de abas do
-            // iOS) diz a mesma coisa: canto superior do ÍCONE, encostando na borda dele, nunca sobre o
+            // cobrir o nome inteiro em 17/08/2026. A pesquisa (uma das referências de desenho e os guias de
+            // barra de abas do iOS) diz a mesma coisa: canto superior do ÍCONE, encostando na borda dele, nunca sobre o
             // texto. A caixa é o que dá ao contador um canto para se ancorar — e nos quatro indicadores
             // redondos é ela que VIRA o círculo, com o rótulo embaixo, fora dele.
             // `size="lg"` porque a proporção contra o contador foi medida: 24 para 16, razão 0,67.

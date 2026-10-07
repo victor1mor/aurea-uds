@@ -1,6 +1,6 @@
 // B-02 no NATIVO · o papel (`type`) e os atalhos `Heading`, `Paragraph` e `Code`, no molde do
-// `Typography` do HeroUI Native 1.0.10. As entradas foram escolhidas para reprovar se o papel não
-// existir: `body-sm` tem de dar 14 (o token direto, como o HeroUI Native), e não os 16 que o
+// componente de tipografia da referência no nativo. As entradas foram escolhidas para reprovar se o papel não
+// existir: `body-sm` tem de dar 14 (o token direto, como a referência no nativo), e não os 16 que o
 // `size="sm"` dá (o degrau a mais da ADR-0050). E o `Text` sem `type` tem de continuar igual.
 import {render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";

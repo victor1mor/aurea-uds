@@ -8,7 +8,7 @@ export default {
   description:
     "Progress shows how far a task has gone. With a value it is determinate; without one it is " +
     "indeterminate — the total is not known yet, and a piece runs across the track instead of a " +
-    "0% that reads as stalled. The anatomy is HeroUI's ProgressBar: the detail above, on the end " +
+    "0% that reads as stalled. The anatomy is the reference library's ProgressBar: the detail above, on the end " +
     "side, and the track below.",
   install: 'import {Progress} from "@aurea-uds/react";',
   features: [

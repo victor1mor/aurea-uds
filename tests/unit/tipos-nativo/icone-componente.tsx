@@ -1,5 +1,5 @@
-// A SONDA DE TIPO da R-11 (02/10/2026): o ícone é o NOME de um glifo ou o próprio DESENHO, como no
-// HeroUI (lá nenhuma peça recebe nome de ícone; o app põe o componente dele). Compilada pelo `tsc`
+// A SONDA DE TIPO da R-11 (02/10/2026): o ícone é o NOME de um glifo ou o próprio DESENHO, como na
+// referência (lá nenhuma peça recebe nome de ícone; o app põe o componente dele). Compilada pelo `tsc`
 // de verdade (o `icone-nome.test.tsx` compila a pasta inteira). Sem `declare module` aqui: é o
 // caminho que a trava do app permite.
 //

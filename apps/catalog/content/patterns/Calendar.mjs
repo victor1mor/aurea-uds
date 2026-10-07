@@ -3,8 +3,8 @@ import {Button, Popover, Field, Input} from "../../../../packages/react/dist/ind
 import {Calendar} from "../../../../packages/react/dist/calendar.js";
 
 // SELETOR DE DATA. Não existe componente `DatePicker` na Aurea, e é decisão, não falta: é a
-// composição de duas peças que já existem, e o shadcn/ui — a referência para "como envelopar
-// biblioteca de terceiro" — também não tem componente-raiz para isso, pelo mesmo motivo.
+// composição de duas peças que já existem, e a biblioteca de referência para "como envelopar
+// biblioteca de terceiro" também não tem componente-raiz para isso, pelo mesmo motivo.
 // Aqui é onde a composição fica escrita.
 //
 // O mês é FIXO em todo preview, e `today` junto — os DOIS. Página estática que muda sozinha faz

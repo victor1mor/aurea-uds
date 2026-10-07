@@ -74,8 +74,8 @@ export default {
     "It FLOATS by default — margin, card radius, a border all the way around. That is what this "
     + "design system looks like everywhere. `variant=\"flush\"` is the one exception it makes to "
     + "that rule, and it is opt-in: against the edges, full height, separated from the content by "
-    + "a single rule. It was measured against four shipping apps — Cloudflare, Sophos, Claude's "
-    + "own app and HeroUI's dashboard. Aurea's own pages stay floating; flush is for the "
+    + "a single rule. It was measured against four shipping admin dashboards. "
+    + "Aurea's own pages stay floating; flush is for the "
     + "applications that want it.",
     "AppShell forwards it: `<AppShell sidebarVariant=\"flush\">`. Without that the variant would "
     + "be unreachable for anyone composing through the shell, which is the normal path.",

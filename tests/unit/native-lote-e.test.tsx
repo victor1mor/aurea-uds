@@ -49,7 +49,7 @@ describe("E3 · SegmentedControl e Tabs: justify quando cabem", () => {
 });
 
 // E5 · a marca do Radio (e do Checkbox, que é a mesma peça) ficava presa no topo do rótulo:
-// `alignItems: "flex-start"` e um `marginTop: 1` fixo. O padrão agora é o do HeroUI Native —
+// `alignItems: "flex-start"` e um `marginTop: 1` fixo. O padrão agora é o da referência no nativo —
 // centralizado —, e `align="start"` põe a marca no meio da PRIMEIRA linha, pela conta dos tokens.
 const linhaDoControle = () => StyleSheet.flatten(__instancias("Pressable").at(-1)?.style);
 const marca = () => StyleSheet.flatten(__instancias("View").find((v) => {
@@ -94,7 +94,7 @@ describe("E4 · as folhas de baixo: nada em volta da lista reivindica o toque", 
 // E10 (0.12.1) · as folhas desciam atrás dos botões do Android. Causa lida no fonte da biblioteca
 // (5.9.1): dentro do `Modal` o `SafeAreaView` não acha o provider, mede a si mesmo, e com altura 0
 // não calcula recuo nenhum — e o do `Combobox` e o do `BottomSheet` eram vazios. Agora o recuo vem
-// do contexto do React (como no HeroUI Native) e vira um espaço de altura conhecida no fim da folha.
+// do contexto do React (como na referência no nativo) e vira um espaço de altura conhecida no fim da folha.
 // Entrada que reprova no código de antes: um recuo de 48 no contexto — antes nada media 48.
 const RECUO = 48;
 const espacos = (h: number) => __instancias("View").filter((p) => StyleSheet.flatten(p.style)?.height === h);
@@ -163,10 +163,11 @@ describe("E8 · Combobox: o X e a setinha no mesmo centro", () => {
   });
 });
 
-// Badge · o mesmo corte do E1 (entrelinha 1,0), e as medidas passam a ser as do `Chip` do HeroUI
-// Native (ordem do Victor de 25/09/2026: "se o HeroUI já tem, vamos usar as deles"). O `xs` não
-// existe no HeroUI e fica com a medida nossa (16 de altura), só com a linha consertada.
-describe("Badge · as medidas do Chip do HeroUI Native, e a letra inteira", () => {
+// Badge · o mesmo corte do E1 (entrelinha 1,0), e as medidas passam a ser as do `Chip` da
+// referência no nativo (ordem do Victor de 25/09/2026: "se a [referência] já tem, vamos usar as
+// deles"). O `xs` não existe na referência e fica com a medida nossa (16 de altura), só com a
+// linha consertada.
+describe("Badge · as medidas do Chip da referência no nativo, e a letra inteira", () => {
   const letra = () => estiloDo("Text");
   const selo = () => estiloDo("View", (p) => {
     const e = StyleSheet.flatten(p.style);
@@ -175,7 +176,7 @@ describe("Badge · as medidas do Chip do HeroUI Native, e a letra inteira", () =
   it.each([
     ["sm", "textXs", "space4", "space2", "space05"],
     ["md", "textSm", "space5", "space3", "space1"],
-  ] as const)("%s: letra, linha e recheio do HeroUI", (size, fonte, linha, px, py) => {
+  ] as const)("%s: letra, linha e recheio da referência", (size, fonte, linha, px, py) => {
     render(<Envolve><Badge size={size}>Pago</Badge></Envolve>);
     expect(letra().fontSize).toBe(t.size[fonte]);
     expect(letra().lineHeight).toBe(t.size[linha]);
@@ -183,7 +184,7 @@ describe("Badge · as medidas do Chip do HeroUI Native, e a letra inteira", () =
     expect(selo().paddingHorizontal).toBe(t.size[px]);
     expect(selo().paddingVertical).toBe(t.size[py]);
   });
-  it("lg: letra 16, linha 24, recheio 16 × 6 (6 = space1 × 1,5, a conta do HeroUI)", () => {
+  it("lg: letra 16, linha 24, recheio 16 × 6 (6 = space1 × 1,5, a conta da referência)", () => {
     render(<Envolve><Badge size="lg">Pago</Badge></Envolve>);
     expect(letra().fontSize).toBe(t.size.textBase);
     expect(letra().lineHeight).toBe(t.size.space6);

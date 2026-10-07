@@ -80,8 +80,8 @@ O keystone: **os itens 3 e 4.** Acertar o registry e a geração do catálogo É
 fundação excelente. Com eles certos, todo componente e toda plataforma futura
 encaixam sem redesign.
 
-**Referências externas (Kibo UI **e** Untitled UI) = SÓ organização.** Espelhos
-locais para consulta: `C:\Meus Sites\kibo-ui.com` e `C:\Meus Sites\untitledui.com`.
+**Referências externas (duas bibliotecas de referência) = SÓ organização.** Espelhos
+locais para consulta: o caminho está no documento de referências, fora do repositório.
 Servem de inspiração para: taxonomia, estrutura de catálogo, **page model**
 (Overview → Installation → exemplos rotulados, cada um com Preview/Code),
 breadcrumb, sidebar categorizada e granularidade de patterns. **Nunca** para
@@ -142,8 +142,8 @@ idêntica em estrutura. A pele é sempre Aurea.
   **M8**, encerrado na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md) em 07/08/2026, e hoje todas as
   fichas publicam contrato de API. O que segue numa minoria é `features` e `examples`. Números:
   `STATE.md`, que é gerado.
-- **Comparação com referência externa ainda é a exceção.** `Button` (Kibo/Untitled) e agora os
-  seis da Fase 11 (Carbon). Os outros nunca foram confrontados. O que mudou é que existe
+- **Comparação com referência externa ainda é a exceção.** `Button` (duas referências) e agora os
+  seis da Fase 11 (uma terceira referência). Os outros nunca foram confrontados. O que mudou é que existe
   registro: [`REFERENCES.md`](REFERENCES.md) diz o que foi olhado, medido, adotado e recusado.
 - ~~`apps/docs/index.html`~~ — **saiu** na Parte D do [`PLANO-1.0.md`](PLANO-1.0.md), em
   08/08/2026, junto com o `docs.css`, o gerador e as 52 baselines dele. Fechou o **M13**, e com ele
@@ -207,7 +207,7 @@ As 4 áreas de itens do topo, resolvidas:
 - **Components** = peças base do sistema.
 - **Patterns** = composições **granulares** de um componente base
   (Componente → Variante → Composição). Ex.: `Button → Destructive → With Kbd`;
-  `QRCode → Rounded → Downloadable`. Modelo Kibo, bate com a imagem-alvo Aurea.
+  `QRCode → Rounded → Downloadable`. Modelo da referência, bate com a imagem-alvo Aurea.
 - **Blocks** = seções/telas maiores (arranjos de produto).
 - **Recipes** = arquétipos de aplicação inteira (os 23 atuais).
 - (Docs = fundamentos/tokens; Platforms = adapters/matriz.)

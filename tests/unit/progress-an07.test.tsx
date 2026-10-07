@@ -15,7 +15,7 @@ async function semViolacao(el: Element) {
   throw new Error("axe: " + violations.map(v => v.id + " (" + v.nodes.length + "): " + v.help).join("; "));
 }
 
-describe("Progress · sem total, a barra é indeterminada (o `isIndeterminate` do HeroUI)", () => {
+describe("Progress · sem total, a barra é indeterminada (o `isIndeterminate` da referência)", () => {
   test("não publica `aria-valuenow`, e não pede largura ao preenchimento", async () => {
     const {container} = wrap(<Progress label="Contando arquivos" />);
     const barra = screen.getByRole("progressbar", {name: "Contando arquivos"});
@@ -35,12 +35,12 @@ describe("Progress · sem total, a barra é indeterminada (o `isIndeterminate` d
   });
 });
 
-describe("Progress · o texto de apoio (o `ProgressBar.Output` do HeroUI)", () => {
+describe("Progress · o texto de apoio (o `ProgressBar.Output` da referência)", () => {
   test("aparece acima do trilho, e o leitor de tela o ouve uma vez só, no valor", async () => {
     const {container} = wrap(<Progress value={64} label="Enviando" detail="2,3 MB/s · 12 s" />);
     const apoio = container.querySelector(".progress-detail")!;
     expect(apoio).toHaveTextContent("2,3 MB/s · 12 s");
-    // Antes do trilho, na mesma caixa: é a ordem da grade do HeroUI ("output" em cima, "track" embaixo).
+    // Antes do trilho, na mesma caixa: é a ordem da grade da referência ("output" em cima, "track" embaixo).
     expect(apoio.nextElementSibling).toHaveClass("progress");
     expect(apoio).toHaveAttribute("aria-hidden", "true");
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuetext", "64%, 2,3 MB/s · 12 s");
@@ -60,7 +60,7 @@ describe("Progress · o texto de apoio (o `ProgressBar.Output` do HeroUI)", () =
   });
 });
 
-describe("Progress · o tom (o `color` do HeroUI, nos nomes do `ButtonTone`)", () => {
+describe("Progress · o tom (o `color` da referência, nos nomes do `ButtonTone`)", () => {
   test.each(["neutral", "success", "warning", "danger", "info"] as const)("%s ganha a classe do tom", (tone) => {
     wrap(<Progress value={50} label="x" tone={tone} />);
     expect(screen.getByRole("progressbar")).toHaveClass(`progress-tone-${tone}`);

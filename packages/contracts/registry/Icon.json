@@ -3,7 +3,7 @@
   "category": "System",
   "layer": "Foundation",
   "maturity": "Stable",
-  "summary": "Carbon icon primitive rendered from a sprite.",
+  "summary": "Icon primitive rendered from a sprite.",
   "icon": "palette",
   "platforms": {
     "web": "stable",
@@ -16,7 +16,9 @@
     "sm",
     "xl"
   ],
-  "responsive": {"size": "visual"},
+  "responsive": {
+    "size": "visual"
+  },
   "states": [],
   "tokens": [
     "--border",
@@ -55,7 +57,7 @@
       "name": "name",
       "type": "IconName",
       "default": "—",
-      "description": "The Carbon glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue."
+      "description": "The glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue."
     },
     {
       "name": "size",
@@ -68,6 +70,18 @@
       "type": "string",
       "default": "—",
       "description": "LOCAL override of where the glyphs come from. The normal way is to set it once on AureaProvider; this is for the rare page carrying two sprites."
+    },
+    {
+      "name": "weight",
+      "type": "\"regular\" | \"fill\"",
+      "default": "\"regular\"",
+      "description": "fill draws the filled shape of the glyph — the one the selected item uses (ADR-0053). An app's own glyph stays regular."
     }
-  ]
+  ],
+  "axes": {
+    "weight": [
+      "fill",
+      "regular"
+    ]
+  }
 }

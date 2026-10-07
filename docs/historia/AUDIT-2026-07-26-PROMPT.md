@@ -119,4 +119,4 @@ python -m http.server 8123 # e varra http://localhost:8123/apps/catalog/*.html
 ```
 
 O axe está em `node_modules/.pnpm/axe-core@4.10.2/node_modules/axe-core/axe.min.js` —
-injete com Playwright. Sem rede: o espelho do Kibo está em `C:\Meus Sites\kibo-ui.com`.
+injete com Playwright. Sem rede: o espelho de uma das referências está numa pasta local (o caminho está no documento de referências, fora do repositório).

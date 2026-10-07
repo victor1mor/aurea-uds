@@ -103,7 +103,7 @@ describe("R-02 · `Topbar inset`", () => {
 
 // ═════════════════════════════════════════════════════════════════════════════════════════════
 describe("R-07 · o token de opacidade e o `comOpacidade`", () => {
-  it("o token existe e vale o 0,5 do HeroUI", () => {
+  it("o token existe e vale o 0,5 da referência", () => {
     expect(claro.size.opacityDisabled).toBe(0.5);
   });
 

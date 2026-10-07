@@ -71,13 +71,13 @@
       "name": "size",
       "type": "\"base\" | \"sm\" | \"xs\"",
       "default": "\"base\"",
-      "description": "Body text at 16, 14 or 12px, all with relaxed leading. The same three sizes HeroUI's Paragraph has."
+      "description": "Body text at 16, 14 or 12px, all with relaxed leading. The same three sizes the reference library's Paragraph has."
     },
     {
       "name": "color",
       "type": "\"default\" | \"muted\"",
       "default": "\"default\"",
-      "description": "Two colours only, like HeroUI: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+      "description": "Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
     },
     {
       "name": "weight",

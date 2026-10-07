@@ -115,20 +115,19 @@ tabela canônica — com o caminho onde a anatomia mora de verdade — é a do
 | Pasta | O que é | Serve a |
 |---|---|---|
 | `base-ui-master` | o motor que a Aurea já usa | comportamento, teclado, ARIA |
-| `ui-main` | shadcn/ui | decomposição, envelope de terceiro, fronteira de cliente |
-| `kibo-main` | Kibo UI | componente raro: dropzone, tree, table, gantt, kanban, editor |
-| `react-main` | Untitled UI React | escala, proporção: table, file-upload, app-navigation, date-picker |
-| `reui-main` | ReUI | terceira leitura de anatomia |
-| `media-chrome-main` | Media Chrome | anatomia de player e de biblioteca de mídia |
-| `material-ui-master` | MUI `9.3.1` | 157 componentes: o catálogo de estados mais completo de todas |
+| (nome no documento de referências) | biblioteca de referência | decomposição, envelope de terceiro, fronteira de cliente |
+| (nome no documento de referências) | biblioteca de referência | componente raro: dropzone, tree, table, gantt, kanban, editor |
+| (nome no documento de referências) | biblioteca de referência | escala, proporção: tabela, envio de arquivo, navegação de aplicativo, seletor de data |
+| (nome no documento de referências) | biblioteca de referência | terceira leitura de anatomia |
+| (nome no documento de referências) | biblioteca de mídia de referência | anatomia de player e de biblioteca de mídia |
+| (nome no documento de referências) | biblioteca de referência | 157 componentes: o catálogo de estados mais completo de todas |
 
-**Mais nove, baixadas em 08/08/2026 para destravar a Parte H:** `agents-kit-main`,
-`agent-prism-main`, `agent-elements-main`, `tool-ui-main`, `langfuse-main`, `openstatus-main`,
-`activepieces-main`, `xyflow-main` e `kaneo-main`. O que cada uma serve, e **onde exatamente**,
+**Mais nove, baixadas em 08/08/2026 para destravar a Parte H:** oito referências (nomes no
+documento de referências) e o `xyflow-main`. O que cada uma serve, e **onde exatamente**,
 está no [`BUILDING.md`](BUILDING.md) §1 — aqui não se repete.
 
-**Cuidado com o caminho:** todas têm o conteúdo um nível abaixo (`ui-main/ui-main/…`); só a
-`material-ui-master` tem direto na pasta.
+**Cuidado com o caminho:** todas têm o conteúdo um nível abaixo (`<pasta>/<pasta>/…`); só a
+de 157 componentes tem direto na pasta.
 
 **Licença deixou de ser critério de escolha, e é medido:** `git ls-files Referencia | wc -l`
 devolve `0` — a pasta está no `.gitignore` e a Aurea não redistribui nada. A trava real é a do
@@ -153,7 +152,7 @@ componente de servidor **quebra na hora**, e quebra para o consumidor, não para
 **Já medido, para o trabalho não começar às cegas:** 13 dos 20 módulos usam estado, efeito,
 contexto ou manipulador de evento. E o compilador **preserva** a diretiva no `dist` — testado.
 
-**Referência:** `ui-main` e `base-ui-master`, que publicam a diretiva. Copiar a **posição** dela,
+**Referência:** uma das bibliotecas de referência e o `base-ui-master`, que publicam a diretiva. Copiar a **posição** dela,
 não código.
 
 - [x] **A1 — Diretiva nos módulos que precisam.** Medir de novo antes (a lista muda com o
@@ -184,7 +183,7 @@ empacotador de RSC, TODO export de um módulo com a diretiva vira referência de
 `internal.tsx` marcado, `cx` seguia importável do barril por um componente de servidor e
 explodiria ao ser **chamado**. O que não tem estado (`cx`, `AureaStrings`, `defaultStrings`,
 `ptBR`, `defaultSpriteUrl`) foi para `packages/react/src/pure.tsx`, sem diretiva. Mesmo desenho
-da referência: no shadcn/ui o `cn` mora em `lib/utils.ts` sem diretiva.
+da referência: nela o utilitário de juntar classes mora num módulo sem diretiva.
 
 **A regra da A2 tinha um buraco, e a medição o achou.** O enunciado dizia
 "`useState`/`useEffect`/`useContext`/`createContext`/`on*=`". O `calendar.tsx` **não chama hook
@@ -215,7 +214,7 @@ Quatro componentes públicos estão em `Draft`, e dois deles — `Sidebar` e `To
 `AppShell`, ou seja, a moldura de **toda** aplicação. Publicar shell em rascunho é publicar a
 primeira tela do consumidor em rascunho.
 
-**Referência:** `react-main/components/application/app-navigation` e o `sidebar` do `ui-main`.
+**Referência:** a navegação de aplicativo de uma das referências e a lateral de outra.
 
 - [x] **B1 — `Sidebar` → `Stable`.** Contrato de API publicado, estados (recolhida, gaveta,
       item ativo, grupo, aninhamento), teclado e teste.
@@ -240,8 +239,8 @@ foram públicos. A peça estava no repositório e não era da biblioteca. Foi co
 `BUILDING.md`, com as três referências que a têm registradas no `REFERENCES.md`, e a `Sidebar`
 entrou em `built-components.json` — as travas 21 a 24 valem para ela.
 
-**Um formato só para grupo e aninhamento.** O Untitled UI separa em três (`link`,
-`collapsible`, `collapsible-child`) e o shadcn em quatro peças. Aqui é um `SidebarItem`: com
+**Um formato só para grupo e aninhamento.** Uma referência separa em três (`link`,
+`collapsible`, `collapsible-child`) e outra em quatro peças. Aqui é um `SidebarItem`: com
 `items` e sem `href` é grupo; com os dois é pai com sublista. Menos API, mesmos casos.
 
 **O `Avatar` entrou em `built-components.json` junto**, e não por generosidade: a nota do
@@ -598,8 +597,7 @@ O `DataGrid` de hoje ordena, filtra em geral, pagina e seleciona — **com o est
 Serve para uma tabela de demonstração. Não serve para uma superfície administrativa, onde os
 dados moram no servidor e o filtro precisa sobreviver a um recarregamento de página.
 
-**Referência:** `react-main/components/application/table`, `kibo-main/packages/table`, e a tabela
-do `ui-main`. As três resolvem o mesmo problema de jeitos diferentes — ler as três antes de
+**Referência:** a tabela de três das referências. As três resolvem o mesmo problema de jeitos diferentes — ler as três antes de
 escolher.
 
 - [x] **F1 — Modo controlado.** ✅ **08/08/2026.** Ordenação, filtro, página e seleção aceitam
@@ -621,7 +619,7 @@ escolher.
       valendo uma segunda vez.
 - [x] **F5 — Seleção e ação em lote.** ✅ **08/08/2026.** E com **zero CSS novo**: a barra é
       `Toolbar` + `ToolbarButton` + `ToolbarSeparator` + `.hint`, que já são superfície flutuante
-      com pele e teclado de setas. As duas referências (Activepieces e Kaneo) desenham a mesma
+      com pele e teclado de setas. Duas das referências desenham a mesma
       barra à mão, com `position:fixed` e biblioteca de movimento — nenhum dos dois entrou.
 - [x] **F6 — Cabeçalho fixo** na rolagem vertical. ✅ **08/08/2026.** `stickyHeader`, e a linha
       de filtro do F3 gruda uma altura de linha abaixo. O teto de altura é `--datagrid-max-h` em
@@ -675,7 +673,7 @@ render no servidor, o layout no navegador e os nós que sobram na página:
    existe depois que o navegador mede a caixa; `renderToStaticMarkup` devolveria uma tabela
    **vazia**. É exatamente o defeito do Recharts no Lote 3, que precisou de um bloco PRERENDER no
    gerador do catálogo — e ali era um `<svg>`, não a tabela inteira.
-3. **Seria dependência nova** (`@tanstack/react-virtual`), e o `BUILDING.md` §3.3 diz que
+3. **Seria dependência nova** (uma biblioteca de virtualização), e o `BUILDING.md` §3.3 diz que
    dependência nova interrompe o lote e exige o Victor. Pagar isso para melhorar um caso que a
    paginação já resolve é o oposto do que o item pediu.
 
@@ -721,8 +719,8 @@ prova. Está escrito no core, ao lado da linha.
 O `FileInput` de hoje já faz mais do que parece: **múltiplos arquivos, progresso real, cancelar e
 repetir por item**. O que falta é o que transforma isso em fila confiável.
 
-**Referência:** `kibo-main/packages/dropzone` e
-`react-main/components/application/file-upload`.
+**Referência:** a área de soltar arquivo de uma das referências e
+o envio de arquivo de outra.
 
 **Fronteira, e ela não se move:** transporte, armazenamento e servidor **não entram na Aurea**. O
 que entra é a peça de interface que mostra a fila e o que aconteceu com ela.
@@ -765,10 +763,10 @@ linha de código, ficha ou export.** Conferido em 02/08/2026.
 > referências locais tinha esta família — era verdade, e a saída escolhida pelo Victor foi baixar
 > referência nova. Nove pastas entraram (`BUILDING.md` §1) e cobrem **15 dos 16**.
 >
-> **Sobra um: o `MemoryLedger` (H13), e ele não tem referência no mundo aberto.** Medido: o ADE do
-> Letta tem só o servidor aberto, o OpenMemory do mem0 está sendo descontinuado, e o painel do
-> mem0 é só na nuvem. Pelo passo 4, nasce de **pesquisa registrada** e por composição —
-> `DataGrid` + `Timeline` + a procedência do `DetailsView` do `agent-prism`.
+> **Sobra um: o `MemoryLedger` (H13), e ele não tem referência no mundo aberto.** Medido: o ambiente de
+> agentes de uma plataforma de memória tem só o servidor aberto, o painel aberto de outra plataforma
+> está sendo descontinuado, e o painel dela é só na nuvem. Pelo passo 4, nasce de **pesquisa registrada** e por composição —
+> `DataGrid` + `Timeline` + a procedência do painel de detalhes do visualizador de rastros de agente.
 >
 > **E por isso o H13 depende da Parte F:** o livro-razão precisa do `DataGrid` em modo controlado,
 > que é o item F1. Abrir H antes de F deixa o H13 meio pronto esperando.
@@ -778,22 +776,22 @@ dentro de cada pasta está no [`BUILDING.md`](BUILDING.md) §1.
 
 | Item | Pasta de referência |
 |---|---|
-| H1 `AgentCard` | `agents-kit-main` · `activepieces-main` |
-| H2 `AgentStatus` | `agents-kit-main` · `openstatus-main` |
-| H3 `AgentInspector` | `agent-prism-main` (`DetailsView/`) |
-| H4 `InvocationPanel` | `agent-elements-main` (`tools/`) · `activepieces-main` (`agent-timeline`) |
-| H5 `TaskQueue` | `agents-kit-main` · `kaneo-main` |
-| H6 `HumanApproval` | `agents-kit-main` · `agent-elements-main` |
-| H7 `ToolPermission` | `activepieces-main` (`agent-tools`) · `agent-elements-main` (`tool-registry`) |
-| H8 `EventStream` | `openstatus-main` (`status-feed`, `status-events`) · `langfuse-main` (`events/`) |
-| H9 `TraceTimeline` | `agent-prism-main` (`SpanCard/`, `TraceViewer/`) |
-| H10 `HealthMatrix` | `openstatus-main` (`status-component-group`) · `langfuse-main` (`monitors/`) |
-| H11 `ModelUsage` | `langfuse-main` (`ModelUsageChart`) |
-| H12 `CostMeter` | `langfuse-main` (`ModelCostTable`, `TotalMetric`) |
+| H1 `AgentCard` | o kit de interface de agentes · a plataforma de automação |
+| H2 `AgentStatus` | o kit de interface de agentes · a página de status |
+| H3 `AgentInspector` | o visualizador de rastros de agente (painel de detalhes) |
+| H4 `InvocationPanel` | os elementos de interface de agente (ferramentas) · a plataforma de automação (linha do tempo do agente) |
+| H5 `TaskQueue` | o kit de interface de agentes · o gestor de projetos |
+| H6 `HumanApproval` | o kit de interface de agentes · os elementos de interface de agente |
+| H7 `ToolPermission` | a plataforma de automação (ferramentas do agente) · os elementos de interface de agente (registro de ferramentas) |
+| H8 `EventStream` | a página de status (feed e eventos de status) · a plataforma de observação de modelos de IA (eventos) |
+| H9 `TraceTimeline` | o visualizador de rastros de agente (cartão de trecho, visualizador de rastros) |
+| H10 `HealthMatrix` | a página de status (grupo de componentes de status) · a plataforma de observação de modelos de IA (monitores) |
+| H11 `ModelUsage` | a plataforma de observação de modelos de IA (gráfico de uso por modelo) |
+| H12 `CostMeter` | a plataforma de observação de modelos de IA (tabela de custo por modelo, métrica total) |
 | H13 `MemoryLedger` | **nenhuma** — pesquisa registrada, ver acima |
-| H14 `DependencyGraph` | `xyflow-main` · `langfuse-main` (`trace-graph-view/`) |
-| H15 `InterAgentMessage` | `agents-kit-main` (`agent-orchestrator`, `agent-routing-hub`) |
-| H16 `AutomationCard` | `langfuse-main` (`automations/`) · `activepieces-main` |
+| H14 `DependencyGraph` | `xyflow-main` · a plataforma de observação de modelos de IA (grafo de rastro) |
+| H15 `InterAgentMessage` | o kit de interface de agentes (orquestrador, central de roteamento) |
+| H16 `AutomationCard` | a plataforma de observação de modelos de IA (automações) · a plataforma de automação |
 
 Agrupados por afinidade — cada grupo é um lote, porque compartilham estado e vocabulário.
 
@@ -849,8 +847,8 @@ Oito arquétipos existem no contrato como **descrição** e não como bloco mont
 dezenas de componentes novos: são **composições** sobre o que já existe, e é isso que as torna
 baratas depois das partes F, G e H.
 
-**Referência:** `media-chrome-main` para a de mídia; `kibo-main` (`gantt`, `kanban`, `tree`,
-`editor`) para as de construção e recurso; `reui-main/components/blocks` para leitura de
+**Referência:** a referência de mídia para a de mídia; uma das referências (`gantt`, `kanban`, `tree`,
+`editor`) para as de construção e recurso; os `components/blocks` de outra para leitura de
 composição.
 
 - [x] **I1 — `RunSession`.** ✅ **10/08/2026.** As **seis regiões** do contrato montadas com o
@@ -889,7 +887,7 @@ composição.
       Também a primeira em que a busca por anatomia devolveu **uma** referência de dezesseis —
       então o item nasceu de **pesquisa registrada** (valor em inteiro, `Intl` com código de
       moeda, `Idempotency-Key`, PCI DSS 4.0.1), no caminho que o `MemoryLedger` abriu no H13. O
-      total é **somado**, e a referência que existia mostra o preço disso: o `checkout` do MUI
+      total é **somado**, e a referência que existia mostra o preço disso: o `checkout` dessa referência
       escreve o total à mão em **quatro** lugares. Zero componente novo, zero CSS novo.
 - [x] **I6 — `DeviceControl`.** ✅ **11/08/2026.** As **sete** regiões, e `fleet` é o `HealthMatrix`
       que a Parte H construiu — zero componente novo, zero CSS novo. Primeiro contrato **sem estado
@@ -984,8 +982,8 @@ tabula chegaria em "Approve" antes de ler o resultado dos testes. Decidir antes 
 exatamente o que a cláusula *"test result is announced"* existe para evitar.
 
 **O achado da leitura das referências é sobre ELAS, e está no [`REFERENCES.md`](REFERENCES.md):**
-o `DiffViewer` do Langfuse e o exemplo de diff do Kibo marcam adição e remoção **só por cor** — o
-primeiro pinta a linha, o segundo deixa o Shiki consumir o marcador e virar fundo. As duas
+o visualizador de diff de uma das referências e o exemplo de diff de outra marcam adição e remoção **só por cor** — o
+primeiro pinta a linha, o segundo deixa o realçador de sintaxe consumir o marcador e virar fundo. As duas
 reprovam a cláusula *"diff has textual additions and deletions"* que o **nosso** contrato exige. A
 saída custou zero: o `+`/`-` da primeira coluna do diff unificado é texto por construção.
 
@@ -1211,8 +1209,8 @@ do catálogo não havia nada de transação, isso estava certo. Mas a busca por 
 **nome de pasta** (`checkout|payment|invoice|billing|transaction|cart`) e conclui que havia **uma**
 anatomia em dezesseis. O Victor perguntou se eu estava usando as referências; refiz a busca por
 **conteúdo** (`grep` de `subtotal`, `idempotenc`, e nome de arquivo com
-`receipt|order-summary|refund|price|amount`) e apareceu o `order-summary` do **tool-ui** — 296
-linhas mais um esquema Zod de 108, e a melhor das duas. São **duas** de dezesseis, não uma.
+`receipt|order-summary|refund|price|amount`) e apareceu o resumo de pedido de **uma das referências da Parte H** — 296
+linhas mais um esquema de validação de 108, e a melhor das duas. São **duas** de dezesseis, não uma.
 
 **A lição de método, e ela vale para os itens I6 a I8:** busca de referência é `grep` de CONTEÚDO,
 não `find` de diretório. Pasta tem o nome que o autor escolheu; o conteúdo tem as palavras do
@@ -1234,9 +1232,9 @@ de 74px era o `max-content` de duas `.data-list` independentes, já resolvido pe
 nunca se extraem de referência. A trava existia e eu passei por cima dela. Números e fontes no
 [`REFERENCES.md`](REFERENCES.md).
 
-**E uma confirmação independente que vale registrar:** o esquema Zod do `order-summary` tem
-`variant: "summary" | "receipt"`, onde `receipt` **exige** a decisão registrada e `summary` a
-**proíbe**. É a mesma divisão que eu havia medido nas regiões do nosso contrato — antes do commit
+**E uma confirmação independente que vale registrar:** o esquema de validação do resumo de pedido
+dessa referência tem uma variante de resumo e outra de recibo, onde a de recibo **exige** a decisão
+registrada e a de resumo a **proíbe**. É a mesma divisão que eu havia medido nas regiões do nosso contrato — antes do commit
 existe revisão, depois existe recibo, e as duas não coexistem. Cheguei nela pelo contrato; a
 referência a impõe por tipo.
 
@@ -1251,7 +1249,7 @@ envolve dinheiro e o passo 4 do `BUILDING.md` manda parar:
 | idempotência | `Idempotency-Key` é prática de mercado e **rascunho** IETF (draft-07, não é RFC) | o nome do cabeçalho, no recibo |
 | segredo financeiro | PCI DSS 4.0.1 tira a página do escopo quando o campo é do provedor | `payment` é REFERÊNCIA; **zero** `input` na composição, e há gate |
 
-**A referência que existia mostrou o preço de não somar.** O `checkout` do MUI escreve o total à
+**A referência que existia mostrou o preço de não somar.** O `checkout` dessa referência escreve o total à
 mão em **quatro** lugares — quatro preços literais no `Info`, três valores no `Review` e o total
 outra vez no `Checkout`, com um ternário (`activeStep >= 2 ? '$144.97' : '$134.98'`). Os números
 **batem hoje**: 15 + 69,99 + 49,99 = 134,98, mais 9,99 = 144,97. Mudar o preço de um item faz o
@@ -1426,7 +1424,7 @@ normal. O sentido ficou no texto, a cor que sobra é a que já existia — e nen
 
       **As três lacunas que estavam do NOSSO lado fecharam, e isso se mede:**
       1. ~~Navegação inferior~~ — `BottomNav`, 17/08/2026; refeito em 20/08 sobre a auditoria de
-         UI/UX (dois eixos, sete indicadores, medidas do Material 3).
+         UI/UX (dois eixos, sete indicadores, medidas da referência).
       2. ~~`Toast` em React~~ — nunca faltou: `useToast()` no `system.tsx`, achado em 16/08.
       3. ~~Linha de lista tocável~~ — `NavList` / `.nav-list-row`, em
          `packages/react/src/navigation-client.tsx`. **Medido, não lembrado.**
@@ -1651,7 +1649,7 @@ Hoje a resposta é **não**, e isso está medido: o catálogo é markup estátic
 mandam o tema para as iframes — **sem React e sem hidratação**). Nenhum preview abre, filtra ou
 digita, e `combobox`, `multicombobox` e `fileinput` têm **3 de 3** demonstrações substituídas por
 *"Interactive — see the code."*: os três componentes públicos **nunca aparecem**. O achado está
-registrado como [`G-LAB-01`](../audit/activity-2/03-GAPS.md).
+registrado como `G-LAB-01`, no documento de referências, fora do repositório.
 
 O catálogo passa a ter **três papéis separados**, e a separação é a decisão de arquitetura:
 
@@ -1809,8 +1807,8 @@ por componente começar.
 antes de escrever — a regra do `CLAUDE.md` §Referências.
 
 - [x] **L1 — `Carousel`.** ✅ **15/08/2026, e SEM dependência nova.** A pergunta que o item mandava
-      decidir primeiro foi respondida medindo: as **quatro** referências embrulham o MESMO motor, o
-      `embla-carousel` (kibo, as quatro bases do `ui-main`, o `react-main` e o `activepieces`), e o
+      decidir primeiro foi respondida medindo: as **quatro** referências embrulham o MESMO motor, um
+      carrossel de terceiro (em uma delas, nas quatro bases), e o
       `@base-ui/react` não tem carrossel — 46 pastas, nenhuma é. Pagar por esse motor obrigaria todo
       consumidor a baixá-lo, para algo que o navegador já faz. E o caminho sem JavaScript ainda não
       serve: `::scroll-button()`/`::scroll-marker()` **não são Baseline** (Chromium tem; o Safari
@@ -1824,9 +1822,8 @@ antes de escrever — a regra do `CLAUDE.md` §Referências.
       prop nenhuma. O ponto é alvo de 24×24 com desenho de 8 no `::before` — fila de pontos de 8px
       reprova o WCAG 2.2 AA (2.5.8). **Limites declarados:** sem laço, sem autoplay, sem arrasto de
       mouse e sem eixo vertical (nenhum tem uso medido, e o sprite não tem chevron para cima).
-      **Ler antes:** `Referencia/kibo-main/kibo-main/packages/patterns/carousel`,
-      `Referencia/react-main/react-main/components/application/carousel` e os quatro exemplos de
-      `Referencia/ui-main/ui-main/apps/v4/examples/aria/carousel-*.tsx` — que são justamente os
+      **Ler antes:** o carrossel de duas das referências e os quatro exemplos
+      de carrossel de uma terceira — que são justamente os
       casos de borda (api, multiple, orientation). **Decidir primeiro, como no DatePicker:** se
       `scroll-snap` do CSS cobre, o componente é marcação e não motor. A regra do `BUILDING.md`
       §3.3 vale — dependência nova interrompe e exige o Victor.
@@ -1836,15 +1833,15 @@ antes de escrever — a regra do `CLAUDE.md` §Referências.
       com `aria-current`; e a seleção vem de FORA, porque no arquétipo biblioteca, detalhe e player
       compartilham UMA constante. Ampliar abre o `Dialog` daqui — a trava cumprida —, com
       `fit="contain"`, porque cortar a imagem que a pessoa pediu para VER é o oposto do pedido.
-      **A referência indicada não tinha a anatomia:** ela está no `Referencia/tool-ui-main`
-      (`components/tool-ui/image-gallery/`), não na `media-chrome-main`. Fica registrado assim, e
+      **A referência indicada não tinha a anatomia:** ela está na galeria de imagens de uma
+      das referências da Parte H, não na referência de mídia. Fica registrado assim, e
       não corrigido em silêncio. **Três defeitos que a medição achou:** legenda repetindo o `alt`
       fazia o leitor de tela anunciar duas vezes (`image-redundant-alt`); a cápsula do selecionado
       não aparecia porque `.gallery-tile` e `.is-selected` empatam em especificidade e a nossa vinha
       depois; e ladrilho sem `onSelect` e sem `zoom` não pode ser `<button>` — botão inerte é alvo
       de foco que engana quem usa teclado. O bloco `MediaLibrary` do **I7** já compõe galeria,
       detalhe e player, mas é **demonstração**, não componente reutilizável: quem quiser a galeria
-      copia o bloco. Extrair o que é componente. **Ler antes:** `Referencia/media-chrome-main` (a
+      copia o bloco. Extrair o que é componente. **Ler antes:** a referência de mídia (a
       mesma que ensinou o `aspect-ratio` por CLS no I7) e a seleção como constante única que o I7
       já provou. **Trava:** ampliar imagem é diálogo, e diálogo já existe — não nasce um segundo.
 - [x] **L3 — `SortableList` (reordenar arrastando).** ✅ **15/08/2026, e SEM dependência nova.** O
@@ -1854,15 +1851,15 @@ antes de escrever — a regra do `CLAUDE.md` §Referências.
       (senão a próxima seta move o vizinho, e vai por efeito porque o React precisa ter commitado a
       ordem nova); as setas não podem fazer nada com o item **solto**, senão o componente sequestra
       a navegação; e sem anúncio quem não vê a lista não recebe confirmação nenhuma — que é a
-      reprovação registrada do USWDS, citada no L6. O `list` e o `kanban` do kibo são ambos
-      `@dnd-kit/core`, e adotá-lo obrigaria todo consumidor a baixá-lo. **Ponteiro e não DnD do
+      reprovação registrada de outro design system, citada no L6. A lista e o quadro kanban de uma das referências são ambos
+      uma biblioteca de arrastar e soltar de terceiro, e adotá-la obrigaria todo consumidor a baixá-la. **Ponteiro e não DnD do
       HTML5, e a razão é medida:** o DnD nativo não dispara em toque nenhum, então o celular ficaria
       sem reordenar — e são justamente dois consumidores fazendo arrasto HTML5 na mão. O
       `touch-action:none` na alça é o par obrigatório do `setPointerCapture`, com asserção na pele.
       A lista é controlada, e teclado e ponteiro chamam o MESMO `onReorder`. Dois consumidores fazem arrasto HTML5 na
       mão. **A trava é de acessibilidade, não de motor:** o **I8** já estabeleceu o precedente de
       que **arrastar precisa de alternativa sem arrastar** (lá foi o outline saindo da mesma
-      fonte do canvas). Sem caminho por teclado, não fecha. **Ler antes:** `Referencia/kibo-main`
+      fonte do canvas). Sem caminho por teclado, não fecha. **Ler antes:** essa mesma referência
       (kanban e gantt) e o `graph.tsx` daqui, que já tem arrasto.
 - [x] **L4 — `Image`.** ✅ **15/08/2026, e ele quase entrou QUEBRADO.** A regra nasceu com
       `aspect-ratio:var(--image-ratio,auto)`, e o fallback `auto` passa por cima do
@@ -1874,10 +1871,10 @@ antes de escrever — a regra do `CLAUDE.md` §Referências.
       dívida que o `Avatar` mediu em 31/07/2026. O marcador de carregamento não tem estado: a caixa
       nasce em `--surface-3` e o bitmap a cobre. `render` troca o `<img>` pelo do framework do
       consumidor, via `useRender` do motor que a casa já paga. **A referência ensinou pelo avesso:**
-      o `aspect-ratio` do kibo é o do Radix, um componente inteiro para emular o que a propriedade
+      o `aspect-ratio` de uma das referências vem da base técnica dela, um componente inteiro para emular o que a propriedade
       CSS hoje faz sozinha. Proporção reservada, `srcset` e marcador enquanto carrega. **A razão é
-      CLS**, a mesma que o I7 mediu no player. **Ler antes:** `aspect-ratio` em
-      `Referencia/kibo-main/.../packages/patterns/aspect-ratio` e a `--media-ar` que já existe no
+      CLS**, a mesma que o I7 mediu no player. **Ler antes:** o componente de
+      proporção dessa referência e a `--media-ar` que já existe no
       core. **Cuidado medido:** um consumidor usa o `<Image>` do framework dele; o nosso não pode
       brigar com isso — provavelmente aceita `render`/`asChild`.
 - [x] **L5 — `Prose` (texto longo renderizado).** ✅ **15/08/2026.** Medido primeiro: o core **não
@@ -1891,25 +1888,25 @@ antes de escrever — a regra do `CLAUDE.md` §Referências.
       `--font-editorial` existe, está sem uso, e trocá-la é decisão de aparência que vai ao Victor.
       A ficha diz em voz alta que HTML de terceiro se **sanitiza** antes. Um portal editorial renderiza Markdown com
       GFM. **Não é o parser** — o parser é do consumidor. É a **pele** do texto: tipografia,
-      medida de linha, tabela, citação, código dentro do texto. **Ler antes:** o `typography` do
-      `Referencia/ui-main`. **Trava:** não pode vazar para toda `<table>` do documento — foi
+      medida de linha, tabela, citação, código dentro do texto. **Ler antes:** a tipografia de uma
+      das referências. **Trava:** não pode vazar para toda `<table>` do documento — foi
       exatamente o defeito que o Lote 4 pagou e que o comentário do `.table-wrap` registra.
 - [x] **L6 — Máscara no campo.** ✅ **15/08/2026, e SEM componente novo.** A metade da **moeda** já
       estava paga e desligada: medido no `@base-ui/react@1.6.0`, o `NumberFieldRoot` aceita
       `format?: Intl.NumberFormatOptions` e `locale?`, e a nossa casca não repassava. Passou a
       repassar, com `name` — que é o que faz o motor renderizar o input escondido com o valor CRU.
       A metade do **texto** é `Input.formatOnBlur`, e a decisão de NÃO mascarar ao vivo é
-      pesquisada: o `Input mask` do **USWDS** é publicado com reprovação de **WCAG 2.1 AA**
-      registrada; o **MUI** abandonou máscara nos campos de data na v6 porque o texto *"leaks to the
-      previous sections"* (há um `masked-input-bad-ux.mp4` no repositório deles); e máscara ao vivo
+      pesquisada: a máscara de campo de **outro design system** é publicada com reprovação de **WCAG 2.1 AA**
+      registrada; uma das **referências** abandonou máscara nos campos de data porque o texto vaza
+      para as seções anteriores (há um vídeo do defeito no repositório deles); e máscara ao vivo
       descasa o que o leitor de tela anuncia do que o campo mostra. A Aurea entrega o **momento**;
       o formato fica com o consumidor, porque placa e documento são regra de país. **A trava está
       provada dos dois lados:** no texto, o valor formatado É o `value` do elemento (o teste cobra
       que não exista nó com o texto fora do campo); no número, o formulário envia `1234.5`.
       Registrado na [ADR-0024](../decisions/0024-mascara-de-campo-e-o-momento-nao-o-formato.md),
       porque um **não** sem página é lacuna que a próxima sessão preenche por engano. Moeda, placa, documento. Um consumidor carrega biblioteca de
-      moeda só para isso. **Ler antes:** `Referencia/material-ui-master` (catálogo de estados
-      maduro) e `Referencia/react-main`. **Trava do I8, que já foi paga:** valor mascarado
+      moeda só para isso. **Ler antes:** a referência de 157 componentes (catálogo de estados
+      maduro) e outra das referências. **Trava do I8, que já foi paga:** valor mascarado
       **continua no DOM** — máscara é apresentação, e o teste tem de reprovar quem esconder só
       na tela.
 
@@ -1919,7 +1916,7 @@ teste provado contra o defeito, e os gates de sempre.
 ### A PARTE L FECHOU em 15/08/2026 — 6 de 6
 
 **Nenhum dos seis trouxe dependência nova**, e em três deles isso foi decisão medida contra o
-padrão de mercado: o `embla-carousel` (L1), o `@dnd-kit/core` (L3) e a biblioteca de moeda (L6).
+padrão de mercado: o motor de carrossel (L1), a biblioteca de arrastar e soltar (L3) e a biblioteca de moeda (L6).
 Nos três, o que substituiu a dependência já estava pago — o contêiner de rolagem do navegador, o
 `PointerEvent`, e o `Intl` mais o motor que a casa usa desde a Fase 2.
 
@@ -1928,14 +1925,14 @@ Nos três, o que substituiu a dependência já estava pago — o contêiner de r
 1. **O L4 veio ANTES do L2**, porque o ladrilho da galeria **é** um `Image`, e a regra 9 da
    `DIRECTION.md` diz que componente composto reusa os menores. Ordem de item dentro de uma parte
    não é contrato — só a ordem entre partes é.
-2. **A referência indicada nem sempre tinha a anatomia.** No L2 o item mandava a `media-chrome`, e
-   a galeria com grade, ladrilho, erro e lightbox estava na `tool-ui-main`. Registrado no
+2. **A referência indicada nem sempre tinha a anatomia.** No L2 o item mandava a referência de mídia, e
+   a galeria com grade, ladrilho, erro e lightbox estava numa das referências da Parte H. Registrado no
    `REFERENCES.md`, não corrigido em silêncio: é a lição de que pasta indicada não é veredito.
-3. **Duas referências ensinaram pelo AVESSO.** O `aspect-ratio` do kibo (L4) é um componente
-   inteiro para emular o que a propriedade CSS faz sozinha hoje; o `typography` do `ui-main` (L5)
+3. **Duas referências ensinaram pelo AVESSO.** O `aspect-ratio` de uma delas (L4) é um componente
+   inteiro para emular o que a propriedade CSS faz sozinha hoje; a tipografia de outra (L5)
    não é componente, é receita em classe utilitária, modelo que não serve a quem entrega CSS.
 4. **O L6 encolheu para duas props, e cresceu em evidência.** Três medições independentes contra
-   mascarar ao vivo — a reprovação de WCAG do próprio USWDS, o abandono da máscara pelo MUI, e a
+   mascarar ao vivo — a reprovação de WCAG que o próprio design system publica na máscara dele, o abandono da máscara por uma das referências, e a
    prática corrente. O item pedia máscara; o que serve o consumidor é o momento certo de formatar.
 
 **Três defeitos foram achados pela MEDIÇÃO e não por gate**, e os três têm asserção agora: o
@@ -1969,7 +1966,8 @@ A medição dá o preço — num único administrativo, três telas de filtro so
 que faz a mesma coisa.
 
 - [x] **M1 — `Form` e validação.** ✅ **13/08/2026, e SEM dependência nova.** O padrão de
-      mercado é `react-hook-form` + `zod` — é o que o `ui-main` embrulha —, e embrulhar isso aqui
+      mercado é uma biblioteca de formulário somada a uma de esquema de validação — é o que uma das
+      referências embrulha —, e embrulhar isso aqui
       obrigaria TODO projeto consumidor a adotá-lo, inclusive os que já validam de outro jeito.
       Não foi preciso: medido no `@base-ui/react@1.6.0`, o `Form` do motor **já** tipa `errors`
       como "erros de validação retornados externamente, tipicamente depois do envio por um
@@ -1978,26 +1976,25 @@ que faz a mesma coisa.
       foi paga com auditoria (AUD-0001). E a medição achou um defeito que referência nenhuma
       avisaria: `aria-invalid: undefined` explícito **vence a mesclagem**, e o campo saía vermelho
       na tela e VÁLIDO para o leitor de tela. Hoje o `Field` sabe mostrar erro e ninguém orquestra. **Ler
-      antes:** `Referencia/ui-main/ui-main/apps/v4/registry/new-york-v4/ui/form.tsx` e o `form`
-      de `Referencia/kibo-main`. **Decidir antes de escrever:** dependência de biblioteca de
+      antes:** o formulário de duas das referências. **Decidir antes de escrever:** dependência de biblioteca de
       formulário é decisão do Victor (`BUILDING.md` §3.3). O caminho sem dependência é aceitar o
       resultado de validação de fora e só desenhar — que é o que o `Field` já quase faz.
 - [x] **M2 — Estado na URL, além da grade.** ✅ **13/08/2026 — `screenStateToParams` /
       `screenStateFromParams`.** Três chaves de TELA (`tab`, `view`, `detail`) somadas às cinco da
       grade, com o mesmo contrato: preservar o que não é deste formato (`ref`, `utm_*`) e limpar
-      o que saiu do estado. A pesquisa de novo disse o que **não** fazer — o `nuqs` é o
-      gerenciador que o mercado consolidou (adaptadores para Next, React Router, TanStack Router
-      e SPA; Sentry, Supabase, Vercel e Clerk usando), e gerenciar exige mexer no histórico, onde
+      o que saiu do estado. A pesquisa de novo disse o que **não** fazer — uma biblioteca de
+      estado na URL é o gerenciador que o mercado consolidou (adaptadores para os principais
+      frameworks e roteadores e para SPA, e empresas grandes usando), e gerenciar exige mexer no histórico, onde
       a escolha entre `push` e `replace` é do consumidor, como o **F4** já tinha registrado. Fica
-      nosso o FORMATO, sobre o qual o `nuqs` não tem opinião. Continuam sem diretiva, no
+      nosso o FORMATO, sobre o qual essa biblioteca não tem opinião. Continuam sem diretiva, no
       `pure.tsx`, porque são chamadas onde a URL chega — no servidor.
 - [x] **M3 — Ligar dado a estado.** ✅ **13/08/2026 — `DataState`.** O eixo `universalStates`
       fechou na **Parte J** e nada o ligava a uma consulta; cada tela ligava na mão. O desenho
       não foi inventado: a regra que separa os **terminais** (carregando/erro/vazio, que
       substituem o conteúdo) dos **universais** (`stale`, `partial`, `degraded`, `offline`,
       `waiting_*`, que o acompanham) é a que o `DataGrid` já tinha pago para aprender, promovida
-      a componente. Da pesquisa veio a lista de casos (o casamento de padrão sobre o status do
-      TanStack Query) e o que ela **não** cobre: `aria-busy` na região enquanto carrega, para a
+      a componente. Da pesquisa veio a lista de casos (o casamento de padrão sobre o status de
+      uma biblioteca de busca de dados) e o que ela **não** cobre: `aria-busy` na região enquanto carrega, para a
       tecnologia assistiva esperar em vez de anunciar meia atualização. Suspense/ErrorBoundary
       ficou de fora de propósito — amarraria a biblioteca a um jeito de buscar dado. `children`
       aceita função, e na face de carregando ela não é chamada.
@@ -2006,23 +2003,24 @@ que faz a mesma coisa.
       errando o método.** Eu tinha fechado como "não é componente" porque nenhuma das cinco
       referências locais tem portão; o Victor corrigiu — *"não existir referência na pasta não
       quer dizer que não é pra criar, deve buscar na internet"* —, e o `BUILDING.md` §Passo 4 já
-      mandava pesquisar. A pesquisa devolveu o padrão com nome (`Can` do CASL, `useCanAccess` do
-      react-admin, `AccessGate` dos guias de painel) e a divisão que virou o desenho: o CASL só
-      esconde, o react-admin deixa escolher. Entregue com dois modos, `reason` obrigatório pelo
+      mandava pesquisar. A pesquisa devolveu o padrão com nome (o componente de permissão de uma
+      biblioteca de autorização, o hook de acesso de um kit de painel administrativo, `AccessGate`
+      dos guias de painel) e a divisão que virou o desenho: a biblioteca de autorização só
+      esconde, o kit de painel deixa escolher. Entregue com dois modos, `reason` obrigatório pelo
       tipo no modo `disable`, e `allowed` como resposta pronta — a Aurea não guarda regra nem
       papel. O outro lado do item era defeito medido: `disabled` tira o botão da ordem de foco, então a dica que explica
-      **por quê** nunca é lida por quem usa teclado — e o embrulho de `<span>` que o MUI
+      **por quê** nunca é lida por quem usa teclado — e o embrulho de `<span>` que uma das referências
       documenta conserta o ponteiro e não o teclado. Além disso `aria-disabled` chegava ao DOM e
       **o clique continuava executando**, que é o AUD-0004 uma segunda vez, agora no `<button>`.
       Entregue: `aria-disabled` vira inerte-mas-alcançável, as 12 regras de hover do core
       excluem-no, e a ficha do `Button` nomeia o critério entre as duas formas.
 - [x] **M5 — Confirmação destrutiva.** ✅ **13/08/2026 — `ConfirmDialog`.** Existe `Dialog`; não existe o padrão "isto apaga" com foco
       no botão seguro e rótulo que diz o que se perde. Dois consumidores têm um botão de apagar
-      cada um com o seu jeito. **Ler antes:** `alert-dialog` em `Referencia/kibo-main` e o
+      cada um com o seu jeito. **Ler antes:** `alert-dialog` em uma das referências e o
       `AlertDialog` do `Referencia/base-ui-master` — que é o motor que já usamos.
 - [x] **M6 — Motor do `CommandPaletteShell`.** ✅ **13/08/2026 — `CommandPalette`, e SEM
       dependência nova.** A casca não mudou; o par é o do `MediaPlayer`/`MediaPlayerShell`. O
-      padrão de mercado é o `cmdk`, que o `ui-main` embrulha — mas o `@base-ui/react` tem
+      padrão de mercado é uma biblioteca de paleta de comandos, que uma das referências embrulha — mas o `@base-ui/react` tem
       `autocomplete`, e medido no `index.parts` dele o `Input`, o `List`, o `Popup`, o `Empty` e
       o `Collection` são **os mesmos módulos do `combobox`** que o `Combobox` daqui já usa. Pagar
       por um segundo motor de lista filtrável não se justificava. Fechar acontece ANTES de
@@ -2030,10 +2028,10 @@ que faz a mesma coisa.
       a v1 não agrupa — o `Autocomplete.Root` não consome a estrutura agrupada, e dar a cada grupo
       a sua fatia passa por cima do filtro (medido: digitar "the" devolvia os três comandos).
       Entre agrupar e filtrar, filtrar é o ponto de uma paleta. Hoje existe a casca e o filtro é do consumidor.
-      **Ler antes:** `command` em `Referencia/kibo-main` e o `cmdk` que o `Referencia/ui-main`
-      embrulha. **Decidir:** filtro nosso ou motor de terceiro.
+      **Ler antes:** `command` em uma das referências e a biblioteca de paleta de comandos
+      que outra embrulha. **Decidir:** filtro nosso ou motor de terceiro.
 - [x] **M7 — Tema com API React.** ✅ **13/08/2026 — `useAureaTheme()`.** E a pesquisa disse
-      principalmente o que **não** construir: o `next-themes` já resolve persistência,
+      principalmente o que **não** construir: uma biblioteca de tema de mercado já resolve persistência,
       preferência do sistema, sincronia entre abas e o script embutido contra o flash — e
       escreve **`data-theme` no `<html>`**, que é exatamente o atributo que a Aurea lê. Os dois
       se encaixam sem cola. Reimplementar isso seria trocar biblioteca mantida por cópia pior, e
@@ -2041,7 +2039,7 @@ que faz a mesma coisa.
       que é eixo da Aurea, e ler o estado atual de dentro do React. `useSyncExternalStore` e não
       `useState`, para acompanhar quem troca por fora; `theme: null` enquanto desconhecido,
       porque fingir saber no servidor é o que produz erro de hidratação — armadilha documentada
-      no próprio `next-themes`. Não há provider, hook nem componente de tema no pacote React —
+      na própria biblioteca de tema. Não há provider, hook nem componente de tema no pacote React —
       o tema mora no `aurea.js` como `window.Aurea.setTheme`, e a persistência que o catálogo
       ganhou em 13/08/2026 é **do catálogo**, de propósito. Um consumidor carrega biblioteca de
       tema por causa disso. **Trava a decidir:** persistir é papel da aplicação, então
@@ -2058,12 +2056,12 @@ dependência sem o Victor.
       decisão que o item mandava tomar primeiro foi tomada medindo, e está na
       [ADR-0025](../decisions/0025-editor-por-blocos-sem-motor.md): **a Aurea entrega a moldura, o
       motor fica com o consumidor** — a segunda opção, como o próprio item previa. **A referência
-      indicada não era o mesmo componente**, e isso fica registrado como no L2: o `editor` do kibo
-      tem 39 exports e 17 dependências (TipTap 3.6.6 sobre ProseMirror), **18 dos 39 só de
+      indicada não era o mesmo componente**, e isso fica registrado como no L2: o `editor` da referência
+      tem 39 exports e 17 dependências (sobre um motor de texto rico de terceiro), **18 dos 39 só de
       tabela**, e é editor de DOCUMENTO ÚNICO — lista de blocos, reordenação e bloco de imagem com
       legenda não existem lá. **O que fechou a porta não foi peso, foi segurança:** o navegador não
       sanitiza HTML colado, e quem é dono da superfície de edição é dono do XSS de colagem — a
-      pesquisa confirma que ProseMirror e Lexical tratam o `contenteditable` como alvo de
+      pesquisa confirma que as bases de vida longa do mercado tratam o `contenteditable` como alvo de
       renderização e nunca como fonte da verdade justamente por isso. A Aurea não pode decidir o
       que é seguro renderizar no domínio do consumidor. **Uma medição mudou o desenho:** ia ser
       prop da `SortableList`, até medir que o rótulo dela é `<span>`, que só aceita conteúdo de
@@ -2134,7 +2132,7 @@ como `Chart`, `Calendar` e `CodeEditor`.
       a legada foi REMOVIDA no Expo SDK 55/RN 0.83), então o "tudo em fluxo" que mandava adiar
       parou de fluir; e a pista do ROADMAP sobre o **Unistyles v3** se confirmou pela razão certa —
       ele não tem componentes, e o time dele diz que a ideia é você construir o seu design system
-      em cima, que é a relação que a Aurea já tem com o Base UI. O **NativeWind ficou fora por
+      em cima, que é a relação que a Aurea já tem com o Base UI. O **motor de utilitário de classe medido ficou fora por
       medida** (197 ms contra 49 do StyleSheet). **O achado que decide 152 tokens não veio da
       pesquisa e sim da falta dela:** nenhuma fonte confiável diz que o `StyleSheet` aceita
       `oklch()` — o que existe é BIBLIOTECA anunciando suporte —, e o amarelo primário é declarado
@@ -2208,42 +2206,42 @@ Uma linha por sessão, ao fechar. O formato longo vai para o
 | 09/08/2026 | **H** | **correção do H14:** a prévia do grafo era uma caixa vazia — o Victor perguntou "cadê?". O motor tem SSR (`initialWidth`/`initialHeight`/`handles` + viewport no provider) e eu tinha concluído sem procurar. Mais três achados: loja semeada só em efeito, tela encolhendo a 71px em painel flex, e **CSS fora de camada vencendo o `@layer aurea`** | validate OK · pack OK · **319/319** · 61/61 | — |
 | 09/08/2026 | **K** | **K1 pela METADE, e fica desmarcado.** A suíte vai a **131 testes** em três motores — pixel só no Chromium ([ADR-0019](../decisions/0019-tres-motores-pixel-em-um-e-o-foco-da-gaveta.md)). O **WebKit passou** e achou uma **barreira de teclado** aberta desde a Fase 8: a gaveta do `AppShell` confiava no popover nativo para o foco e o Safari não entrega — corrigido nos dois runtimes. O **Firefox não inicia nesta máquina** (`mozglue`), então nunca rodou. Mais: o prerender do catálogo (defeito anterior, bloqueava o build) deixou de apostar em `setTimeout` e passou a esperar a PROVA | validate OK (30 checks) · pack OK · **332/332** · playwright **95 passed · 1 skipped · 0 failed** (chromium+webkit) · `pnpm audit` limpo | este |
 | 10/08/2026 | **I** | **I1 `RunSession`** — o bloco existia e era um DESENHO (escrito antes da Parte H); virou a composição do contrato, reescrita no lugar. As seis regiões, e as ações **derivadas da tabela de transições** em vez de escritas ao lado dos botões. Teste da composição provado contra **quatro** defeitos. **Um achado fora do escopo, corrigido na raiz:** o `<pre>` do `CodeBlock` é `overflow:auto` e nunca foi focável — código mais largo que a caixa era inalcançável por teclado em **qualquer** página, e quem achou foi o `catalog-sweep` quando a linha de import cresceu. Mais a **Decisão 3** da [ADR-0019](../decisions/0019-tres-motores-pixel-em-um-e-o-foco-da-gaveta.md): a gaveta continua não-modal | validate OK (30 checks) · pack OK (react:51) · **366/366** · playwright **95 passed · 1 skipped · 0 failed** · zero pixel · `pnpm audit` limpo | este |
-| 10/08/2026 | **I** | **I2 `ReviewCompare`** — as cinco regiões do contrato, com a decisão **derivada da tabela de transições** e sem excluir nada, porque o `ReviewCompare` **não tem região `actions`**. O recibo **nasce do `apply`** (no I1 existe desde o aceite) e o `rollback` **aponta** para ele. A diferença é marcada em **texto** — o `+`/`-` do diff unificado —, que é a **única cláusula do contrato em que as duas referências reprovam**: Langfuse pinta a linha, Kibo deixa o Shiki consumir o marcador ([`REFERENCES.md`](REFERENCES.md)). Teste provado contra **seis** defeitos. **Um achado fora do escopo, corrigido com autorização:** o bloco do **I1 rolava** — o registro dele comparou a altura contra a caixa do demo (457) e não contra o painel (**354**), que é o vão de verdade. Foi de 447 para **347**; o I2 fecha em **326** | validate OK (30 checks) · pack OK (react:51) · **403/403** · playwright **95 passed · 1 skipped · 0 failed** · 2 baselines `-win32` regravadas (o crachá de Blocks foi de 8 para 9) | este |
+| 10/08/2026 | **I** | **I2 `ReviewCompare`** — as cinco regiões do contrato, com a decisão **derivada da tabela de transições** e sem excluir nada, porque o `ReviewCompare` **não tem região `actions`**. O recibo **nasce do `apply`** (no I1 existe desde o aceite) e o `rollback` **aponta** para ele. A diferença é marcada em **texto** — o `+`/`-` do diff unificado —, que é a **única cláusula do contrato em que as duas referências reprovam**: uma pinta a linha, a outra deixa o realçador de sintaxe consumir o marcador ([`REFERENCES.md`](REFERENCES.md)). Teste provado contra **seis** defeitos. **Um achado fora do escopo, corrigido com autorização:** o bloco do **I1 rolava** — o registro dele comparou a altura contra a caixa do demo (457) e não contra o painel (**354**), que é o vão de verdade. Foi de 447 para **347**; o I2 fecha em **326** | validate OK (30 checks) · pack OK (react:51) · **403/403** · playwright **95 passed · 1 skipped · 0 failed** · 2 baselines `-win32` regravadas (o crachá de Blocks foi de 8 para 9) | este |
 | 10/08/2026 | **I** | **I3 `ResourceWorkbench`** — as seis regiões, e **metade da parte já estava construída**: a fila com progresso, soma de verificação e conflito é a Parte G. `source` e `collection` não viram `role=group` porque já são marco nomeado (`role=tree`, `role=table`). O número do progresso sai de **um lugar só**, para a barra e a frase nunca discordarem. Teste provado contra **cinco** defeitos. **Duas falhas de construção, e as duas achadas por OLHAR a imagem:** `.table` exige `min-width:720px` e a coluna `State` saía cortada da tela; e a minha medição de truncamento do rótulo da árvore olhava o `<span>` do glifo, não o `.tree-label` — disse "inteiro" para os três e o tema claro mostrou `Typo…` | validate OK (30 checks) · pack OK (react:51) · **438/438** · playwright **95 passed · 1 skipped · 0 failed** · 2 baselines `-win32` (o crachá de Blocks foi de 9 para **10** e ganhou um dígito: 1084 pixels) | este |
 | 10/08/2026 | **I** | **I4 `AnalyticsWorkbench`** — **oito** regiões, a primeira de `applicationPatterns`. **Duas mudanças de infraestrutura autorizadas:** `--chart-h` no core (default 220px inalterado, idioma do `--qr-size`) e **`prerender` para BLOCO** no gerador — sem ele, gráfico dentro de composição sai caixa vazia, e o I8 precisa do mesmo. Abas **medidas e recusadas** (o Base UI não renderiza o painel inativo no HTML estático); a tabela é `DataGrid` porque 2 de 7 linhas é resumo, não alternativa. Teste provado contra **cinco** defeitos, e o da frase universal mostra as duas redações lado a lado. **O guarda do prerender mentiu pela TERCEIRA vez:** deu o gráfico por pronto com o `<svg>` do ícone do botão de exportar. **Achado fora do escopo, registrado como tarefa:** o Base UI avisa `nativeButton` só no caminho de cliente — atinge quem instala, não o catálogo. **O alcance que eu registrei (17) estava errado: é UM**, corrigido em `52395b8` | validate OK (30 checks) · pack OK (react:51) · **464/464** · playwright **95 passed · 1 skipped · 0 failed** · 2 baselines `-win32` (crachá de Blocks 10 → 11) | este |
 | 11/08/2026 | — | **fora do plano: as 10 prévias que ROLAVAM, e o gate que faltava.** Medido nas 206 páginas: 10 de **520** caixas de demo exigiam rolagem, contra a [ADR-0002](../decisions/0002-altura-fixa-do-demo.md), e **nenhum teste olhava**. Três causas — CSS de altura fixa (5), grid responsivo colapsado em uma coluna (1) e conteúdo alto demais (4). Nasce a **quinta válvula** do core, `--log-h` (default 240px inalterado), e o `catalog-sweep` passa a medir a rolagem VERTICAL da caixa, **provado contra as três causas** | validate OK · **662/662** · playwright chromium **62/62** · **0 de 524** rolando · zero pixel | este |
 | 11/08/2026 | **I** | **I6** · **I7** · **I8** — **A PARTE I FECHA**, 8 de 8. **I6 `DeviceControl`**: primeiro contrato SEM estado terminal (dispositivo não termina), e a palavra "confidence" virou o vocabulário do domínio por pesquisa — OPC UA **Good · Uncertain · Bad**, com a leitura congelada caindo para `Uncertain · last usable` e nunca `Good`. **I7 `MediaLibrary`**: primeira com um MOTOR dentro, então a barra de ações **não repete o transporte**, e a seleção é uma constante que a galeria, o detalhe e o player leem. Custou a válvula **`--media-h`/`--media-ar`** no core (autorizada, default inalterado), e a referência explicou de graça que o `aspect-ratio` existe por **CLS**. **I8 `VisualBuilder`**: o **outline é a alternativa sem arrastar** e sai da mesma fonte do canvas; segredo é referência e o teste reprova até a máscara; e o **`prerender` que o I4 previu não foi necessário**. Testes provados contra **11 + 12 + 11** defeitos, e **três acharam defeito meu**: travas que cobravam a palavra em vez da regra. **Achado fora do escopo, medido e registrado como tarefa: 10 de 520 prévias do catálogo ROLAM**, contra a ADR-0002, e nenhum gate olha isso | validate OK (30 checks) · pack OK (react:51) · **662/662** · playwright **95 passed · 1 skipped · 0 failed** (chromium+webkit) · 2 baselines `-win32` (crachá de Blocks 12 → **15**) · zero pixel nas outras 59 | este |
-| 11/08/2026 | **I** | **correção do I5, e ela é sobre MÉTODO:** a busca de referência tinha sido por **nome de pasta** e perdeu o `order-summary` do tool-ui (296 linhas + esquema Zod). Refeita por CONTEÚDO, são **2 de 16** e não 1. A leitura tardia trouxe quantidade × unitário separados, com o total da linha derivado e gateado. E o `tabular-nums` que eu copiei dela foi **medido e rejeitado**: no IBM Plex Sans e no Segoe UI é **no-op** (uma largura de dígito com e sem), e no IBM Plex Serif nem funciona — eu ia pedir autorização para pôr no core uma regra que não muda pixel. `font-variant-numeric` é tipografia, que o `BUILDING.md` §1 proíbe extrair de referência. Mais a confirmação de que o `variant summary\|receipt` deles impõe por TIPO a mesma divisão que eu medi pelo contrato | validate OK · **526/526** · playwright chromium **61/61, zero pixel** | este |
+| 11/08/2026 | **I** | **correção do I5, e ela é sobre MÉTODO:** a busca de referência tinha sido por **nome de pasta** e perdeu o resumo de pedido de uma das referências da Parte H (296 linhas + esquema de validação). Refeita por CONTEÚDO, são **2 de 16** e não 1. A leitura tardia trouxe quantidade × unitário separados, com o total da linha derivado e gateado. E o `tabular-nums` que eu copiei dela foi **medido e rejeitado**: no IBM Plex Sans e no Segoe UI é **no-op** (uma largura de dígito com e sem), e no IBM Plex Serif nem funciona — eu ia pedir autorização para pôr no core uma regra que não muda pixel. `font-variant-numeric` é tipografia, que o `BUILDING.md` §1 proíbe extrair de referência. Mais a confirmação de que a variante de resumo ou recibo deles impõe por TIPO a mesma divisão que eu medi pelo contrato | validate OK · **526/526** · playwright chromium **61/61, zero pixel** | este |
 | 11/08/2026 | **I** | **I5 `TransactionFlow`** — as **sete** regiões, e a primeira composição em que **nenhum estado tem todas**: `review` é antes do commit, `receipt`/`reversal` só depois. Publica `settled` (seis, e o único terminal com ação). Também a primeira em que a busca por anatomia devolveu **1 de 16** referências, então o item nasceu de **pesquisa registrada** — valor em inteiro (TC39 `Decimal` em stage 1), `Intl` com **código** de moeda, `Idempotency-Key` (draft IETF, não é RFC) e **PCI DSS 4.0.1**: `payment` é referência e a composição tem **zero** `input`, com gate. O total é **somado**; a referência que existia escreve o dela à mão em **quatro** lugares. As ações moram na região que afetam, porque este contrato não tem `actions`. Teste provado contra **oito** defeitos. **Duas correções vieram de OLHAR a imagem:** a pilha de dinheiro desalinhada em 74px (duas faixas no lugar de duas colunas) e a região de reversão que era uma barra sem palavra nenhuma. **Achado fora do escopo, registrado:** `patterns/commerce_finance.md` promete `.flow-panel`/`.flow-summary`/`.flow-total`, e as três **não existem no core** | validate OK (30 checks) · pack OK (react:51) · **526/526** · playwright **95 passed · 1 skipped · 0 failed** (chromium+webkit) · 2 baselines `-win32` (crachá de Blocks 11 → **12**) · **`-linux` PENDENTES** | este |
 | 11/08/2026 | **K** | **K1 marcado** (ordem do Victor: o Firefox rodou e passou no contêiner) e **a decisão do `0.2.0`**, delegada por ele e registrada na [ADR-0020](../decisions/0020-a-proxima-versao-e-0-2-0-nao-1-0.md). O argumento que decide sozinho: a `1.0` exige **consumidor real instalando do npm**, e o que está no npm **quebra na hora** dentro de um componente de servidor — esperar o consumidor era esperar por uma coisa que a espera impedia. Em semver `^0.1.0` **não pega** `0.2.0`, então cinco quebras num minor de `0.x` não surpreendem ninguém. Nasce o item **K5** (o total vai a 81), porque dobrar um publish inteiro dentro do K4 o deixaria sem checkbox | validate OK · pack OK · 662/662 | este |
 | 11/08/2026 | **K** | **K3 — o changelog, e ele estava mais vazio do que o enunciado supunha.** Medido de `a0dd056` (o publish) até `HEAD`, **99 commits**: 27 componentes, 70 nomes exportados, **39 props** em componentes preexistentes e **zero remoção** de API. As quebras não eram as duas da Parte B: são **cinco**, e as duas que faltavam são **de CSS** — as 5 regras de ELEMENTO que estilizavam **toda `<table>` do consumidor** (regras sem classe: 14 → 9) e 14 classes removidas. A **Parte F não quebrou nada**. Duas imprecisões minhas de 06/08 corrigidas: o `AvatarGroup` **não existia** na `0.1.0`, e o `<Avatar/>` sem prop **encolhe 4px** (o default era `size={40}` inline, hoje é `md` = 36px) — a frase antiga comparava o que o core declarava, não o que a tela mostrava. O `FileEntry` **parecia** quebra e não é: nunca foi exportado. Idioma **inglês** por decisão do Victor (o arquivo não vai em tarball nenhum, mas está ao lado de um README em inglês); as 127 linhas antigas traduzidas no mesmo passo. Nasce o **check 31** com `scripts/released-surface.json`, provado contra **quatro** injúrias, duas delas defeitos do próprio gate (substring, e nome citado em versão já publicada). **Duas reincidências minhas:** a medição leu **comentário como código** (4ª vez nesta casa) e eu **copiei um número do plano** — "19 de 22" módulos com a diretiva era de 06/08; são **21 de 24** | validate OK (**29 checks** — é o número que o `manifest.json` MEDE, `gates.validate`; as linhas acima escreveram "30" à mão e o gerado dizia 28. O I1 dentro do próprio registro do I1) · pack OK (react:51) · **662/662** · playwright chromium+webkit | este |
 | 09/08/2026 | **J** | **J1 · J2 · J3 — A PARTE J FECHA**, com **sete** estados e não seis ([ADR-0018](../decisions/0018-estados-universais-sao-um-eixo-a-parte.md)): `waiting_dependency` estava no contrato e fora do plano. Eixo próprio (`state` × `variant`), **zero token novo** e **zero CSS novo**. Nasce o **check 30**, com a lista LIDA do `pure.tsx` e provado nos dois sentidos. **Três defeitos achados por gate, nenhum por leitura:** o check 11 lendo `UNIVERSAL_STATES` como um componente · a trava nascida forte demais, desmentida pelo `HealthMatrix` na estreia · o `DataGrid` marcando o RECADO em vez de si mesmo | validate OK (**30 checks**) · pack OK (react:51) · **332/332** · 61/61 · zero pixel · `pnpm audit` limpo | este |
 | 12/08/2026 | **K** | **K5 — a `0.2.0` ESTA NO NPM**, os seis, medidos com `npm view` e nao na tela. A ADR-0020 dizia que as tres coisas do publish acontecem juntas; medido que e **obrigatorio** — com o bump aplicado e a superficie velha o check 31 reprova nomeando os 27 componentes, e nao ha ordem sem um commit vermelho no meio. **Eram oito arquivos de versao, nao seis** (a raiz privada do workspace acompanhou a `0.1.0`, e o `aurea.contract.json`). A receita da ADR tem um **laco**: manda regerar o `released-surface.json` de `git show <commit>:manifest.json`, e o arquivo mora dentro desse commit — o campo `commit` saiu com a palavra `PENDENTE` e o hash entrou no commit seguinte, em vez de `--amend` no commit ja publicado. **Dois achados, um corrigido e um registrado:** o comando de publish da ADR-0013 encadeia com `&&`, que o **PowerShell 5.1 nao tem** — a forma do PowerShell entrou ao lado; e **nada cobra que os seis pacotes versionem juntos** (o check 31 le so o `react`), que e o I1 no eixo da versao, deixado como tarefa por nascer no meio de um publish. A restricao de 2FA do npm foi **pesquisada, nao lembrada**: atinge token, nao publicacao interativa — e poe prazo no K2 | validate OK (29 checks) · pack OK (react:51) · **662/662** · playwright **97 passed · 1 skipped · 0 failed** (nao repetido depois do bump: nenhum arquivo de `apps/catalog/` mudou) | `450d8df` + este |
 | 12/08/2026 | **K** | **K2 ADIADO por decisao ([ADR-0021](../decisions/0021-o-publicador-confiavel-fica-adiado.md)) e nasce o `check-published.mjs`.** O K2 sai da fila **sem ser feito**: a ADR-0013 rejeitou o token pelas razoes certas e **nao listou a saida de nao automatizar**, que e a unica em que nao existe segredo para vazar — dois publishes a mao, de minutos, com a CI parada por um mes. Gatilho de volta e **frequencia ou maos**, nunca data, e explicitamente NAO "a CI voltou". O checkbox fica desmarcado, porque nao foi feito. **E o controle que faltava:** todo gate deste repositorio mede a ARVORE, e foi por isso que a `0.1.0` ficou DOZE DIAS no npm sem instalar em RSC sem ninguem poder ver. O `check-published.mjs` instala **do registro** num projeto limpo fora do repo, reusando `proof-server` e `proof-client` com `workspace:*` trocado pela versao — reuso, nao um terceiro app. **Provado nas duas direcoes E em tres camadas:** a `0.2.0` passa (exit 0); a `0.1.0` reprova por `Export Toggle doesn't exist` (compatibilidade — o Toggle nasceu no Lote 1); tirado o Toggle, reprova por **TS2882** no `./css` sem condicao `types`; e desligada a checagem de tipos, reprova por `TypeError: (0, d.createContext) is not a function` — **este e o defeito de RSC**. O registro e a CADEIA e nao a frase, porque a primeira leitura me fez afirmar "prova RSC" quando eu tinha medido export ausente. **Dois defeitos meus dentro do proprio script:** a mensagem de falha dizia so `Build error occurred`, sem nomear causa (e a regra do E13), e as constantes da extracao nasceram DEPOIS do laco que as usa — `ReferenceError: Cannot access RUIDO before initialization`, que `node --check` **aprova**, porque e erro de execucao e nao de sintaxe | validate OK (29 checks) · `pnpm published:check` OK na 0.2.0 · reprova na 0.1.0 | este |
-| 15/08/2026 | **L** | **A PARTE L FECHA, 6 de 6, e sem UMA dependência nova** — e em três itens isso foi decisão medida contra o padrão de mercado: o `embla-carousel` (as QUATRO referências o embrulham; o `@base-ui/react` não tem carrossel, 46 pastas), o `@dnd-kit/core` (é o `list` e o `kanban` do kibo) e a biblioteca de moeda (o motor já aceitava `Intl.NumberFormatOptions`; a nossa casca é que não repassava). O que substituiu cada um já estava pago: contêiner de rolagem com `scroll-snap`, `PointerEvent`, e o `Intl` da plataforma. **O L4 veio antes do L2** porque o ladrilho da galeria É um `Image` (regra 9 da DIRECTION). **A referência indicada nem sempre tinha a anatomia** — a da galeria estava na `tool-ui-main` e não na `media-chrome` —, e **duas ensinaram pelo AVESSO**: o `aspect-ratio` do kibo é um componente para emular o que a propriedade CSS já faz, e o `typography` do `ui-main` é receita em classe utilitária, modelo que não serve a quem entrega CSS. **O L6 encolheu para duas props e cresceu em evidência:** três medições independentes contra mascarar ao vivo — a reprovação de WCAG 2.1 AA do próprio USWDS, o abandono da máscara pelo MUI na v6 (`masked-input-bad-ux.mp4`) e a prática corrente. **Quatro defeitos achados pela MEDIÇÃO, não por gate:** o `aspect-ratio:auto` que produzia altura ZERO no caso mais comum do `Image` (a regra contra o salto de layout produzindo o salto) · a cápsula do selecionado que sumia por empate de especificidade com `.is-selected` · a legenda que fazia o leitor de tela anunciar duas vezes · e o **link de texto no tema claro a 1,68:1**, reprovação de WCAG AA latente desde sempre no core, que só apareceu quando o catálogo ganhou a primeira página com link em corpo de texto. Curado com a fórmula que já estava escrita para o `.btn-link-primary` (6,92:1 depois), escopado em `:not([class])` para não passar por cima de componente nenhum. **E um quinto, do REPOSITÓRIO:** comentário de BLOCO citando o nome de uma prop entre crases fez uma classe do core parecer produzida pelo pacote React — 3ª vez que um gate daqui lê prosa como código | validate OK · pack OK (react:51) · **760 testes** · chromium **sweep 14/14** + **pixel 22/22 sem um pixel de diferença** · webkit **26/26** · 4 baselines `-win32` regravadas (6 páginas novas na navegação) · **`-linux` pendentes** · **Firefox NÃO rodou**: o binário do Playwright parou de iniciar nesta máquina no meio da sessão (SxS, `mozglue` — confirmado no log de eventos do Windows), e a reinstalação com `--force` é decisão do Victor | este |
-| 13–15/08/2026 | **L–O nascem** + **M** | **A Parte M FECHA, 7 de 7, e sem UMA dependência nova.** A sessão começou no catálogo (tema que persiste, lateral que abre no item atual, os últimos previews vazios, os três tamanhos do QRCode) e virou medição dos consumidores reais do Victor — nove superfícies em seis projetos, lidas e NUNCA tocadas. Dela nasceram as partes **L, M, N, O** (§15–19). Entregues na M: `ConfirmDialog`, `AccessGate`, `DataState`, `useAureaTheme`, `screenState*`, `Form`, `CommandPalette`. **A lição da sessão foi de MÉTODO, e o Victor a deu duas vezes:** (1) *"não existir referência na pasta não quer dizer que não é pra criar, deve buscar na internet"* — eu tinha fechado o M4 como "não é componente" por achar zero nas cinco pastas, e o §Passo 4 do BUILDING.md já mandava pesquisar; a pesquisa devolveu o padrão com nome e o desenho (ADR-0023, reescrita e não apagada). (2) Em quatro itens a pesquisa serviu para dizer o que **NÃO** construir — `next-themes`, `nuqs`, `react-hook-form`, `cmdk` —, e em três deles o motor que já se paga (`@base-ui/react`) tinha a peça. **E eu reportei um gate verde que não era:** `| tail` engole o código de saída, e a varredura tinha 4 reprovações nos meus dois componentes novos (axe da paleta, salto de título e rolagem do DataState) — corrigidas, com a cobrança de axe trazida para o teste de unidade | validate OK (30 checks) · **728 testes** · pack OK · skin 2/2 · catalog 16/16 · **sweep 14/14** | `bfddb7d` |
-| 15/08/2026 | **N** | **A PARTE N FECHA, 1 de 1, e o resultado é um NÃO registrado** ([ADR-0025](../decisions/0025-editor-por-blocos-sem-motor.md)): o `BlockEditor` entrega a **moldura** dos blocos e o motor de texto rico fica com o consumidor — a opção que o próprio item previa, agora com medição atrás. **A referência indicada não era o mesmo componente**, e é a primeira pergunta do BUILDING §2: o `editor` do kibo tem 39 exports e 17 dependências (TipTap 3.6.6 sobre ProseMirror), **18 dos 39 só de tabela**, e é editor de DOCUMENTO ÚNICO — lista de blocos, reordenação e bloco de imagem com legenda **não existem lá**. **O que fechou a porta foi SEGURANÇA, não peso:** o navegador não sanitiza HTML colado, e quem é dono da superfície de edição é dono do XSS de colagem — a pesquisa confirma que ProseMirror e Lexical tratam o `contenteditable` como alvo de renderização e nunca como fonte da verdade por isso mesmo. A Aurea não pode decidir o que é seguro renderizar no domínio do consumidor. **Pesquisa registrada:** TipTap 3 (MIT no editor, pago na nuvem) · BlockNote (**MPL-2.0**, e a Aurea é Apache-2.0) · Editor.js · Lexical · e a plataforma — `contenteditable="plaintext-only"` **virou Baseline**, a **EditContext API NÃO é** (só Chromium). **Uma medição mudou o desenho:** ia ser prop da `SortableList`, até medir que o rótulo dela é `<span>`, que só aceita conteúdo de frase — `<figure>` ali é marcação inválida, e bloco de imagem com legenda é literalmente o que o item pede. **A extração que isso pagou:** o protocolo de arrasto saiu para o `useReorder` do `internal.tsx` porque o `BlockEditor` virou o segundo dono dele, e a DOM da `SortableList` não mudou — quem prova são o pixel e o `skin.spec`. **Dois defeitos meus achados por gate, não por leitura:** o axe reprovou o `<textarea>` sem rótulo do meu próprio fixture (corretamente — o rótulo é do consumidor), e a prévia do catálogo exigia rolagem, **502px numa caixa de 354**, contra a ADR-0002; encolheu em duas medições até 2 blocos. **E uma contagem à mão vencida saiu do `04-PROTOCOLO-IA.md`:** dizia "19 ADRs" e o repositório tinha 24 — o achado I1 acontecendo no arquivo que serve de ponto de partida | validate OK (30 checks) · pack OK (react:51) · **769 testes** · skin 4/4 · **sweep 28/28** (chromium+webkit) · pixel: 10/16 intactas, **6 `-win32` regravadas** (1 componente novo em Inputs; diff conferido: só os contadores no topo e o deslocamento da lista) · **`-linux` pendentes** · **Firefox NÃO rodou** (SxS/`mozglue`, decisão do Victor) | este |
-| 15/08/2026 | **O** | **A PARTE O FECHA, 2 de 2 — E COM ELA AS PARTES ACABAM.** O **O1** não terminou em "não vale": medido com comando (`node scripts/measure-boundary.mjs`), **22 de 105 exports não precisavam de cliente por nada que faziam**, e importar `Card` — uma `<div>` — embarcava **9 módulos e 118,5 KB**, porque a diretiva contamina o módulo inteiro e o fecho dele. Agora eles moram no `markup.tsx`, sem diretiva: fecho de **2 módulos e 27,3 KB**, e pelo barril não vai JavaScript nenhum ([ADR-0026](../decisions/0026-marcacao-pura-e-de-servidor.md)). **A prova de que dava para fazer já estava no repositório:** o `Accordion`, da mesma natureza, custava **0,3 KB** — a diferença era só o arquivo em que ele caiu na Fase 9. **A medição corrigiu o enunciado do próprio item em três pontos:** `chart`, `qrcode` e `calendar` são de cliente pelo MOTOR e não pelos nossos hooks; `Table` PRECISA de cliente; e o problema estava em nove módulos, não quatro (o `inputs` sozinho tinha seis). **E uma medição errada minha foi pega antes de decidir** — a primeira versão adivinhava o motor pelo nome do pacote e daria `Calendar` e `ChartLegend` como puros, mandando para o servidor o que o navegador precisa montar. **Sem quebra de API**, com **check 35 provado contra o defeito** — e a prova DERRUBOU a explicação que eu tinha escrito: tirar um nome da linha explícita não faz o componente sumir, faz ele **voltar a ser cliente em silêncio**, com `tsc` verde e testes passando. O texto foi corrigido para o que foi medido. O **O2** produziu o [`NATIVE.md`](NATIVE.md) e **não construiu nada**, como mandava: a New Architecture do RN deixou de ser opcional (legada REMOVIDA no Expo SDK 55/RN 0.83), o Unistyles v3 se confirmou como par filosófico, o NativeWind saiu por medida (197 ms contra 49 do StyleSheet) — e o achado que decide 152 tokens é que **nenhuma fonte confiável diz que o `StyleSheet` aceita `oklch()`**, sendo o amarelo primário intocável e a conversão para sRGB com perda. Por isso a Etapa 1 proposta é medir a cor no aparelho | validate OK (**33 checks**, medido no `manifest.json`, que é gerado — eu tinha escrito 31 à mão e a linha da Parte N diz 30, as duas erradas: o número era 32 antes deste item. **Terceira vez na mesma sessão** que contagem à mão apareceu, agora na minha própria; e a renumeração do check para **35** saiu de outra medição — o 29 que eu escolhi **já existia**, e o validador conta números DISTINTOS, então a colisão passaria calada) · pack OK (react:53) · **769 testes** · suíte visual completa nos dois motores · zero pixel novo | este |
+| 15/08/2026 | **L** | **A PARTE L FECHA, 6 de 6, e sem UMA dependência nova** — e em três itens isso foi decisão medida contra o padrão de mercado: o motor de carrossel (as QUATRO referências o embrulham; o `@base-ui/react` não tem carrossel, 46 pastas), a biblioteca de arrastar e soltar (é a lista e o kanban de uma das referências) e a biblioteca de moeda (o motor já aceitava `Intl.NumberFormatOptions`; a nossa casca é que não repassava). O que substituiu cada um já estava pago: contêiner de rolagem com `scroll-snap`, `PointerEvent`, e o `Intl` da plataforma. **O L4 veio antes do L2** porque o ladrilho da galeria É um `Image` (regra 9 da DIRECTION). **A referência indicada nem sempre tinha a anatomia** — a da galeria estava numa das referências da Parte H e não na referência de mídia —, e **duas ensinaram pelo AVESSO**: o `aspect-ratio` de uma delas é um componente para emular o que a propriedade CSS já faz, e a tipografia de outra é receita em classe utilitária, modelo que não serve a quem entrega CSS. **O L6 encolheu para duas props e cresceu em evidência:** três medições independentes contra mascarar ao vivo — a reprovação de WCAG 2.1 AA que outro design system publica na própria máscara, o abandono da máscara por uma das referências (com vídeo do defeito no repositório deles) e a prática corrente. **Quatro defeitos achados pela MEDIÇÃO, não por gate:** o `aspect-ratio:auto` que produzia altura ZERO no caso mais comum do `Image` (a regra contra o salto de layout produzindo o salto) · a cápsula do selecionado que sumia por empate de especificidade com `.is-selected` · a legenda que fazia o leitor de tela anunciar duas vezes · e o **link de texto no tema claro a 1,68:1**, reprovação de WCAG AA latente desde sempre no core, que só apareceu quando o catálogo ganhou a primeira página com link em corpo de texto. Curado com a fórmula que já estava escrita para o `.btn-link-primary` (6,92:1 depois), escopado em `:not([class])` para não passar por cima de componente nenhum. **E um quinto, do REPOSITÓRIO:** comentário de BLOCO citando o nome de uma prop entre crases fez uma classe do core parecer produzida pelo pacote React — 3ª vez que um gate daqui lê prosa como código | validate OK · pack OK (react:51) · **760 testes** · chromium **sweep 14/14** + **pixel 22/22 sem um pixel de diferença** · webkit **26/26** · 4 baselines `-win32` regravadas (6 páginas novas na navegação) · **`-linux` pendentes** · **Firefox NÃO rodou**: o binário do Playwright parou de iniciar nesta máquina no meio da sessão (SxS, `mozglue` — confirmado no log de eventos do Windows), e a reinstalação com `--force` é decisão do Victor | este |
+| 13–15/08/2026 | **L–O nascem** + **M** | **A Parte M FECHA, 7 de 7, e sem UMA dependência nova.** A sessão começou no catálogo (tema que persiste, lateral que abre no item atual, os últimos previews vazios, os três tamanhos do QRCode) e virou medição dos consumidores reais do Victor — nove superfícies em seis projetos, lidas e NUNCA tocadas. Dela nasceram as partes **L, M, N, O** (§15–19). Entregues na M: `ConfirmDialog`, `AccessGate`, `DataState`, `useAureaTheme`, `screenState*`, `Form`, `CommandPalette`. **A lição da sessão foi de MÉTODO, e o Victor a deu duas vezes:** (1) *"não existir referência na pasta não quer dizer que não é pra criar, deve buscar na internet"* — eu tinha fechado o M4 como "não é componente" por achar zero nas cinco pastas, e o §Passo 4 do BUILDING.md já mandava pesquisar; a pesquisa devolveu o padrão com nome e o desenho (ADR-0023, reescrita e não apagada). (2) Em quatro itens a pesquisa serviu para dizer o que **NÃO** construir — as bibliotecas de tema, de estado na URL, de formulário e de paleta de comandos —, e em três deles o motor que já se paga (`@base-ui/react`) tinha a peça. **E eu reportei um gate verde que não era:** `| tail` engole o código de saída, e a varredura tinha 4 reprovações nos meus dois componentes novos (axe da paleta, salto de título e rolagem do DataState) — corrigidas, com a cobrança de axe trazida para o teste de unidade | validate OK (30 checks) · **728 testes** · pack OK · skin 2/2 · catalog 16/16 · **sweep 14/14** | `bfddb7d` |
+| 15/08/2026 | **N** | **A PARTE N FECHA, 1 de 1, e o resultado é um NÃO registrado** ([ADR-0025](../decisions/0025-editor-por-blocos-sem-motor.md)): o `BlockEditor` entrega a **moldura** dos blocos e o motor de texto rico fica com o consumidor — a opção que o próprio item previa, agora com medição atrás. **A referência indicada não era o mesmo componente**, e é a primeira pergunta do BUILDING §2: o `editor` da referência tem 39 exports e 17 dependências (sobre um motor de texto rico de terceiro), **18 dos 39 só de tabela**, e é editor de DOCUMENTO ÚNICO — lista de blocos, reordenação e bloco de imagem com legenda **não existem lá**. **O que fechou a porta foi SEGURANÇA, não peso:** o navegador não sanitiza HTML colado, e quem é dono da superfície de edição é dono do XSS de colagem — a pesquisa confirma que as bases de vida longa do mercado tratam o `contenteditable` como alvo de renderização e nunca como fonte da verdade por isso mesmo. A Aurea não pode decidir o que é seguro renderizar no domínio do consumidor. **Pesquisa registrada:** um motor MIT no editor e pago na nuvem · outro **MPL-2.0** (e a Aurea é Apache-2.0) · um modelo de blocos independentes · uma base de vida longa · e a plataforma — `contenteditable="plaintext-only"` **virou Baseline**, a **EditContext API NÃO é** (só Chromium). **Uma medição mudou o desenho:** ia ser prop da `SortableList`, até medir que o rótulo dela é `<span>`, que só aceita conteúdo de frase — `<figure>` ali é marcação inválida, e bloco de imagem com legenda é literalmente o que o item pede. **A extração que isso pagou:** o protocolo de arrasto saiu para o `useReorder` do `internal.tsx` porque o `BlockEditor` virou o segundo dono dele, e a DOM da `SortableList` não mudou — quem prova são o pixel e o `skin.spec`. **Dois defeitos meus achados por gate, não por leitura:** o axe reprovou o `<textarea>` sem rótulo do meu próprio fixture (corretamente — o rótulo é do consumidor), e a prévia do catálogo exigia rolagem, **502px numa caixa de 354**, contra a ADR-0002; encolheu em duas medições até 2 blocos. **E uma contagem à mão vencida saiu do `04-PROTOCOLO-IA.md`:** dizia "19 ADRs" e o repositório tinha 24 — o achado I1 acontecendo no arquivo que serve de ponto de partida | validate OK (30 checks) · pack OK (react:51) · **769 testes** · skin 4/4 · **sweep 28/28** (chromium+webkit) · pixel: 10/16 intactas, **6 `-win32` regravadas** (1 componente novo em Inputs; diff conferido: só os contadores no topo e o deslocamento da lista) · **`-linux` pendentes** · **Firefox NÃO rodou** (SxS/`mozglue`, decisão do Victor) | este |
+| 15/08/2026 | **O** | **A PARTE O FECHA, 2 de 2 — E COM ELA AS PARTES ACABAM.** O **O1** não terminou em "não vale": medido com comando (`node scripts/measure-boundary.mjs`), **22 de 105 exports não precisavam de cliente por nada que faziam**, e importar `Card` — uma `<div>` — embarcava **9 módulos e 118,5 KB**, porque a diretiva contamina o módulo inteiro e o fecho dele. Agora eles moram no `markup.tsx`, sem diretiva: fecho de **2 módulos e 27,3 KB**, e pelo barril não vai JavaScript nenhum ([ADR-0026](../decisions/0026-marcacao-pura-e-de-servidor.md)). **A prova de que dava para fazer já estava no repositório:** o `Accordion`, da mesma natureza, custava **0,3 KB** — a diferença era só o arquivo em que ele caiu na Fase 9. **A medição corrigiu o enunciado do próprio item em três pontos:** `chart`, `qrcode` e `calendar` são de cliente pelo MOTOR e não pelos nossos hooks; `Table` PRECISA de cliente; e o problema estava em nove módulos, não quatro (o `inputs` sozinho tinha seis). **E uma medição errada minha foi pega antes de decidir** — a primeira versão adivinhava o motor pelo nome do pacote e daria `Calendar` e `ChartLegend` como puros, mandando para o servidor o que o navegador precisa montar. **Sem quebra de API**, com **check 35 provado contra o defeito** — e a prova DERRUBOU a explicação que eu tinha escrito: tirar um nome da linha explícita não faz o componente sumir, faz ele **voltar a ser cliente em silêncio**, com `tsc` verde e testes passando. O texto foi corrigido para o que foi medido. O **O2** produziu o [`NATIVE.md`](NATIVE.md) e **não construiu nada**, como mandava: a New Architecture do RN deixou de ser opcional (legada REMOVIDA no Expo SDK 55/RN 0.83), o Unistyles v3 se confirmou como par filosófico, o motor de utilitário de classe saiu por medida (197 ms contra 49 do StyleSheet) — e o achado que decide 152 tokens é que **nenhuma fonte confiável diz que o `StyleSheet` aceita `oklch()`**, sendo o amarelo primário intocável e a conversão para sRGB com perda. Por isso a Etapa 1 proposta é medir a cor no aparelho | validate OK (**33 checks**, medido no `manifest.json`, que é gerado — eu tinha escrito 31 à mão e a linha da Parte N diz 30, as duas erradas: o número era 32 antes deste item. **Terceira vez na mesma sessão** que contagem à mão apareceu, agora na minha própria; e a renumeração do check para **35** saiu de outra medição — o 29 que eu escolhi **já existia**, e o validador conta números DISTINTOS, então a colisão passaria calada) · pack OK (react:53) · **769 testes** · suíte visual completa nos dois motores · zero pixel novo | este |
 | 15/08/2026 | — (`NATIVE.md`) | **Etapa 1 do nativo, autorizada e FEITA** — e ela admitia terminar em "hex serve", mas terminou no contrário ([ADR-0027](../decisions/0027-a-cor-no-alvo-nativo.md)). Medido por comando (`node scripts/measure-color-native.mjs`): a superfície real são **95 valores `oklch`**, não 152 (o resto é 42 alias + 15 já em sRGB); **20 dos 95 estouram o gamute sRGB**, o amarelo da marca entre eles, cortando para `#f0b100` a **ΔEok 0,02247** — e o limiar de perceptível publicado para ΔEok é **≈0,02**, então cai EM CIMA dele, não abaixo. **A pergunta que decidiu:** numa tela sRGB o navegador corta IGUAL — provado lendo o pixel rasterizado, 95 de 95, diferença máxima de 1/255 —, então hex não perde nada ali; a perda é nas telas de **gamute largo**, que é o que os aparelhos têm (todo iPhone desde 2016/17). Em `display-p3` os 20 rasterizam diferente: amarelo sRGB `rgb(240,177,0)` contra P3 `rgb(230,179,19)`. **Decisão: o nativo não recebe hex sozinho** — o adapter emite largo onde a plataforma suporta e hex como fallback, e o fallback é este, porque é byte a byte o que a web já pinta. **A Etapa 2 muda de escopo antes de começar.** **E um defeito meu dentro da própria medição:** a primeira validação imprimiu "0 de divergência" tendo comparado **ZERO** cores — lia `getComputedStyle` e o Chromium devolve `oklch()` sem resolver, então o filtro pulava todas. Verde que não era, agora dentro do script que ia decidir; trocado para canvas 2D, que obriga o motor a rasterizar em bytes. **NÃO rodou em aparelho** (Windows, sem SDK Android; simulador iOS exige macOS) e a ADR declara os três pontos que ficaram para a Etapa 2 | validate OK (33 checks) · pack OK · nada em `packages/` mudou, então nem render nem teste se moveram (o `STATE.md` regravou idêntico) | este |
 | 15/08/2026 | — (`NATIVE.md`) | **Etapa 2 do nativo, autorizada e FEITA — zero componente**, como o item exigia. O alvo é `@aurea-uds/tokens/native`, gerado pelo MESMO `build-tokens.mjs` (o parser do DTCG continua sendo um só) e cobrado pelo **check 36**, provado contra o defeito: token novo na fonte sem regravar o alvo reprova. **Quatro impedâncias que o CSS esconde:** não há cascata (alias resolvido no build, por grupo) · não há `rem` (**1rem = 16dp**, MEDIDO no navegador) · não há `em` (os 5 `tracking` saem como RAZÃO — `letterSpacing` no RN é absoluto, e emitir dp acertaria num tamanho de fonte só) · não há `@media` (os 5 breakpoints saem à parte, declarados como não sendo para `StyleSheet`). **A sombra ficou MELHOR que o previsto:** o plano dizia `shadowColor`/`elevation`, que perdem `spread`; medido, o **RN 0.76+ tem `boxShadow`** com sintaxe do CSS inclusive `spreadDistance`, e a Nova Arquitetura é obrigatória desde o Expo SDK 55 — mapeamento 1:1 e sem perda. **DOIS DEFEITOS, e um é do arquivo de tokens:** `base.text-muted` estava `$type:"dimension"` apontando para uma COR — o CSS nunca reclamou porque alias vira `var()` antes de o tipo ser olhado, e a página do catálogo desenhava uma RÉGUA para uma cor; corrigido na fonte, e o CSS saiu **byte a byte idêntico**, o que prova que a correção não tocou o alvo web. O segundo era meu: o gerador emitia `undefined` em silêncio e o `JSON.stringify` descartava a chave — agora ele morre. **Seis tokens do `base` saem DENTRO de cada tema** (`text-muted` e os cinco `oracle-*`): apontam para folhas que só existem por tema, e em JS não há ligação tardia. **As matrizes de cor foram provadas contra o rasterizador**, como na Etapa 1 — `p3` emitido contra `oklch` da fonte no mesmo canvas P3, **95 de 95, máximo 1/255**; a primeira rodada acusou 229 e era o MEU harness reconstruindo a cor sem o alfa. **Falta hardware, não trabalho:** os três pontos de aparelho da ADR-0027 não são executáveis nesta máquina. **E um defeito PRÉ-EXISTENTE foi sinalizado sem desvio:** 198 `[object Object]` na página de tokens do catálogo, contagem idêntica antes e depois | validate OK (**34 checks**, medido) · pack OK (tokens:8) · **769 testes** · suíte visual **103 passed / 1 skipped / 0 falhas** nos dois motores · pixel: 14/16 intactas, **2 `-win32` regravadas** (a linha do `text-muted` mudou de tabela), diff conferido | este |
 | 15/08/2026 | — (`NATIVE.md`) | **A ADR-0027 foi CORRIGIDA no mesmo dia, e a lição é de método.** Eu tinha classificado três pontos como "precisa de aparelho" e cheguei a mandar o Victor instalar Node, Expo e Expo Go, criar projeto e parear celular — que **não pareou**. Dois desses pontos não precisavam de celular nenhum, e o terceiro já estava respondido: o `StyleSheet` do React Native resolve cor com `@react-native/normalize-colors`, que é **JavaScript puro e roda no Node**. Medido em `node scripts/measure-color-rn-parser.mjs` (novo, e a dependência **não entra no repositório** — o script a procura onde já exista, pelo `BUILDING.md` §3.3): o interpretador **RECUSA** `color(display-p3 …)`, `color(srgb …)`, `oklch()`, `oklab()`, `lab()`, `lch()` e `color-mix()`; aceita hex, `rgb()`, `hsl()` e `hwb()`. Conferido em **duas** versões para não parecer defeito de uma — a **0.81.5** (Expo SDK 54) e a **0.87.0**, a mais recente —, e o interpretador é JS compartilhado, então não há um lado onde funcione. **O que muda:** `hex` não é o *fallback* do alvo nativo, é o **único caminho vivo**; `p3` e `oklch` ficam como intenção registrada, não API consumível. E a perda de **ΔEok 0,0225** no amarelo, em tela de gamute largo, **deixa de ser evitável** — é teto da plataforma, e fica declarada. **O que sobra de fato não medido:** `PlatformColor()`/`DynamicColorIOS()`, que buscam cor por nome num catálogo nativo e não passam pelo interpretador — é a única hipótese viva de gamute largo. **A lição:** classifiquei como "falta hardware" uma pergunta que era **de biblioteca**, e o custo caiu no Victor. Antes de declarar que falta hardware, procurar a parte da pergunta que é software | validate OK (34 checks) · pack OK · CSS e `packages/core/dist` **inalterados** (nada visual se moveu, então nem render nem teste precisaram rodar) | este |
-| 15/08/2026 | — (`NATIVE.md`) | **Etapa 3 do nativo, autorizada e FEITA — e a ADR-0028 não existe para confirmar a escolha, e sim para MEDIR o que ela custa**, porque a recomendação que a sustentava vinha de resumo de busca. Medido no pacote instalado (numa pasta descartável; **não entrou no repositório**): **Unistyles 3.3.0, licença MIT** — compatível com a Apache-2.0 —, React Native ≥ 0.76 no contrato e ≥ 0.78 na documentação, Nova Arquitetura. **O custo que a minha recomendação escondia: não é UMA dependência, são CINCO** — `react-native-reanimated` e `react-native-nitro-modules` entre elas, as duas nativas —, e **não roda no Expo Go**. **E ele NÃO destrava a cor:** o `peerDependencies` dele traz o mesmo `@react-native/normalize-colors` que a correção da ADR-0027 mediu recusando gamute largo, então a pergunta "e se o Unistyles resolvesse?" está respondida antes de ser feita. **A razão que pesou não é desempenho** (o `StyleSheet` puro é mais rápido, 49,74 ms contra 66,40): é filosófica, a mesma da web — **o Unistyles não traz componentes**, então não disputa a identidade, que foi o motivo de o Tamagui ter sido recusado em 18/07. **O achado que a Etapa 4 herda:** o Unistyles tem **um** eixo de tema e a Aurea tem **dois** (tema × densidade, seis combinações), e as `variants` dele são por folha de estilo, não globais — duas saídas declaradas na ADR, e escolher exige o app na frente. **Nesta sessão também foi FUNDIDO** o galho da sessão paralela (`8b1ca56`): `[object Object]` na página de tokens, 198 → 0, com a serialização virando módulo compartilhado. Fusão testada com `merge-tree` antes — limpa, apesar de as duas sessões terem mexido no `build-tokens.mjs` | validate OK (34 checks) · pack OK · build reproduz a árvore | este |
+| 15/08/2026 | — (`NATIVE.md`) | **Etapa 3 do nativo, autorizada e FEITA — e a ADR-0028 não existe para confirmar a escolha, e sim para MEDIR o que ela custa**, porque a recomendação que a sustentava vinha de resumo de busca. Medido no pacote instalado (numa pasta descartável; **não entrou no repositório**): **Unistyles 3.3.0, licença MIT** — compatível com a Apache-2.0 —, React Native ≥ 0.76 no contrato e ≥ 0.78 na documentação, Nova Arquitetura. **O custo que a minha recomendação escondia: não é UMA dependência, são CINCO** — `react-native-reanimated` e `react-native-nitro-modules` entre elas, as duas nativas —, e **não roda no Expo Go**. **E ele NÃO destrava a cor:** o `peerDependencies` dele traz o mesmo `@react-native/normalize-colors` que a correção da ADR-0027 mediu recusando gamute largo, então a pergunta "e se o Unistyles resolvesse?" está respondida antes de ser feita. **A razão que pesou não é desempenho** (o `StyleSheet` puro é mais rápido, 49,74 ms contra 66,40): é filosófica, a mesma da web — **o Unistyles não traz componentes**, então não disputa a identidade, que foi o motivo de o kit de motor e componentes ter sido recusado em 18/07. **O achado que a Etapa 4 herda:** o Unistyles tem **um** eixo de tema e a Aurea tem **dois** (tema × densidade, seis combinações), e as `variants` dele são por folha de estilo, não globais — duas saídas declaradas na ADR, e escolher exige o app na frente. **Nesta sessão também foi FUNDIDO** o galho da sessão paralela (`8b1ca56`): `[object Object]` na página de tokens, 198 → 0, com a serialização virando módulo compartilhado. Fusão testada com `merge-tree` antes — limpa, apesar de as duas sessões terem mexido no `build-tokens.mjs` | validate OK (34 checks) · pack OK · build reproduz a árvore | este |
 | 15/08/2026 | — (catálogo) | **O defeito irmão da página de tokens, autorizado e corrigido — e ele era MAIOR que o relatado.** A sessão paralela achou e parou de propósito, porque havia decisão de apresentação no meio; fez certo. Medido por mim no navegador antes de tocar em nada: **261 de 261** chips mostravam um nome que **não existe** no CSS, **153 de 153** amostras de cor computavam `rgba(0,0,0,0)` (caixas vazias) e **84 de 84** réguas caíam em `auto`, todas do mesmo tamanho. A página inteira de referência de token dizia o que não é. **Causa de uma linha:** o `flattenTokens` montava o nome com o CAMINHO (`base-brand-yellow`) e o `build-tokens.mjs` emite a FOLHA (`--brand-yellow`) sob o seletor do grupo — e `var()` que não resolve não dá erro, dá transparente. **Por que gate nenhum viu:** o check 17 pergunta se há conteúdo, não se ele é verdade; e as 102 fichas sempre usaram a folha, então a paridade do check 5 seguia verde. **A decisão que travava, resolvida por número** ([ADR-0029](../decisions/0029-a-pagina-de-tokens-mostra-o-nome-real-e-o-escopo.md)): **70 dos 175 nomes valem em mais de um grupo** (56 dark+light, 8 base+densidades, 6 base+light), então a folha sozinha não identifica a linha — e isso não é ambiguidade a esconder, é como o CSS funciona. A página passa a mostrar o nome REAL mais uma coluna com o SELETOR sob o qual ele vale, tirada do próprio `$extensions.ui.aurea.selectors` para não criar um segundo mapa. **E a amostra carrega o próprio escopo:** sem isso a linha de `theme.light` seria pintada com o valor de `dark` numa página escura — mentira mais discreta que a caixa vazia, e por isso pior. **Provado depois:** 0 transparentes, 41 larguras distintas, e dos 56 pares dark/light **44 pintam diferente** — os 12 que pintam igual são exatamente os invariáveis por design (`--primary` e derivados, `--focus`, os cinco `--chart-*`), que é a regra do `CLAUDE.md` aparecendo na medição. **Quem mais tinha o problema? Ninguém**, verificado. **E uma faixa magenta no topo da captura me fez parar e medir:** é a máscara do próprio Playwright, idêntica na baseline antiga — pré-existente, não defeito, e não era minha para "consertar" | validate OK · pixel: 14/16 intactas, 2 `-win32` regravadas com o diff conferido | este |
 | 16/08/2026 | — (infra) | **As baselines `-linux` deixaram de ser pendência — e nunca deveriam ter sido.** Eu vinha escrevendo "fica para o contêiner de outra máquina" sessão após sessão como se fosse fim de linha; o Victor avisou **"pela milionésima vez"** que existe um minipc Linux na rede local dedicado exatamente a isto. **A regra virou global** (`~/.claude/rules/`, fora do repositório), não do projeto: antes de dizer "precisa de outra máquina", lembrar que ela existe. **Como foi feito, seguindo o que o projeto já mandava:** código por **git bundle** (push suspenso), e as capturas geradas de dentro da imagem FIXADA `mcr.microsoft.com/playwright:v1.61.1-noble` via **podman** — porque o `ci.yml` avisa que a rasterização depende da máquina e que o chromium da imagem **não se reinstala**. **O resultado é a prova de que o contêiner reproduz:** das 22 baselines, **só 8 mudaram** (índice, lateral, topo e tokens × dois temas) e as outras **14 saíram byte a byte idênticas**. Regravadas com `--update-snapshots` e reconferidas na sequência: **22 passed** nas duas rodadas. **Duas coisas que teriam quebrado e foram pegas antes:** o `webServer` do playwright chama `python` e a imagem Ubuntu só tem `python3`; e a chave SSH já existia — **a senha nunca foi necessária**, e por isso não entrou em memória, documento nem commit. O `~/.ssh/config` do Victor aponta para um IP que morreu (`.9`), e isso ficou avisado a ele, não corrigido em silêncio | validate OK · pixel local (win32) **22/22** · pixel no contêiner (linux) **22/22** | este |
 | 16/08/2026 | — (infra) | **O Firefox roda, e a frase que dizia o contrário era minha, herdada e nunca conferida.** O bloco "COMECE POR AQUI" afirmava desde 15/08 que o binário falhava em SxS e que a correção exigia reinstalar com a flag que o hook bloqueia — e eu **repeti isso em três registros de sessão sem voltar a testar**. Testado hoje: `firefox.exe --version` devolve **Mozilla Firefox 151.0**, exit 0, binário íntegro (61 arquivos, 327 MB, `mozglue.dll` no lugar). **Nada reinstalado, nenhuma flag bloqueada usada.** **A suíte completa nos TRÊS motores: 143 passed · 2 skipped · 0 failed** (chromium 63, firefox 40, webkit 40) — primeira vez que a promessa da [ADR-0019](../decisions/0019-tres-motores-pixel-em-um-e-o-foco-da-gaveta.md) fica inteira. **Uma armadilha quase me fez reinstalar 327 MB à toa:** o `PrintDeps.exe` do próprio Playwright reporta `mozglue.dll => not found`, e é **falso positivo** — ele não procura na pasta do executável como o carregador do Windows procura em tempo de execução. Se eu tivesse acreditado na ferramenta em vez de rodar o binário, teria "consertado" o que não estava quebrado. **A causa da falha de 15/08 não foi estabelecida e não inventei uma** — o que ficou provado é que não era permanente. **Mesma classe do erro anterior:** obstáculo registrado como permanente tem de ser reconferido antes de ser repetido | três motores **143 passed / 2 skipped / 0 failed** · validate OK | este |
 | 16/08/2026 | — (consumidor) | **A demanda do primeiro consumidor, medida — e ela mostra que a Aurea está quase pronta para ele.** Lidas as **15 telas** do PWA do Victor e o relatório de requisitos, **sem tocar em um arquivo**. Resultado no [`CONSUMIDOR-1.md`](CONSUMIDOR-1.md): a demanda de um produto inteiro cai **quase toda** dentro das 103 fichas — formulários, catálogo pesquisável, datas, comprovantes, galeria, gráficos, histórico, estados de carregamento/erro/vazio, alertas, confirmação de exclusão, limites de plano (`AccessGate`), perfil e gamificação. **A ADR-0015 se provou:** construir por cobertura de contrato em vez de por pedido deixou o primeiro consumidor quase servido. **TRÊS LACUNAS medidas:** navegação inferior (não existe nada — `Topbar` e `Sidebar` são vocabulário de DESKTOP, e é a lacuna estrutural) · `Toast` em React (existe no core como JS puro, mas não há ficha entre as 103 nem módulo React que o produza) · linha de lista tocável (`DataList` é `<dl>`, `Table` é tabela; falta a linha com ícone, rótulo e seta que navega). **E UM ERRO MEU, apontado por ele pela TERCEIRA vez:** eu vinha escrevendo que o consumidor era "candidato, não consumo" e que o K4 exigia instalação do npm — quando a [ADR-0022](../decisions/0022-consumidor-real-e-projeto-do-victor.md) já tinha decidido em 13/08, **citando a frase dele**, que projeto do Victor É o consumidor real. O que falta para o K4 fechar está do NOSSO lado. Corrigido no documento e gravado como regra: **decisão registrada em ADR não se reabre em prosa.** **E uma tarefa começada sem autorização foi DESFEITA:** li um "Tentar novamente" como sinal verde e comecei a divisão dos subpaths; ele apontou, e a árvore voltou ao estado coerente — o plano ficou escrito no `COMECE POR AQUI`, que vale mais que código pela metade | validate OK · árvore limpa | este |
 | 16/08/2026 | — (consumidor) | **A lacuna do `Toast` NÃO EXISTIA, e o erro era meu — mas a ida até lá achou um defeito de verdade.** Eu tinha escrito no `CONSUMIDOR-1.md` que "nenhum módulo React produz toast". Falso: o `system.tsx` publica `useToast()` desde sempre e o `AureaProvider` **já monta o viewport** — nem `<Toaster/>` existe para posicionar. **Como eu errei:** li o **registry** e concluí sobre o **código**. Não há ficha `Toast` — isso é verdade —, e ficha é *contagem*, não medida; a fonte era `grep -rn toast packages/react/src`, que devolve o hook na primeira linha. **O DEFEITO REAL, que só a leitura do código acharia:** o `system.tsx` emite `toast-${t.type}` e as classes `.toast-info/.toast-success/.toast-warning/.toast-danger` **não existiam no core** — o `AureaToastType` prometia quatro faces e as quatro pintavam idênticas. É o ponto CEGO do check 18, que só enxerga classe literal: o mesmo que já tinha deixado passar o `log-${level}`. **Respondida a pergunta "quem mais tem esse problema?"**, que é obrigatória: varridos os **18** padrões de classe dinâmica do pacote React, este era o **único** órfão (o `ev-${e.id}` do `agents.tsx` é `id`, não classe). Corrigido com o mecanismo do `.alert`/`.banner` **reusado**, não inventado — e as regras vão DEPOIS da base `.toast`, porque mesma especificidade faz a última vencer. **Dois controles, e cada um cobre uma metade:** teste de unidade para o tipo virar classe (o lado que emite) e asserção de EFEITO no `skin.spec` para a classe pintar — esta **provada contra o defeito** (removidas as quatro regras, reprova; repostas, passa). **A lacuna que sobrou é outra e é decisão do Victor:** hook público não tem página no catálogo (ficha é de componente), então `useToast`, `useAureaTheme`, `useAureaStrings` e `useSpriteUrl` são API sem lugar onde se leia — foi por isso que eu mesmo concluí que o toast não existia. Documentados por ora no README do pacote | validate OK (34 checks) · pack OK (react:69) · **774 testes** · suíte visual chromium **63/63**, zero pixel novo | este |
-| 17/08/2026 | — (BottomNav + Badge) | **A lacuna ESTRUTURAL do `CONSUMIDOR-1` §4.1 FECHOU: existe `BottomNav`** — e ele recebe o **mesmo `SidebarItem`** da lateral, porque duas listas do mesmo menu divergem ([ADR-0030](../decisions/0030-a-barra-inferior-reusa-o-item-da-lateral.md)). Quatro variantes, e **duas saem de aplicativo QUE RODA**: o Victor mandou prints de WhatsApp, YouTube, Mercado Livre e Shopee, e o que os quatro fazem igual é rótulo visível em TODO item, ícone sobre rótulo e contador no canto do ícone. `flat` é 3 dos 4 (sem fundo no atual, só cor) e `surface` é o WhatsApp (realce só no ÍCONE, rótulo embaixo e fora dele). **`Badge` reescrito no mesmo dia** a pedido dele — *"o nosso atual é pobre"* —: 14 capacidades lidas no fonte local da Untitled UI e da MUI, e o uso de sempre intacto. **TRÊS DEFEITOS ANTIGOS caíram junto, e o padrão é um só — gate que não olha para a composição:** `.badge-primary` dentro de `.btn-primary` media contraste **1** (amarelo sobre amarelo, invisível, PUBLICADO) e nenhum gate via porque página nenhuma compunha os dois; as ênfases nasceram escritas ANTES das variantes e, com especificidade igual, `solid` desenhava igual ao `soft` em 4 das 6; e um fixture do `skin.spec` usava a string `"3"` no lugar de um `<Badge>`, então **o gate passou verde com o defeito na tela** — fixture mais fraco que o uso real é gate que mente. **A lição mais cara da sessão é minha:** construí de memória e o Victor teve de corrigir a barra TRÊS vezes; as três se resolveram lendo referência e medindo | validate OK (36 checks) · **804 testes** · `skin.spec` **6/6** nos três motores · contraste medido em **36 combinações**, mínimo **5,60:1** · travas novas provadas contra o defeito | este |
+| 17/08/2026 | — (BottomNav + Badge) | **A lacuna ESTRUTURAL do `CONSUMIDOR-1` §4.1 FECHOU: existe `BottomNav`** — e ele recebe o **mesmo `SidebarItem`** da lateral, porque duas listas do mesmo menu divergem ([ADR-0030](../decisions/0030-a-barra-inferior-reusa-o-item-da-lateral.md)). Quatro variantes, e **duas saem de aplicativo QUE RODA**: o Victor mandou prints de quatro apps de mercado (mensagens, vídeo e duas lojas), e o que os quatro fazem igual é rótulo visível em TODO item, ícone sobre rótulo e contador no canto do ícone. `flat` é 3 dos 4 (sem fundo no atual, só cor) e `surface` é o app de mensagens (realce só no ÍCONE, rótulo embaixo e fora dele). **`Badge` reescrito no mesmo dia** a pedido dele — *"o nosso atual é pobre"* —: 14 capacidades lidas no fonte local de duas das referências, e o uso de sempre intacto. **TRÊS DEFEITOS ANTIGOS caíram junto, e o padrão é um só — gate que não olha para a composição:** `.badge-primary` dentro de `.btn-primary` media contraste **1** (amarelo sobre amarelo, invisível, PUBLICADO) e nenhum gate via porque página nenhuma compunha os dois; as ênfases nasceram escritas ANTES das variantes e, com especificidade igual, `solid` desenhava igual ao `soft` em 4 das 6; e um fixture do `skin.spec` usava a string `"3"` no lugar de um `<Badge>`, então **o gate passou verde com o defeito na tela** — fixture mais fraco que o uso real é gate que mente. **A lição mais cara da sessão é minha:** construí de memória e o Victor teve de corrigir a barra TRÊS vezes; as três se resolveram lendo referência e medindo | validate OK (36 checks) · **804 testes** · `skin.spec` **6/6** nos três motores · contraste medido em **36 combinações**, mínimo **5,60:1** · travas novas provadas contra o defeito | este |
 | 17/08/2026 | — (garantia + backup) | **A suíte fechou nos TRÊS motores DEPOIS das mudanças de CSS: 143 passed · 2 skipped · 0 failed.** Não é o número herdado de 16/08 — as quatro regras do toast e a correção do `DataList` entraram depois dele, e rodar só o chromium teria deixado Firefox e WebKit sem resposta. **E os 136 commits que o push suspenso segura deixaram de existir numa máquina só:** `git bundle` da Aurea (69 MB, `git bundle verify` respondeu "records a complete history") mais `.tar.gz` dos dez projetos de `C:\dev` e `C:\dev-data`, todos conferidos com `gzip -t`. **A escolha entre bundle e tar foi medida, não preferida:** bundle guarda só o COMMITADO, e um dos projetos dele tem pastas com parte rastreada e parte fora do git — bundle ali perderia o resto em silêncio. **Um erro meu, registrado porque se repete:** meu laço de acompanhamento casava com uma linha ANTIGA do log, voltava na hora, e eu li isso como "parou de crescer" — matei um `tar` e apaguei um arquivo que provavelmente já estava pronto. Nada se perdeu (a origem nunca foi tocada), mas a decisão saiu de uma leitura errada. Refeito gravando em disco LOCAL e movendo no fim, que é o certo para pasta sincronizada | três motores **143/143** · 10 arquivos íntegros (`gzip -t`) · 6,5 GB no Drive | este |
 | 17/08/2026 | — (release) | **A `0.3.0` ESTÁ NO NPM**, os seis pacotes, publicados pelo Victor com 2FA e **conferidos no registro** (`npm view <pacote> version` nos seis) — não na tela do publish. O `pnpm published:check` fecha a prova do outro lado: instala do registro numa pasta temporária e constrói as duas aplicações de prova — **proof-server (RSC) com 5 asserções e proof-client com 2**. É a única medição que atravessa o npm de verdade. **O que vai na versão, medido contra `released-surface.json` e não digitado:** 11 componentes novos, `useAureaTheme`, `screenState*`, `@aurea-uds/tokens/native` e 3 quebras com nota. **O item de maior alcance não é componente:** marcação pura passou a renderizar no SERVIDOR, pelo barril e — desde ontem — pelo subpath da categoria; `Card` custava 118,5 KB e passou a custar zero. **Três entradas faltavam no changelog e nenhum gate teria acusado**, porque o check 31 cobra COMPONENTE: o alvo nativo dos tokens, a mudança de fronteira servidor/cliente e os dois defeitos de ontem (o `type` do toast e o `DataList`). Entraram antes do bump. **A forma do release é a mesma da 0.2.0 e pelo mesmo motivo:** bump + changelog + superfície no MESMO commit, senão o check 31 reprova os três separados. **Uma falha que NÃO era falha:** a primeira rodada do `published:check` morreu com `EBUSY ... unlink` no cache do npm — é o antivírus do Windows segurando o arquivo, o mesmo achado A7 que o gerador do catálogo já contorna com retentativa. Rodar de novo passou. Não confundir trava de arquivo do Windows com pacote quebrado | seis pacotes em **0.3.0** no registro · `published:check` OK (5 + 2 provas) · validate OK (34 checks) · pack OK · 774 testes · visual chromium 63/63 | este |
 | 16/08/2026 | — (catálogo) | **Hook público ganhou onde ser lido — e a página nova achou dois defeitos no que já existia.** O catálogo documentava componente e mais nada; `useToast`, `useAureaTheme`, `useAureaStrings` e `useSpriteUrl` são API publicada e **não apareciam em lugar nenhum**, porque ficha descreve componente. Entrou `hooks.html` como **índice de área**, não como item: o núcleo do modelo é preview + código, e hook não tem prévia estática — `useToast` só existe depois de um clique, e caixa vazia com legenda é exatamente o defeito que a ADR-0001 já pagou no `Chart`. O conteúdo é dado (`content/_hooks.mjs`), com a mesma trava do `_starters`: chave que o gerador não lê reprova, e o `source` de cada hook é conferido no arquivo — **check 28 na mão**, porque hook não tem ficha onde o `source` viva. **O DEFEITO 1, e ele era do componente, não da página:** `.data-list` usava `grid-template-columns:max-content`, que não encolhe; um termo longo empurrava a PÁGINA — a varredura acusou **+179px** de rolagem lateral a 320px. `DataList` é publicado: quem escrevesse um termo comprido levava o mesmo. Duas tentativas erradas ficam registradas porque cada uma ensinou: `auto` **não resolveu** (a trilha tem max-content como máximo e não encolhe sob aperto — caiu para +90px, não zerou), e a regra de mídia que empilha **não valia nada** escrita ANTES da base, porque mídia não soma especificidade e a base vencia por vir depois — a mesma armadilha que o comentário do `.banner` já registrava dez linhas acima. **O DEFEITO 2:** o caminho do arquivo dentro de um `.chip` estourava o `<h2>` e `overflow-wrap` não resolve — `.chip` é `inline-flex` com `line-height:1`, caixa que não quebra. Caminho é conteúdo, não etiqueta: saiu do título. **E a segunda verdade que isso expôs:** o `validate.py` tinha uma CÓPIA à mão da lista de índices de área do `page-model.mjs`. O `hooks.html` foi contado como página de COMPONENTE e o STATE.md publicou 104 componentes onde há 103. A cópia morreu: a lista agora é LIDA do modelo | validate OK (34 checks) · pack OK · 774 testes · varredura do catálogo **14/14** · suíte visual chromium **63/63** · só as 2 baselines do `topo` mudaram (a área nova no topo), e **nenhuma outra** — o que prova que a mudança no `.data-list` não mexeu em pixel de página existente · catálogo **218 páginas** | este |
 | 16/08/2026 | — (O1, adendo) | **O limite declarado da ADR-0026 fechou, e a ADR tinha errado o preço dele.** Ela previa "quebrar cada categoria em **duas entradas públicas** — mudança de fronteira publicada". Não foi nada disso: os **20 subpaths** seguem idênticos, com os mesmos nomes e exports. As oito categorias que reexportavam marcação pura (`code`, `data-display`, `feedback`, `identity`, `inputs`, `layout`, `media`, `navigation`) viraram **vitrines sem diretiva** — `export *` do irmão `-client.tsx` mais a linha explícita do `markup.js` — e a diretiva foi junto com o código, por `git mv`. **A medição é do empacotador, não de script nosso:** o `apps/proof-server` (Next 16 + Turbopack) passou a importar `KPI`/`Kbd` do subpath dentro de uma página de servidor, e o defeito foi **reposto de propósito** para ver a diferença — com a diretiva na vitrine o payload traz `["$","$L5",…]` (referência de cliente); sem ela, `["$","strong",…]` (marcação). **A trava é o check 26b**, escrito ANTES da correção e provado contra o defeito: acusou os oito módulos, mais uma **reexportação morta de `Kbd`** que sobrara no `internal.tsx` desde o O1 e que ninguém importava. Mudaram o `source.react` de **35** fichas (check 28 cobra) e o baseline do pack, que ganhou os 16 arquivos novos de `dist` | validate OK (34 checks) · pack OK (react:69) · **769 testes** · `tsc` verde · `next build` do proof-server verde · STATE.md sem alteração (nenhuma contagem mudou) | este |
-| 21/08/2026 | — (ATIVIDADE-2) | 21 gaps fechados fora da numeração deste plano — ver [`audit/activity-2/03-GAPS.md`](../audit/activity-2/03-GAPS.md) | validate OK (28 checks) · pack OK · 324/324 · 80/89 visual (9 esperando baseline) | `a97e104` |
+| 21/08/2026 | — (ATIVIDADE-2) | 21 gaps fechados fora da numeração deste plano — ver o `03-GAPS.md`, no documento de referências, fora do repositório | validate OK (28 checks) · pack OK · 324/324 · 80/89 visual (9 esperando baseline) | `a97e104` |
 | 28/08/2026 | **L autorizada** (ATIVIDADE-2) | `G-A11Y-11` e `G-STATE-02` fechados · `G-LAB-01` aberto · check 31 novo | validate OK (31 checks) · 464/464 · 2/2 nos gates do `invalido` | `8a3a1df` + este |
 
 > **A ATIVIDADE-2 corre em paralelo a este plano e não usa a numeração dele.** Ela trabalha por
 > COBERTURA medida contra nove referências, e a fila dela vive no
-> [`03-GAPS.md`](../audit/activity-2/03-GAPS.md). Onde as duas se tocam está anotado abaixo.
+> `03-GAPS.md`, no documento de referências, fora do repositório. Onde as duas se tocam está anotado abaixo.
 >
 > **O que a ATIVIDADE-2 adiantou de partes deste plano:**
 >

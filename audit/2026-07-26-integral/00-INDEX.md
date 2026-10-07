@@ -111,8 +111,8 @@ Causa raiz marcada como **HIPÓTESE** quando não foi provada.
   de tela neste ambiente. A11y semântica foi verificada por axe-core 4.10.2 e por
   medição de propriedade, não por uso assistivo.
 - Navegadores além do Chromium — **BLOQUEADO**: só Chromium instalado.
-- Referências externas (Kibo UI, Untitled UI) — **BLOQUEADO nesta sessão**: os espelhos
-  locais citados em `AUREA.md` (`C:\Meus Sites\kibo-ui.com`, `C:\Meus Sites\untitledui.com`)
+- Referências externas (duas bibliotecas de referência) — **BLOQUEADO nesta sessão**: os espelhos
+  locais citados em `AUREA.md` (duas pastas em `C:\Meus Sites\`)
   não foram acessados; nenhuma comparação com referência externa foi feita, e portanto
   nenhuma é afirmada. O registro de referências (§10 do escopo pedido) fica **AUSENTE**
   por falta de análise, não por esquecimento.

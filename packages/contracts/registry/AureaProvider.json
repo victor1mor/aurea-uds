@@ -81,7 +81,7 @@
       "name": "spriteUrl",
       "type": "string",
       "default": "\"/aurea-icons.svg\"",
-      "description": "Where the Carbon sprite lives. Application configuration, so it belongs here and not on every Icon — an app served from a sub-path used to lose every glyph and had to be fixed component by component."
+      "description": "Where the icon sprite lives. Application configuration, so it belongs here and not on every Icon — an app served from a sub-path used to lose every glyph and had to be fixed component by component."
     },
     {
       "name": "direction",

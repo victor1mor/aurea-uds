@@ -62,7 +62,7 @@
       "name": "mode",
       "type": "hide | disable",
       "default": "hide",
-      "description": "hide removes the action from the DOM, which is what @casl/react does and the right default when the action would mean nothing to this user. disable keeps it visible and inert, for when they should know it exists — react-admin is the reference that lets you pick, and the pick is the whole reason this component exists."
+      "description": "hide removes the action from the DOM, which is what an authorization library does and the right default when the action would mean nothing to this user. disable keeps it visible and inert, for when they should know it exists — an admin-panel kit is the reference that lets you pick, and the pick is the whole reason this component exists."
     },
     {
       "name": "reason",

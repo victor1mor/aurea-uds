@@ -570,7 +570,7 @@ img,svg { display:block; }
    Medido em 21/08/2026: existia só no `apps/docs/index.html`, escrito à mão. O core não tinha,
    o `AppShell` não tinha, e as 200 páginas do catálogo não tinham — ou seja, a página de
    demonstração era acessível e o componente que o consumidor instala não era. Achado ao
-   conferir se o `skip-nav` da `shark-ui` era gap de verdade (`G-A11Y-03`).
+   conferir se o `skip-nav` de uma das referências era gap de verdade (`G-A11Y-03`).
    Fora da tela por TRANSFORMAÇÃO, não por `display:none` nem por `left:-9999px`: o primeiro
    tira do foco (e um link que não recebe foco não pula nada), e o segundo faz o navegador
    rolar a página lateralmente ao focar. Aparece no foco, que é o único momento em que precisa
@@ -838,7 +838,7 @@ img,svg { display:block; }
 .input-group-addon-inline.input-group-addon-end { padding-inline-end:var(--space-1); }
 /* ADORNO EM BLOCO — a barra de ações ACIMA ou ABAIXO do campo, dentro da mesma moldura. É a
    forma da caixa de composição moderna: o texto em cima, os controles embaixo, tudo numa caixa
-   só. Vem do `G-AXIS-01`; a `shadcn` e a `reui` têm as quatro posições e a Aurea tinha duas.
+   só. Vem do `G-AXIS-01`; duas das referências têm as quatro posições e a Aurea tinha duas.
    Registro de correção: escrevi neste lugar que o `MessageComposer` da Aurea já desenhava essa
    forma à mão, e fui conferir — NÃO desenha. Ele é uma LINHA (`.message-composer` é flex com o
    grupo e o botão lado a lado). Então isto não é consolidação de solução local como foi o
@@ -881,8 +881,8 @@ img,svg { display:block; }
    .select` fixavam --control-h-md e não havia modificador nenhum. Os tokens de altura já
    existiam e o `.btn-*` já os usava desde sempre — o campo é que tinha ficado para trás.
    `md` é a classe base e não tem modificador, como não existe `.btn-md`.
-   O que muda por tamanho é o que converge nas referências (Untitled UI `input.tsx` e
-   `select.tsx`, MUI `InputBase` com sizeSmall) e o que o `.btn-*` daqui já fazia: altura,
+   O que muda por tamanho é o que converge nas referências (o campo e a seleção de uma, a
+   base de campo com o tamanho pequeno de outra) e o que o `.btn-*` daqui já fazia: altura,
    padding inline e corpo do texto. Tudo em token: a catraca do check 12 não aceita px cru novo,
    e é ela que obrigou o `calc()` em vez de um 44 escrito na mão. */
 /* G-AXIS-04 — as classes de tamanho do campo passam a SETAR variáveis, como as do botão. A
@@ -1177,7 +1177,7 @@ img,svg { display:block; }
 .timeline > li > div { display:flex; flex-direction:column; gap:var(--space-05); min-width:0; }
 .timeline > li > div > p { margin:0; }
 .timeline-dot { flex:none; width:var(--space-3); height:var(--space-3); border-radius:var(--radius-full); margin-block-start:var(--space-1); background:var(--primary); box-shadow:0 0 0 var(--space-05) var(--surface-1); }
-/* Accordion: anatomia medida no Carbon em 30/07/2026 (REFERENCES.md) — cabeçalho na altura de
+/* Accordion: anatomia medida numa das referências em 30/07/2026 (REFERENCES.md) — cabeçalho na altura de
    controle, divisória de 1px por item, corpo com respiro pequeno em cima e grande embaixo.
    O marcador é o NATIVO do <summary>: gira sozinho e custa zero código, e é por isso que o
    summary continua `display:list-item` — pôr flex nele apagaria o marcador. */
@@ -1541,7 +1541,7 @@ button.notification-item:hover { background:var(--surface-3); }
 /* EmptyState é o membro GRANDE da família "aqui não há nada" — .notification-empty acima e
    .datagrid-empty abaixo já respondiam a mesma pergunta do mesmo jeito (centralizado, muted),
    e o componente público era o único dos três sem regra (achado A13). A ordem das partes
-   (imagem → título → corpo → ação) é a do padrão de empty state do Carbon, registrado em
+   (imagem → título → corpo → ação) é a do padrão de empty state de uma das referências, registrado em
    REFERENCES.md; a pele é Aurea. O título vinha com o h3 do NAVEGADOR (16,38px). */
 .empty-state { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); padding:var(--space-10) var(--space-6); color:var(--muted-foreground); text-align:center; }
 .empty-state > .icon { color:var(--subtle-foreground); }
@@ -1647,7 +1647,7 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
 /* ========================================================================== */
 /* 99. EIXO RESPONSIVO — a infraestrutura do G-AXIS-04                        */
 /* ========================================================================== */
-/* A Aurea tinha ZERO eixo responsivo e a Radix Themes tem em 47 de 50. O Victor decidiu que a
+/* A Aurea tinha ZERO eixo responsivo e uma das referências tem em 47 de 50. O Victor decidiu que a
    Aurea terá os DOIS mecanismos, explícitos na API, e que a abstração vem ANTES dos componentes:
    uma camada compartilhada, não uma solução diferente por peça.
 
@@ -2820,7 +2820,7 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
     <article class="demo span-12">
       <div class="demo-title"><h3>Arqu&eacute;tipos cobertos por receitas</h3><code>23 receitas validadas</code></div>
       <div class="recipe-chips" aria-label="Arquétipos de produto cobertos">
-        <span data-archetype="public_site">site · portf&oacute;lio</span><span data-archetype="docs_cms">docs · CMS</span><span data-archetype="saas_admin">SaaS · admin</span><span data-archetype="dashboard_bi">dashboard · BI</span><span data-archetype="catalog_gallery">cat&aacute;logo · galeria</span><span data-archetype="media_streaming">m&iacute;dia · streaming</span><span data-archetype="workflow_automation">workflow · n8n</span><span data-archetype="developer_tools">IDE · devtools</span><span data-archetype="file_cloud">arquivos · cloud</span><span data-archetype="messaging_social">chat · social</span><span data-archetype="commerce_finance">commerce · finan&ccedil;as</span><span data-archetype="booking_calendar">booking · agenda</span><span data-archetype="maps_logistics">mapas · log&iacute;stica</span><span data-archetype="iot_control">IoT · controle</span><span data-archetype="agent_ai">agentes · IA</span><span data-archetype="project_crm_erp">projetos · CRM · ERP</span><span data-archetype="education">educa&ccedil;&atilde;o</span><span data-archetype="personal_productivity">produtividade pessoal</span><span data-archetype="mobile_pwa">mobile · PWA</span><span data-archetype="support_service">suporte · servi&ccedil;o</span><span data-archetype="regulated_records">registros regulados</span><span data-archetype="creative_workspace">workspace criativo</span><span data-archetype="observability_ops">observabilidade · opera&ccedil;&atilde;o</span>
+        <span data-archetype="public_site">site · portf&oacute;lio</span><span data-archetype="docs_cms">docs · CMS</span><span data-archetype="saas_admin">SaaS · admin</span><span data-archetype="dashboard_bi">dashboard · BI</span><span data-archetype="catalog_gallery">cat&aacute;logo · galeria</span><span data-archetype="media_streaming">m&iacute;dia · streaming</span><span data-archetype="workflow_automation">workflow · automa&ccedil;&atilde;o</span><span data-archetype="developer_tools">IDE · devtools</span><span data-archetype="file_cloud">arquivos · cloud</span><span data-archetype="messaging_social">chat · social</span><span data-archetype="commerce_finance">commerce · finan&ccedil;as</span><span data-archetype="booking_calendar">booking · agenda</span><span data-archetype="maps_logistics">mapas · log&iacute;stica</span><span data-archetype="iot_control">IoT · controle</span><span data-archetype="agent_ai">agentes · IA</span><span data-archetype="project_crm_erp">projetos · CRM · ERP</span><span data-archetype="education">educa&ccedil;&atilde;o</span><span data-archetype="personal_productivity">produtividade pessoal</span><span data-archetype="mobile_pwa">mobile · PWA</span><span data-archetype="support_service">suporte · servi&ccedil;o</span><span data-archetype="regulated_records">registros regulados</span><span data-archetype="creative_workspace">workspace criativo</span><span data-archetype="observability_ops">observabilidade · opera&ccedil;&atilde;o</span>
       </div>
     </article>
   </div>
