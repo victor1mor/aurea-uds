@@ -128,11 +128,13 @@ PATTERNS = [
 # sai como "#<índice>". Ficam de fora da lista, de propósito, as dependências de verdade, as
 # plataformas e os provedores que são função de uma peça (o `docs/REFERENCES.md` diz quais).
 def _carregar_referencias() -> list[str]:
+    # O segredo aceita a lista do mesmo jeito que o arquivo: um nome por linha, ou separados por
+    # ";". Assim o conteúdo do `.referencias` se cola no segredo como está.
     bruto = os.environ.get("AUREA_REFERENCIAS", "")
     arquivo = root / ".referencias"
     if not bruto.strip() and arquivo.is_file():
-        bruto = arquivo.read_text(encoding="utf-8-sig").replace("\n", ";")
-    bruto = bruto.strip().strip("\"'")
+        bruto = arquivo.read_text(encoding="utf-8-sig")
+    bruto = bruto.replace("\r", "").replace("\n", ";").strip().strip("\"'")
     return [n.strip() for n in bruto.split(";") if n.strip()]
 
 
