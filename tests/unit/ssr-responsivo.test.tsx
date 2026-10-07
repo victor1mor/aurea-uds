@@ -42,6 +42,14 @@ function instalarResizeObserver() {
 
 const comProvider = (ui: React.ReactNode) => <AureaProvider>{ui}</AureaProvider>;
 
+// Toda raiz criada aqui é desmontada no fim do teste (06/10/2026). Sem isso o React ainda tinha
+// trabalho agendado quando o arquivo terminava, e a tarefa procurava o `window` já desmontado:
+// "window is not defined" solto, que reprovou a CI do pedido #45 ao acaso. Quem cobra:
+// `raizes-desmontadas.test.tsx`.
+const raizes: Array<{unmount: () => void}> = [];
+afterEach(() => { act(() => { while (raizes.length) raizes.pop()!.unmount(); }); });
+const guardar = <R extends {unmount: () => void}>(raiz: R): R => { raizes.push(raiz); return raiz; };
+
 const abas = [{id: "a", label: "Um", content: "um"}, {id: "b", label: "Dois", content: "dois"}];
 
 test("o servidor renderiza o valor BASE, deterministicamente", () => {
@@ -65,7 +73,7 @@ test("valor SIMPLES não assina nada — nem matchMedia, nem observer", () => {
   (window as any).ResizeObserver = class { constructor() { ro(); } observe() {} unobserve() {} disconnect() {} };
   const div = document.createElement("div");
   document.body.appendChild(div);
-  act(() => { createRoot(div).render(comProvider(<Toolbar label="t"><Button>a</Button></Toolbar>)); });
+  act(() => { guardar(createRoot(div)).render(comProvider(<Toolbar label="t"><Button>a</Button></Toolbar>)); });
   expect(mm, "valor simples não pode chamar matchMedia").not.toHaveBeenCalled();
   expect(ro, "valor simples não pode criar ResizeObserver").not.toHaveBeenCalled();
   (window as any).ResizeObserver = original;
@@ -94,7 +102,7 @@ test("hidratação sem aviso, e a correção vem DEPOIS", async () => {
   document.body.appendChild(div);
   expect(div.querySelector(".tabs")!.getAttribute("data-orientation")).toBe("vertical");
 
-  await act(async () => { hydrateRoot(div, ui); });
+  await act(async () => { guardar(hydrateRoot(div, ui)); });
   console.error = erroOriginal;
 
   const deHidratacao = avisos.filter(a => String(a[0]).toLowerCase().includes("hydrat"));
@@ -111,7 +119,7 @@ test("o resolvedor de CONTAINER acha o mesmo elemento pelos dois caminhos", asyn
   const div = document.createElement("div");
   document.body.appendChild(div);
   await act(async () => {
-    createRoot(div).render(comProvider(
+    guardar(createRoot(div)).render(comProvider(
       <ContainerScope data-teste="escopo">
         <Toolbar label="t" orientation={{base: "vertical", container: {sm: "horizontal"}}}>
           <Button>a</Button>
