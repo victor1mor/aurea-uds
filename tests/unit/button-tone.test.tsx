@@ -83,6 +83,21 @@ test("um eixo sozinho modifica o par do atalho, não o substitui", () => {
 // fala dele. É por isso que o bloco de tom mora no fim das regras de botão no core.
 type Regra = {tom: boolean; espec: number; ordem: number; tema: boolean; valor: string};
 
+// Separa uma lista de seletores pelas vírgulas de FORA dos parênteses.
+function separarSeletores(lista: string): string[] {
+  const partes: string[] = [];
+  let nivel = 0, atual = "";
+  for (const c of lista) {
+    if (c === "(") nivel++;
+    if (c === ")") nivel--;
+    if (c === "," && nivel === 0) { partes.push(atual); atual = ""; } else atual += c;
+  }
+  partes.push(atual);
+  return partes;
+}
+// `:where(...)` com até um nível de parênteses dentro (o `:not(...)` da guarda do GAR-05).
+const SEM_WHERE = /:where\((?:[^()]|\([^()]*\))*\)/g;
+
 function regrasDe(classes: string, prop: string): Regra[] {
   const tem = new Set(classes.split(" "));
   const tom = [...tem].find(c => c.startsWith("btn-tone-"));
@@ -93,7 +108,12 @@ function regrasDe(classes: string, prop: string): Regra[] {
   semComentario.split("}").forEach((bloco, ordem) => {
     const i = bloco.indexOf("{");
     if (i < 0 || !new RegExp(`${prop}\\s*:`).test(bloco.slice(i))) return;
-    for (const sel of bloco.slice(0, i).split(",")) {
+    // GAR-05 (06/10/2026): as regras de tema claro levam a guarda
+    // `:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)`. Duas coisas
+    // a modelar, e esta função errava as duas: a VÍRGULA de dentro dos parênteses não separa
+    // seletor (separar ali criava um pedaço sem classe que "casava" com todo botão), e o `:where`
+    // tem força ZERO e, numa página de um tema só, sempre casa — então ele sai antes da conta.
+    for (const sel of separarSeletores(bloco.slice(0, i)).map(s => s.replace(SEM_WHERE, ""))) {
       if (sel.includes(":hover")) continue;          // repouso; o hover tem teste próprio
       // `:not(.x)` exige a AUSÊNCIA da classe, e contá-la como exigência inverteria o teste.
       const negadas = [...sel.matchAll(/:not\(\.([a-z0-9-]+)\)/g)].map(m => m[1]);

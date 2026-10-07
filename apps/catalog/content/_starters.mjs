@@ -680,6 +680,37 @@ export default {
     render: () => h("div", {style: {width: "100%"}}, h(A.Grid, null,
       h(A.Card, null, "One"), h(A.Card, null, "Two"), h(A.Card, null, "Three"))),
   },
+  // GAR-02 a GAR-05 (06/10/2026): a página de site. A prévia mostra as três peças juntas, porque é
+  // assim que elas trabalham: a faixa de ponta a ponta, o container de leitura, e a grade de 12.
+  Container: {
+    description: "The reading width of a website page: centred, capped at 1280 by default, with a "
+      + "side gutter of 16 that grows to 32 from the md breakpoint. It goes inside a Section.",
+    code: `<Container>
+  <Heading level={2}>Fichas técnicas</Heading>
+</Container>`,
+    render: () => h("div", {style: {width: "100%"}}, h(A.Container, {size: "sm"},
+      h(A.Card, null, "Content, centred and capped"))),
+  },
+  Section: {
+    description: "An edge-to-edge band of a website page, with its own surface and site spacing. "
+      + "theme=\"dark\" makes a dark band inside a light page; nothing of the page's light theme leaks in.",
+    code: `<Section theme="dark" aria-labelledby="t-app">
+  <Container>
+    <Grid columns={12}>
+      <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
+        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+      </Grid.Item>
+      <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
+        <Button tone="brand">Baixar</Button>
+      </Grid.Item>
+    </Grid>
+  </Container>
+</Section>`,
+    render: () => h("div", {style: {width: "100%"}}, h(A.Section, {theme: "dark", spacing: "sm"},
+      h(A.Container, null, h(A.Grid, {columns: 12},
+        h(A.Grid.Item, {span: {base: "12", viewport: {md: "7"}}}, h("strong", null, "A dark band")),
+        h(A.Grid.Item, {span: {base: "12", viewport: {md: "5"}}}, h(A.Button, {variant: "primary-outline"}, "Its own theme")))))),
+  },
   Icon: {
     description: "One <svg><use> pointing at the shared Carbon sprite. The sprite URL comes "
       + "from the AureaProvider, never from the call site.",

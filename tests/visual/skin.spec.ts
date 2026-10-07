@@ -2945,3 +2945,66 @@ for (const theme of ["dark", "light"] as const) {
     expect(m.negrito.iconeAoRotulo).toBeLessThanOrEqual(0.5);
   });
 }
+
+// ── Página de site: Container, Section e Grid.Item (GAR-02 a GAR-04, 06/10/2026) ────────────────
+// O que se mede é o EFEITO, nos dois temas e em duas larguras: o teto e o respiro do `Container`,
+// o fundo e o respiro da `Section`, e quantas colunas o `Grid.Item` ocupa — com valor simples e
+// com valor por tela (mobile-first). Provado contra o defeito: sem as regras novas no core, o
+// container estica, a seção não tem respiro e o item ocupa uma coluna só.
+const PAGINA_DE_SITE = renderToStaticMarkup(h("div", null,
+  h(A.Section, {id: "s-padrao"}, h(A.Container, {id: "c-padrao"}, "conteúdo")),
+  h(A.Section, {id: "s-card", surface: "card", spacing: "sm"}, h(A.Container, {id: "c-sm", size: "sm"}, "x")),
+  h(A.Section, {id: "s-inset", surface: "inset"}, "y"),
+  h(A.Grid, {id: "grade", columns: 12, gap: "tight"},
+    h(A.Grid.Item, {id: "sete", span: "7"}, "7"),
+    h(A.Grid.Item, {id: "cinco", span: "5"}, "5"),
+    h(A.Grid.Item, {id: "resp", span: {base: "12", viewport: {md: "6"}}}, "resp"))));
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: Container, Section e Grid.Item · página de site · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__site-${theme}`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head>
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body style="margin:0">${PAGINA_DE_SITE}</body></html>`}));
+    const medir = () => p.evaluate(() => {
+      const caixa = (id: string) => document.getElementById(id)!.getBoundingClientRect();
+      const est = (id: string) => getComputedStyle(document.getElementById(id)!);
+      const sonda = (css: string) => { const s = document.createElement("span"); s.style.color = css;
+        document.body.append(s); const v = getComputedStyle(s).color; s.remove(); return v; };
+      return {
+        janela: document.documentElement.clientWidth,
+        cPadrao: {w: caixa("c-padrao").width, x: caixa("c-padrao").left, pad: parseFloat(est("c-padrao").paddingLeft)},
+        cSm: caixa("c-sm").width,
+        sPadrao: parseFloat(est("s-padrao").paddingTop),
+        sCard: {pad: parseFloat(est("s-card").paddingTop), fundo: est("s-card").backgroundColor},
+        sInset: est("s-inset").backgroundColor, sFundo: est("s-padrao").backgroundColor,
+        card: sonda("var(--card)"), inset: sonda("var(--surface-inset)"), pagina: sonda("var(--background)"),
+        grade: caixa("grade").width, sete: caixa("sete").width, cinco: caixa("cinco").width, resp: caixa("resp").width,
+        gap: parseFloat(est("grade").columnGap),
+      };
+    });
+    // Tela larga: o container para no `--breakpoint-xl` (1280) e centra; respiro de 32.
+    await p.setViewportSize({width: 1600, height: 900});
+    await p.goto(url, {waitUntil: "networkidle"});
+    const l = await medir();
+    expect(l.cPadrao.w).toBe(1280);
+    expect(l.cPadrao.x).toBe((l.janela - 1280) / 2);
+    expect(l.cPadrao.pad).toBe(32);
+    expect(l.cSm).toBe(640);
+    expect(l.sPadrao).toBe(96);
+    expect(l.sCard.pad).toBe(48);
+    expect([l.sCard.fundo, l.sInset, l.sFundo]).toEqual([l.card, l.inset, l.pagina]);
+    // 7 e 5 de 12 dividem a linha (descontado o vão); o responsivo é 6 de 12 a partir do `md`.
+    const coluna = (l.grade - 11 * l.gap) / 12;
+    expect(l.sete).toBeCloseTo(7 * coluna + 6 * l.gap, 0);
+    expect(l.cinco).toBeCloseTo(5 * coluna + 4 * l.gap, 0);
+    expect(l.resp).toBeCloseTo(6 * coluna + 5 * l.gap, 0);
+    // Tela estreita: respiro de 16, seção com 64, e o responsivo volta a ocupar a linha inteira.
+    await p.setViewportSize({width: 375, height: 800});
+    const e = await medir();
+    expect(e.cPadrao.w).toBe(375);
+    expect(e.cPadrao.pad).toBe(16);
+    expect(e.sPadrao).toBe(64);
+    expect(e.resp).toBeCloseTo(e.grade, 0);
+  });
+}

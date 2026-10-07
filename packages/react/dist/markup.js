@@ -57,6 +57,27 @@ export function Grid({ gap, min, columns, className, style, ...props }) {
         : style;
     return _jsx("div", { className: cx("grid", gap && gap !== "normal" && `grid-gap-${gap}`, nome && min !== "md" && `grid-min-${min}`, columns != null && "grid-fixed", className), style: vars, ...props });
 }
+/** O item da grade que sabe quantas colunas ocupa (GAR-03). Mora em `Grid.Item`, como `Card.Media`. */
+function GridItem({ span, className, ...props }) {
+    return _jsx("div", { className: cx("grid-item", peleDoEixo("grid-span", span, "", "grid-span"), className), ...props });
+}
+Grid.Item = GridItem;
+/**
+ * A largura de leitura de uma página de SITE: centrada, com teto e o respiro dos lados que cresce
+ * com a tela (16 no estreito, 32 a partir do `md`). É o que vai DENTRO de uma `Section`. O painel
+ * de aplicativo continua sendo o `AppShell`.
+ */
+export function Container({ size = "xl", className, ...props }) {
+    return _jsx("div", { className: cx("container", size !== "xl" && `container-${size}`, className), ...props });
+}
+/**
+ * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
+ * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
+ * quando ela for uma região que o leitor de tela deva listar.
+ */
+export function Section({ surface = "background", spacing = "md", theme, className, ...props }) {
+    return _jsx("section", { "data-theme": theme, className: cx("section", surface !== "background" && `section-${surface}`, spacing !== "md" && `section-spacing-${spacing}`, className), ...props });
+}
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({ label, value, trend, className, ...props }) { return _jsxs(Card, { className: cx("kpi", className), ...props, children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), trend && _jsx("small", { children: trend })] }); }
 export function DataList({ items }) { return _jsx("dl", { className: "data-list", children: items.map((i, n) => _jsxs(React.Fragment, { children: [_jsx("dt", { children: i.term }), _jsx("dd", { children: i.value })] }, n)) }); }

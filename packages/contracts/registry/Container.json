@@ -1,0 +1,71 @@
+{
+  "name": "Container",
+  "category": "Layout",
+  "layer": "Primitive",
+  "maturity": "Ready",
+  "summary": "The reading width of a website page: centred, capped, with side gutters that grow with the screen.",
+  "icon": "ruler",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg",
+    "xl",
+    "2xl",
+    "full"
+  ],
+  "states": [],
+  "tokens": [
+    "--breakpoint-2xl",
+    "--breakpoint-lg",
+    "--breakpoint-md",
+    "--breakpoint-sm",
+    "--breakpoint-xl",
+    "--space-4",
+    "--space-8"
+  ],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "Layout primitive, no role and no keyboard: it is a <div> that caps the width and centres it. The landmark is the Section or the <main> around it, not the container."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Section",
+      "Grid",
+      "Stack"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Container"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "default": "\"xl\"",
+      "description": "How far the content grows, by the names of the breakpoint scale: sm 640, md 768, lg 1024, xl 1280 (the default, Untitled UI's max-w-container), 2xl 1536, or full with no cap (GAR-02, 06/10/2026)."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The page content. The side gutter is --space-4 (16) on a narrow screen and --space-8 (32) from the md breakpoint up."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Extra classes on the <div>."
+    }
+  ]
+}

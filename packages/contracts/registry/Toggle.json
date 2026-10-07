@@ -110,6 +110,12 @@
       "type": "string",
       "default": "—",
       "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference."
     }
   ],
   "notes": [

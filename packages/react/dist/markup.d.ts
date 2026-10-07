@@ -66,6 +66,56 @@ export interface GridProps extends DivProps {
     columns?: number;
 }
 export declare function Grid({ gap, min, columns, className, style, ...props }: GridProps): React.JSX.Element;
+export declare namespace Grid {
+    export { GridItem as Item };
+}
+/**
+ * Quantas colunas da grade o item ocupa — GAR-03 (06/10/2026). Texto, e não número, porque é o
+ * valor de um eixo responsivo, como `size` e `orientation`.
+ */
+export type GridSpan = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
+export interface GridItemProps extends DivProps {
+    /**
+     * Quantas colunas o item ocupa (GAR-03). Com `<Grid columns={12}>` é o "7 de 12" de página de
+     * site. Responsivo, mobile-first: `{base: "12", viewport: {md: "7"}}` ocupa a linha inteira no
+     * estreito e 7 de 12 a partir do `md`. Sem `span`, uma coluna, como qualquer filho de grade.
+     */
+    span?: Responsive<GridSpan>;
+}
+/** O item da grade que sabe quantas colunas ocupa (GAR-03). Mora em `Grid.Item`, como `Card.Media`. */
+declare function GridItem({ span, className, ...props }: GridItemProps): React.JSX.Element;
+/** A largura máxima do `Container`, pelos nomes da escala de pontos. `xl` (1280) é o padrão. */
+export type ContainerSize = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
+    /** Até onde o conteúdo cresce: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280 (padrão) · `2xl` 1536 · `full` sem teto. */
+    size?: ContainerSize;
+}
+/**
+ * A largura de leitura de uma página de SITE: centrada, com teto e o respiro dos lados que cresce
+ * com a tela (16 no estreito, 32 a partir do `md`). É o que vai DENTRO de uma `Section`. O painel
+ * de aplicativo continua sendo o `AppShell`.
+ */
+export declare function Container({ size, className, ...props }: ContainerProps): React.JSX.Element;
+/** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
+export type SectionSurface = "background" | "card" | "inset";
+/** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
+export type SectionSpacing = "sm" | "md";
+export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement> {
+    surface?: SectionSurface;
+    spacing?: SectionSpacing;
+    /**
+     * Um tema só para esta faixa (GAR-05): `"dark"` faz uma faixa escura dentro de uma página clara,
+     * e o contrário. Fundo, letra e peças de dentro seguem o tema da faixa, e as regras de tema da
+     * página não vazam para dentro dela.
+     */
+    theme?: "light" | "dark";
+}
+/**
+ * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
+ * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
+ * quando ela for uma região que o leitor de tela deva listar.
+ */
+export declare function Section({ surface, spacing, theme, className, ...props }: SectionProps): React.JSX.Element;
 export declare function KPI({ label, value, trend, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label: ReactNode;
     value: ReactNode;

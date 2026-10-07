@@ -243,6 +243,18 @@ documento de achados mais novo para conferir se ela envelheceu.
    navegador (`pnpm exec playwright test`), não só os unitários — o `skin.spec` do Lote I só foi
    pego assim. E a barra de cima do catálogo mostra a contagem de tokens: token novo muda a foto
    `topo` da CI.
+16. **`0.22.0`, o Lote K1, feito na madrugada de 06 para 07/10/2026 e AINDA NÃO APROVADO** — o
+   Victor mandou fazer (*"pode fazer o K1 hoje"*) e foi dormir; falta ele ver a bancada. A página de
+   SITE, na web: `Container` (GAR-02), `Grid.Item span` pela camada responsiva (GAR-03, família
+   `grid-span`), `Section` com `surface`, `spacing` e `theme` (GAR-04 e GAR-05). E o conserto do
+   GAR-05: as 22 regras `[data-theme="light"] X` levam uma guarda de força zero e não vazam mais
+   para dentro de uma faixa escura. ⚠ **Regra nova:** seletor de tema claro com descendente leva
+   a guarda — `tests/unit/tema-na-secao.test.tsx` reprova quem esquecer. O cabeçalho e o rodapé
+   de site (GAR-01 e GAR-06) ficaram para a próxima sessão, por decisão do Victor.
+
+**Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
+de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
+continua só com ele (o npm pede o segundo fator).
 
 ### Lote E e decisões de 25/09/2026
 

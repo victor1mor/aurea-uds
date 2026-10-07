@@ -5,3 +5,5 @@ export * from "./layout-client.js";
 export { Card, Stack, Cluster, Grid } from "./markup.js";
 // PORTADO no merge de 28/08/2026 — sai do markup (servidor), como os demais de marcação.
 export { AspectRatio } from "./markup.js";
+// GAR-02 a GAR-05 (06/10/2026): a página de site — `Container`, `Section` e o `Grid.Item` com `span`.
+export { Container, Section } from "./markup.js";

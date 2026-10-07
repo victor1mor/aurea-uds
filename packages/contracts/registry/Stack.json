@@ -59,5 +59,18 @@
       "default": "—",
       "description": "For alignment or width that this one job needs. Every other div attribute passes through."
     }
-  ]
+  ],
+  "axes": {
+    "align": [
+      "center",
+      "end",
+      "start",
+      "stretch"
+    ],
+    "gap": [
+      "loose",
+      "normal",
+      "tight"
+    ]
+  }
 }

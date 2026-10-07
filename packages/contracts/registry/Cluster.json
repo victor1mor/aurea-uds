@@ -71,5 +71,24 @@
       "default": "—",
       "description": "For justification or width. Every other div attribute passes through."
     }
-  ]
+  ],
+  "axes": {
+    "align": [
+      "baseline",
+      "center",
+      "end",
+      "start"
+    ],
+    "gap": [
+      "loose",
+      "normal",
+      "tight"
+    ],
+    "justify": [
+      "between",
+      "center",
+      "end",
+      "start"
+    ]
+  }
 }

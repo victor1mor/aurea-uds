@@ -173,6 +173,66 @@ export function Grid({gap,min,columns,className,style,...props}:GridProps){
     ?{...(medida!=null?{"--grid-min":medida}:{}),...(columns!=null?{"--grid-cols":String(columns)}:{}),...style} as React.CSSProperties
     :style;
   return <div className={cx("grid",gap&&gap!=="normal"&&`grid-gap-${gap}`,nome&&min!=="md"&&`grid-min-${min}`,columns!=null&&"grid-fixed",className)} style={vars} {...props}/>}
+/**
+ * Quantas colunas da grade o item ocupa — GAR-03 (06/10/2026). Texto, e não número, porque é o
+ * valor de um eixo responsivo, como `size` e `orientation`.
+ */
+export type GridSpan="1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"|"11"|"12";
+export interface GridItemProps extends DivProps{
+  /**
+   * Quantas colunas o item ocupa (GAR-03). Com `<Grid columns={12}>` é o "7 de 12" de página de
+   * site. Responsivo, mobile-first: `{base: "12", viewport: {md: "7"}}` ocupa a linha inteira no
+   * estreito e 7 de 12 a partir do `md`. Sem `span`, uma coluna, como qualquer filho de grade.
+   */
+  span?:Responsive<GridSpan>;
+}
+/** O item da grade que sabe quantas colunas ocupa (GAR-03). Mora em `Grid.Item`, como `Card.Media`. */
+function GridItem({span,className,...props}:GridItemProps){
+  return <div className={cx("grid-item",peleDoEixo("grid-span",span,"","grid-span"),className)} {...props}/>}
+Grid.Item=GridItem;
+
+// ── Página de site: Container e Section (GAR-02, GAR-04, GAR-05 — 06/10/2026) ───────────────
+// O HeroUI não tem nenhum dos dois. Na fila de referências, o Untitled UI é o primeiro que tem o
+// container (`--max-width-container: 1280px`, respiro `pl-4` → `md:px-8`), e o MUI tem o
+// `Container` com `maxWidth` por ponto da escala. As seções do Untitled são pagas e não foram
+// lidas: o respiro da `Section` é escolha da Aurea, com tokens que já existem (ver o `aurea.css`).
+/** A largura máxima do `Container`, pelos nomes da escala de pontos. `xl` (1280) é o padrão. */
+export type ContainerSize="sm"|"md"|"lg"|"xl"|"2xl"|"full";
+// `HTMLAttributes` + `RefAttributes` escritos aqui, e não o `DivProps`: o `build-api-surface` não
+// enxerga as props de quem estende o `DivProps` (o `Grid` sai vazio no `api-surface.json` pelo mesmo
+// motivo), e o check 11 confere o `size` da ficha contra o tipo por esse arquivo.
+export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement>{
+  /** Até onde o conteúdo cresce: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280 (padrão) · `2xl` 1536 · `full` sem teto. */
+  size?:ContainerSize;
+}
+/**
+ * A largura de leitura de uma página de SITE: centrada, com teto e o respiro dos lados que cresce
+ * com a tela (16 no estreito, 32 a partir do `md`). É o que vai DENTRO de uma `Section`. O painel
+ * de aplicativo continua sendo o `AppShell`.
+ */
+export function Container({size="xl",className,...props}:ContainerProps){
+  return <div className={cx("container",size!=="xl"&&`container-${size}`,className)} {...props}/>}
+/** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
+export type SectionSurface="background"|"card"|"inset";
+/** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
+export type SectionSpacing="sm"|"md";
+export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement>{
+  surface?:SectionSurface;
+  spacing?:SectionSpacing;
+  /**
+   * Um tema só para esta faixa (GAR-05): `"dark"` faz uma faixa escura dentro de uma página clara,
+   * e o contrário. Fundo, letra e peças de dentro seguem o tema da faixa, e as regras de tema da
+   * página não vazam para dentro dela.
+   */
+  theme?:"light"|"dark";
+}
+/**
+ * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
+ * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
+ * quando ela for uma região que o leitor de tela deva listar.
+ */
+export function Section({surface="background",spacing="md",theme,className,...props}:SectionProps){
+  return <section data-theme={theme} className={cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`,className)} {...props}/>}
 
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({label,value,trend,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label:ReactNode;value:ReactNode;trend?:ReactNode}){return <Card className={cx("kpi",className)} {...props}><span className="muted">{label}</span><strong>{value}</strong>{trend&&<small>{trend}</small>}</Card>}

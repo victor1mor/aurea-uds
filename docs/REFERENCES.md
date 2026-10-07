@@ -3818,3 +3818,20 @@ Com o plano do Victor da noite de 06/10/2026. Só leitura: nenhuma linha de terc
 A medida do recheio do cartão é a do `Card` da Aurea (`cardPad`) e não o `p-3` do exemplo do HeroUI:
 o exemplo é uma composição de quem usa a biblioteca, não uma peça com medida própria, e o cartão
 escolhido tem de ser igual ao cartão escolhido que o app já usa.
+
+
+## A página de site: Container, Section, Grid.Item e o tema numa faixa — 06/10/2026 · Lote K1 (GAR-02 a GAR-05)
+
+Com o plano do Victor da noite de 06/10/2026 (*"pode fazer o K1 hoje"*). Só leitura: nenhuma linha
+de terceiro foi copiada. A pesquisa de onde olhar é a do documento de achados do Victor (§13 e §14,
+06/10/2026), conferida aqui na fonte.
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| HeroUI 3.2.6 (`@heroui/styles`, baixado com `npm pack`) | MIT | não tem `Container`, nem `Section`, nem grade de 12. Que o `Navbar` saiu na v3 e que o tema numa subárvore foi corrigido na 3.2.5 vem do documento de achados (§13), não relido aqui | o tema por faixa (`Section theme`) e a guarda do GAR-05 |
+| Untitled UI React (`untitleduico/react`: `styles/theme.css` e `header-navigation.tsx`) | MIT nos componentes abertos; o PRO não entra | `--max-width-container: 1280px`; o cabeçalho com `pl-4` → `md:px-8`. As seções de marketing são PRO e não foram lidas | `Container` com teto no `--breakpoint-xl` (1280), respiro `--space-4`/`--space-8`. O respiro da `Section` (`--space-16`/`--space-24`) é escolha da Aurea |
+| MUI 9, `packages/mui-system/src/Container/createContainer.tsx` | MIT | `maxWidth` por nome de ponto da escala (`sm`…`xl`), `false` sem teto | `Container size` com os nomes da escala de pontos da Aurea e `full` sem teto |
+| MUI 9, `Grid` (`size` por ponto de quebra) | MIT | o item diz quantas das 12 colunas ocupa, por ponto | `Grid.Item span`, pela camada responsiva que a Aurea já tinha (`Responsive<T>`, `vp-*`/`ct-*`) |
+| CSS Cascade 6 (`@scope`), Firefox 146 (dez/2025) | — | `@scope` resolve o tema mais próximo, mas a proximidade passa por cima da ORDEM entre regras de mesma força | **lido e não usado**: a guarda `:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)`, de força zero, não muda a precedência de nada |
+
+Nenhum número novo: cada medida é um token que já existia (`--breakpoint-*`, `--space-*`).

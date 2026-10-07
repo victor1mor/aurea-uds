@@ -50,7 +50,13 @@ function literalUnion(text) {
 
 /** Corpo de um objeto `{ ... }` -> lista de props, respeitando aninhamento e assinaturas. */
 function parseMembers(body) {
-  const inner = body.replace(/^\{/, "").replace(/\}$/, "");
+  // 🔴 OS COMENTÁRIOS SAEM ANTES (06/10/2026). O `/** … */` de documentação ficava grudado no texto
+  // da prop seguinte (o corte é no `;`), a linha passava a começar por `/**`, a expressão abaixo não
+  // casava, e a prop SUMIA da superfície — toda prop documentada de todo componente. Achado ao
+  // conferir o `size` do `Container` (K1): o `Grid` saía com ZERO props pelo mesmo motivo. Só o
+  // comentário de linha que começa a linha sai; `//` dentro de um tipo (uma URL literal) fica.
+  const inner = body.replace(/^\{/, "").replace(/\}$/, "")
+    .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/[^\n]*$/gm, "");
   const props = [];
   let buf = "";
   let depth = 0;

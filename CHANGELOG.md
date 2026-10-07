@@ -17,6 +17,10 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### Componentes novos, ainda não publicados (06/10/2026)
+
+- `Container` e `Section`, da página de site — entram na `0.22.0`, descrita na seção dela abaixo.
+
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -79,6 +83,49 @@ em inglês e ficam como estão: são registro.
 - Não muda nenhum pacote publicado.
 
 ---
+
+## [0.22.0] — 2026-10-06
+
+⏳ **Ainda não publicada, e AINDA NÃO APROVADA:** feita na madrugada de 06 para 07/10/2026 com o
+Victor dormindo, por ordem dele (*"pode fazer o K1 hoje"*). Falta ele ver a bancada. Vem depois da
+`0.21.0` (pedido #44).
+
+O **Lote K1**: as peças de leiaute de uma página de SITE, o primeiro bloco do grupo 2 da fila
+(GAR-02 a GAR-05). **Versão nova porque entram peças.** Nada sai nem muda de nome, e nenhuma
+dependência entra. O HeroUI não tem nenhuma das três; as medidas são tokens que já existiam.
+
+### Adicionado
+
+- **GAR-02 · `Container` (web).** A largura de leitura de uma página de site: centrada, com teto
+  (`size`: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280, o padrão · `2xl` 1536 · `full`) e respiro
+  dos lados de 16 que vira 32 a partir do `md`. O 1280 é o do Untitled UI (`--max-width-container`).
+- **GAR-03 · `Grid.Item` com `span` (web).** O item diz quantas das 12 colunas ocupa:
+  `<Grid columns={12}><Grid.Item span={{base: "12", viewport: {md: "7"}}}>`. Entra pela camada
+  responsiva que já existia (`vp-*` por tela, `ct-*` por contêiner), com a família nova
+  `grid-span`.
+- **GAR-04 · `Section` (web).** A faixa de ponta a ponta de uma página de site: `<section>` com
+  `surface` (`background`, `card`, `inset`) e `spacing` (`md`: 64 e 96 a partir do `md`; `sm`: a
+  metade).
+- **GAR-05 · `Section theme` (web).** `theme="dark"` faz uma faixa escura dentro de uma página
+  clara, e o contrário.
+
+### Corrigido
+
+- **GAR-05 · As regras de tema claro vazavam para dentro de uma faixa escura (web).** Os 22
+  seletores `[data-theme="light"] X` do core continuavam valendo dentro de
+  `<section data-theme="dark">`: o botão de contorno, o rótulo de seção e o escolhido saíam com a
+  tinta do claro sobre o fundo escuro. Cada um leva agora a guarda de força zero
+  `:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)`: a precedência
+  entre as regras não muda, e numa página sem faixa escura o computado é o mesmo. O `@scope` foi
+  lido e não usado — a proximidade dele passa por cima da ordem das regras. Limite declarado:
+  quatro níveis alternados não são cobertos. Quem cobra: `tests/visual/tema-na-secao.spec.ts`
+  (nos três navegadores) e `tests/unit/tema-na-secao.test.tsx` (regra nova sem a guarda reprova).
+- **O gerador do `api-surface.json` perdia as props com comentário de documentação.** O
+  `scripts/build-api-surface.mjs` lia o `/** … */` antes da prop como parte dela, e a prop sumia
+  da superfície — por isso a conferência das fichas não pegava nada nesses componentes. Agora ele
+  tira os comentários antes de ler. Com a superfície completa, nove fichas ganharam o que faltava
+  (`Badge`, `Cluster`, `Grid`, `Icon`, `IconButton`, `Stack`, `ThemeToggle`, `Toggle` e
+  `ToolbarButton`). Nada muda em pacote publicado.
 
 ## [0.21.0] — 2026-10-06
 
