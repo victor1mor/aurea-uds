@@ -17,10 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### Componentes novos, ainda não publicados (06/10/2026)
-
-- `Container` e `Section`, da página de site — entram na `0.22.0`, descrita na seção dela abaixo.
-
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -86,9 +82,10 @@ em inglês e ficam como estão: são registro.
 
 ## [0.22.0] — 2026-10-06
 
-⏳ **Ainda não publicada.** Feita na madrugada de 06 para 07/10/2026 com o Victor dormindo, por
-ordem dele (*"pode fazer o K1 hoje"*). **Aprovada pela bancada em 07/10/2026** (*"aprovo"*). Vem
-depois da `0.21.0` (pedido #44); pedido #46.
+✅ **Publicada em 07/10/2026** (o Victor avisou às 13:40, Brasília), pelo terminal do Victor, da
+junção do pedido #46. Leva a `0.20.0` e a `0.21.0` junto. Feita na madrugada de 06 para 07/10/2026
+com o Victor dormindo, por ordem dele (*"pode fazer o K1 hoje"*), e **aprovada pela bancada em
+07/10/2026** (*"aprovo"*).
 
 O **Lote K1**: as peças de leiaute de uma página de SITE, o primeiro bloco do grupo 2 da fila
 (GAR-02 a GAR-05). **Versão nova porque entram peças.** Nada sai nem muda de nome, e nenhuma
@@ -150,8 +147,8 @@ dependência entra. A referência não tem nenhuma das três; as medidas são to
 
 ## [0.21.0] — 2026-10-06
 
-⏳ **Ainda não publicada.** Falta a aprovação do Victor na bancada, a junção e a publicação. Vem
-depois da `0.20.0` (pedido #43), que também não saiu.
+✅ **Não saiu sozinha: foi publicada dentro da `0.22.0`**, em 07/10/2026, da junção do pedido #44.
+Aprovada pela bancada (*"aprovado o J"*).
 
 O **Lote J**: o resto do grupo 1 da fila (CHK-01) e o primeiro defeito do grupo 2, o site (GAR-08),
 com o plano do Victor da noite de 06/10/2026. **Versão nova porque entra prop.** Nada sai nem muda
@@ -182,8 +179,9 @@ de nome, e nenhuma dependência entra.
 
 ## [0.20.0] — 2026-10-06
 
-⏳ **Ainda não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador
-e a `0.19.1` ao lado (*"pode, folha com 32"*, 06/10/2026). Falta a junção e a publicação.
+✅ **Não saiu sozinha: foi publicada dentro da `0.22.0`**, em 07/10/2026, da junção do pedido #43.
+Aprovada pela bancada do Victor, com o código real rodando no navegador e a `0.19.1` ao lado
+(*"pode, folha com 32"*, 06/10/2026).
 
 O **Lote I**: o grupo 1 da fila de 06/10/2026 — o que o app do consumidor de celular viu no aparelho
 e o que destrava função nova nele. Seis itens, com o "pode" de 06/10/2026. **Versão nova, e não

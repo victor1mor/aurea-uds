@@ -126,6 +126,9 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.18.0` | Lote G, de um consumidor novo da web: AN-07 (`Progress` sem total, com `detail` e `tone`), AN-08 (`Grid` com `min` por nome), AN-04 (`NavList` com `avatar` e `indicators`) e AN-01 (`AppShell` com o botão de recolher — [ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md)); junto, as fichas com o Phosphor (pedido #37). Aprovada pela bancada (*"pode, aprovado o lote G"*) — pedido #38. **Publicada em 03/10/2026**, pelo terminal do Victor, **sem o aceite de aparelho** |
 | `0.19.0` | Lote H, do consumidor novo da web: AN-06 (`TreeView` que carrega ao abrir), AN-05 (`Gallery` em lote), AN-03 (`MessageComposer` que anexa, responde e edita), AN-02 (`MessageList` para conversa longa — [ADR-0057](decisions/0057-a-conversa-longa-e-uma-janela-sem-virtualizacao.md)). Aprovada pela bancada (*"Pode"*) — pedido #40. **Não saiu sozinha**: foi publicada dentro da `0.19.1` |
 | `0.19.1` | A cápsula do `BottomNav` saía quadrada no Android (`collapsable={false}`), aceita no aparelho (*"deu certo"*) — pedido #41. **Publicada em 04/10/2026**, pelo terminal do Victor. Leva a `0.19.0` junto |
+| `0.20.0` | Lote I: A5, C9 e MNT-05, R-23, HER-01, HER-02 e HER-03 ([ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)) — pedido #43. **Não saiu sozinha**: foi publicada dentro da `0.22.0` |
+| `0.21.0` | Lote J: CHK-01 e GAR-08 — pedido #44. **Não saiu sozinha**: foi publicada dentro da `0.22.0` |
+| `0.22.0` | Lote K1: `Container`, `Grid.Item span`, `Section` e o tema na faixa (GAR-02 a GAR-05), e as referências de desenho fora de tudo que é publicado — pedido #46. **Publicada em 07/10/2026** (avisada às 13:40, Brasília), pelo terminal do Victor, **sem o aceite de aparelho** dos blocos `0.20` e `0.21`. Leva a `0.20.0` e a `0.21.0` junto |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -216,7 +219,7 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    aberto) — ela leva `collapsable={false}`, ou cor/borda desde o começo. Quem cobra:
    `tests/unit/native-capsula-android.test.tsx`. **Aceito no aparelho Android do Victor** em
    04/10/2026 (bloco `0.19.1`, no topo do `apps/native-smoke`: *"deu certo"*). Leva a `0.19.0` junto.
-14. **`0.20.0`, o Lote I, feito em 06/10/2026 e ainda não publicado** — o grupo 1 da fila de
+14. **`0.20.0`, o Lote I, feito em 06/10/2026 e publicado dentro da `0.22.0` em 07/10/2026** — o grupo 1 da fila de
    06/10/2026 (a fila agora mora no documento de achados do Victor, fora do repositório), com o
    "pode" do mesmo dia: A5 (o `SegmentedControl` do nativo não quebra o rótulo, e `fullWidth` nos dois
    alvos), C9 e MNT-05 (`panel="plain"` no `Tabs`, nos dois alvos), R-23 (`exif` → `takenAt` no
@@ -225,10 +228,10 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    [ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)). ⚠ **A regra nova:** todo raio
    do nativo passa por `canto()` (`estilos.ts`); raio escrito à mão reprova em
    `tests/unit/native-canto-continuo.test.tsx`. Aprovado pela bancada (*"pode, folha com 32"*,
-   06/10/2026). Falta a junção, a publicação e o aceite de aparelho (bloco `0.20`, no topo do
+   06/10/2026). Falta o aceite de aparelho (bloco `0.20`, no topo do
    `apps/native-smoke`). O LOGO-01 fechou sem peça nova (decisão do Victor: o app usa o encaixe
    `leading` do `Button`).
-15. **`0.21.0`, o Lote J, feito em 06/10/2026 e ainda não publicado** — aprovado pela bancada
+15. **`0.21.0`, o Lote J, feito em 06/10/2026 e publicado dentro da `0.22.0` em 07/10/2026** — aprovado pela bancada
    (*"aprovado o J"*): CHK-01 (`RadioGroup variant="card"`, o cartão de escolha, no nativo; a pele
    do `Card` mora em `estilos.ts`) e GAR-08 (o cartão clicável na horizontal volta a ter a coluna da
    foto, na web — `:where(.card-interactive)`), mais o achado da medição: o cartão-link e o item de
@@ -237,7 +240,7 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    navegador (`pnpm exec playwright test`), não só os unitários — o `skin.spec` do Lote I só foi
    pego assim. E a barra de cima do catálogo mostra a contagem de tokens: token novo muda a foto
    `topo` da CI.
-16. **`0.22.0`, o Lote K1, feito na madrugada de 06 para 07/10/2026 e ainda não publicado** — o
+16. **`0.22.0`, o Lote K1, feito na madrugada de 06 para 07/10/2026 e publicado em 07/10/2026** (pelo terminal do Victor) — o
    Victor mandou fazer (*"pode fazer o K1 hoje"*) e foi dormir; **aprovado pela bancada em
    07/10/2026** (*"aprovo"*), pedido #46. A página de
    SITE, na web: `Container` (GAR-02), `Grid.Item span` pela camada responsiva (GAR-03, família
