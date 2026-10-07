@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Avatar, Badge } from "./display.js";
-import { comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
+import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
 import { FilaRolante } from "./rolagem.js";
@@ -22,7 +22,7 @@ const folha = criarFolha((t) => ({
         marginHorizontal: t.size.space4, marginTop: t.size.space4,
         paddingVertical: t.size.space2, paddingHorizontal: t.size.space4,
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
-        borderRadius: t.size.radiusCard, backgroundColor: t.color.card,
+        ...canto(t.size.radiusCard), backgroundColor: t.color.card,
     },
     topo_flush: { paddingVertical: t.size.space2, paddingHorizontal: t.size.space5,
         backgroundColor: t.color.background },
@@ -35,7 +35,7 @@ const folha = criarFolha((t) => ({
         alignSelf: "center", marginTop: t.size.space4, justifyContent: "flex-start",
         gap: t.size.space2, padding: t.size.space2,
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.card,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.card,
     },
     // ── BottomNav ──────────────────────────────────────────────────────────────────────────────
     // 🔴 `floating` FLUTUA POR CIMA DA TELA, e isto é conserto de 19/09/2026 — a variante prometia
@@ -53,14 +53,14 @@ const folha = criarFolha((t) => ({
         position: "absolute", bottom: 0, zIndex: t.size.zSticky,
         flexDirection: "row", gap: t.size.space1, margin: t.size.space4, padding: t.size.space1,
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.card,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.card,
         boxShadow: [t.shadow.shadowMd],
     },
     // `edge` encosta na borda: sem margem, sem raio, só a linha de cima — e continua NO FLUXO,
     // porque uma barra encostada que flutuasse esconderia o fim da tela sem nada reservar.
     barra_edge: {
         position: "relative", left: undefined, right: undefined, bottom: undefined, zIndex: undefined,
-        margin: 0, paddingHorizontal: 0, borderRadius: 0, backgroundColor: t.color.background,
+        margin: 0, paddingHorizontal: 0, ...canto(0), backgroundColor: t.color.background,
         borderWidth: 0, borderTopWidth: t.size.borderWidth, boxShadow: undefined,
     },
     // A pílula CHEIA, de uma borda à outra menos a margem — o de sempre. Mora fora da `barra` para
@@ -92,7 +92,7 @@ const folha = criarFolha((t) => ({
         // recheio de cima e de baixo cai de `space1` para `space05`, e o nome sai em 12 com a
         // entrelinha justa (ver o `Text` do rótulo). Igual na web (`aurea.css`).
         paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
-        borderRadius: t.size.radiusControl,
+        ...canto(t.size.radiusControl),
     },
     // Com a pílula do tamanho do conteúdo, `flex: 1` MATA as abas: no RN ele é base ZERO, e a soma
     // de zeros é uma pílula de largura zero. Aqui cada aba mede o próprio conteúdo (base `auto`) e
@@ -108,8 +108,8 @@ const folha = criarFolha((t) => ({
     // Victor viu o contador cobrir o nome em 17/08/2026, e a pesquisa (Material 3 e os guias de
     // barra de abas do iOS) diz o mesmo: canto superior do ÍCONE, nunca sobre o texto.
     marca: { position: "relative", alignItems: "center", justifyContent: "center",
-        width: 32, height: 32, borderRadius: t.size.radiusControl },
-    marcaRedonda: { borderRadius: t.size.radiusFull },
+        width: 32, height: 32, ...canto(t.size.radiusControl) },
+    marcaRedonda: { ...canto(t.size.radiusFull) },
     contador: { position: "absolute", top: -t.size.space05, right: -t.size.space05 },
     // ── A BARRA FICA PARADA QUANDO SE TROCA DE ABA — pedido do Victor, 03/10/2026 ──────────────
     // *"me incomoda o bottom nav todo se mexer [...] quero ele estático, apenas os botões
@@ -128,13 +128,13 @@ const folha = criarFolha((t) => ({
     // (56 × 48).
     disco: {
         alignItems: "center", justifyContent: "center", gap: 0,
-        width: 56, minHeight: t.size.controlHLg, borderRadius: t.size.radiusFull,
+        width: 56, minHeight: t.size.controlHLg, ...canto(t.size.radiusFull),
         paddingHorizontal: t.size.space1, paddingVertical: t.size.space1,
     },
     // `capsule` (a "A" da bancada, o Material 3 Expressive): a moldura do ícone vira a cápsula de
     // 56 × 32 do indicador ativo dele — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
     // `aurea.css`, em todos os itens. O rótulo fica embaixo, fora dela.
-    marcaCapsula: { width: 56, height: 32, borderRadius: t.size.radiusFull },
+    marcaCapsula: { width: 56, height: 32, ...canto(t.size.radiusFull) },
     // O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada (item não
     // escolhido) ele ficaria solto, longe do sino. São os (56 − 32) / 2 a mais para dentro.
     contadorCapsula: { right: (56 - 32) / 2 - t.size.space05 },
@@ -168,7 +168,7 @@ const folha = criarFolha((t) => ({
         flexDirection: "row", alignItems: "center", gap: t.size.space3, width: "100%",
         minHeight: t.size.controlHLg,
         paddingVertical: t.size.space2, paddingHorizontal: t.size.space3,
-        borderRadius: t.size.radiusCard - t.size.space1,
+        ...canto(t.size.radiusCard - t.size.space1),
     },
     // O MIOLO da linha: ícone + texto (+ valor em texto) + seta. Ele é quem toca; o que vem
     // depois dele, na moldura, é IRMÃO — ver o comentário no componente.
@@ -183,7 +183,7 @@ const folha = criarFolha((t) => ({
     // lá — `gap:3px; padding:3px` — e não de mim.
     abas: {
         flexDirection: "row", gap: 3, padding: 3,
-        minHeight: t.size.controlHMd, borderRadius: t.size.radiusControl,
+        minHeight: t.size.controlHMd, ...canto(t.size.radiusControl),
         backgroundColor: t.color.muted,
     },
     // `padding:0 14px` é literal no `.tab` (`aurea.css:1127`). A aba NÃO estica (nada de `flex`):
@@ -194,7 +194,7 @@ const folha = criarFolha((t) => ({
     // silêncio, e o `tsc` só pegou porque são chaves do mesmo objeto.
     abaDeTab: {
         alignItems: "center", justifyContent: "center",
-        paddingHorizontal: 14, borderRadius: t.size.radiusControl,
+        paddingHorizontal: 14, ...canto(t.size.radiusControl),
     },
     abaDeTabAtiva: { backgroundColor: t.color.secondary },
     // `variant="secondary"` (R-12, 01/10/2026): o `secondary` do HeroUI Native 1.0.10
@@ -221,7 +221,7 @@ const folha = criarFolha((t) => ({
     passo: { flex: 1, alignItems: "center" },
     bolinha: {
         width: 32, height: 32, marginBottom: t.size.space2,
-        alignItems: "center", justifyContent: "center", borderRadius: t.size.radiusFull,
+        alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
         backgroundColor: t.color.surface1,
     },
@@ -401,7 +401,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                 // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
                 accessibilityRole: "link", accessibilityLabel: !nomeVisivel && typeof it.label === "string" ? it.label : undefined, ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }), style: [
                     s.aba, justa && s.aba_content,
-                    indicator === "subtle" && { borderRadius: t.size.radiusCard - t.size.space1 },
+                    indicator === "subtle" && { ...canto(t.size.radiusCard - t.size.space1) },
                     ativo && (indicator === "subtle" || indicator === "pill")
                         && { backgroundColor: comOpacidade(t.color.primary, 0.12) },
                     disco && s.aba_disco,
@@ -555,7 +555,7 @@ export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circl
  * largura de tela grande. Não há tablet medido neste projeto, e no nativo vale demanda antes de
  * cobertura — a mesma decisão da `Table` do Lote 6.
  */
-export function Tabs({ tabs, value, onChange, label, justify, variant = "primary", style, ...rest }) {
+export function Tabs({ tabs, value, onChange, label, justify, variant = "primary", panel = "card", style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
@@ -570,7 +570,5 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
                             ], children: [typeof it.label === "string"
                                     ? _jsx(Text, { size: "sm", weight: ativa ? 600 : 400, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
                                     : it.label, ativa && secundaria && _jsx(View, { style: s.fioDaAba })] }, it.id));
-                    }) }) }), aberta
-                ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content }))
-                : null] }));
+                    }) }) }), aberta && panel === "plain" ? (_jsx(View, { accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : aberta ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : null] }));
 }

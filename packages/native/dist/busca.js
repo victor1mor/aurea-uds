@@ -69,7 +69,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, } from "react-native";
 import { IconButton } from "./actions.js";
-import { criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Spinner } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { KeyboardAvoiding, useCampo } from "./inputs.js";
@@ -105,7 +105,7 @@ const folha = criarFolha((t) => ({
     caixa: {
         width: "100%", minWidth: 0,
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
         flexDirection: "row", alignItems: "center",
     },
     invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
@@ -152,12 +152,13 @@ const folha = criarFolha((t) => ({
     // desenhar vazio.
     lista: {
         maxHeight: "90%",
-        borderTopLeftRadius: t.size.radiusCard, borderTopRightRadius: t.size.radiusCard,
+        // HER-03 (ADR-0058): a folha que sobe de baixo tem 32, como a `BottomSheet`.
+        ...cantosDeCima(t.size.radiusSheet),
         backgroundColor: t.color.popover, borderWidth: t.size.borderWidth, borderColor: t.color.border,
     },
     // O puxador, copiado do `BottomSheet` (`overlays.tsx:111-112`) — mesma medida, mesmo token.
     puxadorArea: { alignItems: "center", paddingVertical: t.size.space2 },
-    puxador: { width: 40, height: 4, borderRadius: t.size.radiusFull,
+    puxador: { width: 40, height: 4, ...canto(t.size.radiusFull),
         backgroundColor: t.color.borderStrong },
     // O campo de digitar, no topo da folha. É o `.input-group` da web (`aurea.css:741`): a borda
     // mora no GRUPO e o campo dentro dele é transparente e sem borda.
@@ -166,7 +167,7 @@ const folha = criarFolha((t) => ({
         margin: t.size.space3,
         paddingHorizontal: t.size.space3,
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
     },
     // ⚠ `paddingVertical: 0` e `textAlignVertical: "center"` — a MESMA correção que o `Input` do
     // Lote 4 levou depois do vidro (`inputs.tsx:280-296`): sem elas o Android injeta o padding do

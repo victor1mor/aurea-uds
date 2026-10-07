@@ -33,6 +33,29 @@ export declare function criarFolha<T extends NamedStyles<T> | NamedStyles<Record
  * um ícone) não tinha como escrevê-lo sem número à mão. O `check 39` cobra o teste dele.
  */
 export declare const comOpacidade: (cor: string, pct: number) => string;
+/**
+ * 🍎 O CANTO DA APPLE — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
+ *
+ * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de
+ * começar de repente como um quarto de círculo. O `heroui-native` 1.0.10 o põe em 24 peças; a
+ * Aurea, até aqui, em nenhuma. Pela doc do React Native (tipos do 0.87.1), ele só vale no **iOS
+ * 13+**: o Android ignora, e o navegador também — o `react-native-web` 0.21 passa a propriedade
+ * adiante e o CSS não a conhece, sem erro. **No Android do Victor nada muda; no iPhone, muda.**
+ *
+ * ⚠ **Raio escrito fora daqui é defeito.** O `native-canto-continuo.test.tsx` lê o fonte do pacote
+ * e reprova `borderRadius` (ou um dos quatro cantos) escrito à mão — a regra *"quem mais tem esse
+ * problema?"* virando trava, para a próxima peça não nascer com o canto do Android no iPhone.
+ */
+export declare const canto: (raio: number, curva?: "continuous" | "circular") => {
+    readonly borderRadius: number;
+    readonly borderCurve: "circular" | "continuous";
+};
+/** Os dois cantos de CIMA — a folha que sobe de baixo (`BottomSheet`, a lista do `Select`). */
+export declare const cantosDeCima: (raio: number) => {
+    readonly borderTopLeftRadius: number;
+    readonly borderTopRightRadius: number;
+    readonly borderCurve: "continuous";
+};
 /** O tom de cor com significado — o vocabulário do `Badge` (`AureaBadgeTone`). */
 export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
 /**

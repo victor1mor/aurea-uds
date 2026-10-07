@@ -1347,7 +1347,9 @@ for (const theme of ["dark", "light"] as const) {
             // Feedback: cada um é uma CAIXA, e sem regra viraria texto solto no fluxo.
             alerta: {display: est(".alert").display, pad: parseFloat(est(".alert").paddingTop),
                      raio: parseFloat(est(".alert").borderTopLeftRadius),
-                     radiusLg: emPx("--radius-lg"),
+                     // HER-02 (06/10/2026): o `Alert` passou de `--radius-lg` (16) para o raio
+                     // de painel, `--radius-card` (22).
+                     radiusCard: emPx("--radius-card"),
                      bordaDanger: est(".banner-danger").borderTopColor,
                      bordaAlerta: est(".alert-warning").borderTopColor},
             // Toast: a base e as quatro faces do tipo. Medir COR, não existência de regra — o
@@ -2376,7 +2378,7 @@ for (const theme of ["dark", "light"] as const) {
 
     // 26. Feedback: cada um é uma CAIXA. Sem regra, viram texto solto no fluxo.
     expect(e.alerta.display, "o Alert é grid de 3 colunas, não texto corrido").toBe("grid");
-    expect(e.alerta.raio, "o Alert usa --radius-lg").toBe(e.alerta.radiusLg);
+    expect(e.alerta.raio, "o Alert usa --radius-card (HER-02)").toBe(e.alerta.radiusCard);
     expect(e.alerta.pad, "sem padding o texto cola na borda").toBeGreaterThan(0);
     expect(e.alerta.bordaDanger, "a variante colore a BORDA — danger e warning não podem medir igual")
       .not.toBe(e.alerta.bordaAlerta);

@@ -48,7 +48,7 @@ import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-n
 import {IconButton} from "./actions.js";
 // Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
 import type {AureaIcon} from "./icon.js";
-import {criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -95,7 +95,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   campo: {
     width: t.size.space16, textAlign: "center",
     borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
     // A mesma correção de Android do `Input` do Lote 4 — ver `inputs.tsx:280-296`.
     paddingVertical: 0, textAlignVertical: "center",
   },

@@ -333,9 +333,13 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 // é o rádio e o input é `aria-hidden`. Comportamento idêntico: Enter não seleciona, Espaço
 // seleciona, a seta move E seleciona. O que sai é a camada sintética que o motor punha por cima
 // da ativação nativa do `<button>`.
-export function SegmentedControl({items,value,onChange,label}:{items:Array<{value:string;label:ReactNode}>;value:string;onChange:(v:string)=>void;label?:string}){
+//
+// `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
+// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É o `fullWidth` do
+// `ToggleButtonGroup` do HeroUI 3.2.6.
+export function SegmentedControl({items,value,onChange,label,fullWidth}:{items:Array<{value:string;label:ReactNode}>;value:string;onChange:(v:string)=>void;label?:string;fullWidth?:boolean}){
 const s=useAureaStrings();
-return <BaseRadioGroup className="segmented" aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange(String(v))}>
+return <BaseRadioGroup className={fullWidth?"segmented segmented-full":"segmented"} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange(String(v))}>
 {items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} nativeButton render={<button type="button"/>}>{i.label}</BaseRadio.Root>)}
 </BaseRadioGroup>}
 

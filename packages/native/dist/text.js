@@ -21,7 +21,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 //   que os tokens já publicam seria uma segunda verdade sobre tipografia.
 import * as React from "react";
 import { Text as TextRN } from "react-native";
-import { criarFolha } from "./estilos.js";
+import { canto, criarFolha } from "./estilos.js";
 import { useAureaTokens, useSobreAMarca } from "./theme.js";
 // 🔴 A ESCALA TEM CINCO DEGRAUS QUE SE ENXERGAM, E DEZ NOMES — ordem do Victor, 19/09/2026,
 // olhando o app no aparelho: *"o tamanho das fontes: existem variações demais, fica muito
@@ -136,7 +136,7 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
             ...(align ? { textAlign: align } : null),
             // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (HeroUI Native).
             ...(type === "code" ? {
-                alignSelf: "flex-start", backgroundColor: t.color.surface2, borderRadius: t.size.radiusXs,
+                alignSelf: "flex-start", backgroundColor: t.color.surface2, ...canto(t.size.radiusXs),
                 paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
             } : null),
         };

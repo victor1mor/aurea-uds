@@ -36,6 +36,13 @@ export interface FilaRolanteProps {
    * `end`. Quando não cabe, ela rola, e o alinhamento deixa de existir: começa no início.
    */
   justify?: AureaFilaJustify;
+  /**
+   * A fila OCUPA a linha quando cabe (A5, 06/10/2026 — o `fullWidth` do `SegmentedControl`). O
+   * recipiente do conteúdo cresce até a largura do rolador; quem cresce dentro dele é o filho, que
+   * também precisa de `flexGrow`. Quando não cabe, rola, como sempre. Vence o `justify`: cheia,
+   * ela não tem onde ficar.
+   */
+  fill?: boolean;
 }
 
 /** Onde a fila fica, na linha, quando cabe. O nome é o do `Cluster` (R-09): o eixo da fileira. */
@@ -48,7 +55,7 @@ const JUSTIFICAR = {center: "center", end: "flex-end"} as const;
  * O componente fica com a informação em vez de adivinhar: `onLayout` dá a largura visível e
  * `onContentSizeChange` dá a do conteúdo. Com as duas, `transbordou` é uma conta, não um palpite.
  */
-export function FilaRolante({children, style, testID, justify = "start"}: FilaRolanteProps) {
+export function FilaRolante({children, style, testID, justify = "start", fill}: FilaRolanteProps) {
   const [visivel, setVisivel] = React.useState(0);
   const [conteudo, setConteudo] = React.useState(0);
   const transbordou = conteudo > visivel && visivel > 0;
@@ -68,7 +75,8 @@ export function FilaRolante({children, style, testID, justify = "start"}: FilaRo
       // largura do rolador (`flexGrow: 1`) e POSICIONA a cápsula lá dentro. Ela não estica: na
       // fileira, o filho tem a largura dele. Medido pelo app: rolador 335 de largura, fileira 281,
       // encostada à esquerda, e um `Cluster justify="center"` em volta não mudava nada.
-      contentContainerStyle={justify === "start" ? {flexGrow: 0} : {flexGrow: 1, justifyContent: JUSTIFICAR[justify]}}
+      contentContainerStyle={fill ? {flexGrow: 1}
+        : justify === "start" ? {flexGrow: 0} : {flexGrow: 1, justifyContent: JUSTIFICAR[justify]}}
       style={style}>
       {children}
     </ScrollView>

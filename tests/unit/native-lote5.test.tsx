@@ -283,11 +283,14 @@ describe("BottomSheet — o gesto é do RN, e soltar no meio VOLTA", () => {
     expect(escondidos.length).toBeGreaterThan(0);
   });
 
-  it("o topo tem o raio de CARD — é uma superfície flutuante, e a identidade manda", () => {
+  // ~~"o topo tem o raio de CARD (22)"~~ — era a regra até 06/10/2026. A folha que sobe de baixo
+  // passou a ter o raio de FOLHA, 32 (decisão do Victor, ADR-0058); o de cartão continua 22.
+  it("o topo tem o raio de FOLHA (32, ADR-0058), e o de cartão continua 22", () => {
     render(<Envolve><BottomSheet open onClose={() => {}} /></Envolve>);
     const raios = todos("Animated.View")
       .map((p) => StyleSheet.flatten(p.style).borderTopLeftRadius);
-    expect(raios).toContain(tokens.size.radiusCard);
+    expect(raios).toContain(tokens.size.radiusSheet);
+    expect(tokens.size.radiusSheet).toBe(32);
     expect(tokens.size.radiusCard).toBe(22);
   });
 });

@@ -3780,3 +3780,25 @@ o esbuild, minificado + gzip, sem o React: 7,8 · 4,1 · 20,1 KB.
 **O que é nosso:** a conta de não pular (a mensagem que começa no alto da tela fica no lugar quando a
 janela troca pelas pontas ou alguma coisa cresce), e o anunciador que lê só a mensagem que chega —
 com a janela ligada, a lista deixa de ser região viva.
+
+
+## O segmentado que ocupa a linha, o painel sem caixa, a data da foto e o canto da Apple — 06/10/2026 · Lote I (A5, C9/MNT-05, R-23, HER-01, HER-02)
+
+O grupo 1 da fila de 06/10/2026, com o "pode" do Victor do mesmo dia. Só leitura: nenhuma linha de
+terceiro foi copiada. Pacotes baixados com `npm pack` em 06/10/2026: `@heroui/styles` 3.2.6 e
+`heroui-native` 1.0.10, as mais novas no npm nesse dia.
+
+| lido | licença | o que se mediu | o que entrou |
+|---|---|---|---|
+| `@heroui/styles` 3.2.6, `toggle-button-group.css` e `.styles.ts` | MIT | o grupo é `w-fit` (do tamanho do conteúdo); `fullWidth` vira `w-full` e cada botão `flex-1` | o nome `fullWidth` no `SegmentedControl`, web e nativo. O segmento cresce a partir do rótulo (base `auto`): no Yoga não há o mínimo de conteúdo que o CSS dá ao `flex-1` |
+| `heroui-native` 1.0.10, `styles/components/tabs.css` | MIT | `.tabs__list` com `align-self: flex-start`; `.tabs__trigger` sem `flex` (do tamanho do conteúdo); nenhuma regra de painel | a aba e o segmento do tamanho do rótulo; o painel sem caixa (`panel="plain"`) |
+| `@heroui/styles` 3.2.6, `tabs.css` (`.tabs__panel`) | MIT | o painel é `w-full p-2`, sem borda nem fundo | `.tabs-panel` na web, sem caixa, com `--space-3` em cima (o do painel do nativo) |
+| `heroui-native` 1.0.10, os 32 arquivos com `borderCurve: 'continuous'` | MIT | o canto contínuo em 24 peças; o `Spinner` não está entre elas | `canto()` e `cantosDeCima()` em `estilos.ts`, em todo raio do nativo; o anel do `Spinner` fica `circular` |
+| `@heroui/styles` 3.2.6 e `heroui-native` 1.0.10, `alert` e `toast` | MIT | 24 (`rounded-3xl`) nos dois, nos dois alvos | 22 (`--radius-card`), o raio de painel da Aurea — a medida da identidade vence (`CLAUDE.md` §5) |
+| `expo-image-picker` 57.0.15 (o instalado; a mais nova é a 57.0.20), `ImagePicker.types.d.ts`, `ImageUtils.swift` e `ImagePickerConstants.kt` | MIT | `exif: true` nos dois sistemas; o iPhone junta o `{Exif}` no topo; o Android não tem etiqueta de fuso; `allowsMultipleSelection` + `selectionLimit` (Android e iOS 14+) | `exif` → `takenAt` no `PhotoInput`, e várias de uma vez da galeria |
+| `react-native` 0.87.1, `StyleSheetTypes.d.ts` | MIT | `borderCurve?: 'circular' \| 'continuous'`, *"On iOS 13+"* | o canto contínuo, sabendo que o Android não muda |
+| `react-native-web` 0.21.2, `preprocess.js` e `createReactDOMStyle.js` | MIT | `flex: 1` sai cru para o CSS (`1 1 0%`); propriedade desconhecida passa adiante sem erro | a causa do A5 no navegador; o `borderCurve` não quebra o app no navegador |
+| `yoga-layout` 3.2.1 (o motor de leiaute do React Native, em WASM) | MIT | a árvore do `SegmentedControl` dentro do rolador: com e sem `flex: 1`, o segmento fica do tamanho do texto; a cápsula com 245 de 343 | a prova de que no aparelho o rótulo não quebrava, e a simulação do `fullWidth` (343 de 343) |
+
+O HeroUI não tem `PhotoInput` nem segmentado no nativo; as duas peças seguem pensadas como ele
+faria, com os nomes das peças que ele tem.

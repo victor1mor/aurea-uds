@@ -60,7 +60,7 @@ import {
   type StyleProp, type ViewStyle,
 } from "react-native";
 import {Button} from "./actions.js";
-import {criarFolha} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha} from "./estilos.js";
 import {IconButton} from "./actions.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
@@ -78,7 +78,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   superficie: {
     width: "100%", maxWidth: 560, padding: 24,
     borderWidth: t.size.borderWidth, borderColor: t.color.border,
-    borderRadius: t.size.radiusCard,
+    ...canto(t.size.radiusCard),
     backgroundColor: t.color.popover,
     ...(t.shadow.shadowLg ? {boxShadow: [t.shadow.shadowLg]} : null),
   },
@@ -105,12 +105,15 @@ const folha = criarFolha((t: AureaTokens) => ({
     maxHeight: "90%",
     paddingHorizontal: 24, paddingTop: t.size.space2, paddingBottom: 24,
     backgroundColor: t.color.popover,
-    borderTopLeftRadius: t.size.radiusCard, borderTopRightRadius: t.size.radiusCard,
+    // HER-03 (06/10/2026, ADR-0058): 32 e não o 22 de painel — a folha acompanha o canto da tela
+    // do telefone. Decisão do Victor, olhando as duas na bancada. A lista do `Select` e a folha do
+    // `Combobox` sobem do mesmo jeito e levam o mesmo token.
+    ...cantosDeCima(t.size.radiusSheet),
     borderTopWidth: t.size.borderWidth, borderTopColor: t.color.border,
     ...(t.shadow.shadowLg ? {boxShadow: [t.shadow.shadowLg]} : null),
   },
   puxadorArea: {alignItems: "center", paddingVertical: t.size.space2},
-  puxador: {width: 40, height: 4, borderRadius: 999, backgroundColor: t.color.borderStrong},
+  puxador: {width: 40, height: 4, ...canto(999), backgroundColor: t.color.borderStrong},
 }));
 
 /** Duração da entrada de painel, em ms. A mesma `.28s` do `.toast` do CSS (aurea.css:1586). */

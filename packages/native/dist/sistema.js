@@ -35,7 +35,7 @@ import { Linking, Platform, Pressable, View } from "react-native";
 import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { IconButton } from "./actions.js";
-import { criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Alert } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { useCampo } from "./inputs.js";
@@ -46,7 +46,7 @@ const folha = criarFolha((t) => ({
     gatilho: {
         flexDirection: "row", alignItems: "center", justifyContent: "space-between",
         width: "100%", borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
     },
     invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
     desabilitado: { opacity: t.size.opacityDisabled },
@@ -65,7 +65,7 @@ const folha = criarFolha((t) => ({
     remover: { position: "absolute", top: -foraDoX(t), right: -foraDoX(t) },
     adicionar: {
         alignItems: "center", justifyContent: "center", gap: t.size.space1,
-        width: t.size.space16, height: t.size.space16, borderRadius: t.size.radiusLg,
+        width: t.size.space16, height: t.size.space16, ...canto(t.size.radiusLg),
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
         borderStyle: "dashed", backgroundColor: t.color.fieldBg,
     },
@@ -128,6 +128,36 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
                     style,
                 ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: value ? "default" : "subtle", numberOfLines: 1, children: texto }), icon && _jsx(Icon, { name: icon, size: "sm", color: t.color.subtleForeground })] }), mostrarSeletorIOS && (_jsx(RNDateTimePicker, { value: value ?? new Date(), mode: mode, minimumDate: minimumDate, maximumDate: maximumDate, onChange: receber }))] }));
 }
+// R-23 (06/10/2026) · a data em que a foto foi tirada, e NADA MAIS do EXIF.
+//
+// Lido no fonte do `expo-image-picker` 57.0.15: no iPhone o código junta o dicionário `{Exif}` no
+// topo, então `DateTimeOriginal` chega com esse nome nos dois sistemas. O formato do EXIF é
+// "AAAA:MM:DD HH:MM:SS", sem fuso. O iPhone pode mandar `OffsetTimeOriginal` ("-03:00"); a lista
+// de etiquetas do Android não tem fuso, e aí vale a hora local do aparelho — que é a hora em que
+// a pessoa estava, no caso comum de fotografar e lançar no mesmo lugar.
+//
+// ⚠ O EXIF de uma foto da galeria traz também a LOCALIZAÇÃO. Por isso esta função devolve uma
+// data e o EXIF não sai daqui: o app não recebe o que não pediu.
+function dataDaFoto(exif) {
+    const bruto = exif?.DateTimeOriginal ?? exif?.DateTimeDigitized;
+    if (typeof bruto !== "string")
+        return undefined;
+    const m = /^(\d{4}):(\d{2}):(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/.exec(bruto.trim());
+    if (!m)
+        return undefined;
+    const [ano, mes, dia, hora, minuto, segundo] = m.slice(1).map(Number);
+    // "0000:00:00 00:00:00" é como câmera sem relógio escreve "sem data".
+    if (ano === 0 || mes < 1 || mes > 12 || dia < 1 || dia > 31 || hora > 23 || minuto > 59 || segundo > 59) {
+        return undefined;
+    }
+    const fuso = exif?.OffsetTimeOriginal ?? exif?.OffsetTimeDigitized;
+    const f = typeof fuso === "string" ? /^([+-])(\d{2}):(\d{2})$/.exec(fuso.trim()) : null;
+    if (f) {
+        const minutos = (f[1] === "-" ? -1 : 1) * (Number(f[2]) * 60 + Number(f[3]));
+        return new Date(Date.UTC(ano, mes - 1, dia, hora, minuto, segundo) - minutos * 60000);
+    }
+    return new Date(ano, mes - 1, dia, hora, minuto, segundo);
+}
 /**
  * O anexo por foto.
  *
@@ -143,6 +173,8 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
  * | **câmera ou galeria?** | câmera, que é o que o plano pede | `source="library"` |
  * | como **remover**? | um `IconButton` no canto de cada miniatura | `removeIcon` |
  * | **quantas** cabem? | uma | `max` |
+ * | **várias de uma vez?** | da galeria, sim, quando cabe mais de uma (R-23) | `max` |
+ * | **a data** em que foi tirada? | não lê: ler o EXIF custa | `exif` → `takenAt` (R-23) |
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
  *
@@ -158,7 +190,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
  * | leitor de tela | *"Foto 2 de 3"* (com uma só, *"Foto"*) e *"Abre a foto"*; o X, *"Remover foto 2"* |
  * | inativo | a foto ainda abre (olhar não muda nada); o X não remove |
  */
-export function PhotoInput({ value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true, onPermissionDenied, addIcon = "camera", removeIcon = "x", style, testID, }) {
+export function PhotoInput({ value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true, onPermissionDenied, exif = false, addIcon = "camera", removeIcon = "x", style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
@@ -185,16 +217,27 @@ export function PhotoInput({ value = [], onChange, max = 1, source = "camera", d
                 return;
             }
         }
+        // R-23: da GALERIA, escolhe várias de uma vez quando cabe mais de uma, até o que falta para o
+        // `max`. A câmera tira uma por vez — no sistema, não há outro jeito.
+        const cabem = max - value.length;
         const r = source === "camera"
-            ? await ImagePicker.launchCameraAsync({ quality: 0.7 })
-            : await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
+            ? await ImagePicker.launchCameraAsync({ quality: 0.7, exif })
+            : await ImagePicker.launchImageLibraryAsync(cabem > 1
+                ? { quality: 0.7, exif, allowsMultipleSelection: true, selectionLimit: cabem }
+                : { quality: 0.7, exif });
         if (r.canceled || !r.assets?.length)
             return;
         const novas = r.assets
-            .slice(0, max - value.length)
-            .map((a) => ({ uri: a.uri, width: a.width, height: a.height }));
+            .slice(0, cabem)
+            .map((a) => {
+            const foto = { uri: a.uri, width: a.width, height: a.height };
+            const quando = exif ? dataDaFoto(a.exif) : undefined;
+            if (quando)
+                foto.takenAt = quando;
+            return foto;
+        });
         onChange?.([...value, ...novas]);
-    }, [source, max, value, onChange, onPermissionDenied]);
+    }, [source, max, value, onChange, onPermissionDenied, exif]);
     return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: [s.galeria, value.length > 0 && s.comX], children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Pressable, { onPress: () => setAberta(n), accessibilityRole: "imagebutton", accessibilityLabel: nomeDa(n), accessibilityHint: strings.photoOpen, children: _jsx(Image, { source: foto.uri, alt: "", ratio: 1 }) }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "solid", size: "sm", name: removeIcon, label: `${strings.photoRemove} ${n + 1}`, disabled: inativo, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, `${foto.uri}-${n}`))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label ?? strings.photoAdd, ...estadoAcessivel({ disabled: !!inativo }), style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] }), _jsx(FotoAmpliada, { source: fotoAberta?.uri, title: aberta != null ? nomeDa(aberta) : "", alt: aberta != null ? nomeDa(aberta) : "", 
                 // A proporção da foto, quando a câmera a deu: a grande aparece inteira, sem tarja à toa.
                 ratio: fotoAberta?.width && fotoAberta.height ? fotoAberta.width / fotoAberta.height : 1, onClose: () => setAberta(null) })] }));

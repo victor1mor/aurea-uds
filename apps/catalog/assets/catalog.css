@@ -557,6 +557,7 @@ svg.react-flow__connectionline {
   --radius-md:10px;
   --radius-lg:16px;
   --radius-card:22px;
+  --radius-sheet:32px;
   --radius-control:999px;
   --radius-full:var(--radius-control);
   --border-width:1px;
@@ -2053,6 +2054,11 @@ img,svg { display:block; }
 .segmented { display:inline-flex; gap:3px; padding:3px; min-height:var(--control-h-md); border-radius:var(--radius-control); background:var(--muted); border:1px solid transparent; box-shadow:none; }
 .segmented button { padding:0 14px; border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; cursor:pointer; }
 .segmented button.active { color:var(--foreground); background:var(--secondary); box-shadow:none; border:0; }
+/* `fullWidth` (A5, 06/10/2026): ocupa a linha, e cada segmento cresce a partir do rótulo sem
+   encolher abaixo dele — o mesmo desenho do nativo. `1 0 auto` e não `1` (= `1 1 0%`): base zero
+   reparte a largura em partes iguais, e é isso que quebrava o rótulo no nativo rodando no
+   navegador. Quando não cabe, rola pela regra de tela estreita, como sem a prop. */
+.segmented-full { display:flex; } .segmented-full button { flex:1 0 auto; }
 /* Toggle (Lote 1): pressionado usa o MESMO par de tokens do segmento aceso, logo acima. Um
    toggle solto e um segmento selecionado dizem a mesma coisa — se parecessem diferentes, o
    sistema teria dois idiomas para "isto está ligado". O estado vem do motor (`data-pressed`),
@@ -2232,7 +2238,10 @@ img,svg { display:block; }
 .card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px; }
 .card-title { margin:0; font-size:var(--text-sm); font-weight:var(--weight-medium); } .card-subtitle { margin:3px 0 0; color:var(--muted-foreground); font-size:var(--text-sm); }
 
-.alert { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:12px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--secondary); box-shadow:none; }
+/* HER-02 (06/10/2026): o `.alert` e o `.toast` eram `--radius-lg` (16). Painel e superfície
+   flutuante são `--radius-card` (22) na identidade da Aurea, como o `.popover`, o `.dialog` e o
+   `.banner`; o HeroUI 3.2.6 usa 24 nos dois. */
+.alert { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:12px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--secondary); box-shadow:none; }
 /* Banner: aviso de largura de página. Base ANTES das variantes — mesma
    especificidade, então a última regra vence e a base apagaria as cores. */
 .banner { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:12px; padding:14px 18px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--secondary); }
@@ -2295,6 +2304,11 @@ img,svg { display:block; }
 .tabs[data-orientation="vertical"] .tab { min-block-size:var(--control-h-md); text-align:start; }
 .tab { position:relative; padding:0 14px; border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); cursor:pointer; }
 .tab.active,.tab[data-active] { color:var(--foreground); background:var(--secondary); } .tab.active:after,.tab[data-active]:after { display:none; }
+/* `panel="plain"` (MNT-05 e C9, 06/10/2026): o painel sem caixa, como o `.tabs__panel` do HeroUI
+   3.2.6. Sem recheio dos lados — o conteúdo começa na linha do que está fora do `Tabs` —, e o
+   espaço de cima é o mesmo `space-3` do painel do nativo. Na vertical, quem separa é o `gap` da
+   grade da raiz, então o espaço de cima não entra. */
+.tabs-panel { min-width:0; } .tabs-root:not([data-orientation="vertical"])>.tabs-panel { padding-block-start:var(--space-3); }
 .breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:7px; color:var(--muted-foreground); font-size:var(--text-sm); }
 .breadcrumb a { color:inherit; text-decoration:none; } .breadcrumb a:hover { color:var(--foreground); }
 .pagination { display:flex; gap:6px; align-items:center; }
@@ -2861,7 +2875,7 @@ img,svg { display:block; }
 .drawer-wrap { position:fixed; inset:0; z-index:var(--z-drawer); display:none; background:var(--overlay); } .drawer-wrap.open { display:block; }
 .drawer-backdrop { position:fixed; inset:0; z-index:var(--z-drawer); background:var(--overlay); }
 .drawer { position:fixed; top:0; bottom:0; z-index:var(--z-drawer); width:min(480px,92vw); padding:24px; background:var(--surface-1); box-shadow:var(--shadow-lg); overflow:auto; } .drawer-right { right:0; border-left:1px solid var(--border); } .drawer-left { left:0; border-right:1px solid var(--border); }
-.toast-stack { position:fixed; inset-inline-end:22px; bottom:22px; z-index:var(--z-toast); width:min(360px,calc(100vw - 44px)); display:flex; flex-direction:column; gap:10px; } .toast { display:flex; align-items:center; gap:11px; padding:14px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-md); transition:opacity .28s var(--ease-standard), transform .28s var(--ease-emphasized); } .toast>:first-child { flex:1; min-width:0; } .toast-text { display:flex; flex-direction:column; gap:2px; min-width:0; } .toast[data-starting-style],.toast[data-ending-style] { opacity:0; transform:translateY(12px); }
+.toast-stack { position:fixed; inset-inline-end:22px; bottom:22px; z-index:var(--z-toast); width:min(360px,calc(100vw - 44px)); display:flex; flex-direction:column; gap:10px; } .toast { display:flex; align-items:center; gap:11px; padding:14px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-md); transition:opacity .28s var(--ease-standard), transform .28s var(--ease-emphasized); } .toast>:first-child { flex:1; min-width:0; } .toast-text { display:flex; flex-direction:column; gap:2px; min-width:0; } .toast[data-starting-style],.toast[data-ending-style] { opacity:0; transform:translateY(12px); }
 /* As quatro faces do `AureaToastType`, escritas em 16/08/2026 — elas NÃO existiam, e o tipo
    publicado não pintava nada. O `system.tsx` emite `toast-${t.type}` desde sempre; classe por
    template é o ponto CEGO do check 18, que só enxerga classe literal — o mesmo defeito que o

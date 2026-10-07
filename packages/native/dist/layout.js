@@ -17,7 +17,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
-import { criarFolha, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
 import { Text } from "./text.js";
 import { useAureaTokens, SobreAMarca } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -40,7 +40,7 @@ const folha = criarFolha((t) => ({
     // `boxShadow` é do RN 0.76+, e a Etapa 2 mediu que ele é 1:1 com o CSS — inclusive `spread`,
     // que o par `shadowRadius`/`elevation` perdia. Provado em aparelho no smoke do Lote 0.
     cardBase: {
-        borderRadius: t.size.radiusCard,
+        ...canto(t.size.radiusCard),
         padding: t.size.cardPad,
         backgroundColor: t.color.card,
         borderWidth: t.size.borderWidth,

@@ -23,7 +23,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // perderia o cartão, que é metade do que ela é.
 import * as React from "react";
 import { Image, View } from "react-native";
-import { acentoDoTom, criarFolha, fundoDoTom } from "./estilos.js";
+import { canto, acentoDoTom, criarFolha, fundoDoTom } from "./estilos.js";
 import { Card } from "./layout.js";
 import { gravidadeDoEstado } from "./strings.js";
 import { Text } from "./text.js";
@@ -44,7 +44,7 @@ const folha = criarFolha((t) => ({
     selo: {
         flexDirection: "row", alignItems: "center", justifyContent: "center", gap: t.size.space1,
         paddingVertical: t.size.space1, paddingHorizontal: t.size.space3,
-        borderWidth: t.size.borderWidth, borderRadius: t.size.radiusControl,
+        borderWidth: t.size.borderWidth, ...canto(t.size.radiusControl),
         backgroundColor: t.color.secondary, borderColor: t.color.border,
     },
     selo_xs: { minHeight: t.size.space4, paddingVertical: 0, paddingHorizontal: t.size.space1, borderWidth: 0 },
@@ -52,7 +52,7 @@ const folha = criarFolha((t) => ({
     selo_md: {},
     // 6 de recheio vertical: no HeroUI é `calc(var(--spacing) * 1.5)`, e `--spacing` é o `space1`.
     selo_lg: { paddingVertical: t.size.space1 * 1.5, paddingHorizontal: t.size.space4 },
-    ponto: { width: t.size.space2, height: t.size.space2, borderRadius: t.size.radiusFull },
+    ponto: { width: t.size.space2, height: t.size.space2, ...canto(t.size.radiusFull) },
     // `fit="content"` (R-01): o mesmo `alignSelf` que a âncora abaixo já usa para não esticar.
     justo: { alignSelf: "flex-start" },
     // A âncora é `position:relative` na web; aqui o filho absoluto já se posiciona por ela.
@@ -66,11 +66,11 @@ const folha = criarFolha((t) => ({
     estado: { flexDirection: "row", alignItems: "center", gap: t.size.space2 },
     // O halo é `box-shadow 0 0 0 3px` da cor corrente a 14% (aurea.css:1055). Sem `color-mix` no
     // RN, o mesmo efeito sai com opacidade no próprio anel.
-    pontoDeEstado: { width: 8, height: 8, borderRadius: t.size.radiusFull },
+    pontoDeEstado: { width: 8, height: 8, ...canto(t.size.radiusFull) },
     // ── Avatar ─────────────────────────────────────────────────────────────────────────────────
     avatar: {
         alignItems: "center", justifyContent: "center", overflow: "hidden",
-        borderRadius: t.size.radiusFull, backgroundColor: t.color.surface3,
+        ...canto(t.size.radiusFull), backgroundColor: t.color.surface3,
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
     },
     imagem: { width: "100%", height: "100%" },

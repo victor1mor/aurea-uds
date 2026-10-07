@@ -38,7 +38,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //                     e serve ao mesmo caso real: o consumidor que já usa `expo-image`.
 import * as React from "react";
 import { Image as ImageRN, Pressable, View, } from "react-native";
-import { criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Grid } from "./layout.js";
 import { Dialog } from "./overlays.js";
@@ -51,12 +51,12 @@ const folha = criarFolha((t) => ({
     // mais numa lista que já rola.
     imagem: {
         width: "100%",
-        borderRadius: t.size.radiusLg,
+        ...canto(t.size.radiusLg),
         backgroundColor: t.color.surface3 ?? t.color.muted,
     },
     contain: { backgroundColor: "transparent" },
     quebrada: { alignItems: "center", justifyContent: "center" },
-    ladrilho: { gap: t.size.space1, padding: t.size.space1, borderRadius: t.size.radiusLg },
+    ladrilho: { gap: t.size.space1, padding: t.size.space1, ...canto(t.size.radiusLg) },
     ladrilhoEscolhido: { backgroundColor: t.color.secondary },
 }));
 /** `"16/9"`, `"4:3"` ou o número que o RN quer. Devolve `undefined` quando não dá para ler. */

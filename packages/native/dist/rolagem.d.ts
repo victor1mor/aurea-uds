@@ -11,6 +11,13 @@ export interface FilaRolanteProps {
      * `end`. Quando não cabe, ela rola, e o alinhamento deixa de existir: começa no início.
      */
     justify?: AureaFilaJustify;
+    /**
+     * A fila OCUPA a linha quando cabe (A5, 06/10/2026 — o `fullWidth` do `SegmentedControl`). O
+     * recipiente do conteúdo cresce até a largura do rolador; quem cresce dentro dele é o filho, que
+     * também precisa de `flexGrow`. Quando não cabe, rola, como sempre. Vence o `justify`: cheia,
+     * ela não tem onde ficar.
+     */
+    fill?: boolean;
 }
 /** Onde a fila fica, na linha, quando cabe. O nome é o do `Cluster` (R-09): o eixo da fileira. */
 export type AureaFilaJustify = "start" | "center" | "end";
@@ -20,4 +27,4 @@ export type AureaFilaJustify = "start" | "center" | "end";
  * O componente fica com a informação em vez de adivinhar: `onLayout` dá a largura visível e
  * `onContentSizeChange` dá a do conteúdo. Com as duas, `transbordou` é uma conta, não um palpite.
  */
-export declare function FilaRolante({ children, style, testID, justify }: FilaRolanteProps): React.JSX.Element;
+export declare function FilaRolante({ children, style, testID, justify, fill }: FilaRolanteProps): React.JSX.Element;

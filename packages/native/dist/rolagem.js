@@ -32,7 +32,7 @@ const JUSTIFICAR = { center: "center", end: "flex-end" };
  * O componente fica com a informação em vez de adivinhar: `onLayout` dá a largura visível e
  * `onContentSizeChange` dá a do conteúdo. Com as duas, `transbordou` é uma conta, não um palpite.
  */
-export function FilaRolante({ children, style, testID, justify = "start" }) {
+export function FilaRolante({ children, style, testID, justify = "start", fill }) {
     const [visivel, setVisivel] = React.useState(0);
     const [conteudo, setConteudo] = React.useState(0);
     const transbordou = conteudo > visivel && visivel > 0;
@@ -46,5 +46,6 @@ export function FilaRolante({ children, style, testID, justify = "start" }) {
         // largura do rolador (`flexGrow: 1`) e POSICIONA a cápsula lá dentro. Ela não estica: na
         // fileira, o filho tem a largura dele. Medido pelo app: rolador 335 de largura, fileira 281,
         // encostada à esquerda, e um `Cluster justify="center"` em volta não mudava nada.
-        contentContainerStyle: justify === "start" ? { flexGrow: 0 } : { flexGrow: 1, justifyContent: JUSTIFICAR[justify] }, style: style, children: children }));
+        contentContainerStyle: fill ? { flexGrow: 1 }
+            : justify === "start" ? { flexGrow: 0 } : { flexGrow: 1, justifyContent: JUSTIFICAR[justify] }, style: style, children: children }));
 }

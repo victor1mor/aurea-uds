@@ -47,7 +47,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Platform, TextInput, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { useCampo } from "./inputs.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca } from "./theme.js";
 const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg
@@ -76,7 +76,7 @@ const folha = criarFolha((t) => ({
     campo: {
         width: t.size.space16, textAlign: "center",
         borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
         // A mesma correção de Android do `Input` do Lote 4 — ver `inputs.tsx:280-296`.
         paddingVertical: 0, textAlignVertical: "center",
     },

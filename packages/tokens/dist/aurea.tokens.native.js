@@ -72,6 +72,7 @@ export const base = {
   "radiusMd": 10,
   "radiusLg": 16,
   "radiusCard": 22,
+  "radiusSheet": 32,
   "radiusControl": 999,
   "radiusFull": 999,
   "borderWidth": 1,

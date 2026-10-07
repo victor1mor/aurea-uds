@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/tokens",
-  "version": "0.19.1",
+  "version": "0.20.0",
   "description": "Os tokens da Aurea UDS: a fonte em DTCG e as variáveis CSS geradas dela.",
   "keywords": [
     "aurea",

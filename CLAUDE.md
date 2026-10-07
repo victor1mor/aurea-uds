@@ -222,6 +222,18 @@ documento de achados mais novo para conferir se ela envelheceu.
    aberto) — ela leva `collapsable={false}`, ou cor/borda desde o começo. Quem cobra:
    `tests/unit/native-capsula-android.test.tsx`. **Aceito no aparelho Android do Victor** em
    04/10/2026 (bloco `0.19.1`, no topo do `apps/native-smoke`: *"deu certo"*). Leva a `0.19.0` junto.
+14. **`0.20.0`, o Lote I, feito em 06/10/2026 e ainda não publicado** — o grupo 1 da fila de
+   06/10/2026 (a fila agora mora no documento de achados do Victor, fora do repositório), com o
+   "pode" do mesmo dia: A5 (o `SegmentedControl` do nativo não quebra o rótulo, e `fullWidth` nos dois
+   alvos), C9 e MNT-05 (`panel="plain"` no `Tabs`, nos dois alvos), R-23 (`exif` → `takenAt` no
+   `PhotoInput`, e várias fotos de uma vez da galeria), HER-01 (o canto contínuo da Apple em todo o
+   nativo), HER-02 (`Alert` e `Toast` com 22, nos dois alvos) e HER-03 (a folha de baixo com 32,
+   [ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)). ⚠ **A regra nova:** todo raio
+   do nativo passa por `canto()` (`estilos.ts`); raio escrito à mão reprova em
+   `tests/unit/native-canto-continuo.test.tsx`. Aprovado pela bancada (*"pode, folha com 32"*,
+   06/10/2026). Falta a junção, a publicação e o aceite de aparelho (bloco `0.20`, no topo do
+   `apps/native-smoke`). Ficaram para decisão do Victor: LOGO-01 (peça nova ou o encaixe `leading`
+   do `Button`) e CHK-01 (cartão de escolha, a desenhar).
 
 ### Lote E e decisões de 25/09/2026
 
@@ -310,6 +322,8 @@ no git.
 ## 5. Identidade visual — INTOCÁVEL
 
 - Superfícies flutuantes; cartões, janelas e painéis com raio 22px (`--radius-card`).
+- **A exceção: a folha que sobe de baixo tem 32** (`--radius-sheet`, decisão do Victor, 06/10/2026,
+  [ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)).
 - Campos, filtros, abas e botões de texto em cápsula (`--radius-control: 999px`).
 - Amarelo primário `oklch(0.795 0.184 86.047)` invariável entre temas — e **invariável dentro de
   cada MARCA** ([ADR-0036](decisions/0036-marca-e-um-eixo-e-o-amarelo-continua-invariavel.md)).

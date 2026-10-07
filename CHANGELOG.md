@@ -80,6 +80,65 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.20.0] — 2026-10-06
+
+⏳ **Ainda não publicada.** Aprovada pela bancada do Victor, com o código real rodando no navegador
+e a `0.19.1` ao lado (*"pode, folha com 32"*, 06/10/2026). Falta a junção e a publicação.
+
+O **Lote I**: o grupo 1 da fila de 06/10/2026 — o que o app do consumidor de celular viu no aparelho
+e o que destrava função nova nele. Seis itens, com o "pode" de 06/10/2026. **Versão nova, e não
+correção, porque entram props.** Nada sai nem muda de nome, e **nenhuma dependência entra**. Cada
+prop nova sai com o mesmo nome na web e no nativo, como no HeroUI.
+
+### Corrigido
+
+- **A5 · O `SegmentedControl` do nativo quebrava o rótulo em duas linhas** no app rodando no
+  navegador. Medido na bancada com a `0.19.1`: três opções de 88 cada e "3.000 km" com 48 de
+  altura (duas linhas). A causa era o `flex: 1` do segmento: o `react-native-web` o passa cru para o
+  CSS (`1 1 0%`), e a largura é repartida em partes iguais. No aparelho o rótulo não quebrava —
+  medido no Yoga oficial (`yoga-layout` 3.2.1), com e sem `flex: 1` —, mas a cápsula não ocupava a
+  linha (245 de 343). Agora o segmento é do tamanho do rótulo, como a aba do `Tabs` e o
+  `.segmented button` da web. Quem cobra: `tests/unit/native-a5-segmentado.test.tsx` (o código de
+  antes reprova).
+
+### Adicionado
+
+- **A5 · `fullWidth` no `SegmentedControl`, web e nativo** — o nome do `ToggleButtonGroup` do HeroUI
+  3.2.6. O controle ocupa a linha, e cada segmento cresce a partir do rótulo (base `auto`; na web,
+  `flex:1 0 auto`), sem encolher abaixo dele. Medido na bancada: 328 de 328, numa linha. Quando as
+  opções não cabem, rola, como sem a prop.
+- **C9 e MNT-05 · `panel` no `Tabs`, web e nativo: `"card"` (padrão) ou `"plain"`.** O app mediu o
+  conteúdo 21 pontos para dentro, e o `variant="secondary"` não mudava isso: o painel era um cartão
+  `inset` nas duas variantes (recheio 20 + borda 1). Com `panel="plain"` o painel é só o espaço de
+  cima (`space3`), sem caixa — como o painel do HeroUI. Medido na bancada: o cartão de dentro passa
+  de 37/286 para 16/328, igual ao de fora. Na web, a classe nova é `.tabs-panel`.
+- **R-23 · `exif` no `PhotoInput`: a data em que a foto foi tirada, em `takenAt`.** Desligado por
+  padrão. Lê `DateTimeOriginal` (com o fuso `OffsetTimeOriginal` quando o iPhone manda; sem fuso,
+  vale a hora do aparelho), e fica vazio quando a foto não tem data. **O EXIF não sai do
+  componente** — ele traz a localização das fotos da galeria. E da galeria, quando ainda cabe mais
+  de uma foto no `max`, escolhe várias de uma vez (`allowsMultipleSelection` + `selectionLimit`,
+  Android e iOS 14+). Lido no fonte do `expo-image-picker` 57.0.15. Quem cobra:
+  `tests/unit/native-r23-data-da-foto.test.tsx`.
+
+### Mudado
+
+- **HER-01 · O canto contínuo da Apple em todo o nativo.** Todo raio do pacote passa por `canto()` e
+  `cantosDeCima()` (`estilos.ts`), que entregam o raio e `borderCurve: "continuous"` juntos — o canto
+  do iPhone, que o `heroui-native` 1.0.10 põe em 24 peças. Eram 60 raios e nenhum canto contínuo.
+  **Só o iOS 13+ desenha; o Android e o navegador não mudam.** O anel do `Spinner` fica `circular`,
+  declarado: ele gira. Quem cobra: `tests/unit/native-canto-continuo.test.tsx` — reprova raio escrito
+  à mão em qualquer fonte do pacote, com arquivo e linha.
+- **HER-02 · `Alert` e `Toast` com 22 de canto (eram 16), web e nativo.** 22 é o raio de painel da
+  Aurea (`CLAUDE.md` §5), o mesmo do `Popover`, do `Dialog` e do `Banner`; o HeroUI usa 24. Quem
+  cobra: `tests/unit/her02-raio-do-aviso.test.tsx`. As fotos da CI não mudam: nenhuma página
+  fotografada tem `Alert` ou `Toast` (conferido no HTML das oito páginas e na matriz).
+- **HER-03 · A folha que sobe de baixo com 32 de canto (era 22), no nativo** — decisão do Victor
+  olhando as duas na bancada (*"folha com 32"*,
+  [ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)). Vale para a `BottomSheet`, a
+  lista do `Select` e a folha do `Combobox`, as três que sobem de baixo. É o 32 do bottom-sheet do
+  HeroUI Native. Token novo: `radius-sheet` (`radiusSheet` no nativo, `--radius-sheet` na web, para a
+  gaveta de baixo que a web ainda não tem). Quem cobra: `tests/unit/native-her03-folha.test.tsx`.
+
 ## [0.19.1] — 2026-10-04
 
 ✅ **Publicada em 04/10/2026, por volta das 18:38 (Brasília)**, pelo terminal do Victor, da junção

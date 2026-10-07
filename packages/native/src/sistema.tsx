@@ -34,7 +34,7 @@ import {Linking, Platform, Pressable, View, type StyleProp, type ViewStyle} from
 import RNDateTimePicker, {DateTimePickerAndroid} from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "./actions.js";
-import {criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
 import {Alert} from "./feedback.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
@@ -47,7 +47,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   gatilho: {
     flexDirection: "row", alignItems: "center", justifyContent: "space-between",
     width: "100%", borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    borderRadius: t.size.radiusControl, backgroundColor: t.color.fieldBg,
+    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
   },
   invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
   desabilitado: {opacity: t.size.opacityDisabled},
@@ -66,7 +66,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   remover: {position: "absolute", top: -foraDoX(t), right: -foraDoX(t)},
   adicionar: {
     alignItems: "center", justifyContent: "center", gap: t.size.space1,
-    width: t.size.space16, height: t.size.space16, borderRadius: t.size.radiusLg,
+    width: t.size.space16, height: t.size.space16, ...canto(t.size.radiusLg),
     borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
     borderStyle: "dashed", backgroundColor: t.color.fieldBg,
   },
@@ -194,7 +194,43 @@ export function DatePicker({
 // PhotoInput
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
-export type AureaPhoto = {uri: string; width?: number; height?: number};
+export type AureaPhoto = {
+  uri: string; width?: number; height?: number;
+  /**
+   * Quando a foto foi TIRADA, lida do EXIF (R-23). Só vem com a prop `exif`, e fica vazia quando
+   * a foto não traz a data — a que passou pelo WhatsApp, por exemplo, perde o EXIF no caminho.
+   */
+  takenAt?: Date;
+};
+
+// R-23 (06/10/2026) · a data em que a foto foi tirada, e NADA MAIS do EXIF.
+//
+// Lido no fonte do `expo-image-picker` 57.0.15: no iPhone o código junta o dicionário `{Exif}` no
+// topo, então `DateTimeOriginal` chega com esse nome nos dois sistemas. O formato do EXIF é
+// "AAAA:MM:DD HH:MM:SS", sem fuso. O iPhone pode mandar `OffsetTimeOriginal` ("-03:00"); a lista
+// de etiquetas do Android não tem fuso, e aí vale a hora local do aparelho — que é a hora em que
+// a pessoa estava, no caso comum de fotografar e lançar no mesmo lugar.
+//
+// ⚠ O EXIF de uma foto da galeria traz também a LOCALIZAÇÃO. Por isso esta função devolve uma
+// data e o EXIF não sai daqui: o app não recebe o que não pediu.
+function dataDaFoto(exif: Record<string, unknown> | null | undefined): Date | undefined {
+  const bruto = exif?.DateTimeOriginal ?? exif?.DateTimeDigitized;
+  if (typeof bruto !== "string") return undefined;
+  const m = /^(\d{4}):(\d{2}):(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/.exec(bruto.trim());
+  if (!m) return undefined;
+  const [ano, mes, dia, hora, minuto, segundo] = m.slice(1).map(Number);
+  // "0000:00:00 00:00:00" é como câmera sem relógio escreve "sem data".
+  if (ano === 0 || mes < 1 || mes > 12 || dia < 1 || dia > 31 || hora > 23 || minuto > 59 || segundo > 59) {
+    return undefined;
+  }
+  const fuso = exif?.OffsetTimeOriginal ?? exif?.OffsetTimeDigitized;
+  const f = typeof fuso === "string" ? /^([+-])(\d{2}):(\d{2})$/.exec(fuso.trim()) : null;
+  if (f) {
+    const minutos = (f[1] === "-" ? -1 : 1) * (Number(f[2]) * 60 + Number(f[3]));
+    return new Date(Date.UTC(ano, mes - 1, dia, hora, minuto, segundo) - minutos * 60000);
+  }
+  return new Date(ano, mes - 1, dia, hora, minuto, segundo);
+}
 
 export interface PhotoInputProps {
   value?: AureaPhoto[];
@@ -211,6 +247,12 @@ export interface PhotoInputProps {
   offerSettings?: boolean;
   /** Avisado quando a permissão foi negada — o app pode querer contar uma história própria. */
   onPermissionDenied?: () => void;
+  /**
+   * Lê do EXIF a data em que a foto foi tirada e a entrega em `takenAt` (R-23). Desligado por
+   * padrão: ler o EXIF custa (no iPhone, a foto que está no iCloud desce inteira) e o app só
+   * paga quando precisa. Da galeria, é o que põe na ordem certa a foto que sobe dias depois.
+   */
+  exif?: boolean;
   addIcon?: AureaIcon | false;
   removeIcon?: AureaIcon;
   style?: StyleProp<ViewStyle>;
@@ -232,6 +274,8 @@ export interface PhotoInputProps {
  * | **câmera ou galeria?** | câmera, que é o que o plano pede | `source="library"` |
  * | como **remover**? | um `IconButton` no canto de cada miniatura | `removeIcon` |
  * | **quantas** cabem? | uma | `max` |
+ * | **várias de uma vez?** | da galeria, sim, quando cabe mais de uma (R-23) | `max` |
+ * | **a data** em que foi tirada? | não lê: ler o EXIF custa | `exif` → `takenAt` (R-23) |
  *
  * ⚠ **O gatilho some quando o limite é atingido**, em vez de ficar aceso e não fazer nada.
  *
@@ -249,7 +293,7 @@ export interface PhotoInputProps {
  */
 export function PhotoInput({
   value = [], onChange, max = 1, source = "camera", disabled, offerSettings = true,
-  onPermissionDenied, addIcon = "camera", removeIcon = "x", style, testID,
+  onPermissionDenied, exif = false, addIcon = "camera", removeIcon = "x", style, testID,
 }: PhotoInputProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -277,16 +321,25 @@ export function PhotoInput({
         return;
       }
     }
+    // R-23: da GALERIA, escolhe várias de uma vez quando cabe mais de uma, até o que falta para o
+    // `max`. A câmera tira uma por vez — no sistema, não há outro jeito.
+    const cabem = max - value.length;
     const r = source === "camera"
-      ? await ImagePicker.launchCameraAsync({quality: 0.7})
-      : await ImagePicker.launchImageLibraryAsync({quality: 0.7});
+      ? await ImagePicker.launchCameraAsync({quality: 0.7, exif})
+      : await ImagePicker.launchImageLibraryAsync(cabem > 1
+        ? {quality: 0.7, exif, allowsMultipleSelection: true, selectionLimit: cabem}
+        : {quality: 0.7, exif});
     if (r.canceled || !r.assets?.length) return;
     const novas: AureaPhoto[] = r.assets
-      .slice(0, max - value.length)
-      .map((a: {uri: string; width?: number; height?: number}) =>
-        ({uri: a.uri, width: a.width, height: a.height}));
+      .slice(0, cabem)
+      .map((a: {uri: string; width?: number; height?: number; exif?: Record<string, unknown> | null}) => {
+        const foto: AureaPhoto = {uri: a.uri, width: a.width, height: a.height};
+        const quando = exif ? dataDaFoto(a.exif) : undefined;
+        if (quando) foto.takenAt = quando;
+        return foto;
+      });
     onChange?.([...value, ...novas]);
-  }, [source, max, value, onChange, onPermissionDenied]);
+  }, [source, max, value, onChange, onPermissionDenied, exif]);
 
   return (
     <View testID={testID} style={style}>

@@ -348,6 +348,12 @@ export interface SegmentedControlProps extends ViewProps {
     disabled?: boolean;
     /** Onde o controle fica quando cabe na linha: `start` (padrão), `center` ou `end` (E3). */
     justify?: AureaFilaJustify;
+    /**
+     * Ocupa a linha inteira, repartindo a sobra entre os segmentos — o `fullWidth` do HeroUI (A5,
+     * 06/10/2026). Nenhum segmento fica menor que o rótulo: quando as opções não cabem, o controle
+     * rola, como sem a prop. Com `fullWidth`, o `justify` não tem efeito.
+     */
+    fullWidth?: boolean;
 }
 /**
  * Um de poucos, lado a lado.
@@ -357,7 +363,7 @@ export interface SegmentedControlProps extends ViewProps {
  * há teclado aqui**, então o que resta é o que já se faz à mão: papel de grupo de rádio, um
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
-export declare function SegmentedControl({ items, value, onChange, label, disabled, justify, style, ...rest }: SegmentedControlProps): React.JSX.Element;
+export declare function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, style, ...rest }: SegmentedControlProps): React.JSX.Element;
 export interface SelectProps {
     items: Array<{
         value: string;

@@ -106,7 +106,7 @@ export type {
   BottomNavProps, TopbarProps, NavListProps, StepperProps,
   AureaNavItem, AureaNavListItem, AureaNavListIndicator, AureaStepItem, AureaStepState,
   AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset,
-  TabsProps, AureaTabItem, AureaTabsVariant,
+  TabsProps, AureaTabItem, AureaTabsVariant, AureaTabsPanel,
 } from "./navigation.js";
 
 // ── Lote 4 — os formulários ────────────────────────────────────────────────────────────────

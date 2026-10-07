@@ -76,6 +76,12 @@
       "type": "string",
       "default": "—",
       "description": "Accessible name of the set."
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "default": "false",
+      "description": "Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. HeroUI's ToggleButtonGroup name; the same prop on native (A5, 06/10/2026)."
     }
   ]
 }
