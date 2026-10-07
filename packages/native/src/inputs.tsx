@@ -43,7 +43,7 @@ import {
   type KeyboardTypeOptions, type PressableProps, type StyleProp, type TextInputProps, type TextStyle,
   type ViewProps, type ViewStyle,
 } from "react-native";
-import {canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido} from "./estilos.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
@@ -104,6 +104,10 @@ const folha = criarFolha((t: AureaTokens) => ({
   // E5: a marca no MEIO da altura do texto, como o HeroUI Native. Era `flex-start` com um
   // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
   linhaDeControle: {flexDirection: "row", alignItems: "center", gap: 9},
+  // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
+  // no alto, na linha do título.
+  itemCartao: {...peleDoCartao(t), alignItems: "flex-start"},
+  itemCartaoEscolhido: peleDoCartaoEscolhido(t),
   linhaNoTopo: {alignItems: "flex-start"},
 
   trilho: {...canto(t.size.radiusFull), backgroundColor: t.color.muted,
@@ -791,12 +795,19 @@ export function Radio(p: RadioProps) { return <ControleMarcado {...p} papel="rad
 /** De que lado da linha a marca fica: `end` (padrão, como o exemplo do HeroUI) ou `start`. */
 export type AureaRadioIndicatorPlacement = "start" | "end";
 
+/**
+ * O jeito dos itens (CHK-01, 06/10/2026): `list` (padrão) é a linha de sempre; `card` faz de cada
+ * item um CARTÃO inteiro tocável — o cartão de escolha.
+ */
+export type AureaRadioGroupVariant = "list" | "card";
+
 interface ContextoDoGrupo {
   value?: string;
   onValueChange?: (value: string) => void;
   disabled?: boolean;
   invalid?: boolean;
   indicatorPlacement?: AureaRadioIndicatorPlacement;
+  variant?: AureaRadioGroupVariant;
 }
 const GrupoDeRadio = React.createContext<ContextoDoGrupo | null>(null);
 
@@ -818,6 +829,13 @@ export interface RadioGroupProps extends ViewProps {
    * o lado vira uma lista fechada de duas opções, com o nome que o HeroUI usa para posição.
    */
   indicatorPlacement?: AureaRadioIndicatorPlacement;
+  /**
+   * `card` faz de cada item um cartão de escolha (CHK-01, 06/10/2026): o cartão INTEIRO é a opção,
+   * com o papel de rádio para o leitor de tela. A pele é a do `Card` — o cartão comum, e o cartão
+   * escolhido (`variant="selected"`) no item marcado. É como o HeroUI monta essa peça (o exemplo
+   * de `RadioGroup.Item` com uma superfície dentro); o Chakra a chama de `RadioCard`.
+   */
+  variant?: AureaRadioGroupVariant;
   children?: React.ReactNode;
 }
 
@@ -840,16 +858,23 @@ export interface RadioGroupItemProps extends Omit<PressableProps, "children" | "
    * cheia (ADR-0053), se o registro a tiver.
    */
   icon?: AureaIcon;
+  /**
+   * Conteúdo a mais, embaixo da descrição (CHK-01) — no cartão de escolha, o preço e a lista do
+   * que o plano inclui. É texto para LER: o item inteiro já é o alvo do toque, e um botão aqui
+   * dentro sumiria para o VoiceOver (a regra do `check 43`). O leitor de tela lê o `label` e a
+   * `description`; o que este conteúdo diz de essencial vai no `accessibilityLabel` do item.
+   */
+  children?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
 function RaizDoGrupoDeRadio({
   value, onValueChange, disabled, invalid, label, orientation = "vertical", indicatorPlacement,
-  style, children, ...rest
+  variant = "list", style, children, ...rest
 }: RadioGroupProps) {
   const t = useAureaTokens();
-  const contexto = React.useMemo(() => ({value, onValueChange, disabled, invalid, indicatorPlacement}),
-    [value, onValueChange, disabled, invalid, indicatorPlacement]);
+  const contexto = React.useMemo(() => ({value, onValueChange, disabled, invalid, indicatorPlacement, variant}),
+    [value, onValueChange, disabled, invalid, indicatorPlacement, variant]);
   return (
     <GrupoDeRadio.Provider value={contexto}>
       <View
@@ -866,7 +891,7 @@ function RaizDoGrupoDeRadio({
 
 function ItemDoGrupoDeRadio({
   value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel,
-  ...rest
+  children, ...rest
 }: RadioGroupItemProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -879,7 +904,8 @@ function ItemDoGrupoDeRadio({
   const marca = t.size.space6;
   const ponto = t.size.space2 + t.size.space05;
   const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
-  const texto = (label != null || description != null) && (
+  const cartao = grupo?.variant === "card";
+  const texto = (label != null || description != null || children != null) && (
     <View key="texto" style={{flex: 1, minWidth: 0}}>
       {typeof label === "string"
         ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
@@ -889,6 +915,8 @@ function ItemDoGrupoDeRadio({
           mesmo do `Checkbox` e do `Switch`. */}
       {description != null && (typeof description === "string"
         ? <Text size="xs" tone="muted">{description}</Text> : description)}
+      {/* CHK-01: o conteúdo a mais (preço, lista) desce com o vão da casa entre blocos. */}
+      {children != null && <View style={{marginTop: t.size.space3}}>{children}</View>}
     </View>
   );
   const marcaDesenhada = (
@@ -920,6 +948,13 @@ function ItemDoGrupoDeRadio({
       style={[
         {flexDirection: "row", alignItems: "center", justifyContent: "space-between",
          gap: t.size.space3, minHeight: t.size.targetMin},
+        // CHK-01: no cartão a marca sobe para a altura do título (o cartão pode ser alto — preço,
+        // lista —, e uma marca no meio dele não diz de quem é). A pele é a do `Card`, e ela existe
+        // DESDE A MONTAGEM, com fundo e borda: escolher só troca as cores. É a regra que a `0.19.1`
+        // pagou no Android — caixa que ganha a pintura depois de montada perde o raio.
+        cartao && s.itemCartao,
+        cartao && escolhido && s.itemCartaoEscolhido,
+        cartao && erro && {borderColor: perigo},
         inativo && s.desabilitado, style,
       ]}
       {...rest}>

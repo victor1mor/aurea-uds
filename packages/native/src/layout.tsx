@@ -16,7 +16,7 @@ import {Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewSt
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
-import {canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Text} from "./text.js";
 import {useAureaTokens, SobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -40,19 +40,14 @@ const folha = criarFolha((t: AureaTokens) => ({
   // O raio 22 e a sombra vêm de token, e os dois são identidade declarada INTOCÁVEL no CLAUDE.md.
   // `boxShadow` é do RN 0.76+, e a Etapa 2 mediu que ele é 1:1 com o CSS — inclusive `spread`,
   // que o par `shadowRadius`/`elevation` perdia. Provado em aparelho no smoke do Lote 0.
-  cardBase: {
-    ...canto(t.size.radiusCard),
-    padding: t.size.cardPad,
-    backgroundColor: t.color.card,
-    borderWidth: t.size.borderWidth,
-    borderColor: t.color.border,
-  },
+  // A pele mora em `estilos.ts` desde 06/10/2026: o cartão de escolha (CHK-01) usa a mesma.
+  cardBase: peleDoCartao(t),
   card_base: {},
   card_raised: {boxShadow: [t.shadow.shadowLg]},
   card_interactive: {borderColor: t.color.borderStrong},
   // `inset` recessa em vez de flutuar — é o painel DENTRO de um card, e a ficha da web diz isso.
   card_inset: {backgroundColor: t.color.surfaceInset, borderColor: "transparent"},
-  card_selected: {borderColor: t.color.primaryOutline, backgroundColor: t.color.surface2},
+  card_selected: peleDoCartaoEscolhido(t),
   card_danger: {borderColor: t.color.danger400 ?? t.color.destructive, backgroundColor: t.color.dangerBg},
   // O amarelo é o DE PREENCHER — `primary`, o mesmo do botão sólido. A borda some: uma superfície
   // cheia não precisa de contorno, e um contorno sobre o amarelo mede 2,43 no claro (invisível).

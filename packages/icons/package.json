@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/icons",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "O sprite de ícones do Phosphor (Regular e Fill) que a Aurea UDS desenha com <use href>, e a tabela de nomes do Carbon para o Phosphor. A atribuição está no NOTICE.",
   "keywords": [
     "aurea",

@@ -2231,7 +2231,16 @@ img,svg { display:block; }
    centraliza o texto, encolhe até o conteúdo e é inline-block. Sem elas o cartão-botão desenharia
    diferente do cartão-div, e a identidade dependeria de qual elemento o consumidor escolheu.
    É a mesma lição do `.step-trigger` (G-A11Y-10): o elemento certo precisa da pele certa. */
-.card-interactive { cursor:pointer; display:block; inline-size:100%; font:inherit; text-align:inherit; color:inherit; transition:transform var(--duration-fast),border-color var(--duration-fast),background var(--duration-fast); }
+/* GAR-08 (06/10/2026): o `display:block` daqui vinha DEPOIS do `.card-horizontal { display:grid }`,
+   com a mesma força, e ganhava — o cartão clicável na horizontal perdia a coluna da foto. Agora o
+   bloco é só o padrão do alvo (um `<a>` ou `<button>` nasceria em linha), com força ZERO
+   (`:where`): qualquer orientação ganha dele, sem depender da ordem das regras. */
+:where(.card-interactive) { display:block; }
+/* E o sublinhado (achado ao medir o GAR-08, 06/10/2026): o cartão clicável costuma ser um `<a>`
+   (o `render` do `Card`), e todo o texto dele saía sublinhado pelo navegador. Os outros alvos que
+   viram link (`.btn`, `.sidebar-item`, `.nav-list-row`…) já tiravam; o cartão e o item de menu
+   não. Quem cobra é o `link-sem-sublinhado.spec.ts`. */
+.card-interactive { cursor:pointer; inline-size:100%; text-decoration:none; font:inherit; text-align:inherit; color:inherit; transition:transform var(--duration-fast),border-color var(--duration-fast),background var(--duration-fast); }
 .card-interactive:hover { transform:translateY(-2px); border-color:var(--border-strong); background:var(--surface-2); }
 .card-selected { border-color:var(--primary-outline); box-shadow:inset 0 0 0 1px var(--primary-outline); }
 .card-danger { border-color:color-mix(in srgb,var(--danger-400) 50%,var(--border)); background:var(--danger-bg); }
@@ -2911,7 +2920,7 @@ img,svg { display:block; }
    e `--space-1` de respiro. Vale para toda lista que usa `.menu`: Combobox, MultiCombobox,
    DropdownMenu, ContextMenu, Menubar e a lista da CommandPalette. */
 .menu { --menu-px:10px; z-index:var(--z-modal); min-width:200px; max-width:min(320px,calc(100vw - 32px)); padding:var(--space-1); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
-.menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,10px); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; cursor:pointer; }
+.menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,10px); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; text-decoration:none; cursor:pointer; }
 .menu-item[data-highlighted],.menu-item:hover:not([data-disabled]) { background:var(--surface-3); }
 /* Foco de TECLADO no item: a linha de foco, por dentro, porque a lista recorta o que passa da borda
    (B-09 e a ordem de 25/09/2026, "HeroUI sempre primeiro": o `menu-item` do HeroUI 3.2.6 leva o

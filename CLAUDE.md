@@ -232,8 +232,17 @@ documento de achados mais novo para conferir se ela envelheceu.
    do nativo passa por `canto()` (`estilos.ts`); raio escrito à mão reprova em
    `tests/unit/native-canto-continuo.test.tsx`. Aprovado pela bancada (*"pode, folha com 32"*,
    06/10/2026). Falta a junção, a publicação e o aceite de aparelho (bloco `0.20`, no topo do
-   `apps/native-smoke`). Ficaram para decisão do Victor: LOGO-01 (peça nova ou o encaixe `leading`
-   do `Button`) e CHK-01 (cartão de escolha, a desenhar).
+   `apps/native-smoke`). O LOGO-01 fechou sem peça nova (decisão do Victor: o app usa o encaixe
+   `leading` do `Button`).
+15. **`0.21.0`, o Lote J, feito em 06/10/2026 e ainda não publicado** — aprovado pela bancada
+   (*"aprovado o J"*): CHK-01 (`RadioGroup variant="card"`, o cartão de escolha, no nativo; a pele
+   do `Card` mora em `estilos.ts`) e GAR-08 (o cartão clicável na horizontal volta a ter a coluna da
+   foto, na web — `:where(.card-interactive)`), mais o achado da medição: o cartão-link e o item de
+   menu-link saíam sublinhados. Quem cobra no navegador: `card-horizontal-clicavel.spec.ts` e
+   `link-sem-sublinhado.spec.ts`. ⚠ **A lição:** depois de mudar CSS, rodar também os testes de
+   navegador (`pnpm exec playwright test`), não só os unitários — o `skin.spec` do Lote I só foi
+   pego assim. E a barra de cima do catálogo mostra a contagem de tokens: token novo muda a foto
+   `topo` da CI.
 
 ### Lote E e decisões de 25/09/2026
 
