@@ -35,6 +35,25 @@ overrides:
   # Nao sai em pacote publicado. 5.0.11 e' o patch e cabe no `^5.0.8` que o minimatch 10.2.6 pede — sem
   # bump maior. O seletor pega SO essa linha: as linhas 1.x e 2.x, de outros minimatch, ficam.
   'brace-expansion@>=4.0.0 <5.0.11': '^5.0.11'
+  # QUATRO ALERTAS NOVOS em 06/10/2026, que reprovaram a CI do pedido #43 sem nenhuma dependencia
+  # nossa mudar (o `main` reprova junto). Todos de FERRAMENTA, nenhum em pacote publicado, e todos
+  # com correcao publicada — por isso override, e nao aceite com registro. Cada seletor pega SO a
+  # faixa vulneravel, e cada versao corrigida cabe na faixa que quem usa pede (medido com
+  # `npm view` em 06/10/2026), sem bump maior:
+  #   • GHSA-pqg4-j6r4-53mv (critico): shell-quote >=1.8.4 <1.11.0, injecao de comando no
+  #     `quote()`. Chega por react-devtools-core 6.1.5 (pede ^1.6.1), sob o react-native e o Expo
+  #     das devDependencies do @aurea-uds/native.
+  #   • GHSA-68fv-2mgg-jv7q (alto): source-map-js >=1.0.0 <1.2.2, negacao de servico. Chega pelo
+  #     postcss 8.5.23 (pede ^1.2.1), sob vite, vitest e o next do proof-server.
+  #   • GHSA-vc2v-76pw-4v95 (alto): compression <1.8.2, vazamento de memoria. Chega pelo @expo/cli
+  #     (pede ^1.7.4), sob as devDependencies do @aurea-uds/native.
+  #   • GHSA-wq5f-xc86-pv6w (alto): sharp <0.35.5, a libvips/librsvg de dentro (CVE-2026-96889).
+  #     Chega pelo next 16.3.6 do proof-server (pede ^0.35.4).
+  # Saem quando os pacotes de cima passarem a pedir a versao corrigida sozinhos.
+  'shell-quote@>=1.8.4 <1.11.0': '^1.11.0'
+  'source-map-js@>=1.0.0 <1.2.2': '^1.2.2'
+  'compression@<1.8.2': '^1.8.2'
+  'sharp@<0.35.5': '^0.35.5'
 
 auditConfig:
   # DUAS VULNERABILIDADES `high` SEM PATCH PUBLICADO, aceitas em 02/09/2026 com registro.
