@@ -1,9 +1,12 @@
 import React, { type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type RefAttributes, type TextareaHTMLAttributes } from "react";
 import { type Responsive } from "./pure.js";
 import type { ComponentSize } from "./actions.js";
+import type { SidebarItem } from "./navigation-client.js";
 export type BadgeVariant = "neutral" | "primary" | "info" | "success" | "warning" | "danger" | "running" | "paused" | "offline" | "review";
 export type AvatarSize = "sm" | "md" | "lg";
-export type TopbarVariant = "floating" | "flush" | "pill";
+export type HeaderVariant = "floating" | "flush" | "pill";
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). O tipo continua valendo; use `HeaderVariant`. */
+export type TopbarVariant = HeaderVariant;
 type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     padding?: "normal" | "none";
     orientation?: "vertical" | "horizontal";
@@ -98,6 +101,13 @@ export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttri
 export declare function Container({ size, className, ...props }: ContainerProps): React.JSX.Element;
 /** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
 export type SectionSurface = "background" | "card" | "inset";
+/** `base` é a faixa comum; `footer` é o rodapé do site (GAR-06, 07/10/2026). */
+export type SectionVariant = "base" | "footer";
+/** Uma coluna de links do rodapé: o título e os itens. */
+export interface SectionFooterGroup {
+    title: ReactNode;
+    items: SidebarItem[];
+}
 /** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
 export type SectionSpacing = "sm" | "md";
 export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement> {
@@ -109,13 +119,28 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
      * página não vazam para dentro dela.
      */
     theme?: "light" | "dark";
+    /**
+     * `footer` faz da faixa o RODAPÉ do site (GAR-06): `<footer>` com a marca, as colunas de links e a
+     * linha legal, e o miolo já num `Container`. No celular, tudo empilha.
+     */
+    variant?: SectionVariant;
+    /** Só no `footer`: a marca e uma frase curta, no alto à esquerda. */
+    brand?: ReactNode;
+    /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
+    links?: SectionFooterGroup[];
+    /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
+    legal?: ReactNode;
+    /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
+    maxWidth?: ContainerSize;
+    /** Só no `footer`: o nome da navegação do rodapé para o leitor de tela. Padrão: `"Footer"`. */
+    navLabel?: string;
 }
 /**
  * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
  * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
  * quando ela for uma região que o leitor de tela deva listar.
  */
-export declare function Section({ surface, spacing, theme, className, ...props }: SectionProps): React.JSX.Element;
+export declare function Section({ surface, spacing, theme, variant, brand, links, legal, maxWidth, navLabel, children, className, ...props }: SectionProps): React.JSX.Element;
 export declare function KPI({ label, value, trend, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label: ReactNode;
     value: ReactNode;
@@ -228,11 +253,34 @@ export declare function LogStream({ lines }: {
     }>;
 }): React.JSX.Element;
 export declare function MediaPlayerShell({ children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
-export declare function Topbar({ variant, divider, brand, children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
-    variant?: TopbarVariant;
+export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement> {
+    /** A pele: `floating` (caixa solta), `flush` (encostada, o fundo da página) ou `pill` (cápsula). */
+    variant?: HeaderVariant;
+    /** A marca. No `AppShell`, é aqui que entra também o botão que abre a lateral. */
     brand?: ReactNode;
+    /** Só na `flush` (B-07): a linha embaixo da barra. */
     divider?: boolean;
-}): React.JSX.Element;
+    /**
+     * Os links do site (GAR-01) — a mesma lista do `Sidebar` e do `BottomNav`. No celular (abaixo
+     * de 768) eles saem da barra e entram no painel do botão de menu.
+     */
+    items?: SidebarItem[];
+    /** O `id` do item da página atual: ganha `aria-current="page"` e a cor de destaque. */
+    current?: string;
+    /** O que fica do lado direito: busca, botão de ação, conta. Fica na barra também no celular. */
+    actions?: ReactNode;
+    /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
+    maxWidth?: ContainerSize;
+    /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
+    navLabel?: string;
+    /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
+    menuLabel?: string;
+    /** O `id` do painel do celular. Padrão: `"aurea-header-menu"`. Troque só se a página tiver dois cabeçalhos de site. */
+    menuId?: string;
+}
+export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, navLabel, menuLabel, menuId, children, className, ...props }: HeaderProps): React.JSX.Element;
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
+export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, RefAttributes<HTMLTextAreaElement> {
     size?: Responsive<FieldSize>;

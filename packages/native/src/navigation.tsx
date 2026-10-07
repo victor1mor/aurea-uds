@@ -1,4 +1,4 @@
-// Aurea nativo — a categoria **Navigation**: `BottomNav`, `Topbar`, `NavList` e `Stepper`.
+// Aurea nativo — a categoria **Navigation**: `BottomNav`, `Header` (o antigo `Topbar`), `NavList` e `Stepper`.
 //
 // Lote 3 do `NATIVE.md` §5.5 — a moldura. O consumidor medido (§5.1) especifica ela **literal**:
 // *navegação inferior fixa com quatro abas e contador de não lidos*, *o botão central abrindo uma
@@ -554,25 +554,34 @@ export function BottomNav({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
-// Topbar
+// Header — o nome era `Topbar` até 07/10/2026
 // ─────────────────────────────────────────────────────────────────────────────────────────────
+// O Victor mandou trocar pelo nome de mercado ("Header" é o de 16 dos 38 design systems do
+// catálogo que os reúne; "Topbar", de 2), com o MESMO nome nos dois alvos. O nome antigo não sai
+// (regra dele: componente não se exclui): `Topbar` e os tipos `AureaTopbar*` continuam, abaixo.
 
-export type AureaTopbarVariant = "floating" | "flush" | "pill";
+export type AureaHeaderVariant = "floating" | "flush" | "pill";
 /** O recuo dos lados da `flush`: `bar` (20, o de sempre), `page` (16, o da `Screen`) ou `none`. */
-export type AureaTopbarInset = "bar" | "page" | "none";
+export type AureaHeaderInset = "bar" | "page" | "none";
+/** @deprecated Nome antigo do `AureaHeaderVariant` (07/10/2026). Continua valendo. */
+export type AureaTopbarVariant = AureaHeaderVariant;
+/** @deprecated Nome antigo do `AureaHeaderInset` (07/10/2026). Continua valendo. */
+export type AureaTopbarInset = AureaHeaderInset;
 
-export interface TopbarProps extends ViewProps {
-  variant?: AureaTopbarVariant;
+export interface HeaderProps extends ViewProps {
+  variant?: AureaHeaderVariant;
   /**
    * Só na `flush` — R-02, 24/09/2026. Por padrão a barra recua 20 dos lados e a `Screen` recua 16,
    * então o título fica 4 para dentro do conteúdo. `page` alinha os dois; `none` serve para a
    * barra que já vai dentro de um conteúdo com recuo. As outras duas variantes são caixas com
    * margem própria e ignoram esta prop.
    */
-  inset?: AureaTopbarInset;
+  inset?: AureaHeaderInset;
   brand?: React.ReactNode;
   children?: React.ReactNode;
 }
+/** @deprecated Nome antigo do `HeaderProps` (07/10/2026). Continua valendo. */
+export type TopbarProps = HeaderProps;
 
 /**
  * A barra de cima.
@@ -582,7 +591,7 @@ export interface TopbarProps extends ViewProps {
  *
  * ```tsx
  * <Screen padded={false}>
- *   <Topbar brand={<Text weight={700}>Aurea</Text>} />
+ *   <Header brand={<Text weight={700}>Aurea</Text>} />
  *   <ScrollView>…</ScrollView>
  * </Screen>
  * ```
@@ -591,7 +600,7 @@ export interface TopbarProps extends ViewProps {
  * e **não há landmarks no RN**. Um papel inventado diria uma coisa errada; a barra fica sem papel,
  * e quem nomeia a tela é o conteúdo dela.
  */
-export function Topbar({variant = "floating", inset = "bar", brand, children, style, ...rest}: TopbarProps) {
+export function Header({variant = "floating", inset = "bar", brand, children, style, ...rest}: HeaderProps) {
   const s = folha(useAureaTokens());
   return (
     <View
@@ -605,6 +614,10 @@ export function Topbar({variant = "floating", inset = "bar", brand, children, st
       {children}
     </View>
   );
+}
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
+export function Topbar(props: HeaderProps) {
+  return <Header {...props} />;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────

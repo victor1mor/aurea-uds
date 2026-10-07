@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 36,
-    "componentes": 128,
+    "componentes": 129,
     "hooks": 9,
-    "aliasesLiterais": 70,
-    "propsDistintas": 282
+    "aliasesLiterais": 71,
+    "propsDistintas": 287
   },
   "aliases": {
     "ButtonVariant": {
@@ -1766,7 +1766,7 @@
         "lg"
       ]
     },
-    "TopbarVariant": {
+    "HeaderVariant": {
       "module": "markup",
       "raw": "\"floating\" | \"flush\" | \"pill\"",
       "union": [
@@ -1774,6 +1774,11 @@
         "flush",
         "pill"
       ]
+    },
+    "TopbarVariant": {
+      "module": "markup",
+      "raw": "HeaderVariant",
+      "union": null
     },
     "CardProps": {
       "module": "markup",
@@ -1866,6 +1871,14 @@
         "background",
         "card",
         "inset"
+      ]
+    },
+    "SectionVariant": {
+      "module": "markup",
+      "raw": "\"base\" | \"footer\"",
+      "union": [
+        "base",
+        "footer"
       ]
     },
     "SectionSpacing": {
@@ -5397,7 +5410,7 @@
             {
               "name": "topbarVariant",
               "optional": true,
-              "type": "Exclude<TopbarVariant, \"pill\">",
+              "type": "Exclude<HeaderVariant, \"pill\">",
               "values": [
                 "floating",
                 "flush"
@@ -5898,6 +5911,84 @@
           ]
         },
         {
+          "name": "Header",
+          "kind": "function",
+          "propsType": "HeaderProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "HeaderVariant",
+              "values": [
+                "floating",
+                "flush",
+                "pill"
+              ]
+            },
+            {
+              "name": "brand",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "divider",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": true,
+              "type": "SidebarItem[]",
+              "values": null
+            },
+            {
+              "name": "current",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "actions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "maxWidth",
+              "optional": true,
+              "type": "ContainerSize",
+              "values": [
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "full"
+              ]
+            },
+            {
+              "name": "navLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "menuLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "menuId",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "Heading",
           "kind": "function",
           "propsType": "HeadingProps",
@@ -6223,6 +6314,52 @@
                 "light",
                 "dark"
               ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "SectionVariant",
+              "values": [
+                "base",
+                "footer"
+              ]
+            },
+            {
+              "name": "brand",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "links",
+              "optional": true,
+              "type": "SectionFooterGroup[]",
+              "values": null
+            },
+            {
+              "name": "legal",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "maxWidth",
+              "optional": true,
+              "type": "ContainerSize",
+              "values": [
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "full"
+              ]
+            },
+            {
+              "name": "navLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -6377,12 +6514,12 @@
         {
           "name": "Topbar",
           "kind": "function",
-          "propsType": null,
+          "propsType": "HeaderProps",
           "props": [
             {
               "name": "variant",
               "optional": true,
-              "type": "TopbarVariant",
+              "type": "HeaderVariant",
               "values": [
                 "floating",
                 "flush",
@@ -6399,6 +6536,55 @@
               "name": "divider",
               "optional": true,
               "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": true,
+              "type": "SidebarItem[]",
+              "values": null
+            },
+            {
+              "name": "current",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "actions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "maxWidth",
+              "optional": true,
+              "type": "ContainerSize",
+              "values": [
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl",
+                "full"
+              ]
+            },
+            {
+              "name": "navLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "menuLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "menuId",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]

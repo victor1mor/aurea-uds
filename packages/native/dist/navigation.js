@@ -430,7 +430,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
  *
  * ```tsx
  * <Screen padded={false}>
- *   <Topbar brand={<Text weight={700}>Aurea</Text>} />
+ *   <Header brand={<Text weight={700}>Aurea</Text>} />
  *   <ScrollView>…</ScrollView>
  * </Screen>
  * ```
@@ -439,13 +439,17 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
  * e **não há landmarks no RN**. Um papel inventado diria uma coisa errada; a barra fica sem papel,
  * e quem nomeia a tela é o conteúdo dela.
  */
-export function Topbar({ variant = "floating", inset = "bar", brand, children, style, ...rest }) {
+export function Header({ variant = "floating", inset = "bar", brand, children, style, ...rest }) {
     const s = folha(useAureaTokens());
     return (_jsxs(View, { style: [
             s.topo, s[`topo_${variant}`],
             variant === "flush" && inset !== "bar" && s[`topo_recuo_${inset}`],
             style,
         ], ...rest, children: [brand != null && _jsx(View, { children: brand }), children] }));
+}
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
+export function Topbar(props) {
+    return _jsx(Header, { ...props });
 }
 /**
  * A lista de destinos DENTRO da página — a tela de ajustes, não a moldura do app.

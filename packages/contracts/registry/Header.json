@@ -1,0 +1,152 @@
+{
+  "name": "Header",
+  "category": "Navigation",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "The top bar of an app or a website — also called header, navbar or top bar. Brand, the site's links with the current page marked, actions, and on a phone a menu button that drops the links below the bar.",
+  "icon": "list",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "floating",
+    "flush",
+    "pill"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "wrapped",
+    "current",
+    "open"
+  ],
+  "tokens": [
+    "--background",
+    "--border",
+    "--border-width",
+    "--card",
+    "--card-foreground",
+    "--control-h-md",
+    "--foreground",
+    "--icon-md",
+    "--muted-foreground",
+    "--primary-emphasis",
+    "--radius-card",
+    "--radius-control",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--space-5",
+    "--space-8",
+    "--text-sm",
+    "--topbar-height",
+    "--weight-medium",
+    "--z-sticky"
+  ],
+  "a11y": {
+    "role": "banner",
+    "apg": "No APG pattern: a banner is a landmark, not a widget. The role comes from the <header> element, so it is a banner only while it is not nested inside another sectioning element — which is how the AppShell places it. Keyboard behaviour belongs to what you put inside. The drawer toggle the shell injects is a button with popovertarget, and the browser is what supplies its aria-expanded. With `items`, the links sit in a <nav> named by `navLabel`, and the current one carries aria-current=\"page\". Below 768px the menu button is a <button popovertarget> and the panel a <nav popover=\"auto\"> — the same native mechanism as the AppShell drawer, with no script. The browser supplies the expanded state, and Escape and click-outside close the panel, in all three engines (measured 07/10/2026; see keyboardNote).",
+    "keyboard": [
+      "Enter",
+      "Escape",
+      "Tab"
+    ],
+    "keyboardNote": "Measured in a browser on 07/10/2026 (tests/visual/site-gar01-06.spec.ts, in Chromium, Firefox and WebKit), for the phone menu below 768px. Confirmed: Enter on the menu button opens and closes the panel; Escape closes it and returns focus to the button when it was opened from the keyboard; Tab moves into the panel right after the button in Chromium and Firefox. In WebKit, Tab does not reach links anywhere on a page by default (a Safari preference), so there the spec checks that the panel's first link is visible and takes focus; a button inside the same kind of popover is reached by Tab in WebKit 26.5 (measured the same day). Not confirmed: after a CLICK in WebKit, Escape closes the panel but focus goes to the page body, because WebKit does not focus a clicked button. Space is not declared: no spec measures it. Without `items` the Header owns no keys: the keyboard belongs to what you put inside."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "AppShell",
+      "Sidebar",
+      "BottomNav",
+      "Container",
+      "Section"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Header"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "floating | flush | pill",
+      "default": "floating",
+      "description": "The skin. floating is a detached card; flush merges into the background so the bar frames the window; pill is a centred capsule for a site header — not for a shell, because search plus density plus theme plus command do not fit in a capsule."
+    },
+    {
+      "name": "brand",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The lockup. It lives here and not in the sidebar: the top crosses the full width and the side panel starts below it. Inside a shell this is also where the drawer toggle sits, injected before what you pass."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Everything beside the brand: sections, search, actions, account. Presentational — the bar never decides what collapses. It wraps by content, so text at 200% breaks it to a second line instead of overflowing; hide what is secondary with hide-below-md/lg."
+    },
+    {
+      "name": "divider",
+      "type": "boolean",
+      "default": "false",
+      "description": "Only on `flush` (B-07): a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends."
+    },
+    {
+      "name": "items",
+      "type": "SidebarItem[]",
+      "default": "—",
+      "description": "The website's links (GAR-01, 07/10/2026) — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel."
+    },
+    {
+      "name": "current",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the current page's item: it gets aria-current=\"page\", the highlight colour and the medium weight, in the bar and in the menu panel."
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What sits on the right: search, a call to action, the account. It stays in the bar on a phone too."
+    },
+    {
+      "name": "maxWidth",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "default": "—",
+      "description": "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "\"Main\"",
+      "description": "The navigation's name for screen readers. Pass it in the page's language."
+    },
+    {
+      "name": "menuLabel",
+      "type": "string",
+      "default": "\"Menu\"",
+      "description": "The phone menu button's name for screen readers. Pass it in the page's language. In an app with client-side routing the panel does not close by itself on a page change: give the Header a key that changes with the route."
+    },
+    {
+      "name": "menuId",
+      "type": "string",
+      "default": "\"aurea-header-menu\"",
+      "description": "The id of the phone menu panel, which the button points at with popovertarget. Change it only when a page has two website headers: each one needs its own."
+    }
+  ],
+  "axes": {
+    "maxWidth": [
+      "2xl",
+      "full",
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ]
+  }
+}

@@ -75,8 +75,18 @@ export function Container({ size = "xl", className, ...props }) {
  * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
  * quando ela for uma região que o leitor de tela deva listar.
  */
-export function Section({ surface = "background", spacing = "md", theme, className, ...props }) {
-    return _jsx("section", { "data-theme": theme, className: cx("section", surface !== "background" && `section-${surface}`, spacing !== "md" && `section-spacing-${spacing}`, className), ...props });
+// GAR-06 (07/10/2026): o rodapé de site é uma VARIAÇÃO da Section (regra do Victor: peça nova entra
+// como variação), porque o rodapé é a última faixa da página: herda o fundo (`surface`), o respiro
+// (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
+// fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
+// coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
+export function Section({ surface = "background", spacing = "md", theme, variant = "base", brand, links, legal, maxWidth = "xl", navLabel = "Footer", children, className, ...props }) {
+    const pele = cx("section", surface !== "background" && `section-${surface}`, spacing !== "md" && `section-spacing-${spacing}`);
+    if (variant !== "footer")
+        return _jsx("section", { "data-theme": theme, className: cx(pele, className), ...props, children: children });
+    return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", className), ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`), children: [_jsxs("div", { className: "section-footer-top", children: [brand != null && _jsx("div", { className: "section-footer-brand", children: brand }), links && links.length > 0 && _jsx("nav", { className: "section-footer-nav", "aria-label": navLabel, children: links.map((g, n) => _jsxs("div", { className: "section-footer-group", children: [_jsx("h2", { className: "section-footer-title", children: g.title }), _jsx("ul", { className: "section-footer-links", children: g.items.map(it => _jsx("li", { children: it.render
+                                                ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
+                                                : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) })] }, n)) }), children] }), legal != null && _jsx("div", { className: "section-footer-legal", children: legal })] }) });
 }
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({ label, value, trend, className, ...props }) { return _jsxs(Card, { className: cx("kpi", className), ...props, children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), trend && _jsx("small", { children: trend })] }); }
@@ -146,11 +156,20 @@ export function AvatarGroup({ children, max, total, label, size, className }) {
 export function LogStream({ lines }) { return _jsx("div", { className: "log-stream", role: "log", "aria-live": "polite", children: lines.map((l, n) => _jsxs("div", { className: "log-line", children: [_jsx("time", { className: "log-time", children: l.time }), _jsx("span", { className: cx("log-level", l.level && l.level.toLowerCase()), children: l.level }), _jsx("span", { children: l.text })] }, n)) }); }
 // ── Media ────────────────────────────────────────────────────────────────────────────────────
 export function MediaPlayerShell({ children, className, ...props }) { return _jsx("div", { className: cx("media-player", className), ...props, children: children }); }
-// ── Navigation ───────────────────────────────────────────────────────────────────────────────
-// B-07 (24/09/2026): `divider` põe a linha de baixo na `flush`. Ela é fundo igual ao da página e
-// gruda no topo; sem linha, o conteúdo passa por baixo dela e nada diz onde a barra acaba. Só na
-// `flush`: a `floating` e a `pill` são caixas com borda própria.
-export function Topbar({ variant = "floating", divider, brand, children, className, ...props }) { return _jsxs("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", className), ...props, children: [brand != null && _jsx("div", { className: "brand", children: brand }), children] }); }
+// O item da barra e o do painel são o MESMO elemento com a mesma pele: o atual é o atual nos dois.
+function linksDoHeader(items, current) {
+    return _jsx("ul", { className: "topbar-links", children: items.map(it => {
+            const p = { className: "topbar-link", "aria-current": it.id === current ? "page" : undefined, children: it.label };
+            return _jsx("li", { children: it.render ? fundirRender(it.render, p, "a") : _jsx("a", { href: it.href, ...p }) }, it.id);
+        }) });
+}
+export function Header({ variant = "floating", divider, brand, items, current, actions, maxWidth, navLabel = "Main", menuLabel = "Menu", menuId = "aurea-header-menu", children, className, ...props }) {
+    const site = !!items && items.length > 0;
+    const miolo = _jsxs(_Fragment, { children: [brand != null && _jsx("div", { className: "brand", children: brand }), site && _jsx("nav", { className: "topbar-nav", "aria-label": navLabel, children: linksDoHeader(items, current) }), children, actions != null && _jsx("div", { className: "topbar-actions", children: actions }), site && _jsxs(_Fragment, { children: [_jsx("button", { type: "button", className: "btn btn-ghost btn-icon topbar-menu-toggle", popoverTarget: menuId, "aria-label": menuLabel, children: _jsx("span", { className: "topbar-menu-icon", "aria-hidden": "true" }) }), _jsx("nav", { id: menuId, popover: "auto", className: "topbar-menu-panel", "aria-label": navLabel, children: linksDoHeader(items, current) })] })] });
+    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", maxWidth && "topbar-contained", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
+}
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
+export function Topbar(props) { return _jsx(Header, { ...props }); }
 // ── System / interno ─────────────────────────────────────────────────────────────────────────
 // Kbd — representação de tecla/atalho. <kbd> é o elemento HTML certo; a pele é nossa. Ele já
 // morava fora da casa dele (no `internal.tsx`, por causa do `Button`); agora mora aqui, pelo

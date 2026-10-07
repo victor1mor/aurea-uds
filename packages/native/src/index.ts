@@ -101,11 +101,11 @@ export {useReduceMotion} from "./movimento.js";
 // ⚠ **O `Tabs` entrou em 17/09/2026, e é a única peça daqui que NÃO saiu de um lote** — ele
 // veio do consumidor, que precisava trocar de painel dentro de uma tela e só tinha o
 // `SegmentedControl`, que anuncia "rádio". A fronteira com o `BottomNav` está no JSDoc dele.
-export {BottomNav, Topbar, NavList, Stepper, Tabs} from "./navigation.js";
+export {BottomNav, Header, Topbar, NavList, Stepper, Tabs} from "./navigation.js";
 export type {
-  BottomNavProps, TopbarProps, NavListProps, StepperProps,
+  BottomNavProps, HeaderProps, TopbarProps, NavListProps, StepperProps,
   AureaNavItem, AureaNavListItem, AureaNavListIndicator, AureaStepItem, AureaStepState,
-  AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaTopbarVariant, AureaTopbarInset,
+  AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaHeaderVariant, AureaHeaderInset, AureaTopbarVariant, AureaTopbarInset,
   TabsProps, AureaTabItem, AureaTabsVariant, AureaTabsPanel,
 } from "./navigation.js";
 

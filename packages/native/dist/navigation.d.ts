@@ -103,21 +103,27 @@ export interface BottomNavProps extends ViewProps {
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
 export declare function BottomNav({ items, current, variant, indicator, width, label, style, ...rest }: BottomNavProps): React.JSX.Element;
-export type AureaTopbarVariant = "floating" | "flush" | "pill";
+export type AureaHeaderVariant = "floating" | "flush" | "pill";
 /** O recuo dos lados da `flush`: `bar` (20, o de sempre), `page` (16, o da `Screen`) ou `none`. */
-export type AureaTopbarInset = "bar" | "page" | "none";
-export interface TopbarProps extends ViewProps {
-    variant?: AureaTopbarVariant;
+export type AureaHeaderInset = "bar" | "page" | "none";
+/** @deprecated Nome antigo do `AureaHeaderVariant` (07/10/2026). Continua valendo. */
+export type AureaTopbarVariant = AureaHeaderVariant;
+/** @deprecated Nome antigo do `AureaHeaderInset` (07/10/2026). Continua valendo. */
+export type AureaTopbarInset = AureaHeaderInset;
+export interface HeaderProps extends ViewProps {
+    variant?: AureaHeaderVariant;
     /**
      * Só na `flush` — R-02, 24/09/2026. Por padrão a barra recua 20 dos lados e a `Screen` recua 16,
      * então o título fica 4 para dentro do conteúdo. `page` alinha os dois; `none` serve para a
      * barra que já vai dentro de um conteúdo com recuo. As outras duas variantes são caixas com
      * margem própria e ignoram esta prop.
      */
-    inset?: AureaTopbarInset;
+    inset?: AureaHeaderInset;
     brand?: React.ReactNode;
     children?: React.ReactNode;
 }
+/** @deprecated Nome antigo do `HeaderProps` (07/10/2026). Continua valendo. */
+export type TopbarProps = HeaderProps;
 /**
  * A barra de cima.
  *
@@ -126,7 +132,7 @@ export interface TopbarProps extends ViewProps {
  *
  * ```tsx
  * <Screen padded={false}>
- *   <Topbar brand={<Text weight={700}>Aurea</Text>} />
+ *   <Header brand={<Text weight={700}>Aurea</Text>} />
  *   <ScrollView>…</ScrollView>
  * </Screen>
  * ```
@@ -135,7 +141,9 @@ export interface TopbarProps extends ViewProps {
  * e **não há landmarks no RN**. Um papel inventado diria uma coisa errada; a barra fica sem papel,
  * e quem nomeia a tela é o conteúdo dela.
  */
-export declare function Topbar({ variant, inset, brand, children, style, ...rest }: TopbarProps): React.JSX.Element;
+export declare function Header({ variant, inset, brand, children, style, ...rest }: HeaderProps): React.JSX.Element;
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
+export declare function Topbar(props: HeaderProps): React.JSX.Element;
 /** Um sinal da linha (AN-04): fixada, silenciada. O `label` não aparece; é o que o leitor de tela lê. */
 export interface AureaNavListIndicator {
     icon: AureaIcon;

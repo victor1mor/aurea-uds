@@ -54,9 +54,10 @@ export {ContainerScope, useValorResponsivo} from "./responsivo-runtime.js";
 export {AspectRatio, InputGroup, InputGroupAddon, Label,
   Card, Stack, Cluster, Grid, Container, Section, KPI, DataList, Timeline, Prose, Text, Heading, Paragraph, Code,
   Badge, Progress, Skeleton,
-  AvatarGroup, LogStream, MediaPlayerShell, Topbar, Kbd, Textarea, Checkbox, Radio,
+  AvatarGroup, LogStream, MediaPlayerShell, Header, Topbar, Kbd, Textarea, Checkbox, Radio,
   Switch, Range, formatBadgeCount, type BadgeVariant, type BadgeEmphasis, type BadgeSize,
-  type BadgePlacement, type BadgeProps, type ProgressProps, type ProgressTone, type AvatarSize, type TopbarVariant,
+  type BadgePlacement, type BadgeProps, type ProgressProps, type ProgressTone, type AvatarSize, type HeaderVariant, type HeaderProps, type TopbarVariant,
+  type SectionVariant, type SectionFooterGroup,
   type TextProps, type HeadingProps, type ParagraphProps, type CodeProps, type TypographyType,
   type TypographyColor, type TypographyWeight, type TypographyAlign, type HeadingLevel, type ParagraphSize} from "./markup.js";
 export * from "./system.js";

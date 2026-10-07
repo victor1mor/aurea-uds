@@ -7,4 +7,5 @@ export {Card, Stack, Cluster, Grid} from "./markup.js";
 export {AspectRatio} from "./markup.js";
 // GAR-02 a GAR-05 (06/10/2026): a página de site — `Container`, `Section` e o `Grid.Item` com `span`.
 export {Container, Section} from "./markup.js";
-export type {GridSpan, GridItemProps, ContainerSize, ContainerProps, SectionSurface, SectionSpacing, SectionProps} from "./markup.js";
+export type {GridSpan, GridItemProps, ContainerSize, ContainerProps, SectionSurface, SectionSpacing, SectionProps,
+  SectionVariant, SectionFooterGroup} from "./markup.js";

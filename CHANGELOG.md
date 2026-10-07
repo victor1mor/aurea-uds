@@ -17,6 +17,10 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### Componentes novos, ainda não publicados (07/10/2026)
+
+- `Header`, o nome de mercado do `Topbar` — entra na `0.23.0`, descrita na seção dela abaixo.
+
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -79,6 +83,58 @@ em inglês e ficam como estão: são registro.
 - Não muda nenhum pacote publicado.
 
 ---
+
+## [0.23.0] — 2026-10-07
+
+⏳ **Ainda não publicada.** Feita com o "pode" do Victor (*"pode fazer o GAR-01 e GAR-06"*) e
+**aprovada pela bancada** em 07/10/2026 (*"aprovado, B, pode"*). O "B" é a escolha dele para o
+painel do celular: um popover no lugar do `<details>` da primeira versão. O B foi feito depois da
+aprovação e está na bancada atualizada.
+
+O **Lote K2**: o cabeçalho e o rodapé de uma página de SITE (GAR-01 e GAR-06), como **variações**
+de peças que já existem — regra nova do Victor, do mesmo dia: *"os componentes da aurea não podem
+ser excluidos, apenas corrigidos. componente novos tem que entrar como variações."* **Versão nova
+porque entram props e um nome.** Nada sai.
+
+### Mudado
+
+- **O `Topbar` passa a se chamar `Header`, nos dois alvos** (decisão do Victor: *"pode alterar
+  nome não tem problema"*). "Header" é o nome de 16 dos 38 design systems do catálogo que os reúne;
+  "Topbar"/"Top bar", de 2. **O `Topbar` continua**, como o mesmo componente, marcado como nome
+  antigo: quem o usa não vê diferença nenhuma (o teste confere a marcação de antes, caractere por
+  caractere). Os tipos também: `HeaderVariant` e `HeaderProps` na web, `AureaHeaderVariant`,
+  `AureaHeaderInset` e `HeaderProps` no nativo, com os nomes antigos valendo. As classes `.topbar*`
+  e as props do `AppShell` (`topbarVariant`, `topbarDivider`) ficam como estão.
+
+### Adicionado
+
+- **GAR-01 · o cabeçalho de site é o `Header` com `items` (web).** A mesma lista do `Sidebar` e do
+  `BottomNav`; `current` marca a página atual com `aria-current="page"`, a cor de destaque e o peso
+  médio; `actions` fica à direita; `maxWidth` alinha a barra com o `Container` da página. A faixa
+  tem 64 de altura (o `--topbar-height`), como na referência principal. **No celular** (abaixo de
+  768) os links saem da barra e descem num painel colado embaixo dela, com a largura dela, aberto
+  por um botão. O painel é um **popover nativo** (`<nav popover="auto">`), o mesmo mecanismo da
+  gaveta do `AppShell`, **sem JavaScript**: o `Header` continua de servidor. Medido nos três
+  navegadores: o Esc e o toque fora fecham o painel, e o Esc devolve o foco ao botão quando o painel
+  foi aberto pelo teclado. A primeira versão usava um `<details>`, que não fechava com o Esc nem com
+  o toque fora; o Victor escolheu o popover depois de ver as duas opções medidas. O `id` do painel
+  é fixo (`aurea-header-menu`); página com dois cabeçalhos de site passa um `menuId` para cada.
+  Limites declarados: em app com rota no cliente, o painel não fecha sozinho ao trocar de página —
+  dê ao `Header` uma `key` que mude com a rota; e no WebKit, depois de um CLIQUE no botão, o Esc
+  fecha o painel mas o foco vai para a página, porque o WebKit não põe foco em botão clicado.
+- **Conserto achado na medição:** sem `maxWidth`, entre 768 e 1023 de largura, os links do
+  cabeçalho de site caíam para uma segunda linha e a barra ia de 64 para 80 — a regra da barra do
+  `AppShell` (`.topbar > nav`) pegava também o `nav` dele. Agora eles ficam na linha da marca.
+- **GAR-06 · o rodapé de site é a `Section variant="footer"` (web).** Um `<footer>` com a marca
+  (`brand`), as colunas de links (`links`, cada uma com título) e a linha legal (`legal`), o miolo
+  num `Container`. Herda da faixa o fundo, o respiro e o tema (rodapé escuro numa página clara é
+  `theme="dark"`). No celular tudo empilha numa coluna; no computador as colunas se repartem.
+- Quem cobra: `tests/unit/site-gar01-06.test.tsx` e `tests/visual/site-gar01-06.spec.ts` (nos três
+  navegadores: a altura de 64, a cor do atual, o painel do celular aberto e percorrido pelo teclado,
+  o Esc e o toque fora, a posição e a largura do painel na barra encostada e na solta, a barra em
+  900, e as colunas do rodapé; no Chromium, também o estado de aberto lido na árvore de
+  acessibilidade). Os testes novos foram rodados contra a primeira versão e reprovam nela pelo
+  comportamento: depois do Esc, o painel do `<details>` continua visível.
 
 ## [0.22.0] — 2026-10-06
 

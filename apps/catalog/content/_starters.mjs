@@ -1499,9 +1499,31 @@ const container = usePortalContainer();`,
     render: () => h(A.Tooltip, {content: "Copy to clipboard"},
       h(A.IconButton, {icon: "copy", label: "Copy"})),
   },
+  Header: {
+    description: "The top bar of an app or a website — header, navbar, top bar. With items it is the "
+      + "website header: the links with the current page marked, the actions on the right, and below "
+      + "768px a menu button that drops the links under the bar, with no script.",
+    code: `<Header
+  variant="flush"
+  divider
+  maxWidth="xl"
+  brand={<strong>Acme</strong>}
+  items={[
+    {id: "home", label: "Home", href: "/"},
+    {id: "pricing", label: "Pricing", href: "/pricing"},
+    {id: "docs", label: "Docs", href: "/docs"},
+  ]}
+  current="pricing"
+  actions={<Button variant="primary" size="sm">Sign up</Button>}
+/>`,
+    render: () => h("div", {style: {width: "100%", position: "relative"}}, h(A.Header, {variant: "flush", divider: true,
+      maxWidth: "xl", brand: h("strong", null, "Acme"),
+      items: [{id: "home", label: "Home", href: "#"}, {id: "pricing", label: "Pricing", href: "#"}, {id: "docs", label: "Docs", href: "#"}],
+      current: "pricing", actions: h(A.Button, {variant: "primary", size: "sm"}, "Sign up")})),
+  },
   Topbar: {
-    description: "The <header> the AppShell composes, and where the brand lives. Three skins: "
-      + "floating, flush and pill.",
+    description: "The old name of Header (renamed on 07/10/2026). Same component, still works the same; "
+      + "use Header. Three skins: floating, flush and pill.",
     code: `<Topbar variant="floating" brand={<strong>Acme</strong>}>
   <Button variant="primary" size="sm">New</Button>
 </Topbar>`,

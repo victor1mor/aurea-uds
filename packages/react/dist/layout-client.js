@@ -11,7 +11,7 @@ import { useValorResponsivo } from "./responsivo-runtime.js";
 import { ESCALA } from "./escala.js";
 import { IconButton } from "./actions.js";
 import { Tooltip } from "./overlays.js";
-import { Sidebar, Topbar } from "./navigation.js";
+import { Sidebar, Header } from "./navigation.js";
 // ── Auxiliar de topo: mora ANTES do primeiro export, e a posição é obrigatória ───────────────
 // O check 22 mede o corpo de um componente do `export` dele até o PRÓXIMO export — fatia longa
 // de propósito, porque a implementação de vários componentes daqui continua num auxiliar não
@@ -180,7 +180,7 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
     // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
     // ícones que o shell desenha.
     const paraOComeco = !efetiva, direita = useDirection() === "rtl";
-    return _jsxs("div", { className: cx("app-shell", topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsx(Topbar, { variant: topbarVariant, divider: topbarDivider, brand: _jsxs(_Fragment, { children: [_jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID }), brand] }), children: topbar }), sidebarCollapsible && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] });
+    return _jsxs("div", { className: cx("app-shell", topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsx(Header, { variant: topbarVariant, divider: topbarDivider, brand: _jsxs(_Fragment, { children: [_jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID }), brand] }), children: topbar }), sidebarCollapsible && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] });
 }
 export function Separator({ orientation, spacing = "none", className, ...props }) {
     const ancora = useRef(null);

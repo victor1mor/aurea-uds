@@ -40,13 +40,16 @@ import {cx, fundirRender, peleDoEixo, type Responsive} from "./pure.js";
 // TIPO apenas: `import type` some na emissão, então isto não faz o `markup` depender de um
 // módulo de cliente. O degrau do campo é o MESMO do botão de propósito (G-FORM-01).
 import type {ComponentSize} from "./actions.js";
+import type {SidebarItem} from "./navigation-client.js";
 
 // Os três tipos abaixo vieram junto com os componentes que os usam. São uniões de string, então
 // não custam runtime nenhum; cada módulo de categoria os reexporta para não mexer em import de
 // consumidor.
 export type BadgeVariant="neutral"|"primary"|"info"|"success"|"warning"|"danger"|"running"|"paused"|"offline"|"review";
 export type AvatarSize="sm"|"md"|"lg";
-export type TopbarVariant="floating"|"flush"|"pill";
+export type HeaderVariant="floating"|"flush"|"pill";
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). O tipo continua valendo; use `HeaderVariant`. */
+export type TopbarVariant=HeaderVariant;
 
 // ── Layout ───────────────────────────────────────────────────────────────────────────────────
 // CARTÃO INTERATIVO É ALVO, e alvo tem de ser elemento de verdade. Um cartão-alvo pode ser AÇÃO
@@ -214,6 +217,10 @@ export function Container({size="xl",className,...props}:ContainerProps){
   return <div className={cx("container",size!=="xl"&&`container-${size}`,className)} {...props}/>}
 /** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
 export type SectionSurface="background"|"card"|"inset";
+/** `base` é a faixa comum; `footer` é o rodapé do site (GAR-06, 07/10/2026). */
+export type SectionVariant="base"|"footer";
+/** Uma coluna de links do rodapé: o título e os itens. */
+export interface SectionFooterGroup{title:ReactNode;items:SidebarItem[]}
 /** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
 export type SectionSpacing="sm"|"md";
 export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement>{
@@ -225,14 +232,51 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
    * página não vazam para dentro dela.
    */
   theme?:"light"|"dark";
+  /**
+   * `footer` faz da faixa o RODAPÉ do site (GAR-06): `<footer>` com a marca, as colunas de links e a
+   * linha legal, e o miolo já num `Container`. No celular, tudo empilha.
+   */
+  variant?:SectionVariant;
+  /** Só no `footer`: a marca e uma frase curta, no alto à esquerda. */
+  brand?:ReactNode;
+  /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
+  links?:SectionFooterGroup[];
+  /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
+  legal?:ReactNode;
+  /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
+  maxWidth?:ContainerSize;
+  /** Só no `footer`: o nome da navegação do rodapé para o leitor de tela. Padrão: `"Footer"`. */
+  navLabel?:string;
 }
 /**
  * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
  * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
  * quando ela for uma região que o leitor de tela deva listar.
  */
-export function Section({surface="background",spacing="md",theme,className,...props}:SectionProps){
-  return <section data-theme={theme} className={cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`,className)} {...props}/>}
+// GAR-06 (07/10/2026): o rodapé de site é uma VARIAÇÃO da Section (regra do Victor: peça nova entra
+// como variação), porque o rodapé é a última faixa da página: herda o fundo (`surface`), o respiro
+// (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
+// fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
+// coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
+export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,maxWidth="xl",navLabel="Footer",children,className,...props}:SectionProps){
+  const pele=cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`);
+  if(variant!=="footer")return <section data-theme={theme} className={cx(pele,className)} {...props}>{children}</section>;
+  return <footer data-theme={theme} className={cx(pele,"section-footer",className)} {...props}>
+    <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`)}>
+      <div className="section-footer-top">
+        {brand!=null&&<div className="section-footer-brand">{brand}</div>}
+        {links&&links.length>0&&<nav className="section-footer-nav" aria-label={navLabel}>{links.map((g,n)=><div className="section-footer-group" key={n}>
+          <h2 className="section-footer-title">{g.title}</h2>
+          <ul className="section-footer-links">{g.items.map(it=><li key={it.id}>{it.render
+            ?fundirRender(it.render,{className:"section-footer-link",children:it.label},"a")
+            :<a className="section-footer-link" href={it.href}>{it.label}</a>}</li>)}</ul>
+        </div>)}</nav>}
+        {children}
+      </div>
+      {legal!=null&&<div className="section-footer-legal">{legal}</div>}
+    </div>
+  </footer>;
+}
 
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
 export function KPI({label,value,trend,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label:ReactNode;value:ReactNode;trend?:ReactNode}){return <Card className={cx("kpi",className)} {...props}><span className="muted">{label}</span><strong>{value}</strong>{trend&&<small>{trend}</small>}</Card>}
@@ -413,10 +457,85 @@ export function LogStream({lines}:{lines:Array<{time?:string;level?:string;text:
 export function MediaPlayerShell({children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("media-player",className)} {...props}>{children}</div>}
 
 // ── Navigation ───────────────────────────────────────────────────────────────────────────────
+// HEADER — o nome era `Topbar` até 07/10/2026. O Victor mandou trocar pelo nome de mercado: no
+// catálogo que reúne 38 design systems, "Header" é o de 16; "Topbar"/"Top bar", de 2. O nome
+// antigo NÃO sai (regra dele: componente não se exclui) — `Topbar` continua, logo abaixo, como o
+// mesmo componente. As classes `.topbar*` também ficam: trocar quebraria quem as usa no CSS.
+//
 // B-07 (24/09/2026): `divider` põe a linha de baixo na `flush`. Ela é fundo igual ao da página e
 // gruda no topo; sem linha, o conteúdo passa por baixo dela e nada diz onde a barra acaba. Só na
 // `flush`: a `floating` e a `pill` são caixas com borda própria.
-export function Topbar({variant="floating",divider,brand,children,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{variant?:TopbarVariant;brand?:ReactNode;divider?:boolean}){return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",className)} {...props}>{brand!=null&&<div className="brand">{brand}</div>}{children}</header>}
+//
+// GAR-01 (07/10/2026): o CABEÇALHO DE SITE é este componente com quatro props a mais, e não uma
+// peça nova (regra do Victor: peça nova entra como variação). A referência principal tirou o dela
+// na versão atual e publicou como montar um; dele vêm a altura (64, o `--topbar-height`), o
+// `aria-current="page"` no item atual com a cor de destaque, e o menu do celular abaixo de 768.
+//   • `items` é a MESMA lista do `Sidebar` e do `BottomNav` (`SidebarItem`): o app não mantém duas
+//     listas do mesmo menu. Daqui só se usam `id`, `label`, `href` e `render`; subitens, ícone e
+//     `onClick` ficam de fora — a barra é plana, e marcação pura não prende manipulador.
+//   • O MENU DO CELULAR é um POPOVER nativo, sem JavaScript: o botão é o `popovertarget` e o painel
+//     é o `<nav popover="auto">`, o mesmo mecanismo da gaveta do `AppShell`. Os links descem num
+//     painel logo abaixo da barra. Era um `<details>` na primeira versão do K2; o Victor escolheu o
+//     popover (07/10/2026, opção "B") depois da medição nos três motores: com o `<details>` nem o
+//     Esc nem o toque fora fechavam o painel; com o popover os dois fecham, o Esc devolve o foco ao
+//     botão, e o Tab depois do botão entra no painel (medido também no WebKit 26.5, com o painel
+//     aberto pelo teclado — o defeito da ADR-0019 não se repete aqui). O `Header` continua de
+//     servidor. Limite declarado: em app com rota no cliente, o painel não fecha sozinho ao trocar
+//     de página — dê ao `Header` uma `key` que mude com a rota.
+//   • O `id` do painel é FIXO (`aurea-header-menu`), como o da gaveta do `AppShell`: marcação pura
+//     não chama `useId` (o check 26 exigiria a diretiva de cliente no arquivo inteiro). Página com
+//     dois cabeçalhos de site passa um `menuId` diferente para cada um.
+//   • `maxWidth` alinha o miolo da barra com o `Container` da página, pela mesma escala.
+export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement>{
+  /** A pele: `floating` (caixa solta), `flush` (encostada, o fundo da página) ou `pill` (cápsula). */
+  variant?:HeaderVariant;
+  /** A marca. No `AppShell`, é aqui que entra também o botão que abre a lateral. */
+  brand?:ReactNode;
+  /** Só na `flush` (B-07): a linha embaixo da barra. */
+  divider?:boolean;
+  /**
+   * Os links do site (GAR-01) — a mesma lista do `Sidebar` e do `BottomNav`. No celular (abaixo
+   * de 768) eles saem da barra e entram no painel do botão de menu.
+   */
+  items?:SidebarItem[];
+  /** O `id` do item da página atual: ganha `aria-current="page"` e a cor de destaque. */
+  current?:string;
+  /** O que fica do lado direito: busca, botão de ação, conta. Fica na barra também no celular. */
+  actions?:ReactNode;
+  /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
+  maxWidth?:ContainerSize;
+  /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
+  navLabel?:string;
+  /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
+  menuLabel?:string;
+  /** O `id` do painel do celular. Padrão: `"aurea-header-menu"`. Troque só se a página tiver dois cabeçalhos de site. */
+  menuId?:string;
+}
+// O item da barra e o do painel são o MESMO elemento com a mesma pele: o atual é o atual nos dois.
+function linksDoHeader(items:SidebarItem[],current:string|undefined){
+  return <ul className="topbar-links">{items.map(it=>{
+    const p={className:"topbar-link","aria-current":it.id===current?"page" as const:undefined,children:it.label};
+    return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
+  })}</ul>;
+}
+export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
+  const site=!!items&&items.length>0;
+  const miolo=<>
+    {brand!=null&&<div className="brand">{brand}</div>}
+    {site&&<nav className="topbar-nav" aria-label={navLabel}>{linksDoHeader(items!,current)}</nav>}
+    {children}
+    {actions!=null&&<div className="topbar-actions">{actions}</div>}
+    {site&&<>
+      <button type="button" className="btn btn-ghost btn-icon topbar-menu-toggle" popoverTarget={menuId} aria-label={menuLabel}><span className="topbar-menu-icon" aria-hidden="true"/></button>
+      <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}</nav>
+    </>}
+  </>;
+  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",maxWidth&&"topbar-contained",className)} {...props}>
+    {maxWidth?<div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"topbar-inner")}>{miolo}</div>:miolo}
+  </header>;
+}
+/** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
+export function Topbar(props:HeaderProps){return <Header {...props}/>}
 
 // ── System / interno ─────────────────────────────────────────────────────────────────────────
 // Kbd — representação de tecla/atalho. <kbd> é o elemento HTML certo; a pele é nossa. Ele já

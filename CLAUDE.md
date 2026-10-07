@@ -250,6 +250,17 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    a guarda — `tests/unit/tema-na-secao.test.tsx` reprova quem esquecer. O cabeçalho e o rodapé
    de site (GAR-01 e GAR-06) ficaram para a próxima sessão, por decisão do Victor.
 
+17. **`0.23.0`, o Lote K2, feito em 07/10/2026 e aprovado pela bancada** (*"aprovado, B, pode"*) —
+   com o "pode" do Victor (*"pode fazer o GAR-01 e GAR-06"*): o `Topbar` passa a se chamar
+   **`Header`** nos dois alvos (*"pode alterar nome não tem problema"*), com o `Topbar` mantido como
+   nome antigo; o cabeçalho de site é o `Header` com `items`, `current`, `actions`, `maxWidth` e
+   `menuId` (GAR-01); o rodapé é a `Section variant="footer"` (GAR-06). O menu do celular desce
+   abaixo da barra (*"Painel que desce"*) e é um **popover** nativo, sem JavaScript — a opção "B" do
+   Victor, depois de medido que o `<details>` da primeira versão não fechava com o Esc nem com o
+   toque fora. Quem cobra: `site-gar01-06.test.tsx` e `site-gar01-06.spec.ts`. ⚠ **A lição:** o
+   Python no Windows grava CRLF; ao reescrever arquivo do repositório com ele, use `newline="\n"`
+   e confira com `git ls-files --eol -m`.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -406,6 +417,13 @@ outros projetos dele** (ordem de 31/08/2026). Falar do consumidor numa conversa 
    começa sem ler isto.**
 7. [`docs/NATIVE.md`](docs/NATIVE.md) — o alvo nativo (React Native).
 8. [`docs/PLANO-1.0.md`](docs/PLANO-1.0.md) — o caminho até a `1.0`.
+
+**Componente da Aurea não se exclui, só se corrige; peça nova entra como VARIAÇÃO** (ordem do
+Victor, 07/10/2026: *"os componentes da aurea não podem ser excluidos, apenas corrigidos.
+componente novos tem que entrar como variações."*). Antes de criar um nome novo, achar o
+componente que já existe e propor a variação (`variant` ou prop nova); quando não for óbvio de qual,
+perguntar. Troca de nome só com ordem dele, e o nome antigo continua funcionando (como o `Topbar`,
+hoje `Header`).
 
 **As regras que custaram caro:**
 

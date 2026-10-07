@@ -3008,3 +3008,54 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.resp).toBeCloseTo(e.grade, 0);
   });
 }
+
+// ── GAR-01 e GAR-06 (07/10/2026): o cabeçalho e o rodapé de SITE ──────────────────────────────
+// O `Header` (o antigo `Topbar`) com `items`, e a `Section` com `variant="footer"`. O que se mede é
+// o EFEITO só com o core, nos dois temas: a faixa de 64, a cor do atual e a dos outros, os links à
+// direita e o botão escondido no computador, e o rodapé com a linha legal sob um fio. O
+// comportamento do celular (o painel, o teclado) está no `site-gar01-06.spec.ts`.
+// Provado contra o defeito: sem as regras novas no core, a faixa sai com a altura do conteúdo, o
+// atual tem a cor dos outros, o botão de menu aparece no computador e a linha legal não tem fio.
+const CABECALHO_E_RODAPE = renderToStaticMarkup(h("div", null,
+  h(A.Header, {id: "hd", variant: "flush", divider: true, maxWidth: "xl", brand: h("strong", {id: "marca"}, "Aurea"),
+    items: [{id: "a", label: "Um", href: "#a"}, {id: "b", label: "Dois", href: "#b"}], current: "b",
+    actions: h("button", {id: "acao", type: "button", className: "btn btn-primary"}, "Entrar")}),
+  h(A.Section, {id: "rodape", variant: "footer", brand: "Aurea", legal: "© 2026",
+    links: [{title: "Produto", items: [{id: "p", label: "Preços", href: "#p"}]}]})));
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: Header e Section footer · cabeçalho e rodapé de site · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__cabecalho-${theme}`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head><meta charset="utf-8">
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body style="margin:0">${CABECALHO_E_RODAPE}</body></html>`}));
+    await p.setViewportSize({width: 1280, height: 900});
+    await p.goto(url, {waitUntil: "networkidle"});
+    const m = await p.evaluate(() => {
+      const q = (s: string) => document.querySelector(s)!;
+      const est = (s: string) => getComputedStyle(q(s));
+      const sonda = (css: string) => { const s = document.createElement("span"); s.style.color = css;
+        document.body.append(s); const v = getComputedStyle(s).color; s.remove(); return v; };
+      const alvo = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-height")) * 16;
+      return {
+        faixa: (q("#hd") as HTMLElement).clientHeight, alvo,
+        atual: est('.topbar-nav [aria-current="page"]').color, outro: est(".topbar-nav a:not([aria-current])").color,
+        destaque: sonda("var(--primary-emphasis)"), apagada: sonda("var(--muted-foreground)"),
+        pesoAtual: est('.topbar-nav [aria-current="page"]').fontWeight,
+        botao: est(".topbar-menu-toggle").display,
+        marcaFim: q("#marca").getBoundingClientRect().right, navInicio: q(".topbar-nav").getBoundingClientRect().left,
+        navFim: q(".topbar-nav").getBoundingClientRect().right, acaoInicio: q("#acao").getBoundingClientRect().left,
+        legalFio: est(".section-footer-legal").borderTopStyle, rodapeTag: q("#rodape").tagName,
+      };
+    });
+    expect(m.faixa).toBe(m.alvo);
+    expect(m.atual).toBe(m.destaque);
+    expect(m.outro).toBe(m.apagada);
+    expect(m.pesoAtual).toBe("500");
+    expect(m.botao, "no computador o botão de menu não aparece").toBe("none");
+    // Os links na ponta direita, logo antes das ações; longe da marca.
+    expect(m.navInicio - m.marcaFim).toBeGreaterThan(m.acaoInicio - m.navFim);
+    expect(m.legalFio).toBe("solid");
+    expect(m.rodapeTag).toBe("FOOTER");
+  });
+}
