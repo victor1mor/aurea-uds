@@ -135,7 +135,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
   segmentoCheio: {flexGrow: 1, flexShrink: 0, flexBasis: "auto"},
   segmentadaCheia: {flexGrow: 1},
-  segmentoAtivo: {backgroundColor: t.color.secondary},
+  // A CÁPSULA ESCOLHIDA tem cor própria, sobre o trilho (ADR-0059, 08/10/2026): era `secondary`, que
+  // no tema claro é a MESMA cor do `muted` do trilho (1:1) e no escuro dá 1,02:1 — não se via. Agora
+  // `segment` com a sombra pequena, como a aba da referência principal. É um `Pressable`, que existe
+  // desde a montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
+  segmentoAtivo: {backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm]},
   // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
   // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
   fioDoSegmento: fioDoEscolhido(t),

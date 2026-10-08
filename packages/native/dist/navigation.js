@@ -196,7 +196,8 @@ const folha = criarFolha((t) => ({
         alignItems: "center", justifyContent: "center",
         paddingHorizontal: 14, ...canto(t.size.radiusControl),
     },
-    abaDeTabAtiva: { backgroundColor: t.color.secondary },
+    // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`), pelo mesmo motivo — ADR-0059.
+    abaDeTabAtiva: { backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm] },
     // `variant="secondary"` (R-12, 01/10/2026): a variante secundária da referência,
     // com o fio da casa no lugar do indicador azul dela.
     //   fila (secundária)               padding 0 · border-bottom 1px, cor da borda

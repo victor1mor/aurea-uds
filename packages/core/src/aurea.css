@@ -8,7 +8,17 @@ body { margin:0; background:var(--background); color:var(--foreground); font-fam
 ::selection { background:var(--selection); }
 button,input,textarea,select { font:inherit; }
 button,a,[role="button"],input,textarea,select { outline:none; }
-:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); box-shadow:none; border-color:var(--focus-strong)!important; }
+:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); box-shadow:none; }
+/* UMA LINHA SÓ (ADR-0059, 08/10/2026). O anel afastado, sozinho, é uma linha — mas na peça que tem
+   BORDA PRÓPRIA ele desenhava borda + vão + anel: duas linhas, em 39 peças medidas no catálogo. E a
+   regra de cima pintava TODA borda de amarelo com `!important`, o que dava uma segunda linha até no
+   botão de borda transparente, depois da transição. Agora só a peça com borda muda a borda: ela
+   passa para a cor do foco e o anel ENCOSTA nela, sem vão — uma faixa só, de borda + anel, como o
+   anel colado do campo da referência principal. A peça sem borda (o botão cheio, a aba) continua com
+   o vão: colado, o anel amarelo sumiria no botão amarelo.
+   Quem cobra que nenhuma peça ficou de fora é o catálogo inteiro, no navegador:
+   `tests/visual/foco-uma-linha.spec.ts`. */
+:is(.input,.textarea,.select,.btn-outline,.btn-primary-outline,.btn-danger-outline,.media-control,.card,.code-block,.graph-node-body):focus-visible { outline-offset:0; border-color:var(--focus-strong); }
 button { color:inherit; }
 /* O link NÃO é `--primary`. Medido em 22/08/2026 com o axe e depois à mão: o amarelo da
    marca sobre o fundo do tema CLARO dá 1,73:1, e o AA de texto (WCAG 1.4.3) pede 4,5:1 —
@@ -1034,7 +1044,7 @@ img,svg { display:block; }
    contorno do input de dentro ficaria escondido atrás da borda do grupo. */
 .input-group { display:flex; flex-wrap:wrap; align-items:center; inline-size:100%; min-inline-size:0; min-block-size:var(--control-h-md); background:var(--field-bg); border:1px solid var(--border-strong); border-radius:var(--radius-control); transition:border-color var(--duration-fast),box-shadow var(--duration-fast); }
 .input-group:hover { border-color:var(--border); }
-.input-group:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.input-group:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:var(--focus-strong); }
 .input-group:has(.input-sm) { min-block-size:var(--control-h-sm); }
 .input-group:has(.input-lg) { min-block-size:var(--control-h-lg); }
 /* O controle dentro do grupo abre mão da própria moldura: quem desenha a caixa é o grupo. */
@@ -1169,7 +1179,12 @@ img,svg { display:block; }
 .control-mark-lg { --step-h:var(--control-h-lg); }
 .checkbox .control-mark { border-radius:5px; } .radio .control-mark { border-radius:50%; }
 .checkbox input:checked + .control-mark { background:var(--control-selected); border-color:var(--control-selected); color:var(--control-selected-foreground); }
-.checkbox input:focus-visible + .control-mark,.radio input:focus-visible + .control-mark,.switch input:focus-visible + .switch-track { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.checkbox input:focus-visible + .control-mark,.radio input:focus-visible + .control-mark,.switch input:focus-visible + .switch-track { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:var(--focus-strong); }
+/* Cheia com a cor do foco (marcada, ligada), a peça volta ao VÃO (ADR-0059): colado, o anel sumiria
+   no recheio, como no botão amarelo. A borda dela já é da cor do recheio, então continua uma linha
+   só — é o que a referência principal faz no checkbox e no switch. Inválida, a borda é vermelha e o
+   anel volta a colar (vermelho, pela regra do inválido). */
+.checkbox input:focus-visible:checked:not([aria-invalid="true"],:user-invalid) + .control-mark,.switch input:focus-visible:checked:not([aria-invalid="true"],:user-invalid) + .switch-track { outline-offset:var(--focus-offset); }
 .checkbox input:checked + .control-mark:after { content:""; width:8px; height:4px; border-left:2px solid currentColor; border-bottom:2px solid currentColor; transform:rotate(-45deg) translateY(-1px); }
 .radio input:checked + .control-mark:after { content:""; width:8px; height:8px; border-radius:50%; background:var(--control-selected); }
 .switch { display:inline-flex; align-items:center; gap:10px; cursor:pointer; } .switch input { position:absolute; opacity:0; }
@@ -1217,7 +1232,7 @@ img,svg { display:block; }
    os filhos esticam sozinhos (align-items é stretch por padrão) e a conta fecha nas TRÊS. */
 .segmented { display:inline-flex; gap:3px; padding:3px; min-height:var(--control-h-md); border-radius:var(--radius-control); background:var(--muted); border:1px solid transparent; box-shadow:none; }
 .segmented button { padding:0 14px; border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; cursor:pointer; }
-.segmented button.active { color:var(--foreground); background:var(--secondary); box-shadow:none; border:0; }
+.segmented button.active { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); border:0; }
 /* `fullWidth` (A5, 06/10/2026): ocupa a linha, e cada segmento cresce a partir do rótulo sem
    encolher abaixo dele — o mesmo desenho do nativo. `1 0 auto` e não `1` (= `1 1 0%`): base zero
    reparte a largura em partes iguais, e é isso que quebrava o rótulo no nativo rodando no
@@ -1237,6 +1252,11 @@ img,svg { display:block; }
    dos 4.5:1 do AA, então o rótulo aprofunda com --foreground e segue âmbar. */
 .is-selected,.btn-nav[aria-current]:not([aria-current="false"]),.btn[aria-pressed="true"],
 .segmented button.active { --btn-bg:var(--secondary); --btn-fg:var(--primary); position:relative; background:var(--secondary); color:var(--primary); }
+/* A CÁPSULA ELEVADA que a regra acima promete, e que no trilho não se via (ADR-0059, 08/10/2026):
+   o segmento aceso e a aba escolhida vivem sobre --muted, e --secondary dava 1:1 contra ele no
+   claro e 1,02:1 no escuro. Sobre o trilho a cápsula é --segment, com a sombra pequena — como a
+   aba da referência principal. O rótulo na cor da marca e o fio continuam. */
+.segmented button.active { --btn-bg:var(--segment); background:var(--segment); box-shadow:var(--shadow-sm); }
 /* O ATIVO DA NAV DA LATERAL sai da escala DELA, e não da página (20/08/2026, o Victor viu sob a
    marca `lory`). Ele dividia esta regra com o `.segmented`, que vive no conteúdo — e `--secondary`
    é quase branco no tema claro. Numa lateral escura isso desenhava uma pílula branca com texto
@@ -1476,7 +1496,7 @@ img,svg { display:block; }
    sai serrilhada, que é o mesmo defeito que o `.btn-group-vertical` resolve com `stretch`. */
 .tabs[data-orientation="vertical"] .tab { min-block-size:var(--control-h-md); text-align:start; }
 .tab { position:relative; padding:0 14px; border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); cursor:pointer; }
-.tab.active,.tab[data-active] { color:var(--foreground); background:var(--secondary); } .tab.active:after,.tab[data-active]:after { display:none; }
+.tab.active,.tab[data-active] { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); } .tab.active:after,.tab[data-active]:after { display:none; }
 /* `panel="plain"` (MNT-05 e C9, 06/10/2026): o painel sem caixa, como o painel de abas da
    referência. Sem recheio dos lados — o conteúdo começa na linha do que está fora do `Tabs` —, e o
    espaço de cima é o mesmo `space-3` do painel do nativo. Na vertical, quem separa é o `gap` da
@@ -2214,7 +2234,7 @@ img,svg { display:block; }
 /* MultiCombobox (Fase 4) — chips de multi-seleção + grupos. Espaçamento novo tokenizado. */
 .combobox-multi { display:flex; align-items:center; gap:var(--space-2); width:100%; min-width:0; min-height:var(--control-h-md); padding:var(--space-1) var(--space-2); background:var(--field-bg); border:1px solid var(--border-strong); border-radius:var(--radius-control); transition:border-color var(--duration-fast); }
 .combobox-multi:hover { border-color:var(--border); }
-.combobox-multi:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); border-color:var(--focus-strong); }
+.combobox-multi:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:var(--focus-strong); }
 .combobox-multi>.combobox-actions { position:static; inset-inline-end:auto; }
 /* o campo de chips não é `.input`, então a regra de :disabled dos campos não o alcança. Quem
    marca aqui é o `data-disabled` que o Base UI põe no InputGroup a partir do estado da Root. */
@@ -2240,7 +2260,7 @@ img,svg { display:block; }
    o arrastar-soltar é reforço. Espaçamento novo tokenizado; superfície = card. */
 .dropzone { display:flex; flex-direction:column; align-items:center; gap:var(--space-2); padding:var(--space-8) var(--space-6); text-align:center; color:var(--muted-foreground); background:var(--surface-inset); border:1px dashed var(--border-strong); border-radius:var(--radius-card); cursor:pointer; transition:border-color var(--duration-fast),background-color var(--duration-fast); }
 .dropzone:hover { border-color:var(--border); }
-.dropzone:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); border-color:var(--focus-strong); }
+.dropzone:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:var(--focus-strong); }
 .dropzone[data-dragging="true"] { border-style:solid; border-color:var(--primary); background:var(--surface-2); }
 .dropzone strong { color:var(--foreground); }
 .dropzone-icon { color:var(--primary); }
@@ -2308,7 +2328,11 @@ img,svg { display:block; }
 .combobox-multi:has([aria-invalid="true"]),
 .combobox-multi:has(:user-invalid),
 .dropzone:has([aria-invalid="true"]),
-.dropzone:has(:user-invalid) { border-color:var(--danger-400); }
+.dropzone:has(:user-invalid) { border-color:var(--danger-400); --focus-strong:var(--danger-400); }
+/* ↑ `--focus-strong` (ADR-0059, 08/10/2026): o anel de foco agora COLA na borda e a pinta — com o
+   amarelo, o campo inválido perdia o vermelho justo enquanto a pessoa corrige. No inválido o anel é
+   da cor do perigo, como o campo inválido da referência principal. Cor por contexto se faz assim,
+   redefinindo `--focus-strong` (check 44). */
 
 
 /* TreeView (Fase 4) — árvore headless própria (Base UI 1.6 não tem tree).

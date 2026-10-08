@@ -22,7 +22,8 @@
     "--muted",
     "--muted-foreground",
     "--radius-control",
-    "--secondary",
+    "--segment",
+    "--shadow-sm",
     "--space-3"
   ],
   "a11y": {

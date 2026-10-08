@@ -44,8 +44,16 @@ export type AureaTokens = {
         editorial: AureaFontScale;
         code: AureaFontScale;
     };
-    /** `boxShadow` do RN 0.76+. */
+    /**
+     * `boxShadow` do RN 0.76+ — **a primeira camada** de cada sombra. Para a sombra INTEIRA, use
+     * `shadowLayers` (a `shadowSm` tem três camadas; aqui está só a primeira).
+     */
     shadow: Record<string, AureaShadow>;
+    /**
+     * Toda sombra com TODAS as camadas, na forma de lista que o `boxShadow` do RN 0.76+ aceita:
+     * `boxShadow: t.shadowLayers.shadowSm`. Desde a 0.25.0 (ADR-0059).
+     */
+    shadowLayers: Record<string, readonly AureaShadow[]>;
     /** `cubicBezier` como os 4 números do DTCG. Não há curva de CSS no RN. */
     easing: Record<string, readonly [number, number, number, number]>;
     /** RAZÃO de `em`, não dp: `letterSpacing` no RN é absoluto, então multiplique pelo `fontSize`. */

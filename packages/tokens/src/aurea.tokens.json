@@ -346,12 +346,102 @@
         "value": 2,
         "unit": "px"
       },
-      "$description": "O afastamento da linha de foco, para fora da peça — B-09. Dentro de contêiner recortado (linha de tabela, item de árvore) a linha vai para DENTRO: calc(-1 * var(--focus-width)). A referência tem o mesmo número: 2px."
+      "$description": "O afastamento da linha de foco, para fora da peça — B-09. Vale só para peça SEM borda própria (o botão cheio, a aba): na peça COM borda (campo, checkbox, botão com contorno) a linha cola nela e cobre a borda, calc(-1 * var(--border-width)), para não desenhar duas linhas (ADR-0059, 08/10/2026). Dentro de contêiner recortado (linha de tabela, item de árvore) a linha vai para DENTRO: calc(-1 * var(--focus-width)). A referência tem o mesmo número: 2px."
     },
     "opacity-disabled": {
       "$type": "number",
       "$value": 0.5,
       "$description": "A opacidade do que está desativado — R-07, 24/09/2026. É o único token de opacidade da referência (0.5 no pacote web dela, usado 51 vezes) e o 0,5 que os campos, o menu e o Combobox da Aurea já usavam. O 0,45 do botão desativado (`.btn:disabled`) continua fora, de propósito: mudar é mudar a aparência publicada."
+    },
+    "shadow-sm": {
+      "$type": "shadow",
+      "$description": "A sombra pequena da cápsula escolhida sobre o trilho (`Tabs`, `SegmentedControl`) — ADR-0059, 08/10/2026. As três camadas são as da referência principal para o mesmo papel. No escuro ela quase não aparece, e é de propósito: lá quem separa a cápsula do trilho é a cor (--segment).",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "hex": "#000000",
+            "alpha": 0.04
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 4,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "hex": "#000000",
+            "alpha": 0.06
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "hex": "#000000",
+            "alpha": 0.06
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 1,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          }
+        }
+      ]
     },
     "shadow-md": {
       "$type": "shadow",
@@ -1560,6 +1650,18 @@
           ]
         }
       },
+      "segment": {
+        "$type": "color",
+        "$description": "A cápsula do item ESCOLHIDO dentro de um trilho (`Tabs`, `SegmentedControl`), que fica sobre --muted. Existe porque o escolhido usava --secondary e, medido em 08/10/2026, dava 1,02:1 contra o trilho no escuro e 1:1 no claro — a 'cápsula elevada' não se via. O número é o da referência principal para o mesmo papel (o mesmo matiz do --secondary); no claro, branco com --shadow-sm.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.3964,
+            0.01,
+            285.93
+          ]
+        }
+      },
       "focus": {
         "$type": "color",
         "$description": "The soft focus colour, for the halo of a control that cannot carry an outline. The focus CONTRACT is built on --focus-strong.",
@@ -2196,6 +2298,17 @@
         "$type": "color",
         "$value": "{surface-hover}"
       },
+      "segment": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            1,
+            0,
+            0
+          ]
+        }
+      },
       "focus": {
         "$type": "color",
         "$value": "{primary}"
@@ -2663,6 +2776,18 @@
             "colorSpace": "oklch",
             "components": [
               0.28,
+              0.02,
+              250
+            ]
+          }
+        },
+        "segment": {
+          "$type": "color",
+          "$description": "A cápsula do item escolhido sobre o trilho (--muted 0,19) da marca: o mesmo degrau de claridade da referência (+0,122 sobre o trilho), no matiz da marca.",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.312,
               0.02,
               250
             ]

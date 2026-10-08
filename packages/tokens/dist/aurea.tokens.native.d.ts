@@ -5,5 +5,6 @@ export declare const REM_EM_DP: number;
 export declare const base: Record<string, number | string | number[] | AureaColor | AureaShadow>;
 export declare const tracking: Record<string, number>;
 export declare const breakpoints: Record<string, number>;
+export declare const shadowLayers: Record<string, AureaShadow[]>;
 export declare const themes: Record<"dark" | "light", Record<string, AureaColor | number>>;
 export declare const densities: Record<"compact" | "comfortable" | "spacious", Record<string, number>>;

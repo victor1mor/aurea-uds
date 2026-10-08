@@ -79,6 +79,13 @@ export const base = {
   "focusWidth": 2,
   "focusOffset": 2,
   "opacityDisabled": 0.5,
+  "shadowSm": {
+    "offsetX": 0,
+    "offsetY": 2,
+    "blurRadius": 4,
+    "spreadDistance": 0,
+    "color": "rgba(0,0,0,0.04)"
+  },
   "shadowMd": {
     "offsetX": 0,
     "offsetY": 16,
@@ -287,6 +294,49 @@ export const breakpoints = {
   "breakpointLg": 1024,
   "breakpointXl": 1280,
   "breakpoint2xl": 1536
+};
+export const shadowLayers = {
+  "shadowSm": [
+    {
+      "offsetX": 0,
+      "offsetY": 2,
+      "blurRadius": 4,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.04)"
+    },
+    {
+      "offsetX": 0,
+      "offsetY": 1,
+      "blurRadius": 2,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.06)"
+    },
+    {
+      "offsetX": 0,
+      "offsetY": 0,
+      "blurRadius": 1,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.06)"
+    }
+  ],
+  "shadowMd": [
+    {
+      "offsetX": 0,
+      "offsetY": 16,
+      "blurRadius": 42,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.28)"
+    }
+  ],
+  "shadowLg": [
+    {
+      "offsetX": 0,
+      "offsetY": 28,
+      "blurRadius": 80,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.42)"
+    }
+  ]
 };
 export const themes = {
   "dark": {
@@ -524,6 +574,11 @@ export const themes = {
       "hex": "#303033",
       "p3": "color(display-p3 0.1877 0.1878 0.1999)",
       "oklch": "oklch(0.31 0.006 286.033)"
+    },
+    "segment": {
+      "hex": "#46464c",
+      "p3": "color(display-p3 0.2745 0.2745 0.296)",
+      "oklch": "oklch(0.3964 0.01 285.93)"
     },
     "focus": {
       "hex": "#f0b100",
@@ -896,6 +951,11 @@ export const themes = {
       "hex": "#e6e6e6",
       "p3": "color(display-p3 0.902 0.902 0.902)",
       "oklch": "oklch(0.925 0 0)"
+    },
+    "segment": {
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": "oklch(1 0 0)"
     },
     "focus": {
       "hex": "#f0b100",

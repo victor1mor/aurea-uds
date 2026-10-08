@@ -3124,7 +3124,9 @@ if _ALVO43.is_dir():
 #
 # A regra: dentro de `:focus-visible`/`:focus-within`, a linha é `var(--focus-width) solid` na cor
 # `--focus-strong` (ou `CanvasText`, no modo de alto contraste do sistema); o afastamento é
-# `var(--focus-offset)` ou, dentro de contêiner recortado, `calc(-1 * var(--focus-width))`; e
+# `var(--focus-offset)` (peça sem borda), `0` (peça COM borda: a borda vira a cor do foco e o anel
+# encosta nela, uma faixa só — ADR-0059, 08/10/2026) ou, dentro de contêiner recortado,
+# `calc(-1 * var(--focus-width))`; e
 # sombra não faz papel de linha. Cor diferente por CONTEXTO se faz redefinindo `--focus-strong`
 # no contêiner (é o que o `.media-player` faz), nunca com uma regra de foco à parte.
 _CSS44 = root / "packages/core/src/aurea.css"
@@ -3136,7 +3138,7 @@ _SEM_LINHA44 = {
     ".combobox-chip-input:focus-visible": "o anel é da moldura (`.combobox-multi:focus-within`)",
 }
 _LINHA44 = re.compile(r"^var\(--focus-width\)\s+solid\s+(var\(--focus-strong\)|CanvasText)$")
-_OFFSET44 = {"var(--focus-offset)", "calc(-1 * var(--focus-width))"}
+_OFFSET44 = {"var(--focus-offset)", "0", "calc(-1 * var(--focus-width))"}
 if _CSS44.is_file():
     _css44 = re.sub(r"/\*.*?\*/", "", _CSS44.read_text(encoding="utf8"), flags=re.S)
     _maus44 = []
@@ -3166,7 +3168,7 @@ if _CSS44.is_file():
         errors.append(
             "check 44: " + "; ".join(_maus44) + ". O foco é uma linha só: "
             "`outline:var(--focus-width) solid var(--focus-strong)` com `outline-offset:var(--focus-offset)` "
-            "(ou `calc(-1 * var(--focus-width))` dentro de contêiner recortado). Cor por contexto "
+            "(`0` na peça com borda, ADR-0059; `calc(-1 * var(--focus-width))` dentro de contêiner recortado). Cor por contexto "
             "se faz redefinindo `--focus-strong` no contêiner, como o `.media-player`"
         )
 

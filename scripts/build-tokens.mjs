@@ -163,7 +163,7 @@ function resolve(valor, grupo, base, tolerante = false) {
 }
 
 function grupoNativo(grupo, base, {tolerante = false, extras = {}} = {}) {
-  const fora = {}, tracking = {}, breakpoints = {}, adiados = [];
+  const fora = {}, tracking = {}, breakpoints = {}, camadas = {}, adiados = [];
   const vistos = new Map();
   for (const [nome, tok] of Object.entries({...grupo, ...extras})) {
     if (nome.startsWith("$")) continue;
@@ -187,10 +187,17 @@ function grupoNativo(grupo, base, {tolerante = false, extras = {}} = {}) {
         // RN 0.76+ (Nova Arquitetura, obrigatória desde o Expo SDK 55) tem `boxShadow` com a
         // sintaxe do CSS, inclusive `spreadDistance` — então o mapeamento é 1:1 e NÃO há a perda
         // que o par shadowColor/elevation teria. As partes vão junto para quem preferir o objeto.
-        const s = Array.isArray(v) ? v[0] : v;
-        const rgba = `rgba(${s.color.components.map(c => Math.round(c * 255)).join(",")},${num(s.color.alpha ?? 1)})`;
-        saida = {offsetX: emDp(s.offsetX), offsetY: emDp(s.offsetY), blurRadius: emDp(s.blur),
-                 spreadDistance: emDp(s.spread ?? {value: 0, unit: "px"}), color: rgba};
+        //
+        // SOMBRA DE VÁRIAS CAMADAS (ADR-0059, 08/10/2026 — a `shadow-sm` tem três): até aqui o ramo
+        // levava só a PRIMEIRA, em silêncio, e o comentário acima dizia "sem perda". Agora toda
+        // sombra sai inteira em `shadowLayers` (uma lista, que é o que o `boxShadow` do RN aceita);
+        // o `base` continua com a primeira camada, para não quebrar quem já lê `.offsetX`.
+        const lista = (Array.isArray(v) ? v : [v]).map(s => ({offsetX: emDp(s.offsetX), offsetY: emDp(s.offsetY),
+          blurRadius: emDp(s.blur), spreadDistance: emDp(s.spread ?? {value: 0, unit: "px"}),
+          color: `rgba(${s.color.components.map(c => Math.round(c * 255)).join(",")},${num(s.color.alpha ?? 1)})`}));
+        if (lista.length === 0) throw new Error(`token "${nome}": sombra sem camada nenhuma`);
+        camadas[chave] = lista;
+        saida = lista[0];
         break;
       }
       default: throw new Error("unknown $type: " + tok.$type);
@@ -205,15 +212,20 @@ function grupoNativo(grupo, base, {tolerante = false, extras = {}} = {}) {
         + "quase sempre é o $type errado na fonte, não o valor");
     destino[chave] = saida;
   }
-  return {fora, tracking, breakpoints, adiados};
+  return {fora, tracking, breakpoints, camadas, adiados};
 }
 
 const j = o => JSON.stringify(o, null, 2).replace(/\n/g, "\n");
 const b = grupoNativo(dtcg.base, dtcg.base, {tolerante: true});
 // Os adiados do `base` entram em CADA tema, resolvidos contra ele — ver DEPENDE_DE_TEMA.
 const adiados = Object.fromEntries(b.adiados.map(n => [n, dtcg.base[n]]));
-const temas = Object.fromEntries(Object.entries(dtcg.theme)
-  .map(([k, g]) => [k, grupoNativo(g, dtcg.base, {extras: adiados}).fora]));
+const temas = Object.fromEntries(Object.entries(dtcg.theme).map(([k, g]) => {
+  const r = grupoNativo(g, dtcg.base, {extras: adiados});
+  // Sombra que muda por tema não tem caminho no nativo ainda: `shadowLayers` sai só do `base`.
+  // Melhor morrer aqui do que o tema perder a sombra dele em silêncio.
+  if (Object.keys(r.camadas).length) throw new Error(`sombra no tema ${k} (${Object.keys(r.camadas)}): o alvo nativo só lê sombra do base`);
+  return [k, r.fora];
+}));
 const dens = Object.fromEntries(Object.entries(dtcg.density).map(([k, g]) => [k, grupoNativo(g, dtcg.base).fora]));
 
 let js = `// Aurea — alvo NATIVO, gerado de aurea.tokens.json (DTCG 2025.10). NÃO EDITAR À MÃO.
@@ -241,6 +253,7 @@ export const REM_EM_DP = ${REM_EM_DP};
 export const base = ${j(b.fora)};
 export const tracking = ${j(b.tracking)};
 export const breakpoints = ${j(b.breakpoints)};
+export const shadowLayers = ${j(b.camadas)};
 export const themes = ${j(temas)};
 export const densities = ${j(dens)};
 `;
@@ -253,6 +266,7 @@ export declare const REM_EM_DP: number;
 export declare const base: Record<string, number | string | number[] | AureaColor | AureaShadow>;
 export declare const tracking: Record<string, number>;
 export declare const breakpoints: Record<string, number>;
+export declare const shadowLayers: Record<string, AureaShadow[]>;
 export declare const themes: Record<"dark" | "light", Record<string, AureaColor | number>>;
 export declare const densities: Record<"compact" | "comfortable" | "spacious", Record<string, number>>;
 `);
