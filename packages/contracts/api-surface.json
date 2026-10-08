@@ -7,7 +7,7 @@
     "componentes": 129,
     "hooks": 9,
     "aliasesLiterais": 71,
-    "propsDistintas": 287
+    "propsDistintas": 289
   },
   "aliases": {
     "ButtonVariant": {
@@ -3760,12 +3760,36 @@
         {
           "name": "Table",
           "kind": "function",
-          "propsType": null,
+          "propsType": "TableProps",
           "props": [
             {
               "name": "caption",
               "optional": true,
               "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "stickyHeader",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "stickyFirstColumn",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "fit",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "differencesOnly",
+              "optional": true,
+              "type": "boolean",
               "values": null
             }
           ]

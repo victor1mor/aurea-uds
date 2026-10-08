@@ -3001,6 +3001,9 @@ for (const theme of ["dark", "light"] as const) {
     expect(l.resp).toBeCloseTo(6 * coluna + 5 * l.gap, 0);
     // Tela estreita: respiro de 16, seção com 64, e o responsivo volta a ocupar a linha inteira.
     await p.setViewportSize({width: 375, height: 800});
+    // ESPERA a janela nova antes de medir (08/10/2026): no WebKit a troca de tamanho às vezes ainda
+    // não chegou ao leiaute, e o `Container` media 1280 — a página larga — em 2 a 3 de 6 rodadas.
+    await p.waitForFunction(() => document.documentElement.clientWidth === 375);
     const e = await medir();
     expect(e.cPadrao.w).toBe(375);
     expect(e.cPadrao.pad).toBe(16);

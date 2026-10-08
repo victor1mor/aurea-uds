@@ -69,4 +69,38 @@ export default [
       h("div", {style: {marginTop: "var(--space-4)"}},
         h(A.Button, {variant: "secondary", size: "sm", leadingIcon: "download"}, "Download PDF")))),
   },
+  // GAR-11 (08/10/2026): a ficha técnica agrupada. Decisão do Victor: com peças que JÁ existem, sem
+  // peça de grupo — a referência principal não tem, e o primeiro da fila que tem algo parecido
+  // monta o grupo como um título e a lista embaixo. Um cartão por grupo; a grade reparte os
+  // cartões e empilha no celular.
+  {
+    variant: "Default",
+    name: "A spec sheet in groups",
+    description: "A long list of facts reads better cut by subject. Each group is a card with its own title and its own list; the grid lays the cards side by side and stacks them on a phone. No group component to learn — the parts already exist.",
+    uses: ["Grid", "Card", "DataList"],
+    code: `<Grid min="sm">
+  <Card>
+    <h3>Engine</h3>
+    <DataList items={engine} />
+  </Card>
+  <Card>
+    <h3>Transmission</h3>
+    <DataList items={transmission} />
+  </Card>
+  <Card>
+    <h3>Brakes</h3>
+    <DataList items={brakes} />
+  </Card>
+</Grid>`,
+    render: () => h("div", {style: {width: "min(760px,100%)"}}, h(A.Grid, {min: "sm"},
+      ...[
+        {title: "Engine", items: [{term: "Power", value: "150 hp"}, {term: "Torque", value: "19 kgfm"}, {term: "Fuel", value: "Flex"}]},
+        {title: "Transmission", items: [{term: "Type", value: "Automatic"}, {term: "Gears", value: "6"}]},
+        {title: "Brakes", items: [{term: "Front", value: "Disc"}, {term: "Rear", value: "Drum"}]},
+      ].map(g => h(A.Card, {key: g.title},
+        // <strong> e não <h3> no PREVIEW, pelo mesmo motivo do padrão acima (salto de nível na
+        // página do catálogo); o `code` mostra o <h3> que o consumidor escreve.
+        h("strong", {style: {display: "block", marginBottom: "var(--space-3)", fontSize: "var(--text-base)"}}, g.title),
+        h(A.DataList, {items: g.items}))))),
+  },
 ];
