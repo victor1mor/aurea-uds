@@ -136,6 +136,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.21.0` | Lote J: CHK-01 e GAR-08 — pedido #44. **Não saiu sozinha**: foi publicada dentro da `0.22.0` |
 | `0.22.0` | Lote K1: `Container`, `Grid.Item span`, `Section` e o tema na faixa (GAR-02 a GAR-05), e as referências de desenho fora de tudo que é publicado — pedido #46. **Publicada em 07/10/2026** (avisada às 13:40, Brasília), pelo terminal do Victor, **sem o aceite de aparelho** dos blocos `0.20` e `0.21`. Leva a `0.20.0` e a `0.21.0` junto |
 | `0.23.0` | Lote K2: o `Topbar` passa a se chamar `Header` (o nome antigo continua), o cabeçalho de site com o menu do celular em popover (GAR-01) e o rodapé de site, `Section variant="footer"` (GAR-06) — pedido #48. **Publicada em 07/10/2026** (21:06, Brasília), pelo terminal do Victor |
+| `0.24.0` | Lote K3: a tabela de comparação — `Table` com `stickyHeader`, `stickyFirstColumn`, `fit` e `differencesOnly`, e a pele do HTML de comparação (GAR-12 e GAR-13); a ficha técnica agrupada como padrão do catálogo (GAR-11) — pedido #50. **Publicada em 08/10/2026** (10:34, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -269,7 +270,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    Python no Windows grava CRLF; ao reescrever arquivo do repositório com ele, use `newline="\n"`
    e confira com `git ls-files --eol -m`.
 
-18. **`0.24.0`, o Lote K3, feito em 08/10/2026 e aprovado pela bancada** (*"aprovado, pode"*) — com o "pode" do Victor
+18. **`0.24.0`, o Lote K3, feito em 08/10/2026, aprovado pela bancada** (*"aprovado, pode"*) **e
+   publicado no mesmo dia** (10:34, Brasília, pelo terminal do Victor, da junção do pedido #50) — com o "pode" do Victor
    (*"pode, e depois GAR-11, GAR-12 e GAR-13"*) e as quatro decisões dele, tomadas depois de ver a
    referência principal: a `Table` ganha `stickyHeader`, `stickyFirstColumn`, `fit` e
    `differencesOnly` (GAR-12 e GAR-13), e a pele do HTML de comparação (`th scope="rowgroup"`,
