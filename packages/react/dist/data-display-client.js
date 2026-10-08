@@ -6,7 +6,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import React from "react";
 import { cx, useAureaStrings, useReorder } from "./internal.js";
 import { Icon } from "./system.js";
-export function Table({ caption, children, className, ...props }) { const s = useAureaStrings(); return _jsx("div", { className: "table-region", role: "region", "aria-label": typeof caption === "string" ? caption : s.tableLabel, tabIndex: 0, children: _jsxs("table", { className: cx("table", className), ...props, children: [caption && _jsx("caption", { children: caption }), children] }) }); }
+export function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, children, className, ...props }) { const s = useAureaStrings(); return _jsx("div", { className: cx("table-region", stickyHeader && "table-sticky-header", stickyFirstColumn && "table-sticky-first"), role: "region", "aria-label": typeof caption === "string" ? caption : s.tableLabel, tabIndex: 0, children: _jsxs("table", { className: cx("table", fit && "table-fit", differencesOnly && "table-differences-only", className), ...props, children: [caption && _jsx("caption", { children: caption }), children] }) }); }
 // O protocolo de teclado e de ponteiro saiu daqui para o `useReorder` do `internal` no item N1,
 // quando o `BlockEditor` virou o segundo dono dele. A DOM abaixo não mudou uma vírgula na
 // extração — é o que o gate de pixel e o `skin.spec` continuam medindo.

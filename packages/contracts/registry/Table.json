@@ -3,7 +3,7 @@
   "category": "Data Display",
   "layer": "Composite",
   "maturity": "Stable",
-  "summary": "Presents rows and columns of data.",
+  "summary": "Presents rows and columns of data — also a comparison table: groups of rows, the row's name pinned while scrolling sideways, the header pinned while scrolling down, the best value marked and a 'differences only' switch.",
   "icon": "tree-structure",
   "platforms": {
     "web": "stable",
@@ -11,19 +11,33 @@
   },
   "variants": [],
   "sizes": [],
-  "states": [],
+  "states": [
+    "default",
+    "sticky-header",
+    "sticky-first-column",
+    "fit",
+    "differences-only",
+    "best",
+    "same"
+  ],
   "tokens": [
     "--border",
+    "--border-width",
     "--card",
     "--focus",
+    "--foreground",
     "--radius-card",
     "--radius-lg",
-    "--space-3"
+    "--space-3",
+    "--surface-2",
+    "--weight-medium",
+    "--weight-semibold"
   ],
   "a11y": {
     "role": "table",
     "apg": "table",
-    "keyboard": []
+    "keyboard": [],
+    "notes": "A comparison is plain HTML with Aurea's skin, so a screen reader gets real table semantics: each item is a <th scope=\"col\">, each row is named by a <th scope=\"row\"> (body text, not a column label), and a group of rows is a <tbody> that opens with a <th scope=\"rowgroup\" colSpan> band. The best value is <td data-best> (bold) and must also say so in TEXT — put a Badge reading 'Best' in the cell: colour alone says nothing to someone who cannot see it (WCAG 1.4.1). differencesOnly hides the rows the page marked <tr data-same> with display:none, so they leave the accessibility tree too; the switch that turns it on belongs to the page. The pinned parts do not move focus or add keys: the scroll box is still the one focusable region it always was."
   },
   "dependencies": {
     "engine": null,
@@ -45,6 +59,30 @@
       "type": "ReactNode",
       "default": "—",
       "description": "Rendered as a real <caption>, and when it is a string it also becomes the accessible name of the scroll region around the table. Without it the region falls back to \"Table\"."
+    },
+    {
+      "name": "stickyHeader",
+      "type": "boolean",
+      "default": "false",
+      "description": "GAR-13: the header stays at the top of the table's box while the body scrolls inside it — the same name and mechanism as DataGrid. The box gets a ceiling, `--table-max-h` (60vh by default), set in CSS: a box with no ceiling never scrolls inside itself. It pins to the box, not to the page: the box also scrolls sideways, and a sticky element only sticks to its nearest scroll container."
+    },
+    {
+      "name": "stickyFirstColumn",
+      "type": "boolean",
+      "default": "false",
+      "description": "GAR-12: the first column — the name of each row — stays put while the table scrolls sideways, on an opaque background so the rest slides under it, with a hairline at its end. With stickyHeader too, the corner stays above both."
+    },
+    {
+      "name": "fit",
+      "type": "boolean",
+      "default": "false",
+      "description": "GAR-12: the table fits its box, without the 720px minimum that makes a wide table scroll sideways. This is what lets a comparison of TWO items fit a 360px phone with no sideways scroll; which two is the page's choice (a Select above the table)."
+    },
+    {
+      "name": "differencesOnly",
+      "type": "boolean",
+      "default": "false",
+      "description": "GAR-12: the 'differences only' view — hides the rows the page marked as identical with <tr data-same>. The table does not compare cells itself; the page knows which rows are equal and owns the switch."
     },
     {
       "name": "children",

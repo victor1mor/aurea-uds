@@ -1541,6 +1541,40 @@ img,svg { display:block; }
 .table th,.table-wrap th { color:var(--subtle-foreground); background:var(--surface-2); font-size:var(--text-xs); letter-spacing:var(--tracking-wider); text-transform:uppercase; }
 .table tr:last-child td,.table-wrap tr:last-child td { border-bottom:0; }
 .table tbody tr:hover,.table-wrap tbody tr:hover { background:var(--surface-2); }
+/* GAR-12 e GAR-13 (08/10/2026): a tabela de COMPARAÇÃO — as chaves da `Table` e a pele do HTML de
+   comparação. A referência principal só tem o cabeçalho preso, à mão, numa caixa de altura fixa; o
+   resto veio do mercado, por escolha do Victor (o detalhe está no comentário da `Table`).
+   O NOME DA LINHA (`<th scope="row">`) é texto de corpo, não rótulo de coluna: sem caixa-alta, na
+   cor do texto, peso médio. Antes herdava a pele do cabeçalho — e ninguém no repositório usava
+   `th` no corpo (medido), então nenhum exemplo muda. A FAIXA DE GRUPO (`<th scope="rowgroup">`)
+   continua com a pele do cabeçalho de propósito: é rótulo, no idioma que a tabela já usa. */
+.table tbody th[scope="row"],.table-wrap tbody th[scope="row"] { color:var(--foreground); background:transparent; font-size:inherit; font-weight:var(--weight-medium); letter-spacing:normal; text-transform:none; }
+.table tbody tr:last-child th,.table-wrap tbody tr:last-child th { border-bottom:0; }
+/* O melhor valor: negrito. O selo "Melhor", em TEXTO, é um `Badge` que o site põe na célula — a
+   cor sozinha não diz nada a quem não a enxerga (WCAG 1.4.1). */
+.table td[data-best],.table-wrap td[data-best] { font-weight:var(--weight-semibold); }
+/* `fit`: sem o mínimo de 720 — a comparação de dois itens cabe num celular de 360. */
+.table.table-fit { min-width:0; }
+/* `differencesOnly`: o "Só diferenças" esconde as linhas que o site marcou como iguais. */
+.table-differences-only tr[data-same] { display:none; }
+/* `stickyHeader`: o mesmo mecanismo do `DataGrid` (F6, mais abaixo). A caixa é o contêiner de
+   rolagem, então precisa de teto para rolar por dentro; `--table-max-h` é a válvula do consumidor.
+   O cabeçalho gruda no topo da CAIXA, não da página: com a caixa rolando de lado, um elemento
+   grudento só gruda no contêiner de rolagem mais próximo. */
+.table-sticky-header { max-block-size:var(--table-max-h,60vh); }
+.table-sticky-header thead th { position:sticky; inset-block-start:0; z-index:1; }
+/* `stickyFirstColumn`: a primeira célula de cada linha fica parada ao rolar de lado, com fundo
+   próprio (o de cartão; o do cabeçalho no cabeçalho e na faixa de grupo) para o que rola passar
+   POR BAIXO dela. O canto (cabeçalho × primeira coluna) fica por cima dos dois. O fio do fim da
+   coluna é um pseudo-elemento, porque a borda de célula grudenta, com `border-collapse`, fica para
+   trás quando a tabela rola. `isolation` prende os `z-index` daqui dentro da caixa: eles não
+   disputam com menu e janela da página. */
+.table-sticky-header,.table-sticky-first { isolation:isolate; }
+.table-sticky-first :is(thead,tbody,tfoot) > tr > :first-child { position:sticky; inset-inline-start:0; z-index:1; background:var(--card); }
+.table-sticky-first thead > tr > :first-child { z-index:2; background:var(--surface-2); }
+.table-sticky-first tbody > tr > th[scope="rowgroup"]:first-child { background:var(--surface-2); }
+.table-sticky-first tbody > tr:hover > :first-child { background:var(--surface-2); }
+.table-sticky-first :is(thead,tbody,tfoot) > tr > :first-child:not([colspan])::after { content:""; position:absolute; inset-block:0; inset-inline-end:0; inline-size:var(--border-width); background:var(--border); }
 /* Avatar (Lote 2): `overflow:hidden` e o `object-fit` da imagem são a correção do defeito que
    a medição achou — foto que não é quadrada vazava inteira da caixa redonda, porque
    `border-radius` não recorta filho sozinho. Foto de perfil raramente vem quadrada, então isto

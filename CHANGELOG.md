@@ -80,6 +80,60 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.24.0] — 2026-10-08
+
+⏳ **Ainda não publicada.** Feita com o "pode" do Victor (*"pode, e depois GAR-11, GAR-12 e
+GAR-13"*) e com as quatro decisões dele, todas tomadas depois de ver o que a referência principal
+faz (regra dele do mesmo dia: decisão só vai para aprovação com a resposta dela antes).
+**Aprovada pela bancada em 08/10/2026** (*"aprovado, pode"*).
+
+O **Lote K3**: a ficha técnica agrupada e a tabela de COMPARAÇÃO de uma página de site (GAR-11,
+GAR-12 e GAR-13), como **variações** de peças que já existem. **Versão nova porque entram props.**
+Nada sai nem muda de nome, e nenhuma dependência entra.
+
+### Adicionado
+
+- **GAR-12 e GAR-13 · a `Table` ganha quatro chaves** (*"uma chave para cada coisa"*, escolha do
+  Victor):
+  - `stickyHeader` — o cabeçalho fica no topo da caixa da tabela, que ganha teto (`--table-max-h`,
+    60vh) e rola por dentro. O mesmo nome e o mesmo mecanismo do `DataGrid`, e o jeito da
+    referência principal. **Gruda na caixa, não na página**: a caixa também rola de lado, e um
+    elemento grudento só gruda no contêiner de rolagem mais próximo.
+  - `stickyFirstColumn` — a primeira coluna (o nome de cada linha) fica parada ao rolar de lado,
+    com fundo opaco e um fio no fim dela. Com as duas chaves, o canto fica por cima.
+  - `fit` — sem o mínimo de 720: **dois itens cabem num celular de 360 sem rolar de lado**. A
+    escolha do Victor para o celular é mostrar só dois; quais dois, o site decide (com um `Select`).
+  - `differencesOnly` — o **"Só diferenças"**: esconde as linhas que o site marcou como iguais
+    (`<tr data-same>`). O botão que liga é do site.
+- **A pele do HTML de comparação**, sem prop nenhuma: a faixa de grupo é `<th scope="rowgroup"
+  colSpan>` no começo de cada `<tbody>` (a pele do cabeçalho); o nome da linha é `<th
+  scope="row">`, agora como texto de corpo; e o **melhor valor** é `<td data-best>`, em negrito,
+  com o selo "Melhor" em **texto** (um `Badge` que o site põe na célula — cor sozinha não basta,
+  WCAG 1.4.1). A ficha da `Table` declara os estados `best` e `same`.
+- **GAR-11 · a ficha técnica agrupada** não tem código novo (decisão do Victor): é o padrão novo
+  do catálogo "A spec sheet in groups" — um `Card` por grupo, com o título e a `DataList`, numa
+  `Grid` que empilha no celular.
+- Três padrões novos da `Table` no catálogo: a comparação com grupos e o melhor valor, dois itens
+  no celular, e o "Só diferenças".
+
+### Mudado
+
+- **O `<th scope="row">` no corpo da tabela deixa de ter a pele do cabeçalho** (letra mínima em
+  caixa-alta sobre o fundo do cabeçalho) e passa a texto de corpo, peso médio. Ninguém no
+  repositório usava (medido); quem usa vê o nome da linha como texto, que é o que ele é.
+
+### Medido
+
+- Nos três navegadores: a primeira coluna parada enquanto o resto anda 150; o cabeçalho no topo da
+  caixa de 180 depois de rolar; o canto por cima dos dois; dois itens em 360 sem rolar (e, sem
+  `fit`, rolando como antes); as linhas iguais escondidas; o melhor em 600 contra 400.
+- Quem cobra: `tests/unit/tabela-gar11-13.test.tsx` (a marcação sem as chaves é a da `0.23.0`,
+  caractere por caractere) e `tests/visual/tabela-gar12-13.spec.ts` (nos três navegadores),
+  provados contra a `0.23.0`: lá as 12 medições reprovam pelo comportamento.
+- Junto: o teste do `Container` no `skin.spec` (do K1) espera a janela de 375 antes de medir. No
+  WebKit a troca de tamanho às vezes não tinha chegado ao leiaute e ele media 1280 (2 a 3 de 6
+  rodadas); agora 30 de 30 nos três navegadores.
+
 ## [0.23.0] — 2026-10-07
 
 ✅ **Publicada em 07/10/2026 às 21:06 (Brasília, medido no npm)**, pelo terminal do Victor, da

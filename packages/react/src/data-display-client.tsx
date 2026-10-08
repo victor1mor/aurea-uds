@@ -5,7 +5,35 @@
 import React, {type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
 import {cx, useAureaStrings, useReorder} from "./internal.js";
 import {Icon} from "./system.js";
-export function Table({caption,children,className,...props}:HTMLAttributes<HTMLTableElement>&RefAttributes<HTMLTableElement>&{caption?:ReactNode}){const s=useAureaStrings();return <div className="table-region" role="region" aria-label={typeof caption==="string"?caption:s.tableLabel} tabIndex={0}><table className={cx("table",className)} {...props}>{caption&&<caption>{caption}</caption>}{children}</table></div>}
+// GAR-12 e GAR-13 (08/10/2026): a TABELA DE COMPARAÇÃO é esta `Table` com quatro chaves a mais, e
+// não uma peça nova (regra do Victor: peça nova entra como variação; e *"uma chave para cada
+// coisa"*, escolha dele). A referência principal só tem o cabeçalho preso, feito à mão dentro de
+// uma caixa de altura fixa; o resto veio do mercado, escolhido pelo Victor:
+//   • `stickyHeader` — o MESMO nome e o mesmo mecanismo do `DataGrid`: a caixa da tabela ganha
+//     teto (`--table-max-h`) e rola por dentro, e o cabeçalho gruda no topo DELA. Não gruda no
+//     topo da página: a caixa rola de lado, e um elemento grudento só gruda no contêiner de
+//     rolagem mais próximo.
+//   • `stickyFirstColumn` — a primeira coluna (o nome de cada linha) fica parada ao rolar de lado.
+//   • `fit` — sem o mínimo de 720: é o que deixa a comparação de DOIS itens caber num celular de
+//     360 sem rolar de lado (a escolha do Victor para o celular; quais dois, o site decide).
+//   • `differencesOnly` — o "Só diferenças": esconde as linhas que o site marcou como iguais
+//     (`<tr data-same>`). O botão que liga é do site.
+// O resto é HTML, com pele da Aurea: a faixa de grupo é `<th scope="rowgroup" colSpan>`, o nome
+// da linha é `<th scope="row">`, e o melhor valor é `<td data-best>` (negrito; o selo "Melhor",
+// em texto, é um `Badge` que o site põe na célula — cor sozinha não basta, WCAG 1.4.1).
+export interface TableProps extends HTMLAttributes<HTMLTableElement>, RefAttributes<HTMLTableElement>{
+  /** Um `<caption>` de verdade; se for texto, vira também o nome da região que rola. */
+  caption?:ReactNode;
+  /** GAR-13: o cabeçalho fica preso no topo da caixa da tabela, que ganha teto (`--table-max-h`, 60vh) e rola por dentro. */
+  stickyHeader?:boolean;
+  /** GAR-12: a primeira coluna fica parada ao rolar de lado. */
+  stickyFirstColumn?:boolean;
+  /** GAR-12: a tabela cabe na largura da caixa, sem o mínimo de 720 — a comparação de dois itens no celular. */
+  fit?:boolean;
+  /** GAR-12: esconde as linhas marcadas como iguais (`<tr data-same>`) — o "Só diferenças". */
+  differencesOnly?:boolean;
+}
+export function Table({caption,stickyHeader,stickyFirstColumn,fit,differencesOnly,children,className,...props}:TableProps){const s=useAureaStrings();return <div className={cx("table-region",stickyHeader&&"table-sticky-header",stickyFirstColumn&&"table-sticky-first")} role="region" aria-label={typeof caption==="string"?caption:s.tableLabel} tabIndex={0}><table className={cx("table",fit&&"table-fit",differencesOnly&&"table-differences-only",className)} {...props}>{caption&&<caption>{caption}</caption>}{children}</table></div>}
 
 // A `Prose` MORAVA AQUI e foi para o `markup.tsx` no item O1. O comentario dela dizia, em
 // 15/08/2026: "e exatamente o caso que o item O1 do plano vai medir: quem e de cliente so por

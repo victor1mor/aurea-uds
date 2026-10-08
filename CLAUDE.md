@@ -269,6 +269,14 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    Python no Windows grava CRLF; ao reescrever arquivo do repositório com ele, use `newline="\n"`
    e confira com `git ls-files --eol -m`.
 
+18. **`0.24.0`, o Lote K3, feito em 08/10/2026 e aprovado pela bancada** (*"aprovado, pode"*) — com o "pode" do Victor
+   (*"pode, e depois GAR-11, GAR-12 e GAR-13"*) e as quatro decisões dele, tomadas depois de ver a
+   referência principal: a `Table` ganha `stickyHeader`, `stickyFirstColumn`, `fit` e
+   `differencesOnly` (GAR-12 e GAR-13), e a pele do HTML de comparação (`th scope="rowgroup"`,
+   `th scope="row"`, `td data-best`, `tr data-same`); a ficha agrupada (GAR-11) é um padrão do
+   catálogo com `Card` + `DataList`, sem código novo. Quem cobra: `tabela-gar11-13.test.tsx` e
+   `tabela-gar12-13.spec.ts`.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
