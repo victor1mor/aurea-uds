@@ -199,6 +199,15 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 - [`decisions/`](decisions/README.md): as decisões registradas (ADRs);
 - [`docs/`](docs/): como se constrói, onde mexer, quando algo está pronto e o caminho até a `1.0`.
 
+## Suporte
+
+A Aurea é gratuita para todo mundo, e eu a mantenho sozinho.
+
+Pedidos, dúvidas e falhas são bem-vindos: abra uma issue. Eu leio tudo, e o que fizer sentido entra
+na fila e é corrigido no ritmo do projeto, sem prazo prometido.
+
+A ideia é ajudar, principalmente quem não pode pagar por uma biblioteca de interface.
+
 ## Contribuir
 
 Leia o [CONTRIBUTING.md](CONTRIBUTING.md). Para relatar uma falha de segurança, siga o
