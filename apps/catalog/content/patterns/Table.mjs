@@ -114,7 +114,9 @@ export default [
       h("div", {style: {display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)"}},
         h(Field, {label: "Compare"}, h(Select, {defaultValue: "a"}, ...MODELS.map((m, i) => h("option", {key: m, value: "abc"[i]}, m)))),
         h(Field, {label: "With"}, h(Select, {defaultValue: "b"}, ...MODELS.map((m, i) => h("option", {key: m, value: "abc"[i]}, m))))),
-      comparison({fit: true}, 2)),
+      // Só o grupo Engine: o ponto deste exemplo é caber na LARGURA de um celular; com os dois
+      // grupos, a prévia passava 129px da altura da caixa (ADR-0002, medido na varredura).
+      comparison({fit: true}, 2, SPECS.slice(0, 1))),
   },
   {
     variant: "Comparison",
@@ -138,11 +140,11 @@ const SPECS = [
   {group: "Engine", rows: [["Power", ["120 hp", "150 hp", "110 hp"], 1], ["Torque", ["16 kgfm", "19 kgfm", "15 kgfm"], 1], ["Fuel", ["Flex", "Flex", "Flex"], -1]]},
   {group: "Brakes", rows: [["Front", ["Disc", "Disc", "Disc"], -1], ["Rear", ["Drum", "Disc", "Drum"], null]]},
 ];
-function comparison(props, n) {
+function comparison(props, n, specs = SPECS) {
   const cols = MODELS.slice(0, n);
   return h(Table, {caption: "Compare models", ...props},
     h("thead", null, h("tr", null, h("th", {scope: "col"}, "Spec"), ...cols.map(m => h("th", {scope: "col", key: m}, m)))),
-    ...SPECS.map(g => h("tbody", {key: g.group},
+    ...specs.map(g => h("tbody", {key: g.group},
       h("tr", null, h("th", {scope: "rowgroup", colSpan: n + 1}, g.group)),
       ...g.rows.map(([name, values, best]) => h("tr", {key: name, "data-same": best === -1 ? "" : undefined},
         h("th", {scope: "row"}, name),
