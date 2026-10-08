@@ -49,7 +49,8 @@ describe("R-12 · Tabs: o jeito sublinhado da referência, com o fio da casa", (
     const e = fila();
     expect(e.backgroundColor).toBe(t.color.muted);
     expect(e.borderRadius).toBe(t.size.radiusControl);
-    expect(plano(tabs()[0]).backgroundColor).toBe(t.color.secondary);
+    // ADR-0059 (08/10/2026): era `secondary`, a mesma cor do trilho no tema claro — não se via.
+    expect(plano(tabs()[0]).backgroundColor).toBe(t.color.segment);
     for (const x of tabs()) expect(fiosDentroDe(x)).toHaveLength(0);
   });
   it("secondary: a fila perde a cápsula e ganha o fio fino de 1 embaixo, na cor da borda", () => {

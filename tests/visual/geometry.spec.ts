@@ -4,6 +4,7 @@ import {join} from "node:path";
 import {createElement as el} from "react";
 import {renderToStaticMarkup} from "react-dom/server";
 import * as A from "../../packages/react/dist/index.js";
+import {esperarTransicoes} from "./esperar-transicoes";
 
 // GEOMETRIA. Compara estilo COMPUTADO, não pixel — independe de plataforma, então vale
 // como gate duro no CI Linux, igual ao rtl.spec e ao status.spec.
@@ -175,8 +176,9 @@ test.describe("catálogo · geometria de todas as páginas", () => {
 // ── contrato de foco (Fase 5, achado M10) ──────────────────────────────────────────────
 // O sinal de foco é a principal affordance de quem navega sem mouse, e a auditoria de
 // 26/07/2026 achou 3 offsets, 2 cores e duas técnicas concorrendo entre as famílias. O
-// contrato agora é: cor única `--focus-strong`, espessura 2px, técnica outline, e só dois
-// offsets — +2px para elemento livre, -2px para item dentro de contêiner recortado.
+// contrato agora é: cor única `--focus-strong`, espessura 2px, técnica outline, e só três
+// offsets — +2px para elemento livre SEM borda, 0 para peça COM borda (a borda vira a cor do foco e
+// o anel encosta nela: uma faixa só, ADR-0059) e -2px para item dentro de contêiner recortado.
 //
 // Mede estilo computado com foco REAL de teclado (Tab), porque `.focus()` não dispara
 // `:focus-visible` de forma confiável — é o pseudo-classe que a regra usa.
@@ -205,15 +207,16 @@ for (const theme of ["dark", "light"] as const) {
       getComputedStyle(document.documentElement).getPropertyValue("--focus-strong").trim());
     expect(esperada, "--focus-strong não existe").toBeTruthy();
 
-    const vistos: Array<{alvo: string; cor: string; largura: string; offset: string}> = [];
+    const vistos: Array<{alvo: string; cor: string; largura: string; offset: string; borda: string}> = [];
     for (let i = 0; i < 6; i++) {
       await p.keyboard.press("Tab");
+      await esperarTransicoes(p);
       const r = await p.evaluate(() => {
         const el = document.activeElement as HTMLElement;
         if (!el || el === document.body) return null;
         const cs = getComputedStyle(el);
         return {alvo: el.tagName.toLowerCase() + "." + (el.className || "—"),
-          cor: cs.outlineColor, largura: cs.outlineWidth, offset: cs.outlineOffset};
+          cor: cs.outlineColor, largura: cs.outlineWidth, offset: cs.outlineOffset, borda: cs.borderTopColor};
       });
       if (r) vistos.push(r);
     }
@@ -224,7 +227,16 @@ for (const theme of ["dark", "light"] as const) {
     expect(larguras, `mais de uma espessura de foco: ${JSON.stringify(vistos)}`).toEqual(["2px"]);
     const offsets = [...new Set(vistos.map(v => v.offset))].sort();
     for (const o of offsets) {
-      expect(["2px", "-2px"], `offset fora do contrato: ${o} — ${JSON.stringify(vistos)}`).toContain(o);
+      expect(["2px", "0px", "-2px"], `offset fora do contrato: ${o} — ${JSON.stringify(vistos)}`).toContain(o);
+    }
+    // ADR-0059: o campo (tem borda) encosta o anel e pinta a borda da MESMA cor — uma faixa só; o
+    // botão cheio e a aba (sem borda) continuam com o vão. Antes o campo dava "2px" com a borda
+    // amarela por dentro: borda, vão e anel, as duas linhas do print do Victor.
+    for (const v of vistos) {
+      const comBorda = /^(input|select|textarea)\./.test(v.alvo);
+      expect(v.offset, `${comBorda ? "peça com borda: o anel encosta" : "peça sem borda: o anel afasta"} — ${JSON.stringify(v)}`)
+        .toBe(comBorda ? "0px" : "2px");
+      if (comBorda) expect(v.borda, `a borda não virou a cor do anel: ${JSON.stringify(v)}`).toBe(v.cor);
     }
     // uma cor só, e é a do token
     const cores = [...new Set(vistos.map(v => v.cor))];

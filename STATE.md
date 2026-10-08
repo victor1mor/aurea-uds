@@ -24,9 +24,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Métrica | Valor |
 |---|---|
-| Declarações emitidas | 411 |
-| Nomes distintos | 193 |
-| Nomes referenciados pelo core | 147 |
+| Declarações emitidas | 415 |
+| Nomes distintos | 195 |
+| Nomes referenciados pelo core | 149 |
 | Nomes nunca referenciados pelo core | 46 |
 
 ## Catálogo gerado
@@ -69,7 +69,7 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1453 |
+| Chamadas de `test()` nos testes unitários | 1456 |
 | Componentes citados nos testes unitários | 131 de 124 |
 | Specs de navegador (Playwright) | 33 |
 | Baselines de screenshot no repositório | 44 |

@@ -15,7 +15,7 @@
 //   • 1 nome existe no `base` E no tema — `warning400`. No CSS o tema ganha.
 // Logo: base < tema < densidade. Inverter isso devolve o app inteiro numa densidade só, e em
 // silêncio — o teste `tokens.test.ts` prova a ordem contra esse defeito.
-import {base, themes, densities, tracking, REM_EM_DP} from "@aurea-uds/tokens/native";
+import {base, themes, densities, tracking, shadowLayers, REM_EM_DP} from "@aurea-uds/tokens/native";
 
 export type AureaThemeName = "dark" | "light";
 export type AureaDensity = "compact" | "comfortable" | "spacious";
@@ -59,8 +59,16 @@ export type AureaTokens = {
   size: Record<string, number>;
   /** Família por papel de tipografia e peso. */
   font: {ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale};
-  /** `boxShadow` do RN 0.76+. */
+  /**
+   * `boxShadow` do RN 0.76+ — **a primeira camada** de cada sombra. Para a sombra INTEIRA, use
+   * `shadowLayers` (a `shadowSm` tem três camadas; aqui está só a primeira).
+   */
   shadow: Record<string, AureaShadow>;
+  /**
+   * Toda sombra com TODAS as camadas, na forma de lista que o `boxShadow` do RN 0.76+ aceita:
+   * `boxShadow: t.shadowLayers.shadowSm`. Desde a 0.25.0 (ADR-0059).
+   */
+  shadowLayers: Record<string, readonly AureaShadow[]>;
   /** `cubicBezier` como os 4 números do DTCG. Não há curva de CSS no RN. */
   easing: Record<string, readonly [number, number, number, number]>;
   /** RAZÃO de `em`, não dp: `letterSpacing` no RN é absoluto, então multiplique pelo `fontSize`. */
@@ -157,5 +165,5 @@ export function resolverTokens(
     code: normalizarEscala(fontFamilies?.code, texto.fontCode ?? "System"),
   };
 
-  return {theme, density, color, size, font, shadow, easing, tracking: {...tracking}, remInDp: REM_EM_DP};
+  return {theme, density, color, size, font, shadow, shadowLayers: {...shadowLayers}, easing, tracking: {...tracking}, remInDp: REM_EM_DP};
 }

@@ -31,7 +31,7 @@ publicada e construir errado passou a custar versão.
 |---|---|---|
 | 4 | Renderiza nos 2 temas e 3 densidades **sem valor cru novo** | check 12 (catraca de px/raio/fonte/peso/entrelinha) |
 | 5 | Estados: default, hover, focus-visible, active, disabled — mais os do papel | pessoa |
-| 6 | Teclado conforme APG; foco visível pelo contrato de foco | `geometry.spec.ts` (contrato de foco) |
+| 6 | Teclado conforme APG; foco visível pelo contrato de foco — uma linha só, sem borda e anel separados (ADR-0059) | `geometry.spec.ts` (contrato de foco) + `catalog-sweep.spec.ts` (duas linhas, com Tab em todo o catálogo) |
 | 7 | Ficha válida com `tokens`, `states`, `a11y.role` e `a11y.keyboard` | check 11 |
 | 8 | Toda classe que o componente emite **tem regra no core** | check 18 (o nome) |
 | 8b | E a regra **faz alguma coisa**, com só o core carregado | `tests/visual/skin.spec.ts` (o efeito) |

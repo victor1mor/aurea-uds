@@ -244,6 +244,118 @@ test.describe("catálogo · varredura de todas as páginas", () => {
       expect(falhas, `violações axe (${theme}):\n${falhas.join("\n")}`).toEqual([]);
     });
   }
+
+  // UMA LINHA SÓ NO FOCO (ADR-0059, 08/10/2026). O Victor mostrou o campo focado com a borda
+  // amarela por dentro e o anel amarelo por fora: a regra global afastava o anel 2px de TODA peça,
+  // e a peça com borda própria ficava com borda + vão + anel. Medido no site: 39 peças. A regra
+  // nova (`aurea.css`, logo abaixo do `:focus-visible` global) lista as peças com borda — e uma
+  // lista esquece. Por isso este teste não confia nela: anda com Tab por toda prévia de toda página
+  // de componente, espera a transição da borda TERMINAR (medir antes dela deu falso negativo no
+  // primeiro levantamento) e, em quem desenha o anel — a peça focada, o irmão (`.control-mark`,
+  // `.switch-track`) ou a moldura (`:focus-within`) —, reprova borda visível que não vira parte do
+  // anel: afastada dele, ou encostada com outra cor.
+  test("nenhuma peça focada desenha duas linhas — ADR-0059", async ({page}) => {
+    const falhas = new Set<string>();
+    const comBorda = new Set<string>();      // tipos de peça com borda que o teste de fato mediu
+    for (const f of PAGES.filter(p => pageType(p) === "component")) {
+      await abrir(page, url(f), avisar);
+      const prevs = await page.locator(".demo-panel[data-panel='preview']").count();
+      for (let i = 0; i < prevs; i++) {
+        await page.evaluate(i => {
+          const d = document.querySelectorAll<HTMLElement>(".demo-panel[data-panel='preview']")[i];
+          (window as any).__prev = d;
+          d.focus();
+        }, i);
+        for (let k = 0; k < 40; k++) {
+          await page.keyboard.press("Tab");
+          await esperarTransicoes(page);
+          const r = await page.evaluate(() => {
+            const el = document.activeElement as HTMLElement | null;
+            const prev = (window as any).__prev as HTMLElement;
+            if (!el || !prev.contains(el) || el === prev) return {fora: true, defeitos: [] as string[], medidas: [] as string[]};
+            const cv = document.createElement("canvas"); cv.width = cv.height = 1;
+            const cx = cv.getContext("2d", {willReadFrequently: true})!;
+            const rgba = (c: string) => { cx.clearRect(0, 0, 1, 1); cx.fillStyle = "#000"; cx.fillStyle = c; cx.fillRect(0, 0, 1, 1); return [...cx.getImageData(0, 0, 1, 1).data]; };
+            const dif = (a: number[], b: number[]) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
+            const fundo = (e: Element | null) => { while (e) { const v = rgba(getComputedStyle(e).backgroundColor); if (v[3] > 200) return v; e = e.parentElement; } return [0, 0, 0, 255]; };
+            // quem desenha o anel: a peça, o irmão de depois, ou um ancestral próximo (moldura)
+            const candidatos = [el, el.nextElementSibling, el.parentElement, el.parentElement?.parentElement, el.parentElement?.parentElement?.parentElement];
+            const defeitos: string[] = [], medidas: string[] = [];
+            for (const h of candidatos) {
+              if (!(h instanceof HTMLElement)) continue;
+              const s = getComputedStyle(h);
+              const ow = parseFloat(s.outlineWidth) || 0;
+              if (s.outlineStyle === "none" || ow === 0) continue;
+              const bw = parseFloat(s.borderTopWidth) || 0;
+              const bc = rgba(s.borderTopColor);
+              const visivel = bw > 0 && s.borderTopStyle !== "none" && bc[3] > 40
+                && dif(bc, fundo(h)) > 12 && dif(bc, fundo(h.parentElement)) > 12;
+              if (!visivel) continue;
+              medidas.push(h.tagName.toLowerCase() + "." + [...h.classList].slice(0, 2).join("."));
+              const off = parseFloat(s.outlineOffset) || 0;
+              const coberta = off <= -bw && off + ow >= 0;
+              const faixa = off === 0 && dif(bc, rgba(s.outlineColor)) <= 12;
+              if (!coberta && !faixa) {
+                const nome = h.tagName.toLowerCase() + "." + [...h.classList].slice(0, 3).join(".");
+                defeitos.push(`${nome}: borda ${bw}px ${s.borderTopColor}, anel ${ow}px a ${off}px ${s.outlineColor}`);
+              }
+            }
+            return {fora: false, defeitos, medidas};
+          });
+          if (r.fora) break;
+          for (const d of r.defeitos) falhas.add(`${f}: ${d}`);
+          for (const m of r.medidas) comBorda.add(m);
+        }
+      }
+    }
+    // Sem isto o teste passaria sem medir nada (um seletor que deixa de casar, um Tab que não entra).
+    expect(comBorda.size, `poucas peças com borda medidas: ${[...comBorda].join(" ")}`).toBeGreaterThan(15);
+    expect([...falhas], `peças focadas com duas linhas (borda e anel separados):\n${[...falhas].join("\n")}`).toEqual([]);
+  });
+
+  // A ABA ESCOLHIDA SE VÊ (ADR-0059, 08/10/2026). A "cápsula elevada" do escolhido era
+  // `--secondary` sobre o trilho `--muted`: no claro, a MESMA cor (1:1); no escuro, 1,02:1. O
+  // Victor mostrou a aba do painel da web ao lado da aba da referência principal, onde a escolhida
+  // é uma cápsula branca com sombra. Agora é `--segment` + `--shadow-sm`. Mede em toda página de
+  // componente, nos dois temas e na marca `lory`, a cor da cápsula contra a do trilho atrás dela.
+  // O piso de 1,08:1 é o que a marca mais clara dá (a `lory` no claro: branco sobre 0,965); a
+  // versão de antes dá 1,00 e 1,02 e reprova.
+  test("a cápsula da aba e do segmento escolhidos se distingue do trilho — ADR-0059", async ({page}) => {
+    const falhas: string[] = [];
+    let medidas = 0;
+    for (const f of PAGES.filter(p => pageType(p) === "component")) {
+      await abrir(page, url(f), avisar);
+      for (const [tema, marca] of [["dark", ""], ["light", ""], ["dark", "lory"], ["light", "lory"]] as const) {
+        await page.evaluate(([t, m]) => {
+          document.documentElement.dataset.theme = t;
+          if (m) document.documentElement.dataset.brand = m; else delete document.documentElement.dataset.brand;
+        }, [tema, marca]);
+        await esperarTransicoes(page);
+        const r = await page.evaluate(() => {
+          const cv = document.createElement("canvas"); cv.width = cv.height = 1;
+          const cx = cv.getContext("2d", {willReadFrequently: true})!;
+          const rgba = (c: string) => { cx.clearRect(0, 0, 1, 1); cx.fillStyle = "#000"; cx.fillStyle = c; cx.fillRect(0, 0, 1, 1); return [...cx.getImageData(0, 0, 1, 1).data]; };
+          const lum = ([r, g, b]: number[]) => { const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+          const cr = (a: number[], b: number[]) => { const A = lum(a), B = lum(b); return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05); };
+          const prevs = document.querySelectorAll(".demo-panel[data-panel='preview']");
+          const out: Array<{quem: string; razao: number}> = [];
+          for (const pv of prevs) {
+            for (const el of pv.querySelectorAll<HTMLElement>(".tabs > .tab.active, .tabs > .tab[data-active], .tabs > .tab[aria-selected='true'], .segmented > button.active")) {
+              const trilho = rgba(getComputedStyle(el.parentElement!).backgroundColor);
+              if (trilho[3] < 200) continue;      // trilho sem fundo (abas de linha): fora da regra
+              out.push({quem: el.tagName.toLowerCase() + "." + [...el.classList].join(".") + " «" + (el.textContent ?? "").trim().slice(0, 20) + "»",
+                razao: cr(rgba(getComputedStyle(el).backgroundColor), trilho)});
+            }
+          }
+          return out;
+        });
+        medidas += r.length;
+        for (const x of r) if (x.razao < 1.08) falhas.push(`${f} · ${tema}${marca ? " · " + marca : ""}: ${x.quem} ${x.razao.toFixed(2)}:1`);
+      }
+    }
+    expect(medidas, "nenhuma aba ou segmento escolhido foi medido").toBeGreaterThan(8);
+    expect(falhas, `escolhido da mesma cor do trilho:\n${falhas.join("\n")}`).toEqual([]);
+  });
 });
 
 // Contratos comportamentais do catálogo. Ficam neste spec, não em catalog.spec.ts: aquele é

@@ -80,9 +80,66 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.25.0] — 2026-10-08
+
+⏳ **Ainda não publicada.** Feita com o "pode" do Victor — *"A, pode criar os tokens, pode fazer.
+e me mostre antes"* — depois de ver como a referência principal faz o foco e a aba
+([ADR-0059](decisions/0059-uma-borda-so-no-foco-e-a-aba-escolhida-se-ve.md)). **Aprovada pela
+imagem em 08/10/2026** (*"aprovado, pode"*), com as três escolhas da bancada: a faixa de 3px, o anel
+vermelho no campo inválido e a letra amarela com o fio no segmentado.
+
+O pedido, com seis imagens: no foco, a Aurea desenhava **duas linhas** — a borda da peça por dentro e
+o anel amarelo por fora, com um vão no meio —, e a aba escolhida **não se via**. **Versão nova
+porque entram dois tokens e a aparência do foco muda em toda peça com borda.** Nenhuma prop muda.
+
+### Mudou
+
+- **O foco é uma linha só (web).** A regra global afastava o anel 2px de TODA peça, e ainda pintava
+  toda borda de amarelo com `!important`. Medido no catálogo, com Tab e depois da transição: **84
+  peças** com borda + vão + anel — campos, `Select`, `Textarea`, `InputGroup`, `Combobox`, área de
+  soltar, checkbox, switch, botões com contorno e até os botões secundário e fantasma, cuja borda
+  transparente virava amarela. Agora:
+  - **peça com borda própria:** a borda passa para a cor do foco e o anel encosta nela — uma faixa
+    só, de 3px (borda de 1 + anel de 2);
+  - **peça sem borda** (botão cheio, botão fantasma, aba, item de menu): o anel afastado, como
+    antes. A borda transparente não vira mais amarela;
+  - **checkbox marcado e switch ligado:** o anel afastado, porque o recheio tem a cor do anel e,
+    colado, ele sumiria;
+  - **campo inválido:** o anel fica da cor do perigo — encostado, o amarelo cobriria o vermelho.
+- **A aba escolhida se vê (web e nativo).** No `Tabs` e no `SegmentedControl`, a cápsula escolhida
+  era `--secondary` sobre o trilho `--muted`: a mesma cor no tema claro (1:1) e 1,02:1 no escuro.
+  Agora é `--segment` com `--shadow-sm` — branca com sombra pequena no claro, cinza mais clara no
+  escuro, como a aba da referência principal. O segmentado mantém a letra na cor da marca e o fio.
+  Vale também onde o segmentado aparece dentro de outra peça (`ButtonGroup`, `ToolPermission`).
+
+### Adicionado
+
+- **`--segment`** — a cápsula do item escolhido sobre o trilho. Claro: branco; escuro:
+  `oklch(0.3964 0.01 285.93)`; marca `lory` no escuro: `oklch(0.312 0.02 250)`.
+- **`--shadow-sm`** — a sombra pequena dessa cápsula, com as três camadas da referência.
+- **Nativo: `t.shadowLayers`** — toda sombra com todas as camadas, no formato de lista do
+  `boxShadow` do React Native: `boxShadow: t.shadowLayers.shadowSm`. O gerador de tokens levava
+  só a primeira camada de uma sombra, em silêncio; `t.shadow` continua com a primeira, para não
+  quebrar quem já lê `.offsetX`.
+
+### Medido
+
+- No catálogo, nos três navegadores: nenhuma peça focada com duas linhas; a cápsula escolhida contra
+  o trilho dá pelo menos 1,08:1 nos dois temas e na `lory`.
+- Quem cobra: dois testes novos na varredura do catálogo (`catalog-sweep.spec.ts`), o contrato de
+  foco do `geometry.spec.ts`, o check 44 e `tests/unit/native-aba-escolhida.test.tsx` — provados
+  contra a `0.24.1`: 84 peças com duas linhas; cápsula a 1,00 e 1,02:1; no nativo, 4 de 5 reprovam.
+
+### Fica para depois
+
+- O botão alternado ligado dentro da barra de ferramentas (`Toolbar`) também tem a cor do fundo
+  (1:1). A referência o desenha de outro jeito (um tom da cor da marca); entra na auditoria peça a
+  peça.
+
 ## [0.24.1] — 2026-10-08
 
-⏳ **Ainda não publicada.** Feita com o "pode" do Victor — *"A, pode fazer"* (o selo) e *"faz isso
+✅ **Publicada em 08/10/2026, entre 15:25 e 15:30 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #53. Feita com o "pode" do Victor — *"A, pode fazer"* (o selo) e *"faz isso
 aqui por favor"* (o KPI e o gráfico) — e **aprovada pela bancada em 08/10/2026** (*"aprovado,
 pode"*).
 

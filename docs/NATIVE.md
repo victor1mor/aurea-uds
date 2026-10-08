@@ -269,6 +269,10 @@ porque a [ADR-0027](../decisions/0027-a-cor-no-alvo-nativo.md) decidiu que hex s
 `spread` e divergem entre os sistemas. Medido: o **RN 0.76+ tem `boxShadow`** com sintaxe do CSS,
 inclusive `spreadDistance` — e a Nova Arquitetura é obrigatória desde o Expo SDK 55, então o
 mapeamento é **1:1 e sem perda**.
+⚠ **Corrigido em 08/10/2026 (ADR-0059):** sem perda só para sombra de UMA camada. Com várias, o
+gerador levava só a primeira, em silêncio — não aparecia porque até a `shadow-sm` (três camadas)
+nenhuma tinha mais de uma. Desde a `0.25.0`, toda sombra sai inteira em `t.shadowLayers`
+(`boxShadow: t.shadowLayers.shadowSm`); `t.shadow` continua com a primeira camada.
 
 **Dois defeitos achados, e um deles é do arquivo de tokens.** `base.text-muted` estava declarado
 `$type: "dimension"` apontando para uma **cor** — o CSS nunca reclamou porque alias vira `var()`
