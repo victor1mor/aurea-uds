@@ -1,6 +1,7 @@
 import * as React from "react";
 import { type PressableProps } from "react-native";
 import { type AureaIconRegistry, type AureaIcon } from "./icon.js";
+import type { AureaTokens } from "./tokens.js";
 /** Quanto peso a caixa tem. */
 export type AureaButtonAppearance = "solid" | "outline" | "ghost";
 /** O que a cor significa. Mesmos nomes da web (ADR-0044). */
@@ -70,6 +71,13 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
 export declare function IconButton(props: IconButtonProps): React.JSX.Element;
+/**
+ * Quanto a ÁREA DE TOQUE do `IconButton` passa do círculo desenhado, de cada lado — R-24
+ * (08/10/2026). O alvo é o maior entre o desenho e o `targetMin` (44), centrado; o círculo de
+ * `md` tem 36, então sobram 4 de cada lado. O `Badge` preso usa isto para se prender ao CÍRCULO,
+ * e não ao canto da área de toque — medido: preso à área de toque, o selo ficava 4 para fora.
+ */
+export declare function folgaDoToque(t: AureaTokens, size?: AureaButtonSize): number;
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
 export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {
 }

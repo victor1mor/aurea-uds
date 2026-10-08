@@ -63,7 +63,7 @@
       "name": "className",
       "type": "string",
       "default": "none",
-      "description": "Added to the box. The height is CSS, not a prop — a dimension comes from a class, so density still reaches it and nobody writes a raw pixel."
+      "description": "Added to the box. The height is CSS, not a prop — a dimension comes from a class, so density still reaches it and nobody writes a raw pixel. To make the axis and legend text bigger — for low vision, for example — set `--chart-text` on the chart or any ancestor, such as `var(--text-sm)` or `var(--text-base)`; the default is `var(--text-xs)`. It is a CSS valve, like DataGrid's `--datagrid-max-h`: the rule is CSS and overrides the engine's own `tick` font size."
     }
   ]
 }

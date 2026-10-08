@@ -80,6 +80,52 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.24.1] — 2026-10-08
+
+⏳ **Ainda não publicada.** Feita com o "pode" do Victor — *"A, pode fazer"* (o selo) e *"faz isso
+aqui por favor"* (o KPI e o gráfico) — e **aprovada pela bancada em 08/10/2026** (*"aprovado,
+pode"*).
+
+Três consertos pedidos por consumidores — um do app de celular, dois de um painel da web usado por
+quem tem baixa visão. **Versão de conserto:** nenhuma prop nova; a opção do gráfico é uma variável
+de CSS, no mesmo idioma das que já existem.
+
+### Consertado
+
+- **R-24 · o selo preso do nativo saía esticado e fora do lugar.** No sino do app (`Badge
+  anchor="top-end"` em volta de um `IconButton`), medido no `react-native-web` com o código real:
+  o "1" media 14,9 × 22 (mais alto que largo) e o centro caía 4,5 para FORA do círculo. Três causas:
+  ele se prendia ao canto da área de toque (44), e não ao círculo desenhado (36); o recuo era um
+  `-8` fixo, sem token; e sobrava o recheio vertical do tamanho. Agora o selo segue a **referência
+  principal** (o nativo dela não tem selo; vale a web dela, decisão do Victor): encosta no canto do
+  alvo e sai **25% do próprio tamanho** para fora; no mínimo um quadrado de 16 (`xs`/`sm`), 28 (`md`)
+  ou 32 (`lg`), que vira círculo com um dígito; sem recheio vertical; com um fio de 1 da cor do
+  fundo. Preso a um `IconButton`, ele desconta a área de toque e se prende ao círculo. Medido: o
+  "1" agora tem 16 × 16, com o centro 4 para dentro do canto do círculo. O deslocamento usa a
+  medida do próprio selo, em pontos — sem `translate` em porcentagem, que só existe na Nova
+  Arquitetura. **O app não muda nada.**
+- **O número do KPI (web) não tinha tamanho.** A ficha sempre prometeu `--text-3xl`, e o CSS nunca
+  aplicou: medido, o número saía com 14, igual ao rótulo, e a tendência com 11,7 (o `small` do
+  navegador). Agora o número tem `--text-3xl`, com algarismos tabulares, e a tendência `--text-sm`.
+  O KPI do nativo já destacava o número e não muda.
+
+### Adicionado
+
+- **`--chart-text` — o tamanho do texto do gráfico (web).** O texto dos eixos e da legenda ficava
+  preso em `--text-xs`: a regra é CSS e vence o `tick` do motor, então o app não tinha como
+  aumentar sem sobrescrever a Aurea. Agora pede no contêiner, por exemplo `--chart-text:
+  var(--text-sm)` ou `var(--text-base)`. Sem pedido, continua `--text-xs`.
+
+### Medido
+
+- Selo, antes e agora, no `react-native-web`: o "1" de 14,9 × 22 para 16 × 16; o centro de 4,5
+  para fora para 4 para dentro do canto do círculo; o "99+" de 31,6 × 22 para 27,6 × 16.
+- KPI e gráfico no Chromium, com os componentes reais: o número de 14 para 30; a tendência de 11,7
+  para 14; o texto do gráfico em 12 sem pedido e 16 com `--chart-text: var(--text-base)`, sem cortar.
+- Quem cobra: `tests/unit/native-selo-preso.test.tsx` e `tests/visual/kpi-chart-texto.spec.ts`
+  (nos três navegadores), provados contra a `0.24.0`: lá o selo tem o `-8` e o recheio vertical, o
+  número do KPI mede 14 e o `--chart-text` é ignorado.
+
 ## [0.24.0] — 2026-10-08
 
 ✅ **Publicada em 08/10/2026 às 10:34 (Brasília, medido no npm)**, pelo terminal do Victor, da

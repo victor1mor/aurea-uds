@@ -198,6 +198,16 @@ export function LinkButton(props) {
 export function IconButton(props) {
     return _jsx(BotaoDeIcone, { ...props });
 }
+/**
+ * Quanto a ÁREA DE TOQUE do `IconButton` passa do círculo desenhado, de cada lado — R-24
+ * (08/10/2026). O alvo é o maior entre o desenho e o `targetMin` (44), centrado; o círculo de
+ * `md` tem 36, então sobram 4 de cada lado. O `Badge` preso usa isto para se prender ao CÍRCULO,
+ * e não ao canto da área de toque — medido: preso à área de toque, o selo ficava 4 para fora.
+ */
+export function folgaDoToque(t, size = "md") {
+    const lado = t.size[ALTURA[size]];
+    return Math.max(0, (Math.max(lado, t.size.targetMin) - lado) / 2);
+}
 /** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
 function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, ...rest }) {
