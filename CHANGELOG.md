@@ -82,10 +82,11 @@ em inglês e ficam como estão: são registro.
 
 ## [0.24.0] — 2026-10-08
 
-⏳ **Ainda não publicada.** Feita com o "pode" do Victor (*"pode, e depois GAR-11, GAR-12 e
-GAR-13"*) e com as quatro decisões dele, todas tomadas depois de ver o que a referência principal
-faz (regra dele do mesmo dia: decisão só vai para aprovação com a resposta dela antes).
-**Aprovada pela bancada em 08/10/2026** (*"aprovado, pode"*).
+✅ **Publicada em 08/10/2026 às 10:34 (Brasília, medido no npm)**, pelo terminal do Victor, da
+junção do pedido #50. Feita com o "pode" do Victor (*"pode, e depois GAR-11, GAR-12 e GAR-13"*) e
+com as quatro decisões dele, todas tomadas depois de ver o que a referência principal faz (regra
+dele do mesmo dia: decisão só vai para aprovação com a resposta dela antes). **Aprovada pela
+bancada em 08/10/2026** (*"aprovado, pode"*).
 
 O **Lote K3**: a ficha técnica agrupada e a tabela de COMPARAÇÃO de uma página de site (GAR-11,
 GAR-12 e GAR-13), como **variações** de peças que já existem. **Versão nova porque entram props.**
