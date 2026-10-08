@@ -20,7 +20,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -30,7 +30,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -40,7 +40,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -50,7 +50,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -60,7 +60,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -79,7 +79,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -121,7 +121,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.22.0",
+      "version": "0.23.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -186,6 +186,7 @@
     "Form",
     "Gallery",
     "Grid",
+    "Header",
     "Heading",
     "HealthMatrix",
     "HoverCard",
@@ -267,39 +268,40 @@
     "useValorResponsivo"
   ],
   "state": {
-    "componentes": 123,
-    "fichas": 123,
+    "componentes": 124,
+    "fichas": 124,
     "hooks": 9,
-    "paginas_total": 380,
+    "paginas_total": 384,
     "paginas": {
-      "component": 132,
-      "pattern": 204,
+      "component": 133,
+      "pattern": 207,
       "block": 15,
       "recipe": 23,
       "area": 6
     },
     "conteudo_rico": 28,
-    "starters": 104,
+    "starters": 105,
     "receitas_com_preview": 23,
-    "patterns_content": 77,
+    "patterns_content": 79,
     "blocks_content": 2,
     "receitas": 23,
-    "props": 123,
-    "variants": 16,
+    "props": 124,
+    "variants": 17,
     "sizes": 24,
-    "states": 105,
-    "tokens_ficha": 124,
-    "apg": 128,
+    "states": 106,
+    "tokens_ficha": 125,
+    "apg": 129,
     "maturidade": {
+      "Deprecated": 1,
       "Ready": 44,
       "Stable": 88
     },
-    "testes_unit": 1425,
-    "componentes_citados_no_teste": 130,
-    "specs_visuais": 30,
+    "testes_unit": 1441,
+    "componentes_citados_no_teste": 131,
+    "specs_visuais": 31,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 640,
+    "classes_core": 658,
     "token_declaracoes": 411,
     "token_nomes": 193,
     "token_usados": 147,
@@ -307,6 +309,6 @@
   },
   "gates": {
     "validate": 42,
-    "playwrightSpecs": 30
+    "playwrightSpecs": 31
   }
 }

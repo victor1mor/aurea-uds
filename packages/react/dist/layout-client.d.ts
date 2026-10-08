@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
-import { type TopbarVariant, type SidebarVariant, type SidebarItem } from "./navigation.js";
+import { type HeaderVariant, type SidebarVariant, type SidebarItem } from "./navigation.js";
 export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, sidebarVariant, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
@@ -8,7 +8,7 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     currentNavId?: string;
     navLabel?: string;
     topbar?: ReactNode;
-    topbarVariant?: Exclude<TopbarVariant, "pill">;
+    topbarVariant?: Exclude<HeaderVariant, "pill">;
     topbarDivider?: boolean;
     sidebarVariant?: SidebarVariant;
     /** A lateral em trilha de ícones. Controlado: quem passa decide (e o `onSidebarCollapsedChange` avisa). */

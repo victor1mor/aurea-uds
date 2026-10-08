@@ -535,6 +535,23 @@ img,svg { display:block; }
 .section-inset { background:var(--surface-inset); }
 .section-spacing-sm { padding-block:var(--space-8); }
 @media (min-width:768px) { .section { padding-block:var(--space-24); } .section-spacing-sm { padding-block:var(--space-12); } }
+/* GAR-06 (07/10/2026): a `Section` variant="footer" — o rodapé de site, uma faixa como as outras
+   (fundo, respiro e tema vêm dela). No celular tudo empilha numa coluna; a partir de 768 a marca
+   fica à esquerda e as colunas de links se repartem à direita, cada uma com pelo menos 8rem (a
+   mesma medida do `.grid-min-xs`). A linha legal fecha embaixo, separada por um fio. */
+.section-footer-top { display:flex; flex-direction:column; gap:var(--space-8); }
+.section-footer-nav { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-8); }
+.section-footer-group { min-inline-size:0; }
+.section-footer-title { margin:0 0 var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-semibold); line-height:var(--leading-tight); color:var(--foreground); }
+.section-footer-links { display:grid; gap:var(--space-2); margin:0; padding:0; list-style:none; }
+.section-footer-link { color:var(--muted-foreground); font-size:var(--text-sm); text-decoration:none; }
+.section-footer-link:hover { color:var(--foreground); }
+.section-footer-legal { display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-2) var(--space-6); margin-block-start:var(--space-8); padding-block-start:var(--space-6); border-block-start:var(--border-width) solid var(--border); color:var(--muted-foreground); font-size:var(--text-sm); }
+@media (min-width:768px) {
+  .section-footer-top { flex-direction:row; justify-content:space-between; }
+  .section-footer-brand { flex:1 1 0; min-inline-size:0; }
+  .section-footer-nav { flex:2 1 0; grid-template-columns:repeat(auto-fit,minmax(8rem,1fr)); }
+}
 
 /* ========================================================================== */
 /* 03. APP SHELL E DOCUMENTAÇÃO                                                */
@@ -578,6 +595,56 @@ img,svg { display:block; }
 /* .brand nasceu como cabeçalho VERTICAL da lateral (borda embaixo + respiro); no topo
    ele deita, então some com a borda e a margem — o lockup em si continua o mesmo. */
 .topbar .brand { min-height:auto; margin:0; padding:0; border:0; }
+/* GAR-01 (07/10/2026): o cabeçalho de SITE — o `Header` com `items`. A altura é o `--topbar-height`
+   (64, a mesma da referência principal); os links ficam a --space-4 um do outro, como nela; o atual
+   é o `[aria-current]`, com a cor de destaque e o peso médio. Abaixo de 768 (md-1, escala) os links
+   saem da barra e descem num painel que é um POPOVER nativo (`<nav popover="auto">`), sem
+   JavaScript — o mesmo mecanismo da gaveta do `AppShell`: o Esc e o toque fora fecham. O desenho do
+   botão é o glifo `list` do Phosphor (e o `x` com o painel aberto), em máscara: a cor é a do texto. */
+/* Os 64 são a faixa inteira, como na referência: sem respiro vertical, e o fio (`divider`) fica por
+   fora. Medido: com o respiro da `flush` a barra saía com 81. */
+.topbar-site { min-height:var(--topbar-height); padding-block:0; }
+.topbar-contained { padding-inline:0; }
+.topbar-inner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-4); min-height:inherit; }
+/* Os links vão para a direita, logo antes das ações, como no guia da referência (a marca numa ponta,
+   a navegação na outra). No celular eles saem, e são as ações que encostam à direita. */
+.topbar-nav { display:flex; margin-inline-start:auto; }
+/* Abaixo de 1024 a regra da barra do `AppShell` manda o `nav` filho para uma segunda linha
+   (`.topbar > nav`, mais abaixo). O cabeçalho de SITE sem `maxWidth` também tem o `nav` como filho
+   e caía junto: medido em 900, os links desciam e a barra ia de 64 para 80. Aqui os links ficam na
+   linha da marca; se não couberem, a barra quebra por conteúdo, como já faz. */
+.topbar-site > .topbar-nav { order:0; flex-basis:auto; }
+.topbar-links { display:flex; align-items:center; gap:var(--space-4); margin:0; padding:0; list-style:none; }
+.topbar-link { display:inline-flex; align-items:center; min-block-size:var(--control-h-md); color:var(--muted-foreground); font-size:var(--text-sm); text-decoration:none; }
+.topbar-link:hover { color:var(--foreground); }
+.topbar-link[aria-current] { color:var(--primary-emphasis); font-weight:var(--weight-medium); }
+.topbar-actions { display:flex; align-items:center; gap:var(--space-2); margin-inline-start:auto; }
+.topbar-site .topbar-actions { margin-inline-start:0; }
+/* O botão e o painel só existem no celular, e só onde há popover. O @supports lá embaixo é a rede,
+   como na gaveta do `AppShell`: navegador sem popover não esconde o `<nav popover>` sozinho, e o
+   painel apareceria solto na barra. Ali os links ficam na barra, que já quebra linha por conteúdo, e
+   o botão não aparece (não haveria o que abrir). Duas classes no botão porque o `.btn` declara o
+   próprio `display`. */
+.btn.topbar-menu-toggle, .topbar-menu-panel { display:none; }
+.topbar-menu-icon { display:block; inline-size:var(--icon-md); block-size:var(--icon-md); background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z'/%3E%3C/svg%3E") center/contain no-repeat; }
+.topbar:has(.topbar-menu-panel:popover-open) .topbar-menu-icon { -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'/%3E%3C/svg%3E"); }
+/* Aberto, o painel vai para a camada de cima, fora do fluxo da barra, e o navegador lhe dá `inset:0`,
+   `margin:auto`, borda e a largura do conteúdo: tudo isso se desfaz aqui. Sem âncora, ele fica fixo
+   logo abaixo dos 64 da barra. Com âncora (o @supports abaixo), cola no fim da barra onde ela estiver
+   e toma a largura dela — na `floating`, a da caixa. O `- border-width` põe o fio de cima do painel
+   EM CIMA do fio da barra (o `divider`, a borda da `floating`), e não um fio duplo. A altura tem teto
+   e rola por dentro; a folga de --space-8 cobre a margem de cima da `floating`. */
+.topbar-menu-panel:popover-open { position:fixed; inset:auto; inset-block-start:var(--topbar-height); inset-inline:0; inline-size:auto; block-size:auto; max-block-size:calc(100dvh - var(--topbar-height) - var(--space-8)); overflow:auto; margin:0; padding:var(--space-4); border:0; border-block:var(--border-width) solid var(--border); background:var(--background); color:var(--foreground); }
+.topbar-menu-panel .topbar-links { flex-direction:column; align-items:stretch; gap:var(--space-2); }
+/* `anchor-scope` prende o nome da âncora a cada cabeçalho: com dois na página (cada um com o seu
+   `menuId`), o painel de um não cola no outro. Onde não houver `anchor-scope`, vale o último. */
+@supports (anchor-name:--a) {
+  .topbar-site { anchor-name:--aurea-header; anchor-scope:--aurea-header; }
+  .topbar-menu-panel:popover-open { position-anchor:--aurea-header; inset-block-start:calc(anchor(bottom) - var(--border-width)); inset-inline-start:anchor(start); inset-inline-end:anchor(end); }
+}
+@supports selector(:popover-open) {
+@media (max-width:767px) { .topbar-site .topbar-nav { display:none; } .topbar-site .topbar-actions { margin-inline-start:auto; } .topbar-site .btn.topbar-menu-toggle { display:inline-flex; } .topbar-menu-panel:popover-open { display:block; } }
+}
 /* altura fixa = janela menos topo e as 3 folgas; assim a caixa parece cheia mesmo com
    poucos itens (é o que as referências mostram) e sobra o que rolar por dentro. */
 /* E O TETO É O CONTAINER, NÃO A JANELA. A altura acima é da JANELA, e sozinha ela faz a lateral

@@ -2,8 +2,8 @@
   "name": "Topbar",
   "category": "Navigation",
   "layer": "Component",
-  "maturity": "Stable",
-  "summary": "Floating full-width top panel: brand lockup plus search, actions and account.",
+  "maturity": "Deprecated",
+  "summary": "The old name of Header (renamed on 07/10/2026). Same component, still works the same; use Header.",
   "icon": "list",
   "platforms": {
     "web": "stable",
@@ -45,6 +45,7 @@
   },
   "related": {
     "components": [
+      "Header",
       "AppShell",
       "Sidebar"
     ],
@@ -77,6 +78,58 @@
       "type": "boolean",
       "default": "false",
       "description": "Only on `flush` (B-07): a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends."
+    },
+    {
+      "name": "items",
+      "type": "SidebarItem[]",
+      "default": "—",
+      "description": "The website's links (GAR-01, 07/10/2026) — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel."
+    },
+    {
+      "name": "current",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the current page's item: it gets aria-current=\"page\", the highlight colour and the medium weight, in the bar and in the menu panel."
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What sits on the right: search, a call to action, the account. It stays in the bar on a phone too."
+    },
+    {
+      "name": "maxWidth",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "default": "—",
+      "description": "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding."
+    },
+    {
+      "name": "navLabel",
+      "type": "string",
+      "default": "\"Main\"",
+      "description": "The navigation's name for screen readers. Pass it in the page's language."
+    },
+    {
+      "name": "menuLabel",
+      "type": "string",
+      "default": "\"Menu\"",
+      "description": "The phone menu button's name for screen readers. Pass it in the page's language. In an app with client-side routing the panel does not close by itself on a page change: give the Header a key that changes with the route."
+    },
+    {
+      "name": "menuId",
+      "type": "string",
+      "default": "\"aurea-header-menu\"",
+      "description": "The id of the phone menu panel, which the button points at with popovertarget. Change it only when a page has two website headers: each one needs its own."
     }
-  ]
+  ],
+  "axes": {
+    "maxWidth": [
+      "2xl",
+      "full",
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ]
+  }
 }

@@ -54,7 +54,7 @@ export { useReduceMotion } from "./movimento.js";
 // ⚠ **O `Tabs` entrou em 17/09/2026, e é a única peça daqui que NÃO saiu de um lote** — ele
 // veio do consumidor, que precisava trocar de painel dentro de uma tela e só tinha o
 // `SegmentedControl`, que anuncia "rádio". A fronteira com o `BottomNav` está no JSDoc dele.
-export { BottomNav, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
+export { BottomNav, Header, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
 // ── Lote 4 — os formulários ────────────────────────────────────────────────────────────────
 // ⚠ O `Field` NÃO nomeia o controle por referência, como o `<label for>` da web: ele empurra o
 // nome, a dica e o estado de inválido para o controle por CONTEXTO. É a tradução que decidiu o
