@@ -82,7 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.25.0] — 2026-10-08
 
-⏳ **Ainda não publicada.** Feita com o "pode" do Victor — *"A, pode criar os tokens, pode fazer.
+✅ **Publicada em 08/10/2026, entre 17:22 e 17:25 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #54. Feita com o "pode" do Victor — *"A, pode criar os tokens, pode fazer.
 e me mostre antes"* — depois de ver como a referência principal faz o foco e a aba
 ([ADR-0059](decisions/0059-uma-borda-so-no-foco-e-a-aba-escolhida-se-ve.md)). **Aprovada pela
 imagem em 08/10/2026** (*"aprovado, pode"*), com as três escolhas da bancada: a faixa de 3px, o anel

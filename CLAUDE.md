@@ -138,6 +138,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.23.0` | Lote K2: o `Topbar` passa a se chamar `Header` (o nome antigo continua), o cabeçalho de site com o menu do celular em popover (GAR-01) e o rodapé de site, `Section variant="footer"` (GAR-06) — pedido #48. **Publicada em 07/10/2026** (21:06, Brasília), pelo terminal do Victor |
 | `0.24.0` | Lote K3: a tabela de comparação — `Table` com `stickyHeader`, `stickyFirstColumn`, `fit` e `differencesOnly`, e a pele do HTML de comparação (GAR-12 e GAR-13); a ficha técnica agrupada como padrão do catálogo (GAR-11) — pedido #50. **Publicada em 08/10/2026** (10:34, Brasília), pelo terminal do Victor |
 | `0.24.1` | R-24 (o selo preso do nativo), o número do KPI da web em `--text-3xl` e a válvula `--chart-text` — pedido #53. **Publicada em 08/10/2026** (entre 15:25 e 15:30, Brasília), pelo terminal do Victor |
+| `0.25.0` | Uma borda só no foco (o anel encosta na peça com borda) e a aba escolhida que se vê (`--segment` + `--shadow-sm`, web e nativo; `t.shadowLayers` no nativo) — [ADR-0059](decisions/0059-uma-borda-so-no-foco-e-a-aba-escolhida-se-ve.md), pedido #54. **Publicada em 08/10/2026** (entre 17:22 e 17:25, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -289,7 +290,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    porcentagem (`translateX: "25%"`) só existe na Nova Arquitetura do React Native, e o pacote
    aceita desde a 0.76 — no nativo, o deslocamento sai em pontos, a partir da medida da peça.
 
-20. **`0.25.0`, feita e aprovada pela imagem em 08/10/2026** (*"aprovado, pode"*) — com o "pode" do Victor
+20. **`0.25.0`, feita e aprovada pela imagem em 08/10/2026** (*"aprovado, pode"*) **e publicada no
+   mesmo dia** (entre 17:22 e 17:25, Brasília, pelo terminal do Victor, da junção do pedido #54) — com o "pode" do Victor
    (*"A, pode criar os tokens, pode fazer. e me mostre antes"*), [ADR-0059](decisions/0059-uma-borda-so-no-foco-e-a-aba-escolhida-se-ve.md):
    o foco é **uma linha só** (na peça com borda, a borda vira a cor do foco e o anel encosta nela;
    sem borda, o anel continua afastado; checkbox marcado e switch ligado também) e a **aba
