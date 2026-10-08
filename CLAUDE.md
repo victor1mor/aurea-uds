@@ -70,6 +70,12 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   `AUREA_REFERENCIAS` da CI).
 - **A referência principal é a fonte principal de desenho**: tamanho, anatomia, estado,
   espaçamento. Antes de inventar, **ver como ela faz**.
+- **Decisão que vai ao Victor vem com a resposta da referência principal** (ordem do Victor,
+  08/10/2026: *"decisoes que devo tomar sempre verificar antes na [referência principal] e eu so
+  aprovo se eles não existe la, usamos o padrão do mercado com nossa cara"*). Antes de levar uma
+  escolha (A ou B, nome, comportamento, medida), ler como ela faz e trazer isso na pergunta. Se ela
+  tem, a proposta é o jeito dela com a aparência da Aurea; solução própria só vai para aprovação
+  quando ela não tem.
 - **Leia no código publicado dela, não na memória.** O documento de referências diz onde.
 - Quando divergem, vale o de cima. Na dúvida, pergunte antes de escolher.
 - ⚠ **A referência não manda na identidade da Aurea** (seção 5). Dela se copia o desenho da peça;
@@ -129,6 +135,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.20.0` | Lote I: A5, C9 e MNT-05, R-23, HER-01, HER-02 e HER-03 ([ADR-0058](decisions/0058-a-folha-de-baixo-tem-32-de-canto.md)) — pedido #43. **Não saiu sozinha**: foi publicada dentro da `0.22.0` |
 | `0.21.0` | Lote J: CHK-01 e GAR-08 — pedido #44. **Não saiu sozinha**: foi publicada dentro da `0.22.0` |
 | `0.22.0` | Lote K1: `Container`, `Grid.Item span`, `Section` e o tema na faixa (GAR-02 a GAR-05), e as referências de desenho fora de tudo que é publicado — pedido #46. **Publicada em 07/10/2026** (avisada às 13:40, Brasília), pelo terminal do Victor, **sem o aceite de aparelho** dos blocos `0.20` e `0.21`. Leva a `0.20.0` e a `0.21.0` junto |
+| `0.23.0` | Lote K2: o `Topbar` passa a se chamar `Header` (o nome antigo continua), o cabeçalho de site com o menu do celular em popover (GAR-01) e o rodapé de site, `Section variant="footer"` (GAR-06) — pedido #48. **Publicada em 07/10/2026** (21:06, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -250,7 +257,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    a guarda — `tests/unit/tema-na-secao.test.tsx` reprova quem esquecer. O cabeçalho e o rodapé
    de site (GAR-01 e GAR-06) ficaram para a próxima sessão, por decisão do Victor.
 
-17. **`0.23.0`, o Lote K2, feito em 07/10/2026 e aprovado pela bancada** (*"aprovado, B, pode"*) —
+17. **`0.23.0`, o Lote K2, feito em 07/10/2026, aprovado pela bancada** (*"aprovado, B, pode"*) **e
+   publicado no mesmo dia** (21:06, Brasília, pelo terminal do Victor, da junção do pedido #48) —
    com o "pode" do Victor (*"pode fazer o GAR-01 e GAR-06"*): o `Topbar` passa a se chamar
    **`Header`** nos dois alvos (*"pode alterar nome não tem problema"*), com o `Topbar` mantido como
    nome antigo; o cabeçalho de site é o `Header` com `items`, `current`, `actions`, `maxWidth` e
@@ -342,6 +350,22 @@ no git.
   prova em contrário** — nunca a máquina dele.
 - **Verificação é local antes de empurrar.** No repositório privado a CI estava parada por limite
   de gasto; no público, o GitHub Actions é gratuito.
+- **O `main` exige a CI verde** (decisão do Victor, 07/10/2026: *"A, pode"*). A regra `main` do
+  GitHub (conjunto de regras do repositório) cobra as seis verificações da CI, vindas do GitHub
+  Actions: `build`, `test`, `visual` e `varredura` nos três navegadores. A `visual-update` não
+  (só roda à mão). Não exige a branch atualizada com o `main`. Continuam as três proteções de
+  antes: não apagar, não reescrever o histórico, entrar só por pedido de junção.
+  - **A junção automática do GitHub está permitida** no repositório. Ligá-la num pedido continua
+    exigindo o "pode" do Victor para AQUELE pedido.
+  - **Pedido com a CI vermelha fica travado**, inclusive o do Victor. O caso que mais acontece: o
+    número de componentes muda e as fotos `index` e `topo` do catálogo vencem. Conserto: rodar a
+    CI no modo de regerar fotos (`gh workflow run CI --ref <branch> -f update_snapshots=true`),
+    baixar o artefato `playwright-snapshots-linux`, **olhar cada foto que mudou** e commitar só
+    essas.
+  - **Alerta de segurança novo reprova a auditoria da `build` sem nenhuma dependência nossa
+    mudar** (07/10/2026: o `next` do app de prova). Com correção publicada: subir a versão — direta
+    no `package.json`, indireta por `overrides` no `pnpm-workspace.yaml`. Sem correção: aceitar
+    com registro no `auditConfig`, como os que já estão lá.
 - **A pasta local do Victor foi refeita em 24/09/2026 a partir do público.** A antiga apontava para
   o `aurea-uds-privado`, e o `git pull` respondia "Already up to date" puxando do repositório que
   não recebe mais nada. Se um `git pull` dele não trouxer o que foi juntado, a primeira pergunta é

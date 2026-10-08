@@ -17,10 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### Componentes novos, ainda não publicados (07/10/2026)
-
-- `Header`, o nome de mercado do `Topbar` — entra na `0.23.0`, descrita na seção dela abaixo.
-
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -86,10 +82,13 @@ em inglês e ficam como estão: são registro.
 
 ## [0.23.0] — 2026-10-07
 
-⏳ **Ainda não publicada.** Feita com o "pode" do Victor (*"pode fazer o GAR-01 e GAR-06"*) e
+✅ **Publicada em 07/10/2026 às 21:06 (Brasília, medido no npm)**, pelo terminal do Victor, da
+junção do pedido #48. Feita com o "pode" do Victor (*"pode fazer o GAR-01 e GAR-06"*) e
 **aprovada pela bancada** em 07/10/2026 (*"aprovado, B, pode"*). O "B" é a escolha dele para o
 painel do celular: um popover no lugar do `<details>` da primeira versão. O B foi feito depois da
-aprovação e está na bancada atualizada.
+aprovação e está na bancada atualizada. Junto, no mesmo pedido: o `next` 16.3.8 no app de prova
+(alerta alto GHSA-cjq9-62q9-8jv4, que reprovava a auditoria da CI) e as fotos `index` e `topo` do
+catálogo.
 
 O **Lote K2**: o cabeçalho e o rodapé de uma página de SITE (GAR-01 e GAR-06), como **variações**
 de peças que já existem — regra nova do Victor, do mesmo dia: *"os componentes da aurea não podem
