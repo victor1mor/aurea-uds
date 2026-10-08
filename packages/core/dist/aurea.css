@@ -2024,6 +2024,12 @@ img,svg { display:block; }
    peso de nome próprio: ele conta, não identifica. */
 .avatar-count { background:var(--secondary); color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-medium); }
 .kpi { display:flex; flex-direction:column; gap:5px; }
+/* O NÚMERO do KPI (08/10/2026, pedido de um consumidor com baixa visão): a ficha sempre prometeu
+   `--text-3xl`, e o CSS nunca aplicou — medido no navegador, o valor saía com 14, igual ao rótulo,
+   e a tendência com 11,7 (o `small` do navegador encolhe a letra). O número é a razão do
+   componente; os algarismos ficam tabulares para não dançar quando o valor muda. */
+.kpi > strong { font-size:var(--text-3xl); line-height:var(--leading-tight); font-variant-numeric:tabular-nums; }
+.kpi > small { font-size:var(--text-sm); }
 /* DataList: chave/valor em duas colunas. O termo é secundário — mesmo idioma do cabeçalho de
    tabela. Sem a regra (achado A13) o <dl> saía cru: dt e dd empilhados, com o recuo de 40px
    que o navegador dá ao <dd>. */
@@ -2152,11 +2158,15 @@ img,svg { display:block; }
    EditorView.theme do CodeMirror e não daqui. O motor põe stroke/fill como ATRIBUTO de
    apresentação (#ccc nas linhas de grade, #666 nos rótulos), e CSS vence atributo — medido em
    01/08/2026: 20 <line> e 9 <text> num gráfico de linha com grade e dois eixos. */
-.chart svg line { stroke:var(--border); } .chart svg text { fill:var(--muted-foreground); font-size:var(--text-xs); }
+/* `--chart-text` (08/10/2026): o tamanho do texto dos eixos e da legenda, com o padrão de sempre
+   (`--text-xs`). Pedido de um consumidor com baixa visão: a regra é CSS e vence o `tick` do motor,
+   então o app não tinha como aumentar sem sobrescrever a Aurea. Agora pede no contêiner — por
+   exemplo `--chart-text: var(--text-sm)` —, o mesmo idioma de válvula do `--datagrid-max-h`. */
+.chart svg line { stroke:var(--border); } .chart svg text { fill:var(--muted-foreground); font-size:var(--chart-text,var(--text-xs)); }
 .chart-tooltip { display:grid; gap:var(--space-1); pointer-events:none; } .chart-tooltip strong { color:var(--foreground); font-weight:var(--weight-medium); }
 .chart-tooltip b { margin-inline-start:auto; color:var(--foreground); font-variant-numeric:tabular-nums; }
 .chart-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-1) var(--space-4); margin:0; padding:0; list-style:none; }
-.chart-key { display:flex; align-items:center; gap:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); } .chart-key i { flex:none; width:9px; height:9px; border-radius:var(--radius-sm); }
+.chart-key { display:flex; align-items:center; gap:var(--space-2); color:var(--muted-foreground); font-size:var(--chart-text,var(--text-xs)); } .chart-key i { flex:none; width:9px; height:9px; border-radius:var(--radius-sm); }
 /* O cursor precisa de DOIS pontos de especificidade porque `.chart svg line` acima já tem dois
    elementos: `.chart .chart-cursor` (0,2,0) vence `.chart svg line` (0,1,2). Em gráfico de linha
    o cursor é <line> e em barra é <rect>, então a regra dá stroke E fill — cada um usa o seu. */

@@ -279,6 +279,14 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    catálogo com `Card` + `DataList`, sem código novo. Quem cobra: `tabela-gar11-13.test.tsx` e
    `tabela-gar12-13.spec.ts`.
 
+19. **`0.24.1`, feita e aprovada pela bancada em 08/10/2026** (*"aprovado, pode"*) — três consertos
+   de consumidores: R-24 (o selo preso do nativo segue a referência principal: encosta no canto e
+   sai 25% do próprio tamanho; mínimo de 16; preso ao círculo do `IconButton`, e não à área de
+   toque), o número do KPI da web em `--text-3xl` (a ficha prometia; o CSS não aplicava) e a
+   válvula `--chart-text` para o texto do gráfico. ⚠ **A regra nova:** deslocamento em
+   porcentagem (`translateX: "25%"`) só existe na Nova Arquitetura do React Native, e o pacote
+   aceita desde a 0.76 — no nativo, o deslocamento sai em pontos, a partir da medida da peça.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).

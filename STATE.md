@@ -69,9 +69,9 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1446 |
+| Chamadas de `test()` nos testes unitários | 1453 |
 | Componentes citados nos testes unitários | 131 de 124 |
-| Specs de navegador (Playwright) | 32 |
+| Specs de navegador (Playwright) | 33 |
 | Baselines de screenshot no repositório | 44 |
 | Baselines `-linux.png` (o que a CI compara) | 22 |
 

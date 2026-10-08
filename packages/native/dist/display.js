@@ -23,6 +23,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // perderia o cartão, que é metade do que ela é.
 import * as React from "react";
 import { Image, View } from "react-native";
+import { IconButton, folgaDoToque } from "./actions.js";
 import { canto, acentoDoTom, criarFolha, fundoDoTom } from "./estilos.js";
 import { Card } from "./layout.js";
 import { gravidadeDoEstado } from "./strings.js";
@@ -57,11 +58,14 @@ const folha = criarFolha((t) => ({
     justo: { alignSelf: "flex-start" },
     // A âncora é `position:relative` na web; aqui o filho absoluto já se posiciona por ela.
     ancora: { position: "relative", alignSelf: "flex-start" },
-    sobreposto: { position: "absolute", zIndex: 1, minHeight: t.size.space4, paddingHorizontal: t.size.space1 },
-    // ⚠ A web desenha um anel da cor do FUNDO em volta do selo sobreposto
-    // (`box-shadow:0 0 0 var(--space-05) var(--badge-ring)`, aurea.css:1010) — é o que separa o
-    // número do ícone embaixo. `boxShadow` do RN 0.76+ aceita spread, então o anel atravessa.
-    anel: { boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: t.size.space05, color: t.color.background }] },
+    // R-24 (08/10/2026): o selo PRESO segue a referência principal. O nativo dela não tem selo, então
+    // vale a web dela (o `badge.css` da 3.2.6, lido no pacote): no mínimo um quadrado do tamanho do
+    // selo (`MINIMO_PRESO`, abaixo), que vira círculo com um dígito; sem recheio vertical e meia
+    // unidade dos lados; e um fio de 1 da cor do FUNDO em volta, que separa o número do que está
+    // atrás. Antes sobrava o recheio vertical do tamanho — o "1" do `sm` media 14,9 × 22, esticado —
+    // e o anel era uma sombra de 2.
+    sobreposto: { position: "absolute", zIndex: 1, paddingVertical: 0, paddingHorizontal: t.size.space05,
+        borderWidth: t.size.borderWidth, borderColor: t.color.background },
     // ── Status ─────────────────────────────────────────────────────────────────────────────────
     estado: { flexDirection: "row", alignItems: "center", gap: t.size.space2 },
     // O halo é `box-shadow 0 0 0 3px` da cor corrente a 14% (aurea.css:1055). Sem `color-mix` no
@@ -118,37 +122,66 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
     // Ponto puro: `dot` sem nada para mostrar. Aí o selo não tem conteúdo e ganha medida própria.
     const soPonto = !!dot && miolo == null;
-    const selo = (_jsxs(View, { style: [
+    // R-24: preso, o selo se prende ao DESENHO do alvo. O `IconButton` tem área de toque maior que o
+    // círculo (44 contra 36 no `md`); preso a ela, o selo ficava 4 para fora. A folga sai do próprio
+    // `IconButton` (`folgaDoToque`), e não de um número escrito aqui.
+    const folga = anchor && React.isValidElement(children) && children.type === IconButton
+        ? folgaDoToque(t, children.props.size) : 0;
+    // O ponto tem 8 de cor (a medida da Aurea, nos dois alvos) mais o fio de 1 do anel de cada lado.
+    const ladoDoPonto = t.size.space2 + 2 * t.size.borderWidth;
+    const minimo = soPonto ? ladoDoPonto : MINIMO_PRESO(t, size);
+    // O deslocamento de 25% é do TAMANHO DO SELO, que só se sabe depois de desenhar. Até a primeira
+    // medida vale o mínimo — o tamanho exato do selo de um dígito, o caso comum —, então o primeiro
+    // quadro já sai certo para ele, e o de "99+" se acerta na medida seguinte. Sem `translate` em
+    // porcentagem de propósito: ele só existe na Nova Arquitetura, e o pacote aceita RN desde 0.76.
+    const [medida, setMedida] = React.useState(null);
+    const aoMedir = anchor ? (e) => {
+        const { width: w, height: h } = e.nativeEvent.layout;
+        if (!medida || medida.w !== w || medida.h !== h)
+            setMedida({ w, h });
+    } : undefined;
+    const selo = (_jsxs(View, { onLayout: aoMedir, style: [
             s.selo, s[`selo_${size}`], pele,
             fit === "content" && !anchor && s.justo,
-            anchor && s.sobreposto, anchor && s.anel,
-            anchor && posicaoDaAncora(anchor),
-            soPonto && { width: t.size.space2, minWidth: t.size.space2, height: t.size.space2,
-                minHeight: t.size.space2, paddingHorizontal: 0, paddingVertical: 0,
-                backgroundColor: acento, borderWidth: 0 },
+            anchor && s.sobreposto,
+            anchor && { minWidth: minimo, minHeight: minimo },
+            anchor && posicaoDaAncora(anchor, folga, medida?.w ?? minimo, medida?.h ?? minimo),
+            soPonto && { width: ladoDoPonto, height: ladoDoPonto, paddingHorizontal: 0, paddingVertical: 0,
+                backgroundColor: acento, borderWidth: anchor ? t.size.borderWidth : 0 },
             style,
         ], ...(anchor ? { accessibilityElementsHidden: true,
             importantForAccessibility: "no-hide-descendants" } : rest), children: [dot && !soPonto && _jsx(View, { style: [s.ponto, { backgroundColor: corDoTexto }] }), !soPonto && leading, typeof miolo === "string" || typeof miolo === "number"
-                ? _jsx(Text, { weight: 500, style: [LETRA_DO_SELO(t, size), { color: corDoTexto }], children: miolo })
+                ? _jsx(Text, { weight: 500, style: [LETRA_DO_SELO(t, size),
+                        // Preso, a linha cabe no mínimo menos o fio: a letra fica no meio do círculo de 16.
+                        anchor && { lineHeight: Math.min(LETRA_DO_SELO(t, size).lineHeight, minimo - 2 * t.size.borderWidth) },
+                        { color: corDoTexto }], children: miolo })
                 : miolo, !soPonto && trailing] }));
     if (!anchor)
         return selo;
     const escondido = invisible || (count === 0 && !showZero) || (miolo == null && !dot);
     return _jsxs(View, { style: s.ancora, ...rest, children: [children, !escondido && selo] });
 }
+/** O mínimo do selo preso, da referência principal: 16 no `xs` e no `sm`, 28 no `md`, 32 no `lg`. */
+const MINIMO_PRESO = (t, size) => size === "lg" ? t.size.space8 : size === "md" ? t.size.space7 : t.size.space4;
 /**
- * O canto, traduzido para o RN.
+ * O canto, do jeito da referência principal (R-24, 08/10/2026): o selo encosta no canto do alvo e
+ * sai 25% do PRÓPRIO tamanho para fora — três quartos dele ficam por cima do alvo. A regra é a mesma
+ * para alvo redondo e quadrado, como lá.
  *
- * A web usa `inset-*` mais `transform: translate(±50%, ∓50%)`, o que centra o selo EM CIMA do
- * canto. `translate` percentual não existe no `transform` do RN — medido no contrato — então o
- * deslocamento sai por `inset` negativo, que é o mesmo efeito com aritmética diferente.
+ * Antes era um `-8` fixo, sem token, a partir do canto da ÁREA DE TOQUE: o selo do sino caía 4,5
+ * para fora do círculo (medido no `react-native-web`). A web da Aurea centra o selo no canto e o
+ * puxa 14% para dentro em alvo redondo; no sino de 36, as duas contas caem a cerca de 1 ponto uma
+ * da outra. `folga` é o quanto a área de toque passa do desenho (0 fora do `IconButton`).
  */
-function posicaoDaAncora(anchor) {
-    const meio = -8;
-    return anchor === "top-end" ? { top: meio, right: meio }
-        : anchor === "top-start" ? { top: meio, left: meio }
-            : anchor === "bottom-end" ? { bottom: meio, right: meio }
-                : { bottom: meio, left: meio };
+function posicaoDaAncora(anchor, folga, w, h) {
+    const fora = 0.25;
+    const emCima = anchor === "top-end" || anchor === "top-start";
+    const noFim = anchor === "top-end" || anchor === "bottom-end";
+    return {
+        ...(emCima ? { top: folga } : { bottom: folga }),
+        ...(noFim ? { right: folga } : { left: folga }),
+        transform: [{ translateX: (noFim ? 1 : -1) * w * fora }, { translateY: (emCima ? -1 : 1) * h * fora }],
+    };
 }
 /**
  * Um ponto e uma palavra.

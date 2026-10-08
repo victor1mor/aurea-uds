@@ -118,8 +118,9 @@ export default {
         h(A.KPI, {label: "Active seats", value: "312", trend: "+4%"})),
       h(A.Table, {caption: "Revenue by plan"},
         h("thead", null, h("tr", null, h("th", null, "Plan"), h("th", null, "Revenue"))),
-        h("tbody", null, h("tr", null, h("td", null, "Pro"), h("td", null, "$31.0k")),
-          h("tr", null, h("td", null, "Team"), h("td", null, "$17.2k"))))),
+        // Uma linha só desde a 0.24.1: com o número do KPI no `--text-3xl` da ficha, a prévia
+        // passava 3px da caixa (ADR-0002, medido na varredura da CI). O código mostra "…".
+        h("tbody", null, h("tr", null, h("td", null, "Pro"), h("td", null, "$31.0k"))))),
   },
   catalog_gallery: {
     uses: ["SegmentedControl", "Badge", "Button", "Grid", "Card", "Checkbox"],

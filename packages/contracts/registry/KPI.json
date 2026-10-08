@@ -13,8 +13,10 @@
   "sizes": [],
   "states": [],
   "tokens": [
+    "--leading-tight",
     "--muted-foreground",
-    "--text-3xl"
+    "--text-3xl",
+    "--text-sm"
   ],
   "a11y": {
     "role": "group",
