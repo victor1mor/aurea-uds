@@ -423,6 +423,11 @@ no git.
     CI no modo de regerar fotos (`gh workflow run CI --ref <branch> -f update_snapshots=true`),
     baixar o artefato `playwright-snapshots-linux`, **olhar cada foto que mudou** e commitar só
     essas.
+  - **A trava de fotos tem tolerância de cor 0,02** (`playwright.config.ts`, decisão do Victor,
+    09/10/2026). Com o 0,2 padrão do Playwright, a troca de paleta da `0.27.0` passou sem foto
+    nova — até o fundo do escuro; com 0, o serrilhado reprovou 3 de 5 rodadas sem mudança. Não subir o
+    número. Quando a `visual` reprovar, as imagens da diferença estão no artefato
+    `playwright-report` da rodada.
   - **Alerta de segurança novo reprova a auditoria da `build` sem nenhuma dependência nossa
     mudar** (07/10/2026: o `next` do app de prova). Com correção publicada: subir a versão — direta
     no `package.json`, indireta por `overrides` no `pnpm-workspace.yaml`. Sem correção: aceitar

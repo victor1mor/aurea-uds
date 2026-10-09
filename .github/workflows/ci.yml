@@ -320,9 +320,10 @@ jobs:
       # CI quebraria na primeira execução com "snapshot doesn't exist" — Playwright não cria
       # baseline sozinho quando CI=true, e é assim que tem de ser.
       - name: Regerar baselines Linux (matriz + catálogo)
-        # `=all` (09/10/2026): o `--update-snapshots` puro é o modo `changed`, que só regrava a foto
-        # que REPROVA — com tolerância de cor, uma foto velha que "passa" nunca era regravada.
-        run: pnpm exec playwright test tests/visual/matrix.spec.ts tests/visual/catalog.spec.ts --update-snapshots=all
+        # O `--update-snapshots` puro é o modo `changed`: regrava só a foto que a trava REPROVA, com a
+        # mesma tolerância de cor do playwright.config.ts (0,02). Assim a regeração e a comparação
+        # concordam, e o ruído de serrilhado não vira foto nova a cada rodada (09/10/2026).
+        run: pnpm exec playwright test tests/visual/matrix.spec.ts tests/visual/catalog.spec.ts --update-snapshots
       - name: Publicar baselines para commit
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
