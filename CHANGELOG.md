@@ -80,6 +80,34 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.26.1] — 2026-10-09
+
+E16, achado do app rodando no navegador: o `DatePicker` do nativo **não abria nada** no
+`react-native-web`. Feito com o "pode" do Victor (*"pode seguir com o E16"*, e depois *"pode faça
+tudo"*). Só o nativo muda, e só no navegador.
+
+### Corrigido
+
+- **Nativo, no navegador: o `DatePicker` abre o calendário do navegador.** A biblioteca de data não
+  tem versão web — no navegador ela devolve nada e só avisa no console ("DateTimePicker is not
+  supported on: web") —, e o `DatePicker` montava ali o seletor do iPhone. Agora, no navegador, o
+  campo de data do próprio navegador (`<input type="date">`, ou `type="time"`) fica **invisível e
+  por cima** do gatilho da Aurea: a pele continua a nossa, o toque e o leitor de tela ficam com o
+  campo do navegador, e o calendário segue o tema da Aurea. No computador, o clique abre o seletor
+  (`showPicker()`); dentro de página de outro endereço, onde o Chrome recusa esse comando, abre pelo
+  ícone do próprio campo, esticado sobre ele. O nome e o erro do `Field` chegam ao leitor de tela.
+  Android e iPhone: nada muda.
+
+### Medido
+
+- No navegador real (bancada do `react-native-web`, o código do pacote): Chromium e Firefox abrem o
+  seletor e a data escolhida chega ao app; dentro de página de outro endereço também. Em repouso, o
+  campo de antes e o de agora são iguais, pixel a pixel. Não testado: o Safari de verdade e o iPhone
+  no navegador (o `showPicker()` não existe no Safari do iPhone — dados de compatibilidade do MDN
+  8.1.5; lá o toque no próprio campo abre o seletor).
+- `tests/unit/native-e16-datepicker-web.test.tsx` (12): contra o código da `0.26.0`, 10 reprovam;
+  os dois que passam lá cobram o que não podia mudar (fora do navegador, nada muda).
+
 ## [0.26.0] — 2026-10-09
 
 Lote L, três pedidos de um consumidor da web (um site de notícias): GAR-07, GAR-09 com a MNT-04, e

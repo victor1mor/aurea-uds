@@ -50,6 +50,9 @@ const folha = criarFolha((t: AureaTokens) => ({
     ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
   },
   invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
+  // No navegador o texto e o ícone vão numa caixa escondida do leitor de tela (E16): a mesma
+  // fileira do gatilho, ocupando a largura dele.
+  mioloWeb: {flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between"},
   desabilitado: {opacity: t.size.opacityDisabled},
   // R-22 (02/10/2026), a "B" da prancha: miniatura QUADRADA de 64 — o `Avatar` `lg` da
   // referência, e a medida que o botão de pôr foto passou a ter também (era 72, número à mão) — e o X
@@ -77,6 +80,45 @@ const foraDoX = (t: AureaTokens) => (t.size.controlHSm + Math.max(t.size.control
 
 const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
+
+// E16 (09/10/2026) · NO NAVEGADOR, o calendário "deles" é o do NAVEGADOR. A biblioteca de data não
+// tem versão web: o arquivo genérico dela devolve `null` e só avisa no console — tocar no campo não
+// abria nada (achado do app rodando no `react-native-web`). A saída é o `<input type="date">` do
+// próprio navegador, INVISÍVEL e POR CIMA do nosso gatilho: a pele continua a nossa, o toque cai no
+// campo do navegador, e é ele que o leitor de tela anuncia. Por cima, e não escondido e aberto por
+// código, porque o `showPicker()` não existe no Safari do iPhone (dados de compatibilidade do MDN,
+// 8.1.5): lá quem abre o seletor é o toque no próprio campo. No computador, o clique chama o
+// `showPicker()` (Chrome e Edge 99, Firefox 101, Safari 17.4).
+// E o ícone de calendário do próprio campo, esticado sobre ele inteiro: o clique vira um clique de
+// verdade no ícone, e o navegador abre o seletor SEM o `showPicker()`. É o que vale dentro de uma
+// página de outro endereço (moldura), onde o Chrome recusa o `showPicker()` — medido: "called from
+// cross-origin iframe". O pseudo-elemento só existe no Chrome, no Edge e no Safari; o Firefox já
+// abre o seletor no clique. O React 19 (o mínimo do pacote) põe a regra no topo da página UMA vez.
+const REGRA_DO_CAMPO_WEB = "input[data-aurea-campo-data]::-webkit-calendar-picker-indicator{"
+  + "position:absolute;top:0;left:0;width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer}";
+const doisDigitos = (n: number) => String(n).padStart(2, "0");
+/** A data no formato do campo do navegador: `AAAA-MM-DD` (data) ou `HH:MM` (hora), no fuso local. */
+const paraCampoWeb = (d: Date, mode: "date" | "time") => mode === "time"
+  ? `${doisDigitos(d.getHours())}:${doisDigitos(d.getMinutes())}`
+  : `${d.getFullYear()}-${doisDigitos(d.getMonth() + 1)}-${doisDigitos(d.getDate())}`;
+/**
+ * O texto do campo de volta para `Date`, mexendo só no que o campo escolhe: a data mantém a hora de
+ * `base`, e a hora mantém a data — como o seletor do aparelho, que parte do `value` (ou de agora).
+ * Texto incompleto ou vazio (a pessoa apagou) não vira data: `undefined`, e `onChange` não é chamado.
+ */
+const doCampoWeb = (texto: string, mode: "date" | "time", base: Date): Date | undefined => {
+  const d = new Date(base.getTime());
+  if (mode === "time") {
+    const m = /^(\d{2}):(\d{2})/.exec(texto);
+    if (!m) return undefined;
+    d.setHours(Number(m[1]), Number(m[2]), 0, 0);
+    return d;
+  }
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto);
+  if (!m) return undefined;
+  d.setFullYear(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return d;
+};
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // DatePicker
@@ -152,6 +194,63 @@ export function DatePicker({
 
   const mostrarSeletorIOS = abertoNoIOS && Platform.OS !== "android";
 
+  const conteudo = (
+    <>
+      <Text size={tam === "sm" ? "xs" : tam === "lg" ? "base" : "md"}
+            tone={value ? "default" : "subtle"} numberOfLines={1}>
+        {texto}
+      </Text>
+      {icon && <Icon name={icon} size="sm" color={t.color.subtleForeground} />}
+    </>
+  );
+  const pele = [
+    s.gatilho,
+    {height: alturaDoTamanho(t, tam),
+     paddingHorizontal: tam === "sm" ? t.size.space3 : tam === "lg" ? t.size.space4 : 13},
+    campo?.invalido && s.invalido,
+    inativo && s.desabilitado,
+    style,
+  ];
+
+  if (Platform.OS === "web") {
+    // O gatilho vira só desenho: sem toque, fora do Tab e escondido do leitor de tela. Quem recebe
+    // o toque, o foco e o nome é o campo do navegador, por cima dele.
+    const campoDoNavegador = React.createElement("input", {
+      type: mode === "time" ? "time" : "date",
+      value: value ? paraCampoWeb(value, mode) : "",
+      min: minimumDate && mode === "date" ? paraCampoWeb(minimumDate, mode) : undefined,
+      max: maximumDate && mode === "date" ? paraCampoWeb(maximumDate, mode) : undefined,
+      disabled: inativo,
+      "aria-label": campo?.label ?? (value ? texto : placeholder ?? strings.datePlaceholder),
+      "aria-invalid": campo?.invalido || undefined,
+      "aria-description": campo?.hint,
+      "data-testid": testID ? `${testID}-campo` : undefined,
+      "data-aurea-campo-data": "",
+      onChange: (e: {currentTarget: {value: string}}) => {
+        const data = doCampoWeb(e.currentTarget.value, mode, value ?? new Date());
+        if (data) onChange?.(data);
+      },
+      onClick: (e: {currentTarget: {showPicker?: () => void}}) => {
+        // Sem `showPicker` (Safari do iPhone) o próprio toque já abriu o seletor; e ele pode
+        // recusar (página dentro de outra), caso em que o campo continua lá, focado.
+        try { e.currentTarget.showPicker?.(); } catch { /* o toque no campo basta */ }
+      },
+      style: {
+        position: "absolute", top: 0, left: 0, width: "100%", height: "100%", margin: 0,
+        padding: 0, border: 0, opacity: 0, cursor: inativo ? "default" : "pointer",
+        // O calendário do navegador segue o tema da Aurea, e não o do sistema operacional.
+        colorScheme: t.theme,
+      },
+    });
+    return (
+      <Pressable testID={testID} disabled={inativo} focusable={false} style={pele}>
+        <View importantForAccessibility="no-hide-descendants" style={s.mioloWeb}>{conteudo}</View>
+        {React.createElement("style", {href: "aurea-campo-data", precedence: "default"}, REGRA_DO_CAMPO_WEB)}
+        {campoDoNavegador}
+      </Pressable>
+    );
+  }
+
   return (
     <>
       <Pressable
@@ -163,19 +262,8 @@ export function DatePicker({
         accessibilityHint={campo?.hint}
         accessibilityValue={{text: value ? texto : undefined}}
         {...estadoAcessivel({disabled: !!inativo})}
-        style={[
-          s.gatilho,
-          {height: alturaDoTamanho(t, tam),
-           paddingHorizontal: tam === "sm" ? t.size.space3 : tam === "lg" ? t.size.space4 : 13},
-          campo?.invalido && s.invalido,
-          inativo && s.desabilitado,
-          style,
-        ]}>
-        <Text size={tam === "sm" ? "xs" : tam === "lg" ? "base" : "md"}
-              tone={value ? "default" : "subtle"} numberOfLines={1}>
-          {texto}
-        </Text>
-        {icon && <Icon name={icon} size="sm" color={t.color.subtleForeground} />}
+        style={pele}>
+        {conteudo}
       </Pressable>
       {mostrarSeletorIOS && (
         <RNDateTimePicker

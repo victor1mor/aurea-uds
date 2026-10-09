@@ -312,6 +312,14 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    o menu do `Header` e a seta do `KPI`. ⚠ **A lição:** na bancada do nativo, o provedor precisa do
    `fontFamilies` do app — sem ele o negrito some, e a foto mente.
 
+22. **`0.26.1`, o E16, feita em 09/10/2026** (*"pode seguir com o E16"*, *"pode faça tudo"*): no navegador
+   (`react-native-web`), o `DatePicker` do nativo não abria nada — a biblioteca de data não tem versão
+   web. Agora o `<input type="date">` do navegador fica invisível por cima do gatilho da Aurea (a pele é
+   a nossa, o calendário é o do navegador), com `showPicker()` no clique e o ícone do campo esticado
+   para abrir também dentro de página de outro endereço. ⚠ **A lição:** o `showPicker()` não existe no
+   Safari do iPhone e é recusado pelo Chrome em página de outro endereço — por isso o campo fica POR
+   CIMA, e não escondido e aberto por código. Quem cobra: `native-e16-datepicker-web.test.tsx`.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
