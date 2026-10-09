@@ -223,18 +223,29 @@ test("warning tem identidade própria, e a distância da marca é medida", () =>
   // A distância perceptual, em oklab. O piso de 0.08 é folgado sobre o ~0.02 de um JND e MUITO
   // acima do 0.001 que havia — e fica abaixo dos 0.104/0.119 medidos, para não travar um ajuste
   // fino futuro. O que ele proíbe é o colapso.
+  // O valor vem em `oklch()` ou em hexadecimal (desde a 0.27.0, ADR-0061, os tons de estado são os
+  // da paleta de referência, escritos no hexadecimal dela). Os dois viram oklab para a conta.
   const val = (nome: string, bloco: string) => {
     const b = tokens.slice(tokens.indexOf(bloco));
-    return b.slice(0, b.indexOf("}")).match(new RegExp(`--${nome}:oklch\\(([^)]+)\\)`))?.[1];
+    return b.slice(0, b.indexOf("}")).match(new RegExp(`--${nome}:(oklch\\([^)]+\\)|#[0-9a-fA-F]{6})`))?.[1];
   };
   const oklab = (s: string) => {
-    const [L, C, h] = s.trim().split(/\s+/).map(Number);
+    if (s.startsWith("#")) {
+      const lin = [1, 3, 5].map((i) => { const c = parseInt(s.slice(i, i + 2), 16) / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
+      const l = Math.cbrt(0.4122214708 * lin[0] + 0.5363325363 * lin[1] + 0.0514459929 * lin[2]);
+      const m = Math.cbrt(0.2119034982 * lin[0] + 0.6806995451 * lin[1] + 0.1073969566 * lin[2]);
+      const q = Math.cbrt(0.0883024619 * lin[0] + 0.2817188376 * lin[1] + 0.6299787005 * lin[2]);
+      return [0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * q,
+        1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * q,
+        0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * q];
+    }
+    const [L, C, h] = s.replace(/^oklch\(|\)$/g, "").trim().split(/\s+/).map(Number);
     return [L, C * Math.cos(h * Math.PI / 180), C * Math.sin(h * Math.PI / 180)];
   };
-  const marca = oklab("0.795 0.184 86.047");
+  const marca = oklab("oklch(0.795 0.184 86.047)");
   for (const bloco of ['[data-theme="dark"]', '[data-theme="light"]']) {
     const w = val("warning", bloco);
-    expect(w, `${bloco} tem de declarar --warning em oklch`).toBeTruthy();
+    expect(w, `${bloco} tem de declarar --warning (oklch ou hexadecimal)`).toBeTruthy();
     const d = Math.hypot(...oklab(w!).map((v, i) => v - marca[i]));
     expect(d, `${bloco}: aviso a ${d.toFixed(3)} da marca — perto demais para significar outra coisa`)
       .toBeGreaterThan(0.08);

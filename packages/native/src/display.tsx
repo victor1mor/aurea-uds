@@ -23,7 +23,7 @@
 import * as React from "react";
 import {Image, View, type ImageSourcePropType, type LayoutChangeEvent, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton, folgaDoToque, type AureaButtonSize} from "./actions.js";
-import {canto, acentoDoTom, criarFolha, fundoDoTom, type TomDeCor} from "./estilos.js";
+import {canto, acentoDoTom, criarFolha, fundoDoTom, preenchimentoDoTom, type TomDeCor} from "./estilos.js";
 import {Card} from "./layout.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
 import {Icon} from "./icon.js";
@@ -194,14 +194,17 @@ export function Badge({
   const acento = categoria ? categoria[0] : acentoDoTom(t, tone as TomDeCor);
   const fundo = categoria ? categoria[1] : fundoDoTom(t, tone as TomDeCor);
 
+  // O selo cheio de ESTADO é o botão cheio do mesmo tom (a cor funda e a letra dele); categoria,
+  // marca e neutro enchem com o acento, como antes.
+  const cheio = categoria ? undefined : preenchimentoDoTom(t, tone as TomDeCor);
   const pele: ViewStyle = emphasis === "solid"
-    ? {backgroundColor: acento, borderColor: "transparent"}
+    ? {backgroundColor: cheio ? cheio[0] : acento, borderColor: "transparent"}
     : emphasis === "outline"
       ? {backgroundColor: "transparent", borderColor: acento}
       : tone === "neutral"
         ? {}
         : {backgroundColor: fundo, borderColor: acento};
-  const corDoTexto = emphasis === "solid" ? t.color.background
+  const corDoTexto = emphasis === "solid" ? (cheio ? cheio[1] : t.color.background)
     : tone === "neutral" ? t.color.secondaryForeground : acento;
 
   const numero = count != null ? formatarContagem(count, max) : undefined;
@@ -336,10 +339,10 @@ export function Status({variant, state, children, style, ...rest}: StatusProps) 
   const v: AureaStatusVariant = variant
     ?? (state ? (state === "offline" ? "offline" : gravidadeDoEstado(state)) : "neutral");
 
-  const cor = v === "online" || v === "success" ? t.color.success
-    : v === "away" || v === "warning" ? t.color.warning
+  const cor = v === "online" || v === "success" ? (t.color.success400 ?? t.color.success)
+    : v === "away" || v === "warning" ? (t.color.warning400 ?? t.color.warning)
     : v === "busy" || v === "danger" ? (t.color.danger400 ?? t.color.destructive)
-    : v === "info" ? t.color.info
+    : v === "info" ? (t.color.info400 ?? t.color.info)
     : v === "offline" ? t.color.subtleForeground
     : t.color.mutedForeground;
 

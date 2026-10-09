@@ -118,8 +118,12 @@ for (const tema of ["dark", "light"] as const) {
 // A pergunta "quem mais tem esse problema?" foi feita ANTES de escrever este bloco, varrendo
 // 11 papéis de texto × 5 superfícies × 2 temas: no escuro **nenhuma** reprovação; no claro,
 // só `--primary` — que está fora da lista abaixo de propósito, e a razão está no comentário dele.
+// Desde a 0.27.0 (ADR-0061), `--success`, `--warning` e `--info` são o FUNDO cheio (a mesma cor
+// funda nos dois temas, com o par `-foreground` por cima, cobrado na matriz acima). A cor de LETRA
+// de cada estado é o par `-400`, e é ele que entra aqui. Que o core não volte a pintar letra com o
+// fundo, quem cobra é `tests/unit/paleta-adr0061.test.tsx`.
 const PAPEIS_DE_TEXTO = ["--foreground", "--muted-foreground", "--subtle-foreground",
-  "--link", "--link-hover", "--secondary-foreground", "--success", "--warning", "--info",
+  "--link", "--link-hover", "--secondary-foreground", "--success-400", "--warning-400", "--info-400",
   "--danger-400"];
 // `--primary` NÃO entra: ele é preenchimento (com `--primary-foreground` por cima), nunca texto
 // sobre a página. Incluí-lo faria o gate cobrar 4,5:1 de uma cor que nunca é lida como texto —

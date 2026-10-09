@@ -87,6 +87,12 @@ export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | 
  * nomeia — e o dia em que um tom novo entra numa só.
  */
 export declare const acentoDoTom: (t: AureaTokens, tom: TomDeCor) => string;
+/**
+ * O FUNDO CHEIO de um tom de estado e a letra em cima dele — o par do botão cheio (ADR-0061, 0.27.0):
+ * o selo cheio é o botão cheio do mesmo tom. `primary` e `neutral` não têm o par: `undefined`, e
+ * quem chama enche com o acento, como antes.
+ */
+export declare const preenchimentoDoTom: (t: AureaTokens, tom: TomDeCor) => [string, string] | undefined;
 /** O fundo SUAVE de um tom (`--<tom>-bg`). `primary` e `neutral` não têm token: `undefined`. */
 export declare const fundoDoTom: (t: AureaTokens, tom: TomDeCor) => string | undefined;
 /**

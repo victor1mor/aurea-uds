@@ -70,9 +70,11 @@ function pintar(t: AureaTokens, tone: AureaButtonTone) {
     // invenção: o `Input` já usa esse token para a borda de inválido.
     // O `solido` continua no `destructive`, porque ali ele é FUNDO e o texto por cima é claro.
     danger: {solido: t.color.destructive, texto: t.color.destructiveForeground, sobre: t.color.danger400 ?? t.color.destructive},
-    success: {solido: t.color.success, texto: t.color.successForeground, sobre: t.color.success},
-    warning: {solido: t.color.warning, texto: t.color.warningForeground, sobre: t.color.warning},
-    info: {solido: t.color.info, texto: t.color.infoForeground, sobre: t.color.info},
+    // `sobre` é a LETRA do tom em cima da superfície (contorno, fantasma): o par `-400`. Desde a
+    // 0.27.0 (ADR-0061) o `success`/`warning`/`info` é o fundo cheio, fundo demais para letra no escuro.
+    success: {solido: t.color.success, texto: t.color.successForeground, sobre: t.color.success400 ?? t.color.success},
+    warning: {solido: t.color.warning, texto: t.color.warningForeground, sobre: t.color.warning400 ?? t.color.warning},
+    info: {solido: t.color.info, texto: t.color.infoForeground, sobre: t.color.info400 ?? t.color.info},
   };
   return m[tone];
 }

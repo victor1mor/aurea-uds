@@ -244,8 +244,10 @@ describe("Badge — a pílula pequena", () => {
   it("o tom pinta pelo token, e solid inverte o texto", () => {
     render(<Envolve><Badge tone="danger">3</Badge></Envolve>);
     expect(estilo("View").backgroundColor).toBe(tokens.color.dangerBg);
+    // Desde a 0.27.0 (ADR-0061) o selo CHEIO de estado é o botão cheio do mesmo tom: a cor funda
+    // (`destructive`) com a letra dele. Antes enchia com o acento (`danger400`).
     render(<Envolve><Badge tone="danger" emphasis="solid">3</Badge></Envolve>);
-    expect(estilo("View", 1).backgroundColor).toBe(tokens.color.danger400);
+    expect(estilo("View", 1).backgroundColor).toBe(tokens.color.destructive);
   });
 });
 
@@ -258,8 +260,10 @@ describe("Status — o ponto e a palavra", () => {
     expect(ponto.backgroundColor).toBe("transparent");
     expect(ponto.borderWidth).toBe(2);
 
+    // O ponto é desenho sobre a superfície: usa o par de LETRA (`success400`) desde a 0.27.0
+    // (ADR-0061) — o `success` virou o fundo cheio, fundo demais sobre o escuro.
     render(<Envolve><Status variant="online">Ativo</Status></Envolve>);
-    expect(estilo("View", 3).backgroundColor).toBe(tokens.color.success);
+    expect(estilo("View", 3).backgroundColor).toBe(tokens.color.success400);
   });
 
   it("o estado universal escolhe a variante e escreve a frase", () => {

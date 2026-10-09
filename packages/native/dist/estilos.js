@@ -95,6 +95,16 @@ export const acentoDoTom = (t, tom) => tom === "primary" ? t.color.primaryEmphas
             : tom === "warning" ? t.color.warning400 ?? t.color.warning
                 : tom === "danger" ? t.color.danger400 ?? t.color.destructive
                     : t.color.secondaryForeground;
+/**
+ * O FUNDO CHEIO de um tom de estado e a letra em cima dele — o par do botão cheio (ADR-0061, 0.27.0):
+ * o selo cheio é o botão cheio do mesmo tom. `primary` e `neutral` não têm o par: `undefined`, e
+ * quem chama enche com o acento, como antes.
+ */
+export const preenchimentoDoTom = (t, tom) => tom === "success" ? [t.color.success, t.color.successForeground]
+    : tom === "warning" ? [t.color.warning, t.color.warningForeground]
+        : tom === "info" ? [t.color.info, t.color.infoForeground]
+            : tom === "danger" ? [t.color.destructive, t.color.destructiveForeground]
+                : undefined;
 /** O fundo SUAVE de um tom (`--<tom>-bg`). `primary` e `neutral` não têm token: `undefined`. */
 export const fundoDoTom = (t, tom) => tom === "info" ? t.color.infoBg
     : tom === "success" ? t.color.successBg
