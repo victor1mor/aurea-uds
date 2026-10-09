@@ -176,7 +176,7 @@ export declare function Timeline({ items }: {
 export declare function Prose({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export type TypographyType = "body" | "body-sm" | "body-xs" | "code" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 export type TypographyColor = "default" | "muted";
-export type TypographyWeight = "normal" | "medium" | "semibold" | "bold";
+export type TypographyWeight = "normal" | "medium" | "semibold" | "bold" | "extrabold";
 export type TypographyAlign = "start" | "center" | "end" | "justify";
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type ParagraphSize = "base" | "sm" | "xs";
@@ -185,19 +185,22 @@ interface TypographyBase {
     color?: TypographyColor;
     weight?: TypographyWeight;
     truncate?: boolean;
+    /** GAR-16 (0.28.0): algarismos da mesma largura — para número que alinha em coluna (preço, ano,
+     *  ficha técnica) ou que muda na tela. Desligado por padrão: no texto corrido o "1" estreito é o certo. */
+    numeric?: boolean;
 }
 export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>, "color">, RefAttributes<HTMLSpanElement>, TypographyBase {
     type?: TypographyType;
 }
-export declare function Text({ type, align, color, weight, truncate, className, ...props }: TextProps): React.JSX.Element;
+export declare function Text({ type, align, color, weight, truncate, numeric, className, ...props }: TextProps): React.JSX.Element;
 export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>, "color">, RefAttributes<HTMLHeadingElement>, TypographyBase {
     level?: HeadingLevel;
 }
-export declare function Heading({ level, align, color, weight, truncate, className, ...props }: HeadingProps): React.JSX.Element;
+export declare function Heading({ level, align, color, weight, truncate, numeric, className, ...props }: HeadingProps): React.JSX.Element;
 export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>, "color">, RefAttributes<HTMLParagraphElement>, TypographyBase {
     size?: ParagraphSize;
 }
-export declare function Paragraph({ size, align, color, weight, truncate, className, ...props }: ParagraphProps): React.JSX.Element;
+export declare function Paragraph({ size, align, color, weight, truncate, numeric, className, ...props }: ParagraphProps): React.JSX.Element;
 export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>, "color">, RefAttributes<HTMLElement>, TypographyBase {
 }
 export declare function Code({ align, color, weight, truncate, className, ...props }: CodeProps): React.JSX.Element;

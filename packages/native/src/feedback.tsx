@@ -21,7 +21,7 @@
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton} from "./actions.js";
-import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, letraDoToken} from "./estilos.js";
 import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
@@ -266,7 +266,9 @@ export function Progress({value, label, detail, tone = "brand", style, testID}: 
   const reduzir = useReduceMotion();
   const semTotal = value == null || Number.isNaN(value);
   const pct = semTotal ? undefined : Math.max(0, Math.min(100, value));
-  const cor = t.color[COR_DO_TOM[tone]];
+  // ADR-0061: a barra é desenho sobre a trilha, como a letra — usa o par `-400`, como a web
+  // (`.progress-tone-*`). Na 0.27.0 ela ficou com a cor de fundo cheio; achado na 0.28.0.
+  const cor = letraDoToken(t, COR_DO_TOM[tone]);
   const temApoio = detail != null && detail !== false && detail !== "";
   const emTexto = temApoio && (typeof detail === "string" || typeof detail === "number") ? String(detail) : undefined;
 

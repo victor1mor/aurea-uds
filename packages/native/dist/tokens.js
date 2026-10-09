@@ -23,7 +23,7 @@ const ehSombra = (v) => typeof v === "object" && v !== null && "blurRadius" in v
 function mesclar(...grupos) {
     return Object.assign({}, ...grupos);
 }
-const PESOS = [400, 500, 600, 700];
+const PESOS = [400, 500, 600, 700, 800];
 /**
  * Fecha a grade parcial que o pacote de fontes emite numa escala TOTAL.
  *
@@ -95,6 +95,7 @@ export function resolverTokens(theme, density, fontFamilies) {
         ui: normalizarEscala(fontFamilies?.ui, texto.fontUi ?? "System"),
         editorial: normalizarEscala(fontFamilies?.editorial, texto.fontEditorial ?? "System"),
         code: normalizarEscala(fontFamilies?.code, texto.fontCode ?? "System"),
+        heading: normalizarEscala(fontFamilies?.heading ?? fontFamilies?.ui, texto.fontHeading ?? texto.fontUi ?? "System"),
     };
     return { theme, density, color, size, font, shadow, shadowLayers: { ...shadowLayers }, easing, tracking: { ...tracking }, remInDp: REM_EM_DP };
 }

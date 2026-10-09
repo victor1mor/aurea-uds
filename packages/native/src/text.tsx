@@ -20,17 +20,17 @@
 //   que os tokens já publicam seria uma segunda verdade sobre tipografia.
 import * as React from "react";
 import {Text as TextRN, type TextProps as TextPropsRN} from "react-native";
-import {canto, criarFolha} from "./estilos.js";
+import {canto, criarFolha, letraDoToken} from "./estilos.js";
 import {useAureaTokens, useSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 /** A escala dos tokens (`--text-xs` … `--text-5xl`). `md` é o corpo, como no `body` da web. */
 export type AureaTextSize =
   "xs" | "sm" | "md" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
-/** Os quatro pesos que o pacote de fontes entrega. Ver ADR-0039: cada peso é uma FAMÍLIA. */
-export type AureaTextWeight = 400 | 500 | 600 | 700;
-/** Papel de tipografia — os três `--font-*` da Aurea. */
-export type AureaTextFont = "ui" | "editorial" | "code";
+/** Os pesos que o pacote de fontes entrega (o 800 desde a 0.28.0, GAR-16). Ver ADR-0039: cada peso é uma FAMÍLIA. */
+export type AureaTextWeight = 400 | 500 | 600 | 700 | 800;
+/** Papel de tipografia — os `--font-*` da Aurea (o `heading` desde a 0.28.0). */
+export type AureaTextFont = "ui" | "editorial" | "code" | "heading";
 /** O que a cor SIGNIFICA. Mesmo vocabulário do `tone` do Button (ADR-0044). */
 export type AureaTextTone =
   "default" | "muted" | "subtle" | "primary" | "link" | "danger" | "success" | "warning" | "info";
@@ -60,6 +60,11 @@ export interface TextProps extends TextPropsRN {
   align?: "auto" | "left" | "right" | "center";
   /** Aplica o `tracking` do token. É RAZÃO de `em`: multiplicado pelo `fontSize` aqui dentro. */
   tracking?: "tight" | "normal" | "wide" | "wider" | "widest";
+  /**
+   * GAR-16 (0.28.0): algarismos da mesma largura (`fontVariant: ["tabular-nums"]`, iOS e Android) —
+   * para número que alinha em coluna ou muda na tela. Desligado por padrão, como na web.
+   */
+  numeric?: boolean;
 }
 
 // 🔴 A ESCALA TEM CINCO DEGRAUS QUE SE ENXERGAM, E DEZ NOMES — ordem do Victor, 19/09/2026,
@@ -111,7 +116,8 @@ const ENTRELINHA: Record<AureaTextLeading, string> = {
 // tamanho aponta para o TOKEN direto, e não para o `TAMANHO` acima: a referência não sobe o
 // degrau no componente de tipografia (o `body-sm` dela é 14, como na web), então o papel também não sobe.
 interface Papel { tamanho: string; peso: AureaTextWeight; entrelinha: string; fonte: AureaTextFont; junto?: true }
-const titulo = (tamanho: string): Papel => ({tamanho, peso: 600, entrelinha: "leadingTight", fonte: "ui", junto: true});
+// O título usa o papel `heading` (GAR-16, 0.28.0) — hoje a mesma fonte do texto, no mesmo peso 600.
+const titulo = (tamanho: string): Papel => ({tamanho, peso: 600, entrelinha: "leadingTight", fonte: "heading", junto: true});
 const PAPEL: Record<AureaTextType, Papel> = {
   h1: titulo("text4xl"), h2: titulo("text3xl"), h3: titulo("text2xl"),
   h4: titulo("textXl"), h5: titulo("textLg"), h6: titulo("textBase"),
@@ -136,7 +142,10 @@ const COR: Record<AureaTextTone, string> = {
 const folha = criarFolha((t: AureaTokens) => {
   const tons = {} as Record<AureaTextTone, {color: string}>;
   for (const [tom, token] of Object.entries(COR) as [AureaTextTone, string][]) {
-    tons[tom] = {color: t.color[token] ?? t.color.foreground};
+    // ADR-0061: `success`, `info`, `warning` e `destructive` são a cor de FUNDO cheio; a LETRA é o
+    // par `-400` de cada tema. Na 0.27.0 este mapa ficou de fora e o texto de tom saía com a cor de
+    // fundo — no escuro, ~2,5:1. Achado na 0.28.0; `paleta-adr0061.test.tsx` cobra.
+    tons[tom] = {color: letraDoToken(t, token) ?? t.color.foreground};
   }
   return tons;
 });
@@ -153,7 +162,7 @@ const folha = criarFolha((t: AureaTokens) => {
  */
 export function Text({
   type, size, weight: pesoPedido, font: fontePedida, tone = "default", leading,
-  italic = false, align, tracking: trackingPedido, style, ...rest
+  italic = false, align, tracking: trackingPedido, numeric = false, style, ...rest
 }: TextProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -185,13 +194,14 @@ export function Text({
       // É a impedância que a Etapa 2 mediu e resolveu emitindo razão em vez de dp.
       ...(tracking ? {letterSpacing: fontSize * t.tracking[`tracking${tracking[0].toUpperCase()}${tracking.slice(1)}`]} : null),
       ...(align ? {textAlign: align} : null),
+      ...(numeric ? {fontVariant: ["tabular-nums" as const]} : null),
       // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (a referência).
       ...(type === "code" ? {
         alignSelf: "flex-start" as const, backgroundColor: t.color.surface2, ...canto(t.size.radiusXs),
         paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
       } : null),
     };
-  }, [t, type, papel, size, weight, font, leading, italic, align, tracking]);
+  }, [t, type, papel, size, weight, font, leading, italic, align, tracking, numeric]);
 
   // 🔴 SOBRE UMA SUPERFÍCIE DA MARCA A COR É FORÇADA, e ela vence até o tom explícito.
   // Medido contra o `primary` nos dois temas: texto comum dá **1,83 no escuro**, esmaecido

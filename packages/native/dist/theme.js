@@ -1,32 +1,4 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-// Aurea nativo — o provider de tema × densidade, e os dois hooks que ele alimenta.
-//
-// ADR-0037: o motor é o `StyleSheet` puro e **esta camada é nossa**. Não há Unistyles para
-// registrar tema, então o lugar onde os dois eixos moram é um contexto do React — e a ADR foi
-// honesta sobre a única aposta que isso carrega: *"se o contexto do React, sem as otimizações do
-// Unistyles, re-renderiza a ponto de doer na troca de tema em tela real"*. Ainda não foi medido
-// em aparelho.
-//
-// UM CONTEXTO, E NÃO DOIS — e vale escrever por que, porque a primeira versão tinha dois.
-// A ideia era que quem só troca o tema assinasse um contexto "estável" e não re-renderizasse
-// junto com a tela. **Não funciona, e a razão é óbvia depois de vista:** o valor de controle
-// contém `theme` e `density`, então ele muda exatamente quando o de tokens muda. Dois contextos
-// que mudam juntos não poupam render nenhum — poupam só a impressão de estarem poupando.
-//
-// O que de fato reduz custo é o `useMemo`: entre renders que NÃO trocam eixo, os dois objetos são
-// os mesmos por identidade, e a subárvore não é notificada. É o que está feito.
-//
-// Se um dia doer em aparelho, a saída é a que a ADR-0037 já prevê — contexto fatiado de verdade,
-// com as AÇÕES separadas do ESTADO. Aí a separação compra algo, porque as ações não mudam. Não
-// está feito hoje porque seria mais superfície pública para um ganho não medido.
-//
-// PARIDADE COM A WEB, de propósito: `useAureaTheme()` devolve o mesmo `{theme, density, setTheme,
-// setDensity, toggleTheme}` do hook homônimo de `@aurea-uds/react`. Uma diferença real: lá o
-// valor pode ser `null` (no servidor o tema é desconhecido e fingir um produz erro de
-// hidratação); aqui não há SSR, então nunca é nulo.
-//
-// E `useAureaTokens()` NÃO tem par na web porque lá ele não faria sentido: o CSS resolve o token
-// no uso. Não é hook duplicado — é o hook que só o alvo sem cascata precisa ter.
 import * as React from "react";
 import { useColorScheme } from "react-native";
 import { IconRegistryProvider } from "./icon.js";
@@ -106,6 +78,12 @@ export function useAureaTokens() {
  * As frases visíveis. Mesmo nome do hook da web (`useAureaStrings`), tabela bem menor — ver
  * `strings.ts`.
  */
+/**
+ * O gerente de avisos do `ToastHost`, para quem não pode importar o `toast.tsx` — o `Button share`
+ * (GAR-14, 0.28.0): o `toast.tsx` importa o `IconButton`, e o botão importar o toast fecharia um
+ * ciclo. Interno: o público continua sendo o `useToast`. `null` sem `ToastHost` acima.
+ */
+export const AvisosContext = React.createContext(null);
 export function useAureaStrings() {
     return usar("useAureaStrings").strings;
 }

@@ -51,6 +51,22 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
      */
     pressed?: boolean;
     kbd?: string;
+    /**
+     * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
+     * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe
+     * (celular; Chrome, Edge e Safari no computador): abre a janela do aparelho, e cancelar não é erro.
+     * Não sabe: copia o link e mostra "Link copiado" preso ao botão, com a medida dele. A cópia falhou:
+     * avisa e mostra o link selecionado. O aviso fala com o leitor de tela nos dois casos.
+     * Sem `url`, é o endereço da página. O aviso precisa do `AureaProvider` (ou do `aurea.js` na página).
+     * Só vale no `<button>`: com `href` ou `render`, é ignorado.
+     */
+    share?: ButtonShareData;
+}
+/** O que o `Button share` compartilha (GAR-14). Os nomes são os do `navigator.share` da web. */
+export interface ButtonShareData {
+    url?: string;
+    title?: string;
+    text?: string;
 }
 export declare const Button: React.ForwardRefExoticComponent<Omit<ButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 interface ToggleBase {
@@ -79,7 +95,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: IconName;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
 }
 export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export declare function ButtonGroup({ label, orientation, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
@@ -94,7 +110,9 @@ export declare function ToolbarGroup({ label, className, ...props }: HTMLAttribu
     label?: string;
 }): React.JSX.Element;
 export declare function ToolbarSeparator({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
-export declare const ToolbarButton: React.ForwardRefExoticComponent<Omit<ButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
+export interface ToolbarButtonProps extends Omit<ButtonProps, "share"> {
+}
+export declare const ToolbarButton: React.ForwardRefExoticComponent<Omit<ToolbarButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export declare function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children }: {
     value?: string[];
     defaultValue?: string[];

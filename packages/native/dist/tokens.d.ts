@@ -15,7 +15,7 @@ export type AureaShadow = {
  *
  * O que chega de fora **não** é total — ver `AureaFontInput` e `normalizarEscala`.
  */
-export type AureaFontScale = Record<400 | 500 | 600 | 700, string> & {
+export type AureaFontScale = Record<400 | 500 | 600 | 700 | 800, string> & {
     /** Só o papel `ui` tem itálico no pacote de fontes; nos outros é `undefined`. */
     italic?: string;
 };
@@ -23,14 +23,14 @@ export type AureaFontScale = Record<400 | 500 | 600 | 700, string> & {
  * O que o consumidor INJETA, e é parcial porque o pacote de fontes é parcial — medido em
  * 03/09/2026 no `@aurea-uds/fonts/native`:
  *
- *     ui         400  400i  500  600  700
+ *     ui         400  400i  500  600  700  800   ← o 800 entrou na 0.28.0 (GAR-16)
  *     editorial  400       500  600  700      ← apelido do `ui` desde a ADR-0053 (sai na 1.0)
  *     code       400       500  600           ← não há 700
  *
  * É a grade dos arquivos de fonte, não um esquecimento nosso. Até a 0.12.4 o `editorial` era a
  * IBM Plex Serif, sem 400; a ADR-0053 tirou a serifada e o deixou apontando para a Atkinson.
  */
-export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "400i", string>>;
+export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "800" | "400i", string>>;
 export type AureaTokens = {
     theme: AureaThemeName;
     density: AureaDensity;
@@ -43,6 +43,7 @@ export type AureaTokens = {
         ui: AureaFontScale;
         editorial: AureaFontScale;
         code: AureaFontScale;
+        heading: AureaFontScale;
     };
     /**
      * `boxShadow` do RN 0.76+ — **a primeira camada** de cada sombra. Para a sombra INTEIRA, use
@@ -66,6 +67,9 @@ export type AureaFontFamilies = {
     ui: AureaFontInput;
     editorial: AureaFontInput;
     code: AureaFontInput;
+    /** O papel do título (GAR-16, 0.28.0). Opcional: sem ele, o título usa o mapa do `ui` — que é a
+     *  mesma fonte hoje, e é o que acontece com quem ainda passa o mapa de antes da 0.28.0. */
+    heading?: AureaFontInput;
 };
 /**
  * Resolve os tokens para um par (tema, densidade). Puro e sem estado: o provider chama isto

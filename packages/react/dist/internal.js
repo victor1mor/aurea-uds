@@ -15,6 +15,7 @@
 // Kbd mora aqui por dependência, não por categoria: o Button precisa dele e ele não precisa de
 // ninguém. A casa pública dele continua sendo `/data-display`, que o reexporta.
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { Toast as BaseToast } from "@base-ui/react/toast";
 import { defaultStrings, defaultSpriteUrl } from "./pure.js";
 export { cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity } from "./pure.js";
 export const StringsContext = createContext(defaultStrings);
@@ -59,6 +60,10 @@ export const useDensity = () => useContext(DensityContext);
 // NÃO distingue "sem provider" de "provider que ainda não adotou tema". Só um booleano que
 // apenas o provider fornece distingue.
 export const DentroDoProviderContext = createContext(false);
+// GAR-14 (0.28.0): o gerenciador dos avisos PRESOS a um botão (o "Link copiado" do `Button share`).
+// Separado do da pilha, como a documentação do motor manda; o hospedeiro é o `AvisosAncorados` do
+// `system.tsx`, montado pelo `AureaProvider` de fora. Mora aqui para não sair no barril público.
+export const avisosAncorados = BaseToast.createToastManager();
 export const PortalContext = createContext(undefined);
 export const usePortalContainer = () => useContext(PortalContext);
 export function useReorder({ count, order, onReorder, rowSelector, handleSelector }) {

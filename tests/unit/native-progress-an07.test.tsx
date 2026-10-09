@@ -87,9 +87,12 @@ describe("Progress · o texto de apoio", () => {
 });
 
 describe("Progress · o tom", () => {
+  // ADR-0061 (0.27.0): a barra é desenho sobre a trilha e usa o par de LETRA (`-400`) dos quatro
+  // estados — como a web. Este mapa esperava a cor de fundo; a 0.27.0 deixou o nativo de fora, e a
+  // 0.28.0 corrigiu o componente e este teste juntos.
   it.each([
-    ["brand", "primary"], ["neutral", "mutedForeground"], ["success", "success"],
-    ["warning", "warning"], ["danger", "destructive"], ["info", "info"],
+    ["brand", "primary"], ["neutral", "mutedForeground"], ["success", "success400"],
+    ["warning", "warning400"], ["danger", "danger400"], ["info", "info400"],
   ] as const)("%s pinta o preenchimento com %s", (tone, cor) => {
     render(<Envolve><Progress value={50} tone={tone} /></Envolve>);
     const preenchido = __instancias("View").map(estilo).filter((e) => e.width === "50%").at(-1)!;

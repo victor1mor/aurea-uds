@@ -30,6 +30,14 @@ export interface ImageProps {
      */
     render?: React.ReactElement;
     onError?: () => void;
+    /**
+     * GAR-15 (0.28.0): a captura dentro de uma moldura de celular — GENÉRICA, sem ilha, entalhe nem
+     * botões, como na web. Com moldura, o `style` vai para a MOLDURA (tamanho e lugar); a proporção
+     * (`ratio`, padrão 9/19,5) vai para a captura.
+     */
+    frame?: "phone";
+    /** GAR-15 (0.28.0): a captura do tema escuro. No tema escuro aparece esta; no claro, a `source`. */
+    sourceDark?: AureaImageSource;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -48,7 +56,7 @@ export interface ImageProps {
  * Trocar o bitmap por uma caixa muda o que se vê, não o que a foto É — e o `role="image"` mapeia
  * nos dois sistemas (`ReactAccessibilityDelegate.kt:461`, `RCTConversions.h:96`).
  */
-export declare function Image({ source, alt, ratio, fit, fallback, fallbackIcon, render, onError, style, testID, }: ImageProps): React.JSX.Element;
+export declare function Image({ source: fonteClara, alt, ratio, fit, fallback, fallbackIcon, render, onError, frame, sourceDark, style, testID, }: ImageProps): React.JSX.Element;
 export interface AureaGalleryItem {
     id: string;
     source: AureaImageSource;

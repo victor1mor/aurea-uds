@@ -60,6 +60,16 @@ const folha = criarFolha((t: AureaTokens) => ({
   },
   contain: {backgroundColor: "transparent"},
   quebrada: {alignItems: "center", justifyContent: "center"},
+  // GAR-15 (0.28.0): a moldura de celular — os mesmos tokens da web (`.image-frame-phone`): a
+  // superfície do cartão, a borda, a sombra média e o canto da folha de baixo; o de dentro acompanha.
+  moldura: {
+    padding: t.size.space2,
+    borderWidth: t.size.borderWidth, borderColor: t.color.border,
+    ...canto(t.size.radiusSheet),
+    backgroundColor: t.color.card,
+    ...(t.shadow.shadowMd ? {boxShadow: [t.shadow.shadowMd]} : null),
+  },
+  naMoldura: {...canto(t.size.radiusSheet - t.size.space2), aspectRatio: 9 / 19.5},
 
   ladrilho: {gap: t.size.space1, padding: t.size.space1, ...canto(t.size.radiusLg)},
   ladrilhoEscolhido: {backgroundColor: t.color.secondary},
@@ -114,6 +124,14 @@ export interface ImageProps {
    */
   render?: React.ReactElement;
   onError?: () => void;
+  /**
+   * GAR-15 (0.28.0): a captura dentro de uma moldura de celular — GENÉRICA, sem ilha, entalhe nem
+   * botões, como na web. Com moldura, o `style` vai para a MOLDURA (tamanho e lugar); a proporção
+   * (`ratio`, padrão 9/19,5) vai para a captura.
+   */
+  frame?: "phone";
+  /** GAR-15 (0.28.0): a captura do tema escuro. No tema escuro aparece esta; no claro, a `source`. */
+  sourceDark?: AureaImageSource;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -134,12 +152,14 @@ export interface ImageProps {
  * nos dois sistemas (`ReactAccessibilityDelegate.kt:461`, `RCTConversions.h:96`).
  */
 export function Image({
-  source, alt, ratio, fit = "cover", fallback, fallbackIcon = "image", render,
-  onError, style, testID,
+  source: fonteClara, alt, ratio, fit = "cover", fallback, fallbackIcon = "image", render,
+  onError, frame, sourceDark, style, testID,
 }: ImageProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const [quebrou, setQuebrou] = React.useState(false);
+  // O tema é do provider, então aqui basta escolher a fonte — não há duas imagens como na web.
+  const source = t.theme === "dark" && sourceDark ? sourceDark : fonteClara;
 
   // A `source` nova merece uma tentativa nova — é a mesma linha do `Avatar` (`display.tsx:283`),
   // e sem ela uma URL quebrada deixa um buraco permanente mesmo depois de o app trocar a foto.
@@ -149,13 +169,17 @@ export function Image({
   const caixa = [
     s.imagem,
     fit === "contain" && s.contain,
+    frame && s.naMoldura,
     proporcao != null && {aspectRatio: proporcao},
-    style,
+    !frame && style,
   ];
+  // Com moldura, a imagem vai dentro de uma caixa que leva o `style` e o `testID` do consumidor.
+  const moldar = (filho: React.ReactElement) =>
+    frame ? <View testID={testID} style={[s.moldura, style]}>{filho}</View> : filho;
 
   if (quebrou) {
-    return (
-      <View testID={testID} style={[caixa, s.quebrada]}
+    return moldar(
+      <View testID={frame ? undefined : testID} style={[caixa, s.quebrada]}
             accessible accessibilityRole="image" accessibilityLabel={alt || undefined}>
         {fallback ?? (fallbackIcon
           ? <Icon name={fallbackIcon} size="lg" color={t.color.mutedForeground} />
@@ -172,14 +196,14 @@ export function Image({
     accessible: alt !== "",
     accessibilityRole: alt !== "" ? ("image" as const) : undefined,
     accessibilityLabel: alt !== "" ? alt : undefined,
-    testID,
+    testID: frame ? undefined : testID,
   };
 
   // `cloneElement` e não `useRender`: o idioma do Base UI não existe aqui, e o que o caso real
   // precisa é de um elemento pronto recebendo as nossas props. As props do consumidor vêm
   // primeiro no objeto do elemento e as nossas depois — `source` e `onError` são o contrato
   // deste componente, e deixá-las sobrescrevíveis seria prometer o substituto e não entregá-lo.
-  if (render) return React.cloneElement(render, comuns);
+  if (render) return moldar(React.cloneElement(render, comuns));
 
   // ⚠ O molde é `ImageStyle` e não `ViewStyle`, e a conversão é CONSCIENTE: os dois tipos só
   // divergem em duas coisas — o `overflow` do `ViewStyle` aceita `"scroll"`, que o `ImageStyle`
@@ -187,7 +211,7 @@ export function Image({
   // nenhuma das duas**: a folha põe largura, raio, fundo e proporção, e o `resizeMode` vai como
   // prop, ao lado. A API pública fica em `ViewStyle` de propósito — quem chama pensa em caixa, e
   // fazer o consumidor importar `ImageStyle` para passar um raio seria vazar o primitivo.
-  return <ImageRN {...comuns} style={caixa as StyleProp<ImageStyle>} resizeMode={fit} />;
+  return moldar(<ImageRN {...comuns} style={caixa as StyleProp<ImageStyle>} resizeMode={fit} />);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────

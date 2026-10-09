@@ -484,7 +484,7 @@ export function KPI({label, value, trend, direction, tone, directionLabel, varia
     <Caixa style={[s.kpi, style]} accessible accessibilityLabel={nome} {...rest}>
       {typeof label === "string" ? <Text size="sm" tone="muted">{label}</Text> : label}
       {typeof value === "string" || typeof value === "number"
-        ? <Text size="3xl" weight={700}>{value}</Text> : value}
+        ? <Text size="3xl" weight={700} numeric>{value}</Text> : value}
       {direction
         ? <View style={s.tendencia}>
             <View style={s.seta}><Icon name={GLIFO_DA_DIRECAO[direction]} size="sm" color={cor} /></View>

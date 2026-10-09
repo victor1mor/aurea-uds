@@ -7,7 +7,7 @@ import {Toast as BaseToast} from "@base-ui/react/toast";
 import {Tooltip as BaseTooltip} from "@base-ui/react/tooltip";
 import {DirectionProvider} from "@base-ui/react/direction-provider";
 import {peleDoEixo, type Responsive} from "./pure.js";
-import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityContext, DentroDoProviderContext, usePortalContainer, defaultStrings, defaultSpriteUrl, useSpriteUrl, useAureaStrings, type AureaStrings, type AureaTheme, type AureaDensity} from "./internal.js";
+import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityContext, DentroDoProviderContext, avisosAncorados, usePortalContainer, defaultStrings, defaultSpriteUrl, useSpriteUrl, useAureaStrings, type AureaStrings, type AureaTheme, type AureaDensity} from "./internal.js";
 
 // `theme` e `density` seguem a convenção controlado/não-controlado do resto da biblioteca
 // (`Toggle`, `ToggleGroup`): passe `theme` para mandar, `defaultTheme` para semear, e ouça por
@@ -41,7 +41,10 @@ export function AureaProvider({children,strings,direction="ltr",spriteUrl=defaul
     // Agora a regra é uma: desconhecido resolve para claro e alterna para ESCURO.
     toggleTheme:()=>temaCtx.set(temaCtx.valor==="dark"?"light":"dark")}),[temaCtx]);
   const dens=React.useMemo(()=>({density:densCtx.valor,setDensity:densCtx.set}),[densCtx]);
-  return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}><BaseToast.Provider><BaseTooltip.Provider>{children}<AureaToastViewport/></BaseTooltip.Provider></BaseToast.Provider></DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
+  // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
+  // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
+  const deFora=!React.useContext(DentroDoProviderContext);
+  return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}><BaseToast.Provider><BaseTooltip.Provider>{children}<AureaToastViewport/>{deFora&&<BaseToast.Provider toastManager={avisosAncorados}><AvisosAncorados/></BaseToast.Provider>}</BaseTooltip.Provider></BaseToast.Provider></DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
 }
 
 /** Um eixo de apresentação que vive no `<html>`: tema ou densidade. A conta é a mesma para os
@@ -155,6 +158,38 @@ function AureaToastList(){
 function AureaToastViewport(){
   const portal=usePortalContainer();
   return <BaseToast.Portal container={portal}><BaseToast.Viewport className="toast-stack"><AureaToastList/></BaseToast.Viewport></BaseToast.Portal>;
+}
+
+// GAR-14 (0.28.0) · OS AVISOS PRESOS A UM BOTÃO ("Link copiado", do `Button share`). A documentação do
+// motor manda o aviso ancorado viver num gerenciador SEPARADO do da pilha — senão ele entra na conta
+// da pilha do canto — e é o que este é: um do módulo, criado com `createToastManager` (mora no
+// `internal.tsx`, para não virar API pública), que o botão chama direto sem precisar de hook. O hospedeiro dele é montado uma vez,
+// pelo `AureaProvider` de fora. A posição é do motor (`Toast.Positioner`, ancorado no botão); a pele é
+// a `.toast-anchored`, com a medida do botão. O anúncio ao leitor de tela é o da região do motor.
+function AvisosAncorados(){
+  const {toasts}=BaseToast.useToastManager();
+  const portal=usePortalContainer();
+  // Região VIVA simples, sem papel e sem nome — o modelo clássico do "copiado" (WCAG 4.1.3). A padrão
+  // do motor é uma região com o nome "Notifications": a página ficava com DUAS (a pilha e esta), e o
+  // axe reprova (`landmark-unique`). Com `role="status"`, quem procura o status da página (o leitor de
+  // tela, e os testes de quem usa a Aurea) passava a achar dois. Sem papel, ela não é nenhum dos dois
+  // e continua anunciando: `aria-live` é atributo global. Os dois `undefined` tiram o padrão do motor.
+  return <BaseToast.Portal container={portal}><BaseToast.Viewport role={undefined} aria-label={undefined}>{toasts.map(t=>{
+    const falhou=t.type==="danger";
+    const url=(t.data as {url?:string}|undefined)?.url;
+    const ancora=(t.positionerProps as {anchor?:Element|null}|undefined)?.anchor;
+    const fechar=(devolverFoco:boolean)=>{avisosAncorados.close(t.id);if(devolverFoco&&ancora instanceof HTMLElement)ancora.focus()};
+    const aviso=<div className={cx("toast-anchored",falhou&&"toast-anchored-danger")}><span className="toast-anchored-icon" aria-hidden="true"/><BaseToast.Title render={<span/>}/></div>;
+    return <BaseToast.Positioner key={t.id} toast={t} className="toast-anchored-positioner">
+      {falhou
+        // O erro fica até a pessoa resolver: o link vem selecionado, para o Ctrl+C; Esc devolve o
+        // foco ao botão, e sair do campo fecha.
+        ?<BaseToast.Root toast={t} className="toast-anchored-stack">{aviso}
+          <input className="input toast-anchored-link" readOnly value={url??""} aria-label={typeof t.title==="string"?t.title:undefined}
+            ref={el=>{if(el){el.focus();el.select()}}}
+            onKeyDown={e=>{if(e.key==="Escape"){e.preventDefault();fechar(true)}}} onBlur={()=>fechar(false)}/></BaseToast.Root>
+        :<BaseToast.Root toast={t} className="toast-anchored"><span className="toast-anchored-icon" aria-hidden="true"/><BaseToast.Title render={<span/>}/></BaseToast.Root>}
+    </BaseToast.Positioner>})}</BaseToast.Viewport></BaseToast.Portal>;
 }
 
 // A-04: o nome é checado pelo TypeScript. A lista é GERADA do mesmo @phosphor-icons/core que monta

@@ -80,6 +80,67 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.28.0] — 2026-10-09
+
+⏳ **Ainda não publicada.** Lote M, os três pedidos do grupo 2 da fila (um site consumidor): GAR-14,
+GAR-15 e GAR-16 ([ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md)). A pesquisa foi além
+da fila de referências, por ordem do Victor; as escolhas foram dele, depois de ver a referência
+principal e a bancada (*"pode construir a 0.28.0"*). **Versão nova porque entram props, dois tokens
+e um peso de fonte.** Nada sai, nenhum padrão muda.
+
+### Novo
+
+- **`share` no `Button` e no `IconButton`, web e nativo (GAR-14).** O botão pergunta ao navegador se
+  ele sabe compartilhar o link (`navigator.canShare`). Sabe — o celular, e o Chrome, o Edge e o
+  Safari no computador —: abre a janela do aparelho; cancelar não é erro. Não sabe: copia o link e
+  mostra **"Link copiado" preso ao botão, com a medida dele** (a altura, o recheio, a letra e a
+  cápsula). A cópia falhou: avisa e mostra o link selecionado, para o Ctrl+C. O aviso fala com o
+  leitor de tela. Sem `url`, é o endereço da página.
+  - Na web, o aviso é o `Toast` ancorado do motor, num gerenciador próprio montado pelo
+    `AureaProvider`. No HTML puro, o `aurea.js` faz o mesmo pelo `[data-aurea-share]` — novo
+    `window.Aurea.share`.
+  - No nativo, abre o compartilhar do sistema; no Android o link vai dentro da mensagem (ele
+    descarta o `url`). No navegador (`react-native-web`), a regra da web, com o aviso pelo
+    `ToastHost`.
+- **`Image frame="phone"`, web e nativo (GAR-15).** A captura dentro de uma moldura de celular
+  **genérica** — sem ilha, sem entalhe, sem botões: as regras de marketing do fabricante proíbem
+  simular o aparelho dele. Canto 32 (o da folha de baixo) por fora, 24 por dentro, proporção 9/19,5
+  por padrão. A captura do tema escuro: `srcDark` na web, `sourceDark` no nativo. Com moldura, a
+  classe e o estilo vão para a moldura.
+- **Títulos e números (GAR-16).** Os tokens `--font-heading` (hoje a mesma fonte do texto) e
+  `--weight-extrabold: 800`, e a **fonte 800** publicada nos dois alvos (12 KB na web, baixados só
+  quando usados). O título padrão continua no semibold. Na tipografia (`Text`, `Heading`,
+  `Paragraph`, `Code`), `weight="extrabold"` e **`numeric`** (algarismos da mesma largura). No
+  nativo, `Text numeric`, `weight={800}` e o papel `heading` — o `fontFamilies` aceita `heading`
+  (sem ele, o título usa o mapa do `ui`, como antes).
+
+### Mudou
+
+- **A tabela inteira tem algarismos da mesma largura** (web): coluna de preço e de ano alinhadas.
+  O campo de número também. No nativo, o número do `KPI` e as células da `Table`. Só os algarismos
+  mudam; o texto fica igual.
+- **O "copiado" fala.** O copiar do bloco de código (pelo `aurea.js` e pelo React) e o do recibo do
+  `FileInput` passam a dizer "Copiado" ao leitor de tela — antes só o ícone mudava.
+
+### Corrigido
+
+- **No nativo, o texto com tom de estado e a barra do `Progress` pintavam com a cor de FUNDO**
+  (ADR-0061): a `0.27.0` mudou o botão, o selo e a situação, e estes dois ficaram de fora. O
+  `Text tone="success"` (e `danger`, `warning`, `info`) dava ~2,5:1 no escuro; agora usa o par
+  `-400`, como a web. A lista é fechada: os tons que não são de estado continuam como eram.
+
+### Medido
+
+- `tests/visual/compartilhar.spec.ts`, nos três motores e nos dois temas: o aviso com a altura, a
+  letra, o peso, o recheio e o canto do botão, a um `--space-2` abaixo dele e alinhado no começo; o
+  erro com o link selecionado; a moldura com 32 e 24 de canto e a proporção; "11.111" e "88.888"
+  com a mesma largura na tabela.
+- `tests/unit/lote-m.test.tsx`, `tests/unit/native-lote-m.test.tsx` e os casos novos de
+  `paleta-adr0061.test.tsx` — provados contra a `0.27.0`: 36 dos testes novos reprovam com o código
+  de antes.
+- A fonte 800 foi cortada da fonte variável oficial pelo mesmo processo das outras, provado refazendo
+  o 700: só a data de criação muda; as outras tabelas são idênticas byte a byte.
+
 ## [0.27.0] — 2026-10-09
 
 ✅ **Publicada em 09/10/2026, entre 13:13 e 13:19 (Brasília, medido no npm)**, pelo terminal do

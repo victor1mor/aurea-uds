@@ -21,7 +21,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 //   que os tokens já publicam seria uma segunda verdade sobre tipografia.
 import * as React from "react";
 import { Text as TextRN } from "react-native";
-import { canto, criarFolha } from "./estilos.js";
+import { canto, criarFolha, letraDoToken } from "./estilos.js";
 import { useAureaTokens, useSobreAMarca } from "./theme.js";
 // 🔴 A ESCALA TEM CINCO DEGRAUS QUE SE ENXERGAM, E DEZ NOMES — ordem do Victor, 19/09/2026,
 // olhando o app no aparelho: *"o tamanho das fontes: existem variações demais, fica muito
@@ -66,7 +66,8 @@ const TAMANHO = {
 const ENTRELINHA = {
     none: "leadingNone", tight: "leadingTight", normal: "leadingNormal", relaxed: "leadingRelaxed",
 };
-const titulo = (tamanho) => ({ tamanho, peso: 600, entrelinha: "leadingTight", fonte: "ui", junto: true });
+// O título usa o papel `heading` (GAR-16, 0.28.0) — hoje a mesma fonte do texto, no mesmo peso 600.
+const titulo = (tamanho) => ({ tamanho, peso: 600, entrelinha: "leadingTight", fonte: "heading", junto: true });
 const PAPEL = {
     h1: titulo("text4xl"), h2: titulo("text3xl"), h3: titulo("text2xl"),
     h4: titulo("textXl"), h5: titulo("textLg"), h6: titulo("textBase"),
@@ -90,7 +91,10 @@ const COR = {
 const folha = criarFolha((t) => {
     const tons = {};
     for (const [tom, token] of Object.entries(COR)) {
-        tons[tom] = { color: t.color[token] ?? t.color.foreground };
+        // ADR-0061: `success`, `info`, `warning` e `destructive` são a cor de FUNDO cheio; a LETRA é o
+        // par `-400` de cada tema. Na 0.27.0 este mapa ficou de fora e o texto de tom saía com a cor de
+        // fundo — no escuro, ~2,5:1. Achado na 0.28.0; `paleta-adr0061.test.tsx` cobra.
+        tons[tom] = { color: letraDoToken(t, token) ?? t.color.foreground };
     }
     return tons;
 });
@@ -104,7 +108,7 @@ const folha = criarFolha((t) => {
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */
-export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone = "default", leading, italic = false, align, tracking: trackingPedido, style, ...rest }) {
+export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone = "default", leading, italic = false, align, tracking: trackingPedido, numeric = false, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const sobreAMarca = useSobreAMarca();
@@ -134,13 +138,14 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
             // É a impedância que a Etapa 2 mediu e resolveu emitindo razão em vez de dp.
             ...(tracking ? { letterSpacing: fontSize * t.tracking[`tracking${tracking[0].toUpperCase()}${tracking.slice(1)}`] } : null),
             ...(align ? { textAlign: align } : null),
+            ...(numeric ? { fontVariant: ["tabular-nums"] } : null),
             // O código leva a pele do `code` da web: fundo, canto e um recheio pequeno (a referência).
             ...(type === "code" ? {
                 alignSelf: "flex-start", backgroundColor: t.color.surface2, ...canto(t.size.radiusXs),
                 paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
             } : null),
         };
-    }, [t, type, papel, size, weight, font, leading, italic, align, tracking]);
+    }, [t, type, papel, size, weight, font, leading, italic, align, tracking, numeric]);
     // 🔴 SOBRE UMA SUPERFÍCIE DA MARCA A COR É FORÇADA, e ela vence até o tom explícito.
     // Medido contra o `primary` nos dois temas: texto comum dá **1,83 no escuro**, esmaecido
     // **1,35**, e `danger` menos ainda. **Nenhum tom alcança os 4,5 da norma sobre o amarelo** —

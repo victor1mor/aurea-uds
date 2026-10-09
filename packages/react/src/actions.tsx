@@ -8,7 +8,7 @@ import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Toolbar as BaseToolbar} from "@base-ui/react/toolbar";
 import {Toggle as BaseToggle} from "@base-ui/react/toggle";
 import {ToggleGroup as BaseToggleGroup} from "@base-ui/react/toggle-group";
-import {cx, useAureaStrings} from "./internal.js";
+import {cx, useAureaStrings, DentroDoProviderContext, avisosAncorados, type AureaStrings} from "./internal.js";
 import {Kbd} from "./markup.js";
 import {Icon, useAureaTheme, type IconName} from "./system.js";
 
@@ -85,11 +85,55 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
    * @deprecatedSince 0.4.0 — sai na `1.0`. A Aurea está em `0.x`, onde o semver permite
    * quebrar, e por isso este é o momento mais barato que vai existir.
    */
-  pressed?:boolean;kbd?:string}
+  pressed?:boolean;kbd?:string;
+  /**
+   * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
+   * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe
+   * (celular; Chrome, Edge e Safari no computador): abre a janela do aparelho, e cancelar não é erro.
+   * Não sabe: copia o link e mostra "Link copiado" preso ao botão, com a medida dele. A cópia falhou:
+   * avisa e mostra o link selecionado. O aviso fala com o leitor de tela nos dois casos.
+   * Sem `url`, é o endereço da página. O aviso precisa do `AureaProvider` (ou do `aurea.js` na página).
+   * Só vale no `<button>`: com `href` ou `render`, é ignorado.
+   */
+  share?:ButtonShareData}
+/** O que o `Button share` compartilha (GAR-14). Os nomes são os do `navigator.share` da web. */
+export interface ButtonShareData{url?:string;title?:string;text?:string}
+// GAR-14 (0.28.0) · o compartilhar do `Button`, a contraparte React do `share` do `aurea.js` — a mesma
+// regra nos dois: detectar o recurso; `AbortError` (a pessoa cancelou) não diz nada; sem o recurso,
+// copiar e avisar preso ao botão; a cópia falhou, avisar e mostrar o link. Fora do `AureaProvider`, o
+// aviso é do `aurea.js`, quando ele está na página; sem nenhum dos dois, o botão ainda compartilha e
+// copia, mas não tem como avisar — e diz isso uma vez no console, em vez de ficar mudo.
+let avisouSemProvider=false;
+async function compartilhar(botao:HTMLElement,dados:ButtonShareData,s:AureaStrings,dentroDoProvider:boolean){
+  const url=dados.url??window.location.href;
+  const pacote:ShareData={url,...(dados.title?{title:dados.title}:null),...(dados.text?{text:dados.text}:null)};
+  const vanilla=(window as unknown as {Aurea?:{share?:(gatilho:Element)=>unknown}}).Aurea;
+  if(!dentroDoProvider&&vanilla?.share){vanilla.share(botao);return}
+  const avisar=(falhou:boolean)=>{
+    if(!dentroDoProvider){
+      if(!avisouSemProvider){avisouSemProvider=true;console.error("Aurea: o <Button share> copiou o link, mas não tem como avisar — ponha o <AureaProvider> em volta do app (ou carregue o aurea.js na página).")}
+      return;
+    }
+    // A distância do botão é a mesma do `Tooltip` e do `Popover` (8 = `--space-2`).
+    avisosAncorados.add({title:falhou?s.linkCopyFailed:s.linkCopied,type:falhou?"danger":"success",
+      timeout:falhou?0:1500,data:{url:falhou?url:undefined},
+      positionerProps:{anchor:botao,side:"bottom",align:"start",sideOffset:8}});
+  };
+  const sabeCompartilhar=typeof navigator.share==="function"&&(typeof navigator.canShare!=="function"||navigator.canShare(pacote));
+  if(sabeCompartilhar){
+    try{await navigator.share(pacote);return}
+    catch(e){if((e as {name?:string}|null)?.name==="AbortError")return}
+  }
+  try{
+    if(typeof navigator.clipboard?.writeText!=="function")throw new Error("sem área de transferência");
+    await navigator.clipboard.writeText(url);
+    avisar(false);
+  }catch{avisar(true)}
+}
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant,appearance,tone,size="md",loading,leadingIcon,trailingIcon,className,children,disabled,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,...props},ref){
+export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant,appearance,tone,size="md",loading,leadingIcon,trailingIcon,className,children,disabled,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,...props},ref){
 // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
 // SOMATIVO por construção: valor simples continua emitindo `btn-sm`, byte por byte a mesma classe
 // de antes, e por isso nenhuma baseline se mexe. Só o valor responsivo entra pela camada genérica
@@ -120,6 +164,16 @@ const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={lead
 const inerte=ariaDisabled===true||ariaDisabled==="true";
 const off=disabled||loading;
 const shared={"aria-keyshortcuts":kbd||undefined,"aria-busy":loading||undefined};
+// GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
+// estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
+const s=useAureaStrings();
+const dentroDoProvider=React.useContext(DentroDoProviderContext);
+const marcaDoShare=share?{"data-aurea-share":"","data-aurea-share-url":share.url,"data-aurea-share-title":share.title,
+  "data-aurea-share-text":share.text,"data-aurea-share-copied":s.linkCopied,"data-aurea-share-failed":s.linkCopyFailed}:undefined;
+// O clique do app roda primeiro; se ele cancelar (`preventDefault`), o botão não compartilha. O
+// `preventDefault` daqui avisa o `aurea.js` de que o clique já foi atendido.
+const aoClicarNoShare=share?(e:React.MouseEvent<HTMLButtonElement>)=>{onClick?.(e);if(e.defaultPrevented)return;e.preventDefault();
+  void compartilhar(e.currentTarget,share,s,dentroDoProvider)}:onClick;
 // AUD-0004 (12/08/2026): o ramo de LINK desabilitado tirava o `href` e punha `aria-disabled`, e
 // deixava o `onClick` passar intacto — então um link "desabilitado" continuava executando a ação
 // ao ser clicado, e o `loading` também. Não há `disabled` em `<a>`: quem tem de barrar a ativação
@@ -134,7 +188,7 @@ const eventos=(off||inerte)?{onClick:bloqueia,onClickCapture:bloqueia}:{onClick:
 // o bloqueio vem POR ÚLTIMO: nenhum `onClick` do elemento passa.
 if(render){const dele=(render.props??{}) as Record<string,unknown>;return cloneElement(render as ReactElement<Record<string,unknown>>,{ref,...shared,...props,...dele,className:cx(cls,dele.className as string|undefined),...((off||inerte)?{"aria-disabled":true,onClick:bloqueia,onClickCapture:bloqueia}:{onClick:dele.onClick??onClick,onClickCapture:dele.onClickCapture??onClickCapture}),children:inner})}
 if(href!==undefined)return <a ref={ref as unknown as React.Ref<HTMLAnchorElement>} className={cls} target={target} rel={rel} download={download} {...shared} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>&RefAttributes<HTMLAnchorElement>)} {...(off?{"aria-disabled":true}:{href})} {...eventos}>{inner}</a>;
-return <button ref={ref} type={type} className={cls} disabled={off} aria-disabled={inerte||undefined} aria-pressed={pressed} {...shared} {...(inerte?{onClick:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>,onClickCapture:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>}:{onClick,onClickCapture})} {...props}>{inner}</button>});
+return <button ref={ref} type={type} className={cls} disabled={off} aria-disabled={inerte||undefined} aria-pressed={pressed} {...shared} {...marcaDoShare} {...(inerte?{onClick:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>,onClickCapture:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>}:{onClick:aoClicarNoShare,onClickCapture})} {...props}>{inner}</button>});
 
 // Toggle (Lote 1 do BUILDING.md). NÃO é o `pressed` do Button: aquele só ANUNCIA o estado e
 // quem controla é o consumidor; este é o controle de dois estados de verdade — o Base UI
@@ -207,7 +261,7 @@ export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function I
 // isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
 // Fechado como a referência faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
 // do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
-export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth">{}
+export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share">{}
 export const ThemeToggle=forwardRef<HTMLButtonElement,ThemeToggleProps>(function ThemeToggle({className,...props},ref){
   const {theme,toggleTheme}=useAureaTheme();const s=useAureaStrings();const escuro=theme==="dark";
   // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
@@ -234,7 +288,10 @@ const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
 return <BaseToolbar.Root ref={ancora} orientation={resolvida} aria-label={label??s.toolbarLabel} className={cx("toolbar",className)} {...props}/>}
 export function ToolbarGroup({label,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label?:string}){return <BaseToolbar.Group aria-label={label} className={cx("toolbar-group",className)} {...props}/>}
 export function ToolbarSeparator({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <BaseToolbar.Separator className={cx("toolbar-sep",className)} {...props}/>}
-export const ToolbarButton=forwardRef<HTMLButtonElement,ButtonProps>(function ToolbarButton({variant="ghost",...props},ref){return <BaseToolbar.Button ref={ref} disabled={props.disabled} render={<Button variant={variant} {...props}/>}/>});
+// Sem `share` (GAR-14): o caminho pelo motor da barra não foi provado — entra quando for medido.
+// Interface com nome (e não o `Omit` solto no tipo): é o que o gerador da superfície da API lê.
+export interface ToolbarButtonProps extends Omit<ButtonProps,"share">{}
+export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(function ToolbarButton({variant="ghost",...props},ref){return <BaseToolbar.Button ref={ref} disabled={props.disabled} render={<Button variant={variant} {...props}/>}/>});
 
 // TOGGLE GROUP — vários Toggle com estado compartilhado e navegação por seta entre eles.
 //

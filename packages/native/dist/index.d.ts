@@ -13,7 +13,7 @@ export type { ScreenProps, AureaScreenBackground, AureaScreenEdge } from "./scre
 export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";
 export type { StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify, GridProps, CardProps, SeparatorProps, AureaCardVariant, AureaGridMin, } from "./layout.js";
 export { Button, IconButton, LinkButton, ThemeToggle } from "./actions.js";
-export type { ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, } from "./actions.js";
+export type { ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, AureaShareData, } from "./actions.js";
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";
 export type { SpinnerProps, SkeletonProps, ProgressProps, AlertProps, EmptyStateProps, DataStateProps, AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue, AureaProgressTone, } from "./feedback.js";
 export { Badge, Status, Avatar, KPI, formatarContagem } from "./display.js";

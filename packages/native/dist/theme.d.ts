@@ -1,3 +1,4 @@
+import type { AureaToastManager } from "./toast.js";
 import * as React from "react";
 import { type AureaIconRegistry } from "./icon.js";
 import { type AureaStrings } from "./strings.js";
@@ -73,6 +74,12 @@ export declare function useAureaTokens(): AureaTokens;
  * As frases visíveis. Mesmo nome do hook da web (`useAureaStrings`), tabela bem menor — ver
  * `strings.ts`.
  */
+/**
+ * O gerente de avisos do `ToastHost`, para quem não pode importar o `toast.tsx` — o `Button share`
+ * (GAR-14, 0.28.0): o `toast.tsx` importa o `IconButton`, e o botão importar o toast fecharia um
+ * ciclo. Interno: o público continua sendo o `useToast`. `null` sem `ToastHost` acima.
+ */
+export declare const AvisosContext: React.Context<AureaToastManager | null>;
 export declare function useAureaStrings(): AureaStrings;
 export interface SobreAMarcaValor {
     /** A única cor que se pode desenhar sobre a marca: letra, contorno e glifo. 4,54 nos dois temas. */

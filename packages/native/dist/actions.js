@@ -21,11 +21,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //   `appearance:"nav"` — é a pele do item de navegação, e quem a consome é o `BottomNav`/`NavList`
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
-import { Pressable, View } from "react-native";
+import { AccessibilityInfo, Platform, Pressable, Share, View } from "react-native";
 import { canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
-import { useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
+import { AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
 const ALTURA = {
     xs: "controlHXs", sm: "controlHSm", md: "controlHMd", lg: "controlHLg", xl: "controlHXl",
 };
@@ -137,6 +137,58 @@ const folha = criarFolha((t) => ({
     // `Card` com `onPress` passou a reagir igual (R-04, 24/09/2026).
     ...REACAO_AO_TOQUE,
 }));
+// GAR-14 · o compartilhar do nativo. Ver a prop `share`.
+async function compartilhar(dados, avisos, strings) {
+    if (Platform.OS !== "web") {
+        // O iOS manda o `url` como link de verdade e o `message` como texto; o Android só lê o `message`.
+        const mensagem = [dados.text, dados.url].filter(Boolean).join(" ");
+        try {
+            await Share.share(Platform.OS === "ios" && dados.url
+                ? { url: dados.url, message: dados.text, title: dados.title }
+                : { message: mensagem, title: dados.title });
+        }
+        catch { /* a pessoa fechou, ou o sistema recusou: não há o que dizer */ }
+        return;
+    }
+    // O alvo nativo não tem os tipos do navegador: só o pedaço que se usa aqui (como no E16).
+    const g = globalThis;
+    const nav = g.navigator;
+    const url = dados.url ?? g.location?.href ?? "";
+    const pacote = { url, ...(dados.title ? { title: dados.title } : null), ...(dados.text ? { text: dados.text } : null) };
+    if (typeof nav?.share === "function" && (typeof nav.canShare !== "function" || nav.canShare(pacote))) {
+        try {
+            await nav.share(pacote);
+            return;
+        }
+        catch (e) {
+            if (e?.name === "AbortError")
+                return;
+        }
+    }
+    const avisar = (falhou) => {
+        const texto = falhou ? strings.linkCopyFailed : strings.linkCopied;
+        avisos?.add(falhou ? { title: texto, description: url, type: "danger", duration: 0 } : { title: texto, type: "success", duration: 1500 });
+        AccessibilityInfo.announceForAccessibility(texto);
+    };
+    try {
+        if (typeof nav?.clipboard?.writeText !== "function")
+            throw new Error("sem área de transferência");
+        await nav.clipboard.writeText(url);
+        avisar(false);
+    }
+    catch {
+        avisar(true);
+    }
+}
+/** O toque do botão com o `share`: o `onPress` do app primeiro, depois o compartilhar. O `Button` e
+ *  o `IconButton` usam o mesmo — com um só, os dois não divergem. */
+function useToqueComShare(share, onPress) {
+    const avisos = React.useContext(AvisosContext);
+    const strings = useAureaStrings();
+    if (!share)
+        return onPress;
+    return (e) => { onPress?.(e); void compartilhar(share, avisos, strings); };
+}
 /**
  * Botão. `Pressable` do RN, alvo ≥ `--target-min`, pele de token.
  *
@@ -150,8 +202,9 @@ export function Button(props) {
     return _jsx(CorpoDoBotao, { ...props });
 }
 /** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
-function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, semRecuo = false, ...rest }) {
+function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, semRecuo = false, share, onPress, ...rest }) {
     const t = useAureaTokens();
+    const aoTocar = useToqueComShare(share, onPress);
     const s = folha(t);
     const marca = useSobreAMarca();
     const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
@@ -168,7 +221,7 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
         ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
     }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
     const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
-    return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
+    return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
             tocando && s.pressionado, disabled && s.inerte,
         ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa], children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
@@ -212,8 +265,9 @@ export function folgaDoToque(t, size = "md") {
 }
 /** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
-function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, ...rest }) {
+function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...rest }) {
     const t = useAureaTokens();
+    const aoTocar = useToqueComShare(share, onPress);
     const s = folha(t);
     const marca = useSobreAMarca();
     const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
@@ -225,7 +279,7 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
     }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
-    return (_jsx(Pressable, { disabled: disabled, accessibilityRole: "button", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
+    return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             // Largura FIXA, como o só-ícone da referência: ele nunca estica,
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
             s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },

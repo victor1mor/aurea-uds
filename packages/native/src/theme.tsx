@@ -26,6 +26,7 @@
 //
 // E `useAureaTokens()` NÃO tem par na web porque lá ele não faria sentido: o CSS resolve o token
 // no uso. Não é hook duplicado — é o hook que só o alvo sem cascata precisa ter.
+import type {AureaToastManager} from "./toast.js";
 import * as React from "react";
 import {useColorScheme} from "react-native";
 import {IconRegistryProvider, type AureaIconRegistry} from "./icon.js";
@@ -190,6 +191,13 @@ export function useAureaTokens(): AureaTokens {
  * As frases visíveis. Mesmo nome do hook da web (`useAureaStrings`), tabela bem menor — ver
  * `strings.ts`.
  */
+/**
+ * O gerente de avisos do `ToastHost`, para quem não pode importar o `toast.tsx` — o `Button share`
+ * (GAR-14, 0.28.0): o `toast.tsx` importa o `IconButton`, e o botão importar o toast fecharia um
+ * ciclo. Interno: o público continua sendo o `useToast`. `null` sem `ToastHost` acima.
+ */
+export const AvisosContext = React.createContext<AureaToastManager | null>(null);
+
 export function useAureaStrings(): AureaStrings {
   return usar("useAureaStrings").strings;
 }

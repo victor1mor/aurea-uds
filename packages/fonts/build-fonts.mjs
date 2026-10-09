@@ -37,6 +37,11 @@ const FONTS = [
   {file: "atkinson-hyperlegible-next-500-normal.woff2", family: UI,     role: "ui",   weight: 500, style: "normal"},
   {file: "atkinson-hyperlegible-next-600-normal.woff2", family: UI,     role: "ui",   weight: 600, style: "normal"},
   {file: "atkinson-hyperlegible-next-700-normal.woff2", family: UI,     role: "ui",   weight: 700, style: "normal"},
+  // GAR-16 (09/10/2026): o 800, para título de quem quiser (`--weight-extrabold`). Cortado da MESMA
+  // fonte variável do Google Fonts, pelo mesmo processo dos outros: refeito para o 700 e comparado
+  // com o arquivo daqui, só a data de criação (`head.modified`) mudou — as outras tabelas são
+  // idênticas byte a byte, no .ttf e no .woff2. No CSS ele só é baixado quando alguma regra pede 800.
+  {file: "atkinson-hyperlegible-next-800-normal.woff2", family: UI,     role: "ui",   weight: 800, style: "normal"},
   {file: "atkinson-hyperlegible-mono-400-normal.woff2", family: CODIGO, role: "code", weight: 400, style: "normal"},
   {file: "atkinson-hyperlegible-mono-500-normal.woff2", family: CODIGO, role: "code", weight: 500, style: "normal"},
   {file: "atkinson-hyperlegible-mono-600-normal.woff2", family: CODIGO, role: "code", weight: 600, style: "normal"},
@@ -116,6 +121,10 @@ for (const m of medidos) {
 // `editorial` é apelido do `ui` desde a ADR-0053 (ver o comentário da lista FONTS). Sem itálico,
 // como a serifada que ele substitui não tinha.
 porPapel.editorial = Object.fromEntries(Object.entries(porPapel.ui).filter(([k]) => !k.endsWith("i")));
+// `heading` (GAR-16, 0.28.0) é o papel do título — o `--font-heading` da web. Hoje é a mesma fonte do
+// texto, então aponta para os arquivos do `ui`, sem itálico; existe para o título poder ter fonte
+// própria um dia sem tocar no resto.
+porPapel.heading = Object.fromEntries(Object.entries(porPapel.ui).filter(([k]) => !k.endsWith("i")));
 
 const cab = `// Aurea — alvo NATIVO das fontes. GERADO por packages/fonts/build-fonts.mjs. NÃO EDITAR.
 //

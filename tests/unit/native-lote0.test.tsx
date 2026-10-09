@@ -73,7 +73,7 @@ describe("tokens nativos — a cascata que o CSS dá de graça e aqui não exist
     const emitidos = new Set([
       ...Object.keys(t.color), ...Object.keys(t.size),
       ...Object.keys(t.shadow), ...Object.keys(t.easing),
-      "fontUi", "fontEditorial", "fontCode", // viram `font`, que é indexado por papel
+      "fontUi", "fontEditorial", "fontCode", "fontHeading", // viram `font`, indexado por papel (o `heading` desde a 0.28.0)
     ]);
     const perdidos = Object.keys(cru).filter((k) => !emitidos.has(k));
     expect(perdidos).toEqual([]);
@@ -306,21 +306,23 @@ describe("ícones nativos — o que o gerador não pode errar em silêncio", () 
 });
 
 describe("fontes nativas", () => {
-  // DEFEITO: o alvo nativo ficar para trás do web. São os MESMOS 8 estilos, em outro formato
-  // (ADR-0053: Atkinson Hyperlegible Next em 5, Mono em 3; a IBM Plex tinha 11, com a Serif).
-  it("8 .ttf, um por .woff2, e todos com nome PostScript distinto", async () => {
+  // DEFEITO: o alvo nativo ficar para trás do web. São os MESMOS 9 estilos, em outro formato
+  // (ADR-0053: Atkinson Hyperlegible Next em 5, Mono em 3; a IBM Plex tinha 11, com a Serif. O 800
+  // da Next entrou na 0.28.0, GAR-16 — eram 8).
+  it("9 .ttf, um por .woff2, e todos com nome PostScript distinto", async () => {
     const woff2 = readdirSync(RAIZ + "packages/fonts/files").filter((f) => f.endsWith(".woff2"));
     const ttf = readdirSync(RAIZ + "packages/fonts/files-native").filter((f) => f.endsWith(".ttf"));
-    expect(ttf).toHaveLength(8);
+    expect(ttf).toHaveLength(9);
     expect(ttf.map((f) => f.replace(/\.ttf$/, "")).sort())
       .toEqual(woff2.map((f) => f.replace(/\.woff2$/, "")).sort());
 
     const gerado = readFileSync(RAIZ + "packages/fonts/dist/fonts.native.js", "utf8");
     const chaves = [...gerado.matchAll(/^  "([^"]+)": require/gm)].map((m) => m[1]);
-    expect(chaves).toHaveLength(8);
-    expect(new Set(chaves).size).toBe(8);
+    expect(chaves).toHaveLength(9);
+    expect(new Set(chaves).size).toBe(9);
     // O nome MEDIDO na tabela `name`, não escrito à mão — se o gerador voltar a inventar, muda.
     expect(chaves).toContain("AtkinsonHyperlegibleNext-SemiBold");
     expect(chaves).toContain("AtkinsonHyperlegibleMono-Regular");
+    expect(chaves).toContain("AtkinsonHyperlegibleNext-ExtraBold");
   });
 });

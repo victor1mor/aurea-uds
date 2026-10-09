@@ -28,7 +28,8 @@
       "normal",
       "medium",
       "semibold",
-      "bold"
+      "bold",
+      "extrabold"
     ],
     "align": [
       "start",
@@ -52,7 +53,9 @@
     "--text-lg",
     "--text-base",
     "--leading-tight",
-    "--tracking-tight"
+    "--tracking-tight",
+    "--weight-extrabold",
+    "--font-heading"
   ],
   "a11y": {
     "role": "heading",
@@ -89,9 +92,9 @@
     },
     {
       "name": "weight",
-      "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\" | \"extrabold\"",
       "default": "— (the role's own)",
-      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default."
+      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default. \"extrabold\" (800, --weight-extrabold) since 0.28.0 (GAR-16), for a cover title; the default title weight is still semibold."
     },
     {
       "name": "align",
@@ -110,6 +113,12 @@
       "type": "ReactNode",
       "default": "—",
       "description": "The text."
+    },
+    {
+      "name": "numeric",
+      "type": "boolean",
+      "default": "false",
+      "description": "GAR-16 (0.28.0): tabular figures (font-variant-numeric: tabular-nums) — for numbers that line up in a column (price, year, spec sheet) or change on screen. Off by default: in running text the narrow \"1\" is right. Native: the same prop sets fontVariant [\"tabular-nums\"]."
     }
   ]
 }

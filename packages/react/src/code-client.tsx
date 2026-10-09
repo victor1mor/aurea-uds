@@ -2,6 +2,7 @@
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
+import React from "react";
 import {cx, useAureaStrings} from "./internal.js";
 import {Icon} from "./system.js";
 
@@ -18,9 +19,17 @@ const s=useAureaStrings();
 // foi o `catalog-sweep` em 10/08/2026, quando o bloco do I1 fez a linha de import crescer.
 const pre=<pre className={cx("code-block",!copyable&&className)} data-language={language} tabIndex={0}><code>{children}</code></pre>;
 if(!copyable)return pre;
-const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();(window as any).Aurea?.copy?.(e.currentTarget)??navigator.clipboard?.writeText(children)};
+// 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
+// texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.
+const [copiado,setCopiado]=React.useState(false);
+const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();const vanilla=(window as any).Aurea;
+  if(vanilla?.copy){vanilla.copy(e.currentTarget);return}
+  // Sem área de transferência (ou sem promessa), não há o que avisar — e não pode quebrar o clique.
+  const copia=navigator.clipboard?.writeText(children);if(typeof copia?.then!=="function")return;
+  void copia.then(()=>{setCopiado(true);setTimeout(()=>setCopiado(false),1500)},()=>{})};
 return <div className={cx("code-block-wrap",className)} data-aurea-copy-scope>
-<button type="button" className="btn btn-icon btn-ghost copy-code" data-aurea-copy aria-label={s.copyCode} onClick={onCopy}>
+<span className="sr-only" role="status" aria-live="polite">{copiado?s.copied:""}</span>
+<button type="button" className={cx("btn btn-icon btn-ghost copy-code",copiado&&"is-done")} data-aurea-copy data-aurea-copy-done={s.copied} aria-label={s.copyCode} onClick={onCopy}>
 <Icon name="copy" size="sm" className="c-copy"/><Icon name="check" size="sm" className="c-done"/></button>
 {pre}</div>
 }

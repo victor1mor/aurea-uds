@@ -123,13 +123,17 @@ export function MediaEmbed({ src, title, poster, ratio = "16/9", href, autoplay 
                     ? _jsx("iframe", { ref: frameRef, src: endereco, title: title, loading: "lazy", referrerPolicy: "strict-origin-when-cross-origin", allow: "autoplay; encrypted-media; fullscreen; picture-in-picture", allowFullScreen: true, ...rest })
                     : _jsxs("button", { type: "button", className: "media-embed-facade", "aria-label": `${s.mediaPlay}: ${title}`, onClick: () => { setAtivo(true); setClicou(true); }, children: [_jsx("img", { src: poster, alt: "", loading: "lazy", decoding: "async" }), _jsx("span", { className: "media-embed-play", "aria-hidden": "true", children: _jsx(Icon, { name: "play-circle", weight: "fill" }) })] }) }), href && _jsxs("a", { className: "media-embed-link", href: href, target: "_blank", rel: "noopener", children: [_jsx(Icon, { name: "arrow-square-out" }), s.mediaEmbedOpen] })] });
 }
-export function Image({ ratio, fit, alt, className, style, render, onError, ...props }) {
+export function Image({ ratio, fit, alt, className, style, render, onError, frame, srcDark, ...props }) {
     const [quebrou, setQuebrou] = React.useState(false);
     // A proporção vai INLINE e só quando existe. Declará-la no core com fallback `auto` custou uma
     // medição em 15/08/2026: `auto` vence o `aspect-ratio: auto <width>/<height>` que o navegador
     // deriva dos atributos, e uma imagem com `width`/`height` e sem `ratio` saía com altura ZERO —
     // a regra escrita contra o salto de layout produzindo o salto. Sem prop, o navegador decide.
     const estilo = { ...(ratio ? { aspectRatio: ratio } : null), ...style };
+    // Com moldura, o `style` e a classe do consumidor vão para ela; a captura fica só com a proporção.
+    const daImagem = frame ? (ratio ? { aspectRatio: ratio } : undefined) : estilo;
+    const classeDaImagem = (tema) => cx("image", fit === "contain" && "image-contain", srcDark && tema && `image-theme-${tema}`, !frame && className);
+    const aoFalhar = (e) => { setQuebrou(true); onError?.(e); };
     // O hook roda SEMPRE, antes de qualquer saída antecipada — trocar a ordem dos hooks entre
     // renders é o que o React proíbe, e o ramo do erro é uma saída antecipada.
     const elemento = useRender({ defaultTagName: "img", render,
@@ -137,13 +141,20 @@ export function Image({ ratio, fit, alt, className, style, render, onError, ...p
         // reprovou: escritos depois, `loading="eager"` numa imagem de topo de página era engolido pelo
         // nosso `lazy` — o componente prometia default e entregava imposição.
         props: { loading: "lazy", decoding: "async", ...props, alt,
-            className: cx("image", fit === "contain" && "image-contain", className), style: estilo,
-            onError: (e) => { setQuebrou(true); onError?.(e); } } });
+            className: classeDaImagem("light"), style: daImagem, onError: aoFalhar } });
+    // A captura do escuro é o MESMO elemento com outra fonte — o hook roda sempre (a ordem dos hooks
+    // não pode mudar entre renders) e só sai na página quando há `srcDark`.
+    const escuro = useRender({ defaultTagName: "img", render,
+        props: { loading: "lazy", decoding: "async", ...props, src: srcDark, alt,
+            className: classeDaImagem("dark"), style: daImagem, onError: aoFalhar } });
     // `role="img"` com `aria-label={alt}`: a caixa de erro continua sendo a imagem para quem usa
     // leitor de tela, com o mesmo texto alternativo. Sem isso o `alt` some junto com o `<img>`.
-    if (quebrou)
-        return _jsx("span", { className: cx("image", "image-broken", fit === "contain" && "image-contain", className), style: estilo, role: "img", "aria-label": alt, children: _jsx(Icon, { name: "image" }) });
-    return elemento;
+    const conteudo = quebrou
+        ? _jsx("span", { className: cx("image", "image-broken", fit === "contain" && "image-contain", !frame && className), style: daImagem, role: "img", "aria-label": alt, children: _jsx(Icon, { name: "image" }) })
+        : srcDark ? _jsxs(_Fragment, { children: [elemento, escuro] }) : elemento;
+    if (!frame)
+        return conteudo;
+    return _jsx("span", { className: cx("image-frame", `image-frame-${frame}`, className), style: style, children: conteudo });
 }
 export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1", selectionMode = "single", selectedIds, onSelectionChange, hasMore, loading, onReachEnd, className, ...props }) {
     const s = useAureaStrings();

@@ -27,6 +27,7 @@ const AUREA_FONTS = {
   "AtkinsonHyperlegibleNext-Medium": require("../files-native/atkinson-hyperlegible-next-500-normal.ttf"),
   "AtkinsonHyperlegibleNext-SemiBold": require("../files-native/atkinson-hyperlegible-next-600-normal.ttf"),
   "AtkinsonHyperlegibleNext-Bold": require("../files-native/atkinson-hyperlegible-next-700-normal.ttf"),
+  "AtkinsonHyperlegibleNext-ExtraBold": require("../files-native/atkinson-hyperlegible-next-800-normal.ttf"),
   "AtkinsonHyperlegibleMono-Regular": require("../files-native/atkinson-hyperlegible-mono-400-normal.ttf"),
   "AtkinsonHyperlegibleMono-Medium": require("../files-native/atkinson-hyperlegible-mono-500-normal.ttf"),
   "AtkinsonHyperlegibleMono-SemiBold": require("../files-native/atkinson-hyperlegible-mono-600-normal.ttf"),
@@ -39,6 +40,7 @@ const FONT_FAMILIES = {
     "500": "AtkinsonHyperlegibleNext-Medium",
     "600": "AtkinsonHyperlegibleNext-SemiBold",
     "700": "AtkinsonHyperlegibleNext-Bold",
+    "800": "AtkinsonHyperlegibleNext-ExtraBold",
     "400i": "AtkinsonHyperlegibleNext-Italic"
   },
   "code": {
@@ -50,7 +52,15 @@ const FONT_FAMILIES = {
     "400": "AtkinsonHyperlegibleNext-Regular",
     "500": "AtkinsonHyperlegibleNext-Medium",
     "600": "AtkinsonHyperlegibleNext-SemiBold",
-    "700": "AtkinsonHyperlegibleNext-Bold"
+    "700": "AtkinsonHyperlegibleNext-Bold",
+    "800": "AtkinsonHyperlegibleNext-ExtraBold"
+  },
+  "heading": {
+    "400": "AtkinsonHyperlegibleNext-Regular",
+    "500": "AtkinsonHyperlegibleNext-Medium",
+    "600": "AtkinsonHyperlegibleNext-SemiBold",
+    "700": "AtkinsonHyperlegibleNext-Bold",
+    "800": "AtkinsonHyperlegibleNext-ExtraBold"
   }
 };
 
@@ -100,6 +110,15 @@ const AUREA_FONT_FILES = [
     "typographicFamily": "Atkinson Hyperlegible Next",
     "role": "ui",
     "weight": 700,
+    "style": "normal"
+  },
+  {
+    "file": "atkinson-hyperlegible-next-800-normal.ttf",
+    "postScriptName": "AtkinsonHyperlegibleNext-ExtraBold",
+    "family": "Atkinson Hyperlegible Next ExtraBold",
+    "typographicFamily": "Atkinson Hyperlegible Next",
+    "role": "ui",
+    "weight": 800,
     "style": "normal"
   },
   {

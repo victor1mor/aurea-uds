@@ -67,7 +67,7 @@ export type {
 
 export {Button, IconButton, LinkButton, ThemeToggle} from "./actions.js";
 export type {
-  ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone,
+  ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, AureaShareData,
 } from "./actions.js";
 
 // ── Lote 2 — o painel, que é só leitura ────────────────────────────────────────────────────

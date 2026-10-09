@@ -336,6 +336,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    tons trocados por outro tom da própria paleta, **e publicada no mesmo dia** (entre 13:13 e 13:19,
    Brasília, pelo terminal do Victor, da junção do pedido #58). Leva a `0.26.0` e a `0.26.1` junto.
 
+24. **`0.28.0`, o Lote M, feita em 09/10/2026** (*"pode construir a 0.28.0"*),
+   [ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md) — os três pedidos do grupo 2 (o site),
+   com a pesquisa além da fila de referências, por ordem do Victor: GAR-14 (`share` no `Button` e no
+   `IconButton`, web e nativo — detecta o recurso; sem ele, copia e mostra "Link copiado" preso ao
+   botão, com a medida dele), GAR-15 (`Image frame="phone"`, moldura GENÉRICA, e a captura do escuro)
+   e GAR-16 (`--font-heading`, `--weight-extrabold`, a fonte 800, `numeric`, a tabela com algarismos
+   da mesma largura). Junto, o "copiado" que fala e dois consertos do nativo que a `0.27.0` deixou de
+   fora (o `Text` com tom e a barra do `Progress` pintavam com a cor de fundo). ⚠ **A regra nova:** o
+   aviso preso a um botão tem a MEDIDA do botão — o recheio é UMA regra (`.btn,.toast-anchored`).
+   ⚠ **A lição:** no `aurea.js`, rolar o campo do próprio aviso (selecionar o link) disparava o
+   "rolou a página, fecha" — medido no navegador, e só lá: o teste de unidade passava.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).

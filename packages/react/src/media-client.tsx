@@ -199,14 +199,26 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
 //
 // `loading="lazy"` e `decoding="async"` como default, e são sobrescrevíveis: as props do
 // consumidor vêm depois no spread. Imagem de topo de página quer `loading="eager"`.
-export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>,"children">{ratio?:string;fit?:"cover"|"contain";render?:React.ReactElement}
-export function Image({ratio,fit,alt,className,style,render,onError,...props}:ImageProps){
+export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>,"children">{ratio?:string;fit?:"cover"|"contain";render?:React.ReactElement;
+  /** GAR-15 (0.28.0): a captura dentro de uma moldura de celular — GENÉRICA, sem ilha, entalhe nem
+   *  botões (as regras de marketing de um fabricante proíbem simular o aparelho dele, e a Aurea não
+   *  leva marca de terceiro). Com moldura, `className` e `style` vão para a MOLDURA (tamanho e lugar);
+   *  a proporção (`ratio`, padrão 9/19,5) vai para a captura. */
+  frame?:"phone";
+  /** GAR-15 (0.28.0): a captura do tema escuro. A página em `data-theme="dark"` mostra esta; no claro,
+   *  a de `src`. A que não aparece fica `display:none`, fora da árvore de acessibilidade. */
+  srcDark?:string}
+export function Image({ratio,fit,alt,className,style,render,onError,frame,srcDark,...props}:ImageProps){
   const [quebrou,setQuebrou]=React.useState(false);
   // A proporção vai INLINE e só quando existe. Declará-la no core com fallback `auto` custou uma
   // medição em 15/08/2026: `auto` vence o `aspect-ratio: auto <width>/<height>` que o navegador
   // deriva dos atributos, e uma imagem com `width`/`height` e sem `ratio` saía com altura ZERO —
   // a regra escrita contra o salto de layout produzindo o salto. Sem prop, o navegador decide.
   const estilo={...(ratio?{aspectRatio:ratio}:null),...style};
+  // Com moldura, o `style` e a classe do consumidor vão para ela; a captura fica só com a proporção.
+  const daImagem=frame?(ratio?{aspectRatio:ratio}:undefined):estilo;
+  const classeDaImagem=(tema?:"light"|"dark")=>cx("image",fit==="contain"&&"image-contain",srcDark&&tema&&`image-theme-${tema}`,!frame&&className);
+  const aoFalhar=(e:React.SyntheticEvent<HTMLImageElement>)=>{setQuebrou(true);onError?.(e)};
   // O hook roda SEMPRE, antes de qualquer saída antecipada — trocar a ordem dos hooks entre
   // renders é o que o React proíbe, e o ramo do erro é uma saída antecipada.
   const elemento=useRender({defaultTagName:"img",render,
@@ -214,12 +226,19 @@ export function Image({ratio,fit,alt,className,style,render,onError,...props}:Im
     // reprovou: escritos depois, `loading="eager"` numa imagem de topo de página era engolido pelo
     // nosso `lazy` — o componente prometia default e entregava imposição.
     props:{loading:"lazy" as const,decoding:"async" as const,...props,alt,
-      className:cx("image",fit==="contain"&&"image-contain",className),style:estilo,
-      onError:(e:React.SyntheticEvent<HTMLImageElement>)=>{setQuebrou(true);onError?.(e)}}});
+      className:classeDaImagem("light"),style:daImagem,onError:aoFalhar}});
+  // A captura do escuro é o MESMO elemento com outra fonte — o hook roda sempre (a ordem dos hooks
+  // não pode mudar entre renders) e só sai na página quando há `srcDark`.
+  const escuro=useRender({defaultTagName:"img",render,
+    props:{loading:"lazy" as const,decoding:"async" as const,...props,src:srcDark,alt,
+      className:classeDaImagem("dark"),style:daImagem,onError:aoFalhar}});
   // `role="img"` com `aria-label={alt}`: a caixa de erro continua sendo a imagem para quem usa
   // leitor de tela, com o mesmo texto alternativo. Sem isso o `alt` some junto com o `<img>`.
-  if(quebrou)return <span className={cx("image","image-broken",fit==="contain"&&"image-contain",className)} style={estilo} role="img" aria-label={alt}><Icon name="image"/></span>;
-  return elemento;
+  const conteudo=quebrou
+    ?<span className={cx("image","image-broken",fit==="contain"&&"image-contain",!frame&&className)} style={daImagem} role="img" aria-label={alt}><Icon name="image"/></span>
+    :srcDark?<>{elemento}{escuro}</>:elemento;
+  if(!frame)return conteudo;
+  return <span className={cx("image-frame",`image-frame-${frame}`,className)} style={style}>{conteudo}</span>;
 }
 
 // ── Gallery (PLANO-1.0, item L2) ─────────────────────────────────────────────────────────────

@@ -13,7 +13,7 @@ import {render} from "@testing-library/react";
 import * as React from "react";
 import {describe, expect, test} from "vitest";
 import {StyleSheet, __instancias} from "./native-stubs/react-native";
-import {AureaProvider, Badge, Button, Status, resolverTokens} from "../../packages/native/src/index.js";
+import {AureaProvider, Badge, Button, Progress, Status, Text, resolverTokens} from "../../packages/native/src/index.js";
 
 const tokens = readFileSync("packages/tokens/dist/aurea.tokens.css", "utf8");
 const core = readFileSync("packages/core/src/aurea.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
@@ -89,5 +89,26 @@ describe("ADR-0061 · no nativo, a mesma regra", () => {
   test("o ponto de situação usa o par de letra", () => {
     render(<Envolve><Status variant="info">Agendado</Status></Envolve>);
     expect(__instancias("View").map((p) => plano(p.style)).some((e) => e.backgroundColor === t.color.info400)).toBe(true);
+  });
+  // Achados na 0.28.0: os dois tinham ficado de fora da 0.27.0 e pintavam com a cor de FUNDO — o
+  // texto de tom no escuro a ~2,5:1. Provado contra o defeito: com a 0.27.0, os dois reprovam.
+  test("o texto de tom escreve com o par de letra, nos quatro estados", () => {
+    render(<Envolve><Text tone="success">Pago</Text><Text tone="danger">Atrasado</Text>
+      <Text tone="warning">Vence hoje</Text><Text tone="info">Agendado</Text></Envolve>);
+    expect(textoDe("Pago").s.color).toBe(t.color.success400);
+    expect(textoDe("Atrasado").s.color).toBe(t.color.danger400);
+    expect(textoDe("Vence hoje").s.color).toBe(t.color.warning400);
+    expect(textoDe("Agendado").s.color).toBe(t.color.info400);
+  });
+  test("o tom que não é de estado continua como era (a lista do par de letra é fechada)", () => {
+    render(<Envolve><Text tone="muted">Apoio</Text><Text tone="link">Ver mais</Text></Envolve>);
+    expect(textoDe("Apoio").s.color).toBe(t.color.mutedForeground);
+    expect(textoDe("Ver mais").s.color).toBe(t.color.link);
+  });
+  test("a barra do progresso com tom é desenho sobre a trilha: usa o par de letra", () => {
+    render(<Envolve><Progress value={40} tone="danger"/></Envolve>);
+    const fundos = __instancias("View").map((p) => plano(p.style).backgroundColor);
+    expect(fundos).toContain(t.color.danger400);
+    expect(fundos).not.toContain(t.color.destructive);
   });
 });

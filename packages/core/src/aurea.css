@@ -765,7 +765,11 @@ img,svg { display:block; }
 /* A base do botão carrega as VARIÁVEIS DE PASSO da camada responsiva (`--step-*`), e cada
    fallback é exatamente o valor fixo de antes — então o botão sem valor responsivo desenha o
    mesmo pixel. É o que permite a camada `size-*` repor a grandeza sem tocar no componente. */
-.btn { --btn-bg:transparent; --btn-fg:var(--foreground); --btn-border:transparent; display:inline-flex; align-items:center; justify-content:center; gap:var(--step-gap,8px); block-size:var(--step-h,var(--control-h-md)); padding-inline:var(--step-px,15px); border:1px solid var(--btn-border); border-radius:var(--radius-control); background:var(--btn-bg); color:var(--btn-fg); font-size:var(--step-fs,var(--text-sm)); font-weight:var(--weight-medium); line-height:var(--leading-none); text-decoration:none; white-space:nowrap; cursor:pointer; transition:transform var(--duration-fast) var(--ease-standard),background var(--duration-fast),border-color var(--duration-fast),color var(--duration-fast),opacity var(--duration-fast); }
+.btn { --btn-bg:transparent; --btn-fg:var(--foreground); --btn-border:transparent; display:inline-flex; align-items:center; justify-content:center; gap:var(--step-gap,8px); block-size:var(--step-h,var(--control-h-md)); border:1px solid var(--btn-border); border-radius:var(--radius-control); background:var(--btn-bg); color:var(--btn-fg); font-size:var(--step-fs,var(--text-sm)); font-weight:var(--weight-medium); line-height:var(--leading-none); text-decoration:none; white-space:nowrap; cursor:pointer; transition:transform var(--duration-fast) var(--ease-standard),background var(--duration-fast),border-color var(--duration-fast),color var(--duration-fast),opacity var(--duration-fast); }
+/* GAR-14 (0.28.0): o recheio do botão vale também para o aviso preso a ele (`.toast-anchored`),
+   que tem a MEDIDA do botão — pedido do Victor na bancada. Uma regra só, para os dois nunca
+   divergirem e para o número não se repetir. */
+.btn,.toast-anchored { padding-inline:var(--step-px,15px); }
 .btn:hover:not(:disabled):not([aria-disabled="true"]) { transform:none; } .btn:active:not(:disabled) { transform:scale(.97); opacity:.9; }
 /* Duas formas de "não dá para fazer isto", e a diferença é QUEM alcança a explicação.
    `:disabled` tira o controle da ordem de foco — medido em 13/08/2026: quem usa teclado nunca
@@ -1011,7 +1015,7 @@ img,svg { display:block; }
    Largura em token para caber de 3 a 4 dígitos sem virar caixa de texto. */
 .number-field { display:inline-flex; }
 .number-field-group { display:inline-flex; align-items:center; gap:var(--space-1); }
-.number-field-input { width:var(--space-16); text-align:center; }
+.number-field-input { width:var(--space-16); text-align:center; font-variant-numeric:tabular-nums; }
 /* A ALÇA DE ARRASTO (G-API-02), e só quando `scrubbable` está ligada.
    O motor já põe por ESTILO EM LINHA tudo o que é mecânica — `touch-action:none` e
    `user-select:none` na alça, e `position:fixed` mais o `transform` no cursor virtual, que ele
@@ -1576,7 +1580,9 @@ img,svg { display:block; }
    `tabIndex=0` (região rolável precisa ser alcançável pelo teclado) e o `.table-wrap` não é. */
 .table-wrap,.table-region { overflow:auto; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); }
 .table,.table-wrap table { width:100%; border-collapse:collapse; min-width:720px; }
-.table th,.table td,.table-wrap th,.table-wrap td { height:var(--row-h); padding:0 14px; text-align:start; border-bottom:1px solid var(--border); }
+/* GAR-16 (0.28.0): a tabela inteira com algarismos da mesma largura — a coluna de preço e de ano
+   alinha. Só os algarismos mudam; o texto das outras colunas fica igual. */
+.table th,.table td,.table-wrap th,.table-wrap td { height:var(--row-h); padding:0 14px; text-align:start; border-bottom:1px solid var(--border); font-variant-numeric:tabular-nums; }
 .table th,.table-wrap th { color:var(--subtle-foreground); background:var(--surface-2); font-size:var(--text-xs); letter-spacing:var(--tracking-wider); text-transform:uppercase; }
 .table tr:last-child td,.table-wrap tr:last-child td { border-bottom:0; }
 .table tbody tr:hover,.table-wrap tbody tr:hover { background:var(--surface-2); }
@@ -1925,6 +1931,18 @@ img,svg { display:block; }
 .image { display:block; width:100%; height:auto; object-fit:cover; border-radius:var(--radius-lg); background:var(--surface-3); }
 .image-contain { object-fit:contain; background:transparent; }
 .image-broken { display:grid; place-items:center; color:var(--muted-foreground); }
+/* GAR-15 (0.28.0): a moldura de celular do `Image frame="phone"`. GENÉRICA de propósito — sem ilha,
+   sem entalhe, sem botões: as regras de marketing de um fabricante proíbem simular o aparelho dele,
+   e a Aurea não leva marca de terceiro. A moldura segue o tema (a superfície do cartão, a borda e a
+   sombra de sempre) e o canto é o da folha de baixo, o maior que a Aurea tem; o de dentro acompanha. */
+.image-frame { display:block; }
+.image-frame-phone { padding:var(--space-2); border:var(--border-width) solid var(--border); border-radius:var(--radius-sheet); background:var(--card); box-shadow:var(--shadow-md); }
+.image-frame-phone > .image { aspect-ratio:9 / 19.5; object-position:top; border-radius:calc(var(--radius-sheet) - var(--space-2)); }
+/* A captura de cada tema (`srcDark`). Sem `data-theme` na página, vale a clara. A guarda é a do
+   GAR-05 espelhada: uma faixa CLARA dentro da página escura volta a mostrar a captura clara. */
+.image-theme-dark { display:none; }
+[data-theme="dark"] .image-theme-dark:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { display:block; }
+[data-theme="dark"] .image-theme-light:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { display:none; }
 
 /* VÍDEO INCORPORADO (achado N-10, 24/09/2026). A caixa é a mesma superfície do `.media-player` —
    raio de cartão, borda e o fundo `--media-canvas` —, então um trailer do YouTube e um vídeo
@@ -1990,7 +2008,7 @@ img,svg { display:block; }
    A margem vai a zero porque `h1`…`h6` e `p` trazem a do navegador; o espaço entre blocos é de
    quem os empilha (`Stack`), não do texto. */
 .typography { margin:0; color:var(--foreground); }
-.typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6 { font-weight:var(--weight-semibold); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); }
+.typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6 { font-family:var(--font-heading); font-weight:var(--weight-semibold); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); }
 .typography-h1 { font-size:var(--text-4xl); }
 .typography-h2 { font-size:var(--text-3xl); }
 .typography-h3 { font-size:var(--text-2xl); }
@@ -2006,6 +2024,10 @@ img,svg { display:block; }
 .typography-weight-medium { font-weight:var(--weight-medium); }
 .typography-weight-semibold { font-weight:var(--weight-semibold); }
 .typography-weight-bold { font-weight:var(--weight-bold); }
+.typography-weight-extrabold { font-weight:var(--weight-extrabold); }
+/* GAR-16 (0.28.0): algarismos da mesma largura, para número que alinha em coluna ou muda na tela.
+   Ligado só onde se pede — no texto corrido o "1" estreito é o certo. */
+.typography-numeric { font-variant-numeric:tabular-nums; }
 .typography-align-start { text-align:start; }
 .typography-align-center { text-align:center; }
 .typography-align-end { text-align:end; }
@@ -2159,6 +2181,20 @@ img,svg { display:block; }
 .toast-success { border-color:color-mix(in srgb,var(--success-400) 38%,var(--border)); background:var(--success-bg); }
 .toast-warning { border-color:color-mix(in srgb,var(--warning-400) 38%,var(--border)); background:var(--warning-bg); }
 .toast-danger { border-color:color-mix(in srgb,var(--danger-400) 38%,var(--border)); background:var(--danger-bg); }
+/* GAR-14 (0.28.0): o aviso do `Button share`, preso ao botão — "Link copiado", ou o erro com o link à
+   mostra. Tem a medida do botão (a altura, o recheio da regra de cima, a letra e a cápsula) e a pele
+   do aviso de sempre. O ícone é desenho de máscara, como a seta do `KPI`: a mesma marcação serve ao
+   React (o motor posiciona) e ao HTML puro (o `aurea.js` posiciona, com `.toast-anchored-fixed`). */
+.toast-anchored { display:inline-flex; align-items:center; gap:var(--space-2); min-block-size:var(--step-h,var(--control-h-md)); max-inline-size:calc(100vw - 2 * var(--space-4)); padding-block:var(--space-1); border:var(--border-width) solid var(--border); border-radius:var(--radius-control); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-md); font-size:var(--step-fs,var(--text-sm)); font-weight:var(--weight-medium); line-height:var(--leading-tight); transition:opacity var(--duration-fast) var(--ease-standard); }
+.toast-anchored[data-starting-style],.toast-anchored[data-ending-style] { opacity:0; }
+.toast-anchored-icon { --toast-glifo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E"); flex:none; inline-size:var(--icon-sm); block-size:var(--icon-sm); background:currentColor; color:var(--success-400); -webkit-mask:var(--toast-glifo) center/contain no-repeat; mask:var(--toast-glifo) center/contain no-repeat; }
+.toast-anchored-danger { border-color:color-mix(in srgb,var(--danger-400) 38%,var(--border)); background:var(--danger-bg); }
+.toast-anchored-danger .toast-anchored-icon { --toast-glifo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z'/%3E%3C/svg%3E"); color:var(--danger-400); }
+/* O erro leva o link logo abaixo do aviso, já selecionado, para a pessoa copiar com o teclado. */
+.toast-anchored-stack { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-2); inline-size:max-content; max-inline-size:calc(100vw - 2 * var(--space-4)); }
+.toast-anchored-link { inline-size:100%; }
+.toast-anchored-fixed { position:fixed; z-index:var(--z-toast); }
+.toast-anchored-positioner { z-index:var(--z-toast); }
 /* CommandPaletteShell (Fase 11, achado A13). A superfície já existia aqui sob o nome
    `.command` — e `.command` é chrome da página de docs manual: nenhum componente React a
    emite. Ela passava no check 15 por ACIDENTE, porque o rótulo padrão "Type a command…" põe

@@ -179,6 +179,9 @@ export interface AureaStrings {
     qrCode: string;
     chartLabel: string;
     copyCode: string;
+    copied: string;
+    linkCopied: string;
+    linkCopyFailed: string;
     tocLabel: string;
     navigationToggle: string;
     sidebarLabel: string;

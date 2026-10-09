@@ -301,7 +301,7 @@ export function KPI({ label, value, trend, direction, tone, directionLabel, vari
     const nome = direction && partes.every((p) => p !== null) ? partes.filter(Boolean).join(", ") : undefined;
     const Caixa = variant === "plain" ? View : Card;
     return (_jsxs(Caixa, { style: [s.kpi, style], accessible: true, accessibilityLabel: nome, ...rest, children: [typeof label === "string" ? _jsx(Text, { size: "sm", tone: "muted", children: label }) : label, typeof value === "string" || typeof value === "number"
-                ? _jsx(Text, { size: "3xl", weight: 700, children: value }) : value, direction
+                ? _jsx(Text, { size: "3xl", weight: 700, numeric: true, children: value }) : value, direction
                 ? _jsxs(View, { style: s.tendencia, children: [_jsx(View, { style: s.seta, children: _jsx(Icon, { name: GLIFO_DA_DIRECAO[direction], size: "sm", color: cor }) }), temTendencia && textoDaTendencia] })
                 : temTendencia && textoDaTendencia] }));
 }
