@@ -82,6 +82,9 @@ em inglês e ficam como estão: são registro.
 
 ## [0.27.0] — 2026-10-09
 
+✅ **Publicada em 09/10/2026, entre 13:13 e 13:19 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #58. Leva a `0.26.0` e a `0.26.1` junto.
+
 **As cores dos dois temas seguem a paleta de referência escolhida pelo Victor; o amarelo da marca
 continua o nosso** ([ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md)).
 Feito com o "pode" dele (*"pode faça tudo"*), depois de comparar as cores lado a lado nos dois
@@ -124,6 +127,8 @@ usa a Aurea muda de cara.** Nenhuma prop muda, nada sai.
 
 ## [0.26.1] — 2026-10-09
 
+✅ **Não saiu sozinha: foi publicada dentro da `0.27.0`**, em 09/10/2026, da junção do pedido #57.
+
 E16, achado do app rodando no navegador: o `DatePicker` do nativo **não abria nada** no
 `react-native-web`. Feito com o "pode" do Victor (*"pode seguir com o E16"*, e depois *"pode faça
 tudo"*). Só o nativo muda, e só no navegador.
@@ -151,6 +156,8 @@ tudo"*). Só o nativo muda, e só no navegador.
   os dois que passam lá cobram o que não podia mudar (fora do navegador, nada muda).
 
 ## [0.26.0] — 2026-10-09
+
+✅ **Não saiu sozinha: foi publicada dentro da `0.27.0`**, em 09/10/2026, da junção do pedido #56.
 
 Lote L, três pedidos de um consumidor da web (um site de notícias): GAR-07, GAR-09 com a MNT-04, e
 GAR-10. Feito com o "pode" do Victor e as escolhas dele, depois de ver como a referência principal

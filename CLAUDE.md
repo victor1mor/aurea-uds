@@ -139,6 +139,9 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.24.0` | Lote K3: a tabela de comparação — `Table` com `stickyHeader`, `stickyFirstColumn`, `fit` e `differencesOnly`, e a pele do HTML de comparação (GAR-12 e GAR-13); a ficha técnica agrupada como padrão do catálogo (GAR-11) — pedido #50. **Publicada em 08/10/2026** (10:34, Brasília), pelo terminal do Victor |
 | `0.24.1` | R-24 (o selo preso do nativo), o número do KPI da web em `--text-3xl` e a válvula `--chart-text` — pedido #53. **Publicada em 08/10/2026** (entre 15:25 e 15:30, Brasília), pelo terminal do Victor |
 | `0.25.0` | Uma borda só no foco (o anel encosta na peça com borda) e a aba escolhida que se vê (`--segment` + `--shadow-sm`, web e nativo; `t.shadowLayers` no nativo) — [ADR-0059](decisions/0059-uma-borda-so-no-foco-e-a-aba-escolhida-se-ve.md), pedido #54. **Publicada em 08/10/2026** (entre 17:22 e 17:25, Brasília), pelo terminal do Victor |
+| `0.26.0` | Lote L: oito cores de categoria no `Badge` (GAR-07), o `KPI` com direção, tom e sem caixa (GAR-09, MNT-04), a caixa de resumo no catálogo (GAR-10) — [ADR-0060](decisions/0060-cor-de-categoria-no-selo-e-o-kpi-com-direcao.md), pedido #56. **Não saiu sozinha**: foi publicada dentro da `0.27.0` |
+| `0.26.1` | E16: no navegador, o `DatePicker` do nativo abre o calendário do navegador — pedido #57. **Não saiu sozinha**: foi publicada dentro da `0.27.0` |
+| `0.27.0` | As cores dos dois temas seguem a paleta de referência; o amarelo da marca fica — [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md), pedido #58. **Publicada em 09/10/2026** (entre 13:13 e 13:19, Brasília), pelo terminal do Victor. Leva a `0.26.0` e a `0.26.1` junto |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -301,7 +304,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    navegadores. ⚠ **A lição:** a borda dos botões muda de cor com transição — medir o foco antes
    de ela terminar escondeu metade das peças com duas linhas (39 viraram 84).
 
-21. **`0.26.0`, o Lote L, feita e aprovada pela bancada em 09/10/2026** (*"aprovado, pode"*) — com
+21. **`0.26.0`, o Lote L, feita e aprovada pela bancada em 09/10/2026** (*"aprovado, pode"*) **e
+   publicada dentro da `0.27.0` no mesmo dia** (pedido #56) — com
    as escolhas do Victor depois de ver a referência principal (*"nome de cor"*, o KPI com direção,
    o resumo como padrão do catálogo), [ADR-0060](decisions/0060-cor-de-categoria-no-selo-e-o-kpi-com-direcao.md):
    GAR-07 (oito cores de categoria no `Badge`, tokens `category-*`, web e nativo), GAR-09 e MNT-04
@@ -312,7 +316,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    o menu do `Header` e a seta do `KPI`. ⚠ **A lição:** na bancada do nativo, o provedor precisa do
    `fontFamilies` do app — sem ele o negrito some, e a foto mente.
 
-22. **`0.26.1`, o E16, feita em 09/10/2026** (*"pode seguir com o E16"*, *"pode faça tudo"*): no navegador
+22. **`0.26.1`, o E16, feita em 09/10/2026 e publicada dentro da `0.27.0` no mesmo dia** (pedido #57;
+   *"pode seguir com o E16"*, *"pode faça tudo"*): no navegador
    (`react-native-web`), o `DatePicker` do nativo não abria nada — a biblioteca de data não tem versão
    web. Agora o `<input type="date">` do navegador fica invisível por cima do gatilho da Aurea (a pele é
    a nossa, o calendário é o do navegador), com `showPicker()` no clique e o ícone do campo esticado
@@ -328,7 +333,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    cheio. ⚠ **A lição:** cor de FUNDO e cor de LETRA são papéis diferentes, mesmo quando o valor
    coincide num tema — eram o mesmo token, e a troca da paleta mostrou 24 lugares que pintavam letra
    com a cor de fundo. **Aprovada pela bancada em 09/10/2026** (*"aprovado, pode enviar"*), com os três
-   tons trocados por outro tom da própria paleta.
+   tons trocados por outro tom da própria paleta, **e publicada no mesmo dia** (entre 13:13 e 13:19,
+   Brasília, pelo terminal do Victor, da junção do pedido #58). Leva a `0.26.0` e a `0.26.1` junto.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
