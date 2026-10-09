@@ -466,7 +466,9 @@ rasterização**:
 | Contêiner, depois de regerar | **0** | 87/87 |
 
 **A prova de que o contêiner reproduz o runner não é o zero — é o que passou antes de regerar.**
-Com `maxDiffPixels: 0`, uma captura que passa é byte a byte idêntica à que o runner Ubuntu gerou.
+~~Com `maxDiffPixels: 0`, uma captura que passa é byte a byte idêntica à que o runner Ubuntu gerou.~~
+⚠ (09/10/2026) Não é: o `maxDiffPixels` só conta o pixel acima da tolerância de cor — 0,2 até
+09/10/2026, 0,02 desde então (`G-GATE-01`). "Passar" quer dizer "nenhum pixel acima da tolerância".
 Dentro do contêiner passaram as **6** do `matrix.spec` e **10 das 16** do `catalog.spec`; na
 Debian pura as mesmas 6 falhavam. As 26 que restaram tinham explicação de conteúdo — uma delas com
 mudança de ALTURA (4156 → 4175px), que rasterização não produz.

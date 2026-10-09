@@ -2253,4 +2253,5 @@ Uma linha por sessão, ao fechar. O formato longo vai para o
 >   triagem (`G-STATE-01`).
 > - **Parte K** (prova de plataforma): apareceu um bloqueio novo que não estava previsto aqui —
 >   o gate visual **não é estrito** (`G-GATE-01`), e isso precisa fechar antes de a `1.0` poder
->   confiar nas capturas.
+>   confiar nas capturas. **Fechado em 09/10/2026:** tolerância de cor `0.02` no
+>   `playwright.config.ts`, medida contra a troca de paleta da `0.27.0` e contra o serrilhado.

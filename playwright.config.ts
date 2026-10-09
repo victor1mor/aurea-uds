@@ -21,7 +21,14 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   reporter: process.env.CI ? "github" : "list",
-  expect: {toHaveScreenshot: {maxDiffPixels: 0}},
+  // `threshold: 0.02` (decisão do Victor, 09/10/2026). Sem ele, o Playwright aceita até 0,2 de
+  // diferença de cor POR PIXEL (espaço YIQ, o padrão do comparador), e o `maxDiffPixels: 0` só conta
+  // os pixels acima disso: a troca de paleta da 0.27.0 passou em 14 das 22 fotos — até o fundo do
+  // escuro, do quase preto ao #1f1f1f —, e a regeração não as regravava. Medido com o comparador do
+  // próprio Playwright: com 0 a trava reprova por ruído (3 de 5 rodadas sem mudança nenhuma, 8 a 29
+  // pixels de no máximo 2 tons de cinza, limiar equivalente 0,0076); com 0,02 o ruído passa e a troca
+  // de paleta reprova em todas as 14 (a menor, 2.401 pixels). Subir o número volta a cegar a trava.
+  expect: {toHaveScreenshot: {maxDiffPixels: 0, threshold: 0.02}},
   // Serve a raiz do repo (não só apps/catalog) para os testes alcançarem
   // packages/core/dist e packages/fonts/dist. O catálogo fica em /apps/catalog/.
   use: {baseURL: `http://127.0.0.1:${PORT}`},
