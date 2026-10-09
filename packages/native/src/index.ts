@@ -80,8 +80,8 @@ export type {
 
 export {Badge, Status, Avatar, KPI, formatarContagem} from "./display.js";
 export type {
-  BadgeProps, StatusProps, AvatarProps, KPIProps,
-  AureaBadgeAnchor, AureaBadgeEmphasis, AureaBadgeFit, AureaBadgeSize, AureaBadgeTone,
+  BadgeProps, StatusProps, AvatarProps, KPIProps, AureaKPIDirection, AureaKPITone, AureaKPIVariant,
+  AureaBadgeAnchor, AureaBadgeCategory, AureaBadgeEmphasis, AureaBadgeFit, AureaBadgeSize, AureaBadgeTone,
   AureaStatusVariant, AureaAvatarSize,
 } from "./display.js";
 

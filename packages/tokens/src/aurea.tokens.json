@@ -1757,6 +1757,206 @@
           "alpha": 0.62
         }
       },
+      "category-red": {
+        "$type": "color",
+        "$description": "A cor de CATEGORIA vermelho (GAR-07, ADR-0060, 09/10/2026): o texto, o contorno e o fundo cheio do `Badge` de categoria. As oito (red, orange, green, teal, cyan, blue, violet, pink) não têm significado de estado: marcam grupo. Pulam o amarelo, que é da marca. Vizinhas na roda alternam dois níveis de claridade, para não se distinguirem só pelo matiz. Todas passam de 4,5:1 nos dois temas, nas três ênfases (medido no navegador pelo `badge-categoria.spec.ts`). Não mudam com a marca: o nome diz a cor.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.85,
+            0.08,
+            25
+          ]
+        }
+      },
+      "category-red-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria vermelho, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.28,
+            0.07,
+            25
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-orange": {
+        "$type": "color",
+        "$description": "A cor de categoria laranja. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.76,
+            0.13,
+            55
+          ]
+        }
+      },
+      "category-orange-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria laranja, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.36,
+            0.089,
+            55
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-green": {
+        "$type": "color",
+        "$description": "A cor de categoria verde. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.85,
+            0.13,
+            150
+          ]
+        }
+      },
+      "category-green-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria verde, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.28,
+            0.07,
+            150
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-teal": {
+        "$type": "color",
+        "$description": "A cor de categoria verde-azulado. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.76,
+            0.13,
+            180
+          ]
+        }
+      },
+      "category-teal-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria verde-azulado, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.36,
+            0.065,
+            180
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-cyan": {
+        "$type": "color",
+        "$description": "A cor de categoria ciano. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.85,
+            0.098,
+            225
+          ]
+        }
+      },
+      "category-cyan-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria ciano, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.28,
+            0.053,
+            225
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-blue": {
+        "$type": "color",
+        "$description": "A cor de categoria azul. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.76,
+            0.121,
+            260
+          ]
+        }
+      },
+      "category-blue-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria azul, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.36,
+            0.09,
+            260
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-violet": {
+        "$type": "color",
+        "$description": "A cor de categoria violeta. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.85,
+            0.086,
+            300
+          ]
+        }
+      },
+      "category-violet-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria violeta, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.28,
+            0.07,
+            300
+          ],
+          "alpha": 0.62
+        }
+      },
+      "category-pink": {
+        "$type": "color",
+        "$description": "A cor de categoria rosa. Ver --category-red.",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.76,
+            0.13,
+            350
+          ]
+        }
+      },
+      "category-pink-bg": {
+        "$type": "color",
+        "$description": "O fundo suave da categoria rosa, atrás do texto (ênfase `soft`).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.36,
+            0.09,
+            350
+          ],
+          "alpha": 0.62
+        }
+      },
       "warning-400": {
         "$value": "{warning}",
         "$type": "color",
@@ -2428,6 +2628,182 @@
             0.95,
             0.045,
             260
+          ]
+        }
+      },
+      "category-red": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.52,
+            0.15,
+            25
+          ]
+        }
+      },
+      "category-red-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.96,
+            0.019,
+            25
+          ]
+        }
+      },
+      "category-orange": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.47,
+            0.115,
+            55
+          ]
+        }
+      },
+      "category-orange-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.925,
+            0.044,
+            55
+          ]
+        }
+      },
+      "category-green": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.52,
+            0.141,
+            150
+          ]
+        }
+      },
+      "category-green-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.96,
+            0.035,
+            150
+          ]
+        }
+      },
+      "category-teal": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.47,
+            0.084,
+            180
+          ]
+        }
+      },
+      "category-teal-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.925,
+            0.055,
+            180
+          ]
+        }
+      },
+      "category-cyan": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.52,
+            0.097,
+            225
+          ]
+        }
+      },
+      "category-cyan-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.96,
+            0.025,
+            225
+          ]
+        }
+      },
+      "category-blue": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.47,
+            0.15,
+            260
+          ]
+        }
+      },
+      "category-blue-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.925,
+            0.035,
+            260
+          ]
+        }
+      },
+      "category-violet": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.52,
+            0.15,
+            300
+          ]
+        }
+      },
+      "category-violet-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.96,
+            0.022,
+            300
+          ]
+        }
+      },
+      "category-pink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.47,
+            0.15,
+            350
+          ]
+        }
+      },
+      "category-pink-bg": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.925,
+            0.044,
+            350
           ]
         }
       },

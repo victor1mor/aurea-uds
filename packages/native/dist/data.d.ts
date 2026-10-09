@@ -1,6 +1,6 @@
 import * as React from "react";
 import { type StyleProp, type ViewStyle } from "react-native";
-import type { AureaBadgeTone } from "./display.js";
+import type { AureaBadgeCategory, AureaBadgeTone } from "./display.js";
 import type { AureaIcon } from "./icon.js";
 type Virtualizavel = {
     /** Vira `FlatList`. ⚠ Então este componente é o rolador — não o ponha dentro de `<Screen scroll>`. */
@@ -18,7 +18,7 @@ export type AureaTimelineItem = {
      */
     icon?: AureaIcon;
     /** A cor da moldura, com o vocabulário do `Badge`. Sem `icon`, não faz nada. Padrão: `neutral`. */
-    tone?: AureaBadgeTone;
+    tone?: Exclude<AureaBadgeTone, AureaBadgeCategory>;
     /** O que vai à DIREITA do título — um valor, um selo. */
     trailing?: React.ReactNode;
     /**

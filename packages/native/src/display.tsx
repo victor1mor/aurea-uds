@@ -23,9 +23,10 @@
 import * as React from "react";
 import {Image, View, type ImageSourcePropType, type LayoutChangeEvent, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton, folgaDoToque, type AureaButtonSize} from "./actions.js";
-import {canto, acentoDoTom, criarFolha, fundoDoTom} from "./estilos.js";
+import {canto, acentoDoTom, criarFolha, fundoDoTom, type TomDeCor} from "./estilos.js";
 import {Card} from "./layout.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
+import {Icon} from "./icon.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -83,14 +84,23 @@ const folha = criarFolha((t: AureaTokens) => ({
   imagem: {width: "100%", height: "100%"},
 
   // ── KPI ────────────────────────────────────────────────────────────────────────────────────
-  kpi: {gap: 5},
+  kpi: {gap: t.size.space1},
+  // A seta fica na PRIMEIRA linha (quando a tendência quebra, `center` a deixava entre as duas):
+  // a caixa dela tem a altura de uma linha do texto `sm` (que no telefone é o `textBase`, ADR-0050).
+  tendencia: {flexDirection: "row", alignItems: "flex-start", gap: t.size.space1},
+  seta: {height: t.size.textBase * t.size.leadingNormal, justifyContent: "center"},
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // Badge
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
-export type AureaBadgeTone = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
+/**
+ * GAR-07 (ADR-0060, 09/10/2026): as oito cores de CATEGORIA — marcam grupo, não estado ("Motos",
+ * "Carros"). As mesmas da web, com os mesmos nomes; o amarelo fica de fora porque é da marca.
+ */
+export type AureaBadgeCategory = "red" | "orange" | "green" | "teal" | "cyan" | "blue" | "violet" | "pink";
+export type AureaBadgeTone = TomDeCor | AureaBadgeCategory;
 export type AureaBadgeEmphasis = "soft" | "outline" | "solid";
 export type AureaBadgeSize = "xs" | "sm" | "md" | "lg";
 export type AureaBadgeAnchor = "top-end" | "top-start" | "bottom-end" | "bottom-start";
@@ -180,8 +190,9 @@ export function Badge({
   const t = useAureaTokens();
   const s = folha(t);
 
-  const acento = acentoDoTom(t, tone);
-  const fundo = fundoDoTom(t, tone);
+  const categoria = ehCategoria(tone) ? coresDaCategoria(t)[tone] : null;
+  const acento = categoria ? categoria[0] : acentoDoTom(t, tone as TomDeCor);
+  const fundo = categoria ? categoria[1] : fundoDoTom(t, tone as TomDeCor);
 
   const pele: ViewStyle = emphasis === "solid"
     ? {backgroundColor: acento, borderColor: "transparent"}
@@ -249,6 +260,26 @@ export function Badge({
   const escondido = invisible || (count === 0 && !showZero) || (miolo == null && !dot);
   return <View style={s.ancora} {...rest}>{children}{!escondido && selo}</View>;
 }
+
+const CATEGORIAS: ReadonlySet<string> = new Set<AureaBadgeCategory>(
+  ["red", "orange", "green", "teal", "cyan", "blue", "violet", "pink"]);
+const ehCategoria = (tom: AureaBadgeTone): tom is AureaBadgeCategory => CATEGORIAS.has(tom);
+/**
+ * O acento e o fundo suave de cada categoria — os tokens `--category-*` e `--category-*-bg`, os
+ * mesmos da web. Ficam AQUI, e não no `acentoDoTom`, de propósito: a moldura do ícone (R-15, R-18)
+ * usa aquele mapa, e as categorias são do selo; levá-las para lá abriria a `Timeline` a cores que
+ * a da web não tem.
+ */
+const coresDaCategoria = (t: AureaTokens): Record<AureaBadgeCategory, [string, string]> => ({
+  red: [t.color.categoryRed, t.color.categoryRedBg],
+  orange: [t.color.categoryOrange, t.color.categoryOrangeBg],
+  green: [t.color.categoryGreen, t.color.categoryGreenBg],
+  teal: [t.color.categoryTeal, t.color.categoryTealBg],
+  cyan: [t.color.categoryCyan, t.color.categoryCyanBg],
+  blue: [t.color.categoryBlue, t.color.categoryBlueBg],
+  violet: [t.color.categoryViolet, t.color.categoryVioletBg],
+  pink: [t.color.categoryPink, t.color.categoryPinkBg],
+});
 
 /** O mínimo do selo preso, da referência principal: 16 no `xs` e no `sm`, 28 no `md`, 32 no `lg`. */
 const MINIMO_PRESO = (t: AureaTokens, size: string) =>
@@ -385,15 +416,37 @@ export function Avatar({source, alt, fallback, size = "md", style, testID}: Avat
 // KPI
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
+/** GAR-09 (ADR-0060, 09/10/2026): para onde a métrica foi. Os mesmos nomes da web. */
+export type AureaKPIDirection = "up" | "down" | "flat";
+export type AureaKPITone = "success" | "danger" | "neutral";
+export type AureaKPIVariant = "card" | "plain";
+const TOM_DA_DIRECAO: Record<AureaKPIDirection, AureaKPITone> = {up: "success", down: "danger", flat: "neutral"};
+const PALAVRA_DA_DIRECAO: Record<AureaKPIDirection, string> = {up: "Up", down: "Down", flat: "No change"};
+const GLIFO_DA_DIRECAO = {up: "trend-up", down: "trend-down", flat: "minus"} as const;
+
 export interface KPIProps extends ViewProps {
   label: React.ReactNode;
   value: React.ReactNode;
   trend?: React.ReactNode;
+  /**
+   * Para onde foi. Desenha a seta (`trend-up`, `trend-down`, `minus` — o app registra os três, como
+   * todo glifo do nativo), pinta a tendência e põe a palavra no nome que o leitor de tela ouve.
+   */
+  direction?: AureaKPIDirection;
+  /** A cor da tendência. Padrão: alta = `success`, baixa = `danger`, estável = `neutral`. */
+  tone?: AureaKPITone;
+  /** A palavra do leitor de tela. Padrão em inglês, como na web: "Up", "Down", "No change". */
+  directionLabel?: string;
+  /** `plain` tira o cartão: o número dentro de um cartão que já existe (MNT-04). */
+  variant?: AureaKPIVariant;
 }
+
+const comoTexto = (n: React.ReactNode): string | null =>
+  typeof n === "string" || typeof n === "number" ? String(n) : null;
 
 /**
  * Um número com nome. **É um `Card`** — medido em `markup.tsx:105`, e não no CSS, que só mostra
- * a coluna.
+ * a coluna. Com `variant="plain"`, é só a coluna.
  *
  * A ficha da web declara `role="group"`, e **o React Native não tem esse papel** — medido na lista
  * de `accessibilityRole`, que vai de `button` a `toolbar` e não inclui `group`. O que ele tem é
@@ -402,16 +455,39 @@ export interface KPIProps extends ViewProps {
  *
  * Inventar `accessibilityRole="summary"` porque o nome parece próximo seria pior que não ter papel:
  * `summary` tem significado próprio (o resumo de um bloco expansível) e diria uma coisa errada.
+ *
+ * Com `direction`, o nome do nó é escrito aqui (rótulo, número, palavra e tendência), porque a seta
+ * é desenho e não tem texto para o leitor juntar — a web resolve com o `.sr-only`, que o nativo não
+ * tem. Só quando as partes são texto; com nó próprio, o app dá o `accessibilityLabel`.
+ *
+ * O número em `3xl` e a tendência em `sm` desde a `0.26.0`: os mesmos da web (`0.24.1`).
  */
-export function KPI({label, value, trend, style, ...rest}: KPIProps) {
-  const s = folha(useAureaTokens());
+export function KPI({label, value, trend, direction, tone, directionLabel, variant = "card", style, ...rest}: KPIProps) {
+  const t = useAureaTokens();
+  const s = folha(t);
+  const tom = direction ? (tone ?? TOM_DA_DIRECAO[direction]) : undefined;
+  const cor = tom === "success" ? (t.color.success400 ?? t.color.success)
+    : tom === "danger" ? (t.color.danger400 ?? t.color.destructive)
+    : t.color.mutedForeground;
+  const palavra = direction ? (directionLabel ?? PALAVRA_DA_DIRECAO[direction]) : undefined;
+  const temTendencia = trend != null && trend !== false && trend !== "";
+  const textoDaTendencia = typeof trend === "string" || typeof trend === "number"
+    ? <Text size="sm" tone={direction ? undefined : "muted"} style={direction ? {color: cor} : undefined}>{trend}</Text>
+    : trend;
+  const partes = [comoTexto(label), comoTexto(value), palavra ?? "", temTendencia ? comoTexto(trend) : ""];
+  const nome = direction && partes.every((p) => p !== null) ? partes.filter(Boolean).join(", ") : undefined;
+  const Caixa = variant === "plain" ? View : Card;
   return (
-    <Card style={[s.kpi, style]} accessible {...rest}>
+    <Caixa style={[s.kpi, style]} accessible accessibilityLabel={nome} {...rest}>
       {typeof label === "string" ? <Text size="sm" tone="muted">{label}</Text> : label}
       {typeof value === "string" || typeof value === "number"
-        ? <Text size="2xl" weight={700}>{value}</Text> : value}
-      {trend != null && (typeof trend === "string"
-        ? <Text size="xs" tone="muted">{trend}</Text> : trend)}
-    </Card>
+        ? <Text size="3xl" weight={700}>{value}</Text> : value}
+      {direction
+        ? <View style={s.tendencia}>
+            <View style={s.seta}><Icon name={GLIFO_DA_DIRECAO[direction]} size="sm" color={cor} /></View>
+            {temTendencia && textoDaTendencia}
+          </View>
+        : temTendencia && textoDaTendencia}
+    </Caixa>
   );
 }

@@ -635,6 +635,86 @@ export const themes = {
       "p3": "color(display-p3 0.0924 0.1619 0.3121 / 0.62)",
       "oklch": "oklch(0.29 0.08 260 / 0.62)"
     },
+    "categoryRed": {
+      "hex": "#febab4",
+      "p3": "color(display-p3 0.9561 0.7403 0.7122)",
+      "oklch": "oklch(0.85 0.08 25)"
+    },
+    "categoryRedBg": {
+      "hex": "#4518169e",
+      "p3": "color(display-p3 0.2507 0.1063 0.0949 / 0.62)",
+      "oklch": "oklch(0.28 0.07 25 / 0.62)"
+    },
+    "categoryOrange": {
+      "hex": "#f0995b",
+      "p3": "color(display-p3 0.8929 0.6169 0.4015)",
+      "oklch": "oklch(0.76 0.13 55)"
+    },
+    "categoryOrangeBg": {
+      "hex": "#5f2e009e",
+      "p3": "color(display-p3 0.3488 0.1896 0.0504 / 0.62)",
+      "oklch": "oklch(0.36 0.089 55 / 0.62)"
+    },
+    "categoryGreen": {
+      "hex": "#8ce6a0",
+      "p3": "color(display-p3 0.6318 0.8922 0.6517)",
+      "oklch": "oklch(0.85 0.13 150)"
+    },
+    "categoryGreenBg": {
+      "hex": "#0632159e",
+      "p3": "color(display-p3 0.0804 0.1929 0.0941 / 0.62)",
+      "oklch": "oklch(0.28 0.07 150 / 0.62)"
+    },
+    "categoryTeal": {
+      "hex": "#2bccb4",
+      "p3": "color(display-p3 0.3904 0.7868 0.7085)",
+      "oklch": "oklch(0.76 0.13 180)"
+    },
+    "categoryTealBg": {
+      "hex": "#01483e9e",
+      "p3": "color(display-p3 0.1102 0.2776 0.2454 / 0.62)",
+      "oklch": "oklch(0.36 0.065 180 / 0.62)"
+    },
+    "categoryCyan": {
+      "hex": "#83dcfe",
+      "p3": "color(display-p3 0.5947 0.8527 0.9816)",
+      "oklch": "oklch(0.85 0.098 225)"
+    },
+    "categoryCyanBg": {
+      "hex": "#002e3c9e",
+      "p3": "color(display-p3 0.0596 0.1769 0.2311 / 0.62)",
+      "oklch": "oklch(0.28 0.053 225 / 0.62)"
+    },
+    "categoryBlue": {
+      "hex": "#83b2fe",
+      "p3": "color(display-p3 0.5528 0.6916 0.9715)",
+      "oklch": "oklch(0.76 0.121 260)"
+    },
+    "categoryBlueBg": {
+      "hex": "#1f3c6c9e",
+      "p3": "color(display-p3 0.1488 0.232 0.4089 / 0.62)",
+      "oklch": "oklch(0.36 0.09 260 / 0.62)"
+    },
+    "categoryViolet": {
+      "hex": "#d6c2fe",
+      "p3": "color(display-p3 0.8258 0.7619 0.9801)",
+      "oklch": "oklch(0.85 0.086 300)"
+    },
+    "categoryVioletBg": {
+      "hex": "#2e1f469e",
+      "p3": "color(display-p3 0.1733 0.1257 0.2647 / 0.62)",
+      "oklch": "oklch(0.28 0.07 300 / 0.62)"
+    },
+    "categoryPink": {
+      "hex": "#ee8dbd",
+      "p3": "color(display-p3 0.8826 0.5723 0.7323)",
+      "oklch": "oklch(0.76 0.13 350)"
+    },
+    "categoryPinkBg": {
+      "hex": "#5f26449e",
+      "p3": "color(display-p3 0.3434 0.163 0.2612 / 0.62)",
+      "oklch": "oklch(0.36 0.09 350 / 0.62)"
+    },
     "warning400": {
       "hex": "#f18500",
       "p3": "color(display-p3 0.8895 0.5417 0.1662)",
@@ -1041,6 +1121,86 @@ export const themes = {
       "hex": "#ddf0ff",
       "p3": "color(display-p3 0.8812 0.9379 1)",
       "oklch": "oklch(0.95 0.045 260)"
+    },
+    "categoryRed": {
+      "hex": "#af3c3a",
+      "p3": "color(display-p3 0.6339 0.2679 0.2457)",
+      "oklch": "oklch(0.52 0.15 25)"
+    },
+    "categoryRedBg": {
+      "hex": "#ffedeb",
+      "p3": "color(display-p3 0.9866 0.9327 0.9249)",
+      "oklch": "oklch(0.96 0.019 25)"
+    },
+    "categoryOrange": {
+      "hex": "#8a4603",
+      "p3": "color(display-p3 0.5071 0.2873 0.0967)",
+      "oklch": "oklch(0.47 0.115 55)"
+    },
+    "categoryOrangeBg": {
+      "hex": "#ffdfcb",
+      "p3": "color(display-p3 0.9778 0.88 0.8062)",
+      "oklch": "oklch(0.925 0.044 55)"
+    },
+    "categoryGreen": {
+      "hex": "#077e39",
+      "p3": "color(display-p3 0.2177 0.4876 0.2543)",
+      "oklch": "oklch(0.52 0.141 150)"
+    },
+    "categoryGreenBg": {
+      "hex": "#e2f9e6",
+      "p3": "color(display-p3 0.9034 0.9734 0.9062)",
+      "oklch": "oklch(0.96 0.035 150)"
+    },
+    "categoryTeal": {
+      "hex": "#056a5d",
+      "p3": "color(display-p3 0.1782 0.4087 0.3641)",
+      "oklch": "oklch(0.47 0.084 180)"
+    },
+    "categoryTealBg": {
+      "hex": "#bff3e7",
+      "p3": "color(display-p3 0.7908 0.9468 0.9087)",
+      "oklch": "oklch(0.925 0.055 180)"
+    },
+    "categoryCyan": {
+      "hex": "#067493",
+      "p3": "color(display-p3 0.1982 0.4474 0.5631)",
+      "oklch": "oklch(0.52 0.097 225)"
+    },
+    "categoryCyanBg": {
+      "hex": "#e1f6ff",
+      "p3": "color(display-p3 0.8975 0.9615 0.9945)",
+      "oklch": "oklch(0.96 0.025 225)"
+    },
+    "categoryBlue": {
+      "hex": "#2256ad",
+      "p3": "color(display-p3 0.1882 0.3339 0.6563)",
+      "oklch": "oklch(0.47 0.15 260)"
+    },
+    "categoryBlueBg": {
+      "hex": "#d9e7fe",
+      "p3": "color(display-p3 0.861 0.905 0.9888)",
+      "oklch": "oklch(0.925 0.035 260)"
+    },
+    "categoryViolet": {
+      "hex": "#7750b1",
+      "p3": "color(display-p3 0.4454 0.3196 0.6721)",
+      "oklch": "oklch(0.52 0.15 300)"
+    },
+    "categoryVioletBg": {
+      "hex": "#f4efff",
+      "p3": "color(display-p3 0.9524 0.9371 0.9944)",
+      "oklch": "oklch(0.96 0.022 300)"
+    },
+    "categoryPink": {
+      "hex": "#942d66",
+      "p3": "color(display-p3 0.5355 0.2057 0.3945)",
+      "oklch": "oklch(0.47 0.15 350)"
+    },
+    "categoryPinkBg": {
+      "hex": "#fedbea",
+      "p3": "color(display-p3 0.9749 0.8635 0.916)",
+      "oklch": "oklch(0.925 0.044 350)"
     },
     "success": {
       "hex": "#0f6b3e",

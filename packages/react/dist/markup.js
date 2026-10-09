@@ -88,8 +88,14 @@ export function Section({ surface = "background", spacing = "md", theme, variant
                                                 ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
                                                 : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) })] }, n)) }), children] }), legal != null && _jsx("div", { className: "section-footer-legal", children: legal })] }) });
 }
-// ── Data Display ─────────────────────────────────────────────────────────────────────────────
-export function KPI({ label, value, trend, className, ...props }) { return _jsxs(Card, { className: cx("kpi", className), ...props, children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), trend && _jsx("small", { children: trend })] }); }
+const TOM_DA_DIRECAO = { up: "success", down: "danger", flat: "neutral" };
+const PALAVRA_DA_DIRECAO = { up: "Up", down: "Down", flat: "No change" };
+export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", className, ...props }) {
+    const tom = direction ? (tone ?? TOM_DA_DIRECAO[direction]) : undefined;
+    const miolo = _jsxs(_Fragment, { children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), (trend || trend === 0 || direction) && _jsxs("small", { className: direction ? cx("kpi-trend", `kpi-trend-${direction}`, `kpi-tone-${tom}`) : undefined, children: [direction && _jsx("span", { className: "kpi-trend-icon", "aria-hidden": "true" }), direction && _jsx("span", { className: "sr-only", children: directionLabel ?? PALAVRA_DA_DIRECAO[direction] }), trend] })] });
+    return variant === "plain" ? _jsx("div", { className: cx("kpi", className), ...props, children: miolo })
+        : _jsx(Card, { className: cx("kpi", className), ...props, children: miolo });
+}
 export function DataList({ items }) { return _jsx("dl", { className: "data-list", children: items.map((i, n) => _jsxs(React.Fragment, { children: [_jsx("dt", { children: i.term }), _jsx("dd", { children: i.value })] }, n)) }); }
 export function Timeline({ items }) { return _jsx("ol", { className: "timeline", children: items.map((i, n) => _jsxs("li", { children: [_jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [_jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time })] })] }, n)) }); }
 // Prose (item L5): UMA LINHA, e é para ser mesmo — quem transforma Markdown em elementos é o

@@ -6,6 +6,8 @@
 // `trend` é ReactNode — texto ou elemento, não um objeto {value, direction}. A primeira versão
 // deste arquivo inventou o objeto e o build reprovou na hora (21/08/2026). É a razão de o gate
 // renderizar todo pattern: API inventada não sobrevive a um render de verdade.
+// Desde a 0.26.0 (GAR-09, ADR-0060) a direção é uma prop à parte — `direction`, `tone` —, e o
+// `trend` continua sendo o texto do domínio.
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
 
@@ -54,5 +56,37 @@ export default [
       ...[["Runs", "1,284", "+12%"], ["Success rate", "98.7%", "+0.4pt"],
         ["P95 latency", "1.8s", "−4%"]].map(([l, v, t]) =>
         h("div", {key: l, style: {flex: "1 1 160px"}}, h(A.KPI, {label: l, value: v, trend: t})))),
+  },
+  // GAR-09 e MNT-04 (ADR-0060, 09/10/2026).
+  {
+    variant: "Metric",
+    name: "A trend with a direction",
+    description: "`direction` draws the arrow, colours the trend and gives screen readers a word before it — up is success and down is danger by default. When going up is bad news, `tone` turns it around. The trend text stays the domain's own words.",
+    uses: ["KPI"],
+    code: `<KPI label="Revenue" value="$12,400" trend="+8% this month" direction="up" />
+<KPI label="Churn" value="2.1%" trend="−0.3pt" direction="down" tone="success" />
+<KPI label="Support cost" value="$3,200" trend="+12%" direction="up" tone="danger" />
+<KPI label="Active seats" value="148" trend="same as last month" direction="flat" />`,
+    render: () => h("div", {style: tiras},
+      ...[["Revenue", "$12,400", "+8% this month", "up"], ["Churn", "2.1%", "−0.3pt", "down", "success"],
+        ["Support cost", "$3,200", "+12%", "up", "danger"], ["Active seats", "148", "same as last month", "flat"]].map(([l, v, t, d, tone]) =>
+        h("div", {key: l, style: {minWidth: "160px"}}, h(A.KPI, {label: l, value: v, trend: t, direction: d, tone})))),
+  },
+  {
+    variant: "Metric",
+    name: "Numbers inside a card that already exists",
+    description: "A KPI is a card, so three of them inside a panel would be boxes inside a box. `variant=\"plain\"` drops the card and keeps the column: the panel is the surface, and the numbers sit on it.",
+    uses: ["Card", "KPI", "Grid"],
+    code: `<Card>
+  <Grid min="xs">
+    <KPI variant="plain" label="Runs" value="1,284" trend="+12%" direction="up" />
+    <KPI variant="plain" label="Success rate" value="98.7%" trend="+0.4pt" direction="up" />
+    <KPI variant="plain" label="P95 latency" value="1.8s" trend="−4%" direction="down" tone="success" />
+  </Grid>
+</Card>`,
+    render: () => h("div", {style: {width: "min(680px,100%)"}}, h(A.Card, null, h(A.Grid, {min: "xs"},
+      h(A.KPI, {variant: "plain", label: "Runs", value: "1,284", trend: "+12%", direction: "up"}),
+      h(A.KPI, {variant: "plain", label: "Success rate", value: "98.7%", trend: "+0.4pt", direction: "up"}),
+      h(A.KPI, {variant: "plain", label: "P95 latency", value: "1.8s", trend: "−4%", direction: "down", tone: "success"})))),
   },
 ];

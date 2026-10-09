@@ -1,6 +1,6 @@
 {
   "name": "Aurea — Universal Design System",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "status": "organized-source-of-truth",
   "language": "pt-BR",
   "fonts": {
@@ -346,7 +346,7 @@
     "Inputs e selects usam formato cápsula; textareas usam raio de 16px.",
     "Cards, dialogs, toasts, demos e painéis usam raio de 22px e superfícies sólidas.",
     "A sidebar é um único painel arredondado com menu accent subtle.",
-    "Não usar gradientes decorativos, paletas alternativas ou cores hardcoded.",
+    "Não usar gradientes decorativos, paletas alternativas ou cores hardcoded. A única paleta além da semântica são as oito cores de CATEGORIA do Badge (category-red a category-pink, ADR-0060): marcam grupo, não estado; não mudam com a marca; e nunca vão sozinhas, sem palavra.",
     "A escala chart-1 a chart-5 é a única escala categórica/sequencial azul.",
     "Atkinson Hyperlegible Next (texto), Atkinson Hyperlegible Mono (código) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0053); não trocar sem atualizar este contrato.",
     "Consumidores usam somente os pacotes @aurea-uds do monorepo; cópias manuais são proibidas.",

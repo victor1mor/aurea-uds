@@ -301,6 +301,17 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    navegadores. ⚠ **A lição:** a borda dos botões muda de cor com transição — medir o foco antes
    de ela terminar escondeu metade das peças com duas linhas (39 viraram 84).
 
+21. **`0.26.0`, o Lote L, feita e aprovada pela bancada em 09/10/2026** (*"aprovado, pode"*) — com
+   as escolhas do Victor depois de ver a referência principal (*"nome de cor"*, o KPI com direção,
+   o resumo como padrão do catálogo), [ADR-0060](decisions/0060-cor-de-categoria-no-selo-e-o-kpi-com-direcao.md):
+   GAR-07 (oito cores de categoria no `Badge`, tokens `category-*`, web e nativo), GAR-09 e MNT-04
+   (`KPI` com `direction`, `tone`, `directionLabel` e `variant="plain"`, web e nativo; o número do
+   nativo em `3xl`, igual à web) e GAR-10 (a caixa de resumo, padrão do `Card` no catálogo). Junto,
+   o `.gitattributes` marca os ícones gerados do nativo. ⚠ **A regra nova:** a marcação pura da web
+   (`markup.tsx`) não importa o `Icon` (ele usa hook); ícone ali é desenho do CSS por máscara, como
+   o menu do `Header` e a seta do `KPI`. ⚠ **A lição:** na bancada do nativo, o provedor precisa do
+   `fontFamilies` do app — sem ele o negrito some, e a foto mente.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).

@@ -6,8 +6,8 @@
     "modulos": 36,
     "componentes": 129,
     "hooks": 9,
-    "aliasesLiterais": 71,
-    "propsDistintas": 289
+    "aliasesLiterais": 74,
+    "propsDistintas": 290
   },
   "aliases": {
     "ButtonVariant": {
@@ -1741,21 +1741,24 @@
         "loose"
       ]
     },
+    "BadgeCategory": {
+      "module": "markup",
+      "raw": "\"red\" | \"orange\" | \"green\" | \"teal\" | \"cyan\" | \"blue\" | \"violet\" | \"pink\"",
+      "union": [
+        "red",
+        "orange",
+        "green",
+        "teal",
+        "cyan",
+        "blue",
+        "violet",
+        "pink"
+      ]
+    },
     "BadgeVariant": {
       "module": "markup",
-      "raw": "\"neutral\" | \"primary\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"running\" | \"paused\" | \"offline\" | \"review\"",
-      "union": [
-        "neutral",
-        "primary",
-        "info",
-        "success",
-        "warning",
-        "danger",
-        "running",
-        "paused",
-        "offline",
-        "review"
-      ]
+      "raw": "\"neutral\" | \"primary\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"running\" | \"paused\" | \"offline\" | \"review\" | BadgeCategory",
+      "union": null
     },
     "AvatarSize": {
       "module": "markup",
@@ -1887,6 +1890,32 @@
       "union": [
         "sm",
         "md"
+      ]
+    },
+    "KPIDirection": {
+      "module": "markup",
+      "raw": "\"up\" | \"down\" | \"flat\"",
+      "union": [
+        "up",
+        "down",
+        "flat"
+      ]
+    },
+    "KPITone": {
+      "module": "markup",
+      "raw": "\"success\" | \"danger\" | \"neutral\"",
+      "union": [
+        "success",
+        "danger",
+        "neutral"
+      ]
+    },
+    "KPIVariant": {
+      "module": "markup",
+      "raw": "\"card\" | \"plain\"",
+      "union": [
+        "card",
+        "plain"
       ]
     },
     "TypographyType": {
@@ -5607,7 +5636,15 @@
                 "running",
                 "paused",
                 "offline",
-                "review"
+                "review",
+                "red",
+                "orange",
+                "green",
+                "teal",
+                "cyan",
+                "blue",
+                "violet",
+                "pink"
               ]
             },
             {
@@ -6109,7 +6146,7 @@
         {
           "name": "KPI",
           "kind": "function",
-          "propsType": null,
+          "propsType": "KPIProps",
           "props": [
             {
               "name": "label",
@@ -6128,6 +6165,41 @@
               "optional": true,
               "type": "ReactNode",
               "values": null
+            },
+            {
+              "name": "direction",
+              "optional": true,
+              "type": "KPIDirection",
+              "values": [
+                "up",
+                "down",
+                "flat"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "KPITone",
+              "values": [
+                "success",
+                "danger",
+                "neutral"
+              ]
+            },
+            {
+              "name": "directionLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "KPIVariant",
+              "values": [
+                "card",
+                "plain"
+              ]
             }
           ]
         },

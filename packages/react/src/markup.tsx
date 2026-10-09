@@ -45,7 +45,10 @@ import type {SidebarItem} from "./navigation-client.js";
 // Os três tipos abaixo vieram junto com os componentes que os usam. São uniões de string, então
 // não custam runtime nenhum; cada módulo de categoria os reexporta para não mexer em import de
 // consumidor.
-export type BadgeVariant="neutral"|"primary"|"info"|"success"|"warning"|"danger"|"running"|"paused"|"offline"|"review";
+// GAR-07 (ADR-0060, 09/10/2026): as oito cores de CATEGORIA — marcam grupo, não estado. Nome de
+// cor, o padrão de mercado; o amarelo fica de fora porque é da marca. O nativo tem as mesmas oito.
+export type BadgeCategory="red"|"orange"|"green"|"teal"|"cyan"|"blue"|"violet"|"pink";
+export type BadgeVariant="neutral"|"primary"|"info"|"success"|"warning"|"danger"|"running"|"paused"|"offline"|"review"|BadgeCategory;
 export type AvatarSize="sm"|"md"|"lg";
 export type HeaderVariant="floating"|"flush"|"pill";
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). O tipo continua valendo; use `HeaderVariant`. */
@@ -279,7 +282,42 @@ export function Section({surface="background",spacing="md",theme,variant="base",
 }
 
 // ── Data Display ─────────────────────────────────────────────────────────────────────────────
-export function KPI({label,value,trend,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label:ReactNode;value:ReactNode;trend?:ReactNode}){return <Card className={cx("kpi",className)} {...props}><span className="muted">{label}</span><strong>{value}</strong>{trend&&<small>{trend}</small>}</Card>}
+// GAR-09 + MNT-04 (ADR-0060, 09/10/2026). A referência principal não tem KPI no grátis; o modelo é o
+// de mercado (alta, baixa, estável). A DIREÇÃO desenha a seta e diz a palavra ao leitor de tela, e
+// a cor vem junto, nunca sozinha: sem `direction`, `tone` não pinta nada. `tone` existe para o caso
+// em que subir é ruim (custo, erro). `variant="plain"` tira a caixa, para o número dentro de um
+// cartão (MNT-04) — como o `panel="plain"` do `Tabs`.
+// A seta é a do Phosphor desenhada por MÁSCARA no CSS, como o menu do `Header`: o `Icon` lê o
+// sprite por hook, e o KPI é marcação pura, sem JavaScript no navegador (ADR-0026).
+export type KPIDirection="up"|"down"|"flat";
+export type KPITone="success"|"danger"|"neutral";
+export type KPIVariant="card"|"plain";
+const TOM_DA_DIRECAO:Record<KPIDirection,KPITone>={up:"success",down:"danger",flat:"neutral"};
+const PALAVRA_DA_DIRECAO:Record<KPIDirection,string>={up:"Up",down:"Down",flat:"No change"};
+export interface KPIProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<HTMLDivElement>{
+  label:ReactNode;
+  value:ReactNode;
+  /** A mudança, como texto do domínio ("+8% no mês"). */
+  trend?:ReactNode;
+  /** Para onde foi. Desenha a seta, pinta a tendência e diz a palavra ao leitor de tela. */
+  direction?:KPIDirection;
+  /** A cor da tendência. Padrão: alta = `success`, baixa = `danger`, estável = `neutral`. */
+  tone?:KPITone;
+  /** A palavra que o leitor de tela ouve antes da tendência. Padrão em inglês: "Up", "Down", "No change". */
+  directionLabel?:string;
+  /** `plain` tira a caixa: o número dentro de um cartão que já existe. */
+  variant?:KPIVariant;
+}
+export function KPI({label,value,trend,direction,tone,directionLabel,variant="card",className,...props}:KPIProps){
+  const tom=direction?(tone??TOM_DA_DIRECAO[direction]):undefined;
+  const miolo=<><span className="muted">{label}</span><strong>{value}</strong>
+    {(trend||trend===0||direction)&&<small className={direction?cx("kpi-trend",`kpi-trend-${direction}`,`kpi-tone-${tom}`):undefined}>
+      {direction&&<span className="kpi-trend-icon" aria-hidden="true"/>}
+      {direction&&<span className="sr-only">{directionLabel??PALAVRA_DA_DIRECAO[direction]}</span>}
+      {trend}</small>}</>;
+  return variant==="plain"?<div className={cx("kpi",className)} {...props}>{miolo}</div>
+    :<Card className={cx("kpi",className)} {...props}>{miolo}</Card>;
+}
 export function DataList({items}:{items:Array<{term:ReactNode;value:ReactNode}>}){return <dl className="data-list">{items.map((i,n)=><React.Fragment key={n}><dt>{i.term}</dt><dd>{i.value}</dd></React.Fragment>)}</dl>}
 export function Timeline({items}:{items:Array<{title:ReactNode;description?:ReactNode;time?:ReactNode}>}){return <ol className="timeline">{items.map((i,n)=><li key={n}><span className="timeline-dot"/><div><strong>{i.title}</strong>{i.description&&<p>{i.description}</p>}{i.time&&<small className="muted">{i.time}</small>}</div></li>)}</ol>}
 // Prose (item L5): UMA LINHA, e é para ser mesmo — quem transforma Markdown em elementos é o
