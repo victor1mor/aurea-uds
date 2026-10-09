@@ -2,10 +2,10 @@ import * as React from "react";
 import { type TextProps as TextPropsRN } from "react-native";
 /** A escala dos tokens (`--text-xs` … `--text-5xl`). `md` é o corpo, como no `body` da web. */
 export type AureaTextSize = "xs" | "sm" | "md" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
-/** Os quatro pesos que o pacote de fontes entrega. Ver ADR-0039: cada peso é uma FAMÍLIA. */
-export type AureaTextWeight = 400 | 500 | 600 | 700;
-/** Papel de tipografia — os três `--font-*` da Aurea. */
-export type AureaTextFont = "ui" | "editorial" | "code";
+/** Os pesos que o pacote de fontes entrega (o 800 desde a 0.28.0, GAR-16). Ver ADR-0039: cada peso é uma FAMÍLIA. */
+export type AureaTextWeight = 400 | 500 | 600 | 700 | 800;
+/** Papel de tipografia — os `--font-*` da Aurea (o `heading` desde a 0.28.0). */
+export type AureaTextFont = "ui" | "editorial" | "code" | "heading";
 /** O que a cor SIGNIFICA. Mesmo vocabulário do `tone` do Button (ADR-0044). */
 export type AureaTextTone = "default" | "muted" | "subtle" | "primary" | "link" | "danger" | "success" | "warning" | "info";
 export type AureaTextLeading = "none" | "tight" | "normal" | "relaxed";
@@ -31,6 +31,11 @@ export interface TextProps extends TextPropsRN {
     align?: "auto" | "left" | "right" | "center";
     /** Aplica o `tracking` do token. É RAZÃO de `em`: multiplicado pelo `fontSize` aqui dentro. */
     tracking?: "tight" | "normal" | "wide" | "wider" | "widest";
+    /**
+     * GAR-16 (0.28.0): algarismos da mesma largura (`fontVariant: ["tabular-nums"]`, iOS e Android) —
+     * para número que alinha em coluna ou muda na tela. Desligado por padrão, como na web.
+     */
+    numeric?: boolean;
 }
 /**
  * Texto da Aurea. Sem provider acima, `useAureaTokens` levanta — de propósito: um padrão
@@ -42,7 +47,7 @@ export interface TextProps extends TextPropsRN {
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */
-export declare function Text({ type, size, weight: pesoPedido, font: fontePedida, tone, leading, italic, align, tracking: trackingPedido, style, ...rest }: TextProps): React.JSX.Element;
+export declare function Text({ type, size, weight: pesoPedido, font: fontePedida, tone, leading, italic, align, tracking: trackingPedido, numeric, style, ...rest }: TextProps): React.JSX.Element;
 export type AureaTypographyColor = "default" | "muted";
 export type AureaTypographyWeight = "normal" | "medium" | "semibold" | "bold";
 export type AureaTypographyAlign = "start" | "center" | "end" | "justify";

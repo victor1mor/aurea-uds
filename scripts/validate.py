@@ -2318,6 +2318,7 @@ CONTRAPARTE_REACT = {
     "setDensity": "useDensity",
     "showToast": "useToast",
     "copy": "CodeBlock",          # o CodeBlock emite o mesmo [data-aurea-copy]
+    "share": "Button",            # GAR-14 (0.28.0): o `Button share` emite o mesmo [data-aurea-share]
     "activateTab": "Tabs",
     # Fechado em 21/08/2026: o `TableOfContents` observa por conta própria quando ninguém passa
     # `current`, com a MESMA faixa do `tocSpy`. Os dois se coordenam pelo `data-toc-spy="react"`,

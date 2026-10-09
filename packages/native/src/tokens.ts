@@ -32,7 +32,7 @@ export type AureaShadow = {
  *
  * O que chega de fora **não** é total — ver `AureaFontInput` e `normalizarEscala`.
  */
-export type AureaFontScale = Record<400 | 500 | 600 | 700, string> & {
+export type AureaFontScale = Record<400 | 500 | 600 | 700 | 800, string> & {
   /** Só o papel `ui` tem itálico no pacote de fontes; nos outros é `undefined`. */
   italic?: string;
 };
@@ -41,14 +41,14 @@ export type AureaFontScale = Record<400 | 500 | 600 | 700, string> & {
  * O que o consumidor INJETA, e é parcial porque o pacote de fontes é parcial — medido em
  * 03/09/2026 no `@aurea-uds/fonts/native`:
  *
- *     ui         400  400i  500  600  700
+ *     ui         400  400i  500  600  700  800   ← o 800 entrou na 0.28.0 (GAR-16)
  *     editorial  400       500  600  700      ← apelido do `ui` desde a ADR-0053 (sai na 1.0)
  *     code       400       500  600           ← não há 700
  *
  * É a grade dos arquivos de fonte, não um esquecimento nosso. Até a 0.12.4 o `editorial` era a
  * IBM Plex Serif, sem 400; a ADR-0053 tirou a serifada e o deixou apontando para a Atkinson.
  */
-export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "400i", string>>;
+export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "800" | "400i", string>>;
 
 export type AureaTokens = {
   theme: AureaThemeName;
@@ -58,7 +58,7 @@ export type AureaTokens = {
   /** Todo token numérico, em dp — espaçamento, raio, tipografia, altura, duração, camada. */
   size: Record<string, number>;
   /** Família por papel de tipografia e peso. */
-  font: {ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale};
+  font: {ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale; heading: AureaFontScale};
   /**
    * `boxShadow` do RN 0.76+ — **a primeira camada** de cada sombra. Para a sombra INTEIRA, use
    * `shadowLayers` (a `shadowSm` tem três camadas; aqui está só a primeira).
@@ -78,7 +78,10 @@ export type AureaTokens = {
 };
 
 /** O mapa que o consumidor injeta para o texto sair na Atkinson Hyperlegible. Ver `AureaProviderProps`. */
-export type AureaFontFamilies = {ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput};
+export type AureaFontFamilies = {ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput;
+  /** O papel do título (GAR-16, 0.28.0). Opcional: sem ele, o título usa o mapa do `ui` — que é a
+   *  mesma fonte hoje, e é o que acontece com quem ainda passa o mapa de antes da 0.28.0. */
+  heading?: AureaFontInput};
 
 type Cor = {hex: string; p3: string; oklch: string | null};
 const ehCor = (v: unknown): v is Cor => typeof v === "object" && v !== null && "hex" in (v as object);
@@ -91,7 +94,7 @@ function mesclar(...grupos: Record<string, unknown>[]): Record<string, unknown> 
   return Object.assign({}, ...grupos) as Record<string, unknown>;
 }
 
-const PESOS = [400, 500, 600, 700] as const;
+const PESOS = [400, 500, 600, 700, 800] as const;
 
 /**
  * Fecha a grade parcial que o pacote de fontes emite numa escala TOTAL.
@@ -109,7 +112,7 @@ const PESOS = [400, 500, 600, 700] as const;
  */
 function normalizarEscala(entrada: AureaFontInput | undefined, familiaCrua: string): AureaFontScale {
   const disponiveis = PESOS.filter((p) => entrada?.[String(p) as keyof AureaFontInput]);
-  const escala = {} as Record<400 | 500 | 600 | 700, string> & {italic?: string};
+  const escala = {} as Record<400 | 500 | 600 | 700 | 800, string> & {italic?: string};
   for (const p of PESOS) {
     const exato = entrada?.[String(p) as keyof AureaFontInput];
     if (exato) { escala[p] = exato; continue; }
@@ -163,6 +166,7 @@ export function resolverTokens(
     ui: normalizarEscala(fontFamilies?.ui, texto.fontUi ?? "System"),
     editorial: normalizarEscala(fontFamilies?.editorial, texto.fontEditorial ?? "System"),
     code: normalizarEscala(fontFamilies?.code, texto.fontCode ?? "System"),
+    heading: normalizarEscala(fontFamilies?.heading ?? fontFamilies?.ui, texto.fontHeading ?? texto.fontUi ?? "System"),
   };
 
   return {theme, density, color, size, font, shadow, shadowLayers: {...shadowLayers}, easing, tracking: {...tracking}, remInDp: REM_EM_DP};

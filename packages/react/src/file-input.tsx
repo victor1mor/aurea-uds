@@ -336,7 +336,10 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
     {recibo.length>0&&!emVoo&&<div className="file-receipt">
       <div className="file-receipt-head">
         <strong>{s.uploadReceipt}</strong>
-        <Button size="sm" variant="ghost" leadingIcon="copy" onClick={()=>void navigator.clipboard?.writeText(reciboTexto)}>{s.uploadReceiptCopy}</Button>
+        {/* 0.28.0: o "copiado" é dito pela região de status que este componente já tem — antes a cópia
+            era muda, para quem vê e para quem ouve. Esvaziar antes faz o mesmo texto ser lido de novo. */}
+        <Button size="sm" variant="ghost" leadingIcon="copy" onClick={()=>{const copia=navigator.clipboard?.writeText(reciboTexto);if(typeof copia?.then!=="function")return;
+          void copia.then(()=>{setAnnounce("");setTimeout(()=>setAnnounce(s.copied),100)},()=>{})}}>{s.uploadReceiptCopy}</Button>
       </div>
       <ul>{recibo.map(r=><li key={r.id}>{r.name} · {r.status==="done"?s.uploadComplete:r.status==="canceled"?s.uploadCanceled:s.uploadError}{r.finishedAt?` · ${r.finishedAt}`:""}</li>)}</ul>
     </div>}

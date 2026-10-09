@@ -9,7 +9,7 @@ import { useValorResponsivo } from "./responsivo-runtime.js";
 import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
-import { cx, useAureaStrings } from "./internal.js";
+import { cx, useAureaStrings, DentroDoProviderContext, avisosAncorados } from "./internal.js";
 import { Kbd } from "./markup.js";
 import { Icon, useAureaTheme } from "./system.js";
 // O dicionário que desachata o enum. É a ÚNICA fonte da correspondência: o gate do
@@ -42,10 +42,58 @@ export function buttonSkin(variant, appearance, tone) {
     const antiga = CLASSE_ANTIGA.get(`${a}/${t}`);
     return antiga ? `btn-${antiga}` : cx(`btn-${a}`, `btn-tone-${t}`);
 }
+// GAR-14 (0.28.0) · o compartilhar do `Button`, a contraparte React do `share` do `aurea.js` — a mesma
+// regra nos dois: detectar o recurso; `AbortError` (a pessoa cancelou) não diz nada; sem o recurso,
+// copiar e avisar preso ao botão; a cópia falhou, avisar e mostrar o link. Fora do `AureaProvider`, o
+// aviso é do `aurea.js`, quando ele está na página; sem nenhum dos dois, o botão ainda compartilha e
+// copia, mas não tem como avisar — e diz isso uma vez no console, em vez de ficar mudo.
+let avisouSemProvider = false;
+async function compartilhar(botao, dados, s, dentroDoProvider) {
+    const url = dados.url ?? window.location.href;
+    const pacote = { url, ...(dados.title ? { title: dados.title } : null), ...(dados.text ? { text: dados.text } : null) };
+    const vanilla = window.Aurea;
+    if (!dentroDoProvider && vanilla?.share) {
+        vanilla.share(botao);
+        return;
+    }
+    const avisar = (falhou) => {
+        if (!dentroDoProvider) {
+            if (!avisouSemProvider) {
+                avisouSemProvider = true;
+                console.error("Aurea: o <Button share> copiou o link, mas não tem como avisar — ponha o <AureaProvider> em volta do app (ou carregue o aurea.js na página).");
+            }
+            return;
+        }
+        // A distância do botão é a mesma do `Tooltip` e do `Popover` (8 = `--space-2`).
+        avisosAncorados.add({ title: falhou ? s.linkCopyFailed : s.linkCopied, type: falhou ? "danger" : "success",
+            timeout: falhou ? 0 : 1500, data: { url: falhou ? url : undefined },
+            positionerProps: { anchor: botao, side: "bottom", align: "start", sideOffset: 8 } });
+    };
+    const sabeCompartilhar = typeof navigator.share === "function" && (typeof navigator.canShare !== "function" || navigator.canShare(pacote));
+    if (sabeCompartilhar) {
+        try {
+            await navigator.share(pacote);
+            return;
+        }
+        catch (e) {
+            if (e?.name === "AbortError")
+                return;
+        }
+    }
+    try {
+        if (typeof navigator.clipboard?.writeText !== "function")
+            throw new Error("sem área de transferência");
+        await navigator.clipboard.writeText(url);
+        avisar(false);
+    }
+    catch {
+        avisar(true);
+    }
+}
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button = forwardRef(function Button({ variant, appearance, tone, size = "md", loading, leadingIcon, trailingIcon, className, children, disabled, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant, appearance, tone, size = "md", loading, leadingIcon, trailingIcon, className, children, disabled, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
     // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
     // SOMATIVO por construção: valor simples continua emitindo `btn-sm`, byte por byte a mesma classe
     // de antes, e por isso nenhuma baseline se mexe. Só o valor responsivo entra pela camada genérica
@@ -74,6 +122,21 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     const inerte = ariaDisabled === true || ariaDisabled === "true";
     const off = disabled || loading;
     const shared = { "aria-keyshortcuts": kbd || undefined, "aria-busy": loading || undefined };
+    // GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
+    // estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
+    const s = useAureaStrings();
+    const dentroDoProvider = React.useContext(DentroDoProviderContext);
+    const marcaDoShare = share ? { "data-aurea-share": "", "data-aurea-share-url": share.url, "data-aurea-share-title": share.title,
+        "data-aurea-share-text": share.text, "data-aurea-share-copied": s.linkCopied, "data-aurea-share-failed": s.linkCopyFailed } : undefined;
+    // O clique do app roda primeiro; se ele cancelar (`preventDefault`), o botão não compartilha. O
+    // `preventDefault` daqui avisa o `aurea.js` de que o clique já foi atendido.
+    const aoClicarNoShare = share ? (e) => {
+        onClick?.(e);
+        if (e.defaultPrevented)
+            return;
+        e.preventDefault();
+        void compartilhar(e.currentTarget, share, s, dentroDoProvider);
+    } : onClick;
     // AUD-0004 (12/08/2026): o ramo de LINK desabilitado tirava o `href` e punha `aria-disabled`, e
     // deixava o `onClick` passar intacto — então um link "desabilitado" continuava executando a ação
     // ao ser clicado, e o `loading` também. Não há `disabled` em `<a>`: quem tem de barrar a ativação
@@ -92,7 +155,7 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     }
     if (href !== undefined)
         return _jsx("a", { ref: ref, className: cls, target: target, rel: rel, download: download, ...shared, ...props, ...(off ? { "aria-disabled": true } : { href }), ...eventos, children: inner });
-    return _jsx("button", { ref: ref, type: type, className: cls, disabled: off, "aria-disabled": inerte || undefined, "aria-pressed": pressed, ...shared, ...(inerte ? { onClick: bloqueia, onClickCapture: bloqueia } : { onClick, onClickCapture }), ...props, children: inner });
+    return _jsx("button", { ref: ref, type: type, className: cls, disabled: off, "aria-disabled": inerte || undefined, "aria-pressed": pressed, ...shared, ...marcaDoShare, ...(inerte ? { onClick: bloqueia, onClickCapture: bloqueia } : { onClick: aoClicarNoShare, onClickCapture }), ...props, children: inner });
 });
 function temConteudoVisivel(children) {
     const itens = React.Children.toArray(children);

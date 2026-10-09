@@ -3,7 +3,7 @@
   "category": "Data Display",
   "layer": "Composite",
   "maturity": "Stable",
-  "summary": "Presents rows and columns of data — also a comparison table: groups of rows, the row's name pinned while scrolling sideways, the header pinned while scrolling down, the best value marked and a 'differences only' switch.",
+  "summary": "Presents rows and columns of data — also a comparison table: groups of rows, the row's name pinned while scrolling sideways, the header pinned while scrolling down, the best value marked and a 'differences only' switch. Every cell has tabular figures, so price and year columns line up.",
   "icon": "tree-structure",
   "platforms": {
     "web": "stable",

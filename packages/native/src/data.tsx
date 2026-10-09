@@ -411,7 +411,7 @@ export function Table<T>({
           <View accessible>
             {(() => {
               const v = conteudo(principal, linha);
-              return typeof v === "string" ? <Text size="md" weight={600}>{v}</Text> : v;
+              return typeof v === "string" ? <Text size="md" weight={600} numeric>{v}</Text> : v;
             })()}
           </View>
         ) : null}
@@ -424,7 +424,7 @@ export function Table<T>({
               {typeof coluna.header === "string"
                 ? <Text size="sm" tone="muted" style={s.nomeDaColuna}>{coluna.header}</Text>
                 : coluna.header}
-              {typeof v === "string" ? <Text size="sm" style={s.valor}>{v}</Text> : v}
+              {typeof v === "string" ? <Text size="sm" numeric style={s.valor}>{v}</Text> : v}
             </View>
           );
         })}

@@ -17,7 +17,13 @@
   "tokens": [
     "--radius-lg",
     "--surface-3",
-    "--muted-foreground"
+    "--muted-foreground",
+    "--radius-sheet",
+    "--space-2",
+    "--border",
+    "--border-width",
+    "--card",
+    "--shadow-md"
   ],
   "a11y": {
     "role": "img",
@@ -77,12 +83,27 @@
       "type": "lazy | eager",
       "default": "lazy",
       "description": "Defaulted, not forced. An image above the fold should be eager — a lazy hero delays the largest paint."
+    },
+    {
+      "name": "frame",
+      "type": "\"phone\"",
+      "default": "—",
+      "description": "The capture inside a phone frame — GENERIC on purpose, with no island, notch or buttons: a manufacturer's marketing rules forbid simulating its device, and the Aurea carries no third-party marks. The frame follows the theme (card surface, border, medium shadow) and has the sheet's corner (--radius-sheet); the inner corner follows it. With a frame, className and style go to the FRAME (size and placement); ratio (default 9/19.5) goes to the capture."
+    },
+    {
+      "name": "srcDark",
+      "type": "string",
+      "default": "—",
+      "description": "The capture for the dark theme. A page under data-theme=\"dark\" shows this one; otherwise, src. The hidden one is display:none, out of the accessibility tree, and lazy, so the browser does not fetch it. On native the same prop is sourceDark (the native Image takes source)."
     }
   ],
   "axes": {
     "fit": [
       "contain",
       "cover"
+    ],
+    "frame": [
+      "phone"
     ]
   }
 }

@@ -96,7 +96,20 @@
     "--text-xs",
     "--warning",
     "--warning-foreground",
-    "--warning-hover"
+    "--warning-hover",
+    "--popover",
+    "--popover-foreground",
+    "--border",
+    "--border-width",
+    "--shadow-md",
+    "--weight-medium",
+    "--space-1",
+    "--space-2",
+    "--space-4",
+    "--icon-sm",
+    "--success-400",
+    "--danger-bg",
+    "--z-toast"
   ],
   "a11y": {
     "role": "button",
@@ -235,6 +248,12 @@
       "type": "ReactElement",
       "default": "—",
       "description": "M-01: the element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
+    },
+    {
+      "name": "share",
+      "type": "{ url?: string; title?: string; text?: string }",
+      "default": "—",
+      "description": "O botão compartilha. Pergunta ao navegador se ele sabe compartilhar este link (navigator.canShare) — detectar o recurso, não adivinhar o aparelho. Sabe (celular; Chrome, Edge e Safari no computador): abre a janela do aparelho, e cancelar não é erro. Não sabe: copia o link e mostra \"Link copiado\" preso ao botão, com a medida dele. A cópia falhou: avisa e mostra o link selecionado. O aviso fala com o leitor de tela. Sem url, é o endereço da página. Precisa do AureaProvider (ou do aurea.js na página) para avisar; emite [data-aurea-share], que o aurea.js também lê. Só vale no <button> (ignorado com href ou render). No nativo, o mesmo nome abre o compartilhar do sistema."
     }
   ]
 }

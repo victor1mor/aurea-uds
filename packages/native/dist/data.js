@@ -233,14 +233,14 @@ export function Table({ caption, columns, rows, keyExtractor, onRowPress, empty,
     const desenharLinha = React.useCallback((linha) => {
         const corpo = (_jsxs(_Fragment, { children: [principal ? (_jsx(View, { accessible: true, children: (() => {
                         const v = conteudo(principal, linha);
-                        return typeof v === "string" ? _jsx(Text, { size: "md", weight: 600, children: v }) : v;
+                        return typeof v === "string" ? _jsx(Text, { size: "md", weight: 600, numeric: true, children: v }) : v;
                     })() })) : null, secundarias.map((coluna) => {
                     const v = conteudo(coluna, linha);
                     const nome = typeof coluna.header === "string" && typeof v === "string"
                         ? `${coluna.header}: ${v}` : undefined;
                     return (_jsxs(View, { accessible: true, accessibilityLabel: nome, style: s.celula, children: [typeof coluna.header === "string"
                                 ? _jsx(Text, { size: "sm", tone: "muted", style: s.nomeDaColuna, children: coluna.header })
-                                : coluna.header, typeof v === "string" ? _jsx(Text, { size: "sm", style: s.valor, children: v }) : v] }, coluna.key));
+                                : coluna.header, typeof v === "string" ? _jsx(Text, { size: "sm", numeric: true, style: s.valor, children: v }) : v] }, coluna.key));
                 })] }));
         // Só vira alvo se houver o que tocar. Uma linha `Pressable` sem ação é um botão que não faz
         // nada — e o leitor de tela a anunciaria como botão.

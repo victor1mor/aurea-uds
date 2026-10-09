@@ -47,15 +47,48 @@
     activateTab(tabs[next]);
   });
 
+  // O texto padrão dos avisos que este script escreve sozinho, pela língua da página. Quem emite a
+  // marcação (o React, o catálogo) pode mandar o seu pelo atributo `data-aurea-*` de cada gatilho.
+  var PT = /^pt/i.test(root.lang || "");
+  var TEXTO = PT
+    ? {copied: "Copiado", linkCopied: "Link copiado", linkCopyFailed: "Não deu para copiar. Copie o link abaixo."}
+    : {copied: "Copied", linkCopied: "Link copied", linkCopyFailed: "Could not copy. Copy the link below."};
+
+  // GAR-14 (0.28.0) · UMA região de status, montada cedo, para os avisos que não têm outra voz.
+  // Região que nasce junto com o texto nem sempre é lida; a que já existe, é (WCAG 4.1.3, a
+  // mensagem de status). Para repetir o mesmo texto, ela é esvaziada e preenchida de novo um
+  // instante depois.
+  var regiao = null;
+  function regiaoDeStatus() {
+    if (regiao && regiao.isConnected) return regiao;
+    regiao = document.createElement("div");
+    regiao.className = "sr-only";
+    regiao.setAttribute("role", "status");
+    regiao.setAttribute("aria-live", "polite");
+    regiao.setAttribute("data-aurea-status", "");
+    document.body.appendChild(regiao);
+    return regiao;
+  }
+  function anunciar(texto) {
+    var r = regiaoDeStatus();
+    r.textContent = "";
+    setTimeout(function () { r.textContent = texto; }, 100);
+  }
+  if (document.body) regiaoDeStatus();
+  else document.addEventListener("DOMContentLoaded", regiaoDeStatus);
+
   // Copiar código: comportamento do CORE, não do catálogo. Quem marca o gatilho com
   // [data-aurea-copy] ganha o copiar de graça — o CodeBlock do React emite esse mesmo
   // markup. Sem permissão de área de transferência, seleciona o texto pro Ctrl+C.
+  // 0.28.0: o "copiado" também é dito ao leitor de tela — antes só o ícone mudava, e quem não vê
+  // não sabia se tinha copiado.
   function copy(trigger) {
     var scope = trigger.closest("[data-aurea-copy-scope]") || trigger.parentElement;
     var source = scope && scope.querySelector("code, pre, [data-aurea-copy-source]");
     if (!source) return;
     function done() {
       trigger.classList.add("is-done");
+      anunciar(trigger.getAttribute("data-aurea-copy-done") || TEXTO.copied);
       setTimeout(function () { trigger.classList.remove("is-done"); }, 1500);
     }
     function select() {
@@ -73,6 +106,121 @@
   document.addEventListener("click", function (event) {
     var trigger = event.target.closest && event.target.closest("[data-aurea-copy]");
     if (trigger) copy(trigger);
+  });
+
+  // GAR-14 (0.28.0) · COMPARTILHAR. O gatilho marcado com [data-aurea-share] (o `Button share` do
+  // React emite isto) pergunta ao navegador se ele sabe compartilhar ESTE link — detectar o recurso,
+  // e não adivinhar o aparelho, é o padrão da web. Sabe: abre a janela do aparelho; a pessoa
+  // cancelar (`AbortError`) não é erro e não diz nada. Não sabe: copia o link e mostra "Link
+  // copiado" preso ao botão. A cópia falhou: avisa e mostra o link selecionado, para o Ctrl+C.
+  // O aviso tem a medida do botão (`.toast-anchored`, no aurea.css).
+  var avisoAberto = null;
+  function fecharAviso(devolverFoco) {
+    if (!avisoAberto) return;
+    var a = avisoAberto;
+    avisoAberto = null;
+    clearTimeout(a.timer);
+    window.removeEventListener("scroll", a.fechar, true);
+    window.removeEventListener("resize", a.fechar);
+    document.removeEventListener("keydown", a.tecla, true);
+    document.removeEventListener("pointerdown", a.fora, true);
+    a.el.remove();
+    if (devolverFoco && a.gatilho.isConnected) a.gatilho.focus();
+  }
+  function posicionar(el, gatilho) {
+    var r = gatilho.getBoundingClientRect();
+    // A distância é o token, lido da página — não um número escrito aqui.
+    var rem = parseFloat(getComputedStyle(root).fontSize) || 16;
+    var espaco = (parseFloat(getComputedStyle(root).getPropertyValue("--space-2")) || 0) * rem;
+    el.style.top = (r.bottom + espaco) + "px";
+    var largura = el.getBoundingClientRect().width;
+    var rtl = getComputedStyle(gatilho).direction === "rtl";
+    var x = rtl ? r.right - largura : r.left;
+    el.style.left = Math.max(espaco, Math.min(x, window.innerWidth - largura - espaco)) + "px";
+  }
+  function avisoAncorado(gatilho, falhou, texto, url) {
+    fecharAviso(false);
+    var aviso = document.createElement("div");
+    aviso.className = "toast-anchored" + (falhou ? " toast-anchored-danger" : "");
+    var icone = document.createElement("span");
+    icone.className = "toast-anchored-icon";
+    icone.setAttribute("aria-hidden", "true");
+    var rotulo = document.createElement("span");
+    rotulo.textContent = texto;
+    aviso.appendChild(icone);
+    aviso.appendChild(rotulo);
+    var el = aviso, campo = null;
+    if (falhou) {
+      el = document.createElement("div");
+      el.className = "toast-anchored-stack toast-anchored-fixed";
+      el.appendChild(aviso);
+      campo = document.createElement("input");
+      campo.className = "input toast-anchored-link";
+      campo.readOnly = true;
+      campo.value = url;
+      campo.setAttribute("aria-label", texto);
+      el.appendChild(campo);
+    } else {
+      aviso.className += " toast-anchored-fixed";
+      // O texto vai pela região de status; o desenho é só para quem vê, e não fala duas vezes.
+      aviso.setAttribute("aria-hidden", "true");
+    }
+    document.body.appendChild(el);
+    posicionar(el, gatilho);
+    var estado = {el: el, gatilho: gatilho, timer: 0};
+    // Rolar a PÁGINA solta o aviso do botão, e ele fecha. Mas o campo do link rola o próprio texto
+    // quando é selecionado — rolagem de dentro do aviso não conta (medido no navegador: sem esta
+    // guarda, o aviso de erro fechava no mesmo instante em que abria).
+    estado.fechar = function (e) { if (e && e.target && e.target.nodeType === 1 && el.contains(e.target)) return; fecharAviso(false); };
+    estado.tecla = function (e) { if (e.key === "Escape") fecharAviso(true); };
+    estado.fora = function (e) { if (!el.contains(e.target) && e.target !== gatilho) fecharAviso(false); };
+    avisoAberto = estado;
+    window.addEventListener("scroll", estado.fechar, true);
+    window.addEventListener("resize", estado.fechar);
+    if (falhou) {
+      // O erro fica até a pessoa resolver: Esc devolve o foco ao botão, clicar fora fecha.
+      document.addEventListener("keydown", estado.tecla, true);
+      document.addEventListener("pointerdown", estado.fora, true);
+      campo.focus();
+      campo.select();
+    } else {
+      estado.timer = setTimeout(estado.fechar, 1500);
+    }
+    anunciar(texto);
+  }
+  function share(trigger) {
+    var url = trigger.getAttribute("data-aurea-share-url") || location.href;
+    var dados = {url: url};
+    var titulo = trigger.getAttribute("data-aurea-share-title");
+    var texto = trigger.getAttribute("data-aurea-share-text");
+    if (titulo) dados.title = titulo;
+    if (texto) dados.text = texto;
+    var copiado = trigger.getAttribute("data-aurea-share-copied") || TEXTO.linkCopied;
+    var falhou = trigger.getAttribute("data-aurea-share-failed") || TEXTO.linkCopyFailed;
+    function copiar() {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) {
+        avisoAncorado(trigger, true, falhou, url);
+        return Promise.resolve();
+      }
+      return navigator.clipboard.writeText(url).then(
+        function () { avisoAncorado(trigger, false, copiado); },
+        function () { avisoAncorado(trigger, true, falhou, url); });
+    }
+    if (typeof navigator.share === "function" && (!navigator.canShare || navigator.canShare(dados))) {
+      return navigator.share(dados).catch(function (e) {
+        if (!e || e.name !== "AbortError") return copiar();
+      });
+    }
+    return copiar();
+  }
+
+  document.addEventListener("click", function (event) {
+    // O `Button` do React faz o mesmo no próprio clique e marca o evento com `preventDefault`,
+    // para não compartilhar duas vezes quando os dois estão na página.
+    if (event.defaultPrevented) return;
+    var trigger = event.target.closest && event.target.closest("[data-aurea-share]");
+    if (!trigger || trigger.disabled || trigger.getAttribute("aria-disabled") === "true") return;
+    share(trigger);
   });
 
   // TableOfContents: marca sozinho a seção em vista. IntersectionObserver com uma faixa
@@ -258,6 +406,7 @@
       root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
     },
     showToast: showToast,
-    copy: copy
+    copy: copy,
+    share: share
   };
 })();

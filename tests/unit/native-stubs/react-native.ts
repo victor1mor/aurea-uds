@@ -390,9 +390,12 @@ let reduzirMovimento = false;
 /** Liga a preferência de "menos movimento" para o próximo render. */
 export function __definirReduceMotion(v: boolean): void { reduzirMovimento = v; }
 
+/** O que foi dito ao leitor de tela por `announceForAccessibility` (GAR-14, 0.28.0). */
+export const __anuncios: string[] = [];
 export const AccessibilityInfo = {
   isReduceMotionEnabled: () => Promise.resolve(reduzirMovimento),
   addEventListener: (_evento: string, _ouvinte: unknown) => ({remove: () => {}}),
+  announceForAccessibility: (texto: string) => { __anuncios.push(texto); },
 };
 
 export const Image = criarPrimitivo("Image");
@@ -446,6 +449,12 @@ export type KeyboardTypeOptions = string;
 // `Linking.openSettings` e' o caminho que o `PhotoInput` oferece quando a pessoa negou a camera
 // de vez. O teste precisa saber SE ele foi chamado — abrir configuracao de verdade nao ha' como.
 export const __chamadasDeSistema: string[] = [];
+// GAR-14 (0.28.0): o `Button share` abre o compartilhar do sistema. O dublê guarda o que pediram.
+export const __compartilhados: Array<Record<string, unknown>> = [];
+export const Share = {
+  share: (conteudo: Record<string, unknown>) => { __compartilhados.push(conteudo); return Promise.resolve({action: "sharedAction"}); },
+};
+
 export const Linking = {
   openSettings: () => { __chamadasDeSistema.push("openSettings"); return Promise.resolve(); },
   openURL: (u: string) => { __chamadasDeSistema.push("openURL:" + u); return Promise.resolve(); },

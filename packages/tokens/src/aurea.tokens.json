@@ -66,6 +66,15 @@
         "sans-serif"
       ]
     },
+    "font-heading": {
+      "$type": "fontFamily",
+      "$value": [
+        "Atkinson Hyperlegible Next",
+        "Segoe UI",
+        "sans-serif"
+      ],
+      "$description": "A fonte dos títulos (GAR-16, 0.28.0). Hoje é a mesma do texto; existe para o título poder ter fonte própria sem tocar no resto — o nome que a maioria dos sistemas usa."
+    },
     "font-editorial": {
       "$type": "fontFamily",
       "$value": [
@@ -1070,6 +1079,11 @@
       "$type": "number",
       "$value": 700,
       "$description": "Título de página e número de destaque."
+    },
+    "weight-extrabold": {
+      "$type": "number",
+      "$value": 800,
+      "$description": "Título de capa, para quem quiser (GAR-16, 0.28.0). O título padrão continua no semibold."
     },
     "icon-sm": {
       "$type": "dimension",

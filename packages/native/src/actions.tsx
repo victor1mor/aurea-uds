@@ -20,11 +20,13 @@
 //   `appearance:"nav"` — é a pele do item de navegação, e quem a consome é o `BottomNav`/`NavList`
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
-import {Pressable, View, type PressableProps} from "react-native";
+import {AccessibilityInfo, Platform, Pressable, Share, View, type GestureResponderEvent, type PressableProps} from "react-native";
 import {canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type AureaIcon, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
-import {useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
+import {AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
+import type {AureaStrings} from "./strings.js";
+import type {AureaToastManager} from "./toast.js";
 import type {AureaTokens} from "./tokens.js";
 
 /** Quanto peso a caixa tem. */
@@ -184,6 +186,64 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   fullWidth?: boolean;
   /** Estado de alternância, anunciado ao leitor de tela como `checked`. */
   pressed?: boolean;
+  /**
+   * GAR-14 (0.28.0): o botão COMPARTILHA — os mesmos nomes da web. No aparelho, abre o compartilhar do
+   * sistema (`Share` do React Native); o link vai DENTRO da mensagem no Android, que descarta o `url`.
+   * No navegador (`react-native-web`), a regra da web: detectar o recurso; sem ele, copiar e avisar
+   * "Link copiado" pelo `ToastHost`, e dizer ao leitor de tela.
+   */
+  share?: AureaShareData;
+}
+
+/** O que o `Button share` compartilha (GAR-14). Os nomes são os da web. */
+export interface AureaShareData {url?: string; title?: string; text?: string}
+
+type DadosWeb = {url: string; title?: string; text?: string};
+type NavegadorWeb = {
+  share?: (d: DadosWeb) => Promise<void>;
+  canShare?: (d: DadosWeb) => boolean;
+  clipboard?: {writeText?: (t: string) => Promise<void>};
+};
+
+// GAR-14 · o compartilhar do nativo. Ver a prop `share`.
+async function compartilhar(dados: AureaShareData, avisos: AureaToastManager | null, strings: AureaStrings) {
+  if (Platform.OS !== "web") {
+    // O iOS manda o `url` como link de verdade e o `message` como texto; o Android só lê o `message`.
+    const mensagem = [dados.text, dados.url].filter(Boolean).join(" ");
+    try {
+      await Share.share(Platform.OS === "ios" && dados.url
+        ? {url: dados.url, message: dados.text, title: dados.title}
+        : {message: mensagem, title: dados.title});
+    } catch { /* a pessoa fechou, ou o sistema recusou: não há o que dizer */ }
+    return;
+  }
+  // O alvo nativo não tem os tipos do navegador: só o pedaço que se usa aqui (como no E16).
+  const g = globalThis as unknown as {navigator?: NavegadorWeb; location?: {href?: string}};
+  const nav = g.navigator;
+  const url = dados.url ?? g.location?.href ?? "";
+  const pacote: DadosWeb = {url, ...(dados.title ? {title: dados.title} : null), ...(dados.text ? {text: dados.text} : null)};
+  if (typeof nav?.share === "function" && (typeof nav.canShare !== "function" || nav.canShare(pacote))) {
+    try { await nav.share(pacote); return; } catch (e) { if ((e as {name?: string} | null)?.name === "AbortError") return; }
+  }
+  const avisar = (falhou: boolean) => {
+    const texto = falhou ? strings.linkCopyFailed : strings.linkCopied;
+    avisos?.add(falhou ? {title: texto, description: url, type: "danger", duration: 0} : {title: texto, type: "success", duration: 1500});
+    AccessibilityInfo.announceForAccessibility(texto);
+  };
+  try {
+    if (typeof nav?.clipboard?.writeText !== "function") throw new Error("sem área de transferência");
+    await nav.clipboard.writeText(url);
+    avisar(false);
+  } catch { avisar(true); }
+}
+
+/** O toque do botão com o `share`: o `onPress` do app primeiro, depois o compartilhar. O `Button` e
+ *  o `IconButton` usam o mesmo — com um só, os dois não divergem. */
+function useToqueComShare(share: AureaShareData | undefined, onPress: PressableProps["onPress"]) {
+  const avisos = React.useContext(AvisosContext);
+  const strings = useAureaStrings();
+  if (!share) return onPress;
+  return (e: GestureResponderEvent) => { onPress?.(e); void compartilhar(share, avisos, strings); };
 }
 
 /**
@@ -203,9 +263,10 @@ export function Button(props: ButtonProps) {
 function CorpoDoBotao({
   children, appearance = "solid", tone = "neutral", size = "md",
   leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed,
-  disabled, accessibilityLabel, semRecuo = false, ...rest
+  disabled, accessibilityLabel, semRecuo = false, share, onPress, ...rest
 }: ButtonProps & {semRecuo?: boolean}) {
   const t = useAureaTokens();
+  const aoTocar = useToqueComShare(share, onPress);
   const s = folha(t);
   const marca = useSobreAMarca();
   const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
@@ -228,6 +289,7 @@ function CorpoDoBotao({
   return (
     <Pressable
       disabled={disabled}
+      onPress={aoTocar}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       {...estadoAcessivel({disabled: !!disabled, pressed})}
@@ -307,9 +369,10 @@ export function folgaDoToque(t: AureaTokens, size: AureaButtonSize = "md"): numb
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
 function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
-  icons, pressed, disabled, corDoIcone, pesoDoIcone, ...rest
+  icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...rest
 }: IconButtonProps & {corDoIcone?: string; pesoDoIcone?: IconWeight}) {
   const t = useAureaTokens();
+  const aoTocar = useToqueComShare(share, onPress);
   const s = folha(t);
   const marca = useSobreAMarca();
   const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
@@ -326,6 +389,7 @@ function BotaoDeIcone({
   return (
     <Pressable
       disabled={disabled}
+      onPress={aoTocar}
       accessibilityRole="button"
       accessibilityLabel={label}
       {...estadoAcessivel({disabled: !!disabled, pressed})}
@@ -350,7 +414,7 @@ function BotaoDeIcone({
 // do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` (na forma cheia, `moon-fill` e `sun-fill`) saem do registro do
 // app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
-export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {}
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share"> {}
 export function ThemeToggle(props: ThemeToggleProps) {
   const {theme, toggleTheme} = useAureaTheme();
   const t = useAureaTokens();

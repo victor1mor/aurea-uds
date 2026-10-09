@@ -60,6 +60,10 @@ export interface AureaStrings {
     confirmProceed: string;
     /** O botão que dispensa um aviso da pilha. Mesmo nome da web. */
     dismissNotification: string;
+    /** GAR-14 (0.28.0): o aviso do `Button share` quando o link foi copiado. Mesmo nome da web. */
+    linkCopied: string;
+    /** GAR-14 (0.28.0): o aviso quando nem compartilhar nem copiar deu certo. Mesmo nome da web. */
+    linkCopyFailed: string;
     /** O nome da `Table` sem `caption`. Mesmo nome — e mesmo recuo — da web. */
     tableLabel: string;
     /** O nome do `Chart` sem `label`. Mesmo nome da web. */

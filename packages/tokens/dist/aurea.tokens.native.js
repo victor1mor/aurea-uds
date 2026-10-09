@@ -37,6 +37,7 @@ export const base = {
     "oklch": "oklch(0.516 0.105 86.047)"
   },
   "fontUi": "Atkinson Hyperlegible Next",
+  "fontHeading": "Atkinson Hyperlegible Next",
   "fontEditorial": "Atkinson Hyperlegible Next",
   "fontCode": "Atkinson Hyperlegible Mono",
   "textXs": 12,
@@ -272,6 +273,7 @@ export const base = {
   "weightMedium": 500,
   "weightSemibold": 600,
   "weightBold": 700,
+  "weightExtrabold": 800,
   "iconSm": 16,
   "iconMd": 20,
   "iconLg": 24,

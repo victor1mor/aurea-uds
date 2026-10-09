@@ -45,6 +45,18 @@ const FOTO = "data:image/svg+xml," + encodeURIComponent(
   + '<rect width="300" height="200" fill="#3f3f46"/>'
   + '<circle cx="150" cy="100" r="54" fill="#eab308"/></svg>');
 
+// GAR-15 (0.28.0): a "captura" de uma tela de app para a moldura de celular — em pé, 9 por 19,5,
+// uma clara e uma escura (`srcDark`), com o desenho de cartões e linhas e nada mais.
+const tela = (fundo, cartao, linha) => "data:image/svg+xml," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="180" height="390">'
+  + `<rect width="180" height="390" fill="${fundo}"/>`
+  + `<rect x="14" y="40" width="96" height="14" rx="7" fill="${linha}"/>`
+  + `<rect x="14" y="70" width="152" height="70" rx="14" fill="${cartao}"/>`
+  + `<rect x="14" y="152" width="152" height="150" rx="14" fill="${cartao}"/>`
+  + `<rect x="14" y="316" width="152" height="24" rx="12" fill="#eab308"/></svg>`);
+const TELA_CLARA = tela("#f5f5f5", "#ffffff", "#242424");
+const TELA_ESCURA = tela("#1f1f1f", "#292929", "#ffffff");
+
 // A capa do `MediaEmbed`: uma cena neutra, sem amarelo. Com a `FOTO` de cima a pastilha de tocar,
 // que é amarela, se confundia com o círculo amarelo da foto — a prévia ensinava o caso ruim.
 const CAPA = "data:image/svg+xml," + encodeURIComponent(
@@ -160,11 +172,14 @@ export default {
     description: "An <img> that reserves its box before the bytes arrive — that is the "
       + "layout-shift fix — and falls back to a named box, keeping the alt text, when they never do.",
     code: `<Image src="/photo.jpg" alt="The product, from the front" ratio="16/9" />
-<Image src="/photo.jpg" alt="The same photo, uncropped" ratio="1/1" fit="contain" />`,
-    render: () => h("div", {style: {display: "grid", gridTemplateColumns: "1fr 1fr",
-      gap: "var(--space-3)", width: "min(30rem,100%)"}},
+<Image src="/photo.jpg" alt="The same photo, uncropped" ratio="1/1" fit="contain" />
+<Image src="/home.png" srcDark="/home-dark.png" alt="The app's home screen" frame="phone" />`,
+    // GAR-15 (0.28.0): a moldura de celular, genérica, com a captura de cada tema.
+    render: () => h("div", {style: {display: "grid", gridTemplateColumns: "1fr 1fr 8rem",
+      alignItems: "start", gap: "var(--space-3)", width: "min(36rem,100%)"}},
       h(A.Image, {src: FOTO, alt: "The product, from the front", ratio: "16/9"}),
-      h(A.Image, {src: FOTO, alt: "The same photo, uncropped", ratio: "1/1", fit: "contain"})),
+      h(A.Image, {src: FOTO, alt: "The same photo, uncropped", ratio: "1/1", fit: "contain"}),
+      h(A.Image, {src: TELA_CLARA, srcDark: TELA_ESCURA, alt: "The app's home screen", frame: "phone"})),
   },
   // Gallery (L2). O `zoom` fica LIGADO no exemplo e a nota diz por que o diálogo não aparece: é a
   // mesma concessão declarada dos outros componentes de portal. O selecionado entra para a prévia
@@ -294,12 +309,17 @@ export default {
     code: `<Text>Body text</Text>
 <Text type="body-sm" color="muted">Supporting text</Text>
 <Text type="h4">Looks like a heading, reads as text</Text>
-<Text weight="semibold">Semibold</Text>`,
+<Text weight="semibold">Semibold</Text>
+<Text weight="extrabold">Extrabold, for a cover title</Text>
+<Text numeric>$ 41,118.00</Text>`,
+    // GAR-16 (0.28.0): o 800 opcional e os algarismos da mesma largura.
     render: () => h(A.Stack, {gap: "tight"},
       h(A.Text, null, "Body text"),
       h(A.Text, {type: "body-sm", color: "muted"}, "Supporting text"),
       h(A.Text, {type: "h4"}, "Looks like a heading, reads as text"),
-      h(A.Text, {weight: "semibold"}, "Semibold")),
+      h(A.Text, {weight: "semibold"}, "Semibold"),
+      h(A.Text, {weight: "extrabold"}, "Extrabold, for a cover title"),
+      h(A.Text, {numeric: true}, "$ 41,118.00")),
   },
   Heading: {
     // Do 2 ao 6, e não do 1: uma página tem UM h1, e aqui ele é o título da própria página do

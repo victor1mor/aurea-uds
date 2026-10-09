@@ -7,7 +7,7 @@
     "componentes": 129,
     "hooks": 9,
     "aliasesLiterais": 74,
-    "propsDistintas": 290
+    "propsDistintas": 294
   },
   "aliases": {
     "ButtonVariant": {
@@ -1944,12 +1944,13 @@
     },
     "TypographyWeight": {
       "module": "markup",
-      "raw": "\"normal\" | \"medium\" | \"semibold\" | \"bold\"",
+      "raw": "\"normal\" | \"medium\" | \"semibold\" | \"bold\" | \"extrabold\"",
       "union": [
         "normal",
         "medium",
         "semibold",
-        "bold"
+        "bold",
+        "extrabold"
       ]
     },
     "TypographyAlign": {
@@ -2399,6 +2400,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "share",
+              "optional": true,
+              "type": "ButtonShareData",
+              "values": null
             }
           ]
         },
@@ -2556,6 +2563,12 @@
               "name": "kbd",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "share",
+              "optional": true,
+              "type": "ButtonShareData",
               "values": null
             },
             {
@@ -2769,7 +2782,7 @@
         {
           "name": "ToolbarButton",
           "kind": "const",
-          "propsType": "ButtonProps",
+          "propsType": "ToolbarButtonProps",
           "props": [
             {
               "name": "variant",
@@ -5898,11 +5911,18 @@
                 "normal",
                 "medium",
                 "semibold",
-                "bold"
+                "bold",
+                "extrabold"
               ]
             },
             {
               "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "numeric",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -6082,11 +6102,18 @@
                 "normal",
                 "medium",
                 "semibold",
-                "bold"
+                "bold",
+                "extrabold"
               ]
             },
             {
               "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "numeric",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -6268,11 +6295,18 @@
                 "normal",
                 "medium",
                 "semibold",
-                "bold"
+                "bold",
+                "extrabold"
               ]
             },
             {
               "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "numeric",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -6549,11 +6583,18 @@
                 "normal",
                 "medium",
                 "semibold",
-                "bold"
+                "bold",
+                "extrabold"
               ]
             },
             {
               "name": "truncate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "numeric",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -6828,6 +6869,20 @@
               "name": "render",
               "optional": true,
               "type": "React.ReactElement",
+              "values": null
+            },
+            {
+              "name": "frame",
+              "optional": true,
+              "type": "\"phone\"",
+              "values": [
+                "phone"
+              ]
+            },
+            {
+              "name": "srcDark",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]

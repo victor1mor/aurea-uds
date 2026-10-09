@@ -96,6 +96,17 @@ export const acentoDoTom = (t, tom) => tom === "primary" ? t.color.primaryEmphas
                 : tom === "danger" ? t.color.danger400 ?? t.color.destructive
                     : t.color.secondaryForeground;
 /**
+ * A cor de LETRA (e de desenho sobre a tela) de um token de cor — ADR-0061. Os quatro tokens de
+ * estado (`success`, `info`, `warning`, `destructive`) são o FUNDO cheio; quem escreve ou desenha
+ * sobre a tela usa o par `-400` de cada tema. Qualquer outro token passa como está — e é por isso
+ * que a lista é FECHADA: um `primary400` que nascesse amanhã não pode mudar o texto amarelo sem
+ * ninguém pedir. Achado na 0.28.0: o `Text` com tom e a barra do `Progress` tinham ficado de fora.
+ */
+const PAR_DE_LETRA = {
+    success: "success400", info: "info400", warning: "warning400", destructive: "danger400",
+};
+export const letraDoToken = (t, token) => (PAR_DE_LETRA[token] ? t.color[PAR_DE_LETRA[token]] : undefined) ?? t.color[token];
+/**
  * O FUNDO CHEIO de um tom de estado e a letra em cima dele — o par do botão cheio (ADR-0061, 0.27.0):
  * o selo cheio é o botão cheio do mesmo tom. `primary` e `neutral` não têm o par: `undefined`, e
  * quem chama enche com o acento, como antes.

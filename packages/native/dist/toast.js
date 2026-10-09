@@ -62,7 +62,7 @@ import { Icon } from "./icon.js";
 import { ICONE_DA_VARIANTE } from "./feedback.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
 import { Text } from "./text.js";
-import { useAureaStrings, useAureaTokens } from "./theme.js";
+import { AvisosContext, useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
     hospedeiro: { flex: 1 },
     pilha: {
@@ -93,7 +93,9 @@ const folha = criarFolha((t) => ({
 const DURACAO_PADRAO = 5000;
 /** A entrada, nos mesmos `.28s` do `.toast` do CSS. */
 const ENTRADA = 280;
-const Ctx = React.createContext(null);
+// O contexto mora no `theme.tsx` desde a 0.28.0 (GAR-14): o `Button share` também o lê, e ele não
+// pode importar este arquivo sem fechar um ciclo (este importa o `IconButton`).
+const Ctx = AvisosContext;
 /**
  * O gerente de avisos. **Precisa de um `ToastHost` acima na árvore.**
  *

@@ -25,8 +25,16 @@ export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
     ratio?: string;
     fit?: "cover" | "contain";
     render?: React.ReactElement;
+    /** GAR-15 (0.28.0): a captura dentro de uma moldura de celular — GENÉRICA, sem ilha, entalhe nem
+     *  botões (as regras de marketing de um fabricante proíbem simular o aparelho dele, e a Aurea não
+     *  leva marca de terceiro). Com moldura, `className` e `style` vão para a MOLDURA (tamanho e lugar);
+     *  a proporção (`ratio`, padrão 9/19,5) vai para a captura. */
+    frame?: "phone";
+    /** GAR-15 (0.28.0): a captura do tema escuro. A página em `data-theme="dark"` mostra esta; no claro,
+     *  a de `src`. A que não aparece fica `display:none`, fora da árvore de acessibilidade. */
+    srcDark?: string;
 }
-export declare function Image({ ratio, fit, alt, className, style, render, onError, ...props }: ImageProps): React.JSX.Element;
+export declare function Image({ ratio, fit, alt, className, style, render, onError, frame, srcDark, ...props }: ImageProps): React.JSX.Element;
 export type GalleryItemKind = "image" | "video";
 export interface GalleryItem {
     id: string;

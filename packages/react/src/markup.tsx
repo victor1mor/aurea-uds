@@ -336,20 +336,23 @@ export function Prose({className,...props}:HTMLAttributes<HTMLDivElement>&RefAtt
 // título e código têm peça própria, com o elemento certo para o leitor de tela.
 export type TypographyType="body"|"body-sm"|"body-xs"|"code"|"h1"|"h2"|"h3"|"h4"|"h5"|"h6";
 export type TypographyColor="default"|"muted";
-export type TypographyWeight="normal"|"medium"|"semibold"|"bold";
+export type TypographyWeight="normal"|"medium"|"semibold"|"bold"|"extrabold";
 export type TypographyAlign="start"|"center"|"end"|"justify";
 export type HeadingLevel=1|2|3|4|5|6;
 export type ParagraphSize="base"|"sm"|"xs";
-interface TypographyBase{align?:TypographyAlign;color?:TypographyColor;weight?:TypographyWeight;truncate?:boolean}
-const tipografia=(tipo:TypographyType,{align,color,weight,truncate}:TypographyBase,className?:string)=>
-  cx("typography",`typography-${tipo}`,color==="muted"&&"typography-muted",weight&&`typography-weight-${weight}`,align&&`typography-align-${align}`,truncate&&"typography-truncate",className);
+interface TypographyBase{align?:TypographyAlign;color?:TypographyColor;weight?:TypographyWeight;truncate?:boolean;
+  /** GAR-16 (0.28.0): algarismos da mesma largura — para número que alinha em coluna (preço, ano,
+   *  ficha técnica) ou que muda na tela. Desligado por padrão: no texto corrido o "1" estreito é o certo. */
+  numeric?:boolean}
+const tipografia=(tipo:TypographyType,{align,color,weight,truncate,numeric}:TypographyBase,className?:string)=>
+  cx("typography",`typography-${tipo}`,color==="muted"&&"typography-muted",weight&&`typography-weight-${weight}`,align&&`typography-align-${align}`,truncate&&"typography-truncate",numeric&&"typography-numeric",className);
 export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>,"color">,RefAttributes<HTMLSpanElement>,TypographyBase{type?:TypographyType}
-export function Text({type="body",align,color,weight,truncate,className,...props}:TextProps){return <span className={tipografia(type,{align,color,weight,truncate},className)} {...props}/>}
+export function Text({type="body",align,color,weight,truncate,numeric,className,...props}:TextProps){return <span className={tipografia(type,{align,color,weight,truncate,numeric},className)} {...props}/>}
 export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>,"color">,RefAttributes<HTMLHeadingElement>,TypographyBase{level?:HeadingLevel}
 // O nível decide o elemento E o tamanho, como na referência: um `h2` tem a cara de título 2.
-export function Heading({level=1,align,color,weight,truncate,className,...props}:HeadingProps){const Tag=`h${level}` as "h1";return <Tag className={tipografia(`h${level}`,{align,color,weight,truncate},className)} {...props}/>}
+export function Heading({level=1,align,color,weight,truncate,numeric,className,...props}:HeadingProps){const Tag=`h${level}` as "h1";return <Tag className={tipografia(`h${level}`,{align,color,weight,truncate,numeric},className)} {...props}/>}
 export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>,"color">,RefAttributes<HTMLParagraphElement>,TypographyBase{size?:ParagraphSize}
-export function Paragraph({size="base",align,color,weight,truncate,className,...props}:ParagraphProps){return <p className={tipografia(size==="base"?"body":`body-${size}`,{align,color,weight,truncate},className)} {...props}/>}
+export function Paragraph({size="base",align,color,weight,truncate,numeric,className,...props}:ParagraphProps){return <p className={tipografia(size==="base"?"body":`body-${size}`,{align,color,weight,truncate,numeric},className)} {...props}/>}
 export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>,"color">,RefAttributes<HTMLElement>,TypographyBase{}
 export function Code({align,color,weight,truncate,className,...props}:CodeProps){return <code className={tipografia("code",{align,color,weight,truncate},className)} {...props}/>}
 

@@ -27,6 +27,7 @@ export declare const useDensity: () => {
     setDensity: (d: AureaDensity) => void;
 };
 export declare const DentroDoProviderContext: React.Context<boolean>;
+export declare const avisosAncorados: import("@base-ui/react").ToastManager<any>;
 export declare const PortalContext: React.Context<HTMLElement | null | undefined>;
 export declare const usePortalContainer: () => HTMLElement | null | undefined;
 export interface Reordenavel<E extends HTMLElement> {

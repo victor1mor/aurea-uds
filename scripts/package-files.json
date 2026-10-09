@@ -33,6 +33,7 @@
       "files-native/atkinson-hyperlegible-next-500-normal.ttf",
       "files-native/atkinson-hyperlegible-next-600-normal.ttf",
       "files-native/atkinson-hyperlegible-next-700-normal.ttf",
+      "files-native/atkinson-hyperlegible-next-800-normal.ttf",
       "files/atkinson-hyperlegible-mono-400-normal.woff2",
       "files/atkinson-hyperlegible-mono-500-normal.woff2",
       "files/atkinson-hyperlegible-mono-600-normal.woff2",
@@ -41,6 +42,7 @@
       "files/atkinson-hyperlegible-next-500-normal.woff2",
       "files/atkinson-hyperlegible-next-600-normal.woff2",
       "files/atkinson-hyperlegible-next-700-normal.woff2",
+      "files/atkinson-hyperlegible-next-800-normal.woff2",
       "package.json"
     ],
     "@aurea-uds/icons": [

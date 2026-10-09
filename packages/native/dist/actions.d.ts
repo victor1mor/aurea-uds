@@ -40,6 +40,19 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
     fullWidth?: boolean;
     /** Estado de alternância, anunciado ao leitor de tela como `checked`. */
     pressed?: boolean;
+    /**
+     * GAR-14 (0.28.0): o botão COMPARTILHA — os mesmos nomes da web. No aparelho, abre o compartilhar do
+     * sistema (`Share` do React Native); o link vai DENTRO da mensagem no Android, que descarta o `url`.
+     * No navegador (`react-native-web`), a regra da web: detectar o recurso; sem ele, copiar e avisar
+     * "Link copiado" pelo `ToastHost`, e dizer ao leitor de tela.
+     */
+    share?: AureaShareData;
+}
+/** O que o `Button share` compartilha (GAR-14). Os nomes são os da web. */
+export interface AureaShareData {
+    url?: string;
+    title?: string;
+    text?: string;
 }
 /**
  * Botão. `Pressable` do RN, alvo ≥ `--target-min`, pele de token.
@@ -79,6 +92,6 @@ export declare function IconButton(props: IconButtonProps): React.JSX.Element;
  */
 export declare function folgaDoToque(t: AureaTokens, size?: AureaButtonSize): number;
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
-export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share"> {
 }
 export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;

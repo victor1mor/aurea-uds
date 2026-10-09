@@ -56,6 +56,16 @@ const folha = criarFolha((t) => ({
     },
     contain: { backgroundColor: "transparent" },
     quebrada: { alignItems: "center", justifyContent: "center" },
+    // GAR-15 (0.28.0): a moldura de celular — os mesmos tokens da web (`.image-frame-phone`): a
+    // superfície do cartão, a borda, a sombra média e o canto da folha de baixo; o de dentro acompanha.
+    moldura: {
+        padding: t.size.space2,
+        borderWidth: t.size.borderWidth, borderColor: t.color.border,
+        ...canto(t.size.radiusSheet),
+        backgroundColor: t.color.card,
+        ...(t.shadow.shadowMd ? { boxShadow: [t.shadow.shadowMd] } : null),
+    },
+    naMoldura: { ...canto(t.size.radiusSheet - t.size.space2), aspectRatio: 9 / 19.5 },
     ladrilho: { gap: t.size.space1, padding: t.size.space1, ...canto(t.size.radiusLg) },
     ladrilhoEscolhido: { backgroundColor: t.color.secondary },
 }));
@@ -93,10 +103,12 @@ const fonteDaImagem = (s) => typeof s === "string" ? { uri: s } : s;
  * Trocar o bitmap por uma caixa muda o que se vê, não o que a foto É — e o `role="image"` mapeia
  * nos dois sistemas (`ReactAccessibilityDelegate.kt:461`, `RCTConversions.h:96`).
  */
-export function Image({ source, alt, ratio, fit = "cover", fallback, fallbackIcon = "image", render, onError, style, testID, }) {
+export function Image({ source: fonteClara, alt, ratio, fit = "cover", fallback, fallbackIcon = "image", render, onError, frame, sourceDark, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const [quebrou, setQuebrou] = React.useState(false);
+    // O tema é do provider, então aqui basta escolher a fonte — não há duas imagens como na web.
+    const source = t.theme === "dark" && sourceDark ? sourceDark : fonteClara;
     // A `source` nova merece uma tentativa nova — é a mesma linha do `Avatar` (`display.tsx:283`),
     // e sem ela uma URL quebrada deixa um buraco permanente mesmo depois de o app trocar a foto.
     React.useEffect(() => { setQuebrou(false); }, [source]);
@@ -104,11 +116,14 @@ export function Image({ source, alt, ratio, fit = "cover", fallback, fallbackIco
     const caixa = [
         s.imagem,
         fit === "contain" && s.contain,
+        frame && s.naMoldura,
         proporcao != null && { aspectRatio: proporcao },
-        style,
+        !frame && style,
     ];
+    // Com moldura, a imagem vai dentro de uma caixa que leva o `style` e o `testID` do consumidor.
+    const moldar = (filho) => frame ? _jsx(View, { testID: testID, style: [s.moldura, style], children: filho }) : filho;
     if (quebrou) {
-        return (_jsx(View, { testID: testID, style: [caixa, s.quebrada], accessible: true, accessibilityRole: "image", accessibilityLabel: alt || undefined, children: fallback ?? (fallbackIcon
+        return moldar(_jsx(View, { testID: frame ? undefined : testID, style: [caixa, s.quebrada], accessible: true, accessibilityRole: "image", accessibilityLabel: alt || undefined, children: fallback ?? (fallbackIcon
                 ? _jsx(Icon, { name: fallbackIcon, size: "lg", color: t.color.mutedForeground })
                 : null) }));
     }
@@ -120,21 +135,21 @@ export function Image({ source, alt, ratio, fit = "cover", fallback, fallbackIco
         accessible: alt !== "",
         accessibilityRole: alt !== "" ? "image" : undefined,
         accessibilityLabel: alt !== "" ? alt : undefined,
-        testID,
+        testID: frame ? undefined : testID,
     };
     // `cloneElement` e não `useRender`: o idioma do Base UI não existe aqui, e o que o caso real
     // precisa é de um elemento pronto recebendo as nossas props. As props do consumidor vêm
     // primeiro no objeto do elemento e as nossas depois — `source` e `onError` são o contrato
     // deste componente, e deixá-las sobrescrevíveis seria prometer o substituto e não entregá-lo.
     if (render)
-        return React.cloneElement(render, comuns);
+        return moldar(React.cloneElement(render, comuns));
     // ⚠ O molde é `ImageStyle` e não `ViewStyle`, e a conversão é CONSCIENTE: os dois tipos só
     // divergem em duas coisas — o `overflow` do `ViewStyle` aceita `"scroll"`, que o `ImageStyle`
     // não tem, e o `ImageStyle` soma `resizeMode`/`tintColor`/`overlayColor`. **Nada aqui escreve
     // nenhuma das duas**: a folha põe largura, raio, fundo e proporção, e o `resizeMode` vai como
     // prop, ao lado. A API pública fica em `ViewStyle` de propósito — quem chama pensa em caixa, e
     // fazer o consumidor importar `ImageStyle` para passar um raio seria vazar o primitivo.
-    return _jsx(ImageRN, { ...comuns, style: caixa, resizeMode: fit });
+    return moldar(_jsx(ImageRN, { ...comuns, style: caixa, resizeMode: fit }));
 }
 /**
  * A grade de fotos, e a foto grande quando se toca.

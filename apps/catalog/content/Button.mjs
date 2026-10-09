@@ -12,7 +12,7 @@
 // Button é o EXEMPLAR (AUREA.md, regra do exemplar): o rigor daqui é o piso dos outros —
 // API na ficha, um exemplo por recurso, nada prometido na Features que não tenha exemplo.
 import {createElement as h} from "react";
-import {Button} from "../../../packages/react/dist/index.js";
+import {Button, IconButton} from "../../../packages/react/dist/index.js";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 const loose = {...row, gap: "var(--space-5)"};
@@ -30,6 +30,7 @@ export default {
     "type=\"button\" by default: a Cancel button inside a <form> never fires submit by accident.",
     "Loading shows a spinner and sets aria-busy; the label stays for context.",
     "With href it renders an anchor — same skin, link semantics. Disabled becomes aria-disabled.",
+    "share opens the device's share sheet when the browser has one; otherwise it copies the link and says \"Link copied\" under the button, at the button's own size, and to the screen reader.",
     "Stretch with fullWidth, announce a shortcut with kbd. For a button that STAYS on, the component is Toggle — `pressed` here is deprecated since 0.4.0 and goes away in 1.0.",
   ],
 
@@ -142,6 +143,20 @@ export default {
       description: "With href it renders an anchor wearing the same skin: a button that navigates is a link, and the reader announces it as one.",
       code: '<Button variant="outline" href="/docs" trailingIcon="arrow-right">Read the docs</Button>',
       render: () => h(Button, {variant: "outline", href: "./index.html", trailingIcon: "caret-down"}, "Read the docs"),
+    },
+    {
+      title: "Share",
+      description: "share asks the browser whether it can share this link — feature detection, not device guessing. "
+        + "On a phone (and in Chrome, Edge or Safari on a computer) the device's share sheet opens, and closing it is not an error. "
+        + "Where the browser cannot share, the link is copied and \"Link copied\" appears under the button, at the button's own size. "
+        + "If copying fails, the link is shown selected for Ctrl+C.",
+      code: [
+        '<Button share={{url: "https://example.com/report", title: "Weekly report"}} leadingIcon="share-network">Share</Button>',
+        '<IconButton icon="share-network" label="Share link" variant="secondary" share={{url: "https://example.com/report"}} />',
+      ].join("\n"),
+      render: () => h("div", {style: row},
+        h(Button, {share: {url: "https://example.com/report", title: "Weekly report"}, leadingIcon: "share-network"}, "Share"),
+        h(IconButton, {icon: "share-network", label: "Share link", variant: "secondary", share: {url: "https://example.com/report"}})),
     },
     {
       title: "Full width",
