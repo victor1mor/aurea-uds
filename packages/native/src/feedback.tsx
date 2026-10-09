@@ -76,9 +76,9 @@ const folha = criarFolha((t: AureaTokens) => ({
     flex: 1, minWidth: 0,
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
   },
-  alerta_info: {backgroundColor: t.color.infoBg, borderColor: t.color.info},
-  alerta_success: {backgroundColor: t.color.successBg, borderColor: t.color.success},
-  alerta_warning: {backgroundColor: t.color.warningBg, borderColor: t.color.warning},
+  alerta_info: {backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info},
+  alerta_success: {backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success},
+  alerta_warning: {backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning},
   alerta_danger: {backgroundColor: t.color.dangerBg, borderColor: t.color.danger400 ?? t.color.destructive},
   corpoDoAlerta: {flex: 1, gap: 2},
 
@@ -367,10 +367,10 @@ export function Alert({
   const s = folha(t);
   const strings = useAureaStrings();
   const v: AureaAlertVariant = variant ?? (state ? gravidadeDoEstado(state) : "info");
-  const corDoIcone = v === "success" ? t.color.success
-    : v === "warning" ? t.color.warning
+  const corDoIcone = v === "success" ? (t.color.success400 ?? t.color.success)
+    : v === "warning" ? (t.color.warning400 ?? t.color.warning)
     : v === "danger" ? (t.color.danger400 ?? t.color.destructive)
-    : t.color.info;
+    : (t.color.info400 ?? t.color.info);
 
   return (
     // 🔴 A MOLDURA NÃO É MAIS `accessible` — defeito achado em 17/09/2026 varrendo o pacote

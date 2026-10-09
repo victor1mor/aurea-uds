@@ -1161,74 +1161,80 @@
     "dark": {
       "background": {
         "$type": "color",
-        "$description": "The page canvas — the furthest-back surface. Everything floats on top of it; nothing else should use it as a fill.",
+        "$description": "The page canvas — the furthest-back surface. Everything floats on top of it; nothing else should use it as a fill. A paleta de referência escolhida pelo Victor (ADR-0061, 09/10/2026): os neutros e as cores de estado dos dois temas seguem essa referência; o amarelo da marca não muda.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.145,
-            0,
-            0
-          ]
+            0.12157,
+            0.12157,
+            0.12157
+          ],
+          "hex": "#1f1f1f"
         }
       },
       "foreground": {
         "$type": "color",
         "$description": "Default body text, on the canvas and on the panel surfaces alike. The most used text colour in the system.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "card": {
         "$type": "color",
         "$description": "Surface of a floating panel: card, topbar, content area. The Aurea identity is built on these, so this is the fill you reach for by default.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.205,
-            0,
-            0
-          ]
+            0.16078,
+            0.16078,
+            0.16078
+          ],
+          "hex": "#292929"
         }
       },
       "card-foreground": {
         "$type": "color",
         "$description": "Text on --card. Separate from --foreground so a panel can shift tone without the text following blindly.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "popover": {
         "$type": "color",
         "$description": "Surface of a TRANSIENT layer — dialog, drawer, toast, menu, tooltip. It reads as sitting above --card, and that is what tells the eye the layer is temporary.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.205,
-            0,
-            0
-          ]
+            0.16078,
+            0.16078,
+            0.16078
+          ],
+          "hex": "#292929"
         }
       },
       "popover-foreground": {
         "$type": "color",
         "$description": "Text on --popover.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "primary": {
@@ -1255,134 +1261,143 @@
         "$type": "color",
         "$description": "Fill of the quiet-but-present control: secondary button, the current item of a navigation list, a segment that is on.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.274,
-            0.006,
-            286.033
-          ]
+            0.2,
+            0.2,
+            0.2
+          ],
+          "hex": "#333333"
         }
       },
       "secondary-foreground": {
         "$type": "color",
         "$description": "Text on --secondary.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "muted": {
         "$type": "color",
         "$description": "Fill for a de-emphasised block — the surface counterpart of --muted-foreground, not a text colour.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.269,
-            0,
-            0
-          ]
+            0.2,
+            0.2,
+            0.2
+          ],
+          "hex": "#333333"
         }
       },
       "muted-foreground": {
         "$type": "color",
         "$description": "Secondary text: helper copy, captions, an item that is present but is not the point.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.708,
-            0,
-            0
-          ]
+            0.67843,
+            0.67843,
+            0.67843
+          ],
+          "hex": "#adadad"
         }
       },
       "accent": {
         "$type": "color",
         "$description": "Hover surface of a control that has no fill of its own (ghost and outline buttons). The lightest possible \"something happened here\".",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.269,
-            0,
-            0
-          ]
+            0.2,
+            0.2,
+            0.2
+          ],
+          "hex": "#333333"
         }
       },
       "accent-foreground": {
         "$type": "color",
         "$description": "Text on --accent.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "destructive": {
         "$type": "color",
         "$description": "Surface of an action that destroys something: the danger button. For actions only — a MESSAGE about danger uses --danger-400 and --danger-bg.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.704,
-            0.191,
-            22.216
-          ]
+            0.77255,
+            0.05882,
+            0.12157
+          ],
+          "hex": "#c50f1f"
         }
       },
       "destructive-foreground": {
         "$type": "color",
         "$description": "Text on --destructive.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.2,
-            0.02,
-            22
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "border": {
         "$type": "color",
         "$description": "The default hairline between surfaces, and the most used border in the system. If you are unsure which border to use, it is this one.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            1,
-            0,
-            0
+            0.32157,
+            0.32157,
+            0.32157
           ],
-          "alpha": 0.1
+          "hex": "#525252"
         }
       },
       "input": {
         "$type": "color",
         "$description": "Border of a form control. Reserved: the core draws fields with --border, and this exists so a consumer can separate the two without forking the CSS.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            1,
-            0,
-            0
+            0.32157,
+            0.32157,
+            0.32157
           ],
-          "alpha": 0.15
+          "hex": "#525252"
         }
       },
       "ring": {
         "$type": "color",
         "$description": "Reserved alias for a focus ring in consumer code. The core uses --focus-strong; this exists so a consumer can theme their own controls consistently.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.556,
-            0,
-            0
-          ]
+            0.4,
+            0.4,
+            0.4
+          ],
+          "hex": "#666666"
         }
       },
       "chart-1": {
@@ -1449,24 +1464,26 @@
         "$type": "color",
         "$description": "Surface of the side panel. Its own token rather than --card, so the sidebar can be tinted apart from the content without touching every panel.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.205,
-            0,
-            0
-          ]
+            0.16078,
+            0.16078,
+            0.16078
+          ],
+          "hex": "#292929"
         }
       },
       "sidebar-foreground": {
         "$type": "color",
         "$description": "Text and navigation items inside the sidebar.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "sidebar-primary": {
@@ -1483,49 +1500,52 @@
         "$type": "color",
         "$description": "Hover surface of a sidebar item.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.269,
-            0,
-            0
-          ]
+            0.2,
+            0.2,
+            0.2
+          ],
+          "hex": "#333333"
         }
       },
       "sidebar-accent-foreground": {
         "$type": "color",
         "$description": "Text of a sidebar item under the pointer.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "sidebar-border": {
         "$type": "color",
         "$description": "The sidebar's own hairline: its outline, and the rule under the brand lockup.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            1,
-            0,
-            0
+            0.32157,
+            0.32157,
+            0.32157
           ],
-          "alpha": 0.1
+          "hex": "#525252"
         }
       },
       "sidebar-ring": {
         "$type": "color",
         "$description": "Reserved: focus ring scoped to the sidebar. The core uses the single system ring, --focus-strong.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.556,
-            0,
-            0
-          ]
+            0.4,
+            0.4,
+            0.4
+          ],
+          "hex": "#666666"
         }
       },
       "surface-1": {
@@ -1547,24 +1567,26 @@
         "$type": "color",
         "$description": "A recessed well: code block, log stream. It reads as carved INTO the panel, which is the opposite of --surface-2.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.145,
-            0,
-            0
-          ]
+            0.07843,
+            0.07843,
+            0.07843
+          ],
+          "hex": "#141414"
         }
       },
       "surface-hover": {
         "$type": "color",
         "$description": "Generic hover tint for a row or a disclosure that has no state of its own. When the element already carries meaning (selected, current), use --secondary instead.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.3,
-            0,
-            0
-          ]
+            0.21961,
+            0.21961,
+            0.21961
+          ],
+          "hex": "#383838"
         }
       },
       "foreground-strong": {
@@ -1576,24 +1598,26 @@
         "$type": "color",
         "$description": "The quietest text in the system — group labels, table headers, metadata. One step below --muted-foreground; below it there is nothing readable.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.76,
-            0,
-            0
-          ]
+            0.67843,
+            0.67843,
+            0.67843
+          ],
+          "hex": "#adadad"
         }
       },
       "border-strong": {
         "$type": "color",
         "$description": "A border that must read as an EDGE and not as a hint: outline buttons, keyboard keys. Use it when the border IS the shape of the component.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.58,
-            0,
-            0
-          ]
+            0.67843,
+            0.67843,
+            0.67843
+          ],
+          "hex": "#adadad"
         }
       },
       "field-bg": {
@@ -1611,7 +1635,7 @@
             0,
             0
           ],
-          "alpha": 0.74
+          "alpha": 0.5
         }
       },
       "primary-hover": {
@@ -1642,12 +1666,13 @@
         "$type": "color",
         "$description": "--secondary under the pointer.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.31,
-            0.006,
-            286.033
-          ]
+            0.23922,
+            0.23922,
+            0.23922
+          ],
+          "hex": "#3d3d3d"
         }
       },
       "segment": {
@@ -1709,52 +1734,52 @@
         "$type": "color",
         "$description": "The muted success fill behind text.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.42,
-            0.11,
-            150
+            0.01961,
+            0.1451,
+            0.01961
           ],
-          "alpha": 0.36
+          "hex": "#052505"
         }
       },
       "warning-bg": {
         "$type": "color",
         "$description": "The muted warning fill behind text.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.34,
-            0.08,
-            60
+            0.2902,
+            0.11765,
+            0.01569
           ],
-          "alpha": 0.64
+          "hex": "#4a1e04"
         }
       },
       "danger-bg": {
         "$type": "color",
         "$description": "The muted danger fill, behind text: danger badge, alert, card. Never for a button — that is --destructive.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.32,
-            0.1,
-            22
+            0.23137,
+            0.01961,
+            0.03529
           ],
-          "alpha": 0.62
+          "hex": "#3b0509"
         }
       },
       "info-bg": {
         "$type": "color",
         "$description": "The muted informational fill behind text.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.29,
-            0.08,
-            260
+            0.0,
+            0.14118,
+            0.25098
           ],
-          "alpha": 0.62
+          "hex": "#002440"
         }
       },
       "category-red": {
@@ -1958,43 +1983,89 @@
         }
       },
       "warning-400": {
-        "$value": "{warning}",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.98039,
+            0.62745,
+            0.41961
+          ],
+          "hex": "#faa06b"
+        },
         "$type": "color",
         "$description": "Alias do semantico: a rampa e o tom nao podem divergir."
+      },
+      "success-400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.32941,
+            0.6902,
+            0.32941
+          ],
+          "hex": "#54b054"
+        }
+      },
+      "danger-400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.93333,
+            0.67451,
+            0.69804
+          ],
+          "hex": "#eeacb2"
+        }
+      },
+      "info-400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.36078,
+            0.66667,
+            0.89804
+          ],
+          "hex": "#5caae5"
+        }
       },
       "success": {
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.25882,
-            0.82745,
-            0.57255
+            0.06275,
+            0.48627,
+            0.06275
           ],
-          "hex": "#42d392"
+          "hex": "#107c10"
         },
         "$type": "color",
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele."
       },
       "success-foreground": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.2,
-            0.02,
-            160
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         },
         "$type": "color",
         "$description": "Par do preenchimento."
       },
       "success-hover": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.83,
-            0.145,
-            160
-          ]
+            0.0549,
+            0.43922,
+            0.0549
+          ],
+          "hex": "#0e700e"
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
@@ -2003,71 +2074,76 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.55686,
-            0.77255,
-            1.0
+            0.0,
+            0.47059,
+            0.83137
           ],
-          "hex": "#8ec5ff"
+          "hex": "#0078d4"
         },
         "$type": "color",
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele."
       },
       "info-foreground": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.2,
-            0.02,
-            250
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         },
         "$type": "color",
         "$description": "Par do preenchimento."
       },
       "info-hover": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.86,
-            0.075,
-            250
-          ]
+            0.0,
+            0.42353,
+            0.74902
+          ],
+          "hex": "#006cbf"
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
       },
       "warning": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.72,
-            0.175,
-            60
-          ]
+            0.96863,
+            0.38824,
+            0.04706
+          ],
+          "hex": "#f7630c"
         },
         "$type": "color",
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele."
       },
       "warning-foreground": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.2,
-            0.02,
-            60
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         },
         "$type": "color",
         "$description": "Par do preenchimento."
       },
       "warning-hover": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.78,
-            0.16,
-            60
-          ]
+            0.87059,
+            0.34902,
+            0.04314
+          ],
+          "hex": "#de590b"
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
@@ -2077,67 +2153,74 @@
       "background": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.965,
-            0,
-            0
-          ]
-        }
+            0.96078,
+            0.96078,
+            0.96078
+          ],
+          "hex": "#f5f5f5"
+        },
+        "$description": "A paleta de referência escolhida pelo Victor (ADR-0061, 09/10/2026): os neutros e as cores de estado dos dois temas seguem essa referência; o amarelo da marca não muda."
       },
       "foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.145,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "card": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            1,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "card-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.145,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "popover": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            1,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "popover-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.145,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "primary": {
@@ -2175,23 +2258,25 @@
       "secondary": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.94,
-            0,
-            0
-          ]
+            0.92157,
+            0.92157,
+            0.92157
+          ],
+          "hex": "#ebebeb"
         }
       },
       "secondary-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.21,
-            0.006,
-            285.885
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "muted": {
@@ -2201,12 +2286,13 @@
       "muted-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.43,
-            0,
-            0
-          ]
+            0.38039,
+            0.38039,
+            0.38039
+          ],
+          "hex": "#616161"
         }
       },
       "accent": {
@@ -2216,67 +2302,73 @@
       "accent-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.205,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "destructive": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.577,
-            0.245,
-            27.325
-          ]
+            0.77255,
+            0.05882,
+            0.12157
+          ],
+          "hex": "#c50f1f"
         }
       },
       "destructive-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         }
       },
       "border": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.89,
-            0,
-            0
-          ]
+            0.87843,
+            0.87843,
+            0.87843
+          ],
+          "hex": "#e0e0e0"
         }
       },
       "input": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.922,
-            0,
-            0
-          ]
+            0.87843,
+            0.87843,
+            0.87843
+          ],
+          "hex": "#e0e0e0"
         }
       },
       "ring": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.708,
-            0,
-            0
-          ]
+            0.81961,
+            0.81961,
+            0.81961
+          ],
+          "hex": "#d1d1d1"
         }
       },
       "chart-1": {
@@ -2341,12 +2433,13 @@
       "sidebar-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.145,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "sidebar-primary": {
@@ -2365,34 +2458,37 @@
       "sidebar-accent-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.205,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         }
       },
       "sidebar-border": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.89,
-            0,
-            0
-          ]
+            0.87843,
+            0.87843,
+            0.87843
+          ],
+          "hex": "#e0e0e0"
         }
       },
       "sidebar-ring": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.708,
-            0,
-            0
-          ]
+            0.81961,
+            0.81961,
+            0.81961
+          ],
+          "hex": "#d1d1d1"
         }
       },
       "surface-1": {
@@ -2410,24 +2506,26 @@
       "surface-inset": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.955,
-            0,
-            0
-          ]
+            0.94118,
+            0.94118,
+            0.94118
+          ],
+          "hex": "#f0f0f0"
         },
         "$description": "Superficie afundada do tema claro. NAO pode ser alias de {secondary}: eram o mesmo 0.94, e um Button secondary desaparecia dentro de um painel inset (achado 24/07/2026). 0.955 fica entre o fundo (0.965) e o secondary (0.94) — afunda sem colidir."
       },
       "surface-hover": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.925,
-            0,
-            0
-          ]
+            0.90196,
+            0.90196,
+            0.90196
+          ],
+          "hex": "#e6e6e6"
         }
       },
       "foreground-strong": {
@@ -2437,23 +2535,25 @@
       "subtle-foreground": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.43,
-            0,
-            0
-          ]
+            0.38039,
+            0.38039,
+            0.38039
+          ],
+          "hex": "#616161"
         }
       },
       "border-strong": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.56,
-            0,
-            0
-          ]
+            0.38039,
+            0.38039,
+            0.38039
+          ],
+          "hex": "#616161"
         }
       },
       "field-bg": {
@@ -2465,7 +2565,7 @@
         "$value": {
           "colorSpace": "oklch",
           "components": [
-            0.145,
+            0,
             0,
             0
           ],
@@ -2541,12 +2641,28 @@
         }
       },
       "success-400": {
-        "$value": "{success}",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0549,
+            0.43922,
+            0.0549
+          ],
+          "hex": "#0e700e"
+        },
         "$type": "color",
         "$description": "Alias do semantico."
       },
       "warning-400": {
-        "$value": "{warning}",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.54118,
+            0.21569,
+            0.02745
+          ],
+          "hex": "#8a3707"
+        },
         "$type": "color",
         "$description": "Alias do semantico: a rampa e o tom nao podem divergir."
       },
@@ -2555,15 +2671,23 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.62353,
-            0.13725,
-            0.18824
+            0.69412,
+            0.0549,
+            0.1098
           ],
-          "hex": "#9f2330"
+          "hex": "#b10e1c"
         }
       },
       "info-400": {
-        "$value": "{info}",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.42353,
+            0.74902
+          ],
+          "hex": "#006cbf"
+        },
         "$type": "color",
         "$description": "Alias do semantico."
       },
@@ -2590,45 +2714,49 @@
       "success-bg": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.94,
-            0.05,
-            150
-          ]
+            0.9451,
+            0.98039,
+            0.9451
+          ],
+          "hex": "#f1faf1"
         }
       },
       "warning-bg": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.95,
-            0.06,
-            61
-          ]
+            1.0,
+            0.97647,
+            0.96078
+          ],
+          "hex": "#fff9f5"
         }
       },
       "danger-bg": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.95,
-            0.05,
-            22
-          ]
+            0.99216,
+            0.95294,
+            0.95686
+          ],
+          "hex": "#fdf3f4"
         }
       },
       "info-bg": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.95,
-            0.045,
-            260
-          ]
+            0.95294,
+            0.97647,
+            0.99216
+          ],
+          "hex": "#f3f9fd"
         }
       },
       "category-red": {
@@ -2811,35 +2939,37 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.05882,
-            0.41961,
-            0.24314
+            0.06275,
+            0.48627,
+            0.06275
           ],
-          "hex": "#0f6b3e"
+          "hex": "#107c10"
         },
         "$type": "color",
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele."
       },
       "success-foreground": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         },
         "$type": "color",
         "$description": "Par do preenchimento."
       },
       "success-hover": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.4,
-            0.1,
-            155
-          ]
+            0.0549,
+            0.43922,
+            0.0549
+          ],
+          "hex": "#0e700e"
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
@@ -2848,71 +2978,76 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.08627,
-            0.3098,
-            0.61569
+            0.0,
+            0.47059,
+            0.83137
           ],
-          "hex": "#164f9d"
+          "hex": "#0078d4"
         },
         "$type": "color",
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele."
       },
       "info-foreground": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
         },
         "$type": "color",
         "$description": "Par do preenchimento."
       },
       "info-hover": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.38,
-            0.13,
-            258
-          ]
+            0.0,
+            0.42353,
+            0.74902
+          ],
+          "hex": "#006cbf"
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
       },
       "warning": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.525,
-            0.131,
-            61
-          ]
+            0.96863,
+            0.38824,
+            0.04706
+          ],
+          "hex": "#f7630c"
         },
         "$type": "color",
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele. L foi de 0.535 para 0.525 em 29/08/2026: sobre --warning-bg o par media 4.449:1, abaixo do AA de 4.5. Medido pelas 18 combinações de crachá do skin.spec, e a diferença é imperceptível — o que muda é passar ou não passar."
       },
       "warning-foreground": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.985,
-            0,
-            0
-          ]
+            0.14118,
+            0.14118,
+            0.14118
+          ],
+          "hex": "#242424"
         },
         "$type": "color",
         "$description": "Par do preenchimento."
       },
       "warning-hover": {
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.47,
-            0.115,
-            61
-          ]
+            0.87059,
+            0.34902,
+            0.04314
+          ],
+          "hex": "#de590b"
         },
         "$type": "color",
         "$description": "Realce do preenchimento."

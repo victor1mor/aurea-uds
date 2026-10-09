@@ -24,7 +24,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Image, View } from "react-native";
 import { IconButton, folgaDoToque } from "./actions.js";
-import { canto, acentoDoTom, criarFolha, fundoDoTom } from "./estilos.js";
+import { canto, acentoDoTom, criarFolha, fundoDoTom, preenchimentoDoTom } from "./estilos.js";
 import { Card } from "./layout.js";
 import { gravidadeDoEstado } from "./strings.js";
 import { Icon } from "./icon.js";
@@ -115,14 +115,17 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
     const categoria = ehCategoria(tone) ? coresDaCategoria(t)[tone] : null;
     const acento = categoria ? categoria[0] : acentoDoTom(t, tone);
     const fundo = categoria ? categoria[1] : fundoDoTom(t, tone);
+    // O selo cheio de ESTADO é o botão cheio do mesmo tom (a cor funda e a letra dele); categoria,
+    // marca e neutro enchem com o acento, como antes.
+    const cheio = categoria ? undefined : preenchimentoDoTom(t, tone);
     const pele = emphasis === "solid"
-        ? { backgroundColor: acento, borderColor: "transparent" }
+        ? { backgroundColor: cheio ? cheio[0] : acento, borderColor: "transparent" }
         : emphasis === "outline"
             ? { backgroundColor: "transparent", borderColor: acento }
             : tone === "neutral"
                 ? {}
                 : { backgroundColor: fundo, borderColor: acento };
-    const corDoTexto = emphasis === "solid" ? t.color.background
+    const corDoTexto = emphasis === "solid" ? (cheio ? cheio[1] : t.color.background)
         : tone === "neutral" ? t.color.secondaryForeground : acento;
     const numero = count != null ? formatarContagem(count, max) : undefined;
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
@@ -221,10 +224,10 @@ export function Status({ variant, state, children, style, ...rest }) {
     // Mesma linha do `feedback-client.tsx:34`: `offline` é ele mesmo; o resto vira a gravidade.
     const v = variant
         ?? (state ? (state === "offline" ? "offline" : gravidadeDoEstado(state)) : "neutral");
-    const cor = v === "online" || v === "success" ? t.color.success
-        : v === "away" || v === "warning" ? t.color.warning
+    const cor = v === "online" || v === "success" ? (t.color.success400 ?? t.color.success)
+        : v === "away" || v === "warning" ? (t.color.warning400 ?? t.color.warning)
             : v === "busy" || v === "danger" ? (t.color.danger400 ?? t.color.destructive)
-                : v === "info" ? t.color.info
+                : v === "info" ? (t.color.info400 ?? t.color.info)
                     : v === "offline" ? t.color.subtleForeground
                         : t.color.mutedForeground;
     const rotulo = children ?? (state ? strings.universalState[state] : null);

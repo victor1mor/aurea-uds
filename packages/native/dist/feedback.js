@@ -72,9 +72,9 @@ const folha = criarFolha((t) => ({
         flex: 1, minWidth: 0,
         flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
     },
-    alerta_info: { backgroundColor: t.color.infoBg, borderColor: t.color.info },
-    alerta_success: { backgroundColor: t.color.successBg, borderColor: t.color.success },
-    alerta_warning: { backgroundColor: t.color.warningBg, borderColor: t.color.warning },
+    alerta_info: { backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info },
+    alerta_success: { backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success },
+    alerta_warning: { backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning },
     alerta_danger: { backgroundColor: t.color.dangerBg, borderColor: t.color.danger400 ?? t.color.destructive },
     corpoDoAlerta: { flex: 1, gap: 2 },
     // ── EmptyState ─────────────────────────────────────────────────────────────────────────────
@@ -255,10 +255,10 @@ accessibilityLabel, accessibilityHint, ...rest }) {
     const s = folha(t);
     const strings = useAureaStrings();
     const v = variant ?? (state ? gravidadeDoEstado(state) : "info");
-    const corDoIcone = v === "success" ? t.color.success
-        : v === "warning" ? t.color.warning
+    const corDoIcone = v === "success" ? (t.color.success400 ?? t.color.success)
+        : v === "warning" ? (t.color.warning400 ?? t.color.warning)
             : v === "danger" ? (t.color.danger400 ?? t.color.destructive)
-                : t.color.info;
+                : (t.color.info400 ?? t.color.info);
     return (_jsxs(View
     // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
     // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.

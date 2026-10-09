@@ -320,6 +320,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    Safari do iPhone e é recusado pelo Chrome em página de outro endereço — por isso o campo fica POR
    CIMA, e não escondido e aberto por código. Quem cobra: `native-e16-datepicker-web.test.tsx`.
 
+23. **`0.27.0`, as cores da paleta de referência, feita em 09/10/2026** (*"pode faça tudo"*),
+   [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md): os neutros e as
+   cores de estado dos dois temas seguem a paleta de referência escolhida pelo Victor (nome fora do
+   repositório); o amarelo, os raios, a fonte e os ícones continuam os nossos. O fundo cheio de estado
+   é o mesmo nos dois temas; letra, ícone, borda e barra usam o par `-400`; o selo cheio é o botão
+   cheio. ⚠ **A lição:** cor de FUNDO e cor de LETRA são papéis diferentes, mesmo quando o valor
+   coincide num tema — eram o mesmo token, e a troca da paleta mostrou 24 lugares que pintavam letra
+   com a cor de fundo. **Aprovada pela bancada em 09/10/2026** (*"aprovado, pode enviar"*), com os três
+   tons trocados por outro tom da própria paleta.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -444,6 +454,12 @@ no git.
   matiz, escurecido até 4,5:1 no pior fundo), e não o marrom (decisão do Victor, 02/10/2026,
   [ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)). Onde o amarelo é
   FUNDO, é o amarelo de verdade. O foco e o controle marcado continuam no marrom.
+- **Os neutros e as cores de estado dos dois temas seguem a paleta de referência** (decisão do
+  Victor, 09/10/2026, [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md));
+  o amarelo da marca, os raios, a fonte e os ícones continuam os nossos. O fundo cheio de estado
+  (`--success`, `--info`, `--warning`, `--destructive`) é a MESMA cor nos dois temas; letra, ícone,
+  borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
+  `paleta-adr0061.test.tsx` reprova.
 - Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - Proibido: a aparência de outro design system; caixas retangulares genéricas;

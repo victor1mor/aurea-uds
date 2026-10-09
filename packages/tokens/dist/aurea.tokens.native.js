@@ -341,34 +341,34 @@ export const shadowLayers = {
 export const themes = {
   "dark": {
     "background": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#1f1f1f",
+      "p3": "color(display-p3 0.1216 0.1216 0.1216)",
+      "oklch": null
     },
     "foreground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "card": {
-      "hex": "#171717",
-      "p3": "color(display-p3 0.0905 0.0905 0.0905)",
-      "oklch": "oklch(0.205 0 0)"
+      "hex": "#292929",
+      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "oklch": null
     },
     "cardForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "popover": {
-      "hex": "#171717",
-      "p3": "color(display-p3 0.0905 0.0905 0.0905)",
-      "oklch": "oklch(0.205 0 0)"
+      "hex": "#292929",
+      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "oklch": null
     },
     "popoverForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "primary": {
       "hex": "#f0b100",
@@ -391,59 +391,59 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "secondary": {
-      "hex": "#27272a",
-      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
-      "oklch": "oklch(0.274 0.006 286.033)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "secondaryForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "muted": {
-      "hex": "#262626",
-      "p3": "color(display-p3 0.1494 0.1494 0.1494)",
-      "oklch": "oklch(0.269 0 0)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "mutedForeground": {
-      "hex": "#a1a1a1",
-      "p3": "color(display-p3 0.6302 0.6302 0.6302)",
-      "oklch": "oklch(0.708 0 0)"
+      "hex": "#adadad",
+      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "oklch": null
     },
     "accent": {
-      "hex": "#262626",
-      "p3": "color(display-p3 0.1494 0.1494 0.1494)",
-      "oklch": "oklch(0.269 0 0)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "accentForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "destructive": {
-      "hex": "#ff6467",
-      "p3": "color(display-p3 0.9335 0.4317 0.4235)",
-      "oklch": "oklch(0.704 0.191 22.216)"
+      "hex": "#c50f1f",
+      "p3": "color(display-p3 0.7725 0.0588 0.1216)",
+      "oklch": null
     },
     "destructiveForeground": {
-      "hex": "#1e1212",
-      "p3": "color(display-p3 0.1121 0.0743 0.0714)",
-      "oklch": "oklch(0.2 0.02 22)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "border": {
-      "hex": "#ffffff1a",
-      "p3": "color(display-p3 1 1 1 / 0.1)",
-      "oklch": "oklch(1 0 0 / 0.1)"
+      "hex": "#525252",
+      "p3": "color(display-p3 0.3216 0.3216 0.3216)",
+      "oklch": null
     },
     "input": {
-      "hex": "#ffffff26",
-      "p3": "color(display-p3 1 1 1 / 0.15)",
-      "oklch": "oklch(1 0 0 / 0.15)"
+      "hex": "#525252",
+      "p3": "color(display-p3 0.3216 0.3216 0.3216)",
+      "oklch": null
     },
     "ring": {
-      "hex": "#737373",
-      "p3": "color(display-p3 0.4515 0.4515 0.4515)",
-      "oklch": "oklch(0.556 0 0)"
+      "hex": "#666666",
+      "p3": "color(display-p3 0.4 0.4 0.4)",
+      "oklch": null
     },
     "chart1": {
       "hex": "#8ec5ff",
@@ -471,14 +471,14 @@ export const themes = {
       "oklch": "oklch(0.424 0.199 265.638)"
     },
     "sidebar": {
-      "hex": "#171717",
-      "p3": "color(display-p3 0.0905 0.0905 0.0905)",
-      "oklch": "oklch(0.205 0 0)"
+      "hex": "#292929",
+      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "oklch": null
     },
     "sidebarForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "sidebarPrimary": {
       "hex": "#f0b100",
@@ -491,74 +491,74 @@ export const themes = {
       "oklch": "oklch(0.421 0.095 57.708)"
     },
     "sidebarAccent": {
-      "hex": "#262626",
-      "p3": "color(display-p3 0.1494 0.1494 0.1494)",
-      "oklch": "oklch(0.269 0 0)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "sidebarAccentForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "sidebarBorder": {
-      "hex": "#ffffff1a",
-      "p3": "color(display-p3 1 1 1 / 0.1)",
-      "oklch": "oklch(1 0 0 / 0.1)"
+      "hex": "#525252",
+      "p3": "color(display-p3 0.3216 0.3216 0.3216)",
+      "oklch": null
     },
     "sidebarRing": {
-      "hex": "#737373",
-      "p3": "color(display-p3 0.4515 0.4515 0.4515)",
-      "oklch": "oklch(0.556 0 0)"
+      "hex": "#666666",
+      "p3": "color(display-p3 0.4 0.4 0.4)",
+      "oklch": null
     },
     "surface1": {
-      "hex": "#171717",
-      "p3": "color(display-p3 0.0905 0.0905 0.0905)",
-      "oklch": "oklch(0.205 0 0)"
+      "hex": "#292929",
+      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "oklch": null
     },
     "surface2": {
-      "hex": "#27272a",
-      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
-      "oklch": "oklch(0.274 0.006 286.033)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "surface3": {
-      "hex": "#262626",
-      "p3": "color(display-p3 0.1494 0.1494 0.1494)",
-      "oklch": "oklch(0.269 0 0)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "surfaceInset": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#141414",
+      "p3": "color(display-p3 0.0784 0.0784 0.0784)",
+      "oklch": null
     },
     "surfaceHover": {
-      "hex": "#2e2e2e",
-      "p3": "color(display-p3 0.1792 0.1792 0.1792)",
-      "oklch": "oklch(0.3 0 0)"
+      "hex": "#383838",
+      "p3": "color(display-p3 0.2196 0.2196 0.2196)",
+      "oklch": null
     },
     "foregroundStrong": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "subtleForeground": {
-      "hex": "#b1b1b1",
-      "p3": "color(display-p3 0.6936 0.6936 0.6936)",
-      "oklch": "oklch(0.76 0 0)"
+      "hex": "#adadad",
+      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "oklch": null
     },
     "borderStrong": {
-      "hex": "#7a7a7a",
-      "p3": "color(display-p3 0.479 0.479 0.479)",
-      "oklch": "oklch(0.58 0 0)"
+      "hex": "#adadad",
+      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "oklch": null
     },
     "fieldBg": {
-      "hex": "#262626",
-      "p3": "color(display-p3 0.1494 0.1494 0.1494)",
-      "oklch": "oklch(0.269 0 0)"
+      "hex": "#333333",
+      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "oklch": null
     },
     "overlay": {
-      "hex": "#000000bd",
-      "p3": "color(display-p3 0 0 0 / 0.74)",
-      "oklch": "oklch(0 0 0 / 0.74)"
+      "hex": "#00000080",
+      "p3": "color(display-p3 0 0 0 / 0.5)",
+      "oklch": "oklch(0 0 0 / 0.5)"
     },
     "primaryHover": {
       "hex": "#fac000",
@@ -571,9 +571,9 @@ export const themes = {
       "oklch": "oklch(0.74 0.17 84)"
     },
     "secondaryHover": {
-      "hex": "#303033",
-      "p3": "color(display-p3 0.1877 0.1878 0.1999)",
-      "oklch": "oklch(0.31 0.006 286.033)"
+      "hex": "#3d3d3d",
+      "p3": "color(display-p3 0.2392 0.2392 0.2392)",
+      "oklch": null
     },
     "segment": {
       "hex": "#46464c",
@@ -616,24 +616,24 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047 / 0.22)"
     },
     "successBg": {
-      "hex": "#0b5d2a5c",
-      "p3": "color(display-p3 0.1609 0.3588 0.1866 / 0.36)",
-      "oklch": "oklch(0.42 0.11 150 / 0.36)"
+      "hex": "#052505",
+      "p3": "color(display-p3 0.0196 0.1451 0.0196)",
+      "oklch": null
     },
     "warningBg": {
-      "hex": "#552c00a3",
-      "p3": "color(display-p3 0.312 0.1804 0.0425 / 0.64)",
-      "oklch": "oklch(0.34 0.08 60 / 0.64)"
+      "hex": "#4a1e04",
+      "p3": "color(display-p3 0.2902 0.1177 0.0157)",
+      "oklch": null
     },
     "dangerBg": {
-      "hex": "#5b161a9e",
-      "p3": "color(display-p3 0.329 0.1093 0.1117 / 0.62)",
-      "oklch": "oklch(0.32 0.1 22 / 0.62)"
+      "hex": "#3b0509",
+      "p3": "color(display-p3 0.2314 0.0196 0.0353)",
+      "oklch": null
     },
     "infoBg": {
-      "hex": "#122a529e",
-      "p3": "color(display-p3 0.0924 0.1619 0.3121 / 0.62)",
-      "oklch": "oklch(0.29 0.08 260 / 0.62)"
+      "hex": "#002440",
+      "p3": "color(display-p3 0 0.1412 0.251)",
+      "oklch": null
     },
     "categoryRed": {
       "hex": "#febab4",
@@ -716,59 +716,74 @@ export const themes = {
       "oklch": "oklch(0.36 0.09 350 / 0.62)"
     },
     "warning400": {
-      "hex": "#f18500",
-      "p3": "color(display-p3 0.8895 0.5417 0.1662)",
-      "oklch": "oklch(0.72 0.175 60)"
+      "hex": "#faa06b",
+      "p3": "color(display-p3 0.9804 0.6274 0.4196)",
+      "oklch": null
+    },
+    "success400": {
+      "hex": "#54b054",
+      "p3": "color(display-p3 0.3294 0.6902 0.3294)",
+      "oklch": null
+    },
+    "danger400": {
+      "hex": "#eeacb2",
+      "p3": "color(display-p3 0.9333 0.6745 0.698)",
+      "oklch": null
+    },
+    "info400": {
+      "hex": "#5caae5",
+      "p3": "color(display-p3 0.3608 0.6667 0.898)",
+      "oklch": null
     },
     "success": {
-      "hex": "#42d392",
-      "p3": "color(display-p3 0.2588 0.8275 0.5726)",
+      "hex": "#107c10",
+      "p3": "color(display-p3 0.0628 0.4863 0.0628)",
       "oklch": null
     },
     "successForeground": {
-      "hex": "#0e1913",
-      "p3": "color(display-p3 0.0638 0.0964 0.0757)",
-      "oklch": "oklch(0.2 0.02 160)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "successHover": {
-      "hex": "#63e4a6",
-      "p3": "color(display-p3 0.5273 0.8827 0.6709)",
-      "oklch": "oklch(0.83 0.145 160)"
+      "hex": "#0e700e",
+      "p3": "color(display-p3 0.0549 0.4392 0.0549)",
+      "oklch": null
     },
     "info": {
-      "hex": "#8ec5ff",
-      "p3": "color(display-p3 0.5569 0.7725 1)",
+      "hex": "#0078d4",
+      "p3": "color(display-p3 0 0.4706 0.8314)",
       "oklch": null
     },
     "infoForeground": {
-      "hex": "#0f171f",
-      "p3": "color(display-p3 0.0653 0.0885 0.1182)",
-      "oklch": "oklch(0.2 0.02 250)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "infoHover": {
-      "hex": "#acd5ff",
-      "p3": "color(display-p3 0.7073 0.8325 0.9923)",
-      "oklch": "oklch(0.86 0.075 250)"
+      "hex": "#006cbf",
+      "p3": "color(display-p3 0 0.4235 0.749)",
+      "oklch": null
     },
     "warning": {
-      "hex": "#f18500",
-      "p3": "color(display-p3 0.8895 0.5417 0.1662)",
-      "oklch": "oklch(0.72 0.175 60)"
+      "hex": "#f7630c",
+      "p3": "color(display-p3 0.9686 0.3882 0.0471)",
+      "oklch": null
     },
     "warningForeground": {
-      "hex": "#1d140d",
-      "p3": "color(display-p3 0.1077 0.0795 0.054)",
-      "oklch": "oklch(0.2 0.02 60)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "warningHover": {
-      "hex": "#ff9c3b",
-      "p3": "color(display-p3 0.9501 0.6285 0.3141)",
-      "oklch": "oklch(0.78 0.16 60)"
+      "hex": "#de590b",
+      "p3": "color(display-p3 0.8706 0.349 0.0431)",
+      "oklch": null
     },
     "textMuted": {
-      "hex": "#a1a1a1",
-      "p3": "color(display-p3 0.6302 0.6302 0.6302)",
-      "oklch": "oklch(0.708 0 0)"
+      "hex": "#adadad",
+      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "oklch": null
     },
     "oracle300": {
       "hex": "#8ec5ff",
@@ -798,34 +813,34 @@ export const themes = {
   },
   "light": {
     "background": {
-      "hex": "#f3f3f3",
-      "p3": "color(display-p3 0.954 0.954 0.954)",
-      "oklch": "oklch(0.965 0 0)"
+      "hex": "#f5f5f5",
+      "p3": "color(display-p3 0.9608 0.9608 0.9608)",
+      "oklch": null
     },
     "foreground": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "card": {
       "hex": "#ffffff",
       "p3": "color(display-p3 1 1 1)",
-      "oklch": "oklch(1 0 0)"
+      "oklch": null
     },
     "cardForeground": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "popover": {
       "hex": "#ffffff",
       "p3": "color(display-p3 1 1 1)",
-      "oklch": "oklch(1 0 0)"
+      "oklch": null
     },
     "popoverForeground": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "primary": {
       "hex": "#f0b100",
@@ -849,58 +864,58 @@ export const themes = {
     },
     "secondary": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "secondaryForeground": {
-      "hex": "#18181b",
-      "p3": "color(display-p3 0.0938 0.0938 0.1048)",
-      "oklch": "oklch(0.21 0.006 285.885)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "muted": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "mutedForeground": {
-      "hex": "#505050",
-      "p3": "color(display-p3 0.3124 0.3124 0.3124)",
-      "oklch": "oklch(0.43 0 0)"
+      "hex": "#616161",
+      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "oklch": null
     },
     "accent": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "accentForeground": {
-      "hex": "#171717",
-      "p3": "color(display-p3 0.0905 0.0905 0.0905)",
-      "oklch": "oklch(0.205 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "destructive": {
-      "hex": "#e7000b",
-      "p3": "color(display-p3 0.8303 0.1404 0.1332)",
-      "oklch": "oklch(0.577 0.245 27.325)"
+      "hex": "#c50f1f",
+      "p3": "color(display-p3 0.7725 0.0588 0.1216)",
+      "oklch": null
     },
     "destructiveForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "border": {
-      "hex": "#dbdbdb",
-      "p3": "color(display-p3 0.857 0.857 0.857)",
-      "oklch": "oklch(0.89 0 0)"
+      "hex": "#e0e0e0",
+      "p3": "color(display-p3 0.8784 0.8784 0.8784)",
+      "oklch": null
     },
     "input": {
-      "hex": "#e5e5e5",
-      "p3": "color(display-p3 0.8982 0.8982 0.8982)",
-      "oklch": "oklch(0.922 0 0)"
+      "hex": "#e0e0e0",
+      "p3": "color(display-p3 0.8784 0.8784 0.8784)",
+      "oklch": null
     },
     "ring": {
-      "hex": "#a1a1a1",
-      "p3": "color(display-p3 0.6302 0.6302 0.6302)",
-      "oklch": "oklch(0.708 0 0)"
+      "hex": "#d1d1d1",
+      "p3": "color(display-p3 0.8196 0.8196 0.8196)",
+      "oklch": null
     },
     "chart1": {
       "hex": "#8ec5ff",
@@ -930,12 +945,12 @@ export const themes = {
     "sidebar": {
       "hex": "#ffffff",
       "p3": "color(display-p3 1 1 1)",
-      "oklch": "oklch(1 0 0)"
+      "oklch": null
     },
     "sidebarForeground": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "sidebarPrimary": {
       "hex": "#826202",
@@ -949,73 +964,73 @@ export const themes = {
     },
     "sidebarAccent": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "sidebarAccentForeground": {
-      "hex": "#171717",
-      "p3": "color(display-p3 0.0905 0.0905 0.0905)",
-      "oklch": "oklch(0.205 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "sidebarBorder": {
-      "hex": "#dbdbdb",
-      "p3": "color(display-p3 0.857 0.857 0.857)",
-      "oklch": "oklch(0.89 0 0)"
+      "hex": "#e0e0e0",
+      "p3": "color(display-p3 0.8784 0.8784 0.8784)",
+      "oklch": null
     },
     "sidebarRing": {
-      "hex": "#a1a1a1",
-      "p3": "color(display-p3 0.6302 0.6302 0.6302)",
-      "oklch": "oklch(0.708 0 0)"
+      "hex": "#d1d1d1",
+      "p3": "color(display-p3 0.8196 0.8196 0.8196)",
+      "oklch": null
     },
     "surface1": {
       "hex": "#ffffff",
       "p3": "color(display-p3 1 1 1)",
-      "oklch": "oklch(1 0 0)"
+      "oklch": null
     },
     "surface2": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "surface3": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "surfaceInset": {
       "hex": "#f0f0f0",
-      "p3": "color(display-p3 0.941 0.941 0.941)",
-      "oklch": "oklch(0.955 0 0)"
+      "p3": "color(display-p3 0.9412 0.9412 0.9412)",
+      "oklch": null
     },
     "surfaceHover": {
       "hex": "#e6e6e6",
       "p3": "color(display-p3 0.902 0.902 0.902)",
-      "oklch": "oklch(0.925 0 0)"
+      "oklch": null
     },
     "foregroundStrong": {
-      "hex": "#0a0a0a",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394)",
-      "oklch": "oklch(0.145 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "subtleForeground": {
-      "hex": "#505050",
-      "p3": "color(display-p3 0.3124 0.3124 0.3124)",
-      "oklch": "oklch(0.43 0 0)"
+      "hex": "#616161",
+      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "oklch": null
     },
     "borderStrong": {
-      "hex": "#747474",
-      "p3": "color(display-p3 0.4561 0.4561 0.4561)",
-      "oklch": "oklch(0.56 0 0)"
+      "hex": "#616161",
+      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "oklch": null
     },
     "fieldBg": {
       "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9215 0.9215 0.9215)",
-      "oklch": "oklch(0.94 0 0)"
+      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "oklch": null
     },
     "overlay": {
-      "hex": "#0a0a0a66",
-      "p3": "color(display-p3 0.0394 0.0394 0.0394 / 0.4)",
-      "oklch": "oklch(0.145 0 0 / 0.4)"
+      "hex": "#00000066",
+      "p3": "color(display-p3 0 0 0 / 0.4)",
+      "oklch": "oklch(0 0 0 / 0.4)"
     },
     "primaryHover": {
       "hex": "#fac000",
@@ -1030,7 +1045,7 @@ export const themes = {
     "secondaryHover": {
       "hex": "#e6e6e6",
       "p3": "color(display-p3 0.902 0.902 0.902)",
-      "oklch": "oklch(0.925 0 0)"
+      "oklch": null
     },
     "segment": {
       "hex": "#ffffff",
@@ -1068,23 +1083,23 @@ export const themes = {
       "oklch": "oklch(0.985 0 0)"
     },
     "success400": {
-      "hex": "#0f6b3e",
-      "p3": "color(display-p3 0.0588 0.4196 0.2431)",
+      "hex": "#0e700e",
+      "p3": "color(display-p3 0.0549 0.4392 0.0549)",
       "oklch": null
     },
     "warning400": {
-      "hex": "#9f5400",
-      "p3": "color(display-p3 0.5836 0.3461 0.0687)",
-      "oklch": "oklch(0.525 0.131 61)"
+      "hex": "#8a3707",
+      "p3": "color(display-p3 0.5412 0.2157 0.0274)",
+      "oklch": null
     },
     "danger400": {
-      "hex": "#9f2330",
-      "p3": "color(display-p3 0.6235 0.1373 0.1882)",
+      "hex": "#b10e1c",
+      "p3": "color(display-p3 0.6941 0.0549 0.1098)",
       "oklch": null
     },
     "info400": {
-      "hex": "#164f9d",
-      "p3": "color(display-p3 0.0863 0.3098 0.6157)",
+      "hex": "#006cbf",
+      "p3": "color(display-p3 0 0.4235 0.749)",
       "oklch": null
     },
     "oracle300": {
@@ -1103,24 +1118,24 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047 / 0.18)"
     },
     "successBg": {
-      "hex": "#d5f5da",
-      "p3": "color(display-p3 0.858 0.9579 0.8625)",
-      "oklch": "oklch(0.94 0.05 150)"
+      "hex": "#f1faf1",
+      "p3": "color(display-p3 0.9451 0.9804 0.9451)",
+      "oklch": null
     },
     "warningBg": {
-      "hex": "#ffe6c6",
-      "p3": "color(display-p3 1 0.9081 0.7938)",
-      "oklch": "oklch(0.95 0.06 61)"
+      "hex": "#fff9f5",
+      "p3": "color(display-p3 1 0.9765 0.9608)",
+      "oklch": null
     },
     "dangerBg": {
-      "hex": "#ffe2df",
-      "p3": "color(display-p3 1 0.8932 0.8808)",
-      "oklch": "oklch(0.95 0.05 22)"
+      "hex": "#fdf3f4",
+      "p3": "color(display-p3 0.9922 0.9529 0.9569)",
+      "oklch": null
     },
     "infoBg": {
-      "hex": "#ddf0ff",
-      "p3": "color(display-p3 0.8812 0.9379 1)",
-      "oklch": "oklch(0.95 0.045 260)"
+      "hex": "#f3f9fd",
+      "p3": "color(display-p3 0.9529 0.9765 0.9922)",
+      "oklch": null
     },
     "categoryRed": {
       "hex": "#af3c3a",
@@ -1203,54 +1218,54 @@ export const themes = {
       "oklch": "oklch(0.925 0.044 350)"
     },
     "success": {
-      "hex": "#0f6b3e",
-      "p3": "color(display-p3 0.0588 0.4196 0.2431)",
+      "hex": "#107c10",
+      "p3": "color(display-p3 0.0628 0.4863 0.0628)",
       "oklch": null
     },
     "successForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "successHover": {
-      "hex": "#00572e",
-      "p3": "color(display-p3 0.1347 0.3347 0.1971)",
-      "oklch": "oklch(0.4 0.1 155)"
+      "hex": "#0e700e",
+      "p3": "color(display-p3 0.0549 0.4392 0.0549)",
+      "oklch": null
     },
     "info": {
-      "hex": "#164f9d",
-      "p3": "color(display-p3 0.0863 0.3098 0.6157)",
+      "hex": "#0078d4",
+      "p3": "color(display-p3 0 0.4706 0.8314)",
       "oklch": null
     },
     "infoForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
     },
     "infoHover": {
-      "hex": "#0a3f86",
-      "p3": "color(display-p3 0.1072 0.2427 0.5055)",
-      "oklch": "oklch(0.38 0.13 258)"
+      "hex": "#006cbf",
+      "p3": "color(display-p3 0 0.4235 0.749)",
+      "oklch": null
     },
     "warning": {
-      "hex": "#9f5400",
-      "p3": "color(display-p3 0.5836 0.3461 0.0687)",
-      "oklch": "oklch(0.525 0.131 61)"
+      "hex": "#f7630c",
+      "p3": "color(display-p3 0.9686 0.3882 0.0471)",
+      "oklch": null
     },
     "warningForeground": {
-      "hex": "#fafafa",
-      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
-      "oklch": "oklch(0.985 0 0)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "warningHover": {
-      "hex": "#884800",
-      "p3": "color(display-p3 0.4986 0.296 0.0656)",
-      "oklch": "oklch(0.47 0.115 61)"
+      "hex": "#de590b",
+      "p3": "color(display-p3 0.8706 0.349 0.0431)",
+      "oklch": null
     },
     "textMuted": {
-      "hex": "#505050",
-      "p3": "color(display-p3 0.3124 0.3124 0.3124)",
-      "oklch": "oklch(0.43 0 0)"
+      "hex": "#616161",
+      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "oklch": null
     },
     "oracle500": {
       "hex": "#155dfc",

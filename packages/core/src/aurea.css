@@ -384,7 +384,9 @@ img,svg { display:block; }
 /* O rótulo de grupo também sai da escala da LATERAL, pelo mesmo motivo: `--subtle-foreground` é
    apagado contra a página, e contra um painel escuro num tema claro ele some. Derivado do próprio
    `--sidebar-foreground` em vez de token novo — a lateral não publica um "muted" dela. */
-.sidebar-group-label { margin:var(--space-3) var(--space-3) var(--space-1); color:color-mix(in oklab, var(--sidebar-foreground) 62%, transparent); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-widest); text-transform:uppercase; }
+/* 72% e não 62% desde a 0.27.0 (ADR-0061): com a letra da paleta nova (#242424, menos preta) os 62%
+   davam 4,4:1 sobre o branco — o axe pegou na varredura. 72% é o cinza de texto apagado da paleta. */
+.sidebar-group-label { margin:var(--space-3) var(--space-3) var(--space-1); color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-widest); text-transform:uppercase; }
 .sidebar-sub { padding-inline-start:var(--space-5); }
 /* RECOLHIDA — a lateral vira trilho de ícones. O rótulo NÃO some do DOM: o React troca a
    classe dele por `.sr-only`, então quem usa leitor de tela continua ouvindo o nome. Ícone
@@ -826,11 +828,11 @@ img,svg { display:block; }
 .btn-primary-outline:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
 .btn-primary-ghost { --btn-bg:transparent; --btn-fg:var(--primary); --btn-border:transparent; }
 .btn-primary-ghost:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
-.btn-danger-outline { --btn-bg:transparent; --btn-fg:var(--destructive); --btn-border:var(--destructive); }
+.btn-danger-outline { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:var(--danger-400); }
 .btn-danger-outline:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
-.btn-danger-ghost { --btn-bg:transparent; --btn-fg:var(--destructive); --btn-border:transparent; }
+.btn-danger-ghost { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:transparent; }
 .btn-danger-ghost:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
-[data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-link-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--destructive) 62%, var(--foreground)); }
+[data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-link-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
 /* A MESMA correção para a marca, que estava faltando. Medido em 21/08/2026 na varredura de AA
    da matriz de tom: `.btn-primary-outline` e `.btn-primary-ghost` pintavam o rótulo com
    `--primary` cru, e no tema claro isso dá **1.73:1** — reprovação grave, em componente
@@ -850,7 +852,7 @@ img,svg { display:block; }
 .btn-link:hover:not(:disabled):not([aria-disabled="true"]) { text-decoration-thickness:2px; }
 .btn-link-primary { --btn-fg:var(--primary); }
 [data-theme="light"] .btn-link-primary:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-.btn-link-danger { --btn-fg:var(--destructive); }
+.btn-link-danger { --btn-fg:var(--danger-400); }
 /* pressed entra na linguagem única de "selecionado" acima; só-ícone não leva o fio. */
 /* Kbd — a tecla que dispara a ação, dentro ou fora do botão. Peça própria, não decoração. */
 .kbd { display:inline-flex; align-items:center; justify-content:center; gap:2px; min-width:20px; height:20px; padding:0 6px; border:1px solid var(--border-strong); border-radius:var(--radius-sm); background:var(--secondary); color:var(--muted-foreground); font:500 11px/1 var(--font-code); }
@@ -893,24 +895,26 @@ img,svg { display:block; }
 .btn-solid.btn-tone-info:hover:not(:disabled) { --btn-bg:var(--info-hover); --btn-fg:var(--info-foreground); }
 .btn-solid.btn-tone-warning { --btn-bg:var(--warning); --btn-fg:var(--warning-foreground); --btn-border:transparent; }
 .btn-solid.btn-tone-warning:hover:not(:disabled) { --btn-bg:var(--warning-hover); --btn-fg:var(--warning-foreground); }
-/* e o mesmo tom SEM caixa: contorno, fantasma, link e navegação. O token de tom já é
-   "esta cor, legível contra a superfície DESTE tema", então não há correção por tema aqui. */
+/* e o mesmo tom SEM caixa: contorno, fantasma, link e navegação. ⚠ Desde a 0.27.0 (ADR-0061) o
+   token de tom (`--success`) é o FUNDO cheio — a mesma cor funda nos dois temas —, e não serve
+   de letra no escuro. Letra, ícone, borda e barra sobre a superfície usam o par de letra
+   (`--success-400`, `--info-400`, `--warning-400`, `--danger-400`), que cada tema ajusta. */
 .btn-tone-brand,.btn-tone-brand:hover:not(:disabled) { --btn-fg:var(--primary); }
 [data-theme="light"] .btn-tone-brand:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-brand:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 .btn-outline.btn-tone-brand { --btn-border:var(--primary); }
 .btn-tone-brand:not(.btn-link):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
-.btn-tone-danger,.btn-tone-danger:hover:not(:disabled) { --btn-fg:var(--destructive); }
-[data-theme="light"] .btn-tone-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-danger:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--destructive) 62%, var(--foreground)); }
-.btn-outline.btn-tone-danger { --btn-border:var(--destructive); }
+.btn-tone-danger,.btn-tone-danger:hover:not(:disabled) { --btn-fg:var(--danger-400); }
+[data-theme="light"] .btn-tone-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-danger:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
+.btn-outline.btn-tone-danger { --btn-border:var(--danger-400); }
 .btn-tone-danger:not(.btn-link):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
-.btn-tone-success,.btn-tone-success:hover:not(:disabled) { --btn-fg:var(--success); }
-.btn-outline.btn-tone-success { --btn-border:var(--success); }
+.btn-tone-success,.btn-tone-success:hover:not(:disabled) { --btn-fg:var(--success-400); }
+.btn-outline.btn-tone-success { --btn-border:var(--success-400); }
 .btn-tone-success:not(.btn-link):not(.btn-solid):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--success) 14%, transparent); }
-.btn-tone-info,.btn-tone-info:hover:not(:disabled) { --btn-fg:var(--info); }
-.btn-outline.btn-tone-info { --btn-border:var(--info); }
+.btn-tone-info,.btn-tone-info:hover:not(:disabled) { --btn-fg:var(--info-400); }
+.btn-outline.btn-tone-info { --btn-border:var(--info-400); }
 .btn-tone-info:not(.btn-link):not(.btn-solid):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--info) 14%, transparent); }
-.btn-tone-warning,.btn-tone-warning:hover:not(:disabled) { --btn-fg:var(--warning); }
-.btn-outline.btn-tone-warning { --btn-border:var(--warning); }
+.btn-tone-warning,.btn-tone-warning:hover:not(:disabled) { --btn-fg:var(--warning-400); }
+.btn-outline.btn-tone-warning { --btn-border:var(--warning-400); }
 .btn-tone-warning:not(.btn-link):not(.btn-solid):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--warning) 14%, transparent); }
 .btn-nav:hover:not(:disabled):not([aria-disabled="true"]) { --btn-fg:var(--foreground); }
 /* O botão só de ícone é REDONDO, em todos os tamanhos — decisão do Victor, 25/09/2026
@@ -1362,10 +1366,10 @@ img,svg { display:block; }
    o contador cai sobre a cor da marca e precisa da mesma inversão do botão primário. Os outros
    seis deixam o contador sobre a superfície da barra, onde ele já se lê. */
 
-.badge-success { --badge-accent:var(--success-400); color:var(--success-400); background:var(--success-bg); border-color:color-mix(in srgb,var(--success-400) 35%,var(--border)); }
-.badge-warning { --badge-accent:var(--warning-400); color:var(--warning-400); background:var(--warning-bg); border-color:color-mix(in srgb,var(--warning-400) 35%,var(--border)); }
-.badge-danger { --badge-accent:var(--danger-400); color:var(--danger-400); background:var(--danger-bg); border-color:color-mix(in srgb,var(--danger-400) 35%,var(--border)); }
-.badge-info,.badge-running { --badge-accent:var(--info-400); color:var(--info-400); background:var(--info-bg); border-color:color-mix(in srgb,var(--info-400) 35%,var(--border)); }
+.badge-success { --badge-accent:var(--success-400); --badge-fill:var(--success); --badge-on:var(--success-foreground); color:var(--success-400); background:var(--success-bg); border-color:color-mix(in srgb,var(--success-400) 35%,var(--border)); }
+.badge-warning { --badge-accent:var(--warning-400); --badge-fill:var(--warning); --badge-on:var(--warning-foreground); color:var(--warning-400); background:var(--warning-bg); border-color:color-mix(in srgb,var(--warning-400) 35%,var(--border)); }
+.badge-danger { --badge-accent:var(--danger-400); --badge-fill:var(--destructive); --badge-on:var(--destructive-foreground); color:var(--danger-400); background:var(--danger-bg); border-color:color-mix(in srgb,var(--danger-400) 35%,var(--border)); }
+.badge-info,.badge-running { --badge-accent:var(--info-400); --badge-fill:var(--info); --badge-on:var(--info-foreground); color:var(--info-400); background:var(--info-bg); border-color:color-mix(in srgb,var(--info-400) 35%,var(--border)); }
 /* AS OITO CORES DE CATEGORIA (GAR-07, ADR-0060, 09/10/2026): marcam GRUPO, não estado — "Motos" e
    "Carros" num site de notícias. Mesma receita dos quatro propósitos acima (acento, fundo suave e
    o fio misturado com a borda), e por isso as três ênfases valem para elas sem regra nova. O
@@ -1387,7 +1391,10 @@ img,svg { display:block; }
    número do `soft`. É a mesma armadilha que o `.banner` e o `.data-list` já pagaram aqui.
    `--background` como texto do sólido serve aos DOIS temas porque o acento já vira com o
    tema: `--success-400` é verde CLARO no escuro e verde ESCURO no claro. */
-.badge-solid { background:var(--badge-accent); color:var(--background); border-color:transparent; }
+/* O selo CHEIO de estado é o botão cheio do mesmo tom (ADR-0061): a mesma cor funda e a mesma letra
+   (`--badge-fill`/`--badge-on`). Quem não declara o par (as categorias, a marca, o neutro) segue
+   enchendo com o acento, como antes. */
+.badge-solid { background:var(--badge-fill, var(--badge-accent)); color:var(--badge-on, var(--background)); border-color:transparent; }
 .badge-outline { background:transparent; color:var(--badge-accent); border-color:var(--badge-accent); }
 .status-dot { width:8px; height:8px; border-radius:50%; background:currentColor; box-shadow:0 0 0 3px color-mix(in srgb,currentColor 14%,transparent); }
 /* Status: condição operacional (DIRECTION §3.6) — NÃO é o pill do Badge; é ponto + rótulo
@@ -1396,10 +1403,10 @@ img,svg { display:block; }
    nomes operacionais e os semânticos apontam pro mesmo par de tokens de propósito. */
 .status { display:inline-flex; align-items:center; gap:var(--space-2); color:var(--muted-foreground); font-size:var(--text-sm); }
 .status-label { color:var(--foreground); }
-.status-online,.status-success { color:var(--success); }
-.status-away,.status-warning { color:var(--warning); }
+.status-online,.status-success { color:var(--success-400); }
+.status-away,.status-warning { color:var(--warning-400); }
 .status-busy,.status-danger { color:var(--danger-400); }
-.status-running,.status-info { color:var(--info); }
+.status-running,.status-info { color:var(--info-400); }
 /* offline é o único que NÃO é "mais uma cor": --subtle-foreground e --muted-foreground
    colapsam no MESMO valor no tema claro, então offline sairia idêntico ao neutral. Ponto
    VAZADO resolve nos dois temas e ainda diz a coisa certa (ausência, não outro estado).
@@ -1460,7 +1467,7 @@ img,svg { display:block; }
 .alert h4,.alert strong { display:block; margin:0 0 2px; font-size:var(--text-sm); } .alert p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
 /* A cor do glifo é a da variante, senão o ícone vira enfeite cinza e não repete o sinal.
    Só o ícone DIRETO do alerta: um ícone dentro do corpo (num botão, num link) é do corpo. */
-.alert>.icon { color:var(--info); } .alert-success>.icon { color:var(--success); } .alert-warning>.icon { color:var(--warning); } .alert-danger>.icon { color:var(--danger-400); }
+.alert>.icon { color:var(--info-400); } .alert-success>.icon { color:var(--success-400); } .alert-warning>.icon { color:var(--warning-400); } .alert-danger>.icon { color:var(--danger-400); }
 .banner strong { font-size:var(--text-sm); } .banner p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
 @media (max-width:640px) { .banner { grid-template-columns:auto minmax(0,1fr); } .banner>:last-child { grid-column:2; justify-self:start; } }
 .progress { height:8px; overflow:hidden; border-radius:999px; background:var(--surface-3); }
@@ -1472,10 +1479,10 @@ img,svg { display:block; }
 .progress-field { display:grid; gap:var(--space-1); }
 .progress-detail { justify-self:end; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); font-variant-numeric:tabular-nums; }
 .progress-tone-neutral>span { background:var(--muted-foreground); }
-.progress-tone-success>span { background:var(--success); }
-.progress-tone-warning>span { background:var(--warning); }
-.progress-tone-danger>span { background:var(--destructive); }
-.progress-tone-info>span { background:var(--info); }
+.progress-tone-success>span { background:var(--success-400); }
+.progress-tone-warning>span { background:var(--warning-400); }
+.progress-tone-danger>span { background:var(--danger-400); }
+.progress-tone-info>span { background:var(--info-400); }
 /* Sem total, um pedaço de 2/5 corre pelo trilho: os números da referência (a largura de 2/5, de -100% a 350%
    da própria largura, 1,5 s, a curva dela). A referência anda com `translateX`; aqui anda a MARGEM LÓGICA
    (de -40% a 140% do trilho, o mesmo percurso), para correr ao contrário na escrita da direita para
@@ -1754,7 +1761,7 @@ img,svg { display:block; }
    log e a cor primária da Aurea são duas intenções, e ficavam indistinguíveis. `text-transform`
    porque o React passa o valor em minúsculas (é ele que casa a regra) e o nível tem de LER como
    nível. */
-.log-line { display:grid; grid-template-columns:86px 72px minmax(0,1fr); gap:12px; padding:3px 0; } .log-time { color:var(--subtle-foreground); } .log-level { color:var(--primary); text-transform:uppercase; } .log-level.info { color:var(--info); } .log-level.warn { color:var(--warning); } .log-level.error { color:var(--danger-400); }
+.log-line { display:grid; grid-template-columns:86px 72px minmax(0,1fr); gap:12px; padding:3px 0; } .log-time { color:var(--subtle-foreground); } .log-level { color:var(--primary); text-transform:uppercase; } .log-level.info { color:var(--info-400); } .log-level.warn { color:var(--warning-400); } .log-level.error { color:var(--danger-400); }
 
 /* ========================================================================== */
 /* 05. GRÁFICOS E VISUALIZAÇÃO                                                 */

@@ -80,6 +80,48 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.27.0] — 2026-10-09
+
+**As cores dos dois temas seguem a paleta de referência escolhida pelo Victor; o amarelo da marca
+continua o nosso** ([ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md)).
+Feito com o "pode" dele (*"pode faça tudo"*), depois de comparar as cores lado a lado nos dois
+temas, e **aprovado pela bancada** (*"aprovado, pode enviar"*). **Versão nova porque todo app que
+usa a Aurea muda de cara.** Nenhuma prop muda, nada sai.
+
+### Mudou
+
+- **Os neutros dos dois temas.** Claro: fundo `#f5f5f5`, cartões brancos, texto `#242424`, texto
+  apagado `#616161`, bordas `#e0e0e0`. Escuro: fundo `#1f1f1f`, cartões `#292929`, texto branco,
+  texto apagado `#adadad`, bordas `#525252` — mais claro e com bordas mais visíveis que antes.
+- **As cores de estado.** Verde `#107c10`, laranja `#f7630c`, vermelho `#c50f1f` e azul `#0078d4`
+  no fundo cheio, **iguais nos dois temas** (antes o escuro trocava para verde e azul claros com
+  letra escura — era o pedido do app). A letra sobre eles é branca; no laranja, escura.
+- **Fundo é fundo, letra é letra.** `--success`, `--info`, `--warning` e `--destructive` são o fundo
+  cheio. Letra, ícone, borda e barra sobre a tela usam o par `-400`, que cada tema ajusta: o botão de
+  contorno e o fantasma, a situação (`Status`), o ícone do aviso, o registro (`LogStream`) e a barra
+  do `Progress`. Na web e no nativo.
+- **O selo cheio de estado é o botão cheio do mesmo tom** (a mesma cor e a mesma letra), na web e no
+  nativo. As categorias, a marca e o neutro continuam como eram.
+- O rótulo de grupo da lateral passa de 62% para 72% da letra da lateral (com a letra nova, os 62%
+  davam 4,4:1 no claro).
+
+### Para quem usa
+
+- Quem pinta letra com `--success`, `--info`, `--warning` ou `--destructive` no próprio app deve
+  passar para `--success-400`, `--info-400`, `--warning-400` e `--danger-400`. No escuro, o fundo
+  cheio como letra dá de 2,4 a 3,6:1.
+- No nativo, o mesmo: `t.color.success400` (e os irmãos) para letra; `t.color.success` para fundo.
+
+### Medido
+
+- Todos os papéis de letra nas cinco superfícies de cada tema passam de 4,5:1 (`tone-contrast.spec`).
+  Três tons da paleta reprovariam e foram trocados por outro tom da própria paleta: a letra de aviso
+  no claro (`#8a3707`), a letra de perigo no escuro (`#eeacb2`) e a letra sobre o botão de aviso
+  (escura). O azul de informação com letra branca fica no limite: 4,53:1.
+- `tests/unit/paleta-adr0061.test.tsx`: os valores, o fundo cheio igual nos dois temas, a marca
+  intocada, nenhuma letra pintada com cor de fundo (havia 24 usos) e o nativo com a mesma regra —
+  provado contra a `0.26.1`.
+
 ## [0.26.1] — 2026-10-09
 
 E16, achado do app rodando no navegador: o `DatePicker` do nativo **não abria nada** no

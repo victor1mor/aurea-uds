@@ -85,9 +85,9 @@ const folha = criarFolha((t: AureaTokens) => ({
     ...(t.shadow.shadowMd ? {boxShadow: [t.shadow.shadowMd]} : null),
   },
   texto: {flex: 1, minWidth: 0, gap: 2},
-  aviso_info: {backgroundColor: t.color.infoBg, borderColor: t.color.info},
-  aviso_success: {backgroundColor: t.color.successBg, borderColor: t.color.success},
-  aviso_warning: {backgroundColor: t.color.warningBg, borderColor: t.color.warning},
+  aviso_info: {backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info},
+  aviso_success: {backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success},
+  aviso_warning: {backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning},
   aviso_danger: {
     backgroundColor: t.color.dangerBg,
     borderColor: t.color.danger400 ?? t.color.destructive,
@@ -264,10 +264,10 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
     return () => laco.stop();
   }, [reduzir, entrada, t.easing.easeEmphasized]);
 
-  const corDoIcone = tipo === "success" ? t.color.success
-    : tipo === "warning" ? t.color.warning
+  const corDoIcone = tipo === "success" ? (t.color.success400 ?? t.color.success)
+    : tipo === "warning" ? (t.color.warning400 ?? t.color.warning)
     : tipo === "danger" ? (t.color.danger400 ?? t.color.destructive)
-    : t.color.info;
+    : (t.color.info400 ?? t.color.info);
 
   const glifo = toast.icon === false ? null : (toast.icon ?? ICONE_DA_VARIANTE[tipo]);
 
