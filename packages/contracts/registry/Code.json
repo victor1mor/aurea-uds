@@ -77,7 +77,7 @@
       "name": "weight",
       "type": "\"normal\" | \"medium\" | \"semibold\" | \"bold\" | \"extrabold\"",
       "default": "— (the role's own)",
-      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default. \"extrabold\" (800, --weight-extrabold) since 0.28.0 (GAR-16), for a cover title; the default title weight is still semibold."
+      "description": "Overrides the weight of the role. Headings are semibold and body text is regular by default. \"extrabold\" (800, --weight-extrabold) is for a cover title; the default title weight is still semibold."
     },
     {
       "name": "align",
@@ -101,7 +101,7 @@
       "name": "numeric",
       "type": "boolean",
       "default": "false",
-      "description": "GAR-16 (0.28.0): tabular figures (font-variant-numeric: tabular-nums) — for numbers that line up in a column (price, year, spec sheet) or change on screen. Off by default: in running text the narrow \"1\" is right. Native: the same prop sets fontVariant [\"tabular-nums\"]."
+      "description": "Tabular figures (font-variant-numeric: tabular-nums) — for numbers that line up in a column (price, year, spec sheet) or change on screen. Off by default: in running text the narrow \"1\" is right. Native: the same prop sets fontVariant [\"tabular-nums\"]."
     }
   ]
 }
