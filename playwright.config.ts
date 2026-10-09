@@ -21,7 +21,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   reporter: process.env.CI ? "github" : "list",
-  expect: {toHaveScreenshot: {maxDiffPixels: 0}},
+  // `threshold: 0` (09/10/2026): sem ele, o Playwright aceita até 0,2 de diferença de cor POR PIXEL
+  // (espaço YIQ, o padrão do comparador), e o `maxDiffPixels: 0` só conta os pixels acima disso.
+  // Medido no pedido #58: a paleta nova do tema claro (#e7000b -> #c50f1f, #f3f3f3 -> #f5f5f5)
+  // passava com a foto antiga, e a regeração não a regravava.
+  expect: {toHaveScreenshot: {maxDiffPixels: 0, threshold: 0}},
   // Serve a raiz do repo (não só apps/catalog) para os testes alcançarem
   // packages/core/dist e packages/fonts/dist. O catálogo fica em /apps/catalog/.
   use: {baseURL: `http://127.0.0.1:${PORT}`},
