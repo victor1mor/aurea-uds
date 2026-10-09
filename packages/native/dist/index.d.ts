@@ -17,7 +17,7 @@ export type { ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, A
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";
 export type { SpinnerProps, SkeletonProps, ProgressProps, AlertProps, EmptyStateProps, DataStateProps, AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue, AureaProgressTone, } from "./feedback.js";
 export { Badge, Status, Avatar, KPI, formatarContagem } from "./display.js";
-export type { BadgeProps, StatusProps, AvatarProps, KPIProps, AureaBadgeAnchor, AureaBadgeEmphasis, AureaBadgeFit, AureaBadgeSize, AureaBadgeTone, AureaStatusVariant, AureaAvatarSize, } from "./display.js";
+export type { BadgeProps, StatusProps, AvatarProps, KPIProps, AureaKPIDirection, AureaKPITone, AureaKPIVariant, AureaBadgeAnchor, AureaBadgeCategory, AureaBadgeEmphasis, AureaBadgeFit, AureaBadgeSize, AureaBadgeTone, AureaStatusVariant, AureaAvatarSize, } from "./display.js";
 export { useAureaStrings } from "./theme.js";
 export { defaultStrings, ptBR, gravidadeDoEstado, AUREA_UNIVERSAL_STATES } from "./strings.js";
 export type { AureaStrings, AureaUniversalState } from "./strings.js";

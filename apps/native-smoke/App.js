@@ -105,6 +105,8 @@ import IconCaretRight from "@aurea-uds/native/icons/caret-right";
 // do substituto da `Image` — que aparece SÓ quando a foto quebra, e por isso é o mais esquecido.
 import IconMagnifyingGlass from "@aurea-uds/native/icons/magnifying-glass";
 import IconMinus from "@aurea-uds/native/icons/minus";
+import IconTrendUp from "@aurea-uds/native/icons/trend-up";
+import IconTrendDown from "@aurea-uds/native/icons/trend-down";
 import IconImage from "@aurea-uds/native/icons/image";
 // O `ThemeToggle` desenha a lua e o sol CHEIOS (aprovados pela imagem em 25/09/2026).
 import IconMoon from "@aurea-uds/native/icons/moon";
@@ -132,6 +134,7 @@ const ICONES = criarRegistroDeIcones({
   "moon": IconMoon, "moon-fill": IconMoonFill, "sun": IconSun, "sun-fill": IconSunFill,
   "truck": IconTruck, "truck-fill": IconTruckFill,
   "storefront": IconStorefront, "storefront-fill": IconStorefrontFill,
+  "trend-up": IconTrendUp, "trend-down": IconTrendDown,
 });
 
 // R-05, a metade que faltava: um glifo PRÓPRIO desenhado só a TRAÇO, como o logotipo do app.
@@ -244,6 +247,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <BlocoLoteL t={t} />
       <BlocoLoteJ t={t} />
       <BlocoLoteI t={t} />
       <BlocoCapsulaAndroid t={t} />
@@ -1595,6 +1599,44 @@ function BlocoBarraParada({t}) {
 // 0.21.0 (06/10/2026): o LOTE J — o cartão de escolha (CHK-01). O que só o aparelho responde: o
 // leitor de tela do Android anuncia cada cartão como OPÇÃO (rádio), marcada ou não, e não como
 // botão; e o cartão inteiro responde ao toque.
+// 0.26.0 (09/10/2026): o LOTE L, ADR-0060. O que só o aparelho responde:
+//   GAR-07 · as oito cores de categoria se distinguem, nos dois temas, nas três ênfases;
+//   GAR-09 · a seta aparece (o glifo registrado acima), na cor do tom, na linha de cima da tendência;
+//            e o TalkBack lê o KPI inteiro de uma vez, com a palavra da direção;
+//   MNT-04 · `variant="plain"` dentro de um cartão: nenhuma caixa dentro da caixa.
+function BlocoLoteL({t}) {
+  const cats = [["red", "Editorial"], ["orange", "Marketing"], ["green", "Finanças"], ["teal", "Pesquisa"],
+    ["cyan", "Suporte"], ["blue", "Engenharia"], ["violet", "Design"], ["pink", "Pessoas"]];
+  const fila = {flexDirection: "row", flexWrap: "wrap", gap: 8};
+  return (
+    <Bloco t={t} n="0.26" titulo="Lote L: as cores de categoria e o KPI com direção"
+      criterio={"1) As oito cores de cada linha se distinguem umas das outras, nos dois temas (use "
+        + "\"trocar tema\"). 2) Cada KPI tem a seta: para cima verde, para baixo vermelha, o traço "
+        + "cinza; o \"Custo\" sobe em VERMELHO. 3) No \"Assinantes\", o texto quebra em duas linhas "
+        + "e o traço fica na linha de cima. 4) Com o TalkBack, o \"Receita\" é lido de uma vez: "
+        + "\"Receita, R$ 12.400, Alta, +8% no mês\". 5) No cartão de baixo, os dois números ficam "
+        + "sem caixa própria."}>
+      {["soft", "solid", "outline"].map((e) => (
+        <View key={e} style={fila}>{cats.map(([c, n]) => <Badge key={c} tone={c} emphasis={e} fit="content">{n}</Badge>)}</View>
+      ))}
+      <View style={{flexDirection: "row", gap: 10}}>
+        <View style={{flex: 1}}><KPI label="Receita" value="R$ 12.400" trend="+8% no mês" direction="up" directionLabel="Alta" /></View>
+        <View style={{flex: 1}}><KPI label="Custo" value="R$ 3.200" trend="+12% no mês" direction="up" tone="danger" directionLabel="Alta" /></View>
+      </View>
+      <View style={{flexDirection: "row", gap: 10}}>
+        <View style={{flex: 1}}><KPI label="Pedidos" value="1.284" trend="−3% no mês" direction="down" directionLabel="Baixa" /></View>
+        <View style={{flex: 1}}><KPI label="Assinantes" value="148" trend="igual ao mês passado" direction="flat" directionLabel="Estável" /></View>
+      </View>
+      <Card>
+        <View style={{flexDirection: "row", gap: 10}}>
+          <View style={{flex: 1}}><KPI variant="plain" label="Execuções" value="1.284" trend="+12%" direction="up" directionLabel="Alta" /></View>
+          <View style={{flex: 1}}><KPI variant="plain" label="Latência" value="1,8 s" trend="−4%" direction="down" tone="success" directionLabel="Baixa" /></View>
+        </View>
+      </Card>
+    </Bloco>
+  );
+}
+
 function BlocoLoteJ({t}) {
   const [plano, setPlano] = React.useState("pro");
   const planos = [

@@ -27,6 +27,7 @@ import { IconButton, folgaDoToque } from "./actions.js";
 import { canto, acentoDoTom, criarFolha, fundoDoTom } from "./estilos.js";
 import { Card } from "./layout.js";
 import { gravidadeDoEstado } from "./strings.js";
+import { Icon } from "./icon.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -79,7 +80,11 @@ const folha = criarFolha((t) => ({
     },
     imagem: { width: "100%", height: "100%" },
     // ── KPI ────────────────────────────────────────────────────────────────────────────────────
-    kpi: { gap: 5 },
+    kpi: { gap: t.size.space1 },
+    // A seta fica na PRIMEIRA linha (quando a tendência quebra, `center` a deixava entre as duas):
+    // a caixa dela tem a altura de uma linha do texto `sm` (que no telefone é o `textBase`, ADR-0050).
+    tendencia: { flexDirection: "row", alignItems: "flex-start", gap: t.size.space1 },
+    seta: { height: t.size.textBase * t.size.leadingNormal, justifyContent: "center" },
 }));
 /** `count > max ? `${max}+` : String(count)` — a mesma linha do `markup.tsx:140`. */
 export const formatarContagem = (count, max = 99) => count > max ? `${max}+` : String(count);
@@ -107,8 +112,9 @@ const LETRA_DO_SELO = (t, size) => size === "lg" ? { fontSize: t.size.textBase, 
 export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, count, max = 99, showZero, leading, trailing, fit = "auto", anchor, badgeContent, invisible, children, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
-    const acento = acentoDoTom(t, tone);
-    const fundo = fundoDoTom(t, tone);
+    const categoria = ehCategoria(tone) ? coresDaCategoria(t)[tone] : null;
+    const acento = categoria ? categoria[0] : acentoDoTom(t, tone);
+    const fundo = categoria ? categoria[1] : fundoDoTom(t, tone);
     const pele = emphasis === "solid"
         ? { backgroundColor: acento, borderColor: "transparent" }
         : emphasis === "outline"
@@ -161,6 +167,24 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
     const escondido = invisible || (count === 0 && !showZero) || (miolo == null && !dot);
     return _jsxs(View, { style: s.ancora, ...rest, children: [children, !escondido && selo] });
 }
+const CATEGORIAS = new Set(["red", "orange", "green", "teal", "cyan", "blue", "violet", "pink"]);
+const ehCategoria = (tom) => CATEGORIAS.has(tom);
+/**
+ * O acento e o fundo suave de cada categoria — os tokens `--category-*` e `--category-*-bg`, os
+ * mesmos da web. Ficam AQUI, e não no `acentoDoTom`, de propósito: a moldura do ícone (R-15, R-18)
+ * usa aquele mapa, e as categorias são do selo; levá-las para lá abriria a `Timeline` a cores que
+ * a da web não tem.
+ */
+const coresDaCategoria = (t) => ({
+    red: [t.color.categoryRed, t.color.categoryRedBg],
+    orange: [t.color.categoryOrange, t.color.categoryOrangeBg],
+    green: [t.color.categoryGreen, t.color.categoryGreenBg],
+    teal: [t.color.categoryTeal, t.color.categoryTealBg],
+    cyan: [t.color.categoryCyan, t.color.categoryCyanBg],
+    blue: [t.color.categoryBlue, t.color.categoryBlueBg],
+    violet: [t.color.categoryViolet, t.color.categoryVioletBg],
+    pink: [t.color.categoryPink, t.color.categoryPinkBg],
+});
 /** O mínimo do selo preso, da referência principal: 16 no `xs` e no `sm`, 28 no `md`, 32 no `lg`. */
 const MINIMO_PRESO = (t, size) => size === "lg" ? t.size.space8 : size === "md" ? t.size.space7 : t.size.space4;
 /**
@@ -236,9 +260,13 @@ export function Avatar({ source, alt, fallback, size = "md", style, testID }) {
                 ? _jsx(Text, { size: size === "sm" ? "xs" : "md", weight: 700, children: fallback })
                 : fallback }));
 }
+const TOM_DA_DIRECAO = { up: "success", down: "danger", flat: "neutral" };
+const PALAVRA_DA_DIRECAO = { up: "Up", down: "Down", flat: "No change" };
+const GLIFO_DA_DIRECAO = { up: "trend-up", down: "trend-down", flat: "minus" };
+const comoTexto = (n) => typeof n === "string" || typeof n === "number" ? String(n) : null;
 /**
  * Um número com nome. **É um `Card`** — medido em `markup.tsx:105`, e não no CSS, que só mostra
- * a coluna.
+ * a coluna. Com `variant="plain"`, é só a coluna.
  *
  * A ficha da web declara `role="group"`, e **o React Native não tem esse papel** — medido na lista
  * de `accessibilityRole`, que vai de `button` a `toolbar` e não inclui `group`. O que ele tem é
@@ -247,10 +275,30 @@ export function Avatar({ source, alt, fallback, size = "md", style, testID }) {
  *
  * Inventar `accessibilityRole="summary"` porque o nome parece próximo seria pior que não ter papel:
  * `summary` tem significado próprio (o resumo de um bloco expansível) e diria uma coisa errada.
+ *
+ * Com `direction`, o nome do nó é escrito aqui (rótulo, número, palavra e tendência), porque a seta
+ * é desenho e não tem texto para o leitor juntar — a web resolve com o `.sr-only`, que o nativo não
+ * tem. Só quando as partes são texto; com nó próprio, o app dá o `accessibilityLabel`.
+ *
+ * O número em `3xl` e a tendência em `sm` desde a `0.26.0`: os mesmos da web (`0.24.1`).
  */
-export function KPI({ label, value, trend, style, ...rest }) {
-    const s = folha(useAureaTokens());
-    return (_jsxs(Card, { style: [s.kpi, style], accessible: true, ...rest, children: [typeof label === "string" ? _jsx(Text, { size: "sm", tone: "muted", children: label }) : label, typeof value === "string" || typeof value === "number"
-                ? _jsx(Text, { size: "2xl", weight: 700, children: value }) : value, trend != null && (typeof trend === "string"
-                ? _jsx(Text, { size: "xs", tone: "muted", children: trend }) : trend)] }));
+export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", style, ...rest }) {
+    const t = useAureaTokens();
+    const s = folha(t);
+    const tom = direction ? (tone ?? TOM_DA_DIRECAO[direction]) : undefined;
+    const cor = tom === "success" ? (t.color.success400 ?? t.color.success)
+        : tom === "danger" ? (t.color.danger400 ?? t.color.destructive)
+            : t.color.mutedForeground;
+    const palavra = direction ? (directionLabel ?? PALAVRA_DA_DIRECAO[direction]) : undefined;
+    const temTendencia = trend != null && trend !== false && trend !== "";
+    const textoDaTendencia = typeof trend === "string" || typeof trend === "number"
+        ? _jsx(Text, { size: "sm", tone: direction ? undefined : "muted", style: direction ? { color: cor } : undefined, children: trend })
+        : trend;
+    const partes = [comoTexto(label), comoTexto(value), palavra ?? "", temTendencia ? comoTexto(trend) : ""];
+    const nome = direction && partes.every((p) => p !== null) ? partes.filter(Boolean).join(", ") : undefined;
+    const Caixa = variant === "plain" ? View : Card;
+    return (_jsxs(Caixa, { style: [s.kpi, style], accessible: true, accessibilityLabel: nome, ...rest, children: [typeof label === "string" ? _jsx(Text, { size: "sm", tone: "muted", children: label }) : label, typeof value === "string" || typeof value === "number"
+                ? _jsx(Text, { size: "3xl", weight: 700, children: value }) : value, direction
+                ? _jsxs(View, { style: s.tendencia, children: [_jsx(View, { style: s.seta, children: _jsx(Icon, { name: GLIFO_DA_DIRECAO[direction], size: "sm", color: cor }) }), temTendencia && textoDaTendencia] })
+                : temTendencia && textoDaTendencia] }));
 }

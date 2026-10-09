@@ -2,7 +2,8 @@ import React, { type HTMLAttributes, type InputHTMLAttributes, type ReactElement
 import { type Responsive } from "./pure.js";
 import type { ComponentSize } from "./actions.js";
 import type { SidebarItem } from "./navigation-client.js";
-export type BadgeVariant = "neutral" | "primary" | "info" | "success" | "warning" | "danger" | "running" | "paused" | "offline" | "review";
+export type BadgeCategory = "red" | "orange" | "green" | "teal" | "cyan" | "blue" | "violet" | "pink";
+export type BadgeVariant = "neutral" | "primary" | "info" | "success" | "warning" | "danger" | "running" | "paused" | "offline" | "review" | BadgeCategory;
 export type AvatarSize = "sm" | "md" | "lg";
 export type HeaderVariant = "floating" | "flush" | "pill";
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). O tipo continua valendo; use `HeaderVariant`. */
@@ -141,11 +142,24 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
  * quando ela for uma região que o leitor de tela deva listar.
  */
 export declare function Section({ surface, spacing, theme, variant, brand, links, legal, maxWidth, navLabel, children, className, ...props }: SectionProps): React.JSX.Element;
-export declare function KPI({ label, value, trend, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export type KPIDirection = "up" | "down" | "flat";
+export type KPITone = "success" | "danger" | "neutral";
+export type KPIVariant = "card" | "plain";
+export interface KPIProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
     label: ReactNode;
     value: ReactNode;
+    /** A mudança, como texto do domínio ("+8% no mês"). */
     trend?: ReactNode;
-}): React.JSX.Element;
+    /** Para onde foi. Desenha a seta, pinta a tendência e diz a palavra ao leitor de tela. */
+    direction?: KPIDirection;
+    /** A cor da tendência. Padrão: alta = `success`, baixa = `danger`, estável = `neutral`. */
+    tone?: KPITone;
+    /** A palavra que o leitor de tela ouve antes da tendência. Padrão em inglês: "Up", "Down", "No change". */
+    directionLabel?: string;
+    /** `plain` tira a caixa: o número dentro de um cartão que já existe. */
+    variant?: KPIVariant;
+}
+export declare function KPI({ label, value, trend, direction, tone, directionLabel, variant, className, ...props }: KPIProps): React.JSX.Element;
 export declare function DataList({ items }: {
     items: Array<{
         term: ReactNode;

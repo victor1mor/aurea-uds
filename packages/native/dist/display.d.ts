@@ -1,7 +1,13 @@
 import * as React from "react";
 import { type ImageSourcePropType, type StyleProp, type ViewProps, type ViewStyle } from "react-native";
+import { type TomDeCor } from "./estilos.js";
 import { type AureaUniversalState } from "./strings.js";
-export type AureaBadgeTone = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
+/**
+ * GAR-07 (ADR-0060, 09/10/2026): as oito cores de CATEGORIA — marcam grupo, não estado ("Motos",
+ * "Carros"). As mesmas da web, com os mesmos nomes; o amarelo fica de fora porque é da marca.
+ */
+export type AureaBadgeCategory = "red" | "orange" | "green" | "teal" | "cyan" | "blue" | "violet" | "pink";
+export type AureaBadgeTone = TomDeCor | AureaBadgeCategory;
 export type AureaBadgeEmphasis = "soft" | "outline" | "solid";
 export type AureaBadgeSize = "xs" | "sm" | "md" | "lg";
 export type AureaBadgeAnchor = "top-end" | "top-start" | "bottom-end" | "bottom-start";
@@ -93,14 +99,29 @@ export interface AvatarProps {
  * `source` muda. Sem isso, uma URL quebrada deixa um buraco cinza permanente na lista.
  */
 export declare function Avatar({ source, alt, fallback, size, style, testID }: AvatarProps): React.JSX.Element;
+/** GAR-09 (ADR-0060, 09/10/2026): para onde a métrica foi. Os mesmos nomes da web. */
+export type AureaKPIDirection = "up" | "down" | "flat";
+export type AureaKPITone = "success" | "danger" | "neutral";
+export type AureaKPIVariant = "card" | "plain";
 export interface KPIProps extends ViewProps {
     label: React.ReactNode;
     value: React.ReactNode;
     trend?: React.ReactNode;
+    /**
+     * Para onde foi. Desenha a seta (`trend-up`, `trend-down`, `minus` — o app registra os três, como
+     * todo glifo do nativo), pinta a tendência e põe a palavra no nome que o leitor de tela ouve.
+     */
+    direction?: AureaKPIDirection;
+    /** A cor da tendência. Padrão: alta = `success`, baixa = `danger`, estável = `neutral`. */
+    tone?: AureaKPITone;
+    /** A palavra do leitor de tela. Padrão em inglês, como na web: "Up", "Down", "No change". */
+    directionLabel?: string;
+    /** `plain` tira o cartão: o número dentro de um cartão que já existe (MNT-04). */
+    variant?: AureaKPIVariant;
 }
 /**
  * Um número com nome. **É um `Card`** — medido em `markup.tsx:105`, e não no CSS, que só mostra
- * a coluna.
+ * a coluna. Com `variant="plain"`, é só a coluna.
  *
  * A ficha da web declara `role="group"`, e **o React Native não tem esse papel** — medido na lista
  * de `accessibilityRole`, que vai de `button` a `toolbar` e não inclui `group`. O que ele tem é
@@ -109,5 +130,11 @@ export interface KPIProps extends ViewProps {
  *
  * Inventar `accessibilityRole="summary"` porque o nome parece próximo seria pior que não ter papel:
  * `summary` tem significado próprio (o resumo de um bloco expansível) e diria uma coisa errada.
+ *
+ * Com `direction`, o nome do nó é escrito aqui (rótulo, número, palavra e tendência), porque a seta
+ * é desenho e não tem texto para o leitor juntar — a web resolve com o `.sr-only`, que o nativo não
+ * tem. Só quando as partes são texto; com nó próprio, o app dá o `accessibilityLabel`.
+ *
+ * O número em `3xl` e a tendência em `sm` desde a `0.26.0`: os mesmos da web (`0.24.1`).
  */
-export declare function KPI({ label, value, trend, style, ...rest }: KPIProps): React.JSX.Element;
+export declare function KPI({ label, value, trend, direction, tone, directionLabel, variant, style, ...rest }: KPIProps): React.JSX.Element;

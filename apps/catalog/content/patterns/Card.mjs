@@ -1,5 +1,5 @@
 import {createElement as h} from "react";
-import {Card, Badge, Button, KPI, Avatar, Status, DataList, Timeline} from "../../../../packages/react/dist/index.js";
+import {Card, Badge, Button, KPI, Avatar, Status, DataList, Timeline, Stack, Cluster, Icon} from "../../../../packages/react/dist/index.js";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 const between = {...row, justifyContent: "space-between"};
@@ -80,5 +80,38 @@ export default [
     render: () => h("div", {style: {width: "min(420px,100%)"}},
       h(Card, null, h(Timeline, {items: [{title: "Created", time: "09:00", description: "by Curator"},
         {title: "Reviewed", time: "11:40"}, {title: "Shipped", time: "14:20"}]}))),
+  },
+  // GAR-10 (09/10/2026): a caixa de resumo no topo de uma matéria. Decisão do Victor: padrão do
+  // catálogo, sem peça nova — a referência principal não tem, e nenhuma da fila tem resumo
+  // editorial (só aviso). Não é `Alert`: aviso ANUNCIA ao leitor de tela, e um resumo se lê.
+  // A lista é uma lista para o leitor de tela (`role="list"`), e o check é desenho.
+  {
+    variant: "Base",
+    name: "A summary at the top of an article",
+    description: "Three short points before the long text, for the reader who has thirty seconds. It is a card with a short title and a list, not an alert: an alert interrupts, a summary waits to be read. The check icon is decoration; the list is announced as a list.",
+    uses: ["Card", "Stack", "Cluster", "Icon"],
+    code: `<Card>
+  <Stack gap="tight">
+    <h2>In 30 seconds</h2>
+    <Stack gap="tight" role="list">
+      <Cluster role="listitem" gap="tight" align="start" wrap={false}>
+        <Icon name="check" />The new model arrives in March.
+      </Cluster>
+      <Cluster role="listitem" gap="tight" align="start" wrap={false}>
+        <Icon name="check" />It costs 6% more than the current one.
+      </Cluster>
+      <Cluster role="listitem" gap="tight" align="start" wrap={false}>
+        <Icon name="check" />Orders open next week.
+      </Cluster>
+    </Stack>
+  </Stack>
+</Card>`,
+    render: () => h("div", {style: {width: "min(480px,100%)"}}, h(Card, null, h(Stack, {gap: "tight"},
+      // <strong> e não <h2> no PREVIEW: um título de segundo nível dentro da prévia quebraria a
+      // hierarquia da página do catálogo (a varredura cobra). O `code` mostra o <h2> do consumidor.
+      h("strong", {style: {fontSize: "var(--text-lg)"}}, "In 30 seconds"),
+      h(Stack, {gap: "tight", role: "list"},
+        ...["The new model arrives in March.", "It costs 6% more than the current one.", "Orders open next week."].map((t) =>
+          h(Cluster, {key: t, role: "listitem", align: "start", wrap: false, gap: "tight"}, h(Icon, {name: "check"}), t)))))),
   },
 ];

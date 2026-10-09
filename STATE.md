@@ -18,15 +18,15 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Hooks públicos com ficha | 9 |
 | Maturidade declarada nas fichas | Deprecated 1 · Ready 44 · Stable 88 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 662 |
+| Classes declaradas no CSS do core | 678 |
 
 ## Tokens
 
 | Métrica | Valor |
 |---|---|
-| Declarações emitidas | 415 |
-| Nomes distintos | 195 |
-| Nomes referenciados pelo core | 149 |
+| Declarações emitidas | 447 |
+| Nomes distintos | 211 |
+| Nomes referenciados pelo core | 165 |
 | Nomes nunca referenciados pelo core | 46 |
 
 ## Catálogo gerado
@@ -34,18 +34,18 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Tipo de página | Quantidade |
 |---|---|
 | Componente | 133 |
-| Pattern | 211 |
+| Pattern | 216 |
 | Block | 15 |
 | Recipe | 23 |
 | Índice de área | 6 |
-| **Total** | **388** |
+| **Total** | **393** |
 
 ## Cobertura das fichas
 
 | Campo | Fichas que declaram |
 |---|---|
 | `props` (contrato de API publicado) | 124 de 124 |
-| `variants` | 17 de 124 |
+| `variants` | 18 de 124 |
 | `sizes` | 24 de 124 |
 | `states` | 107 de 124 |
 | `tokens` | 125 de 124 |
@@ -69,9 +69,9 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1456 |
+| Chamadas de `test()` nos testes unitários | 1474 |
 | Componentes citados nos testes unitários | 131 de 124 |
-| Specs de navegador (Playwright) | 33 |
+| Specs de navegador (Playwright) | 34 |
 | Baselines de screenshot no repositório | 44 |
 | Baselines `-linux.png` (o que a CI compara) | 22 |
 

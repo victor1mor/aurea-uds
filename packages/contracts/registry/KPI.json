@@ -9,12 +9,19 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "card",
+    "plain"
+  ],
   "sizes": [],
   "states": [],
   "tokens": [
+    "--danger-400",
+    "--icon-sm",
     "--leading-tight",
     "--muted-foreground",
+    "--space-1",
+    "--success-400",
     "--text-3xl",
     "--text-sm"
   ],
@@ -54,6 +61,42 @@
       "type": "ReactNode",
       "default": "—",
       "description": "The change, as a node and not a number: the sign, the unit and the wording belong to the domain, not to a card."
+    },
+    {
+      "name": "direction",
+      "type": "up | down | flat",
+      "default": "—",
+      "description": "Where the number went. Draws the arrow (trend-up, trend-down, minus), colours the trend and puts a word in front of it for screen readers — so the direction never depends on colour alone."
+    },
+    {
+      "name": "tone",
+      "type": "success | danger | neutral",
+      "default": "from direction",
+      "description": "The colour of the trend. By default up is success, down is danger and flat is neutral; set it when going up is bad (cost, errors). Without direction it paints nothing: colour never travels alone."
+    },
+    {
+      "name": "directionLabel",
+      "type": "string",
+      "default": "Up / Down / No change",
+      "description": "The word a screen reader hears before the trend. English by default, like every built-in label of the web package; pass it in the language of the page."
+    },
+    {
+      "name": "variant",
+      "type": "card | plain",
+      "default": "card",
+      "description": "`plain` drops the card: the number sits inside a card that already exists, instead of a box inside a box."
     }
-  ]
+  ],
+  "axes": {
+    "direction": [
+      "down",
+      "flat",
+      "up"
+    ],
+    "tone": [
+      "danger",
+      "neutral",
+      "success"
+    ]
+  }
 }

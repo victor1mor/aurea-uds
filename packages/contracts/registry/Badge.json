@@ -19,7 +19,15 @@
     "running",
     "paused",
     "offline",
-    "review"
+    "review",
+    "red",
+    "orange",
+    "green",
+    "teal",
+    "cyan",
+    "blue",
+    "violet",
+    "pink"
   ],
   "sizes": [
     "xs",
@@ -40,6 +48,22 @@
   "tokens": [
     "--background",
     "--border",
+    "--category-blue",
+    "--category-blue-bg",
+    "--category-cyan",
+    "--category-cyan-bg",
+    "--category-green",
+    "--category-green-bg",
+    "--category-orange",
+    "--category-orange-bg",
+    "--category-pink",
+    "--category-pink-bg",
+    "--category-red",
+    "--category-red-bg",
+    "--category-teal",
+    "--category-teal-bg",
+    "--category-violet",
+    "--category-violet-bg",
     "--danger-400",
     "--danger-bg",
     "--info-400",
@@ -55,6 +79,7 @@
     "--radius-full",
     "--secondary",
     "--secondary-foreground",
+    "--space-05",
     "--space-1",
     "--space-2",
     "--space-3",
@@ -62,7 +87,6 @@
     "--space-5",
     "--space-6",
     "--space-7",
-    "--space-05",
     "--success-400",
     "--success-bg",
     "--text-sm",
@@ -91,9 +115,9 @@
   "props": [
     {
       "name": "variant",
-      "type": "neutral | primary | info | success | warning | danger | running | paused | offline | review",
+      "type": "neutral | primary | info | success | warning | danger | running | paused | offline | review | red | orange | green | teal | cyan | blue | violet | pink",
       "default": "neutral",
-      "description": "Tone of the label. The four operational ones exist because the state of a job is metadata as often as it is a condition; when it is a condition standing on its own, use Status."
+      "description": "Tone of the label. The four operational ones exist because the state of a job is metadata as often as it is a condition; when it is a condition standing on its own, use Status. The eight colour names (red, orange, green, teal, cyan, blue, violet, pink) are CATEGORIES, not states — they mark a group (a section, a type of item) and say nothing about health. They skip yellow, which belongs to the brand, and pass AA in both themes in all three emphases. Pair the colour with a word or a leading icon: colour alone is never the label."
     },
     {
       "name": "emphasis",

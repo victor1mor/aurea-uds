@@ -15,6 +15,10 @@ apps/catalog/**/*.html   linguist-generated=true
 apps/catalog/assets/*    linguist-generated=true
 apps/docs/index.html     linguist-generated=true
 packages/*/dist/**       linguist-generated=true
+# Os ícones do nativo são 2.868 módulos GERADOS por `packages/native/build-icons-native.mjs`
+# (2,6 MB, medido em 09/10/2026). Fora desta linha, eles faziam o GitHub anunciar JavaScript como
+# a linguagem principal de um projeto escrito em TypeScript.
+packages/native/icons/** linguist-generated=true
 
 # Congelado, não gerado: é a referência visual de origem, e o CLAUDE.md proíbe
 # editá-la. Não é código do projeto, então não conta como linguagem dele.

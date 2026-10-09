@@ -80,6 +80,67 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.26.0] — 2026-10-09
+
+Lote L, três pedidos de um consumidor da web (um site de notícias): GAR-07, GAR-09 com a MNT-04, e
+GAR-10. Feito com o "pode" do Victor e as escolhas dele, depois de ver como a referência principal
+faz cada um ([ADR-0060](decisions/0060-cor-de-categoria-no-selo-e-o-kpi-com-direcao.md)). **Aprovado
+pela bancada em 09/10/2026** (*"aprovado, pode"*). **Versão nova porque entram 32 tokens, oito
+valores no `Badge` e quatro props no `KPI`.** Nada sai, nada muda de nome.
+
+### Adicionado
+
+- **O selo com cor de categoria (web e nativo, GAR-07).** Oito cores com nome de cor: `red`,
+  `orange`, `green`, `teal`, `cyan`, `blue`, `violet`, `pink` — `variant` na web, `tone` no nativo.
+  Marcam grupo, não estado. O amarelo fica de fora: é da marca. Valem nas três ênfases (`soft`,
+  `solid`, `outline`) e passam de 4,5:1 nos dois temas e nas duas marcas. Vizinhas na roda de cores
+  alternam dois níveis de claridade, para não se distinguirem só pelo matiz. Tipos novos:
+  `BadgeCategory` (web) e `AureaBadgeCategory` (nativo).
+- **Os tokens `--category-<cor>` e `--category-<cor>-bg`** (32, nos temas escuro e claro): o acento e
+  o fundo suave de cada categoria. Não mudam com a marca — o nome diz a cor.
+- **O KPI diz para onde o número foi (web e nativo, GAR-09).** `direction` (`up`, `down`, `flat`)
+  desenha a seta, pinta a tendência e põe uma palavra para o leitor de tela; `tone` (`success`,
+  `danger`, `neutral`) inverte a cor quando subir é ruim; `directionLabel` troca a palavra (padrão
+  em inglês: "Up", "Down", "No change"). Sem `direction`, `tone` não pinta nada. A seta fica na
+  primeira linha quando a tendência quebra. Tipos novos: `KPIProps`, `KPIDirection`, `KPITone`,
+  `KPIVariant` (web) e `AureaKPIDirection`, `AureaKPITone`, `AureaKPIVariant` (nativo).
+- **O KPI sem a caixa (web e nativo, MNT-04):** `variant="plain"`, para o número dentro de um cartão
+  que já existe.
+- **No catálogo:** a caixa de resumo "Em 30 segundos" como padrão do `Card` (GAR-10, sem peça nova:
+  `Card`, `Stack`, `Cluster` e o ícone `check`); dois padrões do `Badge` (as categorias, e uma
+  categoria nas três ênfases); dois do `KPI` (a direção, e os números dentro de um cartão).
+
+### Mudou
+
+- **Nativo: o KPI igual ao da web.** O número passa de `2xl` (24) para `3xl` (30), o da web desde a
+  `0.24.1`. A tendência passa de 14 para 16, o tamanho do rótulo (no telefone o texto pequeno sobe
+  um degrau, ADR-0050). Com `direction`, o nome que o leitor de tela ouve é montado (rótulo,
+  número, palavra e tendência), porque a seta é desenho e não tem texto. O app registra os glifos
+  `trend-up`, `trend-down` e `minus`, como todo ícone.
+- **O vão de dentro do KPI sai de token** (`--space-1`, 4), e não mais de `5px` cru, nos dois alvos.
+- **O contrato:** a regra "não usar paletas alternativas" ganha a exceção das oito categorias.
+- **Na web, a seta do KPI é desenho do CSS** (o Phosphor por máscara, como o menu do `Header`): o
+  KPI continua marcação pura, sem JavaScript no navegador (ADR-0026).
+
+### Medido
+
+- `tests/visual/badge-categoria.spec.ts`, nos três navegadores: as 8 cores × 3 ênfases × 2 temas
+  × 2 marcas, contra o fundo da página e o do cartão, todas acima de 4,5:1 (a pior, calculada ao
+  escolher: o verde no claro, 4,65); oito cores distintas, nenhuma igual à do neutro; a seta com o
+  `--icon-sm`, a cor da tendência, e o centro dentro da primeira linha. Provado contra a `0.25.0`
+  (as oito saem com a cor do neutro; a seta mede 0) e contra a seta centrada (fica entre as linhas).
+- `tests/unit/lote-l.test.tsx` (web) e `tests/unit/native-lote-l.test.tsx` (nativo): 37 testes;
+  contra o código da `0.25.0`, 23 reprovam. Os que passam lá cobram o que não podia mudar (a
+  marcação de antes, caractere por caractere) e a classe do selo, que já saía — o que faltava era o
+  CSS, e quem cobra é o navegador.
+
+### Fora dos pacotes
+
+- **O GitHub deixa de anunciar JavaScript como a linguagem principal.** Ele conta bytes por
+  extensão, e os 2.868 ícones gerados do nativo (`packages/native/icons/`, 2,6 MB) não estavam
+  marcados como gerados no `.gitattributes`. Medido em 09/10/2026: 3,4 MB de JavaScript contra 2,9
+  MB de TypeScript. Uma linha nova no `.gitattributes`.
+
 ## [0.25.0] — 2026-10-08
 
 ✅ **Publicada em 08/10/2026, entre 17:22 e 17:25 (Brasília, medido no npm)**, pelo terminal do
