@@ -142,6 +142,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.26.0` | Lote L: oito cores de categoria no `Badge` (GAR-07), o `KPI` com direção, tom e sem caixa (GAR-09, MNT-04), a caixa de resumo no catálogo (GAR-10) — [ADR-0060](decisions/0060-cor-de-categoria-no-selo-e-o-kpi-com-direcao.md), pedido #56. **Não saiu sozinha**: foi publicada dentro da `0.27.0` |
 | `0.26.1` | E16: no navegador, o `DatePicker` do nativo abre o calendário do navegador — pedido #57. **Não saiu sozinha**: foi publicada dentro da `0.27.0` |
 | `0.27.0` | As cores dos dois temas seguem a paleta de referência; o amarelo da marca fica — [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md), pedido #58. **Publicada em 09/10/2026** (entre 13:13 e 13:19, Brasília), pelo terminal do Victor. Leva a `0.26.0` e a `0.26.1` junto |
+| `0.28.0` | Lote M: `share` no `Button` e no `IconButton` (GAR-14), `Image frame="phone"` (GAR-15), `--font-heading`, `--weight-extrabold`, a fonte 800 e `numeric` (GAR-16) — [ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md), pedido #61. **Publicada em 09/10/2026** (entre 19:24 e 19:30, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -347,6 +348,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    aviso preso a um botão tem a MEDIDA do botão — o recheio é UMA regra (`.btn,.toast-anchored`).
    ⚠ **A lição:** no `aurea.js`, rolar o campo do próprio aviso (selecionar o link) disparava o
    "rolou a página, fecha" — medido no navegador, e só lá: o teste de unidade passava.
+   **Aprovada pela bancada** (*"aprovado, pode enviar a 0.28.0"*) **e publicada no mesmo dia**
+   (entre 19:24 e 19:30, Brasília, pelo terminal do Victor, da junção do pedido #61).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

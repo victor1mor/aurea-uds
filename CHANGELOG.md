@@ -82,7 +82,10 @@ em inglês e ficam como estão: são registro.
 
 ## [0.28.0] — 2026-10-09
 
-⏳ **Ainda não publicada.** Lote M, os três pedidos do grupo 2 da fila (um site consumidor): GAR-14,
+✅ **Publicada em 09/10/2026, entre 19:24 e 19:30 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #61.
+
+Lote M, os três pedidos do grupo 2 da fila (um site consumidor): GAR-14,
 GAR-15 e GAR-16 ([ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md)). A pesquisa foi além
 da fila de referências, por ordem do Victor; as escolhas foram dele, depois de ver a referência
 principal e a bancada (*"pode construir a 0.28.0"*). **Versão nova porque entram props, dois tokens
