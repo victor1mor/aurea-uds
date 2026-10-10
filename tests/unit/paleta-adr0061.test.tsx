@@ -67,6 +67,20 @@ describe("ADR-0061 · a cor de fundo nunca vira letra no core", () => {
   });
 });
 
+describe("ADR-0063 · a exceção: o traço do Card é enfeite e usa a cor CHEIA", () => {
+  // O traço no topo (`Card accent`) é a ÚNICA borda pintada com a cor de fundo, por decisão do
+  // Victor (10/10/2026): o nome da caixa diz o assunto, e o traço não carrega informação. A exceção
+  // mora numa variável própria (`--card-accent`), para que a regra de cima continue valendo para
+  // toda outra borda — quem quiser pintar outra borda com a cor cheia reprova lá.
+  test("a cor cheia só entra pela variável do traço, e a variável só pinta o traço", () => {
+    const usos = [...core.matchAll(/([^{}]+)\{[^}]*--card-accent:\s*var\(--(success|info|warning|destructive|primary)\)/g)]
+      .map((m) => m[1].trim());
+    expect(usos).toEqual([".card-accent-brand", ".card-accent-success", ".card-accent-info", ".card-accent-warning", ".card-accent-danger"]);
+    const quemLe = [...core.matchAll(/([^{}]+)\{[^}]*var\(--card-accent\)/g)].map((m) => m[1].trim());
+    expect(quemLe).toEqual([".card.card-accent"]);
+  });
+});
+
 describe("ADR-0061 · no nativo, a mesma regra", () => {
   const t = resolverTokens("dark", "comfortable");
   const plano = (e: unknown) => (StyleSheet.flatten(e as never) ?? {}) as Record<string, unknown>;

@@ -114,4 +114,29 @@ export default [
         ...["The new model arrives in March.", "It costs 6% more than the current one.", "Orders open next week."].map((t) =>
           h(Cluster, {key: t, role: "listitem", align: "start", wrap: false, gap: "tight"}, h(Icon, {name: "check"}), t)))))),
   },
+  // ADR-0063 (10/10/2026): o cartão que se destaca nos dois temas e o traço no topo. Os dois exemplos
+  // são a tela de um app de veículo: o cartão principal e as caixas de resumo.
+  {
+    variant: "Contrast",
+    name: "The card that stands out",
+    description: "The main card of a screen. In the light theme it is the dark theme's card; in the dark theme, the regular card with a yellow outline. Inside it the whole dark theme applies, so text, badges and buttons adjust by themselves. Not for a list of choices: in the dark theme its outline is close to `selected`.",
+    uses: ["Card", "Badge"],
+    code: '<Card variant="contrast">\n  <div className="cluster" style={{justifyContent:"space-between"}}>\n    <strong>Main vehicle</strong>\n    <Badge size="xs" variant="success">UP TO DATE</Badge>\n  </div>\n  <p>18,420 km</p>\n</Card>',
+    render: () => h("div", {style: {width: "min(420px,100%)"}},
+      h(Card, {variant: "contrast"},
+        h("div", {style: between}, h("strong", null, "Main vehicle"), h(Badge, {size: "xs", variant: "success"}, "UP TO DATE")),
+        h("p", {style: {margin: "var(--space-2) 0 0", fontSize: "var(--text-3xl)", fontWeight: "var(--weight-bold)", fontVariantNumeric: "tabular-nums"}}, "18,420 km"),
+        h("p", {className: "muted", style: {margin: 0}}, "Last service on 12 Aug 2026"))),
+  },
+  {
+    variant: "Accent",
+    name: "A colour stroke on top",
+    description: "A stroke on the top edge in the tone's fill colour, the same in both themes. It is decoration: the title already says the subject.",
+    uses: ["Card"],
+    code: '<Card accent="success">\n  <span className="muted">Fuel</span>\n  <strong>3 days ago</strong>\n</Card>',
+    render: () => h("div", {style: grid3},
+      ...[["brand", "Next service", "1,240 km"], ["success", "Fuel", "3 days ago"], ["info", "Odometer", "today"],
+        ["warning", "Consumption", "27.8 km/L"]].map(([tom, nome, valor]) =>
+        h(Card, {key: tom, accent: tom}, h("span", {className: "muted"}, nome), h("br"), h("strong", null, valor)))),
+  },
 ];

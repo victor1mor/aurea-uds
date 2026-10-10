@@ -64,7 +64,7 @@ import {canto, cantosDeCima, criarFolha} from "./estilos.js";
 import {IconButton} from "./actions.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
-import {useAureaStrings, useAureaTokens, ForaDaMarca} from "./theme.js";
+import {useAureaStrings, useTokensDoApp, ForaDaMarca} from "./theme.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
 import type {AureaTokens} from "./tokens.js";
 
@@ -195,7 +195,7 @@ export interface DialogProps {
 export function Dialog({
   open, title, children, footer, onClose, scroll = true, style, testID,
 }: DialogProps) {
-  const t = useAureaTokens();
+  const t = useTokensDoApp();
   const s = folha(t);
   const strings = useAureaStrings();
   const Corpo = scroll ? ScrollView : View;
@@ -268,7 +268,7 @@ export interface ConfirmDialogProps {
 export function ConfirmDialog({
   open, title, description, confirmLabel, cancelLabel, destructive, onConfirm, onCancel, testID,
 }: ConfirmDialogProps) {
-  const t = useAureaTokens();
+  const t = useTokensDoApp();
   const s = folha(t);
   const strings = useAureaStrings();
   return (
@@ -340,7 +340,7 @@ export interface DrawerProps {
 export function Drawer({
   open, title, children, onClose, side = "right", scroll = true, style, testID,
 }: DrawerProps) {
-  const t = useAureaTokens();
+  const t = useTokensDoApp();
   const s = folha(t);
   const strings = useAureaStrings();
   const reduzir = useReduceMotion();
@@ -436,7 +436,7 @@ export interface BottomSheetProps {
 export function BottomSheet({
   open, title, children, onClose, grabber = true, draggable = true, scroll = true, style, testID,
 }: BottomSheetProps) {
-  const t = useAureaTokens();
+  const t = useTokensDoApp();
   const s = folha(t);
   const reduzir = useReduceMotion();
   const arrasto = React.useRef(new Animated.Value(0)).current;

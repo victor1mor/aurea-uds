@@ -76,14 +76,22 @@ export type TopbarVariant=HeaderVariant;
 // o conteúdo ao lado. No modo lista de um app a capa ocupava a largura toda (954 × 1.431 px) e cada
 // cartão virava um pôster: um por tela. A medida é a do exemplo horizontal da referência (a imagem
 // de 96, e o vão de 16), que é o nosso `--space-24`. O padrão continua vertical.
-type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal"};
+// MT-01 e MT-02 (10/10/2026, ADR-0063), pedido de um app: `variant="contrast"` é o cartão que se
+// destaca da tela nos dois temas — no claro, o cartão do tema ESCURO; no escuro, o cartão comum com
+// contorno amarelo. Por dentro ele é o tema escuro inteiro (`data-theme="dark"` no próprio cartão,
+// o caminho da `Section theme`), então todo filho se ajusta sozinho. É o jeito da referência
+// principal de fazer um pedaço escuro (o tema num elemento); ela não tem o cartão.
+// `accent` é o traço de cor no topo, na cor CHEIA do tom, igual nos dois temas — a exceção que a
+// ADR-0063 abriu na ADR-0061 para enfeite: o nome da caixa diz o assunto, o traço não carrega nada.
+export type CardAccent="brand"|"success"|"info"|"warning"|"danger";
+type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
 export type CardProps=CardBase&(
-  {variant?:"base"|"raised"|"inset"|"selected"|"danger";render?:ReactElement}|
+  {variant?:"base"|"raised"|"inset"|"selected"|"danger"|"contrast";render?:ReactElement}|
   {variant:"interactive";render:ReactElement});
-export function Card({variant="base",padding="normal",orientation="vertical",className,render,...props}:CardProps){
-return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...props})}
+export function Card({variant="base",padding="normal",orientation="vertical",accent,className,render,...props}:CardProps){
+return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,accent&&`card-accent card-accent-${accent}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
  *  largura de miniatura, dentro do respiro, com o raio que sai da conta da casa (ADR-0033: raio do

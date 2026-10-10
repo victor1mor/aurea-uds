@@ -42,6 +42,11 @@ par `-400` (`--success-400`…), que cada tema ajusta. Como letra no escuro, o f
 a 3,6:1; o par de letra passa de 4,5:1 em todas as superfícies. O selo cheio de estado passa a ser
 o botão cheio do mesmo tom (mesma cor, mesma letra), na web e no nativo.
 
+> **Exceção, 10/10/2026 ([ADR-0063](0063-o-cartao-contraste-e-o-traco-de-cor.md)):** o traço no topo
+> do `Card` (`accent`) usa a cor CHEIA, a mesma nos dois temas. É enfeite — o nome da caixa diz o
+> assunto —, por decisão do Victor. A exceção mora numa variável própria (`--card-accent`); toda
+> outra borda continua no par `-400`.
+
 **4. Onde a paleta reprovaria a norma, vale o tom da própria paleta que passa** (medido nas cinco
 superfícies de cada tema):
 - a letra de aviso no claro é o `#8a3707` (o segundo tom de letra de aviso da paleta); o primeiro,

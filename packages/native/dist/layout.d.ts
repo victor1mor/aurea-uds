@@ -92,9 +92,18 @@ export interface SeparatorProps extends ViewProps {
  * comportamento certo.
  */
 export declare function Separator({ orientation, label, style, ...rest }: SeparatorProps): React.JSX.Element;
-export type AureaCardVariant = "base" | "raised" | "interactive" | "inset" | "selected" | "danger" | "brand";
+export type AureaCardVariant = "base" | "raised" | "interactive" | "inset" | "selected" | "danger" | "brand" | "contrast";
+/** O tom do traço no topo (`accent`, MT-02, ADR-0063) — os MESMOS cinco da web. */
+export type AureaCardAccent = "brand" | "success" | "info" | "warning" | "danger";
 interface CardBase extends ViewProps {
     children?: React.ReactNode;
+    /**
+     * O traço de cor no topo (MT-02, ADR-0063, 10/10/2026): `--accent-width` (4), na cor CHEIA do
+     * tom, igual nos dois temas. É enfeite — o nome da caixa diz o assunto —, e por isso a ADR-0063
+     * abriu a exceção na ADR-0061 (borda com a cor de fundo). Funciona com `onPress`, com
+     * `accessible` e dentro da `Grid`.
+     */
+    accent?: AureaCardAccent;
 }
 /**
  * 🔴 **O `brand` EXIGE `action`, e isso é de propósito — a regra é do TIPO, não de documento.**
@@ -162,5 +171,5 @@ export type CardProps = CardDaMarca | CardComum | CardTocavel;
  * volta de um `Card` com `Button` dentro) — é o ponto em que a referência não serve.
  * Cartão com duas ações não tem `onPress`: cada ação é um botão dentro de um cartão comum.
  */
-export declare function Card({ variant, style, ...rest }: CardProps): React.JSX.Element;
+export declare function Card(props: CardProps): React.JSX.Element;
 export {};

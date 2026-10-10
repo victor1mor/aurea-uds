@@ -8,18 +8,20 @@ export type AvatarSize = "sm" | "md" | "lg";
 export type HeaderVariant = "floating" | "flush" | "pill";
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). O tipo continua valendo; use `HeaderVariant`. */
 export type TopbarVariant = HeaderVariant;
+export type CardAccent = "brand" | "success" | "info" | "warning" | "danger";
 type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     padding?: "normal" | "none";
     orientation?: "vertical" | "horizontal";
+    accent?: CardAccent;
 };
 export type CardProps = CardBase & ({
-    variant?: "base" | "raised" | "inset" | "selected" | "danger";
+    variant?: "base" | "raised" | "inset" | "selected" | "danger" | "contrast";
     render?: ReactElement;
 } | {
     variant: "interactive";
     render: ReactElement;
 });
-export declare function Card({ variant, padding, orientation, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
+export declare function Card({ variant, padding, orientation, accent, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 export declare namespace Card {
     export { CardMedia as Media };
 }

@@ -16,9 +16,9 @@ import {Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewSt
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
-import {criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Text} from "./text.js";
-import {useAureaTokens, SobreAMarca} from "./theme.js";
+import {useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 const folha = criarFolha((t: AureaTokens) => ({
@@ -52,6 +52,24 @@ const folha = criarFolha((t: AureaTokens) => ({
   // O amarelo é o DE PREENCHER — `primary`, o mesmo do botão sólido. A borda some: uma superfície
   // cheia não precisa de contorno, e um contorno sobre o amarelo mede 2,43 no claro (invisível).
   card_brand: {backgroundColor: t.color.primary, borderColor: "transparent"},
+  // MT-01 (ADR-0063): o `contrast` é pintado DENTRO do tema escuro (`TemaDentro`), então o fundo do
+  // `cardBase` já é o cartão do escuro. No claro, sem linha em volta (13,3:1 contra a tela); no
+  // escuro, o amarelo, com a borda de sempre.
+  card_contrast: {borderColor: "transparent"},
+  contrasteNoEscuro: {borderColor: t.color.primary},
+  // MT-02 (ADR-0063): o traço no topo. Uma borda mais grossa só em cima, com o canto 22, desenha
+  // errado no Android (react-native#51926, fechada sem conserto em 24/03/2026: a borda sai do
+  // contorno e deixa vão). Então o traço é uma faixa de `accentWidth` numa camada que se recorta no
+  // canto do cartão, por cima da borda de 1 — o mesmo desenho do `border-top` da web, que afina na
+  // curva. A camada cobre a CAIXA DA BORDA (deslocada de `borderWidth` para fora), e o recheio de
+  // cima cresce o que o traço come, para o conteúdo ficar onde fica na web.
+  comTraco: {paddingTop: t.size.cardPad + t.size.accentWidth - t.size.borderWidth},
+  tracoCamada: {
+    position: "absolute", top: -t.size.borderWidth, left: -t.size.borderWidth,
+    right: -t.size.borderWidth, bottom: -t.size.borderWidth,
+    ...canto(t.size.radiusCard), overflow: "hidden",
+  },
+  traco: {height: t.size.accentWidth},
   // A ação fica embaixo, separada pelo mesmo respiro que o resto da casa usa entre blocos.
   acaoDaMarca: {marginTop: t.size.space3},
 }));
@@ -262,10 +280,20 @@ export function Separator({orientation = "horizontal", label, style, ...rest}: S
 }
 
 export type AureaCardVariant =
-  "base" | "raised" | "interactive" | "inset" | "selected" | "danger" | "brand";
+  "base" | "raised" | "interactive" | "inset" | "selected" | "danger" | "brand" | "contrast";
+
+/** O tom do traço no topo (`accent`, MT-02, ADR-0063) — os MESMOS cinco da web. */
+export type AureaCardAccent = "brand" | "success" | "info" | "warning" | "danger";
 
 interface CardBase extends ViewProps {
   children?: React.ReactNode;
+  /**
+   * O traço de cor no topo (MT-02, ADR-0063, 10/10/2026): `--accent-width` (4), na cor CHEIA do
+   * tom, igual nos dois temas. É enfeite — o nome da caixa diz o assunto —, e por isso a ADR-0063
+   * abriu a exceção na ADR-0061 (borda com a cor de fundo). Funciona com `onPress`, com
+   * `accessible` e dentro da `Grid`.
+   */
+  accent?: AureaCardAccent;
 }
 
 /**
@@ -338,12 +366,39 @@ export type CardProps = CardDaMarca | CardComum | CardTocavel;
  * volta de um `Card` com `Button` dentro) — é o ponto em que a referência não serve.
  * Cartão com duas ações não tem `onPress`: cada ação é um botão dentro de um cartão comum.
  */
-export function Card({variant, style, ...rest}: CardProps) {
+export function Card(props: CardProps) {
+  // MT-01 (ADR-0063, 10/10/2026): o `contrast` é o tema escuro DENTRO do cartão, então TODO filho
+  // se ajusta — texto, selo, botão, campo —, e não só a lista declarada do `brand`. A marca não
+  // atravessa: dentro de um cartão amarelo, o `contrast` não é amarelo, e a tinta dele não vale.
+  if (props.variant === "contrast") {
+    return (
+      <TemaDentro tema="dark">
+        <SobreAMarca.Provider value={null}><CorpoDoCartao {...props}/></SobreAMarca.Provider>
+      </TemaDentro>
+    );
+  }
+  return <CorpoDoCartao {...props}/>;
+}
+
+/** A cor CHEIA de cada tom do traço — a mesma nos dois temas (ADR-0063, exceção à ADR-0061). */
+const COR_DO_TRACO = {
+  brand: "primary", success: "success", info: "info", warning: "warning", danger: "destructive",
+} as const satisfies Record<AureaCardAccent, string>;
+
+function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   const t = useAureaTokens();
+  const {theme: temaDoApp} = useAureaTheme();
   const s = folha(t);
   const {action, children, onPress, disabled, ...resto} = rest as {
     action?: React.ReactNode; children?: React.ReactNode; onPress?: () => void; disabled?: boolean;
   };
+  // O contorno do `contrast` olha o tema do APP: dentro do cartão os tokens já são os do escuro.
+  const contorno = variant === "contrast" && temaDoApp === "dark" ? s.contrasteNoEscuro : null;
+  const traco = accent == null ? null : (
+    <View pointerEvents="none" collapsable={false} style={s.tracoCamada}>
+      <View style={[s.traco, {backgroundColor: t.color[COR_DO_TRACO[accent]]}]}/>
+    </View>
+  );
 
   if (onPress != null) {
     const pele = variant ?? "interactive";
@@ -354,11 +409,12 @@ export function Card({variant, style, ...rest}: CardProps) {
         accessibilityRole="button"
         {...estadoAcessivel({disabled: !!disabled})}
         style={({pressed: tocando}) => [
-          s.cardBase, s[`card_${pele}`],
+          s.cardBase, s[`card_${pele}`], contorno, traco != null && s.comTraco,
           tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
           style,
         ]}
         {...resto}>
+        {traco}
         {children}
       </Pressable>
     );
@@ -366,12 +422,17 @@ export function Card({variant, style, ...rest}: CardProps) {
 
   const corpo = (
     <>
+      {traco}
       {children}
       {action != null && <View style={s.acaoDaMarca}>{action}</View>}
     </>
   );
 
-  const pele = <View style={[s.cardBase, s[`card_${variant ?? "base"}`], style]} {...resto}>{corpo}</View>;
+  const pele = (
+    <View style={[s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style]} {...resto}>
+      {corpo}
+    </View>
+  );
 
   // 🔴 SOBRE O AMARELO A COR DO TEXTO NÃO É ESCOLHA, É OBRIGAÇÃO — e os números decidiram isto.
   // Medido nos dois temas, texto contra o `primary`:

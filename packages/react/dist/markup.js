@@ -37,8 +37,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
 import React, { forwardRef } from "react";
 import { cx, fundirRender, peleDoEixo } from "./pure.js";
-export function Card({ variant = "base", padding = "normal", orientation = "vertical", className, render, ...props }) {
-    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...props });
+export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, className, render, ...props }) {
+    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a

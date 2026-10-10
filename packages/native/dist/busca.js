@@ -76,7 +76,7 @@ import { KeyboardAvoiding, useCampo } from "./inputs.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
-import { useAureaStrings, useAureaTokens, ForaDaMarca, usePeleSobreAMarca } from "./theme.js";
+import { useAureaStrings, useAureaTokens, useTokensDoApp, ForaDaMarca, usePeleSobreAMarca } from "./theme.js";
 // As mesmas contas do `inputs.tsx`, e elas são repetidas AQUI de propósito: exportá-las de lá
 // tornaria pública uma conta interna do outro módulo, e um `import` de função privada entre
 // módulos irmãos é o começo de um acoplamento que ninguém declara. São três linhas.
@@ -215,6 +215,9 @@ const folha = criarFolha((t) => ({
 export function Combobox({ items, value, onValueChange, onSearchChange, searchDelay = ESPERA_PADRAO, loading, onEndReached, placeholder, searchPlaceholder, empty, clearable = true, draggable = true, disabled, size, chevron = "caret-down", searchIcon = "magnifying-glass", searchKeyboardType, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
+    // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
+    const tf = useTokensDoApp();
+    const sf = folha(tf);
     const peleDaMarca = usePeleSobreAMarca();
     const strings = useAureaStrings();
     const campo = useCampo();
@@ -307,7 +310,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                     peleDaMarca,
                     inativo && s.desabilitado,
                     style,
-                ], children: [_jsx(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: value?.label }, ...estadoAcessivel({ disabled: !!inativo, expanded: aberto }), style: s.gatilho, children: _jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: value ? "default" : "subtle", numberOfLines: 1, style: { flex: 1, minWidth: 0 }, children: value?.label ?? placeholder ?? "" }) }), _jsxs(View, { style: s.acoes, children: [clearable && value != null && !inativo && (_jsx(IconButton, { name: "x", label: strings.comboboxClear, appearance: "ghost", size: "sm", onPress: () => onValueChange?.(null), testID: testID ? `${testID}-limpar` : undefined })), chevron && (_jsx(Pressable, { accessible: false, disabled: inativo, style: s.setaToque, onPress: inativo ? undefined : () => setAberto(true), testID: testID ? `${testID}-seta` : undefined, children: _jsx(Icon, { name: chevron, size: "sm", color: t.color.subtleForeground }) }))] })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: fechar, children: _jsxs(KeyboardAvoiding, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: fechar, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { style: [s.lista, { transform: [{ translateY: arrasto }] }], onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, children: [_jsx(View, { style: s.puxadorArea, ...(draggable ? gestos.panHandlers : null), accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) }), _jsxs(View, { style: [s.grupo, { height: alturaDoTamanho(t, tam) }], ...(draggable ? gestos.panHandlers : null), children: [searchIcon && _jsx(Icon, { name: searchIcon, size: "sm", color: t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-busca` : undefined, value: texto, onChangeText: digitar, placeholder: searchPlaceholder ?? strings.comboboxSearch, placeholderTextColor: t.color.subtleForeground, 
+                ], children: [_jsx(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: value?.label }, ...estadoAcessivel({ disabled: !!inativo, expanded: aberto }), style: s.gatilho, children: _jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: value ? "default" : "subtle", numberOfLines: 1, style: { flex: 1, minWidth: 0 }, children: value?.label ?? placeholder ?? "" }) }), _jsxs(View, { style: s.acoes, children: [clearable && value != null && !inativo && (_jsx(IconButton, { name: "x", label: strings.comboboxClear, appearance: "ghost", size: "sm", onPress: () => onValueChange?.(null), testID: testID ? `${testID}-limpar` : undefined })), chevron && (_jsx(Pressable, { accessible: false, disabled: inativo, style: s.setaToque, onPress: inativo ? undefined : () => setAberto(true), testID: testID ? `${testID}-seta` : undefined, children: _jsx(Icon, { name: chevron, size: "sm", color: t.color.subtleForeground }) }))] })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: fechar, children: _jsxs(KeyboardAvoiding, { style: sf.fundoDaLista, children: [_jsx(Pressable, { style: sf.fundoDeToque, onPress: fechar, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { style: [sf.lista, { transform: [{ translateY: arrasto }] }], onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, children: [_jsx(View, { style: sf.puxadorArea, ...(draggable ? gestos.panHandlers : null), accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: sf.puxador }) }), _jsxs(View, { style: [sf.grupo, { height: alturaDoTamanho(t, tam) }], ...(draggable ? gestos.panHandlers : null), children: [searchIcon && _jsx(Icon, { name: searchIcon, size: "sm", color: tf.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-busca` : undefined, value: texto, onChangeText: digitar, placeholder: searchPlaceholder ?? strings.comboboxSearch, placeholderTextColor: tf.color.subtleForeground, 
                                                 // ⚠ `autoFocus` é o que faz a folha valer a pena: abrir um campo de busca e
                                                 // exigir um segundo toque para o teclado subir é um toque a mais em cada
                                                 // cadastro. O foco entra com a folha; o teclado vem junto.
@@ -318,17 +321,17 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                                                 // plataforma, não decoração: diz à pessoa que aquele campo é de busca antes de
                                                 // ela digitar a primeira letra.
                                                 returnKeyType: "search", keyboardType: searchKeyboardType, style: [
-                                                    s.campoDeTexto,
-                                                    { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
-                                                        color: t.color.foreground },
-                                                ] }), texto.length > 0 && (_jsx(IconButton, { name: "x", label: strings.searchClear, appearance: "ghost", size: "sm", onPress: () => digitar(""), testID: testID ? `${testID}-busca-limpar` : undefined }))] }), loading && (_jsx(View, { style: s.carregando, children: _jsx(Spinner, { label: strings.comboboxLoading }) })), nada && (_jsx(View, { style: s.vazio, children: typeof empty === "string" || empty == null
+                                                    sf.campoDeTexto,
+                                                    { fontSize: fonteDoTamanho(t, tam), fontFamily: tf.font.ui[400],
+                                                        color: tf.color.foreground },
+                                                ] }), texto.length > 0 && (_jsx(IconButton, { name: "x", label: strings.searchClear, appearance: "ghost", size: "sm", onPress: () => digitar(""), testID: testID ? `${testID}-busca-limpar` : undefined }))] }), loading && (_jsx(View, { style: sf.carregando, children: _jsx(Spinner, { label: strings.comboboxLoading }) })), nada && (_jsx(View, { style: sf.vazio, children: typeof empty === "string" || empty == null
                                             ? _jsx(Text, { size: "sm", tone: "muted", children: empty ?? strings.comboboxEmpty })
                                             : empty })), _jsx(FlatList, { data: filtrados, keyExtractor: (i) => i.value, keyboardShouldPersistTaps: "handled", onEndReached: onEndReached, onEndReachedThreshold: ANTECEDENCIA_DE_PAGINA, renderItem: ({ item }) => (_jsxs(Pressable, { disabled: item.disabled, onPress: () => { onValueChange?.(item); fechar(); }, accessibilityRole: "menuitem", ...estadoAcessivel({
                                                 selected: item.value === value?.value, disabled: !!item.disabled,
                                             }), accessibilityHint: item.description, style: [
-                                                s.opcao,
-                                                item.value === value?.value && s.opcaoEscolhida,
-                                                item.disabled && s.desabilitado,
+                                                sf.opcao,
+                                                item.value === value?.value && sf.opcaoEscolhida,
+                                                item.disabled && sf.desabilitado,
                                             ], children: [_jsx(Text, { size: "md", weight: item.value === value?.value ? 600 : 400, children: item.label }), item.description != null && (_jsx(Text, { size: "xs", tone: "muted", children: item.description }))] })) }), _jsx(RecuoDaFolha, { comTeclado: true })] })] }) }) })] }));
 }
 // ── A DOBRA DE ACENTO, e por que ela é sondada em vez de presumida ───────────────────────────

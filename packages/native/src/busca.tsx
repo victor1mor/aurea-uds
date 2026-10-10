@@ -78,7 +78,7 @@ import {KeyboardAvoiding, useCampo, type AureaFieldSize} from "./inputs.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
-import {useAureaStrings, useAureaTokens, ForaDaMarca, usePeleSobreAMarca} from "./theme.js";
+import {useAureaStrings, useAureaTokens, useTokensDoApp, ForaDaMarca, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 // As mesmas contas do `inputs.tsx`, e elas são repetidas AQUI de propósito: exportá-las de lá
@@ -306,6 +306,9 @@ export function Combobox({
 }: ComboboxProps) {
   const t = useAureaTokens();
   const s = folha(t);
+  // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
+  const tf = useTokensDoApp();
+  const sf = folha(tf);
   const peleDaMarca = usePeleSobreAMarca();
   const strings = useAureaStrings();
   const campo = useCampo();
@@ -446,15 +449,15 @@ export function Combobox({
             Sem isto, uma folha de 90% com o teclado aberto no iOS deixa a lista inteira ATRÁS
             do teclado: a pessoa digita e não vê resultado nenhum. É a peça que bloqueia o
             cadastro, no sistema em que ninguém deste projeto testou. */}
-        <KeyboardAvoiding style={s.fundoDaLista}>
+        <KeyboardAvoiding style={sf.fundoDaLista}>
           {/* O fundo tocável é IRMÃO, não ancestral: é isso que impede que tocar no corpo da folha
               a feche (correção de 10/09/2026 do `Select`). Aqui o defeito seria pior: tocar para
               posicionar o cursor no campo de busca fecharia a folha. */}
-          <Pressable style={s.fundoDeToque} onPress={fechar} accessible={false}
+          <Pressable style={sf.fundoDeToque} onPress={fechar} accessible={false}
                      testID={testID ? `${testID}-fundo` : undefined} />
           {/* E4: a folha NÃO reivindica mais o toque — ver o `Select` (`inputs.tsx`), mesma causa
               suspeita e mesma razão de ser seguro: o fundo é irmão. */}
-          <Animated.View style={[s.lista, {transform: [{translateY: arrasto}]}]}
+          <Animated.View style={[sf.lista, {transform: [{translateY: arrasto}]}]}
                          onLayout={(e) => { altura.current = e.nativeEvent.layout.height; }}>
             {/* 🔴 O PUXADOR E O ARRASTO SÃO A SAÍDA DO iOS, e eles são cópia deliberada do
                 `BottomSheet` (`overlays.tsx:433-470`) — mesma medida, mesmo limiar, mesma curva.
@@ -462,19 +465,19 @@ export function Combobox({
                 Lá a folha inteira arrasta porque o corpo é um `ScrollView` curto; aqui o corpo é
                 um `FlatList` de milhares de linhas, e reivindicar o gesto sobre ele roubaria a
                 rolagem da lista — que é a única coisa que este componente existe para fazer. */}
-            <View style={s.puxadorArea} {...(draggable ? gestos.panHandlers : null)}
+            <View style={sf.puxadorArea} {...(draggable ? gestos.panHandlers : null)}
                   accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-              <View style={s.puxador} />
+              <View style={sf.puxador} />
             </View>
-            <View style={[s.grupo, {height: alturaDoTamanho(t, tam)}]}
+            <View style={[sf.grupo, {height: alturaDoTamanho(t, tam)}]}
                   {...(draggable ? gestos.panHandlers : null)}>
-              {searchIcon && <Icon name={searchIcon} size="sm" color={t.color.subtleForeground} />}
+              {searchIcon && <Icon name={searchIcon} size="sm" color={tf.color.subtleForeground} />}
               <TextInput
                 testID={testID ? `${testID}-busca` : undefined}
                 value={texto}
                 onChangeText={digitar}
                 placeholder={searchPlaceholder ?? strings.comboboxSearch}
-                placeholderTextColor={t.color.subtleForeground}
+                placeholderTextColor={tf.color.subtleForeground}
                 // ⚠ `autoFocus` é o que faz a folha valer a pena: abrir um campo de busca e
                 // exigir um segundo toque para o teclado subir é um toque a mais em cada
                 // cadastro. O foco entra com a folha; o teclado vem junto.
@@ -490,9 +493,9 @@ export function Combobox({
                 returnKeyType="search"
                 keyboardType={searchKeyboardType}
                 style={[
-                  s.campoDeTexto,
-                  {fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
-                   color: t.color.foreground},
+                  sf.campoDeTexto,
+                  {fontSize: fonteDoTamanho(t, tam), fontFamily: tf.font.ui[400],
+                   color: tf.color.foreground},
                 ]}
               />
               {texto.length > 0 && (
@@ -503,13 +506,13 @@ export function Combobox({
             </View>
 
             {loading && (
-              <View style={s.carregando}>
+              <View style={sf.carregando}>
                 <Spinner label={strings.comboboxLoading} />
               </View>
             )}
 
             {nada && (
-              <View style={s.vazio}>
+              <View style={sf.vazio}>
                 {typeof empty === "string" || empty == null
                   ? <Text size="sm" tone="muted">{(empty as string) ?? strings.comboboxEmpty}</Text>
                   : empty}
@@ -537,9 +540,9 @@ export function Combobox({
                   })}
                   accessibilityHint={item.description}
                   style={[
-                    s.opcao,
-                    item.value === value?.value && s.opcaoEscolhida,
-                    item.disabled && s.desabilitado,
+                    sf.opcao,
+                    item.value === value?.value && sf.opcaoEscolhida,
+                    item.disabled && sf.desabilitado,
                   ]}>
                   <Text size="md" weight={item.value === value?.value ? 600 : 400}>
                     {item.label}

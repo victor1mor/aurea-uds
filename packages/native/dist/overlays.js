@@ -62,7 +62,7 @@ import { canto, cantosDeCima, criarFolha } from "./estilos.js";
 import { IconButton } from "./actions.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
-import { useAureaStrings, useAureaTokens, ForaDaMarca } from "./theme.js";
+import { useAureaStrings, useTokensDoApp, ForaDaMarca } from "./theme.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
 const folha = criarFolha((t) => ({
     fundo: { flex: 1, backgroundColor: t.color.overlay },
@@ -163,7 +163,7 @@ const naoAtravessa = { onStartShouldSetResponder: () => true };
  * fica presa — o equivalente exato de um diálogo web que ignora `Escape`.
  */
 export function Dialog({ open, title, children, footer, onClose, scroll = true, style, testID, }) {
-    const t = useAureaTokens();
+    const t = useTokensDoApp();
     const s = folha(t);
     const strings = useAureaStrings();
     const Corpo = scroll ? ScrollView : View;
@@ -192,7 +192,7 @@ export function Dialog({ open, title, children, footer, onClose, scroll = true, 
  * separa esta caixa de um `Dialog` para quem não vê é o texto, não um atributo.
  */
 export function ConfirmDialog({ open, title, description, confirmLabel, cancelLabel, destructive, onConfirm, onCancel, testID, }) {
-    const t = useAureaTokens();
+    const t = useTokensDoApp();
     const s = folha(t);
     const strings = useAureaStrings();
     return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onCancel, testID: testID, children: _jsx(View, { style: [s.fundo, s.centro], children: _jsxs(View, { ...naoAtravessa, style: [s.superficie, s.confirmar], children: [_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) }), _jsx(View, { style: s.corpo, children: typeof description === "string"
@@ -211,7 +211,7 @@ export function ConfirmDialog({ open, title, description, confirmLabel, cancelLa
  * cascata de `prefers-reduced-motion` que a web ganha de graça.
  */
 export function Drawer({ open, title, children, onClose, side = "right", scroll = true, style, testID, }) {
-    const t = useAureaTokens();
+    const t = useTokensDoApp();
     const s = folha(t);
     const strings = useAureaStrings();
     const reduzir = useReduceMotion();
@@ -267,7 +267,7 @@ export function Drawer({ open, title, children, onClose, side = "right", scroll 
  * terço da altura da folha. Fechar cedo demais é como um gesto de fechar vira perda de dado.
  */
 export function BottomSheet({ open, title, children, onClose, grabber = true, draggable = true, scroll = true, style, testID, }) {
-    const t = useAureaTokens();
+    const t = useTokensDoApp();
     const s = folha(t);
     const reduzir = useReduceMotion();
     const arrasto = React.useRef(new Animated.Value(0)).current;

@@ -1,4 +1,4 @@
-import { jsx as _jsx } from "react/jsx-runtime";
+import { Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import * as React from "react";
 import { useColorScheme } from "react-native";
 import { IconRegistryProvider } from "./icon.js";
@@ -45,6 +45,8 @@ export function AureaProvider({ children, theme, density, defaultTheme, defaultD
         // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
         // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
         strings: strings ?? defaultStrings,
+        fontes: fontFamilies,
+        raiz: null,
     }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings]);
     // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
     // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
@@ -119,7 +121,46 @@ export function useSobreAMarca() {
  * passa por aqui.
  */
 export function ForaDaMarca({ children }) {
-    return _jsx(SobreAMarcaCtx.Provider, { value: null, children: children });
+    // ✅ **E corta o tema do pedaço também (ADR-0063, 10/10/2026).** A mesma armadilha vale para o
+    // `Card variant="contrast"`: ele entrega os tokens do ESCURO aos filhos, e a folha de um `Select`
+    // aberto dali sairia escura sobre um app claro. Na web isso não acontece porque a folha vai para
+    // o fim da página (portal), fora do pedaço; aqui, quem sai do fluxo volta ao valor do app.
+    const v = React.useContext(Contexto);
+    const corpo = _jsx(SobreAMarcaCtx.Provider, { value: null, children: children });
+    return v?.raiz ? _jsx(Contexto.Provider, { value: v.raiz, children: corpo }) : corpo;
+}
+/**
+ * O tema num pedaço da tela — o `Card variant="contrast"` (MT-01, ADR-0063, 10/10/2026). Os filhos
+ * leem os tokens do `tema` pedido; o resto do app não muda. É o jeito da referência principal de
+ * fazer um pedaço escuro (o tema aplicado num elemento), e o da web (`data-theme` no cartão).
+ *
+ * ⚠ **O `useAureaTheme()` continua o do app**: dentro do pedaço, `theme` diz o tema do APP, e o
+ * `setTheme` troca o do app. Só os tokens mudam — é o que pinta.
+ *
+ * Interno: o público é o `Card variant="contrast"`. O que sai do fluxo (folha, sobreposto) passa
+ * pelo `ForaDaMarca` e volta ao app.
+ */
+/**
+ * Os tokens do APP, mesmo dentro de um pedaço com tema próprio. Quem desenha uma janela que sai do
+ * fluxo (a folha, o diálogo) pinta o FUNDO dela com isto: o `ForaDaMarca` devolve o contexto do app
+ * só para quem lê o contexto DENTRO da janela (o texto, o botão), e o fundo é calculado antes, por
+ * quem abre. Medido na bancada do Lote N (10/10/2026): sem isto, a lista do `Select` aberta de
+ * dentro do `contrast` saía com o fundo do escuro e a letra do claro. Interno.
+ */
+export function useTokensDoApp() {
+    const v = usar("useTokensDoApp");
+    return (v.raiz ?? v).tokens;
+}
+export function TemaDentro({ tema, children }) {
+    const v = usar("TemaDentro");
+    const valor = React.useMemo(() => ({
+        ...v,
+        tokens: resolverTokens(tema, v.controle.density, v.fontes),
+        raiz: v.raiz ?? v,
+    }), [v, tema]);
+    if (v.tokens.theme === tema)
+        return _jsx(_Fragment, { children: children });
+    return _jsx(Contexto.Provider, { value: valor, children: children });
 }
 /**
  * A pele que um CAMPO tem de vestir quando está dentro de um `Card variant="brand"`, ou `null`

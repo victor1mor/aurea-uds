@@ -341,6 +341,14 @@
         "unit": "px"
       }
     },
+    "accent-width": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$description": "A altura do traço de cor no topo do Card (accent) — MT-02, ADR-0063, 10/10/2026. O número é o do pedido do app, aprovado pelo Victor; o mercado usa 3 (a referência principal não tem traço). Só o traço usa esta linha: a borda comum continua --border-width."
+    },
     "focus-width": {
       "$type": "dimension",
       "$value": {

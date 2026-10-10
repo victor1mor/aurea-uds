@@ -15,7 +15,8 @@
     "interactive",
     "inset",
     "selected",
-    "danger"
+    "danger",
+    "contrast"
   ],
   "sizes": [],
   "states": [
@@ -23,6 +24,7 @@
     "hover"
   ],
   "tokens": [
+    "--accent-width",
     "--border",
     "--border-strong",
     "--card",
@@ -30,14 +32,19 @@
     "--card-pad",
     "--danger-400",
     "--danger-bg",
+    "--destructive",
     "--duration-fast",
+    "--info",
     "--muted-foreground",
+    "--primary",
     "--primary-outline",
     "--radius-card",
     "--secondary",
+    "--success",
     "--surface-2",
     "--text-base",
-    "--text-sm"
+    "--text-sm",
+    "--warning"
   ],
   "a11y": {
     "role": null,
@@ -61,9 +68,9 @@
   "props": [
     {
       "name": "variant",
-      "type": "base | raised | interactive | inset | selected | danger",
+      "type": "base | raised | interactive | inset | selected | danger | contrast",
       "default": "base",
-      "description": "Which surface it is. `interactive` is the only one that answers the pointer, so use it only when the whole card really is a target; `inset` recesses instead of floating, which is what a panel inside a card wants."
+      "description": "Which surface it is. `interactive` is the only one that answers the pointer, so use it only when the whole card really is a target; `inset` recesses instead of floating, which is what a panel inside a card wants. `contrast` stands out from the screen in both themes: in the light theme it is the dark theme's card, with no outline; in the dark theme it is the regular card with a yellow outline. Inside it the whole dark theme applies (data-theme=\"dark\" on the card), so every child adjusts by itself. Do not use it in a list of choices: in the dark theme its outline is close to `selected`."
     },
     {
       "name": "children",
@@ -76,6 +83,12 @@
       "type": "ReactElement",
       "default": "—",
       "description": "The ELEMENT the card renders as, with the Aurea surface merged into it. Required when variant is \"interactive\": a card that is a target has to be a real target — <button> for an action, <a href> for navigation — and only you know which. tabIndex on a <div> would give focus with no role, no key and no accessible name."
+    },
+    {
+      "name": "accent",
+      "type": "brand | success | info | warning | danger",
+      "default": "—",
+      "description": "A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline."
     },
     {
       "name": "padding",
