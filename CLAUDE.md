@@ -144,6 +144,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.27.0` | As cores dos dois temas seguem a paleta de referência; o amarelo da marca fica — [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md), pedido #58. **Publicada em 09/10/2026** (entre 13:13 e 13:19, Brasília), pelo terminal do Victor. Leva a `0.26.0` e a `0.26.1` junto |
 | `0.28.0` | Lote M: `share` no `Button` e no `IconButton` (GAR-14), `Image frame="phone"` (GAR-15), `--font-heading`, `--weight-extrabold`, a fonte 800 e `numeric` (GAR-16) — [ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md), pedido #61. **Publicada em 09/10/2026** (entre 19:24 e 19:30, Brasília), pelo terminal do Victor |
 | `0.29.0` | Lote N: `Card variant="contrast"` (o tema escuro dentro do cartão) e `Card accent` (o traço de 4 no topo, na cor cheia), web e nativo; a marca chega a um pedaço com tema próprio — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md), pedido #63. **Publicada em 10/10/2026** (entre 13:05 e 13:10, Brasília), pelo terminal do Victor |
+| `0.30.0` | A rodada 1 do mapa de rede: o `DependencyGraph` de cima para baixo, em camadas pelo `elkjs` (opcional), com ícone, selos, portas, a linha que diz o que é sem cor, enlaces juntos, minimapa, ir até, caminho, setas e exportar `.drawio`/PNG/SVG; o `Icon` da web aceita o desenho do app — [ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md), pedido #64. **Publicada em 10/10/2026** (por volta das 15:38, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -379,7 +380,24 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    do motor não; a lista de alças declaradas só vale até a primeira medida; e no mapa de leitura as
    alças existem, escondidas e surdas. ⚠ **A lição:** os três defeitos só apareceram na bancada com o
    código real, e o banco `apps/keyboard-probe/rede.html` importa a folha do motor sem camada — o pior
-   caso — para o teste valer para quem a importa assim.
+   caso — para o teste valer para quem a importa assim. **Aprovada pela bancada** (*"aprovado, pode
+   enviar a 0.30.0"*) **e publicada no mesmo dia** (por volta das 15:38, Brasília, pelo terminal do
+   Victor, da junção do pedido #64).
+
+27. **`0.31.0`, a rodada 2 do mapa de rede, feita em 10/10/2026** (*"como recomendado, pode construir a
+   rodada 2"*), [ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md) — mexer no mapa: o modo de arrumar
+   (`editable`: laço, Shift, arrastar vários, grade de 16, alinhar, distribuir, fixar, reorganizar, setas),
+   desfazer como pilha de comandos e o aviso `onLayoutChange`; as rotas do `elkjs` e o desvio pelo
+   `@tisoap/react-flow-smart-edge` (peer OPCIONAL novo), com a ponte nossa; rótulos que somem; o
+   contêiner `parentId` que fecha, a subárvore por dominador e a nuvem; a árvore e o círculo;
+   `visibleOnly` e `layoutWorker`. Junto: o teclado do mapa de leitura (duas paradas por nó, linha em
+   inglês, publicado na `0.30.0`) e o aviso de compilação que faltou em quatro versões. ⚠ **As regras
+   novas:** frase nova no `AureaStrings` sai com o nome dela sob "⚠ Pode quebrar a compilação" — o check
+   31b cobra, contra as frases guardadas no `released-surface.json`; e o rótulo de HTML do mapa fica
+   acima das linhas e dos nós (`--graph-label-z`). ⚠ **A lição:** a bancada achou seis defeitos que os
+   testes não pegavam (rótulo por baixo do contêiner, botão em cima da porta, clique que escolhia o nó,
+   desvio jogado fora, caixa de contêiner na árvore, ícone da nuvem para fora — este, o Victor viu); cada
+   um ganhou o teste que reprova sem o conserto.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

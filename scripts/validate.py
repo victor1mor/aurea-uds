@@ -1015,7 +1015,9 @@ PESADAS = {"codemirror": "code-editor", "@codemirror/": "code-editor", "@lezer/"
            "react-day-picker": "calendar", "@xyflow/react": "graph",
            # Rodada 1 da rede (ADR-0064, 10/10/2026): a arrumação em camadas e a foto do mapa. Os
            # dois são peer OPCIONAL e entram por `import()` dentro do graph.tsx, só quando usados.
-           "elkjs": "graph", "modern-screenshot": "graph"}
+           "elkjs": "graph", "modern-screenshot": "graph",
+           # Rodada 2 (ADR-0065): o desvio de linhas, peer OPCIONAL, também só por `import()` no graph.tsx.
+           "@tisoap/react-flow-smart-edge": "graph"}
 for fp in sorted((root / "packages/react/src").glob("*.tsx")):
     fonte = fp.read_text(encoding="utf-8")
     for imp in re.findall(r'^import[^"\']*["\']([^"\']+)["\']', fonte, re.M):
@@ -1799,6 +1801,37 @@ else:
         errors.append(f"CHANGELOG.md: os pacotes estão em {_v} e não há seção '## [{_v}]' "
                       f"(o último release registrado é {_rel['version']})")
 
+# ── 31b. frase nova no `AureaStrings` sai com o aviso de compilação ────────
+# Nasceu em 10/10/2026 de um defeito medido QUATRO vezes: a 0.15.0 (nativo), a 0.19.0, a 0.28.0 e a
+# 0.30.0 acrescentaram chaves ao `AureaStrings` — e quem monta o objeto INTEIRO com esse tipo (uma
+# tradução própria, por exemplo) deixa de compilar —, e nenhuma das quatro escreveu o aviso que a
+# 0.18.0 escreveu. O `released-surface.json` passou a guardar as chaves da versão publicada
+# (`strings.web` e `strings.native`), e toda chave que não está lá tem de ser citada na seção da versão
+# dos pacotes, sob "### ⚠ Pode quebrar a compilação". O nome tem de aparecer: o consumidor procura por ele.
+def _chaves31b(caminho):
+    _fp31b = root / caminho
+    _m31b = re.search(r"export interface AureaStrings\s*\{([^}]*)\}", _fp31b.read_text(encoding="utf-8")) if _fp31b.is_file() else None
+    return set(re.findall(r"(\w+)\s*:\s*string", _m31b.group(1))) if _m31b else set()
+if CHANGELOG.is_file() and SURFACE.is_file():
+    _rel31b = json.loads(SURFACE.read_text(encoding="utf-8"))
+    _str31b = _rel31b.get("strings")
+    if not isinstance(_str31b, dict):
+        errors.append("scripts/released-surface.json: sem `strings` — o check 31b não tem contra o que comparar")
+    else:
+        _v31b = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
+        _ch31b = CHANGELOG.read_text(encoding="utf-8")
+        _sec31b = _ch31b.split(f"## [{_v31b}]", 1)[1].split("\n## [", 1)[0] if f"## [{_v31b}]" in _ch31b else ""
+        _tit31b = "### ⚠ Pode quebrar a compilação"
+        _aviso31b = _sec31b.split(_tit31b, 1)[1].split("\n### ", 1)[0] if _tit31b in _sec31b else ""
+        for _alvo31b, _arq31b in (("web", "packages/react/src/pure.tsx"), ("native", "packages/native/src/strings.ts")):
+            _novas31b = sorted(_chaves31b(_arq31b) - set(_str31b.get(_alvo31b, [])))
+            _sem31b = [k for k in _novas31b if not re.search(rf"(?<![A-Za-z0-9]){re.escape(k)}(?![A-Za-z0-9])", _aviso31b)]
+            if _sem31b:
+                errors.append(
+                    f"CHANGELOG.md: o AureaStrings ({_alvo31b}) ganhou {len(_novas31b)} chave(s) depois da "
+                    f"{_rel31b['version']}, e a seção [{_v31b}] não cita {len(_sem31b)} delas sob '{_tit31b}' — "
+                    f"{', '.join(_sem31b)}. Quem monta o objeto inteiro com esse tipo deixa de compilar.")
+
 # ── 32. os lugares públicos onde a versão mora dizem o mesmo número ────────
 # A POLÍTICA NÃO NASCE AQUI. Ela é da ADR-0014 — "todos os seis pacotes ... versionam JUNTOS, como
 # já faziam" —, cuja autoria é do Victor em 31/07/2026. Este check só a OBRIGA, e existir é a
@@ -2278,6 +2311,10 @@ NAO_E_ESTADO = {
     # DependencyGraph — não condição em que o componente se encontra.
     "text": "é EIXO (`textSize` do DependencyGraph), declarado em `axes`",
     "contrast": "é MODO de leitura (`highContrast` do DependencyGraph, booleano), não estado",
+    # Rodada 2 da rede (ADR-0065): a FORMA do nó é dado (`shape` do item), e o modo de arrumar é
+    # MODO escolhido pelo app (`editable`, booleano) — nenhum é condição em que o componente se encontra.
+    "shape": "é DADO do nó (`shape` do item do DependencyGraph: a nuvem), não estado",
+    "editable": "é MODO (`editable` do DependencyGraph, booleano), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}
@@ -3145,6 +3182,10 @@ _SEM_LINHA44 = {
     ".input-group>.select:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
     ".input-group>.textarea:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
     ".combobox-chip-input:focus-visible": "o anel é da moldura (`.combobox-multi:focus-within`)",
+    # Rodada 2 da rede (ADR-0065): no modo de arrumar quem recebe o foco é a caixa QUADRADA do motor;
+    # o anel vai para o corpo do nó (ou a caixa do contêiner), que tem o raio da casa.
+    ".dependency-graph:focus-visible:has(>.graph-node)": "o anel é do corpo do nó (`:focus-visible > .graph-node > .graph-node-body`)",
+    ".dependency-graph:focus-visible:has(>.graph-group)": "o anel é da caixa do contêiner (`:focus-visible > .graph-group`)",
 }
 _LINHA44 = re.compile(r"^var\(--focus-width\)\s+solid\s+(var\(--focus-strong\)|CanvasText)$")
 _OFFSET44 = {"var(--focus-offset)", "0", "calc(-1 * var(--focus-width))"}

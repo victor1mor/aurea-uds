@@ -3,11 +3,11 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 36,
+    "modulos": 37,
     "componentes": 129,
     "hooks": 9,
-    "aliasesLiterais": 83,
-    "propsDistintas": 309
+    "aliasesLiterais": 84,
+    "propsDistintas": 316
   },
   "aliases": {
     "ButtonVariant": {
@@ -266,6 +266,33 @@
       "raw": "(file: File, ctx: UploadContext) => Promise<void | { checksum?: string; }>",
       "union": null
     },
+    "Ponto": {
+      "module": "graph-geometria",
+      "raw": "{ x: number; y: number; }",
+      "union": null
+    },
+    "Caixa": {
+      "module": "graph-geometria",
+      "raw": "{ x: number; y: number; larg: number; alt: number; }",
+      "union": null
+    },
+    "Borda": {
+      "module": "graph-geometria",
+      "raw": "\"left\" | \"center\" | \"right\" | \"top\" | \"middle\" | \"bottom\"",
+      "union": [
+        "left",
+        "center",
+        "right",
+        "top",
+        "middle",
+        "bottom"
+      ]
+    },
+    "Ponte": {
+      "module": "graph-geometria",
+      "raw": "{ de: number; ate: number; }",
+      "union": null
+    },
     "GraphOrientation": {
       "module": "graph",
       "raw": "\"horizontal\" | \"vertical\"",
@@ -276,10 +303,12 @@
     },
     "GraphLayout": {
       "module": "graph",
-      "raw": "\"simple\" | \"layered\"",
+      "raw": "\"simple\" | \"layered\" | \"tree\" | \"radial\"",
       "union": [
         "simple",
-        "layered"
+        "layered",
+        "tree",
+        "radial"
       ]
     },
     "GraphEdgeShape": {
@@ -338,6 +367,11 @@
         "dot",
         "lock"
       ]
+    },
+    "GraphAlign": {
+      "module": "graph",
+      "raw": "Borda",
+      "union": null
     },
     "PhosphorIconName": {
       "module": "icon-names",
@@ -4721,6 +4755,11 @@
       "hooks": [],
       "clientDirective": false
     },
+    "graph-geometria": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
     "graph": {
       "components": [
         {
@@ -4803,7 +4842,9 @@
               "type": "GraphLayout",
               "values": [
                 "simple",
-                "layered"
+                "layered",
+                "tree",
+                "radial"
               ]
             },
             {
@@ -4906,6 +4947,54 @@
               "name": "apiRef",
               "optional": true,
               "type": "React.Ref<DependencyGraphApi>",
+              "values": null
+            },
+            {
+              "name": "editable",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "grid",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onLayoutChange",
+              "optional": true,
+              "type": "(layout: GraphLayoutChange) => void",
+              "values": null
+            },
+            {
+              "name": "onSelectionChange",
+              "optional": true,
+              "type": "(ids: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "collapsible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onCollapseChange",
+              "optional": true,
+              "type": "(id: string, collapsed: boolean) => void",
+              "values": null
+            },
+            {
+              "name": "visibleOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "layoutWorker",
+              "optional": true,
+              "type": "() => Worker",
               "values": null
             }
           ]

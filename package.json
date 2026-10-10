@@ -1,7 +1,7 @@
 {
   "name": "aurea-uds-workspace",
   "private": true,
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "Aurea Universal Design System — o repositório dos sete pacotes @aurea-uds/*.",
   "repository": {
     "type": "git",
@@ -43,10 +43,11 @@
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
+    "@tisoap/react-flow-smart-edge": "^5.0.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
-    "@xyflow/react": "^12.11.2",
+    "@xyflow/react": "^12.12.0",
     "elkjs": "^0.12.0",
     "jest-axe": "^10.0.0",
     "jsdom": "^29.1.1",

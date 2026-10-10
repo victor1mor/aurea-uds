@@ -47,6 +47,30 @@ Seis módulos trazem uma engine opcional e por isso ficam **fora do entry point 
 | `@aurea-uds/react/chart` | `recharts` |
 | `@aurea-uds/react/graph` | `@xyflow/react` |
 
+### O mapa (`DependencyGraph`) e as três peças opcionais dele
+
+Cada uma só é carregada quando a função dela é pedida. Sem ela, o mapa avisa uma vez no console e
+segue sem a função — não quebra a tela.
+
+| Para | Instale |
+|---|---|
+| arrumar em camadas, em árvore ou em círculo (`layout="layered"`, `"tree"`, `"radial"`) | `elkjs` |
+| a linha que desvia de um nó depois de arrumar à mão | `@tisoap/react-flow-smart-edge` |
+| a foto do mapa (`toPng()`, `toSvg()`) | `modern-screenshot` |
+
+**O arrumador fora da tela principal (`layoutWorker`).** Num mapa grande, a arrumação pode prender a
+tela por alguns segundos. O mapa aceita um trabalhador (Web Worker) que o app cria — cada empacotador
+cria trabalhador do seu jeito, e por isso quem entrega é o app. No Vite:
+
+```js
+import TrabalhadorDoElk from "elkjs/lib/elk-worker.min.js?worker";
+
+<DependencyGraph layout="layered" layoutWorker={() => new TrabalhadorDoElk()} … />
+```
+
+Em qualquer outro empacotador, o jeito que sempre funciona: copie `node_modules/elkjs/lib/elk-worker.min.js`
+para a pasta pública do app e passe `layoutWorker={() => new Worker("/elk-worker.min.js")}`.
+
 ## Hooks
 
 Quatro são públicos, e eles são a parte da API que **não tem página no catálogo** — o catálogo

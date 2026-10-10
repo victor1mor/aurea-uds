@@ -11,10 +11,24 @@
   "dependencies": {
     "engine": "@xyflow/react",
     "icons": [
+      "align-bottom",
+      "align-center-horizontal",
+      "align-center-vertical",
+      "align-left",
+      "align-right",
+      "align-top",
+      "arrow-u-up-left",
+      "arrow-u-up-right",
+      "arrows-out-line-horizontal",
+      "arrows-out-line-vertical",
+      "caret-down",
       "corners-out",
       "lock-key",
       "magnifying-glass-minus",
-      "magnifying-glass-plus"
+      "magnifying-glass-plus",
+      "minus",
+      "push-pin",
+      "tree-structure"
     ]
   },
   "name": "DependencyGraph",
@@ -22,8 +36,10 @@
   "icon": "flow-arrow",
   "states": [
     "connectable",
+    "crowded",
     "dimmed",
     "draggable",
+    "far",
     "focused",
     "hidden",
     "selected"
@@ -34,17 +50,22 @@
     "--border-strong",
     "--border-width",
     "--card",
+    "--focus-strong",
+    "--focus-width",
     "--foreground",
     "--muted-foreground",
     "--primary",
     "--primary-outline",
     "--radius-card",
     "--radius-control",
+    "--radius-full",
     "--radius-md",
     "--radius-xs",
     "--secondary",
     "--space-05",
     "--space-1",
+    "--space-10",
+    "--space-16",
     "--space-2",
     "--space-3",
     "--space-5",
@@ -52,6 +73,7 @@
     "--space-8",
     "--subtle-foreground",
     "--surface-2",
+    "--surface-inset",
     "--text-base",
     "--text-sm",
     "--text-xs",
@@ -89,13 +111,13 @@
       "name": "nodes",
       "type": "GraphNodeItem[]",
       "default": "—",
-      "description": "The vocabulary is ours, not the engine's. x and y are optional: without them a layered longest-path layout runs, because the engine positions nothing on its own and a graph with no coordinates piles every node at 0,0. A node can carry an `icon` (a sprite name or the app's own drawing) NEXT TO its kind, never instead of it; a `count` badge (with `countLabel` for the screen reader); a `status` badge (a word, with a tone that only reinforces it); `ports` (named handles on a chosen side); and a suggested `layer`."
+      "description": "The vocabulary is ours, not the engine's. x and y are optional: without them a layered longest-path layout runs, because the engine positions nothing on its own and a graph with no coordinates piles every node at 0,0. A node can carry an `icon` (a sprite name or the app's own drawing) NEXT TO its kind, never instead of it; a `count` badge (with `countLabel` for the screen reader); a `status` badge (a word, with a tone that only reinforces it); `ports` (named handles on a chosen side); and a suggested `layer`. Round 2: `parentId` puts the node inside a CONTAINER (site, floor, rack — one parent each; a VLAN is a filter, not a container, because one device sits in several); `collapsed` starts a container or a subtree closed; `pinned` keeps the node where it is; `shape: \"cloud\"` draws it as a cloud (Internet, public cloud, remote site)."
     },
     {
       "name": "edges",
       "type": "GraphEdgeItem[]",
       "default": "—",
-      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types. An edge can attach to ports (`fromPort`, `toPort`), write port names at its ends (`sourceLabel`, `targetLabel`), and say what it is without relying on colour: `pattern` (solid, dashed, dotted, double), `weight` (regular, thick, heavy), `mark` in the middle (cross, dot, lock), a `count` (for example the members of a link aggregation) and a `legend` name."
+      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types. An edge can attach to ports (`fromPort`, `toPort`), write port names at its ends (`sourceLabel`, `targetLabel`), and say what it is without relying on colour: `pattern` (solid, dashed, dotted, double), `weight` (regular, thick, heavy), `mark` in the middle (cross, dot, lock), a `count` (for example the members of a link aggregation) and a `legend` name. Round 2: `priority` decides which label stays when two labels touch (higher wins; on a tie, the earlier edge)."
     },
     {
       "name": "selectedId",
@@ -153,9 +175,9 @@
     },
     {
       "name": "layout",
-      "type": "\"simple\" | \"layered\"",
+      "type": "\"simple\" | \"layered\" | \"tree\" | \"radial\"",
       "default": "\"simple\"",
-      "description": "`layered` arranges the graph with elkjs (an optional peer): fewer crossings, balanced children, ports in their declared order. It arrives after the first paint; the simple layout stands until then."
+      "description": "`layered` arranges the graph with elkjs (an optional peer): fewer crossings, balanced children, ports where the node draws them, children INSIDE their container, and right-angle routes with parallel lines kept apart. `tree` is a compact tree and `radial` puts the root in the centre with straight lines. They arrive after the first paint; the simple layout stands until then."
     },
     {
       "name": "rootId",
@@ -167,7 +189,7 @@
       "name": "edgeShape",
       "type": "\"curve\" | \"step\"",
       "default": "\"curve\"",
-      "description": "`step` draws edges at right angles, with the small radius at each bend. It does not route around nodes yet."
+      "description": "`step` draws edges at right angles, with the small radius at each bend. In the `layered` layout the route comes from elkjs and keeps parallel lines apart; after a manual arrangement, a line that would cross a node is routed around it by @tisoap/react-flow-smart-edge (an optional peer). Where a line crosses another, the one drawn later jumps over it."
     },
     {
       "name": "groupParallel",
@@ -233,7 +255,7 @@
       "name": "onEdgeSelect",
       "type": "(id: string) => void",
       "default": "—",
-      "description": "A click on an edge. With it, edges show the pointer; without it they do not, because nothing would answer the click."
+      "description": "A click on an edge, or Enter on a focused edge. With it, edges show the pointer and take the Tab; without it they do neither, because nothing would answer."
     },
     {
       "name": "textSize",
@@ -251,18 +273,70 @@
       "name": "apiRef",
       "type": "Ref<DependencyGraphApi>",
       "default": "—",
-      "description": "Commands for the app: fitView(), zoomIn(), zoomOut(), focus(id), toDrawio() (a draw.io file with the current positions), toPng() and toSvg() (a data: URL; they need modern-screenshot)."
+      "description": "Commands for the app: fitView(), zoomIn(), zoomOut(), focus(id), toDrawio() (a draw.io file with the current positions), toPng() and toSvg() (a data: URL; they need modern-screenshot). Round 2: undo(), redo(), align(edge), distribute(axis), relayout() and getLayout()."
+    },
+    {
+      "name": "editable",
+      "type": "boolean",
+      "default": "false",
+      "description": "The ARRANGE mode: dragging on empty canvas draws a lasso; Shift, Ctrl or Cmd add to the selection; dragging moves every selected node; a toolbar aligns, distributes, pins, rearranges, undoes and redoes; arrow keys move the selection (with Shift, four steps); Ctrl+Z, Ctrl+Shift+Z or Ctrl+Y, and Ctrl+A. The canvas pans with the middle or right button, or Space + drag. Off, it is the read-only map."
+    },
+    {
+      "name": "grid",
+      "type": "boolean",
+      "default": "true",
+      "description": "The snapping grid of the arrange mode (16 px, `--space-4`), drawn as the background dots."
+    },
+    {
+      "name": "onLayoutChange",
+      "type": "(layout: GraphLayoutChange) => void",
+      "default": "—",
+      "description": "The arrangement changed — a drag, align, distribute, pin, rearrange, undo or redo. It carries every node's position and the pinned ids; storing it is the app's job. Whoever passes the positions back as x/y keeps them."
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(ids: string[]) => void",
+      "default": "—",
+      "description": "The selection of the arrange mode. With exactly one node selected, `onSelect` is called too."
+    },
+    {
+      "name": "collapsible",
+      "type": "boolean",
+      "default": "false",
+      "description": "Nodes with a subtree get the button to close and open it. A node's subtree is what can only be reached THROUGH it — with a redundant cable, an access switch does not vanish with one of its two cores. Containers always have the button."
+    },
+    {
+      "name": "onCollapseChange",
+      "type": "(id: string, collapsed: boolean) => void",
+      "default": "—",
+      "description": "A container or a subtree opened or closed."
+    },
+    {
+      "name": "visibleOnly",
+      "type": "boolean",
+      "default": "false",
+      "description": "Renders only what is on screen — for a very large map."
+    },
+    {
+      "name": "layoutWorker",
+      "type": "() => Worker",
+      "default": "—",
+      "description": "A worker that runs elkjs off the main thread. The app provides it because each bundler creates workers its own way, and copying elkjs's worker into this package would redistribute it; the README has the recipe."
     }
   ],
   "notes": [
     "Ships from its own subpath: import {DependencyGraph} from \"@aurea-uds/react/graph\". @xyflow/react is an OPTIONAL peer, so nobody who installed the library for the Button pays for it.",
     "The consumer must also import the engine's structural stylesheet once, and it must sit in a cascade layer BELOW ours: `@layer motor, aurea;` then `@import \"@xyflow/react/dist/base.css\" layer(motor);`. Unlayered CSS beats layered CSS regardless of specificity, and the Aurea core lives in `@layer aurea` — imported loose, the engine overrides our skin. Measured 09/08/2026: the attribution link kept the engine's hardcoded #999 and failed colour contrast even though our rule was more specific. Only `base.css`: `dist/style.css` is the engine's own identity — 3px radius, #1a192b, shadows, white nodes — and it never enters.",
-    "Scope is smaller than the engine's: no free-floating engine panels, no resizable nodes, no rectangle selection, and not the engine's <Controls/>. The control buttons only get colour from style.css, and writing .react-flow__* rules into our core would plant a class no component here produces — exactly what check 15 exists to stop. The overview (`minimap`) and the zoom buttons (`controls`) are opt-in: the overview is dressed through the engine's own CSS variables, and the buttons are Aurea IconButtons inside an engine Panel, which only positions them. A network map of a hundred devices is not readable without the overview.",
+    "Scope is smaller than the engine's: no free-floating engine panels, no resizable nodes, no rectangle selection outside the arrange mode (`editable`), and not the engine's <Controls/>. The control buttons only get colour from style.css, and writing .react-flow__* rules into our core would plant a class no component here produces — exactly what check 15 exists to stop. The overview (`minimap`) and the zoom buttons (`controls`) are opt-in: the overview is dressed through the engine's own CSS variables, and the buttons are Aurea IconButtons inside an engine Panel, which only positions them. A network map of a hundred devices is not readable without the overview.",
     "The default layout is a layered longest-path pass written here, because the engine takes x/y ready-made. It does NOT minimise edge crossings. `layout=\"layered\"` hands the job to elkjs (an OPTIONAL peer, EPL-2.0, loaded with import() only when asked): fewer crossings, the root on top (`rootId`), the layer the app suggests (`layer`) and ports kept on their side, in the declared order. It runs after the first paint; until it answers — and on the server — the simple layout stands. Without the package installed, the map warns once in the console and keeps the simple layout.",
     "The preview on the catalogue page is REAL, server-rendered. That needs three things on every node — initialWidth, initialHeight and an explicit handles array — plus the initial viewport on the provider. Without them the engine has nothing to measure and draws nothing. An earlier version of this ficha claimed a graph could not exist in static HTML; that was a conclusion, not a measurement, and it was wrong.",
     "Handles exist on every node, also on a read-only graph, but hidden and deaf to the pointer: the engine needs them to MEASURE where the border is. The declared `handles` array (what lets the graph render on the server) is dropped after the first measurement, because the engine always prefers a declared array — and a node taller than the default made edges start inside it.",
     "Edge thickness goes through the engine's own variable (`--xy-edge-stroke-width`), not `stroke-width`: the engine's rule has no layer and would beat ours otherwise. Dashes, dots and the double line are drawn on top of the same path.",
-    "Exporting: `apiRef.current.toDrawio()` writes a draw.io file by hand, as the format documents it (no dependency); `toPng()` and `toSvg()` need the OPTIONAL peer modern-screenshot, loaded with import() only when called."
+    "Exporting: `apiRef.current.toDrawio()` writes a draw.io file by hand, as the format documents it (no dependency); `toPng()` and `toSvg()` need the OPTIONAL peer modern-screenshot, loaded with import() only when called.",
+    "Round 2 (ADR-0065): the map can be ARRANGED by hand (`editable`). The map stays controlled by the app: what the person does wins until the app changes that same value; every step, forward or back, is an `onLayoutChange`. Undo is a stack of commands (each step with its inverse, the last 100), not a snapshot of the whole map.",
+    "Containers (`parentId`) are drawn as a region around their children with a header (close button, icon, name). Closed, a container — or a node whose subtree is closed — stands in for what it hides: the lines from hidden nodes leave from it, lines between the same pair become one line with the count, and the button shows how many are hidden.",
+    "Labels never cover another label or a node: when they touch, the lower `priority` label is hidden (there is no free library that POSITIONS labels without overlap). Below 60 % zoom the text of the lines is hidden.",
+    "Read mode keyboard fix (round 2): the engine's node wrapper took a Tab of its own besides the node's button, and every edge took a Tab with an English name telling the user to press Delete. Now the node is one stop, edges are stops only with `onEdgeSelect`, and every text the engine shows comes from the Aurea strings."
   ],
   "axes": {
     "orientation": [
@@ -271,7 +345,9 @@
     ],
     "layout": [
       "simple",
-      "layered"
+      "layered",
+      "tree",
+      "radial"
     ],
     "edgeShape": [
       "curve",
