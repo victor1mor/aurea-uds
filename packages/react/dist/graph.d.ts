@@ -1,7 +1,12 @@
 import React, { type ReactNode } from "react";
 import { type AureaIcon } from "./system.js";
+import { type Borda } from "./graph-geometria.js";
 export type GraphOrientation = "horizontal" | "vertical";
-export type GraphLayout = "simple" | "layered";
+/**
+ * `simple` (a de sempre, sem dependência), `layered` (camadas, com contêineres por dentro), `tree`
+ * (árvore compacta) e `radial` (a raiz no centro, as linhas retas). As três últimas pedem o `elkjs`.
+ */
+export type GraphLayout = "simple" | "layered" | "tree" | "radial";
 export type GraphEdgeShape = "curve" | "step";
 export type GraphPortSide = "top" | "right" | "bottom" | "left";
 /** Uma porta do nó: uma alça com nome e lado (MNT-14). A aresta liga nela por `fromPort`/`toPort`. */
@@ -31,6 +36,17 @@ export interface GraphNodeItem {
     ports?: GraphPort[];
     /** A camada sugerida pelo app, contada de 0 (só na arrumação `layered`). */
     layer?: number;
+    /** O CONTÊINER deste nó (site, andar, rack): um só. O contêiner é um nó como os outros, e vira
+     *  a caixa em volta dos filhos, com o botão de fechar (MNT-16.6). VLAN não é contêiner: um
+     *  equipamento está em várias — ela é filtro e destaque (`hiddenIds`, `highlight`). */
+    parentId?: string;
+    /** Começa FECHADO: o contêiner esconde o que tem dentro, e o nó com `collapsible` esconde a
+     *  subárvore. Fechado, ele mostra quantos guarda (MNT-16.4 e 16.7). */
+    collapsed?: boolean;
+    /** Fixo no lugar: não arrasta, e "Reorganizar" não o move (MNT-13.4). */
+    pinned?: boolean;
+    /** `cloud` desenha o nó como nuvem: Internet, nuvem pública, site remoto (MNT-16.5). */
+    shape?: "box" | "cloud";
 }
 export type GraphEdgePattern = "solid" | "dashed" | "dotted" | "double";
 export type GraphEdgeWeight = "regular" | "thick" | "heavy";
@@ -55,18 +71,40 @@ export interface GraphEdgeItem {
     count?: number;
     /** O nome desta espécie de linha na legenda automática (`legend`). */
     legend?: string;
+    /** Quando dois rótulos se encostam, fica o de prioridade MAIOR; no empate, o que vem antes na
+     *  lista (MNT-12.5). O nome da porta na ponta conta com a mesma prioridade da linha. */
+    priority?: number;
 }
+/** A arrumação para o app guardar (MNT-13.6): onde cada nó está e quais estão fixos. */
+export interface GraphLayoutChange {
+    positions: Record<string, {
+        x: number;
+        y: number;
+    }>;
+    pinned: string[];
+}
+export type GraphAlign = Borda;
 /** O que o app pede ao mapa pelo `apiRef` (MNT-18 e MNT-19). */
 export interface DependencyGraphApi {
     fitView(): void;
     zoomIn(): void;
     zoomOut(): void;
     focus(id: string): void;
-    /** O mapa como arquivo do draw.io (`.drawio`), com as posições de agora. */
+    /** O mapa como arquivo do draw.io (`.drawio`), com as posições e as dobras de agora. */
     toDrawio(): string;
     /** A foto do mapa inteiro, como `data:` URL. Pede o peer opcional `modern-screenshot`. */
     toPng(): Promise<string>;
     toSvg(): Promise<string>;
+    undo(): void;
+    redo(): void;
+    /** Alinha os nós escolhidos pela borda pedida. */
+    align(edge: GraphAlign): void;
+    /** Deixa os vãos iguais entre os escolhidos (três ou mais). */
+    distribute(axis: "horizontal" | "vertical"): void;
+    /** Volta à arrumação automática, menos os fixos. */
+    relayout(): void;
+    /** A arrumação de agora, no mesmo formato do `onLayoutChange`. */
+    getLayout(): GraphLayoutChange;
 }
 export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
     nodes: GraphNodeItem[];
@@ -126,5 +164,25 @@ export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivE
     highContrast?: boolean;
     /** Os comandos do mapa para o app: caber, aproximar, ir até, e exportar (MNT-18 e MNT-19). */
     apiRef?: React.Ref<DependencyGraphApi>;
+    /**
+     * O MODO DE ARRUMAR (MNT-13): arrastar na área vazia faz o laço; Shift soma à escolha; arrastar
+     * move todos os escolhidos; a barra alinha, distribui, fixa, reorganiza, desfaz e refaz; as setas
+     * movem os escolhidos (com Shift, quatro passos). Desligado, é o mapa de leitura.
+     */
+    editable?: boolean;
+    /** A grade com encaixe do modo de arrumar. Ligada por padrão. */
+    grid?: boolean;
+    /** A arrumação mudou (arraste, alinhar, fixar, reorganizar, desfazer): guardar é do app (MNT-13.6). */
+    onLayoutChange?: (layout: GraphLayoutChange) => void;
+    /** Os nós escolhidos no modo de arrumar. Com UM escolhido, o `onSelect` também é chamado. */
+    onSelectionChange?: (ids: string[]) => void;
+    /** Os nós com subárvore ganham o botão de fechar e abrir (MNT-16.7). O contêiner sempre tem. */
+    collapsible?: boolean;
+    /** Um contêiner ou uma subárvore abriu ou fechou. */
+    onCollapseChange?: (id: string, collapsed: boolean) => void;
+    /** Desenha só o que está na tela (mapa muito grande, MNT-19.1). */
+    visibleOnly?: boolean;
+    /** O trabalhador que arruma FORA da tela principal (MNT-19.1). A receita de cada empacotador está no README. */
+    layoutWorker?: () => Worker;
 }
-export declare function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation, layout, rootId, edgeShape, groupParallel, minimap, controls, legend, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize, highContrast, apiRef, style, ...props }: DependencyGraphProps): React.JSX.Element;
+export declare function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation, layout, rootId, edgeShape, groupParallel, minimap, controls, legend, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize, highContrast, apiRef, editable, grid, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, ...props }: DependencyGraphProps): React.JSX.Element;

@@ -80,9 +80,107 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.31.0] — 2026-10-10
+
+⏳ **Ainda não publicada.** A rodada 2 do mapa de rede — mexer no mapa —, dos pedidos de um app de
+topologia ([ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md)). As seis escolhas foram do Victor,
+depois de ver a referência principal (que não tem grafo), o mercado e as licenças (*"como recomendado,
+pode construir a rodada 2"*). **Versão nova porque entram props, uma dependência opcional, frases e dois
+tipos.** Nada sai. Muda o teclado do mapa de leitura (em "Corrigido") e o desenho da linha em degrau na
+arrumação em camadas (em "Mudou").
+
+### Novo
+
+- **Arrumar o mapa à mão (`editable`), no `DependencyGraph`.** Arrastar na área vazia faz o laço; Shift,
+  Ctrl ou Cmd somam à escolha; arrastar move todos os escolhidos, com encaixe na grade de 16 (`grid`); a
+  barra (a `Toolbar` da Aurea) alinha pelas seis bordas, distribui com as pontas paradas, fixa e
+  reorganiza. As setas movem os escolhidos um passo da grade (com Shift, quatro). A tela anda com o botão
+  do meio, o direito ou Espaço + arrastar. Desligado, é o mapa de leitura de antes.
+- **Desfazer e refazer** — botões, Ctrl+Z, Ctrl+Shift+Z e Ctrl+Y —, com os últimos 100 passos. E o aviso
+  **`onLayoutChange`**, a cada passo (para frente ou para trás), com a posição de todos os nós e os fixos:
+  guardar é do app. Também `onSelectionChange`.
+- **Fixar no lugar (`pinned`).** O fixo não arrasta, e "Reorganizar" devolve todos à arrumação automática
+  MENOS ele; quem cairia em cima de um fixo vai para o lado.
+- **Linhas que não atravessam nó.** Na arrumação em camadas, a linha em degrau segue a ROTA do `elkjs` —
+  em ângulo reto, com as paralelas separadas. Depois de arrumar à mão (ou com as posições guardadas pelo
+  app), a linha que passaria por dentro de um nó desvia, pelo `@tisoap/react-flow-smart-edge` (5.0, MIT,
+  sem dependência), **dependência OPCIONAL nova**: só a conta dele, o desenho é o nosso. Sem ele, a linha
+  fica como estava e o console avisa uma vez.
+- **A ponte no cruzamento**: a linha desenhada depois salta sobre a de antes, num arco pequeno.
+- **Rótulos que somem**: nenhum rótulo cobre outro nem um nó — o de `priority` maior fica, e no empate o
+  que vem antes na lista. Abaixo de 60% de zoom, o texto das linhas some.
+- **Contêiner (`parentId`)**: site, andar, rack. A caixa em volta dos filhos, com o botão de fechar, o
+  ícone e o nome; na arrumação em camadas, os filhos vão DENTRO dele. Um pai por nó — VLAN é filtro, não
+  contêiner. **Fechar** (`collapsed`, e `onCollapseChange`): o contêiner fechado guarda os filhos e diz
+  quantos ("+4"); as linhas deles passam a sair dele, e as que sobram entre o mesmo par viram uma, com o
+  número.
+- **Recolher a subárvore (`collapsible`)**: o botão no canto do nó esconde o que SÓ se alcança passando
+  por ele — com cabo redundante, o switch de acesso não some com um dos dois núcleos.
+- **A nuvem (`shape: "cloud"`)**, para Internet, nuvem pública e site remoto.
+- **Arrumações novas:** `layout="tree"` (árvore compacta) e `layout="radial"` (a raiz no centro, as linhas
+  retas de borda a borda). Nelas o contêiner aberto não vira caixa: os filhos aparecem soltos.
+- **Mapa grande:** `visibleOnly` (desenha só o que está na tela), `layoutWorker` (o arrumador fora da tela
+  principal, com o trabalhador que o app entrega — a receita do Vite no README) e o zoom que afasta até 10%.
+- **Exportar:** o `.drawio` leva o contêiner (`container=1`, com os filhos dentro), a nuvem e as dobras.
+- **`apiRef`:** `undo()`, `redo()`, `align(edge)`, `distribute(axis)`, `relayout()` e `getLayout()`. Tipos
+  novos: `GraphLayoutChange` e `GraphAlign`.
+
+### Mudou
+
+- **Na arrumação em camadas com `edgeShape="step"`, a linha segue a rota do arrumador**, e não mais o
+  degrau do motor: o desenho dessas linhas muda (para melhor: elas deixam de passar por dentro de nó).
+- **O rótulo de HTML da linha (a pastilha e o nome da porta) fica acima das linhas e dos nós**
+  (`--graph-label-z`). Com o contêiner, o motor eleva a linha de quem está dentro dele, e o nome da porta
+  saía por baixo da caixa do site.
+- **O peer `@xyflow/react` pede `^12.11.3`** (era `^12.11.2`): a 12.11.3 conserta o arraste com o dedo
+  junto do laço, que o modo de arrumar usa. A Aurea foi testada na 12.12.0.
+- O nó com porta vai ao arrumador com a POSIÇÃO de cada porta (e não só a ordem): a rota tem de nascer na
+  alça desenhada.
+
+### Corrigido
+
+- **O teclado do mapa de leitura.** Cada nó tinha DUAS paradas de Tab (a caixa do motor e o botão do nó),
+  e toda linha recebia o Tab, com o nome do motor em inglês ("Edge from internet to fw") e a instrução de
+  apagar com Delete — medido na bancada da rodada 1, publicado na `0.30.0`. Agora o nó é uma parada; a
+  linha só é parada com `onEdgeSelect`, tem nome nosso ("Ligação: Internet – Firewall") e o Enter a
+  escolhe; e todo texto que o motor mostra sai das frases da Aurea.
+- Achados na bancada desta rodada, antes de sair: o nome da porta por baixo do contêiner e o "10G" por
+  baixo da fibra; o botão de fechar em cima da última porta (foi para o canto); o clique no botão de
+  fechar escolhia o nó; o desvio que nascia cruzando (a ponta largada em cima de outro nó) era jogado fora
+  e voltava ao degrau do motor; a caixa de contêiner na árvore e no círculo cobria os outros nós; e, visto
+  pelo Victor, o ícone da nuvem saía para fora dela.
+- **O aviso de compilação que faltou** nas seções da `0.15.0`, da `0.19.0`, da `0.28.0` e da `0.30.0`
+  (frases novas no `AureaStrings`), escrito em cada uma, com a data. O check 31b passa a cobrar.
+
+### ⚠ Pode quebrar a compilação
+
+- `AureaStrings` (web) ganhou 22 chaves: `graphArrange`, `graphUndo`, `graphRedo`, `graphAlignLeft`,
+  `graphAlignCenter`, `graphAlignRight`, `graphAlignTop`, `graphAlignMiddle`, `graphAlignBottom`,
+  `graphDistributeH`, `graphDistributeV`, `graphPin`, `graphPinned`, `graphRelayout`, `graphExpand`,
+  `graphCollapse`, `graphHidden`, `graphEdge`, `graphEdgeHelp`, `graphHandle`, `graphNodeHelp` e
+  `graphMoved`. Quem monta o objeto INTEIRO com esse tipo precisa acrescentá-las; quem passa só parte ao
+  `AureaProvider` não muda nada.
+
+### Medido
+
+- `tests/visual/rede2.spec.ts` (18 casos, nos três navegadores), `tests/unit/rede-rodada2.test.tsx` (15) e
+  `tests/unit/rede-rodada2-geometria.test.tsx` (23). Sem os seis consertos da bancada, 7 dos 18 casos de
+  navegador reprovam; com o mapa da `0.30.0`, os 3 do teclado de leitura reprovam.
+- A rodada 1 continua passando: `tests/visual/rede.spec.ts` (11 casos, três navegadores).
+- O check 31b reprova sem o aviso das 22 frases.
+- Na bancada com o código real (`apps/keyboard-probe/rede2.html`).
+
+### Registro
+
+- `scripts/released-surface.json` passa a ser o da `0.30.0` (junção `0d80ea49`), e guarda também as
+  frases (`strings.web` e `strings.native`).
+
 ## [0.30.0] — 2026-10-10
 
-⏳ **Ainda não publicada.** A rodada 1 do mapa de rede — ler o mapa —, dos pedidos de um app de
+✅ **Publicada em 10/10/2026, por volta das 15:38 (Brasília)**, pelo terminal do Victor, da junção do
+pedido #64 (o `+ …native@0.30.0` saiu lá; o registro do npm mostrou o `native` minutos depois dos outros seis).
+
+A rodada 1 do mapa de rede — ler o mapa —, dos pedidos de um app de
 topologia ([ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md)). A escolha foi do Victor, depois de
 ver a referência principal (que não tem grafo), o mercado e as licenças (*"como recomendado, pode
 construir a rodada 1"*). **Versão nova porque entram props, duas dependências opcionais e um tipo.**
@@ -129,6 +227,12 @@ Nada sai, nenhum padrão muda.
 - `tests/visual/rede.spec.ts` (11 casos, no navegador, com a folha do motor sem camada) e
   `tests/unit/rede-rodada1.test.tsx` (22). Sem os três consertos da bancada, 5 dos 11 reprovam.
 - Na bancada com o código real, nos dois temas.
+
+### ⚠ Pode quebrar a compilação (aviso acrescentado em 10/10/2026)
+
+- `AureaStrings` (web) ganhou oito chaves: `graphConnections`, `graphFit`, `graphJoin`, `graphLegend`,
+  `graphOverview`, `graphShow`, `graphZoomIn` e `graphZoomOut`. Quem monta o objeto INTEIRO com esse
+  tipo precisa acrescentá-las; quem passa só parte ao `AureaProvider` não muda nada. Faltou na versão; achado na rodada 2 da rede, que perguntou quem mais acrescentou frase sem aviso. Desde a `0.31.0`, o check 31b do `validate.py` cobra o aviso.
 
 ## [0.29.0] — 2026-10-10
 
@@ -238,6 +342,12 @@ e um peso de fonte.** Nada sai, nenhum padrão muda.
   de antes.
 - A fonte 800 foi cortada da fonte variável oficial pelo mesmo processo das outras, provado refazendo
   o 700: só a data de criação muda; as outras tabelas são idênticas byte a byte.
+
+### ⚠ Pode quebrar a compilação (aviso acrescentado em 10/10/2026)
+
+- `AureaStrings` ganhou chaves. Na web: `copied`, `linkCopied` e `linkCopyFailed`; no nativo: `linkCopied` e
+  `linkCopyFailed`. Quem monta o objeto INTEIRO com esse tipo precisa acrescentá-las; quem passa só parte ao
+  provedor não muda nada. Faltou na versão; achado na rodada 2 da rede, que perguntou quem mais acrescentou frase sem aviso. Desde a `0.31.0`, o check 31b do `validate.py` cobra o aviso.
 
 ## [0.27.0] — 2026-10-09
 
@@ -855,6 +965,13 @@ carregar mais da tabela, o modo de escolha) e da segunda referência da fila.
   `0.18.0` reprova os 7. A conta de não pular foi provada desligando-a (reprovam os dois testes de
   "não pular") e desligando o acompanhamento por tamanho (reprovam "abre no fim" e "acompanha").
 
+### ⚠ Pode quebrar a compilação (aviso acrescentado em 10/10/2026)
+
+- `AureaStrings` (web) ganhou dez chaves: `chatAttach`, `chatAttachments`, `chatEditCancel`, `chatEdited`,
+  `chatEditing`, `chatForwardedFrom`, `chatReplyCancel`, `chatReplyTo`, `chatSave` e `galleryVideo`. Quem monta
+  o objeto INTEIRO com esse tipo precisa acrescentá-las; quem passa só parte ao `AureaProvider` não muda nada.
+  Faltou na versão; achado na rodada 2 da rede, que perguntou quem mais acrescentou frase sem aviso. Desde a `0.31.0`, o check 31b do `validate.py` cobra o aviso.
+
 ## [0.18.0] — 2026-10-03
 
 ✅ **Publicada em 03/10/2026, por volta das 22:18 (Brasília)**, pelo terminal do Victor, da junção
@@ -1227,6 +1344,12 @@ e a E13. Escolhas do Victor nas pranchas de 02/10/2026: *"sim pode seguir"* (R-1
   fim; o corte no meio é do aparelho.
 
 ---
+
+### ⚠ Pode quebrar a compilação (aviso acrescentado em 10/10/2026)
+
+- `AureaStrings` do nativo ganhou oito chaves: `fileChoose`, `fileRemove`, `fileTooLarge`, `fileWrongType`,
+  `photo`, `photoAdd`, `photoOpen` e `positionOf`. Quem monta o objeto INTEIRO com esse tipo precisa
+  acrescentá-las; quem passa só parte ao provedor não muda nada. Faltou na versão; achado na rodada 2 da rede, que perguntou quem mais acrescentou frase sem aviso. Desde a `0.31.0`, o check 31b do `validate.py` cobra o aviso.
 
 ## [0.14.1] — 2026-10-01
 

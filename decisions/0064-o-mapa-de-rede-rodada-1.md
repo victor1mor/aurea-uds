@@ -1,7 +1,7 @@
 # ADR-0064 — O mapa de rede, rodada 1: ler o mapa
 
 - **Data:** 10/10/2026
-- **Estado:** aceita · executada na `0.30.0` (ainda não publicada).
+- **Estado:** aceita · executada na `0.30.0`, publicada em 10/10/2026 (por volta das 15:38, Brasília). A rodada 2 está na [ADR-0065](0065-o-mapa-de-rede-rodada-2.md).
 - **Origem:** os pedidos de um app de topologia de rede (MNT-01 a MNT-03 e MNT-06 a MNT-19). A
   proposta veio depois de três pesquisas (o código de hoje; o mercado de motor, arrumação, linhas e
   exportação, com licença; e as famílias de ícones). Escolha do Victor: *"como recomendado, pode

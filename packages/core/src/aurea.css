@@ -2752,7 +2752,12 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
   --xy-minimap-node-stroke-color:transparent;
   /* A espessura de base da linha: a do sistema (1). O alto contraste dobra a base, e os pesos e
      traços são múltiplos dela — por isso nada aqui é número solto. */
-  --graph-edge-base:var(--border-width); }
+  --graph-edge-base:var(--border-width);
+  /* (Rodada 2) O rótulo de HTML fica ACIMA das linhas e dos contêineres: o motor eleva a linha de quem
+     está dentro de um contêiner ao andar do nó (1, 2…), e a caixa do contêiner é um nó — sem isto, o
+     "10G" saía por baixo da fibra e o nome da porta, por baixo do site (medido na bancada). 1000 é o
+     degrau que o próprio motor usa para elevar o escolhido; o rótulo que encosta num nó some (MNT-12.5). */
+  --graph-label-z:1000; }
 /* A atribuição do motor (que a licença dele manda manter, e mantemos) traz `color:#999`
    CRAVADO no `init.css` — o único ponto em que a folha "estrutural" carrega cor. Reprovou
    contraste no axe, tema claro. A regra é de ELEMENTO e vem ESCOPADA à nossa classe, que é a
@@ -2807,8 +2812,8 @@ button.graph-node-body { cursor:pointer; }
 .graph-edge-double-core.graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2); }
 .graph-edge-double-core.graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3); }
 /* A pastilha do meio (marca, número, grupo) e o nome da porta na ponta são HTML sobre o desenho. */
-.graph-edge-chip { position:absolute; display:inline-flex; align-items:center; gap:var(--space-1); padding:var(--space-05) var(--space-2); border-radius:var(--radius-control); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:all; }
-.graph-edge-end { position:absolute; padding:0 var(--space-1); border-radius:var(--radius-xs); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:none; }
+.graph-edge-chip { position:absolute; z-index:var(--graph-label-z); display:inline-flex; align-items:center; gap:var(--space-1); padding:var(--space-05) var(--space-2); border-radius:var(--radius-control); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:all; }
+.graph-edge-end { position:absolute; z-index:var(--graph-label-z); padding:0 var(--space-1); border-radius:var(--radius-xs); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:none; }
 /* `nodrag`/`nopan`: a pastilha é HTML sobre o mapa, e as duas classes dizem ao motor para não arrastar
    nem rolar a tela por ela (o botão do grupo precisa do clique). Fora do botão, o cursor é o comum. */
 .graph-edge-chip.nodrag.nopan { cursor:default; }
@@ -2836,6 +2841,50 @@ button.graph-node-body { cursor:pointer; }
 .dependency-graph[data-contrast="high"] { --xy-edge-stroke:var(--foreground); --xy-edge-label-color:var(--foreground); --graph-edge-base:calc(var(--border-width) * 2); }
 .dependency-graph[data-contrast="high"] .graph-node-body { border-color:var(--foreground); border-width:calc(var(--border-width) * 2); }
 .dependency-graph[data-contrast="high"] .graph-node-kind,.dependency-graph[data-contrast="high"] .graph-node-icon { color:var(--foreground); }
+/* ── RODADA 2 DA REDE (ADR-0065, 10/10/2026) ───────────────────────────────────────────────
+   O LAÇO do modo de arrumar e a caixa em volta dos escolhidos se vestem pelas variáveis do motor. */
+.dependency-graph { --xy-selection-background-color:color-mix(in oklab,var(--primary) 10%,transparent); --xy-selection-border:var(--border-width) dashed var(--primary); }
+/* No modo de arrumar, quem recebe o foco é a caixa do MOTOR (que não tem classe nossa): o anel vai
+   no corpo do nó, com o raio dele, e é UMA linha — a borda vira a cor do foco e o anel encosta nela
+   (ADR-0059). A caixa do motor, quadrada, não desenha anel nenhum. */
+.dependency-graph :focus-visible:has(> .graph-node) { outline:none; }
+.dependency-graph :focus-visible:has(> .graph-group) { outline:none; }
+.dependency-graph :focus-visible > .graph-node > .graph-node-body,.dependency-graph :focus-visible > .graph-group { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:var(--focus-strong); }
+/* O CONTÊINER aberto (site, andar, rack): a região em volta dos filhos, com a cabeça. A cabeça tem
+   `--space-10` e o recheio `--space-4` — os mesmos números com que o graph.tsx monta a caixa. */
+/* O fundo é um VÉU leve, e não uma cor cheia: a linha entre dois nós de fora que passa por cima da
+   região continua aparecendo (o contêiner é um nó, e o motor o desenha acima das linhas comuns). E o
+   véu soma: o andar dentro do site fica um tom acima, e o aninhamento se lê sem cor nova. */
+.graph-group { position:relative; inline-size:100%; block-size:100%; border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:color-mix(in oklab,var(--foreground) 3%,transparent); }
+.graph-group[data-selected] { border-color:var(--primary); }
+.graph-group[data-dimmed] { opacity:.3; }
+.graph-group-head { display:flex; align-items:center; gap:var(--space-2); block-size:var(--space-10); padding-inline:var(--space-2) var(--space-3); color:var(--foreground); font-size:var(--text-sm); }
+.graph-group-label { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:var(--weight-medium); }
+/* Os dois botões de fechar e abrir têm 24 de lado (`--space-6`): o alvo mínimo de toque (WCAG 2.5.8). */
+.graph-group-toggle { display:inline-grid; place-items:center; flex:none; inline-size:var(--space-6); block-size:var(--space-6); padding:0; border:0; border-radius:var(--radius-full); background:none; color:var(--muted-foreground); cursor:pointer; }
+.graph-group-toggle:hover { background:var(--secondary); color:var(--foreground); }
+/* O de NÓ senta no CANTO de baixo, à direita, como a quantidade no de cima: fechado, mostra QUANTOS
+   guarda ("+12"). No canto, e não na borda: na borda ele cobria a alça da última porta (medido na
+   bancada, a "porta 3" do núcleo saía por baixo dele). O selo de estado, embaixo à esquerda, encolhe. */
+.graph-node-toggle { position:absolute; inset-block-end:0; inset-inline-end:0; display:inline-flex; align-items:center; justify-content:center; min-inline-size:var(--space-6); block-size:var(--space-6); padding:0 var(--space-2); border:var(--border-width) solid var(--border-strong); border-radius:var(--radius-control); background:var(--secondary); color:var(--foreground); font:inherit; font-size:var(--text-xs); font-variant-numeric:tabular-nums; font-weight:var(--weight-medium); transform:translate(25%,50%); cursor:pointer; }
+.graph-node-toggle[aria-expanded="false"] { border-color:var(--primary-outline); }
+.graph-node:has(.graph-node-toggle) .graph-node-status { max-inline-size:calc(100% - var(--space-16)); }
+/* O ALFINETE (nó fixo), no canto de cima à esquerda — a quantidade fica no da direita. */
+.graph-node-pin { position:absolute; inset-block-start:0; inset-inline-start:0; display:inline-grid; place-items:center; inline-size:var(--space-5); block-size:var(--space-5); border:var(--border-width) solid var(--border); border-radius:var(--radius-full); background:var(--card); color:var(--foreground); transform:translate(-25%,-50%); }
+/* A NUVEM é desenho de FUNDO: a caixa do nó fica sem borda e sem fundo, e o texto vai ao centro. */
+.graph-node-cloud { position:absolute; inset:0; inline-size:100%; block-size:100%; overflow:visible; pointer-events:none; }
+.graph-node-cloud path { fill:var(--card); stroke:var(--border); stroke-width:var(--border-width); }
+/* E o ícone vai JUNTO do texto, no meio da nuvem: na borda da caixa, onde fica nos outros nós, ele
+   saía para fora do contorno. */
+.graph-node[data-shape="cloud"] .graph-node-body { position:relative; border-color:transparent; background:none; justify-items:center; text-align:center; }
+.graph-node[data-shape="cloud"] .graph-node-has-icon { grid-template-columns:auto auto; justify-content:center; }
+.graph-node[data-shape="cloud"][data-selected] .graph-node-cloud path,.graph-node[data-shape="cloud"][data-focused] .graph-node-cloud path { stroke:var(--primary); }
+.dependency-graph[data-contrast="high"] .graph-node-cloud path { stroke:var(--foreground); stroke-width:calc(var(--border-width) * 2); }
+/* A BARRA do modo de arrumar quebra em mais linhas quando a tela é estreita. */
+.graph-toolbar { max-inline-size:calc(100% - var(--space-8)); }
+/* OS RÓTULOS QUE SOMEM (MNT-12.5): o que encosta noutro, pela prioridade (o graph.tsx mede e marca),
+   e o texto das linhas inteiro quando a câmera está longe — a 60%, a letra viraria um risco. */
+.dependency-graph [data-crowded],.dependency-graph[data-far] :is(.graph-edge-text,.graph-edge-end,.graph-edge-chip-text) { visibility:hidden; }
 .datagrid tbody tr[data-selected] { background:color-mix(in srgb,var(--primary) 14%,transparent); }
 .datagrid-empty { padding:var(--space-6); color:var(--muted-foreground); text-align:center; }
 

@@ -49,7 +49,8 @@ describe("MNT-01 e MNT-03", () => {
 
 describe("as dependências novas do mapa são opcionais", () => {
   const pkg = JSON.parse(readFileSync("packages/react/package.json", "utf8"));
-  for (const dep of ["elkjs", "modern-screenshot"]) {
+  // Rodada 2 (0.31.0): o desvio de linhas entrou na mesma regra.
+  for (const dep of ["elkjs", "modern-screenshot", "@tisoap/react-flow-smart-edge"]) {
     test(`${dep}: par opcional, nunca dependência direta`, () => {
       expect(pkg.peerDependencies[dep]).toBeDefined();
       expect(pkg.peerDependenciesMeta[dep]).toEqual({optional: true});
@@ -58,9 +59,12 @@ describe("as dependências novas do mapa são opcionais", () => {
   }
   test("e só o módulo do mapa os carrega, por import() (não por import no topo)", () => {
     const grafo = readFileSync("packages/react/src/graph.tsx", "utf8");
-    expect(grafo).toMatch(/await import\("elkjs\/lib\/elk\.bundled\.js"\)/);
+    // Rodada 2: o arrumador entra pelo `elk.bundled.js` (na tela) ou pelo `elk-api.js` (com o trabalhador do app).
+    expect(grafo).toMatch(/import\("elkjs\/lib\/elk\.bundled\.js"\)/);
+    expect(grafo).toMatch(/import\("elkjs\/lib\/elk-api\.js"\)/);
     expect(grafo).toMatch(/await import\("modern-screenshot"\)/);
-    expect(grafo).not.toMatch(/^import[^\n]*from "(elkjs|modern-screenshot)/m);
+    expect(grafo).toMatch(/import\("@tisoap\/react-flow-smart-edge"\)/);
+    expect(grafo).not.toMatch(/^import[^\n]*from "(elkjs|modern-screenshot|@tisoap)/m);
   });
 });
 

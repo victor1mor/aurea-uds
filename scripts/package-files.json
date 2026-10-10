@@ -151,6 +151,8 @@
       "dist/feedback.js",
       "dist/file-input.d.ts",
       "dist/file-input.js",
+      "dist/graph-geometria.d.ts",
+      "dist/graph-geometria.js",
       "dist/graph.d.ts",
       "dist/graph.js",
       "dist/icon-names.d.ts",
