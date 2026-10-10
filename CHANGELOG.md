@@ -80,9 +80,62 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.30.0] — 2026-10-10
+
+⏳ **Ainda não publicada.** A rodada 1 do mapa de rede — ler o mapa —, dos pedidos de um app de
+topologia ([ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md)). A escolha foi do Victor, depois de
+ver a referência principal (que não tem grafo), o mercado e as licenças (*"como recomendado, pode
+construir a rodada 1"*). **Versão nova porque entram props, duas dependências opcionais e um tipo.**
+Nada sai, nenhum padrão muda.
+
+### Novo
+
+- **`DependencyGraph` de cima para baixo e arrumado em camadas.** `orientation="vertical"` (a linha
+  entra por cima e sai por baixo, cada camada centrada); `layout="layered"` arruma com o `elkjs` —
+  menos cruzamento, `rootId` no topo, a `layer` sugerida e as portas na ordem declarada; `edgeShape=
+  "step"` desenha em ângulo reto, com canto arredondado. O `elkjs` é dependência OPCIONAL nova, carregada
+  só quando pedida; sem ele, a arrumação simples.
+- **O nó diz mais, sem depender de cor:** `icon` ao lado do tipo (nunca no lugar dele), o selo de
+  quantidade (`count`, com `countLabel` para o leitor de tela), o selo de estado (`status`, a palavra) e
+  as `ports`, com nome e lado.
+- **A linha diz o que é, sem depender de cor:** `pattern` (tracejada, pontilhada, dupla), `weight`
+  (mais grossa), `mark` no meio (×, ponto, cadeado), `count`, o nome da porta nas pontas
+  (`sourceLabel`, `targetLabel`) e a `legend`, que se monta sozinha com as linhas na tela.
+- **Linhas repetidas viram uma** (`groupParallel`): os 10 enlaces entre dois equipamentos saem como
+  uma linha com "×10", que é um botão — abre nas linhas separadas e junta de novo.
+- **Ler um mapa grande:** `minimap` (a visão geral, que saiu da lista de recusas), `controls`
+  (aproximar, afastar, caber na tela), `focusId` (ir até), `highlight` (um caminho acende e o resto
+  apaga), `highlightNeighbors`, `hiddenIds` (esconde sem refazer a arrumação), e os avisos
+  `onNodeHover`, `onNodeContextMenu` e `onEdgeSelect`.
+- **Baixa visão e teclado:** `textSize="lg"` (o texto do nó, independente do zoom, e a caixa cresce
+  junto), `highContrast` (linha e letra no tom da letra, e mais grossas), e as setas andando de nó em nó.
+- **Exportar** pelo `apiRef`: `toDrawio()` (um arquivo do draw.io, escrito pela Aurea, sem
+  dependência), `toPng()` e `toSvg()` (pela `modern-screenshot`, dependência OPCIONAL nova).
+- **O `Icon` da web aceita o desenho do app** (`AureaIconComponent`), como o nativo já aceitava — para
+  o glifo que o conjunto não tem, como um roteador.
+- **A tabela de troca Carbon→Phosphor** ganha os 7 nomes que um app usava: `add--alt`, `edge-node`,
+  `flow--connection`, `ibm-cloud-pak--network-automation`, `location`, `network-interface`, `router`.
+- **O README avisa:** depois de atualizar a Aurea, reinicie o servidor de desenvolvimento.
+
+### Corrigido no caminho (achados na bancada, antes de sair)
+
+- A linha do mapa nascia DENTRO de um nó mais alto que o padrão (com endereço): o motor usava sempre a
+  lista de alças declarada. Agora ela vale só até a primeira medida.
+- A espessura da linha não chegava quando a folha do motor é importada sem camada (o jeito comum): ela
+  passa pela variável do próprio motor.
+
+### Medido
+
+- `tests/visual/rede.spec.ts` (11 casos, no navegador, com a folha do motor sem camada) e
+  `tests/unit/rede-rodada1.test.tsx` (22). Sem os três consertos da bancada, 5 dos 11 reprovam.
+- Na bancada com o código real, nos dois temas.
+
 ## [0.29.0] — 2026-10-10
 
-⏳ **Ainda não publicada.** Lote N, os dois pedidos de um app do nativo: MT-01 (o cartão que se
+✅ **Publicada em 10/10/2026, entre 13:05 e 13:10 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #63.
+
+Lote N, os dois pedidos de um app do nativo: MT-01 (o cartão que se
 destaca nos dois temas) e MT-02 (o traço de cor no topo) — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md).
 As escolhas foram do Victor, depois de ver a referência principal, o mercado e a bancada (*"como
 recomendado e A, pode construir"*). **Versão nova porque entram uma variante, uma prop e um token.**

@@ -3732,7 +3732,16 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
   --xy-edge-label-color:var(--muted-foreground);
   --xy-edge-label-background-color:var(--card);
   --xy-connectionline-stroke:var(--primary);
-  --xy-attribution-background-color:transparent; }
+  --xy-attribution-background-color:transparent;
+  /* O minimapa (ADR-0064) se veste pelas variáveis dele, como o resto do motor. */
+  --xy-minimap-background-color:var(--card);
+  --xy-minimap-mask-background-color:color-mix(in oklab,var(--background) 70%,transparent);
+  --xy-minimap-mask-stroke-color:var(--border-strong);
+  --xy-minimap-node-background-color:var(--muted-foreground);
+  --xy-minimap-node-stroke-color:transparent;
+  /* A espessura de base da linha: a do sistema (1). O alto contraste dobra a base, e os pesos e
+     traços são múltiplos dela — por isso nada aqui é número solto. */
+  --graph-edge-base:var(--border-width); }
 /* A atribuição do motor (que a licença dele manda manter, e mantemos) traz `color:#999`
    CRAVADO no `init.css` — o único ponto em que a folha "estrutural" carrega cor. Reprovou
    contraste no axe, tema claro. A regra é de ELEMENTO e vem ESCOPADA à nossa classe, que é a
@@ -3744,7 +3753,7 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
 .dependency-graph a[href] { color:var(--muted-foreground); }
 /* O nó é uma superfície flutuante como qualquer outra da Aurea — mesmo raio de cartão, mesma
    borda, mesmo fundo. É aqui que ele deixa de parecer React Flow. */
-.graph-node { position:relative; inline-size:180px; }
+.graph-node { position:relative; inline-size:var(--graph-node-w,180px); }
 .graph-node-body { display:grid; gap:var(--space-05); inline-size:100%; padding:var(--space-2) var(--space-3); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:var(--foreground); font-family:inherit; font-size:var(--text-sm); text-align:start; }
 button.graph-node-body { cursor:pointer; }
 .graph-node[data-selected] .graph-node-body { border-color:var(--primary); }
@@ -3753,6 +3762,69 @@ button.graph-node-body { cursor:pointer; }
    que esta parte recusa a mesma coisa. */
 .graph-node-kind { color:var(--subtle-foreground); font-size:var(--text-xs); letter-spacing:var(--tracking-wider); text-transform:uppercase; }
 .graph-handle { inline-size:var(--space-2); block-size:var(--space-2); border:1px solid var(--border); background:var(--surface-2); }
+/* ── RODADA 1 DA REDE (ADR-0064, 10/10/2026) ───────────────────────────────────────────────
+   O ÍCONE vai ao lado do texto, e o texto continua inteiro (o tipo é PALAVRA — a recusa das cores
+   continua de pé). Os SELOS sentam na borda, nos cantos: a quantidade em cima, à direita; o estado
+   embaixo, à esquerda — longe um do outro, e fora do nome. */
+/* A alça do grafo de LEITURA existe só para o motor medir a borda: invisível e surda ao ponteiro. */
+.graph-handle-oculta { visibility:hidden; pointer-events:none; }
+.graph-node-text { display:grid; gap:var(--space-05); min-inline-size:0; }
+.graph-node-has-icon { grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:var(--space-2); }
+.graph-node-icon { color:var(--muted-foreground); }
+.graph-node-count { position:absolute; inset-block-start:0; inset-inline-end:0; transform:translate(25%,-50%); }
+.graph-node-status { position:absolute; inset-block-end:0; inset-inline-start:var(--space-3); max-inline-size:calc(100% - var(--space-6)); transform:translateY(50%); }
+.graph-node-status .badge { max-inline-size:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* "Ir até" (focusId): a marca de achado é a borda da marca com uma linha por dentro, como o
+   cartão escolhido — e não o anel de foco, que é do teclado. */
+.graph-node[data-focused] .graph-node-body { border-color:var(--primary); box-shadow:inset 0 0 0 var(--border-width) var(--primary); }
+/* O resto apaga quando há caminho ou vizinhos acesos (MNT-18.3 e 18.6). */
+.graph-node[data-dimmed] { opacity:.3; }
+.dependency-graph .is-dimmed { opacity:.25; }
+/* AS LINHAS: o desenho diz o que ela é, sem depender de cor (MNT-08 e MNT-15).
+   ⚠ A ESPESSURA VAI PELA VARIÁVEL DO MOTOR (`--xy-edge-stroke-width`), e não por `stroke-width`:
+   esta folha mora numa camada (`@layer aurea`) e a do motor não — e regra sem camada ganha de regra
+   com camada, qualquer que seja a força do seletor. Medido na bancada da rodada 1: a fibra saía com
+   1 de espessura em vez de 6. A variável não tem rival na linha, então a nossa vale. O `stroke-width`
+   fica para os desenhos que são nossos (a amostra da legenda e o miolo do traço duplo). */
+.dependency-graph .graph-edge { --graph-edge-w:var(--graph-edge-base); --xy-edge-stroke-width:var(--graph-edge-w); stroke-width:var(--graph-edge-w); }
+.dependency-graph .graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2); }
+.dependency-graph .graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3); }
+.dependency-graph .graph-edge-dashed { stroke-dasharray:var(--space-2) var(--space-1); }
+.dependency-graph .graph-edge-dotted { --xy-edge-stroke-width:calc(var(--graph-edge-w) * 2); stroke-width:calc(var(--graph-edge-w) * 2); stroke-dasharray:0 calc(var(--graph-edge-w) * 5); stroke-linecap:round; }
+.dependency-graph .graph-edge-double { --xy-edge-stroke-width:calc(var(--graph-edge-w) * 3); stroke-width:calc(var(--graph-edge-w) * 3); }
+.graph-edge-double-core { --graph-edge-w:var(--graph-edge-base); fill:none; stroke:var(--xy-edge-label-background-color); stroke-width:var(--graph-edge-w); pointer-events:none; }
+.graph-edge-double-core.graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2); }
+.graph-edge-double-core.graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3); }
+/* A pastilha do meio (marca, número, grupo) e o nome da porta na ponta são HTML sobre o desenho. */
+.graph-edge-chip { position:absolute; display:inline-flex; align-items:center; gap:var(--space-1); padding:var(--space-05) var(--space-2); border-radius:var(--radius-control); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:all; }
+.graph-edge-end { position:absolute; padding:0 var(--space-1); border-radius:var(--radius-xs); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:none; }
+/* `nodrag`/`nopan`: a pastilha é HTML sobre o mapa, e as duas classes dizem ao motor para não arrastar
+   nem rolar a tela por ela (o botão do grupo precisa do clique). Fora do botão, o cursor é o comum. */
+.graph-edge-chip.nodrag.nopan { cursor:default; }
+.graph-edge-count { font-variant-numeric:tabular-nums; font-weight:var(--weight-medium); }
+.graph-edge-group { display:inline-flex; align-items:center; min-block-size:var(--space-5); padding:0 var(--space-2); border:var(--border-width) solid var(--border-strong); border-radius:var(--radius-control); background:var(--secondary); color:var(--foreground); font:inherit; font-variant-numeric:tabular-nums; font-weight:var(--weight-medium); cursor:pointer; }
+.graph-edge-group[aria-expanded="true"] { border-color:var(--primary-outline); }
+.graph-edge-mark { display:inline-grid; place-items:center; color:var(--foreground); }
+.graph-edge-mark-cross:before { content:"\2715"; font-weight:var(--weight-bold); }
+.graph-edge-mark-dot { inline-size:var(--space-2); block-size:var(--space-2); border-radius:var(--radius-full); background:currentColor; }
+/* Os botões de zoom, o minimapa e a legenda flutuam sobre o mapa, com a pele de cartão. */
+.graph-controls { display:flex; gap:var(--space-1); padding:var(--space-1); border:var(--border-width) solid var(--border); border-radius:var(--radius-control); background:var(--card); }
+.graph-minimap { border:var(--border-width) solid var(--border); border-radius:var(--radius-md); overflow:hidden; }
+.graph-legend { display:grid; gap:var(--space-1); margin:0; padding:var(--space-2) var(--space-3); list-style:none; border:var(--border-width) solid var(--border); border-radius:var(--radius-md); background:var(--card); color:var(--foreground); font-size:var(--graph-edge-label-size,var(--text-xs)); }
+.graph-legend li { display:flex; align-items:center; gap:var(--space-2); }
+.graph-legend-sample { inline-size:var(--space-8); block-size:var(--space-2); overflow:visible; }
+.graph-legend-sample .graph-edge,.graph-legend-sample .graph-edge-double-core { fill:none; }
+.graph-legend-sample .graph-edge { stroke:var(--xy-edge-stroke); }
+/* TEXTO MAIOR, independente do zoom (MNT-19.3): o rótulo do nó vai a `--text-base`, o resto a
+   `--text-sm`, e a caixa cresce na mesma razão (a conta mora no graph.tsx). */
+.dependency-graph[data-text="lg"] { --graph-edge-label-size:var(--text-sm); }
+.dependency-graph[data-text="lg"] .graph-node-body { font-size:var(--text-base); }
+.dependency-graph[data-text="lg"] .graph-node-kind,.dependency-graph[data-text="lg"] .graph-node-body .hint { font-size:var(--text-sm); }
+/* ALTO CONTRASTE (MNT-19.3): linha e letra no tom da letra, a base da linha dobra, e a borda do nó
+   também. Tudo o mais (pesos, pontilhado, duplo) é múltiplo da base e acompanha sozinho. */
+.dependency-graph[data-contrast="high"] { --xy-edge-stroke:var(--foreground); --xy-edge-label-color:var(--foreground); --graph-edge-base:calc(var(--border-width) * 2); }
+.dependency-graph[data-contrast="high"] .graph-node-body { border-color:var(--foreground); border-width:calc(var(--border-width) * 2); }
+.dependency-graph[data-contrast="high"] .graph-node-kind,.dependency-graph[data-contrast="high"] .graph-node-icon { color:var(--foreground); }
 .datagrid tbody tr[data-selected] { background:color-mix(in srgb,var(--primary) 14%,transparent); }
 .datagrid-empty { padding:var(--space-6); color:var(--muted-foreground); text-align:center; }
 

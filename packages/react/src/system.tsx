@@ -200,7 +200,16 @@ import {NOMES_PHOSPHOR,type IconName,type IconWeight} from "./icon-names.js";
 // degrau `xs` aqui seria desenhar por simetria com o botão, e a medição de 22/08 mostrou que as
 // duas escalas nem sequer reagem à densidade do mesmo jeito.
 export type IconSize="sm"|"md"|"lg"|"xl";
-export interface IconProps extends React.SVGAttributes<SVGSVGElement>{name:IconName;spriteUrl?:string;size?:Responsive<IconSize>;
+/**
+ * O DESENHO do próprio app, como no nativo (`AureaIcon`, R-11) — MNT-02, ADR-0064, 10/10/2026. Um
+ * componente que devolve o `<svg>` dele; recebe a classe e o tamanho da Aurea, e herda a cor
+ * (`currentColor`). Serve ao glifo que o Phosphor não tem (o roteador de um mapa de rede) e ao
+ * logotipo do app, sem sprite próprio nem `declare module`. Não tem forma cheia.
+ */
+export type AureaIconComponent=(props:React.SVGAttributes<SVGSVGElement>)=>React.ReactElement;
+/** Um ícone: o NOME de um glifo do sprite, ou o DESENHO do app. */
+export type AureaIcon=IconName|AureaIconComponent;
+export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>,"name">{name:AureaIcon;spriteUrl?:string;size?:Responsive<IconSize>;
   /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
   weight?:IconWeight}
 // spriteUrl aqui é OVERRIDE local (dois sprites na mesma página, por exemplo). O normal é
@@ -208,7 +217,9 @@ export interface IconProps extends React.SVGAttributes<SVGSVGElement>{name:IconN
 // A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
 // próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
 const idDoIcone=(name:string,weight:IconWeight="regular")=>weight==="fill"&&NOMES_PHOSPHOR.has(name)?`i-${name}-fill`:`i-${name}`;
-export function Icon({name,spriteUrl,size,weight,className,...props}:IconProps){const base=useSpriteUrl();return <svg aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}><use href={`${spriteUrl??base}#${idDoIcone(name,weight)}`}/></svg>}
+export function Icon({name,spriteUrl,size,weight,className,...props}:IconProps){const base=useSpriteUrl();
+  if(typeof name==="function"){const Desenho=name;return <Desenho aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}/>}
+  return <svg aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}><use href={`${spriteUrl??base}#${idDoIcone(name,weight)}`}/></svg>}
 
 // "nav" = item de navegação; marque o atual com aria-current="page" (texto amarelo +
 // traço embaixo, e o leitor de tela anuncia a página atual). Ver .btn-nav no core.

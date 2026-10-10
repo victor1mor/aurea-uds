@@ -162,6 +162,14 @@ export interface AureaStrings {
     automationLastRun: string;
     automationResult: Record<"success" | "failure", string>;
     graphLabel: string;
+    graphZoomIn: string;
+    graphZoomOut: string;
+    graphFit: string;
+    graphLegend: string;
+    graphOverview: string;
+    graphConnections: string;
+    graphShow: string;
+    graphJoin: string;
     agentState: Record<"idle" | "thinking" | "running" | "paused" | "error" | "completed", string>;
     codeEditor: string;
     chatLabel: string;

@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react()],
   base: "./",
   // Três páginas: o banco de teclado; desde 03/10/2026 (AN-01), o da moldura (`shell.html`); e desde
-  // 04/10/2026 (Lote H), o da conversa, da galeria e da árvore (`lote-h.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html"}}},
+  // 04/10/2026 (Lote H), o da conversa, da galeria e da árvore (`lote-h.html`); desde 10/10/2026
+  // (ADR-0064), o do mapa de rede (`rede.html`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html"}}},
 });

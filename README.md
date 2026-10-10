@@ -33,6 +33,11 @@ de comportamento em JavaScript puro.
 O conjunto de ícones de `@aurea-uds/icons` é um arquivo estático: copie `dist/aurea-icons.svg` para
 onde o seu app serve arquivos e aponte o `AureaProvider` para ele.
 
+**Depois de atualizar a Aurea, reinicie o servidor de desenvolvimento** (`vite`, `next dev`). Um
+servidor que já estava rodando continua servindo a versão de antes, e o sintoma engana: ícones
+pedidos por nomes antigos, ou componentes sem a novidade da versão. Reiniciar resolve; não é
+preciso apagar cache.
+
 **Para mobile (React Native):** é outro pacote, `@aurea-uds/native`, publicado desde
 11/09/2026. A lista de componentes dele **não é a da web com itens a menos**: é outra, com
 instalação e dependências próprias. Comece pelo
@@ -183,7 +188,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-395 páginas geradas — 133 de componente, 218 de padrão, 15 de bloco, 23 de receita e 6 índices de área — a partir de 124 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 28 componentes têm conteúdo escrito à mão; os outros 105 trazem um starter — o preview real e o código, ainda sem exemplos extras. 124 componentes publicam a tabela de props.
+396 páginas geradas — 133 de componente, 219 de padrão, 15 de bloco, 23 de receita e 6 índices de área — a partir de 124 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 28 componentes têm conteúdo escrito à mão; os outros 105 trazem um starter — o preview real e o código, ainda sem exemplos extras. 124 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

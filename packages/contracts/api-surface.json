@@ -6,8 +6,8 @@
     "modulos": 36,
     "componentes": 129,
     "hooks": 9,
-    "aliasesLiterais": 75,
-    "propsDistintas": 294
+    "aliasesLiterais": 83,
+    "propsDistintas": 309
   },
   "aliases": {
     "ButtonVariant": {
@@ -265,6 +265,79 @@
       "module": "file-input",
       "raw": "(file: File, ctx: UploadContext) => Promise<void | { checksum?: string; }>",
       "union": null
+    },
+    "GraphOrientation": {
+      "module": "graph",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "GraphLayout": {
+      "module": "graph",
+      "raw": "\"simple\" | \"layered\"",
+      "union": [
+        "simple",
+        "layered"
+      ]
+    },
+    "GraphEdgeShape": {
+      "module": "graph",
+      "raw": "\"curve\" | \"step\"",
+      "union": [
+        "curve",
+        "step"
+      ]
+    },
+    "GraphPortSide": {
+      "module": "graph",
+      "raw": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+      "union": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ]
+    },
+    "GraphTone": {
+      "module": "graph",
+      "raw": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "neutral",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ]
+    },
+    "GraphEdgePattern": {
+      "module": "graph",
+      "raw": "\"solid\" | \"dashed\" | \"dotted\" | \"double\"",
+      "union": [
+        "solid",
+        "dashed",
+        "dotted",
+        "double"
+      ]
+    },
+    "GraphEdgeWeight": {
+      "module": "graph",
+      "raw": "\"regular\" | \"thick\" | \"heavy\"",
+      "union": [
+        "regular",
+        "thick",
+        "heavy"
+      ]
+    },
+    "GraphEdgeMark": {
+      "module": "graph",
+      "raw": "\"cross\" | \"dot\" | \"lock\"",
+      "union": [
+        "cross",
+        "dot",
+        "lock"
+      ]
     },
     "PhosphorIconName": {
       "module": "icon-names",
@@ -2273,6 +2346,16 @@
         "lg",
         "xl"
       ]
+    },
+    "AureaIconComponent": {
+      "module": "system",
+      "raw": "(props: React.SVGAttributes<SVGSVGElement>) => React.ReactElement",
+      "union": null
+    },
+    "AureaIcon": {
+      "module": "system",
+      "raw": "IconName | AureaIconComponent",
+      "union": null
     }
   },
   "modules": {
@@ -4643,7 +4726,7 @@
         {
           "name": "DependencyGraph",
           "kind": "function",
-          "propsType": null,
+          "propsType": "DependencyGraphProps",
           "props": [
             {
               "name": "nodes",
@@ -4684,7 +4767,7 @@
             {
               "name": "onConnect",
               "optional": true,
-              "type": "(edge: { from: string; to: string; }) => void",
+              "type": "(edge: { from: string; to: string; fromPort?: string; toPort?: string; }) => void",
               "values": null
             },
             {
@@ -4703,6 +4786,126 @@
               "name": "className",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "GraphOrientation",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "layout",
+              "optional": true,
+              "type": "GraphLayout",
+              "values": [
+                "simple",
+                "layered"
+              ]
+            },
+            {
+              "name": "rootId",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "edgeShape",
+              "optional": true,
+              "type": "GraphEdgeShape",
+              "values": [
+                "curve",
+                "step"
+              ]
+            },
+            {
+              "name": "groupParallel",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "minimap",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "controls",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "legend",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "focusId",
+              "optional": true,
+              "type": "string | null",
+              "values": null
+            },
+            {
+              "name": "highlight",
+              "optional": true,
+              "type": "{ nodes?: string[]; edges?: string[]; } | null",
+              "values": null
+            },
+            {
+              "name": "highlightNeighbors",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "hiddenIds",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "onNodeHover",
+              "optional": true,
+              "type": "(id: string | null) => void",
+              "values": null
+            },
+            {
+              "name": "onNodeContextMenu",
+              "optional": true,
+              "type": "(id: string, point: { x: number; y: number; }) => void",
+              "values": null
+            },
+            {
+              "name": "onEdgeSelect",
+              "optional": true,
+              "type": "(id: string) => void",
+              "values": null
+            },
+            {
+              "name": "textSize",
+              "optional": true,
+              "type": "\"md\" | \"lg\"",
+              "values": [
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "highContrast",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "apiRef",
+              "optional": true,
+              "type": "React.Ref<DependencyGraphApi>",
               "values": null
             }
           ]
@@ -7969,7 +8172,7 @@
             {
               "name": "name",
               "optional": false,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {

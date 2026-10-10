@@ -10,31 +10,53 @@
   "sizes": [],
   "dependencies": {
     "engine": "@xyflow/react",
-    "icons": []
+    "icons": [
+      "corners-out",
+      "lock-key",
+      "magnifying-glass-minus",
+      "magnifying-glass-plus"
+    ]
   },
   "name": "DependencyGraph",
   "summary": "Who depends on whom, on a canvas you can pan, zoom and build on.",
   "icon": "flow-arrow",
   "states": [
-    "selected",
     "connectable",
-    "draggable"
+    "dimmed",
+    "draggable",
+    "focused",
+    "hidden",
+    "selected"
   ],
   "tokens": [
+    "--background",
     "--border",
+    "--border-strong",
+    "--border-width",
     "--card",
     "--foreground",
     "--muted-foreground",
     "--primary",
+    "--primary-outline",
     "--radius-card",
+    "--radius-control",
+    "--radius-md",
+    "--radius-xs",
+    "--secondary",
     "--space-05",
+    "--space-1",
     "--space-2",
     "--space-3",
+    "--space-5",
+    "--space-6",
+    "--space-8",
     "--subtle-foreground",
     "--surface-2",
+    "--text-base",
     "--text-sm",
     "--text-xs",
     "--tracking-wider",
+    "--weight-bold",
     "--weight-medium"
   ],
   "a11y": {
@@ -43,9 +65,13 @@
     "keyboard": [
       "Tab",
       "Enter",
-      "Space"
+      "Space",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight"
     ],
-    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which select the focused node. The first run reported zero of three for the same reason as the Gallery — the bank started on the node that was already selected. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component."
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which select the focused node. The first run reported zero of three for the same reason as the Gallery — the bank started on the node that was already selected. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component. The arrow keys move focus from node to node: the nearest node in the arrow's direction, inside a 45-degree cone, and the canvas pans to it when it is off screen. They work on nodes that are buttons (with onSelect); a read-only node is not focusable, and giving focus to a span with no role would be worse than none."
   },
   "related": {
     "components": [
@@ -63,13 +89,13 @@
       "name": "nodes",
       "type": "GraphNodeItem[]",
       "default": "—",
-      "description": "The vocabulary is ours, not the engine's. x and y are optional: without them a layered longest-path layout runs, because the engine positions nothing on its own and a graph with no coordinates piles every node at 0,0."
+      "description": "The vocabulary is ours, not the engine's. x and y are optional: without them a layered longest-path layout runs, because the engine positions nothing on its own and a graph with no coordinates piles every node at 0,0. A node can carry an `icon` (a sprite name or the app's own drawing) NEXT TO its kind, never instead of it; a `count` badge (with `countLabel` for the screen reader); a `status` badge (a word, with a tone that only reinforces it); `ports` (named handles on a chosen side); and a suggested `layer`."
     },
     {
       "name": "edges",
       "type": "GraphEdgeItem[]",
       "default": "—",
-      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types."
+      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types. An edge can attach to ports (`fromPort`, `toPort`), write port names at its ends (`sourceLabel`, `targetLabel`), and say what it is without relying on colour: `pattern` (solid, dashed, dotted, double), `weight` (regular, thick, heavy), `mark` in the middle (cross, dot, lock), a `count` (for example the members of a link aggregation) and a `legend` name."
     },
     {
       "name": "selectedId",
@@ -91,7 +117,7 @@
     },
     {
       "name": "onConnect",
-      "type": "(edge: {from: string; to: string}) => void",
+      "type": "(edge: {from: string; to: string; fromPort?: string; toPort?: string}) => void",
       "default": "—",
       "description": "Fires when someone draws a new edge."
     },
@@ -118,13 +144,142 @@
       "type": "string",
       "default": "—",
       "description": "On the canvas wrapper."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "`vertical` draws top to bottom: edges enter a node from the top and leave from the bottom, and each layer is centred on the widest one, so the root sits in the middle."
+    },
+    {
+      "name": "layout",
+      "type": "\"simple\" | \"layered\"",
+      "default": "\"simple\"",
+      "description": "`layered` arranges the graph with elkjs (an optional peer): fewer crossings, balanced children, ports in their declared order. It arrives after the first paint; the simple layout stands until then."
+    },
+    {
+      "name": "rootId",
+      "type": "string",
+      "default": "—",
+      "description": "The node pinned to the first layer in the `layered` layout."
+    },
+    {
+      "name": "edgeShape",
+      "type": "\"curve\" | \"step\"",
+      "default": "\"curve\"",
+      "description": "`step` draws edges at right angles, with the small radius at each bend. It does not route around nodes yet."
+    },
+    {
+      "name": "groupParallel",
+      "type": "boolean",
+      "default": "false",
+      "description": "Edges between the same two nodes (in either direction) collapse into one line with their count. The count is a button that expands them into separate lines and joins them again; its name says what it does and how many."
+    },
+    {
+      "name": "minimap",
+      "type": "boolean",
+      "default": "false",
+      "description": "An overview in the corner, with the visible area marked. It can be dragged and zoomed."
+    },
+    {
+      "name": "controls",
+      "type": "boolean",
+      "default": "false",
+      "description": "Zoom in, zoom out and fit-to-screen buttons in the corner."
+    },
+    {
+      "name": "legend",
+      "type": "boolean",
+      "default": "false",
+      "description": "A legend built from what is on the canvas: one row per distinct `legend` name of the edges, drawn with that edge's own pattern, weight and mark."
+    },
+    {
+      "name": "focusId",
+      "type": "string | null",
+      "default": "—",
+      "description": "Centres the canvas on this node and marks it — the 'go to' of a search. The mark is the brand border, not the keyboard focus ring."
+    },
+    {
+      "name": "highlight",
+      "type": "{nodes?: string[]; edges?: string[]} | null",
+      "default": "—",
+      "description": "Lights a path and dims everything else. Edges are matched by their `id`; without edge ids, an edge stays lit when both its ends are lit."
+    },
+    {
+      "name": "highlightNeighbors",
+      "type": "boolean",
+      "default": "false",
+      "description": "With a selected node, lights it, its neighbours and the edges between them, and dims the rest."
+    },
+    {
+      "name": "hiddenIds",
+      "type": "string[]",
+      "default": "—",
+      "description": "Hides these nodes and their edges WITHOUT re-running the layout: everything else stays exactly where it was. Filtering a map should not reshuffle it."
+    },
+    {
+      "name": "onNodeHover",
+      "type": "(id: string | null) => void",
+      "default": "—",
+      "description": "The pointer entered a node (its id) or left it (null) — for a summary card."
+    },
+    {
+      "name": "onNodeContextMenu",
+      "type": "(id: string, point: {x: number; y: number}) => void",
+      "default": "—",
+      "description": "Right click on a node, with the point on the screen — for a ContextMenu. The browser's own menu does not open."
+    },
+    {
+      "name": "onEdgeSelect",
+      "type": "(id: string) => void",
+      "default": "—",
+      "description": "A click on an edge. With it, edges show the pointer; without it they do not, because nothing would answer the click."
+    },
+    {
+      "name": "textSize",
+      "type": "\"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "The text of the nodes and edge labels, independent of zoom. `lg` grows the node box in the same proportion, so names do not cut sooner."
+    },
+    {
+      "name": "highContrast",
+      "type": "boolean",
+      "default": "false",
+      "description": "Edges, labels and node borders in the text colour, and the base line thickness doubles. Every weight and pattern is a multiple of the base, so they all follow."
+    },
+    {
+      "name": "apiRef",
+      "type": "Ref<DependencyGraphApi>",
+      "default": "—",
+      "description": "Commands for the app: fitView(), zoomIn(), zoomOut(), focus(id), toDrawio() (a draw.io file with the current positions), toPng() and toSvg() (a data: URL; they need modern-screenshot)."
     }
   ],
   "notes": [
     "Ships from its own subpath: import {DependencyGraph} from \"@aurea-uds/react/graph\". @xyflow/react is an OPTIONAL peer, so nobody who installed the library for the Button pays for it.",
     "The consumer must also import the engine's structural stylesheet once, and it must sit in a cascade layer BELOW ours: `@layer motor, aurea;` then `@import \"@xyflow/react/dist/base.css\" layer(motor);`. Unlayered CSS beats layered CSS regardless of specificity, and the Aurea core lives in `@layer aurea` — imported loose, the engine overrides our skin. Measured 09/08/2026: the attribution link kept the engine's hardcoded #999 and failed colour contrast even though our rule was more specific. Only `base.css`: `dist/style.css` is the engine's own identity — 3px radius, #1a192b, shadows, white nodes — and it never enters.",
-    "Scope is smaller than the engine's: no minimap, no panels, no resizable nodes, no rectangle selection, and no <Controls/>. The control buttons only get colour from style.css, and writing .react-flow__* rules into our core would plant a class no component here produces — exactly what check 15 exists to stop.",
-    "The layout is a layered longest-path pass written here, because the engine takes x/y ready-made. It does NOT minimise edge crossings: fine for dependency graphs of dozens of nodes, not for thousands. The upgrade path is elkjs — a NEW dependency, which needs authorisation rather than smuggling.",
-    "The preview on the catalogue page is REAL, server-rendered. That needs three things on every node — initialWidth, initialHeight and an explicit handles array — plus the initial viewport on the provider. Without them the engine has nothing to measure and draws nothing. An earlier version of this ficha claimed a graph could not exist in static HTML; that was a conclusion, not a measurement, and it was wrong."
-  ]
+    "Scope is smaller than the engine's: no free-floating engine panels, no resizable nodes, no rectangle selection, and not the engine's <Controls/>. The control buttons only get colour from style.css, and writing .react-flow__* rules into our core would plant a class no component here produces — exactly what check 15 exists to stop. The overview (`minimap`) and the zoom buttons (`controls`) are opt-in: the overview is dressed through the engine's own CSS variables, and the buttons are Aurea IconButtons inside an engine Panel, which only positions them. A network map of a hundred devices is not readable without the overview.",
+    "The default layout is a layered longest-path pass written here, because the engine takes x/y ready-made. It does NOT minimise edge crossings. `layout=\"layered\"` hands the job to elkjs (an OPTIONAL peer, EPL-2.0, loaded with import() only when asked): fewer crossings, the root on top (`rootId`), the layer the app suggests (`layer`) and ports kept on their side, in the declared order. It runs after the first paint; until it answers — and on the server — the simple layout stands. Without the package installed, the map warns once in the console and keeps the simple layout.",
+    "The preview on the catalogue page is REAL, server-rendered. That needs three things on every node — initialWidth, initialHeight and an explicit handles array — plus the initial viewport on the provider. Without them the engine has nothing to measure and draws nothing. An earlier version of this ficha claimed a graph could not exist in static HTML; that was a conclusion, not a measurement, and it was wrong.",
+    "Handles exist on every node, also on a read-only graph, but hidden and deaf to the pointer: the engine needs them to MEASURE where the border is. The declared `handles` array (what lets the graph render on the server) is dropped after the first measurement, because the engine always prefers a declared array — and a node taller than the default made edges start inside it.",
+    "Edge thickness goes through the engine's own variable (`--xy-edge-stroke-width`), not `stroke-width`: the engine's rule has no layer and would beat ours otherwise. Dashes, dots and the double line are drawn on top of the same path.",
+    "Exporting: `apiRef.current.toDrawio()` writes a draw.io file by hand, as the format documents it (no dependency); `toPng()` and `toSvg()` need the OPTIONAL peer modern-screenshot, loaded with import() only when called."
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ],
+    "layout": [
+      "simple",
+      "layered"
+    ],
+    "edgeShape": [
+      "curve",
+      "step"
+    ],
+    "textSize": [
+      "md",
+      "lg"
+    ]
+  }
 }

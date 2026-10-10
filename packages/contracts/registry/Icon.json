@@ -55,9 +55,9 @@
   "props": [
     {
       "name": "name",
-      "type": "IconName",
+      "type": "IconName | AureaIconComponent",
       "default": "—",
-      "description": "The glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue."
+      "description": "The glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue. It also takes the app's OWN drawing — a component that returns its <svg> and receives the Aurea class and size, inheriting the colour (currentColor) — for a glyph the set does not have, or the app's logo, with no sprite of its own. A drawing has no fill weight."
     },
     {
       "name": "size",
