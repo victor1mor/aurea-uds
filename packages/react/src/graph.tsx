@@ -543,6 +543,11 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
     id:n.id,type:"aurea",
     position:posicao(n),
     draggable:!!onNodeMove,
+    // `selectable:false` no PRÓPRIO nó, como na aresta: no servidor (a prévia do catálogo) o motor ainda
+    // não recebeu o `elementsSelectable={false}` do fluxo, e o nó saía com a classe `.selectable` e a
+    // mão de ponteiro — num mapa sem `onSelect`, uma promessa de clique sem teclado. O gate
+    // `alvo-clicavel` pegou na página do padrão de rede (10/10/2026).
+    selectable:false,
     hidden:ocultos.has(n.id),
     // ── O QUE FAZ ESTE GRAFO EXISTIR FORA DO NAVEGADOR ─────────────────────────────────
     // O motor só desenha nó que tem tamanho, e no servidor não há o que medir. `initialWidth`

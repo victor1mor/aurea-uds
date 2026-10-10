@@ -54,7 +54,7 @@ export default [
 />`,
     render: () => h("div", {style: {width: "100%"}}, h(DependencyGraph, {
       orientation: "vertical", rootId: "internet", edgeShape: "step", groupParallel: true, legend: true,
-      label: "Network map", height: "30rem", nodes: NOS, edges: ARESTAS,
+      label: "Network map", height: "21rem", nodes: NOS, edges: ARESTAS,
     })),
   },
 ];
