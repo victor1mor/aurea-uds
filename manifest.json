@@ -20,7 +20,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -30,7 +30,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -40,7 +40,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -50,7 +50,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -60,7 +60,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -79,7 +79,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -92,6 +92,8 @@
         "@tanstack/react-table",
         "@xyflow/react",
         "codemirror",
+        "elkjs",
+        "modern-screenshot",
         "qr",
         "react-day-picker",
         "recharts"
@@ -121,7 +123,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.29.0",
+      "version": "0.30.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -271,10 +273,10 @@
     "componentes": 124,
     "fichas": 124,
     "hooks": 9,
-    "paginas_total": 395,
+    "paginas_total": 396,
     "paginas": {
       "component": 133,
-      "pattern": 218,
+      "pattern": 219,
       "block": 15,
       "recipe": 23,
       "area": 6
@@ -282,7 +284,7 @@
     "conteudo_rico": 28,
     "starters": 105,
     "receitas_com_preview": 23,
-    "patterns_content": 79,
+    "patterns_content": 80,
     "blocks_content": 2,
     "receitas": 23,
     "props": 124,
@@ -296,12 +298,12 @@
       "Ready": 44,
       "Stable": 88
     },
-    "testes_unit": 1560,
+    "testes_unit": 1574,
     "componentes_citados_no_teste": 131,
-    "specs_visuais": 35,
+    "specs_visuais": 36,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 698,
+    "classes_core": 725,
     "token_declaracoes": 453,
     "token_nomes": 214,
     "token_usados": 169,
@@ -309,6 +311,6 @@
   },
   "gates": {
     "validate": 42,
-    "playwrightSpecs": 35
+    "playwrightSpecs": 36
   }
 }

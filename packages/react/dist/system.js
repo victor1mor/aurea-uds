@@ -196,4 +196,11 @@ import { NOMES_PHOSPHOR } from "./icon-names.js";
 // A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
 // próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
 const idDoIcone = (name, weight = "regular") => weight === "fill" && NOMES_PHOSPHOR.has(name) ? `i-${name}-fill` : `i-${name}`;
-export function Icon({ name, spriteUrl, size, weight, className, ...props }) { const base = useSpriteUrl(); return _jsx("svg", { "aria-hidden": "true", className: cx("icon", peleDoEixo("icon", size), className), ...props, children: _jsx("use", { href: `${spriteUrl ?? base}#${idDoIcone(name, weight)}` }) }); }
+export function Icon({ name, spriteUrl, size, weight, className, ...props }) {
+    const base = useSpriteUrl();
+    if (typeof name === "function") {
+        const Desenho = name;
+        return _jsx(Desenho, { "aria-hidden": "true", className: cx("icon", peleDoEixo("icon", size), className), ...props });
+    }
+    return _jsx("svg", { "aria-hidden": "true", className: cx("icon", peleDoEixo("icon", size), className), ...props, children: _jsx("use", { href: `${spriteUrl ?? base}#${idDoIcone(name, weight)}` }) });
+}

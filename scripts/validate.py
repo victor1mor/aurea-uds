@@ -1012,7 +1012,10 @@ else:
 # em runtime, com "Cannot find module". Aqui aparece no build.
 PESADAS = {"codemirror": "code-editor", "@codemirror/": "code-editor", "@lezer/": "code-editor",
            "@tanstack/react-table": "data-grid", "qr": "qrcode", "recharts": "chart",
-           "react-day-picker": "calendar", "@xyflow/react": "graph"}
+           "react-day-picker": "calendar", "@xyflow/react": "graph",
+           # Rodada 1 da rede (ADR-0064, 10/10/2026): a arrumação em camadas e a foto do mapa. Os
+           # dois são peer OPCIONAL e entram por `import()` dentro do graph.tsx, só quando usados.
+           "elkjs": "graph", "modern-screenshot": "graph"}
 for fp in sorted((root / "packages/react/src").glob("*.tsx")):
     fonte = fp.read_text(encoding="utf-8")
     for imp in re.findall(r'^import[^"\']*["\']([^"\']+)["\']', fonte, re.M):
@@ -2270,6 +2273,11 @@ NAO_E_ESTADO = {
     "state": "é EIXO, e já mora em `axes` das fichas que o têm (DataGrid, DataState, AgentCard…)",
     "orientation": "é EIXO, e eixo é variante: mora em `variants` com `variantProp` "
                    "(o Toolbar e o Separator fazem assim)",
+    # O mapa de rede (ADR-0064, 10/10/2026): o texto maior e o alto contraste são MODOS de leitura
+    # escolhidos pelo app (`textSize`, `highContrast`), declarados em `axes` da ficha do
+    # DependencyGraph — não condição em que o componente se encontra.
+    "text": "é EIXO (`textSize` do DependencyGraph), declarado em `axes`",
+    "contrast": "é MODO de leitura (`highContrast` do DependencyGraph, booleano), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}

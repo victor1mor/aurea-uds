@@ -143,6 +143,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.26.1` | E16: no navegador, o `DatePicker` do nativo abre o calendário do navegador — pedido #57. **Não saiu sozinha**: foi publicada dentro da `0.27.0` |
 | `0.27.0` | As cores dos dois temas seguem a paleta de referência; o amarelo da marca fica — [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md), pedido #58. **Publicada em 09/10/2026** (entre 13:13 e 13:19, Brasília), pelo terminal do Victor. Leva a `0.26.0` e a `0.26.1` junto |
 | `0.28.0` | Lote M: `share` no `Button` e no `IconButton` (GAR-14), `Image frame="phone"` (GAR-15), `--font-heading`, `--weight-extrabold`, a fonte 800 e `numeric` (GAR-16) — [ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md), pedido #61. **Publicada em 09/10/2026** (entre 19:24 e 19:30, Brasília), pelo terminal do Victor |
+| `0.29.0` | Lote N: `Card variant="contrast"` (o tema escuro dentro do cartão) e `Card accent` (o traço de 4 no topo, na cor cheia), web e nativo; a marca chega a um pedaço com tema próprio — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md), pedido #63. **Publicada em 10/10/2026** (entre 13:05 e 13:10, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -362,6 +363,23 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    ⚠ **A lição:** a primeira versão abria a lista do `Select` de dentro do `contrast` com o fundo do
    escuro e a letra do claro; só a bancada no navegador mostrou. E o traço no Android é uma faixa
    recortada no canto, não uma borda mais grossa (react-native#51926, fechada sem conserto).
+   **Aprovada pela bancada** (*"aprovado, pode enviar a 0.29.0"*) **e publicada no mesmo dia** (entre
+   13:05 e 13:10, Brasília, pelo terminal do Victor, da junção do pedido #63).
+
+26. **`0.30.0`, a rodada 1 do mapa de rede, feita em 10/10/2026** (*"como recomendado, pode construir a
+   rodada 1"*), [ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md) — os pedidos de um app de
+   topologia: o `DependencyGraph` de cima para baixo, arrumado em camadas pelo `elkjs` (peer OPCIONAL
+   novo), com ícone, selos e portas no nó; a linha que diz o que é sem cor (traço, peso, marca, número,
+   nome da porta nas pontas, legenda); linhas repetidas juntas num botão "×n"; minimapa (fora da lista
+   de recusas), botões de zoom, ir até, caminho, vizinhos, esconder sem refazer; texto grande, alto
+   contraste e setas; exportar `.drawio` (nosso), PNG e SVG (`modern-screenshot`, peer OPCIONAL novo).
+   Junto, MNT-01 (7 nomes na tabela Carbon→Phosphor), MNT-02(a) (o `Icon` da web aceita o desenho do
+   app) e MNT-03 (o README manda reiniciar o servidor). ⚠ **As regras novas:** no mapa, a espessura da
+   linha vai pela variável do motor (`--xy-edge-stroke-width`) — a folha da Aurea mora numa camada e a
+   do motor não; a lista de alças declaradas só vale até a primeira medida; e no mapa de leitura as
+   alças existem, escondidas e surdas. ⚠ **A lição:** os três defeitos só apareceram na bancada com o
+   código real, e o banco `apps/keyboard-probe/rede.html` importa a folha do motor sem camada — o pior
+   caso — para o teste valer para quem a importa assim.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

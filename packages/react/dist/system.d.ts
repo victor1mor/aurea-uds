@@ -28,8 +28,17 @@ export declare function useAureaTheme(): {
 export type { IconName, PhosphorIconName, AureaIconNames, IconWeight } from "./icon-names.js";
 import { type IconName, type IconWeight } from "./icon-names.js";
 export type IconSize = "sm" | "md" | "lg" | "xl";
-export interface IconProps extends React.SVGAttributes<SVGSVGElement> {
-    name: IconName;
+/**
+ * O DESENHO do próprio app, como no nativo (`AureaIcon`, R-11) — MNT-02, ADR-0064, 10/10/2026. Um
+ * componente que devolve o `<svg>` dele; recebe a classe e o tamanho da Aurea, e herda a cor
+ * (`currentColor`). Serve ao glifo que o Phosphor não tem (o roteador de um mapa de rede) e ao
+ * logotipo do app, sem sprite próprio nem `declare module`. Não tem forma cheia.
+ */
+export type AureaIconComponent = (props: React.SVGAttributes<SVGSVGElement>) => React.ReactElement;
+/** Um ícone: o NOME de um glifo do sprite, ou o DESENHO do app. */
+export type AureaIcon = IconName | AureaIconComponent;
+export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, "name"> {
+    name: AureaIcon;
     spriteUrl?: string;
     size?: Responsive<IconSize>;
     /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
