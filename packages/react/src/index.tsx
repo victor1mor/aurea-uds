@@ -57,7 +57,7 @@ export {AspectRatio, InputGroup, InputGroupAddon, Label,
   AvatarGroup, LogStream, MediaPlayerShell, Header, Topbar, Kbd, Textarea, Checkbox, Radio,
   Switch, Range, formatBadgeCount, type BadgeVariant, type BadgeCategory, type BadgeEmphasis, type BadgeSize,
   type BadgePlacement, type BadgeProps, type KPIProps, type KPIDirection, type KPITone, type KPIVariant, type ProgressProps, type ProgressTone, type AvatarSize, type HeaderVariant, type HeaderProps, type TopbarVariant,
-  type SectionVariant, type SectionFooterGroup,
+  type SectionVariant, type SectionFooterGroup, type CardProps, type CardAccent,
   type TextProps, type HeadingProps, type ParagraphProps, type CodeProps, type TypographyType,
   type TypographyColor, type TypographyWeight, type TypographyAlign, type HeadingLevel, type ParagraphSize} from "./markup.js";
 export * from "./system.js";

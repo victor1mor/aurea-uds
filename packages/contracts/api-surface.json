@@ -6,7 +6,7 @@
     "modulos": 36,
     "componentes": 129,
     "hooks": 9,
-    "aliasesLiterais": 74,
+    "aliasesLiterais": 75,
     "propsDistintas": 294
   },
   "aliases": {
@@ -1783,9 +1783,20 @@
       "raw": "HeaderVariant",
       "union": null
     },
+    "CardAccent": {
+      "module": "markup",
+      "raw": "\"brand\" | \"success\" | \"info\" | \"warning\" | \"danger\"",
+      "union": [
+        "brand",
+        "success",
+        "info",
+        "warning",
+        "danger"
+      ]
+    },
     "CardProps": {
       "module": "markup",
-      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
+      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"contrast\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
       "union": null
     },
     "LayoutGap": {
@@ -5780,9 +5791,10 @@
             {
               "name": "variant",
               "optional": false,
-              "type": "\"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"interactive\"",
+              "type": "\"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"contrast\" | \"interactive\"",
               "values": [
                 "base",
+                "contrast",
                 "danger",
                 "inset",
                 "interactive",

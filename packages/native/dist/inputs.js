@@ -46,7 +46,7 @@ import { Icon } from "./icon.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
-import { useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca } from "./theme.js";
+import { useAureaStrings, useAureaTokens, useTokensDoApp, usePeleSobreAMarca, ForaDaMarca } from "./theme.js";
 // `alturaDoTamanho` e `respiroDoTamanho` saem do arquivo (não do pacote) desde 02/10/2026: o
 // `FileInput` (R-21) desenha um gatilho com a medida do campo, e copiar os números para lá é o
 // defeito que o `CLAUDE.md` nomeia.
@@ -588,6 +588,9 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
 export function Select({ items, value, onChange, placeholder, disabled, size, chevron = "caret-down", style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
+    // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
+    const tf = useTokensDoApp();
+    const sf = folha(tf);
     const peleDaMarca = usePeleSobreAMarca();
     const campo = useCampo();
     const tam = size ?? campo?.size ?? "md";
@@ -603,7 +606,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
                     peleDaMarca,
                     inativo && s.desabilitado,
                     style,
-                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: () => setAberto(false), children: _jsxs(View, { style: s.fundoDaLista, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsxs(View, { style: s.lista, children: [_jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", ...estadoAcessivel({ selected: it.value === value, disabled: !!it.disabled }), style: [s.opcao, it.disabled && s.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }), _jsx(RecuoDaFolha, {})] })] }) }) })] }));
+                ], children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: escolhido ? "default" : "subtle", numberOfLines: 1, children: escolhido?.label ?? placeholder ?? "" }), chevron && _jsx(Icon, { name: chevron, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground })] }), _jsx(ForaDaMarca, { children: _jsx(Modal, { visible: aberto, transparent: true, animationType: "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: () => setAberto(false), children: _jsxs(View, { style: sf.fundoDaLista, children: [_jsx(Pressable, { style: sf.fundoDeToque, onPress: () => setAberto(false), accessible: false }), _jsxs(View, { style: sf.lista, children: [_jsx(ScrollView, { children: items.map((it) => (_jsx(Pressable, { disabled: it.disabled, onPress: () => { onChange?.(it.value); setAberto(false); }, accessibilityRole: "menuitem", ...estadoAcessivel({ selected: it.value === value, disabled: !!it.disabled }), style: [sf.opcao, it.disabled && sf.desabilitado], children: _jsx(Text, { size: "md", weight: it.value === value ? 600 : 400, children: it.label }) }, it.value))) }), _jsx(RecuoDaFolha, {})] })] }) }) })] }));
 }
 /**
  * A pilha de campos, com o respiro do `--space-5`.

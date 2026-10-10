@@ -119,6 +119,29 @@ export declare function ForaDaMarca({ children }: {
     children?: React.ReactNode;
 }): React.JSX.Element;
 /**
+ * O tema num pedaço da tela — o `Card variant="contrast"` (MT-01, ADR-0063, 10/10/2026). Os filhos
+ * leem os tokens do `tema` pedido; o resto do app não muda. É o jeito da referência principal de
+ * fazer um pedaço escuro (o tema aplicado num elemento), e o da web (`data-theme` no cartão).
+ *
+ * ⚠ **O `useAureaTheme()` continua o do app**: dentro do pedaço, `theme` diz o tema do APP, e o
+ * `setTheme` troca o do app. Só os tokens mudam — é o que pinta.
+ *
+ * Interno: o público é o `Card variant="contrast"`. O que sai do fluxo (folha, sobreposto) passa
+ * pelo `ForaDaMarca` e volta ao app.
+ */
+/**
+ * Os tokens do APP, mesmo dentro de um pedaço com tema próprio. Quem desenha uma janela que sai do
+ * fluxo (a folha, o diálogo) pinta o FUNDO dela com isto: o `ForaDaMarca` devolve o contexto do app
+ * só para quem lê o contexto DENTRO da janela (o texto, o botão), e o fundo é calculado antes, por
+ * quem abre. Medido na bancada do Lote N (10/10/2026): sem isto, a lista do `Select` aberta de
+ * dentro do `contrast` saía com o fundo do escuro e a letra do claro. Interno.
+ */
+export declare function useTokensDoApp(): AureaTokens;
+export declare function TemaDentro({ tema, children }: {
+    tema: AureaThemeName;
+    children?: React.ReactNode;
+}): React.JSX.Element;
+/**
  * A pele que um CAMPO tem de vestir quando está dentro de um `Card variant="brand"`, ou `null`
  * quando não está.
  *

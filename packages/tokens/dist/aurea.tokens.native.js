@@ -77,6 +77,7 @@ export const base = {
   "radiusControl": 999,
   "radiusFull": 999,
   "borderWidth": 1,
+  "accentWidth": 4,
   "focusWidth": 2,
   "focusOffset": 2,
   "opacityDisabled": 0.5,

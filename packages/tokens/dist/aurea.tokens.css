@@ -44,6 +44,7 @@
   --radius-control:999px;
   --radius-full:var(--radius-control);
   --border-width:1px;
+  --accent-width:4px;
   --focus-width:2px;
   --focus-offset:2px;
   --opacity-disabled:0.5;
@@ -312,7 +313,7 @@
   --warning-foreground:#242424;
   --warning-hover:#de590b;
 }
-[data-brand="lory"][data-theme="dark"]{
+[data-brand="lory"][data-theme="dark"],[data-brand="lory"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
   --foreground:oklch(0.96 0.006 250);
   --foreground-strong:oklch(1 0 0);
@@ -375,7 +376,7 @@
   --danger-bg:oklch(0.34 0.09 25);
   --info-bg:oklch(0.32 0.06 235);
 }
-[data-brand="lory"][data-theme="light"]{
+[data-brand="lory"][data-theme="light"],[data-brand="lory"] [data-theme="light"]{
   --background:oklch(0.984 0.004 70);
   --foreground:oklch(0.24 0.022 250);
   --foreground-strong:oklch(0.16 0.02 250);

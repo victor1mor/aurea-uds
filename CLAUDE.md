@@ -351,6 +351,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    **Aprovada pela bancada** (*"aprovado, pode enviar a 0.28.0"*) **e publicada no mesmo dia**
    (entre 19:24 e 19:30, Brasília, pelo terminal do Victor, da junção do pedido #61).
 
+25. **`0.29.0`, o Lote N, feita em 10/10/2026** (*"como recomendado e A, pode construir"*),
+   [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md) — os dois pedidos de um app do
+   nativo: MT-01 (`Card variant="contrast"`: o tema escuro dentro do cartão; no claro, o cartão do
+   escuro sem linha; no escuro, o contorno amarelo) e MT-02 (`Card accent`: o traço de 4 no topo, na
+   cor CHEIA, exceção à ADR-0061), web e nativo, com o token `--accent-width`. Junto, o conserto que
+   o MT-01 achou: uma faixa escura numa página `lory` saía com o escuro da Aurea (desde a `0.22.0`).
+   ⚠ **A regra nova:** no nativo, janela que sai do fluxo (folha, diálogo) pinta o FUNDO com
+   `useTokensDoApp()` — o `ForaDaMarca` devolve o contexto do app só a quem está dentro dela.
+   ⚠ **A lição:** a primeira versão abria a lista do `Select` de dentro do `contrast` com o fundo do
+   escuro e a letra do claro; só a bancada no navegador mostrou. E o traço no Android é uma faixa
+   recortada no canto, não uma borda mais grossa (react-native#51926, fechada sem conserto).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).

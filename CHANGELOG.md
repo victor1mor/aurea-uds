@@ -80,6 +80,48 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.29.0] — 2026-10-10
+
+⏳ **Ainda não publicada.** Lote N, os dois pedidos de um app do nativo: MT-01 (o cartão que se
+destaca nos dois temas) e MT-02 (o traço de cor no topo) — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md).
+As escolhas foram do Victor, depois de ver a referência principal, o mercado e a bancada (*"como
+recomendado e A, pode construir"*). **Versão nova porque entram uma variante, uma prop e um token.**
+Nada sai, nenhum padrão muda.
+
+### Novo
+
+- **`Card variant="contrast"`, web e nativo (MT-01).** O cartão que se destaca da tela nos dois
+  temas: no claro, o cartão do tema escuro, sem linha em volta; no escuro, o cartão comum com
+  contorno amarelo (a borda de sempre, 1). Por dentro, o tema escuro inteiro — todo filho se ajusta
+  sozinho: texto, selo, botão, campo. Na web, `data-theme="dark"` no próprio cartão; no nativo, os
+  tokens do escuro só para os filhos. O tema do app não muda (`useAureaTheme`), e o que abre de
+  dentro (a lista do `Select`, o `Dialog`) sai no tema do app. Aceita `onPress` no nativo e `render`
+  na web. Não serve para lista de escolha: no escuro, o contorno lembra o `selected`.
+- **`Card accent`, web e nativo (MT-02).** O traço de cor no topo: `brand`, `success`, `info`,
+  `warning` ou `danger`, com 4 de altura, na **cor cheia** do tom, igual nos dois temas. É enfeite —
+  o nome da caixa diz o assunto —, e por isso abre uma exceção na ADR-0061. Funciona com `onPress`,
+  com `accessible` e dentro da `Grid`. No nativo, o traço é uma faixa que se recorta no canto do
+  cartão: a borda mais grossa só em cima desenha errado no Android.
+- **Token `--accent-width` (4)**: a altura do traço. A borda comum continua `--border-width`.
+
+### Corrigido
+
+- **Uma faixa escura numa página da marca `lory` saía com o escuro da Aurea.** A `Section
+  theme="dark"` (e agora o `contrast`) põe só o tema no elemento, e o seletor da marca exigia marca e
+  tema no MESMO elemento: o `--card` saía `#292929` e o destaque amarelo, em vez do azulado e do
+  laranja da `lory`. O seletor da marca passa a valer também com o tema dentro dela. Existia desde a
+  `0.22.0`.
+
+### Medido
+
+- `tests/unit/lote-n.test.tsx` (web) e `tests/unit/native-lote-n.test.tsx` (nativo), e o caso novo
+  de `paleta-adr0061.test.tsx` (a cor cheia só pinta o traço) — provados contra a `0.28.0`: 31 dos
+  testes novos reprovam com o código de antes. E contra a primeira versão desta sessão: a lista do
+  `Select` e o `Dialog` abertos de dentro do `contrast` saíam com o fundo do escuro e a letra do
+  claro (2 reprovam).
+- Na bancada com o código real (web e nativo no navegador, os dois temas e a marca `lory`).
+- O traço no Android precisa do aceite no aparelho: bloco `0.29` do `apps/native-smoke`.
+
 ## [0.28.0] — 2026-10-09
 
 ✅ **Publicada em 09/10/2026, entre 19:24 e 19:30 (Brasília, medido no npm)**, pelo terminal do

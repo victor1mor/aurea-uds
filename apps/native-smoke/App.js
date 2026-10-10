@@ -33,7 +33,7 @@ import {SafeAreaProvider, useSafeAreaInsets} from "react-native-safe-area-contex
 
 import {
   Alert, AureaProvider, Avatar, Badge, BottomNav, BottomSheet, Button, Card, Chart, Checkbox, Code,
-  Heading, Paragraph,
+  Heading, Paragraph, Cluster, Text as AText,
   ConfirmDialog, DataList, DataState, Dialog, Drawer, EmptyState, Field, Form, Grid, IconButton, Input,
   RadioGroup, Separator,
   KPI, KeyboardAvoiding, LinkButton, NavList, Progress, Radio, Screen, Select, SegmentedControl, Skeleton,
@@ -247,6 +247,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <BlocoLoteN t={t} />
       <BlocoLoteL t={t} />
       <BlocoLoteJ t={t} />
       <BlocoLoteI t={t} />
@@ -1604,6 +1605,56 @@ function BlocoBarraParada({t}) {
 //   GAR-09 · a seta aparece (o glifo registrado acima), na cor do tom, na linha de cima da tendência;
 //            e o TalkBack lê o KPI inteiro de uma vez, com a palavra da direção;
 //   MNT-04 · `variant="plain"` dentro de um cartão: nenhuma caixa dentro da caixa.
+// 0.29 (ADR-0063): o cartão `contrast` e o traço `accent` — a tela Início do app que pediu. O que
+// só o aparelho responde: no Android, o traço é uma faixa numa camada que se recorta no canto do
+// cartão (a borda mais grossa só em cima desenha errado lá, react-native#51926).
+function BlocoLoteN({t}) {
+  const [toques, setToques] = React.useState(0);
+  const [escolha, setEscolha] = React.useState("revisao");
+  const caixas = [["Próxima revisão", "1.240 km", "brand"], ["Abastecimento", "há 3 dias", "success"],
+    ["Km anotado", "hoje", "info"], ["Consumo", "27,8 km/L", "warning"]];
+  return (
+    <Bloco t={t} n="0.29" titulo="Lote N: o cartão contrast e o traço no topo"
+      criterio={"1) No tema claro, o cartão da moto é escuro, sem linha em volta; no escuro (\"trocar "
+        + "tema\"), tem o contorno amarelo fino. 2) Dentro dele, o texto é branco, o destaque é amarelo e "
+        + "o selo verde se lê, nos dois temas. 3) Tocar no cartão da moto soma 1 no contador. 4) O traço "
+        + "de cada caixa acompanha o canto redondo: não passa para fora do cartão, não deixa vão nos "
+        + "cantos, e a borda cinza continua nos lados. 5) No tema claro, abrir o Select de dentro do "
+        + "cartão escuro: a lista sobe CLARA, com a letra escura."}>
+      <Card variant="contrast" onPress={() => setToques((n) => n + 1)} accessibilityLabel="Abrir o painel da CB 500X">
+        <View style={{gap: 4}}>
+          <Cluster justify="between">
+            <AText size="xs" weight={700} tone="link">VEÍCULO PRINCIPAL</AText>
+            <Badge size="xs" tone="success">TUDO EM DIA</Badge>
+          </Cluster>
+          <AText size="xl" weight={700}>CB 500X</AText>
+          <AText size="xs" weight={600} tone="link">2023 · Honda</AText>
+          <View style={{flexDirection: "row", alignItems: "baseline", gap: 4}}>
+            <AText size="3xl" weight={700} tone="link">18.420</AText>
+            <AText size="xs" tone="muted">km</AText>
+          </View>
+        </View>
+      </Card>
+      <AText size="sm" tone="muted">{`Toques no cartão da moto: ${toques}`}</AText>
+      <Grid minColumnWidth={150}>
+        {caixas.map(([nome, valor, tom]) => (
+          <Card key={nome} accessible accent={tom}>
+            <AText size="xs" tone="muted">{nome}</AText>
+            <AText size="lg" weight={700}>{valor}</AText>
+          </Card>
+        ))}
+      </Grid>
+      <Card variant="contrast">
+        <View style={{gap: 8}}>
+          <AText tone="muted">Select dentro do cartão escuro</AText>
+          <Select items={[{value: "revisao", label: "Revisão"}, {value: "abastecimento", label: "Abastecimento"}]}
+            value={escolha} onChange={setEscolha} />
+        </View>
+      </Card>
+    </Bloco>
+  );
+}
+
 function BlocoLoteL({t}) {
   const cats = [["red", "Editorial"], ["orange", "Marketing"], ["green", "Finanças"], ["teal", "Pesquisa"],
     ["cyan", "Suporte"], ["blue", "Engenharia"], ["violet", "Design"], ["pink", "Pessoas"]];

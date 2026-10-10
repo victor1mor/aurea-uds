@@ -62,7 +62,7 @@ export type {ScreenProps, AureaScreenBackground, AureaScreenEdge} from "./screen
 export {Stack, Cluster, Grid, Card, Separator} from "./layout.js";
 export type {
   StackProps, ClusterProps, AureaStackAlign, AureaClusterAlign, AureaClusterJustify,
-  GridProps, CardProps, SeparatorProps, AureaCardVariant, AureaGridMin,
+  GridProps, CardProps, SeparatorProps, AureaCardVariant, AureaCardAccent, AureaGridMin,
 } from "./layout.js";
 
 export {Button, IconButton, LinkButton, ThemeToggle} from "./actions.js";

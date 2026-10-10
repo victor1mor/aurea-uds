@@ -45,6 +45,7 @@
   --radius-control:999px;
   --radius-full:var(--radius-control);
   --border-width:1px;
+  --accent-width:4px;
   --focus-width:2px;
   --focus-offset:2px;
   --opacity-disabled:0.5;
@@ -313,7 +314,7 @@
   --warning-foreground:#242424;
   --warning-hover:#de590b;
 }
-[data-brand="lory"][data-theme="dark"]{
+[data-brand="lory"][data-theme="dark"],[data-brand="lory"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
   --foreground:oklch(0.96 0.006 250);
   --foreground-strong:oklch(1 0 0);
@@ -376,7 +377,7 @@
   --danger-bg:oklch(0.34 0.09 25);
   --info-bg:oklch(0.32 0.06 235);
 }
-[data-brand="lory"][data-theme="light"]{
+[data-brand="lory"][data-theme="light"],[data-brand="lory"] [data-theme="light"]{
   --background:oklch(0.984 0.004 70);
   --foreground:oklch(0.24 0.022 250);
   --foreground-strong:oklch(0.16 0.02 250);
@@ -1921,6 +1922,22 @@ img,svg { display:block; }
 .card-interactive:hover { transform:translateY(-2px); border-color:var(--border-strong); background:var(--surface-2); }
 .card-selected { border-color:var(--primary-outline); box-shadow:inset 0 0 0 1px var(--primary-outline); }
 .card-danger { border-color:color-mix(in srgb,var(--danger-400) 50%,var(--border)); background:var(--danger-bg); }
+/* MT-01 (10/10/2026, ADR-0063): o cartão `contrast` traz `data-theme="dark"` no próprio elemento —
+   o fundo, a letra e todo filho já saem do tema escuro. Falta só a linha em volta: no claro, nenhuma
+   (o cartão escuro já se separa da tela, 13,3:1); no escuro, o amarelo, com a borda de sempre (1).
+   O "está num pedaço escuro?" é o do ANCESTRAL, com a guarda do GAR-05: o atributo do próprio
+   cartão não conta, e uma faixa clara dentro da página escura não ganha o contorno. */
+.card-contrast { border-color:transparent; }
+[data-theme="dark"] .card-contrast:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { border-color:var(--primary); }
+/* MT-02 (10/10/2026, ADR-0063): o traço no topo, `--accent-width` (4), na cor CHEIA do tom e igual
+   nos dois temas — a exceção que a ADR-0063 abriu na ADR-0061 para enfeite. O navegador desenha a
+   borda grossa do topo afinando na curva do canto, até a de 1 dos lados. `.card.card-accent` tem a
+   força de duas classes e vem depois: o escolhido, o de perigo e o contorno do `contrast` mudam os
+   outros lados, e o topo continua o traço. */
+.card.card-accent { border-top:var(--accent-width) solid var(--card-accent); }
+.card-accent-brand { --card-accent:var(--primary); } .card-accent-success { --card-accent:var(--success); }
+.card-accent-info { --card-accent:var(--info); } .card-accent-warning { --card-accent:var(--warning); }
+.card-accent-danger { --card-accent:var(--destructive); }
 .card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px; }
 .card-title { margin:0; font-size:var(--text-sm); font-weight:var(--weight-medium); } .card-subtitle { margin:3px 0 0; color:var(--muted-foreground); font-size:var(--text-sm); }
 

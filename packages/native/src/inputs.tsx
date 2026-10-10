@@ -50,7 +50,7 @@ import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
-import {useAureaStrings, useAureaTokens, usePeleSobreAMarca, ForaDaMarca} from "./theme.js";
+import {useAureaStrings, useAureaTokens, useTokensDoApp, usePeleSobreAMarca, ForaDaMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 export type AureaFieldSize = "sm" | "md" | "lg";
@@ -1230,6 +1230,9 @@ export function Select({
 }: SelectProps) {
   const t = useAureaTokens();
   const s = folha(t);
+  // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
+  const tf = useTokensDoApp();
+  const sf = folha(tf);
   const peleDaMarca = usePeleSobreAMarca();
   const campo = useCampo();
   const tam = size ?? campo?.size ?? "md";
@@ -1270,9 +1273,9 @@ export function Select({
              navigationBarTranslucent onRequestClose={() => setAberto(false)}>
         {/* O toque fora fecha — é o que a pessoa espera de uma folha, e o `onRequestClose` acima
             é o BOTÃO VOLTAR do Android, que sem isso deixaria a folha presa. */}
-        <View style={s.fundoDaLista}>
+        <View style={sf.fundoDaLista}>
           {/* 🔴 O FUNDO TOCÁVEL É IRMÃO, NÃO ANCESTRAL — ver o comentário abaixo. */}
-          <Pressable style={s.fundoDeToque} onPress={() => setAberto(false)} accessible={false} />
+          <Pressable style={sf.fundoDeToque} onPress={() => setAberto(false)} accessible={false} />
           {/* E4 (25/09/2026): a lista NÃO reivindica mais o toque. O `onStartShouldSetResponder`
               que morava aqui (conserto de 09/09) ficou redundante em 10/09, quando o fundo tocável
               virou IRMÃO da folha — o toque na lista não tem o fundo no caminho, por construção.
@@ -1283,7 +1286,7 @@ export function Select({
               `apps/native-smoke` (50 itens, rolar até o último).
               E10: a borda de baixo é o `RecuoDaFolha` (`screen.tsx`), igual nas três folhas. O
               `SafeAreaView` da 0.11.0 não recuava dentro do `Modal` — a razão está lá. */}
-          <View style={s.lista}>
+          <View style={sf.lista}>
             <ScrollView>
               {items.map((it) => (
                 <Pressable
@@ -1292,7 +1295,7 @@ export function Select({
                   onPress={() => { onChange?.(it.value); setAberto(false); }}
                   accessibilityRole="menuitem"
                   {...estadoAcessivel({selected: it.value === value, disabled: !!it.disabled})}
-                  style={[s.opcao, it.disabled && s.desabilitado]}>
+                  style={[sf.opcao, it.disabled && sf.desabilitado]}>
                   <Text size="md" weight={it.value === value ? 600 : 400}>{it.label}</Text>
                 </Pressable>
               ))}
