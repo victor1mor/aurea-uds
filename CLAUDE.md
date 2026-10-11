@@ -95,6 +95,30 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   validada, não se inventa; só se cria medida e tamanho em componente exclusivo nosso. Recheio,
   altura, letra, linha e vão de peça que ela tem se leem no pacote dela e se escrevem com os
   tokens que dão o mesmo número. A identidade (seção 5: raio, cor, fonte) continua nossa.
+- **QUASE IDÊNTICA À REFERÊNCIA PRINCIPAL** (regra do Victor, 11/10/2026: *"tem que ser quase
+  idêntico [à referência], só add nossas características"*). A peça da Aurea é a peça da
+  referência principal — anatomia, partes, medidas, espaçamento, estados, comportamento, teclado,
+  onde cada coisa fica — e por cima dela só entra o que é da Aurea: o amarelo e as cores dos temas
+  (ADR-0061); os cantos (22 no cartão, 32 na folha de baixo, cápsula nos controles; nada quadrado);
+  a Atkinson Hyperlegible e o Phosphor; as densidades; nenhum degradê; e a acessibilidade de baixa
+  visão (contraste medido, toque de 44, foco visível). Divergir em qualquer outra coisa é pergunta
+  ao Victor, com o motivo.
+  - **O alcance, decidido pelo Victor em 11/10/2026:** vale para as peças E para o site da Aurea (o
+    site segue a documentação da referência, com a cara da Aurea). *"A questão é não colocar nomes
+    dos outros no projeto; aqui do desenvolvimento é livre"*: copiar o desenho é livre, e **copiar o
+    nome de COMPONENTE também** (`CloseButton`, `ColorSwatch`… podem ser os dela). O que não entra é
+    o nome da BIBLIOTECA dela (nem de nenhuma outra) escrito em qualquer coisa do projeto —
+    repositório, site, pacote, pedido de junção (seção 2, acima). Nomes de prop que a Aurea já
+    decidiu continuam (o `tone`, seção 11).
+- **Antes de desenhar ou mostrar uma peça que a referência tem** (lição de 11/10/2026, quando cinco
+  peças da prancha voltaram para correção): (1) abrir a PÁGINA DE EXEMPLOS dela — o pacote não traz
+  exemplos, e uma ficha antiga dizia "não tem" o que estava num exemplo; (2) ler o CSS publicado
+  dela e copiar anatomia e medidas; (3) medir o desenho contra isso no navegador antes de mostrar.
+- **Pesquisa, uma referência de cada vez** (ordem do Victor, 10/10/2026: *"busca massiva ao mesmo
+  tempo gasta token demais"*): primeiro o que já está anotado no documento de achados e os pacotes
+  já baixados; depois a referência principal; achou tudo, para. Só a peça que faltou segue para a
+  próxima da fila, em sequência, e para na primeira que tiver. Sem buscas em paralelo. Fora da fila,
+  só depois de a fila acabar.
 
 ---
 
@@ -145,6 +169,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.28.0` | Lote M: `share` no `Button` e no `IconButton` (GAR-14), `Image frame="phone"` (GAR-15), `--font-heading`, `--weight-extrabold`, a fonte 800 e `numeric` (GAR-16) — [ADR-0062](decisions/0062-compartilhar-moldura-e-numeros.md), pedido #61. **Publicada em 09/10/2026** (entre 19:24 e 19:30, Brasília), pelo terminal do Victor |
 | `0.29.0` | Lote N: `Card variant="contrast"` (o tema escuro dentro do cartão) e `Card accent` (o traço de 4 no topo, na cor cheia), web e nativo; a marca chega a um pedaço com tema próprio — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md), pedido #63. **Publicada em 10/10/2026** (entre 13:05 e 13:10, Brasília), pelo terminal do Victor |
 | `0.30.0` | A rodada 1 do mapa de rede: o `DependencyGraph` de cima para baixo, em camadas pelo `elkjs` (opcional), com ícone, selos, portas, a linha que diz o que é sem cor, enlaces juntos, minimapa, ir até, caminho, setas e exportar `.drawio`/PNG/SVG; o `Icon` da web aceita o desenho do app — [ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md), pedido #64. **Publicada em 10/10/2026** (por volta das 15:38, Brasília), pelo terminal do Victor |
+| `0.31.0` | A rodada 2 do mapa de rede: o modo de arrumar (`editable`), desfazer, as rotas do `elkjs` e o desvio (`@tisoap/react-flow-smart-edge`, opcional), rótulos que somem, contêiner que fecha, árvore e círculo, `visibleOnly` e `layoutWorker` — [ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md), pedido #65. **Publicada em 10/10/2026** (entre 20:25 e 20:29, Brasília), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -397,7 +422,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    acima das linhas e dos nós (`--graph-label-z`). ⚠ **A lição:** a bancada achou seis defeitos que os
    testes não pegavam (rótulo por baixo do contêiner, botão em cima da porta, clique que escolhia o nó,
    desvio jogado fora, caixa de contêiner na árvore, ícone da nuvem para fora — este, o Victor viu); cada
-   um ganhou o teste que reprova sem o conserto.
+   um ganhou o teste que reprova sem o conserto. **Publicada em 10/10/2026** (entre 20:25 e 20:29,
+   Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #65.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
@@ -536,8 +562,11 @@ no git.
   `paleta-adr0061.test.tsx` reprova.
 - Sem gradientes (nem funcionais).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
-- Proibido: a aparência de outro design system; caixas retangulares genéricas;
-  trocar paleta, raios, tipografia ou densidade sem autorização.
+- ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
+  é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
+  2, "quase idêntica"). Nome de componente igual ao dela é permitido. Continua proibido: o nome da
+  BIBLIOTECA de outro sistema escrito em qualquer coisa do projeto;
+  caixas retangulares genéricas; trocar paleta, raios, tipografia ou densidade sem autorização.
 - **Marca registrada de terceiro não entra** numa biblioteca Apache-2.0 (logos de
   outras empresas). O `Button` do nativo tem `leading`/`trailing` para o app pôr o desenho dele, e o slot **não tinge**
   o que recebe.
@@ -665,3 +694,50 @@ hoje `Header`).
 4. Fontes em pacote próprio, `@aurea-uds/fonts`.
 5. Gradientes substituídos. Não reintroduzir.
 6. Gestor: pnpm workspaces.
+
+## 11. Regras de trabalho que moravam só na memória das sessões (passadas para cá em 11/10/2026)
+
+Ordem do Victor, 11/10/2026: *"veja todas suas memórias e anote na do projeto"*. A memória de uma
+sessão não chega à outra; este arquivo chega. O que já estava nas seções acima não se repete aqui.
+
+**Começo de sessão e registro**
+- **Comece pelo bloco "PASSAGEM PARA A PRÓXIMA SESSÃO"**, no topo da fila do documento de achados (fora
+  do repositório, na pasta do Victor). Depois confira por comando: `git status -sb`, `gh pr list`,
+  `npm view @aurea-uds/react version`.
+- **Tudo se anota no documento de achados** — pedido, decisão, achado, com a prova. O Victor não cola
+  texto entre sessões; nunca entregar "texto para colar". No fim da resposta, dizer ONDE ficou escrito.
+- **Decisão dada é só registrar:** anotar e parar. Não emendar "baixo? instalo? guardo onde?".
+
+**Como a fila anda**
+- **Rodadas maiores** (ordem de 10/10/2026): juntar mais componentes em cada versão — construir é mais
+  rápido que validar e passar pela CI. O que cresce é o lote, nunca o atalho.
+- **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
+  Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
+- **O caminho até a `1.0`** (08 e 09/10/2026): terminar a fila do documento de achados → auditar a
+  referência principal peça a peça, com as variações, e adotar o jeito dela → a `1.0` só quando a
+  sessão disser que está pronta, com aprovação visual dele, e com mais duas marcas além de `aurea` e
+  `lory` → antes dela, uma auditoria rígida e independente de tudo, feita por quem não escreveu o código
+  (um agente sem o contexto da conversa, ou outra sessão aberta pelo Victor), consertada antes de sair.
+- **Sem versão paga por enquanto** (08/10/2026): não propor preço, plano pago ou venda sem pedido dele.
+  Pedido de quem é de fora é bem-vindo e entra na fila normal, sem prazo prometido; texto público sobre
+  suporte, leve e acolhedor.
+- **Mesmo nome de prop na web e no nativo** (06/10/2026, mantido em 11/10/2026): vale o do nativo
+  (`tone`, `appearance`); a web aceita o antigo como apelido. E `onPress` nos dois.
+- **Todo projeto deve lembrar a Apple** (06/10/2026); a referência principal é a nº 1.
+
+**Travas, pasta e autonomia**
+- **Trava (hook) que bloqueou: pare e peça o "pode".** Não contornar por outro caminho; só seguir o
+  caminho que a própria mensagem da trava indica quando ele não chega ao mesmo efeito proibido.
+  Remendo se declara com essa palavra.
+- **A pasta principal fica no `main`.** O terminal do Victor usa a mesma pasta
+  (`git pull`, `node scripts/publicar.mjs`): antes de mandar comando para ele, `git switch main`,
+  `git status -sb` igual ao `origin/main` e `dist/` montado. Trabalho de lote vai numa branch ou numa
+  cópia (worktree).
+- **Com o Victor ausente** (06/10/2026): decidir pelo padrão recomendado e seguir (commit, envio de
+  branch, pedido de junção, conserto da CI), anotando cada decisão. Continuam dele: juntar, publicar
+  no npm e aprovar aparência. Trava que bloquear: pular, anotar e seguir.
+- **Não arquivar conversas:** os arquivamentos automáticos da conta estão desligados por ordem dele
+  (ao fechar o pedido e por inatividade). Nunca religar; ao ligar junção automática num pedido,
+  conferir que o arquivamento ao fechar está desligado.
+- **As memórias de agosto e setembro** (da pasta antiga) são histórico, de antes da troca de fonte e
+  ícones: reconferir contra este arquivo e o código. Este arquivo e o código ganham da memória.

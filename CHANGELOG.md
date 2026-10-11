@@ -82,7 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.31.0] — 2026-10-10
 
-⏳ **Ainda não publicada.** A rodada 2 do mapa de rede — mexer no mapa —, dos pedidos de um app de
+✅ **Publicada em 10/10/2026, entre 20:25 e 20:29 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #65. A rodada 2 do mapa de rede — mexer no mapa —, dos pedidos de um app de
 topologia ([ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md)). As seis escolhas foram do Victor,
 depois de ver a referência principal (que não tem grafo), o mercado e as licenças (*"como recomendado,
 pode construir a rodada 2"*). **Versão nova porque entram props, uma dependência opcional, frases e dois
