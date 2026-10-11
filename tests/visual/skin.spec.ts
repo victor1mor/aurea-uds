@@ -439,11 +439,15 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // `renderToStaticMarkup` não monta portal: Dialog e Drawer saem com ZERO byte e os
     // outros quatro saem só com o gatilho. Medido em 07/08/2026, e é por isso que a
     // superfície entra escrita à mão, copiada da montagem real de overlays.tsx.
+    // 0.32.0: a anatomia da referência — o X (`CloseButton`) solto no canto, o ícone no círculo de 40
+    // em cima do título de 16, o corpo de 14/20 e o rodapé.
     h("div", {key: "dlg", className: "dialog"},
-      h("header", null, h("h2", null, "Confirm"),
-        h("button", {className: "btn btn-ghost btn-icon", "aria-label": "Close"}, "×")),
+      h(A.CloseButton, {className: "dialog-close"}),
+      h("header", {className: "dialog-header"},
+        h("span", {className: "dialog-icon dialog-icon-brand", "aria-hidden": "true"}, h(A.Icon, {name: "users"})),
+        h("h2", {className: "dialog-heading"}, "Confirm")),
       h("div", {className: "dialog-body"}, "Body of the dialog."),
-      h("footer", null, h(A.Button, null, "Cancel"))),
+      h("footer", {className: "dialog-footer"}, h(A.Button, null, "Cancel"))),
     h("div", {key: "dbk", className: "dialog-backdrop"}),
     // Toast (16/08/2026). Entra como MARCAÇÃO pelo mesmo motivo dos outros de portal, e mais
     // um: ele não é componente — nasce do `useToast()` e o viewport mora no AureaProvider.
@@ -452,11 +456,18 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // no core até hoje — o tipo publicado não pintava nada, e o check 18 não via porque classe
     // por template é o ponto cego dele. Emitir a classe é o que o teste de unidade cobra; que
     // ela tenha EFEITO só se mede aqui.
-    h("div", {key: "tst", className: "toast"},
-      h("div", {className: "toast-text"}, h("strong", null, "Saved"))),
+    // 0.32.0: a marcação nova (ícone, título, descrição), em fluxo (`position: relative`): fora da
+    // pilha do motor, os avisos absolutos se empilhariam no pé da página, por cima dos outros.
+    h("div", {key: "tst", className: "toast", style: {position: "relative"}},
+      h("div", {className: "toast-content"},
+        h("span", {className: "toast-indicator", "aria-hidden": "true"}, h(A.Icon, {name: "info"})),
+        h("div", {className: "toast-text"}, h("strong", {className: "toast-title"}, "Saved"),
+          h("p", {className: "toast-description"}, "Visible to the team.")))),
     ...(["info", "success", "warning", "danger"] as const).map(t =>
-      h("div", {key: `tst-${t}`, className: `toast toast-${t}`},
-        h("div", {className: "toast-text"}, h("strong", null, t)))),
+      h("div", {key: `tst-${t}`, className: `toast toast-${t}`, style: {position: "relative"}},
+        h("div", {className: "toast-content"},
+          h("span", {className: "toast-indicator", "aria-hidden": "true"}, h(A.Icon, {name: "info"})),
+          h("div", {className: "toast-text"}, h("strong", {className: "toast-title"}, t))))),
     // ConfirmDialog (M5): mesma marcação escrita à mão dos outros de portal. Ele reusa `.dialog`
     // e só acrescenta `.dialog-confirm` — a medição abaixo é justamente que ele NÃO virou uma
     // segunda superfície flutuante, e que o rodapé alinha ao fim com os dois botões.
@@ -484,15 +495,15 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.Button, {key: "bdis", disabled: true}, "Disabled"),
     h(A.Button, {key: "bine", "aria-disabled": true}, "Inert"),
     h("div", {key: "cfm", className: "dialog dialog-confirm"},
-      h("header", null, h("h2", null, "Delete this article?")),
+      h("header", {className: "dialog-header"}, h("h2", {className: "dialog-heading"}, "Delete this article?")),
       h("div", {className: "dialog-body"}, "This cannot be undone."),
-      h("footer", null, h(A.Button, {variant: "secondary"}, "Cancel"),
+      h("footer", {className: "dialog-footer"}, h(A.Button, {variant: "tertiary"}, "Cancel"),
         h(A.Button, {variant: "danger"}, "Delete"))),
     h("div", {key: "drw", className: "drawer drawer-right"},
-      h("header", null, h("h2", null, "Details"),
-        h("button", {className: "btn btn-ghost btn-icon", "aria-label": "Close"}, "×")),
-      "Body of the drawer."),
-    h("div", {key: "pop", className: "popover"}, h("strong", null, "Title"), "Popover body."),
+      h(A.CloseButton, {className: "dialog-close"}),
+      h("header", {className: "dialog-header"}, h("h2", {className: "dialog-heading"}, "Details")),
+      h("div", {className: "dialog-body"}, "Body of the drawer.")),
+    h("div", {key: "pop", className: "popover"}, h("strong", {className: "popover-title"}, "Title"), "Popover body."),
     h("div", {key: "ttp", className: "tooltip", role: "tooltip"}, "Short hint"),
     // SortableList (L3). Duas regras da pele são COMPORTAMENTO e não enfeite: `touch-action:none`
     // na alça (sem ela o navegador rola a página em vez de deixar arrastar, e o componente não
@@ -1372,9 +1383,15 @@ for (const theme of ["dark", "light"] as const) {
                      bordaAlerta: est(".alert-warning").borderTopColor},
             // Toast: a base e as quatro faces do tipo. Medir COR, não existência de regra — o
             // defeito de origem era exatamente uma classe emitida sem nada atrás.
-            toast: {baseFundo: est(".toast").backgroundColor, baseBorda: est(".toast").borderTopColor,
+            toast: {baseFundo: est(".toast").backgroundColor, baseTitulo: est(".toast .toast-title").color,
                     fundos: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t}`).backgroundColor),
-                    bordas: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t}`).borderTopColor)},
+                    titulos: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t} .toast-title`).color),
+                    icones: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t} .toast-indicator`).color),
+                    recheioV: parseFloat(est(".toast").paddingTop), recheioH: parseFloat(est(".toast").paddingLeft),
+                    raio: parseFloat(est(".toast").borderTopLeftRadius),
+                    tituloFs: parseFloat(est(".toast-title").fontSize), tituloLh: parseFloat(est(".toast-title").lineHeight),
+                    tituloPeso: est(".toast-title").fontWeight, descFs: parseFloat(est(".toast-description").fontSize),
+                    caixaIcone: caixa(".toast-indicator").width, icone: caixa(".toast-indicator .icon").width},
             badge: {display: est(".badge").display, raio: parseFloat(est(".badge").borderTopLeftRadius),
                     radiusControl: emPx("--radius-control"), alt: caixa(".badge").height,
                     entrelinha: est(".badge").lineHeight},
@@ -1704,6 +1721,15 @@ for (const theme of ["dark", "light"] as const) {
             // Os 6 de portal
             dialog: {raio: parseFloat(est(".dialog").borderTopLeftRadius), radiusCard: emPx("--radius-card"),
                      largura: caixa(".dialog").width, bg: est(".dialog").backgroundColor,
+                     recheio: parseFloat(est(".dialog").paddingTop),
+                     xTam: caixa(".dialog > .dialog-close").width,
+                     xTopo: caixa(".dialog > .dialog-close").top - caixa(".dialog").top,
+                     xFim: caixa(".dialog").right - caixa(".dialog > .dialog-close").right,
+                     icone: caixa(".dialog .dialog-icon").width, iconeRaio: parseFloat(est(".dialog .dialog-icon").borderTopLeftRadius),
+                     tituloFs: parseFloat(est(".dialog .dialog-heading").fontSize), tituloPeso: est(".dialog .dialog-heading").fontWeight,
+                     corpoFs: parseFloat(est(".dialog .dialog-body").fontSize), corpoLh: parseFloat(est(".dialog .dialog-body").lineHeight),
+                     corpoRola: est(".dialog .dialog-body").overflowY,
+                     iconeAoTitulo: caixa(".dialog .dialog-heading").top - caixa(".dialog .dialog-icon").bottom,
                      fundoPos: est(".dialog-backdrop").position,
                      fundoCobre: caixa(".dialog-backdrop").width >= window.innerWidth},
             paleta: {colunas: est(".command-item").gridTemplateColumns.split(" ").length,
@@ -1725,16 +1751,20 @@ for (const theme of ["dark", "light"] as const) {
                             radiusCard: emPx("--radius-card"),
                             largura: caixa(".dialog-confirm").width,
                             larguraDoDialog: caixa(".dialog").width,
-                            rodapeAlinha: est(".dialog-confirm>footer").justifyContent,
-                            rodapeGap: parseFloat(est(".dialog-confirm>footer").columnGap)},
+                            rodapeAlinha: est(".dialog-confirm>.dialog-footer").justifyContent,
+                            rodapeGap: parseFloat(est(".dialog-confirm>.dialog-footer").columnGap)},
             drawer: {pos: est(".drawer").position, alt: caixa(".drawer").height,
                      colaNaDireita: Math.round(caixa(".drawer").right) === window.innerWidth,
-                     bordaEsq: parseFloat(est(".drawer").borderLeftWidth)},
+                     bordaEsq: parseFloat(est(".drawer").borderLeftWidth),
+                     largura: caixa(".drawer").width,
+                     raioDentro: parseFloat(est(".drawer").borderTopLeftRadius), raioFora: parseFloat(est(".drawer").borderTopRightRadius)},
             popover: {raio: parseFloat(est(".popover").borderTopLeftRadius), radiusCard: emPx("--radius-card"),
-                      bg: est(".popover").backgroundColor, maxW: est(".popover").maxWidth},
+                      bg: est(".popover").backgroundColor, maxW: est(".popover").maxWidth,
+                      fs: parseFloat(est(".popover").fontSize), tituloPeso: est(".popover-title").fontWeight},
             tooltip: {raio: parseFloat(est(".tooltip").borderTopLeftRadius),
                       bg: est(".tooltip").backgroundColor, maxW: est(".tooltip").maxWidth,
-                      fs: parseFloat(est(".tooltip").fontSize), textSm: emPx("--text-sm", "font-size")},
+                      fs: parseFloat(est(".tooltip").fontSize), textSm: emPx("--text-sm", "font-size"),
+                      lh: parseFloat(est(".tooltip").lineHeight), recheio: parseFloat(est(".tooltip").paddingLeft)},
             // SortableList (L3). Aqui a pele carrega comportamento — ver o comentário no corpo.
             ordenavel: (() => {
               const solto = document.querySelector(".sortable-item:not([data-grabbed])")!;
@@ -2451,13 +2481,20 @@ for (const theme of ["dark", "light"] as const) {
       .not.toBe(e.alerta.bordaAlerta);
     // 26b. Toast: o tipo publicado tem de PINTAR. As quatro classes não existiam no core até
     // 16/08/2026 — `AureaToastType` prometia quatro faces e as quatro mediam igual à base.
-    expect(new Set(e.toast.bordas).size, "as quatro faces do toast têm de ter bordas DISTINTAS")
+    // 0.32.0, o aviso da referência: o tipo pinta o TÍTULO e o ÍCONE (quatro cores distintas, nenhuma
+    // a do título sem tipo), e o fundo é o mesmo de cartão nas cinco faces.
+    expect(new Set(e.toast.titulos).size, "as quatro faces do toast têm títulos de cores DISTINTAS")
       .toBe(4);
-    expect(e.toast.fundos.every(f => f !== e.toast.baseFundo),
-      "cada face do toast muda o fundo em relação à base — classe emitida sem regra é o defeito")
-      .toBe(true);
-    expect(e.toast.bordas.every(b => b !== e.toast.baseBorda),
-      "cada face do toast tinge a borda em relação à base").toBe(true);
+    expect(e.toast.titulos.every(c => c !== e.toast.baseTitulo),
+      "cada face muda a cor do título em relação à base — classe emitida sem regra é o defeito").toBe(true);
+    expect(e.toast.icones, "e o ícone anda junto com o título").toEqual(e.toast.titulos);
+    expect(e.toast.fundos.every(f => f === e.toast.baseFundo),
+      "o fundo NÃO é tingido pelo tipo (era, até a 0.31.0)").toBe(true);
+    expect([e.toast.recheioV, e.toast.recheioH], "recheio de 12 em cima e embaixo e 16 dos lados").toEqual([12, 16]);
+    expect(e.toast.raio, "canto de card").toBe(e.dialog.radiusCard);
+    expect([e.toast.tituloFs, e.toast.tituloLh, e.toast.tituloPeso], "título 14/20 peso médio").toEqual([14, 20, "500"]);
+    expect(e.toast.descFs, "descrição de 14").toBe(14);
+    expect([e.toast.caixaIcone, e.toast.icone], "o ícone de 16 numa caixa de 24").toEqual([24, 16]);
     expect(e.badge.raio, "o Badge é pill: --radius-control").toBe(e.badge.radiusControl);
     expect(e.badge.entrelinha, "o Badge fixa line-height (achado A2: ele media duas alturas)")
       .not.toBe("normal");
@@ -2728,6 +2765,15 @@ for (const theme of ["dark", "light"] as const) {
       .not.toBe("rgba(0, 0, 0, 0)");
     expect(e.dialog.fundoPos, "o fundo do Dialog é fixed").toBe("fixed");
     expect(e.dialog.fundoCobre, "e cobre a janela inteira").toBe(true);
+    // 0.32.0, a anatomia da referência, lida no CSS publicado dela.
+    expect(e.dialog.recheio, "recheio de 24").toBe(24);
+    expect([e.dialog.xTam, Math.round(e.dialog.xTopo), Math.round(e.dialog.xFim)],
+      "o X é o CloseButton de 24, a 16 do topo e do fim").toEqual([24, 16, 16]);
+    expect([e.dialog.icone, e.dialog.iconeRaio >= 20], "o ícone num círculo de 40").toEqual([40, true]);
+    expect(Math.round(e.dialog.iconeAoTitulo), "12 entre o círculo e o título").toBe(12);
+    expect([e.dialog.tituloFs, e.dialog.tituloPeso], "o título de 16, peso médio").toEqual([16, "500"]);
+    expect([e.dialog.corpoFs, e.dialog.corpoLh], "o corpo de 14/20").toEqual([14, 20]);
+    expect(e.dialog.corpoRola, "é o corpo que rola, e não a janela inteira").toBe("auto");
     // ConfirmDialog: a regra é que ele NÃO é uma segunda superfície. Mesmo raio de card, e mais
     // ESTREITO que o Dialog — uma frase e dois botões não pedem a largura dele. O rodapé alinha ao fim
     // porque a ordem é cancelar → agir, e é onde as quatro referências batem.
@@ -2897,6 +2943,13 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.drawer.pos, "o Drawer é fixed").toBe("fixed");
     expect(e.drawer.colaNaDireita, "e cola na borda direita — é o que o torna gaveta").toBe(true);
     expect(e.drawer.bordaEsq, "com borda no lado que dá para o conteúdo").toBeGreaterThan(0);
+    // 0.32.0: a lateral da referência — 384 de 640 para cima (a página mede mais que isso) — com o
+    // canto 22 da Aurea do lado de dentro, e reta no lado da tela.
+    expect(e.drawer.largura, "a lateral tem 384").toBe(384);
+    expect([e.drawer.raioDentro, e.drawer.raioFora], "22 do lado de dentro, reta do lado da tela")
+      .toEqual([e.dialog.radiusCard, 0]);
+    expect([e.popover.fs, e.popover.tituloPeso], "o popover lê a 14, com o título em peso médio").toEqual([14, "500"]);
+    expect([e.tooltip.recheio, e.tooltip.fs, e.tooltip.lh], "a dica: recheio 8, letra 12/16").toEqual([8, 12, 16]);
     expect(e.popover.raio, "o Popover é superfície flutuante").toBe(e.popover.radiusCard);
     expect(e.popover.maxW, "e tem largura máxima, senão acompanha o gatilho").not.toBe("none");
     expect(e.tooltip.maxW, "a Tooltip tem largura máxima — é um rótulo, não um parágrafo")

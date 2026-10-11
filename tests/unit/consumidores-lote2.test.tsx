@@ -123,16 +123,18 @@ describe("B-03 e C-07 · Dialog", () => {
     wrap(<Dialog open title="Relatório" size="xl" onClose={() => {}}>x</Dialog>);
     expect(screen.getByRole("dialog")).toHaveClass("dialog", "dialog-xl");
     expect(regra(".dialog-xl")).toContain("var(--breakpoint-lg)");
-    // as quatro da referência: 20, 24, 28 (o padrão, na própria .dialog) e 32rem
-    expect(regra(".dialog-xs")).toContain("min(20rem,");
-    expect(regra(".dialog-sm")).toContain("min(24rem,");
-    expect(regra(".dialog-lg")).toContain("min(32rem,");
+    // as quatro da referência: 20, 24, 28 (o padrão, na própria .dialog) e 32rem. Desde a 0.32.0 a
+    // largura é uma variável (`--dialog-w`), e a conta com a margem da tela mora uma vez só na `.dialog`.
+    expect(regra(".dialog-xs")).toContain("--dialog-w:20rem");
+    expect(regra(".dialog-sm")).toContain("--dialog-w:24rem");
+    expect(regra(".dialog-lg")).toContain("--dialog-w:32rem");
   });
 
   // ⚠ A mudança que não é acréscimo: o padrão era 560 e passou a 448, por decisão do Victor.
   test("o padrão é o md da referência, 448 — e o ConfirmDialog continua mais estreito", () => {
-    expect(css).toMatch(/\.dialog \{ position:fixed;[^}]*width:min\(28rem,/);
-    expect(regra(".dialog-confirm")).toContain("min(420px,");
+    expect(css).toMatch(/\.dialog \{[^}]*--dialog-w:28rem;[^}]*inline-size:min\(var\(--dialog-w\),/);
+    // 26.25rem = 420
+    expect(regra(".dialog-confirm")).toContain("--dialog-w:26.25rem");
   });
 
   test("dismissible={false}: Esc não fecha e o X fica desativado", async () => {

@@ -2870,40 +2870,131 @@ img,svg { display:block; }
 .icon-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
 .icon-tile { min-height:86px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:12px; padding:13px; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--secondary); color:var(--muted-foreground); cursor:pointer; text-align:start; transition:transform var(--duration-fast) var(--ease-standard),border-color var(--duration-fast),color var(--duration-fast); }
 @media (hover:hover) and (pointer:fine) { .icon-tile:hover { color:var(--foreground); border-color:var(--primary); transform:translateY(-1px); } } .icon-tile:focus-visible { color:var(--foreground); border-color:var(--primary); } .icon-tile span { overflow:hidden; max-width:100%; text-overflow:ellipsis; white-space:nowrap; font:11px var(--font-code); }
-.dialog-backdrop { position:fixed; inset:0; z-index:var(--z-modal); background:var(--overlay); backdrop-filter:blur(5px); }
-.dialog { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:var(--z-modal); width:min(28rem,calc(100vw - 40px)); max-height:calc(100vh - 40px); overflow:auto; padding:24px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
+/* JANELAS (0.32.0): o Dialog, o ConfirmDialog e o Drawer com a anatomia da referência, lida no CSS
+   PUBLICADO dela — recheio de 24; o X a 16 do topo e do fim; o cabeçalho em coluna (o ícone num círculo
+   de 40 em cima, 12 até o título de 16, peso médio); o corpo de 14/20 esmaecido, que é o que rola; 8
+   entre o cabeçalho e o corpo e 20 antes do rodapé; o rodapé ao fim, com 8 entre os botões. Da tela, a
+   janela guarda 16 no celular e 40 de 640 para cima. Entra crescendo de 0,95 a 1 e sai encolhendo, como
+   a dela. A borda continua (a dela é só sombra no claro): baixa visão, como nas outras janelas.
+   O que já rolava (a janela inteira) passou para o corpo — a ficha prometia isso desde sempre. */
+.dialog-backdrop { position:fixed; inset:0; z-index:var(--z-modal); background:var(--overlay); backdrop-filter:blur(5px); transition:opacity var(--duration-slow) var(--ease-standard); }
+.dialog-backdrop[data-starting-style],.dialog-backdrop[data-ending-style] { opacity:0; }
+.dialog-backdrop[data-ending-style] { transition-duration:var(--duration-fast); }
+.dialog { --dialog-margin:var(--space-4); --dialog-w:28rem; position:fixed; inset-inline:0; top:50%; translate:0 -50%; z-index:var(--z-modal); display:flex; flex-direction:column; inline-size:min(var(--dialog-w),calc(100vw - 2 * var(--dialog-margin))); max-block-size:calc(100dvh - 2 * var(--dialog-margin)); margin-inline:auto; padding:var(--space-6); border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); outline:none; transition:opacity var(--duration-slow) var(--ease-standard),scale var(--duration-slow) var(--ease-standard); }
+.dialog[data-starting-style] { opacity:0; scale:1.05; }
+.dialog[data-ending-style] { opacity:0; scale:.95; transition-duration:var(--duration-fast); }
+@media (min-width:640px) { .dialog { --dialog-margin:var(--space-10); } }
+/* `placement` (o dela): `auto` senta a janela EMBAIXO no celular, onde o polegar alcança, e no meio de
+   640 para cima. Sem o atributo (a marcação pura), a janela fica no meio, como sempre ficou. */
+.dialog[data-placement="top"] { top:var(--dialog-margin); translate:none; }
+.dialog[data-placement="bottom"] { top:auto; bottom:var(--dialog-margin); translate:none; }
+@media (max-width:639.98px) { .dialog[data-placement="auto"] { top:auto; bottom:var(--dialog-margin); translate:none; } }
 /* size (B-03), decisão do Victor em 24/09/2026: as quatro larguras da referência — as do
    pacote de estilos dela, 20/24/28/32rem = 320/384/448/512 — mais 1024
    (o token --breakpoint-lg) e a tela cheia. O padrão passou a ser o `md` da referência, 448; até a 0.8.14
    era 560. */
-.dialog-xs { width:min(20rem,calc(100vw - 40px)); }
-.dialog-sm { width:min(24rem,calc(100vw - 40px)); }
-.dialog-lg { width:min(32rem,calc(100vw - 40px)); }
-.dialog-xl { width:min(var(--breakpoint-lg),calc(100vw - 40px)); }
-.dialog-full { width:calc(100vw - 40px); height:calc(100vh - 40px); }
-.dialog>header,.drawer>header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px; } .dialog-body { display:grid; gap:14px; }
+.dialog-xs { --dialog-w:20rem; }
+.dialog-sm { --dialog-w:24rem; }
+.dialog-lg { --dialog-w:32rem; }
+.dialog-xl { --dialog-w:var(--breakpoint-lg); }
+.dialog-full { --dialog-w:100vw; block-size:calc(100dvh - 2 * var(--dialog-margin)); }
+/* As partes, as mesmas no Dialog, no ConfirmDialog e no Drawer. O corpo guarda, dos lados e em cima e
+   embaixo, o espaço do anel de foco (a largura e o afastamento dele): é ele que rola, e o que rola corta
+   o anel de quem encosta na borda — a referência faz a mesma conta, com 3. */
+/* 16 da borda de FORA, como a dela (que não tem borda): o absoluto conta de dentro da borda de 1. */
+.dialog-close { position:absolute; inset-block-start:calc(var(--space-4) - var(--border-width)); inset-inline-end:calc(var(--space-4) - var(--border-width)); }
+.dialog-header { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3); }
+.dialog-heading { margin:0; padding-inline-end:var(--space-6); color:var(--popover-foreground); font-size:var(--text-base); font-weight:var(--weight-medium); line-height:var(--leading-normal); text-wrap:balance; }
+.dialog-icon { display:inline-flex; flex:none; align-items:center; justify-content:center; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full); background:var(--secondary); color:var(--foreground); }
+.dialog-icon > .icon { --step-icon:var(--icon-md); }
+.dialog-icon-brand { background:color-mix(in oklab,var(--primary) 10%,var(--secondary)); color:var(--primary-emphasis); }
+.dialog-icon-info { background:var(--info-bg); color:var(--info-400); }
+.dialog-icon-success { background:var(--success-bg); color:var(--success-400); }
+.dialog-icon-warning { background:var(--warning-bg); color:var(--warning-400); }
+.dialog-icon-danger { background:var(--danger-bg); color:var(--danger-400); }
+.dialog-body { --dialog-ring:calc(var(--focus-width) + var(--focus-offset)); display:grid; gap:14px; flex:1 1 auto; min-block-size:0; overflow-y:auto; overscroll-behavior:contain; margin-inline:calc(-1 * var(--dialog-ring)); padding:var(--dialog-ring); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
+.dialog-header + .dialog-body { margin-block-start:calc(var(--space-2) - var(--dialog-ring)); }
+.dialog-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:var(--space-2); }
+.dialog-body + .dialog-footer { margin-block-start:calc(var(--space-5) - var(--dialog-ring)); }
+.dialog-header + .dialog-footer { margin-block-start:var(--space-5); }
 /* O ConfirmDialog é o MESMO `.dialog` — não nasce uma segunda superfície flutuante, que seria a
    pele divergindo como divergiu entre `.table-wrap` e `.table-region`. O que muda é a caixa mais
-   estreita (uma frase e dois botões não precisam da largura do Dialog) e o rodapé alinhado ao fim, com o
-   destrutivo por último: a ordem visual é cancelar → agir, e é onde as quatro referências batem. */
-.dialog-confirm { width:min(420px,calc(100vw - 40px)); }
-.dialog-confirm>footer { display:flex; justify-content:flex-end; gap:var(--space-2); margin-block-start:var(--space-5); }
+   estreita (uma frase e dois botões não precisam da largura do Dialog), com o destrutivo por último no
+   rodapé: a ordem visual é cancelar → agir, e é onde as quatro referências batem. */
+.dialog-confirm { --dialog-w:26.25rem; }
 .drawer-wrap { position:fixed; inset:0; z-index:var(--z-drawer); display:none; background:var(--overlay); } .drawer-wrap.open { display:block; }
-.drawer-backdrop { position:fixed; inset:0; z-index:var(--z-drawer); background:var(--overlay); }
-.drawer { position:fixed; top:0; bottom:0; z-index:var(--z-drawer); width:min(480px,92vw); padding:24px; background:var(--surface-1); box-shadow:var(--shadow-lg); overflow:auto; } .drawer-right { right:0; border-left:1px solid var(--border); } .drawer-left { left:0; border-right:1px solid var(--border); }
-.toast-stack { position:fixed; inset-inline-end:22px; bottom:22px; z-index:var(--z-toast); width:min(360px,calc(100vw - 44px)); display:flex; flex-direction:column; gap:10px; } .toast { display:flex; align-items:center; gap:11px; padding:14px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-md); transition:opacity .28s var(--ease-standard), transform .28s var(--ease-emphasized); } .toast>:first-child { flex:1; min-width:0; } .toast-text { display:flex; flex-direction:column; gap:2px; min-width:0; } .toast[data-starting-style],.toast[data-ending-style] { opacity:0; transform:translateY(12px); }
-/* As quatro faces do `AureaToastType`, escritas em 16/08/2026 — elas NÃO existiam, e o tipo
-   publicado não pintava nada. O `system.tsx` emite `toast-${t.type}` desde sempre; classe por
-   template é o ponto CEGO do check 18, que só enxerga classe literal — o mesmo defeito que o
-   `log-${level}` já tinha tido. Varridos os 18 padrões dinâmicos do pacote React: este era o
-   ÚNICO órfão (o `ev-${e.id}` do agents.tsx é `id`, não classe).
-   Mecanismo REUSADO do .alert/.banner, não inventado: borda tingida + fundo semântico. Vêm
-   DEPOIS da base `.toast` de propósito — mesma especificidade, a última regra vence, e é a
-   armadilha que o comentário do .banner já registrava lá em cima. */
-.toast-info { border-color:color-mix(in srgb,var(--info-400) 38%,var(--border)); background:var(--info-bg); }
-.toast-success { border-color:color-mix(in srgb,var(--success-400) 38%,var(--border)); background:var(--success-bg); }
-.toast-warning { border-color:color-mix(in srgb,var(--warning-400) 38%,var(--border)); background:var(--warning-bg); }
-.toast-danger { border-color:color-mix(in srgb,var(--danger-400) 38%,var(--border)); background:var(--danger-bg); }
+/* DRAWER (0.32.0): a gaveta da referência nos quatro lados, no motor de gaveta do Base UI, que arrasta
+   para fechar. Laterais de 320 (384 de 640 para cima, nunca mais que 85% da tela); a de cima e a de
+   baixo, a largura toda e até 85% da altura, com a alça de 36 × 4. Os cantos são da Aurea: 22 do lado de
+   dentro nas laterais (a dela é quadrada) e o 32 da folha na de cima e na de baixo (ADR-0058). Enquanto
+   o dedo arrasta, a gaveta segue o dedo (as variáveis do motor) e o fundo clareia junto. */
+.drawer-backdrop { position:fixed; inset:0; z-index:var(--z-drawer); background:var(--overlay); opacity:calc(1 - var(--drawer-swipe-progress,0)); transition:opacity var(--duration-slow) var(--ease-emphasized); }
+.drawer-backdrop[data-starting-style],.drawer-backdrop[data-ending-style] { opacity:0; }
+.drawer-backdrop[data-swiping] { transition-duration:0ms; }
+.drawer-viewport { position:fixed; inset:0; z-index:var(--z-drawer); }
+.drawer { position:fixed; z-index:var(--z-drawer); display:flex; flex-direction:column; padding:var(--space-6); border:0 solid var(--border); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); outline:none; overscroll-behavior:contain; transition:transform var(--duration-slow) var(--ease-emphasized); }
+.drawer[data-swiping] { transition-duration:0ms; }
+.drawer[data-ending-style] { transition-duration:calc(var(--drawer-swipe-strength,1) * var(--duration-slow)); }
+.drawer-left,.drawer-right { top:0; bottom:0; inline-size:min(20rem,85vw); transform:translateX(var(--drawer-swipe-movement-x,0px)); }
+@media (min-width:640px) { .drawer-left,.drawer-right { inline-size:min(24rem,85vw); } }
+.drawer-right { right:0; border-left-width:var(--border-width); border-radius:var(--radius-card) 0 0 var(--radius-card); }
+.drawer-left { left:0; border-right-width:var(--border-width); border-radius:0 var(--radius-card) var(--radius-card) 0; }
+.drawer-top,.drawer-bottom { left:0; right:0; max-block-size:85dvh; transform:translateY(var(--drawer-swipe-movement-y,0px)); }
+.drawer-bottom { bottom:0; border-top-width:var(--border-width); border-radius:var(--radius-sheet) var(--radius-sheet) 0 0; padding-block-end:calc(var(--space-6) + env(safe-area-inset-bottom,0px)); }
+.drawer-top { top:0; border-bottom-width:var(--border-width); border-radius:0 0 var(--radius-sheet) var(--radius-sheet); padding-block:calc(var(--space-6) + env(safe-area-inset-top,0px)) var(--space-2); }
+.drawer-right[data-starting-style],.drawer-right[data-ending-style] { transform:translateX(100%); }
+.drawer-left[data-starting-style],.drawer-left[data-ending-style] { transform:translateX(-100%); }
+.drawer-bottom[data-starting-style],.drawer-bottom[data-ending-style] { transform:translateY(100%); }
+.drawer-top[data-starting-style],.drawer-top[data-ending-style] { transform:translateY(-100%); }
+.drawer-handle { flex:none; align-self:center; inline-size:calc(var(--space-8) + var(--space-1)); block-size:var(--space-1); border-radius:var(--radius-full); background:var(--border-strong); }
+.drawer-bottom > .drawer-handle { margin-block-end:var(--space-2); }
+.drawer-top > .drawer-handle { margin-block-start:var(--space-2); }
+/* TOAST (0.32.0): o aviso da referência, lido no CSS e no código publicados dela, sobre a pilha do
+   motor (as variáveis `--toast-*` do Base UI). Os avisos moram todos no mesmo lugar: o da frente
+   inteiro, os de trás 12 acima e 5% menores a cada um, com o conteúdo apagado; passar o mouse ou o
+   foco abre a pilha, com 12 entre eles. Embaixo no meio por padrão (o dela), 460 de largura de 640
+   para cima e a tela menos 16 de cada lado no celular. `--toast-dir` é o sentido da pilha: para cima
+   quando ela mora embaixo, para baixo quando mora em cima. */
+.toast-stack { --toast-gap:var(--space-3); --toast-dir:-1; position:fixed; z-index:var(--z-toast); inset-block-end:var(--space-4); inset-inline:0; inline-size:min(28.75rem,calc(100vw - 2 * var(--space-4))); margin-inline:auto; outline:none; }
+.toast-stack:is(.toast-stack-top,.toast-stack-top-start,.toast-stack-top-end) { --toast-dir:1; inset-block:var(--space-4) auto; }
+.toast-stack:is(.toast-stack-bottom-start,.toast-stack-top-start) { inset-inline:var(--space-4) auto; margin-inline:0; }
+.toast-stack:is(.toast-stack-bottom-end,.toast-stack-top-end) { inset-inline:auto var(--space-4); margin-inline:0; }
+.toast { position:absolute; inset-inline:0; bottom:0; z-index:calc(1000 - var(--toast-index,0)); box-sizing:border-box; block-size:var(--toast-frontmost-height,var(--toast-height,auto)); padding:var(--space-3) var(--space-4); border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-md); user-select:none; transform-origin:50% 100%; transform:translateX(var(--toast-swipe-movement-x,0px)) translateY(calc(var(--toast-swipe-movement-y,0px) + var(--toast-dir) * var(--toast-index,0) * var(--toast-gap))) scale(calc(1 - var(--toast-index,0) * .05)); transition:transform var(--duration-slow) var(--ease-emphasized),opacity var(--duration-slow) var(--ease-standard),block-size var(--duration-fast) var(--ease-standard); }
+.toast-stack:is(.toast-stack-top,.toast-stack-top-start,.toast-stack-top-end) .toast { top:0; bottom:auto; transform-origin:50% 0; }
+.toast[data-expanded] { block-size:var(--toast-height,auto); transform:translateX(var(--toast-swipe-movement-x,0px)) translateY(calc(var(--toast-swipe-movement-y,0px) + var(--toast-dir) * (var(--toast-offset-y,0px) + var(--toast-index,0) * var(--toast-gap)))); }
+.toast[data-starting-style],.toast[data-ending-style] { transform:translateY(calc(-1 * var(--toast-dir) * 150%)); }
+.toast[data-limited],.toast[data-ending-style] { opacity:0; }
+.toast[data-ending-style][data-swipe-direction="right"] { transform:translateX(calc(var(--toast-swipe-movement-x,0px) + 150%)); }
+.toast[data-ending-style][data-swipe-direction="up"] { transform:translateY(calc(var(--toast-swipe-movement-y,0px) - 150%)); }
+.toast[data-ending-style][data-swipe-direction="down"] { transform:translateY(calc(var(--toast-swipe-movement-y,0px) + 150%)); }
+/* A ponte entre dois avisos abertos: sem ela, o mouse que passa pelo vão de 12 sai da pilha e ela fecha. */
+.toast::after { content:""; position:absolute; inset-inline:0; top:100%; block-size:calc(var(--toast-gap) + var(--border-width)); }
+.toast-stack:is(.toast-stack-top,.toast-stack-top-start,.toast-stack-top-end) .toast::after { top:auto; bottom:100%; }
+.toast-content { display:flex; align-items:flex-start; gap:calc(var(--space-1) + var(--space-05)); block-size:100%; overflow:hidden; transition:opacity var(--duration-base) var(--ease-standard); }
+.toast-content[data-behind] { opacity:0; }
+.toast-content[data-expanded] { opacity:1; }
+.toast-indicator { display:inline-flex; flex:none; align-items:center; justify-content:center; inline-size:var(--space-6); block-size:var(--space-6); color:var(--popover-foreground); }
+.toast-indicator > .icon { --step-icon:var(--icon-sm); }
+.toast-text { display:flex; flex:1 1 0; flex-direction:column; align-self:center; min-inline-size:0; }
+.toast-title { color:var(--popover-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--space-5); }
+.toast-description { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
+.toast-action { flex:none; align-self:center; }
+/* No celular a ação desce para baixo do texto, alinhada com ele — como a dela. */
+@media (max-width:639.98px) { .toast-content { flex-wrap:wrap; } .toast-text { flex-basis:calc(100% - var(--space-6) - var(--space-1) - var(--space-05)); } .toast-action { margin-inline-start:calc(var(--space-6) + var(--space-1) + var(--space-05)); } }
+/* As faces do tipo (desde 16/08/2026 elas pintam; o check 18 não enxerga classe por template). Em
+   0.32.0 o tipo deixou de tingir o fundo e a borda: pinta o ícone e o título, no par `-400` da
+   ADR-0061, como o aviso da referência. */
+.toast-info :is(.toast-indicator,.toast-title) { color:var(--info-400); }
+.toast-success :is(.toast-indicator,.toast-title) { color:var(--success-400); }
+.toast-warning :is(.toast-indicator,.toast-title) { color:var(--warning-400); }
+.toast-danger :is(.toast-indicator,.toast-title) { color:var(--danger-400); }
+/* O X do aviso: o `CloseButton` de 20 com o X de 12, na quina, com borda. Aparece com o mouse ou o
+   foco no aviso da frente (ou na pilha aberta); no toque, fica sempre à vista. */
+.toast-close.close-button { position:absolute; inset-block-start:calc(-1 * var(--space-1)); inset-inline-end:calc(-1 * var(--space-1)); inline-size:var(--space-5); block-size:var(--space-5); border:var(--border-width) solid var(--border); background:var(--popover); opacity:0; pointer-events:none; transition:opacity var(--duration-fast) var(--ease-standard); }
+.toast-close.close-button .icon { --step-icon:var(--space-3); }
+:is(.toast[data-expanded],.toast:has(> .toast-content:not([data-behind]))):is(:hover,:focus-within) > .toast-close { opacity:1; pointer-events:auto; }
+@media (hover:none) { :is(.toast[data-expanded],.toast:has(> .toast-content:not([data-behind]))) > .toast-close { opacity:1; pointer-events:auto; } }
+@media (pointer:coarse) { .toast-close.close-button::before { inset:calc((var(--space-5) - var(--target-min)) / 2); } }
 /* GAR-14 (0.28.0): o aviso do `Button share`, preso ao botão — "Link copiado", ou o erro com o link à
    mostra. Tem a medida do botão (a altura, o recheio da regra de cima, a letra e a cápsula) e a pele
    do aviso de sempre. O ícone é desenho de máscara, como a seta do `KPI`: a mesma marcação serve ao
@@ -2928,8 +3019,27 @@ img,svg { display:block; }
 .command-overlay { position:fixed; inset:0; z-index:var(--z-modal); display:grid; place-items:start center; padding:var(--space-16) var(--space-5) var(--space-5); background:var(--overlay); backdrop-filter:blur(5px); }
 .command-palette { display:grid; gap:var(--space-2); width:min(680px,100%); max-height:100%; overflow:auto; padding:var(--space-4); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
 /* Camadas flutuantes (Base UI): tooltip, popover, menu. z-modal para funcionarem sobre diálogos; empilhamento mútuo pela ordem do portal no DOM. */
-.tooltip { z-index:var(--z-modal); max-width:260px; padding:6px 10px; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--surface-inset); color:var(--foreground); font-size:var(--text-xs); line-height:var(--leading-normal); box-shadow:var(--shadow-md); }
-.popover { z-index:var(--z-modal); min-width:220px; max-width:min(360px,calc(100vw - 32px)); padding:16px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); display:grid; gap:10px; }
+/* 0.32.0, a dica da referência: recheio de 8, letra de 12/16, até 320 de largura, o fundo das janelas
+   (era o fundo afundado), e a palavra longa quebra onde precisar. O canto continua o 10 da Aurea (o
+   dela é 12, que a nossa escala não tem). Entra crescendo de 0,9 e sai encolhendo; pelo teclado, e
+   quando passa de uma dica para a vizinha, entra sem animação (`data-instant` do motor). */
+.tooltip { z-index:var(--z-modal); max-inline-size:min(20rem,calc(100vw - 2 * var(--space-4))); padding:var(--space-2); border:var(--border-width) solid var(--border); border-radius:var(--radius-md); background:var(--popover); color:var(--popover-foreground); font-size:var(--text-xs); line-height:var(--space-4); overflow-wrap:anywhere; box-shadow:var(--shadow-md); transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
+.tooltip[data-starting-style],.tooltip[data-ending-style],.popover[data-starting-style],.popover[data-ending-style] { opacity:0; scale:.9; }
+.tooltip[data-ending-style],.popover[data-ending-style] { transition-duration:var(--duration-fast); }
+.tooltip[data-instant] { transition:none; }
+.popover { z-index:var(--z-modal); min-width:220px; max-width:min(360px,calc(100vw - 32px)); padding:16px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); font-size:var(--text-sm); box-shadow:var(--shadow-lg); display:grid; gap:10px; transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
+.popover-title { font-weight:var(--weight-medium); }
+/* A SETA (0.32.0): o desenho é nosso — uma curva de 12 × 6 —, com o fundo da janela e a linha da borda,
+   e ela entra 1 por cima da borda da janela para a linha dar a volta sem emenda. O motor põe a seta
+   no ponto certo do lado; aqui só se diz em que lado ela encosta e para onde aponta. */
+.overlay-arrow { display:flex; inline-size:var(--space-3); block-size:var(--space-3); }
+.overlay-arrow > svg { inline-size:100%; block-size:100%; overflow:visible; }
+.overlay-arrow-fill { fill:var(--popover); }
+.overlay-arrow-line { stroke:var(--border); stroke-width:var(--border-width); }
+.overlay-arrow[data-side="top"] { top:calc(100% - var(--border-width)); }
+.overlay-arrow[data-side="bottom"] { bottom:calc(100% - var(--border-width)); rotate:180deg; }
+.overlay-arrow[data-side="left"] { left:calc(100% - var(--border-width)); rotate:-90deg; }
+.overlay-arrow[data-side="right"] { right:calc(100% - var(--border-width)); rotate:90deg; }
 /* `--menu-px` existe porque o RÓTULO DE GRUPO tem de alinhar com o texto dos itens, e o número
    estava escrito duas vezes. Uma relação entre duas regras não se mantém repetindo a constante:
    quem mudar o recuo do item mudaria o alinhamento do rótulo sem perceber. */
@@ -3684,12 +3794,12 @@ button.graph-node-body { cursor:pointer; }
    Ou seja: o par padrão cobre Firefox e Chrome e ainda não cobre o Safari da maioria; o caminho
    webkit cobre Safari e Chrome. Juntos cobrem os três, e onde os dois valem o padrão ganha por
    vir depois. Só cor e espessura — nada de desenhar seta ou canto. */
-.carousel-track,.code-block,.combobox-popup,.command-palette,.dialog,.drawer,.log-stream,.notification-list,.sidebar,.table-region,.table-wrap,.toc {
+.carousel-track,.code-block,.combobox-popup,.command-palette,.dialog,.dialog-body,.drawer,.log-stream,.notification-list,.sidebar,.table-region,.table-wrap,.toc {
   scrollbar-width:thin; scrollbar-color:var(--border-strong) transparent;
 }
-.carousel-track::-webkit-scrollbar,.code-block::-webkit-scrollbar,.combobox-popup::-webkit-scrollbar,.command-palette::-webkit-scrollbar,.dialog::-webkit-scrollbar,.drawer::-webkit-scrollbar,.log-stream::-webkit-scrollbar,.notification-list::-webkit-scrollbar,.sidebar::-webkit-scrollbar,.table-region::-webkit-scrollbar,.table-wrap::-webkit-scrollbar,.toc::-webkit-scrollbar { inline-size:var(--space-2); block-size:var(--space-2); }
-.carousel-track::-webkit-scrollbar-track,.code-block::-webkit-scrollbar-track,.combobox-popup::-webkit-scrollbar-track,.command-palette::-webkit-scrollbar-track,.dialog::-webkit-scrollbar-track,.drawer::-webkit-scrollbar-track,.log-stream::-webkit-scrollbar-track,.notification-list::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track,.table-region::-webkit-scrollbar-track,.table-wrap::-webkit-scrollbar-track,.toc::-webkit-scrollbar-track { background:transparent; }
-.carousel-track::-webkit-scrollbar-thumb,.code-block::-webkit-scrollbar-thumb,.combobox-popup::-webkit-scrollbar-thumb,.command-palette::-webkit-scrollbar-thumb,.dialog::-webkit-scrollbar-thumb,.drawer::-webkit-scrollbar-thumb,.log-stream::-webkit-scrollbar-thumb,.notification-list::-webkit-scrollbar-thumb,.sidebar::-webkit-scrollbar-thumb,.table-region::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb,.toc::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:var(--radius-control); }
+.carousel-track::-webkit-scrollbar,.code-block::-webkit-scrollbar,.combobox-popup::-webkit-scrollbar,.command-palette::-webkit-scrollbar,.dialog::-webkit-scrollbar,.dialog-body::-webkit-scrollbar,.drawer::-webkit-scrollbar,.log-stream::-webkit-scrollbar,.notification-list::-webkit-scrollbar,.sidebar::-webkit-scrollbar,.table-region::-webkit-scrollbar,.table-wrap::-webkit-scrollbar,.toc::-webkit-scrollbar { inline-size:var(--space-2); block-size:var(--space-2); }
+.carousel-track::-webkit-scrollbar-track,.code-block::-webkit-scrollbar-track,.combobox-popup::-webkit-scrollbar-track,.command-palette::-webkit-scrollbar-track,.dialog::-webkit-scrollbar-track,.dialog-body::-webkit-scrollbar-track,.drawer::-webkit-scrollbar-track,.log-stream::-webkit-scrollbar-track,.notification-list::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track,.table-region::-webkit-scrollbar-track,.table-wrap::-webkit-scrollbar-track,.toc::-webkit-scrollbar-track { background:transparent; }
+.carousel-track::-webkit-scrollbar-thumb,.code-block::-webkit-scrollbar-thumb,.combobox-popup::-webkit-scrollbar-thumb,.command-palette::-webkit-scrollbar-thumb,.dialog::-webkit-scrollbar-thumb,.dialog-body::-webkit-scrollbar-thumb,.drawer::-webkit-scrollbar-thumb,.log-stream::-webkit-scrollbar-thumb,.notification-list::-webkit-scrollbar-thumb,.sidebar::-webkit-scrollbar-thumb,.table-region::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb,.toc::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:var(--radius-control); }
 
 /* ========================================================================== */
 /* 99. EIXO RESPONSIVO — a infraestrutura do G-AXIS-04                        */

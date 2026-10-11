@@ -94,7 +94,41 @@
       "type": "() => void",
       "default": "—",
       "description": "REQUIRED. Fires on the cancel button and on Escape. A click outside does NOT close this dialog — that is the difference from Dialog, and it is why an accidental click cannot answer for the user."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "An icon in a 40 circle above the title, as in the reference library's alert dialog."
+    },
+    {
+      "name": "iconTone",
+      "type": "\"neutral\" | \"brand\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "default": "destructive ? \"danger\" : \"neutral\"",
+      "description": "The circle's colour. Left out, it follows destructive."
+    },
+    {
+      "name": "placement",
+      "type": "\"auto\" | \"center\" | \"top\" | \"bottom\"",
+      "default": "\"auto\"",
+      "description": "Where it sits; auto is at the bottom on a phone and in the middle from 640 up."
     }
   ],
-  "variants": []
+  "variants": [],
+  "axes": {
+    "placement": [
+      "auto",
+      "bottom",
+      "center",
+      "top"
+    ],
+    "iconTone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  }
 }

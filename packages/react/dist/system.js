@@ -22,7 +22,7 @@ import { cx, StringsContext, SpriteContext, PortalContext, ThemeContext, Density
 // Sem ela nada muda: o Base UI monta no `document.body`, que é o que permite empilhar e
 // posicionar sem herdar `overflow` nem `transform`. Com ela, o consumidor aponta para um nó
 // dentro do landmark dele e o conteúdo do popup deixa de ficar fora de qualquer marco.
-export function AureaProvider({ children, strings, direction = "ltr", spriteUrl = defaultSpriteUrl, portalContainer, theme, defaultTheme, onThemeChange, density, defaultDensity, onDensityChange }) {
+export function AureaProvider({ children, strings, direction = "ltr", spriteUrl = defaultSpriteUrl, portalContainer, theme, defaultTheme, onThemeChange, density, defaultDensity, onDensityChange, toastPlacement = "bottom" }) {
     const value = React.useMemo(() => strings ? { ...defaultStrings, ...strings } : defaultStrings, [strings]);
     const temaCtx = useEixoDoDocumento("theme", theme, defaultTheme, onThemeChange);
     const densCtx = useEixoDoDocumento("density", density, defaultDensity, onDensityChange);
@@ -43,7 +43,7 @@ export function AureaProvider({ children, strings, direction = "ltr", spriteUrl 
     // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
     // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
     const deFora = !React.useContext(DentroDoProviderContext);
-    return _jsx(DentroDoProviderContext.Provider, { value: true, children: _jsx(StringsContext.Provider, { value: value, children: _jsx(SpriteContext.Provider, { value: spriteUrl, children: _jsx(PortalContext.Provider, { value: portalContainer, children: _jsx(ThemeContext.Provider, { value: tema, children: _jsx(DensityContext.Provider, { value: dens, children: _jsx(DirectionProvider, { direction: direction, children: _jsx(BaseToast.Provider, { children: _jsxs(BaseTooltip.Provider, { children: [children, _jsx(AureaToastViewport, {}), deFora && _jsx(BaseToast.Provider, { toastManager: avisosAncorados, children: _jsx(AvisosAncorados, {}) })] }) }) }) }) }) }) }) }) });
+    return _jsx(DentroDoProviderContext.Provider, { value: true, children: _jsx(StringsContext.Provider, { value: value, children: _jsx(SpriteContext.Provider, { value: spriteUrl, children: _jsx(PortalContext.Provider, { value: portalContainer, children: _jsx(ThemeContext.Provider, { value: tema, children: _jsx(DensityContext.Provider, { value: dens, children: _jsx(DirectionProvider, { direction: direction, children: _jsx(BaseToast.Provider, { timeout: TEMPO_DO_AVISO, children: _jsxs(BaseTooltip.Provider, { children: [children, _jsx(AureaToastViewport, { placement: toastPlacement }), deFora && _jsx(BaseToast.Provider, { toastManager: avisosAncorados, children: _jsx(AvisosAncorados, {}) })] }) }) }) }) }) }) }) }) });
 }
 /** Um eixo de apresentação que vive no `<html>`: tema ou densidade. A conta é a mesma para os
  *  dois, e escrevê-la duas vezes seria o defeito do §21 cometido dentro do próprio conserto
@@ -147,14 +147,20 @@ export function useAureaTheme() {
         },
     }), [theme, density, dentroDeProvider, ctxTema, ctxDens]);
 }
-function AureaToastList() {
+const TEMPO_DO_AVISO = 4000;
+const ICONE_DO_AVISO = { info: "info", success: "check-circle", warning: "warning", danger: "x-circle" };
+function AureaToastList({ placement }) {
     const { toasts } = BaseToast.useToastManager();
     const s = useAureaStrings();
-    return _jsx(_Fragment, { children: toasts.map(t => (_jsxs(BaseToast.Root, { toast: t, className: cx("toast", t.type && `toast-${t.type}`), children: [_jsxs("div", { className: "toast-text", children: [_jsx(BaseToast.Title, { render: _jsx("strong", {}) }), t.description ? _jsx(BaseToast.Description, { className: "muted" }) : null] }), _jsx(BaseToast.Close, { className: "btn btn-ghost btn-icon btn-sm", "aria-label": s.dismissNotification, children: "\u00D7" })] }, t.id))) });
+    const arrasto = [placement.startsWith("top") ? "up" : "down", "right"];
+    return _jsx(_Fragment, { children: toasts.map(t => {
+            const tipo = t.type === "error" ? "danger" : t.type;
+            return _jsxs(BaseToast.Root, { toast: t, swipeDirection: arrasto, className: cx("toast", tipo && `toast-${tipo}`), children: [_jsxs(BaseToast.Content, { className: "toast-content", children: [_jsx("span", { className: "toast-indicator", "aria-hidden": "true", children: tipo === "loading" ? _jsx("span", { className: "spinner" }) : _jsx(Icon, { name: ICONE_DO_AVISO[tipo ?? ""] ?? "info" }) }), _jsxs("div", { className: "toast-text", children: [_jsx(BaseToast.Title, { className: "toast-title", render: _jsx("strong", {}) }), t.description ? _jsx(BaseToast.Description, { className: "toast-description" }) : null] }), t.actionProps ? _jsx(BaseToast.Action, { className: "btn btn-tertiary btn-sm toast-action" }) : null] }), _jsx(BaseToast.Close, { className: "btn btn-tertiary close-button toast-close", "aria-label": s.dismissNotification, children: _jsx("span", { children: _jsx(Icon, { name: "x", weight: "bold" }) }) })] }, t.id);
+        }) });
 }
-function AureaToastViewport() {
+function AureaToastViewport({ placement }) {
     const portal = usePortalContainer();
-    return _jsx(BaseToast.Portal, { container: portal, children: _jsx(BaseToast.Viewport, { className: "toast-stack", children: _jsx(AureaToastList, {}) }) });
+    return _jsx(BaseToast.Portal, { container: portal, children: _jsx(BaseToast.Viewport, { className: cx("toast-stack", `toast-stack-${placement}`), children: _jsx(AureaToastList, { placement: placement }) }) });
 }
 // GAR-14 (0.28.0) · OS AVISOS PRESOS A UM BOTÃO ("Link copiado", do `Button share`). A documentação do
 // motor manda o aviso ancorado viver num gerenciador SEPARADO do da pilha — senão ele entra na conta

@@ -582,7 +582,9 @@ export default {
   open={open}
   onClose={() => setOpen(false)}
   title="Delete project"
-  footer={<><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+  icon="trash"
+  iconTone="danger"
+  footer={<><Button variant="tertiary" onClick={() => setOpen(false)}>Cancel</Button>
     <Button variant="danger" onClick={remove}>Delete</Button></>}
 >
   This removes every component and token in it. It cannot be undone.
@@ -622,6 +624,7 @@ export default {
   description="It leaves the site immediately, and this cannot be undone."
   confirmLabel="Delete"
   destructive
+  icon="trash"
   onConfirm={() => { remove(); setOpen(false); }}
   onCancel={() => setOpen(false)}
 />`,
@@ -631,10 +634,13 @@ export default {
     note: PORTAL,
     code: `<Button onClick={() => setOpen(true)}>Edit member</Button>
 
-<Drawer open={open} onClose={() => setOpen(false)} title="Edit member" side="right">
+<Drawer open={open} onClose={() => setOpen(false)} title="Edit member" side="right"
+  footer={<Button variant="primary">Save</Button>}>
   <Field label="Name"><Input defaultValue="Analyst" /></Field>
-  <Button variant="primary">Save</Button>
-</Drawer>`,
+</Drawer>
+
+// On a phone, the panel that rises from the bottom (swipe down to close):
+<Drawer open={open} onClose={() => setOpen(false)} title="Filters" side="bottom">…</Drawer>`,
     render: () => h(A.Button, null, "Edit member"),
   },
   DropdownMenu: {
@@ -882,6 +888,7 @@ export default {
     note: PORTAL,
     code: `<Popover
   title="Filters"
+  arrow
   trigger={<Button variant="outline">Filters</Button>}
 >
   <Checkbox label="Only mine" />
@@ -1345,7 +1352,16 @@ const container = usePortalContainer();`,
 
 <Button onClick={() => toast.add({title: "Saved", type: "success"})}>
   Save
-</Button>`,
+</Button>
+
+// with a line under the title and an action
+toast.add({title: "Conversation deleted", actionProps: {children: "Undo", onClick: restore}});
+
+// a promise: spins while it runs, then success or error
+toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not send"});
+
+// where the stack lives (the default is the bottom middle)
+<AureaProvider toastPlacement="top-end">…</AureaProvider>`,
     note: "The toast list is mounted by AureaProvider and lives in a portal, which a static page cannot render. The button is real; the toast needs the runtime.",
     render: () => h(A.Button, null, "Save"),
   },
@@ -1487,6 +1503,11 @@ const container = usePortalContainer();`,
     note: PORTAL,
     code: `<Tooltip content="Copy to clipboard" side="top">
   <IconButton icon="copy" label="Copy" />
+</Tooltip>
+
+// with the arrow; on plain text the trigger becomes focusable by itself
+<Tooltip content="Monthly recurring revenue" arrow>
+  <span>MRR</span>
 </Tooltip>`,
     render: () => h(A.Tooltip, {content: "Copy to clipboard"},
       h(A.IconButton, {icon: "copy", label: "Copy"})),

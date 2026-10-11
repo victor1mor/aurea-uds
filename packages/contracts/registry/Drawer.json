@@ -10,14 +10,17 @@
     "native": "planned"
   },
   "variants": [
+    "bottom",
     "left",
-    "right"
+    "right",
+    "top"
   ],
   "variantProp": "side",
   "sizes": [],
   "states": [
     "open",
-    "closed"
+    "closed",
+    "swiping"
   ],
   "tokens": [
     "--border",
@@ -35,9 +38,7 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": [
-      "x"
-    ]
+    "icons": []
   },
   "related": {
     "components": [
@@ -68,6 +69,12 @@
       "description": "The panel body."
     },
     {
+      "name": "footer",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The actions row, at the end, with 8 between the buttons. Left out, there is no footer."
+    },
+    {
       "name": "onClose",
       "type": "() => void",
       "default": "—",
@@ -75,9 +82,9 @@
     },
     {
       "name": "side",
-      "type": "left | right",
+      "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
       "default": "right",
-      "description": "Which edge it slides from. It is a physical side, not a logical one: a drawer anchored to the writing direction would move when the language changes, which is not what a navigation panel should do."
+      "description": "The edge it slides from — all four, as in the reference library (WEB-06: the panel that rises from the bottom on a phone). left/right are PHYSICAL sides. The side ones are 320 wide on a phone and 384 from 640 up (never more than 85% of the screen), with the 22 corner on the inner side; top and bottom take the full width and up to 85% of the height, with the 32 sheet corner and the 36 × 4 handle. A swipe toward its edge closes it (the engine's drawer). The default stays right: the reference opens at the bottom, and moving it for whoever already uses it would open the drawer somewhere else without warning."
     }
   ]
 }

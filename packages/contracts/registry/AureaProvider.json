@@ -33,6 +33,14 @@
     "theme": [
       "dark",
       "light"
+    ],
+    "toastPlacement": [
+      "bottom",
+      "bottom-end",
+      "bottom-start",
+      "top",
+      "top-end",
+      "top-start"
     ]
   },
   "states": [],
@@ -53,7 +61,13 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": []
+    "icons": [
+      "check-circle",
+      "info",
+      "warning",
+      "x",
+      "x-circle"
+    ]
   },
   "related": {
     "components": [
@@ -130,6 +144,12 @@
       "type": "(density: AureaDensity) => void",
       "default": "—",
       "description": "Fires with the new density."
+    },
+    {
+      "name": "toastPlacement",
+      "type": "\"top\" | \"top-start\" | \"top-end\" | \"bottom\" | \"bottom-start\" | \"bottom-end\"",
+      "default": "\"bottom\"",
+      "description": "Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default; up to 0.31.0 they sat at the bottom end. 460 wide from 640 up; the screen minus 16 on each side on a phone."
     }
   ]
 }

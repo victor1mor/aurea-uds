@@ -139,6 +139,17 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   "Nesta página" de uma documentação, de 1280 para cima; abaixo, depois do conteúdo (DOC-01).
 - **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
   (`shortcuts`, ligada; DOC-07).
+- **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
+  `iconTone` (`neutral`, `brand`, `info`, `success`, `warning`, `danger`; no `ConfirmDialog`, segue o
+  `destructive`) e `placement` (`auto`, `center`, `top`, `bottom`).
+- **`Drawer`**: os quatro lados (`side="top"` e `side="bottom"` — o painel que sobe de baixo no celular,
+  WEB-06), `footer`, e arrastar para fechar no sentido do lado (o motor de gaveta do Base UI). A de cima
+  e a de baixo têm a alça.
+- **`Tooltip`**: `arrow`, `delay` e `closeDelay`. **`Popover`**: `arrow`. A seta é opcional, como a da
+  referência; o desenho é nosso.
+- **`AureaProvider toastPlacement`**: onde a pilha de avisos mora (`bottom`, o padrão; `bottom-start`,
+  `bottom-end`, `top`, `top-start`, `top-end`). E o aviso aceita `actionProps` (a ação, um botão pequeno
+  terciário) e mostra o `loading` do `promise()` do motor girando.
 
 ### Mudou
 
@@ -188,6 +199,27 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   `onPageChange` deixa de ser obrigatório (com `href`, a página pode só navegar).
 - **`CommandPalette`**: a lista mora DENTRO da caixa da paleta (era um popup embaixo do campo), e o
   primeiro resultado já vem marcado.
+- ⚠ **`Dialog` e `ConfirmDialog`** com a anatomia da referência: o X é o `CloseButton`, solto no canto
+  a 16 da borda (era um botão fantasma no fim do cabeçalho); o título tem 16, peso médio; o corpo é de
+  14/20 na cor esmaecida, e é ELE que rola — o cabeçalho e o rodapé ficam (rolava a janela inteira); 8
+  entre o cabeçalho e o corpo, 20 antes do rodapé, 8 entre os botões. **No celular a janela senta
+  embaixo** (`placement="auto"`, o padrão dela; `center` volta ao meio); da tela, ela guarda 16 no
+  celular e 40 de 640 para cima (era 20 sempre). Entra crescendo e sai encolhendo.
+- ⚠ **`Drawer`**: as laterais têm 320 no celular e 384 de 640 para cima, nunca mais que 85% da tela
+  (era até 480); o canto 22 do lado de dentro; o fundo das janelas (era o da superfície 1); o conteúdo
+  vai num corpo de 14 esmaecido que rola, e o X é o `CloseButton` no canto. O lado padrão continua a
+  direita (o dela é embaixo).
+- **`Tooltip`**: recheio de 8 (era 6 e 10), letra 12/16, até 320 de largura (era 260), o fundo das
+  janelas (era o afundado); abre com 1,5 s de mouse parado e fecha 0,5 s depois de sair (era 0,6 s e na
+  hora — o tempo da referência); pelo teclado, na hora. E o gatilho que não é focável sozinho (um
+  `<span>`, um `Badge`) passa a receber o foco, como botão — a dica sobre um texto abria só com o
+  `tabIndex` do app (C-11).
+- **`Popover`**: a letra de 14, e o título em peso médio (era negrito).
+- ⚠ **O aviso (`useToast`)** é o da referência: os avisos se EMPILHAM no mesmo lugar — o da frente
+  inteiro, os de trás espiando, e passar o mouse ou o foco abre a pilha (era uma coluna); embaixo no meio
+  (era no canto de baixo, no fim); 460 de largura (era 360); somem em 4 s (eram 5); três à vista. O tipo
+  deixou de tingir o fundo e a borda: pinta o ícone (que o aviso não tinha) e o título. O X é o
+  `CloseButton` de 20 na quina, que aparece com o mouse ou o foco (no toque, sempre); era um "×" de texto.
 
 ### Corrigido
 

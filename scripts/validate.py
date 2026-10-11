@@ -2315,6 +2315,12 @@ NAO_E_ESTADO = {
     # MODO escolhido pelo app (`editable`, booleano) — nenhum é condição em que o componente se encontra.
     "shape": "é DADO do nó (`shape` do item do DependencyGraph: a nuvem), não estado",
     "editable": "é MODO (`editable` do DependencyGraph, booleano), não estado",
+    # As janelas da 0.32.0: o lugar da janela é EIXO (`placement` do Dialog e do ConfirmDialog, em
+    # `axes`); o sentido do arrasto é DADO do gesto (o motor diz para que lado o dedo foi); e o
+    # `instant` da dica é o MODO da transição (ela abriu sem animar, pelo teclado ou vinda da vizinha).
+    "placement": "é EIXO (`placement` do Dialog e do ConfirmDialog, em `axes`), não estado",
+    "swipe-direction": "é o SENTIDO do gesto de arrastar (dado do motor), não estado",
+    "instant": "é o MODO da transição da dica (abriu sem animar), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}

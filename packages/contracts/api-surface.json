@@ -6,8 +6,8 @@
     "modulos": 37,
     "componentes": 134,
     "hooks": 9,
-    "aliasesLiterais": 93,
-    "propsDistintas": 328
+    "aliasesLiterais": 97,
+    "propsDistintas": 333
   },
   "aliases": {
     "ButtonVariant": {
@@ -2348,6 +2348,38 @@
         "full"
       ]
     },
+    "DialogPlacement": {
+      "module": "overlays",
+      "raw": "\"auto\" | \"center\" | \"top\" | \"bottom\"",
+      "union": [
+        "auto",
+        "center",
+        "top",
+        "bottom"
+      ]
+    },
+    "DialogIconTone": {
+      "module": "overlays",
+      "raw": "\"neutral\" | \"brand\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "neutral",
+        "brand",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ]
+    },
+    "DrawerSide": {
+      "module": "overlays",
+      "raw": "\"left\" | \"right\" | \"top\" | \"bottom\"",
+      "union": [
+        "left",
+        "right",
+        "top",
+        "bottom"
+      ]
+    },
     "AccessGateProps": {
       "module": "overlays",
       "raw": "{ allowed: boolean; children: ReactElement; } & ({ mode?: \"hide\"; fallback?: ReactNode; reason?: never; } | { mode: \"disable\"; reason: ReactNode; fallback?: never; })",
@@ -2444,6 +2476,18 @@
       "union": [
         "dark",
         "light"
+      ]
+    },
+    "ToastPlacement": {
+      "module": "system",
+      "raw": "\"top\" | \"top-start\" | \"top-end\" | \"bottom\" | \"bottom-start\" | \"bottom-end\"",
+      "union": [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end"
       ]
     },
     "IconSize": {
@@ -8308,6 +8352,36 @@
               "optional": false,
               "type": "() => void",
               "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "iconTone",
+              "optional": true,
+              "type": "DialogIconTone",
+              "values": [
+                "neutral",
+                "brand",
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "name": "placement",
+              "optional": true,
+              "type": "DialogPlacement",
+              "values": [
+                "auto",
+                "center",
+                "top",
+                "bottom"
+              ]
             }
           ]
         },
@@ -8395,6 +8469,36 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "iconTone",
+              "optional": true,
+              "type": "DialogIconTone",
+              "values": [
+                "neutral",
+                "brand",
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "name": "placement",
+              "optional": true,
+              "type": "DialogPlacement",
+              "values": [
+                "auto",
+                "center",
+                "top",
+                "bottom"
+              ]
             }
           ]
         },
@@ -8422,6 +8526,12 @@
               "values": null
             },
             {
+              "name": "footer",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
               "name": "onClose",
               "optional": false,
               "type": "() => void",
@@ -8430,10 +8540,12 @@
             {
               "name": "side",
               "optional": true,
-              "type": "\"left\" | \"right\"",
+              "type": "DrawerSide",
               "values": [
                 "left",
-                "right"
+                "right",
+                "top",
+                "bottom"
               ]
             }
           ]
@@ -8589,6 +8701,12 @@
                 "bottom",
                 "left"
               ]
+            },
+            {
+              "name": "arrow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -8619,6 +8737,24 @@
                 "bottom",
                 "left"
               ]
+            },
+            {
+              "name": "arrow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "delay",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "closeDelay",
+              "optional": true,
+              "type": "number",
+              "values": null
             }
           ]
         }
@@ -8794,6 +8930,19 @@
               "optional": true,
               "type": "(density: AureaDensity) => void",
               "values": null
+            },
+            {
+              "name": "toastPlacement",
+              "optional": true,
+              "type": "ToastPlacement",
+              "values": [
+                "top",
+                "top-start",
+                "top-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end"
+              ]
             }
           ]
         },

@@ -5,6 +5,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, { useRef } from "react";
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
+import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import { AlertDialog as BaseAlertDialog } from "@base-ui/react/alert-dialog";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
@@ -15,12 +16,17 @@ import { PreviewCard as BasePreviewCard } from "@base-ui/react/preview-card";
 import { cx, useAureaStrings, usePortalContainer } from "./internal.js";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { Icon } from "./system.js";
-import { Button } from "./actions.js";
-export function Dialog({ open, title, children, footer, onClose, size = "md", dismissible = true }) {
-    const s = useAureaStrings();
+import { Button, CloseButton } from "./actions.js";
+function IconeDaJanela({ icon, tone }) {
+    return _jsx("span", { className: cx("dialog-icon", `dialog-icon-${tone}`), "aria-hidden": "true", children: _jsx(Icon, { name: icon }) });
+}
+export function Dialog({ open, title, children, footer, onClose, size = "md", dismissible = true, icon, iconTone = "neutral", placement = "auto" }) {
     const portal = usePortalContainer();
+    // O X vem PRIMEIRO na ordem do documento, como o gatilho de fechar da referência: o motor foca o
+    // primeiro focável ao abrir, e era o X também quando ele morava no fim do cabeçalho (o título não é
+    // focável) — a ordem do Tab não muda.
     return _jsx(BaseDialog.Root, { open: open, disablePointerDismissal: !dismissible, onOpenChange: o => { if (!o && dismissible)
-            onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("dialog", size !== "md" && `dialog-${size}`), children: [_jsxs("header", { children: [_jsx(BaseDialog.Title, { render: _jsx("h2", {}), children: title }), _jsx(BaseDialog.Close, { className: "btn btn-ghost btn-icon", "aria-label": s.close, disabled: !dismissible, children: _jsx(Icon, { name: "x" }) })] }), _jsx("div", { className: "dialog-body", children: children }), footer && _jsx("footer", { children: footer })] })] }) });
+            onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("dialog", size !== "md" && `dialog-${size}`), "data-placement": placement, children: [_jsx(BaseDialog.Close, { render: _jsx(CloseButton, { className: "dialog-close", disabled: !dismissible }) }), _jsxs("header", { className: "dialog-header", children: [icon && _jsx(IconeDaJanela, { icon: icon, tone: iconTone }), _jsx(BaseDialog.Title, { render: _jsx("h2", {}), className: "dialog-heading", children: title })] }), _jsx("div", { className: "dialog-body", children: children }), footer && _jsx("footer", { className: "dialog-footer", children: footer })] })] }) });
 }
 // ConfirmDialog (M5): a decisão que não se fecha por engano. NÃO é um Dialog com dois botões —
 // é `role="alertdialog"`, e a diferença é de comportamento, não de aparência: o Base UI tira do
@@ -50,15 +56,23 @@ export function Dialog({ open, title, children, footer, onClose, size = "md", di
 // `description` é prop e não `children` porque ela é o nó de `aria-describedby`: o AlertDialog
 // só anuncia o que passa pelo `Description`. Como `children`, um consumidor poria um <div> no
 // meio e o leitor de tela perderia a frase que diz o que se perde.
-export function ConfirmDialog({ open, title, description, confirmLabel, cancelLabel, destructive, onConfirm, onCancel }) {
+//
+// 0.32.0: a anatomia do `Dialog` (a da referência), sem o X — a decisão não se fecha por engano. O
+// ícone é o círculo de 40 de lá; a cor dele segue o `destructive` quando quem usa não escolhe.
+export function ConfirmDialog({ open, title, description, confirmLabel, cancelLabel, destructive, onConfirm, onCancel, icon, iconTone, placement = "auto" }) {
     const s = useAureaStrings();
     const portal = usePortalContainer();
     const seguro = React.useRef(null);
     return _jsx(BaseAlertDialog.Root, { open: open, onOpenChange: o => { if (!o)
-            onCancel(); }, children: _jsxs(BaseAlertDialog.Portal, { container: portal, children: [_jsx(BaseAlertDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseAlertDialog.Popup, { className: "dialog dialog-confirm", initialFocus: seguro, children: [_jsx("header", { children: _jsx(BaseAlertDialog.Title, { render: _jsx("h2", {}), children: title }) }), _jsx(BaseAlertDialog.Description, { className: "dialog-body", children: description }), _jsxs("footer", { children: [_jsx(Button, { ref: seguro, variant: "tertiary", onClick: onCancel, children: cancelLabel ?? s.confirmCancel }), _jsx(Button, { variant: destructive ? "danger" : "primary", onClick: onConfirm, children: confirmLabel ?? s.confirmProceed })] })] })] }) });
+            onCancel(); }, children: _jsxs(BaseAlertDialog.Portal, { container: portal, children: [_jsx(BaseAlertDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseAlertDialog.Popup, { className: "dialog dialog-confirm", initialFocus: seguro, "data-placement": placement, children: [_jsxs("header", { className: "dialog-header", children: [icon && _jsx(IconeDaJanela, { icon: icon, tone: iconTone ?? (destructive ? "danger" : "neutral") }), _jsx(BaseAlertDialog.Title, { render: _jsx("h2", {}), className: "dialog-heading", children: title })] }), _jsx(BaseAlertDialog.Description, { className: "dialog-body", children: description }), _jsxs("footer", { className: "dialog-footer", children: [_jsx(Button, { ref: seguro, variant: "tertiary", onClick: onCancel, children: cancelLabel ?? s.confirmCancel }), _jsx(Button, { variant: destructive ? "danger" : "primary", onClick: onConfirm, children: confirmLabel ?? s.confirmProceed })] })] })] }) });
 }
-export function Drawer({ open, title, children, onClose, side = "right" }) { const s = useAureaStrings(); const portal = usePortalContainer(); return _jsx(BaseDialog.Root, { open: open, onOpenChange: o => { if (!o)
-        onClose(); }, children: _jsxs(BaseDialog.Portal, { container: portal, children: [_jsx(BaseDialog.Backdrop, { className: "drawer-backdrop" }), _jsxs(BaseDialog.Popup, { className: cx("drawer", `drawer-${side}`), children: [_jsxs("header", { children: [_jsx(BaseDialog.Title, { render: _jsx("h2", {}), children: title }), _jsx(BaseDialog.Close, { className: "btn btn-ghost btn-icon", "aria-label": s.close, children: _jsx(Icon, { name: "x" }) })] }), children] })] }) }); }
+const ARRASTO_DO_LADO = { left: "left", right: "right", top: "up", bottom: "down" };
+export function Drawer({ open, title, children, footer, onClose, side = "right" }) {
+    const portal = usePortalContainer();
+    const alca = _jsx("div", { className: "drawer-handle", "aria-hidden": "true" });
+    return _jsx(BaseDrawer.Root, { open: open, onOpenChange: o => { if (!o)
+            onClose(); }, swipeDirection: ARRASTO_DO_LADO[side], children: _jsxs(BaseDrawer.Portal, { container: portal, children: [_jsx(BaseDrawer.Backdrop, { className: "drawer-backdrop" }), _jsx(BaseDrawer.Viewport, { className: "drawer-viewport", children: _jsxs(BaseDrawer.Popup, { className: cx("drawer", `drawer-${side}`), children: [_jsx(BaseDrawer.Close, { render: _jsx(CloseButton, { className: "dialog-close" }) }), side === "bottom" && alca, _jsx("header", { className: "dialog-header", children: _jsx(BaseDrawer.Title, { render: _jsx("h2", {}), className: "dialog-heading", children: title }) }), _jsx(BaseDrawer.Content, { className: "dialog-body", children: children }), footer && _jsx("footer", { className: "dialog-footer", children: footer }), side === "top" && alca] }) })] }) });
+}
 export function AccessGate({ allowed, children, ...resto }) {
     if (allowed)
         return children;
@@ -72,8 +86,49 @@ export function AccessGate({ allowed, children, ...resto }) {
 // conteúdo da dica. Era tooltip visual, não acessível (padrão APG Tooltip).
 // O id aponta para um elemento que só existe quando aberto; referência pendente é ignorada
 // pela tecnologia assistiva, então não precisa acompanhar o estado.
-export function Tooltip({ children, content, side = "top" }) { const id = React.useId(); const triggerId = children.props.id; const portal = usePortalContainer(); return _jsxs(BaseTooltip.Root, { children: [_jsx(BaseTooltip.Trigger, { id: triggerId, render: children, "aria-describedby": id }), _jsx(BaseTooltip.Portal, { container: portal, children: _jsx(BaseTooltip.Positioner, { side: side, sideOffset: 8, children: _jsx(BaseTooltip.Popup, { id: id, role: "tooltip", className: "tooltip", children: content }) }) })] }); }
-export function Popover({ trigger, title, children, side = "bottom" }) { const portal = usePortalContainer(); return _jsxs(BasePopover.Root, { children: [_jsx(BasePopover.Trigger, { render: trigger }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: side, sideOffset: 8, children: _jsxs(BasePopover.Popup, { className: "popover", children: [title && _jsx(BasePopover.Title, { render: _jsx("strong", {}), children: title }), children] }) }) })] }); }
+//
+// 0.32.0, a dica e o popover da referência:
+//   • A SETA (`arrow`), desligada por padrão como lá. O desenho é nosso (uma curva de 12 × 6, sem a
+//     ponta afiada); ela tem o fundo da janela e a linha da borda, então a borda dá a volta nela.
+//     A dica com seta se afasta 8 do gatilho (`--space-2`: os 6 da seta e 2 de folga); sem
+//     seta, 4 (`--space-1`) — a referência usa 7 e 3, que não são da nossa escala. O popover fica
+//     sempre a 8, com ou sem seta, como o dela.
+//   • O ATRASO da dica é o dela: 1,5 s para abrir e 0,5 s para fechar (o motor abre em 0,6 s e
+//     fecha na hora). Pelo teclado ela abre já, e depois da primeira as vizinhas abrem sem esperar
+//     — é o grupo do `Tooltip.Provider` do `AureaProvider`.
+//   • O GATILHO FOCÁVEL (C-11): a dica em cima de um texto só abria pelo teclado se o app pusesse
+//     `tabIndex`. A referência resolve no gatilho, que sai focável como botão; aqui também — o que
+//     não é focável sozinho (um `<span>`, um selo) ganha `tabIndex=0` e `role="button"`. Na
+//     marcação, quando o filho é uma tag; e, quando é um componente, no nó de verdade, depois de
+//     montado, porque só o DOM sabe o que o componente desenhou.
+const ATRASO_DA_DICA = 1500, ATRASO_PARA_FECHAR_A_DICA = 500;
+function Seta() { return _jsxs("svg", { viewBox: "0 0 12 12", "aria-hidden": "true", children: [_jsx("path", { className: "overlay-arrow-fill", d: "M0 0Q6 12 12 0Z" }), _jsx("path", { className: "overlay-arrow-line", d: "M0 0Q6 12 12 0", fill: "none" })] }); }
+const FOCAVEIS_POR_NATUREZA = new Set(["button", "input", "select", "textarea", "summary", "iframe", "audio", "video"]);
+function focavelNaMarcacao(el) {
+    if (typeof el.type !== "string")
+        return undefined;
+    const p = el.props;
+    if (p.tabIndex !== undefined)
+        return true;
+    if (el.type === "a" || el.type === "area")
+        return p.href !== undefined;
+    return FOCAVEIS_POR_NATUREZA.has(el.type);
+}
+function garantirFoco(no) {
+    if (!no || no.tabIndex >= 0 || no.hasAttribute("tabindex"))
+        return;
+    no.tabIndex = 0;
+    if (!no.hasAttribute("role"))
+        no.setAttribute("role", "button");
+}
+export function Tooltip({ children, content, side = "top", arrow = false, delay = ATRASO_DA_DICA, closeDelay = ATRASO_PARA_FECHAR_A_DICA }) {
+    const id = React.useId();
+    const triggerId = children.props.id;
+    const portal = usePortalContainer();
+    const foco = focavelNaMarcacao(children) === false ? { tabIndex: 0, role: "button" } : {};
+    return _jsxs(BaseTooltip.Root, { children: [_jsx(BaseTooltip.Trigger, { ref: garantirFoco, id: triggerId, render: children, "aria-describedby": id, delay: delay, closeDelay: closeDelay, ...foco }), _jsx(BaseTooltip.Portal, { container: portal, children: _jsx(BaseTooltip.Positioner, { side: side, sideOffset: arrow ? 8 : 4, children: _jsxs(BaseTooltip.Popup, { id: id, role: "tooltip", className: "tooltip", children: [arrow && _jsx(BaseTooltip.Arrow, { className: "overlay-arrow", children: _jsx(Seta, {}) }), content] }) }) })] });
+}
+export function Popover({ trigger, title, children, side = "bottom", arrow = false }) { const portal = usePortalContainer(); return _jsxs(BasePopover.Root, { children: [_jsx(BasePopover.Trigger, { render: trigger }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: side, sideOffset: 8, children: _jsxs(BasePopover.Popup, { className: "popover", children: [arrow && _jsx(BasePopover.Arrow, { className: "overlay-arrow", children: _jsx(Seta, {}) }), title && _jsx(BasePopover.Title, { render: _jsx("strong", {}), className: "popover-title", children: title }), children] }) }) })] }); }
 // HoverCard (Lote 1 do BUILDING.md). Não é Tooltip nem Popover, e a diferença é de propósito,
 // não de aparência: a Tooltip é um RÓTULO curto (`role="tooltip"`, some ao mover o mouse); o
 // Popover abre por CLIQUE e pode conter foco; este é uma PRÉVIA rica que aparece ao repousar o

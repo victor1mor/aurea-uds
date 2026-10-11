@@ -303,16 +303,16 @@
       "Ready": 44,
       "Stable": 92
     },
-    "testes_unit": 1679,
+    "testes_unit": 1697,
     "componentes_citados_no_teste": 135,
     "specs_visuais": 37,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 781,
+    "classes_core": 810,
     "token_declaracoes": 467,
     "token_nomes": 222,
-    "token_usados": 174,
-    "token_sem_uso": 48
+    "token_usados": 175,
+    "token_sem_uso": 47
   },
   "gates": {
     "validate": 42,

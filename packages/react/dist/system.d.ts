@@ -1,7 +1,7 @@
 import React, { type ReactNode } from "react";
 import { type Responsive } from "./pure.js";
 import { type AureaStrings, type AureaTheme, type AureaDensity } from "./internal.js";
-export declare function AureaProvider({ children, strings, direction, spriteUrl, portalContainer, theme, defaultTheme, onThemeChange, density, defaultDensity, onDensityChange }: {
+export declare function AureaProvider({ children, strings, direction, spriteUrl, portalContainer, theme, defaultTheme, onThemeChange, density, defaultDensity, onDensityChange, toastPlacement }: {
     children: ReactNode;
     strings?: Partial<AureaStrings>;
     direction?: "ltr" | "rtl";
@@ -13,6 +13,7 @@ export declare function AureaProvider({ children, strings, direction, spriteUrl,
     density?: AureaDensity;
     defaultDensity?: AureaDensity;
     onDensityChange?: (density: AureaDensity) => void;
+    toastPlacement?: ToastPlacement;
 }): React.JSX.Element;
 export type AureaToastType = "info" | "success" | "warning" | "danger";
 export declare const useToast: () => import("@base-ui/react").UseToastManagerReturnValue<any>;
@@ -25,6 +26,7 @@ export declare function useAureaTheme(): {
     setDensity: (d: AureaDensity) => void;
     toggleTheme: () => void;
 };
+export type ToastPlacement = "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end";
 export type { IconName, PhosphorIconName, AureaIconNames, IconWeight } from "./icon-names.js";
 import { type IconName, type IconWeight } from "./icon-names.js";
 export type IconSize = "sm" | "md" | "lg" | "xl";
