@@ -10,7 +10,11 @@
     "native": "planned"
   },
   "variants": [],
-  "sizes": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
   "states": [
     "determinate",
     "indeterminate"
@@ -72,6 +76,24 @@
       "description": "What the fill colour means — the same closed list as Button's tone. Paused is neutral; failed is danger. Every tone keeps 3:1 against the track in both themes, except brand in the light theme (the brand gold is a fill, ADR-0054)."
     },
     {
+      "name": "showLabel",
+      "type": "boolean",
+      "default": "false",
+      "description": "0.32.0: shows the label above the bar, at the start (the reference library's progress bar). Without it, label only names the bar for screen readers."
+    },
+    {
+      "name": "showValue",
+      "type": "boolean",
+      "default": "false",
+      "description": "0.32.0: shows the value (\"60%\") above the bar, at the end, when there is no detail."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "The track: 4, 8 or 12 thick — the reference library's."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",
@@ -87,5 +109,6 @@
       "success",
       "warning"
     ]
-  }
+  },
+  "sizeProp": "size"
 }

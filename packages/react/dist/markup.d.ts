@@ -255,10 +255,21 @@ export interface ProgressProps {
      *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
     detail?: ReactNode;
     tone?: ProgressTone;
+    /** 0.32.0: o rótulo À MOSTRA, no alto à esquerda (o da barra da referência). Sem ele, o `label` só
+     *  nomeia a barra para o leitor de tela, como sempre. */
+    showLabel?: boolean;
+    /** 0.32.0: o valor ("60%") no alto à direita, quando não há `detail`. */
+    showValue?: boolean;
+    /** A espessura do trilho: sm 4, md 8, lg 12 — os da referência. */
+    size?: ProgressSize;
     className?: string;
 }
-export declare function Progress({ value, label, detail, tone, className }: ProgressProps): React.JSX.Element;
-export declare function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+export type ProgressSize = "sm" | "md" | "lg";
+export declare function Progress({ value, label, detail, tone, showLabel, showValue, size, className }: ProgressProps): React.JSX.Element;
+export type SkeletonAnimation = "pulse" | "none";
+export declare function Skeleton({ animation, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+    animation?: SkeletonAnimation;
+}): React.JSX.Element;
 export declare function AvatarGroup({ children, max, total, label, size, className }: {
     children: ReactNode;
     max?: number;

@@ -8,7 +8,7 @@ import React from "react";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import { cx, useAureaStrings, usePortalContainer, stateSeverity } from "./internal.js";
 import { Icon } from "./system.js";
-import { Button, IconButton } from "./actions.js";
+import { Button, IconButton, CloseButton } from "./actions.js";
 // `oracle` saiu daqui (achado M9, 26/07/2026): estava no tipo e no CSS, e NÃO estava na
 // ficha — ou seja, era superfície pública que o contrato não declarava. E é vocabulário do
 // app de origem (papel de agente), não do sistema, como as classes de domínio que o achado
@@ -36,7 +36,7 @@ export function Status({ variant, state, children, className, ...props }) { cons
 // referência e o aviso de largura de página nem sempre quer glifo — a assimetria é decidida,
 // não herdada.
 const ICONE_DA_VARIANTE = { info: "info",
-    success: "check-circle", warning: "warning", danger: "x-circle" };
+    success: "check-circle", warning: "warning", danger: "x-circle", accent: "info" };
 // A grade do `.alert` tem TRÊS trilhas (auto 1fr auto): ícone, corpo, ação. Uma versão anterior
 // emitia o título solto na trilha 1 — a do ícone — e o corpo como item anônimo. Medido no
 // navegador em 21/08/2026: o título ocupava a coluna do ícone e crescia com o próprio texto,
@@ -51,19 +51,9 @@ const ICONE_DA_VARIANTE = { info: "info",
 // universal. Quem passa só `state` recebe a cor derivada da gravidade e o rótulo universal
 // quando não há filho; quem passa os dois manda, porque só o consumidor sabe se aquele
 // "esperando" dele é grave.
-export function Alert({ variant, state, title, icon, onDismiss, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] }); }
+export function Alert({ variant, state, title, icon, onDismiss, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
 export function Banner({ variant, state, title, icon, onDismiss, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("banner", `banner-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [icon ? _jsx(Icon, { name: icon }) : _jsx("span", {}), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] }); }
-// A barra grampeava 0..100 e o `aria-valuenow` NÃO — medido ao publicar o contrato de API na
-// Parte E: com value=150 o desenho parava em 100% e o leitor de tela anunciava "150 de 100".
-// A causa é a de sempre: o grampo existia num lugar só. Agora é UMA expressão que serve os dois,
-// então não há como divergirem de novo.
-// SÓ DETERMINADA, de propósito: não há modo indeterminado nem `.progress` para ele no core. A
-// ficha dizia que havia e era falso — corrigido junto, porque contrato que promete o que não
-// existe custa mais que ausência.
-// O DEGRAU RESPONSIVO volta (merge de 28/08/2026): a ficha declara `responsive.size` e o
-// componente tinha perdido a capacidade quando este arquivo entrou da `main`. Mesma perda
-// silenciosa do `Input`, do `Tabs` e do `NumberField` — a ficha documentava, o código não fazia.
-export function Spinner({ size, label, decorative, className, ...props }) { const s = useAureaStrings(); return _jsx("span", { className: cx("spinner", peleDoEixo("spinner", size, "sm", "spinner"), className), ...(decorative ? { "aria-hidden": true } : { role: "status", "aria-label": label ?? s.loading }), ...props }); }
+export function Spinner({ size = "md", label, decorative, className, ...props }) { const s = useAureaStrings(); return _jsx("span", { className: cx("spinner", peleDoEixo("spinner", size, "sm", "spinner"), className), ...(decorative ? { "aria-hidden": true } : { role: "status", "aria-label": label ?? s.loading }), ...props }); }
 // `children` como FUNÇÃO é de propósito para o caso `loading`: assim o consumidor não paga o
 // render do conteúdo enquanto ele não existe. Aceita nó também, porque a maioria das telas já
 // tem o conteúdo pronto e obrigar função seria cerimônia.

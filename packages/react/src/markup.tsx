@@ -463,12 +463,20 @@ export interface ProgressProps{
    *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
   detail?:ReactNode;
   tone?:ProgressTone;
+  /** 0.32.0: o rótulo À MOSTRA, no alto à esquerda (o da barra da referência). Sem ele, o `label` só
+   *  nomeia a barra para o leitor de tela, como sempre. */
+  showLabel?:boolean;
+  /** 0.32.0: o valor ("60%") no alto à direita, quando não há `detail`. */
+  showValue?:boolean;
+  /** A espessura do trilho: sm 4, md 8, lg 12 — os da referência. */
+  size?:ProgressSize;
   className?:string;
 }
+export type ProgressSize="sm"|"md"|"lg";
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
 // de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
-export function Progress({value,label,detail,tone="brand",className}:ProgressProps){
+export function Progress({value,label,detail,tone="brand",showLabel,showValue,size="md",className}:ProgressProps){
   const semTotal=value==null||Number.isNaN(value);
   const pct=semTotal?undefined:Math.max(0,Math.min(100,value));
   const temApoio=detail!=null&&detail!==false&&detail!=="";
@@ -476,13 +484,23 @@ export function Progress({value,label,detail,tone="brand",className}:ProgressPro
   // vezes. Apoio que não é texto (um ícone, um link) fica onde está, para o leitor achar sozinho.
   const emTexto=temApoio&&(typeof detail==="string"||typeof detail==="number")?String(detail):undefined;
   const valuetext=emTexto==null?undefined:pct==null?emTexto:`${pct}%, ${emTexto}`;
+  // O rótulo à mostra sai do leitor de tela (`aria-hidden`): quem nomeia a barra continua o `aria-label`,
+  // com o mesmo texto — sem isso, o leitor o leria duas vezes. (Este arquivo não usa hook, então nada de
+  // id gerado para `aria-labelledby`.)
+  const rotuloVisivel=!!showLabel&&!!label;
+  const valor=!temApoio&&showValue&&pct!=null?`${Math.round(pct)}%`:undefined;
   return <div className={cx("progress-field",className)}>
+    {rotuloVisivel&&<span className="progress-label" aria-hidden="true">{label}</span>}
     {temApoio&&<div className="progress-detail" aria-hidden={emTexto!=null||undefined}>{detail}</div>}
-    <div className={cx("progress",semTotal&&"progress-indeterminate",tone!=="brand"&&`progress-tone-${tone}`)} role="progressbar"
+    {valor&&<div className="progress-detail" aria-hidden="true">{valor}</div>}
+    <div className={cx("progress",semTotal&&"progress-indeterminate",tone!=="brand"&&`progress-tone-${tone}`,size!=="md"&&`progress-${size}`)} role="progressbar"
       aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-valuetext={valuetext}>
       <span style={pct==null?undefined:{width:`${pct}%`}}/></div>
   </div>}
-export function Skeleton({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("skeleton",className)} aria-hidden="true" {...props}/>}
+// Skeleton (0.32.0): o "pulse" da referência é o padrão, e `animation="none"` o para. O "shimmer" dela
+// (o brilho que corre) é DEGRADÊ, e degradê a Aurea não tem (CLAUDE.md §5) — não entra.
+export type SkeletonAnimation="pulse"|"none";
+export function Skeleton({animation="pulse",className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{animation?:SkeletonAnimation}){return <div className={cx("skeleton",animation==="none"&&"skeleton-static",className)} aria-hidden="true" {...props}/>}
 
 // ── Identity ─────────────────────────────────────────────────────────────────────────────────
 // `React.Children` não é hook — é utilitário de leitura de `children`, e roda no servidor.

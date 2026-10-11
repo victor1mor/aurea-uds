@@ -134,7 +134,9 @@ test("o degrau BASE não é `md` em toda família — o do Spinner é `sm`", () 
   // Aqui ela é parâmetro, e o teste cobra os dois lados: `sm` não emite classe, `md` emite.
   const {container} = wrap(<><Spinner decorative/><Spinner size="sm" decorative/><Spinner size="md" decorative/></>);
   const [padrao, sm, md] = [...container.querySelectorAll(".spinner")];
-  expect(padrao.className, "o padrão do spinner JÁ é o sm").not.toMatch(/spinner-(sm|md|lg)/);
+  // 0.32.0: o PADRÃO do componente passou a ser o `md` (24, o da referência); o degrau BASE do CSS
+  // continua o `sm` (o glifo cru, o de dentro do botão) — e é por isso que o `md` emite classe.
+  expect(padrao.className, "o padrão do componente é o md").toContain("spinner-md");
   expect(sm.className, "`sm` é a base: não emite classe").not.toMatch(/spinner-(sm|md|lg)/);
   expect(md.className).toContain("spinner-md");
 });

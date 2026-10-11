@@ -1527,8 +1527,11 @@ img,svg { display:block; }
 /* O spinner lê a MESMA escala de glifo, mas o degrau base dele é `sm` e não `md` — presumir
    `md` como base de toda família é o erro que esta atividade já cometeu duas vezes. */
 .spinner { width:var(--step-icon,var(--icon-sm)); height:var(--step-icon,var(--icon-sm)); border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:spin .7s linear infinite; }
-.spinner-md { --step-icon:var(--icon-md); }
-.spinner-lg { --step-icon:var(--icon-lg); } @keyframes spin { to { transform:rotate(360deg); } }
+/* 0.32.0: a escala da referência — 16 · 24 · 32 · 40. O componente nasce no `md` (24); o glifo cru
+   continua no `sm` (16), dentro do botão e do aviso. */
+.spinner-md { --step-icon:var(--space-6); }
+.spinner-lg { --step-icon:var(--space-8); }
+.spinner-xl { --step-icon:var(--space-10); } @keyframes spin { to { transform:rotate(360deg); } }
 
 .field { display:flex; flex-direction:column; gap:7px; }
 /* CAMPO NA HORIZONTAL — rótulo à esquerda, controle à direita. É a linha do formulário de
@@ -2148,21 +2151,26 @@ img,svg { display:block; }
 /* HER-02 (06/10/2026): o `.alert` e o `.toast` eram `--radius-lg` (16). Painel e superfície
    flutuante são `--radius-card` (22) na identidade da Aurea, como o `.popover`, o `.dialog` e o
    `.banner`; a referência usa 24 nos dois. */
-.alert { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:12px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--secondary); box-shadow:none; }
+/* 0.32.0, o Alert da referência (lido no CSS publicado dela, ordem do Victor: "igual ao dela"): o fundo
+   de CARTÃO, sem borda, com a sombra de superfície; 12 em cima e embaixo e 16 dos lados; 16 entre as
+   partes; o ícone de 16 numa caixa de 24; o título 14/24 peso médio NA COR DO ESTADO, e o corpo 14/20
+   esmaecido. Até a 0.31.0 a cor do estado tingia o fundo e a borda. `--alert-tone` é a cor do estado. */
+.alert { --alert-tone:var(--info-400); display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:var(--space-4); padding:var(--space-3) var(--space-4); border:0; border-radius:var(--radius-card); background:var(--card); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); box-shadow:var(--shadow-sm); }
+.alert-success { --alert-tone:var(--success-400); } .alert-warning { --alert-tone:var(--warning-400); } .alert-danger { --alert-tone:var(--danger-400); } .alert-accent { --alert-tone:var(--link); }
 /* Banner: aviso de largura de página. Base ANTES das variantes — mesma
    especificidade, então a última regra vence e a base apagaria as cores. */
 .banner { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:12px; padding:14px 18px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--secondary); }
-.alert-info,.banner-info { border-color:color-mix(in srgb,var(--info) 38%,var(--border)); background:var(--info-bg); }
-.alert-success,.banner-success { border-color:color-mix(in srgb,var(--success) 38%,var(--border)); background:var(--success-bg); }
-.alert-warning,.banner-warning { border-color:color-mix(in srgb,var(--warning) 38%,var(--border)); background:var(--warning-bg); }
-.alert-danger,.banner-danger { border-color:color-mix(in srgb,var(--danger-400) 38%,var(--border)); background:var(--danger-bg); }
+.banner-info { border-color:color-mix(in srgb,var(--info) 38%,var(--border)); background:var(--info-bg); }
+.banner-success { border-color:color-mix(in srgb,var(--success) 38%,var(--border)); background:var(--success-bg); }
+.banner-warning { border-color:color-mix(in srgb,var(--warning) 38%,var(--border)); background:var(--warning-bg); }
+.banner-danger { border-color:color-mix(in srgb,var(--danger-400) 38%,var(--border)); background:var(--danger-bg); }
 /* O título do alerta é <strong> e não <h4>: alerta cai em qualquer profundidade da página e
    um h4 fixo quebraria a ordem de cabeçalhos. `display:block` porque o corpo vem embaixo
    dele, não ao lado — as duas linhas são o desenho da referência congelada. */
-.alert h4,.alert strong { display:block; margin:0 0 2px; font-size:var(--text-sm); } .alert p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
+.alert h4,.alert strong { display:block; margin:0; color:var(--alert-tone); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--space-6); } .alert p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
 /* A cor do glifo é a da variante, senão o ícone vira enfeite cinza e não repete o sinal.
    Só o ícone DIRETO do alerta: um ícone dentro do corpo (num botão, num link) é do corpo. */
-.alert>.icon { color:var(--info-400); } .alert-success>.icon { color:var(--success-400); } .alert-warning>.icon { color:var(--warning-400); } .alert-danger>.icon { color:var(--danger-400); }
+.alert>.icon { --step-icon:var(--icon-sm); margin:var(--space-1); color:var(--alert-tone); }
 .banner strong { font-size:var(--text-sm); } .banner p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
 @media (max-width:640px) { .banner { grid-template-columns:auto minmax(0,1fr); } .banner>:last-child { grid-column:2; justify-self:start; } }
 .progress { height:8px; overflow:hidden; border-radius:999px; background:var(--surface-3); }
@@ -2173,6 +2181,13 @@ img,svg { display:block; }
    pausado é `neutral`, falha é `danger`. */
 .progress-field { display:grid; gap:var(--space-1); }
 .progress-detail { justify-self:end; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); font-variant-numeric:tabular-nums; }
+/* 0.32.0, a barra da referência: o rótulo à mostra no alto à esquerda (14 peso médio), a saída à direita,
+   e o trilho embaixo, ocupando as duas colunas. sm 4, md 8, lg 12 de espessura. */
+.progress-field:has(> .progress-label) { grid-template-columns:minmax(0,1fr) auto; }
+.progress-field:has(> .progress-label) > .progress { grid-column:1 / -1; }
+.progress-label { color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
+.progress-sm { height:var(--space-1); }
+.progress-lg { height:var(--space-3); }
 .progress-tone-neutral>span { background:var(--muted-foreground); }
 .progress-tone-success>span { background:var(--success-400); }
 .progress-tone-warning>span { background:var(--warning-400); }
@@ -2193,8 +2208,11 @@ img,svg { display:block; }
    já existe (esqueleto, alerta, estado vazio, conteúdo) com respiro entre eles. Se ganhar borda
    ou fundo, viram duas superfícies para a mesma coisa — o defeito que a `.table-region` cobrou. */
 .data-state { display:grid; gap:var(--space-3); }
-.skeleton { position:relative; overflow:hidden; border-radius:7px; background:var(--surface-3); }
+.skeleton { position:relative; overflow:hidden; border-radius:var(--radius-sm); background:var(--surface-3); }
 .skeleton { animation:skeleton-pulse 1.35s ease-in-out infinite; } @keyframes skeleton-pulse { 50% { opacity:.55; } }
+/* 0.32.0: `animation="none"` para o pulso; e quem pediu menos movimento ao sistema também não o vê. */
+.skeleton-static { animation:none; }
+@media (prefers-reduced-motion:reduce) { .skeleton { animation:none; } }
 
 /* Mesma regra da .segmented (0.32.0, as medidas da referência): 4 de recheio, sem vão, a aba de 32
    (`--control-h-sm`, que anda com a densidade), 16 dos lados, peso médio. */
@@ -2306,6 +2324,9 @@ img,svg { display:block; }
 /* GAR-16 (0.28.0): a tabela inteira com algarismos da mesma largura — a coluna de preço e de ano
    alinha. Só os algarismos mudam; o texto das outras colunas fica igual. */
 .table th,.table td,.table-wrap th,.table-wrap td { padding:calc((var(--row-h) - var(--space-5)) / 2 - var(--space-05)) var(--space-4); text-align:start; line-height:var(--space-5); border-bottom:var(--border-width) solid color-mix(in oklab,var(--border) 50%,transparent); font-variant-numeric:tabular-nums; }
+/* O título da tabela (`caption`) mora na moldura, em cima do cabeçalho, alinhado ao texto das colunas
+   (sem regra, o navegador o centralizava). */
+.table > caption,.table-wrap table > caption { padding:var(--space-3) var(--space-4) var(--space-1); color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--space-5); text-align:start; }
 .table thead th,.table-wrap thead th { position:relative; block-size:var(--table-head-h); padding-block:0; border-bottom:0; color:var(--muted-foreground); background:var(--surface-2); font-size:var(--text-xs); font-weight:var(--weight-medium); line-height:var(--space-4); }
 .table thead th:not(:last-child)::after,.table-wrap thead th:not(:last-child)::after { content:""; position:absolute; inset-inline-end:0; inset-block-start:50%; translate:0 -50%; inline-size:var(--border-width); block-size:var(--space-4); border-radius:var(--radius-full); background:var(--border); pointer-events:none; }
 .table tbody :is(td,th),.table-wrap tbody :is(td,th) { background:var(--card); }

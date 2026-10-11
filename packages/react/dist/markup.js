@@ -132,7 +132,7 @@ export function Badge({ variant: variantProp = "neutral", tone, emphasis = "soft
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
 // de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
-export function Progress({ value, label, detail, tone = "brand", className }) {
+export function Progress({ value, label, detail, tone = "brand", showLabel, showValue, size = "md", className }) {
     const semTotal = value == null || Number.isNaN(value);
     const pct = semTotal ? undefined : Math.max(0, Math.min(100, value));
     const temApoio = detail != null && detail !== false && detail !== "";
@@ -140,9 +140,14 @@ export function Progress({ value, label, detail, tone = "brand", className }) {
     // vezes. Apoio que não é texto (um ícone, um link) fica onde está, para o leitor achar sozinho.
     const emTexto = temApoio && (typeof detail === "string" || typeof detail === "number") ? String(detail) : undefined;
     const valuetext = emTexto == null ? undefined : pct == null ? emTexto : `${pct}%, ${emTexto}`;
-    return _jsxs("div", { className: cx("progress-field", className), children: [temApoio && _jsx("div", { className: "progress-detail", "aria-hidden": emTexto != null || undefined, children: detail }), _jsx("div", { className: cx("progress", semTotal && "progress-indeterminate", tone !== "brand" && `progress-tone-${tone}`), role: "progressbar", "aria-label": label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-valuetext": valuetext, children: _jsx("span", { style: pct == null ? undefined : { width: `${pct}%` } }) })] });
+    // O rótulo à mostra sai do leitor de tela (`aria-hidden`): quem nomeia a barra continua o `aria-label`,
+    // com o mesmo texto — sem isso, o leitor o leria duas vezes. (Este arquivo não usa hook, então nada de
+    // id gerado para `aria-labelledby`.)
+    const rotuloVisivel = !!showLabel && !!label;
+    const valor = !temApoio && showValue && pct != null ? `${Math.round(pct)}%` : undefined;
+    return _jsxs("div", { className: cx("progress-field", className), children: [rotuloVisivel && _jsx("span", { className: "progress-label", "aria-hidden": "true", children: label }), temApoio && _jsx("div", { className: "progress-detail", "aria-hidden": emTexto != null || undefined, children: detail }), valor && _jsx("div", { className: "progress-detail", "aria-hidden": "true", children: valor }), _jsx("div", { className: cx("progress", semTotal && "progress-indeterminate", tone !== "brand" && `progress-tone-${tone}`, size !== "md" && `progress-${size}`), role: "progressbar", "aria-label": label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-valuetext": valuetext, children: _jsx("span", { style: pct == null ? undefined : { width: `${pct}%` } }) })] });
 }
-export function Skeleton({ className, ...props }) { return _jsx("div", { className: cx("skeleton", className), "aria-hidden": "true", ...props }); }
+export function Skeleton({ animation = "pulse", className, ...props }) { return _jsx("div", { className: cx("skeleton", animation === "none" && "skeleton-static", className), "aria-hidden": "true", ...props }); }
 // ── Identity ─────────────────────────────────────────────────────────────────────────────────
 // `React.Children` não é hook — é utilitário de leitura de `children`, e roda no servidor.
 export function AvatarGroup({ children, max, total, label, size, className }) {

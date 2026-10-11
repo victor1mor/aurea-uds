@@ -6,8 +6,8 @@
     "modulos": 37,
     "componentes": 138,
     "hooks": 9,
-    "aliasesLiterais": 102,
-    "propsDistintas": 337
+    "aliasesLiterais": 106,
+    "propsDistintas": 339
   },
   "aliases": {
     "ButtonVariant": {
@@ -260,6 +260,17 @@
     },
     "AlertVariant": {
       "module": "feedback-client",
+      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\"",
+      "union": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "accent"
+      ]
+    },
+    "BannerVariant": {
+      "module": "feedback-client",
       "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
       "union": [
         "info",
@@ -268,10 +279,15 @@
         "danger"
       ]
     },
-    "BannerVariant": {
+    "SpinnerSize": {
       "module": "feedback-client",
-      "raw": "AlertVariant",
-      "union": null
+      "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "union": [
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
     },
     "DataStateValue": {
       "module": "feedback-client",
@@ -2210,6 +2226,23 @@
         "warning",
         "danger",
         "info"
+      ]
+    },
+    "ProgressSize": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "SkeletonAnimation": {
+      "module": "markup",
+      "raw": "\"pulse\" | \"none\"",
+      "union": [
+        "pulse",
+        "none"
       ]
     },
     "RangeOrientation": {
@@ -4627,7 +4660,8 @@
                 "info",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "accent"
               ]
             },
             {
@@ -4886,11 +4920,12 @@
             {
               "name": "size",
               "optional": true,
-              "type": "Responsive<\"sm\" | \"md\" | \"lg\">",
+              "type": "Responsive<SpinnerSize>",
               "values": [
                 "sm",
                 "md",
-                "lg"
+                "lg",
+                "xl"
               ]
             },
             {
@@ -7402,6 +7437,28 @@
               ]
             },
             {
+              "name": "showLabel",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "showValue",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ProgressSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
               "name": "className",
               "optional": true,
               "type": "string",
@@ -7593,7 +7650,17 @@
           "name": "Skeleton",
           "kind": "function",
           "propsType": null,
-          "props": []
+          "props": [
+            {
+              "name": "animation",
+              "optional": true,
+              "type": "SkeletonAnimation",
+              "values": [
+                "pulse",
+                "none"
+              ]
+            }
+          ]
         },
         {
           "name": "Stack",

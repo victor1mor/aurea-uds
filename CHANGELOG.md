@@ -157,6 +157,10 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **`TagGroup`** — o grupo de etiquetas da referência: escolha de nenhuma, uma ou várias, o X de tirar
   (`onRemove`), descrição e erro; um ponto de Tab só, setas entre as etiquetas, Delete tira.
 - **`Badge tone`** — o nome do nativo para a cor (DOC-11: os mesmos nomes na web e no nativo).
+- **`Alert variant="accent"`** — o acento da referência, na cor de link da Aurea (o `info` continua).
+- **`Spinner size="xl"`** (40). **`Progress`**: `showLabel` (o rótulo à mostra, no alto à esquerda),
+  `showValue` (o "60%" à direita) e `size` (o trilho de 4, 8 ou 12). **`Skeleton animation`**: `pulse`
+  (o padrão) ou `none`; o "shimmer" da referência é degradê e não entra.
 - **`AureaProvider toastPlacement`**: onde a pilha de avisos mora (`bottom`, o padrão; `bottom-start`,
   `bottom-end`, `top`, `top-start`, `top-end`). E o aviso aceita `actionProps` (a ação, um botão pequeno
   terciário) e mostra o `loading` do `promise()` do motor girando.
@@ -241,6 +245,13 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **`Calendar`**: o mês no começo e as duas setas juntas no fim (eram uma de cada lado do mês), botões de
   24 na cor de letra da marca; o dia redondo em peso médio; HOJE no clarinho (era um anel); o de fora do
   mês a meia força; o desligado riscado.
+- ⚠ **`Alert`** é o da referência (*"igual ao dela"*): fundo de CARTÃO, sem borda, com a sombra de
+  superfície (até a 0.31.0 a cor do estado tingia o fundo e a borda); 12 em cima e embaixo e 16 dos lados,
+  16 entre as partes; o ícone de 16 numa caixa de 24; o título 14/24 peso médio NA COR DO ESTADO, e o corpo
+  esmaecido; o X de dispensar é o `CloseButton`. O `Banner` não muda.
+- ⚠ **`Spinner`**: a escala da referência — 16 · 24 · 32 · 40 (era 16 · 20 · 24) — e o componente nasce no
+  `md`, **24** (era 16). O glifo de dentro do botão continua com 16.
+- **`Skeleton`**: o canto 8 (`--radius-sm`, era 7 cru), e parado para quem pediu menos movimento ao sistema.
 - ⚠ **O aviso (`useToast`)** é o da referência: os avisos se EMPILHAM no mesmo lugar — o da frente
   inteiro, os de trás espiando, e passar o mouse ou o foco abre a pilha (era uma coluna); embaixo no meio
   (era no canto de baixo, no fim); 460 de largura (era 360); somem em 4 s (eram 5); três à vista. O tipo

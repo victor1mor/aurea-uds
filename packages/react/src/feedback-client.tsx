@@ -7,7 +7,7 @@ import React, {type HTMLAttributes, type RefAttributes, type ReactNode} from "re
 import {Popover as BasePopover} from "@base-ui/react/popover";
 import {cx, useAureaStrings, usePortalContainer, stateSeverity, type UniversalState} from "./internal.js";
 import {Icon, type IconName} from "./system.js";
-import {Button, IconButton} from "./actions.js";
+import {Button, IconButton, CloseButton} from "./actions.js";
 // NotificationCenter aceita `side`: o tipo é do módulo que define overlay, não uma cópia.
 import {type OverlaySide} from "./overlays.js";
 
@@ -33,7 +33,9 @@ export type StatusVariant="neutral"|"online"|"offline"|"busy"|"away"|"running"|"
 // entra só quando não há filho, para o componente não passar a inventar texto.
 export function Status({variant,state,children,className,...props}:HTMLAttributes<HTMLSpanElement>&RefAttributes<HTMLSpanElement>&{variant?:StatusVariant;state?:UniversalState}){const s=useAureaStrings();const v=variant??(state?(state==="offline"?"offline":stateSeverity(state)):"neutral");return <span className={cx("status",v!=="neutral"&&`status-${v}`,className)} data-state={state} {...props}><i className="status-dot" aria-hidden="true"/><span className="status-label">{children??(state?s.universalState[state]:null)}</span></span>}
 
-export type AlertVariant="info"|"success"|"warning"|"danger";
+// 0.32.0: `accent`, o "acento" da referência — na Aurea, a cor de link (o amarelo como letra). O `info`
+// continua (é o azul de informação, que ela não separa do acento).
+export type AlertVariant="info"|"success"|"warning"|"danger"|"accent";
 // O ícone é FUNÇÃO da variante, como o `role` já era. A referência congelada desenha o alerta
 // com ele em toda variante, e um sistema que faz o consumidor lembrar qual glifo significa
 // "perigo" acaba com quatro respostas diferentes para a mesma pergunta. `icon` sobrepõe quando o
@@ -41,7 +43,7 @@ export type AlertVariant="info"|"success"|"warning"|"danger";
 // referência e o aviso de largura de página nem sempre quer glifo — a assimetria é decidida,
 // não herdada.
 const ICONE_DA_VARIANTE:Record<AlertVariant,IconName>={info:"info",
-success:"check-circle",warning:"warning",danger:"x-circle"};
+success:"check-circle",warning:"warning",danger:"x-circle",accent:"info"};
 // A grade do `.alert` tem TRÊS trilhas (auto 1fr auto): ícone, corpo, ação. Uma versão anterior
 // emitia o título solto na trilha 1 — a do ícone — e o corpo como item anônimo. Medido no
 // navegador em 21/08/2026: o título ocupava a coluna do ícone e crescia com o próprio texto,
@@ -56,10 +58,13 @@ success:"check-circle",warning:"warning",danger:"x-circle"};
 // universal. Quem passa só `state` recebe a cor derivada da gravidade e o rótulo universal
 // quando não há filho; quem passa os dois manda, porque só o consumidor sabe se aquele
 // "esperando" dele é grave.
-export function Alert({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+export function Alert({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
+// 0.32.0 (o Alert da referência): o X de dispensar é o `CloseButton` (HER-12), e a pele mudou no core —
+// fundo de cartão, sem borda, sombra, 12/16, o ícone de 16 numa caixa de 24 e o título na cor do estado.
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios
 // preservam as 3 colunas do grid quando não há ícone ou botão de dispensar.
-export type BannerVariant=AlertVariant;
+// O Banner NÃO ganhou o `accent` do Alert (0.32.0): ele não existe na referência, e a lista dele fica.
+export type BannerVariant="info"|"success"|"warning"|"danger";
 export function Banner({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:BannerVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
 // A barra grampeava 0..100 e o `aria-valuenow` NÃO — medido ao publicar o contrato de API na
 // Parte E: com value=150 o desenho parava em 100% e o leitor de tela anunciava "150 de 100".
@@ -71,7 +76,11 @@ export function Banner({variant,state,title,icon,onDismiss,children,className,..
 // O DEGRAU RESPONSIVO volta (merge de 28/08/2026): a ficha declara `responsive.size` e o
 // componente tinha perdido a capacidade quando este arquivo entrou da `main`. Mesma perda
 // silenciosa do `Input`, do `Tabs` e do `NumberField` — a ficha documentava, o código não fazia.
-export function Spinner({size,label,decorative,className,...props}:HTMLAttributes<HTMLSpanElement>&RefAttributes<HTMLSpanElement>&{size?:Responsive<"sm"|"md"|"lg">;label?:string;decorative?:boolean}){const s=useAureaStrings();return <span className={cx("spinner",peleDoEixo("spinner",size,"sm","spinner"),className)} {...(decorative?{"aria-hidden":true}:{role:"status","aria-label":label??s.loading})} {...props}/>}
+// 0.32.0: a escala da referência — sm 16, md 24, lg 32, xl 40 — e o PADRÃO do componente passa a ser o
+// `md`, 24, o dela (era o `sm`, 16). O glifo cru (`.spinner` sem classe, o de dentro do botão e do aviso)
+// continua com 16: é a casa dele, ao lado de texto.
+export type SpinnerSize="sm"|"md"|"lg"|"xl";
+export function Spinner({size="md",label,decorative,className,...props}:HTMLAttributes<HTMLSpanElement>&RefAttributes<HTMLSpanElement>&{size?:Responsive<SpinnerSize>;label?:string;decorative?:boolean}){const s=useAureaStrings();return <span className={cx("spinner",peleDoEixo("spinner",size,"sm","spinner"),className)} {...(decorative?{"aria-hidden":true}:{role:"status","aria-label":label??s.loading})} {...props}/>}
 // titleAs: o nível do título é do DOCUMENTO, não do componente. Fixo em h3, um empty state
 // no alto de uma página vira h1→h3 e a hierarquia quebra (axe heading-order). Default h3
 // para não mexer em quem já consome; quem sabe o contexto passa o nível certo.

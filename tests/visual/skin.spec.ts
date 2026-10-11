@@ -58,7 +58,8 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h(A.Toggle, {key: "t1", icon: "heart", label: "Favourite", defaultPressed: true}),
   h(A.Toggle, {key: "t2", icon: "push-pin", label: "Pin"}),
   h("div", {key: "sp"},
-    h(A.Spinner, {}), h(A.Spinner, {size: "md"}), h(A.Spinner, {size: "lg"})),
+    // 0.32.0: a escala da referência, 16 · 24 · 32 · 40, e o padrão do componente é o md (24).
+    h(A.Spinner, {size: "sm"}), h(A.Spinner, {}), h(A.Spinner, {size: "lg"}), h(A.Spinner, {size: "xl"})),
   h(A.NumberField, {key: "nf", defaultValue: 1, min: 0, max: 9, label: "Quantity"}),
   h(A.OTPField, {key: "otp", length: 4, label: "Code"}),
   // HoverCard vive num PORTAL e só existe aberto — `renderToStaticMarkup` não renderiza portal
@@ -253,6 +254,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h(A.Stack, {key: "e13"},
     // ── Feedback ───────────────────────────────────────────────────────────────────────
     h(A.Alert, {key: "al", variant: "warning", title: "Heads up"}, "Body of the alert."),
+    h(A.Alert, {key: "al2", variant: "danger", title: "Stop", className: "alerta-perigo", onDismiss: () => {}}, "It failed."),
     h(A.Badge, {key: "bd", variant: "success"}, "Stable"),
     h(A.Banner, {key: "bn", variant: "danger", title: "Down", icon: "warning", onDismiss: () => {}}, "Body."),
     h(A.Skeleton, {key: "sk", style: {width: 160, height: 12}}),
@@ -1389,8 +1391,16 @@ for (const theme of ["dark", "light"] as const) {
                      // HER-02 (06/10/2026): o `Alert` passou de `--radius-lg` (16) para o raio
                      // de painel, `--radius-card` (22).
                      radiusCard: emPx("--radius-card"),
-                     bordaDanger: est(".banner-danger").borderTopColor,
-                     bordaAlerta: est(".alert-warning").borderTopColor},
+                     // 0.32.0, o Alert da referência: fundo de cartão, sem borda, sombra; a cor do estado
+                     // pinta o ícone e o título.
+                     fundo: est(".alert").backgroundColor, cartao: est(".card").backgroundColor,
+                     borda: parseFloat(est(".alert").borderTopWidth), sombra: est(".alert").boxShadow,
+                     padLado: parseFloat(est(".alert").paddingLeft), vao: parseFloat(est(".alert").columnGap),
+                     icone: caixa(".alert > .icon").width, iconeCaixa: caixa(".alert > .icon").width + 2 * parseFloat(est(".alert > .icon").marginLeft),
+                     titulo: [parseFloat(est(".alert strong").fontSize), parseFloat(est(".alert strong").lineHeight), est(".alert strong").fontWeight],
+                     tituloAviso: est(".alert-warning strong").color, tituloPerigo: est(".alerta-perigo strong").color,
+                     iconeAviso: est(".alert-warning > .icon").color,
+                     xFechar: document.querySelector(".alerta-perigo > .close-button") !== null},
             // Toast: a base e as quatro faces do tipo. Medir COR, não existência de regra — o
             // defeito de origem era exatamente uma classe emitida sem nada atrás.
             toast: {baseFundo: est(".toast").backgroundColor, baseTitulo: est(".toast .toast-title").color,
@@ -1721,8 +1731,9 @@ for (const theme of ["dark", "light"] as const) {
                       // no cartão de perto e não existe no de baixo do teto.
                       avisoPerto: !!document.querySelector(".cm-near .alert"),
                       avisoSob: !!document.querySelector(".cm-under .alert"),
-                      avisoAcima: est(".cm-over .alert").borderColor,
-                      alertaPerto: est(".cm-near .alert").borderColor,
+                      // 0.32.0: o Alert não tem mais borda; o estado está na cor do ícone.
+                      avisoAcima: est(".cm-over .alert > .icon").color,
+                      alertaPerto: est(".cm-near .alert > .icon").color,
                       // o razão é apende-só: a linha esquecida CONTINUA na lista, riscada.
                       razaoLinhas: document.querySelectorAll(".memory-entry").length,
                       razaoRiscado: est('.memory-entry[data-operation="forgotten"] .memory-content').textDecorationLine,
@@ -2068,7 +2079,9 @@ for (const theme of ["dark", "light"] as const) {
       .not.toBe(m.toggle.corSolto);
 
     // 8. Spinner: três tamanhos DISTINTOS, o médio no eixo dos ícones, e girando de verdade.
-    expect(new Set(m.spinner.larguras).size, "sm, md e lg têm de medir diferente").toBe(3);
+    // (outros spinners da página — o de dentro de um botão — repetem o 16; por isso o conjunto)
+    expect([...new Set(m.spinner.larguras)].sort((a, b) => a - b),
+      "0.32.0: sm, md (o padrão), lg e xl — 16 · 24 · 32 · 40, a escala da referência").toEqual([16, 24, 32, 40]);
     // O base é --icon-sm, que são os 16px que o spinner sempre teve: apontar para --icon-md
     // mudaria o botão em carregamento de toda página, e os baselines pegaram isso.
     expect(m.spinner.larguras[0], "o base mede --icon-sm — o tamanho de sempre").toBe(m.spinner.iconSm);
@@ -2518,8 +2531,16 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.alerta.display, "o Alert é grid de 3 colunas, não texto corrido").toBe("grid");
     expect(e.alerta.raio, "o Alert usa --radius-card (HER-02)").toBe(e.alerta.radiusCard);
     expect(e.alerta.pad, "sem padding o texto cola na borda").toBeGreaterThan(0);
-    expect(e.alerta.bordaDanger, "a variante colore a BORDA — danger e warning não podem medir igual")
-      .not.toBe(e.alerta.bordaAlerta);
+    // 0.32.0, o Alert da referência, lido no CSS publicado dela.
+    expect(e.alerta.fundo, "fundo de cartão").toBe(e.alerta.cartao);
+    expect(e.alerta.borda, "sem borda").toBe(0);
+    expect(e.alerta.sombra, "com a sombra de superfície").not.toBe("none");
+    expect([e.alerta.pad, e.alerta.padLado, e.alerta.vao], "12 em cima, 16 dos lados, 16 entre as partes").toEqual([12, 16, 16]);
+    expect([e.alerta.icone, e.alerta.iconeCaixa], "o ícone de 16 numa caixa de 24").toEqual([16, 24]);
+    expect(e.alerta.titulo, "o título 14/24 peso médio").toEqual([14, 24, "500"]);
+    expect(e.alerta.tituloAviso, "o título na cor do estado — aviso e perigo não medem igual").not.toBe(e.alerta.tituloPerigo);
+    expect(e.alerta.iconeAviso, "e o ícone na mesma cor do título").toBe(e.alerta.tituloAviso);
+    expect(e.alerta.xFechar, "o X de dispensar é o CloseButton (HER-12)").toBe(true);
     // 26b. Toast: o tipo publicado tem de PINTAR. As quatro classes não existiam no core até
     // 16/08/2026 — `AureaToastType` prometia quatro faces e as quatro mediam igual à base.
     // 0.32.0, o aviso da referência: o tipo pinta o TÍTULO e o ÍCONE (quatro cores distintas, nenhuma

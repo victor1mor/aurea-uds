@@ -8,7 +8,7 @@ export declare function Status({ variant, state, children, className, ...props }
     variant?: StatusVariant;
     state?: UniversalState;
 }): React.JSX.Element;
-export type AlertVariant = "info" | "success" | "warning" | "danger";
+export type AlertVariant = "info" | "success" | "warning" | "danger" | "accent";
 export declare function Alert({ variant, state, title, icon, onDismiss, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     variant?: AlertVariant;
     state?: UniversalState;
@@ -16,7 +16,7 @@ export declare function Alert({ variant, state, title, icon, onDismiss, children
     icon?: IconName;
     onDismiss?: () => void;
 }): React.JSX.Element;
-export type BannerVariant = AlertVariant;
+export type BannerVariant = "info" | "success" | "warning" | "danger";
 export declare function Banner({ variant, state, title, icon, onDismiss, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     variant?: BannerVariant;
     state?: UniversalState;
@@ -24,8 +24,9 @@ export declare function Banner({ variant, state, title, icon, onDismiss, childre
     icon?: IconName;
     onDismiss?: () => void;
 }): React.JSX.Element;
+export type SpinnerSize = "sm" | "md" | "lg" | "xl";
 export declare function Spinner({ size, label, decorative, className, ...props }: HTMLAttributes<HTMLSpanElement> & RefAttributes<HTMLSpanElement> & {
-    size?: Responsive<"sm" | "md" | "lg">;
+    size?: Responsive<SpinnerSize>;
     label?: string;
     decorative?: boolean;
 }): React.JSX.Element;

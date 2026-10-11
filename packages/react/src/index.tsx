@@ -60,7 +60,8 @@ export {AspectRatio, InputGroup, InputGroupAddon, Label,
   type SectionVariant, type SectionFooterGroup, type CardProps, type CardAccent,
   type TextProps, type HeadingProps, type ParagraphProps, type CodeProps, type TypographyType,
   type TypographyColor, type TypographyWeight, type TypographyAlign, type HeadingLevel, type ParagraphSize,
-  type LinkProps, type ColorSwatchProps, type ColorSwatchSize, type ProgressCircleProps, type ProgressCircleSize} from "./markup.js";
+  type LinkProps, type ColorSwatchProps, type ColorSwatchSize, type ProgressCircleProps, type ProgressCircleSize,
+  type ProgressSize, type SkeletonAnimation} from "./markup.js";
 export * from "./system.js";
 export * from "./actions.js";
 export * from "./feedback.js";
