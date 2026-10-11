@@ -1,6 +1,6 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Responsive } from "./pure.js";
-import { type FieldSize } from "./markup.js";
+import { type FieldSize, type FieldVariant } from "./markup.js";
 import { type IconName } from "./system.js";
 export { FileInput, matchesAccept, type FileRejection, type UploadContext, type UploadFn } from "./file-input.js";
 export type FieldOrientation = "vertical" | "horizontal";
@@ -18,8 +18,11 @@ export interface FieldProps extends HTMLAttributes<HTMLDivElement>, RefAttribute
     name?: string;
     orientation?: Responsive<FieldOrientation>;
     labelWidth?: FieldLabelWidth;
+    /** 0.32.0, como o `isRequired` da referência: o asterisco vermelho depois do rótulo (escondido do
+     *  leitor de tela) e o `required` no controle — é ele que anuncia "obrigatório". */
+    required?: boolean;
 }
-export declare function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, ...props }: FieldProps): React.JSX.Element;
+export declare function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, required, ...props }: FieldProps): React.JSX.Element;
 export declare function Form({ errors, onSubmit, children, className, ...props }: Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit"> & RefAttributes<HTMLFormElement> & {
     errors?: Record<string, string | string[]>;
     onSubmit?: (values: Record<string, unknown>) => void;
@@ -27,6 +30,8 @@ export declare function Form({ errors, onSubmit, children, className, ...props }
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">, RefAttributes<HTMLInputElement> {
     formatOnBlur?: (value: string) => string;
     size?: Responsive<FieldSize>;
+    /** 0.32.0, a da referência: `secondary` é o fundo neutro, para o campo dentro de um cartão. */
+    variant?: FieldVariant;
 }
 export declare const Input: React.ForwardRefExoticComponent<Omit<InputProps, "ref"> & RefAttributes<HTMLInputElement>>;
 export interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "width">, RefAttributes<HTMLInputElement> {
@@ -56,6 +61,77 @@ export declare function NumberField({ value, defaultValue, onValueChange, min, m
     scrubbable?: boolean;
     scrubDirection?: "horizontal" | "vertical";
 }): React.JSX.Element;
+export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">, RefAttributes<HTMLDivElement> {
+    label: ReactNode;
+    description?: ReactNode;
+    error?: ReactNode;
+    value?: readonly string[];
+    defaultValue?: readonly string[];
+    onValueChange?: (value: string[]) => void;
+    /** O `name` de todas as caixas, para o formulário. */
+    name?: string;
+    disabled?: boolean;
+    /** O asterisco no rótulo, como o `Field`. */
+    required?: boolean;
+}
+export declare function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }: CheckboxGroupProps): React.JSX.Element;
+export interface ListBoxItem {
+    id: string;
+    label: ReactNode;
+    /** O texto que a busca pela letra lê, quando o `label` não é texto. */
+    textValue?: string;
+    description?: ReactNode;
+    icon?: IconName;
+    disabled?: boolean;
+    /** O item de perigo ("Excluir"), na cor de perigo. */
+    danger?: boolean;
+}
+export interface ListBoxSection {
+    title: ReactNode;
+    items: readonly ListBoxItem[];
+}
+export type ListBoxSelectionMode = "none" | "single" | "multiple";
+export interface ListBoxProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
+    /** O nome da lista para o leitor de tela. */
+    label: string;
+    items: readonly (ListBoxItem | ListBoxSection)[];
+    selectionMode?: ListBoxSelectionMode;
+    value?: readonly string[];
+    defaultValue?: readonly string[];
+    onValueChange?: (value: string[]) => void;
+    /** Sem escolha: o item foi ativado (Enter, Espaço ou clique). */
+    onAction?: (id: string) => void;
+}
+export declare function ListBox({ label, items, selectionMode, value, defaultValue, onValueChange, onAction, className, ...props }: ListBoxProps): React.JSX.Element;
+export type SliderOrientation = "horizontal" | "vertical";
+export interface SliderProps<V extends number | readonly number[] = number | readonly number[]> {
+    /** O rótulo. Obrigatório: é o nome das alças. `labelHidden` o tira da tela e deixa para o leitor de tela. */
+    label: ReactNode;
+    labelHidden?: boolean;
+    value?: V;
+    defaultValue?: V;
+    /** Chamado a cada passo, com o número (ou a lista, na faixa). */
+    onValueChange?: (value: V) => void;
+    /** Chamado ao soltar a alça — o momento de salvar. */
+    onValueCommitted?: (value: V) => void;
+    min?: number;
+    max?: number;
+    step?: number;
+    /** O passo do Page Up/Down e do Shift + seta. */
+    largeStep?: number;
+    orientation?: SliderOrientation;
+    disabled?: boolean;
+    name?: string;
+    format?: Intl.NumberFormatOptions;
+    locale?: string;
+    /** Mostrar o valor ao lado do rótulo. Padrão: sim. */
+    showValue?: boolean;
+    /** Com dois valores, o nome de cada alça, na ordem ("Mínimo", "Máximo"). */
+    thumbLabels?: readonly string[];
+    className?: string;
+    id?: string;
+}
+export declare function Slider<V extends number | readonly number[]>({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation, disabled, name, format, locale, showValue, thumbLabels, className, id }: SliderProps<V>): React.JSX.Element;
 export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className }: {
     length: number;
     value?: string;

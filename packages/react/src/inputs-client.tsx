@@ -10,6 +10,7 @@ import {Form as BaseForm} from "@base-ui/react/form";
 import {Field as BaseField} from "@base-ui/react/field";
 import {NumberField as BaseNumberField} from "@base-ui/react/number-field";
 import {OTPField as BaseOTPField} from "@base-ui/react/otp-field";
+import {Slider as BaseSlider} from "@base-ui/react/slider";
 import {RadioGroup as BaseRadioGroup} from "@base-ui/react/radio-group";
 import {Radio as BaseRadio} from "@base-ui/react/radio";
 import {cx, useAureaStrings, usePortalContainer, useReorder} from "./internal.js";
@@ -17,7 +18,7 @@ import {cx, useAureaStrings, usePortalContainer, useReorder} from "./internal.js
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
 // objetos diferentes com o mesmo nome quebrariam o rótulo do campo em silêncio.
-import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, type FieldSize} from "./markup.js";
+import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, type FieldSize, type FieldVariant} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {IconButton} from "./actions.js";
 // FileInput mora em arquivo próprio (132 linhas — upload real, aborto, progresso) e é público
@@ -45,7 +46,10 @@ export interface FieldProps extends HTMLAttributes<HTMLDivElement>,RefAttributes
    *  ("opcional", "em MB"). É o lugar da descrição da referência e da `description` que o
    *  `Checkbox` desta casa já tem. Entra no `aria-describedby` na ordem da tela: hint, descrição,
    *  erro. */
-  description?:ReactNode;name?:string;orientation?:Responsive<FieldOrientation>;labelWidth?:FieldLabelWidth}
+  description?:ReactNode;name?:string;orientation?:Responsive<FieldOrientation>;labelWidth?:FieldLabelWidth;
+  /** 0.32.0, como o `isRequired` da referência: o asterisco vermelho depois do rótulo (escondido do
+   *  leitor de tela) e o `required` no controle — é ele que anuncia "obrigatório". */
+  required?:boolean}
 // hint e error são DESCRIÇÃO (aria-describedby), nunca parte do NOME. Nome é o que o campo É;
 // hint e erro são sobre o VALOR.
 //
@@ -99,7 +103,7 @@ function elementoRotulavel(tipo:ReactElement["type"]):boolean{
   // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
   return ([Input,Select,Textarea,SearchField,PasswordField,Checkbox,Radio,Switch,Range,Combobox,MultiCombobox] as unknown[]).includes(tipo);
 }
-export function Field({label,hint,description,error,children,className,id,name,orientation,labelWidth,style,...props}:FieldProps){
+export function Field({label,hint,description,error,children,className,id,name,orientation,labelWidth,style,required,...props}:FieldProps){
   const auto=React.useId();
   // Fragment não cria nó no DOM. Um Fragment com um só controle é só sintaxe; com vários,
   // Field precisa voltar para grupo em vez de pendurar `htmlFor` num id que nunca existirá.
@@ -134,6 +138,9 @@ export function Field({label,hint,description,error,children,className,id,name,o
   if(descritoFinal)injecao["aria-describedby"]=descritoFinal;
   const invalidoFinal=error?true:unico?.props["aria-invalid"];
   if(invalidoFinal!==undefined)injecao["aria-invalid"]=invalidoFinal;
+  // o `required` do controle é o que anuncia; o do filho, se ele já disse, vence
+  if(required&&unico?.props.required===undefined)injecao.required=true;
+  const asterisco=required?<span className="label-required" aria-hidden="true">*</span>:null;
   const controle=rotulavel?React.cloneElement(unico!,injecao):children;
   // a descrição mora no nó FOCAL quando existe um; sem filho único, no grupo — que é o que sobra
   // para anunciar. Nos dois lugares seria anunciar duas vezes.
@@ -145,7 +152,7 @@ export function Field({label,hint,description,error,children,className,id,name,o
   const estilo=labelWidth?{...style,"--field-label-width":labelWidth==="auto"?"max-content":labelWidth} as React.CSSProperties:style;
   const corpo=<div className={cx("field",peleDoEixo("field",orientation,"vertical","field"),className)} {...(nomeAqui?{}:{role:"group","aria-labelledby":idRotulo,...(rotulavel?{}:{"aria-describedby":descrito})})} style={estilo} {...props}>
     <span className="label">
-      {nomeAqui?<label htmlFor={idControle}>{label}</label>:<span id={idRotulo}>{label}</span>}
+      {nomeAqui?<label htmlFor={idControle}>{label}{asterisco}</label>:<span id={idRotulo}>{label}{asterisco}</span>}
       {hint&&<span className="hint" id={idHint}>{hint}</span>}
     </span>
     {controleFinal}
@@ -203,9 +210,11 @@ export function Form({errors,onSubmit,children,className,...props}:Omit<React.Fo
 // o degrau do sistema (sm/md/lg) e não a contagem de caracteres do HTML — e o componente passava
 // o atributo nativo adiante, então os três campos de exemplo saíam do mesmo tamanho. Promessa na
 // documentação e nada no código. `Omit<…,"size">` faz o que a documentação já dizia.
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>,"size">,RefAttributes<HTMLInputElement>{formatOnBlur?:(value:string)=>string;size?:Responsive<FieldSize>}
-export const Input=forwardRef<HTMLInputElement,InputProps>(function Input({className,formatOnBlur,size,onBlur,onChange,...props},ref){
-return <input ref={ref} className={cx("input",peleDoEixo("input",size),className)} onChange={onChange} onBlur={e=>{
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>,"size">,RefAttributes<HTMLInputElement>{formatOnBlur?:(value:string)=>string;size?:Responsive<FieldSize>;
+  /** 0.32.0, a da referência: `secondary` é o fundo neutro, para o campo dentro de um cartão. */
+  variant?:FieldVariant}
+export const Input=forwardRef<HTMLInputElement,InputProps>(function Input({className,formatOnBlur,size,variant,onBlur,onChange,...props},ref){
+return <input ref={ref} className={cx("input",peleDoEixo("input",size),variant==="secondary"&&"input-secondary",className)} onChange={onChange} onBlur={e=>{
   if(formatOnBlur){
     const formatado=formatOnBlur(e.currentTarget.value);
     if(formatado!==e.currentTarget.value){
@@ -277,10 +286,183 @@ return <BaseNumberField.Root id={id} name={name} value={value} defaultValue={def
   <Icon name="dots-six-vertical" aria-hidden={true}/>
   <BaseNumberField.ScrubAreaCursor className="number-field-scrub-cursor"><Icon name="dots-six-vertical" aria-hidden={true}/></BaseNumberField.ScrubAreaCursor>
 </BaseNumberField.ScrubArea>}
-<BaseNumberField.Decrement className="btn btn-ghost btn-icon" aria-label={s.decrement}><Icon name="minus"/></BaseNumberField.Decrement>
+{/* 0.32.0: os botões DENTRO do grupo, como o da referência (ver o `.number-field-group`) */}
+<BaseNumberField.Decrement className="number-field-button number-field-decrement" aria-label={s.decrement}><Icon name="minus"/></BaseNumberField.Decrement>
 <BaseNumberField.Input className="input number-field-input" aria-label={label}/>
-<BaseNumberField.Increment className="btn btn-ghost btn-icon" aria-label={s.increment}><Icon name="plus"/></BaseNumberField.Increment>
+<BaseNumberField.Increment className="number-field-button number-field-increment" aria-label={s.increment}><Icon name="plus"/></BaseNumberField.Increment>
 </BaseNumberField.Group></BaseNumberField.Root>}
+
+// CHECKBOXGROUP (0.32.0) — o grupo de caixas da referência: o rótulo do grupo, a descrição, as caixas
+// (16 de espaço antes de cada uma) e o erro no fim. O grupo GUARDA a lista do que está marcado:
+// cada `Checkbox` de dentro diz o seu `value`, e o grupo passa a ele o `checked` e o clique — o mesmo
+// caminho do `Field`, que injeta no filho em vez de exigir um `Checkbox` especial. O `Checkbox` solto
+// continua igual. O grupo é `role="group"` com o nome do rótulo; a descrição e o erro entram no
+// `aria-describedby`. Inválido (com `error`), cada caixa recebe `aria-invalid`.
+export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,"defaultValue"|"onChange">,RefAttributes<HTMLDivElement>{
+  label:ReactNode;description?:ReactNode;error?:ReactNode;
+  value?:readonly string[];defaultValue?:readonly string[];onValueChange?:(value:string[])=>void;
+  /** O `name` de todas as caixas, para o formulário. */
+  name?:string;disabled?:boolean;
+  /** O asterisco no rótulo, como o `Field`. */
+  required?:boolean}
+export function CheckboxGroup({label,description,error,value,defaultValue,onValueChange,name,disabled,required,children,className,...props}:CheckboxGroupProps){
+  const auto=React.useId();
+  const [proprio,setProprio]=React.useState<readonly string[]>(defaultValue??[]);
+  const marcados=value??proprio;
+  const trocar=(v:string,ligado:boolean)=>{
+    const novo=ligado?[...marcados.filter(x=>x!==v),v]:marcados.filter(x=>x!==v);
+    if(value===undefined)setProprio(novo);
+    onValueChange?.(novo);
+  };
+  const idRotulo=`${auto}-label`,idDescricao=description?`${auto}-description`:undefined,idErro=error?`${auto}-error`:undefined;
+  const caixas=React.Children.map(children,filho=>{
+    if(!React.isValidElement(filho))return filho;
+    const p=filho.props as {value?:unknown;onChange?:(e:React.ChangeEvent<HTMLInputElement>)=>void;disabled?:boolean};
+    if(typeof p.value!=="string")return filho;
+    const v=p.value;
+    return React.cloneElement(filho as ReactElement<Record<string,unknown>>,{checked:marcados.includes(v),name:name??(filho.props as {name?:string}).name,
+      disabled:p.disabled??disabled,...(error?{"aria-invalid":true}:null),
+      onChange:(e:React.ChangeEvent<HTMLInputElement>)=>{p.onChange?.(e);trocar(v,e.currentTarget.checked)}});
+  });
+  return <div role="group" aria-labelledby={idRotulo} aria-describedby={[idDescricao,idErro].filter(Boolean).join(" ")||undefined}
+    className={cx("checkbox-group",className)} {...props}>
+    <span className="label" id={idRotulo}><span>{label}{required?<span className="label-required" aria-hidden="true">*</span>:null}</span></span>
+    {description&&<span className="field-description" id={idDescricao}>{description}</span>}
+    {caixas}
+    {error&&<span className="field-error" id={idErro}>{error}</span>}
+  </div>;
+}
+
+// LISTBOX (0.32.0) — a lista de opções da referência, solta (não dentro de um Select): itens com
+// rótulo, descrição e ícone, SEÇÕES com título, e escolha de nenhum, um ou vários. O motor da Aurea só
+// tem a lista DENTRO do Select, do Combobox e do Menu, então o teclado é nosso, pelo padrão do APG
+// para listbox: um ponto de Tab só (o item ativo), setas para cima e para baixo, Home e End, Espaço e
+// Enter escolhem (em `multiple`, ligam e desligam), e a primeira letra pula para o item que começa com
+// ela. Item desligado é pulado pelas setas e não escolhe. Sem escolha (`selectionMode="none"`), Enter
+// e clique chamam `onAction` — é a lista de ações.
+// A pele é a dela: recheio de 4, 4 entre itens, item de 36 com 8 dos lados e 6 em cima e embaixo,
+// vão 12, o visto de 16 no fim do escolhido; o canto é o nosso — o item é cápsula.
+export interface ListBoxItem{id:string;label:ReactNode;
+  /** O texto que a busca pela letra lê, quando o `label` não é texto. */
+  textValue?:string;description?:ReactNode;icon?:IconName;disabled?:boolean;
+  /** O item de perigo ("Excluir"), na cor de perigo. */
+  danger?:boolean}
+export interface ListBoxSection{title:ReactNode;items:readonly ListBoxItem[]}
+export type ListBoxSelectionMode="none"|"single"|"multiple";
+export interface ListBoxProps extends Omit<HTMLAttributes<HTMLDivElement>,"defaultValue"|"onChange">{
+  /** O nome da lista para o leitor de tela. */
+  label:string;
+  items:readonly (ListBoxItem|ListBoxSection)[];
+  selectionMode?:ListBoxSelectionMode;
+  value?:readonly string[];defaultValue?:readonly string[];onValueChange?:(value:string[])=>void;
+  /** Sem escolha: o item foi ativado (Enter, Espaço ou clique). */
+  onAction?:(id:string)=>void}
+const ehSecao=(x:ListBoxItem|ListBoxSection):x is ListBoxSection=>"items" in x;
+const textoDoItem=(it:ListBoxItem)=>it.textValue??(typeof it.label==="string"?it.label:"");
+export function ListBox({label,items,selectionMode="single",value,defaultValue,onValueChange,onAction,className,...props}:ListBoxProps){
+  const auto=React.useId();
+  const [proprio,setProprio]=React.useState<readonly string[]>(defaultValue??[]);
+  const escolhidos=value??proprio;
+  const todos=React.useMemo(()=>items.flatMap(x=>ehSecao(x)?x.items:[x]),[items]);
+  const habilitados=todos.filter(it=>!it.disabled);
+  const [ativo,setAtivo]=React.useState<string|undefined>(undefined);
+  // O item que recebe o Tab: o ativo; senão o primeiro escolhido; senão o primeiro habilitado.
+  const alvo=ativo??habilitados.find(it=>escolhidos.includes(it.id))?.id??habilitados[0]?.id;
+  const refs=React.useRef(new Map<string,HTMLDivElement>());
+  const focar=(id:string|undefined)=>{if(!id)return;setAtivo(id);refs.current.get(id)?.focus()};
+  const escolher=(it:ListBoxItem)=>{
+    if(it.disabled)return;
+    if(selectionMode==="none"){onAction?.(it.id);return}
+    const ja=escolhidos.includes(it.id);
+    const novo=selectionMode==="multiple"?(ja?escolhidos.filter(x=>x!==it.id):[...escolhidos,it.id]):[it.id];
+    if(value===undefined)setProprio(novo);
+    onValueChange?.(novo);
+    onAction?.(it.id);
+  };
+  const aoTeclar=(e:React.KeyboardEvent<HTMLDivElement>,it:ListBoxItem)=>{
+    const i=habilitados.findIndex(x=>x.id===it.id);
+    if(e.key==="ArrowDown"){e.preventDefault();focar(habilitados[Math.min(i+1,habilitados.length-1)]?.id)}
+    else if(e.key==="ArrowUp"){e.preventDefault();focar(habilitados[Math.max(i-1,0)]?.id)}
+    else if(e.key==="Home"){e.preventDefault();focar(habilitados[0]?.id)}
+    else if(e.key==="End"){e.preventDefault();focar(habilitados[habilitados.length-1]?.id)}
+    else if(e.key===" "||e.key==="Enter"){e.preventDefault();escolher(it)}
+    else if(e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+      // a primeira letra: o próximo item, depois do atual, que começa com ela (e dá a volta)
+      const letra=e.key.toLocaleLowerCase();
+      const ordem=[...habilitados.slice(i+1),...habilitados.slice(0,i+1)];
+      const achou=ordem.find(x=>textoDoItem(x).toLocaleLowerCase().startsWith(letra));
+      if(achou){e.preventDefault();focar(achou.id)}
+    }
+  };
+  const item=(it:ListBoxItem)=>{
+    const escolhido=selectionMode!=="none"&&escolhidos.includes(it.id);
+    const idDesc=it.description?`${auto}-${it.id}-d`:undefined;
+    return <div key={it.id} ref={n=>{if(n)refs.current.set(it.id,n);else refs.current.delete(it.id)}}
+      role="option" aria-selected={selectionMode==="none"?undefined:escolhido} aria-disabled={it.disabled||undefined} aria-describedby={idDesc}
+      tabIndex={it.id===alvo?0:-1} className={cx("list-box-item",it.danger&&"list-box-item-danger")}
+      onClick={()=>{if(!it.disabled){setAtivo(it.id);escolher(it)}}} onKeyDown={e=>aoTeclar(e,it)} onFocus={()=>setAtivo(it.id)}>
+      {it.icon&&<Icon name={it.icon}/>}
+      <span className="list-box-item-text"><span className="list-box-item-label">{it.label}</span>
+        {it.description&&<span className="list-box-item-description" id={idDesc}>{it.description}</span>}</span>
+      {escolhido&&<Icon name="check" className="list-box-item-indicator"/>}
+    </div>;
+  };
+  return <div role="listbox" aria-label={label} aria-multiselectable={selectionMode==="multiple"||undefined} className={cx("list-box",className)} {...props}>
+    {items.map((x,i)=>ehSecao(x)
+      ?<div key={`s${i}`} role="group" aria-labelledby={`${auto}-s${i}`} className="list-box-section">
+        <span className="list-box-section-title" id={`${auto}-s${i}`} role="presentation">{x.title}</span>
+        {x.items.map(item)}</div>
+      :item(x))}
+  </div>;
+}
+
+// SLIDER (HER-05, 0.32.0) — o controle deslizante DESENHADO da referência, com o nome e as partes
+// dela: rótulo e valor na linha de cima, o trilho com o preenchimento, a alça. Um valor ou DOIS (a
+// faixa: passe uma lista), na horizontal ou na vertical, com o número formatado pelo `Intl`
+// (`format`/`locale`, como o `NumberField`). Quem faz o comportamento — arrastar, setas, Page
+// Up/Down, Home/End, o papel `slider` em cada alça — é o motor que a Aurea já usa; não entra
+// dependência nova.
+// O `Range` continua: é o do navegador, com o `onChange` de evento (decisão do Victor, 11/10/2026,
+// "Slider novo"). Este fala NÚMERO: `onValueChange(valor)`.
+// O NOME: o rótulo visível nomeia as alças sozinho (o `Label` do motor as liga). Com dois valores,
+// cada alça precisa do próprio nome ("Mínimo", "Máximo") — `thumbLabels`.
+export type SliderOrientation="horizontal"|"vertical";
+export interface SliderProps<V extends number|readonly number[]=number|readonly number[]>{
+  /** O rótulo. Obrigatório: é o nome das alças. `labelHidden` o tira da tela e deixa para o leitor de tela. */
+  label:ReactNode;labelHidden?:boolean;
+  value?:V;defaultValue?:V;
+  /** Chamado a cada passo, com o número (ou a lista, na faixa). */
+  onValueChange?:(value:V)=>void;
+  /** Chamado ao soltar a alça — o momento de salvar. */
+  onValueCommitted?:(value:V)=>void;
+  min?:number;max?:number;step?:number;
+  /** O passo do Page Up/Down e do Shift + seta. */
+  largeStep?:number;
+  orientation?:SliderOrientation;disabled?:boolean;name?:string;
+  format?:Intl.NumberFormatOptions;locale?:string;
+  /** Mostrar o valor ao lado do rótulo. Padrão: sim. */
+  showValue?:boolean;
+  /** Com dois valores, o nome de cada alça, na ordem ("Mínimo", "Máximo"). */
+  thumbLabels?:readonly string[];
+  className?:string;id?:string}
+export function Slider<V extends number|readonly number[]>({label,labelHidden,value,defaultValue,onValueChange,onValueCommitted,min,max,step,largeStep,orientation="horizontal",disabled,name,format,locale,showValue=true,thumbLabels,className,id}:SliderProps<V>){
+  // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
+  const atual=value??defaultValue;
+  const alcas=Array.isArray(atual)?atual.length:1;
+  return <BaseSlider.Root id={id} name={name} value={value as number|readonly number[]|undefined} defaultValue={defaultValue as number|readonly number[]|undefined}
+    onValueChange={onValueChange?(v:unknown)=>onValueChange(v as V):undefined} onValueCommitted={onValueCommitted?(v:unknown)=>onValueCommitted(v as V):undefined}
+    min={min} max={max} step={step} largeStep={largeStep} orientation={orientation} disabled={disabled} format={format} locale={locale}
+    className={cx("slider",className)}>
+    <BaseSlider.Label className={labelHidden?"sr-only":"slider-label"}>{label}</BaseSlider.Label>
+    {showValue&&<BaseSlider.Value className="slider-output"/>}
+    <BaseSlider.Control className="slider-control">
+      <BaseSlider.Track className="slider-track">
+        <BaseSlider.Indicator className="slider-fill"/>
+        {Array.from({length:alcas},(_,i)=><BaseSlider.Thumb key={i} index={i} className="slider-thumb" getAriaLabel={thumbLabels?()=>thumbLabels[i]??"":undefined}/>)}
+      </BaseSlider.Track>
+    </BaseSlider.Control>
+  </BaseSlider.Root>;
+}
 
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta
 // à mão: colar o código inteiro distribui pelos campos, Backspace volta um, e o

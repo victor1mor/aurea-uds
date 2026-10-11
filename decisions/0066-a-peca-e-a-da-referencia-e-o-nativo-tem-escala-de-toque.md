@@ -45,7 +45,8 @@ como o nome do app pedido em `fill`.
 ## O que fica de fora, e por quê
 
 - **O X de 18 do `CloseButton` nativo dela:** a escala de ícone da Aurea é 16 · 20 · 24 · 32, e escala
-  nova não se cria no meio de um componente. O nativo usa 20 (`iconMd`); a diferença vai à bancada.
+  nova não se cria no meio de um componente. O nativo usa 20 (`iconMd`) — decidido pelo Victor na
+  bancada (11/10/2026: *"mantém 20"*).
 - **O 32 da anotação HER-12 para o `CloseButton` nativo** estava errado: lido no CSS publicado, o botão
   `sm` só de ícone do nativo dela tem 40 (`--spacing` × 10, com a unidade de 4).
 

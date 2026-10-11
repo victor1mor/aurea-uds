@@ -45,6 +45,20 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **`ButtonGroup`**: `variant`, `size` e `disabled` valem para todos os botões de dentro (cada um
   pode trocar o seu), `fullWidth` e `detached`. **`ToggleGroup`**: `size`, `fullWidth` e `detached`.
 - **`Toggle variant`**: `default` (fundo neutro, o padrão) ou `ghost` (sem fundo, o de antes).
+- **`Slider`** — o controle deslizante DESENHADO da referência (decisão do Victor: "Slider novo"):
+  rótulo e valor em cima, trilho de 20 com o preenchimento, alça em cápsula de 28 × 20 com o miolo
+  de 24 × 16 na cor de letra sobre o amarelo; um valor ou dois (`defaultValue={[20, 80]}`, `thumbLabels`), vertical, valor formatado pelo
+  `Intl` (`format`, `locale`), `onValueChange` e `onValueCommitted` com o NÚMERO. O motor é o que a
+  Aurea já usa. O `Range` (o do navegador) continua igual.
+- **`CheckboxGroup`** — o grupo de caixas da referência: rótulo, descrição, as caixas e o erro; guarda
+  a lista do que está marcado (`value`, `onValueChange`); cada `Checkbox` de dentro diz o seu `value`.
+- **`ListBox`** — a lista de opções solta da referência: ícone, descrição, seções, escolha de nenhum
+  (lista de ações, `onAction`), um ou vários; o teclado do padrão do APG (setas, Home, End, Espaço,
+  Enter, a primeira letra).
+- **`Field required`**: o asterisco vermelho depois do rótulo (escondido do leitor de tela) e o
+  `required` no controle.
+- **`Input` e `Textarea` `variant="secondary"`**: o fundo neutro, sem borda à vista, para dentro de
+  cartão.
 
 #### Mudou
 
@@ -63,6 +77,18 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **`Toggle`**: passa a ter o fundo neutro (`variant="default"`), como o da referência; o ligado
   continua o "selecionado" da Aurea. Era sem fundo: quem quer assim passa `variant="ghost"`.
 - **`IconButton` dentro de um `ButtonGroup` com `variant`** segue o grupo; solto, continua fantasma.
+- **Os campos**: 12 dos lados no campo e na área de texto (eram 13 e 14), e a área com 8 em cima e
+  embaixo (era 12); rótulo peso médio (era 600); a dica e a descrição 12/16 sem negrito; o erro com
+  4 de recuo.
+- ⚠ **`NumberField` em grupo**: um grupo só, com a borda e o fundo de campo, e os botões de mais e
+  menos DENTRO dele (40 de largura, ícone 16, um fio entre cada botão e o número), como o da
+  referência. Eram dois botões fantasma soltos ao lado do campo. No toque, o grupo tem 44.
+- **`OTPField`**: a casa de 38 × 40 com o número de 18 em seminegrito (era 36 × 36, letra 14).
+- **Caixa e opção**: a marca de 16 (era 18), o canto da caixa 6 (`--radius-xs`, era 5 cru), 12 até o
+  texto, o texto peso médio (o da caixa era negrito), a descrição 12/16. A opção marcada fica CHEIA,
+  com o ponto no meio.
+- **`Switch`**: o trilho de 40 × 20 (sm 32 × 16, lg 48 × 24; era 42 × 24), a bolinha em cápsula de
+  22 × 16, 12 até o texto, peso médio.
 - **`Kbd`**: a tecla da referência — 24 de altura, 8 dos lados, letra 14 peso médio na fonte do
   texto, fundo neutro, sem borda —, em cápsula, e redonda quando é um caractere só (`kbd-single`,
   posto pelo componente). Era 20, letra 11 na fonte de código, com borda. Dentro do botão, 20.

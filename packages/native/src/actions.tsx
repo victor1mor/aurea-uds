@@ -434,7 +434,7 @@ export function ThemeToggle(props: ThemeToggleProps) {
 // ADR-0066), o X esmaecido e a área de toque estendida em 12 de cada lado (`space3`, o `hitSlop`
 // dela). O X é o do traço Bold (decisão do Victor, *"1 bold"*): a chave `x-bold` do registro do app
 // (`@aurea-uds/native/icons/x-bold`); sem ela, sai o `x`. ⚠ O X dela tem 18; aqui é o `iconMd`
-// (20), porque a escala de ícone não tem 18 — levado à bancada.
+// (20), porque a escala de ícone não tem 18 — decisão do Victor na bancada (*"mantém 20"*).
 // Fechado como o dela: sem cor nem tamanho; `children` troca o X.
 export interface CloseButtonProps {
   /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */

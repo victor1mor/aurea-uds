@@ -303,6 +303,8 @@ export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, RefAttributes<HTMLTextAreaElement> {
     size?: Responsive<FieldSize>;
+    /** 0.32.0, a da referência: `secondary` é o fundo neutro, para o campo dentro de um cartão. */
+    variant?: FieldVariant;
 }
 export declare const Textarea: React.ForwardRefExoticComponent<Omit<TextareaProps, "ref"> & RefAttributes<HTMLTextAreaElement>>;
 export declare function Checkbox({ label, labelHidden, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
@@ -324,6 +326,7 @@ export declare function Range({ orientation, className, ...props }: InputHTMLAtt
     orientation?: Responsive<RangeOrientation>;
 }): React.JSX.Element;
 export type FieldSize = Extract<ComponentSize, "sm" | "md" | "lg">;
+export type FieldVariant = "primary" | "secondary";
 export declare function Label({ htmlFor, className, children, ...props }: HTMLAttributes<HTMLLabelElement> & RefAttributes<HTMLLabelElement> & {
     htmlFor?: string;
 }): React.JSX.Element;

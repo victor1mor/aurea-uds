@@ -1,0 +1,161 @@
+{
+  "name": "Slider",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Drawn slider: label and value on top, a 20 track with the fill, a capsule thumb. One value or a range of two, horizontal or vertical, number formatted by Intl.",
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  },
+  "icon": "faders",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "dragging",
+    "disabled"
+  ],
+  "tokens": [
+    "--secondary",
+    "--primary",
+    "--primary-foreground",
+    "--space-5",
+    "--space-6",
+    "--space-4",
+    "--radius-full",
+    "--shadow-sm",
+    "--text-sm",
+    "--weight-medium"
+  ],
+  "a11y": {
+    "role": "slider",
+    "apg": "slider",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown"
+    ],
+    "keyboardNote": "Each thumb is a slider; the engine (Base UI 1.6) gives the eight keys, Shift + arrow for the large step. The visible label names the thumbs; with two values, thumbLabels names each one."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/slider",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Range",
+      "NumberField",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#Slider"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. Names the thumbs. labelHidden keeps it for screen readers only."
+    },
+    {
+      "name": "labelHidden",
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides the label from the screen, keeps it as the accessible name."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "number | number[]",
+      "default": "—",
+      "description": "A number, or a list of two for a range (two thumbs)."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value) => void",
+      "default": "—",
+      "description": "Called on every step with the number (or the list)."
+    },
+    {
+      "name": "onValueCommitted",
+      "type": "(value) => void",
+      "default": "—",
+      "description": "Called when the thumb is released — the moment to save."
+    },
+    {
+      "name": "min / max / step",
+      "type": "number",
+      "default": "0 / 100 / 1",
+      "description": "The scale."
+    },
+    {
+      "name": "largeStep",
+      "type": "number",
+      "default": "10",
+      "description": "The step for Page Up/Down and Shift + arrow."
+    },
+    {
+      "name": "orientation",
+      "type": "horizontal | vertical",
+      "default": "horizontal",
+      "description": "Vertical stacks value, track and label; its height is --range-vertical-size."
+    },
+    {
+      "name": "format / locale",
+      "type": "Intl.NumberFormatOptions / string",
+      "default": "—",
+      "description": "How the value is written (currency, percent…), by the platform's Intl."
+    },
+    {
+      "name": "showValue",
+      "type": "boolean",
+      "default": "true",
+      "description": "Shows the value next to the label."
+    },
+    {
+      "name": "thumbLabels",
+      "type": "string[]",
+      "default": "—",
+      "description": "With two values, each thumb's name, in order (\"Minimum\", \"Maximum\")."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the slider."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "For the form: the engine renders the hidden input with the raw value."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the slider root."
+    }
+  ]
+}

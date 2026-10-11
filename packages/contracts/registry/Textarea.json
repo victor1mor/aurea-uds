@@ -9,7 +9,10 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "primary",
+    "secondary"
+  ],
   "sizes": [
     "sm",
     "md",
@@ -97,6 +100,12 @@
       "type": "Responsive<FieldSize>",
       "default": "md",
       "description": "The system's size step, NOT the HTML rows/cols. Height still grows with the content."
+    },
+    {
+      "name": "variant",
+      "type": "primary | secondary",
+      "default": "primary",
+      "description": "secondary is the neutral fill with no visible border, for a field inside a card."
     }
   ]
 }

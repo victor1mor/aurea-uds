@@ -162,7 +162,8 @@ test("o passo do glifo é OUTRA escala, e a folha não confunde as duas", () => 
   expect(css, "e NÃO pode ler a altura de controle").not.toMatch(/\.icon \{[^}]*--step-h/);
   // E a marcação/identidade leem a MESMA grandeza do botão, porque a medição diz que é a mesma —
   // o que muda é a razão, e a razão fica no componente.
-  expect(css).toMatch(/\.control-mark \{[^}]*calc\(var\(--step-h,var\(--control-h-md\)\) \/ 2\)/);
+  // 0.32.0: "metade menos 2" — a marca de 16 da referência no md.
+  expect(css).toMatch(/\.control-mark \{[^}]*calc\(var\(--step-h,var\(--control-h-md\)\) \/ 2 - var\(--space-05\)\)/);
   expect(css).toMatch(/\.avatar \{[^}]*var\(--step-h,var\(--control-h-md\)\)/);
 });
 

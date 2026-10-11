@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 37,
-    "componentes": 131,
+    "componentes": 134,
     "hooks": 9,
-    "aliasesLiterais": 86,
-    "propsDistintas": 317
+    "aliasesLiterais": 89,
+    "propsDistintas": 322
   },
   "aliases": {
     "ButtonVariant": {
@@ -1855,6 +1855,23 @@
       "raw": "\"auto\" | (string & {})",
       "union": null
     },
+    "ListBoxSelectionMode": {
+      "module": "inputs-client",
+      "raw": "\"none\" | \"single\" | \"multiple\"",
+      "union": [
+        "none",
+        "single",
+        "multiple"
+      ]
+    },
+    "SliderOrientation": {
+      "module": "inputs-client",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
+    },
     "SeparatorSpacing": {
       "module": "layout-client",
       "raw": "\"none\" | \"tight\" | \"normal\" | \"loose\"",
@@ -2173,6 +2190,14 @@
       "module": "markup",
       "raw": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">",
       "union": null
+    },
+    "FieldVariant": {
+      "module": "markup",
+      "raw": "\"primary\" | \"secondary\"",
+      "union": [
+        "primary",
+        "secondary"
+      ]
     },
     "AddonSide": {
       "module": "markup",
@@ -5227,6 +5252,67 @@
           ]
         },
         {
+          "name": "CheckboxGroup",
+          "kind": "function",
+          "propsType": "CheckboxGroupProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "error",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "Combobox",
           "kind": "function",
           "propsType": null,
@@ -5364,6 +5450,12 @@
               "optional": true,
               "type": "FieldLabelWidth",
               "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -5406,6 +5498,68 @@
                 "md",
                 "lg"
               ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "FieldVariant",
+              "values": [
+                "primary",
+                "secondary"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ListBox",
+          "kind": "function",
+          "propsType": "ListBoxProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "readonly (ListBoxItem | ListBoxSection)[]",
+              "values": null
+            },
+            {
+              "name": "selectionMode",
+              "optional": true,
+              "type": "ListBoxSelectionMode",
+              "values": [
+                "none",
+                "single",
+                "multiple"
+              ]
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "onAction",
+              "optional": true,
+              "type": "(id: string) => void",
+              "values": null
             }
           ]
         },
@@ -5830,6 +5984,130 @@
                 "md",
                 "lg"
               ]
+            }
+          ]
+        },
+        {
+          "name": "Slider",
+          "kind": "function",
+          "propsType": "SliderProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "V",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "V",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: V) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: V) => void",
+              "values": null
+            },
+            {
+              "name": "min",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "step",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "largeStep",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "SliderOrientation",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "format",
+              "optional": true,
+              "type": "Intl.NumberFormatOptions",
+              "values": null
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "showValue",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "thumbLabels",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         }
@@ -7056,6 +7334,15 @@
                 "sm",
                 "md",
                 "lg"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "FieldVariant",
+              "values": [
+                "primary",
+                "secondary"
               ]
             }
           ]

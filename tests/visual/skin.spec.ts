@@ -270,6 +270,9 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.Radio, {key: "rd", label: "One", name: "skin-g"}),
     h(A.Switch, {key: "sw", label: "Active", defaultChecked: true}),
     h(A.Range, {key: "rg", defaultValue: 40}),
+    h("div", {key: "sl", style: {width: 320}}, h(A.Slider, {label: "Volume", defaultValue: 0})),
+    h(A.CheckboxGroup, {key: "cg", label: "Interests"}, h(A.Checkbox, {label: "Code", value: "c"}), h(A.Checkbox, {label: "Design", value: "d"})),
+    h(A.ListBox, {key: "lb", label: "Fruit", defaultValue: ["a"], items: [{id: "a", label: "Apple"}, {id: "b", label: "Banana"}]}),
     h(A.SearchField, {key: "sf", defaultValue: "query"}),
     h(A.Select, {key: "sl", label: "Level", items: [{value: "a", label: "A"}], defaultValue: "a"}),
     h(A.SegmentedControl, {key: "sg", label: "View", defaultValue: "a",
@@ -676,11 +679,17 @@ for (const theme of ["dark", "light"] as const) {
                       })(),
                       w: parseFloat(cs(".number-field-input").width),
                       align: cs(".number-field-input").textAlign,
-                      botoes: document.querySelectorAll(".number-field .btn").length},
+                      // 0.32.0: os botões são do grupo (40 de largura), e a borda é do grupo
+                      botoes: document.querySelectorAll(".number-field-group > .number-field-button").length,
+                      botaoW: parseFloat(cs(".number-field-button").width),
+                      grupoBorda: parseFloat(cs(".number-field-group").borderTopWidth),
+                      grupoAlt: document.querySelector(".number-field-group")!.getBoundingClientRect().height,
+                      campoBorda: parseFloat(cs(".number-field-input").borderTopWidth)},
         otp: {display: cs(".otp-field").display,
               slots: document.querySelectorAll(".otp-slot").length,
               lado: parseFloat(cs(".otp-slot").width),
               alt: parseFloat(cs(".otp-slot").height),
+              letra: parseFloat(cs(".otp-slot").fontSize),
               fonte: cs(".otp-slot").fontFamily},
         // ── Lote 2 ────────────────────────────────────────────────────────────────────
         avatar: (() => {
@@ -1386,10 +1395,25 @@ for (const theme of ["dark", "light"] as const) {
             marca: {w: caixa(".control-mark").width, h: caixa(".control-mark").height,
                     raio: parseFloat(est(".checkbox .control-mark").borderTopLeftRadius),
                     radioRedondo: parseFloat(est(".radio .control-mark").borderTopLeftRadius),
-                    radioW: caixa(".radio .control-mark").width},
+                    radioW: caixa(".radio .control-mark").width,
+                    vao: parseFloat(est(".checkbox").columnGap), peso: est(".checkbox").fontWeight},
             switchT: {w: caixa(".switch-track").width, h: caixa(".switch-track").height,
                       raio: parseFloat(est(".switch-track").borderTopLeftRadius),
-                      pilula: parseFloat(est(".switch-track").borderTopLeftRadius) >= caixa(".switch-track").height / 2},
+                      pilula: parseFloat(est(".switch-track").borderTopLeftRadius) >= caixa(".switch-track").height / 2,
+                      bolaW: parseFloat(getComputedStyle(document.querySelector(".switch-track")!, "::after").width),
+                      bolaH: parseFloat(getComputedStyle(document.querySelector(".switch-track")!, "::after").height)},
+            // 0.32.0, os campos da referência
+            campo: {rotuloPeso: est(".field .label").fontWeight, dicaPeso: est(".hint").fontWeight,
+                    inputLados: parseFloat(est(".input").paddingLeft),
+                    textareaLados: parseFloat(est(".textarea").paddingLeft), textareaTopo: parseFloat(est(".textarea").paddingTop)},
+            slider: {trilhoH: caixa(".slider-track").height, alcaW: caixa(".slider-thumb").width, alcaH: caixa(".slider-thumb").height,
+                     miolo: getComputedStyle(document.querySelector(".slider-thumb")!, "::after").width,
+                     alcaDentro: caixa(".slider-thumb").left >= caixa(".slider-track").left - 2,
+                     cheio: est(".slider-fill").backgroundColor, trilhoCor: est(".slider-track").backgroundColor},
+            grupoCaixas: {display: est(".checkbox-group").display, antes: parseFloat(est(".checkbox-group > .checkbox").marginTop)},
+            listBox: {itemAlt: caixa(".list-box-item").height, lados: parseFloat(est(".list-box-item").paddingLeft),
+                      raio: parseFloat(est(".list-box-item").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
+                      visto: caixa(".list-box-item-indicator").width},
             select: {alt: caixa(".select").height, controlMd: emPx("--control-h-md"),
                      raio: parseFloat(est(".select").borderTopLeftRadius),
                      radiusControl: emPx("--radius-control"),
@@ -1959,14 +1983,20 @@ for (const theme of ["dark", "light"] as const) {
 
     // 9. NumberField: menos · campo · mais na mesma linha, campo estreito e centrado.
     expect(m.numberField.mesmaLinha, "menos, campo e mais ficam na MESMA linha").toBe(true);
-    expect(m.numberField.botoes, "um botão de cada lado").toBe(2);
+    expect(m.numberField.botoes, "um botão de cada lado, DENTRO do grupo").toBe(2);
+    expect(m.numberField.botaoW, "o botão do grupo tem 40, como o da referência").toBeCloseTo(40, 0);
+    expect(m.numberField.grupoBorda, "a borda é do GRUPO").toBe(1);
+    expect(m.numberField.grupoAlt, "o grupo tem a altura do campo (36)").toBeCloseTo(36, 0);
+    expect(m.numberField.campoBorda, "e o campo de dentro não tem borda própria").toBe(0);
     expect(m.numberField.align, "número centrado, senão a vírgula dança ao digitar").toBe("center");
     expect(m.numberField.w, "campo de quantidade não é caixa de texto").toBeLessThan(120);
 
     // 10. OTPField: uma caixa por dígito, quadrada, em fonte de largura fixa.
     expect(m.otp.display, "a fila de dígitos fica em linha").toBe("inline-flex");
     expect(m.otp.slots, "uma caixa por dígito").toBe(4);
-    expect(Math.abs(m.otp.lado - m.otp.alt), "a caixa do dígito é quadrada").toBeLessThanOrEqual(1);
+    // 0.32.0: a casa da referência, 38 × 40, com o número de 18 (era quadrada, 36).
+    expect([Math.round(m.otp.lado), Math.round(m.otp.alt)], "a casa do dígito tem 38 × 40").toEqual([38, 40]);
+    expect(m.otp.letra, "o número tem 18").toBe(18);
     expect(m.otp.fonte, "dígito em fonte de largura fixa, senão a fila treme").toContain("Mono");
 
     // 11. HoverCard: superfície flutuante do sistema, com largura de leitura.
@@ -2443,6 +2473,27 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.marca.radioRedondo, "a do Radio é REDONDA (50% resolve acima da metade da largura)")
       .toBeGreaterThanOrEqual(e.marca.radioW / 2);
     expect(e.switchT.pilula, "o trilho do Switch é pílula").toBe(true);
+    // 0.32.0, as medidas da referência
+    expect([e.marca.w, e.marca.h], "a marca tem 16").toEqual([16, 16]);
+    expect(e.marca.raio, "o canto da caixa é o 6 dela (--radius-xs)").toBe(6);
+    expect(e.marca.vao, "12 entre a marca e o texto").toBe(12);
+    expect(e.marca.peso, "o texto da caixa é peso médio").toBe("500");
+    expect([e.switchT.w, e.switchT.h], "o trilho do Switch tem 40 × 20").toEqual([40, 20]);
+    expect([e.switchT.bolaW, e.switchT.bolaH], "a bolinha é uma cápsula de 22 × 16").toEqual([22, 16]);
+    expect(e.campo.rotuloPeso, "o rótulo é peso médio").toBe("500");
+    expect(e.campo.dicaPeso, "a dica não é negrito").toBe("400");
+    expect(e.campo.inputLados, "o campo tem 12 dos lados").toBe(12);
+    expect([e.campo.textareaLados, e.campo.textareaTopo], "a área de texto tem 12 dos lados e 8 em cima").toEqual([12, 8]);
+    expect(e.slider.trilhoH, "o trilho do Slider tem 20").toBe(20);
+    expect([e.slider.alcaW, e.slider.alcaH], "a alça tem 28 × 20").toEqual([28, 20]);
+    expect(e.slider.miolo, "o miolo claro tem 24").toBe("24px");
+    expect(e.slider.alcaDentro, "no mínimo, a alça fica no trilho (a folga de 12; passa 2, como a dela)").toBe(true);
+    expect(e.slider.cheio, "o preenchimento tem cor própria").not.toBe(e.slider.trilhoCor);
+    expect(e.grupoCaixas.antes, "16 antes de cada caixa do grupo").toBe(16);
+    expect(e.listBox.itemAlt, "o item da lista tem 36").toBeCloseTo(36, 0);
+    expect(e.listBox.lados, "8 dos lados").toBe(8);
+    expect(e.listBox.raio, "o item é cápsula").toBe(e.listBox.radiusControl);
+    expect(e.listBox.visto, "o visto do escolhido tem 16").toBeCloseTo(16, 0);
     expect(e.select.alt, "o Select mede --control-h-md, como os outros controles")
       .toBe(e.select.controlMd);
     expect(e.select.raio, "o Select é pill").toBe(e.select.radiusControl);

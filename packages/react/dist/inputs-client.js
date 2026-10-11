@@ -11,6 +11,7 @@ import { Form as BaseForm } from "@base-ui/react/form";
 import { Field as BaseField } from "@base-ui/react/field";
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
 import { OTPField as BaseOTPField } from "@base-ui/react/otp-field";
+import { Slider as BaseSlider } from "@base-ui/react/slider";
 import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { cx, useAureaStrings, usePortalContainer, useReorder } from "./internal.js";
@@ -79,7 +80,7 @@ function elementoRotulavel(tipo) {
     // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
     return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox].includes(tipo);
 }
-export function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, ...props }) {
+export function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, required, ...props }) {
     const auto = React.useId();
     // Fragment não cria nó no DOM. Um Fragment com um só controle é só sintaxe; com vários,
     // Field precisa voltar para grupo em vez de pendurar `htmlFor` num id que nunca existirá.
@@ -116,6 +117,10 @@ export function Field({ label, hint, description, error, children, className, id
     const invalidoFinal = error ? true : unico?.props["aria-invalid"];
     if (invalidoFinal !== undefined)
         injecao["aria-invalid"] = invalidoFinal;
+    // o `required` do controle é o que anuncia; o do filho, se ele já disse, vence
+    if (required && unico?.props.required === undefined)
+        injecao.required = true;
+    const asterisco = required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null;
     const controle = rotulavel ? React.cloneElement(unico, injecao) : children;
     // a descrição mora no nó FOCAL quando existe um; sem filho único, no grupo — que é o que sobra
     // para anunciar. Nos dois lugares seria anunciar duas vezes.
@@ -125,7 +130,7 @@ export function Field({ label, hint, description, error, children, className, id
     // árvore de acessibilidade enquanto a frase de erro aparece na tela. Pior que não mostrar.
     const controleFinal = name ? _jsx(BaseField.Control, { render: controle }) : controle;
     const estilo = labelWidth ? { ...style, "--field-label-width": labelWidth === "auto" ? "max-content" : labelWidth } : style;
-    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsx("label", { htmlFor: idControle, children: label }) : _jsx("span", { id: idRotulo, children: label }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
+    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsxs("label", { htmlFor: idControle, children: [label, asterisco] }) : _jsxs("span", { id: idRotulo, children: [label, asterisco] }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
     // `Field.Root` do motor entra SÓ quando há `name`: é ele que liga o campo à chave de `errors`
     // do formulário. Ele não desenha nada — é contexto — então a pele não muda.
     return name ? _jsx(BaseField.Root, { name: name, invalid: error ? true : undefined, render: corpo }) : corpo;
@@ -146,8 +151,8 @@ export function Field({ label, hint, description, error, children, className, id
 export function Form({ errors, onSubmit, children, className, ...props }) {
     return _jsx(BaseForm, { errors: errors, onFormSubmit: onSubmit ? (v) => onSubmit(v) : undefined, className: cx("form", className), ...props, children: children });
 }
-export const Input = forwardRef(function Input({ className, formatOnBlur, size, onBlur, onChange, ...props }, ref) {
-    return _jsx("input", { ref: ref, className: cx("input", peleDoEixo("input", size), className), onChange: onChange, onBlur: e => {
+export const Input = forwardRef(function Input({ className, formatOnBlur, size, variant, onBlur, onChange, ...props }, ref) {
+    return _jsx("input", { ref: ref, className: cx("input", peleDoEixo("input", size), variant === "secondary" && "input-secondary", className), onChange: onChange, onBlur: e => {
             if (formatOnBlur) {
                 const formatado = formatOnBlur(e.currentTarget.value);
                 if (formatado !== e.currentTarget.value) {
@@ -186,7 +191,113 @@ export function SearchField({ icon = "magnifying-glass", className, size, width,
 // é a trava do item ("o valor mascarado continua no DOM") entregue pelo motor, e o teste a cobra.
 export function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection }) {
     const s = useAureaStrings();
-    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "btn btn-ghost btn-icon", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label }), _jsx(BaseNumberField.Increment, { className: "btn btn-ghost btn-icon", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
+    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "number-field-button number-field-decrement", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label }), _jsx(BaseNumberField.Increment, { className: "number-field-button number-field-increment", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
+}
+export function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }) {
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultValue ?? []);
+    const marcados = value ?? proprio;
+    const trocar = (v, ligado) => {
+        const novo = ligado ? [...marcados.filter(x => x !== v), v] : marcados.filter(x => x !== v);
+        if (value === undefined)
+            setProprio(novo);
+        onValueChange?.(novo);
+    };
+    const idRotulo = `${auto}-label`, idDescricao = description ? `${auto}-description` : undefined, idErro = error ? `${auto}-error` : undefined;
+    const caixas = React.Children.map(children, filho => {
+        if (!React.isValidElement(filho))
+            return filho;
+        const p = filho.props;
+        if (typeof p.value !== "string")
+            return filho;
+        const v = p.value;
+        return React.cloneElement(filho, { checked: marcados.includes(v), name: name ?? filho.props.name,
+            disabled: p.disabled ?? disabled, ...(error ? { "aria-invalid": true } : null),
+            onChange: (e) => { p.onChange?.(e); trocar(v, e.currentTarget.checked); } });
+    });
+    return _jsxs("div", { role: "group", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, className: cx("checkbox-group", className), ...props, children: [_jsx("span", { className: "label", id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), caixas, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
+}
+const ehSecao = (x) => "items" in x;
+const textoDoItem = (it) => it.textValue ?? (typeof it.label === "string" ? it.label : "");
+export function ListBox({ label, items, selectionMode = "single", value, defaultValue, onValueChange, onAction, className, ...props }) {
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultValue ?? []);
+    const escolhidos = value ?? proprio;
+    const todos = React.useMemo(() => items.flatMap(x => ehSecao(x) ? x.items : [x]), [items]);
+    const habilitados = todos.filter(it => !it.disabled);
+    const [ativo, setAtivo] = React.useState(undefined);
+    // O item que recebe o Tab: o ativo; senão o primeiro escolhido; senão o primeiro habilitado.
+    const alvo = ativo ?? habilitados.find(it => escolhidos.includes(it.id))?.id ?? habilitados[0]?.id;
+    const refs = React.useRef(new Map());
+    const focar = (id) => { if (!id)
+        return; setAtivo(id); refs.current.get(id)?.focus(); };
+    const escolher = (it) => {
+        if (it.disabled)
+            return;
+        if (selectionMode === "none") {
+            onAction?.(it.id);
+            return;
+        }
+        const ja = escolhidos.includes(it.id);
+        const novo = selectionMode === "multiple" ? (ja ? escolhidos.filter(x => x !== it.id) : [...escolhidos, it.id]) : [it.id];
+        if (value === undefined)
+            setProprio(novo);
+        onValueChange?.(novo);
+        onAction?.(it.id);
+    };
+    const aoTeclar = (e, it) => {
+        const i = habilitados.findIndex(x => x.id === it.id);
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            focar(habilitados[Math.min(i + 1, habilitados.length - 1)]?.id);
+        }
+        else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            focar(habilitados[Math.max(i - 1, 0)]?.id);
+        }
+        else if (e.key === "Home") {
+            e.preventDefault();
+            focar(habilitados[0]?.id);
+        }
+        else if (e.key === "End") {
+            e.preventDefault();
+            focar(habilitados[habilitados.length - 1]?.id);
+        }
+        else if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            escolher(it);
+        }
+        else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            // a primeira letra: o próximo item, depois do atual, que começa com ela (e dá a volta)
+            const letra = e.key.toLocaleLowerCase();
+            const ordem = [...habilitados.slice(i + 1), ...habilitados.slice(0, i + 1)];
+            const achou = ordem.find(x => textoDoItem(x).toLocaleLowerCase().startsWith(letra));
+            if (achou) {
+                e.preventDefault();
+                focar(achou.id);
+            }
+        }
+    };
+    const item = (it) => {
+        const escolhido = selectionMode !== "none" && escolhidos.includes(it.id);
+        const idDesc = it.description ? `${auto}-${it.id}-d` : undefined;
+        return _jsxs("div", { ref: n => { if (n)
+                refs.current.set(it.id, n);
+            else
+                refs.current.delete(it.id); }, role: "option", "aria-selected": selectionMode === "none" ? undefined : escolhido, "aria-disabled": it.disabled || undefined, "aria-describedby": idDesc, tabIndex: it.id === alvo ? 0 : -1, className: cx("list-box-item", it.danger && "list-box-item-danger"), onClick: () => { if (!it.disabled) {
+                setAtivo(it.id);
+                escolher(it);
+            } }, onKeyDown: e => aoTeclar(e, it), onFocus: () => setAtivo(it.id), children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "list-box-item-text", children: [_jsx("span", { className: "list-box-item-label", children: it.label }), it.description && _jsx("span", { className: "list-box-item-description", id: idDesc, children: it.description })] }), escolhido && _jsx(Icon, { name: "check", className: "list-box-item-indicator" })] }, it.id);
+    };
+    return _jsx("div", { role: "listbox", "aria-label": label, "aria-multiselectable": selectionMode === "multiple" || undefined, className: cx("list-box", className), ...props, children: items.map((x, i) => ehSecao(x)
+            ? _jsxs("div", { role: "group", "aria-labelledby": `${auto}-s${i}`, className: "list-box-section", children: [_jsx("span", { className: "list-box-section-title", id: `${auto}-s${i}`, role: "presentation", children: x.title }), x.items.map(item)] }, `s${i}`)
+            : item(x)) });
+}
+export function Slider({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation = "horizontal", disabled, name, format, locale, showValue = true, thumbLabels, className, id }) {
+    // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
+    const atual = value ?? defaultValue;
+    const alcas = Array.isArray(atual) ? atual.length : 1;
+    return _jsxs(BaseSlider.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: onValueChange ? (v) => onValueChange(v) : undefined, onValueCommitted: onValueCommitted ? (v) => onValueCommitted(v) : undefined, min: min, max: max, step: step, largeStep: largeStep, orientation: orientation, disabled: disabled, format: format, locale: locale, className: cx("slider", className), children: [_jsx(BaseSlider.Label, { className: labelHidden ? "sr-only" : "slider-label", children: label }), showValue && _jsx(BaseSlider.Value, { className: "slider-output" }), _jsx(BaseSlider.Control, { className: "slider-control", children: _jsxs(BaseSlider.Track, { className: "slider-track", children: [_jsx(BaseSlider.Indicator, { className: "slider-fill" }), Array.from({ length: alcas }, (_, i) => _jsx(BaseSlider.Thumb, { index: i, className: "slider-thumb", getAriaLabel: thumbLabels ? () => thumbLabels[i] ?? "" : undefined }, i))] }) })] });
 }
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta
 // à mão: colar o código inteiro distribui pelos campos, Backspace volta um, e o

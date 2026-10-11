@@ -185,7 +185,7 @@ export function Topbar(props) { return _jsx(Header, { ...props }); }
 // pessoa vê (`Array.from` não parte um emoji ao meio); conteúdo que não é texto fica em cápsula.
 const umCaractere = (c) => (typeof c === "string" || typeof c === "number") && Array.from(String(c).trim()).length === 1;
 export function Kbd({ children, className, ...props }) { return _jsx("kbd", { className: cx("kbd", umCaractere(children) && "kbd-single", className), ...props, children: children }); }
-export const Textarea = forwardRef(function Textarea({ className, size, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), className), ...props }); });
+export const Textarea = forwardRef(function Textarea({ className, size, variant, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), variant === "secondary" && "textarea-secondary", className), ...props }); });
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] }); }

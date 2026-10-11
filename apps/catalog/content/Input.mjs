@@ -1,5 +1,5 @@
 import {createElement as h} from "react";
-import {Input, Field} from "../../../packages/react/dist/index.js";
+import {Input, Field, Card} from "../../../packages/react/dist/index.js";
 
 const stack = {display: "grid", gap: "var(--space-4)", width: "min(420px, 100%)"};
 
@@ -23,6 +23,17 @@ export default {
   ],
 
   examples: [
+    {
+      title: "In a card",
+      description: "Inside a card the field background disappears against the card's. variant=\"secondary\" uses the neutral fill instead, with no visible border.",
+      code: [
+        "<Card>",
+        '  <Field label="Project name"><Input variant="secondary" placeholder="Aurea" /></Field>',
+        "</Card>",
+      ].join("\n"),
+      render: () => h(Card, {style: {width: "100%", maxWidth: "22rem"}},
+        h(Field, {label: "Project name"}, h(Input, {variant: "secondary", placeholder: "Aurea"}))),
+    },
     {
       title: "Sizes",
       description:

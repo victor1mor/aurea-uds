@@ -41,7 +41,7 @@ const PASSOS = {
   xs: {h: "--control-h-xs", fs: "--text-xs",   gap: "6px",  px: "10px", fpx: "var(--space-3)", spe: "var(--space-8)", icon: null,      qr: null,      avfs: null},
   // 0.32.0: o recheio do botão é o da referência — 12 no sm, 16 no md e no lg (eram 15 e 20).
   sm: {h: "--control-h-sm", fs: "--text-sm",   gap: "8px",  px: "var(--space-3)", fpx: "var(--space-3)", spe: "var(--space-8)", icon: "--icon-sm", qr: "7.5rem",  avfs: "var(--text-xs)"},
-  md: {h: "--control-h-md", fs: "--text-sm",   gap: "8px",  px: "var(--space-4)", fpx: "13px",           spe: "38px",           icon: "--icon-md", qr: "10rem",   avfs: null},
+  md: {h: "--control-h-md", fs: "--text-sm",   gap: "8px",  px: "var(--space-4)", fpx: "var(--space-3)", spe: "38px",           icon: "--icon-md", qr: "10rem",   avfs: null},
   lg: {h: "--control-h-lg", fs: "--text-base", gap: "8px",  px: "var(--space-4)", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-lg", qr: "15rem", avfs: null},
   xl: {h: "--control-h-xl", fs: "--text-base", gap: "10px", px: "26px", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-xl", qr: null,    avfs: null},
 };

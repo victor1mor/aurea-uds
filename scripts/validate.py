@@ -3182,6 +3182,8 @@ _SEM_LINHA44 = {
     ".input-group>.select:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
     ".input-group>.textarea:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
     ".combobox-chip-input:focus-visible": "o anel é da moldura (`.combobox-multi:focus-within`)",
+    # 0.32.0: o `NumberField` virou um grupo só, como o da referência; o anel é do grupo inteiro.
+    ".number-field-group>.number-field-input:focus-visible": "o anel é do grupo (`.number-field-group:focus-within`)",
     # Rodada 2 da rede (ADR-0065): no modo de arrumar quem recebe o foco é a caixa QUADRADA do motor;
     # o anel vai para o corpo do nó (ou a caixa do contêiner), que tem o raio da casa.
     ".dependency-graph:focus-visible:has(>.graph-node)": "o anel é do corpo do nó (`:focus-visible > .graph-node > .graph-node-body`)",

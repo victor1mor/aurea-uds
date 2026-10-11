@@ -604,8 +604,10 @@ export function Kbd({children,className,...props}:HTMLAttributes<HTMLElement>&Re
 // e a lista que o nativo abre é do sistema operacional — CSS de autor não a alcança. O Victor mandou
 // trocar: "tudo deve ser padrão aurea". Pele própria na lista exige motor, e motor exige cliente.
 // O textarea não tem `size` no HTML (tem rows/cols), então aqui não há nada a tirar.
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>,RefAttributes<HTMLTextAreaElement>{size?:Responsive<FieldSize>}
-export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Textarea({className,size,...props},ref){return <textarea ref={ref} className={cx("textarea",peleDoEixo("textarea",size),className)} {...props}/>});
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>,RefAttributes<HTMLTextAreaElement>{size?:Responsive<FieldSize>;
+  /** 0.32.0, a da referência: `secondary` é o fundo neutro, para o campo dentro de um cartão. */
+  variant?:FieldVariant}
+export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Textarea({className,size,variant,...props},ref){return <textarea ref={ref} className={cx("textarea",peleDoEixo("textarea",size),variant==="secondary"&&"textarea-secondary",className)} {...props}/>});
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({label,labelHidden,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
@@ -629,6 +631,10 @@ export function Range({orientation,className,...props}:InputHTMLAttributes<HTMLI
 // composição e não tamanho. `Extract` em vez de união solta para o degrau ser O MESMO do botão:
 // um `sm` de campo e um `sm` de botão ao lado têm de medir igual (§23 e §132 da ATIVIDADE-2).
 export type FieldSize=Extract<ComponentSize,"sm"|"md"|"lg">;
+// O DESENHO DO CAMPO (0.32.0), o da referência: `primary` é o campo de sempre (fundo de campo e
+// borda); `secondary` é o de fundo neutro, sem borda, para quando o campo mora dentro de um cartão —
+// lá o fundo de campo some contra o cartão.
+export type FieldVariant="primary"|"secondary";
 // `md` é a classe base — não existe `.input-md`, como não existe `.btn-md`. O prefixo é escrito
 // literal em cada chamada (`input-${size}`, e não `${base}-${size}`) porque é assim que o check 15
 // enxerga uma classe montada em tempo de execução; com prefixo dinâmico ele para de proteger a
