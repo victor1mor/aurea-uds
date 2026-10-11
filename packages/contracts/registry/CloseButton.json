@@ -1,0 +1,85 @@
+{
+  "name": "CloseButton",
+  "category": "Actions",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "The round close button: a 24 circle on the neutral fill with a 16 X in the Bold stroke, named \"Close\" by itself.",
+  "icon": "x",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--secondary",
+    "--secondary-hover",
+    "--muted-foreground",
+    "--space-6",
+    "--icon-sm",
+    "--radius-full",
+    "--target-min",
+    "--duration-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "button",
+    "keyboard": [
+      "Enter",
+      "Space"
+    ],
+    "keyboardNote": "A real <button> (web) or a Pressable with the button role (native). The accessible name comes from the `close` string (\"Close\" / \"Fechar\"); say what closes with `label` when the screen has more than one."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": [
+      "x"
+    ]
+  },
+  "related": {
+    "components": [
+      "IconButton",
+      "Button",
+      "Alert",
+      "Dialog"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/actions.tsx#CloseButton"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "strings.close",
+      "description": "The accessible name. Defaults to \"Close\" (\"Fechar\" in ptBR); pass what closes when there is more than one on the screen, e.g. \"Close notice\"."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "the X (Bold)",
+      "description": "Replaces the X, as in the reference. Keep it a 16 glyph."
+    },
+    {
+      "name": "onClick",
+      "type": "MouseEventHandler",
+      "default": "—",
+      "description": "What closing does. On native, `onPress`."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the button; it leaves the focus order."
+    }
+  ]
+}

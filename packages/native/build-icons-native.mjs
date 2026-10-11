@@ -25,7 +25,7 @@ import {createRequire} from "node:module";
 import {dirname, join} from "node:path";
 import {fileURLToPath} from "node:url";
 import {escreverNomesDeIcone} from "../../scripts/icon-names.mjs";
-import {nomesDoPhosphor, mioloDoPhosphor} from "../icons/build-icons.mjs";
+import {nomesDoPhosphor, mioloDoPhosphor, NOMES_BOLD} from "../icons/build-icons.mjs";
 
 const require = createRequire(import.meta.url);
 const phosphor = join(dirname(dirname(require.resolve("@phosphor-icons/core"))), "assets");
@@ -49,8 +49,11 @@ const nomes = nomesDoPhosphor(phosphor);
 const usados = new Map();
 const barril = [];
 for (const base of nomes) {
-  for (const [nome, arquivo] of [[base, join(phosphor, "regular", base + ".svg")],
-                                 [base + "-fill", join(phosphor, "fill", base + "-fill.svg")]]) {
+  // 0.32.0: os nomes de `NOMES_BOLD` (hoje, o `x` do `CloseButton`) ganham também `<nome>-bold`.
+  const formas = [[base, join(phosphor, "regular", base + ".svg")],
+                  [base + "-fill", join(phosphor, "fill", base + "-fill.svg")]];
+  if (NOMES_BOLD.includes(base)) formas.push([base + "-bold", join(phosphor, "bold", base + "-bold.svg")]);
+  for (const [nome, arquivo] of formas) {
     const comp = pascal(nome);
     if (usados.has(comp)) throw new Error(`nome de componente repetido: ${comp} (${usados.get(comp)} e ${nome})`);
     usados.set(comp, nome);
@@ -101,6 +104,6 @@ writeFileSync(join(saidaDir, "index.d.ts"),
   + barril.map(({nome, comp}) => `export {default as ${comp}} from "./${nome}.js";`).join("\n") + "\n");
 
 // A-04: a mesma lista, como tipo, para o `<Icon name>` do nativo recusar nome que não existe.
-escreverNomesDeIcone(nomes, join(raiz, "src", "icon-names.ts"));
+escreverNomesDeIcone(nomes, join(raiz, "src", "icon-names.ts"), NOMES_BOLD);
 
-console.log(`build-icons-native: wrote ${nomes.length} icons x 2 weights -> ${saidaDir}`);
+console.log(`build-icons-native: wrote ${nomes.length} icons x 2 weights (+${NOMES_BOLD.length} bold) -> ${saidaDir}`);

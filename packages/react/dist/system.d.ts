@@ -41,7 +41,8 @@ export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, "nam
     name: AureaIcon;
     spriteUrl?: string;
     size?: Responsive<IconSize>;
-    /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
+    /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). `bold`, o traço grosso, só nos
+     *  nomes que o têm (hoje, o `x`); os outros, e o nome próprio do app, ficam no `regular`. */
     weight?: IconWeight;
 }
 export declare function Icon({ name, spriteUrl, size, weight, className, ...props }: IconProps): React.JSX.Element;

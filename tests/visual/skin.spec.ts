@@ -279,6 +279,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.FileInput, {key: "fi", label: "Files"}),
     // ── Ações ──────────────────────────────────────────────────────────────────────────
     h(A.IconButton, {key: "ib", icon: "plus", label: "Add"}),
+    h(A.CloseButton, {key: "xb"}),
     h(A.ButtonGroup, {key: "bg"}, h(A.Button, {key: 1}, "One"), h(A.Button, {key: 2}, "Two")),
     h(A.Toolbar, {key: "tb", label: "Skin"},
       h(A.ToolbarGroup, {key: "g", label: "Edit"},
@@ -1372,8 +1373,9 @@ for (const theme of ["dark", "light"] as const) {
             cluster: {display: est(".cluster").display, quebra: est(".cluster").flexWrap,
                       gap: parseFloat(est(".cluster").columnGap)},
             kbd: {display: est(".kbd").display, fonte: est(".kbd").fontFamily,
-                  fontCode: getComputedStyle(document.documentElement).getPropertyValue("--font-code").trim().replace(/,\s*/g, ","),
-                  borda: parseFloat(est(".kbd").borderTopWidth)},
+                  borda: parseFloat(est(".kbd").borderTopWidth), alt: caixa(".kbd").height,
+                  raio: parseFloat(est(".kbd").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
+                  peso: est(".kbd").fontWeight, fundo: est(".kbd").backgroundColor},
             // Formulários: o `.field` empilha; hint e erro NÃO podem medir igual ao rótulo.
             field: {display: est(".field").display, gap: parseFloat(est(".field").rowGap),
                     hintCor: est(".hint").color, erroCor: est(".field-error").color,
@@ -1405,6 +1407,10 @@ for (const theme of ["dark", "light"] as const) {
             iconBtn: {w: caixa(".btn-icon").width, h: caixa(".btn-icon").height,
                       quadrado: Math.abs(caixa(".btn-icon").width - caixa(".btn-icon").height) <= 1,
                       controlMd: emPx("--control-h-md")},
+            fechar: {w: caixa(".close-button").width, h: caixa(".close-button").height,
+                     raio: parseFloat(est(".close-button").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
+                     icone: caixa(".close-button .icon").width, fundo: est(".close-button").backgroundColor,
+                     nome: document.querySelector(".close-button")?.getAttribute("aria-label")},
             btnGroup: {display: est(".btn-group").display, naLinha: linhaUnica(".btn-group", ":scope > .btn")},
             toolbar: {display: est(".toolbar").display, raio: parseFloat(est(".toolbar").borderTopLeftRadius),
                       radiusControl: emPx("--radius-control"),
@@ -2408,8 +2414,14 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.cluster.display, "o Cluster é flex").toBe("flex");
     expect(e.cluster.quebra, "o Cluster QUEBRA — sem isso ele é a fonte mais barata de rolagem lateral")
       .toBe("wrap");
-    expect(e.kbd.fonte, "o Kbd usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
-    expect(e.kbd.borda, "o Kbd é uma tecla: tem borda").toBeGreaterThan(0);
+    // 0.32.0: a tecla da referência — 24 de altura, letra do texto em peso médio, fundo neutro,
+    // sem borda — com o canto da Aurea (cápsula). Até a 0.31.0 era 20, de código e com borda.
+    expect(e.kbd.fonte, "o Kbd usa a fonte do texto, como a referência").toContain("Atkinson Hyperlegible Next");
+    expect(e.kbd.borda, "o Kbd não tem borda: o fundo neutro é o que o separa").toBe(0);
+    expect(e.kbd.alt, "o Kbd tem 24 de altura (--space-6)").toBeCloseTo(24, 0);
+    expect(e.kbd.raio, "o Kbd é cápsula: --radius-control").toBe(e.kbd.radiusControl);
+    expect(e.kbd.peso, "o Kbd é peso médio").toBe("500");
+    expect(e.kbd.fundo, "o Kbd tem fundo próprio").not.toBe("rgba(0, 0, 0, 0)");
 
     // 28. Formulários: hint, erro e rótulo não podem medir a mesma cor — foi o achado A12.
     expect(e.field.hintCor, "hint e erro descrevem coisas diferentes e não podem parecer iguais")
@@ -2440,6 +2452,12 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.iconBtn.quadrado, "o IconButton é QUADRADO: ícone sem rótulo não pode virar cápsula")
       .toBe(true);
     expect(e.iconBtn.w, "e mede --control-h-md, como o Button de texto").toBe(e.iconBtn.controlMd);
+    // CloseButton (HER-12, 0.32.0): o da referência, um círculo de 24 com o X de 16 no fundo neutro.
+    expect([e.fechar.w, e.fechar.h], "o CloseButton é um círculo de 24 (--space-6)").toEqual([24, 24]);
+    expect(e.fechar.raio, "e é redondo: --radius-control").toBe(e.fechar.radiusControl);
+    expect(e.fechar.icone, "o X tem 16 (--icon-sm), não os 20 do botão").toBeCloseTo(16, 0);
+    expect(e.fechar.fundo, "o CloseButton tem o fundo neutro").not.toBe("rgba(0, 0, 0, 0)");
+    expect(e.fechar.nome, "o nome acessível vem sozinho").toBe("Close");
     expect(e.btnGroup.naLinha, "o ButtonGroup alinha os botões numa fila").toBe(true);
     expect(e.toolbar.raio, "a Toolbar é pill").toBe(e.toolbar.radiusControl);
     expect(e.toolbar.grupoGap, "o ToolbarGroup usa --space-1 — era `gap:4px` cru até o item E12")

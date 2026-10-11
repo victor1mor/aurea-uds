@@ -590,7 +590,11 @@ export function Topbar(props:HeaderProps){return <Header {...props}/>}
 // Kbd — representação de tecla/atalho. <kbd> é o elemento HTML certo; a pele é nossa. Ele já
 // morava fora da casa dele (no `internal.tsx`, por causa do `Button`); agora mora aqui, pelo
 // mesmo motivo elevado a regra.
-export function Kbd({children,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>){return <kbd className={cx("kbd",className)} {...props}>{children}</kbd>}
+// 0.32.0: uma tecla de UM caractere ("K", "⌘", "/") sai redonda (`kbd-single`), e uma palavra
+// ("Esc", "Enter") em cápsula — o canto da Aurea sobre a medida da referência. Conta-se o que a
+// pessoa vê (`Array.from` não parte um emoji ao meio); conteúdo que não é texto fica em cápsula.
+const umCaractere=(c:React.ReactNode)=>(typeof c==="string"||typeof c==="number")&&Array.from(String(c).trim()).length===1;
+export function Kbd({children,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>){return <kbd className={cx("kbd",umCaractere(children)&&"kbd-single",className)} {...props}>{children}</kbd>}
 
 // ── Inputs ───────────────────────────────────────────────────────────────────────────────────
 // Os seis controles abaixo NÃO prendem manipulador nenhum: quem escuta `onChange` é o consumidor,

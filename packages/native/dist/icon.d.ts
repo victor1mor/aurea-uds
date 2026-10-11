@@ -16,13 +16,14 @@ export type AureaIconComponent = (props: {
  */
 export type AureaIcon = IconName | AureaIconComponent;
 export type { IconName, PhosphorIconName, AureaIconNames, IconWeight } from "./icon-names.js";
-import type { IconName, IconWeight, PhosphorIconName } from "./icon-names.js";
+import type { BoldIconName, IconName, IconWeight, PhosphorIconName } from "./icon-names.js";
 /**
  * Parcial: o app registra só os que usa, e uma chave com erro de digitação reprova. A forma cheia
  * (o item escolhido, ADR-0053) entra com o sufixo `-fill`, como o arquivo:
- * `{"house": House, "house-fill": HouseFill}`.
+ * `{"house": House, "house-fill": HouseFill}`. O traço grosso (0.32.0), com `-bold`, só para os
+ * nomes que o têm — hoje o `x` do `CloseButton`: `{"x-bold": XBold}`.
  */
-export type AureaIconRegistry = Readonly<Partial<Record<IconName | `${PhosphorIconName}-fill`, AureaIconComponent>>>;
+export type AureaIconRegistry = Readonly<Partial<Record<IconName | `${PhosphorIconName}-fill` | `${BoldIconName}-bold`, AureaIconComponent>>>;
 /**
  * Declara o registro. É uma função de identidade tipada, e ela existe por um motivo prático:
  * escrita como constante no módulo do app, a referência é estável — e um registro recriado a cada
@@ -123,7 +124,8 @@ export interface IconProps {
     icons?: AureaIconRegistry;
     /**
      * `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Ela é a chave `<nome>-fill`
-     * do registro; se o app não a registrou, sai o glifo regular, em vez de nada.
+     * do registro; se o app não a registrou, sai o glifo regular, em vez de nada. `bold` (0.32.0) é
+     * a chave `<nome>-bold`, pela mesma regra.
      */
     weight?: IconWeight;
     /**

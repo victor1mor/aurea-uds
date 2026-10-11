@@ -427,3 +427,49 @@ export function ThemeToggle(props: ThemeToggleProps) {
       onPress={toggleTheme} />
   );
 }
+
+// ── CloseButton (HER-12, 0.32.0) ─────────────────────────────────────────────────────────────
+// O botão de fechar da referência, irmão do da web. No nativo dela ele é o próprio botão `sm` só
+// de ícone com fundo neutro: um círculo de 40 (o `touchControlHSm`, a escala de toque da
+// ADR-0066), o X esmaecido e a área de toque estendida em 12 de cada lado (`space3`, o `hitSlop`
+// dela). O X é o do traço Bold (decisão do Victor, *"1 bold"*): a chave `x-bold` do registro do app
+// (`@aurea-uds/native/icons/x-bold`); sem ela, sai o `x`. ⚠ O X dela tem 18; aqui é o `iconMd`
+// (20), porque a escala de ícone não tem 18 — levado à bancada.
+// Fechado como o dela: sem cor nem tamanho; `children` troca o X.
+export interface CloseButtonProps {
+  /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
+  label?: string;
+  onPress?: PressableProps["onPress"];
+  disabled?: boolean;
+  /** Registro local de ícones, quando não há um em contexto. */
+  icons?: AureaIconRegistry;
+  /** Troca o X. */
+  children?: React.ReactNode;
+  testID?: string;
+}
+
+/** O botão de fechar: círculo neutro com o X, que já se chama "Close"/"Fechar". */
+export function CloseButton({label, onPress, disabled, icons, children, testID}: CloseButtonProps) {
+  const t = useAureaTokens();
+  const s = useAureaStrings();
+  const lado = t.size.touchControlHSm;
+  return (
+    <Pressable
+      disabled={disabled}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label ?? s.close}
+      {...estadoAcessivel({disabled: !!disabled})}
+      hitSlop={t.size.space3}
+      testID={testID}
+      style={({pressed: tocando}) => [
+        {width: lado, height: lado, alignItems: "center", justifyContent: "center",
+         ...canto(t.size.radiusFull), backgroundColor: t.color.secondary},
+        // Encolhe a 93%, como o da referência (o botão comum da Aurea vai a 97%).
+        tocando && {opacity: REACAO_AO_TOQUE.pressionado.opacity, transform: [{scale: 0.93}]},
+        disabled && REACAO_AO_TOQUE.inerte,
+      ]}>
+      {children ?? <Icon name="x" weight="bold" size="md" icons={icons} color={t.color.mutedForeground} />}
+    </Pressable>
+  );
+}

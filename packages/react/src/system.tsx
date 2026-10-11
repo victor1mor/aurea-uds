@@ -195,7 +195,7 @@ function AvisosAncorados(){
 // A-04: o nome é checado pelo TypeScript. A lista é GERADA do mesmo @phosphor-icons/core que monta
 // o sprite (`packages/icons/build-icons.mjs`, ADR-0053); nome próprio do app entra por `AureaIconNames`.
 export type {IconName,PhosphorIconName,AureaIconNames,IconWeight} from "./icon-names.js";
-import {NOMES_PHOSPHOR,type IconName,type IconWeight} from "./icon-names.js";
+import {NOMES_PHOSPHOR,NOMES_BOLD,type IconName,type IconWeight} from "./icon-names.js";
 // A escala de GLIFO é própria (`--icon-*`) e começa em `sm`: não existe `--icon-xs`. Emitir um
 // degrau `xs` aqui seria desenhar por simetria com o botão, e a medição de 22/08 mostrou que as
 // duas escalas nem sequer reagem à densidade do mesmo jeito.
@@ -210,13 +210,16 @@ export type AureaIconComponent=(props:React.SVGAttributes<SVGSVGElement>)=>React
 /** Um ícone: o NOME de um glifo do sprite, ou o DESENHO do app. */
 export type AureaIcon=IconName|AureaIconComponent;
 export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>,"name">{name:AureaIcon;spriteUrl?:string;size?:Responsive<IconSize>;
-  /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
+  /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). `bold`, o traço grosso, só nos
+   *  nomes que o têm (hoje, o `x`); os outros, e o nome próprio do app, ficam no `regular`. */
   weight?:IconWeight}
 // spriteUrl aqui é OVERRIDE local (dois sprites na mesma página, por exemplo). O normal é
 // não passar nada e deixar o AureaProvider dizer de onde vêm os glifos.
 // A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
-// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
-const idDoIcone=(name:string,weight:IconWeight="regular")=>weight==="fill"&&NOMES_PHOSPHOR.has(name)?`i-${name}-fill`:`i-${name}`;
+// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio. O `bold` (0.32.0)
+// segue a mesma regra, com a lista curta do `NOMES_BOLD`.
+const idDoIcone=(name:string,weight:IconWeight="regular")=>weight==="fill"&&NOMES_PHOSPHOR.has(name)?`i-${name}-fill`
+  :weight==="bold"&&NOMES_BOLD.has(name)?`i-${name}-bold`:`i-${name}`;
 export function Icon({name,spriteUrl,size,weight,className,...props}:IconProps){const base=useSpriteUrl();
   if(typeof name==="function"){const Desenho=name;return <Desenho aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}/>}
   return <svg aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}><use href={`${spriteUrl??base}#${idDoIcone(name,weight)}`}/></svg>}

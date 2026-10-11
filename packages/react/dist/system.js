@@ -190,12 +190,14 @@ function AvisosAncorados() {
                         : _jsxs(BaseToast.Root, { toast: t, className: "toast-anchored", children: [_jsx("span", { className: "toast-anchored-icon", "aria-hidden": "true" }), _jsx(BaseToast.Title, { render: _jsx("span", {}) })] }) }, t.id);
             }) }) });
 }
-import { NOMES_PHOSPHOR } from "./icon-names.js";
+import { NOMES_PHOSPHOR, NOMES_BOLD } from "./icon-names.js";
 // spriteUrl aqui é OVERRIDE local (dois sprites na mesma página, por exemplo). O normal é
 // não passar nada e deixar o AureaProvider dizer de onde vêm os glifos.
 // A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
-// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
-const idDoIcone = (name, weight = "regular") => weight === "fill" && NOMES_PHOSPHOR.has(name) ? `i-${name}-fill` : `i-${name}`;
+// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio. O `bold` (0.32.0)
+// segue a mesma regra, com a lista curta do `NOMES_BOLD`.
+const idDoIcone = (name, weight = "regular") => weight === "fill" && NOMES_PHOSPHOR.has(name) ? `i-${name}-fill`
+    : weight === "bold" && NOMES_BOLD.has(name) ? `i-${name}-bold` : `i-${name}`;
 export function Icon({ name, spriteUrl, size, weight, className, ...props }) {
     const base = useSpriteUrl();
     if (typeof name === "function") {

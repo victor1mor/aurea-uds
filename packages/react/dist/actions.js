@@ -203,6 +203,10 @@ export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, 
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 // Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
 export const IconButton = forwardRef(function IconButton({ label, icon, variant = "ghost", className, loading, ...props }, ref) { return _jsx(Button, { ref: ref, variant: variant, className: cx("btn-icon", className), "aria-label": label, loading: loading, ...props, children: loading ? null : _jsx(Icon, { name: icon }) }); });
+export const CloseButton = forwardRef(function CloseButton({ label, className, children, ...props }, ref) {
+    const s = useAureaStrings();
+    return _jsx(Button, { ref: ref, variant: "secondary", className: cx("close-button", className), "aria-label": label ?? s.close, ...props, children: children ?? _jsx(Icon, { name: "x", weight: "bold" }) });
+});
 export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
     const { theme, toggleTheme } = useAureaTheme();
     const s = useAureaStrings();

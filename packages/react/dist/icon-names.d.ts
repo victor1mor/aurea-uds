@@ -15,7 +15,13 @@ export type IconName = PhosphorIconName | Extract<keyof AureaIconNames, string>;
 /**
  * O peso do ícone. `regular` é o de sempre; `fill` é o cheio, o do item escolhido (aba ativa,
  * item atual do menu) — ADR-0053. Nome próprio do app não tem forma cheia e fica no `regular`.
+ * `bold` (0.32.0) é o traço grosso, e só existe para os nomes de `NOMES_BOLD` (hoje, o `x` do
+ * `CloseButton`); para os outros, ele desenha o `regular`.
  */
-export type IconWeight = "regular" | "fill";
+export type IconWeight = "regular" | "fill" | "bold";
 /** Os nomes do Phosphor em tempo de execução: só eles têm a forma cheia (`<nome>-fill`). */
 export declare const NOMES_PHOSPHOR: ReadonlySet<string>;
+/** Os nomes que também têm o peso Bold (`<nome>-bold`), um a um, por decisão. */
+export type BoldIconName = "x";
+/** Os mesmos, em tempo de execução. */
+export declare const NOMES_BOLD: ReadonlySet<string>;

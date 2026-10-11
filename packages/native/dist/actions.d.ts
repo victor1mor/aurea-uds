@@ -95,3 +95,16 @@ export declare function folgaDoToque(t: AureaTokens, size?: AureaButtonSize): nu
 export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share"> {
 }
 export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;
+export interface CloseButtonProps {
+    /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
+    label?: string;
+    onPress?: PressableProps["onPress"];
+    disabled?: boolean;
+    /** Registro local de ícones, quando não há um em contexto. */
+    icons?: AureaIconRegistry;
+    /** Troca o X. */
+    children?: React.ReactNode;
+    testID?: string;
+}
+/** O botão de fechar: círculo neutro com o X, que já se chama "Close"/"Fechar". */
+export declare function CloseButton({ label, onPress, disabled, icons, children, testID }: CloseButtonProps): React.JSX.Element;

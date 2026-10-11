@@ -293,3 +293,16 @@ export function ThemeToggle(props) {
     const escuro = theme === "dark";
     return (_jsx(BotaoDeIcone, { ...props, name: escuro ? "sun" : "moon", label: escuro ? s.themeToLight : s.themeToDark, corDoIcone: escuro ? t.color.primary : t.color.foreground, pesoDoIcone: "fill", onPress: toggleTheme }));
 }
+/** O botão de fechar: círculo neutro com o X, que já se chama "Close"/"Fechar". */
+export function CloseButton({ label, onPress, disabled, icons, children, testID }) {
+    const t = useAureaTokens();
+    const s = useAureaStrings();
+    const lado = t.size.touchControlHSm;
+    return (_jsx(Pressable, { disabled: disabled, onPress: onPress, accessibilityRole: "button", accessibilityLabel: label ?? s.close, ...estadoAcessivel({ disabled: !!disabled }), hitSlop: t.size.space3, testID: testID, style: ({ pressed: tocando }) => [
+            { width: lado, height: lado, alignItems: "center", justifyContent: "center",
+                ...canto(t.size.radiusFull), backgroundColor: t.color.secondary },
+            // Encolhe a 93%, como o da referência (o botão comum da Aurea vai a 97%).
+            tocando && { opacity: REACAO_AO_TOQUE.pressionado.opacity, transform: [{ scale: 0.93 }] },
+            disabled && REACAO_AO_TOQUE.inerte,
+        ], children: children ?? _jsx(Icon, { name: "x", weight: "bold", size: "md", icons: icons, color: t.color.mutedForeground }) }));
+}

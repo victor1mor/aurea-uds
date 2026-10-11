@@ -180,7 +180,11 @@ export function Topbar(props) { return _jsx(Header, { ...props }); }
 // Kbd — representação de tecla/atalho. <kbd> é o elemento HTML certo; a pele é nossa. Ele já
 // morava fora da casa dele (no `internal.tsx`, por causa do `Button`); agora mora aqui, pelo
 // mesmo motivo elevado a regra.
-export function Kbd({ children, className, ...props }) { return _jsx("kbd", { className: cx("kbd", className), ...props, children: children }); }
+// 0.32.0: uma tecla de UM caractere ("K", "⌘", "/") sai redonda (`kbd-single`), e uma palavra
+// ("Esc", "Enter") em cápsula — o canto da Aurea sobre a medida da referência. Conta-se o que a
+// pessoa vê (`Array.from` não parte um emoji ao meio); conteúdo que não é texto fica em cápsula.
+const umCaractere = (c) => (typeof c === "string" || typeof c === "number") && Array.from(String(c).trim()).length === 1;
+export function Kbd({ children, className, ...props }) { return _jsx("kbd", { className: cx("kbd", umCaractere(children) && "kbd-single", className), ...props, children: children }); }
 export const Textarea = forwardRef(function Textarea({ className, size, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), className), ...props }); });
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.

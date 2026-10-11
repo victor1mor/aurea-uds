@@ -173,6 +173,31 @@
       "$type": "number",
       "$value": 1.7
     },
+    "text-4xl-leading": {
+      "$type": "number",
+      "$description": "Line height of the text-4xl heading (36 → 40), from the reference's published scale, where each size carries its own line height (0.32.0). A ratio, so the native target multiplies it by the font size.",
+      "$value": 1.111111
+    },
+    "text-3xl-leading": {
+      "$type": "number",
+      "$description": "Line height of the text-3xl heading (30 → 36), from the reference's published scale (0.32.0).",
+      "$value": 1.2
+    },
+    "text-2xl-leading": {
+      "$type": "number",
+      "$description": "Line height of the text-2xl heading (24 → 32), from the reference's published scale (0.32.0).",
+      "$value": 1.333333
+    },
+    "text-xl-leading": {
+      "$type": "number",
+      "$description": "Line height of the text-xl heading (20 → 28), from the reference's published scale (0.32.0).",
+      "$value": 1.4
+    },
+    "text-lg-leading": {
+      "$type": "number",
+      "$description": "Line height of the text-lg heading (18 → 28), from the reference's published scale (0.32.0). The base size (16 → 24) is leading-normal.",
+      "$value": 1.555556
+    },
     "space-0": {
       "$type": "dimension",
       "$value": {
@@ -680,7 +705,7 @@
     "control-h-sm": {
       "$type": "dimension",
       "$value": {
-        "value": 1.875,
+        "value": 2,
         "unit": "rem"
       }
     },
@@ -694,7 +719,7 @@
     "control-h-lg": {
       "$type": "dimension",
       "$value": {
-        "value": 2.625,
+        "value": 2.5,
         "unit": "rem"
       }
     },
@@ -4459,7 +4484,7 @@
       "control-h-lg": {
         "$type": "dimension",
         "$value": {
-          "value": 2.375,
+          "value": 2.25,
           "unit": "rem"
         }
       },
@@ -4467,6 +4492,27 @@
         "$type": "dimension",
         "$value": {
           "value": 2.75,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2.25,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-md": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2.75,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 3.25,
           "unit": "rem"
         }
       },
@@ -4503,9 +4549,9 @@
       },
       "control-h-sm": {
         "$type": "dimension",
-        "$description": "Height of a small control: compact button, pagination, calendar arrow.",
+        "$description": "Height of a small control: compact button, pagination, calendar arrow. 32, the reference's sm (h-8); was 30 until 0.32.0.",
         "$value": {
-          "value": 1.875,
+          "value": 2,
           "unit": "rem"
         }
       },
@@ -4519,9 +4565,9 @@
       },
       "control-h-lg": {
         "$type": "dimension",
-        "$description": "Height of a large control.",
+        "$description": "Height of a large control. 40, the reference's lg (h-10); was 42 until 0.32.0.",
         "$value": {
-          "value": 2.625,
+          "value": 2.5,
           "unit": "rem"
         }
       },
@@ -4530,6 +4576,30 @@
         "$description": "Height of the largest control, for a single prominent call to action.",
         "$value": {
           "value": 3.125,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-sm": {
+        "$type": "dimension",
+        "$description": "Height of a small control on the native (touch) target. The native scale is its own, built for the finger like the reference's native package (sm 40 · md 48 · lg 56); the web keeps control-h-* (0.32.0, ADR-0066).",
+        "$value": {
+          "value": 2.5,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-md": {
+        "$type": "dimension",
+        "$description": "Height of the default control on the native (touch) target: button, field, select. 48, as in the reference's native package (0.32.0, ADR-0066).",
+        "$value": {
+          "value": 3,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-lg": {
+        "$type": "dimension",
+        "$description": "Height of a large control on the native (touch) target (0.32.0, ADR-0066).",
+        "$value": {
+          "value": 3.5,
           "unit": "rem"
         }
       },
@@ -4569,7 +4639,7 @@
       "control-h-sm": {
         "$type": "dimension",
         "$value": {
-          "value": 2.125,
+          "value": 2.25,
           "unit": "rem"
         }
       },
@@ -4583,7 +4653,7 @@
       "control-h-lg": {
         "$type": "dimension",
         "$value": {
-          "value": 3.0,
+          "value": 2.75,
           "unit": "rem"
         }
       },
@@ -4591,6 +4661,27 @@
         "$type": "dimension",
         "$value": {
           "value": 3.5,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2.75,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-md": {
+        "$type": "dimension",
+        "$value": {
+          "value": 3.25,
+          "unit": "rem"
+        }
+      },
+      "touch-control-h-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 3.75,
           "unit": "rem"
         }
       },

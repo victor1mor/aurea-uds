@@ -65,9 +65,9 @@ export type {
   GridProps, CardProps, SeparatorProps, AureaCardVariant, AureaCardAccent, AureaGridMin,
 } from "./layout.js";
 
-export {Button, IconButton, LinkButton, ThemeToggle} from "./actions.js";
+export {Button, IconButton, LinkButton, ThemeToggle, CloseButton} from "./actions.js";
 export type {
-  ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, AureaShareData,
+  ButtonProps, IconButtonProps, LinkButtonProps, ThemeToggleProps, CloseButtonProps, AureaButtonAppearance, AureaButtonSize, AureaButtonTone, AureaShareData,
 } from "./actions.js";
 
 // ── Lote 2 — o painel, que é só leitura ────────────────────────────────────────────────────

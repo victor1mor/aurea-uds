@@ -67,7 +67,13 @@ const ENTRELINHA = {
     none: "leadingNone", tight: "leadingTight", normal: "leadingNormal", relaxed: "leadingRelaxed",
 };
 // O título usa o papel `heading` (GAR-16, 0.28.0) — hoje a mesma fonte do texto, no mesmo peso 600.
-const titulo = (tamanho) => ({ tamanho, peso: 600, entrelinha: "leadingTight", fonte: "heading", junto: true });
+// 0.32.0: a entrelinha é a de CADA tamanho (40 · 36 · 32 · 28 · 28 · 24), como na escala publicada
+// da referência e na web; até aqui era `leadingTight` (1,2) em todos.
+const ENTRELINHA_DO_TITULO = {
+    text4xl: "text4xlLeading", text3xl: "text3xlLeading", text2xl: "text2xlLeading",
+    textXl: "textXlLeading", textLg: "textLgLeading", textBase: "leadingNormal",
+};
+const titulo = (tamanho) => ({ tamanho, peso: 600, entrelinha: ENTRELINHA_DO_TITULO[tamanho] ?? "leadingTight", fonte: "heading", junto: true });
 const PAPEL = {
     h1: titulo("text4xl"), h2: titulo("text3xl"), h3: titulo("text2xl"),
     h4: titulo("textXl"), h5: titulo("textLg"), h6: titulo("textBase"),

@@ -95,6 +95,11 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: IconName;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
+export interface CloseButtonProps extends Omit<ButtonProps, "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
+    /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
+    label?: string;
+}
+export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
 }
 export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;

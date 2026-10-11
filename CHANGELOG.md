@@ -17,6 +17,44 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### 0.32.0 — o lote único: as peças quase idênticas às da referência (em construção, 11/10/2026)
+
+A regra nova do Victor (11/10/2026): a peça da Aurea é a da referência principal — anatomia,
+medidas, estados, comportamento, teclado —, e por cima só entra o que é da Aurea (as cores e os
+temas, os cantos 22/32/cápsula, a fonte, os ícones, as densidades, sem degradê, a baixa visão).
+O lote junta a rodada 1 do site, a auditoria peça a peça (web e nativo), os pedidos do app de rede
+e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]` na versão.
+
+#### Novo
+
+- **`CloseButton`, na web e no nativo** — o botão de fechar da referência: um círculo no cinza
+  neutro com o X esmaecido, que já se chama "Close" ("Fechar" em `ptBR`); `label` diz o que fecha,
+  `children` troca o X. Web: 24, X de 16, a área de toque de 44 em volta sem o círculo crescer.
+  Nativo: 40 (a escala de toque, abaixo), X de 20, toque estendido em 12.
+- **O peso `bold` no `Icon`**, só para os nomes desenhados nele — hoje, o `x` (o traço do
+  `CloseButton`). Os outros nomes pedidos em `bold` desenham o regular. No sprite, `i-x-bold`; no
+  nativo, `@aurea-uds/native/icons/x-bold` (registre como `"x-bold"`).
+- **A escala de toque do nativo** (`touch-control-h-sm/md/lg`, [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md)): 40 · 48 · 56 no
+  confortável, como o pacote nativo da referência; 36 · 44 · 52 no compacto e 44 · 52 · 60 no
+  espaçoso. A web continua na escala dela.
+- **A entrelinha de cada título** (`text-4xl-leading` … `text-lg-leading`): 40 · 36 · 32 · 28 · 28 ·
+  24 para os títulos de 36 · 30 · 24 · 20 · 18 · 16, como na escala publicada da referência — no
+  `Heading`/`Text type="h*"` (web e nativo) e nos títulos do `.prose`.
+
+#### Mudou
+
+- **`Kbd`**: a tecla da referência — 24 de altura, 8 dos lados, letra 14 peso médio na fonte do
+  texto, fundo neutro, sem borda —, em cápsula, e redonda quando é um caractere só (`kbd-single`,
+  posto pelo componente). Era 20, letra 11 na fonte de código, com borda. Dentro do botão, 20.
+- **A altura `sm` e `lg` dos controles da web**: 32 e 40 (eram 30 e 42), como a referência; o `md`
+  continua 36. Compacto 28/36 (era 28/38), espaçoso 36/44 (era 34/48).
+- **Títulos**: a entrelinha deixa de ser 1,2 em todos (era 43 no título 1 e 19 no título 6).
+
+#### ⚠ Pode quebrar a compilação
+
+- `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
+  compilar.
+
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no

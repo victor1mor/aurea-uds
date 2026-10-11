@@ -10,8 +10,12 @@
 // dois e reprova se divergirem.
 import {writeFileSync} from "node:fs";
 
-/** @param {string[]} nomes em ordem alfabética  @param {string} destino caminho do `.ts` */
-export function escreverNomesDeIcone(nomes, destino) {
+/**
+ * @param {string[]} nomes em ordem alfabética  @param {string} destino caminho do `.ts`
+ * @param {string[]} nomesBold os que também têm o peso Bold (0.32.0: só o `x`, do `CloseButton`)
+ */
+export function escreverNomesDeIcone(nomes, destino, nomesBold) {
+  if (!Array.isArray(nomesBold)) throw new Error("escreverNomesDeIcone: falta a lista do Bold — os dois alvos têm de passar a mesma");
   const linhas = nomes.map((n) => `  | ${JSON.stringify(n)}`).join("\n");
   writeFileSync(destino, `// GERADO por scripts/icon-names.mjs a partir do @phosphor-icons/core. Não editar à mão.
 // Achado A-04: o nome do ícone é checado pelo TypeScript. ADR-0053: os nomes são os do Phosphor.
@@ -36,10 +40,18 @@ export type IconName = PhosphorIconName | Extract<keyof AureaIconNames, string>;
 /**
  * O peso do ícone. \`regular\` é o de sempre; \`fill\` é o cheio, o do item escolhido (aba ativa,
  * item atual do menu) — ADR-0053. Nome próprio do app não tem forma cheia e fica no \`regular\`.
+ * \`bold\` (0.32.0) é o traço grosso, e só existe para os nomes de \`NOMES_BOLD\` (hoje, o \`x\` do
+ * \`CloseButton\`); para os outros, ele desenha o \`regular\`.
  */
-export type IconWeight = "regular" | "fill";
+export type IconWeight = "regular" | "fill" | "bold";
 
 /** Os nomes do Phosphor em tempo de execução: só eles têm a forma cheia (\`<nome>-fill\`). */
 export const NOMES_PHOSPHOR: ReadonlySet<string> = new Set(${JSON.stringify(nomes)});
+
+/** Os nomes que também têm o peso Bold (\`<nome>-bold\`), um a um, por decisão. */
+export type BoldIconName = ${nomesBold.map((n) => JSON.stringify(n)).join(" | ") || "never"};
+
+/** Os mesmos, em tempo de execução. */
+export const NOMES_BOLD: ReadonlySet<string> = new Set(${JSON.stringify(nomesBold)});
 `);
 }

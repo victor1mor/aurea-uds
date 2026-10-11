@@ -253,6 +253,18 @@ export interface IconButtonProps extends Omit<ButtonProps,"children">{label:stri
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 // Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
 export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,loading,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} loading={loading} {...props}>{loading?null:<Icon name={icon}/>}</Button>});
+// CloseButton (HER-12, 0.32.0) — o botão de fechar da referência, quase idêntico: um círculo de 24
+// no cinza neutro, o X de 16 esmaecido no traço Bold (decisão do Victor, *"1 bold"*), que escurece
+// com o mouse e encolhe ao apertar. O canto é o nosso (círculo cheio, e não o quadrado arredondado
+// dela). O nome acessível vem sozinho ("Close"/"Fechar"), e quem fecha outra coisa diz o quê
+// (`label="Fechar aviso"`). No toque, a área continua de 44 (`--target-min`) sem o círculo crescer.
+// Fechado como o dela: sem cor, tamanho nem ícone de fora — `children` troca o X, como lá.
+export interface CloseButtonProps extends Omit<ButtonProps,"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"pressed"|"share">{
+  /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
+  label?:string}
+export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function CloseButton({label,className,children,...props},ref){
+  const s=useAureaStrings();
+  return <Button ref={ref} variant="secondary" className={cx("close-button",className)} aria-label={label??s.close} {...props}>{children??<Icon name="x" weight="bold"/>}</Button>});
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone. É peça
 // EXCLUSIVA da Aurea — a referência não tem troca de tema —, então nasce
 // pensando como ela criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.

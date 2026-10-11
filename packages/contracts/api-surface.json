@@ -4,9 +4,9 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 37,
-    "componentes": 129,
+    "componentes": 131,
     "hooks": 9,
-    "aliasesLiterais": 84,
+    "aliasesLiterais": 85,
     "propsDistintas": 316
   },
   "aliases": {
@@ -1819,10 +1819,18 @@
     },
     "IconWeight": {
       "module": "icon-names",
-      "raw": "\"regular\" | \"fill\"",
+      "raw": "\"regular\" | \"fill\" | \"bold\"",
       "union": [
         "regular",
-        "fill"
+        "fill",
+        "bold"
+      ]
+    },
+    "BoldIconName": {
+      "module": "icon-names",
+      "raw": "\"x\"",
+      "union": [
+        "x"
       ]
     },
     "FieldOrientation": {
@@ -2556,6 +2564,19 @@
                 "horizontal",
                 "vertical"
               ]
+            }
+          ]
+        },
+        {
+          "name": "CloseButton",
+          "kind": "const",
+          "propsType": "CloseButtonProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -5005,6 +5026,12 @@
     },
     "icon-names": {
       "components": [
+        {
+          "name": "NOMES_BOLD",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        },
         {
           "name": "NOMES_PHOSPHOR",
           "kind": "const",
@@ -8287,7 +8314,8 @@
               "type": "IconWeight",
               "values": [
                 "regular",
-                "fill"
+                "fill",
+                "bold"
               ]
             }
           ]

@@ -21,6 +21,11 @@
   --leading-tight:1.2;
   --leading-normal:1.5;
   --leading-relaxed:1.7;
+  --text-4xl-leading:1.111111;
+  --text-3xl-leading:1.2;
+  --text-2xl-leading:1.333333;
+  --text-xl-leading:1.4;
+  --text-lg-leading:1.555556;
   --space-0:0;
   --space-05:0.125rem;
   --space-1:0.25rem;
@@ -75,9 +80,9 @@
   --breakpoint-xl:1280px;
   --breakpoint-2xl:1536px;
   --control-h-xs:1.625rem;
-  --control-h-sm:1.875rem;
+  --control-h-sm:2rem;
   --control-h-md:2.25rem;
-  --control-h-lg:2.625rem;
+  --control-h-lg:2.5rem;
   --control-h-xl:3.125rem;
   --row-h:3rem;
   --card-pad:1.25rem;
@@ -443,28 +448,37 @@
   --control-h-xs:1.5rem;
   --control-h-sm:1.75rem;
   --control-h-md:2rem;
-  --control-h-lg:2.375rem;
+  --control-h-lg:2.25rem;
   --control-h-xl:2.75rem;
+  --touch-control-h-sm:2.25rem;
+  --touch-control-h-md:2.75rem;
+  --touch-control-h-lg:3.25rem;
   --row-h:2.625rem;
   --card-pad:1rem;
   --section-gap:1.125rem;
 }
 [data-density="comfortable"]{
   --control-h-xs:1.625rem;
-  --control-h-sm:1.875rem;
+  --control-h-sm:2rem;
   --control-h-md:2.25rem;
-  --control-h-lg:2.625rem;
+  --control-h-lg:2.5rem;
   --control-h-xl:3.125rem;
+  --touch-control-h-sm:2.5rem;
+  --touch-control-h-md:3rem;
+  --touch-control-h-lg:3.5rem;
   --row-h:3rem;
   --card-pad:1.25rem;
   --section-gap:1.5rem;
 }
 [data-density="spacious"]{
   --control-h-xs:1.75rem;
-  --control-h-sm:2.125rem;
+  --control-h-sm:2.25rem;
   --control-h-md:2.5rem;
-  --control-h-lg:3rem;
+  --control-h-lg:2.75rem;
   --control-h-xl:3.5rem;
+  --touch-control-h-sm:2.75rem;
+  --touch-control-h-md:3.25rem;
+  --touch-control-h-lg:3.75rem;
   --row-h:3.375rem;
   --card-pad:1.5rem;
   --section-gap:2rem;
@@ -1329,14 +1343,21 @@ img,svg { display:block; }
 [data-theme="light"] .btn-link-primary:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 .btn-link-danger { --btn-fg:var(--danger-400); }
 /* pressed entra na linguagem única de "selecionado" acima; só-ícone não leva o fio. */
-/* Kbd — a tecla que dispara a ação, dentro ou fora do botão. Peça própria, não decoração. */
-.kbd { display:inline-flex; align-items:center; justify-content:center; gap:2px; min-width:20px; height:20px; padding:0 6px; border:1px solid var(--border-strong); border-radius:var(--radius-sm); background:var(--secondary); color:var(--muted-foreground); font:500 11px/1 var(--font-code); }
+/* Kbd — a tecla que dispara a ação, dentro ou fora do botão. Peça própria, não decoração.
+   0.32.0: as medidas da referência (24 de altura, 8 dos lados, letra 14 peso médio na fonte do
+   texto, cinza neutro, sem borda); o canto é o nosso: cápsula, e CÍRCULO quando a tecla é um
+   caractere só (`kbd-single`, que o componente põe sozinho). Era 20, letra 11 de código, borda. */
+.kbd { display:inline-flex; align-items:center; justify-content:center; gap:var(--space-05); min-width:var(--space-6); height:var(--space-6); padding:0 var(--space-2); border:0; border-radius:var(--radius-full); background:var(--secondary); color:var(--muted-foreground); font:var(--weight-medium) var(--text-sm)/1 var(--font-ui); white-space:nowrap; }
+.kbd-single { width:var(--space-6); padding:0; }
 /* dentro do botão a tecla herda a cor do rótulo, SEM opacidade: a 85% o contraste caía
    para 3.67:1 (axe) e o atalho é informação, não enfeite. O fundo já o separa. */
 /* Dentro do botão a tecla NÃO ganha fundo próprio: qualquer tinta escurece a cápsula e o
    rótulo perde contraste (no primary claro caiu a 3.55:1). Sem fundo, o contraste da
-   tecla é o MESMO do rótulo — se o botão passa, ela passa. A borda de currentColor separa. */
-.btn .kbd { background:transparent; border-color:color-mix(in oklab, currentColor 35%, transparent); color:inherit; }
+   tecla é o MESMO do rótulo — se o botão passa, ela passa. O fio de currentColor separa (sem
+   borda desde a 0.32.0, o fio é sombra por dentro, e não muda a medida). Menor que a solta (20),
+   para caber no botão pequeno. */
+.btn .kbd { min-width:var(--space-5); height:var(--space-5); padding:0 var(--space-1); background:transparent; box-shadow:inset 0 0 0 var(--border-width) color-mix(in oklab, currentColor 35%, transparent); color:inherit; font-size:var(--text-xs); }
+.btn .kbd-single { width:var(--space-5); padding:0; }
 
 /* nav: item de navegação. Normal = ghost silencioso; o ATIVO (aria-current) ganha texto
    amarelo + traço embaixo — SEM borda (pedido do Victor). aria-current, não uma variante
@@ -1401,6 +1422,16 @@ img,svg { display:block; }
 /* xs e xl também precisam de largura: sem isto a altura mudava e a largura ficava na do
    md, e o alvo só-ícone deixava de ser quadrado (achado na onda Actions, 24/07). */
 .btn-icon.btn-xl { width:var(--control-h-xl); }
+/* CloseButton (HER-12, 0.32.0) — o botão de fechar da referência, quase idêntico: 24 × 24, o X de
+   16 no cinza neutro, esmaecido; escurece com o mouse (o `--secondary-hover` do `.btn-secondary`) e
+   encolhe para 93% ao apertar, como o dela. O canto é o nosso: círculo cheio. O tamanho do X vai no
+   próprio `.icon`, porque o `--step-icon` não herda. No TOQUE o círculo não cresce: a área de 44
+   (`--target-min`) é um `::before` invisível em volta dele, e o `.btn` de toque o deixa de fora da
+   altura mínima (regra do `pointer:coarse`, mais abaixo). */
+.close-button { --btn-fg:var(--muted-foreground); position:relative; flex:none; inline-size:var(--space-6); block-size:var(--space-6); min-inline-size:0; min-block-size:0; padding:0; border-radius:var(--radius-full); }
+.close-button .icon { --step-icon:var(--icon-sm); }
+.close-button:active:not(:disabled) { transform:scale(.93); }
+@media (pointer:coarse) { .close-button::before { content:""; position:absolute; inset:calc((var(--space-6) - var(--target-min)) / 2); border-radius:var(--radius-full); } }
 /* ThemeToggle (25/09/2026): a cor no ícone mostra o tema para onde se vai. No claro a LUA, na tinta
    do texto; no escuro o SOL, no amarelo da marca — as duas combinações se enxergam, e é por isso
    que o botão nunca mostra a lua no escuro nem o sol no claro. Mais específico que o `.btn:hover`,
@@ -2493,15 +2524,17 @@ img,svg { display:block; }
    token: a escala de letras é a dela desde a ADR-0050, a entrelinha do texto é `--leading-relaxed`
    (27, 24 e 20px, contra os 28, 24 e 20 dela) e o código reusa a pele do `code` do `.prose`.
    A margem vai a zero porque `h1`…`h6` e `p` trazem a do navegador; o espaço entre blocos é de
-   quem os empilha (`Stack`), não do texto. */
+   quem os empilha (`Stack`), não do texto.
+   0.32.0: a entrelinha do título passa a ser a de CADA tamanho, como na escala publicada dela
+   (40 · 36 · 32 · 28 · 28 · 24); até aqui era 1,2 em todos (43 · 36 · 29 · 24 · 22 · 19). */
 .typography { margin:0; color:var(--foreground); }
-.typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6 { font-family:var(--font-heading); font-weight:var(--weight-semibold); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); }
-.typography-h1 { font-size:var(--text-4xl); }
-.typography-h2 { font-size:var(--text-3xl); }
-.typography-h3 { font-size:var(--text-2xl); }
-.typography-h4 { font-size:var(--text-xl); }
-.typography-h5 { font-size:var(--text-lg); }
-.typography-h6 { font-size:var(--text-base); }
+.typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6 { font-family:var(--font-heading); font-weight:var(--weight-semibold); letter-spacing:var(--tracking-tight); }
+.typography-h1 { font-size:var(--text-4xl); line-height:var(--text-4xl-leading); }
+.typography-h2 { font-size:var(--text-3xl); line-height:var(--text-3xl-leading); }
+.typography-h3 { font-size:var(--text-2xl); line-height:var(--text-2xl-leading); }
+.typography-h4 { font-size:var(--text-xl); line-height:var(--text-xl-leading); }
+.typography-h5 { font-size:var(--text-lg); line-height:var(--text-lg-leading); }
+.typography-h6 { font-size:var(--text-base); line-height:var(--leading-normal); }
 .typography-body { font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .typography-body-sm { font-size:var(--text-sm); line-height:var(--leading-relaxed); }
 .typography-body-xs { font-size:var(--text-xs); line-height:var(--leading-relaxed); }
@@ -2540,11 +2573,11 @@ img,svg { display:block; }
 .prose { max-width:var(--prose-measure,68ch); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .prose > * + * { margin-block-start:var(--space-4); }
 .prose > h2,.prose > h3,.prose > h4 { margin-block-start:var(--space-8); }
-.prose h1,.prose h2,.prose h3,.prose h4 { line-height:var(--leading-tight); font-weight:var(--weight-semibold); }
-.prose h1 { font-size:var(--text-3xl); }
-.prose h2 { font-size:var(--text-2xl); }
-.prose h3 { font-size:var(--text-xl); }
-.prose h4 { font-size:var(--text-lg); }
+.prose h1,.prose h2,.prose h3,.prose h4 { font-weight:var(--weight-semibold); }
+.prose h1 { font-size:var(--text-3xl); line-height:var(--text-3xl-leading); }
+.prose h2 { font-size:var(--text-2xl); line-height:var(--text-2xl-leading); }
+.prose h3 { font-size:var(--text-xl); line-height:var(--text-xl-leading); }
+.prose h4 { font-size:var(--text-lg); line-height:var(--text-lg-leading); }
 .prose blockquote { margin-inline:0; padding-inline-start:var(--space-4); border-inline-start:2px solid var(--border-strong); color:var(--muted-foreground); }
 .prose ul,.prose ol { padding-inline-start:var(--space-6); }
 .prose li + li { margin-block-start:var(--space-2); }
@@ -3377,8 +3410,9 @@ button.graph-node-body { cursor:pointer; }
 .pattern-toolbar .input-group { flex:1 1 180px; }
 .media-library-row.active { border-color:var(--primary); }
 /* Alvo de toque. `.tabs`/`.segmented` no lugar de `.tab`/`.segmented button`: agora a altura
-   mora na cápsula, então é ela que precisa crescer — o filho estica atrás. */
-@media (pointer:coarse) { .btn:not(.btn-link),.tabs,.segmented,.pagination button,.schedule-grid button,.media-control,.nav-list-row { min-height:var(--target-min); } .btn-icon,.media-control { min-width:var(--target-min); } }
+   mora na cápsula, então é ela que precisa crescer — o filho estica atrás. O `CloseButton` fica de
+   fora (0.32.0): o alvo dele é o `::before` de 44, e o círculo continua de 24, como o da referência. */
+@media (pointer:coarse) { .btn:not(.btn-link):not(.close-button),.tabs,.segmented,.pagination button,.schedule-grid button,.media-control,.nav-list-row { min-height:var(--target-min); } .btn-icon,.media-control { min-width:var(--target-min); } }
 @media (forced-colors:active) {
   :focus-visible { outline:var(--focus-width) solid CanvasText; outline-offset:var(--focus-offset); box-shadow:none; }
   .badge,.pattern-gallery button[aria-pressed="true"],.device-grid button[aria-pressed="true"] { border:1px solid CanvasText; }

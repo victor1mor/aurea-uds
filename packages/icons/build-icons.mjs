@@ -24,6 +24,13 @@ const require = createRequire(import.meta.url);
 const phosphor = join(dirname(dirname(require.resolve("@phosphor-icons/core"))), "assets");
 const outFile = join(dirname(fileURLToPath(import.meta.url)), "dist", "aurea-icons.svg");
 
+/**
+ * Os ícones que a Aurea desenha TAMBÉM no peso Bold (`i-<nome>-bold`), um a um, por decisão — e
+ * não o peso inteiro: o traço da Aurea é o Regular (ADR-0053). O `x` entrou na 0.32.0 para o
+ * `CloseButton`, com o traço da referência (decisão do Victor, 11/10/2026: *"1 bold"*).
+ */
+export const NOMES_BOLD = ["x"];
+
 /** Os nomes que a Aurea desenha: os do Regular, menos os logotipos de marca. */
 export function nomesDoPhosphor(dir) {
   return readdirSync(join(dir, "regular")).filter((f) => f.endsWith(".svg"))
@@ -50,10 +57,14 @@ if (isMain) {
   for (const n of nomes) {
     symbols.push(`<symbol id="i-${n}" viewBox="0 0 256 256">${mioloDoPhosphor(join(phosphor, "regular", n + ".svg"))}</symbol>`);
     symbols.push(`<symbol id="i-${n}-fill" viewBox="0 0 256 256">${mioloDoPhosphor(join(phosphor, "fill", n + "-fill.svg"))}</symbol>`);
+    if (NOMES_BOLD.includes(n))
+      symbols.push(`<symbol id="i-${n}-bold" viewBox="0 0 256 256">${mioloDoPhosphor(join(phosphor, "bold", n + "-bold.svg"))}</symbol>`);
   }
+  const fora = NOMES_BOLD.filter((n) => !nomes.includes(n));
+  if (fora.length) throw new Error(`NOMES_BOLD com nome que não existe no Regular: ${fora}`);
   const sprite = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${symbols.join("")}</svg>`;
   writeFileSync(outFile, sprite);
   // A-04: a mesma lista, como tipo, para o `<Icon name>` recusar nome que não existe no sprite.
-  escreverNomesDeIcone(nomes, join(dirname(fileURLToPath(import.meta.url)), "..", "react", "src", "icon-names.ts"));
-  console.log(`build-icons: wrote ${nomes.length} icons x 2 weights -> ${outFile}`);
+  escreverNomesDeIcone(nomes, join(dirname(fileURLToPath(import.meta.url)), "..", "react", "src", "icon-names.ts"), NOMES_BOLD);
+  console.log(`build-icons: wrote ${nomes.length} icons x 2 weights (+${NOMES_BOLD.length} bold) -> ${outFile}`);
 }
