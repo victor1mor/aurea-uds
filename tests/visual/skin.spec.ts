@@ -624,8 +624,12 @@ for (const theme of ["dark", "light"] as const) {
       };
       const cards = [...document.querySelectorAll(".grid > .card")].map(e => Math.round(e.getBoundingClientRect().top));
       const dt = box(".data-list dt"), dd = box(".data-list dd");
-      const sums = [...document.querySelectorAll(".accordion > details > summary")];
-      const det2 = getComputedStyle(document.querySelectorAll(".accordion > details")[1]!);
+      const sums = [...document.querySelectorAll(".accordion > .accordion-item > summary")];
+      // 0.32.0: o fio entre os itens é desenhado (`::after` do item), e o último não tem
+      const fio1 = getComputedStyle(document.querySelectorAll(".accordion > .accordion-item")[0]!, "::after");
+      const itens = document.querySelectorAll(".accordion > .accordion-item");
+      const fioUltimo = getComputedStyle(itens[itens.length - 1]!, "::after");
+      const sum1 = getComputedStyle(sums[0]!);
       return {
         grid: {display: cs(".grid").display, topos: [...new Set(cards)].length, filhos: cards.length},
         dot: {w: parseFloat(cs(".timeline-dot").width), h: parseFloat(cs(".timeline-dot").height),
@@ -647,7 +651,11 @@ for (const theme of ["dark", "light"] as const) {
         dataList: {display: cs(".data-list").display, ddIndent: parseFloat(cs(".data-list dd").marginLeft),
                    mesmaLinha: Math.round(dt.top) === Math.round(dd.top)},
         accordion: {alturas: sums.map(e => e.getBoundingClientRect().height),
-                    controlMd: emPx("--control-h-md"), divisoria: parseFloat(det2.borderTopWidth),
+                    controlMd: emPx("--control-h-md"), divisoria: parseFloat(fio1.height),
+                    semFioNoUltimo: fioUltimo.content === "none",
+                    recheio: parseFloat(sum1.paddingTop), raio: parseFloat(sum1.borderTopLeftRadius),
+                    radiusControl: emPx("--radius-control"), peso: sum1.fontWeight,
+                    seta: document.querySelector(".accordion-chevron")!.getBoundingClientRect().width,
                     corpoBaixo: parseFloat(cs(".accordion-content").paddingBottom)},
         empty: {align: cs(".empty-state").textAlign, padTop: parseFloat(cs(".empty-state").paddingTop),
                 display: cs(".empty-state").display},
@@ -1451,8 +1459,18 @@ for (const theme of ["dark", "light"] as const) {
                       sepW: caixa(".toolbar-sep").width, sepH: caixa(".toolbar-sep").height,
                       sepCor: est(".toolbar-sep").backgroundColor},
             pagination: {display: est(".pagination").display, alinha: est(".pagination").alignItems,
-                         naLinha: linhaUnica(".pagination", ":scope > *"),
-                         },
+                         naLinha: linhaUnica(".pagination-content", ":scope > li"),
+                         // 0.32.0, a da referência com o clarinho da Aurea
+                         numeroW: caixa(".pagination-link:not(.pagination-link-nav)").width,
+                         numeroH: caixa(".pagination-link:not(.pagination-link-nav)").height,
+                         peso: est(".pagination-link").fontWeight,
+                         atualFundo: est(".pagination-link.active").backgroundColor,
+                         atualLetra: est(".pagination-link.active").color,
+                         outroFundo: est(".pagination-link:not(.active):not(.pagination-link-nav)").backgroundColor},
+            breadcrumbVao: parseFloat(est(".breadcrumb").columnGap),
+            breadcrumbSeta: caixa(".breadcrumb > .icon").width,
+            tabsRecheio: parseFloat(est(".tabs").paddingTop), tabsVao: parseFloat(est(".tabs").columnGap),
+            tabLados: parseFloat(est(".tab").paddingLeft), tabPeso: est(".tab").fontWeight,
             // Dados e navegação
             tabela: {regiaoOver: est(".table-region").overflow,
                      raio: parseFloat(est(".table-region").borderTopLeftRadius),
@@ -1953,8 +1971,14 @@ for (const theme of ["dark", "light"] as const) {
       expect(a, `cabeçalho do accordion mede ao menos --control-h-md (${m.accordion.controlMd}px)`)
         .toBeGreaterThanOrEqual(m.accordion.controlMd);
     }
-    expect(m.accordion.divisoria, "item seguinte tem divisória de 1px").toBeGreaterThan(0);
+    expect(m.accordion.divisoria, "o fio entre os itens tem 1px").toBe(1);
+    expect(m.accordion.semFioNoUltimo, "e o último item não tem fio").toBe(true);
     expect(m.accordion.corpoBaixo, "o corpo não cola no item de baixo").toBeGreaterThan(0);
+    // 0.32.0, o da referência com o realce em cápsula
+    expect(m.accordion.recheio, "a pergunta tem 16 de todos os lados").toBe(16);
+    expect(m.accordion.raio, "o realce é cápsula").toBe(m.accordion.radiusControl);
+    expect(m.accordion.peso, "a pergunta é peso médio").toBe("500");
+    expect(m.accordion.seta, "a seta tem 16").toBeCloseTo(16, 0);
 
     // 6. EmptyState é o membro grande da família "aqui não há nada": centralizado e com folga.
     expect(m.empty.display, "sem a regra saía display:block").toBe("flex");
@@ -2530,7 +2554,17 @@ for (const theme of ["dark", "light"] as const) {
       .toBeGreaterThan(20);
     expect(e.toolbar.sepCor, "e tem cor, senão é um espaço em branco").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.pagination.alinha, "a Pagination centraliza verticalmente").toBe("center");
-    expect(e.pagination.naLinha, "botões e contador ficam na mesma fila").toBe(true);
+    expect(e.pagination.naLinha, "anterior, números e próxima ficam na mesma fila").toBe(true);
+    // 0.32.0: os números da referência (32), peso médio, e a atual no clarinho (não o amarelo cheio)
+    expect([e.pagination.numeroW, e.pagination.numeroH], "o número tem 32 × 32").toEqual([32, 32]);
+    expect(e.pagination.peso, "peso médio").toBe("500");
+    expect(e.pagination.atualFundo, "a atual tem fundo").not.toBe(e.pagination.outroFundo);
+    expect(e.pagination.atualLetra, "e a letra da marca, não a de cima do amarelo").not.toBe(e.pagination.atualFundo);
+    expect(e.breadcrumbVao, "a trilha tem vão 6").toBe(6);
+    expect(e.breadcrumbSeta, "o separador tem 12").toBeCloseTo(12, 0);
+    expect([e.tabsRecheio, e.tabsVao], "as abas: recheio 4, sem vão").toEqual([4, 0]);
+    expect([e.tabLados, e.tabPeso], "a aba: 16 dos lados, peso médio").toEqual([16, "500"]);
+    expect(e.tabs.tabAlt, "a aba tem 32 (o --control-h-sm)").toBeCloseTo(32, 0);
 
     // 30. Dados e navegação.
     expect(e.tabela.regiaoOver, "a região da tabela rola — é o que a torna alcançável por teclado")

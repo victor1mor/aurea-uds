@@ -18,6 +18,7 @@ export interface AureaStrings {
     dataEmpty: string;
     confirmProceed: string;
     paginationLabel: string;
+    paginationPage: string;
     previous: string;
     next: string;
     breadcrumbLabel: string;
@@ -26,6 +27,9 @@ export interface AureaStrings {
     tableLabel: string;
     commandLabel: string;
     commandPlaceholder: string;
+    commandHintMove: string;
+    commandHintSelect: string;
+    commandHintClose: string;
     dismissNotification: string;
     toolbarLabel: string;
     loading: string;

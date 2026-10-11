@@ -73,16 +73,6 @@ const SERIE = [{month: "Jan", runs: 128, errors: 9}, {month: "Feb", runs: 194, e
   {month: "May", runs: 287, errors: 8}, {month: "Jun", runs: 264, errors: 17}];
 
 export default {
-  Accordion: {
-    code: `<Accordion items={[
-  {id: "ship", title: "How do I ship it?", content: "Install the three packages and import the CSS."},
-  {id: "theme", title: "Can I theme it?", content: "Every visual value is a token."},
-]} />`,
-    render: () => h("div", {style: wide}, h(A.Accordion, {items: [
-      {id: "ship", title: "How do I ship it?", content: "Install the three packages and import the CSS."},
-      {id: "theme", title: "Can I theme it?", content: "Every visual value is a token."},
-    ]})),
-  },
   Alert: {
     code: `<Alert variant="info" title="Heads up">Contextual information.</Alert>
 <Alert variant="danger" title="Upload failed">The file exceeds 10 MB.</Alert>`,
@@ -494,9 +484,11 @@ export default {
     code: `<Button leadingIcon="magnifying-glass" kbd="⌘K" onClick={() => setOpen(true)}>Search</Button>
 
 <CommandPalette open={open} onClose={() => setOpen(false)} items={[
-  {id: "button", label: "Go to Button", icon: "arrow-right", run: () => go("/button")},
-  {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", run: toggleTheme},
-]} />`,
+  {id: "button", label: "Button", icon: "squares-four", group: "Components", run: () => go("/button")},
+  {id: "close", label: "CloseButton", icon: "squares-four", group: "Components", run: () => go("/close-button")},
+  {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", group: "Actions", run: toggleTheme},
+]} />
+// Items with a group come together under its title; the line under the list teaches the keys.`,
     render: () => h(A.Button, {leadingIcon: "magnifying-glass", kbd: "⌘K"}, "Search"),
   },
   CommandPaletteShell: {
@@ -886,10 +878,6 @@ export default {
       {id: "2", title: "New member", time: "1h", group: "Today", read: true},
     ]}),
   },
-  Pagination: {
-    code: `<Pagination page={page} total={12} onPageChange={setPage} />`,
-    render: () => h(A.Pagination, {page: 3, total: 12, onPageChange: () => {}}),
-  },
   Popover: {
     note: PORTAL,
     code: `<Popover
@@ -1206,22 +1194,6 @@ export default {
       {id: "preview", label: "Preview"}, {id: "installation", label: "Installation"},
       {id: "reference", label: "Reference"},
     ]}),
-  },
-  Tabs: {
-    code: `<Tabs
-  label="Report"
-  value={tab}
-  onChange={setTab}
-  tabs={[
-    {id: "overview", label: "Overview", content: "One number per row."},
-    {id: "detail", label: "Detail", content: "Every row, unaggregated."},
-  ]}
-/>`,
-    render: () => h("div", {style: wide}, h(A.Tabs, {label: "Report", value: "overview",
-      onChange: () => {}, tabs: [
-        {id: "overview", label: "Overview", content: "One number per row."},
-        {id: "detail", label: "Detail", content: "Every row, unaggregated."},
-      ]})),
   },
   AvatarGroup: {
     code: `<AvatarGroup max={3} total={9} label="Reviewers">

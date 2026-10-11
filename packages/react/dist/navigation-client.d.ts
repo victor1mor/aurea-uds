@@ -24,7 +24,8 @@ export declare function Breadcrumb({ items, label }: {
 }): React.JSX.Element;
 export type TabsOrientation = "horizontal" | "vertical";
 export type TabsPanel = "card" | "plain";
-export declare function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus, loopFocus, panel }: {
+export type TabsVariant = "primary" | "secondary";
+export declare function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus, loopFocus, panel, variant }: {
     tabs: Array<{
         id: string;
         label: ReactNode;
@@ -37,12 +38,26 @@ export declare function Tabs({ tabs, value, onChange, label, orientation, activa
     activateOnFocus?: boolean;
     loopFocus?: boolean;
     panel?: TabsPanel;
+    variant?: TabsVariant;
 }): React.JSX.Element;
-export declare function Pagination({ page, total, onPageChange }: {
+export type PaginationVariant = "numbers" | "simple" | "compact";
+export interface PaginationProps {
     page: number;
     total: number;
-    onPageChange: (p: number) => void;
-}): React.JSX.Element;
+    onPageChange?: (p: number) => void;
+    variant?: PaginationVariant;
+    /** O resumo à esquerda — "1 a 5 de 50 pedidos". */
+    summary?: ReactNode;
+    /** O endereço de cada página. Com ele, as páginas são links. */
+    href?: (page: number) => string;
+    /** Quantas páginas aparecem de cada lado da atual. Padrão: 1. */
+    siblings?: number;
+    /** O nome do marco de navegação. Padrão: a frase `paginationLabel`. Com duas paginações na mesma
+     *  página, cada uma diz de quê ("Páginas dos pedidos"), senão o leitor de tela ouve dois marcos iguais. */
+    label?: string;
+    className?: string;
+}
+export declare function Pagination({ page, total, onPageChange, variant, summary, href, siblings, label, className }: PaginationProps): React.JSX.Element;
 export interface TocItem {
     id: string;
     label: string;
@@ -81,11 +96,13 @@ export interface SidebarItem {
     render?: ReactElement;
 }
 export type SidebarVariant = "floating" | "flush";
-export declare function Sidebar({ items, current, collapsed, variant, label, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+export type SidebarPlacement = "left" | "right";
+export declare function Sidebar({ items, current, collapsed, variant, placement, label, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
     items?: SidebarItem[];
     current?: string;
     collapsed?: boolean;
     variant?: SidebarVariant;
+    placement?: SidebarPlacement;
     label?: string;
 }): React.JSX.Element;
 export type BottomNavVariant = "floating" | "edge";
@@ -135,13 +152,18 @@ export interface CommandItem {
     icon?: IconName;
     kbd?: string;
     run: () => void;
+    /** 0.32.0 (DOC-06): o grupo do item ("Componentes", "Páginas"). Itens com o mesmo grupo saem juntos,
+     *  sob o título dele, na ordem em que o grupo aparece primeiro. */
+    group?: string;
 }
-export declare function CommandPalette({ open, onClose, items, placeholder, label }: {
+export declare function CommandPalette({ open, onClose, items, placeholder, label, shortcuts }: {
     open: boolean;
     onClose: () => void;
     items: CommandItem[];
     placeholder?: string;
     label?: string;
+    /** 0.32.0 (DOC-07): a linha que ensina as teclas, embaixo — ↑ ↓ mover, Enter abrir, Esc fechar. */
+    shortcuts?: boolean;
 }): React.JSX.Element | null;
 export declare function CommandPaletteShell({ open, query, onQueryChange, children }: {
     open: boolean;

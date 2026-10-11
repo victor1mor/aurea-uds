@@ -449,16 +449,22 @@ export function Slider<V extends number|readonly number[]>({label,labelHidden,va
   // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
   const atual=value??defaultValue;
   const alcas=Array.isArray(atual)?atual.length:1;
-  return <BaseSlider.Root id={id} name={name} value={value as number|readonly number[]|undefined} defaultValue={defaultValue as number|readonly number[]|undefined}
+  // O NOME DA ALÇA SAI NA MARCAÇÃO. O motor liga o `<input>` de cada alça ao rótulo por um id que ele
+  // só conhece DEPOIS de montar — no HTML do servidor (e no catálogo, que é HTML parado) as alças saíam
+  // sem nome, e o axe do catálogo acusou as cinco. O `Slider.Label` do motor não aceita id, então o
+  // rótulo é um `<div>` nosso, com id, que nomeia o grupo e cada alça — o nome já vem no HTML. E o desligado vai também para o grupo (`aria-disabled`): o motor só marca o `<input>`, e a
+  // letra esmaecida do rótulo e do valor era lida como texto de contraste baixo, e não como peça desligada.
+  const idDoRotulo=React.useId();
+  return <BaseSlider.Root id={id} name={name} aria-labelledby={idDoRotulo} aria-disabled={disabled||undefined} value={value as number|readonly number[]|undefined} defaultValue={defaultValue as number|readonly number[]|undefined}
     onValueChange={onValueChange?(v:unknown)=>onValueChange(v as V):undefined} onValueCommitted={onValueCommitted?(v:unknown)=>onValueCommitted(v as V):undefined}
     min={min} max={max} step={step} largeStep={largeStep} orientation={orientation} disabled={disabled} format={format} locale={locale}
     className={cx("slider",className)}>
-    <BaseSlider.Label className={labelHidden?"sr-only":"slider-label"}>{label}</BaseSlider.Label>
+    <div id={idDoRotulo} className={labelHidden?"sr-only":"slider-label"}>{label}</div>
     {showValue&&<BaseSlider.Value className="slider-output"/>}
     <BaseSlider.Control className="slider-control">
       <BaseSlider.Track className="slider-track">
         <BaseSlider.Indicator className="slider-fill"/>
-        {Array.from({length:alcas},(_,i)=><BaseSlider.Thumb key={i} index={i} className="slider-thumb" getAriaLabel={thumbLabels?()=>thumbLabels[i]??"":undefined}/>)}
+        {Array.from({length:alcas},(_,i)=><BaseSlider.Thumb key={i} index={i} className="slider-thumb" getAriaLabel={thumbLabels?()=>thumbLabels[i]??"":undefined} aria-labelledby={thumbLabels?undefined:idDoRotulo}/>)}
       </BaseSlider.Track>
     </BaseSlider.Control>
   </BaseSlider.Root>;

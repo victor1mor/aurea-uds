@@ -425,7 +425,12 @@ export function analyticsWorkbench(state) {
   // passava do vão do painel antes mesmo da tabela entrar. A válvula existe no core desde este
   // item, no mesmo idioma de `--qr-size` e `--datagrid-max-h`. `7rem` porque é a altura do KPI
   // ao lado — a faixa mede o maior dos dois, então passar disso é altura comprada e não usada.
-  return h("div", {style: {display: "grid", gap: "var(--space-2)", width: "min(880px,100%)", "--chart-h": "7rem"}},
+  //
+  // 0.32.0: o vão entre as faixas passou de 8 para 6. O controle segmentado ganhou a medida da
+  // referência (40, era 36), a faixa de cima cresceu 4 e a composição passou 2 da caixa (o
+  // `catalog-sweep` pegou: 352 numa caixa de 350). Medido: 40 + 128 + 144 + 16 e três vãos. A faixa
+  // do KPI mede 128 (8rem), e não os 7rem do gráfico: quem manda nela é o KPI.
+  return h("div", {style: {display: "grid", gap: "calc(var(--space-1) + var(--space-05))", width: "min(880px,100%)", "--chart-h": "7rem"}},
     // Os quatro controles numa faixa só. Cada um é a sua região do contrato — não é um
     // agrupamento de conveniência, é o que cabe numa caixa de altura fixa (ADR-0002).
     // `--space-2` e sem piso de largura nos dois `Select`: com a escala de letra da 0.8.8 a

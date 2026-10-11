@@ -74,8 +74,66 @@ export type TabsOrientation="horizontal"|"vertical";
 // caso de `Table` e `DataGrid`, que já têm moldura: dentro de um painel-cartão, caixa dentro de
 // caixa. O mesmo nome e os mesmos dois valores no nativo.
 export type TabsPanel="card"|"plain";
-export function Tabs({tabs,value,onChange,label,orientation,activateOnFocus=true,loopFocus,panel="card"}:{tabs:Array<{id:string;label:ReactNode;content:ReactNode}>;value:string;onChange:(id:string)=>void;label?:string;orientation?:Responsive<TabsOrientation>;activateOnFocus?:boolean;loopFocus?:boolean;panel?:TabsPanel}){const s=useAureaStrings();const ancora=useRef<HTMLDivElement|null>(null);const resolvida=useValorResponsivo(orientation,"horizontal",ancora);return <BaseTabs.Root ref={ancora} value={value} onValueChange={v=>onChange(String(v))} orientation={resolvida} className="tabs-root"><BaseTabs.List className="tabs" aria-label={label??s.tabsLabel} activateOnFocus={activateOnFocus} loopFocus={loopFocus}>{tabs.map(t=><BaseTabs.Tab key={t.id} value={t.id} className="tab">{t.label}</BaseTabs.Tab>)}</BaseTabs.List>{tabs.map(t=><BaseTabs.Panel key={t.id} value={t.id} className={panel==="plain"?"tabs-panel":"card card-inset"} tabIndex={0}>{t.content}</BaseTabs.Panel>)}</BaseTabs.Root>}
-export function Pagination({page,total,onPageChange}:{page:number;total:number;onPageChange:(p:number)=>void}){const s=useAureaStrings();return <nav className="pagination" aria-label={s.paginationLabel}><Button variant="ghost" size="sm" disabled={page<=1} onClick={()=>onPageChange(page-1)}>{s.previous}</Button><Badge variant="primary">{page} / {total}</Badge><Button variant="ghost" size="sm" disabled={page>=total} onClick={()=>onPageChange(page+1)}>{s.next}</Button></nav>}
+// `variant` (0.32.0): `primary` é a cápsula de sempre; `secondary` é a aba secundária da referência —
+// sem trilho, um fio embaixo da lista, e a escolhida marcada pelo fio da casa (o mesmo do item
+// escolhido e do `Tabs variant="secondary"` do nativo, R-12). Era a peça que o nativo tinha e a web não.
+export type TabsVariant="primary"|"secondary";
+export function Tabs({tabs,value,onChange,label,orientation,activateOnFocus=true,loopFocus,panel="card",variant="primary"}:{tabs:Array<{id:string;label:ReactNode;content:ReactNode}>;value:string;onChange:(id:string)=>void;label?:string;orientation?:Responsive<TabsOrientation>;activateOnFocus?:boolean;loopFocus?:boolean;panel?:TabsPanel;variant?:TabsVariant}){const s=useAureaStrings();const ancora=useRef<HTMLDivElement|null>(null);const resolvida=useValorResponsivo(orientation,"horizontal",ancora);return <BaseTabs.Root ref={ancora} value={value} onValueChange={v=>onChange(String(v))} orientation={resolvida} className="tabs-root"><BaseTabs.List className={cx("tabs",variant==="secondary"&&"tabs-secondary")} aria-label={label??s.tabsLabel} activateOnFocus={activateOnFocus} loopFocus={loopFocus}>{tabs.map(t=><BaseTabs.Tab key={t.id} value={t.id} className="tab">{t.label}</BaseTabs.Tab>)}</BaseTabs.List>{tabs.map(t=><BaseTabs.Panel key={t.id} value={t.id} className={panel==="plain"?"tabs-panel":"card card-inset"} tabIndex={0}>{t.content}</BaseTabs.Panel>)}</BaseTabs.Root>}
+// PAGINATION (0.32.0) — a da referência: os NÚMEROS das páginas (32, em cápsula, peso médio), as
+// reticências quando são muitas, "anterior" e "próxima" com a seta, e o resumo opcional à esquerda
+// ("1 a 5 de 50"). A página atual leva o "clarinho" da Aurea — a receita do selo suave (decisão do
+// Victor, 11/10/2026: *"quero o selecionado clarinho como nosso e não cor sólida"*).
+//   • `variant="simple"`: só anterior e próxima, o exemplo "Simple" dela (era o pedido WEB-10);
+//   • `variant="compact"`: o desenho de até a 0.31.0 ("Anterior · 3 / 12 · Próxima") — fica, porque
+//     componente da Aurea não perde variação.
+// `href` (GAR-18): com ele, cada página é um LINK de verdade (`<a href>`), que o buscador segue e que
+// abre em outra aba; sem ele, botões que chamam `onPageChange`. Os dois podem andar juntos (o app
+// intercepta o clique e ainda tem o endereço).
+// Quantas páginas aparecem: a primeira, a última, a atual e `siblings` de cada lado dela (1); o
+// buraco vira reticências. Até 7 páginas, todas.
+export type PaginationVariant="numbers"|"simple"|"compact";
+export interface PaginationProps{page:number;total:number;onPageChange?:(p:number)=>void;
+  variant?:PaginationVariant;
+  /** O resumo à esquerda — "1 a 5 de 50 pedidos". */
+  summary?:ReactNode;
+  /** O endereço de cada página. Com ele, as páginas são links. */
+  href?:(page:number)=>string;
+  /** Quantas páginas aparecem de cada lado da atual. Padrão: 1. */
+  siblings?:number;
+  /** O nome do marco de navegação. Padrão: a frase `paginationLabel`. Com duas paginações na mesma
+   *  página, cada uma diz de quê ("Páginas dos pedidos"), senão o leitor de tela ouve dois marcos iguais. */
+  label?:string;className?:string}
+function paginasVisiveis(page:number,total:number,siblings:number):Array<number|"..."> {
+  if(total<=5+siblings*2)return Array.from({length:total},(_,i)=>i+1);
+  const ini=Math.max(2,page-siblings),fim=Math.min(total-1,page+siblings);
+  const meio=Array.from({length:fim-ini+1},(_,i)=>ini+i);
+  return [1,...(ini>2?["..." as const]:[]),...meio,...(fim<total-1?["..." as const]:[]),total];
+}
+export function Pagination({page,total,onPageChange,variant="numbers",summary,href,siblings=1,label,className}:PaginationProps){
+  const s=useAureaStrings();
+  if(variant==="compact")return <nav className={cx("pagination",className)} aria-label={label??s.paginationLabel}><Button variant="ghost" size="sm" disabled={page<=1} onClick={()=>onPageChange?.(page-1)}>{s.previous}</Button><Badge variant="primary">{page} / {total}</Badge><Button variant="ghost" size="sm" disabled={page>=total} onClick={()=>onPageChange?.(page+1)}>{s.next}</Button></nav>;
+  // Um item: link (com `href`) ou botão. Desligado (a primeira página no "anterior"), sem endereço.
+  const item=(alvo:number,conteudo:ReactNode,{atual=false,nav,rotulo}:{atual?:boolean;nav?:"prev"|"next";rotulo?:string}={})=>{
+    const fora=alvo<1||alvo>total;
+    const cls=cx("pagination-link",nav&&"pagination-link-nav",atual&&"active");
+    const comuns={className:cls,"aria-label":rotulo,"aria-current":atual?("page" as const):undefined};
+    if(href)return fora?<a {...comuns} aria-disabled="true">{conteudo}</a>
+      :<a {...comuns} href={href(alvo)} onClick={onPageChange?(e:React.MouseEvent)=>{if(!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&e.button===0){e.preventDefault();onPageChange(alvo)}}:undefined}>{conteudo}</a>;
+    return <button type="button" {...comuns} disabled={fora} onClick={()=>onPageChange?.(alvo)}>{conteudo}</button>;
+  };
+  const anterior=item(page-1,<><Icon name="caret-left" className="pagination-nav-icon"/><span>{s.previous}</span></>,{nav:"prev"});
+  const proxima=item(page+1,<><span>{s.next}</span><Icon name="caret-right" className="pagination-nav-icon"/></>,{nav:"next"});
+  return <nav className={cx("pagination",className)} aria-label={label??s.paginationLabel}>
+    {summary!=null&&<span className="pagination-summary">{summary}</span>}
+    <ul className="pagination-content">
+      <li>{anterior}</li>
+      {variant==="numbers"&&paginasVisiveis(page,total,siblings).map((p,i)=>p==="..."
+        ?<li key={`e${i}`}><span className="pagination-ellipsis" aria-hidden="true">…</span></li>
+        :<li key={p}>{item(p,p,{atual:p===page,rotulo:`${s.paginationPage} ${p}`})}</li>)}
+      <li>{proxima}</li>
+    </ul>
+  </nav>;
+}
 
 
 // TableOfContents — o "On this page". Recebe os itens prontos (quem sabe quais seções existem é
@@ -327,10 +385,14 @@ function fecharGavetaAoEscolher(e:React.MouseEvent<HTMLElement>){
   if(!alvo||!gaveta.contains(alvo))return;
   try{if(gaveta.matches(":popover-open"))gaveta.hidePopover()}catch{/* motor sem popover: não há gaveta */}
 }
-export function Sidebar({items,current,collapsed,variant="floating",label,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;label?:string}){
+// `placement` (0.32.0, DOC-01): de que lado da tela a lateral mora — `left` (o padrão) ou `right`, o
+// nome de uma das referências da fila (a principal não tem moldura de página). Na direita, o fio da
+// lateral encostada passa para o outro lado. É a coluna "Nesta página" do `AppShell` (`aside`).
+export type SidebarPlacement="left"|"right";
+export function Sidebar({items,current,collapsed,variant="floating",placement="left",label,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;label?:string}){
 const s=useAureaStrings();
 const baseId=React.useId();
-return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",className)} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",placement==="right"&&"sidebar-right",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
 {items&&items.length>0&&<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}>{sidebarList(items,{baseId,current,collapsed})}</nav>}
 {children}
 </aside>}
@@ -500,17 +562,28 @@ return <li key={it.id}>{it.render&&!it.disabled
 // e a lateral começa abaixo dele. Por isso o Topbar é sempre renderizado pelo AppShell —
 // ele carrega a marca, então não é mais opcional; opcional é o CONTEÚDO dele.
 import type {TopbarVariant} from "./markup.js";
-export interface CommandItem{id:string;label:string;icon?:IconName;kbd?:string;run:()=>void}
-export function CommandPalette({open,onClose,items,placeholder,label}:{open:boolean;onClose:()=>void;items:CommandItem[];placeholder?:string;label?:string}){
+export interface CommandItem{id:string;label:string;icon?:IconName;kbd?:string;run:()=>void;
+  /** 0.32.0 (DOC-06): o grupo do item ("Componentes", "Páginas"). Itens com o mesmo grupo saem juntos,
+   *  sob o título dele, na ordem em que o grupo aparece primeiro. */
+  group?:string}
+interface GrupoDeComandos{value:string;items:CommandItem[]}
+export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=true}:{open:boolean;onClose:()=>void;items:CommandItem[];placeholder?:string;label?:string;
+  /** 0.32.0 (DOC-07): a linha que ensina as teclas, embaixo — ↑ ↓ mover, Enter abrir, Esc fechar. */
+  shortcuts?:boolean}){
   const s=useAureaStrings();
-  const portal=usePortalContainer();
+  const idAtalhos=React.useId();
+  // GRUPOS (0.32.0, DOC-06). Em 13/08/2026 a Aurea ficou SEM grupo, e a medição decidiu: dar a cada
+  // `Group` a sua fatia de itens passava POR CIMA do filtro do motor (digitar "the" devolvia os três).
+  // O caminho certo é o da documentação do motor (1.6.0, a paleta de exemplo dele): `items` agrupados
+  // (`{value, items}`), e a lista recebe os grupos JÁ FILTRADOS. Sem `group` em nenhum item, a lista é
+  // a de sempre.
+  const grupos=React.useMemo(()=>{
+    if(!items.some(i=>i.group))return null;
+    const mapa=new Map<string,CommandItem[]>();
+    for(const i of items){const g=i.group??"";if(!mapa.has(g))mapa.set(g,[]);mapa.get(g)!.push(i)}
+    return [...mapa].map(([value,itens]):GrupoDeComandos=>({value,items:itens}));
+  },[items]);
   if(!open)return null;
-  // SEM AGRUPAMENTO na v1, e a medição é que decidiu (13/08/2026). O `Autocomplete.Root` não
-  // consome a estrutura agrupada como o `Combobox.Root` consome — e o caminho alternativo, dar a
-  // cada `Group` a sua fatia de itens, PASSA POR CIMA do filtro do motor: digitar "the" devolvia
-  // os três comandos. Entre agrupar e filtrar, filtrar é o ponto de uma paleta de comandos.
-  // Fica registrado como limite, não como esquecimento: quando alguém precisar de grupo aqui, o
-  // caminho é o `Combobox.Root`, e isso é troca de motor, não ajuste.
   const executa=(item:CommandItem)=>{onClose();item.run()};
   const linha=(item:CommandItem)=><BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
     {item.icon&&<Icon name={item.icon}/>}
@@ -525,26 +598,41 @@ export function CommandPalette({open,onClose,items,placeholder,label}:{open:bool
           tempo de execução — é o mesmo caminho que o `MultiCombobox` daqui já usa, e o teste de
           grupo prova —, mas o genérico do `Root` fica preso em `CommandItem` por causa do
           `itemToStringValue`. Sem isto, ou se mente no tipo do item, ou se perde o agrupamento. */}
-      <BaseAutocomplete.Root items={items} itemToStringValue={(i:CommandItem)=>i.label} mode="list" open>
+      {/* 0.32.0: a lista mora DENTRO da caixa da paleta (`inline`), como a paleta de exemplo do motor
+          e como a prancha aprovada — e a linha de atalhos vem embaixo dela. Até a 0.31.0 a lista
+          era um popup posicionado abaixo do campo (Portal > Positioner > Popup): em 14/08/2026, sem
+          essas peças, o axe acusava o `combobox` sem `aria-controls`; no modo `inline` do 1.6.0 é o
+          próprio motor que liga o campo à lista. */}
+      {/* O `as` é sobre TIPO: o motor aceita os grupos em execução (é o exemplo de paleta dele), mas o
+          genérico do `Root` fica preso em `CommandItem` pelo `itemToStringValue`. O teste de grupo
+          (`lote-q-navegacao.test.tsx`) prova que filtra DENTRO dos grupos. */}
+      <BaseAutocomplete.Root items={(grupos??items) as unknown as CommandItem[]} itemToStringValue={(i:CommandItem)=>i.label} mode="list" open inline autoHighlight="always" keepHighlight>
         {/* Escape no INPUT, e não no contêiner: o foco nasce aqui dentro e o motor trata a tecla
             antes de ela subir. `onOpenChange` não serve — o tipo do Autocomplete o remove. */}
-        <BaseAutocomplete.Input autoFocus className="input" onKeyDown={e=>{if(e.key==="Escape")onClose()}} aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}/>
-        {/* Portal > Positioner > Popup, e NÃO a lista solta ao lado do input. A primeira versão
-            pulava as três peças porque a paleta já é a sua própria caixa — e o gate de axe pegou
-            o preço: um `role="combobox"` com `aria-expanded="true"` EXIGE `aria-controls`, e
-            quem o liga é a composição do motor. Sem ela saíam duas violações: o input sem o
-            atributo obrigatório e a lista sem nome acessível. Medido em 14/08/2026. */}
-        <BaseAutocomplete.Portal container={portal}>
-          <BaseAutocomplete.Positioner sideOffset={6} className="command-positioner">
-            <BaseAutocomplete.Popup className="menu command-list">
-              <BaseAutocomplete.Empty className="combobox-empty">{s.comboboxEmpty}</BaseAutocomplete.Empty>
-              <BaseAutocomplete.List>
-                <BaseAutocomplete.Collection>{linha}</BaseAutocomplete.Collection>
-              </BaseAutocomplete.List>
-            </BaseAutocomplete.Popup>
-          </BaseAutocomplete.Positioner>
-        </BaseAutocomplete.Portal>
+        {/* Dois consertos do modo `inline` (0.32.0), medidos pelos testes de antes:
+            • `aria-expanded` à mão: no `inline` o motor 1.6.0 publica o papel `combobox` SEM ele, e o
+              atributo é obrigatório (o axe acusou `aria-required-attr`). A lista está sempre à vista;
+            • o Esc PARA aqui: sem o popup no portal, a tecla subia até a moldura (`.command-overlay`),
+              que também fecha — e o `onClose` era chamado duas vezes. */}
+        <BaseAutocomplete.Input autoFocus className="input" onKeyDown={e=>{if(e.key==="Escape"){e.stopPropagation();onClose()}}} aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}
+          aria-expanded={true} aria-describedby={shortcuts?idAtalhos:undefined}/>
+        <div className="menu command-list">
+          <BaseAutocomplete.Empty className="combobox-empty">{s.comboboxEmpty}</BaseAutocomplete.Empty>
+          <BaseAutocomplete.List>
+            {grupos
+              ?(g:GrupoDeComandos)=><BaseAutocomplete.Group key={g.value} items={g.items} className="command-group">
+                  {g.value&&<BaseAutocomplete.GroupLabel className="command-group-label">{g.value}</BaseAutocomplete.GroupLabel>}
+                  <BaseAutocomplete.Collection>{linha}</BaseAutocomplete.Collection>
+                </BaseAutocomplete.Group>
+              :<BaseAutocomplete.Collection>{linha}</BaseAutocomplete.Collection>}
+          </BaseAutocomplete.List>
+        </div>
       </BaseAutocomplete.Root>
+      {shortcuts&&<p className="command-shortcuts" id={idAtalhos}>
+        <span><Kbd>↑</Kbd><Kbd>↓</Kbd> {s.commandHintMove}</span>
+        <span><Kbd>Enter</Kbd> {s.commandHintSelect}</span>
+        <span><Kbd>Esc</Kbd> {s.commandHintClose}</span>
+      </p>}
     </div>
   </div>;
 }

@@ -953,7 +953,9 @@ describe("DataGrid", () => {
     const user = userEvent.setup();
     wrap(<DataGrid data={AGENTES} columns={COLUNAS} pageSize={2} />);
     expect(linhas()).toHaveLength(2);
-    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "Page 1"})).toHaveAttribute("aria-current", "page"); // 0.32.0: os números (era "1 / 3")
+    expect(screen.getByRole("button", {name: "Page 3"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Page 4"})).not.toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Previous"})).toBeDisabled();
 
     await user.click(screen.getByRole("button", {name: "Next"}));
@@ -1180,7 +1182,9 @@ describe("DataGrid controlado (F1) e dados do servidor (F2)", () => {
     const user = userEvent.setup();
     const onPageChange = vi.fn();
     wrap(<DataGrid data={AGENTES} columns={COLUNAS} pageSize={2} page={1} onPageChange={onPageChange} />);
-    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "Page 1"})).toHaveAttribute("aria-current", "page"); // 0.32.0: os números (era "1 / 3")
+    expect(screen.getByRole("button", {name: "Page 3"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Page 4"})).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", {name: "Next"}));
     expect(onPageChange).toHaveBeenCalledWith(2); // 2, não o índice 1 do motor
@@ -1214,7 +1218,9 @@ describe("DataGrid controlado (F1) e dados do servidor (F2)", () => {
     const pagina = AGENTES.slice(0, 2); // o servidor mandou UMA página de 2
     wrap(<DataGrid data={pagina} columns={COLUNAS} pageSize={2} manualPagination rowCount={5} />);
     expect(linhas()).toHaveLength(2);
-    expect(screen.getByText("1 / 3")).toBeInTheDocument(); // ceil(5/2), do servidor
+    expect(screen.getByRole("button", {name: "Page 1"})).toHaveAttribute("aria-current", "page"); // 0.32.0: os números (era "1 / 3")
+    expect(screen.getByRole("button", {name: "Page 3"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Page 4"})).not.toBeInTheDocument(); // ceil(5/2), do servidor
   });
 
   test("F2 — sem rowCount a paginação some: o limite declarado na ficha", () => {

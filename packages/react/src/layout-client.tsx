@@ -140,7 +140,13 @@ function useLargura(query:string){
     ()=>typeof window!=="undefined"&&typeof window.matchMedia==="function"&&window.matchMedia(query).matches,
     ()=>false);
 }
-export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,sidebarVariant,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,sidebarVariant,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+  /** 0.32.0 (DOC-01): a coluna da DIREITA — o "Nesta página" de uma documentação (um `TableOfContents`).
+   *  Mora numa `Sidebar placement="right"` do mesmo desenho da da esquerda. De 1280 para cima é a
+   *  terceira coluna; abaixo, desce para depois do conteúdo. */
+  aside?:ReactNode;
+  /** O nome da coluna da direita para o leitor de tela. Padrão: a frase `tocLabel` ("On this page"). */
+  asideLabel?:string;
   /** A lateral em trilha de ícones. Controlado: quem passa decide (e o `onSidebarCollapsedChange` avisa). */
   sidebarCollapsed?:boolean;
   /** AN-01: o botão de recolher na junção do menu com o conteúdo, e a trilha sozinha entre 1024 e 1279 de largura. */
@@ -177,14 +183,14 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
   // ícones que o shell desenha.
   const paraOComeco=!efetiva, direita=useDirection()==="rtl";
-  return <div className={cx("app-shell",topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
+  return <div className={cx("app-shell",topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
     É requisito de acessibilidade, não enfeite (WCAG 2.4.1, "pular blocos"): sem ele, quem navega
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Header variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Header>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main></div>}
+<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Header variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Header>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>{aside!=null&&<Sidebar placement="right" variant={sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel}>{aside}</Sidebar>}</div>}
 
 // ── Separator ────────────────────────────────────────────────────────────────────────────────
 // A LINHA DO SISTEMA, e ela é de CLIENTE por necessidade, não por vizinhança.

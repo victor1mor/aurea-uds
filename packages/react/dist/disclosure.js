@@ -1,10 +1,17 @@
 "use client";
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+// Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
+// do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
+// internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
+import React from "react";
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { cx } from "./internal.js";
 import { soOValor } from "./pure.js";
 import { Icon } from "./system.js";
-export function Accordion({ items }) { return _jsx("div", { className: "accordion", children: items.map(i => _jsxs("details", { children: [_jsx("summary", { children: i.title }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) }); }
+export function Accordion({ items, variant = "default", multiple = false, defaultValue, className }) {
+    const grupo = React.useId();
+    return _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault() : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx(Icon, { name: "caret-down", className: "accordion-chevron" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
+}
 // COLLAPSIBLE — uma seção que abre e fecha, com o estado do lado de quem usa.
 //
 // Não é um Accordion de um item só, e a diferença é o motivo de existir: o `Accordion` é um

@@ -6,6 +6,7 @@
 // botões do `NumberField` eram `.btn` soltos, e as três peças não existiam — tudo abaixo reprova.
 import {render, fireEvent} from "@testing-library/react";
 import {vi} from "vitest";
+import {renderToStaticMarkup} from "react-dom/server";
 import {AureaProvider, Checkbox, CheckboxGroup, Field, Input, ListBox, NumberField, Slider, Textarea} from "../../packages/react/src/index";
 
 const wrap = (ui: React.ReactNode) => render(<AureaProvider>{ui}</AureaProvider>);
@@ -171,5 +172,33 @@ describe("Slider", () => {
     const {container} = wrap(<Slider label="Desconto" orientation="vertical" defaultValue={0.25} min={0} max={1} step={0.05} format={{style: "percent"}} locale="pt-BR" />);
     expect(container.querySelector(".slider")).toHaveAttribute("data-orientation", "vertical");
     expect(container.querySelector(".slider-output")!.textContent!.replace(/\s/g, " ")).toBe("25%");
+  });
+});
+
+// O catálogo é HTML parado: o motor só liga o `<input>` da alça ao rótulo DEPOIS de montar, e o axe da
+// varredura acusou as cinco alças sem nome (0.32.0). O id do rótulo agora sai na marcação. E o
+// desligado vai para o grupo — sem isso, a letra esmaecida contava como texto de contraste baixo.
+describe("Slider na marcação do servidor", () => {
+  test("a alça já sai nomeada pelo rótulo, sem montar", () => {
+    const html = renderToStaticMarkup(<AureaProvider><Slider label="Volume" defaultValue={40} /></AureaProvider>);
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const rotulo = doc.querySelector(".slider-label")!;
+    const entrada = doc.querySelector(".slider-thumb input")!;
+    expect(rotulo.id).not.toBe("");
+    expect(entrada.getAttribute("aria-labelledby")).toBe(rotulo.id);
+  });
+  test("com nome por alça (`thumbLabels`), vale o nome dela, e não o do rótulo", () => {
+    const html = renderToStaticMarkup(<AureaProvider><Slider label="Preço" defaultValue={[20, 80]} thumbLabels={["Mínimo", "Máximo"]} /></AureaProvider>);
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const entradas = [...doc.querySelectorAll(".slider-thumb input")];
+    expect(entradas.map(e => e.getAttribute("aria-label"))).toEqual(["Mínimo", "Máximo"]);
+    expect(entradas.every(e => !e.hasAttribute("aria-labelledby"))).toBe(true);
+  });
+  test("desligado, o grupo inteiro diz que está desligado", () => {
+    const html = renderToStaticMarkup(<AureaProvider><Slider label="Volume" defaultValue={40} disabled /></AureaProvider>);
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    expect(doc.querySelector(".slider")!.getAttribute("aria-disabled")).toBe("true");
+    const ligado = renderToStaticMarkup(<AureaProvider><Slider label="Volume" defaultValue={40} /></AureaProvider>);
+    expect(new DOMParser().parseFromString(ligado, "text/html").querySelector(".slider")!.hasAttribute("aria-disabled")).toBe(false);
   });
 });

@@ -44,12 +44,12 @@ const FIXTURE = `
     <button class="active" type="button">Left</button>
     <button type="button">Right</button>
   </div>
-  <nav class="pagination">
-    <button class="btn btn-ghost btn-sm" type="button">Prev</button>
-    <button class="active" type="button">1</button>
-    <button type="button">2</button>
-    <button class="btn btn-ghost btn-sm" type="button">Next</button>
-  </nav>
+  <nav class="pagination"><ul class="pagination-content">
+    <li><button class="pagination-link pagination-link-nav" type="button">Prev</button></li>
+    <li><button class="pagination-link active" type="button">1</button></li>
+    <li><button class="pagination-link" type="button">2</button></li>
+    <li><button class="pagination-link pagination-link-nav" type="button">Next</button></li>
+  </ul></nav>
   <span class="badge">Text only</span>
   <span class="badge badge-primary"><svg class="icon" aria-hidden="true"></svg>With glyph</span>
   <span class="badge"><i class="status-dot"></i>With dot</span>
@@ -96,28 +96,33 @@ for (const theme of ["dark", "light"] as const) {
           select: cs(".select").height,
           tabs: cs(".tabs").height,
           segmented: cs(".segmented").height,
-          pageBtn: alturas(".pagination button:not(.btn)"),
-          paginationBtn: alturas(".pagination .btn"),
+          pageBtn: alturas(".pagination-link:not(.pagination-link-nav)"),
+          paginationBtn: alturas(".pagination-link-nav"),
+          space1: emPx("--space-1"),
           badges: alturas(".badge"),
         };
       });
 
       const md = h(m.tokens.md), sm = h(m.tokens.sm), lg = h(m.tokens.lg);
 
-      // 1. Tudo que é "controle de tamanho md" mede o token md. A cápsula de abas e a de
-      //    segmented contam como o controle — é a caixa que encosta no campo ao lado.
-      for (const [nome, valor] of Object.entries({
-        btn: m.btn, input: m.input, select: m.select, tabs: m.tabs, segmented: m.segmented,
-      })) {
+      // 1. Tudo que é "controle de tamanho md" mede o token md.
+      for (const [nome, valor] of Object.entries({btn: m.btn, input: m.input, select: m.select})) {
         expect(h(valor), `${nome} deveria medir --control-h-md (${md}px) em ${density}`).toBe(md);
+      }
+      // 0.32.0: a cápsula de abas e a de segmented são as da referência — a aba é o `sm`, e o trilho é
+      // ela mais 4 em cima e embaixo (40 no padrão; era o `md`, 36). Continua andando com a densidade:
+      // é o que o achado A1 cobra.
+      for (const [nome, valor] of Object.entries({tabs: m.tabs, segmented: m.segmented})) {
+        expect(h(valor), `${nome} deveria medir --control-h-sm + 2 × --space-1 (${sm + 2 * h(m.space1)}px) em ${density}`)
+          .toBe(sm + 2 * h(m.space1));
       }
       expect(h(m.btnSm), `.btn-sm deveria medir --control-h-sm (${sm}px)`).toBe(sm);
       expect(h(m.btnLg), `.btn-lg deveria medir --control-h-lg (${lg}px)`).toBe(lg);
 
-      // 2. O quadrado de número de página é um controle md quadrado, e o Anterior/Próxima
-      //    continua sendo um .btn-sm — o seletor de elemento não pode vencê-lo (B3).
-      expect(new Set(m.pageBtn), "todo número de página mede o mesmo").toEqual(new Set([md]));
-      expect(new Set(m.paginationBtn), "Anterior/Próxima seguem .btn-sm, não o número").toEqual(new Set([sm]));
+      // 2. 0.32.0: o número de página e o Anterior/Próxima da referência medem o `sm` (32 no padrão),
+      //    os dois — e andam com a densidade.
+      expect(new Set(m.pageBtn), "todo número de página mede o --control-h-sm").toEqual(new Set([sm]));
+      expect(new Set(m.paginationBtn), "Anterior/Próxima medem o mesmo que o número").toEqual(new Set([sm]));
 
       // 3. Badge com texto, com glifo e com ponto medem o MESMO (A2).
       expect(new Set(m.badges), "badge mede igual com texto, com glifo e com ponto").toEqual(
@@ -140,7 +145,9 @@ const PAGES = readdirSync(DIR).filter(f => f.endsWith(".html")).sort();
 // badges do MESMO tamanho na mesma pagina tem de medir igual —, e o que saiu do seletor foi
 // so o que declara outro tamanho POR CLASSE. Sobrescrita contextual continua reprovando, e
 // foi exatamente assim que ela pegou a do contador da barra inferior.
-const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs", ".segmented", ".tab", ".segmented button",
+// `.tabs` sem a secundária, pela mesma regra (0.32.0): a `tabs-secondary` declara POR CLASSE outra
+// forma — sem trilho, a aba de 32 e o fio de 1 embaixo, 33 — e a página das abas mostra as duas.
+const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs:not(.tabs-secondary)", ".segmented", ".tab", ".segmented button",
                ".kbd", ".pagination button:not(.btn)"];
 
 test.describe("catálogo · geometria de todas as páginas", () => {

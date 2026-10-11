@@ -6,8 +6,8 @@
     "modulos": 37,
     "componentes": 134,
     "hooks": 9,
-    "aliasesLiterais": 89,
-    "propsDistintas": 322
+    "aliasesLiterais": 93,
+    "propsDistintas": 328
   },
   "aliases": {
     "ButtonVariant": {
@@ -208,6 +208,14 @@
       "union": [
         "incoming",
         "outgoing"
+      ]
+    },
+    "AccordionVariant": {
+      "module": "disclosure",
+      "raw": "\"default\" | \"surface\"",
+      "union": [
+        "default",
+        "surface"
       ]
     },
     "Breakpoint": {
@@ -2249,12 +2257,37 @@
         "plain"
       ]
     },
+    "TabsVariant": {
+      "module": "navigation-client",
+      "raw": "\"primary\" | \"secondary\"",
+      "union": [
+        "primary",
+        "secondary"
+      ]
+    },
+    "PaginationVariant": {
+      "module": "navigation-client",
+      "raw": "\"numbers\" | \"simple\" | \"compact\"",
+      "union": [
+        "numbers",
+        "simple",
+        "compact"
+      ]
+    },
     "SidebarVariant": {
       "module": "navigation-client",
       "raw": "\"floating\" | \"flush\"",
       "union": [
         "floating",
         "flush"
+      ]
+    },
+    "SidebarPlacement": {
+      "module": "navigation-client",
+      "raw": "\"left\" | \"right\"",
+      "union": [
+        "left",
+        "right"
       ]
     },
     "BottomNavVariant": {
@@ -4374,7 +4407,34 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ id: string; title: ReactNode; content: ReactNode; }>",
+              "type": "AccordionItem[]",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "AccordionVariant",
+              "values": [
+                "default",
+                "surface"
+              ]
+            },
+            {
+              "name": "multiple",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -6200,6 +6260,18 @@
               ]
             },
             {
+              "name": "aside",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "asideLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
               "name": "sidebarCollapsed",
               "optional": true,
               "type": "boolean",
@@ -7797,6 +7869,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "shortcuts",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -7847,7 +7925,7 @@
         {
           "name": "Pagination",
           "kind": "function",
-          "propsType": null,
+          "propsType": "PaginationProps",
           "props": [
             {
               "name": "page",
@@ -7863,8 +7941,48 @@
             },
             {
               "name": "onPageChange",
-              "optional": false,
+              "optional": true,
               "type": "(p: number) => void",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "PaginationVariant",
+              "values": [
+                "numbers",
+                "simple",
+                "compact"
+              ]
+            },
+            {
+              "name": "summary",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "href",
+              "optional": true,
+              "type": "(page: number) => string",
+              "values": null
+            },
+            {
+              "name": "siblings",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -7899,6 +8017,15 @@
               "values": [
                 "floating",
                 "flush"
+              ]
+            },
+            {
+              "name": "placement",
+              "optional": true,
+              "type": "SidebarPlacement",
+              "values": [
+                "left",
+                "right"
               ]
             },
             {
@@ -8016,6 +8143,15 @@
               "values": [
                 "card",
                 "plain"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "TabsVariant",
+              "values": [
+                "primary",
+                "secondary"
               ]
             }
           ]

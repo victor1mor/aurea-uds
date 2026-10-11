@@ -17,95 +17,9 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### 0.32.0 — o lote único: as peças quase idênticas às da referência (em construção, 11/10/2026)
+### Os componentes novos da 0.32.0 (em construção)
 
-A regra nova do Victor (11/10/2026): a peça da Aurea é a da referência principal — anatomia,
-medidas, estados, comportamento, teclado —, e por cima só entra o que é da Aurea (as cores e os
-temas, os cantos 22/32/cápsula, a fonte, os ícones, as densidades, sem degradê, a baixa visão).
-O lote junta a rodada 1 do site, a auditoria peça a peça (web e nativo), os pedidos do app de rede
-e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]` na versão.
-
-#### Novo
-
-- **`CloseButton`, na web e no nativo** — o botão de fechar da referência: um círculo no cinza
-  neutro com o X esmaecido, que já se chama "Close" ("Fechar" em `ptBR`); `label` diz o que fecha,
-  `children` troca o X. Web: 24, X de 16, a área de toque de 44 em volta sem o círculo crescer.
-  Nativo: 40 (a escala de toque, abaixo), X de 20, toque estendido em 12.
-- **O peso `bold` no `Icon`**, só para os nomes desenhados nele — hoje, o `x` (o traço do
-  `CloseButton`). Os outros nomes pedidos em `bold` desenham o regular. No sprite, `i-x-bold`; no
-  nativo, `@aurea-uds/native/icons/x-bold` (registre como `"x-bold"`).
-- **A escala de toque do nativo** (`touch-control-h-sm/md/lg`, [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md)): 40 · 48 · 56 no
-  confortável, como o pacote nativo da referência; 36 · 44 · 52 no compacto e 44 · 52 · 60 no
-  espaçoso. A web continua na escala dela.
-- **A entrelinha de cada título** (`text-4xl-leading` … `text-lg-leading`): 40 · 36 · 32 · 28 · 28 ·
-  24 para os títulos de 36 · 30 · 24 · 20 · 18 · 16, como na escala publicada da referência — no
-  `Heading`/`Text type="h*"` (web e nativo) e nos títulos do `.prose`.
-
-- **`Button variant="tertiary"`**, o fundo neutro com a letra normal — o `secondary` de até a 0.31.0.
-- **`ButtonGroup`**: `variant`, `size` e `disabled` valem para todos os botões de dentro (cada um
-  pode trocar o seu), `fullWidth` e `detached`. **`ToggleGroup`**: `size`, `fullWidth` e `detached`.
-- **`Toggle variant`**: `default` (fundo neutro, o padrão) ou `ghost` (sem fundo, o de antes).
-- **`Slider`** — o controle deslizante DESENHADO da referência (decisão do Victor: "Slider novo"):
-  rótulo e valor em cima, trilho de 20 com o preenchimento, alça em cápsula de 28 × 20 com o miolo
-  de 24 × 16 na cor de letra sobre o amarelo; um valor ou dois (`defaultValue={[20, 80]}`, `thumbLabels`), vertical, valor formatado pelo
-  `Intl` (`format`, `locale`), `onValueChange` e `onValueCommitted` com o NÚMERO. O motor é o que a
-  Aurea já usa. O `Range` (o do navegador) continua igual.
-- **`CheckboxGroup`** — o grupo de caixas da referência: rótulo, descrição, as caixas e o erro; guarda
-  a lista do que está marcado (`value`, `onValueChange`); cada `Checkbox` de dentro diz o seu `value`.
-- **`ListBox`** — a lista de opções solta da referência: ícone, descrição, seções, escolha de nenhum
-  (lista de ações, `onAction`), um ou vários; o teclado do padrão do APG (setas, Home, End, Espaço,
-  Enter, a primeira letra).
-- **`Field required`**: o asterisco vermelho depois do rótulo (escondido do leitor de tela) e o
-  `required` no controle.
-- **`Input` e `Textarea` `variant="secondary"`**: o fundo neutro, sem borda à vista, para dentro de
-  cartão.
-
-#### Mudou
-
-- ⚠ **`Button variant="secondary"` passa a ter a LETRA DA MARCA** sobre o fundo neutro, como a
-  referência (decisão do Victor, 11/10/2026: a opção "A"). **O `Button` sem `variant` NÃO muda**: o
-  padrão passa a ser o `tertiary`, que é a cara de sempre (a classe sai `btn-tertiary`, e não mais
-  `btn-secondary`). A regra dela: salvar é o primário, editar o secundário, cancelar o terciário —
-  por isso o "Cancelar" do `ConfirmDialog` e o "Negar" do `ApprovalCard` passam a `tertiary` e não
-  mudam de cara; o exportar da `DataGrid` e os botões do `FileInput` continuam `secondary` e ganham a
-  letra da marca. Quem quer o neutro num botão `secondary` escreve `tertiary`.
-- **O botão**: 16 dos lados (era 15), `lg` com 16 (era 20); o ícone tem 16 em tela de 640 para cima e
-  20 abaixo, e 16 sempre no `sm` e no `xs` (era 20 sempre) — como a referência.
-- ⚠ **`ButtonGroup` e `ToggleGroup` COLADOS** numa cápsula: vão 0, canto só nas pontas, um fio de 1
-  (a cor do texto a 15%) entre os botões, sem o encolher ao apertar, e o contorno que não dobra.
-  Eram cápsulas soltas com vão de 4, que quebravam linha: quem quer assim passa `detached`.
-- **`Toggle`**: passa a ter o fundo neutro (`variant="default"`), como o da referência; o ligado
-  continua o "selecionado" da Aurea. Era sem fundo: quem quer assim passa `variant="ghost"`.
-- **`IconButton` dentro de um `ButtonGroup` com `variant`** segue o grupo; solto, continua fantasma.
-- **Os campos**: 12 dos lados no campo e na área de texto (eram 13 e 14), e a área com 8 em cima e
-  embaixo (era 12); rótulo peso médio (era 600); a dica e a descrição 12/16 sem negrito; o erro com
-  4 de recuo.
-- ⚠ **`NumberField` em grupo**: um grupo só, com a borda e o fundo de campo, e os botões de mais e
-  menos DENTRO dele (40 de largura, ícone 16, um fio entre cada botão e o número), como o da
-  referência. Eram dois botões fantasma soltos ao lado do campo. No toque, o grupo tem 44.
-- **`OTPField`**: a casa de 38 × 40 com o número de 18 em seminegrito (era 36 × 36, letra 14).
-- **Caixa e opção**: a marca de 16 (era 18), o canto da caixa 6 (`--radius-xs`, era 5 cru), 12 até o
-  texto, o texto peso médio (o da caixa era negrito), a descrição 12/16. A opção marcada fica CHEIA,
-  com o ponto no meio.
-- **`Switch`**: o trilho de 40 × 20 (sm 32 × 16, lg 48 × 24; era 42 × 24), a bolinha em cápsula de
-  22 × 16, 12 até o texto, peso médio.
-- **`Kbd`**: a tecla da referência — 24 de altura, 8 dos lados, letra 14 peso médio na fonte do
-  texto, fundo neutro, sem borda —, em cápsula, e redonda quando é um caractere só (`kbd-single`,
-  posto pelo componente). Era 20, letra 11 na fonte de código, com borda. Dentro do botão, 20.
-- **A altura `sm` e `lg` dos controles da web**: 32 e 40 (eram 30 e 42), como a referência; o `md`
-  continua 36. Compacto 28/36 (era 28/38), espaçoso 36/44 (era 34/48).
-- **Títulos**: a entrelinha deixa de ser 1,2 em todos (era 43 no título 1 e 19 no título 6).
-
-#### Corrigido
-
-- **O `Toggle` sem `size` saía com a classe `btn-undefined`** (medido no catálogo, nos três botões do
-  `ToggleGroup`); e com tamanho responsivo sairia `btn-[object Object]`. Agora a conta é a do `Button`.
-
-#### ⚠ Pode quebrar a compilação
-
-- `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
-  compilar.
-- `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.
+- `CloseButton`, `Slider`, `CheckboxGroup` e `ListBox` — a nota está na seção `[0.32.0]`, abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -167,6 +81,134 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   dependências que o `@aurea-uds/react` declara; e nenhuma página puxa script, folha, imagem ou
   moldura de outro endereço. O `montar-site.mjs` confere a segunda metade de novo na publicação.
 - Não muda nenhum pacote publicado.
+
+---
+
+## [0.32.0] — em construção (11/10/2026)
+
+⏳ **Em construção, na branch `claude/lote-q`.** O lote único: as peças quase idênticas às da referência.
+
+A regra nova do Victor (11/10/2026): a peça da Aurea é a da referência principal — anatomia,
+medidas, estados, comportamento, teclado —, e por cima só entra o que é da Aurea (as cores e os
+temas, os cantos 22/32/cápsula, a fonte, os ícones, as densidades, sem degradê, a baixa visão).
+O lote junta a rodada 1 do site, a auditoria peça a peça (web e nativo), os pedidos do app de rede
+e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]` na versão.
+
+### Novo
+
+- **`CloseButton`, na web e no nativo** — o botão de fechar da referência: um círculo no cinza
+  neutro com o X esmaecido, que já se chama "Close" ("Fechar" em `ptBR`); `label` diz o que fecha,
+  `children` troca o X. Web: 24, X de 16, a área de toque de 44 em volta sem o círculo crescer.
+  Nativo: 40 (a escala de toque, abaixo), X de 20, toque estendido em 12.
+- **O peso `bold` no `Icon`**, só para os nomes desenhados nele — hoje, o `x` (o traço do
+  `CloseButton`). Os outros nomes pedidos em `bold` desenham o regular. No sprite, `i-x-bold`; no
+  nativo, `@aurea-uds/native/icons/x-bold` (registre como `"x-bold"`).
+- **A escala de toque do nativo** (`touch-control-h-sm/md/lg`, [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md)): 40 · 48 · 56 no
+  confortável, como o pacote nativo da referência; 36 · 44 · 52 no compacto e 44 · 52 · 60 no
+  espaçoso. A web continua na escala dela.
+- **A entrelinha de cada título** (`text-4xl-leading` … `text-lg-leading`): 40 · 36 · 32 · 28 · 28 ·
+  24 para os títulos de 36 · 30 · 24 · 20 · 18 · 16, como na escala publicada da referência — no
+  `Heading`/`Text type="h*"` (web e nativo) e nos títulos do `.prose`.
+
+- **`Button variant="tertiary"`**, o fundo neutro com a letra normal — o `secondary` de até a 0.31.0.
+- **`ButtonGroup`**: `variant`, `size` e `disabled` valem para todos os botões de dentro (cada um
+  pode trocar o seu), `fullWidth` e `detached`. **`ToggleGroup`**: `size`, `fullWidth` e `detached`.
+- **`Toggle variant`**: `default` (fundo neutro, o padrão) ou `ghost` (sem fundo, o de antes).
+- **`Slider`** — o controle deslizante DESENHADO da referência (decisão do Victor: "Slider novo"):
+  rótulo e valor em cima, trilho de 20 com o preenchimento, alça em cápsula de 28 × 20 com o miolo
+  de 24 × 16 na cor de letra sobre o amarelo; um valor ou dois (`defaultValue={[20, 80]}`, `thumbLabels`), vertical, valor formatado pelo
+  `Intl` (`format`, `locale`), `onValueChange` e `onValueCommitted` com o NÚMERO. O motor é o que a
+  Aurea já usa. O `Range` (o do navegador) continua igual.
+- **`CheckboxGroup`** — o grupo de caixas da referência: rótulo, descrição, as caixas e o erro; guarda
+  a lista do que está marcado (`value`, `onValueChange`); cada `Checkbox` de dentro diz o seu `value`.
+- **`ListBox`** — a lista de opções solta da referência: ícone, descrição, seções, escolha de nenhum
+  (lista de ações, `onAction`), um ou vários; o teclado do padrão do APG (setas, Home, End, Espaço,
+  Enter, a primeira letra).
+- **`Field required`**: o asterisco vermelho depois do rótulo (escondido do leitor de tela) e o
+  `required` no controle.
+- **`Input` e `Textarea` `variant="secondary"`**: o fundo neutro, sem borda à vista, para dentro de
+  cartão.
+- **`Tabs variant="secondary"`** — a aba secundária da referência: sem trilho, um fio embaixo da
+  lista e a escolhida com o fio da casa (o nativo já tinha, R-12).
+- **`Pagination`**: `variant` (`numbers`, o novo padrão; `simple`, só anterior e próxima; `compact`,
+  o desenho de até a 0.31.0), `summary` (o resumo à esquerda), `href` (cada página vira um link de
+  verdade, que o buscador segue — GAR-18), `siblings` e `label` (o nome do marco).
+- **`Accordion`**: `variant="surface"` (num cartão), `multiple` (vários abertos), `defaultValue` e o
+  item `disabled`.
+- **`Sidebar placement="right"`** e a coluna da direita do **`AppShell`** (`aside`, `asideLabel`) — o
+  "Nesta página" de uma documentação, de 1280 para cima; abaixo, depois do conteúdo (DOC-01).
+- **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
+  (`shortcuts`, ligada; DOC-07).
+
+### Mudou
+
+- ⚠ **`Button variant="secondary"` passa a ter a LETRA DA MARCA** sobre o fundo neutro, como a
+  referência (decisão do Victor, 11/10/2026: a opção "A"). **O `Button` sem `variant` NÃO muda**: o
+  padrão passa a ser o `tertiary`, que é a cara de sempre (a classe sai `btn-tertiary`, e não mais
+  `btn-secondary`). A regra dela: salvar é o primário, editar o secundário, cancelar o terciário —
+  por isso o "Cancelar" do `ConfirmDialog` e o "Negar" do `ApprovalCard` passam a `tertiary` e não
+  mudam de cara; o exportar da `DataGrid` e os botões do `FileInput` continuam `secondary` e ganham a
+  letra da marca. Quem quer o neutro num botão `secondary` escreve `tertiary`.
+- **O botão**: 16 dos lados (era 15), `lg` com 16 (era 20); o ícone tem 16 em tela de 640 para cima e
+  20 abaixo, e 16 sempre no `sm` e no `xs` (era 20 sempre) — como a referência.
+- ⚠ **`ButtonGroup` e `ToggleGroup` COLADOS** numa cápsula: vão 0, canto só nas pontas, um fio de 1
+  (a cor do texto a 15%) entre os botões, sem o encolher ao apertar, e o contorno que não dobra.
+  Eram cápsulas soltas com vão de 4, que quebravam linha: quem quer assim passa `detached`.
+- **`Toggle`**: passa a ter o fundo neutro (`variant="default"`), como o da referência; o ligado
+  continua o "selecionado" da Aurea. Era sem fundo: quem quer assim passa `variant="ghost"`.
+- **`IconButton` dentro de um `ButtonGroup` com `variant`** segue o grupo; solto, continua fantasma.
+- **Os campos**: 12 dos lados no campo e na área de texto (eram 13 e 14), e a área com 8 em cima e
+  embaixo (era 12); rótulo peso médio (era 600); a dica e a descrição 12/16 sem negrito; o erro com
+  4 de recuo.
+- ⚠ **`NumberField` em grupo**: um grupo só, com a borda e o fundo de campo, e os botões de mais e
+  menos DENTRO dele (40 de largura, ícone 16, um fio entre cada botão e o número), como o da
+  referência. Eram dois botões fantasma soltos ao lado do campo. No toque, o grupo tem 44.
+- **`OTPField`**: a casa de 38 × 40 com o número de 18 em seminegrito (era 36 × 36, letra 14).
+- **Caixa e opção**: a marca de 16 (era 18), o canto da caixa 6 (`--radius-xs`, era 5 cru), 12 até o
+  texto, o texto peso médio (o da caixa era negrito), a descrição 12/16. A opção marcada fica CHEIA,
+  com o ponto no meio.
+- **`Switch`**: o trilho de 40 × 20 (sm 32 × 16, lg 48 × 24; era 42 × 24), a bolinha em cápsula de
+  22 × 16, 12 até o texto, peso médio.
+- **`Kbd`**: a tecla da referência — 24 de altura, 8 dos lados, letra 14 peso médio na fonte do
+  texto, fundo neutro, sem borda —, em cápsula, e redonda quando é um caractere só (`kbd-single`,
+  posto pelo componente). Era 20, letra 11 na fonte de código, com borda. Dentro do botão, 20.
+- **A altura `sm` e `lg` dos controles da web**: 32 e 40 (eram 30 e 42), como a referência; o `md`
+  continua 36. Compacto 28/36 (era 28/38), espaçoso 36/44 (era 34/48).
+- **Títulos**: a entrelinha deixa de ser 1,2 em todos (era 43 no título 1 e 19 no título 6).
+- **Abas e segmentado**: o trilho com 4 de recheio e sem vão, a aba de 32 (o `sm`), 16 dos lados,
+  peso médio — o trilho dá 40 (era 36).
+- **`Breadcrumb`**: vão 6 (era 7), peso médio, sublinhado com o mouse, a página atual na cor do texto
+  e em peso médio (era negrito), o separador de 12 (era 16).
+- ⚠ **`Accordion`** — o da referência, com o realce em cápsula (decisão do Victor): sem caixa em volta
+  (era uma borda em cima e embaixo), um fio entre os itens, a pergunta com 16 de todos os lados, a seta
+  de 16 no FIM, que vira ao abrir (era o marcador do navegador, no começo), a resposta 14 esmaecida, e
+  **um aberto de cada vez** (abrir um fecha o outro, como o dela; `multiple` volta ao de antes).
+- ⚠ **`Pagination`**: o padrão passa a ser os NÚMEROS das páginas, como o da referência, com a página
+  atual no "clarinho" (decisão do Victor). O desenho de antes continua como `variant="compact"`.
+  `onPageChange` deixa de ser obrigatório (com `href`, a página pode só navegar).
+- **`CommandPalette`**: a lista mora DENTRO da caixa da paleta (era um popup embaixo do campo), e o
+  primeiro resultado já vem marcado.
+
+### Corrigido
+
+- **O `Toggle` sem `size` saía com a classe `btn-undefined`** (medido no catálogo, nos três botões do
+  `ToggleGroup`); e com tamanho responsivo sairia `btn-[object Object]`. Agora a conta é a do `Button`.
+- **As alças do `Slider` saíam sem nome no HTML do servidor** (o axe da varredura do catálogo acusou
+  as cinco): o motor só liga a alça ao rótulo depois de montar. O rótulo agora tem id próprio, que
+  nomeia o grupo e cada alça já na marcação; e o desligado vai também para o grupo (`aria-disabled`).
+- **Duas `Pagination` na mesma página eram dois marcos com o mesmo nome**: `label` dá a cada uma o
+  seu ("Pedidos", "Resultados da busca").
+- **A página atual da `Pagination` desenhava duas linhas no foco** (a borda e o anel separados,
+  ADR-0059): ela entrou na lista das peças com borda, e o anel encosta.
+
+### ⚠ Pode quebrar a compilação
+
+- `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
+  compilar.
+- `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.
+- **Quatro frases novas no `AureaStrings` da web** — quem monta o objeto inteiro (uma tradução própria)
+  precisa acrescentá-las: `paginationPage` (o "Página" do nome de cada número), `commandHintMove`,
+  `commandHintSelect` e `commandHintClose` (a linha de atalhos da paleta). O `ptBR` já as traz.
 
 ---
 

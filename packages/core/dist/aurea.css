@@ -503,7 +503,7 @@ button,a,[role="button"],input,textarea,select { outline:none; }
    o vão: colado, o anel amarelo sumiria no botão amarelo.
    Quem cobra que nenhuma peça ficou de fora é o catálogo inteiro, no navegador:
    `tests/visual/foco-uma-linha.spec.ts`. */
-:is(.input,.textarea,.select,.btn-outline,.btn-primary-outline,.btn-danger-outline,.media-control,.card,.code-block,.graph-node-body):focus-visible { outline-offset:0; border-color:var(--focus-strong); }
+:is(.input,.textarea,.select,.btn-outline,.btn-primary-outline,.btn-danger-outline,.media-control,.card,.code-block,.graph-node-body,.pagination-link):focus-visible { outline-offset:0; border-color:var(--focus-strong); }
 button { color:inherit; }
 /* O link NÃO é `--primary`. Medido em 22/08/2026 com o axe e depois à mão: o amarelo da
    marca sobre o fundo do tema CLARO dá 1,73:1, e o AA de texto (WCAG 1.4.3) pede 4,5:1 —
@@ -748,6 +748,25 @@ img,svg { display:block; }
    variante que desenha igual é enfeite. `--shell-top` volta a ser só a altura do topo, porque sem
    margem não há as duas folgas a descontar. */
 .sidebar-flush { --shell-top:var(--topbar-height); height:calc(100vh - var(--shell-top)); max-height:100%; margin:0; border:0; border-inline-end:1px solid var(--sidebar-border); border-radius:0; }
+/* `placement="right"` (0.32.0, DOC-01): a lateral do outro lado. A flutuante já tem margem nos quatro
+   lados; a encostada leva o fio para o lado de dentro, que agora é o começo da linha. */
+.sidebar-flush.sidebar-right { border-inline-end:0; border-inline-start:1px solid var(--sidebar-border); }
+/* A COLUNA DA DIREITA do `AppShell` (`aside`): a terceira trilha, da largura da lateral, de 1280 para
+   cima. Abaixo, ela desce para depois do conteúdo, na última coluna que houver (a do conteúdo entre
+   1024 e 1279; a única abaixo de 1024), sem grudar. Com ela, o conteúdo perde a margem da direita: a
+   folga entre os dois é a margem da coluna, como entre a lateral e o conteúdo. */
+.app-shell-with-aside { --aside-track:calc(var(--sidebar-width) + var(--space-4)*2); }
+.app-shell-with-aside:has(> .app-shell-aside.sidebar-flush) { --aside-track:var(--sidebar-width); }
+/* `.sidebar.app-shell-aside` (três classes) e não só a classe da coluna: a regra do shell recolhível
+   (`.app-shell-collapsible > .sidebar`, mais abaixo na folha) prende TODA lateral na coluna 1, e com
+   a mesma força ganharia por vir depois. */
+.app-shell-with-aside > .sidebar.app-shell-aside { grid-column:-2 / -1; grid-row:auto; }
+@media (max-width:1279px) { .app-shell-with-aside > .sidebar.app-shell-aside { position:static; height:auto; max-height:none; } }
+@media (min-width:1280px) {
+  .app-shell-with-aside { grid-template-columns:var(--sidebar-track) minmax(0,1fr) var(--aside-track); }
+  .app-shell-with-aside > .content.content { grid-column:2; grid-row:2; margin-inline-end:0; }
+  .app-shell-with-aside > .sidebar.app-shell-aside { grid-column:3; grid-row:2; }
+}
 /* a lateral ROLA mas nunca mostra a barra (pedido do Victor): a barra nativa risca a
    superfície flutuante e não segue o raio de 22px. `scrollbar-width` cobre Firefox e
    Chrome 121+; o pseudo cobre Safari e Chrome antigo. */
@@ -1876,8 +1895,13 @@ img,svg { display:block; }
    coincidência; em compact a cápsula ficava 4px alta demais e em spacious 4px baixa demais,
    porque a densidade não alcançava a regra (achado A1, 26/07/2026). Com a altura na cápsula
    os filhos esticam sozinhos (align-items é stretch por padrão) e a conta fecha nas TRÊS. */
-.segmented { display:inline-flex; gap:3px; padding:3px; min-height:var(--control-h-md); border-radius:var(--radius-control); background:var(--muted); border:1px solid transparent; box-shadow:none; }
-.segmented button { padding:0 14px; border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; cursor:pointer; }
+/* 0.32.0 — as medidas das abas da referência (o segmentado é a mesma peça): trilho com 4 de recheio
+   e sem vão; cada segmento com a altura `sm` (32 no padrão, e anda com a densidade), 16 dos lados,
+   letra peso médio. O trilho dá 40 (era 36: 3 + 30 + 3). */
+/* A borda transparente de 1 (as abas não têm) entra no recheio: 1 + 3 = os 4 da referência, e o
+   trilho mede 40 como o das abas — sem o desconto, 42 (a geometria pegou). */
+.segmented { display:inline-flex; gap:0; padding:calc(var(--space-1) - var(--border-width)); border-radius:var(--radius-control); background:var(--muted); border:var(--border-width) solid transparent; box-shadow:none; }
+.segmented button { min-block-size:var(--control-h-sm); padding:0 var(--space-4); border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; font-weight:var(--weight-medium); cursor:pointer; }
 .segmented button.active { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); border:0; }
 /* `fullWidth` (A5, 06/10/2026): ocupa a linha, e cada segmento cresce a partir do rótulo sem
    encolher abaixo dele — o mesmo desenho do nativo. `1 0 auto` e não `1` (= `1 1 0%`): base zero
@@ -1931,7 +1955,7 @@ img,svg { display:block; }
    saíram com a mesma cor. Com o `:not` ela pesa (0,3,1) e só alcança quem está em repouso. */
 [data-theme="light"] .doc-nav a:not(.active):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }
 .is-selected::after,.btn-nav[aria-current]:not([aria-current="false"])::after,
-.btn[aria-pressed="true"]:not(.btn-icon)::after,.segmented button.active::after,
+.btn[aria-pressed="true"]:not(.btn-icon)::after,.segmented button.active::after,.tabs-secondary .tab[data-active]::after,
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { background:color-mix(in oklab, var(--sidebar-primary) 75%, transparent); }
@@ -2167,8 +2191,9 @@ img,svg { display:block; }
 .skeleton { position:relative; overflow:hidden; border-radius:7px; background:var(--surface-3); }
 .skeleton { animation:skeleton-pulse 1.35s ease-in-out infinite; } @keyframes skeleton-pulse { 50% { opacity:.55; } }
 
-/* Mesma regra da .segmented: a cápsula carrega a altura da densidade, o filho estica. */
-.tabs { display:inline-flex; gap:3px; padding:3px; min-height:var(--control-h-md); border:0; border-radius:var(--radius-control); background:var(--muted); }
+/* Mesma regra da .segmented (0.32.0, as medidas da referência): 4 de recheio, sem vão, a aba de 32
+   (`--control-h-sm`, que anda com a densidade), 16 dos lados, peso médio. */
+.tabs { display:inline-flex; gap:0; padding:var(--space-1); border:0; border-radius:var(--radius-control); background:var(--muted); }
 /* Abas VERTICAIS (a família da orientação, achada pela matriz do §13). A raiz vira GRADE e
    não linha: com `flex-direction:row` o painel herdaria a altura da lista, e uma aba com
    muito conteúdo esticaria a coluna de rótulos junto — medido no navegador em 22/08/2026.
@@ -2176,25 +2201,48 @@ img,svg { display:block; }
    painel porque `minmax(0,1fr)` sozinho deixa conteúdo largo (uma tabela) empurrar a coluna
    de rótulos para fora. */
 .tabs-root[data-orientation="vertical"] { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:start; gap:var(--space-4); }
-.tabs[data-orientation="vertical"] { flex-direction:column; align-items:stretch; min-height:0; }
+.tabs[data-orientation="vertical"] { flex-direction:column; align-items:stretch; gap:var(--space-1); min-height:0; }
 /* o rótulo alinha ao INÍCIO da linha: centrado, uma coluna de abas de larguras diferentes
    sai serrilhada, que é o mesmo defeito que o `.btn-group-vertical` resolve com `stretch`. */
-.tabs[data-orientation="vertical"] .tab { min-block-size:var(--control-h-md); text-align:start; }
-.tab { position:relative; padding:0 14px; border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); cursor:pointer; }
+.tabs[data-orientation="vertical"] .tab { text-align:start; }
+.tab { position:relative; min-block-size:var(--control-h-sm); padding:0 var(--space-4); border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); font-weight:var(--weight-medium); cursor:pointer; }
 .tab.active,.tab[data-active] { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); } .tab.active:after,.tab[data-active]:after { display:none; }
+/* `variant="secondary"` (0.32.0): a aba secundária da referência — sem trilho e sem cápsula, um fio
+   embaixo da lista, a escolhida com a letra normal e o fio da casa (a regra do "selecionado", mais
+   abaixo). */
+.tabs-secondary { gap:var(--space-1); padding:0; border-block-end:var(--border-width) solid var(--border); border-radius:0; background:transparent; }
+.tabs-secondary[data-orientation="vertical"] { border-block-end:0; border-inline-start:var(--border-width) solid var(--border); }
+.tabs-secondary .tab { border-radius:0; }
+.tabs-secondary .tab.active,.tabs-secondary .tab[data-active] { background:transparent; box-shadow:none; color:var(--foreground); }
+.tabs-secondary .tab[data-active]::after { display:block; }
 /* `panel="plain"` (MNT-05 e C9, 06/10/2026): o painel sem caixa, como o painel de abas da
    referência. Sem recheio dos lados — o conteúdo começa na linha do que está fora do `Tabs` —, e o
    espaço de cima é o mesmo `space-3` do painel do nativo. Na vertical, quem separa é o `gap` da
    grade da raiz, então o espaço de cima não entra. */
 .tabs-panel { min-width:0; } .tabs-root:not([data-orientation="vertical"])>.tabs-panel { padding-block-start:var(--space-3); }
-.breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:7px; color:var(--muted-foreground); font-size:var(--text-sm); }
-.breadcrumb a { color:inherit; text-decoration:none; } .breadcrumb a:hover { color:var(--foreground); }
-.pagination { display:flex; gap:6px; align-items:center; }
-/* `:not(.btn)` porque isto é o quadrado de NÚMERO de página. Sem o :not, o seletor de
-   elemento vencia o `.btn-sm` do Anterior/Próxima por especificidade (0,1,1 contra 0,1,0)
-   e forçava 34px neles — era a terceira altura de .btn-sm que a auditoria mediu (B3). */
-.pagination button:not(.btn) { width:var(--control-h-md); height:var(--control-h-md); border:1px solid var(--border); border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); cursor:pointer; }
-.pagination button.active { color:var(--primary-foreground); background:var(--primary); border-color:var(--primary); }
+/* 0.32.0 — a trilha da referência: vão 6, link 14 PESO MÉDIO esmaecido (sublinhado com o mouse, como o
+   dela), a página atual na cor do texto e em peso médio (era negrito), e o separador de 12 (era 16). */
+.breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
+.breadcrumb a { color:inherit; text-decoration:none; } .breadcrumb a:hover { color:var(--foreground); text-decoration:underline; text-underline-offset:var(--space-05); }
+.breadcrumb > .icon { --step-icon:var(--space-3); }
+.breadcrumb [aria-current="page"] { color:var(--foreground); font-weight:inherit; }
+/* PAGINATION (0.32.0) — a da referência: o resumo à esquerda (14 esmaecido) e os itens à direita,
+   com 4 entre eles; cada número é uma cápsula de 32 (`--control-h-sm`, 44 no toque), 14 PESO MÉDIO,
+   que escurece com o mouse; "anterior" e "próxima" com a seta de 16 e o texto, 10 dos lados e 6 entre
+   a seta e o texto; as reticências esmaecidas. A página ATUAL é o "clarinho" da Aurea — a receita do
+   `.badge-primary` suave (o amarelo a 10%, o contorno da marca e a letra da marca), decisão do Victor.
+   O `compact` (o desenho de até a 0.31.0) usa o `Button` e o `Badge`, e não passa por aqui. */
+.pagination { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-4); }
+.pagination-summary { margin-inline-end:auto; color:var(--muted-foreground); font-size:var(--text-sm); }
+.pagination-content { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-1); margin:0; padding:0; list-style:none; }
+.pagination-link { display:inline-flex; align-items:center; justify-content:center; gap:calc(var(--space-1) + var(--space-05)); min-inline-size:var(--control-h-sm); block-size:var(--control-h-sm); padding-inline:var(--space-1); border:var(--border-width) solid transparent; border-radius:var(--radius-full); background:transparent; color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); font-variant-numeric:tabular-nums; text-decoration:none; cursor:pointer; transition:background var(--duration-fast),transform var(--duration-fast) var(--ease-standard); }
+.pagination-link:hover:not(:disabled):not([aria-disabled="true"]) { background:var(--secondary); }
+.pagination-link:active:not(:disabled):not([aria-disabled="true"]) { transform:scale(.97); }
+.pagination-link:disabled,.pagination-link[aria-disabled="true"] { opacity:var(--opacity-disabled); cursor:not-allowed; }
+.pagination-link.active { border-color:var(--primary-outline); background:color-mix(in srgb, var(--primary) 10%, transparent); color:var(--primary-emphasis); }
+.pagination-link-nav { padding-inline:calc(var(--space-2) + var(--space-05)); }
+.pagination-nav-icon { --step-icon:var(--icon-sm); }
+.pagination-ellipsis { display:inline-grid; place-items:center; inline-size:var(--control-h-sm); color:var(--muted-foreground); font-size:var(--text-sm); }
 /* Stepper (Lote 2): o container NUNCA existiu no core — só no docs.css, e lá era
    `repeat(4,1fr)`, com o número de etapas cravado. `grid-auto-flow:column` distribui N etapas
    iguais sem saber quanto é N, e colunas iguais são o que faz a linha conectora (`.step:before`,
@@ -2360,18 +2408,29 @@ img,svg { display:block; }
 .timeline > li > div { display:flex; flex-direction:column; gap:var(--space-05); min-width:0; }
 .timeline > li > div > p { margin:0; }
 .timeline-dot { flex:none; width:var(--space-3); height:var(--space-3); border-radius:var(--radius-full); margin-block-start:var(--space-1); background:var(--primary); box-shadow:0 0 0 var(--space-05) var(--surface-1); }
-/* Accordion: anatomia medida numa das referências de desenho em 30/07/2026 (REFERENCES.md) — cabeçalho na altura de
-   controle, divisória de 1px por item, corpo com respiro pequeno em cima e grande embaixo.
-   O marcador é o NATIVO do <summary>: gira sozinho e custa zero código, e é por isso que o
-   summary continua `display:list-item` — pôr flex nele apagaria o marcador. */
-.accordion { display:flex; flex-direction:column; border-block:1px solid var(--border); }
-.accordion > details + details { border-top:1px solid var(--border); }
-.accordion > details > summary { min-height:var(--control-h-md); padding-block:var(--space-2); padding-inline:var(--space-5) var(--space-2); color:var(--foreground); font-weight:var(--weight-medium); line-height:var(--leading-normal); cursor:pointer; }
-.accordion > details > summary:hover { background:var(--surface-hover); }
-.accordion > details > summary::marker { color:var(--muted-foreground); }
-/* Recuo INLINE, não `padding-left`: o marcador do <summary> troca de lado em RTL e o corpo
-   tem de acompanhar. Foi o gate de RTL que cobrou — ele mede o eixo inline do core. */
-.accordion-content { padding-block:0 var(--space-6); padding-inline:var(--space-5) var(--space-2); color:var(--muted-foreground); }
+/* ACCORDION (0.32.0) — o da referência, com o realce em CÁPSULA (decisão do Victor, 11/10/2026). Sem
+   caixa em volta: um fio de 1 entre os itens, nenhum depois do último. A pergunta: 16 de todos os
+   lados, 14 peso médio, a seta de 16 no FIM (esmaecida), que vira −180° ao abrir — o marcador do
+   navegador sai (era ele que girava, no começo da linha). O realce do mouse só no item fechado: a cor
+   do texto a 3%, em cápsula. A resposta: 14 esmaecida, 16 dos lados e embaixo. Recuo INLINE, não
+   `padding-left`: em RTL a seta troca de lado e o corpo acompanha (o gate de RTL mede o eixo inline).
+   `surface`: tudo num cartão, o fio a 94% (3% de cada lado) e o realce no cinza neutro. */
+.accordion { display:flex; flex-direction:column; }
+.accordion-item { position:relative; }
+.accordion-item::after { content:""; position:absolute; inset-inline-start:0; inset-block-end:0; inline-size:100%; block-size:var(--border-width); background:var(--border); }
+.accordion-item:last-child::after { content:none; }
+.accordion-item > summary { display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); padding:var(--space-4); border-radius:var(--radius-full); color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--leading-normal); list-style:none; cursor:pointer; transition:background var(--duration-fast); }
+.accordion-item > summary::-webkit-details-marker { display:none; }
+.accordion-title { min-inline-size:0; }
+.accordion-item:not([open]) > summary:hover:not([aria-disabled="true"]) { background:color-mix(in oklab, var(--foreground) 3%, transparent); }
+.accordion-item > summary[aria-disabled="true"] { opacity:var(--opacity-disabled); cursor:not-allowed; }
+.accordion-chevron { --step-icon:var(--icon-sm); flex:none; color:var(--muted-foreground); transition:transform var(--duration-fast) var(--ease-standard); }
+.accordion-item[open] > summary .accordion-chevron { transform:rotate(-180deg); }
+.accordion-content { padding-block:0 var(--space-4); padding-inline:var(--space-4); color:var(--muted-foreground); font-size:var(--text-sm); }
+.accordion-surface { border-radius:var(--radius-card); background:var(--card); }
+.accordion-surface > .accordion-item::after { inset-inline-start:3%; inline-size:94%; }
+.accordion-surface > .accordion-item:not([open]) > summary:hover:not([aria-disabled="true"]) { background:var(--secondary); }
+@media (prefers-reduced-motion:reduce) { .accordion-chevron { transition:none; } }
 /* Mockup do kit de origem (apps/docs) — não é o Accordion do sistema, que é <details> nativo. */
 
 /* QRCode: superfície flutuante Aurea, mas o miolo é de alto contraste FIXO — um QR
@@ -2900,8 +2959,18 @@ img,svg { display:block; }
    DEPOIS do `.menu-item` de proposito: as duas regras tem a MESMA especificidade, entao quem vem
    por ultimo vence. Escrita antes, a grade de tres colunas era apagada pelo `display:flex` do
    menu — medido em 13/08/2026, e o gate de pele foi quem pegou. */
-.command-positioner { inline-size:var(--anchor-width); }
 .command-list { max-height:min(50vh,360px); overflow-y:auto; overscroll-behavior:contain; }
+/* 0.32.0 — a lista mora DENTRO da caixa da paleta (o `inline` do motor), e não num popup: o `.menu`
+   aqui não flutua — sem borda, sem sombra, sem largura própria; a caixa é a da paleta. */
+.command-palette .command-list { position:static; z-index:auto; min-width:0; max-width:none; border:0; box-shadow:none; padding:0; background:transparent; }
+/* O título do grupo (DOC-06) = o `Header` da seção da lista da referência: 12, peso médio,
+   esmaecido, sem maiúsculas; 6 em cima e 4 embaixo; alinhado ao texto do item (`--menu-px`). */
+.command-group + .command-group { margin-block-start:var(--space-1); }
+.command-group-label { padding:calc(var(--space-1) + var(--space-05)) var(--menu-px, var(--space-3)) var(--space-1); color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-medium); }
+/* A linha de atalhos (DOC-07): a tecla da referência (o `Kbd`) com o que ela faz, 12 esmaecido,
+   separada da lista por um fio. */
+.command-shortcuts { display:flex; flex-wrap:wrap; gap:var(--space-4); margin:0; padding:var(--space-2) var(--space-1) 0; border-top:var(--border-width) solid var(--border); color:var(--muted-foreground); font-size:var(--text-xs); }
+.command-shortcuts > span { display:inline-flex; align-items:center; gap:var(--space-1); }
 .command-item { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:var(--space-3); align-items:center; }
 .command-item-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
@@ -3556,7 +3625,7 @@ button.graph-node-body { cursor:pointer; }
 /* Alvo de toque. `.tabs`/`.segmented` no lugar de `.tab`/`.segmented button`: agora a altura
    mora na cápsula, então é ela que precisa crescer — o filho estica atrás. O `CloseButton` fica de
    fora (0.32.0): o alvo dele é o `::before` de 44, e o círculo continua de 24, como o da referência. */
-@media (pointer:coarse) { .btn:not(.btn-link):not(.close-button),.tabs,.segmented,.pagination button,.schedule-grid button,.media-control,.nav-list-row { min-height:var(--target-min); } .btn-icon,.media-control { min-width:var(--target-min); } }
+@media (pointer:coarse) { .btn:not(.btn-link):not(.close-button),.tabs,.segmented,.pagination button,.pagination-link,.schedule-grid button,.media-control,.nav-list-row { min-height:var(--target-min); } .btn-icon,.media-control,.pagination-link { min-width:var(--target-min); } }
 @media (forced-colors:active) {
   :focus-visible { outline:var(--focus-width) solid CanvasText; outline-offset:var(--focus-offset); box-shadow:none; }
   .badge,.pattern-gallery button[aria-pressed="true"],.device-grid button[aria-pressed="true"] { border:1px solid CanvasText; }

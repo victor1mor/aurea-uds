@@ -98,6 +98,18 @@
       "type": "\"surface\" | \"plain\"",
       "default": "\"surface\"",
       "description": "`plain` removes the box around the content area (B-10). `.content` is a card — same background, border and radius as `.card` — so every Card inside became a box inside an identical box; an app spent 14 !important to erase it. The margin stays."
+    },
+    {
+      "name": "aside",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The right-hand column — a documentation page's \"On this page\" (a TableOfContents). From 1280 up it is the third column; below, it follows the content."
+    },
+    {
+      "name": "asideLabel",
+      "type": "string",
+      "default": "strings.tocLabel",
+      "description": "The right column's name for screen readers."
     }
   ],
   "tokens": [

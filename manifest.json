@@ -20,7 +20,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -30,7 +30,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -40,7 +40,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -50,7 +50,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -60,7 +60,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -79,7 +79,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -124,7 +124,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.31.0",
+      "version": "0.32.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -286,14 +286,14 @@
       "recipe": 23,
       "area": 6
     },
-    "conteudo_rico": 32,
-    "starters": 105,
+    "conteudo_rico": 35,
+    "starters": 102,
     "receitas_com_preview": 23,
     "patterns_content": 80,
     "blocks_content": 2,
     "receitas": 23,
     "props": 128,
-    "variants": 22,
+    "variants": 25,
     "sizes": 26,
     "states": 112,
     "tokens_ficha": 129,
@@ -303,12 +303,12 @@
       "Ready": 44,
       "Stable": 92
     },
-    "testes_unit": 1656,
+    "testes_unit": 1679,
     "componentes_citados_no_teste": 135,
     "specs_visuais": 37,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 765,
+    "classes_core": 781,
     "token_declaracoes": 467,
     "token_nomes": 222,
     "token_usados": 174,

@@ -81,6 +81,12 @@
       "type": "string",
       "default": "\"Command palette\"",
       "description": "Accessible name of the dialog."
+    },
+    {
+      "name": "shortcuts",
+      "type": "boolean",
+      "default": "true",
+      "description": "The line under the list that teaches the keys: ↑ ↓ move, Enter open, Esc close. Each item may also say its group (item.group): items of the same group come together under its title."
     }
   ]
 }

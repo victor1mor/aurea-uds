@@ -18,7 +18,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Hooks públicos com ficha | 9 |
 | Maturidade declarada nas fichas | Deprecated 1 · Ready 44 · Stable 92 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 765 |
+| Classes declaradas no CSS do core | 781 |
 
 ## Tokens
 
@@ -45,7 +45,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Campo | Fichas que declaram |
 |---|---|
 | `props` (contrato de API publicado) | 128 de 128 |
-| `variants` | 22 de 128 |
+| `variants` | 25 de 128 |
 | `sizes` | 26 de 128 |
 | `states` | 112 de 128 |
 | `tokens` | 129 de 128 |
@@ -55,21 +55,21 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Origem | Arquivos |
 |---|---|
-| Componentes com conteúdo próprio | 32 de 128 |
-| Componentes com starter (preview + código mínimos) | 105 de 128 |
+| Componentes com conteúdo próprio | 35 de 128 |
+| Componentes com starter (preview + código mínimos) | 102 de 128 |
 | Patterns com conteúdo | 80 |
 | Blocks com conteúdo | 2 |
 | Receitas com preview | 23 de 23 |
 
 Todo item tem preview e código — é o núcleo do modelo de página decidido na
-[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 105 componentes de
+[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 102 componentes de
 starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 128: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
 
 ## Garantias automáticas
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 1656 |
+| Chamadas de `test()` nos testes unitários | 1679 |
 | Componentes citados nos testes unitários | 135 de 128 |
 | Specs de navegador (Playwright) | 37 |
 | Baselines de screenshot no repositório | 44 |
