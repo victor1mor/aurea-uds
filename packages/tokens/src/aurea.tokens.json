@@ -740,7 +740,7 @@
     "card-pad": {
       "$type": "dimension",
       "$value": {
-        "value": 1.25,
+        "value": 1.0,
         "unit": "rem"
       }
     },
@@ -4526,7 +4526,7 @@
       "card-pad": {
         "$type": "dimension",
         "$value": {
-          "value": 1.0,
+          "value": 0.75,
           "unit": "rem"
         }
       },
@@ -4615,7 +4615,7 @@
         "$type": "dimension",
         "$description": "Inner padding of a panel. Density breathes here, which is why a compact layout feels tighter without anything having moved.",
         "$value": {
-          "value": 1.25,
+          "value": 1.0,
           "unit": "rem"
         }
       },
@@ -4695,7 +4695,7 @@
       "card-pad": {
         "$type": "dimension",
         "$value": {
-          "value": 1.5,
+          "value": 1.25,
           "unit": "rem"
         }
       },

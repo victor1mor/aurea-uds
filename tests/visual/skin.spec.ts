@@ -283,6 +283,16 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // ── Ações ──────────────────────────────────────────────────────────────────────────
     h(A.IconButton, {key: "ib", icon: "plus", label: "Add"}),
     h(A.CloseButton, {key: "xb"}),
+    // 0.32.0, passo 6: as quatro peças novas da referência, e os três tamanhos do selo e do avatar.
+    h("p", {key: "lnk"}, h(A.Link, {href: "#a"}, "Plain link"), " ", h(A.Link, {href: "#b", external: true}, "External")),
+    h("div", {key: "csw"}, h(A.ColorSwatch, {color: "#f0c200", label: "Yellow"}), h(A.ColorSwatch, {color: "#123456", size: "xl"})),
+    h("div", {key: "pcr"}, h(A.ProgressCircle, {label: "Upload", value: 50}), h(A.ProgressCircle, {label: "Big", value: 50, size: "lg", tone: "success"})),
+    h(A.TagGroup, {key: "tgg", label: "Topics", selectionMode: "multiple", defaultSelectedKeys: ["b"],
+      items: [{id: "a", label: "News"}, {id: "b", label: "Travel", icon: "tag"}], onRemove: () => {}}),
+    h("div", {key: "bsz"}, h(A.Badge, {size: "sm", className: "bsz-sm"}, "Small"), h(A.Badge, {className: "bsz-md", leading: h(A.Icon, {name: "check"})}, "Medium"),
+      h(A.Badge, {size: "lg", className: "bsz-lg"}, "Large")),
+    h("div", {key: "avs"}, h(A.Avatar, {fallback: "AB", size: "sm", className: "avs-sm"}), h(A.Avatar, {fallback: "AB", className: "avs-md"}),
+      h(A.Avatar, {fallback: "AB", size: "lg", className: "avs-lg"})),
     h(A.ButtonGroup, {key: "bg"}, h(A.Button, {key: 1}, "One"), h(A.Button, {key: 2}, "Two")),
     h(A.Toolbar, {key: "tb", label: "Skin"},
       h(A.ToolbarGroup, {key: "g", label: "Edit"},
@@ -1456,6 +1466,27 @@ for (const theme of ["dark", "light"] as const) {
             iconBtn: {w: caixa(".btn-icon").width, h: caixa(".btn-icon").height,
                       quadrado: Math.abs(caixa(".btn-icon").width - caixa(".btn-icon").height) <= 1,
                       controlMd: emPx("--control-h-md")},
+            passo6: {
+              link: {cor: est(".link").color, linkToken: (() => { const d = document.createElement("span"); d.style.color = "var(--link)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; })(),
+                     peso: est(".link").fontWeight, sublinhado: est(".link").textDecorationLine, seta: caixa(".link-external").width,
+                     setaMascara: est(".link-external").maskImage !== "none" || est(".link-external").webkitMaskImage !== "none"},
+              amostra: {md: caixa(".color-swatch").width, xl: caixa(".color-swatch-xl").width, raio: parseFloat(est(".color-swatch").borderTopLeftRadius),
+                        fundo: est(".color-swatch").backgroundColor},
+              anel: {md: caixa(".progress-circle").width, lg: caixa(".progress-circle-lg").width,
+                     traco: est(".progress-circle-fill").strokeWidth, ponta: est(".progress-circle-fill").strokeLinecap,
+                     cor: est(".progress-circle-fill").stroke, corSucesso: est(".progress-circle-success .progress-circle-fill").stroke},
+              etiqueta: {alt: caixa(".tag").height, lados: parseFloat(est(".tag").paddingLeft), fs: parseFloat(est(".tag").fontSize),
+                         peso: est(".tag").fontWeight, raio: parseFloat(est(".tag").borderTopLeftRadius), vao: parseFloat(est(".tag-group-list").columnGap),
+                         escolhida: est('.tag[data-selected]').backgroundColor, outra: est('.tag:not([data-selected])').backgroundColor,
+                         icone: caixa(".tag-main .icon").width, x: caixa(".tag-remove").width},
+              selo: {sm: caixa(".bsz-sm").height, md: caixa(".bsz-md").height, lg: caixa(".bsz-lg").height,
+                     ladoMd: parseFloat(est(".bsz-md").paddingLeft) + parseFloat(est(".bsz-md").borderLeftWidth),
+                     ladoSm: parseFloat(est(".bsz-sm").paddingLeft) + parseFloat(est(".bsz-sm").borderLeftWidth),
+                     ladoLg: parseFloat(est(".bsz-lg").paddingLeft) + parseFloat(est(".bsz-lg").borderLeftWidth),
+                     vao: parseFloat(est(".bsz-md").columnGap)},
+              avatar: {sm: caixa(".avs-sm").width, md: caixa(".avs-md").width, lg: caixa(".avs-lg").width,
+                       letra: [".avs-sm", ".avs-md", ".avs-lg"].map(c => parseFloat(est(c).fontSize)), peso: est(".avs-md").fontWeight},
+            },
             fechar: {w: caixa(".close-button").width, h: caixa(".close-button").height,
                      raio: parseFloat(est(".close-button").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
                      icone: caixa(".close-button .icon").width, fundo: est(".close-button").backgroundColor,
@@ -1489,14 +1520,21 @@ for (const theme of ["dark", "light"] as const) {
             tabsRecheio: parseFloat(est(".tabs").paddingTop), tabsVao: parseFloat(est(".tabs").columnGap),
             tabLados: parseFloat(est(".tab").paddingLeft), tabPeso: est(".tab").fontWeight,
             // Dados e navegação
+            // 0.32.0 (HER-13): a moldura cinza com o corpo como cartão por dentro, da referência.
             tabela: {regiaoOver: est(".table-region").overflow,
                      raio: parseFloat(est(".table-region").borderTopLeftRadius),
                      colapso: est(".table").borderCollapse,
-                     alturaLinha: caixa(".table tbody td").height, rowH: emPx("--row-h"),
-                     alinhamento: est(".table th").textAlign,
-                     // no <th>, não no <td>: a única linha do fixture é também a ÚLTIMA, e a
-                     // última perde a divisória de propósito. Medido em 07/08/2026.
-                     divisoria: parseFloat(est(".table th").borderBottomWidth)},
+                     molduraFundo: est(".table-region").backgroundColor, celFundo: est(".table tbody td").backgroundColor,
+                     cartao: est(".card").backgroundColor,
+                     molduraRecheio: [est(".table-region").paddingTop, est(".table-region").paddingRight, est(".table-region").paddingBottom].map(parseFloat),
+                     celPad: [parseFloat(est(".table tbody td").paddingTop), parseFloat(est(".table tbody td").paddingLeft)],
+                     celLetra: [parseFloat(est(".table tbody td").fontSize), parseFloat(est(".table tbody td").lineHeight)],
+                     celCanto: parseFloat(est(".table tbody td").borderTopLeftRadius),
+                     cabecAlt: caixa(".table thead th").height, cabecFs: parseFloat(est(".table thead th").fontSize),
+                     cabecPeso: est(".table thead th").fontWeight, cabecCaixa: est(".table thead th").textTransform,
+                     // o fio entre as colunas do cabeçalho: um traço de 16 no fim de cada coluna, menos a última
+                     fioColuna: parseFloat(getComputedStyle(document.querySelector(".table thead th")!, "::after").height),
+                     alinhamento: est(".table th").textAlign},
             breadcrumb: {display: est(".breadcrumb").display, naLinha: linhaUnica(".breadcrumb", ":scope > *")},
             tabs: {display: est(".tabs").display, raio: parseFloat(est(".tabs").borderTopLeftRadius),
                    radiusControl: emPx("--radius-control"),
@@ -1607,7 +1645,9 @@ for (const theme of ["dark", "light"] as const) {
                          const depois = topos();
                          const rolou = wrap.scrollTop > 0;
                          wrap.scrollTop = 0;
-                         return {antes, depois, rolou, degrau: depois[1] - depois[0], rowH: emPx("--row-h")};
+                         // 0.32.0: o degrau é a altura do CABEÇALHO (36, o da referência), e não mais a da linha.
+                         const cabeca = Math.round(wrap.querySelector("thead th")!.getBoundingClientRect().height);
+                         return {antes, depois, rolou, degrau: depois[1] - depois[0], rowH: cabeca};
                        })(),
                        radiusControl: emPx("--radius-control"),
                        controles: [...document.querySelectorAll(".datagrid:not(.datagrid-sticky) .datagrid-filters th")].map(th=>{const c=th.firstElementChild;if(!c)return null;const r=c.getBoundingClientRect();return {cls:c.className,top:Math.round(r.top),h:Math.round(r.height)}}).filter(Boolean)},
@@ -2141,7 +2181,8 @@ for (const theme of ["dark", "light"] as const) {
     }
     // 20. As setas do mês ficam NA LINHA do mês. Sem a âncora do `.calendar-months` elas
     //     caem numa fileira própria acima, e o cabeçalho vira duas linhas.
-    expect(m.calendar.navBtn.w, "a seta mede um controle pequeno").toBe(m.calendar.navBtn.controlSm);
+    // 0.32.0: o botão de 24 da referência (era o controle pequeno, 32).
+    expect(m.calendar.navBtn.w, "a seta mede 24").toBe(24);
     expect(m.calendar.navNaLinhaDoMes, "as setas ficam na linha do nome do mês").toBe(true);
     // 21. Sidebar (Parte B, B1): a lista que o componente não tinha. Sem as regras, um <ul>
     //     cru com bolinha e 40px de recuo, e o item sem caixa nenhuma.
@@ -2577,6 +2618,29 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.fechar.icone, "o X tem 16 (--icon-sm), não os 20 do botão").toBeCloseTo(16, 0);
     expect(e.fechar.fundo, "o CloseButton tem o fundo neutro").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.fechar.nome, "o nome acessível vem sozinho").toBe("Close");
+    // 0.32.0, passo 6 — as medidas da referência, lidas no CSS publicado dela.
+    const p6 = e.passo6;
+    expect(p6.link.cor, "Link: a cor de link").toBe(p6.link.linkToken);
+    expect([p6.link.peso, p6.link.sublinhado], "peso médio, sem sublinhado parado").toEqual(["500", "none"]);
+    expect(p6.link.setaMascara, "a seta do external é desenho por máscara").toBe(true);
+    expect(p6.link.seta, "a seta tem 0,75 da letra").toBeGreaterThan(8);
+    expect([p6.amostra.md, p6.amostra.xl], "ColorSwatch: 32 e 40").toEqual([32, 40]);
+    expect(p6.amostra.raio, "redonda").toBeGreaterThanOrEqual(16);
+    expect(p6.amostra.fundo, "na cor pedida").toBe("rgb(240, 194, 0)");
+    expect([p6.anel.md, p6.anel.lg], "ProgressCircle: 28 e 36").toEqual([28, 36]);
+    expect([p6.anel.traco, p6.anel.ponta], "traço de 4, ponta redonda").toEqual(["4px", "round"]);
+    expect(p6.anel.corSucesso, "o tom muda a cor").not.toBe(p6.anel.cor);
+    expect([p6.etiqueta.alt, p6.etiqueta.lados, p6.etiqueta.fs, p6.etiqueta.peso],
+      "Tag: 24 de altura, 8 dos lados, letra 12 peso médio").toEqual([24, 8, 12, "500"]);
+    expect(p6.etiqueta.raio, "em cápsula (o canto da Aurea)").toBeGreaterThanOrEqual(12);
+    expect(p6.etiqueta.vao, "6 entre as etiquetas").toBe(6);
+    expect(p6.etiqueta.escolhida, "a escolhida no clarinho, diferente da outra").not.toBe(p6.etiqueta.outra);
+    expect([p6.etiqueta.icone, p6.etiqueta.x], "ícone e X de 12").toEqual([12, 12]);
+    expect([p6.selo.sm, p6.selo.md, p6.selo.lg], "Badge: 20, 24, 28 (o Chip da referência)").toEqual([20, 24, 28]);
+    expect([p6.selo.ladoSm, p6.selo.ladoMd, p6.selo.ladoLg], "6, 10 e 14 até o texto").toEqual([6, 10, 14]);
+    expect(p6.selo.vao, "4 entre o glifo e o texto").toBe(4);
+    expect([p6.avatar.sm, p6.avatar.md, p6.avatar.lg], "Avatar: 32, 40, 48").toEqual([32, 40, 48]);
+    expect([p6.avatar.letra, p6.avatar.peso], "letra 12, 14, 16 em peso médio").toEqual([[12, 14, 16], "500"]);
     expect(e.btnGroup.naLinha, "o ButtonGroup alinha os botões numa fila").toBe(true);
     expect(e.btnGroup.vao, "o ButtonGroup é COLADO: vão 0").toBe(0);
     expect(e.btnGroup.pontaFora, "a ponta de fora é cápsula").toBe(e.btnGroup.radiusControl);
@@ -2606,12 +2670,18 @@ for (const theme of ["dark", "light"] as const) {
     // 30. Dados e navegação.
     expect(e.tabela.regiaoOver, "a região da tabela rola — é o que a torna alcançável por teclado")
       .toBe("auto");
-    expect(e.tabela.colapso, "a tabela colapsa as bordas").toBe("collapse");
-    expect(e.tabela.alturaLinha, "a linha mede --row-h").toBe(e.tabela.rowH);
+    expect(e.tabela.colapso, "as bordas SEPARADAS (sem vão): é o que deixa a célula ter canto").toBe("separate");
+    expect(e.tabela.molduraFundo, "a moldura é cinza, diferente do corpo").not.toBe(e.tabela.celFundo);
+    expect(e.tabela.celFundo, "e o corpo é um cartão por dentro").toBe(e.tabela.cartao);
+    expect(e.tabela.molduraRecheio, "a moldura: 0 em cima, 4 dos lados e embaixo").toEqual([0, 4, 4]);
+    expect(e.tabela.celPad, "a célula: 12 em cima e embaixo, 16 dos lados").toEqual([12, 16]);
+    expect(e.tabela.celLetra, "letra de 14/20").toEqual([14, 20]);
+    expect(e.tabela.celCanto, "o canto da casa: o da moldura menos a folga").toBe(e.tabela.raio - 4);
+    expect([e.tabela.cabecAlt, e.tabela.cabecFs, e.tabela.cabecPeso, e.tabela.cabecCaixa],
+      "o cabeçalho: 36, letra 12 peso médio, sem caixa-alta").toEqual([36, 12, "500", "none"]);
+    expect(e.tabela.fioColuna, "o fio de 16 entre as colunas do cabeçalho").toBe(16);
     expect(e.tabela.alinhamento, "o cabeçalho alinha ao INÍCIO, não à esquerda — RTL depende disso")
       .toBe("start");
-    expect(e.tabela.divisoria, "há divisória entre linhas (a última perde a dela de propósito)")
-      .toBeGreaterThan(0);
     expect(e.breadcrumb.naLinha, "o Breadcrumb alinha rótulos e chevrons pelo centro").toBe(true);
     expect(e.tabs.raio, "a lista de abas é pill").toBe(e.tabs.radiusControl);
     expect(e.tabs.tabRaio, "e cada aba também").toBe(e.tabs.radiusControl);
@@ -2686,7 +2756,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.datagrid.alcaAltura, "e cobre a altura toda da célula — alça curta é alvo que ninguém acerta").toBe(e.datagrid.cabecAltura);
     expect(e.datagrid.fixo.rolou, "a fixture precisa MESMO rolar, senão o teste do cabeçalho fixo não mede nada").toBe(true);
     expect(e.datagrid.fixo.depois, "o cabeçalho fica onde estava enquanto o corpo rola por baixo").toEqual(e.datagrid.fixo.antes);
-    expect(e.datagrid.fixo.degrau, "e a linha de filtro gruda exatamente uma altura de linha abaixo dele").toBe(e.datagrid.fixo.rowH);
+    expect(e.datagrid.fixo.degrau, "e a linha de filtro gruda exatamente a altura do cabeçalho abaixo dele").toBe(e.datagrid.fixo.rowH);
     expect(e.datagrid.loteRaio, "a barra de lote chega ao consumidor como superfície em pílula, só com o core").toBe(e.datagrid.radiusControl);
     expect(e.datagrid.loteFundo, "e com fundo próprio — barra sem superfície some dentro da página").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.datagrid.loteBotoes, "a ação declarada mais o limpar: sem o limpar a seleção vira armadilha").toBe(2);

@@ -103,6 +103,36 @@ export interface ListBoxProps extends Omit<HTMLAttributes<HTMLDivElement>, "defa
     onAction?: (id: string) => void;
 }
 export declare function ListBox({ label, items, selectionMode, value, defaultValue, onValueChange, onAction, className, ...props }: ListBoxProps): React.JSX.Element;
+export type TagGroupSelectionMode = "none" | "single" | "multiple";
+export type TagSize = "sm" | "md" | "lg";
+export type TagVariant = "default" | "surface";
+export interface TagItem {
+    id: string;
+    label: ReactNode;
+    /** O texto do nome do X ("Remover Design"), quando o `label` não é texto. */
+    textValue?: string;
+    icon?: IconName;
+    disabled?: boolean;
+}
+export interface TagGroupProps {
+    /** O nome do grupo. `labelHidden` o tira da tela e deixa para o leitor de tela. */
+    label: ReactNode;
+    labelHidden?: boolean;
+    description?: ReactNode;
+    errorMessage?: ReactNode;
+    items: readonly TagItem[];
+    selectionMode?: TagGroupSelectionMode;
+    selectedKeys?: readonly string[];
+    defaultSelectedKeys?: readonly string[];
+    onSelectionChange?: (keys: string[]) => void;
+    /** Com ele, cada etiqueta ganha o X, e Delete/Backspace tiram a ativa. */
+    onRemove?: (ids: string[]) => void;
+    size?: TagSize;
+    variant?: TagVariant;
+    className?: string;
+    id?: string;
+}
+export declare function TagGroup({ label, labelHidden, description, errorMessage, items, selectionMode, selectedKeys, defaultSelectedKeys, onSelectionChange, onRemove, size, variant, className, id }: TagGroupProps): React.JSX.Element;
 export type SliderOrientation = "horizontal" | "vertical";
 export interface SliderProps<V extends number | readonly number[] = number | readonly number[]> {
     /** O rótulo. Obrigatório: é o nome das alças. `labelHidden` o tira da tela e deixa para o leitor de tela. */

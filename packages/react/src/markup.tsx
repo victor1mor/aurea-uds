@@ -34,7 +34,7 @@
 //
 // PARA QUEM VIER: componente novo só entra aqui se não chamar hook, não prender manipulador e não
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
-import React, {forwardRef, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
+import React, {forwardRef, type AnchorHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
   type ReactNode, type RefAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes} from "react";
 import {cx, fundirRender, peleDoEixo, type Responsive} from "./pure.js";
 // TIPO apenas: `import type` some na emissão, então isto não faz o `markup` depender de um
@@ -396,6 +396,9 @@ export type BadgeFit="auto"|"content";
 export function formatBadgeCount(count:number,max=99){return count>max?`${max}+`:String(count)}
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttributes<HTMLSpanElement>{
   variant?:BadgeVariant;
+  /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
+   *  eixo do `variant`, e vence quando os dois vêm. */
+  tone?:BadgeVariant;
   /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
   emphasis?:BadgeEmphasis;
   size?:BadgeSize;
@@ -422,7 +425,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
    *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
   badgeContent?:ReactNode;
 }
-export function Badge({variant="neutral",emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,children,className,...props}:BadgeProps){
+export function Badge({variant:variantProp="neutral",tone,emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,children,className,...props}:BadgeProps){
+  const variant=tone??variantProp;
   const numero=count!=null?formatBadgeCount(count,max):undefined;
   const miolo=anchor?(numero??badgeContent):(numero??children);
   // Ponto puro: `dot` sem nada para mostrar. Aí o badge não tem conteúdo, e ganha medida própria.
@@ -698,3 +702,68 @@ return <span className={cx("input-group-addon",`input-group-addon-${side}`,peleD
 // escreve o `padding-top: 56.25%` de 2015, ou esquece o `min-width: 0` que impede a caixa de
 // estourar dentro de um grid.
 export function AspectRatio({ratio=1,className,style,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{ratio?:number}){return <div className={cx("aspect-ratio",className)} style={{aspectRatio:ratio,...style}} {...props}/>}
+
+// ── 0.32.0, passo 6: três peças da referência que não pedem o navegador ─────────────────────────
+
+// Link — o link de texto da referência: peso médio, a cor de link da Aurea (`--link`), sem sublinhado;
+// com o mouse (ou apertado), o sublinhado de 1,5 a 4 da letra, na cor esmaecida a meia força. `external`
+// abre noutra aba (`target="_blank"` com `rel="noopener noreferrer"`) e põe a seta da referência — o
+// `arrow-up-right` do Phosphor desenhado por MÁSCARA no CSS, porque este arquivo não importa o `Icon`
+// (ele usa hook). `disabled` não navega: o link sai SEM `href`, com `aria-disabled`.
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>,RefAttributes<HTMLAnchorElement>{
+  /** Abre noutra aba e mostra a seta. */
+  external?:boolean;
+  /** Não navega: sai sem `href` e com `aria-disabled`. */
+  disabled?:boolean;
+}
+export function Link({external,disabled,href,target,rel,className,children,...props}:LinkProps){
+  return <a className={cx("link",className)} href={disabled?undefined:href} aria-disabled={disabled||undefined}
+    target={external?target??"_blank":target} rel={external?rel??"noopener noreferrer":rel} {...props}>
+    {children}{external&&<span className="link-external" aria-hidden="true"/>}
+  </a>;
+}
+
+// ColorSwatch — a amostra de cor da referência, só REDONDA e sem o xadrez de transparência (decisão do
+// Victor): um círculo da cor pedida com um anel de 1 por dentro, que segura a amostra branca no fundo
+// branco. Tamanhos da referência: xs 16, sm 24, md 32, lg 36, xl 40. É imagem (`role="img"`): o nome
+// é `label`, e sem ele, o próprio valor da cor.
+export type ColorSwatchSize="xs"|"sm"|"md"|"lg"|"xl";
+export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>,RefAttributes<HTMLSpanElement>{
+  /** Qualquer cor do CSS: `#f0c200`, `oklch(…)`, `var(--primary)`. */
+  color:string;
+  size?:ColorSwatchSize;
+  /** O nome que o leitor de tela anuncia ("Amarelo Aurea"). Sem ele, o valor da cor. */
+  label?:string;
+}
+export function ColorSwatch({color,size="md",label,className,style,...props}:ColorSwatchProps){
+  return <span role="img" aria-label={label??color} className={cx("color-swatch",size!=="md"&&`color-swatch-${size}`,className)}
+    style={{...style,["--color-swatch-current" as string]:color}} {...props}/>;
+}
+
+// ProgressCircle — o progresso em círculo da referência: um anel de 4 num quadro de 36 (a geometria
+// dela), começando no topo, com a ponta redonda. sm 20, md 28, lg 36. Sem `value`, gira (não se sabe
+// quanto falta). As cores são as do `Progress` (`tone`, com o amarelo da marca por padrão). Tem de ter
+// nome (`label`): uma barra de progresso sem nome o leitor de tela anuncia só como "progresso".
+export type ProgressCircleSize="sm"|"md"|"lg";
+export interface ProgressCircleProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<HTMLDivElement>{
+  /** De `min` a `max`. Sem ele, o círculo gira. */
+  value?:number;
+  min?:number;
+  max?:number;
+  size?:ProgressCircleSize;
+  tone?:ProgressTone;
+  /** O nome que o leitor de tela anuncia ("Enviando o arquivo"). */
+  label:string;
+}
+export function ProgressCircle({value,min=0,max=100,size="md",tone="brand",label,className,...props}:ProgressCircleProps){
+  const semTotal=value==null||Number.isNaN(value);
+  const pct=semTotal?25:Math.max(0,Math.min(100,(value-min)/(max-min)*100));
+  return <div role="progressbar" aria-label={label} aria-valuemin={semTotal?undefined:min} aria-valuemax={semTotal?undefined:max}
+    aria-valuenow={semTotal?undefined:value}
+    className={cx("progress-circle",size!=="md"&&`progress-circle-${size}`,tone!=="brand"&&`progress-circle-${tone}`,semTotal&&"progress-circle-indeterminate",className)} {...props}>
+    <svg viewBox="0 0 36 36" aria-hidden="true">
+      <circle className="progress-circle-track" cx="18" cy="18" r="16"/>
+      <circle className="progress-circle-fill" cx="18" cy="18" r="16" pathLength={100} strokeDasharray="100" strokeDashoffset={100-pct}/>
+    </svg>
+  </div>;
+}

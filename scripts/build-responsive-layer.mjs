@@ -38,12 +38,14 @@ const FIM = "/* <<< fim da camada responsiva >>> */";
 // inventado ali seria desenhar por simetria, que é exatamente o que esta atividade proíbe.
 const PASSOS = {
   //        altura              corpo             gap    botão   campo            select (fim)          glifo         QR        avatar (corpo)
-  xs: {h: "--control-h-xs", fs: "--text-xs",   gap: "6px",  px: "10px", fpx: "var(--space-3)", spe: "var(--space-8)", icon: null,      qr: null,      avfs: null},
+  // 0.32.0: o AVATAR tem a escala da referência — 32 · 40 · 48 (`av`) —, e não mais a altura do botão
+  // (32 · 36 · 40): a regra B5 ("avatar e botão da mesma altura") cedeu às medidas dela.
+  xs: {h: "--control-h-xs", fs: "--text-xs",   gap: "6px",  px: "10px", fpx: "var(--space-3)", spe: "var(--space-8)", icon: null,      qr: null,      avfs: null, av: null},
   // 0.32.0: o recheio do botão é o da referência — 12 no sm, 16 no md e no lg (eram 15 e 20).
-  sm: {h: "--control-h-sm", fs: "--text-sm",   gap: "8px",  px: "var(--space-3)", fpx: "var(--space-3)", spe: "var(--space-8)", icon: "--icon-sm", qr: "7.5rem",  avfs: "var(--text-xs)"},
-  md: {h: "--control-h-md", fs: "--text-sm",   gap: "8px",  px: "var(--space-4)", fpx: "var(--space-3)", spe: "38px",           icon: "--icon-md", qr: "10rem",   avfs: null},
-  lg: {h: "--control-h-lg", fs: "--text-base", gap: "8px",  px: "var(--space-4)", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-lg", qr: "15rem", avfs: null},
-  xl: {h: "--control-h-xl", fs: "--text-base", gap: "10px", px: "26px", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-xl", qr: null,    avfs: null},
+  sm: {h: "--control-h-sm", fs: "--text-sm",   gap: "8px",  px: "var(--space-3)", fpx: "var(--space-3)", spe: "var(--space-8)", icon: "--icon-sm", qr: "7.5rem",  avfs: "var(--text-xs)", av: "var(--space-8)"},
+  md: {h: "--control-h-md", fs: "--text-sm",   gap: "8px",  px: "var(--space-4)", fpx: "var(--space-3)", spe: "38px",           icon: "--icon-md", qr: "10rem",   avfs: "var(--text-sm)", av: "var(--space-10)"},
+  lg: {h: "--control-h-lg", fs: "--text-base", gap: "8px",  px: "var(--space-4)", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-lg", qr: "15rem", avfs: "var(--text-base)", av: "var(--space-12)"},
+  xl: {h: "--control-h-xl", fs: "--text-base", gap: "10px", px: "26px", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-xl", qr: null,    avfs: null, av: null},
 };
 
 // TODA variável de passo é REGISTRADA como não-herdável. Sem isto, `.size-lg` num botão desce
@@ -52,7 +54,7 @@ const PASSOS = {
 // de `var()`: propriedade registrada com sintaxe tipada exige `initial-value`, e aí o fallback
 // NUNCA dispara, o que quebraria todo o core. Provado nos três motores em `.prova`.
 const VARIAVEIS = ["--step-h", "--step-fs", "--step-gap", "--step-px", "--step-field-px",
-                   "--step-select-pe", "--step-icon", "--step-qr", "--step-avatar-fs"];
+                   "--step-select-pe", "--step-icon", "--step-qr", "--step-avatar-fs", "--step-avatar"];
 
 // ── A TABELA DOS EIXOS CUJA UNIDADE É REGRA. Chamava-se ORIENTACAO até 22/08/2026, quando o
 // `align` do InputGroupAddon entrou pela mesma porta e o nome passou a mentir: o que reúne
@@ -187,7 +189,7 @@ const corpo = (p) => {
   const pares = [
     ["--step-h", `var(${v.h})`], ["--step-fs", `var(${v.fs})`], ["--step-gap", v.gap],
     ["--step-px", v.px], ["--step-field-px", v.fpx], ["--step-select-pe", v.spe],
-    ["--step-icon", v.icon && `var(${v.icon})`], ["--step-qr", v.qr], ["--step-avatar-fs", v.avfs],
+    ["--step-icon", v.icon && `var(${v.icon})`], ["--step-qr", v.qr], ["--step-avatar-fs", v.avfs], ["--step-avatar", v.av],
   ];
   return pares.filter(([, valor]) => valor).map(([nome, valor]) => `${nome}:${valor}`).join(";");
 };

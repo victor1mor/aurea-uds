@@ -1,0 +1,162 @@
+{
+  "name": "TagGroup",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A wrapping row of tags with a label: none, one or several can be selected, and each can be removed.",
+  "icon": "tag",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [
+    "default",
+    "surface"
+  ],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "selected",
+    "disabled"
+  ],
+  "tokens": [
+    "--secondary",
+    "--secondary-hover",
+    "--card",
+    "--primary",
+    "--primary-emphasis",
+    "--space-1",
+    "--space-2",
+    "--text-xs",
+    "--weight-medium",
+    "--radius-full"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "toolbar",
+    "keyboard": [
+      "Tab",
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowDown",
+      "ArrowUp",
+      "Home",
+      "End",
+      "Delete",
+      "Backspace",
+      "Space",
+      "Enter"
+    ],
+    "keyboardNote": "One Tab stop for the group (the active tag); arrows move between tags, Home and End go to the ends. With selection each tag is a toggle button (aria-pressed) in a group; without, a list. Delete or Backspace removes the active tag; the X is for the pointer and is not a Tab stop (without selection, the X buttons are the stops)."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": [
+      "x"
+    ]
+  },
+  "related": {
+    "components": [
+      "Badge",
+      "CheckboxGroup",
+      "ListBox"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#TagGroup"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. The group's name. labelHidden keeps it for screen readers only."
+    },
+    {
+      "name": "labelHidden",
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides the label from the screen, not from screen readers."
+    },
+    {
+      "name": "items",
+      "type": "TagItem[]",
+      "default": "—",
+      "description": "REQUIRED. {id, label, textValue?, icon?, disabled?}."
+    },
+    {
+      "name": "selectionMode",
+      "type": "\"none\" | \"single\" | \"multiple\"",
+      "default": "\"none\"",
+      "description": "none: a list. single/multiple: each tag toggles (aria-pressed); the selected one is in the light yellow wash."
+    },
+    {
+      "name": "selectedKeys / defaultSelectedKeys",
+      "type": "string[]",
+      "default": "—",
+      "description": "The selected ids, controlled or not."
+    },
+    {
+      "name": "onSelectionChange",
+      "type": "(keys: string[]) => void",
+      "default": "—",
+      "description": "Called with the new list."
+    },
+    {
+      "name": "onRemove",
+      "type": "(ids: string[]) => void",
+      "default": "—",
+      "description": "With it each tag gets the X, and Delete/Backspace remove the active one; the focus goes to the neighbour."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Help under the tags, in aria-describedby."
+    },
+    {
+      "name": "errorMessage",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The error under the tags, in aria-describedby."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "20, 24, 32 high — the reference library's tag."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"surface\"",
+      "default": "\"default\"",
+      "description": "The neutral fill, or the card fill (for a tag on a grey surface)."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the group."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "The group's id."
+    }
+  ],
+  "variantProp": "variant",
+  "sizeProp": "size",
+  "axes": {
+    "selectionMode": [
+      "multiple",
+      "none",
+      "single"
+    ]
+  }
+}

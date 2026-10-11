@@ -138,7 +138,7 @@ export const base = {
   "controlHLg": 40,
   "controlHXl": 50,
   "rowH": 48,
-  "cardPad": 20,
+  "cardPad": 16,
   "sectionGap": 24,
   "mediaCanvas": {
     "hex": "#020202",
@@ -1303,7 +1303,7 @@ export const densities = {
     "touchControlHMd": 44,
     "touchControlHLg": 52,
     "rowH": 42,
-    "cardPad": 16,
+    "cardPad": 12,
     "sectionGap": 18
   },
   "comfortable": {
@@ -1316,7 +1316,7 @@ export const densities = {
     "touchControlHMd": 48,
     "touchControlHLg": 56,
     "rowH": 48,
-    "cardPad": 20,
+    "cardPad": 16,
     "sectionGap": 24
   },
   "spacious": {
@@ -1329,7 +1329,7 @@ export const densities = {
     "touchControlHMd": 52,
     "touchControlHLg": 60,
     "rowH": 54,
-    "cardPad": 24,
+    "cardPad": 20,
     "sectionGap": 32
   }
 };

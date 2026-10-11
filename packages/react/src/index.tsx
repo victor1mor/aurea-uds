@@ -53,13 +53,14 @@ export {ContainerScope, useValorResponsivo} from "./responsivo-runtime.js";
 // se desfazendo em silêncio. É isso, exatamente isso, que o check 35 pega.
 export {AspectRatio, InputGroup, InputGroupAddon, Label,
   Card, Stack, Cluster, Grid, Container, Section, KPI, DataList, Timeline, Prose, Text, Heading, Paragraph, Code,
-  Badge, Progress, Skeleton,
+  Badge, Progress, Skeleton, Link, ColorSwatch, ProgressCircle,
   AvatarGroup, LogStream, MediaPlayerShell, Header, Topbar, Kbd, Textarea, Checkbox, Radio,
   Switch, Range, formatBadgeCount, type BadgeVariant, type BadgeCategory, type BadgeEmphasis, type BadgeSize,
   type BadgePlacement, type BadgeProps, type KPIProps, type KPIDirection, type KPITone, type KPIVariant, type ProgressProps, type ProgressTone, type AvatarSize, type HeaderVariant, type HeaderProps, type TopbarVariant,
   type SectionVariant, type SectionFooterGroup, type CardProps, type CardAccent,
   type TextProps, type HeadingProps, type ParagraphProps, type CodeProps, type TypographyType,
-  type TypographyColor, type TypographyWeight, type TypographyAlign, type HeadingLevel, type ParagraphSize} from "./markup.js";
+  type TypographyColor, type TypographyWeight, type TypographyAlign, type HeadingLevel, type ParagraphSize,
+  type LinkProps, type ColorSwatchProps, type ColorSwatchSize, type ProgressCircleProps, type ProgressCircleSize} from "./markup.js";
 export * from "./system.js";
 export * from "./actions.js";
 export * from "./feedback.js";

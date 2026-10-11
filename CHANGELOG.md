@@ -19,7 +19,8 @@ em inglês e ficam como estão: são registro.
 
 ### Os componentes novos da 0.32.0 (em construção)
 
-- `CloseButton`, `Slider`, `CheckboxGroup` e `ListBox` — a nota está na seção `[0.32.0]`, abaixo.
+- `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle` e
+  `TagGroup` — a nota está na seção `[0.32.0]`, abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -147,6 +148,15 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   e a de baixo têm a alça.
 - **`Tooltip`**: `arrow`, `delay` e `closeDelay`. **`Popover`**: `arrow`. A seta é opcional, como a da
   referência; o desenho é nosso.
+- **`Link`** — o link de texto da referência: peso médio, a cor de link, sem sublinhado (aparece com o
+  mouse); `external` abre noutra aba com a seta; `disabled` não navega.
+- **`ColorSwatch`** — a amostra de cor da referência, só redonda e sem o xadrez (decisão do Victor):
+  `color`, `size` (xs 16 a xl 40) e `label` (o nome para o leitor de tela).
+- **`ProgressCircle`** — o progresso em círculo da referência (20 · 28 · 36), com as cores do `Progress`;
+  sem `value`, gira.
+- **`TagGroup`** — o grupo de etiquetas da referência: escolha de nenhuma, uma ou várias, o X de tirar
+  (`onRemove`), descrição e erro; um ponto de Tab só, setas entre as etiquetas, Delete tira.
+- **`Badge tone`** — o nome do nativo para a cor (DOC-11: os mesmos nomes na web e no nativo).
 - **`AureaProvider toastPlacement`**: onde a pilha de avisos mora (`bottom`, o padrão; `bottom-start`,
   `bottom-end`, `top`, `top-start`, `top-end`). E o aviso aceita `actionProps` (a ação, um botão pequeno
   terciário) e mostra o `loading` do `promise()` do motor girando.
@@ -215,6 +225,22 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   `<span>`, um `Badge`) passa a receber o foco, como botão — a dica sobre um texto abria só com o
   `tabIndex` do app (C-11).
 - **`Popover`**: a letra de 14, e o título em peso médio (era negrito).
+- ⚠ **`Table` e `DataGrid`** com a pele da referência (HER-13, *"tabela quero como essa"*): a moldura
+  cinza sem borda, o cabeçalho sobre ela — 12 peso médio esmaecido, SEM caixa-alta (era caixa-alta com
+  espaçamento), um fio de 16 entre as colunas — e o corpo como um cartão por dentro, com o canto da casa
+  nas pontas; as células com 12 em cima e embaixo e 16 dos lados (eram 14 dos lados e a altura da
+  linha), letra de 14; o escolhido da `DataGrid` no clarinho. No celular, a tabela rola de lado dentro da
+  moldura (a "A"). A densidade continua mexendo na altura das linhas. O título (`caption`) fica em cima,
+  alinhado ao texto das colunas (o navegador o centralizava).
+- **`Badge`**: as medidas do Chip da referência — o vão de 4 entre glifo e texto (era 6), `sm` com 6 até
+  o texto (era 8) e `lg` com 14 (era 12); a linha de 16 (era 1, e a letra encostava).
+- **`Avatar`**: 32 · 40 · 48 (eram 32 · 36 · 40, a altura do botão), com a letra de 12 · 14 · 16 em peso
+  médio (era negrito).
+- **`Card`**: o recheio de 16, o da referência (era 20; compacto 12, espaçoso 20 — a diferença de 4 entre
+  as densidades continua); o título 14/24 e a descrição 14/20 colada nele.
+- **`Calendar`**: o mês no começo e as duas setas juntas no fim (eram uma de cada lado do mês), botões de
+  24 na cor de letra da marca; o dia redondo em peso médio; HOJE no clarinho (era um anel); o de fora do
+  mês a meia força; o desligado riscado.
 - ⚠ **O aviso (`useToast`)** é o da referência: os avisos se EMPILHAM no mesmo lugar — o da frente
   inteiro, os de trás espiando, e passar o mouse ou o foco abre a pilha (era uma coluna); embaixo no meio
   (era no canto de baixo, no fim); 460 de largura (era 360); somem em 4 s (eram 5); três à vista. O tipo

@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 37,
-    "componentes": 134,
+    "componentes": 138,
     "hooks": 9,
-    "aliasesLiterais": 97,
-    "propsDistintas": 333
+    "aliasesLiterais": 102,
+    "propsDistintas": 337
   },
   "aliases": {
     "ButtonVariant": {
@@ -1872,6 +1872,32 @@
         "multiple"
       ]
     },
+    "TagGroupSelectionMode": {
+      "module": "inputs-client",
+      "raw": "\"none\" | \"single\" | \"multiple\"",
+      "union": [
+        "none",
+        "single",
+        "multiple"
+      ]
+    },
+    "TagSize": {
+      "module": "inputs-client",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "TagVariant": {
+      "module": "inputs-client",
+      "raw": "\"default\" | \"surface\"",
+      "union": [
+        "default",
+        "surface"
+      ]
+    },
     "SliderOrientation": {
       "module": "inputs-client",
       "raw": "\"horizontal\" | \"vertical\"",
@@ -2221,6 +2247,26 @@
       "union": [
         "inline",
         "block"
+      ]
+    },
+    "ColorSwatchSize": {
+      "module": "markup",
+      "raw": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "union": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
+    },
+    "ProgressCircleSize": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
       ]
     },
     "GalleryItemKind": {
@@ -6214,6 +6260,108 @@
               "values": null
             }
           ]
+        },
+        {
+          "name": "TagGroup",
+          "kind": "function",
+          "propsType": "TagGroupProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "errorMessage",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "readonly TagItem[]",
+              "values": null
+            },
+            {
+              "name": "selectionMode",
+              "optional": true,
+              "type": "TagGroupSelectionMode",
+              "values": [
+                "none",
+                "single",
+                "multiple"
+              ]
+            },
+            {
+              "name": "selectedKeys",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "defaultSelectedKeys",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "onSelectionChange",
+              "optional": true,
+              "type": "(keys: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "onRemove",
+              "optional": true,
+              "type": "(ids: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "TagSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "TagVariant",
+              "values": [
+                "default",
+                "surface"
+              ]
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
         }
       ],
       "hooks": [],
@@ -6455,6 +6603,31 @@
           "props": [
             {
               "name": "variant",
+              "optional": true,
+              "type": "BadgeVariant",
+              "values": [
+                "neutral",
+                "primary",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "running",
+                "paused",
+                "offline",
+                "review",
+                "red",
+                "orange",
+                "green",
+                "teal",
+                "cyan",
+                "blue",
+                "violet",
+                "pink"
+              ]
+            },
+            {
+              "name": "tone",
               "optional": true,
               "type": "BadgeVariant",
               "values": [
@@ -6744,6 +6917,37 @@
               "name": "numeric",
               "optional": true,
               "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ColorSwatch",
+          "kind": "function",
+          "propsType": "ColorSwatchProps",
+          "props": [
+            {
+              "name": "color",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ColorSwatchSize",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -7063,6 +7267,25 @@
           ]
         },
         {
+          "name": "Link",
+          "kind": "function",
+          "propsType": "LinkProps",
+          "props": [
+            {
+              "name": "external",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "LogStream",
           "kind": "function",
           "propsType": null,
@@ -7181,6 +7404,60 @@
             {
               "name": "className",
               "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ProgressCircle",
+          "kind": "function",
+          "propsType": "ProgressCircleProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "min",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ProgressCircleSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "ProgressTone",
+              "values": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger",
+                "info"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": false,
               "type": "string",
               "values": null
             }

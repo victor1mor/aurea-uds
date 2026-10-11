@@ -1,4 +1,4 @@
-import React, { type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type RefAttributes, type TextareaHTMLAttributes } from "react";
+import React, { type AnchorHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type RefAttributes, type TextareaHTMLAttributes } from "react";
 import { type Responsive } from "./pure.js";
 import type { ComponentSize } from "./actions.js";
 import type { SidebarItem } from "./navigation-client.js";
@@ -213,6 +213,9 @@ export type BadgeFit = "auto" | "content";
 export declare function formatBadgeCount(count: number, max?: number): string;
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttributes<HTMLSpanElement> {
     variant?: BadgeVariant;
+    /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
+     *  eixo do `variant`, e vence quando os dois vêm. */
+    tone?: BadgeVariant;
     /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
     emphasis?: BadgeEmphasis;
     size?: BadgeSize;
@@ -239,7 +242,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
      *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
     badgeContent?: ReactNode;
 }
-export declare function Badge({ variant, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
+export declare function Badge({ variant: variantProp, tone, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
 /** O tom da barra: a mesma lista fechada do `ButtonTone`. Pausado é `neutral`; falha é `danger`. */
 export type ProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 export interface ProgressProps {
@@ -342,4 +345,32 @@ export declare function InputGroupAddon({ side, layout, className, children, ...
 export declare function AspectRatio({ ratio, className, style, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     ratio?: number;
 }): React.JSX.Element;
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>, RefAttributes<HTMLAnchorElement> {
+    /** Abre noutra aba e mostra a seta. */
+    external?: boolean;
+    /** Não navega: sai sem `href` e com `aria-disabled`. */
+    disabled?: boolean;
+}
+export declare function Link({ external, disabled, href, target, rel, className, children, ...props }: LinkProps): React.JSX.Element;
+export type ColorSwatchSize = "xs" | "sm" | "md" | "lg" | "xl";
+export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>, RefAttributes<HTMLSpanElement> {
+    /** Qualquer cor do CSS: `#f0c200`, `oklch(…)`, `var(--primary)`. */
+    color: string;
+    size?: ColorSwatchSize;
+    /** O nome que o leitor de tela anuncia ("Amarelo Aurea"). Sem ele, o valor da cor. */
+    label?: string;
+}
+export declare function ColorSwatch({ color, size, label, className, style, ...props }: ColorSwatchProps): React.JSX.Element;
+export type ProgressCircleSize = "sm" | "md" | "lg";
+export interface ProgressCircleProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
+    /** De `min` a `max`. Sem ele, o círculo gira. */
+    value?: number;
+    min?: number;
+    max?: number;
+    size?: ProgressCircleSize;
+    tone?: ProgressTone;
+    /** O nome que o leitor de tela anuncia ("Enviando o arquivo"). */
+    label: string;
+}
+export declare function ProgressCircle({ value, min, max, size, tone, label, className, ...props }: ProgressCircleProps): React.JSX.Element;
 export {};

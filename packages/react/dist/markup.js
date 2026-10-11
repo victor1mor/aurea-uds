@@ -113,7 +113,8 @@ export function Code({ align, color, weight, truncate, className, ...props }) { 
 // `max` com `+` é o idioma universal do contador (três das referências o usam). Exportada porque quem
 // escreve o nome acessível precisa do MESMO texto — "99+ unread" tem de bater com o que se vê.
 export function formatBadgeCount(count, max = 99) { return count > max ? `${max}+` : String(count); }
-export function Badge({ variant = "neutral", emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, children, className, ...props }) {
+export function Badge({ variant: variantProp = "neutral", tone, emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, children, className, ...props }) {
+    const variant = tone ?? variantProp;
     const numero = count != null ? formatBadgeCount(count, max) : undefined;
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
     // Ponto puro: `dot` sem nada para mostrar. Aí o badge não tem conteúdo, e ganha medida própria.
@@ -232,3 +233,14 @@ export function InputGroupAddon({ side = "start", layout = "inline", className, 
 // escreve o `padding-top: 56.25%` de 2015, ou esquece o `min-width: 0` que impede a caixa de
 // estourar dentro de um grid.
 export function AspectRatio({ ratio = 1, className, style, ...props }) { return _jsx("div", { className: cx("aspect-ratio", className), style: { aspectRatio: ratio, ...style }, ...props }); }
+export function Link({ external, disabled, href, target, rel, className, children, ...props }) {
+    return _jsxs("a", { className: cx("link", className), href: disabled ? undefined : href, "aria-disabled": disabled || undefined, target: external ? target ?? "_blank" : target, rel: external ? rel ?? "noopener noreferrer" : rel, ...props, children: [children, external && _jsx("span", { className: "link-external", "aria-hidden": "true" })] });
+}
+export function ColorSwatch({ color, size = "md", label, className, style, ...props }) {
+    return _jsx("span", { role: "img", "aria-label": label ?? color, className: cx("color-swatch", size !== "md" && `color-swatch-${size}`, className), style: { ...style, ["--color-swatch-current"]: color }, ...props });
+}
+export function ProgressCircle({ value, min = 0, max = 100, size = "md", tone = "brand", label, className, ...props }) {
+    const semTotal = value == null || Number.isNaN(value);
+    const pct = semTotal ? 25 : Math.max(0, Math.min(100, (value - min) / (max - min) * 100));
+    return _jsx("div", { role: "progressbar", "aria-label": label, "aria-valuemin": semTotal ? undefined : min, "aria-valuemax": semTotal ? undefined : max, "aria-valuenow": semTotal ? undefined : value, className: cx("progress-circle", size !== "md" && `progress-circle-${size}`, tone !== "brand" && `progress-circle-${tone}`, semTotal && "progress-circle-indeterminate", className), ...props, children: _jsxs("svg", { viewBox: "0 0 36 36", "aria-hidden": "true", children: [_jsx("circle", { className: "progress-circle-track", cx: "18", cy: "18", r: "16" }), _jsx("circle", { className: "progress-circle-fill", cx: "18", cy: "18", r: "16", pathLength: 100, strokeDasharray: "100", strokeDashoffset: 100 - pct })] }) });
+}

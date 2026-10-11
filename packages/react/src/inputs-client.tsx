@@ -416,6 +416,96 @@ export function ListBox({label,items,selectionMode="single",value,defaultValue,o
   </div>;
 }
 
+// TAGGROUP (0.32.0) — o grupo de etiquetas da referência: as etiquetas numa fila que quebra, com rótulo,
+// descrição e erro; escolha de nenhuma, uma ou várias; e o X de tirar. O motor da Aurea não tem
+// etiqueta, então o teclado é nosso, no desenho dela: um ponto de Tab só para o grupo (a etiqueta
+// ativa), as setas andam entre as etiquetas, Home e End vão às pontas, e Delete ou Backspace tiram a
+// etiqueta ativa (o X é para o mouse e não entra no Tab). Com escolha, cada etiqueta é um botão que
+// liga e desliga (`aria-pressed`) num `group`; sem escolha, é uma lista, e o foco anda pelos X.
+// A pele é a dela — 24 de altura (sm 20, lg 32), 8 dos lados, letra de 12 peso médio, 6 entre as
+// etiquetas, a escolhida no clarinho —; o canto é o nosso, a cápsula.
+export type TagGroupSelectionMode="none"|"single"|"multiple";
+export type TagSize="sm"|"md"|"lg";
+export type TagVariant="default"|"surface";
+export interface TagItem{id:string;label:ReactNode;
+  /** O texto do nome do X ("Remover Design"), quando o `label` não é texto. */
+  textValue?:string;icon?:IconName;disabled?:boolean}
+export interface TagGroupProps{
+  /** O nome do grupo. `labelHidden` o tira da tela e deixa para o leitor de tela. */
+  label:ReactNode;labelHidden?:boolean;description?:ReactNode;errorMessage?:ReactNode;
+  items:readonly TagItem[];
+  selectionMode?:TagGroupSelectionMode;
+  selectedKeys?:readonly string[];defaultSelectedKeys?:readonly string[];onSelectionChange?:(keys:string[])=>void;
+  /** Com ele, cada etiqueta ganha o X, e Delete/Backspace tiram a ativa. */
+  onRemove?:(ids:string[])=>void;
+  size?:TagSize;variant?:TagVariant;className?:string;id?:string}
+const textoDaEtiqueta=(it:TagItem)=>it.textValue??(typeof it.label==="string"?it.label:"");
+export function TagGroup({label,labelHidden,description,errorMessage,items,selectionMode="none",selectedKeys,defaultSelectedKeys,onSelectionChange,onRemove,size="md",variant="default",className,id}:TagGroupProps){
+  const s=useAureaStrings();
+  const auto=React.useId();
+  const [proprio,setProprio]=React.useState<readonly string[]>(defaultSelectedKeys??[]);
+  const escolhidos=selectedKeys??proprio;
+  const escolhe=selectionMode!=="none";
+  const habilitadas=items.filter(it=>!it.disabled);
+  const [ativa,setAtiva]=React.useState<string|undefined>(undefined);
+  const alvo=(ativa&&habilitadas.some(it=>it.id===ativa)?ativa:undefined)??habilitadas[0]?.id;
+  const refs=React.useRef(new Map<string,HTMLButtonElement>());
+  const focar=(id:string|undefined)=>{if(!id)return;setAtiva(id);refs.current.get(id)?.focus()};
+  const escolher=(it:TagItem)=>{
+    if(!escolhe||it.disabled)return;
+    const ja=escolhidos.includes(it.id);
+    const novo=selectionMode==="multiple"?(ja?escolhidos.filter(x=>x!==it.id):[...escolhidos,it.id]):(ja?[]:[it.id]);
+    if(selectedKeys===undefined)setProprio(novo);
+    onSelectionChange?.(novo);
+  };
+  const tirar=(it:TagItem)=>{
+    if(!onRemove||it.disabled)return;
+    // o foco vai para a vizinha (a seguinte; na última, a anterior), e não se perde no documento
+    const i=habilitadas.findIndex(x=>x.id===it.id);
+    const vizinha=habilitadas[i+1]??habilitadas[i-1];
+    onRemove([it.id]);
+    if(vizinha)requestAnimationFrame(()=>focar(vizinha.id));
+  };
+  const aoTeclar=(e:React.KeyboardEvent<HTMLButtonElement>,it:TagItem)=>{
+    const i=habilitadas.findIndex(x=>x.id===it.id);
+    const rtl=getComputedStyle(e.currentTarget).direction==="rtl";
+    const frente=rtl?"ArrowLeft":"ArrowRight", tras=rtl?"ArrowRight":"ArrowLeft";
+    if(e.key===frente||e.key==="ArrowDown"){e.preventDefault();focar(habilitadas[Math.min(i+1,habilitadas.length-1)]?.id)}
+    else if(e.key===tras||e.key==="ArrowUp"){e.preventDefault();focar(habilitadas[Math.max(i-1,0)]?.id)}
+    else if(e.key==="Home"){e.preventDefault();focar(habilitadas[0]?.id)}
+    else if(e.key==="End"){e.preventDefault();focar(habilitadas[habilitadas.length-1]?.id)}
+    else if((e.key==="Delete"||e.key==="Backspace")&&onRemove){e.preventDefault();tirar(it)}
+  };
+  const guardar=(itId:string)=>(n:HTMLButtonElement|null)=>{if(n)refs.current.set(itId,n);else refs.current.delete(itId)};
+  const idRotulo=`${auto}-l`, idDesc=description?`${auto}-d`:undefined, idErro=errorMessage?`${auto}-e`:undefined;
+  return <div className={cx("tag-group",className)} id={id}>
+    <span className={labelHidden?"sr-only":"label"} id={idRotulo}>{label}</span>
+    <div role={escolhe?"group":"list"} aria-labelledby={idRotulo} aria-describedby={[idDesc,idErro].filter(Boolean).join(" ")||undefined}
+      className="tag-group-list">
+      {items.map(it=>{
+        const escolhida=escolhe&&escolhidos.includes(it.id);
+        const conteudo=<>{it.icon&&<Icon name={it.icon}/>}<span className="tag-label">{it.label}</span></>;
+        const x=onRemove&&<button type="button" className="tag-remove" disabled={it.disabled}
+          tabIndex={escolhe?-1:it.id===alvo?0:-1} ref={escolhe?undefined:guardar(it.id)}
+          aria-label={`${s.comboboxRemove} ${textoDaEtiqueta(it)}`.trim()}
+          onClick={()=>tirar(it)} onKeyDown={escolhe?undefined:e=>aoTeclar(e,it)} onFocus={escolhe?undefined:()=>setAtiva(it.id)}>
+          <Icon name="x" weight="bold"/></button>;
+        return <span key={it.id} role={escolhe?undefined:"listitem"}
+          className={cx("tag",size!=="md"&&`tag-${size}`,variant!=="default"&&`tag-${variant}`)}
+          data-selected={escolhida||undefined} data-disabled={it.disabled||undefined}>
+          {escolhe
+            ?<button type="button" className="tag-main" ref={guardar(it.id)} aria-pressed={escolhida} disabled={it.disabled}
+              tabIndex={it.id===alvo?0:-1} onClick={()=>{setAtiva(it.id);escolher(it)}} onKeyDown={e=>aoTeclar(e,it)} onFocus={()=>setAtiva(it.id)}>{conteudo}</button>
+            :<span className="tag-main">{conteudo}</span>}
+          {x}
+        </span>;
+      })}
+    </div>
+    {description&&<span className="field-description" id={idDesc}>{description}</span>}
+    {errorMessage&&<span className="field-error" id={idErro}>{errorMessage}</span>}
+  </div>;
+}
+
 // SLIDER (HER-05, 0.32.0) — o controle deslizante DESENHADO da referência, com o nome e as partes
 // dela: rótulo e valor na linha de cima, o trilho com o preenchimento, a alça. Um valor ou DOIS (a
 // faixa: passe uma lista), na horizontal ou na vertical, com o número formatado pelo `Intl`
@@ -424,7 +514,8 @@ export function ListBox({label,items,selectionMode="single",value,defaultValue,o
 // dependência nova.
 // O `Range` continua: é o do navegador, com o `onChange` de evento (decisão do Victor, 11/10/2026,
 // "Slider novo"). Este fala NÚMERO: `onValueChange(valor)`.
-// O NOME: o rótulo visível nomeia as alças sozinho (o `Label` do motor as liga). Com dois valores,
+// O NOME: o rótulo visível nomeia as alças sozinho (desde a varredura do passo 4, por um id nosso,
+// já na marcação — ver abaixo). Com dois valores,
 // cada alça precisa do próprio nome ("Mínimo", "Máximo") — `thumbLabels`.
 export type SliderOrientation="horizontal"|"vertical";
 export interface SliderProps<V extends number|readonly number[]=number|readonly number[]>{

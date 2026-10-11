@@ -293,6 +293,77 @@ export function ListBox({ label, items, selectionMode = "single", value, default
             ? _jsxs("div", { role: "group", "aria-labelledby": `${auto}-s${i}`, className: "list-box-section", children: [_jsx("span", { className: "list-box-section-title", id: `${auto}-s${i}`, role: "presentation", children: x.title }), x.items.map(item)] }, `s${i}`)
             : item(x)) });
 }
+const textoDaEtiqueta = (it) => it.textValue ?? (typeof it.label === "string" ? it.label : "");
+export function TagGroup({ label, labelHidden, description, errorMessage, items, selectionMode = "none", selectedKeys, defaultSelectedKeys, onSelectionChange, onRemove, size = "md", variant = "default", className, id }) {
+    const s = useAureaStrings();
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultSelectedKeys ?? []);
+    const escolhidos = selectedKeys ?? proprio;
+    const escolhe = selectionMode !== "none";
+    const habilitadas = items.filter(it => !it.disabled);
+    const [ativa, setAtiva] = React.useState(undefined);
+    const alvo = (ativa && habilitadas.some(it => it.id === ativa) ? ativa : undefined) ?? habilitadas[0]?.id;
+    const refs = React.useRef(new Map());
+    const focar = (id) => { if (!id)
+        return; setAtiva(id); refs.current.get(id)?.focus(); };
+    const escolher = (it) => {
+        if (!escolhe || it.disabled)
+            return;
+        const ja = escolhidos.includes(it.id);
+        const novo = selectionMode === "multiple" ? (ja ? escolhidos.filter(x => x !== it.id) : [...escolhidos, it.id]) : (ja ? [] : [it.id]);
+        if (selectedKeys === undefined)
+            setProprio(novo);
+        onSelectionChange?.(novo);
+    };
+    const tirar = (it) => {
+        if (!onRemove || it.disabled)
+            return;
+        // o foco vai para a vizinha (a seguinte; na última, a anterior), e não se perde no documento
+        const i = habilitadas.findIndex(x => x.id === it.id);
+        const vizinha = habilitadas[i + 1] ?? habilitadas[i - 1];
+        onRemove([it.id]);
+        if (vizinha)
+            requestAnimationFrame(() => focar(vizinha.id));
+    };
+    const aoTeclar = (e, it) => {
+        const i = habilitadas.findIndex(x => x.id === it.id);
+        const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
+        const frente = rtl ? "ArrowLeft" : "ArrowRight", tras = rtl ? "ArrowRight" : "ArrowLeft";
+        if (e.key === frente || e.key === "ArrowDown") {
+            e.preventDefault();
+            focar(habilitadas[Math.min(i + 1, habilitadas.length - 1)]?.id);
+        }
+        else if (e.key === tras || e.key === "ArrowUp") {
+            e.preventDefault();
+            focar(habilitadas[Math.max(i - 1, 0)]?.id);
+        }
+        else if (e.key === "Home") {
+            e.preventDefault();
+            focar(habilitadas[0]?.id);
+        }
+        else if (e.key === "End") {
+            e.preventDefault();
+            focar(habilitadas[habilitadas.length - 1]?.id);
+        }
+        else if ((e.key === "Delete" || e.key === "Backspace") && onRemove) {
+            e.preventDefault();
+            tirar(it);
+        }
+    };
+    const guardar = (itId) => (n) => { if (n)
+        refs.current.set(itId, n);
+    else
+        refs.current.delete(itId); };
+    const idRotulo = `${auto}-l`, idDesc = description ? `${auto}-d` : undefined, idErro = errorMessage ? `${auto}-e` : undefined;
+    return _jsxs("div", { className: cx("tag-group", className), id: id, children: [_jsx("span", { className: labelHidden ? "sr-only" : "label", id: idRotulo, children: label }), _jsx("div", { role: escolhe ? "group" : "list", "aria-labelledby": idRotulo, "aria-describedby": [idDesc, idErro].filter(Boolean).join(" ") || undefined, className: "tag-group-list", children: items.map(it => {
+                    const escolhida = escolhe && escolhidos.includes(it.id);
+                    const conteudo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsx("span", { className: "tag-label", children: it.label })] });
+                    const x = onRemove && _jsx("button", { type: "button", className: "tag-remove", disabled: it.disabled, tabIndex: escolhe ? -1 : it.id === alvo ? 0 : -1, ref: escolhe ? undefined : guardar(it.id), "aria-label": `${s.comboboxRemove} ${textoDaEtiqueta(it)}`.trim(), onClick: () => tirar(it), onKeyDown: escolhe ? undefined : e => aoTeclar(e, it), onFocus: escolhe ? undefined : () => setAtiva(it.id), children: _jsx(Icon, { name: "x", weight: "bold" }) });
+                    return _jsxs("span", { role: escolhe ? undefined : "listitem", className: cx("tag", size !== "md" && `tag-${size}`, variant !== "default" && `tag-${variant}`), "data-selected": escolhida || undefined, "data-disabled": it.disabled || undefined, children: [escolhe
+                                ? _jsx("button", { type: "button", className: "tag-main", ref: guardar(it.id), "aria-pressed": escolhida, disabled: it.disabled, tabIndex: it.id === alvo ? 0 : -1, onClick: () => { setAtiva(it.id); escolher(it); }, onKeyDown: e => aoTeclar(e, it), onFocus: () => setAtiva(it.id), children: conteudo })
+                                : _jsx("span", { className: "tag-main", children: conteudo }), x] }, it.id);
+                }) }), description && _jsx("span", { className: "field-description", id: idDesc, children: description }), errorMessage && _jsx("span", { className: "field-error", id: idErro, children: errorMessage })] });
+}
 export function Slider({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation = "horizontal", disabled, name, format, locale, showValue = true, thumbLabels, className, id }) {
     // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
     const atual = value ?? defaultValue;

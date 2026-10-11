@@ -1,0 +1,77 @@
+{
+  "name": "ColorSwatch",
+  "category": "Identity",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows.",
+  "icon": "palette",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg",
+    "xl"
+  ],
+  "states": [
+    "default"
+  ],
+  "tokens": [
+    "--space-4",
+    "--space-6",
+    "--space-8",
+    "--space-10",
+    "--radius-full",
+    "--foreground"
+  ],
+  "a11y": {
+    "role": "img",
+    "apg": "img",
+    "keyboard": [],
+    "keyboardNote": "role=img named by label (or the colour value). Not interactive."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Badge"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#ColorSwatch"
+  },
+  "props": [
+    {
+      "name": "color",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. Any CSS colour: #f0c200, oklch(…), var(--primary)."
+    },
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "default": "\"md\"",
+      "description": "16, 24, 32, 36, 40 — the reference library's scale. Round only, and without the transparency checkerboard (Victor's decision)."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "color",
+      "description": "The name a screen reader announces (\"Aurea yellow\"). Without it, the colour value."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the swatch."
+    }
+  ],
+  "sizeProp": "size"
+}

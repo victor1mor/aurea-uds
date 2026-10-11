@@ -84,7 +84,7 @@
   --control-h-lg:2.5rem;
   --control-h-xl:3.125rem;
   --row-h:3rem;
-  --card-pad:1.25rem;
+  --card-pad:1rem;
   --section-gap:1.5rem;
   --media-canvas:oklch(0.085 0 0);
   --media-foreground:oklch(0.985 0 0);
@@ -453,7 +453,7 @@
   --touch-control-h-md:2.75rem;
   --touch-control-h-lg:3.25rem;
   --row-h:2.625rem;
-  --card-pad:1rem;
+  --card-pad:0.75rem;
   --section-gap:1.125rem;
 }
 [data-density="comfortable"]{
@@ -466,7 +466,7 @@
   --touch-control-h-md:3rem;
   --touch-control-h-lg:3.5rem;
   --row-h:3rem;
-  --card-pad:1.25rem;
+  --card-pad:1rem;
   --section-gap:1.5rem;
 }
 [data-density="spacious"]{
@@ -479,6 +479,6 @@
   --touch-control-h-md:3.25rem;
   --touch-control-h-lg:3.75rem;
   --row-h:3.375rem;
-  --card-pad:1.5rem;
+  --card-pad:1.25rem;
   --section-gap:2rem;
 }

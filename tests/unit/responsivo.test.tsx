@@ -164,7 +164,10 @@ test("o passo do glifo é OUTRA escala, e a folha não confunde as duas", () => 
   // o que muda é a razão, e a razão fica no componente.
   // 0.32.0: "metade menos 2" — a marca de 16 da referência no md.
   expect(css).toMatch(/\.control-mark \{[^}]*calc\(var\(--step-h,var\(--control-h-md\)\) \/ 2 - var\(--space-05\)\)/);
-  expect(css).toMatch(/\.avatar \{[^}]*var\(--step-h,var\(--control-h-md\)\)/);
+  // 0.32.0: o AVATAR saiu desta família — tem a escala da referência (32 · 40 · 48), e não a do botão
+  // (32 · 36 · 40) —, com variável de passo própria, que a camada responsiva emite junto das outras.
+  expect(css).toMatch(/\.avatar \{[^}]*var\(--step-avatar,var\(--space-10\)\)/);
+  expect(css, "e o avatar NÃO lê mais a altura de controle").not.toMatch(/\.avatar \{[^}]*--step-h/);
 });
 
 test("toda variável de passo é registrada como NÃO-HERDÁVEL", () => {
@@ -172,7 +175,7 @@ test("toda variável de passo é registrada como NÃO-HERDÁVEL", () => {
   // esqueça disto volta a vazar. `syntax:"*"` não é detalhe — com sintaxe tipada o `@property`
   // exige `initial-value`, o fallback de `var()` nunca dispara e o core inteiro quebra.
   for (const v of ["--step-h", "--step-fs", "--step-gap", "--step-px", "--step-field-px",
-                   "--step-select-pe", "--step-icon", "--step-qr", "--step-avatar-fs"]) {
+                   "--step-select-pe", "--step-icon", "--step-qr", "--step-avatar-fs", "--step-avatar"]) {
     expect(css, `${v} sem registro herda e vaza para dentro dos filhos`)
       .toContain(`@property ${v} { syntax:"*"; inherits:false; }`);
   }
