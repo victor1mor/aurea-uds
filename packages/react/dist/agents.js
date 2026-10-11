@@ -100,7 +100,7 @@ export function HumanApproval({ title, description, details, risk, reasoning, de
     const s = useAureaStrings();
     return _jsxs("section", { className: cx("card", "approval", className), "aria-label": typeof title === "string" ? title : s.approvalLabel, ...props, children: [_jsxs("header", { className: "approval-head", children: [_jsx("strong", { children: title }), risk && _jsx(Badge, { variant: risk === "high" ? "danger" : risk === "medium" ? "warning" : "neutral", children: s.approvalRisk[risk] })] }), description && _jsx("p", { className: "approval-desc", children: description }), !!details?.length && _jsx(DataList, { items: details }), reasoning && _jsx("p", { className: "approval-reason", children: reasoning }), deadline && _jsxs("p", { className: "hint", children: [s.approvalDeadline, ": ", deadline] }), decision
                 ? _jsx(Alert, { variant: decision === "approved" ? "success" : "warning", children: decision === "approved" ? s.approvalApproved : s.approvalDenied })
-                : _jsxs("footer", { className: "approval-actions", children: [_jsx(Button, { variant: "secondary", onClick: onDeny, children: s.approvalDeny }), _jsx(Button, { variant: "primary", onClick: onApprove, children: s.approvalApprove })] })] });
+                : _jsxs("footer", { className: "approval-actions", children: [_jsx(Button, { variant: "tertiary", onClick: onDeny, children: s.approvalDeny }), _jsx(Button, { variant: "primary", onClick: onApprove, children: s.approvalApprove })] })] });
 }
 // ToolPermission — o que cada ferramenta pode, sem perguntar de novo.
 //

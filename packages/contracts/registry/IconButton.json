@@ -22,7 +22,8 @@
     "primary",
     "primary-ghost",
     "primary-outline",
-    "secondary"
+    "secondary",
+    "tertiary"
   ],
   "sizes": [
     "lg",
@@ -134,7 +135,7 @@
       "name": "variant",
       "type": "ButtonVariant",
       "default": "ghost",
-      "description": "Same eleven variants as Button. Ghost by default, so a row of them stays quiet."
+      "description": "Same eleven variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default, and what `secondary` was up to 0.31.0)."
     },
     {
       "name": "appearance",

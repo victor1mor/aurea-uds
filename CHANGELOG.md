@@ -41,8 +41,28 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   24 para os títulos de 36 · 30 · 24 · 20 · 18 · 16, como na escala publicada da referência — no
   `Heading`/`Text type="h*"` (web e nativo) e nos títulos do `.prose`.
 
+- **`Button variant="tertiary"`**, o fundo neutro com a letra normal — o `secondary` de até a 0.31.0.
+- **`ButtonGroup`**: `variant`, `size` e `disabled` valem para todos os botões de dentro (cada um
+  pode trocar o seu), `fullWidth` e `detached`. **`ToggleGroup`**: `size`, `fullWidth` e `detached`.
+- **`Toggle variant`**: `default` (fundo neutro, o padrão) ou `ghost` (sem fundo, o de antes).
+
 #### Mudou
 
+- ⚠ **`Button variant="secondary"` passa a ter a LETRA DA MARCA** sobre o fundo neutro, como a
+  referência (decisão do Victor, 11/10/2026: a opção "A"). **O `Button` sem `variant` NÃO muda**: o
+  padrão passa a ser o `tertiary`, que é a cara de sempre (a classe sai `btn-tertiary`, e não mais
+  `btn-secondary`). A regra dela: salvar é o primário, editar o secundário, cancelar o terciário —
+  por isso o "Cancelar" do `ConfirmDialog` e o "Negar" do `ApprovalCard` passam a `tertiary` e não
+  mudam de cara; o exportar da `DataGrid` e os botões do `FileInput` continuam `secondary` e ganham a
+  letra da marca. Quem quer o neutro num botão `secondary` escreve `tertiary`.
+- **O botão**: 16 dos lados (era 15), `lg` com 16 (era 20); o ícone tem 16 em tela de 640 para cima e
+  20 abaixo, e 16 sempre no `sm` e no `xs` (era 20 sempre) — como a referência.
+- ⚠ **`ButtonGroup` e `ToggleGroup` COLADOS** numa cápsula: vão 0, canto só nas pontas, um fio de 1
+  (a cor do texto a 15%) entre os botões, sem o encolher ao apertar, e o contorno que não dobra.
+  Eram cápsulas soltas com vão de 4, que quebravam linha: quem quer assim passa `detached`.
+- **`Toggle`**: passa a ter o fundo neutro (`variant="default"`), como o da referência; o ligado
+  continua o "selecionado" da Aurea. Era sem fundo: quem quer assim passa `variant="ghost"`.
+- **`IconButton` dentro de um `ButtonGroup` com `variant`** segue o grupo; solto, continua fantasma.
 - **`Kbd`**: a tecla da referência — 24 de altura, 8 dos lados, letra 14 peso médio na fonte do
   texto, fundo neutro, sem borda —, em cápsula, e redonda quando é um caractere só (`kbd-single`,
   posto pelo componente). Era 20, letra 11 na fonte de código, com borda. Dentro do botão, 20.
@@ -50,10 +70,16 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   continua 36. Compacto 28/36 (era 28/38), espaçoso 36/44 (era 34/48).
 - **Títulos**: a entrelinha deixa de ser 1,2 em todos (era 43 no título 1 e 19 no título 6).
 
+#### Corrigido
+
+- **O `Toggle` sem `size` saía com a classe `btn-undefined`** (medido no catálogo, nos três botões do
+  `ToggleGroup`); e com tamanho responsivo sairia `btn-[object Object]`. Agora a conta é a do `Button`.
+
 #### ⚠ Pode quebrar a compilação
 
 - `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
   compilar.
+- `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 

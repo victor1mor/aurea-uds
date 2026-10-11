@@ -22,7 +22,8 @@
     "primary",
     "primary-ghost",
     "primary-outline",
-    "secondary"
+    "secondary",
+    "tertiary"
   ],
   "sizes": [
     "lg",
@@ -111,7 +112,7 @@
       "name": "variant",
       "type": "ButtonVariant",
       "default": "ghost",
-      "description": "Ghost by default: inside a toolbar the surface already frames the action."
+      "description": "Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default, and what `secondary` was up to 0.31.0)."
     },
     {
       "name": "appearance",

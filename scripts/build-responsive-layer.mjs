@@ -39,9 +39,10 @@ const FIM = "/* <<< fim da camada responsiva >>> */";
 const PASSOS = {
   //        altura              corpo             gap    botão   campo            select (fim)          glifo         QR        avatar (corpo)
   xs: {h: "--control-h-xs", fs: "--text-xs",   gap: "6px",  px: "10px", fpx: "var(--space-3)", spe: "var(--space-8)", icon: null,      qr: null,      avfs: null},
-  sm: {h: "--control-h-sm", fs: "--text-sm",   gap: "8px",  px: "12px", fpx: "var(--space-3)", spe: "var(--space-8)", icon: "--icon-sm", qr: "7.5rem",  avfs: "var(--text-xs)"},
-  md: {h: "--control-h-md", fs: "--text-sm",   gap: "8px",  px: "15px", fpx: "13px",           spe: "38px",           icon: "--icon-md", qr: "10rem",   avfs: null},
-  lg: {h: "--control-h-lg", fs: "--text-base", gap: "8px",  px: "20px", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-lg", qr: "15rem", avfs: null},
+  // 0.32.0: o recheio do botão é o da referência — 12 no sm, 16 no md e no lg (eram 15 e 20).
+  sm: {h: "--control-h-sm", fs: "--text-sm",   gap: "8px",  px: "var(--space-3)", fpx: "var(--space-3)", spe: "var(--space-8)", icon: "--icon-sm", qr: "7.5rem",  avfs: "var(--text-xs)"},
+  md: {h: "--control-h-md", fs: "--text-sm",   gap: "8px",  px: "var(--space-4)", fpx: "13px",           spe: "38px",           icon: "--icon-md", qr: "10rem",   avfs: null},
+  lg: {h: "--control-h-lg", fs: "--text-base", gap: "8px",  px: "var(--space-4)", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-lg", qr: "15rem", avfs: null},
   xl: {h: "--control-h-xl", fs: "--text-base", gap: "10px", px: "26px", fpx: "var(--space-4)", spe: "calc(var(--space-10) + var(--space-1))", icon: "--icon-xl", qr: null,    avfs: null},
 };
 
@@ -105,8 +106,10 @@ const VARIAVEIS = ["--step-h", "--step-fs", "--step-gap", "--step-px", "--step-f
 const EIXO_REGRA_BASE = {"btn-group": "horizontal", "range": "horizontal", "field": "vertical"};
 
 const EIXO_REGRA = {
-  "btn-group": {vertical:   "flex-direction:column; align-items:stretch;",
-                horizontal: "flex-direction:row; align-items:center;"},
+  // 0.32.0: o grupo é COLADO, e os cantos e o fio entre os botões seguem a direção por variável
+  // (ver o `.btn-group` no core) — por isso os dois corpos levam as variáveis junto.
+  "btn-group": {vertical:   "flex-direction:column; align-items:stretch; --btn-group-h:0; --btn-group-v:var(--radius-full); --btn-group-sep-i:25%; --btn-group-sep-b:0; --btn-group-sep-w:50%; --btn-group-sep-h:var(--border-width); --btn-group-bi:var(--border-width); --btn-group-bb:0;",
+                horizontal: "flex-direction:row; align-items:center; --btn-group-h:var(--radius-full); --btn-group-v:0; --btn-group-sep-i:0; --btn-group-sep-b:25%; --btn-group-sep-w:var(--border-width); --btn-group-sep-h:50%; --btn-group-bi:0; --btn-group-bb:var(--border-width);"},
   "range":     {vertical:   "writing-mode:vertical-rl; direction:rtl; inline-size:var(--range-vertical-size,10rem); width:auto;",
                 horizontal: "writing-mode:horizontal-tb; direction:inherit; inline-size:auto; width:100%;"},
   "field":     {horizontal: "display:grid; grid-template-columns:minmax(0,var(--field-label-width,12rem)) minmax(0,1fr); align-items:center; column-gap:var(--space-4); row-gap:var(--space-1);",

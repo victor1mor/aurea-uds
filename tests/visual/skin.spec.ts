@@ -1411,7 +1411,14 @@ for (const theme of ["dark", "light"] as const) {
                      raio: parseFloat(est(".close-button").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
                      icone: caixa(".close-button .icon").width, fundo: est(".close-button").backgroundColor,
                      nome: document.querySelector(".close-button")?.getAttribute("aria-label")},
-            btnGroup: {display: est(".btn-group").display, naLinha: linhaUnica(".btn-group", ":scope > .btn")},
+            btnGroup: {display: est(".btn-group").display, naLinha: linhaUnica(".btn-group", ":scope > .btn"),
+                       // 0.32.0: colado — vão 0, canto só na ponta de fora, o fio de 1 a 15% entre eles
+                       vao: parseFloat(est(".btn-group").columnGap),
+                       pontaFora: parseFloat(est(".btn-group > .btn:first-child").borderTopLeftRadius),
+                       pontaDentro: parseFloat(est(".btn-group > .btn:first-child").borderTopRightRadius),
+                       radiusControl: emPx("--radius-control"),
+                       fioW: parseFloat(getComputedStyle(document.querySelector(".btn-group > .btn + .btn")!, "::before").width),
+                       fioOp: getComputedStyle(document.querySelector(".btn-group > .btn + .btn")!, "::before").opacity},
             toolbar: {display: est(".toolbar").display, raio: parseFloat(est(".toolbar").borderTopLeftRadius),
                       radiusControl: emPx("--radius-control"),
                       grupoDisplay: est(".toolbar-group").display,
@@ -2459,6 +2466,11 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.fechar.fundo, "o CloseButton tem o fundo neutro").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.fechar.nome, "o nome acessível vem sozinho").toBe("Close");
     expect(e.btnGroup.naLinha, "o ButtonGroup alinha os botões numa fila").toBe(true);
+    expect(e.btnGroup.vao, "o ButtonGroup é COLADO: vão 0").toBe(0);
+    expect(e.btnGroup.pontaFora, "a ponta de fora é cápsula").toBe(e.btnGroup.radiusControl);
+    expect(e.btnGroup.pontaDentro, "a ponta de dentro é reta: quem desenha a forma é a cápsula inteira").toBe(0);
+    expect(e.btnGroup.fioW, "um fio de 1 entre os botões").toBe(1);
+    expect(e.btnGroup.fioOp, "na cor do texto a 15%").toBe("0.15");
     expect(e.toolbar.raio, "a Toolbar é pill").toBe(e.toolbar.radiusControl);
     expect(e.toolbar.grupoGap, "o ToolbarGroup usa --space-1 — era `gap:4px` cru até o item E12")
       .toBe(e.toolbar.space1);

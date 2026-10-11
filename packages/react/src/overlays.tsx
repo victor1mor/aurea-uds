@@ -76,7 +76,7 @@ export function ConfirmDialog({open,title,description,confirmLabel,cancelLabel,d
         <header><BaseAlertDialog.Title render={<h2/>}>{title}</BaseAlertDialog.Title></header>
         <BaseAlertDialog.Description className="dialog-body">{description}</BaseAlertDialog.Description>
         <footer>
-          <Button ref={seguro} variant="secondary" onClick={onCancel}>{cancelLabel??s.confirmCancel}</Button>
+          <Button ref={seguro} variant="tertiary" onClick={onCancel}>{cancelLabel??s.confirmCancel}</Button>
           <Button variant={destructive?"danger":"primary"} onClick={onConfirm}>{confirmLabel??s.confirmProceed}</Button>
         </footer>
       </BaseAlertDialog.Popup>

@@ -18,7 +18,10 @@ import {Icon, useAureaTheme, type IconName} from "./system.js";
 // achatados num só é o achado `G-API-01`, e a partir daqui ele é ATALHO, não a API: os treze
 // nomes continuam valendo, continuam saindo com a mesma classe e continuam desenhando o mesmo
 // pixel — quem quiser os dois eixos usa `appearance` + `tone`.
-export type ButtonVariant="primary"|"secondary"|"outline"|"ghost"|"primary-outline"|"primary-ghost"|"danger"|"danger-outline"|"danger-ghost"|"link"|"link-primary"|"link-danger"|"nav";
+// 0.32.0 (decisão do Victor, 11/10/2026, "A"): os dois de fundo neutro da referência — `secondary`
+// com a letra da marca e `tertiary` com a letra normal. O `tertiary` é o `secondary` de até a 0.31.0 e
+// é o PADRÃO: o `Button` sem `variant` não muda de cara. Muda só quem escreveu `secondary`.
+export type ButtonVariant="primary"|"secondary"|"tertiary"|"outline"|"ghost"|"primary-outline"|"primary-ghost"|"danger"|"danger-outline"|"danger-ghost"|"link"|"link-primary"|"link-danger"|"nav";
 // APARÊNCIA: quanto peso a caixa tem. `nav` é aparência própria (item de navegação, cor
 // esmaecida em repouso), não um tom — por isso mora aqui e não ali.
 export type ButtonAppearance="solid"|"outline"|"ghost"|"link"|"nav";
@@ -31,8 +34,11 @@ export type ComponentSize="xs"|"sm"|"md"|"lg"|"xl";
 // O dicionário que desachata o enum. É a ÚNICA fonte da correspondência: o gate do
 // `validate.py` lê daqui para provar que todo par ou tem regra no core ou está declarado
 // ausente com motivo, e a ficha do registry declara os mesmos dois eixos.
+// O `secondary` não tem célula própria nos dois eixos (a letra da marca no fundo neutro não é nenhum
+// par aparência × tom): os eixos dele são os do `tertiary`, que valem só quando quem chama troca a
+// aparência ou o tom — aí sai a célula pedida, como em todo atalho.
 const EIXOS:Record<ButtonVariant,readonly [ButtonAppearance,ButtonTone]>={
-  primary:["solid","brand"],secondary:["solid","neutral"],
+  primary:["solid","brand"],secondary:["solid","neutral"],tertiary:["solid","neutral"],
   outline:["outline","neutral"],ghost:["ghost","neutral"],
   "primary-outline":["outline","brand"],"primary-ghost":["ghost","brand"],
   danger:["solid","danger"],"danger-outline":["outline","danger"],"danger-ghost":["ghost","danger"],
@@ -43,7 +49,7 @@ const EIXOS:Record<ButtonVariant,readonly [ButtonAppearance,ButtonTone]>={
 // + `tone="danger"` emite `.btn-danger-outline`, o mesmo DOM de sempre.
 const CLASSE_ANTIGA=new Map<string,ButtonVariant>(
   (Object.entries(EIXOS) as [ButtonVariant,readonly [ButtonAppearance,ButtonTone]][])
-    .map(([v,[a,t]])=>[`${a}/${t}`,v] as const));
+    .filter(([v])=>v!=="secondary").map(([v,[a,t]])=>[`${a}/${t}`,v] as const));
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
  *  cobra a matriz inteira, e porque quem monta um botão à mão precisa da mesma conta.
  *
@@ -53,7 +59,9 @@ const CLASSE_ANTIGA=new Map<string,ButtonVariant>(
  *  `--success`/`--success-foreground` e os irmãos são. `outline` voltou a ser só uma aparência
  *  que se pede, nunca o que sobra quando a nossa paleta não dá conta. */
 export function buttonSkin(variant?:ButtonVariant,appearance?:ButtonAppearance,tone?:ButtonTone):string{
-  const [a0,t0]=EIXOS[variant??"secondary"];
+  // A variação sem eixo pedido é a própria classe — é o caminho do `secondary`, que não tem célula.
+  if(appearance===undefined&&tone===undefined)return `btn-${variant??"tertiary"}`;
+  const [a0,t0]=EIXOS[variant??"tertiary"];
   const a=appearance??a0, t=tone??t0;
   const antiga=CLASSE_ANTIGA.get(`${a}/${t}`);
   return antiga?`btn-${antiga}`:cx(`btn-${a}`,`btn-tone-${t}`);
@@ -130,10 +138,18 @@ async function compartilhar(botao:HTMLElement,dados:ButtonShareData,s:AureaStrin
     avisar(false);
   }catch{avisar(true)}
 }
+// O GRUPO passa o desenho aos botões de dentro (0.32.0), como o `ButtonGroup` da referência: `variant`,
+// `size` e desligado valem para todos, e cada botão pode trocar o seu. Fora de um grupo, nada muda.
+interface GrupoDeBotoes{variant?:ButtonVariant;size?:Responsive<ComponentSize>;disabled?:boolean}
+const GrupoDeBotoesContext=React.createContext<GrupoDeBotoes|null>(null);
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant,appearance,tone,size="md",loading,leadingIcon,trailingIcon,className,children,disabled,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,...props},ref){
+export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,...props},ref){
+const grupo=React.useContext(GrupoDeBotoesContext);
+const variant=variantPedida??grupo?.variant;
+const size=sizePedido??grupo?.size??"md";
+const disabled=disabledPedido??grupo?.disabled;
 // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
 // SOMATIVO por construção: valor simples continua emitindo `btn-sm`, byte por byte a mesma classe
 // de antes, e por isso nenhuma baseline se mexe. Só o valor responsivo entra pela camada genérica
@@ -205,7 +221,11 @@ return <button ref={ref} type={type} className={cls} disabled={off} aria-disable
 // tela. O tipo passa a cobrar a regra em vez de descrevê-la: ou há `children`, ou há `label`.
 interface ToggleBase{pressed?:boolean;defaultPressed?:boolean;onPressedChange?:(pressed:boolean)=>void;/** O que identifica este toggle DENTRO de um ToggleGroup — sem ele o grupo não sabe qual botão
  *  mudou, e a composição fica bonita e morta. Solto, não faz diferença nenhuma. */
-value?:string;icon?:IconName;size?:Responsive<Extract<ComponentSize,"sm"|"md"|"lg">>;disabled?:boolean;id?:string;className?:string}
+value?:string;icon?:IconName;size?:Responsive<Extract<ComponentSize,"sm"|"md"|"lg">>;disabled?:boolean;id?:string;className?:string;
+/** 0.32.0, o `ToggleButton` da referência: `default` com o fundo neutro (o padrão), `ghost` sem fundo
+ *  (o desenho de até a 0.31.0). O ligado é o idioma "selecionado" da Aurea nos dois. */
+variant?:ToggleVariant}
+export type ToggleVariant="default"|"ghost";
 type ToggleChildren=Exclude<React.ReactNode,boolean|null|undefined>;
 export type ToggleProps=ToggleBase&({children:ToggleChildren;label?:string}|{children?:never;label:string});
 // O ReactNode inclui false/null/undefined, mas nenhum deles nomeia um botão. Estes tipos somem
@@ -235,7 +255,9 @@ return itens.some(item=>{
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
-export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,size,disabled,id,className,children}:ToggleProps){
+export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,size:sizePedido,disabled,id,className,children,variant="default"}:ToggleProps){
+const grupo=React.useContext(GrupoDeBotoesContext);
+const size=sizePedido??(grupo?.size as ToggleProps["size"]);
 // O tipo barra o consumidor TypeScript; este aviso barra o de JavaScript, que não tem tipo nenhum.
 // Sem gate por NODE_ENV de propósito: o `dist` é saída de `tsc`, então `process` não existe no
 // navegador e a referência quebraria o render — e um controle sem nome merece aparecer em produção
@@ -245,14 +267,19 @@ export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,
 const textoVisivel=temConteudoVisivel(children);
 const rotuloVisivel=typeof label==="string"&&label.trim().length>0;
 if(!textoVisivel&&!rotuloVisivel)console.error("Aurea: <Toggle> sem `children` visível e sem `label` não tem nome acessível — quem usa leitor de tela encontra um botão anônimo. Passe `label` quando o toggle for só ícone.");
-return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} className={cx("btn","btn-ghost",size!=="md"&&`btn-${size}`,!textoVisivel&&"btn-icon","toggle",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
+// O tamanho pela MESMA conta do `Button` (0.32.0): até a 0.31.0 era `size!=="md"&&\`btn-${size}\``, e
+// sem `size` saía a classe `btn-undefined` (medido no catálogo, nos três botões do `ToggleGroup`); com
+// valor responsivo sairia `btn-[object Object]`.
+const tamanho=ehResponsivo(size)?classesResponsivas("size",size):((valorBase(size)??"md")!=="md"&&`btn-${valorBase(size)}`);
+return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} className={cx("btn",variant==="ghost"?"btn-ghost":"btn-tertiary",tamanho,!textoVisivel&&"btn-icon","toggle",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
 
 export interface IconButtonProps extends Omit<ButtonProps,"children">{label:string;icon:IconName}
 // default ghost (não secondary): um ícone-ação solto — hambúrguer, tema, fechar — é sem
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 // Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
-export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant="ghost",className,loading,...props},ref){return <Button ref={ref} variant={variant} className={cx("btn-icon",className)} aria-label={label} loading={loading} {...props}>{loading?null:<Icon name={icon}/>}</Button>});
+// Dentro de um grupo com `variant`, o do grupo vale (0.32.0); solto, o padrão continua o fantasma.
+export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function IconButton({label,icon,variant,className,loading,...props},ref){const grupo=React.useContext(GrupoDeBotoesContext);return <Button ref={ref} variant={variant??(grupo?.variant?undefined:"ghost")} className={cx("btn-icon",className)} aria-label={label} loading={loading} {...props}>{loading?null:<Icon name={icon}/>}</Button>});
 // CloseButton (HER-12, 0.32.0) — o botão de fechar da referência, quase idêntico: um círculo de 24
 // no cinza neutro, o X de 16 esmaecido no traço Bold (decisão do Victor, *"1 bold"*), que escurece
 // com o mouse e encolhe ao apertar. O canto é o nosso (círculo cheio, e não o quadrado arredondado
@@ -264,7 +291,7 @@ export interface CloseButtonProps extends Omit<ButtonProps,"variant"|"appearance
   label?:string}
 export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function CloseButton({label,className,children,...props},ref){
   const s=useAureaStrings();
-  return <Button ref={ref} variant="secondary" className={cx("close-button",className)} aria-label={label??s.close} {...props}>{children??<Icon name="x" weight="bold"/>}</Button>});
+  return <Button ref={ref} variant="tertiary" className={cx("close-button",className)} aria-label={label??s.close} {...props}>{children??<Icon name="x" weight="bold"/>}</Button>});
 // ThemeToggle (25/09/2026, pedido do Victor): o botão de claro e escuro, com cor no ícone. É peça
 // EXCLUSIVA da Aurea — a referência não tem troca de tema —, então nasce
 // pensando como ela criaria: um só-ícone (o `IconButton`, redondo pela ADR-0052), fechado, sem opção de cor solta.
@@ -286,7 +313,24 @@ export const ThemeToggle=forwardRef<HTMLButtonElement,ThemeToggleProps>(function
 // noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por
 // seta e precisam saber para que lado a seta anda — aqui não há `aria-orientation`. Anunciar
 // orientação num grupo que não navega seria prometer teclado que não existe.
-export function ButtonGroup({label,orientation,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label?:string;orientation?:Responsive<Orientation>}){const s=useAureaStrings();return <div role="group" aria-label={label??s.optionsLabel} className={cx("btn-group",peleDoEixo("btn-group",orientation,"horizontal","btn-group"),className)} {...props}/>}
+// 0.32.0 — o `ButtonGroup` da referência: COLADO numa cápsula, e o desenho dos botões vem do grupo.
+// `detached` (o `isDetached` do grupo de alternáveis dela) é o grupo de até a 0.31.0: cápsulas soltas
+// com vão de 4, que quebram linha.
+export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<HTMLDivElement>{
+  label?:string;orientation?:Responsive<Orientation>;
+  /** O desenho de todos os botões de dentro; cada um pode trocar o seu. */
+  variant?:ButtonVariant;
+  /** O tamanho de todos os botões de dentro; cada um pode trocar o seu. */
+  size?:Responsive<ComponentSize>;
+  /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
+  fullWidth?:boolean;
+  /** Desliga todos os botões de dentro. */
+  disabled?:boolean;
+  /** Botões soltos (cápsulas com vão de 4), em vez de colados. */
+  detached?:boolean}
+export function ButtonGroup({label,orientation,variant,size,fullWidth,disabled,detached,className,...props}:ButtonGroupProps){const s=useAureaStrings();
+  const grupo=React.useMemo(()=>({variant,size,disabled}),[variant,size,disabled]);
+  return <GrupoDeBotoesContext.Provider value={grupo}><div role="group" aria-label={label??s.optionsLabel} className={cx("btn-group",peleDoEixo("btn-group",orientation,"horizontal","btn-group"),detached&&"btn-group-detached",fullWidth&&"btn-group-full",className)} {...props}/></GrupoDeBotoesContext.Provider>}
 // Toolbar: roving tabindex (setas navegam, Tab entra/sai) via Base UI.
 // G-AXIS-06 — o valor responsivo RESOLVIDO é a única fonte de verdade: ele vai para o motor, o
 // motor publica `data-orientation`/`aria-orientation` e ajusta o teclado, e a pele reage ao
@@ -315,8 +359,18 @@ export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(func
 //
 // O motor dá o roving tabindex, o `loopFocus` e o contrato de pressionado; a pele é a do
 // `.btn-group`, porque um grupo de botões é o que isto é.
-export function ToggleGroup({value,defaultValue,onValueChange,multiple,orientation,disabled,label,className,children}:{value?:string[];defaultValue?:string[];onValueChange?:(value:string[])=>void;multiple?:boolean;orientation?:Responsive<Orientation>;disabled?:boolean;label?:string;className?:string;children:React.ReactNode}){
+// 0.32.0 — o `ToggleButtonGroup` da referência: COLADO, com `size` e `fullWidth` para todos e o
+// `detached` dela (soltos, com vão de 4 — o grupo de até a 0.31.0).
+export interface ToggleGroupProps{value?:string[];defaultValue?:string[];onValueChange?:(value:string[])=>void;multiple?:boolean;orientation?:Responsive<Orientation>;disabled?:boolean;label?:string;className?:string;children:React.ReactNode;
+  /** O tamanho de todos os botões de dentro; cada um pode trocar o seu (valor simples, como o dela). */
+  size?:Extract<ComponentSize,"sm"|"md"|"lg">;
+  /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
+  fullWidth?:boolean;
+  /** Botões soltos (vão de 4), em vez de colados. */
+  detached?:boolean}
+export function ToggleGroup({value,defaultValue,onValueChange,multiple,orientation,disabled,label,className,children,size,fullWidth,detached}:ToggleGroupProps){
   const ancora=useRef<HTMLDivElement|null>(null);
   const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
-  return <BaseToggleGroup ref={ancora} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} multiple={multiple} orientation={resolvida} disabled={disabled} aria-label={label} className={cx("toggle-group",className)}>{children}</BaseToggleGroup>;
+  const grupo=React.useMemo(()=>({size}),[size]);
+  return <GrupoDeBotoesContext.Provider value={grupo}><BaseToggleGroup ref={ancora} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} multiple={multiple} orientation={resolvida} disabled={disabled} aria-label={label} className={cx("toggle-group",detached&&"toggle-group-detached",fullWidth&&"toggle-group-full",className)}>{children}</BaseToggleGroup></GrupoDeBotoesContext.Provider>;
 }

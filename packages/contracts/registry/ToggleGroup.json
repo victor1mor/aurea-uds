@@ -14,7 +14,11 @@
     "horizontal",
     "vertical"
   ],
-  "sizes": [],
+  "sizes": [
+    "lg",
+    "md",
+    "sm"
+  ],
   "responsive": {
     "orientation": "behavioral"
   },
@@ -111,6 +115,24 @@
       "type": "string",
       "default": "—",
       "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
+    },
+    {
+      "name": "size",
+      "type": "sm | md | lg",
+      "default": "—",
+      "description": "The size of every toggle inside; a toggle may set its own."
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "default": "false",
+      "description": "Fills the parent's width, and the toggles share it equally."
+    },
+    {
+      "name": "detached",
+      "type": "boolean",
+      "default": "false",
+      "description": "Loose toggles with a 4 gap, instead of joined in one capsule."
     }
   ]
 }

@@ -22,7 +22,8 @@
     "primary",
     "primary-ghost",
     "primary-outline",
-    "secondary"
+    "secondary",
+    "tertiary"
   ],
   "sizes": [
     "xs",
@@ -139,7 +140,7 @@
       "name": "variant",
       "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav",
       "default": "secondary",
-      "description": "Atalho para o par (appearance, tone). Os treze nomes continuam valendo e pintam exatamente o mesmo; a API de dois eixos é appearance + tone."
+      "description": "Atalho para o par (appearance, tone). Os treze nomes continuam valendo e pintam exatamente o mesmo; a API de dois eixos é appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default, and what `secondary` was up to 0.31.0)."
     },
     {
       "name": "appearance",

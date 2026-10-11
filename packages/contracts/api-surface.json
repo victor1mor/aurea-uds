@@ -6,16 +6,17 @@
     "modulos": 37,
     "componentes": 131,
     "hooks": 9,
-    "aliasesLiterais": 85,
-    "propsDistintas": 316
+    "aliasesLiterais": 86,
+    "propsDistintas": 317
   },
   "aliases": {
     "ButtonVariant": {
       "module": "actions",
-      "raw": "\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
+      "raw": "\"primary\" | \"secondary\" | \"tertiary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
       "union": [
         "primary",
         "secondary",
+        "tertiary",
         "outline",
         "ghost",
         "primary-outline",
@@ -61,6 +62,14 @@
         "md",
         "lg",
         "xl"
+      ]
+    },
+    "ToggleVariant": {
+      "module": "actions",
+      "raw": "\"default\" | \"ghost\"",
+      "union": [
+        "default",
+        "ghost"
       ]
     },
     "ToggleProps": {
@@ -2415,6 +2424,7 @@
               "values": [
                 "primary",
                 "secondary",
+                "tertiary",
                 "outline",
                 "ghost",
                 "primary-outline",
@@ -2548,7 +2558,7 @@
         {
           "name": "ButtonGroup",
           "kind": "function",
-          "propsType": null,
+          "propsType": "ButtonGroupProps",
           "props": [
             {
               "name": "label",
@@ -2564,6 +2574,57 @@
                 "horizontal",
                 "vertical"
               ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "ButtonVariant",
+              "values": [
+                "primary",
+                "secondary",
+                "tertiary",
+                "outline",
+                "ghost",
+                "primary-outline",
+                "primary-ghost",
+                "danger",
+                "danger-outline",
+                "danger-ghost",
+                "link",
+                "link-primary",
+                "link-danger",
+                "nav"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<ComponentSize>",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "detached",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -2592,6 +2653,7 @@
               "values": [
                 "primary",
                 "secondary",
+                "tertiary",
                 "outline",
                 "ghost",
                 "primary-outline",
@@ -2829,6 +2891,15 @@
               "values": null
             },
             {
+              "name": "variant",
+              "optional": true,
+              "type": "ToggleVariant",
+              "values": [
+                "default",
+                "ghost"
+              ]
+            },
+            {
               "name": "children",
               "optional": false,
               "type": "ToggleChildren | never",
@@ -2845,7 +2916,7 @@
         {
           "name": "ToggleGroup",
           "kind": "function",
-          "propsType": null,
+          "propsType": "ToggleGroupProps",
           "props": [
             {
               "name": "value",
@@ -2903,6 +2974,28 @@
               "optional": false,
               "type": "React.ReactNode",
               "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "detached",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -2940,6 +3033,7 @@
               "values": [
                 "primary",
                 "secondary",
+                "tertiary",
                 "outline",
                 "ghost",
                 "primary-outline",

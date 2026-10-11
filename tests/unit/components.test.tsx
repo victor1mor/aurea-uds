@@ -124,10 +124,11 @@ describe("Button — API do exemplar", () => {
     expect(el).toHaveTextContent("Enviando…");
   });
 
-  test("as cinco alturas e as onze variantes viram classe, e md/secondary não sujam o markup", () => {
+  // 0.32.0: o padrão é o `tertiary` (a cara de sempre; decisão A do Victor), e não mais o `secondary`.
+  test("as cinco alturas e as variantes viram classe, e md/tertiary (o padrão) não sujam o markup", () => {
     wrap(<><Button size="xs" variant="link-danger">A</Button><Button>B</Button></>);
     expect(screen.getByRole("button", {name: "A"})).toHaveClass("btn-xs", "btn-link-danger");
-    expect(screen.getByRole("button", {name: "B"}).className).toBe("btn btn-secondary");
+    expect(screen.getByRole("button", {name: "B"}).className).toBe("btn btn-tertiary");
   });
 
   test("Kbd é <kbd> de verdade, dentro ou fora do botão", () => {

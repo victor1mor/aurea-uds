@@ -15,7 +15,7 @@
      layoutProprio existe para quem ja monta os proprios landmarks: a lateral poe o main AO LADO
      do aside, porque aside DENTRO de main e landmark-complementary-is-top-level. -->
 <header><h1 class="sr-only">Toggle preview</h1></header>
-<main id="root" data-componente="Toggle" data-indice="0"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2)"><button type="button" data-pressed="" tabindex="0" aria-pressed="true" class="btn btn-ghost btn-undefined toggle">Bold</button><button type="button" tabindex="0" aria-pressed="false" class="btn btn-ghost btn-undefined toggle">Italic</button><button type="button" tabindex="0" aria-pressed="false" class="btn btn-ghost btn-undefined toggle">Underline</button></div></main>
+<main id="root" data-componente="Toggle" data-indice="0"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2)"><button type="button" data-pressed="" tabindex="0" aria-pressed="true" class="btn btn-tertiary toggle">Bold</button><button type="button" tabindex="0" aria-pressed="false" class="btn btn-tertiary toggle">Italic</button><button type="button" tabindex="0" aria-pressed="false" class="btn btn-tertiary toggle">Underline</button></div></main>
 <!-- O RUNTIME (18/08/2026). Sem ele a prévia é HTML morto: o `Tooltip` do trilho existe no
      código, passa no teste, e não abria porque não havia JavaScript. O estático continua sendo o
      piso — este script só ENXERTA por cima, e se falhar a marcação já está na tela. -->

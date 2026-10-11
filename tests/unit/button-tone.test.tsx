@@ -52,7 +52,9 @@ test("os dois eixos caem na classe antiga quando a célula já existia", () => {
   expect(buttonSkin(undefined, "outline", "danger")).toBe("btn-danger-outline");
   expect(buttonSkin(undefined, "link", "brand")).toBe("btn-link-primary");
   expect(buttonSkin(undefined, "solid", "brand")).toBe("btn-primary");
-  expect(buttonSkin(undefined, "solid", "neutral")).toBe("btn-secondary");
+  // 0.32.0 (decisão A do Victor): o neutro cheio é o `tertiary` — o `secondary` passou a ter a letra
+  // da marca e não é célula dos dois eixos.
+  expect(buttonSkin(undefined, "solid", "neutral")).toBe("btn-tertiary");
 });
 
 // `variant` como base e um eixo por cima: é o caminho de migração real, e o que permite
