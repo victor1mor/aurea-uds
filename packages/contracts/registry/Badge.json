@@ -123,7 +123,7 @@
       "name": "tone",
       "type": "BadgeVariant",
       "default": "—",
-      "description": "The colour, with the native package's NAME (DOC-11: the same names on web and native). The same axis as variant; it wins when both are given."
+      "description": "The colour, with the native package's name — the same names on web and native. The same axis as variant; it wins when both are given."
     },
     {
       "name": "emphasis",

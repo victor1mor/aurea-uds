@@ -39,7 +39,7 @@
       "name": "animation",
       "type": "\"pulse\" | \"none\"",
       "default": "\"pulse\"",
-      "description": "0.32.0: the reference library's pulse, or none. Its shimmer is a gradient, which Aurea does not have. With reduced motion requested by the system, it never pulses."
+      "description": "the reference library's pulse, or none. Its shimmer is a gradient, which Aurea does not have. With reduced motion requested by the system, it never pulses."
     },
     {
       "name": "className",

@@ -77,13 +77,13 @@
       "name": "divider",
       "type": "boolean",
       "default": "false",
-      "description": "Only on `flush` (B-07): a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends."
+      "description": "Only on `flush`: a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends."
     },
     {
       "name": "items",
       "type": "SidebarItem[]",
       "default": "—",
-      "description": "The website's links (GAR-01, 07/10/2026) — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel."
+      "description": "The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel."
     },
     {
       "name": "current",

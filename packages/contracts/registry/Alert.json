@@ -70,7 +70,7 @@
       "name": "variant",
       "type": "info | success | warning | danger | accent",
       "default": "info",
-      "description": "Tone and, with it, the live region: `danger` renders role=\"alert\", which interrupts the screen reader; the other three render role=\"status\", which waits for a pause. Colour is never the only signal — what carries the meaning is the text. 0.32.0: accent is the reference library's accent — in Aurea, the link colour. The state colour paints the icon and the TITLE; the box is the card surface with a shadow, no border (until 0.31.0 the state tinted the fill and the border)."
+      "description": "Tone and, with it, the live region: `danger` renders role=\"alert\", which interrupts the screen reader; the others render role=\"status\", which waits for a pause. `accent` is the reference library's accent, in Aurea's link colour. The state colour paints the icon and the title, on the card surface. Colour is never the only signal — what carries the meaning is the text."
     },
     {
       "name": "title",
@@ -100,7 +100,7 @@
       "name": "onDismiss",
       "type": "() => void",
       "default": "—",
-      "description": "Shows the X (the CloseButton, HER-12) and is called when it is pressed."
+      "description": "Shows the X (the CloseButton) and is called when it is pressed."
     }
   ],
   "axes": {

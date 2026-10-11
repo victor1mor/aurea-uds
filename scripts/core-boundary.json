@@ -8,7 +8,6 @@
   "_limite_do_check_18": "Ele olha NOME, nao efeito: uma regra vazia ('.grid{}') passaria. Quem cobra o efeito e' tests/visual/skin.spec.ts, que renderiza os nove com SO o core e mede — foi escrito na Fase 11 junto das regras, porque o defeito A13 era exatamente 'funciona na nossa documentacao e nao no consumidor'.",
   "catalogo": [
     "bad",
-    "demo",
     "doc-nav",
     "eyebrow",
     "hide-below-lg",

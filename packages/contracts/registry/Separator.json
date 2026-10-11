@@ -58,7 +58,7 @@
       "name": "spacing",
       "type": "\"none\" | \"tight\" | \"normal\" | \"loose\"",
       "default": "\"none\"",
-      "description": "The space on both sides of the line (C-04), in the same three steps as the layout primitives' gap (ADR-0051). On a vertical separator the space goes to the sides."
+      "description": "The space on both sides of the line, in the same three steps as the layout primitives' gap. On a vertical separator the space goes to the sides."
     }
   ],
   "notes": [

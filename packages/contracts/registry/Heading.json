@@ -36,6 +36,17 @@
       "center",
       "end",
       "justify"
+    ],
+    "tone": [
+      "danger",
+      "default",
+      "info",
+      "link",
+      "muted",
+      "primary",
+      "subtle",
+      "success",
+      "warning"
     ]
   },
   "states": [],
@@ -89,6 +100,12 @@
       "type": "\"default\" | \"muted\"",
       "default": "\"default\"",
       "description": "Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface."
+    },
+    {
+      "name": "tone",
+      "type": "\"default\" | \"muted\" | \"subtle\" | \"primary\" | \"link\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "default": "—",
+      "description": "The text colour with the native package's name — the same names on web and native. link is the yellow made for text, readable on both themes; primary is the fill yellow and nearly disappears on the light theme. The state colours are the -400 pair. It wins over color when both are given."
     },
     {
       "name": "weight",

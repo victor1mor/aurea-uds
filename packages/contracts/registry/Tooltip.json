@@ -50,7 +50,7 @@
       "name": "children",
       "type": "ReactElement",
       "default": "—",
-      "description": "The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye. When the element is not focusable on its own (a <span>, a Badge), it becomes focusable, as a button — as in the reference library — so the tip opens from the keyboard too (C-11)."
+      "description": "The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye. When the element is not focusable on its own (a <span>, a Badge), it becomes focusable, as a button — as in the reference library — so the tip opens from the keyboard too."
     },
     {
       "name": "content",

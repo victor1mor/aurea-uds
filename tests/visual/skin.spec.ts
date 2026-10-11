@@ -293,6 +293,9 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
       items: [{id: "a", label: "News"}, {id: "b", label: "Travel", icon: "tag"}], onRemove: () => {}}),
     h("div", {key: "bsz"}, h(A.Badge, {size: "sm", className: "bsz-sm"}, "Small"), h(A.Badge, {className: "bsz-md", leading: h(A.Icon, {name: "check"})}, "Medium"),
       h(A.Badge, {size: "lg", className: "bsz-lg"}, "Large")),
+    // 0.32.0, passo 8: a caixa de exemplo do site (`CodeBlock preview`) e o `tone` do texto.
+    h("div", {key: "cbp", style: {width: 360}}, h(A.CodeBlock, {preview: h(A.Button, null, "Save")}, "<Button>Save</Button>")),
+    h(A.Text, {key: "ttn", tone: "link", className: "texto-tom-link"}, "Link tone"),
     h("div", {key: "avs"}, h(A.Avatar, {fallback: "AB", size: "sm", className: "avs-sm"}), h(A.Avatar, {fallback: "AB", className: "avs-md"}),
       h(A.Avatar, {fallback: "AB", size: "lg", className: "avs-lg"})),
     h(A.ButtonGroup, {key: "bg"}, h(A.Button, {key: 1}, "One"), h(A.Button, {key: 2}, "Two")),
@@ -1494,6 +1497,14 @@ for (const theme of ["dark", "light"] as const) {
                      ladoSm: parseFloat(est(".bsz-sm").paddingLeft) + parseFloat(est(".bsz-sm").borderLeftWidth),
                      ladoLg: parseFloat(est(".bsz-lg").paddingLeft) + parseFloat(est(".bsz-lg").borderLeftWidth),
                      vao: parseFloat(est(".bsz-md").columnGap)},
+              caixaExemplo: {abas: document.querySelectorAll(".code-preview .demo-tabs [role=tab]").length,
+                             abasLargura: Math.round(caixa(".code-preview .demo-tabs .segmented").width),
+                             caixaLargura: Math.round(caixa(".code-preview").width),
+                             previaFundo: est(".code-preview .demo-panel[data-panel=preview]").backgroundColor,
+                             afundado: (() => { const d = document.createElement("span"); d.style.background = "var(--surface-inset)"; document.body.append(d); const c = getComputedStyle(d).backgroundColor; d.remove(); return c; })(),
+                             codigoEscondido: est(".code-preview .demo-code").display,
+                             raio: parseFloat(est(".code-preview").borderTopLeftRadius)},
+              textoTom: {cor: est(".texto-tom-link").color, link: (() => { const d = document.createElement("span"); d.style.color = "var(--link)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; })()},
               avatar: {sm: caixa(".avs-sm").width, md: caixa(".avs-md").width, lg: caixa(".avs-lg").width,
                        letra: [".avs-sm", ".avs-md", ".avs-lg"].map(c => parseFloat(est(c).fontSize)), peso: est(".avs-md").fontWeight},
             },
@@ -2661,6 +2672,13 @@ for (const theme of ["dark", "light"] as const) {
     expect([p6.selo.ladoSm, p6.selo.ladoMd, p6.selo.ladoLg], "6, 10 e 14 até o texto").toEqual([6, 10, 14]);
     expect(p6.selo.vao, "4 entre o glifo e o texto").toBe(4);
     expect([p6.avatar.sm, p6.avatar.md, p6.avatar.lg], "Avatar: 32, 40, 48").toEqual([32, 40, 48]);
+    // 0.32.0, passo 8 — a caixa de exemplo é a do site: duas abas na largura, a prévia no afundado.
+    expect(p6.caixaExemplo.abas, "CodeBlock preview: as abas Preview | Code").toBe(2);
+    expect(p6.caixaExemplo.abasLargura, "o segmentado ocupa a largura da caixa (menos o recheio de 8)").toBe(p6.caixaExemplo.caixaLargura - 2 - 16);
+    expect(p6.caixaExemplo.previaFundo, "a prévia no fundo afundado").toBe(p6.caixaExemplo.afundado);
+    expect(p6.caixaExemplo.codigoEscondido, "o código começa escondido").toBe("none");
+    expect(p6.caixaExemplo.raio, "o cartão da Aurea").toBe(22);
+    expect(p6.textoTom.cor, "Text tone=\"link\" é a cor de link").toBe(p6.textoTom.link);
     expect([p6.avatar.letra, p6.avatar.peso], "letra 12, 14, 16 em peso médio").toEqual([[12, 14, 16], "500"]);
     expect(e.btnGroup.naLinha, "o ButtonGroup alinha os botões numa fila").toBe(true);
     expect(e.btnGroup.vao, "o ButtonGroup é COLADO: vão 0").toBe(0);

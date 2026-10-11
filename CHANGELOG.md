@@ -158,6 +158,13 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   (`onRemove`), descrição e erro; um ponto de Tab só, setas entre as etiquetas, Delete tira.
 - **`Badge tone`** — o nome do nativo para a cor (DOC-11: os mesmos nomes na web e no nativo).
 - **`Alert variant="accent"`** — o acento da referência, na cor de link da Aurea (o `info` continua).
+- **`Text`, `Heading`, `Paragraph` e `Code` com `tone`** — o nome do nativo para a cor do texto (DOC-11):
+  `default`, `muted`, `subtle`, `primary`, `link`, `danger`, `success`, `warning`, `info`. Vence o `color`.
+- **`CodeBlock preview`** (DOC-02) — a caixa de exemplo do site da Aurea, agora no pacote: as abas Prévia |
+  Código, a prévia no fundo afundado e o código sem moldura.
+- **As fichas sem número de pedido nem versão** (DOC-15): os 72 textos públicos (o resumo e as descrições
+  das props, que o site mostra) dizem o que a peça faz hoje; o histórico fica aqui. O check 47 do
+  validador reprova a volta.
 - **`Spinner size="xl"`** (40). **`Progress`**: `showLabel` (o rótulo à mostra, no alto à esquerda),
   `showValue` (o "60%" à direita) e `size` (o trilho de 4, 8 ou 12). **`Skeleton animation`**: `pulse`
   (o padrão) ou `none`; o "shimmer" da referência é degradê e não entra.
@@ -277,7 +284,8 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.
 - **Quatro frases novas no `AureaStrings` da web** — quem monta o objeto inteiro (uma tradução própria)
   precisa acrescentá-las: `paginationPage` (o "Página" do nome de cada número), `commandHintMove`,
-  `commandHintSelect` e `commandHintClose` (a linha de atalhos da paleta). O `ptBR` já as traz.
+  `commandHintSelect` e `commandHintClose` (a linha de atalhos da paleta), e `codeBlockPreview` e
+  `codeBlockCode` (as abas da caixa de exemplo do `CodeBlock preview`). O `ptBR` já as traz.
 
 ---
 

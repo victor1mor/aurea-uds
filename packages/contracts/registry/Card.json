@@ -94,13 +94,13 @@
       "name": "padding",
       "type": "\"normal\" | \"none\"",
       "default": "\"normal\"",
-      "description": "none removes the inner padding so media bleeds to the edge (C-05); the 22 radius stays and clips the media."
+      "description": "none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media."
     },
     {
       "name": "orientation",
       "type": "\"vertical\" | \"horizontal\"",
       "default": "\"vertical\"",
-      "description": "`horizontal` is the LIST mode (A-14, from the Card spec approved on 22/09/2026): Card.Media on the left at thumbnail width (96, --space-24 — the size-24 of the reference library's horizontal example) and the content beside it. In one app's list mode the cover took the full width (954 × 1,431 px): one card per screen."
+      "description": "`horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it."
     },
     {
       "name": "Card.Media",

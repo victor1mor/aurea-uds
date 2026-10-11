@@ -99,13 +99,13 @@
       "name": "pressed",
       "type": "boolean",
       "default": "—",
-      "description": "Inherited from IconButton and deprecated there since 0.4.0. The toggle's state is the document theme, not this prop."
+      "description": "Inherited from IconButton, where it is deprecated. The toggle's state is the document theme, not this prop."
     },
     {
       "name": "grow",
       "type": "boolean",
       "default": "false",
-      "description": "Inherited from Button (C-03): the button takes the free space of its row."
+      "description": "Inherited from Button: the button takes the free space of its row."
     }
   ]
 }

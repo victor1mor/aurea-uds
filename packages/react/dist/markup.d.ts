@@ -182,9 +182,14 @@ export type TypographyWeight = "normal" | "medium" | "semibold" | "bold" | "extr
 export type TypographyAlign = "start" | "center" | "end" | "justify";
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type ParagraphSize = "base" | "sm" | "xs";
+/** A cor do texto com o NOME do nativo (DOC-11, os mesmos nomes na web e no nativo). `link` é o amarelo
+ *  de ESCREVER (legível nos dois temas); `primary` é o de PREENCHER, e no tema claro quase some — como no
+ *  nativo. As cores de estado são o par `-400` (ADR-0061). Vence o `color` quando os dois vêm. */
+export type TypographyTone = "default" | "muted" | "subtle" | "primary" | "link" | "danger" | "success" | "warning" | "info";
 interface TypographyBase {
     align?: TypographyAlign;
     color?: TypographyColor;
+    tone?: TypographyTone;
     weight?: TypographyWeight;
     truncate?: boolean;
     /** GAR-16 (0.28.0): algarismos da mesma largura — para número que alinha em coluna (preço, ano,
@@ -194,18 +199,18 @@ interface TypographyBase {
 export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>, "color">, RefAttributes<HTMLSpanElement>, TypographyBase {
     type?: TypographyType;
 }
-export declare function Text({ type, align, color, weight, truncate, numeric, className, ...props }: TextProps): React.JSX.Element;
+export declare function Text({ type, align, color, tone, weight, truncate, numeric, className, ...props }: TextProps): React.JSX.Element;
 export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>, "color">, RefAttributes<HTMLHeadingElement>, TypographyBase {
     level?: HeadingLevel;
 }
-export declare function Heading({ level, align, color, weight, truncate, numeric, className, ...props }: HeadingProps): React.JSX.Element;
+export declare function Heading({ level, align, color, tone, weight, truncate, numeric, className, ...props }: HeadingProps): React.JSX.Element;
 export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>, "color">, RefAttributes<HTMLParagraphElement>, TypographyBase {
     size?: ParagraphSize;
 }
-export declare function Paragraph({ size, align, color, weight, truncate, numeric, className, ...props }: ParagraphProps): React.JSX.Element;
+export declare function Paragraph({ size, align, color, tone, weight, truncate, numeric, className, ...props }: ParagraphProps): React.JSX.Element;
 export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>, "color">, RefAttributes<HTMLElement>, TypographyBase {
 }
-export declare function Code({ align, color, weight, truncate, className, ...props }: CodeProps): React.JSX.Element;
+export declare function Code({ align, color, tone, weight, truncate, className, ...props }: CodeProps): React.JSX.Element;
 export type BadgeEmphasis = "soft" | "solid" | "outline";
 export type BadgeSize = "xs" | "sm" | "md" | "lg";
 export type BadgePlacement = "top-end" | "top-start" | "bottom-end" | "bottom-start";

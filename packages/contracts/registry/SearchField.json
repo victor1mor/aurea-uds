@@ -81,7 +81,7 @@
       "name": "width",
       "type": "string",
       "default": "—",
-      "description": "The field width (A-08): \"20rem\" or \"auto\". Without it, 100% of the line as always. `size` changes height and type, never width."
+      "description": "The field width: \"20rem\" or \"auto\". Without it, 100% of the line as always. `size` changes height and type, never width."
     }
   ]
 }

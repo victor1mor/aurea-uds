@@ -124,7 +124,7 @@
       "name": "variant",
       "type": "default | ghost",
       "default": "default",
-      "description": "default has the neutral fill; ghost has none (the look up to 0.31.0). Pressed uses Aurea's selected language on both."
+      "description": "default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both."
     }
   ],
   "notes": [

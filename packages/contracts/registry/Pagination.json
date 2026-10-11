@@ -77,7 +77,7 @@
       "name": "variant",
       "type": "numbers | simple | compact",
       "default": "numbers",
-      "description": "numbers: the page numbers, with ellipses (the default). simple: previous and next only. compact: the look up to 0.31.0 (Previous · 3 / 12 · Next)."
+      "description": "numbers: the page numbers, with ellipses (the default). simple: previous and next only. compact: Previous · 3 / 12 · Next, for a tight toolbar."
     },
     {
       "name": "summary",

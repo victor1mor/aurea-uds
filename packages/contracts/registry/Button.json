@@ -140,7 +140,7 @@
       "name": "variant",
       "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav",
       "default": "secondary",
-      "description": "Atalho para o par (appearance, tone). Os treze nomes continuam valendo e pintam exatamente o mesmo; a API de dois eixos é appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default, and what `secondary` was up to 0.31.0)."
+      "description": "A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
@@ -212,7 +212,7 @@
       "name": "pressed",
       "type": "boolean",
       "default": "—",
-      "description": "DEPRECATED since 0.4.0, removed in 1.0 — use `<Toggle>`. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. Twelve reference libraries were read on 18/08/2026 (Base UI and the W3C APG among them) and NONE puts the pressed state on the plain button. Toggle state via aria-pressed: on shows the raised capsule with a yellow underline."
+      "description": "DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline."
     },
     {
       "name": "kbd",
@@ -224,31 +224,31 @@
       "name": "grow",
       "type": "boolean",
       "default": "false",
-      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow (C-03). `fullWidth` asks for the whole line instead."
+      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead."
     },
     {
       "name": "target",
       "type": "HTMLAttributeAnchorTarget",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13). It always reached the <a> at runtime; now the type accepts it, so target=\"_blank\" compiles."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "rel",
       "type": "string",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13)."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "download",
       "type": "boolean | string",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13)."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "render",
       "type": "ReactElement",
       "default": "—",
-      "description": "M-01: the element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
+      "description": "The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
     },
     {
       "name": "share",

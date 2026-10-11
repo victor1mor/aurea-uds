@@ -52,7 +52,7 @@
       "name": "size",
       "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "\"md\"",
-      "description": "16, 24, 32, 40 — the reference library's scale. 0.32.0: the component default is md, 24 (it was sm, 16). The bare glyph inside a button stays 16."
+      "description": "16, 24, 32, 40 — the reference library's scale. The component default is md, 24; the bare glyph inside a button stays 16."
     },
     {
       "name": "label",

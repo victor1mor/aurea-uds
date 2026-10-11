@@ -2321,6 +2321,9 @@ NAO_E_ESTADO = {
     "placement": "é EIXO (`placement` do Dialog e do ConfirmDialog, em `axes`), não estado",
     "swipe-direction": "é o SENTIDO do gesto de arrastar (dado do motor), não estado",
     "instant": "é o MODO da transição da dica (abriu sem animar), não estado",
+    # A caixa de exemplo do `CodeBlock preview` (DOC-02): `data-panel` diz QUAL painel é (a prévia ou o
+    # código) — é nome, e quem diz se ele está à mostra é o `hidden`.
+    "panel": "é o NOME do painel da caixa de exemplo (prévia ou código), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}
@@ -3514,6 +3517,32 @@ else:
         errors.append(f"check 46: ícone fixo que nenhuma ficha alcança — {'; '.join(_orfaos46)}. Ou é "
                       "componente sem ficha, ou ajudante exportado/de outro arquivo que a leitura não "
                       "segue: a ficha de quem o usa ficaria sem ele, calada")
+
+# ── 47. o texto PÚBLICO da ficha não tem número de pedido nem versão (DOC-15) ────────────────
+# O `summary` e as descrições das props aparecem no site (o cartão do catálogo e a tabela de API). A
+# proposta aprovada do site diz: descrição curta, em inglês, SEM número de pedido nem histórico — o
+# histórico mora no CHANGELOG. Medido em 11/10/2026: 72 textos em 35 fichas carregavam "GAR-12:",
+# "(C-13)", "0.32.0:" ou "up to 0.31.0". Reprova o identificador de pedido (as famílias da fila) e
+# o número de versão. NÃO pega: histórico em prosa sem número ("as before"), nem português.
+_ID47 = re.compile(r"\b(?:GAR|AN|HER|DOC|MNT|WEB|MT|CHK|LOGO|R|E|C|B|A|M|N)-\d{1,2}\b|\b0\.\d{1,2}\.\d{1,2}\b")
+_ach47, _lidos47 = [], 0
+for _fp47 in sorted((root / "packages/contracts/registry").glob("*.json")):
+    try:
+        _f47 = json.loads(_fp47.read_text(encoding="utf-8"))
+    except Exception:
+        continue
+    _textos47 = [("summary", _f47.get("summary", ""))] + [(p.get("name", "?"), p.get("description", "")) for p in _f47.get("props", [])]
+    for _onde47, _t47 in _textos47:
+        _lidos47 += 1
+        _m47 = _ID47.search(_t47 or "")
+        if _m47:
+            _ach47.append(f"{_fp47.stem}.{_onde47} ({_m47.group(0)})")
+if _lidos47 < 100:
+    errors.append(f"check 47: só {_lidos47} texto(s) de ficha lido(s) — a varredura está cega")
+if _ach47:
+    errors.append(f"check 47: {len(_ach47)} texto(s) público(s) de ficha com número de pedido ou versão — "
+                  f"{', '.join(_ach47[:12])}{'…' if len(_ach47) > 12 else ''}. O histórico vai para o "
+                  "CHANGELOG; a ficha diz o que a prop faz HOJE (DOC-15)")
 
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")

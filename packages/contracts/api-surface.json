@@ -6,7 +6,7 @@
     "modulos": 37,
     "componentes": 138,
     "hooks": 9,
-    "aliasesLiterais": 106,
+    "aliasesLiterais": 107,
     "propsDistintas": 339
   },
   "aliases": {
@@ -2179,6 +2179,21 @@
         "xs"
       ]
     },
+    "TypographyTone": {
+      "module": "markup",
+      "raw": "\"default\" | \"muted\" | \"subtle\" | \"primary\" | \"link\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "union": [
+        "default",
+        "muted",
+        "subtle",
+        "primary",
+        "link",
+        "danger",
+        "success",
+        "warning",
+        "info"
+      ]
+    },
     "BadgeEmphasis": {
       "module": "markup",
       "raw": "\"soft\" | \"solid\" | \"outline\"",
@@ -3976,6 +3991,12 @@
               "name": "copyable",
               "optional": true,
               "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "preview",
+              "optional": true,
+              "type": "React.ReactNode",
               "values": null
             },
             {
@@ -6931,6 +6952,22 @@
               ]
             },
             {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
               "name": "weight",
               "optional": true,
               "type": "TypographyWeight",
@@ -7153,6 +7190,22 @@
               ]
             },
             {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
               "name": "weight",
               "optional": true,
               "type": "TypographyWeight",
@@ -7362,6 +7415,22 @@
               "values": [
                 "default",
                 "muted"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
               ]
             },
             {
@@ -7736,6 +7805,22 @@
               "values": [
                 "default",
                 "muted"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
               ]
             },
             {

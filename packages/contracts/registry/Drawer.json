@@ -84,7 +84,7 @@
       "name": "side",
       "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
       "default": "right",
-      "description": "The edge it slides from — all four, as in the reference library (WEB-06: the panel that rises from the bottom on a phone). left/right are PHYSICAL sides. The side ones are 320 wide on a phone and 384 from 640 up (never more than 85% of the screen), with the 22 corner on the inner side; top and bottom take the full width and up to 85% of the height, with the 32 sheet corner and the 36 × 4 handle. A swipe toward its edge closes it (the engine's drawer). The default stays right: the reference opens at the bottom, and moving it for whoever already uses it would open the drawer somewhere else without warning."
+      "description": "The edge it slides from — all four, as in the reference library; bottom is the panel that rises on a phone. left/right are PHYSICAL sides. The side ones are 320 wide on a phone and 384 from 640 up (never more than 85% of the screen), with the 22 corner on the inner side; top and bottom take the full width and up to 85% of the height, with the 32 sheet corner and the 36 × 4 handle. A swipe toward its edge closes it. The default is right (the reference library's is bottom)."
     }
   ]
 }

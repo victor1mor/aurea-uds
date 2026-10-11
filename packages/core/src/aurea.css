@@ -2078,6 +2078,21 @@ button.tag-main { cursor:pointer; }
 .checkbox-bare { gap:0; }
 .code-block-wrap { position:relative; display:flex; min-width:0; }
 .code-block-wrap > .code-block { flex:1; min-width:0; margin:0; }
+/* DOC-02 (0.32.0): a caixa de exemplo do site (`CodeBlock preview`), trazida para o core do jeito que
+   ela é no site — o cartão sem recheio, a barra de abas com o segmentado ocupando a largura, a prévia
+   no fundo afundado, centrada, e o código sem moldura (o cartão já é a moldura). A altura é do conteúdo;
+   o site fixa a dele (`--demo-height`). */
+.code-preview { display:flex; flex-direction:column; block-size:var(--demo-height,auto); padding:0; overflow:hidden; }
+.demo-tabs { display:flex; padding:var(--space-2); border-bottom:var(--border-width) solid var(--border); }
+.demo-tabs .segmented { flex:1; display:flex; }
+.demo-tabs .segmented button { flex:1; }
+.demo-panel { flex:1; min-height:0; overflow:auto; padding:var(--space-6); }
+.demo-panel[hidden] { display:none; }
+.demo-panel[data-panel="preview"] { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--space-4); background:var(--surface-inset); }
+.demo-panel[data-panel="preview"][hidden] { display:none; }
+.demo-code { display:flex; padding:0; overflow:hidden; }
+.demo-code .code-block-wrap { flex:1; }
+.demo-code .code-block { padding:var(--space-6); border:0; border-radius:0; }
 .copy-code { position:absolute; top:var(--space-3); inset-inline-end:var(--space-3); z-index:1; }
 .copy-code .c-done { display:none; }
 .copy-code.is-done .c-copy { display:none; } .copy-code.is-done .c-done { display:block; color:var(--primary); }
@@ -2369,6 +2384,15 @@ button.tag-main { cursor:pointer; }
 .typography-body-xs { font-size:var(--text-xs); line-height:var(--leading-relaxed); }
 .typography-code { padding:var(--space-05) var(--space-1); border-radius:var(--radius-xs); background:var(--surface-2); font-family:var(--font-code); font-size:var(--text-sm); }
 .typography-muted { color:var(--muted-foreground); }
+/* DOC-11 (0.32.0): o `tone` do nativo, na web. `link` é o amarelo de escrever; `primary`, o de
+   preencher (no claro quase some, como no nativo); as cores de estado, o par `-400` (ADR-0061). */
+.typography-tone-subtle { color:var(--subtle-foreground); }
+.typography-tone-primary { color:var(--primary); }
+.typography-tone-link { color:var(--link); }
+.typography-tone-danger { color:var(--danger-400); }
+.typography-tone-success { color:var(--success-400); }
+.typography-tone-warning { color:var(--warning-400); }
+.typography-tone-info { color:var(--info-400); }
 .typography-weight-normal { font-weight:var(--weight-regular); }
 .typography-weight-medium { font-weight:var(--weight-medium); }
 .typography-weight-semibold { font-weight:var(--weight-semibold); }

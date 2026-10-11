@@ -148,7 +148,7 @@
       "name": "aria-label",
       "type": "string",
       "default": "—",
-      "description": "Accessible name when there is no visible label — a filter in a grid without labels (C-01). With `label`, prefer `label`."
+      "description": "Accessible name when there is no visible label — a filter in a grid without labels. With `label`, prefer `label`."
     }
   ]
 }

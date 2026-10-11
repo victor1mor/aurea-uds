@@ -66,7 +66,7 @@
       "name": "surface",
       "type": "\"background\" | \"card\" | \"inset\"",
       "default": "\"background\"",
-      "description": "The band's background: the page's (the default), a card surface, or the recessed inset surface (GAR-04, 06/10/2026)."
+      "description": "The band's background: the page's (the default), a card surface, or the recessed inset surface."
     },
     {
       "name": "spacing",
@@ -78,13 +78,13 @@
       "name": "theme",
       "type": "\"light\" | \"dark\"",
       "default": "—",
-      "description": "A theme for this band only (GAR-05): theme=\"dark\" makes a dark band inside a light page, and the other way round. The background, the text and every piece inside follow the band's theme, and the page's light-theme rules do not leak into it."
+      "description": "A theme for this band only: theme=\"dark\" makes a dark band inside a light page, and the other way round. The background, the text and every piece inside follow the band's theme, and the page's light-theme rules do not leak into it."
     },
     {
       "name": "variant",
       "type": "\"base\" | \"footer\"",
       "default": "\"base\"",
-      "description": "footer makes the band the website's footer (GAR-06, 07/10/2026): a <footer> with the brand, the link columns and the legal line, its content already in a Container. Surface, spacing and theme keep working — a dark footer on a light page is theme=\"dark\". On a phone everything stacks in one column."
+      "description": "footer makes the band the website's footer: a <footer> with the brand, the link columns and the legal line, its content already in a Container. Surface, spacing and theme keep working — a dark footer on a light page is theme=\"dark\". On a phone everything stacks in one column."
     },
     {
       "name": "brand",

@@ -312,14 +312,14 @@
     "specs_visuais": 37,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 842,
+    "classes_core": 853,
     "token_declaracoes": 467,
     "token_nomes": 222,
     "token_usados": 175,
     "token_sem_uso": 47
   },
   "gates": {
-    "validate": 42,
+    "validate": 43,
     "playwrightSpecs": 37
   }
 }

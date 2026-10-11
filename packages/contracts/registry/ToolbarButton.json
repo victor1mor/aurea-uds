@@ -112,7 +112,7 @@
       "name": "variant",
       "type": "ButtonVariant",
       "default": "ghost",
-      "description": "Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default, and what `secondary` was up to 0.31.0)."
+      "description": "Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
@@ -184,31 +184,31 @@
       "name": "grow",
       "type": "boolean",
       "default": "false",
-      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow (C-03). `fullWidth` asks for the whole line instead."
+      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead."
     },
     {
       "name": "target",
       "type": "HTMLAttributeAnchorTarget",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13). It always reached the <a> at runtime; now the type accepts it, so target=\"_blank\" compiles."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "rel",
       "type": "string",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13)."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "download",
       "type": "boolean | string",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13)."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "render",
       "type": "ReactElement",
       "default": "—",
-      "description": "Inherited from Button (M-01): the element that renders the button — the router's link, for example — receiving the Aurea skin and the content."
+      "description": "Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content."
     }
   ]
 }

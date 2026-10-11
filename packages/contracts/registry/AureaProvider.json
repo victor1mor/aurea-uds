@@ -149,7 +149,7 @@
       "name": "toastPlacement",
       "type": "\"top\" | \"top-start\" | \"top-end\" | \"bottom\" | \"bottom-start\" | \"bottom-end\"",
       "default": "\"bottom\"",
-      "description": "Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default; up to 0.31.0 they sat at the bottom end. 460 wide from 640 up; the screen minus 16 on each side on a phone."
+      "description": "Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone."
     }
   ]
 }
