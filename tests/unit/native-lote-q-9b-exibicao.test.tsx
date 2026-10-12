@@ -235,10 +235,23 @@ describe("ScrollShadow · o fio no lugar do degradê", () => {
   it("o fio é uma linha de 1 na cor de borda, colada na ponta; fora do toque e do leitor de tela", () => {
     montar(<ScrollShadow testID="sombra"><ScrollView testID="lista" /></ScrollShadow>);
     const cima = plano(fio("start").style);
-    expect(cima).toMatchObject({position: "absolute", top: 0, left: 0, right: 0, height: t.size.borderWidth, backgroundColor: t.color.border});
+    expect(cima).toMatchObject({position: "absolute", top: 0, height: t.size.borderWidth, backgroundColor: t.color.border});
     expect(cima.height).toBe(1);
     expect(plano(fio("end").style)).toMatchObject({position: "absolute", bottom: 0, height: t.size.borderWidth});
     expect([fio("start").pointerEvents, fio("start").accessibilityElementsHidden]).toEqual(["none", true]);
+  });
+
+  it("o fio não chega aos cantos: recuado o raio do cartão (22) dos lados, com as pontas em cápsula", () => {
+    // Escolha do Victor (12/10/2026, opção "A"): o fio reto de ponta a ponta fazia uma QUINA, que a
+    // Aurea não tem. Recuado o raio do cartão, ele para onde o canto de um cartão em volta começa.
+    montar(<ScrollShadow testID="sombra"><ScrollView testID="lista" /></ScrollShadow>);
+    for (const lado of ["start", "end"] as const) {
+      expect(plano(fio(lado).style)).toMatchObject({left: t.size.radiusCard, right: t.size.radiusCard, borderRadius: t.size.radiusControl});
+    }
+    montar(<ScrollShadow testID="sombra"><ScrollView testID="lista" horizontal /></ScrollShadow>);
+    for (const lado of ["start", "end"] as const) {
+      expect(plano(fio(lado).style)).toMatchObject({top: t.size.radiusCard, bottom: t.size.radiusCard, borderRadius: t.size.radiusControl});
+    }
   });
 
   it("o conteúdo que cabe não acende fio; a sobra menor que o próprio fio também não", async () => {
@@ -255,7 +268,7 @@ describe("ScrollShadow · o fio no lugar do degradê", () => {
     __definirReduceMotion(true);
     montar(<ScrollShadow testID="sombra"><ScrollView testID="lista" horizontal /></ScrollShadow>);
     await assentar();
-    expect(plano(fio("start").style)).toMatchObject({left: 0, top: 0, bottom: 0, width: t.size.borderWidth});
+    expect(plano(fio("start").style)).toMatchObject({left: 0, width: t.size.borderWidth});
     expect(plano(fio("end").style)).toMatchObject({right: 0, width: t.size.borderWidth});
     medir(200, 500, true);
     expect([aceso("start"), aceso("end")]).toEqual([0, 1]);

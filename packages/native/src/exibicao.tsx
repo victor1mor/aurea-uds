@@ -63,10 +63,17 @@ const folha = criarFolha((t: AureaTokens) => ({
   inativo: {opacity: t.size.opacityDisabled},
 
   // ── ScrollShadow ───────────────────────────────────────────────────────────────────────────
-  fioDeCima: {position: "absolute", top: 0, left: 0, right: 0, height: t.size.borderWidth, backgroundColor: t.color.border},
-  fioDeBaixo: {position: "absolute", bottom: 0, left: 0, right: 0, height: t.size.borderWidth, backgroundColor: t.color.border},
-  fioDaEsquerda: {position: "absolute", top: 0, bottom: 0, left: 0, width: t.size.borderWidth, backgroundColor: t.color.border},
-  fioDaDireita: {position: "absolute", top: 0, bottom: 0, right: 0, width: t.size.borderWidth, backgroundColor: t.color.border},
+  // O fio NÃO vai de ponta a ponta: recua o raio do cartão (22) dos dois lados e tem as pontas em
+  // cápsula (escolha do Victor, 12/10/2026, opção "A"). De ponta a ponta ele desenhava uma quina, que
+  // a Aurea não tem; recuado, ele para onde o canto de um cartão em volta começa a curvar.
+  fioDeCima: {position: "absolute", top: 0, left: t.size.radiusCard, right: t.size.radiusCard,
+    height: t.size.borderWidth, ...canto(t.size.radiusControl), backgroundColor: t.color.border},
+  fioDeBaixo: {position: "absolute", bottom: 0, left: t.size.radiusCard, right: t.size.radiusCard,
+    height: t.size.borderWidth, ...canto(t.size.radiusControl), backgroundColor: t.color.border},
+  fioDaEsquerda: {position: "absolute", left: 0, top: t.size.radiusCard, bottom: t.size.radiusCard,
+    width: t.size.borderWidth, ...canto(t.size.radiusControl), backgroundColor: t.color.border},
+  fioDaDireita: {position: "absolute", right: 0, top: t.size.radiusCard, bottom: t.size.radiusCard,
+    width: t.size.borderWidth, ...canto(t.size.radiusControl), backgroundColor: t.color.border},
 
   // ── PressableFeedback ──────────────────────────────────────────────────────────────────────
   // `overflow: hidden` é o da raiz dela: o realce e a onda ficam dentro do canto de quem usa.
@@ -296,8 +303,9 @@ const AVISO_DE_ROLAGEM = 16;
  * "Tem mais para lá" — o scroll-shadow da referência, com um FIO no lugar do degradê.
  *
  * 🔴 **Decisão do Victor:** a referência esmaece a ponta com um degradê de 50; a Aurea não tem
- * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema) na
- * ponta onde há mais conteúdo escondido, e SÓ lá: no topo da lista não há fio em cima; no fim, não
+ * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema), recuada 22
+ * dos lados e com as pontas em cápsula (opção "A", 12/10/2026), na ponta onde há mais conteúdo
+ * escondido, e SÓ lá: no topo da lista não há fio em cima; no fim, não
  * há embaixo. Na horizontal, à esquerda e à direita.
  *
  * Ele mede como o dela, pelos três avisos do rolador (`onLayout`, `onContentSizeChange` e

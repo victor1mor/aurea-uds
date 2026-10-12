@@ -59,8 +59,9 @@ export interface ScrollShadowProps {
  * "Tem mais para lá" — o scroll-shadow da referência, com um FIO no lugar do degradê.
  *
  * 🔴 **Decisão do Victor:** a referência esmaece a ponta com um degradê de 50; a Aurea não tem
- * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema) na
- * ponta onde há mais conteúdo escondido, e SÓ lá: no topo da lista não há fio em cima; no fim, não
+ * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema), recuada 22
+ * dos lados e com as pontas em cápsula (opção "A", 12/10/2026), na ponta onde há mais conteúdo
+ * escondido, e SÓ lá: no topo da lista não há fio em cima; no fim, não
  * há embaixo. Na horizontal, à esquerda e à direita.
  *
  * Ele mede como o dela, pelos três avisos do rolador (`onLayout`, `onContentSizeChange` e
