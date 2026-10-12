@@ -45,6 +45,8 @@ import {
   // exatamente o que um teste rodando em Node não pode responder.
   Combobox, SearchField, NumberField, Image as AureaImage, Gallery,
   separadoresDoLocale, formatarNumero,
+  // 0.32 (passo 9b): as nove peças que faltavam no nativo.
+  Accordion, ScrollShadow, SkeletonGroup, PressableFeedback, Slider, OTPField, TagGroup, Popover, DropdownMenu,
 } from "@aurea-uds/native";
 import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 
@@ -249,6 +251,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <Bloco0320b t={t} />
       <Bloco0320 t={t} />
       <BlocoLoteN t={t} />
       <BlocoLoteL t={t} />
@@ -1664,6 +1667,80 @@ function Bloco0320({t}) {
       <BottomSheet open={janela === "sheet"} title="Escolha o período" onClose={() => setJanela(null)}>
         <AText>A folha com recheio de 20 e o canto de 32.</AText>
       </BottomSheet>
+    </Bloco>
+  );
+}
+
+// 0.32 (passo 9b): as nove peças novas do nativo. O que só o aparelho responde: o painel do menu e do
+// popover não fica embaixo da barra de status nem sai da tela; a onda do toque nasce no dedo e não
+// pisca no primeiro toque; o fio do ScrollShadow só aparece na ponta onde há mais lista; o X da
+// etiqueta e a etiqueta são DOIS alvos para o VoiceOver e o TalkBack; o código abre o teclado de números.
+function Bloco0320b({t}) {
+  const [abertos, setAbertos] = React.useState(["a"]);
+  const [faixa, setFaixa] = React.useState([20, 80]);
+  const [codigo, setCodigo] = React.useState("");
+  const [tags, setTags] = React.useState([{id: "news", label: "Notícias"}, {id: "travel", label: "Viagem"},
+    {id: "games", label: "Jogos"}, {id: "shop", label: "Compras"}]);
+  const [escolhidas, setEscolhidas] = React.useState(["travel"]);
+  const [carregando, setCarregando] = React.useState(true);
+  const [ordem, setOrdem] = React.useState("data");
+  const [ultimo, setUltimo] = React.useState("—");
+  const fila = {flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center"};
+  const itensDoMenu = [
+    {label: "Renomear", onClick: () => setUltimo("Renomear")},
+    {label: "Compartilhar", onClick: () => setUltimo("Compartilhar")},
+    "separator",
+    {kind: "radiogroup", label: "Ordenar por", value: ordem, onValueChange: setOrdem,
+      items: [{value: "data", label: "Data"}, {value: "nome", label: "Nome"}]},
+    {kind: "submenu", label: "Mover para", items: [{label: "Arquivo", onClick: () => setUltimo("Arquivo")},
+      {label: "Lixeira", onClick: () => setUltimo("Lixeira")}]},
+    {label: "Excluir", destructive: true, onClick: () => setUltimo("Excluir")},
+  ];
+  return (
+    <Bloco t={t} n="0.32b" titulo="As nove peças novas do nativo"
+      criterio={"1) Accordion: um aberto de cada vez; a seta gira; o realce do dedo é em cápsula. "
+        + "2) A lista dentro do ScrollShadow: no topo, só o fio de baixo; no meio, os dois; no fim, só o de cima. "
+        + "3) SkeletonGroup: as três caixas pulsam JUNTAS; \"Carregou\" troca pelo texto. "
+        + "4) A onda do toque nasce no dedo e não pisca no canto no primeiro toque. "
+        + "5) O Slider arrasta as duas alças; o código abre o teclado de números. "
+        + "6) Etiquetas: o X e a etiqueta são dois alvos para o leitor de tela. "
+        + "7) O menu e o popover abrem perto do botão, fora da barra de status, e fecham ao tocar fora."}>
+      <Accordion value={abertos} onValueChange={setAbertos} items={[
+        {id: "a", title: "Como instalo?", content: "Instale os pacotes e ponha o AureaProvider na raiz do app."},
+        {id: "b", title: "Funciona no tema escuro?", content: "Sim: as cores vêm do tema."},
+        {id: "c", title: "Item desligado", content: "—", disabled: true},
+      ]} />
+      <ScrollShadow>
+        <ScrollView style={{height: 120}} nestedScrollEnabled>
+          {Array.from({length: 12}, (_, i) => <AText key={i}>{`Linha ${i + 1} da lista que rola`}</AText>)}
+        </ScrollView>
+      </ScrollShadow>
+      <SkeletonGroup isLoading={carregando}>
+        <View style={{gap: 8}}>
+          <Skeleton height={16} width="70%"><AText>O título chegou.</AText></Skeleton>
+          <Skeleton height={16}><AText>A primeira linha do texto.</AText></Skeleton>
+          <Skeleton height={16} width="40%"><AText>Fim.</AText></Skeleton>
+        </View>
+      </SkeletonGroup>
+      <Button size="sm" onPress={() => setCarregando((c) => !c)}>{carregando ? "Carregou" : "Carregar de novo"}</Button>
+      <PressableFeedback onPress={() => setUltimo("Cartão")} accessibilityLabel="Cartão que responde ao toque"
+        style={{borderRadius: 22, padding: 16, backgroundColor: t.color.card}}>
+        <PressableFeedback.Highlight />
+        <PressableFeedback.Ripple />
+        <AText weight={600}>Toque aqui: encolhe um pouco, acende e faz a onda</AText>
+      </PressableFeedback>
+      <Slider label="Preço" value={faixa} onValueChange={setFaixa} min={0} max={100} step={5}
+        thumbLabels={["Mínimo", "Máximo"]} />
+      <OTPField label="Código" length={6} value={codigo} onValueChange={setCodigo} />
+      <TagGroup label="Assuntos" selectionMode="multiple" items={tags} selectedKeys={escolhidas}
+        onSelectionChange={setEscolhidas} onRemove={(ids) => setTags((xs) => xs.filter((x) => !ids.includes(x.id)))} />
+      <View style={fila}>
+        <DropdownMenu label="Ações do arquivo" trigger={<Button>Menu</Button>} items={itensDoMenu} />
+        <Popover trigger={<Button>Popover</Button>} title="Por que 849?" arrow>
+          <AText>Execuções nos últimos 30 dias, contando as que falharam.</AText>
+        </Popover>
+      </View>
+      <AText size="sm" tone="muted">{`Último toque: ${ultimo} · ordem: ${ordem}`}</AText>
     </Bloco>
   );
 }

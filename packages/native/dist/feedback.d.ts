@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type StyleProp, type ViewProps, type ViewStyle } from "react-native";
+import { Animated, type StyleProp, type ViewProps, type ViewStyle } from "react-native";
 import { type IconName, type AureaIcon } from "./icon.js";
 import { type AureaUniversalState } from "./strings.js";
 export type AureaSpinnerSize = "sm" | "md" | "lg";
@@ -25,6 +25,9 @@ export interface SpinnerProps {
  * "algo está acontecendo" continua vendo o rótulo.
  */
 export declare function Spinner({ size, label, decorative, style, testID }: SpinnerProps): React.JSX.Element;
+/** O pulso (`"pulse"`, o padrão) ou a caixa parada (`"none"`) — os nomes da web (0.32.0). O brilho que
+ *  corre da referência ("shimmer") é degradê, e degradê a Aurea não tem. */
+export type AureaSkeletonAnimation = "pulse" | "none";
 export interface SkeletonProps {
     /** Padrão: ocupa a largura disponível. */
     width?: number | `${number}%`;
@@ -33,7 +36,36 @@ export interface SkeletonProps {
     radius?: number;
     style?: StyleProp<ViewStyle>;
     testID?: string;
+    /**
+     * 0.32.0: `false` troca a caixa pelo conteúdo de verdade (`children`) — o `isLoading` da referência.
+     * Padrão: `true`, a caixa de sempre. Dentro de um `SkeletonGroup`, sem este, vale o do grupo.
+     */
+    isLoading?: boolean;
+    /** O conteúdo que aparece no lugar da caixa quando `isLoading` é `false`. */
+    children?: React.ReactNode;
+    /** `"none"` deixa a caixa parada, como na web. Dentro de um `SkeletonGroup`, sem este, vale o do grupo. */
+    animation?: AureaSkeletonAnimation;
 }
+/**
+ * O que o `SkeletonGroup` manda para os esqueletos de dentro: o `isLoading` e a `animation` do grupo,
+ * e o PULSO — um valor só, e por isso todos sobem e descem juntos, em vez de cada um no seu tempo.
+ *
+ * Mora aqui, ao lado do `Skeleton`, porque é ele quem lê. O grupo (`exibicao.tsx`) importa daqui;
+ * o contrário fecharia um ciclo de importação entre os dois arquivos. Ferramenta de dentro: não sai
+ * pela porta da frente do pacote.
+ */
+export interface GrupoDeEsqueletoValor {
+    isLoading: boolean;
+    animation: AureaSkeletonAnimation;
+    pulso: Animated.Value;
+}
+export declare const GrupoDeEsqueleto: React.Context<GrupoDeEsqueletoValor | null>;
+/**
+ * O pulso do esqueleto: liga só quando `ativo`, e só depois de o sistema dizer que pode mexer.
+ * Desligado, a opacidade volta a 1 — um laço parado no meio deixaria a caixa meio apagada.
+ * O `SkeletonGroup` usa o mesmo, uma vez para o grupo inteiro.
+ */
+export declare function usePulsoDoEsqueleto(ativo: boolean): Animated.Value;
 /**
  * A caixa cinza que pulsa enquanto o dado não chega.
  *
@@ -44,8 +76,13 @@ export interface SkeletonProps {
  *
  * Ele é **invisível para o leitor de tela** (`aria-hidden` na web, `accessibilityElementsHidden`
  * aqui): anunciar "caixa" três vezes enquanto a tela carrega não ajuda ninguém.
+ *
+ * 0.32.0: o `isLoading` e os `children` da referência. Com `isLoading={false}` a caixa sai e o
+ * conteúdo entra, num esmaecer da duração lenta da Aurea (a referência usa o esmaecer padrão do
+ * motor dela); com "menos movimento", ou no primeiro desenho, ele entra sem esmaecer. Sem as props
+ * novas, nada muda: é a caixa de sempre.
  */
-export declare function Skeleton({ width, height, radius, style, testID }: SkeletonProps): React.JSX.Element;
+export declare function Skeleton({ width, height, radius, style, testID, isLoading, children, animation }: SkeletonProps): React.JSX.Element;
 /** O tom da barra: a mesma lista fechada do `tone` do `Button`. Pausado é `neutral`; falha é `danger`. */
 export type AureaProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 export interface ProgressProps {

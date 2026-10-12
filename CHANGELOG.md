@@ -172,6 +172,26 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   `bottom-end`, `top`, `top-start`, `top-end`). E o aviso aceita `actionProps` (a ação, um botão pequeno
   terciário) e mostra o `loading` do `promise()` do motor girando.
 
+- **Nove peças novas no nativo** (passo 9b), com a API da web e o desenho do pacote nativo da referência:
+  - **`Accordion`** — `items`, `variant` (`default`, `surface`), `multiple`, `defaultValue`, e `value` com
+    `onValueChange` (o controlado da referência, que a web não tem). A seta gira numa mola; a resposta entra
+    esmaecendo; o realce do dedo é em cápsula, como na web.
+  - **`ScrollShadow`** — "tem mais para lá": um FIO de 1 na ponta onde há conteúdo escondido, e só lá (a
+    referência usa um degradê; a Aurea não tem degradê — decisão do Victor). `orientation`, `visibility`,
+    `isEnabled`; respeita a lista invertida.
+  - **`SkeletonGroup`** (e `SkeletonGroup.Item`) — um comando para vários esqueletos: `isLoading`,
+    `isSkeletonOnly` e `animation`, com UM pulso para o grupo inteiro. O **`Skeleton`** ganhou `isLoading`,
+    `children` e `animation`: com `isLoading={false}` a caixa sai e o conteúdo entra esmaecendo.
+  - **`PressableFeedback`** — o alvo de toque que responde: encolhe um pouco com o dedo (0,985 numa peça de
+    300, proporcional), e três partes que se combinam: `.Highlight` (a camada que acende), `.Ripple` (a onda
+    que nasce no dedo, de uma cor só) e `.Scale` (a escala num filho).
+  - **`Slider`**, **`OTPField`** e **`TagGroup`** — os mesmos da web, no toque: um valor ou dois, vertical e
+    valor formatado; o código em casas; as etiquetas com escolha e o X de tirar (o X é irmão da etiqueta, e
+    não filho, para o VoiceOver não esconder nenhum dos dois).
+  - **`Popover`** e **`DropdownMenu`** — o painel com título e seta, e o menu com o MESMO `MenuEntry` da web
+    (ação, link, alternável, escolha única, submenu que abre no lugar, seção). Só no nativo, por enquanto: o
+    `destructive` do item de ação. A janela pinta o fundo pelo tema do app.
+
 ### Mudou
 
 - ⚠ **`Button variant="secondary"` passa a ter a LETRA DA MARCA** sobre o fundo neutro, como a

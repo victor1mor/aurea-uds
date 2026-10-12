@@ -71,8 +71,12 @@
       "dist/data.js",
       "dist/display.d.ts",
       "dist/display.js",
+      "dist/escolha.d.ts",
+      "dist/escolha.js",
       "dist/estilos.d.ts",
       "dist/estilos.js",
+      "dist/exibicao.d.ts",
+      "dist/exibicao.js",
       "dist/feedback.d.ts",
       "dist/feedback.js",
       "dist/icon-names.d.ts",
@@ -85,6 +89,8 @@
       "dist/inputs.js",
       "dist/layout.d.ts",
       "dist/layout.js",
+      "dist/menu.d.ts",
+      "dist/menu.js",
       "dist/midia.d.ts",
       "dist/midia.js",
       "dist/moldura.d.ts",
@@ -114,7 +120,7 @@
       "dist/tokens.d.ts",
       "dist/tokens.js",
       "package.json",
-      "icons/* (5736 arquivos gerados)"
+      "icons/* (5738 arquivos gerados)"
     ],
     "@aurea-uds/react": [
       "LICENSE",

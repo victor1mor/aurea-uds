@@ -209,3 +209,29 @@ export type {
 // E3 (25/09/2026): onde o `SegmentedControl` e as `Tabs` ficam quando cabem na linha. Só o TIPO:
 // a `FilaRolante` continua fora da porta da frente.
 export type {AureaFilaJustify} from "./rolagem.js";
+
+// ── 0.32.0, passo 9b — as peças que faltavam no nativo, com a API da web ────────────────────
+// As nove são as do pacote nativo da referência (anatomia, medidas, comportamento), com o que é da
+// Aurea por cima. O que ficou de fora de cada uma está no cabeçalho do arquivo dela.
+// ⚠ O `ScrollShadow` é um FIO na ponta com mais conteúdo, e não o degradê dela (decisão do Victor:
+// a Aurea não tem degradê). O `DropdownMenu` usa o MESMO `MenuEntry` da web; o `destructive` do
+// item de ação é só do nativo, por enquanto.
+export {Accordion, ScrollShadow, SkeletonGroup, PressableFeedback} from "./exibicao.js";
+export type {
+  AccordionProps, AureaAccordionItem, AureaAccordionVariant, ScrollShadowProps, AureaScrollShadowOrientation,
+  AureaScrollShadowVisibility, SkeletonGroupProps, PressableFeedbackProps, PressableFeedbackScaleProps,
+  PressableFeedbackHighlightProps, PressableFeedbackRippleProps,
+} from "./exibicao.js";
+export type {AureaSkeletonAnimation} from "./feedback.js";
+
+export {Slider, OTPField, TagGroup} from "./escolha.js";
+export type {
+  SliderProps, AureaSliderOrientation, OTPFieldProps, TagGroupProps, AureaTagItem, AureaTagSize, AureaTagVariant,
+  AureaTagGroupSelectionMode,
+} from "./escolha.js";
+
+export {Popover, DropdownMenu} from "./menu.js";
+export type {
+  PopoverProps, DropdownMenuProps, AureaOverlaySide, MenuEntry, MenuActionDef, MenuLinkDef, MenuCheckboxDef,
+  MenuRadioGroupDef, MenuSubmenuDef, MenuGroupDef,
+} from "./menu.js";

@@ -127,6 +127,31 @@ export function Spinner({ size = "md", label, decorative, style, testID }) {
             style,
         ] }));
 }
+export const GrupoDeEsqueleto = React.createContext(null);
+/**
+ * O pulso do esqueleto: liga só quando `ativo`, e só depois de o sistema dizer que pode mexer.
+ * Desligado, a opacidade volta a 1 — um laço parado no meio deixaria a caixa meio apagada.
+ * O `SkeletonGroup` usa o mesmo, uma vez para o grupo inteiro.
+ */
+export function usePulsoDoEsqueleto(ativo) {
+    const reduzir = useReduceMotion();
+    const opacidade = React.useRef(new Animated.Value(1)).current;
+    React.useEffect(() => {
+        if (!ativo || reduzir !== false) {
+            opacidade.setValue(1);
+            return;
+        }
+        // 1,35 s no total, com o vale em .55 na METADE — é o `@keyframes skeleton-pulse` do
+        // `aurea.css:1112` lido literalmente: 675 ms para descer e 675 para voltar.
+        const laco = Animated.loop(Animated.sequence([
+            Animated.timing(opacidade, { toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo() }),
+            Animated.timing(opacidade, { toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo() }),
+        ]));
+        laco.start();
+        return () => laco.stop();
+    }, [ativo, opacidade, reduzir]);
+    return opacidade;
+}
 /**
  * A caixa cinza que pulsa enquanto o dado não chega.
  *
@@ -137,29 +162,48 @@ export function Spinner({ size = "md", label, decorative, style, testID }) {
  *
  * Ele é **invisível para o leitor de tela** (`aria-hidden` na web, `accessibilityElementsHidden`
  * aqui): anunciar "caixa" três vezes enquanto a tela carrega não ajuda ninguém.
+ *
+ * 0.32.0: o `isLoading` e os `children` da referência. Com `isLoading={false}` a caixa sai e o
+ * conteúdo entra, num esmaecer da duração lenta da Aurea (a referência usa o esmaecer padrão do
+ * motor dela); com "menos movimento", ou no primeiro desenho, ele entra sem esmaecer. Sem as props
+ * novas, nada muda: é a caixa de sempre.
  */
-export function Skeleton({ width, height, radius, style, testID }) {
+export function Skeleton({ width, height, radius, style, testID, isLoading, children, animation }) {
     const t = useAureaTokens();
     const s = folha(t);
     const reduzir = useReduceMotion();
-    const opacidade = React.useRef(new Animated.Value(1)).current;
+    const grupo = React.useContext(GrupoDeEsqueleto);
+    const carregando = isLoading ?? grupo?.isLoading ?? true;
+    const pulsa = (animation ?? grupo?.animation ?? "pulse") === "pulse";
+    // No grupo que pulsa, o pulso é o dele. O próprio só liga fora de um grupo — ou quando este pede o
+    // pulso e o grupo não.
+    const doGrupo = pulsa && grupo?.animation === "pulse" ? grupo.pulso : null;
+    const proprio = usePulsoDoEsqueleto(carregando && pulsa && !doGrupo);
+    // O esmaecer do conteúdo que chega. Um valor NOVO a cada troca, que já nasce em 0 quando vai
+    // esmaecer: zerar depois, num efeito, deixaria passar um quadro com o conteúdo cheio antes do
+    // esmaecer começar. No primeiro desenho ele nasce em 1 — nada está chegando, já estava lá.
+    // As dependências são só a TROCA de estado (e, abaixo, o valor novo), de propósito: a resposta do
+    // "menos movimento" chegando depois não pode fazer o conteúdo esmaecer de novo.
+    const montado = React.useRef(false);
+    const entrada = React.useMemo(() => new Animated.Value(montado.current && reduzir === false ? 0 : 1), [carregando]);
+    React.useEffect(() => { montado.current = true; }, []);
     React.useEffect(() => {
-        if (reduzir !== false)
+        if (carregando || reduzir !== false) {
+            entrada.setValue(1);
             return;
-        // 1,35 s no total, com o vale em .55 na METADE — é o `@keyframes skeleton-pulse` do
-        // `aurea.css:1112` lido literalmente: 675 ms para descer e 675 para voltar.
-        const laco = Animated.loop(Animated.sequence([
-            Animated.timing(opacidade, { toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo() }),
-            Animated.timing(opacidade, { toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo() }),
-        ]));
-        laco.start();
-        return () => laco.stop();
-    }, [opacidade, reduzir]);
+        }
+        const a = Animated.timing(entrada, { toValue: 1, duration: t.size.durationSlow, useNativeDriver: driverNativo() });
+        a.start();
+        return () => a.stop();
+    }, [entrada]);
+    if (!carregando) {
+        return _jsx(Animated.View, { style: { opacity: entrada }, children: children });
+    }
     return (_jsx(Animated.View, { testID: testID, accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", style: [
             s.esqueleto,
             { width: width ?? "100%", height: height ?? t.size.space4 },
             radius != null && { ...canto(radius) },
-            { opacity: opacidade },
+            { opacity: doGrupo ?? proprio },
             style,
         ] }));
 }
