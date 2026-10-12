@@ -177,9 +177,11 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
     `onValueChange` (o controlado da referência, que a web não tem). A seta gira numa mola; a resposta entra
     esmaecendo; o realce do dedo é em cápsula, como na web.
   - **`ScrollShadow`** — "tem mais para lá": um FIO de 1 na ponta onde há conteúdo escondido, e só lá (a
-    referência usa um degradê; a Aurea não tem degradê — decisão do Victor). O fio recua 22 dos lados e tem
-    as pontas em cápsula: de ponta a ponta ele fazia uma quina (opção "A" do Victor). `orientation`,
-    `visibility`, `isEnabled`; respeita a lista invertida.
+    referência usa um degradê; a Aurea não tem degradê — decisão do Victor). E a lista mora numa superfície
+    da Aurea, como o `Accordion` no cartão: fundo do cartão, canto 22, a sombra de superfície (a referência
+    não tem caixa; pedido do Victor). `variant="plain"` tira a caixa, para dentro de um cartão — aí o fio
+    recua 22 dos lados, para não fazer quina. `orientation`, `visibility`, `isEnabled`; respeita a lista
+    invertida.
   - **`SkeletonGroup`** (e `SkeletonGroup.Item`) — um comando para vários esqueletos: `isLoading`,
     `isSkeletonOnly` e `animation`, com UM pulso para o grupo inteiro. O **`Skeleton`** ganhou `isLoading`,
     `children` e `animation`: com `isLoading={false}` a caixa sai e o conteúdo entra esmaecendo.

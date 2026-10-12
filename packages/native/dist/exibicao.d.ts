@@ -44,6 +44,12 @@ export type AureaScrollShadowOrientation = "horizontal" | "vertical";
  * `bottom`/`right` só a do fim, `none` nenhuma.
  */
 export type AureaScrollShadowVisibility = "auto" | "top" | "bottom" | "left" | "right" | "both" | "none";
+/**
+ * `surface` (o padrão): a lista numa superfície da Aurea, com o canto 22 do cartão, como o `Accordion`
+ * no cartão. `plain`: sem caixa — para a lista que já mora dentro de um cartão (caixa dentro de caixa é
+ * o que o `KPI variant="plain"` evita).
+ */
+export type AureaScrollShadowVariant = "surface" | "plain";
 export interface ScrollShadowProps {
     /** O rolador: um `ScrollView`, um `FlatList`… Um elemento só. */
     children: React.ReactElement;
@@ -52,6 +58,8 @@ export interface ScrollShadowProps {
     visibility?: AureaScrollShadowVisibility;
     /** `false` tira os fios. */
     isEnabled?: boolean;
+    /** Padrão: `surface`. */
+    variant?: AureaScrollShadowVariant;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -59,10 +67,14 @@ export interface ScrollShadowProps {
  * "Tem mais para lá" — o scroll-shadow da referência, com um FIO no lugar do degradê.
  *
  * 🔴 **Decisão do Victor:** a referência esmaece a ponta com um degradê de 50; a Aurea não tem
- * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema), recuada 22
- * dos lados e com as pontas em cápsula (opção "A", 12/10/2026), na ponta onde há mais conteúdo
- * escondido, e SÓ lá: no topo da lista não há fio em cima; no fim, não
- * há embaixo. Na horizontal, à esquerda e à direita.
+ * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema), com as
+ * pontas em cápsula, na ponta onde há mais conteúdo escondido, e SÓ lá: no topo da lista não há fio
+ * em cima; no fim, não há embaixo. Na horizontal, à esquerda e à direita.
+ *
+ * 🔴 **E a lista mora numa superfície da Aurea** (Victor, 12/10/2026: *"o ScrollShadow não é [arredondado]
+ * como todos da Aurea"*, apontando o `Accordion` no cartão): por padrão, fundo do cartão, canto 22 e a
+ * sombra de superfície — a referência não tem caixa nenhuma. `variant="plain"` tira a caixa, para dentro
+ * de um cartão; aí o fio recua 22 dos lados, para não fazer quina.
  *
  * Ele mede como o dela, pelos três avisos do rolador (`onLayout`, `onContentSizeChange` e
  * `onScroll`), e entrega ao rolador os avisos que o app já tinha posto, depois dos dele. O
@@ -72,7 +84,7 @@ export interface ScrollShadowProps {
  * ⚠ Um `onScroll` que não é função — o `Animated.event` com o motor nativo — não é repassado: o
  * aviso dele vive no motor, e não há como chamá-lo daqui.
  */
-export declare function ScrollShadow({ children, orientation, visibility, isEnabled, style, testID, }: ScrollShadowProps): React.JSX.Element | null;
+export declare function ScrollShadow({ children, orientation, visibility, isEnabled, variant, style, testID, }: ScrollShadowProps): React.JSX.Element | null;
 export interface SkeletonGroupProps {
     children?: React.ReactNode;
     /** `false` troca todos os esqueletos de dentro pelo conteúdo deles. Padrão: `true`. */

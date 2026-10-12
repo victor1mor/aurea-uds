@@ -219,7 +219,7 @@ export type {AureaFilaJustify} from "./rolagem.js";
 export {Accordion, ScrollShadow, SkeletonGroup, PressableFeedback} from "./exibicao.js";
 export type {
   AccordionProps, AureaAccordionItem, AureaAccordionVariant, ScrollShadowProps, AureaScrollShadowOrientation,
-  AureaScrollShadowVisibility, SkeletonGroupProps, PressableFeedbackProps, PressableFeedbackScaleProps,
+  AureaScrollShadowVisibility, AureaScrollShadowVariant, SkeletonGroupProps, PressableFeedbackProps, PressableFeedbackScaleProps,
   PressableFeedbackHighlightProps, PressableFeedbackRippleProps,
 } from "./exibicao.js";
 export type {AureaSkeletonAnimation} from "./feedback.js";

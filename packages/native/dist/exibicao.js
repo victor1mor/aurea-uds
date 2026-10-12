@@ -1,4 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Aurea nativo — quatro peças que acompanham o conteúdo: `Accordion`, `ScrollShadow`,
 // `SkeletonGroup` e `PressableFeedback` (0.32.0, passo 9b).
 //
@@ -57,7 +57,16 @@ const folha = criarFolha((t) => ({
     fioSurface: { marginHorizontal: t.size.space3 },
     inativo: { opacity: t.size.opacityDisabled },
     // ── ScrollShadow ───────────────────────────────────────────────────────────────────────────
-    // O fio NÃO vai de ponta a ponta: recua o raio do cartão (22) dos dois lados e tem as pontas em
+    // A superfície (o padrão, 12/10/2026): a MESMA pele do `Accordion` no cartão — fundo do cartão, canto
+    // 22 e a sombra de superfície —, com o recheio dos lados dele (20) e 12 em cima e embaixo.
+    superficieDaLista: { ...canto(t.size.radiusCard), backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm],
+        paddingHorizontal: t.size.space5, paddingVertical: t.size.space3 },
+    // Dentro da superfície a janela da lista já está longe dos cantos: o fio vai de lado a lado dela.
+    fioDeCimaNaSuperficie: { left: 0, right: 0 },
+    fioDaEsquerdaNaSuperficie: { top: 0, bottom: 0 },
+    // Cresce com a caixa: quem dá altura ao `ScrollShadow` (um `flex: 1`) a dá também à lista de dentro.
+    miolo: { position: "relative", flexGrow: 1, flexShrink: 1 },
+    // No `plain` (sem caixa), o fio NÃO vai de ponta a ponta: recua o raio do cartão (22) dos dois lados e tem as pontas em
     // cápsula (escolha do Victor, 12/10/2026, opção "A"). De ponta a ponta ele desenhava uma quina, que
     // a Aurea não tem; recuado, ele para onde o canto de um cartão em volta começa a curvar.
     fioDeCima: { position: "absolute", top: 0, left: t.size.radiusCard, right: t.size.radiusCard,
@@ -182,10 +191,14 @@ const AVISO_DE_ROLAGEM = 16;
  * "Tem mais para lá" — o scroll-shadow da referência, com um FIO no lugar do degradê.
  *
  * 🔴 **Decisão do Victor:** a referência esmaece a ponta com um degradê de 50; a Aurea não tem
- * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema), recuada 22
- * dos lados e com as pontas em cápsula (opção "A", 12/10/2026), na ponta onde há mais conteúdo
- * escondido, e SÓ lá: no topo da lista não há fio em cima; no fim, não
- * há embaixo. Na horizontal, à esquerda e à direita.
+ * degradê (CLAUDE.md §5). Aqui é uma linha de 1 (a borda da Aurea, na cor de borda do tema), com as
+ * pontas em cápsula, na ponta onde há mais conteúdo escondido, e SÓ lá: no topo da lista não há fio
+ * em cima; no fim, não há embaixo. Na horizontal, à esquerda e à direita.
+ *
+ * 🔴 **E a lista mora numa superfície da Aurea** (Victor, 12/10/2026: *"o ScrollShadow não é [arredondado]
+ * como todos da Aurea"*, apontando o `Accordion` no cartão): por padrão, fundo do cartão, canto 22 e a
+ * sombra de superfície — a referência não tem caixa nenhuma. `variant="plain"` tira a caixa, para dentro
+ * de um cartão; aí o fio recua 22 dos lados, para não fazer quina.
  *
  * Ele mede como o dela, pelos três avisos do rolador (`onLayout`, `onContentSizeChange` e
  * `onScroll`), e entrega ao rolador os avisos que o app já tinha posto, depois dos dele. O
@@ -195,7 +208,7 @@ const AVISO_DE_ROLAGEM = 16;
  * ⚠ Um `onScroll` que não é função — o `Animated.event` com o motor nativo — não é repassado: o
  * aviso dele vive no motor, e não há como chamá-lo daqui.
  */
-export function ScrollShadow({ children, orientation, visibility = "auto", isEnabled = true, style, testID, }) {
+export function ScrollShadow({ children, orientation, visibility = "auto", isEnabled = true, variant = "surface", style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
     const reduzir = useReduceMotion();
@@ -257,7 +270,14 @@ export function ScrollShadow({ children, orientation, visibility = "auto", isEna
         accessibilityElementsHidden: true,
         importantForAccessibility: "no-hide-descendants",
     };
-    return (_jsxs(View, { testID: testID, style: style, children: [rolador, _jsx(Animated.View, { ...decorativo, testID: testID ? `${testID}-start` : undefined, style: [horizontal ? s.fioDaEsquerda : s.fioDeCima, { opacity: opComeco }] }), _jsx(Animated.View, { ...decorativo, testID: testID ? `${testID}-end` : undefined, style: [horizontal ? s.fioDaDireita : s.fioDeBaixo, { opacity: opFim }] })] }));
+    const superficie = variant === "surface";
+    const noLado = superficie && (horizontal ? s.fioDaEsquerdaNaSuperficie : s.fioDeCimaNaSuperficie);
+    const fios = (_jsxs(_Fragment, { children: [_jsx(Animated.View, { ...decorativo, testID: testID ? `${testID}-start` : undefined, style: [horizontal ? s.fioDaEsquerda : s.fioDeCima, noLado, { opacity: opComeco }] }), _jsx(Animated.View, { ...decorativo, testID: testID ? `${testID}-end` : undefined, style: [horizontal ? s.fioDaDireita : s.fioDeBaixo, noLado, { opacity: opFim }] })] }));
+    if (!superficie) {
+        return _jsxs(View, { testID: testID, style: style, children: [rolador, fios] });
+    }
+    // Na superfície, os fios ficam na borda da JANELA da lista (o miolo), e não na da caixa.
+    return (_jsx(View, { testID: testID, style: [s.superficieDaLista, style], children: _jsxs(View, { style: s.miolo, children: [rolador, fios] }) }));
 }
 /**
  * Um comando para vários esqueletos — o skeleton-group da referência. O `isLoading` e a `animation`

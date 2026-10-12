@@ -44,7 +44,7 @@ export { Image, Gallery } from "./midia.js";
 export type { ImageProps, GalleryProps, AureaGalleryItem, AureaImageSource, } from "./midia.js";
 export type { AureaFilaJustify } from "./rolagem.js";
 export { Accordion, ScrollShadow, SkeletonGroup, PressableFeedback } from "./exibicao.js";
-export type { AccordionProps, AureaAccordionItem, AureaAccordionVariant, ScrollShadowProps, AureaScrollShadowOrientation, AureaScrollShadowVisibility, SkeletonGroupProps, PressableFeedbackProps, PressableFeedbackScaleProps, PressableFeedbackHighlightProps, PressableFeedbackRippleProps, } from "./exibicao.js";
+export type { AccordionProps, AureaAccordionItem, AureaAccordionVariant, ScrollShadowProps, AureaScrollShadowOrientation, AureaScrollShadowVisibility, AureaScrollShadowVariant, SkeletonGroupProps, PressableFeedbackProps, PressableFeedbackScaleProps, PressableFeedbackHighlightProps, PressableFeedbackRippleProps, } from "./exibicao.js";
 export type { AureaSkeletonAnimation } from "./feedback.js";
 export { Slider, OTPField, TagGroup } from "./escolha.js";
 export type { SliderProps, AureaSliderOrientation, OTPFieldProps, TagGroupProps, AureaTagItem, AureaTagSize, AureaTagVariant, AureaTagGroupSelectionMode, } from "./escolha.js";

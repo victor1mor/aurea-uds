@@ -241,14 +241,28 @@ describe("ScrollShadow · o fio no lugar do degradê", () => {
     expect([fio("start").pointerEvents, fio("start").accessibilityElementsHidden]).toEqual(["none", true]);
   });
 
-  it("o fio não chega aos cantos: recuado o raio do cartão (22) dos lados, com as pontas em cápsula", () => {
-    // Escolha do Victor (12/10/2026, opção "A"): o fio reto de ponta a ponta fazia uma QUINA, que a
-    // Aurea não tem. Recuado o raio do cartão, ele para onde o canto de um cartão em volta começa.
+  it("por padrão a lista mora numa superfície da Aurea: a pele do Accordion no cartão, canto 22", () => {
+    // Victor, 12/10/2026: "o ScrollShadow não é [arredondado] como todos da Aurea", apontando o
+    // `Accordion variant="surface"`. A caixa é a MESMA pele dele, e o fio vai de lado a lado da janela.
     montar(<ScrollShadow testID="sombra"><ScrollView testID="lista" /></ScrollShadow>);
+    const caixa = plano(porId("View", "sombra").style);
+    expect(caixa).toMatchObject({borderRadius: t.size.radiusCard, backgroundColor: t.color.card,
+      paddingHorizontal: t.size.space5, paddingVertical: t.size.space3});
+    expect(caixa.boxShadow).toEqual([...t.shadowLayers.shadowSm]);
+    for (const lado of ["start", "end"] as const) {
+      expect(plano(fio(lado).style)).toMatchObject({left: 0, right: 0, borderRadius: t.size.radiusControl});
+    }
+  });
+
+  it("`plain` tira a caixa (para dentro de um cartão), e o fio recua 22 dos lados para não fazer quina", () => {
+    // Escolha do Victor (12/10/2026, opção "A"): o fio reto de ponta a ponta fazia uma QUINA. Sem a
+    // caixa, recuado o raio do cartão, ele para onde o canto de um cartão em volta começa.
+    montar(<ScrollShadow testID="sombra" variant="plain"><ScrollView testID="lista" /></ScrollShadow>);
+    expect(plano(porId("View", "sombra").style).backgroundColor).toBeUndefined();
     for (const lado of ["start", "end"] as const) {
       expect(plano(fio(lado).style)).toMatchObject({left: t.size.radiusCard, right: t.size.radiusCard, borderRadius: t.size.radiusControl});
     }
-    montar(<ScrollShadow testID="sombra"><ScrollView testID="lista" horizontal /></ScrollShadow>);
+    montar(<ScrollShadow testID="sombra" variant="plain"><ScrollView testID="lista" horizontal /></ScrollShadow>);
     for (const lado of ["start", "end"] as const) {
       expect(plano(fio(lado).style)).toMatchObject({top: t.size.radiusCard, bottom: t.size.radiusCard, borderRadius: t.size.radiusControl});
     }
