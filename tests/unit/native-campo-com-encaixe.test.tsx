@@ -40,7 +40,8 @@ describe("InputGroup — a caixa passa a ser dele", () => {
     expect(s.borderWidth).toBe(tokens.size.borderWidth);
     expect(s.borderRadius).toBe(tokens.size.radiusControl);
     expect(s.backgroundColor).toBe(tokens.color.fieldBg);
-    expect(s.height).toBe(tokens.size.controlHMd);
+    // 0.32.0: o campo adotou a escala de toque (48 no `md`; era o `controlHMd`, 36).
+    expect(s.height).toBe(tokens.size.touchControlHMd);
     expect(s.flexDirection).toBe("row");
   });
 
@@ -60,7 +61,7 @@ describe("InputGroup — a caixa passa a ser dele", () => {
     render(<Envolve><Input /></Envolve>);
     const s = estilo("TextInput");
     expect(s.borderWidth).toBe(tokens.size.borderWidth);
-    expect(s.height).toBe(tokens.size.controlHMd);
+    expect(s.height).toBe(tokens.size.touchControlHMd);  // 0.32.0: a escala de toque
   });
 
   // O conserto de Android de 09/09/2026 não pode sumir na travessia para o grupo: sem estas duas
@@ -74,7 +75,7 @@ describe("InputGroup — a caixa passa a ser dele", () => {
 
   it("o degrau do grupo desce para o campo", () => {
     render(<Envolve><InputGroup size="lg" testID="g"><Input /></InputGroup></Envolve>);
-    expect(StyleSheet.flatten(porID("View", "g").style).height).toBe(tokens.size.controlHLg);
+    expect(StyleSheet.flatten(porID("View", "g").style).height).toBe(tokens.size.touchControlHLg);  // 0.32.0
     expect(estilo("TextInput").fontSize).toBe(tokens.size.textLg);
   });
 
@@ -97,7 +98,7 @@ describe("InputGroup — a caixa passa a ser dele", () => {
       <Field label="E-mail" size="sm" error="Obrigatório"><InputGroup testID="g"><Input /></InputGroup></Field>
     </Envolve>);
     const s = StyleSheet.flatten(porID("View", "g").style);
-    expect(s.height).toBe(tokens.size.controlHSm);
+    expect(s.height).toBe(tokens.size.touchControlHSm);  // 0.32.0: a escala de toque
     expect(s.borderColor).toBe(tokens.color.danger400 ?? tokens.color.destructive);
   });
 

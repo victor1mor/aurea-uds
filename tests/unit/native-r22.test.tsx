@@ -86,8 +86,10 @@ describe("R-22 · o X fora da foto", () => {
   });
   it("o X tem fundo próprio", () => {
     render(<Envolve><PhotoInput max={5} value={FOTOS} /></Envolve>);
+    // 0.32.0: o `IconButton` `sm` é o da escala de toque da referência (`touchControlHSm`, 40; era o
+    // `controlHSm`, 32).
     const circulos = __instancias("View").map(estilo)
-      .filter((e) => e.width === t.size.controlHSm && e.height === t.size.controlHSm && e.borderRadius === t.size.radiusControl);
+      .filter((e) => e.width === t.size.touchControlHSm && e.height === t.size.touchControlHSm && e.borderRadius === t.size.radiusControl);
     // O quarto círculo do tamanho é o X de fechar da janela da foto grande, que fica montada.
     const comFundo = circulos.filter((e) => e.backgroundColor && e.backgroundColor !== "transparent");
     expect(comFundo).toHaveLength(3);
@@ -97,7 +99,9 @@ describe("R-22 · o X fora da foto", () => {
   // canto de cima à direita da foto.
   it("o desenho do X fica TODO fora da foto", () => {
     render(<Envolve><PhotoInput max={5} value={FOTOS} /></Envolve>);
-    const lado = t.size.space16, x = t.size.controlHSm, alvo = Math.max(x, t.size.targetMin);
+    // 0.32.0: o desenho do X é o `IconButton` `sm` da escala de toque (40; era 32). Com o 32 aqui, o
+    // X de 40 cobriria 4 da foto e este teste não veria.
+    const lado = t.size.space16, x = t.size.touchControlHSm, alvo = Math.max(x, t.size.targetMin);
     const pos = __instancias("View").map(estilo).find((e) => e.position === "absolute" && typeof e.top === "number")!;
     const alvoEsq = lado + (pos.right as number) * -1 - alvo;  // `right` negativo: sai pela direita
     const desenho = {esq: alvoEsq + (alvo - x) / 2, topo: (pos.top as number) + (alvo - x) / 2};
@@ -106,7 +110,7 @@ describe("R-22 · o X fora da foto", () => {
   });
   it("a grade deixa espaço para o X em cima e à direita (no Android, toque fora do pai não chega)", () => {
     render(<Envolve><PhotoInput max={5} value={FOTOS} /></Envolve>);
-    const fora = (t.size.controlHSm + Math.max(t.size.controlHSm, t.size.targetMin)) / 2;
+    const fora = (t.size.touchControlHSm + Math.max(t.size.touchControlHSm, t.size.targetMin)) / 2;
     const grade = __instancias("View").map(estilo).find((e) => e.flexWrap === "wrap")!;
     expect([grade.paddingTop, grade.paddingRight]).toEqual([fora, fora]);
   });

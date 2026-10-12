@@ -26,11 +26,14 @@ describe("HER-02 · a web", () => {
 });
 
 describe("HER-02 · o nativo", () => {
-  // A moldura do `Alert` é a caixa com o recheio de cima e de baixo de 14 (o `padding:14px 16px`
-  // da web), em todas as variantes.
+  // A moldura do `Alert` é a caixa com a região viva, em todas as variantes. Até a 0.31.0 este teste
+  // a achava pelo recheio de 14 e pela borda; a 0.32.0 adotou as medidas do nativo da referência
+  // (12 em volta) e a pintura da web desta versão (sem borda), e a moldura passou a ser achada pelo
+  // que ela É, não pela medida que muda.
   it.each(["info", "warning", "danger"] as const)("o `Alert` (%s) usa `radiusCard`", (variant) => {
     render(<AureaProvider><Alert variant={variant}>Aviso</Alert></AureaProvider>);
-    const moldura = estilos().find((e) => e.paddingVertical === 14 && e.borderWidth === t.size.borderWidth);
+    const viva = __instancias("View").find((p) => p.accessibilityLiveRegion != null);
+    const moldura = viva ? (StyleSheet.flatten(viva.style) ?? {}) as Record<string, unknown> : undefined;
     expect(moldura?.borderRadius).toBe(t.size.radiusCard);
   });
 

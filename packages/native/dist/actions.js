@@ -26,17 +26,22 @@ import { canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.j
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
 import { AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
-const ALTURA = {
-    xs: "controlHXs", sm: "controlHSm", md: "controlHMd", lg: "controlHLg", xl: "controlHXl",
+const MEDIDA = {
+    xs: (s) => ({ altura: s.controlHSm, recheio: s.space3, vao: s.space1 + s.space05 }),
+    sm: (s) => ({ altura: s.touchControlHSm, recheio: s.space3 + s.space05, vao: s.space1 + s.space05 }),
+    md: (s) => ({ altura: s.touchControlHMd, recheio: s.space4, vao: s.space2 }),
+    lg: (s) => ({ altura: s.touchControlHLg, recheio: s.space5, vao: s.space2 + s.space05 }),
+    xl: (s) => ({ altura: s.touchControlHLg + s.space2, recheio: s.space6, vao: s.space2 + s.space05 }),
 };
-// Os mesmos números do `.btn-*` do core, medidos lá — não reinventados aqui.
-const PADDING = { xs: 10, sm: 12, md: 15, lg: 20, xl: 26 };
-const GAP = { xs: 6, sm: 8, md: 8, lg: 8, xl: 10 };
+// O degrau do `Text` do nativo, que sobe um em relação à web (ADR-0050): `xs` é 14, `base` é 16 e
+// `lg` é 18.
 const FONTE = {
-    xs: "xs", sm: "xs", md: "sm", lg: "base", xl: "base",
+    xs: "xs", sm: "xs", md: "base", lg: "lg", xl: "lg",
 };
+// O ícone acompanha a altura nova: 16 até o `sm` (40), 20 no `md` (48), 24 do `lg` (56) para cima.
+// Era 16 até o `md` e 20 no `lg` e no `xl`, quando o `md` tinha 36.
 const ICONE = {
-    xs: "sm", sm: "sm", md: "sm", lg: "md", xl: "md",
+    xs: "sm", sm: "sm", md: "md", lg: "lg", xl: "lg",
 };
 /** Par (fundo, texto, borda) por tom, para cada aparência. Tudo de token, nada cru. */
 function pintar(t, tone) {
@@ -121,6 +126,8 @@ const folha = criarFolha((t) => ({
     // pinta fundo, borda e raio é a `caixa` interna, com a altura do token. O botão continua com
     // 36 dp de desenho e passa a ter 44 de alvo — e o leitor de tela enxerga os 44, porque o
     // elemento acessível é o `Pressable`, não um retângulo invisível ao lado dele.
+    // 0.32.0: com a escala de toque, o `md` (48) e o `lg` (56) já passam do alvo sozinhos; o `sm`
+    // (40) e o `xs` (32) continuam ganhando os 44 por aqui.
     // E2 (25/09/2026): SEM `alignSelf`. O botão obedece o pai, como na referência (a folha do botão dela
     // não fixa alinhamento) e como o `.btn` da web num `.stack`. Era `alignSelf: "flex-start"`, e ele
     // vencia o `alignItems: "center"` do pai: o botão do `EmptyState` ficava à esquerda com o resto
@@ -209,17 +216,18 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
     const marca = useSobreAMarca();
     const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
     const corDaBorda = marca?.tinta ?? t.color.border;
+    const medida = MEDIDA[size](t.size);
     const caixa = React.useMemo(() => ({
-        height: t.size[ALTURA[size]],
-        paddingHorizontal: PADDING[size],
-        gap: GAP[size],
+        height: medida.altura,
+        paddingHorizontal: medida.recheio,
+        gap: medida.vao,
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
         ...(fullWidth ? { flex: 1 } : null),
         // A regra do botão-link da referência: `height: auto; padding: 0`, e a do botão dela já
         // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
         ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
-    }), [t, size, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
+    }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
     const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
     return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
@@ -231,8 +239,8 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
                     // Atkinson Hyperlegible (ADR-0053) sobe 0,984 e desce 0,316, o mesmo 1,3 (medido na
                     // tabela `hhea` dos dois arquivos, 01/10/2026): no Android o RN
                     // corta o que passa da linha, e a perna do g, do p e do ç sumia. Cabe em todo tamanho e
-                    // densidade (medido): `xs`/`sm` têm linha de 21 e o menor botão mede 24 (compacto); os
-                    // maiores têm linha de 24 e medem 32 ou mais.
+                    // densidade (conta da 0.32.0): `xs`/`sm` têm linha de 21 e o menor botão mede 28 (`xs`
+                    // no compacto); o `md` tem linha de 24 e mede 44 ou mais; `lg`/`xl`, 27 e 52 ou mais.
                     ? _jsx(Text, { size: FONTE[size], weight: 500, leading: "normal", style: { color: corDoTexto }, children: children })
                     : children, trailingIcon ? _jsx(Icon, { name: trailingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, trailing ?? null] }) }));
 }
@@ -256,11 +264,12 @@ export function IconButton(props) {
 /**
  * Quanto a ÁREA DE TOQUE do `IconButton` passa do círculo desenhado, de cada lado — R-24
  * (08/10/2026). O alvo é o maior entre o desenho e o `targetMin` (44), centrado; o círculo de
- * `md` tem 36, então sobram 4 de cada lado. O `Badge` preso usa isto para se prender ao CÍRCULO,
+ * `md` tinha 36, e sobravam 4 de cada lado. O `Badge` preso usa isto para se prender ao CÍRCULO,
  * e não ao canto da área de toque — medido: preso à área de toque, o selo ficava 4 para fora.
+ * 0.32.0: com a escala de toque o `md` tem 48 e a folga é 0; sobra no `sm` (40: 2) e no `xs`.
  */
 export function folgaDoToque(t, size = "md") {
-    const lado = t.size[ALTURA[size]];
+    const lado = MEDIDA[size](t.size).altura;
     return Math.max(0, (Math.max(lado, t.size.targetMin) - lado) / 2);
 }
 /** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
@@ -272,13 +281,14 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
     const marca = useSobreAMarca();
     const cor = pintarSobreAMarca(pintar(t, tone), marca, tone, appearance);
     const corDaBorda = marca?.tinta ?? t.color.border;
-    const lado = t.size[ALTURA[size]];
+    // O círculo tem a altura do botão do mesmo tamanho (o só-ícone da referência: `aspect-ratio: 1`).
+    const lado = MEDIDA[size](t.size).altura;
     const caixa = React.useMemo(() => ({
         height: lado, width: lado, paddingHorizontal: 0,
         ...canto(t.size.radiusControl),
         backgroundColor: appearance === "solid" ? cor.solido : "transparent",
         borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
-    }), [t, lado, size, appearance, cor.solido, cor.contorno, corDaBorda]);
+    }), [t, lado, appearance, cor.solido, cor.contorno, corDaBorda]);
     return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             // Largura FIXA, como o só-ícone da referência: ele nunca estica,
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.

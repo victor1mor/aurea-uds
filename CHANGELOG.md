@@ -259,6 +259,28 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - ⚠ **`Spinner`**: a escala da referência — 16 · 24 · 32 · 40 (era 16 · 20 · 24) — e o componente nasce no
   `md`, **24** (era 16). O glifo de dentro do botão continua com 16.
 - **`Skeleton`**: o canto 8 (`--radius-sm`, era 7 cru), e parado para quem pediu menos movimento ao sistema.
+- ⚠ **O NATIVO NA ESCALA DE 48** (ADR-0066, aprovada pelo Victor: *"sim, aprovo a escala de 48 no
+  nativo"*) — as medidas do pacote nativo da referência, para o dedo; a web continua em 36:
+  - `Button`/`IconButton`/`LinkButton`: sm 40 · md 48 · lg 56 (eram 32 · 36 · 40), com 14 · 16 · 20 dos
+    lados, vão 6 · 8 · 10 e letra 14 · 16 · 18 peso médio; o `xs` (32) e o `xl` (64) são só da Aurea.
+  - Campos (`Input`, `InputGroup`, `PasswordField`, `SearchField`, o `Combobox`, o `NumberField`, o
+    `DatePicker`, o `FileInput`): 40 · 48 · 56, com 12 dos lados; o `Select` com 12/16 no gatilho e a opção
+    12/8, rótulo 16 peso médio e o visto de 20 na escolhida (o app registra o ícone `check`); `Textarea` 128
+    com 8 em cima e embaixo; o rótulo do `Field` peso médio.
+  - `Checkbox` 24 (era 18) com canto 6; `Radio` 24 com ponto 10; `Switch` 48 × 24 com a bolinha em cápsula
+    28 × 20 (era 42 × 24 e bolinha redonda de 18); 12 até o texto.
+  - `Avatar` 40 · 48 · 64 (eram 32 · 36 · 40) com as iniciais 12 · 14 · 16 peso médio.
+  - `NavList` com 16 de recheio e o título 16 peso médio; `Tabs` (a cápsula) com a aba de 12/6 e o rótulo
+    16 peso médio.
+  - `Dialog`, `ConfirmDialog`, `Drawer` e `BottomSheet` com recheio 20 e título 18 peso médio; o X do
+    `Dialog` e da `Drawer` é o `CloseButton` no canto.
+  - `Alert` como o da web desta versão (cartão, sem borda, sombra, a cor do estado no ícone e no título,
+    12 de recheio, título 16 peso médio, descrição 14, o X é o `CloseButton`); o `Toast` também deixa de
+    tingir o fundo, com 16 de recheio e o X do `CloseButton`.
+  - `Spinner`: 16 · 24 · 32, e o padrão passa a 24 (dentro da lista do `Combobox`, continua 16).
+  - O `NumberField display` sobe para 64 (era 50, que ficaria abaixo do `lg`).
+  - **A barra de baixo (`BottomNav`) NÃO muda** — comparada na bancada com a do `main` nas quatro formas, e
+    congelada num teste.
 - ⚠ **O aviso (`useToast`)** é o da referência: os avisos se EMPILHAM no mesmo lugar — o da frente
   inteiro, os de trás espiando, e passar o mouse ou o foco abre a pilha (era uma coluna); embaixo no meio
   (era no canto de baixo, no fim); 460 de largura (era 360); somem em 4 s (eram 5); três à vista. O tipo

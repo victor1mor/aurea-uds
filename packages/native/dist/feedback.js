@@ -11,7 +11,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .spinner      aurea.css:668   borda 2 currentColor, direita transparente, redondo, .7s linear
 //   .skeleton     aurea.css:1111  raio 7, fundo surface-3, pulso de opacidade .55 em 1.35s
 //   .progress     aurea.css:1105  altura 8, raio 999, trilho surface-3, preenchimento primary
-//   .alert        aurea.css:1088  grade auto/1fr/auto, gap 12, padding 14 16, raio lg, borda 1
+//   .alert        aurea.css:1088  grade auto/1fr/auto, ~~gap 12, padding 14 16, raio lg, borda 1~~
+//                                 → 0.32.0: medidas do nativo da referência, pintura da web (`Alert`)
 //   .empty-state  aurea.css:1823  coluna centrada, gap space-3, padding space-10 space-6
 //   .data-state   aurea.css:1110  grade com gap space-3 e NADA de superfície própria
 //
@@ -21,7 +22,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // de uma REGIÃO não emite título de documento.
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
-import { IconButton } from "./actions.js";
+import { CloseButton } from "./actions.js";
 import { canto, criarFolha, estadoAcessivel, letraDoToken } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { IconeEmMoldura } from "./moldura.js";
@@ -56,13 +57,17 @@ const folha = criarFolha((t) => ({
     // `flex:1` — mesmo resultado, e `display:grid` não existe no RN (a mesma nota do `Grid`).
     // `alignItems:"flex-start"` porque o ícone acompanha a PRIMEIRA linha do texto, não o centro
     // de um parágrafo de três linhas.
+    // 0.32.0: as medidas do nativo da referência — 12 de recheio em volta e 12 entre as partes (era
+    // 14 em cima e embaixo e 16 dos lados). A pintura é a da web desta versão (`.alert`): fundo de
+    // CARTÃO, sem borda, com a sombra de superfície (`shadowSm` inteira); a cor do estado fica só no
+    // ícone e no título. Até a 0.31.0 o estado tingia o fundo e a borda.
     alerta: {
         flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
-        paddingVertical: 14, paddingHorizontal: t.size.space4,
+        padding: t.size.space3,
         // HER-02 (06/10/2026): era `radiusLg` (16). Painel é 22 na identidade da Aurea (`CLAUDE.md`
         // §5), como o `Popover`, o `Dialog` e o `Banner`; a referência usa 24 na web e no nativo.
-        borderWidth: t.size.borderWidth, ...canto(t.size.radiusCard),
-        backgroundColor: t.color.secondary, borderColor: t.color.border,
+        ...canto(t.size.radiusCard),
+        backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm],
     },
     // O GRUPO de leitura: ícone + texto, lidos como uma coisa só. Ele existe porque a moldura
     // deixou de ser `accessible` (ver o comentário no componente) — e sem um grupo o título e o
@@ -72,10 +77,6 @@ const folha = criarFolha((t) => ({
         flex: 1, minWidth: 0,
         flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
     },
-    alerta_info: { backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info },
-    alerta_success: { backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success },
-    alerta_warning: { backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning },
-    alerta_danger: { backgroundColor: t.color.dangerBg, borderColor: t.color.danger400 ?? t.color.destructive },
     corpoDoAlerta: { flex: 1, gap: 2 },
     // ── EmptyState ─────────────────────────────────────────────────────────────────────────────
     vazio: {
@@ -95,7 +96,7 @@ const folha = criarFolha((t) => ({
  * cascata para fazê-lo por ele. Parado, o anel continua desenhado — quem precisa da informação
  * "algo está acontecendo" continua vendo o rótulo.
  */
-export function Spinner({ size = "sm", label, decorative, style, testID }) {
+export function Spinner({ size = "md", label, decorative, style, testID }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
@@ -114,7 +115,7 @@ export function Spinner({ size = "sm", label, decorative, style, testID }) {
         // clássico de `Animated.loop`.
         return () => laco.stop();
     }, [giro, reduzir]);
-    const lado = size === "lg" ? t.size.iconLg : size === "md" ? t.size.iconMd : t.size.iconSm;
+    const lado = size === "lg" ? t.size.iconXl : size === "md" ? t.size.iconLg : t.size.iconSm;
     const acessibilidade = decorative
         ? { accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants" }
         : { accessible: true, accessibilityRole: "progressbar",
@@ -267,9 +268,9 @@ accessibilityLabel, accessibilityHint, ...rest }) {
     , { 
         // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
         // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
-        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, s[`alerta_${v}`], style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "sm", weight: 600, children: title }), children != null
-                                ? (typeof children === "string" ? _jsx(Text, { size: "sm", tone: "muted", children: children }) : children)
-                                : state ? _jsx(Text, { size: "sm", tone: "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(IconButton, { appearance: "ghost", size: "sm", name: "x", label: strings.close, onPress: onDismiss }) : null] }));
+        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "base", weight: 500, tone: v, children: title }), children != null
+                                ? (typeof children === "string" ? _jsx(Text, { size: "xs", tone: "muted", children: children }) : children)
+                                : state ? _jsx(Text, { size: "xs", tone: "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(CloseButton, { label: strings.close, onPress: onDismiss }) : null] }));
 }
 /**
  * O nada, dito com jeito.

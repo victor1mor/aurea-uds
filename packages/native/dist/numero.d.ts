@@ -9,8 +9,8 @@ import { type AureaFieldSize } from "./inputs.js";
  * peça nossa —
  * e as medidas saem de escalas que JÁ existem, nenhuma nova:
  *   letra    `text3xl` (30) em seminegrito — o título 2 (`h2` do B-02). Escolha do Victor.
- *   altura   `controlHXl` — o degrau seguinte da escala de altura dos controles, que muda com a
- *            densidade como as outras três.
+ *   altura   o degrau acima do `lg` na escala de toque (`touchControlHLg + space2`, 64 no
+ *            confortável; até a 0.31.0 era o `controlHXl`, 50), como o `Button xl`.
  *   largura  `space24` (96): o `space16` (64) do campo comum não cabe "1.234" em 30.
  *   botões   os do `lg`, o maior do `IconButton`.
  */

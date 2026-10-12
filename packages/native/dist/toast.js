@@ -56,7 +56,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { IconButton } from "./actions.js";
+import { CloseButton } from "./actions.js";
 import { canto, criarFolha } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { ICONE_DA_VARIANTE } from "./feedback.js";
@@ -71,7 +71,8 @@ const folha = criarFolha((t) => ({
         zIndex: t.size.zToast,
     },
     aviso: {
-        flexDirection: "row", alignItems: "center", gap: 11, padding: 14,
+        // 0.32.0: 16 de recheio, o do aviso do nativo da referência (era 14, o da web antiga).
+        flexDirection: "row", alignItems: "center", gap: 11, padding: t.size.space4,
         maxWidth: 360, width: "100%", alignSelf: "flex-end",
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
         // HER-02 (06/10/2026): era `radiusLg` (16). O aviso é superfície flutuante, e superfície
@@ -81,13 +82,9 @@ const folha = criarFolha((t) => ({
         ...(t.shadow.shadowMd ? { boxShadow: [t.shadow.shadowMd] } : null),
     },
     texto: { flex: 1, minWidth: 0, gap: 2 },
-    aviso_info: { backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info },
-    aviso_success: { backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success },
-    aviso_warning: { backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning },
-    aviso_danger: {
-        backgroundColor: t.color.dangerBg,
-        borderColor: t.color.danger400 ?? t.color.destructive,
-    },
+    // 0.32.0: o tipo deixou de tingir o fundo e a borda (eram `aviso_info`…`aviso_danger`). Como o aviso
+    // da web desta versão e o da referência: o fundo é o da janela, e a cor do tipo vai no ícone e no
+    // TÍTULO.
 }));
 /** Quanto um aviso fica na tela sem `duration`. */
 const DURACAO_PADRAO = 5000;
@@ -201,14 +198,14 @@ export function Toast({ toast, onClose }) {
                 : (t.color.info400 ?? t.color.info);
     const glifo = toast.icon === false ? null : (toast.icon ?? ICONE_DA_VARIANTE[tipo]);
     return (_jsxs(Animated.View, { accessible: true, ...(tipo === "danger" ? { accessibilityRole: "alert" } : null), accessibilityLiveRegion: tipo === "danger" ? "assertive" : "polite", style: [
-            s.aviso, s[`aviso_${tipo}`],
+            s.aviso,
             // Os mesmos 12dp de baixo que o `.toast[data-starting-style]` da web usa.
             { opacity: entrada, transform: [{ translateY: entrada.interpolate({
                             inputRange: [0, 1], outputRange: [12, 0],
                         }) }] },
-        ], testID: `toast-${toast.id}`, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone, weight: toast.icon ? undefined : "fill" }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "sm", weight: 600, children: toast.title }), toast.description != null
+        ], testID: `toast-${toast.id}`, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone, weight: toast.icon ? undefined : "fill" }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "base", weight: 500, style: { color: corDoIcone }, children: toast.title }), toast.description != null
                         ? (typeof toast.description === "string"
                             ? _jsx(Text, { size: "sm", tone: "muted", children: toast.description })
                             : toast.description)
-                        : null] }), toast.action, _jsx(IconButton, { name: "x", label: strings.dismissNotification, appearance: "ghost", size: "sm", onPress: onClose })] }));
+                        : null] }), toast.action, _jsx(CloseButton, { label: strings.dismissNotification, onPress: onClose })] }));
 }

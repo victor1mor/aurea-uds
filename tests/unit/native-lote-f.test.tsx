@@ -122,19 +122,23 @@ describe("R-16 · NumberField: o tamanho display (número grande, título 2)", (
     expect(e.fontSize).toBe(t.size.text3xl);
     expect(e.fontSize).toBe(30);
     expect(e.fontFamily).toBe(t.font.ui[600]);
-    expect(e.height).toBe(t.size.controlHXl);
+    // 0.32.0: o degrau acima do `lg` na escala de toque (o mesmo do `Button xl`); era o `controlHXl`.
+    expect(e.height).toBe(t.size.touchControlHLg + t.size.space2);
     expect(e.width).toBe(t.size.space24);
   });
+  // 0.32.0: o `IconButton` `lg` é o da escala de toque da referência (`touchControlHLg`, 56; era o
+  // `controlHLg`, 40).
   it("os botões de − e + são os do lg, o maior do IconButton", () => {
     render(<Envolve><NumberField testID="nf" value={42} size="display" /></Envolve>);
-    expect(botoes(t.size.controlHLg)).toHaveLength(2);
+    expect(botoes(t.size.touchControlHLg)).toHaveLength(2);
   });
   it("o lg não mudou: letra lg, peso regular, largura 64", () => {
     render(<Envolve><NumberField testID="nf" value={42} size="lg" /></Envolve>);
     const e = campo();
     expect(e.fontSize).toBe(t.size.textLg);
     expect(e.fontFamily).toBe(t.font.ui[400]);
-    expect(e.height).toBe(t.size.controlHLg);
+    // 0.32.0: o campo adotou a escala de toque (o `lg` é 56; era o `controlHLg`, 40).
+    expect(e.height).toBe(t.size.touchControlHLg);
     expect(e.width).toBe(t.size.space16);
   });
   it("fullWidth vence a largura do display (moeda em 30 não cabe em 96)", () => {

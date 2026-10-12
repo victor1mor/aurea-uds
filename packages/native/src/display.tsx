@@ -14,7 +14,8 @@
 //   .badge-solid/outline :1053-4  as duas ênfases além do `soft`
 //   .status       aurea.css:1060  linha, gap space-2, mutedForeground, textSm
 //   .status-dot   aurea.css:1055  8 quadrado, redondo, halo de 3 na cor corrente a 14%
-//   .avatar       aurea.css:1196  quadrado da altura de controle, redondo, borda borderStrong
+//   .avatar       aurea.css:1196  ~~quadrado da altura de controle~~, redondo, borda borderStrong
+//                                 (0.32.0: o lado e a letra são os do avatar nativo da referência)
 //   .kpi          aurea.css:1207  coluna com gap 5 — **dentro de um Card**
 //
 // ⚠ **O `.kpi` do CSS mente sozinho, e o fonte corrige:** `markup.tsx:105` mostra que o `KPI` é
@@ -76,6 +77,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   pontoDeEstado: {width: 8, height: 8, ...canto(t.size.radiusFull)},
 
   // ── Avatar ─────────────────────────────────────────────────────────────────────────────────
+  // 0.32.0 (ADR-0066): as medidas do avatar NATIVO da referência, lidas no pacote dela — 40 · 48 · 64,
+  // com as iniciais em 12 · 14 · 16 e peso médio. O lado sai no componente (`LADO_DO_AVATAR`).
   avatar: {
     alignItems: "center", justifyContent: "center", overflow: "hidden",
     ...canto(t.size.radiusFull), backgroundColor: t.color.surface3,
@@ -370,6 +373,16 @@ export function Status({variant, state, children, style, ...rest}: StatusProps) 
 
 export type AureaAvatarSize = "sm" | "md" | "lg";
 
+/**
+ * O lado do avatar, do pacote nativo da referência: 40 · 48 · 64 (0.32.0). Até a 0.31.0 era a altura
+ * de controle da WEB (`controlHSm/Md/Lg`, 32 · 36 · 40 no confortável), pequena para o polegar.
+ * Na escala de ESPAÇO, e não na de toque: o avatar não é controle e não anda com a densidade — é o
+ * que o `.avatar` da web já faz (`--space-8/10/12`). O 64 é o mesmo `space16` das molduras de 64
+ * da casa (a tela vazia, a miniatura do `PhotoInput`).
+ */
+const LADO_DO_AVATAR = (t: AureaTokens, size: AureaAvatarSize) =>
+  size === "sm" ? t.size.space10 : size === "lg" ? t.size.space16 : t.size.space12;
+
 export interface AvatarProps {
   /** URL ou `require()` de um asset local — as duas formas do `Image` do RN. */
   source?: ImageSourcePropType | string;
@@ -396,7 +409,7 @@ export function Avatar({source, alt, fallback, size = "md", style, testID}: Avat
   // A `source` nova merece uma tentativa nova — é o `useEffect([src])` do `identity-client.tsx`.
   React.useEffect(() => { setFalhou(false); }, [source]);
 
-  const lado = size === "sm" ? t.size.controlHSm : size === "lg" ? t.size.controlHLg : t.size.controlHMd;
+  const lado = LADO_DO_AVATAR(t, size);
   const fonte = typeof source === "string" ? {uri: source} : source;
 
   return (
@@ -409,7 +422,10 @@ export function Avatar({source, alt, fallback, size = "md", style, testID}: Avat
       {fonte && !falhou
         ? <Image source={fonte} style={s.imagem} onError={() => setFalhou(true)} />
         : typeof fallback === "string"
-          ? <Text size={size === "sm" ? "xs" : "md"} weight={700}>{fallback}</Text>
+          // As iniciais da referência: 12 · 14 · 16 em peso médio (eram 14 ou 16, em negrito), com
+          // as linhas de 16 · 20 · 24 — a mesma escada da letra do selo, e pela mesma razão: o token
+          // direto, porque o `size` do `Text` sobe um degrau no telefone (ADR-0050) e a referência não.
+          ? <Text weight={500} style={LETRA_DO_SELO(t, size)}>{fallback}</Text>
           : fallback}
     </View>
   );

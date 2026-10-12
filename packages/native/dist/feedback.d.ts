@@ -4,7 +4,10 @@ import { type IconName, type AureaIcon } from "./icon.js";
 import { type AureaUniversalState } from "./strings.js";
 export type AureaSpinnerSize = "sm" | "md" | "lg";
 export interface SpinnerProps {
-    /** `sm` é o padrão, como na web (`.spinner` sem modificador usa `--icon-sm`). */
+    /**
+     * 16 · 24 · 32, e o padrão é o `md` (24) — a escala do pacote nativo da referência (0.32.0).
+     * Até a 0.31.0 era 16 · 20 · 24, com o `sm` de padrão, como a web.
+     */
     size?: AureaSpinnerSize;
     /** O que o leitor de tela anuncia. Sem ele, a frase `loading` do provider. */
     label?: string;

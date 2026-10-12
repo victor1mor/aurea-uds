@@ -55,11 +55,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // E o comentário do `.dialog-confirm` (aurea.css:1577-1579) decidiu uma coisa por nós: **o
 // ConfirmDialog é o MESMO `.dialog`**, não uma segunda superfície. Aqui isso vira literalmente a
 // mesma função interna com uma largura diferente.
+//
+// ⚠ 0.32.0 (ADR-0066): o recheio de 24, o cabeçalho em linha com o X e o título em seminegrito, da
+// lista acima, valem hoje só para o `Drawer`. O `Dialog`, o `ConfirmDialog` e o `BottomSheet` seguem
+// as medidas do pacote NATIVO da referência — ver a folha, logo abaixo.
 import * as React from "react";
 import { Animated, Easing, Modal, PanResponder, Pressable, ScrollView, View, } from "react-native";
 import { Button } from "./actions.js";
 import { canto, cantosDeCima, criarFolha } from "./estilos.js";
-import { IconButton } from "./actions.js";
+import { CloseButton } from "./actions.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useTokensDoApp, ForaDaMarca } from "./theme.js";
@@ -71,8 +75,10 @@ const folha = criarFolha((t) => ({
     // contêiner; este só recebe o toque de fora do painel.
     fundoDeToque: { position: "absolute", top: 0, right: 0, bottom: 0, left: 0 },
     centro: { flex: 1, alignItems: "center", justifyContent: "center", padding: 20 },
+    // 0.32.0 (ADR-0066): a janela do pacote NATIVO da referência — recheio de 20 (era 24, o da web),
+    // título 18 em peso médio e descrição 16 (no componente).
     superficie: {
-        width: "100%", maxWidth: 560, padding: 24,
+        width: "100%", maxWidth: 560, padding: t.size.space5,
         borderWidth: t.size.borderWidth, borderColor: t.color.border,
         ...canto(t.size.radiusCard),
         backgroundColor: t.color.popover,
@@ -84,13 +90,30 @@ const folha = criarFolha((t) => ({
         gap: 16, marginBottom: 16,
     },
     titulo: { flex: 1 },
+    // O título do `Dialog` e do `ConfirmDialog` (0.32.0): sozinho no alto, e não mais em linha com o
+    // X; 8 até o corpo — o `.dialog-header + .dialog-body` da web desta versão (era 16).
+    tituloDaJanela: { marginBottom: t.size.space2 },
+    // O X fica no CANTO, solto do fluxo, como o `.dialog-close` da web: a 16 da borda de FORA em cima e
+    // no fim (o absoluto conta de dentro da borda de 1). É o `CloseButton`, o círculo de 40 da escala
+    // de toque (`touchControlHSm`).
+    fechar: {
+        position: "absolute",
+        top: t.size.space4 - t.size.borderWidth, right: t.size.space4 - t.size.borderWidth,
+    },
+    // E o título não passa por baixo dele: reserva no fim a largura do X. Da borda de fora, o título
+    // acaba em 20 + 1 + 40 = 61 e o X começa em 16 + 40 = 56 — sobram 5 (a diferença entre o recheio
+    // e o canto do X, mais a borda).
+    tituloComFechar: { paddingRight: t.size.touchControlHSm },
+    // Na gaveta não há borda em cima nem do lado da tela (só a de dentro): o X fica a 16 cheios.
+    fecharDaGaveta: { top: t.size.space4, right: t.size.space4 },
     corpo: { gap: 14 },
     rodape: {
         flexDirection: "row", justifyContent: "flex-end", gap: t.size.space2,
         marginTop: t.size.space5,
     },
     gaveta: {
-        position: "absolute", top: 0, bottom: 0, width: "92%", maxWidth: 480, padding: 24,
+        // 0.32.0: o recheio de 20 do `Dialog` nativo da referência (era 24 cru).
+        position: "absolute", top: 0, bottom: 0, width: "92%", maxWidth: 480, padding: t.size.space5,
         backgroundColor: t.color.surface1,
         ...(t.shadow.shadowLg ? { boxShadow: [t.shadow.shadowLg] } : null),
     },
@@ -99,7 +122,10 @@ const folha = criarFolha((t) => ({
     folhaBaixo: {
         position: "absolute", left: 0, right: 0, bottom: 0,
         maxHeight: "90%",
-        paddingHorizontal: 24, paddingTop: t.size.space2, paddingBottom: 24,
+        // 0.32.0 (ADR-0066): recheio de 20, o da folha do pacote nativo da referência (era 24). Em cima,
+        // com o puxador, ficam estes 8 e a faixa dele (8 + o puxador de 4 + 8); sem o puxador, vale o
+        // `folhaSemPuxador`, 20 (eram estes 8 sozinhos).
+        paddingHorizontal: t.size.space5, paddingTop: t.size.space2, paddingBottom: t.size.space5,
         backgroundColor: t.color.popover,
         // HER-03 (06/10/2026, ADR-0058): 32 e não o 22 de painel — a folha acompanha o canto da tela
         // do telefone. Decisão do Victor, olhando as duas na bancada. A lista do `Select` e a folha do
@@ -108,6 +134,7 @@ const folha = criarFolha((t) => ({
         borderTopWidth: t.size.borderWidth, borderTopColor: t.color.border,
         ...(t.shadow.shadowLg ? { boxShadow: [t.shadow.shadowLg] } : null),
     },
+    folhaSemPuxador: { paddingTop: t.size.space5 },
     puxadorArea: { alignItems: "center", paddingVertical: t.size.space2 },
     puxador: { width: 40, height: 4, ...canto(999), backgroundColor: t.color.borderStrong },
 }));
@@ -165,9 +192,8 @@ const naoAtravessa = { onStartShouldSetResponder: () => true };
 export function Dialog({ open, title, children, footer, onClose, scroll = true, style, testID, }) {
     const t = useTokensDoApp();
     const s = folha(t);
-    const strings = useAureaStrings();
     const Corpo = scroll ? ScrollView : View;
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: [s.fundo, s.centro], children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(View, { style: [s.superficie, style], children: [_jsxs(View, { style: s.cabecalho, children: [_jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }), _jsx(IconButton, { name: "x", label: strings.close, appearance: "ghost", size: "sm", onPress: onClose })] }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), footer ? _jsx(View, { style: s.rodape, children: footer }) : null] })] }) }) }));
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: [s.fundo, s.centro], children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(View, { style: [s.superficie, style], children: [_jsx(Text, { size: "lg", weight: 500, accessibilityRole: "header", style: [s.tituloDaJanela, s.tituloComFechar], children: title }), _jsx(View, { style: s.fechar, children: _jsx(CloseButton, { onPress: onClose }) }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), footer ? _jsx(View, { style: s.rodape, children: footer }) : null] })] }) }) }));
 }
 /**
  * A decisão que não se desfaz.
@@ -195,7 +221,7 @@ export function ConfirmDialog({ open, title, description, confirmLabel, cancelLa
     const t = useTokensDoApp();
     const s = folha(t);
     const strings = useAureaStrings();
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onCancel, testID: testID, children: _jsx(View, { style: [s.fundo, s.centro], children: _jsxs(View, { ...naoAtravessa, style: [s.superficie, s.confirmar], children: [_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) }), _jsx(View, { style: s.corpo, children: typeof description === "string"
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "fade", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onCancel, testID: testID, children: _jsx(View, { style: [s.fundo, s.centro], children: _jsxs(View, { ...naoAtravessa, style: [s.superficie, s.confirmar], children: [_jsx(Text, { size: "lg", weight: 500, accessibilityRole: "header", style: s.tituloDaJanela, children: title }), _jsx(View, { style: s.corpo, children: typeof description === "string"
                                 ? _jsx(Text, { size: "md", tone: "muted", children: description })
                                 : description }), _jsxs(View, { style: s.rodape, children: [_jsx(Button, { appearance: "outline", onPress: onCancel, testID: testID ? `${testID}-cancelar` : undefined, children: cancelLabel ?? strings.confirmCancel }), _jsx(Button, { appearance: "solid", tone: destructive ? "danger" : "brand", onPress: onConfirm, testID: testID ? `${testID}-confirmar` : undefined, children: confirmLabel ?? strings.confirmProceed })] })] }) }) }) }));
 }
@@ -242,7 +268,7 @@ export function Drawer({ open, title, children, onClose, side = "right", scroll 
     return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: "none", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { style: [
                             s.gaveta, side === "right" ? s.gavetaDireita : s.gavetaEsquerda,
                             { transform: [{ translateX: desloca }] }, style,
-                        ], children: [_jsxs(View, { style: s.cabecalho, children: [_jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }), _jsx(IconButton, { name: "x", label: strings.close, appearance: "ghost", size: "sm", onPress: onClose })] }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children })] })] }) }) }));
+                        ], children: [_jsx(Text, { size: "lg", weight: 500, accessibilityRole: "header", style: [s.tituloDaJanela, s.tituloComFechar], children: title }), _jsx(View, { style: [s.fechar, s.fecharDaGaveta], children: _jsx(CloseButton, { label: strings.close, onPress: onClose }) }), _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children })] })] }) }) }));
 }
 /**
  * A folha que sobe de baixo. **NÃO existe na web** — é o único componente deste lote sem ficha.
@@ -297,5 +323,5 @@ export function BottomSheet({ open, title, children, onClose, grabber = true, dr
             }).start();
         },
     }), [draggable, onClose, arrasto, reduzir, t.easing.easeEmphasized]);
-    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, ...gestos.panHandlers, onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, style: [s.folhaBaixo, { transform: [{ translateY: arrasto }] }, style], children: [grabber ? (_jsx(View, { style: s.puxadorArea, accessible: false, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) })) : null, title ? (_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 600, accessibilityRole: "header", style: s.titulo, children: title }) })) : null, _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), _jsx(RecuoDaFolha, {})] })] }) }) }));
+    return (_jsx(ForaDaMarca, { children: _jsx(Modal, { visible: open, transparent: true, animationType: reduzir !== false ? "none" : "slide", statusBarTranslucent: true, navigationBarTranslucent: true, onRequestClose: onClose, testID: testID, children: _jsxs(View, { style: s.fundo, children: [_jsx(Pressable, { style: s.fundoDeToque, onPress: onClose, accessible: false, testID: testID ? `${testID}-fundo` : undefined }), _jsxs(Animated.View, { ...naoAtravessa, ...gestos.panHandlers, onLayout: (e) => { altura.current = e.nativeEvent.layout.height; }, style: [s.folhaBaixo, !grabber && s.folhaSemPuxador, { transform: [{ translateY: arrasto }] }, style], children: [grabber ? (_jsx(View, { style: s.puxadorArea, accessible: false, importantForAccessibility: "no-hide-descendants", children: _jsx(View, { style: s.puxador }) })) : null, title ? (_jsx(View, { style: s.cabecalho, children: _jsx(Text, { size: "lg", weight: 500, accessibilityRole: "header", style: s.titulo, children: title }) })) : null, _jsx(Corpo, { ...(scroll ? { contentContainerStyle: s.corpo } : { style: s.corpo }), children: children }), _jsx(RecuoDaFolha, {})] })] }) }) }));
 }

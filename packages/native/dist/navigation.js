@@ -164,37 +164,52 @@ const folha = criarFolha((t) => ({
     rotuloEscondido: { position: "absolute", opacity: 0 },
     // ── NavList ────────────────────────────────────────────────────────────────────────────────
     lista: { gap: t.size.space05 },
+    // 0.32.0 (ADR-0066): a linha da lista do pacote NATIVO da referência — recheio de 16 em volta e vão
+    // de 12; título 16 em peso médio e descrição 14 (no componente). Até a 0.31.0 era a linha da web:
+    // altura mínima de controle (`controlHLg`), 8 em cima e embaixo, 12 dos lados. A altura mínima saiu:
+    // a altura vem do recheio e da linha do texto, como lá.
     linha: {
         flexDirection: "row", alignItems: "center", gap: t.size.space3, width: "100%",
-        minHeight: t.size.controlHLg,
-        paddingVertical: t.size.space2, paddingHorizontal: t.size.space3,
+        paddingHorizontal: t.size.space4,
         ...canto(t.size.radiusCard - t.size.space1),
     },
     // O MIOLO da linha: ícone + texto (+ valor em texto) + seta. Ele é quem toca; o que vem
     // depois dele, na moldura, é IRMÃO — ver o comentário no componente.
-    // Nenhuma medida nova: `flex`, `minWidth` e o MESMO `gap` da moldura.
-    linhaMiolo: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space3 },
+    // ⚠ O recheio de CIMA E DE BAIXO mora aqui, e não na moldura: é o miolo que toca, e na referência
+    // a linha inteira é o alvo. Na moldura ele ficaria fora do toque, e o miolo de uma linha só
+    // mediria a linha do título (24), abaixo dos 44 do alvo mínimo; aqui ele mede 16 + 24 + 16 = 56.
+    // O valor que é componente (irmão) fica no meio da altura, como antes.
+    linhaMiolo: {
+        flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space3,
+        paddingVertical: t.size.space4,
+    },
     linhaTexto: { flex: 1, minWidth: 0 },
     // AN-04: os sinais, com o vão de dentro do texto (`space1`), como o `.nav-list-indicators` da web.
     sinais: { flexDirection: "row", alignItems: "center", gap: t.size.space1 },
     // ── Tabs ───────────────────────────────────────────────────────────────────────────────────
-    // A cápsula é a MESMA do `SegmentedControl`, e o CSS diz isso em voz alta no comentário de
-    // cima do `.tabs` (`aurea.css:1114`): *"Mesma regra da .segmented"*. Os três números vêm de
-    // lá — `gap:3px; padding:3px` — e não de mim.
+    // ~~A cápsula é a MESMA do `SegmentedControl` [...] `gap:3px; padding:3px`~~ — 0.32.0 (ADR-0066):
+    // a lista com cápsula do pacote NATIVO da referência. O trilho tem 3 de recheio lá; aqui é o
+    // `space1` (4), o token mais perto — a escala não tem 3, e escala nova não nasce no meio de um
+    // componente. É o mesmo 4 do `.tabs` da web desta versão. O vão entre as abas é 4, o dela.
+    // A altura sai da aba (6 + a linha de 24 + 6 = 36) mais o trilho: 44. A altura mínima de controle
+    // (`controlHMd`) saiu, como na referência.
     abas: {
-        flexDirection: "row", gap: 3, padding: 3,
-        minHeight: t.size.controlHMd, ...canto(t.size.radiusControl),
+        flexDirection: "row", gap: t.size.space1, padding: t.size.space1,
+        ...canto(t.size.radiusControl),
         backgroundColor: t.color.muted,
     },
-    // `padding:0 14px` é literal no `.tab` (`aurea.css:1127`). A aba NÃO estica (nada de `flex`):
-    // na web ela é conteúdo dentro de um `inline-flex`, e é isso que deixa a lista rolar quando
-    // não cabe, em vez de espremer todas.
+    // A aba da referência nativa: 12 dos lados, 6 em cima e embaixo, 6 de vão entre o que vai dentro
+    // (o rótulo e um ícone, quando o app passa os dois), e o rótulo 16 em peso médio (no componente).
+    // Era o `padding:0 14px` do `.tab` da web antiga. A aba NÃO estica (nada de `flex`): é isso que
+    // deixa a lista rolar quando não cabe, em vez de espremer todas.
     // ⚠ O nome é `abaDeTab` porque `aba` JÁ EXISTE neste arquivo — é o item do `BottomNav`
     // (linha 78), que tem `flex: 1` e cresce. Reusar o nome teria sobrescrito um dos dois em
     // silêncio, e o `tsc` só pegou porque são chaves do mesmo objeto.
     abaDeTab: {
-        alignItems: "center", justifyContent: "center",
-        paddingHorizontal: 14, ...canto(t.size.radiusControl),
+        flexDirection: "row", alignItems: "center", justifyContent: "center",
+        gap: t.size.space1 + t.size.space05,
+        paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
+        ...canto(t.size.radiusControl),
     },
     // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`), pelo mesmo motivo — ADR-0059.
     abaDeTabAtiva: { backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm] },
@@ -204,8 +219,10 @@ const folha = criarFolha((t) => ({
     //   fila                            gap de 1 unidade → space1
     //   aba                             padding-inline de 3 unidades → space3 · padding-block de 1,5
     //                                   → space1 + space05. Rótulo `text-base` + entrelinha 1.5 dá
-    //                                   36, que é o `controlHMd`: a altura da fila da cápsula, então
-    //                                   trocar de variante não muda a altura da fila.
+    //                                   36, que é o `controlHMd`. ~~a altura da fila da cápsula, então
+    //                                   trocar de variante não muda a altura da fila~~ — 0.32.0: a
+    //                                   aba da cápsula também tem 36, mas a fila dela soma o trilho
+    //                                   de 4 de cada lado (44).
     //   indicador (secundária)          border-bottom 2px na cor de destaque → `fioDoEscolhido`
     abasSecundarias: {
         flexDirection: "row", gap: t.size.space1,
@@ -489,7 +506,7 @@ export function NavList({ items, chevron = "caret-right", style, ...rest }) {
             const miolo = (_jsxs(_Fragment, { children: [it.avatar
                         ? _jsx(Avatar, { source: it.avatar.source, fallback: it.avatar.fallback })
                         : it.icon && _jsx(Icon, { name: it.icon, size: "md", color: t.color.foreground }), _jsxs(View, { style: s.linhaTexto, children: [typeof it.label === "string"
-                                ? _jsx(Text, { size: "sm", numberOfLines: 1, children: it.label }) : it.label, it.description != null && (typeof it.description === "string"
+                                ? _jsx(Text, { size: "sm", weight: 500, numberOfLines: 1, children: it.label }) : it.label, it.description != null && (typeof it.description === "string"
                                 ? _jsx(Text, { size: "xs", tone: "muted", numberOfLines: 1, children: it.description })
                                 : it.description)] }), it.indicators && it.indicators.length > 0 && (_jsx(View, { style: s.sinais, children: it.indicators.map((x) => (_jsx(View, { accessibilityLabel: x.label, children: _jsx(Icon, { name: x.icon, size: "sm", color: t.color.mutedForeground }) }, x.label))) })), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron
                         && _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground })] }));
@@ -574,7 +591,7 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
                                 ativa && !secundaria && s.abaDeTabAtiva,
                                 it.disabled && { opacity: t.size.opacityDisabled },
                             ], children: [typeof it.label === "string"
-                                    ? _jsx(Text, { size: "sm", weight: ativa ? 600 : 400, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
+                                    ? _jsx(Text, { size: "sm", weight: secundaria ? (ativa ? 600 : 400) : 500, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
                                     : it.label, ativa && secundaria && _jsx(View, { style: s.fioDaAba })] }, it.id));
                     }) }) }), aberta && panel === "plain" ? (_jsx(View, { accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : aberta ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : null] }));
 }

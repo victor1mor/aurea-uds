@@ -6,6 +6,7 @@ import type { AureaTokens } from "./tokens.js";
 export type AureaFieldSize = "sm" | "md" | "lg";
 export declare const alturaDoTamanho: (t: AureaTokens, s: AureaFieldSize) => number;
 export declare const respiroDoTamanho: (t: AureaTokens, s: AureaFieldSize) => number;
+export declare const respiroDoGatilho: (t: AureaTokens, s: AureaFieldSize) => number;
 type ContextoDeCampo = {
     label?: string;
     hint?: string;
@@ -143,7 +144,7 @@ export interface TextareaProps extends InputProps {
     /** Linhas visíveis. Vira altura mínima, porque no RN não há `rows`. */
     rows?: number;
 }
-/** A caixa alta. Mesmo campo, `multiline`, raio LG e altura mínima de 104 (medida no CSS). */
+/** A caixa alta. Mesmo campo, `multiline`, raio LG e altura mínima de 128 (a da referência, 0.32.0). */
 export declare function Textarea({ rows, size, style, ...rest }: TextareaProps): React.JSX.Element;
 interface ControleProps {
     label?: React.ReactNode;
@@ -348,8 +349,8 @@ export interface SwitchProps extends ControleProps {
  *
  * ⚠ **NÃO é o `Switch` do React Native**, pela mesma razão que o `Spinner` não é o
  * `ActivityIndicator`: aquele desenha o interruptor do sistema no Android e o do iOS no iOS —
- * duas aparências que o `CLAUDE.md` proíbe em voz alta. As medidas aqui são as do CSS: trilho de
- * `altura × 7/6` por `altura × 2/3`, polegar com 3 de folga.
+ * duas aparências que o `CLAUDE.md` proíbe em voz alta. As medidas são as do interruptor da
+ * referência (0.32.0): trilho de 48 × 24 e bolinha em cápsula de 28 × 20, a 2 da borda.
  *
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
@@ -383,6 +384,14 @@ export interface SegmentedControlProps extends ViewProps {
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
 export declare function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, style, ...rest }: SegmentedControlProps): React.JSX.Element;
+/**
+ * O indicador da opção escolhida, nas listas do `Select` e do `Combobox` (0.32.0): o da referência
+ * — a caixa de 20 com o `check` de 16 — e o mesmo glifo da coluna `.combobox-check` da web. A cor
+ * é a do destaque que se lê como ícone nos dois temas (`primaryEmphasis`, ADR-0054). Sai do
+ * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
+ * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
+ */
+export declare const indicadorDaEscolhida: (t: AureaTokens) => React.JSX.Element;
 export interface SelectProps {
     items: Array<{
         value: string;

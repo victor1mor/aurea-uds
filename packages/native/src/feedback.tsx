@@ -10,7 +10,8 @@
 //   .spinner      aurea.css:668   borda 2 currentColor, direita transparente, redondo, .7s linear
 //   .skeleton     aurea.css:1111  raio 7, fundo surface-3, pulso de opacidade .55 em 1.35s
 //   .progress     aurea.css:1105  altura 8, raio 999, trilho surface-3, preenchimento primary
-//   .alert        aurea.css:1088  grade auto/1fr/auto, gap 12, padding 14 16, raio lg, borda 1
+//   .alert        aurea.css:1088  grade auto/1fr/auto, ~~gap 12, padding 14 16, raio lg, borda 1~~
+//                                 → 0.32.0: medidas do nativo da referência, pintura da web (`Alert`)
 //   .empty-state  aurea.css:1823  coluna centrada, gap space-3, padding space-10 space-6
 //   .data-state   aurea.css:1110  grade com gap space-3 e NADA de superfície própria
 //
@@ -20,7 +21,7 @@
 // de uma REGIÃO não emite título de documento.
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
-import {IconButton} from "./actions.js";
+import {CloseButton} from "./actions.js";
 import {canto, criarFolha, estadoAcessivel, letraDoToken} from "./estilos.js";
 import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
@@ -60,13 +61,17 @@ const folha = criarFolha((t: AureaTokens) => ({
   // `flex:1` — mesmo resultado, e `display:grid` não existe no RN (a mesma nota do `Grid`).
   // `alignItems:"flex-start"` porque o ícone acompanha a PRIMEIRA linha do texto, não o centro
   // de um parágrafo de três linhas.
+  // 0.32.0: as medidas do nativo da referência — 12 de recheio em volta e 12 entre as partes (era
+  // 14 em cima e embaixo e 16 dos lados). A pintura é a da web desta versão (`.alert`): fundo de
+  // CARTÃO, sem borda, com a sombra de superfície (`shadowSm` inteira); a cor do estado fica só no
+  // ícone e no título. Até a 0.31.0 o estado tingia o fundo e a borda.
   alerta: {
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
-    paddingVertical: 14, paddingHorizontal: t.size.space4,
+    padding: t.size.space3,
     // HER-02 (06/10/2026): era `radiusLg` (16). Painel é 22 na identidade da Aurea (`CLAUDE.md`
     // §5), como o `Popover`, o `Dialog` e o `Banner`; a referência usa 24 na web e no nativo.
-    borderWidth: t.size.borderWidth, ...canto(t.size.radiusCard),
-    backgroundColor: t.color.secondary, borderColor: t.color.border,
+    ...canto(t.size.radiusCard),
+    backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm],
   },
   // O GRUPO de leitura: ícone + texto, lidos como uma coisa só. Ele existe porque a moldura
   // deixou de ser `accessible` (ver o comentário no componente) — e sem um grupo o título e o
@@ -76,10 +81,6 @@ const folha = criarFolha((t: AureaTokens) => ({
     flex: 1, minWidth: 0,
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
   },
-  alerta_info: {backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info},
-  alerta_success: {backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success},
-  alerta_warning: {backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning},
-  alerta_danger: {backgroundColor: t.color.dangerBg, borderColor: t.color.danger400 ?? t.color.destructive},
   corpoDoAlerta: {flex: 1, gap: 2},
 
   // ── EmptyState ─────────────────────────────────────────────────────────────────────────────
@@ -101,7 +102,10 @@ const folha = criarFolha((t: AureaTokens) => ({
 export type AureaSpinnerSize = "sm" | "md" | "lg";
 
 export interface SpinnerProps {
-  /** `sm` é o padrão, como na web (`.spinner` sem modificador usa `--icon-sm`). */
+  /**
+   * 16 · 24 · 32, e o padrão é o `md` (24) — a escala do pacote nativo da referência (0.32.0).
+   * Até a 0.31.0 era 16 · 20 · 24, com o `sm` de padrão, como a web.
+   */
   size?: AureaSpinnerSize;
   /** O que o leitor de tela anuncia. Sem ele, a frase `loading` do provider. */
   label?: string;
@@ -119,7 +123,7 @@ export interface SpinnerProps {
  * cascata para fazê-lo por ele. Parado, o anel continua desenhado — quem precisa da informação
  * "algo está acontecendo" continua vendo o rótulo.
  */
-export function Spinner({size = "sm", label, decorative, style, testID}: SpinnerProps) {
+export function Spinner({size = "md", label, decorative, style, testID}: SpinnerProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
@@ -139,7 +143,7 @@ export function Spinner({size = "sm", label, decorative, style, testID}: Spinner
     return () => laco.stop();
   }, [giro, reduzir]);
 
-  const lado = size === "lg" ? t.size.iconLg : size === "md" ? t.size.iconMd : t.size.iconSm;
+  const lado = size === "lg" ? t.size.iconXl : size === "md" ? t.size.iconLg : t.size.iconSm;
   const acessibilidade = decorative
     ? {accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants" as const}
     : {accessible: true, accessibilityRole: "progressbar" as const,
@@ -393,7 +397,7 @@ export function Alert({
       // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
       // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
       accessibilityLiveRegion={v === "danger" ? "assertive" : "polite"}
-      style={[s.alerta, s[`alerta_${v}`], style]}
+      style={[s.alerta, style]}
       {...rest}>
       <View
         accessible
@@ -418,15 +422,19 @@ export function Alert({
         style={s.grupoDoAlerta}>
         <Icon name={icon ?? ICONE_DA_VARIANTE[v]} size="md" color={corDoIcone} weight={icon ? undefined : "fill"} />
         <View style={s.corpoDoAlerta}>
-          {title != null && <Text size="sm" weight={600}>{title}</Text>}
+          {/* 0.32.0: o título é 16 em peso médio, na entrelinha do token (24), e na cor do estado
+              (o mesmo par `-400` do ícone); a descrição é 14 (o `xs` do nativo). Era 16 em
+              seminegrito, na cor do texto, e a descrição também 16. */}
+          {title != null && <Text size="base" weight={500} tone={v}>{title}</Text>}
           {children != null
-            ? (typeof children === "string" ? <Text size="sm" tone="muted">{children}</Text> : children)
-            : state ? <Text size="sm" tone="muted">{strings.universalState[state]}</Text> : null}
+            ? (typeof children === "string" ? <Text size="xs" tone="muted">{children}</Text> : children)
+            : state ? <Text size="xs" tone="muted">{strings.universalState[state]}</Text> : null}
         </View>
       </View>
       {/* ⚠ Era `label="Close"` literal, e ficava em inglês num app em português — a tabela de
-          frases não tinha `close` até o Lote 5 criá-la para o `Dialog`. Corrigido junto. */}
-      {onDismiss ? <IconButton appearance="ghost" size="sm" name="x" label={strings.close} onPress={onDismiss} /> : null}
+          frases não tinha `close` até o Lote 5 criá-la para o `Dialog`. Corrigido junto.
+          0.32.0: o X é o `CloseButton` (o círculo neutro de 40), como no aviso da referência. */}
+      {onDismiss ? <CloseButton label={strings.close} onPress={onDismiss} /> : null}
     </View>
   );
 }

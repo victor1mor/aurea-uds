@@ -160,7 +160,7 @@ export interface AureaNavListItem {
     disabled?: boolean;
     /**
      * A foto da linha (AN-04, 03/10/2026) — o formato do `Avatar` daqui (`source`, `fallback`), no
-     * tamanho dele de sempre, o mesmo da web. Toma o lugar do `icon`.
+     * tamanho padrão dele (`md`, 48 desde a 0.32.0). Toma o lugar do `icon`.
      */
     avatar?: {
         source?: ImageSourcePropType | string;

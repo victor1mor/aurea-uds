@@ -63,10 +63,13 @@ describe("E5 · Radio e Checkbox: a marca na altura do texto", () => {
     expect(marca().marginTop ?? 0).toBe(0);
   });
   it("align=\"start\": a marca no meio da primeira linha", () => {
-    render(<Envolve><Radio label="Rótulo longo" description="que quebra em várias linhas" align="start" checked /></Envolve>);
+    // 0.32.0: a marca é metade da altura de TOQUE. No `md` ela tem 24, a linha do rótulo, e a conta
+    // daria 0 — igual a não ter conta. O `sm` (20) é a entrada que ainda a exercita.
+    render(<Envolve><Radio label="Rótulo longo" description="que quebra em várias linhas" align="start" size="sm" checked /></Envolve>);
     expect(linhaDoControle().alignItems).toBe("flex-start");
     const linha = t.size.textBase * t.size.leadingNormal;
-    const lado = t.size.controlHMd / 2;
+    const lado = t.size.touchControlHSm / 2;
+    expect(Math.max(0, (linha - lado) / 2)).toBeGreaterThan(0);
     expect(marca().marginTop).toBe(Math.max(0, (linha - lado) / 2));
   });
 });
@@ -96,7 +99,9 @@ describe("E4 · as folhas de baixo: nada em volta da lista reivindica o toque", 
 // não calcula recuo nenhum — e o do `Combobox` e o do `BottomSheet` eram vazios. Agora o recuo vem
 // do contexto do React (como na referência no nativo) e vira um espaço de altura conhecida no fim da folha.
 // Entrada que reprova no código de antes: um recuo de 48 no contexto — antes nada media 48.
-const RECUO = 48;
+// 0.32.0: agora o campo mede 48 (a altura de toque adotada pela 0.32.0), e o recuo passa a 34, o
+// do iPhone, que nada na folha mede.
+const RECUO = 34;
 const espacos = (h: number) => __instancias("View").filter((p) => StyleSheet.flatten(p.style)?.height === h);
 const FOLHAS: [string, () => React.ReactElement][] = [
   ["Select", () => <Select items={CINQUENTA} value="v0" label="Ano" />],

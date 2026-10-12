@@ -74,25 +74,22 @@ import {IconButton} from "./actions.js";
 import {canto, cantosDeCima, criarFolha, estadoAcessivel} from "./estilos.js";
 import {Spinner} from "./feedback.js";
 import {Icon, type AureaIcon} from "./icon.js";
-import {KeyboardAvoiding, useCampo, type AureaFieldSize} from "./inputs.js";
+import {
+  KeyboardAvoiding, alturaDoTamanho, indicadorDaEscolhida, respiroDoGatilho, respiroDoTamanho, useCampo,
+  type AureaFieldSize,
+} from "./inputs.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, useTokensDoApp, ForaDaMarca, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
-// As mesmas contas do `inputs.tsx`, e elas são repetidas AQUI de propósito: exportá-las de lá
-// tornaria pública uma conta interna do outro módulo, e um `import` de função privada entre
-// módulos irmãos é o começo de um acoplamento que ninguém declara. São três linhas.
-const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
-  s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
+// A altura e o respiro do campo vêm do `inputs.tsx` (0.32.0). Eram repetidos aqui, de propósito,
+// para não tornar pública uma conta interna de lá — mas desde 02/10/2026 o `inputs.tsx` já os
+// exporta ao `FileInput`, e a escala de toque mostrou o custo da cópia: duas contas para mudar
+// juntas. Saem do arquivo, não do pacote.
 const fonteDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg : t.size.textBase;  // ADR-0050: um degrau acima da web
-// ⚠ O `13` do tamanho `md` NÃO é número inventado: é o `padding-inline` literal do `.input`
-// (`aurea.css:685`), e é o mesmo valor que o `inputs.tsx:60` usa. Não há token de 13 — a escala
-// tem `space3`=12 e `space4`=16 —, e é por isso que o CSS o escreve cru dos dois lados.
-const respiroDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
-  s === "sm" ? t.size.space3 : s === "lg" ? t.size.space4 : 13;
 
 // ── AS DUAS CONSTANTES DE INTERAÇÃO, e elas NÃO são geometria ────────────────────────────────
 // Ficam nomeadas e no topo porque número solto no meio do componente é o que o `CLAUDE.md`
@@ -186,10 +183,14 @@ const folha = criarFolha((t: AureaTokens) => ({
   // `CLAUDE.md` ("correção local é proibida sem responder quem mais tem esse problema") é o que
   // traz as duas linhas para cá, e este campo é exatamente "quem mais".
   campoDeTexto: {flex: 1, minWidth: 0, paddingVertical: 0, textAlignVertical: "center"},
+  // 0.32.0: a opção da lista do `Select` (`inputs.tsx`), que é a da referência — 12 em cima e
+  // embaixo, 8 dos lados, 8 até o indicador, 48 de toque no mínimo. Era `controlHLg` (40), 16 dos
+  // lados e 8 em cima e embaixo. As duas folhas continuam iguais, que é o combinado acima.
   opcao: {
-    minHeight: t.size.controlHLg, justifyContent: "center",
-    paddingHorizontal: t.size.space4, paddingVertical: t.size.space2,
+    minHeight: t.size.touchControlHMd, flexDirection: "row", alignItems: "center", gap: t.size.space2,
+    paddingHorizontal: t.size.space2, paddingVertical: t.size.space3,
   },
+  textoDaOpcao: {flex: 1, minWidth: 0},
   opcaoEscolhida: {backgroundColor: t.color.surface3 ?? t.color.muted},
   vazio: {paddingHorizontal: t.size.space4, paddingVertical: t.size.space5, alignItems: "center"},
   carregando: {paddingVertical: t.size.space4, alignItems: "center"},
@@ -393,7 +394,9 @@ export function Combobox({
       <View
         style={[
           s.caixa,
-          {height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam)},
+          // 0.32.0: o gatilho do `Select` — altura de toque, 16 dos lados no `md` e 12 entre o
+          // texto e as ações (era 13 e nada).
+          {height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoGatilho(t, tam), gap: t.size.space3},
           campo?.invalido && s.invalido,
           // Sobre a marca a tinta vence inválido — ver `usePeleSobreAMarca`.
           peleDaMarca,
@@ -507,7 +510,8 @@ export function Combobox({
 
             {loading && (
               <View style={sf.carregando}>
-                <Spinner label={strings.comboboxLoading} />
+                {/* 0.32.0: o `Spinner` nasce no `md` (24); dentro da lista do campo ele fica no `sm` (16), o de sempre. */}
+                <Spinner size="sm" label={strings.comboboxLoading} />
               </View>
             )}
 
@@ -544,14 +548,17 @@ export function Combobox({
                     item.value === value?.value && sf.opcaoEscolhida,
                     item.disabled && sf.desabilitado,
                   ]}>
-                  <Text size="md" weight={item.value === value?.value ? 600 : 400}>
-                    {item.label}
-                  </Text>
-                  {/* `xs` é o 14 no telefone (o mapa da ADR-0050 sobe um degrau): o `text-sm`
-                      da referência, o mesmo da descrição do `Checkbox` e do `RadioGroup`. */}
-                  {item.description != null && (
-                    <Text size="xs" tone="muted">{item.description}</Text>
-                  )}
+                  <View style={sf.textoDaOpcao}>
+                    {/* 0.32.0: 16 em peso médio em todas, como o `Select` (a escolhida era 600 e
+                        as outras 400); quem marca a escolhida é o fundo e o indicador. */}
+                    <Text size="md" weight={500}>{item.label}</Text>
+                    {/* `xs` é o 14 no telefone (o mapa da ADR-0050 sobe um degrau): o `text-sm`
+                        da referência, o mesmo da descrição do `Checkbox` e do `RadioGroup`. */}
+                    {item.description != null && (
+                      <Text size="xs" tone="muted">{item.description}</Text>
+                    )}
+                  </View>
+                  {item.value === value?.value && indicadorDaEscolhida(tf)}
                 </Pressable>
               )}
             />

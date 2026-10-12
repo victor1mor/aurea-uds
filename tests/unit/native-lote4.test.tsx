@@ -57,7 +57,8 @@ describe("Field — a ligação que a web faz e o RN não tem", () => {
 
   it("o tamanho e o desabilitado descem pelo contexto", () => {
     render(<Envolve><Field label="A" size="lg" disabled><Input /></Field></Envolve>);
-    expect(estilo("TextInput").height).toBe(tokens.size.controlHLg);
+    // 0.32.0: o campo adotou a escala de toque (o `lg` é 56; era o `controlHLg`, 40).
+    expect(estilo("TextInput").height).toBe(tokens.size.touchControlHLg);
     expect(props("TextInput").editable).toBe(false);
   });
 
@@ -83,9 +84,10 @@ describe("Field — a ligação que a web faz e o RN não tem", () => {
 
   // A caixa alta é o contrário nos dois lados, e o `.textarea` da web diz os dois:
   // `padding-block:var(--space-3)` e o texto começando em cima.
+  // 0.32.0: o respiro passou ao da caixa alta da referência, 8 (`space2`); era o 12 da web.
   it("a caixa alta tem o respiro do CSS e alinha no topo", () => {
     render(<Envolve><Textarea /></Envolve>);
-    expect(estilo("TextInput").paddingVertical).toBe(tokens.size.space3);
+    expect(estilo("TextInput").paddingVertical).toBe(tokens.size.space2);
     expect(estilo("TextInput").textAlignVertical).toBe("top");
   });
 
@@ -110,7 +112,7 @@ describe("Input e Textarea", () => {
     render(<Envolve><Textarea /></Envolve>);
     const e = estilo("TextInput");
     expect(props("TextInput").multiline).toBe(true);
-    expect(e.minHeight).toBe(104);
+    expect(e.minHeight).toBe(128);  // 0.32.0: a da referência (era 104, a da web)
     expect(e.height).toBeUndefined();
     // E o raio é o LG, não o de controle: uma caixa alta em pílula viraria cápsula.
     expect(e.borderRadius).toBe(tokens.size.radiusLg);
@@ -137,10 +139,11 @@ describe("Checkbox e Radio — o mesmo desenho, duas semânticas", () => {
 
   // DEFEITO: a marca com tamanho fixo. No CSS ela é METADE da altura de controle, e é assim que
   // ela cresce junto com a densidade sem token próprio.
+  // 0.32.0: da altura de TOQUE, que o campo adotou (o `lg` dá 28; era 20).
   it("a marca é metade da altura do controle", () => {
     render(<Envolve><Checkbox label="A" size="lg" /></Envolve>);
     const marca = __instancias("View").map((p) => StyleSheet.flatten(p.style))
-      .find((e) => e.width === tokens.size.controlHLg / 2);
+      .find((e) => e.width === tokens.size.touchControlHLg / 2);
     expect(marca).toBeDefined();
   });
 
@@ -148,7 +151,8 @@ describe("Checkbox e Radio — o mesmo desenho, duas semânticas", () => {
   it("a caixa é quadrada de canto suave; o rádio é redondo", () => {
     render(<Envolve><Checkbox label="A" /></Envolve>);
     const raios = __instancias("View").map((p) => StyleSheet.flatten(p.style).borderRadius);
-    expect(raios).toContain(5);
+    // 0.32.0: o canto é o `radiusXs` (6), o do `.checkbox .control-mark` da web; era 5 cru.
+    expect(raios).toContain(tokens.size.radiusXs);
     render(<Envolve><Radio label="B" /></Envolve>);
     const depois = __instancias("View").map((p) => StyleSheet.flatten(p.style).borderRadius);
     expect(depois).toContain(tokens.size.radiusFull);
@@ -172,13 +176,15 @@ describe("Switch — o interruptor que é NOSSO", () => {
   });
 
   // DEFEITO: as medidas do trilho inventadas. No CSS são frações da altura de controle.
-  it("o trilho mede altura×7/6 por altura×2/3, como no CSS", () => {
+  // 0.32.0: o nativo adotou o interruptor da referência — o trilho é a altura de TOQUE por metade
+  // dela (48 × 24 no `md`); era `altura × 7/6` por `altura × 2/3` da web (42 × 24).
+  it("o trilho mede a altura de toque por metade dela", () => {
     render(<Envolve><Switch label="A" /></Envolve>);
-    const h = tokens.size.controlHMd;
+    const h = tokens.size.touchControlHMd;
     const trilho = __instancias("View").map((p) => StyleSheet.flatten(p.style))
-      .find((e) => e.width === h * 7 / 6);
+      .find((e) => e.width === h);
     expect(trilho).toBeDefined();
-    expect(trilho!.height).toBe(h * 2 / 3);
+    expect(trilho!.height).toBe(h / 2);
   });
 
   // A mesma regra do Lote 2, e ela vale para TODA animação do pacote: com "menos movimento"
