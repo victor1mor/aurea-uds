@@ -18,6 +18,10 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Toast as BaseToast } from "@base-ui/react/toast";
 import { defaultStrings, defaultSpriteUrl } from "./pure.js";
 export { cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity } from "./pure.js";
+// Os controles da Aurea que moram FORA do pacote principal (o `DatePicker`, em `./calendar`, 0.32.0) e
+// entregam o `id` ao nó focal. O `Field` os nomeia com `<label for>`, como os da lista dele; eles se
+// registram aqui ao carregar, porque importar cada um no `Field` puxaria o motor deles para todo app.
+export const controlesRotulaveis = new WeakSet();
 export const StringsContext = createContext(defaultStrings);
 export const useAureaStrings = () => useContext(StringsContext);
 export const SpriteContext = createContext(defaultSpriteUrl);

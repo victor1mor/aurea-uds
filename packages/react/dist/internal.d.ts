@@ -1,6 +1,7 @@
 import React from "react";
 import { type AureaStrings, type AureaTheme, type AureaDensity } from "./pure.js";
 export { cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity, type AureaStrings, type UniversalState, type AureaTheme, type AureaDensity } from "./pure.js";
+export declare const controlesRotulaveis: WeakSet<object>;
 export declare const StringsContext: React.Context<AureaStrings>;
 export declare const useAureaStrings: () => AureaStrings;
 export declare const SpriteContext: React.Context<string>;

@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 38,
-    "componentes": 138,
+    "componentes": 139,
     "hooks": 9,
     "aliasesLiterais": 108,
-    "propsDistintas": 344
+    "propsDistintas": 348
   },
   "aliases": {
     "ButtonVariant": {
@@ -200,6 +200,11 @@
     "CalendarProps": {
       "module": "calendar",
       "raw": "React.ComponentProps<typeof DayPicker> & { label?: string; }",
+      "union": null
+    },
+    "DatePickerProps": {
+      "module": "calendar",
+      "raw": "DatePickerBase & ({ range?: false; value?: Date; defaultValue?: Date; onChange?: (d: Date) => void; } | { range: true; value?: DateRange; defaultValue?: DateRange; onChange?: (r: DateRange) => void; })",
       "union": null
     },
     "ChatDirection": {
@@ -3931,6 +3936,125 @@
               "name": "label",
               "optional": true,
               "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "DatePicker",
+          "kind": "function",
+          "propsType": "DatePickerProps",
+          "props": [
+            {
+              "name": "minimumDate",
+              "optional": true,
+              "type": "Date",
+              "values": null
+            },
+            {
+              "name": "maximumDate",
+              "optional": true,
+              "type": "Date",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "DayPickerLocale",
+              "values": null
+            },
+            {
+              "name": "format",
+              "optional": true,
+              "type": "(d: Date) => string",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName | false",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "range",
+              "optional": false,
+              "type": "false | true",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "Date | DateRange",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "Date | DateRange",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "(d: Date) => void | (r: DateRange) => void",
               "values": null
             }
           ]

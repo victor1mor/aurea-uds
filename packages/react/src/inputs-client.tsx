@@ -13,7 +13,7 @@ import {OTPField as BaseOTPField} from "@base-ui/react/otp-field";
 import {Slider as BaseSlider} from "@base-ui/react/slider";
 import {RadioGroup as BaseRadioGroup} from "@base-ui/react/radio-group";
 import {Radio as BaseRadio} from "@base-ui/react/radio";
-import {cx, useAureaStrings, usePortalContainer, useReorder} from "./internal.js";
+import {cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis} from "./internal.js";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
@@ -101,7 +101,9 @@ function elementoRotulavel(tipo:ReactElement["type"]):boolean{
   // reprovava no axe com "Form elements must have labels". Fora desta lista o Field vira GRUPO e
   // não pendura `htmlFor`, então o <input> de dentro ficava sem nome. Ele qualifica pela mesma
   // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
-  return ([Input,Select,Textarea,SearchField,PasswordField,Checkbox,Radio,Switch,Range,Combobox,MultiCombobox] as unknown[]).includes(tipo);
+  return ([Input,Select,Textarea,SearchField,PasswordField,Checkbox,Radio,Switch,Range,Combobox,MultiCombobox] as unknown[]).includes(tipo)
+    // os que moram fora do pacote principal e se registraram (o `DatePicker`, 0.32.0)
+    ||(typeof tipo==="function"&&controlesRotulaveis.has(tipo));
 }
 export function Field({label,hint,description,error,children,className,id,name,orientation,labelWidth,style,required,...props}:FieldProps){
   const auto=React.useId();
@@ -152,7 +154,9 @@ export function Field({label,hint,description,error,children,className,id,name,o
   const estilo=labelWidth?{...style,"--field-label-width":labelWidth==="auto"?"max-content":labelWidth} as React.CSSProperties:style;
   const corpo=<div className={cx("field",peleDoEixo("field",orientation,"vertical","field"),className)} {...(nomeAqui?{}:{role:"group","aria-labelledby":idRotulo,...(rotulavel?{}:{"aria-describedby":descrito})})} style={estilo} {...props}>
     <span className="label">
-      {nomeAqui?<label htmlFor={idControle}>{label}{asterisco}</label>:<span id={idRotulo}>{label}{asterisco}</span>}
+      {/* O `<label>` tem `for` E `id` (0.32.0, como o rótulo da biblioteca de acessibilidade do mercado): o `id`
+          deixa outra parte do controle apontar para ele — a janela do `DatePicker` se chama pelo rótulo. */}
+      {nomeAqui?<label htmlFor={idControle} id={idRotulo}>{label}{asterisco}</label>:<span id={idRotulo}>{label}{asterisco}</span>}
       {hint&&<span className="hint" id={idHint}>{hint}</span>}
     </span>
     {controleFinal}

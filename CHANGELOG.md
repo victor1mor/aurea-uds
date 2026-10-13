@@ -19,8 +19,8 @@ em inglês e ficam como estão: são registro.
 
 ### Os componentes novos da 0.32.0 (em construção)
 
-- `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle` e
-  `TagGroup` — a nota está na seção `[0.32.0]`, abaixo.
+- `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
+  `TagGroup` e `DatePicker` (na web; o nativo já o tinha) — a nota está na seção `[0.32.0]`, abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -148,6 +148,18 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **`Card variant="outline"`**, na web e no nativo — o cartão da cor de onde ele está, só com a linha em
   volta (a caixa grande do Início da referência; o site usa na vitrine). O nome é o da referência para "sem
   fundo, com contorno"; o `transparent` do cartão dela tira também a linha.
+- **`DatePicker` na web** ([ADR-0068](decisions/0068-o-datepicker-da-web-e-componente.md), escolha do Victor:
+  *"data B"*), em `@aurea-uds/react/calendar` — o mesmo nome e as mesmas props do nativo (`value`,
+  `onChange`, `minimumDate`, `maximumDate`, `disabled`, `size`, `format`, `placeholder`, `icon`), mais
+  `defaultValue`, `name`, **`range`** (o intervalo, como variação) e **`locale`**. O gatilho é o campo do
+  `Select` com o calendário no lugar da seta; a janela é o `Calendar` num popover, com nome. A data única fecha
+  ao escolher; o intervalo, no segundo clique, e cada abertura começa um intervalo novo. O formulário recebe a
+  data LOCAL (`aaaa-mm-dd`; o intervalo, `aaaa-mm-dd/aaaa-mm-dd`). Dentro de um `Field`, o rótulo nomeia o
+  gatilho, e a janela do calendário APONTA para ele (`aria-labelledby`).
+  - **A língua é o `locale`** (escolha do Victor, 13/10/2026): o mesmo objeto que o `Calendar` recebe
+    (`import {ptBR} from "react-day-picker/locale"`), e o campo e o calendário mudam JUNTOS. Sem ele, inglês, o
+    padrão do motor. Nunca a língua do ambiente: com ela, o servidor e o navegador escreviam textos diferentes
+    e a página perdia a hidratação (medido no catálogo). O texto da data leva `lang` com a língua dela.
 - **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
   (`shortcuts`, ligada; DOC-07).
 - **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
@@ -234,6 +246,9 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 
 ### Mudou
 
+- **`Field`: o `<label>` tem `id`**, além do `for` (escolha do Victor, 13/10/2026), como o rótulo da biblioteca
+  de acessibilidade do mercado — outra parte do controle pode apontar para ele (a janela do `DatePicker`).
+  Nada muda na tela.
 - **O site (aureauds.dev) segue a documentação da referência** ([ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md),
   escolha do Victor): o topo em duas linhas com a logo da Aurea; o menu em ordem alfabética, com os selos
   "New" e "Updated" tirados dos dados; a página de componente na ordem dela — o título com "Copy Markdown",
@@ -420,6 +435,9 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **Mais duas frases no `AureaStrings` da web** — `graphLegendKind` ("Tipo de ligação") e
   `graphLegendStatus` ("Estado"), os títulos das duas partes da legenda do mapa. Mesma regra: quem monta o
   objeto inteiro acrescenta; o `ptBR` já as traz.
+- **Mais duas frases no `AureaStrings` da web** — `datePlaceholder` ("Escolher data", o mesmo nome do
+  nativo) e `dateRangePlaceholder` ("Escolher período"), o gatilho vazio do `DatePicker`. Mesma regra: quem
+  monta o objeto inteiro acrescenta; o `ptBR` já as traz.
 - `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
   compilar.
 - `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.

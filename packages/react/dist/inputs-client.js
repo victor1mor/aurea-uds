@@ -14,7 +14,7 @@ import { OTPField as BaseOTPField } from "@base-ui/react/otp-field";
 import { Slider as BaseSlider } from "@base-ui/react/slider";
 import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
-import { cx, useAureaStrings, usePortalContainer, useReorder } from "./internal.js";
+import { cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis } from "./internal.js";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
@@ -78,7 +78,9 @@ function elementoRotulavel(tipo) {
     // reprovava no axe com "Form elements must have labels". Fora desta lista o Field vira GRUPO e
     // não pendura `htmlFor`, então o <input> de dentro ficava sem nome. Ele qualifica pela mesma
     // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
-    return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox].includes(tipo);
+    return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox].includes(tipo)
+        // os que moram fora do pacote principal e se registraram (o `DatePicker`, 0.32.0)
+        || (typeof tipo === "function" && controlesRotulaveis.has(tipo));
 }
 export function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, required, ...props }) {
     const auto = React.useId();
@@ -130,7 +132,7 @@ export function Field({ label, hint, description, error, children, className, id
     // árvore de acessibilidade enquanto a frase de erro aparece na tela. Pior que não mostrar.
     const controleFinal = name ? _jsx(BaseField.Control, { render: controle }) : controle;
     const estilo = labelWidth ? { ...style, "--field-label-width": labelWidth === "auto" ? "max-content" : labelWidth } : style;
-    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsxs("label", { htmlFor: idControle, children: [label, asterisco] }) : _jsxs("span", { id: idRotulo, children: [label, asterisco] }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
+    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsxs("label", { htmlFor: idControle, id: idRotulo, children: [label, asterisco] }) : _jsxs("span", { id: idRotulo, children: [label, asterisco] }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
     // `Field.Root` do motor entra SÓ quando há `name`: é ele que liga o campo à chave de `errors`
     // do formulário. Ele não desenha nada — é contexto — então a pele não muda.
     return name ? _jsx(BaseField.Root, { name: name, invalid: error ? true : undefined, render: corpo }) : corpo;

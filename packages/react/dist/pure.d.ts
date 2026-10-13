@@ -230,6 +230,8 @@ export interface AureaStrings {
     bottomNavLabel: string;
     themeToDark: string;
     themeToLight: string;
+    datePlaceholder: string;
+    dateRangePlaceholder: string;
     universalState: Record<UniversalState, string>;
 }
 export declare const defaultStrings: AureaStrings;

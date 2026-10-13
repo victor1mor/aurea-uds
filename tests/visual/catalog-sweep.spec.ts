@@ -455,6 +455,27 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await expect(page.getByRole("dialog", {name: "Search the site"})).toBeVisible();
   });
 
+  // ADR-0068 (13/10/2026): o `DatePicker` da web. A pele (`.date-picker-trigger`) tira a seta do campo do Select
+  // e põe o calendário no fim; o clique abre o calendário com o foco num dia, e o Esc fecha devolvendo o foco.
+  // A prévia é VIVA (`embed`): o componente mora na moldura, então tudo se procura dentro dela.
+  test("o DatePicker: o gatilho sem a seta, o calendário abre com foco e o Esc devolve o foco", async ({page}) => {
+    await page.goto("/apps/catalog/datepicker.html");
+    const moldura = page.frameLocator(".demo-panel > iframe.demo-frame").first();
+    const gatilho = moldura.locator(".date-picker-trigger").first();
+    await expect(gatilho).toHaveAccessibleName("Check-in");
+    expect(await gatilho.evaluate((e) => getComputedStyle(e).backgroundImage)).toBe("none");
+    const icone = gatilho.locator(".icon");
+    const [g, i] = [(await gatilho.boundingBox())!, (await icone.boundingBox())!];
+    expect(g.x + g.width - (i.x + i.width)).toBeLessThan(24);
+    await gatilho.click();
+    const janela = moldura.getByRole("dialog", {name: "Check-in"});
+    await expect(janela.getByRole("grid").first()).toBeVisible();
+    await expect(janela.locator("td button:focus")).toHaveCount(1);
+    await page.keyboard.press("Escape");
+    await expect(janela).toHaveCount(0);
+    await expect(gatilho).toBeFocused();
+  });
+
   // O Victor, 13/10/2026: a barra de rolagem da lateral "só aparece se o mouse fica em cima" e é clarinha.
   // Medido pela cor da barra (o caminho padrão); o WebKit sem `scrollbar-color` usa o caminho do webkit,
   // que o teste de unidade cobra no texto do CSS.
@@ -486,8 +507,14 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/\/timeline\.html$/);
     await expect(page.getByRole("dialog", {name: "Search the site"})).toHaveCount(0);
-    await page.keyboard.press("Control+k");
-    await expect(page.getByRole("dialog", {name: "Search the site"})).toBeVisible();
+    // A página nova carrega a busca de novo (`search.js`, adiado): o atalho só existe depois de ela montar.
+    // Na varredura cheia o Firefox apertou antes disso (13/10/2026) — sozinho, o teste passava.
+    await page.waitForLoadState("load");
+    await expect(page.locator("#site-search-root")).toBeAttached();
+    await expect(async () => {
+      await page.keyboard.press("Control+k");
+      await expect(page.getByRole("dialog", {name: "Search the site"})).toBeVisible({timeout: 1000});
+    }).toPass({timeout: 10000});
   });
 
   test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {

@@ -3824,6 +3824,12 @@ button.tag-main { cursor:pointer; }
    centralizado; e o valor longo termina em "…" em vez de passar por baixo da seta. */
 .select-trigger { display:flex; align-items:center; text-align:start; cursor:pointer; }
 .select-trigger:disabled,.select-trigger[data-disabled] { cursor:not-allowed; }
+/* O GATILHO DO `DatePicker` (0.32.0, ADR-0068) é o campo do `Select`, com o calendário no lugar da seta:
+   sem a seta desenhada no fundo, o recheio do fim volta ao do lado de dentro, e o ícone vai no fim. */
+.date-picker-trigger { gap:var(--space-2); padding-inline-end:var(--step-field-px,var(--space-3)); background-image:none; }
+.date-picker-trigger > .icon { flex:none; color:var(--muted-foreground); }
+/* A janela abraça o calendário (o `.popover` tem um piso de largura para texto, e aqui não há texto). */
+.date-picker-popover { min-width:0; }
 .select-value { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .select-value[data-placeholder] { color:var(--muted-foreground); }
 .combobox-popup { inline-size:var(--anchor-width); min-inline-size:0; max-inline-size:none; max-block-size:min(320px,var(--available-height)); overflow-y:auto; overscroll-behavior:contain; }
