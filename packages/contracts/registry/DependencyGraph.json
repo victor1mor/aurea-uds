@@ -117,7 +117,7 @@
       "name": "edges",
       "type": "GraphEdgeItem[]",
       "default": "—",
-      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types. An edge can attach to ports (`fromPort`, `toPort`), write port names at its ends (`sourceLabel`, `targetLabel`), and say what it is without relying on colour: `pattern` (solid, dashed, dotted, double), `weight` (regular, thick, heavy), `mark` in the middle (cross, dot, lock), a `count` (for example the members of a link aggregation) and a `legend` name. Round 2: `priority` decides which label stays when two labels touch (higher wins; on a tie, the earlier edge)."
+      "description": "{from, to} — not {source, target}. Keeping our own words is what lets the engine be replaced without breaking anyone, the same reason Chart does not expose Recharts types. An edge can attach to ports (`fromPort`, `toPort`), write port names at its ends (`sourceLabel`, `targetLabel`), and say what it is without relying on colour: `pattern` (solid, dashed, dotted, double), `weight` (regular, thick, heavy), `mark` in the middle (cross, dot, lock), a `count` (for example the members of a link aggregation) and a `legend` name — the KIND of link (copper, fibre). Its STATE is separate: `status` (`label`, `tone`, and an optional `mark` such as the cross of a down link), the same shape as a node's status badge. The tone colours the line and doubles its thickness (all three weights double together, so speed still reads between coloured lines) — a hairline loses its colour when the map is zoomed out. The word goes into the legend, so colour is never the only signal. Round 2: `priority` decides which label stays when two labels touch (higher wins; on a tie, the earlier edge)."
     },
     {
       "name": "selectedId",
@@ -213,7 +213,7 @@
       "name": "legend",
       "type": "boolean",
       "default": "false",
-      "description": "A legend built from what is on the canvas: one row per distinct `legend` name of the edges, drawn with that edge's own pattern, weight and mark."
+      "description": "A legend built from what is on the canvas, in two parts: the KIND of link (one row per distinct `legend` name, drawn without colour) and its STATE (one row per distinct `status.label`, drawn in its tone). Each sample shows what all the lines in its row share — a fibre row stays double even when only some fibre lines are thick. With only one part, it is a single list without titles."
     },
     {
       "name": "focusId",

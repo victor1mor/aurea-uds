@@ -18,6 +18,10 @@ export interface AureaStrings {
     loading: string;
     /** O que o `DataState` mostra em `error` sem `message`. */
     dataError: string;
+    /** O que o `DataState catchErrors` mostra quando o conteúdo quebra (MNT-25, 0.32.0). */
+    dataCrashed: string;
+    /** O botão que desenha de novo o conteúdo que quebrou. */
+    dataRetry: string;
     /** O título que o `EmptyState` e o `DataState` usam sem `title`. */
     dataEmpty: string;
     /** O nome da barra inferior para o leitor de tela. */

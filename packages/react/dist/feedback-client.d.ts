@@ -31,7 +31,7 @@ export declare function Spinner({ size, label, decorative, className, ...props }
     decorative?: boolean;
 }): React.JSX.Element;
 export type DataStateValue = "loading" | "error" | "empty" | UniversalState;
-export declare function DataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export type DataStateProps = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     state?: DataStateValue;
     message?: ReactNode;
     skeleton?: ReactNode;
@@ -39,7 +39,12 @@ export declare function DataState({ state, message, skeleton, emptyTitle, emptyI
     emptyIcon?: IconName;
     action?: ReactNode;
     children: ReactNode | (() => ReactNode);
-}): React.JSX.Element;
+    /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com "Tentar de novo". */
+    catchErrors?: boolean;
+    /** Recebe o erro que a barreira pegou — para o app registrar. */
+    onCatch?: (error: unknown, info: React.ErrorInfo) => void;
+};
+export declare function DataState({ catchErrors, onCatch, ...props }: DataStateProps): React.JSX.Element;
 export declare function EmptyState({ icon, title, titleAs: TitleTag, description, action, state }: {
     icon?: IconName;
     title: ReactNode;

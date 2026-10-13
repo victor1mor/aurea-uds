@@ -15,6 +15,8 @@ export interface AureaStrings {
     close: string;
     confirmCancel: string;
     dataError: string;
+    dataCrashed: string;
+    dataRetry: string;
     dataEmpty: string;
     confirmProceed: string;
     paginationLabel: string;
@@ -170,6 +172,8 @@ export interface AureaStrings {
     graphZoomOut: string;
     graphFit: string;
     graphLegend: string;
+    graphLegendKind: string;
+    graphLegendStatus: string;
     graphOverview: string;
     graphConnections: string;
     graphShow: string;

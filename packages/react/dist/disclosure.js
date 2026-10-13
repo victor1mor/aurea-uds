@@ -10,7 +10,7 @@ import { soOValor } from "./pure.js";
 import { Icon } from "./system.js";
 export function Accordion({ items, variant = "default", multiple = false, defaultValue, className }) {
     const grupo = React.useId();
-    return _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault() : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx(Icon, { name: "caret-down", className: "accordion-chevron" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
+    return _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault() : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx("span", { className: "accordion-chevron", "aria-hidden": "true" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
 }
 // COLLAPSIBLE — uma seção que abre e fecha, com o estado do lado de quem usa.
 //

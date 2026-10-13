@@ -3,11 +3,11 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 37,
+    "modulos": 38,
     "componentes": 138,
     "hooks": 9,
     "aliasesLiterais": 107,
-    "propsDistintas": 339
+    "propsDistintas": 341
   },
   "aliases": {
     "ButtonVariant": {
@@ -292,6 +292,11 @@
     "DataStateValue": {
       "module": "feedback-client",
       "raw": "\"loading\" | \"error\" | \"empty\" | UniversalState",
+      "union": null
+    },
+    "DataStateProps": {
+      "module": "feedback-client",
+      "raw": "HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & { state?: DataStateValue; message?: ReactNode; skeleton?: ReactNode; emptyTitle?: ReactNode; emptyIcon?: IconName; action?: ReactNode; children: ReactNode | (() => ReactNode); /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com \"Tentar de novo\". */ catchErrors?: boolean; /** Recebe o erro que a barreira pegou — para o app registrar. */ onCatch?: (error: unknown, info: React.ErrorInfo) => void; }",
       "union": null
     },
     "UploadFn": {
@@ -4772,7 +4777,7 @@
         {
           "name": "DataState",
           "kind": "function",
-          "propsType": null,
+          "propsType": "DataStateProps",
           "props": [
             {
               "name": "state",
@@ -4825,6 +4830,18 @@
               "name": "children",
               "optional": false,
               "type": "ReactNode | (() => ReactNode)",
+              "values": null
+            },
+            {
+              "name": "catchErrors",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onCatch",
+              "optional": true,
+              "type": "(error: unknown, info: React.ErrorInfo) => void",
               "values": null
             }
           ]
@@ -5102,6 +5119,11 @@
       "clientDirective": false
     },
     "graph-geometria": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "graph-worker": {
       "components": [],
       "hooks": [],
       "clientDirective": false

@@ -195,8 +195,44 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
     (ação, link, alternável, escolha única, submenu que abre no lugar, seção). Só no nativo, por enquanto: o
     `destructive` do item de ação. A janela pinta o fundo pelo tema do app.
 
+- **O mapa de rede, os pedidos do app (passo 10):**
+  - **`GraphEdgeItem.status`** (MNT-26) — o ESTADO da linha, como o selo do nó: `label`, `tone`
+    (`neutral`, `info`, `success`, `warning`, `danger`) e um `mark` opcional, o sinal no meio da linha (o ×
+    do "Caído"), ao lado da marca do tipo. O tom pinta o traço na cor de letra e borda sobre a tela (o par
+    `-400`); no alto contraste, a linha de cor continua de cor. A linha com cor tem o DOBRO da espessura
+    (ordem do Victor): medido com o mapa no "caber na tela", a linha de 1 não chegava à cor de verdade em
+    ponto nenhum e a verde parecia cinza; com 2, a cor aparece. As três espessuras dobram juntas, para a
+    velocidade continuar legível entre as linhas com cor.
+  - **A legenda do mapa em duas partes** (escolha do Victor, depois de pesquisar as ferramentas de mapa de
+    rede que ele indicou): "Tipo de ligação" (o `legend`, pelo desenho, SEM cor) e "Estado" (o
+    `status.label`, na cor), cada uma com o título à vista. Cada amostra mostra o que todas as linhas da
+    fileira têm em comum. Com uma parte só, a legenda é a lista de antes, sem título — quem usa `mark` com um
+    `legend` de estado (como até a 0.31.0) vê a mesma legenda.
+  - **`@aurea-uds/react/graph-worker`** (MNT-22) — o trabalhador do arrumador por um caminho da Aurea. No
+    Vite: `import TrabalhadorDoMapa from "@aurea-uds/react/graph-worker?worker"` e
+    `layoutWorker={() => new TrabalhadorDoMapa()}`. É uma linha que importa o trabalhador do `elkjs` (o peer
+    opcional): o app não importa mais o motor por fora, e o `elkjs` não é copiado para dentro do pacote.
+  - **O teclado do mapa de leitura** (MNT-21, opção "A" do Victor) — o mapa é UMA parada de Tab (o nó
+    atual: o último visitado; no começo, o primeiro); as setas andam de nó em nó; com o nó em foco, o Tab
+    passa pelo botão de fechar dele (e o do contêiner em volta) e pelas linhas dele, e depois sai do mapa.
+    Numa linha em foco, as setas levam às pontas dela. O link de crédito do motor sai do Tab. O app mediu 87
+    paradas, com as 59 linhas antes de qualquer nó.
+- **`DataState catchErrors` e `onCatch`** (MNT-25), na web e no nativo — a barreira de erro, como variação
+  do `DataState` (escolha do Victor; escrita na Aurea, sem dependência nova): o que quebra ao desenhar o
+  conteúdo vira a cara de erro dele, com "Tentar de novo", e o resto da tela fica. `onCatch` (e não
+  `onError`, que é o evento do HTML) recebe o erro para o app registrar.
+
 ### Mudou
 
+- **O "caber na tela" do mapa reserva em cima a barra do modo de arrumar e os botões de zoom** (MNT-24) — o
+  nó de cima ficava atrás da barra até a pessoa rolar. A reserva é medida (a barra quebra em mais linhas na
+  tela estreita); a barra que aparece depois desce o mapa o tanto dela, sem mexer no zoom.
+- **O `TreeView` e a `NavList` não alargam mais a página** (MNT-23) — o rótulo não quebra linha, e numa
+  coluna `1fr` de grade ou num filho `flex: 1` a peça pedia o rótulo inteiro como largura mínima (medido:
+  a caixa de 360 ia a 820). A trilha do texto virou `minmax(0,1fr)` numa grade: pede zero e, quando há
+  espaço, mostra o texto inteiro. A linha não muda de lugar nem de altura.
+- **O `sideEffects` do `@aurea-uds/react` vira uma lista** com o `dist/graph-worker.js` (o import dele É o
+  efeito); os outros arquivos continuam sem efeito colateral.
 - ⚠ **`Button variant="secondary"` passa a ter a LETRA DA MARCA** sobre o fundo neutro, como a
   referência (decisão do Victor, 11/10/2026: a opção "A"). **O `Button` sem `variant` NÃO muda**: o
   padrão passa a ser o `tertiary`, que é a cara de sempre (a classe sai `btn-tertiary`, e não mais
@@ -321,9 +357,27 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   seu ("Pedidos", "Resultados da busca").
 - **A página atual da `Pagination` desenhava duas linhas no foco** (a borda e o anel separados,
   ADR-0059): ela entrou na lista das peças com borda, e o anel encosta.
+- **Na `Table` com `stickyFirstColumn`, as células passavam por uma faixa de 4 à esquerda da coluna
+  parada** ao rolar de lado (a moldura tem recheio de 4, e a coluna gruda na borda de dentro dela). Cada
+  célula parada tapa a faixa com a cor da moldura; vale também na escrita da direita para a esquerda.
+- **A seta do `Accordion` não depende mais do arquivo de ícones.** Desde o redesenho deste lote ela era um
+  `Icon`, e quem usava só o `Accordion` (que abre sem JavaScript) via um erro de rede e a seta vazia — a
+  prova do cliente pegou. Agora é desenho do CSS por máscara, o mesmo `caret-down`, no mesmo tamanho e no
+  mesmo lugar (medidos antes e depois: 16 × 16, a 16 da ponta).
+- **Os glifos desenhados por máscara sumiam no alto contraste do Windows** — o menu do `Header`, a seta
+  do link externo, a seta do `KPI`, o visto do aviso preso ao botão e a seta do `Accordion` (medido: zero
+  ponto de tinta nos cinco). Agora pintam com a cor do sistema do texto ao lado; e, nesse modo, o título
+  do `Accordion` fica na cor de texto (o Chromium o pintava na de link, e o Firefox não). Quem cobra:
+  `mascara-alto-contraste.spec.ts`, que também reprova glifo novo por máscara fora da lista.
 
 ### ⚠ Pode quebrar a compilação
 
+- **Duas frases novas no `AureaStrings`, na web e no nativo** — `dataCrashed` ("Algo deu errado aqui.") e
+  `dataRetry` ("Tentar de novo"), da barreira de erro do `DataState`. Quem monta o objeto inteiro precisa
+  acrescentá-las; o `ptBR` já as traz.
+- **Mais duas frases no `AureaStrings` da web** — `graphLegendKind` ("Tipo de ligação") e
+  `graphLegendStatus` ("Estado"), os títulos das duas partes da legenda do mapa. Mesma regra: quem monta o
+  objeto inteiro acrescenta; o `ptBR` já as traz.
 - `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
   compilar.
 - `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.

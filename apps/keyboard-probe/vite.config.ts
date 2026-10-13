@@ -11,5 +11,5 @@ export default defineConfig({
   // 04/10/2026 (Lote H), o da conversa, da galeria e da árvore (`lote-h.html`); desde 10/10/2026
   // (ADR-0064), o do mapa de rede (`rede.html`); e desde a rodada 2 (ADR-0065), o do mapa que se arruma
   // (`rede2.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html"}}},
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html"}}},
 });

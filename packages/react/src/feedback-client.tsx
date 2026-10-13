@@ -111,7 +111,36 @@ export type DataStateValue="loading"|"error"|"empty"|UniversalState;
 // `children` como FUNÇÃO é de propósito para o caso `loading`: assim o consumidor não paga o
 // render do conteúdo enquanto ele não existe. Aceita nó também, porque a maioria das telas já
 // tem o conteúdo pronto e obrigar função seria cerimônia.
-export function DataState({state,message,skeleton,emptyTitle,emptyIcon,action,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode)}){
+// MNT-25 (passo 10, 0.32.0): A BARREIRA DE ERRO, como variação do `DataState` (escolha do Victor,
+// 12/10/2026: escrita na Aurea, sem dependência nova; variação, e não peça nova). Um erro de desenho no app
+// de rede deixou a tela inteira em branco. Com `catchErrors`, o que quebra DENTRO do `DataState` vira a
+// cara de erro dele (a mensagem e "Tentar de novo"), e o resto da tela fica. O React só pega erro de
+// desenho com um componente de CLASSE (não há gancho para isso) — é o jeito que ele manda, e o único.
+// `onCatch`, e não `onError`: `onError` já é o evento do HTML que o `DataState` repassa ao `<div>`.
+// O que a barreira NÃO pega (é do React, não daqui): erro em evento de clique, em código assíncrono e no
+// desenho no servidor.
+class BarreiraDeErro extends React.Component<{onCatch?:(error:unknown,info:React.ErrorInfo)=>void;falha:(tentar:()=>void)=>ReactNode;children?:ReactNode},{quebrou:boolean}>{
+  state={quebrou:false};
+  static getDerivedStateFromError(){return {quebrou:true}}
+  componentDidCatch(erro:unknown,info:React.ErrorInfo){this.props.onCatch?.(erro,info)}
+  tentar=()=>this.setState({quebrou:false});
+  render(){return this.state.quebrou?this.props.falha(this.tentar):this.props.children}
+}
+export type DataStateProps=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode);
+  /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com "Tentar de novo". */
+  catchErrors?:boolean;
+  /** Recebe o erro que a barreira pegou — para o app registrar. */
+  onCatch?:(error:unknown,info:React.ErrorInfo)=>void};
+export function DataState({catchErrors,onCatch,...props}:DataStateProps){
+  const s=useAureaStrings();
+  if(!catchErrors)return <CorpoDoDataState {...props}/>;
+  return <BarreiraDeErro onCatch={onCatch} falha={tentar=>
+    <div className={cx("data-state",props.className)} data-state="error">
+      <Alert variant="danger">{props.message??s.dataCrashed}</Alert>
+      <div><Button size="sm" onClick={tentar}>{s.dataRetry}</Button></div>
+    </div>}><CorpoDoDataState {...props}/></BarreiraDeErro>;
+}
+function CorpoDoDataState({state,message,skeleton,emptyTitle,emptyIcon,action,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode)}){
   const s=useAureaStrings();
   const conteudo=()=>typeof children==="function"?children():children;
   const caixa=(inner:ReactNode,ocupado?:boolean)=>

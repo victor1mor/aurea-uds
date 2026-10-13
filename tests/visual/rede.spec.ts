@@ -76,9 +76,12 @@ test("o desenho da linha chega à linha: a fibra é dupla e grossa, o estimado �
     const s = getComputedStyle(caminho);
     return {largura: parseFloat(s.strokeWidth), tracos: s.strokeDasharray, miolo: !!document.querySelector(`.react-flow__edge[data-id="${i}"] .graph-edge-double-core`)};
   }, id);
-  const fibra = await traco("fw-core");       // dupla e `thick`: 3 × (2 × 1)
-  expect(fibra.largura).toBe(6);
+  // Dupla, `thick` e com cor (o estado "Ativo", desde 12/10/2026): 3 × (2 × 1) × 2 — a linha com cor tem o
+  // dobro (13/10/2026). A fibra SEM cor e sem `thick` fica nos 3 × 1 de sempre.
+  const fibra = await traco("fw-core");
+  expect(fibra.largura).toBe(12);
   expect(fibra.miolo).toBe(true);
+  expect((await traco("core-srv")).largura).toBe(3);
   const cobre = await traco("b-ap");          // a de sempre: 1
   expect(cobre.largura).toBe(1);
   expect((await traco("b-lldp")).tracos).not.toBe("none");
@@ -130,8 +133,11 @@ test("visão geral, botões de zoom e legenda montada pelas linhas", async ({pag
   await expect(p.getByRole("button", {name: "Aproximar"})).toBeVisible();
   await expect(p.getByRole("button", {name: "Caber na tela"})).toBeVisible();
   await expect(p.locator(".graph-minimap")).toBeVisible();
-  const legenda = await p.getByRole("list", {name: "Legenda"}).locator("li").allTextContents();
-  expect(legenda).toEqual(["Cobre", "VPN", "Fibra", "Agregação (LAG)", "Estimado", "Sem fio", "Caído", "Anotado à mão"]);
+  // Em duas partes (12/10/2026): o tipo da ligação e o estado, cada lista com o nome do título à vista.
+  const legenda = p.getByRole("group", {name: "Legenda"});
+  expect(await legenda.getByRole("list", {name: "Tipo de ligação"}).locator("li").allTextContents())
+    .toEqual(["Cobre", "VPN", "Fibra", "Agregação (LAG)", "Estimado", "Sem fio", "Anotado à mão"]);
+  expect(await legenda.getByRole("list", {name: "Estado"}).locator("li").allTextContents()).toEqual(["Ativo", "Atenção", "Caído"]);
 });
 
 test("texto grande e alto contraste: a caixa cresce, e a linha engrossa", async ({page: p}) => {
@@ -159,4 +165,92 @@ test("exporta: o .drawio é XML válido com todos os nós, e a foto é PNG", asy
   expect(leitura.arestas).toBe(15);   // os 10 enlaces repetidos saem como um, como estão na tela
   const foto = await p.evaluate(() => window.__mapa!.toPng());
   expect(foto.startsWith("data:image/png;base64,")).toBe(true);
+});
+
+// MNT-26 (passo 10, 12/10/2026): a COR da linha é o ESTADO dela (`status`, como o selo do nó). A cor é a
+// de letra e borda sobre a tela (o par `-400`), pinta o traço E a amostra da parte "Estado" da legenda (a
+// palavra ao lado diz o que é); a amostra do TIPO fica sem cor, mesmo quando as linhas dele estão em
+// atenção; e a linha sem estado continua na cor de sempre. No alto contraste, a linha de cor continua de cor.
+const corDoTraco = (p: Page, id: string) => p.evaluate((i) =>
+  getComputedStyle(document.querySelector(`.react-flow__edge[data-id="${i}"] path.react-flow__edge-path`)!).stroke, id);
+const corDaAmostra = (p: Page, nome: string) => p.evaluate((n) => {
+  const li = [...document.querySelectorAll(".graph-legend li")].find((x) => x.textContent === n)!;
+  return getComputedStyle(li.querySelector(".graph-legend-sample .graph-edge")!).stroke;
+}, nome);
+const corDoToken = (p: Page, token: string) => p.evaluate((t) => {
+  const el = document.createElement("span");
+  el.style.color = `var(${t})`;
+  document.querySelector(".dependency-graph")!.append(el);
+  const c = getComputedStyle(el).color;
+  el.remove();
+  return c;
+}, token);
+
+test("MNT-26 · a linha tem a cor do estado: o traço e a amostra do estado no tom; a do tipo e a linha sem estado ficam como eram", async ({page: p}) => {
+  await abrir(p);
+  const perigo = await corDoToken(p, "--danger-400"), atencao = await corDoToken(p, "--warning-400"), neutra = await corDoToken(p, "--muted-foreground");
+  expect(perigo).not.toBe(neutra);
+  expect(await corDoTraco(p, "a3-cam")).toBe(perigo);
+  expect(await corDaAmostra(p, "Caído")).toBe(perigo);
+  expect(await corDoTraco(p, "b-lldp")).toBe(atencao);
+  expect(await corDaAmostra(p, "Atenção")).toBe(atencao);
+  expect(await corDaAmostra(p, "Estimado")).toBe(neutra);
+  expect(await corDoTraco(p, "a-1")).toBe(neutra);
+  expect(await corDaAmostra(p, "Cobre")).toBe(neutra);
+});
+
+test("o × do estado aparece no meio da linha caída, e não na linha de cobre que funciona", async ({page: p}) => {
+  await abrir(p);
+  await expect(p.locator('[data-edge-label="a3-cam"] .graph-edge-mark-cross')).toBeVisible();
+  // Só uma linha do mapa está caída: um × só no meio das linhas (a amostra da legenda é à parte).
+  await expect(p.locator(".graph-edge-chip .graph-edge-mark-cross")).toHaveCount(1);
+});
+
+test("MNT-26 · no alto contraste, a linha de cor continua de cor e a sem tom vai à cor do texto", async ({page: p}) => {
+  await abrir(p, "grande&contraste");
+  expect(await corDoTraco(p, "a3-cam")).toBe(await corDoToken(p, "--danger-400"));
+  expect(await corDoTraco(p, "a-1")).toBe(await corDoToken(p, "--foreground"));
+});
+
+// A LINHA COM COR É MAIS GROSSA (ordem do Victor, 13/10/2026: "pode engrossar a linha com cor"). Medido com o
+// mapa no "caber na tela" (zoom 0,57): com 1 de espessura — e com 1,5 —, nenhum ponto da linha chegava à cor
+// de verdade (o mais perto ficava a 43 de distância de cor) e a "WAN 1G" verde parecia cinza; com 2, a cor
+// aparece exata. As três espessuras dobram JUNTAS na linha com cor (2, 4, 6), para a velocidade continuar
+// legível entre as linhas com cor; o miolo da linha dupla dobra com ela.
+const larguraDoTraco = (p: Page, id: string, sel = "path.react-flow__edge-path") => p.evaluate(([i, s]) =>
+  parseFloat(getComputedStyle(document.querySelector(`.react-flow__edge[data-id="${i}"] ${s}`)!).strokeWidth), [id, sel] as const);
+const distanciaDaCor = async (p: Page, id: string, token: string) => {
+  const alvo = await corDoToken(p, token);
+  const caixa = (await p.locator(`.react-flow__edge[data-id="${id}"] path.react-flow__edge-path`).boundingBox())!;
+  const foto = (await p.screenshot({clip: {x: caixa.x - 6, y: caixa.y + 4, width: caixa.width + 12, height: Math.max(4, caixa.height - 8)}})).toString("base64");
+  return p.evaluate(async ([f, a]) => {
+    const [r0, g0, b0] = a.match(/\d+/g)!.map(Number);
+    const img = new Image();
+    img.src = "data:image/png;base64," + f;
+    await img.decode();
+    const c = document.createElement("canvas");
+    c.width = img.width;
+    c.height = img.height;
+    const x = c.getContext("2d")!;
+    x.drawImage(img, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height).data;
+    let melhor = Infinity;
+    for (let i = 0; i < d.length; i += 4) melhor = Math.min(melhor, Math.hypot(d[i] - r0, d[i + 1] - g0, d[i + 2] - b0));
+    return melhor;
+  }, [foto, alvo] as const);
+};
+
+test("a linha com cor é o dobro da sem cor, nas três espessuras, e a cor aparece com o mapa afastado", async ({page: p}) => {
+  await abrir(p);
+  // Comum: o "Caído" (com cor) tem o dobro do cobre comum (sem cor).
+  expect(await larguraDoTraco(p, "a3-cam")).toBe(2 * await larguraDoTraco(p, "a-1"));
+  // Grossa: o miolo da fibra 10G "Ativo" (= a espessura dela) tem o dobro da agregação grossa sem cor.
+  expect(await larguraDoTraco(p, "fw-core", "path.graph-edge-double-core")).toBe(2 * await larguraDoTraco(p, "lag-a"));
+  // E, no "caber na tela", algum ponto da linha chega à cor de verdade.
+  expect(await distanciaDaCor(p, "a3-cam", "--danger-400")).toBeLessThan(8);
+});
+
+test("no alto contraste, a linha com cor continua o dobro da sem cor", async ({page: p}) => {
+  await abrir(p, "grande&contraste");
+  expect(await larguraDoTraco(p, "a3-cam")).toBe(2 * await larguraDoTraco(p, "a-1"));
 });

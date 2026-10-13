@@ -53,15 +53,25 @@ test("GAR-12 · a primeira coluna fica parada ao rolar de lado, com fio e fundo 
     const antes = {nome: nome.getBoundingClientRect().left, outra: outra.getBoundingClientRect().left};
     reg.scrollLeft = 150;
     const fio = getComputedStyle(nome, "::after");
+    // A faixa ENTRE a borda da caixa e a coluna parada (o recheio da moldura, desde o passo 6): o que rola
+    // não pode aparecer ali.
+    const r = nome.getBoundingClientRect(), naFaixa = document.elementFromPoint(x0 + 1, r.top + r.height / 2);
     return {rola: reg.scrollWidth > reg.clientWidth, nomeAntes: antes.nome - x0, nomeDepois: nome.getBoundingClientRect().left - x0,
+      recheio: parseFloat(getComputedStyle(reg).paddingInlineStart), naFaixa: naFaixa?.tagName,
       outraAndou: antes.outra - outra.getBoundingClientRect().left, fio: fio.content !== "none" ? fio.width : null,
-      fundoNome: getComputedStyle(nome).backgroundColor, fundoCaixa: getComputedStyle(reg).backgroundColor};
+      fundoNome: getComputedStyle(nome).backgroundColor, fundoCorpo: getComputedStyle(document.querySelector("tbody td")!).backgroundColor};
   });
   expect(m.rola, "a 360, os quatro itens rolam de lado").toBe(true);
   expect(Math.round(m.nomeDepois)).toBe(Math.round(m.nomeAntes));
+  // A coluna parada encosta na borda de dentro da moldura (o recheio dela), e a faixa fica tapada.
+  expect(Math.round(m.nomeAntes)).toBe(Math.round(m.recheio));
+  // A faixa é da coluna parada (a máscara na cor da moldura). Sem ela, ali aparece o que rola: a célula ou
+  // a própria tabela, no vão entre as células (medido: "TABLE").
+  expect(m.naFaixa, "o que rola não aparece na faixa à esquerda da coluna parada").toBe("TH");
   expect(Math.round(m.outraAndou)).toBe(150);
   expect(m.fio).toBe("1px");
-  expect(m.fundoNome, "fundo opaco, o de cartão: o que rola passa por baixo").toBe(m.fundoCaixa);
+  // Opaco e o mesmo do corpo (desde o passo 6 o corpo é um cartão dentro da moldura cinza).
+  expect(m.fundoNome, "fundo opaco, o do corpo: o que rola passa por baixo").toBe(m.fundoCorpo);
 });
 
 test("GAR-13 · o cabeçalho fica no topo da caixa, e o canto por cima dos dois", async ({page: p, baseURL}) => {
@@ -78,12 +88,13 @@ test("GAR-13 · o cabeçalho fica no topo da caixa, e o canto por cima dos dois"
     // ali o Firefox devolve a própria caixa (medido em 08/10/2026), e isso não é o canto por baixo.
     const noMeio = document.elementFromPoint(canto.left + canto.width / 2, canto.top + canto.height / 2);
     return {altura: reg.getBoundingClientRect().height, cantoTopo: canto.top - y0, cantoEsq: canto.left - x0, outroTopo: outro.top - y0,
-      cantoPorCima: noMeio?.closest("thead th") === ths[0]};
+      recheio: parseFloat(getComputedStyle(reg).paddingInlineStart), cantoPorCima: noMeio?.closest("thead th") === ths[0]};
   });
   expect(Math.round(m.altura), "a caixa tem o teto do --table-max-h").toBe(180);
   expect(Math.round(m.cantoTopo)).toBe(0);
   expect(Math.round(m.outroTopo)).toBe(0);
-  expect(Math.round(m.cantoEsq)).toBe(0);
+  // O canto encosta na borda de dentro da moldura (o recheio do lado, desde o passo 6).
+  expect(Math.round(m.cantoEsq)).toBe(Math.round(m.recheio));
   expect(m.cantoPorCima).toBe(true);
 });
 
@@ -108,7 +119,7 @@ test("GAR-12 · só diferenças, melhor valor, nome da linha e faixa de grupo", 
       nome: {caixa: css('tbody th[scope="row"]').textTransform, peso: css('tbody th[scope="row"]').fontWeight, cor: css('tbody th[scope="row"]').color},
       corTexto: css("td").color,
       faixa: {caixa: css('th[scope="rowgroup"]').textTransform, fundo: css('th[scope="rowgroup"]').backgroundColor},
-      fundoCabecalho: css("thead th").backgroundColor};
+      fundoCabecalho: css("thead th").backgroundColor, caixaCabecalho: css("thead th").textTransform};
   });
   expect(m.iguais).toBe(2);
   expect(m.iguaisVisiveis, "as linhas iguais somem").toBe(0);
@@ -116,5 +127,6 @@ test("GAR-12 · só diferenças, melhor valor, nome da linha e faixa de grupo", 
   expect(m.pesoMelhor).toBe("600");
   expect(m.pesoComum).toBe("400");
   expect(m.nome).toEqual({caixa: "none", peso: "500", cor: m.corTexto});
-  expect(m.faixa).toEqual({caixa: "uppercase", fundo: m.fundoCabecalho});
+  // A faixa de grupo tem a pele do CABEÇALHO — que, desde o passo 6, não é mais caixa-alta (aprovado).
+  expect(m.faixa).toEqual({caixa: m.caixaCabecalho, fundo: m.fundoCabecalho});
 });

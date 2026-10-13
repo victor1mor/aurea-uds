@@ -42,7 +42,9 @@ test("NavList: a foto no começo, os sinais antes do valor, e o nome inteiro par
   });
   expect(m.fotoNoComeco, "a foto encosta no recheio da linha (space-3)").toBe(12);
   expect(Math.abs(m.centroFoto)).toBeLessThanOrEqual(0.5);
-  expect(m.fotoLado).toEqual([36, 36]);
+  // 40: o avatar médio da referência, desde o passo 6 da 0.32.0 (era 36, a altura do botão — aprovado pelo
+  // Victor: "o avatar médio passa de 36 para 40"). O token é `--space-10`.
+  expect(m.fotoLado).toEqual([40, 40]);
   expect(m.ordem).toEqual([true, true]);
   expect(m.icones).toEqual([[16, 16], [16, 16]]);
   expect(m.vaoEntreSinais).toBe(4);

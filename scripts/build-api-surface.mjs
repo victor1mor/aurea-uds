@@ -112,7 +112,11 @@ for (const file of files) {
     for (let j = inicio; j < src.length; j++) {
       const ch = src[j];
       if ("{([<".includes(ch)) depth++;
-      else if ("})]>".includes(ch)) depth--;
+      else if ("})]".includes(ch)) depth--;
+      // O `>` de uma SETA não fecha nada — o mesmo defeito que o `parseMembers` pagou em 29/08/2026, aqui
+      // no corte do alias. Achado em 12/10/2026: `children: ReactNode | (() => ReactNode);` cortava o
+      // `DataStateProps` no `;` dele, e as props de depois (`catchErrors`, `onCatch`) sumiam da superfície.
+      else if (ch === ">" && src[j - 1] !== "=") depth--;
       else if (ch === ";" && depth <= 0) { fim = j; break; }
     }
     const corpo = src.slice(inicio, fim);

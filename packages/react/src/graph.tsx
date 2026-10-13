@@ -38,7 +38,7 @@
 // Quem importa a folha é o CONSUMIDOR, uma vez, como já importa o `@aurea-uds/core/css`: um
 // `import "…css"` dentro deste módulo quebraria em Node puro e o build daqui é `tsc` só.
 import React, {type ReactNode} from "react";
-import {ReactFlow, ReactFlowProvider, Background, BaseEdge, EdgeLabelRenderer, EdgeText, Handle, MiniMap, Panel, Position, SelectionMode, applyNodeChanges, getBezierPath, getSmoothStepPath, useOnViewportChange, useReactFlow, useStore, type AriaLabelConfig, type Node, type Edge, type EdgeProps, type NodeChange, type NodePositionChange, type NodeProps} from "@xyflow/react";
+import {ReactFlow, ReactFlowProvider, Background, BaseEdge, EdgeLabelRenderer, EdgeText, Handle, MiniMap, Panel, Position, SelectionMode, applyNodeChanges, getBezierPath, getSmoothStepPath, useNodesInitialized, useOnViewportChange, useReactFlow, useStore, type AriaLabelConfig, type Node, type Edge, type EdgeProps, type NodeChange, type NodePositionChange, type NodeProps} from "@xyflow/react";
 import {cx, useAureaStrings} from "./internal.js";
 import {Icon, type AureaIcon} from "./system.js";
 import {Badge} from "./markup.js";
@@ -98,9 +98,15 @@ export interface GraphEdgeItem{id?:string;from:string;to:string;label?:string;an
   sourceLabel?:string;targetLabel?:string;
   /** O desenho do traço, que diz o que a linha é SEM depender de cor (MNT-08 e MNT-15). */
   pattern?:GraphEdgePattern;weight?:GraphEdgeWeight;mark?:GraphEdgeMark;
+  /** O ESTADO da ligação (MNT-26), como o selo do nó: a palavra e o tom. O tom pinta o traço; a palavra
+   *  entra na parte "Estado" da legenda, com a amostra na cor — quem não distingue a cor lê a palavra.
+   *  `mark` é o SINAL do estado no meio da linha (o × do "Caído"), ao lado da marca do tipo, para o
+   *  estado se ver também sem cor. O TIPO da ligação (cobre, fibra) continua no desenho, no `mark` da
+   *  linha e no `legend`: são duas coisas, e a legenda as mostra separadas (decisão do Victor, 12/10/2026). */
+  status?:{label:string;tone?:GraphTone;mark?:GraphEdgeMark};
   /** Um número no meio da linha: os membros de uma agregação (LAG). */
   count?:number;
-  /** O nome desta espécie de linha na legenda automática (`legend`). */
+  /** O nome do TIPO desta linha na parte "Tipo de ligação" da legenda automática (`legend`). */
   legend?:string;
   /** Quando dois rótulos se encostam, fica o de prioridade MAIOR; no empate, o que vem antes na
    *  lista (MNT-12.5). O nome da porta na ponta conta com a mesma prioridade da linha. */
@@ -153,6 +159,8 @@ const FOLGA_DO_DESVIO=8,MALHA_DO_DESVIO=8;
 const ESCALA_DOS_ROTULOS=0.6;
 // O mapa grande (MNT-19.1) precisa caber na tela: o motor para em 50% por padrão, e um site de 100
 // equipamentos com andares não cabe nisso. Afasta até 10%.
+// A margem que o motor põe em volta do mapa ao caber na tela (o padrão do `fitView` dele, 10%).
+const MARGEM_DO_MOTOR=0.1;
 const ESCALA_MINIMA=0.1;
 // O VÃO ENTRE COLUNAS CRESCE COM O RÓTULO (A-09, 23/09/2026). Com o rótulo legível, a primeira
 // imagem mostrou o que o preto escondia: "Te1/1/1 ↔ Te1/0/1" é mais largo que 90px e entrava por
@@ -499,8 +507,8 @@ const pontaDoRotulo=(x:number,y:number,pos:Position)=>{
   if(pos===Position.Right)return `translate(${x+f}px,${y-f}px) translateY(-100%)`;
   return `translate(${x-f}px,${y-f}px) translate(-100%,-100%)`;
 };
-type DadosDaAresta={deslocamento:number;vertical:boolean;forma:GraphEdgeShape;padrao?:GraphEdgePattern;peso?:GraphEdgeWeight;
-  marca?:GraphEdgeMark;contagem?:number;origem?:string;destino?:string;apagada?:boolean;
+type DadosDaAresta={deslocamento:number;vertical:boolean;forma:GraphEdgeShape;padrao?:GraphEdgePattern;peso?:GraphEdgeWeight;tom?:GraphTone;
+  marca?:GraphEdgeMark;marcaDoEstado?:GraphEdgeMark;contagem?:number;origem?:string;destino?:string;apagada?:boolean;
   grupo?:{n:number;aberto:boolean;alternar:()=>void;mostrar:string;juntar:string;conexoes:string};
   clicavel?:boolean;
   // ── Rodada 2 (ADR-0065) ──
@@ -530,25 +538,27 @@ const ArestaAurea=React.memo(function ArestaAurea({id,sourceX,sourceY,targetX,ta
   // rótulo vai para a pastilha de HTML do meio, junto deles — dois desenhos no mesmo ponto se cobririam.
   // O traço DUPLO desenha o miolo por cima da linha — e por cima do rótulo SVG, que sairia riscado
   // (medido na bancada). Com rótulo, ele também vai para a pastilha.
-  const pastilha=!!(d.marca||d.contagem||d.grupo||(d.padrao==="double"&&label!=null));
+  const pastilha=!!(d.marca||d.marcaDoEstado||d.contagem||d.grupo||(d.padrao==="double"&&label!=null));
   const cls=cx("graph-edge",d.padrao&&d.padrao!=="solid"&&`graph-edge-${d.padrao}`,d.peso&&d.peso!=="regular"&&`graph-edge-${d.peso}`,
-    d.apagada&&"is-dimmed");
+    d.tom&&d.tom!=="neutral"&&`graph-edge-tone-${d.tom}`,d.apagada&&"is-dimmed");
   // MNT-12.5: cada rótulo leva quem é, a prioridade e a ordem — o mapa esconde o que encosta.
   const marca=(parte:string)=>({"data-edge-label":`${id}${parte}`,"data-priority":d.prioridade??0,"data-order":d.ordem??0});
   return <>
     <BaseEdge id={id} path={caminho} className={cls} markerEnd={markerEnd} style={style}/>
     {/* O traço DUPLO (fibra, no mercado) é a linha grossa com um miolo da cor do fundo por cima. */}
-    {d.padrao==="double"&&<path d={caminho} fill="none" className={cx("graph-edge-double-core",d.peso&&d.peso!=="regular"&&`graph-edge-${d.peso}`,d.apagada&&"is-dimmed")}/>}
+    {d.padrao==="double"&&<path d={caminho} fill="none" className={cx("graph-edge-double-core",d.peso&&d.peso!=="regular"&&`graph-edge-${d.peso}`,
+      d.tom&&d.tom!=="neutral"&&`graph-edge-tone-${d.tom}`,d.apagada&&"is-dimmed")}/>}
     {!pastilha&&label!=null&&<EdgeText x={lx} y={ly} label={label} labelStyle={ROTULO} labelShowBg labelBgStyle={FUNDO_DO_ROTULO}
                                        className={cx("graph-edge-text",d.apagada&&"is-dimmed")} {...marca("")}/>}
     {(pastilha||d.origem||d.destino)&&<EdgeLabelRenderer>
       {pastilha&&<div className={cx("graph-edge-chip nodrag nopan",d.apagada&&"is-dimmed")} style={{transform:`translate(-50%,-50%) translate(${lx}px,${ly}px)`}} {...marca("")}>
-        {d.marca&&<span className={`graph-edge-mark graph-edge-mark-${d.marca}`} aria-hidden="true">{d.marca==="lock"&&<Icon name="lock-key" size="sm"/>}</span>}
+        {d.marca&&<MarcaDaLinha marca={d.marca}/>}
+        {d.marcaDoEstado&&d.marcaDoEstado!==d.marca&&<MarcaDaLinha marca={d.marcaDoEstado}/>}
         {label!=null&&<span className="graph-edge-chip-text">{label}</span>}
         {d.contagem!=null&&<span className="graph-edge-count">×{d.contagem}</span>}
         {/* MNT-12.4: as linhas entre o mesmo par viram UMA com o número, e o número é um BOTÃO —
             abre nas linhas separadas e junta de novo. O nome diz o que ele faz e quantas são. */}
-        {d.grupo&&<button type="button" className="graph-edge-group" aria-expanded={d.grupo.aberto}
+        {d.grupo&&<button type="button" className="graph-edge-group" data-edge-group={id} aria-expanded={d.grupo.aberto}
           aria-label={`${d.grupo.aberto?d.grupo.juntar:d.grupo.mostrar} ${d.grupo.n} ${d.grupo.conexoes}`} onClick={d.grupo.alternar}>×{d.grupo.n}</button>}
       </div>}
       {d.origem&&<div className={cx("graph-edge-end",d.apagada&&"is-dimmed")} style={{transform:pontaDoRotulo(ini.x,ini.y,ladoIni)}} {...marca(":origem")}>{d.origem}</div>}
@@ -557,6 +567,20 @@ const ArestaAurea=React.memo(function ArestaAurea({id,sourceX,sourceY,targetX,ta
   </>;
 });
 const TIPOS_DE_ARESTA={aurea:ArestaAurea};
+/** A marca do meio da linha: o × e o ponto são desenho do CSS; o cadeado, o ícone. */
+function MarcaDaLinha({marca}:{marca:GraphEdgeMark}){
+  return <span className={`graph-edge-mark graph-edge-mark-${marca}`} aria-hidden="true">{marca==="lock"&&<Icon name="lock-key" size="sm"/>}</span>;
+}
+/** A amostra de uma linha na legenda: o traço, o miolo do duplo e a marca — o mesmo desenho do mapa. */
+function AmostraDaLinha({padrao,peso,tom,marca}:{padrao?:GraphEdgePattern;peso?:GraphEdgeWeight;tom?:GraphTone;marca?:GraphEdgeMark}){
+  return <>
+    <svg className="graph-legend-sample" aria-hidden="true" viewBox="0 0 32 8"><path d="M0 4H32"
+      className={cx("graph-edge",padrao&&padrao!=="solid"&&`graph-edge-${padrao}`,peso&&peso!=="regular"&&`graph-edge-${peso}`,
+        tom&&tom!=="neutral"&&`graph-edge-tone-${tom}`)}/>
+      {padrao==="double"&&<path d="M0 4H32" className={cx("graph-edge-double-core",peso&&peso!=="regular"&&`graph-edge-${peso}`)}/>}</svg>
+    {marca&&<MarcaDaLinha marca={marca}/>}
+  </>;
+}
 /** A chave de um PAR sem sentido: o cabo entre A e B é o mesmo que entre B e A. */
 const parSemSentido=(e:GraphEdgeItem)=>e.from<e.to?`${e.from}|${e.to}`:`${e.to}|${e.from}`;
 /**
@@ -1187,19 +1211,33 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
       ariaLabel:`${s.graphEdge}: ${nomeDe(e.from)} – ${nomeDe(e.to)}${e.label?` (${e.label})`:""}`,
       ...(onEdgeSelect?{domAttributes:{onKeyDown:(ev:React.KeyboardEvent)=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();onEdgeSelect(id)}}}}:{}),
       hidden:ocultos.has(e.from)||ocultos.has(e.to),
-      data:{deslocamento:rota?0:ident[i].deslocamento,vertical,forma:edgeShape,padrao:e.pattern,peso:e.weight,marca:e.mark,contagem:e.count,
+      data:{deslocamento:rota?0:ident[i].deslocamento,vertical,forma:edgeShape,padrao:e.pattern,peso:e.weight,tom:e.status?.tone,marca:e.mark,marcaDoEstado:e.status?.mark,contagem:e.count,
             origem:e.sourceLabel,destino:e.targetLabel,apagada:aceso?.arestas?!aceso.arestas.has(e.id??id):aceso?.nos?!(aceso.nos.has(e.from)&&aceso.nos.has(e.to)):false,
             grupo:grupo?{n:grupo.n,aberto:grupo.aberto,alternar:()=>alternarGrupo(grupo.chave),mostrar:s.graphShow,juntar:s.graphJoin,conexoes:s.graphConnections}:undefined,
             rota,saltos:sl?[...sl]:undefined,prioridade:e.priority,ordem:i} satisfies DadosDaAresta,
     };
   }),[desenhadas,ident,tracados,saltos,vertical,edgeShape,onEdgeSelect,ocultos,aceso,alternarGrupo,s,nomeDe]);
 
-  // A LEGENDA se monta com o que está na tela: uma linha por nome de `legend`, com o desenho dela.
+  // A LEGENDA se monta com as linhas, em DUAS PARTES (decisão do Victor, 12/10/2026, depois da pesquisa
+  // nas referências de mapa dele): o TIPO da ligação (`legend`, pelo desenho, SEM cor) e o ESTADO
+  // (`status`, pela cor). Nenhuma das referências de mapa junta as duas coisas numa lista: uma legenda só
+  // o tipo, pelo desenho; as outras pintam o estado. Cada amostra mostra o que TODAS as linhas do grupo têm em comum
+  // — a espessura da velocidade varia dentro da "Fibra" e não é dela. A marca de cada parte é a SUA: o
+  // `mark` da linha na do tipo (o cadeado da VPN), o `status.mark` na do estado (o × do "Caído"). Com uma
+  // linha só não dá para adivinhar de quem é a marca — por isso o app diz.
   const legenda=React.useMemo(()=>{
-    const vistas=new Map<string,GraphEdgeItem>();
-    for(const e of edges)if(e.legend&&!vistas.has(e.legend))vistas.set(e.legend,e);
-    return [...vistas.entries()];
+    const comum=<T,>(xs:T[])=>xs.every(x=>x===xs[0])?xs[0]:undefined;
+    const agrupar=(nome:(e:GraphEdgeItem)=>string|undefined)=>{
+      const m=new Map<string,GraphEdgeItem[]>();
+      for(const e of edges){const k=nome(e);if(k)m.set(k,[...(m.get(k)??[]),e])}
+      return [...m.entries()];
+    };
+    const estados=agrupar(e=>e.status?.label).map(([nome,es])=>({nome,tom:comum(es.map(e=>e.status?.tone)),marca:comum(es.map(e=>e.status?.mark))}));
+    const tipos=agrupar(e=>e.legend).map(([nome,es])=>
+      ({nome,padrao:comum(es.map(e=>e.pattern)),peso:comum(es.map(e=>e.weight)),marca:comum(es.map(e=>e.mark))}));
+    return {tipos,estados};
   },[edges]);
+  const idDaLegenda=React.useId();
   // O texto que o MOTOR põe na tela (descrição do nó para o leitor de tela, aviso de "movido", nome das
   // alças e do minimapa) sai na língua da Aurea — o padrão dele é inglês.
   const rotulosDoMotor=React.useMemo<Partial<AriaLabelConfig>>(()=>({
@@ -1210,6 +1248,90 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
     "minimap.ariaLabel":s.graphOverview,"handle.ariaLabel":s.graphHandle}),[s]);
   const linhas=React.useMemo(()=>desenhadas.map(({item},i)=>({item,rota:tracados.mapa.get(ident[i].id)})),[desenhadas,tracados,ident]);
   const raiz=React.useRef<HTMLDivElement>(null);
+  // MNT-21 (opção "A" do Victor, 12/10/2026): O MAPA DE LEITURA É UMA PARADA DE TAB. O app mediu 87
+  // paradas, as 59 linhas antes de qualquer nó (o motor desenha as linhas antes dos nós). Agora só o nó
+  // atual (o último visitado; no começo, o primeiro) fica na ordem do Tab; as setas andam de nó em nó;
+  // com o nó em foco, o Tab passa pelo botão de fechar dele e pelas linhas dele, e depois sai do mapa.
+  // Numa linha em foco, as setas levam às pontas dela. O link de crédito do motor sai do Tab (continua à
+  // vista). No modo de arrumar quem manda é o motor, e nada disto liga.
+  const linhasDoNo=React.useMemo(()=>{
+    const porNo=new Map<string,string[]>(),pontas=new Map<string,{de:string;para:string}>();
+    desenhadas.forEach(({item},i)=>{
+      const id=ident[i].id;pontas.set(id,{de:item.from,para:item.to});
+      for(const n of [item.from,item.to]){const l=porNo.get(n)??[];if(!l.includes(id))l.push(id);porNo.set(n,l)}
+    });
+    const pai=new Map(nodes.filter(n=>n.parentId).map(n=>[n.id,n.parentId!]));
+    return {porNo,pontas,pai};
+  },[desenhadas,ident,nodes]);
+  const linhasRef=React.useRef(linhasDoNo);linhasRef.current=linhasDoNo;
+  React.useEffect(()=>{
+    const el=raiz.current;
+    if(!el||editavel)return;
+    let atual:string|null=null,quadro=0;
+    const sequencia=(id:string)=>{
+      const no=el.querySelector<HTMLElement>(`.react-flow__node[data-id="${escapar(id)}"]`);
+      if(!no)return [];
+      const ancora=ancoraDoNo(el,id);
+      const seq=ancora?[ancora,...[...no.querySelectorAll<HTMLElement>("button.graph-node-toggle, button.graph-group-toggle")].filter(b=>b!==ancora)]:[];
+      // O nó dentro de um contêiner aberto leva também o "Fechar" dele: o contêiner aberto não é alvo das
+      // setas (o centro dele é o meio da caixa grande), e o botão dele não pode ficar fora de alcance.
+      const pai=linhasRef.current.pai.get(id);
+      const fecharPai=pai?el.querySelector<HTMLElement>(`.react-flow__node[data-id="${escapar(pai)}"] button.graph-group-toggle`):null;
+      if(fecharPai&&!seq.includes(fecharPai))seq.push(fecharPai);
+      for(const l of linhasRef.current.porNo.get(id)??[]){
+        const linha=el.querySelector<HTMLElement>(`.react-flow__edge[data-id="${escapar(l)}"]`);
+        if(linha&&linha.hasAttribute("tabindex"))seq.push(linha);
+        const grupo=el.querySelector<HTMLElement>(`[data-edge-group="${escapar(l)}"]`);
+        if(grupo)seq.push(grupo);
+      }
+      return seq;
+    };
+    const aplicar=()=>{
+      const todos=[...el.querySelectorAll<HTMLElement>(".react-flow__node button, .react-flow__edge[tabindex], .graph-edge-group, .react-flow__attribution a")];
+      if(!atual||!ancoraDoNo(el,atual)){
+        const ids=[...el.querySelectorAll<HTMLElement>(".react-flow__node")].map(n=>n.dataset.id!);
+        atual=ids.find(id=>el.querySelector(`.react-flow__node[data-id="${escapar(id)}"] button.graph-node-body`))
+          ??ids.find(id=>ancoraDoNo(el,id))??null;
+      }
+      const ancora=atual?ancoraDoNo(el,atual):null;
+      for(const t of todos)t.tabIndex=t===ancora?0:-1;
+    };
+    const depois=()=>{cancelAnimationFrame(quadro);quadro=requestAnimationFrame(aplicar)};
+    const aoFocar=(e:FocusEvent)=>{
+      const no=(e.target as HTMLElement).closest<HTMLElement>(".react-flow__node");
+      if(no?.dataset.id&&no.dataset.id!==atual){atual=no.dataset.id;aplicar()}
+    };
+    const aoTeclar=(e:KeyboardEvent)=>{
+      const alvo=e.target as HTMLElement;
+      if(!atual)return;
+      const seq=sequencia(atual),i=seq.indexOf(alvo);
+      if(i<0)return;
+      if(e.key==="Tab"){
+        if(e.shiftKey?i>0:i<seq.length-1){e.preventDefault();seq[e.shiftKey?i-1:i+1].focus({preventScroll:true});return}
+        // A última da sequência: o Tab do navegador segue para depois do mapa. A âncora sai da ordem por
+        // um instante — ela vem DEPOIS das linhas no documento, e o Tab voltaria a ela.
+        if(!e.shiftKey){const a=seq[0];a.tabIndex=-1;setTimeout(aplicar,0)}
+        return;
+      }
+      if(!SETAS.has(e.key))return;
+      const linha=alvo.closest<HTMLElement>(".react-flow__edge")?.dataset.id??alvo.dataset.edgeGroup;
+      if(linha){
+        // Numa linha, as setas levam às pontas: para cima ou para a esquerda, a de onde ela sai.
+        const pt=linhasRef.current.pontas.get(linha);if(!pt)return;
+        e.preventDefault();
+        ancoraDoNo(el,e.key==="ArrowUp"||e.key==="ArrowLeft"?pt.de:pt.para)?.focus({preventScroll:true});
+        return;
+      }
+      // O botão do nó já anda pelas setas; o de fechar anda igual.
+      if(!alvo.matches("button.graph-node-body")){e.preventDefault();teclado.current?.(atual,e.key)}
+    };
+    aplicar();
+    const obs=new MutationObserver(depois);
+    obs.observe(el,{childList:true,subtree:true});
+    el.addEventListener("focusin",aoFocar);
+    el.addEventListener("keydown",aoTeclar);
+    return ()=>{obs.disconnect();cancelAnimationFrame(quadro);el.removeEventListener("focusin",aoFocar);el.removeEventListener("keydown",aoTeclar)};
+  },[editavel]);
   // `initialWidth`/`initialHeight` no provider é o par do de cima, um nível acima: é o viewport
   // que o `fitView` usa ENQUANTO ninguém mediu. Com o prefixo `initial`, o navegador sobrescreve
   // na primeira medição — passar `width`/`height` direto no ReactFlow fixaria o tamanho e mataria
@@ -1251,22 +1373,34 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
                 apiRef={apiRef} linhas={linhas} forma={edgeShape} titulo={label??s.graphLabel} desenho={tracados}
                 editavel={editavel} barra={barra} acoes={acoes}/>
       {minimap&&<MiniMap pannable zoomable ariaLabel={s.graphOverview} className="graph-minimap"/>}
-      {legend&&legenda.length>0&&<Panel position="bottom-left">
-        <ul className="graph-legend" aria-label={s.graphLegend}>
-          {legenda.map(([nome,e])=><li key={nome}>
-            <svg className="graph-legend-sample" aria-hidden="true" viewBox="0 0 32 8"><path d="M0 4H32"
-              className={cx("graph-edge",e.pattern&&e.pattern!=="solid"&&`graph-edge-${e.pattern}`,e.weight&&e.weight!=="regular"&&`graph-edge-${e.weight}`)}/>
-              {e.pattern==="double"&&<path d="M0 4H32" className={cx("graph-edge-double-core",e.weight&&e.weight!=="regular"&&`graph-edge-${e.weight}`)}/>}</svg>
-            {e.mark&&<span className={`graph-edge-mark graph-edge-mark-${e.mark}`} aria-hidden="true">{e.mark==="lock"&&<Icon name="lock-key" size="sm"/>}</span>}
-            <span>{nome}</span>
-          </li>)}
-        </ul>
+      {legend&&(legenda.tipos.length>0||legenda.estados.length>0)&&<Panel position="bottom-left">
+        {/* Com as duas partes, cada uma tem o título à vista, que dá nome à lista; com uma só, a legenda
+            é a lista de antes, sem título. */}
+        <div className="graph-legend" role="group" aria-label={s.graphLegend}>
+          {legenda.tipos.length>0&&<>
+            {legenda.estados.length>0&&<p className="graph-legend-title" id={`${idDaLegenda}-tipo`}>{s.graphLegendKind}</p>}
+            <ul aria-labelledby={legenda.estados.length>0?`${idDaLegenda}-tipo`:undefined}>
+              {legenda.tipos.map(t=><li key={t.nome}><AmostraDaLinha padrao={t.padrao} peso={t.peso} marca={t.marca}/><span>{t.nome}</span></li>)}
+            </ul>
+          </>}
+          {legenda.estados.length>0&&<>
+            {legenda.tipos.length>0&&<p className="graph-legend-title" id={`${idDaLegenda}-estado`}>{s.graphLegendStatus}</p>}
+            <ul aria-labelledby={legenda.tipos.length>0?`${idDaLegenda}-estado`:undefined}>
+              {legenda.estados.map(e=><li key={e.nome}><AmostraDaLinha tom={e.tom} marca={e.marca}/><span>{e.nome}</span></li>)}
+            </ul>
+          </>}
+        </div>
       </Panel>}
     </ReactFlow>
     </ReactFlowProvider>
   </div>;
 }
 
+/** O primeiro alvo de Tab de um nó no mapa de leitura: o botão dele; sem ele, o de fechar. */
+function ancoraDoNo(raiz:HTMLElement|null,id:string){
+  const no=raiz?.querySelector<HTMLElement>(`.react-flow__node[data-id="${escapar(id)}"]`);
+  return no?.querySelector<HTMLElement>("button.graph-node-body")??no?.querySelector<HTMLElement>("button.graph-node-toggle, button.graph-group-toggle")??null;
+}
 // `CSS.escape` existe no navegador; fora dele (o teste em jsdom), as aspas bastam.
 const escapar=(id:string)=>typeof CSS!=="undefined"&&typeof CSS.escape==="function"?CSS.escape(id):id.replace(/[\x22\\]/g,"\\$&");
 /**
@@ -1310,8 +1444,41 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
     const c=centro(id);
     if(c)rf.setCenter(c.x,c.y,{zoom:Math.max(rf.getZoom(),1),duration:duracao()});
   },[rf,centro]);
+  // MNT-24 (12/10/2026): A BARRA DO MODO DE ARRUMAR COBRIA O TOPO DO MAPA — o nó de cima ficava atrás
+  // dela até a pessoa rolar (medido pelo app). Os botões de zoom, no outro canto de cima, fazem o mesmo.
+  // O "caber na tela" passa a reservar em cima a altura do mais alto dos dois, com a margem que o motor
+  // dá a eles (`offsetTop`) dos dois lados; os outros lados ficam com a margem do motor (0,1, o padrão
+  // dele). A reserva é MEDIDA: a barra quebra em mais linhas na tela estreita.
+  const barraRef=React.useRef<HTMLDivElement>(null);
+  const zoomRef=React.useRef<HTMLDivElement>(null);
+  const [reserva,setReserva]=React.useState(0);
+  React.useLayoutEffect(()=>{
+    const medir=()=>{
+      const alturas=[barraRef.current,zoomRef.current].filter((e):e is HTMLDivElement=>!!e).map(e=>e.offsetTop*2+e.offsetHeight);
+      setReserva(alturas.length?Math.max(...alturas):0);
+    };
+    medir();
+    if(typeof ResizeObserver==="undefined")return;
+    const ro=new ResizeObserver(medir);
+    for(const e of [barraRef.current,zoomRef.current])if(e)ro.observe(e);
+    return ()=>ro.disconnect();
+  },[editavel,controls]);
+  const margem=React.useMemo(()=>reserva?{top:`${reserva}px` as const,right:MARGEM_DO_MOTOR,bottom:MARGEM_DO_MOTOR,left:MARGEM_DO_MOTOR}:MARGEM_DO_MOTOR,[reserva]);
+  const caber=React.useCallback((duration=duracao())=>void rf.fitView({padding:margem,duration}),[rf,margem]);
+  // O primeiro "caber" é o do motor, antes de a reserva existir: quando os nós estão medidos e a reserva
+  // chega, ele cabe de novo, uma vez. Depois disso, a barra que aparece ou some (ligar o modo de arrumar)
+  // DESCE o mapa o tanto dela, sem mexer no zoom que a pessoa escolheu.
+  const medidos=useNodesInitialized();
+  const reservaAnterior=React.useRef<number|null>(null);
+  React.useEffect(()=>{
+    if(!medidos)return;
+    const antes=reservaAnterior.current;
+    reservaAnterior.current=reserva;
+    if(antes===null){if(reserva)requestAnimationFrame(()=>caber(0));return;}
+    if(reserva!==antes){const v=rf.getViewport();void rf.setViewport({...v,y:v.y+reserva-antes});}
+  },[medidos,reserva,caber,rf]);
   // A arrumação chegou (ou a pessoa pediu "Reorganizar"): o mapa cabe de novo na tela.
-  React.useEffect(()=>{if(pedidoDeCaber)requestAnimationFrame(()=>rf.fitView({duration:duracao()}))},[pedidoDeCaber,rf]);
+  React.useEffect(()=>{if(pedidoDeCaber)requestAnimationFrame(()=>caber())},[pedidoDeCaber,caber]);
   React.useEffect(()=>{if(focusId)centralizar(focusId)},[focusId,centralizar]);
   // AS SETAS (MNT-19.4): o nó mais perto na direção da seta, dentro de um cone de 45°. O foco vai
   // para o botão dele; se ele estiver fora da tela, a tela vai até ele. (Rodada 2) Com `visibleOnly`
@@ -1319,8 +1486,12 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
   React.useEffect(()=>{teclado.current=(id,tecla)=>{
     const a=centro(id);if(!a)return;
     let melhor:{id:string;d:number}|null=null;
-    for(const n of rf.getNodes()){
-      if(n.id===id||n.hidden||n.type!=="aurea")continue;
+    const nos=rf.getNodes();
+    for(const n of nos){
+      if(n.id===id||n.hidden)continue;
+      // O contêiner FECHADO é alvo das setas — fechado, ele é uma caixa só, e o botão dele abre. O aberto
+      // não: o centro dele é o meio da caixa grande, e a seta pularia os nós de dentro.
+      if(n.type==="aureaGrupo"?nos.some(f=>f.parentId===n.id&&!f.hidden):n.type!=="aurea")continue;
       const b=centro(n.id);if(!b)continue;
       const dx=b.x-a.x,dy=b.y-a.y;
       const naDirecao=tecla==="ArrowRight"?dx>0&&Math.abs(dy)<=dx:tecla==="ArrowLeft"?dx<0&&Math.abs(dy)<=-dx
@@ -1330,7 +1501,7 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
       if(!melhor||d<melhor.d)melhor={id:n.id,d};
     }
     if(!melhor)return;
-    const alvo=()=>raiz.current?.querySelector<HTMLElement>(`.react-flow__node[data-id="${escapar(melhor!.id)}"] button.graph-node-body`);
+    const alvo=()=>ancoraDoNo(raiz.current,melhor!.id);
     const botao=alvo();
     if(!botao){centralizar(melhor.id);requestAnimationFrame(()=>alvo()?.focus({preventScroll:true}));return}
     botao.focus({preventScroll:true});
@@ -1363,7 +1534,7 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
     return ()=>el.removeEventListener("keydown",atalho);
   },[editavel,raiz,acoes]);
   React.useImperativeHandle(apiRef,()=>({
-    fitView:()=>{void rf.fitView({duration:duracao()})},
+    fitView:()=>caber(),
     zoomIn:()=>{void rf.zoomIn({duration:duracao()})},
     zoomOut:()=>{void rf.zoomOut({duration:duracao()})},
     focus:centralizar,
@@ -1373,13 +1544,13 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
     undo:()=>acoes.current.desfazer(),redo:()=>acoes.current.refazer(),
     align:b=>acoes.current.alinhar(b),distribute:e=>acoes.current.distribuir(e),
     relayout:()=>acoes.current.reorganizar(),getLayout:()=>acoes.current.arrumacao(),
-  }),[rf,centralizar,linhas,forma,titulo,raiz,acoes]);
+  }),[rf,centralizar,linhas,forma,titulo,raiz,acoes,caber]);
   const a=acoes.current;
   return <>
     {/* A BARRA DO MODO DE ARRUMAR (MNT-13): desfazer e refazer; alinhar (dois ou mais escolhidos);
         distribuir (três ou mais); fixar; reorganizar. É a `Toolbar` da Aurea — as setas andam entre os
         botões e o Tab entra e sai dela —, num `Panel` do motor, que só posiciona. */}
-    {editavel&&<Panel position="top-left" className="graph-toolbar">
+    {editavel&&<Panel ref={barraRef} position="top-left" className="graph-toolbar">
       <Toolbar label={s.graphArrange}>
         <ToolbarButton className="btn-icon" aria-label={s.graphUndo} disabled={!barra.podeDesfazer} onClick={()=>a.desfazer()}><Icon name="arrow-u-up-left"/></ToolbarButton>
         <ToolbarButton className="btn-icon" aria-label={s.graphRedo} disabled={!barra.podeRefazer} onClick={()=>a.refazer()}><Icon name="arrow-u-up-right"/></ToolbarButton>
@@ -1398,10 +1569,10 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
         <ToolbarButton className="btn-icon" aria-label={s.graphRelayout} disabled={false} onClick={()=>a.reorganizar()}><Icon name="tree-structure"/></ToolbarButton>
       </Toolbar>
     </Panel>}
-    {controls&&<Panel position="top-right" className="graph-controls">
+    {controls&&<Panel ref={zoomRef} position="top-right" className="graph-controls">
       <IconButton icon="magnifying-glass-plus" label={s.graphZoomIn} onClick={()=>void rf.zoomIn({duration:duracao()})}/>
       <IconButton icon="magnifying-glass-minus" label={s.graphZoomOut} onClick={()=>void rf.zoomOut({duration:duracao()})}/>
-      <IconButton icon="corners-out" label={s.graphFit} onClick={()=>void rf.fitView({duration:duracao()})}/>
+      <IconButton icon="corners-out" label={s.graphFit} onClick={()=>caber()}/>
     </Panel>}
   </>;
 }

@@ -22,7 +22,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // de uma REGIÃO não emite título de documento.
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
-import { CloseButton } from "./actions.js";
+import { Button, CloseButton } from "./actions.js";
 import { canto, criarFolha, estadoAcessivel, letraDoToken } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { IconeEmMoldura } from "./moldura.js";
@@ -336,6 +336,17 @@ export function EmptyState({ icon = "file", title, description, action, state, s
                 : desc), action] }));
 }
 /**
+ * MNT-25 (0.32.0): a barreira de erro, a mesma da web — o que quebra DENTRO do `DataState` vira a cara de
+ * erro dele, e o resto da tela fica. Só um componente de CLASSE pega erro de desenho no React.
+ */
+class BarreiraDeErro extends React.Component {
+    state = { quebrou: false };
+    static getDerivedStateFromError() { return { quebrou: true }; }
+    componentDidCatch(erro, info) { this.props.onCatch?.(erro, info); }
+    tentar = () => this.setState({ quebrou: false });
+    render() { return this.state.quebrou ? this.props.falha(this.tentar) : this.props.children; }
+}
+/**
  * A região que troca de cara. **Ela não desenha nada próprio** — empilha o que já existe.
  *
  * ⚠ **A regra que não está no CSS e é a mais importante:** os sete estados universais
@@ -343,7 +354,15 @@ export function EmptyState({ icon = "file", title, description, action, state, s
  * dado está aí e tem ressalva — esconder o dado seria trocar informação parcial por informação
  * nenhuma. Só `loading`, `error` e `empty` tomam o lugar.
  */
-export function DataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, style, ...rest }) {
+export function DataState({ catchErrors, onCatch, ...props }) {
+    const t = useAureaTokens();
+    const s = folha(t);
+    const strings = useAureaStrings();
+    if (!catchErrors)
+        return _jsx(CorpoDoDataState, { ...props });
+    return (_jsx(BarreiraDeErro, { onCatch: onCatch, falha: (tentar) => (_jsxs(View, { style: [s.regiao, props.style], children: [_jsx(Alert, { variant: "danger", children: props.message ?? strings.dataCrashed }), _jsx(View, { style: { alignSelf: "flex-start" }, children: _jsx(Button, { size: "sm", onPress: tentar, children: strings.dataRetry }) })] })), children: _jsx(CorpoDoDataState, { ...props }) }));
+}
+function CorpoDoDataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();

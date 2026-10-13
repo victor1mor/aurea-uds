@@ -1199,7 +1199,10 @@ img,svg { display:block; }
    `min-width:0` o conteúdo mínimo do flex é o texto inteiro, e o rótulo longo empurra o valor e a
    seta para fora da linha em vez de reticenciar. É a mesma família do defeito que a `pill` da
    barra inferior pagou em 18/08/2026 — lá o rótulo virava zero, aqui ele expulsaria os vizinhos. */
-.nav-list-text { flex:1; min-width:0; display:flex; flex-direction:column; }
+.nav-list-text { flex:1; min-width:0; display:grid; grid-template-columns:minmax(0,1fr); }
+/* MNT-23, "quem mais" (12/10/2026): a NavList empurrava a página como a árvore (360 → 729), pelo mesmo
+   motivo — o `min-width:0` faz o texto encolher DENTRO da linha, mas a largura mínima da lista ainda era
+   o rótulo inteiro. A grade de uma coluna `minmax(0,1fr)` pede zero e, quando cabe, mostra tudo. */
 .nav-list-label { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .nav-list-description { overflow:hidden; color:var(--muted-foreground); font-size:var(--text-xs); text-overflow:ellipsis; white-space:nowrap; }
 /* O VALOR E A SETA NÃO ENCOLHEM: valor cortado MENTE (um "R$ 1.2" no lugar de "R$ 1.234"), e seta
@@ -2373,6 +2376,11 @@ img,svg { display:block; }
 .table-sticky-first tbody > tr > th[scope="rowgroup"]:first-child { background:var(--surface-2); }
 @media (hover:hover) { .table-sticky-first tbody > tr:hover > :first-child { background:color-mix(in oklab,var(--card) 40%,var(--surface-2)); } }
 .table-sticky-first :is(thead,tbody,tfoot) > tr > :first-child:not([colspan])::after { content:""; position:absolute; inset-block:0; inset-inline-end:0; inline-size:var(--border-width); background:var(--border); }
+/* Achado em 12/10/2026 (o teste GAR-12, vencido desde o passo 6): a moldura da tabela tem recheio de 4 dos
+   lados, e a coluna parada gruda na borda de DENTRO dela — a 4. Ao rolar de lado, as células passavam
+   nessa faixa de 4 à esquerda da coluna parada. Cada célula parada tapa a faixa com a cor da moldura, por
+   fora; com propriedade lógica, vale também na escrita da direita para a esquerda. */
+.table-sticky-first :is(thead,tbody,tfoot) > tr > :first-child::before { content:""; position:absolute; inset-block:0; inset-inline-start:calc(-1 * var(--space-1)); inline-size:var(--space-1); background:var(--surface-2); }
 /* Avatar (Lote 2): `overflow:hidden` e o `object-fit` da imagem são a correção do defeito que
    a medição achou — foto que não é quadrada vazava inteira da caixa redonda, porque
    `border-radius` não recorta filho sozinho. Foto de perfil raramente vem quadrada, então isto
@@ -2528,7 +2536,11 @@ button.tag-main { cursor:pointer; }
 .accordion-title { min-inline-size:0; }
 .accordion-item:not([open]) > summary:hover:not([aria-disabled="true"]) { background:color-mix(in oklab, var(--foreground) 3%, transparent); }
 .accordion-item > summary[aria-disabled="true"] { opacity:var(--opacity-disabled); cursor:not-allowed; }
-.accordion-chevron { --step-icon:var(--icon-sm); flex:none; color:var(--muted-foreground); transition:transform var(--duration-fast) var(--ease-standard); }
+/* A seta é desenho do CSS por máscara, como a do `KPI` e a do aviso preso ao botão (12/10/2026). No
+   passo 4 ela entrou como `<Icon>`, que busca o arquivo de ícones: quem usava só o `Accordion` — que
+   abre sem JavaScript e não pedia arquivo nenhum — passou a ver um erro de rede e uma seta vazia (a
+   prova A4 pegou). O desenho é o `caret-down` do Phosphor, o mesmo do arquivo, no mesmo tamanho. */
+.accordion-chevron { --accordion-glifo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E"); flex:none; inline-size:var(--icon-sm); block-size:var(--icon-sm); background:currentColor; color:var(--muted-foreground); -webkit-mask:var(--accordion-glifo) center/contain no-repeat; mask:var(--accordion-glifo) center/contain no-repeat; transition:transform var(--duration-fast) var(--ease-standard); }
 .accordion-item[open] > summary .accordion-chevron { transform:rotate(-180deg); }
 .accordion-content { padding-block:0 var(--space-4); padding-inline:var(--space-4); color:var(--muted-foreground); font-size:var(--text-sm); }
 .accordion-surface { border-radius:var(--radius-card); background:var(--card); }
@@ -3391,7 +3403,7 @@ button.tag-main { cursor:pointer; }
    (`.tree-label` não quebra), então a cápsula não deforma. */
 .tree, .tree-group { margin:0; padding:0; list-style:none; }
 .tree-item { outline:none; }
-.tree-node { display:flex; align-items:center; gap:var(--space-2); min-height:var(--control-h-md); padding-block:var(--space-1); padding-inline-end:var(--space-3); border-radius:var(--radius-control); color:var(--foreground); cursor:pointer; user-select:none; }
+.tree-node { display:grid; grid-template-columns:auto auto minmax(0,1fr); align-items:center; column-gap:0; min-height:var(--control-h-md); padding-block:var(--space-1); padding-inline-end:var(--space-3); border-radius:var(--radius-control); color:var(--foreground); cursor:pointer; user-select:none; }
 .tree-node:hover { background:var(--surface-3); }
 .tree-item:focus-visible > .tree-node { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .tree-node[data-selected] { background:color-mix(in srgb,var(--primary) 14%,transparent); }
@@ -3404,7 +3416,17 @@ button.tag-main { cursor:pointer; }
 .tree-twist-rtl { rotate:180deg; }
 .tree-item[aria-expanded="true"] > .tree-node > .tree-twist { rotate:90deg; }
 .tree-indent { flex:none; width:1rem; }
-.tree-label { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* MNT-23 (12/10/2026): a árvore ALARGAVA A PÁGINA. O rótulo não quebra linha, e numa linha `flex` a
+   largura mínima da árvore era o rótulo inteiro: numa coluna `1fr` de grade, num filho `flex: 1` ou num
+   div dentro deles, ela empurrava a caixa (medido: 360 → 820). A linha é uma GRADE, e a trilha do
+   rótulo é `minmax(0,1fr)`: ela pede zero de largura mínima e, quando há espaço (um painel que se
+   ajusta ao conteúdo), mostra o rótulo inteiro — largura 0 no rótulo resolveria só a primeira metade.
+   As três colunas: a seta (ou o recuo, ou a rodinha), o ícone do nó e o rótulo. O vão vira margem do
+   ícone e do rótulo: sem ícone, a coluna dele fica vazia e não sobra vão dobrado. Quem cobra:
+   `tests/visual/rede3.spec.ts`. */
+.tree-node > .tree-twist, .tree-node > .tree-indent { grid-column:1; }
+.tree-node > .icon:not(.tree-twist) { grid-column:2; margin-inline-start:var(--space-2); }
+.tree-label { grid-column:3; margin-inline-start:var(--space-2); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* NotificationCenter (Fase 4) — compõe o .popover; aqui só o gatilho com count,
    o cabeçalho e as linhas do feed. Espaço novo tokenizado; a linha usa radius-sm
@@ -3767,15 +3789,31 @@ button.graph-node-body { cursor:pointer; }
    com camada, qualquer que seja a força do seletor. Medido na bancada da rodada 1: a fibra saía com
    1 de espessura em vez de 6. A variável não tem rival na linha, então a nossa vale. O `stroke-width`
    fica para os desenhos que são nossos (a amostra da legenda e o miolo do traço duplo). */
-.dependency-graph .graph-edge { --graph-edge-w:var(--graph-edge-base); --xy-edge-stroke-width:var(--graph-edge-w); stroke-width:var(--graph-edge-w); }
-.dependency-graph .graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2); }
-.dependency-graph .graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3); }
+.dependency-graph .graph-edge { --graph-edge-w:calc(var(--graph-edge-base) * var(--graph-edge-scale,1)); --xy-edge-stroke-width:var(--graph-edge-w); stroke-width:var(--graph-edge-w); }
+.dependency-graph .graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2 * var(--graph-edge-scale,1)); }
+.dependency-graph .graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3 * var(--graph-edge-scale,1)); }
+/* MNT-26 (12/10/2026): a COR da linha é o ESTADO dela, o `status.tone` da linha, como o selo do nó (pedido
+   do dono do app: "senti falta de cores"). A cor é a de LETRA e borda sobre a tela (o par `-400`,
+   ADR-0061), e não o fundo cheio. Ela pinta a variável do motor no próprio traço — vence o alto contraste,
+   que pinta a do mapa inteiro: a linha de cor continua de cor, e o traço fica grosso como o resto. A
+   amostra da parte "Estado" da legenda usa a mesma classe, e a palavra ao lado dela é o que garante que a
+   cor não fala sozinha; a amostra do TIPO da ligação não leva cor.
+   A linha com cor tem o DOBRO da espessura (ordem do Victor, 13/10/2026: "pode engrossar a linha com cor").
+   Medido no "caber na tela" (zoom 0,57): com 1 — e com 1,5 —, nenhum ponto do traço chegava à cor de
+   verdade, e a linha verde parecia cinza; com 2, a cor aparece exata. As três espessuras dobram juntas
+   (`--graph-edge-scale`), para a velocidade continuar legível entre as linhas com cor; o miolo do duplo
+   leva a mesma classe e dobra junto. */
+.dependency-graph :is(.graph-edge-tone-info,.graph-edge-tone-success,.graph-edge-tone-warning,.graph-edge-tone-danger) { --graph-edge-scale:2; }
+.dependency-graph .graph-edge-tone-info { --xy-edge-stroke:var(--info-400); }
+.dependency-graph .graph-edge-tone-success { --xy-edge-stroke:var(--success-400); }
+.dependency-graph .graph-edge-tone-warning { --xy-edge-stroke:var(--warning-400); }
+.dependency-graph .graph-edge-tone-danger { --xy-edge-stroke:var(--danger-400); }
 .dependency-graph .graph-edge-dashed { stroke-dasharray:var(--space-2) var(--space-1); }
 .dependency-graph .graph-edge-dotted { --xy-edge-stroke-width:calc(var(--graph-edge-w) * 2); stroke-width:calc(var(--graph-edge-w) * 2); stroke-dasharray:0 calc(var(--graph-edge-w) * 5); stroke-linecap:round; }
 .dependency-graph .graph-edge-double { --xy-edge-stroke-width:calc(var(--graph-edge-w) * 3); stroke-width:calc(var(--graph-edge-w) * 3); }
-.graph-edge-double-core { --graph-edge-w:var(--graph-edge-base); fill:none; stroke:var(--xy-edge-label-background-color); stroke-width:var(--graph-edge-w); pointer-events:none; }
-.graph-edge-double-core.graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2); }
-.graph-edge-double-core.graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3); }
+.graph-edge-double-core { --graph-edge-w:calc(var(--graph-edge-base) * var(--graph-edge-scale,1)); fill:none; stroke:var(--xy-edge-label-background-color); stroke-width:var(--graph-edge-w); pointer-events:none; }
+.graph-edge-double-core.graph-edge-thick { --graph-edge-w:calc(var(--graph-edge-base) * 2 * var(--graph-edge-scale,1)); }
+.graph-edge-double-core.graph-edge-heavy { --graph-edge-w:calc(var(--graph-edge-base) * 3 * var(--graph-edge-scale,1)); }
 /* A pastilha do meio (marca, número, grupo) e o nome da porta na ponta são HTML sobre o desenho. */
 .graph-edge-chip { position:absolute; z-index:var(--graph-label-z); display:inline-flex; align-items:center; gap:var(--space-1); padding:var(--space-05) var(--space-2); border-radius:var(--radius-control); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:all; }
 .graph-edge-end { position:absolute; z-index:var(--graph-label-z); padding:0 var(--space-1); border-radius:var(--radius-xs); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:none; }
@@ -3791,7 +3829,12 @@ button.graph-node-body { cursor:pointer; }
 /* Os botões de zoom, o minimapa e a legenda flutuam sobre o mapa, com a pele de cartão. */
 .graph-controls { display:flex; gap:var(--space-1); padding:var(--space-1); border:var(--border-width) solid var(--border); border-radius:var(--radius-control); background:var(--card); }
 .graph-minimap { border:var(--border-width) solid var(--border); border-radius:var(--radius-md); overflow:hidden; }
-.graph-legend { display:grid; gap:var(--space-1); margin:0; padding:var(--space-2) var(--space-3); list-style:none; border:var(--border-width) solid var(--border); border-radius:var(--radius-md); background:var(--card); color:var(--foreground); font-size:var(--graph-edge-label-size,var(--text-xs)); }
+.graph-legend { display:grid; gap:var(--space-1); margin:0; padding:var(--space-2) var(--space-3); border:var(--border-width) solid var(--border); border-radius:var(--radius-md); background:var(--card); color:var(--foreground); font-size:var(--graph-edge-label-size,var(--text-xs)); }
+/* Duas partes (12/10/2026): o tipo da ligação e o estado, cada uma com o título à vista; com uma parte só,
+   a lista sozinha, como era. */
+.graph-legend ul { display:grid; gap:var(--space-1); margin:0; padding:0; list-style:none; }
+.graph-legend-title { margin:0; color:var(--muted-foreground); font-weight:var(--weight-medium); }
+.graph-legend ul + .graph-legend-title { margin-block-start:var(--space-2); }
 .graph-legend li { display:flex; align-items:center; gap:var(--space-2); }
 .graph-legend-sample { inline-size:var(--space-8); block-size:var(--space-2); overflow:visible; }
 .graph-legend-sample .graph-edge,.graph-legend-sample .graph-edge-double-core { fill:none; }
@@ -3879,6 +3922,17 @@ button.graph-node-body { cursor:pointer; }
 @media (forced-colors:active) {
   :focus-visible { outline:var(--focus-width) solid CanvasText; outline-offset:var(--focus-offset); box-shadow:none; }
   .badge,.pattern-gallery button[aria-pressed="true"],.device-grid button[aria-pressed="true"] { border:1px solid CanvasText; }
+  /* O glifo por máscara é FUNDO recortado, e aqui o navegador troca todo fundo pela cor da tela: o
+     glifo sumia (medido em 12/10/2026: zero ponto de tinta nos cinco). Ele sai da troca e pinta com a
+     cor do SISTEMA que o texto ao lado recebe — pelo nome, porque `inherit` aqui devolve a cor de
+     antes da troca (medido: o amarelo do link e o branco do tema escuro, sobre a tela branca). O
+     título do `Accordion` fica na cor de texto: sem isto, o Chromium o pintava na cor de link e o
+     Firefox na de texto, e a seta não tinha como acompanhar os dois. Glifo novo por máscara entra
+     nesta lista; quem cobra é `tests/visual/mascara-alto-contraste.spec.ts`. */
+  :is(.topbar-menu-icon,.link-external,.kpi-trend-icon,.accordion-chevron,.toast-anchored-icon) { forced-color-adjust:none; background:CanvasText; }
+  .topbar-menu-icon { background:ButtonText; }
+  .link-external { background:LinkText; opacity:1; }
+  .accordion-item > summary { color:CanvasText; }
 }
 
 

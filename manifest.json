@@ -113,6 +113,7 @@
         "./disclosure",
         "./feedback",
         "./graph",
+        "./graph-worker",
         "./identity",
         "./inputs",
         "./layout",
@@ -307,12 +308,12 @@
       "Ready": 44,
       "Stable": 96
     },
-    "testes_unit": 1919,
+    "testes_unit": 1932,
     "componentes_citados_no_teste": 139,
-    "specs_visuais": 37,
+    "specs_visuais": 39,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 853,
+    "classes_core": 858,
     "token_declaracoes": 467,
     "token_nomes": 222,
     "token_usados": 175,
@@ -320,6 +321,6 @@
   },
   "gates": {
     "validate": 43,
-    "playwrightSpecs": 37
+    "playwrightSpecs": 39
   }
 }

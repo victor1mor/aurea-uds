@@ -39,9 +39,7 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": [
-      "caret-down"
-    ]
+    "icons": []
   },
   "related": {
     "components": [

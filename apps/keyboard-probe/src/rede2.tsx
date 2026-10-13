@@ -19,9 +19,10 @@ import "../../../packages/fonts/dist/fonts.css";
 import sprite from "../../../packages/icons/dist/aurea-icons.svg?url";
 // A folha do motor SEM camada — o pior caso, como no banco da rodada 1.
 import "../../../node_modules/@xyflow/react/dist/base.css";
-// A RECEITA DO VITE para o arrumador fora da tela principal (está no README): o `?worker` empacota o
-// trabalhador do próprio `elkjs`, e o app entrega a fábrica ao mapa.
-import TrabalhadorDoElk from "elkjs/lib/elk-worker.min.js?worker";
+// A RECEITA DO VITE para o arrumador fora da tela principal (está no README): desde o MNT-22 (0.32.0), pelo
+// caminho da Aurea — o `?worker` empacota o `@aurea-uds/react/graph-worker`, que traz o trabalhador do
+// `elkjs` junto. O app não importa o motor por fora (a trava dele reprovava a receita antiga).
+import TrabalhadorDoElk from "@aurea-uds/react/graph-worker?worker";
 
 const q = new URLSearchParams(location.search);
 const NOS: GraphNodeItem[] = [

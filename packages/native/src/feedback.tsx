@@ -21,7 +21,7 @@
 // de uma REGIÃO não emite título de documento.
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
-import {CloseButton} from "./actions.js";
+import {Button, CloseButton} from "./actions.js";
 import {canto, criarFolha, estadoAcessivel, letraDoToken} from "./estilos.js";
 import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
@@ -575,6 +575,24 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
   action?: React.ReactNode;
   /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
   children: React.ReactNode | (() => React.ReactNode);
+  /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com "Tentar de novo". */
+  catchErrors?: boolean;
+  /** Recebe o erro que a barreira pegou — para o app registrar. */
+  onCatch?: (error: unknown, info: React.ErrorInfo) => void;
+}
+
+/**
+ * MNT-25 (0.32.0): a barreira de erro, a mesma da web — o que quebra DENTRO do `DataState` vira a cara de
+ * erro dele, e o resto da tela fica. Só um componente de CLASSE pega erro de desenho no React.
+ */
+class BarreiraDeErro extends React.Component<
+  {onCatch?: (error: unknown, info: React.ErrorInfo) => void; falha: (tentar: () => void) => React.ReactNode; children?: React.ReactNode},
+  {quebrou: boolean}> {
+  state = {quebrou: false};
+  static getDerivedStateFromError() { return {quebrou: true}; }
+  componentDidCatch(erro: unknown, info: React.ErrorInfo) { this.props.onCatch?.(erro, info); }
+  tentar = () => this.setState({quebrou: false});
+  render() { return this.state.quebrou ? this.props.falha(this.tentar) : this.props.children; }
 }
 
 /**
@@ -585,9 +603,26 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
  * dado está aí e tem ressalva — esconder o dado seria trocar informação parcial por informação
  * nenhuma. Só `loading`, `error` e `empty` tomam o lugar.
  */
-export function DataState({
+export function DataState({catchErrors, onCatch, ...props}: DataStateProps) {
+  const t = useAureaTokens();
+  const s = folha(t);
+  const strings = useAureaStrings();
+  if (!catchErrors) return <CorpoDoDataState {...props} />;
+  return (
+    <BarreiraDeErro onCatch={onCatch} falha={(tentar) => (
+      <View style={[s.regiao, props.style]}>
+        <Alert variant="danger">{props.message ?? strings.dataCrashed}</Alert>
+        <View style={{alignSelf: "flex-start"}}><Button size="sm" onPress={tentar}>{strings.dataRetry}</Button></View>
+      </View>
+    )}>
+      <CorpoDoDataState {...props} />
+    </BarreiraDeErro>
+  );
+}
+
+function CorpoDoDataState({
   state, message, skeleton, emptyTitle, emptyIcon, action, children, style, ...rest
-}: DataStateProps) {
+}: Omit<DataStateProps, "catchErrors" | "onCatch">) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();

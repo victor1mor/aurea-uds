@@ -30,7 +30,7 @@ export function Accordion({items,variant="default",multiple=false,defaultValue,c
     <details key={i.id} className="accordion-item" name={multiple?undefined:grupo} open={defaultValue?.includes(i.id)||undefined}>
       <summary aria-disabled={i.disabled||undefined} tabIndex={i.disabled?-1:undefined}
         onClick={i.disabled?(e:React.MouseEvent)=>e.preventDefault():undefined}>
-        <span className="accordion-title">{i.title}</span><Icon name="caret-down" className="accordion-chevron"/>
+        <span className="accordion-title">{i.title}</span><span className="accordion-chevron" aria-hidden="true"/>
       </summary>
       <div className="accordion-content">{i.content}</div>
     </details>)}</div>;

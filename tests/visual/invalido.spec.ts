@@ -229,6 +229,8 @@ const ALVO: Record<string, string> = {
   FileInput: 'input[type="file"]',
   Combobox: ".combobox-group > .input", MultiCombobox: ".combobox-chip-input",
   Range: ".range",
+  // 0.32.0 (passo 3): o grupo põe `aria-invalid` em cada caixa de dentro quando tem `error`.
+  CheckboxGroup: ".checkbox-group .checkbox input",
 };
 
 // TRÊS COMPONENTES NÃO TÊM DEMONSTRAÇÃO NA PÁGINA DELES: o catálogo escreve "Interactive — see
@@ -266,6 +268,11 @@ const FICHA_SEM_INVALIDO: Record<string, string> = {
     "`invalid` sem nada desenhar, que é a ficha prometendo o que não existe",
   BlockEditor: "edita a ORDEM e a presença de blocos, não um valor: não há entrada a validar. O " +
     "estado que ele tem é `grabbed`, do arraste por teclado",
+  // As três de 0.32.0 (passos 3 e 6), que entraram sem passar por aqui — achado em 12/10/2026.
+  ListBox: "escolhe itens de uma lista que só oferece opções válidas: não há valor digitado a validar",
+  Slider: "o valor fica sempre dentro de [min,max] por construção, como o do `Range`",
+  TagGroup: "o erro dele é a mensagem embaixo (`errorMessage`), ligada ao grupo para o leitor de tela; " +
+    "as etiquetas não mudam de cor",
 };
 
 // O escopo é a categoria `Inputs` do registry, e é fechado de propósito: `invalid` é estado de

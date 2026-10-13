@@ -255,7 +255,10 @@ test("rótulos: nenhum rótulo à vista cobre outro nem um nó; o que encosta so
   expect(r.sobre).toBe(0);
   expect(r.tapados).toEqual([]);
   expect(r.somem).toBeGreaterThan(0);
-  expect(r.vistos).toBeGreaterThan(5);
+  // 5, e não 6: desde o MNT-24 (12/10/2026) o caber reserva em cima a altura da barra do modo de arrumar,
+  // o mapa cabe num zoom um pouco menor e um rótulo a mais encosta e some. O que importa continua cobrado
+  // acima: nenhum à vista cobre outro, e o que encosta some — sem esconder todos.
+  expect(r.vistos).toBeGreaterThanOrEqual(5);
   for (let k = 0; k < 4; k++) await p.evaluate(() => (window as unknown as {__mapa2: {zoomOut(): void}}).__mapa2.zoomOut());
   await expect(mapa(p)).toHaveAttribute("data-far", "");
   const fim = mapa(p).locator(".graph-edge-end").first();
@@ -284,19 +287,53 @@ test("o arrumador fora da tela principal (a receita do Vite) arruma igual ao da 
   expect(erros).toEqual([]);
 });
 
-test("teclado do mapa de leitura: uma parada por nó, a linha só com onEdgeSelect, e nada em inglês", async ({page: p}) => {
+test("teclado do mapa de leitura (MNT-21, opção A): UMA parada; as setas andam de nó em nó; o Tab passa pelas linhas do nó e sai", async ({page: p}) => {
   await abrir(p, "leitura");
   // Medido na bancada da rodada 1: a caixa do motor e o botão do nó davam DUAS paradas por nó.
   await expect(mapa(p).locator(".react-flow__node[tabindex=\"0\"]")).toHaveCount(0);
   await expect(mapa(p).locator(".react-flow__node button.graph-node-body")).toHaveCount(15);
-  // Este mapa avisa a escolha de linha: aí ela é parada, com nome nosso, e o Enter escolhe.
+  // UMA parada de Tab no mapa (fora os botões de zoom): o app mediu 87, e as linhas vinham antes dos nós.
+  const paradas = () => mapa(p).locator(".react-flow__node button[tabindex=\"0\"], .react-flow__edge[tabindex=\"0\"], .graph-edge-group[tabindex=\"0\"], .react-flow__attribution a[tabindex=\"0\"]");
+  await expect(paradas()).toHaveCount(1);
+  await expect(mapa(p).locator(".react-flow__attribution a")).toHaveAttribute("tabindex", "-1");
+  // O Firewall: as setas levam a ele e a parada vai junto.
+  const firewall = mapa(p).locator(".react-flow__node[data-id=\"fw\"] button.graph-node-body");
+  await paradas().first().focus();
+  for (let k = 0; k < 6 && !(await firewall.evaluate((b) => b === document.activeElement)); k++) await p.keyboard.press("ArrowDown");
+  await expect(firewall).toBeFocused();
+  await expect(firewall).toHaveAttribute("tabindex", "0");
+  await expect(paradas()).toHaveCount(1);
+  // Com o Firewall em foco, o Tab passa pelas linhas DELE (e pelo botão de fechar, se tiver) e sai do mapa.
+  const daSequencia: string[] = [];
+  for (let k = 0; k < 40; k++) {
+    await p.keyboard.press("Tab");
+    const onde = await p.evaluate(() => {
+      const a = document.activeElement as HTMLElement | null;
+      const m = document.querySelector(".dependency-graph")!;
+      if (!a || !m.contains(a) || a.closest(".graph-controls")) return null;
+      return a.closest<HTMLElement>(".react-flow__edge")?.dataset.id ?? a.dataset.edgeGroup ?? a.getAttribute("aria-label") ?? a.className;
+    });
+    if (onde === null) break;
+    daSequencia.push(onde);
+  }
+  const linhasDoFirewall = await p.evaluate(() => (window as unknown as {__arestas2: {id: string; from: string; to: string}[]}).__arestas2
+    .filter((a) => a.from === "fw" || a.to === "fw").length);
+  expect(daSequencia.length, `a sequência: ${daSequencia.join(" | ")}`).toBeGreaterThan(0);
+  expect(daSequencia.length).toBeLessThanOrEqual(linhasDoFirewall + 2);
+  expect(daSequencia).toContain("vpn");
+  // Numa linha em foco, as setas levam às pontas; e o Enter escolhe a linha.
   const linha = mapa(p).locator(".react-flow__edge[data-id=\"vpn\"]");
-  await expect(linha).toHaveAttribute("tabindex", "0");
   await expect(linha).toHaveAttribute("aria-label", "Ligação: Firewall – Filial Centro (VPN)");
   await eventos(p);
   await linha.focus();
   await p.keyboard.press("Enter");
   expect(await eventos(p)).toContain("aresta:vpn");
+  await linha.focus();
+  await p.keyboard.press("ArrowDown");
+  await expect(mapa(p).locator(".react-flow__node[data-id=\"filial\"] button.graph-node-body")).toBeFocused();
+  await linha.focus();
+  await p.keyboard.press("ArrowUp");
+  await expect(firewall).toBeFocused();
   // O mapa da ponte não avisa linha: nenhuma linha é parada.
   await expect(p.locator(".mapa-ponte .react-flow__edge[tabindex=\"0\"]")).toHaveCount(0);
   const textos = await p.locator("[id^=\"react-flow__node-desc\"],[id^=\"react-flow__edge-desc\"]").allTextContents();
@@ -349,9 +386,12 @@ test("a ponta largada em cima de outro nó: a linha fica no desvio, e não volta
   await p.mouse.down();
   // O motor mede o ponto de pega quando o arraste começa: o mouse desce aos poucos até a borda de cima
   // da filial entrar na câmera.
-  await p.mouse.move(c.x + c.width / 2 + 30, c.y - 20, {steps: 10});
+  // A mira é uma FRAÇÃO da câmera (15% da largura à direita do meio), e não 30 pixels: o zoom muda com a
+  // tela e com a reserva da barra (MNT-24), e 30 pixels fixos passavam da câmera no zoom menor.
+  const mira = c.x + c.width / 2 + c.width * 0.15;
+  await p.mouse.move(mira, c.y - 20, {steps: 10});
   for (let y = c.y - 20; y < c.y + c.height + 60; y += 4) {
-    await p.mouse.move(c.x + c.width / 2 + 30, y);
+    await p.mouse.move(mira, y);
     const agora = (await caixa(p, "filial"))!;
     if (agora.y > c.y + 4 && agora.y < c.y + c.height - 4) break;
   }
@@ -379,4 +419,35 @@ test("o botão de fechar fica no canto, fora da alça das portas", async ({page:
     }));
   expect(pontas.length).toBe(4);
   for (const q of pontas) expect(q.x < botao.x || q.x > botao.x + botao.width || q.y < botao.y || q.y > botao.y + botao.height, JSON.stringify(q)).toBe(true);
+});
+
+// MNT-24 (passo 10, 12/10/2026): a barra do modo de arrumar cobria o topo do mapa — o nó de cima ficava
+// atrás dela até a pessoa rolar (medido pelo app no mapa real). O mesmo vale para os botões de zoom,
+// no canto de cima à direita. O "caber na tela" passa a reservar em cima a altura deles.
+/** Os nós cuja caixa cruza a barra do modo de arrumar ou os botões de zoom. */
+const tapados = (p: Page) => p.evaluate(() => {
+  const raiz = document.querySelector(".dependency-graph")!;
+  const barras = [...raiz.querySelectorAll(".graph-toolbar, .graph-controls")].map((b) => b.getBoundingClientRect());
+  return [...raiz.querySelectorAll<HTMLElement>(".react-flow__node")].filter((n) => {
+    const r = n.getBoundingClientRect();
+    return barras.some((b) => r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top);
+  }).map((n) => n.dataset.id);
+});
+
+test("MNT-24 · a barra do modo de arrumar e os botões de zoom não cobrem nó nenhum, ao abrir e depois de caber", async ({page: p}) => {
+  // Em 1000 de largura, sem a reserva, a Internet (o nó de cima) ficava atrás da barra — medido em
+  // 12/10/2026 desligando o conserto. Em 1280 a barra fica ao LADO dela, e o teste não provaria nada.
+  const erros = await abrir(p);
+  await p.setViewportSize({width: 1000, height: 900});
+  await p.reload({waitUntil: "networkidle"});
+  await parar(p);
+  await expect(mapa(p).locator(".graph-toolbar")).toBeVisible();
+  expect(await tapados(p)).toEqual([]);
+  await caber(p);
+  expect(await tapados(p)).toEqual([]);
+  // O botão de caber, da própria barra de zoom, também reserva o espaço.
+  await mapa(p).locator(".graph-controls button").last().click();
+  await parar(p);
+  expect(await tapados(p)).toEqual([]);
+  expect(erros).toEqual([]);
 });

@@ -1,0 +1,124 @@
+import {test, expect, type Page, type Locator} from "@playwright/test";
+
+// O desenho por MÁSCARA no alto contraste do Windows — 12/10/2026, passo 10 (0.32.0).
+//
+// Cinco glifos da Aurea são desenho do CSS por máscara (`background: currentColor` recortado por um
+// SVG): o menu do `Header`, a seta do link externo, a seta do `KPI`, o visto do aviso preso ao botão
+// e, desde hoje, a seta do `Accordion`. No alto contraste o navegador troca o FUNDO de toda peça pela
+// cor da tela — e o glifo, que é feito de fundo, sumia. Medido: 34 pontos de tinta na seta do
+// `Accordion` no modo normal, ZERO no alto contraste. O ícone de arquivo (`<svg>`) não sofre disso,
+// porque o traço dele é `fill`, e não fundo.
+//
+// O conserto mora no bloco do alto contraste: o glifo sai da troca e pinta com a cor do sistema que
+// o texto AO LADO recebe (o `inherit` não serve: devolve a cor de antes da troca). Este teste cobra
+// três coisas — o glifo aparece no modo normal e no alto contraste; no alto contraste, tem a cor do
+// texto ao lado; e a LISTA: glifo novo por máscara que não estiver aqui reprova, para não nascer
+// invisível.
+// Para cada glifo: a marcação do componente e o texto ao lado, cuja cor ele acompanha.
+const GLIFOS: Record<string, string> = {
+  ".topbar-menu-icon": `<button type="button" class="btn btn-ghost btn-icon"><span class="topbar-menu-icon" data-glifo></span></button>`,
+  ".link-external": `<a class="link" href="#x">Documentação<span class="link-external" data-glifo></span></a>`,
+  ".kpi-trend-icon": `<div class="kpi"><small class="kpi-trend kpi-trend-up kpi-tone-success"><span class="kpi-trend-icon" data-glifo></span>+12%</small></div>`,
+  ".accordion-chevron": `<details class="accordion-item"><summary><span class="accordion-title">Pergunta</span><span class="accordion-chevron" data-glifo></span></summary></details>`,
+  ".toast-anchored-icon": `<div class="toast-anchored"><span class="toast-anchored-icon" data-glifo></span><span>Link copiado</span></div>`,
+};
+
+async function tinta(p: Page, l: Locator) {
+  const b64 = (await l.screenshot()).toString("base64");
+  return p.evaluate(async (s) => {
+    const img = new Image();
+    img.src = "data:image/png;base64," + s;
+    await img.decode();
+    const c = document.createElement("canvas");
+    c.width = img.width;
+    c.height = img.height;
+    const x = c.getContext("2d")!;
+    x.drawImage(img, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height).data;
+    let n = 0;
+    // O canto de cima é fundo (o glifo é recortado no centro): conta o que difere dele.
+    for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - d[0]) + Math.abs(d[i + 1] - d[1]) + Math.abs(d[i + 2] - d[2]) > 60) n++;
+    return n;
+  }, b64);
+}
+
+async function montar(p: Page) {
+  await p.setViewportSize({width: 900, height: 700});
+  await p.goto("/apps/catalog/accordion.html", {waitUntil: "networkidle"});
+  await p.evaluate((html) => {
+    document.body.innerHTML = `<main style="display:grid;gap:24px;padding:24px;justify-items:start">${html}</main>`;
+  }, Object.values(GLIFOS).join(""));
+}
+
+test("os glifos por máscara são todos conhecidos: máscara nova entra nesta lista", async ({page: p}) => {
+  await montar(p);
+  const comMascara = await p.evaluate(() => {
+    const achados = new Set<string>();
+    const varrer = (regras: CSSRuleList) => {
+      for (const r of Array.from(regras)) {
+        if (r instanceof CSSStyleRule) {
+          const m = r.style.getPropertyValue("mask-image") || r.style.getPropertyValue("-webkit-mask-image") || r.style.getPropertyValue("mask") || r.style.getPropertyValue("-webkit-mask");
+          if (m && m !== "none") for (const s of r.selectorText.split(",")) achados.add(s.trim());
+        }
+        if ("cssRules" in r && (r as CSSGroupingRule).cssRules) varrer((r as CSSGroupingRule).cssRules);
+      }
+    };
+    for (const f of Array.from(document.styleSheets)) varrer(f.cssRules);
+    return [...achados];
+  });
+  // Cada seletor com máscara termina num dos glifos conhecidos (o do menu tem uma segunda regra, a do X).
+  const desconhecidos = comMascara.filter((s) => !Object.keys(GLIFOS).some((g) => s.endsWith(g)));
+  expect(desconhecidos).toEqual([]);
+  for (const g of Object.keys(GLIFOS)) expect(comMascara.some((s) => s.endsWith(g)), g).toBe(true);
+});
+
+// O WebKit não tem alto contraste (o macOS não tem esse modo). A emulação liga a CONSULTA, mas o
+// navegador não troca cor nenhuma — medido: o texto continuou branco. Então o teste confere a troca
+// de verdade (uma cor qualquer de autor tem de virar a do sistema) e, sem ela, se declara pulado, em
+// vez de passar sem olhar.
+async function altoContraste(p: Page) {
+  await p.emulateMedia({forcedColors: "active"});
+  const troca = await p.evaluate(() => {
+    const i = document.createElement("i");
+    i.style.color = "rgb(1, 2, 3)";
+    document.body.append(i);
+    const cor = getComputedStyle(i).color;
+    i.remove();
+    return cor !== "rgb(1, 2, 3)";
+  });
+  test.skip(!troca, "este navegador não tem alto contraste");
+}
+
+const TEXTO_AO_LADO: Record<string, string> = {
+  ".topbar-menu-icon": ".btn",
+  ".link-external": ".link",
+  ".kpi-trend-icon": ".kpi-trend",
+  ".accordion-chevron": ".accordion-title",
+  ".toast-anchored-icon": ".toast-anchored > span:last-child",
+};
+
+test("no alto contraste, cada glifo tem a cor do texto ao lado", async ({page: p}) => {
+  await montar(p);
+  await altoContraste(p);
+  const cores = await p.evaluate((pares) => pares.map(([glifo, texto]) => ({
+    glifo,
+    tinta: getComputedStyle(document.querySelector(glifo)!).backgroundColor,
+    texto: getComputedStyle(document.querySelector(texto)!).color,
+  })), Object.entries(TEXTO_AO_LADO));
+  for (const c of cores) expect(c.tinta, c.glifo).toBe(c.texto);
+});
+
+for (const modo of ["normal", "alto contraste"] as const) {
+  test(`cada glifo por máscara aparece no modo ${modo}`, async ({page: p}) => {
+    await montar(p);
+    if (modo === "alto contraste") await altoContraste(p);
+    const glifos = p.locator("[data-glifo]");
+    expect(await glifos.count()).toBe(Object.keys(GLIFOS).length);
+    const medido: Record<string, number> = {};
+    for (let i = 0; i < Object.keys(GLIFOS).length; i++) {
+      const g = glifos.nth(i);
+      medido[(await g.getAttribute("class"))!.split(" ")[0]] = await tinta(p, g);
+    }
+    for (const [glifo, pontos] of Object.entries(medido)) expect(pontos, `${glifo}: ${JSON.stringify(medido)}`).toBeGreaterThan(10);
+  });
+}

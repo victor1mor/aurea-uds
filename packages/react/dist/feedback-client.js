@@ -57,7 +57,28 @@ export function Spinner({ size = "md", label, decorative, className, ...props })
 // `children` como FUNÇÃO é de propósito para o caso `loading`: assim o consumidor não paga o
 // render do conteúdo enquanto ele não existe. Aceita nó também, porque a maioria das telas já
 // tem o conteúdo pronto e obrigar função seria cerimônia.
-export function DataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, className, ...props }) {
+// MNT-25 (passo 10, 0.32.0): A BARREIRA DE ERRO, como variação do `DataState` (escolha do Victor,
+// 12/10/2026: escrita na Aurea, sem dependência nova; variação, e não peça nova). Um erro de desenho no app
+// de rede deixou a tela inteira em branco. Com `catchErrors`, o que quebra DENTRO do `DataState` vira a
+// cara de erro dele (a mensagem e "Tentar de novo"), e o resto da tela fica. O React só pega erro de
+// desenho com um componente de CLASSE (não há gancho para isso) — é o jeito que ele manda, e o único.
+// `onCatch`, e não `onError`: `onError` já é o evento do HTML que o `DataState` repassa ao `<div>`.
+// O que a barreira NÃO pega (é do React, não daqui): erro em evento de clique, em código assíncrono e no
+// desenho no servidor.
+class BarreiraDeErro extends React.Component {
+    state = { quebrou: false };
+    static getDerivedStateFromError() { return { quebrou: true }; }
+    componentDidCatch(erro, info) { this.props.onCatch?.(erro, info); }
+    tentar = () => this.setState({ quebrou: false });
+    render() { return this.state.quebrou ? this.props.falha(this.tentar) : this.props.children; }
+}
+export function DataState({ catchErrors, onCatch, ...props }) {
+    const s = useAureaStrings();
+    if (!catchErrors)
+        return _jsx(CorpoDoDataState, { ...props });
+    return _jsx(BarreiraDeErro, { onCatch: onCatch, falha: tentar => _jsxs("div", { className: cx("data-state", props.className), "data-state": "error", children: [_jsx(Alert, { variant: "danger", children: props.message ?? s.dataCrashed }), _jsx("div", { children: _jsx(Button, { size: "sm", onClick: tentar, children: s.dataRetry }) })] }), children: _jsx(CorpoDoDataState, { ...props }) });
+}
+function CorpoDoDataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, className, ...props }) {
     const s = useAureaStrings();
     const conteudo = () => typeof children === "function" ? children() : children;
     const caixa = (inner, ocupado) => _jsx("div", { className: cx("data-state", className), "aria-busy": ocupado || undefined, "data-state": state, ...props, children: inner });

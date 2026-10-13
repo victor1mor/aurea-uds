@@ -177,6 +177,10 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
     action?: React.ReactNode;
     /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
     children: React.ReactNode | (() => React.ReactNode);
+    /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com "Tentar de novo". */
+    catchErrors?: boolean;
+    /** Recebe o erro que a barreira pegou — para o app registrar. */
+    onCatch?: (error: unknown, info: React.ErrorInfo) => void;
 }
 /**
  * A região que troca de cara. **Ela não desenha nada próprio** — empilha o que já existe.
@@ -186,4 +190,4 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
  * dado está aí e tem ressalva — esconder o dado seria trocar informação parcial por informação
  * nenhuma. Só `loading`, `error` e `empty` tomam o lugar.
  */
-export declare function DataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, style, ...rest }: DataStateProps): React.JSX.Element;
+export declare function DataState({ catchErrors, onCatch, ...props }: DataStateProps): React.JSX.Element;
