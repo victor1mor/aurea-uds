@@ -31,6 +31,10 @@
   só este caminho o puxa.
 - **O gatilho é o campo do `Select`** com o calendário no lugar da seta (`.date-picker-trigger`); a janela é o
   `.popover` com o `Calendar` dentro (`.date-picker-popover`). Nenhuma pele nova além dessas duas regras.
+- **A janela é UMA superfície**, como na referência: recheio 12 (`--space-3`, o `p-3` dela), e o `Calendar` de
+  dentro sem moldura própria — visto rodando em 13/10/2026, saía caixa dentro de caixa. O `Calendar` sozinho não
+  muda. E a seta do `Select` sai nos DOIS temas (`.select.date-picker-trigger`): a regra do claro a repintava por
+  cima do calendário (visto pelo Victor). **Aprovado pelo Victor vendo a bancada, 13/10/2026: *"aprovado"*.**
 - **Fechar ao escolher:** a data única fecha no clique; o intervalo, no segundo clique de cada abertura. **Cada
   abertura começa um intervalo novo** — o do motor estendia o que já existia (com 1 a 3 escolhido, clicar 15 e
   20 dava 1 a 20).

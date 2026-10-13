@@ -464,6 +464,14 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const gatilho = moldura.locator(".date-picker-trigger").first();
     await expect(gatilho).toHaveAccessibleName("Check-in");
     expect(await gatilho.evaluate((e) => getComputedStyle(e).backgroundImage)).toBe("none");
+    // E no CLARO: a regra do tema claro do `.select` repinta a seta, e ela saía por cima do calendário (visto pelo
+    // Victor em 13/10/2026: "tem tipo uma seta em cima do ícone do calendário").
+    expect(await gatilho.evaluate((e) => {
+      e.ownerDocument.documentElement.dataset.theme = "light";
+      const fundo = getComputedStyle(e).backgroundImage;
+      e.ownerDocument.documentElement.dataset.theme = "dark";
+      return fundo;
+    })).toBe("none");
     const icone = gatilho.locator(".icon");
     const [g, i] = [(await gatilho.boundingBox())!, (await icone.boundingBox())!];
     expect(g.x + g.width - (i.x + i.width)).toBeLessThan(24);
@@ -471,6 +479,14 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const janela = moldura.getByRole("dialog", {name: "Check-in"});
     await expect(janela.getByRole("grid").first()).toBeVisible();
     await expect(janela.locator("td button:focus")).toHaveCount(1);
+    // UMA superfície, como na referência: a janela com recheio 12, e o calendário de dentro sem moldura própria.
+    // Visto em 13/10/2026: saía caixa dentro de caixa (as duas com borda e canto 22).
+    expect(await janela.evaluate((e) => getComputedStyle(e).paddingTop)).toBe("12px");
+    const calendarioDentro = await janela.locator(".calendar").evaluate((e) => {
+      const cs = getComputedStyle(e);
+      return {borda: cs.borderTopWidth, fundo: cs.backgroundColor, recheio: cs.paddingTop};
+    });
+    expect(calendarioDentro).toEqual({borda: "0px", fundo: "rgba(0, 0, 0, 0)", recheio: "0px"});
     await page.keyboard.press("Escape");
     await expect(janela).toHaveCount(0);
     await expect(gatilho).toBeFocused();

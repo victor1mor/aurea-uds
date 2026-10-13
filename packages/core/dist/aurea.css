@@ -3308,10 +3308,17 @@ button.tag-main { cursor:pointer; }
 .select-trigger:disabled,.select-trigger[data-disabled] { cursor:not-allowed; }
 /* O GATILHO DO `DatePicker` (0.32.0, ADR-0068) é o campo do `Select`, com o calendário no lugar da seta:
    sem a seta desenhada no fundo, o recheio do fim volta ao do lado de dentro, e o ícone vai no fim. */
-.date-picker-trigger { gap:var(--space-2); padding-inline-end:var(--step-field-px,var(--space-3)); background-image:none; }
+/* A seta sai com `.select.date-picker-trigger` (força 0,2,0), e não só `.date-picker-trigger`: a regra do tema claro
+   do `.select` (`[data-theme="light"] .select:where(…)`, mais acima) também tem 0,2,0 e repintava a seta por cima do
+   calendário — visto pelo Victor em 13/10/2026. Empate de força: vale a que vem depois, que é esta. */
+.date-picker-trigger { gap:var(--space-2); padding-inline-end:var(--step-field-px,var(--space-3)); }
+.select.date-picker-trigger { background-image:none; }
 .date-picker-trigger > .icon { flex:none; color:var(--muted-foreground); }
-/* A janela abraça o calendário (o `.popover` tem um piso de largura para texto, e aqui não há texto). */
-.date-picker-popover { min-width:0; }
+/* A janela abraça o calendário (o `.popover` tem um piso de largura para texto, e aqui não há texto). E é UMA
+   superfície só, como na referência: a janela tem o fundo, a sombra e o canto, com recheio 12 (o `p-3` dela); o
+   calendário de dentro perde a moldura própria — antes saía caixa dentro de caixa (visto em 13/10/2026). */
+.date-picker-popover { min-width:0; padding:var(--space-3); }
+.date-picker-popover > .calendar { padding:0; border:0; border-radius:0; background:transparent; }
 .select-value { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .select-value[data-placeholder] { color:var(--muted-foreground); }
 .combobox-popup { inline-size:var(--anchor-width); min-inline-size:0; max-inline-size:none; max-block-size:min(320px,var(--available-height)); overflow-y:auto; overscroll-behavior:contain; }
