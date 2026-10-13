@@ -1269,6 +1269,13 @@ img,svg { display:block; }
 /* `placement="right"` (0.32.0, DOC-01): a lateral do outro lado. A flutuante já tem margem nos quatro
    lados; a encostada leva o fio para o lado de dentro, que agora é o começo da linha. */
 .sidebar-flush.sidebar-right { border-inline-end:0; border-inline-start:1px solid var(--sidebar-border); }
+/* SEM CAIXA é outra variante (0.32.0): `plain`, o nome que a Aurea já dá ao "sem caixa" (`contentVariant`,
+   o painel do `Tabs`, o `KPI`). É a coluna "On this page" de uma documentação, como a da referência: os
+   itens soltos na página. Tira só a PINTURA — fundo, cor da borda, sombra — e guarda a geometria da
+   flutuante (margens, altura, a mesma borda de 1, agora invisível), então trocar de variante não mexe em
+   nada de lugar. O texto continua na escala da lateral: medido nos quatro (Aurea e `lory`, claro e
+   escuro), o `--sidebar-foreground` é o mesmo `--foreground` da página. */
+.sidebar-plain { border-color:transparent; background:transparent; box-shadow:none; }
 /* A COLUNA DA DIREITA do `AppShell` (`aside`): a terceira trilha, da largura da lateral, de 1280 para
    cima. Abaixo, ela desce para depois do conteúdo, na última coluna que houver (a do conteúdo entre
    1024 e 1279; a única abaixo de 1024), sem grudar. Com ela, o conteúdo perde a margem da direita: a
@@ -1389,7 +1396,14 @@ img,svg { display:block; }
    `--sidebar-accent` e `--sidebar-accent-foreground` já eram PUBLICADOS e não tinham um único
    uso no core — token publicado que ninguém usa é promessa sem entrega, e era o par certo o
    tempo todo. O defeito não é da marca: a marca só o tornou visível. */
-@media (hover:hover) and (pointer:fine) { .sidebar-item:hover { background:var(--sidebar-accent); } }
+/* O ITEM ESMAECIDO, como o da referência (ADR-0067, decisão do Victor de 13/10/2026, vendo os dois rodando:
+   "B, igual ao dela"): o item que não é o atual fica cinza, e o título de grupo e o item atual ficam fortes;
+   passando o mouse, o item acende. O cinza sai da ESCALA DA LATERAL (o texto dela, esmaecido), e não do
+   `--muted-foreground` da página — sob a marca `lory` a lateral é escura e a página não (a lição de
+   20/08/2026, logo abaixo). Medido contra o fundo da lateral (13/10/2026): 7,6:1 no escuro e 5,4:1 no
+   claro; na marca `lory`, 7,8:1 e 5,6:1 — o branco de antes era 14,5:1. */
+.sidebar-item:not([aria-current]) { color:color-mix(in oklab, var(--sidebar-foreground) 68%, transparent); }
+@media (hover:hover) and (pointer:fine) { .sidebar-item:hover { background:var(--sidebar-accent); } .sidebar-item:not([aria-current]):hover { color:var(--sidebar-foreground); } }
 /* A-05 (24/09/2026), decisão do Victor: o item atual da lateral passa a usar a MARCA DA CASA para
    "selecionado" — fundo, texto na cor da marca e o fio de 2px embaixo —, que o `Toggle`, o
    `SegmentedControl`, o `Button variant="nav"` e a navegação do catálogo (`.doc-nav`) já usavam.
@@ -1408,7 +1422,10 @@ img,svg { display:block; }
    `--sidebar-foreground` em vez de token novo — a lateral não publica um "muted" dela. */
 /* 72% e não 62% desde a 0.27.0 (ADR-0061): com a letra da paleta nova (#242424, menos preta) os 62%
    davam 4,4:1 sobre o branco — o axe pegou na varredura. 72% é o cinza de texto apagado da paleta. */
-.sidebar-group-label { margin:var(--space-3) var(--space-3) var(--space-1); color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-widest); text-transform:uppercase; }
+/* O título de grupo da lateral é o da referência (ADR-0067, decisão do Victor de 13/10/2026: "igual ao dela"):
+   letra 14, peso médio, SEM maiúsculas, na cor do texto da lateral — mais forte que o item, que é
+   esmaecido; 16 antes do grupo. Era 12, em maiúsculas espaçadas, esmaecido. */
+.sidebar-group-label { margin:var(--space-4) var(--space-3) var(--space-1); color:var(--sidebar-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
 .sidebar-sub { padding-inline-start:var(--space-5); }
 /* RECOLHIDA — a lateral vira trilho de ícones. O rótulo NÃO some do DOM: o React troca a
    classe dele por `.sr-only`, então quem usa leitor de tela continua ouvindo o nome. Ícone
@@ -2630,6 +2647,11 @@ img,svg { display:block; }
 .card-horizontal > .card-media { grid-row:1 / span 99; border-radius:calc(var(--radius-card) - var(--card-pad)); }
 .card-horizontal > :not(.card-media) { grid-column:2; min-width:0; }
 .card-raised { box-shadow:none; } .card-inset { background:var(--secondary); }
+/* `outline` (0.32.0): o cartão da cor de onde ele está, só com a linha em volta — a caixa grande do
+   Início da documentação da referência (o Victor, 13/10/2026: "na mesma cor do site, só tem uma linha
+   ao redor"). O nome é o da referência para "sem fundo, com contorno" (o botão dela); o `transparent`
+   do cartão dela tira também a linha, e esta guarda. A borda, o raio e o recheio são os do `.card`. */
+.card-outline { background:transparent; }
 /* A variante interativa é o ALVO, e desde o G-A11Y-11 ela exige `render` — o elemento vem de
    quem consome, e é `<button>` ou `<a href>` conforme a promessa seja ação ou navegação.
    As quatro normalizações abaixo existem por causa disso: um <button> traz fonte própria,
@@ -3115,7 +3137,11 @@ button.tag-main { cursor:pointer; }
    por isso é <nav> com rótulo, e o item atual se marca com aria-current. */
 .toc { position:sticky; top:var(--space-4); align-self:start; display:grid; gap:var(--space-1); max-height:calc(100vh - var(--space-8)); overflow:auto; padding:var(--space-2) 0; }
 
-.toc-label { margin:0 0 var(--space-1); padding-inline:var(--space-3); color:var(--subtle-foreground); font-size:11px; letter-spacing:var(--tracking-widest); text-transform:uppercase; }
+/* O "On this page" é o da referência (ADR-0067): letra 14, peso normal, esmaecido, SEM maiúsculas, e o
+   ícone de linhas ao lado — desenho do CSS por máscara (o `text-align-left` do Phosphor), para o sumário
+   não passar a depender do arquivo de ícones. Era 11, em maiúsculas espaçadas. */
+.toc-label { display:flex; align-items:center; gap:var(--space-2); margin:0 0 var(--space-1); padding-inline:var(--space-3); color:var(--muted-foreground); font-size:var(--text-sm); }
+.toc-label-icon { --toc-glifo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M32,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H40A8,8,0,0,1,32,64Zm8,48H168a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16Zm176,24H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Zm-48,40H40a8,8,0,0,0,0,16H168a8,8,0,0,0,0-16Z'/%3E%3C/svg%3E"); flex:none; inline-size:var(--icon-sm); block-size:var(--icon-sm); background:currentColor; -webkit-mask:var(--toc-glifo) center/contain no-repeat; mask:var(--toc-glifo) center/contain no-repeat; }
 .toc a { padding:var(--space-1) var(--space-3); border-inline-start:2px solid var(--border); color:var(--muted-foreground); font-size:var(--text-sm); text-decoration:none; }
 .toc a:hover { color:var(--foreground); }
 .toc a[aria-current] { border-inline-start-color:var(--primary); color:var(--foreground); }
@@ -4447,7 +4473,7 @@ button.graph-node-body { cursor:pointer; }
      título do `Accordion` fica na cor de texto: sem isto, o Chromium o pintava na cor de link e o
      Firefox na de texto, e a seta não tinha como acompanhar os dois. Glifo novo por máscara entra
      nesta lista; quem cobra é `tests/visual/mascara-alto-contraste.spec.ts`. */
-  :is(.topbar-menu-icon,.link-external,.kpi-trend-icon,.accordion-chevron,.toast-anchored-icon) { forced-color-adjust:none; background:CanvasText; }
+  :is(.topbar-menu-icon,.link-external,.kpi-trend-icon,.accordion-chevron,.toast-anchored-icon,.toc-label-icon) { forced-color-adjust:none; background:CanvasText; }
   .topbar-menu-icon { background:ButtonText; }
   .link-external { background:LinkText; opacity:1; }
   .accordion-item > summary { color:CanvasText; }
@@ -4512,6 +4538,27 @@ button.graph-node-body { cursor:pointer; }
 .carousel-track::-webkit-scrollbar,.code-block::-webkit-scrollbar,.combobox-popup::-webkit-scrollbar,.command-palette::-webkit-scrollbar,.dialog::-webkit-scrollbar,.dialog-body::-webkit-scrollbar,.drawer::-webkit-scrollbar,.log-stream::-webkit-scrollbar,.notification-list::-webkit-scrollbar,.sidebar::-webkit-scrollbar,.table-region::-webkit-scrollbar,.table-wrap::-webkit-scrollbar,.toc::-webkit-scrollbar { inline-size:var(--space-2); block-size:var(--space-2); }
 .carousel-track::-webkit-scrollbar-track,.code-block::-webkit-scrollbar-track,.combobox-popup::-webkit-scrollbar-track,.command-palette::-webkit-scrollbar-track,.dialog::-webkit-scrollbar-track,.dialog-body::-webkit-scrollbar-track,.drawer::-webkit-scrollbar-track,.log-stream::-webkit-scrollbar-track,.notification-list::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track,.table-region::-webkit-scrollbar-track,.table-wrap::-webkit-scrollbar-track,.toc::-webkit-scrollbar-track { background:transparent; }
 .carousel-track::-webkit-scrollbar-thumb,.code-block::-webkit-scrollbar-thumb,.combobox-popup::-webkit-scrollbar-thumb,.command-palette::-webkit-scrollbar-thumb,.dialog::-webkit-scrollbar-thumb,.dialog-body::-webkit-scrollbar-thumb,.drawer::-webkit-scrollbar-thumb,.log-stream::-webkit-scrollbar-thumb,.notification-list::-webkit-scrollbar-thumb,.sidebar::-webkit-scrollbar-thumb,.table-region::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb,.toc::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:var(--radius-control); }
+/* A LATERAL é a exceção (0.32.0; o Victor, 13/10/2026, olhando a da documentação da referência: a barra
+   "só aparece se o mouse fica em cima do sidebar e ela é clarinha" — e, sobre o padrão, "pode alterar o
+   atual para ser claro e sumir a rolagem"). A barra continua NATIVA e continua lá — a largura fina não
+   muda, então nada pula quando ela aparece; parada, o polegar é transparente. Ela aparece:
+     - com o ponteiro em cima da lateral (é quando quem usa mouse vai arrastá-la);
+     - com o foco do teclado dentro dela (quem navega com Tab vê que a lista rola);
+     - sempre, em tela sem ponteiro que paire (`hover: none`), onde o "em cima" não existe.
+   A cor sai da escala da LATERAL, não da página: é o texto dela, esmaecido.
+   O desenho de antes — a barra sempre à vista, na cor de borda forte — não saiu: é a variante
+   `scrollbar="visible"` (`.sidebar-scrollbar-visible`), para quem precisa da barra o tempo todo. */
+.sidebar { scrollbar-color:transparent transparent; }
+.sidebar::-webkit-scrollbar-thumb { background:transparent; }
+.sidebar:is(:hover,:focus-within) { scrollbar-color:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent) transparent; }
+.sidebar:is(:hover,:focus-within)::-webkit-scrollbar-thumb { background:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent); }
+@media (hover: none) {
+  .sidebar { scrollbar-color:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent) transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent); }
+}
+/* Duas classes, depois das de cima: ganha do "em cima" e do "sem ponteiro" com a mesma força, pela ordem. */
+.sidebar.sidebar-scrollbar-visible { scrollbar-color:var(--border-strong) transparent; }
+.sidebar.sidebar-scrollbar-visible::-webkit-scrollbar-thumb { background:var(--border-strong); }
 
 /* ========================================================================== */
 /* 99. EIXO RESPONSIVO — a infraestrutura do G-AXIS-04                        */
@@ -4595,27 +4642,27 @@ button.graph-node-body { cursor:pointer; }
 /* A lateral NÃO encolhe abaixo de 1366px como a dos docs: os rótulos aqui são nomes de
    componente (o maior, CommandPaletteShell, pede 167px) e cortar nome de componente num
    catálogo de componentes é inaceitável. 264px = o valor padrão do token. */
-.app-shell { --sidebar-width:264px; }
-.crumb { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-bottom:var(--space-4); color:var(--muted-foreground); font-size:var(--text-sm); }
-.crumb a { color:var(--muted-foreground); text-decoration:none; } .crumb a:hover { color:var(--foreground); }
-.crumb-here { color:var(--foreground); }
-.page-head { margin-bottom:var(--space-6); }
+/* ADR-0067: o menu da esquerda e o "On this page" com a largura da referência (220, medida a 1440). */
+.app-shell.site-shell { --sidebar-width:13.75rem; }
+.page-head { display:grid; gap:var(--space-3); margin-bottom:var(--space-6); }
+.page-head-row { display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); }
+.page-pills { display:flex; flex-wrap:wrap; gap:var(--space-2); }
 /* overflow-wrap:anywhere — nome de componente é uma palavra só e pode ser longa
    ("CommandPaletteShell" mede 315px no display serif): a 320px ela empurrava a página e
    fazia a única rolagem lateral que sobrou na varredura. Palavra quebrada é melhor que
    layout quebrado, e a regra do projeto é nunca rolar de lado. */
-.page-head h1 { margin:0; font-family:var(--font-editorial); font-size:var(--text-3xl); letter-spacing:-.025em; overflow-wrap:anywhere; }
-.page-lede { max-width:70ch; margin:var(--space-3) 0 0; color:var(--muted-foreground); line-height:1.65; }
+.page-head h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); line-height:var(--text-3xl-leading); font-weight:var(--weight-semibold); overflow-wrap:anywhere; }
+.page-lede { max-width:70ch; margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .block { margin-bottom:var(--space-8); }
 /* Toda seção mostra o conteúdo numa SUPERFÍCIE, com o mesmo raio do demo — é a identidade
    da Aurea (CLAUDE.md) e o que tira a sensação de peças soltas: antes o demo tinha card de
    22px, o código uma caixa de 16px e Reference/Features nada, só um fio embaixo do título.
    O fio saiu: quem separa as seções agora é o espaço e a borda da própria caixa. */
-.block > h2 { margin:0 0 var(--space-4); font-family:var(--font-editorial); font-size:var(--text-xl); }
+.block { display:grid; gap:var(--space-3); }
+.block > h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); line-height:var(--text-2xl-leading); font-weight:var(--weight-semibold); }
+.usage-points { margin:0; padding-inline-start:calc(var(--space-6) + var(--space-5)); display:grid; gap:var(--space-2); color:var(--muted-foreground); line-height:var(--leading-relaxed); }
 .block > pre, .block > .code-block-wrap .code-block { margin:0; padding:var(--space-6); border-radius:var(--radius-card); }
 .block > dl, .block > ul { margin:0; padding:var(--space-6); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); }
-.install-import { margin-top:var(--space-3); }
-.nav-count { margin-inline-start:var(--space-2); }
 /* chip que embrulha um Status: o texto do Status já traz a cor certa, o chip só dá a
    cápsula para a linha ficar alinhada com as outras da Reference. */
 .chip-status .status { font:inherit; line-height:1; min-width:0; }
@@ -4660,8 +4707,8 @@ button.graph-node-body { cursor:pointer; }
    larga o padding — a moldura já é o card, e o shell lá dentro tem a margem dele. */
 .demo-panel:has(> .demo-frame) { padding:0; }
 .demo-frame { flex:1; align-self:stretch; width:100%; min-height:0; border:0; border-radius:var(--radius-card); }
-.example { margin-top:var(--space-5); }
-.example h3 { margin:0 0 var(--space-1); font-size:var(--text-base); }
+.example { display:grid; gap:var(--space-3); margin-top:var(--space-5); }
+.example h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); line-height:var(--text-xl-leading); font-weight:var(--weight-semibold); }
 .facts { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--space-3) var(--space-5); margin:0; }
 .facts dt { color:var(--subtle-foreground); font-weight:500; }
 .facts dd { margin:0; }
@@ -4692,6 +4739,7 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .pn { display:flex; flex-direction:column; gap:var(--space-05); padding:var(--space-4); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; min-width:0; }
 .pn-next { text-align:end; margin-inline-start:auto; }
 .pn small { color:var(--muted-foreground); }
+.pn > span { color:var(--muted-foreground); font-size:var(--text-sm); }
 /* Nome de componente é UMA palavra longa ("CommandPalette", "ConfirmDialog") e não quebra
    sozinho: a 320px, com a escala de letra da 0.8.8, os dois cartões somavam mais que a coluna
    e a PÁGINA rolava de lado 4–11px. Quando os dois não cabem lado a lado, o de "Next" desce
@@ -4702,6 +4750,50 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .pn strong { overflow-wrap:break-word; }
 .pn:hover { border-color:var(--primary-outline); }
 /* toggle de tema: mostra o ícone do tema PRA ONDE VAI (no dark, a lua… não — o sol, "ir pro claro"). */
+/* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
+   O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
+   largura) e as ações; embaixo, as áreas do site. */
+.site-shell > .topbar, .site-top { flex-wrap:wrap; row-gap:0; }
+.site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
+.site-brand strong { font-size:var(--text-lg); }
+.site-version { color:var(--muted-foreground); font-size:var(--text-sm); }
+.site-actions { display:flex; align-items:center; gap:var(--space-2); }
+.site-areas { order:3; flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
+.site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
+.site-search .kbd { margin-inline-start:auto; }
+.site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
+.site-area:hover { color:var(--foreground); }
+.site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:var(--primary); }
+/* O conteúdo com a largura da referência (912, 816 úteis com o respiro de 48). */
+.site-shell > .content { max-width:57rem; padding:var(--space-8) var(--space-12) var(--space-4); }
+/* "Related Components" em cartões, e o "All Components" em grade de 3, como a referência. */
+.related-grid, .cat-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap:var(--space-4); }
+.cat-grid { gap:var(--space-10) var(--space-4); }
+.related-card { display:grid; gap:var(--space-1); padding:var(--space-4); border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
+a.related-card:hover { border-color:var(--primary-outline); }
+.related-card span { color:var(--muted-foreground); font-size:var(--text-sm); }
+.cat-card { position:relative; display:grid; gap:var(--space-2); }
+/* O componente de verdade, parado (elemento nosso): inerte, recortado na caixa e um pouco menor. */
+.cat-card-preview { display:flex; align-items:center; justify-content:center; aspect-ratio:4 / 3; padding:var(--space-4); overflow:hidden; border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--surface-inset); zoom:.8; }
+.cat-card-icon { color:var(--muted-foreground); }
+.cat-card-foot { display:flex; align-items:center; gap:var(--space-2); }
+.cat-card-name { color:var(--foreground); font-weight:var(--weight-medium); text-decoration:none; }
+/* O link cobre o cartão inteiro: a prévia não mora DENTRO dele (botão dentro de <a> é HTML inválido). */
+.cat-card-name::after { content:""; position:absolute; inset:0; border-radius:var(--radius-card); }
+.cat-card:hover .cat-card-preview { border-color:var(--primary-outline); }
+.cat-card-name:focus-visible { outline:none; }
+.cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
+/* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */
+.site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
+.home { display:grid; gap:var(--space-12); width:min(100%, 72rem); }
+.home-hero { display:grid; justify-items:center; gap:var(--space-5); text-align:center; }
+.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-5xl); line-height:var(--text-4xl-leading); font-weight:var(--weight-bold); text-wrap:balance; }
+.home-hero h1 span { color:var(--muted-foreground); }
+.home-hero > p { max-width:40rem; margin:0; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.home-hero > .home-nota { font-size:var(--text-sm); }
+.home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
+.home-vitrine { display:grid; gap:var(--space-4); }
+.home-abas { justify-self:center; }
 [data-theme="dark"] #theme-toggle .t-moon { display:none; }
 [data-theme="light"] #theme-toggle .t-sun { display:none; }
 }

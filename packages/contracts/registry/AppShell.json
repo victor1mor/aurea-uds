@@ -54,9 +54,15 @@
     },
     {
       "name": "sidebarVariant",
-      "type": "\"floating\" | \"flush\"",
+      "type": "\"floating\" | \"flush\" | \"plain\"",
       "default": "\"floating\"",
       "description": "Skin of the sidebar, forwarded to it. flush is the one exception this design system makes to its floating surfaces: the panel sits against the edges, takes the full height and is separated from the content by a single rule. Without this prop the variant would be unreachable for anyone composing through the shell, which is the normal path."
+    },
+    {
+      "name": "sidebarScrollbar",
+      "type": "hover | visible",
+      "default": "hover",
+      "description": "The left sidebar's scrollbar, forwarded to it: hover (light, shown with the pointer over it, with focus inside and on touch screens) or visible (always on screen)."
     },
     {
       "name": "sidebarCollapsed",
@@ -110,6 +116,12 @@
       "type": "string",
       "default": "strings.tocLabel",
       "description": "The right column's name for screen readers."
+    },
+    {
+      "name": "asideVariant",
+      "type": "\"floating\" | \"flush\" | \"plain\"",
+      "default": "sidebarVariant",
+      "description": "Skin of the right-hand column. Without it, the same as the left sidebar. plain removes the box — the items sit loose on the page, like a documentation page's \"On this page\"."
     }
   ],
   "tokens": [
@@ -158,7 +170,8 @@
   "axes": {
     "sidebarVariant": [
       "floating",
-      "flush"
+      "flush",
+      "plain"
     ],
     "topbarVariant": [
       "floating",
@@ -167,6 +180,15 @@
     "contentVariant": [
       "plain",
       "surface"
+    ],
+    "sidebarScrollbar": [
+      "hover",
+      "visible"
+    ],
+    "asideVariant": [
+      "floating",
+      "flush",
+      "plain"
     ]
   }
 }

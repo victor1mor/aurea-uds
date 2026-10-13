@@ -1319,6 +1319,8 @@ for (const theme of ["dark", "light"] as const) {
             grupoCaixaAlta: cs(".sidebar-group-label").textTransform,
             grupoCor: cs(".sidebar-group-label").color,
             itemCor: getComputedStyle(comum).color,
+            grupoPeso: Number(cs(".sidebar-group-label").fontWeight),
+            itemPeso: Number(getComputedStyle(comum).fontWeight),
             // o rótulo do trilho: FORA da tela, DENTRO do DOM
             trilhoRotuloW: r.width, trilhoRotuloH: r.height,
             trilhoRotuloTexto: (rotuloTrilho.textContent ?? "").trim(),
@@ -2224,9 +2226,13 @@ for (const theme of ["dark", "light"] as const) {
     // 23. Grupo e aninhamento têm de ser VISÍVEIS como tais: sem o recuo, a sublista fica
     //     indistinguível da lista de cima e a hierarquia só existe no HTML.
     expect(m.sidebar.subRecuo, "a sublista recua em relação ao pai").toBeGreaterThan(0);
-    expect(m.sidebar.grupoCaixaAlta, "o rótulo de grupo é caixa alta").toBe("uppercase");
-    expect(m.sidebar.grupoCor, "rótulo de grupo é mais apagado que item — ele não é clicável")
-      .not.toBe(m.sidebar.itemCor);
+    // ADR-0067 (13/10/2026, "igual ao dela"): o título de grupo é o da referência, em letra normal.
+    expect(m.sidebar.grupoCaixaAlta, "o rótulo de grupo é letra normal, como o da referência").toBe("none");
+    // O título se DISTINGUE do item (não é clicável). Era "mais apagado"; o da referência é o oposto, e é o
+    // que o Victor escolheu ("B, igual ao dela", 13/10/2026): o título forte, em peso médio, e o item
+    // esmaecido. A cor do item é outra — e a conferência de marca cobra o contraste dele em toda combinação.
+    expect(m.sidebar.grupoPeso, "o título de grupo é mais pesado que o item").toBeGreaterThan(m.sidebar.itemPeso);
+    expect(m.sidebar.grupoCor, "o item que não é o atual é esmaecido, e o título não").not.toBe(m.sidebar.itemCor);
     // 24. O TRILHO recolhido, e é a promessa que mais barato seria quebrar: esconder o rótulo
     //     com display:none passaria no olho e deixaria uma coluna de ícones anônimos para
     //     quem usa leitor de tela. Ele tem de sair da TELA e continuar no DOM.
@@ -2725,7 +2731,8 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.tabs.raio, "a lista de abas é pill").toBe(e.tabs.radiusControl);
     expect(e.tabs.tabRaio, "e cada aba também").toBe(e.tabs.radiusControl);
     expect(e.tabs.tabsNaLinha, "as abas ficam na mesma linha").toBe(true);
-    expect(e.toc.rotuloCaixaAlta, "o rótulo do índice é caixa alta").toBe("uppercase");
+    // ADR-0067: o "On this page" é o da referência, em letra normal.
+    expect(e.toc.rotuloCaixaAlta, "o rótulo do índice é letra normal, como o da referência").toBe("none");
     expect(e.toc.subRecuo, "o item aninhado recua — é o único sinal de nível").toBeGreaterThan(0);
     expect(e.toc.atualCor, "o item atual se distingue dos demais").not.toBe(e.toc.comumCor);
     expect(e.tree.marcador, "a árvore é <ul> e não mostra as bolinhas do navegador").toBe("none");

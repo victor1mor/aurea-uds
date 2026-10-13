@@ -95,14 +95,16 @@ export interface SidebarItem {
     /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
     render?: ReactElement;
 }
-export type SidebarVariant = "floating" | "flush";
+export type SidebarVariant = "floating" | "flush" | "plain";
+export type SidebarScrollbar = "hover" | "visible";
 export type SidebarPlacement = "left" | "right";
-export declare function Sidebar({ items, current, collapsed, variant, placement, label, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+export declare function Sidebar({ items, current, collapsed, variant, placement, scrollbar, label, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
     items?: SidebarItem[];
     current?: string;
     collapsed?: boolean;
     variant?: SidebarVariant;
     placement?: SidebarPlacement;
+    scrollbar?: SidebarScrollbar;
     label?: string;
 }): React.JSX.Element;
 export type BottomNavVariant = "floating" | "edge";

@@ -72,7 +72,7 @@ export function TableOfContents({ items, current, label, className, ...props }) 
     return _jsxs("nav", { ref: n => { meu.current = n; if (typeof refDele === "function")
             refDele(n);
         else if (refDele)
-            refDele.current = n; }, className: cx("toc", className), "aria-label": label ?? s.tocLabel, ...resto, children: [_jsx("p", { className: "toc-label", children: label ?? s.tocLabel }), items.map(i => _jsx("a", { href: `#${i.id}`, className: cx(i.sub && "toc-sub"), ...(i.id === atual ? { "aria-current": "true" } : {}), children: i.label }, i.id))] });
+            refDele.current = n; }, className: cx("toc", className), "aria-label": label ?? s.tocLabel, ...resto, children: [_jsxs("p", { className: "toc-label", children: [_jsx("span", { className: "toc-label-icon", "aria-hidden": "true" }), label ?? s.tocLabel] }), items.map(i => _jsx("a", { href: `#${i.id}`, className: cx(i.sub && "toc-sub"), ...(i.id === atual ? { "aria-current": "true" } : {}), children: i.label }, i.id))] });
 }
 /** Qual dos `items` está na faixa de leitura, observando o documento. Devolve `undefined` até o
  *  primeiro cálculo — e em SSR, onde não há documento para observar.
@@ -264,10 +264,10 @@ function fecharGavetaAoEscolher(e) {
     }
     catch { /* motor sem popover: não há gaveta */ }
 }
-export function Sidebar({ items, current, collapsed, variant = "floating", placement = "left", label, children, className, onClick, ...props }) {
+export function Sidebar({ items, current, collapsed, variant = "floating", placement = "left", scrollbar = "hover", label, children, className, onClick, ...props }) {
     const s = useAureaStrings();
     const baseId = React.useId();
-    return _jsxs("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", placement === "right" && "sidebar-right", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: [items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) }), children] });
+    return _jsxs("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: [items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) }), children] });
 }
 const LEGADO = {
     flat: ["edge", "none"], surface: ["floating", "circle"], pill: ["floating", "pill"], dock: ["floating", "circle"]

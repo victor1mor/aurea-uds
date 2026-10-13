@@ -118,13 +118,13 @@
       "name": "appearance",
       "type": "solid | outline | ghost | link | nav",
       "default": "ghost",
-      "description": "Herdado do Button. Quanto peso a caixa tem; o default aqui é ghost."
+      "description": "Inherited from Button. How much weight the box carries; the default here is ghost."
     },
     {
       "name": "tone",
       "type": "neutral | brand | danger | success | warning | info",
       "default": "neutral",
-      "description": "Herdado do Button. O que a cor significa; todas as células existem."
+      "description": "Inherited from Button. What the colour means; every combination exists."
     },
     {
       "name": "pressed",

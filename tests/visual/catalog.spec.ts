@@ -10,13 +10,15 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // Recorte por seletor, não a página inteira: baseline de página inteira quebra a cada linha de
 // conteúdo novo e ninguém olha o diff depois da terceira vez.
 const PAGES = [
-  {name: "index", url: "/apps/catalog/index.html", clip: ".app-shell"},
-  {name: "componente", url: "/apps/catalog/button.html", clip: ".page-main > .block:nth-of-type(1)"},
-  {name: "pattern", url: "/apps/catalog/pattern-button-with-kbd.html", clip: ".page-main"},
-  {name: "block", url: "/apps/catalog/block-stats-row.html", clip: ".page-main > .block:nth-of-type(1)"},
+  // ADR-0067 (13/10/2026): o `index.html` é o Início, e o catálogo de componentes mora em `components.html`.
+  {name: "index", url: "/apps/catalog/index.html", clip: ".home-hero"},
+  {name: "componentes", url: "/apps/catalog/components.html", clip: ".content > .block:nth-of-type(1)"},
+  {name: "componente", url: "/apps/catalog/button.html", clip: "#usage"},
+  {name: "pattern", url: "/apps/catalog/pattern-button-with-kbd.html", clip: "#usage"},
+  {name: "block", url: "/apps/catalog/block-stats-row.html", clip: "#usage"},
   {name: "recipe", url: "/apps/catalog/recipe-saas-admin.html", clip: ".page-head"},
-  {name: "tokens", url: "/apps/catalog/tokens.html", clip: ".page-main > .block:nth-of-type(1)"},
-  {name: "lateral", url: "/apps/catalog/button.html", clip: ".sidebar"},
+  {name: "tokens", url: "/apps/catalog/tokens.html", clip: ".content > .block:nth-of-type(1)"},
+  {name: "lateral", url: "/apps/catalog/button.html", clip: ".app-shell > .sidebar"},
   {name: "topo", url: "/apps/catalog/button.html", clip: ".topbar"},
 ];
 

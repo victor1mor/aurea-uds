@@ -96,7 +96,7 @@
       "name": "variant",
       "type": "\"floating\" | \"edge\"",
       "default": "\"floating\"",
-      "description": "Where the BAR sits: floating as a loose pill, or edge against the screen with a hairline above it. It says nothing about how the current item is marked — that is `indicator`, and keeping the two apart is the whole point of the 20/08/2026 rewrite. The four names of 17/08/2026 (flat, surface, pill, dock) are still accepted and map onto the pair; they are deprecated, not removed."
+      "description": "Where the BAR sits: floating as a loose pill, or edge against the screen with a hairline above it. It says nothing about how the current item is marked — that is `indicator`, and keeping the two apart is the point. The older names (flat, surface, pill, dock) are still accepted and map onto the pair; they are deprecated, not removed."
     },
     {
       "name": "indicator",

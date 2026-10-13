@@ -141,13 +141,13 @@
       "name": "appearance",
       "type": "solid | outline | ghost | link | nav",
       "default": "ghost",
-      "description": "Herdado do Button. Quanto peso a caixa tem; o default aqui é ghost."
+      "description": "Inherited from Button. How much weight the box carries; the default here is ghost."
     },
     {
       "name": "tone",
       "type": "neutral | brand | danger | success | warning | info",
       "default": "neutral",
-      "description": "Herdado do Button. O que a cor significa; todas as células existem."
+      "description": "Inherited from Button. What the colour means; every combination exists."
     },
     {
       "name": "size",
@@ -231,7 +231,7 @@
       "name": "share",
       "type": "{ url?: string; title?: string; text?: string }",
       "default": "—",
-      "description": "O botão compartilha. Pergunta ao navegador se ele sabe compartilhar este link (navigator.canShare) — detectar o recurso, não adivinhar o aparelho. Sabe (celular; Chrome, Edge e Safari no computador): abre a janela do aparelho, e cancelar não é erro. Não sabe: copia o link e mostra \"Link copiado\" preso ao botão, com a medida dele. A cópia falhou: avisa e mostra o link selecionado. O aviso fala com o leitor de tela. Sem url, é o endereço da página. Precisa do AureaProvider (ou do aurea.js na página) para avisar; emite [data-aurea-share], que o aurea.js também lê. Só vale no <button> (ignorado com href ou render). No nativo, o mesmo nome abre o compartilhar do sistema."
+      "description": "The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows \"Link copied\" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet."
     }
   ]
 }

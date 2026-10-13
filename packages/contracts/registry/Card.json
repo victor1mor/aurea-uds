@@ -14,6 +14,7 @@
     "raised",
     "interactive",
     "inset",
+    "outline",
     "selected",
     "danger",
     "contrast"
@@ -68,9 +69,9 @@
   "props": [
     {
       "name": "variant",
-      "type": "base | raised | interactive | inset | selected | danger | contrast",
+      "type": "base | raised | interactive | inset | outline | selected | danger | contrast",
       "default": "base",
-      "description": "Which surface it is. `interactive` is the only one that answers the pointer, so use it only when the whole card really is a target; `inset` recesses instead of floating, which is what a panel inside a card wants. `contrast` stands out from the screen in both themes: in the light theme it is the dark theme's card, with no outline; in the dark theme it is the regular card with a yellow outline. Inside it the whole dark theme applies (data-theme=\"dark\" on the card), so every child adjusts by itself. Do not use it in a list of choices: in the dark theme its outline is close to `selected`."
+      "description": "Which surface it is. `interactive` is the only one that answers the pointer, so use it only when the whole card really is a target; `inset` recesses instead of floating, which is what a panel inside a card wants. `contrast` stands out from the screen in both themes: in the light theme it is the dark theme's card, with no outline; in the dark theme it is the regular card with a yellow outline. Inside it the whole dark theme applies (data-theme=\"dark\" on the card), so every child adjusts by itself. Do not use it in a list of choices: in the dark theme its outline is close to `selected`. `outline` has no fill of its own — it takes the colour of whatever it sits on — and keeps only the line around it: the big showcase box of a documentation home page."
     },
     {
       "name": "children",

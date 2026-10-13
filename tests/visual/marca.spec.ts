@@ -81,9 +81,10 @@ async function medir(page: Page, marca: string, tema: string): Promise<Medida> {
     const painelCor = getComputedStyle(lateral).backgroundColor;
     const painel = rgb(painelCor);
     const painelHex = `rgb(${painel.join(",")})`;
-    const ativo = lateral.querySelector("a.active")!;
-    const repouso = lateral.querySelector("a:not(.active)")!;
-    const rotulo = lateral.querySelector(".nav-group-label, h4")!;
+    // ADR-0067: a lateral do site é a `Sidebar` da Aurea — o atual se marca com aria-current.
+    const ativo = lateral.querySelector('a[aria-current="page"]')!;
+    const repouso = lateral.querySelector("a:not([aria-current])")!;
+    const rotulo = lateral.querySelector(".sidebar-group-label")!;
     const csAtivo = getComputedStyle(ativo);
     // O ativo tem fundo PRÓPRIO: medir contra o painel mentiria a favor.
     const fundoAtivo = rgb(csAtivo.backgroundColor, painelHex);

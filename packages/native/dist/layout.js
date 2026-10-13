@@ -46,6 +46,9 @@ const folha = criarFolha((t) => ({
     card_interactive: { borderColor: t.color.borderStrong },
     // `inset` recessa em vez de flutuar — é o painel DENTRO de um card, e a ficha da web diz isso.
     card_inset: { backgroundColor: t.color.surfaceInset, borderColor: "transparent" },
+    // 0.32.0: `outline` é o cartão da cor de onde ele está, só com a linha em volta — o mesmo nome da
+    // web. Sem fundo; a borda, o raio e o recheio continuam os do `cardBase`.
+    card_outline: { backgroundColor: "transparent" },
     card_selected: peleDoCartaoEscolhido(t),
     card_danger: { borderColor: t.color.danger400 ?? t.color.destructive, backgroundColor: t.color.dangerBg },
     // O amarelo é o DE PREENCHER — `primary`, o mesmo do botão sólido. A borda some: uma superfície

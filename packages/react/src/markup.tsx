@@ -83,12 +83,14 @@ export type TopbarVariant=HeaderVariant;
 // principal de fazer um pedaço escuro (o tema num elemento); ela não tem o cartão.
 // `accent` é o traço de cor no topo, na cor CHEIA do tom, igual nos dois temas — a exceção que a
 // ADR-0063 abriu na ADR-0061 para enfeite: o nome da caixa diz o assunto, o traço não carrega nada.
+// 0.32.0: `variant="outline"` é o cartão da cor de onde ele está, só com a linha em volta — a caixa
+// grande do Início da documentação da referência. O nome é o dela para "sem fundo, com contorno".
 export type CardAccent="brand"|"success"|"info"|"warning"|"danger";
 type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
 export type CardProps=CardBase&(
-  {variant?:"base"|"raised"|"inset"|"selected"|"danger"|"contrast";render?:ReactElement}|
+  {variant?:"base"|"raised"|"inset"|"outline"|"selected"|"danger"|"contrast";render?:ReactElement}|
   {variant:"interactive";render:ReactElement});
 export function Card({variant="base",padding="normal",orientation="vertical",accent,className,render,...props}:CardProps){
 return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,accent&&`card-accent card-accent-${accent}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}

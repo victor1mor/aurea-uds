@@ -283,13 +283,13 @@
     "componentes": 132,
     "fichas": 132,
     "hooks": 9,
-    "paginas_total": 404,
+    "paginas_total": 406,
     "paginas": {
       "component": 141,
       "pattern": 219,
       "block": 15,
       "recipe": 23,
-      "area": 6
+      "area": 8
     },
     "conteudo_rico": 39,
     "starters": 102,
@@ -308,12 +308,12 @@
       "Ready": 44,
       "Stable": 96
     },
-    "testes_unit": 1932,
+    "testes_unit": 1947,
     "componentes_citados_no_teste": 139,
     "specs_visuais": 39,
     "baselines": 44,
     "baselines_linux": 22,
-    "classes_core": 858,
+    "classes_core": 862,
     "token_declaracoes": 467,
     "token_nomes": 222,
     "token_usados": 175,

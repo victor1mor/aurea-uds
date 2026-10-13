@@ -154,7 +154,9 @@ PATTERNS_REF = [
 # Pacotes MONTADOS, com código de dependência dentro: o `live.js` do catálogo e a saída do
 # `keyboard-probe` levam o código do Base UI, cujo gerador de id tem um prefixo que casa com uma
 # sigla da lista. O código-fonte nosso que vai dentro deles já é varrido arquivo por arquivo.
-REF_FORA = {root / "apps/catalog/assets/live.js"}
+# O `search.js` (a busca do site, 13/10/2026) é o mesmo caso: leva a `CommandPalette`, e com ela o
+# mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`.
+REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js"}
 REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
 
 

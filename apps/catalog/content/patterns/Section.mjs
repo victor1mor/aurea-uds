@@ -3,10 +3,12 @@
 // GAR-06 (07/10/2026): o rodapé de site é a `Section` com `variant="footer"`.
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+// DUAS colunas, e não três (13/10/2026): na coluna de conteúdo do site novo a prévia tem 766 de largura, a
+// grade das colunas pede 8rem cada, e a terceira descia para uma segunda linha — o rodapé passava 14px
+// da caixa (o `catalog-sweep` pegou). Quem cede é o exemplo, não a caixa (ADR-0002).
 const COLUNAS = [
   {title: "Product", items: [{id: "pricing", label: "Pricing", href: "#"}, {id: "changelog", label: "Changelog", href: "#"}]},
-  {title: "Company", items: [{id: "about", label: "About", href: "#"}, {id: "careers", label: "Careers", href: "#"}]},
-  {title: "Help", items: [{id: "docs", label: "Docs", href: "#"}, {id: "contact", label: "Contact", href: "#"}]},
+  {title: "Company", items: [{id: "about", label: "About", href: "#"}, {id: "contact", label: "Contact", href: "#"}]},
 ];
 export default [
   {

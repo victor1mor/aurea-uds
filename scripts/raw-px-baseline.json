@@ -7,7 +7,7 @@
     "scripts/build-catalog.mjs": 0,
     "apps/catalog/content/**/*.mjs": 0,
     "core: raio cru": 3,
-    "core: tamanho de fonte cru": 5,
+    "core: tamanho de fonte cru": 4,
     "core: peso de fonte cru": 0,
     "core: entrelinha cru": 0
   },

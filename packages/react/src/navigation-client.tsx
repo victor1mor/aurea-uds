@@ -162,7 +162,7 @@ const refDele=(props as {ref?:React.Ref<HTMLElement>}).ref;
 const {ref:_ignorado,...resto}=props as {ref?:React.Ref<HTMLElement>}&HTMLAttributes<HTMLElement>;
 return <nav ref={n=>{meu.current=n;if(typeof refDele==="function")refDele(n);else if(refDele)(refDele as React.RefObject<HTMLElement|null>).current=n;}}
   className={cx("toc",className)} aria-label={label??s.tocLabel} {...resto}>
-<p className="toc-label">{label??s.tocLabel}</p>
+<p className="toc-label"><span className="toc-label-icon" aria-hidden="true"/>{label??s.tocLabel}</p>
 {items.map(i=><a key={i.id} href={`#${i.id}`} className={cx(i.sub&&"toc-sub")} {...(i.id===atual?{"aria-current":"true" as const}:{})}>{i.label}</a>)}
 </nav>
 }
@@ -369,7 +369,14 @@ return <li key={it.id}>
 // Então `floating` é o padrão (o desenho da `0.3.0`, que segue publicado sem quebra) e `flush` é a
 // variante — a ÚNICA exceção à caixa flutuante desta casa, medida em quatro aplicativos que rodam
 // na mão, um deles o painel da própria referência de desenho. Ver ADR-0034.
-export type SidebarVariant="floating"|"flush";
+// `plain` (0.32.0): a lateral SEM CAIXA — sem fundo, sem linha, sem sombra —, com o lugar e a altura da
+// flutuante. É a coluna "On this page" da documentação da referência, os itens soltos na página.
+export type SidebarVariant="floating"|"flush"|"plain";
+// `scrollbar` (0.32.0): `hover`, o padrão, é a barra da documentação da referência — clara, invisível
+// parada, e de volta com o ponteiro em cima, com o foco dentro, e sempre em tela de toque (o Victor,
+// 13/10/2026: "pode alterar o atual para ser claro e sumir a rolagem"). `visible` é o desenho de
+// antes, a barra sempre à vista, para quem precisa dela o tempo todo.
+export type SidebarScrollbar="hover"|"visible";
 // A GAVETA FECHA AO ESCOLHER (A-06, 23/09/2026). Abaixo de lg a lateral do `AppShell` é popover,
 // e a biblioteca a abria e NUNCA a fechava por código: `hidePopover` tinha zero ocorrências. O
 // usuário tocava "Relatórios", a página trocava por baixo e a gaveta ficava na frente dela. Duas das
@@ -389,10 +396,10 @@ function fecharGavetaAoEscolher(e:React.MouseEvent<HTMLElement>){
 // nome de uma das referências da fila (a principal não tem moldura de página). Na direita, o fio da
 // lateral encostada passa para o outro lado. É a coluna "Nesta página" do `AppShell` (`aside`).
 export type SidebarPlacement="left"|"right";
-export function Sidebar({items,current,collapsed,variant="floating",placement="left",label,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;label?:string}){
+export function Sidebar({items,current,collapsed,variant="floating",placement="left",scrollbar="hover",label,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string}){
 const s=useAureaStrings();
 const baseId=React.useId();
-return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",placement==="right"&&"sidebar-right",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
 {items&&items.length>0&&<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}>{sidebarList(items,{baseId,current,collapsed})}</nav>}
 {children}
 </aside>}

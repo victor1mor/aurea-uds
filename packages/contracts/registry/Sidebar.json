@@ -11,7 +11,8 @@
   },
   "variants": [
     "floating",
-    "flush"
+    "flush",
+    "plain"
   ],
   "sizes": [],
   "states": [
@@ -81,9 +82,9 @@
     },
     {
       "name": "variant",
-      "type": "\"floating\" | \"flush\"",
+      "type": "\"floating\" | \"flush\" | \"plain\"",
       "default": "floating",
-      "description": "floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping admin panels do — the reference library's own dashboard among the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it."
+      "description": "floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping admin panels do — the reference library's own dashboard among the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it. plain is the sidebar with NO box — no fill, no line, no shadow — in the floating one's place and height: the items sit loose on the page, like a documentation page's \"On this page\" column. The 1px border stays, transparent, so switching variants moves nothing."
     },
     {
       "name": "current",
@@ -114,6 +115,12 @@
       "type": "left | right",
       "default": "left",
       "description": "Which side the sidebar lives on. On the right, the flush variant's line moves to the inner side. It is the AppShell's aside column."
+    },
+    {
+      "name": "scrollbar",
+      "type": "hover | visible",
+      "default": "hover",
+      "description": "hover is a light scrollbar that is invisible at rest and comes back with the pointer over the sidebar, with keyboard focus inside it, and always on a screen without hover (touch). It stays native and keeps its width, so nothing jumps when it shows. visible keeps the bar on screen all the time, for whoever needs it."
     }
   ],
   "notes": [
@@ -124,6 +131,10 @@
     "placement": [
       "left",
       "right"
+    ],
+    "scrollbar": [
+      "hover",
+      "visible"
     ]
   }
 }

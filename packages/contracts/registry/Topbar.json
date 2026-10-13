@@ -3,7 +3,7 @@
   "category": "Navigation",
   "layer": "Component",
   "maturity": "Deprecated",
-  "summary": "The old name of Header (renamed on 07/10/2026). Same component, still works the same; use Header.",
+  "summary": "The old name of Header. Same component, still works the same; use Header.",
   "icon": "list",
   "platforms": {
     "web": "stable",

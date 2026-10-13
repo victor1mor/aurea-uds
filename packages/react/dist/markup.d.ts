@@ -15,7 +15,7 @@ type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> &
     accent?: CardAccent;
 };
 export type CardProps = CardBase & ({
-    variant?: "base" | "raised" | "inset" | "selected" | "danger" | "contrast";
+    variant?: "base" | "raised" | "inset" | "outline" | "selected" | "danger" | "contrast";
     render?: ReactElement;
 } | {
     variant: "interactive";

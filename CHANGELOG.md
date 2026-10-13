@@ -138,6 +138,16 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   item `disabled`.
 - **`Sidebar placement="right"`** e a coluna da direita do **`AppShell`** (`aside`, `asideLabel`) — o
   "Nesta página" de uma documentação, de 1280 para cima; abaixo, depois do conteúdo (DOC-01).
+- **`Sidebar variant="plain"`** — a lateral SEM CAIXA (sem fundo, sem linha, sem sombra), com o lugar e a
+  altura da flutuante: os itens soltos na página, como o "On this page" da documentação da referência. E
+  **`AppShell asideVariant`**, a variante da coluna da direita (padrão: a mesma da esquerda) — o site usa
+  `asideVariant="plain"`. "plain" é o nome que a Aurea já dá ao "sem caixa" (`contentVariant`, o painel do
+  `Tabs`, o `KPI`).
+- **`Sidebar scrollbar`** (`hover`, o padrão novo, ou `visible`) e **`AppShell sidebarScrollbar`**, que o
+  repassa — ver "Mudou".
+- **`Card variant="outline"`**, na web e no nativo — o cartão da cor de onde ele está, só com a linha em
+  volta (a caixa grande do Início da referência; o site usa na vitrine). O nome é o da referência para "sem
+  fundo, com contorno"; o `transparent` do cartão dela tira também a linha.
 - **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
   (`shortcuts`, ligada; DOC-07).
 - **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
@@ -224,6 +234,34 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 
 ### Mudou
 
+- **O site (aureauds.dev) segue a documentação da referência** ([ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md),
+  escolha do Victor): o topo em duas linhas com a logo da Aurea; o menu em ordem alfabética, com os selos
+  "New" e "Updated" tirados dos dados; a página de componente na ordem dela — o título com "Copy Markdown",
+  as pílulas "Source" e "Styles source", Usage, Examples, Styling Reference, API Reference, Related
+  Components e os cartões de anterior e próxima, sem trilha e sem "Installation" por página (ela mora no
+  novo Getting Started); o "All Components" em `components.html`, em grade de 3, com o componente de
+  verdade, parado, em cada cartão; e o Início em `index.html`. As abas Preview | Code continuam as da Aurea.
+  A lateral da esquerda é a superfície flutuante da Aurea, e o "On this page" da direita é a `Sidebar`
+  sem caixa (`asideVariant="plain"`). A busca é a `CommandPalette`, em toda página: o botão "Search" do
+  topo (no Início, só o ícone, como o da referência) e o Ctrl+K (⌘K no Mac) abrem, os resultados vêm em
+  grupos (Pages, Components, Hooks, Patterns, Blocks, Recipes) e o Enter leva à página. O índice sai dos
+  mesmos dados das páginas (`assets/search-index.js`); sem JavaScript, o botão é um link para o "All
+  Components". A vitrine do Início é o `Card variant="outline"`. Dois exemplos encolheram para caber na
+  prévia da coluna nova (ADR-0002: quem cede é o exemplo): o rodapé de site com duas colunas de links, e o
+  "Analytics workbench" com o "Export" sem ícone.
+- ⚠ **A barra de rolagem da `Sidebar` é clara e some parada** (o Victor, 13/10/2026: *"pode alterar o
+  atual para ser claro e sumir a rolagem"*), como a da documentação da referência. Ela continua nativa e
+  no mesmo lugar (nada pula), e aparece com o ponteiro em cima, com o foco do teclado dentro, e sempre em
+  tela de toque. A barra de antes, sempre à vista, é a variante `scrollbar="visible"`. As outras regiões
+  que rolam não mudam.
+- ⚠ **Os títulos de grupo da `Sidebar` e o título do `TableOfContents` são os da referência:** letra 14, sem
+  maiúsculas — o do menu em peso médio, na cor do texto da lateral; o do sumário esmaecido, com o ícone de
+  linhas ao lado, desenhado pelo CSS num `span.toc-label-icon` novo (o sumário não passa a depender do
+  arquivo de ícones). Eram 12 e 11, em maiúsculas espaçadas.
+- ⚠ **Os itens da `Sidebar` que não são o atual ficam esmaecidos**, como os da referência (escolha do Victor,
+  vendo os dois rodando): o cinza sai da cor da própria lateral, e o item acende ao passar o mouse; o título
+  de grupo e o item atual ficam fortes. Contraste medido do item contra a lateral: 7,6:1 no escuro e 5,4:1
+  no claro (na marca `lory`, 7,8:1 e 5,6:1); era 14,5:1.
 - **O "caber na tela" do mapa reserva em cima a barra do modo de arrumar e os botões de zoom** (MNT-24) — o
   nó de cima ficava atrás da barra até a pessoa rolar. A reserva é medida (a barra quebra em mais linhas na
   tela estreita); a barra que aparece depois desce o mapa o tanto dela, sem mexer no zoom.
@@ -369,6 +407,10 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   ponto de tinta nos cinco). Agora pintam com a cor do sistema do texto ao lado; e, nesse modo, o título
   do `Accordion` fica na cor de texto (o Chromium o pintava na de link, e o Firefox não). Quem cobra:
   `mascara-alto-contraste.spec.ts`, que também reprova glifo novo por máscara fora da lista.
+- **Os textos públicos das fichas que tinham ficado para trás:** as descrições de `appearance`, `tone` e
+  `share` do `Button`, do `IconButton` e do `ToolbarButton` estavam em português no meio do inglês, e o
+  `MessageList`, o `SegmentedControl`, o `AvatarGroup`, o `BottomNav` e o `Topbar` citavam versão ou data. Em
+  inglês e sem histórico agora; quem cobra é `fichas-texto-publico.test.tsx`.
 
 ### ⚠ Pode quebrar a compilação
 

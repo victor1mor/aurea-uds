@@ -6,8 +6,8 @@
     "modulos": 38,
     "componentes": 138,
     "hooks": 9,
-    "aliasesLiterais": 107,
-    "propsDistintas": 341
+    "aliasesLiterais": 108,
+    "propsDistintas": 344
   },
   "aliases": {
     "ButtonVariant": {
@@ -1992,7 +1992,7 @@
     },
     "CardProps": {
       "module": "markup",
-      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"contrast\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
+      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"outline\" | \"selected\" | \"danger\" | \"contrast\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
       "union": null
     },
     "LayoutGap": {
@@ -2375,10 +2375,19 @@
     },
     "SidebarVariant": {
       "module": "navigation-client",
-      "raw": "\"floating\" | \"flush\"",
+      "raw": "\"floating\" | \"flush\" | \"plain\"",
       "union": [
         "floating",
-        "flush"
+        "flush",
+        "plain"
+      ]
+    },
+    "SidebarScrollbar": {
+      "module": "navigation-client",
+      "raw": "\"hover\" | \"visible\"",
+      "union": [
+        "hover",
+        "visible"
       ]
     },
     "SidebarPlacement": {
@@ -6526,7 +6535,17 @@
               "type": "SidebarVariant",
               "values": [
                 "floating",
-                "flush"
+                "flush",
+                "plain"
+              ]
+            },
+            {
+              "name": "sidebarScrollbar",
+              "optional": true,
+              "type": "SidebarScrollbar",
+              "values": [
+                "hover",
+                "visible"
               ]
             },
             {
@@ -6540,6 +6559,16 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "asideVariant",
+              "optional": true,
+              "type": "SidebarVariant",
+              "values": [
+                "floating",
+                "flush",
+                "plain"
+              ]
             },
             {
               "name": "sidebarCollapsed",
@@ -6849,13 +6878,14 @@
             {
               "name": "variant",
               "optional": false,
-              "type": "\"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"contrast\" | \"interactive\"",
+              "type": "\"base\" | \"raised\" | \"inset\" | \"outline\" | \"selected\" | \"danger\" | \"contrast\" | \"interactive\"",
               "values": [
                 "base",
                 "contrast",
                 "danger",
                 "inset",
                 "interactive",
+                "outline",
                 "raised",
                 "selected"
               ]
@@ -8511,7 +8541,8 @@
               "type": "SidebarVariant",
               "values": [
                 "floating",
-                "flush"
+                "flush",
+                "plain"
               ]
             },
             {
@@ -8521,6 +8552,15 @@
               "values": [
                 "left",
                 "right"
+              ]
+            },
+            {
+              "name": "scrollbar",
+              "optional": true,
+              "type": "SidebarScrollbar",
+              "values": [
+                "hover",
+                "visible"
               ]
             },
             {

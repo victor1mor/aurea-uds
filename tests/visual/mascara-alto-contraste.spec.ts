@@ -21,6 +21,8 @@ const GLIFOS: Record<string, string> = {
   ".kpi-trend-icon": `<div class="kpi"><small class="kpi-trend kpi-trend-up kpi-tone-success"><span class="kpi-trend-icon" data-glifo></span>+12%</small></div>`,
   ".accordion-chevron": `<details class="accordion-item"><summary><span class="accordion-title">Pergunta</span><span class="accordion-chevron" data-glifo></span></summary></details>`,
   ".toast-anchored-icon": `<div class="toast-anchored"><span class="toast-anchored-icon" data-glifo></span><span>Link copiado</span></div>`,
+  // O ícone de linhas do "On this page" (ADR-0067, 13/10/2026).
+  ".toc-label-icon": `<nav class="toc"><p class="toc-label"><span class="toc-label-icon" data-glifo></span>On this page</p></nav>`,
 };
 
 async function tinta(p: Page, l: Locator) {
@@ -95,6 +97,7 @@ const TEXTO_AO_LADO: Record<string, string> = {
   ".kpi-trend-icon": ".kpi-trend",
   ".accordion-chevron": ".accordion-title",
   ".toast-anchored-icon": ".toast-anchored > span:last-child",
+  ".toc-label-icon": ".toc-label",
 };
 
 test("no alto contraste, cada glifo tem a cor do texto ao lado", async ({page: p}) => {
