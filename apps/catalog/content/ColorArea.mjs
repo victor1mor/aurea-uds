@@ -1,0 +1,50 @@
+// 0.32.0, ADR-0069 — o `ColorArea`. As prévias são VIVAS (`embed`): arrastar, tocar e as teclas funcionam
+// dentro da moldura, e é isso que a varredura mede.
+import {createElement as h, useState} from "react";
+import {ColorArea, ColorSwatch} from "../../../packages/react/dist/index.js";
+
+const coluna = {display: "grid", gap: "var(--space-3)", justifyItems: "start", width: "min(100%, 14rem)"};
+
+function ComOValor() {
+  const [cor, setCor] = useState("#0485f7");
+  return h("div", {style: coluna},
+    h(ColorArea, {value: cor, onValueChange: setCor, "aria-label": "Accent"}),
+    h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-2)"}},
+      h(ColorSwatch, {color: cor, label: "Accent"}),
+      h("code", null, cor)));
+}
+
+export default {
+  description:
+    "ColorArea is the square where you pick a colour's saturation (across) and brightness (up) for one hue. " +
+    "It works by pointer, touch and keyboard, and the screen reader hears the channels and the colour's name.",
+
+  install: 'import {ColorArea} from "@aurea-uds/react";',
+
+  features: [
+    "The value is hex (#rrggbb), like the browser's colour input: value, defaultValue, onValueChange, onValueCommitted.",
+    "Arrows move one step (Shift: ten); Page Up/Down change the brightness, Home/End the saturation.",
+    "Two hidden range inputs, one per axis, announced as a 2D slider, with the colour's name in the app's language.",
+    "Dragging to grey keeps the hue: the area does not jump to red.",
+  ],
+
+  examples: [
+    {
+      title: "Pick a colour",
+      description: "Drag, tap or use the arrows.",
+      code: `<ColorArea defaultValue="#0485f7" aria-label="Fill" />`,
+      embed: true,
+      render: () => h("div", {style: coluna}, h(ColorArea, {defaultValue: "#0485f7", "aria-label": "Fill"})),
+    },
+    {
+      title: "With the value",
+      description: "Controlled: the swatch and the code follow the area.",
+      code: `const [colour, setColour] = useState("#0485f7");
+
+<ColorArea value={colour} onValueChange={setColour} aria-label="Accent" />
+<ColorSwatch color={colour} label="Accent" />`,
+      embed: true,
+      render: () => h(ComOValor),
+    },
+  ],
+};

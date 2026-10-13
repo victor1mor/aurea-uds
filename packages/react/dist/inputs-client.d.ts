@@ -158,10 +158,33 @@ export interface SliderProps<V extends number | readonly number[] = number | rea
     showValue?: boolean;
     /** Com dois valores, o nome de cada alça, na ordem ("Mínimo", "Máximo"). */
     thumbLabels?: readonly string[];
+    /** A TRILHA DE COR (0.32.0, ADR-0069), variação deste mesmo Slider: `"hue"` faz dele a trilha do matiz — de 0 a
+     *  360, pintada com o círculo de cores, o pino na cor do valor, o valor em graus, e o nome da cor para o leitor
+     *  de tela. Um valor só. */
+    channel?: "hue";
     className?: string;
     id?: string;
 }
-export declare function Slider<V extends number | readonly number[]>({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation, disabled, name, format, locale, showValue, thumbLabels, className, id }: SliderProps<V>): React.JSX.Element;
+export declare function Slider<V extends number | readonly number[]>({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation, disabled, name, format, locale, showValue, thumbLabels, channel, className, id }: SliderProps<V>): React.JSX.Element;
+export interface ColorAreaProps {
+    /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+    value?: string;
+    /** A cor de partida quando você não controla. Padrão: branco. */
+    defaultValue?: string;
+    /** Chamado a cada passo, com o hex `#rrggbb`. */
+    onValueChange?: (value: string) => void;
+    /** Chamado ao soltar o ponteiro e a cada tecla — o momento de salvar. */
+    onValueCommitted?: (value: string) => void;
+    disabled?: boolean;
+    /** Vai no formulário como `#rrggbb`. */
+    name?: string;
+    id?: string;
+    className?: string;
+    "aria-label"?: string;
+    "aria-labelledby"?: string;
+    "aria-describedby"?: string;
+}
+export declare function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, ...resto }: ColorAreaProps): React.JSX.Element;
 export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className }: {
     length: number;
     value?: string;

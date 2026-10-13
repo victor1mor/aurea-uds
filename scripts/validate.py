@@ -389,6 +389,14 @@ _sem_gradiente += [str(f.relative_to(root)) for f in sorted((root / "apps/catalo
 for rel in _sem_gradiente:
     if "gradient(" in (root / rel).read_text(encoding="utf-8"):
         errors.append(f"{rel}: contém gradient()")
+# A QUARTA porta, fechada em 13/10/2026 (ADR-0069): o código dos componentes. Até ali o check olhava só o CSS e
+# o catálogo, e um gradiente posto pelo React (estilo em linha, variável de CSS) passaria calado. A ADR-0069 abre
+# UMA exceção — pintar as cores que se escolhem (a área e a trilha de cor) — e ela mora num arquivo só.
+_gradiente_permitido = {"packages/react/src/color.ts"}
+for f in sorted((root / "packages/react/src").rglob("*.ts*")):
+    rel = f.relative_to(root).as_posix()
+    if rel not in _gradiente_permitido and "gradient(" in f.read_text(encoding="utf-8"):
+        errors.append(f"{rel}: contém gradient() — a única exceção é o color.ts (ADR-0069)")
 
 def _sem_comentario(texto):
     """COMENTÁRIO NÃO PRODUZ PIXEL. A contagem por eixo (logo abaixo) já descartava comentário

@@ -8,6 +8,9 @@
     "orientation": [
       "horizontal",
       "vertical"
+    ],
+    "channel": [
+      "hue"
     ]
   },
   "icon": "faders",
@@ -34,7 +37,8 @@
     "--radius-full",
     "--shadow-sm",
     "--text-sm",
-    "--weight-medium"
+    "--weight-medium",
+    "--border-width"
   ],
   "a11y": {
     "role": "slider",
@@ -144,6 +148,12 @@
       "type": "string",
       "default": "—",
       "description": "For the form: the engine renders the hidden input with the raw value."
+    },
+    {
+      "name": "channel",
+      "type": "\"hue\"",
+      "default": "—",
+      "description": "The colour track (ADR-0069), a variation of this Slider: 0 to 360, the track painted with the colour wheel, the thumb in the value's colour, the value in degrees and the colour's name for the screen reader. One value."
     },
     {
       "name": "className",

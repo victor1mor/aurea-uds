@@ -288,6 +288,10 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // 0.32.0, passo 6: as quatro peças novas da referência, e os três tamanhos do selo e do avatar.
     h("p", {key: "lnk"}, h(A.Link, {href: "#a"}, "Plain link"), " ", h(A.Link, {href: "#b", external: true}, "External")),
     h("div", {key: "csw"}, h(A.ColorSwatch, {color: "#f0c200", label: "Yellow"}), h(A.ColorSwatch, {color: "#123456", size: "xl"})),
+    // 0.32.0, passo 12: a área de cor (ADR-0069) e o gatilho do DatePicker (ADR-0068, subcaminho `calendar`).
+    h("div", {key: "car", style: {width: 320}}, h(A.ColorArea, {defaultValue: "#0485f7", "aria-label": "Fill"})),
+    h("div", {key: "shue", style: {width: 320}}, h(A.Slider, {label: "Hue", channel: "hue", defaultValue: 210})),
+    h("div", {key: "dpk", style: {width: 320}}, h(A2.DatePicker, {"aria-label": "Check-in", defaultValue: new Date(2026, 7, 12)})),
     h("div", {key: "pcr"}, h(A.ProgressCircle, {label: "Upload", value: 50}), h(A.ProgressCircle, {label: "Big", value: 50, size: "lg", tone: "success"})),
     h(A.TagGroup, {key: "tgg", label: "Topics", selectionMode: "multiple", defaultSelectedKeys: ["b"],
       items: [{id: "a", label: "News"}, {id: "b", label: "Travel", icon: "tag"}], onRemove: () => {}}),
@@ -1481,6 +1485,17 @@ for (const theme of ["dark", "light"] as const) {
             iconBtn: {w: caixa(".btn-icon").width, h: caixa(".btn-icon").height,
                       quadrado: Math.abs(caixa(".btn-icon").width - caixa(".btn-icon").height) <= 1,
                       controlMd: emPx("--control-h-md")},
+            passo12: {
+              area: {w: caixa(".color-area").width, h: caixa(".color-area").height, raio: parseFloat(est(".color-area").borderTopLeftRadius),
+                     pintada: est(".color-area").backgroundImage, pino: caixa(".color-area-thumb").width,
+                     anel: parseFloat(est(".color-area-thumb").borderTopWidth), anelCor: est(".color-area-thumb").borderTopColor,
+                     entrada: est(".color-area-input").opacity},
+              matiz: {pino: [caixa(".slider-hue .slider-thumb").width, caixa(".slider-hue .slider-thumb").height],
+                      anel: parseFloat(est(".slider-hue .slider-thumb").borderTopWidth), trilho: caixa(".slider-hue .slider-track").height,
+                      pintada: est(".slider-hue .slider-track").backgroundImage, cheio: !!document.querySelector(".slider-hue .slider-fill")},
+              data: {fundo: est(".date-picker-trigger").backgroundImage, alt: caixa(".date-picker-trigger").height,
+                     select: caixa(".select-trigger:not(.date-picker-trigger)").height},
+            },
             passo6: {
               link: {cor: est(".link").color, linkToken: (() => { const d = document.createElement("span"); d.style.color = "var(--link)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; })(),
                      peso: est(".link").fontWeight, sublinhado: est(".link").textDecorationLine, seta: caixa(".link-external").width,
@@ -2656,6 +2671,21 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.fechar.icone, "o X tem 16 (--icon-sm), não os 20 do botão").toBeCloseTo(16, 0);
     expect(e.fechar.fundo, "o CloseButton tem o fundo neutro").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.fechar.nome, "o nome acessível vem sozinho").toBe("Close");
+    // 0.32.0, passo 12 — o ColorArea (ADR-0069) e o gatilho do DatePicker (ADR-0068), nas medidas da referência
+    // (lidas no CSS publicado dela, 3.2.6).
+    const p12 = e.passo12;
+    expect([p12.area.w, p12.area.h], "ColorArea: quadrada, até 224").toEqual([224, 224]);
+    expect(p12.area.raio, "canto 16 (--radius-lg)").toBe(16);
+    expect(p12.area.pintada, "a pintura chega pela variável — o gradiente da exceção").toMatch(/^linear-gradient/);
+    expect([p12.area.pino, p12.area.anel], "o pino tem 16, com o anel de 3").toEqual([16, 3]);
+    expect(p12.area.anelCor, "o anel é branco nos dois temas (fica sobre a cor)").toBe("rgb(255, 255, 255)");
+    expect(Number(p12.area.entrada), "os dois range ficam escondidos").toBeLessThan(0.01);
+    expect(p12.matiz.pino, "Slider channel=hue: o pino redondo de 16").toEqual([16, 16]);
+    expect([p12.matiz.anel, p12.matiz.trilho], "com o anel de 3, na trilha de 20").toEqual([3, 20]);
+    expect(p12.matiz.pintada, "a trilha pintada com o círculo de cores").toMatch(/^linear-gradient/);
+    expect(p12.matiz.cheio, "sem o preenchimento: a cor é a trilha").toBe(false);
+    expect(p12.data.fundo, "DatePicker: sem a seta do Select").toBe("none");
+    expect(p12.data.alt, "o gatilho tem a altura do Select").toBe(p12.data.select);
     // 0.32.0, passo 6 — as medidas da referência, lidas no CSS publicado dela.
     const p6 = e.passo6;
     expect(p6.link.cor, "Link: a cor de link").toBe(p6.link.linkToken);

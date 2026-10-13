@@ -20,7 +20,8 @@ em inglês e ficam como estão: são registro.
 ### Os componentes novos da 0.32.0 (em construção)
 
 - `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
-  `TagGroup` e `DatePicker` (na web; o nativo já o tinha) — a nota está na seção `[0.32.0]`, abaixo.
+  `TagGroup`, `DatePicker` (na web; o nativo já o tinha) e `ColorArea` — a nota está na seção `[0.32.0]`,
+  abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -160,6 +161,17 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
     (`import {ptBR} from "react-day-picker/locale"`), e o campo e o calendário mudam JUNTOS. Sem ele, inglês, o
     padrão do motor. Nunca a língua do ambiente: com ela, o servidor e o navegador escreviam textos diferentes
     e a página perdia a hidratação (medido no catálogo). O texto da data leva `lang` com a língua dela.
+- **`ColorArea`** ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), escolhas
+  do Victor: *"cor A"*, *"área de cor como peça nova"*, motor *"como o calendário"*) — o quadrado em que se escolhe
+  a saturação e o brilho de um matiz, pelo ponteiro, pelo toque e pelo teclado (as teclas da referência). O
+  valor é hex, com `value`, `defaultValue`, `onValueChange` e `onValueCommitted`, o idioma das peças de entrada
+  da web. Por dentro, dois `range` escondidos, um por eixo, anunciados como controle 2D, com o NOME da cor na
+  língua do app ("vivid blue", "azul vivo"). Puxar até o cinza não troca o matiz. Sem dependência nova.
+- **`Slider channel="hue"`, a trilha de cor** (ADR-0069, escolha do Victor: *"a trilha de cor segue como variação
+  do Slider"*) — de 0 a 360, a trilha pintada com o círculo de cores, sem o preenchimento, o pino redondo de 16 na
+  cor do valor (o da referência), o valor em graus e o nome da cor para o leitor de tela ("Hue 210°, vivid
+  blue"). O grau é escrito pela Aurea, e não pelo `Intl` do motor: ele formata na língua do ambiente, e o
+  servidor e o navegador escreveriam "210 °" e "210°".
 - **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
   (`shortcuts`, ligada; DOC-07).
 - **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
@@ -246,6 +258,11 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 
 ### Mudou
 
+- **A regra "sem gradientes" ganha UMA exceção** ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md),
+  escolha do Victor: *"cor A"*): pintar as cores que se escolhem — a área e a trilha de cor —, e só no
+  `packages/react/src/color.ts`. O CSS do core continua sem gradiente nenhum. A trava (check 4 do
+  `validate.py`) passou a varrer também o código dos componentes: antes, um gradiente posto pelo React
+  passaria calado.
 - **`Field`: o `<label>` tem `id`**, além do `for` (escolha do Victor, 13/10/2026), como o rótulo da biblioteca
   de acessibilidade do mercado — outra parte do controle pode apontar para ele (a janela do `DatePicker`).
   Nada muda na tela.
@@ -438,6 +455,11 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **Mais duas frases no `AureaStrings` da web** — `datePlaceholder` ("Escolher data", o mesmo nome do
   nativo) e `dateRangePlaceholder` ("Escolher período"), o gatilho vazio do `DatePicker`. Mesma regra: quem
   monta o objeto inteiro acrescenta; o `ptBR` já as traz.
+- **Seis frases novas no `AureaStrings` da web, da família de cor** (ADR-0069) — `colorPicker` ("Seletor de
+  cor"), `colorArea2D` ("controle 2D"), `colorChannel` (os nomes dos canais: matiz, saturação, brilho),
+  `colorHue` (os nomes das cores), `colorTone` (escuro, claro, vivo, pálido, acinzentado…) e `colorNameFormat`
+  (a ordem das palavras do nome da cor na língua: `"{hue} {chroma} {lightness}"` no português). Mesma regra:
+  quem monta o objeto inteiro acrescenta; o `ptBR` já as traz.
 - `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
   compilar.
 - `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.

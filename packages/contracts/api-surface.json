@@ -3,11 +3,11 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 38,
-    "componentes": 139,
+    "modulos": 39,
+    "componentes": 140,
     "hooks": 9,
     "aliasesLiterais": 108,
-    "propsDistintas": 348
+    "propsDistintas": 349
   },
   "aliases": {
     "ButtonVariant": {
@@ -205,6 +205,21 @@
     "DatePickerProps": {
       "module": "calendar",
       "raw": "DatePickerBase & ({ range?: false; value?: Date; defaultValue?: Date; onChange?: (d: Date) => void; } | { range: true; value?: DateRange; defaultValue?: DateRange; onChange?: (r: DateRange) => void; })",
+      "union": null
+    },
+    "ColorNameStrings": {
+      "module": "color",
+      "raw": "Pick<AureaStrings, \"colorHue\" | \"colorTone\" | \"colorNameFormat\">",
+      "union": null
+    },
+    "ColorHueName": {
+      "module": "color",
+      "raw": "keyof AureaStrings[\"colorHue\"]",
+      "union": null
+    },
+    "ColorToneName": {
+      "module": "color",
+      "raw": "keyof AureaStrings[\"colorTone\"]",
       "union": null
     },
     "ChatDirection": {
@@ -4203,6 +4218,11 @@
       "hooks": [],
       "clientDirective": false
     },
+    "color": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
     "communication": {
       "components": [
         {
@@ -5674,6 +5694,79 @@
           ]
         },
         {
+          "name": "ColorArea",
+          "kind": "function",
+          "propsType": "ColorAreaProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "Combobox",
           "kind": "function",
           "propsType": null,
@@ -6457,6 +6550,14 @@
               "optional": true,
               "type": "readonly string[]",
               "values": null
+            },
+            {
+              "name": "channel",
+              "optional": true,
+              "type": "\"hue\"",
+              "values": [
+                "hue"
+              ]
             },
             {
               "name": "className",

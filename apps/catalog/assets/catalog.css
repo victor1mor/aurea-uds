@@ -2430,6 +2430,28 @@ img,svg { display:block; }
 .slider[data-orientation="vertical"] .slider-thumb { inline-size:100%; block-size:calc(var(--space-6) + var(--space-1)); }
 .slider[data-orientation="vertical"] .slider-thumb::after { inline-size:var(--space-4); block-size:var(--space-6); }
 @media (prefers-reduced-motion:reduce) { .slider-thumb::after { transition:none; } }
+/* A TRILHA DE COR (0.32.0, ADR-0069) — a variação `channel="hue"` do Slider. A pintura (o círculo de cores, a
+   exceção da ADR-0069) chega pela variável que o componente põe; esta folha não escreve gradiente (check 4). Sem o
+   preenchimento: a cor É a trilha. O pino é o da referência (lido no CSS publicado dela, 3.2.6): redondo de 16,
+   na cor do valor, com o anel branco de 3 — branco nos dois temas, porque fica sobre a cor. */
+.slider-hue .slider-track { background:var(--slider-track-fill,var(--secondary)); }
+.slider-hue .slider-thumb { box-sizing:border-box; inline-size:var(--space-4); block-size:var(--space-4); align-self:center; border:calc(3 * var(--border-width)) solid #fff; background:var(--slider-thumb-color,var(--primary)); box-shadow:0 0 0 var(--border-width) rgba(0,0,0,.1), var(--shadow-sm); }
+.slider-hue .slider-thumb::after { content:none; }
+.slider-hue[data-orientation="vertical"] .slider-thumb { inline-size:var(--space-4); block-size:var(--space-4); }
+/* COLORAREA (0.32.0, ADR-0069) — a área de cor. A pintura (o gradiente, a ÚNICA exceção à ADR-0007) chega pela
+   variável que o componente põe (`--color-area-fill`): esta folha não escreve gradiente nenhum (check 4).
+   Medidas da referência, lidas no CSS publicado dela (3.2.6): quadrada, até 224 de largura, canto 16; o pino de
+   16 que cresce para 20 ao arrastar, com o anel de 3. 224 não tem token: sai de dois `--space-24` e um `--space-8`.
+   O anel é BRANCO nos dois temas, e não um token de tema: ele fica sobre a cor escolhida, e não sobre a página.
+   Os dois `range` escondidos (o motor da área) cobrem o pino com opacidade quase zero, como na referência: o
+   leitor de tela por toque os acha no lugar do pino. */
+.color-area { position:relative; inline-size:100%; max-inline-size:calc(2 * var(--space-24) + var(--space-8)); aspect-ratio:1; border-radius:var(--radius-lg); background:var(--color-area-fill,var(--secondary)); box-shadow:inset 0 0 0 var(--border-width) rgba(0,0,0,.1); touch-action:none; cursor:crosshair; user-select:none; }
+.color-area[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
+.color-area-thumb { position:absolute; box-sizing:border-box; inline-size:var(--space-4); block-size:var(--space-4); margin-inline-start:calc(var(--space-4) / -2); margin-block-start:calc(var(--space-4) / -2); border:calc(3 * var(--border-width)) solid #fff; border-radius:var(--radius-full); background:var(--color-area-thumb,transparent); box-shadow:0 0 0 var(--border-width) rgba(0,0,0,.1), inset 0 0 0 var(--border-width) rgba(0,0,0,.1); pointer-events:none; transition:inline-size var(--duration-base) var(--ease-standard), block-size var(--duration-base) var(--ease-standard), margin var(--duration-base) var(--ease-standard); }
+.color-area[data-dragging] .color-area-thumb { inline-size:var(--space-5); block-size:var(--space-5); margin-inline-start:calc(var(--space-5) / -2); margin-block-start:calc(var(--space-5) / -2); }
+.color-area-thumb[data-focus-visible] { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.color-area-input { position:absolute; inset:0; inline-size:100%; block-size:100%; margin:0; opacity:.0001; pointer-events:none; }
+@media (prefers-reduced-motion:reduce) { .color-area-thumb { transition:none; } }
 
 /* A CÁPSULA é que tem de medir igual a um botão/campo ao lado — não o botão de dentro.
    Antes: `height:30px` no filho, cru. Em comfortable dava 30+3+3=36 = --control-h-md por

@@ -18,6 +18,7 @@ export default {
     "onValueChange on every step; onValueCommitted when the thumb is released — the moment to save.",
     "format and locale write the value (percent, currency…) with Intl, as NumberField does.",
     "Range stays for the browser's own slider, with its change event.",
+    "channel=\"hue\" makes it the colour track: 0 to 360, painted with the colour wheel, the thumb in the value's colour.",
   ],
 
   examples: [
@@ -47,6 +48,13 @@ export default {
       render: () => h("div", {style: {display: "flex", gap: "var(--space-8)"}},
         h(Slider, {label: "Level", orientation: "vertical", defaultValue: 60}),
         h(Slider, {label: "Bass", orientation: "vertical", defaultValue: 30})),
+    },
+    {
+      title: "Colour track",
+      description: "The hue, from 0 to 360 degrees. The screen reader hears the colour's name with the number.",
+      code: '<Slider label="Hue" channel="hue" defaultValue={210} />',
+      embed: true,
+      render: () => h("div", {style: col}, h(Slider, {label: "Hue", channel: "hue", defaultValue: 210})),
     },
     {
       title: "Disabled",
