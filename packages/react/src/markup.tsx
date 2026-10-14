@@ -34,9 +34,11 @@
 //
 // PARA QUEM VIER: componente novo só entra aqui se não chamar hook, não prender manipulador e não
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
-import React, {forwardRef, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
+import React, {forwardRef, type AnchorHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
   type ReactNode, type RefAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes} from "react";
 import {cx, fundirRender, peleDoEixo, type Responsive} from "./pure.js";
+// As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
+import {contrastingInk, hsbToRgb, parseColor} from "./color.js";
 // TIPO apenas: `import type` some na emissão, então isto não faz o `markup` depender de um
 // módulo de cliente. O degrau do campo é o MESMO do botão de propósito (G-FORM-01).
 import type {ComponentSize} from "./actions.js";
@@ -83,12 +85,14 @@ export type TopbarVariant=HeaderVariant;
 // principal de fazer um pedaço escuro (o tema num elemento); ela não tem o cartão.
 // `accent` é o traço de cor no topo, na cor CHEIA do tom, igual nos dois temas — a exceção que a
 // ADR-0063 abriu na ADR-0061 para enfeite: o nome da caixa diz o assunto, o traço não carrega nada.
+// 0.32.0: `variant="outline"` é o cartão da cor de onde ele está, só com a linha em volta — a caixa
+// grande do Início da documentação da referência. O nome é o dela para "sem fundo, com contorno".
 export type CardAccent="brand"|"success"|"info"|"warning"|"danger";
 type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
 export type CardProps=CardBase&(
-  {variant?:"base"|"raised"|"inset"|"selected"|"danger"|"contrast";render?:ReactElement}|
+  {variant?:"base"|"raised"|"inset"|"outline"|"selected"|"danger"|"contrast";render?:ReactElement}|
   {variant:"interactive";render:ReactElement});
 export function Card({variant="base",padding="normal",orientation="vertical",accent,className,render,...props}:CardProps){
 return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,accent&&`card-accent card-accent-${accent}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
@@ -348,21 +352,25 @@ export type TypographyWeight="normal"|"medium"|"semibold"|"bold"|"extrabold";
 export type TypographyAlign="start"|"center"|"end"|"justify";
 export type HeadingLevel=1|2|3|4|5|6;
 export type ParagraphSize="base"|"sm"|"xs";
-interface TypographyBase{align?:TypographyAlign;color?:TypographyColor;weight?:TypographyWeight;truncate?:boolean;
+/** A cor do texto com o NOME do nativo (DOC-11, os mesmos nomes na web e no nativo). `link` é o amarelo
+ *  de ESCREVER (legível nos dois temas); `primary` é o de PREENCHER, e no tema claro quase some — como no
+ *  nativo. As cores de estado são o par `-400` (ADR-0061). Vence o `color` quando os dois vêm. */
+export type TypographyTone="default"|"muted"|"subtle"|"primary"|"link"|"danger"|"success"|"warning"|"info";
+interface TypographyBase{align?:TypographyAlign;color?:TypographyColor;tone?:TypographyTone;weight?:TypographyWeight;truncate?:boolean;
   /** GAR-16 (0.28.0): algarismos da mesma largura — para número que alinha em coluna (preço, ano,
    *  ficha técnica) ou que muda na tela. Desligado por padrão: no texto corrido o "1" estreito é o certo. */
   numeric?:boolean}
-const tipografia=(tipo:TypographyType,{align,color,weight,truncate,numeric}:TypographyBase,className?:string)=>
-  cx("typography",`typography-${tipo}`,color==="muted"&&"typography-muted",weight&&`typography-weight-${weight}`,align&&`typography-align-${align}`,truncate&&"typography-truncate",numeric&&"typography-numeric",className);
+const tipografia=(tipo:TypographyType,{align,color,tone,weight,truncate,numeric}:TypographyBase,className?:string)=>
+  cx("typography",`typography-${tipo}`,(tone??color)==="muted"&&"typography-muted",tone&&tone!=="default"&&tone!=="muted"&&`typography-tone-${tone}`,weight&&`typography-weight-${weight}`,align&&`typography-align-${align}`,truncate&&"typography-truncate",numeric&&"typography-numeric",className);
 export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>,"color">,RefAttributes<HTMLSpanElement>,TypographyBase{type?:TypographyType}
-export function Text({type="body",align,color,weight,truncate,numeric,className,...props}:TextProps){return <span className={tipografia(type,{align,color,weight,truncate,numeric},className)} {...props}/>}
+export function Text({type="body",align,color,tone,weight,truncate,numeric,className,...props}:TextProps){return <span className={tipografia(type,{align,color,tone,weight,truncate,numeric},className)} {...props}/>}
 export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>,"color">,RefAttributes<HTMLHeadingElement>,TypographyBase{level?:HeadingLevel}
 // O nível decide o elemento E o tamanho, como na referência: um `h2` tem a cara de título 2.
-export function Heading({level=1,align,color,weight,truncate,numeric,className,...props}:HeadingProps){const Tag=`h${level}` as "h1";return <Tag className={tipografia(`h${level}`,{align,color,weight,truncate,numeric},className)} {...props}/>}
+export function Heading({level=1,align,color,tone,weight,truncate,numeric,className,...props}:HeadingProps){const Tag=`h${level}` as "h1";return <Tag className={tipografia(`h${level}`,{align,color,tone,weight,truncate,numeric},className)} {...props}/>}
 export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>,"color">,RefAttributes<HTMLParagraphElement>,TypographyBase{size?:ParagraphSize}
-export function Paragraph({size="base",align,color,weight,truncate,numeric,className,...props}:ParagraphProps){return <p className={tipografia(size==="base"?"body":`body-${size}`,{align,color,weight,truncate,numeric},className)} {...props}/>}
+export function Paragraph({size="base",align,color,tone,weight,truncate,numeric,className,...props}:ParagraphProps){return <p className={tipografia(size==="base"?"body":`body-${size}`,{align,color,tone,weight,truncate,numeric},className)} {...props}/>}
 export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>,"color">,RefAttributes<HTMLElement>,TypographyBase{}
-export function Code({align,color,weight,truncate,className,...props}:CodeProps){return <code className={tipografia("code",{align,color,weight,truncate},className)} {...props}/>}
+export function Code({align,color,tone,weight,truncate,className,...props}:CodeProps){return <code className={tipografia("code",{align,color,tone,weight,truncate},className)} {...props}/>}
 
 // ── Feedback ─────────────────────────────────────────────────────────────────────────────────
 // ── BADGE ────────────────────────────────────────────────────────────────────────────────────
@@ -396,6 +404,9 @@ export type BadgeFit="auto"|"content";
 export function formatBadgeCount(count:number,max=99){return count>max?`${max}+`:String(count)}
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttributes<HTMLSpanElement>{
   variant?:BadgeVariant;
+  /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
+   *  eixo do `variant`, e vence quando os dois vêm. */
+  tone?:BadgeVariant;
   /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
   emphasis?:BadgeEmphasis;
   size?:BadgeSize;
@@ -422,7 +433,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
    *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
   badgeContent?:ReactNode;
 }
-export function Badge({variant="neutral",emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,children,className,...props}:BadgeProps){
+export function Badge({variant:variantProp="neutral",tone,emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,children,className,...props}:BadgeProps){
+  const variant=tone??variantProp;
   const numero=count!=null?formatBadgeCount(count,max):undefined;
   const miolo=anchor?(numero??badgeContent):(numero??children);
   // Ponto puro: `dot` sem nada para mostrar. Aí o badge não tem conteúdo, e ganha medida própria.
@@ -459,12 +471,20 @@ export interface ProgressProps{
    *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
   detail?:ReactNode;
   tone?:ProgressTone;
+  /** 0.32.0: o rótulo À MOSTRA, no alto à esquerda (o da barra da referência). Sem ele, o `label` só
+   *  nomeia a barra para o leitor de tela, como sempre. */
+  showLabel?:boolean;
+  /** 0.32.0: o valor ("60%") no alto à direita, quando não há `detail`. */
+  showValue?:boolean;
+  /** A espessura do trilho: sm 4, md 8, lg 12 — os da referência. */
+  size?:ProgressSize;
   className?:string;
 }
+export type ProgressSize="sm"|"md"|"lg";
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
 // de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
-export function Progress({value,label,detail,tone="brand",className}:ProgressProps){
+export function Progress({value,label,detail,tone="brand",showLabel,showValue,size="md",className}:ProgressProps){
   const semTotal=value==null||Number.isNaN(value);
   const pct=semTotal?undefined:Math.max(0,Math.min(100,value));
   const temApoio=detail!=null&&detail!==false&&detail!=="";
@@ -472,13 +492,23 @@ export function Progress({value,label,detail,tone="brand",className}:ProgressPro
   // vezes. Apoio que não é texto (um ícone, um link) fica onde está, para o leitor achar sozinho.
   const emTexto=temApoio&&(typeof detail==="string"||typeof detail==="number")?String(detail):undefined;
   const valuetext=emTexto==null?undefined:pct==null?emTexto:`${pct}%, ${emTexto}`;
+  // O rótulo à mostra sai do leitor de tela (`aria-hidden`): quem nomeia a barra continua o `aria-label`,
+  // com o mesmo texto — sem isso, o leitor o leria duas vezes. (Este arquivo não usa hook, então nada de
+  // id gerado para `aria-labelledby`.)
+  const rotuloVisivel=!!showLabel&&!!label;
+  const valor=!temApoio&&showValue&&pct!=null?`${Math.round(pct)}%`:undefined;
   return <div className={cx("progress-field",className)}>
+    {rotuloVisivel&&<span className="progress-label" aria-hidden="true">{label}</span>}
     {temApoio&&<div className="progress-detail" aria-hidden={emTexto!=null||undefined}>{detail}</div>}
-    <div className={cx("progress",semTotal&&"progress-indeterminate",tone!=="brand"&&`progress-tone-${tone}`)} role="progressbar"
+    {valor&&<div className="progress-detail" aria-hidden="true">{valor}</div>}
+    <div className={cx("progress",semTotal&&"progress-indeterminate",tone!=="brand"&&`progress-tone-${tone}`,size!=="md"&&`progress-${size}`)} role="progressbar"
       aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-valuetext={valuetext}>
       <span style={pct==null?undefined:{width:`${pct}%`}}/></div>
   </div>}
-export function Skeleton({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("skeleton",className)} aria-hidden="true" {...props}/>}
+// Skeleton (0.32.0): o "pulse" da referência é o padrão, e `animation="none"` o para. O "shimmer" dela
+// (o brilho que corre) é DEGRADÊ, e degradê a Aurea não tem (CLAUDE.md §5) — não entra.
+export type SkeletonAnimation="pulse"|"none";
+export function Skeleton({animation="pulse",className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{animation?:SkeletonAnimation}){return <div className={cx("skeleton",animation==="none"&&"skeleton-static",className)} aria-hidden="true" {...props}/>}
 
 // ── Identity ─────────────────────────────────────────────────────────────────────────────────
 // `React.Children` não é hook — é utilitário de leitura de `children`, e roda no servidor.
@@ -590,7 +620,11 @@ export function Topbar(props:HeaderProps){return <Header {...props}/>}
 // Kbd — representação de tecla/atalho. <kbd> é o elemento HTML certo; a pele é nossa. Ele já
 // morava fora da casa dele (no `internal.tsx`, por causa do `Button`); agora mora aqui, pelo
 // mesmo motivo elevado a regra.
-export function Kbd({children,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>){return <kbd className={cx("kbd",className)} {...props}>{children}</kbd>}
+// 0.32.0: uma tecla de UM caractere ("K", "⌘", "/") sai redonda (`kbd-single`), e uma palavra
+// ("Esc", "Enter") em cápsula — o canto da Aurea sobre a medida da referência. Conta-se o que a
+// pessoa vê (`Array.from` não parte um emoji ao meio); conteúdo que não é texto fica em cápsula.
+const umCaractere=(c:React.ReactNode)=>(typeof c==="string"||typeof c==="number")&&Array.from(String(c).trim()).length===1;
+export function Kbd({children,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>){return <kbd className={cx("kbd",umCaractere(children)&&"kbd-single",className)} {...props}>{children}</kbd>}
 
 // ── Inputs ───────────────────────────────────────────────────────────────────────────────────
 // Os seis controles abaixo NÃO prendem manipulador nenhum: quem escuta `onChange` é o consumidor,
@@ -600,8 +634,10 @@ export function Kbd({children,className,...props}:HTMLAttributes<HTMLElement>&Re
 // e a lista que o nativo abre é do sistema operacional — CSS de autor não a alcança. O Victor mandou
 // trocar: "tudo deve ser padrão aurea". Pele própria na lista exige motor, e motor exige cliente.
 // O textarea não tem `size` no HTML (tem rows/cols), então aqui não há nada a tirar.
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>,RefAttributes<HTMLTextAreaElement>{size?:Responsive<FieldSize>}
-export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Textarea({className,size,...props},ref){return <textarea ref={ref} className={cx("textarea",peleDoEixo("textarea",size),className)} {...props}/>});
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>,RefAttributes<HTMLTextAreaElement>{size?:Responsive<FieldSize>;
+  /** 0.32.0, a da referência: `secondary` é o fundo neutro, para o campo dentro de um cartão. */
+  variant?:FieldVariant}
+export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Textarea({className,size,variant,...props},ref){return <textarea ref={ref} className={cx("textarea",peleDoEixo("textarea",size),variant==="secondary"&&"textarea-secondary",className)} {...props}/>});
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({label,labelHidden,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
@@ -625,6 +661,10 @@ export function Range({orientation,className,...props}:InputHTMLAttributes<HTMLI
 // composição e não tamanho. `Extract` em vez de união solta para o degrau ser O MESMO do botão:
 // um `sm` de campo e um `sm` de botão ao lado têm de medir igual (§23 e §132 da ATIVIDADE-2).
 export type FieldSize=Extract<ComponentSize,"sm"|"md"|"lg">;
+// O DESENHO DO CAMPO (0.32.0), o da referência: `primary` é o campo de sempre (fundo de campo e
+// borda); `secondary` é o de fundo neutro, sem borda, para quando o campo mora dentro de um cartão —
+// lá o fundo de campo some contra o cartão.
+export type FieldVariant="primary"|"secondary";
 // `md` é a classe base — não existe `.input-md`, como não existe `.btn-md`. O prefixo é escrito
 // literal em cada chamada (`input-${size}`, e não `${base}-${size}`) porque é assim que o check 15
 // enxerga uma classe montada em tempo de execução; com prefixo dinâmico ele para de proteger a
@@ -688,3 +728,121 @@ return <span className={cx("input-group-addon",`input-group-addon-${side}`,peleD
 // escreve o `padding-top: 56.25%` de 2015, ou esquece o `min-width: 0` que impede a caixa de
 // estourar dentro de um grid.
 export function AspectRatio({ratio=1,className,style,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{ratio?:number}){return <div className={cx("aspect-ratio",className)} style={{aspectRatio:ratio,...style}} {...props}/>}
+
+// ── 0.32.0, passo 6: três peças da referência que não pedem o navegador ─────────────────────────
+
+// Link — o link de texto da referência: peso médio, a cor de link da Aurea (`--link`), sem sublinhado;
+// com o mouse (ou apertado), o sublinhado de 1,5 a 4 da letra, na cor esmaecida a meia força. `external`
+// abre noutra aba (`target="_blank"` com `rel="noopener noreferrer"`) e põe a seta da referência — o
+// `arrow-up-right` do Phosphor desenhado por MÁSCARA no CSS, porque este arquivo não importa o `Icon`
+// (ele usa hook). `disabled` não navega: o link sai SEM `href`, com `aria-disabled`.
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>,RefAttributes<HTMLAnchorElement>{
+  /** Abre noutra aba e mostra a seta. */
+  external?:boolean;
+  /** Não navega: sai sem `href` e com `aria-disabled`. */
+  disabled?:boolean;
+}
+export function Link({external,disabled,href,target,rel,className,children,...props}:LinkProps){
+  return <a className={cx("link",className)} href={disabled?undefined:href} aria-disabled={disabled||undefined}
+    target={external?target??"_blank":target} rel={external?rel??"noopener noreferrer":rel} {...props}>
+    {children}{external&&<span className="link-external" aria-hidden="true"/>}
+  </a>;
+}
+
+// ColorSwatch — a amostra de cor da referência, só REDONDA (decisão do Victor): um círculo da cor pedida com um
+// anel de 1 por dentro, que segura a amostra branca no fundo branco. Tamanhos da referência: xs 16, sm 24, md 32,
+// lg 36, xl 40. É imagem (`role="img"`): o nome é `label`, e sem ele, o próprio valor da cor.
+// O XADREZ entra só onde há transparência (o Victor, 14/10/2026: "xadrez sim, quadrado não") — é como se vê que a
+// cor é transparente. A amostra sabe quando: a cor em hex/`rgb()`/`hsl()` com alfa abaixo de 1.
+export type ColorSwatchSize="xs"|"sm"|"md"|"lg"|"xl";
+export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>,RefAttributes<HTMLSpanElement>{
+  /** Qualquer cor do CSS: `#f0c200`, `oklch(…)`, `var(--primary)`. */
+  color:string;
+  size?:ColorSwatchSize;
+  /** O nome que o leitor de tela anuncia ("Amarelo Aurea"). Sem ele, o valor da cor. */
+  label?:string;
+}
+// AS AMOSTRAS PARA ESCOLHER (0.32.0, ADR-0069 — a "C" do Victor, "como VARIAÇÃO do ColorSwatch"): com `options`,
+// a amostra vira um GRUPO de escolha — a paleta fechada. São botões de opção NATIVOS, um por cor, invisíveis sobre
+// a amostra: a escolha única e as setas são do navegador, sem JavaScript, e por isso ela continua marcação pura.
+// O desenho é o da referência (lido no CSS publicado dela, 3.2.6): a escolhida ganha a borda na cor dela, encolhe a
+// 77% por dentro e mostra o "visto" — na tinta que contrasta mais com a cor, pela conta da WCAG.
+// O nome de cada cor é o `label` dela; sem ele, o código. (O nome da cor na língua do app pede o contexto das
+// frases, que a marcação pura não tem — o `ColorPicker` o põe.)
+export interface ColorSwatchOption{color:string;label?:string;
+  /** Esta cor não se escolhe (as outras sim). */
+  disabled?:boolean}
+/** O que as duas formas têm em comum: a escala. (É a base que o leitor da API segue em `base & (a | b)`.) */
+export interface ColorSwatchBase{size?:ColorSwatchSize}
+export interface ColorSwatchPickerProps{
+  /** As cores para escolher — `"#0485f7"` ou `{color, label}`. É o que faz da amostra um grupo de escolha. */
+  options:readonly (string|ColorSwatchOption)[];
+  /** O nome do grupo no formulário, e o que faz das amostras UM grupo (as setas andam entre elas). */
+  name:string;
+  /** O nome do grupo para o leitor de tela ("Cor de destaque"). */
+  label:string;
+  value?:string;defaultValue?:string;
+  /** O evento do navegador, como no `Radio`: `event.target.value` é a cor escolhida. */
+  onChange?:React.ChangeEventHandler<HTMLInputElement>;
+  /** `"grid"` (o padrão: em linha, quebrando) ou `"stack"` (em coluna), como na referência. */
+  layout?:"grid"|"stack";
+  /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
+  indicator?:ReactNode;
+  size?:ColorSwatchSize;disabled?:boolean;id?:string;className?:string;
+}
+// Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
+// `oklch()` a marcação não lê: fica sem xadrez.
+const transparente=(cor:string)=>{const c=parseColor(cor);return c!==null&&c.a<1;};
+export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchPickerProps)){
+  if("options" in props){
+    const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,size="md",disabled,id,className}=props;
+    // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
+    // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
+    return <div role="radiogroup" aria-label={label} id={id} aria-disabled={disabled||undefined}
+      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,layout==="stack"&&"color-swatch-picker-stack",className)}>
+      {options.map((o)=>{
+        const op:ColorSwatchOption=typeof o==="string"?{color:o}:o;
+        const cor=parseColor(op.color),rgb=cor&&hsbToRgb(cor);
+        return <label key={op.color} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
+          style={{["--color-swatch-current" as string]:op.color}}>
+          <input type="radio" className="color-swatch-input" name={name} value={op.color} aria-label={op.label??op.color}
+            checked={value===undefined?undefined:value===op.color} defaultChecked={value===undefined?defaultValue===op.color:undefined}
+            disabled={disabled||op.disabled} {...(onChange?{onChange}:{})}/>
+          <span className={cx("color-swatch",cor&&cor.a<1&&"color-swatch-alpha")} aria-hidden="true"/>
+          {indicator!=null&&<span className="color-swatch-indicator" aria-hidden="true">{indicator}</span>}
+        </label>;
+      })}
+    </div>;
+  }
+  const {color,size="md",label,className,style,...resto}=props;
+  return <span role="img" aria-label={label??color} className={cx("color-swatch",size!=="md"&&`color-swatch-${size}`,transparente(color)&&"color-swatch-alpha",className)}
+    style={{...style,["--color-swatch-current" as string]:color}} {...resto}/>;
+}
+
+// ProgressCircle — o progresso em círculo da referência: um anel de 4 num quadro de 36 (a geometria
+// dela), começando no topo, com a ponta redonda. sm 20, md 28, lg 36. Sem `value`, gira (não se sabe
+// quanto falta). As cores são as do `Progress` (`tone`, com o amarelo da marca por padrão). Tem de ter
+// nome (`label`): uma barra de progresso sem nome o leitor de tela anuncia só como "progresso".
+export type ProgressCircleSize="sm"|"md"|"lg";
+export interface ProgressCircleProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<HTMLDivElement>{
+  /** De `min` a `max`. Sem ele, o círculo gira. */
+  value?:number;
+  min?:number;
+  max?:number;
+  size?:ProgressCircleSize;
+  tone?:ProgressTone;
+  /** O nome que o leitor de tela anuncia ("Enviando o arquivo"). */
+  label:string;
+}
+export function ProgressCircle({value,min=0,max=100,size="md",tone="brand",label,className,...props}:ProgressCircleProps){
+  const semTotal=value==null||Number.isNaN(value);
+  const pct=semTotal?25:Math.max(0,Math.min(100,(value-min)/(max-min)*100));
+  return <div role="progressbar" aria-label={label} aria-valuemin={semTotal?undefined:min} aria-valuemax={semTotal?undefined:max}
+    aria-valuenow={semTotal?undefined:value}
+    className={cx("progress-circle",size!=="md"&&`progress-circle-${size}`,tone!=="brand"&&`progress-circle-${tone}`,semTotal&&"progress-circle-indeterminate",className)} {...props}>
+    <svg viewBox="0 0 36 36" aria-hidden="true">
+      <circle className="progress-circle-track" cx="18" cy="18" r="16"/>
+      <circle className="progress-circle-fill" cx="18" cy="18" r="16" pathLength={100} strokeDasharray="100" strokeDashoffset={100-pct}/>
+    </svg>
+  </div>;
+}

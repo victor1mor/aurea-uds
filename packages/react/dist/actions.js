@@ -15,8 +15,11 @@ import { Icon, useAureaTheme } from "./system.js";
 // O dicionário que desachata o enum. É a ÚNICA fonte da correspondência: o gate do
 // `validate.py` lê daqui para provar que todo par ou tem regra no core ou está declarado
 // ausente com motivo, e a ficha do registry declara os mesmos dois eixos.
+// O `secondary` não tem célula própria nos dois eixos (a letra da marca no fundo neutro não é nenhum
+// par aparência × tom): os eixos dele são os do `tertiary`, que valem só quando quem chama troca a
+// aparência ou o tom — aí sai a célula pedida, como em todo atalho.
 const EIXOS = {
-    primary: ["solid", "brand"], secondary: ["solid", "neutral"],
+    primary: ["solid", "brand"], secondary: ["solid", "neutral"], tertiary: ["solid", "neutral"],
     outline: ["outline", "neutral"], ghost: ["ghost", "neutral"],
     "primary-outline": ["outline", "brand"], "primary-ghost": ["ghost", "brand"],
     danger: ["solid", "danger"], "danger-outline": ["outline", "danger"], "danger-ghost": ["ghost", "danger"],
@@ -27,7 +30,7 @@ const EIXOS = {
 // uma classe própria", e é o que garante que NENHUMA baseline se mexe: `appearance="outline"`
 // + `tone="danger"` emite `.btn-danger-outline`, o mesmo DOM de sempre.
 const CLASSE_ANTIGA = new Map(Object.entries(EIXOS)
-    .map(([v, [a, t]]) => [`${a}/${t}`, v]));
+    .filter(([v]) => v !== "secondary").map(([v, [a, t]]) => [`${a}/${t}`, v]));
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
  *  cobra a matriz inteira, e porque quem monta um botão à mão precisa da mesma conta.
  *
@@ -37,7 +40,10 @@ const CLASSE_ANTIGA = new Map(Object.entries(EIXOS)
  *  `--success`/`--success-foreground` e os irmãos são. `outline` voltou a ser só uma aparência
  *  que se pede, nunca o que sobra quando a nossa paleta não dá conta. */
 export function buttonSkin(variant, appearance, tone) {
-    const [a0, t0] = EIXOS[variant ?? "secondary"];
+    // A variação sem eixo pedido é a própria classe — é o caminho do `secondary`, que não tem célula.
+    if (appearance === undefined && tone === undefined)
+        return `btn-${variant ?? "tertiary"}`;
+    const [a0, t0] = EIXOS[variant ?? "tertiary"];
     const a = appearance ?? a0, t = tone ?? t0;
     const antiga = CLASSE_ANTIGA.get(`${a}/${t}`);
     return antiga ? `btn-${antiga}` : cx(`btn-${a}`, `btn-tone-${t}`);
@@ -90,10 +96,15 @@ async function compartilhar(botao, dados, s, dentroDoProvider) {
         avisar(true);
     }
 }
+const GrupoDeBotoesContext = React.createContext(null);
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button = forwardRef(function Button({ variant, appearance, tone, size = "md", loading, leadingIcon, trailingIcon, className, children, disabled, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
+    const grupo = React.useContext(GrupoDeBotoesContext);
+    const variant = variantPedida ?? grupo?.variant;
+    const size = sizePedido ?? grupo?.size ?? "md";
+    const disabled = disabledPedido ?? grupo?.disabled;
     // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
     // SOMATIVO por construção: valor simples continua emitindo `btn-sm`, byte por byte a mesma classe
     // de antes, e por isso nenhuma baseline se mexe. Só o valor responsivo entra pela camada genérica
@@ -111,7 +122,7 @@ export const Button = forwardRef(function Button({ variant, appearance, tone, si
     // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
     // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
     const temConteudo = children != null && children !== false;
-    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
+    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { className: "btn-kbd", children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
     // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
     // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
     // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
@@ -185,7 +196,9 @@ function temConteudoVisivel(children) {
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
-export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size, disabled, id, className, children }) {
+export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant = "default" }) {
+    const grupo = React.useContext(GrupoDeBotoesContext);
+    const size = sizePedido ?? grupo?.size;
     // O tipo barra o consumidor TypeScript; este aviso barra o de JavaScript, que não tem tipo nenhum.
     // Sem gate por NODE_ENV de propósito: o `dist` é saída de `tsc`, então `process` não existe no
     // navegador e a referência quebraria o render — e um controle sem nome merece aparecer em produção
@@ -196,13 +209,22 @@ export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, 
     const rotuloVisivel = typeof label === "string" && label.trim().length > 0;
     if (!textoVisivel && !rotuloVisivel)
         console.error("Aurea: <Toggle> sem `children` visível e sem `label` não tem nome acessível — quem usa leitor de tela encontra um botão anônimo. Passe `label` quando o toggle for só ícone.");
-    return _jsxs(BaseToggle, { id: id, value: value, disabled: disabled, pressed: pressed, defaultPressed: defaultPressed, onPressedChange: soOValor(onPressedChange), "aria-label": textoVisivel ? undefined : (rotuloVisivel ? label : undefined), className: cx("btn", "btn-ghost", size !== "md" && `btn-${size}`, !textoVisivel && "btn-icon", "toggle", className), children: [icon && _jsx(Icon, { name: icon }), children] });
+    // O tamanho pela MESMA conta do `Button` (0.32.0): até a 0.31.0 era `size!=="md"&&\`btn-${size}\``, e
+    // sem `size` saía a classe `btn-undefined` (medido no catálogo, nos três botões do `ToggleGroup`); com
+    // valor responsivo sairia `btn-[object Object]`.
+    const tamanho = ehResponsivo(size) ? classesResponsivas("size", size) : ((valorBase(size) ?? "md") !== "md" && `btn-${valorBase(size)}`);
+    return _jsxs(BaseToggle, { id: id, value: value, disabled: disabled, pressed: pressed, defaultPressed: defaultPressed, onPressedChange: soOValor(onPressedChange), "aria-label": textoVisivel ? undefined : (rotuloVisivel ? label : undefined), className: cx("btn", variant === "ghost" ? "btn-ghost" : "btn-tertiary", tamanho, !textoVisivel && "btn-icon", "toggle", className), children: [icon && _jsx(Icon, { name: icon }), children] });
 }
 // default ghost (não secondary): um ícone-ação solto — hambúrguer, tema, fechar — é sem
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.
 // Ocupado, o glifo SAI e a rodinha fica sozinha no centro — ver o `inner` do `Button`.
-export const IconButton = forwardRef(function IconButton({ label, icon, variant = "ghost", className, loading, ...props }, ref) { return _jsx(Button, { ref: ref, variant: variant, className: cx("btn-icon", className), "aria-label": label, loading: loading, ...props, children: loading ? null : _jsx(Icon, { name: icon }) }); });
+// Dentro de um grupo com `variant`, o do grupo vale (0.32.0); solto, o padrão continua o fantasma.
+export const IconButton = forwardRef(function IconButton({ label, icon, variant, className, loading, ...props }, ref) { const grupo = React.useContext(GrupoDeBotoesContext); return _jsx(Button, { ref: ref, variant: variant ?? (grupo?.variant ? undefined : "ghost"), className: cx("btn-icon", className), "aria-label": label, loading: loading, ...props, children: loading ? null : _jsx(Icon, { name: icon }) }); });
+export const CloseButton = forwardRef(function CloseButton({ label, className, children, ...props }, ref) {
+    const s = useAureaStrings();
+    return _jsx(Button, { ref: ref, variant: "tertiary", className: cx("close-button", className), "aria-label": label ?? s.close, ...props, children: children ?? _jsx(Icon, { name: "x", weight: "bold" }) });
+});
 export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
     const { theme, toggleTheme } = useAureaTheme();
     const s = useAureaStrings();
@@ -212,12 +234,11 @@ export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props
     // tem peso de ícone.
     return _jsx(Button, { ref: ref, variant: "ghost", className: cx("btn-icon", escuro ? "theme-toggle-sun" : "theme-toggle-moon", className), "aria-label": escuro ? s.themeToLight : s.themeToDark, onClick: toggleTheme, ...props, children: _jsx(Icon, { name: escuro ? "sun" : "moon", weight: "fill" }) });
 });
-// ButtonGroup: agrupamento semântico. Sem roving tabindex — cada botão continua tabulável (use Toolbar para roving).
-// `orientation` (G-AXIS-01) muda só o EIXO do layout, não a semântica: `role="group"` não tem
-// noção de direção, e por isso — ao contrário do `Toolbar` e do `ToggleGroup`, que navegam por
-// seta e precisam saber para que lado a seta anda — aqui não há `aria-orientation`. Anunciar
-// orientação num grupo que não navega seria prometer teclado que não existe.
-export function ButtonGroup({ label, orientation, className, ...props }) { const s = useAureaStrings(); return _jsx("div", { role: "group", "aria-label": label ?? s.optionsLabel, className: cx("btn-group", peleDoEixo("btn-group", orientation, "horizontal", "btn-group"), className), ...props }); }
+export function ButtonGroup({ label, orientation, variant, size, fullWidth, disabled, detached, className, ...props }) {
+    const s = useAureaStrings();
+    const grupo = React.useMemo(() => ({ variant, size, disabled }), [variant, size, disabled]);
+    return _jsx(GrupoDeBotoesContext.Provider, { value: grupo, children: _jsx("div", { role: "group", "aria-label": label ?? s.optionsLabel, className: cx("btn-group", peleDoEixo("btn-group", orientation, "horizontal", "btn-group"), detached && "btn-group-detached", fullWidth && "btn-group-full", className), ...props }) });
+}
 // Toolbar: roving tabindex (setas navegam, Tab entra/sai) via Base UI.
 // G-AXIS-06 — o valor responsivo RESOLVIDO é a única fonte de verdade: ele vai para o motor, o
 // motor publica `data-orientation`/`aria-orientation` e ajusta o teclado, e a pele reage ao
@@ -233,18 +254,9 @@ export function Toolbar({ orientation, label, className, ...props }) {
 export function ToolbarGroup({ label, className, ...props }) { return _jsx(BaseToolbar.Group, { "aria-label": label, className: cx("toolbar-group", className), ...props }); }
 export function ToolbarSeparator({ className, ...props }) { return _jsx(BaseToolbar.Separator, { className: cx("toolbar-sep", className), ...props }); }
 export const ToolbarButton = forwardRef(function ToolbarButton({ variant = "ghost", ...props }, ref) { return _jsx(BaseToolbar.Button, { ref: ref, disabled: props.disabled, render: _jsx(Button, { variant: variant, ...props }) }); });
-// TOGGLE GROUP — vários Toggle com estado compartilhado e navegação por seta entre eles.
-//
-// Não é o SegmentedControl, e confundir os dois constrói a coisa errada com o nome certo: o
-// `SegmentedControl` é escolha ÚNICA e obrigatória entre alternativas de uma mesma dimensão
-// ("dia / semana / mês") e se parece com uma cápsula; aqui cada botão liga e desliga por conta
-// própria, `multiple` permite vários ao mesmo tempo, e zero selecionado é estado legítimo. É a
-// barra de formatação de um editor, não um filtro de período.
-//
-// O motor dá o roving tabindex, o `loopFocus` e o contrato de pressionado; a pele é a do
-// `.btn-group`, porque um grupo de botões é o que isto é.
-export function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children }) {
+export function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached }) {
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
-    return _jsx(BaseToggleGroup, { ref: ancora, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), multiple: multiple, orientation: resolvida, disabled: disabled, "aria-label": label, className: cx("toggle-group", className), children: children });
+    const grupo = React.useMemo(() => ({ size }), [size]);
+    return _jsx(GrupoDeBotoesContext.Provider, { value: grupo, children: _jsx(BaseToggleGroup, { ref: ancora, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), multiple: multiple, orientation: resolvida, disabled: disabled, "aria-label": label, className: cx("toggle-group", detached && "toggle-group-detached", fullWidth && "toggle-group-full", className), children: children }) });
 }

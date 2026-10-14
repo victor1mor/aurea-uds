@@ -38,7 +38,7 @@ import { IconButton } from "./actions.js";
 import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Alert } from "./feedback.js";
 import { Icon } from "./icon.js";
-import { useCampo } from "./inputs.js";
+import { alturaDoTamanho, respiroDoTamanho, useCampo } from "./inputs.js";
 import { FotoAmpliada, Image } from "./midia.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
@@ -55,10 +55,11 @@ const folha = criarFolha((t) => ({
     desabilitado: { opacity: t.size.opacityDisabled },
     // R-22 (02/10/2026), a "B" da prancha: miniatura QUADRADA de 64 — o `Avatar` `lg` da
     // referência, e a medida que o botão de pôr foto passou a ter também (era 72, número à mão) — e o X
-    // TODO FORA da foto. O X é o `IconButton` `sm` (30) com fundo; a área de toque dele é de 44
-    // (`targetMin`), com o desenho no centro, então o deslocamento que põe o canto do DESENHO no
-    // canto da foto é (30 + 44) / 2. A grade deixa esse espaço em cima, à direita e entre as linhas,
-    // porque no Android o toque fora da caixa do pai não chega.
+    // TODO FORA da foto. O X é o `IconButton` `sm` (40 desde a 0.32.0) com fundo; a área de toque
+    // dele é a maior entre o desenho e o `targetMin` (44), com o desenho no centro, então o
+    // deslocamento que põe o canto do DESENHO no canto da foto é (40 + 44) / 2. A grade deixa esse
+    // espaço em cima, à direita e entre as linhas, porque no Android o toque fora da caixa do pai
+    // não chega.
     galeria: {
         flexDirection: "row", flexWrap: "wrap", columnGap: t.size.space4,
         rowGap: foraDoX(t) + t.size.space2,
@@ -73,9 +74,12 @@ const folha = criarFolha((t) => ({
         borderStyle: "dashed", backgroundColor: t.color.fieldBg,
     },
 }));
-/** Quanto o X do `PhotoInput` sai da foto: metade do desenho (30) mais metade do alvo (44). */
-const foraDoX = (t) => (t.size.controlHSm + Math.max(t.size.controlHSm, t.size.targetMin)) / 2;
-const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
+/**
+ * Quanto o X do `PhotoInput` sai da foto: metade do desenho mais metade do alvo (44). 0.32.0: o
+ * `IconButton` `sm` passou à escala de toque (`touchControlHSm`, 40; era o `controlHSm`, 32), e a
+ * conta segue o desenho — com a antiga, o X voltava a cobrir 4 da foto.
+ */
+const foraDoX = (t) => (t.size.touchControlHSm + Math.max(t.size.touchControlHSm, t.size.targetMin)) / 2;
 // E16 (09/10/2026) · NO NAVEGADOR, o calendário "deles" é o do NAVEGADOR. A biblioteca de data não
 // tem versão web: o arquivo genérico dela devolve `null` e só avisa no console — tocar no campo não
 // abria nada (achado do app rodando no `react-native-web`). A saída é o `<input type="date">` do
@@ -163,10 +167,11 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
     }, [value, mode, minimumDate, maximumDate, receber]);
     const mostrarSeletorIOS = abertoNoIOS && Platform.OS !== "android";
     const conteudo = (_jsxs(_Fragment, { children: [_jsx(Text, { size: tam === "sm" ? "xs" : tam === "lg" ? "base" : "md", tone: value ? "default" : "subtle", numberOfLines: 1, children: texto }), icon && _jsx(Icon, { name: icon, size: "sm", color: t.color.subtleForeground })] }));
+    // 0.32.0: a medida do campo vem do `inputs.tsx` — a altura de toque (48 no `md`; era 36) e 12
+    // dos lados (era 13). Era uma cópia das contas de lá.
     const pele = [
         s.gatilho,
-        { height: alturaDoTamanho(t, tam),
-            paddingHorizontal: tam === "sm" ? t.size.space3 : tam === "lg" ? t.size.space4 : 13 },
+        { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam) },
         campo?.invalido && s.invalido,
         inativo && s.desabilitado,
         style,

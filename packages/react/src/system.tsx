@@ -23,7 +23,7 @@ import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityC
 // posicionar sem herdar `overflow` nem `transform`. Com ela, o consumidor aponta para um nó
 // dentro do landmark dele e o conteúdo do popup deixa de ficar fora de qualquer marco.
 export function AureaProvider({children,strings,direction="ltr",spriteUrl=defaultSpriteUrl,portalContainer,
-  theme,defaultTheme,onThemeChange,density,defaultDensity,onDensityChange}:{children:ReactNode;strings?:Partial<AureaStrings>;direction?:"ltr"|"rtl";spriteUrl?:string;portalContainer?:HTMLElement|null;theme?:AureaTheme;defaultTheme?:AureaTheme;onThemeChange?:(theme:AureaTheme)=>void;density?:AureaDensity;defaultDensity?:AureaDensity;onDensityChange?:(density:AureaDensity)=>void}){
+  theme,defaultTheme,onThemeChange,density,defaultDensity,onDensityChange,toastPlacement="bottom"}:{children:ReactNode;strings?:Partial<AureaStrings>;direction?:"ltr"|"rtl";spriteUrl?:string;portalContainer?:HTMLElement|null;theme?:AureaTheme;defaultTheme?:AureaTheme;onThemeChange?:(theme:AureaTheme)=>void;density?:AureaDensity;defaultDensity?:AureaDensity;onDensityChange?:(density:AureaDensity)=>void;toastPlacement?:ToastPlacement}){
   const value=React.useMemo(()=>strings?{...defaultStrings,...strings}:defaultStrings,[strings]);
   const temaCtx=useEixoDoDocumento("theme",theme,defaultTheme,onThemeChange);
   const densCtx=useEixoDoDocumento("density",density,defaultDensity,onDensityChange);
@@ -44,7 +44,7 @@ export function AureaProvider({children,strings,direction="ltr",spriteUrl=defaul
   // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
   // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
   const deFora=!React.useContext(DentroDoProviderContext);
-  return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}><BaseToast.Provider><BaseTooltip.Provider>{children}<AureaToastViewport/>{deFora&&<BaseToast.Provider toastManager={avisosAncorados}><AvisosAncorados/></BaseToast.Provider>}</BaseTooltip.Provider></BaseToast.Provider></DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
+  return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}><BaseToast.Provider timeout={TEMPO_DO_AVISO}><BaseTooltip.Provider>{children}<AureaToastViewport placement={toastPlacement}/>{deFora&&<BaseToast.Provider toastManager={avisosAncorados}><AvisosAncorados/></BaseToast.Provider>}</BaseTooltip.Provider></BaseToast.Provider></DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
 }
 
 /** Um eixo de apresentação que vive no `<html>`: tema ou densidade. A conta é a mesma para os
@@ -145,19 +145,42 @@ export function useAureaTheme(){
     },
   }),[theme,density,dentroDeProvider,ctxTema,ctxDens]);
 }
-function AureaToastList(){
+// O AVISO DA REFERÊNCIA (0.32.0), lido no CSS e no código publicados dela:
+//   • a PILHA: os avisos se empilham no mesmo lugar, o da frente inteiro e os de trás espiando 12
+//     acima, cada um 5% menor; passar o mouse (ou o foco) abre a pilha com 12 entre eles. Três à
+//     vista, como lá (o `limit` do motor), e cada um some sozinho em 4 s (o dela; o motor dá 5).
+//   • o LUGAR: embaixo, no meio (o padrão dela), com 460 de largura de 640 para cima e a tela menos
+//     16 de cada lado no celular. `toastPlacement` no `AureaProvider` escolhe um dos seis lugares.
+//   • a CARA: o fundo de cartão (não mais tingido pelo tipo — era a borda e o fundo de estado), o
+//     ícone de 16 numa caixa de 24 e o título de 14/20, peso médio, os dois na cor do tipo (o par
+//     `-400` da ADR-0061); a descrição de 14 esmaecida; a ação (`actionProps`) como botão pequeno
+//     terciário; e o X — o `CloseButton`, de 20 com o X de 12 — na quina, que aparece com o mouse
+//     ou o foco. No toque ele fica sempre à vista: lá ele só aparece com o mouse, e quem não tem
+//     mouse só fecharia arrastando, que não se descobre (característica de baixa visão da Aurea).
+//   • o aviso do `promise()` do motor: `loading` gira, e o `error` dele é o `danger` da Aurea.
+// O X é a MARCAÇÃO do `CloseButton`, escrita aqui porque o `actions.tsx` vem depois deste arquivo na
+// ordem dos módulos; um teste compara as duas, para elas não se separarem.
+export type ToastPlacement="top"|"top-start"|"top-end"|"bottom"|"bottom-start"|"bottom-end";
+const TEMPO_DO_AVISO=4000;
+const ICONE_DO_AVISO:Record<string,IconName>={info:"info",success:"check-circle",warning:"warning",danger:"x-circle"};
+function AureaToastList({placement}:{placement:ToastPlacement}){
   const {toasts}=BaseToast.useToastManager();
   const s=useAureaStrings();
-  return <>{toasts.map(t=>(
-    <BaseToast.Root key={t.id} toast={t} className={cx("toast",t.type&&`toast-${t.type}`)}>
-      <div className="toast-text"><BaseToast.Title render={<strong/>}/>{t.description?<BaseToast.Description className="muted"/>:null}</div>
-      <BaseToast.Close className="btn btn-ghost btn-icon btn-sm" aria-label={s.dismissNotification}>×</BaseToast.Close>
-    </BaseToast.Root>
-  ))}</>;
+  const arrasto:("up"|"down"|"left"|"right")[]=[placement.startsWith("top")?"up":"down","right"];
+  return <>{toasts.map(t=>{
+    const tipo=t.type==="error"?"danger":t.type;
+    return <BaseToast.Root key={t.id} toast={t} swipeDirection={arrasto} className={cx("toast",tipo&&`toast-${tipo}`)}>
+      <BaseToast.Content className="toast-content">
+        <span className="toast-indicator" aria-hidden="true">{tipo==="loading"?<span className="spinner"/>:<Icon name={ICONE_DO_AVISO[tipo??""]??"info"}/>}</span>
+        <div className="toast-text"><BaseToast.Title className="toast-title" render={<strong/>}/>{t.description?<BaseToast.Description className="toast-description"/>:null}</div>
+        {t.actionProps?<BaseToast.Action className="btn btn-tertiary btn-sm toast-action"/>:null}
+      </BaseToast.Content>
+      <BaseToast.Close className="btn btn-tertiary close-button toast-close" aria-label={s.dismissNotification}><span><Icon name="x" weight="bold"/></span></BaseToast.Close>
+    </BaseToast.Root>})}</>;
 }
-function AureaToastViewport(){
+function AureaToastViewport({placement}:{placement:ToastPlacement}){
   const portal=usePortalContainer();
-  return <BaseToast.Portal container={portal}><BaseToast.Viewport className="toast-stack"><AureaToastList/></BaseToast.Viewport></BaseToast.Portal>;
+  return <BaseToast.Portal container={portal}><BaseToast.Viewport className={cx("toast-stack",`toast-stack-${placement}`)}><AureaToastList placement={placement}/></BaseToast.Viewport></BaseToast.Portal>;
 }
 
 // GAR-14 (0.28.0) · OS AVISOS PRESOS A UM BOTÃO ("Link copiado", do `Button share`). A documentação do
@@ -195,7 +218,7 @@ function AvisosAncorados(){
 // A-04: o nome é checado pelo TypeScript. A lista é GERADA do mesmo @phosphor-icons/core que monta
 // o sprite (`packages/icons/build-icons.mjs`, ADR-0053); nome próprio do app entra por `AureaIconNames`.
 export type {IconName,PhosphorIconName,AureaIconNames,IconWeight} from "./icon-names.js";
-import {NOMES_PHOSPHOR,type IconName,type IconWeight} from "./icon-names.js";
+import {NOMES_PHOSPHOR,NOMES_BOLD,type IconName,type IconWeight} from "./icon-names.js";
 // A escala de GLIFO é própria (`--icon-*`) e começa em `sm`: não existe `--icon-xs`. Emitir um
 // degrau `xs` aqui seria desenhar por simetria com o botão, e a medição de 22/08 mostrou que as
 // duas escalas nem sequer reagem à densidade do mesmo jeito.
@@ -210,13 +233,16 @@ export type AureaIconComponent=(props:React.SVGAttributes<SVGSVGElement>)=>React
 /** Um ícone: o NOME de um glifo do sprite, ou o DESENHO do app. */
 export type AureaIcon=IconName|AureaIconComponent;
 export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>,"name">{name:AureaIcon;spriteUrl?:string;size?:Responsive<IconSize>;
-  /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). Nome próprio do app fica no `regular`. */
+  /** `fill` desenha a forma cheia — a do item escolhido (ADR-0053). `bold`, o traço grosso, só nos
+   *  nomes que o têm (hoje, o `x`); os outros, e o nome próprio do app, ficam no `regular`. */
   weight?:IconWeight}
 // spriteUrl aqui é OVERRIDE local (dois sprites na mesma página, por exemplo). O normal é
 // não passar nada e deixar o AureaProvider dizer de onde vêm os glifos.
 // A forma cheia é o símbolo `i-<nome>-fill` do sprite. Só os nomes do Phosphor a têm: um nome
-// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio.
-const idDoIcone=(name:string,weight:IconWeight="regular")=>weight==="fill"&&NOMES_PHOSPHOR.has(name)?`i-${name}-fill`:`i-${name}`;
+// próprio do app pedido em `fill` desenha o regular, em vez de um `<use>` vazio. O `bold` (0.32.0)
+// segue a mesma regra, com a lista curta do `NOMES_BOLD`.
+const idDoIcone=(name:string,weight:IconWeight="regular")=>weight==="fill"&&NOMES_PHOSPHOR.has(name)?`i-${name}-fill`
+  :weight==="bold"&&NOMES_BOLD.has(name)?`i-${name}-bold`:`i-${name}`;
 export function Icon({name,spriteUrl,size,weight,className,...props}:IconProps){const base=useSpriteUrl();
   if(typeof name==="function"){const Desenho=name;return <Desenho aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}/>}
   return <svg aria-hidden="true" className={cx("icon",peleDoEixo("icon",size),className)} {...props}><use href={`${spriteUrl??base}#${idDoIcone(name,weight)}`}/></svg>}

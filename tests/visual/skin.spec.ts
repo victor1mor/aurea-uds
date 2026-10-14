@@ -58,7 +58,8 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h(A.Toggle, {key: "t1", icon: "heart", label: "Favourite", defaultPressed: true}),
   h(A.Toggle, {key: "t2", icon: "push-pin", label: "Pin"}),
   h("div", {key: "sp"},
-    h(A.Spinner, {}), h(A.Spinner, {size: "md"}), h(A.Spinner, {size: "lg"})),
+    // 0.32.0: a escala da referência, 16 · 24 · 32 · 40, e o padrão do componente é o md (24).
+    h(A.Spinner, {size: "sm"}), h(A.Spinner, {}), h(A.Spinner, {size: "lg"}), h(A.Spinner, {size: "xl"})),
   h(A.NumberField, {key: "nf", defaultValue: 1, min: 0, max: 9, label: "Quantity"}),
   h(A.OTPField, {key: "otp", length: 4, label: "Code"}),
   // HoverCard vive num PORTAL e só existe aberto — `renderToStaticMarkup` não renderiza portal
@@ -253,6 +254,7 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h(A.Stack, {key: "e13"},
     // ── Feedback ───────────────────────────────────────────────────────────────────────
     h(A.Alert, {key: "al", variant: "warning", title: "Heads up"}, "Body of the alert."),
+    h(A.Alert, {key: "al2", variant: "danger", title: "Stop", className: "alerta-perigo", onDismiss: () => {}}, "It failed."),
     h(A.Badge, {key: "bd", variant: "success"}, "Stable"),
     h(A.Banner, {key: "bn", variant: "danger", title: "Down", icon: "warning", onDismiss: () => {}}, "Body."),
     h(A.Skeleton, {key: "sk", style: {width: 160, height: 12}}),
@@ -270,6 +272,9 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.Radio, {key: "rd", label: "One", name: "skin-g"}),
     h(A.Switch, {key: "sw", label: "Active", defaultChecked: true}),
     h(A.Range, {key: "rg", defaultValue: 40}),
+    h("div", {key: "sl", style: {width: 320}}, h(A.Slider, {label: "Volume", defaultValue: 0})),
+    h(A.CheckboxGroup, {key: "cg", label: "Interests"}, h(A.Checkbox, {label: "Code", value: "c"}), h(A.Checkbox, {label: "Design", value: "d"})),
+    h(A.ListBox, {key: "lb", label: "Fruit", defaultValue: ["a"], items: [{id: "a", label: "Apple"}, {id: "b", label: "Banana"}]}),
     h(A.SearchField, {key: "sf", defaultValue: "query"}),
     h(A.Select, {key: "sl", label: "Level", items: [{value: "a", label: "A"}], defaultValue: "a"}),
     h(A.SegmentedControl, {key: "sg", label: "View", defaultValue: "a",
@@ -279,6 +284,31 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.FileInput, {key: "fi", label: "Files"}),
     // ── Ações ──────────────────────────────────────────────────────────────────────────
     h(A.IconButton, {key: "ib", icon: "plus", label: "Add"}),
+    h(A.CloseButton, {key: "xb"}),
+    // 0.32.0, passo 6: as quatro peças novas da referência, e os três tamanhos do selo e do avatar.
+    h("p", {key: "lnk"}, h(A.Link, {href: "#a"}, "Plain link"), " ", h(A.Link, {href: "#b", external: true}, "External")),
+    h("div", {key: "csw"}, h(A.ColorSwatch, {color: "#f0c200", label: "Yellow"}), h(A.ColorSwatch, {color: "#123456", size: "xl"})),
+    // 0.32.0, passo 12: a área de cor (ADR-0069) e o gatilho do DatePicker (ADR-0068, subcaminho `calendar`).
+    h("div", {key: "car", style: {width: 320}}, h(A.ColorArea, {defaultValue: "#0485f7", "aria-label": "Fill"})),
+    h("div", {key: "shue", style: {width: 320}}, h(A.Slider, {label: "Hue", channel: "hue", defaultValue: "hsl(210, 100%, 50%)"})),
+    h(A.ColorSwatch, {key: "cswp", name: "skin-swatch", label: "Accent", defaultValue: "#f0c200",
+      options: [{color: "#0485f7", label: "Ocean"}, {color: "#f0c200", label: "Aurea yellow"}]}),
+    h(A.ColorPicker, {key: "cpk", label: "Brand colour", defaultValue: "#0485f7"}),
+    h("div", {key: "cfd", style: {width: 320}}, h(A.ColorField, {"aria-label": "Colour", defaultValue: "#0485f780", className: "cfd-campo"})),
+    h("div", {key: "cfd2", style: {width: 320}}, h(A.Input, {"aria-label": "Plain", className: "cfd-input"})),
+    h("div", {key: "cfd3", style: {width: 320}}, h(A.ColorField, {"aria-label": "Colour on a card", variant: "secondary", defaultValue: "#0485f7", className: "cfd-sec"})),
+    h("div", {key: "cfd4", style: {width: 320}}, h(A.Input, {"aria-label": "Plain on a card", variant: "secondary", className: "cfd-input-sec"})),
+    h("div", {key: "dpk", style: {width: 320}}, h(A2.DatePicker, {"aria-label": "Check-in", defaultValue: new Date(2026, 7, 12)})),
+    h("div", {key: "pcr"}, h(A.ProgressCircle, {label: "Upload", value: 50}), h(A.ProgressCircle, {label: "Big", value: 50, size: "lg", tone: "success"})),
+    h(A.TagGroup, {key: "tgg", label: "Topics", selectionMode: "multiple", defaultSelectedKeys: ["b"],
+      items: [{id: "a", label: "News"}, {id: "b", label: "Travel", icon: "tag"}], onRemove: () => {}}),
+    h("div", {key: "bsz"}, h(A.Badge, {size: "sm", className: "bsz-sm"}, "Small"), h(A.Badge, {className: "bsz-md", leading: h(A.Icon, {name: "check"})}, "Medium"),
+      h(A.Badge, {size: "lg", className: "bsz-lg"}, "Large")),
+    // 0.32.0, passo 8: a caixa de exemplo do site (`CodeBlock preview`) e o `tone` do texto.
+    h("div", {key: "cbp", style: {width: 360}}, h(A.CodeBlock, {preview: h(A.Button, null, "Save")}, "<Button>Save</Button>")),
+    h(A.Text, {key: "ttn", tone: "link", className: "texto-tom-link"}, "Link tone"),
+    h("div", {key: "avs"}, h(A.Avatar, {fallback: "AB", size: "sm", className: "avs-sm"}), h(A.Avatar, {fallback: "AB", className: "avs-md"}),
+      h(A.Avatar, {fallback: "AB", size: "lg", className: "avs-lg"})),
     h(A.ButtonGroup, {key: "bg"}, h(A.Button, {key: 1}, "One"), h(A.Button, {key: 2}, "Two")),
     h(A.Toolbar, {key: "tb", label: "Skin"},
       h(A.ToolbarGroup, {key: "g", label: "Edit"},
@@ -435,11 +465,15 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // `renderToStaticMarkup` não monta portal: Dialog e Drawer saem com ZERO byte e os
     // outros quatro saem só com o gatilho. Medido em 07/08/2026, e é por isso que a
     // superfície entra escrita à mão, copiada da montagem real de overlays.tsx.
+    // 0.32.0: a anatomia da referência — o X (`CloseButton`) solto no canto, o ícone no círculo de 40
+    // em cima do título de 16, o corpo de 14/20 e o rodapé.
     h("div", {key: "dlg", className: "dialog"},
-      h("header", null, h("h2", null, "Confirm"),
-        h("button", {className: "btn btn-ghost btn-icon", "aria-label": "Close"}, "×")),
+      h(A.CloseButton, {className: "dialog-close"}),
+      h("header", {className: "dialog-header"},
+        h("span", {className: "dialog-icon dialog-icon-brand", "aria-hidden": "true"}, h(A.Icon, {name: "users"})),
+        h("h2", {className: "dialog-heading"}, "Confirm")),
       h("div", {className: "dialog-body"}, "Body of the dialog."),
-      h("footer", null, h(A.Button, null, "Cancel"))),
+      h("footer", {className: "dialog-footer"}, h(A.Button, null, "Cancel"))),
     h("div", {key: "dbk", className: "dialog-backdrop"}),
     // Toast (16/08/2026). Entra como MARCAÇÃO pelo mesmo motivo dos outros de portal, e mais
     // um: ele não é componente — nasce do `useToast()` e o viewport mora no AureaProvider.
@@ -448,11 +482,18 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // no core até hoje — o tipo publicado não pintava nada, e o check 18 não via porque classe
     // por template é o ponto cego dele. Emitir a classe é o que o teste de unidade cobra; que
     // ela tenha EFEITO só se mede aqui.
-    h("div", {key: "tst", className: "toast"},
-      h("div", {className: "toast-text"}, h("strong", null, "Saved"))),
+    // 0.32.0: a marcação nova (ícone, título, descrição), em fluxo (`position: relative`): fora da
+    // pilha do motor, os avisos absolutos se empilhariam no pé da página, por cima dos outros.
+    h("div", {key: "tst", className: "toast", style: {position: "relative"}},
+      h("div", {className: "toast-content"},
+        h("span", {className: "toast-indicator", "aria-hidden": "true"}, h(A.Icon, {name: "info"})),
+        h("div", {className: "toast-text"}, h("strong", {className: "toast-title"}, "Saved"),
+          h("p", {className: "toast-description"}, "Visible to the team.")))),
     ...(["info", "success", "warning", "danger"] as const).map(t =>
-      h("div", {key: `tst-${t}`, className: `toast toast-${t}`},
-        h("div", {className: "toast-text"}, h("strong", null, t)))),
+      h("div", {key: `tst-${t}`, className: `toast toast-${t}`, style: {position: "relative"}},
+        h("div", {className: "toast-content"},
+          h("span", {className: "toast-indicator", "aria-hidden": "true"}, h(A.Icon, {name: "info"})),
+          h("div", {className: "toast-text"}, h("strong", {className: "toast-title"}, t))))),
     // ConfirmDialog (M5): mesma marcação escrita à mão dos outros de portal. Ele reusa `.dialog`
     // e só acrescenta `.dialog-confirm` — a medição abaixo é justamente que ele NÃO virou uma
     // segunda superfície flutuante, e que o rodapé alinha ao fim com os dois botões.
@@ -480,15 +521,15 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h(A.Button, {key: "bdis", disabled: true}, "Disabled"),
     h(A.Button, {key: "bine", "aria-disabled": true}, "Inert"),
     h("div", {key: "cfm", className: "dialog dialog-confirm"},
-      h("header", null, h("h2", null, "Delete this article?")),
+      h("header", {className: "dialog-header"}, h("h2", {className: "dialog-heading"}, "Delete this article?")),
       h("div", {className: "dialog-body"}, "This cannot be undone."),
-      h("footer", null, h(A.Button, {variant: "secondary"}, "Cancel"),
+      h("footer", {className: "dialog-footer"}, h(A.Button, {variant: "tertiary"}, "Cancel"),
         h(A.Button, {variant: "danger"}, "Delete"))),
     h("div", {key: "drw", className: "drawer drawer-right"},
-      h("header", null, h("h2", null, "Details"),
-        h("button", {className: "btn btn-ghost btn-icon", "aria-label": "Close"}, "×")),
-      "Body of the drawer."),
-    h("div", {key: "pop", className: "popover"}, h("strong", null, "Title"), "Popover body."),
+      h(A.CloseButton, {className: "dialog-close"}),
+      h("header", {className: "dialog-header"}, h("h2", {className: "dialog-heading"}, "Details")),
+      h("div", {className: "dialog-body"}, "Body of the drawer.")),
+    h("div", {key: "pop", className: "popover"}, h("strong", {className: "popover-title"}, "Title"), "Popover body."),
     h("div", {key: "ttp", className: "tooltip", role: "tooltip"}, "Short hint"),
     // SortableList (L3). Duas regras da pele são COMPORTAMENTO e não enfeite: `touch-action:none`
     // na alça (sem ela o navegador rola a página em vez de deixar arrastar, e o componente não
@@ -620,8 +661,12 @@ for (const theme of ["dark", "light"] as const) {
       };
       const cards = [...document.querySelectorAll(".grid > .card")].map(e => Math.round(e.getBoundingClientRect().top));
       const dt = box(".data-list dt"), dd = box(".data-list dd");
-      const sums = [...document.querySelectorAll(".accordion > details > summary")];
-      const det2 = getComputedStyle(document.querySelectorAll(".accordion > details")[1]!);
+      const sums = [...document.querySelectorAll(".accordion > .accordion-item > summary")];
+      // 0.32.0: o fio entre os itens é desenhado (`::after` do item), e o último não tem
+      const fio1 = getComputedStyle(document.querySelectorAll(".accordion > .accordion-item")[0]!, "::after");
+      const itens = document.querySelectorAll(".accordion > .accordion-item");
+      const fioUltimo = getComputedStyle(itens[itens.length - 1]!, "::after");
+      const sum1 = getComputedStyle(sums[0]!);
       return {
         grid: {display: cs(".grid").display, topos: [...new Set(cards)].length, filhos: cards.length},
         dot: {w: parseFloat(cs(".timeline-dot").width), h: parseFloat(cs(".timeline-dot").height),
@@ -643,7 +688,11 @@ for (const theme of ["dark", "light"] as const) {
         dataList: {display: cs(".data-list").display, ddIndent: parseFloat(cs(".data-list dd").marginLeft),
                    mesmaLinha: Math.round(dt.top) === Math.round(dd.top)},
         accordion: {alturas: sums.map(e => e.getBoundingClientRect().height),
-                    controlMd: emPx("--control-h-md"), divisoria: parseFloat(det2.borderTopWidth),
+                    controlMd: emPx("--control-h-md"), divisoria: parseFloat(fio1.height),
+                    semFioNoUltimo: fioUltimo.content === "none",
+                    recheio: parseFloat(sum1.paddingTop), raio: parseFloat(sum1.borderTopLeftRadius),
+                    radiusControl: emPx("--radius-control"), peso: sum1.fontWeight,
+                    seta: document.querySelector(".accordion-chevron")!.getBoundingClientRect().width,
                     corpoBaixo: parseFloat(cs(".accordion-content").paddingBottom)},
         empty: {align: cs(".empty-state").textAlign, padTop: parseFloat(cs(".empty-state").paddingTop),
                 display: cs(".empty-state").display},
@@ -675,11 +724,17 @@ for (const theme of ["dark", "light"] as const) {
                       })(),
                       w: parseFloat(cs(".number-field-input").width),
                       align: cs(".number-field-input").textAlign,
-                      botoes: document.querySelectorAll(".number-field .btn").length},
+                      // 0.32.0: os botões são do grupo (40 de largura), e a borda é do grupo
+                      botoes: document.querySelectorAll(".number-field-group > .number-field-button").length,
+                      botaoW: parseFloat(cs(".number-field-button").width),
+                      grupoBorda: parseFloat(cs(".number-field-group").borderTopWidth),
+                      grupoAlt: document.querySelector(".number-field-group")!.getBoundingClientRect().height,
+                      campoBorda: parseFloat(cs(".number-field-input").borderTopWidth)},
         otp: {display: cs(".otp-field").display,
               slots: document.querySelectorAll(".otp-slot").length,
               lado: parseFloat(cs(".otp-slot").width),
               alt: parseFloat(cs(".otp-slot").height),
+              letra: parseFloat(cs(".otp-slot").fontSize),
               fonte: cs(".otp-slot").fontFamily},
         // ── Lote 2 ────────────────────────────────────────────────────────────────────
         avatar: (() => {
@@ -1275,6 +1330,8 @@ for (const theme of ["dark", "light"] as const) {
             grupoCaixaAlta: cs(".sidebar-group-label").textTransform,
             grupoCor: cs(".sidebar-group-label").color,
             itemCor: getComputedStyle(comum).color,
+            grupoPeso: Number(cs(".sidebar-group-label").fontWeight),
+            itemPeso: Number(getComputedStyle(comum).fontWeight),
             // o rótulo do trilho: FORA da tela, DENTRO do DOM
             trilhoRotuloW: r.width, trilhoRotuloH: r.height,
             trilhoRotuloTexto: (rotuloTrilho.textContent ?? "").trim(),
@@ -1350,13 +1407,27 @@ for (const theme of ["dark", "light"] as const) {
                      // HER-02 (06/10/2026): o `Alert` passou de `--radius-lg` (16) para o raio
                      // de painel, `--radius-card` (22).
                      radiusCard: emPx("--radius-card"),
-                     bordaDanger: est(".banner-danger").borderTopColor,
-                     bordaAlerta: est(".alert-warning").borderTopColor},
+                     // 0.32.0, o Alert da referência: fundo de cartão, sem borda, sombra; a cor do estado
+                     // pinta o ícone e o título.
+                     fundo: est(".alert").backgroundColor, cartao: est(".card").backgroundColor,
+                     borda: parseFloat(est(".alert").borderTopWidth), sombra: est(".alert").boxShadow,
+                     padLado: parseFloat(est(".alert").paddingLeft), vao: parseFloat(est(".alert").columnGap),
+                     icone: caixa(".alert > .icon").width, iconeCaixa: caixa(".alert > .icon").width + 2 * parseFloat(est(".alert > .icon").marginLeft),
+                     titulo: [parseFloat(est(".alert strong").fontSize), parseFloat(est(".alert strong").lineHeight), est(".alert strong").fontWeight],
+                     tituloAviso: est(".alert-warning strong").color, tituloPerigo: est(".alerta-perigo strong").color,
+                     iconeAviso: est(".alert-warning > .icon").color,
+                     xFechar: document.querySelector(".alerta-perigo > .close-button") !== null},
             // Toast: a base e as quatro faces do tipo. Medir COR, não existência de regra — o
             // defeito de origem era exatamente uma classe emitida sem nada atrás.
-            toast: {baseFundo: est(".toast").backgroundColor, baseBorda: est(".toast").borderTopColor,
+            toast: {baseFundo: est(".toast").backgroundColor, baseTitulo: est(".toast .toast-title").color,
                     fundos: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t}`).backgroundColor),
-                    bordas: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t}`).borderTopColor)},
+                    titulos: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t} .toast-title`).color),
+                    icones: ["info", "success", "warning", "danger"].map(t => est(`.toast-${t} .toast-indicator`).color),
+                    recheioV: parseFloat(est(".toast").paddingTop), recheioH: parseFloat(est(".toast").paddingLeft),
+                    raio: parseFloat(est(".toast").borderTopLeftRadius),
+                    tituloFs: parseFloat(est(".toast-title").fontSize), tituloLh: parseFloat(est(".toast-title").lineHeight),
+                    tituloPeso: est(".toast-title").fontWeight, descFs: parseFloat(est(".toast-description").fontSize),
+                    caixaIcone: caixa(".toast-indicator").width, icone: caixa(".toast-indicator .icon").width},
             badge: {display: est(".badge").display, raio: parseFloat(est(".badge").borderTopLeftRadius),
                     radiusControl: emPx("--radius-control"), alt: caixa(".badge").height,
                     entrelinha: est(".badge").lineHeight},
@@ -1372,8 +1443,9 @@ for (const theme of ["dark", "light"] as const) {
             cluster: {display: est(".cluster").display, quebra: est(".cluster").flexWrap,
                       gap: parseFloat(est(".cluster").columnGap)},
             kbd: {display: est(".kbd").display, fonte: est(".kbd").fontFamily,
-                  fontCode: getComputedStyle(document.documentElement).getPropertyValue("--font-code").trim().replace(/,\s*/g, ","),
-                  borda: parseFloat(est(".kbd").borderTopWidth)},
+                  borda: parseFloat(est(".kbd").borderTopWidth), alt: caixa(".kbd").height,
+                  raio: parseFloat(est(".kbd").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
+                  peso: est(".kbd").fontWeight, fundo: est(".kbd").backgroundColor},
             // Formulários: o `.field` empilha; hint e erro NÃO podem medir igual ao rótulo.
             field: {display: est(".field").display, gap: parseFloat(est(".field").rowGap),
                     hintCor: est(".hint").color, erroCor: est(".field-error").color,
@@ -1384,10 +1456,25 @@ for (const theme of ["dark", "light"] as const) {
             marca: {w: caixa(".control-mark").width, h: caixa(".control-mark").height,
                     raio: parseFloat(est(".checkbox .control-mark").borderTopLeftRadius),
                     radioRedondo: parseFloat(est(".radio .control-mark").borderTopLeftRadius),
-                    radioW: caixa(".radio .control-mark").width},
+                    radioW: caixa(".radio .control-mark").width,
+                    vao: parseFloat(est(".checkbox").columnGap), peso: est(".checkbox").fontWeight},
             switchT: {w: caixa(".switch-track").width, h: caixa(".switch-track").height,
                       raio: parseFloat(est(".switch-track").borderTopLeftRadius),
-                      pilula: parseFloat(est(".switch-track").borderTopLeftRadius) >= caixa(".switch-track").height / 2},
+                      pilula: parseFloat(est(".switch-track").borderTopLeftRadius) >= caixa(".switch-track").height / 2,
+                      bolaW: parseFloat(getComputedStyle(document.querySelector(".switch-track")!, "::after").width),
+                      bolaH: parseFloat(getComputedStyle(document.querySelector(".switch-track")!, "::after").height)},
+            // 0.32.0, os campos da referência
+            campo: {rotuloPeso: est(".field .label").fontWeight, dicaPeso: est(".hint").fontWeight,
+                    inputLados: parseFloat(est(".input").paddingLeft),
+                    textareaLados: parseFloat(est(".textarea").paddingLeft), textareaTopo: parseFloat(est(".textarea").paddingTop)},
+            slider: {trilhoH: caixa(".slider-track").height, alcaW: caixa(".slider-thumb").width, alcaH: caixa(".slider-thumb").height,
+                     miolo: getComputedStyle(document.querySelector(".slider-thumb")!, "::after").width,
+                     alcaDentro: caixa(".slider-thumb").left >= caixa(".slider-track").left - 2,
+                     cheio: est(".slider-fill").backgroundColor, trilhoCor: est(".slider-track").backgroundColor},
+            grupoCaixas: {display: est(".checkbox-group").display, antes: parseFloat(est(".checkbox-group > .checkbox").marginTop)},
+            listBox: {itemAlt: caixa(".list-box-item").height, lados: parseFloat(est(".list-box-item").paddingLeft),
+                      raio: parseFloat(est(".list-box-item").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
+                      visto: caixa(".list-box-item-indicator").width},
             select: {alt: caixa(".select").height, controlMd: emPx("--control-h-md"),
                      raio: parseFloat(est(".select").borderTopLeftRadius),
                      radiusControl: emPx("--radius-control"),
@@ -1405,7 +1492,72 @@ for (const theme of ["dark", "light"] as const) {
             iconBtn: {w: caixa(".btn-icon").width, h: caixa(".btn-icon").height,
                       quadrado: Math.abs(caixa(".btn-icon").width - caixa(".btn-icon").height) <= 1,
                       controlMd: emPx("--control-h-md")},
-            btnGroup: {display: est(".btn-group").display, naLinha: linhaUnica(".btn-group", ":scope > .btn")},
+            passo12: {
+              area: {w: caixa(".color-area").width, h: caixa(".color-area").height, raio: parseFloat(est(".color-area").borderTopLeftRadius),
+                     pintada: est(".color-area").backgroundImage, pino: caixa(".color-area-thumb").width,
+                     anel: parseFloat(est(".color-area-thumb").borderTopWidth), anelCor: est(".color-area-thumb").borderTopColor,
+                     entrada: est(".color-area-input").opacity},
+              matiz: {pino: [caixa(".slider-color .slider-thumb").width, caixa(".slider-color .slider-thumb").height],
+                      anel: parseFloat(est(".slider-color .slider-thumb").borderTopWidth), trilho: caixa(".slider-color .slider-track").height,
+                      pintada: est(".slider-color .slider-track").backgroundImage, cheio: !!document.querySelector(".slider-color .slider-fill")},
+              amostras: (() => {
+                const op = document.querySelector(".color-swatch-option:not(:has(:checked))")!, esc = document.querySelector(".color-swatch-option:has(:checked)")!;
+                const cs = getComputedStyle(op), ce = getComputedStyle(esc);
+                return {tam: Math.round(op.getBoundingClientRect().width), borda: parseFloat(cs.borderTopWidth), vao: parseFloat(getComputedStyle(op.parentElement!).columnGap),
+                  bordaLivre: cs.borderTopColor, bordaEscolhida: ce.borderTopColor, encolhe: getComputedStyle(esc.querySelector(".color-swatch")!).scale,
+                  visto: getComputedStyle(esc, "::after").scale, tinta: getComputedStyle(esc, "::after").backgroundColor,
+                  botaoInvisivel: getComputedStyle(esc.querySelector("input")!).opacity};
+              })(),
+              campoCor: {alt: caixa(".cfd-campo .input").height, input: caixa(".cfd-input").height,
+                         amostra: caixa(".cfd-campo .color-swatch").width, xadrez: est(".cfd-campo .color-swatch").backgroundImage,
+                         fundoSec: est(".cfd-sec").backgroundColor, fundoInputSec: est(".cfd-input-sec").backgroundColor,
+                         bordaSec: est(".cfd-sec").borderTopColor, bordaInputSec: est(".cfd-input-sec").borderTopColor, bordaPrim: est(".cfd-campo").borderTopColor},
+              seletor: {vao: parseFloat(est(".color-picker-trigger").columnGap), amostra: caixa(".color-picker-trigger .color-swatch").width,
+                        letra: parseFloat(est(".color-picker-trigger").fontSize), fundo: est(".color-picker-trigger").backgroundColor},
+              data: {fundo: est(".date-picker-trigger").backgroundImage, alt: caixa(".date-picker-trigger").height,
+                     select: caixa(".select-trigger:not(.date-picker-trigger)").height},
+            },
+            passo6: {
+              link: {cor: est(".link").color, linkToken: (() => { const d = document.createElement("span"); d.style.color = "var(--link)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; })(),
+                     peso: est(".link").fontWeight, sublinhado: est(".link").textDecorationLine, seta: caixa(".link-external").width,
+                     setaMascara: est(".link-external").maskImage !== "none" || est(".link-external").webkitMaskImage !== "none"},
+              amostra: {md: caixa(".color-swatch").width, xl: caixa(".color-swatch-xl").width, raio: parseFloat(est(".color-swatch").borderTopLeftRadius),
+                        fundo: est(".color-swatch").backgroundColor},
+              anel: {md: caixa(".progress-circle").width, lg: caixa(".progress-circle-lg").width,
+                     traco: est(".progress-circle-fill").strokeWidth, ponta: est(".progress-circle-fill").strokeLinecap,
+                     cor: est(".progress-circle-fill").stroke, corSucesso: est(".progress-circle-success .progress-circle-fill").stroke},
+              etiqueta: {alt: caixa(".tag").height, lados: parseFloat(est(".tag").paddingLeft), fs: parseFloat(est(".tag").fontSize),
+                         peso: est(".tag").fontWeight, raio: parseFloat(est(".tag").borderTopLeftRadius), vao: parseFloat(est(".tag-group-list").columnGap),
+                         escolhida: est('.tag[data-selected]').backgroundColor, outra: est('.tag:not([data-selected])').backgroundColor,
+                         icone: caixa(".tag-main .icon").width, x: caixa(".tag-remove").width},
+              selo: {sm: caixa(".bsz-sm").height, md: caixa(".bsz-md").height, lg: caixa(".bsz-lg").height,
+                     ladoMd: parseFloat(est(".bsz-md").paddingLeft) + parseFloat(est(".bsz-md").borderLeftWidth),
+                     ladoSm: parseFloat(est(".bsz-sm").paddingLeft) + parseFloat(est(".bsz-sm").borderLeftWidth),
+                     ladoLg: parseFloat(est(".bsz-lg").paddingLeft) + parseFloat(est(".bsz-lg").borderLeftWidth),
+                     vao: parseFloat(est(".bsz-md").columnGap)},
+              caixaExemplo: {abas: document.querySelectorAll(".code-preview .demo-tabs [role=tab]").length,
+                             abasLargura: Math.round(caixa(".code-preview .demo-tabs .segmented").width),
+                             caixaLargura: Math.round(caixa(".code-preview").width),
+                             previaFundo: est(".code-preview .demo-panel[data-panel=preview]").backgroundColor,
+                             afundado: (() => { const d = document.createElement("span"); d.style.background = "var(--surface-inset)"; document.body.append(d); const c = getComputedStyle(d).backgroundColor; d.remove(); return c; })(),
+                             codigoEscondido: est(".code-preview .demo-code").display,
+                             raio: parseFloat(est(".code-preview").borderTopLeftRadius)},
+              textoTom: {cor: est(".texto-tom-link").color, link: (() => { const d = document.createElement("span"); d.style.color = "var(--link)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; })()},
+              avatar: {sm: caixa(".avs-sm").width, md: caixa(".avs-md").width, lg: caixa(".avs-lg").width,
+                       letra: [".avs-sm", ".avs-md", ".avs-lg"].map(c => parseFloat(est(c).fontSize)), peso: est(".avs-md").fontWeight},
+            },
+            fechar: {w: caixa(".close-button").width, h: caixa(".close-button").height,
+                     raio: parseFloat(est(".close-button").borderTopLeftRadius), radiusControl: emPx("--radius-control"),
+                     icone: caixa(".close-button .icon").width, fundo: est(".close-button").backgroundColor,
+                     nome: document.querySelector(".close-button")?.getAttribute("aria-label")},
+            btnGroup: {display: est(".btn-group").display, naLinha: linhaUnica(".btn-group", ":scope > .btn"),
+                       // 0.32.0: colado — vão 0, canto só na ponta de fora, o fio de 1 a 15% entre eles
+                       vao: parseFloat(est(".btn-group").columnGap),
+                       pontaFora: parseFloat(est(".btn-group > .btn:first-child").borderTopLeftRadius),
+                       pontaDentro: parseFloat(est(".btn-group > .btn:first-child").borderTopRightRadius),
+                       radiusControl: emPx("--radius-control"),
+                       fioW: parseFloat(getComputedStyle(document.querySelector(".btn-group > .btn + .btn")!, "::before").width),
+                       fioOp: getComputedStyle(document.querySelector(".btn-group > .btn + .btn")!, "::before").opacity},
             toolbar: {display: est(".toolbar").display, raio: parseFloat(est(".toolbar").borderTopLeftRadius),
                       radiusControl: emPx("--radius-control"),
                       grupoDisplay: est(".toolbar-group").display,
@@ -1414,17 +1566,34 @@ for (const theme of ["dark", "light"] as const) {
                       sepW: caixa(".toolbar-sep").width, sepH: caixa(".toolbar-sep").height,
                       sepCor: est(".toolbar-sep").backgroundColor},
             pagination: {display: est(".pagination").display, alinha: est(".pagination").alignItems,
-                         naLinha: linhaUnica(".pagination", ":scope > *"),
-                         },
+                         naLinha: linhaUnica(".pagination-content", ":scope > li"),
+                         // 0.32.0, a da referência com o clarinho da Aurea
+                         numeroW: caixa(".pagination-link:not(.pagination-link-nav)").width,
+                         numeroH: caixa(".pagination-link:not(.pagination-link-nav)").height,
+                         peso: est(".pagination-link").fontWeight,
+                         atualFundo: est(".pagination-link.active").backgroundColor,
+                         atualLetra: est(".pagination-link.active").color,
+                         outroFundo: est(".pagination-link:not(.active):not(.pagination-link-nav)").backgroundColor},
+            breadcrumbVao: parseFloat(est(".breadcrumb").columnGap),
+            breadcrumbSeta: caixa(".breadcrumb > .icon").width,
+            tabsRecheio: parseFloat(est(".tabs").paddingTop), tabsVao: parseFloat(est(".tabs").columnGap),
+            tabLados: parseFloat(est(".tab").paddingLeft), tabPeso: est(".tab").fontWeight,
             // Dados e navegação
+            // 0.32.0 (HER-13): a moldura cinza com o corpo como cartão por dentro, da referência.
             tabela: {regiaoOver: est(".table-region").overflow,
                      raio: parseFloat(est(".table-region").borderTopLeftRadius),
                      colapso: est(".table").borderCollapse,
-                     alturaLinha: caixa(".table tbody td").height, rowH: emPx("--row-h"),
-                     alinhamento: est(".table th").textAlign,
-                     // no <th>, não no <td>: a única linha do fixture é também a ÚLTIMA, e a
-                     // última perde a divisória de propósito. Medido em 07/08/2026.
-                     divisoria: parseFloat(est(".table th").borderBottomWidth)},
+                     molduraFundo: est(".table-region").backgroundColor, celFundo: est(".table tbody td").backgroundColor,
+                     cartao: est(".card").backgroundColor,
+                     molduraRecheio: [est(".table-region").paddingTop, est(".table-region").paddingRight, est(".table-region").paddingBottom].map(parseFloat),
+                     celPad: [parseFloat(est(".table tbody td").paddingTop), parseFloat(est(".table tbody td").paddingLeft)],
+                     celLetra: [parseFloat(est(".table tbody td").fontSize), parseFloat(est(".table tbody td").lineHeight)],
+                     celCanto: parseFloat(est(".table tbody td").borderTopLeftRadius),
+                     cabecAlt: caixa(".table thead th").height, cabecFs: parseFloat(est(".table thead th").fontSize),
+                     cabecPeso: est(".table thead th").fontWeight, cabecCaixa: est(".table thead th").textTransform,
+                     // o fio entre as colunas do cabeçalho: um traço de 16 no fim de cada coluna, menos a última
+                     fioColuna: parseFloat(getComputedStyle(document.querySelector(".table thead th")!, "::after").height),
+                     alinhamento: est(".table th").textAlign},
             breadcrumb: {display: est(".breadcrumb").display, naLinha: linhaUnica(".breadcrumb", ":scope > *")},
             tabs: {display: est(".tabs").display, raio: parseFloat(est(".tabs").borderTopLeftRadius),
                    radiusControl: emPx("--radius-control"),
@@ -1535,7 +1704,9 @@ for (const theme of ["dark", "light"] as const) {
                          const depois = topos();
                          const rolou = wrap.scrollTop > 0;
                          wrap.scrollTop = 0;
-                         return {antes, depois, rolou, degrau: depois[1] - depois[0], rowH: emPx("--row-h")};
+                         // 0.32.0: o degrau é a altura do CABEÇALHO (36, o da referência), e não mais a da linha.
+                         const cabeca = Math.round(wrap.querySelector("thead th")!.getBoundingClientRect().height);
+                         return {antes, depois, rolou, degrau: depois[1] - depois[0], rowH: cabeca};
                        })(),
                        radiusControl: emPx("--radius-control"),
                        controles: [...document.querySelectorAll(".datagrid:not(.datagrid-sticky) .datagrid-filters th")].map(th=>{const c=th.firstElementChild;if(!c)return null;const r=c.getBoundingClientRect();return {cls:c.className,top:Math.round(r.top),h:Math.round(r.height)}}).filter(Boolean)},
@@ -1609,8 +1780,9 @@ for (const theme of ["dark", "light"] as const) {
                       // no cartão de perto e não existe no de baixo do teto.
                       avisoPerto: !!document.querySelector(".cm-near .alert"),
                       avisoSob: !!document.querySelector(".cm-under .alert"),
-                      avisoAcima: est(".cm-over .alert").borderColor,
-                      alertaPerto: est(".cm-near .alert").borderColor,
+                      // 0.32.0: o Alert não tem mais borda; o estado está na cor do ícone.
+                      avisoAcima: est(".cm-over .alert > .icon").color,
+                      alertaPerto: est(".cm-near .alert > .icon").color,
                       // o razão é apende-só: a linha esquecida CONTINUA na lista, riscada.
                       razaoLinhas: document.querySelectorAll(".memory-entry").length,
                       razaoRiscado: est('.memory-entry[data-operation="forgotten"] .memory-content').textDecorationLine,
@@ -1649,6 +1821,15 @@ for (const theme of ["dark", "light"] as const) {
             // Os 6 de portal
             dialog: {raio: parseFloat(est(".dialog").borderTopLeftRadius), radiusCard: emPx("--radius-card"),
                      largura: caixa(".dialog").width, bg: est(".dialog").backgroundColor,
+                     recheio: parseFloat(est(".dialog").paddingTop),
+                     xTam: caixa(".dialog > .dialog-close").width,
+                     xTopo: caixa(".dialog > .dialog-close").top - caixa(".dialog").top,
+                     xFim: caixa(".dialog").right - caixa(".dialog > .dialog-close").right,
+                     icone: caixa(".dialog .dialog-icon").width, iconeRaio: parseFloat(est(".dialog .dialog-icon").borderTopLeftRadius),
+                     tituloFs: parseFloat(est(".dialog .dialog-heading").fontSize), tituloPeso: est(".dialog .dialog-heading").fontWeight,
+                     corpoFs: parseFloat(est(".dialog .dialog-body").fontSize), corpoLh: parseFloat(est(".dialog .dialog-body").lineHeight),
+                     corpoRola: est(".dialog .dialog-body").overflowY,
+                     iconeAoTitulo: caixa(".dialog .dialog-heading").top - caixa(".dialog .dialog-icon").bottom,
                      fundoPos: est(".dialog-backdrop").position,
                      fundoCobre: caixa(".dialog-backdrop").width >= window.innerWidth},
             paleta: {colunas: est(".command-item").gridTemplateColumns.split(" ").length,
@@ -1670,16 +1851,20 @@ for (const theme of ["dark", "light"] as const) {
                             radiusCard: emPx("--radius-card"),
                             largura: caixa(".dialog-confirm").width,
                             larguraDoDialog: caixa(".dialog").width,
-                            rodapeAlinha: est(".dialog-confirm>footer").justifyContent,
-                            rodapeGap: parseFloat(est(".dialog-confirm>footer").columnGap)},
+                            rodapeAlinha: est(".dialog-confirm>.dialog-footer").justifyContent,
+                            rodapeGap: parseFloat(est(".dialog-confirm>.dialog-footer").columnGap)},
             drawer: {pos: est(".drawer").position, alt: caixa(".drawer").height,
                      colaNaDireita: Math.round(caixa(".drawer").right) === window.innerWidth,
-                     bordaEsq: parseFloat(est(".drawer").borderLeftWidth)},
+                     bordaEsq: parseFloat(est(".drawer").borderLeftWidth),
+                     largura: caixa(".drawer").width,
+                     raioDentro: parseFloat(est(".drawer").borderTopLeftRadius), raioFora: parseFloat(est(".drawer").borderTopRightRadius)},
             popover: {raio: parseFloat(est(".popover").borderTopLeftRadius), radiusCard: emPx("--radius-card"),
-                      bg: est(".popover").backgroundColor, maxW: est(".popover").maxWidth},
+                      bg: est(".popover").backgroundColor, maxW: est(".popover").maxWidth,
+                      fs: parseFloat(est(".popover").fontSize), tituloPeso: est(".popover-title").fontWeight},
             tooltip: {raio: parseFloat(est(".tooltip").borderTopLeftRadius),
                       bg: est(".tooltip").backgroundColor, maxW: est(".tooltip").maxWidth,
-                      fs: parseFloat(est(".tooltip").fontSize), textSm: emPx("--text-sm", "font-size")},
+                      fs: parseFloat(est(".tooltip").fontSize), textSm: emPx("--text-sm", "font-size"),
+                      lh: parseFloat(est(".tooltip").lineHeight), recheio: parseFloat(est(".tooltip").paddingLeft)},
             // SortableList (L3). Aqui a pele carrega comportamento — ver o comentário no corpo.
             ordenavel: (() => {
               const solto = document.querySelector(".sortable-item:not([data-grabbed])")!;
@@ -1916,8 +2101,14 @@ for (const theme of ["dark", "light"] as const) {
       expect(a, `cabeçalho do accordion mede ao menos --control-h-md (${m.accordion.controlMd}px)`)
         .toBeGreaterThanOrEqual(m.accordion.controlMd);
     }
-    expect(m.accordion.divisoria, "item seguinte tem divisória de 1px").toBeGreaterThan(0);
+    expect(m.accordion.divisoria, "o fio entre os itens tem 1px").toBe(1);
+    expect(m.accordion.semFioNoUltimo, "e o último item não tem fio").toBe(true);
     expect(m.accordion.corpoBaixo, "o corpo não cola no item de baixo").toBeGreaterThan(0);
+    // 0.32.0, o da referência com o realce em cápsula
+    expect(m.accordion.recheio, "a pergunta tem 16 de todos os lados").toBe(16);
+    expect(m.accordion.raio, "o realce é cápsula").toBe(m.accordion.radiusControl);
+    expect(m.accordion.peso, "a pergunta é peso médio").toBe("500");
+    expect(m.accordion.seta, "a seta tem 16").toBeCloseTo(16, 0);
 
     // 6. EmptyState é o membro grande da família "aqui não há nada": centralizado e com folga.
     expect(m.empty.display, "sem a regra saía display:block").toBe("flex");
@@ -1937,7 +2128,9 @@ for (const theme of ["dark", "light"] as const) {
       .not.toBe(m.toggle.corSolto);
 
     // 8. Spinner: três tamanhos DISTINTOS, o médio no eixo dos ícones, e girando de verdade.
-    expect(new Set(m.spinner.larguras).size, "sm, md e lg têm de medir diferente").toBe(3);
+    // (outros spinners da página — o de dentro de um botão — repetem o 16; por isso o conjunto)
+    expect([...new Set(m.spinner.larguras)].sort((a, b) => a - b),
+      "0.32.0: sm, md (o padrão), lg e xl — 16 · 24 · 32 · 40, a escala da referência").toEqual([16, 24, 32, 40]);
     // O base é --icon-sm, que são os 16px que o spinner sempre teve: apontar para --icon-md
     // mudaria o botão em carregamento de toda página, e os baselines pegaram isso.
     expect(m.spinner.larguras[0], "o base mede --icon-sm — o tamanho de sempre").toBe(m.spinner.iconSm);
@@ -1946,14 +2139,20 @@ for (const theme of ["dark", "light"] as const) {
 
     // 9. NumberField: menos · campo · mais na mesma linha, campo estreito e centrado.
     expect(m.numberField.mesmaLinha, "menos, campo e mais ficam na MESMA linha").toBe(true);
-    expect(m.numberField.botoes, "um botão de cada lado").toBe(2);
+    expect(m.numberField.botoes, "um botão de cada lado, DENTRO do grupo").toBe(2);
+    expect(m.numberField.botaoW, "o botão do grupo tem 40, como o da referência").toBeCloseTo(40, 0);
+    expect(m.numberField.grupoBorda, "a borda é do GRUPO").toBe(1);
+    expect(m.numberField.grupoAlt, "o grupo tem a altura do campo (36)").toBeCloseTo(36, 0);
+    expect(m.numberField.campoBorda, "e o campo de dentro não tem borda própria").toBe(0);
     expect(m.numberField.align, "número centrado, senão a vírgula dança ao digitar").toBe("center");
     expect(m.numberField.w, "campo de quantidade não é caixa de texto").toBeLessThan(120);
 
     // 10. OTPField: uma caixa por dígito, quadrada, em fonte de largura fixa.
     expect(m.otp.display, "a fila de dígitos fica em linha").toBe("inline-flex");
     expect(m.otp.slots, "uma caixa por dígito").toBe(4);
-    expect(Math.abs(m.otp.lado - m.otp.alt), "a caixa do dígito é quadrada").toBeLessThanOrEqual(1);
+    // 0.32.0: a casa da referência, 38 × 40, com o número de 18 (era quadrada, 36).
+    expect([Math.round(m.otp.lado), Math.round(m.otp.alt)], "a casa do dígito tem 38 × 40").toEqual([38, 40]);
+    expect(m.otp.letra, "o número tem 18").toBe(18);
     expect(m.otp.fonte, "dígito em fonte de largura fixa, senão a fila treme").toContain("Mono");
 
     // 11. HoverCard: superfície flutuante do sistema, com largura de leitura.
@@ -2044,7 +2243,8 @@ for (const theme of ["dark", "light"] as const) {
     }
     // 20. As setas do mês ficam NA LINHA do mês. Sem a âncora do `.calendar-months` elas
     //     caem numa fileira própria acima, e o cabeçalho vira duas linhas.
-    expect(m.calendar.navBtn.w, "a seta mede um controle pequeno").toBe(m.calendar.navBtn.controlSm);
+    // 0.32.0: o botão de 24 da referência (era o controle pequeno, 32).
+    expect(m.calendar.navBtn.w, "a seta mede 24").toBe(24);
     expect(m.calendar.navNaLinhaDoMes, "as setas ficam na linha do nome do mês").toBe(true);
     // 21. Sidebar (Parte B, B1): a lista que o componente não tinha. Sem as regras, um <ul>
     //     cru com bolinha e 40px de recuo, e o item sem caixa nenhuma.
@@ -2062,9 +2262,13 @@ for (const theme of ["dark", "light"] as const) {
     // 23. Grupo e aninhamento têm de ser VISÍVEIS como tais: sem o recuo, a sublista fica
     //     indistinguível da lista de cima e a hierarquia só existe no HTML.
     expect(m.sidebar.subRecuo, "a sublista recua em relação ao pai").toBeGreaterThan(0);
-    expect(m.sidebar.grupoCaixaAlta, "o rótulo de grupo é caixa alta").toBe("uppercase");
-    expect(m.sidebar.grupoCor, "rótulo de grupo é mais apagado que item — ele não é clicável")
-      .not.toBe(m.sidebar.itemCor);
+    // ADR-0067 (13/10/2026, "igual ao dela"): o título de grupo é o da referência, em letra normal.
+    expect(m.sidebar.grupoCaixaAlta, "o rótulo de grupo é letra normal, como o da referência").toBe("none");
+    // O título se DISTINGUE do item (não é clicável). Era "mais apagado"; o da referência é o oposto, e é o
+    // que o Victor escolheu ("B, igual ao dela", 13/10/2026): o título forte, em peso médio, e o item
+    // esmaecido. A cor do item é outra — e a conferência de marca cobra o contraste dele em toda combinação.
+    expect(m.sidebar.grupoPeso, "o título de grupo é mais pesado que o item").toBeGreaterThan(m.sidebar.itemPeso);
+    expect(m.sidebar.grupoCor, "o item que não é o atual é esmaecido, e o título não").not.toBe(m.sidebar.itemCor);
     // 24. O TRILHO recolhido, e é a promessa que mais barato seria quebrar: esconder o rótulo
     //     com display:none passaria no olho e deixaria uma coluna de ícones anônimos para
     //     quem usa leitor de tela. Ele tem de sair da TELA e continuar no DOM.
@@ -2380,17 +2584,32 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.alerta.display, "o Alert é grid de 3 colunas, não texto corrido").toBe("grid");
     expect(e.alerta.raio, "o Alert usa --radius-card (HER-02)").toBe(e.alerta.radiusCard);
     expect(e.alerta.pad, "sem padding o texto cola na borda").toBeGreaterThan(0);
-    expect(e.alerta.bordaDanger, "a variante colore a BORDA — danger e warning não podem medir igual")
-      .not.toBe(e.alerta.bordaAlerta);
+    // 0.32.0, o Alert da referência, lido no CSS publicado dela.
+    expect(e.alerta.fundo, "fundo de cartão").toBe(e.alerta.cartao);
+    expect(e.alerta.borda, "sem borda").toBe(0);
+    expect(e.alerta.sombra, "com a sombra de superfície").not.toBe("none");
+    expect([e.alerta.pad, e.alerta.padLado, e.alerta.vao], "12 em cima, 16 dos lados, 16 entre as partes").toEqual([12, 16, 16]);
+    expect([e.alerta.icone, e.alerta.iconeCaixa], "o ícone de 16 numa caixa de 24").toEqual([16, 24]);
+    expect(e.alerta.titulo, "o título 14/24 peso médio").toEqual([14, 24, "500"]);
+    expect(e.alerta.tituloAviso, "o título na cor do estado — aviso e perigo não medem igual").not.toBe(e.alerta.tituloPerigo);
+    expect(e.alerta.iconeAviso, "e o ícone na mesma cor do título").toBe(e.alerta.tituloAviso);
+    expect(e.alerta.xFechar, "o X de dispensar é o CloseButton (HER-12)").toBe(true);
     // 26b. Toast: o tipo publicado tem de PINTAR. As quatro classes não existiam no core até
     // 16/08/2026 — `AureaToastType` prometia quatro faces e as quatro mediam igual à base.
-    expect(new Set(e.toast.bordas).size, "as quatro faces do toast têm de ter bordas DISTINTAS")
+    // 0.32.0, o aviso da referência: o tipo pinta o TÍTULO e o ÍCONE (quatro cores distintas, nenhuma
+    // a do título sem tipo), e o fundo é o mesmo de cartão nas cinco faces.
+    expect(new Set(e.toast.titulos).size, "as quatro faces do toast têm títulos de cores DISTINTAS")
       .toBe(4);
-    expect(e.toast.fundos.every(f => f !== e.toast.baseFundo),
-      "cada face do toast muda o fundo em relação à base — classe emitida sem regra é o defeito")
-      .toBe(true);
-    expect(e.toast.bordas.every(b => b !== e.toast.baseBorda),
-      "cada face do toast tinge a borda em relação à base").toBe(true);
+    expect(e.toast.titulos.every(c => c !== e.toast.baseTitulo),
+      "cada face muda a cor do título em relação à base — classe emitida sem regra é o defeito").toBe(true);
+    expect(e.toast.icones, "e o ícone anda junto com o título").toEqual(e.toast.titulos);
+    expect(e.toast.fundos.every(f => f === e.toast.baseFundo),
+      "o fundo NÃO é tingido pelo tipo (era, até a 0.31.0)").toBe(true);
+    expect([e.toast.recheioV, e.toast.recheioH], "recheio de 12 em cima e embaixo e 16 dos lados").toEqual([12, 16]);
+    expect(e.toast.raio, "canto de card").toBe(e.dialog.radiusCard);
+    expect([e.toast.tituloFs, e.toast.tituloLh, e.toast.tituloPeso], "título 14/20 peso médio").toEqual([14, 20, "500"]);
+    expect(e.toast.descFs, "descrição de 14").toBe(14);
+    expect([e.toast.caixaIcone, e.toast.icone], "o ícone de 16 numa caixa de 24").toEqual([24, 16]);
     expect(e.badge.raio, "o Badge é pill: --radius-control").toBe(e.badge.radiusControl);
     expect(e.badge.entrelinha, "o Badge fixa line-height (achado A2: ele media duas alturas)")
       .not.toBe("normal");
@@ -2408,8 +2627,14 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.cluster.display, "o Cluster é flex").toBe("flex");
     expect(e.cluster.quebra, "o Cluster QUEBRA — sem isso ele é a fonte mais barata de rolagem lateral")
       .toBe("wrap");
-    expect(e.kbd.fonte, "o Kbd usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
-    expect(e.kbd.borda, "o Kbd é uma tecla: tem borda").toBeGreaterThan(0);
+    // 0.32.0: a tecla da referência — 24 de altura, letra do texto em peso médio, fundo neutro,
+    // sem borda — com o canto da Aurea (cápsula). Até a 0.31.0 era 20, de código e com borda.
+    expect(e.kbd.fonte, "o Kbd usa a fonte do texto, como a referência").toContain("Atkinson Hyperlegible Next");
+    expect(e.kbd.borda, "o Kbd não tem borda: o fundo neutro é o que o separa").toBe(0);
+    expect(e.kbd.alt, "o Kbd tem 24 de altura (--space-6)").toBeCloseTo(24, 0);
+    expect(e.kbd.raio, "o Kbd é cápsula: --radius-control").toBe(e.kbd.radiusControl);
+    expect(e.kbd.peso, "o Kbd é peso médio").toBe("500");
+    expect(e.kbd.fundo, "o Kbd tem fundo próprio").not.toBe("rgba(0, 0, 0, 0)");
 
     // 28. Formulários: hint, erro e rótulo não podem medir a mesma cor — foi o achado A12.
     expect(e.field.hintCor, "hint e erro descrevem coisas diferentes e não podem parecer iguais")
@@ -2424,6 +2649,27 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.marca.radioRedondo, "a do Radio é REDONDA (50% resolve acima da metade da largura)")
       .toBeGreaterThanOrEqual(e.marca.radioW / 2);
     expect(e.switchT.pilula, "o trilho do Switch é pílula").toBe(true);
+    // 0.32.0, as medidas da referência
+    expect([e.marca.w, e.marca.h], "a marca tem 16").toEqual([16, 16]);
+    expect(e.marca.raio, "o canto da caixa é o 6 dela (--radius-xs)").toBe(6);
+    expect(e.marca.vao, "12 entre a marca e o texto").toBe(12);
+    expect(e.marca.peso, "o texto da caixa é peso médio").toBe("500");
+    expect([e.switchT.w, e.switchT.h], "o trilho do Switch tem 40 × 20").toEqual([40, 20]);
+    expect([e.switchT.bolaW, e.switchT.bolaH], "a bolinha é uma cápsula de 22 × 16").toEqual([22, 16]);
+    expect(e.campo.rotuloPeso, "o rótulo é peso médio").toBe("500");
+    expect(e.campo.dicaPeso, "a dica não é negrito").toBe("400");
+    expect(e.campo.inputLados, "o campo tem 12 dos lados").toBe(12);
+    expect([e.campo.textareaLados, e.campo.textareaTopo], "a área de texto tem 12 dos lados e 8 em cima").toEqual([12, 8]);
+    expect(e.slider.trilhoH, "o trilho do Slider tem 20").toBe(20);
+    expect([e.slider.alcaW, e.slider.alcaH], "a alça tem 28 × 20").toEqual([28, 20]);
+    expect(e.slider.miolo, "o miolo claro tem 24").toBe("24px");
+    expect(e.slider.alcaDentro, "no mínimo, a alça fica no trilho (a folga de 12; passa 2, como a dela)").toBe(true);
+    expect(e.slider.cheio, "o preenchimento tem cor própria").not.toBe(e.slider.trilhoCor);
+    expect(e.grupoCaixas.antes, "16 antes de cada caixa do grupo").toBe(16);
+    expect(e.listBox.itemAlt, "o item da lista tem 36").toBeCloseTo(36, 0);
+    expect(e.listBox.lados, "8 dos lados").toBe(8);
+    expect(e.listBox.raio, "o item é cápsula").toBe(e.listBox.radiusControl);
+    expect(e.listBox.visto, "o visto do escolhido tem 16").toBeCloseTo(16, 0);
     expect(e.select.alt, "o Select mede --control-h-md, como os outros controles")
       .toBe(e.select.controlMd);
     expect(e.select.raio, "o Select é pill").toBe(e.select.radiusControl);
@@ -2440,7 +2686,82 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.iconBtn.quadrado, "o IconButton é QUADRADO: ícone sem rótulo não pode virar cápsula")
       .toBe(true);
     expect(e.iconBtn.w, "e mede --control-h-md, como o Button de texto").toBe(e.iconBtn.controlMd);
+    // CloseButton (HER-12, 0.32.0): o da referência, um círculo de 24 com o X de 16 no fundo neutro.
+    expect([e.fechar.w, e.fechar.h], "o CloseButton é um círculo de 24 (--space-6)").toEqual([24, 24]);
+    expect(e.fechar.raio, "e é redondo: --radius-control").toBe(e.fechar.radiusControl);
+    expect(e.fechar.icone, "o X tem 16 (--icon-sm), não os 20 do botão").toBeCloseTo(16, 0);
+    expect(e.fechar.fundo, "o CloseButton tem o fundo neutro").not.toBe("rgba(0, 0, 0, 0)");
+    expect(e.fechar.nome, "o nome acessível vem sozinho").toBe("Close");
+    // 0.32.0, passo 12 — o ColorArea (ADR-0069) e o gatilho do DatePicker (ADR-0068), nas medidas da referência
+    // (lidas no CSS publicado dela, 3.2.6).
+    const p12 = e.passo12;
+    expect([p12.area.w, p12.area.h], "ColorArea: quadrada, até 224").toEqual([224, 224]);
+    expect(p12.area.raio, "canto 16 (--radius-lg)").toBe(16);
+    expect(p12.area.pintada, "a pintura chega pela variável — o gradiente da exceção").toMatch(/^linear-gradient/);
+    expect([p12.area.pino, p12.area.anel], "o pino tem 16, com o anel de 3").toEqual([16, 3]);
+    expect(p12.area.anelCor, "o anel é branco nos dois temas (fica sobre a cor)").toBe("rgb(255, 255, 255)");
+    expect(Number(p12.area.entrada), "os dois range ficam escondidos").toBeLessThan(0.01);
+    expect(p12.matiz.pino, "Slider channel=hue: o pino redondo de 16").toEqual([16, 16]);
+    expect([p12.matiz.anel, p12.matiz.trilho], "com o anel de 3, na trilha de 20").toEqual([3, 20]);
+    expect(p12.matiz.pintada, "a trilha pintada com o círculo de cores").toMatch(/^linear-gradient/);
+    expect(p12.matiz.cheio, "sem o preenchimento: a cor é a trilha").toBe(false);
+    expect([p12.amostras.tam, p12.amostras.borda, p12.amostras.vao], "ColorSwatch options: 32, borda 2, vão 8").toEqual([32, 2, 8]);
+    expect(p12.amostras.bordaLivre, "a livre tem a borda transparente").toBe("rgba(0, 0, 0, 0)");
+    expect(p12.amostras.bordaEscolhida, "a escolhida, a borda na cor dela").toBe("rgb(240, 194, 0)");
+    expect([p12.amostras.encolhe, p12.amostras.visto], "a escolhida encolhe a 77% e mostra o visto").toEqual(["0.77", "1"]);
+    expect(p12.amostras.tinta, "o visto no amarelo é preto (o contraste)").toBe("rgb(0, 0, 0)");
+    expect(Number(p12.amostras.botaoInvisivel), "o botão de opção nativo fica invisível").toBe(0);
+    expect(p12.campoCor.alt, "ColorField: a altura do Input").toBe(p12.campoCor.input);
+    expect(p12.campoCor.amostra, "a amostra na frente, sm (24)").toBe(24);
+    expect(p12.campoCor.xadrez, "a cor transparente mostra o xadrez").toContain("svg");
+    // O `secondary` do campo vale para o grupo, que é quem desenha a caixa (medido na bancada em 14/10/2026: saía
+    // igual ao `primary`).
+    expect(p12.campoCor.fundoSec, "ColorField secondary: o fundo do Input secondary").toBe(p12.campoCor.fundoInputSec);
+    expect(p12.campoCor.bordaSec, "ColorField secondary: a borda do Input secondary").toBe(p12.campoCor.bordaInputSec);
+    // O fundo do campo é o mesmo token nas duas peles (medido: `--field-bg` = `--secondary` nos dois temas); o que
+    // separa o `secondary` é a borda, que some.
+    expect(p12.campoCor.bordaSec, "e a borda diferente da do primary").not.toBe(p12.campoCor.bordaPrim);
+    expect([p12.seletor.vao, p12.seletor.amostra], "ColorPicker: o gatilho é a amostra de 32 com o nome, vão de 12").toEqual([12, 32]);
+    expect(p12.seletor.letra, "o nome em 14 (--text-sm)").toBe(14);
+    expect(p12.seletor.fundo, "o gatilho não tem caixa").toBe("rgba(0, 0, 0, 0)");
+    expect(p12.data.fundo, "DatePicker: sem a seta do Select").toBe("none");
+    expect(p12.data.alt, "o gatilho tem a altura do Select").toBe(p12.data.select);
+    // 0.32.0, passo 6 — as medidas da referência, lidas no CSS publicado dela.
+    const p6 = e.passo6;
+    expect(p6.link.cor, "Link: a cor de link").toBe(p6.link.linkToken);
+    expect([p6.link.peso, p6.link.sublinhado], "peso médio, sem sublinhado parado").toEqual(["500", "none"]);
+    expect(p6.link.setaMascara, "a seta do external é desenho por máscara").toBe(true);
+    expect(p6.link.seta, "a seta tem 0,75 da letra").toBeGreaterThan(8);
+    expect([p6.amostra.md, p6.amostra.xl], "ColorSwatch: 32 e 40").toEqual([32, 40]);
+    expect(p6.amostra.raio, "redonda").toBeGreaterThanOrEqual(16);
+    expect(p6.amostra.fundo, "na cor pedida").toBe("rgb(240, 194, 0)");
+    expect([p6.anel.md, p6.anel.lg], "ProgressCircle: 28 e 36").toEqual([28, 36]);
+    expect([p6.anel.traco, p6.anel.ponta], "traço de 4, ponta redonda").toEqual(["4px", "round"]);
+    expect(p6.anel.corSucesso, "o tom muda a cor").not.toBe(p6.anel.cor);
+    expect([p6.etiqueta.alt, p6.etiqueta.lados, p6.etiqueta.fs, p6.etiqueta.peso],
+      "Tag: 24 de altura, 8 dos lados, letra 12 peso médio").toEqual([24, 8, 12, "500"]);
+    expect(p6.etiqueta.raio, "em cápsula (o canto da Aurea)").toBeGreaterThanOrEqual(12);
+    expect(p6.etiqueta.vao, "6 entre as etiquetas").toBe(6);
+    expect(p6.etiqueta.escolhida, "a escolhida no clarinho, diferente da outra").not.toBe(p6.etiqueta.outra);
+    expect([p6.etiqueta.icone, p6.etiqueta.x], "ícone e X de 12").toEqual([12, 12]);
+    expect([p6.selo.sm, p6.selo.md, p6.selo.lg], "Badge: 20, 24, 28 (o Chip da referência)").toEqual([20, 24, 28]);
+    expect([p6.selo.ladoSm, p6.selo.ladoMd, p6.selo.ladoLg], "6, 10 e 14 até o texto").toEqual([6, 10, 14]);
+    expect(p6.selo.vao, "4 entre o glifo e o texto").toBe(4);
+    expect([p6.avatar.sm, p6.avatar.md, p6.avatar.lg], "Avatar: 32, 40, 48").toEqual([32, 40, 48]);
+    // 0.32.0, passo 8 — a caixa de exemplo é a do site: duas abas na largura, a prévia no afundado.
+    expect(p6.caixaExemplo.abas, "CodeBlock preview: as abas Preview | Code").toBe(2);
+    expect(p6.caixaExemplo.abasLargura, "o segmentado ocupa a largura da caixa (menos o recheio de 8)").toBe(p6.caixaExemplo.caixaLargura - 2 - 16);
+    expect(p6.caixaExemplo.previaFundo, "a prévia no fundo afundado").toBe(p6.caixaExemplo.afundado);
+    expect(p6.caixaExemplo.codigoEscondido, "o código começa escondido").toBe("none");
+    expect(p6.caixaExemplo.raio, "o cartão da Aurea").toBe(22);
+    expect(p6.textoTom.cor, "Text tone=\"link\" é a cor de link").toBe(p6.textoTom.link);
+    expect([p6.avatar.letra, p6.avatar.peso], "letra 12, 14, 16 em peso médio").toEqual([[12, 14, 16], "500"]);
     expect(e.btnGroup.naLinha, "o ButtonGroup alinha os botões numa fila").toBe(true);
+    expect(e.btnGroup.vao, "o ButtonGroup é COLADO: vão 0").toBe(0);
+    expect(e.btnGroup.pontaFora, "a ponta de fora é cápsula").toBe(e.btnGroup.radiusControl);
+    expect(e.btnGroup.pontaDentro, "a ponta de dentro é reta: quem desenha a forma é a cápsula inteira").toBe(0);
+    expect(e.btnGroup.fioW, "um fio de 1 entre os botões").toBe(1);
+    expect(e.btnGroup.fioOp, "na cor do texto a 15%").toBe("0.15");
     expect(e.toolbar.raio, "a Toolbar é pill").toBe(e.toolbar.radiusControl);
     expect(e.toolbar.grupoGap, "o ToolbarGroup usa --space-1 — era `gap:4px` cru até o item E12")
       .toBe(e.toolbar.space1);
@@ -2449,22 +2770,39 @@ for (const theme of ["dark", "light"] as const) {
       .toBeGreaterThan(20);
     expect(e.toolbar.sepCor, "e tem cor, senão é um espaço em branco").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.pagination.alinha, "a Pagination centraliza verticalmente").toBe("center");
-    expect(e.pagination.naLinha, "botões e contador ficam na mesma fila").toBe(true);
+    expect(e.pagination.naLinha, "anterior, números e próxima ficam na mesma fila").toBe(true);
+    // 0.32.0: os números da referência (32), peso médio, e a atual no clarinho (não o amarelo cheio)
+    expect([e.pagination.numeroW, e.pagination.numeroH], "o número tem 32 × 32").toEqual([32, 32]);
+    expect(e.pagination.peso, "peso médio").toBe("500");
+    expect(e.pagination.atualFundo, "a atual tem fundo").not.toBe(e.pagination.outroFundo);
+    expect(e.pagination.atualLetra, "e a letra da marca, não a de cima do amarelo").not.toBe(e.pagination.atualFundo);
+    expect(e.breadcrumbVao, "a trilha tem vão 6").toBe(6);
+    expect(e.breadcrumbSeta, "o separador tem 12").toBeCloseTo(12, 0);
+    expect([e.tabsRecheio, e.tabsVao], "as abas: recheio 4, sem vão").toEqual([4, 0]);
+    expect([e.tabLados, e.tabPeso], "a aba: 16 dos lados, peso médio").toEqual([16, "500"]);
+    expect(e.tabs.tabAlt, "a aba tem 32 (o --control-h-sm)").toBeCloseTo(32, 0);
 
     // 30. Dados e navegação.
     expect(e.tabela.regiaoOver, "a região da tabela rola — é o que a torna alcançável por teclado")
       .toBe("auto");
-    expect(e.tabela.colapso, "a tabela colapsa as bordas").toBe("collapse");
-    expect(e.tabela.alturaLinha, "a linha mede --row-h").toBe(e.tabela.rowH);
+    expect(e.tabela.colapso, "as bordas SEPARADAS (sem vão): é o que deixa a célula ter canto").toBe("separate");
+    expect(e.tabela.molduraFundo, "a moldura é cinza, diferente do corpo").not.toBe(e.tabela.celFundo);
+    expect(e.tabela.celFundo, "e o corpo é um cartão por dentro").toBe(e.tabela.cartao);
+    expect(e.tabela.molduraRecheio, "a moldura: 0 em cima, 4 dos lados e embaixo").toEqual([0, 4, 4]);
+    expect(e.tabela.celPad, "a célula: 12 em cima e embaixo, 16 dos lados").toEqual([12, 16]);
+    expect(e.tabela.celLetra, "letra de 14/20").toEqual([14, 20]);
+    expect(e.tabela.celCanto, "o canto da casa: o da moldura menos a folga").toBe(e.tabela.raio - 4);
+    expect([e.tabela.cabecAlt, e.tabela.cabecFs, e.tabela.cabecPeso, e.tabela.cabecCaixa],
+      "o cabeçalho: 36, letra 12 peso médio, sem caixa-alta").toEqual([36, 12, "500", "none"]);
+    expect(e.tabela.fioColuna, "o fio de 16 entre as colunas do cabeçalho").toBe(16);
     expect(e.tabela.alinhamento, "o cabeçalho alinha ao INÍCIO, não à esquerda — RTL depende disso")
       .toBe("start");
-    expect(e.tabela.divisoria, "há divisória entre linhas (a última perde a dela de propósito)")
-      .toBeGreaterThan(0);
     expect(e.breadcrumb.naLinha, "o Breadcrumb alinha rótulos e chevrons pelo centro").toBe(true);
     expect(e.tabs.raio, "a lista de abas é pill").toBe(e.tabs.radiusControl);
     expect(e.tabs.tabRaio, "e cada aba também").toBe(e.tabs.radiusControl);
     expect(e.tabs.tabsNaLinha, "as abas ficam na mesma linha").toBe(true);
-    expect(e.toc.rotuloCaixaAlta, "o rótulo do índice é caixa alta").toBe("uppercase");
+    // ADR-0067: o "On this page" é o da referência, em letra normal.
+    expect(e.toc.rotuloCaixaAlta, "o rótulo do índice é letra normal, como o da referência").toBe("none");
     expect(e.toc.subRecuo, "o item aninhado recua — é o único sinal de nível").toBeGreaterThan(0);
     expect(e.toc.atualCor, "o item atual se distingue dos demais").not.toBe(e.toc.comumCor);
     expect(e.tree.marcador, "a árvore é <ul> e não mostra as bolinhas do navegador").toBe("none");
@@ -2534,7 +2872,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.datagrid.alcaAltura, "e cobre a altura toda da célula — alça curta é alvo que ninguém acerta").toBe(e.datagrid.cabecAltura);
     expect(e.datagrid.fixo.rolou, "a fixture precisa MESMO rolar, senão o teste do cabeçalho fixo não mede nada").toBe(true);
     expect(e.datagrid.fixo.depois, "o cabeçalho fica onde estava enquanto o corpo rola por baixo").toEqual(e.datagrid.fixo.antes);
-    expect(e.datagrid.fixo.degrau, "e a linha de filtro gruda exatamente uma altura de linha abaixo dele").toBe(e.datagrid.fixo.rowH);
+    expect(e.datagrid.fixo.degrau, "e a linha de filtro gruda exatamente a altura do cabeçalho abaixo dele").toBe(e.datagrid.fixo.rowH);
     expect(e.datagrid.loteRaio, "a barra de lote chega ao consumidor como superfície em pílula, só com o core").toBe(e.datagrid.radiusControl);
     expect(e.datagrid.loteFundo, "e com fundo próprio — barra sem superfície some dentro da página").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.datagrid.loteBotoes, "a ação declarada mais o limpar: sem o limpar a seleção vira armadilha").toBe(2);
@@ -2613,6 +2951,15 @@ for (const theme of ["dark", "light"] as const) {
       .not.toBe("rgba(0, 0, 0, 0)");
     expect(e.dialog.fundoPos, "o fundo do Dialog é fixed").toBe("fixed");
     expect(e.dialog.fundoCobre, "e cobre a janela inteira").toBe(true);
+    // 0.32.0, a anatomia da referência, lida no CSS publicado dela.
+    expect(e.dialog.recheio, "recheio de 24").toBe(24);
+    expect([e.dialog.xTam, Math.round(e.dialog.xTopo), Math.round(e.dialog.xFim)],
+      "o X é o CloseButton de 24, a 16 do topo e do fim").toEqual([24, 16, 16]);
+    expect([e.dialog.icone, e.dialog.iconeRaio >= 20], "o ícone num círculo de 40").toEqual([40, true]);
+    expect(Math.round(e.dialog.iconeAoTitulo), "12 entre o círculo e o título").toBe(12);
+    expect([e.dialog.tituloFs, e.dialog.tituloPeso], "o título de 16, peso médio").toEqual([16, "500"]);
+    expect([e.dialog.corpoFs, e.dialog.corpoLh], "o corpo de 14/20").toEqual([14, 20]);
+    expect(e.dialog.corpoRola, "é o corpo que rola, e não a janela inteira").toBe("auto");
     // ConfirmDialog: a regra é que ele NÃO é uma segunda superfície. Mesmo raio de card, e mais
     // ESTREITO que o Dialog — uma frase e dois botões não pedem a largura dele. O rodapé alinha ao fim
     // porque a ordem é cancelar → agir, e é onde as quatro referências batem.
@@ -2782,6 +3129,13 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.drawer.pos, "o Drawer é fixed").toBe("fixed");
     expect(e.drawer.colaNaDireita, "e cola na borda direita — é o que o torna gaveta").toBe(true);
     expect(e.drawer.bordaEsq, "com borda no lado que dá para o conteúdo").toBeGreaterThan(0);
+    // 0.32.0: a lateral da referência — 384 de 640 para cima (a página mede mais que isso) — com o
+    // canto 22 da Aurea do lado de dentro, e reta no lado da tela.
+    expect(e.drawer.largura, "a lateral tem 384").toBe(384);
+    expect([e.drawer.raioDentro, e.drawer.raioFora], "22 do lado de dentro, reta do lado da tela")
+      .toEqual([e.dialog.radiusCard, 0]);
+    expect([e.popover.fs, e.popover.tituloPeso], "o popover lê a 14, com o título em peso médio").toEqual([14, "500"]);
+    expect([e.tooltip.recheio, e.tooltip.fs, e.tooltip.lh], "a dica: recheio 8, letra 12/16").toEqual([8, 12, 16]);
     expect(e.popover.raio, "o Popover é superfície flutuante").toBe(e.popover.radiusCard);
     expect(e.popover.maxW, "e tem largura máxima, senão acompanha o gatilho").not.toBe("none");
     expect(e.tooltip.maxW, "a Tooltip tem largura máxima — é um rótulo, não um parágrafo")

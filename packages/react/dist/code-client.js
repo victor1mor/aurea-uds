@@ -9,7 +9,29 @@ import { Icon } from "./system.js";
 // copyable: o gatilho é marcado com data-aurea-copy e o COMPORTAMENTO mora no aurea.js do
 // core (uma implementação para React e para HTML puro). O onClick daqui atende quem só
 // carrega o pacote React; ele para a propagação pro core não copiar duas vezes.
-export function CodeBlock({ children, language = "text", copyable, className }) {
+// DOC-02 (0.32.0): a CAIXA DE EXEMPLO do site da Aurea virou o `preview` do `CodeBlock` — as abas
+// Prévia | Código (o controle segmentado ocupando a largura), a prévia no fundo afundado e o código sem
+// moldura. É a caixa do site de hoje (decisão do Victor, 06/10/2026: a da Aurea, não a da referência),
+// agora no pacote, para o site usar só peças da Aurea. O teclado é o das abas do APG: setas, Home e End.
+// Sem o `aurea.js` na página — quem troca a aba é o React.
+function CaixaDeExemplo({ preview, codigo, className }) {
+    const s = useAureaStrings();
+    const id = React.useId();
+    const [aba, setAba] = React.useState("preview");
+    const refPrevia = React.useRef(null), refCodigo = React.useRef(null);
+    const ir = (a) => { setAba(a); (a === "preview" ? refPrevia : refCodigo).current?.focus(); };
+    const tecla = (e) => {
+        if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key))
+            return;
+        e.preventDefault();
+        ir(e.key === "Home" ? "preview" : e.key === "End" ? "code" : aba === "preview" ? "code" : "preview");
+    };
+    const botao = (a, rotulo) => _jsx("button", { type: "button", role: "tab", id: `${id}-${a}`, ref: a === "preview" ? refPrevia : refCodigo, className: aba === a ? "active" : undefined, "aria-selected": aba === a, "aria-controls": `${id}-${a}-panel`, tabIndex: aba === a ? 0 : -1, onClick: () => setAba(a), onKeyDown: tecla, children: rotulo });
+    return _jsxs("div", { className: cx("demo code-preview", className), children: [_jsx("div", { className: "demo-tabs", children: _jsxs("div", { className: "segmented", role: "tablist", children: [botao("preview", s.codeBlockPreview), botao("code", s.codeBlockCode)] }) }), _jsx("div", { className: "demo-panel", "data-panel": "preview", role: "tabpanel", id: `${id}-preview-panel`, "aria-labelledby": `${id}-preview`, tabIndex: 0, hidden: aba !== "preview", children: preview }), _jsx("div", { className: "demo-panel demo-code", "data-panel": "code", role: "tabpanel", id: `${id}-code-panel`, "aria-labelledby": `${id}-code`, tabIndex: 0, hidden: aba !== "code", children: codigo })] });
+}
+export function CodeBlock({ children, language = "text", copyable, preview, className }) {
+    if (preview !== undefined)
+        return _jsx(CaixaDeExemplo, { preview: preview, className: className, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, children: children }) });
     const s = useAureaStrings();
     // tabIndex no <pre>: `.code-block` é `overflow:auto` por construção, então é REGIÃO ROLÁVEL
     // e não tem nada focável dentro — quem navega por teclado não alcança o código que passa da

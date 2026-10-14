@@ -425,7 +425,12 @@ export function analyticsWorkbench(state) {
   // passava do vão do painel antes mesmo da tabela entrar. A válvula existe no core desde este
   // item, no mesmo idioma de `--qr-size` e `--datagrid-max-h`. `7rem` porque é a altura do KPI
   // ao lado — a faixa mede o maior dos dois, então passar disso é altura comprada e não usada.
-  return h("div", {style: {display: "grid", gap: "var(--space-2)", width: "min(880px,100%)", "--chart-h": "7rem"}},
+  //
+  // 0.32.0: o vão entre as faixas passou de 8 para 6. O controle segmentado ganhou a medida da
+  // referência (40, era 36), a faixa de cima cresceu 4 e a composição passou 2 da caixa (o
+  // `catalog-sweep` pegou: 352 numa caixa de 350). Medido: 40 + 128 + 144 + 16 e três vãos. A faixa
+  // do KPI mede 128 (8rem), e não os 7rem do gráfico: quem manda nela é o KPI.
+  return h("div", {style: {display: "grid", gap: "calc(var(--space-1) + var(--space-05))", width: "min(880px,100%)", "--chart-h": "7rem"}},
     // Os quatro controles numa faixa só. Cada um é a sua região do contrato — não é um
     // agrupamento de conveniência, é o que cabe numa caixa de altura fixa (ADR-0002).
     // `--space-2` e sem piso de largura nos dois `Select`: com a escala de letra da 0.8.8 a
@@ -459,8 +464,13 @@ export function analyticsWorkbench(state) {
       // que a cobra lê os dois por padrão (`\d+d` e `\d{1,2}:\d{2}`), não pela preposição.
       // A folga passou de 10px para 35px, que é o ponto: 10px é o tamanho de qualquer mudança
       // de layout futura, e foi exatamente uma dessas que quebrou isto aqui.
-      regiao("Export", h(Button, {variant: "outline", size: "sm", leadingIcon: "download"},
-        "Export · 30d · 09:41"))),
+      //
+      // E de novo em 13/10/2026: o site novo segue a documentação da referência, e a coluna do
+      // conteúdo deu à prévia 766px. A faixa pedia 768 e o Export desceu, +44px numa caixa de 350.
+      // Saíram o ícone (24px) e o primeiro ponto do rótulo; medido, a faixa pede ~737 — folga de
+      // ~30. O rótulo continua dizendo o escopo (`30d`) e a atualidade (`09:41`).
+      regiao("Export", h(Button, {variant: "outline", size: "sm"},
+        "Export 30d · 09:41"))),
     r ? h(Alert, {variant: r.variant}, r.texto) : null,
     // Os universais falam pela frase do vocabulário: nada de texto inventado aqui.
     e.state ? h(Alert, {state: e.state}) : null,
@@ -1402,7 +1412,7 @@ const actions = allowedFrom(view.state);   // ready -> ["refresh"]
         needs to know what comes out before it comes out. Keep it SHORT — this row holds four
         control groups on one line, and a label that wraps costs the box 43px of height */}
     <div role="group" aria-label="Export">
-      <Button leadingIcon="download">Export · {view.rangeLabel} · {view.asOf}</Button>
+      <Button>Export {view.rangeLabel} · {view.asOf}</Button>
     </div>
   </div>
 

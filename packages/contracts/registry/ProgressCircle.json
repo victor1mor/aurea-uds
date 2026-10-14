@@ -1,0 +1,106 @@
+{
+  "name": "ProgressCircle",
+  "category": "Feedback",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Progress as a ring that fills from the top; without a value it spins.",
+  "icon": "circle-notch",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "determinate",
+    "indeterminate"
+  ],
+  "tokens": [
+    "--primary",
+    "--surface-3",
+    "--success-400",
+    "--warning-400",
+    "--danger-400",
+    "--info-400",
+    "--muted-foreground"
+  ],
+  "a11y": {
+    "role": "progressbar",
+    "apg": "meter",
+    "keyboard": [],
+    "keyboardNote": "role=progressbar named by label, with aria-valuenow/min/max; indeterminate leaves the values out."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Progress",
+      "Spinner"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#ProgressCircle"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. What is in progress (\"Uploading the file\")."
+    },
+    {
+      "name": "value",
+      "type": "number",
+      "default": "—",
+      "description": "From min to max. Left out, the ring spins: nobody knows how much is left."
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "default": "0",
+      "description": "The start."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "100",
+      "description": "The end."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "20, 28, 36 — the reference library's ring: a 4 stroke on a 36 frame, round cap."
+    },
+    {
+      "name": "tone",
+      "type": "\"brand\" | \"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\"",
+      "default": "\"brand\"",
+      "description": "The fill colour, the same tones as Progress."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the ring."
+    }
+  ],
+  "sizeProp": "size",
+  "axes": {
+    "tone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  }
+}

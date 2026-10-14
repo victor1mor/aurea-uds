@@ -9,7 +9,11 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "compact",
+    "numbers",
+    "simple"
+  ],
   "sizes": [],
   "states": [
     "default",
@@ -35,7 +39,10 @@
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "caret-left",
+      "caret-right"
+    ]
   },
   "related": {
     "components": [
@@ -64,7 +71,43 @@
       "name": "onPageChange",
       "type": "(page: number) => void",
       "default": "—",
-      "description": "Receives the page to go to, already computed. Controlled: the component does not hold the number, because whoever fetches the data is the one who knows it."
+      "description": "Called with the new page. Optional with href: the page can just navigate."
+    },
+    {
+      "name": "variant",
+      "type": "numbers | simple | compact",
+      "default": "numbers",
+      "description": "numbers: the page numbers, with ellipses (the default). simple: previous and next only. compact: Previous · 3 / 12 · Next, for a tight toolbar."
+    },
+    {
+      "name": "summary",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The summary on the left — \"1 to 5 of 50 orders\"."
+    },
+    {
+      "name": "href",
+      "type": "(page: number) => string",
+      "default": "—",
+      "description": "The address of each page. With it, pages are real links a search engine follows."
+    },
+    {
+      "name": "siblings",
+      "type": "number",
+      "default": "1",
+      "description": "How many pages show on each side of the current one."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "strings.paginationLabel",
+      "description": "The name of the navigation landmark. With two paginations on one page, each says what it pages through (\"Orders\", \"Search results\"); otherwise a screen reader hears two identical landmarks."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the nav, after the Aurea skin."
     }
   ]
 }

@@ -92,7 +92,7 @@ export interface SeparatorProps extends ViewProps {
  * comportamento certo.
  */
 export declare function Separator({ orientation, label, style, ...rest }: SeparatorProps): React.JSX.Element;
-export type AureaCardVariant = "base" | "raised" | "interactive" | "inset" | "selected" | "danger" | "brand" | "contrast";
+export type AureaCardVariant = "base" | "raised" | "interactive" | "inset" | "outline" | "selected" | "danger" | "brand" | "contrast";
 /** O tom do traço no topo (`accent`, MT-02, ADR-0063) — os MESMOS cinco da web. */
 export type AureaCardAccent = "brand" | "success" | "info" | "warning" | "danger";
 interface CardBase extends ViewProps {

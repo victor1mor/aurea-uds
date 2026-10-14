@@ -13,6 +13,7 @@ export default {
   install: 'import {Range, Field} from "@aurea-uds/react";',
 
   features: [
+    "For the drawn slider — label and value on top, the fill, a range of two thumbs, formatted values — use Slider. Range is the browser's own control, with the change event.",
     "Native input: dragging, arrow keys, Home and End all work without a line of our JS.",
     "The thumb and the track wear the tokens — the accent colour is the brand's, in both themes.",
     "min, max and step pass through; the browser enforces them.",

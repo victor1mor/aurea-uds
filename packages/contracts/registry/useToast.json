@@ -14,9 +14,14 @@
   "sizes": [],
   "states": [
     "default",
+    "info",
     "success",
     "warning",
-    "danger"
+    "danger",
+    "loading",
+    "behind",
+    "limited",
+    "swiping"
   ],
   "tokens": [
     "--radius-card",
@@ -29,7 +34,7 @@
     "keyboard": [
       "Escape"
     ],
-    "nota": "a lista é uma região viva montada pelo AureaProvider; o toast é anunciado sem roubar o foco"
+    "nota": "a lista é uma região viva montada pelo AureaProvider; o toast é anunciado sem roubar o foco. 0.32.0: o aviso da referência — em pilha no mesmo lugar (passar o mouse ou o foco abre), embaixo no meio por padrão, some em 4 s, três à vista; o ícone e o título na cor do tipo; o X do CloseButton na quina, à vista com o mouse ou o foco, e sempre no toque."
   },
   "dependencies": {
     "engine": "@base-ui/react/toast",

@@ -215,11 +215,14 @@ describe("Button e IconButton", () => {
 
   // E o complemento: o DESENHO continua o do token. Se o alvo tivesse sido resolvido esticando a
   // caixa, a identidade visual teria mudado para caber na acessibilidade.
+  // 0.32.0: o token é o da escala de TOQUE (`touchControlHMd`, 48), a do pacote nativo da referência
+  // aprovada pelo Victor ("sim, aprovo a escala de 48 no nativo"). Até a 0.31.0 era o `controlHMd`
+  // (36), a altura da web, pequena para o dedo. A regra deste teste continua: a altura é de token.
   it("a caixa pintada mantém a altura do token de densidade", () => {
     render(<Envolve><Button size="md">ok</Button></Envolve>);
     const caixa = estilo("View");
-    expect(caixa.height).toBe(tokens.size.controlHMd);
-    expect(caixa.height).toBe(36);
+    expect(caixa.height).toBe(tokens.size.touchControlHMd);
+    expect(caixa.height).toBe(48);
     expect(caixa.borderRadius).toBe(999);   // pill — identidade INTOCÁVEL
   });
 

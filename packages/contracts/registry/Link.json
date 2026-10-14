@@ -1,0 +1,82 @@
+{
+  "name": "Link",
+  "category": "Navigation",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A text link: medium weight in the link colour, no underline until hovered; external opens in a new tab with the arrow.",
+  "icon": "link",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "disabled"
+  ],
+  "tokens": [
+    "--link",
+    "--link-hover",
+    "--muted-foreground",
+    "--weight-medium",
+    "--space-1",
+    "--opacity-disabled"
+  ],
+  "a11y": {
+    "role": "link",
+    "apg": "link",
+    "keyboard": [
+      "Tab",
+      "Enter"
+    ],
+    "keyboardNote": "A real <a href>. disabled renders without href and with aria-disabled, so it does not navigate."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button",
+      "LinkButton"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#Link"
+  },
+  "props": [
+    {
+      "name": "href",
+      "type": "string",
+      "default": "—",
+      "description": "Where it goes."
+    },
+    {
+      "name": "external",
+      "type": "boolean",
+      "default": "false",
+      "description": "Opens in a new tab (target=\"_blank\", rel=\"noopener noreferrer\") and shows the reference library's arrow, drawn by CSS mask."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Does not navigate: rendered without href and with aria-disabled."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The link text."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the <a>."
+    }
+  ]
+}

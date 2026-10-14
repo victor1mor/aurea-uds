@@ -36,6 +36,7 @@ describe("E9 · LinkButton: o texto encosta na margem", () => {
   it("o Button sem fundo não muda: continua com o recuo dele", () => {
     render(<Envolve><Button appearance="ghost">Cancelar</Button></Envolve>);
     expect(caixa().paddingHorizontal).toBeGreaterThan(0);
-    expect(caixa().height).toBe(t.size.controlHMd);
+    // 0.32.0: a altura do `md` é a da escala de toque da referência (48, era o `controlHMd`, 36).
+    expect(caixa().height).toBe(t.size.touchControlHMd);
   });
 });

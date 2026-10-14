@@ -19,7 +19,9 @@ async function expectDrawerAt(page: Page, width: number) {
   await page.setViewportSize({width, height: HEIGHT});
   await page.goto("/apps/catalog/button.html");
 
-  await expect.soft(page.locator(".sidebar"), `a lateral sai do fluxo em ${width}px`).toBeHidden();
+  // A navegação: a coluna da direita (`.app-shell-aside`, DOC-01) desce para depois do conteúdo abaixo
+  // de 1280, de propósito, e não é gaveta.
+  await expect.soft(page.locator(".sidebar:not(.app-shell-aside)"), `a lateral sai do fluxo em ${width}px`).toBeHidden();
   await expect.soft(page.getByRole("button", {name: "Navigation"}),
     `o disparador da gaveta aparece em ${width}px`).toBeVisible();
 }

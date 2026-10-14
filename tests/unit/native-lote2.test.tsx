@@ -72,9 +72,11 @@ describe("Spinner — o anel, e a preferência de movimento", () => {
     expect(props("Animated.View", 1).accessibilityRole).toBeUndefined();
   });
 
+  // 0.32.0: a escala do `Spinner` é a do nativo da referência, 16 · 24 · 32 — o `lg` é o `iconXl`
+  // (era o `iconLg`, 24, quando a escala era 16 · 20 · 24).
   it("cresce com o tamanho pedido, pela escala de ícone do tema", () => {
     render(<Envolve><Spinner size="lg" /></Envolve>);
-    expect(estilo("Animated.View").width).toBe(tokens.size.iconLg);
+    expect(estilo("Animated.View").width).toBe(tokens.size.iconXl);
   });
 });
 
@@ -156,15 +158,20 @@ describe("Alert — o aviso em linha", () => {
 
   // DEFEITO: tratar os sete estados como um só. `waiting_*` é o sistema funcionando e avisando;
   // o resto é problema. Pintar tudo de amarelo apaga a diferença.
+  // 0.32.0: o estado não tinge mais o FUNDO (o `Alert` tem o fundo de cartão, como o `.alert` da web
+  // desta versão); a variante se vê na cor do ícone e do título. O teste lê a cor que o ícone recebeu.
   it("o estado universal escolhe a variante e escreve a frase", () => {
-    render(<Envolve><Alert state="waiting_approval" /></Envolve>);
+    const cores: string[] = [];
+    const Pinta = ({color}: {color?: string}) => { cores.push(color ?? ""); return null; };
+    const PINTA = criarRegistroDeIcones(Object.fromEntries(Object.values(ICONE_DA_VARIANTE).map((n) => [n, Pinta])));
+    render(<AureaProvider icons={PINTA}><Alert state="waiting_approval" /></AureaProvider>);
     expect(gravidadeDoEstado("waiting_approval")).toBe("info");
-    expect(StyleSheet.flatten(moldura().style).backgroundColor).toBe(tokens.color.infoBg);
+    expect(cores.at(-1)).toBe(tokens.color.info400 ?? tokens.color.info);
     expect(props("Text", 0).children).toBe(defaultStrings.universalState.waiting_approval);
 
-    render(<Envolve><Alert state="stale" /></Envolve>);
+    render(<AureaProvider icons={PINTA}><Alert state="stale" /></AureaProvider>);
     expect(gravidadeDoEstado("stale")).toBe("warning");
-    expect(StyleSheet.flatten(moldura().style).backgroundColor).toBe(tokens.color.warningBg);
+    expect(cores.at(-1)).toBe(tokens.color.warning400 ?? tokens.color.warning);
   });
 
   it("as frases saem do provider, não do módulo", () => {
@@ -287,9 +294,12 @@ describe("Avatar — o retrato redondo", () => {
     expect(__instancias("Image").length).toBeGreaterThan(1);
   });
 
-  it("o lado sai da altura de controle do tema", () => {
+  // ~~o lado sai da altura de controle do tema~~ — a 0.32.0 adotou a escala do avatar NATIVO da
+  // referência (40 · 48 · 64, na escala de espaço; ADR-0066). As medidas são cobradas no
+  // `native-lote-q-escala-c.test.tsx`; aqui fica a regra de que o lado sai de token.
+  it("o lado sai de token: o lg é o `space16` (64)", () => {
     render(<Envolve><Avatar fallback="A" size="lg" /></Envolve>);
-    expect(estilo("View").width).toBe(tokens.size.controlHLg);
+    expect(estilo("View").width).toBe(tokens.size.space16);
   });
 });
 

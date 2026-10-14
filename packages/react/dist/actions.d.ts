@@ -1,7 +1,7 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
 import { type IconName } from "./system.js";
-export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav";
 export type ButtonAppearance = "solid" | "outline" | "ghost" | "link" | "nav";
 export type ButtonTone = "neutral" | "brand" | "danger" | "success" | "warning" | "info";
 export type ComponentSize = "xs" | "sm" | "md" | "lg" | "xl";
@@ -80,7 +80,11 @@ interface ToggleBase {
     disabled?: boolean;
     id?: string;
     className?: string;
+    /** 0.32.0, o `ToggleButton` da referência: `default` com o fundo neutro (o padrão), `ghost` sem fundo
+     *  (o desenho de até a 0.31.0). O ligado é o idioma "selecionado" da Aurea nos dois. */
+    variant?: ToggleVariant;
 }
+export type ToggleVariant = "default" | "ghost";
 type ToggleChildren = Exclude<React.ReactNode, boolean | null | undefined>;
 export type ToggleProps = ToggleBase & ({
     children: ToggleChildren;
@@ -89,19 +93,35 @@ export type ToggleProps = ToggleBase & ({
     children?: never;
     label: string;
 });
-export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size, disabled, id, className, children }: ToggleProps): React.JSX.Element;
+export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant }: ToggleProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     label: string;
     icon: IconName;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
+export interface CloseButtonProps extends Omit<ButtonProps, "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
+    /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
+    label?: string;
+}
+export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
 }
 export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export declare function ButtonGroup({ label, orientation, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
     label?: string;
     orientation?: Responsive<Orientation>;
-}): React.JSX.Element;
+    /** O desenho de todos os botões de dentro; cada um pode trocar o seu. */
+    variant?: ButtonVariant;
+    /** O tamanho de todos os botões de dentro; cada um pode trocar o seu. */
+    size?: Responsive<ComponentSize>;
+    /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
+    fullWidth?: boolean;
+    /** Desliga todos os botões de dentro. */
+    disabled?: boolean;
+    /** Botões soltos (cápsulas com vão de 4), em vez de colados. */
+    detached?: boolean;
+}
+export declare function ButtonGroup({ label, orientation, variant, size, fullWidth, disabled, detached, className, ...props }: ButtonGroupProps): React.JSX.Element;
 export declare function Toolbar({ orientation, label, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     orientation?: Responsive<Orientation>;
     label?: string;
@@ -113,7 +133,7 @@ export declare function ToolbarSeparator({ className, ...props }: HTMLAttributes
 export interface ToolbarButtonProps extends Omit<ButtonProps, "share"> {
 }
 export declare const ToolbarButton: React.ForwardRefExoticComponent<Omit<ToolbarButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export declare function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children }: {
+export interface ToggleGroupProps {
     value?: string[];
     defaultValue?: string[];
     onValueChange?: (value: string[]) => void;
@@ -123,5 +143,12 @@ export declare function ToggleGroup({ value, defaultValue, onValueChange, multip
     label?: string;
     className?: string;
     children: React.ReactNode;
-}): React.JSX.Element;
+    /** O tamanho de todos os botões de dentro; cada um pode trocar o seu (valor simples, como o dela). */
+    size?: Extract<ComponentSize, "sm" | "md" | "lg">;
+    /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
+    fullWidth?: boolean;
+    /** Botões soltos (vão de 4), em vez de colados. */
+    detached?: boolean;
+}
+export declare function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached }: ToggleGroupProps): React.JSX.Element;
 export {};

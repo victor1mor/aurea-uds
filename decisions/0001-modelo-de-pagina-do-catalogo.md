@@ -1,7 +1,9 @@
 # ADR-0001 — Modelo de página do catálogo: núcleo comum + extras por tipo
 
 - **Data:** 30/07/2026
-- **Estado:** aceita
+- **Estado:** aceita · **as SEÇÕES do núcleo foram trocadas em 13/10/2026 pela
+  [ADR-0067](0067-o-site-segue-a-documentacao-da-referencia.md)** (o site segue a documentação da referência:
+  sem trilha e sem "Installation" por página; "Uses" virou "Related Components"). O resto desta ADR vale.
 - **Decide:** a decisão **D3**, aberta em `AUREA.md` §4 desde 24/07/2026
 - **Destrava:** Fase 7 do `audit/2026-07-26-integral/03-PLANO.md` (achado I2, crítico)
 - **Autoria:** recomendação do Opus, aceita pelo Victor em 30/07/2026 ("vou seguir todas

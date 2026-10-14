@@ -18,12 +18,16 @@ import {test, expect} from "@playwright/test";
 // TRÊS motores: é o que separa "funciona onde eu testei" de "funciona".
 const MOVEL = {width: 375, height: 812};
 const PAGINA = "/apps/catalog/button.html";
+// A NAVEGAÇÃO, e não toda `.sidebar`: desde a 0.32.0 a página do catálogo tem também a coluna da direita
+// ("On this page", `.app-shell-aside`, DOC-01), que abaixo de 1280 DESCE para depois do conteúdo — de
+// propósito. Com `.sidebar` puro o teste achava as duas (medido em 14/10/2026).
+const NAV = ".sidebar:not(.app-shell-aside)";
 
 test.describe("shell · gaveta de navegação", () => {
   test("em 375px a lateral sai do fluxo e o conteúdo vem primeiro", async ({page}) => {
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    const lateral = page.locator(".sidebar");
+    const lateral = page.locator(NAV);
     await expect(lateral).toBeHidden();
     // o h1 é o objetivo da página: ele tem de estar na PRIMEIRA tela, sem rolar
     const caixa = await page.locator("h1").boundingBox();
@@ -55,7 +59,7 @@ test.describe("shell · gaveta de navegação", () => {
     };
     expect(await estado(), "fechada, o disparador anuncia expanded=false").toBe(false);
     await botao.click();
-    await expect(page.locator(".sidebar")).toBeVisible();
+    await expect(page.locator(NAV)).toBeVisible();
     expect(await estado(), "aberta, o disparador anuncia expanded=true").toBe(true);
   });
 
@@ -64,9 +68,9 @@ test.describe("shell · gaveta de navegação", () => {
     await page.goto(PAGINA);
     const botao = page.getByRole("button", {name: "Navigation"});
     await botao.click();
-    await expect(page.locator(".sidebar")).toBeVisible();
+    await expect(page.locator(NAV)).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.locator(".sidebar")).toBeHidden();
+    await expect(page.locator(NAV)).toBeHidden();
     await expect(botao).toBeFocused();
   });
 
@@ -75,7 +79,7 @@ test.describe("shell · gaveta de navegação", () => {
     await page.goto(PAGINA);
     await page.getByRole("button", {name: "Navigation"}).click();
     const dentro = () => page.evaluate(() =>
-      document.querySelector(".sidebar")!.contains(document.activeElement));
+      document.querySelector(".sidebar:not(.app-shell-aside)")!.contains(document.activeElement));
     // A GARANTIA MUDOU NO K1. Era "o primeiro Tab depois de abrir cai dentro" — o que dependia
     // de o motor pôr o conteúdo do popover na ordem de tabulação do documento. O Chromium põe;
     // o WebKit NÃO. Agora quem põe o foco somos nós, e o que se cobra é o fato que vale nos
@@ -98,10 +102,10 @@ test.describe("shell · gaveta de navegação", () => {
   test("a partir de lg não há gaveta: a lateral é a lateral", async ({page}) => {
     await page.setViewportSize({width: 1024, height: 900});
     await page.goto(PAGINA);
-    await expect(page.locator(".sidebar")).toBeVisible();
+    await expect(page.locator(NAV)).toBeVisible();
     await expect(page.getByRole("button", {name: "Navigation"})).toBeHidden();
     // e ela continua sendo uma coluna do grid, não um popup encostado na tela
-    expect(await page.locator(".sidebar").evaluate(el => getComputedStyle(el).position)).toBe("sticky");
+    expect(await page.locator(NAV).evaluate(el => getComputedStyle(el).position)).toBe("sticky");
   });
 
   test("página curta não estica a barra do topo", async ({page}) => {

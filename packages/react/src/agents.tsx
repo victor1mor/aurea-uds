@@ -201,7 +201,7 @@ export function HumanApproval({title,description,details,risk,reasoning,deadline
     {decision
       ?<Alert variant={decision==="approved"?"success":"warning"}>{decision==="approved"?s.approvalApproved:s.approvalDenied}</Alert>
       :<footer className="approval-actions">
-        <Button variant="secondary" onClick={onDeny}>{s.approvalDeny}</Button>
+        <Button variant="tertiary" onClick={onDeny}>{s.approvalDeny}</Button>
         <Button variant="primary" onClick={onApprove}>{s.approvalApprove}</Button>
       </footer>}
   </section>;

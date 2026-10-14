@@ -36,6 +36,12 @@
   },
   "props": [
     {
+      "name": "animation",
+      "type": "\"pulse\" | \"none\"",
+      "default": "\"pulse\"",
+      "description": "the reference library's pulse, or none. Its shimmer is a gradient, which Aurea does not have. With reduced motion requested by the system, it never pulses."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",
@@ -47,5 +53,11 @@
       "default": "—",
       "description": "The usual way to give it width and height for a one-off. Every other div attribute passes through as well."
     }
-  ]
+  ],
+  "axes": {
+    "animation": [
+      "none",
+      "pulse"
+    ]
+  }
 }

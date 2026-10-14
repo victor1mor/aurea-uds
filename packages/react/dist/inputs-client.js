@@ -11,16 +11,230 @@ import { Form as BaseForm } from "@base-ui/react/form";
 import { Field as BaseField } from "@base-ui/react/field";
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
 import { OTPField as BaseOTPField } from "@base-ui/react/otp-field";
+import { Slider as BaseSlider } from "@base-ui/react/slider";
 import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
-import { cx, useAureaStrings, usePortalContainer, useReorder } from "./internal.js";
+import { useDirection } from "@base-ui/react/direction-provider";
+import { cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis } from "./internal.js";
+import { COLOR_CHANNELS, areaBackground, channelRange, colorName, corToHex, formatChannel, getChannel, hsbToRgb, parseColor, pureHue, setChannel, spaceOf, trackBackground } from "./color.js";
+import { Popover as BasePopover } from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
 // objetos diferentes com o mesmo nome quebrariam o rótulo do campo em silêncio.
-import { Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon } from "./markup.js";
+import { Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch } from "./markup.js";
 import { Icon } from "./system.js";
 import { IconButton } from "./actions.js";
+// A FAMÍLIA DE COR (0.32.0, ADR-0069) — as peças INTERNAS moram aqui, no topo, antes do primeiro export (auxiliar
+// entre exports entra na fatia de outro componente — regra do check 22). As públicas (`ColorArea`, `Slider` com
+// `channel`, `ColorField`, `ColorPicker`) ficam com as irmãs delas, lá embaixo.
+//
+// A COR DE DENTRO é HSB com alfa (`Cor`, do `color.ts`), e não hex: o hex perde o matiz no cinza e no preto —
+// puxar a saturação a 0 não pode trocar a cor do fundo da área. Os três espaços (RGB, HSL, HSB) e o alfa entram por
+// ela, com as faixas de cada canal iguais às da biblioteca de acessibilidade em que a referência se apoia.
+//
+// A ÁREA (`AreaDeCor`) é o DESENHO acessível da referência, lido no código da biblioteca dela: um grupo com DOIS
+// `input type="range"` escondidos, um por eixo, anunciados como controle 2D, e o valor dito com o NOME da cor. Só um
+// dos dois fica na ordem do Tab (o do eixo que mexeu por último); o outro sai da árvore até a pessoa mexer nele pelo
+// teclado. As teclas são as dela: setas (Shift: o salto do canal), Page Up/Down no eixo de cima, Home/End no de
+// lado, invertidas na escrita da direita para a esquerda.
+const no01 = (n) => Math.min(1, Math.max(0, n));
+// COMO A PESSOA CHEGOU AQUI: a última interação foi teclado ou ponteiro? O anel de foco da área é só do teclado, e o
+// foco que chega por código (a janela do `ColorPicker` o põe na área ao abrir; o arrasto o põe no `range`) não diz
+// nada por si. É o jeito da biblioteca de acessibilidade em que a referência se apoia: ouvir o documento inteiro, uma
+// vez, e lembrar a última modalidade. Medido em 13/10/2026: abrindo o seletor com o mouse, o anel acendia.
+let modalidade = "teclado";
+let ouvindoModalidade = false;
+function ouvirModalidade() {
+    if (ouvindoModalidade || typeof document === "undefined")
+        return;
+    ouvindoModalidade = true;
+    document.addEventListener("keydown", (e) => { if (!e.metaKey && !e.ctrlKey && !e.altKey)
+        modalidade = "teclado"; }, true);
+    document.addEventListener("pointerdown", () => { modalidade = "ponteiro"; }, true);
+}
+/** O texto de entrada → a cor de dentro. Hex e `rgb()` não dizem o matiz do cinza: aí vale o matiz (e a saturação)
+ *  da cor de antes. `hsl()`/`hsb()` dizem, e o que veio no texto vale. */
+function corDoTexto(texto, anterior) {
+    const nova = texto ? parseColor(texto) : null;
+    if (!nova)
+        return anterior ?? { h: 0, s: 0, b: 1, a: 1 };
+    if (anterior && (nova.s === 0 || nova.b === 0) && !/^\s*hs[lb]/i.test(texto))
+        return { ...nova, h: anterior.h, s: nova.b === 0 ? anterior.s : nova.s };
+    return nova;
+}
+/** A cor que o `ColorPicker` reparte com as peças de dentro, quando o conteúdo da janela é montado por quem usa
+ *  ("com campos", "com trilhas" — os exemplos da referência). */
+const CorDoSeletor = React.createContext(null);
+/** O estado de cor das peças: a cor de dentro por dentro, hex por fora. Controlado, se o hex que chega é o que a peça
+ *  acabou de mandar, a cor de dentro vale (com o matiz); se é outro, vira cor guardando o matiz de antes no cinza.
+ *  Dentro de um `ColorPicker`, a peça sem valor próprio usa a cor DELE. */
+function useCor(value, defaultValue, onValueChange, onValueCommitted) {
+    const doSeletor = React.useContext(CorDoSeletor);
+    const [interno, setInterno] = React.useState(() => corDoTexto(defaultValue));
+    const ultimo = React.useRef(interno);
+    let cor = interno;
+    if (value !== undefined) {
+        const chegou = parseColor(value);
+        const mesmo = chegou !== null && corToHex(chegou) === corToHex(ultimo.current);
+        cor = mesmo ? ultimo.current : corDoTexto(value, ultimo.current);
+    }
+    ultimo.current = cor;
+    const avisar = (novo, fim) => { const h = corToHex(novo); onValueChange?.(h); if (fim)
+        onValueCommitted?.(h); };
+    if (doSeletor && value === undefined && defaultValue === undefined)
+        return [doSeletor.cor, (novo, fim) => { doSeletor.mudar(novo, fim); avisar(novo, fim); }];
+    const mudar = (novo, fim) => {
+        ultimo.current = novo;
+        // SEMPRE, e não só sem controle: no cinza o hex não muda com o matiz, o app devolve o MESMO valor e nada
+        // redesenharia — a trilha mexia e a área não (o teste do `ColorPicker` pegou). Este estado é o que redesenha;
+        // com controle, quem decide continua sendo o `value` (acima).
+        setInterno(novo);
+        avisar(novo, fim);
+    };
+    return [cor, mudar];
+}
+/** O espaço de uma peça de cor: o pedido, ou o que os canais exigem (vermelho/verde/azul no RGB, luminosidade no
+ *  HSL, brilho no HSB). */
+function espacoDosCanais(pedido, ...canais) {
+    if (pedido)
+        return pedido;
+    for (const ch of canais) {
+        const e = spaceOf(ch);
+        if (e !== "hsb" || ch === "brightness")
+            return e;
+    }
+    return "hsb";
+}
+function AreaDeCor({ cor, onCor, space, x: canalX, y: canalY, showDots, disabled, name, id, className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby }) {
+    const s = useAureaStrings();
+    const rtl = useDirection() === "rtl";
+    const caixa = React.useRef(null);
+    const inX = React.useRef(null), inY = React.useRef(null);
+    const [arrastando, setArrastando] = React.useState(false);
+    const [focado, setFocado] = React.useState(null);
+    const [pelaTecla, setPelaTecla] = React.useState(false);
+    // O anel de foco é do TECLADO, como na referência: o foco que o arrasto põe no `range` não acende o anel.
+    const [peloPonteiro, setPeloPonteiro] = React.useState(false);
+    React.useEffect(ouvirModalidade, []);
+    const fx = channelRange(canalX), fy = channelRange(canalY);
+    const canalZ = COLOR_CHANNELS[space].find((ch) => ch !== canalX && ch !== canalY);
+    const vx = getChannel(cor, canalX, space), vy = getChannel(cor, canalY, space);
+    const px = (vx - fx.min) / (fx.max - fx.min), py = (vy - fy.min) / (fy.max - fy.min);
+    const hex = corToHex({ ...cor, a: 1 }), nome = colorName(hsbToRgb(cor), s);
+    // Antes de mexer, o leitor de tela ouve os três canais e o nome; depois de mexer pelo teclado, só o canal que
+    // mudou e o nome — como na referência (o resto ele já ouviu).
+    const fala = (ch, v) => `${s.colorChannel[ch]} ${formatChannel(ch, v)}`;
+    const textoDo = (eixo) => {
+        const a = fala(canalX, vx), b = fala(canalY, vy), c = fala(canalZ, getChannel(cor, canalZ, space));
+        const partes = pelaTecla ? [eixo === "x" ? a : b] : eixo === "x" ? [a, b, c] : [b, a, c];
+        return `${partes.join(", ")}, ${nome}`;
+    };
+    const rotulo = ariaLabel ? `${ariaLabel}, ${s.colorPicker}` : ariaLabelledby ? undefined : s.colorPicker;
+    // Na grade do passo do canal: somar passos em ponto flutuante acumula erro.
+    const naGrade = (v, f) => Math.round(Math.min(f.max, Math.max(f.min, v)) / f.step) * f.step;
+    const com = (nx, ny) => setChannel(setChannel(cor, canalX, nx, space), canalY, ny, space);
+    const pelaPosicao = (cx, cy, fim) => {
+        const r = caixa.current.getBoundingClientRect();
+        if (!r.width || !r.height)
+            return;
+        const x = no01((cx - r.left) / r.width), y = no01((cy - r.top) / r.height);
+        onCor(com(fx.min + (rtl ? 1 - x : x) * (fx.max - fx.min), fy.min + (1 - y) * (fy.max - fy.min)), fim);
+    };
+    const focar = (eixo) => { (eixo === "x" ? inX : inY).current?.focus({ preventScroll: true }); setFocado(eixo); };
+    const aoApertar = (e) => {
+        if (disabled || e.button !== 0)
+            return;
+        e.preventDefault();
+        e.currentTarget.setPointerCapture?.(e.pointerId);
+        setArrastando(true);
+        setPelaTecla(false);
+        setPeloPonteiro(true);
+        focar("x");
+        pelaPosicao(e.clientX, e.clientY, false);
+    };
+    const aoMover = (e) => { if (arrastando)
+        pelaPosicao(e.clientX, e.clientY, false); };
+    const aoSoltar = (e) => { if (!arrastando)
+        return; setArrastando(false); pelaPosicao(e.clientX, e.clientY, true); };
+    const aoTeclar = (e) => {
+        if (disabled)
+            return;
+        const frente = rtl ? -1 : 1, sx = e.shiftKey ? fx.page : fx.step, sy = e.shiftKey ? fy.page : fy.step;
+        let nx = vx, ny = vy, eixo;
+        switch (e.key) {
+            case "ArrowRight":
+                nx += sx * frente;
+                eixo = "x";
+                break;
+            case "ArrowLeft":
+                nx -= sx * frente;
+                eixo = "x";
+                break;
+            case "ArrowUp":
+                ny += sy;
+                eixo = "y";
+                break;
+            case "ArrowDown":
+                ny -= sy;
+                eixo = "y";
+                break;
+            case "PageUp":
+                ny += fy.page;
+                eixo = "y";
+                break;
+            case "PageDown":
+                ny -= fy.page;
+                eixo = "y";
+                break;
+            case "Home":
+                nx -= fx.page * frente;
+                eixo = "x";
+                break;
+            case "End":
+                nx += fx.page * frente;
+                eixo = "x";
+                break;
+            default: return;
+        }
+        e.preventDefault();
+        setPelaTecla(true);
+        setPeloPonteiro(false);
+        focar(eixo);
+        onCor(com(naGrade(nx, fx), naGrade(ny, fy)), true);
+    };
+    // O motor do navegador também muda o `range` (o leitor de tela pede "aumentar"): o valor chega pelo `onChange`.
+    const aoMudar = (eixo) => (e) => {
+        setPelaTecla(true);
+        onCor(setChannel(cor, eixo === "x" ? canalX : canalY, Number(e.target.value), space), true);
+    };
+    const escondido = (eixo) => focado === null ? eixo === "y" : focado !== eixo;
+    const fundo = areaBackground(cor, space, canalX, canalY, rtl);
+    return _jsxs("div", { ref: caixa, role: "group", id: id, "aria-label": ariaLabel ? rotulo : undefined, "aria-labelledby": ariaLabelledby, "aria-disabled": disabled || undefined, "data-disabled": disabled ? "" : undefined, "data-dragging": arrastando ? "" : undefined, className: cx("color-area", showDots && "color-area-dots", className), style: { "--color-area-fill": fundo.background, "--color-area-blend": fundo.blend ?? "normal", "--color-area-thumb": hex }, onPointerDown: aoApertar, onPointerMove: aoMover, onPointerUp: aoSoltar, onPointerCancel: aoSoltar, onKeyDown: aoTeclar, children: [_jsx("div", { className: "color-area-thumb", "data-focus-visible": focado && !peloPonteiro ? "" : undefined, style: { insetInlineStart: `${px * 100}%`, insetBlockStart: `${(1 - py) * 100}%` }, children: ["x", "y"].map((eixo) => {
+                    const f = eixo === "x" ? fx : fy;
+                    return _jsx("input", { ref: eixo === "x" ? inX : inY, type: "range", className: "color-area-input", min: f.min, max: f.max, step: f.step, value: naGrade(eixo === "x" ? vx : vy, f), disabled: disabled, "aria-label": rotulo, "aria-labelledby": rotulo ? undefined : ariaLabelledby, "aria-describedby": ariaDescribedby, "aria-roledescription": s.colorArea2D, "aria-valuetext": textoDo(eixo), "aria-orientation": eixo === "x" ? "horizontal" : "vertical", tabIndex: escondido(eixo) ? -1 : undefined, "aria-hidden": escondido(eixo) && !pelaTecla ? true : undefined, onChange: aoMudar(eixo), onFocus: () => { setFocado(eixo); setPeloPonteiro(modalidade === "ponteiro"); }, onBlur: (e) => { if (!caixa.current?.contains(e.relatedTarget)) {
+                            setFocado(null);
+                            setPeloPonteiro(false);
+                        } } }, eixo);
+                }) }), name && _jsx("input", { type: "hidden", name: name, value: corToHex(cor) })] });
+}
+function TrilhaDeCor({ cor, onCor, channel, colorSpace, label, labelHidden, showValue = true, orientation = "horizontal", disabled, name, className, id }) {
+    const s = useAureaStrings();
+    const rtl = useDirection() === "rtl";
+    const space = spaceOf(channel, colorSpace);
+    const { min, max, step, page } = channelRange(channel);
+    const v = getChannel(cor, channel, space);
+    const idDoRotulo = React.useId();
+    const fundo = trackBackground(cor, channel, space, orientation === "vertical" ? "to top" : rtl ? "to left" : "to right");
+    const pino = channel === "hue" ? pureHue(v) : channel === "alpha" ? corToHex(cor) : corToHex({ ...cor, a: 1 });
+    const falado = (n) => {
+        const base = `${s.colorChannel[channel]} ${formatChannel(channel, n)}`;
+        if (channel === "alpha")
+            return base;
+        return `${base}, ${colorName(hsbToRgb(channel === "hue" ? { h: n, s: 1, b: 1 } : setChannel(cor, channel, n, space)), s)}`;
+    };
+    return _jsxs(BaseSlider.Root, { id: id, "aria-labelledby": idDoRotulo, "aria-disabled": disabled || undefined, value: v, onValueChange: (n) => onCor(setChannel(cor, channel, n, space), false), onValueCommitted: (n) => onCor(setChannel(cor, channel, n, space), true), min: min, max: max, step: step, largeStep: page, orientation: orientation, disabled: disabled, className: cx("slider", "slider-color", channel === "alpha" && "slider-alpha", className), style: { "--slider-track-fill": fundo, "--slider-thumb-color": pino }, children: [_jsx("div", { id: idDoRotulo, className: labelHidden ? "sr-only" : "slider-label", children: label }), showValue && _jsx(BaseSlider.Value, { className: "slider-output", children: (_, valores) => formatChannel(channel, valores[0] ?? v) }), _jsx(BaseSlider.Control, { className: "slider-control", children: _jsx(BaseSlider.Track, { className: "slider-track", children: _jsx(BaseSlider.Thumb, { className: "slider-thumb", "aria-labelledby": idDoRotulo, getAriaValueText: (_f, n) => falado(n) }) }) }), name && _jsx("input", { type: "hidden", name: name, value: corToHex(cor) })] });
+}
 // FileInput mora em arquivo próprio (132 linhas — upload real, aborto, progresso) e é público
 // por aqui: a categoria dele é Inputs.
 export { FileInput, matchesAccept } from "./file-input.js";
@@ -77,9 +291,11 @@ function elementoRotulavel(tipo) {
     // reprovava no axe com "Form elements must have labels". Fora desta lista o Field vira GRUPO e
     // não pendura `htmlFor`, então o <input> de dentro ficava sem nome. Ele qualifica pela mesma
     // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
-    return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox].includes(tipo);
+    return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox, ColorField].includes(tipo)
+        // os que moram fora do pacote principal e se registraram (o `DatePicker`, 0.32.0)
+        || (typeof tipo === "function" && controlesRotulaveis.has(tipo));
 }
-export function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, ...props }) {
+export function Field({ label, hint, description, error, children, className, id, name, orientation, labelWidth, style, required, ...props }) {
     const auto = React.useId();
     // Fragment não cria nó no DOM. Um Fragment com um só controle é só sintaxe; com vários,
     // Field precisa voltar para grupo em vez de pendurar `htmlFor` num id que nunca existirá.
@@ -116,6 +332,10 @@ export function Field({ label, hint, description, error, children, className, id
     const invalidoFinal = error ? true : unico?.props["aria-invalid"];
     if (invalidoFinal !== undefined)
         injecao["aria-invalid"] = invalidoFinal;
+    // o `required` do controle é o que anuncia; o do filho, se ele já disse, vence
+    if (required && unico?.props.required === undefined)
+        injecao.required = true;
+    const asterisco = required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null;
     const controle = rotulavel ? React.cloneElement(unico, injecao) : children;
     // a descrição mora no nó FOCAL quando existe um; sem filho único, no grupo — que é o que sobra
     // para anunciar. Nos dois lugares seria anunciar duas vezes.
@@ -125,7 +345,7 @@ export function Field({ label, hint, description, error, children, className, id
     // árvore de acessibilidade enquanto a frase de erro aparece na tela. Pior que não mostrar.
     const controleFinal = name ? _jsx(BaseField.Control, { render: controle }) : controle;
     const estilo = labelWidth ? { ...style, "--field-label-width": labelWidth === "auto" ? "max-content" : labelWidth } : style;
-    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsx("label", { htmlFor: idControle, children: label }) : _jsx("span", { id: idRotulo, children: label }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
+    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsxs("label", { htmlFor: idControle, id: idRotulo, children: [label, asterisco] }) : _jsxs("span", { id: idRotulo, children: [label, asterisco] }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
     // `Field.Root` do motor entra SÓ quando há `name`: é ele que liga o campo à chave de `errors`
     // do formulário. Ele não desenha nada — é contexto — então a pele não muda.
     return name ? _jsx(BaseField.Root, { name: name, invalid: error ? true : undefined, render: corpo }) : corpo;
@@ -146,8 +366,8 @@ export function Field({ label, hint, description, error, children, className, id
 export function Form({ errors, onSubmit, children, className, ...props }) {
     return _jsx(BaseForm, { errors: errors, onFormSubmit: onSubmit ? (v) => onSubmit(v) : undefined, className: cx("form", className), ...props, children: children });
 }
-export const Input = forwardRef(function Input({ className, formatOnBlur, size, onBlur, onChange, ...props }, ref) {
-    return _jsx("input", { ref: ref, className: cx("input", peleDoEixo("input", size), className), onChange: onChange, onBlur: e => {
+export const Input = forwardRef(function Input({ className, formatOnBlur, size, variant, onBlur, onChange, ...props }, ref) {
+    return _jsx("input", { ref: ref, className: cx("input", peleDoEixo("input", size), variant === "secondary" && "input-secondary", className), onChange: onChange, onBlur: e => {
             if (formatOnBlur) {
                 const formatado = formatOnBlur(e.currentTarget.value);
                 if (formatado !== e.currentTarget.value) {
@@ -186,7 +406,283 @@ export function SearchField({ icon = "magnifying-glass", className, size, width,
 // é a trava do item ("o valor mascarado continua no DOM") entregue pelo motor, e o teste a cobra.
 export function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection }) {
     const s = useAureaStrings();
-    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "btn btn-ghost btn-icon", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label }), _jsx(BaseNumberField.Increment, { className: "btn btn-ghost btn-icon", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
+    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "number-field-button number-field-decrement", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label }), _jsx(BaseNumberField.Increment, { className: "number-field-button number-field-increment", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
+}
+export function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }) {
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultValue ?? []);
+    const marcados = value ?? proprio;
+    const trocar = (v, ligado) => {
+        const novo = ligado ? [...marcados.filter(x => x !== v), v] : marcados.filter(x => x !== v);
+        if (value === undefined)
+            setProprio(novo);
+        onValueChange?.(novo);
+    };
+    const idRotulo = `${auto}-label`, idDescricao = description ? `${auto}-description` : undefined, idErro = error ? `${auto}-error` : undefined;
+    const caixas = React.Children.map(children, filho => {
+        if (!React.isValidElement(filho))
+            return filho;
+        const p = filho.props;
+        if (typeof p.value !== "string")
+            return filho;
+        const v = p.value;
+        return React.cloneElement(filho, { checked: marcados.includes(v), name: name ?? filho.props.name,
+            disabled: p.disabled ?? disabled, ...(error ? { "aria-invalid": true } : null),
+            onChange: (e) => { p.onChange?.(e); trocar(v, e.currentTarget.checked); } });
+    });
+    return _jsxs("div", { role: "group", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, className: cx("checkbox-group", className), ...props, children: [_jsx("span", { className: "label", id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), caixas, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
+}
+const ehSecao = (x) => "items" in x;
+const textoDoItem = (it) => it.textValue ?? (typeof it.label === "string" ? it.label : "");
+export function ListBox({ label, items, selectionMode = "single", value, defaultValue, onValueChange, onAction, className, ...props }) {
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultValue ?? []);
+    const escolhidos = value ?? proprio;
+    const todos = React.useMemo(() => items.flatMap(x => ehSecao(x) ? x.items : [x]), [items]);
+    const habilitados = todos.filter(it => !it.disabled);
+    const [ativo, setAtivo] = React.useState(undefined);
+    // O item que recebe o Tab: o ativo; senão o primeiro escolhido; senão o primeiro habilitado.
+    const alvo = ativo ?? habilitados.find(it => escolhidos.includes(it.id))?.id ?? habilitados[0]?.id;
+    const refs = React.useRef(new Map());
+    const focar = (id) => { if (!id)
+        return; setAtivo(id); refs.current.get(id)?.focus(); };
+    const escolher = (it) => {
+        if (it.disabled)
+            return;
+        if (selectionMode === "none") {
+            onAction?.(it.id);
+            return;
+        }
+        const ja = escolhidos.includes(it.id);
+        const novo = selectionMode === "multiple" ? (ja ? escolhidos.filter(x => x !== it.id) : [...escolhidos, it.id]) : [it.id];
+        if (value === undefined)
+            setProprio(novo);
+        onValueChange?.(novo);
+        onAction?.(it.id);
+    };
+    const aoTeclar = (e, it) => {
+        const i = habilitados.findIndex(x => x.id === it.id);
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            focar(habilitados[Math.min(i + 1, habilitados.length - 1)]?.id);
+        }
+        else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            focar(habilitados[Math.max(i - 1, 0)]?.id);
+        }
+        else if (e.key === "Home") {
+            e.preventDefault();
+            focar(habilitados[0]?.id);
+        }
+        else if (e.key === "End") {
+            e.preventDefault();
+            focar(habilitados[habilitados.length - 1]?.id);
+        }
+        else if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            escolher(it);
+        }
+        else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            // a primeira letra: o próximo item, depois do atual, que começa com ela (e dá a volta)
+            const letra = e.key.toLocaleLowerCase();
+            const ordem = [...habilitados.slice(i + 1), ...habilitados.slice(0, i + 1)];
+            const achou = ordem.find(x => textoDoItem(x).toLocaleLowerCase().startsWith(letra));
+            if (achou) {
+                e.preventDefault();
+                focar(achou.id);
+            }
+        }
+    };
+    const item = (it) => {
+        const escolhido = selectionMode !== "none" && escolhidos.includes(it.id);
+        const idDesc = it.description ? `${auto}-${it.id}-d` : undefined;
+        return _jsxs("div", { ref: n => { if (n)
+                refs.current.set(it.id, n);
+            else
+                refs.current.delete(it.id); }, role: "option", "aria-selected": selectionMode === "none" ? undefined : escolhido, "aria-disabled": it.disabled || undefined, "aria-describedby": idDesc, tabIndex: it.id === alvo ? 0 : -1, className: cx("list-box-item", it.danger && "list-box-item-danger"), onClick: () => { if (!it.disabled) {
+                setAtivo(it.id);
+                escolher(it);
+            } }, onKeyDown: e => aoTeclar(e, it), onFocus: () => setAtivo(it.id), children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "list-box-item-text", children: [_jsx("span", { className: "list-box-item-label", children: it.label }), it.description && _jsx("span", { className: "list-box-item-description", id: idDesc, children: it.description })] }), escolhido && _jsx(Icon, { name: "check", className: "list-box-item-indicator" })] }, it.id);
+    };
+    return _jsx("div", { role: "listbox", "aria-label": label, "aria-multiselectable": selectionMode === "multiple" || undefined, className: cx("list-box", className), ...props, children: items.map((x, i) => ehSecao(x)
+            ? _jsxs("div", { role: "group", "aria-labelledby": `${auto}-s${i}`, className: "list-box-section", children: [_jsx("span", { className: "list-box-section-title", id: `${auto}-s${i}`, role: "presentation", children: x.title }), x.items.map(item)] }, `s${i}`)
+            : item(x)) });
+}
+const textoDaEtiqueta = (it) => it.textValue ?? (typeof it.label === "string" ? it.label : "");
+export function TagGroup({ label, labelHidden, description, errorMessage, items, selectionMode = "none", selectedKeys, defaultSelectedKeys, onSelectionChange, onRemove, size = "md", variant = "default", className, id }) {
+    const s = useAureaStrings();
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultSelectedKeys ?? []);
+    const escolhidos = selectedKeys ?? proprio;
+    const escolhe = selectionMode !== "none";
+    const habilitadas = items.filter(it => !it.disabled);
+    const [ativa, setAtiva] = React.useState(undefined);
+    const alvo = (ativa && habilitadas.some(it => it.id === ativa) ? ativa : undefined) ?? habilitadas[0]?.id;
+    const refs = React.useRef(new Map());
+    const focar = (id) => { if (!id)
+        return; setAtiva(id); refs.current.get(id)?.focus(); };
+    const escolher = (it) => {
+        if (!escolhe || it.disabled)
+            return;
+        const ja = escolhidos.includes(it.id);
+        const novo = selectionMode === "multiple" ? (ja ? escolhidos.filter(x => x !== it.id) : [...escolhidos, it.id]) : (ja ? [] : [it.id]);
+        if (selectedKeys === undefined)
+            setProprio(novo);
+        onSelectionChange?.(novo);
+    };
+    const tirar = (it) => {
+        if (!onRemove || it.disabled)
+            return;
+        // o foco vai para a vizinha (a seguinte; na última, a anterior), e não se perde no documento
+        const i = habilitadas.findIndex(x => x.id === it.id);
+        const vizinha = habilitadas[i + 1] ?? habilitadas[i - 1];
+        onRemove([it.id]);
+        if (vizinha)
+            requestAnimationFrame(() => focar(vizinha.id));
+    };
+    const aoTeclar = (e, it) => {
+        const i = habilitadas.findIndex(x => x.id === it.id);
+        const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
+        const frente = rtl ? "ArrowLeft" : "ArrowRight", tras = rtl ? "ArrowRight" : "ArrowLeft";
+        if (e.key === frente || e.key === "ArrowDown") {
+            e.preventDefault();
+            focar(habilitadas[Math.min(i + 1, habilitadas.length - 1)]?.id);
+        }
+        else if (e.key === tras || e.key === "ArrowUp") {
+            e.preventDefault();
+            focar(habilitadas[Math.max(i - 1, 0)]?.id);
+        }
+        else if (e.key === "Home") {
+            e.preventDefault();
+            focar(habilitadas[0]?.id);
+        }
+        else if (e.key === "End") {
+            e.preventDefault();
+            focar(habilitadas[habilitadas.length - 1]?.id);
+        }
+        else if ((e.key === "Delete" || e.key === "Backspace") && onRemove) {
+            e.preventDefault();
+            tirar(it);
+        }
+    };
+    const guardar = (itId) => (n) => { if (n)
+        refs.current.set(itId, n);
+    else
+        refs.current.delete(itId); };
+    const idRotulo = `${auto}-l`, idDesc = description ? `${auto}-d` : undefined, idErro = errorMessage ? `${auto}-e` : undefined;
+    return _jsxs("div", { className: cx("tag-group", className), id: id, children: [_jsx("span", { className: labelHidden ? "sr-only" : "label", id: idRotulo, children: label }), _jsx("div", { role: escolhe ? "group" : "list", "aria-labelledby": idRotulo, "aria-describedby": [idDesc, idErro].filter(Boolean).join(" ") || undefined, className: "tag-group-list", children: items.map(it => {
+                    const escolhida = escolhe && escolhidos.includes(it.id);
+                    const conteudo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon }), _jsx("span", { className: "tag-label", children: it.label })] });
+                    const x = onRemove && _jsx("button", { type: "button", className: "tag-remove", disabled: it.disabled, tabIndex: escolhe ? -1 : it.id === alvo ? 0 : -1, ref: escolhe ? undefined : guardar(it.id), "aria-label": `${s.comboboxRemove} ${textoDaEtiqueta(it)}`.trim(), onClick: () => tirar(it), onKeyDown: escolhe ? undefined : e => aoTeclar(e, it), onFocus: escolhe ? undefined : () => setAtiva(it.id), children: _jsx(Icon, { name: "x", weight: "bold" }) });
+                    return _jsxs("span", { role: escolhe ? undefined : "listitem", className: cx("tag", size !== "md" && `tag-${size}`, variant !== "default" && `tag-${variant}`), "data-selected": escolhida || undefined, "data-disabled": it.disabled || undefined, children: [escolhe
+                                ? _jsx("button", { type: "button", className: "tag-main", ref: guardar(it.id), "aria-pressed": escolhida, disabled: it.disabled, tabIndex: it.id === alvo ? 0 : -1, onClick: () => { setAtiva(it.id); escolher(it); }, onKeyDown: e => aoTeclar(e, it), onFocus: () => setAtiva(it.id), children: conteudo })
+                                : _jsx("span", { className: "tag-main", children: conteudo }), x] }, it.id);
+                }) }), description && _jsx("span", { className: "field-description", id: idDesc, children: description }), errorMessage && _jsx("span", { className: "field-error", id: idErro, children: errorMessage })] });
+}
+export function Slider(props) {
+    return props.channel ? _jsx(SliderDeCor, { ...props }) : _jsx(SliderDeNumero, { ...props });
+}
+function SliderDeCor({ value, defaultValue, onValueChange, onValueCommitted, ...resto }) {
+    const [cor, mudar] = useCor(value, defaultValue, onValueChange, onValueCommitted);
+    return _jsx(TrilhaDeCor, { ...resto, cor: cor, onCor: mudar });
+}
+function SliderDeNumero({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation = "horizontal", disabled, name, format, locale, showValue = true, thumbLabels, className, id }) {
+    // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
+    const atual = value ?? defaultValue;
+    const alcas = Array.isArray(atual) ? atual.length : 1;
+    // O NOME DA ALÇA SAI NA MARCAÇÃO. O motor liga o `<input>` de cada alça ao rótulo por um id que ele
+    // só conhece DEPOIS de montar — no HTML do servidor (e no catálogo, que é HTML parado) as alças saíam
+    // sem nome, e o axe do catálogo acusou as cinco. O `Slider.Label` do motor não aceita id, então o
+    // rótulo é um `<div>` nosso, com id, que nomeia o grupo e cada alça — o nome já vem no HTML. E o desligado vai também para o grupo (`aria-disabled`): o motor só marca o `<input>`, e a
+    // letra esmaecida do rótulo e do valor era lida como texto de contraste baixo, e não como peça desligada.
+    const idDoRotulo = React.useId();
+    return _jsxs(BaseSlider.Root, { id: id, name: name, "aria-labelledby": idDoRotulo, "aria-disabled": disabled || undefined, value: value, defaultValue: defaultValue, onValueChange: onValueChange ? (v) => onValueChange(v) : undefined, onValueCommitted: onValueCommitted ? (v) => onValueCommitted(v) : undefined, min: min, max: max, step: step, largeStep: largeStep, orientation: orientation, disabled: disabled, format: format, locale: locale, className: cx("slider", className), children: [_jsx("div", { id: idDoRotulo, className: labelHidden ? "sr-only" : "slider-label", children: label }), showValue && _jsx(BaseSlider.Value, { className: "slider-output" }), _jsx(BaseSlider.Control, { className: "slider-control", children: _jsxs(BaseSlider.Track, { className: "slider-track", children: [_jsx(BaseSlider.Indicator, { className: "slider-fill" }), Array.from({ length: alcas }, (_, i) => _jsx(BaseSlider.Thumb, { index: i, className: "slider-thumb", getAriaLabel: thumbLabels ? () => thumbLabels[i] ?? "" : undefined, "aria-labelledby": thumbLabels ? undefined : idDoRotulo }, i))] }) })] });
+}
+const EIXOS_PADRAO = { hsb: ["saturation", "brightness"], hsl: ["saturation", "lightness"], rgb: ["red", "green"] };
+export function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, colorSpace, xChannel, yChannel, ...resto }) {
+    const [cor, mudar] = useCor(value, defaultValue, onValueChange, onValueCommitted);
+    const space = espacoDosCanais(colorSpace, ...[xChannel, yChannel].filter((c) => !!c));
+    const [x, y] = [xChannel ?? EIXOS_PADRAO[space][0], yChannel ?? EIXOS_PADRAO[space][1]];
+    return _jsx(AreaDeCor, { ...resto, cor: cor, onCor: mudar, space: space, x: x, y: y });
+}
+export function ColorField({ value, defaultValue, onValueChange, onValueCommitted, channel, colorSpace, swatch, size, variant, width, disabled, readOnly, required, name, placeholder, id, className, ...aria }) {
+    const s = useAureaStrings();
+    const doSeletor = React.useContext(CorDoSeletor);
+    const [cor, mudar] = useCor(value === "" ? undefined : value, defaultValue, onValueChange, onValueCommitted);
+    // Vazio: o valor "" de fora, ou sem valor nenhum e ainda não escrito (o campo da referência começa vazio).
+    const [escrito, setEscrito] = React.useState(defaultValue !== undefined);
+    const vazio = !doSeletor && (value !== undefined ? value === "" : !escrito);
+    const [rascunho, setRascunho] = React.useState(null);
+    const canal = channel;
+    const space = canal ? spaceOf(canal, colorSpace) : "hsb";
+    const faixa = canal ? channelRange(canal) : null;
+    const v = canal ? getChannel(cor, canal, space) : 0;
+    const mostrado = vazio ? "" : canal ? formatChannel(canal, v) : corToHex(cor);
+    const confirmar = () => {
+        if (rascunho === null)
+            return;
+        const t = rascunho.trim();
+        setRascunho(null);
+        if (t === "") {
+            if (canal)
+                return;
+            setEscrito(false);
+            onValueChange?.("");
+            onValueCommitted?.("");
+            return;
+        }
+        if (canal) {
+            const n = Number(t.replace(/[°%\s]/g, "").replace(",", "."));
+            if (!Number.isFinite(n))
+                return;
+            mudar(setChannel(cor, canal, canal === "alpha" && (n > 1 || /%/.test(t)) ? n / 100 : n, space), true);
+            return;
+        }
+        const nova = parseColor(t);
+        if (!nova)
+            return;
+        setEscrito(true);
+        mudar(corDoTexto(t, cor), true);
+    };
+    const aoTeclar = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            confirmar();
+            return;
+        }
+        if (!canal || !faixa || disabled || readOnly)
+            return;
+        const passo = e.key === "ArrowUp" ? faixa.step : e.key === "ArrowDown" ? -faixa.step : e.key === "PageUp" ? faixa.page : e.key === "PageDown" ? -faixa.page : 0;
+        const alvo = e.key === "Home" ? faixa.min : e.key === "End" ? faixa.max : passo ? v + passo : null;
+        if (alvo === null)
+            return;
+        e.preventDefault();
+        setRascunho(null);
+        mudar(setChannel(cor, canal, Math.round(alvo / faixa.step) * faixa.step, space), true);
+    };
+    const comAmostra = swatch ?? !canal;
+    return _jsxs(InputGroup, { className: className, width: width, children: [comAmostra && _jsx(InputGroupAddon, { children: _jsx(ColorSwatch, { color: vazio ? "transparent" : corToHex(cor), size: "sm", "aria-hidden": "true" }) }), _jsx(Input, { id: id, size: size, variant: variant, value: rascunho ?? mostrado, placeholder: placeholder, disabled: disabled, readOnly: readOnly, required: required, spellCheck: false, autoComplete: "off", inputMode: canal ? "decimal" : undefined, role: canal ? "spinbutton" : undefined, "aria-valuenow": canal ? v : undefined, "aria-valuemin": faixa?.min, "aria-valuemax": faixa?.max, "aria-valuetext": canal ? `${formatChannel(canal, v)}, ${colorName(hsbToRgb(cor), s)}` : undefined, ...aria, onChange: (e) => setRascunho(e.target.value), onBlur: confirmar, onKeyDown: aoTeclar }), name && _jsx("input", { type: "hidden", name: name, value: vazio ? "" : corToHex(cor) })] });
+}
+export function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant = "full", children, disabled, name, id, className }) {
+    const s = useAureaStrings();
+    const portal = usePortalContainer();
+    const idGrupo = React.useId();
+    const [cor, mudar] = useCor(value, defaultValue, onValueChange, onValueCommitted);
+    const hex = corToHex(cor), nome = colorName(hsbToRgb(cor), s);
+    const amostras = swatches?.map((o) => {
+        const op = typeof o === "string" ? { color: o } : o;
+        const c = parseColor(op.color);
+        return { color: op.color, label: op.label ?? (c ? colorName(hsbToRgb(c), s) : op.color) };
+    });
+    const escolhida = amostras?.find((o) => { const c = parseColor(o.color); return c !== null && corToHex(c) === hex; })?.color ?? "";
+    const contexto = React.useMemo(() => ({ cor, mudar }), [cor, mudar]);
+    // O seletor escuta o teclado e o ponteiro desde que MONTA: a área só monta ao abrir, DEPOIS do clique que abriu, e
+    // a primeira abertura com o mouse acendia o anel (medido na bancada em 14/10/2026; o teste abria pelo teclado antes).
+    React.useEffect(ouvirModalidade, []);
+    // O foco fica PRESO na janela (`trap-focus`), como na referência: com quatro peças dentro, o Tab que saía depois
+    // do código fechava a janela (medido no navegador). O motor pede um botão de fechar dentro, para o leitor de tela
+    // por toque sair; ele fica invisível e fora do Tab — quem usa teclado tem o Esc, e o foco nunca some na tela.
+    return _jsxs(BasePopover.Root, { modal: "trap-focus", children: [_jsxs(BasePopover.Trigger, { disabled: disabled, id: id, "aria-label": `${label}, ${nome}`, className: cx("color-picker-trigger", className), children: [_jsx(ColorSwatch, { color: hex, "aria-hidden": "true" }), _jsx("span", { children: label })] }), name && _jsx("input", { type: "hidden", name: name, value: hex }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: "bottom", align: "start", sideOffset: 6, children: _jsxs(BasePopover.Popup, { className: "popover color-picker-popover", "aria-label": label, children: [_jsx(CorDoSeletor.Provider, { value: contexto, children: children ?? _jsxs(_Fragment, { children: [variant !== "swatches" && _jsxs(_Fragment, { children: [_jsx(AreaDeCor, { cor: cor, onCor: mudar, space: "hsb", x: "saturation", y: "brightness", "aria-label": label }), _jsx(TrilhaDeCor, { cor: cor, onCor: mudar, channel: "hue", label: s.colorChannel.hue, labelHidden: true, showValue: false })] }), amostras && _jsx(ColorSwatch, { options: amostras, name: `${idGrupo}-amostras`, label: s.colorSwatches, value: escolhida, onChange: (e) => mudar(corDoTexto(e.target.value, cor), true) }), _jsx(ColorField, { "aria-label": s.colorHex })] }) }), _jsx(BasePopover.Close, { className: "sr-only", tabIndex: -1, children: s.close })] }) }) })] });
 }
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta
 // à mão: colar o código inteiro distribui pelos campos, Backspace volta um, e o

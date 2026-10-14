@@ -10,9 +10,13 @@
 //   - `tests/visual/catalog-sweep.spec.ts` cobra o conjunto nas 169 páginas.
 // Sem o segundo isto é decoração — foi o que a auditoria inteira mostrou sobre regra sem gate.
 
-// Núcleo obrigatório em TODO tipo de item. É a decisão da ADR-0001: o consumidor tem de poder
-// copiar algo de qualquer página, e saber onde a página está e o que ela consome.
-export const CORE = ["breadcrumb", "title", "preview", "code", "installation", "uses", "prevnext"];
+// Núcleo obrigatório em TODO tipo de item. É a decisão da ADR-0001 — o consumidor tem de poder
+// copiar algo de qualquer página, e saber o que ela consome — na ORDEM e com os NOMES da documentação
+// da referência desde a ADR-0067 (13/10/2026): sem trilha (a página dela não tem), sem "Installation"
+// por página (mora uma vez no Getting Started); o import e o exemplo moram no "Usage"; a proveniência
+// ("Uses") virou os cartões de "Related Components" — OPCIONAL, porque a peça que não compõe nenhuma
+// outra não tem o que listar (a "Uses" dizia isso numa frase; a referência simplesmente não mostra).
+export const CORE = ["title", "usage", "preview", "code", "prevnext"];
 
 // Extras DECLARADOS por tipo, e só estes.
 //   required — sempre presente (a página não existe sem eles);
@@ -21,26 +25,26 @@ export const CORE = ["breadcrumb", "title", "preview", "code", "installation", "
 //     em todas as fichas; o que continua faltando é `features`/`examples` nos starters.) O gate
 //     cobra o required e PROÍBE seção fora da união — é assim que o quinto modelo não nasce.
 export const EXTRAS = {
-  component: {required: ["reference"], optional: ["api", "features", "examples"]},
-  pattern: {required: [], optional: []},
-  block: {required: [], optional: []},
-  recipe: {required: ["composition", "capabilities", "invariants", "states"], optional: []},
+  // A "Reference" virou "Styling Reference" e a "API", "API Reference" (ADR-0067); a "Features" deixou de
+  // ser seção — os pontos entram como texto do Usage.
+  component: {required: ["styling"], optional: ["api", "examples", "related"]},
+  pattern: {required: [], optional: ["related"]},
+  block: {required: [], optional: ["related"]},
+  recipe: {required: ["composition", "capabilities", "invariants", "states"], optional: ["related"]},
 };
 
 // Como cada seção é verificável numa página EMITIDA. Mora aqui junto do modelo porque um gate
 // que declara seus próprios seletores é um segundo modelo escondido.
 // `preview` e `code` são os dois painéis do mesmo bloco de demo — um bloco, duas abas.
 export const SELECTOR = {
-  breadcrumb: ".crumb",
   title: ".page-head h1",
+  usage: "#usage",
   preview: '#preview .demo-panel[data-panel="preview"]',
   code: '#preview .demo-panel[data-panel="code"]',
-  installation: "#installation",
-  uses: "#uses",
+  related: "#related",
   prevnext: ".prevnext",
-  reference: "#reference",
+  styling: "#styling",
   api: "#api",
-  features: "#features",
   examples: "#examples",
   composition: "#composition",
   capabilities: "#capabilities",
@@ -53,16 +57,14 @@ export const SELECTOR = {
 // sabe ler, e as duas saem desta mesma tabela. O gate faz o que o gerador não consegue: cobrar
 // que NÃO exista seção fora do modelo.
 export const MARKER = {
-  breadcrumb: 'class="crumb"',
   title: "<h1>",
+  usage: 'id="usage"',
   preview: 'id="preview"',
   code: 'data-panel="code"',
-  installation: 'id="installation"',
-  uses: 'id="uses"',
+  related: 'id="related"',
   prevnext: 'class="prevnext"',
-  reference: 'id="reference"',
+  styling: 'id="styling"',
   api: 'id="api"',
-  features: 'id="features"',
   examples: 'id="examples"',
   composition: 'id="composition"',
   capabilities: 'id="capabilities"',
@@ -77,7 +79,9 @@ export const allowed = type => [...required(type), ...EXTRAS[type].optional];
 // Tipo pelo nome do arquivo emitido. O gate varre um diretório de .html e precisa saber o que
 // cada página é; o gerador já sabe. Índice de área (`index`, `patterns`, `blocks`, `recipes`,
 // `tokens`) não é item — é índice, e a ADR o deixa fora do modelo de propósito.
-export const AREA_PAGES = ["index.html", "patterns.html", "blocks.html", "recipes.html", "tokens.html",
+// ADR-0067: o `index.html` passou a ser o Início, e o catálogo de componentes e o Getting Started são
+// índices também.
+export const AREA_PAGES = ["index.html", "components.html", "getting-started.html", "patterns.html", "blocks.html", "recipes.html", "tokens.html",
   // `hooks.html` (16/08/2026) entra como ÍNDICE e não como item, pela mesma razão do `tokens.html`:
   // o núcleo do modelo é preview + código, e hook não tem prévia estática. `useToast` só existe
   // depois de um clique — a página traz assinatura, exemplo e limites, que é o que dá para ler.

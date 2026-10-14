@@ -134,7 +134,9 @@ test("o degrau BASE não é `md` em toda família — o do Spinner é `sm`", () 
   // Aqui ela é parâmetro, e o teste cobra os dois lados: `sm` não emite classe, `md` emite.
   const {container} = wrap(<><Spinner decorative/><Spinner size="sm" decorative/><Spinner size="md" decorative/></>);
   const [padrao, sm, md] = [...container.querySelectorAll(".spinner")];
-  expect(padrao.className, "o padrão do spinner JÁ é o sm").not.toMatch(/spinner-(sm|md|lg)/);
+  // 0.32.0: o PADRÃO do componente passou a ser o `md` (24, o da referência); o degrau BASE do CSS
+  // continua o `sm` (o glifo cru, o de dentro do botão) — e é por isso que o `md` emite classe.
+  expect(padrao.className, "o padrão do componente é o md").toContain("spinner-md");
   expect(sm.className, "`sm` é a base: não emite classe").not.toMatch(/spinner-(sm|md|lg)/);
   expect(md.className).toContain("spinner-md");
 });
@@ -162,8 +164,12 @@ test("o passo do glifo é OUTRA escala, e a folha não confunde as duas", () => 
   expect(css, "e NÃO pode ler a altura de controle").not.toMatch(/\.icon \{[^}]*--step-h/);
   // E a marcação/identidade leem a MESMA grandeza do botão, porque a medição diz que é a mesma —
   // o que muda é a razão, e a razão fica no componente.
-  expect(css).toMatch(/\.control-mark \{[^}]*calc\(var\(--step-h,var\(--control-h-md\)\) \/ 2\)/);
-  expect(css).toMatch(/\.avatar \{[^}]*var\(--step-h,var\(--control-h-md\)\)/);
+  // 0.32.0: "metade menos 2" — a marca de 16 da referência no md.
+  expect(css).toMatch(/\.control-mark \{[^}]*calc\(var\(--step-h,var\(--control-h-md\)\) \/ 2 - var\(--space-05\)\)/);
+  // 0.32.0: o AVATAR saiu desta família — tem a escala da referência (32 · 40 · 48), e não a do botão
+  // (32 · 36 · 40) —, com variável de passo própria, que a camada responsiva emite junto das outras.
+  expect(css).toMatch(/\.avatar \{[^}]*var\(--step-avatar,var\(--space-10\)\)/);
+  expect(css, "e o avatar NÃO lê mais a altura de controle").not.toMatch(/\.avatar \{[^}]*--step-h/);
 });
 
 test("toda variável de passo é registrada como NÃO-HERDÁVEL", () => {
@@ -171,7 +177,7 @@ test("toda variável de passo é registrada como NÃO-HERDÁVEL", () => {
   // esqueça disto volta a vazar. `syntax:"*"` não é detalhe — com sintaxe tipada o `@property`
   // exige `initial-value`, o fallback de `var()` nunca dispara e o core inteiro quebra.
   for (const v of ["--step-h", "--step-fs", "--step-gap", "--step-px", "--step-field-px",
-                   "--step-select-pe", "--step-icon", "--step-qr", "--step-avatar-fs"]) {
+                   "--step-select-pe", "--step-icon", "--step-qr", "--step-avatar-fs", "--step-avatar"]) {
     expect(css, `${v} sem registro herda e vaza para dentro dos filhos`)
       .toContain(`@property ${v} { syntax:"*"; inherits:false; }`);
   }

@@ -13,9 +13,12 @@
   "sizes": [
     "sm",
     "md",
-    "lg"
+    "lg",
+    "xl"
   ],
-  "responsive": {"size": "visual"},
+  "responsive": {
+    "size": "visual"
+  },
   "states": [
     "spinning"
   ],
@@ -47,9 +50,9 @@
   "props": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\"",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "\"md\"",
-      "description": "Same scale as the icons, so a spinner and a glyph on the same line measure alike."
+      "description": "16, 24, 32, 40 — the reference library's scale. The component default is md, 24; the bare glyph inside a button stays 16."
     },
     {
       "name": "label",

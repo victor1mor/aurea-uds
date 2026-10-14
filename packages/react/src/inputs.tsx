@@ -10,4 +10,4 @@ export {Textarea, Checkbox, Radio, Switch, Range} from "./markup.js";
 // PORTADOS no merge de 28/08/2026, da linhagem da ATIVIDADE-2 — não existiam na `main`.
 // Saem do `markup` pela mesma razão dos seis acima: nenhum usa hook, então chegam como
 // componente de SERVIDOR e não arrastam a fronteira de cliente com eles.
-export {Label, InputGroup, InputGroupAddon, type AddonSide, type AddonLayout, type FieldSize} from "./markup.js";
+export {Label, InputGroup, InputGroupAddon, type AddonSide, type AddonLayout, type FieldSize, type FieldVariant} from "./markup.js";

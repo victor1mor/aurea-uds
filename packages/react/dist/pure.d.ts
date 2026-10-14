@@ -15,9 +15,12 @@ export interface AureaStrings {
     close: string;
     confirmCancel: string;
     dataError: string;
+    dataCrashed: string;
+    dataRetry: string;
     dataEmpty: string;
     confirmProceed: string;
     paginationLabel: string;
+    paginationPage: string;
     previous: string;
     next: string;
     breadcrumbLabel: string;
@@ -26,6 +29,9 @@ export interface AureaStrings {
     tableLabel: string;
     commandLabel: string;
     commandPlaceholder: string;
+    commandHintMove: string;
+    commandHintSelect: string;
+    commandHintClose: string;
     dismissNotification: string;
     toolbarLabel: string;
     loading: string;
@@ -166,6 +172,8 @@ export interface AureaStrings {
     graphZoomOut: string;
     graphFit: string;
     graphLegend: string;
+    graphLegendKind: string;
+    graphLegendStatus: string;
     graphOverview: string;
     graphConnections: string;
     graphShow: string;
@@ -209,6 +217,8 @@ export interface AureaStrings {
     qrCode: string;
     chartLabel: string;
     copyCode: string;
+    codeBlockPreview: string;
+    codeBlockCode: string;
     copied: string;
     linkCopied: string;
     linkCopyFailed: string;
@@ -220,6 +230,16 @@ export interface AureaStrings {
     bottomNavLabel: string;
     themeToDark: string;
     themeToLight: string;
+    datePlaceholder: string;
+    dateRangePlaceholder: string;
+    colorPicker: string;
+    colorArea2D: string;
+    colorChannel: Record<"hue" | "saturation" | "brightness" | "lightness" | "red" | "green" | "blue" | "alpha", string>;
+    colorHue: Record<"red" | "orange" | "yellow" | "green" | "cyan" | "blue" | "purple" | "magenta" | "pink" | "brown" | "gray" | "white" | "black", string>;
+    colorTone: Record<"veryDark" | "dark" | "light" | "veryLight" | "vivid" | "pale" | "grayish", string>;
+    colorNameFormat: string;
+    colorHex: string;
+    colorSwatches: string;
     universalState: Record<UniversalState, string>;
 }
 export declare const defaultStrings: AureaStrings;

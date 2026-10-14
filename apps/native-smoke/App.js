@@ -45,6 +45,8 @@ import {
   // exatamente o que um teste rodando em Node não pode responder.
   Combobox, SearchField, NumberField, Image as AureaImage, Gallery,
   separadoresDoLocale, formatarNumero,
+  // 0.32 (passo 9b): as nove peças que faltavam no nativo.
+  Accordion, ScrollShadow, SkeletonGroup, PressableFeedback, Slider, OTPField, TagGroup, Popover, DropdownMenu,
 } from "@aurea-uds/native";
 import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 
@@ -96,6 +98,8 @@ import IconListBullets from "@aurea-uds/native/icons/list-bullets";
 import IconListBulletsFill from "@aurea-uds/native/icons/list-bullets-fill";
 import IconCaretDown from "@aurea-uds/native/icons/caret-down";
 import IconX from "@aurea-uds/native/icons/x";
+// 0.32: o X das janelas e dos avisos é o `CloseButton`, que pede o X em traço grosso, como o da web.
+import IconXBold from "@aurea-uds/native/icons/x-bold";
 // ⚠ Os PADRÕES de componentes do Lote 3, achados rodando no aparelho em 09/09/2026: o `NavList`
 // cai em `caret-right`, e o `Stepper` em `check`/`x-circle`. Eles não aparecem em nenhuma prop
 // escrita aqui — vêm do valor padrão lá dentro —, e é por isso que o aviso do `Icon` existe.
@@ -128,7 +132,7 @@ const ICONES = criarRegistroDeIcones({
   "bell": IconBell, "bell-fill": IconBellFill, "bell-slash": IconBellSlash, "push-pin": IconPushPin,
   "squares-four": IconSquaresFour, "squares-four-fill": IconSquaresFourFill,
   "list-bullets": IconListBullets, "list-bullets-fill": IconListBulletsFill,
-  "caret-down": IconCaretDown, "x": IconX,
+  "caret-down": IconCaretDown, "x": IconX, "x-bold": IconXBold,
   "check": IconCheck, "caret-right": IconCaretRight,
   "magnifying-glass": IconMagnifyingGlass, "minus": IconMinus, "image": IconImage,
   "moon": IconMoon, "moon-fill": IconMoonFill, "sun": IconSun, "sun-fill": IconSunFill,
@@ -247,6 +251,8 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <Bloco0320b t={t} />
+      <Bloco0320 t={t} />
       <BlocoLoteN t={t} />
       <BlocoLoteL t={t} />
       <BlocoLoteJ t={t} />
@@ -1608,6 +1614,137 @@ function BlocoBarraParada({t}) {
 // 0.29 (ADR-0063): o cartão `contrast` e o traço `accent` — a tela Início do app que pediu. O que
 // só o aparelho responde: no Android, o traço é uma faixa numa camada que se recorta no canto do
 // cartão (a borda mais grossa só em cima desenha errado lá, react-native#51926).
+// 0.32 (passo 9a): a escala de 48 do nativo, as medidas do nativo da referência, para o dedo. O que só
+// o aparelho responde: se o botão de 48 e o campo de 48 cabem na tela sem parecer grandes demais, se
+// a bolinha em cápsula do interruptor desliza sem pular, e se a barra de baixo ficou IGUAL (ela não
+// podia mudar; a bancada mediu igual no navegador, o aparelho confirma).
+function Bloco0320({t}) {
+  const [marca, setMarca] = React.useState(true);
+  const [liga, setLiga] = React.useState(true);
+  const [plano, setPlano] = React.useState("mensal");
+  const [janela, setJanela] = React.useState(null);
+  const fila = {flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center"};
+  return (
+    <Bloco t={t} n="0.32" titulo="A escala de 48 do nativo"
+      criterio={"1) Os três botões têm 40, 48 e 56 de altura; o do meio é da mesma altura do campo. "
+        + "2) A caixa de marcar e a bolinha da opção têm 24; o interruptor tem 48 × 24 e a bolinha dele "
+        + "é uma cápsula que desliza sem pular. 3) Os avatares crescem 40, 48 e 64. 4) Diálogo, gaveta "
+        + "e folha de baixo: título de 18, X redondo no canto, recheio de 20. 5) As barras de baixo dos "
+        + "blocos 0.17 e 0.19.1 estão IGUAIS às de antes (altura, ícones, nomes)."}>
+      <View style={fila}>
+        <Button size="sm">Pequeno</Button>
+        <Button tone="brand">Salvar</Button>
+        <Button size="lg">Grande</Button>
+      </View>
+      <Input placeholder="E-mail" accessibilityLabel="E-mail" />
+      <View style={fila}>
+        <Checkbox label="Lembrar" checked={marca} onChange={setMarca} />
+        <Switch label="Avisos" checked={liga} onChange={setLiga} />
+      </View>
+      <RadioGroup label="Plano" value={plano} onValueChange={setPlano}>
+        <RadioGroup.Item value="mensal" label="Mensal" />
+        <RadioGroup.Item value="anual" label="Anual" />
+      </RadioGroup>
+      <View style={fila}>
+        <Avatar size="sm" fallback="AN" />
+        <Avatar fallback="CU" />
+        <Avatar size="lg" fallback="WR" />
+        <Spinner />
+      </View>
+      <Alert variant="success" title="Relatório enviado">Os três destinatários já podem abrir.</Alert>
+      <View style={fila}>
+        <Button onPress={() => setJanela("dialog")}>Diálogo</Button>
+        <Button onPress={() => setJanela("drawer")}>Gaveta</Button>
+        <Button onPress={() => setJanela("sheet")}>Folha de baixo</Button>
+      </View>
+      <Dialog open={janela === "dialog"} title="Renomear o projeto" onClose={() => setJanela(null)}
+        footer={<Button tone="brand" onPress={() => setJanela(null)}>Salvar</Button>}>
+        <Input placeholder="Relatórios" accessibilityLabel="Nome" />
+      </Dialog>
+      <Drawer open={janela === "drawer"} title="Filtros" onClose={() => setJanela(null)}>
+        <AText>O título de 18, peso médio, e o X no canto.</AText>
+      </Drawer>
+      <BottomSheet open={janela === "sheet"} title="Escolha o período" onClose={() => setJanela(null)}>
+        <AText>A folha com recheio de 20 e o canto de 32.</AText>
+      </BottomSheet>
+    </Bloco>
+  );
+}
+
+// 0.32 (passo 9b): as nove peças novas do nativo. O que só o aparelho responde: o painel do menu e do
+// popover não fica embaixo da barra de status nem sai da tela; a onda do toque nasce no dedo e não
+// pisca no primeiro toque; o fio do ScrollShadow só aparece na ponta onde há mais lista; o X da
+// etiqueta e a etiqueta são DOIS alvos para o VoiceOver e o TalkBack; o código abre o teclado de números.
+function Bloco0320b({t}) {
+  const [abertos, setAbertos] = React.useState(["a"]);
+  const [faixa, setFaixa] = React.useState([20, 80]);
+  const [codigo, setCodigo] = React.useState("");
+  const [tags, setTags] = React.useState([{id: "news", label: "Notícias"}, {id: "travel", label: "Viagem"},
+    {id: "games", label: "Jogos"}, {id: "shop", label: "Compras"}]);
+  const [escolhidas, setEscolhidas] = React.useState(["travel"]);
+  const [carregando, setCarregando] = React.useState(true);
+  const [ordem, setOrdem] = React.useState("data");
+  const [ultimo, setUltimo] = React.useState("—");
+  const fila = {flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center"};
+  const itensDoMenu = [
+    {label: "Renomear", onClick: () => setUltimo("Renomear")},
+    {label: "Compartilhar", onClick: () => setUltimo("Compartilhar")},
+    "separator",
+    {kind: "radiogroup", label: "Ordenar por", value: ordem, onValueChange: setOrdem,
+      items: [{value: "data", label: "Data"}, {value: "nome", label: "Nome"}]},
+    {kind: "submenu", label: "Mover para", items: [{label: "Arquivo", onClick: () => setUltimo("Arquivo")},
+      {label: "Lixeira", onClick: () => setUltimo("Lixeira")}]},
+    {label: "Excluir", destructive: true, onClick: () => setUltimo("Excluir")},
+  ];
+  return (
+    <Bloco t={t} n="0.32b" titulo="As nove peças novas do nativo"
+      criterio={"1) Accordion: um aberto de cada vez; a seta gira; o realce do dedo é em cápsula. "
+        + "2) A lista dentro do ScrollShadow: no topo, só o fio de baixo; no meio, os dois; no fim, só o de cima. "
+        + "3) SkeletonGroup: as três caixas pulsam JUNTAS; \"Carregou\" troca pelo texto. "
+        + "4) A onda do toque nasce no dedo e não pisca no canto no primeiro toque. "
+        + "5) O Slider arrasta as duas alças; o código abre o teclado de números. "
+        + "6) Etiquetas: o X e a etiqueta são dois alvos para o leitor de tela. "
+        + "7) O menu e o popover abrem perto do botão, fora da barra de status, e fecham ao tocar fora."}>
+      <Accordion value={abertos} onValueChange={setAbertos} items={[
+        {id: "a", title: "Como instalo?", content: "Instale os pacotes e ponha o AureaProvider na raiz do app."},
+        {id: "b", title: "Funciona no tema escuro?", content: "Sim: as cores vêm do tema."},
+        {id: "c", title: "Item desligado", content: "—", disabled: true},
+      ]} />
+      <ScrollShadow>
+        <ScrollView style={{height: 120}} nestedScrollEnabled>
+          {Array.from({length: 12}, (_, i) => <AText key={i}>{`Linha ${i + 1} da lista que rola`}</AText>)}
+        </ScrollView>
+      </ScrollShadow>
+      <SkeletonGroup isLoading={carregando}>
+        <View style={{gap: 8}}>
+          <Skeleton height={16} width="70%"><AText>O título chegou.</AText></Skeleton>
+          <Skeleton height={16}><AText>A primeira linha do texto.</AText></Skeleton>
+          <Skeleton height={16} width="40%"><AText>Fim.</AText></Skeleton>
+        </View>
+      </SkeletonGroup>
+      <Button size="sm" onPress={() => setCarregando((c) => !c)}>{carregando ? "Carregou" : "Carregar de novo"}</Button>
+      <PressableFeedback onPress={() => setUltimo("Cartão")} accessibilityLabel="Cartão que responde ao toque"
+        style={{borderRadius: 22, padding: 16, backgroundColor: t.color.card}}>
+        <PressableFeedback.Highlight />
+        <PressableFeedback.Ripple />
+        <AText weight={600}>Toque aqui: encolhe um pouco, acende e faz a onda</AText>
+      </PressableFeedback>
+      <Slider label="Preço" value={faixa} onValueChange={setFaixa} min={0} max={100} step={5}
+        thumbLabels={["Mínimo", "Máximo"]} />
+      <OTPField label="Código" length={6} value={codigo} onValueChange={setCodigo} />
+      <TagGroup label="Assuntos" selectionMode="multiple" items={tags} selectedKeys={escolhidas}
+        onSelectionChange={setEscolhidas} onRemove={(ids) => setTags((xs) => xs.filter((x) => !ids.includes(x.id)))} />
+      <View style={fila}>
+        <DropdownMenu label="Ações do arquivo" trigger={<Button>Menu</Button>} items={itensDoMenu} />
+        <Popover trigger={<Button>Popover</Button>} title="Por que 849?" arrow>
+          <AText>Execuções nos últimos 30 dias, contando as que falharam.</AText>
+        </Popover>
+      </View>
+      <AText size="sm" tone="muted">{`Último toque: ${ultimo} · ordem: ${ordem}`}</AText>
+    </Bloco>
+  );
+}
+
 function BlocoLoteN({t}) {
   const [toques, setToques] = React.useState(0);
   const [escolha, setEscolha] = React.useState("revisao");

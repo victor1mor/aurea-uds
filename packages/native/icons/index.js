@@ -1,7 +1,7 @@
 // GERADO por packages/native/build-icons-native.mjs. NÃO EDITAR.
 // Glifo do @phosphor-icons/core (Phosphor Icons, MIT) — ver NOTICE. Desenho copiado sem alteração.
 //
-// ⚠ ESTE BARRIL NÃO É A FORMA DOCUMENTADA. Ele traz os 2866 ícones ao grafo do bundler
+// ⚠ ESTE BARRIL NÃO É A FORMA DOCUMENTADA. Ele traz os 2867 ícones ao grafo do bundler
 // a menos que o tree-shaking do Metro (experimental, três flags, só em produção) esteja
 // ligado. A forma que não depende de configuração alheia é o caminho profundo:
 //
@@ -2865,6 +2865,7 @@ export {default as Wrench} from "./wrench.js";
 export {default as WrenchFill} from "./wrench-fill.js";
 export {default as X} from "./x.js";
 export {default as XFill} from "./x-fill.js";
+export {default as XBold} from "./x-bold.js";
 export {default as XCircle} from "./x-circle.js";
 export {default as XCircleFill} from "./x-circle-fill.js";
 export {default as XSquare} from "./x-square.js";

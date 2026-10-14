@@ -1,0 +1,101 @@
+{
+  "name": "CheckboxGroup",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A group of checkboxes with a label, a description and an error, that keeps the list of what is checked.",
+  "icon": "list-checks",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "invalid",
+    "disabled"
+  ],
+  "tokens": [
+    "--space-4",
+    "--space-2",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--muted-foreground",
+    "--danger-400"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "checkbox",
+    "keyboard": [
+      "Tab",
+      "Space"
+    ],
+    "keyboardNote": "role=group named by the label; description and error in aria-describedby. Each checkbox is a native input: Tab moves between them, Space toggles."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Checkbox",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#CheckboxGroup"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. The group's name."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Help text under the label, read by screen readers with the group."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The error at the end; each checkbox gets aria-invalid."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string[]",
+      "default": "—",
+      "description": "The values of the checked boxes. Each Checkbox inside says its own value."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string[]) => void",
+      "default": "—",
+      "description": "Called with the new list."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "The name of every checkbox, for the form."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables every checkbox inside."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "The red asterisk after the label, like Field."
+    }
+  ]
+}

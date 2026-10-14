@@ -84,6 +84,9 @@ describe("Button — API do exemplar", () => {
     const el = screen.getByRole("button", {name: /Command/});
     expect(el).toHaveAttribute("aria-keyshortcuts", "⌘K");
     expect(within(el).getByText("⌘K").tagName).toBe("KBD");
+    // O tamanho de dentro do botão é declarado por CLASSE (`btn-kbd`), e não pelo contexto: com o botão de busca
+    // do site em toda página, o `.kbd` de 24 e o de 20 dividiam a página, e a trava de geometria reprovou (14/10/2026).
+    expect(within(el).getByText("⌘K")).toHaveClass("kbd", "btn-kbd");
   });
 
   test("fullWidth só acrescenta a classe de largura — não troca a forma", () => {
@@ -124,10 +127,11 @@ describe("Button — API do exemplar", () => {
     expect(el).toHaveTextContent("Enviando…");
   });
 
-  test("as cinco alturas e as onze variantes viram classe, e md/secondary não sujam o markup", () => {
+  // 0.32.0: o padrão é o `tertiary` (a cara de sempre; decisão A do Victor), e não mais o `secondary`.
+  test("as cinco alturas e as variantes viram classe, e md/tertiary (o padrão) não sujam o markup", () => {
     wrap(<><Button size="xs" variant="link-danger">A</Button><Button>B</Button></>);
     expect(screen.getByRole("button", {name: "A"})).toHaveClass("btn-xs", "btn-link-danger");
-    expect(screen.getByRole("button", {name: "B"}).className).toBe("btn btn-secondary");
+    expect(screen.getByRole("button", {name: "B"}).className).toBe("btn btn-tertiary");
   });
 
   test("Kbd é <kbd> de verdade, dentro ou fora do botão", () => {
@@ -952,7 +956,9 @@ describe("DataGrid", () => {
     const user = userEvent.setup();
     wrap(<DataGrid data={AGENTES} columns={COLUNAS} pageSize={2} />);
     expect(linhas()).toHaveLength(2);
-    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "Page 1"})).toHaveAttribute("aria-current", "page"); // 0.32.0: os números (era "1 / 3")
+    expect(screen.getByRole("button", {name: "Page 3"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Page 4"})).not.toBeInTheDocument();
     expect(screen.getByRole("button", {name: "Previous"})).toBeDisabled();
 
     await user.click(screen.getByRole("button", {name: "Next"}));
@@ -1179,7 +1185,9 @@ describe("DataGrid controlado (F1) e dados do servidor (F2)", () => {
     const user = userEvent.setup();
     const onPageChange = vi.fn();
     wrap(<DataGrid data={AGENTES} columns={COLUNAS} pageSize={2} page={1} onPageChange={onPageChange} />);
-    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    expect(screen.getByRole("button", {name: "Page 1"})).toHaveAttribute("aria-current", "page"); // 0.32.0: os números (era "1 / 3")
+    expect(screen.getByRole("button", {name: "Page 3"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Page 4"})).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", {name: "Next"}));
     expect(onPageChange).toHaveBeenCalledWith(2); // 2, não o índice 1 do motor
@@ -1213,7 +1221,9 @@ describe("DataGrid controlado (F1) e dados do servidor (F2)", () => {
     const pagina = AGENTES.slice(0, 2); // o servidor mandou UMA página de 2
     wrap(<DataGrid data={pagina} columns={COLUNAS} pageSize={2} manualPagination rowCount={5} />);
     expect(linhas()).toHaveLength(2);
-    expect(screen.getByText("1 / 3")).toBeInTheDocument(); // ceil(5/2), do servidor
+    expect(screen.getByRole("button", {name: "Page 1"})).toHaveAttribute("aria-current", "page"); // 0.32.0: os números (era "1 / 3")
+    expect(screen.getByRole("button", {name: "Page 3"})).toBeInTheDocument();
+    expect(screen.queryByRole("button", {name: "Page 4"})).not.toBeInTheDocument(); // ceil(5/2), do servidor
   });
 
   test("F2 — sem rowCount a paginação some: o limite declarado na ficha", () => {

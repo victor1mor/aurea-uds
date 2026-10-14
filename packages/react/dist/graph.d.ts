@@ -67,9 +67,19 @@ export interface GraphEdgeItem {
     pattern?: GraphEdgePattern;
     weight?: GraphEdgeWeight;
     mark?: GraphEdgeMark;
+    /** O ESTADO da ligação (MNT-26), como o selo do nó: a palavra e o tom. O tom pinta o traço; a palavra
+     *  entra na parte "Estado" da legenda, com a amostra na cor — quem não distingue a cor lê a palavra.
+     *  `mark` é o SINAL do estado no meio da linha (o × do "Caído"), ao lado da marca do tipo, para o
+     *  estado se ver também sem cor. O TIPO da ligação (cobre, fibra) continua no desenho, no `mark` da
+     *  linha e no `legend`: são duas coisas, e a legenda as mostra separadas (decisão do Victor, 12/10/2026). */
+    status?: {
+        label: string;
+        tone?: GraphTone;
+        mark?: GraphEdgeMark;
+    };
     /** Um número no meio da linha: os membros de uma agregação (LAG). */
     count?: number;
-    /** O nome desta espécie de linha na legenda automática (`legend`). */
+    /** O nome do TIPO desta linha na parte "Tipo de ligação" da legenda automática (`legend`). */
     legend?: string;
     /** Quando dois rótulos se encostam, fica o de prioridade MAIOR; no empate, o que vem antes na
      *  lista (MNT-12.5). O nome da porta na ponta conta com a mesma prioridade da linha. */

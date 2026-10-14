@@ -123,10 +123,12 @@ describe("R-21 · o que aparece", () => {
     render(<Envolve><FileInput value={[DOC]} /></Envolve>);
     expect(gatilho()).toBeUndefined();
   });
-  it("o gatilho tem a medida do campo: altura `controlHMd` e cápsula", () => {
+  // 0.32.0: a medida do campo passou à escala de toque (48; era o `controlHMd`, 36). O `FileInput`
+  // a lê do `inputs.tsx`, então acompanha sem mudar de código.
+  it("o gatilho tem a medida do campo: altura `touchControlHMd` e cápsula", () => {
     render(<Envolve><FileInput /></Envolve>);
     const e = estilo(gatilho()!);
-    expect(e.height).toBe(t.size.controlHMd);
+    expect(e.height).toBe(t.size.touchControlHMd);
     expect(e.borderRadius).toBe(t.size.radiusControl);
     expect(e.borderColor).toBe(t.color.borderStrong);
   });

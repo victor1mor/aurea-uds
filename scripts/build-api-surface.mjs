@@ -112,7 +112,11 @@ for (const file of files) {
     for (let j = inicio; j < src.length; j++) {
       const ch = src[j];
       if ("{([<".includes(ch)) depth++;
-      else if ("})]>".includes(ch)) depth--;
+      else if ("})]".includes(ch)) depth--;
+      // O `>` de uma SETA não fecha nada — o mesmo defeito que o `parseMembers` pagou em 29/08/2026, aqui
+      // no corte do alias. Achado em 12/10/2026: `children: ReactNode | (() => ReactNode);` cortava o
+      // `DataStateProps` no `;` dele, e as props de depois (`catchErrors`, `onCatch`) sumiam da superfície.
+      else if (ch === ">" && src[j - 1] !== "=") depth--;
       else if (ch === ";" && depth <= 0) { fim = j; break; }
     }
     const corpo = src.slice(inicio, fim);
@@ -258,7 +262,14 @@ function resolveProps(name, seen = new Set()) {
   //
   // Isto vai se repetir. A união discriminada é o mecanismo do `G-API-02` para exigir, no TIPO, o
   // que hoje se pede em prosa — e o próximo a usá-la é o `items | children` do Menu.
-  const cru = iface.props.map((p) => ({...p, values: expand(p.type)}));
+  const own = somarRamos(iface.props.map((p) => ({...p, values: expand(p.type)})));
+  const names = new Set(own.map((p) => p.name));
+  return [...inherited.filter((p) => !names.has(p.name)), ...own];
+}
+
+// A soma dos ramos, separada para servir aos dois lugares onde uma união aparece: dentro de um tipo
+// (`CardProps`, acima) e direto no parâmetro do componente (`Base & (A | B)`, abaixo).
+function somarRamos(cru) {
   const porNome = new Map();
   for (const p of cru) {
     const antes = porNome.get(p.name);
@@ -271,9 +282,7 @@ function resolveProps(name, seen = new Set()) {
     // precisa fornecê-la em algum caminho.
     antes.optional = antes.optional && p.optional;
   }
-  const own = [...porNome.values()];
-  const names = new Set(own.map((p) => p.name));
-  return [...inherited.filter((p) => !names.has(p.name)), ...own];
+  return [...porNome.values()];
 }
 
 // Passo 2 — componentes exportados por módulo.
@@ -313,6 +322,15 @@ for (const file of files) {
     for (const piece of typeText.split("&")) {
       const n = /^\s*([A-Za-z_$][\w$]*)\s*$/.exec(piece)?.[1];
       if (n && interfaces[n] && n !== propsName) props.push(...resolveProps(n));
+      // A UNIÃO DIRETO NO PARÂMETRO — `Base & (A | B)`. O `Slider` (o número ou a cor, 0.32.0) e o
+      // `ColorSwatch` (a amostra ou o grupo de escolha) têm esta forma, e o leitor só via a base:
+      // o `Slider` publicava 8 props de 20, e o check 14 acusava `channel` de não ser prop. Os ramos
+      // se SOMAM, com a mesma regra da união dentro de um tipo (`somarRamos`).
+      const uniao = /^\s*\(([\s\S]+)\)\s*$/.exec(piece)?.[1];
+      if (uniao) {
+        const ramos = uniao.split("|").map((r) => /^\s*([A-Za-z_$][\w$]*)/.exec(r)?.[1]).filter((r) => r && interfaces[r]);
+        props.push(...somarRamos(ramos.flatMap((r) => resolveProps(r))));
+      }
     }
     const braceAt = typeText.indexOf("{");
     if (braceAt >= 0) {

@@ -61,16 +61,20 @@ import type {AureaTokens} from "./tokens.js";
  * peça nossa —
  * e as medidas saem de escalas que JÁ existem, nenhuma nova:
  *   letra    `text3xl` (30) em seminegrito — o título 2 (`h2` do B-02). Escolha do Victor.
- *   altura   `controlHXl` — o degrau seguinte da escala de altura dos controles, que muda com a
- *            densidade como as outras três.
+ *   altura   o degrau acima do `lg` na escala de toque (`touchControlHLg + space2`, 64 no
+ *            confortável; até a 0.31.0 era o `controlHXl`, 50), como o `Button xl`.
  *   largura  `space24` (96): o `space16` (64) do campo comum não cabe "1.234" em 30.
  *   botões   os do `lg`, o maior do `IconButton`.
  */
 export type AureaNumberFieldSize = AureaFieldSize | "display";
 
+// 0.32.0: o campo comum na altura de TOQUE, como o `Input` (40 · 48 · 56; era 32 · 36 · 40). O
+// `display` (peça nossa, sem medida na referência) sobe para o degrau acima do `lg` que o `Button xl`
+// também usa: `touchControlHLg + space2` = 64 (era o `controlHXl`, 50, que com a escala nova ficaria
+// MAIS BAIXO que o `lg`).
 const alturaDoTamanho = (t: AureaTokens, s: AureaNumberFieldSize) =>
-  s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg
-    : s === "display" ? t.size.controlHXl : t.size.controlHMd;
+  s === "sm" ? t.size.touchControlHSm : s === "lg" ? t.size.touchControlHLg
+    : s === "display" ? t.size.touchControlHLg + t.size.space2 : t.size.touchControlHMd;
 const fonteDoTamanho = (t: AureaTokens, s: AureaNumberFieldSize) =>
   s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg
     : s === "display" ? t.size.text3xl : t.size.textBase;  // ADR-0050: um degrau acima da web

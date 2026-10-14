@@ -25,13 +25,16 @@ const plano = (e: unknown) => (StyleSheet.flatten(e as never) ?? {}) as Estilo;
 const selo = () => __instancias("View").map((p) => plano(p.style)).filter((e) => e.position === "absolute").at(-1)!;
 
 describe("R-24 · a folga da área de toque do IconButton", () => {
-  it("no md, o alvo de 44 passa 4 do círculo de 36 de cada lado", () => {
-    const lado = t.size.controlHMd;
-    expect(folgaDoToque(t, "md")).toBe((Math.max(lado, t.size.targetMin) - lado) / 2);
-    expect(folgaDoToque(t, "md")).toBeGreaterThan(0);
+  // 0.32.0: o `IconButton` adotou a escala de toque da referência (40 · 48 · 56). O md tinha 36 e
+  // sobravam 4 de cada lado; agora tem 48, maior que o alvo, e a folga é 0. Sobra no `sm` (40).
+  it("no sm, o alvo de 44 passa 2 do círculo de 40 de cada lado", () => {
+    const lado = t.size.touchControlHSm;
+    expect(folgaDoToque(t, "sm")).toBe((Math.max(lado, t.size.targetMin) - lado) / 2);
+    expect(folgaDoToque(t, "sm")).toBe(2);
   });
-  it("quando o desenho já é maior que o alvo, não há folga", () => {
-    expect(folgaDoToque(t, "xl")).toBe(Math.max(0, (Math.max(t.size.controlHXl, t.size.targetMin) - t.size.controlHXl) / 2));
+  it("quando o desenho já é maior que o alvo, não há folga (md, 48, e xl, 64)", () => {
+    expect(folgaDoToque(t, "md")).toBe(0);
+    expect(folgaDoToque(t, "xl")).toBe(Math.max(0, (Math.max(t.size.touchControlHLg + t.size.space2, t.size.targetMin) - (t.size.touchControlHLg + t.size.space2)) / 2));
   });
 });
 

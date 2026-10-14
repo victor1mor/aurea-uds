@@ -9,7 +9,36 @@ import {Icon} from "./system.js";
 // copyable: o gatilho é marcado com data-aurea-copy e o COMPORTAMENTO mora no aurea.js do
 // core (uma implementação para React e para HTML puro). O onClick daqui atende quem só
 // carrega o pacote React; ele para a propagação pro core não copiar duas vezes.
-export function CodeBlock({children,language="text",copyable,className}:{children:string;language?:string;copyable?:boolean;className?:string}){
+// DOC-02 (0.32.0): a CAIXA DE EXEMPLO do site da Aurea virou o `preview` do `CodeBlock` — as abas
+// Prévia | Código (o controle segmentado ocupando a largura), a prévia no fundo afundado e o código sem
+// moldura. É a caixa do site de hoje (decisão do Victor, 06/10/2026: a da Aurea, não a da referência),
+// agora no pacote, para o site usar só peças da Aurea. O teclado é o das abas do APG: setas, Home e End.
+// Sem o `aurea.js` na página — quem troca a aba é o React.
+function CaixaDeExemplo({preview,codigo,className}:{preview:React.ReactNode;codigo:React.ReactNode;className?:string}){
+  const s=useAureaStrings();
+  const id=React.useId();
+  const [aba,setAba]=React.useState<"preview"|"code">("preview");
+  const refPrevia=React.useRef<HTMLButtonElement>(null), refCodigo=React.useRef<HTMLButtonElement>(null);
+  const ir=(a:"preview"|"code")=>{setAba(a);(a==="preview"?refPrevia:refCodigo).current?.focus()};
+  const tecla=(e:React.KeyboardEvent<HTMLButtonElement>)=>{
+    if(!["ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;
+    e.preventDefault();
+    ir(e.key==="Home"?"preview":e.key==="End"?"code":aba==="preview"?"code":"preview");
+  };
+  const botao=(a:"preview"|"code",rotulo:string)=><button type="button" role="tab" id={`${id}-${a}`} ref={a==="preview"?refPrevia:refCodigo}
+    className={aba===a?"active":undefined} aria-selected={aba===a} aria-controls={`${id}-${a}-panel`} tabIndex={aba===a?0:-1}
+    onClick={()=>setAba(a)} onKeyDown={tecla}>{rotulo}</button>;
+  return <div className={cx("demo code-preview",className)}>
+    <div className="demo-tabs"><div className="segmented" role="tablist">{botao("preview",s.codeBlockPreview)}{botao("code",s.codeBlockCode)}</div></div>
+    <div className="demo-panel" data-panel="preview" role="tabpanel" id={`${id}-preview-panel`} aria-labelledby={`${id}-preview`} tabIndex={0} hidden={aba!=="preview"}>{preview}</div>
+    <div className="demo-panel demo-code" data-panel="code" role="tabpanel" id={`${id}-code-panel`} aria-labelledby={`${id}-code`} tabIndex={0} hidden={aba!=="code"}>{codigo}</div>
+  </div>;
+}
+export function CodeBlock({children,language="text",copyable,preview,className}:{children:string;language?:string;copyable?:boolean;
+  /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
+  preview?:React.ReactNode;className?:string}){
+if(preview!==undefined)return <CaixaDeExemplo preview={preview} className={className}
+  codigo={<CodeBlock language={language} copyable={copyable}>{children}</CodeBlock>}/>;
 const s=useAureaStrings();
 // tabIndex no <pre>: `.code-block` é `overflow:auto` por construção, então é REGIÃO ROLÁVEL
 // e não tem nada focável dentro — quem navega por teclado não alcança o código que passa da

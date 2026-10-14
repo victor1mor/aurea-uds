@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/react",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Os componentes React da Aurea UDS. Importe @aurea-uds/fonts/css e @aurea-uds/core/css junto.",
   "keywords": [
     "aurea",
@@ -23,7 +23,9 @@
     "access": "public"
   },
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/graph-worker.js"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -107,6 +109,10 @@
     "./graph": {
       "types": "./dist/graph.d.ts",
       "import": "./dist/graph.js"
+    },
+    "./graph-worker": {
+      "types": "./dist/graph-worker.d.ts",
+      "import": "./dist/graph-worker.js"
     },
     "./agents": {
       "types": "./dist/agents.d.ts",

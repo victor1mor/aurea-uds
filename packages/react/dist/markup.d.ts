@@ -1,4 +1,4 @@
-import React, { type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type RefAttributes, type TextareaHTMLAttributes } from "react";
+import React, { type AnchorHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type RefAttributes, type TextareaHTMLAttributes } from "react";
 import { type Responsive } from "./pure.js";
 import type { ComponentSize } from "./actions.js";
 import type { SidebarItem } from "./navigation-client.js";
@@ -15,7 +15,7 @@ type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> &
     accent?: CardAccent;
 };
 export type CardProps = CardBase & ({
-    variant?: "base" | "raised" | "inset" | "selected" | "danger" | "contrast";
+    variant?: "base" | "raised" | "inset" | "outline" | "selected" | "danger" | "contrast";
     render?: ReactElement;
 } | {
     variant: "interactive";
@@ -182,9 +182,14 @@ export type TypographyWeight = "normal" | "medium" | "semibold" | "bold" | "extr
 export type TypographyAlign = "start" | "center" | "end" | "justify";
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type ParagraphSize = "base" | "sm" | "xs";
+/** A cor do texto com o NOME do nativo (DOC-11, os mesmos nomes na web e no nativo). `link` é o amarelo
+ *  de ESCREVER (legível nos dois temas); `primary` é o de PREENCHER, e no tema claro quase some — como no
+ *  nativo. As cores de estado são o par `-400` (ADR-0061). Vence o `color` quando os dois vêm. */
+export type TypographyTone = "default" | "muted" | "subtle" | "primary" | "link" | "danger" | "success" | "warning" | "info";
 interface TypographyBase {
     align?: TypographyAlign;
     color?: TypographyColor;
+    tone?: TypographyTone;
     weight?: TypographyWeight;
     truncate?: boolean;
     /** GAR-16 (0.28.0): algarismos da mesma largura — para número que alinha em coluna (preço, ano,
@@ -194,18 +199,18 @@ interface TypographyBase {
 export interface TextProps extends Omit<HTMLAttributes<HTMLSpanElement>, "color">, RefAttributes<HTMLSpanElement>, TypographyBase {
     type?: TypographyType;
 }
-export declare function Text({ type, align, color, weight, truncate, numeric, className, ...props }: TextProps): React.JSX.Element;
+export declare function Text({ type, align, color, tone, weight, truncate, numeric, className, ...props }: TextProps): React.JSX.Element;
 export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>, "color">, RefAttributes<HTMLHeadingElement>, TypographyBase {
     level?: HeadingLevel;
 }
-export declare function Heading({ level, align, color, weight, truncate, numeric, className, ...props }: HeadingProps): React.JSX.Element;
+export declare function Heading({ level, align, color, tone, weight, truncate, numeric, className, ...props }: HeadingProps): React.JSX.Element;
 export interface ParagraphProps extends Omit<HTMLAttributes<HTMLParagraphElement>, "color">, RefAttributes<HTMLParagraphElement>, TypographyBase {
     size?: ParagraphSize;
 }
-export declare function Paragraph({ size, align, color, weight, truncate, numeric, className, ...props }: ParagraphProps): React.JSX.Element;
+export declare function Paragraph({ size, align, color, tone, weight, truncate, numeric, className, ...props }: ParagraphProps): React.JSX.Element;
 export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>, "color">, RefAttributes<HTMLElement>, TypographyBase {
 }
-export declare function Code({ align, color, weight, truncate, className, ...props }: CodeProps): React.JSX.Element;
+export declare function Code({ align, color, tone, weight, truncate, className, ...props }: CodeProps): React.JSX.Element;
 export type BadgeEmphasis = "soft" | "solid" | "outline";
 export type BadgeSize = "xs" | "sm" | "md" | "lg";
 export type BadgePlacement = "top-end" | "top-start" | "bottom-end" | "bottom-start";
@@ -213,6 +218,9 @@ export type BadgeFit = "auto" | "content";
 export declare function formatBadgeCount(count: number, max?: number): string;
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttributes<HTMLSpanElement> {
     variant?: BadgeVariant;
+    /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
+     *  eixo do `variant`, e vence quando os dois vêm. */
+    tone?: BadgeVariant;
     /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
     emphasis?: BadgeEmphasis;
     size?: BadgeSize;
@@ -239,7 +247,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
      *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
     badgeContent?: ReactNode;
 }
-export declare function Badge({ variant, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
+export declare function Badge({ variant: variantProp, tone, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
 /** O tom da barra: a mesma lista fechada do `ButtonTone`. Pausado é `neutral`; falha é `danger`. */
 export type ProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 export interface ProgressProps {
@@ -252,10 +260,21 @@ export interface ProgressProps {
      *  que falta, bytes. Em texto, vai junto no `aria-valuetext`. */
     detail?: ReactNode;
     tone?: ProgressTone;
+    /** 0.32.0: o rótulo À MOSTRA, no alto à esquerda (o da barra da referência). Sem ele, o `label` só
+     *  nomeia a barra para o leitor de tela, como sempre. */
+    showLabel?: boolean;
+    /** 0.32.0: o valor ("60%") no alto à direita, quando não há `detail`. */
+    showValue?: boolean;
+    /** A espessura do trilho: sm 4, md 8, lg 12 — os da referência. */
+    size?: ProgressSize;
     className?: string;
 }
-export declare function Progress({ value, label, detail, tone, className }: ProgressProps): React.JSX.Element;
-export declare function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+export type ProgressSize = "sm" | "md" | "lg";
+export declare function Progress({ value, label, detail, tone, showLabel, showValue, size, className }: ProgressProps): React.JSX.Element;
+export type SkeletonAnimation = "pulse" | "none";
+export declare function Skeleton({ animation, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+    animation?: SkeletonAnimation;
+}): React.JSX.Element;
 export declare function AvatarGroup({ children, max, total, label, size, className }: {
     children: ReactNode;
     max?: number;
@@ -303,6 +322,8 @@ export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, RefAttributes<HTMLTextAreaElement> {
     size?: Responsive<FieldSize>;
+    /** 0.32.0, a da referência: `secondary` é o fundo neutro, para o campo dentro de um cartão. */
+    variant?: FieldVariant;
 }
 export declare const Textarea: React.ForwardRefExoticComponent<Omit<TextareaProps, "ref"> & RefAttributes<HTMLTextAreaElement>>;
 export declare function Checkbox({ label, labelHidden, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
@@ -324,6 +345,7 @@ export declare function Range({ orientation, className, ...props }: InputHTMLAtt
     orientation?: Responsive<RangeOrientation>;
 }): React.JSX.Element;
 export type FieldSize = Extract<ComponentSize, "sm" | "md" | "lg">;
+export type FieldVariant = "primary" | "secondary";
 export declare function Label({ htmlFor, className, children, ...props }: HTMLAttributes<HTMLLabelElement> & RefAttributes<HTMLLabelElement> & {
     htmlFor?: string;
 }): React.JSX.Element;
@@ -339,4 +361,62 @@ export declare function InputGroupAddon({ side, layout, className, children, ...
 export declare function AspectRatio({ ratio, className, style, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     ratio?: number;
 }): React.JSX.Element;
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>, RefAttributes<HTMLAnchorElement> {
+    /** Abre noutra aba e mostra a seta. */
+    external?: boolean;
+    /** Não navega: sai sem `href` e com `aria-disabled`. */
+    disabled?: boolean;
+}
+export declare function Link({ external, disabled, href, target, rel, className, children, ...props }: LinkProps): React.JSX.Element;
+export type ColorSwatchSize = "xs" | "sm" | "md" | "lg" | "xl";
+export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>, RefAttributes<HTMLSpanElement> {
+    /** Qualquer cor do CSS: `#f0c200`, `oklch(…)`, `var(--primary)`. */
+    color: string;
+    size?: ColorSwatchSize;
+    /** O nome que o leitor de tela anuncia ("Amarelo Aurea"). Sem ele, o valor da cor. */
+    label?: string;
+}
+export interface ColorSwatchOption {
+    color: string;
+    label?: string;
+    /** Esta cor não se escolhe (as outras sim). */
+    disabled?: boolean;
+}
+/** O que as duas formas têm em comum: a escala. (É a base que o leitor da API segue em `base & (a | b)`.) */
+export interface ColorSwatchBase {
+    size?: ColorSwatchSize;
+}
+export interface ColorSwatchPickerProps {
+    /** As cores para escolher — `"#0485f7"` ou `{color, label}`. É o que faz da amostra um grupo de escolha. */
+    options: readonly (string | ColorSwatchOption)[];
+    /** O nome do grupo no formulário, e o que faz das amostras UM grupo (as setas andam entre elas). */
+    name: string;
+    /** O nome do grupo para o leitor de tela ("Cor de destaque"). */
+    label: string;
+    value?: string;
+    defaultValue?: string;
+    /** O evento do navegador, como no `Radio`: `event.target.value` é a cor escolhida. */
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    /** `"grid"` (o padrão: em linha, quebrando) ou `"stack"` (em coluna), como na referência. */
+    layout?: "grid" | "stack";
+    /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
+    indicator?: ReactNode;
+    size?: ColorSwatchSize;
+    disabled?: boolean;
+    id?: string;
+    className?: string;
+}
+export declare function ColorSwatch(props: ColorSwatchBase & (ColorSwatchProps | ColorSwatchPickerProps)): React.JSX.Element;
+export type ProgressCircleSize = "sm" | "md" | "lg";
+export interface ProgressCircleProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
+    /** De `min` a `max`. Sem ele, o círculo gira. */
+    value?: number;
+    min?: number;
+    max?: number;
+    size?: ProgressCircleSize;
+    tone?: ProgressTone;
+    /** O nome que o leitor de tela anuncia ("Enviando o arquivo"). */
+    label: string;
+}
+export declare function ProgressCircle({ value, min, max, size, tone, label, className, ...props }: ProgressCircleProps): React.JSX.Element;
 export {};

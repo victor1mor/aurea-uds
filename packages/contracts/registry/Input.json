@@ -9,7 +9,10 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "primary",
+    "secondary"
+  ],
   "sizes": [
     "sm",
     "md",
@@ -103,6 +106,12 @@
       "type": "Responsive<FieldSize>",
       "default": "md",
       "description": "The system's size step (sm/md/lg), NOT the HTML size attribute — that one is a width in characters and it is deliberately shadowed here, because two meanings for one prop name is worse than losing the native one."
+    },
+    {
+      "name": "variant",
+      "type": "primary | secondary",
+      "default": "primary",
+      "description": "secondary is the neutral fill with no visible border, for a field inside a card."
     }
   ]
 }

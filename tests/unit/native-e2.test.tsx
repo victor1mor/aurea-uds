@@ -29,7 +29,8 @@ describe("E2 · o Button obedece o pai", () => {
   it("IconButton tem largura fixa, como o só-ícone da referência: nunca estica", () => {
     render(<Envolve><IconButton name="plus" label="Adicionar" /></Envolve>);
     expect(alvo().alignSelf).toBeUndefined();
-    expect(alvo().width).toBe(Math.max(t.size.controlHMd, t.size.targetMin));
+    // 0.32.0: o círculo do `md` segue a escala de toque da referência (48, era o `controlHMd`, 36).
+    expect(alvo().width).toBe(Math.max(t.size.touchControlHMd, t.size.targetMin));
   });
 });
 

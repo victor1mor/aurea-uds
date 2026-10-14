@@ -29,7 +29,9 @@ export default {
         '<Textarea />',
         '<Textarea size="lg" />',
       ].join("\n"),
-      render: () => h("div", {style: stack},
+      // 12 entre os três, e não 16: com o `sm` de 32 (0.32.0) os três somam 320, e a caixa da prévia
+      // tem 350 — quem cede é o conteúdo, nunca a caixa (ADR-0002).
+      render: () => h("div", {style: {...stack, gap: "var(--space-3)"}},
         h(Textarea, {size: "sm", "aria-label": "Small", defaultValue: "Small"}),
         h(Textarea, {"aria-label": "Medium", defaultValue: "Medium (default)"}),
         h(Textarea, {size: "lg", "aria-label": "Large", defaultValue: "Large"})),

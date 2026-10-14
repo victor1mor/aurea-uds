@@ -2,7 +2,9 @@ import React, { type ReactNode, type ReactElement } from "react";
 import { type Responsive } from "./pure.js";
 import { type IconName } from "./system.js";
 export type DialogSize = "xs" | "sm" | "md" | "lg" | "xl" | "full";
-export declare function Dialog({ open, title, children, footer, onClose, size, dismissible }: {
+export type DialogPlacement = "auto" | "center" | "top" | "bottom";
+export type DialogIconTone = "neutral" | "brand" | "info" | "success" | "warning" | "danger";
+export declare function Dialog({ open, title, children, footer, onClose, size, dismissible, icon, iconTone, placement }: {
     open: boolean;
     title: ReactNode;
     children: ReactNode;
@@ -10,8 +12,11 @@ export declare function Dialog({ open, title, children, footer, onClose, size, d
     onClose: () => void;
     size?: DialogSize;
     dismissible?: boolean;
+    icon?: IconName;
+    iconTone?: DialogIconTone;
+    placement?: DialogPlacement;
 }): React.JSX.Element;
-export declare function ConfirmDialog({ open, title, description, confirmLabel, cancelLabel, destructive, onConfirm, onCancel }: {
+export declare function ConfirmDialog({ open, title, description, confirmLabel, cancelLabel, destructive, onConfirm, onCancel, icon, iconTone, placement }: {
     open: boolean;
     title: ReactNode;
     description: ReactNode;
@@ -20,13 +25,18 @@ export declare function ConfirmDialog({ open, title, description, confirmLabel, 
     destructive?: boolean;
     onConfirm: () => void;
     onCancel: () => void;
+    icon?: IconName;
+    iconTone?: DialogIconTone;
+    placement?: DialogPlacement;
 }): React.JSX.Element;
-export declare function Drawer({ open, title, children, onClose, side }: {
+export type DrawerSide = "left" | "right" | "top" | "bottom";
+export declare function Drawer({ open, title, children, footer, onClose, side }: {
     open: boolean;
     title: ReactNode;
     children: ReactNode;
+    footer?: ReactNode;
     onClose: () => void;
-    side?: "left" | "right";
+    side?: DrawerSide;
 }): React.JSX.Element;
 export type AccessGateProps = {
     allowed: boolean;
@@ -42,16 +52,20 @@ export type AccessGateProps = {
 });
 export declare function AccessGate({ allowed, children, ...resto }: AccessGateProps): React.JSX.Element;
 export type OverlaySide = "top" | "right" | "bottom" | "left";
-export declare function Tooltip({ children, content, side }: {
+export declare function Tooltip({ children, content, side, arrow, delay, closeDelay }: {
     children: ReactElement;
     content: ReactNode;
     side?: OverlaySide;
+    arrow?: boolean;
+    delay?: number;
+    closeDelay?: number;
 }): React.JSX.Element;
-export declare function Popover({ trigger, title, children, side }: {
+export declare function Popover({ trigger, title, children, side, arrow }: {
     trigger: ReactElement;
     title?: ReactNode;
     children: ReactNode;
     side?: OverlaySide;
+    arrow?: boolean;
 }): React.JSX.Element;
 export declare function HoverCard({ trigger, children, side }: {
     trigger: ReactElement;

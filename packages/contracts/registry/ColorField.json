@@ -1,0 +1,209 @@
+{
+  "name": "ColorField",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "A field for a colour: the swatch in front and the code — hex, rgb(), hsl() or hsb() — applied on Enter or when it loses focus; or one channel as a number. Inside a Field, the label, description and error are the Field's.",
+  "axes": {
+    "channel": [
+      "hue",
+      "saturation",
+      "brightness",
+      "lightness",
+      "red",
+      "green",
+      "blue",
+      "alpha"
+    ],
+    "colorSpace": [
+      "hsb",
+      "hsl",
+      "rgb"
+    ]
+  },
+  "icon": "palette",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [
+    "primary",
+    "secondary"
+  ],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "focus",
+    "invalid",
+    "disabled",
+    "readonly"
+  ],
+  "tokens": [
+    "--space-6"
+  ],
+  "a11y": {
+    "role": "textbox",
+    "apg": "A text field (the code) or, with channel, a spinbutton with the channel's range and its value written (\"208°, vivid blue\"). The swatch in front is decorative. Inside a Field, the label names it, the description describes it and the error marks it invalid.",
+    "keyboard": [
+      "Enter",
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Enter applies the code (so does leaving the field); text that is not a colour goes back. With channel, the arrows move one step, Page Up/Down the large step, Home/End the ends."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ColorPicker",
+      "ColorSwatch",
+      "InputGroup",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#ColorField"
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "The colour, in hex or rgb()/hsl()/hsb(); \"\" is the empty field. Controlled."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "The starting colour when you do not control it. Without it, the field starts empty."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called when the code is applied (Enter or leaving the field) and on every key in a channel, with the hex — or \"\" when it is cleared."
+    },
+    {
+      "name": "onValueCommitted",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called with onValueChange — the moment to save."
+    },
+    {
+      "name": "channel",
+      "type": "ColorChannel",
+      "default": "—",
+      "description": "One channel, as a number, in place of the code: hue, saturation, brightness, lightness, red, green, blue or alpha."
+    },
+    {
+      "name": "colorSpace",
+      "type": "\"hsb\" | \"hsl\" | \"rgb\"",
+      "default": "\"hsb\"",
+      "description": "With channel: the space of hue and saturation."
+    },
+    {
+      "name": "swatch",
+      "type": "boolean",
+      "default": "true for the code, false for a channel",
+      "description": "The swatch in front."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<sm | md | lg>",
+      "default": "md",
+      "description": "The field height, the same scale as Input."
+    },
+    {
+      "name": "variant",
+      "type": "\"primary\" | \"secondary\"",
+      "default": "\"primary\"",
+      "description": "secondary is the neutral background, for a field inside a card — the same as Input."
+    },
+    {
+      "name": "width",
+      "type": "string",
+      "default": "100%",
+      "description": "The field width — \"20rem\" or \"auto\". Without it, the whole line, like the other fields."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "The field does not take input."
+    },
+    {
+      "name": "readOnly",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shown and focusable, not editable."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "Inside a Field, Field's required does it."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Sends the colour with a form, as hex."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "—",
+      "description": "Shown while the field is empty."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the input — what a label points at. Inside a Field, the Field gives it one."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": "—",
+      "description": "Names the field when there is no visible label."
+    },
+    {
+      "name": "aria-labelledby",
+      "type": "string",
+      "default": "—",
+      "description": "Names the field by another element's id."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the input. Inside a Field, the description and the error are added."
+    },
+    {
+      "name": "aria-invalid",
+      "type": "boolean",
+      "default": "—",
+      "description": "Marks the value as rejected. Inside a Field, the error does it."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the group, after the Aurea skin."
+    }
+  ]
+}

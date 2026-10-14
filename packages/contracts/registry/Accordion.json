@@ -9,7 +9,10 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "default",
+    "surface"
+  ],
   "sizes": [],
   "states": [
     "default",
@@ -53,6 +56,30 @@
       "type": "Array<{id: string; title: ReactNode; content: ReactNode}>",
       "default": "—",
       "description": "The sections. Built on native <details>/<summary>, so opening, closing, keyboard and find-in-page come from the browser and the component ships no JavaScript at all. Several can be open at once: exclusivity would need the `name` attribute, and hiding what someone just opened is rarely what they wanted."
+    },
+    {
+      "name": "variant",
+      "type": "default | surface",
+      "default": "default",
+      "description": "surface puts the items in a card, with the line at 94% and the neutral hover."
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "default": "false",
+      "description": "Lets several items stay open. Without it, opening one closes the other, as in the reference."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string[]",
+      "default": "—",
+      "description": "The ids of the items that start open."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the outermost element, after the Aurea skin."
     }
   ]
 }

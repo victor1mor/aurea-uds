@@ -50,7 +50,7 @@
       "name": "children",
       "type": "ReactElement",
       "default": "—",
-      "description": "The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye."
+      "description": "The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye. When the element is not focusable on its own (a <span>, a Badge), it becomes focusable, as a button — as in the reference library — so the tip opens from the keyboard too."
     },
     {
       "name": "content",
@@ -63,6 +63,24 @@
       "type": "top | right | bottom | left",
       "default": "top",
       "description": "Preferred side; it flips when there is no room."
+    },
+    {
+      "name": "arrow",
+      "type": "boolean",
+      "default": "false",
+      "description": "The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line."
+    },
+    {
+      "name": "delay",
+      "type": "number",
+      "default": "1500",
+      "description": "Milliseconds the pointer rests before it opens — the reference library's 1.5 s (the engine's own is 0.6 s). From the keyboard it opens at once, and once one is open its neighbours open without waiting."
+    },
+    {
+      "name": "closeDelay",
+      "type": "number",
+      "default": "500",
+      "description": "Milliseconds before it closes after the pointer leaves — the reference library's 0.5 s."
     }
   ],
   "axes": {

@@ -3,19 +3,20 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 37,
-    "componentes": 129,
+    "modulos": 39,
+    "componentes": 143,
     "hooks": 9,
-    "aliasesLiterais": 84,
-    "propsDistintas": 316
+    "aliasesLiterais": 110,
+    "propsDistintas": 356
   },
   "aliases": {
     "ButtonVariant": {
       "module": "actions",
-      "raw": "\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
+      "raw": "\"primary\" | \"secondary\" | \"tertiary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
       "union": [
         "primary",
         "secondary",
+        "tertiary",
         "outline",
         "ghost",
         "primary-outline",
@@ -61,6 +62,14 @@
         "md",
         "lg",
         "xl"
+      ]
+    },
+    "ToggleVariant": {
+      "module": "actions",
+      "raw": "\"default\" | \"ghost\"",
+      "union": [
+        "default",
+        "ghost"
       ]
     },
     "ToggleProps": {
@@ -193,12 +202,63 @@
       "raw": "React.ComponentProps<typeof DayPicker> & { label?: string; }",
       "union": null
     },
+    "DatePickerProps": {
+      "module": "calendar",
+      "raw": "DatePickerBase & ({ range?: false; value?: Date; defaultValue?: Date; onChange?: (d: Date) => void; } | { range: true; value?: DateRange; defaultValue?: DateRange; onChange?: (r: DateRange) => void; })",
+      "union": null
+    },
+    "ColorSpace": {
+      "module": "color",
+      "raw": "\"rgb\" | \"hsl\" | \"hsb\"",
+      "union": [
+        "rgb",
+        "hsl",
+        "hsb"
+      ]
+    },
+    "ColorChannel": {
+      "module": "color",
+      "raw": "\"hue\" | \"saturation\" | \"brightness\" | \"lightness\" | \"red\" | \"green\" | \"blue\" | \"alpha\"",
+      "union": [
+        "hue",
+        "saturation",
+        "brightness",
+        "lightness",
+        "red",
+        "green",
+        "blue",
+        "alpha"
+      ]
+    },
+    "ColorNameStrings": {
+      "module": "color",
+      "raw": "Pick<AureaStrings, \"colorHue\" | \"colorTone\" | \"colorNameFormat\">",
+      "union": null
+    },
+    "ColorHueName": {
+      "module": "color",
+      "raw": "keyof AureaStrings[\"colorHue\"]",
+      "union": null
+    },
+    "ColorToneName": {
+      "module": "color",
+      "raw": "keyof AureaStrings[\"colorTone\"]",
+      "union": null
+    },
     "ChatDirection": {
       "module": "communication",
       "raw": "\"incoming\" | \"outgoing\"",
       "union": [
         "incoming",
         "outgoing"
+      ]
+    },
+    "AccordionVariant": {
+      "module": "disclosure",
+      "raw": "\"default\" | \"surface\"",
+      "union": [
+        "default",
+        "surface"
       ]
     },
     "Breakpoint": {
@@ -243,6 +303,17 @@
     },
     "AlertVariant": {
       "module": "feedback-client",
+      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\"",
+      "union": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "accent"
+      ]
+    },
+    "BannerVariant": {
+      "module": "feedback-client",
       "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
       "union": [
         "info",
@@ -251,14 +322,24 @@
         "danger"
       ]
     },
-    "BannerVariant": {
+    "SpinnerSize": {
       "module": "feedback-client",
-      "raw": "AlertVariant",
-      "union": null
+      "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "union": [
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
     },
     "DataStateValue": {
       "module": "feedback-client",
       "raw": "\"loading\" | \"error\" | \"empty\" | UniversalState",
+      "union": null
+    },
+    "DataStateProps": {
+      "module": "feedback-client",
+      "raw": "HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & { state?: DataStateValue; message?: ReactNode; skeleton?: ReactNode; emptyTitle?: ReactNode; emptyIcon?: IconName; action?: ReactNode; children: ReactNode | (() => ReactNode); /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com \"Tentar de novo\". */ catchErrors?: boolean; /** Recebe o erro que a barreira pegou — para o app registrar. */ onCatch?: (error: unknown, info: React.ErrorInfo) => void; }",
       "union": null
     },
     "UploadFn": {
@@ -1819,10 +1900,18 @@
     },
     "IconWeight": {
       "module": "icon-names",
-      "raw": "\"regular\" | \"fill\"",
+      "raw": "\"regular\" | \"fill\" | \"bold\"",
       "union": [
         "regular",
-        "fill"
+        "fill",
+        "bold"
+      ]
+    },
+    "BoldIconName": {
+      "module": "icon-names",
+      "raw": "\"x\"",
+      "union": [
+        "x"
       ]
     },
     "FieldOrientation": {
@@ -1837,6 +1926,49 @@
       "module": "inputs-client",
       "raw": "\"auto\" | (string & {})",
       "union": null
+    },
+    "ListBoxSelectionMode": {
+      "module": "inputs-client",
+      "raw": "\"none\" | \"single\" | \"multiple\"",
+      "union": [
+        "none",
+        "single",
+        "multiple"
+      ]
+    },
+    "TagGroupSelectionMode": {
+      "module": "inputs-client",
+      "raw": "\"none\" | \"single\" | \"multiple\"",
+      "union": [
+        "none",
+        "single",
+        "multiple"
+      ]
+    },
+    "TagSize": {
+      "module": "inputs-client",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "TagVariant": {
+      "module": "inputs-client",
+      "raw": "\"default\" | \"surface\"",
+      "union": [
+        "default",
+        "surface"
+      ]
+    },
+    "SliderOrientation": {
+      "module": "inputs-client",
+      "raw": "\"horizontal\" | \"vertical\"",
+      "union": [
+        "horizontal",
+        "vertical"
+      ]
     },
     "SeparatorSpacing": {
       "module": "layout-client",
@@ -1903,7 +2035,7 @@
     },
     "CardProps": {
       "module": "markup",
-      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"contrast\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
+      "raw": "CardBase & ({ variant?: \"base\" | \"raised\" | \"inset\" | \"outline\" | \"selected\" | \"danger\" | \"contrast\"; render?: ReactElement; } | { variant: \"interactive\"; render: ReactElement; })",
       "union": null
     },
     "LayoutGap": {
@@ -2095,6 +2227,21 @@
         "xs"
       ]
     },
+    "TypographyTone": {
+      "module": "markup",
+      "raw": "\"default\" | \"muted\" | \"subtle\" | \"primary\" | \"link\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "union": [
+        "default",
+        "muted",
+        "subtle",
+        "primary",
+        "link",
+        "danger",
+        "success",
+        "warning",
+        "info"
+      ]
+    },
     "BadgeEmphasis": {
       "module": "markup",
       "raw": "\"soft\" | \"solid\" | \"outline\"",
@@ -2144,6 +2291,23 @@
         "info"
       ]
     },
+    "ProgressSize": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "SkeletonAnimation": {
+      "module": "markup",
+      "raw": "\"pulse\" | \"none\"",
+      "union": [
+        "pulse",
+        "none"
+      ]
+    },
     "RangeOrientation": {
       "module": "markup",
       "raw": "\"horizontal\" | \"vertical\"",
@@ -2156,6 +2320,14 @@
       "module": "markup",
       "raw": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">",
       "union": null
+    },
+    "FieldVariant": {
+      "module": "markup",
+      "raw": "\"primary\" | \"secondary\"",
+      "union": [
+        "primary",
+        "secondary"
+      ]
     },
     "AddonSide": {
       "module": "markup",
@@ -2171,6 +2343,26 @@
       "union": [
         "inline",
         "block"
+      ]
+    },
+    "ColorSwatchSize": {
+      "module": "markup",
+      "raw": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "union": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
+    },
+    "ProgressCircleSize": {
+      "module": "markup",
+      "raw": "\"sm\" | \"md\" | \"lg\"",
+      "union": [
+        "sm",
+        "md",
+        "lg"
       ]
     },
     "GalleryItemKind": {
@@ -2207,12 +2399,46 @@
         "plain"
       ]
     },
+    "TabsVariant": {
+      "module": "navigation-client",
+      "raw": "\"primary\" | \"secondary\"",
+      "union": [
+        "primary",
+        "secondary"
+      ]
+    },
+    "PaginationVariant": {
+      "module": "navigation-client",
+      "raw": "\"numbers\" | \"simple\" | \"compact\"",
+      "union": [
+        "numbers",
+        "simple",
+        "compact"
+      ]
+    },
     "SidebarVariant": {
       "module": "navigation-client",
-      "raw": "\"floating\" | \"flush\"",
+      "raw": "\"floating\" | \"flush\" | \"plain\"",
       "union": [
         "floating",
-        "flush"
+        "flush",
+        "plain"
+      ]
+    },
+    "SidebarScrollbar": {
+      "module": "navigation-client",
+      "raw": "\"hover\" | \"visible\"",
+      "union": [
+        "hover",
+        "visible"
+      ]
+    },
+    "SidebarPlacement": {
+      "module": "navigation-client",
+      "raw": "\"left\" | \"right\"",
+      "union": [
+        "left",
+        "right"
       ]
     },
     "BottomNavVariant": {
@@ -2271,6 +2497,38 @@
         "lg",
         "xl",
         "full"
+      ]
+    },
+    "DialogPlacement": {
+      "module": "overlays",
+      "raw": "\"auto\" | \"center\" | \"top\" | \"bottom\"",
+      "union": [
+        "auto",
+        "center",
+        "top",
+        "bottom"
+      ]
+    },
+    "DialogIconTone": {
+      "module": "overlays",
+      "raw": "\"neutral\" | \"brand\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "neutral",
+        "brand",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ]
+    },
+    "DrawerSide": {
+      "module": "overlays",
+      "raw": "\"left\" | \"right\" | \"top\" | \"bottom\"",
+      "union": [
+        "left",
+        "right",
+        "top",
+        "bottom"
       ]
     },
     "AccessGateProps": {
@@ -2371,6 +2629,18 @@
         "light"
       ]
     },
+    "ToastPlacement": {
+      "module": "system",
+      "raw": "\"top\" | \"top-start\" | \"top-end\" | \"bottom\" | \"bottom-start\" | \"bottom-end\"",
+      "union": [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end"
+      ]
+    },
     "IconSize": {
       "module": "system",
       "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
@@ -2407,6 +2677,7 @@
               "values": [
                 "primary",
                 "secondary",
+                "tertiary",
                 "outline",
                 "ghost",
                 "primary-outline",
@@ -2540,7 +2811,7 @@
         {
           "name": "ButtonGroup",
           "kind": "function",
-          "propsType": null,
+          "propsType": "ButtonGroupProps",
           "props": [
             {
               "name": "label",
@@ -2556,6 +2827,70 @@
                 "horizontal",
                 "vertical"
               ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "ButtonVariant",
+              "values": [
+                "primary",
+                "secondary",
+                "tertiary",
+                "outline",
+                "ghost",
+                "primary-outline",
+                "primary-ghost",
+                "danger",
+                "danger-outline",
+                "danger-ghost",
+                "link",
+                "link-primary",
+                "link-danger",
+                "nav"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<ComponentSize>",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "detached",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "CloseButton",
+          "kind": "const",
+          "propsType": "CloseButtonProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -2571,6 +2906,7 @@
               "values": [
                 "primary",
                 "secondary",
+                "tertiary",
                 "outline",
                 "ghost",
                 "primary-outline",
@@ -2808,6 +3144,15 @@
               "values": null
             },
             {
+              "name": "variant",
+              "optional": true,
+              "type": "ToggleVariant",
+              "values": [
+                "default",
+                "ghost"
+              ]
+            },
+            {
               "name": "children",
               "optional": false,
               "type": "ToggleChildren | never",
@@ -2824,7 +3169,7 @@
         {
           "name": "ToggleGroup",
           "kind": "function",
-          "propsType": null,
+          "propsType": "ToggleGroupProps",
           "props": [
             {
               "name": "value",
@@ -2882,6 +3227,28 @@
               "optional": false,
               "type": "React.ReactNode",
               "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "detached",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -2919,6 +3286,7 @@
               "values": [
                 "primary",
                 "secondary",
+                "tertiary",
                 "outline",
                 "ghost",
                 "primary-outline",
@@ -3609,6 +3977,125 @@
               "values": null
             }
           ]
+        },
+        {
+          "name": "DatePicker",
+          "kind": "function",
+          "propsType": "DatePickerProps",
+          "props": [
+            {
+              "name": "minimumDate",
+              "optional": true,
+              "type": "Date",
+              "values": null
+            },
+            {
+              "name": "maximumDate",
+              "optional": true,
+              "type": "Date",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "DayPickerLocale",
+              "values": null
+            },
+            {
+              "name": "format",
+              "optional": true,
+              "type": "(d: Date) => string",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName | false",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "range",
+              "optional": false,
+              "type": "false | true",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "Date | DateRange",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "Date | DateRange",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "(d: Date) => void | (r: DateRange) => void",
+              "values": null
+            }
+          ]
         }
       ],
       "hooks": [],
@@ -3683,6 +4170,12 @@
               "values": null
             },
             {
+              "name": "preview",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            },
+            {
               "name": "className",
               "optional": true,
               "type": "string",
@@ -3745,6 +4238,18 @@
     },
     "code": {
       "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "color": {
+      "components": [
+        {
+          "name": "COLOR_CHANNELS",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        }
+      ],
       "hooks": [],
       "clientDirective": false
     },
@@ -4234,7 +4739,34 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ id: string; title: ReactNode; content: ReactNode; }>",
+              "type": "AccordionItem[]",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "AccordionVariant",
+              "values": [
+                "default",
+                "surface"
+              ]
+            },
+            {
+              "name": "multiple",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string[]",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -4337,7 +4869,8 @@
                 "info",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "accent"
               ]
             },
             {
@@ -4427,7 +4960,7 @@
         {
           "name": "DataState",
           "kind": "function",
-          "propsType": null,
+          "propsType": "DataStateProps",
           "props": [
             {
               "name": "state",
@@ -4480,6 +5013,18 @@
               "name": "children",
               "optional": false,
               "type": "ReactNode | (() => ReactNode)",
+              "values": null
+            },
+            {
+              "name": "catchErrors",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "onCatch",
+              "optional": true,
+              "type": "(error: unknown, info: React.ErrorInfo) => void",
               "values": null
             }
           ]
@@ -4596,11 +5141,12 @@
             {
               "name": "size",
               "optional": true,
-              "type": "Responsive<\"sm\" | \"md\" | \"lg\">",
+              "type": "Responsive<SpinnerSize>",
               "values": [
                 "sm",
                 "md",
-                "lg"
+                "lg",
+                "xl"
               ]
             },
             {
@@ -4756,6 +5302,11 @@
       "clientDirective": false
     },
     "graph-geometria": {
+      "components": [],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "graph-worker": {
       "components": [],
       "hooks": [],
       "clientDirective": false
@@ -5006,6 +5557,12 @@
     "icon-names": {
       "components": [
         {
+          "name": "NOMES_BOLD",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        },
+        {
           "name": "NOMES_PHOSPHOR",
           "kind": "const",
           "propsType": null,
@@ -5099,6 +5656,419 @@
             },
             {
               "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "CheckboxGroup",
+          "kind": "function",
+          "propsType": "CheckboxGroupProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "error",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ColorArea",
+          "kind": "function",
+          "propsType": "ColorAreaProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "colorSpace",
+              "optional": true,
+              "type": "ColorSpace",
+              "values": [
+                "rgb",
+                "hsl",
+                "hsb"
+              ]
+            },
+            {
+              "name": "xChannel",
+              "optional": true,
+              "type": "Exclude<ColorChannel, \"alpha\">",
+              "values": [
+                "hue",
+                "saturation",
+                "brightness",
+                "lightness",
+                "red",
+                "green",
+                "blue"
+              ]
+            },
+            {
+              "name": "yChannel",
+              "optional": true,
+              "type": "Exclude<ColorChannel, \"alpha\">",
+              "values": [
+                "hue",
+                "saturation",
+                "brightness",
+                "lightness",
+                "red",
+                "green",
+                "blue"
+              ]
+            },
+            {
+              "name": "showDots",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ColorField",
+          "kind": "function",
+          "propsType": "ColorFieldProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "channel",
+              "optional": true,
+              "type": "ColorChannel",
+              "values": [
+                "hue",
+                "saturation",
+                "brightness",
+                "lightness",
+                "red",
+                "green",
+                "blue",
+                "alpha"
+              ]
+            },
+            {
+              "name": "colorSpace",
+              "optional": true,
+              "type": "ColorSpace",
+              "values": [
+                "rgb",
+                "hsl",
+                "hsb"
+              ]
+            },
+            {
+              "name": "swatch",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "FieldVariant",
+              "values": [
+                "primary",
+                "secondary"
+              ]
+            },
+            {
+              "name": "width",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "readOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ColorPicker",
+          "kind": "function",
+          "propsType": "ColorPickerProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "swatches",
+              "optional": true,
+              "type": "readonly (string | ColorSwatchOption)[]",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"full\" | \"swatches\"",
+              "values": [
+                "full",
+                "swatches"
+              ]
+            },
+            {
+              "name": "children",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
               "optional": true,
               "type": "string",
               "values": null
@@ -5243,6 +6213,12 @@
               "optional": true,
               "type": "FieldLabelWidth",
               "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -5285,6 +6261,68 @@
                 "md",
                 "lg"
               ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "FieldVariant",
+              "values": [
+                "primary",
+                "secondary"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ListBox",
+          "kind": "function",
+          "propsType": "ListBoxProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "readonly (ListBoxItem | ListBoxSection)[]",
+              "values": null
+            },
+            {
+              "name": "selectionMode",
+              "optional": true,
+              "type": "ListBoxSelectionMode",
+              "values": [
+                "none",
+                "single",
+                "multiple"
+              ]
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "onAction",
+              "optional": true,
+              "type": "(id: string) => void",
+              "values": null
             }
           ]
         },
@@ -5711,6 +6749,257 @@
               ]
             }
           ]
+        },
+        {
+          "name": "Slider",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "SliderOrientation",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "showValue",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "V | string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "V | string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: V) => void | (value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: V) => void | (value: string) => void",
+              "values": null
+            },
+            {
+              "name": "min",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "step",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "largeStep",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "format",
+              "optional": true,
+              "type": "Intl.NumberFormatOptions",
+              "values": null
+            },
+            {
+              "name": "locale",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "thumbLabels",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "channel",
+              "optional": false,
+              "type": "undefined | ColorChannel",
+              "values": [
+                "alpha",
+                "blue",
+                "brightness",
+                "green",
+                "hue",
+                "lightness",
+                "red",
+                "saturation"
+              ]
+            },
+            {
+              "name": "colorSpace",
+              "optional": true,
+              "type": "ColorSpace",
+              "values": [
+                "rgb",
+                "hsl",
+                "hsb"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TagGroup",
+          "kind": "function",
+          "propsType": "TagGroupProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "errorMessage",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "items",
+              "optional": false,
+              "type": "readonly TagItem[]",
+              "values": null
+            },
+            {
+              "name": "selectionMode",
+              "optional": true,
+              "type": "TagGroupSelectionMode",
+              "values": [
+                "none",
+                "single",
+                "multiple"
+              ]
+            },
+            {
+              "name": "selectedKeys",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "defaultSelectedKeys",
+              "optional": true,
+              "type": "readonly string[]",
+              "values": null
+            },
+            {
+              "name": "onSelectionChange",
+              "optional": true,
+              "type": "(keys: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "onRemove",
+              "optional": true,
+              "type": "(ids: string[]) => void",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "TagSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "TagVariant",
+              "values": [
+                "default",
+                "surface"
+              ]
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
         }
       ],
       "hooks": [],
@@ -5797,7 +7086,39 @@
               "type": "SidebarVariant",
               "values": [
                 "floating",
-                "flush"
+                "flush",
+                "plain"
+              ]
+            },
+            {
+              "name": "sidebarScrollbar",
+              "optional": true,
+              "type": "SidebarScrollbar",
+              "values": [
+                "hover",
+                "visible"
+              ]
+            },
+            {
+              "name": "aside",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "asideLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "asideVariant",
+              "optional": true,
+              "type": "SidebarVariant",
+              "values": [
+                "floating",
+                "flush",
+                "plain"
               ]
             },
             {
@@ -5964,6 +7285,31 @@
               ]
             },
             {
+              "name": "tone",
+              "optional": true,
+              "type": "BadgeVariant",
+              "values": [
+                "neutral",
+                "primary",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "running",
+                "paused",
+                "offline",
+                "review",
+                "red",
+                "orange",
+                "green",
+                "teal",
+                "cyan",
+                "blue",
+                "violet",
+                "pink"
+              ]
+            },
+            {
               "name": "emphasis",
               "optional": true,
               "type": "BadgeEmphasis",
@@ -6083,13 +7429,14 @@
             {
               "name": "variant",
               "optional": false,
-              "type": "\"base\" | \"raised\" | \"inset\" | \"selected\" | \"danger\" | \"contrast\" | \"interactive\"",
+              "type": "\"base\" | \"raised\" | \"inset\" | \"outline\" | \"selected\" | \"danger\" | \"contrast\" | \"interactive\"",
               "values": [
                 "base",
                 "contrast",
                 "danger",
                 "inset",
                 "interactive",
+                "outline",
                 "raised",
                 "selected"
               ]
@@ -6208,6 +7555,22 @@
               ]
             },
             {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
               "name": "weight",
               "optional": true,
               "type": "TypographyWeight",
@@ -6229,6 +7592,100 @@
               "name": "numeric",
               "optional": true,
               "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ColorSwatch",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ColorSwatchSize",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "color",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "options",
+              "optional": false,
+              "type": "readonly (string | ColorSwatchOption)[]",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "React.ChangeEventHandler<HTMLInputElement>",
+              "values": null
+            },
+            {
+              "name": "layout",
+              "optional": true,
+              "type": "\"grid\" | \"stack\"",
+              "values": [
+                "grid",
+                "stack"
+              ]
+            },
+            {
+              "name": "indicator",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -6399,6 +7856,22 @@
               ]
             },
             {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
               "name": "weight",
               "optional": true,
               "type": "TypographyWeight",
@@ -6548,6 +8021,25 @@
           ]
         },
         {
+          "name": "Link",
+          "kind": "function",
+          "propsType": "LinkProps",
+          "props": [
+            {
+              "name": "external",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "LogStream",
           "kind": "function",
           "propsType": null,
@@ -6589,6 +8081,22 @@
               "values": [
                 "default",
                 "muted"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
               ]
             },
             {
@@ -6664,8 +8172,84 @@
               ]
             },
             {
+              "name": "showLabel",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "showValue",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ProgressSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
               "name": "className",
               "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ProgressCircle",
+          "kind": "function",
+          "propsType": "ProgressCircleProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "min",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "ProgressCircleSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "ProgressTone",
+              "values": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger",
+                "info"
+              ]
+            },
+            {
+              "name": "label",
+              "optional": false,
               "type": "string",
               "values": null
             }
@@ -6801,7 +8385,17 @@
           "name": "Skeleton",
           "kind": "function",
           "propsType": null,
-          "props": []
+          "props": [
+            {
+              "name": "animation",
+              "optional": true,
+              "type": "SkeletonAnimation",
+              "values": [
+                "pulse",
+                "none"
+              ]
+            }
+          ]
         },
         {
           "name": "Stack",
@@ -6880,6 +8474,22 @@
               ]
             },
             {
+              "name": "tone",
+              "optional": true,
+              "type": "TypographyTone",
+              "values": [
+                "default",
+                "muted",
+                "subtle",
+                "primary",
+                "link",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
               "name": "weight",
               "optional": true,
               "type": "TypographyWeight",
@@ -6935,6 +8545,15 @@
                 "sm",
                 "md",
                 "lg"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "FieldVariant",
+              "values": [
+                "primary",
+                "secondary"
               ]
             }
           ]
@@ -7389,6 +9008,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "shortcuts",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -7439,7 +9064,7 @@
         {
           "name": "Pagination",
           "kind": "function",
-          "propsType": null,
+          "propsType": "PaginationProps",
           "props": [
             {
               "name": "page",
@@ -7455,8 +9080,48 @@
             },
             {
               "name": "onPageChange",
-              "optional": false,
+              "optional": true,
               "type": "(p: number) => void",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "PaginationVariant",
+              "values": [
+                "numbers",
+                "simple",
+                "compact"
+              ]
+            },
+            {
+              "name": "summary",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "href",
+              "optional": true,
+              "type": "(page: number) => string",
+              "values": null
+            },
+            {
+              "name": "siblings",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]
@@ -7490,7 +9155,26 @@
               "type": "SidebarVariant",
               "values": [
                 "floating",
-                "flush"
+                "flush",
+                "plain"
+              ]
+            },
+            {
+              "name": "placement",
+              "optional": true,
+              "type": "SidebarPlacement",
+              "values": [
+                "left",
+                "right"
+              ]
+            },
+            {
+              "name": "scrollbar",
+              "optional": true,
+              "type": "SidebarScrollbar",
+              "values": [
+                "hover",
+                "visible"
               ]
             },
             {
@@ -7608,6 +9292,15 @@
               "values": [
                 "card",
                 "plain"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "TabsVariant",
+              "values": [
+                "primary",
+                "secondary"
               ]
             }
           ]
@@ -7764,6 +9457,36 @@
               "optional": false,
               "type": "() => void",
               "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "iconTone",
+              "optional": true,
+              "type": "DialogIconTone",
+              "values": [
+                "neutral",
+                "brand",
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "name": "placement",
+              "optional": true,
+              "type": "DialogPlacement",
+              "values": [
+                "auto",
+                "center",
+                "top",
+                "bottom"
+              ]
             }
           ]
         },
@@ -7851,6 +9574,36 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "icon",
+              "optional": true,
+              "type": "IconName",
+              "values": null
+            },
+            {
+              "name": "iconTone",
+              "optional": true,
+              "type": "DialogIconTone",
+              "values": [
+                "neutral",
+                "brand",
+                "info",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "name": "placement",
+              "optional": true,
+              "type": "DialogPlacement",
+              "values": [
+                "auto",
+                "center",
+                "top",
+                "bottom"
+              ]
             }
           ]
         },
@@ -7878,6 +9631,12 @@
               "values": null
             },
             {
+              "name": "footer",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
               "name": "onClose",
               "optional": false,
               "type": "() => void",
@@ -7886,10 +9645,12 @@
             {
               "name": "side",
               "optional": true,
-              "type": "\"left\" | \"right\"",
+              "type": "DrawerSide",
               "values": [
                 "left",
-                "right"
+                "right",
+                "top",
+                "bottom"
               ]
             }
           ]
@@ -8045,6 +9806,12 @@
                 "bottom",
                 "left"
               ]
+            },
+            {
+              "name": "arrow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -8075,6 +9842,24 @@
                 "bottom",
                 "left"
               ]
+            },
+            {
+              "name": "arrow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "delay",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "closeDelay",
+              "optional": true,
+              "type": "number",
+              "values": null
             }
           ]
         }
@@ -8250,6 +10035,19 @@
               "optional": true,
               "type": "(density: AureaDensity) => void",
               "values": null
+            },
+            {
+              "name": "toastPlacement",
+              "optional": true,
+              "type": "ToastPlacement",
+              "values": [
+                "top",
+                "top-start",
+                "top-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end"
+              ]
             }
           ]
         },
@@ -8287,7 +10085,8 @@
               "type": "IconWeight",
               "values": [
                 "regular",
-                "fill"
+                "fill",
+                "bold"
               ]
             }
           ]

@@ -59,7 +59,7 @@
       "name": "messages",
       "type": "ChatMessage[]",
       "default": "—",
-      "description": "The conversation, as data: {id, body, author?, time?, avatar?, status?}. Transport and state are yours; this renders. Since 0.19 a message may also carry direction (\"incoming\" | \"outgoing\"), forwardedFrom, replyTo {id, author?, body}, attachments [{id, kind: \"image\" | \"video\" | \"file\", src?, alt?, name?, bytes?, duration?, href?}], edited and day. Photos and videos become an album in the Gallery (zoom included); files become FileInput's row, with a download link when href is given. A day separator appears whenever day changes from one message to the next; its text is the app's."
+      "description": "The conversation, as data: {id, body, author?, time?, avatar?, status?}. Transport and state are yours; this renders. A message may also carry direction (\"incoming\" | \"outgoing\"), forwardedFrom, replyTo {id, author?, body}, attachments [{id, kind: \"image\" | \"video\" | \"file\", src?, alt?, name?, bytes?, duration?, href?}], edited and day. Photos and videos become an album in the Gallery (zoom included); files become FileInput's row, with a download link when href is given. A day separator appears whenever day changes from one message to the next; its text is the app's."
     },
     {
       "name": "hasMoreBefore",

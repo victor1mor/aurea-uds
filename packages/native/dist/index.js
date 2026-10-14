@@ -37,7 +37,7 @@ export { Icon, IconRegistryProvider, criarRegistroDeIcones, criarGlifo } from ".
 // autorizada pelo Victor em 03/09/2026 depois de o lote parar por ela (`BUILDING.md` §3).
 export { Screen } from "./screen.js";
 export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";
-export { Button, IconButton, LinkButton, ThemeToggle } from "./actions.js";
+export { Button, IconButton, LinkButton, ThemeToggle, CloseButton } from "./actions.js";
 // ── Lote 2 — o painel, que é só leitura ────────────────────────────────────────────────────
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";
 export { Badge, Status, Avatar, KPI, formatarContagem } from "./display.js";
@@ -118,3 +118,12 @@ export { NumberField, formatarNumero, lerNumero, separadoresDoLocale } from "./n
 // promete e que o primitivo cru não faz. Foi por não fazê-las que o `Avatar` precisou de
 // conserto em 31/07/2026.
 export { Image, Gallery } from "./midia.js";
+// ── 0.32.0, passo 9b — as peças que faltavam no nativo, com a API da web ────────────────────
+// As nove são as do pacote nativo da referência (anatomia, medidas, comportamento), com o que é da
+// Aurea por cima. O que ficou de fora de cada uma está no cabeçalho do arquivo dela.
+// ⚠ O `ScrollShadow` é um FIO na ponta com mais conteúdo, e não o degradê dela (decisão do Victor:
+// a Aurea não tem degradê). O `DropdownMenu` usa o MESMO `MenuEntry` da web; o `destructive` do
+// item de ação é só do nativo, por enquanto.
+export { Accordion, ScrollShadow, SkeletonGroup, PressableFeedback } from "./exibicao.js";
+export { Slider, OTPField, TagGroup } from "./escolha.js";
+export { Popover, DropdownMenu } from "./menu.js";

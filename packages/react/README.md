@@ -60,12 +60,14 @@ segue sem a função — não quebra a tela.
 
 **O arrumador fora da tela principal (`layoutWorker`).** Num mapa grande, a arrumação pode prender a
 tela por alguns segundos. O mapa aceita um trabalhador (Web Worker) que o app cria — cada empacotador
-cria trabalhador do seu jeito, e por isso quem entrega é o app. No Vite:
+cria trabalhador do seu jeito, e por isso quem entrega é o app. A Aurea publica o trabalhador por um
+caminho dela, `@aurea-uds/react/graph-worker`, que traz o do `elkjs` (o peer opcional) junto — o app
+não importa o motor por fora. No Vite:
 
 ```js
-import TrabalhadorDoElk from "elkjs/lib/elk-worker.min.js?worker";
+import TrabalhadorDoMapa from "@aurea-uds/react/graph-worker?worker";
 
-<DependencyGraph layout="layered" layoutWorker={() => new TrabalhadorDoElk()} … />
+<DependencyGraph layout="layered" layoutWorker={() => new TrabalhadorDoMapa()} … />
 ```
 
 Em qualquer outro empacotador, o jeito que sempre funciona: copie `node_modules/elkjs/lib/elk-worker.min.js`

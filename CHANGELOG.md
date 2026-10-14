@@ -17,6 +17,12 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### Os componentes novos da 0.32.0 (ainda não publicada)
+
+- `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
+  `TagGroup`, `DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker` — a nota
+  está na seção `[0.32.0]`, abaixo.
+
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -80,9 +86,445 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.32.0] — 2026-10-14
+
+⏳ **Ainda não publicada.** O lote único: as peças quase idênticas às da referência. Os componentes novos:
+`CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`,
+`DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker`.
+
+A regra nova do Victor (11/10/2026): a peça da Aurea é a da referência principal — anatomia,
+medidas, estados, comportamento, teclado —, e por cima só entra o que é da Aurea (as cores e os
+temas, os cantos 22/32/cápsula, a fonte, os ícones, as densidades, sem degradê, a baixa visão).
+O lote junta a rodada 1 do site, a auditoria peça a peça (web e nativo), os pedidos do app de rede
+e a escala de toque do nativo.
+
+### Novo
+
+- **`CloseButton`, na web e no nativo** — o botão de fechar da referência: um círculo no cinza
+  neutro com o X esmaecido, que já se chama "Close" ("Fechar" em `ptBR`); `label` diz o que fecha,
+  `children` troca o X. Web: 24, X de 16, a área de toque de 44 em volta sem o círculo crescer.
+  Nativo: 40 (a escala de toque, abaixo), X de 20, toque estendido em 12.
+- **O peso `bold` no `Icon`**, só para os nomes desenhados nele — hoje, o `x` (o traço do
+  `CloseButton`). Os outros nomes pedidos em `bold` desenham o regular. No sprite, `i-x-bold`; no
+  nativo, `@aurea-uds/native/icons/x-bold` (registre como `"x-bold"`).
+- **A escala de toque do nativo** (`touch-control-h-sm/md/lg`, [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md)): 40 · 48 · 56 no
+  confortável, como o pacote nativo da referência; 36 · 44 · 52 no compacto e 44 · 52 · 60 no
+  espaçoso. A web continua na escala dela.
+- **A entrelinha de cada título** (`text-4xl-leading` … `text-lg-leading`): 40 · 36 · 32 · 28 · 28 ·
+  24 para os títulos de 36 · 30 · 24 · 20 · 18 · 16, como na escala publicada da referência — no
+  `Heading`/`Text type="h*"` (web e nativo) e nos títulos do `.prose`.
+
+- **`Button variant="tertiary"`**, o fundo neutro com a letra normal — o `secondary` de até a 0.31.0.
+- **`ButtonGroup`**: `variant`, `size` e `disabled` valem para todos os botões de dentro (cada um
+  pode trocar o seu), `fullWidth` e `detached`. **`ToggleGroup`**: `size`, `fullWidth` e `detached`.
+- **`Toggle variant`**: `default` (fundo neutro, o padrão) ou `ghost` (sem fundo, o de antes).
+- **`Slider`** — o controle deslizante DESENHADO da referência (decisão do Victor: "Slider novo"):
+  rótulo e valor em cima, trilho de 20 com o preenchimento, alça em cápsula de 28 × 20 com o miolo
+  de 24 × 16 na cor de letra sobre o amarelo; um valor ou dois (`defaultValue={[20, 80]}`, `thumbLabels`), vertical, valor formatado pelo
+  `Intl` (`format`, `locale`), `onValueChange` e `onValueCommitted` com o NÚMERO. O motor é o que a
+  Aurea já usa. O `Range` (o do navegador) continua igual.
+- **`CheckboxGroup`** — o grupo de caixas da referência: rótulo, descrição, as caixas e o erro; guarda
+  a lista do que está marcado (`value`, `onValueChange`); cada `Checkbox` de dentro diz o seu `value`.
+- **`ListBox`** — a lista de opções solta da referência: ícone, descrição, seções, escolha de nenhum
+  (lista de ações, `onAction`), um ou vários; o teclado do padrão do APG (setas, Home, End, Espaço,
+  Enter, a primeira letra).
+- **`Field required`**: o asterisco vermelho depois do rótulo (escondido do leitor de tela) e o
+  `required` no controle.
+- **`Input` e `Textarea` `variant="secondary"`**: o fundo neutro, sem borda à vista, para dentro de
+  cartão.
+- **`Tabs variant="secondary"`** — a aba secundária da referência: sem trilho, um fio embaixo da
+  lista e a escolhida com o fio da casa (o nativo já tinha, R-12).
+- **`Pagination`**: `variant` (`numbers`, o novo padrão; `simple`, só anterior e próxima; `compact`,
+  o desenho de até a 0.31.0), `summary` (o resumo à esquerda), `href` (cada página vira um link de
+  verdade, que o buscador segue — GAR-18), `siblings` e `label` (o nome do marco).
+- **`Accordion`**: `variant="surface"` (num cartão), `multiple` (vários abertos), `defaultValue` e o
+  item `disabled`.
+- **`Sidebar placement="right"`** e a coluna da direita do **`AppShell`** (`aside`, `asideLabel`) — o
+  "Nesta página" de uma documentação, de 1280 para cima; abaixo, depois do conteúdo (DOC-01).
+- **`Sidebar variant="plain"`** — a lateral SEM CAIXA (sem fundo, sem linha, sem sombra), com o lugar e a
+  altura da flutuante: os itens soltos na página, como o "On this page" da documentação da referência. E
+  **`AppShell asideVariant`**, a variante da coluna da direita (padrão: a mesma da esquerda) — o site usa
+  `asideVariant="plain"`. "plain" é o nome que a Aurea já dá ao "sem caixa" (`contentVariant`, o painel do
+  `Tabs`, o `KPI`).
+- **`Sidebar scrollbar`** (`hover`, o padrão novo, ou `visible`) e **`AppShell sidebarScrollbar`**, que o
+  repassa — ver "Mudou".
+- **`Card variant="outline"`**, na web e no nativo — o cartão da cor de onde ele está, só com a linha em
+  volta (a caixa grande do Início da referência; o site usa na vitrine). O nome é o da referência para "sem
+  fundo, com contorno"; o `transparent` do cartão dela tira também a linha.
+- **`DatePicker` na web** ([ADR-0068](decisions/0068-o-datepicker-da-web-e-componente.md), escolha do Victor:
+  *"data B"*), em `@aurea-uds/react/calendar` — o mesmo nome e as mesmas props do nativo (`value`,
+  `onChange`, `minimumDate`, `maximumDate`, `disabled`, `size`, `format`, `placeholder`, `icon`), mais
+  `defaultValue`, `name`, **`range`** (o intervalo, como variação) e **`locale`**. O gatilho é o campo do
+  `Select` com o calendário no lugar da seta; a janela é o `Calendar` num popover, com nome. A data única fecha
+  ao escolher; o intervalo, no segundo clique, e cada abertura começa um intervalo novo. O formulário recebe a
+  data LOCAL (`aaaa-mm-dd`; o intervalo, `aaaa-mm-dd/aaaa-mm-dd`). Dentro de um `Field`, o rótulo nomeia o
+  gatilho, e a janela do calendário APONTA para ele (`aria-labelledby`).
+  - **A língua é o `locale`** (escolha do Victor, 13/10/2026): o mesmo objeto que o `Calendar` recebe
+    (`import {ptBR} from "react-day-picker/locale"`), e o campo e o calendário mudam JUNTOS. Sem ele, inglês, o
+    padrão do motor. Nunca a língua do ambiente: com ela, o servidor e o navegador escreviam textos diferentes
+    e a página perdia a hidratação (medido no catálogo). O texto da data leva `lang` com a língua dela.
+- **`ColorArea`** ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), escolhas
+  do Victor: *"cor A"*, *"área de cor como peça nova"*, motor *"como o calendário"*) — o quadrado em que se escolhe
+  a saturação e o brilho de um matiz, pelo ponteiro, pelo toque e pelo teclado (as teclas da referência). Ou
+  qualquer par de canais de HSB, HSL ou RGB, com o terceiro parado (`colorSpace`, `xChannel`, `yChannel`, o Victor:
+  *"todos, com transparência"*), e a grade de pontinhos da referência (`showDots`). O
+  valor é hex, com `value`, `defaultValue`, `onValueChange` e `onValueCommitted`, o idioma das peças de entrada
+  da web. Por dentro, dois `range` escondidos, um por eixo, anunciados como controle 2D, com o NOME da cor na
+  língua do app ("vivid blue", "azul vivo"). Puxar até o cinza não troca o matiz. Sem dependência nova.
+- **`Slider channel`, as trilhas de cor** (ADR-0069, escolhas do Victor: *"a trilha de cor segue como variação
+  do Slider"* e *"todos, com transparência"*) — um canal da cor: `hue`, `saturation`, `brightness`, `lightness`,
+  `red`, `green`, `blue` ou `alpha` (`colorSpace` diz o espaço do matiz e da saturação). A trilha pintada com o
+  canal, sem o preenchimento; a do alfa sobre o xadrez; o pino redondo de 16 na cor do valor (o da referência), o
+  valor escrito ("210°", "80%") e o nome da cor para o leitor de tela ("Hue 210°, vivid blue"). Como na
+  referência, o VALOR da trilha de cor é a COR (hex, `rgb()`, `hsl()`, `hsb()`), e o `onValueChange` devolve o
+  hex: várias trilhas repartem a mesma cor. O número é escrito pela Aurea, e não pelo `Intl` do motor: ele
+  formata na língua do ambiente, e o servidor e o navegador escreveriam "210 °" e "210°".
+- **`ColorSwatch options`, as amostras para escolher** (ADR-0069, a "C" do Victor, *"como variação do
+  ColorSwatch"*) — com `options` (hex ou `{color, label}`), `name` e `label`, a amostra vira um grupo de escolha: a
+  paleta fechada. São botões de opção NATIVOS, então a escolha única e as setas são do navegador, sem
+  JavaScript, e ela continua marcação pura (sai pronta do servidor). O desenho é o da referência: opção de 32,
+  borda de 2, vão de 8; a escolhida com a borda na cor dela, encolhida a 77%, e o "visto" na tinta que contrasta
+  MAIS com a cor — a conta da WCAG (no amarelo da Aurea, preto). Avisa pelo `onChange` do navegador, como o
+  `Radio`. Os exemplos da referência entram todos: os cinco tamanhos, uma cor que não se escolhe (`disabled` na
+  opção), em coluna (`layout="stack"`) e outra marca no lugar do "visto" (`indicator`). O foco é uma linha só
+  (ADR-0059): na escolhida, a borda da cor vira a cor do foco e o anel encosta nela — a referência mostra borda +
+  vão + anel, e a varredura do catálogo reprovou.
+- **`ColorSwatch`: a cor transparente mostra o xadrez** (o Victor: *"xadrez sim, quadrado não"*) — hex de 4 ou 8
+  dígitos, `rgba()`, `hsla()`. A amostra continua só redonda.
+- **`ColorPicker`** (ADR-0069, escolhas do Victor: *"ColorPicker componente"*, *"cor A com C como variação"*) — o
+  gatilho é a amostra com o nome; a janela traz a área, a trilha do matiz e o CAMPO DO CÓDIGO, sempre (o Victor:
+  *"sempre com campo do código e teclado"*). `swatches` acrescenta amostras prontas, com o nome de cada cor na
+  língua do app; `variant="swatches"` é a paleta fechada (a "C"): só as amostras e o código. O código vale ao
+  confirmar (Enter ou sair do campo); texto que não é cor volta. No cinza, a trilha do matiz continua mexendo o
+  fundo da área (o hex não muda, o matiz sim — o teste pegou o defeito na primeira versão). A janela também se
+  MONTA, como na referência (`children`): a `ColorArea`, o `Slider` com `channel` e o `ColorField` de dentro, sem
+  valor próprio, repartem a cor do seletor — o catálogo traz os dois exemplos dela, "com campos" e "com trilhas".
+- **`ColorField`** (ADR-0069, escolha do Victor: *"Pode, componente novo"*) — o campo de cor da referência: a
+  amostra na frente e o código (hex, `rgb()`, `hsl()` ou `hsb()`), que vale no Enter ou ao sair do campo; texto
+  que não é cor volta, e o vazio limpa (avisa com `""`). Com `channel`, um canal só, como número, com as setas,
+  Page Up/Down e Home/End. É o `Input` da Aurea, com as mesmas peles (`size`, `variant`); dentro do `Field`, o
+  rótulo, a descrição e o erro são os dele, e `name` manda o hex no formulário.
+- **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
+  (`shortcuts`, ligada; DOC-07).
+- **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
+  `iconTone` (`neutral`, `brand`, `info`, `success`, `warning`, `danger`; no `ConfirmDialog`, segue o
+  `destructive`) e `placement` (`auto`, `center`, `top`, `bottom`).
+- **`Drawer`**: os quatro lados (`side="top"` e `side="bottom"` — o painel que sobe de baixo no celular,
+  WEB-06), `footer`, e arrastar para fechar no sentido do lado (o motor de gaveta do Base UI). A de cima
+  e a de baixo têm a alça.
+- **`Tooltip`**: `arrow`, `delay` e `closeDelay`. **`Popover`**: `arrow`. A seta é opcional, como a da
+  referência; o desenho é nosso.
+- **`Link`** — o link de texto da referência: peso médio, a cor de link, sem sublinhado (aparece com o
+  mouse); `external` abre noutra aba com a seta; `disabled` não navega.
+- **`ColorSwatch`** — a amostra de cor da referência, só redonda e sem o xadrez (decisão do Victor):
+  `color`, `size` (xs 16 a xl 40) e `label` (o nome para o leitor de tela).
+- **`ProgressCircle`** — o progresso em círculo da referência (20 · 28 · 36), com as cores do `Progress`;
+  sem `value`, gira.
+- **`TagGroup`** — o grupo de etiquetas da referência: escolha de nenhuma, uma ou várias, o X de tirar
+  (`onRemove`), descrição e erro; um ponto de Tab só, setas entre as etiquetas, Delete tira.
+- **`Badge tone`** — o nome do nativo para a cor (DOC-11: os mesmos nomes na web e no nativo).
+- **`Alert variant="accent"`** — o acento da referência, na cor de link da Aurea (o `info` continua).
+- **`Text`, `Heading`, `Paragraph` e `Code` com `tone`** — o nome do nativo para a cor do texto (DOC-11):
+  `default`, `muted`, `subtle`, `primary`, `link`, `danger`, `success`, `warning`, `info`. Vence o `color`.
+- **`CodeBlock preview`** (DOC-02) — a caixa de exemplo do site da Aurea, agora no pacote: as abas Prévia |
+  Código, a prévia no fundo afundado e o código sem moldura.
+- **As fichas sem número de pedido nem versão** (DOC-15): os 72 textos públicos (o resumo e as descrições
+  das props, que o site mostra) dizem o que a peça faz hoje; o histórico fica aqui. O check 47 do
+  validador reprova a volta.
+- **`Spinner size="xl"`** (40). **`Progress`**: `showLabel` (o rótulo à mostra, no alto à esquerda),
+  `showValue` (o "60%" à direita) e `size` (o trilho de 4, 8 ou 12). **`Skeleton animation`**: `pulse`
+  (o padrão) ou `none`; o "shimmer" da referência é degradê e não entra.
+- **`AureaProvider toastPlacement`**: onde a pilha de avisos mora (`bottom`, o padrão; `bottom-start`,
+  `bottom-end`, `top`, `top-start`, `top-end`). E o aviso aceita `actionProps` (a ação, um botão pequeno
+  terciário) e mostra o `loading` do `promise()` do motor girando.
+
+- **Nove peças novas no nativo** (passo 9b), com a API da web e o desenho do pacote nativo da referência:
+  - **`Accordion`** — `items`, `variant` (`default`, `surface`), `multiple`, `defaultValue`, e `value` com
+    `onValueChange` (o controlado da referência, que a web não tem). A seta gira numa mola; a resposta entra
+    esmaecendo; o realce do dedo é em cápsula, como na web.
+  - **`ScrollShadow`** — "tem mais para lá": um FIO de 1 na ponta onde há conteúdo escondido, e só lá (a
+    referência usa um degradê; a Aurea não tem degradê — decisão do Victor). E a lista mora numa superfície
+    da Aurea, como o `Accordion` no cartão: fundo do cartão, canto 22, a sombra de superfície (a referência
+    não tem caixa; pedido do Victor). `variant="plain"` tira a caixa, para dentro de um cartão — aí o fio
+    recua 22 dos lados, para não fazer quina. `orientation`, `visibility`, `isEnabled`; respeita a lista
+    invertida.
+  - **`SkeletonGroup`** (e `SkeletonGroup.Item`) — um comando para vários esqueletos: `isLoading`,
+    `isSkeletonOnly` e `animation`, com UM pulso para o grupo inteiro. O **`Skeleton`** ganhou `isLoading`,
+    `children` e `animation`: com `isLoading={false}` a caixa sai e o conteúdo entra esmaecendo.
+  - **`PressableFeedback`** — o alvo de toque que responde: encolhe um pouco com o dedo (0,985 numa peça de
+    300, proporcional), e três partes que se combinam: `.Highlight` (a camada que acende), `.Ripple` (a onda
+    que nasce no dedo, de uma cor só) e `.Scale` (a escala num filho).
+  - **`Slider`**, **`OTPField`** e **`TagGroup`** — os mesmos da web, no toque: um valor ou dois, vertical e
+    valor formatado; o código em casas; as etiquetas com escolha e o X de tirar (o X é irmão da etiqueta, e
+    não filho, para o VoiceOver não esconder nenhum dos dois).
+  - **`Popover`** e **`DropdownMenu`** — o painel com título e seta, e o menu com o MESMO `MenuEntry` da web
+    (ação, link, alternável, escolha única, submenu que abre no lugar, seção). Só no nativo, por enquanto: o
+    `destructive` do item de ação. A janela pinta o fundo pelo tema do app.
+
+- **O mapa de rede, os pedidos do app (passo 10):**
+  - **`GraphEdgeItem.status`** (MNT-26) — o ESTADO da linha, como o selo do nó: `label`, `tone`
+    (`neutral`, `info`, `success`, `warning`, `danger`) e um `mark` opcional, o sinal no meio da linha (o ×
+    do "Caído"), ao lado da marca do tipo. O tom pinta o traço na cor de letra e borda sobre a tela (o par
+    `-400`); no alto contraste, a linha de cor continua de cor. A linha com cor tem o DOBRO da espessura
+    (ordem do Victor): medido com o mapa no "caber na tela", a linha de 1 não chegava à cor de verdade em
+    ponto nenhum e a verde parecia cinza; com 2, a cor aparece. As três espessuras dobram juntas, para a
+    velocidade continuar legível entre as linhas com cor.
+  - **A legenda do mapa em duas partes** (escolha do Victor, depois de pesquisar as ferramentas de mapa de
+    rede que ele indicou): "Tipo de ligação" (o `legend`, pelo desenho, SEM cor) e "Estado" (o
+    `status.label`, na cor), cada uma com o título à vista. Cada amostra mostra o que todas as linhas da
+    fileira têm em comum. Com uma parte só, a legenda é a lista de antes, sem título — quem usa `mark` com um
+    `legend` de estado (como até a 0.31.0) vê a mesma legenda.
+  - **`@aurea-uds/react/graph-worker`** (MNT-22) — o trabalhador do arrumador por um caminho da Aurea. No
+    Vite: `import TrabalhadorDoMapa from "@aurea-uds/react/graph-worker?worker"` e
+    `layoutWorker={() => new TrabalhadorDoMapa()}`. É uma linha que importa o trabalhador do `elkjs` (o peer
+    opcional): o app não importa mais o motor por fora, e o `elkjs` não é copiado para dentro do pacote.
+  - **O teclado do mapa de leitura** (MNT-21, opção "A" do Victor) — o mapa é UMA parada de Tab (o nó
+    atual: o último visitado; no começo, o primeiro); as setas andam de nó em nó; com o nó em foco, o Tab
+    passa pelo botão de fechar dele (e o do contêiner em volta) e pelas linhas dele, e depois sai do mapa.
+    Numa linha em foco, as setas levam às pontas dela. O link de crédito do motor sai do Tab. O app mediu 87
+    paradas, com as 59 linhas antes de qualquer nó.
+- **`DataState catchErrors` e `onCatch`** (MNT-25), na web e no nativo — a barreira de erro, como variação
+  do `DataState` (escolha do Victor; escrita na Aurea, sem dependência nova): o que quebra ao desenhar o
+  conteúdo vira a cara de erro dele, com "Tentar de novo", e o resto da tela fica. `onCatch` (e não
+  `onError`, que é o evento do HTML) recebe o erro para o app registrar.
+
+### Mudou
+
+- **A regra "sem gradientes" ganha UMA exceção** ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md),
+  escolha do Victor: *"cor A"*): pintar as cores que se escolhem — a área e a trilha de cor —, e só no
+  `packages/react/src/color.ts`. O CSS do core continua sem gradiente nenhum. A trava (check 4 do
+  `validate.py`) passou a varrer também o código dos componentes: antes, um gradiente posto pelo React
+  passaria calado.
+- **`Field`: o `<label>` tem `id`**, além do `for` (escolha do Victor, 13/10/2026), como o rótulo da biblioteca
+  de acessibilidade do mercado — outra parte do controle pode apontar para ele (a janela do `DatePicker`).
+  Nada muda na tela.
+- **O site (aureauds.dev) segue a documentação da referência** ([ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md),
+  escolha do Victor): o topo em duas linhas com a logo da Aurea; o menu em ordem alfabética, com os selos
+  "New" e "Updated" tirados dos dados; a página de componente na ordem dela — o título com "Copy Markdown",
+  as pílulas "Source" e "Styles source", Usage, Examples, Styling Reference, API Reference, Related
+  Components e os cartões de anterior e próxima, sem trilha e sem "Installation" por página (ela mora no
+  novo Getting Started); o "All Components" em `components.html`, em grade de 3, com o componente de
+  verdade, parado, em cada cartão; e o Início em `index.html`. As abas Preview | Code continuam as da Aurea.
+  A lateral da esquerda é a superfície flutuante da Aurea, e o "On this page" da direita é a `Sidebar`
+  sem caixa (`asideVariant="plain"`). A busca é a `CommandPalette`, em toda página: o botão "Search" do
+  topo (no Início, só o ícone, como o da referência) e o Ctrl+K (⌘K no Mac) abrem, os resultados vêm em
+  grupos (Pages, Components, Hooks, Patterns, Blocks, Recipes) e o Enter leva à página. O índice sai dos
+  mesmos dados das páginas (`assets/search-index.js`); sem JavaScript, o botão é um link para o "All
+  Components". A vitrine do Início é o `Card variant="outline"`. Dois exemplos encolheram para caber na
+  prévia da coluna nova (ADR-0002: quem cede é o exemplo): o rodapé de site com duas colunas de links, e o
+  "Analytics workbench" com o "Export" sem ícone.
+- ⚠ **A barra de rolagem da `Sidebar` é clara e some parada** (o Victor, 13/10/2026: *"pode alterar o
+  atual para ser claro e sumir a rolagem"*), como a da documentação da referência. Ela continua nativa e
+  no mesmo lugar (nada pula), e aparece com o ponteiro em cima, com o foco do teclado dentro, e sempre em
+  tela de toque. A barra de antes, sempre à vista, é a variante `scrollbar="visible"`. As outras regiões
+  que rolam não mudam.
+- ⚠ **Os títulos de grupo da `Sidebar` e o título do `TableOfContents` são os da referência:** letra 14, sem
+  maiúsculas — o do menu em peso médio, na cor do texto da lateral; o do sumário esmaecido, com o ícone de
+  linhas ao lado, desenhado pelo CSS num `span.toc-label-icon` novo (o sumário não passa a depender do
+  arquivo de ícones). Eram 12 e 11, em maiúsculas espaçadas.
+- ⚠ **Os itens da `Sidebar` que não são o atual ficam esmaecidos**, como os da referência (escolha do Victor,
+  vendo os dois rodando): o cinza sai da cor da própria lateral, e o item acende ao passar o mouse; o título
+  de grupo e o item atual ficam fortes. Contraste medido do item contra a lateral: 7,6:1 no escuro e 5,4:1
+  no claro (na marca `lory`, 7,8:1 e 5,6:1); era 14,5:1.
+- **O "caber na tela" do mapa reserva em cima a barra do modo de arrumar e os botões de zoom** (MNT-24) — o
+  nó de cima ficava atrás da barra até a pessoa rolar. A reserva é medida (a barra quebra em mais linhas na
+  tela estreita); a barra que aparece depois desce o mapa o tanto dela, sem mexer no zoom.
+- **O `TreeView` e a `NavList` não alargam mais a página** (MNT-23) — o rótulo não quebra linha, e numa
+  coluna `1fr` de grade ou num filho `flex: 1` a peça pedia o rótulo inteiro como largura mínima (medido:
+  a caixa de 360 ia a 820). A trilha do texto virou `minmax(0,1fr)` numa grade: pede zero e, quando há
+  espaço, mostra o texto inteiro. A linha não muda de lugar nem de altura.
+- **O `sideEffects` do `@aurea-uds/react` vira uma lista** com o `dist/graph-worker.js` (o import dele É o
+  efeito); os outros arquivos continuam sem efeito colateral.
+- ⚠ **`Button variant="secondary"` passa a ter a LETRA DA MARCA** sobre o fundo neutro, como a
+  referência (decisão do Victor, 11/10/2026: a opção "A"). **O `Button` sem `variant` NÃO muda**: o
+  padrão passa a ser o `tertiary`, que é a cara de sempre (a classe sai `btn-tertiary`, e não mais
+  `btn-secondary`). A regra dela: salvar é o primário, editar o secundário, cancelar o terciário —
+  por isso o "Cancelar" do `ConfirmDialog` e o "Negar" do `ApprovalCard` passam a `tertiary` e não
+  mudam de cara; o exportar da `DataGrid` e os botões do `FileInput` continuam `secondary` e ganham a
+  letra da marca. Quem quer o neutro num botão `secondary` escreve `tertiary`.
+- **O botão**: 16 dos lados (era 15), `lg` com 16 (era 20); o ícone tem 16 em tela de 640 para cima e
+  20 abaixo, e 16 sempre no `sm` e no `xs` (era 20 sempre) — como a referência.
+- ⚠ **`ButtonGroup` e `ToggleGroup` COLADOS** numa cápsula: vão 0, canto só nas pontas, um fio de 1
+  (a cor do texto a 15%) entre os botões, sem o encolher ao apertar, e o contorno que não dobra.
+  Eram cápsulas soltas com vão de 4, que quebravam linha: quem quer assim passa `detached`.
+- **`Toggle`**: passa a ter o fundo neutro (`variant="default"`), como o da referência; o ligado
+  continua o "selecionado" da Aurea. Era sem fundo: quem quer assim passa `variant="ghost"`.
+- **`IconButton` dentro de um `ButtonGroup` com `variant`** segue o grupo; solto, continua fantasma.
+- **Os campos**: 12 dos lados no campo e na área de texto (eram 13 e 14), e a área com 8 em cima e
+  embaixo (era 12); rótulo peso médio (era 600); a dica e a descrição 12/16 sem negrito; o erro com
+  4 de recuo.
+- ⚠ **`NumberField` em grupo**: um grupo só, com a borda e o fundo de campo, e os botões de mais e
+  menos DENTRO dele (40 de largura, ícone 16, um fio entre cada botão e o número), como o da
+  referência. Eram dois botões fantasma soltos ao lado do campo. No toque, o grupo tem 44.
+- **`OTPField`**: a casa de 38 × 40 com o número de 18 em seminegrito (era 36 × 36, letra 14).
+- **Caixa e opção**: a marca de 16 (era 18), o canto da caixa 6 (`--radius-xs`, era 5 cru), 12 até o
+  texto, o texto peso médio (o da caixa era negrito), a descrição 12/16. A opção marcada fica CHEIA,
+  com o ponto no meio.
+- **`Switch`**: o trilho de 40 × 20 (sm 32 × 16, lg 48 × 24; era 42 × 24), a bolinha em cápsula de
+  22 × 16, 12 até o texto, peso médio.
+- **`Kbd`**: a tecla da referência — 24 de altura, 8 dos lados, letra 14 peso médio na fonte do
+  texto, fundo neutro, sem borda —, em cápsula, e redonda quando é um caractere só (`kbd-single`,
+  posto pelo componente). Era 20, letra 11 na fonte de código, com borda. Dentro do botão, 20.
+- **A altura `sm` e `lg` dos controles da web**: 32 e 40 (eram 30 e 42), como a referência; o `md`
+  continua 36. Compacto 28/36 (era 28/38), espaçoso 36/44 (era 34/48).
+- **Títulos**: a entrelinha deixa de ser 1,2 em todos (era 43 no título 1 e 19 no título 6).
+- **Abas e segmentado**: o trilho com 4 de recheio e sem vão, a aba de 32 (o `sm`), 16 dos lados,
+  peso médio — o trilho dá 40 (era 36).
+- **`Breadcrumb`**: vão 6 (era 7), peso médio, sublinhado com o mouse, a página atual na cor do texto
+  e em peso médio (era negrito), o separador de 12 (era 16).
+- ⚠ **`Accordion`** — o da referência, com o realce em cápsula (decisão do Victor): sem caixa em volta
+  (era uma borda em cima e embaixo), um fio entre os itens, a pergunta com 16 de todos os lados, a seta
+  de 16 no FIM, que vira ao abrir (era o marcador do navegador, no começo), a resposta 14 esmaecida, e
+  **um aberto de cada vez** (abrir um fecha o outro, como o dela; `multiple` volta ao de antes).
+- ⚠ **`Pagination`**: o padrão passa a ser os NÚMEROS das páginas, como o da referência, com a página
+  atual no "clarinho" (decisão do Victor). O desenho de antes continua como `variant="compact"`.
+  `onPageChange` deixa de ser obrigatório (com `href`, a página pode só navegar).
+- **`CommandPalette`**: a lista mora DENTRO da caixa da paleta (era um popup embaixo do campo), e o
+  primeiro resultado já vem marcado.
+- ⚠ **`Dialog` e `ConfirmDialog`** com a anatomia da referência: o X é o `CloseButton`, solto no canto
+  a 16 da borda (era um botão fantasma no fim do cabeçalho); o título tem 16, peso médio; o corpo é de
+  14/20 na cor esmaecida, e é ELE que rola — o cabeçalho e o rodapé ficam (rolava a janela inteira); 8
+  entre o cabeçalho e o corpo, 20 antes do rodapé, 8 entre os botões. **No celular a janela senta
+  embaixo** (`placement="auto"`, o padrão dela; `center` volta ao meio); da tela, ela guarda 16 no
+  celular e 40 de 640 para cima (era 20 sempre). Entra crescendo e sai encolhendo.
+- ⚠ **`Drawer`**: as laterais têm 320 no celular e 384 de 640 para cima, nunca mais que 85% da tela
+  (era até 480); o canto 22 do lado de dentro; o fundo das janelas (era o da superfície 1); o conteúdo
+  vai num corpo de 14 esmaecido que rola, e o X é o `CloseButton` no canto. O lado padrão continua a
+  direita (o dela é embaixo).
+- **`Tooltip`**: recheio de 8 (era 6 e 10), letra 12/16, até 320 de largura (era 260), o fundo das
+  janelas (era o afundado); abre com 1,5 s de mouse parado e fecha 0,5 s depois de sair (era 0,6 s e na
+  hora — o tempo da referência); pelo teclado, na hora. E o gatilho que não é focável sozinho (um
+  `<span>`, um `Badge`) passa a receber o foco, como botão — a dica sobre um texto abria só com o
+  `tabIndex` do app (C-11).
+- **`Popover`**: a letra de 14, e o título em peso médio (era negrito).
+- ⚠ **`Table` e `DataGrid`** com a pele da referência (HER-13, *"tabela quero como essa"*): a moldura
+  cinza sem borda, o cabeçalho sobre ela — 12 peso médio esmaecido, SEM caixa-alta (era caixa-alta com
+  espaçamento), um fio de 16 entre as colunas — e o corpo como um cartão por dentro, com o canto da casa
+  nas pontas; as células com 12 em cima e embaixo e 16 dos lados (eram 14 dos lados e a altura da
+  linha), letra de 14; o escolhido da `DataGrid` no clarinho. No celular, a tabela rola de lado dentro da
+  moldura (a "A"). A densidade continua mexendo na altura das linhas. O título (`caption`) fica em cima,
+  alinhado ao texto das colunas (o navegador o centralizava).
+- **`Badge`**: as medidas do Chip da referência — o vão de 4 entre glifo e texto (era 6), `sm` com 6 até
+  o texto (era 8) e `lg` com 14 (era 12); a linha de 16 (era 1, e a letra encostava).
+- **`Avatar`**: 32 · 40 · 48 (eram 32 · 36 · 40, a altura do botão), com a letra de 12 · 14 · 16 em peso
+  médio (era negrito).
+- **`Card`**: o recheio de 16, o da referência (era 20; compacto 12, espaçoso 20 — a diferença de 4 entre
+  as densidades continua); o título 14/24 e a descrição 14/20 colada nele.
+- **`Calendar`**: o mês no começo e as duas setas juntas no fim (eram uma de cada lado do mês), botões de
+  24 na cor de letra da marca; o dia redondo em peso médio; HOJE no clarinho (era um anel); o de fora do
+  mês a meia força; o desligado riscado.
+- ⚠ **`Alert`** é o da referência (*"igual ao dela"*): fundo de CARTÃO, sem borda, com a sombra de
+  superfície (até a 0.31.0 a cor do estado tingia o fundo e a borda); 12 em cima e embaixo e 16 dos lados,
+  16 entre as partes; o ícone de 16 numa caixa de 24; o título 14/24 peso médio NA COR DO ESTADO, e o corpo
+  esmaecido; o X de dispensar é o `CloseButton`. O `Banner` não muda.
+- ⚠ **`Spinner`**: a escala da referência — 16 · 24 · 32 · 40 (era 16 · 20 · 24) — e o componente nasce no
+  `md`, **24** (era 16). O glifo de dentro do botão continua com 16.
+- **`Skeleton`**: o canto 8 (`--radius-sm`, era 7 cru), e parado para quem pediu menos movimento ao sistema.
+- ⚠ **O NATIVO NA ESCALA DE 48** (ADR-0066, aprovada pelo Victor: *"sim, aprovo a escala de 48 no
+  nativo"*) — as medidas do pacote nativo da referência, para o dedo; a web continua em 36:
+  - `Button`/`IconButton`/`LinkButton`: sm 40 · md 48 · lg 56 (eram 32 · 36 · 40), com 14 · 16 · 20 dos
+    lados, vão 6 · 8 · 10 e letra 14 · 16 · 18 peso médio; o `xs` (32) e o `xl` (64) são só da Aurea.
+  - Campos (`Input`, `InputGroup`, `PasswordField`, `SearchField`, o `Combobox`, o `NumberField`, o
+    `DatePicker`, o `FileInput`): 40 · 48 · 56, com 12 dos lados; o `Select` com 12/16 no gatilho e a opção
+    12/8, rótulo 16 peso médio e o visto de 20 na escolhida (o app registra o ícone `check`); `Textarea` 128
+    com 8 em cima e embaixo; o rótulo do `Field` peso médio.
+  - `Checkbox` 24 (era 18) com canto 6; `Radio` 24 com ponto 10; `Switch` 48 × 24 com a bolinha em cápsula
+    28 × 20 (era 42 × 24 e bolinha redonda de 18); 12 até o texto.
+  - `Avatar` 40 · 48 · 64 (eram 32 · 36 · 40) com as iniciais 12 · 14 · 16 peso médio.
+  - `NavList` com 16 de recheio e o título 16 peso médio; `Tabs` (a cápsula) com a aba de 12/6 e o rótulo
+    16 peso médio.
+  - `Dialog`, `ConfirmDialog`, `Drawer` e `BottomSheet` com recheio 20 e título 18 peso médio; o X do
+    `Dialog` e da `Drawer` é o `CloseButton` no canto.
+  - `Alert` como o da web desta versão (cartão, sem borda, sombra, a cor do estado no ícone e no título,
+    12 de recheio, título 16 peso médio, descrição 14, o X é o `CloseButton`); o `Toast` também deixa de
+    tingir o fundo, com 16 de recheio e o X do `CloseButton`.
+  - `Spinner`: 16 · 24 · 32, e o padrão passa a 24 (dentro da lista do `Combobox`, continua 16).
+  - O `NumberField display` sobe para 64 (era 50, que ficaria abaixo do `lg`).
+  - **A barra de baixo (`BottomNav`) NÃO muda** — comparada na bancada com a do `main` nas quatro formas, e
+    congelada num teste.
+- ⚠ **O aviso (`useToast`)** é o da referência: os avisos se EMPILHAM no mesmo lugar — o da frente
+  inteiro, os de trás espiando, e passar o mouse ou o foco abre a pilha (era uma coluna); embaixo no meio
+  (era no canto de baixo, no fim); 460 de largura (era 360); somem em 4 s (eram 5); três à vista. O tipo
+  deixou de tingir o fundo e a borda: pinta o ícone (que o aviso não tinha) e o título. O X é o
+  `CloseButton` de 20 na quina, que aparece com o mouse ou o foco (no toque, sempre); era um "×" de texto.
+
+### Corrigido
+
+- **No alto contraste do Windows, a amostra de cor perdia a cor** — no `ColorSwatch`, nas amostras para escolher, no
+  gatilho do `ColorPicker` e na frente do `ColorField`: viravam círculos brancos, e o "visto" sumia. Agora ela sai da
+  troca do sistema, como a área e a trilha (`forced-color-adjust:none`); o anel de foco fica na cor do sistema.
+- **`Button kbd`: a tecla de dentro do botão tem a medida declarada pela classe `btn-kbd`**, que o `Button` põe, e
+  não mais pelo contexto (`.btn .kbd`). A aparência não muda; um `Kbd` posto à mão dentro de um botão fica com a
+  medida da solta (24) e as cores de dentro do botão.
+- **Site: no cabeçalho, a ordem do Tab é a da tela** — as áreas ("Components", "Patterns"…) vinham primeiro no
+  código e desciam para a segunda linha por `order`, e o Tab ia da marca para baixo e voltava para a busca (WCAG
+  2.4.3). E **o título da página não quebra mais no meio da palavra no celular**: o botão "Copy Markdown" desce
+  quando não cabe ao lado.
+- **`InputGroup` com um `Input variant="secondary"` dentro saía com a borda do `primary`**: quem desenha a caixa é
+  o grupo, e ele só lia o TAMANHO do campo de dentro. Agora lê a pele também (`.input-group:has(>.input-secondary)`).
+  Achado no `ColorField variant="secondary"`, medido na bancada; o `skin.spec` cobra.
+- **O leitor da API (`scripts/build-api-surface.mjs`) não via os ramos de `Base & (A | B)` escrito direto no
+  parâmetro** — a forma do `Slider` (o número ou a cor) e do `ColorSwatch` (a amostra ou o grupo de escolha). O
+  `api-surface.json` publicava 8 props do `Slider` de 21, e o check 14 acusava `channel` de não ser prop. Os ramos
+  agora se somam, com a mesma regra da união dentro de um tipo (a do `Card`).
+- **O `Toggle` sem `size` saía com a classe `btn-undefined`** (medido no catálogo, nos três botões do
+  `ToggleGroup`); e com tamanho responsivo sairia `btn-[object Object]`. Agora a conta é a do `Button`.
+- **As alças do `Slider` saíam sem nome no HTML do servidor** (o axe da varredura do catálogo acusou
+  as cinco): o motor só liga a alça ao rótulo depois de montar. O rótulo agora tem id próprio, que
+  nomeia o grupo e cada alça já na marcação; e o desligado vai também para o grupo (`aria-disabled`).
+- **Duas `Pagination` na mesma página eram dois marcos com o mesmo nome**: `label` dá a cada uma o
+  seu ("Pedidos", "Resultados da busca").
+- **A página atual da `Pagination` desenhava duas linhas no foco** (a borda e o anel separados,
+  ADR-0059): ela entrou na lista das peças com borda, e o anel encosta.
+- **Na `Table` com `stickyFirstColumn`, as células passavam por uma faixa de 4 à esquerda da coluna
+  parada** ao rolar de lado (a moldura tem recheio de 4, e a coluna gruda na borda de dentro dela). Cada
+  célula parada tapa a faixa com a cor da moldura; vale também na escrita da direita para a esquerda.
+- **A seta do `Accordion` não depende mais do arquivo de ícones.** Desde o redesenho deste lote ela era um
+  `Icon`, e quem usava só o `Accordion` (que abre sem JavaScript) via um erro de rede e a seta vazia — a
+  prova do cliente pegou. Agora é desenho do CSS por máscara, o mesmo `caret-down`, no mesmo tamanho e no
+  mesmo lugar (medidos antes e depois: 16 × 16, a 16 da ponta).
+- **Os glifos desenhados por máscara sumiam no alto contraste do Windows** — o menu do `Header`, a seta
+  do link externo, a seta do `KPI`, o visto do aviso preso ao botão e a seta do `Accordion` (medido: zero
+  ponto de tinta nos cinco). Agora pintam com a cor do sistema do texto ao lado; e, nesse modo, o título
+  do `Accordion` fica na cor de texto (o Chromium o pintava na de link, e o Firefox não). Quem cobra:
+  `mascara-alto-contraste.spec.ts`, que também reprova glifo novo por máscara fora da lista.
+- **Os textos públicos das fichas que tinham ficado para trás:** as descrições de `appearance`, `tone` e
+  `share` do `Button`, do `IconButton` e do `ToolbarButton` estavam em português no meio do inglês, e o
+  `MessageList`, o `SegmentedControl`, o `AvatarGroup`, o `BottomNav` e o `Topbar` citavam versão ou data. Em
+  inglês e sem histórico agora; quem cobra é `fichas-texto-publico.test.tsx`.
+
+### ⚠ Pode quebrar a compilação
+
+- **Duas frases novas no `AureaStrings`, na web e no nativo** — `dataCrashed` ("Algo deu errado aqui.") e
+  `dataRetry` ("Tentar de novo"), da barreira de erro do `DataState`. Quem monta o objeto inteiro precisa
+  acrescentá-las; o `ptBR` já as traz.
+- **Mais duas frases no `AureaStrings` da web** — `graphLegendKind` ("Tipo de ligação") e
+  `graphLegendStatus` ("Estado"), os títulos das duas partes da legenda do mapa. Mesma regra: quem monta o
+  objeto inteiro acrescenta; o `ptBR` já as traz.
+- **Mais duas frases no `AureaStrings` da web** — `datePlaceholder` ("Escolher data", o mesmo nome do
+  nativo) e `dateRangePlaceholder` ("Escolher período"), o gatilho vazio do `DatePicker`. Mesma regra: quem
+  monta o objeto inteiro acrescenta; o `ptBR` já as traz.
+- **Oito frases novas no `AureaStrings` da web, da família de cor** (ADR-0069) — `colorPicker` ("Seletor de
+  cor"), `colorArea2D` ("controle 2D"), `colorChannel` (os nomes dos oito canais: matiz, saturação, brilho,
+  luminosidade, vermelho, verde, azul e alfa),
+  `colorHue` (os nomes das cores), `colorTone` (escuro, claro, vivo, pálido, acinzentado…), `colorNameFormat`
+  (a ordem das palavras do nome da cor na língua: `"{hue} {chroma} {lightness}"` no português), `colorHex`
+  ("Código hex", o campo do código) e `colorSwatches` ("Amostras", o grupo de amostras do `ColorPicker`). Mesma
+  regra: quem monta o objeto inteiro acrescenta; o `ptBR` já as traz.
+- `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
+  compilar.
+- `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.
+- **Quatro frases novas no `AureaStrings` da web** — quem monta o objeto inteiro (uma tradução própria)
+  precisa acrescentá-las: `paginationPage` (o "Página" do nome de cada número), `commandHintMove`,
+  `commandHintSelect` e `commandHintClose` (a linha de atalhos da paleta), e `codeBlockPreview` e
+  `codeBlockCode` (as abas da caixa de exemplo do `CodeBlock preview`). O `ptBR` já as traz.
+
+---
+
 ## [0.31.0] — 2026-10-10
 
-⏳ **Ainda não publicada.** A rodada 2 do mapa de rede — mexer no mapa —, dos pedidos de um app de
+✅ **Publicada em 10/10/2026, entre 20:25 e 20:29 (Brasília, medido no npm)**, pelo terminal do
+Victor, da junção do pedido #65. A rodada 2 do mapa de rede — mexer no mapa —, dos pedidos de um app de
 topologia ([ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md)). As seis escolhas foram do Victor,
 depois de ver a referência principal (que não tem grafo), o mercado e as licenças (*"como recomendado,
 pode construir a rodada 2"*). **Versão nova porque entram props, uma dependência opcional, frases e dois

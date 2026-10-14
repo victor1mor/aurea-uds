@@ -423,3 +423,23 @@ test("a barra segue o tema nos dois caminhos, o padrão e o do webkit", () => {
   expect(semComentario).toMatch(/scrollbar-color:\s*var\(--border-strong\)/);
   expect(semComentario).toMatch(/::-webkit-scrollbar-thumb[^{]*\{[^}]*background:\s*var\(--border-strong\)/);
 });
+
+// A barra da LATERAL (o Victor, 13/10/2026: "pode alterar o atual para ser claro e sumir a rolagem"):
+// parada, o polegar é transparente; ele volta com o ponteiro em cima, com o foco dentro, e sempre em tela de
+// toque. O que este teste pega é a metade que falta — a barra apagada SEM a regra que a traz de volta seria
+// exatamente a barra escondida que o teste de cima proíbe. E o desenho de antes continua existindo, como a
+// variante `scrollbar="visible"`, que ganha das regras de cima pela ordem.
+test("a barra da lateral some parada e volta com o ponteiro, o foco e o toque; `visible` é a de antes", () => {
+  const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  const visivel = /color-mix\(in oklab, var\(--sidebar-foreground\) \d+%, transparent\)/.source;
+  expect(semComentario).toMatch(/\.sidebar \{ scrollbar-color:transparent transparent; \}/);
+  expect(semComentario).toMatch(new RegExp(`\\.sidebar:is\\(:hover,:focus-within\\) \\{ scrollbar-color:${visivel} transparent; \\}`));
+  expect(semComentario).toMatch(new RegExp(`\\.sidebar:is\\(:hover,:focus-within\\)::-webkit-scrollbar-thumb \\{ background:${visivel}; \\}`));
+  const toque = semComentario.match(/@media \(hover: none\) \{([\s\S]*?)\n\}/)?.[1] ?? "";
+  expect(toque).toMatch(new RegExp(`\\.sidebar \\{ scrollbar-color:${visivel} transparent; \\}`));
+  expect(toque).toMatch(new RegExp(`\\.sidebar::-webkit-scrollbar-thumb \\{ background:${visivel}; \\}`));
+  const iVisivel = semComentario.indexOf(".sidebar.sidebar-scrollbar-visible { scrollbar-color:var(--border-strong) transparent; }");
+  expect(iVisivel).toBeGreaterThan(semComentario.indexOf(".sidebar:is(:hover,:focus-within) {"));
+  expect(iVisivel).toBeGreaterThan(semComentario.indexOf("@media (hover: none) {"));
+  expect(semComentario).toMatch(/\.sidebar\.sidebar-scrollbar-visible::-webkit-scrollbar-thumb \{ background:var\(--border-strong\); \}/);
+});

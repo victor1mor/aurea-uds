@@ -117,7 +117,14 @@ const ENTRELINHA: Record<AureaTextLeading, string> = {
 // degrau no componente de tipografia (o `body-sm` dela é 14, como na web), então o papel também não sobe.
 interface Papel { tamanho: string; peso: AureaTextWeight; entrelinha: string; fonte: AureaTextFont; junto?: true }
 // O título usa o papel `heading` (GAR-16, 0.28.0) — hoje a mesma fonte do texto, no mesmo peso 600.
-const titulo = (tamanho: string): Papel => ({tamanho, peso: 600, entrelinha: "leadingTight", fonte: "heading", junto: true});
+// 0.32.0: a entrelinha é a de CADA tamanho (40 · 36 · 32 · 28 · 28 · 24), como na escala publicada
+// da referência e na web; até aqui era `leadingTight` (1,2) em todos.
+const ENTRELINHA_DO_TITULO: Record<string, string> = {
+  text4xl: "text4xlLeading", text3xl: "text3xlLeading", text2xl: "text2xlLeading",
+  textXl: "textXlLeading", textLg: "textLgLeading", textBase: "leadingNormal",
+};
+const titulo = (tamanho: string): Papel =>
+  ({tamanho, peso: 600, entrelinha: ENTRELINHA_DO_TITULO[tamanho] ?? "leadingTight", fonte: "heading", junto: true});
 const PAPEL: Record<AureaTextType, Papel> = {
   h1: titulo("text4xl"), h2: titulo("text3xl"), h3: titulo("text2xl"),
   h4: titulo("textXl"), h5: titulo("textLg"), h6: titulo("textBase"),

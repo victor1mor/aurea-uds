@@ -1,0 +1,178 @@
+{
+  "name": "DatePicker",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "summary": "A field that opens a calendar to pick a date, or a range of dates.",
+  "icon": "calendar",
+  "platforms": {
+    "web": "supported",
+    "native": "supported"
+  },
+  "variants": [],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "responsive": {
+    "size": "visual"
+  },
+  "states": [
+    "default",
+    "open",
+    "filled",
+    "disabled"
+  ],
+  "tokens": [
+    "--muted-foreground",
+    "--space-2",
+    "--space-3"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "The trigger is a button that opens a dialog (the calendar in a popover). The dialog takes the field's name, focus moves to the chosen day (or today) when it opens, and Escape or choosing a date closes it and returns focus to the trigger. Inside, the calendar is the Calendar grid.",
+    "keyboard": [
+      "Enter",
+      "Space",
+      "Escape",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Enter or Space on the trigger opens the calendar; the arrows, PageUp/PageDown and Home/End move the day inside it (the Calendar grid); Escape closes."
+  },
+  "dependencies": {
+    "engine": "react-day-picker",
+    "icons": [
+      "calendar"
+    ]
+  },
+  "related": {
+    "components": [
+      "Calendar",
+      "Popover",
+      "Select",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/calendar.tsx#DatePicker"
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "Date | DateRange",
+      "default": "—",
+      "description": "The chosen date (controlled). With range, {from, to}."
+    },
+    {
+      "name": "defaultValue",
+      "type": "Date | DateRange",
+      "default": "—",
+      "description": "The starting date when you do not control it."
+    },
+    {
+      "name": "onChange",
+      "type": "(value) => void",
+      "default": "—",
+      "description": "Called on every pick. A single date closes the calendar; a range closes on the second pick."
+    },
+    {
+      "name": "range",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pick a range instead of one date. Every time the calendar opens, the first pick is one end and the second is the other, in any order — it does not stretch the range that was there."
+    },
+    {
+      "name": "minimumDate",
+      "type": "Date",
+      "default": "—",
+      "description": "Days before it are disabled, and the calendar does not go back past its month."
+    },
+    {
+      "name": "maximumDate",
+      "type": "Date",
+      "default": "—",
+      "description": "Days after it are disabled, and the calendar does not go past its month."
+    },
+    {
+      "name": "format",
+      "type": "(d: Date) => string",
+      "default": "the locale's language",
+      "description": "How a date is written on the trigger. The default is day, short month and year in the language of locale — English without it, the same on the server and in the browser."
+    },
+    {
+      "name": "locale",
+      "type": "DayPickerLocale",
+      "default": "English",
+      "description": "The language of the trigger AND the calendar, together: the object from react-day-picker/locale (import {ptBR} from \"react-day-picker/locale\"), the same one Calendar takes. It never comes from the environment, so the server and the browser write the same text."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "strings.datePlaceholder",
+      "description": "The text of the empty trigger. With range, strings.dateRangePlaceholder."
+    },
+    {
+      "name": "icon",
+      "type": "IconName | false",
+      "default": "\"calendar\"",
+      "description": "The icon at the end of the trigger; false removes it."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Sends the value with a form: yyyy-mm-dd, from the LOCAL date; a range goes as yyyy-mm-dd/yyyy-mm-dd, the ISO 8601 interval."
+    },
+    {
+      "name": "size",
+      "type": "Responsive<sm | md | lg>",
+      "default": "md",
+      "description": "The field height, the same scale as Select and Input."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "The trigger does not open."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the TRIGGER, which is the focusable node — it is what a <label htmlFor> points at. Inside a Field, the Field gives it one."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": "—",
+      "description": "Names the trigger when there is no visible label, and the calendar window too. With a Field, prefer the Field's label."
+    },
+    {
+      "name": "aria-labelledby",
+      "type": "string",
+      "default": "—",
+      "description": "Names the trigger and the calendar window by another element's id."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the trigger. It is spelled out because this component unpacks a fixed list of props and drops anything else."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the trigger, after the Aurea skin."
+    }
+  ]
+}

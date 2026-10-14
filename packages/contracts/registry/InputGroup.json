@@ -56,7 +56,7 @@
       "name": "width",
       "type": "string",
       "default": "—",
-      "description": "Takes the group out of 100% (A-08): \"20rem\" for a measure, \"auto\" for the content size. With it the group also stops growing in a row."
+      "description": "Takes the group out of 100%: \"20rem\" for a measure, \"auto\" for the content size. With it the group also stops growing in a row."
     }
   ]
 }

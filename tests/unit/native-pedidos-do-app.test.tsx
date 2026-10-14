@@ -614,10 +614,11 @@ describe("A6 · `Switch` sem rótulo não estica", () => {
     expect(colunas.length).toBe(0);
   });
 
-  it("COM `label`, continua igual — coluna de texto e vão de 10", () => {
+  // 0.32.0: o vão passou a 12 (`space3`), o do campo de controle da referência e o do `Checkbox`.
+  it("COM `label`, continua igual — coluna de texto e vão de 12", () => {
     render(<Envolve><Switch label="Digital" checked onChange={() => {}} testID="sw" /></Envolve>);
     const raiz = __instancias("Pressable").find((p) => p.testID === "sw") ?? {};
-    expect((StyleSheet.flatten(raiz.style as never) as {gap?: number}).gap).toBe(10);
+    expect((StyleSheet.flatten(raiz.style as never) as {gap?: number}).gap).toBe(12);
     const colunas = __instancias("View")
       .map((p) => StyleSheet.flatten(p.style as never) as {flex?: number} | undefined)
       .filter((x) => x?.flex === 1);

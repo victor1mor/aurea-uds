@@ -63,6 +63,12 @@
       "description": "Draws the copy button. The copying itself lives in the core's aurea.js, so React and plain HTML share one implementation instead of two that drift."
     },
     {
+      "name": "preview",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The live example of the code. With it, the block becomes the example box of Aurea's site: the Preview | Code tabs (a segmented control across the width; arrows, Home and End move between them), the preview on the recessed surface and the code without a frame."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

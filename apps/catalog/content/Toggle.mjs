@@ -55,5 +55,16 @@ export default {
       note: "This catalog page is static HTML, so the preview shows the two states side by side "
         + "instead of switching. Pressing is real in your app, not here.",
     },
+    {
+      title: "Ghost",
+      description: "The default has the neutral fill; ghost has none, for a quiet row. Pressed looks the same on both.",
+      code: [
+        '<Toggle variant="ghost" icon="text-b" label="Bold" defaultPressed />',
+        '<Toggle variant="ghost" icon="text-italic" label="Italic" />',
+      ].join("\n"),
+      render: () => h("div", {style: row},
+        h(Toggle, {variant: "ghost", icon: "text-b", label: "Bold", defaultPressed: true}),
+        h(Toggle, {variant: "ghost", icon: "text-italic", label: "Italic"})),
+    },
   ],
 };

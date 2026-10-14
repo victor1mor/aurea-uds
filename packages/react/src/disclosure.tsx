@@ -2,13 +2,39 @@
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import {type ReactNode} from "react";
+import React, {type ReactNode} from "react";
 import {Collapsible as BaseCollapsible} from "@base-ui/react/collapsible";
 import {cx} from "./internal.js";
 import {soOValor} from "./pure.js";
 import {Icon} from "./system.js";
 
-export function Accordion({items}:{items:Array<{id:string;title:ReactNode;content:ReactNode}>}){return <div className="accordion">{items.map(i=><details key={i.id}><summary>{i.title}</summary><div className="accordion-content">{i.content}</div></details>)}</div>}
+// ACCORDION (0.32.0) — o da referência, com o realce em CÁPSULA (decisão do Victor, 11/10/2026: *"quero
+// como o deles as medidas e tudo apenas com uma alteração a seleção é quadrada deles quero nossa como
+// capsula"*). Sem caixa em volta; um fio entre os itens (nenhum depois do último); a pergunta com 16 de
+// todos os lados, 14 peso médio; a seta de 16 no fim, esmaecida, que vira ao abrir; a resposta 14
+// esmaecida, com 16 dos lados e embaixo; o realce do mouse só no fechado. `variant="surface"` põe tudo
+// num cartão, com o fio a 94% e o realce no cinza neutro.
+// Continua sobre `<details>`: abre sem JavaScript. UM DE CADA VEZ, como o dela por padrão — o HTML faz
+// sozinho com o mesmo `name` em todos os `<details>`; `multiple` deixa abrir vários.
+export type AccordionVariant="default"|"surface";
+export interface AccordionItem{id:string;title:ReactNode;content:ReactNode;
+  /** O item que não abre: anunciado como desligado e fora do Tab. */
+  disabled?:boolean}
+export function Accordion({items,variant="default",multiple=false,defaultValue,className}:{items:AccordionItem[];variant?:AccordionVariant;
+  /** Deixa vários itens abertos ao mesmo tempo. Sem isto, abrir um fecha o outro. */
+  multiple?:boolean;
+  /** Os itens que começam abertos (o `id` de cada um). */
+  defaultValue?:string[];className?:string}){
+  const grupo=React.useId();
+  return <div className={cx("accordion",variant==="surface"&&"accordion-surface",className)}>{items.map(i=>
+    <details key={i.id} className="accordion-item" name={multiple?undefined:grupo} open={defaultValue?.includes(i.id)||undefined}>
+      <summary aria-disabled={i.disabled||undefined} tabIndex={i.disabled?-1:undefined}
+        onClick={i.disabled?(e:React.MouseEvent)=>e.preventDefault():undefined}>
+        <span className="accordion-title">{i.title}</span><span className="accordion-chevron" aria-hidden="true"/>
+      </summary>
+      <div className="accordion-content">{i.content}</div>
+    </details>)}</div>;
+}
 
 // COLLAPSIBLE — uma seção que abre e fecha, com o estado do lado de quem usa.
 //

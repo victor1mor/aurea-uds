@@ -116,14 +116,20 @@ test("a marca de seleção sai do token de altura, e não de um pixel cru", () =
 // inline de um elemento absoluto resolve contra a LARGURA do contêiner, não contra a altura:
 // escrever a mesma conta nos dois eixos deu um botão de 34×16, medido no navegador depois que a
 // suíte de captura reprovou duas seções da página de docs. O `aspect-ratio` fecha o quadrado.
-test("o botão do switch encolhe com o trilho, por um eixo só", () => {
+// 0.32.0: a bolinha passou a ser a CÁPSULA da referência (22 × 16 no md), e não mais um círculo — o
+// `aspect-ratio:1` saiu. O que o teste protege continua: a medida sai do trilho (que sai da altura de
+// controle), nunca de porcentagem no eixo inline nem de número cru.
+test("o botão do switch encolhe com o trilho, sem porcentagem no eixo inline e sem número cru", () => {
   const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, "");
   const corpo = /\.switch-track:after\s*\{([^}]*)\}/.exec(semComentario)?.[1] ?? "";
-  expect(corpo).toMatch(/block-size:\s*calc\(100%/);
+  expect(corpo).toMatch(/--thumb-h:\s*calc\(var\(--switch-h\)/);
+  expect(corpo).toMatch(/block-size:\s*var\(--thumb-h\)/);
+  expect(corpo).toMatch(/inline-size:\s*var\(--thumb-w\)/);
   expect(corpo, "porcentagem no eixo inline mede a LARGURA do trilho, não a altura")
     .not.toMatch(/inline-size:\s*calc\(100%/);
-  expect(corpo).toMatch(/aspect-ratio:\s*1/);
   expect(corpo).not.toMatch(/(inline|block)-size:\s*\d+px/);
+  // e o trilho sai da altura de controle
+  expect(semComentario).toMatch(/\.switch-track \{[^}]*--switch-h:calc\(var\(--step-h,var\(--control-h-md\)\)/);
 });
 
 test.each([

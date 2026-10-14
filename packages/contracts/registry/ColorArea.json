@@ -1,0 +1,182 @@
+{
+  "name": "ColorArea",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Ready",
+  "summary": "The square where you pick two channels of a colour for the third one fixed — saturation and brightness by default, or any pair of HSB, HSL or RGB — by pointer, touch or keyboard. The screen reader hears the channels and the colour's name.",
+  "icon": "palette",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "focus",
+    "dragging",
+    "disabled"
+  ],
+  "tokens": [
+    "--radius-lg",
+    "--radius-full",
+    "--space-4",
+    "--space-5",
+    "--space-8",
+    "--space-24",
+    "--border-width",
+    "--focus-width",
+    "--focus-strong",
+    "--focus-offset",
+    "--opacity-disabled",
+    "--duration-base",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "role": "group",
+    "apg": "A group with two hidden range inputs, one per axis (saturation and brightness), announced as a 2D slider. Only one is in the Tab order. Before you move it, each input's value names the three channels and the colour; after a keyboard change, only the channel that changed and the colour.",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Arrows move one step (Shift: ten). Page Up/Down change the brightness by ten, Home/End the saturation by ten. Left and right swap when the text runs right to left."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ColorSwatch",
+      "Slider",
+      "Field"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#ColorArea"
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "The colour, in hex or rgb()/hsl()/hsb(), controlled."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "\"#ffffff\"",
+      "description": "The starting colour when you do not control it."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called on every step with #rrggbb."
+    },
+    {
+      "name": "onValueCommitted",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called when the pointer is released and on every key — the moment to save."
+    },
+    {
+      "name": "colorSpace",
+      "type": "\"hsb\" | \"hsl\" | \"rgb\"",
+      "default": "\"hsb\"",
+      "description": "The colour space of the area. Without it, the one the channels ask for."
+    },
+    {
+      "name": "xChannel",
+      "type": "ColorChannel",
+      "default": "saturation (HSB, HSL) · red (RGB)",
+      "description": "The channel across."
+    },
+    {
+      "name": "yChannel",
+      "type": "ColorChannel",
+      "default": "brightness (HSB) · lightness (HSL) · green (RGB)",
+      "description": "The channel up."
+    },
+    {
+      "name": "showDots",
+      "type": "boolean",
+      "default": "false",
+      "description": "A grid of dots over the area, as in the reference — it helps to see the position."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "The area does not move."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Sends the colour with a form, as #rrggbb."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the group."
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "default": "strings.colorPicker",
+      "description": "What the colour is for (\"Background\"). The inputs are named \"Background, Color picker\"; without it, \"Color picker\"."
+    },
+    {
+      "name": "aria-labelledby",
+      "type": "string",
+      "default": "—",
+      "description": "Names the group and the inputs by another element's id."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the inputs."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the area, after the Aurea skin."
+    }
+  ],
+  "axes": {
+    "colorSpace": [
+      "hsb",
+      "hsl",
+      "rgb"
+    ],
+    "xChannel": [
+      "hue",
+      "saturation",
+      "brightness",
+      "lightness",
+      "red",
+      "green",
+      "blue"
+    ],
+    "yChannel": [
+      "hue",
+      "saturation",
+      "brightness",
+      "lightness",
+      "red",
+      "green",
+      "blue"
+    ]
+  }
+}

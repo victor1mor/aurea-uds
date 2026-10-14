@@ -1,0 +1,158 @@
+{
+  "name": "ColorSwatch",
+  "category": "Identity",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows, and a checkerboard under a transparent colour. With options, a group of swatches to pick one from (a closed palette).",
+  "icon": "palette",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg",
+    "xl"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "selected",
+    "disabled"
+  ],
+  "tokens": [
+    "--space-4",
+    "--space-6",
+    "--space-8",
+    "--space-10",
+    "--radius-full",
+    "--foreground",
+    "--border-width",
+    "--focus-width",
+    "--focus-strong",
+    "--focus-offset",
+    "--opacity-disabled",
+    "--space-1",
+    "--space-2",
+    "--duration-fast",
+    "--ease-standard"
+  ],
+  "a11y": {
+    "role": "img",
+    "apg": "Alone, an image (role=img) named by label or the colour value. With options (the picker variation, ADR-0069), a radio group: one native radio button per colour, named by the option's label or the code; the browser gives single choice and the arrow keys.",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Space"
+    ],
+    "keyboardNote": "Alone, not interactive. With options, Tab enters the group at the chosen colour, the arrows move and choose, Space chooses — all from the browser's radio buttons."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Badge",
+      "ColorArea",
+      "Radio"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/markup.tsx#ColorSwatch"
+  },
+  "props": [
+    {
+      "name": "color",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED without options. Any CSS colour: #f0c200, oklch(…), var(--primary)."
+    },
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "default": "\"md\"",
+      "description": "16, 24, 32, 36, 40 — the reference library's scale. Round only (Victor's decision); the checkerboard shows only under a transparent colour."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "color",
+      "description": "The name a screen reader announces (\"Aurea yellow\"); without it, the colour value. With options, the name of the group (\"Accent colour\"), and REQUIRED."
+    },
+    {
+      "name": "options",
+      "type": "(string | {color, label?})[]",
+      "default": "—",
+      "description": "The picker variation (ADR-0069): the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "With options, REQUIRED: the group's name in a form, and what makes the swatches one group (the arrows move between them)."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "With options: the chosen colour, controlled."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "With options: the colour chosen at the start."
+    },
+    {
+      "name": "onChange",
+      "type": "ChangeEventHandler<HTMLInputElement>",
+      "default": "—",
+      "description": "With options: the browser's event, as in Radio — event.target.value is the chosen colour."
+    },
+    {
+      "name": "layout",
+      "type": "\"grid\" | \"stack\"",
+      "default": "\"grid\"",
+      "description": "With options: in a wrapping row (grid) or in a column (stack), as in the reference."
+    },
+    {
+      "name": "indicator",
+      "type": "ReactNode",
+      "default": "the check",
+      "description": "With options: the mark of the chosen colour, in place of the check (an Icon, for example). It takes the ink that contrasts most."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "With options: no colour can be chosen."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "With options: the id of the group."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Added to the swatch."
+    }
+  ],
+  "sizeProp": "size",
+  "axes": {
+    "layout": [
+      "grid",
+      "stack"
+    ]
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "name": "ColorPicker",
+  "category": "Inputs",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "summary": "A swatch with a name that opens a window to pick a colour: the area, the hue track and the hex field — or, as the swatches variation, a closed palette with the hex field.",
+  "icon": "palette",
+  "platforms": {
+    "web": "supported",
+    "native": "planned"
+  },
+  "variants": [
+    "full",
+    "swatches"
+  ],
+  "sizes": [],
+  "states": [
+    "default",
+    "open",
+    "focus",
+    "disabled"
+  ],
+  "tokens": [
+    "--space-2",
+    "--space-3",
+    "--space-8",
+    "--space-24",
+    "--radius-full",
+    "--text-sm",
+    "--weight-medium",
+    "--foreground",
+    "--focus-width",
+    "--focus-strong",
+    "--focus-offset",
+    "--opacity-disabled"
+  ],
+  "a11y": {
+    "role": "button",
+    "apg": "The trigger is a button named by the label and the colour's name; it opens a dialog named by the label. Inside: the ColorArea (a 2D slider), the hue Slider, the ColorSwatch options (a radio group) and the hex field. The hex is applied on Enter or when the field loses focus; text that is not a colour goes back to the colour before.",
+    "keyboard": [
+      "Enter",
+      "Space",
+      "Escape",
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End"
+    ],
+    "keyboardNote": "Enter or Space on the trigger opens the window; Tab moves through the area, the hue track, the swatches and the hex field; each keeps its own keys; Escape closes and returns focus to the trigger."
+  },
+  "dependencies": {
+    "engine": "@base-ui/react/popover",
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ColorArea",
+      "ColorField",
+      "ColorSwatch",
+      "InputGroup",
+      "Slider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#ColorPicker"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. The name next to the swatch on the trigger (\"Brand colour\"). Names the trigger and the window."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "The colour in hex (#rrggbb or #rgb), controlled."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "\"#ffffff\"",
+      "description": "The starting colour when you do not control it."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called on every step with #rrggbb."
+    },
+    {
+      "name": "onValueCommitted",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called on release, on every key, when a swatch is chosen and when the hex is confirmed — the moment to save."
+    },
+    {
+      "name": "swatches",
+      "type": "(string | {color, label?})[]",
+      "default": "—",
+      "description": "Ready colours, under the hue track; with variant=\"swatches\", in place of the area. Without a label, each is named by the colour's name in the app's language."
+    },
+    {
+      "name": "variant",
+      "type": "\"full\" | \"swatches\"",
+      "default": "\"full\"",
+      "description": "\"swatches\": the closed palette (ADR-0069, the \"C\") — only the swatches and the hex field."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "area, hue, swatches, hex field",
+      "description": "The content of the window, built by you (\"with fields\", \"with sliders\"): the colour pieces without a value of their own — ColorArea, Slider with channel, ColorField — share the picker's colour."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "The trigger does not open."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Sends the colour with a form, as #rrggbb."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "Id of the trigger."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Merged onto the trigger, after the Aurea skin."
+    }
+  ]
+}

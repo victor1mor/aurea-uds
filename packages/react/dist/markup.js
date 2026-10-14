@@ -37,6 +37,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
 import React, { forwardRef } from "react";
 import { cx, fundirRender, peleDoEixo } from "./pure.js";
+// As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
+import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
 export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, className, render, ...props }) {
     return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
 }
@@ -104,16 +106,17 @@ export function Timeline({ items }) { return _jsx("ol", { className: "timeline",
 // `dangerouslySetInnerHTML` tem de SANITIZAR antes. A Aurea desenha o texto; ela não pode decidir
 // o que é seguro renderizar. Está dito na ficha, em voz alta.
 export function Prose({ className, ...props }) { return _jsx("div", { className: cx("prose", className), ...props }); }
-const tipografia = (tipo, { align, color, weight, truncate, numeric }, className) => cx("typography", `typography-${tipo}`, color === "muted" && "typography-muted", weight && `typography-weight-${weight}`, align && `typography-align-${align}`, truncate && "typography-truncate", numeric && "typography-numeric", className);
-export function Text({ type = "body", align, color, weight, truncate, numeric, className, ...props }) { return _jsx("span", { className: tipografia(type, { align, color, weight, truncate, numeric }, className), ...props }); }
+const tipografia = (tipo, { align, color, tone, weight, truncate, numeric }, className) => cx("typography", `typography-${tipo}`, (tone ?? color) === "muted" && "typography-muted", tone && tone !== "default" && tone !== "muted" && `typography-tone-${tone}`, weight && `typography-weight-${weight}`, align && `typography-align-${align}`, truncate && "typography-truncate", numeric && "typography-numeric", className);
+export function Text({ type = "body", align, color, tone, weight, truncate, numeric, className, ...props }) { return _jsx("span", { className: tipografia(type, { align, color, tone, weight, truncate, numeric }, className), ...props }); }
 // O nível decide o elemento E o tamanho, como na referência: um `h2` tem a cara de título 2.
-export function Heading({ level = 1, align, color, weight, truncate, numeric, className, ...props }) { const Tag = `h${level}`; return _jsx(Tag, { className: tipografia(`h${level}`, { align, color, weight, truncate, numeric }, className), ...props }); }
-export function Paragraph({ size = "base", align, color, weight, truncate, numeric, className, ...props }) { return _jsx("p", { className: tipografia(size === "base" ? "body" : `body-${size}`, { align, color, weight, truncate, numeric }, className), ...props }); }
-export function Code({ align, color, weight, truncate, className, ...props }) { return _jsx("code", { className: tipografia("code", { align, color, weight, truncate }, className), ...props }); }
+export function Heading({ level = 1, align, color, tone, weight, truncate, numeric, className, ...props }) { const Tag = `h${level}`; return _jsx(Tag, { className: tipografia(`h${level}`, { align, color, tone, weight, truncate, numeric }, className), ...props }); }
+export function Paragraph({ size = "base", align, color, tone, weight, truncate, numeric, className, ...props }) { return _jsx("p", { className: tipografia(size === "base" ? "body" : `body-${size}`, { align, color, tone, weight, truncate, numeric }, className), ...props }); }
+export function Code({ align, color, tone, weight, truncate, className, ...props }) { return _jsx("code", { className: tipografia("code", { align, color, tone, weight, truncate }, className), ...props }); }
 // `max` com `+` é o idioma universal do contador (três das referências o usam). Exportada porque quem
 // escreve o nome acessível precisa do MESMO texto — "99+ unread" tem de bater com o que se vê.
 export function formatBadgeCount(count, max = 99) { return count > max ? `${max}+` : String(count); }
-export function Badge({ variant = "neutral", emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, children, className, ...props }) {
+export function Badge({ variant: variantProp = "neutral", tone, emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, children, className, ...props }) {
+    const variant = tone ?? variantProp;
     const numero = count != null ? formatBadgeCount(count, max) : undefined;
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
     // Ponto puro: `dot` sem nada para mostrar. Aí o badge não tem conteúdo, e ganha medida própria.
@@ -131,7 +134,7 @@ export function Badge({ variant = "neutral", emphasis = "soft", size = "md", dot
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
 // de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.
-export function Progress({ value, label, detail, tone = "brand", className }) {
+export function Progress({ value, label, detail, tone = "brand", showLabel, showValue, size = "md", className }) {
     const semTotal = value == null || Number.isNaN(value);
     const pct = semTotal ? undefined : Math.max(0, Math.min(100, value));
     const temApoio = detail != null && detail !== false && detail !== "";
@@ -139,9 +142,14 @@ export function Progress({ value, label, detail, tone = "brand", className }) {
     // vezes. Apoio que não é texto (um ícone, um link) fica onde está, para o leitor achar sozinho.
     const emTexto = temApoio && (typeof detail === "string" || typeof detail === "number") ? String(detail) : undefined;
     const valuetext = emTexto == null ? undefined : pct == null ? emTexto : `${pct}%, ${emTexto}`;
-    return _jsxs("div", { className: cx("progress-field", className), children: [temApoio && _jsx("div", { className: "progress-detail", "aria-hidden": emTexto != null || undefined, children: detail }), _jsx("div", { className: cx("progress", semTotal && "progress-indeterminate", tone !== "brand" && `progress-tone-${tone}`), role: "progressbar", "aria-label": label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-valuetext": valuetext, children: _jsx("span", { style: pct == null ? undefined : { width: `${pct}%` } }) })] });
+    // O rótulo à mostra sai do leitor de tela (`aria-hidden`): quem nomeia a barra continua o `aria-label`,
+    // com o mesmo texto — sem isso, o leitor o leria duas vezes. (Este arquivo não usa hook, então nada de
+    // id gerado para `aria-labelledby`.)
+    const rotuloVisivel = !!showLabel && !!label;
+    const valor = !temApoio && showValue && pct != null ? `${Math.round(pct)}%` : undefined;
+    return _jsxs("div", { className: cx("progress-field", className), children: [rotuloVisivel && _jsx("span", { className: "progress-label", "aria-hidden": "true", children: label }), temApoio && _jsx("div", { className: "progress-detail", "aria-hidden": emTexto != null || undefined, children: detail }), valor && _jsx("div", { className: "progress-detail", "aria-hidden": "true", children: valor }), _jsx("div", { className: cx("progress", semTotal && "progress-indeterminate", tone !== "brand" && `progress-tone-${tone}`, size !== "md" && `progress-${size}`), role: "progressbar", "aria-label": label, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": pct, "aria-valuetext": valuetext, children: _jsx("span", { style: pct == null ? undefined : { width: `${pct}%` } }) })] });
 }
-export function Skeleton({ className, ...props }) { return _jsx("div", { className: cx("skeleton", className), "aria-hidden": "true", ...props }); }
+export function Skeleton({ animation = "pulse", className, ...props }) { return _jsx("div", { className: cx("skeleton", animation === "none" && "skeleton-static", className), "aria-hidden": "true", ...props }); }
 // ── Identity ─────────────────────────────────────────────────────────────────────────────────
 // `React.Children` não é hook — é utilitário de leitura de `children`, e roda no servidor.
 export function AvatarGroup({ children, max, total, label, size, className }) {
@@ -180,8 +188,12 @@ export function Topbar(props) { return _jsx(Header, { ...props }); }
 // Kbd — representação de tecla/atalho. <kbd> é o elemento HTML certo; a pele é nossa. Ele já
 // morava fora da casa dele (no `internal.tsx`, por causa do `Button`); agora mora aqui, pelo
 // mesmo motivo elevado a regra.
-export function Kbd({ children, className, ...props }) { return _jsx("kbd", { className: cx("kbd", className), ...props, children: children }); }
-export const Textarea = forwardRef(function Textarea({ className, size, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), className), ...props }); });
+// 0.32.0: uma tecla de UM caractere ("K", "⌘", "/") sai redonda (`kbd-single`), e uma palavra
+// ("Esc", "Enter") em cápsula — o canto da Aurea sobre a medida da referência. Conta-se o que a
+// pessoa vê (`Array.from` não parte um emoji ao meio); conteúdo que não é texto fica em cápsula.
+const umCaractere = (c) => (typeof c === "string" || typeof c === "number") && Array.from(String(c).trim()).length === 1;
+export function Kbd({ children, className, ...props }) { return _jsx("kbd", { className: cx("kbd", umCaractere(children) && "kbd-single", className), ...props, children: children }); }
+export const Textarea = forwardRef(function Textarea({ className, size, variant, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), variant === "secondary" && "textarea-secondary", className), ...props }); });
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] }); }
@@ -228,3 +240,28 @@ export function InputGroupAddon({ side = "start", layout = "inline", className, 
 // escreve o `padding-top: 56.25%` de 2015, ou esquece o `min-width: 0` que impede a caixa de
 // estourar dentro de um grid.
 export function AspectRatio({ ratio = 1, className, style, ...props }) { return _jsx("div", { className: cx("aspect-ratio", className), style: { aspectRatio: ratio, ...style }, ...props }); }
+export function Link({ external, disabled, href, target, rel, className, children, ...props }) {
+    return _jsxs("a", { className: cx("link", className), href: disabled ? undefined : href, "aria-disabled": disabled || undefined, target: external ? target ?? "_blank" : target, rel: external ? rel ?? "noopener noreferrer" : rel, ...props, children: [children, external && _jsx("span", { className: "link-external", "aria-hidden": "true" })] });
+}
+// Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
+// `oklch()` a marcação não lê: fica sem xadrez.
+const transparente = (cor) => { const c = parseColor(cor); return c !== null && c.a < 1; };
+export function ColorSwatch(props) {
+    if ("options" in props) {
+        const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, size = "md", disabled, id, className } = props;
+        // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
+        // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
+        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", className), children: options.map((o) => {
+                const op = typeof o === "string" ? { color: o } : o;
+                const cor = parseColor(op.color), rgb = cor && hsbToRgb(cor);
+                return _jsxs("label", { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, op.color);
+            }) });
+    }
+    const { color, size = "md", label, className, style, ...resto } = props;
+    return _jsx("span", { role: "img", "aria-label": label ?? color, className: cx("color-swatch", size !== "md" && `color-swatch-${size}`, transparente(color) && "color-swatch-alpha", className), style: { ...style, ["--color-swatch-current"]: color }, ...resto });
+}
+export function ProgressCircle({ value, min = 0, max = 100, size = "md", tone = "brand", label, className, ...props }) {
+    const semTotal = value == null || Number.isNaN(value);
+    const pct = semTotal ? 25 : Math.max(0, Math.min(100, (value - min) / (max - min) * 100));
+    return _jsx("div", { role: "progressbar", "aria-label": label, "aria-valuemin": semTotal ? undefined : min, "aria-valuemax": semTotal ? undefined : max, "aria-valuenow": semTotal ? undefined : value, className: cx("progress-circle", size !== "md" && `progress-circle-${size}`, tone !== "brand" && `progress-circle-${tone}`, semTotal && "progress-circle-indeterminate", className), ...props, children: _jsxs("svg", { viewBox: "0 0 36 36", "aria-hidden": "true", children: [_jsx("circle", { className: "progress-circle-track", cx: "18", cy: "18", r: "16" }), _jsx("circle", { className: "progress-circle-fill", cx: "18", cy: "18", r: "16", pathLength: 100, strokeDasharray: "100", strokeDashoffset: 100 - pct })] }) });
+}

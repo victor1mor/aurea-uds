@@ -426,6 +426,23 @@ document.addEventListener("click", e => {
     try { localStorage.setItem("aurea-theme", document.documentElement.dataset.theme); } catch (err) {}
   }
 });
+// -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
+// Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
+// confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copy-page]");
+  if (!botao) return;
+  const fonte = document.getElementById("page-markdown");
+  if (!fonte || !navigator.clipboard) return;
+  let texto;
+  try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
+  navigator.clipboard.writeText(texto).then(() => {
+    const alvo = [...botao.querySelectorAll("span")].filter(s => !s.querySelector("svg") && s.textContent.trim()).pop() || botao;
+    const antes = alvo.textContent;
+    alvo.textContent = "Copied";
+    setTimeout(() => { alvo.textContent = antes; }, 2000);
+  }, () => {});
+});
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
 // 'change' e não 'click': em 'select' o clique acontece antes de a opção mudar, e o teclado não
 // clica — quem escolhe com as setas nunca dispararia o handler.

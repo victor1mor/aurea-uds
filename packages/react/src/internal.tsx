@@ -22,6 +22,11 @@ import {cx, fundirRender, defaultStrings, defaultSpriteUrl, type AureaStrings,
 export {cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity,
   type AureaStrings, type UniversalState, type AureaTheme, type AureaDensity} from "./pure.js";
 
+// Os controles da Aurea que moram FORA do pacote principal (o `DatePicker`, em `./calendar`, 0.32.0) e
+// entregam o `id` ao nó focal. O `Field` os nomeia com `<label for>`, como os da lista dele; eles se
+// registram aqui ao carregar, porque importar cada um no `Field` puxaria o motor deles para todo app.
+export const controlesRotulaveis=new WeakSet<object>();
+
 export const StringsContext=createContext<AureaStrings>(defaultStrings);
 export const useAureaStrings=()=>useContext(StringsContext);
 export const SpriteContext=createContext<string>(defaultSpriteUrl);

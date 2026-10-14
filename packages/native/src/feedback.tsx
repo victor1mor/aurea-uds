@@ -10,7 +10,8 @@
 //   .spinner      aurea.css:668   borda 2 currentColor, direita transparente, redondo, .7s linear
 //   .skeleton     aurea.css:1111  raio 7, fundo surface-3, pulso de opacidade .55 em 1.35s
 //   .progress     aurea.css:1105  altura 8, raio 999, trilho surface-3, preenchimento primary
-//   .alert        aurea.css:1088  grade auto/1fr/auto, gap 12, padding 14 16, raio lg, borda 1
+//   .alert        aurea.css:1088  grade auto/1fr/auto, ~~gap 12, padding 14 16, raio lg, borda 1~~
+//                                 → 0.32.0: medidas do nativo da referência, pintura da web (`Alert`)
 //   .empty-state  aurea.css:1823  coluna centrada, gap space-3, padding space-10 space-6
 //   .data-state   aurea.css:1110  grade com gap space-3 e NADA de superfície própria
 //
@@ -20,7 +21,7 @@
 // de uma REGIÃO não emite título de documento.
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
-import {IconButton} from "./actions.js";
+import {Button, CloseButton} from "./actions.js";
 import {canto, criarFolha, estadoAcessivel, letraDoToken} from "./estilos.js";
 import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
@@ -60,13 +61,17 @@ const folha = criarFolha((t: AureaTokens) => ({
   // `flex:1` — mesmo resultado, e `display:grid` não existe no RN (a mesma nota do `Grid`).
   // `alignItems:"flex-start"` porque o ícone acompanha a PRIMEIRA linha do texto, não o centro
   // de um parágrafo de três linhas.
+  // 0.32.0: as medidas do nativo da referência — 12 de recheio em volta e 12 entre as partes (era
+  // 14 em cima e embaixo e 16 dos lados). A pintura é a da web desta versão (`.alert`): fundo de
+  // CARTÃO, sem borda, com a sombra de superfície (`shadowSm` inteira); a cor do estado fica só no
+  // ícone e no título. Até a 0.31.0 o estado tingia o fundo e a borda.
   alerta: {
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
-    paddingVertical: 14, paddingHorizontal: t.size.space4,
+    padding: t.size.space3,
     // HER-02 (06/10/2026): era `radiusLg` (16). Painel é 22 na identidade da Aurea (`CLAUDE.md`
     // §5), como o `Popover`, o `Dialog` e o `Banner`; a referência usa 24 na web e no nativo.
-    borderWidth: t.size.borderWidth, ...canto(t.size.radiusCard),
-    backgroundColor: t.color.secondary, borderColor: t.color.border,
+    ...canto(t.size.radiusCard),
+    backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm],
   },
   // O GRUPO de leitura: ícone + texto, lidos como uma coisa só. Ele existe porque a moldura
   // deixou de ser `accessible` (ver o comentário no componente) — e sem um grupo o título e o
@@ -76,10 +81,6 @@ const folha = criarFolha((t: AureaTokens) => ({
     flex: 1, minWidth: 0,
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
   },
-  alerta_info: {backgroundColor: t.color.infoBg, borderColor: t.color.info400 ?? t.color.info},
-  alerta_success: {backgroundColor: t.color.successBg, borderColor: t.color.success400 ?? t.color.success},
-  alerta_warning: {backgroundColor: t.color.warningBg, borderColor: t.color.warning400 ?? t.color.warning},
-  alerta_danger: {backgroundColor: t.color.dangerBg, borderColor: t.color.danger400 ?? t.color.destructive},
   corpoDoAlerta: {flex: 1, gap: 2},
 
   // ── EmptyState ─────────────────────────────────────────────────────────────────────────────
@@ -101,7 +102,10 @@ const folha = criarFolha((t: AureaTokens) => ({
 export type AureaSpinnerSize = "sm" | "md" | "lg";
 
 export interface SpinnerProps {
-  /** `sm` é o padrão, como na web (`.spinner` sem modificador usa `--icon-sm`). */
+  /**
+   * 16 · 24 · 32, e o padrão é o `md` (24) — a escala do pacote nativo da referência (0.32.0).
+   * Até a 0.31.0 era 16 · 20 · 24, com o `sm` de padrão, como a web.
+   */
   size?: AureaSpinnerSize;
   /** O que o leitor de tela anuncia. Sem ele, a frase `loading` do provider. */
   label?: string;
@@ -119,7 +123,7 @@ export interface SpinnerProps {
  * cascata para fazê-lo por ele. Parado, o anel continua desenhado — quem precisa da informação
  * "algo está acontecendo" continua vendo o rótulo.
  */
-export function Spinner({size = "sm", label, decorative, style, testID}: SpinnerProps) {
+export function Spinner({size = "md", label, decorative, style, testID}: SpinnerProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
@@ -139,7 +143,7 @@ export function Spinner({size = "sm", label, decorative, style, testID}: Spinner
     return () => laco.stop();
   }, [giro, reduzir]);
 
-  const lado = size === "lg" ? t.size.iconLg : size === "md" ? t.size.iconMd : t.size.iconSm;
+  const lado = size === "lg" ? t.size.iconXl : size === "md" ? t.size.iconLg : t.size.iconSm;
   const acessibilidade = decorative
     ? {accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants" as const}
     : {accessible: true, accessibilityRole: "progressbar" as const,
@@ -163,6 +167,10 @@ export function Spinner({size = "sm", label, decorative, style, testID}: Spinner
 // Skeleton
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
+/** O pulso (`"pulse"`, o padrão) ou a caixa parada (`"none"`) — os nomes da web (0.32.0). O brilho que
+ *  corre da referência ("shimmer") é degradê, e degradê a Aurea não tem. */
+export type AureaSkeletonAnimation = "pulse" | "none";
+
 export interface SkeletonProps {
   /** Padrão: ocupa a largura disponível. */
   width?: number | `${number}%`;
@@ -171,6 +179,54 @@ export interface SkeletonProps {
   radius?: number;
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  /**
+   * 0.32.0: `false` troca a caixa pelo conteúdo de verdade (`children`) — o `isLoading` da referência.
+   * Padrão: `true`, a caixa de sempre. Dentro de um `SkeletonGroup`, sem este, vale o do grupo.
+   */
+  isLoading?: boolean;
+  /** O conteúdo que aparece no lugar da caixa quando `isLoading` é `false`. */
+  children?: React.ReactNode;
+  /** `"none"` deixa a caixa parada, como na web. Dentro de um `SkeletonGroup`, sem este, vale o do grupo. */
+  animation?: AureaSkeletonAnimation;
+}
+
+/**
+ * O que o `SkeletonGroup` manda para os esqueletos de dentro: o `isLoading` e a `animation` do grupo,
+ * e o PULSO — um valor só, e por isso todos sobem e descem juntos, em vez de cada um no seu tempo.
+ *
+ * Mora aqui, ao lado do `Skeleton`, porque é ele quem lê. O grupo (`exibicao.tsx`) importa daqui;
+ * o contrário fecharia um ciclo de importação entre os dois arquivos. Ferramenta de dentro: não sai
+ * pela porta da frente do pacote.
+ */
+export interface GrupoDeEsqueletoValor {
+  isLoading: boolean;
+  animation: AureaSkeletonAnimation;
+  pulso: Animated.Value;
+}
+export const GrupoDeEsqueleto = React.createContext<GrupoDeEsqueletoValor | null>(null);
+
+/**
+ * O pulso do esqueleto: liga só quando `ativo`, e só depois de o sistema dizer que pode mexer.
+ * Desligado, a opacidade volta a 1 — um laço parado no meio deixaria a caixa meio apagada.
+ * O `SkeletonGroup` usa o mesmo, uma vez para o grupo inteiro.
+ */
+export function usePulsoDoEsqueleto(ativo: boolean): Animated.Value {
+  const reduzir = useReduceMotion();
+  const opacidade = React.useRef(new Animated.Value(1)).current;
+
+  React.useEffect(() => {
+    if (!ativo || reduzir !== false) { opacidade.setValue(1); return; }
+    // 1,35 s no total, com o vale em .55 na METADE — é o `@keyframes skeleton-pulse` do
+    // `aurea.css:1112` lido literalmente: 675 ms para descer e 675 para voltar.
+    const laco = Animated.loop(Animated.sequence([
+      Animated.timing(opacidade, {toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo()}),
+      Animated.timing(opacidade, {toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo()}),
+    ]));
+    laco.start();
+    return () => laco.stop();
+  }, [ativo, opacidade, reduzir]);
+
+  return opacidade;
 }
 
 /**
@@ -183,24 +239,43 @@ export interface SkeletonProps {
  *
  * Ele é **invisível para o leitor de tela** (`aria-hidden` na web, `accessibilityElementsHidden`
  * aqui): anunciar "caixa" três vezes enquanto a tela carrega não ajuda ninguém.
+ *
+ * 0.32.0: o `isLoading` e os `children` da referência. Com `isLoading={false}` a caixa sai e o
+ * conteúdo entra, num esmaecer da duração lenta da Aurea (a referência usa o esmaecer padrão do
+ * motor dela); com "menos movimento", ou no primeiro desenho, ele entra sem esmaecer. Sem as props
+ * novas, nada muda: é a caixa de sempre.
  */
-export function Skeleton({width, height, radius, style, testID}: SkeletonProps) {
+export function Skeleton({width, height, radius, style, testID, isLoading, children, animation}: SkeletonProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const reduzir = useReduceMotion();
-  const opacidade = React.useRef(new Animated.Value(1)).current;
+  const grupo = React.useContext(GrupoDeEsqueleto);
+  const carregando = isLoading ?? grupo?.isLoading ?? true;
+  const pulsa = (animation ?? grupo?.animation ?? "pulse") === "pulse";
+  // No grupo que pulsa, o pulso é o dele. O próprio só liga fora de um grupo — ou quando este pede o
+  // pulso e o grupo não.
+  const doGrupo = pulsa && grupo?.animation === "pulse" ? grupo.pulso : null;
+  const proprio = usePulsoDoEsqueleto(carregando && pulsa && !doGrupo);
 
+  // O esmaecer do conteúdo que chega. Um valor NOVO a cada troca, que já nasce em 0 quando vai
+  // esmaecer: zerar depois, num efeito, deixaria passar um quadro com o conteúdo cheio antes do
+  // esmaecer começar. No primeiro desenho ele nasce em 1 — nada está chegando, já estava lá.
+  // As dependências são só a TROCA de estado (e, abaixo, o valor novo), de propósito: a resposta do
+  // "menos movimento" chegando depois não pode fazer o conteúdo esmaecer de novo.
+  const montado = React.useRef(false);
+  const entrada = React.useMemo(
+    () => new Animated.Value(montado.current && reduzir === false ? 0 : 1), [carregando]);
+  React.useEffect(() => { montado.current = true; }, []);
   React.useEffect(() => {
-    if (reduzir !== false) return;
-    // 1,35 s no total, com o vale em .55 na METADE — é o `@keyframes skeleton-pulse` do
-    // `aurea.css:1112` lido literalmente: 675 ms para descer e 675 para voltar.
-    const laco = Animated.loop(Animated.sequence([
-      Animated.timing(opacidade, {toValue: 0.55, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo()}),
-      Animated.timing(opacidade, {toValue: 1, duration: 675, easing: Easing.inOut(Easing.ease), useNativeDriver: driverNativo()}),
-    ]));
-    laco.start();
-    return () => laco.stop();
-  }, [opacidade, reduzir]);
+    if (carregando || reduzir !== false) { entrada.setValue(1); return; }
+    const a = Animated.timing(entrada, {toValue: 1, duration: t.size.durationSlow, useNativeDriver: driverNativo()});
+    a.start();
+    return () => a.stop();
+  }, [entrada]);
+
+  if (!carregando) {
+    return <Animated.View style={{opacity: entrada}}>{children}</Animated.View>;
+  }
 
   return (
     <Animated.View
@@ -211,7 +286,7 @@ export function Skeleton({width, height, radius, style, testID}: SkeletonProps) 
         s.esqueleto,
         {width: width ?? "100%", height: height ?? t.size.space4},
         radius != null && {...canto(radius)},
-        {opacity: opacidade},
+        {opacity: doGrupo ?? proprio},
         style,
       ]}
     />
@@ -393,7 +468,7 @@ export function Alert({
       // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
       // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
       accessibilityLiveRegion={v === "danger" ? "assertive" : "polite"}
-      style={[s.alerta, s[`alerta_${v}`], style]}
+      style={[s.alerta, style]}
       {...rest}>
       <View
         accessible
@@ -418,15 +493,19 @@ export function Alert({
         style={s.grupoDoAlerta}>
         <Icon name={icon ?? ICONE_DA_VARIANTE[v]} size="md" color={corDoIcone} weight={icon ? undefined : "fill"} />
         <View style={s.corpoDoAlerta}>
-          {title != null && <Text size="sm" weight={600}>{title}</Text>}
+          {/* 0.32.0: o título é 16 em peso médio, na entrelinha do token (24), e na cor do estado
+              (o mesmo par `-400` do ícone); a descrição é 14 (o `xs` do nativo). Era 16 em
+              seminegrito, na cor do texto, e a descrição também 16. */}
+          {title != null && <Text size="base" weight={500} tone={v}>{title}</Text>}
           {children != null
-            ? (typeof children === "string" ? <Text size="sm" tone="muted">{children}</Text> : children)
-            : state ? <Text size="sm" tone="muted">{strings.universalState[state]}</Text> : null}
+            ? (typeof children === "string" ? <Text size="xs" tone="muted">{children}</Text> : children)
+            : state ? <Text size="xs" tone="muted">{strings.universalState[state]}</Text> : null}
         </View>
       </View>
       {/* ⚠ Era `label="Close"` literal, e ficava em inglês num app em português — a tabela de
-          frases não tinha `close` até o Lote 5 criá-la para o `Dialog`. Corrigido junto. */}
-      {onDismiss ? <IconButton appearance="ghost" size="sm" name="x" label={strings.close} onPress={onDismiss} /> : null}
+          frases não tinha `close` até o Lote 5 criá-la para o `Dialog`. Corrigido junto.
+          0.32.0: o X é o `CloseButton` (o círculo neutro de 40), como no aviso da referência. */}
+      {onDismiss ? <CloseButton label={strings.close} onPress={onDismiss} /> : null}
     </View>
   );
 }
@@ -496,6 +575,24 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
   action?: React.ReactNode;
   /** Função para o conteúdo caro não ser construído enquanto o estado o esconde. */
   children: React.ReactNode | (() => React.ReactNode);
+  /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com "Tentar de novo". */
+  catchErrors?: boolean;
+  /** Recebe o erro que a barreira pegou — para o app registrar. */
+  onCatch?: (error: unknown, info: React.ErrorInfo) => void;
+}
+
+/**
+ * MNT-25 (0.32.0): a barreira de erro, a mesma da web — o que quebra DENTRO do `DataState` vira a cara de
+ * erro dele, e o resto da tela fica. Só um componente de CLASSE pega erro de desenho no React.
+ */
+class BarreiraDeErro extends React.Component<
+  {onCatch?: (error: unknown, info: React.ErrorInfo) => void; falha: (tentar: () => void) => React.ReactNode; children?: React.ReactNode},
+  {quebrou: boolean}> {
+  state = {quebrou: false};
+  static getDerivedStateFromError() { return {quebrou: true}; }
+  componentDidCatch(erro: unknown, info: React.ErrorInfo) { this.props.onCatch?.(erro, info); }
+  tentar = () => this.setState({quebrou: false});
+  render() { return this.state.quebrou ? this.props.falha(this.tentar) : this.props.children; }
 }
 
 /**
@@ -506,9 +603,26 @@ export interface DataStateProps extends Omit<ViewProps, "children"> {
  * dado está aí e tem ressalva — esconder o dado seria trocar informação parcial por informação
  * nenhuma. Só `loading`, `error` e `empty` tomam o lugar.
  */
-export function DataState({
+export function DataState({catchErrors, onCatch, ...props}: DataStateProps) {
+  const t = useAureaTokens();
+  const s = folha(t);
+  const strings = useAureaStrings();
+  if (!catchErrors) return <CorpoDoDataState {...props} />;
+  return (
+    <BarreiraDeErro onCatch={onCatch} falha={(tentar) => (
+      <View style={[s.regiao, props.style]}>
+        <Alert variant="danger">{props.message ?? strings.dataCrashed}</Alert>
+        <View style={{alignSelf: "flex-start"}}><Button size="sm" onPress={tentar}>{strings.dataRetry}</Button></View>
+      </View>
+    )}>
+      <CorpoDoDataState {...props} />
+    </BarreiraDeErro>
+  );
+}
+
+function CorpoDoDataState({
   state, message, skeleton, emptyTitle, emptyIcon, action, children, style, ...rest
-}: DataStateProps) {
+}: Omit<DataStateProps, "catchErrors" | "onCatch">) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();

@@ -1,0 +1,111 @@
+{
+  "name": "ListBox",
+  "category": "Inputs",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A standalone list of options with sections, descriptions and icons — choose none, one or many, or use it as a list of actions.",
+  "axes": {
+    "selectionMode": [
+      "multiple",
+      "none",
+      "single"
+    ]
+  },
+  "icon": "list-bullets",
+  "platforms": {
+    "web": "stable",
+    "native": "planned"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "selected",
+    "disabled"
+  ],
+  "tokens": [
+    "--secondary",
+    "--control-h-md",
+    "--space-1",
+    "--space-2",
+    "--space-3",
+    "--space-7",
+    "--radius-full",
+    "--icon-sm",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--muted-foreground",
+    "--danger-400"
+  ],
+  "a11y": {
+    "role": "listbox",
+    "apg": "listbox",
+    "keyboard": [
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "Space",
+      "Enter"
+    ],
+    "keyboardNote": "One tab stop (the active option). Arrows, Home and End move; Space and Enter choose (toggle in multiple); a letter jumps to the next option starting with it. Disabled options are skipped. Sections are role=group named by their title."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": [
+      "check"
+    ]
+  },
+  "related": {
+    "components": [
+      "Select",
+      "Combobox",
+      "DropdownMenu"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#ListBox"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "—",
+      "description": "REQUIRED. The list's name for screen readers."
+    },
+    {
+      "name": "items",
+      "type": "(ListBoxItem | ListBoxSection)[]",
+      "default": "—",
+      "description": "Options ({id, label, description?, icon?, disabled?, danger?, textValue?}) and sections ({title, items})."
+    },
+    {
+      "name": "selectionMode",
+      "type": "none | single | multiple",
+      "default": "single",
+      "description": "none turns it into a list of actions (onAction)."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string[]",
+      "default": "—",
+      "description": "The ids of the chosen options."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string[]) => void",
+      "default": "—",
+      "description": "Called with the new list of ids."
+    },
+    {
+      "name": "onAction",
+      "type": "(id: string) => void",
+      "default": "—",
+      "description": "Called when an option is activated (Enter, Space or click)."
+    }
+  ]
+}

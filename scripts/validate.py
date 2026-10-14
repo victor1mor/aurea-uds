@@ -154,7 +154,9 @@ PATTERNS_REF = [
 # Pacotes MONTADOS, com código de dependência dentro: o `live.js` do catálogo e a saída do
 # `keyboard-probe` levam o código do Base UI, cujo gerador de id tem um prefixo que casa com uma
 # sigla da lista. O código-fonte nosso que vai dentro deles já é varrido arquivo por arquivo.
-REF_FORA = {root / "apps/catalog/assets/live.js"}
+# O `search.js` (a busca do site, 13/10/2026) é o mesmo caso: leva a `CommandPalette`, e com ela o
+# mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`.
+REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js"}
 REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
 
 
@@ -387,6 +389,14 @@ _sem_gradiente += [str(f.relative_to(root)) for f in sorted((root / "apps/catalo
 for rel in _sem_gradiente:
     if "gradient(" in (root / rel).read_text(encoding="utf-8"):
         errors.append(f"{rel}: contém gradient()")
+# A QUARTA porta, fechada em 13/10/2026 (ADR-0069): o código dos componentes. Até ali o check olhava só o CSS e
+# o catálogo, e um gradiente posto pelo React (estilo em linha, variável de CSS) passaria calado. A ADR-0069 abre
+# UMA exceção — pintar as cores que se escolhem (a área e a trilha de cor) — e ela mora num arquivo só.
+_gradiente_permitido = {"packages/react/src/color.ts"}
+for f in sorted((root / "packages/react/src").rglob("*.ts*")):
+    rel = f.relative_to(root).as_posix()
+    if rel not in _gradiente_permitido and "gradient(" in f.read_text(encoding="utf-8"):
+        errors.append(f"{rel}: contém gradient() — a única exceção é o color.ts (ADR-0069)")
 
 def _sem_comentario(texto):
     """COMENTÁRIO NÃO PRODUZ PIXEL. A contagem por eixo (logo abaixo) já descartava comentário
@@ -2315,6 +2325,15 @@ NAO_E_ESTADO = {
     # MODO escolhido pelo app (`editable`, booleano) — nenhum é condição em que o componente se encontra.
     "shape": "é DADO do nó (`shape` do item do DependencyGraph: a nuvem), não estado",
     "editable": "é MODO (`editable` do DependencyGraph, booleano), não estado",
+    # As janelas da 0.32.0: o lugar da janela é EIXO (`placement` do Dialog e do ConfirmDialog, em
+    # `axes`); o sentido do arrasto é DADO do gesto (o motor diz para que lado o dedo foi); e o
+    # `instant` da dica é o MODO da transição (ela abriu sem animar, pelo teclado ou vinda da vizinha).
+    "placement": "é EIXO (`placement` do Dialog e do ConfirmDialog, em `axes`), não estado",
+    "swipe-direction": "é o SENTIDO do gesto de arrastar (dado do motor), não estado",
+    "instant": "é o MODO da transição da dica (abriu sem animar), não estado",
+    # A caixa de exemplo do `CodeBlock preview` (DOC-02): `data-panel` diz QUAL painel é (a prévia ou o
+    # código) — é nome, e quem diz se ele está à mostra é o `hidden`.
+    "panel": "é o NOME do painel da caixa de exemplo (prévia ou código), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}
@@ -3182,6 +3201,10 @@ _SEM_LINHA44 = {
     ".input-group>.select:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
     ".input-group>.textarea:focus-visible": "o anel é da moldura (`.input-group:focus-within`)",
     ".combobox-chip-input:focus-visible": "o anel é da moldura (`.combobox-multi:focus-within`)",
+    # 0.32.0: o `NumberField` virou um grupo só, como o da referência; o anel é do grupo inteiro.
+    ".number-field-group>.number-field-input:focus-visible": "o anel é do grupo (`.number-field-group:focus-within`)",
+    # 0.32.0: o anel da etiqueta do `TagGroup` vai na etiqueta inteira, e não só no botão de dentro.
+    ".tag-main:focus-visible": "o anel é da etiqueta (`.tag:has(> .tag-main:focus-visible)`)",
     # Rodada 2 da rede (ADR-0065): no modo de arrumar quem recebe o foco é a caixa QUADRADA do motor;
     # o anel vai para o corpo do nó (ou a caixa do contêiner), que tem o raio da casa.
     ".dependency-graph:focus-visible:has(>.graph-node)": "o anel é do corpo do nó (`:focus-visible > .graph-node > .graph-node-body`)",
@@ -3504,6 +3527,32 @@ else:
         errors.append(f"check 46: ícone fixo que nenhuma ficha alcança — {'; '.join(_orfaos46)}. Ou é "
                       "componente sem ficha, ou ajudante exportado/de outro arquivo que a leitura não "
                       "segue: a ficha de quem o usa ficaria sem ele, calada")
+
+# ── 47. o texto PÚBLICO da ficha não tem número de pedido nem versão (DOC-15) ────────────────
+# O `summary` e as descrições das props aparecem no site (o cartão do catálogo e a tabela de API). A
+# proposta aprovada do site diz: descrição curta, em inglês, SEM número de pedido nem histórico — o
+# histórico mora no CHANGELOG. Medido em 11/10/2026: 72 textos em 35 fichas carregavam "GAR-12:",
+# "(C-13)", "0.32.0:" ou "up to 0.31.0". Reprova o identificador de pedido (as famílias da fila) e
+# o número de versão. NÃO pega: histórico em prosa sem número ("as before"), nem português.
+_ID47 = re.compile(r"\b(?:GAR|AN|HER|DOC|MNT|WEB|MT|CHK|LOGO|R|E|C|B|A|M|N)-\d{1,2}\b|\b0\.\d{1,2}\.\d{1,2}\b")
+_ach47, _lidos47 = [], 0
+for _fp47 in sorted((root / "packages/contracts/registry").glob("*.json")):
+    try:
+        _f47 = json.loads(_fp47.read_text(encoding="utf-8"))
+    except Exception:
+        continue
+    _textos47 = [("summary", _f47.get("summary", ""))] + [(p.get("name", "?"), p.get("description", "")) for p in _f47.get("props", [])]
+    for _onde47, _t47 in _textos47:
+        _lidos47 += 1
+        _m47 = _ID47.search(_t47 or "")
+        if _m47:
+            _ach47.append(f"{_fp47.stem}.{_onde47} ({_m47.group(0)})")
+if _lidos47 < 100:
+    errors.append(f"check 47: só {_lidos47} texto(s) de ficha lido(s) — a varredura está cega")
+if _ach47:
+    errors.append(f"check 47: {len(_ach47)} texto(s) público(s) de ficha com número de pedido ou versão — "
+                  f"{', '.join(_ach47[:12])}{'…' if len(_ach47) > 12 else ''}. O histórico vai para o "
+                  "CHANGELOG; a ficha diz o que a prop faz HOJE (DOC-15)")
 
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")

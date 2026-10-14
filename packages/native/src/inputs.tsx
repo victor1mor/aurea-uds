@@ -36,6 +36,11 @@
 //   .switch-track  :882            largura h×7/6, altura h×2/3, raio 999, fundo muted
 //   o polegar      :894            inset 3, lado = 100% − space-1 − space-05, redondo
 //   .segmented     :922            linha, gap 3, padding 3, minH controlHMd, fundo muted
+//
+// ── 0.32.0: A ESCALA DE TOQUE (aprovada pelo Victor: "sim, aprovo a escala de 48 no nativo") ────
+// Os campos e controles deste arquivo deixam a altura da web (32 · 36 · 40) e passam à do pacote
+// nativo da referência: `touchControlH*`, 40 · 48 · 56 no confortável. As medidas de cada peça
+// estão ao lado dela. O `SegmentedControl` fica na escala da web — não é desta frente.
 import * as React from "react";
 import {
   Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable,
@@ -58,12 +63,20 @@ export type AureaFieldSize = "sm" | "md" | "lg";
 // `alturaDoTamanho` e `respiroDoTamanho` saem do arquivo (não do pacote) desde 02/10/2026: o
 // `FileInput` (R-21) desenha um gatilho com a medida do campo, e copiar os números para lá é o
 // defeito que o `CLAUDE.md` nomeia.
+// 0.32.0: a altura é a de TOQUE (40 · 48 · 56; a do campo da referência é 48), e anda com a
+// densidade como a da web andava.
 export const alturaDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
-  s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg : t.size.controlHMd;
+  s === "sm" ? t.size.touchControlHSm : s === "lg" ? t.size.touchControlHLg : t.size.touchControlHMd;
 const fonteDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
   s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg : t.size.textBase;  // ADR-0050: um degrau acima da web
+// 0.32.0: o `md` é o 12 do campo da referência (`space3`). Era 13, o `padding-inline` cru do
+// `.input` da web, que não tinha token.
 export const respiroDoTamanho = (t: AureaTokens, s: AureaFieldSize) =>
-  s === "sm" ? t.size.space3 : s === "lg" ? t.size.space4 : 13;
+  s === "lg" ? t.size.space4 : t.size.space3;
+// O gatilho de LISTA (`Select`, e o `Combobox`, que é igual a ele) tem 16 dos lados no `md`, o da
+// referência; o `sm` e o `lg` ficam com o do campo.
+export const respiroDoGatilho = (t: AureaTokens, s: AureaFieldSize) =>
+  s === "sm" ? respiroDoTamanho(t, s) : t.size.space4;
 
 const folha = criarFolha((t: AureaTokens) => ({
   campo: {gap: 7},
@@ -76,7 +89,9 @@ const folha = criarFolha((t: AureaTokens) => ({
   },
   // O `.textarea` é o único da família com raio LG em vez do de controle: uma caixa alta em
   // pílula viraria uma cápsula, e o CSS já decidiu isso (`aurea.css:694`).
-  areaDeTexto: {minHeight: 104, paddingVertical: t.size.space3, ...canto(t.size.radiusLg)},
+  // 0.32.0: a caixa alta da referência — 128 de altura (era 104) e 8 em cima e embaixo (era 12).
+  areaDeTexto: {minHeight: t.size.space24 + t.size.space8, paddingVertical: t.size.space2,
+                ...canto(t.size.radiusLg)},
   invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
   desabilitado: {opacity: t.size.opacityDisabled},
 
@@ -103,7 +118,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   },
   // E5: a marca no MEIO da altura do texto, como a referência. Era `flex-start` com um
   // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
-  linhaDeControle: {flexDirection: "row", alignItems: "center", gap: 9},
+  // 0.32.0: 12 entre a marca e o texto, o vão do campo de controle da referência (era 9).
+  linhaDeControle: {flexDirection: "row", alignItems: "center", gap: t.size.space3},
   // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
   // no alto, na linha do título.
   itemCartao: {...peleDoCartao(t), alignItems: "flex-start"},
@@ -112,7 +128,9 @@ const folha = criarFolha((t: AureaTokens) => ({
 
   trilho: {...canto(t.size.radiusFull), backgroundColor: t.color.muted,
            borderWidth: t.size.borderWidth, borderColor: t.color.border, justifyContent: "center"},
-  polegar: {position: "absolute", left: 3, ...canto(t.size.radiusFull)},
+  // 0.32.0: a 2 da borda de FORA, como a bolinha da referência — o `left` conta de dentro da borda
+  // do trilho, então é `space05 − borderWidth` (1), a mesma conta do `.switch-track:after` da web.
+  polegar: {position: "absolute", left: t.size.space05 - t.size.borderWidth, ...canto(t.size.radiusFull)},
 
   segmentada: {
     flexDirection: "row", alignSelf: "flex-start", gap: 3, padding: 3,
@@ -156,8 +174,13 @@ const folha = criarFolha((t: AureaTokens) => ({
     ...cantosDeCima(t.size.radiusSheet),
     backgroundColor: t.color.popover, borderWidth: t.size.borderWidth, borderColor: t.color.border,
   },
-  opcao: {minHeight: t.size.controlHLg, justifyContent: "center",
-          paddingHorizontal: t.size.space4},
+  // 0.32.0: a opção da lista da referência — 12 em cima e embaixo, 8 dos lados, 8 entre o rótulo e
+  // o indicador. Com a linha de 24 do rótulo dá 48, a altura de toque (era `controlHLg`, 40).
+  opcao: {minHeight: t.size.touchControlHMd, flexDirection: "row", alignItems: "center",
+          gap: t.size.space2, paddingVertical: t.size.space3, paddingHorizontal: t.size.space2},
+  // O indicador da escolhida: a caixa de 20 (`iconMd`) com o `check` de 16 no meio, como o da
+  // referência e a coluna `.combobox-check` da web.
+  indicador: {width: t.size.iconMd, height: t.size.iconMd, alignItems: "center", justifyContent: "center"},
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -289,8 +312,9 @@ export function Label({children, trailing, style, ...rest}: LabelProps) {
   const s = folha(useAureaTokens());
   return (
     <View style={[s.rotulo, style]} {...rest}>
+      {/* 0.32.0: o rótulo da referência — 16 (o `sm` do telefone) em peso MÉDIO; era 600. */}
       {typeof children === "string"
-        ? <Text size="sm" weight={600}>{children}</Text> : children}
+        ? <Text size="sm" weight={500}>{children}</Text> : children}
       {trailing}
     </View>
   );
@@ -493,7 +517,7 @@ export interface TextareaProps extends InputProps {
   rows?: number;
 }
 
-/** A caixa alta. Mesmo campo, `multiline`, raio LG e altura mínima de 104 (medida no CSS). */
+/** A caixa alta. Mesmo campo, `multiline`, raio LG e altura mínima de 128 (a da referência, 0.32.0). */
 export function Textarea({rows, size, style, ...rest}: TextareaProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -714,7 +738,8 @@ function ControleMarcado({
   // largura que sobra dentro de uma fileira e apagaria o que estivesse ao lado.
   const temTexto = label != null || description != null;
   // A marca é METADE da altura do controle — `aurea.css:871`, e é o que faz ela crescer junto
-  // com a densidade sem token próprio.
+  // com a densidade sem token próprio. 0.32.0: da altura de TOQUE, então o `md` dá os 24 da caixa
+  // da referência (era 18).
   const lado = alturaDoTamanho(t, tam) / 2;
   // `start`: o meio da marca no meio da PRIMEIRA linha do rótulo. A linha é a do `Text size="sm"`
   // do rótulo (entrelinha normal), então a conta sai dos mesmos tokens que desenham o texto.
@@ -736,15 +761,17 @@ function ControleMarcado({
       style={[s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style]}>
       <View style={[
         s.marcaBase, noTopo,
+        // 0.32.0: o canto da caixa é o `radiusXs` (6), o mesmo do `.checkbox .control-mark` da
+        // web; era 5 cru.
         {width: lado, height: lado,
-         ...canto(papel === "radio" ? t.size.radiusFull : 5)},
+         ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusXs)},
         checked && {backgroundColor: t.color.controlSelected, borderColor: t.color.controlSelected},
       ]}>
         {checked && (papel === "radio"
-          // O ponto do rádio é 8×8 e da cor SELECIONADA, não da cor de primeiro plano — no CSS
-          // ele é `background: var(--control-selected)` sobre a marca já pintada.
-          ? <View style={{width: 8, height: 8, ...canto(t.size.radiusFull),
-                          backgroundColor: t.color.controlSelectedForeground}} />
+          // O ponto do rádio é da cor de primeiro plano da seleção, sobre a marca já pintada.
+          // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
+          ? <View style={{width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
+                          ...canto(t.size.radiusFull), backgroundColor: t.color.controlSelectedForeground}} />
           // O visto da web é desenhado com DUAS BORDAS de um retângulo 8×4 girado −45°. Isso
           // atravessa inteiro: `transform: rotate` e `borderLeftWidth`/`borderBottomWidth`
           // existem no RN. Desenhá-lo assim, em vez de trazer um glifo, mantém a peça sem
@@ -1004,8 +1031,8 @@ export interface SwitchProps extends ControleProps {}
  *
  * ⚠ **NÃO é o `Switch` do React Native**, pela mesma razão que o `Spinner` não é o
  * `ActivityIndicator`: aquele desenha o interruptor do sistema no Android e o do iOS no iOS —
- * duas aparências que o `CLAUDE.md` proíbe em voz alta. As medidas aqui são as do CSS: trilho de
- * `altura × 7/6` por `altura × 2/3`, polegar com 3 de folga.
+ * duas aparências que o `CLAUDE.md` proíbe em voz alta. As medidas são as do interruptor da
+ * referência (0.32.0): trilho de 48 × 24 e bolinha em cápsula de 28 × 20, a 2 da borda.
  *
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
@@ -1021,11 +1048,17 @@ export function Switch({
   const reduzir = useReduceMotion();
   const temTexto = label != null || description != null;
 
+  // 0.32.0: o interruptor da referência — trilho 48 × 24 e bolinha em CÁPSULA de 28 × 20, a 2 da
+  // borda de fora (era trilho 42 × 24 e bolinha redonda de 18). Na altura de toque: o trilho é a
+  // altura do controle por METADE dela (a largura é o dobro da altura, como na web); a bolinha é a
+  // altura do trilho menos 4 e 8 mais larga que alta. sm 40 × 20 / 24 × 16 · lg 56 × 28 / 32 × 24.
   const h = alturaDoTamanho(t, tam);
-  const larguraDoTrilho = h * 7 / 6;
-  const alturaDoTrilho = h * 2 / 3;
-  const ladoDoPolegar = alturaDoTrilho - t.size.space1 - t.size.space05;
-  const curso = larguraDoTrilho - ladoDoPolegar - 6;
+  const larguraDoTrilho = h;
+  const alturaDoTrilho = h / 2;
+  const alturaDoPolegar = alturaDoTrilho - 2 * t.size.space05;
+  const larguraDoPolegar = alturaDoPolegar + t.size.space2;
+  // O curso deixa os mesmos 2 da borda de fora na outra ponta (a conta do `--switch-x` da web).
+  const curso = larguraDoTrilho - larguraDoPolegar - 2 * t.size.space05;
 
   const pos = React.useRef(new Animated.Value(checked ? 1 : 0)).current;
   React.useEffect(() => {
@@ -1062,7 +1095,8 @@ export function Switch({
       // `Input`: o que a cascata resolve de graça, aqui é conta explícita.
       style={[
         {flexDirection: "row", alignItems: "center"},
-        temTexto && {gap: 10},
+        // 0.32.0: 12 até o texto, o vão do campo de controle da referência e o do `Checkbox` (era 10).
+        temTexto && {gap: t.size.space3},
         inativo && s.desabilitado, style,
       ]}>
       <View style={[
@@ -1072,7 +1106,7 @@ export function Switch({
       ]}>
         <Animated.View style={[
           s.polegar,
-          {width: ladoDoPolegar, height: ladoDoPolegar,
+          {width: larguraDoPolegar, height: alturaDoPolegar,
            backgroundColor: checked ? t.color.controlSelectedForeground : t.color.mutedForeground,
            transform: [{translateX: pos.interpolate({inputRange: [0, 1], outputRange: [0, curso]})}]},
         ]} />
@@ -1193,6 +1227,19 @@ export function SegmentedControl({
 // Select — o "motor novo sobre `Modal`" que a §5.2.4 previu
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
+/**
+ * O indicador da opção escolhida, nas listas do `Select` e do `Combobox` (0.32.0): o da referência
+ * — a caixa de 20 com o `check` de 16 — e o mesmo glifo da coluna `.combobox-check` da web. A cor
+ * é a do destaque que se lê como ícone nos dois temas (`primaryEmphasis`, ADR-0054). Sai do
+ * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
+ * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
+ */
+export const indicadorDaEscolhida = (t: AureaTokens) => (
+  <View style={folha(t).indicador}>
+    <Icon name="check" size="sm" color={t.color.primaryEmphasis} />
+  </View>
+);
+
 export interface SelectProps {
   items: Array<{value: string; label: string; disabled?: boolean}>;
   value?: string;
@@ -1253,8 +1300,11 @@ export function Select({
         {...estadoAcessivel({disabled: !!inativo, expanded: aberto})}
         style={[
           s.caixa,
+          // 0.32.0: o gatilho da referência — 16 dos lados (era 13) e 12 entre o valor e a seta.
+          // Os 12 de cima e de baixo dela são a altura de toque: 48 menos a linha de 24 do valor.
           {flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-           height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam)},
+           gap: t.size.space3, height: alturaDoTamanho(t, tam),
+           paddingHorizontal: respiroDoGatilho(t, tam)},
           campo?.invalido && s.invalido,
           // Sobre a marca a tinta vence inválido — ver `usePeleSobreAMarca`.
           peleDaMarca,
@@ -1296,7 +1346,10 @@ export function Select({
                   accessibilityRole="menuitem"
                   {...estadoAcessivel({selected: it.value === value, disabled: !!it.disabled})}
                   style={[sf.opcao, it.disabled && sf.desabilitado]}>
-                  <Text size="md" weight={it.value === value ? 600 : 400}>{it.label}</Text>
+                  {/* 0.32.0: o rótulo da opção da referência, 16 em peso médio em todas (a escolhida
+                      era 600 e as outras 400); quem marca a escolhida é o indicador. */}
+                  <Text size="md" weight={500} style={{flex: 1, minWidth: 0}}>{it.label}</Text>
+                  {it.value === value && indicadorDaEscolhida(tf)}
                 </Pressable>
               ))}
             </ScrollView>

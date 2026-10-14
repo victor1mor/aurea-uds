@@ -51,8 +51,12 @@ import { IconButton } from "./actions.js";
 import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { useCampo } from "./inputs.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca } from "./theme.js";
-const alturaDoTamanho = (t, s) => s === "sm" ? t.size.controlHSm : s === "lg" ? t.size.controlHLg
-    : s === "display" ? t.size.controlHXl : t.size.controlHMd;
+// 0.32.0: o campo comum na altura de TOQUE, como o `Input` (40 · 48 · 56; era 32 · 36 · 40). O
+// `display` (peça nossa, sem medida na referência) sobe para o degrau acima do `lg` que o `Button xl`
+// também usa: `touchControlHLg + space2` = 64 (era o `controlHXl`, 50, que com a escala nova ficaria
+// MAIS BAIXO que o `lg`).
+const alturaDoTamanho = (t, s) => s === "sm" ? t.size.touchControlHSm : s === "lg" ? t.size.touchControlHLg
+    : s === "display" ? t.size.touchControlHLg + t.size.space2 : t.size.touchControlHMd;
 const fonteDoTamanho = (t, s) => s === "sm" ? t.size.textSm : s === "lg" ? t.size.textLg
     : s === "display" ? t.size.text3xl : t.size.textBase; // ADR-0050: um degrau acima da web
 const folha = criarFolha((t) => ({

@@ -21,7 +21,8 @@
 //   [aria-current]      :331            foreground + peso médio, e o ícone perde a transparência
 //   os sete indicadores :360-397        de `none` a `circle-bold`
 //   .nav-list           :405            coluna com gap space-05
-//   .nav-list-row       :416            linha, gap space-3, minH control-h-lg, raio card − space-1
+//   .nav-list-row       :416            linha, gap space-3, ~~minH control-h-lg~~, raio card − space-1
+//                                       (0.32.0: recheio e letra da linha nativa da referência)
 //   .stepper            :1141           colunas iguais
 //   .step-dot           :1145           32 redondo, borda border-strong, fundo surface-1
 //
@@ -199,38 +200,53 @@ const folha = criarFolha((t: AureaTokens) => ({
 
   // ── NavList ────────────────────────────────────────────────────────────────────────────────
   lista: {gap: t.size.space05},
+  // 0.32.0 (ADR-0066): a linha da lista do pacote NATIVO da referência — recheio de 16 em volta e vão
+  // de 12; título 16 em peso médio e descrição 14 (no componente). Até a 0.31.0 era a linha da web:
+  // altura mínima de controle (`controlHLg`), 8 em cima e embaixo, 12 dos lados. A altura mínima saiu:
+  // a altura vem do recheio e da linha do texto, como lá.
   linha: {
     flexDirection: "row", alignItems: "center", gap: t.size.space3, width: "100%",
-    minHeight: t.size.controlHLg,
-    paddingVertical: t.size.space2, paddingHorizontal: t.size.space3,
+    paddingHorizontal: t.size.space4,
     ...canto(t.size.radiusCard - t.size.space1),
   },
   // O MIOLO da linha: ícone + texto (+ valor em texto) + seta. Ele é quem toca; o que vem
   // depois dele, na moldura, é IRMÃO — ver o comentário no componente.
-  // Nenhuma medida nova: `flex`, `minWidth` e o MESMO `gap` da moldura.
-  linhaMiolo: {flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space3},
+  // ⚠ O recheio de CIMA E DE BAIXO mora aqui, e não na moldura: é o miolo que toca, e na referência
+  // a linha inteira é o alvo. Na moldura ele ficaria fora do toque, e o miolo de uma linha só
+  // mediria a linha do título (24), abaixo dos 44 do alvo mínimo; aqui ele mede 16 + 24 + 16 = 56.
+  // O valor que é componente (irmão) fica no meio da altura, como antes.
+  linhaMiolo: {
+    flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space3,
+    paddingVertical: t.size.space4,
+  },
   linhaTexto: {flex: 1, minWidth: 0},
   // AN-04: os sinais, com o vão de dentro do texto (`space1`), como o `.nav-list-indicators` da web.
   sinais: {flexDirection: "row", alignItems: "center", gap: t.size.space1},
 
   // ── Tabs ───────────────────────────────────────────────────────────────────────────────────
-  // A cápsula é a MESMA do `SegmentedControl`, e o CSS diz isso em voz alta no comentário de
-  // cima do `.tabs` (`aurea.css:1114`): *"Mesma regra da .segmented"*. Os três números vêm de
-  // lá — `gap:3px; padding:3px` — e não de mim.
+  // ~~A cápsula é a MESMA do `SegmentedControl` [...] `gap:3px; padding:3px`~~ — 0.32.0 (ADR-0066):
+  // a lista com cápsula do pacote NATIVO da referência. O trilho tem 3 de recheio lá; aqui é o
+  // `space1` (4), o token mais perto — a escala não tem 3, e escala nova não nasce no meio de um
+  // componente. É o mesmo 4 do `.tabs` da web desta versão. O vão entre as abas é 4, o dela.
+  // A altura sai da aba (6 + a linha de 24 + 6 = 36) mais o trilho: 44. A altura mínima de controle
+  // (`controlHMd`) saiu, como na referência.
   abas: {
-    flexDirection: "row", gap: 3, padding: 3,
-    minHeight: t.size.controlHMd, ...canto(t.size.radiusControl),
+    flexDirection: "row", gap: t.size.space1, padding: t.size.space1,
+    ...canto(t.size.radiusControl),
     backgroundColor: t.color.muted,
   },
-  // `padding:0 14px` é literal no `.tab` (`aurea.css:1127`). A aba NÃO estica (nada de `flex`):
-  // na web ela é conteúdo dentro de um `inline-flex`, e é isso que deixa a lista rolar quando
-  // não cabe, em vez de espremer todas.
+  // A aba da referência nativa: 12 dos lados, 6 em cima e embaixo, 6 de vão entre o que vai dentro
+  // (o rótulo e um ícone, quando o app passa os dois), e o rótulo 16 em peso médio (no componente).
+  // Era o `padding:0 14px` do `.tab` da web antiga. A aba NÃO estica (nada de `flex`): é isso que
+  // deixa a lista rolar quando não cabe, em vez de espremer todas.
   // ⚠ O nome é `abaDeTab` porque `aba` JÁ EXISTE neste arquivo — é o item do `BottomNav`
   // (linha 78), que tem `flex: 1` e cresce. Reusar o nome teria sobrescrito um dos dois em
   // silêncio, e o `tsc` só pegou porque são chaves do mesmo objeto.
   abaDeTab: {
-    alignItems: "center", justifyContent: "center",
-    paddingHorizontal: 14, ...canto(t.size.radiusControl),
+    flexDirection: "row", alignItems: "center", justifyContent: "center",
+    gap: t.size.space1 + t.size.space05,
+    paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
+    ...canto(t.size.radiusControl),
   },
   // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`), pelo mesmo motivo — ADR-0059.
   abaDeTabAtiva: {backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm]},
@@ -240,8 +256,10 @@ const folha = criarFolha((t: AureaTokens) => ({
   //   fila                            gap de 1 unidade → space1
   //   aba                             padding-inline de 3 unidades → space3 · padding-block de 1,5
   //                                   → space1 + space05. Rótulo `text-base` + entrelinha 1.5 dá
-  //                                   36, que é o `controlHMd`: a altura da fila da cápsula, então
-  //                                   trocar de variante não muda a altura da fila.
+  //                                   36, que é o `controlHMd`. ~~a altura da fila da cápsula, então
+  //                                   trocar de variante não muda a altura da fila~~ — 0.32.0: a
+  //                                   aba da cápsula também tem 36, mas a fila dela soma o trilho
+  //                                   de 4 de cada lado (44).
   //   indicador (secundária)          border-bottom 2px na cor de destaque → `fioDoEscolhido`
   abasSecundarias: {
     flexDirection: "row", gap: t.size.space1,
@@ -642,7 +660,7 @@ export interface AureaNavListItem {
   disabled?: boolean;
   /**
    * A foto da linha (AN-04, 03/10/2026) — o formato do `Avatar` daqui (`source`, `fallback`), no
-   * tamanho dele de sempre, o mesmo da web. Toma o lugar do `icon`.
+   * tamanho padrão dele (`md`, 48 desde a 0.32.0). Toma o lugar do `icon`.
    */
   avatar?: {source?: ImageSourcePropType | string; fallback?: React.ReactNode};
   /** Os sinais ao lado do `value` (AN-04): pequenos e apagados, cada um com nome. */
@@ -699,8 +717,10 @@ export function NavList({items, chevron = "caret-right", style, ...rest}: NavLis
               ? <Avatar source={it.avatar.source} fallback={it.avatar.fallback} />
               : it.icon && <Icon name={it.icon} size="md" color={t.color.foreground} />}
             <View style={s.linhaTexto}>
+              {/* 16 em peso médio, o título da linha da referência (era 400). A descrição continua
+                  14 (o `xs` do telefone, ADR-0050). */}
               {typeof it.label === "string"
-                ? <Text size="sm" numberOfLines={1}>{it.label}</Text> : it.label}
+                ? <Text size="sm" weight={500} numberOfLines={1}>{it.label}</Text> : it.label}
               {it.description != null && (typeof it.description === "string"
                 ? <Text size="xs" tone="muted" numberOfLines={1}>{it.description}</Text>
                 : it.description)}
@@ -944,8 +964,11 @@ export function Tabs({
                   ativa && !secundaria && s.abaDeTabAtiva,
                   it.disabled && {opacity: t.size.opacityDisabled},
                 ]}>
+                {/* Na cápsula, o rótulo é 16 em peso médio, escolhido ou não — o da referência, e o
+                    peso do `.tab` da web (era 600 no escolhido e 400 nos outros). A escolha fica na
+                    cor e na cápsula. A secundária fica como estava. */}
                 {typeof it.label === "string"
-                  ? <Text size="sm" weight={ativa ? 600 : 400}
+                  ? <Text size="sm" weight={secundaria ? (ativa ? 600 : 400) : 500}
                           style={{color: ativa ? t.color.foreground : t.color.mutedForeground}}>
                       {it.label}
                     </Text>

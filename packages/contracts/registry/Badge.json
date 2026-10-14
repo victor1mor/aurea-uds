@@ -120,6 +120,12 @@
       "description": "Tone of the label. The four operational ones exist because the state of a job is metadata as often as it is a condition; when it is a condition standing on its own, use Status. The eight colour names (red, orange, green, teal, cyan, blue, violet, pink) are CATEGORIES, not states — they mark a group (a section, a type of item) and say nothing about health. They skip yellow, which belongs to the brand, and pass AA in both themes in all three emphases. Pair the colour with a word or a leading icon: colour alone is never the label."
     },
     {
+      "name": "tone",
+      "type": "BadgeVariant",
+      "default": "—",
+      "description": "The colour, with the native package's name — the same names on web and native. The same axis as variant; it wins when both are given."
+    },
+    {
       "name": "emphasis",
       "type": "soft | outline | solid",
       "default": "soft",
@@ -216,6 +222,26 @@
     "fit": [
       "auto",
       "content"
+    ],
+    "tone": [
+      "blue",
+      "cyan",
+      "danger",
+      "green",
+      "info",
+      "neutral",
+      "offline",
+      "orange",
+      "paused",
+      "pink",
+      "primary",
+      "red",
+      "review",
+      "running",
+      "success",
+      "teal",
+      "violet",
+      "warning"
     ]
   }
 }

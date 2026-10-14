@@ -30,6 +30,8 @@ export const gravidadeDoEstado = (estado) => estado.startsWith("waiting_") ? "in
 export const defaultStrings = {
     loading: "Loading",
     dataError: "This could not be loaded.",
+    dataCrashed: "Something went wrong here.",
+    dataRetry: "Try again",
     dataEmpty: "Nothing here yet",
     bottomNavLabel: "Main",
     tabsLabel: "Tabs",
@@ -80,6 +82,8 @@ export const defaultStrings = {
 export const ptBR = {
     loading: "Carregando",
     dataError: "Não foi possível carregar.",
+    dataCrashed: "Algo deu errado aqui.",
+    dataRetry: "Tentar de novo",
     dataEmpty: "Ainda não há nada aqui",
     bottomNavLabel: "Principal",
     tabsLabel: "Abas",

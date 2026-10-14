@@ -10,7 +10,7 @@
 // Assets compartilhados (assets/catalog.css|js) via <link>/<script> relativos: standalone
 // não pode inlinar as fontes (300KB) em 63 páginas = 19MB. O sprite fica inline (external
 // <use> via file:// esbarra em CORS). Tudo abre via file:// com duplo-clique.
-import {createElement as h, Fragment} from "react";
+import React, {createElement as h, Fragment} from "react";
 import {renderToStaticMarkup, renderToString} from "react-dom/server";
 import {readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, unlinkSync} from "node:fs";
 import {fileURLToPath, pathToFileURL} from "node:url";
@@ -87,6 +87,24 @@ const cats = CAT_ORDER.filter(c => byCat[c]);
 const ordered = cats.flatMap(c => byCat[c]);
 
 const MAT = {Stable: "success", Universal: "primary", Ready: "info", Draft: "warning", Deprecated: "danger"};
+
+// ── O SITE NO MOLDE DA DOCUMENTAÇÃO DA REFERÊNCIA (ADR-0067, 13/10/2026) ──────────
+// A versão no topo, o endereço do código-fonte nas pílulas, e os selos do menu — tudo dos DADOS.
+const VERSAO = JSON.parse(readFileSync(join(root, "packages/react/package.json"), "utf8")).version;
+const REPO = "https://github.com/victor1mor/aurea-uds";
+// "New": o componente que não está na superfície PUBLICADA (o marco da última versão no npm).
+const publicados = new Set(JSON.parse(readFileSync(join(root, "scripts/released-surface.json"), "utf8")).components);
+// "Updated": o que a seção da versão EM CONSTRUÇÃO do CHANGELOG cita, entre crases, como mudado — a
+// nota já é cobrada pelo check 31, então o selo não se escreve à mão e não envelhece sozinho.
+const changelog = readFileSync(join(root, "CHANGELOG.md"), "utf8");
+const secaoAtual = (() => {
+  const ini = changelog.search(/^## \[\d+\.\d+\.\d+\] — em construção/m);
+  if (ini < 0) return "";
+  const fim = changelog.slice(ini + 1).search(/^## \[/m);
+  return fim < 0 ? changelog.slice(ini) : changelog.slice(ini, ini + 1 + fim);
+})();
+const citados = new Set([...secaoAtual.matchAll(/`([A-Z][A-Za-z]+)[` .]/g)].map(m => m[1]));
+const seloDe = nome => !publicados.has(nome) ? "New" : citados.has(nome) ? "Updated" : null;
 
 // conteúdo rico: apps/catalog/content/<Name>.mjs (default export).
 // `_` no começo = arquivo de conteúdo que NÃO é de um componente (_starters, _recipes).
@@ -331,58 +349,76 @@ function chip(label) { return h("code", {className: "chip", key: label}, chipTex
 function chipLink(label, href) { return h("a", {key: label, className: "chip chip-link", href}, chipText(label)); }
 
 // ── UMA página de item, montada a partir do MODELO ────────────────────────────
-// `page-model.mjs` declara as seções; aqui elas viram markup, UMA vez. Antes, as quatro
-// funções de página montavam cada uma o seu esqueleto — crumb, demo, Installation, Uses e
-// prev/next escritos quatro vezes, com o mesmo comentário copiado quatro vezes. Foi assim que
-// os quatro modelos que o achado I2 mediu divergiram sem ninguém decidir nada.
+// `page-model.mjs` declara as seções; aqui elas viram markup, UMA vez (ADR-0001). A ORDEM e os nomes
+// são os da documentação da referência desde a ADR-0067 (13/10/2026): o título com "Copy Markdown", a
+// descrição e as pílulas de atalho; Usage (o import e a caixa Preview | Code, que é a da Aurea); os
+// extras do tipo; Related Components; e os cartões de anterior e próxima. Sem trilha, e sem
+// "Installation" na página — ela mora, uma vez, no Getting Started.
 //
-//   trail    caminho do breadcrumb; o último item é a página atual
-//   demo     {render, code, description} — o par preview/code, núcleo do modelo
-//   imports  a linha de import que o Installation mostra
-//   uses     [[rótulo, [nós]]] — proveniência, agora seção própria em TODO tipo
-//   extras   [{id, label, node, toc}] na ordem que o tipo declara (page-model.EXTRAS)
-function itemPage({trail, title, badges, lede, demo, imports, uses, extras = [], prev, next}) {
+//   title     o nome
+//   lede      a descrição de uma linha
+//   pills     [[rótulo, ícone, href]] — os atalhos embaixo da descrição
+//   demo      {render, code, description} — o par preview/code, núcleo do modelo
+//   imports   a linha de import que o Usage mostra
+//   points    os pontos que eram a "Features": entram como texto do Usage (nada se perde)
+//   related   [[nome, href, resumo]] — a proveniência, em cartões
+//   extras    [{id, label, node, toc}] na ordem que o tipo declara (page-model.EXTRAS)
+//   markdown  o texto que o "Copy Markdown" copia
+// Devolve o conteúdo e o índice da página — o índice vai para a coluna da direita do shell.
+function itemPage({title, lede, pills = [], demo, imports, points = [], related = [], extras = [], prev, next, markdown}) {
   const secoes = extras.filter(Boolean);
-  // O índice da página sai das seções que a página REALMENTE tem — antes era lista escrita à
-  // mão em cada função, e por isso a das receitas nem mencionava Installation (não existia).
-  const toc = [{id: "installation", label: "Installation"},
+  // O índice sai das seções que a página REALMENTE tem — nunca de uma lista escrita à mão.
+  const toc = [{id: "usage", label: "Usage"},
     ...secoes.flatMap(s => [{id: s.id, label: s.label}, ...(s.toc || [])]),
-    {id: "uses", label: "Uses"}];
-  return h("div", {className: "page-grid"}, h("div", {className: "page-main"},
-    // não "Breadcrumb": o demo pode renderizar o componente Breadcrumb, e dois landmarks de
-    // navegação com o mesmo nome são indistinguíveis pro leitor de tela (auditoria 26/07, A2).
-    h("nav", {className: "crumb", "aria-label": "Page path"},
-      ...trail.flatMap((t, n) => [
-        n > 0 ? h("span", {key: `sep${n}`}, "›") : null,
-        t.href ? h("a", {key: n, href: t.href}, t.label)
-          : h("span", {key: n, className: n === trail.length - 1 ? "crumb-here" : undefined}, t.label)])),
+    ...(related.length ? [{id: "related", label: "Related Components"}] : [])];
+  const node = h(Fragment, null,
     h("header", {className: "page-head"},
-      h("div", {style: {...row, justifyContent: "space-between"}}, h("h1", null, title),
-        badges?.length ? h("div", {style: row}, ...badges) : null),
-      h("p", {className: "page-lede"}, lede)),
-    h("section", {className: "block"},
-      demo.description ? h("p", {className: "demo-lede", style: muted}, demo.description) : null,
-      demoBlock(demo.render, demo.code, "preview")),
-    h("section", {className: "block", id: "installation"}, h("h2", null, "Installation"),
-      // Installation que INSTALA: o pacote, a ordem obrigatória de CSS (fontes antes do
-      // core, como o README manda) e só então o import do que a página mostra.
-      h(A.CodeBlock, {language: "bash", copyable: true}, INSTALL_CMD),
-      h(A.CodeBlock, {language: "tsx", copyable: true, className: "install-import"},
-        `${IMPORT_CSS}\n${imports}`)),
+      h("div", {className: "page-head-row"}, h("h1", null, title),
+        h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown")),
+      h("p", {className: "page-lede"}, lede),
+      pills.length ? h("div", {className: "page-pills"}, ...pills.map(([rotulo, icone, href]) =>
+        h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, target: "_blank", rel: "noreferrer"}, rotulo))) : null),
+    h("section", {className: "block", id: "usage"}, h("h2", null, "Usage"),
+      h(A.CodeBlock, {language: "tsx", copyable: true, className: "usage-import"}, imports),
+      demo.description ? h("p", {className: "demo-lede"}, demo.description) : null,
+      demoBlock(demo.render, demo.code, "preview"),
+      points.length ? h("ul", {className: "usage-points"}, ...points.map((t, n) => h("li", {key: n}, t))) : null),
     ...secoes.map(s => s.node),
-    h("section", {className: "block", id: "uses"}, h("h2", null, "Uses"),
-      h("dl", {className: "facts"}, ...uses.flatMap(([label, nodes], n) =>
-        [h("dt", {key: `t${n}`}, label), h("dd", {key: `d${n}`}, h("div", {style: row}, ...nodes))]))),
+    // A proveniência ("Uses" da ADR-0001) vira os cartões de "Related Components", como na referência.
+    related.length ? h("section", {className: "block", id: "related"}, h("h2", null, "Related Components"),
+      h("div", {className: "related-grid"}, ...related.map(([nome, href, resumo]) => href
+        ? h("a", {key: nome, className: "related-card", href}, h("strong", null, nome), resumo ? h("span", null, resumo) : null)
+        : h("div", {key: nome, className: "related-card"}, h("strong", null, nome), resumo ? h("span", null, resumo) : null)))) : null,
     // rótulo distinto do <nav> do componente Pagination: dois landmarks de navegação com
     // o MESMO nome é violação (axe landmark-unique) e o leitor de tela não distingue.
     h("nav", {className: "prevnext", "aria-label": "Previous and next"},
-      prev ? h("a", {className: "pn", href: prev.href}, h("small", null, "← Previous"), h("strong", null, prev.name)) : h("span"),
-      next ? h("a", {className: "pn pn-next", href: next.href}, h("small", null, "Next →"), h("strong", null, next.name)) : h("span"))),
-    h(A.TableOfContents, {items: toc}));
+      prev ? h("a", {className: "pn", href: prev.href}, h("small", null, "← Previous"), h("strong", null, prev.name),
+        prev.summary ? h("span", null, prev.summary) : null) : h("span"),
+      next ? h("a", {className: "pn pn-next", href: next.href}, h("small", null, "Next →"), h("strong", null, next.name),
+        next.summary ? h("span", null, next.summary) : null) : h("span")),
+    // O texto do "Copy Markdown": vai na própria página, sem rede, e o catalog.js copia. Vai como JSON, com
+    // todo "<" escrito "<": cru, o código dos exemplos ("<Link href=…>") aparecia como TAG no HTML — o
+    // check 45 do validate.py leu um link de exemplo como recurso de fora, e um "</script>" fecharia o bloco.
+    h("script", {type: "application/json", id: "page-markdown",
+      dangerouslySetInnerHTML: {__html: JSON.stringify(markdown || `# ${title}\n\n${lede}\n`).replace(/</g, "\\u003c")}}));
+  return {node, toc};
 }
 
-// prev/next: o vizinho na ordem linear do tipo, ou nada nas pontas.
-const pn = (item, href) => item ? {name: item.name ?? item, href: href(item)} : null;
+// O markdown de uma página de item: o mesmo conteúdo, em texto que se cola num editor ou num agente.
+function paraMarkdown({title, lede, imports, demo, points = [], exemplos = [], props = []}) {
+  const bloco = (codigo, lang = "tsx") => `\`\`\`${lang}\n${codigo}\n\`\`\``;
+  return [`# ${title}`, lede, "## Usage", bloco(imports), demo?.code ? bloco(demo.code) : null,
+    ...points.map(p => `- ${p}`),
+    exemplos.length ? "## Examples" : null,
+    ...exemplos.flatMap(e => [`### ${e.title}`, e.description || null, e.code ? bloco(e.code) : null]),
+    props.length ? "## API Reference" : null,
+    props.length ? ["| Prop | Type | Default | Description |", "|---|---|---|---|",
+      ...props.map(p => `| \`${p.name}\` | \`${String(p.type).replace(/\|/g, "\\|")}\` | ${p.default || "—"} | ${String(p.description || "").replace(/\|/g, "\\|").replace(/\n/g, " ")} |`)].join("\n") : null,
+  ].filter(Boolean).join("\n\n") + "\n";
+}
+
+// prev/next: o vizinho na ordem linear do tipo, ou nada nas pontas — com o resumo, como os cartões da referência.
+const pn = (item, href, resumo = () => null) => item ? {name: item.name ?? item, href: href(item), summary: resumo(item)} : null;
 
 // Componente de PÁGINA (hoje só o AppShell) é dono do <main>, do <header> e do <aside> do
 // documento. Renderizado dentro de outra página ele duplica os landmarks dela — medido com axe
@@ -452,10 +488,6 @@ function componentPage(f, i) {
     // desenho vazava para fora dela.
     ...(bruto.prerender ? {render: () => h("div", {style: {width: "100%"},
       dangerouslySetInnerHTML: {__html: preRenderizado[f.name]}})} : {})};
-  const meta = [
-    ...(f.kind === "hook" ? [h(A.Badge, {key: "k", variant: "info"}, "hook")] : []),
-    h(A.Badge, {key: "m", variant: MAT[f.maturity] || "neutral"}, f.maturity),
-    h(A.Badge, {key: "c"}, f.category), h(A.Badge, {key: "l"}, f.layer)];
   // Variante, tamanho e estado são EIXOS DIFERENTES (DIRECTION.md §5) — juntar os três num
   // rótulo "Variants" era mentira: `lg` não é variante e `hover` não é nem uma coisa nem outra.
   // Eixo declarado que a página não mostra é eixo que ninguém descobre. `variants` e `sizes`
@@ -477,30 +509,51 @@ function componentPage(f, i) {
     h("span", {key: p, className: "chip chip-status"},
       h(A.Status, {variant: s === "planned" ? "offline" : s === "n-a" ? "neutral" : "online"}, `${p}: ${s}`)));
   const usa = f.related.components || [];
+  const resumoDe = nome => fichas.find(x => x.name === nome)?.summary || null;
+  const exemplos = c ? c.examples.slice(1) : [];
+  const fonte = f.source?.react ? f.source.react.split("#")[0] : null;
   return itemPage({
-    // Hook não é componente, e o caminho tem de dizer isso: o `useToast` anunciado como
-    // "Components › Feedback" mente sobre o que a página é, e o §52 da ATIVIDADE-2 (no documento de referências, fora do repositório) cobra que a
-    // documentação permita DESCOBRIR o que a coisa é antes de saber usá-la. A categoria continua
-    // sendo a mesma — um hook de aviso mora ao lado do Alert e do Banner, que é onde se procura.
-    trail: [{label: f.kind === "hook" ? "Hooks" : "Components", href: "./index.html"},
-      // a categoria era texto morto; agora leva à sua seção no índice (a landing tem id por
-      // categoria), então todo nível do caminho é navegável menos o atual.
-      {label: f.category, href: `./index.html#cat-${slug(f.category)}`}, {label: f.name}],
-    title: f.name, badges: meta, lede: c?.description || f.summary,
+    title: f.name, lede: c?.description || f.summary,
+    // As pílulas de atalho da referência, com o que a Aurea tem: o código do componente e o CSS dele.
+    pills: [...(fonte ? [["Source", "code", `${REPO}/blob/main/${fonte}`]] : []),
+      ["Styles source", "paint-brush", `${REPO}/blob/main/packages/core/src/aurea.css`]],
     demo: main,
     // O starter também pode declarar o import: módulos de motor opcional moram em subpath próprio
-    // desde a Fase 9, e a página tem de ensinar o
-    // import que funciona, não o do barril — que para eles não existe.
+    // desde a Fase 9, e a página tem de ensinar o import que funciona, não o do barril — que para
+    // eles não existe.
     imports: c?.install || bruto.install || `import {${f.name}} from "@aurea-uds/react";`,
-    uses: [["Components", usa.length
-      ? usa.map(rc => fichas.some(x => x.name === rc) ? chipLink(rc, `./${slug(rc)}.html`) : chip(rc))
-      // 2 dos 65 não compõem ninguém. Dizer isso é informação (é um primitivo); seção vazia
-      // seria defeito, que é o que a ADR-0001 recusa.
-      : [h("span", {style: muted}, "Leaf component — it composes no other Aurea component.")]]],
+    points: c?.features || [],
+    related: usa.map(rc => [rc, fichas.some(x => x.name === rc) ? `./${slug(rc)}.html` : null, resumoDe(rc)]),
     extras: [
-      // API antes de Reference: quem chega quer a assinatura. A tabela é o componente Table.
-      f.props?.length ? {id: "api", label: "API",
-        node: h("section", {className: "block", id: "api"}, h("h2", null, "API"),
+      exemplos.length ? {id: "examples", label: "Examples",
+        toc: exemplos.map(ex => ({id: slug(ex.title), label: ex.title, sub: true})),
+        node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
+          ...exemplos.map((ex, n) => h("div", {className: "example", key: n, id: slug(ex.title)},
+            h("h3", null, ex.title), ex.description ? h("p", {className: "demo-lede"}, ex.description) : null,
+            // `embed` deixou de ser privilégio do primeiro exemplo (18/08/2026): componente que
+            // mede a própria altura em `100vh` — a lateral é o caso — só se enxerga numa moldura
+            // com viewport PRÓPRIA. Espremido num painel de demo ele era recortado.
+            demoBlock(ex.embed
+              ? embedPreview(`${f.name}-${slug(ex.title)}`, ex.render, `${f.name} — ${ex.title}`,
+                  // `n` é o índice DENTRO de `slice(1)`, então o índice real é `n + 1`
+                  {componente: f.name, indice: n + 1}, ex.layoutProprio === true,
+                  ex.tituloProprio === true)
+              : ex.render, ex.code))))} : null,
+      // A "Reference" da Aurea, no nome e no lugar da referência ("Styling Reference"): os eixos, a
+      // acessibilidade, os tokens e as plataformas. Toda linha é uma fila de chips do MESMO tamanho.
+      {id: "styling", label: "Styling Reference",
+        node: h("section", {className: "block", id: "styling"}, h("h2", null, "Styling Reference"),
+          h("dl", {className: "facts"},
+            ...axes.map(([label, values]) => h(Fragment, {key: label},
+              h("dt", null, label), h("dd", null, h("div", {style: row}, ...values.map(chip))))),
+            h("dt", {key: "a"}, "A11y"), h("dd", {key: "ad"}, h("div", {style: row},
+              chip(f.a11y.role ? `role="${f.a11y.role}"` : "native semantics"),
+              ...(f.a11y.keyboard || []).map(chip))),
+            f.tokens.length ? h(Fragment, {key: "t"}, h("dt", null, "Tokens"), h("dd", null, h("div", {style: row}, ...f.tokens.map(chip)))) : null,
+            h("dt", {key: "p"}, "Platforms"), h("dd", {key: "pd"}, h("div", {style: row}, ...platforms))))},
+      // A tabela é o componente Table.
+      f.props?.length ? {id: "api", label: "API Reference",
+        node: h("section", {className: "block", id: "api"}, h("h2", null, "API Reference"),
           h(A.Table, {caption: `${f.name} props`},
             h("thead", null, h("tr", null, h("th", null, "Prop"), h("th", null, "Type"),
               h("th", null, "Default"), h("th", null, "Description"))),
@@ -509,75 +562,115 @@ function componentPage(f, i) {
               h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}}, pr.type)),
               h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--subtle-foreground)"}}, pr.default || "—")),
               h("td", null, pr.description))))))} : null,
-      {id: "reference", label: "Reference",
-        node: h("section", {className: "block", id: "reference"}, h("h2", null, "Reference"),
-          h("dl", {className: "facts"},
-            ...axes.map(([label, values]) => h(Fragment, {key: label},
-              h("dt", null, label), h("dd", null, h("div", {style: row}, ...values.map(chip))))),
-            // toda linha da Reference é uma fila de chips do MESMO tamanho e borda: valor solto
-            // no meio de chips lia como texto perdido (revisão do Victor, 24/07).
-            h("dt", {key: "a"}, "A11y"), h("dd", {key: "ad"}, h("div", {style: row},
-              chip(f.a11y.role ? `role="${f.a11y.role}"` : "native semantics"),
-              ...(f.a11y.keyboard || []).map(chip))),
-            f.tokens.length ? h(Fragment, {key: "t"}, h("dt", null, "Tokens"), h("dd", null, h("div", {style: row}, ...f.tokens.map(chip)))) : null,
-            h("dt", {key: "p"}, "Platforms"), h("dd", {key: "pd"}, h("div", {style: row}, ...platforms))))},
-      c?.features?.length ? {id: "features", label: "Features",
-        node: h("section", {className: "block", id: "features"}, h("h2", null, "Features"),
-          h("ul", {className: "features"}, ...c.features.map((t, n) => h("li", {key: n}, t))))} : null,
-      c && c.examples.length > 1 ? {id: "examples", label: "Examples",
-        toc: c.examples.slice(1).map(ex => ({id: slug(ex.title), label: ex.title, sub: true})),
-        node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
-          ...c.examples.slice(1).map((ex, n) => h("div", {className: "example", key: n, id: slug(ex.title)},
-            h("h3", null, ex.title), ex.description ? h("p", {style: muted}, ex.description) : null,
-            // `embed` deixou de ser privilégio do primeiro exemplo (18/08/2026): componente que
-            // mede a própria altura em `100vh` — a lateral é o caso — só se enxerga numa moldura
-            // com viewport PRÓPRIA. Espremido num painel de demo ele era recortado, e o recorte
-            // estava escrito como gambiarra no conteúdo ("a caixa mostra o topo").
-            demoBlock(ex.embed
-              ? embedPreview(`${f.name}-${slug(ex.title)}`, ex.render, `${f.name} — ${ex.title}`,
-                  // `n` é o índice DENTRO de `slice(1)`, então o índice real é `n + 1`
-                  {componente: f.name, indice: n + 1}, ex.layoutProprio === true,
-                  ex.tituloProprio === true)
-              : ex.render, ex.code))))} : null,
     ],
-    prev: pn(ordered[i - 1], x => `./${slug(x.name)}.html`),
-    next: pn(ordered[i + 1], x => `./${slug(x.name)}.html`),
+    prev: pn(ordered[i - 1], x => `./${slug(x.name)}.html`, x => x.summary),
+    next: pn(ordered[i + 1], x => `./${slug(x.name)}.html`, x => x.summary),
+    markdown: paraMarkdown({title: f.name, lede: c?.description || f.summary,
+      imports: c?.install || bruto.install || `import {${f.name}} from "@aurea-uds/react";`,
+      demo: main, points: c?.features || [], exemplos, props: f.props || []}),
   });
 }
 
-// ── landing (índice) ──────────────────────────────────────────────────────────
-function landing() {
-  return h(Fragment, null,
+// ── "All Components" (components.html) ───────────────────────────────────────
+// Como o catálogo da referência: grupos por categoria, grade de 3, o nome embaixo. O cartão mostra
+// o COMPONENTE DE VERDADE, parado (elemento nosso, ADR-0067), e não uma foto: renderizado aqui, com
+// `inert` (nada recebe foco nem clique) e escondido do leitor de tela — quem lê ouve o nome do link.
+// O link cobre o cartão inteiro por um pseudo-elemento: botão de verdade dentro de um <a> seria HTML
+// inválido, e é por isso que a prévia não mora DENTRO do link.
+function previaDoCartao(f) {
+  const c = content[f.name];
+  const bruto = c ? c.examples[0] : starters[f.name];
+  if (bruto?.prerender && preRenderizado[f.name]) return preRenderizado[f.name];
+  if (!bruto?.render || bruto.embed) return null;
+  return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, bruto.render()), {identifierPrefix: `card-${slug(f.name)}-`});
+}
+function componentsIndex() {
+  const toc = cats.map(cat => ({id: `cat-${slug(cat)}`, label: cat}));
+  const node = h(Fragment, null,
     h("header", {className: "page-head"},
-      h("p", {className: "eyebrow"}, "Aurea Universal Design System"),
-      h("h1", null, "Component catalog"),
-      h("p", {className: "page-lede"}, `${fichas.length} components, generated from the registry and rendered with the Aurea components themselves. The frame is an AppShell, a Topbar and a Sidebar; the maturity chips are Badges. Pick a component from the left.`)),
+      h("div", {className: "page-head-row"}, h("h1", null, "All Components")),
+      h("p", {className: "page-lede"}, `Explore the full list of ${fichas.length} components, rendered with the Aurea components themselves.`)),
     ...cats.map(cat => h("section", {className: "block", key: cat},
-      h("h2", {id: `cat-${slug(cat)}`}, cat, h("span", {className: "count"}, ` ${byCat[cat].length}`)),
-      h("div", {className: "grid"}, ...byCat[cat].map(f =>
-        h("a", {className: "tile", href: `./${slug(f.name)}.html`, key: f.name},
-          // O nome `useX` já denuncia um hook a quem lê React, mas o cartão do índice é o que
-          // se varre com o olho — e ali o selo diz a ESPÉCIE antes de a pessoa entrar na página.
-          h("div", {style: {...row, justifyContent: "space-between"}}, h("strong", null, f.name),
-            h("span", {style: row},
-              f.kind === "hook" ? h(A.Badge, {variant: "info"}, "hook") : null,
-              h(A.Badge, {variant: MAT[f.maturity] || "neutral"}, f.maturity))),
-          h("p", null, f.summary)))))));
+      h("h2", {id: `cat-${slug(cat)}`}, cat),
+      h("div", {className: "cat-grid"}, ...byCat[cat].map(f => {
+        const previa = previaDoCartao(f), selo = seloDe(f.name);
+        return h("div", {className: "cat-card", key: f.name},
+          previa
+            ? h("div", {className: "cat-card-preview", inert: true, "aria-hidden": "true", dangerouslySetInnerHTML: {__html: previa}})
+            : h("div", {className: "cat-card-preview cat-card-icon", "aria-hidden": "true"}, h(A.Icon, {name: f.icon || "cube", size: "xl"})),
+          h("div", {className: "cat-card-foot"},
+            h("a", {className: "cat-card-name", href: `./${slug(f.name)}.html`}, f.name),
+            selo ? h(A.Badge, {size: "xs", tone: selo === "New" ? "primary" : "neutral"}, selo) : null));
+      })))));
+  return {node, toc};
+}
+
+// ── Início (index.html) ──────────────────────────────────────────────────────
+// Como o início da referência: o título centralizado em duas linhas (a segunda esmaecida), o texto,
+// dois botões, e uma vitrine grande. A vitrine são os BLOCOS da própria Aurea, em abas.
+const VITRINE = ["block-sign-in-panel", "block-stats-row", "block-members-table", "block-settings-form"];
+function homePage() {
+  const escolhidos = VITRINE.map(s => blocks.find(b => b.slug === s)).filter(Boolean);
+  const aba = (b, n) => h("button", {key: b.slug, type: "button", role: "tab", id: `vit-${n}`, "data-panel": b.slug,
+    className: n === 0 ? "active" : undefined, "aria-selected": n === 0 ? "true" : "false",
+    "aria-controls": `vit-${n}-panel`, tabIndex: n === 0 ? 0 : -1}, b.name);
+  const node = h("div", {className: "home"},
+    h("section", {className: "home-hero"},
+      h(A.Badge, {tone: "primary"}, `v${VERSAO}`),
+      h("h1", null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
+      h("p", null, "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little."),
+      h("div", {className: "home-acoes"},
+        h(A.Button, {variant: "primary", href: "./getting-started.html"}, "Get started"),
+        h(A.Button, {variant: "outline", href: "./components.html"}, "View components")),
+      h("p", {className: "home-nota"}, "Open source under Apache-2.0")),
+    h("section", {className: "home-vitrine", "aria-label": "Showcase"},
+      h("div", {className: "segmented home-abas", role: "tablist", "aria-label": "Showcase"}, ...escolhidos.map(aba)),
+      // A caixa é o `Card variant="outline"`: da cor da página, só com a linha em volta, como a da
+      // referência (o Victor, 13/10/2026). O componente, e não uma regra do site.
+      ...escolhidos.map((b, n) => h(A.Card, {key: b.slug, variant: "outline", className: "home-painel", role: "tabpanel", id: `vit-${n}-panel`,
+        "aria-labelledby": `vit-${n}`, "data-panel": b.slug, "data-aurea-tabpanel": "", tabIndex: 0, hidden: n !== 0 ? true : undefined,
+        dangerouslySetInnerHTML: {__html: b.prerender ? preRenderizado[b.slug]
+          : renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, b.render()), {identifierPrefix: `vit-${n}-`})}}))));
+  return {node, toc: []};
+}
+
+// ── Getting Started (getting-started.html) ───────────────────────────────────
+// A instalação mora AQUI, uma vez — como na referência —, e não em cada página de item.
+function gettingStartedPage() {
+  const toc = [{id: "installation", label: "Installation"}, {id: "provider", label: "Provider"},
+    {id: "first-component", label: "Your first component"}, {id: "native", label: "React Native"}];
+  const node = h(Fragment, null,
+    h("header", {className: "page-head"},
+      h("div", {className: "page-head-row"}, h("h1", null, "Getting Started")),
+      h("p", {className: "page-lede"}, "Install the packages, load the fonts before the core, and wrap the app in the provider.")),
+    h("section", {className: "block", id: "installation"}, h("h2", null, "Installation"),
+      h(A.CodeBlock, {language: "bash", copyable: true}, "pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons"),
+      h("p", {className: "demo-lede"}, "The fonts load BEFORE the core: the core embeds no font."),
+      h(A.CodeBlock, {language: "tsx", copyable: true}, IMPORT_CSS)),
+    h("section", {className: "block", id: "provider"}, h("h2", null, "Provider"),
+      h("p", {className: "demo-lede"}, "The provider hands out the default sentences, tells the components where the icon sprite is, and mounts what tooltips and toasts use."),
+      h(A.CodeBlock, {language: "tsx", copyable: true},
+        'import {AureaProvider} from "@aurea-uds/react";\n\nexport default function App() {\n  return <AureaProvider><Screen /></AureaProvider>;\n}')),
+    h("section", {className: "block", id: "first-component"}, h("h2", null, "Your first component"),
+      demoBlock(() => h(A.Button, {variant: "primary"}, "Save"), 'import {Button} from "@aurea-uds/react";\n\n<Button variant="primary">Save</Button>', "preview")),
+    h("section", {className: "block", id: "native"}, h("h2", null, "React Native"),
+      h("p", {className: "demo-lede"}, "Mobile is another package, with its own list of components and its own dependencies — not the web list with fewer items."),
+      h(A.CodeBlock, {language: "bash", copyable: true}, "pnpm add @aurea-uds/native")));
+  return {node, toc};
 }
 
 // ── chips e import de "Uses", comuns a pattern / block / recipe ───────────────
-const usesChips = list => (list || []).map(u => fichas.some(x => x.name === u)
-  ? chipLink(u, `./${slug(u)}.html`) : chip(u));
+// "Related Components": a proveniência em cartões, com o resumo de cada ficha (ADR-0067).
+const relacionados = list => [...new Set(list || [])].map(u => {
+  const f = fichas.find(x => x.name === u);
+  return [u, f ? `./${slug(u)}.html` : null, f?.summary || null];
+});
 const importLine = list => `import {${[...new Set(list || [])]
   .filter(u => fichas.some(x => x.name === u)).join(", ")}} from "@aurea-uds/react";`;
 
 function patternPage(p, i) {
   return itemPage({
-    trail: [{label: "Patterns", href: "./patterns.html"},
-      {label: p.component, href: `./${slug(p.component)}.html`}, {label: p.variant}, {label: p.name}],
     title: p.name, lede: p.description,
-    badges: [h(A.Badge, {key: "t", variant: "info"}, "Pattern"), h(A.Badge, {key: "c"}, p.component),
-      h(A.Badge, {key: "v"}, p.variant)],
     // `note` é a explicação de por que o preview mostra só o disparador (portal, ponteiro). Ela
     // existia em 14 entradas e esta função a DESCARTAVA — o pattern saía com uma caixa quase
     // vazia e nenhuma linha dizendo por quê, que é exatamente o defeito que o starter já tinha
@@ -600,18 +693,16 @@ function patternPage(p, i) {
           p.layoutProprio === true, p.tituloProprio === true)
       : p.render, code: p.code, description: p.note},
     imports: importLine(p.uses || [p.component]),
-    uses: [["Components", usesChips(p.uses)],
-      ["Pattern of", [chipLink(p.component, `./${slug(p.component)}.html`), chip(p.variant)]]],
-    prev: pn(patterns[i - 1], x => `./${x.slug}.html`),
-    next: pn(patterns[i + 1], x => `./${x.slug}.html`),
+    related: relacionados([p.component, ...(p.uses || [])]),
+    prev: pn(patterns[i - 1], x => `./${x.slug}.html`, x => x.description),
+    next: pn(patterns[i + 1], x => `./${x.slug}.html`, x => x.description),
+    markdown: paraMarkdown({title: p.name, lede: p.description, imports: importLine(p.uses || [p.component]), demo: {code: p.code}}),
   });
 }
 
 function blockPage(b, i) {
   return itemPage({
-    trail: [{label: "Blocks", href: "./blocks.html"}, {label: b.category}, {label: b.name}],
     title: b.name, lede: b.description,
-    badges: [h(A.Badge, {key: "t", variant: "info"}, "Block"), h(A.Badge, {key: "c"}, b.category)],
     // Mesmo desvio do `componentPage`, e pela mesma razão: quem pré-renderiza entrega HTML
     // pronto, não uma função. O `width:100%` no invólucro não é enfeite — o `.demo-panel` é
     // flex, e um <div> solto entra com largura automática, encolhe para zero, e o
@@ -620,9 +711,10 @@ function blockPage(b, i) {
       ? () => h("div", {style: {width: "100%"}, dangerouslySetInnerHTML: {__html: preRenderizado[b.slug]}})
       : b.render},
     imports: importLine(b.uses),
-    uses: [["Components", usesChips(b.uses)]],
-    prev: pn(blocks[i - 1], x => `./${x.slug}.html`),
-    next: pn(blocks[i + 1], x => `./${x.slug}.html`),
+    related: relacionados(b.uses),
+    prev: pn(blocks[i - 1], x => `./${x.slug}.html`, x => x.description),
+    next: pn(blocks[i + 1], x => `./${x.slug}.html`, x => x.description),
+    markdown: paraMarkdown({title: b.name, lede: b.description, imports: importLine(b.uses), demo: {code: b.code}}),
   });
 }
 
@@ -741,15 +833,13 @@ function recipePage(id, archetype, i, ids) {
   const c = recipeContent[id];
   if (!c) throw new Error(`recipe ${id}: sem preview em content/_recipes.mjs — o modelo exige preview e código`);
   return itemPage({
-    trail: [{label: "Recipes", href: "./recipes.html"}, {label: recipeTitle(id)}],
     title: recipeTitle(id),
-    badges: [h(A.Badge, {key: "t", variant: "info"}, "Recipe"),
-      ...archetype.patterns.slice(0, 3).map(p => h(A.Badge, {key: p}, p))],
     lede: intro || (archetype.capabilities || []).join(" · "),
     demo: {render: c.render, code: c.code, description: c.description},
     imports: importLine(c.uses),
-    uses: [["Components", usesChips(c.uses)],
-      ["Patterns", archetype.patterns.map(chip)]],
+    related: relacionados(c.uses),
+    markdown: paraMarkdown({title: recipeTitle(id), lede: intro || (archetype.capabilities || []).join(" · "),
+      imports: importLine(c.uses), demo: {code: c.code}}),
     extras: secoes.map(s => ({id: s.id, label: s.label,
       node: h("section", {className: "block", key: s.id, id: s.id}, h("h2", null, s.label), ...s.nodes)})),
     prev: ids[i - 1] ? {name: recipeTitle(ids[i - 1]), href: `./recipe-${slug(ids[i - 1])}.html`} : null,
@@ -897,67 +987,107 @@ function hooksPage() {
 }
 
 // ── shell dogfooded (comum a todas as páginas) ────────────────────────────────
-const AREAS = [["Components", "index.html", "components", ordered.length],
-  ["Patterns", "patterns.html", "patterns", patterns.length],
-  ["Blocks", "blocks.html", "blocks", blocks.length],
-  ["Recipes", "recipes.html", "recipes", Object.keys(contract.applicationPatterns.archetypes).length],
-  ["Hooks", "hooks.html", "hooks", hooks.length],
-  ["Tokens", "tokens.html", "tokens", flattenTokens(tokensDoc).length]];
+// O molde da documentação da referência (ADR-0067): o topo em duas linhas — a logo da Aurea, o nome e
+// a versão; embaixo, as áreas do site —, o menu à esquerda e o "On this page" à direita. Tudo é peça da
+// Aurea: o `AppShell` (com a coluna da direita, feita para isto no passo 4), a `Sidebar` pelos
+// `navItems` e o `TableOfContents`. As áreas não levam mais contagem (era ruído; o número vai para o
+// título de cada página).
+const AREAS = [["Getting Started", "getting-started.html", "start"], ["Components", "components.html", "components"],
+  ["Patterns", "patterns.html", "patterns"], ["Blocks", "blocks.html", "blocks"], ["Recipes", "recipes.html", "recipes"],
+  ["Hooks", "hooks.html", "hooks"], ["Tokens", "tokens.html", "tokens"]];
 
-// A lateral mostra o índice DA ÁREA em que você está: componentes por categoria, patterns por
-// componente, blocks por categoria, receitas em lista. Mesma peça, dado diferente.
-function navGroups(groups, activeHref) {
-  return h("nav", {className: "doc-nav", "aria-label": "Contents"},
-    ...groups.map(([label, items]) => h("div", {key: label, className: "nav-group", role: "group",
-      "aria-labelledby": `grp-${slug(label)}`},
-      h("div", {className: "nav-group-label", id: `grp-${slug(label)}`}, label),
-      // o glifo vem da ficha (campo icon, travado na allowlist do contrato pelo gate) e é
-      // aria-hidden: quem lê tela já ouve o nome do item, o ícone só ajuda a varredura visual.
-      ...items.map(([text, href, icon]) => h("a", {key: href, href: `./${href}`,
-        className: href === activeHref ? "active" : undefined,
-        ...(href === activeHref ? {"aria-current": "page"} : {})},
-        // o item escolhido desenha o glifo CHEIO, como no `Sidebar` (ADR-0053).
-        icon ? h(A.Icon, {name: icon, size: "sm", weight: href === activeHref ? "fill" : undefined}) : null,
-        h("span", null, text))))));
-}
+// O MENU de cada área, como itens da `Sidebar` (grupos com título; o id do item é o arquivo dele).
+// Componentes: "Overview" e a lista em ordem ALFABÉTICA, como a da referência, com os selos
+// "New"/"Updated" tirados dos dados. Os hooks ficam num grupo próprio no fim.
+const seloBadge = nome => { const s = seloDe(nome); return s ? h(A.Badge, {size: "xs", tone: s === "New" ? "primary" : "neutral"}, s) : undefined; };
+const item = (label, href, badge) => ({id: href, label, href: `./${href}`, ...(badge ? {badge} : {})});
+const alfabetico = list => [...list].sort((a, b) => a.name.localeCompare(b.name));
+const menuComponentes = () => [
+  {id: "overview", label: "Overview", items: [item("Getting Started", "getting-started.html"), item("All Components", "components.html")]},
+  {id: "components", label: "Components", items: alfabetico(fichas.filter(f => f.kind !== "hook"))
+    .map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
+  {id: "hooks", label: "Hooks", items: alfabetico(fichas.filter(f => f.kind === "hook"))
+    .map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
+].filter(g => g.items.length);
+const menuPatterns = () => [{id: "overview", label: "Overview", items: [item("All Patterns", "patterns.html")]},
+  ...Object.entries(patternsByComponent).map(([cmp, list]) => ({id: `p-${slug(cmp)}`, label: cmp,
+    items: list.map(p => item(p.name, `${p.slug}.html`))}))];
+const menuBlocks = () => [{id: "overview", label: "Overview", items: [item("All Blocks", "blocks.html")]},
+  ...Object.entries(blocksByCategory).map(([cat, list]) => ({id: `b-${slug(cat)}`, label: cat,
+    items: list.map(b => item(b.name, `${b.slug}.html`))}))];
+const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
+const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
+  {id: "archetypes", label: "Archetypes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
+const MENUS = {start: menuComponentes, components: menuComponentes, hooks: menuComponentes, tokens: menuComponentes,
+  patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
+
 const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
+// A LOGO da Aurea, as quatro pétalas amarelas (ordem do Victor, 13/10/2026: "não a perca").
 const mark = h("svg", {width: 26, height: 26, viewBox: "0 0 1000 1000", "aria-hidden": "true", style: {flex: "none"}},
   [0, 90, 180, 270].map(r => h("path", {key: r, d: D, fill: "var(--primary)", transform: `rotate(${r} 500 500)`})));
 
-function shell(activeName, inner, section = "components", sideNav = null) {
-  const brand = h(Fragment, null, h("a", {href: "./index.html", style: {...row, gap: "var(--space-2)", textDecoration: "none", color: "inherit"}},
-    mark, h("strong", {style: {whiteSpace: "nowrap"}}, "Aurea UDS")), h(A.Badge, {className: "hide-below-md"}, `${fichas.length}`));
+function topoDoSite(section) {
+  const brand = h("a", {href: "./index.html", className: "site-brand"}, mark, h("strong", null, "Aurea"),
+    h("span", {className: "site-version"}, `v${VERSAO}`));
   const topbar = h(Fragment, null,
-    // As áreas do vocabulário (AUREA.md §4; "cinco" estava escrito aqui e venceu quando Hooks
-    // entrou — a lista é que manda), links de verdade e com a contagem do que
-    // existe de fato em cada uma — número que sai dos dados, não escrito à mão.
-    h("nav", {"aria-label": "Sections", style: {display: "flex", gap: "var(--space-05)"}},
-      ...AREAS.map(([label, href, id, count]) => h("a", {key: id, className: "btn btn-nav", href: `./${href}`,
-        ...(id === section ? {"aria-current": "page"} : {})}, label,
-        h(A.Badge, {className: "nav-count hide-below-lg"}, String(count))))),
-    h("span", {style: {...row, gap: "var(--space-2)"}},
-      // SELETOR DE MARCA (20/08/2026, ADR-0036). Fica ao lado do tema porque são o mesmo tipo de
-      // chave — atributo no <html> que a cascata resolve —, e é `select` e não botão porque marca
-      // é lista aberta: a segunda custa uma <option>, um segundo botão custaria desenho.
-      // O rótulo é `aria-label` e não texto visível: no topo o espaço é do que se navega.
-      h(A.Select, {id: "brand-select", "aria-label": "Brand", className: "hide-below-lg",
-        defaultValue: "", style: {width: "auto"}},
-        h("option", {value: ""}, "Aurea"),
-        h("option", {value: "lory"}, "Lory")),
+    // A BUSCA (ADR-0067; o Victor, 13/10/2026: "faltou o buscar"): o botão da referência, com o atalho
+    // à mostra. Quem abre é o `search.js` (a `CommandPalette` da Aurea, viva), com Ctrl+K ou o clique;
+    // sem JavaScript o botão leva ao catálogo, onde está a lista inteira. No Início, como no da
+    // referência, a busca é SÓ o ícone, junto das outras chaves (o Victor, 13/10/2026).
+    section === "home" ? null : h(A.Button, {variant: "tertiary", leadingIcon: "magnifying-glass", kbd: "Ctrl K",
+      className: "site-search", href: "./components.html", "data-site-search": ""}, "Search"),
+    h("span", {className: "site-actions"},
+      section === "home" ? h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary",
+        href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}) : null,
+      // SELETOR DE MARCA (20/08/2026, ADR-0036): ao lado do tema, porque são o mesmo tipo de chave.
+      h(A.Select, {id: "brand-select", "aria-label": "Brand", className: "hide-below-lg", defaultValue: "", style: {width: "auto"}},
+        h("option", {value: ""}, "Aurea"), h("option", {value: "lory"}, "Lory")),
       // toggle de tema: dois ícones, o CSS mostra o oposto do tema atual; catalog.js alterna.
       h("button", {className: "btn btn-icon btn-ghost", id: "theme-toggle", type: "button", "aria-label": "Toggle light / dark theme"},
         h(A.Icon, {name: "sun", weight: "fill", className: "t-sun"}),
-        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"}))));
-  // Categoria NÃO é título de documento: como <h4> ela vinha antes do <h1> da página e quem
-  // navega por títulos no leitor de tela começava no meio da lateral. Vira grupo rotulado.
-  const nav = sideNav || navGroups(cats.map(cat => [cat, byCat[cat].map(f => [f.name, `${slug(f.name)}.html`, f.icon])]),
-    activeName ? `${slug(activeName)}.html` : null);
-  // O catálogo consome o AureaProvider como um app consumiria: o sprite é INLINE nesta
-  // página (external <use> via file:// esbarra em CORS), então a base é vazia e o href sai
-  // "#i-nome". Antes cada componente recebia spriteUrl="" na mão, 13 vezes aqui e mais nos
-  // arquivos de conteúdo — era o sintoma do achado A4 visto de dentro.
+        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"}))),
+    // AS ÁREAS POR ÚLTIMO NO CÓDIGO, porque aparecem na segunda linha. Vinham primeiro e desciam por `order:3`:
+    // o Tab ia da marca para a linha de baixo e voltava para a busca, em cima (WCAG 2.4.3; a trava
+    // `ordem-de-foco.spec.ts` pegou nas 410 páginas, 14/10/2026).
+    h("nav", {"aria-label": "Sections", className: "site-areas"},
+      ...AREAS.map(([label, href, id]) => h("a", {key: id, className: "site-area", href: `./${href}`,
+        ...(id === section ? {"aria-current": "page"} : {})}, label))));
+  return {brand, topbar};
+}
+
+// O índice da página vai para a coluna da direita. As páginas de ÁREA ainda montam o próprio
+// `page-grid` com o `TableOfContents` dentro: aqui ele é separado, sem reescrever as cinco.
+function separarToc(inner) {
+  if (inner && !React.isValidElement(inner) && inner.node) return inner;
+  const filhos = React.Children.toArray(inner?.props?.children);
+  if (inner?.props?.className === "page-grid" && filhos.length === 2 && filhos[1].props?.items) {
+    return {node: filhos[0].props.children, toc: filhos[1].props.items};
+  }
+  return {node: inner, toc: []};
+}
+
+function shell(activeHref, inner, section = "components") {
+  const {node, toc} = separarToc(inner);
+  const {brand, topbar} = topoDoSite(section);
+  // O sprite é INLINE nesta página (external <use> via file:// esbarra em CORS), então a base é vazia.
+  if (section === "home") {
+    // O Início da referência não tem menu: o topo e o conteúdo, sem o AppShell (que sempre desenha a lateral).
+    return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h("div", {className: "site-home"},
+      h("a", {className: "skip-link", href: "#main"}, "Skip to content"),
+      h(A.Header, {variant: "flush", brand, className: "site-top"}, topbar),
+      h("main", {id: "main", tabIndex: -1}, node))));
+  }
+  const menu = (MENUS[section] || menuComponentes)();
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
-    h(A.AppShell, {brand, navigation: nav, topbar, topbarVariant: "flush"}, inner)));
+    // A lateral da esquerda é a superfície FLUTUANTE da Aurea (o Victor, 13/10/2026: "sidebar precisa ser o
+    // nosso flutuante"), com a barra de rolagem clara que só aparece com o ponteiro em cima (o padrão da
+    // `Sidebar` desde a 0.32.0); a da direita, o "On this page", é a variante SEM CAIXA (`asideVariant:
+    // "plain"`) — variante do componente, e não regra do site (o Victor, 13/10/2026: "não edite componente
+    // nosso, deve sempre criar novas variações").
+    h(A.AppShell, {brand, topbar, topbarVariant: "flush", contentVariant: "plain",
+      navItems: menu, currentNavId: activeHref || undefined, navLabel: "Contents", className: "site-shell",
+      ...(toc.length ? {aside: h(A.TableOfContents, {items: toc}), asideLabel: "On this page", asideVariant: "plain"} : {})},
+      node)));
 }
 
 // ── assets: catalog.css (fontes+core+chrome) e catalog.js (abas+tema) ─────────
@@ -990,27 +1120,29 @@ const chrome = `
 /* A lateral NÃO encolhe abaixo de 1366px como a dos docs: os rótulos aqui são nomes de
    componente (o maior, CommandPaletteShell, pede 167px) e cortar nome de componente num
    catálogo de componentes é inaceitável. 264px = o valor padrão do token. */
-.app-shell { --sidebar-width:264px; }
-.crumb { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-bottom:var(--space-4); color:var(--muted-foreground); font-size:var(--text-sm); }
-.crumb a { color:var(--muted-foreground); text-decoration:none; } .crumb a:hover { color:var(--foreground); }
-.crumb-here { color:var(--foreground); }
-.page-head { margin-bottom:var(--space-6); }
+/* ADR-0067: o menu da esquerda e o "On this page" com a largura da referência (220, medida a 1440). */
+.app-shell.site-shell { --sidebar-width:13.75rem; }
+.page-head { display:grid; gap:var(--space-3); margin-bottom:var(--space-6); }
+/* A linha QUEBRA: sem isso o botão "Copy Markdown" espremia o título a 81px no celular, e ele quebrava no meio da
+   palavra (14/10/2026). Agora o botão desce quando não cabe ao lado. */
+.page-head-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-4); }
+.page-pills { display:flex; flex-wrap:wrap; gap:var(--space-2); }
 /* overflow-wrap:anywhere — nome de componente é uma palavra só e pode ser longa
    ("CommandPaletteShell" mede 315px no display serif): a 320px ela empurrava a página e
    fazia a única rolagem lateral que sobrou na varredura. Palavra quebrada é melhor que
    layout quebrado, e a regra do projeto é nunca rolar de lado. */
-.page-head h1 { margin:0; font-family:var(--font-editorial); font-size:var(--text-3xl); letter-spacing:-.025em; overflow-wrap:anywhere; }
-.page-lede { max-width:70ch; margin:var(--space-3) 0 0; color:var(--muted-foreground); line-height:1.65; }
+.page-head h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); line-height:var(--text-3xl-leading); font-weight:var(--weight-semibold); overflow-wrap:anywhere; }
+.page-lede { max-width:70ch; margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .block { margin-bottom:var(--space-8); }
 /* Toda seção mostra o conteúdo numa SUPERFÍCIE, com o mesmo raio do demo — é a identidade
    da Aurea (CLAUDE.md) e o que tira a sensação de peças soltas: antes o demo tinha card de
    22px, o código uma caixa de 16px e Reference/Features nada, só um fio embaixo do título.
    O fio saiu: quem separa as seções agora é o espaço e a borda da própria caixa. */
-.block > h2 { margin:0 0 var(--space-4); font-family:var(--font-editorial); font-size:var(--text-xl); }
+.block { display:grid; gap:var(--space-3); }
+.block > h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); line-height:var(--text-2xl-leading); font-weight:var(--weight-semibold); }
+.usage-points { margin:0; padding-inline-start:calc(var(--space-6) + var(--space-5)); display:grid; gap:var(--space-2); color:var(--muted-foreground); line-height:var(--leading-relaxed); }
 .block > pre, .block > .code-block-wrap .code-block { margin:0; padding:var(--space-6); border-radius:var(--radius-card); }
 .block > dl, .block > ul { margin:0; padding:var(--space-6); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); }
-.install-import { margin-top:var(--space-3); }
-.nav-count { margin-inline-start:var(--space-2); }
 /* chip que embrulha um Status: o texto do Status já traz a cor certa, o chip só dá a
    cápsula para a linha ficar alinhada com as outras da Reference. */
 .chip-status .status { font:inherit; line-height:1; min-width:0; }
@@ -1055,8 +1187,8 @@ const chrome = `
    larga o padding — a moldura já é o card, e o shell lá dentro tem a margem dele. */
 .demo-panel:has(> .demo-frame) { padding:0; }
 .demo-frame { flex:1; align-self:stretch; width:100%; min-height:0; border:0; border-radius:var(--radius-card); }
-.example { margin-top:var(--space-5); }
-.example h3 { margin:0 0 var(--space-1); font-size:var(--text-base); }
+.example { display:grid; gap:var(--space-3); margin-top:var(--space-5); }
+.example h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); line-height:var(--text-xl-leading); font-weight:var(--weight-semibold); }
 .facts { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--space-3) var(--space-5); margin:0; }
 .facts dt { color:var(--subtle-foreground); font-weight:500; }
 .facts dd { margin:0; }
@@ -1087,6 +1219,7 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .pn { display:flex; flex-direction:column; gap:var(--space-05); padding:var(--space-4); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; min-width:0; }
 .pn-next { text-align:end; margin-inline-start:auto; }
 .pn small { color:var(--muted-foreground); }
+.pn > span { color:var(--muted-foreground); font-size:var(--text-sm); }
 /* Nome de componente é UMA palavra longa ("CommandPalette", "ConfirmDialog") e não quebra
    sozinho: a 320px, com a escala de letra da 0.8.8, os dois cartões somavam mais que a coluna
    e a PÁGINA rolava de lado 4–11px. Quando os dois não cabem lado a lado, o de "Next" desce
@@ -1097,6 +1230,50 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .pn strong { overflow-wrap:break-word; }
 .pn:hover { border-color:var(--primary-outline); }
 /* toggle de tema: mostra o ícone do tema PRA ONDE VAI (no dark, a lua… não — o sol, "ir pro claro"). */
+/* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
+   O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
+   largura) e as ações; embaixo, as áreas do site. */
+.site-shell > .topbar, .site-top { flex-wrap:wrap; row-gap:0; }
+.site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
+.site-brand strong { font-size:var(--text-lg); }
+.site-version { color:var(--muted-foreground); font-size:var(--text-sm); }
+.site-actions { display:flex; align-items:center; gap:var(--space-2); }
+.site-areas { flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
+.site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
+.site-search .kbd { margin-inline-start:auto; }
+.site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
+.site-area:hover { color:var(--foreground); }
+.site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:var(--primary); }
+/* O conteúdo com a largura da referência (912, 816 úteis com o respiro de 48). */
+.site-shell > .content { max-width:57rem; padding:var(--space-8) var(--space-12) var(--space-4); }
+/* "Related Components" em cartões, e o "All Components" em grade de 3, como a referência. */
+.related-grid, .cat-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap:var(--space-4); }
+.cat-grid { gap:var(--space-10) var(--space-4); }
+.related-card { display:grid; gap:var(--space-1); padding:var(--space-4); border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
+a.related-card:hover { border-color:var(--primary-outline); }
+.related-card span { color:var(--muted-foreground); font-size:var(--text-sm); }
+.cat-card { position:relative; display:grid; gap:var(--space-2); }
+/* O componente de verdade, parado (elemento nosso): inerte, recortado na caixa e um pouco menor. */
+.cat-card-preview { display:flex; align-items:center; justify-content:center; aspect-ratio:4 / 3; padding:var(--space-4); overflow:hidden; border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--surface-inset); zoom:.8; }
+.cat-card-icon { color:var(--muted-foreground); }
+.cat-card-foot { display:flex; align-items:center; gap:var(--space-2); }
+.cat-card-name { color:var(--foreground); font-weight:var(--weight-medium); text-decoration:none; }
+/* O link cobre o cartão inteiro: a prévia não mora DENTRO dele (botão dentro de <a> é HTML inválido). */
+.cat-card-name::after { content:""; position:absolute; inset:0; border-radius:var(--radius-card); }
+.cat-card:hover .cat-card-preview { border-color:var(--primary-outline); }
+.cat-card-name:focus-visible { outline:none; }
+.cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
+/* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */
+.site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
+.home { display:grid; gap:var(--space-12); width:min(100%, 72rem); }
+.home-hero { display:grid; justify-items:center; gap:var(--space-5); text-align:center; }
+.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-5xl); line-height:var(--text-4xl-leading); font-weight:var(--weight-bold); text-wrap:balance; }
+.home-hero h1 span { color:var(--muted-foreground); }
+.home-hero > p { max-width:40rem; margin:0; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.home-hero > .home-nota { font-size:var(--text-sm); }
+.home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
+.home-vitrine { display:grid; gap:var(--space-4); }
+.home-abas { justify-self:center; }
 [data-theme="dark"] #theme-toggle .t-moon { display:none; }
 [data-theme="light"] #theme-toggle .t-sun { display:none; }
 `;
@@ -1120,6 +1297,23 @@ document.addEventListener("click", e => {
     espelhaTema();
     try { localStorage.setItem("aurea-theme", document.documentElement.dataset.theme); } catch (err) {}
   }
+});
+// -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
+// Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
+// confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copy-page]");
+  if (!botao) return;
+  const fonte = document.getElementById("page-markdown");
+  if (!fonte || !navigator.clipboard) return;
+  let texto;
+  try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
+  navigator.clipboard.writeText(texto).then(() => {
+    const alvo = [...botao.querySelectorAll("span")].filter(s => !s.querySelector("svg") && s.textContent.trim()).pop() || botao;
+    const antes = alvo.textContent;
+    alvo.textContent = "Copied";
+    setTimeout(() => { alvo.textContent = antes; }, 2000);
+  }, () => {});
 });
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
 // 'change' e não 'click': em 'select' o clique acontece antes de a opção mudar, e o teclado não
@@ -1237,6 +1431,20 @@ ${coreCss}@layer aurea{
 ${chrome}}
 `);
 write(join(outDir, "assets/catalog.js"), catalogJs);
+// O ÍNDICE DA BUSCA (ADR-0067): o que a `CommandPalette` do topo procura, em grupos, saído dos MESMOS dados
+// das páginas — nada escrito à mão. Vai como script clássico (`window.AUREA_SEARCH`), e não como JSON
+// buscado por rede, porque o site abre direto do disco e `file://` bloqueia o `fetch`.
+const indiceDaBusca = [
+  ...[["Getting Started", "getting-started.html"], ["All Components", "components.html"], ["Patterns", "patterns.html"],
+    ["Blocks", "blocks.html"], ["Recipes", "recipes.html"], ["Hooks", "hooks.html"], ["Tokens", "tokens.html"]]
+    .map(([label, href]) => ({label, href, group: "Pages"})),
+  ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components"})),
+  ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks"})),
+  ...patterns.map(p => ({label: `${p.component} · ${p.name}`, href: `${p.slug}.html`, group: "Patterns"})),
+  ...blocks.map(b => ({label: b.name, href: `${b.slug}.html`, group: "Blocks"})),
+  ...archetypeIds.map(id => ({label: recipeTitle(id), href: `recipe-${slug(id)}.html`, group: "Recipes"})),
+];
+write(join(outDir, "assets/search-index.js"), `window.AUREA_SEARCH = ${JSON.stringify(indiceDaBusca)};\n`);
 
 // O tema escolhido tem de valer na PRÓXIMA página, e o catálogo são 206 documentos: cada link é
 // um documento novo, que nascia sempre no `data-theme="dark"` do template. O Victor tinha de
@@ -1258,7 +1466,7 @@ try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")documen
 </script>
 `;
 
-function pageHtml(title, activeName, inner, section = "components", sideNav = null) {
+function pageHtml(title, activeHref, inner, section = "components") {
   return `<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
@@ -1267,36 +1475,29 @@ function pageHtml(title, activeName, inner, section = "components", sideNav = nu
 <title>${title} — Aurea UDS</title>
 <link rel="stylesheet" href="./assets/catalog.css">
 ${TEMA_SALVO}</head>
-<body>${SPRITE_SLOT}${shell(activeName, inner, section, sideNav)}<script src="./assets/catalog.js"></script></body>
+<body>${SPRITE_SLOT}${shell(activeHref, inner, section)}<script src="./assets/catalog.js"></script>
+<script src="./assets/search-index.js" defer></script><script src="./assets/search.js" defer></script></body>
 </html>
 `;
 }
 
-// navegações laterais por área (a de componentes é o default do shell)
-const iconOf = name => fichas.find(f => f.name === name)?.icon;
-const patternsNav = active => navGroups(Object.entries(patternsByComponent)
-  .map(([cmp, list]) => [cmp, list.map(p => [p.name, `${p.slug}.html`, iconOf(cmp)])]), active);
-const blocksNav = active => navGroups(Object.entries(blocksByCategory)
-  .map(([cat, list]) => [cat, list.map(b => [b.name, `${b.slug}.html`, iconOf(b.uses?.[0]) || "books"])]), active);
-const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
-const recipesNav = active => navGroups([["Archetypes", archetypeIds.map(id => [recipeTitle(id), `recipe-${slug(id)}.html`, "books"])]], active);
-
 // As páginas são montadas ANTES de escrever, porque o sprite é medido no HTML de todas elas.
+// ADR-0067: o `index.html` é o Início; o catálogo de componentes mora em `components.html`; a
+// instalação, uma vez, em `getting-started.html`.
 const paginas = [
-  ["index.html", pageHtml("Components", null, landing())],
-  ["patterns.html", pageHtml("Patterns", null, patternsIndex(), "patterns", patternsNav(null))],
-  ["blocks.html", pageHtml("Blocks", null, blocksIndex(), "blocks", blocksNav(null))],
-  ["recipes.html", pageHtml("Recipes", null, recipesIndex(), "recipes", recipesNav(null))],
+  ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
+  ["getting-started.html", pageHtml("Getting Started", "getting-started.html", gettingStartedPage(), "start")],
+  ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
+  ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
+  ["blocks.html", pageHtml("Blocks", "blocks.html", blocksIndex(), "blocks")],
+  ["recipes.html", pageHtml("Recipes", "recipes.html", recipesIndex(), "recipes")],
   ["hooks.html", pageHtml("Hooks", null, hooksPage(), "hooks")],
   ["tokens.html", pageHtml("Tokens", null, tokensPage(), "tokens")],
-  ...patterns.map((p, i) => [`${p.slug}.html`,
-    pageHtml(p.name, null, patternPage(p, i), "patterns", patternsNav(`${p.slug}.html`))]),
-  ...blocks.map((b, i) => [`${b.slug}.html`,
-    pageHtml(b.name, null, blockPage(b, i), "blocks", blocksNav(`${b.slug}.html`))]),
+  ...patterns.map((p, i) => [`${p.slug}.html`, pageHtml(p.name, `${p.slug}.html`, patternPage(p, i), "patterns")]),
+  ...blocks.map((b, i) => [`${b.slug}.html`, pageHtml(b.name, `${b.slug}.html`, blockPage(b, i), "blocks")]),
   ...archetypeIds.map((id, i) => [`recipe-${slug(id)}.html`,
-    pageHtml(recipeTitle(id), null, recipePage(id, contract.applicationPatterns.archetypes[id], i, archetypeIds),
-      "recipes", recipesNav(`recipe-${slug(id)}.html`))]),
-  ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, f.name, componentPage(f, i))]),
+    pageHtml(recipeTitle(id), `recipe-${slug(id)}.html`, recipePage(id, contract.applicationPatterns.archetypes[id], i, archetypeIds), "recipes")]),
+  ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i))]),
 ];
 
 // O MODELO cobra o gerador aqui, na hora, antes de escrever: se uma seção obrigatória do tipo
@@ -1322,4 +1523,4 @@ const rich = Object.keys(content).length;
 console.log(`build-catalog: ${paginas.length} pages — ${ordered.length} components `
   + `(${rich} rich, ${Object.keys(starters).length} starters), ${patterns.length} patterns, `
   // "tokens + 4 indexes" era contagem à mão, e venceu no dia em que a área de hooks entrou.
-  + `${blocks.length} blocks, ${archetypeIds.length} recipes, ${AREAS.length} area indexes`);
+  + `${blocks.length} blocks, ${archetypeIds.length} recipes, ${AREAS.length} areas`);

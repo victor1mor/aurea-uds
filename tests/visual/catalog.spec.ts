@@ -10,13 +10,15 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // Recorte por seletor, não a página inteira: baseline de página inteira quebra a cada linha de
 // conteúdo novo e ninguém olha o diff depois da terceira vez.
 const PAGES = [
-  {name: "index", url: "/apps/catalog/index.html", clip: ".app-shell"},
-  {name: "componente", url: "/apps/catalog/button.html", clip: ".page-main > .block:nth-of-type(1)"},
-  {name: "pattern", url: "/apps/catalog/pattern-button-with-kbd.html", clip: ".page-main"},
-  {name: "block", url: "/apps/catalog/block-stats-row.html", clip: ".page-main > .block:nth-of-type(1)"},
+  // ADR-0067 (13/10/2026): o `index.html` é o Início, e o catálogo de componentes mora em `components.html`.
+  {name: "index", url: "/apps/catalog/index.html", clip: ".home-hero"},
+  {name: "componentes", url: "/apps/catalog/components.html", clip: ".content > .block:nth-of-type(1)"},
+  {name: "componente", url: "/apps/catalog/button.html", clip: "#usage"},
+  {name: "pattern", url: "/apps/catalog/pattern-button-with-kbd.html", clip: "#usage"},
+  {name: "block", url: "/apps/catalog/block-stats-row.html", clip: "#usage"},
   {name: "recipe", url: "/apps/catalog/recipe-saas-admin.html", clip: ".page-head"},
-  {name: "tokens", url: "/apps/catalog/tokens.html", clip: ".page-main > .block:nth-of-type(1)"},
-  {name: "lateral", url: "/apps/catalog/button.html", clip: ".sidebar"},
+  {name: "tokens", url: "/apps/catalog/tokens.html", clip: ".content > .block:nth-of-type(1)"},
+  {name: "lateral", url: "/apps/catalog/button.html", clip: ".app-shell > .sidebar"},
   {name: "topo", url: "/apps/catalog/button.html", clip: ".topbar"},
 ];
 
@@ -37,6 +39,16 @@ for (const theme of ["dark", "light"] as const) {
         // de diferença que não vêm de mudança nenhuma. Mascarar a barra torna a captura
         // determinística. No teste da própria barra, mascarar seria apagar o objeto do teste.
         const mask = page.name === "topo" ? [] : [p.locator(".topbar")];
+        // A FOTO MAIOR QUE A TELA (14/10/2026): a seção dos tokens passou de 16.198 para 19.595px com o site novo, e a
+        // CI não conseguiu duas capturas iguais seguidas — uma saía cortada (as duas idênticas até a linha 18.857,
+        // medido no relatório da rodada). E para caber, o elemento rolava para baixo do cabeçalho fixo, que entrava na
+        // máscara e escondia o topo da peça. A tela cresce até o elemento caber inteiro e nada rola — o contorno que o
+        // próprio Playwright registra para elemento mais alto que a tela (microsoft/playwright#27922). A seção dos
+        // tokens não muda de altura com a tela (medido: 18.892px com 1.000 e com 20.000 de altura).
+        const caixa = await p.locator(page.clip).first().boundingBox();
+        if (caixa && caixa.y + caixa.height > 1000) {
+          await p.setViewportSize({width: 1440, height: Math.ceil(caixa.y + caixa.height)});
+        }
         await expect(p.locator(page.clip).first()).toHaveScreenshot(`${theme}-catalogo-${page.name}.png`, {mask});
       });
     }

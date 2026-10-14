@@ -20,6 +20,11 @@
   --leading-tight:1.2;
   --leading-normal:1.5;
   --leading-relaxed:1.7;
+  --text-4xl-leading:1.111111;
+  --text-3xl-leading:1.2;
+  --text-2xl-leading:1.333333;
+  --text-xl-leading:1.4;
+  --text-lg-leading:1.555556;
   --space-0:0;
   --space-05:0.125rem;
   --space-1:0.25rem;
@@ -74,12 +79,12 @@
   --breakpoint-xl:1280px;
   --breakpoint-2xl:1536px;
   --control-h-xs:1.625rem;
-  --control-h-sm:1.875rem;
+  --control-h-sm:2rem;
   --control-h-md:2.25rem;
-  --control-h-lg:2.625rem;
+  --control-h-lg:2.5rem;
   --control-h-xl:3.125rem;
   --row-h:3rem;
-  --card-pad:1.25rem;
+  --card-pad:1rem;
   --section-gap:1.5rem;
   --media-canvas:oklch(0.085 0 0);
   --media-foreground:oklch(0.985 0 0);
@@ -442,29 +447,38 @@
   --control-h-xs:1.5rem;
   --control-h-sm:1.75rem;
   --control-h-md:2rem;
-  --control-h-lg:2.375rem;
+  --control-h-lg:2.25rem;
   --control-h-xl:2.75rem;
+  --touch-control-h-sm:2.25rem;
+  --touch-control-h-md:2.75rem;
+  --touch-control-h-lg:3.25rem;
   --row-h:2.625rem;
-  --card-pad:1rem;
+  --card-pad:0.75rem;
   --section-gap:1.125rem;
 }
 [data-density="comfortable"]{
   --control-h-xs:1.625rem;
-  --control-h-sm:1.875rem;
+  --control-h-sm:2rem;
   --control-h-md:2.25rem;
-  --control-h-lg:2.625rem;
+  --control-h-lg:2.5rem;
   --control-h-xl:3.125rem;
+  --touch-control-h-sm:2.5rem;
+  --touch-control-h-md:3rem;
+  --touch-control-h-lg:3.5rem;
   --row-h:3rem;
-  --card-pad:1.25rem;
+  --card-pad:1rem;
   --section-gap:1.5rem;
 }
 [data-density="spacious"]{
   --control-h-xs:1.75rem;
-  --control-h-sm:2.125rem;
+  --control-h-sm:2.25rem;
   --control-h-md:2.5rem;
-  --control-h-lg:3rem;
+  --control-h-lg:2.75rem;
   --control-h-xl:3.5rem;
+  --touch-control-h-sm:2.75rem;
+  --touch-control-h-md:3.25rem;
+  --touch-control-h-lg:3.75rem;
   --row-h:3.375rem;
-  --card-pad:1.5rem;
+  --card-pad:1.25rem;
   --section-gap:2rem;
 }

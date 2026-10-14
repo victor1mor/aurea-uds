@@ -76,6 +76,12 @@
       "type": "top | right | bottom | left",
       "default": "bottom",
       "description": "Preferred side. It flips on its own when there is no room, so this is a preference, not a promise."
+    },
+    {
+      "name": "arrow",
+      "type": "boolean",
+      "default": "false",
+      "description": "The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line."
     }
   ]
 }

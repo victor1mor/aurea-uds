@@ -111,7 +111,10 @@ export default [
   <Pagination page={1} total={4} onPageChange={setPage} />
 </Card>`,
     render: () => {
-      const rows = [{name: "Messenger", state: "online"}, {name: "Analyst", state: "busy"}, {name: "Curator", state: "offline"}];
+      // 0.32.0: DUAS linhas, e não três. A tabela da referência tem o título na moldura e a linha de 12 em
+      // cima e embaixo (com o botão pequeno, 57), e a composição passava 24 da caixa de 350 — quem cede é
+      // o conteúdo (ADR-0002). Duas linhas ainda mostram a escolha e o estado por linha.
+      const rows = [{name: "Messenger", state: "online"}, {name: "Analyst", state: "busy"}];
       return h("div", {style: {width: "min(680px,100%)"}}, h(Card, null,
         h("div", {style: stackApertado},
           h("div", {style: between},

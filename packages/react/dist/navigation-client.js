@@ -8,7 +8,7 @@ import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
 import { useValorResponsivo } from "./responsivo-runtime.js";
-import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
+import { cx, fundirRender, useAureaStrings } from "./internal.js";
 import { Kbd } from "./markup.js";
 import { Icon } from "./system.js";
 import { Button } from "./actions.js";
@@ -29,8 +29,37 @@ export function Stepper({ items, label, className }) {
         }) });
 }
 export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "caret-right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
-export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { className: "tabs", "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
-export function Pagination({ page, total, onPageChange }) { const s = useAureaStrings(); return _jsxs("nav", { className: "pagination", "aria-label": s.paginationLabel, children: [_jsx(Button, { variant: "ghost", size: "sm", disabled: page <= 1, onClick: () => onPageChange(page - 1), children: s.previous }), _jsxs(Badge, { variant: "primary", children: [page, " / ", total] }), _jsx(Button, { variant: "ghost", size: "sm", disabled: page >= total, onClick: () => onPageChange(page + 1), children: s.next })] }); }
+export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
+function paginasVisiveis(page, total, siblings) {
+    if (total <= 5 + siblings * 2)
+        return Array.from({ length: total }, (_, i) => i + 1);
+    const ini = Math.max(2, page - siblings), fim = Math.min(total - 1, page + siblings);
+    const meio = Array.from({ length: fim - ini + 1 }, (_, i) => ini + i);
+    return [1, ...(ini > 2 ? ["..."] : []), ...meio, ...(fim < total - 1 ? ["..."] : []), total];
+}
+export function Pagination({ page, total, onPageChange, variant = "numbers", summary, href, siblings = 1, label, className }) {
+    const s = useAureaStrings();
+    if (variant === "compact")
+        return _jsxs("nav", { className: cx("pagination", className), "aria-label": label ?? s.paginationLabel, children: [_jsx(Button, { variant: "ghost", size: "sm", disabled: page <= 1, onClick: () => onPageChange?.(page - 1), children: s.previous }), _jsxs(Badge, { variant: "primary", children: [page, " / ", total] }), _jsx(Button, { variant: "ghost", size: "sm", disabled: page >= total, onClick: () => onPageChange?.(page + 1), children: s.next })] });
+    // Um item: link (com `href`) ou botão. Desligado (a primeira página no "anterior"), sem endereço.
+    const item = (alvo, conteudo, { atual = false, nav, rotulo } = {}) => {
+        const fora = alvo < 1 || alvo > total;
+        const cls = cx("pagination-link", nav && "pagination-link-nav", atual && "active");
+        const comuns = { className: cls, "aria-label": rotulo, "aria-current": atual ? "page" : undefined };
+        if (href)
+            return fora ? _jsx("a", { ...comuns, "aria-disabled": "true", children: conteudo })
+                : _jsx("a", { ...comuns, href: href(alvo), onClick: onPageChange ? (e) => { if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+                        e.preventDefault();
+                        onPageChange(alvo);
+                    } } : undefined, children: conteudo });
+        return _jsx("button", { type: "button", ...comuns, disabled: fora, onClick: () => onPageChange?.(alvo), children: conteudo });
+    };
+    const anterior = item(page - 1, _jsxs(_Fragment, { children: [_jsx(Icon, { name: "caret-left", className: "pagination-nav-icon" }), _jsx("span", { children: s.previous })] }), { nav: "prev" });
+    const proxima = item(page + 1, _jsxs(_Fragment, { children: [_jsx("span", { children: s.next }), _jsx(Icon, { name: "caret-right", className: "pagination-nav-icon" })] }), { nav: "next" });
+    return _jsxs("nav", { className: cx("pagination", className), "aria-label": label ?? s.paginationLabel, children: [summary != null && _jsx("span", { className: "pagination-summary", children: summary }), _jsxs("ul", { className: "pagination-content", children: [_jsx("li", { children: anterior }), variant === "numbers" && paginasVisiveis(page, total, siblings).map((p, i) => p === "..."
+                        ? _jsx("li", { children: _jsx("span", { className: "pagination-ellipsis", "aria-hidden": "true", children: "\u2026" }) }, `e${i}`)
+                        : _jsx("li", { children: item(p, p, { atual: p === page, rotulo: `${s.paginationPage} ${p}` }) }, p)), _jsx("li", { children: proxima })] })] });
+}
 export function TableOfContents({ items, current, label, className, ...props }) {
     const s = useAureaStrings();
     const meu = React.useRef(null);
@@ -43,7 +72,7 @@ export function TableOfContents({ items, current, label, className, ...props }) 
     return _jsxs("nav", { ref: n => { meu.current = n; if (typeof refDele === "function")
             refDele(n);
         else if (refDele)
-            refDele.current = n; }, className: cx("toc", className), "aria-label": label ?? s.tocLabel, ...resto, children: [_jsx("p", { className: "toc-label", children: label ?? s.tocLabel }), items.map(i => _jsx("a", { href: `#${i.id}`, className: cx(i.sub && "toc-sub"), ...(i.id === atual ? { "aria-current": "true" } : {}), children: i.label }, i.id))] });
+            refDele.current = n; }, className: cx("toc", className), "aria-label": label ?? s.tocLabel, ...resto, children: [_jsxs("p", { className: "toc-label", children: [_jsx("span", { className: "toc-label-icon", "aria-hidden": "true" }), label ?? s.tocLabel] }), items.map(i => _jsx("a", { href: `#${i.id}`, className: cx(i.sub && "toc-sub"), ...(i.id === atual ? { "aria-current": "true" } : {}), children: i.label }, i.id))] });
 }
 /** Qual dos `items` está na faixa de leitura, observando o documento. Devolve `undefined` até o
  *  primeiro cálculo — e em SSR, onde não há documento para observar.
@@ -235,10 +264,10 @@ function fecharGavetaAoEscolher(e) {
     }
     catch { /* motor sem popover: não há gaveta */ }
 }
-export function Sidebar({ items, current, collapsed, variant = "floating", label, children, className, onClick, ...props }) {
+export function Sidebar({ items, current, collapsed, variant = "floating", placement = "left", scrollbar = "hover", label, children, className, onClick, ...props }) {
     const s = useAureaStrings();
     const baseId = React.useId();
-    return _jsxs("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", className), onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: [items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) }), children] });
+    return _jsxs("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: [items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) }), children] });
 }
 const LEGADO = {
     flat: ["edge", "none"], surface: ["floating", "circle"], pill: ["floating", "pill"], dock: ["floating", "circle"]
@@ -282,24 +311,39 @@ export function NavList({ items, className, ...props }) {
                         : _jsx("button", { type: "button", className: "nav-list-row", "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : it.onClick, children: miolo }) }, it.id);
         }) });
 }
-export function CommandPalette({ open, onClose, items, placeholder, label }) {
+export function CommandPalette({ open, onClose, items, placeholder, label, shortcuts = true }) {
     const s = useAureaStrings();
-    const portal = usePortalContainer();
+    const idAtalhos = React.useId();
+    // GRUPOS (0.32.0, DOC-06). Em 13/08/2026 a Aurea ficou SEM grupo, e a medição decidiu: dar a cada
+    // `Group` a sua fatia de itens passava POR CIMA do filtro do motor (digitar "the" devolvia os três).
+    // O caminho certo é o da documentação do motor (1.6.0, a paleta de exemplo dele): `items` agrupados
+    // (`{value, items}`), e a lista recebe os grupos JÁ FILTRADOS. Sem `group` em nenhum item, a lista é
+    // a de sempre.
+    const grupos = React.useMemo(() => {
+        if (!items.some(i => i.group))
+            return null;
+        const mapa = new Map();
+        for (const i of items) {
+            const g = i.group ?? "";
+            if (!mapa.has(g))
+                mapa.set(g, []);
+            mapa.get(g).push(i);
+        }
+        return [...mapa].map(([value, itens]) => ({ value, items: itens }));
+    }, [items]);
     if (!open)
         return null;
-    // SEM AGRUPAMENTO na v1, e a medição é que decidiu (13/08/2026). O `Autocomplete.Root` não
-    // consome a estrutura agrupada como o `Combobox.Root` consome — e o caminho alternativo, dar a
-    // cada `Group` a sua fatia de itens, PASSA POR CIMA do filtro do motor: digitar "the" devolvia
-    // os três comandos. Entre agrupar e filtrar, filtrar é o ponto de uma paleta de comandos.
-    // Fica registrado como limite, não como esquecimento: quando alguém precisar de grupo aqui, o
-    // caminho é o `Combobox.Root`, e isso é troca de motor, não ajuste.
     const executa = (item) => { onClose(); item.run(); };
     const linha = (item) => _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [item.icon && _jsx(Icon, { name: item.icon }), _jsx("span", { className: "command-item-label", children: item.label }), item.kbd && _jsx(Kbd, { children: item.kbd })] }, item.id);
     // Escape fecha, e é o teclado que a pessoa tenta primeiro. O motor não fecha sozinho porque
     // quem é dono do `open` é o consumidor — mesma regra do Dialog e do Drawer daqui.
     return _jsx("div", { className: "command-overlay", onKeyDown: e => { if (e.key === "Escape")
-            onClose(); }, children: _jsx("div", { className: "command-palette", role: "dialog", "aria-label": label ?? s.commandLabel, children: _jsxs(BaseAutocomplete.Root, { items: items, itemToStringValue: (i) => i.label, mode: "list", open: true, children: [_jsx(BaseAutocomplete.Input, { autoFocus: true, className: "input", onKeyDown: e => { if (e.key === "Escape")
-                            onClose(); }, "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder }), _jsx(BaseAutocomplete.Portal, { container: portal, children: _jsx(BaseAutocomplete.Positioner, { sideOffset: 6, className: "command-positioner", children: _jsxs(BaseAutocomplete.Popup, { className: "menu command-list", children: [_jsx(BaseAutocomplete.Empty, { className: "combobox-empty", children: s.comboboxEmpty }), _jsx(BaseAutocomplete.List, { children: _jsx(BaseAutocomplete.Collection, { children: linha }) })] }) }) })] }) }) });
+            onClose(); }, children: _jsxs("div", { className: "command-palette", role: "dialog", "aria-label": label ?? s.commandLabel, children: [_jsxs(BaseAutocomplete.Root, { items: (grupos ?? items), itemToStringValue: (i) => i.label, mode: "list", open: true, inline: true, autoHighlight: "always", keepHighlight: true, children: [_jsx(BaseAutocomplete.Input, { autoFocus: true, className: "input", onKeyDown: e => { if (e.key === "Escape") {
+                                e.stopPropagation();
+                                onClose();
+                            } }, "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder, "aria-expanded": true, "aria-describedby": shortcuts ? idAtalhos : undefined }), _jsxs("div", { className: "menu command-list", children: [_jsx(BaseAutocomplete.Empty, { className: "combobox-empty", children: s.comboboxEmpty }), _jsx(BaseAutocomplete.List, { children: grupos
+                                        ? (g) => _jsxs(BaseAutocomplete.Group, { items: g.items, className: "command-group", children: [g.value && _jsx(BaseAutocomplete.GroupLabel, { className: "command-group-label", children: g.value }), _jsx(BaseAutocomplete.Collection, { children: linha })] }, g.value)
+                                        : _jsx(BaseAutocomplete.Collection, { children: linha }) })] })] }), shortcuts && _jsxs("p", { className: "command-shortcuts", id: idAtalhos, children: [_jsxs("span", { children: [_jsx(Kbd, { children: "\u2191" }), _jsx(Kbd, { children: "\u2193" }), " ", s.commandHintMove] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Enter" }), " ", s.commandHintSelect] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Esc" }), " ", s.commandHintClose] })] })] }) });
 }
 export function CommandPaletteShell({ open, query, onQueryChange, children }) { const s = useAureaStrings(); if (!open)
     return null; return _jsx("div", { className: "command-overlay", children: _jsxs("div", { className: "command-palette", role: "dialog", "aria-label": s.commandLabel, children: [_jsx(SearchField, { autoFocus: true, "aria-label": s.commandPlaceholder, value: query, onChange: e => onQueryChange(e.target.value), placeholder: s.commandPlaceholder }), children] }) }); }

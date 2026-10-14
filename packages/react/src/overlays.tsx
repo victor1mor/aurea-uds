@@ -4,6 +4,7 @@
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {useRef, type ReactNode, type ReactElement} from "react";
 import {Dialog as BaseDialog} from "@base-ui/react/dialog";
+import {Drawer as BaseDrawer} from "@base-ui/react/drawer";
 import {AlertDialog as BaseAlertDialog} from "@base-ui/react/alert-dialog";
 import {Popover as BasePopover} from "@base-ui/react/popover";
 import {Tooltip as BaseTooltip} from "@base-ui/react/tooltip";
@@ -15,7 +16,7 @@ import {cx, useAureaStrings, usePortalContainer} from "./internal.js";
 import {type Responsive} from "./pure.js";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Icon, type IconName} from "./system.js";
-import {Button} from "./actions.js";
+import {Button, CloseButton} from "./actions.js";
 
 // B-03 e C-07 (24/09/2026). `size` é a largura, e os números são decisão do Victor: as quatro da
 // referência (320, 384, 448, 512 — `xs` a `lg`), mais `xl` (1024, o token `--breakpoint-lg`) para o
@@ -26,14 +27,32 @@ import {Button} from "./actions.js";
 // `dismissible={false}` segura a janela aberta durante uma operação: nem Esc, nem clique fora, e o
 // X fica DESATIVADO, não some — sumir mudaria o cabeçalho de lugar no meio da operação. Antes, o
 // app passava `onClose={() => {}}`, que faz o mesmo sem dizer isso a ninguém.
+//
+// A ANATOMIA DA REFERÊNCIA (0.32.0, "o Dialog = o dela", lida no CSS publicado dela): recheio de 24;
+// o X (`CloseButton`) solto no canto, a 16 do topo e do fim; o cabeçalho em coluna com o ícone num
+// círculo de 40 em cima e o título de 16, peso médio; o corpo de 14/20 na cor esmaecida, e é ELE que
+// rola (o cabeçalho e o rodapé ficam); 8 entre o cabeçalho e o corpo, 20 antes do rodapé; o rodapé
+// alinhado ao fim, com 8 entre os botões. E `placement="auto"`: no celular a janela senta embaixo
+// (onde o polegar alcança), e de 640 para cima fica no meio — o padrão dela. A borda continua (a
+// dela é só sombra no claro): é a característica de baixa visão da Aurea, como nas outras janelas.
 export type DialogSize="xs"|"sm"|"md"|"lg"|"xl"|"full";
-export function Dialog({open,title,children,footer,onClose,size="md",dismissible=true}:{open:boolean;title:ReactNode;children:ReactNode;footer?:ReactNode;onClose:()=>void;size?:DialogSize;dismissible?:boolean}){
-  const s=useAureaStrings();const portal=usePortalContainer();
+export type DialogPlacement="auto"|"center"|"top"|"bottom";
+// O círculo do ícone tem as cores de estado da Aurea (o fundo `*-bg` e a letra `-400`, ADR-0061), e o
+// `brand` é o clarinho do alternável ligado com o amarelo de letra. Os nomes são os do `ButtonTone`.
+export type DialogIconTone="neutral"|"brand"|"info"|"success"|"warning"|"danger";
+function IconeDaJanela({icon,tone}:{icon:IconName;tone:DialogIconTone}){
+  return <span className={cx("dialog-icon",`dialog-icon-${tone}`)} aria-hidden="true"><Icon name={icon}/></span>}
+export function Dialog({open,title,children,footer,onClose,size="md",dismissible=true,icon,iconTone="neutral",placement="auto"}:{open:boolean;title:ReactNode;children:ReactNode;footer?:ReactNode;onClose:()=>void;size?:DialogSize;dismissible?:boolean;icon?:IconName;iconTone?:DialogIconTone;placement?:DialogPlacement}){
+  const portal=usePortalContainer();
+  // O X vem PRIMEIRO na ordem do documento, como o gatilho de fechar da referência: o motor foca o
+  // primeiro focável ao abrir, e era o X também quando ele morava no fim do cabeçalho (o título não é
+  // focável) — a ordem do Tab não muda.
   return <BaseDialog.Root open={open} disablePointerDismissal={!dismissible} onOpenChange={o=>{if(!o&&dismissible)onClose()}}>
     <BaseDialog.Portal container={portal}><BaseDialog.Backdrop className="dialog-backdrop"/>
-      <BaseDialog.Popup className={cx("dialog",size!=="md"&&`dialog-${size}`)}>
-        <header><BaseDialog.Title render={<h2/>}>{title}</BaseDialog.Title><BaseDialog.Close className="btn btn-ghost btn-icon" aria-label={s.close} disabled={!dismissible}><Icon name="x"/></BaseDialog.Close></header>
-        <div className="dialog-body">{children}</div>{footer&&<footer>{footer}</footer>}
+      <BaseDialog.Popup className={cx("dialog",size!=="md"&&`dialog-${size}`)} data-placement={placement}>
+        <BaseDialog.Close render={<CloseButton className="dialog-close" disabled={!dismissible}/>}/>
+        <header className="dialog-header">{icon&&<IconeDaJanela icon={icon} tone={iconTone}/>}<BaseDialog.Title render={<h2/>} className="dialog-heading">{title}</BaseDialog.Title></header>
+        <div className="dialog-body">{children}</div>{footer&&<footer className="dialog-footer">{footer}</footer>}
       </BaseDialog.Popup>
     </BaseDialog.Portal>
   </BaseDialog.Root>}
@@ -65,25 +84,55 @@ export function Dialog({open,title,children,footer,onClose,size="md",dismissible
 // `description` é prop e não `children` porque ela é o nó de `aria-describedby`: o AlertDialog
 // só anuncia o que passa pelo `Description`. Como `children`, um consumidor poria um <div> no
 // meio e o leitor de tela perderia a frase que diz o que se perde.
-export function ConfirmDialog({open,title,description,confirmLabel,cancelLabel,destructive,onConfirm,onCancel}:{open:boolean;title:ReactNode;description:ReactNode;confirmLabel?:string;cancelLabel?:string;destructive?:boolean;onConfirm:()=>void;onCancel:()=>void}){
+//
+// 0.32.0: a anatomia do `Dialog` (a da referência), sem o X — a decisão não se fecha por engano. O
+// ícone é o círculo de 40 de lá; a cor dele segue o `destructive` quando quem usa não escolhe.
+export function ConfirmDialog({open,title,description,confirmLabel,cancelLabel,destructive,onConfirm,onCancel,icon,iconTone,placement="auto"}:{open:boolean;title:ReactNode;description:ReactNode;confirmLabel?:string;cancelLabel?:string;destructive?:boolean;onConfirm:()=>void;onCancel:()=>void;icon?:IconName;iconTone?:DialogIconTone;placement?:DialogPlacement}){
   const s=useAureaStrings();
   const portal=usePortalContainer();
   const seguro=React.useRef<HTMLButtonElement>(null);
   return <BaseAlertDialog.Root open={open} onOpenChange={o=>{if(!o)onCancel()}}>
     <BaseAlertDialog.Portal container={portal}>
       <BaseAlertDialog.Backdrop className="dialog-backdrop"/>
-      <BaseAlertDialog.Popup className="dialog dialog-confirm" initialFocus={seguro}>
-        <header><BaseAlertDialog.Title render={<h2/>}>{title}</BaseAlertDialog.Title></header>
+      <BaseAlertDialog.Popup className="dialog dialog-confirm" initialFocus={seguro} data-placement={placement}>
+        <header className="dialog-header">{icon&&<IconeDaJanela icon={icon} tone={iconTone??(destructive?"danger":"neutral")}/>}<BaseAlertDialog.Title render={<h2/>} className="dialog-heading">{title}</BaseAlertDialog.Title></header>
         <BaseAlertDialog.Description className="dialog-body">{description}</BaseAlertDialog.Description>
-        <footer>
-          <Button ref={seguro} variant="secondary" onClick={onCancel}>{cancelLabel??s.confirmCancel}</Button>
+        <footer className="dialog-footer">
+          <Button ref={seguro} variant="tertiary" onClick={onCancel}>{cancelLabel??s.confirmCancel}</Button>
           <Button variant={destructive?"danger":"primary"} onClick={onConfirm}>{confirmLabel??s.confirmProceed}</Button>
         </footer>
       </BaseAlertDialog.Popup>
     </BaseAlertDialog.Portal>
   </BaseAlertDialog.Root>;
 }
-export function Drawer({open,title,children,onClose,side="right"}:{open:boolean;title:ReactNode;children:ReactNode;onClose:()=>void;side?:"left"|"right"}){const s=useAureaStrings();const portal=usePortalContainer();return <BaseDialog.Root open={open} onOpenChange={o=>{if(!o)onClose()}}><BaseDialog.Portal container={portal}><BaseDialog.Backdrop className="drawer-backdrop"/><BaseDialog.Popup className={cx("drawer",`drawer-${side}`)}><header><BaseDialog.Title render={<h2/>}>{title}</BaseDialog.Title><BaseDialog.Close className="btn btn-ghost btn-icon" aria-label={s.close}><Icon name="x"/></BaseDialog.Close></header>{children}</BaseDialog.Popup></BaseDialog.Portal></BaseDialog.Root>}
+// Drawer (0.32.0): a gaveta da referência nos QUATRO lados (WEB-06, o painel que sobe de baixo, e
+// HER-06), no motor de gaveta do Base UI — que já arrasta para fechar, no sentido do lado. A anatomia
+// é a do `Dialog` (X no canto, título de 16, corpo que rola, rodapé); a largura das laterais é a dela,
+// 320 no celular e 384 de 640 para cima, nunca mais que 85% da tela; a de cima e a de baixo ocupam a
+// largura toda e até 85% da altura, com a alça (36 × 4) do lado de dentro. Os cantos são os da Aurea:
+// as laterais com o 22 do lado de dentro (a dela é quadrada, e nada na Aurea é), a de baixo e a de
+// cima com o 32 da folha (ADR-0058). O padrão continua `right`: o dela é `bottom`, mas trocar o lado
+// de quem já usa seria a gaveta abrindo noutro lugar sem aviso.
+// `left`/`right` prometem lado FÍSICO no nome (ver o comentário da `.drawer-left` no core).
+export type DrawerSide="left"|"right"|"top"|"bottom";
+const ARRASTO_DO_LADO:Record<DrawerSide,"left"|"right"|"up"|"down">={left:"left",right:"right",top:"up",bottom:"down"};
+export function Drawer({open,title,children,footer,onClose,side="right"}:{open:boolean;title:ReactNode;children:ReactNode;footer?:ReactNode;onClose:()=>void;side?:DrawerSide}){
+  const portal=usePortalContainer();
+  const alca=<div className="drawer-handle" aria-hidden="true"/>;
+  return <BaseDrawer.Root open={open} onOpenChange={o=>{if(!o)onClose()}} swipeDirection={ARRASTO_DO_LADO[side]}>
+    <BaseDrawer.Portal container={portal}><BaseDrawer.Backdrop className="drawer-backdrop"/>
+      <BaseDrawer.Viewport className="drawer-viewport">
+        <BaseDrawer.Popup className={cx("drawer",`drawer-${side}`)}>
+          <BaseDrawer.Close render={<CloseButton className="dialog-close"/>}/>
+          {side==="bottom"&&alca}
+          <header className="dialog-header"><BaseDrawer.Title render={<h2/>} className="dialog-heading">{title}</BaseDrawer.Title></header>
+          <BaseDrawer.Content className="dialog-body">{children}</BaseDrawer.Content>
+          {footer&&<footer className="dialog-footer">{footer}</footer>}
+          {side==="top"&&alca}
+        </BaseDrawer.Popup>
+      </BaseDrawer.Viewport>
+    </BaseDrawer.Portal>
+  </BaseDrawer.Root>}
 
 // AccessGate (M4): a ação que o usuário não pode fazer. A Aurea NÃO decide permissão — quem
 // decide é o consumidor, e `allowed` é a resposta dele já pronta. O que este componente carrega é
@@ -124,8 +173,41 @@ export type OverlaySide="top"|"right"|"bottom"|"left";
 // conteúdo da dica. Era tooltip visual, não acessível (padrão APG Tooltip).
 // O id aponta para um elemento que só existe quando aberto; referência pendente é ignorada
 // pela tecnologia assistiva, então não precisa acompanhar o estado.
-export function Tooltip({children,content,side="top"}:{children:ReactElement;content:ReactNode;side?:OverlaySide}){const id=React.useId();const triggerId=(children.props as {id?:string}).id;const portal=usePortalContainer();return <BaseTooltip.Root><BaseTooltip.Trigger id={triggerId} render={children} aria-describedby={id}/><BaseTooltip.Portal container={portal}><BaseTooltip.Positioner side={side} sideOffset={8}><BaseTooltip.Popup id={id} role="tooltip" className="tooltip">{content}</BaseTooltip.Popup></BaseTooltip.Positioner></BaseTooltip.Portal></BaseTooltip.Root>}
-export function Popover({trigger,title,children,side="bottom"}:{trigger:ReactElement;title?:ReactNode;children:ReactNode;side?:OverlaySide}){const portal=usePortalContainer();return <BasePopover.Root><BasePopover.Trigger render={trigger}/><BasePopover.Portal container={portal}><BasePopover.Positioner side={side} sideOffset={8}><BasePopover.Popup className="popover">{title&&<BasePopover.Title render={<strong/>}>{title}</BasePopover.Title>}{children}</BasePopover.Popup></BasePopover.Positioner></BasePopover.Portal></BasePopover.Root>}
+//
+// 0.32.0, a dica e o popover da referência:
+//   • A SETA (`arrow`), desligada por padrão como lá. O desenho é nosso (uma curva de 12 × 6, sem a
+//     ponta afiada); ela tem o fundo da janela e a linha da borda, então a borda dá a volta nela.
+//     A dica com seta se afasta 8 do gatilho (`--space-2`: os 6 da seta e 2 de folga); sem
+//     seta, 4 (`--space-1`) — a referência usa 7 e 3, que não são da nossa escala. O popover fica
+//     sempre a 8, com ou sem seta, como o dela.
+//   • O ATRASO da dica é o dela: 1,5 s para abrir e 0,5 s para fechar (o motor abre em 0,6 s e
+//     fecha na hora). Pelo teclado ela abre já, e depois da primeira as vizinhas abrem sem esperar
+//     — é o grupo do `Tooltip.Provider` do `AureaProvider`.
+//   • O GATILHO FOCÁVEL (C-11): a dica em cima de um texto só abria pelo teclado se o app pusesse
+//     `tabIndex`. A referência resolve no gatilho, que sai focável como botão; aqui também — o que
+//     não é focável sozinho (um `<span>`, um selo) ganha `tabIndex=0` e `role="button"`. Na
+//     marcação, quando o filho é uma tag; e, quando é um componente, no nó de verdade, depois de
+//     montado, porque só o DOM sabe o que o componente desenhou.
+const ATRASO_DA_DICA=1500, ATRASO_PARA_FECHAR_A_DICA=500;
+function Seta(){return <svg viewBox="0 0 12 12" aria-hidden="true"><path className="overlay-arrow-fill" d="M0 0Q6 12 12 0Z"/><path className="overlay-arrow-line" d="M0 0Q6 12 12 0" fill="none"/></svg>}
+const FOCAVEIS_POR_NATUREZA=new Set(["button","input","select","textarea","summary","iframe","audio","video"]);
+function focavelNaMarcacao(el:ReactElement):boolean|undefined{
+  if(typeof el.type!=="string")return undefined;
+  const p=el.props as {tabIndex?:number;href?:string};
+  if(p.tabIndex!==undefined)return true;
+  if(el.type==="a"||el.type==="area")return p.href!==undefined;
+  return FOCAVEIS_POR_NATUREZA.has(el.type);
+}
+function garantirFoco(no:HTMLElement|null){
+  if(!no||no.tabIndex>=0||no.hasAttribute("tabindex"))return;
+  no.tabIndex=0;
+  if(!no.hasAttribute("role"))no.setAttribute("role","button");
+}
+export function Tooltip({children,content,side="top",arrow=false,delay=ATRASO_DA_DICA,closeDelay=ATRASO_PARA_FECHAR_A_DICA}:{children:ReactElement;content:ReactNode;side?:OverlaySide;arrow?:boolean;delay?:number;closeDelay?:number}){
+  const id=React.useId();const triggerId=(children.props as {id?:string}).id;const portal=usePortalContainer();
+  const foco=focavelNaMarcacao(children)===false?{tabIndex:0,role:"button"}:{};
+  return <BaseTooltip.Root><BaseTooltip.Trigger ref={garantirFoco} id={triggerId} render={children} aria-describedby={id} delay={delay} closeDelay={closeDelay} {...foco}/><BaseTooltip.Portal container={portal}><BaseTooltip.Positioner side={side} sideOffset={arrow?8:4}><BaseTooltip.Popup id={id} role="tooltip" className="tooltip">{arrow&&<BaseTooltip.Arrow className="overlay-arrow"><Seta/></BaseTooltip.Arrow>}{content}</BaseTooltip.Popup></BaseTooltip.Positioner></BaseTooltip.Portal></BaseTooltip.Root>}
+export function Popover({trigger,title,children,side="bottom",arrow=false}:{trigger:ReactElement;title?:ReactNode;children:ReactNode;side?:OverlaySide;arrow?:boolean}){const portal=usePortalContainer();return <BasePopover.Root><BasePopover.Trigger render={trigger}/><BasePopover.Portal container={portal}><BasePopover.Positioner side={side} sideOffset={8}><BasePopover.Popup className="popover">{arrow&&<BasePopover.Arrow className="overlay-arrow"><Seta/></BasePopover.Arrow>}{title&&<BasePopover.Title render={<strong/>} className="popover-title">{title}</BasePopover.Title>}{children}</BasePopover.Popup></BasePopover.Positioner></BasePopover.Portal></BasePopover.Root>}
 // HoverCard (Lote 1 do BUILDING.md). Não é Tooltip nem Popover, e a diferença é de propósito,
 // não de aparência: a Tooltip é um RÓTULO curto (`role="tooltip"`, some ao mover o mouse); o
 // Popover abre por CLIQUE e pode conter foco; este é uma PRÉVIA rica que aparece ao repousar o

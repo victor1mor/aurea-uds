@@ -73,16 +73,6 @@ const SERIE = [{month: "Jan", runs: 128, errors: 9}, {month: "Feb", runs: 194, e
   {month: "May", runs: 287, errors: 8}, {month: "Jun", runs: 264, errors: 17}];
 
 export default {
-  Accordion: {
-    code: `<Accordion items={[
-  {id: "ship", title: "How do I ship it?", content: "Install the three packages and import the CSS."},
-  {id: "theme", title: "Can I theme it?", content: "Every visual value is a token."},
-]} />`,
-    render: () => h("div", {style: wide}, h(A.Accordion, {items: [
-      {id: "ship", title: "How do I ship it?", content: "Install the three packages and import the CSS."},
-      {id: "theme", title: "Can I theme it?", content: "Every visual value is a token."},
-    ]})),
-  },
   Alert: {
     code: `<Alert variant="info" title="Heads up">Contextual information.</Alert>
 <Alert variant="danger" title="Upload failed">The file exceeds 10 MB.</Alert>`,
@@ -494,9 +484,11 @@ export default {
     code: `<Button leadingIcon="magnifying-glass" kbd="⌘K" onClick={() => setOpen(true)}>Search</Button>
 
 <CommandPalette open={open} onClose={() => setOpen(false)} items={[
-  {id: "button", label: "Go to Button", icon: "arrow-right", run: () => go("/button")},
-  {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", run: toggleTheme},
-]} />`,
+  {id: "button", label: "Button", icon: "squares-four", group: "Components", run: () => go("/button")},
+  {id: "close", label: "CloseButton", icon: "squares-four", group: "Components", run: () => go("/close-button")},
+  {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", group: "Actions", run: toggleTheme},
+]} />
+// Items with a group come together under its title; the line under the list teaches the keys.`,
     render: () => h(A.Button, {leadingIcon: "magnifying-glass", kbd: "⌘K"}, "Search"),
   },
   CommandPaletteShell: {
@@ -590,7 +582,9 @@ export default {
   open={open}
   onClose={() => setOpen(false)}
   title="Delete project"
-  footer={<><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+  icon="trash"
+  iconTone="danger"
+  footer={<><Button variant="tertiary" onClick={() => setOpen(false)}>Cancel</Button>
     <Button variant="danger" onClick={remove}>Delete</Button></>}
 >
   This removes every component and token in it. It cannot be undone.
@@ -630,6 +624,7 @@ export default {
   description="It leaves the site immediately, and this cannot be undone."
   confirmLabel="Delete"
   destructive
+  icon="trash"
   onConfirm={() => { remove(); setOpen(false); }}
   onCancel={() => setOpen(false)}
 />`,
@@ -639,10 +634,13 @@ export default {
     note: PORTAL,
     code: `<Button onClick={() => setOpen(true)}>Edit member</Button>
 
-<Drawer open={open} onClose={() => setOpen(false)} title="Edit member" side="right">
+<Drawer open={open} onClose={() => setOpen(false)} title="Edit member" side="right"
+  footer={<Button variant="primary">Save</Button>}>
   <Field label="Name"><Input defaultValue="Analyst" /></Field>
-  <Button variant="primary">Save</Button>
-</Drawer>`,
+</Drawer>
+
+// On a phone, the panel that rises from the bottom (swipe down to close):
+<Drawer open={open} onClose={() => setOpen(false)} title="Filters" side="bottom">…</Drawer>`,
     render: () => h(A.Button, null, "Edit member"),
   },
   DropdownMenu: {
@@ -886,14 +884,11 @@ export default {
       {id: "2", title: "New member", time: "1h", group: "Today", read: true},
     ]}),
   },
-  Pagination: {
-    code: `<Pagination page={page} total={12} onPageChange={setPage} />`,
-    render: () => h(A.Pagination, {page: 3, total: 12, onPageChange: () => {}}),
-  },
   Popover: {
     note: PORTAL,
     code: `<Popover
   title="Filters"
+  arrow
   trigger={<Button variant="outline">Filters</Button>}
 >
   <Checkbox label="Only mine" />
@@ -1207,22 +1202,6 @@ export default {
       {id: "reference", label: "Reference"},
     ]}),
   },
-  Tabs: {
-    code: `<Tabs
-  label="Report"
-  value={tab}
-  onChange={setTab}
-  tabs={[
-    {id: "overview", label: "Overview", content: "One number per row."},
-    {id: "detail", label: "Detail", content: "Every row, unaggregated."},
-  ]}
-/>`,
-    render: () => h("div", {style: wide}, h(A.Tabs, {label: "Report", value: "overview",
-      onChange: () => {}, tabs: [
-        {id: "overview", label: "Overview", content: "One number per row."},
-        {id: "detail", label: "Detail", content: "Every row, unaggregated."},
-      ]})),
-  },
   AvatarGroup: {
     code: `<AvatarGroup max={3} total={9} label="Reviewers">
   <Avatar fallback="AM" />
@@ -1373,7 +1352,16 @@ const container = usePortalContainer();`,
 
 <Button onClick={() => toast.add({title: "Saved", type: "success"})}>
   Save
-</Button>`,
+</Button>
+
+// with a line under the title and an action
+toast.add({title: "Conversation deleted", actionProps: {children: "Undo", onClick: restore}});
+
+// a promise: spins while it runs, then success or error
+toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not send"});
+
+// where the stack lives (the default is the bottom middle)
+<AureaProvider toastPlacement="top-end">…</AureaProvider>`,
     note: "The toast list is mounted by AureaProvider and lives in a portal, which a static page cannot render. The button is real; the toast needs the runtime.",
     render: () => h(A.Button, null, "Save"),
   },
@@ -1515,6 +1503,11 @@ const container = usePortalContainer();`,
     note: PORTAL,
     code: `<Tooltip content="Copy to clipboard" side="top">
   <IconButton icon="copy" label="Copy" />
+</Tooltip>
+
+// with the arrow; on plain text the trigger becomes focusable by itself
+<Tooltip content="Monthly recurring revenue" arrow>
+  <span>MRR</span>
 </Tooltip>`,
     render: () => h(A.Tooltip, {content: "Copy to clipboard"},
       h(A.IconButton, {icon: "copy", label: "Copy"})),

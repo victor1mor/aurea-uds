@@ -22,6 +22,12 @@ export default {
 
   examples: [
     {
+      title: "Required",
+      description: "required puts the red asterisk after the label and required on the control — the control is what tells the screen reader. The asterisk is hidden from it.",
+      code: '<Field label="E-mail" required><Input type="email" /></Field>',
+      render: () => h("div", {style: {width: "100%", maxWidth: "22rem"}}, h(Field, {label: "E-mail", required: true}, h(Input, {type: "email"}))),
+    },
+    {
       title: "With hint",
       description: "Label, control and help in one block. The hint explains, it does not repeat the label.",
       code: [

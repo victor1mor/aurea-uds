@@ -9,7 +9,10 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "default",
+    "ghost"
+  ],
   "sizes": [
     "sm",
     "md",
@@ -116,6 +119,12 @@
       "type": "string",
       "default": "—",
       "description": "What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference."
+    },
+    {
+      "name": "variant",
+      "type": "default | ghost",
+      "default": "default",
+      "description": "default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both."
     }
   ],
   "notes": [

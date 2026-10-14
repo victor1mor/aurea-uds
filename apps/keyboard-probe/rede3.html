@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aurea — passo 10 (rede)</title>
+<style>
+  /* Só a moldura do banco. Cada caso mora numa caixa de largura FIXA: se a peça de dentro empurrar,
+     a caixa transborda e a medida mostra quanto. */
+  .rede3 { display:grid; gap:var(--space-6); padding:var(--space-4); }
+  .caso { display:grid; gap:var(--space-2); }
+  .moldura { inline-size:360px; outline:1px dashed var(--border); }
+  .moldura.ajusta { inline-size:max-content; }
+  .grade-1fr { display:grid; grid-template-columns:1fr 120px; gap:var(--space-3); }
+  .fila-flex { display:flex; gap:var(--space-3); }
+  .fila-flex > * { flex:1; }
+  .hint { color:var(--muted-foreground); font-size:var(--text-sm); }
+</style></head>
+<body><div id="root"></div><script type="module" src="/src/rede3.tsx"></script></body>
+</html>

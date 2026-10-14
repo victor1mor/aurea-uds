@@ -41,9 +41,7 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": [
-      "x"
-    ]
+    "icons": []
   },
   "related": {
     "components": [
@@ -90,14 +88,48 @@
       "name": "size",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
       "default": "\"md\"",
-      "description": "The width (B-03), chosen by Victor: the reference library's four (xs 320, sm 384, md 448, lg 512), then xl (1024, the --breakpoint-lg token) for a wide detail view, and full — the screen minus the usual margin, keeping the 22 radius. The default became the reference library's md, 448; up to 0.8.14 every dialog was 560."
+      "description": "The width: the reference library's four — xs 320, sm 384, md 448 (the default) and lg 512 —, xl (1024, the --breakpoint-lg token) for a wide detail view, and full: the screen minus the usual margin, keeping the 22 radius."
     },
     {
       "name": "dismissible",
       "type": "boolean",
       "default": "true",
-      "description": "false keeps the dialog open during an operation (C-07): no Escape, no click outside, and the close button is DISABLED rather than hidden, so the header does not move mid-operation."
+      "description": "false keeps the dialog open during an operation: no Escape, no click outside, and the close button is DISABLED rather than hidden, so the header does not move mid-operation."
+    },
+    {
+      "name": "icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "An icon in a 40 circle above the title, as in the reference library. Decorative: the title says what the dialog is."
+    },
+    {
+      "name": "iconTone",
+      "type": "\"neutral\" | \"brand\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "default": "\"neutral\"",
+      "description": "The circle's colour: the state colours (the *-bg fill and the -400 glyph, ADR-0061), or brand — the light yellow wash with the yellow-as-text glyph."
+    },
+    {
+      "name": "placement",
+      "type": "\"auto\" | \"center\" | \"top\" | \"bottom\"",
+      "default": "\"auto\"",
+      "description": "Where the dialog sits. auto, the reference library's default: at the BOTTOM on a phone (below 640, where the thumb reaches) and in the middle from 640 up."
     }
   ],
-  "sizeProp": "size"
+  "sizeProp": "size",
+  "axes": {
+    "placement": [
+      "auto",
+      "bottom",
+      "center",
+      "top"
+    ],
+    "iconTone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  }
 }

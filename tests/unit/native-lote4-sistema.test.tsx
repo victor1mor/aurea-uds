@@ -93,7 +93,8 @@ describe("DatePicker — a nossa pele, o calendário DELES", () => {
   it("o gatilho tem a geometria do Input, e o Field o nomeia", () => {
     render(<Envolve><Field label="Data"><DatePicker /></Field></Envolve>);
     const e = estilo("Pressable");
-    expect(e.height).toBe(tokens.size.controlHMd);
+    // 0.32.0: a do `Input`, que adotou a escala de toque (48; era o `controlHMd`, 36).
+    expect(e.height).toBe(tokens.size.touchControlHMd);
     expect(e.borderRadius).toBe(tokens.size.radiusControl);
     expect(props("Pressable").accessibilityLabel).toBe("Data");
   });

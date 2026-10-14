@@ -106,7 +106,7 @@ export function Icon({ name, size = "md", color, icons, label, weight }) {
     // O desenho passado direto (R-11) não consulta o registro.
     const Glifo = typeof name === "function"
         ? name
-        : (weight === "fill" ? registro?.[`${name}-fill`] : undefined) ?? registro?.[name];
+        : (weight === "fill" || weight === "bold" ? registro?.[`${name}-${weight}`] : undefined) ?? registro?.[name];
     if (!Glifo) {
         if (__DEV__) {
             console.warn(`Aurea Icon: "${name}" não está no registro. Importe-o pelo caminho profundo e ` +

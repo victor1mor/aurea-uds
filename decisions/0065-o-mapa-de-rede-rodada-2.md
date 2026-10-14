@@ -1,7 +1,7 @@
 # ADR-0065 — O mapa de rede, rodada 2: mexer no mapa
 
 - **Data:** 10/10/2026
-- **Estado:** aceita · executada na `0.31.0` (ainda não publicada).
+- **Estado:** aceita · executada na `0.31.0`, publicada em 10/10/2026.
 - **Origem:** os pedidos de um app de topologia de rede que a rodada 1 ([ADR-0064](0064-o-mapa-de-rede-rodada-1.md))
   deixou para depois: MNT-13 (arrumar à mão), MNT-12.1 a 12.3 e 12.5 (linhas que desviam, paralelas,
   ponte, rótulos), MNT-16.4 a 16.7 (grupos, contêineres, nuvem, subárvore), MNT-11.2 (outras arrumações)

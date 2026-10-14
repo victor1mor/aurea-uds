@@ -44,6 +44,10 @@ export interface AureaStrings {
   loading: string;
   /** O que o `DataState` mostra em `error` sem `message`. */
   dataError: string;
+  /** O que o `DataState catchErrors` mostra quando o conteúdo quebra (MNT-25, 0.32.0). */
+  dataCrashed: string;
+  /** O botão que desenha de novo o conteúdo que quebrou. */
+  dataRetry: string;
   /** O título que o `EmptyState` e o `DataState` usam sem `title`. */
   dataEmpty: string;
   /** O nome da barra inferior para o leitor de tela. */
@@ -142,6 +146,8 @@ export interface AureaStrings {
 export const defaultStrings: AureaStrings = {
   loading: "Loading",
   dataError: "This could not be loaded.",
+  dataCrashed: "Something went wrong here.",
+  dataRetry: "Try again",
   dataEmpty: "Nothing here yet",
   bottomNavLabel: "Main",
   tabsLabel: "Tabs",
@@ -193,6 +199,8 @@ export const defaultStrings: AureaStrings = {
 export const ptBR: AureaStrings = {
   loading: "Carregando",
   dataError: "Não foi possível carregar.",
+  dataCrashed: "Algo deu errado aqui.",
+  dataRetry: "Tentar de novo",
   dataEmpty: "Ainda não há nada aqui",
   bottomNavLabel: "Principal",
   tabsLabel: "Abas",

@@ -22,7 +22,8 @@
     "primary",
     "primary-ghost",
     "primary-outline",
-    "secondary"
+    "secondary",
+    "tertiary"
   ],
   "sizes": [
     "xs",
@@ -139,19 +140,19 @@
       "name": "variant",
       "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav",
       "default": "secondary",
-      "description": "Atalho para o par (appearance, tone). Os treze nomes continuam valendo e pintam exatamente o mesmo; a API de dois eixos é appearance + tone."
+      "description": "A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
       "type": "solid | outline | ghost | link | nav",
       "default": "solid",
-      "description": "Quanto peso a caixa tem. nav é aparência própria (item de navegação), não um tom."
+      "description": "How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone."
     },
     {
       "name": "tone",
       "type": "neutral | brand | danger | success | warning | info",
       "default": "neutral",
-      "description": "O que a cor significa. Todos os tons funcionam em todas as aparências, inclusive preenchido — cada um tem par cor+texto próprio por tema."
+      "description": "What the colour means. Every tone works with every appearance, filled included — each has its own colour and text pair per theme."
     },
     {
       "name": "size",
@@ -211,7 +212,7 @@
       "name": "pressed",
       "type": "boolean",
       "default": "—",
-      "description": "DEPRECATED since 0.4.0, removed in 1.0 — use `<Toggle>`. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. Twelve reference libraries were read on 18/08/2026 (Base UI and the W3C APG among them) and NONE puts the pressed state on the plain button. Toggle state via aria-pressed: on shows the raised capsule with a yellow underline."
+      "description": "DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline."
     },
     {
       "name": "kbd",
@@ -223,37 +224,37 @@
       "name": "grow",
       "type": "boolean",
       "default": "false",
-      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow (C-03). `fullWidth` asks for the whole line instead."
+      "description": "In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead."
     },
     {
       "name": "target",
       "type": "HTMLAttributeAnchorTarget",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13). It always reached the <a> at runtime; now the type accepts it, so target=\"_blank\" compiles."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "rel",
       "type": "string",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13)."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "download",
       "type": "boolean | string",
       "default": "—",
-      "description": "Link attribute, only with `href` (C-13)."
+      "description": "Link attribute, only with `href`."
     },
     {
       "name": "render",
       "type": "ReactElement",
       "default": "—",
-      "description": "M-01: the element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
+      "description": "The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
     },
     {
       "name": "share",
       "type": "{ url?: string; title?: string; text?: string }",
       "default": "—",
-      "description": "O botão compartilha. Pergunta ao navegador se ele sabe compartilhar este link (navigator.canShare) — detectar o recurso, não adivinhar o aparelho. Sabe (celular; Chrome, Edge e Safari no computador): abre a janela do aparelho, e cancelar não é erro. Não sabe: copia o link e mostra \"Link copiado\" preso ao botão, com a medida dele. A cópia falhou: avisa e mostra o link selecionado. O aviso fala com o leitor de tela. Sem url, é o endereço da página. Precisa do AureaProvider (ou do aurea.js na página) para avisar; emite [data-aurea-share], que o aurea.js também lê. Só vale no <button> (ignorado com href ou render). No nativo, o mesmo nome abre o compartilhar do sistema."
+      "description": "The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows \"Link copied\" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet."
     }
   ]
 }

@@ -3,18 +3,43 @@
   "category": "Actions",
   "layer": "Component",
   "maturity": "Stable",
-  "summary": "Coordinated group of related buttons.",
+  "summary": "Buttons joined into one capsule — no gap, rounded only at the ends, a hairline between them — that share their variant, size and disabled state.",
   "icon": "squares-four",
   "platforms": {
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
-  "sizes": [],
+  "variants": [
+    "danger",
+    "danger-ghost",
+    "danger-outline",
+    "ghost",
+    "link",
+    "link-danger",
+    "link-primary",
+    "nav",
+    "outline",
+    "primary",
+    "primary-ghost",
+    "primary-outline",
+    "secondary",
+    "tertiary"
+  ],
+  "sizes": [
+    "lg",
+    "md",
+    "sm",
+    "xl",
+    "xs"
+  ],
   "responsive": {
-    "orientation": "visual"
+    "orientation": "visual",
+    "size": "visual"
   },
-  "states": [],
+  "states": [
+    "default",
+    "disabled"
+  ],
   "tokens": [
     "--radius-control"
   ],
@@ -61,6 +86,36 @@
       "type": "Responsive<Orientation>",
       "default": "horizontal",
       "description": "Stacks the buttons instead of lining them up. Visual only — it changes no order, no semantics and no keyboard — so it resolves in the CSS layer and costs no observer."
+    },
+    {
+      "name": "variant",
+      "type": "ButtonVariant",
+      "default": "—",
+      "description": "The look of every button inside; a button may set its own."
+    },
+    {
+      "name": "size",
+      "type": "xs | sm | md | lg | xl",
+      "default": "—",
+      "description": "The size of every button inside; a button may set its own. Accepts a responsive value."
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "default": "false",
+      "description": "Fills the parent's width, and the buttons share it equally."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables every button inside."
+    },
+    {
+      "name": "detached",
+      "type": "boolean",
+      "default": "false",
+      "description": "Loose capsules with a 4 gap that wrap, instead of joined."
     }
   ],
   "axes": {

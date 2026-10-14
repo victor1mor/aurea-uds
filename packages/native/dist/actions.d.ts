@@ -87,11 +87,25 @@ export declare function IconButton(props: IconButtonProps): React.JSX.Element;
 /**
  * Quanto a ÁREA DE TOQUE do `IconButton` passa do círculo desenhado, de cada lado — R-24
  * (08/10/2026). O alvo é o maior entre o desenho e o `targetMin` (44), centrado; o círculo de
- * `md` tem 36, então sobram 4 de cada lado. O `Badge` preso usa isto para se prender ao CÍRCULO,
+ * `md` tinha 36, e sobravam 4 de cada lado. O `Badge` preso usa isto para se prender ao CÍRCULO,
  * e não ao canto da área de toque — medido: preso à área de toque, o selo ficava 4 para fora.
+ * 0.32.0: com a escala de toque o `md` tem 48 e a folga é 0; sobra no `sm` (40: 2) e no `xs`.
  */
 export declare function folgaDoToque(t: AureaTokens, size?: AureaButtonSize): number;
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
 export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share"> {
 }
 export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;
+export interface CloseButtonProps {
+    /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
+    label?: string;
+    onPress?: PressableProps["onPress"];
+    disabled?: boolean;
+    /** Registro local de ícones, quando não há um em contexto. */
+    icons?: AureaIconRegistry;
+    /** Troca o X. */
+    children?: React.ReactNode;
+    testID?: string;
+}
+/** O botão de fechar: círculo neutro com o X, que já se chama "Close"/"Fechar". */
+export declare function CloseButton({ label, onPress, disabled, icons, children, testID }: CloseButtonProps): React.JSX.Element;

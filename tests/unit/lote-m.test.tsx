@@ -220,7 +220,8 @@ describe("GAR-14 · o aurea.js compartilha (HTML puro), e o copiar fala", () => 
 
 describe("GAR-14 · o aviso tem a medida do botão (CSS)", () => {
   test("o recheio é UMA regra para o botão e o aviso — o .btn não o declara mais sozinho", () => {
-    expect(regra(".btn,.toast-anchored")).toContain("padding-inline:var(--step-px,15px)");
+    // 0.32.0: o recheio do botão é o da referência, 16 (`--space-4`); era 15 cru.
+    expect(regra(".btn,.toast-anchored")).toContain("padding-inline:var(--step-px,var(--space-4))");
     const btn = css.match(/\n\.btn \{ --btn-bg:transparent;[^}]*\}/)![0];
     expect(btn).not.toContain("padding-inline");
   });

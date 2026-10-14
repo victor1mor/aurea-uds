@@ -160,19 +160,39 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   // empilhada acima do conteúdo — nada estourava, e para ler a documentação de um componente
   // era preciso rolar por 65 itens de navegação (achado A8). Isto mede o que aquele gate não
   // media: onde o objetivo da página começa. O comportamento da gaveta está em shell-nav.spec.
-  test("em 375px o h1 de toda página cabe na primeira tela", async ({page}) => {
+  test("em 375px o h1 de toda página cabe na primeira tela, sem quebrar no meio da palavra", async ({page}) => {
     const falhas: string[] = [];
     await page.setViewportSize({width: 375, height: 812});
     for (const f of PAGES) {
       await abrir(page, url(f), avisar);
-      const y = await page.evaluate(() => {
+      const m = await page.evaluate(() => {
         const h1 = document.querySelector("h1");
-        return h1 ? Math.round(h1.getBoundingClientRect().top + scrollY) : null;
+        if (!h1) return null;
+        // E O TÍTULO NÃO QUEBRA NO MEIO DA PALAVRA (14/10/2026): o botão "Copy Markdown" ao lado, numa linha que
+        // não quebrava, espremia o h1 a 81px e "Accordion" saía "Accor / dion". A maior palavra, medida na fonte do
+        // próprio título, tem de caber nele — quando ela cabe na linha; palavra maior que a tela quebra mesmo.
+        const cs = getComputedStyle(h1), s = document.createElement("span");
+        Object.assign(s.style, {position: "absolute", visibility: "hidden", whiteSpace: "nowrap", fontStyle: cs.fontStyle,
+          fontWeight: cs.fontWeight, fontSize: cs.fontSize, fontFamily: cs.fontFamily, letterSpacing: cs.letterSpacing});
+        document.body.append(s);
+        let maior = 0;
+        for (const w of (h1.textContent ?? "").split(/\s+/).filter(Boolean)) {
+          s.textContent = w;
+          maior = Math.max(maior, s.getBoundingClientRect().width);
+        }
+        s.remove();
+        const largura = h1.getBoundingClientRect().width, linha = h1.parentElement!.getBoundingClientRect().width;
+        return {y: Math.round(h1.getBoundingClientRect().top + scrollY),
+          // O h1 das molduras de exemplo é `.sr-only` (1px, só para o leitor de tela): não tem linha para quebrar.
+          quebra: !h1.classList.contains("sr-only") && maior <= linha && largura + 0.5 < maior ? `${Math.round(largura)}px para a palavra de ${Math.round(maior)}px` : null};
       });
-      if (y === null) falhas.push(`${f}: sem h1`);
-      else if (y >= 812) falhas.push(`${f}: o h1 começa a ${y}px — ${(y / 812).toFixed(1)} telas abaixo`);
+      if (m === null) falhas.push(`${f}: sem h1`);
+      else {
+        if (m.y >= 812) falhas.push(`${f}: o h1 começa a ${m.y}px — ${(m.y / 812).toFixed(1)} telas abaixo`);
+        if (m.quebra) falhas.push(`${f}: o h1 quebra no meio da palavra — ${m.quebra}`);
+      }
     }
-    expect(falhas, `páginas cujo conteúdo não começa na primeira tela:\n${falhas.join("\n")}`).toEqual([]);
+    expect(falhas, `páginas cujo título não começa na primeira tela, ou quebra no meio da palavra:\n${falhas.join("\n")}`).toEqual([]);
   });
 
   test("hierarquia de títulos: um h1, sem salto de nível", async ({page}) => {
@@ -361,25 +381,227 @@ test.describe("catálogo · varredura de todas as páginas", () => {
 // Contratos comportamentais do catálogo. Ficam neste spec, não em catalog.spec.ts: aquele é
 // captura de pixel e roda só no Chromium; estes precisam cobrir os três motores.
 test.describe("catálogo · contratos do modelo de página", () => {
-  test("toda página de componente tem breadcrumb, demo, Installation e prev/next", async ({page}) => {
+  // ADR-0067 (13/10/2026): a página segue a documentação da referência — o título com "Copy Markdown",
+  // o Usage com o exemplo, e os cartões de anterior e próxima; SEM trilha e SEM "Installation" na página.
+  test("toda página de componente tem o título com Copy Markdown, o Usage com o exemplo e prev/next", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
-    await expect(page.locator(".crumb")).toBeVisible();
-    await expect(page.locator(".demo").first()).toBeVisible();
-    await expect(page.locator("#installation")).toBeAttached();
+    await expect(page.locator(".page-head h1")).toHaveText("Button");
+    await expect(page.locator(".page-head [data-copy-page]")).toBeVisible();
+    await expect(page.locator("#usage .demo").first()).toBeVisible();
     await expect(page.locator(".prevnext a").first()).toBeAttached();
+    await expect(page.locator(".crumb")).toHaveCount(0);
+    await expect(page.locator("#installation")).toHaveCount(0);
+  });
+
+  test("o Copy Markdown copia o texto da própria página", async ({page, browserName, context}) => {
+    test.skip(browserName !== "chromium", "ler a área de transferência num teste só é permitido no Chromium");
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/apps/catalog/button.html");
+    await page.locator(".page-head [data-copy-page]").click();
+    await expect(page.locator(".page-head [data-copy-page]")).toContainText("Copied");
+    // O Windows troca a quebra de linha na área de transferência; o texto é o mesmo.
+    const copiado = (await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n");
+    expect(copiado.startsWith("# Button\n")).toBe(true);
+    expect(copiado).toContain("## Usage");
+    expect(copiado).toContain("## API Reference");
+    // A tabela continua tabela: a barra do tipo ("primary | secondary") sai escapada, e a linha tem
+    // só os 5 separadores. A primeira versão escrevia "\|" num texto JS — que vira só "|" —, e a
+    // linha do `variant` saía com 16 colunas.
+    const linha = copiado.split("\n").find((l) => l.startsWith("| `variant`"))!;
+    expect(linha.replace(/\\\|/g, "").split("|").length - 1).toBe(5);
   });
 
   test("o item ativo da lateral e a área ativa do topo se marcam com aria-current", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
-    await expect(page.locator('.doc-nav a[aria-current="page"]')).toHaveText("Button");
-    await expect(page.locator('.btn-nav[aria-current="page"]')).toContainText("Components");
+    await expect(page.locator('.app-shell > .sidebar a[aria-current="page"]')).toContainText("Button");
+    await expect(page.locator('.site-area[aria-current="page"]')).toHaveText("Components");
   });
 
-  test("cada item da lateral leva seu glifo (campo icon da ficha)", async ({page}) => {
+  // ADR-0067: o menu é o da referência — ordem alfabética, sem glifo em cada item, com os selos de novidade.
+  test("o menu de componentes é alfabético, sem glifo nos itens, e leva os selos New e Updated", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
-    const itens = page.locator(".doc-nav a");
-    const glifos = page.locator(".doc-nav a svg");
-    expect(await glifos.count()).toBe(await itens.count());
+    const lateral = page.locator(".app-shell > .sidebar");
+    const nomes = await lateral.locator('[aria-labelledby] a, .sidebar-group a').allTextContents();
+    expect(await lateral.locator("a svg").count()).toBe(0);
+    const grupo = await page.evaluate(() => {
+      const t = [...document.querySelectorAll(".app-shell > .sidebar .sidebar-group-label")].find((e) => e.textContent === "Components");
+      const lista = t?.parentElement?.querySelectorAll("a .sidebar-label");
+      return lista ? [...lista].map((s) => (s.textContent ?? "").trim()) : [];
+    });
+    expect(grupo.length).toBeGreaterThan(50);
+    expect(grupo).toEqual([...grupo].sort((a, b) => a.localeCompare(b)));
+    expect(nomes.length).toBeGreaterThan(0);
+    await expect(lateral.getByText("New", {exact: true}).first()).toBeAttached();
+  });
+
+  // O Victor, 13/10/2026: "sidebar precisa ser o nosso flutuante" e, do "On this page", que os itens saiam
+  // de dentro da caixa, como na referência. A da esquerda tem o canto de cartão e o fundo da lateral; a da
+  // direita (`asideVariant="plain"`), nenhum dos três à vista: fundo, linha, sombra. A borda de 1 continua
+  // lá, transparente — a variante guarda a geometria da flutuante. Medido a 1440, onde a coluna aparece.
+  test("a lateral da esquerda é a flutuante da Aurea, e o sumário da direita não tem caixa", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/getting-started.html");
+    const caixas = await page.evaluate(() => {
+      const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
+      const raio = getComputedStyle(document.documentElement).getPropertyValue("--radius-card").trim();
+      const esq = cs(".app-shell > .sidebar:not(.app-shell-aside)"), dir = cs(".app-shell > .app-shell-aside");
+      return {raio, esq: {raio: esq.borderTopLeftRadius, fundo: esq.backgroundColor},
+        dir: {fundo: dir.backgroundColor, linha: dir.borderTopColor, sombra: dir.boxShadow}};
+    });
+    expect(caixas.esq.raio).toBe(caixas.raio);
+    expect(caixas.esq.fundo).not.toBe("rgba(0, 0, 0, 0)");
+    expect(caixas.dir).toEqual({fundo: "rgba(0, 0, 0, 0)", linha: "rgba(0, 0, 0, 0)", sombra: "none"});
+  });
+
+  // O Victor, 13/10/2026, comparando com o Início da referência: a busca do Início é SÓ o ícone, e a caixa
+  // da vitrine é "na mesma cor do site, só tem uma linha ao redor" — o `Card variant="outline"`.
+  test("o Início: a busca é só o ícone, e a vitrine é o cartão sem fundo, com a linha", async ({page}) => {
+    await page.goto("/apps/catalog/index.html");
+    const busca = page.locator("[data-site-search]");
+    await expect(busca).toHaveCount(1);
+    await expect(busca).toHaveClass(/\bbtn-icon\b/);
+    await expect(busca).toHaveAccessibleName("Search");
+    await expect(busca).toHaveAttribute("href", "./components.html");
+    const caixa = page.locator(".home-painel:not([hidden])");
+    await expect(caixa).toHaveClass(/\bcard-outline\b/);
+    const pintura = await caixa.evaluate((e) => {
+      const cs = getComputedStyle(e);
+      return {fundo: cs.backgroundColor, borda: cs.borderTopWidth, cor: cs.borderTopColor};
+    });
+    expect(pintura.fundo).toBe("rgba(0, 0, 0, 0)");
+    expect(pintura.borda).toBe("1px");
+    expect(pintura.cor).not.toBe("rgba(0, 0, 0, 0)");
+    await busca.click();
+    await expect(page.getByRole("dialog", {name: "Search the site"})).toBeVisible();
+  });
+
+  // ADR-0068 (13/10/2026): o `DatePicker` da web. A pele (`.date-picker-trigger`) tira a seta do campo do Select
+  // e põe o calendário no fim; o clique abre o calendário com o foco num dia, e o Esc fecha devolvendo o foco.
+  // A prévia é VIVA (`embed`): o componente mora na moldura, então tudo se procura dentro dela.
+  test("o DatePicker: o gatilho sem a seta, o calendário abre com foco e o Esc devolve o foco", async ({page}) => {
+    await page.goto("/apps/catalog/datepicker.html");
+    const moldura = page.frameLocator(".demo-panel > iframe.demo-frame").first();
+    const gatilho = moldura.locator(".date-picker-trigger").first();
+    await expect(gatilho).toHaveAccessibleName("Check-in");
+    expect(await gatilho.evaluate((e) => getComputedStyle(e).backgroundImage)).toBe("none");
+    // E no CLARO: a regra do tema claro do `.select` repinta a seta, e ela saía por cima do calendário (visto pelo
+    // Victor em 13/10/2026: "tem tipo uma seta em cima do ícone do calendário").
+    expect(await gatilho.evaluate((e) => {
+      e.ownerDocument.documentElement.dataset.theme = "light";
+      const fundo = getComputedStyle(e).backgroundImage;
+      e.ownerDocument.documentElement.dataset.theme = "dark";
+      return fundo;
+    })).toBe("none");
+    const icone = gatilho.locator(".icon");
+    const [g, i] = [(await gatilho.boundingBox())!, (await icone.boundingBox())!];
+    expect(g.x + g.width - (i.x + i.width)).toBeLessThan(24);
+    await gatilho.click();
+    const janela = moldura.getByRole("dialog", {name: "Check-in"});
+    await expect(janela.getByRole("grid").first()).toBeVisible();
+    await expect(janela.locator("td button:focus")).toHaveCount(1);
+    // UMA superfície, como na referência: a janela com recheio 12, e o calendário de dentro sem moldura própria.
+    // Visto em 13/10/2026: saía caixa dentro de caixa (as duas com borda e canto 22).
+    expect(await janela.evaluate((e) => getComputedStyle(e).paddingTop)).toBe("12px");
+    const calendarioDentro = await janela.locator(".calendar").evaluate((e) => {
+      const cs = getComputedStyle(e);
+      return {borda: cs.borderTopWidth, fundo: cs.backgroundColor, recheio: cs.paddingTop};
+    });
+    expect(calendarioDentro).toEqual({borda: "0px", fundo: "rgba(0, 0, 0, 0)", recheio: "0px"});
+    await page.keyboard.press("Escape");
+    await expect(janela).toHaveCount(0);
+    await expect(gatilho).toBeFocused();
+  });
+
+  // ADR-0069 (13/10/2026): o `ColorPicker`. O foco fica PRESO na janela, como na referência — medido no navegador:
+  // sem isso, o Tab depois do campo do código saía da janela e ela fechava no meio do uso. A prévia se abre como
+  // PÁGINA PRÓPRIA: dentro da moldura do catálogo o Tab do navegador dá a volta sozinho, e o teste passava com o
+  // defeito (provado em 13/10/2026).
+  test("o ColorPicker: abre com o foco na área, o Tab dá a volta dentro da janela, e o Esc devolve o foco", async ({page}) => {
+    await page.goto("/apps/catalog/embeds/colorpicker-with-swatches.html");
+    const gatilho = page.locator(".color-picker-trigger");
+    await expect(gatilho).toHaveAccessibleName("Brand colour, vivid blue");
+    const janela = page.getByRole("dialog", {name: "Brand colour"});
+    const focado = () => page.evaluate(() => {
+      const a = document.activeElement!, j = document.querySelector(".color-picker-popover");
+      if (!j || !j.contains(a)) return "fora";
+      return a.closest(".color-area") ? "área" : a.closest(".slider") ? "trilha" : a.closest(".color-swatch-picker") ? "amostras"
+        : a.closest(".input-group") ? "código" : a.className;
+    });
+    // O anel de foco da área é do TECLADO: aberto pelo mouse, não. E a PRIMEIRA coisa que a pessoa faz na página é o
+    // clique — medido na bancada em 14/10/2026: a primeira abertura com o mouse acendia o anel (a escuta só começava
+    // quando a área montava, depois do clique), e este teste, que abria pelo teclado antes, passava com o defeito.
+    const anel = () => page.locator(".color-picker-popover .color-area-thumb").getAttribute("data-focus-visible");
+    await gatilho.click();
+    await expect(janela).toBeVisible();
+    await expect.poll(focado).toBe("área");
+    expect(await anel(), "a primeira abertura, pelo mouse, sem o anel").toBeNull();
+    await page.keyboard.press("Escape");
+    await expect(janela).toHaveCount(0);
+    await gatilho.focus();
+    await page.keyboard.press("Enter");
+    await expect(janela).toBeVisible();
+    await expect.poll(focado).toBe("área");
+    await expect.poll(anel, {message: "aberto pelo teclado, com o anel"}).toBe("");
+    // Uma ESPERA por passo, e não uma leitura: a volta do foco ao começo da janela é do motor e acontece um instante
+    // depois do Tab — a leitura imediata reprovou 1 vez em 2 rodadas com o código certo.
+    for (const onde of ["trilha", "amostras", "código", "área", "trilha"]) {
+      await page.keyboard.press("Tab");
+      await expect.poll(focado, {message: `o Tab leva a: ${onde}`, timeout: 2000}).toBe(onde);
+    }
+    // E a janela FICA aberta: sem o foco preso, o motor primeiro devolve o foco ao começo e, uns 300 ms depois,
+    // fecha a janela (medido em 13/10/2026). Aqui a espera fixa é a medida: o que se testa é nada acontecer.
+    await page.waitForTimeout(600);
+    expect(await focado(), "o foco continua dentro da janela").toBe("trilha");
+    await expect(janela).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(janela).toHaveCount(0);
+    await expect(gatilho).toBeFocused();
+    // E o mouse depois do teclado volta a não ter anel (medido em 13/10/2026: a janela põe o foco na área por código).
+    await gatilho.click();
+    await expect(janela).toBeVisible();
+    await expect.poll(focado).toBe("área");
+    expect(await anel(), "aberto pelo mouse depois do teclado, sem o anel").toBeNull();
+  });
+
+  // O Victor, 13/10/2026: a barra de rolagem da lateral "só aparece se o mouse fica em cima" e é clarinha.
+  // Medido pela cor da barra (o caminho padrão); o WebKit sem `scrollbar-color` usa o caminho do webkit,
+  // que o teste de unidade cobra no texto do CSS.
+  test("a barra de rolagem da lateral aparece só com o ponteiro em cima", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/button.html");
+    test.skip(!(await page.evaluate(() => CSS.supports("scrollbar-color", "auto"))), "este navegador não tem scrollbar-color");
+    const lateral = page.locator(".app-shell > .sidebar:not(.app-shell-aside)");
+    const cor = () => lateral.evaluate((e) => getComputedStyle(e).scrollbarColor);
+    await page.mouse.move(720, 450);
+    expect(await cor()).toMatch(/^(transparent|rgba\(0, 0, 0, 0\)) (transparent|rgba\(0, 0, 0, 0\))$/);
+    await lateral.hover();
+    expect(await cor()).not.toMatch(/^(transparent|rgba\(0, 0, 0, 0\)) /);
+  });
+
+  // O Victor, 13/10/2026: "faltou o buscar". A busca é a CommandPalette: o botão do topo e o Ctrl+K abrem,
+  // os resultados vêm em grupos, e o Enter leva à página. Sem JavaScript, o botão é um link para o catálogo.
+  test("a busca abre pelo botão e pelo Ctrl+K, agrupa os resultados e o Enter leva à página", async ({page}) => {
+    await page.goto("/apps/catalog/getting-started.html");
+    const botao = page.locator("[data-site-search]");
+    await expect(botao).toHaveAttribute("href", "./components.html");
+    await botao.click();
+    const busca = page.getByRole("dialog", {name: "Search the site"});
+    await expect(busca).toBeVisible();
+    await page.getByRole("combobox", {name: /Search components/}).fill("timeline");
+    await expect(busca.getByRole("option", {name: "Timeline", exact: true})).toBeVisible();
+    await expect(busca.getByText("Components", {exact: true})).toBeVisible();
+    await expect(busca.getByText("Patterns", {exact: true})).toBeVisible();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/timeline\.html$/);
+    await expect(page.getByRole("dialog", {name: "Search the site"})).toHaveCount(0);
+    // A página nova carrega a busca de novo (`search.js`, adiado): o atalho só existe depois de ela montar.
+    // Na varredura cheia o Firefox apertou antes disso (13/10/2026) — sozinho, o teste passava.
+    await page.waitForLoadState("load");
+    await expect(page.locator("#site-search-root")).toBeAttached();
+    await expect(async () => {
+      await page.keyboard.press("Control+k");
+      await expect(page.getByRole("dialog", {name: "Search the site"})).toBeVisible({timeout: 1000});
+    }).toPass({timeout: 10000});
   });
 
   test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {

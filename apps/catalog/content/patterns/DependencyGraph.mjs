@@ -2,7 +2,8 @@ import {createElement as h} from "react";
 import {DependencyGraph} from "../../../../packages/react/dist/graph.js";
 
 // ADR-0064 (10/10/2026): o mapa de rede é o `DependencyGraph` com props genéricas — o app traduz o
-// domínio dele (fibra, enlace caído, 20 estações) para elas. A prévia é a arrumação SIMPLES (no
+// domínio dele (fibra, enlace caído, 20 estações) para elas. O TIPO da ligação vai no desenho e no `legend`;
+// o ESTADO, à parte, no `status` (12/10/2026) — a legenda mostra as duas partes. A prévia é a arrumação SIMPLES (no
 // servidor a de camadas não roda); o código mostra a de camadas, que é a recomendada.
 const NOS = [
   {id: "internet", label: "Internet", kind: "Cloud", icon: "globe"},
@@ -18,14 +19,14 @@ const ARESTAS = [
   {from: "internet", to: "fw", legend: "Copper"},
   {from: "fw", to: "core", pattern: "double", legend: "Fibre"},
   {from: "core", to: "floor", fromPort: "p1", sourceLabel: "port 1", legend: "Copper"},
-  {from: "core", to: "cam", fromPort: "p2", sourceLabel: "port 2", mark: "cross", legend: "Down"},
+  {from: "core", to: "cam", fromPort: "p2", sourceLabel: "port 2", legend: "Copper", status: {label: "Down", tone: "danger", mark: "cross"}},
 ];
 
 export default [
   {
     variant: "Network",
     name: "A network map, top to bottom",
-    description: "The internet on top and each layer below. The kind of device is a word with an icon beside it; badges carry the count and the status; ports name the ends of the lines; the line itself says what it is without colour — double for fibre, a cross when down — and the legend builds itself. Repeated links between the same two devices collapse into one with their count.",
+    description: "The internet on top and each layer below. The kind of device is a word with an icon beside it; badges carry the count and the status; ports name the ends of the lines; the line's drawing says what kind of link it is without colour — double for fibre — and its state comes apart, as a colour, a word and a cross when down. The legend builds itself in two parts: the kind of link and the state. Repeated links between the same two devices collapse into one with their count.",
     uses: ["DependencyGraph"],
     code: `<DependencyGraph
   orientation="vertical"
@@ -49,7 +50,8 @@ export default [
     {from: "internet", to: "fw", legend: "Copper"},
     {from: "fw", to: "core", pattern: "double", legend: "Fibre"},
     {from: "core", to: "floor", fromPort: "p1", sourceLabel: "port 1", legend: "Copper"},
-    {from: "core", to: "cam", fromPort: "p2", sourceLabel: "port 2", mark: "cross", legend: "Down"},
+    {from: "core", to: "cam", fromPort: "p2", sourceLabel: "port 2", legend: "Copper",
+      status: {label: "Down", tone: "danger", mark: "cross"}},
   ]}
 />`,
     render: () => h("div", {style: {width: "100%"}}, h(DependencyGraph, {

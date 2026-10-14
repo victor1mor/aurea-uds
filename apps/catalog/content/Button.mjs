@@ -25,7 +25,7 @@ export default {
   install: 'import {Button} from "@aurea-uds/react";',
 
   features: [
-    "Eleven variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive).",
+    "Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the brand-coloured label.",
     "Five sizes (xs / sm / md / lg / xl) from density tokens; the pill shape is invariant.",
     "type=\"button\" by default: a Cancel button inside a <form> never fires submit by accident.",
     "Loading shows a spinner and sets aria-busy; the label stays for context.",
@@ -37,19 +37,21 @@ export default {
   examples: [
     {
       title: "Variants",
-      description: "One primary action; the rest step back so hierarchy reads at a glance.",
+      description: "One primary action; the rest step back so hierarchy reads at a glance. Save is primary, edit is secondary, cancel is tertiary — the tertiary is also what a Button with no variant draws.",
       code: [
         '<Button variant="primary">Publish</Button>',
-        '<Button variant="secondary">Save draft</Button>',
+        '<Button variant="secondary">Edit</Button>',
+        '<Button variant="tertiary">Cancel</Button>',
         '<Button variant="outline">Preview</Button>',
-        '<Button variant="ghost">Cancel</Button>',
+        '<Button variant="ghost">Skip</Button>',
         '<Button variant="danger">Delete</Button>',
       ].join("\n"),
       render: () => h("div", {style: row},
         h(Button, {variant: "primary"}, "Publish"),
-        h(Button, {variant: "secondary"}, "Save draft"),
+        h(Button, {variant: "secondary"}, "Edit"),
+        h(Button, {variant: "tertiary"}, "Cancel"),
         h(Button, {variant: "outline"}, "Preview"),
-        h(Button, {variant: "ghost"}, "Cancel"),
+        h(Button, {variant: "ghost"}, "Skip"),
         h(Button, {variant: "danger"}, "Delete")),
     },
     {

@@ -67,7 +67,8 @@ describe("NavList (nativo) · a foto e os sinais, os mesmos da web", () => {
   it("a foto abre a linha, no tamanho do Avatar de sempre, no lugar do ícone", () => {
     conversa({icon: "user"});
     expect(__instancias("Image").at(-1)!.source).toEqual({uri: "https://exemplo.dev/ana.jpg"});
-    const foto = __instancias("View").map(estilo).find((e) => e.width === t.size.controlHMd && e.height === t.size.controlHMd);
+    // 0.32.0: o Avatar `md` do nativo é o 48 da referência (`space12`; era a altura de controle, 36).
+    const foto = __instancias("View").map(estilo).find((e) => e.width === t.size.space12 && e.height === t.size.space12);
     expect(foto).toBeDefined();
     // Nenhum ícone de pessoa: a foto tomou o lugar.
     expect(Pessoa).not.toHaveBeenCalled();
