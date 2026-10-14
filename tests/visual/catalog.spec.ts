@@ -39,6 +39,16 @@ for (const theme of ["dark", "light"] as const) {
         // de diferença que não vêm de mudança nenhuma. Mascarar a barra torna a captura
         // determinística. No teste da própria barra, mascarar seria apagar o objeto do teste.
         const mask = page.name === "topo" ? [] : [p.locator(".topbar")];
+        // A FOTO MAIOR QUE A TELA (14/10/2026): a seção dos tokens passou de 16.198 para 19.595px com o site novo, e a
+        // CI não conseguiu duas capturas iguais seguidas — uma saía cortada (as duas idênticas até a linha 18.857,
+        // medido no relatório da rodada). E para caber, o elemento rolava para baixo do cabeçalho fixo, que entrava na
+        // máscara e escondia o topo da peça. A tela cresce até o elemento caber inteiro e nada rola — o contorno que o
+        // próprio Playwright registra para elemento mais alto que a tela (microsoft/playwright#27922). A seção dos
+        // tokens não muda de altura com a tela (medido: 18.892px com 1.000 e com 20.000 de altura).
+        const caixa = await p.locator(page.clip).first().boundingBox();
+        if (caixa && caixa.y + caixa.height > 1000) {
+          await p.setViewportSize({width: 1440, height: Math.ceil(caixa.y + caixa.height)});
+        }
         await expect(p.locator(page.clip).first()).toHaveScreenshot(`${theme}-catalogo-${page.name}.png`, {mask});
       });
     }
