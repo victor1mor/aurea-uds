@@ -84,6 +84,9 @@ describe("Button — API do exemplar", () => {
     const el = screen.getByRole("button", {name: /Command/});
     expect(el).toHaveAttribute("aria-keyshortcuts", "⌘K");
     expect(within(el).getByText("⌘K").tagName).toBe("KBD");
+    // O tamanho de dentro do botão é declarado por CLASSE (`btn-kbd`), e não pelo contexto: com o botão de busca
+    // do site em toda página, o `.kbd` de 24 e o de 20 dividiam a página, e a trava de geometria reprovou (14/10/2026).
+    expect(within(el).getByText("⌘K")).toHaveClass("kbd", "btn-kbd");
   });
 
   test("fullWidth só acrescenta a classe de largura — não troca a forma", () => {

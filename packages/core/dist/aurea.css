@@ -1411,10 +1411,13 @@ img,svg { display:block; }
 /* Dentro do botão a tecla NÃO ganha fundo próprio: qualquer tinta escurece a cápsula e o
    rótulo perde contraste (no primary claro caiu a 3.55:1). Sem fundo, o contraste da
    tecla é o MESMO do rótulo — se o botão passa, ela passa. O fio de currentColor separa (sem
-   borda desde a 0.32.0, o fio é sombra por dentro, e não muda a medida). Menor que a solta (20),
-   para caber no botão pequeno. */
-.btn .kbd { min-width:var(--space-5); height:var(--space-5); padding:0 var(--space-1); background:transparent; box-shadow:inset 0 0 0 var(--border-width) color-mix(in oklab, currentColor 35%, transparent); color:inherit; font-size:var(--text-xs); }
-.btn .kbd-single { width:var(--space-5); padding:0; }
+   borda desde a 0.32.0, o fio é sombra por dentro, e não muda a medida).
+   A MEDIDA de dentro do botão (20, para caber no botão pequeno) é declarada pela CLASSE que o `Button` põe no
+   atalho (`btn-kbd`), e não pelo contexto: com o botão de busca do site em toda página, o `.kbd` de 24 e o de 20
+   dividiam a página, e a trava de geometria (uma altura por classe) reprovou (14/10/2026). */
+.btn .kbd { background:transparent; box-shadow:inset 0 0 0 var(--border-width) color-mix(in oklab, currentColor 35%, transparent); color:inherit; }
+.btn-kbd { min-width:var(--space-5); height:var(--space-5); padding:0 var(--space-1); font-size:var(--text-xs); }
+.btn-kbd.kbd-single { width:var(--space-5); padding:0; }
 
 /* nav: item de navegação. Normal = ghost silencioso; o ATIVO (aria-current) ganha texto
    amarelo + traço embaixo — SEM borda (pedido do Victor). aria-current, não uma variante
@@ -4059,6 +4062,12 @@ button.graph-node-body { cursor:pointer; }
   .topbar-menu-icon { background:ButtonText; }
   .link-external { background:LinkText; opacity:1; }
   .accordion-item > summary { color:CanvasText; }
+  /* A AMOSTRA DE COR (0.32.0, ADR-0069): a cor É o conteúdo dela — no `ColorSwatch`, nas amostras para escolher, no
+     gatilho do `ColorPicker` e na frente do `ColorField`. Com a troca, viravam círculos brancos de contorno preto e o
+     "visto" sumia (medido em 14/10/2026). Ela sai da troca, como a área e a trilha; o anel de foco fica na cor do
+     sistema. Quem cobra: `tests/visual/mascara-alto-contraste.spec.ts`. */
+  :is(.color-swatch,.color-swatch-option) { forced-color-adjust:none; }
+  .color-swatch-option:has(:focus-visible) { outline-color:CanvasText; }
 }
 
 

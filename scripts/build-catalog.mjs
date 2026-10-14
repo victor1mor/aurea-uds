@@ -1030,9 +1030,6 @@ function topoDoSite(section) {
   const brand = h("a", {href: "./index.html", className: "site-brand"}, mark, h("strong", null, "Aurea"),
     h("span", {className: "site-version"}, `v${VERSAO}`));
   const topbar = h(Fragment, null,
-    h("nav", {"aria-label": "Sections", className: "site-areas"},
-      ...AREAS.map(([label, href, id]) => h("a", {key: id, className: "site-area", href: `./${href}`,
-        ...(id === section ? {"aria-current": "page"} : {})}, label))),
     // A BUSCA (ADR-0067; o Victor, 13/10/2026: "faltou o buscar"): o botão da referência, com o atalho
     // à mostra. Quem abre é o `search.js` (a `CommandPalette` da Aurea, viva), com Ctrl+K ou o clique;
     // sem JavaScript o botão leva ao catálogo, onde está a lista inteira. No Início, como no da
@@ -1048,7 +1045,13 @@ function topoDoSite(section) {
       // toggle de tema: dois ícones, o CSS mostra o oposto do tema atual; catalog.js alterna.
       h("button", {className: "btn btn-icon btn-ghost", id: "theme-toggle", type: "button", "aria-label": "Toggle light / dark theme"},
         h(A.Icon, {name: "sun", weight: "fill", className: "t-sun"}),
-        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"}))));
+        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"}))),
+    // AS ÁREAS POR ÚLTIMO NO CÓDIGO, porque aparecem na segunda linha. Vinham primeiro e desciam por `order:3`:
+    // o Tab ia da marca para a linha de baixo e voltava para a busca, em cima (WCAG 2.4.3; a trava
+    // `ordem-de-foco.spec.ts` pegou nas 410 páginas, 14/10/2026).
+    h("nav", {"aria-label": "Sections", className: "site-areas"},
+      ...AREAS.map(([label, href, id]) => h("a", {key: id, className: "site-area", href: `./${href}`,
+        ...(id === section ? {"aria-current": "page"} : {})}, label))));
   return {brand, topbar};
 }
 
@@ -1120,7 +1123,9 @@ const chrome = `
 /* ADR-0067: o menu da esquerda e o "On this page" com a largura da referência (220, medida a 1440). */
 .app-shell.site-shell { --sidebar-width:13.75rem; }
 .page-head { display:grid; gap:var(--space-3); margin-bottom:var(--space-6); }
-.page-head-row { display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); }
+/* A linha QUEBRA: sem isso o botão "Copy Markdown" espremia o título a 81px no celular, e ele quebrava no meio da
+   palavra (14/10/2026). Agora o botão desce quando não cabe ao lado. */
+.page-head-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-4); }
 .page-pills { display:flex; flex-wrap:wrap; gap:var(--space-2); }
 /* overflow-wrap:anywhere — nome de componente é uma palavra só e pode ser longa
    ("CommandPaletteShell" mede 315px no display serif): a 320px ela empurrava a página e
@@ -1233,7 +1238,7 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .site-brand strong { font-size:var(--text-lg); }
 .site-version { color:var(--muted-foreground); font-size:var(--text-sm); }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
-.site-areas { order:3; flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
+.site-areas { flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
 .site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
 .site-search .kbd { margin-inline-start:auto; }
 .site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }

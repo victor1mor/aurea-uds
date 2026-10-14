@@ -23,6 +23,11 @@ const GLIFOS: Record<string, string> = {
   ".toast-anchored-icon": `<div class="toast-anchored"><span class="toast-anchored-icon" data-glifo></span><span>Link copiado</span></div>`,
   // O ícone de linhas do "On this page" (ADR-0067, 13/10/2026).
   ".toc-label-icon": `<nav class="toc"><p class="toc-label"><span class="toc-label-icon" data-glifo></span>On this page</p></nav>`,
+  // O "visto" da amostra escolhida (0.32.0, ADR-0069). Ele NÃO tem texto ao lado — fica em cima da cor, na tinta
+  // que mais contrasta com ela (a conta da WCAG) —, por isso não entra em `TEXTO_AO_LADO`: no alto contraste a
+  // amostra inteira sai da troca (`forced-color-adjust:none`, como a área e a trilha), senão a COR, que é o
+  // conteúdo dela, vira a cor da tela. Medido em 14/10/2026: sem isso, a amostra sumia.
+  ".color-swatch-option::after": `<div class="color-swatch-picker" role="radiogroup" aria-label="Cor"><label class="color-swatch-option color-swatch-option-dark" data-glifo style="--color-swatch-current:#0485f7"><input type="radio" class="color-swatch-input" name="g" value="#0485f7" aria-label="Oceano" checked><span class="color-swatch" aria-hidden="true"></span></label></div>`,
 };
 
 async function tinta(p: Page, l: Locator) {
@@ -109,6 +114,22 @@ test("no alto contraste, cada glifo tem a cor do texto ao lado", async ({page: p
     texto: getComputedStyle(document.querySelector(texto)!).color,
   })), Object.entries(TEXTO_AO_LADO));
   for (const c of cores) expect(c.tinta, c.glifo).toBe(c.texto);
+});
+
+// A AMOSTRA DE COR NÃO É GLIFO SOBRE TEXTO: a cor É o conteúdo dela. Medido em 14/10/2026 com o alto contraste
+// ligado: as amostras viravam círculos brancos de contorno preto, e o "visto" sumia (branco sobre branco) — e o teste
+// de "tinta" de baixo PASSAVA, porque o contorno preto conta como tinta. Aqui se mede o que importa: a cor e a tinta
+// do visto continuam as delas (`forced-color-adjust:none`, como a área e a trilha de cor).
+test("no alto contraste, a amostra de cor continua com a cor, e o visto com a tinta dele", async ({page: p}) => {
+  await montar(p);
+  await altoContraste(p);
+  const m = await p.evaluate(() => {
+    const o = document.querySelector(".color-swatch-option")!;
+    return {cor: getComputedStyle(o.querySelector(".color-swatch")!).backgroundColor,
+      visto: getComputedStyle(o, "::after").backgroundColor};
+  });
+  expect(m.cor, "a amostra mantém a cor dela").toBe("rgb(4, 133, 247)");
+  expect(m.visto, "o visto mantém a tinta que contrasta com a cor").toBe("rgb(0, 0, 0)");
 });
 
 for (const modo of ["normal", "alto contraste"] as const) {

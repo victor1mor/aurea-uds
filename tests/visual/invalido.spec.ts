@@ -56,6 +56,9 @@ const SEM_INVALIDO: Record<string, string> = {
     "inválido a mostrar",
   "media-seek": "é a barra de progresso do player, não um campo de formulário",
   color: "o seletor de cor nativo sempre devolve uma cor válida",
+  // 0.32.0 (ADR-0069): os botões de opção invisíveis das amostras do `ColorSwatch options`.
+  "color-swatch-input": "as amostras para escolher são uma paleta fechada: só oferecem cores válidas, " +
+    "e o grupo de amostras da referência também não tem estado inválido",
 };
 
 // ── A MEDIÇÃO, UMA SÓ, EM DOIS MODOS ─────────────────────────────────────────────────────────
@@ -231,6 +234,8 @@ const ALVO: Record<string, string> = {
   Range: ".range",
   // 0.32.0 (passo 3): o grupo põe `aria-invalid` em cada caixa de dentro quando tem `error`.
   CheckboxGroup: ".checkbox-group .checkbox input",
+  // 0.32.0 (ADR-0069): o `ColorField` é um `InputGroup` com a amostra na frente; quem pinta é o grupo.
+  ColorField: ".input-group:has(.color-swatch) > .input",
 };
 
 // TRÊS COMPONENTES NÃO TÊM DEMONSTRAÇÃO NA PÁGINA DELES: o catálogo escreve "Interactive — see
@@ -273,6 +278,15 @@ const FICHA_SEM_INVALIDO: Record<string, string> = {
   Slider: "o valor fica sempre dentro de [min,max] por construção, como o do `Range`",
   TagGroup: "o erro dele é a mensagem embaixo (`errorMessage`), ligada ao grupo para o leitor de tela; " +
     "as etiquetas não mudam de cor",
+  // As duas da família de cor (0.32.0, ADR-0069), achadas pela suíte inteira em 14/10/2026.
+  ColorArea: "a área só dá cores que existem: o ponto fica sempre dentro do quadrado por construção, " +
+    "como o valor do `Slider`",
+  ColorPicker: "a área, a trilha e as amostras só dão cores válidas, e o código que não é cor volta ao de " +
+    "antes — não há valor inválido guardado. O campo que pode receber texto errado é o `ColorField`, e ele pinta",
+  // O `DatePicker` da web (0.32.0, ADR-0068), achado pela mesma suíte. A referência tem o estado (pergunta guardada
+  // para o Victor: acrescentar é mudança de API).
+  DatePicker: "o gatilho não recebe texto: o calendário só oferece datas dentro de `minimumDate`/`maximumDate`, " +
+    "como o `Calendar` — o valor escolhido é sempre uma data que existe e que cabe",
 };
 
 // O escopo é a categoria `Inputs` do registry, e é fechado de propósito: `invalid` é estado de

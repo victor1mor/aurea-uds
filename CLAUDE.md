@@ -438,9 +438,13 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    ⚠ **As regras novas:** o catálogo carrega uma CÓPIA do CSS do core (`apps/catalog/assets/catalog.css`) —
    depois de mexer no core, remontar o catálogo antes de rodar a varredura, ou ela mede o CSS velho; o
    leitor da API soma os ramos de `Base & (A | B)` escrito direto no parâmetro; e o `InputGroup` lê do
-   `Input` de dentro o tamanho E a pele (`secondary`). ⚠ **A lição:** a varredura do catálogo inteira nos
-   três navegadores pegou o foco de duas linhas nas amostras de cor, que os testes da peça não pegavam —
-   ela roda antes de pedir o "pode", sempre.
+   `Input` de dentro o tamanho E a pele (`secondary`); a medida de uma peça muda por CLASSE, nunca pelo
+   contexto (`btn-kbd`, e não `.btn .kbd`). ⚠ **A lição:** os passos rodaram só os testes do próprio passo, e a
+   suíte INTEIRA de navegador (843 testes, três navegadores), rodada no fechamento, pegou sete defeitos que
+   ninguém tinha visto — o foco de duas linhas e a cor que some no alto contraste nas amostras, o Tab que
+   descia e voltava no cabeçalho do site, o título quebrado no meio da palavra no celular, o `Kbd` de duas
+   alturas e as peças de cor fora das travas de inválido e de máscara. A suíte inteira roda ANTES de pedir o
+   "pode", sempre; e mais de uma vez no lote, não só no fim.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

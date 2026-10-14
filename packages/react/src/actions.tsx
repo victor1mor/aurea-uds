@@ -169,7 +169,7 @@ const cls=cx("btn",buttonSkin(variant,appearance,tone),
 // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
 // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
 const temConteudo=children!=null&&children!==false;
-const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={leadingIcon}/>}{(temConteudo||!loading)&&<span>{children}</span>}{kbd&&<Kbd>{kbd}</Kbd>}{trailingIcon&&<Icon name={trailingIcon}/>}</>;
+const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={leadingIcon}/>}{(temConteudo||!loading)&&<span>{children}</span>}{kbd&&<Kbd className="btn-kbd">{kbd}</Kbd>}{trailingIcon&&<Icon name={trailingIcon}/>}</>;
 // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
 // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
 // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O

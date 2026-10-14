@@ -122,7 +122,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
     // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
     const temConteudo = children != null && children !== false;
-    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
+    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { className: "btn-kbd", children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
     // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
     // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
     // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O

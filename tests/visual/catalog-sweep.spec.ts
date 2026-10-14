@@ -160,19 +160,39 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   // empilhada acima do conteúdo — nada estourava, e para ler a documentação de um componente
   // era preciso rolar por 65 itens de navegação (achado A8). Isto mede o que aquele gate não
   // media: onde o objetivo da página começa. O comportamento da gaveta está em shell-nav.spec.
-  test("em 375px o h1 de toda página cabe na primeira tela", async ({page}) => {
+  test("em 375px o h1 de toda página cabe na primeira tela, sem quebrar no meio da palavra", async ({page}) => {
     const falhas: string[] = [];
     await page.setViewportSize({width: 375, height: 812});
     for (const f of PAGES) {
       await abrir(page, url(f), avisar);
-      const y = await page.evaluate(() => {
+      const m = await page.evaluate(() => {
         const h1 = document.querySelector("h1");
-        return h1 ? Math.round(h1.getBoundingClientRect().top + scrollY) : null;
+        if (!h1) return null;
+        // E O TÍTULO NÃO QUEBRA NO MEIO DA PALAVRA (14/10/2026): o botão "Copy Markdown" ao lado, numa linha que
+        // não quebrava, espremia o h1 a 81px e "Accordion" saía "Accor / dion". A maior palavra, medida na fonte do
+        // próprio título, tem de caber nele — quando ela cabe na linha; palavra maior que a tela quebra mesmo.
+        const cs = getComputedStyle(h1), s = document.createElement("span");
+        Object.assign(s.style, {position: "absolute", visibility: "hidden", whiteSpace: "nowrap", fontStyle: cs.fontStyle,
+          fontWeight: cs.fontWeight, fontSize: cs.fontSize, fontFamily: cs.fontFamily, letterSpacing: cs.letterSpacing});
+        document.body.append(s);
+        let maior = 0;
+        for (const w of (h1.textContent ?? "").split(/\s+/).filter(Boolean)) {
+          s.textContent = w;
+          maior = Math.max(maior, s.getBoundingClientRect().width);
+        }
+        s.remove();
+        const largura = h1.getBoundingClientRect().width, linha = h1.parentElement!.getBoundingClientRect().width;
+        return {y: Math.round(h1.getBoundingClientRect().top + scrollY),
+          // O h1 das molduras de exemplo é `.sr-only` (1px, só para o leitor de tela): não tem linha para quebrar.
+          quebra: !h1.classList.contains("sr-only") && maior <= linha && largura + 0.5 < maior ? `${Math.round(largura)}px para a palavra de ${Math.round(maior)}px` : null};
       });
-      if (y === null) falhas.push(`${f}: sem h1`);
-      else if (y >= 812) falhas.push(`${f}: o h1 começa a ${y}px — ${(y / 812).toFixed(1)} telas abaixo`);
+      if (m === null) falhas.push(`${f}: sem h1`);
+      else {
+        if (m.y >= 812) falhas.push(`${f}: o h1 começa a ${m.y}px — ${(m.y / 812).toFixed(1)} telas abaixo`);
+        if (m.quebra) falhas.push(`${f}: o h1 quebra no meio da palavra — ${m.quebra}`);
+      }
     }
-    expect(falhas, `páginas cujo conteúdo não começa na primeira tela:\n${falhas.join("\n")}`).toEqual([]);
+    expect(falhas, `páginas cujo título não começa na primeira tela, ou quebra no meio da palavra:\n${falhas.join("\n")}`).toEqual([]);
   });
 
   test("hierarquia de títulos: um h1, sem salto de nível", async ({page}) => {

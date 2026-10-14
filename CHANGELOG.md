@@ -450,6 +450,16 @@ e a escala de toque do nativo.
 
 ### Corrigido
 
+- **No alto contraste do Windows, a amostra de cor perdia a cor** — no `ColorSwatch`, nas amostras para escolher, no
+  gatilho do `ColorPicker` e na frente do `ColorField`: viravam círculos brancos, e o "visto" sumia. Agora ela sai da
+  troca do sistema, como a área e a trilha (`forced-color-adjust:none`); o anel de foco fica na cor do sistema.
+- **`Button kbd`: a tecla de dentro do botão tem a medida declarada pela classe `btn-kbd`**, que o `Button` põe, e
+  não mais pelo contexto (`.btn .kbd`). A aparência não muda; um `Kbd` posto à mão dentro de um botão fica com a
+  medida da solta (24) e as cores de dentro do botão.
+- **Site: no cabeçalho, a ordem do Tab é a da tela** — as áreas ("Components", "Patterns"…) vinham primeiro no
+  código e desciam para a segunda linha por `order`, e o Tab ia da marca para baixo e voltava para a busca (WCAG
+  2.4.3). E **o título da página não quebra mais no meio da palavra no celular**: o botão "Copy Markdown" desce
+  quando não cabe ao lado.
 - **`InputGroup` com um `Input variant="secondary"` dentro saía com a borda do `primary`**: quem desenha a caixa é
   o grupo, e ele só lia o TAMANHO do campo de dentro. Agora lê a pele também (`.input-group:has(>.input-secondary)`).
   Achado no `ColorField variant="secondary"`, medido na bancada; o `skin.spec` cobra.

@@ -147,8 +147,11 @@ const PAGES = readdirSync(DIR).filter(f => f.endsWith(".html")).sort();
 // foi exatamente assim que ela pegou a do contador da barra inferior.
 // `.tabs` sem a secundária, pela mesma regra (0.32.0): a `tabs-secondary` declara POR CLASSE outra
 // forma — sem trilho, a aba de 32 e o fio de 1 embaixo, 33 — e a página das abas mostra as duas.
+// `.kbd` sem o de dentro do botão, pela mesma regra (0.32.0): o `Button` declara POR CLASSE (`btn-kbd`) a tecla de
+// 20 que cabe no botão pequeno; a solta é a de 24 da referência. Era sobrescrita por contexto (`.btn .kbd`), e esta
+// trava a pegou quando o botão de busca do site passou a estar em toda página (14/10/2026).
 const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs:not(.tabs-secondary)", ".segmented", ".tab", ".segmented button",
-               ".kbd", ".pagination button:not(.btn)"];
+               ".kbd:not(.btn-kbd)", ".pagination button:not(.btn)"];
 
 test.describe("catálogo · geometria de todas as páginas", () => {
   test.describe.configure({timeout: 8 * 60 * 1000});
