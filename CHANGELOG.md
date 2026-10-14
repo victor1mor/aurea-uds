@@ -17,11 +17,11 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### Os componentes novos da 0.32.0 (em construção)
+### Os componentes novos da 0.32.0 (ainda não publicada)
 
 - `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
-  `TagGroup`, `DatePicker` (na web; o nativo já o tinha), `ColorArea` e `ColorPicker` — a nota está na seção
-  `[0.32.0]`, abaixo.
+  `TagGroup`, `DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker` — a nota
+  está na seção `[0.32.0]`, abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -86,15 +86,17 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [0.32.0] — em construção (11/10/2026)
+## [0.32.0] — 2026-10-14
 
-⏳ **Em construção, na branch `claude/lote-q`.** O lote único: as peças quase idênticas às da referência.
+⏳ **Ainda não publicada.** O lote único: as peças quase idênticas às da referência. Os componentes novos:
+`CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`,
+`DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker`.
 
 A regra nova do Victor (11/10/2026): a peça da Aurea é a da referência principal — anatomia,
 medidas, estados, comportamento, teclado —, e por cima só entra o que é da Aurea (as cores e os
 temas, os cantos 22/32/cápsula, a fonte, os ícones, as densidades, sem degradê, a baixa visão).
 O lote junta a rodada 1 do site, a auditoria peça a peça (web e nativo), os pedidos do app de rede
-e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]` na versão.
+e a escala de toque do nativo.
 
 ### Novo
 
@@ -163,28 +165,45 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
     e a página perdia a hidratação (medido no catálogo). O texto da data leva `lang` com a língua dela.
 - **`ColorArea`** ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), escolhas
   do Victor: *"cor A"*, *"área de cor como peça nova"*, motor *"como o calendário"*) — o quadrado em que se escolhe
-  a saturação e o brilho de um matiz, pelo ponteiro, pelo toque e pelo teclado (as teclas da referência). O
+  a saturação e o brilho de um matiz, pelo ponteiro, pelo toque e pelo teclado (as teclas da referência). Ou
+  qualquer par de canais de HSB, HSL ou RGB, com o terceiro parado (`colorSpace`, `xChannel`, `yChannel`, o Victor:
+  *"todos, com transparência"*), e a grade de pontinhos da referência (`showDots`). O
   valor é hex, com `value`, `defaultValue`, `onValueChange` e `onValueCommitted`, o idioma das peças de entrada
   da web. Por dentro, dois `range` escondidos, um por eixo, anunciados como controle 2D, com o NOME da cor na
   língua do app ("vivid blue", "azul vivo"). Puxar até o cinza não troca o matiz. Sem dependência nova.
-- **`Slider channel="hue"`, a trilha de cor** (ADR-0069, escolha do Victor: *"a trilha de cor segue como variação
-  do Slider"*) — de 0 a 360, a trilha pintada com o círculo de cores, sem o preenchimento, o pino redondo de 16 na
-  cor do valor (o da referência), o valor em graus e o nome da cor para o leitor de tela ("Hue 210°, vivid
-  blue"). O grau é escrito pela Aurea, e não pelo `Intl` do motor: ele formata na língua do ambiente, e o
-  servidor e o navegador escreveriam "210 °" e "210°".
+- **`Slider channel`, as trilhas de cor** (ADR-0069, escolhas do Victor: *"a trilha de cor segue como variação
+  do Slider"* e *"todos, com transparência"*) — um canal da cor: `hue`, `saturation`, `brightness`, `lightness`,
+  `red`, `green`, `blue` ou `alpha` (`colorSpace` diz o espaço do matiz e da saturação). A trilha pintada com o
+  canal, sem o preenchimento; a do alfa sobre o xadrez; o pino redondo de 16 na cor do valor (o da referência), o
+  valor escrito ("210°", "80%") e o nome da cor para o leitor de tela ("Hue 210°, vivid blue"). Como na
+  referência, o VALOR da trilha de cor é a COR (hex, `rgb()`, `hsl()`, `hsb()`), e o `onValueChange` devolve o
+  hex: várias trilhas repartem a mesma cor. O número é escrito pela Aurea, e não pelo `Intl` do motor: ele
+  formata na língua do ambiente, e o servidor e o navegador escreveriam "210 °" e "210°".
 - **`ColorSwatch options`, as amostras para escolher** (ADR-0069, a "C" do Victor, *"como variação do
   ColorSwatch"*) — com `options` (hex ou `{color, label}`), `name` e `label`, a amostra vira um grupo de escolha: a
   paleta fechada. São botões de opção NATIVOS, então a escolha única e as setas são do navegador, sem
   JavaScript, e ela continua marcação pura (sai pronta do servidor). O desenho é o da referência: opção de 32,
   borda de 2, vão de 8; a escolhida com a borda na cor dela, encolhida a 77%, e o "visto" na tinta que contrasta
   MAIS com a cor — a conta da WCAG (no amarelo da Aurea, preto). Avisa pelo `onChange` do navegador, como o
-  `Radio`.
+  `Radio`. Os exemplos da referência entram todos: os cinco tamanhos, uma cor que não se escolhe (`disabled` na
+  opção), em coluna (`layout="stack"`) e outra marca no lugar do "visto" (`indicator`). O foco é uma linha só
+  (ADR-0059): na escolhida, a borda da cor vira a cor do foco e o anel encosta nela — a referência mostra borda +
+  vão + anel, e a varredura do catálogo reprovou.
+- **`ColorSwatch`: a cor transparente mostra o xadrez** (o Victor: *"xadrez sim, quadrado não"*) — hex de 4 ou 8
+  dígitos, `rgba()`, `hsla()`. A amostra continua só redonda.
 - **`ColorPicker`** (ADR-0069, escolhas do Victor: *"ColorPicker componente"*, *"cor A com C como variação"*) — o
   gatilho é a amostra com o nome; a janela traz a área, a trilha do matiz e o CAMPO DO CÓDIGO, sempre (o Victor:
   *"sempre com campo do código e teclado"*). `swatches` acrescenta amostras prontas, com o nome de cada cor na
   língua do app; `variant="swatches"` é a paleta fechada (a "C"): só as amostras e o código. O código vale ao
   confirmar (Enter ou sair do campo); texto que não é cor volta. No cinza, a trilha do matiz continua mexendo o
-  fundo da área (o hex não muda, o matiz sim — o teste pegou o defeito na primeira versão).
+  fundo da área (o hex não muda, o matiz sim — o teste pegou o defeito na primeira versão). A janela também se
+  MONTA, como na referência (`children`): a `ColorArea`, o `Slider` com `channel` e o `ColorField` de dentro, sem
+  valor próprio, repartem a cor do seletor — o catálogo traz os dois exemplos dela, "com campos" e "com trilhas".
+- **`ColorField`** (ADR-0069, escolha do Victor: *"Pode, componente novo"*) — o campo de cor da referência: a
+  amostra na frente e o código (hex, `rgb()`, `hsl()` ou `hsb()`), que vale no Enter ou ao sair do campo; texto
+  que não é cor volta, e o vazio limpa (avisa com `""`). Com `channel`, um canal só, como número, com as setas,
+  Page Up/Down e Home/End. É o `Input` da Aurea, com as mesmas peles (`size`, `variant`); dentro do `Field`, o
+  rótulo, a descrição e o erro são os dele, e `name` manda o hex no formulário.
 - **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
   (`shortcuts`, ligada; DOC-07).
 - **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
@@ -431,6 +450,13 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 
 ### Corrigido
 
+- **`InputGroup` com um `Input variant="secondary"` dentro saía com a borda do `primary`**: quem desenha a caixa é
+  o grupo, e ele só lia o TAMANHO do campo de dentro. Agora lê a pele também (`.input-group:has(>.input-secondary)`).
+  Achado no `ColorField variant="secondary"`, medido na bancada; o `skin.spec` cobra.
+- **O leitor da API (`scripts/build-api-surface.mjs`) não via os ramos de `Base & (A | B)` escrito direto no
+  parâmetro** — a forma do `Slider` (o número ou a cor) e do `ColorSwatch` (a amostra ou o grupo de escolha). O
+  `api-surface.json` publicava 8 props do `Slider` de 21, e o check 14 acusava `channel` de não ser prop. Os ramos
+  agora se somam, com a mesma regra da união dentro de um tipo (a do `Card`).
 - **O `Toggle` sem `size` saía com a classe `btn-undefined`** (medido no catálogo, nos três botões do
   `ToggleGroup`); e com tamanho responsivo sairia `btn-[object Object]`. Agora a conta é a do `Button`.
 - **As alças do `Slider` saíam sem nome no HTML do servidor** (o axe da varredura do catálogo acusou
@@ -469,7 +495,8 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   nativo) e `dateRangePlaceholder` ("Escolher período"), o gatilho vazio do `DatePicker`. Mesma regra: quem
   monta o objeto inteiro acrescenta; o `ptBR` já as traz.
 - **Oito frases novas no `AureaStrings` da web, da família de cor** (ADR-0069) — `colorPicker` ("Seletor de
-  cor"), `colorArea2D` ("controle 2D"), `colorChannel` (os nomes dos canais: matiz, saturação, brilho),
+  cor"), `colorArea2D` ("controle 2D"), `colorChannel` (os nomes dos oito canais: matiz, saturação, brilho,
+  luminosidade, vermelho, verde, azul e alfa),
   `colorHue` (os nomes das cores), `colorTone` (escuro, claro, vivo, pálido, acinzentado…), `colorNameFormat`
   (a ordem das palavras do nome da cor na língua: `"{hue} {chroma} {lightness}"` no português), `colorHex`
   ("Código hex", o campo do código) e `colorSwatches` ("Amostras", o grupo de amostras do `ColorPicker`). Mesma

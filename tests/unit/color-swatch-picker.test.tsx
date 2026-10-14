@@ -47,6 +47,30 @@ describe("ColorSwatch options (as amostras para escolher)", () => {
     expect(marcada[0]).toContain('value="#000080"');
   });
 
+  // 14/10/2026 (o Victor: "xadrez sim", só onde há transparência): a amostra transparente ganha o xadrez; a opaca e
+  // a cor de token não.
+  test("o xadrez só na cor transparente", () => {
+    const {container} = wrap(<>
+      <ColorSwatch color="#0485f780" label="Meia" />
+      <ColorSwatch color="rgba(255, 0, 0, 0.25)" label="Um quarto" />
+      <ColorSwatch color="#0485f7" label="Opaca" />
+      <ColorSwatch color="var(--primary)" label="Token" />
+    </>);
+    const comXadrez = [...container.querySelectorAll(".color-swatch")].map((e) => e.classList.contains("color-swatch-alpha"));
+    expect(comXadrez).toEqual([true, true, false, false]);
+  });
+
+  test("uma cor desligada, em coluna, e a marca própria no lugar do visto (os exemplos da referência)", () => {
+    const {container} = wrap(<ColorSwatch name="x" label="X" layout="stack" defaultValue="#ff0000"
+      indicator={<svg data-testid="coracao" />}
+      options={[{color: "#ff0000", label: "Red"}, {color: "#00ff00", label: "Green", disabled: true}]} />);
+    expect(container.querySelector(".color-swatch-picker")).toHaveClass("color-swatch-picker-stack");
+    expect(screen.getByRole("radio", {name: "Green"})).toBeDisabled();
+    expect(screen.getByRole("radio", {name: "Red"})).not.toBeDisabled();
+    expect(container.querySelectorAll(".color-swatch-indicator")).toHaveLength(2);
+    expect(screen.getAllByTestId("coracao")).toHaveLength(2);
+  });
+
   test("a amostra comum não muda: imagem com nome", async () => {
     const {container} = wrap(<><ColorSwatch color="#f0c200" label="Yellow" /><ColorSwatch options={PALETA} name="a" label="Accent" /></>);
     expect(screen.getByRole("img", {name: "Yellow"})).toHaveClass("color-swatch");

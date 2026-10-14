@@ -425,6 +425,23 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    um ganhou o teste que reprova sem o conserto. **Publicada em 10/10/2026** (entre 20:25 e 20:29,
    Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #65.
 
+28. **`0.32.0`, o lote único, feita de 11 a 14/10/2026** em 12 passos na branch `claude/lote-q` — a regra
+   do Victor de 11/10: a peça é a da referência principal, e por cima só entra o que é da Aurea. A escala
+   e a entrelinha, as ações, os campos (`Slider`, `CheckboxGroup`, `ListBox`), a navegação, as janelas, os
+   dados, os avisos, o texto, o nativo na escala de toque ([ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md))
+   e as nove peças novas dele, o mapa de rede (MNT-21 a 26), o site no molde da documentação da referência
+   ([ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md)), o `DatePicker` da web
+   ([ADR-0068](decisions/0068-o-datepicker-da-web-e-componente.md)) e a família de cor inteira — `ColorArea`,
+   `ColorField`, `ColorPicker`, a trilha de cor do `Slider` e as amostras do `ColorSwatch`, com todos os
+   canais e o alfa ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md)).
+   Cada passo aprovado pela bancada; a cor por último (*"continue e tudo aprovado"*, 14/10/2026).
+   ⚠ **As regras novas:** o catálogo carrega uma CÓPIA do CSS do core (`apps/catalog/assets/catalog.css`) —
+   depois de mexer no core, remontar o catálogo antes de rodar a varredura, ou ela mede o CSS velho; o
+   leitor da API soma os ramos de `Base & (A | B)` escrito direto no parâmetro; e o `InputGroup` lê do
+   `Input` de dentro o tamanho E a pele (`secondary`). ⚠ **A lição:** a varredura do catálogo inteira nos
+   três navegadores pegou o foco de duas linhas nas amostras de cor, que os testes da peça não pegavam —
+   ela roda antes de pedir o "pode", sempre.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).

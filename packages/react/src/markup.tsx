@@ -38,7 +38,7 @@ import React, {forwardRef, type AnchorHTMLAttributes, type HTMLAttributes, type 
   type ReactNode, type RefAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes} from "react";
 import {cx, fundirRender, peleDoEixo, type Responsive} from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
-import {contrastingInk, parseHex} from "./color.js";
+import {contrastingInk, hsbToRgb, parseColor} from "./color.js";
 // TIPO apenas: `import type` some na emissão, então isto não faz o `markup` depender de um
 // módulo de cliente. O degrau do campo é o MESMO do botão de propósito (G-FORM-01).
 import type {ComponentSize} from "./actions.js";
@@ -749,10 +749,11 @@ export function Link({external,disabled,href,target,rel,className,children,...pr
   </a>;
 }
 
-// ColorSwatch — a amostra de cor da referência, só REDONDA e sem o xadrez de transparência (decisão do
-// Victor): um círculo da cor pedida com um anel de 1 por dentro, que segura a amostra branca no fundo
-// branco. Tamanhos da referência: xs 16, sm 24, md 32, lg 36, xl 40. É imagem (`role="img"`): o nome
-// é `label`, e sem ele, o próprio valor da cor.
+// ColorSwatch — a amostra de cor da referência, só REDONDA (decisão do Victor): um círculo da cor pedida com um
+// anel de 1 por dentro, que segura a amostra branca no fundo branco. Tamanhos da referência: xs 16, sm 24, md 32,
+// lg 36, xl 40. É imagem (`role="img"`): o nome é `label`, e sem ele, o próprio valor da cor.
+// O XADREZ entra só onde há transparência (o Victor, 14/10/2026: "xadrez sim, quadrado não") — é como se vê que a
+// cor é transparente. A amostra sabe quando: a cor em hex/`rgb()`/`hsl()` com alfa abaixo de 1.
 export type ColorSwatchSize="xs"|"sm"|"md"|"lg"|"xl";
 export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>,RefAttributes<HTMLSpanElement>{
   /** Qualquer cor do CSS: `#f0c200`, `oklch(…)`, `var(--primary)`. */
@@ -768,7 +769,9 @@ export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>,RefAtt
 // 77% por dentro e mostra o "visto" — na tinta que contrasta mais com a cor, pela conta da WCAG.
 // O nome de cada cor é o `label` dela; sem ele, o código. (O nome da cor na língua do app pede o contexto das
 // frases, que a marcação pura não tem — o `ColorPicker` o põe.)
-export interface ColorSwatchOption{color:string;label?:string}
+export interface ColorSwatchOption{color:string;label?:string;
+  /** Esta cor não se escolhe (as outras sim). */
+  disabled?:boolean}
 /** O que as duas formas têm em comum: a escala. (É a base que o leitor da API segue em `base & (a | b)`.) */
 export interface ColorSwatchBase{size?:ColorSwatchSize}
 export interface ColorSwatchPickerProps{
@@ -781,30 +784,38 @@ export interface ColorSwatchPickerProps{
   value?:string;defaultValue?:string;
   /** O evento do navegador, como no `Radio`: `event.target.value` é a cor escolhida. */
   onChange?:React.ChangeEventHandler<HTMLInputElement>;
+  /** `"grid"` (o padrão: em linha, quebrando) ou `"stack"` (em coluna), como na referência. */
+  layout?:"grid"|"stack";
+  /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
+  indicator?:ReactNode;
   size?:ColorSwatchSize;disabled?:boolean;id?:string;className?:string;
 }
+// Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
+// `oklch()` a marcação não lê: fica sem xadrez.
+const transparente=(cor:string)=>{const c=parseColor(cor);return c!==null&&c.a<1;};
 export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchPickerProps)){
   if("options" in props){
-    const {options,name,label,value,defaultValue,onChange,size="md",disabled,id,className}=props;
+    const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,size="md",disabled,id,className}=props;
     // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
     // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
     return <div role="radiogroup" aria-label={label} id={id} aria-disabled={disabled||undefined}
-      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,className)}>
+      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,layout==="stack"&&"color-swatch-picker-stack",className)}>
       {options.map((o)=>{
-        const op=typeof o==="string"?{color:o}:o;
-        const rgb=parseHex(op.color);
+        const op:ColorSwatchOption=typeof o==="string"?{color:o}:o;
+        const cor=parseColor(op.color),rgb=cor&&hsbToRgb(cor);
         return <label key={op.color} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
           style={{["--color-swatch-current" as string]:op.color}}>
           <input type="radio" className="color-swatch-input" name={name} value={op.color} aria-label={op.label??op.color}
             checked={value===undefined?undefined:value===op.color} defaultChecked={value===undefined?defaultValue===op.color:undefined}
-            disabled={disabled} {...(onChange?{onChange}:{})}/>
-          <span className="color-swatch" aria-hidden="true"/>
+            disabled={disabled||op.disabled} {...(onChange?{onChange}:{})}/>
+          <span className={cx("color-swatch",cor&&cor.a<1&&"color-swatch-alpha")} aria-hidden="true"/>
+          {indicator!=null&&<span className="color-swatch-indicator" aria-hidden="true">{indicator}</span>}
         </label>;
       })}
     </div>;
   }
   const {color,size="md",label,className,style,...resto}=props;
-  return <span role="img" aria-label={label??color} className={cx("color-swatch",size!=="md"&&`color-swatch-${size}`,className)}
+  return <span role="img" aria-label={label??color} className={cx("color-swatch",size!=="md"&&`color-swatch-${size}`,transparente(color)&&"color-swatch-alpha",className)}
     style={{...style,["--color-swatch-current" as string]:color}} {...resto}/>;
 }
 

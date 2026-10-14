@@ -38,7 +38,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import React, { forwardRef } from "react";
 import { cx, fundirRender, peleDoEixo } from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
-import { contrastingInk, parseHex } from "./color.js";
+import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
 export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, className, render, ...props }) {
     return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
 }
@@ -243,19 +243,22 @@ export function AspectRatio({ ratio = 1, className, style, ...props }) { return 
 export function Link({ external, disabled, href, target, rel, className, children, ...props }) {
     return _jsxs("a", { className: cx("link", className), href: disabled ? undefined : href, "aria-disabled": disabled || undefined, target: external ? target ?? "_blank" : target, rel: external ? rel ?? "noopener noreferrer" : rel, ...props, children: [children, external && _jsx("span", { className: "link-external", "aria-hidden": "true" })] });
 }
+// Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
+// `oklch()` a marcação não lê: fica sem xadrez.
+const transparente = (cor) => { const c = parseColor(cor); return c !== null && c.a < 1; };
 export function ColorSwatch(props) {
     if ("options" in props) {
-        const { options, name, label, value, defaultValue, onChange, size = "md", disabled, id, className } = props;
+        const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, size = "md", disabled, id, className } = props;
         // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
         // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
-        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, className), children: options.map((o) => {
+        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", className), children: options.map((o) => {
                 const op = typeof o === "string" ? { color: o } : o;
-                const rgb = parseHex(op.color);
-                return _jsxs("label", { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: "color-swatch", "aria-hidden": "true" })] }, op.color);
+                const cor = parseColor(op.color), rgb = cor && hsbToRgb(cor);
+                return _jsxs("label", { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, op.color);
             }) });
     }
     const { color, size = "md", label, className, style, ...resto } = props;
-    return _jsx("span", { role: "img", "aria-label": label ?? color, className: cx("color-swatch", size !== "md" && `color-swatch-${size}`, className), style: { ...style, ["--color-swatch-current"]: color }, ...resto });
+    return _jsx("span", { role: "img", "aria-label": label ?? color, className: cx("color-swatch", size !== "md" && `color-swatch-${size}`, transparente(color) && "color-swatch-alpha", className), style: { ...style, ["--color-swatch-current"]: color }, ...resto });
 }
 export function ProgressCircle({ value, min = 0, max = 100, size = "md", tone = "brand", label, className, ...props }) {
     const semTotal = value == null || Number.isNaN(value);

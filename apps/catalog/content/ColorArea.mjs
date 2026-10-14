@@ -16,8 +16,9 @@ function ComOValor() {
 
 export default {
   description:
-    "ColorArea is the square where you pick a colour's saturation (across) and brightness (up) for one hue. " +
-    "It works by pointer, touch and keyboard, and the screen reader hears the channels and the colour's name.",
+    "ColorArea is the square where you pick two channels of a colour for the third one fixed — saturation (across) " +
+    "and brightness (up) by default, or any pair of HSB, HSL or RGB. It works by pointer, touch and keyboard, and " +
+    "the screen reader hears the channels and the colour's name.",
 
   install: 'import {ColorArea} from "@aurea-uds/react";',
 
@@ -25,6 +26,8 @@ export default {
     "The value is hex (#rrggbb), like the browser's colour input: value, defaultValue, onValueChange, onValueCommitted.",
     "Arrows move one step (Shift: ten); Page Up/Down change the brightness, Home/End the saturation.",
     "Two hidden range inputs, one per axis, announced as a 2D slider, with the colour's name in the app's language.",
+    "colorSpace, xChannel and yChannel choose the pair: hue and saturation in HSL, red and blue in RGB…",
+    "showDots draws a grid of dots over the area, to see the position.",
     "Dragging to grey keeps the hue: the area does not jump to red.",
   ],
 
@@ -35,6 +38,31 @@ export default {
       code: `<ColorArea defaultValue="#0485f7" aria-label="Fill" />`,
       embed: true,
       render: () => h("div", {style: coluna}, h(ColorArea, {defaultValue: "#0485f7", "aria-label": "Fill"})),
+    },
+    {
+      title: "With dots",
+      description: "showDots: a grid of dots over the area.",
+      code: `<ColorArea defaultValue="#7c3aed" showDots aria-label="Fill" />`,
+      embed: true,
+      render: () => h("div", {style: coluna}, h(ColorArea, {defaultValue: "#7c3aed", showDots: true, "aria-label": "Fill"})),
+    },
+    {
+      title: "Colour spaces and channels",
+      description: "Any pair of channels, and the third one stays fixed: hue and saturation in HSL, red and blue in RGB, hue and brightness in HSB.",
+      code: `<ColorArea colorSpace="hsl" xChannel="hue" yChannel="saturation" defaultValue="hsl(200, 80%, 50%)" aria-label="HSL" />
+<ColorArea colorSpace="rgb" xChannel="red" yChannel="blue" defaultValue="rgb(120, 40, 220)" aria-label="RGB" />
+<ColorArea xChannel="hue" yChannel="brightness" defaultValue="#16a34a" aria-label="HSB" />`,
+      embed: true,
+      render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-6)"}},
+        h(ColorArea, {colorSpace: "hsl", xChannel: "hue", yChannel: "saturation", defaultValue: "hsl(200, 80%, 50%)", "aria-label": "HSL"}),
+        h(ColorArea, {colorSpace: "rgb", xChannel: "red", yChannel: "blue", defaultValue: "rgb(120, 40, 220)", "aria-label": "RGB"}),
+        h(ColorArea, {xChannel: "hue", yChannel: "brightness", defaultValue: "#16a34a", "aria-label": "HSB"})),
+    },
+    {
+      title: "Disabled",
+      description: "The area does not move, and the keyboard skips it.",
+      code: `<ColorArea defaultValue="#e11d48" disabled aria-label="Fill" />`,
+      render: () => h("div", {style: coluna}, h(ColorArea, {defaultValue: "#e11d48", disabled: true, "aria-label": "Fill"})),
     },
     {
       title: "With the value",

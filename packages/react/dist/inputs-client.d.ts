@@ -1,5 +1,6 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Responsive } from "./pure.js";
+import { type ColorChannel, type ColorSpace } from "./color.js";
 import { type ColorSwatchOption, type FieldSize, type FieldVariant } from "./markup.js";
 import { type IconName } from "./system.js";
 export { FileInput, matchesAccept, type FileRejection, type UploadContext, type UploadFn } from "./file-input.js";
@@ -134,10 +135,21 @@ export interface TagGroupProps {
 }
 export declare function TagGroup({ label, labelHidden, description, errorMessage, items, selectionMode, selectedKeys, defaultSelectedKeys, onSelectionChange, onRemove, size, variant, className, id }: TagGroupProps): React.JSX.Element;
 export type SliderOrientation = "horizontal" | "vertical";
-export interface SliderProps<V extends number | readonly number[] = number | readonly number[]> {
+/** O que os dois modos do Slider têm em comum (o número e a cor). É a base que o leitor da API segue em
+ *  `base & (a | b)` — com a união sozinha, ele não acha prop nenhuma (medido no `ColorSwatch`, 13/10/2026). */
+export interface SliderBase {
     /** O rótulo. Obrigatório: é o nome das alças. `labelHidden` o tira da tela e deixa para o leitor de tela. */
     label: ReactNode;
     labelHidden?: boolean;
+    orientation?: SliderOrientation;
+    disabled?: boolean;
+    name?: string;
+    /** Mostrar o valor ao lado do rótulo. Padrão: sim. */
+    showValue?: boolean;
+    className?: string;
+    id?: string;
+}
+export interface SliderProps<V extends number | readonly number[] = number | readonly number[]> extends SliderBase {
     value?: V;
     defaultValue?: V;
     /** Chamado a cada passo, com o número (ou a lista, na faixa). */
@@ -149,34 +161,47 @@ export interface SliderProps<V extends number | readonly number[] = number | rea
     step?: number;
     /** O passo do Page Up/Down e do Shift + seta. */
     largeStep?: number;
-    orientation?: SliderOrientation;
-    disabled?: boolean;
-    name?: string;
     format?: Intl.NumberFormatOptions;
     locale?: string;
-    /** Mostrar o valor ao lado do rótulo. Padrão: sim. */
-    showValue?: boolean;
     /** Com dois valores, o nome de cada alça, na ordem ("Mínimo", "Máximo"). */
     thumbLabels?: readonly string[];
-    /** A TRILHA DE COR (0.32.0, ADR-0069), variação deste mesmo Slider: `"hue"` faz dele a trilha do matiz — de 0 a
-     *  360, pintada com o círculo de cores, o pino na cor do valor, o valor em graus, e o nome da cor para o leitor
-     *  de tela. Um valor só. */
-    channel?: "hue";
-    className?: string;
-    id?: string;
+    channel?: undefined;
 }
-export declare function Slider<V extends number | readonly number[]>({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation, disabled, name, format, locale, showValue, thumbLabels, channel, className, id }: SliderProps<V>): React.JSX.Element;
+/** A TRILHA DE COR (0.32.0, ADR-0069), variação deste mesmo Slider: com `channel`, ele anda num canal da cor — e o
+ *  valor passa a ser a COR (hex), como na referência, para várias trilhas repartirem a mesma. */
+export interface SliderColorProps extends SliderBase {
+    /** O canal: `hue`, `saturation`, `brightness`, `lightness`, `red`, `green`, `blue` ou `alpha`. */
+    channel: ColorChannel;
+    /** O espaço de `hue` e `saturation` (`hsb` ou `hsl`); os outros canais já dizem o deles. Padrão: `hsb`. */
+    colorSpace?: ColorSpace;
+    /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`. Controlado. */
+    value?: string;
+    defaultValue?: string;
+    /** Chamado a cada passo, com o hex (`#rrggbb`, ou `#rrggbbaa` com transparência). */
+    onValueChange?: (value: string) => void;
+    /** Chamado ao soltar — o momento de salvar. */
+    onValueCommitted?: (value: string) => void;
+}
+export declare function Slider<V extends number | readonly number[]>(props: SliderBase & (SliderProps<V> | SliderColorProps)): React.JSX.Element;
 export interface ColorAreaProps {
-    /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+    /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`. Controlado. */
     value?: string;
     /** A cor de partida quando você não controla. Padrão: branco. */
     defaultValue?: string;
-    /** Chamado a cada passo, com o hex `#rrggbb`. */
+    /** Chamado a cada passo, com o hex (`#rrggbb`, ou `#rrggbbaa` com transparência). */
     onValueChange?: (value: string) => void;
     /** Chamado ao soltar o ponteiro e a cada tecla — o momento de salvar. */
     onValueCommitted?: (value: string) => void;
+    /** O espaço de cor da área: `hsb` (o padrão), `hsl` ou `rgb`. */
+    colorSpace?: ColorSpace;
+    /** O canal do eixo de lado. Padrão: saturação (HSB e HSL) ou vermelho (RGB). A área não tem alfa. */
+    xChannel?: Exclude<ColorChannel, "alpha">;
+    /** O canal do eixo de cima. Padrão: brilho (HSB), luminosidade (HSL) ou verde (RGB). */
+    yChannel?: Exclude<ColorChannel, "alpha">;
+    /** Pontinhos por cima da área, como na referência — ajudam a ver a posição. */
+    showDots?: boolean;
     disabled?: boolean;
-    /** Vai no formulário como `#rrggbb`. */
+    /** Vai no formulário como hex. */
     name?: string;
     id?: string;
     className?: string;
@@ -184,15 +209,49 @@ export interface ColorAreaProps {
     "aria-labelledby"?: string;
     "aria-describedby"?: string;
 }
-export declare function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, ...resto }: ColorAreaProps): React.JSX.Element;
+export declare function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, colorSpace, xChannel, yChannel, ...resto }: ColorAreaProps): React.JSX.Element;
+export interface ColorFieldProps {
+    /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`; `""` é o campo vazio. Controlado. */
+    value?: string;
+    /** A cor de partida quando você não controla. Sem ela, o campo começa vazio. */
+    defaultValue?: string;
+    /** Chamado ao confirmar (Enter ou sair do campo) e a cada tecla no canal, com o hex — ou `""`, ao limpar. */
+    onValueChange?: (value: string) => void;
+    /** Chamado junto do `onValueChange` — o momento de salvar. */
+    onValueCommitted?: (value: string) => void;
+    /** Um canal só, no lugar do código: `hue`, `saturation`, `brightness`, `lightness`, `red`, `green`, `blue`, `alpha`. */
+    channel?: ColorChannel;
+    /** O espaço de `hue` e `saturation` no modo canal (`hsb` ou `hsl`). Padrão: `hsb`. */
+    colorSpace?: ColorSpace;
+    /** A amostra na frente. Padrão: sim no código, não no canal. */
+    swatch?: boolean;
+    size?: Responsive<FieldSize>;
+    /** `secondary` é o fundo neutro, para o campo dentro de um cartão (o mesmo do `Input`). */
+    variant?: FieldVariant;
+    /** A largura do campo — `"20rem"` ou `"auto"`. Sem ela, 100% da linha, como os outros campos. */
+    width?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    required?: boolean;
+    /** Vai no formulário como hex. */
+    name?: string;
+    placeholder?: string;
+    id?: string;
+    className?: string;
+    "aria-label"?: string;
+    "aria-labelledby"?: string;
+    "aria-describedby"?: string;
+    "aria-invalid"?: boolean | "true" | "false";
+}
+export declare function ColorField({ value, defaultValue, onValueChange, onValueCommitted, channel, colorSpace, swatch, size, variant, width, disabled, readOnly, required, name, placeholder, id, className, ...aria }: ColorFieldProps): React.JSX.Element;
 export interface ColorPickerProps {
     /** O nome, ao lado da amostra no gatilho ("Cor da marca"). Nomeia o gatilho e a janela. */
     label: string;
-    /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+    /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`. Controlado. */
     value?: string;
     /** A cor de partida quando você não controla. Padrão: branco. */
     defaultValue?: string;
-    /** Chamado a cada passo, com o hex `#rrggbb`. */
+    /** Chamado a cada passo, com o hex (`#rrggbb`, ou `#rrggbbaa` com transparência). */
     onValueChange?: (value: string) => void;
     /** Chamado ao soltar, a cada tecla, ao escolher uma amostra e ao confirmar o código — o momento de salvar. */
     onValueCommitted?: (value: string) => void;
@@ -200,13 +259,16 @@ export interface ColorPickerProps {
     swatches?: readonly (string | ColorSwatchOption)[];
     /** `"swatches"`: a paleta fechada — só as amostras e o campo do código. Padrão: `"full"`. */
     variant?: "full" | "swatches";
+    /** O conteúdo da janela, montado por quem usa (no lugar do padrão): `ColorArea`, `Slider` com `channel`,
+     *  `ColorField` e o que mais couber. As peças de cor sem valor próprio usam a cor do seletor. */
+    children?: ReactNode;
     disabled?: boolean;
-    /** Vai no formulário como `#rrggbb`. */
+    /** Vai no formulário como hex. */
     name?: string;
     id?: string;
     className?: string;
 }
-export declare function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant, disabled, name, id, className }: ColorPickerProps): React.JSX.Element;
+export declare function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant, children, disabled, name, id, className }: ColorPickerProps): React.JSX.Element;
 export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className }: {
     length: number;
     value?: string;

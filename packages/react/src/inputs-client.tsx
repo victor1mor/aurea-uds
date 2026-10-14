@@ -15,7 +15,7 @@ import {RadioGroup as BaseRadioGroup} from "@base-ui/react/radio-group";
 import {Radio as BaseRadio} from "@base-ui/react/radio";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis} from "./internal.js";
-import {areaFill, colorName, hsbToRgb, hueTrackBackground, normalizeHex, parseHex, pureHue, rgbToHsb, toHex, type Hsb} from "./color.js";
+import {COLOR_CHANNELS, areaBackground, channelRange, colorName, corToHex, formatChannel, getChannel, hsbToRgb, parseColor, pureHue, setChannel, spaceOf, trackBackground, type ColorChannel, type ColorSpace, type Cor} from "./color.js";
 import {Popover as BasePopover} from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
@@ -24,18 +24,19 @@ import {Popover as BasePopover} from "@base-ui/react/popover";
 import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch, type ColorSwatchOption, type FieldSize, type FieldVariant} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {IconButton} from "./actions.js";
-// ColorArea (0.32.0, ADR-0069) — a ÁREA de cor da referência: o quadrado em que se escolhe a saturação (do
-// começo ao fim da linha) e o brilho (de baixo para cima) de um matiz. Peça NOVA, autorizada pelo Victor ("área
-// de cor como peça nova"). O motor é nosso (ADR-0069, "como o calendário"), no DESENHO acessível da referência,
-// lido no código da biblioteca dela: um grupo com DOIS `input type="range"` escondidos, um por eixo, anunciados
-// como controle 2D, e o valor dito com o NOME da cor. Só um dos dois fica na ordem do Tab (o do eixo que mexeu
-// por último); o outro sai da árvore até a pessoa mexer nele pelo teclado. As teclas são as dela: setas (Shift:
-// passo de 10), Page Up/Down no brilho, Home/End na saturação, invertidas na escrita da direita para a esquerda.
+// A FAMÍLIA DE COR (0.32.0, ADR-0069) — as peças INTERNAS moram aqui, no topo, antes do primeiro export (auxiliar
+// entre exports entra na fatia de outro componente — regra do check 22). As públicas (`ColorArea`, `Slider` com
+// `channel`, `ColorField`, `ColorPicker`) ficam com as irmãs delas, lá embaixo.
 //
-// Por dentro a cor é HSB, e não hex: o hex perde o matiz no cinza e no preto — puxar a saturação a 0 não pode
-// trocar a cor do fundo da área. O `ColorPicker` usa esta peça interna direto, com o matiz dele.
-interface AreaDeCorProps{hsb:Hsb;onHsb:(hsb:Hsb,fim:boolean)=>void;disabled?:boolean;name?:string;id?:string;className?:string;
-  "aria-label"?:string;"aria-labelledby"?:string;"aria-describedby"?:string}
+// A COR DE DENTRO é HSB com alfa (`Cor`, do `color.ts`), e não hex: o hex perde o matiz no cinza e no preto —
+// puxar a saturação a 0 não pode trocar a cor do fundo da área. Os três espaços (RGB, HSL, HSB) e o alfa entram por
+// ela, com as faixas de cada canal iguais às da biblioteca de acessibilidade em que a referência se apoia.
+//
+// A ÁREA (`AreaDeCor`) é o DESENHO acessível da referência, lido no código da biblioteca dela: um grupo com DOIS
+// `input type="range"` escondidos, um por eixo, anunciados como controle 2D, e o valor dito com o NOME da cor. Só um
+// dos dois fica na ordem do Tab (o do eixo que mexeu por último); o outro sai da árvore até a pessoa mexer nele pelo
+// teclado. As teclas são as dela: setas (Shift: o salto do canal), Page Up/Down no eixo de cima, Home/End no de
+// lado, invertidas na escrita da direita para a esquerda.
 const no01=(n:number)=>Math.min(1,Math.max(0,n));
 // COMO A PESSOA CHEGOU AQUI: a última interação foi teclado ou ponteiro? O anel de foco da área é só do teclado, e o
 // foco que chega por código (a janela do `ColorPicker` o põe na área ao abrir; o arrasto o põe no `range`) não diz
@@ -49,7 +50,58 @@ function ouvirModalidade(){
   document.addEventListener("keydown",(e)=>{if(!e.metaKey&&!e.ctrlKey&&!e.altKey)modalidade="teclado";},true);
   document.addEventListener("pointerdown",()=>{modalidade="ponteiro";},true);
 }
-function AreaDeCor({hsb,onHsb,disabled,name,id,className,"aria-label":ariaLabel,"aria-labelledby":ariaLabelledby,"aria-describedby":ariaDescribedby}:AreaDeCorProps){
+
+/** O texto de entrada → a cor de dentro. Hex e `rgb()` não dizem o matiz do cinza: aí vale o matiz (e a saturação)
+ *  da cor de antes. `hsl()`/`hsb()` dizem, e o que veio no texto vale. */
+function corDoTexto(texto:string|undefined,anterior?:Cor):Cor{
+  const nova=texto?parseColor(texto):null;
+  if(!nova)return anterior??{h:0,s:0,b:1,a:1};
+  if(anterior&&(nova.s===0||nova.b===0)&&!/^\s*hs[lb]/i.test(texto!))return {...nova,h:anterior.h,s:nova.b===0?anterior.s:nova.s};
+  return nova;
+}
+
+/** A cor que o `ColorPicker` reparte com as peças de dentro, quando o conteúdo da janela é montado por quem usa
+ *  ("com campos", "com trilhas" — os exemplos da referência). */
+const CorDoSeletor=React.createContext<{cor:Cor;mudar:(c:Cor,fim:boolean)=>void}|null>(null);
+
+/** O estado de cor das peças: a cor de dentro por dentro, hex por fora. Controlado, se o hex que chega é o que a peça
+ *  acabou de mandar, a cor de dentro vale (com o matiz); se é outro, vira cor guardando o matiz de antes no cinza.
+ *  Dentro de um `ColorPicker`, a peça sem valor próprio usa a cor DELE. */
+function useCor(value:string|undefined,defaultValue:string|undefined,onValueChange?:(v:string)=>void,onValueCommitted?:(v:string)=>void):[Cor,(novo:Cor,fim:boolean)=>void]{
+  const doSeletor=React.useContext(CorDoSeletor);
+  const [interno,setInterno]=React.useState<Cor>(()=>corDoTexto(defaultValue));
+  const ultimo=React.useRef<Cor>(interno);
+  let cor=interno;
+  if(value!==undefined){
+    const chegou=parseColor(value);
+    const mesmo=chegou!==null&&corToHex(chegou)===corToHex(ultimo.current);
+    cor=mesmo?ultimo.current:corDoTexto(value,ultimo.current);
+  }
+  ultimo.current=cor;
+  const avisar=(novo:Cor,fim:boolean)=>{const h=corToHex(novo);onValueChange?.(h);if(fim)onValueCommitted?.(h);};
+  if(doSeletor&&value===undefined&&defaultValue===undefined)return [doSeletor.cor,(novo,fim)=>{doSeletor.mudar(novo,fim);avisar(novo,fim);}];
+  const mudar=(novo:Cor,fim:boolean)=>{
+    ultimo.current=novo;
+    // SEMPRE, e não só sem controle: no cinza o hex não muda com o matiz, o app devolve o MESMO valor e nada
+    // redesenharia — a trilha mexia e a área não (o teste do `ColorPicker` pegou). Este estado é o que redesenha;
+    // com controle, quem decide continua sendo o `value` (acima).
+    setInterno(novo);
+    avisar(novo,fim);
+  };
+  return [cor,mudar];
+}
+
+/** O espaço de uma peça de cor: o pedido, ou o que os canais exigem (vermelho/verde/azul no RGB, luminosidade no
+ *  HSL, brilho no HSB). */
+function espacoDosCanais(pedido:ColorSpace|undefined,...canais:ColorChannel[]):ColorSpace{
+  if(pedido)return pedido;
+  for(const ch of canais){const e=spaceOf(ch);if(e!=="hsb"||ch==="brightness")return e;}
+  return "hsb";
+}
+
+interface AreaDeCorProps{cor:Cor;onCor:(c:Cor,fim:boolean)=>void;space:ColorSpace;x:ColorChannel;y:ColorChannel;showDots?:boolean;
+  disabled?:boolean;name?:string;id?:string;className?:string;"aria-label"?:string;"aria-labelledby"?:string;"aria-describedby"?:string}
+function AreaDeCor({cor,onCor,space,x:canalX,y:canalY,showDots,disabled,name,id,className,"aria-label":ariaLabel,"aria-labelledby":ariaLabelledby,"aria-describedby":ariaDescribedby}:AreaDeCorProps){
   const s=useAureaStrings();
   const rtl=useDirection()==="rtl";
   const caixa=React.useRef<HTMLDivElement>(null);
@@ -60,21 +112,28 @@ function AreaDeCor({hsb,onHsb,disabled,name,id,className,"aria-label":ariaLabel,
   // O anel de foco é do TECLADO, como na referência: o foco que o arrasto põe no `range` não acende o anel.
   const [peloPonteiro,setPeloPonteiro]=React.useState(false);
   React.useEffect(ouvirModalidade,[]);
-  const rgb=hsbToRgb(hsb),hex=toHex(rgb),nome=colorName(rgb,s);
-  const pct=(n:number)=>Math.round(n*100);
+  const fx=channelRange(canalX),fy=channelRange(canalY);
+  const canalZ=COLOR_CHANNELS[space].find((ch)=>ch!==canalX&&ch!==canalY)!;
+  const vx=getChannel(cor,canalX,space),vy=getChannel(cor,canalY,space);
+  const px=(vx-fx.min)/(fx.max-fx.min),py=(vy-fy.min)/(fy.max-fy.min);
+  const hex=corToHex({...cor,a:1}),nome=colorName(hsbToRgb(cor),s);
   // Antes de mexer, o leitor de tela ouve os três canais e o nome; depois de mexer pelo teclado, só o canal que
   // mudou e o nome — como na referência (o resto ele já ouviu).
+  const fala=(ch:ColorChannel,v:number)=>`${s.colorChannel[ch]} ${formatChannel(ch,v)}`;
   const textoDo=(eixo:"x"|"y")=>{
-    const sat=`${s.colorChannel.saturation} ${pct(hsb.s)}%`,bri=`${s.colorChannel.brightness} ${pct(hsb.b)}%`,mat=`${s.colorChannel.hue} ${Math.round(hsb.h)}°`;
-    const partes=pelaTecla?[eixo==="x"?sat:bri]:eixo==="x"?[sat,bri,mat]:[bri,sat,mat];
+    const a=fala(canalX,vx),b=fala(canalY,vy),c=fala(canalZ,getChannel(cor,canalZ,space));
+    const partes=pelaTecla?[eixo==="x"?a:b]:eixo==="x"?[a,b,c]:[b,a,c];
     return `${partes.join(", ")}, ${nome}`;
   };
   const rotulo=ariaLabel?`${ariaLabel}, ${s.colorPicker}`:ariaLabelledby?undefined:s.colorPicker;
-  const pelaPosicao=(px:number,py:number,fim:boolean)=>{
+  // Na grade do passo do canal: somar passos em ponto flutuante acumula erro.
+  const naGrade=(v:number,f:{min:number;max:number;step:number})=>Math.round(Math.min(f.max,Math.max(f.min,v))/f.step)*f.step;
+  const com=(nx:number,ny:number)=>setChannel(setChannel(cor,canalX,nx,space),canalY,ny,space);
+  const pelaPosicao=(cx:number,cy:number,fim:boolean)=>{
     const r=caixa.current!.getBoundingClientRect();
     if(!r.width||!r.height)return;
-    const x=no01((px-r.left)/r.width),y=no01((py-r.top)/r.height);
-    onHsb({h:hsb.h,s:rtl?1-x:x,b:1-y},fim);
+    const x=no01((cx-r.left)/r.width),y=no01((cy-r.top)/r.height);
+    onCor(com(fx.min+(rtl?1-x:x)*(fx.max-fx.min),fy.min+(1-y)*(fy.max-fy.min)),fim);
   };
   const focar=(eixo:"x"|"y")=>{(eixo==="x"?inX:inY).current?.focus({preventScroll:true});setFocado(eixo);};
   const aoApertar=(e:React.PointerEvent<HTMLDivElement>)=>{
@@ -88,82 +147,88 @@ function AreaDeCor({hsb,onHsb,disabled,name,id,className,"aria-label":ariaLabel,
   const aoSoltar=(e:React.PointerEvent<HTMLDivElement>)=>{if(!arrastando)return;setArrastando(false);pelaPosicao(e.clientX,e.clientY,true);};
   const aoTeclar=(e:React.KeyboardEvent<HTMLDivElement>)=>{
     if(disabled)return;
-    const passo=e.shiftKey?0.1:0.01,pagina=0.1,frente=rtl?-1:1;
-    let x=hsb.s,y=hsb.b,eixo:"x"|"y";
+    const frente=rtl?-1:1,sx=e.shiftKey?fx.page:fx.step,sy=e.shiftKey?fy.page:fy.step;
+    let nx=vx,ny=vy,eixo:"x"|"y";
     switch(e.key){
-      case "ArrowRight":x+=passo*frente;eixo="x";break;
-      case "ArrowLeft":x-=passo*frente;eixo="x";break;
-      case "ArrowUp":y+=passo;eixo="y";break;
-      case "ArrowDown":y-=passo;eixo="y";break;
-      case "PageUp":y+=pagina;eixo="y";break;
-      case "PageDown":y-=pagina;eixo="y";break;
-      case "Home":x-=pagina*frente;eixo="x";break;
-      case "End":x+=pagina*frente;eixo="x";break;
+      case "ArrowRight":nx+=sx*frente;eixo="x";break;
+      case "ArrowLeft":nx-=sx*frente;eixo="x";break;
+      case "ArrowUp":ny+=sy;eixo="y";break;
+      case "ArrowDown":ny-=sy;eixo="y";break;
+      case "PageUp":ny+=fy.page;eixo="y";break;
+      case "PageDown":ny-=fy.page;eixo="y";break;
+      case "Home":nx-=fx.page*frente;eixo="x";break;
+      case "End":nx+=fx.page*frente;eixo="x";break;
       default:return;
     }
     e.preventDefault();
     setPelaTecla(true);setPeloPonteiro(false);focar(eixo);
-    // Na grade de 1%: somar 0,01 em ponto flutuante acumula erro, e 0,3 viraria 0,30000000000000004.
-    const grade=(n:number)=>Math.round(no01(n)*100)/100;
-    onHsb({h:hsb.h,s:grade(x),b:grade(y)},true);
+    onCor(com(naGrade(nx,fx),naGrade(ny,fy)),true);
   };
   // O motor do navegador também muda o `range` (o leitor de tela pede "aumentar"): o valor chega pelo `onChange`.
   const aoMudar=(eixo:"x"|"y")=>(e:React.ChangeEvent<HTMLInputElement>)=>{
     setPelaTecla(true);
-    const v=Number(e.target.value)/100;
-    onHsb(eixo==="x"?{...hsb,s:v}:{...hsb,b:v},true);
+    onCor(setChannel(cor,eixo==="x"?canalX:canalY,Number(e.target.value),space),true);
   };
   const escondido=(eixo:"x"|"y")=>focado===null?eixo==="y":focado!==eixo;
+  const fundo=areaBackground(cor,space,canalX,canalY,rtl);
   return <div ref={caixa} role="group" id={id} aria-label={ariaLabel?rotulo:undefined} aria-labelledby={ariaLabelledby}
     aria-disabled={disabled||undefined} data-disabled={disabled?"":undefined} data-dragging={arrastando?"":undefined}
-    className={cx("color-area",className)} style={{"--color-area-fill":areaFill(hsb.h,rtl),"--color-area-thumb":hex} as React.CSSProperties}
+    className={cx("color-area",showDots&&"color-area-dots",className)}
+    style={{"--color-area-fill":fundo.background,"--color-area-blend":fundo.blend??"normal","--color-area-thumb":hex} as React.CSSProperties}
     onPointerDown={aoApertar} onPointerMove={aoMover} onPointerUp={aoSoltar} onPointerCancel={aoSoltar} onKeyDown={aoTeclar}>
-    <div className="color-area-thumb" data-focus-visible={focado&&!peloPonteiro?"":undefined} style={{insetInlineStart:`${hsb.s*100}%`,insetBlockStart:`${(1-hsb.b)*100}%`}}>
-      {(["x","y"] as const).map((eixo)=><input key={eixo} ref={eixo==="x"?inX:inY} type="range" className="color-area-input"
-        min={0} max={100} step={1} value={pct(eixo==="x"?hsb.s:hsb.b)} disabled={disabled}
-        aria-label={rotulo} aria-labelledby={rotulo?undefined:ariaLabelledby} aria-describedby={ariaDescribedby}
-        aria-roledescription={s.colorArea2D} aria-valuetext={textoDo(eixo)} aria-orientation={eixo==="x"?"horizontal":"vertical"}
-        tabIndex={escondido(eixo)?-1:undefined} aria-hidden={escondido(eixo)&&!pelaTecla?true:undefined}
-        onChange={aoMudar(eixo)} onFocus={()=>{setFocado(eixo);setPeloPonteiro(modalidade==="ponteiro");}}
-        onBlur={(e)=>{if(!caixa.current?.contains(e.relatedTarget as Node|null)){setFocado(null);setPeloPonteiro(false);}}}/>)}
+    <div className="color-area-thumb" data-focus-visible={focado&&!peloPonteiro?"":undefined} style={{insetInlineStart:`${px*100}%`,insetBlockStart:`${(1-py)*100}%`}}>
+      {(["x","y"] as const).map((eixo)=>{
+        const f=eixo==="x"?fx:fy;
+        return <input key={eixo} ref={eixo==="x"?inX:inY} type="range" className="color-area-input"
+          min={f.min} max={f.max} step={f.step} value={naGrade(eixo==="x"?vx:vy,f)} disabled={disabled}
+          aria-label={rotulo} aria-labelledby={rotulo?undefined:ariaLabelledby} aria-describedby={ariaDescribedby}
+          aria-roledescription={s.colorArea2D} aria-valuetext={textoDo(eixo)} aria-orientation={eixo==="x"?"horizontal":"vertical"}
+          tabIndex={escondido(eixo)?-1:undefined} aria-hidden={escondido(eixo)&&!pelaTecla?true:undefined}
+          onChange={aoMudar(eixo)} onFocus={()=>{setFocado(eixo);setPeloPonteiro(modalidade==="ponteiro");}}
+          onBlur={(e)=>{if(!caixa.current?.contains(e.relatedTarget as Node|null)){setFocado(null);setPeloPonteiro(false);}}}/>;
+      })}
     </div>
-    {name&&<input type="hidden" name={name} value={hex}/>}
+    {name&&<input type="hidden" name={name} value={corToHex(cor)}/>}
   </div>;
 }
 
-/** O hex de entrada → HSB, guardando o matiz (e a saturação) do anterior quando a cor nova é cinza ou preta. */
-function hsbDoHex(hex:string|undefined,anterior?:Hsb):Hsb{
-  const rgb=hex?parseHex(hex):null;
-  if(!rgb)return anterior??{h:0,s:0,b:1};
-  const novo=rgbToHsb(rgb);
-  if(anterior&&(novo.s===0||novo.b===0))return {h:anterior.h,s:novo.b===0?anterior.s:novo.s,b:novo.b};
-  return novo;
-}
-
-/** O estado de cor do `ColorArea` e do `ColorPicker`: HSB por dentro, hex por fora. Controlado, se o hex que chega é
- *  o que a peça acabou de mandar, o HSB de dentro vale (com o matiz); se é outro, vira HSB guardando o matiz do
- *  anterior quando a cor nova é cinza ou preta. */
-function useCorEmHsb(value:string|undefined,defaultValue:string|undefined,onValueChange?:(v:string)=>void,onValueCommitted?:(v:string)=>void):[Hsb,(novo:Hsb,fim:boolean)=>void]{
-  const [interno,setInterno]=React.useState<Hsb>(()=>hsbDoHex(defaultValue));
-  const ultimo=React.useRef<Hsb>(interno);
-  let hsb=interno;
-  if(value!==undefined){
-    const chegou=parseHex(value);
-    const mesmo=chegou!==null&&toHex(chegou)===toHex(hsbToRgb(ultimo.current));
-    hsb=mesmo?ultimo.current:hsbDoHex(value,ultimo.current);
-  }
-  ultimo.current=hsb;
-  const mudar=(novo:Hsb,fim:boolean)=>{
-    ultimo.current=novo;
-    // SEMPRE, e não só sem controle: no cinza o hex não muda com o matiz, o app devolve o MESMO valor e nada
-    // redesenharia — a trilha mexia e a área não (o teste do `ColorPicker` pegou). Este estado é o que redesenha;
-    // com controle, quem decide continua sendo o `value` (acima).
-    setInterno(novo);
-    const h=toHex(hsbToRgb(novo));
-    onValueChange?.(h);
-    if(fim)onValueCommitted?.(h);
+// A TRILHA DE COR (`TrilhaDeCor`) — o `Slider` da Aurea (o motor dele, Base UI) andando num canal da cor. O valor de
+// fora é a COR, como na referência (várias trilhas repartem a mesma); por dentro o motor anda no número do canal, na
+// faixa dele. A trilha pinta o canal de ponta a ponta (a cor chapada nas folgas, pelas paradas); o alfa ganha o
+// xadrez embaixo. O leitor de tela ouve o canal e o nome da cor (no matiz, o nome do matiz puro; no alfa, só o
+// número — como na referência).
+interface TrilhaDeCorProps{cor:Cor;onCor:(c:Cor,fim:boolean)=>void;channel:ColorChannel;colorSpace?:ColorSpace;label:ReactNode;labelHidden?:boolean;
+  showValue?:boolean;orientation?:SliderOrientation;disabled?:boolean;name?:string;className?:string;id?:string}
+function TrilhaDeCor({cor,onCor,channel,colorSpace,label,labelHidden,showValue=true,orientation="horizontal",disabled,name,className,id}:TrilhaDeCorProps){
+  const s=useAureaStrings();
+  const rtl=useDirection()==="rtl";
+  const space=spaceOf(channel,colorSpace);
+  const {min,max,step,page}=channelRange(channel);
+  const v=getChannel(cor,channel,space);
+  const idDoRotulo=React.useId();
+  const fundo=trackBackground(cor,channel,space,orientation==="vertical"?"to top":rtl?"to left":"to right");
+  const pino=channel==="hue"?pureHue(v):channel==="alpha"?corToHex(cor):corToHex({...cor,a:1});
+  const falado=(n:number)=>{
+    const base=`${s.colorChannel[channel]} ${formatChannel(channel,n)}`;
+    if(channel==="alpha")return base;
+    return `${base}, ${colorName(hsbToRgb(channel==="hue"?{h:n,s:1,b:1}:setChannel(cor,channel,n,space)),s)}`;
   };
-  return [hsb,mudar];
+  return <BaseSlider.Root id={id} aria-labelledby={idDoRotulo} aria-disabled={disabled||undefined} value={v}
+    onValueChange={(n:number)=>onCor(setChannel(cor,channel,n,space),false)} onValueCommitted={(n:number)=>onCor(setChannel(cor,channel,n,space),true)}
+    min={min} max={max} step={step} largeStep={page} orientation={orientation} disabled={disabled}
+    className={cx("slider","slider-color",channel==="alpha"&&"slider-alpha",className)}
+    style={{"--slider-track-fill":fundo,"--slider-thumb-color":pino} as React.CSSProperties}>
+    <div id={idDoRotulo} className={labelHidden?"sr-only":"slider-label"}>{label}</div>
+    {/* O valor é escrito AQUI, e não pelo `Intl` do motor: ele formata na língua do ambiente, e o servidor (Node em
+        pt-BR: "210 °") e o navegador (en: "210°") escreveriam diferente — a hidratação cairia. */}
+    {showValue&&<BaseSlider.Value className="slider-output">{(_:readonly string[],valores:readonly number[])=>formatChannel(channel,valores[0]??v)}</BaseSlider.Value>}
+    <BaseSlider.Control className="slider-control">
+      <BaseSlider.Track className="slider-track">
+        <BaseSlider.Thumb className="slider-thumb" aria-labelledby={idDoRotulo} getAriaValueText={(_f:string,n:number)=>falado(n)}/>
+      </BaseSlider.Track>
+    </BaseSlider.Control>
+    {name&&<input type="hidden" name={name} value={corToHex(cor)}/>}
+  </BaseSlider.Root>;
 }
 
 // FileInput mora em arquivo próprio (132 linhas — upload real, aborto, progresso) e é público
@@ -246,7 +311,7 @@ function elementoRotulavel(tipo:ReactElement["type"]):boolean{
   // reprovava no axe com "Form elements must have labels". Fora desta lista o Field vira GRUPO e
   // não pendura `htmlFor`, então o <input> de dentro ficava sem nome. Ele qualifica pela mesma
   // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
-  return ([Input,Select,Textarea,SearchField,PasswordField,Checkbox,Radio,Switch,Range,Combobox,MultiCombobox] as unknown[]).includes(tipo)
+  return ([Input,Select,Textarea,SearchField,PasswordField,Checkbox,Radio,Switch,Range,Combobox,MultiCombobox,ColorField] as unknown[]).includes(tipo)
     // os que moram fora do pacote principal e se registraram (o `DatePicker`, 0.32.0)
     ||(typeof tipo==="function"&&controlesRotulaveis.has(tipo));
 }
@@ -667,9 +732,16 @@ export function TagGroup({label,labelHidden,description,errorMessage,items,selec
 // já na marcação — ver abaixo). Com dois valores,
 // cada alça precisa do próprio nome ("Mínimo", "Máximo") — `thumbLabels`.
 export type SliderOrientation="horizontal"|"vertical";
-export interface SliderProps<V extends number|readonly number[]=number|readonly number[]>{
+/** O que os dois modos do Slider têm em comum (o número e a cor). É a base que o leitor da API segue em
+ *  `base & (a | b)` — com a união sozinha, ele não acha prop nenhuma (medido no `ColorSwatch`, 13/10/2026). */
+export interface SliderBase{
   /** O rótulo. Obrigatório: é o nome das alças. `labelHidden` o tira da tela e deixa para o leitor de tela. */
   label:ReactNode;labelHidden?:boolean;
+  orientation?:SliderOrientation;disabled?:boolean;name?:string;
+  /** Mostrar o valor ao lado do rótulo. Padrão: sim. */
+  showValue?:boolean;
+  className?:string;id?:string}
+export interface SliderProps<V extends number|readonly number[]=number|readonly number[]> extends SliderBase{
   value?:V;defaultValue?:V;
   /** Chamado a cada passo, com o número (ou a lista, na faixa). */
   onValueChange?:(value:V)=>void;
@@ -678,34 +750,34 @@ export interface SliderProps<V extends number|readonly number[]=number|readonly 
   min?:number;max?:number;step?:number;
   /** O passo do Page Up/Down e do Shift + seta. */
   largeStep?:number;
-  orientation?:SliderOrientation;disabled?:boolean;name?:string;
   format?:Intl.NumberFormatOptions;locale?:string;
-  /** Mostrar o valor ao lado do rótulo. Padrão: sim. */
-  showValue?:boolean;
   /** Com dois valores, o nome de cada alça, na ordem ("Mínimo", "Máximo"). */
   thumbLabels?:readonly string[];
-  /** A TRILHA DE COR (0.32.0, ADR-0069), variação deste mesmo Slider: `"hue"` faz dele a trilha do matiz — de 0 a
-   *  360, pintada com o círculo de cores, o pino na cor do valor, o valor em graus, e o nome da cor para o leitor
-   *  de tela. Um valor só. */
-  channel?:"hue";
-  className?:string;id?:string}
-export function Slider<V extends number|readonly number[]>({label,labelHidden,value,defaultValue,onValueChange,onValueCommitted,min,max,step,largeStep,orientation="horizontal",disabled,name,format,locale,showValue=true,thumbLabels,channel,className,id}:SliderProps<V>){
+  channel?:undefined}
+/** A TRILHA DE COR (0.32.0, ADR-0069), variação deste mesmo Slider: com `channel`, ele anda num canal da cor — e o
+ *  valor passa a ser a COR (hex), como na referência, para várias trilhas repartirem a mesma. */
+export interface SliderColorProps extends SliderBase{
+  /** O canal: `hue`, `saturation`, `brightness`, `lightness`, `red`, `green`, `blue` ou `alpha`. */
+  channel:ColorChannel;
+  /** O espaço de `hue` e `saturation` (`hsb` ou `hsl`); os outros canais já dizem o deles. Padrão: `hsb`. */
+  colorSpace?:ColorSpace;
+  /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`. Controlado. */
+  value?:string;defaultValue?:string;
+  /** Chamado a cada passo, com o hex (`#rrggbb`, ou `#rrggbbaa` com transparência). */
+  onValueChange?:(value:string)=>void;
+  /** Chamado ao soltar — o momento de salvar. */
+  onValueCommitted?:(value:string)=>void}
+export function Slider<V extends number|readonly number[]>(props:SliderBase&(SliderProps<V>|SliderColorProps)){
+  return props.channel?<SliderDeCor {...props as SliderColorProps}/>:<SliderDeNumero {...props as SliderProps<V>}/>;
+}
+function SliderDeCor({value,defaultValue,onValueChange,onValueCommitted,...resto}:SliderColorProps){
+  const [cor,mudar]=useCor(value,defaultValue,onValueChange,onValueCommitted);
+  return <TrilhaDeCor {...resto} cor={cor} onCor={mudar}/>;
+}
+function SliderDeNumero<V extends number|readonly number[]>({label,labelHidden,value,defaultValue,onValueChange,onValueCommitted,min,max,step,largeStep,orientation="horizontal",disabled,name,format,locale,showValue=true,thumbLabels,className,id}:SliderProps<V>){
   // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
   const atual=value??defaultValue;
   const alcas=Array.isArray(atual)?atual.length:1;
-  // A trilha de cor precisa do valor de AGORA para pintar o pino; sem controle, o motor guarda o valor, então
-  // ele é acompanhado aqui também.
-  const s=useAureaStrings();
-  const rtl=useDirection()==="rtl";
-  const ehMatiz=channel==="hue";
-  const [matizSolto,setMatizSolto]=React.useState(typeof defaultValue==="number"?defaultValue:0);
-  const matiz=typeof value==="number"?value:matizSolto;
-  const cor=ehMatiz?{
-    min:min??0,max:max??360,step:step??1,format,
-    style:{"--slider-track-fill":hueTrackBackground(orientation==="vertical"?"to top":rtl?"to left":"to right"),
-      "--slider-thumb-color":pureHue(matiz)} as React.CSSProperties,
-    valorFalado:(_f:string,v:number)=>`${s.colorChannel.hue} ${Math.round(v)}°, ${colorName(hsbToRgb({h:v,s:1,b:1}),s)}`,
-  }:null;
   // O NOME DA ALÇA SAI NA MARCAÇÃO. O motor liga o `<input>` de cada alça ao rótulo por um id que ele
   // só conhece DEPOIS de montar — no HTML do servidor (e no catálogo, que é HTML parado) as alças saíam
   // sem nome, e o axe do catálogo acusou as cinco. O `Slider.Label` do motor não aceita id, então o
@@ -713,58 +785,157 @@ export function Slider<V extends number|readonly number[]>({label,labelHidden,va
   // letra esmaecida do rótulo e do valor era lida como texto de contraste baixo, e não como peça desligada.
   const idDoRotulo=React.useId();
   return <BaseSlider.Root id={id} name={name} aria-labelledby={idDoRotulo} aria-disabled={disabled||undefined} value={value as number|readonly number[]|undefined} defaultValue={defaultValue as number|readonly number[]|undefined}
-    onValueChange={onValueChange||ehMatiz?(v:unknown)=>{if(ehMatiz&&typeof v==="number")setMatizSolto(v);onValueChange?.(v as V);}:undefined} onValueCommitted={onValueCommitted?(v:unknown)=>onValueCommitted(v as V):undefined}
-    min={cor?.min??min} max={cor?.max??max} step={cor?.step??step} largeStep={largeStep} orientation={orientation} disabled={disabled} format={cor?.format??format} locale={locale}
-    className={cx("slider",ehMatiz&&"slider-hue",className)} style={cor?.style}>
+    onValueChange={onValueChange?(v:unknown)=>onValueChange(v as V):undefined} onValueCommitted={onValueCommitted?(v:unknown)=>onValueCommitted(v as V):undefined}
+    min={min} max={max} step={step} largeStep={largeStep} orientation={orientation} disabled={disabled} format={format} locale={locale}
+    className={cx("slider",className)}>
     <div id={idDoRotulo} className={labelHidden?"sr-only":"slider-label"}>{label}</div>
-    {/* Na trilha de cor o grau é escrito AQUI, e não pelo `Intl` do motor: ele formata na língua do ambiente, e o
-        servidor (Node em pt-BR: "210 °") e o navegador (en: "210°") escreveriam diferente — a hidratação cairia. */}
-    {showValue&&<BaseSlider.Value className="slider-output">{ehMatiz?(_:readonly string[],valores:readonly number[])=>`${Math.round(valores[0]??0)}°`:undefined}</BaseSlider.Value>}
+    {showValue&&<BaseSlider.Value className="slider-output"/>}
     <BaseSlider.Control className="slider-control">
       <BaseSlider.Track className="slider-track">
-        {!ehMatiz&&<BaseSlider.Indicator className="slider-fill"/>}
-        {Array.from({length:alcas},(_,i)=><BaseSlider.Thumb key={i} index={i} className="slider-thumb" getAriaLabel={thumbLabels?()=>thumbLabels[i]??"":undefined} aria-labelledby={thumbLabels?undefined:idDoRotulo} getAriaValueText={cor?.valorFalado}/>)}
+        <BaseSlider.Indicator className="slider-fill"/>
+        {Array.from({length:alcas},(_,i)=><BaseSlider.Thumb key={i} index={i} className="slider-thumb" getAriaLabel={thumbLabels?()=>thumbLabels[i]??"":undefined} aria-labelledby={thumbLabels?undefined:idDoRotulo}/>)}
       </BaseSlider.Track>
     </BaseSlider.Control>
   </BaseSlider.Root>;
 }
 
-// ColorArea (0.32.0, ADR-0069): a peça interna `AreaDeCor` e o `hsbDoHex` moram no TOPO do arquivo, antes do
-// primeiro export — auxiliar entre exports entra na fatia de outro componente (regra do check 22).
+// ColorArea (0.32.0, ADR-0069): a peça interna `AreaDeCor` mora no TOPO do arquivo, antes do primeiro export —
+// auxiliar entre exports entra na fatia de outro componente (regra do check 22).
 export interface ColorAreaProps{
-  /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+  /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`. Controlado. */
   value?:string;
   /** A cor de partida quando você não controla. Padrão: branco. */
   defaultValue?:string;
-  /** Chamado a cada passo, com o hex `#rrggbb`. */
+  /** Chamado a cada passo, com o hex (`#rrggbb`, ou `#rrggbbaa` com transparência). */
   onValueChange?:(value:string)=>void;
   /** Chamado ao soltar o ponteiro e a cada tecla — o momento de salvar. */
   onValueCommitted?:(value:string)=>void;
+  /** O espaço de cor da área: `hsb` (o padrão), `hsl` ou `rgb`. */
+  colorSpace?:ColorSpace;
+  /** O canal do eixo de lado. Padrão: saturação (HSB e HSL) ou vermelho (RGB). A área não tem alfa. */
+  xChannel?:Exclude<ColorChannel,"alpha">;
+  /** O canal do eixo de cima. Padrão: brilho (HSB), luminosidade (HSL) ou verde (RGB). */
+  yChannel?:Exclude<ColorChannel,"alpha">;
+  /** Pontinhos por cima da área, como na referência — ajudam a ver a posição. */
+  showDots?:boolean;
   disabled?:boolean;
-  /** Vai no formulário como `#rrggbb`. */
+  /** Vai no formulário como hex. */
   name?:string;
   id?:string;className?:string;
   "aria-label"?:string;"aria-labelledby"?:string;"aria-describedby"?:string}
-export function ColorArea({value,defaultValue,onValueChange,onValueCommitted,...resto}:ColorAreaProps){
-  const [hsb,mudar]=useCorEmHsb(value,defaultValue,onValueChange,onValueCommitted);
-  return <AreaDeCor {...resto} hsb={hsb} onHsb={mudar}/>;
+const EIXOS_PADRAO:Record<ColorSpace,[ColorChannel,ColorChannel]>={hsb:["saturation","brightness"],hsl:["saturation","lightness"],rgb:["red","green"]};
+export function ColorArea({value,defaultValue,onValueChange,onValueCommitted,colorSpace,xChannel,yChannel,...resto}:ColorAreaProps){
+  const [cor,mudar]=useCor(value,defaultValue,onValueChange,onValueCommitted);
+  const space=espacoDosCanais(colorSpace,...[xChannel,yChannel].filter((c):c is Exclude<ColorChannel,"alpha">=>!!c));
+  const [x,y]=[xChannel??EIXOS_PADRAO[space][0],yChannel??EIXOS_PADRAO[space][1]];
+  return <AreaDeCor {...resto} cor={cor} onCor={mudar} space={space} x={x} y={y}/>;
+}
+
+// ColorField (0.32.0, ADR-0069 — o Victor, 14/10/2026: "Pode, componente novo") — o campo de cor da referência: o
+// `InputGroup` com a amostra na frente e o `Input` da Aurea (as mesmas peles: `size`, `variant`), como o
+// `SearchField`. Dentro do `Field`, o rótulo, a descrição e o erro são os dele. Dois modos, como na referência:
+//   • o CÓDIGO (o padrão): aceita hex, `rgb()`, `hsl()` e `hsb()`; vale no Enter ou ao sair do campo (como o
+//     código do `ColorPicker`); texto que não é cor VOLTA ao de antes; texto vazio LIMPA (avisa com "").
+//   • UM CANAL (`channel`): o número do canal, na faixa dele, com as setas, Page Up/Down e Home/End — anunciado
+//     como campo numérico (`spinbutton`), com o valor escrito ("208°", "80%").
+// Dentro de um `ColorPicker`, sem valor próprio, ele reparte a cor do seletor.
+export interface ColorFieldProps{
+  /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`; `""` é o campo vazio. Controlado. */
+  value?:string;
+  /** A cor de partida quando você não controla. Sem ela, o campo começa vazio. */
+  defaultValue?:string;
+  /** Chamado ao confirmar (Enter ou sair do campo) e a cada tecla no canal, com o hex — ou `""`, ao limpar. */
+  onValueChange?:(value:string)=>void;
+  /** Chamado junto do `onValueChange` — o momento de salvar. */
+  onValueCommitted?:(value:string)=>void;
+  /** Um canal só, no lugar do código: `hue`, `saturation`, `brightness`, `lightness`, `red`, `green`, `blue`, `alpha`. */
+  channel?:ColorChannel;
+  /** O espaço de `hue` e `saturation` no modo canal (`hsb` ou `hsl`). Padrão: `hsb`. */
+  colorSpace?:ColorSpace;
+  /** A amostra na frente. Padrão: sim no código, não no canal. */
+  swatch?:boolean;
+  size?:Responsive<FieldSize>;
+  /** `secondary` é o fundo neutro, para o campo dentro de um cartão (o mesmo do `Input`). */
+  variant?:FieldVariant;
+  /** A largura do campo — `"20rem"` ou `"auto"`. Sem ela, 100% da linha, como os outros campos. */
+  width?:string;
+  disabled?:boolean;readOnly?:boolean;required?:boolean;
+  /** Vai no formulário como hex. */
+  name?:string;
+  placeholder?:string;
+  id?:string;className?:string;
+  "aria-label"?:string;"aria-labelledby"?:string;"aria-describedby"?:string;"aria-invalid"?:boolean|"true"|"false"}
+export function ColorField({value,defaultValue,onValueChange,onValueCommitted,channel,colorSpace,swatch,size,variant,width,disabled,readOnly,required,name,placeholder,id,className,...aria}:ColorFieldProps){
+  const s=useAureaStrings();
+  const doSeletor=React.useContext(CorDoSeletor);
+  const [cor,mudar]=useCor(value===""?undefined:value,defaultValue,onValueChange,onValueCommitted);
+  // Vazio: o valor "" de fora, ou sem valor nenhum e ainda não escrito (o campo da referência começa vazio).
+  const [escrito,setEscrito]=React.useState(defaultValue!==undefined);
+  const vazio=!doSeletor&&(value!==undefined?value==="":!escrito);
+  const [rascunho,setRascunho]=React.useState<string|null>(null);
+  const canal=channel;
+  const space=canal?spaceOf(canal,colorSpace):"hsb";
+  const faixa=canal?channelRange(canal):null;
+  const v=canal?getChannel(cor,canal,space):0;
+  const mostrado=vazio?"":canal?formatChannel(canal,v):corToHex(cor);
+  const confirmar=()=>{
+    if(rascunho===null)return;
+    const t=rascunho.trim();
+    setRascunho(null);
+    if(t===""){
+      if(canal)return;
+      setEscrito(false);onValueChange?.("");onValueCommitted?.("");return;
+    }
+    if(canal){
+      const n=Number(t.replace(/[°%\s]/g,"").replace(",","."));
+      if(!Number.isFinite(n))return;
+      mudar(setChannel(cor,canal,canal==="alpha"&&(n>1||/%/.test(t))?n/100:n,space),true);
+      return;
+    }
+    const nova=parseColor(t);
+    if(!nova)return;
+    setEscrito(true);
+    mudar(corDoTexto(t,cor),true);
+  };
+  const aoTeclar=(e:React.KeyboardEvent<HTMLInputElement>)=>{
+    if(e.key==="Enter"){e.preventDefault();confirmar();return;}
+    if(!canal||!faixa||disabled||readOnly)return;
+    const passo=e.key==="ArrowUp"?faixa.step:e.key==="ArrowDown"?-faixa.step:e.key==="PageUp"?faixa.page:e.key==="PageDown"?-faixa.page:0;
+    const alvo=e.key==="Home"?faixa.min:e.key==="End"?faixa.max:passo?v+passo:null;
+    if(alvo===null)return;
+    e.preventDefault();
+    setRascunho(null);
+    mudar(setChannel(cor,canal,Math.round(alvo/faixa.step)*faixa.step,space),true);
+  };
+  const comAmostra=swatch??!canal;
+  return <InputGroup className={className} width={width}>
+    {comAmostra&&<InputGroupAddon><ColorSwatch color={vazio?"transparent":corToHex(cor)} size="sm" aria-hidden="true"/></InputGroupAddon>}
+    <Input id={id} size={size} variant={variant} value={rascunho??mostrado} placeholder={placeholder} disabled={disabled} readOnly={readOnly}
+      required={required} spellCheck={false} autoComplete="off" inputMode={canal?"decimal":undefined}
+      role={canal?"spinbutton":undefined} aria-valuenow={canal?v:undefined} aria-valuemin={faixa?.min} aria-valuemax={faixa?.max}
+      aria-valuetext={canal?`${formatChannel(canal,v)}, ${colorName(hsbToRgb(cor),s)}`:undefined}
+      {...aria} onChange={(e)=>setRascunho(e.target.value)} onBlur={confirmar} onKeyDown={aoTeclar}/>
+    {name&&<input type="hidden" name={name} value={vazio?"":corToHex(cor)}/>}
+  </InputGroup>;
 }
 
 // ColorPicker (0.32.0, ADR-0069 — o Victor: "ColorPicker componente") — o seletor de cor da referência: o gatilho
 // é a amostra com o nome; a janela traz a área, a trilha do matiz e o CAMPO DO CÓDIGO, que está sempre lá (o
 // Victor: "sempre com campo do código e teclado" — baixa visão). Com `swatches`, as amostras também. A variação
 // `variant="swatches"` é a "C": a paleta fechada — só as amostras e o código, sem a área e a trilha.
-// As peças são as da Aurea: a área (`AreaDeCor`, o HSB direto, para o matiz não se perder no cinza), o `Slider`
-// com `channel="hue"`, o `ColorSwatch` com `options` (com o nome de cada cor na língua do app) e o `InputGroup`.
+// O CONTEÚDO PODE SER MONTADO (`children`), como na referência ("com campos", "com trilhas"): as peças de cor de
+// dentro — `ColorArea`, `Slider` com `channel`, `ColorField` — sem valor próprio repartem a cor do seletor.
+// As peças são as da Aurea: a área e a trilha pelas internas (a cor de dentro direto, para o matiz não se perder no
+// cinza), o `ColorSwatch` com `options` (com o nome de cada cor na língua do app) e o `InputGroup`.
 // O código só vale ao confirmar (Enter ou sair do campo); texto que não é cor volta ao valor de antes.
 export interface ColorPickerProps{
   /** O nome, ao lado da amostra no gatilho ("Cor da marca"). Nomeia o gatilho e a janela. */
   label:string;
-  /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+  /** A cor, em hex ou `rgb()`/`hsl()`/`hsb()`. Controlado. */
   value?:string;
   /** A cor de partida quando você não controla. Padrão: branco. */
   defaultValue?:string;
-  /** Chamado a cada passo, com o hex `#rrggbb`. */
+  /** Chamado a cada passo, com o hex (`#rrggbb`, ou `#rrggbbaa` com transparência). */
   onValueChange?:(value:string)=>void;
   /** Chamado ao soltar, a cada tecla, ao escolher uma amostra e ao confirmar o código — o momento de salvar. */
   onValueCommitted?:(value:string)=>void;
@@ -772,30 +943,29 @@ export interface ColorPickerProps{
   swatches?:readonly (string|ColorSwatchOption)[];
   /** `"swatches"`: a paleta fechada — só as amostras e o campo do código. Padrão: `"full"`. */
   variant?:"full"|"swatches";
+  /** O conteúdo da janela, montado por quem usa (no lugar do padrão): `ColorArea`, `Slider` com `channel`,
+   *  `ColorField` e o que mais couber. As peças de cor sem valor próprio usam a cor do seletor. */
+  children?:ReactNode;
   disabled?:boolean;
-  /** Vai no formulário como `#rrggbb`. */
+  /** Vai no formulário como hex. */
   name?:string;
   id?:string;className?:string}
-export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommitted,swatches,variant="full",disabled,name,id,className}:ColorPickerProps){
+export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommitted,swatches,variant="full",children,disabled,name,id,className}:ColorPickerProps){
   const s=useAureaStrings();
   const portal=usePortalContainer();
   const idGrupo=React.useId();
-  const [hsb,mudar]=useCorEmHsb(value,defaultValue,onValueChange,onValueCommitted);
-  const rgb=hsbToRgb(hsb),hex=toHex(rgb),nome=colorName(rgb,s);
-  // O texto do campo enquanto a pessoa digita; fora disso, o campo mostra a cor de agora.
-  const [rascunho,setRascunho]=React.useState<string|null>(null);
-  const confirmar=()=>{
-    if(rascunho===null)return;
-    const certo=normalizeHex(rascunho);
-    if(certo&&certo!==hex)mudar(hsbDoHex(certo,hsb),true);
-    setRascunho(null);
-  };
+  const [cor,mudar]=useCor(value,defaultValue,onValueChange,onValueCommitted);
+  const hex=corToHex(cor),nome=colorName(hsbToRgb(cor),s);
   const amostras=swatches?.map((o)=>{
     const op=typeof o==="string"?{color:o}:o;
-    const cor=parseHex(op.color);
-    return {color:op.color,label:op.label??(cor?colorName(cor,s):op.color)};
+    const c=parseColor(op.color);
+    return {color:op.color,label:op.label??(c?colorName(hsbToRgb(c),s):op.color)};
   });
-  const escolhida=amostras?.find((o)=>normalizeHex(o.color)===hex)?.color??"";
+  const escolhida=amostras?.find((o)=>{const c=parseColor(o.color);return c!==null&&corToHex(c)===hex;})?.color??"";
+  const contexto=React.useMemo(()=>({cor,mudar}),[cor,mudar]);
+  // O seletor escuta o teclado e o ponteiro desde que MONTA: a área só monta ao abrir, DEPOIS do clique que abriu, e
+  // a primeira abertura com o mouse acendia o anel (medido na bancada em 14/10/2026; o teste abria pelo teclado antes).
+  React.useEffect(ouvirModalidade,[]);
   // O foco fica PRESO na janela (`trap-focus`), como na referência: com quatro peças dentro, o Tab que saía depois
   // do código fechava a janela (medido no navegador). O motor pede um botão de fechar dentro, para o leitor de tela
   // por toque sair; ele fica invisível e fora do Tab — quem usa teclado tem o Esc, e o foco nunca some na tela.
@@ -810,19 +980,17 @@ export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommi
     <BasePopover.Portal container={portal}>
       <BasePopover.Positioner side="bottom" align="start" sideOffset={6}>
         <BasePopover.Popup className="popover color-picker-popover" aria-label={label}>
-          {variant!=="swatches"&&<>
-            <AreaDeCor hsb={hsb} onHsb={mudar} aria-label={label}/>
-            <Slider label={s.colorChannel.hue} labelHidden showValue={false} channel="hue" value={Math.round(hsb.h)}
-              onValueChange={(h:number)=>mudar({...hsb,h},false)} onValueCommitted={(h:number)=>mudar({...hsb,h},true)}/>
-          </>}
-          {amostras&&<ColorSwatch options={amostras} name={`${idGrupo}-amostras`} label={s.colorSwatches} value={escolhida}
-            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>mudar(hsbDoHex(e.target.value,hsb),true)}/>}
-          <InputGroup>
-            <InputGroupAddon><ColorSwatch color={hex} size="sm" aria-hidden="true"/></InputGroupAddon>
-            <Input aria-label={s.colorHex} value={rascunho??hex} spellCheck={false} autoComplete="off"
-              onChange={(e)=>setRascunho(e.target.value)} onBlur={confirmar}
-              onKeyDown={(e)=>{if(e.key==="Enter"){e.preventDefault();confirmar();}}}/>
-          </InputGroup>
+          <CorDoSeletor.Provider value={contexto}>
+            {children??<>
+              {variant!=="swatches"&&<>
+                <AreaDeCor cor={cor} onCor={mudar} space="hsb" x="saturation" y="brightness" aria-label={label}/>
+                <TrilhaDeCor cor={cor} onCor={mudar} channel="hue" label={s.colorChannel.hue} labelHidden showValue={false}/>
+              </>}
+              {amostras&&<ColorSwatch options={amostras} name={`${idGrupo}-amostras`} label={s.colorSwatches} value={escolhida}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>)=>mudar(corDoTexto(e.target.value,cor),true)}/>}
+              <ColorField aria-label={s.colorHex}/>
+            </>}
+          </CorDoSeletor.Provider>
           <BasePopover.Close className="sr-only" tabIndex={-1}>{s.close}</BasePopover.Close>
         </BasePopover.Popup>
       </BasePopover.Positioner>

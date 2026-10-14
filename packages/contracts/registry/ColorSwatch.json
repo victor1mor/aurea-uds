@@ -3,7 +3,7 @@
   "category": "Identity",
   "layer": "Primitive",
   "maturity": "Stable",
-  "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows. With options, a group of swatches to pick one from (a closed palette).",
+  "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows, and a checkerboard under a transparent colour. With options, a group of swatches to pick one from (a closed palette).",
   "icon": "palette",
   "platforms": {
     "web": "stable",
@@ -79,7 +79,7 @@
       "name": "size",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "\"md\"",
-      "description": "16, 24, 32, 36, 40 — the reference library's scale. Round only, and without the transparency checkerboard (Victor's decision)."
+      "description": "16, 24, 32, 36, 40 — the reference library's scale. Round only (Victor's decision); the checkerboard shows only under a transparent colour."
     },
     {
       "name": "label",
@@ -91,7 +91,7 @@
       "name": "options",
       "type": "(string | {color, label?})[]",
       "default": "—",
-      "description": "The picker variation (ADR-0069): the colours to pick from, as hex or {color, label}. Turns the swatch into a radio group."
+      "description": "The picker variation (ADR-0069): the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen."
     },
     {
       "name": "name",
@@ -118,6 +118,18 @@
       "description": "With options: the browser's event, as in Radio — event.target.value is the chosen colour."
     },
     {
+      "name": "layout",
+      "type": "\"grid\" | \"stack\"",
+      "default": "\"grid\"",
+      "description": "With options: in a wrapping row (grid) or in a column (stack), as in the reference."
+    },
+    {
+      "name": "indicator",
+      "type": "ReactNode",
+      "default": "the check",
+      "description": "With options: the mark of the chosen colour, in place of the check (an Icon, for example). It takes the ink that contrasts most."
+    },
+    {
       "name": "disabled",
       "type": "boolean",
       "default": "false",
@@ -136,5 +148,11 @@
       "description": "Added to the swatch."
     }
   ],
-  "sizeProp": "size"
+  "sizeProp": "size",
+  "axes": {
+    "layout": [
+      "grid",
+      "stack"
+    ]
+  }
 }

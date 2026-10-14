@@ -504,6 +504,10 @@ button,a,[role="button"],input,textarea,select { outline:none; }
    Quem cobra que nenhuma peça ficou de fora é o catálogo inteiro, no navegador:
    `tests/visual/foco-uma-linha.spec.ts`. */
 :is(.input,.textarea,.select,.btn-outline,.btn-primary-outline,.btn-danger-outline,.media-control,.card,.code-block,.graph-node-body,.pagination-link):focus-visible { outline-offset:0; border-color:var(--focus-strong); }
+/* A amostra ESCOLHIDA do `ColorSwatch options` (0.32.0) tem borda — a da cor dela — e o foco mora no botão de
+   opção invisível de dentro, por isso o `:has`. A referência mostra a borda da cor + vão + anel; a ADR-0059 é a
+   escolha A do Victor, nenhuma peça com duas linhas (a varredura do catálogo pegou, 14/10/2026). */
+.color-swatch-option:has(:checked:focus-visible) { outline-offset:0; border-color:var(--focus-strong); }
 button { color:inherit; }
 /* O link NÃO é `--primary`. Medido em 22/08/2026 com o axe e depois à mão: o amarelo da
    marca sobre o fundo do tema CLARO dá 1,73:1, e o AA de texto (WCAG 1.4.3) pede 4,5:1 —
@@ -1658,6 +1662,11 @@ img,svg { display:block; }
    contorno do input de dentro ficaria escondido atrás da borda do grupo. */
 .input-group { display:flex; flex-wrap:wrap; align-items:center; inline-size:100%; min-inline-size:0; min-block-size:var(--control-h-md); background:var(--field-bg); border:1px solid var(--border-strong); border-radius:var(--radius-control); transition:border-color var(--duration-fast),box-shadow var(--duration-fast); }
 .input-group:hover { border-color:var(--border); }
+/* A pele `secondary` do campo vale para o GRUPO, como o tamanho (abaixo): quem desenha a caixa é o grupo, e o
+   `ColorField variant="secondary"` (e todo `InputGroup` com um `Input variant="secondary"` dentro) saía igual ao
+   `primary` (medido na bancada em 14/10/2026). Antes do foco, para a borda do foco valer. */
+.input-group:has(>.input-secondary) { background:var(--secondary); border-color:transparent; }
+.input-group:has(>.input-secondary):hover { background:var(--secondary-hover); }
 .input-group:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:var(--focus-strong); }
 .input-group:has(.input-sm) { min-block-size:var(--control-h-sm); }
 .input-group:has(.input-lg) { min-block-size:var(--control-h-lg); }
@@ -1912,14 +1921,24 @@ img,svg { display:block; }
 .slider[data-orientation="vertical"] .slider-thumb { inline-size:100%; block-size:calc(var(--space-6) + var(--space-1)); }
 .slider[data-orientation="vertical"] .slider-thumb::after { inline-size:var(--space-4); block-size:var(--space-6); }
 @media (prefers-reduced-motion:reduce) { .slider-thumb::after { transition:none; } }
-/* A TRILHA DE COR (0.32.0, ADR-0069) — a variação `channel="hue"` do Slider. A pintura (o círculo de cores, a
-   exceção da ADR-0069) chega pela variável que o componente põe; esta folha não escreve gradiente (check 4). Sem o
-   preenchimento: a cor É a trilha. O pino é o da referência (lido no CSS publicado dela, 3.2.6): redondo de 16,
-   na cor do valor, com o anel branco de 3 — branco nos dois temas, porque fica sobre a cor. */
-.slider-hue .slider-track { background:var(--slider-track-fill,var(--secondary)); }
-.slider-hue .slider-thumb { box-sizing:border-box; inline-size:var(--space-4); block-size:var(--space-4); align-self:center; border:calc(3 * var(--border-width)) solid #fff; background:var(--slider-thumb-color,var(--primary)); box-shadow:0 0 0 var(--border-width) rgba(0,0,0,.1), var(--shadow-sm); }
-.slider-hue .slider-thumb::after { content:none; }
-.slider-hue[data-orientation="vertical"] .slider-thumb { inline-size:var(--space-4); block-size:var(--space-4); }
+/* A TRILHA DE COR (0.32.0, ADR-0069) — a variação `channel` do Slider, em qualquer canal. A pintura (a exceção da
+   ADR-0069) chega pela variável que o componente põe; esta folha não escreve gradiente (check 4). O gradiente vai
+   de ponta a ponta do trilho (`background-origin: border-box`) e as paradas começam na folga (`--slider-cap`, a
+   mesma de onde o pino para): a ponta tem a cor chapada do mínimo e do máximo. Sem o preenchimento: a cor É a
+   trilha. O pino é o da referência (lido no CSS publicado dela, 3.2.6): redondo de 16, na cor do valor, com o anel
+   branco de 3 — branco nos dois temas, porque fica sobre a cor. A cor do pino vai por uma sombra por dentro, para o
+   xadrez aparecer por baixo quando ela é transparente.
+   O XADREZ (14/10/2026, o Victor: "xadrez sim", só onde há transparência) é desenho de SVG, e não gradiente: no
+   alfa, embaixo da trilha e do pino. E `forced-color-adjust:none`, como na biblioteca da referência: com o alto
+   contraste do sistema, a trilha continua mostrando as cores. */
+/* O xadrez da transparência, um desenho só para as peças que o mostram (a trilha do alfa, a amostra transparente). */
+.slider-color,.color-swatch-alpha { --color-checker:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath fill='%23fff' d='M0 0h8v8H0z'/%3E%3Cpath fill='%23c8c8c8' d='M0 0h4v4H0zM4 4h4v4H4z'/%3E%3C/svg%3E"); }
+.slider-color { --slider-cap:var(--space-3); }
+.slider-color .slider-track { background:var(--slider-track-fill,var(--secondary)); background-origin:border-box; forced-color-adjust:none; }
+.slider-alpha .slider-track { background-image:var(--slider-track-fill,none),var(--color-checker); background-size:auto,var(--space-2) var(--space-2); }
+.slider-color .slider-thumb { box-sizing:border-box; inline-size:var(--space-4); block-size:var(--space-4); align-self:center; border:calc(3 * var(--border-width)) solid #fff; background:var(--color-checker) center/var(--space-2) var(--space-2); box-shadow:inset 0 0 0 var(--space-4) var(--slider-thumb-color,var(--primary)), 0 0 0 var(--border-width) rgba(0,0,0,.1), var(--shadow-sm); forced-color-adjust:none; }
+.slider-color .slider-thumb::after { content:none; }
+.slider-color[data-orientation="vertical"] .slider-thumb { inline-size:var(--space-4); block-size:var(--space-4); }
 /* COLORAREA (0.32.0, ADR-0069) — a área de cor. A pintura (o gradiente, a ÚNICA exceção à ADR-0007) chega pela
    variável que o componente põe (`--color-area-fill`): esta folha não escreve gradiente nenhum (check 4).
    Medidas da referência, lidas no CSS publicado dela (3.2.6): quadrada, até 224 de largura, canto 16; o pino de
@@ -1927,9 +1946,13 @@ img,svg { display:block; }
    O anel é BRANCO nos dois temas, e não um token de tema: ele fica sobre a cor escolhida, e não sobre a página.
    Os dois `range` escondidos (o motor da área) cobrem o pino com opacidade quase zero, como na referência: o
    leitor de tela por toque os acha no lugar do pino. */
-.color-area { position:relative; inline-size:100%; max-inline-size:calc(2 * var(--space-24) + var(--space-8)); aspect-ratio:1; border-radius:var(--radius-lg); background:var(--color-area-fill,var(--secondary)); box-shadow:inset 0 0 0 var(--border-width) rgba(0,0,0,.1); touch-action:none; cursor:crosshair; user-select:none; }
+.color-area { position:relative; inline-size:100%; max-inline-size:calc(2 * var(--space-24) + var(--space-8)); aspect-ratio:1; border-radius:var(--radius-lg); background:var(--color-area-fill,var(--secondary)); background-blend-mode:var(--color-area-blend,normal); box-shadow:inset 0 0 0 var(--border-width) rgba(0,0,0,.1); touch-action:none; cursor:crosshair; user-select:none; forced-color-adjust:none; }
+/* Os pontinhos (`showDots`, o da referência: um ponto branco a 20% a cada 8) são desenho de SVG por cima da área,
+   e não gradiente. O pino fica acima deles. */
+.color-area-dots::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='1' fill='%23fff' fill-opacity='.2'/%3E%3C/svg%3E"); background-size:var(--space-2) var(--space-2); }
+.color-area-dots .color-area-thumb { z-index:1; }
 .color-area[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
-.color-area-thumb { position:absolute; box-sizing:border-box; inline-size:var(--space-4); block-size:var(--space-4); margin-inline-start:calc(var(--space-4) / -2); margin-block-start:calc(var(--space-4) / -2); border:calc(3 * var(--border-width)) solid #fff; border-radius:var(--radius-full); background:var(--color-area-thumb,transparent); box-shadow:0 0 0 var(--border-width) rgba(0,0,0,.1), inset 0 0 0 var(--border-width) rgba(0,0,0,.1); pointer-events:none; transition:inline-size var(--duration-base) var(--ease-standard), block-size var(--duration-base) var(--ease-standard), margin var(--duration-base) var(--ease-standard); }
+.color-area-thumb { position:absolute; box-sizing:border-box; inline-size:var(--space-4); block-size:var(--space-4); margin-inline-start:calc(var(--space-4) / -2); margin-block-start:calc(var(--space-4) / -2); border:calc(3 * var(--border-width)) solid #fff; border-radius:var(--radius-full); background:var(--color-area-thumb,transparent); box-shadow:0 0 0 var(--border-width) rgba(0,0,0,.1), inset 0 0 0 var(--border-width) rgba(0,0,0,.1); pointer-events:none; forced-color-adjust:none; transition:inline-size var(--duration-base) var(--ease-standard), block-size var(--duration-base) var(--ease-standard), margin var(--duration-base) var(--ease-standard); }
 .color-area[data-dragging] .color-area-thumb { inline-size:var(--space-5); block-size:var(--space-5); margin-inline-start:calc(var(--space-5) / -2); margin-block-start:calc(var(--space-5) / -2); }
 .color-area-thumb[data-focus-visible] { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .color-area-input { position:absolute; inset:0; inline-size:100%; block-size:100%; margin:0; opacity:.0001; pointer-events:none; }
@@ -2467,6 +2490,9 @@ img,svg { display:block; }
 .color-swatch-sm { --color-swatch-size:var(--space-6); }
 .color-swatch-lg { --color-swatch-size:calc(var(--space-8) + var(--space-1)); }
 .color-swatch-xl { --color-swatch-size:var(--space-10); }
+/* A amostra TRANSPARENTE (14/10/2026): o xadrez embaixo, e a cor por uma sombra por dentro (a sombra pinta POR CIMA
+   do fundo; a cor de fundo pintaria por baixo do xadrez). O anel de 1 continua por cima de tudo. */
+.color-swatch-alpha { background:var(--color-checker) center/var(--space-2) var(--space-2); box-shadow:inset 0 0 0 var(--border-width) color-mix(in oklab,var(--foreground) 10%,transparent), inset 0 0 0 var(--color-swatch-size) var(--color-swatch-current,transparent); }
 /* AS AMOSTRAS PARA ESCOLHER (0.32.0, ADR-0069): a variação `options` do ColorSwatch. Cada cor é um rótulo com um
    botão de opção nativo por cima, invisível (o navegador cuida da escolha e das setas). O desenho é o da
    referência (3.2.6): opção de 32 (os mesmos tamanhos da amostra), borda de 2 transparente, vão de 8; a escolhida
@@ -2484,11 +2510,19 @@ img,svg { display:block; }
 .color-swatch-option:has(:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .color-swatch-option:has(:disabled) { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .color-swatch-input { position:absolute; inset:0; z-index:1; margin:0; opacity:0; cursor:inherit; }
+/* Em coluna (`layout="stack"`) e a marca própria (`indicator`, no lugar do "visto"), como na referência. A marca
+   aparece só na escolhida, na tinta que contrasta, com 1/3 da opção. */
+.color-swatch-picker-stack { flex-direction:column; align-items:flex-start; }
+.color-swatch-indicator { position:absolute; inset:0; display:grid; place-items:center; color:#fff; pointer-events:none; scale:0; transition:scale var(--duration-fast) var(--ease-standard); }
+.color-swatch-indicator > * { inline-size:calc(var(--color-swatch-size) / 3); block-size:calc(var(--color-swatch-size) / 3); }
+.color-swatch-option-dark .color-swatch-indicator { color:#000; }
+.color-swatch-option:has(:checked) .color-swatch-indicator { scale:1; }
+.color-swatch-option:has(.color-swatch-indicator)::after { content:none; }
 .color-swatch-picker-xs .color-swatch-option { --color-swatch-size:var(--space-4); border-width:var(--border-width); }
 .color-swatch-picker-sm .color-swatch-option { --color-swatch-size:var(--space-6); }
 .color-swatch-picker-lg .color-swatch-option { --color-swatch-size:calc(var(--space-8) + var(--space-1)); }
 .color-swatch-picker-xl .color-swatch-option { --color-swatch-size:var(--space-10); }
-@media (prefers-reduced-motion:reduce) { .color-swatch-option,.color-swatch-option > .color-swatch,.color-swatch-option::after { transition:none; } }
+@media (prefers-reduced-motion:reduce) { .color-swatch-option,.color-swatch-option > .color-swatch,.color-swatch-option::after,.color-swatch-indicator { transition:none; } }
 /* PROGRESSCIRCLE (0.32.0): o anel da referência — traço de 4 num quadro de 36, ponta redonda, começando no
    topo —, em 20 · 28 · 36. O trilho e as cores são as do `Progress`. Sem valor, gira. */
 .progress-circle { --progress-circle-size:calc(var(--space-6) + var(--space-1)); --progress-circle-fill:var(--primary); display:inline-flex; flex:none; inline-size:var(--progress-circle-size); block-size:var(--progress-circle-size); }

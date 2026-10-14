@@ -3,7 +3,7 @@
   "category": "Inputs",
   "layer": "Component",
   "maturity": "Ready",
-  "summary": "The square where you pick a colour's saturation and brightness for one hue, by pointer, touch or keyboard. The screen reader hears the channels and the colour's name.",
+  "summary": "The square where you pick two channels of a colour for the third one fixed — saturation and brightness by default, or any pair of HSB, HSL or RGB — by pointer, touch or keyboard. The screen reader hears the channels and the colour's name.",
   "icon": "palette",
   "platforms": {
     "web": "supported",
@@ -67,7 +67,7 @@
       "name": "value",
       "type": "string",
       "default": "—",
-      "description": "The colour in hex (#rrggbb or #rgb), controlled."
+      "description": "The colour, in hex or rgb()/hsl()/hsb(), controlled."
     },
     {
       "name": "defaultValue",
@@ -86,6 +86,30 @@
       "type": "(value: string) => void",
       "default": "—",
       "description": "Called when the pointer is released and on every key — the moment to save."
+    },
+    {
+      "name": "colorSpace",
+      "type": "\"hsb\" | \"hsl\" | \"rgb\"",
+      "default": "\"hsb\"",
+      "description": "The colour space of the area. Without it, the one the channels ask for."
+    },
+    {
+      "name": "xChannel",
+      "type": "ColorChannel",
+      "default": "saturation (HSB, HSL) · red (RGB)",
+      "description": "The channel across."
+    },
+    {
+      "name": "yChannel",
+      "type": "ColorChannel",
+      "default": "brightness (HSB) · lightness (HSL) · green (RGB)",
+      "description": "The channel up."
+    },
+    {
+      "name": "showDots",
+      "type": "boolean",
+      "default": "false",
+      "description": "A grid of dots over the area, as in the reference — it helps to see the position."
     },
     {
       "name": "disabled",
@@ -129,5 +153,30 @@
       "default": "—",
       "description": "Merged onto the area, after the Aurea skin."
     }
-  ]
+  ],
+  "axes": {
+    "colorSpace": [
+      "hsb",
+      "hsl",
+      "rgb"
+    ],
+    "xChannel": [
+      "hue",
+      "saturation",
+      "brightness",
+      "lightness",
+      "red",
+      "green",
+      "blue"
+    ],
+    "yChannel": [
+      "hue",
+      "saturation",
+      "brightness",
+      "lightness",
+      "red",
+      "green",
+      "blue"
+    ]
+  }
 }

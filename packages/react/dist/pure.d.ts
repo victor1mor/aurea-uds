@@ -234,7 +234,7 @@ export interface AureaStrings {
     dateRangePlaceholder: string;
     colorPicker: string;
     colorArea2D: string;
-    colorChannel: Record<"hue" | "saturation" | "brightness", string>;
+    colorChannel: Record<"hue" | "saturation" | "brightness" | "lightness" | "red" | "green" | "blue" | "alpha", string>;
     colorHue: Record<"red" | "orange" | "yellow" | "green" | "cyan" | "blue" | "purple" | "magenta" | "pink" | "brown" | "gray" | "white" | "black", string>;
     colorTone: Record<"veryDark" | "dark" | "light" | "veryLight" | "vivid" | "pale" | "grayish", string>;
     colorNameFormat: string;

@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 39,
-    "componentes": 141,
+    "componentes": 143,
     "hooks": 9,
-    "aliasesLiterais": 108,
-    "propsDistintas": 350
+    "aliasesLiterais": 110,
+    "propsDistintas": 356
   },
   "aliases": {
     "ButtonVariant": {
@@ -206,6 +206,29 @@
       "module": "calendar",
       "raw": "DatePickerBase & ({ range?: false; value?: Date; defaultValue?: Date; onChange?: (d: Date) => void; } | { range: true; value?: DateRange; defaultValue?: DateRange; onChange?: (r: DateRange) => void; })",
       "union": null
+    },
+    "ColorSpace": {
+      "module": "color",
+      "raw": "\"rgb\" | \"hsl\" | \"hsb\"",
+      "union": [
+        "rgb",
+        "hsl",
+        "hsb"
+      ]
+    },
+    "ColorChannel": {
+      "module": "color",
+      "raw": "\"hue\" | \"saturation\" | \"brightness\" | \"lightness\" | \"red\" | \"green\" | \"blue\" | \"alpha\"",
+      "union": [
+        "hue",
+        "saturation",
+        "brightness",
+        "lightness",
+        "red",
+        "green",
+        "blue",
+        "alpha"
+      ]
     },
     "ColorNameStrings": {
       "module": "color",
@@ -4219,7 +4242,14 @@
       "clientDirective": false
     },
     "color": {
-      "components": [],
+      "components": [
+        {
+          "name": "COLOR_CHANNELS",
+          "kind": "const",
+          "propsType": null,
+          "props": []
+        }
+      ],
       "hooks": [],
       "clientDirective": false
     },
@@ -5723,6 +5753,50 @@
               "values": null
             },
             {
+              "name": "colorSpace",
+              "optional": true,
+              "type": "ColorSpace",
+              "values": [
+                "rgb",
+                "hsl",
+                "hsb"
+              ]
+            },
+            {
+              "name": "xChannel",
+              "optional": true,
+              "type": "Exclude<ColorChannel, \"alpha\">",
+              "values": [
+                "hue",
+                "saturation",
+                "brightness",
+                "lightness",
+                "red",
+                "green",
+                "blue"
+              ]
+            },
+            {
+              "name": "yChannel",
+              "optional": true,
+              "type": "Exclude<ColorChannel, \"alpha\">",
+              "values": [
+                "hue",
+                "saturation",
+                "brightness",
+                "lightness",
+                "red",
+                "green",
+                "blue"
+              ]
+            },
+            {
+              "name": "showDots",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "disabled",
               "optional": true,
               "type": "boolean",
@@ -5762,6 +5836,159 @@
               "name": "\"aria-describedby\"",
               "optional": true,
               "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "ColorField",
+          "kind": "function",
+          "propsType": "ColorFieldProps",
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "channel",
+              "optional": true,
+              "type": "ColorChannel",
+              "values": [
+                "hue",
+                "saturation",
+                "brightness",
+                "lightness",
+                "red",
+                "green",
+                "blue",
+                "alpha"
+              ]
+            },
+            {
+              "name": "colorSpace",
+              "optional": true,
+              "type": "ColorSpace",
+              "values": [
+                "rgb",
+                "hsl",
+                "hsb"
+              ]
+            },
+            {
+              "name": "swatch",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "Responsive<FieldSize>",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "FieldVariant",
+              "values": [
+                "primary",
+                "secondary"
+              ]
+            },
+            {
+              "name": "width",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "readOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-label\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
               "values": null
             }
           ]
@@ -5815,6 +6042,12 @@
                 "full",
                 "swatches"
               ]
+            },
+            {
+              "name": "children",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             },
             {
               "name": "disabled",
@@ -6520,7 +6753,7 @@
         {
           "name": "Slider",
           "kind": "function",
-          "propsType": "SliderProps",
+          "propsType": null,
           "props": [
             {
               "name": "label",
@@ -6535,27 +6768,66 @@
               "values": null
             },
             {
+              "name": "orientation",
+              "optional": true,
+              "type": "SliderOrientation",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "showValue",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
               "name": "value",
               "optional": true,
-              "type": "V",
+              "type": "V | string",
               "values": null
             },
             {
               "name": "defaultValue",
               "optional": true,
-              "type": "V",
+              "type": "V | string",
               "values": null
             },
             {
               "name": "onValueChange",
               "optional": true,
-              "type": "(value: V) => void",
+              "type": "(value: V) => void | (value: string) => void",
               "values": null
             },
             {
               "name": "onValueCommitted",
               "optional": true,
-              "type": "(value: V) => void",
+              "type": "(value: V) => void | (value: string) => void",
               "values": null
             },
             {
@@ -6583,27 +6855,6 @@
               "values": null
             },
             {
-              "name": "orientation",
-              "optional": true,
-              "type": "SliderOrientation",
-              "values": [
-                "horizontal",
-                "vertical"
-              ]
-            },
-            {
-              "name": "disabled",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
-              "name": "name",
-              "optional": true,
-              "type": "string",
-              "values": null
-            },
-            {
               "name": "format",
               "optional": true,
               "type": "Intl.NumberFormatOptions",
@@ -6616,12 +6867,6 @@
               "values": null
             },
             {
-              "name": "showValue",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
               "name": "thumbLabels",
               "optional": true,
               "type": "readonly string[]",
@@ -6629,23 +6874,28 @@
             },
             {
               "name": "channel",
-              "optional": true,
-              "type": "\"hue\"",
+              "optional": false,
+              "type": "undefined | ColorChannel",
               "values": [
-                "hue"
+                "alpha",
+                "blue",
+                "brightness",
+                "green",
+                "hue",
+                "lightness",
+                "red",
+                "saturation"
               ]
             },
             {
-              "name": "className",
+              "name": "colorSpace",
               "optional": true,
-              "type": "string",
-              "values": null
-            },
-            {
-              "name": "id",
-              "optional": true,
-              "type": "string",
-              "values": null
+              "type": "ColorSpace",
+              "values": [
+                "rgb",
+                "hsl",
+                "hsb"
+              ]
             }
           ]
         },
@@ -7362,6 +7612,81 @@
                 "lg",
                 "xl"
               ]
+            },
+            {
+              "name": "color",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "options",
+              "optional": false,
+              "type": "readonly (string | ColorSwatchOption)[]",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChange",
+              "optional": true,
+              "type": "React.ChangeEventHandler<HTMLInputElement>",
+              "values": null
+            },
+            {
+              "name": "layout",
+              "optional": true,
+              "type": "\"grid\" | \"stack\"",
+              "values": [
+                "grid",
+                "stack"
+              ]
+            },
+            {
+              "name": "indicator",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },

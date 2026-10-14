@@ -36,6 +36,7 @@
     "CodeBlock",
     "CodeEditor",
     "ColorArea",
+    "ColorField",
     "ColorPicker",
     "ColorSwatch",
     "Combobox",

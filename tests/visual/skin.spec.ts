@@ -290,10 +290,14 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     h("div", {key: "csw"}, h(A.ColorSwatch, {color: "#f0c200", label: "Yellow"}), h(A.ColorSwatch, {color: "#123456", size: "xl"})),
     // 0.32.0, passo 12: a área de cor (ADR-0069) e o gatilho do DatePicker (ADR-0068, subcaminho `calendar`).
     h("div", {key: "car", style: {width: 320}}, h(A.ColorArea, {defaultValue: "#0485f7", "aria-label": "Fill"})),
-    h("div", {key: "shue", style: {width: 320}}, h(A.Slider, {label: "Hue", channel: "hue", defaultValue: 210})),
+    h("div", {key: "shue", style: {width: 320}}, h(A.Slider, {label: "Hue", channel: "hue", defaultValue: "hsl(210, 100%, 50%)"})),
     h(A.ColorSwatch, {key: "cswp", name: "skin-swatch", label: "Accent", defaultValue: "#f0c200",
       options: [{color: "#0485f7", label: "Ocean"}, {color: "#f0c200", label: "Aurea yellow"}]}),
     h(A.ColorPicker, {key: "cpk", label: "Brand colour", defaultValue: "#0485f7"}),
+    h("div", {key: "cfd", style: {width: 320}}, h(A.ColorField, {"aria-label": "Colour", defaultValue: "#0485f780", className: "cfd-campo"})),
+    h("div", {key: "cfd2", style: {width: 320}}, h(A.Input, {"aria-label": "Plain", className: "cfd-input"})),
+    h("div", {key: "cfd3", style: {width: 320}}, h(A.ColorField, {"aria-label": "Colour on a card", variant: "secondary", defaultValue: "#0485f7", className: "cfd-sec"})),
+    h("div", {key: "cfd4", style: {width: 320}}, h(A.Input, {"aria-label": "Plain on a card", variant: "secondary", className: "cfd-input-sec"})),
     h("div", {key: "dpk", style: {width: 320}}, h(A2.DatePicker, {"aria-label": "Check-in", defaultValue: new Date(2026, 7, 12)})),
     h("div", {key: "pcr"}, h(A.ProgressCircle, {label: "Upload", value: 50}), h(A.ProgressCircle, {label: "Big", value: 50, size: "lg", tone: "success"})),
     h(A.TagGroup, {key: "tgg", label: "Topics", selectionMode: "multiple", defaultSelectedKeys: ["b"],
@@ -1493,9 +1497,9 @@ for (const theme of ["dark", "light"] as const) {
                      pintada: est(".color-area").backgroundImage, pino: caixa(".color-area-thumb").width,
                      anel: parseFloat(est(".color-area-thumb").borderTopWidth), anelCor: est(".color-area-thumb").borderTopColor,
                      entrada: est(".color-area-input").opacity},
-              matiz: {pino: [caixa(".slider-hue .slider-thumb").width, caixa(".slider-hue .slider-thumb").height],
-                      anel: parseFloat(est(".slider-hue .slider-thumb").borderTopWidth), trilho: caixa(".slider-hue .slider-track").height,
-                      pintada: est(".slider-hue .slider-track").backgroundImage, cheio: !!document.querySelector(".slider-hue .slider-fill")},
+              matiz: {pino: [caixa(".slider-color .slider-thumb").width, caixa(".slider-color .slider-thumb").height],
+                      anel: parseFloat(est(".slider-color .slider-thumb").borderTopWidth), trilho: caixa(".slider-color .slider-track").height,
+                      pintada: est(".slider-color .slider-track").backgroundImage, cheio: !!document.querySelector(".slider-color .slider-fill")},
               amostras: (() => {
                 const op = document.querySelector(".color-swatch-option:not(:has(:checked))")!, esc = document.querySelector(".color-swatch-option:has(:checked)")!;
                 const cs = getComputedStyle(op), ce = getComputedStyle(esc);
@@ -1504,6 +1508,10 @@ for (const theme of ["dark", "light"] as const) {
                   visto: getComputedStyle(esc, "::after").scale, tinta: getComputedStyle(esc, "::after").backgroundColor,
                   botaoInvisivel: getComputedStyle(esc.querySelector("input")!).opacity};
               })(),
+              campoCor: {alt: caixa(".cfd-campo .input").height, input: caixa(".cfd-input").height,
+                         amostra: caixa(".cfd-campo .color-swatch").width, xadrez: est(".cfd-campo .color-swatch").backgroundImage,
+                         fundoSec: est(".cfd-sec").backgroundColor, fundoInputSec: est(".cfd-input-sec").backgroundColor,
+                         bordaSec: est(".cfd-sec").borderTopColor, bordaInputSec: est(".cfd-input-sec").borderTopColor, bordaPrim: est(".cfd-campo").borderTopColor},
               seletor: {vao: parseFloat(est(".color-picker-trigger").columnGap), amostra: caixa(".color-picker-trigger .color-swatch").width,
                         letra: parseFloat(est(".color-picker-trigger").fontSize), fundo: est(".color-picker-trigger").backgroundColor},
               data: {fundo: est(".date-picker-trigger").backgroundImage, alt: caixa(".date-picker-trigger").height,
@@ -2703,6 +2711,16 @@ for (const theme of ["dark", "light"] as const) {
     expect([p12.amostras.encolhe, p12.amostras.visto], "a escolhida encolhe a 77% e mostra o visto").toEqual(["0.77", "1"]);
     expect(p12.amostras.tinta, "o visto no amarelo é preto (o contraste)").toBe("rgb(0, 0, 0)");
     expect(Number(p12.amostras.botaoInvisivel), "o botão de opção nativo fica invisível").toBe(0);
+    expect(p12.campoCor.alt, "ColorField: a altura do Input").toBe(p12.campoCor.input);
+    expect(p12.campoCor.amostra, "a amostra na frente, sm (24)").toBe(24);
+    expect(p12.campoCor.xadrez, "a cor transparente mostra o xadrez").toContain("svg");
+    // O `secondary` do campo vale para o grupo, que é quem desenha a caixa (medido na bancada em 14/10/2026: saía
+    // igual ao `primary`).
+    expect(p12.campoCor.fundoSec, "ColorField secondary: o fundo do Input secondary").toBe(p12.campoCor.fundoInputSec);
+    expect(p12.campoCor.bordaSec, "ColorField secondary: a borda do Input secondary").toBe(p12.campoCor.bordaInputSec);
+    // O fundo do campo é o mesmo token nas duas peles (medido: `--field-bg` = `--secondary` nos dois temas); o que
+    // separa o `secondary` é a borda, que some.
+    expect(p12.campoCor.bordaSec, "e a borda diferente da do primary").not.toBe(p12.campoCor.bordaPrim);
     expect([p12.seletor.vao, p12.seletor.amostra], "ColorPicker: o gatilho é a amostra de 32 com o nome, vão de 12").toEqual([12, 32]);
     expect(p12.seletor.letra, "o nome em 14 (--text-sm)").toBe(14);
     expect(p12.seletor.fundo, "o gatilho não tem caixa").toBe("rgba(0, 0, 0, 0)");

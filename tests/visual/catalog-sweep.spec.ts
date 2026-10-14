@@ -500,17 +500,28 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.goto("/apps/catalog/embeds/colorpicker-with-swatches.html");
     const gatilho = page.locator(".color-picker-trigger");
     await expect(gatilho).toHaveAccessibleName("Brand colour, vivid blue");
-    await gatilho.focus();
-    await page.keyboard.press("Enter");
     const janela = page.getByRole("dialog", {name: "Brand colour"});
-    await expect(janela).toBeVisible();
     const focado = () => page.evaluate(() => {
       const a = document.activeElement!, j = document.querySelector(".color-picker-popover");
       if (!j || !j.contains(a)) return "fora";
       return a.closest(".color-area") ? "área" : a.closest(".slider") ? "trilha" : a.closest(".color-swatch-picker") ? "amostras"
         : a.closest(".input-group") ? "código" : a.className;
     });
+    // O anel de foco da área é do TECLADO: aberto pelo mouse, não. E a PRIMEIRA coisa que a pessoa faz na página é o
+    // clique — medido na bancada em 14/10/2026: a primeira abertura com o mouse acendia o anel (a escuta só começava
+    // quando a área montava, depois do clique), e este teste, que abria pelo teclado antes, passava com o defeito.
+    const anel = () => page.locator(".color-picker-popover .color-area-thumb").getAttribute("data-focus-visible");
+    await gatilho.click();
+    await expect(janela).toBeVisible();
     await expect.poll(focado).toBe("área");
+    expect(await anel(), "a primeira abertura, pelo mouse, sem o anel").toBeNull();
+    await page.keyboard.press("Escape");
+    await expect(janela).toHaveCount(0);
+    await gatilho.focus();
+    await page.keyboard.press("Enter");
+    await expect(janela).toBeVisible();
+    await expect.poll(focado).toBe("área");
+    await expect.poll(anel, {message: "aberto pelo teclado, com o anel"}).toBe("");
     // Uma ESPERA por passo, e não uma leitura: a volta do foco ao começo da janela é do motor e acontece um instante
     // depois do Tab — a leitura imediata reprovou 1 vez em 2 rodadas com o código certo.
     for (const onde of ["trilha", "amostras", "código", "área", "trilha"]) {
@@ -525,17 +536,11 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.keyboard.press("Escape");
     await expect(janela).toHaveCount(0);
     await expect(gatilho).toBeFocused();
-    // O anel de foco da área é do TECLADO: aberto pelo teclado, ele aparece; aberto pelo mouse, não (medido em
-    // 13/10/2026: abrindo com o mouse, o anel acendia, porque a janela põe o foco na área por código).
-    const anel = () => page.locator(".color-picker-popover .color-area-thumb").getAttribute("data-focus-visible");
-    await page.keyboard.press("Enter");
-    await expect(janela).toBeVisible();
-    await expect.poll(anel).toBe("");
-    await page.keyboard.press("Escape");
+    // E o mouse depois do teclado volta a não ter anel (medido em 13/10/2026: a janela põe o foco na área por código).
     await gatilho.click();
     await expect(janela).toBeVisible();
     await expect.poll(focado).toBe("área");
-    expect(await anel(), "aberto pelo mouse, sem o anel").toBeNull();
+    expect(await anel(), "aberto pelo mouse depois do teclado, sem o anel").toBeNull();
   });
 
   // O Victor, 13/10/2026: a barra de rolagem da lateral "só aparece se o mouse fica em cima" e é clarinha.

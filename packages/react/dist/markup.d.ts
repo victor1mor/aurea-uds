@@ -379,6 +379,8 @@ export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>, RefAt
 export interface ColorSwatchOption {
     color: string;
     label?: string;
+    /** Esta cor não se escolhe (as outras sim). */
+    disabled?: boolean;
 }
 /** O que as duas formas têm em comum: a escala. (É a base que o leitor da API segue em `base & (a | b)`.) */
 export interface ColorSwatchBase {
@@ -395,6 +397,10 @@ export interface ColorSwatchPickerProps {
     defaultValue?: string;
     /** O evento do navegador, como no `Radio`: `event.target.value` é a cor escolhida. */
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    /** `"grid"` (o padrão: em linha, quebrando) ou `"stack"` (em coluna), como na referência. */
+    layout?: "grid" | "stack";
+    /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
+    indicator?: ReactNode;
     size?: ColorSwatchSize;
     disabled?: boolean;
     id?: string;

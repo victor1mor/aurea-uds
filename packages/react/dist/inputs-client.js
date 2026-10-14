@@ -16,7 +16,7 @@ import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis } from "./internal.js";
-import { areaFill, colorName, hsbToRgb, hueTrackBackground, normalizeHex, parseHex, pureHue, rgbToHsb, toHex } from "./color.js";
+import { COLOR_CHANNELS, areaBackground, channelRange, colorName, corToHex, formatChannel, getChannel, hsbToRgb, parseColor, pureHue, setChannel, spaceOf, trackBackground } from "./color.js";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
@@ -25,6 +25,19 @@ import { Popover as BasePopover } from "@base-ui/react/popover";
 import { Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch } from "./markup.js";
 import { Icon } from "./system.js";
 import { IconButton } from "./actions.js";
+// A FAMÍLIA DE COR (0.32.0, ADR-0069) — as peças INTERNAS moram aqui, no topo, antes do primeiro export (auxiliar
+// entre exports entra na fatia de outro componente — regra do check 22). As públicas (`ColorArea`, `Slider` com
+// `channel`, `ColorField`, `ColorPicker`) ficam com as irmãs delas, lá embaixo.
+//
+// A COR DE DENTRO é HSB com alfa (`Cor`, do `color.ts`), e não hex: o hex perde o matiz no cinza e no preto —
+// puxar a saturação a 0 não pode trocar a cor do fundo da área. Os três espaços (RGB, HSL, HSB) e o alfa entram por
+// ela, com as faixas de cada canal iguais às da biblioteca de acessibilidade em que a referência se apoia.
+//
+// A ÁREA (`AreaDeCor`) é o DESENHO acessível da referência, lido no código da biblioteca dela: um grupo com DOIS
+// `input type="range"` escondidos, um por eixo, anunciados como controle 2D, e o valor dito com o NOME da cor. Só um
+// dos dois fica na ordem do Tab (o do eixo que mexeu por último); o outro sai da árvore até a pessoa mexer nele pelo
+// teclado. As teclas são as dela: setas (Shift: o salto do canal), Page Up/Down no eixo de cima, Home/End no de
+// lado, invertidas na escrita da direita para a esquerda.
 const no01 = (n) => Math.min(1, Math.max(0, n));
 // COMO A PESSOA CHEGOU AQUI: a última interação foi teclado ou ponteiro? O anel de foco da área é só do teclado, e o
 // foco que chega por código (a janela do `ColorPicker` o põe na área ao abrir; o arrasto o põe no `range`) não diz
@@ -40,7 +53,60 @@ function ouvirModalidade() {
         modalidade = "teclado"; }, true);
     document.addEventListener("pointerdown", () => { modalidade = "ponteiro"; }, true);
 }
-function AreaDeCor({ hsb, onHsb, disabled, name, id, className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby }) {
+/** O texto de entrada → a cor de dentro. Hex e `rgb()` não dizem o matiz do cinza: aí vale o matiz (e a saturação)
+ *  da cor de antes. `hsl()`/`hsb()` dizem, e o que veio no texto vale. */
+function corDoTexto(texto, anterior) {
+    const nova = texto ? parseColor(texto) : null;
+    if (!nova)
+        return anterior ?? { h: 0, s: 0, b: 1, a: 1 };
+    if (anterior && (nova.s === 0 || nova.b === 0) && !/^\s*hs[lb]/i.test(texto))
+        return { ...nova, h: anterior.h, s: nova.b === 0 ? anterior.s : nova.s };
+    return nova;
+}
+/** A cor que o `ColorPicker` reparte com as peças de dentro, quando o conteúdo da janela é montado por quem usa
+ *  ("com campos", "com trilhas" — os exemplos da referência). */
+const CorDoSeletor = React.createContext(null);
+/** O estado de cor das peças: a cor de dentro por dentro, hex por fora. Controlado, se o hex que chega é o que a peça
+ *  acabou de mandar, a cor de dentro vale (com o matiz); se é outro, vira cor guardando o matiz de antes no cinza.
+ *  Dentro de um `ColorPicker`, a peça sem valor próprio usa a cor DELE. */
+function useCor(value, defaultValue, onValueChange, onValueCommitted) {
+    const doSeletor = React.useContext(CorDoSeletor);
+    const [interno, setInterno] = React.useState(() => corDoTexto(defaultValue));
+    const ultimo = React.useRef(interno);
+    let cor = interno;
+    if (value !== undefined) {
+        const chegou = parseColor(value);
+        const mesmo = chegou !== null && corToHex(chegou) === corToHex(ultimo.current);
+        cor = mesmo ? ultimo.current : corDoTexto(value, ultimo.current);
+    }
+    ultimo.current = cor;
+    const avisar = (novo, fim) => { const h = corToHex(novo); onValueChange?.(h); if (fim)
+        onValueCommitted?.(h); };
+    if (doSeletor && value === undefined && defaultValue === undefined)
+        return [doSeletor.cor, (novo, fim) => { doSeletor.mudar(novo, fim); avisar(novo, fim); }];
+    const mudar = (novo, fim) => {
+        ultimo.current = novo;
+        // SEMPRE, e não só sem controle: no cinza o hex não muda com o matiz, o app devolve o MESMO valor e nada
+        // redesenharia — a trilha mexia e a área não (o teste do `ColorPicker` pegou). Este estado é o que redesenha;
+        // com controle, quem decide continua sendo o `value` (acima).
+        setInterno(novo);
+        avisar(novo, fim);
+    };
+    return [cor, mudar];
+}
+/** O espaço de uma peça de cor: o pedido, ou o que os canais exigem (vermelho/verde/azul no RGB, luminosidade no
+ *  HSL, brilho no HSB). */
+function espacoDosCanais(pedido, ...canais) {
+    if (pedido)
+        return pedido;
+    for (const ch of canais) {
+        const e = spaceOf(ch);
+        if (e !== "hsb" || ch === "brightness")
+            return e;
+    }
+    return "hsb";
+}
+function AreaDeCor({ cor, onCor, space, x: canalX, y: canalY, showDots, disabled, name, id, className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby }) {
     const s = useAureaStrings();
     const rtl = useDirection() === "rtl";
     const caixa = React.useRef(null);
@@ -51,22 +117,29 @@ function AreaDeCor({ hsb, onHsb, disabled, name, id, className, "aria-label": ar
     // O anel de foco é do TECLADO, como na referência: o foco que o arrasto põe no `range` não acende o anel.
     const [peloPonteiro, setPeloPonteiro] = React.useState(false);
     React.useEffect(ouvirModalidade, []);
-    const rgb = hsbToRgb(hsb), hex = toHex(rgb), nome = colorName(rgb, s);
-    const pct = (n) => Math.round(n * 100);
+    const fx = channelRange(canalX), fy = channelRange(canalY);
+    const canalZ = COLOR_CHANNELS[space].find((ch) => ch !== canalX && ch !== canalY);
+    const vx = getChannel(cor, canalX, space), vy = getChannel(cor, canalY, space);
+    const px = (vx - fx.min) / (fx.max - fx.min), py = (vy - fy.min) / (fy.max - fy.min);
+    const hex = corToHex({ ...cor, a: 1 }), nome = colorName(hsbToRgb(cor), s);
     // Antes de mexer, o leitor de tela ouve os três canais e o nome; depois de mexer pelo teclado, só o canal que
     // mudou e o nome — como na referência (o resto ele já ouviu).
+    const fala = (ch, v) => `${s.colorChannel[ch]} ${formatChannel(ch, v)}`;
     const textoDo = (eixo) => {
-        const sat = `${s.colorChannel.saturation} ${pct(hsb.s)}%`, bri = `${s.colorChannel.brightness} ${pct(hsb.b)}%`, mat = `${s.colorChannel.hue} ${Math.round(hsb.h)}°`;
-        const partes = pelaTecla ? [eixo === "x" ? sat : bri] : eixo === "x" ? [sat, bri, mat] : [bri, sat, mat];
+        const a = fala(canalX, vx), b = fala(canalY, vy), c = fala(canalZ, getChannel(cor, canalZ, space));
+        const partes = pelaTecla ? [eixo === "x" ? a : b] : eixo === "x" ? [a, b, c] : [b, a, c];
         return `${partes.join(", ")}, ${nome}`;
     };
     const rotulo = ariaLabel ? `${ariaLabel}, ${s.colorPicker}` : ariaLabelledby ? undefined : s.colorPicker;
-    const pelaPosicao = (px, py, fim) => {
+    // Na grade do passo do canal: somar passos em ponto flutuante acumula erro.
+    const naGrade = (v, f) => Math.round(Math.min(f.max, Math.max(f.min, v)) / f.step) * f.step;
+    const com = (nx, ny) => setChannel(setChannel(cor, canalX, nx, space), canalY, ny, space);
+    const pelaPosicao = (cx, cy, fim) => {
         const r = caixa.current.getBoundingClientRect();
         if (!r.width || !r.height)
             return;
-        const x = no01((px - r.left) / r.width), y = no01((py - r.top) / r.height);
-        onHsb({ h: hsb.h, s: rtl ? 1 - x : x, b: 1 - y }, fim);
+        const x = no01((cx - r.left) / r.width), y = no01((cy - r.top) / r.height);
+        onCor(com(fx.min + (rtl ? 1 - x : x) * (fx.max - fx.min), fy.min + (1 - y) * (fy.max - fy.min)), fim);
     };
     const focar = (eixo) => { (eixo === "x" ? inX : inY).current?.focus({ preventScroll: true }); setFocado(eixo); };
     const aoApertar = (e) => {
@@ -87,39 +160,39 @@ function AreaDeCor({ hsb, onHsb, disabled, name, id, className, "aria-label": ar
     const aoTeclar = (e) => {
         if (disabled)
             return;
-        const passo = e.shiftKey ? 0.1 : 0.01, pagina = 0.1, frente = rtl ? -1 : 1;
-        let x = hsb.s, y = hsb.b, eixo;
+        const frente = rtl ? -1 : 1, sx = e.shiftKey ? fx.page : fx.step, sy = e.shiftKey ? fy.page : fy.step;
+        let nx = vx, ny = vy, eixo;
         switch (e.key) {
             case "ArrowRight":
-                x += passo * frente;
+                nx += sx * frente;
                 eixo = "x";
                 break;
             case "ArrowLeft":
-                x -= passo * frente;
+                nx -= sx * frente;
                 eixo = "x";
                 break;
             case "ArrowUp":
-                y += passo;
+                ny += sy;
                 eixo = "y";
                 break;
             case "ArrowDown":
-                y -= passo;
+                ny -= sy;
                 eixo = "y";
                 break;
             case "PageUp":
-                y += pagina;
+                ny += fy.page;
                 eixo = "y";
                 break;
             case "PageDown":
-                y -= pagina;
+                ny -= fy.page;
                 eixo = "y";
                 break;
             case "Home":
-                x -= pagina * frente;
+                nx -= fx.page * frente;
                 eixo = "x";
                 break;
             case "End":
-                x += pagina * frente;
+                nx += fx.page * frente;
                 eixo = "x";
                 break;
             default: return;
@@ -128,57 +201,39 @@ function AreaDeCor({ hsb, onHsb, disabled, name, id, className, "aria-label": ar
         setPelaTecla(true);
         setPeloPonteiro(false);
         focar(eixo);
-        // Na grade de 1%: somar 0,01 em ponto flutuante acumula erro, e 0,3 viraria 0,30000000000000004.
-        const grade = (n) => Math.round(no01(n) * 100) / 100;
-        onHsb({ h: hsb.h, s: grade(x), b: grade(y) }, true);
+        onCor(com(naGrade(nx, fx), naGrade(ny, fy)), true);
     };
     // O motor do navegador também muda o `range` (o leitor de tela pede "aumentar"): o valor chega pelo `onChange`.
     const aoMudar = (eixo) => (e) => {
         setPelaTecla(true);
-        const v = Number(e.target.value) / 100;
-        onHsb(eixo === "x" ? { ...hsb, s: v } : { ...hsb, b: v }, true);
+        onCor(setChannel(cor, eixo === "x" ? canalX : canalY, Number(e.target.value), space), true);
     };
     const escondido = (eixo) => focado === null ? eixo === "y" : focado !== eixo;
-    return _jsxs("div", { ref: caixa, role: "group", id: id, "aria-label": ariaLabel ? rotulo : undefined, "aria-labelledby": ariaLabelledby, "aria-disabled": disabled || undefined, "data-disabled": disabled ? "" : undefined, "data-dragging": arrastando ? "" : undefined, className: cx("color-area", className), style: { "--color-area-fill": areaFill(hsb.h, rtl), "--color-area-thumb": hex }, onPointerDown: aoApertar, onPointerMove: aoMover, onPointerUp: aoSoltar, onPointerCancel: aoSoltar, onKeyDown: aoTeclar, children: [_jsx("div", { className: "color-area-thumb", "data-focus-visible": focado && !peloPonteiro ? "" : undefined, style: { insetInlineStart: `${hsb.s * 100}%`, insetBlockStart: `${(1 - hsb.b) * 100}%` }, children: ["x", "y"].map((eixo) => _jsx("input", { ref: eixo === "x" ? inX : inY, type: "range", className: "color-area-input", min: 0, max: 100, step: 1, value: pct(eixo === "x" ? hsb.s : hsb.b), disabled: disabled, "aria-label": rotulo, "aria-labelledby": rotulo ? undefined : ariaLabelledby, "aria-describedby": ariaDescribedby, "aria-roledescription": s.colorArea2D, "aria-valuetext": textoDo(eixo), "aria-orientation": eixo === "x" ? "horizontal" : "vertical", tabIndex: escondido(eixo) ? -1 : undefined, "aria-hidden": escondido(eixo) && !pelaTecla ? true : undefined, onChange: aoMudar(eixo), onFocus: () => { setFocado(eixo); setPeloPonteiro(modalidade === "ponteiro"); }, onBlur: (e) => { if (!caixa.current?.contains(e.relatedTarget)) {
-                        setFocado(null);
-                        setPeloPonteiro(false);
-                    } } }, eixo)) }), name && _jsx("input", { type: "hidden", name: name, value: hex })] });
+    const fundo = areaBackground(cor, space, canalX, canalY, rtl);
+    return _jsxs("div", { ref: caixa, role: "group", id: id, "aria-label": ariaLabel ? rotulo : undefined, "aria-labelledby": ariaLabelledby, "aria-disabled": disabled || undefined, "data-disabled": disabled ? "" : undefined, "data-dragging": arrastando ? "" : undefined, className: cx("color-area", showDots && "color-area-dots", className), style: { "--color-area-fill": fundo.background, "--color-area-blend": fundo.blend ?? "normal", "--color-area-thumb": hex }, onPointerDown: aoApertar, onPointerMove: aoMover, onPointerUp: aoSoltar, onPointerCancel: aoSoltar, onKeyDown: aoTeclar, children: [_jsx("div", { className: "color-area-thumb", "data-focus-visible": focado && !peloPonteiro ? "" : undefined, style: { insetInlineStart: `${px * 100}%`, insetBlockStart: `${(1 - py) * 100}%` }, children: ["x", "y"].map((eixo) => {
+                    const f = eixo === "x" ? fx : fy;
+                    return _jsx("input", { ref: eixo === "x" ? inX : inY, type: "range", className: "color-area-input", min: f.min, max: f.max, step: f.step, value: naGrade(eixo === "x" ? vx : vy, f), disabled: disabled, "aria-label": rotulo, "aria-labelledby": rotulo ? undefined : ariaLabelledby, "aria-describedby": ariaDescribedby, "aria-roledescription": s.colorArea2D, "aria-valuetext": textoDo(eixo), "aria-orientation": eixo === "x" ? "horizontal" : "vertical", tabIndex: escondido(eixo) ? -1 : undefined, "aria-hidden": escondido(eixo) && !pelaTecla ? true : undefined, onChange: aoMudar(eixo), onFocus: () => { setFocado(eixo); setPeloPonteiro(modalidade === "ponteiro"); }, onBlur: (e) => { if (!caixa.current?.contains(e.relatedTarget)) {
+                            setFocado(null);
+                            setPeloPonteiro(false);
+                        } } }, eixo);
+                }) }), name && _jsx("input", { type: "hidden", name: name, value: corToHex(cor) })] });
 }
-/** O hex de entrada → HSB, guardando o matiz (e a saturação) do anterior quando a cor nova é cinza ou preta. */
-function hsbDoHex(hex, anterior) {
-    const rgb = hex ? parseHex(hex) : null;
-    if (!rgb)
-        return anterior ?? { h: 0, s: 0, b: 1 };
-    const novo = rgbToHsb(rgb);
-    if (anterior && (novo.s === 0 || novo.b === 0))
-        return { h: anterior.h, s: novo.b === 0 ? anterior.s : novo.s, b: novo.b };
-    return novo;
-}
-/** O estado de cor do `ColorArea` e do `ColorPicker`: HSB por dentro, hex por fora. Controlado, se o hex que chega é
- *  o que a peça acabou de mandar, o HSB de dentro vale (com o matiz); se é outro, vira HSB guardando o matiz do
- *  anterior quando a cor nova é cinza ou preta. */
-function useCorEmHsb(value, defaultValue, onValueChange, onValueCommitted) {
-    const [interno, setInterno] = React.useState(() => hsbDoHex(defaultValue));
-    const ultimo = React.useRef(interno);
-    let hsb = interno;
-    if (value !== undefined) {
-        const chegou = parseHex(value);
-        const mesmo = chegou !== null && toHex(chegou) === toHex(hsbToRgb(ultimo.current));
-        hsb = mesmo ? ultimo.current : hsbDoHex(value, ultimo.current);
-    }
-    ultimo.current = hsb;
-    const mudar = (novo, fim) => {
-        ultimo.current = novo;
-        // SEMPRE, e não só sem controle: no cinza o hex não muda com o matiz, o app devolve o MESMO valor e nada
-        // redesenharia — a trilha mexia e a área não (o teste do `ColorPicker` pegou). Este estado é o que redesenha;
-        // com controle, quem decide continua sendo o `value` (acima).
-        setInterno(novo);
-        const h = toHex(hsbToRgb(novo));
-        onValueChange?.(h);
-        if (fim)
-            onValueCommitted?.(h);
+function TrilhaDeCor({ cor, onCor, channel, colorSpace, label, labelHidden, showValue = true, orientation = "horizontal", disabled, name, className, id }) {
+    const s = useAureaStrings();
+    const rtl = useDirection() === "rtl";
+    const space = spaceOf(channel, colorSpace);
+    const { min, max, step, page } = channelRange(channel);
+    const v = getChannel(cor, channel, space);
+    const idDoRotulo = React.useId();
+    const fundo = trackBackground(cor, channel, space, orientation === "vertical" ? "to top" : rtl ? "to left" : "to right");
+    const pino = channel === "hue" ? pureHue(v) : channel === "alpha" ? corToHex(cor) : corToHex({ ...cor, a: 1 });
+    const falado = (n) => {
+        const base = `${s.colorChannel[channel]} ${formatChannel(channel, n)}`;
+        if (channel === "alpha")
+            return base;
+        return `${base}, ${colorName(hsbToRgb(channel === "hue" ? { h: n, s: 1, b: 1 } : setChannel(cor, channel, n, space)), s)}`;
     };
-    return [hsb, mudar];
+    return _jsxs(BaseSlider.Root, { id: id, "aria-labelledby": idDoRotulo, "aria-disabled": disabled || undefined, value: v, onValueChange: (n) => onCor(setChannel(cor, channel, n, space), false), onValueCommitted: (n) => onCor(setChannel(cor, channel, n, space), true), min: min, max: max, step: step, largeStep: page, orientation: orientation, disabled: disabled, className: cx("slider", "slider-color", channel === "alpha" && "slider-alpha", className), style: { "--slider-track-fill": fundo, "--slider-thumb-color": pino }, children: [_jsx("div", { id: idDoRotulo, className: labelHidden ? "sr-only" : "slider-label", children: label }), showValue && _jsx(BaseSlider.Value, { className: "slider-output", children: (_, valores) => formatChannel(channel, valores[0] ?? v) }), _jsx(BaseSlider.Control, { className: "slider-control", children: _jsx(BaseSlider.Track, { className: "slider-track", children: _jsx(BaseSlider.Thumb, { className: "slider-thumb", "aria-labelledby": idDoRotulo, getAriaValueText: (_f, n) => falado(n) }) }) }), name && _jsx("input", { type: "hidden", name: name, value: corToHex(cor) })] });
 }
 // FileInput mora em arquivo próprio (132 linhas — upload real, aborto, progresso) e é público
 // por aqui: a categoria dele é Inputs.
@@ -236,7 +291,7 @@ function elementoRotulavel(tipo) {
     // reprovava no axe com "Form elements must have labels". Fora desta lista o Field vira GRUPO e
     // não pendura `htmlFor`, então o <input> de dentro ficava sem nome. Ele qualifica pela mesma
     // regra que os outros: recebe `id` e espalha `...props` no `Input`, que é o nó focal.
-    return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox].includes(tipo)
+    return [Input, Select, Textarea, SearchField, PasswordField, Checkbox, Radio, Switch, Range, Combobox, MultiCombobox, ColorField].includes(tipo)
         // os que moram fora do pacote principal e se registraram (o `DatePicker`, 0.32.0)
         || (typeof tipo === "function" && controlesRotulaveis.has(tipo));
 }
@@ -524,65 +579,110 @@ export function TagGroup({ label, labelHidden, description, errorMessage, items,
                                 : _jsx("span", { className: "tag-main", children: conteudo }), x] }, it.id);
                 }) }), description && _jsx("span", { className: "field-description", id: idDesc, children: description }), errorMessage && _jsx("span", { className: "field-error", id: idErro, children: errorMessage })] });
 }
-export function Slider({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation = "horizontal", disabled, name, format, locale, showValue = true, thumbLabels, channel, className, id }) {
+export function Slider(props) {
+    return props.channel ? _jsx(SliderDeCor, { ...props }) : _jsx(SliderDeNumero, { ...props });
+}
+function SliderDeCor({ value, defaultValue, onValueChange, onValueCommitted, ...resto }) {
+    const [cor, mudar] = useCor(value, defaultValue, onValueChange, onValueCommitted);
+    return _jsx(TrilhaDeCor, { ...resto, cor: cor, onCor: mudar });
+}
+function SliderDeNumero({ label, labelHidden, value, defaultValue, onValueChange, onValueCommitted, min, max, step, largeStep, orientation = "horizontal", disabled, name, format, locale, showValue = true, thumbLabels, className, id }) {
     // Quantas alças: tantas quantos valores houver (a faixa é uma lista).
     const atual = value ?? defaultValue;
     const alcas = Array.isArray(atual) ? atual.length : 1;
-    // A trilha de cor precisa do valor de AGORA para pintar o pino; sem controle, o motor guarda o valor, então
-    // ele é acompanhado aqui também.
-    const s = useAureaStrings();
-    const rtl = useDirection() === "rtl";
-    const ehMatiz = channel === "hue";
-    const [matizSolto, setMatizSolto] = React.useState(typeof defaultValue === "number" ? defaultValue : 0);
-    const matiz = typeof value === "number" ? value : matizSolto;
-    const cor = ehMatiz ? {
-        min: min ?? 0, max: max ?? 360, step: step ?? 1, format,
-        style: { "--slider-track-fill": hueTrackBackground(orientation === "vertical" ? "to top" : rtl ? "to left" : "to right"),
-            "--slider-thumb-color": pureHue(matiz) },
-        valorFalado: (_f, v) => `${s.colorChannel.hue} ${Math.round(v)}°, ${colorName(hsbToRgb({ h: v, s: 1, b: 1 }), s)}`,
-    } : null;
     // O NOME DA ALÇA SAI NA MARCAÇÃO. O motor liga o `<input>` de cada alça ao rótulo por um id que ele
     // só conhece DEPOIS de montar — no HTML do servidor (e no catálogo, que é HTML parado) as alças saíam
     // sem nome, e o axe do catálogo acusou as cinco. O `Slider.Label` do motor não aceita id, então o
     // rótulo é um `<div>` nosso, com id, que nomeia o grupo e cada alça — o nome já vem no HTML. E o desligado vai também para o grupo (`aria-disabled`): o motor só marca o `<input>`, e a
     // letra esmaecida do rótulo e do valor era lida como texto de contraste baixo, e não como peça desligada.
     const idDoRotulo = React.useId();
-    return _jsxs(BaseSlider.Root, { id: id, name: name, "aria-labelledby": idDoRotulo, "aria-disabled": disabled || undefined, value: value, defaultValue: defaultValue, onValueChange: onValueChange || ehMatiz ? (v) => { if (ehMatiz && typeof v === "number")
-            setMatizSolto(v); onValueChange?.(v); } : undefined, onValueCommitted: onValueCommitted ? (v) => onValueCommitted(v) : undefined, min: cor?.min ?? min, max: cor?.max ?? max, step: cor?.step ?? step, largeStep: largeStep, orientation: orientation, disabled: disabled, format: cor?.format ?? format, locale: locale, className: cx("slider", ehMatiz && "slider-hue", className), style: cor?.style, children: [_jsx("div", { id: idDoRotulo, className: labelHidden ? "sr-only" : "slider-label", children: label }), showValue && _jsx(BaseSlider.Value, { className: "slider-output", children: ehMatiz ? (_, valores) => `${Math.round(valores[0] ?? 0)}°` : undefined }), _jsx(BaseSlider.Control, { className: "slider-control", children: _jsxs(BaseSlider.Track, { className: "slider-track", children: [!ehMatiz && _jsx(BaseSlider.Indicator, { className: "slider-fill" }), Array.from({ length: alcas }, (_, i) => _jsx(BaseSlider.Thumb, { index: i, className: "slider-thumb", getAriaLabel: thumbLabels ? () => thumbLabels[i] ?? "" : undefined, "aria-labelledby": thumbLabels ? undefined : idDoRotulo, getAriaValueText: cor?.valorFalado }, i))] }) })] });
+    return _jsxs(BaseSlider.Root, { id: id, name: name, "aria-labelledby": idDoRotulo, "aria-disabled": disabled || undefined, value: value, defaultValue: defaultValue, onValueChange: onValueChange ? (v) => onValueChange(v) : undefined, onValueCommitted: onValueCommitted ? (v) => onValueCommitted(v) : undefined, min: min, max: max, step: step, largeStep: largeStep, orientation: orientation, disabled: disabled, format: format, locale: locale, className: cx("slider", className), children: [_jsx("div", { id: idDoRotulo, className: labelHidden ? "sr-only" : "slider-label", children: label }), showValue && _jsx(BaseSlider.Value, { className: "slider-output" }), _jsx(BaseSlider.Control, { className: "slider-control", children: _jsxs(BaseSlider.Track, { className: "slider-track", children: [_jsx(BaseSlider.Indicator, { className: "slider-fill" }), Array.from({ length: alcas }, (_, i) => _jsx(BaseSlider.Thumb, { index: i, className: "slider-thumb", getAriaLabel: thumbLabels ? () => thumbLabels[i] ?? "" : undefined, "aria-labelledby": thumbLabels ? undefined : idDoRotulo }, i))] }) })] });
 }
-export function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, ...resto }) {
-    const [hsb, mudar] = useCorEmHsb(value, defaultValue, onValueChange, onValueCommitted);
-    return _jsx(AreaDeCor, { ...resto, hsb: hsb, onHsb: mudar });
+const EIXOS_PADRAO = { hsb: ["saturation", "brightness"], hsl: ["saturation", "lightness"], rgb: ["red", "green"] };
+export function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, colorSpace, xChannel, yChannel, ...resto }) {
+    const [cor, mudar] = useCor(value, defaultValue, onValueChange, onValueCommitted);
+    const space = espacoDosCanais(colorSpace, ...[xChannel, yChannel].filter((c) => !!c));
+    const [x, y] = [xChannel ?? EIXOS_PADRAO[space][0], yChannel ?? EIXOS_PADRAO[space][1]];
+    return _jsx(AreaDeCor, { ...resto, cor: cor, onCor: mudar, space: space, x: x, y: y });
 }
-export function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant = "full", disabled, name, id, className }) {
+export function ColorField({ value, defaultValue, onValueChange, onValueCommitted, channel, colorSpace, swatch, size, variant, width, disabled, readOnly, required, name, placeholder, id, className, ...aria }) {
     const s = useAureaStrings();
-    const portal = usePortalContainer();
-    const idGrupo = React.useId();
-    const [hsb, mudar] = useCorEmHsb(value, defaultValue, onValueChange, onValueCommitted);
-    const rgb = hsbToRgb(hsb), hex = toHex(rgb), nome = colorName(rgb, s);
-    // O texto do campo enquanto a pessoa digita; fora disso, o campo mostra a cor de agora.
+    const doSeletor = React.useContext(CorDoSeletor);
+    const [cor, mudar] = useCor(value === "" ? undefined : value, defaultValue, onValueChange, onValueCommitted);
+    // Vazio: o valor "" de fora, ou sem valor nenhum e ainda não escrito (o campo da referência começa vazio).
+    const [escrito, setEscrito] = React.useState(defaultValue !== undefined);
+    const vazio = !doSeletor && (value !== undefined ? value === "" : !escrito);
     const [rascunho, setRascunho] = React.useState(null);
+    const canal = channel;
+    const space = canal ? spaceOf(canal, colorSpace) : "hsb";
+    const faixa = canal ? channelRange(canal) : null;
+    const v = canal ? getChannel(cor, canal, space) : 0;
+    const mostrado = vazio ? "" : canal ? formatChannel(canal, v) : corToHex(cor);
     const confirmar = () => {
         if (rascunho === null)
             return;
-        const certo = normalizeHex(rascunho);
-        if (certo && certo !== hex)
-            mudar(hsbDoHex(certo, hsb), true);
+        const t = rascunho.trim();
         setRascunho(null);
+        if (t === "") {
+            if (canal)
+                return;
+            setEscrito(false);
+            onValueChange?.("");
+            onValueCommitted?.("");
+            return;
+        }
+        if (canal) {
+            const n = Number(t.replace(/[°%\s]/g, "").replace(",", "."));
+            if (!Number.isFinite(n))
+                return;
+            mudar(setChannel(cor, canal, canal === "alpha" && (n > 1 || /%/.test(t)) ? n / 100 : n, space), true);
+            return;
+        }
+        const nova = parseColor(t);
+        if (!nova)
+            return;
+        setEscrito(true);
+        mudar(corDoTexto(t, cor), true);
     };
+    const aoTeclar = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            confirmar();
+            return;
+        }
+        if (!canal || !faixa || disabled || readOnly)
+            return;
+        const passo = e.key === "ArrowUp" ? faixa.step : e.key === "ArrowDown" ? -faixa.step : e.key === "PageUp" ? faixa.page : e.key === "PageDown" ? -faixa.page : 0;
+        const alvo = e.key === "Home" ? faixa.min : e.key === "End" ? faixa.max : passo ? v + passo : null;
+        if (alvo === null)
+            return;
+        e.preventDefault();
+        setRascunho(null);
+        mudar(setChannel(cor, canal, Math.round(alvo / faixa.step) * faixa.step, space), true);
+    };
+    const comAmostra = swatch ?? !canal;
+    return _jsxs(InputGroup, { className: className, width: width, children: [comAmostra && _jsx(InputGroupAddon, { children: _jsx(ColorSwatch, { color: vazio ? "transparent" : corToHex(cor), size: "sm", "aria-hidden": "true" }) }), _jsx(Input, { id: id, size: size, variant: variant, value: rascunho ?? mostrado, placeholder: placeholder, disabled: disabled, readOnly: readOnly, required: required, spellCheck: false, autoComplete: "off", inputMode: canal ? "decimal" : undefined, role: canal ? "spinbutton" : undefined, "aria-valuenow": canal ? v : undefined, "aria-valuemin": faixa?.min, "aria-valuemax": faixa?.max, "aria-valuetext": canal ? `${formatChannel(canal, v)}, ${colorName(hsbToRgb(cor), s)}` : undefined, ...aria, onChange: (e) => setRascunho(e.target.value), onBlur: confirmar, onKeyDown: aoTeclar }), name && _jsx("input", { type: "hidden", name: name, value: vazio ? "" : corToHex(cor) })] });
+}
+export function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant = "full", children, disabled, name, id, className }) {
+    const s = useAureaStrings();
+    const portal = usePortalContainer();
+    const idGrupo = React.useId();
+    const [cor, mudar] = useCor(value, defaultValue, onValueChange, onValueCommitted);
+    const hex = corToHex(cor), nome = colorName(hsbToRgb(cor), s);
     const amostras = swatches?.map((o) => {
         const op = typeof o === "string" ? { color: o } : o;
-        const cor = parseHex(op.color);
-        return { color: op.color, label: op.label ?? (cor ? colorName(cor, s) : op.color) };
+        const c = parseColor(op.color);
+        return { color: op.color, label: op.label ?? (c ? colorName(hsbToRgb(c), s) : op.color) };
     });
-    const escolhida = amostras?.find((o) => normalizeHex(o.color) === hex)?.color ?? "";
+    const escolhida = amostras?.find((o) => { const c = parseColor(o.color); return c !== null && corToHex(c) === hex; })?.color ?? "";
+    const contexto = React.useMemo(() => ({ cor, mudar }), [cor, mudar]);
+    // O seletor escuta o teclado e o ponteiro desde que MONTA: a área só monta ao abrir, DEPOIS do clique que abriu, e
+    // a primeira abertura com o mouse acendia o anel (medido na bancada em 14/10/2026; o teste abria pelo teclado antes).
+    React.useEffect(ouvirModalidade, []);
     // O foco fica PRESO na janela (`trap-focus`), como na referência: com quatro peças dentro, o Tab que saía depois
     // do código fechava a janela (medido no navegador). O motor pede um botão de fechar dentro, para o leitor de tela
     // por toque sair; ele fica invisível e fora do Tab — quem usa teclado tem o Esc, e o foco nunca some na tela.
-    return _jsxs(BasePopover.Root, { modal: "trap-focus", children: [_jsxs(BasePopover.Trigger, { disabled: disabled, id: id, "aria-label": `${label}, ${nome}`, className: cx("color-picker-trigger", className), children: [_jsx(ColorSwatch, { color: hex, "aria-hidden": "true" }), _jsx("span", { children: label })] }), name && _jsx("input", { type: "hidden", name: name, value: hex }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: "bottom", align: "start", sideOffset: 6, children: _jsxs(BasePopover.Popup, { className: "popover color-picker-popover", "aria-label": label, children: [variant !== "swatches" && _jsxs(_Fragment, { children: [_jsx(AreaDeCor, { hsb: hsb, onHsb: mudar, "aria-label": label }), _jsx(Slider, { label: s.colorChannel.hue, labelHidden: true, showValue: false, channel: "hue", value: Math.round(hsb.h), onValueChange: (h) => mudar({ ...hsb, h }, false), onValueCommitted: (h) => mudar({ ...hsb, h }, true) })] }), amostras && _jsx(ColorSwatch, { options: amostras, name: `${idGrupo}-amostras`, label: s.colorSwatches, value: escolhida, onChange: (e) => mudar(hsbDoHex(e.target.value, hsb), true) }), _jsxs(InputGroup, { children: [_jsx(InputGroupAddon, { children: _jsx(ColorSwatch, { color: hex, size: "sm", "aria-hidden": "true" }) }), _jsx(Input, { "aria-label": s.colorHex, value: rascunho ?? hex, spellCheck: false, autoComplete: "off", onChange: (e) => setRascunho(e.target.value), onBlur: confirmar, onKeyDown: (e) => { if (e.key === "Enter") {
-                                            e.preventDefault();
-                                            confirmar();
-                                        } } })] }), _jsx(BasePopover.Close, { className: "sr-only", tabIndex: -1, children: s.close })] }) }) })] });
+    return _jsxs(BasePopover.Root, { modal: "trap-focus", children: [_jsxs(BasePopover.Trigger, { disabled: disabled, id: id, "aria-label": `${label}, ${nome}`, className: cx("color-picker-trigger", className), children: [_jsx(ColorSwatch, { color: hex, "aria-hidden": "true" }), _jsx("span", { children: label })] }), name && _jsx("input", { type: "hidden", name: name, value: hex }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: "bottom", align: "start", sideOffset: 6, children: _jsxs(BasePopover.Popup, { className: "popover color-picker-popover", "aria-label": label, children: [_jsx(CorDoSeletor.Provider, { value: contexto, children: children ?? _jsxs(_Fragment, { children: [variant !== "swatches" && _jsxs(_Fragment, { children: [_jsx(AreaDeCor, { cor: cor, onCor: mudar, space: "hsb", x: "saturation", y: "brightness", "aria-label": label }), _jsx(TrilhaDeCor, { cor: cor, onCor: mudar, channel: "hue", label: s.colorChannel.hue, labelHidden: true, showValue: false })] }), amostras && _jsx(ColorSwatch, { options: amostras, name: `${idGrupo}-amostras`, label: s.colorSwatches, value: escolhida, onChange: (e) => mudar(corDoTexto(e.target.value, cor), true) }), _jsx(ColorField, { "aria-label": s.colorHex })] }) }), _jsx(BasePopover.Close, { className: "sr-only", tabIndex: -1, children: s.close })] }) }) })] });
 }
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta
 // à mão: colar o código inteiro distribui pelos campos, Backspace volta um, e o

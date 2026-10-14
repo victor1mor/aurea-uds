@@ -139,6 +139,8 @@
       "dist/code-editor.js",
       "dist/code.d.ts",
       "dist/code.js",
+      "dist/color.d.ts",
+      "dist/color.js",
       "dist/communication.d.ts",
       "dist/communication.js",
       "dist/data-display-client.d.ts",

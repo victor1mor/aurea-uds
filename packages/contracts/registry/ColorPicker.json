@@ -60,9 +60,10 @@
   "related": {
     "components": [
       "ColorArea",
+      "ColorField",
       "ColorSwatch",
-      "Slider",
-      "InputGroup"
+      "InputGroup",
+      "Slider"
     ],
     "patterns": []
   },
@@ -111,6 +112,12 @@
       "type": "\"full\" | \"swatches\"",
       "default": "\"full\"",
       "description": "\"swatches\": the closed palette (ADR-0069, the \"C\") — only the swatches and the hex field."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "area, hue, swatches, hex field",
+      "description": "The content of the window, built by you (\"with fields\", \"with sliders\"): the colour pieces without a value of their own — ColorArea, Slider with channel, ColorField — share the picker's colour."
     },
     {
       "name": "disabled",

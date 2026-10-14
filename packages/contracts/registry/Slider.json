@@ -10,7 +10,19 @@
       "vertical"
     ],
     "channel": [
-      "hue"
+      "hue",
+      "saturation",
+      "brightness",
+      "lightness",
+      "red",
+      "green",
+      "blue",
+      "alpha"
+    ],
+    "colorSpace": [
+      "hsb",
+      "hsl",
+      "rgb"
     ]
   },
   "icon": "faders",
@@ -87,7 +99,7 @@
       "name": "value / defaultValue",
       "type": "number | number[]",
       "default": "—",
-      "description": "A number, or a list of two for a range (two thumbs)."
+      "description": "A number, or a list of two for a range (two thumbs). With channel, the colour (hex or rgb()/hsl()/hsb())."
     },
     {
       "name": "onValueChange",
@@ -151,9 +163,15 @@
     },
     {
       "name": "channel",
-      "type": "\"hue\"",
+      "type": "ColorChannel",
       "default": "—",
-      "description": "The colour track (ADR-0069), a variation of this Slider: 0 to 360, the track painted with the colour wheel, the thumb in the value's colour, the value in degrees and the colour's name for the screen reader. One value."
+      "description": "The colour track (ADR-0069), a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name."
+    },
+    {
+      "name": "colorSpace",
+      "type": "\"hsb\" | \"hsl\" | \"rgb\"",
+      "default": "\"hsb\"",
+      "description": "With channel: the space of hue and saturation. The other channels already say theirs (red, green and blue are rgb), so one colorSpace serves every track of a picker; with hue or saturation, rgb reads as hsb."
     },
     {
       "name": "className",

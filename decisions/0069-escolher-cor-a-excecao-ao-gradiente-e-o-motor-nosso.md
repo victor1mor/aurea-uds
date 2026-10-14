@@ -58,6 +58,22 @@ a cor da biblioteca de acessibilidade em que se apoia.
   `NumberField`).
 - **Na web.** O nativo fica para depois: o `Slider` e o `ColorSwatch` ainda não existem lá.
 
+### A família inteira, como a referência (decisões do Victor, 14/10/2026)
+
+Medido na documentação da referência (v3): seis peças de cor e 46 exemplos. A Aurea tinha cinco e mostrava nove.
+O Victor: *"vamos ter todos os 6? e todos os seus exemplos são vários"*. Decidido:
+
+- **`ColorField` é componente novo** — o campo de cor com a amostra na frente, que valida, edita um canal só e vai
+  no formulário.
+- **Todos os canais e espaços de cor, com transparência** (RGB, HSL, HSB e alfa) na área, na trilha e no campo.
+  O valor continua hex; com transparência, o hex de oito dígitos (`#rrggbbaa`), que o CSS lê.
+- **O xadrez entra, só onde há transparência** — é como se vê que a cor é transparente. Muda a decisão antiga do
+  `ColorSwatch` ("sem o xadrez"); o xadrez é desenho de SVG, e não gradiente. **A forma quadrada não entra**: a
+  amostra continua só redonda, identidade da Aurea.
+- **A função `render` não entra** nas peças de cor: vale a M-01 (só no `Button`, no `IconButton` e nos itens de
+  navegação).
+- Os exemplos da referência entram todos no catálogo, menos os de `render` e os de forma quadrada.
+
 ## Como é obrigada
 
 - **Check 4 do `validate.py`, estendido:** passa a varrer também o código dos componentes
@@ -67,9 +83,18 @@ a cor da biblioteca de acessibilidade em que se apoia.
   WCAG), `color-area.test.tsx` (as teclas, o que o leitor de tela ouve, só um na ordem do Tab, o matiz no cinza,
   o anel só do teclado), `slider-hue.test.tsx`, `color-swatch-picker.test.tsx` (marcação pura, o visto pelo
   contraste) e `color-picker.test.tsx` (o código que volta, a trilha que mexe a área no cinza, as amostras com o
-  nome da cor). Cada um provado contra o defeito que ele cobra.
+  nome da cor), e `color-field.test.tsx` (o código no Enter, o que não é cor volta, o vazio limpa, o canal como
+  número, o alfa em por cento, o `Field` nomeando, marcando obrigatório e o erro). Cada um provado contra o defeito
+  que ele cobra.
 - `tests/visual/skin.spec.ts`, passo 12: as medidas da referência (área 224 e canto 16; pino 16 com anel 3;
-  amostra de 32, borda 2, vão 8, 77%; o gatilho com o vão de 12).
+  amostra de 32, borda 2, vão 8, 77%; o gatilho com o vão de 12; o `ColorField` na altura do `Input`, a amostra
+  de 24 e o xadrez na cor transparente).
+- `tests/visual/catalog-sweep.spec.ts`: o `ColorPicker` com o foco preso, o Esc que devolve o foco, e o anel só do
+  teclado — com a PRIMEIRA abertura pelo mouse (a escuta começava tarde e o anel acendia; medido na bancada em
+  14/10/2026).
+- **Check 14 do `validate.py`**: os eixos da ficha (`channel`, `colorSpace`, `xChannel`, `yChannel`) têm de ser
+  props do componente. Foi ele que mostrou que o leitor da API não via os ramos de `Base & (A | B)` (o `Slider` e
+  o `ColorSwatch`), consertado no `build-api-surface.mjs`.
 
 ## Consequências
 
