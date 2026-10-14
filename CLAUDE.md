@@ -170,6 +170,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.29.0` | Lote N: `Card variant="contrast"` (o tema escuro dentro do cartão) e `Card accent` (o traço de 4 no topo, na cor cheia), web e nativo; a marca chega a um pedaço com tema próprio — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md), pedido #63. **Publicada em 10/10/2026** (entre 13:05 e 13:10, Brasília), pelo terminal do Victor |
 | `0.30.0` | A rodada 1 do mapa de rede: o `DependencyGraph` de cima para baixo, em camadas pelo `elkjs` (opcional), com ícone, selos, portas, a linha que diz o que é sem cor, enlaces juntos, minimapa, ir até, caminho, setas e exportar `.drawio`/PNG/SVG; o `Icon` da web aceita o desenho do app — [ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md), pedido #64. **Publicada em 10/10/2026** (por volta das 15:38, Brasília), pelo terminal do Victor |
 | `0.31.0` | A rodada 2 do mapa de rede: o modo de arrumar (`editable`), desfazer, as rotas do `elkjs` e o desvio (`@tisoap/react-flow-smart-edge`, opcional), rótulos que somem, contêiner que fecha, árvore e círculo, `visibleOnly` e `layoutWorker` — [ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md), pedido #65. **Publicada em 10/10/2026** (entre 20:25 e 20:29, Brasília), pelo terminal do Victor |
+| `0.32.0` | O lote único — a peça é a da referência, com a cara da Aurea: 12 componentes novos (`CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`, `DatePicker` na web, `ColorArea`, `ColorField`, `ColorPicker`), o nativo na escala de toque, o mapa de rede (MNT-21 a 26) e o site no molde da documentação da referência — [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md) a [ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), pedido #66. **Publicada em 14/10/2026** (entre 17:56 e 18:07, Brasília, medido no npm), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -444,7 +445,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    ninguém tinha visto — o foco de duas linhas e a cor que some no alto contraste nas amostras, o Tab que
    descia e voltava no cabeçalho do site, o título quebrado no meio da palavra no celular, o `Kbd` de duas
    alturas e as peças de cor fora das travas de inválido e de máscara. A suíte inteira roda ANTES de pedir o
-   "pode", sempre; e mais de uma vez no lote, não só no fim.
+   "pode", sempre; e mais de uma vez no lote, não só no fim. **Publicada em 14/10/2026** (entre 17:56 e 18:07,
+   Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #66.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

@@ -17,12 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### Os componentes novos da 0.32.0 (ainda não publicada)
-
-- `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
-  `TagGroup`, `DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker` — a nota
-  está na seção `[0.32.0]`, abaixo.
-
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -88,7 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.32.0] — 2026-10-14
 
-⏳ **Ainda não publicada.** O lote único: as peças quase idênticas às da referência. Os componentes novos:
+✅ **Publicada em 14/10/2026, entre 17:56 e 18:07 (Brasília, medido no npm)**, pelo terminal do Victor, da junção
+do pedido #66 (o `native` falhou na primeira tentativa e saiu na segunda; o npm o registra às 18:06). O lote único: as peças quase idênticas às da referência. Os componentes novos:
 `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`,
 `DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker`.
 
