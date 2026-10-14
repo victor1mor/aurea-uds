@@ -72,10 +72,10 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 | Chamadas de `test()` nos testes unitários | 2008 |
 | Componentes citados nos testes unitários | 143 de 136 |
 | Specs de navegador (Playwright) | 39 |
-| Baselines de screenshot no repositório | 46 |
-| Baselines `-linux.png` (o que a CI compara) | 22 |
+| Baselines de screenshot no repositório | 48 |
+| Baselines `-linux.png` (o que a CI compara) | 24 |
 
-Com 22 baselines `-linux.png` no repositório, o **gate de pixel está ATIVO**: o
+Com 24 baselines `-linux.png` no repositório, o **gate de pixel está ATIVO**: o
 passo de screenshot da CI compara e bloqueia. Fechou o follow-up A4 da auditoria de
 18/07/2026, aberto desde então. Os `-win32.png` servem à execução local nesta máquina e
 não são comparados pela CI.

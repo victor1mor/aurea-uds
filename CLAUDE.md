@@ -538,7 +538,9 @@ no git.
     número de componentes muda e as fotos `index` e `topo` do catálogo vencem. Conserto: rodar a
     CI no modo de regerar fotos (`gh workflow run CI --ref <branch> -f update_snapshots=true`),
     baixar o artefato `playwright-snapshots-linux`, **olhar cada foto que mudou** e commitar só
-    essas.
+    essas. ⚠ Foto NOVA (arquivo que não existia) muda o `manifest.json` e o `STATE.md`: regravar os
+    dois (`--write-manifest`, `--write-state`, cada um sozinho) e rodar o `validate.py` puro ANTES de
+    empurrar — em 14/10/2026 as 2 fotos novas da 0.32.0 reprovaram a `build` da CI por isso.
   - **A trava de fotos tem tolerância de cor 0,02** (`playwright.config.ts`, decisão do Victor,
     09/10/2026). Com o 0,2 padrão do Playwright, a troca de paleta da `0.27.0` passou sem foto
     nova — até o fundo do escuro; com 0, o serrilhado reprovou 3 de 5 rodadas sem mudança. Não subir o
