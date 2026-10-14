@@ -27,6 +27,11 @@ export declare function rgbToHsb({ r, g, b }: Rgb): Hsb;
 export declare function hsbToRgb({ h, s, b }: Hsb): Rgb;
 export declare function rgbToHsl({ r, g, b }: Rgb): Hsl;
 export declare function hslToRgb({ h, s, l }: Hsl): Rgb;
+/** A luminância relativa da WCAG 2 (0 = preto, 1 = branco), a conta do contraste. */
+export declare function relativeLuminance({ r, g, b }: Rgb): number;
+/** A tinta que contrasta MAIS sobre a cor: `"dark"` (preto) ou `"light"` (branco), pela razão de contraste da WCAG
+ *  — e não por um palpite de "cor clara". O amarelo da Aurea pede preto; um azul médio também. */
+export declare function contrastingInk(rgb: Rgb): "dark" | "light";
 /** O fundo da área de cor para um matiz: do começo ao fim da linha, do branco à cor pura (a saturação); de cima
  *  para baixo, do claro ao preto (o brilho). O motor da área lê o mesmo eixo: x = saturação, y = brilho. Na
  *  escrita da direita para a esquerda (`rtl`), o começo da linha é a direita. */

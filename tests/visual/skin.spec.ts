@@ -291,6 +291,9 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // 0.32.0, passo 12: a área de cor (ADR-0069) e o gatilho do DatePicker (ADR-0068, subcaminho `calendar`).
     h("div", {key: "car", style: {width: 320}}, h(A.ColorArea, {defaultValue: "#0485f7", "aria-label": "Fill"})),
     h("div", {key: "shue", style: {width: 320}}, h(A.Slider, {label: "Hue", channel: "hue", defaultValue: 210})),
+    h(A.ColorSwatch, {key: "cswp", name: "skin-swatch", label: "Accent", defaultValue: "#f0c200",
+      options: [{color: "#0485f7", label: "Ocean"}, {color: "#f0c200", label: "Aurea yellow"}]}),
+    h(A.ColorPicker, {key: "cpk", label: "Brand colour", defaultValue: "#0485f7"}),
     h("div", {key: "dpk", style: {width: 320}}, h(A2.DatePicker, {"aria-label": "Check-in", defaultValue: new Date(2026, 7, 12)})),
     h("div", {key: "pcr"}, h(A.ProgressCircle, {label: "Upload", value: 50}), h(A.ProgressCircle, {label: "Big", value: 50, size: "lg", tone: "success"})),
     h(A.TagGroup, {key: "tgg", label: "Topics", selectionMode: "multiple", defaultSelectedKeys: ["b"],
@@ -1493,6 +1496,16 @@ for (const theme of ["dark", "light"] as const) {
               matiz: {pino: [caixa(".slider-hue .slider-thumb").width, caixa(".slider-hue .slider-thumb").height],
                       anel: parseFloat(est(".slider-hue .slider-thumb").borderTopWidth), trilho: caixa(".slider-hue .slider-track").height,
                       pintada: est(".slider-hue .slider-track").backgroundImage, cheio: !!document.querySelector(".slider-hue .slider-fill")},
+              amostras: (() => {
+                const op = document.querySelector(".color-swatch-option:not(:has(:checked))")!, esc = document.querySelector(".color-swatch-option:has(:checked)")!;
+                const cs = getComputedStyle(op), ce = getComputedStyle(esc);
+                return {tam: Math.round(op.getBoundingClientRect().width), borda: parseFloat(cs.borderTopWidth), vao: parseFloat(getComputedStyle(op.parentElement!).columnGap),
+                  bordaLivre: cs.borderTopColor, bordaEscolhida: ce.borderTopColor, encolhe: getComputedStyle(esc.querySelector(".color-swatch")!).scale,
+                  visto: getComputedStyle(esc, "::after").scale, tinta: getComputedStyle(esc, "::after").backgroundColor,
+                  botaoInvisivel: getComputedStyle(esc.querySelector("input")!).opacity};
+              })(),
+              seletor: {vao: parseFloat(est(".color-picker-trigger").columnGap), amostra: caixa(".color-picker-trigger .color-swatch").width,
+                        letra: parseFloat(est(".color-picker-trigger").fontSize), fundo: est(".color-picker-trigger").backgroundColor},
               data: {fundo: est(".date-picker-trigger").backgroundImage, alt: caixa(".date-picker-trigger").height,
                      select: caixa(".select-trigger:not(.date-picker-trigger)").height},
             },
@@ -2684,6 +2697,15 @@ for (const theme of ["dark", "light"] as const) {
     expect([p12.matiz.anel, p12.matiz.trilho], "com o anel de 3, na trilha de 20").toEqual([3, 20]);
     expect(p12.matiz.pintada, "a trilha pintada com o círculo de cores").toMatch(/^linear-gradient/);
     expect(p12.matiz.cheio, "sem o preenchimento: a cor é a trilha").toBe(false);
+    expect([p12.amostras.tam, p12.amostras.borda, p12.amostras.vao], "ColorSwatch options: 32, borda 2, vão 8").toEqual([32, 2, 8]);
+    expect(p12.amostras.bordaLivre, "a livre tem a borda transparente").toBe("rgba(0, 0, 0, 0)");
+    expect(p12.amostras.bordaEscolhida, "a escolhida, a borda na cor dela").toBe("rgb(240, 194, 0)");
+    expect([p12.amostras.encolhe, p12.amostras.visto], "a escolhida encolhe a 77% e mostra o visto").toEqual(["0.77", "1"]);
+    expect(p12.amostras.tinta, "o visto no amarelo é preto (o contraste)").toBe("rgb(0, 0, 0)");
+    expect(Number(p12.amostras.botaoInvisivel), "o botão de opção nativo fica invisível").toBe(0);
+    expect([p12.seletor.vao, p12.seletor.amostra], "ColorPicker: o gatilho é a amostra de 32 com o nome, vão de 12").toEqual([12, 32]);
+    expect(p12.seletor.letra, "o nome em 14 (--text-sm)").toBe(14);
+    expect(p12.seletor.fundo, "o gatilho não tem caixa").toBe("rgba(0, 0, 0, 0)");
     expect(p12.data.fundo, "DatePicker: sem a seta do Select").toBe("none");
     expect(p12.data.alt, "o gatilho tem a altura do Select").toBe(p12.data.select);
     // 0.32.0, passo 6 — as medidas da referência, lidas no CSS publicado dela.

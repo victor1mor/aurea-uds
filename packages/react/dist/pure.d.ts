@@ -238,6 +238,8 @@ export interface AureaStrings {
     colorHue: Record<"red" | "orange" | "yellow" | "green" | "cyan" | "blue" | "purple" | "magenta" | "pink" | "brown" | "gray" | "white" | "black", string>;
     colorTone: Record<"veryDark" | "dark" | "light" | "veryLight" | "vivid" | "pale" | "grayish", string>;
     colorNameFormat: string;
+    colorHex: string;
+    colorSwatches: string;
     universalState: Record<UniversalState, string>;
 }
 export declare const defaultStrings: AureaStrings;

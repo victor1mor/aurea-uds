@@ -492,6 +492,52 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await expect(gatilho).toBeFocused();
   });
 
+  // ADR-0069 (13/10/2026): o `ColorPicker`. O foco fica PRESO na janela, como na referência — medido no navegador:
+  // sem isso, o Tab depois do campo do código saía da janela e ela fechava no meio do uso. A prévia se abre como
+  // PÁGINA PRÓPRIA: dentro da moldura do catálogo o Tab do navegador dá a volta sozinho, e o teste passava com o
+  // defeito (provado em 13/10/2026).
+  test("o ColorPicker: abre com o foco na área, o Tab dá a volta dentro da janela, e o Esc devolve o foco", async ({page}) => {
+    await page.goto("/apps/catalog/embeds/colorpicker-with-swatches.html");
+    const gatilho = page.locator(".color-picker-trigger");
+    await expect(gatilho).toHaveAccessibleName("Brand colour, vivid blue");
+    await gatilho.focus();
+    await page.keyboard.press("Enter");
+    const janela = page.getByRole("dialog", {name: "Brand colour"});
+    await expect(janela).toBeVisible();
+    const focado = () => page.evaluate(() => {
+      const a = document.activeElement!, j = document.querySelector(".color-picker-popover");
+      if (!j || !j.contains(a)) return "fora";
+      return a.closest(".color-area") ? "área" : a.closest(".slider") ? "trilha" : a.closest(".color-swatch-picker") ? "amostras"
+        : a.closest(".input-group") ? "código" : a.className;
+    });
+    await expect.poll(focado).toBe("área");
+    // Uma ESPERA por passo, e não uma leitura: a volta do foco ao começo da janela é do motor e acontece um instante
+    // depois do Tab — a leitura imediata reprovou 1 vez em 2 rodadas com o código certo.
+    for (const onde of ["trilha", "amostras", "código", "área", "trilha"]) {
+      await page.keyboard.press("Tab");
+      await expect.poll(focado, {message: `o Tab leva a: ${onde}`, timeout: 2000}).toBe(onde);
+    }
+    // E a janela FICA aberta: sem o foco preso, o motor primeiro devolve o foco ao começo e, uns 300 ms depois,
+    // fecha a janela (medido em 13/10/2026). Aqui a espera fixa é a medida: o que se testa é nada acontecer.
+    await page.waitForTimeout(600);
+    expect(await focado(), "o foco continua dentro da janela").toBe("trilha");
+    await expect(janela).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(janela).toHaveCount(0);
+    await expect(gatilho).toBeFocused();
+    // O anel de foco da área é do TECLADO: aberto pelo teclado, ele aparece; aberto pelo mouse, não (medido em
+    // 13/10/2026: abrindo com o mouse, o anel acendia, porque a janela põe o foco na área por código).
+    const anel = () => page.locator(".color-picker-popover .color-area-thumb").getAttribute("data-focus-visible");
+    await page.keyboard.press("Enter");
+    await expect(janela).toBeVisible();
+    await expect.poll(anel).toBe("");
+    await page.keyboard.press("Escape");
+    await gatilho.click();
+    await expect(janela).toBeVisible();
+    await expect.poll(focado).toBe("área");
+    expect(await anel(), "aberto pelo mouse, sem o anel").toBeNull();
+  });
+
   // O Victor, 13/10/2026: a barra de rolagem da lateral "só aparece se o mouse fica em cima" e é clarinha.
   // Medido pela cor da barra (o caminho padrão); o WebKit sem `scrollbar-color` usa o caminho do webkit,
   // que o teste de unidade cobra no texto do CSS.

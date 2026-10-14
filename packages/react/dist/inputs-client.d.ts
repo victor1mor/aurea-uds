@@ -1,6 +1,6 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Responsive } from "./pure.js";
-import { type FieldSize, type FieldVariant } from "./markup.js";
+import { type ColorSwatchOption, type FieldSize, type FieldVariant } from "./markup.js";
 import { type IconName } from "./system.js";
 export { FileInput, matchesAccept, type FileRejection, type UploadContext, type UploadFn } from "./file-input.js";
 export type FieldOrientation = "vertical" | "horizontal";
@@ -185,6 +185,28 @@ export interface ColorAreaProps {
     "aria-describedby"?: string;
 }
 export declare function ColorArea({ value, defaultValue, onValueChange, onValueCommitted, ...resto }: ColorAreaProps): React.JSX.Element;
+export interface ColorPickerProps {
+    /** O nome, ao lado da amostra no gatilho ("Cor da marca"). Nomeia o gatilho e a janela. */
+    label: string;
+    /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+    value?: string;
+    /** A cor de partida quando você não controla. Padrão: branco. */
+    defaultValue?: string;
+    /** Chamado a cada passo, com o hex `#rrggbb`. */
+    onValueChange?: (value: string) => void;
+    /** Chamado ao soltar, a cada tecla, ao escolher uma amostra e ao confirmar o código — o momento de salvar. */
+    onValueCommitted?: (value: string) => void;
+    /** Cores prontas, embaixo da trilha; com `variant="swatches"`, no lugar da área. Hex ou `{color, label}`. */
+    swatches?: readonly (string | ColorSwatchOption)[];
+    /** `"swatches"`: a paleta fechada — só as amostras e o campo do código. Padrão: `"full"`. */
+    variant?: "full" | "swatches";
+    disabled?: boolean;
+    /** Vai no formulário como `#rrggbb`. */
+    name?: string;
+    id?: string;
+    className?: string;
+}
+export declare function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant, disabled, name, id, className }: ColorPickerProps): React.JSX.Element;
 export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className }: {
     length: number;
     value?: string;

@@ -3,7 +3,7 @@
   "category": "Identity",
   "layer": "Primitive",
   "maturity": "Stable",
-  "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows.",
+  "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows. With options, a group of swatches to pick one from (a closed palette).",
   "icon": "palette",
   "platforms": {
     "web": "stable",
@@ -18,7 +18,11 @@
     "xl"
   ],
   "states": [
-    "default"
+    "default",
+    "hover",
+    "focus",
+    "selected",
+    "disabled"
   ],
   "tokens": [
     "--space-4",
@@ -26,13 +30,28 @@
     "--space-8",
     "--space-10",
     "--radius-full",
-    "--foreground"
+    "--foreground",
+    "--border-width",
+    "--focus-width",
+    "--focus-strong",
+    "--focus-offset",
+    "--opacity-disabled",
+    "--space-1",
+    "--space-2",
+    "--duration-fast",
+    "--ease-standard"
   ],
   "a11y": {
     "role": "img",
-    "apg": "img",
-    "keyboard": [],
-    "keyboardNote": "role=img named by label (or the colour value). Not interactive."
+    "apg": "Alone, an image (role=img) named by label or the colour value. With options (the picker variation, ADR-0069), a radio group: one native radio button per colour, named by the option's label or the code; the browser gives single choice and the arrow keys.",
+    "keyboard": [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Space"
+    ],
+    "keyboardNote": "Alone, not interactive. With options, Tab enters the group at the chosen colour, the arrows move and choose, Space chooses — all from the browser's radio buttons."
   },
   "dependencies": {
     "engine": null,
@@ -40,7 +59,9 @@
   },
   "related": {
     "components": [
-      "Badge"
+      "Badge",
+      "ColorArea",
+      "Radio"
     ],
     "patterns": []
   },
@@ -52,7 +73,7 @@
       "name": "color",
       "type": "string",
       "default": "—",
-      "description": "REQUIRED. Any CSS colour: #f0c200, oklch(…), var(--primary)."
+      "description": "REQUIRED without options. Any CSS colour: #f0c200, oklch(…), var(--primary)."
     },
     {
       "name": "size",
@@ -64,7 +85,49 @@
       "name": "label",
       "type": "string",
       "default": "color",
-      "description": "The name a screen reader announces (\"Aurea yellow\"). Without it, the colour value."
+      "description": "The name a screen reader announces (\"Aurea yellow\"); without it, the colour value. With options, the name of the group (\"Accent colour\"), and REQUIRED."
+    },
+    {
+      "name": "options",
+      "type": "(string | {color, label?})[]",
+      "default": "—",
+      "description": "The picker variation (ADR-0069): the colours to pick from, as hex or {color, label}. Turns the swatch into a radio group."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "With options, REQUIRED: the group's name in a form, and what makes the swatches one group (the arrows move between them)."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "—",
+      "description": "With options: the chosen colour, controlled."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "With options: the colour chosen at the start."
+    },
+    {
+      "name": "onChange",
+      "type": "ChangeEventHandler<HTMLInputElement>",
+      "default": "—",
+      "description": "With options: the browser's event, as in Radio — event.target.value is the chosen colour."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "With options: no colour can be chosen."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "—",
+      "description": "With options: the id of the group."
     },
     {
       "name": "className",

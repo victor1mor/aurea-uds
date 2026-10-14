@@ -75,6 +75,19 @@ export function hslToRgb({h, s, l}: Hsl): Rgb {
   return {r: f(0), g: f(8), b: f(4)};
 }
 
+/** A luminância relativa da WCAG 2 (0 = preto, 1 = branco), a conta do contraste. */
+export function relativeLuminance({r, g, b}: Rgb): number {
+  const lin = (c: number) => { const s = c / 255; return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+/** A tinta que contrasta MAIS sobre a cor: `"dark"` (preto) ou `"light"` (branco), pela razão de contraste da WCAG
+ *  — e não por um palpite de "cor clara". O amarelo da Aurea pede preto; um azul médio também. */
+export function contrastingInk(rgb: Rgb): "dark" | "light" {
+  const L = relativeLuminance(rgb);
+  return (L + 0.05) / 0.05 >= 1.05 / (L + 0.05) ? "dark" : "light";
+}
+
 // ── A pintura (a exceção da ADR-0069) ────────────────────────────────────────────────────────────────────────
 // A cor pura de um matiz, que é o canto de cima à direita da área.
 const puro = (h: number) => toHex(hsbToRgb({h, s: 1, b: 1}));

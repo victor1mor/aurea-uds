@@ -15,6 +15,7 @@ export default {
     "Five sizes from the reference library: 16, 24, 32, 36 and 40.",
     "Round only, with no transparency checkerboard.",
     "role=\"img\" named by label; without it, the colour value is read.",
+    "With options, a group of swatches to pick one from: native radio buttons, so the choice and the arrows work without JavaScript.",
   ],
 
   examples: [
@@ -46,6 +47,25 @@ export default {
         h(ColorSwatch, {color: "var(--info)", label: "Info"}),
         h(ColorSwatch, {color: "var(--destructive)", label: "Danger"}),
         h(ColorSwatch, {color: "var(--background)", label: "Background"})),
+    },
+    {
+      title: "Pick from a palette",
+      description: "options turns the swatch into a group to pick one colour. The chosen one gets the ring in its own colour and a check in the ink that contrasts most.",
+      code: `<ColorSwatch
+  name="accent"
+  label="Accent colour"
+  defaultValue="#0485f7"
+  options={[
+    {color: "#0485f7", label: "Ocean"},
+    {color: "#16a34a", label: "Forest"},
+    {color: "#f0c200", label: "Aurea yellow"},
+    {color: "#e11d48", label: "Ruby"},
+    {color: "#7c3aed", label: "Violet"},
+  ]}
+/>`,
+      render: () => h(ColorSwatch, {name: "accent", label: "Accent colour", defaultValue: "#0485f7", options: [
+        {color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, {color: "#f0c200", label: "Aurea yellow"},
+        {color: "#e11d48", label: "Ruby"}, {color: "#7c3aed", label: "Violet"}]}),
     },
   ],
 };

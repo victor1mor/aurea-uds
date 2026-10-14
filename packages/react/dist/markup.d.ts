@@ -376,7 +376,31 @@ export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>, RefAt
     /** O nome que o leitor de tela anuncia ("Amarelo Aurea"). Sem ele, o valor da cor. */
     label?: string;
 }
-export declare function ColorSwatch({ color, size, label, className, style, ...props }: ColorSwatchProps): React.JSX.Element;
+export interface ColorSwatchOption {
+    color: string;
+    label?: string;
+}
+/** O que as duas formas têm em comum: a escala. (É a base que o leitor da API segue em `base & (a | b)`.) */
+export interface ColorSwatchBase {
+    size?: ColorSwatchSize;
+}
+export interface ColorSwatchPickerProps {
+    /** As cores para escolher — `"#0485f7"` ou `{color, label}`. É o que faz da amostra um grupo de escolha. */
+    options: readonly (string | ColorSwatchOption)[];
+    /** O nome do grupo no formulário, e o que faz das amostras UM grupo (as setas andam entre elas). */
+    name: string;
+    /** O nome do grupo para o leitor de tela ("Cor de destaque"). */
+    label: string;
+    value?: string;
+    defaultValue?: string;
+    /** O evento do navegador, como no `Radio`: `event.target.value` é a cor escolhida. */
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    size?: ColorSwatchSize;
+    disabled?: boolean;
+    id?: string;
+    className?: string;
+}
+export declare function ColorSwatch(props: ColorSwatchBase & (ColorSwatchProps | ColorSwatchPickerProps)): React.JSX.Element;
 export type ProgressCircleSize = "sm" | "md" | "lg";
 export interface ProgressCircleProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
     /** De `min` a `max`. Sem ele, o círculo gira. */

@@ -63,7 +63,13 @@ a cor da biblioteca de acessibilidade em que se apoia.
 - **Check 4 do `validate.py`, estendido:** passa a varrer também o código dos componentes
   (`packages/react/src`), e `gradient(` só é aceito em `color.ts`. Antes, ele olhava só o CSS e o catálogo — um
   gradiente posto pelo código passaria calado.
-- Os testes de cada peça entram com ela (a lista fica na seção abaixo, quando fechar).
+- `tests/unit/color.test.tsx` (as contas, o nome da cor — o pastel não é "vivo" —, a tinta pelo contraste da
+  WCAG), `color-area.test.tsx` (as teclas, o que o leitor de tela ouve, só um na ordem do Tab, o matiz no cinza,
+  o anel só do teclado), `slider-hue.test.tsx`, `color-swatch-picker.test.tsx` (marcação pura, o visto pelo
+  contraste) e `color-picker.test.tsx` (o código que volta, a trilha que mexe a área no cinza, as amostras com o
+  nome da cor). Cada um provado contra o defeito que ele cobra.
+- `tests/visual/skin.spec.ts`, passo 12: as medidas da referência (área 224 e canto 16; pino 16 com anel 3;
+  amostra de 32, borda 2, vão 8, 77%; o gatilho com o vão de 12).
 
 ## Consequências
 

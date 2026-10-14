@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 39,
-    "componentes": 140,
+    "componentes": 141,
     "hooks": 9,
     "aliasesLiterais": 108,
-    "propsDistintas": 349
+    "propsDistintas": 350
   },
   "aliases": {
     "ButtonVariant": {
@@ -5767,6 +5767,82 @@
           ]
         },
         {
+          "name": "ColorPicker",
+          "kind": "function",
+          "propsType": "ColorPickerProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "onValueCommitted",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "swatches",
+              "optional": true,
+              "type": "readonly (string | ColorSwatchOption)[]",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"full\" | \"swatches\"",
+              "values": [
+                "full",
+                "swatches"
+              ]
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "id",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "Combobox",
           "kind": "function",
           "propsType": null,
@@ -7273,14 +7349,8 @@
         {
           "name": "ColorSwatch",
           "kind": "function",
-          "propsType": "ColorSwatchProps",
+          "propsType": null,
           "props": [
-            {
-              "name": "color",
-              "optional": false,
-              "type": "string",
-              "values": null
-            },
             {
               "name": "size",
               "optional": true,
@@ -7292,12 +7362,6 @@
                 "lg",
                 "xl"
               ]
-            },
-            {
-              "name": "label",
-              "optional": true,
-              "type": "string",
-              "values": null
             }
           ]
         },

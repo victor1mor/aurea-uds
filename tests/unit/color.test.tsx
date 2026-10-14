@@ -1,7 +1,7 @@
 // 0.32.0, passo 12 · as contas da família de cor (ADR-0069): o texto hex, as conversões, a pintura e o nome da
 // cor. As contas são fórmulas padrão; o teste as amarra em cores de valor conhecido.
 import {
-  areaFill, colorName, hsbToRgb, hslToRgb, hueTrackBackground, hueTrackFill, normalizeHex, parseHex, pureHue,
+  areaFill, colorName, contrastingInk, relativeLuminance, hsbToRgb, hslToRgb, hueTrackBackground, hueTrackFill, normalizeHex, parseHex, pureHue,
   rgbToHsb, rgbToHsl, toHex,
 } from "../../packages/react/src/color";
 import {defaultStrings as en, ptBR as pt} from "../../packages/react/src/pure";
@@ -35,6 +35,14 @@ describe("color (as contas da família de cor)", () => {
       expect(toHex(hsbToRgb(rgbToHsb(rgb)))).toBe(hex);
       expect(toHex(hslToRgb(rgbToHsl(rgb)))).toBe(hex);
     }
+  });
+
+  test("a tinta que contrasta: a conta da WCAG, e não um palpite de cor clara", () => {
+    expect(relativeLuminance({r: 255, g: 255, b: 255})).toBeCloseTo(1, 5);
+    expect(relativeLuminance({r: 0, g: 0, b: 0})).toBe(0);
+    expect(contrastingInk(parseHex("#f0c200")!)).toBe("dark"); // o amarelo da Aurea: luminância ~0,57
+    expect(contrastingInk(parseHex("#000080")!)).toBe("light");
+    expect(contrastingInk(parseHex("#ff0000")!)).toBe("dark"); // 5,25:1 com preto contra 4,00:1 com branco
   });
 
   test("a pintura: a área vai do branco à cor pura e do claro ao preto; a trilha dá a volta inteira", () => {

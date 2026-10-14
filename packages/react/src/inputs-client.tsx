@@ -15,12 +15,13 @@ import {RadioGroup as BaseRadioGroup} from "@base-ui/react/radio-group";
 import {Radio as BaseRadio} from "@base-ui/react/radio";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis} from "./internal.js";
-import {areaFill, colorName, hsbToRgb, hueTrackBackground, parseHex, pureHue, rgbToHsb, toHex, type Hsb} from "./color.js";
+import {areaFill, colorName, hsbToRgb, hueTrackBackground, normalizeHex, parseHex, pureHue, rgbToHsb, toHex, type Hsb} from "./color.js";
+import {Popover as BasePopover} from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
 // objetos diferentes com o mesmo nome quebrariam o rótulo do campo em silêncio.
-import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, type FieldSize, type FieldVariant} from "./markup.js";
+import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch, type ColorSwatchOption, type FieldSize, type FieldVariant} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {IconButton} from "./actions.js";
 // ColorArea (0.32.0, ADR-0069) — a ÁREA de cor da referência: o quadrado em que se escolhe a saturação (do
@@ -36,6 +37,18 @@ import {IconButton} from "./actions.js";
 interface AreaDeCorProps{hsb:Hsb;onHsb:(hsb:Hsb,fim:boolean)=>void;disabled?:boolean;name?:string;id?:string;className?:string;
   "aria-label"?:string;"aria-labelledby"?:string;"aria-describedby"?:string}
 const no01=(n:number)=>Math.min(1,Math.max(0,n));
+// COMO A PESSOA CHEGOU AQUI: a última interação foi teclado ou ponteiro? O anel de foco da área é só do teclado, e o
+// foco que chega por código (a janela do `ColorPicker` o põe na área ao abrir; o arrasto o põe no `range`) não diz
+// nada por si. É o jeito da biblioteca de acessibilidade em que a referência se apoia: ouvir o documento inteiro, uma
+// vez, e lembrar a última modalidade. Medido em 13/10/2026: abrindo o seletor com o mouse, o anel acendia.
+let modalidade:"teclado"|"ponteiro"="teclado";
+let ouvindoModalidade=false;
+function ouvirModalidade(){
+  if(ouvindoModalidade||typeof document==="undefined")return;
+  ouvindoModalidade=true;
+  document.addEventListener("keydown",(e)=>{if(!e.metaKey&&!e.ctrlKey&&!e.altKey)modalidade="teclado";},true);
+  document.addEventListener("pointerdown",()=>{modalidade="ponteiro";},true);
+}
 function AreaDeCor({hsb,onHsb,disabled,name,id,className,"aria-label":ariaLabel,"aria-labelledby":ariaLabelledby,"aria-describedby":ariaDescribedby}:AreaDeCorProps){
   const s=useAureaStrings();
   const rtl=useDirection()==="rtl";
@@ -46,6 +59,7 @@ function AreaDeCor({hsb,onHsb,disabled,name,id,className,"aria-label":ariaLabel,
   const [pelaTecla,setPelaTecla]=React.useState(false);
   // O anel de foco é do TECLADO, como na referência: o foco que o arrasto põe no `range` não acende o anel.
   const [peloPonteiro,setPeloPonteiro]=React.useState(false);
+  React.useEffect(ouvirModalidade,[]);
   const rgb=hsbToRgb(hsb),hex=toHex(rgb),nome=colorName(rgb,s);
   const pct=(n:number)=>Math.round(n*100);
   // Antes de mexer, o leitor de tela ouve os três canais e o nome; depois de mexer pelo teclado, só o canal que
@@ -110,7 +124,7 @@ function AreaDeCor({hsb,onHsb,disabled,name,id,className,"aria-label":ariaLabel,
         aria-label={rotulo} aria-labelledby={rotulo?undefined:ariaLabelledby} aria-describedby={ariaDescribedby}
         aria-roledescription={s.colorArea2D} aria-valuetext={textoDo(eixo)} aria-orientation={eixo==="x"?"horizontal":"vertical"}
         tabIndex={escondido(eixo)?-1:undefined} aria-hidden={escondido(eixo)&&!pelaTecla?true:undefined}
-        onChange={aoMudar(eixo)} onFocus={()=>setFocado(eixo)}
+        onChange={aoMudar(eixo)} onFocus={()=>{setFocado(eixo);setPeloPonteiro(modalidade==="ponteiro");}}
         onBlur={(e)=>{if(!caixa.current?.contains(e.relatedTarget as Node|null)){setFocado(null);setPeloPonteiro(false);}}}/>)}
     </div>
     {name&&<input type="hidden" name={name} value={hex}/>}
@@ -124,6 +138,32 @@ function hsbDoHex(hex:string|undefined,anterior?:Hsb):Hsb{
   const novo=rgbToHsb(rgb);
   if(anterior&&(novo.s===0||novo.b===0))return {h:anterior.h,s:novo.b===0?anterior.s:novo.s,b:novo.b};
   return novo;
+}
+
+/** O estado de cor do `ColorArea` e do `ColorPicker`: HSB por dentro, hex por fora. Controlado, se o hex que chega é
+ *  o que a peça acabou de mandar, o HSB de dentro vale (com o matiz); se é outro, vira HSB guardando o matiz do
+ *  anterior quando a cor nova é cinza ou preta. */
+function useCorEmHsb(value:string|undefined,defaultValue:string|undefined,onValueChange?:(v:string)=>void,onValueCommitted?:(v:string)=>void):[Hsb,(novo:Hsb,fim:boolean)=>void]{
+  const [interno,setInterno]=React.useState<Hsb>(()=>hsbDoHex(defaultValue));
+  const ultimo=React.useRef<Hsb>(interno);
+  let hsb=interno;
+  if(value!==undefined){
+    const chegou=parseHex(value);
+    const mesmo=chegou!==null&&toHex(chegou)===toHex(hsbToRgb(ultimo.current));
+    hsb=mesmo?ultimo.current:hsbDoHex(value,ultimo.current);
+  }
+  ultimo.current=hsb;
+  const mudar=(novo:Hsb,fim:boolean)=>{
+    ultimo.current=novo;
+    // SEMPRE, e não só sem controle: no cinza o hex não muda com o matiz, o app devolve o MESMO valor e nada
+    // redesenharia — a trilha mexia e a área não (o teste do `ColorPicker` pegou). Este estado é o que redesenha;
+    // com controle, quem decide continua sendo o `value` (acima).
+    setInterno(novo);
+    const h=toHex(hsbToRgb(novo));
+    onValueChange?.(h);
+    if(fim)onValueCommitted?.(h);
+  };
+  return [hsb,mudar];
 }
 
 // FileInput mora em arquivo próprio (132 linhas — upload real, aborto, progresso) e é público
@@ -706,24 +746,88 @@ export interface ColorAreaProps{
   id?:string;className?:string;
   "aria-label"?:string;"aria-labelledby"?:string;"aria-describedby"?:string}
 export function ColorArea({value,defaultValue,onValueChange,onValueCommitted,...resto}:ColorAreaProps){
-  const [interno,setInterno]=React.useState<Hsb>(()=>hsbDoHex(defaultValue));
-  const ultimo=React.useRef<Hsb>(interno);
-  // Controlado: se o hex que chegou é o que esta peça acabou de mandar, o HSB de dentro vale (com o matiz);
-  // se é outro, ele vira HSB — guardando o matiz anterior quando a cor nova é cinza ou preta.
-  let hsb=interno;
-  if(value!==undefined){
-    const chegou=parseHex(value);
-    const mesmo=chegou!==null&&toHex(chegou)===toHex(hsbToRgb(ultimo.current));
-    hsb=mesmo?ultimo.current:hsbDoHex(value,ultimo.current);
-  }
-  ultimo.current=hsb;
-  return <AreaDeCor {...resto} hsb={hsb} onHsb={(novo,fim)=>{
-    ultimo.current=novo;
-    if(value===undefined)setInterno(novo);
-    const h=toHex(hsbToRgb(novo));
-    onValueChange?.(h);
-    if(fim)onValueCommitted?.(h);
-  }}/>;
+  const [hsb,mudar]=useCorEmHsb(value,defaultValue,onValueChange,onValueCommitted);
+  return <AreaDeCor {...resto} hsb={hsb} onHsb={mudar}/>;
+}
+
+// ColorPicker (0.32.0, ADR-0069 — o Victor: "ColorPicker componente") — o seletor de cor da referência: o gatilho
+// é a amostra com o nome; a janela traz a área, a trilha do matiz e o CAMPO DO CÓDIGO, que está sempre lá (o
+// Victor: "sempre com campo do código e teclado" — baixa visão). Com `swatches`, as amostras também. A variação
+// `variant="swatches"` é a "C": a paleta fechada — só as amostras e o código, sem a área e a trilha.
+// As peças são as da Aurea: a área (`AreaDeCor`, o HSB direto, para o matiz não se perder no cinza), o `Slider`
+// com `channel="hue"`, o `ColorSwatch` com `options` (com o nome de cada cor na língua do app) e o `InputGroup`.
+// O código só vale ao confirmar (Enter ou sair do campo); texto que não é cor volta ao valor de antes.
+export interface ColorPickerProps{
+  /** O nome, ao lado da amostra no gatilho ("Cor da marca"). Nomeia o gatilho e a janela. */
+  label:string;
+  /** A cor, em hex (`#rrggbb` ou `#rgb`). Controlado. */
+  value?:string;
+  /** A cor de partida quando você não controla. Padrão: branco. */
+  defaultValue?:string;
+  /** Chamado a cada passo, com o hex `#rrggbb`. */
+  onValueChange?:(value:string)=>void;
+  /** Chamado ao soltar, a cada tecla, ao escolher uma amostra e ao confirmar o código — o momento de salvar. */
+  onValueCommitted?:(value:string)=>void;
+  /** Cores prontas, embaixo da trilha; com `variant="swatches"`, no lugar da área. Hex ou `{color, label}`. */
+  swatches?:readonly (string|ColorSwatchOption)[];
+  /** `"swatches"`: a paleta fechada — só as amostras e o campo do código. Padrão: `"full"`. */
+  variant?:"full"|"swatches";
+  disabled?:boolean;
+  /** Vai no formulário como `#rrggbb`. */
+  name?:string;
+  id?:string;className?:string}
+export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommitted,swatches,variant="full",disabled,name,id,className}:ColorPickerProps){
+  const s=useAureaStrings();
+  const portal=usePortalContainer();
+  const idGrupo=React.useId();
+  const [hsb,mudar]=useCorEmHsb(value,defaultValue,onValueChange,onValueCommitted);
+  const rgb=hsbToRgb(hsb),hex=toHex(rgb),nome=colorName(rgb,s);
+  // O texto do campo enquanto a pessoa digita; fora disso, o campo mostra a cor de agora.
+  const [rascunho,setRascunho]=React.useState<string|null>(null);
+  const confirmar=()=>{
+    if(rascunho===null)return;
+    const certo=normalizeHex(rascunho);
+    if(certo&&certo!==hex)mudar(hsbDoHex(certo,hsb),true);
+    setRascunho(null);
+  };
+  const amostras=swatches?.map((o)=>{
+    const op=typeof o==="string"?{color:o}:o;
+    const cor=parseHex(op.color);
+    return {color:op.color,label:op.label??(cor?colorName(cor,s):op.color)};
+  });
+  const escolhida=amostras?.find((o)=>normalizeHex(o.color)===hex)?.color??"";
+  // O foco fica PRESO na janela (`trap-focus`), como na referência: com quatro peças dentro, o Tab que saía depois
+  // do código fechava a janela (medido no navegador). O motor pede um botão de fechar dentro, para o leitor de tela
+  // por toque sair; ele fica invisível e fora do Tab — quem usa teclado tem o Esc, e o foco nunca some na tela.
+  return <BasePopover.Root modal="trap-focus">
+    {/* O nome inteiro no `aria-label`, começando pelo texto que se vê (WCAG 2.5.3): com a cor num texto escondido,
+        os navegadores punham um espaço antes da vírgula ("Brand colour , vivid blue") — medido nos três. */}
+    <BasePopover.Trigger disabled={disabled} id={id} aria-label={`${label}, ${nome}`} className={cx("color-picker-trigger",className)}>
+      <ColorSwatch color={hex} aria-hidden="true"/>
+      <span>{label}</span>
+    </BasePopover.Trigger>
+    {name&&<input type="hidden" name={name} value={hex}/>}
+    <BasePopover.Portal container={portal}>
+      <BasePopover.Positioner side="bottom" align="start" sideOffset={6}>
+        <BasePopover.Popup className="popover color-picker-popover" aria-label={label}>
+          {variant!=="swatches"&&<>
+            <AreaDeCor hsb={hsb} onHsb={mudar} aria-label={label}/>
+            <Slider label={s.colorChannel.hue} labelHidden showValue={false} channel="hue" value={Math.round(hsb.h)}
+              onValueChange={(h:number)=>mudar({...hsb,h},false)} onValueCommitted={(h:number)=>mudar({...hsb,h},true)}/>
+          </>}
+          {amostras&&<ColorSwatch options={amostras} name={`${idGrupo}-amostras`} label={s.colorSwatches} value={escolhida}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>mudar(hsbDoHex(e.target.value,hsb),true)}/>}
+          <InputGroup>
+            <InputGroupAddon><ColorSwatch color={hex} size="sm" aria-hidden="true"/></InputGroupAddon>
+            <Input aria-label={s.colorHex} value={rascunho??hex} spellCheck={false} autoComplete="off"
+              onChange={(e)=>setRascunho(e.target.value)} onBlur={confirmar}
+              onKeyDown={(e)=>{if(e.key==="Enter"){e.preventDefault();confirmar();}}}/>
+          </InputGroup>
+          <BasePopover.Close className="sr-only" tabIndex={-1}>{s.close}</BasePopover.Close>
+        </BasePopover.Popup>
+      </BasePopover.Positioner>
+    </BasePopover.Portal>
+  </BasePopover.Root>;
 }
 
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta

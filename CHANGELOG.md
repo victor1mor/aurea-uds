@@ -20,8 +20,8 @@ em inglês e ficam como estão: são registro.
 ### Os componentes novos da 0.32.0 (em construção)
 
 - `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
-  `TagGroup`, `DatePicker` (na web; o nativo já o tinha) e `ColorArea` — a nota está na seção `[0.32.0]`,
-  abaixo.
+  `TagGroup`, `DatePicker` (na web; o nativo já o tinha), `ColorArea` e `ColorPicker` — a nota está na seção
+  `[0.32.0]`, abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -172,6 +172,19 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
   cor do valor (o da referência), o valor em graus e o nome da cor para o leitor de tela ("Hue 210°, vivid
   blue"). O grau é escrito pela Aurea, e não pelo `Intl` do motor: ele formata na língua do ambiente, e o
   servidor e o navegador escreveriam "210 °" e "210°".
+- **`ColorSwatch options`, as amostras para escolher** (ADR-0069, a "C" do Victor, *"como variação do
+  ColorSwatch"*) — com `options` (hex ou `{color, label}`), `name` e `label`, a amostra vira um grupo de escolha: a
+  paleta fechada. São botões de opção NATIVOS, então a escolha única e as setas são do navegador, sem
+  JavaScript, e ela continua marcação pura (sai pronta do servidor). O desenho é o da referência: opção de 32,
+  borda de 2, vão de 8; a escolhida com a borda na cor dela, encolhida a 77%, e o "visto" na tinta que contrasta
+  MAIS com a cor — a conta da WCAG (no amarelo da Aurea, preto). Avisa pelo `onChange` do navegador, como o
+  `Radio`.
+- **`ColorPicker`** (ADR-0069, escolhas do Victor: *"ColorPicker componente"*, *"cor A com C como variação"*) — o
+  gatilho é a amostra com o nome; a janela traz a área, a trilha do matiz e o CAMPO DO CÓDIGO, sempre (o Victor:
+  *"sempre com campo do código e teclado"*). `swatches` acrescenta amostras prontas, com o nome de cada cor na
+  língua do app; `variant="swatches"` é a paleta fechada (a "C"): só as amostras e o código. O código vale ao
+  confirmar (Enter ou sair do campo); texto que não é cor volta. No cinza, a trilha do matiz continua mexendo o
+  fundo da área (o hex não muda, o matiz sim — o teste pegou o defeito na primeira versão).
 - **`CommandPalette`**: os grupos com título (`group` no item, DOC-06) e a linha de atalhos embaixo
   (`shortcuts`, ligada; DOC-07).
 - **`Dialog` e `ConfirmDialog`**: `icon` (num círculo de 40 em cima do título, como o da referência),
@@ -455,11 +468,12 @@ e a escala de toque do nativo. Esta seção cresce a cada passo e vira `[0.32.0]
 - **Mais duas frases no `AureaStrings` da web** — `datePlaceholder` ("Escolher data", o mesmo nome do
   nativo) e `dateRangePlaceholder` ("Escolher período"), o gatilho vazio do `DatePicker`. Mesma regra: quem
   monta o objeto inteiro acrescenta; o `ptBR` já as traz.
-- **Seis frases novas no `AureaStrings` da web, da família de cor** (ADR-0069) — `colorPicker` ("Seletor de
+- **Oito frases novas no `AureaStrings` da web, da família de cor** (ADR-0069) — `colorPicker` ("Seletor de
   cor"), `colorArea2D` ("controle 2D"), `colorChannel` (os nomes dos canais: matiz, saturação, brilho),
-  `colorHue` (os nomes das cores), `colorTone` (escuro, claro, vivo, pálido, acinzentado…) e `colorNameFormat`
-  (a ordem das palavras do nome da cor na língua: `"{hue} {chroma} {lightness}"` no português). Mesma regra:
-  quem monta o objeto inteiro acrescenta; o `ptBR` já as traz.
+  `colorHue` (os nomes das cores), `colorTone` (escuro, claro, vivo, pálido, acinzentado…), `colorNameFormat`
+  (a ordem das palavras do nome da cor na língua: `"{hue} {chroma} {lightness}"` no português), `colorHex`
+  ("Código hex", o campo do código) e `colorSwatches` ("Amostras", o grupo de amostras do `ColorPicker`). Mesma
+  regra: quem monta o objeto inteiro acrescenta; o `ptBR` já as traz.
 - `IconWeight` passa a ser `"regular" | "fill" | "bold"`: um `switch` exaustivo sobre ele deixa de
   compilar.
 - `ButtonVariant` ganha `"tertiary"`: um `switch` exaustivo sobre ele deixa de compilar.
