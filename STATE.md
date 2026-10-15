@@ -18,7 +18,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Hooks públicos com ficha | 9 |
 | Maturidade declarada nas fichas | Deprecated 1 · Ready 48 · Stable 96 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 884 |
+| Classes declaradas no CSS do core | 888 |
 
 ## Tokens
 
@@ -69,7 +69,7 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 2008 |
+| Chamadas de `test()` nos testes unitários | 2015 |
 | Componentes citados nos testes unitários | 143 de 136 |
 | Specs de navegador (Playwright) | 39 |
 | Baselines de screenshot no repositório | 48 |

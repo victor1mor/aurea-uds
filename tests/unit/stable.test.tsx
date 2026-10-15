@@ -502,6 +502,30 @@ describe("CommandPalette — a paleta com motor", () => {
     expect(feito).toEqual(["fechou"]);
   });
 
+  // O Victor, 14/10/2026, no site: clicar fora não fechava, e depois do clique nem o Esc chegava — a moldura era
+  // uma `div` feita à mão, e o Esc só era escutado no campo. Agora é a janela do motor.
+  test("clicar fora (no fundo) fecha", async () => {
+    const u = userEvent.setup();
+    const feito: string[] = [];
+    render(<AureaProvider><main>
+      <CommandPalette open onClose={() => feito.push("fechou")} items={COMANDOS(feito)} />
+    </main></AureaProvider>);
+    await u.click(document.querySelector(".command-overlay")!);
+    expect(feito).toEqual(["fechou"]);
+  });
+
+  test("o Esc fecha também com o foco fora do campo", async () => {
+    const u = userEvent.setup();
+    const feito: string[] = [];
+    render(<AureaProvider><main>
+      <CommandPalette open onClose={() => feito.push("fechou")} items={COMANDOS(feito)} />
+    </main></AureaProvider>);
+    await u.click(document.querySelector(".command-shortcuts")!);
+    expect(document.activeElement).not.toBe(screen.getByRole("combobox"));
+    await u.keyboard("{Escape}");
+    expect(feito).toEqual(["fechou"]);
+  });
+
   // LIMITE REGISTRADO, não esquecimento: a v1 não agrupa. O `Autocomplete.Root` não consome a
   // estrutura agrupada, e dar a cada grupo a sua fatia de itens passa por cima do filtro —
   // medido. Este teste trava o que se escolheu: a lista é plana e o filtro FUNCIONA.

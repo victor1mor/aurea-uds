@@ -6,6 +6,7 @@ import React, {useRef, type HTMLAttributes, type RefAttributes, type ReactNode, 
 import {Tabs as BaseTabs} from "@base-ui/react/tabs";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {Autocomplete as BaseAutocomplete} from "@base-ui/react/autocomplete";
+import {Dialog as BaseDialog} from "@base-ui/react/dialog";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {type Responsive} from "./pure.js";
 import {cx, fundirRender, useAureaStrings, usePortalContainer} from "./internal.js";
@@ -590,17 +591,27 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
     for(const i of items){const g=i.group??"";if(!mapa.has(g))mapa.set(g,[]);mapa.get(g)!.push(i)}
     return [...mapa].map(([value,itens]):GrupoDeComandos=>({value,items:itens}));
   },[items]);
-  if(!open)return null;
+  const portal=usePortalContainer();
+  const campo=useRef<HTMLInputElement>(null);
   const executa=(item:CommandItem)=>{onClose();item.run()};
   const linha=(item:CommandItem)=><BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
     {item.icon&&<Icon name={item.icon}/>}
     <span className="command-item-label">{item.label}</span>
     {item.kbd&&<Kbd>{item.kbd}</Kbd>}
   </BaseAutocomplete.Item>;
-  // Escape fecha, e é o teclado que a pessoa tenta primeiro. O motor não fecha sozinho porque
-  // quem é dono do `open` é o consumidor — mesma regra do Dialog e do Drawer daqui.
-  return <div className="command-overlay" onKeyDown={e=>{if(e.key==="Escape")onClose()}}>
-    <div className="command-palette" role="dialog" aria-label={label??s.commandLabel}>
+  // A JANELA É A DO MOTOR (14/10/2026), como na paleta de exemplo dele (1.6.0): `Dialog` por fora,
+  // `Autocomplete` `inline` por dentro. Até aqui a moldura era uma `div` feita à mão, e o Victor achou no site
+  // publicado: o clique no fundo não fechava, e depois dele o foco ia para a página — o Esc, que era escutado
+  // dentro da caixa, não chegava mais. A janela do motor fecha pelos dois caminhos, prende o Tab, trava a
+  // rolagem de trás e devolve o foco a quem abriu. O `open` continua do consumidor: o motor só AVISA
+  // (`onOpenChange`), e quem fecha é o `onClose` — mesma regra do Dialog e do Drawer daqui. Os nomes de classe
+  // ficaram: a moldura (`Viewport`) é a `.command-overlay`, a caixa (`Popup`) é a `.command-palette`.
+  return <BaseDialog.Root open={open} onOpenChange={o=>{if(!o)onClose()}}>
+    <BaseDialog.Portal container={portal}>
+    <BaseDialog.Viewport className="command-overlay">
+    {/* O campo recebe o foco pelo `initialFocus` da janela, e não por `autoFocus`: o `autoFocus` focava o campo
+        ANTES de o motor anotar quem tinha o foco, e ao fechar o foco não voltava ao botão que abriu (medido). */}
+    <BaseDialog.Popup className="command-palette" aria-label={label??s.commandLabel} initialFocus={campo}>
       {/* O `as` é sobre TIPO, não sobre comportamento: o motor aceita a estrutura agrupada em
           tempo de execução — é o mesmo caminho que o `MultiCombobox` daqui já usa, e o teste de
           grupo prova —, mas o genérico do `Root` fica preso em `CommandItem` por causa do
@@ -614,14 +625,10 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
           genérico do `Root` fica preso em `CommandItem` pelo `itemToStringValue`. O teste de grupo
           (`lote-q-navegacao.test.tsx`) prova que filtra DENTRO dos grupos. */}
       <BaseAutocomplete.Root items={(grupos??items) as unknown as CommandItem[]} itemToStringValue={(i:CommandItem)=>i.label} mode="list" open inline autoHighlight="always" keepHighlight>
-        {/* Escape no INPUT, e não no contêiner: o foco nasce aqui dentro e o motor trata a tecla
-            antes de ela subir. `onOpenChange` não serve — o tipo do Autocomplete o remove. */}
-        {/* Dois consertos do modo `inline` (0.32.0), medidos pelos testes de antes:
-            • `aria-expanded` à mão: no `inline` o motor 1.6.0 publica o papel `combobox` SEM ele, e o
-              atributo é obrigatório (o axe acusou `aria-required-attr`). A lista está sempre à vista;
-            • o Esc PARA aqui: sem o popup no portal, a tecla subia até a moldura (`.command-overlay`),
-              que também fecha — e o `onClose` era chamado duas vezes. */}
-        <BaseAutocomplete.Input autoFocus className="input" onKeyDown={e=>{if(e.key==="Escape"){e.stopPropagation();onClose()}}} aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}
+        {/* `aria-expanded` à mão (0.32.0): no `inline` o motor 1.6.0 publica o papel `combobox` SEM ele, e o
+            atributo é obrigatório (o axe acusou `aria-required-attr`). A lista está sempre à vista. O Esc não
+            se trata mais aqui: é a janela que fecha, de onde quer que o foco esteja dentro dela. */}
+        <BaseAutocomplete.Input ref={campo} className="input" aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}
           aria-expanded={true} aria-describedby={shortcuts?idAtalhos:undefined}/>
         <div className="menu command-list">
           <BaseAutocomplete.Empty className="combobox-empty">{s.comboboxEmpty}</BaseAutocomplete.Empty>
@@ -640,7 +647,9 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
         <span><Kbd>Enter</Kbd> {s.commandHintSelect}</span>
         <span><Kbd>Esc</Kbd> {s.commandHintClose}</span>
       </p>}
-    </div>
-  </div>;
+    </BaseDialog.Popup>
+    </BaseDialog.Viewport>
+    </BaseDialog.Portal>
+  </BaseDialog.Root>;
 }
 export function CommandPaletteShell({open,query,onQueryChange,children}:{open:boolean;query:string;onQueryChange:(v:string)=>void;children?:ReactNode}){const s=useAureaStrings();if(!open)return null;return <div className="command-overlay"><div className="command-palette" role="dialog" aria-label={s.commandLabel}><SearchField autoFocus aria-label={s.commandPlaceholder} value={query} onChange={e=>onQueryChange(e.target.value)} placeholder={s.commandPlaceholder}/>{children}</div></div>}

@@ -7,7 +7,7 @@
     "componentes": 143,
     "hooks": 9,
     "aliasesLiterais": 110,
-    "propsDistintas": 356
+    "propsDistintas": 358
   },
   "aliases": {
     "ButtonVariant": {
@@ -3044,7 +3044,7 @@
             {
               "name": "icon",
               "optional": false,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             }
           ]
@@ -7671,6 +7671,12 @@
               "values": null
             },
             {
+              "name": "showLabels",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "disabled",
               "optional": true,
               "type": "boolean",
@@ -7808,6 +7814,15 @@
                 "xl",
                 "2xl",
                 "full"
+              ]
+            },
+            {
+              "name": "itemsJustify",
+              "optional": true,
+              "type": "\"start\" | \"end\"",
+              "values": [
+                "start",
+                "end"
               ]
             },
             {
@@ -8627,6 +8642,15 @@
                 "xl",
                 "2xl",
                 "full"
+              ]
+            },
+            {
+              "name": "itemsJustify",
+              "optional": true,
+              "type": "\"start\" | \"end\"",
+              "values": [
+                "start",
+                "end"
               ]
             },
             {

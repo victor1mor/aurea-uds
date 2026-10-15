@@ -75,3 +75,17 @@ describe("Toggle · sem `btn-undefined`, e o desenho padrão é o de fundo neutr
     expect(getByRole("group")).toHaveClass("toggle-group", "toggle-group-detached", "toggle-group-full");
   });
 });
+
+// 15/10/2026 · o `IconButton` aceita o DESENHO do app, como o `Icon` (MNT-02) e o `IconButton` do nativo (R-11) — no
+// site, o logo oficial do GitHub. Na 0.32.0 o tipo só aceitava nome, e o desenho virava `<use href="#i-function…">`.
+describe("IconButton · o desenho do app", () => {
+  test("o desenho é desenhado, com a classe do ícone, e o nome do botão continua o `label`", () => {
+    const Marca = (p: React.SVGAttributes<SVGSVGElement>) => <svg {...p} data-desenho="marca" viewBox="0 0 10 10"><path d="M0 0h10v10z" /></svg>;
+    const {getByRole, container} = wrap(<IconButton icon={Marca} label="GitHub" />);
+    expect(getByRole("button", {name: "GitHub"})).toHaveClass("btn-icon");
+    const svg = container.querySelector('svg[data-desenho="marca"]')!;
+    expect(svg).toHaveClass("icon");
+    expect(svg.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector("use")).toBeNull();
+  });
+});

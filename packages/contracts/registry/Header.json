@@ -121,6 +121,12 @@
       "description": "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding."
     },
     {
+      "name": "itemsJustify",
+      "type": "\"start\" | \"end\"",
+      "default": "\"end\"",
+      "description": "Where the links sit: end (just before the actions, at the other end from the brand) or start (right after the brand, with the actions at the other end — the reference's home page)."
+    },
+    {
       "name": "navLabel",
       "type": "string",
       "default": "\"Main\"",
@@ -140,6 +146,10 @@
     }
   ],
   "axes": {
+    "itemsJustify": [
+      "end",
+      "start"
+    ],
     "maxWidth": [
       "2xl",
       "full",

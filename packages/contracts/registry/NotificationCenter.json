@@ -1,6 +1,6 @@
 {
   "name": "NotificationCenter",
-  "category": "Feedback",
+  "category": "Overlays",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Inbox surface aggregating notifications.",

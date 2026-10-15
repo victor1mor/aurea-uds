@@ -1,6 +1,6 @@
 {
   "name": "ColorPicker",
-  "category": "Inputs",
+  "category": "Colors",
   "layer": "Composite",
   "maturity": "Ready",
   "summary": "A swatch with a name that opens a window to pick a colour: the area, the hue track and the hex field — or, as the swatches variation, a closed palette with the hex field.",

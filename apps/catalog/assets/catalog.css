@@ -1208,6 +1208,11 @@ img,svg { display:block; }
 .topbar-link[aria-current] { color:var(--primary-emphasis); font-weight:var(--weight-medium); }
 .topbar-actions { display:flex; align-items:center; gap:var(--space-2); margin-inline-start:auto; }
 .topbar-site .topbar-actions { margin-inline-start:0; }
+/* itemsJustify="start" (14/10/2026): os links perto da marca, como na página inicial da referência, e as ações na
+   outra ponta. Da marca ao primeiro link, 32 (medido nela, 15/10/2026): o vão da barra (--space-4) e mais --space-4.
+   No celular os links saem e nada muda. */
+.topbar-items-start .topbar-nav { margin-inline-start:var(--space-4); }
+.topbar-items-start .topbar-actions { margin-inline-start:auto; }
 /* O botão e o painel só existem no celular, e só onde há popover. O @supports lá embaixo é a rede,
    como na gaveta do `AppShell`: navegador sem popover não esconde o `<nav popover>` sozinho, e o
    painel apareceria solto na barra. Ali os links ficam na barra, que já quebra linha por conteúdo, e
@@ -3043,6 +3048,14 @@ img,svg { display:block; }
 .color-swatch-picker-sm .color-swatch-option { --color-swatch-size:var(--space-6); }
 .color-swatch-picker-lg .color-swatch-option { --color-swatch-size:calc(var(--space-8) + var(--space-1)); }
 .color-swatch-picker-xl .color-swatch-option { --color-swatch-size:var(--space-10); }
+/* showLabels (14/10/2026): o nome embaixo de cada cor, como a escolha de tema da referência — a amostra, 4 abaixo o nome
+   pequeno e apagado, que acende na escolhida; 12 entre os itens (a grade dela). O rótulo inteiro escolhe. O nome usa a
+   menor letra da Aurea (12), e não os 10 da referência: a Aurea é de baixa visão. */
+.color-swatch-picker-labels { gap:var(--space-3); }
+.color-swatch-item { display:inline-grid; justify-items:center; gap:var(--space-1); cursor:pointer; }
+.color-swatch-name { color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-medium); line-height:var(--space-4); }
+.color-swatch-item:has(:checked) .color-swatch-name { color:var(--foreground); }
+.color-swatch-item:has(:disabled) { cursor:not-allowed; }
 @media (prefers-reduced-motion:reduce) { .color-swatch-option,.color-swatch-option > .color-swatch,.color-swatch-option::after,.color-swatch-indicator { transition:none; } }
 /* PROGRESSCIRCLE (0.32.0): o anel da referência — traço de 4 num quadro de 36, ponta redonda, começando no
    topo —, em 20 · 28 · 36. O trilho e as cores são as do `Progress`. Sem valor, gira. */
@@ -4866,8 +4879,7 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
    largura) e as ações; embaixo, as áreas do site. */
 .site-shell > .topbar, .site-top { flex-wrap:wrap; row-gap:0; }
 .site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
-.site-brand strong { font-size:var(--text-lg); }
-.site-version { color:var(--muted-foreground); font-size:var(--text-sm); }
+.site-brand strong { font-size:var(--text-base); font-weight:var(--weight-semibold); }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
 .site-areas { flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
 .site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
@@ -4896,15 +4908,36 @@ a.related-card:hover { border-color:var(--primary-outline); }
 .cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
 /* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */
 .site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
-.home { display:grid; gap:var(--space-12); width:min(100%, 72rem); }
-.home-hero { display:grid; justify-items:center; gap:var(--space-5); text-align:center; }
-.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-5xl); line-height:var(--text-4xl-leading); font-weight:var(--weight-bold); text-wrap:balance; }
+/* A vitrine com os 1200 da referência (15/10/2026): o 1280 da escala menos o --space-20. */
+.home { display:grid; gap:var(--space-12); width:min(100%, calc(var(--breakpoint-xl) - var(--space-20))); }
+/* As medidas do início da referência (lidas na página dela, 14/10/2026, a 1440): 16 entre as peças, o título e o texto
+   colados, e o texto com 18 de letra em 28 de linha (o Victor: "as linhas estão distantes, deixe como a referência"). */
+/* Os vãos e as letras da referência, nas três larguras dela (lidos no código e medidos, 15/10/2026): o selo e o título
+   a 8 (16 a partir de 1024); o texto colado no título; os botões a 16; a nota a 8 (16 a partir de 1024). O título 30/36
+   no celular, 36/40 a partir de 640 e 48/48 a partir de 1024; o texto 16/24, e 18/28 a partir de 768, em 672 de largura
+   (o 640 da escala mais o --space-8). A segunda linha do título fica no cinza da Aurea (7,3:1): a da referência apaga
+   até ~4,4:1, e a Aurea é de baixa visão. As letras do título, juntas pelo --tracking-tight da Aurea. */
+.home-hero { display:grid; justify-items:center; text-align:center; }
+.home-texto { display:grid; justify-items:center; margin-block-start:var(--space-2); }
+.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); line-height:var(--text-3xl-leading); font-weight:var(--weight-bold); letter-spacing:var(--tracking-tight); text-wrap:balance; }
 .home-hero h1 span { color:var(--muted-foreground); }
-.home-hero > p { max-width:40rem; margin:0; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
-.home-hero > .home-nota { font-size:var(--text-sm); }
+.home-texto > p { max-width:calc(var(--breakpoint-sm) + var(--space-8)); margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); text-wrap:balance; }
+.home-acoes { margin-block-start:var(--space-4); }
+.home-hero > .home-nota { display:inline-flex; align-items:center; gap:var(--space-2); margin-block-start:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); text-decoration:none; }
+.home-hero > .home-nota:hover { color:var(--foreground); }
+@media (min-width:640px) { .home-hero h1 { font-size:var(--text-4xl); line-height:var(--text-4xl-leading); } }
+@media (min-width:768px) { .home-texto > p { font-size:var(--text-lg); line-height:var(--text-lg-leading); } }
+@media (min-width:1024px) { .home-texto, .home-hero > .home-nota { margin-block-start:var(--space-4); } .home-hero h1 { font-size:var(--text-5xl); line-height:var(--leading-none); } }
+.home-selo { display:inline-flex; border-radius:var(--radius-control); text-decoration:none; }
+/* O conteúdo da vitrine centrado na caixa, com os 32 de respiro da referência em cima e embaixo (16 do cartão + 16). */
+.home-painel-miolo { display:flex; justify-content:center; padding-block:var(--space-4); }
+/* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
+.site-github-ink { fill:#fff; }
+[data-theme="light"] .site-github-ink { fill:#000; }
 .home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
 .home-vitrine { display:grid; gap:var(--space-4); }
-.home-abas { justify-self:center; }
+/* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
+.home-abas { justify-self:start; margin-inline-start:var(--space-2); }
 [data-theme="dark"] #theme-toggle .t-moon { display:none; }
 [data-theme="light"] #theme-toggle .t-sun { display:none; }
 }

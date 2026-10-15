@@ -1,6 +1,6 @@
 {
   "name": "ContextMenu",
-  "category": "Overlays",
+  "category": "Collections",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Actions menu opened by right-click or long-press.",

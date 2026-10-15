@@ -1,6 +1,6 @@
 {
   "name": "Range",
-  "category": "Inputs",
+  "category": "Controls",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Slider for selecting a value from a range.",

@@ -580,9 +580,9 @@ LAYER = {"Foundation", "Primitive", "Component", "Composite", "Shell"}
 # "AI & Agents" entrou em 09/08/2026 (ADR-0017), da macroarea 18 do DIRECTION.md, para
 # a camada operacional da Parte H — 16 nomes que o contrato ja declarava em
 # componentRules.UniversalDomain e que nao cabiam em nenhuma das 13 por objetivo.
-CATEGORY = {"Actions", "Inputs", "Navigation", "Overlays", "Feedback", "Disclosure",
-            "Data Display", "Identity", "Layout", "Media", "Code", "Communication",
-            "System", "AI & Agents"}
+# Os grupos da página "All Components" (ADR-0070, 14/10/2026): os 15 da referência, em ordem alfabética,
+# e os 3 da Aurea que ela não tem.
+CATEGORY = {"Buttons", "Collections", "Colors", "Controls", "Data Display", "Date and Time", "Feedback", "Forms", "Layout", "Media", "Navigation", "Overlays", "Pickers", "Typography", "Utilities", "AI & Agents", "Code", "Communication"}
 REQUIRED = ["name", "category", "layer", "maturity", "summary", "icon", "platforms",
             "variants", "sizes", "states", "tokens", "a11y", "dependencies",
             "related", "source"]
@@ -656,7 +656,7 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     if f.get("icon") and f["icon"] not in ALLOWED_ICONS:
         errors.append(f"{rel}: icon '{f['icon']}' fora da allowlist do contrato")
     if f["category"] not in CATEGORY:
-        errors.append(f"{rel}: category '{f['category']}' fora da taxonomia (ver DIRECTION.md §4)")
+        errors.append(f"{rel}: category '{f['category']}' fora da taxonomia (ver decisions/0070, os grupos da referência)")
     if f["layer"] not in LAYER:
         errors.append(f"{rel}: layer '{f['layer']}' inválida ({'/'.join(sorted(LAYER))})")
     if f["maturity"] not in MATURITY:

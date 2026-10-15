@@ -1,6 +1,6 @@
 {
   "name": "ColorSwatch",
-  "category": "Identity",
+  "category": "Colors",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "A round sample of a colour, with a thin inner ring so a colour the same as the background still shows, and a checkerboard under a transparent colour. With options, a group of swatches to pick one from (a closed palette).",
@@ -128,6 +128,12 @@
       "type": "ReactNode",
       "default": "the check",
       "description": "With options: the mark of the chosen colour, in place of the check (an Icon, for example). It takes the ink that contrasts most."
+    },
+    {
+      "name": "showLabels",
+      "type": "boolean",
+      "default": "false",
+      "description": "With options: each colour's name under it (its label, or the colour value), like the reference's theme picker. The whole item picks; the name is only for the eyes — the radio already has it."
     },
     {
       "name": "disabled",

@@ -604,6 +604,178 @@ test.describe("catálogo · contratos do modelo de página", () => {
     }).toPass({timeout: 10000});
   });
 
+  // O Victor, 14/10/2026: "o buscar depois que clica nele não tem como sair, nem Esc nem clicando fora". Medido no
+  // site publicado: o clique no fundo não fechava, e o foco ia para a página — dali o Esc também não chegava. A
+  // paleta era uma `div` feita à mão; agora mora na janela do motor (a paleta de exemplo dele), que fecha pelos dois
+  // caminhos, prende o Tab dentro e devolve o foco ao botão. Sem o conserto, o primeiro `toHaveCount(0)` reprova.
+  test("a busca fecha clicando fora e com Esc, prende o Tab e devolve o foco ao botão", async ({page}) => {
+    await page.goto("/apps/catalog/getting-started.html");
+    await page.waitForLoadState("load");
+    await expect(page.locator("#site-search-root")).toBeAttached();
+    const botao = page.locator("[data-site-search]").first();
+    const busca = page.getByRole("dialog", {name: "Search the site"});
+    const vp = page.viewportSize()!;
+    // 1. Clique fora (no fundo, longe da caixa) fecha.
+    await botao.click();
+    await expect(busca).toBeVisible();
+    await page.mouse.click(vp.width - 8, vp.height - 8);
+    await expect(busca).toHaveCount(0);
+    // 2. Esc fecha, e o foco volta ao botão que abriu.
+    await botao.click();
+    await expect(busca).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(busca).toHaveCount(0);
+    await expect(botao).toBeFocused();
+    // 3. Clique DENTRO da caixa, fora do campo (a linha das teclas), e depois Esc: ainda fecha.
+    await botao.click();
+    await busca.locator(".command-shortcuts").click();
+    await page.keyboard.press("Escape");
+    await expect(busca).toHaveCount(0);
+    // 4. O Tab não sai da caixa para a página de trás (com a caixa aberta e o campo focado — antes disso o Tab
+    //    ainda é da página).
+    await botao.click();
+    await expect(busca.getByRole("combobox")).toBeFocused();
+    // O Tab passa por uma guarda invisível do motor, que devolve o foco para dentro no mesmo instante — por isso a
+    // espera. Com a caixa feita à mão, o foco ia de vez para a página, e a espera vencia.
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press("Tab");
+      await expect.poll(() => page.evaluate(() => !!document.activeElement?.closest(".command-palette")), {message: `Tab ${i + 1}`, timeout: 2000}).toBe(true);
+    }
+  });
+
+  // O Victor, 14/10/2026, comparando o Início com o da referência (as medidas dela foram lidas na página, a 1440):
+  //   1. os links na MESMA linha da logo, colados nela — o `Header` com `items` e `itemsJustify="start"`;
+  //   4. o texto com 18 de letra em 28 de linha, colado no título, e 16 entre as outras peças;
+  //   5. as abas da vitrine no canto, 8 para dentro da caixa.
+  // No site de antes: o topo tinha duas linhas (99), o texto 30,6 de linha, 20 de vão, e as abas no meio.
+  test("o Início: os links na linha da logo, o texto na medida da referência e as abas no canto", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/index.html");
+    const m = await page.evaluate(() => {
+      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const topo = r(".site-top"), marca = r(".site-brand"), link = r(".site-top .topbar-nav .topbar-link");
+      const acoes = r(".site-top .topbar-actions"), h1 = r(".home-texto h1"), p = r(".home-texto p");
+      const selo = r(".home-selo"), botoes = r(".home-acoes");
+      const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16;
+      return {altura: topo.height, alturaPadrao: em("--topbar-height"),
+        mesmaLinha: Math.abs((link.top + link.height / 2) - (marca.top + marca.height / 2)),
+        marcaAoLink: link.left - marca.right, vaoDaBarra: em("--space-4"),
+        sobra: document.documentElement.clientWidth - acoes.right, marcaEsq: marca.left,
+        linhaDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-texto p")!).lineHeight),
+        letraDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-texto p")!).fontSize),
+        tituloAoTexto: p.top - h1.bottom, seloAoTitulo: h1.top - selo.bottom, textoAosBotoes: botoes.top - p.bottom,
+        abas: r(".home-abas").left - r(".home-painel:not([hidden])").left, espaco2: em("--space-2")};
+    });
+    expect(m.altura, "uma linha só: a altura do Header de site").toBe(m.alturaPadrao);
+    expect(m.mesmaLinha, "o primeiro link na linha da logo").toBeLessThan(1);
+    expect(m.marcaAoLink, "da logo ao 1º link, 32: o vão da barra e mais --space-4, como na referência").toBeCloseTo(m.vaoDaBarra * 2, 0);
+    expect(m.sobra, "as ações na outra ponta: a mesma sobra da logo, do outro lado").toBeCloseTo(m.marcaEsq, 0);
+    expect(m.letraDoTexto).toBe(18);
+    expect(m.linhaDoTexto, "18 em 28, como a referência").toBeCloseTo(28, 0);
+    expect(m.tituloAoTexto, "o título e o texto colados").toBeCloseTo(0, 0);
+    expect(m.seloAoTitulo).toBeCloseTo(16, 0);
+    expect(m.textoAosBotoes).toBeCloseTo(16, 0);
+    expect(m.abas, "as abas no canto, 8 para dentro").toBeCloseTo(m.espaco2, 0);
+    // 15/10/2026 (o Victor: "iguale"): as letras da referência — o nome 16 em 600, sem a versão ao lado; o título com
+    // 48 de linha; a nota em 12, que é o link para o repositório. Antes: 18 em 700 com a versão, 53, e 14 sem link.
+    const l = await page.evaluate(() => {
+      const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
+      return {nome: [cs(".site-brand strong").fontSize, cs(".site-brand strong").fontWeight],
+        versao: document.querySelectorAll(".site-top .site-version").length,
+        titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight], nota: cs(".home-nota").fontSize,
+        link: document.querySelector(".home-nota")!.getAttribute("href")};
+    });
+    expect(l).toEqual({nome: ["16px", "600"], versao: 0, titulo: ["48px", "48px"], nota: "12px",
+      link: "https://github.com/victor1mor/aurea-uds"});
+    // E no monitor grande o topo fica no centro, como o da referência (no 24" do Victor ia para os cantos): o miolo
+    // tem a largura do `Container` `2xl`, com o respiro dele.
+    await page.setViewportSize({width: 1902, height: 1000});
+    const c = await page.evaluate(() => {
+      const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v));
+      return {logo: document.querySelector(".site-brand")!.getBoundingClientRect().left,
+        esperado: (document.documentElement.clientWidth - em("--breakpoint-2xl")) / 2 + em("--space-8") * 16};
+    });
+    expect(c.logo, "a logo no começo do miolo centrado, e não na borda").toBeCloseTo(c.esperado, 0);
+  });
+
+  // 15/10/2026 (o Victor: "analise cada milímetro"): no celular, as medidas da referência em 375 — o título 30/36, o
+  // texto 16/24, 8 do selo ao título e dos botões à nota, as abas da vitrine escondidas (só a primeira vitrine), e a barra
+  // numa linha só (o GitHub sai dela). E o logo do GitHub é o oficial, em branco no escuro e preto no claro.
+  test("o Início no celular tem as medidas da referência, e o logo do GitHub é o oficial", async ({page}) => {
+    await page.setViewportSize({width: 375, height: 812});
+    await page.goto("/apps/catalog/index.html");
+    const m = await page.evaluate(() => {
+      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
+      return {titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight],
+        texto: [cs(".home-texto p").fontSize, cs(".home-texto p").lineHeight],
+        seloAoTitulo: r(".home-texto h1").top - r(".home-selo").bottom, botoesANota: r(".home-nota").top - r(".home-acoes").bottom,
+        abas: r(".home-abas").height, topo: r(".site-top").height, alturaPadrao: parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-height")) * 16,
+        lado: document.documentElement.scrollWidth - document.documentElement.clientWidth};
+    });
+    expect(m.titulo).toEqual(["30px", "36px"]);
+    expect(m.texto).toEqual(["16px", "24px"]);
+    expect(m.seloAoTitulo).toBeCloseTo(8, 0);
+    expect(m.botoesANota).toBeCloseTo(8, 0);
+    expect(m.abas, "as abas da vitrine escondidas abaixo de 1024").toBe(0);
+    expect(m.topo, "a barra numa linha só").toBe(m.alturaPadrao);
+    expect(m.lado, "sem rolar de lado").toBe(0);
+    // O logo: o desenho do arquivo oficial, nas cores oficiais.
+    await page.setViewportSize({width: 1440, height: 900});
+    const tinta = () => page.locator(".topbar-actions a[aria-label='GitHub'] path").evaluate((p) => getComputedStyle(p).fill);
+    await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+    expect(await tinta()).toBe("rgb(255, 255, 255)");
+    await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
+    expect(await tinta()).toBe("rgb(0, 0, 0)");
+    await expect(page.locator(".topbar-actions a[aria-label='GitHub']")).toHaveAttribute("href", "https://github.com/victor1mor/aurea-uds");
+    await expect(page.locator(".home-nota svg path")).toHaveCount(1);
+  });
+
+  // O Victor, 14/10/2026: "crie um botão tema como da [referência]". O botão pequeno com o balde e "Theme" abre a janelinha
+  // com as amostras das MARCAS e o nome embaixo; escolher troca a marca da página, grava, e o botão mostra o nome dela.
+  test("o botão Theme troca a marca: abre as amostras com nome, grava a escolha, e volta para a Aurea", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/index.html");
+    await page.evaluate(() => localStorage.removeItem("aurea-brand"));
+    await page.reload();
+    await page.waitForLoadState("load");
+    const tema = page.getByRole("button", {name: "Theme", exact: true});
+    await tema.click();
+    const grupo = page.getByRole("radiogroup", {name: "Theme"});
+    await expect(grupo).toBeVisible();
+    await expect(grupo.locator(".color-swatch-name")).toHaveText(["Aurea", "Lory"]);
+    await expect(grupo.getByRole("radio", {name: "Aurea"})).toBeChecked();
+    await grupo.getByText("Lory").click();
+    await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
+    expect(await page.evaluate(() => localStorage.getItem("aurea-brand"))).toBe("lory");
+    await page.keyboard.press("Escape");
+    const tLory = page.getByRole("button", {name: "Theme: Lory"});
+    await expect(tLory).toHaveText("Lory");
+    // A página nova abre com a marca gravada, e o botão já diz qual é.
+    await page.reload();
+    await page.waitForLoadState("load");
+    await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
+    await expect(page.getByRole("button", {name: "Theme: Lory"})).toBeVisible();
+    await page.getByRole("button", {name: "Theme: Lory"}).click();
+    await page.getByRole("radiogroup", {name: "Theme"}).getByText("Aurea").click();
+    await expect(page.locator("html")).not.toHaveAttribute("data-brand", /.*/);
+    await page.evaluate(() => localStorage.removeItem("aurea-brand"));
+    await page.keyboard.press("Escape");
+    // A mesma caixa dos vizinhos (o Victor, 15/10/2026: "por que os ícones da direita estão tamanhos diferentes?"): os
+    // botões do topo todos com a mesma altura e com fundo. E no celular só o balde, no botão redondo — trocando ao
+    // estreitar a janela, sem recarregar.
+    const temaPadrao = page.locator("#site-theme-root button");
+    const caixas = await page.locator(".topbar-actions > a, .topbar-actions > button, #site-theme-root button").evaluateAll((bs) =>
+      bs.map((b) => [Math.round(b.getBoundingClientRect().height), getComputedStyle(b).backgroundColor]));
+    expect(new Set(caixas.map(([h]) => h)).size, `alturas: ${JSON.stringify(caixas)}`).toBe(1);
+    expect(caixas.every(([, f]) => !/rgba\(0, 0, 0, 0\)|transparent/.test(String(f))), "todos com fundo").toBe(true);
+    await page.setViewportSize({width: 600, height: 900});
+    await expect(temaPadrao).toHaveClass(/btn-icon/);
+    await expect(temaPadrao).toHaveAccessibleName("Theme");
+    await page.setViewportSize({width: 1440, height: 900});
+    await expect(temaPadrao).toHaveText("Theme");
+  });
+
   test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
     // .demo-panel no seletor: aba e painel compartilham data-panel, e sem isso o locator

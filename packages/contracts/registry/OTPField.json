@@ -1,6 +1,6 @@
 {
   "name": "OTPField",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "One box per character, for a verification code the user types or pastes.",

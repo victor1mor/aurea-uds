@@ -1,6 +1,6 @@
 {
   "name": "IconButton",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Icon-only button with a required accessible label.",
@@ -127,9 +127,9 @@
     },
     {
       "name": "icon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
-      "description": "Glyph, from the contract's allowlist."
+      "description": "Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon and the native IconButton take."
     },
     {
       "name": "variant",

@@ -1,7 +1,7 @@
 {
   "name": "useReorder",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "The accessible drag-and-drop reordering protocol, shared by SortableList and BlockEditor.",

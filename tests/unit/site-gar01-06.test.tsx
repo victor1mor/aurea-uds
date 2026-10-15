@@ -106,6 +106,13 @@ describe("GAR-01 · o cabeçalho de site", () => {
     const painel = container.querySelector(".topbar-menu-panel a")!.outerHTML;
     expect(barra).toBe(painel);
   });
+  // 14/10/2026 · `itemsJustify="start"`: os links colados na marca, como a página inicial da referência. O padrão
+  // ("end") não muda a marcação; a posição na tela se mede no `catalog-sweep.spec.ts` (o topo do Início).
+  test("`itemsJustify=\"start\"` marca a barra; o padrão e a barra sem links não", () => {
+    expect(wrap(<Header items={ITENS} itemsJustify="start" />).container.querySelector("header")).toHaveClass("topbar-items-start");
+    expect(wrap(<Header items={ITENS} />).container.querySelector("header")!.className).toBe("topbar topbar-floating topbar-site");
+    expect(wrap(<Header itemsJustify="start">x</Header>).container.querySelector("header")!.className).toBe("topbar topbar-floating");
+  });
 });
 
 describe("GAR-06 · o rodapé de site (Section variant=\"footer\")", () => {

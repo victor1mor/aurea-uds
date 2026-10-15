@@ -205,6 +205,11 @@ img,svg { display:block; }
 .topbar-link[aria-current] { color:var(--primary-emphasis); font-weight:var(--weight-medium); }
 .topbar-actions { display:flex; align-items:center; gap:var(--space-2); margin-inline-start:auto; }
 .topbar-site .topbar-actions { margin-inline-start:0; }
+/* itemsJustify="start" (14/10/2026): os links perto da marca, como na página inicial da referência, e as ações na
+   outra ponta. Da marca ao primeiro link, 32 (medido nela, 15/10/2026): o vão da barra (--space-4) e mais --space-4.
+   No celular os links saem e nada muda. */
+.topbar-items-start .topbar-nav { margin-inline-start:var(--space-4); }
+.topbar-items-start .topbar-actions { margin-inline-start:auto; }
 /* O botão e o painel só existem no celular, e só onde há popover. O @supports lá embaixo é a rede,
    como na gaveta do `AppShell`: navegador sem popover não esconde o `<nav popover>` sozinho, e o
    painel apareceria solto na barra. Ali os links ficam na barra, que já quebra linha por conteúdo, e
@@ -2040,6 +2045,14 @@ img,svg { display:block; }
 .color-swatch-picker-sm .color-swatch-option { --color-swatch-size:var(--space-6); }
 .color-swatch-picker-lg .color-swatch-option { --color-swatch-size:calc(var(--space-8) + var(--space-1)); }
 .color-swatch-picker-xl .color-swatch-option { --color-swatch-size:var(--space-10); }
+/* showLabels (14/10/2026): o nome embaixo de cada cor, como a escolha de tema da referência — a amostra, 4 abaixo o nome
+   pequeno e apagado, que acende na escolhida; 12 entre os itens (a grade dela). O rótulo inteiro escolhe. O nome usa a
+   menor letra da Aurea (12), e não os 10 da referência: a Aurea é de baixa visão. */
+.color-swatch-picker-labels { gap:var(--space-3); }
+.color-swatch-item { display:inline-grid; justify-items:center; gap:var(--space-1); cursor:pointer; }
+.color-swatch-name { color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-medium); line-height:var(--space-4); }
+.color-swatch-item:has(:checked) .color-swatch-name { color:var(--foreground); }
+.color-swatch-item:has(:disabled) { cursor:not-allowed; }
 @media (prefers-reduced-motion:reduce) { .color-swatch-option,.color-swatch-option > .color-swatch,.color-swatch-option::after,.color-swatch-indicator { transition:none; } }
 /* PROGRESSCIRCLE (0.32.0): o anel da referência — traço de 4 num quadro de 36, ponta redonda, começando no
    topo —, em 20 · 28 · 36. O trilho e as cores são as do `Progress`. Sem valor, gira. */

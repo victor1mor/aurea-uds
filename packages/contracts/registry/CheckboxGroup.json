@@ -1,6 +1,6 @@
 {
   "name": "CheckboxGroup",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "A group of checkboxes with a label, a description and an error, that keeps the list of what is checked.",

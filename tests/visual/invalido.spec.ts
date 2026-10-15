@@ -283,6 +283,9 @@ const FICHA_SEM_INVALIDO: Record<string, string> = {
     "como o valor do `Slider`",
   ColorPicker: "a área, a trilha e as amostras só dão cores válidas, e o código que não é cor volta ao de " +
     "antes — não há valor inválido guardado. O campo que pode receber texto errado é o `ColorField`, e ele pinta",
+  // Entrou no escopo com a ADR-0070 (14/10/2026): era "Identity" e foi para "Colors", o grupo dela na referência.
+  ColorSwatch: "sozinha é uma imagem da cor; com `options` é uma paleta FECHADA, que só oferece as cores dadas — " +
+    "como o `ListBox`, não há valor digitado a validar",
   // O `DatePicker` da web (0.32.0, ADR-0068), achado pela mesma suíte. A referência tem o estado (pergunta guardada
   // para o Victor: acrescentar é mudança de API).
   DatePicker: "o gatilho não recebe texto: o calendário só oferece datas dentro de `minimumDate`/`maximumDate`, " +
@@ -295,7 +298,9 @@ const FICHA_SEM_INVALIDO: Record<string, string> = {
 const FICHAS: {name: string; states?: string[]}[] =
   readdirSync("packages/contracts/registry").filter((f) => f.endsWith(".json"))
     .map((f) => JSON.parse(readFileSync(`packages/contracts/registry/${f}`, "utf8")))
-    .filter((d) => d.category === "Inputs");
+    // Os grupos de CAMPO desde a ADR-0070 (14/10/2026), que trocou o "Inputs" pelos grupos da referência. A lista,
+    // a peça e o bloco (ListBox, TagGroup, BlockEditor) foram para "Collections", com menus que não são campo.
+    .filter((d) => ["Forms", "Pickers", "Colors", "Date and Time", "Controls"].includes(d.category));
 
 test("a ficha e o desenho concordam sobre `invalid`, campo por campo", async ({page}) => {
   const mentindo: string[] = [], calando: string[] = [], semAlvo: string[] = [];

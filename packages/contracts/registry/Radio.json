@@ -1,6 +1,6 @@
 {
   "name": "Radio",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Single choice within a group.",

@@ -1,6 +1,6 @@
 {
   "name": "ListBox",
-  "category": "Inputs",
+  "category": "Collections",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "A standalone list of options with sections, descriptions and icons — choose none, one or many, or use it as a list of actions.",

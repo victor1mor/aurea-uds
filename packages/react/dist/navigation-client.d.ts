@@ -166,7 +166,7 @@ export declare function CommandPalette({ open, onClose, items, placeholder, labe
     label?: string;
     /** 0.32.0 (DOC-07): a linha que ensina as teclas, embaixo — ↑ ↓ mover, Enter abrir, Esc fechar. */
     shortcuts?: boolean;
-}): React.JSX.Element | null;
+}): React.JSX.Element;
 export declare function CommandPaletteShell({ open, query, onQueryChange, children }: {
     open: boolean;
     query: string;

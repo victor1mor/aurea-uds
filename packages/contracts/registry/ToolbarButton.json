@@ -1,6 +1,6 @@
 {
   "name": "ToolbarButton",
-  "category": "Actions",
+  "category": "Layout",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Button tuned for use inside a Toolbar.",

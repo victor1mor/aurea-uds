@@ -1,7 +1,7 @@
 {
   "name": "useSpriteUrl",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read where the provider is loading icon glyphs from.",

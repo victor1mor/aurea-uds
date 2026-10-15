@@ -1,6 +1,6 @@
 {
   "name": "Code",
-  "category": "Data Display",
+  "category": "Typography",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "A short piece of code inside a sentence. For a block of code use CodeBlock.",

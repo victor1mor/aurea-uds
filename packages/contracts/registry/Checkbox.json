@@ -1,6 +1,6 @@
 {
   "name": "Checkbox",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Binary or tri-state selection control.",

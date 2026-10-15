@@ -1,6 +1,6 @@
 {
   "name": "Paragraph",
-  "category": "Data Display",
+  "category": "Typography",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "A paragraph of body text in one of three sizes.",

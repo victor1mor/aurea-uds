@@ -1,6 +1,6 @@
 {
   "name": "Calendar",
-  "category": "Inputs",
+  "category": "Date and Time",
   "layer": "Composite",
   "maturity": "Ready",
   "summary": "Month grid for picking a day, a range, or several days.",

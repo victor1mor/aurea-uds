@@ -1,6 +1,6 @@
 {
   "name": "FileInput",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Upload control with progress and validation.",

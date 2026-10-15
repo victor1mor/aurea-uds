@@ -309,6 +309,12 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     actions?: ReactNode;
     /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
     maxWidth?: ContainerSize;
+    /**
+     * Onde ficam os links (14/10/2026): `"end"` (o padrão) logo antes das ações, na outra ponta da marca; `"start"`
+     * colados na marca, com as ações na outra ponta — a página inicial da referência. O nome é o `justify` do
+     * conteúdo da barra dela.
+     */
+    itemsJustify?: "start" | "end";
     /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
     navLabel?: string;
     /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
@@ -316,7 +322,7 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     /** O `id` do painel do celular. Padrão: `"aurea-header-menu"`. Troque só se a página tiver dois cabeçalhos de site. */
     menuId?: string;
 }
-export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, navLabel, menuLabel, menuId, children, className, ...props }: HeaderProps): React.JSX.Element;
+export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, itemsJustify, navLabel, menuLabel, menuId, children, className, ...props }: HeaderProps): React.JSX.Element;
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;
@@ -401,6 +407,8 @@ export interface ColorSwatchPickerProps {
     layout?: "grid" | "stack";
     /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
     indicator?: ReactNode;
+    /** O nome de cada cor embaixo dela (o `label` da opção; sem ele, o código), como a escolha de tema da referência. */
+    showLabels?: boolean;
     size?: ColorSwatchSize;
     disabled?: boolean;
     id?: string;

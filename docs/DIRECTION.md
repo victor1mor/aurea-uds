@@ -130,7 +130,10 @@ Renomeações sugeridas (quando chegar a fase de refactor, **não agora**):
 
 ## 4 — Reorganização dos 59 atuais (aplicada na Fase 1)
 
-Categorias travadas no gate para os componentes que **existem hoje**:
+> **14/10/2026:** esta lista é histórica. Os grupos de hoje são os da referência, com 3 nossos no fim —
+> [ADR-0070](../decisions/0070-os-grupos-sao-os-da-referencia.md). Quem trava é o `CATEGORY` do `validate.py`.
+
+~~Categorias travadas no gate para os componentes que **existem hoje**:~~ (a lista da Fase 1, abaixo)
 
 ```
 Actions        Button · IconButton · ButtonGroup · Toolbar · ToolbarButton ·

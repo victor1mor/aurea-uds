@@ -177,10 +177,10 @@ function linksDoHeader(items, current) {
             return _jsx("li", { children: it.render ? fundirRender(it.render, p, "a") : _jsx("a", { href: it.href, ...p }) }, it.id);
         }) });
 }
-export function Header({ variant = "floating", divider, brand, items, current, actions, maxWidth, navLabel = "Main", menuLabel = "Menu", menuId = "aurea-header-menu", children, className, ...props }) {
+export function Header({ variant = "floating", divider, brand, items, current, actions, maxWidth, itemsJustify = "end", navLabel = "Main", menuLabel = "Menu", menuId = "aurea-header-menu", children, className, ...props }) {
     const site = !!items && items.length > 0;
     const miolo = _jsxs(_Fragment, { children: [brand != null && _jsx("div", { className: "brand", children: brand }), site && _jsx("nav", { className: "topbar-nav", "aria-label": navLabel, children: linksDoHeader(items, current) }), children, actions != null && _jsx("div", { className: "topbar-actions", children: actions }), site && _jsxs(_Fragment, { children: [_jsx("button", { type: "button", className: "btn btn-ghost btn-icon topbar-menu-toggle", popoverTarget: menuId, "aria-label": menuLabel, children: _jsx("span", { className: "topbar-menu-icon", "aria-hidden": "true" }) }), _jsx("nav", { id: menuId, popover: "auto", className: "topbar-menu-panel", "aria-label": navLabel, children: linksDoHeader(items, current) })] })] });
-    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", maxWidth && "topbar-contained", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
+    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", site && itemsJustify === "start" && "topbar-items-start", maxWidth && "topbar-contained", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
 }
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export function Topbar(props) { return _jsx(Header, { ...props }); }
@@ -248,13 +248,19 @@ export function Link({ external, disabled, href, target, rel, className, childre
 const transparente = (cor) => { const c = parseColor(cor); return c !== null && c.a < 1; };
 export function ColorSwatch(props) {
     if ("options" in props) {
-        const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, size = "md", disabled, id, className } = props;
+        const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, showLabels, size = "md", disabled, id, className } = props;
         // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
         // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
-        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", className), children: options.map((o) => {
+        // `showLabels` (14/10/2026): o rótulo passa a ser a amostra E o nome embaixo — o círculo continua o mesmo
+        // (`.color-swatch-option`, agora um `span`), e clicar no nome também escolhe. O nome é só para os olhos: o leitor
+        // de tela já ouve o `aria-label` do botão de opção.
+        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", showLabels && "color-swatch-picker-labels", className), children: options.map((o) => {
                 const op = typeof o === "string" ? { color: o } : o;
                 const cor = parseColor(op.color), rgb = cor && hsbToRgb(cor);
-                return _jsxs("label", { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, op.color);
+                const circulo = (Tag, key) => _jsxs(Tag, { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, key);
+                return showLabels
+                    ? _jsxs("label", { className: "color-swatch-item", children: [circulo("span"), _jsx("span", { className: "color-swatch-name", "aria-hidden": "true", children: op.label ?? op.color })] }, op.color)
+                    : circulo("label", op.color);
             }) });
     }
     const { color, size = "md", label, className, style, ...resto } = props;

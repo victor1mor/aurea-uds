@@ -1,7 +1,7 @@
 {
   "name": "useAureaStrings",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read the string dictionary the provider is using, to translate your own labels with it.",

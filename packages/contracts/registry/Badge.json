@@ -1,6 +1,6 @@
 {
   "name": "Badge",
-  "category": "Feedback",
+  "category": "Data Display",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Short metadata label or status marker.",

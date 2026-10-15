@@ -1,6 +1,6 @@
 {
   "name": "ToggleGroup",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Several toggles sharing one state, with arrow-key navigation between them.",

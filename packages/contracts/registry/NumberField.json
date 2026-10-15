@@ -1,6 +1,6 @@
 {
   "name": "NumberField",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Numeric field with decrease and increase controls, for a quantity you nudge.",

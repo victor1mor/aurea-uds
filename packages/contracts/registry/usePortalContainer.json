@@ -1,7 +1,7 @@
 {
   "name": "usePortalContainer",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "The node every Aurea popup is mounted into, as configured once on AureaProvider.",

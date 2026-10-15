@@ -1,6 +1,6 @@
 {
   "name": "TreeView",
-  "category": "Navigation",
+  "category": "Collections",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Hierarchical, expandable tree of items.",

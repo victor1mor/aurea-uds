@@ -12,6 +12,9 @@
 import {createRoot} from "react-dom/client";
 import {createElement as h, useEffect, useMemo, useState} from "react";
 import {AureaProvider, CommandPalette} from "../../../packages/react/dist/index.js";
+// O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
+// sob o MESMO provedor (ver `tema.tsx`).
+import {TemaDoTopo} from "./tema";
 
 type Entrada = {label: string; href: string; group: string};
 declare global {interface Window {AUREA_SEARCH?: Entrada[]}}
@@ -23,6 +26,10 @@ function Busca() {
       const alvo = (e.target as Element | null)?.closest?.("[data-site-search]");
       if (!alvo) return;
       e.preventDefault();
+      // No Safari o clique não dá foco a um link, e a janela da busca devolve o foco a quem o tinha ao abrir —
+      // sem isto, fechar deixava o foco solto na página (medido no WebKit, 14/10/2026). Chrome e Firefox já
+      // focam sozinhos.
+      (alvo as HTMLElement).focus({preventScroll: true});
       setAberta(true);
     };
     const tecla = (e: KeyboardEvent) => {
@@ -50,4 +57,4 @@ const raiz = document.createElement("div");
 raiz.id = "site-search-root";
 document.body.append(raiz);
 // O sprite está DENTRO da página (inline), então a base dos ícones é vazia — como no gerador.
-createRoot(raiz).render(h(AureaProvider, {spriteUrl: ""}, h(Busca)));
+createRoot(raiz).render(h(AureaProvider, {spriteUrl: ""}, h(Busca), h(TemaDoTopo)));

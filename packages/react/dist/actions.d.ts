@@ -1,6 +1,6 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
-import { type IconName } from "./system.js";
+import { type IconName, type AureaIcon } from "./system.js";
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav";
 export type ButtonAppearance = "solid" | "outline" | "ghost" | "link" | "nav";
 export type ButtonTone = "neutral" | "brand" | "danger" | "success" | "warning" | "info";
@@ -96,7 +96,7 @@ export type ToggleProps = ToggleBase & ({
 export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant }: ToggleProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     label: string;
-    icon: IconName;
+    icon: AureaIcon;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface CloseButtonProps extends Omit<ButtonProps, "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {

@@ -1,6 +1,6 @@
 {
   "name": "AureaProvider",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Root provider: strings, icon sprite, text direction, toasts and where popups mount.",

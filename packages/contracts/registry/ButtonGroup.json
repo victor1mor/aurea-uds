@@ -1,6 +1,6 @@
 {
   "name": "ButtonGroup",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Buttons joined into one capsule — no gap, rounded only at the ends, a hairline between them — that share their variant, size and disabled state.",

@@ -583,6 +583,12 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
   actions?:ReactNode;
   /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
   maxWidth?:ContainerSize;
+  /**
+   * Onde ficam os links (14/10/2026): `"end"` (o padrão) logo antes das ações, na outra ponta da marca; `"start"`
+   * colados na marca, com as ações na outra ponta — a página inicial da referência. O nome é o `justify` do
+   * conteúdo da barra dela.
+   */
+  itemsJustify?:"start"|"end";
   /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
   navLabel?:string;
   /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
@@ -597,7 +603,7 @@ function linksDoHeader(items:SidebarItem[],current:string|undefined){
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }
-export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
+export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
   const site=!!items&&items.length>0;
   const miolo=<>
     {brand!=null&&<div className="brand">{brand}</div>}
@@ -609,7 +615,7 @@ export function Header({variant="floating",divider,brand,items,current,actions,m
       <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}</nav>
     </>}
   </>;
-  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",maxWidth&&"topbar-contained",className)} {...props}>
+  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",maxWidth&&"topbar-contained",className)} {...props}>
     {maxWidth?<div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"topbar-inner")}>{miolo}</div>:miolo}
   </header>;
 }
@@ -788,6 +794,8 @@ export interface ColorSwatchPickerProps{
   layout?:"grid"|"stack";
   /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
   indicator?:ReactNode;
+  /** O nome de cada cor embaixo dela (o `label` da opção; sem ele, o código), como a escolha de tema da referência. */
+  showLabels?:boolean;
   size?:ColorSwatchSize;disabled?:boolean;id?:string;className?:string;
 }
 // Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
@@ -795,22 +803,28 @@ export interface ColorSwatchPickerProps{
 const transparente=(cor:string)=>{const c=parseColor(cor);return c!==null&&c.a<1;};
 export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchPickerProps)){
   if("options" in props){
-    const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,size="md",disabled,id,className}=props;
+    const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,showLabels,size="md",disabled,id,className}=props;
     // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
     // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
+    // `showLabels` (14/10/2026): o rótulo passa a ser a amostra E o nome embaixo — o círculo continua o mesmo
+    // (`.color-swatch-option`, agora um `span`), e clicar no nome também escolhe. O nome é só para os olhos: o leitor
+    // de tela já ouve o `aria-label` do botão de opção.
     return <div role="radiogroup" aria-label={label} id={id} aria-disabled={disabled||undefined}
-      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,layout==="stack"&&"color-swatch-picker-stack",className)}>
+      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,layout==="stack"&&"color-swatch-picker-stack",showLabels&&"color-swatch-picker-labels",className)}>
       {options.map((o)=>{
         const op:ColorSwatchOption=typeof o==="string"?{color:o}:o;
         const cor=parseColor(op.color),rgb=cor&&hsbToRgb(cor);
-        return <label key={op.color} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
+        const circulo=(Tag:"label"|"span",key?:string)=><Tag key={key} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
           style={{["--color-swatch-current" as string]:op.color}}>
           <input type="radio" className="color-swatch-input" name={name} value={op.color} aria-label={op.label??op.color}
             checked={value===undefined?undefined:value===op.color} defaultChecked={value===undefined?defaultValue===op.color:undefined}
             disabled={disabled||op.disabled} {...(onChange?{onChange}:{})}/>
           <span className={cx("color-swatch",cor&&cor.a<1&&"color-swatch-alpha")} aria-hidden="true"/>
           {indicator!=null&&<span className="color-swatch-indicator" aria-hidden="true">{indicator}</span>}
-        </label>;
+        </Tag>;
+        return showLabels
+          ?<label key={op.color} className="color-swatch-item">{circulo("span")}<span className="color-swatch-name" aria-hidden="true">{op.label??op.color}</span></label>
+          :circulo("label",op.color);
       })}
     </div>;
   }

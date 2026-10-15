@@ -1,6 +1,6 @@
 {
   "name": "AccessGate",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Hides an action the user cannot take, or shows it inert with the reason.",

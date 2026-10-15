@@ -1,6 +1,6 @@
 {
   "name": "CloseButton",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "The round close button: a 24 circle on the neutral fill with a 16 X in the Bold stroke, named \"Close\" by itself.",

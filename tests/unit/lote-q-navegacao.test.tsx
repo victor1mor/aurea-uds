@@ -141,12 +141,13 @@ describe("CommandPalette com grupos e atalhos", () => {
     expect(titulos).toEqual(["Pages"]);
   });
   test("a linha de atalhos descreve o campo, e some com shortcuts={false}", () => {
-    const {getByRole, rerender, container} = wrap(<CommandPalette open onClose={() => {}} items={ITENS} />, ptBR);
-    const linha = container.querySelector(".command-shortcuts")!;
+    // `document`, e não o `container`: desde 14/10/2026 a paleta mora na janela do motor, que vai para o portal.
+    const {getByRole, rerender} = wrap(<CommandPalette open onClose={() => {}} items={ITENS} />, ptBR);
+    const linha = document.querySelector(".command-shortcuts")!;
     expect(linha.textContent).toContain("mover");
     expect(getByRole("combobox").getAttribute("aria-describedby")).toContain(linha.id);
     rerender(<AureaProvider strings={ptBR}><CommandPalette open onClose={() => {}} items={ITENS} shortcuts={false} /></AureaProvider>);
-    expect(container.querySelector(".command-shortcuts")).toBeNull();
+    expect(document.querySelector(".command-shortcuts")).toBeNull();
   });
   test("sem `group` em nenhum item, a lista é a de sempre (sem título)", () => {
     const {getByRole} = wrap(<CommandPalette open onClose={() => {}} items={ITENS.map(({group: _g, ...i}) => i)} />);

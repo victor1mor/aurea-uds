@@ -1,7 +1,7 @@
 {
   "name": "useDensity",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read the current density and switch it, from anywhere inside AureaProvider.",

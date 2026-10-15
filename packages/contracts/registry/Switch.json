@@ -1,6 +1,6 @@
 {
   "name": "Switch",
-  "category": "Inputs",
+  "category": "Controls",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "On/off toggle.",

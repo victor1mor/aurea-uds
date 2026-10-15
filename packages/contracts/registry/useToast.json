@@ -1,7 +1,7 @@
 {
   "name": "useToast",
   "kind": "hook",
-  "category": "Feedback",
+  "category": "Overlays",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Raise a transient notification from anywhere inside AureaProvider.",

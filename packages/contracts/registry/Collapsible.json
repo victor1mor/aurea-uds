@@ -1,6 +1,6 @@
 {
   "name": "Collapsible",
-  "category": "Disclosure",
+  "category": "Navigation",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "One section that opens and closes, with the open state owned by the app.",

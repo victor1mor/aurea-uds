@@ -1,6 +1,6 @@
 {
   "name": "Input",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Single-line text entry control.",

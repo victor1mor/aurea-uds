@@ -10,7 +10,7 @@ import {Toggle as BaseToggle} from "@base-ui/react/toggle";
 import {ToggleGroup as BaseToggleGroup} from "@base-ui/react/toggle-group";
 import {cx, useAureaStrings, DentroDoProviderContext, avisosAncorados, type AureaStrings} from "./internal.js";
 import {Kbd} from "./markup.js";
-import {Icon, useAureaTheme, type IconName} from "./system.js";
+import {Icon, useAureaTheme, type IconName, type AureaIcon} from "./system.js";
 
 // A ordem do nome segue a FAMÍLIA, e a inconsistência é herdada: em `outline`/`ghost` o tom vem
 // primeiro (`danger-outline`, `primary-outline`); em `link` vem depois (`link-danger`), porque ali
@@ -273,7 +273,9 @@ if(!textoVisivel&&!rotuloVisivel)console.error("Aurea: <Toggle> sem `children` v
 const tamanho=ehResponsivo(size)?classesResponsivas("size",size):((valorBase(size)??"md")!=="md"&&`btn-${valorBase(size)}`);
 return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} className={cx("btn",variant==="ghost"?"btn-ghost":"btn-tertiary",tamanho,!textoVisivel&&"btn-icon","toggle",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
 
-export interface IconButtonProps extends Omit<ButtonProps,"children">{label:string;icon:IconName}
+// O ícone do `IconButton` aceita também o DESENHO do app (15/10/2026), como o `Icon` (MNT-02, 0.30.0) e o
+// `IconButton` do nativo (R-11): a marca de um serviço, um glifo que o Phosphor não tem.
+export interface IconButtonProps extends Omit<ButtonProps,"children">{label:string;icon:AureaIcon}
 // default ghost (não secondary): um ícone-ação solto — hambúrguer, tema, fechar — é sem
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
 // variant. Alinha o React ao HTML dos docs, onde .btn-icon já é transparente.

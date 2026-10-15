@@ -1,6 +1,6 @@
 {
   "name": "Accordion",
-  "category": "Disclosure",
+  "category": "Navigation",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Stack of expandable/collapsible sections.",

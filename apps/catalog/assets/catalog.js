@@ -444,23 +444,15 @@ document.addEventListener("click", e => {
   }, () => {});
 });
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
-// 'change' e não 'click': em 'select' o clique acontece antes de a opção mudar, e o teclado não
-// clica — quem escolhe com as setas nunca dispararia o handler.
-// Valor vazio = SEM marca, e é assim que a Aurea volta a ser a Aurea: 'delete' do atributo, não
-// 'data-brand="aurea"'. Marca padrão não tem nome porque não é marca — é o padrão (ADR-0036).
-document.addEventListener("change", e => {
-  const alvo = e.target.closest("#brand-select");
-  if (!alvo) return;
-  if (alvo.value) document.documentElement.dataset.brand = alvo.value;
+// Quem escolhe é o botão "Theme" (14/10/2026), vivo no search.js: ele avisa com o evento 'aurea-brand', e a
+// cola é daqui, num lugar só. Valor vazio = SEM marca, e é assim que a Aurea volta a ser a Aurea: 'delete' do
+// atributo, não 'data-brand="aurea"'. Marca padrão não tem nome porque não é marca — é o padrão (ADR-0036).
+document.addEventListener("aurea-brand", e => {
+  const marca = (e.detail && e.detail.brand) || "";
+  if (marca) document.documentElement.dataset.brand = marca;
   else delete document.documentElement.dataset.brand;
   espelhaTema();
-  try { localStorage.setItem("aurea-brand", alvo.value); } catch (err) {}
-});
-// E o seletor tem de MOSTRAR a marca que está valendo quando a página remonta — cada página do
-// catálogo é documento novo, e o <select> voltaria para "Aurea" com a página em laranja.
-addEventListener("DOMContentLoaded", () => {
-  const alvo = document.querySelector("#brand-select");
-  if (alvo) alvo.value = document.documentElement.dataset.brand || "";
+  try { localStorage.setItem("aurea-brand", marca); } catch (err) {}
 });
 
 // -- a lateral abre onde voce parou ------------------------------------------------------

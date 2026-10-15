@@ -1,6 +1,6 @@
 {
   "name": "Combobox",
-  "category": "Inputs",
+  "category": "Pickers",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Text field with an autocomplete listbox.",

@@ -1,6 +1,6 @@
 {
   "name": "DropdownMenu",
-  "category": "Overlays",
+  "category": "Collections",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Menu of actions triggered by a control.",

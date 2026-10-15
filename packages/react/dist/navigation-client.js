@@ -7,8 +7,9 @@ import React, { useRef } from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
+import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { useValorResponsivo } from "./responsivo-runtime.js";
-import { cx, fundirRender, useAureaStrings } from "./internal.js";
+import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
 import { Kbd } from "./markup.js";
 import { Icon } from "./system.js";
 import { Button } from "./actions.js";
@@ -331,19 +332,21 @@ export function CommandPalette({ open, onClose, items, placeholder, label, short
         }
         return [...mapa].map(([value, itens]) => ({ value, items: itens }));
     }, [items]);
-    if (!open)
-        return null;
+    const portal = usePortalContainer();
+    const campo = useRef(null);
     const executa = (item) => { onClose(); item.run(); };
     const linha = (item) => _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [item.icon && _jsx(Icon, { name: item.icon }), _jsx("span", { className: "command-item-label", children: item.label }), item.kbd && _jsx(Kbd, { children: item.kbd })] }, item.id);
-    // Escape fecha, e é o teclado que a pessoa tenta primeiro. O motor não fecha sozinho porque
-    // quem é dono do `open` é o consumidor — mesma regra do Dialog e do Drawer daqui.
-    return _jsx("div", { className: "command-overlay", onKeyDown: e => { if (e.key === "Escape")
-            onClose(); }, children: _jsxs("div", { className: "command-palette", role: "dialog", "aria-label": label ?? s.commandLabel, children: [_jsxs(BaseAutocomplete.Root, { items: (grupos ?? items), itemToStringValue: (i) => i.label, mode: "list", open: true, inline: true, autoHighlight: "always", keepHighlight: true, children: [_jsx(BaseAutocomplete.Input, { autoFocus: true, className: "input", onKeyDown: e => { if (e.key === "Escape") {
-                                e.stopPropagation();
-                                onClose();
-                            } }, "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder, "aria-expanded": true, "aria-describedby": shortcuts ? idAtalhos : undefined }), _jsxs("div", { className: "menu command-list", children: [_jsx(BaseAutocomplete.Empty, { className: "combobox-empty", children: s.comboboxEmpty }), _jsx(BaseAutocomplete.List, { children: grupos
-                                        ? (g) => _jsxs(BaseAutocomplete.Group, { items: g.items, className: "command-group", children: [g.value && _jsx(BaseAutocomplete.GroupLabel, { className: "command-group-label", children: g.value }), _jsx(BaseAutocomplete.Collection, { children: linha })] }, g.value)
-                                        : _jsx(BaseAutocomplete.Collection, { children: linha }) })] })] }), shortcuts && _jsxs("p", { className: "command-shortcuts", id: idAtalhos, children: [_jsxs("span", { children: [_jsx(Kbd, { children: "\u2191" }), _jsx(Kbd, { children: "\u2193" }), " ", s.commandHintMove] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Enter" }), " ", s.commandHintSelect] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Esc" }), " ", s.commandHintClose] })] })] }) });
+    // A JANELA É A DO MOTOR (14/10/2026), como na paleta de exemplo dele (1.6.0): `Dialog` por fora,
+    // `Autocomplete` `inline` por dentro. Até aqui a moldura era uma `div` feita à mão, e o Victor achou no site
+    // publicado: o clique no fundo não fechava, e depois dele o foco ia para a página — o Esc, que era escutado
+    // dentro da caixa, não chegava mais. A janela do motor fecha pelos dois caminhos, prende o Tab, trava a
+    // rolagem de trás e devolve o foco a quem abriu. O `open` continua do consumidor: o motor só AVISA
+    // (`onOpenChange`), e quem fecha é o `onClose` — mesma regra do Dialog e do Drawer daqui. Os nomes de classe
+    // ficaram: a moldura (`Viewport`) é a `.command-overlay`, a caixa (`Popup`) é a `.command-palette`.
+    return _jsx(BaseDialog.Root, { open: open, onOpenChange: o => { if (!o)
+            onClose(); }, children: _jsx(BaseDialog.Portal, { container: portal, children: _jsx(BaseDialog.Viewport, { className: "command-overlay", children: _jsxs(BaseDialog.Popup, { className: "command-palette", "aria-label": label ?? s.commandLabel, initialFocus: campo, children: [_jsxs(BaseAutocomplete.Root, { items: (grupos ?? items), itemToStringValue: (i) => i.label, mode: "list", open: true, inline: true, autoHighlight: "always", keepHighlight: true, children: [_jsx(BaseAutocomplete.Input, { ref: campo, className: "input", "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder, "aria-expanded": true, "aria-describedby": shortcuts ? idAtalhos : undefined }), _jsxs("div", { className: "menu command-list", children: [_jsx(BaseAutocomplete.Empty, { className: "combobox-empty", children: s.comboboxEmpty }), _jsx(BaseAutocomplete.List, { children: grupos
+                                                ? (g) => _jsxs(BaseAutocomplete.Group, { items: g.items, className: "command-group", children: [g.value && _jsx(BaseAutocomplete.GroupLabel, { className: "command-group-label", children: g.value }), _jsx(BaseAutocomplete.Collection, { children: linha })] }, g.value)
+                                                : _jsx(BaseAutocomplete.Collection, { children: linha }) })] })] }), shortcuts && _jsxs("p", { className: "command-shortcuts", id: idAtalhos, children: [_jsxs("span", { children: [_jsx(Kbd, { children: "\u2191" }), _jsx(Kbd, { children: "\u2193" }), " ", s.commandHintMove] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Enter" }), " ", s.commandHintSelect] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Esc" }), " ", s.commandHintClose] })] })] }) }) }) });
 }
 export function CommandPaletteShell({ open, query, onQueryChange, children }) { const s = useAureaStrings(); if (!open)
     return null; return _jsx("div", { className: "command-overlay", children: _jsxs("div", { className: "command-palette", role: "dialog", "aria-label": s.commandLabel, children: [_jsx(SearchField, { autoFocus: true, "aria-label": s.commandPlaceholder, value: query, onChange: e => onQueryChange(e.target.value), placeholder: s.commandPlaceholder }), children] }) }); }

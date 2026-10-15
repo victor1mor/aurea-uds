@@ -1,6 +1,6 @@
 {
   "name": "Avatar",
-  "category": "Identity",
+  "category": "Media",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Represents a user or entity with image or initials.",
