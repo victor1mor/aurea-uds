@@ -48,6 +48,19 @@ export function Card({ variant = "base", padding = "normal", orientation = "vert
  *  cartão menos o respiro dele). O que vai dentro — `Image`, vídeo — é do app. */
 function CardMedia({ className, ...props }) { return _jsx("div", { className: cx("card-media", className), ...props }); }
 Card.Media = CardMedia;
+// AS PARTES DO CARTÃO (15/10/2026, o Victor: "A, B, C, pode"), como as da referência: o cabeçalho (o título e a
+// descrição, colados), o conteúdo (4 entre os itens) e o rodapé (em linha). 12 entre as partes, o vão dela — por margem,
+// porque o `Card` da Aurea é um bloco e virar coluna mudaria quem já o usa. O título é um `h3`, como lá.
+function CardHeader({ className, ...props }) { return _jsx("div", { className: cx("card-header", className), ...props }); }
+function CardTitle({ className, ...props }) { return _jsx("h3", { className: cx("card-title", className), ...props }); }
+function CardDescription({ className, ...props }) { return _jsx("p", { className: cx("card-description", className), ...props }); }
+function CardContent({ className, ...props }) { return _jsx("div", { className: cx("card-content", className), ...props }); }
+function CardFooter({ className, ...props }) { return _jsx("div", { className: cx("card-footer", className), ...props }); }
+Card.Header = CardHeader;
+Card.Title = CardTitle;
+Card.Description = CardDescription;
+Card.Content = CardContent;
+Card.Footer = CardFooter;
 export function Stack({ gap, align, className, ...props }) { return _jsx("div", { className: cx("stack", gap && gap !== "normal" && `stack-gap-${gap}`, align && align !== "stretch" && `stack-align-${align}`, className), ...props }); }
 export function Cluster({ gap, align, justify, wrap, className, ...props }) { return _jsx("div", { className: cx("cluster", gap && gap !== "normal" && `cluster-gap-${gap}`, align && align !== "center" && `cluster-align-${align}`, justify && justify !== "start" && `cluster-justify-${justify}`, wrap === false && "cluster-nowrap", className), ...props }); }
 const GRID_MIN = new Set(["xs", "sm", "md", "lg"]);
@@ -203,8 +216,11 @@ export const Textarea = forwardRef(function Textarea({ className, size, variant,
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] }); }
-export function Radio({ label, size, className, ...props }) { return _jsxs("label", { className: cx("radio", className), children: [_jsx("input", { type: "radio", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), label] }); }
-export function Switch({ label, size, className, ...props }) { return _jsxs("label", { className: cx("switch", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { children: label })] }); }
+// `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
+// mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
+const comDescricao = (label, description) => description ? _jsxs("span", { children: [_jsx("strong", { children: label }), _jsx("br", {}), _jsx("span", { className: "muted", children: description })] }) : label;
+export function Radio({ label, description, size, className, ...props }) { return _jsxs("label", { className: cx("radio", className), children: [_jsx("input", { type: "radio", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), comDescricao(label, description)] }); }
+export function Switch({ label, description, size, className, ...props }) { return _jsxs("label", { className: cx("switch", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { children: comDescricao(label, description) })] }); }
 export function Range({ orientation, className, ...props }) { return _jsx("input", { className: cx("range", peleDoEixo("range", orientation, "horizontal", "range"), className), type: "range", ...props }); }
 // `md` é a classe base — não existe `.input-md`, como não existe `.btn-md`. O prefixo é escrito
 // literal em cada chamada (`input-${size}`, e não `${base}-${size}`) porque é assim que o check 15

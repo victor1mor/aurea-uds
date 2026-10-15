@@ -9,12 +9,14 @@ export declare function Status({ variant, state, children, className, ...props }
     state?: UniversalState;
 }): React.JSX.Element;
 export type AlertVariant = "info" | "success" | "warning" | "danger" | "accent";
-export declare function Alert({ variant, state, title, icon, onDismiss, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function Alert({ variant, state, title, icon, onDismiss, action, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     variant?: AlertVariant;
     state?: UniversalState;
     title?: ReactNode;
     icon?: IconName;
     onDismiss?: () => void;
+    /** O botão do aviso ("Atualizar", "Desfazer"): depois do texto, antes do X. No celular, embaixo do texto. */
+    action?: ReactNode;
 }): React.JSX.Element;
 export type BannerVariant = "info" | "success" | "warning" | "danger";
 export declare function Banner({ variant, state, title, icon, onDismiss, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {

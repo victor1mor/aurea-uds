@@ -64,6 +64,12 @@
       "description": "REQUIRED. One radio per option, all sharing the same name."
     },
     {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A muted line under the label, as the Checkbox and the reference — then the label is set in bold."
+    },
+    {
       "name": "name",
       "type": "string",
       "default": "—",

@@ -23,7 +23,8 @@
     "primary-ghost",
     "primary-outline",
     "secondary",
-    "tertiary"
+    "tertiary",
+    "danger-soft"
   ],
   "sizes": [
     "lg",
@@ -41,6 +42,7 @@
       "link",
       "nav",
       "outline",
+      "soft",
       "solid"
     ],
     "tone": [
@@ -110,13 +112,13 @@
   "props": [
     {
       "name": "variant",
-      "type": "ButtonVariant",
+      "type": "ButtonVariant | danger-soft",
       "default": "ghost",
       "description": "Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
-      "type": "solid | outline | ghost | link | nav",
+      "type": "solid | outline | ghost | link | nav | soft",
       "default": "ghost",
       "description": "Inherited from Button. How much weight the box carries; the default here is ghost."
     },
@@ -209,6 +211,12 @@
       "type": "ReactElement",
       "default": "—",
       "description": "Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content."
+    },
+    {
+      "name": "quiet",
+      "type": "boolean",
+      "default": "false",
+      "description": "Less weight: muted text one step smaller — the Button's quiet."
     }
   ]
 }

@@ -21,10 +21,11 @@ import {Icon, useAureaTheme, type IconName, type AureaIcon} from "./system.js";
 // 0.32.0 (decisão do Victor, 11/10/2026, "A"): os dois de fundo neutro da referência — `secondary`
 // com a letra da marca e `tertiary` com a letra normal. O `tertiary` é o `secondary` de até a 0.31.0 e
 // é o PADRÃO: o `Button` sem `variant` não muda de cara. Muda só quem escreveu `secondary`.
-export type ButtonVariant="primary"|"secondary"|"tertiary"|"outline"|"ghost"|"primary-outline"|"primary-ghost"|"danger"|"danger-outline"|"danger-ghost"|"link"|"link-primary"|"link-danger"|"nav";
+export type ButtonVariant="primary"|"secondary"|"tertiary"|"outline"|"ghost"|"primary-outline"|"primary-ghost"|"danger"|"danger-outline"|"danger-ghost"|"link"|"link-primary"|"link-danger"|"nav"|"danger-soft";
 // APARÊNCIA: quanto peso a caixa tem. `nav` é aparência própria (item de navegação, cor
 // esmaecida em repouso), não um tom — por isso mora aqui e não ali.
-export type ButtonAppearance="solid"|"outline"|"ghost"|"link"|"nav";
+// `soft` (15/10/2026, o "danger-soft" da referência): o fundo clarinho do tom e a letra do tom.
+export type ButtonAppearance="solid"|"outline"|"ghost"|"link"|"nav"|"soft";
 // TOM: o que a cor SIGNIFICA. Os cinco tons semânticos mais o neutro, e TODOS funcionam em
 // TODAS as aparências — inclusive preenchido. `warning` entrou em 21/08/2026, quando o token de
 // aviso deixou de resolver para a cor da marca no tema escuro (`G-TOKEN-02`).
@@ -43,13 +44,16 @@ const EIXOS:Record<ButtonVariant,readonly [ButtonAppearance,ButtonTone]>={
   "primary-outline":["outline","brand"],"primary-ghost":["ghost","brand"],
   danger:["solid","danger"],"danger-outline":["outline","danger"],"danger-ghost":["ghost","danger"],
   link:["link","neutral"],"link-primary":["link","brand"],"link-danger":["link","danger"],
-  nav:["nav","neutral"]};
+  nav:["nav","neutral"],"danger-soft":["soft","danger"]};
+// Atalhos que NÃO têm classe própria (15/10/2026): saem como os dois eixos (`btn-soft btn-tone-danger`), e herdam as
+// regras de cor do tom nos dois temas em vez de repeti-las numa classe nova.
+const SO_EIXOS=new Set<ButtonVariant>(["danger-soft"]);
 // caminho de volta: par → nome antigo. Existir aqui significa "o core já pinta esta célula com
 // uma classe própria", e é o que garante que NENHUMA baseline se mexe: `appearance="outline"`
 // + `tone="danger"` emite `.btn-danger-outline`, o mesmo DOM de sempre.
 const CLASSE_ANTIGA=new Map<string,ButtonVariant>(
   (Object.entries(EIXOS) as [ButtonVariant,readonly [ButtonAppearance,ButtonTone]][])
-    .filter(([v])=>v!=="secondary").map(([v,[a,t]])=>[`${a}/${t}`,v] as const));
+    .filter(([v])=>v!=="secondary"&&!SO_EIXOS.has(v)).map(([v,[a,t]])=>[`${a}/${t}`,v] as const));
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
  *  cobra a matriz inteira, e porque quem monta um botão à mão precisa da mesma conta.
  *
@@ -60,7 +64,7 @@ const CLASSE_ANTIGA=new Map<string,ButtonVariant>(
  *  que se pede, nunca o que sobra quando a nossa paleta não dá conta. */
 export function buttonSkin(variant?:ButtonVariant,appearance?:ButtonAppearance,tone?:ButtonTone):string{
   // A variação sem eixo pedido é a própria classe — é o caminho do `secondary`, que não tem célula.
-  if(appearance===undefined&&tone===undefined)return `btn-${variant??"tertiary"}`;
+  if(appearance===undefined&&tone===undefined&&!(variant&&SO_EIXOS.has(variant)))return `btn-${variant??"tertiary"}`;
   const [a0,t0]=EIXOS[variant??"tertiary"];
   const a=appearance??a0, t=tone??t0;
   const antiga=CLASSE_ANTIGA.get(`${a}/${t}`);
@@ -291,7 +295,7 @@ export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function I
 // dela). O nome acessível vem sozinho ("Close"/"Fechar"), e quem fecha outra coisa diz o quê
 // (`label="Fechar aviso"`). No toque, a área continua de 44 (`--target-min`) sem o círculo crescer.
 // Fechado como o dela: sem cor, tamanho nem ícone de fora — `children` troca o X, como lá.
-export interface CloseButtonProps extends Omit<ButtonProps,"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"pressed"|"share">{
+export interface CloseButtonProps extends Omit<ButtonProps,"quiet"|"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"pressed"|"share">{
   /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
   label?:string}
 export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function CloseButton({label,className,children,...props},ref){
@@ -305,7 +309,7 @@ export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function
 // isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
 // Fechado como a referência faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
 // do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
-export interface ThemeToggleProps extends Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share">{
+export interface ThemeToggleProps extends Omit<IconButtonProps,"quiet"|"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share">{
   /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
    *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
   mode?:"light-dark"|"light-dark-system"}

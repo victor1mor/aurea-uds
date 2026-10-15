@@ -65,6 +65,12 @@
       "description": "REQUIRED. A switch with no label is a mystery toggle."
     },
     {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A muted line under the label, as the Checkbox and the reference — then the label is set in bold."
+    },
+    {
       "name": "checked / defaultChecked",
       "type": "boolean",
       "default": "—",

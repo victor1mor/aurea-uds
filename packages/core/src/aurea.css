@@ -1016,6 +1016,22 @@ img,svg { display:block; }
 .btn-tone-warning,.btn-tone-warning:hover:not(:disabled) { --btn-fg:var(--warning-400); }
 .btn-outline.btn-tone-warning { --btn-border:var(--warning-400); }
 .btn-tone-warning:not(.btn-link):not(.btn-solid):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--warning) 14%, transparent); }
+/* appearance="soft" (15/10/2026, o "danger-soft" da referência): o fundo clarinho do tom e a letra do tom (a letra é a
+   do tom, das regras acima). Em repouso, a tinta que os botões sem caixa usam no hover (14%); no hover, 22%. O neutro
+   é o fundo --muted com a letra normal. */
+.btn-soft { --btn-border:transparent; }
+.btn-soft.btn-tone-neutral { --btn-bg:var(--muted); --btn-fg:var(--foreground); }
+.btn-soft.btn-tone-neutral:hover:not(:disabled) { --btn-bg:var(--secondary-hover); }
+.btn-soft.btn-tone-brand { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
+.btn-soft.btn-tone-brand:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 22%, transparent); }
+.btn-soft.btn-tone-danger { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
+.btn-soft.btn-tone-danger:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--destructive) 22%, transparent); }
+.btn-soft.btn-tone-success { --btn-bg:color-mix(in oklab, var(--success) 14%, transparent); }
+.btn-soft.btn-tone-success:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--success) 22%, transparent); }
+.btn-soft.btn-tone-warning { --btn-bg:color-mix(in oklab, var(--warning) 14%, transparent); }
+.btn-soft.btn-tone-warning:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--warning) 22%, transparent); }
+.btn-soft.btn-tone-info { --btn-bg:color-mix(in oklab, var(--info) 14%, transparent); }
+.btn-soft.btn-tone-info:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--info) 22%, transparent); }
 .btn-nav:hover:not(:disabled):not([aria-disabled="true"]) { --btn-fg:var(--foreground); }
 /* O botão só de ícone é REDONDO, em todos os tamanhos — decisão do Victor, 25/09/2026
    (ADR-0052). Era um quadrado de canto 10px (6px nos dois menores). A referência faz o
@@ -1211,6 +1227,9 @@ img,svg { display:block; }
 .otp-field { display:inline-flex; align-items:center; gap:var(--space-2); }
 /* 0.32.0: a casa da referência — 38 × 40, o número 18 em seminegrito (era 36 × 36, letra 14). */
 .otp-slot { width:calc(var(--space-10) - var(--space-05)); block-size:var(--space-10); padding:0; text-align:center; font-family:var(--font-code); font-size:var(--text-lg); font-weight:var(--weight-semibold); }
+/* O tracinho entre os grupos (15/10/2026): o da referência, 6 × 2 com a ponta arredondada. Só desenho — o leitor de
+   tela segue de caixa em caixa. */
+.otp-separator { flex:none; inline-size:calc(var(--space-1) + var(--space-05)); block-size:var(--space-05); border-radius:var(--radius-sm); background:var(--border-strong); }
 /* HoverCard (Lote 1) reusa `.popover`; só limita a largura, porque prévia é conteúdo, não rótulo. */
 .hover-card { max-width:min(20rem,calc(100vw - var(--space-8))); }
 
@@ -1362,6 +1381,8 @@ img,svg { display:block; }
 .list-box-section { display:flex; flex-direction:column; gap:var(--space-1); }
 .list-box-section-title { padding:var(--space-2) var(--space-2) var(--space-1); color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-medium); }
 .list-box-item { position:relative; display:flex; align-items:center; gap:var(--space-3); inline-size:100%; min-block-size:var(--control-h-md); padding:calc(var(--space-1) + var(--space-05)) var(--space-2); border-radius:var(--radius-full); color:var(--foreground); font-size:var(--text-sm); cursor:pointer; transition:background var(--duration-fast),transform var(--duration-fast) var(--ease-standard); }
+/* O atalho do item (15/10/2026), como o da referência: o `Kbd` na ponta da linha. */
+.list-box-item-kbd { flex:none; margin-inline-start:auto; }
 .list-box-item:has(.list-box-item-indicator) { padding-inline-end:var(--space-7); }
 .list-box-item:hover:not([aria-disabled="true"]),.list-box-item:focus-visible { background:var(--secondary); }
 .list-box-item:focus-visible { outline-offset:calc(-1 * var(--focus-width)); }
@@ -1378,6 +1399,12 @@ img,svg { display:block; }
 .checkbox-group { display:flex; flex-direction:column; align-items:flex-start; }
 .checkbox-group > .checkbox { margin-block-start:var(--space-4); }
 .checkbox-group > .field-error { margin-block-start:var(--space-2); }
+/* RadioGroup (15/10/2026): o molde do CheckboxGroup — 16 antes de cada opção; na horizontal, as opções numa linha com 16
+   entre elas, como na referência. */
+.radio-group { display:flex; flex-direction:column; align-items:flex-start; }
+.radio-group > .radio { margin-block-start:var(--space-4); }
+.radio-group-items { display:flex; flex-wrap:wrap; gap:var(--space-4); margin-block-start:var(--space-4); }
+.radio-group > .field-error { margin-block-start:var(--space-2); }
 .checkbox > span > .muted { font-size:var(--text-xs); font-weight:var(--weight-regular); line-height:var(--space-4); }
 .checkbox input,.radio input { position:absolute; opacity:0; pointer-events:none; }
 /* A MARCA DE SELEÇÃO acompanha a densidade, e antes não acompanhava. Era `18px` cru: em
@@ -1739,6 +1766,14 @@ img,svg { display:block; }
    lados. Horizontal (o modo lista): a mídia à esquerda, 96 de largura (a do exemplo da
    referência, nosso --space-24), 16 até o texto, e o raio concêntrico da casa. */
 .card-media { display:block; overflow:hidden; }
+/* As partes do cartão (15/10/2026), as da referência: o título 14/24 médio e a descrição 14/20 apagada, colados no
+   cabeçalho; o conteúdo em coluna com 4; o rodapé em linha, com 8 entre os botões; 12 entre as partes. */
+.card-header { display:flex; flex-direction:column; }
+.card-title { margin:0; color:var(--card-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--space-6); }
+.card-description { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
+.card-content { display:flex; flex-direction:column; gap:var(--space-1); }
+.card-footer { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); }
+:is(.card-header,.card-content,.card-footer) + :is(.card-header,.card-content,.card-footer) { margin-block-start:var(--space-3); }
 .card-media > :is(img,video,.image) { display:block; width:100%; }
 .card:not(.card-horizontal) > .card-media:first-child { margin:calc(var(--card-pad) * -1) calc(var(--card-pad) * -1) var(--card-pad); border-radius:calc(var(--radius-card) - var(--border-width)) calc(var(--radius-card) - var(--border-width)) 0 0; }
 .card-flush:not(.card-horizontal) > .card-media:first-child { margin:0; }
@@ -1799,6 +1834,11 @@ img,svg { display:block; }
    esmaecido. Até a 0.31.0 a cor do estado tingia o fundo e a borda. `--alert-tone` é a cor do estado. */
 .alert { --alert-tone:var(--info-400); display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:var(--space-4); padding:var(--space-3) var(--space-4); border:0; border-radius:var(--radius-card); background:var(--card); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); box-shadow:var(--shadow-sm); }
 .alert-success { --alert-tone:var(--success-400); } .alert-warning { --alert-tone:var(--warning-400); } .alert-danger { --alert-tone:var(--danger-400); } .alert-accent { --alert-tone:var(--link); }
+/* action (15/10/2026): a coluna do botão, depois do texto e antes do X, no meio da altura. Abaixo de 640 o botão desce
+   para baixo do texto, na mesma coluna — a referência repete o botão no celular; aqui ele só muda de lugar. */
+.alert-has-action { grid-template-columns:auto minmax(0,1fr) auto auto; }
+.alert-action { display:flex; align-items:center; align-self:center; gap:var(--space-2); }
+@media (max-width:639px) { .alert-has-action { grid-template-columns:auto minmax(0,1fr) auto; } .alert-has-action > .alert-action { grid-column:2; grid-row:2; justify-self:start; align-self:start; } }
 /* Banner: aviso de largura de página. Base ANTES das variantes — mesma
    especificidade, então a última regra vence e a base apagaria as cores. */
 .banner { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:12px; padding:14px 18px; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--secondary); }
@@ -2034,6 +2074,17 @@ img,svg { display:block; }
 .avatar { width:var(--step-avatar,var(--space-10)); height:var(--step-avatar,var(--space-10)); font-size:var(--step-avatar-fs,var(--text-sm)); display:grid; place-items:center; overflow:hidden; border-radius:50%; background:var(--surface-3); color:var(--foreground); border:1px solid var(--border-strong); font-weight:var(--weight-medium); }
 .avatar-sm { --step-avatar:var(--space-8); --step-avatar-fs:var(--text-xs); }
 .avatar-lg { --step-avatar:var(--space-12); --step-avatar-fs:var(--text-base); }
+/* tone e emphasis="soft" (15/10/2026), o `color` e o `soft` do avatar da referência: o tom pinta a letra ou o ícone (o par
+   de letra de cada estado, ADR-0061); o `soft` tira a moldura e põe o fundo clarinho do tom (14%, a tinta dos botões
+   suaves). O neutro suave é o --muted. */
+.avatar-tone-brand { --avatar-ink:var(--primary-emphasis); --avatar-tint:var(--primary); }
+.avatar-tone-danger { --avatar-ink:var(--danger-400); --avatar-tint:var(--destructive); }
+.avatar-tone-success { --avatar-ink:var(--success-400); --avatar-tint:var(--success); }
+.avatar-tone-warning { --avatar-ink:var(--warning-400); --avatar-tint:var(--warning); }
+.avatar-tone-info { --avatar-ink:var(--info-400); --avatar-tint:var(--info); }
+.avatar:is(.avatar-tone-brand,.avatar-tone-danger,.avatar-tone-success,.avatar-tone-warning,.avatar-tone-info) { color:var(--avatar-ink); }
+.avatar.avatar-soft { border-color:transparent; background:var(--muted); }
+.avatar.avatar-soft:is(.avatar-tone-brand,.avatar-tone-danger,.avatar-tone-success,.avatar-tone-warning,.avatar-tone-info) { background:color-mix(in oklab, var(--avatar-tint) 14%, transparent); }
 .avatar img { width:100%; height:100%; object-fit:cover; }
 /* LINK (0.32.0): o link de texto da referência — peso médio, a cor de link, sem sublinhado; com o mouse
    ou apertado, o sublinhado de 1,5 a 4 da letra, na cor esmaecida (a meia força com o mouse). A seta do

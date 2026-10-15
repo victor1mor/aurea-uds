@@ -13,7 +13,7 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // `.btn-primary-ghost` pintavam o rótulo com `--primary` cru, e no tema claro isso dá 1.73:1.
 // Nenhum gate existente olhava para contraste. Sem este arquivo, o próximo tom entra torto do
 // mesmo jeito.
-const APARENCIAS = ["solid", "outline", "ghost", "link", "nav"] as const;
+const APARENCIAS = ["solid", "outline", "ghost", "link", "nav", "soft"] as const;
 const TONS = ["neutral", "brand", "danger", "success", "warning", "info"] as const;
 const ANTIGA: Record<string, string> = {
   "solid/brand": "primary", "solid/neutral": "secondary", "outline/neutral": "outline",

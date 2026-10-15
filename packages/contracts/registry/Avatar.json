@@ -78,10 +78,36 @@
       "description": "Token scale, not pixels. It shares --control-h-* with the controls, so an avatar next to a button of the same size lines up by construction, and density reaches it."
     },
     {
+      "name": "tone",
+      "type": "\"neutral\" | \"brand\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "default": "\"neutral\"",
+      "description": "The colour of the fallback letter or icon — what it means (the reference's color)."
+    },
+    {
+      "name": "emphasis",
+      "type": "\"default\" | \"soft\"",
+      "default": "\"default\"",
+      "description": "soft drops the ring and gives the tone's light background, as the reference's soft avatar (the yellow floppy disk of its showcase)."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",
       "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
     }
-  ]
+  ],
+  "axes": {
+    "emphasis": [
+      "default",
+      "soft"
+    ],
+    "tone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ]
+  }
 }

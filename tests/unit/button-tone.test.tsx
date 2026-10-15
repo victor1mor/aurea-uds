@@ -20,7 +20,7 @@ import {
 const css = readFileSync("packages/core/src/aurea.css", "utf8");
 const wrap = (ui: React.ReactNode) => render(<AureaProvider><main>{ui}</main></AureaProvider>);
 
-const APARENCIAS = ["solid", "outline", "ghost", "link", "nav"] as const;
+const APARENCIAS = ["solid", "outline", "ghost", "link", "nav", "soft"] as const;
 const TONS = ["neutral", "brand", "danger", "success", "warning", "info"] as const;
 
 // As treze de sempre e a classe que cada uma SEMPRE emitiu. Esta tabela é escrita à mão de

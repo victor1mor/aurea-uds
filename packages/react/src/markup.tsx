@@ -102,6 +102,15 @@ return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${varian
  *  cartão menos o respiro dele). O que vai dentro — `Image`, vídeo — é do app. */
 function CardMedia({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-media",className)} {...props}/>}
 Card.Media=CardMedia;
+// AS PARTES DO CARTÃO (15/10/2026, o Victor: "A, B, C, pode"), como as da referência: o cabeçalho (o título e a
+// descrição, colados), o conteúdo (4 entre os itens) e o rodapé (em linha). 12 entre as partes, o vão dela — por margem,
+// porque o `Card` da Aurea é um bloco e virar coluna mudaria quem já o usa. O título é um `h3`, como lá.
+function CardHeader({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-header",className)} {...props}/>}
+function CardTitle({className,...props}:HTMLAttributes<HTMLHeadingElement>&RefAttributes<HTMLHeadingElement>){return <h3 className={cx("card-title",className)} {...props}/>}
+function CardDescription({className,...props}:HTMLAttributes<HTMLParagraphElement>&RefAttributes<HTMLParagraphElement>){return <p className={cx("card-description",className)} {...props}/>}
+function CardContent({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-content",className)} {...props}/>}
+function CardFooter({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-footer",className)} {...props}/>}
+Card.Header=CardHeader;Card.Title=CardTitle;Card.Description=CardDescription;Card.Content=CardContent;Card.Footer=CardFooter;
 // ── Stack, Cluster e Grid ganham props de layout — B-01, 24/09/2026 ────────────────────────────
 // A falta que mais gerou remendo num app: 180 `style={{}}` e 122 `<div>`, quase todos flex + gap.
 // Os nomes `align`, `justify` e `wrap` são os MESMOS do `Cluster` nativo (R-09), de propósito.
@@ -677,8 +686,11 @@ export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Tex
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({label,labelHidden,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
-export function Radio({label,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("radio",className)}><input type="radio" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/>{label}</label>}
-export function Switch({label,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("switch",className)}><input type="checkbox" role="switch" {...props}/><span className={cx("switch-track",peleDoEixo("switch-track",size))}/><span>{label}</span></label>}
+// `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
+// mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
+const comDescricao=(label:ReactNode,description:ReactNode)=>description?<span><strong>{label}</strong><br/><span className="muted">{description}</span></span>:label;
+export function Radio({label,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("radio",className)}><input type="radio" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/>{comDescricao(label,description)}</label>}
+export function Switch({label,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("switch",className)}><input type="checkbox" role="switch" {...props}/><span className={cx("switch-track",peleDoEixo("switch-track",size))}/><span>{comDescricao(label,description)}</span></label>}
 // `orientation` no `<input type=range>` NATIVO — a vertical não exige trocar de motor, e isso foi
 // medido nos três navegadores. Sem `aria-orientation`: o papel `slider` é implícito do elemento e
 // o navegador já anuncia a orientação a partir do writing-mode; pôr o atributo à mão criaria uma

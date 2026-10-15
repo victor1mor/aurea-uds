@@ -4,15 +4,15 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 39,
-    "componentes": 143,
+    "componentes": 144,
     "hooks": 9,
-    "aliasesLiterais": 110,
-    "propsDistintas": 362
+    "aliasesLiterais": 111,
+    "propsDistintas": 364
   },
   "aliases": {
     "ButtonVariant": {
       "module": "actions",
-      "raw": "\"primary\" | \"secondary\" | \"tertiary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
+      "raw": "\"primary\" | \"secondary\" | \"tertiary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\" | \"danger-soft\"",
       "union": [
         "primary",
         "secondary",
@@ -27,18 +27,20 @@
         "link",
         "link-primary",
         "link-danger",
-        "nav"
+        "nav",
+        "danger-soft"
       ]
     },
     "ButtonAppearance": {
       "module": "actions",
-      "raw": "\"solid\" | \"outline\" | \"ghost\" | \"link\" | \"nav\"",
+      "raw": "\"solid\" | \"outline\" | \"ghost\" | \"link\" | \"nav\" | \"soft\"",
       "union": [
         "solid",
         "outline",
         "ghost",
         "link",
-        "nav"
+        "nav",
+        "soft"
       ]
     },
     "ButtonTone": {
@@ -1914,6 +1916,18 @@
         "x"
       ]
     },
+    "AvatarTone": {
+      "module": "identity-client",
+      "raw": "\"neutral\" | \"brand\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "union": [
+        "neutral",
+        "brand",
+        "danger",
+        "success",
+        "warning",
+        "info"
+      ]
+    },
     "FieldOrientation": {
       "module": "inputs-client",
       "raw": "\"vertical\" | \"horizontal\"",
@@ -2694,7 +2708,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -2706,7 +2721,8 @@
                 "outline",
                 "ghost",
                 "link",
-                "nav"
+                "nav",
+                "soft"
               ]
             },
             {
@@ -2858,7 +2874,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -2899,12 +2916,6 @@
           "propsType": "CloseButtonProps",
           "props": [
             {
-              "name": "quiet",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
               "name": "label",
               "optional": true,
               "type": "string",
@@ -2935,7 +2946,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -2947,7 +2959,8 @@
                 "outline",
                 "ghost",
                 "link",
-                "nav"
+                "nav",
+                "soft"
               ]
             },
             {
@@ -3089,12 +3102,6 @@
                 "lg",
                 "xl"
               ]
-            },
-            {
-              "name": "quiet",
-              "optional": true,
-              "type": "boolean",
-              "values": null
             },
             {
               "name": "grow",
@@ -3336,7 +3343,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -3348,7 +3356,8 @@
                 "outline",
                 "ghost",
                 "link",
-                "nav"
+                "nav",
+                "soft"
               ]
             },
             {
@@ -4949,6 +4958,12 @@
               "optional": true,
               "type": "() => void",
               "values": null
+            },
+            {
+              "name": "action",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             }
           ]
         },
@@ -5650,6 +5665,28 @@
                 "sm",
                 "md",
                 "lg"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "AvatarTone",
+              "values": [
+                "neutral",
+                "brand",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
+              "name": "emphasis",
+              "optional": true,
+              "type": "\"default\" | \"soft\"",
+              "values": [
+                "default",
+                "soft"
               ]
             },
             {
@@ -6638,6 +6675,21 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "groupSize",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"primary\" | \"secondary\"",
+              "values": [
+                "primary",
+                "secondary"
+              ]
             }
           ]
         },
@@ -6658,6 +6710,82 @@
             },
             {
               "name": "defaultVisible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "RadioGroup",
+          "kind": "function",
+          "propsType": "RadioGroupProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "error",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "invalid",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"vertical\" | \"horizontal\"",
+              "values": [
+                "vertical",
+                "horizontal"
+              ]
+            },
+            {
+              "name": "required",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -8355,6 +8483,12 @@
               "values": null
             },
             {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
               "name": "size",
               "optional": true,
               "type": "Responsive<FieldSize>",
@@ -8524,6 +8658,12 @@
             {
               "name": "label",
               "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
               "type": "ReactNode",
               "values": null
             },

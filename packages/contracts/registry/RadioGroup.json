@@ -1,0 +1,131 @@
+{
+  "name": "RadioGroup",
+  "category": "Forms",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A group of radio options with a label, a description and an error, that keeps the chosen value — vertical or horizontal. RadioGroup.Item is the Radio.",
+  "icon": "check-circle",
+  "platforms": {
+    "web": "stable",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  },
+  "states": [
+    "default",
+    "invalid",
+    "disabled"
+  ],
+  "tokens": [
+    "--space-4",
+    "--space-2",
+    "--text-sm",
+    "--text-xs",
+    "--weight-medium",
+    "--muted-foreground",
+    "--danger-400"
+  ],
+  "a11y": {
+    "role": "radiogroup",
+    "apg": "radio",
+    "keyboard": [
+      "Tab",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "Space"
+    ],
+    "keyboardNote": "role=radiogroup named by the label; description and error in aria-describedby. The options are native radios sharing one name: Tab enters on the chosen one, the arrows move and choose, Space chooses."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Radio",
+      "CheckboxGroup",
+      "Field",
+      "SegmentedControl"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/inputs-client.tsx#RadioGroup"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "REQUIRED. The group's visible name — what the screen reader announces for the group."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A line under the label, joined to the group by aria-describedby."
+    },
+    {
+      "name": "error",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The error at the end; marks every option invalid."
+    },
+    {
+      "name": "value / defaultValue",
+      "type": "string",
+      "default": "—",
+      "description": "The chosen option's value: controlled, or where it starts."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "—",
+      "description": "Called with the value of the option chosen."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "the group's own",
+      "description": "The name of every option, for a form."
+    },
+    {
+      "name": "orientation",
+      "type": "\"vertical\" | \"horizontal\"",
+      "default": "\"vertical\"",
+      "description": "vertical stacks the options with 16 before each; horizontal puts them in a row with 16 between them, as the reference."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "No option can be chosen."
+    },
+    {
+      "name": "invalid",
+      "type": "boolean",
+      "default": "false",
+      "description": "Paints every option invalid, as the native invalid; error already does it."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "The asterisk on the label, and required on the options."
+    },
+    {
+      "name": "RadioGroup.Item",
+      "type": "component",
+      "default": "—",
+      "description": "The option: the Radio (value, label, description, disabled)."
+    }
+  ]
+}

@@ -24,12 +24,22 @@ export type CardProps = CardBase & ({
 export declare function Card({ variant, padding, orientation, accent, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 export declare namespace Card {
     export { CardMedia as Media };
+    export { CardHeader as Header };
+    export { CardTitle as Title };
+    export { CardDescription as Description };
+    export { CardContent as Content };
+    export { CardFooter as Footer };
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
  *  largura de miniatura, dentro do respiro, com o raio que sai da conta da casa (ADR-0033: raio do
  *  cartão menos o respiro dele). O que vai dentro — `Image`, vídeo — é do app. */
 declare function CardMedia({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+declare function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+declare function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement> & RefAttributes<HTMLHeadingElement>): React.JSX.Element;
+declare function CardDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement> & RefAttributes<HTMLParagraphElement>): React.JSX.Element;
+declare function CardContent({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+declare function CardFooter({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export type LayoutGap = "tight" | "normal" | "loose";
 export type StackAlign = "start" | "center" | "end" | "stretch";
 export type ClusterAlign = "start" | "center" | "end" | "baseline";
@@ -355,12 +365,14 @@ export declare function Checkbox({ label, labelHidden, description, size, classN
     description?: ReactNode;
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
-export declare function Radio({ label, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Radio({ label, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
+    description?: ReactNode;
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
-export declare function Switch({ label, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Switch({ label, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
+    description?: ReactNode;
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
 export type RangeOrientation = "horizontal" | "vertical";

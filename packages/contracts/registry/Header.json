@@ -14,7 +14,10 @@
     "flush",
     "pill"
   ],
-  "sizes": [],
+  "sizes": [
+    "md",
+    "sm"
+  ],
   "states": [
     "default",
     "wrapped",
@@ -175,10 +178,6 @@
       "md",
       "sm",
       "xl"
-    ],
-    "size": [
-      "md",
-      "sm"
     ]
   }
 }

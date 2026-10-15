@@ -1,7 +1,7 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Responsive } from "./pure.js";
 import { type ColorChannel, type ColorSpace } from "./color.js";
-import { type ColorSwatchOption, type FieldSize, type FieldVariant } from "./markup.js";
+import { Radio, type ColorSwatchOption, type FieldSize, type FieldVariant } from "./markup.js";
 import { type IconName } from "./system.js";
 export { FileInput, matchesAccept, type FileRejection, type UploadContext, type UploadFn } from "./file-input.js";
 export type FieldOrientation = "vertical" | "horizontal";
@@ -76,6 +76,27 @@ export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,
     required?: boolean;
 }
 export declare function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }: CheckboxGroupProps): React.JSX.Element;
+export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">, RefAttributes<HTMLDivElement> {
+    label: ReactNode;
+    description?: ReactNode;
+    error?: ReactNode;
+    value?: string;
+    defaultValue?: string;
+    onValueChange?: (value: string) => void;
+    /** O `name` de todas as opções, para o formulário. Sem ele, um nome próprio do grupo. */
+    name?: string;
+    disabled?: boolean;
+    /** Pinta todas as opções de erro, como o `invalid` do nativo. Com `error`, já vale. */
+    invalid?: boolean;
+    /** `vertical` (o padrão) ou `horizontal`, como a referência e o nativo. */
+    orientation?: "vertical" | "horizontal";
+    /** O asterisco no rótulo, como o `Field`. */
+    required?: boolean;
+}
+export declare function RadioGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation, required, children, className, ...props }: RadioGroupProps): React.JSX.Element;
+export declare namespace RadioGroup {
+    export { Radio as Item };
+}
 export interface ListBoxItem {
     id: string;
     label: ReactNode;
@@ -86,6 +107,8 @@ export interface ListBoxItem {
     disabled?: boolean;
     /** O item de perigo ("Excluir"), na cor de perigo. */
     danger?: boolean;
+    /** O atalho do item ("⌘N"), à direita, como na lista da referência (15/10/2026). Só mostra: quem liga a tecla é o app. */
+    kbd?: string;
 }
 export interface ListBoxSection {
     title: ReactNode;
@@ -269,7 +292,7 @@ export interface ColorPickerProps {
     className?: string;
 }
 export declare function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant, children, disabled, name, id, className }: ColorPickerProps): React.JSX.Element;
-export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className }: {
+export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant }: {
     length: number;
     value?: string;
     defaultValue?: string;
@@ -280,6 +303,10 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     label?: string;
     id?: string;
     className?: string;
+    /** O tracinho entre os grupos: a cada `groupSize` caixas (3 num código de 6). */
+    groupSize?: number;
+    /** `secondary`: o fundo neutro do `Input` secundário, para o campo dentro de um cartão. */
+    variant?: "primary" | "secondary";
 }): React.JSX.Element;
 export declare function SegmentedControl({ items, value, onChange, label, fullWidth }: {
     items: Array<{

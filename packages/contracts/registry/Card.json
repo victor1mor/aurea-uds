@@ -108,6 +108,36 @@
       "type": "component",
       "default": "—",
       "description": "The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033)."
+    },
+    {
+      "name": "Card.Header",
+      "type": "component",
+      "default": "—",
+      "description": "The header: the title and the description, together. 12 between the parts."
+    },
+    {
+      "name": "Card.Title",
+      "type": "component",
+      "default": "—",
+      "description": "The card's title — an h3, 14/24 medium, as the reference. 12 between the parts."
+    },
+    {
+      "name": "Card.Description",
+      "type": "component",
+      "default": "—",
+      "description": "The line under the title, 14/20 muted. 12 between the parts."
+    },
+    {
+      "name": "Card.Content",
+      "type": "component",
+      "default": "—",
+      "description": "The body: a column with 4 between the items. 12 between the parts."
+    },
+    {
+      "name": "Card.Footer",
+      "type": "component",
+      "default": "—",
+      "description": "The footer: a row (the buttons), 8 between them. 12 between the parts."
     }
   ]
 }

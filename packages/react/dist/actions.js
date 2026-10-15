@@ -24,13 +24,16 @@ const EIXOS = {
     "primary-outline": ["outline", "brand"], "primary-ghost": ["ghost", "brand"],
     danger: ["solid", "danger"], "danger-outline": ["outline", "danger"], "danger-ghost": ["ghost", "danger"],
     link: ["link", "neutral"], "link-primary": ["link", "brand"], "link-danger": ["link", "danger"],
-    nav: ["nav", "neutral"]
+    nav: ["nav", "neutral"], "danger-soft": ["soft", "danger"]
 };
+// Atalhos que NÃO têm classe própria (15/10/2026): saem como os dois eixos (`btn-soft btn-tone-danger`), e herdam as
+// regras de cor do tom nos dois temas em vez de repeti-las numa classe nova.
+const SO_EIXOS = new Set(["danger-soft"]);
 // caminho de volta: par → nome antigo. Existir aqui significa "o core já pinta esta célula com
 // uma classe própria", e é o que garante que NENHUMA baseline se mexe: `appearance="outline"`
 // + `tone="danger"` emite `.btn-danger-outline`, o mesmo DOM de sempre.
 const CLASSE_ANTIGA = new Map(Object.entries(EIXOS)
-    .filter(([v]) => v !== "secondary").map(([v, [a, t]]) => [`${a}/${t}`, v]));
+    .filter(([v]) => v !== "secondary" && !SO_EIXOS.has(v)).map(([v, [a, t]]) => [`${a}/${t}`, v]));
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
  *  cobra a matriz inteira, e porque quem monta um botão à mão precisa da mesma conta.
  *
@@ -41,7 +44,7 @@ const CLASSE_ANTIGA = new Map(Object.entries(EIXOS)
  *  que se pede, nunca o que sobra quando a nossa paleta não dá conta. */
 export function buttonSkin(variant, appearance, tone) {
     // A variação sem eixo pedido é a própria classe — é o caminho do `secondary`, que não tem célula.
-    if (appearance === undefined && tone === undefined)
+    if (appearance === undefined && tone === undefined && !(variant && SO_EIXOS.has(variant)))
         return `btn-${variant ?? "tertiary"}`;
     const [a0, t0] = EIXOS[variant ?? "tertiary"];
     const a = appearance ?? a0, t = tone ?? t0;

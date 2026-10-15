@@ -23,7 +23,8 @@
     "primary-ghost",
     "primary-outline",
     "secondary",
-    "tertiary"
+    "tertiary",
+    "danger-soft"
   ],
   "sizes": [
     "xs",
@@ -41,6 +42,7 @@
       "link",
       "nav",
       "outline",
+      "soft",
       "solid"
     ],
     "tone": [
@@ -138,15 +140,15 @@
   "props": [
     {
       "name": "variant",
-      "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav",
+      "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav | danger-soft",
       "default": "secondary",
       "description": "A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
-      "type": "solid | outline | ghost | link | nav",
+      "type": "solid | outline | ghost | link | nav | soft",
       "default": "solid",
-      "description": "How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone."
+      "description": "How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone. soft is the tone's light background with the tone's text (the reference's danger-soft)."
     },
     {
       "name": "tone",

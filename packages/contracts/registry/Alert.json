@@ -97,6 +97,12 @@
       "description": "Overrides the glyph. The icon is a FUNCTION of the variant by default, because a system that makes you remember which glyph means \"danger\" ends up with four answers to the same question."
     },
     {
+      "name": "action",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The alert's button (Upgrade, Undo), as the reference: after the text and before the X, in the middle; on a phone (below 640) it goes under the text, in the same column."
+    },
+    {
       "name": "onDismiss",
       "type": "() => void",
       "default": "—",

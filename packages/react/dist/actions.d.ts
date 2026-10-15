@@ -1,8 +1,8 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
 import { type IconName, type AureaIcon } from "./system.js";
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav";
-export type ButtonAppearance = "solid" | "outline" | "ghost" | "link" | "nav";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav" | "danger-soft";
+export type ButtonAppearance = "solid" | "outline" | "ghost" | "link" | "nav" | "soft";
 export type ButtonTone = "neutral" | "brand" | "danger" | "success" | "warning" | "info";
 export type ComponentSize = "xs" | "sm" | "md" | "lg" | "xl";
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
@@ -102,12 +102,12 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: AureaIcon;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface CloseButtonProps extends Omit<ButtonProps, "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
+export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
     /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
     label?: string;
 }
 export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "quiet" | "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
     /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
      *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
     mode?: "light-dark" | "light-dark-system";
