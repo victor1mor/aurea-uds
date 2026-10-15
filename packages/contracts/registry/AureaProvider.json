@@ -111,21 +111,27 @@
     },
     {
       "name": "theme",
-      "type": "AureaTheme",
+      "type": "AureaThemePreference",
       "default": "—",
-      "description": "Controlled theme. Pass it to command; the provider then never writes it on its own."
+      "description": "Controlled theme. Pass it to command; the provider then never writes it on its own. \"system\" follows the computer's light/dark (prefers-color-scheme) and changes with it."
     },
     {
       "name": "defaultTheme",
-      "type": "AureaTheme",
+      "type": "AureaThemePreference",
       "default": "—",
-      "description": "Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back."
+      "description": "Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. \"system\" follows the computer's light/dark (prefers-color-scheme) and changes with it."
     },
     {
       "name": "onThemeChange",
       "type": "(theme: AureaTheme) => void",
       "default": "—",
       "description": "Fires with the new theme, whether it changed from here or from useTheme."
+    },
+    {
+      "name": "onThemePreferenceChange",
+      "type": "(preference: AureaThemePreference) => void",
+      "default": "—",
+      "description": "Called with what was CHOSEN, which can be \"system\" (onThemeChange gets the theme on screen). The moment to save the choice."
     },
     {
       "name": "density",

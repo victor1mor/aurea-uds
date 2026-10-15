@@ -209,6 +209,12 @@
       "description": "Stretches to the container. Only the width changes — the pill radius is invariant."
     },
     {
+      "name": "quiet",
+      "type": "boolean",
+      "default": "false",
+      "description": "Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's \"Theme\". The box and the background stay the appearance's."
+    },
+    {
       "name": "pressed",
       "type": "boolean",
       "default": "—",

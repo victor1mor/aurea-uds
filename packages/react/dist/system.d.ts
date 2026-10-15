@@ -1,15 +1,16 @@
 import React, { type ReactNode } from "react";
 import { type Responsive } from "./pure.js";
-import { type AureaStrings, type AureaTheme, type AureaDensity } from "./internal.js";
-export declare function AureaProvider({ children, strings, direction, spriteUrl, portalContainer, theme, defaultTheme, onThemeChange, density, defaultDensity, onDensityChange, toastPlacement }: {
+import { type AureaStrings, type AureaTheme, type AureaThemePreference, type AureaDensity } from "./internal.js";
+export declare function AureaProvider({ children, strings, direction, spriteUrl, portalContainer, theme, defaultTheme, onThemeChange, onThemePreferenceChange, density, defaultDensity, onDensityChange, toastPlacement }: {
     children: ReactNode;
     strings?: Partial<AureaStrings>;
     direction?: "ltr" | "rtl";
     spriteUrl?: string;
     portalContainer?: HTMLElement | null;
-    theme?: AureaTheme;
-    defaultTheme?: AureaTheme;
+    theme?: AureaThemePreference;
+    defaultTheme?: AureaThemePreference;
     onThemeChange?: (theme: AureaTheme) => void;
+    onThemePreferenceChange?: (preference: AureaThemePreference) => void;
     density?: AureaDensity;
     defaultDensity?: AureaDensity;
     onDensityChange?: (density: AureaDensity) => void;
@@ -22,7 +23,9 @@ export type { AureaDensity };
 export declare function useAureaTheme(): {
     theme: AureaThemeName | null;
     density: AureaDensity | null;
-    setTheme: (t: AureaThemeName) => void;
+    /** O que foi escolhido (15/10/2026): pode ser `"system"`. Fora de um provider, o tema na tela. */
+    preference: "system" | AureaThemeName | null;
+    setTheme: (t: AureaThemePreference) => void;
     setDensity: (d: AureaDensity) => void;
     toggleTheme: () => void;
 };

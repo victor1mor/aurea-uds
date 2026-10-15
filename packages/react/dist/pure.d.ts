@@ -4,6 +4,9 @@ export declare function fundirRender(render: ReactElement | undefined, props: {
     className?: string;
 } & Record<string, unknown>, padrao?: string): ReactElement;
 export type AureaTheme = "dark" | "light";
+/** O que se ESCOLHE (15/10/2026): um tema, ou `"system"` — seguir o claro/escuro do sistema, e mudar junto com ele.
+ *  O tema na tela continua sendo `AureaTheme`; a preferência é o que a chave de três posições guarda. */
+export type AureaThemePreference = AureaTheme | "system";
 export type AureaDensity = "compact" | "comfortable" | "spacious";
 export type UniversalState = "waiting_user" | "waiting_approval" | "waiting_dependency" | "offline" | "stale" | "partial" | "degraded";
 export declare const universalStates: readonly UniversalState[];
@@ -229,6 +232,10 @@ export interface AureaStrings {
     sidebarExpand: string;
     bottomNavLabel: string;
     themeToDark: string;
+    themeChoice: string;
+    themeLight: string;
+    themeDark: string;
+    themeSystem: string;
     themeToLight: string;
     datePlaceholder: string;
     dateRangePlaceholder: string;

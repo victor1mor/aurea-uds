@@ -28,7 +28,7 @@
 // DataGrid, de propósito: quem lê a URL num framework de RSC é o SERVIDOR, e o
 // subpath tem a diretiva. Vindo daqui — via `pure.js`, que não tem — a função é
 // chamável dos dois lados. É a mesma razão do `cx`, uma camada acima.
-export {cx, defaultStrings, ptBR, defaultSpriteUrl, gridStateToParams, gridStateFromParams, screenStateToParams, screenStateFromParams, universalStates, stateSeverity, type AureaStrings, type AureaTheme, type AureaDensity, type GridState, type ScreenState, type UniversalState} from "./pure.js";
+export {cx, defaultStrings, ptBR, defaultSpriteUrl, gridStateToParams, gridStateFromParams, screenStateToParams, screenStateFromParams, universalStates, stateSeverity, type AureaStrings, type AureaTheme, type AureaThemePreference, type AureaDensity, type GridState, type ScreenState, type UniversalState} from "./pure.js";
 export {useAureaStrings, useSpriteUrl, useTheme, useDensity} from "./internal.js";
 // O EIXO RESPONSIVO (G-AXIS-04/06) — os tipos e a escala saem do `pure.js`, que não tem a
 // diretiva, pela mesma razão do `gridStateToParams` logo acima: resolver um valor responsivo é

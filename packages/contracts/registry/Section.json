@@ -105,6 +105,12 @@
       "description": "Footer only: the bottom line — rights, terms, privacy — under a hairline."
     },
     {
+      "name": "layout",
+      "type": "\"columns\" | \"inline\"",
+      "default": "\"columns\"",
+      "description": "Only on footer: columns is the large site footer; inline is ONE centred line, as the reference's home page footer — the legal sentence, the links (without the column titles) and the children (social icons). The brand does not go in."
+    },
+    {
       "name": "maxWidth",
       "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
       "default": "\"xl\"",
@@ -130,6 +136,10 @@
     }
   ],
   "axes": {
+    "layout": [
+      "columns",
+      "inline"
+    ],
     "maxWidth": [
       "2xl",
       "full",

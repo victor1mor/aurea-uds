@@ -132,6 +132,14 @@ img,svg { display:block; }
 .section-footer-link { color:var(--muted-foreground); font-size:var(--text-sm); text-decoration:none; }
 .section-footer-link:hover { color:var(--foreground); }
 .section-footer-legal { display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-2) var(--space-6); margin-block-start:var(--space-8); padding-block-start:var(--space-6); border-block-start:var(--border-width) solid var(--border); color:var(--muted-foreground); font-size:var(--text-sm); }
+/* layout="inline" (15/10/2026): o rodapé da página inicial da referência — UMA linha centrada, 12 de respiro em cima e
+   embaixo, 8 entre as partes, letra 14 apagada; os links acendem com o ponteiro. Quebra linha se não couber. */
+.section.section-footer-inline { padding-block:var(--space-3); }
+.section-footer-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--space-2); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
+.section-footer-inline-legal { margin:0; }
+.section-footer-inline-links { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin:0; padding:0; list-style:none; }
+.section-footer-line .section-footer-link { display:inline-flex; align-items:center; }
+.section-footer-line .section-footer-link:hover { color:var(--foreground); }
 @media (min-width:768px) {
   .section-footer-top { flex-direction:row; justify-content:space-between; }
   .section-footer-brand { flex:1 1 0; min-inline-size:0; }
@@ -210,6 +218,18 @@ img,svg { display:block; }
    No celular os links saem e nada muda. */
 .topbar-items-start .topbar-nav { margin-inline-start:var(--space-4); }
 .topbar-items-start .topbar-actions { margin-inline-start:auto; }
+/* size="sm" (15/10/2026): a barra de 56 do topo da página inicial da referência (medida nela; o guia de barra dela tem
+   64, o nosso padrão), com 6 entre as ações (o gap-1.5 dela). O painel do celular segue a altura, pela mesma variável. */
+.topbar-sm { --topbar-height:calc(var(--space-12) + var(--space-2)); }
+.topbar-sm .topbar-actions { gap:calc(var(--space-1) + var(--space-05)); }
+/* blurred (15/10/2026), só na `flush`: o fundo transparente que embaça o que passa por baixo — o desfoque de 16 da
+   referência. Quem pede menos transparência ao sistema, e o navegador sem desfoque, ficam com o fundo cheio. */
+.topbar-flush.topbar-blurred { background:transparent; -webkit-backdrop-filter:blur(var(--space-4)); backdrop-filter:blur(var(--space-4)); }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) { .topbar-flush.topbar-blurred { background:var(--background); } }
+@media (prefers-reduced-transparency:reduce) { .topbar-flush.topbar-blurred { background:var(--background); -webkit-backdrop-filter:none; backdrop-filter:none; } }
+/* menuActions (15/10/2026): o que só o menu do celular leva (o GitHub, na referência), embaixo dos links, depois de uma
+   linha. */
+.topbar-menu-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-block-start:var(--space-4); padding-block-start:var(--space-4); border-block-start:var(--border-width) solid var(--border); }
 /* O botão e o painel só existem no celular, e só onde há popover. O @supports lá embaixo é a rede,
    como na gaveta do `AppShell`: navegador sem popover não esconde o `<nav popover>` sozinho, e o
    painel apareceria solto na barra. Ali os links ficam na barra, que já quebra linha por conteúdo, e
@@ -850,6 +870,10 @@ img,svg { display:block; }
 .btn-sm { --step-h:var(--control-h-sm); --step-px:var(--space-3); --step-fs:var(--text-sm); border-radius:var(--radius-control); }
 .btn-lg { --step-h:var(--control-h-lg); --step-px:var(--space-4); --step-fs:var(--text-base); border-radius:var(--radius-control); }
 .btn-xl { --step-h:var(--control-h-xl); --step-px:26px; --step-gap:10px; --step-fs:var(--text-base); border-radius:var(--radius-control); }
+/* quiet (15/10/2026): menos peso — a letra apagada e um degrau menor (12 no `sm`), como o botão "Theme" do topo da
+   referência. A caixa e o fundo ficam os da aparência; o contraste da letra apagada sobre o fundo neutro é o da Aurea. */
+.btn.btn-quiet { --btn-fg:var(--muted-foreground); --step-fs:var(--text-xs); }
+.btn.btn-quiet:is(.btn-lg,.btn-xl) { --step-fs:var(--text-sm); }
 /* Largura total: para rodapé de formulário e tela estreita. Só a largura muda. */
 .btn-block { width:100%; }
 /* grow (C-03): parte igual de uma fila. `min-width:0` deixa o rótulo encolher em vez de estourar. */
@@ -1018,6 +1042,19 @@ img,svg { display:block; }
    então a cor fica também com o mouse em cima. */
 .theme-toggle-moon .icon { color:var(--foreground); }
 .theme-toggle-sun .icon { color:var(--primary); }
+/* ThemeToggle mode="light-dark-system" (15/10/2026): a chave de três posições do topo da referência, medida nela — a
+   cápsula de 34 (4 de recheio) com as três opções de 26 e o glifo de 16. A cápsula e a escolhida têm a pele da escolha de
+   abas da Aurea (`.segmented`, ADR-0059): o fundo --muted, e a escolhida no --segment com a sombra, a letra cheia. São
+   botões de opção nativos por cima de cada glifo, como as amostras do `ColorSwatch`. No toque, cada opção tem 44. */
+.theme-switch { display:inline-flex; align-items:center; padding:calc(var(--space-1) - var(--border-width)); border:var(--border-width) solid transparent; border-radius:var(--radius-control); background:var(--muted); }
+.theme-switch-option { position:relative; display:inline-grid; place-items:center; inline-size:var(--control-h-xs); block-size:var(--control-h-xs); border-radius:var(--radius-control); color:var(--muted-foreground); cursor:pointer; }
+.theme-switch-option:has(:checked) { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); }
+.theme-switch-option:hover:not(:has(:checked,:disabled)) { color:var(--foreground); }
+.theme-switch-option:has(:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.theme-switch-option:has(:disabled) { opacity:var(--opacity-disabled); cursor:not-allowed; }
+.theme-switch-input { position:absolute; inset:0; z-index:1; margin:0; opacity:0; cursor:inherit; }
+@media (pointer:coarse) { .theme-switch-option { inline-size:var(--target-min); block-size:var(--target-min); } }
+@media (forced-colors:active) { .theme-switch-option:has(:checked) { outline:var(--focus-width) solid Highlight; outline-offset:calc(var(--border-width) * -2); } }
 /* GRUPOS COLADOS (0.32.0) — o `ButtonGroup` e o `ToggleGroup` da referência: os botões COLADOS numa
    cápsula só (vão 0), canto só nas pontas, um fio entre eles (a cor do texto a 15%, metade da
    altura), sem o encolher ao apertar (o grupo é uma peça só), e o contorno que não dobra entre
@@ -1674,6 +1711,9 @@ img,svg { display:block; }
    enchendo com o acento, como antes. */
 .badge-solid { background:var(--badge-fill, var(--badge-accent)); color:var(--badge-on, var(--background)); border-color:transparent; }
 .badge-outline { background:transparent; color:var(--badge-accent); border-color:var(--badge-accent); }
+/* flat (15/10/2026): o tom de sempre sem a linha em volta — o selo da referência não tem borda em forma nenhuma. A
+   borda fica, transparente: a medida do selo não muda. */
+.badge.badge-flat { border-color:transparent; }
 .status-dot { width:8px; height:8px; border-radius:50%; background:currentColor; box-shadow:0 0 0 3px color-mix(in srgb,currentColor 14%,transparent); }
 /* Status: condição operacional (DIRECTION §3.6) — NÃO é o pill do Badge; é ponto + rótulo
    solto na linha. A variante pinta o .status (o ponto herda por currentColor) e o rótulo

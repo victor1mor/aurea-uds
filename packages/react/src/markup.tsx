@@ -257,6 +257,10 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
   /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
   links?:SectionFooterGroup[];
   /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
+  /** Só no `footer` (15/10/2026): `"columns"` (o padrão, o rodapé de site grande) ou `"inline"` — UMA linha centrada, como
+   *  o rodapé da página inicial da referência: a frase legal, os links (sem os títulos das colunas) e o que vier dentro
+   *  (os ícones sociais). A marca não entra. */
+  layout?:"columns"|"inline";
   legal?:ReactNode;
   /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
   maxWidth?:ContainerSize;
@@ -273,9 +277,21 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
 // (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
 // fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
 // coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
-export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,maxWidth="xl",navLabel="Footer",children,className,...props}:SectionProps){
+export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,layout="columns",maxWidth="xl",navLabel="Footer",children,className,...props}:SectionProps){
   const pele=cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`);
   if(variant!=="footer")return <section data-theme={theme} className={cx(pele,className)} {...props}>{children}</section>;
+  if(layout==="inline"){
+    const itens=(links??[]).flatMap((g)=>g.items);
+    return <footer data-theme={theme} className={cx(pele,"section-footer","section-footer-inline",className)} {...props}>
+      <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"section-footer-line")}>
+        {legal!=null&&<p className="section-footer-inline-legal">{legal}</p>}
+        {itens.length>0&&<nav aria-label={navLabel}><ul className="section-footer-inline-links">{itens.map(it=><li key={it.id}>{it.render
+          ?fundirRender(it.render,{className:"section-footer-link",children:it.label},"a")
+          :<a className="section-footer-link" href={it.href}>{it.label}</a>}</li>)}</ul></nav>}
+        {children}
+      </div>
+    </footer>;
+  }
   return <footer data-theme={theme} className={cx(pele,"section-footer",className)} {...props}>
     <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`)}>
       <div className="section-footer-top">
@@ -392,7 +408,7 @@ export function Code({align,color,tone,weight,truncate,className,...props}:CodeP
 // removível é `Tag`, não `Badge` — e um manipulador em JSX exigiria `"use client"` aqui, que é
 // exatamente o que este arquivo existe para não ter. `Tag` não existe na Aurea: é lacuna de
 // verdade, achada por esta leitura, e está registrada no REFERENCES.md.
-export type BadgeEmphasis="soft"|"solid"|"outline";
+export type BadgeEmphasis="soft"|"solid"|"outline"|"flat";
 export type BadgeSize="xs"|"sm"|"md"|"lg";
 export type BadgePlacement="top-end"|"top-start"|"bottom-end"|"bottom-start";
 // R-01 (24/09/2026): `content` põe o selo do tamanho do texto DENTRO de uma coluna. O padrão
@@ -407,7 +423,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
   /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
    *  eixo do `variant`, e vence quando os dois vêm. */
   tone?:BadgeVariant;
-  /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
+  /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno; `flat` (15/10/2026) é o tom de
+   *  sempre SEM a linha em volta, como o selo da referência (que chamava essa forma de `flat`). */
   emphasis?:BadgeEmphasis;
   size?:BadgeSize;
   /** Ponto de estado antes do texto. Sozinho num `anchor`, ele É o badge. */
@@ -589,6 +606,18 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
    * conteúdo da barra dela.
    */
   itemsJustify?:"start"|"end";
+  /**
+   * A altura (15/10/2026): `"md"` (o padrão, 64 — a do guia de barra da referência) ou `"sm"` (56, a do topo da página
+   * inicial dela), com 6 entre as ações em vez de 8.
+   */
+  size?:"md"|"sm";
+  /**
+   * Só na `flush` (15/10/2026): o fundo transparente que EMBAÇA o que passa por baixo, como o topo da página inicial
+   * da referência. Quem pede menos transparência no sistema, ou o navegador sem desfoque, recebe o fundo cheio.
+   */
+  blurred?:boolean;
+  /** O que entra no MENU DO CELULAR, embaixo dos links (15/10/2026): o GitHub, a conta. Na barra larga não aparece. */
+  menuActions?:ReactNode;
   /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
   navLabel?:string;
   /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
@@ -603,7 +632,7 @@ function linksDoHeader(items:SidebarItem[],current:string|undefined){
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }
-export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
+export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",size="md",blurred,menuActions,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
   const site=!!items&&items.length>0;
   const miolo=<>
     {brand!=null&&<div className="brand">{brand}</div>}
@@ -612,10 +641,11 @@ export function Header({variant="floating",divider,brand,items,current,actions,m
     {actions!=null&&<div className="topbar-actions">{actions}</div>}
     {site&&<>
       <button type="button" className="btn btn-ghost btn-icon topbar-menu-toggle" popoverTarget={menuId} aria-label={menuLabel}><span className="topbar-menu-icon" aria-hidden="true"/></button>
-      <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}</nav>
+      <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}
+        {menuActions!=null&&<div className="topbar-menu-actions">{menuActions}</div>}</nav>
     </>}
   </>;
-  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",maxWidth&&"topbar-contained",className)} {...props}>
+  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",size==="sm"&&"topbar-sm",blurred&&variant==="flush"&&"topbar-blurred",maxWidth&&"topbar-contained",className)} {...props}>
     {maxWidth?<div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"topbar-inner")}>{miolo}</div>:miolo}
   </header>;
 }

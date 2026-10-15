@@ -100,7 +100,7 @@ const GrupoDeBotoesContext = React.createContext(null);
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
     const grupo = React.useContext(GrupoDeBotoesContext);
     const variant = variantPedida ?? grupo?.variant;
     const size = sizePedido ?? grupo?.size ?? "md";
@@ -112,7 +112,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // Quem decide é o CSS: nada aqui observa largura, e o HTML do servidor já sai correto.
     const responsivo = ehResponsivo(size);
     const base = valorBase(size) ?? "md";
-    const cls = cx("btn", buttonSkin(variant, appearance, tone), responsivo ? classesResponsivas("size", size) : (base !== "md" && `btn-${base}`), fullWidth && "btn-block", grow && "btn-grow", className);
+    const cls = cx("btn", buttonSkin(variant, appearance, tone), responsivo ? classesResponsivas("size", size) : (base !== "md" && `btn-${base}`), fullWidth && "btn-block", grow && "btn-grow", quiet && "btn-quiet", className);
     // kbd dentro do botão: mostra o atalho E o anuncia (aria-keyshortcuts), senão é enfeite.
     // 🔴 OCUPADO TROCA, NÃO ACRESCENTA (01/10/2026, achado pelo Victor no aureauds.dev): a rodinha
     // entrava ANTES do ícone, e no `IconButton` — 36 de largura fixa — rodinha e glifo não cabiam:
@@ -225,10 +225,22 @@ export const CloseButton = forwardRef(function CloseButton({ label, className, c
     const s = useAureaStrings();
     return _jsx(Button, { ref: ref, variant: "tertiary", className: cx("close-button", className), "aria-label": label ?? s.close, ...props, children: children ?? _jsx(Icon, { name: "x", weight: "bold" }) });
 });
-export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
-    const { theme, toggleTheme } = useAureaTheme();
+export const ThemeToggle = forwardRef(function ThemeToggle({ className, mode = "light-dark", ...props }, ref) {
+    const { theme, preference, toggleTheme, setTheme } = useAureaTheme();
     const s = useAureaStrings();
     const escuro = theme === "dark";
+    const nome = React.useId();
+    // A CHAVE DE TRÊS POSIÇÕES (15/10/2026, o Victor: "A, B, C, pode"): a do topo da referência, medida nela — a
+    // cápsula de 34 com as três opções de 26 e o glifo de 16. São botões de opção NATIVOS, como as amostras do
+    // `ColorSwatch`: a escolha única e as setas são do navegador. A escolhida tem o glifo cheio (ADR-0053) e a pele da
+    // aba escolhida (ADR-0059). Quem escolhe é o provider (`"system"` segue o sistema).
+    if (mode === "light-dark-system") {
+        const opcoes = [["light", "sun", s.themeLight], ["dark", "moon", s.themeDark], ["system", "monitor", s.themeSystem]];
+        return _jsx("div", { role: "radiogroup", "aria-label": s.themeChoice, className: cx("theme-switch", className), children: opcoes.map(([v, icone, rotulo]) => {
+                const marcada = preference === v;
+                return _jsxs("label", { className: "theme-switch-option", children: [_jsx("input", { type: "radio", className: "theme-switch-input", name: nome, value: v, checked: marcada, disabled: props.disabled, "aria-label": rotulo, onChange: () => setTheme(v) }), _jsx(Icon, { name: icone, size: "sm", weight: marcada ? "fill" : "regular" })] }, v);
+            }) });
+    }
     // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
     // sol cheios, como os do conjunto de ícones anterior, aprovados pela imagem em 25/09/2026). O `IconButton` público não
     // tem peso de ícone.

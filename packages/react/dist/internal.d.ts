@@ -1,6 +1,6 @@
 import React from "react";
-import { type AureaStrings, type AureaTheme, type AureaDensity } from "./pure.js";
-export { cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity, type AureaStrings, type UniversalState, type AureaTheme, type AureaDensity } from "./pure.js";
+import { type AureaStrings, type AureaTheme, type AureaThemePreference, type AureaDensity } from "./pure.js";
+export { cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity, type AureaStrings, type UniversalState, type AureaTheme, type AureaThemePreference, type AureaDensity } from "./pure.js";
 export declare const controlesRotulaveis: WeakSet<object>;
 export declare const StringsContext: React.Context<AureaStrings>;
 export declare const useAureaStrings: () => AureaStrings;
@@ -8,14 +8,16 @@ export declare const SpriteContext: React.Context<string>;
 export declare const useSpriteUrl: () => string;
 export declare const ThemeContext: React.Context<{
     theme?: AureaTheme;
-    setTheme: (t: AureaTheme) => void;
+    preference?: AureaThemePreference;
+    setTheme: (t: AureaThemePreference) => void;
     toggleTheme: () => void;
 }>;
 /** Tema atual e como trocá-lo. Fora de um `AureaProvider`, devolve `undefined` e no-ops — não
  *  lança: um componente isolado num teste não deve morrer por falta de provider. */
 export declare const useTheme: () => {
     theme?: AureaTheme;
-    setTheme: (t: AureaTheme) => void;
+    preference?: AureaThemePreference;
+    setTheme: (t: AureaThemePreference) => void;
     toggleTheme: () => void;
 };
 export declare const DensityContext: React.Context<{

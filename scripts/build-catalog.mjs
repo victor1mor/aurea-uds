@@ -94,6 +94,8 @@ const MAT = {Stable: "success", Universal: "primary", Ready: "info", Draft: "war
 // A versão no topo, o endereço do código-fonte nas pílulas, e os selos do menu — tudo dos DADOS.
 const VERSAO = JSON.parse(readFileSync(join(root, "packages/react/package.json"), "utf8")).version;
 const REPO = "https://github.com/victor1mor/aurea-uds";
+// O ano do rodapé: o da última versão publicada, e não o relógio (a página é gerada e conferida pela CI).
+const ANO = JSON.parse(readFileSync(join(root, "scripts/released-surface.json"), "utf8")).date.slice(0, 4);
 // O LOGO DO GITHUB (o Victor, 15/10/2026: "A, pode baixar o oficial do GitHub") — só no SITE, nunca na biblioteca
 // (CLAUDE.md §5). Os arquivos são os oficiais, sem alteração (`apps/catalog/marcas/github/`, do brand.github.com). A
 // regra do GitHub, lida em 15/10/2026: o logo pode ser o botão que leva ao projeto; não se modifica, e só sai em preto
@@ -625,9 +627,9 @@ function homePage() {
   const node = h("div", {className: "home"},
     h("section", {className: "home-hero"},
       // O selo é um LINK para o que mudou, com o foguete, sem borda e com o fundo clarinho — como o da referência
-      // (15/10/2026). O `Badge` com `emphasis="soft"` e o ícone no encaixe `leading`.
+      // (15/10/2026). O `Badge` com `emphasis="flat"` (o tom clarinho, sem a linha) e o ícone no encaixe `leading`.
       h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`},
-        h(A.Badge, {tone: "primary", emphasis: "soft", leading: h(A.Icon, {name: "rocket"})}, `Aurea v${VERSAO} — what's new`)),
+        h(A.Badge, {tone: "primary", emphasis: "flat", leading: h(A.Icon, {name: "rocket"})}, `Aurea v${VERSAO} — what's new`)),
       // O título e o texto JUNTOS, sem vão entre eles, como no início da referência (o Victor, 14/10/2026).
       h("div", {className: "home-texto"},
         h("h1", null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
@@ -1055,15 +1057,21 @@ const MARCAS = [{id: "", label: "Aurea", color: hexDoToken(tokensDoc.base["brand
   {id: "lory", label: "Lory", color: hexDoToken(tokensDoc.brand.lory.dark.primary)}];
 // A MESMA CAIXA DOS VIZINHOS (o Victor, 15/10/2026: "por que os ícones da direita estão tamanhos diferentes?"): o `sm`
 // (32), como os outros botões do topo — na referência são todos de 32 a 34, com fundo. A letra fica a do `sm` (14): a
-// referência põe 12 nesse botão com um ajuste só dela, e na Aurea isso é mudança de peça (a lista da "Pergunta 7").
+// referência põe 12 e a letra apagada nesse botão com um ajuste só dela; na Aurea é o `quiet` do `Button` (15/10/2026).
 const botaoTema = () => h("span", {id: "site-theme-root", className: "site-theme", "data-brands": JSON.stringify(MARCAS)},
-  h(A.Button, {size: "sm", variant: "tertiary", leadingIcon: "paint-bucket", "aria-label": "Theme"}, "Theme"));
+  h(A.Button, {size: "sm", variant: "tertiary", quiet: true, leadingIcon: "paint-bucket", "aria-label": "Design theme"}, "Theme"));
 
 // O GITHUB no topo, por último, como o da referência (o Victor, 15/10/2026: "adicione também o ícone lá em cima do
 // github"): o botão redondo da busca, com o logo oficial — o `IconButton` aceita o desenho do app desde 15/10/2026.
 // Sem o número de estrelas, pelo mesmo motivo da nota do Início.
 // No celular ele sai da barra (a `hide-below-md` do core): com os botões de 44 da Aurea a barra quebrava em duas
 // linhas (medido em 375). A referência o põe dentro do menu do celular; o menu do `Header` só leva os links do site.
+// A CHAVE DE TEMA (o Victor, 15/10/2026: "A, B, C, pode"): a de três posições do topo da referência — claro, escuro e
+// sistema —, o `ThemeToggle mode="light-dark-system"`. Viva no `search.js` (sob o mesmo provedor da busca), que guarda
+// a escolha; aqui sai a peça parada, no lugar dela. No Início ela sai da barra no celular e entra no menu.
+const chaveDeTema = (classe) => h("span", {className: classe ? `site-theme-switch ${classe}` : "site-theme-switch", "data-site-theme-switch": ""},
+  h(A.ThemeToggle, {mode: "light-dark-system"}));
+
 const botaoGitHub = () => h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO, className: "hide-below-md"});
 
 function topoDoSite(section) {
@@ -1080,9 +1088,7 @@ function topoDoSite(section) {
         h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm",
           href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}),
         botaoTema(),
-        h(A.Button, {variant: "tertiary", size: "sm", className: "btn-icon", id: "theme-toggle", "aria-label": "Toggle light / dark theme"},
-          h(A.Icon, {name: "sun", weight: "fill", className: "t-sun"}),
-          h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"})),
+        chaveDeTema("hide-below-md"),
         botaoGitHub())}};
   }
   const topbar = h(Fragment, null,
@@ -1096,10 +1102,8 @@ function topoDoSite(section) {
       // A MARCA (20/08/2026, ADR-0036) ao lado do tema, porque são o mesmo tipo de chave — desde 14/10/2026 no botão
       // "Theme" da referência, e não mais numa caixa de seleção.
       botaoTema(),
-      // toggle de tema: dois ícones, o CSS mostra o oposto do tema atual; catalog.js alterna.
-      h(A.Button, {variant: "tertiary", size: "sm", className: "btn-icon", id: "theme-toggle", "aria-label": "Toggle light / dark theme"},
-        h(A.Icon, {name: "sun", weight: "fill", className: "t-sun"}),
-        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"})),
+      // A chave de três posições do topo da referência (15/10/2026): claro, escuro e sistema.
+      chaveDeTema(),
       botaoGitHub()),
     // AS ÁREAS POR ÚLTIMO NO CÓDIGO, porque aparecem na segunda linha. Vinham primeiro e desciam por `order:3`:
     // o Tab ia da marca para a linha de baixo e voltava para a busca, em cima (WCAG 2.4.3; a trava
@@ -1133,8 +1137,20 @@ function shell(activeHref, inner, section = "components") {
       // centro, com 1400 de largura). A escala do `Container` não tem 1400; o `2xl` (1536) fica mais perto nas duas
       // telas medidas: a logo a 32 da borda em 1440 (a dela, 36) e a 215 em 1902 (a dela, 276) — o `xl` daria 104 e 343.
       h(A.Header, {variant: "flush", brand, className: "site-top", items: home.items, actions: home.actions,
-        itemsJustify: "start", maxWidth: "2xl", navLabel: "Sections"}),
-      h("main", {id: "main", tabIndex: -1}, node))));
+        itemsJustify: "start", maxWidth: "2xl", navLabel: "Sections",
+        // O topo da página inicial da referência (o Victor, 15/10/2026: "A, B, C, pode"): 56 de altura, 6 entre as
+        // ações, o fundo que embaça, e o GitHub dentro do menu do celular (na barra ele some abaixo de 768).
+        size: "sm", blurred: true, menuActions: h(Fragment, null, chaveDeTema(),
+          h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO}))}),
+      h("main", {id: "main", tabIndex: -1}, node),
+      // O RODAPÉ da página inicial da referência (15/10/2026): uma linha centrada — a `Section variant="footer"` com
+      // `layout="inline"`. O ano é o da última versão publicada (dos dados), para a página não mudar sozinha.
+      h(A.Section, {variant: "footer", layout: "inline", maxWidth: "2xl",
+        legal: `© ${ANO} Aurea UDS. Open source under Apache-2.0.`,
+        links: [{title: "Aurea", items: [{id: "changelog", label: "Changelog", href: `${REPO}/blob/main/CHANGELOG.md`},
+          {id: "license", label: "License", href: `${REPO}/blob/main/LICENSE`}]}]},
+        // O ícone social é um LINK simples, como os da referência (18 de desenho): a pele de link do próprio rodapé.
+        h("a", {className: "section-footer-link", href: REPO, "aria-label": "GitHub"}, h(A.Icon, {name: GitHub}))))));
   }
   const menu = (MENUS[section] || menuComponentes)();
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
@@ -1288,7 +1304,6 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .prevnext { flex-wrap:wrap; }
 .pn strong { overflow-wrap:break-word; }
 .pn:hover { border-color:var(--primary-outline); }
-/* toggle de tema: mostra o ícone do tema PRA ONDE VAI (no dark, a lua… não — o sol, "ir pro claro"). */
 /* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
    O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
    largura) e as ações; embaixo, as áreas do site. */
@@ -1353,8 +1368,6 @@ a.related-card:hover { border-color:var(--primary-outline); }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
 .home-abas { justify-self:start; margin-inline-start:var(--space-2); }
-[data-theme="dark"] #theme-toggle .t-moon { display:none; }
-[data-theme="light"] #theme-toggle .t-sun { display:none; }
 `;
 
 // O catálogo NÃO tem comportamento próprio: abas (setas/Home/End), copiar e o índice que
@@ -1368,15 +1381,10 @@ const espelhaTema = alvo => (alvo ? [alvo] : [...document.querySelectorAll("ifra
   .map(f => f.contentWindow)).forEach(w => w && w.postMessage({aureaTheme: document.documentElement.dataset.theme,
     aureaBrand: document.documentElement.dataset.brand || ""}, "*"));
 addEventListener("message", e => { if (e.data && e.data.aureaThemeRequest) espelhaTema(e.source); });
-// Quem GRAVA é o catálogo; quem aplica no primeiro quadro é o script inline do <head>. O core só
-// troca o atributo — ver o comentário em TEMA_SALVO.
-document.addEventListener("click", e => {
-  if (e.target.closest("#theme-toggle")) {
-    window.Aurea.toggleTheme();
-    espelhaTema();
-    try { localStorage.setItem("aurea-theme", document.documentElement.dataset.theme); } catch (err) {}
-  }
-});
+// O TEMA (15/10/2026): quem escolhe é a chave de três posições, viva no search.js, que grava a escolha (pode ser
+// "system"); quem aplica no primeiro quadro é o script inline do <head>. Aqui só se ESPELHA nas molduras de prévia o tema
+// e a marca que estiverem no <html> — observados, e não avisados: o "system" muda o tema sem clique nenhum.
+new MutationObserver(() => espelhaTema()).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme", "data-brand"]});
 // -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
 // Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
 // confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
@@ -1533,7 +1541,7 @@ write(join(outDir, "assets/search-index.js"), `window.AUREA_SEARCH = ${JSON.stri
 // Victor navega: `file:///C:/dev/aurea-uds/...`. Falhar em silêncio devolve o comportamento
 // antigo (tema do template); estourar deixaria a página sem estilo nenhum.
 const TEMA_SALVO = `<script>
-try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;var b=localStorage.getItem("aurea-brand");if(b)document.documentElement.dataset.brand=b}catch(e){}
+try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;else if(t==="system")document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var b=localStorage.getItem("aurea-brand");if(b)document.documentElement.dataset.brand=b}catch(e){}
 </script>
 `;
 

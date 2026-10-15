@@ -11,10 +11,10 @@
 // juntar os dois faria toda página baixar os exemplos de todos os componentes.
 import {createRoot} from "react-dom/client";
 import {createElement as h, useEffect, useMemo, useState} from "react";
-import {AureaProvider, CommandPalette} from "../../../packages/react/dist/index.js";
+import {CommandPalette} from "../../../packages/react/dist/index.js";
 // O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
 // sob o MESMO provedor (ver `tema.tsx`).
-import {TemaDoTopo} from "./tema";
+import {ChavesDeTema, ProvedorDoSite, TemaDoTopo} from "./tema";
 
 type Entrada = {label: string; href: string; group: string};
 declare global {interface Window {AUREA_SEARCH?: Entrada[]}}
@@ -57,4 +57,5 @@ const raiz = document.createElement("div");
 raiz.id = "site-search-root";
 document.body.append(raiz);
 // O sprite está DENTRO da página (inline), então a base dos ícones é vazia — como no gerador.
-createRoot(raiz).render(h(AureaProvider, {spriteUrl: ""}, h(Busca), h(TemaDoTopo)));
+// O provedor do site guarda o tema escolhido (15/10/2026); as peças vivas do topo moram todas sob ele.
+createRoot(raiz).render(h(ProvedorDoSite, null, h(Busca), h(TemaDoTopo), h(ChavesDeTema)));

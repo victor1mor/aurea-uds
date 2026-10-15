@@ -648,7 +648,7 @@ test.describe("catálogo · contratos do modelo de página", () => {
   //   4. o texto com 18 de letra em 28 de linha, colado no título, e 16 entre as outras peças;
   //   5. as abas da vitrine no canto, 8 para dentro da caixa.
   // No site de antes: o topo tinha duas linhas (99), o texto 30,6 de linha, 20 de vão, e as abas no meio.
-  test("o Início: os links na linha da logo, o texto na medida da referência e as abas no canto", async ({page}) => {
+  test("o Início: os links na linha da logo, o texto na medida da referência e as abas no canto", async ({page, browserName}) => {
     await page.setViewportSize({width: 1440, height: 900});
     await page.goto("/apps/catalog/index.html");
     const m = await page.evaluate(() => {
@@ -657,7 +657,10 @@ test.describe("catálogo · contratos do modelo de página", () => {
       const acoes = r(".site-top .topbar-actions"), h1 = r(".home-texto h1"), p = r(".home-texto p");
       const selo = r(".home-selo"), botoes = r(".home-acoes");
       const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16;
-      return {altura: topo.height, alturaPadrao: em("--topbar-height"),
+      const cs = getComputedStyle(document.querySelector(".site-top")!);
+      return {altura: topo.height, alturaPadrao: em("--space-12") + em("--space-2"),
+        fundo: cs.backgroundColor, desfoque: cs.backdropFilter || (cs as unknown as Record<string, string>).webkitBackdropFilter,
+        vaoAcoes: parseFloat(getComputedStyle(document.querySelector(".site-top .topbar-actions")!).columnGap),
         mesmaLinha: Math.abs((link.top + link.height / 2) - (marca.top + marca.height / 2)),
         marcaAoLink: link.left - marca.right, vaoDaBarra: em("--space-4"),
         sobra: document.documentElement.clientWidth - acoes.right, marcaEsq: marca.left,
@@ -666,7 +669,27 @@ test.describe("catálogo · contratos do modelo de página", () => {
         tituloAoTexto: p.top - h1.bottom, seloAoTitulo: h1.top - selo.bottom, textoAosBotoes: botoes.top - p.bottom,
         abas: r(".home-abas").left - r(".home-painel:not([hidden])").left, espaco2: em("--space-2")};
     });
-    expect(m.altura, "uma linha só: a altura do Header de site").toBe(m.alturaPadrao);
+    // 15/10/2026 (A): o topo da página inicial da referência — 56, o fundo transparente que embaça (16), 6 entre as ações.
+    expect(m.altura, "uma linha só, com os 56 da página inicial da referência").toBe(m.alturaPadrao);
+    // O fundo que embaça respeita quem pede MENOS TRANSPARÊNCIA ao sistema (o Windows com "Efeitos de transparência"
+    // desligado, medido nesta máquina em 15/10/2026): aí o fundo é cheio. O teste confere o que vale na máquina, e no
+    // Chromium força as duas preferências (o Playwright 1.61 não emula essa; o protocolo do navegador emula).
+    const transparente = /^(transparent|rgba\(0, 0, 0, 0\))$/;
+    const menos = await page.evaluate(() => matchMedia("(prefers-reduced-transparency: reduce)").matches);
+    if (menos) { expect(m.fundo).not.toMatch(transparente); expect(m.desfoque).toBe("none"); }
+    else { expect(m.fundo).toMatch(transparente); expect(m.desfoque).toBe("blur(16px)"); }
+    if (browserName === "chromium") {
+      const cdp = await page.context().newCDPSession(page);
+      const topo = () => page.locator(".site-top").evaluate((e) => [getComputedStyle(e).backgroundColor, getComputedStyle(e).backdropFilter]);
+      await cdp.send("Emulation.setEmulatedMedia", {features: [{name: "prefers-reduced-transparency", value: "no-preference"}]});
+      const [f1, d1] = await topo();
+      expect(f1).toMatch(transparente); expect(d1).toBe("blur(16px)");
+      await cdp.send("Emulation.setEmulatedMedia", {features: [{name: "prefers-reduced-transparency", value: "reduce"}]});
+      const [f2, d2] = await topo();
+      expect(f2).not.toMatch(transparente); expect(d2).toBe("none");
+      await cdp.send("Emulation.setEmulatedMedia", {features: []});
+    }
+    expect(m.vaoAcoes).toBe(6);
     expect(m.mesmaLinha, "o primeiro link na linha da logo").toBeLessThan(1);
     expect(m.marcaAoLink, "da logo ao 1º link, 32: o vão da barra e mais --space-4, como na referência").toBeCloseTo(m.vaoDaBarra * 2, 0);
     expect(m.sobra, "as ações na outra ponta: a mesma sobra da logo, do outro lado").toBeCloseTo(m.marcaEsq, 0);
@@ -676,6 +699,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(m.seloAoTitulo).toBeCloseTo(16, 0);
     expect(m.textoAosBotoes).toBeCloseTo(16, 0);
     expect(m.abas, "as abas no canto, 8 para dentro").toBeCloseTo(m.espaco2, 0);
+    // O selo sem a linha em volta, como o da referência (o `Badge` `flat`).
+    await expect(page.locator(".home-selo .badge")).toHaveCSS("border-top-color", /rgba\(0, 0, 0, 0\)|transparent/);
     // 15/10/2026 (o Victor: "iguale"): as letras da referência — o nome 16 em 600, sem a versão ao lado; o título com
     // 48 de linha; a nota em 12, que é o link para o repositório. Antes: 18 em 700 com a versão, 53, e 14 sem link.
     const l = await page.evaluate(() => {
@@ -710,7 +735,7 @@ test.describe("catálogo · contratos do modelo de página", () => {
       return {titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight],
         texto: [cs(".home-texto p").fontSize, cs(".home-texto p").lineHeight],
         seloAoTitulo: r(".home-texto h1").top - r(".home-selo").bottom, botoesANota: r(".home-nota").top - r(".home-acoes").bottom,
-        abas: r(".home-abas").height, topo: r(".site-top").height, alturaPadrao: parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-height")) * 16,
+        abas: r(".home-abas").height, topo: r(".site-top").height, alturaPadrao: ["--space-12", "--space-2"].reduce((t, v) => t + parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16, 0),
         lado: document.documentElement.scrollWidth - document.documentElement.clientWidth};
     });
     expect(m.titulo).toEqual(["30px", "36px"]);
@@ -720,6 +745,10 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(m.abas, "as abas da vitrine escondidas abaixo de 1024").toBe(0);
     expect(m.topo, "a barra numa linha só").toBe(m.alturaPadrao);
     expect(m.lado, "sem rolar de lado").toBe(0);
+    // O GitHub, que sai da barra no celular, está no menu (o `menuActions` do `Header`), como na referência.
+    await page.locator(".site-top .topbar-menu-toggle").click();
+    await expect(page.locator(".topbar-menu-panel .topbar-menu-actions a[aria-label='GitHub']")).toBeVisible();
+    await page.keyboard.press("Escape");
     // O logo: o desenho do arquivo oficial, nas cores oficiais.
     await page.setViewportSize({width: 1440, height: 900});
     const tinta = () => page.locator(".topbar-actions a[aria-label='GitHub'] path").evaluate((p) => getComputedStyle(p).fill);
@@ -739,9 +768,9 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.evaluate(() => localStorage.removeItem("aurea-brand"));
     await page.reload();
     await page.waitForLoadState("load");
-    const tema = page.getByRole("button", {name: "Theme", exact: true});
+    const tema = page.getByRole("button", {name: "Design theme", exact: true});
     await tema.click();
-    const grupo = page.getByRole("radiogroup", {name: "Theme"});
+    const grupo = page.getByRole("radiogroup", {name: "Design theme", exact: true});
     await expect(grupo).toBeVisible();
     await expect(grupo.locator(".color-swatch-name")).toHaveText(["Aurea", "Lory"]);
     await expect(grupo.getByRole("radio", {name: "Aurea"})).toBeChecked();
@@ -749,15 +778,15 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
     expect(await page.evaluate(() => localStorage.getItem("aurea-brand"))).toBe("lory");
     await page.keyboard.press("Escape");
-    const tLory = page.getByRole("button", {name: "Theme: Lory"});
+    const tLory = page.getByRole("button", {name: "Design theme: Lory"});
     await expect(tLory).toHaveText("Lory");
     // A página nova abre com a marca gravada, e o botão já diz qual é.
     await page.reload();
     await page.waitForLoadState("load");
     await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
-    await expect(page.getByRole("button", {name: "Theme: Lory"})).toBeVisible();
-    await page.getByRole("button", {name: "Theme: Lory"}).click();
-    await page.getByRole("radiogroup", {name: "Theme"}).getByText("Aurea").click();
+    await expect(page.getByRole("button", {name: "Design theme: Lory"})).toBeVisible();
+    await page.getByRole("button", {name: "Design theme: Lory"}).click();
+    await page.getByRole("radiogroup", {name: "Design theme", exact: true}).getByText("Aurea").click();
     await expect(page.locator("html")).not.toHaveAttribute("data-brand", /.*/);
     await page.evaluate(() => localStorage.removeItem("aurea-brand"));
     await page.keyboard.press("Escape");
@@ -769,11 +798,51 @@ test.describe("catálogo · contratos do modelo de página", () => {
       bs.map((b) => [Math.round(b.getBoundingClientRect().height), getComputedStyle(b).backgroundColor]));
     expect(new Set(caixas.map(([h]) => h)).size, `alturas: ${JSON.stringify(caixas)}`).toBe(1);
     expect(caixas.every(([, f]) => !/rgba\(0, 0, 0, 0\)|transparent/.test(String(f))), "todos com fundo").toBe(true);
+    // E a letra do "Theme" é a da referência: 12, apagada (o `quiet` do `Button`).
+    await expect(temaPadrao).toHaveCSS("font-size", "12px");
+    const apagada = await page.evaluate(() => { const d = document.createElement("span"); d.style.color = "var(--muted-foreground)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; });
+    await expect(temaPadrao).toHaveCSS("color", apagada);
     await page.setViewportSize({width: 600, height: 900});
     await expect(temaPadrao).toHaveClass(/btn-icon/);
-    await expect(temaPadrao).toHaveAccessibleName("Theme");
+    await expect(temaPadrao).toHaveAccessibleName("Design theme");
     await page.setViewportSize({width: 1440, height: 900});
     await expect(temaPadrao).toHaveText("Theme");
+  });
+
+  // 15/10/2026 (o Victor: "A, B, C, pode"): a chave de TRÊS posições do topo da referência — claro, escuro e sistema —, o
+  // `ThemeToggle mode="light-dark-system"`. "Sistema" segue o esquema do computador e muda JUNTO, sem recarregar; a escolha
+  // fica guardada. E o rodapé de uma linha (a `Section` `layout="inline"`), com os 44 da referência.
+  test("a chave de tema de três posições guarda a escolha, e Sistema segue o computador", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.emulateMedia({colorScheme: "light"});
+    await page.goto("/apps/catalog/index.html");
+    await page.evaluate(() => localStorage.removeItem("aurea-theme"));
+    await page.reload();
+    await page.waitForLoadState("load");
+    const chave = page.locator(".topbar-actions").getByRole("radiogroup", {name: "Theme", exact: true});
+    await expect(chave.getByRole("radio")).toHaveCount(3);
+    const caixa = await chave.boundingBox();
+    expect(Math.round(caixa!.height), "a cápsula de 34 da referência").toBe(34);
+    await chave.getByRole("radio", {name: "System"}).check();
+    expect(await page.evaluate(() => localStorage.getItem("aurea-theme"))).toBe("system");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.emulateMedia({colorScheme: "dark"});
+    await expect(page.locator("html"), "o computador mudou: o site muda junto").toHaveAttribute("data-theme", "dark");
+    await page.reload();
+    await page.waitForLoadState("load");
+    await expect(page.locator("html"), "a escolha volta ao abrir de novo").toHaveAttribute("data-theme", "dark");
+    await expect(page.locator(".topbar-actions").getByRole("radio", {name: "System"})).toBeChecked();
+    await page.locator(".topbar-actions").getByRole("radio", {name: "Light"}).check();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.emulateMedia({colorScheme: "dark"});
+    await expect(page.locator("html"), "escolhido Claro, o computador não manda mais").toHaveAttribute("data-theme", "light");
+    await page.evaluate(() => localStorage.removeItem("aurea-theme"));
+    // O rodapé: uma linha centrada, 44 de altura (12 + 20 + 12), a frase, os dois links e o GitHub.
+    const rodape = page.locator("footer.section-footer-inline");
+    await expect(rodape).toContainText("Open source under Apache-2.0.");
+    await expect(rodape.getByRole("link")).toHaveText(["Changelog", "License", ""]);
+    await expect(rodape.getByRole("link", {name: "GitHub"})).toHaveAttribute("href", "https://github.com/victor1mor/aurea-uds");
+    expect(Math.round((await rodape.boundingBox())!.height)).toBe(44);
   });
 
   test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {

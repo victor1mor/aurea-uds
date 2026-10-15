@@ -89,3 +89,21 @@ describe("IconButton · o desenho do app", () => {
     expect(container.querySelector("use")).toBeNull();
   });
 });
+
+// 15/10/2026 · o "Theme" do topo da referência: o `Button` com `quiet` (letra apagada, um degrau menor) e o selo dela,
+// sem borda: o `Badge` com `emphasis="flat"`. Sem as props, a marcação de antes. A medida é do `catalog-sweep.spec.ts`.
+describe("Button quiet e Badge flat", () => {
+  test("`quiet` acrescenta a classe, e sem ele nada muda", () => {
+    const {getAllByRole} = wrap(<><Button size="sm" quiet>Theme</Button><Button size="sm">Theme</Button></>);
+    const [quieto, normal] = getAllByRole("button");
+    expect(quieto).toHaveClass("btn", "btn-sm", "btn-quiet");
+    expect(normal.className).toBe("btn btn-tertiary btn-sm");
+  });
+  test("`emphasis=\"flat\"` sai como `badge-flat`; o `soft` de sempre continua sem classe", async () => {
+    const {Badge} = await import("../../packages/react/src/index");
+    const {container} = wrap(<><Badge tone="primary" emphasis="flat">a</Badge><Badge tone="primary">b</Badge></>);
+    const [plano, suave] = [...container.querySelectorAll(".badge")];
+    expect(plano).toHaveClass("badge-primary", "badge-flat");
+    expect(suave.className).toBe("badge badge-primary");
+  });
+});

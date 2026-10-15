@@ -24,6 +24,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     trailingIcon?: IconName;
     href?: string;
     fullWidth?: boolean;
+    /** Menos peso (15/10/2026): a letra apagada e um degrau menor (12 no `sm`) — o botão de ferramenta de um topo de
+     *  site, como o "Theme" da referência. A caixa e o fundo são os da aparência escolhida. */
+    quiet?: boolean;
     /** C-03 (24/09/2026): numa fila (`Cluster`), divide o espaço em partes iguais com os outros botões
      *  que também têm `grow`. O `fullWidth` não serve ali: ele pede a linha inteira. */
     grow?: boolean;
@@ -105,6 +108,9 @@ export interface CloseButtonProps extends Omit<ButtonProps, "variant" | "appeara
 }
 export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
+    /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
+     *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
+    mode?: "light-dark" | "light-dark-system";
 }
 export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {

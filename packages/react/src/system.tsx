@@ -7,7 +7,7 @@ import {Toast as BaseToast} from "@base-ui/react/toast";
 import {Tooltip as BaseTooltip} from "@base-ui/react/tooltip";
 import {DirectionProvider} from "@base-ui/react/direction-provider";
 import {peleDoEixo, type Responsive} from "./pure.js";
-import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityContext, DentroDoProviderContext, avisosAncorados, usePortalContainer, defaultStrings, defaultSpriteUrl, useSpriteUrl, useAureaStrings, type AureaStrings, type AureaTheme, type AureaDensity} from "./internal.js";
+import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityContext, DentroDoProviderContext, avisosAncorados, usePortalContainer, defaultStrings, defaultSpriteUrl, useSpriteUrl, useAureaStrings, type AureaStrings, type AureaTheme, type AureaThemePreference, type AureaDensity} from "./internal.js";
 
 // `theme` e `density` seguem a convenção controlado/não-controlado do resto da biblioteca
 // (`Toggle`, `ToggleGroup`): passe `theme` para mandar, `defaultTheme` para semear, e ouça por
@@ -23,11 +23,23 @@ import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityC
 // posicionar sem herdar `overflow` nem `transform`. Com ela, o consumidor aponta para um nó
 // dentro do landmark dele e o conteúdo do popup deixa de ficar fora de qualquer marco.
 export function AureaProvider({children,strings,direction="ltr",spriteUrl=defaultSpriteUrl,portalContainer,
-  theme,defaultTheme,onThemeChange,density,defaultDensity,onDensityChange,toastPlacement="bottom"}:{children:ReactNode;strings?:Partial<AureaStrings>;direction?:"ltr"|"rtl";spriteUrl?:string;portalContainer?:HTMLElement|null;theme?:AureaTheme;defaultTheme?:AureaTheme;onThemeChange?:(theme:AureaTheme)=>void;density?:AureaDensity;defaultDensity?:AureaDensity;onDensityChange?:(density:AureaDensity)=>void;toastPlacement?:ToastPlacement}){
+  theme,defaultTheme,onThemeChange,onThemePreferenceChange,density,defaultDensity,onDensityChange,toastPlacement="bottom"}:{children:ReactNode;strings?:Partial<AureaStrings>;direction?:"ltr"|"rtl";spriteUrl?:string;portalContainer?:HTMLElement|null;theme?:AureaThemePreference;defaultTheme?:AureaThemePreference;onThemeChange?:(theme:AureaTheme)=>void;onThemePreferenceChange?:(preference:AureaThemePreference)=>void;density?:AureaDensity;defaultDensity?:AureaDensity;onDensityChange?:(density:AureaDensity)=>void;toastPlacement?:ToastPlacement}){
   const value=React.useMemo(()=>strings?{...defaultStrings,...strings}:defaultStrings,[strings]);
-  const temaCtx=useEixoDoDocumento("theme",theme,defaultTheme,onThemeChange);
+  // "SYSTEM" (15/10/2026, a chave de três posições da referência): a PREFERÊNCIA pode ser `"system"`, e aí o tema na
+  // tela é o do sistema (`prefers-color-scheme`), e muda junto com ele. O documento recebe sempre o tema RESOLVIDO —
+  // o CSS só conhece `dark` e `light`. Sem preferência, o provider continua adotando o que o documento trouxer.
+  const [prefInterna,setPrefInterna]=React.useState<AureaThemePreference|undefined>(defaultTheme);
+  const preferencia=theme??prefInterna;
+  const sistemaEscuro=React.useSyncExternalStore(assinaEsquema,leEsquemaEscuro,()=>false);
+  const resolvido:AureaTheme|undefined=preferencia==="system"?(sistemaEscuro?"dark":"light"):preferencia;
+  const temaCtx=useEixoDoDocumento<AureaTheme>("theme",resolvido,undefined,undefined);
+  const escolher=React.useCallback((p:AureaThemePreference)=>{
+    if(theme===undefined)setPrefInterna(p);
+    onThemePreferenceChange?.(p);
+    onThemeChange?.(p==="system"?(leEsquemaEscuro()?"dark":"light"):p);
+  },[theme,onThemeChange,onThemePreferenceChange]);
   const densCtx=useEixoDoDocumento("density",density,defaultDensity,onDensityChange);
-  const tema=React.useMemo(()=>({theme:temaCtx.valor,setTheme:temaCtx.set,
+  const tema=React.useMemo(()=>({theme:temaCtx.valor,preference:preferencia??temaCtx.valor,setTheme:escolher,
     // `toggleTheme` existe porque é o gesto real: um botão de tema não escolhe entre dois
     // valores, ele inverte o atual. Deixar isso para o consumidor é como o catálogo e os docs
     // acabaram com duas implementações divergentes da mesma coisa.
@@ -39,13 +51,21 @@ export function AureaProvider({children,strings,direction="ltr",spriteUrl=defaul
     // ⚠ Achado em 09/09/2026 SÓ porque o `useAureaTheme` passou a delegar para cá: a divergência
     // existia desde sempre e nenhum teste a pegava, porque cada metade era testada sozinha.
     // Agora a regra é uma: desconhecido resolve para claro e alterna para ESCURO.
-    toggleTheme:()=>temaCtx.set(temaCtx.valor==="dark"?"light":"dark")}),[temaCtx]);
+    toggleTheme:()=>escolher(temaCtx.valor==="dark"?"light":"dark")}),[temaCtx,preferencia,escolher]);
   const dens=React.useMemo(()=>({density:densCtx.valor,setDensity:densCtx.set}),[densCtx]);
   // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
   // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
   const deFora=!React.useContext(DentroDoProviderContext);
   return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}><BaseToast.Provider timeout={TEMPO_DO_AVISO}><BaseTooltip.Provider>{children}<AureaToastViewport placement={toastPlacement}/>{deFora&&<BaseToast.Provider toastManager={avisosAncorados}><AvisosAncorados/></BaseToast.Provider>}</BaseTooltip.Provider></BaseToast.Provider></DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
 }
+
+// O esquema do sistema, para a preferência `"system"`. Sem `matchMedia` (servidor, jsdom), claro.
+const ESQUEMA_ESCURO="(prefers-color-scheme: dark)";
+const assinaEsquema=(cb:()=>void)=>{
+  if(typeof matchMedia!=="function")return ()=>{};
+  const m=matchMedia(ESQUEMA_ESCURO);m.addEventListener("change",cb);return ()=>m.removeEventListener("change",cb);
+};
+const leEsquemaEscuro=()=>typeof matchMedia==="function"&&matchMedia(ESQUEMA_ESCURO).matches;
 
 /** Um eixo de apresentação que vive no `<html>`: tema ou densidade. A conta é a mesma para os
  *  dois, e escrevê-la duas vezes seria o defeito do §21 cometido dentro do próprio conserto
@@ -128,9 +148,12 @@ export function useAureaTheme(){
   const ctxDens=React.useContext(DensityContext);
   return React.useMemo(()=>({
     theme,density,
-    setTheme:(t:AureaThemeName)=>{
-      if(dentroDeProvider){ctxTema.setTheme(t as AureaTheme);return;}
-      document.documentElement.dataset.theme=t;
+    /** O que foi escolhido (15/10/2026): pode ser `"system"`. Fora de um provider, o tema na tela. */
+    preference:(dentroDeProvider?ctxTema.preference:theme)??theme,
+    setTheme:(t:AureaThemePreference)=>{
+      if(dentroDeProvider){ctxTema.setTheme(t);return;}
+      // Fora de provider, `"system"` escreve o tema do sistema AGORA; seguir as mudanças dele é do provider.
+      document.documentElement.dataset.theme=t==="system"?(leEsquemaEscuro()?"dark":"light"):t;
     },
     setDensity:(d:AureaDensity)=>{
       if(dentroDeProvider){ctxDens.setDensity(d);return;}

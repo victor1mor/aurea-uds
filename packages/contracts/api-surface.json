@@ -7,7 +7,7 @@
     "componentes": 143,
     "hooks": 9,
     "aliasesLiterais": 110,
-    "propsDistintas": 358
+    "propsDistintas": 362
   },
   "aliases": {
     "ButtonVariant": {
@@ -2244,11 +2244,12 @@
     },
     "BadgeEmphasis": {
       "module": "markup",
-      "raw": "\"soft\" | \"solid\" | \"outline\"",
+      "raw": "\"soft\" | \"solid\" | \"outline\" | \"flat\"",
       "union": [
         "soft",
         "solid",
-        "outline"
+        "outline",
+        "flat"
       ]
     },
     "BadgeSize": {
@@ -2572,6 +2573,11 @@
         "light"
       ]
     },
+    "AureaThemePreference": {
+      "module": "pure",
+      "raw": "AureaTheme | \"system\"",
+      "union": null
+    },
     "AureaDensity": {
       "module": "pure",
       "raw": "\"compact\" | \"comfortable\" | \"spacious\"",
@@ -2759,6 +2765,12 @@
               "values": null
             },
             {
+              "name": "quiet",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "grow",
               "optional": true,
               "type": "boolean",
@@ -2887,6 +2899,12 @@
           "propsType": "CloseButtonProps",
           "props": [
             {
+              "name": "quiet",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "label",
               "optional": true,
               "type": "string",
@@ -2988,6 +3006,12 @@
               "values": null
             },
             {
+              "name": "quiet",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "grow",
               "optional": true,
               "type": "boolean",
@@ -3067,6 +3091,12 @@
               ]
             },
             {
+              "name": "quiet",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "grow",
               "optional": true,
               "type": "boolean",
@@ -3077,6 +3107,15 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "mode",
+              "optional": true,
+              "type": "\"light-dark\" | \"light-dark-system\"",
+              "values": [
+                "light-dark",
+                "light-dark-system"
+              ]
             }
           ]
         },
@@ -3363,6 +3402,12 @@
             },
             {
               "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "quiet",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -7316,7 +7361,8 @@
               "values": [
                 "soft",
                 "solid",
-                "outline"
+                "outline",
+                "flat"
               ]
             },
             {
@@ -7824,6 +7870,27 @@
                 "start",
                 "end"
               ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"sm\"",
+              "values": [
+                "md",
+                "sm"
+              ]
+            },
+            {
+              "name": "blurred",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "menuActions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             },
             {
               "name": "navLabel",
@@ -8370,6 +8437,15 @@
               "values": null
             },
             {
+              "name": "layout",
+              "optional": true,
+              "type": "\"columns\" | \"inline\"",
+              "values": [
+                "columns",
+                "inline"
+              ]
+            },
+            {
               "name": "legal",
               "optional": true,
               "type": "ReactNode",
@@ -8652,6 +8728,27 @@
                 "start",
                 "end"
               ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"sm\"",
+              "values": [
+                "md",
+                "sm"
+              ]
+            },
+            {
+              "name": "blurred",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "menuActions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             },
             {
               "name": "navLabel",
@@ -10013,25 +10110,33 @@
             {
               "name": "theme",
               "optional": true,
-              "type": "AureaTheme",
+              "type": "AureaThemePreference",
               "values": [
                 "dark",
-                "light"
+                "light",
+                "system"
               ]
             },
             {
               "name": "defaultTheme",
               "optional": true,
-              "type": "AureaTheme",
+              "type": "AureaThemePreference",
               "values": [
                 "dark",
-                "light"
+                "light",
+                "system"
               ]
             },
             {
               "name": "onThemeChange",
               "optional": true,
               "type": "(theme: AureaTheme) => void",
+              "values": null
+            },
+            {
+              "name": "onThemePreferenceChange",
+              "optional": true,
+              "type": "(preference: AureaThemePreference) => void",
               "values": null
             },
             {

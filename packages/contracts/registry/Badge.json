@@ -127,9 +127,9 @@
     },
     {
       "name": "emphasis",
-      "type": "soft | outline | solid",
+      "type": "soft | outline | solid | flat",
       "default": "soft",
-      "description": "How loud the tone is. `soft` is the tinted pill you already know; `outline` is contour only; `solid` fills with the accent and is what a notification counter wants. All 36 combinations of variant × emphasis × theme were measured for contrast — the lowest is 5.6:1, and the skin spec keeps it that way."
+      "description": "How loud the tone is. `soft` is the tinted pill you already know; `outline` is contour only; `solid` fills with the accent and is what a notification counter wants. All 36 combinations of variant × emphasis × theme were measured for contrast — the lowest is 5.6:1, and the skin spec keeps it that way. flat is the soft tone without the line around it, as the reference's chip."
     },
     {
       "name": "size",
@@ -215,6 +215,7 @@
       "square"
     ],
     "emphasis": [
+      "flat",
       "outline",
       "soft",
       "solid"

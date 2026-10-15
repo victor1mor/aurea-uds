@@ -35,7 +35,8 @@ export const useSpriteUrl = () => useContext(SpriteContext);
 // diferente de "escuro". Um default concreto aqui faria o provider sobrescrever, na primeira
 // pintura, o `data-theme` que o documento já traz no markup — e esse atributo existe justamente
 // para não haver piscada de tema ao carregar.
-export const ThemeContext = createContext({ theme: undefined, setTheme: () => { }, toggleTheme: () => { } });
+// `preference` (15/10/2026): o que foi ESCOLHIDO, que pode ser `"system"`; `theme` é o que está na tela.
+export const ThemeContext = createContext({ theme: undefined, preference: undefined, setTheme: () => { }, toggleTheme: () => { } });
 /** Tema atual e como trocá-lo. Fora de um `AureaProvider`, devolve `undefined` e no-ops — não
  *  lança: um componente isolado num teste não deve morrer por falta de provider. */
 export const useTheme = () => useContext(ThemeContext);
