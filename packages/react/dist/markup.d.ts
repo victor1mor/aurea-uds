@@ -24,12 +24,22 @@ export type CardProps = CardBase & ({
 export declare function Card({ variant, padding, orientation, accent, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 export declare namespace Card {
     export { CardMedia as Media };
+    export { CardHeader as Header };
+    export { CardTitle as Title };
+    export { CardDescription as Description };
+    export { CardContent as Content };
+    export { CardFooter as Footer };
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
  *  largura de miniatura, dentro do respiro, com o raio que sai da conta da casa (ADR-0033: raio do
  *  cartão menos o respiro dele). O que vai dentro — `Image`, vídeo — é do app. */
 declare function CardMedia({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+declare function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+declare function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement> & RefAttributes<HTMLHeadingElement>): React.JSX.Element;
+declare function CardDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement> & RefAttributes<HTMLParagraphElement>): React.JSX.Element;
+declare function CardContent({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
+declare function CardFooter({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export type LayoutGap = "tight" | "normal" | "loose";
 export type StackAlign = "start" | "center" | "end" | "stretch";
 export type ClusterAlign = "start" | "center" | "end" | "baseline";
@@ -132,6 +142,10 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
     /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
     links?: SectionFooterGroup[];
     /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
+    /** Só no `footer` (15/10/2026): `"columns"` (o padrão, o rodapé de site grande) ou `"inline"` — UMA linha centrada, como
+     *  o rodapé da página inicial da referência: a frase legal, os links (sem os títulos das colunas) e o que vier dentro
+     *  (os ícones sociais). A marca não entra. */
+    layout?: "columns" | "inline";
     legal?: ReactNode;
     /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
     maxWidth?: ContainerSize;
@@ -143,7 +157,7 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
  * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
  * quando ela for uma região que o leitor de tela deva listar.
  */
-export declare function Section({ surface, spacing, theme, variant, brand, links, legal, maxWidth, navLabel, children, className, ...props }: SectionProps): React.JSX.Element;
+export declare function Section({ surface, spacing, theme, variant, brand, links, legal, layout, maxWidth, navLabel, children, className, ...props }: SectionProps): React.JSX.Element;
 export type KPIDirection = "up" | "down" | "flat";
 export type KPITone = "success" | "danger" | "neutral";
 export type KPIVariant = "card" | "plain";
@@ -211,7 +225,7 @@ export declare function Paragraph({ size, align, color, tone, weight, truncate, 
 export interface CodeProps extends Omit<HTMLAttributes<HTMLElement>, "color">, RefAttributes<HTMLElement>, TypographyBase {
 }
 export declare function Code({ align, color, tone, weight, truncate, className, ...props }: CodeProps): React.JSX.Element;
-export type BadgeEmphasis = "soft" | "solid" | "outline";
+export type BadgeEmphasis = "soft" | "solid" | "outline" | "flat";
 export type BadgeSize = "xs" | "sm" | "md" | "lg";
 export type BadgePlacement = "top-end" | "top-start" | "bottom-end" | "bottom-start";
 export type BadgeFit = "auto" | "content";
@@ -221,7 +235,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
      *  eixo do `variant`, e vence quando os dois vêm. */
     tone?: BadgeVariant;
-    /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
+    /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno; `flat` (15/10/2026) é o tom de
+     *  sempre SEM a linha em volta, como o selo da referência (que chamava essa forma de `flat`). */
     emphasis?: BadgeEmphasis;
     size?: BadgeSize;
     /** Ponto de estado antes do texto. Sozinho num `anchor`, ele É o badge. */
@@ -309,6 +324,24 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     actions?: ReactNode;
     /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
     maxWidth?: ContainerSize;
+    /**
+     * Onde ficam os links (14/10/2026): `"end"` (o padrão) logo antes das ações, na outra ponta da marca; `"start"`
+     * colados na marca, com as ações na outra ponta — a página inicial da referência. O nome é o `justify` do
+     * conteúdo da barra dela.
+     */
+    itemsJustify?: "start" | "end";
+    /**
+     * A altura (15/10/2026): `"md"` (o padrão, 64 — a do guia de barra da referência) ou `"sm"` (56, a do topo da página
+     * inicial dela), com 6 entre as ações em vez de 8.
+     */
+    size?: "md" | "sm";
+    /**
+     * Só na `flush` (15/10/2026): o fundo transparente que EMBAÇA o que passa por baixo, como o topo da página inicial
+     * da referência. Quem pede menos transparência no sistema, ou o navegador sem desfoque, recebe o fundo cheio.
+     */
+    blurred?: boolean;
+    /** O que entra no MENU DO CELULAR, embaixo dos links (15/10/2026): o GitHub, a conta. Na barra larga não aparece. */
+    menuActions?: ReactNode;
     /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
     navLabel?: string;
     /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
@@ -316,7 +349,7 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     /** O `id` do painel do celular. Padrão: `"aurea-header-menu"`. Troque só se a página tiver dois cabeçalhos de site. */
     menuId?: string;
 }
-export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, navLabel, menuLabel, menuId, children, className, ...props }: HeaderProps): React.JSX.Element;
+export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, itemsJustify, size, blurred, menuActions, navLabel, menuLabel, menuId, children, className, ...props }: HeaderProps): React.JSX.Element;
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;
@@ -332,12 +365,17 @@ export declare function Checkbox({ label, labelHidden, description, size, classN
     description?: ReactNode;
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
-export declare function Radio({ label, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Radio({ label, labelHidden, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
+    labelHidden?: boolean;
+    description?: ReactNode;
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
-export declare function Switch({ label, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Switch({ label, labelHidden, description, indicatorPlacement, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
+    labelHidden?: boolean;
+    description?: ReactNode;
+    indicatorPlacement?: "start" | "end";
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
 export type RangeOrientation = "horizontal" | "vertical";
@@ -401,6 +439,8 @@ export interface ColorSwatchPickerProps {
     layout?: "grid" | "stack";
     /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
     indicator?: ReactNode;
+    /** O nome de cada cor embaixo dela (o `label` da opção; sem ele, o código), como a escolha de tema da referência. */
+    showLabels?: boolean;
     size?: ColorSwatchSize;
     disabled?: boolean;
     id?: string;

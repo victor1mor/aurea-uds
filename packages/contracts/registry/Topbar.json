@@ -14,7 +14,10 @@
     "flush",
     "pill"
   ],
-  "sizes": [],
+  "sizes": [
+    "md",
+    "sm"
+  ],
   "states": [
     "default",
     "wrapped"
@@ -104,6 +107,30 @@
       "description": "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding."
     },
     {
+      "name": "itemsJustify",
+      "type": "\"start\" | \"end\"",
+      "default": "\"end\"",
+      "description": "Where the links sit: end (just before the actions, at the other end from the brand) or start (right after the brand, with the actions at the other end — the reference's home page)."
+    },
+    {
+      "name": "size",
+      "type": "\"md\" | \"sm\"",
+      "default": "\"md\"",
+      "description": "The bar's height: md is 64 (the reference's bar guide), sm is 56 (the reference's home page), with 6 between the actions instead of 8."
+    },
+    {
+      "name": "blurred",
+      "type": "boolean",
+      "default": "false",
+      "description": "Only on flush: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid."
+    },
+    {
+      "name": "menuActions",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What only the phone menu carries, under the links (the GitHub link, the account). Not shown in the wide bar."
+    },
+    {
       "name": "navLabel",
       "type": "string",
       "default": "\"Main\"",
@@ -123,6 +150,10 @@
     }
   ],
   "axes": {
+    "itemsJustify": [
+      "end",
+      "start"
+    ],
     "maxWidth": [
       "2xl",
       "full",

@@ -19,6 +19,14 @@ repositório** (decisão do Victor, 07/10/2026). Elas ficam com o Victor, fora d
 Os detalhes de cada redistribuição (formatos, recortes, o que fica de fora) estão no
 [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
 
+## Marca de terceiro no SITE (não na biblioteca)
+
+| Marca | Onde | Regra de uso | Arquivos |
+|---|---|---|---|
+| O logo do GitHub (Invertocat) | só no site `aureauds.dev`: o botão do topo e a nota do Início, que levam ao repositório (decisão do Victor, 15/10/2026) | a do GitHub (`brand.github.com/foundations/logo`, lida em 15/10/2026): pode ser o botão que leva ao projeto; não se modifica; só em preto ou branco. GITHUB® e o logo são marcas registradas da GitHub, Inc. e **não** estão sob a licença Apache-2.0 deste repositório | `apps/catalog/marcas/github/`, os arquivos oficiais sem alteração |
+
+Nenhum pacote publicado (`@aurea-uds/*`) leva o logo: marca de terceiro não entra na biblioteca (CLAUDE.md §5).
+
 ## Código copiado
 
 **Nenhum.** A Aurea não tem linha de código copiada de outra biblioteca.

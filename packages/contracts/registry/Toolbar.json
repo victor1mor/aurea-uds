@@ -1,6 +1,6 @@
 {
   "name": "Toolbar",
-  "category": "Actions",
+  "category": "Layout",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Container of actions with roving-tabindex keyboard navigation.",

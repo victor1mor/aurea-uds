@@ -1,6 +1,6 @@
 {
   "name": "Radio",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Single choice within a group.",
@@ -62,6 +62,18 @@
       "type": "ReactNode",
       "default": "—",
       "description": "REQUIRED. One radio per option, all sharing the same name."
+    },
+    {
+      "name": "labelHidden",
+      "type": "boolean",
+      "default": "false",
+      "description": "Keeps the label in the DOM but out of sight, as the Checkbox does — for a row of bare controls, where the group names them."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A muted line under the label, as the Checkbox and the reference — then the label is set in bold."
     },
     {
       "name": "name",

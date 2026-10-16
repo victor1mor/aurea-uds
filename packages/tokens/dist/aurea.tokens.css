@@ -3,6 +3,8 @@
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
   --brand-yellow-text:oklch(0.516 0.105 86.047);
+  --white:oklch(1 0 0);
+  --black:oklch(0 0 0);
   --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
   --font-heading:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
   --font-editorial:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;

@@ -1,6 +1,6 @@
 {
   "name": "Icon",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Icon primitive rendered from a sprite.",

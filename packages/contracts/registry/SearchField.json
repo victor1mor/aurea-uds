@@ -1,6 +1,6 @@
 {
   "name": "SearchField",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Text field specialized for search, with clear affordance.",

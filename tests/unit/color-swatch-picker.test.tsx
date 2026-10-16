@@ -77,3 +77,30 @@ describe("ColorSwatch options (as amostras para escolher)", () => {
     expect((await axe(container)).violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+// 14/10/2026 · `showLabels`: o nome embaixo de cada cor, como a escolha de tema da referência (o botão "Theme" do
+// site). Sem ele, nada muda — o primeiro teste trava a marcação de antes.
+describe("ColorSwatch options com showLabels (o nome embaixo)", () => {
+  test("sem showLabels a marcação é a de antes: o círculo é o rótulo, e não há nome escrito", () => {
+    const {container} = wrap(<ColorSwatch options={PALETA} name="a" label="Accent" />);
+    expect(container.querySelectorAll("label.color-swatch-option")).toHaveLength(3);
+    expect(container.querySelector(".color-swatch-item, .color-swatch-name")).toBeNull();
+  });
+
+  test("com showLabels cada cor mostra o nome (ou o código), só para os olhos", async () => {
+    const {container} = wrap(<ColorSwatch options={PALETA} name="a" label="Accent" showLabels />);
+    const nomes = [...container.querySelectorAll(".color-swatch-name")];
+    expect(nomes.map((n) => n.textContent)).toEqual(["Ocean", "Aurea yellow", "#000080"]);
+    expect(nomes.every((n) => n.getAttribute("aria-hidden") === "true")).toBe(true);
+    // O nome falado continua um só, o do botão de opção.
+    expect(screen.getAllByRole("radio").map((o) => o.getAttribute("aria-label"))).toEqual(["Ocean", "Aurea yellow", "#000080"]);
+    expect(container.querySelector(".color-swatch-picker")).toHaveClass("color-swatch-picker-labels");
+    expect((await axe(container)).violations.map((v) => v.id)).toEqual([]);
+  });
+
+  test("clicar no NOME também escolhe a cor", () => {
+    const {container} = wrap(<ColorSwatch options={PALETA} name="a" label="Accent" showLabels defaultValue="#0485f7" />);
+    fireEvent.click([...container.querySelectorAll(".color-swatch-name")][1]);
+    expect(screen.getByRole("radio", {name: "Aurea yellow"})).toBeChecked();
+  });
+});

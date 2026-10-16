@@ -17,10 +17,10 @@
 import React, {createContext, useContext, useEffect, useRef, useState, type HTMLAttributes, type RefAttributes} from "react";
 import {Toast as BaseToast} from "@base-ui/react/toast";
 import {cx, fundirRender, defaultStrings, defaultSpriteUrl, type AureaStrings,
-  type AureaTheme, type AureaDensity} from "./pure.js";
+  type AureaTheme, type AureaThemePreference, type AureaDensity} from "./pure.js";
 
 export {cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStates, stateSeverity,
-  type AureaStrings, type UniversalState, type AureaTheme, type AureaDensity} from "./pure.js";
+  type AureaStrings, type UniversalState, type AureaTheme, type AureaThemePreference, type AureaDensity} from "./pure.js";
 
 // Os controles da Aurea que moram FORA do pacote principal (o `DatePicker`, em `./calendar`, 0.32.0) e
 // entregam o `id` ao nó focal. O `Field` os nomeia com `<label for>`, como os da lista dele; eles se
@@ -41,8 +41,9 @@ export const useSpriteUrl=()=>useContext(SpriteContext);
 // diferente de "escuro". Um default concreto aqui faria o provider sobrescrever, na primeira
 // pintura, o `data-theme` que o documento já traz no markup — e esse atributo existe justamente
 // para não haver piscada de tema ao carregar.
-export const ThemeContext=createContext<{theme?:AureaTheme;setTheme:(t:AureaTheme)=>void;toggleTheme:()=>void}>(
-  {theme:undefined,setTheme:()=>{},toggleTheme:()=>{}});
+// `preference` (15/10/2026): o que foi ESCOLHIDO, que pode ser `"system"`; `theme` é o que está na tela.
+export const ThemeContext=createContext<{theme?:AureaTheme;preference?:AureaThemePreference;setTheme:(t:AureaThemePreference)=>void;toggleTheme:()=>void}>(
+  {theme:undefined,preference:undefined,setTheme:()=>{},toggleTheme:()=>{}});
 /** Tema atual e como trocá-lo. Fora de um `AureaProvider`, devolve `undefined` e no-ops — não
  *  lança: um componente isolado num teste não deve morrer por falta de provider. */
 export const useTheme=()=>useContext(ThemeContext);

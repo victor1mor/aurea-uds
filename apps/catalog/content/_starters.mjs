@@ -73,12 +73,18 @@ const SERIE = [{month: "Jan", runs: 128, errors: 9}, {month: "Feb", runs: 194, e
   {month: "May", runs: 287, errors: 8}, {month: "Jun", runs: 264, errors: 17}];
 
 export default {
+  // 0.33.0: o terceiro com `action`, o botão do aviso da referência ("Upgrade"), antes do X.
   Alert: {
     code: `<Alert variant="info" title="Heads up">Contextual information.</Alert>
-<Alert variant="danger" title="Upload failed">The file exceeds 10 MB.</Alert>`,
+<Alert variant="danger" title="Upload failed">The file exceeds 10 MB.</Alert>
+<Alert title="You have 2 credits left" action={<Button variant="tertiary">Upgrade</Button>}>
+  Get a paid plan for more credits
+</Alert>`,
     render: () => h("div", {style: {...stack, ...wide}},
       h(A.Alert, {variant: "info", title: "Heads up"}, "Contextual information."),
-      h(A.Alert, {variant: "danger", title: "Upload failed"}, "The file exceeds 10 MB.")),
+      h(A.Alert, {variant: "danger", title: "Upload failed"}, "The file exceeds 10 MB."),
+      h(A.Alert, {title: "You have 2 credits left", action: h(A.Button, {variant: "tertiary"}, "Upgrade")},
+        "Get a paid plan for more credits")),
   },
   AppShell: {
     // O único componente de PÁGINA: ele é dono do <main>, do <header> e do <aside> do documento.
@@ -121,10 +127,15 @@ export default {
     render: () => h(A.AureaProvider, {spriteUrl: ""}, h("div", {style: row},
       h(A.Icon, {name: "check"}), h("span", null, "Icons resolve through the provider."))),
   },
+  // 0.33.0: com `tone` e `emphasis="soft"` — a cor da letra e o fundo clarinho do tom, como os da referência.
   Avatar: {
     code: `<Avatar fallback="AU" />
-<Avatar fallback="VM" size="lg" />`,
-    render: () => h("div", {style: row}, h(A.Avatar, {fallback: "AU"}), h(A.Avatar, {fallback: "VM", size: "lg"})),
+<Avatar fallback="VM" size="lg" />
+<Avatar fallback="B" tone="info" emphasis="soft" />
+<Avatar fallback={<Icon name="floppy-disk" />} tone="warning" emphasis="soft" />`,
+    render: () => h("div", {style: row}, h(A.Avatar, {fallback: "AU"}), h(A.Avatar, {fallback: "VM", size: "lg"}),
+      h(A.Avatar, {fallback: "B", tone: "info", emphasis: "soft"}),
+      h(A.Avatar, {fallback: h(A.Icon, {name: "floppy-disk"}), tone: "warning", emphasis: "soft"})),
   },
   Banner: {
     code: `<Banner variant="success" title="Saved" icon="check" onDismiss={() => setShown(false)}>
@@ -142,14 +153,27 @@ export default {
     render: () => h(A.Breadcrumb, {items: [{label: "Home", href: "#"},
       {label: "Patterns", href: "#"}, {label: "QR code"}]}),
   },
+  // 0.33.0: as partes da referência — o cabeçalho com título e descrição colados, o conteúdo e o rodapé, 12 entre elas.
   Card: {
     code: `<Card>
-  <strong>A floating surface</strong>
-  <p>Radius 22px, one border, no shadow stack.</p>
+  <Card.Header>
+    <Card.Title>A floating surface</Card.Title>
+    <Card.Description>Radius 22px, one border, no shadow stack.</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <p>The parts are optional: a card can hold anything.</p>
+  </Card.Content>
+  <Card.Footer>
+    <Button variant="primary">Save</Button>
+    <Button>Cancel</Button>
+  </Card.Footer>
 </Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("strong", null, "A floating surface"),
-      h("span", {className: "muted"}, "Radius 22px, one border, no shadow stack.")))),
+    render: () => h("div", {style: wide}, h(A.Card, null,
+      h(A.Card.Header, null,
+        h(A.Card.Title, null, "A floating surface"),
+        h(A.Card.Description, null, "Radius 22px, one border, no shadow stack.")),
+      h(A.Card.Content, null, h("p", {style: {margin: 0}}, "The parts are optional: a card can hold anything.")),
+      h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Save"), h(A.Button, null, "Cancel")))),
   },
   // Image (L4). A foto é um SVG em data URI porque o catálogo é HTML gerado e COMMITADO: preview
   // que busca bytes na rede reprova sem rede, e um byte diferente move o gate de pixel.
@@ -1474,9 +1498,12 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       h(A.NumberField, {label: "Price", name: "price", defaultValue: 1234.5,
         format: {style: "currency", currency: "BRL"}, locale: "pt-BR"})),
   },
+  // 0.33.0: o segundo com `groupSize`, o tracinho do 3 + 3 da referência.
   OTPField: {
-    code: `<OTPField length={6} label="Verification code" />`,
-    render: () => h(A.OTPField, {length: 6, label: "Verification code"}),
+    code: `<OTPField length={6} label="Verification code" />
+<OTPField length={6} groupSize={3} label="Verification code, in two groups" />`,
+    render: () => h("div", {style: stack}, h(A.OTPField, {length: 6, label: "Verification code"}),
+      h(A.OTPField, {length: 6, groupSize: 3, label: "Verification code, in two groups"})),
   },
   // O disparador é um `Button variant="link"`, não um `<a>` cru: um link sem pele da Aurea
   // reprovou contraste AA no tema claro dentro do painel de demo — pego pelo axe da varredura.

@@ -1,6 +1,6 @@
 {
   "name": "ThemeToggle",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "The light/dark switch, with colour in the glyph: a dark moon in the light theme, the brand yellow sun in the dark one.",
@@ -20,10 +20,16 @@
   "responsive": {
     "size": "visual"
   },
-  "axes": {},
+  "axes": {
+    "mode": [
+      "light-dark",
+      "light-dark-system"
+    ]
+  },
   "states": [
     "light",
-    "dark"
+    "dark",
+    "system"
   ],
   "tokens": [
     "--accent",
@@ -55,9 +61,11 @@
     "apg": "button",
     "keyboard": [
       "Enter",
-      "Space"
+      "Space",
+      "ArrowLeft",
+      "ArrowRight"
     ],
-    "keyboardNote": "A native <button> (the IconButton). Its name says where it goes — \"Switch to dark theme\" / \"Switch to light theme\" — and changes with the theme."
+    "keyboardNote": "A native <button> (the IconButton). Its name says where it goes — \"Switch to dark theme\" / \"Switch to light theme\" — and changes with the theme. With mode=\"light-dark-system\" it is a radio group named \"Theme\": Tab enters on the chosen option, the arrows move and choose."
   },
   "dependencies": {
     "engine": "none",
@@ -77,6 +85,12 @@
     "react": "packages/react/src/actions.tsx#ThemeToggle"
   },
   "props": [
+    {
+      "name": "mode",
+      "type": "\"light-dark\" | \"light-dark-system\"",
+      "default": "\"light-dark\"",
+      "description": "light-dark is the button that flips the theme. light-dark-system is the reference's three-way switch — light, dark and system (follow the computer, and change with it): a radio group of three icon options, the chosen one filled."
+    },
     {
       "name": "size",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",

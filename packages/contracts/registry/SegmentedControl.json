@@ -1,6 +1,6 @@
 {
   "name": "SegmentedControl",
-  "category": "Inputs",
+  "category": "Controls",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Choose one option from a compact inline set.",

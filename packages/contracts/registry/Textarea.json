@@ -1,6 +1,6 @@
 {
   "name": "Textarea",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Multi-line text entry control.",

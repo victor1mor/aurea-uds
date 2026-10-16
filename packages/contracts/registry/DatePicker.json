@@ -1,6 +1,6 @@
 {
   "name": "DatePicker",
-  "category": "Inputs",
+  "category": "Date and Time",
   "layer": "Composite",
   "maturity": "Ready",
   "summary": "A field that opens a calendar to pick a date, or a range of dates.",

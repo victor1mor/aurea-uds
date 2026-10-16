@@ -1,6 +1,6 @@
 {
   "name": "ToolbarGroup",
-  "category": "Actions",
+  "category": "Layout",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Structural grouping of toolbar items.",

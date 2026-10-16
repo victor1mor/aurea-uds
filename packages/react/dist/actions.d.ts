@@ -1,8 +1,8 @@
 import React, { type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
-import { type IconName } from "./system.js";
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav";
-export type ButtonAppearance = "solid" | "outline" | "ghost" | "link" | "nav";
+import { type IconName, type AureaIcon } from "./system.js";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "primary-outline" | "primary-ghost" | "danger" | "danger-outline" | "danger-ghost" | "link" | "link-primary" | "link-danger" | "nav" | "danger-soft";
+export type ButtonAppearance = "solid" | "outline" | "ghost" | "link" | "nav" | "soft";
 export type ButtonTone = "neutral" | "brand" | "danger" | "success" | "warning" | "info";
 export type ComponentSize = "xs" | "sm" | "md" | "lg" | "xl";
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
@@ -20,10 +20,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     tone?: ButtonTone;
     size?: Responsive<ComponentSize>;
     loading?: boolean;
-    leadingIcon?: IconName;
-    trailingIcon?: IconName;
+    leadingIcon?: AureaIcon;
+    trailingIcon?: AureaIcon;
     href?: string;
     fullWidth?: boolean;
+    /** Menos peso (15/10/2026): a letra apagada e um degrau menor (12 no `sm`) — o botão de ferramenta de um topo de
+     *  site, como o "Theme" da referência. A caixa e o fundo são os da aparência escolhida. */
+    quiet?: boolean;
     /** C-03 (24/09/2026): numa fila (`Cluster`), divide o espaço em partes iguais com os outros botões
      *  que também têm `grow`. O `fullWidth` não serve ali: ele pede a linha inteira. */
     grow?: boolean;
@@ -50,7 +53,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
      * quebrar, e por isso este é o momento mais barato que vai existir.
      */
     pressed?: boolean;
-    kbd?: string;
+    /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
+     *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
+    kbd?: string | readonly string[];
     /**
      * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
      * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe
@@ -96,15 +101,18 @@ export type ToggleProps = ToggleBase & ({
 export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant }: ToggleProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     label: string;
-    icon: IconName;
+    icon: AureaIcon;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface CloseButtonProps extends Omit<ButtonProps, "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
+export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
     /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
     label?: string;
 }
 export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface ThemeToggleProps extends Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "quiet" | "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
+    /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
+     *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
+    mode?: "light-dark" | "light-dark-system";
 }
 export declare const ThemeToggle: React.ForwardRefExoticComponent<Omit<ThemeToggleProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {

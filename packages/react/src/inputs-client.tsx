@@ -21,7 +21,7 @@ import {Popover as BasePopover} from "@base-ui/react/popover";
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
 // objetos diferentes com o mesmo nome quebrariam o rótulo do campo em silêncio.
-import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch, type ColorSwatchOption, type FieldSize, type FieldVariant} from "./markup.js";
+import {Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch, Kbd, type ColorSwatchOption, type FieldSize, type FieldVariant} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {IconButton} from "./actions.js";
 // A FAMÍLIA DE COR (0.32.0, ADR-0069) — as peças INTERNAS moram aqui, no topo, antes do primeiro export (auxiliar
@@ -452,7 +452,8 @@ export interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 // `.input-wrap-end` para o botão do PasswordField —, e o grupo é a terceira vez virando uma. O
 // merge das duas linhagens tinha trazido de volta a versão com `.input-wrap`, contra um core
 // que já não a pinta.
-export function SearchField({icon="magnifying-glass",className,size,width,...props}:SearchFieldProps){return <InputGroup className={className} width={width}><InputGroupAddon><Icon name={icon} size={valorBase(size)==="sm"?"sm":undefined}/></InputGroupAddon><Input type="search" size={size} {...props}/></InputGroup>}
+// `search-field` (15/10/2026): a busca tem a medida própria da referência — 12, a lupa, 8 (ver o core).
+export function SearchField({icon="magnifying-glass",className,size,width,...props}:SearchFieldProps){return <InputGroup className={cx("search-field",className)} width={width}><InputGroupAddon><Icon name={icon} size={valorBase(size)==="sm"?"sm":undefined}/></InputGroupAddon><Input type="search" size={size} {...props}/></InputGroup>}
 // labelHidden: coluna de seleção de tabela precisa do rótulo POR LINHA para o leitor de
 // tela ("Select Analyst"), mas mostrá-lo engorda a coluna. O rótulo continua no DOM, só
 // sai da tela (.sr-only) — nunca trocar por aria-label solto num <label> visível vazio.
@@ -547,6 +548,52 @@ export function CheckboxGroup({label,description,error,value,defaultValue,onValu
   </div>;
 }
 
+// RADIOGROUP (15/10/2026, o Victor: "A, B, C, pode") — o grupo de opções da referência, na web. O nativo já tinha
+// `RadioGroup` e `RadioGroup.Item`; aqui os mesmos nomes de prop (`value`, `onValueChange`, `orientation`, `disabled`,
+// `invalid`), e o molde do `CheckboxGroup` da casa: o rótulo do grupo, a descrição, as opções (16 antes de cada uma, ou
+// 16 entre elas na horizontal) e o erro no fim. As opções são o `Radio` de sempre (`RadioGroup.Item` é ele): botões de
+// opção NATIVOS com o mesmo `name`, então o Tab entra na escolhida e as setas andam e escolhem — do navegador. O grupo
+// é `role="radiogroup"` com o nome do rótulo; a descrição e o erro entram no `aria-describedby`.
+export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,"defaultValue"|"onChange">,RefAttributes<HTMLDivElement>{
+  label:ReactNode;
+  /** O nome sai da tela e fica para o leitor de tela, como no `Checkbox` (a fileira de controles da vitrine da referência). */
+  labelHidden?:boolean;description?:ReactNode;error?:ReactNode;
+  value?:string;defaultValue?:string;onValueChange?:(value:string)=>void;
+  /** O `name` de todas as opções, para o formulário. Sem ele, um nome próprio do grupo. */
+  name?:string;disabled?:boolean;
+  /** Pinta todas as opções de erro, como o `invalid` do nativo. Com `error`, já vale. */
+  invalid?:boolean;
+  /** `vertical` (o padrão) ou `horizontal`, como a referência e o nativo. */
+  orientation?:"vertical"|"horizontal";
+  /** O asterisco no rótulo, como o `Field`. */
+  required?:boolean}
+export function RadioGroup({label,labelHidden,description,error,value,defaultValue,onValueChange,name,disabled,invalid,orientation="vertical",required,children,className,...props}:RadioGroupProps){
+  const auto=React.useId();
+  const [proprio,setProprio]=React.useState<string|undefined>(defaultValue);
+  const escolhido=value??proprio;
+  const idRotulo=`${auto}-label`,idDescricao=description?`${auto}-description`:undefined,idErro=error?`${auto}-error`:undefined;
+  const opcoes=React.Children.map(children,filho=>{
+    if(!React.isValidElement(filho))return filho;
+    const p=filho.props as {value?:unknown;onChange?:(e:React.ChangeEvent<HTMLInputElement>)=>void;disabled?:boolean};
+    if(typeof p.value!=="string")return filho;
+    const v=p.value;
+    return React.cloneElement(filho as ReactElement<Record<string,unknown>>,{checked:escolhido===v,name:name??auto,required,
+      disabled:p.disabled??disabled,...(error||invalid?{"aria-invalid":true}:null),
+      onChange:(e:React.ChangeEvent<HTMLInputElement>)=>{p.onChange?.(e);if(!e.currentTarget.checked)return;
+        if(value===undefined)setProprio(v);onValueChange?.(v)}});
+  });
+  return <div role="radiogroup" aria-labelledby={idRotulo} aria-describedby={[idDescricao,idErro].filter(Boolean).join(" ")||undefined}
+    aria-orientation={orientation} aria-required={required||undefined} aria-invalid={error||invalid?true:undefined}
+    className={cx("radio-group",orientation==="horizontal"&&"radio-group-horizontal",labelHidden&&"radio-group-bare",className)} {...props}>
+    <span className={cx("label",labelHidden&&"sr-only")} id={idRotulo}><span>{label}{required?<span className="label-required" aria-hidden="true">*</span>:null}</span></span>
+    {description&&<span className="field-description" id={idDescricao}>{description}</span>}
+    {orientation==="horizontal"?<div className="radio-group-items">{opcoes}</div>:opcoes}
+    {error&&<span className="field-error" id={idErro}>{error}</span>}
+  </div>;
+}
+/** A opção do grupo: o `Radio`, como o `RadioGroup.Item` do nativo. */
+RadioGroup.Item=Radio;
+
 // LISTBOX (0.32.0) — a lista de opções da referência, solta (não dentro de um Select): itens com
 // rótulo, descrição e ícone, SEÇÕES com título, e escolha de nenhum, um ou vários. O motor da Aurea só
 // tem a lista DENTRO do Select, do Combobox e do Menu, então o teclado é nosso, pelo padrão do APG
@@ -560,7 +607,9 @@ export interface ListBoxItem{id:string;label:ReactNode;
   /** O texto que a busca pela letra lê, quando o `label` não é texto. */
   textValue?:string;description?:ReactNode;icon?:IconName;disabled?:boolean;
   /** O item de perigo ("Excluir"), na cor de perigo. */
-  danger?:boolean}
+  danger?:boolean;
+  /** O atalho do item ("⌘N"), à direita, como na lista da referência (15/10/2026). Só mostra: quem liga a tecla é o app. */
+  kbd?:string}
 export interface ListBoxSection{title:ReactNode;items:readonly ListBoxItem[]}
 export type ListBoxSelectionMode="none"|"single"|"multiple";
 export interface ListBoxProps extends Omit<HTMLAttributes<HTMLDivElement>,"defaultValue"|"onChange">{
@@ -618,6 +667,7 @@ export function ListBox({label,items,selectionMode="single",value,defaultValue,o
       {it.icon&&<Icon name={it.icon}/>}
       <span className="list-box-item-text"><span className="list-box-item-label">{it.label}</span>
         {it.description&&<span className="list-box-item-description" id={idDesc}>{it.description}</span>}</span>
+      {it.kbd&&<Kbd className="list-box-item-kbd">{it.kbd}</Kbd>}
       {escolhido&&<Icon name="check" className="list-box-item-indicator"/>}
     </div>;
   };
@@ -978,7 +1028,7 @@ export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommi
     </BasePopover.Trigger>
     {name&&<input type="hidden" name={name} value={hex}/>}
     <BasePopover.Portal container={portal}>
-      <BasePopover.Positioner side="bottom" align="start" sideOffset={6}>
+      <BasePopover.Positioner className="positioner" side="bottom" align="start" sideOffset={6}>
         <BasePopover.Popup className="popover color-picker-popover" aria-label={label}>
           <CorDoSeletor.Provider value={contexto}>
             {children??<>
@@ -1009,7 +1059,14 @@ export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommi
 // formulário anônimos. Um leitor de tela anunciaria "editar texto" seis vezes seguidas sem
 // dizer qual é qual. O grupo continua nomeado (`role="group"`), que é o que diz para que serve
 // o código; o nome de cada caixa é o que diz onde você está.
-export function OTPField({length,value,defaultValue,onValueChange,mask,disabled,required,label,id,className}:{length:number;value?:string;defaultValue?:string;onValueChange?:(v:string)=>void;mask?:boolean;disabled?:boolean;required?:boolean;label?:string;id?:string;className?:string}){
+// 15/10/2026 (o Victor: "A, B, C, pode"), como o campo de código da referência: `groupSize` põe o TRACINHO a cada N
+// caixas (o 3 + 3 da vitrine dela; o `Separator` do motor, de 6 × 2), e `variant="secondary"` dá às caixas o fundo
+// neutro do `Input` secundário. Sem os dois, a marcação é a de antes.
+export function OTPField({length,value,defaultValue,onValueChange,mask,disabled,required,label,id,className,groupSize,variant}:{length:number;value?:string;defaultValue?:string;onValueChange?:(v:string)=>void;mask?:boolean;disabled?:boolean;required?:boolean;label?:string;id?:string;className?:string;
+  /** O tracinho entre os grupos: a cada `groupSize` caixas (3 num código de 6). */
+  groupSize?:number;
+  /** `secondary`: o fundo neutro do `Input` secundário, para o campo dentro de um cartão. */
+  variant?:"primary"|"secondary"}){
 const s=useAureaStrings();
 return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} mask={mask} disabled={disabled} required={required} role="group" aria-label={label} className={cx("otp-field",className)}>
 {/* Duas coisas medidas no Base UI 1.6.0, e as duas custaram uma volta:
@@ -1018,7 +1075,8 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
        sem rótulo na raiz. Medido: o axe acusou `label` justamente nele. Pelo `render` o
        atributo sobrevive, e todos os outros que o motor injeta (autocomplete=one-time-code,
        pattern, enterKeyHint, tabindex) continuam intactos — conferido no markup emitido. */}
-{Array.from({length},(_,i)=><BaseOTPField.Input key={i} render={<input aria-label={`${s.otpDigit} ${i+1}`}/>} className="input otp-slot"/>)}
+{Array.from({length},(_,i)=><React.Fragment key={i}><BaseOTPField.Input render={<input aria-label={`${s.otpDigit} ${i+1}`}/>} className={cx("input otp-slot",variant==="secondary"&&"input-secondary")}/>
+  {groupSize&&groupSize>0&&(i+1)%groupSize===0&&i<length-1?<BaseOTPField.Separator className="otp-separator"/>:null}</React.Fragment>)}
 </BaseOTPField.Root>}
 // SegmentedControl — achado M20, fechado na Parte C do PLANO-1.0 em 07/08/2026.
 //
@@ -1128,7 +1186,7 @@ export function Combobox({items,value,onValueChange,placeholder,label,empty,disa
         </span>
       </BaseCombobox.InputGroup>
     </div>
-    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner sideOffset={6}>
+    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner className="positioner" sideOffset={6}>
       <BaseCombobox.Popup className="menu combobox-popup">
         <BaseCombobox.Empty className="combobox-empty">{empty??s.comboboxEmpty}</BaseCombobox.Empty>
         {listaCombobox(items)}
@@ -1173,7 +1231,7 @@ export function MultiCombobox({items,value,onValueChange,onInputChange,loading,p
         </span>
       </BaseCombobox.InputGroup>
     </div>
-    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner sideOffset={6}>
+    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner className="positioner" sideOffset={6}>
       <BaseCombobox.Popup className="menu combobox-popup">
         <BaseCombobox.Empty className="combobox-empty">{loading?s.comboboxLoading:(empty??s.comboboxEmpty)}</BaseCombobox.Empty>
         {listaCombobox(items)}
@@ -1238,7 +1296,7 @@ export const Select=forwardRef<HTMLButtonElement,SelectProps>(function Select({i
     <BaseSelect.Trigger ref={ref} className={cx("select","select-trigger",peleDoEixo("select",size),className)} {...props}>
       <BaseSelect.Value placeholder={placeholder} className="select-value"/>
     </BaseSelect.Trigger>
-    <BaseSelect.Portal container={portal}><BaseSelect.Positioner sideOffset={6} alignItemWithTrigger={false}>
+    <BaseSelect.Portal container={portal}><BaseSelect.Positioner className="positioner" sideOffset={6} alignItemWithTrigger={false}>
       <BaseSelect.Popup className="menu combobox-popup">
         <BaseSelect.List>
           {lista.map((i,n)=>ehGrupoDoSelect(i)

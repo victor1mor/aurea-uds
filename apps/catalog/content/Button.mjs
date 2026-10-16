@@ -85,6 +85,27 @@ export default {
         h(Button, {variant: "danger-ghost"}, "Delete")),
     },
     {
+      title: "Soft",
+      description: "The pale fill of the tone with the tone's letter — the reference's soft button. danger-soft is the "
+        + "shortcut for the destructive one that should not shout.",
+      code: [
+        '<Button appearance="soft" tone="brand">Upgrade</Button>',
+        '<Button appearance="soft" tone="success">Approve</Button>',
+        '<Button variant="danger-soft">Remove</Button>',
+      ].join("\n"),
+      render: () => h("div", {style: row},
+        h(Button, {appearance: "soft", tone: "brand"}, "Upgrade"),
+        h(Button, {appearance: "soft", tone: "success"}, "Approve"),
+        h(Button, {variant: "danger-soft"}, "Remove")),
+    },
+    {
+      title: "Quiet",
+      description: "The muted letter, one step smaller: a secondary control that sits beside the main ones without "
+        + "competing, like the Theme button at the top of this site.",
+      code: '<Button size="sm" quiet leadingIcon="paint-bucket">Theme</Button>',
+      render: () => h("div", {style: row}, h(Button, {size: "sm", quiet: true, leadingIcon: "paint-bucket"}, "Theme")),
+    },
+    {
       title: "Link appearance",
       description: "Text with no capsule, for inline actions. The underline is there at rest — revealing it on hover would hide the affordance.",
       code: [
@@ -131,14 +152,17 @@ export default {
     },
     {
       title: "With shortcut",
-      description: "The key that fires it, shown and announced: kbd renders a Kbd inside the button and sets aria-keyshortcuts.",
+      description: "The key that fires it, shown and announced: kbd renders a Kbd inside the button and sets "
+        + "aria-keyshortcuts. Pass a list for a combination: one cap per key, and the reader hears Control+K.",
       code: [
         '<Button variant="primary" kbd="⌘K">Command</Button>',
         '<Button variant="outline" kbd="/">Search</Button>',
+        '<Button leadingIcon="magnifying-glass" kbd={["Ctrl", "K"]}>Search</Button>',
       ].join("\n"),
       render: () => h("div", {style: row},
         h(Button, {variant: "primary", kbd: "⌘K"}, "Command"),
-        h(Button, {variant: "outline", kbd: "/"}, "Search")),
+        h(Button, {variant: "outline", kbd: "/"}, "Search"),
+        h(Button, {leadingIcon: "magnifying-glass", kbd: ["Ctrl", "K"]}, "Search")),
     },
     {
       title: "As a link",

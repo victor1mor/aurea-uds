@@ -1,6 +1,6 @@
 {
   "name": "ColorField",
-  "category": "Inputs",
+  "category": "Colors",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "A field for a colour: the swatch in front and the code — hex, rgb(), hsl() or hsb() — applied on Enter or when it loses focus; or one channel as a number. Inside a Field, the label, description and error are the Field's.",

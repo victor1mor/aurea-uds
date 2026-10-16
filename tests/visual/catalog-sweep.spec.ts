@@ -1,5 +1,5 @@
 import {test, expect} from "@playwright/test";
-import {readdirSync} from "node:fs";
+import {readdirSync, readFileSync} from "node:fs";
 import {join} from "node:path";
 // O MESMO dado que o gerador consome (ADR-0001, Fase 7). Um gate que declarasse suas próprias
 // seções seria um segundo modelo escondido — e é a divergência que o achado I2 mediu.
@@ -431,7 +431,13 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(grupo.length).toBeGreaterThan(50);
     expect(grupo).toEqual([...grupo].sort((a, b) => a.localeCompare(b)));
     expect(nomes.length).toBeGreaterThan(0);
-    await expect(lateral.getByText("New", {exact: true}).first()).toBeAttached();
+    // "New" é o que ainda não está na superfície publicada (`released-surface.json`). Contado, e não "pelo menos um":
+    // logo depois de uma publicação NADA é novo — o registro da 0.32.0 reprovou na CI por exigir um (14/10/2026).
+    const publicados = new Set(JSON.parse(readFileSync("scripts/released-surface.json", "utf8")).components);
+    const novos = readdirSync("packages/contracts/registry").filter((f) => f.endsWith(".json"))
+      .map((f) => JSON.parse(readFileSync(join("packages/contracts/registry", f), "utf8")).name as string)
+      .filter((n) => !publicados.has(n));
+    await expect(lateral.getByText("New", {exact: true})).toHaveCount(novos.length);
   });
 
   // O Victor, 13/10/2026: "sidebar precisa ser o nosso flutuante" e, do "On this page", que os itens saiam
@@ -602,6 +608,432 @@ test.describe("catálogo · contratos do modelo de página", () => {
       await page.keyboard.press("Control+k");
       await expect(page.getByRole("dialog", {name: "Search the site"})).toBeVisible({timeout: 1000});
     }).toPass({timeout: 10000});
+  });
+
+  // O Victor, 14/10/2026: "o buscar depois que clica nele não tem como sair, nem Esc nem clicando fora". Medido no
+  // site publicado: o clique no fundo não fechava, e o foco ia para a página — dali o Esc também não chegava. A
+  // paleta era uma `div` feita à mão; agora mora na janela do motor (a paleta de exemplo dele), que fecha pelos dois
+  // caminhos, prende o Tab dentro e devolve o foco ao botão. Sem o conserto, o primeiro `toHaveCount(0)` reprova.
+  test("a busca fecha clicando fora e com Esc, prende o Tab e devolve o foco ao botão", async ({page}) => {
+    await page.goto("/apps/catalog/getting-started.html");
+    await page.waitForLoadState("load");
+    await expect(page.locator("#site-search-root")).toBeAttached();
+    const botao = page.locator("[data-site-search]").first();
+    const busca = page.getByRole("dialog", {name: "Search the site"});
+    const vp = page.viewportSize()!;
+    // 1. Clique fora (no fundo, longe da caixa) fecha.
+    await botao.click();
+    await expect(busca).toBeVisible();
+    await page.mouse.click(vp.width - 8, vp.height - 8);
+    await expect(busca).toHaveCount(0);
+    // 2. Esc fecha, e o foco volta ao botão que abriu.
+    await botao.click();
+    await expect(busca).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(busca).toHaveCount(0);
+    await expect(botao).toBeFocused();
+    // 3. Clique DENTRO da caixa, fora do campo (a linha das teclas), e depois Esc: ainda fecha.
+    await botao.click();
+    await busca.locator(".command-shortcuts").click();
+    await page.keyboard.press("Escape");
+    await expect(busca).toHaveCount(0);
+    // 4. O Tab não sai da caixa para a página de trás (com a caixa aberta e o campo focado — antes disso o Tab
+    //    ainda é da página).
+    await botao.click();
+    await expect(busca.getByRole("combobox")).toBeFocused();
+    // O Tab passa por uma guarda invisível do motor, que devolve o foco para dentro no mesmo instante — por isso a
+    // espera. Com a caixa feita à mão, o foco ia de vez para a página, e a espera vencia.
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press("Tab");
+      await expect.poll(() => page.evaluate(() => !!document.activeElement?.closest(".command-palette")), {message: `Tab ${i + 1}`, timeout: 2000}).toBe(true);
+    }
+  });
+
+  // O Victor, 14/10/2026, comparando o Início com o da referência (as medidas dela foram lidas na página, a 1440):
+  //   1. os links na MESMA linha da logo, colados nela — o `Header` com `items` e `itemsJustify="start"`;
+  //   4. o texto com 18 de letra em 28 de linha, colado no título, e 16 entre as outras peças;
+  //   5. as abas da vitrine no canto, 8 para dentro da caixa.
+  // No site de antes: o topo tinha duas linhas (99), o texto 30,6 de linha, 20 de vão, e as abas no meio.
+  test("o Início: os links na linha da logo, o texto na medida da referência e as abas no canto", async ({page, browserName}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/index.html");
+    const m = await page.evaluate(() => {
+      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const topo = r(".site-top"), marca = r(".site-brand"), link = r(".site-top .topbar-nav .topbar-link");
+      const acoes = r(".site-top .topbar-actions"), h1 = r(".home-texto h1"), p = r(".home-texto p");
+      const selo = r(".home-selo"), botoes = r(".home-acoes");
+      const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16;
+      const cs = getComputedStyle(document.querySelector(".site-top")!);
+      return {altura: topo.height, alturaPadrao: em("--space-12") + em("--space-2"),
+        fundo: cs.backgroundColor, desfoque: cs.backdropFilter || (cs as unknown as Record<string, string>).webkitBackdropFilter,
+        vaoAcoes: parseFloat(getComputedStyle(document.querySelector(".site-top .topbar-actions")!).columnGap),
+        mesmaLinha: Math.abs((link.top + link.height / 2) - (marca.top + marca.height / 2)),
+        marcaAoLink: link.left - marca.right, vaoDaBarra: em("--space-4"),
+        sobra: document.documentElement.clientWidth - acoes.right, marcaEsq: marca.left,
+        linhaDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-texto p")!).lineHeight),
+        letraDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-texto p")!).fontSize),
+        tituloAoTexto: p.top - h1.bottom, seloAoTitulo: h1.top - selo.bottom, textoAosBotoes: botoes.top - p.bottom,
+        abas: r(".home-abas").left - r(".home-painel:not([hidden])").left, espaco2: em("--space-2")};
+    });
+    // 15/10/2026 (A): o topo da página inicial da referência — 56, o fundo transparente que embaça (16), 6 entre as ações.
+    expect(m.altura, "uma linha só, com os 56 da página inicial da referência").toBe(m.alturaPadrao);
+    // O fundo que embaça respeita quem pede MENOS TRANSPARÊNCIA ao sistema (o Windows com "Efeitos de transparência"
+    // desligado, medido nesta máquina em 15/10/2026): aí o fundo é cheio. O teste confere o que vale na máquina, e no
+    // Chromium força as duas preferências (o Playwright 1.61 não emula essa; o protocolo do navegador emula).
+    const transparente = /^(transparent|rgba\(0, 0, 0, 0\))$/;
+    const menos = await page.evaluate(() => matchMedia("(prefers-reduced-transparency: reduce)").matches);
+    if (menos) { expect(m.fundo).not.toMatch(transparente); expect(m.desfoque).toBe("none"); }
+    else { expect(m.fundo).toMatch(transparente); expect(m.desfoque).toBe("blur(16px)"); }
+    if (browserName === "chromium") {
+      const cdp = await page.context().newCDPSession(page);
+      const topo = () => page.locator(".site-top").evaluate((e) => [getComputedStyle(e).backgroundColor, getComputedStyle(e).backdropFilter]);
+      await cdp.send("Emulation.setEmulatedMedia", {features: [{name: "prefers-reduced-transparency", value: "no-preference"}]});
+      const [f1, d1] = await topo();
+      expect(f1).toMatch(transparente); expect(d1).toBe("blur(16px)");
+      await cdp.send("Emulation.setEmulatedMedia", {features: [{name: "prefers-reduced-transparency", value: "reduce"}]});
+      const [f2, d2] = await topo();
+      expect(f2).not.toMatch(transparente); expect(d2).toBe("none");
+      await cdp.send("Emulation.setEmulatedMedia", {features: []});
+    }
+    expect(m.vaoAcoes).toBe(6);
+    expect(m.mesmaLinha, "o primeiro link na linha da logo").toBeLessThan(1);
+    expect(m.marcaAoLink, "da logo ao 1º link, 32: o vão da barra e mais --space-4, como na referência").toBeCloseTo(m.vaoDaBarra * 2, 0);
+    expect(m.sobra, "as ações na outra ponta: a mesma sobra da logo, do outro lado").toBeCloseTo(m.marcaEsq, 0);
+    expect(m.letraDoTexto).toBe(18);
+    expect(m.linhaDoTexto, "18 em 28, como a referência").toBeCloseTo(28, 0);
+    expect(m.tituloAoTexto, "o título e o texto colados").toBeCloseTo(0, 0);
+    expect(m.seloAoTitulo).toBeCloseTo(16, 0);
+    expect(m.textoAosBotoes).toBeCloseTo(16, 0);
+    expect(m.abas, "as abas no canto, 8 para dentro").toBeCloseTo(m.espaco2, 0);
+    // O selo sem a linha em volta, como o da referência (o `Badge` `flat`).
+    await expect(page.locator(".home-selo .badge")).toHaveCSS("border-top-color", /rgba\(0, 0, 0, 0\)|transparent/);
+    // 15/10/2026 (o Victor: "iguale"): as letras da referência — o nome 16 em 600, sem a versão ao lado; o título com
+    // 48 de linha; a nota em 12, que é o link para o repositório. Antes: 18 em 700 com a versão, 53, e 14 sem link.
+    const l = await page.evaluate(() => {
+      const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
+      return {nome: [cs(".site-brand strong").fontSize, cs(".site-brand strong").fontWeight],
+        versao: document.querySelectorAll(".site-top .site-version").length,
+        titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight], nota: cs(".home-nota").fontSize,
+        link: document.querySelector(".home-nota")!.getAttribute("href")};
+    });
+    expect(l).toEqual({nome: ["16px", "600"], versao: 0, titulo: ["48px", "48px"], nota: "12px",
+      link: "https://github.com/victor1mor/aurea-uds"});
+    // E no monitor grande o topo fica no centro, como o da referência (no 24" do Victor ia para os cantos): o miolo
+    // tem a largura do `Container` `2xl`, com o respiro dele.
+    await page.setViewportSize({width: 1902, height: 1000});
+    const c = await page.evaluate(() => {
+      const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v));
+      return {logo: document.querySelector(".site-brand")!.getBoundingClientRect().left,
+        esperado: (document.documentElement.clientWidth - em("--breakpoint-2xl")) / 2 + em("--space-8") * 16};
+    });
+    expect(c.logo, "a logo no começo do miolo centrado, e não na borda").toBeCloseTo(c.esperado, 0);
+  });
+
+  // 15/10/2026 (o Victor: "analise cada milímetro"): no celular, as medidas da referência em 375 — o título 30/36, o
+  // texto 16/24, 8 do selo ao título e dos botões à nota, as abas da vitrine escondidas (só a primeira vitrine), e a barra
+  // numa linha só (o GitHub sai dela). E o logo do GitHub é o oficial, em branco no escuro e preto no claro.
+  test("o Início no celular tem as medidas da referência, e o logo do GitHub é o oficial", async ({page}) => {
+    await page.setViewportSize({width: 375, height: 812});
+    await page.goto("/apps/catalog/index.html");
+    const m = await page.evaluate(() => {
+      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
+      return {titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight],
+        texto: [cs(".home-texto p").fontSize, cs(".home-texto p").lineHeight],
+        seloAoTitulo: r(".home-texto h1").top - r(".home-selo").bottom, botoesANota: r(".home-nota").top - r(".home-acoes").bottom,
+        abas: r(".home-abas").height, topo: r(".site-top").height, alturaPadrao: ["--space-12", "--space-2"].reduce((t, v) => t + parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16, 0),
+        lado: document.documentElement.scrollWidth - document.documentElement.clientWidth};
+    });
+    expect(m.titulo).toEqual(["30px", "36px"]);
+    expect(m.texto).toEqual(["16px", "24px"]);
+    expect(m.seloAoTitulo).toBeCloseTo(8, 0);
+    expect(m.botoesANota).toBeCloseTo(8, 0);
+    expect(m.abas, "as abas da vitrine escondidas abaixo de 1024").toBe(0);
+    expect(m.topo, "a barra numa linha só").toBe(m.alturaPadrao);
+    expect(m.lado, "sem rolar de lado").toBe(0);
+    // O GitHub, que sai da barra no celular, está no menu (o `menuActions` do `Header`), como na referência.
+    await page.locator(".site-top .topbar-menu-toggle").click();
+    await expect(page.locator(".topbar-menu-panel .topbar-menu-actions a[aria-label='GitHub']")).toBeVisible();
+    await page.keyboard.press("Escape");
+    // O logo: o desenho do arquivo oficial, nas cores oficiais.
+    await page.setViewportSize({width: 1440, height: 900});
+    const tinta = () => page.locator(".topbar-actions a[aria-label='GitHub'] path").evaluate((p) => getComputedStyle(p).fill);
+    await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+    expect(await tinta()).toBe("rgb(255, 255, 255)");
+    await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
+    expect(await tinta()).toBe("rgb(0, 0, 0)");
+    await expect(page.locator(".topbar-actions a[aria-label='GitHub']")).toHaveAttribute("href", "https://github.com/victor1mor/aurea-uds");
+    await expect(page.locator(".home-nota svg path")).toHaveCount(1);
+  });
+
+  // O Victor, 14/10/2026: "crie um botão tema como da [referência]". O botão pequeno com o balde e "Theme" abre a janelinha
+  // com as amostras das MARCAS e o nome embaixo; escolher troca a marca da página, grava, e o botão mostra o nome dela.
+  test("o botão Theme troca a marca: abre as amostras com nome, grava a escolha, e volta para a Aurea", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/index.html");
+    await page.evaluate(() => localStorage.removeItem("aurea-brand"));
+    await page.reload();
+    await page.waitForLoadState("load");
+    const tema = page.getByRole("button", {name: "Design theme", exact: true});
+    await tema.click();
+    const grupo = page.getByRole("radiogroup", {name: "Design theme", exact: true});
+    await expect(grupo).toBeVisible();
+    await expect(grupo.locator(".color-swatch-name")).toHaveText(["Aurea", "Lory"]);
+    await expect(grupo.getByRole("radio", {name: "Aurea"})).toBeChecked();
+    await grupo.getByText("Lory").click();
+    await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
+    expect(await page.evaluate(() => localStorage.getItem("aurea-brand"))).toBe("lory");
+    await page.keyboard.press("Escape");
+    const tLory = page.getByRole("button", {name: "Design theme: Lory"});
+    await expect(tLory).toHaveText("Lory");
+    // A página nova abre com a marca gravada, e o botão já diz qual é.
+    await page.reload();
+    await page.waitForLoadState("load");
+    await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
+    await expect(page.getByRole("button", {name: "Design theme: Lory"})).toBeVisible();
+    await page.getByRole("button", {name: "Design theme: Lory"}).click();
+    await page.getByRole("radiogroup", {name: "Design theme", exact: true}).getByText("Aurea").click();
+    await expect(page.locator("html")).not.toHaveAttribute("data-brand", /.*/);
+    await page.evaluate(() => localStorage.removeItem("aurea-brand"));
+    await page.keyboard.press("Escape");
+    // A mesma caixa dos vizinhos (o Victor, 15/10/2026: "por que os ícones da direita estão tamanhos diferentes?"): os
+    // botões do topo todos com a mesma altura e com fundo. E no celular só o balde, no botão redondo — trocando ao
+    // estreitar a janela, sem recarregar.
+    const temaPadrao = page.locator("#site-theme-root button");
+    const caixas = await page.locator(".topbar-actions > a, .topbar-actions > button, #site-theme-root button").evaluateAll((bs) =>
+      bs.map((b) => [Math.round(b.getBoundingClientRect().height), getComputedStyle(b).backgroundColor]));
+    expect(new Set(caixas.map(([h]) => h)).size, `alturas: ${JSON.stringify(caixas)}`).toBe(1);
+    expect(caixas.every(([, f]) => !/rgba\(0, 0, 0, 0\)|transparent/.test(String(f))), "todos com fundo").toBe(true);
+    // E a letra do "Theme" é a da referência: 12, apagada (o `quiet` do `Button`).
+    await expect(temaPadrao).toHaveCSS("font-size", "12px");
+    const apagada = await page.evaluate(() => { const d = document.createElement("span"); d.style.color = "var(--muted-foreground)"; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; });
+    await expect(temaPadrao).toHaveCSS("color", apagada);
+    await page.setViewportSize({width: 600, height: 900});
+    await expect(temaPadrao).toHaveClass(/btn-icon/);
+    await expect(temaPadrao).toHaveAccessibleName("Design theme");
+    await page.setViewportSize({width: 1440, height: 900});
+    await expect(temaPadrao).toHaveText("Theme");
+  });
+
+  // 15/10/2026 (o Victor: "A, B, C, pode"): a chave de TRÊS posições do topo da referência — claro, escuro e sistema —, o
+  // `ThemeToggle mode="light-dark-system"`. "Sistema" segue o esquema do computador e muda JUNTO, sem recarregar; a escolha
+  // fica guardada. E o rodapé de uma linha (a `Section` `layout="inline"`), com os 44 da referência.
+  test("a chave de tema de três posições guarda a escolha, e Sistema segue o computador", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.emulateMedia({colorScheme: "light"});
+    await page.goto("/apps/catalog/index.html");
+    await page.evaluate(() => localStorage.removeItem("aurea-theme"));
+    await page.reload();
+    await page.waitForLoadState("load");
+    const chave = page.locator(".topbar-actions").getByRole("radiogroup", {name: "Theme", exact: true});
+    await expect(chave.getByRole("radio")).toHaveCount(3);
+    const caixa = await chave.boundingBox();
+    expect(Math.round(caixa!.height), "a cápsula de 34 da referência").toBe(34);
+    await chave.getByRole("radio", {name: "System"}).check();
+    expect(await page.evaluate(() => localStorage.getItem("aurea-theme"))).toBe("system");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.emulateMedia({colorScheme: "dark"});
+    await expect(page.locator("html"), "o computador mudou: o site muda junto").toHaveAttribute("data-theme", "dark");
+    await page.reload();
+    await page.waitForLoadState("load");
+    await expect(page.locator("html"), "a escolha volta ao abrir de novo").toHaveAttribute("data-theme", "dark");
+    await expect(page.locator(".topbar-actions").getByRole("radio", {name: "System"})).toBeChecked();
+    await page.locator(".topbar-actions").getByRole("radio", {name: "Light"}).check();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.emulateMedia({colorScheme: "dark"});
+    await expect(page.locator("html"), "escolhido Claro, o computador não manda mais").toHaveAttribute("data-theme", "light");
+    // 15/10/2026 (o Victor: "some o ícone quando clica"): a escolhida desenha a forma CHEIA, e o sprite da página só
+    // tinha a da lua — a página sai pronta com o escuro. Em cada uma das três, todo desenho da chave existe na página.
+    for (const nome of ["Light", "Dark", "System"]) {
+      await page.locator(".topbar-actions").getByRole("radio", {name: nome}).check();
+      const faltando = await page.evaluate(() => [...document.querySelectorAll(".topbar-actions .theme-switch-option use")]
+        .map((u) => u.getAttribute("href")!).filter((h) => !document.getElementById(h.slice(1))));
+      expect(faltando, `o desenho da escolhida (${nome})`).toEqual([]);
+      // PINTADA (o Victor, 15/10/2026: "o sol deve ficar amarelo… a lua quero um preto absoluto"): a escolhida é branca nos
+      // dois temas, o sol no amarelo da marca, puro (a "B" dele; o de ícone do claro saiu marrom), a lua e o monitor no
+      // preto absoluto.
+      const pintura = await page.evaluate(() => {
+        const op = [...document.querySelectorAll(".topbar-actions .theme-switch-option")].find((o) => o.querySelector(":checked"))!;
+        const raiz = getComputedStyle(document.documentElement);
+        const cor = (v: string) => { const t = document.createElement("i"); t.style.color = raiz.getPropertyValue(v); document.body.append(t);
+          const c = getComputedStyle(t).color; t.remove(); return c; };
+        return {fundo: getComputedStyle(op).backgroundColor, icone: getComputedStyle(op.querySelector(".icon")!).color,
+          branco: cor("--white"), preto: cor("--black"), amarelo: cor("--brand-yellow")};
+      });
+      expect(pintura.fundo, `a escolhida é branca (${nome})`).toBe(pintura.branco);
+      expect(pintura.icone, `o ícone da escolhida (${nome})`).toBe(nome === "Light" ? pintura.amarelo : pintura.preto);
+    }
+    await page.evaluate(() => localStorage.removeItem("aurea-theme"));
+    // O rodapé: uma linha centrada, 44 de altura (12 + 20 + 12), a frase, os dois links e o GitHub.
+    const rodape = page.locator("footer.section-footer-inline");
+    await expect(rodape).toContainText("Open source under Apache-2.0.");
+    await expect(rodape.getByRole("link")).toHaveText(["Changelog", "License", ""]);
+    await expect(rodape.getByRole("link", {name: "GitHub"})).toHaveAttribute("href", "https://github.com/victor1mor/aurea-uds");
+    expect(Math.round((await rodape.boundingBox())!.height)).toBe(44);
+  });
+
+  // 15/10/2026 — o Victor: "a caixa do tema está sendo cortada". Medido: de 768 a 949 o topo do Início quebrava em duas
+  // linhas e passava da borda. Como a referência entre 768 e 1023: uma linha, a chave de tema e o GitHub dentro da
+  // setinha (a janelinha cabe na tela), e o "Theme" só de ícone, do tamanho dos vizinhos. Provado contra o defeito: na
+  // versão anterior, 86 de altura em 800.
+  // 15/10/2026 — o Victor: "a caixa dos temas continua cortando". Medido: a borda de cima da escolha de tema ficava por
+  // baixo do topo fixo (camada 20), porque a camada das janelinhas estava na caixa de dentro, estática, e não no
+  // posicionador do motor. Provado contra o defeito: antes, o ponto de cima da caixa era do topo da página.
+  test("a escolha de tema abre por cima do topo, com a borda de cima inteira", async ({page}) => {
+    await page.setViewportSize({width: 1280, height: 800});
+    await page.goto("/apps/catalog/index.html");
+    await page.getByRole("button", {name: /Design theme/}).click();
+    const caixa = page.locator(".popover:has(.color-swatch)");
+    await expect(caixa).toBeVisible();
+    const cobre = await caixa.evaluate((p) => {
+      const r = p.getBoundingClientRect();
+      return [0.25, 0.5, 0.75].map((f) => !!document.elementFromPoint(r.left + r.width * f, r.top + 1)?.closest(".popover"));
+    });
+    expect(cobre, "a borda de cima é da caixa, de ponta a ponta").toEqual([true, true, true]);
+  });
+
+  test("o topo do Início cabe numa linha de 768 a 1023, com a setinha da referência", async ({page}) => {
+    await page.goto("/apps/catalog/index.html");
+    for (const largura of [768, 850, 1023]) {
+      await page.setViewportSize({width: largura, height: 800});
+      // a troca do "Theme" para só o ícone é do vivo, no aviso de mudança de largura: espera ela (o WebKit mede antes)
+      await expect.poll(() => page.locator("#site-theme-root .btn").evaluate((b) => b.getBoundingClientRect().width)).toBe(32);
+      const m = await page.evaluate(() => {
+        const topo = document.querySelector(".site-top")!;
+        const visiveis = [...topo.querySelectorAll(".topbar-actions > *, .topbar-nav")].filter((e) => e.getBoundingClientRect().width > 0);
+        const nav = topo.querySelector(".topbar-nav")!.getBoundingClientRect(), acoes = topo.querySelector(".topbar-actions")!.getBoundingClientRect();
+        return {altura: topo.getBoundingClientRect().height, tela: document.documentElement.clientWidth,
+          direita: Math.max(...visiveis.map((e) => e.getBoundingClientRect().right)), folga: acoes.left - nav.right,
+          botoes: [...topo.querySelectorAll(".topbar-actions .btn")].filter((e) => e.getBoundingClientRect().width > 0)
+            .map((e) => Math.round(e.getBoundingClientRect().height))};
+      });
+      expect(m.altura, `${largura}: uma linha`).toBe(56);
+      expect(m.direita, `${largura}: nada passa da borda`).toBeLessThanOrEqual(m.tela);
+      expect(m.folga, `${largura}: folga para a barra de rolagem do Windows`).toBeGreaterThanOrEqual(16);
+      expect(new Set(m.botoes), `${largura}: os botões do mesmo tamanho`).toEqual(new Set([32]));
+    }
+    await page.setViewportSize({width: 850, height: 800});
+    await page.getByRole("button", {name: "More"}).click();
+    const janela = page.locator(".popover:has(.theme-switch)");
+    await expect(janela.getByRole("radiogroup", {name: "Theme", exact: true})).toBeVisible();
+    await expect(janela.getByRole("link", {name: "GitHub"})).toBeVisible();
+    const caixa = (await janela.boundingBox())!;
+    expect(caixa.x + caixa.width).toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
+  });
+
+  // 15/10/2026 — o Victor, com a busca da Aurea ao lado do campo da referência: "de um lado é curto (correto), do outro
+  // é largo". Medido: borda 13, o glifo, e o texto a 24 (28 no lg) — o campo somava o recuo dele aos 12 do adorno. A
+  // referência: 12, o glifo, 12 (o campo com prefixo) e 12, a lupa, 8 (a busca); no fim, texto a 12 da borda.
+  // Provado contra o defeito: na peça velha, o de dentro é 24.
+  test("o campo com ícone: 12, o ícone, 12; a busca, 12, a lupa, 8; o texto do fim, 12 da borda", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    const medir = () => page.evaluate(() => [...document.querySelectorAll(".input-group")].flatMap((g) => {
+      const gr = g.getBoundingClientRect();
+      if (!gr.width) return [];
+      const borda = parseFloat(getComputedStyle(g).borderLeftWidth);
+      const inp = g.querySelector<HTMLInputElement>(":scope > .input")!;
+      const cs = getComputedStyle(inp), ir = inp.getBoundingClientRect();
+      const texto = ir.left + parseFloat(cs.borderLeftWidth) + parseFloat(cs.paddingLeft);
+      const icone = g.querySelector(":scope > .input-group-addon-start svg")?.getBoundingClientRect();
+      const fim = g.querySelector(":scope > .input-group-addon-end");
+      let foraFim: number | null = null;
+      if (fim && !fim.querySelector(".btn, .kbd")) {
+        const rg = document.createRange(); rg.selectNodeContents(fim);
+        foraFim = gr.right - borda - rg.getBoundingClientRect().right;
+      }
+      return [{busca: g.classList.contains("search-field"), fora: icone ? icone.left - gr.left - borda : null,
+        dentro: icone ? texto - icone.right : null, foraFim}];
+    }));
+    await page.goto("/apps/catalog/searchfield.html");
+    const buscas = (await medir()).filter((m) => m.busca && m.fora !== null);
+    expect(buscas.length).toBeGreaterThan(0);
+    for (const m of buscas) { expect(m.fora).toBeCloseTo(12, 0); expect(m.dentro, "a busca: a lupa a 8 do texto").toBeCloseTo(8, 0); }
+    await page.goto("/apps/catalog/inputgroupaddon.html");
+    const comIcone = (await medir()).filter((m) => !m.busca && m.fora !== null);
+    expect(comIcone.length).toBeGreaterThan(0);
+    for (const m of comIcone) { expect(m.fora).toBeCloseTo(12, 0); expect(m.dentro, "o ícone a 12 do texto").toBeCloseTo(12, 0); }
+    await page.goto("/apps/catalog/inputgroup.html");
+    const comFim = (await medir()).filter((m) => m.foraFim !== null);
+    expect(comFim.length).toBeGreaterThan(0);
+    for (const m of comFim) expect(m.foraFim, "o texto do fim a 12 da borda (era 4)").toBeCloseTo(12, 0);
+  });
+
+  // 15/10/2026 (B, aprovada): a linha entre as seções, como em todos os exemplos de seções da referência. É BORDA (fica
+  // no alto contraste), de 1, 8 para dentro de cada lado. Provado contra o defeito: na 0.32.0, nenhuma linha.
+  test("a ListBox com seções tem a linha entre elas, de borda, 8 para dentro", async ({page}) => {
+    await page.goto("/apps/catalog/listbox.html");
+    const linhas = await page.evaluate(() => [...document.querySelectorAll(".list-box-section + .list-box-section")].map((s) => {
+      const b = getComputedStyle(s, "::before");
+      return {estilo: b.borderTopStyle, largura: b.borderTopWidth, recuo: [b.marginLeft, b.marginRight]};
+    }));
+    expect(linhas.length).toBeGreaterThan(0);
+    for (const l of linhas) expect(l).toEqual({estilo: "solid", largura: "1px", recuo: ["8px", "8px"]});
+  });
+
+  // 15/10/2026: o título e a descrição do `Card.Header` colados (uma regra antiga os separava em 16), e 12 até o conteúdo.
+  test("o Card.Header: título e descrição colados, e 12 até o conteúdo", async ({page}) => {
+    await page.goto("/apps/catalog/card.html");
+    const m = await page.locator(".card:has(> .card-header .card-description)").first().evaluate((c) => {
+      const r = (s: string) => c.querySelector(s)!.getBoundingClientRect();
+      return {colados: r(".card-description").top - r(".card-title").bottom, ateConteudo: r(".card-content").top - r(".card-header").bottom};
+    });
+    expect(m.colados).toBeCloseTo(0, 0);
+    expect(m.ateConteudo).toBeCloseTo(12, 0);
+  });
+
+  // 15/10/2026 (A): a chave no fim, como o "Allow notifications" da referência.
+  test("o Switch com indicatorPlacement=end: o nome à esquerda, a chave à direita", async ({page}) => {
+    await page.goto("/apps/catalog/switch.html");
+    const m = await page.locator(".switch-end").first().evaluate((s) => ({
+      texto: s.querySelector(":scope > span:not(.switch-track)")!.getBoundingClientRect().right,
+      chave: s.querySelector(".switch-track")!.getBoundingClientRect().left}));
+    expect(m.chave).toBeGreaterThan(m.texto);
+  });
+
+  // 15/10/2026: o "Ctrl" e o "K" separados, como a busca da referência, e o leitor ouve a combinação.
+  test("a busca do topo: uma caixinha por tecla, e o atalho anunciado como Control+K", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/button.html");
+    const busca = page.locator(".site-search");
+    await expect(busca.locator("kbd")).toHaveText(["Ctrl", "K"]);
+    await expect(busca).toHaveAttribute("aria-keyshortcuts", "Control+K");
+    // E na PONTA do botão (o Victor, 15/10/2026, com a seta até a borda direita): a última tecla a um recuo da borda,
+    // longe do texto. Provado contra o defeito: com as teclas coladas no "Search", sobravam ~230 até a borda.
+    const m = await busca.evaluate((b) => {
+      const r = b.getBoundingClientRect(), k = [...b.querySelectorAll("kbd")].at(-1)!.getBoundingClientRect();
+      return {sobra: r.right - k.right, recuo: parseFloat(getComputedStyle(b).paddingRight) + parseFloat(getComputedStyle(b).borderRightWidth)};
+    });
+    expect(m.sobra, "a última tecla encosta no recuo da borda direita").toBeCloseTo(m.recuo, 0);
+  });
+
+  // 15/10/2026 (C): a vitrine "Components" do Início, a da referência — três colunas a 32, peças a 40, campos de 256; no
+  // celular uma coluna, a do meio primeiro; VIVA (a lista abre e escolhe; a aba troca).
+  test("a vitrine Components: as colunas da referência, viva, e uma coluna no celular", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/index.html");
+    await expect(page.locator(".home-abas [role=tab]").first()).toHaveText("Components");
+    const m = await page.evaluate(() => {
+      const cols = [...document.querySelectorAll(".vit-col")].map((c) => c.getBoundingClientRect());
+      const a = [...document.querySelector(".vit-col-a")!.children].map((e) => e.getBoundingClientRect());
+      return {vaos: [cols[1].left - cols[0].right, cols[2].left - cols[1].right],
+        pecas: a.slice(1).map((r, i) => r.top - a[i].bottom),
+        campos: [...document.querySelectorAll(".vit-256")].map((e) => e.getBoundingClientRect().width)};
+    });
+    for (const v of m.vaos) expect(v).toBeCloseTo(32, 0);
+    for (const v of m.pecas) expect(v).toBeCloseTo(40, 0);
+    for (const w of m.campos) expect(w).toBeCloseTo(256, 0);
+    // viva: a lista de estados abre e escolhe; o período troca
+    await page.locator(".vit-col-a .select-trigger").click();
+    await page.getByRole("option", {name: "Texas"}).click();
+    await expect(page.locator(".vit-col-a .select-trigger")).toContainText("Texas");
+    await page.locator(".vit-col-a .segmented").first().getByRole("radio", {name: "7D"}).click();
+    await expect(page.locator(".vit-col-a .segmented").first().getByRole("radio", {name: "7D"})).toHaveClass(/\bactive\b/);
+    await page.setViewportSize({width: 375, height: 812});
+    const ordem = await page.evaluate(() => [...document.querySelectorAll(".vit-col")]
+      .map((c) => ({classe: [...c.classList].find((x) => /^vit-col-/.test(x)), topo: c.getBoundingClientRect().top}))
+      .sort((x, y) => x.topo - y.topo).map((x) => x.classe));
+    expect(ordem).toEqual(["vit-col-b", "vit-col-a", "vit-col-c"]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
   });
 
   test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {

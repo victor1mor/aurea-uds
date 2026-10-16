@@ -166,10 +166,14 @@ export declare function CommandPalette({ open, onClose, items, placeholder, labe
     label?: string;
     /** 0.32.0 (DOC-07): a linha que ensina as teclas, embaixo — ↑ ↓ mover, Enter abrir, Esc fechar. */
     shortcuts?: boolean;
-}): React.JSX.Element | null;
-export declare function CommandPaletteShell({ open, query, onQueryChange, children }: {
+}): React.JSX.Element;
+export declare function CommandPaletteShell({ open, query, onQueryChange, onClose, label, children }: {
     open: boolean;
     query: string;
     onQueryChange: (v: string) => void;
+    /** Quem fecha: a janela avisa pelo Esc e pelo clique fora. */
+    onClose?: () => void;
+    /** O nome da janela (o padrão é o da paleta, "Command palette"). */
+    label?: string;
     children?: ReactNode;
-}): React.JSX.Element | null;
+}): React.JSX.Element;

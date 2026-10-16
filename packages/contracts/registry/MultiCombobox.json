@@ -1,6 +1,6 @@
 {
   "name": "MultiCombobox",
-  "category": "Inputs",
+  "category": "Pickers",
   "layer": "Composite",
   "maturity": "Stable",
   "summary": "Combobox that accepts multiple selected values.",

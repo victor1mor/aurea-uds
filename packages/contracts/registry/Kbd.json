@@ -1,6 +1,6 @@
 {
   "name": "Kbd",
-  "category": "Data Display",
+  "category": "Typography",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "A keyboard key or shortcut, shown as the user would press it. Renders the <kbd> element.",

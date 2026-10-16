@@ -106,6 +106,29 @@ describe("GAR-01 · o cabeçalho de site", () => {
     const painel = container.querySelector(".topbar-menu-panel a")!.outerHTML;
     expect(barra).toBe(painel);
   });
+  // 14/10/2026 · `itemsJustify="start"`: os links colados na marca, como a página inicial da referência. O padrão
+  // ("end") não muda a marcação; a posição na tela se mede no `catalog-sweep.spec.ts` (o topo do Início).
+  test("`itemsJustify=\"start\"` marca a barra; o padrão e a barra sem links não", () => {
+    expect(wrap(<Header items={ITENS} itemsJustify="start" />).container.querySelector("header")).toHaveClass("topbar-items-start");
+    expect(wrap(<Header items={ITENS} />).container.querySelector("header")!.className).toBe("topbar topbar-floating topbar-site");
+    expect(wrap(<Header itemsJustify="start">x</Header>).container.querySelector("header")!.className).toBe("topbar topbar-floating");
+  });
+  // 15/10/2026 · o topo da página inicial da referência: `size="sm"` (56), `blurred` (o fundo que embaça, só na `flush`)
+  // e `menuActions` (o que só o menu do celular leva). O padrão não muda a marcação; a medida é do `catalog-sweep.spec.ts`.
+  test("`size=\"sm\"` e `blurred` marcam a barra; `blurred` só vale na `flush`", () => {
+    const h = (ui: ReactElement) => wrap(ui).container.querySelector("header")!;
+    expect(h(<Header variant="flush" items={ITENS} size="sm" blurred />)).toHaveClass("topbar-sm", "topbar-blurred");
+    expect(h(<Header items={ITENS} blurred />)).not.toHaveClass("topbar-blurred");
+    expect(h(<Header variant="flush" items={ITENS} />).className).toBe("topbar topbar-flush topbar-site");
+  });
+  test("`menuActions` entra no painel do celular, depois dos links, e não na barra", () => {
+    const {container} = wrap(<Header items={ITENS} actions={<button type="button">Busca</button>} menuActions={<a href="/gh">GitHub</a>} />);
+    const painel = container.querySelector(".topbar-menu-panel")!;
+    expect(painel.querySelector(".topbar-menu-actions a")!.textContent).toBe("GitHub");
+    expect(painel.lastElementChild).toHaveClass("topbar-menu-actions");
+    expect(container.querySelector(".topbar-actions")!.textContent).toBe("Busca");
+    expect(wrap(<Header items={ITENS} />).container.querySelector(".topbar-menu-actions")).toBeNull();
+  });
 });
 
 describe("GAR-06 · o rodapé de site (Section variant=\"footer\")", () => {
@@ -139,5 +162,18 @@ describe("GAR-06 · o rodapé de site (Section variant=\"footer\")", () => {
     const {container} = wrap(<Section variant="footer" links={COLUNAS} />);
     expect(container.querySelector("nav")!.getAttribute("aria-label")).toBe("Footer");
     expect(container.querySelector("footer > div")!.className).toBe("container");
+  });
+  // 15/10/2026 · `layout="inline"`: o rodapé de UMA linha da página inicial da referência — a frase legal, os links sem os
+  // títulos das colunas, e o que vier dentro. A marca não entra. O padrão (`columns`) não muda.
+  test("`layout=\"inline\"`: uma linha com a frase, os links sem título e os filhos; sem a marca", () => {
+    const {container} = wrap(<Section variant="footer" layout="inline" brand="Marca" links={COLUNAS} legal="© 2026 X"><a href="/gh">GitHub</a></Section>);
+    const rodape = container.querySelector("footer")!;
+    expect(rodape).toHaveClass("section-footer", "section-footer-inline");
+    expect(rodape.querySelector(".section-footer-line > p")!.textContent).toBe("© 2026 X");
+    expect([...rodape.querySelectorAll("nav a")].map((a) => a.textContent)).toEqual(["Preços", "Sobre", "Vagas"]);
+    expect(rodape.querySelector("h2")).toBeNull();
+    expect(rodape.textContent).not.toContain("Marca");
+    expect(rodape.querySelector(".section-footer-line > a")!.textContent).toBe("GitHub");
+    expect(wrap(<Section variant="footer" links={COLUNAS} />).container.querySelector(".section-footer-inline")).toBeNull();
   });
 });

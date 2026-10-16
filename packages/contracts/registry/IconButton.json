@@ -1,6 +1,6 @@
 {
   "name": "IconButton",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Icon-only button with a required accessible label.",
@@ -23,7 +23,8 @@
     "primary-ghost",
     "primary-outline",
     "secondary",
-    "tertiary"
+    "tertiary",
+    "danger-soft"
   ],
   "sizes": [
     "lg",
@@ -41,6 +42,7 @@
       "link",
       "nav",
       "outline",
+      "soft",
       "solid"
     ],
     "tone": [
@@ -127,19 +129,19 @@
     },
     {
       "name": "icon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
-      "description": "Glyph, from the contract's allowlist."
+      "description": "Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon and the native IconButton take."
     },
     {
       "name": "variant",
-      "type": "ButtonVariant",
+      "type": "ButtonVariant | danger-soft",
       "default": "ghost",
       "description": "Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
-      "type": "solid | outline | ghost | link | nav",
+      "type": "solid | outline | ghost | link | nav | soft",
       "default": "ghost",
       "description": "Inherited from Button. How much weight the box carries; the default here is ghost."
     },
@@ -169,21 +171,21 @@
     },
     {
       "name": "leadingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
       "description": "A second glyph before the main one. Rare on an icon button, and it is here because the type is shared with Button."
     },
     {
       "name": "trailingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
       "description": "A glyph after the main one — a chevron on a button that opens a menu, for instance."
     },
     {
       "name": "kbd",
-      "type": "string",
+      "type": "string | string[]",
       "default": "—",
-      "description": "Shows the shortcut inside the button AND announces it with aria-keyshortcuts. Showing it without announcing would be decoration."
+      "description": "Shows the shortcut inside the button AND announces it with aria-keyshortcuts. Showing it without announcing would be decoration. A list ([\"Ctrl\", \"K\"]) shows one key cap per key and announces the combination (Control+K)."
     },
     {
       "name": "fullWidth",
@@ -232,6 +234,12 @@
       "type": "{ url?: string; title?: string; text?: string }",
       "default": "—",
       "description": "The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows \"Link copied\" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet."
+    },
+    {
+      "name": "quiet",
+      "type": "boolean",
+      "default": "false",
+      "description": "Less weight: muted text one step smaller — the Button's quiet."
     }
   ]
 }

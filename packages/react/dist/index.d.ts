@@ -1,4 +1,4 @@
-export { cx, defaultStrings, ptBR, defaultSpriteUrl, gridStateToParams, gridStateFromParams, screenStateToParams, screenStateFromParams, universalStates, stateSeverity, type AureaStrings, type AureaTheme, type AureaDensity, type GridState, type ScreenState, type UniversalState } from "./pure.js";
+export { cx, defaultStrings, ptBR, defaultSpriteUrl, gridStateToParams, gridStateFromParams, screenStateToParams, screenStateFromParams, universalStates, stateSeverity, type AureaStrings, type AureaTheme, type AureaThemePreference, type AureaDensity, type GridState, type ScreenState, type UniversalState } from "./pure.js";
 export { useAureaStrings, useSpriteUrl, useTheme, useDensity } from "./internal.js";
 export { type Responsive, type Breakpoint, type ContainerBreakpoint, type Orientation, ESCALA, ESCALA_CONTAINER } from "./pure.js";
 export { ContainerScope, useValorResponsivo } from "./responsivo-runtime.js";

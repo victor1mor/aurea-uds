@@ -1,6 +1,6 @@
 {
   "name": "ListBox",
-  "category": "Inputs",
+  "category": "Collections",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "A standalone list of options with sections, descriptions and icons — choose none, one or many, or use it as a list of actions.",
@@ -81,7 +81,7 @@
       "name": "items",
       "type": "(ListBoxItem | ListBoxSection)[]",
       "default": "—",
-      "description": "Options ({id, label, description?, icon?, disabled?, danger?, textValue?}) and sections ({title, items})."
+      "description": "Options ({id, label, description?, icon?, disabled?, danger?, textValue?, kbd?}) and sections ({title, items}). kbd shows the item's shortcut at the end of the row, as the reference — display only; the app binds the key."
     },
     {
       "name": "selectionMode",

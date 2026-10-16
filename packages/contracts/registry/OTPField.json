@@ -1,6 +1,6 @@
 {
   "name": "OTPField",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "One box per character, for a verification code the user types or pastes.",
@@ -9,7 +9,10 @@
     "web": "stable",
     "native": "planned"
   },
-  "variants": [],
+  "variants": [
+    "primary",
+    "secondary"
+  ],
   "sizes": [],
   "states": [
     "default",
@@ -78,6 +81,18 @@
       "type": "boolean",
       "default": "false",
       "description": "Hides the characters, the way a password does."
+    },
+    {
+      "name": "groupSize",
+      "type": "number",
+      "default": "—",
+      "description": "The dash between groups: one every groupSize boxes (3 for a 6-digit code), as the reference's showcase. Drawing only — the screen reader goes box by box."
+    },
+    {
+      "name": "variant",
+      "type": "\"primary\" | \"secondary\"",
+      "default": "\"primary\"",
+      "description": "secondary gives the boxes the neutral background of the secondary Input, for a field inside a card."
     },
     {
       "name": "label",

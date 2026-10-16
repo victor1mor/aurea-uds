@@ -170,6 +170,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.29.0` | Lote N: `Card variant="contrast"` (o tema escuro dentro do cartão) e `Card accent` (o traço de 4 no topo, na cor cheia), web e nativo; a marca chega a um pedaço com tema próprio — [ADR-0063](decisions/0063-o-cartao-contraste-e-o-traco-de-cor.md), pedido #63. **Publicada em 10/10/2026** (entre 13:05 e 13:10, Brasília), pelo terminal do Victor |
 | `0.30.0` | A rodada 1 do mapa de rede: o `DependencyGraph` de cima para baixo, em camadas pelo `elkjs` (opcional), com ícone, selos, portas, a linha que diz o que é sem cor, enlaces juntos, minimapa, ir até, caminho, setas e exportar `.drawio`/PNG/SVG; o `Icon` da web aceita o desenho do app — [ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md), pedido #64. **Publicada em 10/10/2026** (por volta das 15:38, Brasília), pelo terminal do Victor |
 | `0.31.0` | A rodada 2 do mapa de rede: o modo de arrumar (`editable`), desfazer, as rotas do `elkjs` e o desvio (`@tisoap/react-flow-smart-edge`, opcional), rótulos que somem, contêiner que fecha, árvore e círculo, `visibleOnly` e `layoutWorker` — [ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md), pedido #65. **Publicada em 10/10/2026** (entre 20:25 e 20:29, Brasília), pelo terminal do Victor |
+| `0.32.0` | O lote único — a peça é a da referência, com a cara da Aurea: 12 componentes novos (`CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`, `DatePicker` na web, `ColorArea`, `ColorField`, `ColorPicker`), o nativo na escala de toque, o mapa de rede (MNT-21 a 26) e o site no molde da documentação da referência — [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md) a [ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), pedido #66. **Publicada em 14/10/2026** (entre 17:56 e 18:07, Brasília, medido no npm), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -444,7 +445,25 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    ninguém tinha visto — o foco de duas linhas e a cor que some no alto contraste nas amostras, o Tab que
    descia e voltava no cabeçalho do site, o título quebrado no meio da palavra no celular, o `Kbd` de duas
    alturas e as peças de cor fora das travas de inválido e de máscara. A suíte inteira roda ANTES de pedir o
-   "pode", sempre; e mais de uma vez no lote, não só no fim.
+   "pode", sempre; e mais de uma vez no lote, não só no fim. **Publicada em 14/10/2026** (entre 17:56 e 18:07,
+   Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #66.
+
+29. **`0.33.0`, o lote R, feito em 14 e 15/10/2026** na branch `claude/lote-r` — a página inicial contra a da
+   referência, *"cada milímetro"* (o Victor, 15/10/2026), e *"A, B, C, pode"*: as diferenças na peça (o topo de 56 que
+   embaça, a chave de tema de três posições e a preferência `"system"`, o rodapé de uma linha, o selo sem linha, o
+   `quiet`), as peças que a vitrine dela usa (o `RadioGroup` na web, `description`/`labelHidden`, o tracinho do
+   `OTPField`, o botão suave, as partes do `Card`, o `Alert` com botão, o atalho na `ListBox`, o `Avatar` colorido) e a
+   aba "Components" da vitrine, viva, só com peças da Aurea; depois, o espaço do ícone do campo (24 → 12, a busca 8),
+   o "Ctrl K" separado, a linha entre as seções, a `CommandPaletteShell` que fecha e a camada das janelinhas no
+   posicionador — [ADR-0070](decisions/0070-os-grupos-sao-os-da-referencia.md) e
+   [ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md). Cada passo na bancada antes do git; o
+   sol da chave no amarelo de ícone (*"A, pode"*). ⚠ **As regras novas:** a camada (`z-index`) de janelinha mora no
+   POSICIONADOR do motor (a classe `positioner`) — na caixa de dentro, estática, ela não vale; e o sprite do site mede
+   também os estados que só a parte viva desenha (a chave de tema nas três escolhas). ⚠ **A lição:** o Victor achou
+   três defeitos que a medição do dia não pegava — o texto do campo a 24 do ícone (com 13 do outro lado, e o
+   comentário da regra prometendo 12), a chave vazia ao clicar e a caixa cortada pelo topo fixo; cada um ganhou o teste
+   que reprova sem o conserto. E o `TaskStop` não mata os filhos de uma suíte em segundo plano: antes de rodar outra,
+   conferir que a anterior morreu.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

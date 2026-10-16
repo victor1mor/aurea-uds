@@ -52,8 +52,12 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
   h(A.Timeline, {key: "t", items: [
     {title: "Created", description: "Draft opened", time: "10:02"},  // com descrição
     {title: "Reviewed", time: "11:40"}]}),                           // sem — e tem de medir igual
-  h(A.CommandPaletteShell, {key: "c", open: true, query: "", onQueryChange: () => {}},
-    h("div", {className: "menu"}, h("button", {className: "menu-item", type: "button"}, "Go to Button"))),
+  // A `CommandPaletteShell` vive na janela do motor desde 15/10/2026 — num PORTAL, que o `renderToStaticMarkup` não
+  // monta. Entra como a marcação que ela emite (a moldura e a caixa), como o Dialog e o Drawer mais abaixo.
+  h("div", {key: "c", className: "command-overlay"},
+    h("div", {className: "command-palette", role: "dialog", "aria-label": "Command palette"},
+      h(A.SearchField, {"aria-label": "Search", placeholder: "Search"}),
+      h("div", {className: "menu"}, h("button", {className: "menu-item", type: "button"}, "Go to Button")))),
   // ── Lote 1 do BUILDING.md ────────────────────────────────────────────────────────────
   h(A.Toggle, {key: "t1", icon: "heart", label: "Favourite", defaultPressed: true}),
   h(A.Toggle, {key: "t2", icon: "push-pin", label: "Pin"}),
@@ -1465,7 +1469,8 @@ for (const theme of ["dark", "light"] as const) {
                       bolaH: parseFloat(getComputedStyle(document.querySelector(".switch-track")!, "::after").height)},
             // 0.32.0, os campos da referência
             campo: {rotuloPeso: est(".field .label").fontWeight, dicaPeso: est(".hint").fontWeight,
-                    inputLados: parseFloat(est(".input").paddingLeft),
+                    // um campo SOLTO: dentro de um grupo com adorno na frente, o recuo do início é do adorno (15/10/2026)
+                    inputLados: parseFloat(est(".input:not(.input-group > .input)").paddingLeft),
                     textareaLados: parseFloat(est(".textarea").paddingLeft), textareaTopo: parseFloat(est(".textarea").paddingTop)},
             slider: {trilhoH: caixa(".slider-track").height, alcaW: caixa(".slider-thumb").width, alcaH: caixa(".slider-thumb").height,
                      miolo: getComputedStyle(document.querySelector(".slider-thumb")!, "::after").width,

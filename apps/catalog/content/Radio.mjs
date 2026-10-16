@@ -34,6 +34,17 @@ export default {
         h(Radio, {name: "billing", label: "Lifetime"})),
     },
     {
+      title: "With a description",
+      description: "The muted line under each name, as the Checkbox has. For a named group with an error, use RadioGroup.",
+      code: [
+        '<Radio name="plan" label="Basic" description="For one person" defaultChecked />',
+        '<Radio name="plan" label="Pro" description="For a small team" />',
+      ].join("\n"),
+      render: () => h("div", {style: stack},
+        h(Radio, {name: "plan", label: "Basic", description: "For one person", defaultChecked: true}),
+        h(Radio, {name: "plan", label: "Pro", description: "For a small team"})),
+    },
+    {
       title: "With a disabled option",
       description: "The unavailable choice keeps its place, so the list never reorders under the arrows.",
       code: [

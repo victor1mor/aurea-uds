@@ -43,6 +43,15 @@ export default {
           h(Badge, {key: v, variant: v, emphasis: "solid"}, v))),
     },
     {
+      title: "Flat",
+      description: "The soft tone without the line around it — the reference's release badge at the top of this site.",
+      code: `<Badge tone="primary" emphasis="flat" leading={<Icon name="rocket" />}>What's new</Badge>
+<Badge tone="success" emphasis="flat">Ready</Badge>`,
+      render: () => h("div", {style: row},
+        h(Badge, {tone: "primary", emphasis: "flat", leading: h(Icon, {name: "rocket"})}, "What's new"),
+        h(Badge, {tone: "success", emphasis: "flat"}, "Ready")),
+    },
+    {
       title: "Sizes, and what goes inside",
       description: "A status dot, a round picture, or a glyph before and after the text.",
       code: `<Badge size="sm" dot variant="success">Online</Badge>

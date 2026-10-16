@@ -62,5 +62,25 @@ export default {
         {id: "share", label: "Share", icon: "share-network"},
         {id: "delete", label: "Delete file", icon: "trash", danger: true}]})),
     },
+    {
+      title: "Sections, descriptions and shortcuts",
+      description: "Each item with a line under its name and the key that fires it at the end, and a line between the "
+        + "sections, as in every sectioned list of the reference.",
+      code: [
+        '<ListBox label="File actions" selectionMode="none" items={[',
+        '  {title: "Actions", items: [',
+        '    {id: "new", label: "New file", description: "Create a new file", icon: "plus-square", kbd: "⌘N"},',
+        '    {id: "edit", label: "Edit file", description: "Make changes", icon: "pencil-simple", kbd: "⌘E"}]},',
+        '  {title: "Danger zone", items: [',
+        '    {id: "delete", label: "Delete file", description: "Move to trash", icon: "trash", kbd: "⌘⇧D", danger: true}]},',
+        ']} />',
+      ].join("\n"),
+      render: () => h("div", {style: box}, h(ListBox, {label: "File actions", selectionMode: "none", items: [
+        {title: "Actions", items: [
+          {id: "new", label: "New file", description: "Create a new file", icon: "plus-square", kbd: "⌘N"},
+          {id: "edit", label: "Edit file", description: "Make changes", icon: "pencil-simple", kbd: "⌘E"}]},
+        {title: "Danger zone", items: [
+          {id: "delete", label: "Delete file", description: "Move to trash", icon: "trash", kbd: "⌘⇧D", danger: true}]}]})),
+    },
   ],
 };

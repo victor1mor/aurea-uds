@@ -58,7 +58,11 @@ success:"check-circle",warning:"warning",danger:"x-circle",accent:"info"};
 // universal. Quem passa só `state` recebe a cor derivada da gravidade e o rótulo universal
 // quando não há filho; quem passa os dois manda, porque só o consumidor sabe se aquele
 // "esperando" dele é grave.
-export function Alert({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
+// `action` (15/10/2026, o "Upgrade" da referência): o botão do aviso, depois do texto e antes do X; no celular ele desce
+// para baixo do texto, na mesma coluna (a referência repete o botão; aqui ele só muda de lugar).
+export function Alert({variant,state,title,icon,onDismiss,action,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void;
+  /** O botão do aviso ("Atualizar", "Desfazer"): depois do texto, antes do X. No celular, embaixo do texto. */
+  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
 // 0.32.0 (o Alert da referência): o X de dispensar é o `CloseButton` (HER-12), e a pele mudou no core —
 // fundo de cartão, sem borda, sombra, 12/16, o ícone de 16 numa caixa de 24 e o título na cor do estado.
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios
@@ -213,7 +217,7 @@ export function NotificationCenter({items,onItemClick,onMarkAllRead,label,icon="
       <BasePopover.Trigger render={<IconButton variant="ghost" icon={icon} label={unread?`${title} (${unread})`:title}/>}/>
       {unread>0&&<span className="notification-count" aria-hidden="true">{unread>99?"99+":unread}</span>}
     </span>
-    <BasePopover.Portal container={portal}><BasePopover.Positioner side={side} sideOffset={8}>
+    <BasePopover.Portal container={portal}><BasePopover.Positioner className="positioner" side={side} sideOffset={8}>
       <BasePopover.Popup className="popover notification-panel" aria-label={title}>
         <div className="notification-head">
           <BasePopover.Title render={<strong/>}>{title}</BasePopover.Title>

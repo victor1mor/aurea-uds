@@ -17,11 +17,9 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### Os componentes novos da 0.32.0 (ainda não publicada)
+### Os componentes novos da 0.33.0
 
-- `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`,
-  `TagGroup`, `DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker` — a nota
-  está na seção `[0.32.0]`, abaixo.
+- `RadioGroup` na web (o nativo já tinha). O detalhe está na seção [0.33.0], abaixo.
 
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
@@ -86,9 +84,146 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.33.0] — em construção
+
+⏳ **Ainda não publicada.** O lote da página inicial contra a referência (o Victor, 15/10/2026: *"analise cada
+milímetro"* e *"A, B, C, pode"*), na branch `claude/lote-r`, em passos mostrados na bancada antes do git —
+[ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md).
+
+### Novo
+
+- **`RadioGroup` na web** — o grupo de opções da referência, com os nomes do nativo (`value`, `onValueChange`,
+  `orientation`, `disabled`, `invalid`) e `RadioGroup.Item` (o `Radio`). As opções são botões de opção nativos com o
+  mesmo nome: o Tab entra na escolhida e as setas andam e escolhem. 16 antes de cada opção; na horizontal, 16 entre elas.
+- **`Radio` e `Switch` com `description`**: a linha apagada embaixo do nome, como o `Checkbox`.
+- **`OTPField` com `groupSize`** (o tracinho a cada N caixas, o 3 + 3 da referência) **e `variant="secondary"`**.
+- **`Button` com `appearance="soft"`** (o fundo clarinho do tom e a letra do tom, em todos os tons) e o atalho
+  **`variant="danger-soft"`** da referência; **`quiet`** (a letra apagada, um degrau menor).
+- **As partes do `Card`**: `Card.Header`, `Card.Title` (`h3`), `Card.Description`, `Card.Content` e `Card.Footer`,
+  com as medidas da referência e 12 entre elas.
+- **`Alert` com `action`**: o botão do aviso, antes do X; no celular, embaixo do texto.
+- **`ListBox`: o `kbd` do item** (o atalho na ponta da linha).
+- **`Avatar` com `tone` e `emphasis="soft"`**: a cor da letra ou do ícone de reserva, e o fundo clarinho do tom.
+- **`Badge` com `emphasis="flat"`**: o tom de sempre sem a linha em volta.
+- **`Header` com `size="sm"`** (56, 6 entre as ações), **`blurred`** (o fundo que embaça; cheio para quem pede menos
+  transparência ao sistema) **e `menuActions`** (o que só o menu do celular leva).
+- **`ThemeToggle mode="light-dark-system"`** — a chave de três posições da referência — e o **`AureaProvider` com a
+  preferência `"system"`** (segue o `prefers-color-scheme` e muda junto), com `onThemePreferenceChange` e o tipo
+  `AureaThemePreference`.
+- **`Section variant="footer" layout="inline"`**: o rodapé de uma linha.
+- **`labelHidden` no `Switch`, no `Radio` e no `RadioGroup`**, o mesmo do `Checkbox`: o nome sai da tela e fica para o
+  leitor de tela (a fileira de controles sem nome da vitrine da referência).
+- **`Switch` com `indicatorPlacement="end"`**: a chave depois do nome, como o "Allow notifications" da referência — o
+  mesmo nome do `RadioGroup` do nativo. O padrão continua `"start"`.
+- **O `kbd` do `Button` aceita uma lista** (`["Ctrl", "K"]`): uma caixinha por tecla, como a busca da referência, e o
+  leitor de tela recebe a combinação (`Control+K`). Com texto, uma caixinha só, como antes.
+- **`leadingIcon` e `trailingIcon` do `Button` aceitam o desenho do app** (`AureaIcon`), como o `Icon` e o
+  `IconButton` já aceitavam — o botão "Theme" do site mostra a amostra da marca escolhida no lugar do balde.
+- **`CommandPaletteShell` com `onClose` e `label`**: a casca é a mesma janela do motor da `CommandPalette` — o Esc e
+  o clique fora avisam, o Tab fica preso e o foco volta a quem abriu. Sem `onClose`, fica aberta até o `open` mudar.
+- **A linha entre as seções** da `ListBox`, do `Select` com grupos e dos dois `Combobox`, como em todos os exemplos de
+  seções da referência (1 de borda, 8 para dentro de cada lado, 4 em cima e embaixo).
+
+### Consertado
+
+- **O texto do campo com ícone na frente ficava a 24 do ícone** (28 no `lg`), com 13 do outro lado: o campo somava o
+  recuo dele aos 12 do adorno. O Victor viu a busca ao lado do campo da referência (*"de um lado é curto, do outro é
+  largo"*). Agora, como a referência: 12, o ícone, 12 — e na busca, 12, a lupa, 8. Vale para todo `InputGroup` com
+  adorno em linha no início (o `SearchField`, a `CommandPaletteShell`, a busca da `DataGrid`…), na camada responsiva
+  também; com o adorno em faixa, o recuo continua.
+- **O título e a descrição do `Card.Header` colados**: uma regra `.card-header` da primeira versão pública (cabeçalho
+  em linha, 16 de vão e 16 embaixo, que nenhuma peça usava) vinha depois das partes do cartão e os separava em 16.
+- **A ficha do `Button`** dizia que o padrão era `secondary` e não listava `tertiary`; o padrão é `tertiary`.
+- **As janelinhas ficavam por baixo de um topo fixo** (o Victor: *"a caixa dos temas continua cortando"*): a camada
+  delas (`--z-modal`) estava na caixa de dentro (`.popover`, `.menu`, `.tooltip`…), que é estática — e camada em caixa
+  estática não vale. Quem flutua é o posicionador do motor. Agora as 13 janelinhas (popover, menus, listas do `Select` e
+  do `Combobox`, dica, cartão de passar o mouse, calendário) levam a classe `positioner`, com a camada nela. Quem cobra:
+  `lote-r-respostas.test.tsx` (todo posicionador tem classe) e `catalog-sweep.spec.ts` (a borda de cima da escolha de
+  tema é da caixa, de ponta a ponta).
+- **A chave de três posições pintada, como a de duas era** (o Victor: *"o sol deve ficar amarelo quando clicado e a lua
+  quero um preto absoluto"*): a escolhida é branca nos dois temas (como a da referência); a lua e o monitor no preto
+  absoluto (21:1); o sol escolhido no amarelo da marca, puro — o amarelo de ícone do tema claro saiu marrom (*"não
+  existe sol marrom"*), e das três formas de sol amarelo mostradas rodando o Victor escolheu esta, com o contraste
+  medido de 1,91:1 no branco. Tokens novos de base, iguais nos dois temas: `--white` e `--black`.
+- **O botão suave no fundo clarinho do próprio tom**: o vermelho, o verde, o amarelo de aviso e o azul de `info` passam
+  a usar o fundo dos avisos (`--danger-bg`, `--success-bg`, `--warning-bg`, `--info-bg`) e 8% do tom com o mouse em cima.
+  Com o tom a 14% por cima da página, o rótulo `info` caía a 4,10:1 no claro — a conta do teste jogava a transparência
+  fora e não via. E as regras gerais de mouse dos tons pintavam o suave por cima da dele (agora `:not(.btn-soft)`).
+  Medido: o pior é o `info` do claro, 5,08:1 parado e 4,61:1 com o mouse. Quem cobra: `tone-contrast.spec.ts` (o fundo
+  pintado sobre a página, e o mouse de verdade em cima de cada suave).
+- **O site — a chave de tema ficava vazia** ao escolher claro ou sistema: a escolhida desenha a forma cheia do ícone,
+  e o sprite das páginas só levava a da lua (a página sai pronta no escuro). O gerador agora mede também os três estados
+  da chave. **E o topo do Início cortava** de 768 a 949 (duas linhas, passando da borda): como a referência nessa
+  faixa, a chave de tema e o GitHub ficam na setinha (a `Popover` da Aurea), o "Theme" fica só de ícone abaixo de 1024
+  e o primeiro link passa a se chamar "Docs", o nome do da referência. O Victor viu os dois na bancada.
+- **O `AureaProvider` só pergunta o esquema de cor ao sistema quando a preferência é `"system"`** — a primeira versão
+  da 0.33.0 perguntava sempre, e os testes de custo pegaram.
+
+### ⚠ Pode quebrar a compilação
+
+- O `AureaStrings` (web) ganhou quatro frases — `themeChoice`, `themeLight`, `themeDark` e `themeSystem` (o nome da
+  chave de tema e das três opções). Quem monta o objeto INTEIRO com esse tipo (uma tradução própria) precisa delas.
+- Os grupos das fichas (`category`) passaram aos da referência (ADR-0070): quem filtra componentes pelo nome do grupo
+  antigo precisa dos nomes novos.
+- A caixa da `CommandPalette` e a da `CommandPaletteShell` passaram a ir para o portal, como a do `Dialog`: teste que
+  a procurava dentro do contêiner do próprio componente passa a procurar no documento.
+- O tipo do `kbd` do `Button` passou a `string | readonly string[]`, e o do `leadingIcon`/`trailingIcon` a
+  `AureaIcon`: código que lê essas props de um `ButtonProps` esperando `string`/`IconName` precisa aceitar o resto.
+- A classe `.card-header` do CSS deixou de ser o cabeçalho em LINHA (com 16 de vão e 16 embaixo): agora é a coluna do
+  `Card.Header`. Quem a usava à mão como linha com ação à direita usa o `Cluster`.
+
+### A busca que fecha, e o Início como o da referência (14/10/2026) — passos da 0.33.0
+
+- **A `CommandPalette` fecha clicando fora, e com o Esc de onde o foco estiver.** O Victor achou no site
+  publicado: depois de abrir a busca, nem o Esc nem o clique fora fechavam. A moldura era uma `div` feita à
+  mão; o clique no fundo não tinha quem o ouvisse, e depois dele o foco ia para a página, onde o Esc (ouvido só
+  no campo) não chegava. Agora a paleta mora na janela do motor (`Dialog`, como a paleta de exemplo dele, 1.6.0):
+  fecha pelos dois caminhos, prende o Tab dentro, trava a rolagem de trás e devolve o foco a quem abriu. O
+  campo recebe o foco pelo `initialFocus` da janela — com o `autoFocus`, o foco não voltava ao botão. Os nomes
+  de classe ficaram (`.command-overlay` é a moldura, `.command-palette` a caixa). ⚠ A caixa agora vai para o
+  portal, como a do `Dialog`: teste que a procurava dentro do próprio contêiner passa a procurar no documento.
+  Quem cobra: `stable.test.tsx` (clicar fora; Esc com o foco fora do campo) e `catalog-sweep.spec.ts` (os
+  dois, o Tab preso e o foco de volta, nos três navegadores) — provados contra a peça velha.
+- **`Header` ganha `itemsJustify`** (`"end"`, o padrão de sempre, ou `"start"`): com `"start"` os links ficam
+  colados na marca e as ações na outra ponta — a página inicial da referência. Sem a prop, nada muda.
+- **`ColorSwatch` com opções ganha `showLabels`**: o nome de cada cor embaixo dela, como a escolha de tema da
+  referência. O rótulo inteiro escolhe; o nome é só para os olhos (o botão de opção já o tem). Sem a prop,
+  nada muda.
+- **O site:** no Início, os links na linha da logo (o `Header` com `items` e `itemsJustify="start"`; no celular
+  eles vão para o menu do próprio `Header`); o texto embaixo do título com 18 de letra em 28 de linha, colado
+  no título, e 16 entre as outras peças (eram 30,6 e 20); as abas da vitrine no canto. Em todas as páginas, a
+  caixa de marca "Aurea ▾" virou o botão **"Theme"** da referência: o balde de tinta, que abre as amostras das
+  marcas com o nome embaixo (a `Popover`, o `Button` e a `ColorSwatch` da Aurea). No celular o "Theme" fica só o
+  ícone, para a barra caber numa linha (medido: 400 em 375). Depois, com o Victor comparando no monitor de 24" e no
+  notebook (15/10/2026): a versão saiu do topo; as letras da referência — o nome 16 em 600, a nota 12; o título com
+  48 de linha; a nota virou o link "Open source on GitHub" (sem o número de estrelas, que mudaria a página gerada
+  sozinho); e o topo do Início no centro, no `Container` `2xl` (no 24" ia para os cantos). Os botões da direita do
+  topo, todos no `sm` (32) e com fundo, como os da referência (32 a 34): eram 36, 26 e um sem fundo. O "Theme" fica
+  com a letra do `sm` (14); a 12 da referência nesse botão é mudança de peça.
+- **O `IconButton` aceita o desenho do app** (`icon` é `AureaIcon`, 15/10/2026), como o `Icon` (MNT-02) e o
+  `IconButton` do nativo (R-11). Quem passa nome de ícone não muda nada.
+- **O Início, ponto por ponto contra a referência** (o Victor, 15/10/2026: *"analise cada milímetro"*; medido nas duas
+  páginas rodando em 1902, 1440 e 375, e lido no código dela): o logo oficial do GitHub no topo e na nota (só no
+  site — [`docs/REFERENCES.md`](docs/REFERENCES.md)); o selo virou link para o que mudou, com o foguete, no `Badge`
+  suave; o título 30/36 no celular, 36/40 a partir de 640 e 48/48 a partir de 1024, com o `--tracking-tight`; o texto
+  16/24 no celular e 18/28 a partir de 768, em 672; os vãos de 8 abaixo de 1024; as abas da vitrine só a partir de
+  1024; a vitrine com 1200 e o conteúdo centrado; da logo ao primeiro link, 32 (o `itemsJustify="start"` do
+  `Header`). O que precisa mudar peça ficou na lista da bancada ("Pergunta 7").
+- A conta de cor do oklch para o hex saiu do `build-tokens.mjs` para `scripts/cor-oklch.mjs`, que o gerador do
+  site também usa (as cores das marcas no "Theme" vêm dos tokens). Os tokens gerados saem idênticos.
+
+### Os grupos da página "All Components" são os da referência (14/10/2026) — aprovado pela bancada
+
+- **Os 15 grupos da referência, em ordem alfabética, e no fim os 3 nossos** (AI & Agents, Code, Communication) —
+  [ADR-0070](decisions/0070-os-grupos-sao-os-da-referencia.md). O Victor: *"bancada do lote parte do site da aurea
+  aprovado"*. 71 fichas mudaram de grupo: o componente que a referência tem vai para o grupo dela; o que ela não
+  tem, para o da peça mais parecida. O menu da lateral continua uma lista alfabética, como o dela. ⚠ O `category`
+  da ficha muda — quem filtra componentes pelo grupo antigo precisa dos nomes novos.
+
 ## [0.32.0] — 2026-10-14
 
-⏳ **Ainda não publicada.** O lote único: as peças quase idênticas às da referência. Os componentes novos:
+✅ **Publicada em 14/10/2026, entre 17:56 e 18:07 (Brasília, medido no npm)**, pelo terminal do Victor, da junção
+do pedido #66 (o `native` falhou na primeira tentativa e saiu na segunda; o npm o registra às 18:06). O lote único: as peças quase idênticas às da referência. Os componentes novos:
 `CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`,
 `DatePicker` (na web; o nativo já o tinha), `ColorArea`, `ColorField` e `ColorPicker`.
 

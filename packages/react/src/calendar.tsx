@@ -187,7 +187,7 @@ export function DatePicker(props: DatePickerProps) {
     </BasePopover.Trigger>
     {name && <input type="hidden" name={name} value={campo ?? ""} />}
     <BasePopover.Portal container={portal}>
-      <BasePopover.Positioner side="bottom" align="start" sideOffset={6}>
+      <BasePopover.Positioner className="positioner" side="bottom" align="start" sideOffset={6}>
         {/* A janela é um diálogo e precisa de NOME (o axe pegou): o rótulo do campo, por `aria-labelledby`, como
             faz a biblioteca de acessibilidade em que a referência se apoia (a janela da referência, montada sem o
             diálogo, sai sem nome). Sem rótulo, o `aria-label` do campo ou a frase de escolher. Medido em

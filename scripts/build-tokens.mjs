@@ -10,6 +10,7 @@ import {dirname, join} from "node:path";
 // A serialização de `$value` mora em `token-value.mjs` porque o catálogo também precisa dela —
 // ver o cabeçalho de lá. Aqui ficou só o que é do ALVO CSS e do ALVO NATIVO.
 import {num, serialize} from "./token-value.mjs";
+import {corta, gama, linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(root, "packages/tokens/src/aurea.tokens.json");
@@ -98,14 +99,6 @@ console.log("build-tokens: wrote", OUT.replace(root + "\\", "").replace(root + "
 const P3_OUT = join(root, "packages/tokens/dist/aurea.tokens.native.js");
 const REM_EM_DP = 16; // medido no Chromium: raiz sem font-size declarado = 16px
 
-const oklabParaLinearSrgb = (L, a, b) => {
-  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
-  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
-  const s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3;
-  return [+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-          -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-          -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s];
-};
 const linearSrgbParaLinearP3 = (r, g, b) => {
   // sRGB linear → XYZ (D65) → P3 linear. As matrizes são constante de especificação e estão
   // PROVADAS contra o rasterizador do Chromium em `scripts/measure-color-native.mjs`.
@@ -116,16 +109,12 @@ const linearSrgbParaLinearP3 = (r, g, b) => {
           -0.8294889696 * X + 1.7626640603 * Y + 0.0236246858 * Z,
            0.0358458302 * X - 0.0761723893 * Y + 0.9568845240 * Z];
 };
-const gama = c => c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
-const corta = c => Math.min(1, Math.max(0, c));
 const arred = (n, casas) => Number(n.toFixed(casas));
 
 function corNativa(v) {
   if (v.colorSpace === "oklch") {
-    const [L, C, H] = v.components;
-    const rad = H * Math.PI / 180;
-    const lin = oklabParaLinearSrgb(L, C * Math.cos(rad), C * Math.sin(rad));
-    const hex = "#" + lin.map(x => Math.round(gama(corta(x)) * 255).toString(16).padStart(2, "0")).join("");
+    const lin = oklchParaLinearSrgb(v.components);
+    const hex = linearSrgbParaHex(lin);
     const p3 = linearSrgbParaLinearP3(...lin).map(x => arred(gama(corta(x)), 4));
     const alfa = v.alpha === undefined ? "" : ` / ${num(v.alpha)}`;
     return {hex: v.alpha === undefined ? hex : hex + Math.round(v.alpha * 255).toString(16).padStart(2, "0"),

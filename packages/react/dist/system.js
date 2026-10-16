@@ -22,11 +22,28 @@ import { cx, StringsContext, SpriteContext, PortalContext, ThemeContext, Density
 // Sem ela nada muda: o Base UI monta no `document.body`, que é o que permite empilhar e
 // posicionar sem herdar `overflow` nem `transform`. Com ela, o consumidor aponta para um nó
 // dentro do landmark dele e o conteúdo do popup deixa de ficar fora de qualquer marco.
-export function AureaProvider({ children, strings, direction = "ltr", spriteUrl = defaultSpriteUrl, portalContainer, theme, defaultTheme, onThemeChange, density, defaultDensity, onDensityChange, toastPlacement = "bottom" }) {
+export function AureaProvider({ children, strings, direction = "ltr", spriteUrl = defaultSpriteUrl, portalContainer, theme, defaultTheme, onThemeChange, onThemePreferenceChange, density, defaultDensity, onDensityChange, toastPlacement = "bottom" }) {
     const value = React.useMemo(() => strings ? { ...defaultStrings, ...strings } : defaultStrings, [strings]);
-    const temaCtx = useEixoDoDocumento("theme", theme, defaultTheme, onThemeChange);
+    // "SYSTEM" (15/10/2026, a chave de três posições da referência): a PREFERÊNCIA pode ser `"system"`, e aí o tema na
+    // tela é o do sistema (`prefers-color-scheme`), e muda junto com ele. O documento recebe sempre o tema RESOLVIDO —
+    // o CSS só conhece `dark` e `light`. Sem preferência, o provider continua adotando o que o documento trouxer.
+    const [prefInterna, setPrefInterna] = React.useState(defaultTheme);
+    const preferencia = theme ?? prefInterna;
+    // Só quem SEGUE o sistema pergunta a ele: o provider sem `"system"` não abre `matchMedia` nenhum (o custo por
+    // aplicação é cobrado em `custo-responsivo` e `ssr-responsivo`, que pegaram a primeira versão, 15/10/2026).
+    const segue = preferencia === "system";
+    const assina = React.useCallback((cb) => segue ? assinaEsquema(cb) : () => { }, [segue]);
+    const sistemaEscuro = React.useSyncExternalStore(assina, segue ? leEsquemaEscuro : semEsquema, semEsquema);
+    const resolvido = preferencia === "system" ? (sistemaEscuro ? "dark" : "light") : preferencia;
+    const temaCtx = useEixoDoDocumento("theme", resolvido, undefined, undefined);
+    const escolher = React.useCallback((p) => {
+        if (theme === undefined)
+            setPrefInterna(p);
+        onThemePreferenceChange?.(p);
+        onThemeChange?.(p === "system" ? (leEsquemaEscuro() ? "dark" : "light") : p);
+    }, [theme, onThemeChange, onThemePreferenceChange]);
     const densCtx = useEixoDoDocumento("density", density, defaultDensity, onDensityChange);
-    const tema = React.useMemo(() => ({ theme: temaCtx.valor, setTheme: temaCtx.set,
+    const tema = React.useMemo(() => ({ theme: temaCtx.valor, preference: preferencia ?? temaCtx.valor, setTheme: escolher,
         // `toggleTheme` existe porque é o gesto real: um botão de tema não escolhe entre dois
         // valores, ele inverte o atual. Deixar isso para o consumidor é como o catálogo e os docs
         // acabaram com duas implementações divergentes da mesma coisa.
@@ -38,13 +55,24 @@ export function AureaProvider({ children, strings, direction = "ltr", spriteUrl 
         // ⚠ Achado em 09/09/2026 SÓ porque o `useAureaTheme` passou a delegar para cá: a divergência
         // existia desde sempre e nenhum teste a pegava, porque cada metade era testada sozinha.
         // Agora a regra é uma: desconhecido resolve para claro e alterna para ESCURO.
-        toggleTheme: () => temaCtx.set(temaCtx.valor === "dark" ? "light" : "dark") }), [temaCtx]);
+        toggleTheme: () => escolher(temaCtx.valor === "dark" ? "light" : "dark") }), [temaCtx, preferencia, escolher]);
     const dens = React.useMemo(() => ({ density: densCtx.valor, setDensity: densCtx.set }), [densCtx]);
     // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
     // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
     const deFora = !React.useContext(DentroDoProviderContext);
     return _jsx(DentroDoProviderContext.Provider, { value: true, children: _jsx(StringsContext.Provider, { value: value, children: _jsx(SpriteContext.Provider, { value: spriteUrl, children: _jsx(PortalContext.Provider, { value: portalContainer, children: _jsx(ThemeContext.Provider, { value: tema, children: _jsx(DensityContext.Provider, { value: dens, children: _jsx(DirectionProvider, { direction: direction, children: _jsx(BaseToast.Provider, { timeout: TEMPO_DO_AVISO, children: _jsxs(BaseTooltip.Provider, { children: [children, _jsx(AureaToastViewport, { placement: toastPlacement }), deFora && _jsx(BaseToast.Provider, { toastManager: avisosAncorados, children: _jsx(AvisosAncorados, {}) })] }) }) }) }) }) }) }) }) });
 }
+// O esquema do sistema, para a preferência `"system"`. Sem `matchMedia` (servidor, jsdom), claro.
+const ESQUEMA_ESCURO = "(prefers-color-scheme: dark)";
+const assinaEsquema = (cb) => {
+    if (typeof matchMedia !== "function")
+        return () => { };
+    const m = matchMedia(ESQUEMA_ESCURO);
+    m.addEventListener("change", cb);
+    return () => m.removeEventListener("change", cb);
+};
+const leEsquemaEscuro = () => typeof matchMedia === "function" && matchMedia(ESQUEMA_ESCURO).matches;
+const semEsquema = () => false;
 /** Um eixo de apresentação que vive no `<html>`: tema ou densidade. A conta é a mesma para os
  *  dois, e escrevê-la duas vezes seria o defeito do §21 cometido dentro do próprio conserto
  *  dele. */
@@ -121,12 +149,15 @@ export function useAureaTheme() {
     const ctxDens = React.useContext(DensityContext);
     return React.useMemo(() => ({
         theme, density,
+        /** O que foi escolhido (15/10/2026): pode ser `"system"`. Fora de um provider, o tema na tela. */
+        preference: (dentroDeProvider ? ctxTema.preference : theme) ?? theme,
         setTheme: (t) => {
             if (dentroDeProvider) {
                 ctxTema.setTheme(t);
                 return;
             }
-            document.documentElement.dataset.theme = t;
+            // Fora de provider, `"system"` escreve o tema do sistema AGORA; seguir as mudanças dele é do provider.
+            document.documentElement.dataset.theme = t === "system" ? (leEsquemaEscuro() ? "dark" : "light") : t;
         },
         setDensity: (d) => {
             if (dentroDeProvider) {

@@ -32,10 +32,18 @@ import type {AvatarSize} from "./markup.js";
 // O DEGRAU RESPONSIVO volta (merge de 28/08/2026): a ficha declara `responsive.size` e o
 // componente tinha perdido a capacidade quando este arquivo entrou da `main`. Mesma perda
 // silenciosa do `Input`, do `Tabs` e do `NumberField` — a ficha documentava, o código não fazia.
-export function Avatar({src,alt="",fallback,size,className}:{src?:string;alt?:string;fallback?:ReactNode;size?:Responsive<AvatarSize>;className?:string}){
+// `tone` e `emphasis="soft"` (15/10/2026, o `color` e o `variant="soft"` da referência): o tom pinta a letra ou o ícone
+// de reserva; o `soft` tira a moldura e dá o fundo clarinho do tom — o disquete amarelo da vitrine dela. Os nomes são os
+// da Aurea (`tone`, como no `Button`; `soft`, como no `Badge`). Sem os dois, a marcação é a de antes.
+export type AvatarTone="neutral"|"brand"|"danger"|"success"|"warning"|"info";
+export function Avatar({src,alt="",fallback,size,tone,emphasis,className}:{src?:string;alt?:string;fallback?:ReactNode;size?:Responsive<AvatarSize>;
+  /** A cor da letra ou do ícone de reserva: o que ele significa. */
+  tone?:AvatarTone;
+  /** `soft`: sem a moldura, com o fundo clarinho do tom. */
+  emphasis?:"default"|"soft";className?:string}){
 const [falhou,setFalhou]=React.useState(false);
 React.useEffect(()=>{setFalhou(false)},[src]);
-return <span className={cx("avatar",peleDoEixo("avatar",size),className)}>
+return <span className={cx("avatar",peleDoEixo("avatar",size),tone&&tone!=="neutral"&&`avatar-tone-${tone}`,emphasis==="soft"&&"avatar-soft",className)}>
 {src&&!falhou?<img src={src} alt={alt} onError={()=>setFalhou(true)}/>:fallback}
 </span>}
 

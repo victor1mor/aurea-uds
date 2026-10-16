@@ -58,6 +58,30 @@
         ]
       }
     },
+    "white": {
+      "$type": "color",
+      "$description": "Branco puro, o MESMO nos dois temas (15/10/2026). A opção escolhida da chave de tema de três posições, como a da referência: no tema escuro ela também é branca, e é isso que deixa a lua preta à vista.",
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    "black": {
+      "$type": "color",
+      "$description": "Preto absoluto, o MESMO nos dois temas (15/10/2026, o Victor: \"a lua quero um preto absoluto\"). A lua e o monitor escolhidos na chave de tema, sobre o branco da escolhida (21:1).",
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
     "font-ui": {
       "$type": "fontFamily",
       "$value": [

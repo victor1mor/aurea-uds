@@ -102,6 +102,15 @@ return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${varian
  *  cartão menos o respiro dele). O que vai dentro — `Image`, vídeo — é do app. */
 function CardMedia({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-media",className)} {...props}/>}
 Card.Media=CardMedia;
+// AS PARTES DO CARTÃO (15/10/2026, o Victor: "A, B, C, pode"), como as da referência: o cabeçalho (o título e a
+// descrição, colados), o conteúdo (4 entre os itens) e o rodapé (em linha). 12 entre as partes, o vão dela — por margem,
+// porque o `Card` da Aurea é um bloco e virar coluna mudaria quem já o usa. O título é um `h3`, como lá.
+function CardHeader({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-header",className)} {...props}/>}
+function CardTitle({className,...props}:HTMLAttributes<HTMLHeadingElement>&RefAttributes<HTMLHeadingElement>){return <h3 className={cx("card-title",className)} {...props}/>}
+function CardDescription({className,...props}:HTMLAttributes<HTMLParagraphElement>&RefAttributes<HTMLParagraphElement>){return <p className={cx("card-description",className)} {...props}/>}
+function CardContent({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-content",className)} {...props}/>}
+function CardFooter({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <div className={cx("card-footer",className)} {...props}/>}
+Card.Header=CardHeader;Card.Title=CardTitle;Card.Description=CardDescription;Card.Content=CardContent;Card.Footer=CardFooter;
 // ── Stack, Cluster e Grid ganham props de layout — B-01, 24/09/2026 ────────────────────────────
 // A falta que mais gerou remendo num app: 180 `style={{}}` e 122 `<div>`, quase todos flex + gap.
 // Os nomes `align`, `justify` e `wrap` são os MESMOS do `Cluster` nativo (R-09), de propósito.
@@ -257,6 +266,10 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
   /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
   links?:SectionFooterGroup[];
   /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
+  /** Só no `footer` (15/10/2026): `"columns"` (o padrão, o rodapé de site grande) ou `"inline"` — UMA linha centrada, como
+   *  o rodapé da página inicial da referência: a frase legal, os links (sem os títulos das colunas) e o que vier dentro
+   *  (os ícones sociais). A marca não entra. */
+  layout?:"columns"|"inline";
   legal?:ReactNode;
   /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
   maxWidth?:ContainerSize;
@@ -273,9 +286,21 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
 // (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
 // fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
 // coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
-export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,maxWidth="xl",navLabel="Footer",children,className,...props}:SectionProps){
+export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,layout="columns",maxWidth="xl",navLabel="Footer",children,className,...props}:SectionProps){
   const pele=cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`);
   if(variant!=="footer")return <section data-theme={theme} className={cx(pele,className)} {...props}>{children}</section>;
+  if(layout==="inline"){
+    const itens=(links??[]).flatMap((g)=>g.items);
+    return <footer data-theme={theme} className={cx(pele,"section-footer","section-footer-inline",className)} {...props}>
+      <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"section-footer-line")}>
+        {legal!=null&&<p className="section-footer-inline-legal">{legal}</p>}
+        {itens.length>0&&<nav aria-label={navLabel}><ul className="section-footer-inline-links">{itens.map(it=><li key={it.id}>{it.render
+          ?fundirRender(it.render,{className:"section-footer-link",children:it.label},"a")
+          :<a className="section-footer-link" href={it.href}>{it.label}</a>}</li>)}</ul></nav>}
+        {children}
+      </div>
+    </footer>;
+  }
   return <footer data-theme={theme} className={cx(pele,"section-footer",className)} {...props}>
     <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`)}>
       <div className="section-footer-top">
@@ -392,7 +417,7 @@ export function Code({align,color,tone,weight,truncate,className,...props}:CodeP
 // removível é `Tag`, não `Badge` — e um manipulador em JSX exigiria `"use client"` aqui, que é
 // exatamente o que este arquivo existe para não ter. `Tag` não existe na Aurea: é lacuna de
 // verdade, achada por esta leitura, e está registrada no REFERENCES.md.
-export type BadgeEmphasis="soft"|"solid"|"outline";
+export type BadgeEmphasis="soft"|"solid"|"outline"|"flat";
 export type BadgeSize="xs"|"sm"|"md"|"lg";
 export type BadgePlacement="top-end"|"top-start"|"bottom-end"|"bottom-start";
 // R-01 (24/09/2026): `content` põe o selo do tamanho do texto DENTRO de uma coluna. O padrão
@@ -407,7 +432,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
   /** A cor, com o NOME do nativo (DOC-11, 0.32.0: os mesmos nomes na web e no nativo). É o mesmo
    *  eixo do `variant`, e vence quando os dois vêm. */
   tone?:BadgeVariant;
-  /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno. */
+  /** `soft` é o tom de sempre; `solid` preenche com o acento; `outline` é só contorno; `flat` (15/10/2026) é o tom de
+   *  sempre SEM a linha em volta, como o selo da referência (que chamava essa forma de `flat`). */
   emphasis?:BadgeEmphasis;
   size?:BadgeSize;
   /** Ponto de estado antes do texto. Sozinho num `anchor`, ele É o badge. */
@@ -583,6 +609,24 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
   actions?:ReactNode;
   /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
   maxWidth?:ContainerSize;
+  /**
+   * Onde ficam os links (14/10/2026): `"end"` (o padrão) logo antes das ações, na outra ponta da marca; `"start"`
+   * colados na marca, com as ações na outra ponta — a página inicial da referência. O nome é o `justify` do
+   * conteúdo da barra dela.
+   */
+  itemsJustify?:"start"|"end";
+  /**
+   * A altura (15/10/2026): `"md"` (o padrão, 64 — a do guia de barra da referência) ou `"sm"` (56, a do topo da página
+   * inicial dela), com 6 entre as ações em vez de 8.
+   */
+  size?:"md"|"sm";
+  /**
+   * Só na `flush` (15/10/2026): o fundo transparente que EMBAÇA o que passa por baixo, como o topo da página inicial
+   * da referência. Quem pede menos transparência no sistema, ou o navegador sem desfoque, recebe o fundo cheio.
+   */
+  blurred?:boolean;
+  /** O que entra no MENU DO CELULAR, embaixo dos links (15/10/2026): o GitHub, a conta. Na barra larga não aparece. */
+  menuActions?:ReactNode;
   /** O nome da navegação para o leitor de tela. Padrão: `"Main"`. */
   navLabel?:string;
   /** O nome do botão de menu do celular. Padrão: `"Menu"`. */
@@ -597,7 +641,7 @@ function linksDoHeader(items:SidebarItem[],current:string|undefined){
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }
-export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
+export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",size="md",blurred,menuActions,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
   const site=!!items&&items.length>0;
   const miolo=<>
     {brand!=null&&<div className="brand">{brand}</div>}
@@ -606,10 +650,11 @@ export function Header({variant="floating",divider,brand,items,current,actions,m
     {actions!=null&&<div className="topbar-actions">{actions}</div>}
     {site&&<>
       <button type="button" className="btn btn-ghost btn-icon topbar-menu-toggle" popoverTarget={menuId} aria-label={menuLabel}><span className="topbar-menu-icon" aria-hidden="true"/></button>
-      <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}</nav>
+      <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}
+        {menuActions!=null&&<div className="topbar-menu-actions">{menuActions}</div>}</nav>
     </>}
   </>;
-  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",maxWidth&&"topbar-contained",className)} {...props}>
+  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",size==="sm"&&"topbar-sm",blurred&&variant==="flush"&&"topbar-blurred",maxWidth&&"topbar-contained",className)} {...props}>
     {maxWidth?<div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"topbar-inner")}>{miolo}</div>:miolo}
   </header>;
 }
@@ -641,8 +686,16 @@ export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Tex
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({label,labelHidden,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
-export function Radio({label,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("radio",className)}><input type="radio" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/>{label}</label>}
-export function Switch({label,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("switch",className)}><input type="checkbox" role="switch" {...props}/><span className={cx("switch-track",peleDoEixo("switch-track",size))}/><span>{label}</span></label>}
+// `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
+// mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
+const comDescricao=(label:ReactNode,description:ReactNode)=>description?<span><strong>{label}</strong><br/><span className="muted">{description}</span></span>:label;
+// `labelHidden` (15/10/2026) no `Radio` e no `Switch`, o mesmo do `Checkbox`: o nome sai da tela e fica para o leitor
+// de tela — a fileira de controles sem rótulo da vitrine da referência.
+export function Radio({label,labelHidden,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("radio",labelHidden&&"radio-bare",className)}><input type="radio" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/>{labelHidden?<span className="sr-only">{comDescricao(label,description)}</span>:comDescricao(label,description)}</label>}
+// `indicatorPlacement` (15/10/2026, o Victor: "A sim"): a chave no FIM, como o "Allow notifications" da vitrine da
+// referência — o nome e a descrição à esquerda. O mesmo nome do `RadioGroup` do nativo. Muda só a ordem do DESENHO: o
+// campo escondido continua logo antes da chave (o CSS do estado depende disso), e o rótulo é um só para o leitor.
+export function Switch({label,labelHidden,description,indicatorPlacement="start",size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;indicatorPlacement?:"start"|"end";size?:Responsive<FieldSize>}){return <label className={cx("switch",labelHidden&&"switch-bare",indicatorPlacement==="end"&&"switch-end",className)}><input type="checkbox" role="switch" {...props}/><span className={cx("switch-track",peleDoEixo("switch-track",size))}/><span className={labelHidden?"sr-only":undefined}>{comDescricao(label,description)}</span></label>}
 // `orientation` no `<input type=range>` NATIVO — a vertical não exige trocar de motor, e isso foi
 // medido nos três navegadores. Sem `aria-orientation`: o papel `slider` é implícito do elemento e
 // o navegador já anuncia a orientação a partir do writing-mode; pôr o atributo à mão criaria uma
@@ -788,6 +841,8 @@ export interface ColorSwatchPickerProps{
   layout?:"grid"|"stack";
   /** A marca da escolhida, no lugar do "visto" (um `<Icon>`, por exemplo). Ela ganha a tinta que contrasta. */
   indicator?:ReactNode;
+  /** O nome de cada cor embaixo dela (o `label` da opção; sem ele, o código), como a escolha de tema da referência. */
+  showLabels?:boolean;
   size?:ColorSwatchSize;disabled?:boolean;id?:string;className?:string;
 }
 // Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
@@ -795,22 +850,28 @@ export interface ColorSwatchPickerProps{
 const transparente=(cor:string)=>{const c=parseColor(cor);return c!==null&&c.a<1;};
 export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchPickerProps)){
   if("options" in props){
-    const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,size="md",disabled,id,className}=props;
+    const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,showLabels,size="md",disabled,id,className}=props;
     // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
     // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
+    // `showLabels` (14/10/2026): o rótulo passa a ser a amostra E o nome embaixo — o círculo continua o mesmo
+    // (`.color-swatch-option`, agora um `span`), e clicar no nome também escolhe. O nome é só para os olhos: o leitor
+    // de tela já ouve o `aria-label` do botão de opção.
     return <div role="radiogroup" aria-label={label} id={id} aria-disabled={disabled||undefined}
-      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,layout==="stack"&&"color-swatch-picker-stack",className)}>
+      className={cx("color-swatch-picker",size!=="md"&&`color-swatch-picker-${size}`,layout==="stack"&&"color-swatch-picker-stack",showLabels&&"color-swatch-picker-labels",className)}>
       {options.map((o)=>{
         const op:ColorSwatchOption=typeof o==="string"?{color:o}:o;
         const cor=parseColor(op.color),rgb=cor&&hsbToRgb(cor);
-        return <label key={op.color} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
+        const circulo=(Tag:"label"|"span",key?:string)=><Tag key={key} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
           style={{["--color-swatch-current" as string]:op.color}}>
           <input type="radio" className="color-swatch-input" name={name} value={op.color} aria-label={op.label??op.color}
             checked={value===undefined?undefined:value===op.color} defaultChecked={value===undefined?defaultValue===op.color:undefined}
             disabled={disabled||op.disabled} {...(onChange?{onChange}:{})}/>
           <span className={cx("color-swatch",cor&&cor.a<1&&"color-swatch-alpha")} aria-hidden="true"/>
           {indicator!=null&&<span className="color-swatch-indicator" aria-hidden="true">{indicator}</span>}
-        </label>;
+        </Tag>;
+        return showLabels
+          ?<label key={op.color} className="color-swatch-item">{circulo("span")}<span className="color-swatch-name" aria-hidden="true">{op.label??op.color}</span></label>
+          :circulo("label",op.color);
       })}
     </div>;
   }

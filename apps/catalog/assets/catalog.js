@@ -417,15 +417,10 @@ const espelhaTema = alvo => (alvo ? [alvo] : [...document.querySelectorAll("ifra
   .map(f => f.contentWindow)).forEach(w => w && w.postMessage({aureaTheme: document.documentElement.dataset.theme,
     aureaBrand: document.documentElement.dataset.brand || ""}, "*"));
 addEventListener("message", e => { if (e.data && e.data.aureaThemeRequest) espelhaTema(e.source); });
-// Quem GRAVA é o catálogo; quem aplica no primeiro quadro é o script inline do <head>. O core só
-// troca o atributo — ver o comentário em TEMA_SALVO.
-document.addEventListener("click", e => {
-  if (e.target.closest("#theme-toggle")) {
-    window.Aurea.toggleTheme();
-    espelhaTema();
-    try { localStorage.setItem("aurea-theme", document.documentElement.dataset.theme); } catch (err) {}
-  }
-});
+// O TEMA (15/10/2026): quem escolhe é a chave de três posições, viva no search.js, que grava a escolha (pode ser
+// "system"); quem aplica no primeiro quadro é o script inline do <head>. Aqui só se ESPELHA nas molduras de prévia o tema
+// e a marca que estiverem no <html> — observados, e não avisados: o "system" muda o tema sem clique nenhum.
+new MutationObserver(() => espelhaTema()).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme", "data-brand"]});
 // -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
 // Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
 // confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
@@ -444,23 +439,15 @@ document.addEventListener("click", e => {
   }, () => {});
 });
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
-// 'change' e não 'click': em 'select' o clique acontece antes de a opção mudar, e o teclado não
-// clica — quem escolhe com as setas nunca dispararia o handler.
-// Valor vazio = SEM marca, e é assim que a Aurea volta a ser a Aurea: 'delete' do atributo, não
-// 'data-brand="aurea"'. Marca padrão não tem nome porque não é marca — é o padrão (ADR-0036).
-document.addEventListener("change", e => {
-  const alvo = e.target.closest("#brand-select");
-  if (!alvo) return;
-  if (alvo.value) document.documentElement.dataset.brand = alvo.value;
+// Quem escolhe é o botão "Theme" (14/10/2026), vivo no search.js: ele avisa com o evento 'aurea-brand', e a
+// cola é daqui, num lugar só. Valor vazio = SEM marca, e é assim que a Aurea volta a ser a Aurea: 'delete' do
+// atributo, não 'data-brand="aurea"'. Marca padrão não tem nome porque não é marca — é o padrão (ADR-0036).
+document.addEventListener("aurea-brand", e => {
+  const marca = (e.detail && e.detail.brand) || "";
+  if (marca) document.documentElement.dataset.brand = marca;
   else delete document.documentElement.dataset.brand;
   espelhaTema();
-  try { localStorage.setItem("aurea-brand", alvo.value); } catch (err) {}
-});
-// E o seletor tem de MOSTRAR a marca que está valendo quando a página remonta — cada página do
-// catálogo é documento novo, e o <select> voltaria para "Aurea" com a página em laranja.
-addEventListener("DOMContentLoaded", () => {
-  const alvo = document.querySelector("#brand-select");
-  if (alvo) alvo.value = document.documentElement.dataset.brand || "";
+  try { localStorage.setItem("aurea-brand", marca); } catch (err) {}
 });
 
 // -- a lateral abre onde voce parou ------------------------------------------------------

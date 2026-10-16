@@ -1,6 +1,6 @@
 {
   "name": "Label",
-  "category": "Inputs",
+  "category": "Forms",
   "layer": "Primitive",
   "maturity": "Ready",
   "summary": "The field label on its own, for when you are not using Field.",

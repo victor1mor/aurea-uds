@@ -22,7 +22,7 @@ import { Popover as BasePopover } from "@base-ui/react/popover";
 // diretiva — são marcação, e quem escuta `onChange` é o consumidor. Voltam IMPORTADOS e não só
 // reexportados porque o `ehControle` do `Field` compara por IDENTIDADE de referência: dois
 // objetos diferentes com o mesmo nome quebrariam o rótulo do campo em silêncio.
-import { Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch } from "./markup.js";
+import { Textarea, Checkbox, Radio, Switch, Range, InputGroup, InputGroupAddon, ColorSwatch, Kbd } from "./markup.js";
 import { Icon } from "./system.js";
 import { IconButton } from "./actions.js";
 // A FAMÍLIA DE COR (0.32.0, ADR-0069) — as peças INTERNAS moram aqui, no topo, antes do primeiro export (auxiliar
@@ -383,7 +383,8 @@ export const Input = forwardRef(function Input({ className, formatOnBlur, size, 
 // `.input-wrap-end` para o botão do PasswordField —, e o grupo é a terceira vez virando uma. O
 // merge das duas linhagens tinha trazido de volta a versão com `.input-wrap`, contra um core
 // que já não a pinta.
-export function SearchField({ icon = "magnifying-glass", className, size, width, ...props }) { return _jsxs(InputGroup, { className: className, width: width, children: [_jsx(InputGroupAddon, { children: _jsx(Icon, { name: icon, size: valorBase(size) === "sm" ? "sm" : undefined }) }), _jsx(Input, { type: "search", size: size, ...props })] }); }
+// `search-field` (15/10/2026): a busca tem a medida própria da referência — 12, a lupa, 8 (ver o core).
+export function SearchField({ icon = "magnifying-glass", className, size, width, ...props }) { return _jsxs(InputGroup, { className: cx("search-field", className), width: width, children: [_jsx(InputGroupAddon, { children: _jsx(Icon, { name: icon, size: valorBase(size) === "sm" ? "sm" : undefined }) }), _jsx(Input, { type: "search", size: size, ...props })] }); }
 // labelHidden: coluna de seleção de tabela precisa do rótulo POR LINHA para o leitor de
 // tela ("Select Analyst"), mas mostrá-lo engorda a coluna. O rótulo continua no DOM, só
 // sai da tela (.sr-only) — nunca trocar por aria-label solto num <label> visível vazio.
@@ -432,6 +433,33 @@ export function CheckboxGroup({ label, description, error, value, defaultValue, 
     });
     return _jsxs("div", { role: "group", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, className: cx("checkbox-group", className), ...props, children: [_jsx("span", { className: "label", id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), caixas, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
 }
+export function RadioGroup({ label, labelHidden, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation = "vertical", required, children, className, ...props }) {
+    const auto = React.useId();
+    const [proprio, setProprio] = React.useState(defaultValue);
+    const escolhido = value ?? proprio;
+    const idRotulo = `${auto}-label`, idDescricao = description ? `${auto}-description` : undefined, idErro = error ? `${auto}-error` : undefined;
+    const opcoes = React.Children.map(children, filho => {
+        if (!React.isValidElement(filho))
+            return filho;
+        const p = filho.props;
+        if (typeof p.value !== "string")
+            return filho;
+        const v = p.value;
+        return React.cloneElement(filho, { checked: escolhido === v, name: name ?? auto, required,
+            disabled: p.disabled ?? disabled, ...(error || invalid ? { "aria-invalid": true } : null),
+            onChange: (e) => {
+                p.onChange?.(e);
+                if (!e.currentTarget.checked)
+                    return;
+                if (value === undefined)
+                    setProprio(v);
+                onValueChange?.(v);
+            } });
+    });
+    return _jsxs("div", { role: "radiogroup", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, "aria-orientation": orientation, "aria-required": required || undefined, "aria-invalid": error || invalid ? true : undefined, className: cx("radio-group", orientation === "horizontal" && "radio-group-horizontal", labelHidden && "radio-group-bare", className), ...props, children: [_jsx("span", { className: cx("label", labelHidden && "sr-only"), id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), orientation === "horizontal" ? _jsx("div", { className: "radio-group-items", children: opcoes }) : opcoes, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
+}
+/** A opção do grupo: o `Radio`, como o `RadioGroup.Item` do nativo. */
+RadioGroup.Item = Radio;
 const ehSecao = (x) => "items" in x;
 const textoDoItem = (it) => it.textValue ?? (typeof it.label === "string" ? it.label : "");
 export function ListBox({ label, items, selectionMode = "single", value, defaultValue, onValueChange, onAction, className, ...props }) {
@@ -502,7 +530,7 @@ export function ListBox({ label, items, selectionMode = "single", value, default
                 refs.current.delete(it.id); }, role: "option", "aria-selected": selectionMode === "none" ? undefined : escolhido, "aria-disabled": it.disabled || undefined, "aria-describedby": idDesc, tabIndex: it.id === alvo ? 0 : -1, className: cx("list-box-item", it.danger && "list-box-item-danger"), onClick: () => { if (!it.disabled) {
                 setAtivo(it.id);
                 escolher(it);
-            } }, onKeyDown: e => aoTeclar(e, it), onFocus: () => setAtivo(it.id), children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "list-box-item-text", children: [_jsx("span", { className: "list-box-item-label", children: it.label }), it.description && _jsx("span", { className: "list-box-item-description", id: idDesc, children: it.description })] }), escolhido && _jsx(Icon, { name: "check", className: "list-box-item-indicator" })] }, it.id);
+            } }, onKeyDown: e => aoTeclar(e, it), onFocus: () => setAtivo(it.id), children: [it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "list-box-item-text", children: [_jsx("span", { className: "list-box-item-label", children: it.label }), it.description && _jsx("span", { className: "list-box-item-description", id: idDesc, children: it.description })] }), it.kbd && _jsx(Kbd, { className: "list-box-item-kbd", children: it.kbd }), escolhido && _jsx(Icon, { name: "check", className: "list-box-item-indicator" })] }, it.id);
     };
     return _jsx("div", { role: "listbox", "aria-label": label, "aria-multiselectable": selectionMode === "multiple" || undefined, className: cx("list-box", className), ...props, children: items.map((x, i) => ehSecao(x)
             ? _jsxs("div", { role: "group", "aria-labelledby": `${auto}-s${i}`, className: "list-box-section", children: [_jsx("span", { className: "list-box-section-title", id: `${auto}-s${i}`, role: "presentation", children: x.title }), x.items.map(item)] }, `s${i}`)
@@ -682,7 +710,7 @@ export function ColorPicker({ label, value, defaultValue, onValueChange, onValue
     // O foco fica PRESO na janela (`trap-focus`), como na referência: com quatro peças dentro, o Tab que saía depois
     // do código fechava a janela (medido no navegador). O motor pede um botão de fechar dentro, para o leitor de tela
     // por toque sair; ele fica invisível e fora do Tab — quem usa teclado tem o Esc, e o foco nunca some na tela.
-    return _jsxs(BasePopover.Root, { modal: "trap-focus", children: [_jsxs(BasePopover.Trigger, { disabled: disabled, id: id, "aria-label": `${label}, ${nome}`, className: cx("color-picker-trigger", className), children: [_jsx(ColorSwatch, { color: hex, "aria-hidden": "true" }), _jsx("span", { children: label })] }), name && _jsx("input", { type: "hidden", name: name, value: hex }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: "bottom", align: "start", sideOffset: 6, children: _jsxs(BasePopover.Popup, { className: "popover color-picker-popover", "aria-label": label, children: [_jsx(CorDoSeletor.Provider, { value: contexto, children: children ?? _jsxs(_Fragment, { children: [variant !== "swatches" && _jsxs(_Fragment, { children: [_jsx(AreaDeCor, { cor: cor, onCor: mudar, space: "hsb", x: "saturation", y: "brightness", "aria-label": label }), _jsx(TrilhaDeCor, { cor: cor, onCor: mudar, channel: "hue", label: s.colorChannel.hue, labelHidden: true, showValue: false })] }), amostras && _jsx(ColorSwatch, { options: amostras, name: `${idGrupo}-amostras`, label: s.colorSwatches, value: escolhida, onChange: (e) => mudar(corDoTexto(e.target.value, cor), true) }), _jsx(ColorField, { "aria-label": s.colorHex })] }) }), _jsx(BasePopover.Close, { className: "sr-only", tabIndex: -1, children: s.close })] }) }) })] });
+    return _jsxs(BasePopover.Root, { modal: "trap-focus", children: [_jsxs(BasePopover.Trigger, { disabled: disabled, id: id, "aria-label": `${label}, ${nome}`, className: cx("color-picker-trigger", className), children: [_jsx(ColorSwatch, { color: hex, "aria-hidden": "true" }), _jsx("span", { children: label })] }), name && _jsx("input", { type: "hidden", name: name, value: hex }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { className: "positioner", side: "bottom", align: "start", sideOffset: 6, children: _jsxs(BasePopover.Popup, { className: "popover color-picker-popover", "aria-label": label, children: [_jsx(CorDoSeletor.Provider, { value: contexto, children: children ?? _jsxs(_Fragment, { children: [variant !== "swatches" && _jsxs(_Fragment, { children: [_jsx(AreaDeCor, { cor: cor, onCor: mudar, space: "hsb", x: "saturation", y: "brightness", "aria-label": label }), _jsx(TrilhaDeCor, { cor: cor, onCor: mudar, channel: "hue", label: s.colorChannel.hue, labelHidden: true, showValue: false })] }), amostras && _jsx(ColorSwatch, { options: amostras, name: `${idGrupo}-amostras`, label: s.colorSwatches, value: escolhida, onChange: (e) => mudar(corDoTexto(e.target.value, cor), true) }), _jsx(ColorField, { "aria-label": s.colorHex })] }) }), _jsx(BasePopover.Close, { className: "sr-only", tabIndex: -1, children: s.close })] }) }) })] });
 }
 // OTPField (Lote 1 do BUILDING.md). Um campo por dígito, com o comportamento que ninguém acerta
 // à mão: colar o código inteiro distribui pelos campos, Backspace volta um, e o
@@ -695,9 +723,12 @@ export function ColorPicker({ label, value, defaultValue, onValueChange, onValue
 // formulário anônimos. Um leitor de tela anunciaria "editar texto" seis vezes seguidas sem
 // dizer qual é qual. O grupo continua nomeado (`role="group"`), que é o que diz para que serve
 // o código; o nome de cada caixa é o que diz onde você está.
-export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className }) {
+// 15/10/2026 (o Victor: "A, B, C, pode"), como o campo de código da referência: `groupSize` põe o TRACINHO a cada N
+// caixas (o 3 + 3 da vitrine dela; o `Separator` do motor, de 6 × 2), e `variant="secondary"` dá às caixas o fundo
+// neutro do `Input` secundário. Sem os dois, a marcação é a de antes.
+export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant }) {
     const s = useAureaStrings();
-    return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}` }), className: "input otp-slot" }, i)) });
+    return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}` }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
 }
 // SegmentedControl — achado M20, fechado na Parte C do PLANO-1.0 em 07/08/2026.
 //
@@ -759,7 +790,7 @@ export function Combobox({ items, value, onValueChange, placeholder, label, empt
     const portal = usePortalContainer();
     const autoId = React.useId();
     const inputId = id ?? autoId;
-    return _jsxs(BaseCombobox.Root, { items: items, value: value, onValueChange: soOValor(onValueChange), disabled: disabled, itemToStringLabel: (i) => i.label, children: [_jsxs("div", { className: cx("field", className), children: [label && _jsx("label", { className: "label", htmlFor: inputId, children: label }), _jsxs(BaseCombobox.InputGroup, { className: "combobox-group", children: [_jsx(BaseCombobox.Input, { id: inputId, placeholder: placeholder, className: cx("input", peleDoEixo("input", size)), "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo }), _jsxs("span", { className: "combobox-actions", children: [_jsx(BaseCombobox.Clear, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.comboboxClear }) }), _jsx(BaseCombobox.Trigger, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "caret-down", label: s.comboboxOpen }) })] })] })] }), _jsx(BaseCombobox.Portal, { container: portal, children: _jsx(BaseCombobox.Positioner, { sideOffset: 6, children: _jsxs(BaseCombobox.Popup, { className: "menu combobox-popup", children: [_jsx(BaseCombobox.Empty, { className: "combobox-empty", children: empty ?? s.comboboxEmpty }), listaCombobox(items)] }) }) })] });
+    return _jsxs(BaseCombobox.Root, { items: items, value: value, onValueChange: soOValor(onValueChange), disabled: disabled, itemToStringLabel: (i) => i.label, children: [_jsxs("div", { className: cx("field", className), children: [label && _jsx("label", { className: "label", htmlFor: inputId, children: label }), _jsxs(BaseCombobox.InputGroup, { className: "combobox-group", children: [_jsx(BaseCombobox.Input, { id: inputId, placeholder: placeholder, className: cx("input", peleDoEixo("input", size)), "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo }), _jsxs("span", { className: "combobox-actions", children: [_jsx(BaseCombobox.Clear, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.comboboxClear }) }), _jsx(BaseCombobox.Trigger, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "caret-down", label: s.comboboxOpen }) })] })] })] }), _jsx(BaseCombobox.Portal, { container: portal, children: _jsx(BaseCombobox.Positioner, { className: "positioner", sideOffset: 6, children: _jsxs(BaseCombobox.Popup, { className: "menu combobox-popup", children: [_jsx(BaseCombobox.Empty, { className: "combobox-empty", children: empty ?? s.comboboxEmpty }), listaCombobox(items)] }) }) })] });
 }
 // MultiCombobox (Fase 4): multi-seleção com chips, opções agrupadas e filtro
 // externo (async). Reusa .combobox-popup/-item/-empty do básico.
@@ -774,7 +805,7 @@ export function MultiCombobox({ items, value, onValueChange, onInputChange, load
     const autoId = React.useId();
     const inputId = id ?? autoId;
     return _jsxs(BaseCombobox.Root, { multiple: true, items: items, value: value, onValueChange: soOValor(onValueChange), disabled: disabled, itemToStringLabel: (i) => i.label, filter: onInputChange ? null : undefined, onInputValueChange: onInputChange ? ((v, d) => { if (d.reason !== "item-press")
-            onInputChange(v); }) : undefined, children: [_jsxs("div", { className: cx("field", className), children: [label && _jsx("label", { className: "label", htmlFor: inputId, children: label }), _jsxs(BaseCombobox.InputGroup, { className: "combobox-multi", children: [_jsx(BaseCombobox.Chips, { className: "combobox-chips", children: _jsx(BaseCombobox.Value, { children: (selected) => _jsxs(_Fragment, { children: [selected.map((item) => _jsxs(BaseCombobox.Chip, { className: "combobox-chip", children: [item.label, _jsx(BaseCombobox.ChipRemove, { className: "combobox-chip-remove", "aria-label": `${s.comboboxRemove} ${item.label}`, children: _jsx(Icon, { name: "x", size: "sm" }) })] }, item.value)), _jsx(BaseCombobox.Input, { id: inputId, placeholder: selected.length ? undefined : placeholder, className: "combobox-chip-input", "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo })] }) }) }), _jsxs("span", { className: "combobox-actions", children: [_jsx(BaseCombobox.Clear, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.comboboxClear }) }), _jsx(BaseCombobox.Trigger, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "caret-down", label: s.comboboxOpen }) })] })] })] }), _jsx(BaseCombobox.Portal, { container: portal, children: _jsx(BaseCombobox.Positioner, { sideOffset: 6, children: _jsxs(BaseCombobox.Popup, { className: "menu combobox-popup", children: [_jsx(BaseCombobox.Empty, { className: "combobox-empty", children: loading ? s.comboboxLoading : (empty ?? s.comboboxEmpty) }), listaCombobox(items)] }) }) })] });
+            onInputChange(v); }) : undefined, children: [_jsxs("div", { className: cx("field", className), children: [label && _jsx("label", { className: "label", htmlFor: inputId, children: label }), _jsxs(BaseCombobox.InputGroup, { className: "combobox-multi", children: [_jsx(BaseCombobox.Chips, { className: "combobox-chips", children: _jsx(BaseCombobox.Value, { children: (selected) => _jsxs(_Fragment, { children: [selected.map((item) => _jsxs(BaseCombobox.Chip, { className: "combobox-chip", children: [item.label, _jsx(BaseCombobox.ChipRemove, { className: "combobox-chip-remove", "aria-label": `${s.comboboxRemove} ${item.label}`, children: _jsx(Icon, { name: "x", size: "sm" }) })] }, item.value)), _jsx(BaseCombobox.Input, { id: inputId, placeholder: selected.length ? undefined : placeholder, className: "combobox-chip-input", "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo })] }) }) }), _jsxs("span", { className: "combobox-actions", children: [_jsx(BaseCombobox.Clear, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.comboboxClear }) }), _jsx(BaseCombobox.Trigger, { render: _jsx(IconButton, { variant: "ghost", size: "sm", icon: "caret-down", label: s.comboboxOpen }) })] })] })] }), _jsx(BaseCombobox.Portal, { container: portal, children: _jsx(BaseCombobox.Positioner, { className: "positioner", sideOffset: 6, children: _jsxs(BaseCombobox.Popup, { className: "menu combobox-popup", children: [_jsx(BaseCombobox.Empty, { className: "combobox-empty", children: loading ? s.comboboxLoading : (empty ?? s.comboboxEmpty) }), listaCombobox(items)] }) }) })] });
 }
 const ehGrupoDoSelect = (i) => typeof i === "object" && i != null && "items" in i;
 // Lê `<option>`/`<optgroup>` como o navegador lê: `value` ausente vale o TEXTO da opção.
@@ -804,7 +835,7 @@ export const Select = forwardRef(function Select({ items, children, value, defau
         onValueChange?.(valor);
         onChange?.({ target: { value: valor, name }, currentTarget: { value: valor, name } });
     };
-    return _jsxs(BaseSelect.Root, { items: planas.map(o => ({ value: o.value, label: o.label })), ...(value !== undefined ? { value } : { defaultValue: inicial }), onValueChange: v => mudar(v), name: name, required: required, disabled: disabled, children: [_jsx(BaseSelect.Trigger, { ref: ref, className: cx("select", "select-trigger", peleDoEixo("select", size), className), ...props, children: _jsx(BaseSelect.Value, { placeholder: placeholder, className: "select-value" }) }), _jsx(BaseSelect.Portal, { container: portal, children: _jsx(BaseSelect.Positioner, { sideOffset: 6, alignItemWithTrigger: false, children: _jsx(BaseSelect.Popup, { className: "menu combobox-popup", children: _jsx(BaseSelect.List, { children: lista.map((i, n) => ehGrupoDoSelect(i)
+    return _jsxs(BaseSelect.Root, { items: planas.map(o => ({ value: o.value, label: o.label })), ...(value !== undefined ? { value } : { defaultValue: inicial }), onValueChange: v => mudar(v), name: name, required: required, disabled: disabled, children: [_jsx(BaseSelect.Trigger, { ref: ref, className: cx("select", "select-trigger", peleDoEixo("select", size), className), ...props, children: _jsx(BaseSelect.Value, { placeholder: placeholder, className: "select-value" }) }), _jsx(BaseSelect.Portal, { container: portal, children: _jsx(BaseSelect.Positioner, { className: "positioner", sideOffset: 6, alignItemWithTrigger: false, children: _jsx(BaseSelect.Popup, { className: "menu combobox-popup", children: _jsx(BaseSelect.List, { children: lista.map((i, n) => ehGrupoDoSelect(i)
                                 ? _jsxs(BaseSelect.Group, { className: "combobox-section", children: [_jsx(BaseSelect.GroupLabel, { className: "combobox-group-label", children: i.label }), i.items.map(itemDoSelect)] }, n)
                                 : itemDoSelect(i)) }) }) }) })] });
 });

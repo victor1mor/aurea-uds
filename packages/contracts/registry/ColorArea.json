@@ -1,6 +1,6 @@
 {
   "name": "ColorArea",
-  "category": "Inputs",
+  "category": "Colors",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "The square where you pick two channels of a colour for the third one fixed — saturation and brightness by default, or any pair of HSB, HSL or RGB — by pointer, touch or keyboard. The screen reader hears the channels and the colour's name.",

@@ -1,6 +1,6 @@
 {
   "name": "Menubar",
-  "category": "Navigation",
+  "category": "Collections",
   "layer": "Composite",
   "maturity": "Ready",
   "summary": "The application menu row — File, Edit, View — where an open menu hands over to its neighbour.",

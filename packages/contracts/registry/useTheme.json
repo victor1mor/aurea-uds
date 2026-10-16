@@ -1,7 +1,7 @@
 {
   "name": "useTheme",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Stable",
   "summary": "Read the current theme and switch it, from anywhere inside AureaProvider.",

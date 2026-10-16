@@ -1,6 +1,6 @@
 {
   "name": "Heading",
-  "category": "Data Display",
+  "category": "Typography",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "A heading, h1 to h6. The level picks both the element and the size, as in the reference library.",

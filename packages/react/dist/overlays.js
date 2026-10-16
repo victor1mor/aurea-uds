@@ -126,9 +126,9 @@ export function Tooltip({ children, content, side = "top", arrow = false, delay 
     const triggerId = children.props.id;
     const portal = usePortalContainer();
     const foco = focavelNaMarcacao(children) === false ? { tabIndex: 0, role: "button" } : {};
-    return _jsxs(BaseTooltip.Root, { children: [_jsx(BaseTooltip.Trigger, { ref: garantirFoco, id: triggerId, render: children, "aria-describedby": id, delay: delay, closeDelay: closeDelay, ...foco }), _jsx(BaseTooltip.Portal, { container: portal, children: _jsx(BaseTooltip.Positioner, { side: side, sideOffset: arrow ? 8 : 4, children: _jsxs(BaseTooltip.Popup, { id: id, role: "tooltip", className: "tooltip", children: [arrow && _jsx(BaseTooltip.Arrow, { className: "overlay-arrow", children: _jsx(Seta, {}) }), content] }) }) })] });
+    return _jsxs(BaseTooltip.Root, { children: [_jsx(BaseTooltip.Trigger, { ref: garantirFoco, id: triggerId, render: children, "aria-describedby": id, delay: delay, closeDelay: closeDelay, ...foco }), _jsx(BaseTooltip.Portal, { container: portal, children: _jsx(BaseTooltip.Positioner, { className: "positioner", side: side, sideOffset: arrow ? 8 : 4, children: _jsxs(BaseTooltip.Popup, { id: id, role: "tooltip", className: "tooltip", children: [arrow && _jsx(BaseTooltip.Arrow, { className: "overlay-arrow", children: _jsx(Seta, {}) }), content] }) }) })] });
 }
-export function Popover({ trigger, title, children, side = "bottom", arrow = false }) { const portal = usePortalContainer(); return _jsxs(BasePopover.Root, { children: [_jsx(BasePopover.Trigger, { render: trigger }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { side: side, sideOffset: 8, children: _jsxs(BasePopover.Popup, { className: "popover", children: [arrow && _jsx(BasePopover.Arrow, { className: "overlay-arrow", children: _jsx(Seta, {}) }), title && _jsx(BasePopover.Title, { render: _jsx("strong", {}), className: "popover-title", children: title }), children] }) }) })] }); }
+export function Popover({ trigger, title, children, side = "bottom", arrow = false }) { const portal = usePortalContainer(); return _jsxs(BasePopover.Root, { children: [_jsx(BasePopover.Trigger, { render: trigger }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { className: "positioner", side: side, sideOffset: 8, children: _jsxs(BasePopover.Popup, { className: "popover", children: [arrow && _jsx(BasePopover.Arrow, { className: "overlay-arrow", children: _jsx(Seta, {}) }), title && _jsx(BasePopover.Title, { render: _jsx("strong", {}), className: "popover-title", children: title }), children] }) }) })] }); }
 // HoverCard (Lote 1 do BUILDING.md). Não é Tooltip nem Popover, e a diferença é de propósito,
 // não de aparência: a Tooltip é um RÓTULO curto (`role="tooltip"`, some ao mover o mouse); o
 // Popover abre por CLIQUE e pode conter foco; este é uma PRÉVIA rica que aparece ao repousar o
@@ -138,7 +138,7 @@ export function Popover({ trigger, title, children, side = "bottom", arrow = fal
 // um segundo nome criaria duas peles para a mesma coisa.
 // Por depender de repouso do ponteiro, NÃO serve para informação essencial — quem navega só por
 // teclado ou toque não abre um hover card. Conteúdo obrigatório vai em Popover.
-export function HoverCard({ trigger, children, side = "bottom" }) { const portal = usePortalContainer(); return _jsxs(BasePreviewCard.Root, { children: [_jsx(BasePreviewCard.Trigger, { render: trigger }), _jsx(BasePreviewCard.Portal, { container: portal, children: _jsx(BasePreviewCard.Positioner, { side: side, sideOffset: 8, children: _jsx(BasePreviewCard.Popup, { className: "popover hover-card", children: children }) }) })] }); }
+export function HoverCard({ trigger, children, side = "bottom" }) { const portal = usePortalContainer(); return _jsxs(BasePreviewCard.Root, { children: [_jsx(BasePreviewCard.Trigger, { render: trigger }), _jsx(BasePreviewCard.Portal, { container: portal, children: _jsx(BasePreviewCard.Positioner, { className: "positioner", side: side, sideOffset: 8, children: _jsx(BasePreviewCard.Popup, { className: "popover hover-card", children: children }) }) })] }); }
 // A MARCA de um item que alterna fica num slot de largura FIXA, e não condicional: sem ele, um
 // menu com um item marcado e outro não desalinharia os rótulos a cada clique — o texto andaria
 // para o lado sozinho. É a mesma razão de o `leadingIcon` ter lugar próprio.
@@ -169,7 +169,7 @@ function renderMenuItems(items, portal) {
                 const sm = it;
                 // O submenu é uma RAIZ própria com gatilho próprio — não é um item que "abre outro menu".
                 // É o que dá `aria-haspopup`, a seta para a direita e o fechamento em cascata de graça.
-                return _jsxs(BaseMenu.SubmenuRoot, { children: [_jsxs(BaseMenu.SubmenuTrigger, { className: "menu-item", disabled: sm.disabled, children: [dentro(sm), _jsx(Icon, { name: "caret-right", size: "sm", className: "menu-seta" })] }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { side: "inline-end", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(sm.items, portal) }) }) })] }, i);
+                return _jsxs(BaseMenu.SubmenuRoot, { children: [_jsxs(BaseMenu.SubmenuTrigger, { className: "menu-item", disabled: sm.disabled, children: [dentro(sm), _jsx(Icon, { name: "caret-right", size: "sm", className: "menu-seta" })] }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: "inline-end", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(sm.items, portal) }) }) })] }, i);
             }
             case "checkbox": {
                 const c = it;
@@ -191,13 +191,13 @@ function renderMenuItems(items, portal) {
         }
     });
 }
-export function DropdownMenu({ trigger, items, side = "bottom", label }) { const portal = usePortalContainer(); return _jsxs(BaseMenu.Root, { children: [_jsx(BaseMenu.Trigger, { render: trigger }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { side: side, sideOffset: 6, children: _jsx(BaseMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal) }) }) })] }); }
+export function DropdownMenu({ trigger, items, side = "bottom", label }) { const portal = usePortalContainer(); return _jsxs(BaseMenu.Root, { children: [_jsx(BaseMenu.Trigger, { render: trigger }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: side, sideOffset: 6, children: _jsx(BaseMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal) }) }) })] }); }
 // ContextMenu: abre no botão direito e — por teclado — em Shift+F10 / tecla Menu,
 // que o browser só dispara (como evento contextmenu) sobre um elemento FOCADO. Por
 // isso o gatilho é focável (tabIndex 0) e tem nome acessível (auditoria 18/07/2026,
 // MÉDIO 3); sem isso o teclado não alcança o menu. Consumidor pode sobrescrever
 // tabIndex via children se o próprio já for focável.
-export function ContextMenu({ children, items, label, className }) { const portal = usePortalContainer(); return _jsxs(BaseContextMenu.Root, { children: [_jsx(BaseContextMenu.Trigger, { className: className, tabIndex: 0, "aria-label": label, "aria-haspopup": "menu", children: children }), _jsx(BaseContextMenu.Portal, { container: portal, children: _jsx(BaseContextMenu.Positioner, { children: _jsx(BaseContextMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal) }) }) })] }); }
+export function ContextMenu({ children, items, label, className }) { const portal = usePortalContainer(); return _jsxs(BaseContextMenu.Root, { children: [_jsx(BaseContextMenu.Trigger, { className: className, tabIndex: 0, "aria-label": label, "aria-haspopup": "menu", children: children }), _jsx(BaseContextMenu.Portal, { container: portal, children: _jsx(BaseContextMenu.Positioner, { className: "positioner", children: _jsx(BaseContextMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal) }) }) })] }); }
 // G-AXIS-06 — o valor responsivo RESOLVIDO é a única fonte de verdade: ele vai para o motor, o
 // motor publica `data-orientation`/`aria-orientation` e ajusta o teclado, e a pele reage ao
 // atributo publicado. Ver `decisions/0047-css-first-para-apresentacao-runtime-para-semantica.md`.
@@ -206,5 +206,5 @@ export function Menubar({ menus, label, modal, disabled, loopFocus, orientation,
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
     const vertical = resolvida === "vertical";
-    return _jsx(BaseMenubar, { ref: ancora, modal: modal, disabled: disabled, loopFocus: loopFocus, orientation: resolvida, "aria-label": label, className: cx("menubar", className), children: menus.map((m, i) => _jsxs(BaseMenu.Root, { disabled: m.disabled, children: [_jsx(BaseMenu.Trigger, { className: "menubar-trigger", children: m.label }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { side: vertical ? "inline-end" : "bottom", align: "start", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(m.items) }) }) })] }, i)) });
+    return _jsx(BaseMenubar, { ref: ancora, modal: modal, disabled: disabled, loopFocus: loopFocus, orientation: resolvida, "aria-label": label, className: cx("menubar", className), children: menus.map((m, i) => _jsxs(BaseMenu.Root, { disabled: m.disabled, children: [_jsx(BaseMenu.Trigger, { className: "menubar-trigger", children: m.label }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: vertical ? "inline-end" : "bottom", align: "start", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(m.items) }) }) })] }, i)) });
 }

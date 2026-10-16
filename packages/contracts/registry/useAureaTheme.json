@@ -1,7 +1,7 @@
 {
   "name": "useAureaTheme",
   "kind": "hook",
-  "category": "System",
+  "category": "Utilities",
   "layer": "Foundation",
   "maturity": "Ready",
   "summary": "Read theme and density straight from the document, and set them — for a host that owns the <html> attributes.",

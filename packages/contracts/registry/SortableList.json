@@ -1,6 +1,6 @@
 {
   "name": "SortableList",
-  "category": "Data Display",
+  "category": "Collections",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Reorder by dragging — and by keyboard, which is the reason it may exist at all.",

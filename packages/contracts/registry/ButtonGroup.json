@@ -1,6 +1,6 @@
 {
   "name": "ButtonGroup",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Buttons joined into one capsule — no gap, rounded only at the ends, a hairline between them — that share their variant, size and disabled state.",
@@ -23,7 +23,8 @@
     "primary-ghost",
     "primary-outline",
     "secondary",
-    "tertiary"
+    "tertiary",
+    "danger-soft"
   ],
   "sizes": [
     "lg",
@@ -89,7 +90,7 @@
     },
     {
       "name": "variant",
-      "type": "ButtonVariant",
+      "type": "ButtonVariant | danger-soft",
       "default": "—",
       "description": "The look of every button inside; a button may set its own."
     },

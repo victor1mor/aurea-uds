@@ -92,7 +92,9 @@ test("CommandPaletteShell: o campo de busca é rotulado", async () => {
   // SearchField é input[type=search], então o papel é searchbox e não textbox
   expect(screen.getByRole("searchbox")).toHaveAccessibleName();
   expect(screen.getByRole("dialog")).toHaveAccessibleName();
-  await semViolacao(container);
+  // 15/10/2026: a casca vai para o portal (a janela do motor), então o axe olha o documento, e não o contêiner.
+  void container;
+  await semViolacao(document.body);
 });
 
 test("DataList: par termo/valor usa dl, não tabela improvisada", async () => {
@@ -498,6 +500,30 @@ describe("CommandPalette — a paleta com motor", () => {
     render(<AureaProvider><main>
       <CommandPalette open onClose={() => feito.push("fechou")} items={COMANDOS(feito)} />
     </main></AureaProvider>);
+    await u.keyboard("{Escape}");
+    expect(feito).toEqual(["fechou"]);
+  });
+
+  // O Victor, 14/10/2026, no site: clicar fora não fechava, e depois do clique nem o Esc chegava — a moldura era
+  // uma `div` feita à mão, e o Esc só era escutado no campo. Agora é a janela do motor.
+  test("clicar fora (no fundo) fecha", async () => {
+    const u = userEvent.setup();
+    const feito: string[] = [];
+    render(<AureaProvider><main>
+      <CommandPalette open onClose={() => feito.push("fechou")} items={COMANDOS(feito)} />
+    </main></AureaProvider>);
+    await u.click(document.querySelector(".command-overlay")!);
+    expect(feito).toEqual(["fechou"]);
+  });
+
+  test("o Esc fecha também com o foco fora do campo", async () => {
+    const u = userEvent.setup();
+    const feito: string[] = [];
+    render(<AureaProvider><main>
+      <CommandPalette open onClose={() => feito.push("fechou")} items={COMANDOS(feito)} />
+    </main></AureaProvider>);
+    await u.click(document.querySelector(".command-shortcuts")!);
+    expect(document.activeElement).not.toBe(screen.getByRole("combobox"));
     await u.keyboard("{Escape}");
     expect(feito).toEqual(["fechou"]);
   });

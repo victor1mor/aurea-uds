@@ -24,13 +24,16 @@ const EIXOS = {
     "primary-outline": ["outline", "brand"], "primary-ghost": ["ghost", "brand"],
     danger: ["solid", "danger"], "danger-outline": ["outline", "danger"], "danger-ghost": ["ghost", "danger"],
     link: ["link", "neutral"], "link-primary": ["link", "brand"], "link-danger": ["link", "danger"],
-    nav: ["nav", "neutral"]
+    nav: ["nav", "neutral"], "danger-soft": ["soft", "danger"]
 };
+// Atalhos que NÃO têm classe própria (15/10/2026): saem como os dois eixos (`btn-soft btn-tone-danger`), e herdam as
+// regras de cor do tom nos dois temas em vez de repeti-las numa classe nova.
+const SO_EIXOS = new Set(["danger-soft"]);
 // caminho de volta: par → nome antigo. Existir aqui significa "o core já pinta esta célula com
 // uma classe própria", e é o que garante que NENHUMA baseline se mexe: `appearance="outline"`
 // + `tone="danger"` emite `.btn-danger-outline`, o mesmo DOM de sempre.
 const CLASSE_ANTIGA = new Map(Object.entries(EIXOS)
-    .filter(([v]) => v !== "secondary").map(([v, [a, t]]) => [`${a}/${t}`, v]));
+    .filter(([v]) => v !== "secondary" && !SO_EIXOS.has(v)).map(([v, [a, t]]) => [`${a}/${t}`, v]));
 /** Resolve os dois eixos (ou o atalho) na classe que o core pinta. Exportada porque o teste
  *  cobra a matriz inteira, e porque quem monta um botão à mão precisa da mesma conta.
  *
@@ -41,7 +44,7 @@ const CLASSE_ANTIGA = new Map(Object.entries(EIXOS)
  *  que se pede, nunca o que sobra quando a nossa paleta não dá conta. */
 export function buttonSkin(variant, appearance, tone) {
     // A variação sem eixo pedido é a própria classe — é o caminho do `secondary`, que não tem célula.
-    if (appearance === undefined && tone === undefined)
+    if (appearance === undefined && tone === undefined && !(variant && SO_EIXOS.has(variant)))
         return `btn-${variant ?? "tertiary"}`;
     const [a0, t0] = EIXOS[variant ?? "tertiary"];
     const a = appearance ?? a0, t = tone ?? t0;
@@ -100,7 +103,13 @@ const GrupoDeBotoesContext = React.createContext(null);
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
-export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
+// O nome da combinação para o `aria-keyshortcuts`: as teclas juntas por "+", com os nomes da especificação (o ESPAÇO
+// separa atalhos ALTERNATIVOS — "Ctrl K" quer dizer "Ctrl" ou "K"). O texto solto passa como veio, como antes.
+const NOME_DA_TECLA = { ctrl: "Control", control: "Control", "⌃": "Control", cmd: "Meta", command: "Meta", "⌘": "Meta", meta: "Meta",
+    shift: "Shift", "⇧": "Shift", alt: "Alt", option: "Alt", "⌥": "Alt", enter: "Enter", "↵": "Enter", esc: "Escape", escape: "Escape" };
+const atalhoAnunciado = (kbd) => typeof kbd === "string" ? (kbd || undefined)
+    : kbd && kbd.length > 0 ? kbd.map(k => NOME_DA_TECLA[k.toLowerCase()] ?? k).join("+") : undefined;
+export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
     const grupo = React.useContext(GrupoDeBotoesContext);
     const variant = variantPedida ?? grupo?.variant;
     const size = sizePedido ?? grupo?.size ?? "md";
@@ -112,7 +121,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // Quem decide é o CSS: nada aqui observa largura, e o HTML do servidor já sai correto.
     const responsivo = ehResponsivo(size);
     const base = valorBase(size) ?? "md";
-    const cls = cx("btn", buttonSkin(variant, appearance, tone), responsivo ? classesResponsivas("size", size) : (base !== "md" && `btn-${base}`), fullWidth && "btn-block", grow && "btn-grow", className);
+    const cls = cx("btn", buttonSkin(variant, appearance, tone), responsivo ? classesResponsivas("size", size) : (base !== "md" && `btn-${base}`), fullWidth && "btn-block", grow && "btn-grow", quiet && "btn-quiet", className);
     // kbd dentro do botão: mostra o atalho E o anuncia (aria-keyshortcuts), senão é enfeite.
     // 🔴 OCUPADO TROCA, NÃO ACRESCENTA (01/10/2026, achado pelo Victor no aureauds.dev): a rodinha
     // entrava ANTES do ícone, e no `IconButton` — 36 de largura fixa — rodinha e glifo não cabiam:
@@ -122,7 +131,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
     // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
     const temConteudo = children != null && children !== false;
-    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { className: "btn-kbd", children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
+    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), typeof kbd === "string" ? (kbd && _jsx(Kbd, { className: "btn-kbd", children: kbd })) : kbd && kbd.length > 0 && _jsx("span", { className: "btn-kbds", children: kbd.map((k, i) => _jsx(Kbd, { className: "btn-kbd", children: k }, i)) }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
     // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
     // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
     // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
@@ -132,7 +141,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
     const inerte = ariaDisabled === true || ariaDisabled === "true";
     const off = disabled || loading;
-    const shared = { "aria-keyshortcuts": kbd || undefined, "aria-busy": loading || undefined };
+    const shared = { "aria-keyshortcuts": atalhoAnunciado(kbd), "aria-busy": loading || undefined };
     // GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
     // estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
     const s = useAureaStrings();
@@ -225,10 +234,22 @@ export const CloseButton = forwardRef(function CloseButton({ label, className, c
     const s = useAureaStrings();
     return _jsx(Button, { ref: ref, variant: "tertiary", className: cx("close-button", className), "aria-label": label ?? s.close, ...props, children: children ?? _jsx(Icon, { name: "x", weight: "bold" }) });
 });
-export const ThemeToggle = forwardRef(function ThemeToggle({ className, ...props }, ref) {
-    const { theme, toggleTheme } = useAureaTheme();
+export const ThemeToggle = forwardRef(function ThemeToggle({ className, mode = "light-dark", ...props }, ref) {
+    const { theme, preference, toggleTheme, setTheme } = useAureaTheme();
     const s = useAureaStrings();
     const escuro = theme === "dark";
+    const nome = React.useId();
+    // A CHAVE DE TRÊS POSIÇÕES (15/10/2026, o Victor: "A, B, C, pode"): a do topo da referência, medida nela — a
+    // cápsula de 34 com as três opções de 26 e o glifo de 16. São botões de opção NATIVOS, como as amostras do
+    // `ColorSwatch`: a escolha única e as setas são do navegador. A escolhida tem o glifo cheio (ADR-0053) e a pele da
+    // aba escolhida (ADR-0059). Quem escolhe é o provider (`"system"` segue o sistema).
+    if (mode === "light-dark-system") {
+        const opcoes = [["light", "sun", s.themeLight], ["dark", "moon", s.themeDark], ["system", "monitor", s.themeSystem]];
+        return _jsx("div", { role: "radiogroup", "aria-label": s.themeChoice, className: cx("theme-switch", className), children: opcoes.map(([v, icone, rotulo]) => {
+                const marcada = preference === v;
+                return _jsxs("label", { className: "theme-switch-option", children: [_jsx("input", { type: "radio", className: "theme-switch-input", name: nome, value: v, checked: marcada, disabled: props.disabled, "aria-label": rotulo, onChange: () => setTheme(v) }), _jsx(Icon, { name: icone, size: "sm", weight: marcada ? "fill" : "regular" })] }, v);
+            }) });
+    }
     // O corpo do `IconButton`, escrito aqui só para o glifo sair na forma CHEIA (ADR-0053: a lua e o
     // sol cheios, como os do conjunto de ícones anterior, aprovados pela imagem em 25/09/2026). O `IconButton` público não
     // tem peso de ícone.

@@ -4,15 +4,15 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 39,
-    "componentes": 143,
+    "componentes": 144,
     "hooks": 9,
-    "aliasesLiterais": 110,
-    "propsDistintas": 356
+    "aliasesLiterais": 111,
+    "propsDistintas": 365
   },
   "aliases": {
     "ButtonVariant": {
       "module": "actions",
-      "raw": "\"primary\" | \"secondary\" | \"tertiary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\"",
+      "raw": "\"primary\" | \"secondary\" | \"tertiary\" | \"outline\" | \"ghost\" | \"primary-outline\" | \"primary-ghost\" | \"danger\" | \"danger-outline\" | \"danger-ghost\" | \"link\" | \"link-primary\" | \"link-danger\" | \"nav\" | \"danger-soft\"",
       "union": [
         "primary",
         "secondary",
@@ -27,18 +27,20 @@
         "link",
         "link-primary",
         "link-danger",
-        "nav"
+        "nav",
+        "danger-soft"
       ]
     },
     "ButtonAppearance": {
       "module": "actions",
-      "raw": "\"solid\" | \"outline\" | \"ghost\" | \"link\" | \"nav\"",
+      "raw": "\"solid\" | \"outline\" | \"ghost\" | \"link\" | \"nav\" | \"soft\"",
       "union": [
         "solid",
         "outline",
         "ghost",
         "link",
-        "nav"
+        "nav",
+        "soft"
       ]
     },
     "ButtonTone": {
@@ -1914,6 +1916,18 @@
         "x"
       ]
     },
+    "AvatarTone": {
+      "module": "identity-client",
+      "raw": "\"neutral\" | \"brand\" | \"danger\" | \"success\" | \"warning\" | \"info\"",
+      "union": [
+        "neutral",
+        "brand",
+        "danger",
+        "success",
+        "warning",
+        "info"
+      ]
+    },
     "FieldOrientation": {
       "module": "inputs-client",
       "raw": "\"vertical\" | \"horizontal\"",
@@ -2244,11 +2258,12 @@
     },
     "BadgeEmphasis": {
       "module": "markup",
-      "raw": "\"soft\" | \"solid\" | \"outline\"",
+      "raw": "\"soft\" | \"solid\" | \"outline\" | \"flat\"",
       "union": [
         "soft",
         "solid",
-        "outline"
+        "outline",
+        "flat"
       ]
     },
     "BadgeSize": {
@@ -2572,6 +2587,11 @@
         "light"
       ]
     },
+    "AureaThemePreference": {
+      "module": "pure",
+      "raw": "AureaTheme | \"system\"",
+      "union": null
+    },
     "AureaDensity": {
       "module": "pure",
       "raw": "\"compact\" | \"comfortable\" | \"spacious\"",
@@ -2688,7 +2708,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -2700,7 +2721,8 @@
                 "outline",
                 "ghost",
                 "link",
-                "nav"
+                "nav",
+                "soft"
               ]
             },
             {
@@ -2737,13 +2759,13 @@
             {
               "name": "leadingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
               "name": "trailingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
@@ -2754,6 +2776,12 @@
             },
             {
               "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "quiet",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -2797,7 +2825,7 @@
             {
               "name": "kbd",
               "optional": true,
-              "type": "string",
+              "type": "string | readonly string[]",
               "values": null
             },
             {
@@ -2846,7 +2874,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -2917,7 +2946,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -2929,7 +2959,8 @@
                 "outline",
                 "ghost",
                 "link",
-                "nav"
+                "nav",
+                "soft"
               ]
             },
             {
@@ -2966,13 +2997,13 @@
             {
               "name": "leadingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
               "name": "trailingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
@@ -2983,6 +3014,12 @@
             },
             {
               "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "quiet",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -3026,7 +3063,7 @@
             {
               "name": "kbd",
               "optional": true,
-              "type": "string",
+              "type": "string | readonly string[]",
               "values": null
             },
             {
@@ -3044,7 +3081,7 @@
             {
               "name": "icon",
               "optional": false,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             }
           ]
@@ -3077,6 +3114,15 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "mode",
+              "optional": true,
+              "type": "\"light-dark\" | \"light-dark-system\"",
+              "values": [
+                "light-dark",
+                "light-dark-system"
+              ]
             }
           ]
         },
@@ -3297,7 +3343,8 @@
                 "link",
                 "link-primary",
                 "link-danger",
-                "nav"
+                "nav",
+                "danger-soft"
               ]
             },
             {
@@ -3309,7 +3356,8 @@
                 "outline",
                 "ghost",
                 "link",
-                "nav"
+                "nav",
+                "soft"
               ]
             },
             {
@@ -3346,13 +3394,13 @@
             {
               "name": "leadingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
               "name": "trailingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
@@ -3363,6 +3411,12 @@
             },
             {
               "name": "fullWidth",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "quiet",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -3406,7 +3460,7 @@
             {
               "name": "kbd",
               "optional": true,
-              "type": "string",
+              "type": "string | readonly string[]",
               "values": null
             }
           ]
@@ -4904,6 +4958,12 @@
               "optional": true,
               "type": "() => void",
               "values": null
+            },
+            {
+              "name": "action",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             }
           ]
         },
@@ -5605,6 +5665,28 @@
                 "sm",
                 "md",
                 "lg"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "AvatarTone",
+              "values": [
+                "neutral",
+                "brand",
+                "danger",
+                "success",
+                "warning",
+                "info"
+              ]
+            },
+            {
+              "name": "emphasis",
+              "optional": true,
+              "type": "\"default\" | \"soft\"",
+              "values": [
+                "default",
+                "soft"
               ]
             },
             {
@@ -6593,6 +6675,21 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "groupSize",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"primary\" | \"secondary\"",
+              "values": [
+                "primary",
+                "secondary"
+              ]
             }
           ]
         },
@@ -6613,6 +6710,88 @@
             },
             {
               "name": "defaultVisible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            }
+          ]
+        },
+        {
+          "name": "RadioGroup",
+          "kind": "function",
+          "propsType": "RadioGroupProps",
+          "props": [
+            {
+              "name": "label",
+              "optional": false,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "error",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "invalid",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"vertical\" | \"horizontal\"",
+              "values": [
+                "vertical",
+                "horizontal"
+              ]
+            },
+            {
+              "name": "required",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -7316,7 +7495,8 @@
               "values": [
                 "soft",
                 "solid",
-                "outline"
+                "outline",
+                "flat"
               ]
             },
             {
@@ -7671,6 +7851,12 @@
               "values": null
             },
             {
+              "name": "showLabels",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "disabled",
               "optional": true,
               "type": "boolean",
@@ -7809,6 +7995,36 @@
                 "2xl",
                 "full"
               ]
+            },
+            {
+              "name": "itemsJustify",
+              "optional": true,
+              "type": "\"start\" | \"end\"",
+              "values": [
+                "start",
+                "end"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"sm\"",
+              "values": [
+                "md",
+                "sm"
+              ]
+            },
+            {
+              "name": "blurred",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "menuActions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             },
             {
               "name": "navLabel",
@@ -8273,6 +8489,18 @@
               "values": null
             },
             {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
               "name": "size",
               "optional": true,
               "type": "Responsive<FieldSize>",
@@ -8355,6 +8583,15 @@
               "values": null
             },
             {
+              "name": "layout",
+              "optional": true,
+              "type": "\"columns\" | \"inline\"",
+              "values": [
+                "columns",
+                "inline"
+              ]
+            },
+            {
               "name": "legal",
               "optional": true,
               "type": "ReactNode",
@@ -8435,6 +8672,27 @@
               "optional": false,
               "type": "ReactNode",
               "values": null
+            },
+            {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "indicatorPlacement",
+              "optional": true,
+              "type": "\"start\" | \"end\"",
+              "values": [
+                "start",
+                "end"
+              ]
             },
             {
               "name": "size",
@@ -8628,6 +8886,36 @@
                 "2xl",
                 "full"
               ]
+            },
+            {
+              "name": "itemsJustify",
+              "optional": true,
+              "type": "\"start\" | \"end\"",
+              "values": [
+                "start",
+                "end"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"sm\"",
+              "values": [
+                "md",
+                "sm"
+              ]
+            },
+            {
+              "name": "blurred",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "menuActions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             },
             {
               "name": "navLabel",
@@ -9038,6 +9326,18 @@
               "name": "onQueryChange",
               "optional": false,
               "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "onClose",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
               "values": null
             },
             {
@@ -9989,25 +10289,33 @@
             {
               "name": "theme",
               "optional": true,
-              "type": "AureaTheme",
+              "type": "AureaThemePreference",
               "values": [
                 "dark",
-                "light"
+                "light",
+                "system"
               ]
             },
             {
               "name": "defaultTheme",
               "optional": true,
-              "type": "AureaTheme",
+              "type": "AureaThemePreference",
               "values": [
                 "dark",
-                "light"
+                "light",
+                "system"
               ]
             },
             {
               "name": "onThemeChange",
               "optional": true,
               "type": "(theme: AureaTheme) => void",
+              "values": null
+            },
+            {
+              "name": "onThemePreferenceChange",
+              "optional": true,
+              "type": "(preference: AureaThemePreference) => void",
               "values": null
             },
             {

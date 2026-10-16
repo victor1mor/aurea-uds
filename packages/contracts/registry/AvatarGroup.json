@@ -1,6 +1,6 @@
 {
   "name": "AvatarGroup",
-  "category": "Identity",
+  "category": "Media",
   "layer": "Component",
   "maturity": "Ready",
   "summary": "Overlapping stack of avatars, with a count for the ones that do not fit.",

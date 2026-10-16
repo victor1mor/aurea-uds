@@ -1,6 +1,6 @@
 {
   "name": "ToolbarSeparator",
-  "category": "Actions",
+  "category": "Layout",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "Visual divider between toolbar groups.",

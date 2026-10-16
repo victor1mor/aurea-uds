@@ -18,6 +18,9 @@ import {dirname, join} from "node:path";
 import * as A from "../packages/react/dist/index.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
+import {linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
+// A aba "Components" da vitrine do Início (15/10/2026): o MESMO arquivo que o `home.js` deixa vivo.
+import {VitrineComponentes} from "../apps/catalog/live/vitrine-componentes.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 // write() em vez de writeFileSync direto: no Windows o antivírus/indexador ainda segura o
@@ -65,8 +68,9 @@ const fichas = readdirSync(regDir).filter(f => f.endsWith(".json"))
   .map(f => JSON.parse(readFileSync(join(regDir, f), "utf8")))
   .sort((a, b) => a.name.localeCompare(b.name));
 
-const CAT_ORDER = ["Actions", "Inputs", "Navigation", "Overlays", "Disclosure", "Feedback",
-  "Data Display", "Identity", "Media", "Code", "Communication", "Layout", "System", "AI & Agents"];
+// A ORDEM DOS GRUPOS (ADR-0070, 14/10/2026): os 15 da referência, em ordem alfabética, como na página "All
+// Components" dela; depois os 3 da Aurea que ela não tem. Dentro do grupo, a ordem alfabética das fichas.
+const CAT_ORDER = ["Buttons", "Collections", "Colors", "Controls", "Data Display", "Date and Time", "Feedback", "Forms", "Layout", "Media", "Navigation", "Overlays", "Pickers", "Typography", "Utilities", "AI & Agents", "Code", "Communication"];
 const byCat = {};
 for (const f of fichas) (byCat[f.category] ??= []).push(f);
 // Esta lista era a ÚNICA fonte das páginas de componente, e uma categoria que não estivesse
@@ -92,6 +96,14 @@ const MAT = {Stable: "success", Universal: "primary", Ready: "info", Draft: "war
 // A versão no topo, o endereço do código-fonte nas pílulas, e os selos do menu — tudo dos DADOS.
 const VERSAO = JSON.parse(readFileSync(join(root, "packages/react/package.json"), "utf8")).version;
 const REPO = "https://github.com/victor1mor/aurea-uds";
+// O ano do rodapé: o da última versão publicada, e não o relógio (a página é gerada e conferida pela CI).
+const ANO = JSON.parse(readFileSync(join(root, "scripts/released-surface.json"), "utf8")).date.slice(0, 4);
+// O LOGO DO GITHUB (o Victor, 15/10/2026: "A, pode baixar o oficial do GitHub") — só no SITE, nunca na biblioteca
+// (CLAUDE.md §5). Os arquivos são os oficiais, sem alteração (`apps/catalog/marcas/github/`, do brand.github.com). A
+// regra do GitHub, lida em 15/10/2026: o logo pode ser o botão que leva ao projeto; não se modifica, e só sai em preto
+// ou branco. O desenho é lido do arquivo; a cor é o preto ou o branco oficial, conforme o tema (`.site-github-ink`).
+const DESENHO_GITHUB = readFileSync(join(root, "apps/catalog/marcas/github/GitHub_Invertocat_Black.svg"), "utf8").match(/ d="([^"]+)"/)[1];
+const GitHub = props => h("svg", {...props, viewBox: "0 0 98 96", fill: "none"}, h("path", {d: DESENHO_GITHUB, className: "site-github-ink"}));
 // "New": o componente que não está na superfície PUBLICADA (o marco da última versão no npm).
 const publicados = new Set(JSON.parse(readFileSync(join(root, "scripts/released-surface.json"), "utf8")).components);
 // "Updated": o que a seção da versão EM CONSTRUÇÃO do CHANGELOG cita, entre crases, como mudado — a
@@ -607,30 +619,47 @@ function componentsIndex() {
 
 // ── Início (index.html) ──────────────────────────────────────────────────────
 // Como o início da referência: o título centralizado em duas linhas (a segunda esmaecida), o texto,
-// dois botões, e uma vitrine grande. A vitrine são os BLOCOS da própria Aurea, em abas.
+// dois botões, e uma vitrine grande. A primeira aba é a "Components" da referência (15/10/2026): as peças soltas, em três
+// colunas (`apps/catalog/live/vitrine-componentes.mjs`), pronta aqui e viva no `home.js`. As outras são os BLOCOS da
+// própria Aurea — na referência, os modelos de tela.
 const VITRINE = ["block-sign-in-panel", "block-stats-row", "block-members-table", "block-settings-form"];
 function homePage() {
-  const escolhidos = VITRINE.map(s => blocks.find(b => b.slug === s)).filter(Boolean);
+  const blocos = VITRINE.map(s => blocks.find(b => b.slug === s)).filter(Boolean).map((b, n) => ({slug: b.slug, name: b.name,
+    html: b.prerender ? preRenderizado[b.slug]
+      : renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, b.render()), {identifierPrefix: `vit-${n + 1}-`})}));
+  const escolhidos = [{slug: "components", name: "Components", vivo: true,
+    html: renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h(VitrineComponentes)), {identifierPrefix: "vit-0-"})}, ...blocos];
   const aba = (b, n) => h("button", {key: b.slug, type: "button", role: "tab", id: `vit-${n}`, "data-panel": b.slug,
     className: n === 0 ? "active" : undefined, "aria-selected": n === 0 ? "true" : "false",
     "aria-controls": `vit-${n}-panel`, tabIndex: n === 0 ? 0 : -1}, b.name);
   const node = h("div", {className: "home"},
     h("section", {className: "home-hero"},
-      h(A.Badge, {tone: "primary"}, `v${VERSAO}`),
-      h("h1", null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
-      h("p", null, "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little."),
+      // O selo é um LINK para o que mudou, com o foguete, sem borda e com o fundo clarinho — como o da referência
+      // (15/10/2026). O `Badge` com `emphasis="flat"` (o tom clarinho, sem a linha) e o ícone no encaixe `leading`.
+      h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`},
+        h(A.Badge, {tone: "primary", emphasis: "flat", leading: h(A.Icon, {name: "rocket"})}, `Aurea v${VERSAO} — what's new`)),
+      // O título e o texto JUNTOS, sem vão entre eles, como no início da referência (o Victor, 14/10/2026).
+      h("div", {className: "home-texto"},
+        h("h1", null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
+        h("p", null, "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little.")),
       h("div", {className: "home-acoes"},
         h(A.Button, {variant: "primary", href: "./getting-started.html"}, "Get started"),
         h(A.Button, {variant: "outline", href: "./components.html"}, "View components")),
-      h("p", {className: "home-nota"}, "Open source under Apache-2.0")),
+      // Como a da referência (o Victor, 15/10/2026: "mude para igual a deles"): o link para o repositório, em letra 12.
+      // Sem o número de estrelas: ele muda sozinho, e a página é gerada e conferida pela CI — o número escrito nela
+      // ficaria velho, e buscado na montagem faria a página mudar a cada estrela.
+      // Com o logo oficial do GitHub na frente, em 16, como a da referência (15/10/2026).
+      h("a", {className: "home-nota", href: REPO}, h(A.Icon, {name: GitHub, size: "sm"}), "Open source on GitHub")),
     h("section", {className: "home-vitrine", "aria-label": "Showcase"},
-      h("div", {className: "segmented home-abas", role: "tablist", "aria-label": "Showcase"}, ...escolhidos.map(aba)),
+      // As abas só a partir de 1024, como na referência: abaixo disso ela mostra só a primeira vitrine (`hide-below-lg`).
+      h("div", {className: "segmented home-abas hide-below-lg", role: "tablist", "aria-label": "Showcase"}, ...escolhidos.map(aba)),
       // A caixa é o `Card variant="outline"`: da cor da página, só com a linha em volta, como a da
-      // referência (o Victor, 13/10/2026). O componente, e não uma regra do site.
+      // referência (o Victor, 13/10/2026). O componente, e não uma regra do site. O conteúdo vai CENTRADO dentro dela,
+      // como na referência (15/10/2026) — pelo miolo do site, sem mexer no cartão.
       ...escolhidos.map((b, n) => h(A.Card, {key: b.slug, variant: "outline", className: "home-painel", role: "tabpanel", id: `vit-${n}-panel`,
-        "aria-labelledby": `vit-${n}`, "data-panel": b.slug, "data-aurea-tabpanel": "", tabIndex: 0, hidden: n !== 0 ? true : undefined,
-        dangerouslySetInnerHTML: {__html: b.prerender ? preRenderizado[b.slug]
-          : renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, b.render()), {identifierPrefix: `vit-${n}-`})}}))));
+        "aria-labelledby": `vit-${n}`, "data-panel": b.slug, "data-aurea-tabpanel": "", tabIndex: 0, hidden: n !== 0 ? true : undefined},
+        // `data-vitrine-componentes`: o lugar que o `home.js` troca pela vitrine viva.
+        h("div", {className: "home-painel-miolo", "data-vitrine-componentes": b.vivo ? "" : undefined, dangerouslySetInnerHTML: {__html: b.html}})))));
   return {node, toc: []};
 }
 
@@ -992,7 +1021,9 @@ function hooksPage() {
 // Aurea: o `AppShell` (com a coluna da direita, feita para isto no passo 4), a `Sidebar` pelos
 // `navItems` e o `TableOfContents`. As áreas não levam mais contagem (era ruído; o número vai para o
 // título de cada página).
-const AREAS = [["Getting Started", "getting-started.html", "start"], ["Components", "components.html", "components"],
+// "Docs", e não "Getting Started" (15/10/2026): o nome do link da referência para a mesma página, e o mais curto — com
+// "Getting Started" o topo do Início não cabia numa linha de 768 a 949 (medido; o Victor viu a barra cortada).
+const AREAS = [["Docs", "getting-started.html", "start"], ["Components", "components.html", "components"],
   ["Patterns", "patterns.html", "patterns"], ["Blocks", "blocks.html", "blocks"], ["Recipes", "recipes.html", "recipes"],
   ["Hooks", "hooks.html", "hooks"], ["Tokens", "tokens.html", "tokens"]];
 
@@ -1026,26 +1057,77 @@ const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 
 const mark = h("svg", {width: 26, height: 26, viewBox: "0 0 1000 1000", "aria-hidden": "true", style: {flex: "none"}},
   [0, 90, 180, 270].map(r => h("path", {key: r, d: D, fill: "var(--primary)", transform: `rotate(${r} 500 500)`})));
 
+// O BOTÃO "THEME" (o Victor, 14/10/2026: "crie um botão tema como da [referência]"): a escolha de tema da referência — o
+// botão pequeno com o balde de tinta e "Theme", que abre a janelinha com as amostras redondas e o nome embaixo. Na
+// Aurea os "temas" são as MARCAS (ADR-0036). Ele é vivo (a `Popover` da Aurea): quem monta é o `search.js`, sobre
+// este lugar; aqui sai o botão parado, igual ao vivo, para a barra não pular. As cores vêm dos TOKENS — a da marca
+// em hex, que é o que a `ColorSwatch` lê para pôr o "visto" claro ou escuro.
+const hexDoToken = t => linearSrgbParaHex(oklchParaLinearSrgb(t.$value.components));
+const MARCAS = [{id: "", label: "Aurea", color: hexDoToken(tokensDoc.base["brand-yellow"])},
+  {id: "lory", label: "Lory", color: hexDoToken(tokensDoc.brand.lory.dark.primary)}];
+// A MESMA CAIXA DOS VIZINHOS (o Victor, 15/10/2026: "por que os ícones da direita estão tamanhos diferentes?"): o `sm`
+// (32), como os outros botões do topo — na referência são todos de 32 a 34, com fundo. A letra fica a do `sm` (14): a
+// referência põe 12 e a letra apagada nesse botão com um ajuste só dela; na Aurea é o `quiet` do `Button` (15/10/2026).
+// Abaixo de 1024 ele é só o ícone (15/10/2026): com a palavra, o topo do Início não cabia numa linha entre 768 e 1023. O
+// botão parado sai nas DUAS formas, cada uma na sua largura, para a barra não pular quando o vivo entra.
+const botaoTema = () => h("span", {id: "site-theme-root", className: "site-theme", "data-brands": JSON.stringify(MARCAS)},
+  h(A.Button, {size: "sm", variant: "tertiary", quiet: true, leadingIcon: "paint-bucket", "aria-label": "Design theme",
+    className: "hide-below-lg"}, "Theme"),
+  h(A.IconButton, {icon: "paint-bucket", label: "Design theme", variant: "tertiary", size: "sm", className: "site-so-estreito"}));
+
+// O GITHUB no topo, por último, como o da referência (o Victor, 15/10/2026: "adicione também o ícone lá em cima do
+// github"): o botão redondo da busca, com o logo oficial — o `IconButton` aceita o desenho do app desde 15/10/2026.
+// Sem o número de estrelas, pelo mesmo motivo da nota do Início.
+// No celular ele sai da barra (a `hide-below-md` do core): com os botões de 44 da Aurea a barra quebrava em duas
+// linhas (medido em 375). A referência o põe dentro do menu do celular; o menu do `Header` só leva os links do site.
+// A CHAVE DE TEMA (o Victor, 15/10/2026: "A, B, C, pode"): a de três posições do topo da referência — claro, escuro e
+// sistema —, o `ThemeToggle mode="light-dark-system"`. Viva no `search.js` (sob o mesmo provedor da busca), que guarda
+// a escolha; aqui sai a peça parada, no lugar dela. No Início ela sai da barra no celular e entra no menu.
+const chaveDeTema = (classe) => h("span", {className: classe ? `site-theme-switch ${classe}` : "site-theme-switch", "data-site-theme-switch": ""},
+  h(A.ThemeToggle, {mode: "light-dark-system"}));
+
+const botaoGitHub = (classe = "hide-below-md") => h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO, className: classe});
+
+// A SETINHA (15/10/2026), a da referência entre 768 e 1023: a chave de tema e o GitHub não cabem na linha ao lado dos
+// links, e ficam numa janelinha que a setinha abre (a `Popover` da Aurea). Viva no `home.js`; aqui sai a setinha parada,
+// no lugar dela, com o desenho do GitHub nos dados (o vivo monta o mesmo logo).
+const setinhaDoTopo = () => h("span", {id: "site-more-root", className: "site-more", "data-github": DESENHO_GITHUB, "data-repo": REPO},
+  h(A.IconButton, {icon: "caret-down", label: "More", variant: "tertiary", size: "sm"}));
+
 function topoDoSite(section) {
-  const brand = h("a", {href: "./index.html", className: "site-brand"}, mark, h("strong", null, "Aurea"),
-    h("span", {className: "site-version"}, `v${VERSAO}`));
+  // SEM a versão ao lado da logo (o Victor, 15/10/2026: "do topo retire a versão"), como na referência; ela continua
+  // no selo da abertura do Início. O nome, com 16 em peso 600, como o dela.
+  const brand = h("a", {href: "./index.html", className: "site-brand"}, mark, h("strong", null, "Aurea"));
+  // O TOPO DO INÍCIO é o da página inicial da referência (o Victor, 14/10/2026: "as opções na página inicial devem
+  // ficar com a logo, e não na linha de baixo"): o `Header` com `items` — os links na MESMA linha, colados na marca
+  // (`itemsJustify="start"`) — e as ações na outra ponta. No celular os links vão para o menu do próprio `Header`.
+  if (section === "home") {
+    return {brand, home: {
+      items: AREAS.map(([label, href, id]) => ({id, label, href: `./${href}`})),
+      actions: h(Fragment, null,
+        h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm",
+          href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}),
+        botaoTema(),
+        // de 1024 para cima, na linha, como a da referência; de 768 a 1023, dentro da setinha; abaixo, no menu
+        chaveDeTema("hide-below-lg"),
+        botaoGitHub("hide-below-lg"),
+        setinhaDoTopo())}};
+  }
   const topbar = h(Fragment, null,
     // A BUSCA (ADR-0067; o Victor, 13/10/2026: "faltou o buscar"): o botão da referência, com o atalho
     // à mostra. Quem abre é o `search.js` (a `CommandPalette` da Aurea, viva), com Ctrl+K ou o clique;
     // sem JavaScript o botão leva ao catálogo, onde está a lista inteira. No Início, como no da
     // referência, a busca é SÓ o ícone, junto das outras chaves (o Victor, 13/10/2026).
-    section === "home" ? null : h(A.Button, {variant: "tertiary", leadingIcon: "magnifying-glass", kbd: "Ctrl K",
+    // As teclas SEPARADAS, uma caixinha cada, como a busca da referência (o Victor, 15/10/2026: "o Ctrl K separado").
+    h(A.Button, {variant: "tertiary", leadingIcon: "magnifying-glass", kbd: ["Ctrl", "K"],
       className: "site-search", href: "./components.html", "data-site-search": ""}, "Search"),
     h("span", {className: "site-actions"},
-      section === "home" ? h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary",
-        href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}) : null,
-      // SELETOR DE MARCA (20/08/2026, ADR-0036): ao lado do tema, porque são o mesmo tipo de chave.
-      h(A.Select, {id: "brand-select", "aria-label": "Brand", className: "hide-below-lg", defaultValue: "", style: {width: "auto"}},
-        h("option", {value: ""}, "Aurea"), h("option", {value: "lory"}, "Lory")),
-      // toggle de tema: dois ícones, o CSS mostra o oposto do tema atual; catalog.js alterna.
-      h("button", {className: "btn btn-icon btn-ghost", id: "theme-toggle", type: "button", "aria-label": "Toggle light / dark theme"},
-        h(A.Icon, {name: "sun", weight: "fill", className: "t-sun"}),
-        h(A.Icon, {name: "moon", weight: "fill", className: "t-moon"}))),
+      // A MARCA (20/08/2026, ADR-0036) ao lado do tema, porque são o mesmo tipo de chave — desde 14/10/2026 no botão
+      // "Theme" da referência, e não mais numa caixa de seleção.
+      botaoTema(),
+      // A chave de três posições do topo da referência (15/10/2026): claro, escuro e sistema.
+      chaveDeTema(),
+      botaoGitHub()),
     // AS ÁREAS POR ÚLTIMO NO CÓDIGO, porque aparecem na segunda linha. Vinham primeiro e desciam por `order:3`:
     // o Tab ia da marca para a linha de baixo e voltava para a busca, em cima (WCAG 2.4.3; a trava
     // `ordem-de-foco.spec.ts` pegou nas 410 páginas, 14/10/2026).
@@ -1068,14 +1150,30 @@ function separarToc(inner) {
 
 function shell(activeHref, inner, section = "components") {
   const {node, toc} = separarToc(inner);
-  const {brand, topbar} = topoDoSite(section);
+  const {brand, topbar, home} = topoDoSite(section);
   // O sprite é INLINE nesta página (external <use> via file:// esbarra em CORS), então a base é vazia.
   if (section === "home") {
     // O Início da referência não tem menu: o topo e o conteúdo, sem o AppShell (que sempre desenha a lateral).
     return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h("div", {className: "site-home"},
       h("a", {className: "skip-link", href: "#main"}, "Skip to content"),
-      h(A.Header, {variant: "flush", brand, className: "site-top"}, topbar),
-      h("main", {id: "main", tabIndex: -1}, node))));
+      // `maxWidth="2xl"` (o Victor, 15/10/2026: no monitor de 24" o topo ia para os cantos, e o da referência fica no
+      // centro, com 1400 de largura). A escala do `Container` não tem 1400; o `2xl` (1536) fica mais perto nas duas
+      // telas medidas: a logo a 32 da borda em 1440 (a dela, 36) e a 215 em 1902 (a dela, 276) — o `xl` daria 104 e 343.
+      h(A.Header, {variant: "flush", brand, className: "site-top", items: home.items, actions: home.actions,
+        itemsJustify: "start", maxWidth: "2xl", navLabel: "Sections",
+        // O topo da página inicial da referência (o Victor, 15/10/2026: "A, B, C, pode"): 56 de altura, 6 entre as
+        // ações, o fundo que embaça, e o GitHub dentro do menu do celular (na barra ele some abaixo de 768).
+        size: "sm", blurred: true, menuActions: h(Fragment, null, chaveDeTema(),
+          h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO}))}),
+      h("main", {id: "main", tabIndex: -1}, node),
+      // O RODAPÉ da página inicial da referência (15/10/2026): uma linha centrada — a `Section variant="footer"` com
+      // `layout="inline"`. O ano é o da última versão publicada (dos dados), para a página não mudar sozinha.
+      h(A.Section, {variant: "footer", layout: "inline", maxWidth: "2xl",
+        legal: `© ${ANO} Aurea UDS. Open source under Apache-2.0.`,
+        links: [{title: "Aurea", items: [{id: "changelog", label: "Changelog", href: `${REPO}/blob/main/CHANGELOG.md`},
+          {id: "license", label: "License", href: `${REPO}/blob/main/LICENSE`}]}]},
+        // O ícone social é um LINK simples, como os da referência (18 de desenho): a pele de link do próprio rodapé.
+        h("a", {className: "section-footer-link", href: REPO, "aria-label": "GitHub"}, h(A.Icon, {name: GitHub}))))));
   }
   const menu = (MENUS[section] || menuComponentes)();
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
@@ -1229,18 +1327,18 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .prevnext { flex-wrap:wrap; }
 .pn strong { overflow-wrap:break-word; }
 .pn:hover { border-color:var(--primary-outline); }
-/* toggle de tema: mostra o ícone do tema PRA ONDE VAI (no dark, a lua… não — o sol, "ir pro claro"). */
 /* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
    O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
    largura) e as ações; embaixo, as áreas do site. */
 .site-shell > .topbar, .site-top { flex-wrap:wrap; row-gap:0; }
 .site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
-.site-brand strong { font-size:var(--text-lg); }
-.site-version { color:var(--muted-foreground); font-size:var(--text-sm); }
+.site-brand strong { font-size:var(--text-base); font-weight:var(--weight-semibold); }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
 .site-areas { flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
 .site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
-.site-search .kbd { margin-inline-start:auto; }
+/* As teclas na PONTA do botão, como a busca da referência. Desde que são uma caixinha por tecla (15/10/2026), elas moram
+   num invólucro (".btn-kbds"): é ELE que vai para a ponta — a regra só na tecla parou de alcançar (o Victor viu). */
+.site-search > .kbd, .site-search > .btn-kbds { margin-inline-start:auto; }
 .site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
 .site-area:hover { color:var(--foreground); }
 .site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:var(--primary); }
@@ -1265,17 +1363,105 @@ a.related-card:hover { border-color:var(--primary-outline); }
 .cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
 /* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */
 .site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
-.home { display:grid; gap:var(--space-12); width:min(100%, 72rem); }
-.home-hero { display:grid; justify-items:center; gap:var(--space-5); text-align:center; }
-.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-5xl); line-height:var(--text-4xl-leading); font-weight:var(--weight-bold); text-wrap:balance; }
+/* A vitrine com os 1200 da referência (15/10/2026): o 1280 da escala menos o --space-20. */
+.home { display:grid; gap:var(--space-12); width:min(100%, calc(var(--breakpoint-xl) - var(--space-20))); }
+/* As medidas do início da referência (lidas na página dela, 14/10/2026, a 1440): 16 entre as peças, o título e o texto
+   colados, e o texto com 18 de letra em 28 de linha (o Victor: "as linhas estão distantes, deixe como a referência"). */
+/* Os vãos e as letras da referência, nas três larguras dela (lidos no código e medidos, 15/10/2026): o selo e o título
+   a 8 (16 a partir de 1024); o texto colado no título; os botões a 16; a nota a 8 (16 a partir de 1024). O título 30/36
+   no celular, 36/40 a partir de 640 e 48/48 a partir de 1024; o texto 16/24, e 18/28 a partir de 768, em 672 de largura
+   (o 640 da escala mais o --space-8). A segunda linha do título fica no cinza da Aurea (7,3:1): a da referência apaga
+   até ~4,4:1, e a Aurea é de baixa visão. As letras do título, juntas pelo --tracking-tight da Aurea. */
+.home-hero { display:grid; justify-items:center; text-align:center; }
+.home-texto { display:grid; justify-items:center; margin-block-start:var(--space-2); }
+.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); line-height:var(--text-3xl-leading); font-weight:var(--weight-bold); letter-spacing:var(--tracking-tight); text-wrap:balance; }
 .home-hero h1 span { color:var(--muted-foreground); }
-.home-hero > p { max-width:40rem; margin:0; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
-.home-hero > .home-nota { font-size:var(--text-sm); }
+.home-texto > p { max-width:calc(var(--breakpoint-sm) + var(--space-8)); margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); text-wrap:balance; }
+.home-acoes { margin-block-start:var(--space-4); }
+.home-hero > .home-nota { display:inline-flex; align-items:center; gap:var(--space-2); margin-block-start:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); text-decoration:none; }
+.home-hero > .home-nota:hover { color:var(--foreground); }
+@media (min-width:640px) { .home-hero h1 { font-size:var(--text-4xl); line-height:var(--text-4xl-leading); } }
+@media (min-width:768px) { .home-texto > p { font-size:var(--text-lg); line-height:var(--text-lg-leading); } }
+@media (min-width:1024px) { .home-texto, .home-hero > .home-nota { margin-block-start:var(--space-4); } .home-hero h1 { font-size:var(--text-5xl); line-height:var(--leading-none); } }
+.home-selo { display:inline-flex; border-radius:var(--radius-control); text-decoration:none; }
+/* O conteúdo da vitrine centrado na caixa, com os 32 de respiro da referência em cima e embaixo (16 do cartão + 16). */
+.home-painel-miolo { display:flex; justify-content:center; padding-block:var(--space-4); }
+/* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
+.site-github-ink { fill:#fff; }
+[data-theme="light"] .site-github-ink { fill:#000; }
 .home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
 .home-vitrine { display:grid; gap:var(--space-4); }
-.home-abas { justify-self:center; }
-[data-theme="dark"] #theme-toggle .t-moon { display:none; }
-[data-theme="light"] #theme-toggle .t-sun { display:none; }
+/* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
+.home-abas { justify-self:start; margin-inline-start:var(--space-2); }
+/* A setinha do topo do Início só de 768 a 1023 (o que ela guarda está na linha de 1024 para cima, e no menu abaixo de
+   768); e o "Theme" só de ícone abaixo de 1024. */
+.site-more { display:none; }
+@media (min-width:768px) and (max-width:1023px) { .site-more { display:inline-flex; } }
+.site-more-panel { display:flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); }
+.site-so-estreito { display:none !important; }
+@media (max-width:1023px) { .site-so-estreito { display:inline-flex !important; } }
+/* A aba "Components" (15/10/2026), na composição da vitrine da referência, lida no código dela: três colunas de até 360
+   (o --breakpoint-2xs), 32 entre elas e 40 entre as peças de cada uma; no celular uma coluna só, a do meio primeiro;
+   de 768 a 1023, duas, com os cartões da direita embaixo das duas. As larguras dela: 256 nos campos (o --space-16
+   vezes 4), 280 no código, 320 no cartão de conta (o --space-20 vezes 4). O que é DESTA composição mora aqui; as peças
+   são as da Aurea, sem nada por cima. */
+.vit-c { display:grid; grid-template-columns:minmax(0,1fr); justify-items:center; gap:var(--space-8); width:100%; }
+.vit-col { display:flex; flex-direction:column; align-items:center; gap:var(--space-10); width:100%; max-width:var(--breakpoint-2xs); }
+.vit-col-a { order:2; } .vit-col-b { order:1; }
+.vit-col-c { order:3; display:grid; grid-template-columns:minmax(0,1fr); justify-items:center; align-self:start; gap:var(--space-5); }
+/* A largura e o teto SEPARADOS: com "min(100%, …)" a porcentagem se resolvia contra a própria coluna, que se mede pelo
+   conteúdo — e os campos saíam com 249, e não 256 (medido, 15/10/2026). */
+.vit-256 { width:calc(var(--space-16) * 4); max-width:100%; }
+.vit-largo { width:100%; }
+.vit-apagado { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
+.vit-forte { display:inline-flex; align-items:center; gap:var(--space-05); margin:0; font-size:var(--text-sm); font-weight:var(--weight-semibold); line-height:var(--space-5); }
+.vit-controles { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--space-8); }
+.vit-controles .radio-group-items { gap:var(--space-8); }
+.vit-preco { padding-inline:var(--space-1); }
+.vit-rotulo { display:inline-flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); }
+.vit-lista .list-box { padding:var(--space-2); }
+.vit-codigo { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-2); width:calc(var(--space-16) * 4 + var(--space-6)); max-width:100%; }
+.vit-codigo-topo { display:flex; flex-direction:column; gap:var(--space-1); }
+.vit-reenviar { display:flex; align-items:center; gap:var(--space-1); padding:var(--space-1) var(--space-1) 0; }
+.vit-botoes { display:grid; grid-template-columns:repeat(3, auto); column-gap:var(--space-3); row-gap:var(--space-2); }
+.vit-perfil { flex-direction:row; align-items:center; gap:var(--space-3); }
+.vit-perfil-nome { display:flex; flex-direction:column; }
+.vit-selo { color:var(--primary-emphasis); }
+.vit-bio { margin:0; font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--space-5); }
+.vit-bio .icon { display:inline-block; vertical-align:text-bottom; }
+.vit-numeros { color:var(--muted-foreground); font-size:var(--text-sm); }
+.vit-numeros strong { color:var(--foreground); font-weight:var(--weight-semibold); }
+.vit-avisos { padding:var(--space-4); }
+.vit-avisos .switch { gap:var(--space-8); }
+.vit-cartao { position:relative; padding:var(--space-5); }
+.vit-fechar { position:absolute; inset-block-start:var(--space-3); inset-inline-end:var(--space-3); }
+.vit-conta { width:calc(var(--space-20) * 4); max-width:100%; }
+.vit-conta-topo { align-items:center; gap:var(--space-2); }
+.vit-conta-corpo { gap:var(--space-2); }
+.vit-nota { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--space-5); text-align:center; text-wrap:balance; }
+.vit-ou { display:flex; align-items:center; gap:var(--space-2); padding-block:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-medium); text-transform:uppercase; }
+.vit-ou > .separator { flex:1; width:auto; }
+.vit-grupos { display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-4); width:100%; }
+.vit-grupo { flex:1; }
+.vit-grupo .card-content { align-items:flex-start; }
+.vit-por { gap:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); }
+.vit-salvar { width:100%; }
+.vit-salvar .card-header { align-items:flex-start; gap:var(--space-2); padding-inline:var(--space-1); }
+.vit-salvar .card-footer { flex-wrap:nowrap; padding-inline:var(--space-05); }
+@media (min-width:768px) {
+  .vit-c { grid-template-columns:repeat(2, auto); width:fit-content; max-width:100%; }
+  .vit-col-a { order:1; } .vit-col-b { order:2; }
+  .vit-col-c { grid-column:span 2; grid-template-columns:repeat(2, minmax(0,1fr)); max-width:none; }
+  .vit-col-c > .vit-conta { grid-row:span 2; }
+}
+@media (min-width:1024px) {
+  .vit-c { grid-template-columns:repeat(3, auto); }
+  .vit-col-c { grid-column:auto; grid-template-columns:minmax(0,1fr); max-width:var(--breakpoint-2xs); }
+  .vit-col-c > .vit-conta { grid-row:auto; }
+}
+/* O cartão de salvar com 340 nas telas largas, como o dela (o 360 menos o --space-5): é ele que dá a largura da coluna.
+   Ela troca em 1200; aqui, no ponto da escala mais perto, o 1280. */
+@media (min-width:1280px) { .vit-salvar { width:calc(var(--breakpoint-2xs) - var(--space-5)); } }
 `;
 
 // O catálogo NÃO tem comportamento próprio: abas (setas/Home/End), copiar e o índice que
@@ -1289,15 +1475,10 @@ const espelhaTema = alvo => (alvo ? [alvo] : [...document.querySelectorAll("ifra
   .map(f => f.contentWindow)).forEach(w => w && w.postMessage({aureaTheme: document.documentElement.dataset.theme,
     aureaBrand: document.documentElement.dataset.brand || ""}, "*"));
 addEventListener("message", e => { if (e.data && e.data.aureaThemeRequest) espelhaTema(e.source); });
-// Quem GRAVA é o catálogo; quem aplica no primeiro quadro é o script inline do <head>. O core só
-// troca o atributo — ver o comentário em TEMA_SALVO.
-document.addEventListener("click", e => {
-  if (e.target.closest("#theme-toggle")) {
-    window.Aurea.toggleTheme();
-    espelhaTema();
-    try { localStorage.setItem("aurea-theme", document.documentElement.dataset.theme); } catch (err) {}
-  }
-});
+// O TEMA (15/10/2026): quem escolhe é a chave de três posições, viva no search.js, que grava a escolha (pode ser
+// "system"); quem aplica no primeiro quadro é o script inline do <head>. Aqui só se ESPELHA nas molduras de prévia o tema
+// e a marca que estiverem no <html> — observados, e não avisados: o "system" muda o tema sem clique nenhum.
+new MutationObserver(() => espelhaTema()).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme", "data-brand"]});
 // -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
 // Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
 // confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
@@ -1316,23 +1497,15 @@ document.addEventListener("click", e => {
   }, () => {});
 });
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
-// 'change' e não 'click': em 'select' o clique acontece antes de a opção mudar, e o teclado não
-// clica — quem escolhe com as setas nunca dispararia o handler.
-// Valor vazio = SEM marca, e é assim que a Aurea volta a ser a Aurea: 'delete' do atributo, não
-// 'data-brand="aurea"'. Marca padrão não tem nome porque não é marca — é o padrão (ADR-0036).
-document.addEventListener("change", e => {
-  const alvo = e.target.closest("#brand-select");
-  if (!alvo) return;
-  if (alvo.value) document.documentElement.dataset.brand = alvo.value;
+// Quem escolhe é o botão "Theme" (14/10/2026), vivo no search.js: ele avisa com o evento 'aurea-brand', e a
+// cola é daqui, num lugar só. Valor vazio = SEM marca, e é assim que a Aurea volta a ser a Aurea: 'delete' do
+// atributo, não 'data-brand="aurea"'. Marca padrão não tem nome porque não é marca — é o padrão (ADR-0036).
+document.addEventListener("aurea-brand", e => {
+  const marca = (e.detail && e.detail.brand) || "";
+  if (marca) document.documentElement.dataset.brand = marca;
   else delete document.documentElement.dataset.brand;
   espelhaTema();
-  try { localStorage.setItem("aurea-brand", alvo.value); } catch (err) {}
-});
-// E o seletor tem de MOSTRAR a marca que está valendo quando a página remonta — cada página do
-// catálogo é documento novo, e o <select> voltaria para "Aurea" com a página em laranja.
-addEventListener("DOMContentLoaded", () => {
-  const alvo = document.querySelector("#brand-select");
-  if (alvo) alvo.value = document.documentElement.dataset.brand || "";
+  try { localStorage.setItem("aurea-brand", marca); } catch (err) {}
 });
 
 // -- a lateral abre onde voce parou ------------------------------------------------------
@@ -1462,7 +1635,7 @@ write(join(outDir, "assets/search-index.js"), `window.AUREA_SEARCH = ${JSON.stri
 // Victor navega: `file:///C:/dev/aurea-uds/...`. Falhar em silêncio devolve o comportamento
 // antigo (tema do template); estourar deixaria a página sem estilo nenhum.
 const TEMA_SALVO = `<script>
-try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;var b=localStorage.getItem("aurea-brand");if(b)document.documentElement.dataset.brand=b}catch(e){}
+try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;else if(t==="system")document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var b=localStorage.getItem("aurea-brand");if(b)document.documentElement.dataset.brand=b}catch(e){}
 </script>
 `;
 
@@ -1476,7 +1649,7 @@ function pageHtml(title, activeHref, inner, section = "components") {
 <link rel="stylesheet" href="./assets/catalog.css">
 ${TEMA_SALVO}</head>
 <body>${SPRITE_SLOT}${shell(activeHref, inner, section)}<script src="./assets/catalog.js"></script>
-<script src="./assets/search-index.js" defer></script><script src="./assets/search.js" defer></script></body>
+<script src="./assets/search-index.js" defer></script><script src="./assets/${section === "home" ? "home" : "search"}.js" defer></script></body>
 </html>
 `;
 }
@@ -1516,7 +1689,13 @@ mkdirSync(join(outDir, "embeds"), {recursive: true});
 for (const f of readdirSync(join(outDir, "embeds")).filter(f => f.endsWith(".html"))) {
   unlinkSync(join(outDir, "embeds", f));
 }
-const spriteInline = spriteFor([...paginas, ...embeds].map(([, html]) => html));
+// Os ESTADOS que só a parte viva desenha (15/10/2026). A chave de tema de três posições desenha a escolhida com a forma
+// CHEIA, e a página pronta só tem uma escolhida (a lua): o "sol cheio" e o "monitor cheio" não entravam no sprite, e a
+// chave ficava vazia ao clicar no claro ou no sistema (o Victor viu na bancada). Mede-se desenhando a chave nos três
+// estados — e não numa lista à mão, que desatualiza sozinha (ver o `spriteFor`).
+const estadosVivos = ["light", "dark", "system"].map(tema =>
+  renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: "", theme: tema}, h(A.ThemeToggle, {mode: "light-dark-system"}))));
+const spriteInline = spriteFor([...paginas, ...embeds].map(([, html]) => html).concat(estadosVivos));
 for (const [file, html] of [...paginas, ...embeds]) write(join(outDir, file), html.replace(SPRITE_SLOT, spriteInline));
 
 const rich = Object.keys(content).length;

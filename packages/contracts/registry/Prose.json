@@ -1,6 +1,6 @@
 {
   "name": "Prose",
-  "category": "Data Display",
+  "category": "Typography",
   "layer": "Primitive",
   "maturity": "Stable",
   "summary": "The skin for long-form text. It is not the parser — that stays yours.",

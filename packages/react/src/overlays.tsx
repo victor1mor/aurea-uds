@@ -206,8 +206,8 @@ function garantirFoco(no:HTMLElement|null){
 export function Tooltip({children,content,side="top",arrow=false,delay=ATRASO_DA_DICA,closeDelay=ATRASO_PARA_FECHAR_A_DICA}:{children:ReactElement;content:ReactNode;side?:OverlaySide;arrow?:boolean;delay?:number;closeDelay?:number}){
   const id=React.useId();const triggerId=(children.props as {id?:string}).id;const portal=usePortalContainer();
   const foco=focavelNaMarcacao(children)===false?{tabIndex:0,role:"button"}:{};
-  return <BaseTooltip.Root><BaseTooltip.Trigger ref={garantirFoco} id={triggerId} render={children} aria-describedby={id} delay={delay} closeDelay={closeDelay} {...foco}/><BaseTooltip.Portal container={portal}><BaseTooltip.Positioner side={side} sideOffset={arrow?8:4}><BaseTooltip.Popup id={id} role="tooltip" className="tooltip">{arrow&&<BaseTooltip.Arrow className="overlay-arrow"><Seta/></BaseTooltip.Arrow>}{content}</BaseTooltip.Popup></BaseTooltip.Positioner></BaseTooltip.Portal></BaseTooltip.Root>}
-export function Popover({trigger,title,children,side="bottom",arrow=false}:{trigger:ReactElement;title?:ReactNode;children:ReactNode;side?:OverlaySide;arrow?:boolean}){const portal=usePortalContainer();return <BasePopover.Root><BasePopover.Trigger render={trigger}/><BasePopover.Portal container={portal}><BasePopover.Positioner side={side} sideOffset={8}><BasePopover.Popup className="popover">{arrow&&<BasePopover.Arrow className="overlay-arrow"><Seta/></BasePopover.Arrow>}{title&&<BasePopover.Title render={<strong/>} className="popover-title">{title}</BasePopover.Title>}{children}</BasePopover.Popup></BasePopover.Positioner></BasePopover.Portal></BasePopover.Root>}
+  return <BaseTooltip.Root><BaseTooltip.Trigger ref={garantirFoco} id={triggerId} render={children} aria-describedby={id} delay={delay} closeDelay={closeDelay} {...foco}/><BaseTooltip.Portal container={portal}><BaseTooltip.Positioner className="positioner" side={side} sideOffset={arrow?8:4}><BaseTooltip.Popup id={id} role="tooltip" className="tooltip">{arrow&&<BaseTooltip.Arrow className="overlay-arrow"><Seta/></BaseTooltip.Arrow>}{content}</BaseTooltip.Popup></BaseTooltip.Positioner></BaseTooltip.Portal></BaseTooltip.Root>}
+export function Popover({trigger,title,children,side="bottom",arrow=false}:{trigger:ReactElement;title?:ReactNode;children:ReactNode;side?:OverlaySide;arrow?:boolean}){const portal=usePortalContainer();return <BasePopover.Root><BasePopover.Trigger render={trigger}/><BasePopover.Portal container={portal}><BasePopover.Positioner className="positioner" side={side} sideOffset={8}><BasePopover.Popup className="popover">{arrow&&<BasePopover.Arrow className="overlay-arrow"><Seta/></BasePopover.Arrow>}{title&&<BasePopover.Title render={<strong/>} className="popover-title">{title}</BasePopover.Title>}{children}</BasePopover.Popup></BasePopover.Positioner></BasePopover.Portal></BasePopover.Root>}
 // HoverCard (Lote 1 do BUILDING.md). Não é Tooltip nem Popover, e a diferença é de propósito,
 // não de aparência: a Tooltip é um RÓTULO curto (`role="tooltip"`, some ao mover o mouse); o
 // Popover abre por CLIQUE e pode conter foco; este é uma PRÉVIA rica que aparece ao repousar o
@@ -217,7 +217,7 @@ export function Popover({trigger,title,children,side="bottom",arrow=false}:{trig
 // um segundo nome criaria duas peles para a mesma coisa.
 // Por depender de repouso do ponteiro, NÃO serve para informação essencial — quem navega só por
 // teclado ou toque não abre um hover card. Conteúdo obrigatório vai em Popover.
-export function HoverCard({trigger,children,side="bottom"}:{trigger:ReactElement;children:ReactNode;side?:OverlaySide}){const portal=usePortalContainer();return <BasePreviewCard.Root><BasePreviewCard.Trigger render={trigger}/><BasePreviewCard.Portal container={portal}><BasePreviewCard.Positioner side={side} sideOffset={8}><BasePreviewCard.Popup className="popover hover-card">{children}</BasePreviewCard.Popup></BasePreviewCard.Positioner></BasePreviewCard.Portal></BasePreviewCard.Root>}
+export function HoverCard({trigger,children,side="bottom"}:{trigger:ReactElement;children:ReactNode;side?:OverlaySide}){const portal=usePortalContainer();return <BasePreviewCard.Root><BasePreviewCard.Trigger render={trigger}/><BasePreviewCard.Portal container={portal}><BasePreviewCard.Positioner className="positioner" side={side} sideOffset={8}><BasePreviewCard.Popup className="popover hover-card">{children}</BasePreviewCard.Popup></BasePreviewCard.Positioner></BasePreviewCard.Portal></BasePreviewCard.Root>}
 
 // ── O MENU É DADO, e o dado precisava de mais de UMA forma. `G-API-02`. ──────────────────────
 //
@@ -316,7 +316,7 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{r
         <BaseMenu.SubmenuTrigger className="menu-item" disabled={sm.disabled}>
           {dentro(sm)}<Icon name="caret-right" size="sm" className="menu-seta"/>
         </BaseMenu.SubmenuTrigger>
-        <BaseMenu.Portal container={portal}><BaseMenu.Positioner side="inline-end" sideOffset={4}>
+        <BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side="inline-end" sideOffset={4}>
           <BaseMenu.Popup className="menu">{renderMenuItems(sm.items,portal)}</BaseMenu.Popup>
         </BaseMenu.Positioner></BaseMenu.Portal></BaseMenu.SubmenuRoot>;
     }
@@ -345,13 +345,13 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{r
     }
   }
 })}
-export function DropdownMenu({trigger,items,side="bottom",label}:{trigger:ReactElement;items:MenuEntry[];side?:OverlaySide;label?:string}){const portal=usePortalContainer();return <BaseMenu.Root><BaseMenu.Trigger render={trigger}/><BaseMenu.Portal container={portal}><BaseMenu.Positioner side={side} sideOffset={6}><BaseMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal)}</BaseMenu.Popup></BaseMenu.Positioner></BaseMenu.Portal></BaseMenu.Root>}
+export function DropdownMenu({trigger,items,side="bottom",label}:{trigger:ReactElement;items:MenuEntry[];side?:OverlaySide;label?:string}){const portal=usePortalContainer();return <BaseMenu.Root><BaseMenu.Trigger render={trigger}/><BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side={side} sideOffset={6}><BaseMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal)}</BaseMenu.Popup></BaseMenu.Positioner></BaseMenu.Portal></BaseMenu.Root>}
 // ContextMenu: abre no botão direito e — por teclado — em Shift+F10 / tecla Menu,
 // que o browser só dispara (como evento contextmenu) sobre um elemento FOCADO. Por
 // isso o gatilho é focável (tabIndex 0) e tem nome acessível (auditoria 18/07/2026,
 // MÉDIO 3); sem isso o teclado não alcança o menu. Consumidor pode sobrescrever
 // tabIndex via children se o próprio já for focável.
-export function ContextMenu({children,items,label,className}:{children:ReactNode;items:MenuEntry[];label?:string;className?:string}){const portal=usePortalContainer();return <BaseContextMenu.Root><BaseContextMenu.Trigger className={className} tabIndex={0} aria-label={label} aria-haspopup="menu">{children}</BaseContextMenu.Trigger><BaseContextMenu.Portal container={portal}><BaseContextMenu.Positioner><BaseContextMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal)}</BaseContextMenu.Popup></BaseContextMenu.Positioner></BaseContextMenu.Portal></BaseContextMenu.Root>}
+export function ContextMenu({children,items,label,className}:{children:ReactNode;items:MenuEntry[];label?:string;className?:string}){const portal=usePortalContainer();return <BaseContextMenu.Root><BaseContextMenu.Trigger className={className} tabIndex={0} aria-label={label} aria-haspopup="menu">{children}</BaseContextMenu.Trigger><BaseContextMenu.Portal container={portal}><BaseContextMenu.Positioner className="positioner"><BaseContextMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal)}</BaseContextMenu.Popup></BaseContextMenu.Positioner></BaseContextMenu.Portal></BaseContextMenu.Root>}
 
 // MENUBAR — a fila de menus de aplicação: Arquivo, Editar, Ver.
 //
@@ -380,7 +380,7 @@ export function Menubar({menus,label,modal,disabled,loopFocus,orientation,classN
   return <BaseMenubar ref={ancora} modal={modal} disabled={disabled} loopFocus={loopFocus} orientation={resolvida} aria-label={label} className={cx("menubar",className)}>
     {menus.map((m,i)=><BaseMenu.Root key={i} disabled={m.disabled}>
       <BaseMenu.Trigger className="menubar-trigger">{m.label}</BaseMenu.Trigger>
-      <BaseMenu.Portal container={portal}><BaseMenu.Positioner side={vertical?"inline-end":"bottom"} align="start" sideOffset={4}>
+      <BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side={vertical?"inline-end":"bottom"} align="start" sideOffset={4}>
         <BaseMenu.Popup className="menu">{renderMenuItems(m.items)}</BaseMenu.Popup>
       </BaseMenu.Positioner></BaseMenu.Portal>
     </BaseMenu.Root>)}

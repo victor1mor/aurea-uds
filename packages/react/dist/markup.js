@@ -48,6 +48,19 @@ export function Card({ variant = "base", padding = "normal", orientation = "vert
  *  cartão menos o respiro dele). O que vai dentro — `Image`, vídeo — é do app. */
 function CardMedia({ className, ...props }) { return _jsx("div", { className: cx("card-media", className), ...props }); }
 Card.Media = CardMedia;
+// AS PARTES DO CARTÃO (15/10/2026, o Victor: "A, B, C, pode"), como as da referência: o cabeçalho (o título e a
+// descrição, colados), o conteúdo (4 entre os itens) e o rodapé (em linha). 12 entre as partes, o vão dela — por margem,
+// porque o `Card` da Aurea é um bloco e virar coluna mudaria quem já o usa. O título é um `h3`, como lá.
+function CardHeader({ className, ...props }) { return _jsx("div", { className: cx("card-header", className), ...props }); }
+function CardTitle({ className, ...props }) { return _jsx("h3", { className: cx("card-title", className), ...props }); }
+function CardDescription({ className, ...props }) { return _jsx("p", { className: cx("card-description", className), ...props }); }
+function CardContent({ className, ...props }) { return _jsx("div", { className: cx("card-content", className), ...props }); }
+function CardFooter({ className, ...props }) { return _jsx("div", { className: cx("card-footer", className), ...props }); }
+Card.Header = CardHeader;
+Card.Title = CardTitle;
+Card.Description = CardDescription;
+Card.Content = CardContent;
+Card.Footer = CardFooter;
 export function Stack({ gap, align, className, ...props }) { return _jsx("div", { className: cx("stack", gap && gap !== "normal" && `stack-gap-${gap}`, align && align !== "stretch" && `stack-align-${align}`, className), ...props }); }
 export function Cluster({ gap, align, justify, wrap, className, ...props }) { return _jsx("div", { className: cx("cluster", gap && gap !== "normal" && `cluster-gap-${gap}`, align && align !== "center" && `cluster-align-${align}`, justify && justify !== "start" && `cluster-justify-${justify}`, wrap === false && "cluster-nowrap", className), ...props }); }
 const GRID_MIN = new Set(["xs", "sm", "md", "lg"]);
@@ -82,10 +95,16 @@ export function Container({ size = "xl", className, ...props }) {
 // (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
 // fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
 // coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
-export function Section({ surface = "background", spacing = "md", theme, variant = "base", brand, links, legal, maxWidth = "xl", navLabel = "Footer", children, className, ...props }) {
+export function Section({ surface = "background", spacing = "md", theme, variant = "base", brand, links, legal, layout = "columns", maxWidth = "xl", navLabel = "Footer", children, className, ...props }) {
     const pele = cx("section", surface !== "background" && `section-${surface}`, spacing !== "md" && `section-spacing-${spacing}`);
     if (variant !== "footer")
         return _jsx("section", { "data-theme": theme, className: cx(pele, className), ...props, children: children });
+    if (layout === "inline") {
+        const itens = (links ?? []).flatMap((g) => g.items);
+        return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", "section-footer-inline", className), ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "section-footer-line"), children: [legal != null && _jsx("p", { className: "section-footer-inline-legal", children: legal }), itens.length > 0 && _jsx("nav", { "aria-label": navLabel, children: _jsx("ul", { className: "section-footer-inline-links", children: itens.map(it => _jsx("li", { children: it.render
+                                    ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
+                                    : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) }) }), children] }) });
+    }
     return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", className), ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`), children: [_jsxs("div", { className: "section-footer-top", children: [brand != null && _jsx("div", { className: "section-footer-brand", children: brand }), links && links.length > 0 && _jsx("nav", { className: "section-footer-nav", "aria-label": navLabel, children: links.map((g, n) => _jsxs("div", { className: "section-footer-group", children: [_jsx("h2", { className: "section-footer-title", children: g.title }), _jsx("ul", { className: "section-footer-links", children: g.items.map(it => _jsx("li", { children: it.render
                                                 ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
                                                 : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) })] }, n)) }), children] }), legal != null && _jsx("div", { className: "section-footer-legal", children: legal })] }) });
@@ -177,10 +196,10 @@ function linksDoHeader(items, current) {
             return _jsx("li", { children: it.render ? fundirRender(it.render, p, "a") : _jsx("a", { href: it.href, ...p }) }, it.id);
         }) });
 }
-export function Header({ variant = "floating", divider, brand, items, current, actions, maxWidth, navLabel = "Main", menuLabel = "Menu", menuId = "aurea-header-menu", children, className, ...props }) {
+export function Header({ variant = "floating", divider, brand, items, current, actions, maxWidth, itemsJustify = "end", size = "md", blurred, menuActions, navLabel = "Main", menuLabel = "Menu", menuId = "aurea-header-menu", children, className, ...props }) {
     const site = !!items && items.length > 0;
-    const miolo = _jsxs(_Fragment, { children: [brand != null && _jsx("div", { className: "brand", children: brand }), site && _jsx("nav", { className: "topbar-nav", "aria-label": navLabel, children: linksDoHeader(items, current) }), children, actions != null && _jsx("div", { className: "topbar-actions", children: actions }), site && _jsxs(_Fragment, { children: [_jsx("button", { type: "button", className: "btn btn-ghost btn-icon topbar-menu-toggle", popoverTarget: menuId, "aria-label": menuLabel, children: _jsx("span", { className: "topbar-menu-icon", "aria-hidden": "true" }) }), _jsx("nav", { id: menuId, popover: "auto", className: "topbar-menu-panel", "aria-label": navLabel, children: linksDoHeader(items, current) })] })] });
-    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", maxWidth && "topbar-contained", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
+    const miolo = _jsxs(_Fragment, { children: [brand != null && _jsx("div", { className: "brand", children: brand }), site && _jsx("nav", { className: "topbar-nav", "aria-label": navLabel, children: linksDoHeader(items, current) }), children, actions != null && _jsx("div", { className: "topbar-actions", children: actions }), site && _jsxs(_Fragment, { children: [_jsx("button", { type: "button", className: "btn btn-ghost btn-icon topbar-menu-toggle", popoverTarget: menuId, "aria-label": menuLabel, children: _jsx("span", { className: "topbar-menu-icon", "aria-hidden": "true" }) }), _jsxs("nav", { id: menuId, popover: "auto", className: "topbar-menu-panel", "aria-label": navLabel, children: [linksDoHeader(items, current), menuActions != null && _jsx("div", { className: "topbar-menu-actions", children: menuActions })] })] })] });
+    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", site && itemsJustify === "start" && "topbar-items-start", size === "sm" && "topbar-sm", blurred && variant === "flush" && "topbar-blurred", maxWidth && "topbar-contained", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
 }
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export function Topbar(props) { return _jsx(Header, { ...props }); }
@@ -197,8 +216,16 @@ export const Textarea = forwardRef(function Textarea({ className, size, variant,
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
 export function Checkbox({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] }); }
-export function Radio({ label, size, className, ...props }) { return _jsxs("label", { className: cx("radio", className), children: [_jsx("input", { type: "radio", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), label] }); }
-export function Switch({ label, size, className, ...props }) { return _jsxs("label", { className: cx("switch", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { children: label })] }); }
+// `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
+// mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
+const comDescricao = (label, description) => description ? _jsxs("span", { children: [_jsx("strong", { children: label }), _jsx("br", {}), _jsx("span", { className: "muted", children: description })] }) : label;
+// `labelHidden` (15/10/2026) no `Radio` e no `Switch`, o mesmo do `Checkbox`: o nome sai da tela e fica para o leitor
+// de tela — a fileira de controles sem rótulo da vitrine da referência.
+export function Radio({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("radio", labelHidden && "radio-bare", className), children: [_jsx("input", { type: "radio", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), labelHidden ? _jsx("span", { className: "sr-only", children: comDescricao(label, description) }) : comDescricao(label, description)] }); }
+// `indicatorPlacement` (15/10/2026, o Victor: "A sim"): a chave no FIM, como o "Allow notifications" da vitrine da
+// referência — o nome e a descrição à esquerda. O mesmo nome do `RadioGroup` do nativo. Muda só a ordem do DESENHO: o
+// campo escondido continua logo antes da chave (o CSS do estado depende disso), e o rótulo é um só para o leitor.
+export function Switch({ label, labelHidden, description, indicatorPlacement = "start", size, className, ...props }) { return _jsxs("label", { className: cx("switch", labelHidden && "switch-bare", indicatorPlacement === "end" && "switch-end", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: comDescricao(label, description) })] }); }
 export function Range({ orientation, className, ...props }) { return _jsx("input", { className: cx("range", peleDoEixo("range", orientation, "horizontal", "range"), className), type: "range", ...props }); }
 // `md` é a classe base — não existe `.input-md`, como não existe `.btn-md`. O prefixo é escrito
 // literal em cada chamada (`input-${size}`, e não `${base}-${size}`) porque é assim que o check 15
@@ -248,13 +275,19 @@ export function Link({ external, disabled, href, target, rel, className, childre
 const transparente = (cor) => { const c = parseColor(cor); return c !== null && c.a < 1; };
 export function ColorSwatch(props) {
     if ("options" in props) {
-        const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, size = "md", disabled, id, className } = props;
+        const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, showLabels, size = "md", disabled, id, className } = props;
         // O `onChange` é o do CONSUMIDOR, repassado, como no `Checkbox` e no `Radio` desta casa: nenhum manipulador nosso
         // é escrito aqui (a marcação continua de servidor). Vai por espalhamento, como lá.
-        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", className), children: options.map((o) => {
+        // `showLabels` (14/10/2026): o rótulo passa a ser a amostra E o nome embaixo — o círculo continua o mesmo
+        // (`.color-swatch-option`, agora um `span`), e clicar no nome também escolhe. O nome é só para os olhos: o leitor
+        // de tela já ouve o `aria-label` do botão de opção.
+        return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", showLabels && "color-swatch-picker-labels", className), children: options.map((o) => {
                 const op = typeof o === "string" ? { color: o } : o;
                 const cor = parseColor(op.color), rgb = cor && hsbToRgb(cor);
-                return _jsxs("label", { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, op.color);
+                const circulo = (Tag, key) => _jsxs(Tag, { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, key);
+                return showLabels
+                    ? _jsxs("label", { className: "color-swatch-item", children: [circulo("span"), _jsx("span", { className: "color-swatch-name", "aria-hidden": "true", children: op.label ?? op.color })] }, op.color)
+                    : circulo("label", op.color);
             }) });
     }
     const { color, size = "md", label, className, style, ...resto } = props;

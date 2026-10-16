@@ -1,6 +1,6 @@
 {
   "name": "Button",
-  "category": "Actions",
+  "category": "Buttons",
   "layer": "Component",
   "maturity": "Stable",
   "summary": "Trigger for an action or navigation. The primary interactive control.",
@@ -23,7 +23,8 @@
     "primary-ghost",
     "primary-outline",
     "secondary",
-    "tertiary"
+    "tertiary",
+    "danger-soft"
   ],
   "sizes": [
     "xs",
@@ -41,6 +42,7 @@
       "link",
       "nav",
       "outline",
+      "soft",
       "solid"
     ],
     "tone": [
@@ -138,15 +140,15 @@
   "props": [
     {
       "name": "variant",
-      "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav",
-      "default": "secondary",
+      "type": "primary | secondary | tertiary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav | danger-soft",
+      "default": "tertiary",
       "description": "A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",
-      "type": "solid | outline | ghost | link | nav",
+      "type": "solid | outline | ghost | link | nav | soft",
       "default": "solid",
-      "description": "How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone."
+      "description": "How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone. soft is the tone's light background with the tone's text (the reference's danger-soft)."
     },
     {
       "name": "tone",
@@ -186,15 +188,15 @@
     },
     {
       "name": "leadingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
-      "description": "Glyph before the label."
+      "description": "Glyph before the label — a name from the allowlist, or the app’s own drawing (a component that returns its <svg>), as Icon and IconButton take."
     },
     {
       "name": "trailingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
-      "description": "Glyph after the label."
+      "description": "Glyph after the label — a name, or the app’s own drawing, as leadingIcon."
     },
     {
       "name": "type",
@@ -209,6 +211,12 @@
       "description": "Stretches to the container. Only the width changes — the pill radius is invariant."
     },
     {
+      "name": "quiet",
+      "type": "boolean",
+      "default": "false",
+      "description": "Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's \"Theme\". The box and the background stay the appearance's."
+    },
+    {
       "name": "pressed",
       "type": "boolean",
       "default": "—",
@@ -216,9 +224,9 @@
     },
     {
       "name": "kbd",
-      "type": "string",
+      "type": "string | string[]",
       "default": "—",
-      "description": "Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts."
+      "description": "Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list ([\"Ctrl\", \"K\"]) shows one key cap per key and announces the combination (Control+K)."
     },
     {
       "name": "grow",
