@@ -1,5 +1,5 @@
 import {test, expect} from "@playwright/test";
-import {readdirSync} from "node:fs";
+import {readdirSync, readFileSync} from "node:fs";
 import {join} from "node:path";
 // O MESMO dado que o gerador consome (ADR-0001, Fase 7). Um gate que declarasse suas próprias
 // seções seria um segundo modelo escondido — e é a divergência que o achado I2 mediu.
@@ -431,7 +431,13 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(grupo.length).toBeGreaterThan(50);
     expect(grupo).toEqual([...grupo].sort((a, b) => a.localeCompare(b)));
     expect(nomes.length).toBeGreaterThan(0);
-    await expect(lateral.getByText("New", {exact: true}).first()).toBeAttached();
+    // "New" é o que ainda não está na superfície publicada (`released-surface.json`). Contado, e não "pelo menos um":
+    // logo depois de uma publicação NADA é novo — o registro da 0.32.0 reprovou na CI por exigir um (14/10/2026).
+    const publicados = new Set(JSON.parse(readFileSync("scripts/released-surface.json", "utf8")).components);
+    const novos = readdirSync("packages/contracts/registry").filter((f) => f.endsWith(".json"))
+      .map((f) => JSON.parse(readFileSync(join("packages/contracts/registry", f), "utf8")).name as string)
+      .filter((n) => !publicados.has(n));
+    await expect(lateral.getByText("New", {exact: true})).toHaveCount(novos.length);
   });
 
   // O Victor, 13/10/2026: "sidebar precisa ser o nosso flutuante" e, do "On this page", que os itens saiam
