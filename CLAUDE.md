@@ -171,6 +171,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.30.0` | A rodada 1 do mapa de rede: o `DependencyGraph` de cima para baixo, em camadas pelo `elkjs` (opcional), com ícone, selos, portas, a linha que diz o que é sem cor, enlaces juntos, minimapa, ir até, caminho, setas e exportar `.drawio`/PNG/SVG; o `Icon` da web aceita o desenho do app — [ADR-0064](decisions/0064-o-mapa-de-rede-rodada-1.md), pedido #64. **Publicada em 10/10/2026** (por volta das 15:38, Brasília), pelo terminal do Victor |
 | `0.31.0` | A rodada 2 do mapa de rede: o modo de arrumar (`editable`), desfazer, as rotas do `elkjs` e o desvio (`@tisoap/react-flow-smart-edge`, opcional), rótulos que somem, contêiner que fecha, árvore e círculo, `visibleOnly` e `layoutWorker` — [ADR-0065](decisions/0065-o-mapa-de-rede-rodada-2.md), pedido #65. **Publicada em 10/10/2026** (entre 20:25 e 20:29, Brasília), pelo terminal do Victor |
 | `0.32.0` | O lote único — a peça é a da referência, com a cara da Aurea: 12 componentes novos (`CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`, `DatePicker` na web, `ColorArea`, `ColorField`, `ColorPicker`), o nativo na escala de toque, o mapa de rede (MNT-21 a 26) e o site no molde da documentação da referência — [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md) a [ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), pedido #66. **Publicada em 14/10/2026** (entre 17:56 e 18:07, Brasília, medido no npm), pelo terminal do Victor |
+| `0.33.0` | O lote R — a página inicial e a vitrine da referência: o topo de 56 que embaça, a chave de tema de três posições (`"system"`), a aba "Components" só com peças da Aurea; o `RadioGroup` na web e as peças da vitrine como variações; o espaço do ícone do campo e a camada das janelinhas no posicionador — [ADR-0070](decisions/0070-os-grupos-sao-os-da-referencia.md) e [ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md), pedido #68. **Publicada em 16/10/2026** (entre 12:29 e 12:45, Brasília, medido no npm), pelo terminal do Victor |
 
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -448,7 +449,7 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    "pode", sempre; e mais de uma vez no lote, não só no fim. **Publicada em 14/10/2026** (entre 17:56 e 18:07,
    Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #66.
 
-29. **`0.33.0`, o lote R, feito em 14 e 15/10/2026** na branch `claude/lote-r` — a página inicial contra a da
+29. **`0.33.0`, o lote R, feito de 14 a 16/10/2026** na branch `claude/lote-r` — a página inicial contra a da
    referência, *"cada milímetro"* (o Victor, 15/10/2026), e *"A, B, C, pode"*: as diferenças na peça (o topo de 56 que
    embaça, a chave de tema de três posições e a preferência `"system"`, o rodapé de uma linha, o selo sem linha, o
    `quiet`), as peças que a vitrine dela usa (o `RadioGroup` na web, `description`/`labelHidden`, o tracinho do
@@ -457,13 +458,15 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    o "Ctrl K" separado, a linha entre as seções, a `CommandPaletteShell` que fecha e a camada das janelinhas no
    posicionador — [ADR-0070](decisions/0070-os-grupos-sao-os-da-referencia.md) e
    [ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md). Cada passo na bancada antes do git; o
-   sol da chave no amarelo de ícone (*"A, pode"*). ⚠ **As regras novas:** a camada (`z-index`) de janelinha mora no
+   sol da chave no amarelo da marca, puro (*"não existe sol marrom"*; das três formas mostradas rodando, a "B", com
+   1,91:1 no branco medido). ⚠ **As regras novas:** a camada (`z-index`) de janelinha mora no
    POSICIONADOR do motor (a classe `positioner`) — na caixa de dentro, estática, ela não vale; e o sprite do site mede
    também os estados que só a parte viva desenha (a chave de tema nas três escolhas). ⚠ **A lição:** o Victor achou
    três defeitos que a medição do dia não pegava — o texto do campo a 24 do ícone (com 13 do outro lado, e o
    comentário da regra prometendo 12), a chave vazia ao clicar e a caixa cortada pelo topo fixo; cada um ganhou o teste
    que reprova sem o conserto. E o `TaskStop` não mata os filhos de uma suíte em segundo plano: antes de rodar outra,
-   conferir que a anterior morreu.
+   conferir que a anterior morreu. **Publicada em 16/10/2026** (entre 12:29 e 12:45, Brasília, medido no npm), pelo terminal do
+   Victor, da junção do pedido #68 (que trouxe junto o #67, o registro da 0.32.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

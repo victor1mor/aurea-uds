@@ -17,10 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### Os componentes novos da 0.33.0
-
-- `RadioGroup` na web (o nativo já tinha). O detalhe está na seção [0.33.0], abaixo.
-
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no
@@ -84,11 +80,14 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [0.33.0] — em construção
+## [0.33.0] — 2026-10-16
 
-⏳ **Ainda não publicada.** O lote da página inicial contra a referência (o Victor, 15/10/2026: *"analise cada
-milímetro"* e *"A, B, C, pode"*), na branch `claude/lote-r`, em passos mostrados na bancada antes do git —
-[ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md).
+✅ **Publicada em 16/10/2026, entre 12:29 e 12:45 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #68 (que trouxe junto o #67, o registro da 0.32.0). Seis pacotes entre 12:29 e 12:32; o `native`, o último
+da ordem, o npm registra às 12:45. O lote da página inicial contra a referência (o Victor,
+15/10/2026: *"analise cada milímetro"* e *"A, B, C, pode"*), feito de 14 a 16/10/2026 na branch `claude/lote-r`, em
+passos mostrados na bancada antes do git — [ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md).
+O componente novo: `RadioGroup` na web (o nativo já tinha).
 
 ### Novo
 
