@@ -12,30 +12,46 @@
 // duas raízes, cada `AureaProvider` punha a sua região de avisos, com o mesmo nome — e o axe reprovou as 410
 // páginas (`landmark-unique`, 14/10/2026).
 import {createPortal} from "react-dom";
-import {createElement as h, Fragment, type ReactNode, useState, useSyncExternalStore} from "react";
+import {createElement as h, Fragment, type ReactElement, type ReactNode, type SVGProps, useState, useSyncExternalStore} from "react";
 import {AureaProvider, Button, ColorSwatch, IconButton, Popover, ThemeToggle, type AureaThemePreference} from "../../../packages/react/dist/index.js";
 
 type Marca = {id: string; label: string; color: string};
 
-// No celular a palavra sai e fica só o balde, como na referência — na Aurea, o botão só de ícone é o `IconButton`
-// redondo (ADR-0052). O ponto é o mesmo em que o `Header` leva os links para o menu (abaixo de 768).
-const CELULAR = "(max-width: 767px)";
-const assina = (avisa: () => void) => { const m = matchMedia(CELULAR); m.addEventListener("change", avisa); return () => m.removeEventListener("change", avisa); };
+// Abaixo de 1024 a palavra sai e fica só o balde — na Aurea, o botão só de ícone é o `IconButton` redondo (ADR-0052).
+// Era abaixo de 768, como a referência no celular; desde 15/10/2026 é abaixo de 1024, porque com a palavra o topo do
+// Início não cabia numa linha entre 768 e 1023 (medido; o Victor viu a barra cortada). O gerador faz o mesmo no parado.
+const ESTREITO = "(max-width: 1023px)";
+const assina = (avisa: () => void) => { const m = matchMedia(ESTREITO); m.addEventListener("change", avisa); return () => m.removeEventListener("change", avisa); };
+
+// A amostra redonda da marca, desenhada na cor dela, com o contorno fraco da amostra da Aurea (o `ColorSwatch`): some
+// sobre fundo da mesma cor sem ele. Uma por cor, para o React não trocar o componente a cada desenho.
+const amostras = new Map<string, (p: SVGProps<SVGSVGElement>) => ReactElement>();
+function amostra(cor: string) {
+  let desenho = amostras.get(cor);
+  if (!desenho) {
+    desenho = (p) => h("svg", {...p, viewBox: "0 0 16 16"},
+      h("circle", {cx: 8, cy: 8, r: 7, fill: cor, stroke: "currentColor", strokeOpacity: 0.35, strokeWidth: 1}));
+    amostras.set(cor, desenho);
+  }
+  return desenho;
+}
 
 function Tema({marcas}: {marcas: Marca[]}) {
   const [marca, setMarca] = useState(() => document.documentElement.dataset.brand || "");
-  const celular = useSyncExternalStore(assina, () => matchMedia(CELULAR).matches);
+  const estreito = useSyncExternalStore(assina, () => matchMedia(ESTREITO).matches);
   const atual = marcas.find((m) => m.id === marca) ?? marcas[0];
   const padrao = atual.id === "";
-  // A referência troca o balde pela amostra da escolhida; o `Button` da web só aceita ÍCONE no início (o encaixe de
-  // desenho, `leading`, só o do nativo tem), então o balde fica e só o nome troca. O nome falado contém o escrito
-  // ("Theme: Lory"), como pede a WCAG 2.5.3.
+  // A referência troca o balde pela amostra da escolhida — e aqui também, desde 15/10/2026 (o Victor: "D … pode"): o
+  // `Button` da web passou a aceitar o desenho do app no encaixe do ícone (`AureaIcon`, como o `Icon` e o
+  // `IconButton`). O nome falado contém o escrito ("Theme: Lory"), como pede a WCAG 2.5.3.
   // "Design theme", como o da referência: a chave claro/escuro/sistema ao lado já se chama "Theme" (15/10/2026).
   const nome = padrao ? "Design theme" : `Design theme: ${atual.label}`;
-  const gatilho = celular
-    ? h(IconButton, {icon: "paint-bucket", label: nome, variant: "tertiary"})
+  const icone = padrao ? "paint-bucket" : amostra(atual.color);
+  const gatilho = estreito
+    // `sm` (32), como a busca e a setinha ao lado: sem ele saía com 36 (medido, 15/10/2026).
+    ? h(IconButton, {icon: icone, label: nome, variant: "tertiary", size: "sm"})
     // `sm` (32), a caixa dos outros botões do topo (15/10/2026; ver `botaoTema` no gerador).
-    : h(Button, {size: "sm", variant: "tertiary", quiet: true, leadingIcon: "paint-bucket", "aria-label": nome}, padrao ? "Theme" : atual.label);
+    : h(Button, {size: "sm", variant: "tertiary", quiet: true, leadingIcon: icone, "aria-label": nome}, padrao ? "Theme" : atual.label);
   return h(Popover, {trigger: gatilho, side: "bottom"},
     h(ColorSwatch, {options: marcas.map((m) => ({color: m.color, label: m.label})), name: "site-theme", label: "Design theme",
       size: "lg", showLabels: true, value: atual.color,
@@ -64,6 +80,23 @@ const lugaresDaChave = [...document.querySelectorAll<HTMLElement>("[data-site-th
 lugaresDaChave.forEach((l) => l.replaceChildren());
 export function ChavesDeTema() {
   return h(Fragment, null, ...lugaresDaChave.map((l, i) => createPortal(h(ThemeToggle, {mode: "light-dark-system"}), l, `chave-${i}`)));
+}
+
+// A SETINHA DO TOPO DO INÍCIO (15/10/2026), a da referência entre 768 e 1023: abre uma janelinha com a chave de tema e o
+// GitHub, que não cabem na linha ao lado dos links. O logo do GitHub vem dos dados do lugar (o desenho oficial, lido pelo
+// gerador do arquivo do GitHub), pintado em branco ou preto pela regra do site.
+const lugarDaSetinha = document.getElementById("site-more-root");
+const desenhoGitHub = lugarDaSetinha?.dataset.github;
+const repositorio = lugarDaSetinha?.dataset.repo;
+if (lugarDaSetinha && desenhoGitHub) lugarDaSetinha.replaceChildren();
+const GitHub = (p: SVGProps<SVGSVGElement>) => h("svg", {...p, viewBox: "0 0 98 96", fill: "none"},
+  h("path", {d: desenhoGitHub, className: "site-github-ink"}));
+export function SetinhaDoTopo() {
+  if (!lugarDaSetinha || !desenhoGitHub) return null;
+  return createPortal(h(Popover, {trigger: h(IconButton, {icon: "caret-down", label: "More", variant: "tertiary", size: "sm"}), side: "bottom"},
+    h("div", {className: "site-more-panel"},
+      h(ThemeToggle, {mode: "light-dark-system"}),
+      h(IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: repositorio}))), lugarDaSetinha);
 }
 
 // O PROVEDOR DO SITE: o tema é a escolha guardada ("dark", "light" ou "system"); sem escolha, o provedor adota o que o

@@ -7,7 +7,7 @@
     "componentes": 144,
     "hooks": 9,
     "aliasesLiterais": 111,
-    "propsDistintas": 364
+    "propsDistintas": 365
   },
   "aliases": {
     "ButtonVariant": {
@@ -2759,13 +2759,13 @@
             {
               "name": "leadingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
               "name": "trailingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
@@ -2825,7 +2825,7 @@
             {
               "name": "kbd",
               "optional": true,
-              "type": "string",
+              "type": "string | readonly string[]",
               "values": null
             },
             {
@@ -2997,13 +2997,13 @@
             {
               "name": "leadingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
               "name": "trailingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
@@ -3063,7 +3063,7 @@
             {
               "name": "kbd",
               "optional": true,
-              "type": "string",
+              "type": "string | readonly string[]",
               "values": null
             },
             {
@@ -3394,13 +3394,13 @@
             {
               "name": "leadingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
               "name": "trailingIcon",
               "optional": true,
-              "type": "IconName",
+              "type": "AureaIcon",
               "values": null
             },
             {
@@ -3460,7 +3460,7 @@
             {
               "name": "kbd",
               "optional": true,
-              "type": "string",
+              "type": "string | readonly string[]",
               "values": null
             }
           ]
@@ -6728,6 +6728,12 @@
               "values": null
             },
             {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "description",
               "optional": true,
               "type": "ReactNode",
@@ -8483,6 +8489,12 @@
               "values": null
             },
             {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "description",
               "optional": true,
               "type": "ReactNode",
@@ -8662,10 +8674,25 @@
               "values": null
             },
             {
+              "name": "labelHidden",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "description",
               "optional": true,
               "type": "ReactNode",
               "values": null
+            },
+            {
+              "name": "indicatorPlacement",
+              "optional": true,
+              "type": "\"start\" | \"end\"",
+              "values": [
+                "start",
+                "end"
+              ]
             },
             {
               "name": "size",
@@ -9299,6 +9326,18 @@
               "name": "onQueryChange",
               "optional": false,
               "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "onClose",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
               "values": null
             },
             {

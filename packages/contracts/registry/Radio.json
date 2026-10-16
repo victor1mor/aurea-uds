@@ -64,6 +64,12 @@
       "description": "REQUIRED. One radio per option, all sharing the same name."
     },
     {
+      "name": "labelHidden",
+      "type": "boolean",
+      "default": "false",
+      "description": "Keeps the label in the DOM but out of sight, as the Checkbox does — for a row of bare controls, where the group names them."
+    },
+    {
       "name": "description",
       "type": "ReactNode",
       "default": "—",

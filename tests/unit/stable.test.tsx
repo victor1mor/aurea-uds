@@ -92,7 +92,9 @@ test("CommandPaletteShell: o campo de busca é rotulado", async () => {
   // SearchField é input[type=search], então o papel é searchbox e não textbox
   expect(screen.getByRole("searchbox")).toHaveAccessibleName();
   expect(screen.getByRole("dialog")).toHaveAccessibleName();
-  await semViolacao(container);
+  // 15/10/2026: a casca vai para o portal (a janela do motor), então o axe olha o documento, e não o contêiner.
+  void container;
+  await semViolacao(document.body);
 });
 
 test("DataList: par termo/valor usa dl, não tabela improvisada", async () => {

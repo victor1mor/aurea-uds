@@ -836,6 +836,27 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
     await page.emulateMedia({colorScheme: "dark"});
     await expect(page.locator("html"), "escolhido Claro, o computador não manda mais").toHaveAttribute("data-theme", "light");
+    // 15/10/2026 (o Victor: "some o ícone quando clica"): a escolhida desenha a forma CHEIA, e o sprite da página só
+    // tinha a da lua — a página sai pronta com o escuro. Em cada uma das três, todo desenho da chave existe na página.
+    for (const nome of ["Light", "Dark", "System"]) {
+      await page.locator(".topbar-actions").getByRole("radio", {name: nome}).check();
+      const faltando = await page.evaluate(() => [...document.querySelectorAll(".topbar-actions .theme-switch-option use")]
+        .map((u) => u.getAttribute("href")!).filter((h) => !document.getElementById(h.slice(1))));
+      expect(faltando, `o desenho da escolhida (${nome})`).toEqual([]);
+      // PINTADA (o Victor, 15/10/2026: "o sol deve ficar amarelo… a lua quero um preto absoluto"): a escolhida é branca nos
+      // dois temas, o sol no amarelo da marca, puro (a "B" dele; o de ícone do claro saiu marrom), a lua e o monitor no
+      // preto absoluto.
+      const pintura = await page.evaluate(() => {
+        const op = [...document.querySelectorAll(".topbar-actions .theme-switch-option")].find((o) => o.querySelector(":checked"))!;
+        const raiz = getComputedStyle(document.documentElement);
+        const cor = (v: string) => { const t = document.createElement("i"); t.style.color = raiz.getPropertyValue(v); document.body.append(t);
+          const c = getComputedStyle(t).color; t.remove(); return c; };
+        return {fundo: getComputedStyle(op).backgroundColor, icone: getComputedStyle(op.querySelector(".icon")!).color,
+          branco: cor("--white"), preto: cor("--black"), amarelo: cor("--brand-yellow")};
+      });
+      expect(pintura.fundo, `a escolhida é branca (${nome})`).toBe(pintura.branco);
+      expect(pintura.icone, `o ícone da escolhida (${nome})`).toBe(nome === "Light" ? pintura.amarelo : pintura.preto);
+    }
     await page.evaluate(() => localStorage.removeItem("aurea-theme"));
     // O rodapé: uma linha centrada, 44 de altura (12 + 20 + 12), a frase, os dois links e o GitHub.
     const rodape = page.locator("footer.section-footer-inline");
@@ -843,6 +864,170 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await expect(rodape.getByRole("link")).toHaveText(["Changelog", "License", ""]);
     await expect(rodape.getByRole("link", {name: "GitHub"})).toHaveAttribute("href", "https://github.com/victor1mor/aurea-uds");
     expect(Math.round((await rodape.boundingBox())!.height)).toBe(44);
+  });
+
+  // 15/10/2026 — o Victor: "a caixa do tema está sendo cortada". Medido: de 768 a 949 o topo do Início quebrava em duas
+  // linhas e passava da borda. Como a referência entre 768 e 1023: uma linha, a chave de tema e o GitHub dentro da
+  // setinha (a janelinha cabe na tela), e o "Theme" só de ícone, do tamanho dos vizinhos. Provado contra o defeito: na
+  // versão anterior, 86 de altura em 800.
+  // 15/10/2026 — o Victor: "a caixa dos temas continua cortando". Medido: a borda de cima da escolha de tema ficava por
+  // baixo do topo fixo (camada 20), porque a camada das janelinhas estava na caixa de dentro, estática, e não no
+  // posicionador do motor. Provado contra o defeito: antes, o ponto de cima da caixa era do topo da página.
+  test("a escolha de tema abre por cima do topo, com a borda de cima inteira", async ({page}) => {
+    await page.setViewportSize({width: 1280, height: 800});
+    await page.goto("/apps/catalog/index.html");
+    await page.getByRole("button", {name: /Design theme/}).click();
+    const caixa = page.locator(".popover:has(.color-swatch)");
+    await expect(caixa).toBeVisible();
+    const cobre = await caixa.evaluate((p) => {
+      const r = p.getBoundingClientRect();
+      return [0.25, 0.5, 0.75].map((f) => !!document.elementFromPoint(r.left + r.width * f, r.top + 1)?.closest(".popover"));
+    });
+    expect(cobre, "a borda de cima é da caixa, de ponta a ponta").toEqual([true, true, true]);
+  });
+
+  test("o topo do Início cabe numa linha de 768 a 1023, com a setinha da referência", async ({page}) => {
+    await page.goto("/apps/catalog/index.html");
+    for (const largura of [768, 850, 1023]) {
+      await page.setViewportSize({width: largura, height: 800});
+      // a troca do "Theme" para só o ícone é do vivo, no aviso de mudança de largura: espera ela (o WebKit mede antes)
+      await expect.poll(() => page.locator("#site-theme-root .btn").evaluate((b) => b.getBoundingClientRect().width)).toBe(32);
+      const m = await page.evaluate(() => {
+        const topo = document.querySelector(".site-top")!;
+        const visiveis = [...topo.querySelectorAll(".topbar-actions > *, .topbar-nav")].filter((e) => e.getBoundingClientRect().width > 0);
+        const nav = topo.querySelector(".topbar-nav")!.getBoundingClientRect(), acoes = topo.querySelector(".topbar-actions")!.getBoundingClientRect();
+        return {altura: topo.getBoundingClientRect().height, tela: document.documentElement.clientWidth,
+          direita: Math.max(...visiveis.map((e) => e.getBoundingClientRect().right)), folga: acoes.left - nav.right,
+          botoes: [...topo.querySelectorAll(".topbar-actions .btn")].filter((e) => e.getBoundingClientRect().width > 0)
+            .map((e) => Math.round(e.getBoundingClientRect().height))};
+      });
+      expect(m.altura, `${largura}: uma linha`).toBe(56);
+      expect(m.direita, `${largura}: nada passa da borda`).toBeLessThanOrEqual(m.tela);
+      expect(m.folga, `${largura}: folga para a barra de rolagem do Windows`).toBeGreaterThanOrEqual(16);
+      expect(new Set(m.botoes), `${largura}: os botões do mesmo tamanho`).toEqual(new Set([32]));
+    }
+    await page.setViewportSize({width: 850, height: 800});
+    await page.getByRole("button", {name: "More"}).click();
+    const janela = page.locator(".popover:has(.theme-switch)");
+    await expect(janela.getByRole("radiogroup", {name: "Theme", exact: true})).toBeVisible();
+    await expect(janela.getByRole("link", {name: "GitHub"})).toBeVisible();
+    const caixa = (await janela.boundingBox())!;
+    expect(caixa.x + caixa.width).toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
+  });
+
+  // 15/10/2026 — o Victor, com a busca da Aurea ao lado do campo da referência: "de um lado é curto (correto), do outro
+  // é largo". Medido: borda 13, o glifo, e o texto a 24 (28 no lg) — o campo somava o recuo dele aos 12 do adorno. A
+  // referência: 12, o glifo, 12 (o campo com prefixo) e 12, a lupa, 8 (a busca); no fim, texto a 12 da borda.
+  // Provado contra o defeito: na peça velha, o de dentro é 24.
+  test("o campo com ícone: 12, o ícone, 12; a busca, 12, a lupa, 8; o texto do fim, 12 da borda", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    const medir = () => page.evaluate(() => [...document.querySelectorAll(".input-group")].flatMap((g) => {
+      const gr = g.getBoundingClientRect();
+      if (!gr.width) return [];
+      const borda = parseFloat(getComputedStyle(g).borderLeftWidth);
+      const inp = g.querySelector<HTMLInputElement>(":scope > .input")!;
+      const cs = getComputedStyle(inp), ir = inp.getBoundingClientRect();
+      const texto = ir.left + parseFloat(cs.borderLeftWidth) + parseFloat(cs.paddingLeft);
+      const icone = g.querySelector(":scope > .input-group-addon-start svg")?.getBoundingClientRect();
+      const fim = g.querySelector(":scope > .input-group-addon-end");
+      let foraFim: number | null = null;
+      if (fim && !fim.querySelector(".btn, .kbd")) {
+        const rg = document.createRange(); rg.selectNodeContents(fim);
+        foraFim = gr.right - borda - rg.getBoundingClientRect().right;
+      }
+      return [{busca: g.classList.contains("search-field"), fora: icone ? icone.left - gr.left - borda : null,
+        dentro: icone ? texto - icone.right : null, foraFim}];
+    }));
+    await page.goto("/apps/catalog/searchfield.html");
+    const buscas = (await medir()).filter((m) => m.busca && m.fora !== null);
+    expect(buscas.length).toBeGreaterThan(0);
+    for (const m of buscas) { expect(m.fora).toBeCloseTo(12, 0); expect(m.dentro, "a busca: a lupa a 8 do texto").toBeCloseTo(8, 0); }
+    await page.goto("/apps/catalog/inputgroupaddon.html");
+    const comIcone = (await medir()).filter((m) => !m.busca && m.fora !== null);
+    expect(comIcone.length).toBeGreaterThan(0);
+    for (const m of comIcone) { expect(m.fora).toBeCloseTo(12, 0); expect(m.dentro, "o ícone a 12 do texto").toBeCloseTo(12, 0); }
+    await page.goto("/apps/catalog/inputgroup.html");
+    const comFim = (await medir()).filter((m) => m.foraFim !== null);
+    expect(comFim.length).toBeGreaterThan(0);
+    for (const m of comFim) expect(m.foraFim, "o texto do fim a 12 da borda (era 4)").toBeCloseTo(12, 0);
+  });
+
+  // 15/10/2026 (B, aprovada): a linha entre as seções, como em todos os exemplos de seções da referência. É BORDA (fica
+  // no alto contraste), de 1, 8 para dentro de cada lado. Provado contra o defeito: na 0.32.0, nenhuma linha.
+  test("a ListBox com seções tem a linha entre elas, de borda, 8 para dentro", async ({page}) => {
+    await page.goto("/apps/catalog/listbox.html");
+    const linhas = await page.evaluate(() => [...document.querySelectorAll(".list-box-section + .list-box-section")].map((s) => {
+      const b = getComputedStyle(s, "::before");
+      return {estilo: b.borderTopStyle, largura: b.borderTopWidth, recuo: [b.marginLeft, b.marginRight]};
+    }));
+    expect(linhas.length).toBeGreaterThan(0);
+    for (const l of linhas) expect(l).toEqual({estilo: "solid", largura: "1px", recuo: ["8px", "8px"]});
+  });
+
+  // 15/10/2026: o título e a descrição do `Card.Header` colados (uma regra antiga os separava em 16), e 12 até o conteúdo.
+  test("o Card.Header: título e descrição colados, e 12 até o conteúdo", async ({page}) => {
+    await page.goto("/apps/catalog/card.html");
+    const m = await page.locator(".card:has(> .card-header .card-description)").first().evaluate((c) => {
+      const r = (s: string) => c.querySelector(s)!.getBoundingClientRect();
+      return {colados: r(".card-description").top - r(".card-title").bottom, ateConteudo: r(".card-content").top - r(".card-header").bottom};
+    });
+    expect(m.colados).toBeCloseTo(0, 0);
+    expect(m.ateConteudo).toBeCloseTo(12, 0);
+  });
+
+  // 15/10/2026 (A): a chave no fim, como o "Allow notifications" da referência.
+  test("o Switch com indicatorPlacement=end: o nome à esquerda, a chave à direita", async ({page}) => {
+    await page.goto("/apps/catalog/switch.html");
+    const m = await page.locator(".switch-end").first().evaluate((s) => ({
+      texto: s.querySelector(":scope > span:not(.switch-track)")!.getBoundingClientRect().right,
+      chave: s.querySelector(".switch-track")!.getBoundingClientRect().left}));
+    expect(m.chave).toBeGreaterThan(m.texto);
+  });
+
+  // 15/10/2026: o "Ctrl" e o "K" separados, como a busca da referência, e o leitor ouve a combinação.
+  test("a busca do topo: uma caixinha por tecla, e o atalho anunciado como Control+K", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/button.html");
+    const busca = page.locator(".site-search");
+    await expect(busca.locator("kbd")).toHaveText(["Ctrl", "K"]);
+    await expect(busca).toHaveAttribute("aria-keyshortcuts", "Control+K");
+    // E na PONTA do botão (o Victor, 15/10/2026, com a seta até a borda direita): a última tecla a um recuo da borda,
+    // longe do texto. Provado contra o defeito: com as teclas coladas no "Search", sobravam ~230 até a borda.
+    const m = await busca.evaluate((b) => {
+      const r = b.getBoundingClientRect(), k = [...b.querySelectorAll("kbd")].at(-1)!.getBoundingClientRect();
+      return {sobra: r.right - k.right, recuo: parseFloat(getComputedStyle(b).paddingRight) + parseFloat(getComputedStyle(b).borderRightWidth)};
+    });
+    expect(m.sobra, "a última tecla encosta no recuo da borda direita").toBeCloseTo(m.recuo, 0);
+  });
+
+  // 15/10/2026 (C): a vitrine "Components" do Início, a da referência — três colunas a 32, peças a 40, campos de 256; no
+  // celular uma coluna, a do meio primeiro; VIVA (a lista abre e escolhe; a aba troca).
+  test("a vitrine Components: as colunas da referência, viva, e uma coluna no celular", async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
+    await page.goto("/apps/catalog/index.html");
+    await expect(page.locator(".home-abas [role=tab]").first()).toHaveText("Components");
+    const m = await page.evaluate(() => {
+      const cols = [...document.querySelectorAll(".vit-col")].map((c) => c.getBoundingClientRect());
+      const a = [...document.querySelector(".vit-col-a")!.children].map((e) => e.getBoundingClientRect());
+      return {vaos: [cols[1].left - cols[0].right, cols[2].left - cols[1].right],
+        pecas: a.slice(1).map((r, i) => r.top - a[i].bottom),
+        campos: [...document.querySelectorAll(".vit-256")].map((e) => e.getBoundingClientRect().width)};
+    });
+    for (const v of m.vaos) expect(v).toBeCloseTo(32, 0);
+    for (const v of m.pecas) expect(v).toBeCloseTo(40, 0);
+    for (const w of m.campos) expect(w).toBeCloseTo(256, 0);
+    // viva: a lista de estados abre e escolhe; o período troca
+    await page.locator(".vit-col-a .select-trigger").click();
+    await page.getByRole("option", {name: "Texas"}).click();
+    await expect(page.locator(".vit-col-a .select-trigger")).toContainText("Texas");
+    await page.locator(".vit-col-a .segmented").first().getByRole("radio", {name: "7D"}).click();
+    await expect(page.locator(".vit-col-a .segmented").first().getByRole("radio", {name: "7D"})).toHaveClass(/\bactive\b/);
+    await page.setViewportSize({width: 375, height: 812});
+    const ordem = await page.evaluate(() => [...document.querySelectorAll(".vit-col")]
+      .map((c) => ({classe: [...c.classList].find((x) => /^vit-col-/.test(x)), topo: c.getBoundingClientRect().top}))
+      .sort((x, y) => x.topo - y.topo).map((x) => x.classe));
+    expect(ordem).toEqual(["vit-col-b", "vit-col-a", "vit-col-c"]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
   });
 
   test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {

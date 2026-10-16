@@ -36,6 +36,16 @@ export const base = {
     "p3": "color(display-p3 0.4921 0.3908 0.1193)",
     "oklch": "oklch(0.516 0.105 86.047)"
   },
+  "white": {
+    "hex": "#ffffff",
+    "p3": "color(display-p3 1 1 1)",
+    "oklch": "oklch(1 0 0)"
+  },
+  "black": {
+    "hex": "#000000",
+    "p3": "color(display-p3 0 0 0)",
+    "oklch": "oklch(0 0 0)"
+  },
   "fontUi": "Atkinson Hyperlegible Next",
   "fontHeading": "Atkinson Hyperlegible Next",
   "fontEditorial": "Atkinson Hyperlegible Next",

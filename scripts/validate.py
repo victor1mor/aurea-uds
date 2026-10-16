@@ -155,8 +155,9 @@ PATTERNS_REF = [
 # `keyboard-probe` levam o código do Base UI, cujo gerador de id tem um prefixo que casa com uma
 # sigla da lista. O código-fonte nosso que vai dentro deles já é varrido arquivo por arquivo.
 # O `search.js` (a busca do site, 13/10/2026) é o mesmo caso: leva a `CommandPalette`, e com ela o
-# mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`.
-REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js"}
+# mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`. O `home.js` (o Início, 15/10/2026) é o
+# `search.js` mais a vitrine: o mesmo caso, o mesmo achado.
+REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js", root / "apps/catalog/assets/home.js"}
 REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
 
 

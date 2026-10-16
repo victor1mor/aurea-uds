@@ -64,6 +64,14 @@ for (const tema of ["dark", "light"] as const) {
       const caixa = document.createElement("div");
       document.body.append(caixa);
       const r: Record<string, {fg: string; bg: string; bd: string; pagina: string}> = {};
+      // O fundo que APARECE: o do botão pintado por cima do da página, num ponto de tela. O suave (`soft`, 0.33.0) é a cor
+      // do tom a 14% — transparente —, e a conta de baixo joga a transparência fora: media amarelo contra amarelo (1,00:1).
+      const tela = document.createElement("canvas").getContext("2d", {willReadFrequently: true})!;
+      const sobre = (cor: string, fundo: string) => {
+        tela.clearRect(0, 0, 1, 1); tela.fillStyle = fundo; tela.fillRect(0, 0, 1, 1); tela.fillStyle = cor; tela.fillRect(0, 0, 1, 1);
+        const [r, g, b] = tela.getImageData(0, 0, 1, 1).data;
+        return `rgb(${r}, ${g}, ${b})`;
+      };
       const fundoDe = (e: Element) => {
         for (let x = e.parentElement; x; x = x.parentElement) {
           const c = getComputedStyle(x).backgroundColor;
@@ -79,7 +87,7 @@ for (const tema of ["dark", "light"] as const) {
         const s = getComputedStyle(b);
         const pagina = fundoDe(b);
         r[`${a}/${t}`] = {fg: s.color, bd: s.borderTopColor, pagina,
-          bg: s.backgroundColor === "rgba(0, 0, 0, 0)" ? pagina : s.backgroundColor};
+          bg: s.backgroundColor === "rgba(0, 0, 0, 0)" ? pagina : sobre(s.backgroundColor, pagina)};
       }
       caixa.remove();
       return r;
@@ -232,6 +240,48 @@ for (const tema of ["dark", "light"] as const) {
       if (tema === "light" && t === "brand") continue;
       const r = razao(cores[t][0], cores[t][1]);
       expect(r, `${t}: preenchimento a ${r.toFixed(2)}:1 do trilho (SC 1.4.11 pede 3)`).toBeGreaterThanOrEqual(3);
+    }
+  });
+}
+
+// O SUAVE COM O MOUSE EM CIMA (0.33.0, 15/10/2026). A matriz de cima mede o botão parado; o suave escurece o fundo ao
+// passar o mouse, e foi aí que o rótulo caía: `info` a 3,69:1, vermelho a 4,42 e verde a 4,23 no claro, com o tom a 22%
+// por cima da página. O mouse é de verdade (o `:hover` não se força por código), e o fundo é o que aparece — o do botão
+// pintado por cima do da página.
+for (const tema of ["dark", "light"] as const) {
+  test(`contraste · o suave com o mouse em cima · tema ${tema}`, async ({page}) => {
+    await page.goto("/apps/catalog/button.html");
+    await page.evaluate((t) => {
+      document.documentElement.dataset.theme = t;
+      const caixa = document.createElement("div");
+      caixa.id = "suaves";
+      caixa.style.cssText = "position:fixed;inset-block-start:0;inset-inline-start:0;z-index:999;display:flex;gap:16px;padding:16px";
+      for (const tom of ["brand", "danger", "success", "warning", "info"]) {
+        const b = document.createElement("button");
+        b.className = `btn btn-soft btn-tone-${tom}`;
+        b.id = `suave-${tom}`;
+        b.textContent = "Action";
+        caixa.append(b);
+      }
+      document.body.append(caixa);
+    }, tema);
+    await esperarTransicoes(page);
+    for (const tom of ["brand", "danger", "success", "warning", "info"]) {
+      await page.hover(`#suave-${tom}`);
+      await esperarTransicoes(page);
+      const c = await page.evaluate((id) => {
+        const b = document.getElementById(id)!;
+        const tela = document.createElement("canvas").getContext("2d", {willReadFrequently: true})!;
+        const pinta = (cor: string, fundo: string) => {
+          tela.clearRect(0, 0, 1, 1); tela.fillStyle = fundo; tela.fillRect(0, 0, 1, 1); tela.fillStyle = cor; tela.fillRect(0, 0, 1, 1);
+          const [r, g, bb] = tela.getImageData(0, 0, 1, 1).data;
+          return `rgb(${r}, ${g}, ${bb})`;
+        };
+        const pagina = getComputedStyle(document.body).backgroundColor;
+        return {fg: getComputedStyle(b).color, bg: pinta(getComputedStyle(b).backgroundColor, pagina), sobre: b.matches(":hover")};
+      }, `suave-${tom}`);
+      expect(c.sobre, `o mouse está em cima do ${tom}`).toBe(true);
+      expect(razao(c.fg, c.bg), `soft × ${tom} com o mouse: rótulo a ${razao(c.fg, c.bg).toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
     }
   });
 }

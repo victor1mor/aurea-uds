@@ -313,15 +313,15 @@
       "Ready": 48,
       "Stable": 97
     },
-    "testes_unit": 2033,
+    "testes_unit": 2044,
     "componentes_citados_no_teste": 144,
     "specs_visuais": 39,
     "baselines": 48,
     "baselines_linux": 24,
-    "classes_core": 917,
-    "token_declaracoes": 467,
-    "token_nomes": 222,
-    "token_usados": 175,
+    "classes_core": 924,
+    "token_declaracoes": 469,
+    "token_nomes": 224,
+    "token_usados": 177,
     "token_sem_uso": 47
   },
   "gates": {

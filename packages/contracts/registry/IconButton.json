@@ -171,21 +171,21 @@
     },
     {
       "name": "leadingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
       "description": "A second glyph before the main one. Rare on an icon button, and it is here because the type is shared with Button."
     },
     {
       "name": "trailingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
       "description": "A glyph after the main one — a chevron on a button that opens a menu, for instance."
     },
     {
       "name": "kbd",
-      "type": "string",
+      "type": "string | string[]",
       "default": "—",
-      "description": "Shows the shortcut inside the button AND announces it with aria-keyshortcuts. Showing it without announcing would be decoration."
+      "description": "Shows the shortcut inside the button AND announces it with aria-keyshortcuts. Showing it without announcing would be decoration. A list ([\"Ctrl\", \"K\"]) shows one key cap per key and announces the combination (Control+K)."
     },
     {
       "name": "fullWidth",

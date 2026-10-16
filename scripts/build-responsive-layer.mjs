@@ -137,10 +137,16 @@ const EIXO_REGRA_FILHOS = {
   // COMPOSTA (`&`), não descendente: `.ct-sm\\:…-inline.…-start`. Sem isso, a camada responsiva
   // repõe a geometria e perde o recuo, que é o tipo de meia-correção que passa despercebida.
   "input-group-addon": {
+    // 15/10/2026: e o CAMPO depois do adorno do início — em linha sem recuo próprio (12, o glifo, 12, como a
+    // referência), em faixa com o recuo de volta. É o irmão (`+`), e por isso entra pela forma `&`.
     "inline": [["&.input-group-addon-start", "padding-inline:var(--space-3);"],
-               ["&.input-group-addon-end", "padding-inline-end:var(--space-1);"]],
+               ["&.input-group-addon-end", "padding-inline-end:var(--space-3);"],
+               ["&.input-group-addon-end:where(:has(> .btn:last-child))", "padding-inline-end:var(--space-1);"],
+               ["&.input-group-addon-end:where(:has(> .kbd:last-child))", "padding-inline-end:var(--space-2);"],
+               ["&.input-group-addon-start + :is(.input,.select,.textarea)", "padding-inline-start:0;"]],
     "block":  [["&.input-group-addon-start", "padding:var(--space-2) var(--space-3) 0;"],
-               ["&.input-group-addon-end", "padding:0 var(--space-3) var(--space-2);"]]},
+               ["&.input-group-addon-end", "padding:0 var(--space-3) var(--space-2);"],
+               ["&.input-group-addon-start + :is(.input,.select,.textarea)", "padding-inline-start:var(--step-field-px,var(--space-3));"]]},
   "field": {horizontal: [[">.label", "grid-column:1; flex-direction:column; align-items:flex-start; justify-content:center; gap:var(--space-05);"],
                          [">*:not(.label)", "grid-column:2;"]],
             // A VOLTA precisa desfazer o que a ida fez no filho. `grid-column` num item de flex é

@@ -348,5 +348,14 @@ export function CommandPalette({ open, onClose, items, placeholder, label, short
                                                 ? (g) => _jsxs(BaseAutocomplete.Group, { items: g.items, className: "command-group", children: [g.value && _jsx(BaseAutocomplete.GroupLabel, { className: "command-group-label", children: g.value }), _jsx(BaseAutocomplete.Collection, { children: linha })] }, g.value)
                                                 : _jsx(BaseAutocomplete.Collection, { children: linha }) })] })] }), shortcuts && _jsxs("p", { className: "command-shortcuts", id: idAtalhos, children: [_jsxs("span", { children: [_jsx(Kbd, { children: "\u2191" }), _jsx(Kbd, { children: "\u2193" }), " ", s.commandHintMove] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Enter" }), " ", s.commandHintSelect] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Esc" }), " ", s.commandHintClose] })] })] }) }) }) });
 }
-export function CommandPaletteShell({ open, query, onQueryChange, children }) { const s = useAureaStrings(); if (!open)
-    return null; return _jsx("div", { className: "command-overlay", children: _jsxs("div", { className: "command-palette", role: "dialog", "aria-label": s.commandLabel, children: [_jsx(SearchField, { autoFocus: true, "aria-label": s.commandPlaceholder, value: query, onChange: e => onQueryChange(e.target.value), placeholder: s.commandPlaceholder }), children] }) }); }
+// A CASCA (15/10/2026, o Victor: "C sim"): a mesma janela do motor da `CommandPalette` acima. Até aqui era uma `div`
+// feita à mão — o mesmo defeito que a busca do site teve: o clique fora e o Esc não fechavam, e o Tab saía da caixa.
+// Agora o motor avisa pelos dois caminhos (`onClose`, novo), prende o Tab e devolve o foco a quem abriu. Sem `onClose`,
+// a janela fica aberta até o `open` do consumidor mudar — como antes. O campo recebe o foco pelo `initialFocus`.
+export function CommandPaletteShell({ open, query, onQueryChange, onClose, label, children }) {
+    const s = useAureaStrings();
+    const portal = usePortalContainer();
+    const campo = useRef(null);
+    return _jsx(BaseDialog.Root, { open: open, onOpenChange: o => { if (!o)
+            onClose?.(); }, children: _jsx(BaseDialog.Portal, { container: portal, children: _jsx(BaseDialog.Viewport, { className: "command-overlay", children: _jsxs(BaseDialog.Popup, { className: "command-palette", "aria-label": label ?? s.commandLabel, initialFocus: campo, children: [_jsx(SearchField, { ref: campo, "aria-label": s.commandPlaceholder, value: query, onChange: e => onQueryChange(e.target.value), placeholder: s.commandPlaceholder }), children] }) }) }) });
+}

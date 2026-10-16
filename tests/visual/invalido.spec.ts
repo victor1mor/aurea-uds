@@ -59,6 +59,9 @@ const SEM_INVALIDO: Record<string, string> = {
   // 0.32.0 (ADR-0069): os botões de opção invisíveis das amostras do `ColorSwatch options`.
   "color-swatch-input": "as amostras para escolher são uma paleta fechada: só oferecem cores válidas, " +
     "e o grupo de amostras da referência também não tem estado inválido",
+  // 0.33.0 (15/10/2026): os botões de opção invisíveis da chave de tema de três posições (`ThemeToggle`).
+  "theme-switch-input": "é a chave de tema — claro, escuro ou sistema —, que sempre tem uma escolhida, como o " +
+    "`SegmentedControl`: não há valor inválido a mostrar",
 };
 
 // ── A MEDIÇÃO, UMA SÓ, EM DOIS MODOS ─────────────────────────────────────────────────────────
@@ -234,6 +237,8 @@ const ALVO: Record<string, string> = {
   Range: ".range",
   // 0.32.0 (passo 3): o grupo põe `aria-invalid` em cada caixa de dentro quando tem `error`.
   CheckboxGroup: ".checkbox-group .checkbox input",
+  // 0.33.0: o grupo de opções da web; com erro, cada opção leva `aria-invalid` e a marca pinta.
+  RadioGroup: ".radio-group .radio input",
   // 0.32.0 (ADR-0069): o `ColorField` é um `InputGroup` com a amostra na frente; quem pinta é o grupo.
   ColorField: ".input-group:has(.color-swatch) > .input",
 };

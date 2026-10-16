@@ -20,8 +20,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     tone?: ButtonTone;
     size?: Responsive<ComponentSize>;
     loading?: boolean;
-    leadingIcon?: IconName;
-    trailingIcon?: IconName;
+    leadingIcon?: AureaIcon;
+    trailingIcon?: AureaIcon;
     href?: string;
     fullWidth?: boolean;
     /** Menos peso (15/10/2026): a letra apagada e um degrau menor (12 no `sm`) — o botão de ferramenta de um topo de
@@ -53,7 +53,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
      * quebrar, e por isso este é o momento mais barato que vai existir.
      */
     pressed?: boolean;
-    kbd?: string;
+    /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
+     *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
+    kbd?: string | readonly string[];
     /**
      * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
      * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe

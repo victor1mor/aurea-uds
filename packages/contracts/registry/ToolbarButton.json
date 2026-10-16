@@ -136,7 +136,7 @@
     },
     {
       "name": "leadingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
       "description": "Same icon API as Button; every Button prop is accepted."
     },
@@ -166,15 +166,15 @@
     },
     {
       "name": "trailingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
       "description": "A glyph after the label."
     },
     {
       "name": "kbd",
-      "type": "string",
+      "type": "string | string[]",
       "default": "—",
-      "description": "Shows the shortcut and announces it with aria-keyshortcuts."
+      "description": "Shows the shortcut and announces it with aria-keyshortcuts. A list ([\"Ctrl\", \"K\"]) shows one key cap per key and announces the combination (Control+K)."
     },
     {
       "name": "fullWidth",

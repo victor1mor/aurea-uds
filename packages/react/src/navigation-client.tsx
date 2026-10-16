@@ -652,4 +652,26 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
     </BaseDialog.Portal>
   </BaseDialog.Root>;
 }
-export function CommandPaletteShell({open,query,onQueryChange,children}:{open:boolean;query:string;onQueryChange:(v:string)=>void;children?:ReactNode}){const s=useAureaStrings();if(!open)return null;return <div className="command-overlay"><div className="command-palette" role="dialog" aria-label={s.commandLabel}><SearchField autoFocus aria-label={s.commandPlaceholder} value={query} onChange={e=>onQueryChange(e.target.value)} placeholder={s.commandPlaceholder}/>{children}</div></div>}
+// A CASCA (15/10/2026, o Victor: "C sim"): a mesma janela do motor da `CommandPalette` acima. Até aqui era uma `div`
+// feita à mão — o mesmo defeito que a busca do site teve: o clique fora e o Esc não fechavam, e o Tab saía da caixa.
+// Agora o motor avisa pelos dois caminhos (`onClose`, novo), prende o Tab e devolve o foco a quem abriu. Sem `onClose`,
+// a janela fica aberta até o `open` do consumidor mudar — como antes. O campo recebe o foco pelo `initialFocus`.
+export function CommandPaletteShell({open,query,onQueryChange,onClose,label,children}:{open:boolean;query:string;onQueryChange:(v:string)=>void;
+  /** Quem fecha: a janela avisa pelo Esc e pelo clique fora. */
+  onClose?:()=>void;
+  /** O nome da janela (o padrão é o da paleta, "Command palette"). */
+  label?:string;children?:ReactNode}){
+  const s=useAureaStrings();
+  const portal=usePortalContainer();
+  const campo=useRef<HTMLInputElement>(null);
+  return <BaseDialog.Root open={open} onOpenChange={o=>{if(!o)onClose?.()}}>
+    <BaseDialog.Portal container={portal}>
+    <BaseDialog.Viewport className="command-overlay">
+    <BaseDialog.Popup className="command-palette" aria-label={label??s.commandLabel} initialFocus={campo}>
+      <SearchField ref={campo} aria-label={s.commandPlaceholder} value={query} onChange={e=>onQueryChange(e.target.value)} placeholder={s.commandPlaceholder}/>
+      {children}
+    </BaseDialog.Popup>
+    </BaseDialog.Viewport>
+    </BaseDialog.Portal>
+  </BaseDialog.Root>;
+}

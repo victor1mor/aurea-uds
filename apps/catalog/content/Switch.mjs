@@ -49,6 +49,26 @@ export default {
           h(Switch, {label: "Push"})))),
     },
     {
+      title: "With a description, and the switch at the end",
+      description: "The muted line under the name, and indicatorPlacement=\"end\" to put the switch after the text — "
+        + "the reference's notification setting.",
+      code: [
+        '<Switch label="Allow notifications" description="Receive push notifications" defaultChecked />',
+        '<Switch label="Allow notifications" description="Receive push notifications" defaultChecked',
+        '  indicatorPlacement="end" />',
+      ].join("\n"),
+      render: () => h("div", {style: stack},
+        h(Switch, {label: "Allow notifications", description: "Receive push notifications", defaultChecked: true}),
+        h(Switch, {label: "Allow notifications", description: "Receive push notifications", defaultChecked: true,
+          indicatorPlacement: "end"})),
+    },
+    {
+      title: "Without a visible label",
+      description: "When the name is already on screen beside it, labelHidden keeps it for the screen reader only.",
+      code: '<Switch label="Dark mode" labelHidden defaultChecked />',
+      render: () => h("div", {style: stack}, h(Switch, {label: "Dark mode", labelHidden: true, defaultChecked: true})),
+    },
+    {
       title: "Disabled",
       description: "Locked by the plan or by permission — the state stays visible, the control does not.",
       code: [

@@ -103,6 +103,12 @@ const GrupoDeBotoesContext = React.createContext(null);
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
+// O nome da combinação para o `aria-keyshortcuts`: as teclas juntas por "+", com os nomes da especificação (o ESPAÇO
+// separa atalhos ALTERNATIVOS — "Ctrl K" quer dizer "Ctrl" ou "K"). O texto solto passa como veio, como antes.
+const NOME_DA_TECLA = { ctrl: "Control", control: "Control", "⌃": "Control", cmd: "Meta", command: "Meta", "⌘": "Meta", meta: "Meta",
+    shift: "Shift", "⇧": "Shift", alt: "Alt", option: "Alt", "⌥": "Alt", enter: "Enter", "↵": "Enter", esc: "Escape", escape: "Escape" };
+const atalhoAnunciado = (kbd) => typeof kbd === "string" ? (kbd || undefined)
+    : kbd && kbd.length > 0 ? kbd.map(k => NOME_DA_TECLA[k.toLowerCase()] ?? k).join("+") : undefined;
 export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
     const grupo = React.useContext(GrupoDeBotoesContext);
     const variant = variantPedida ?? grupo?.variant;
@@ -125,7 +131,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
     // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
     const temConteudo = children != null && children !== false;
-    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), kbd && _jsx(Kbd, { className: "btn-kbd", children: kbd }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
+    const inner = _jsxs(_Fragment, { children: [loading ? _jsx("span", { className: "spinner" }) : leadingIcon && _jsx(Icon, { name: leadingIcon }), (temConteudo || !loading) && _jsx("span", { children: children }), typeof kbd === "string" ? (kbd && _jsx(Kbd, { className: "btn-kbd", children: kbd })) : kbd && kbd.length > 0 && _jsx("span", { className: "btn-kbds", children: kbd.map((k, i) => _jsx(Kbd, { className: "btn-kbd", children: k }, i)) }), trailingIcon && _jsx(Icon, { name: trailingIcon })] });
     // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
     // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
     // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
@@ -135,7 +141,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
     const inerte = ariaDisabled === true || ariaDisabled === "true";
     const off = disabled || loading;
-    const shared = { "aria-keyshortcuts": kbd || undefined, "aria-busy": loading || undefined };
+    const shared = { "aria-keyshortcuts": atalhoAnunciado(kbd), "aria-busy": loading || undefined };
     // GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
     // estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
     const s = useAureaStrings();

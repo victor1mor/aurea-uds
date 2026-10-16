@@ -73,7 +73,7 @@ export function buttonSkin(variant?:ButtonVariant,appearance?:ButtonAppearance,t
 // href: um botão que NAVEGA é um link, e link é <a>. A pele é a mesma (.btn), a semântica
 // não: leitor de tela anuncia link, o meio-clique abre em nova aba, o Enter funciona sem JS.
 // Desabilitado + href = <a> SEM href e com aria-disabled: link não tem estado disabled.
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,RefAttributes<HTMLButtonElement>{variant?:ButtonVariant;appearance?:ButtonAppearance;tone?:ButtonTone;size?:Responsive<ComponentSize>;loading?:boolean;leadingIcon?:IconName;trailingIcon?:IconName;href?:string;fullWidth?:boolean;
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,RefAttributes<HTMLButtonElement>{variant?:ButtonVariant;appearance?:ButtonAppearance;tone?:ButtonTone;size?:Responsive<ComponentSize>;loading?:boolean;leadingIcon?:AureaIcon;trailingIcon?:AureaIcon;href?:string;fullWidth?:boolean;
   /** Menos peso (15/10/2026): a letra apagada e um degrau menor (12 no `sm`) — o botão de ferramenta de um topo de
    *  site, como o "Theme" da referência. A caixa e o fundo são os da aparência escolhida. */
   quiet?:boolean;
@@ -100,7 +100,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
    * @deprecatedSince 0.4.0 — sai na `1.0`. A Aurea está em `0.x`, onde o semver permite
    * quebrar, e por isso este é o momento mais barato que vai existir.
    */
-  pressed?:boolean;kbd?:string;
+  pressed?:boolean;
+  /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
+   *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
+  kbd?:string|readonly string[];
   /**
    * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
    * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe
@@ -152,6 +155,12 @@ const GrupoDeBotoesContext=React.createContext<GrupoDeBotoes|null>(null);
 // type="button" por default: o default do HTML é submit, e um "Cancelar"/"Remover"
 // dentro de <form> dispararia a ação principal (auditoria 18/07/2026, ALTO 1).
 // Quem quer submeter passa type="submit" explícito (como o MessageComposer faz).
+// O nome da combinação para o `aria-keyshortcuts`: as teclas juntas por "+", com os nomes da especificação (o ESPAÇO
+// separa atalhos ALTERNATIVOS — "Ctrl K" quer dizer "Ctrl" ou "K"). O texto solto passa como veio, como antes.
+const NOME_DA_TECLA:Record<string,string>={ctrl:"Control",control:"Control","⌃":"Control",cmd:"Meta",command:"Meta","⌘":"Meta",meta:"Meta",
+  shift:"Shift","⇧":"Shift",alt:"Alt",option:"Alt","⌥":"Alt",enter:"Enter","↵":"Enter",esc:"Escape",escape:"Escape"};
+const atalhoAnunciado=(kbd:string|readonly string[]|undefined)=>typeof kbd==="string"?(kbd||undefined)
+  :kbd&&kbd.length>0?kbd.map(k=>NOME_DA_TECLA[k.toLowerCase()]??k).join("+"):undefined;
 export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,...props},ref){
 const grupo=React.useContext(GrupoDeBotoesContext);
 const variant=variantPedida??grupo?.variant;
@@ -176,7 +185,7 @@ const cls=cx("btn",buttonSkin(variant,appearance,tone),
 // da frente; e sem conteúdo (o `IconButton` ocupado) o invólucro vazio some, senão o `gap` dele
 // empurraria a rodinha para fora do centro. Fora do estado ocupado o HTML é o mesmo de antes.
 const temConteudo=children!=null&&children!==false;
-const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={leadingIcon}/>}{(temConteudo||!loading)&&<span>{children}</span>}{kbd&&<Kbd className="btn-kbd">{kbd}</Kbd>}{trailingIcon&&<Icon name={trailingIcon}/>}</>;
+const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={leadingIcon}/>}{(temConteudo||!loading)&&<span>{children}</span>}{typeof kbd==="string"?(kbd&&<Kbd className="btn-kbd">{kbd}</Kbd>):kbd&&kbd.length>0&&<span className="btn-kbds">{kbd.map((k,i)=><Kbd key={i} className="btn-kbd">{k}</Kbd>)}</span>}{trailingIcon&&<Icon name={trailingIcon}/>}</>;
 // INERTE ≠ DESABILITADO, e a diferença é medida (M4, 13/08/2026): `disabled` tira o botão da
 // ordem de foco, então quem navega por teclado nunca alcança a explicação de POR QUE não dá — e
 // "não dá porque você não tem permissão" é justamente o caso em que a explicação é tudo. O
@@ -186,7 +195,7 @@ const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={lead
 // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
 const inerte=ariaDisabled===true||ariaDisabled==="true";
 const off=disabled||loading;
-const shared={"aria-keyshortcuts":kbd||undefined,"aria-busy":loading||undefined};
+const shared={"aria-keyshortcuts":atalhoAnunciado(kbd),"aria-busy":loading||undefined};
 // GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
 // estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
 const s=useAureaStrings();

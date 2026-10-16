@@ -219,8 +219,13 @@ export function Checkbox({ label, labelHidden, description, size, className, ...
 // `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
 // mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
 const comDescricao = (label, description) => description ? _jsxs("span", { children: [_jsx("strong", { children: label }), _jsx("br", {}), _jsx("span", { className: "muted", children: description })] }) : label;
-export function Radio({ label, description, size, className, ...props }) { return _jsxs("label", { className: cx("radio", className), children: [_jsx("input", { type: "radio", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), comDescricao(label, description)] }); }
-export function Switch({ label, description, size, className, ...props }) { return _jsxs("label", { className: cx("switch", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { children: comDescricao(label, description) })] }); }
+// `labelHidden` (15/10/2026) no `Radio` e no `Switch`, o mesmo do `Checkbox`: o nome sai da tela e fica para o leitor
+// de tela — a fileira de controles sem rótulo da vitrine da referência.
+export function Radio({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("radio", labelHidden && "radio-bare", className), children: [_jsx("input", { type: "radio", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), labelHidden ? _jsx("span", { className: "sr-only", children: comDescricao(label, description) }) : comDescricao(label, description)] }); }
+// `indicatorPlacement` (15/10/2026, o Victor: "A sim"): a chave no FIM, como o "Allow notifications" da vitrine da
+// referência — o nome e a descrição à esquerda. O mesmo nome do `RadioGroup` do nativo. Muda só a ordem do DESENHO: o
+// campo escondido continua logo antes da chave (o CSS do estado depende disso), e o rótulo é um só para o leitor.
+export function Switch({ label, labelHidden, description, indicatorPlacement = "start", size, className, ...props }) { return _jsxs("label", { className: cx("switch", labelHidden && "switch-bare", indicatorPlacement === "end" && "switch-end", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: comDescricao(label, description) })] }); }
 export function Range({ orientation, className, ...props }) { return _jsx("input", { className: cx("range", peleDoEixo("range", orientation, "horizontal", "range"), className), type: "range", ...props }); }
 // `md` é a classe base — não existe `.input-md`, como não existe `.btn-md`. O prefixo é escrito
 // literal em cada chamada (`input-${size}`, e não `${base}-${size}`) porque é assim que o check 15

@@ -78,6 +78,8 @@ export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,
 export declare function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }: CheckboxGroupProps): React.JSX.Element;
 export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">, RefAttributes<HTMLDivElement> {
     label: ReactNode;
+    /** O nome sai da tela e fica para o leitor de tela, como no `Checkbox` (a fileira de controles da vitrine da referência). */
+    labelHidden?: boolean;
     description?: ReactNode;
     error?: ReactNode;
     value?: string;
@@ -93,7 +95,7 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "d
     /** O asterisco no rótulo, como o `Field`. */
     required?: boolean;
 }
-export declare function RadioGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation, required, children, className, ...props }: RadioGroupProps): React.JSX.Element;
+export declare function RadioGroup({ label, labelHidden, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation, required, children, className, ...props }: RadioGroupProps): React.JSX.Element;
 export declare namespace RadioGroup {
     export { Radio as Item };
 }

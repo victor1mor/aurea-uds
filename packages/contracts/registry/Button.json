@@ -140,8 +140,8 @@
   "props": [
     {
       "name": "variant",
-      "type": "primary | secondary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav | danger-soft",
-      "default": "secondary",
+      "type": "primary | secondary | tertiary | outline | ghost | primary-outline | primary-ghost | danger | danger-outline | danger-ghost | link | link-primary | link-danger | nav | danger-soft",
+      "default": "tertiary",
       "description": "A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
     },
     {
@@ -188,15 +188,15 @@
     },
     {
       "name": "leadingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
-      "description": "Glyph before the label."
+      "description": "Glyph before the label — a name from the allowlist, or the app’s own drawing (a component that returns its <svg>), as Icon and IconButton take."
     },
     {
       "name": "trailingIcon",
-      "type": "IconName",
+      "type": "AureaIcon",
       "default": "—",
-      "description": "Glyph after the label."
+      "description": "Glyph after the label — a name, or the app’s own drawing, as leadingIcon."
     },
     {
       "name": "type",
@@ -224,9 +224,9 @@
     },
     {
       "name": "kbd",
-      "type": "string",
+      "type": "string | string[]",
       "default": "—",
-      "description": "Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts."
+      "description": "Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list ([\"Ctrl\", \"K\"]) shows one key cap per key and announces the combination (Control+K)."
     },
     {
       "name": "grow",

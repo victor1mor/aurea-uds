@@ -452,7 +452,8 @@ export interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 // `.input-wrap-end` para o botão do PasswordField —, e o grupo é a terceira vez virando uma. O
 // merge das duas linhagens tinha trazido de volta a versão com `.input-wrap`, contra um core
 // que já não a pinta.
-export function SearchField({icon="magnifying-glass",className,size,width,...props}:SearchFieldProps){return <InputGroup className={className} width={width}><InputGroupAddon><Icon name={icon} size={valorBase(size)==="sm"?"sm":undefined}/></InputGroupAddon><Input type="search" size={size} {...props}/></InputGroup>}
+// `search-field` (15/10/2026): a busca tem a medida própria da referência — 12, a lupa, 8 (ver o core).
+export function SearchField({icon="magnifying-glass",className,size,width,...props}:SearchFieldProps){return <InputGroup className={cx("search-field",className)} width={width}><InputGroupAddon><Icon name={icon} size={valorBase(size)==="sm"?"sm":undefined}/></InputGroupAddon><Input type="search" size={size} {...props}/></InputGroup>}
 // labelHidden: coluna de seleção de tabela precisa do rótulo POR LINHA para o leitor de
 // tela ("Select Analyst"), mas mostrá-lo engorda a coluna. O rótulo continua no DOM, só
 // sai da tela (.sr-only) — nunca trocar por aria-label solto num <label> visível vazio.
@@ -554,7 +555,9 @@ export function CheckboxGroup({label,description,error,value,defaultValue,onValu
 // opção NATIVOS com o mesmo `name`, então o Tab entra na escolhida e as setas andam e escolhem — do navegador. O grupo
 // é `role="radiogroup"` com o nome do rótulo; a descrição e o erro entram no `aria-describedby`.
 export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,"defaultValue"|"onChange">,RefAttributes<HTMLDivElement>{
-  label:ReactNode;description?:ReactNode;error?:ReactNode;
+  label:ReactNode;
+  /** O nome sai da tela e fica para o leitor de tela, como no `Checkbox` (a fileira de controles da vitrine da referência). */
+  labelHidden?:boolean;description?:ReactNode;error?:ReactNode;
   value?:string;defaultValue?:string;onValueChange?:(value:string)=>void;
   /** O `name` de todas as opções, para o formulário. Sem ele, um nome próprio do grupo. */
   name?:string;disabled?:boolean;
@@ -564,7 +567,7 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,"de
   orientation?:"vertical"|"horizontal";
   /** O asterisco no rótulo, como o `Field`. */
   required?:boolean}
-export function RadioGroup({label,description,error,value,defaultValue,onValueChange,name,disabled,invalid,orientation="vertical",required,children,className,...props}:RadioGroupProps){
+export function RadioGroup({label,labelHidden,description,error,value,defaultValue,onValueChange,name,disabled,invalid,orientation="vertical",required,children,className,...props}:RadioGroupProps){
   const auto=React.useId();
   const [proprio,setProprio]=React.useState<string|undefined>(defaultValue);
   const escolhido=value??proprio;
@@ -581,8 +584,8 @@ export function RadioGroup({label,description,error,value,defaultValue,onValueCh
   });
   return <div role="radiogroup" aria-labelledby={idRotulo} aria-describedby={[idDescricao,idErro].filter(Boolean).join(" ")||undefined}
     aria-orientation={orientation} aria-required={required||undefined} aria-invalid={error||invalid?true:undefined}
-    className={cx("radio-group",orientation==="horizontal"&&"radio-group-horizontal",className)} {...props}>
-    <span className="label" id={idRotulo}><span>{label}{required?<span className="label-required" aria-hidden="true">*</span>:null}</span></span>
+    className={cx("radio-group",orientation==="horizontal"&&"radio-group-horizontal",labelHidden&&"radio-group-bare",className)} {...props}>
+    <span className={cx("label",labelHidden&&"sr-only")} id={idRotulo}><span>{label}{required?<span className="label-required" aria-hidden="true">*</span>:null}</span></span>
     {description&&<span className="field-description" id={idDescricao}>{description}</span>}
     {orientation==="horizontal"?<div className="radio-group-items">{opcoes}</div>:opcoes}
     {error&&<span className="field-error" id={idErro}>{error}</span>}
@@ -1025,7 +1028,7 @@ export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommi
     </BasePopover.Trigger>
     {name&&<input type="hidden" name={name} value={hex}/>}
     <BasePopover.Portal container={portal}>
-      <BasePopover.Positioner side="bottom" align="start" sideOffset={6}>
+      <BasePopover.Positioner className="positioner" side="bottom" align="start" sideOffset={6}>
         <BasePopover.Popup className="popover color-picker-popover" aria-label={label}>
           <CorDoSeletor.Provider value={contexto}>
             {children??<>
@@ -1183,7 +1186,7 @@ export function Combobox({items,value,onValueChange,placeholder,label,empty,disa
         </span>
       </BaseCombobox.InputGroup>
     </div>
-    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner sideOffset={6}>
+    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner className="positioner" sideOffset={6}>
       <BaseCombobox.Popup className="menu combobox-popup">
         <BaseCombobox.Empty className="combobox-empty">{empty??s.comboboxEmpty}</BaseCombobox.Empty>
         {listaCombobox(items)}
@@ -1228,7 +1231,7 @@ export function MultiCombobox({items,value,onValueChange,onInputChange,loading,p
         </span>
       </BaseCombobox.InputGroup>
     </div>
-    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner sideOffset={6}>
+    <BaseCombobox.Portal container={portal}><BaseCombobox.Positioner className="positioner" sideOffset={6}>
       <BaseCombobox.Popup className="menu combobox-popup">
         <BaseCombobox.Empty className="combobox-empty">{loading?s.comboboxLoading:(empty??s.comboboxEmpty)}</BaseCombobox.Empty>
         {listaCombobox(items)}
@@ -1293,7 +1296,7 @@ export const Select=forwardRef<HTMLButtonElement,SelectProps>(function Select({i
     <BaseSelect.Trigger ref={ref} className={cx("select","select-trigger",peleDoEixo("select",size),className)} {...props}>
       <BaseSelect.Value placeholder={placeholder} className="select-value"/>
     </BaseSelect.Trigger>
-    <BaseSelect.Portal container={portal}><BaseSelect.Positioner sideOffset={6} alignItemWithTrigger={false}>
+    <BaseSelect.Portal container={portal}><BaseSelect.Positioner className="positioner" sideOffset={6} alignItemWithTrigger={false}>
       <BaseSelect.Popup className="menu combobox-popup">
         <BaseSelect.List>
           {lista.map((i,n)=>ehGrupoDoSelect(i)

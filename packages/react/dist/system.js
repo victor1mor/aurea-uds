@@ -29,7 +29,11 @@ export function AureaProvider({ children, strings, direction = "ltr", spriteUrl 
     // o CSS só conhece `dark` e `light`. Sem preferência, o provider continua adotando o que o documento trouxer.
     const [prefInterna, setPrefInterna] = React.useState(defaultTheme);
     const preferencia = theme ?? prefInterna;
-    const sistemaEscuro = React.useSyncExternalStore(assinaEsquema, leEsquemaEscuro, () => false);
+    // Só quem SEGUE o sistema pergunta a ele: o provider sem `"system"` não abre `matchMedia` nenhum (o custo por
+    // aplicação é cobrado em `custo-responsivo` e `ssr-responsivo`, que pegaram a primeira versão, 15/10/2026).
+    const segue = preferencia === "system";
+    const assina = React.useCallback((cb) => segue ? assinaEsquema(cb) : () => { }, [segue]);
+    const sistemaEscuro = React.useSyncExternalStore(assina, segue ? leEsquemaEscuro : semEsquema, semEsquema);
     const resolvido = preferencia === "system" ? (sistemaEscuro ? "dark" : "light") : preferencia;
     const temaCtx = useEixoDoDocumento("theme", resolvido, undefined, undefined);
     const escolher = React.useCallback((p) => {
@@ -68,6 +72,7 @@ const assinaEsquema = (cb) => {
     return () => m.removeEventListener("change", cb);
 };
 const leEsquemaEscuro = () => typeof matchMedia === "function" && matchMedia(ESQUEMA_ESCURO).matches;
+const semEsquema = () => false;
 /** Um eixo de apresentação que vive no `<html>`: tema ou densidade. A conta é a mesma para os
  *  dois, e escrevê-la duas vezes seria o defeito do §21 cometido dentro do próprio conserto
  *  dele. */

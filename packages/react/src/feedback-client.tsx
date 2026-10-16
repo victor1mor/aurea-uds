@@ -217,7 +217,7 @@ export function NotificationCenter({items,onItemClick,onMarkAllRead,label,icon="
       <BasePopover.Trigger render={<IconButton variant="ghost" icon={icon} label={unread?`${title} (${unread})`:title}/>}/>
       {unread>0&&<span className="notification-count" aria-hidden="true">{unread>99?"99+":unread}</span>}
     </span>
-    <BasePopover.Portal container={portal}><BasePopover.Positioner side={side} sideOffset={8}>
+    <BasePopover.Portal container={portal}><BasePopover.Positioner className="positioner" side={side} sideOffset={8}>
       <BasePopover.Popup className="popover notification-panel" aria-label={title}>
         <div className="notification-head">
           <BasePopover.Title render={<strong/>}>{title}</BasePopover.Title>

@@ -68,6 +68,12 @@
       "description": "REQUIRED. The group's visible name — what the screen reader announces for the group."
     },
     {
+      "name": "labelHidden",
+      "type": "boolean",
+      "default": "false",
+      "description": "Keeps the group name in the DOM but out of sight, as the Checkbox does: the options start at the top, without the 16 that separated them from the name."
+    },
+    {
       "name": "description",
       "type": "ReactNode",
       "default": "—",
