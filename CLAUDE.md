@@ -173,6 +173,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.32.0` | O lote único — a peça é a da referência, com a cara da Aurea: 12 componentes novos (`CloseButton`, `Slider`, `CheckboxGroup`, `ListBox`, `Link`, `ColorSwatch`, `ProgressCircle`, `TagGroup`, `DatePicker` na web, `ColorArea`, `ColorField`, `ColorPicker`), o nativo na escala de toque, o mapa de rede (MNT-21 a 26) e o site no molde da documentação da referência — [ADR-0066](decisions/0066-a-peca-e-a-da-referencia-e-o-nativo-tem-escala-de-toque.md) a [ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), pedido #66. **Publicada em 14/10/2026** (entre 17:56 e 18:07, Brasília, medido no npm), pelo terminal do Victor |
 | `0.33.0` | O lote R — a página inicial e a vitrine da referência: o topo de 56 que embaça, a chave de tema de três posições (`"system"`), a aba "Components" só com peças da Aurea; o `RadioGroup` na web e as peças da vitrine como variações; o espaço do ícone do campo e a camada das janelinhas no posicionador — [ADR-0070](decisions/0070-os-grupos-sao-os-da-referencia.md) e [ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md), pedido #68. **Publicada em 16/10/2026** (entre 12:29 e 12:45, Brasília, medido no npm), pelo terminal do Victor |
 
+| `0.34.0` | O lote S — **sem linha**: nenhuma peça desenha borda (transparente, nenhuma medida muda), na web e no nativo; a única que fica é a do `Card variant="outline"`, clara; o que sumia ganha fundo (o texto a 6, 10 e 20%), o contorno com tom leva o tom a 16% e a letra mais escura (a "C"), o aviso que era linha vira fundo e o desenho de linha vira desenho cheio — [ADR-0072](decisions/0072-sem-linha.md), pedido #70. **Publicada em 17/10/2026** (entre 08:16 e 08:24, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -467,6 +468,22 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    que reprova sem o conserto. E o `TaskStop` não mata os filhos de uma suíte em segundo plano: antes de rodar outra,
    conferir que a anterior morreu. **Publicada em 16/10/2026** (entre 12:29 e 12:45, Brasília, medido no npm), pelo terminal do
    Victor, da junção do pedido #68 (que trouxe junto o #67, o registro da 0.32.0).
+
+30. **`0.34.0`, o lote S, feito de 16 a 17/10/2026** na branch `claude/lote-s` — **sem linha**
+   ([ADR-0072](decisions/0072-sem-linha.md)). O Victor marcou na vitrine as peças sem borda (*"não tem linha ao redor, e
+   isso acho bonito"*), viu a proposta em todas as páginas lado a lado com a de hoje e decidiu *"quero tudo sem borda, sem
+   exceções"*; depois, cada peça que sumiu ao lado da sugestão de fundo: *"caixa B, o resto tudo B"*; e, para o contorno
+   colorido, a "C" (o tom a 16% e a letra mais escura). ⚠ **As regras novas:** nenhuma borda com cor, nem o anel fino de
+   `box-shadow` — quem cobra é o `tests/unit/sem-linha.test.tsx` (o código, em todo estado) e a varredura do catálogo; a
+   única linha é a do `.card-outline`; o fundo novo vai SÓ na peça que sumiu (um seletor largo, `.badge:not(...)`,
+   pintou por cima do fundo calibrado do suave); o marcador do item ATUAL não é contorno, é indicador (desenho cheio); e
+   desenho por máscara precisa da regra do alto contraste. ⚠ **As lições:** a suíte INTEIRA achou, depois do "aprovado",
+   onze defeitos que os testes do lote não pegavam; as fotos, olhadas uma a uma, acharam mais dois; e a montagem parcial
+   (`build:core`/`build:catalog`) deixou o catálogo velho — antes de commitar, `pnpm build` inteiro e `git status` limpo.
+   Falhas que já existem na 0.33.0, fora da CI: o crachá `danger` cheio da `lory` no claro (4,03:1, decisão do Victor), a
+   largura da prosa (705 > 700) e, no WebKit do Windows, o nome do `NavList` e as setas do `Radio`. **Publicada em
+   17/10/2026** (entre 08:16 e 08:24, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #70 (que levou
+   junto o #69, o registro da 0.33.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
