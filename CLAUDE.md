@@ -174,6 +174,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.33.0` | O lote R — a página inicial e a vitrine da referência: o topo de 56 que embaça, a chave de tema de três posições (`"system"`), a aba "Components" só com peças da Aurea; o `RadioGroup` na web e as peças da vitrine como variações; o espaço do ícone do campo e a camada das janelinhas no posicionador — [ADR-0070](decisions/0070-os-grupos-sao-os-da-referencia.md) e [ADR-0071](decisions/0071-a-pagina-inicial-e-a-vitrine-da-referencia.md), pedido #68. **Publicada em 16/10/2026** (entre 12:29 e 12:45, Brasília, medido no npm), pelo terminal do Victor |
 
 | `0.34.0` | O lote S — **sem linha**: nenhuma peça desenha borda (transparente, nenhuma medida muda), na web e no nativo; a única que fica é a do `Card variant="outline"`, clara; o que sumia ganha fundo (o texto a 6, 10 e 20%), o contorno com tom leva o tom a 16% e a letra mais escura (a "C"), o aviso que era linha vira fundo e o desenho de linha vira desenho cheio — [ADR-0072](decisions/0072-sem-linha.md), pedido #70. **Publicada em 17/10/2026** (entre 08:16 e 08:24, Brasília, medido no npm), pelo terminal do Victor |
+| `0.35.0` | O lote T — o site no arranjo da documentação da referência: `AppShell layout="docs"`, `Header tabs`, `Container size="docs"`, cinco tokens de largura, cada área com a sua lateral, a segunda linha da ADR-0072 (a de ponta a ponta embaixo das áreas) e o índice sem barra de rolagem; e o MNT-28 (o nó movido encaixa na grade, no vizinho e onde a linha fica reta) — [ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md), seção "Lote T", pedido #72. **Publicada em 17/10/2026** (entre 17:58 e 18:04, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -496,7 +497,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    item — medi a caixa, chamei de texto, e levei um "16" errado ao Victor. ⚠ **As lições:** a barra de rolagem
    escondida na coluna apareceu no índice de DENTRO, que numa tela baixa encolhe e rola sozinho; um `sticky` dentro de
    outro soma os deslocamentos; e a borda transparente do sem linha ainda soma 1 à medida (a barra tinha 101, e tudo
-   embaixo ficava 1 abaixo da referência).
+   embaixo ficava 1 abaixo da referência). **Publicada em 17/10/2026** (entre 17:58 e 18:04, Brasília, medido no npm),
+   pelo terminal do Victor, da junção do pedido #72.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
