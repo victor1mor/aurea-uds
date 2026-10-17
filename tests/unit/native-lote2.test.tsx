@@ -261,11 +261,11 @@ describe("Badge — a pílula pequena", () => {
 describe("Status — o ponto e a palavra", () => {
   // DEFEITO: fazer `offline` ser só outra cor. Quem não distingue as duas cores perde a diferença
   // entre "está fora" e "está bem" — no CSS ele é VAZADO, não pintado.
-  it("offline é ponto vazado, não só outra cor", () => {
+  it("offline é o ponto APAGADO, e a palavra diz o estado (sem linha, ADR-0072)", () => {
     render(<Envolve><Status variant="offline">Fora</Status></Envolve>);
     const ponto = estilo("View", 1);
-    expect(ponto.backgroundColor).toBe("transparent");
-    expect(ponto.borderWidth).toBe(2);
+    expect(ponto.backgroundColor).toMatch(/^#[0-9a-f]{6}66$/i);  // a cor do estado a 40%
+    expect(ponto.borderWidth).toBeUndefined();
 
     // O ponto é desenho sobre a superfície: usa o par de LETRA (`success400`) desde a 0.27.0
     // (ADR-0061) — o `success` virou o fundo cheio, fundo demais sobre o escuro.

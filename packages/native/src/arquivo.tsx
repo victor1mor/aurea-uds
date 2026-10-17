@@ -32,7 +32,7 @@ import * as React from "react";
 import {Pressable, View, type StyleProp, type ViewStyle} from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import {IconButton} from "./actions.js";
-import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {alturaDoTamanho, respiroDoTamanho, useCampo} from "./inputs.js";
 import {Text} from "./text.js";
@@ -44,10 +44,10 @@ const folha = criarFolha((t: AureaTokens) => ({
   // O gatilho e a linha do arquivo têm a pele do campo: mesma borda, mesmo fundo, cápsula.
   caixa: {
     flexDirection: "row", alignItems: "center", gap: t.size.space2,
-    width: "100%", minWidth: 0, borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+    width: "100%", minWidth: 0, borderWidth: t.size.borderWidth, borderColor: "transparent",
+    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
   },
-  invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
+  invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   desabilitado: {opacity: t.size.opacityDisabled},
   nomeETamanho: {flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space2},
   nome: {flexShrink: 1},

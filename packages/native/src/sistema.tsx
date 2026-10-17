@@ -34,7 +34,7 @@ import {Linking, Platform, Pressable, View, type StyleProp, type ViewStyle} from
 import RNDateTimePicker, {DateTimePickerAndroid} from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "./actions.js";
-import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
 import {Alert} from "./feedback.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {alturaDoTamanho, respiroDoTamanho, useCampo, type AureaFieldSize} from "./inputs.js";
@@ -46,10 +46,10 @@ import type {AureaTokens} from "./tokens.js";
 const folha = criarFolha((t: AureaTokens) => ({
   gatilho: {
     flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-    width: "100%", borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+    width: "100%", borderWidth: t.size.borderWidth, borderColor: "transparent",
+    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
   },
-  invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
+  invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   // No navegador o texto e o ícone vão numa caixa escondida do leitor de tela (E16): a mesma
   // fileira do gatilho, ocupando a largura dele.
   mioloWeb: {flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between"},
@@ -71,8 +71,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   adicionar: {
     alignItems: "center", justifyContent: "center", gap: t.size.space1,
     width: t.size.space16, height: t.size.space16, ...canto(t.size.radiusLg),
-    borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    borderStyle: "dashed", backgroundColor: t.color.fieldBg,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
+    borderStyle: "dashed", backgroundColor: preenchimento(t, 2),
   },
 }));
 

@@ -74,7 +74,7 @@ const folha = criarFolha((t) => ({
         // 0.32.0: 16 de recheio, o do aviso do nativo da referência (era 14, o da web antiga).
         flexDirection: "row", alignItems: "center", gap: 11, padding: t.size.space4,
         maxWidth: 360, width: "100%", alignSelf: "flex-end",
-        borderWidth: t.size.borderWidth, borderColor: t.color.border,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
         // HER-02 (06/10/2026): era `radiusLg` (16). O aviso é superfície flutuante, e superfície
         // flutuante é 22 na identidade da Aurea (`CLAUDE.md` §5). A referência usa 24.
         ...canto(t.size.radiusCard),

@@ -44,7 +44,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // estão ao lado dela. O `SegmentedControl` fica na escala da web — não é desta frente.
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido } from "./estilos.js";
+import Svg, { Path } from "react-native-svg";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento } from "./estilos.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -70,8 +71,8 @@ const folha = criarFolha((t) => ({
     rotulo: { flexDirection: "row", justifyContent: "space-between", gap: 12 },
     caixa: {
         width: "100%", minWidth: 0,
-        borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
+        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
         color: t.color.foreground,
     },
     // O `.textarea` é o único da família com raio LG em vez do de controle: uma caixa alta em
@@ -79,15 +80,15 @@ const folha = criarFolha((t) => ({
     // 0.32.0: a caixa alta da referência — 128 de altura (era 104) e 8 em cima e embaixo (era 12).
     areaDeTexto: { minHeight: t.size.space24 + t.size.space8, paddingVertical: t.size.space2,
         ...canto(t.size.radiusLg) },
-    invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
+    invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
     desabilitado: { opacity: t.size.opacityDisabled },
     // O GRUPO é a mesma caixa do campo virada em LINHA, e os números são os mesmos: mesma borda,
     // mesmo raio de controle, mesmo fundo. A altura e o respiro horizontal entram por tamanho, como
     // no `Input`, porque é o grupo que passa a desenhar a caixa quando existe um.
     grupo: {
         flexDirection: "row", alignItems: "center", width: "100%", minWidth: 0,
-        borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
+        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
         gap: t.size.space1,
     },
     // Dentro do grupo o campo perde a caixa e vira só o texto — a borda passou a ser do grupo.
@@ -98,8 +99,8 @@ const folha = criarFolha((t) => ({
     encaixe: { flexDirection: "row", alignItems: "center", flexShrink: 0, gap: t.size.space1 },
     marcaBase: {
         alignItems: "center", justifyContent: "center",
-        borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        backgroundColor: t.color.fieldBg,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
+        backgroundColor: preenchimento(t, 3),
     },
     // E5: a marca no MEIO da altura do texto, como a referência. Era `flex-start` com um
     // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
@@ -110,8 +111,8 @@ const folha = criarFolha((t) => ({
     itemCartao: { ...peleDoCartao(t), alignItems: "flex-start" },
     itemCartaoEscolhido: peleDoCartaoEscolhido(t),
     linhaNoTopo: { alignItems: "flex-start" },
-    trilho: { ...canto(t.size.radiusFull), backgroundColor: t.color.muted,
-        borderWidth: t.size.borderWidth, borderColor: t.color.border, justifyContent: "center" },
+    trilho: { ...canto(t.size.radiusFull), backgroundColor: preenchimento(t, 3),
+        borderWidth: t.size.borderWidth, borderColor: "transparent", justifyContent: "center" },
     // 0.32.0: a 2 da borda de FORA, como a bolinha da referência — o `left` conta de dentro da borda
     // do trilho, então é `space05 − borderWidth` (1), a mesma conta do `.switch-track:after` da web.
     polegar: { position: "absolute", left: t.size.space05 - t.size.borderWidth, ...canto(t.size.radiusFull) },
@@ -153,7 +154,7 @@ const folha = criarFolha((t) => ({
         maxHeight: "60%", paddingVertical: t.size.space2,
         // HER-03 (ADR-0058): a folha que sobe de baixo tem 32, como a `BottomSheet`.
         ...cantosDeCima(t.size.radiusSheet),
-        backgroundColor: t.color.popover, borderWidth: t.size.borderWidth, borderColor: t.color.border,
+        backgroundColor: t.color.popover, borderWidth: t.size.borderWidth, borderColor: "transparent",
     },
     // 0.32.0: a opção da lista da referência — 12 em cima e embaixo, 8 dos lados, 8 entre o rótulo e
     // o indicador. Com a linha de 24 do rótulo dá 48, a altura de toque (era `controlHLg`, 40).
@@ -395,22 +396,16 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
                     // web; era 5 cru.
                     { width: lado, height: lado,
                         ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusXs) },
-                    checked && { backgroundColor: t.color.controlSelected, borderColor: t.color.controlSelected },
+                    checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
                 ], children: checked && (papel === "radio"
                     // O ponto do rádio é da cor de primeiro plano da seleção, sobre a marca já pintada.
                     // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
                     ? _jsx(View, { style: { width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
                             ...canto(t.size.radiusFull), backgroundColor: t.color.controlSelectedForeground } })
-                    // O visto da web é desenhado com DUAS BORDAS de um retângulo 8×4 girado −45°. Isso
-                    // atravessa inteiro: `transform: rotate` e `borderLeftWidth`/`borderBottomWidth`
-                    // existem no RN. Desenhá-lo assim, em vez de trazer um glifo, mantém a peça sem
-                    // depender do registro de ícones do app.
-                    : _jsx(View, { style: {
-                            width: 8, height: 4, marginTop: -2,
-                            borderLeftWidth: 2, borderBottomWidth: 2,
-                            borderColor: t.color.controlSelectedForeground,
-                            transform: [{ rotate: "-45deg" }],
-                        } })) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
+                    // O visto. Era desenhado com DUAS BORDAS de um retângulo girado; sem linha (16/10/2026), ele é
+                    // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
+                    // que o pacote já usa — sem depender do registro de ícones do app.
+                    : _jsx(Svg, { width: "100%", height: "100%", viewBox: "0 0 16 16", children: _jsx(Path, { d: "M3.5 8.5l3 3 6-7", fill: "none", stroke: t.color.controlSelectedForeground, strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" }) })) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }))] }));
 }
 /** A caixa que marca. `accessibilityRole="checkbox"` + `state.checked`. */
@@ -448,9 +443,9 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
     const marcaDesenhada = (_jsx(View, { style: [
             s.marcaBase,
             { width: marca, height: marca, ...canto(t.size.radiusFull) },
-            erro && { borderColor: perigo, backgroundColor: "transparent" },
+            erro && { borderColor: "transparent", backgroundColor: t.color.dangerBg },
             escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
-                borderColor: erro ? perigo : t.color.controlSelected },
+                borderColor: "transparent" },
         ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
                 backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
     // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
@@ -465,7 +460,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
             // pagou no Android — caixa que ganha a pintura depois de montada perde o raio.
             cartao && s.itemCartao,
             cartao && escolhido && s.itemCartaoEscolhido,
-            cartao && erro && { borderColor: perigo },
+            cartao && erro && { borderColor: "transparent", backgroundColor: t.color.dangerBg },
             inativo && s.desabilitado, style,
         ], ...rest, children: noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada] }));
 }
@@ -551,7 +546,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         ], children: [_jsx(View, { style: [
                     s.trilho,
                     { width: larguraDoTrilho, height: alturaDoTrilho },
-                    checked && { backgroundColor: t.color.controlSelected, borderColor: t.color.controlSelected },
+                    checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
                 ], children: _jsx(Animated.View, { style: [
                         s.polegar,
                         { width: larguraDoPolegar, height: alturaDoPolegar,

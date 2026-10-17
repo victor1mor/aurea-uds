@@ -64,7 +64,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // superfície do cartão, a borda, a sombra média e o canto da folha de baixo; o de dentro acompanha.
   moldura: {
     padding: t.size.space2,
-    borderWidth: t.size.borderWidth, borderColor: t.color.border,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusSheet),
     backgroundColor: t.color.card,
     ...(t.shadow.shadowMd ? {boxShadow: [t.shadow.shadowMd]} : null),

@@ -71,7 +71,7 @@ export default {
     "Collapsed turns it into an icon rail. The labels stay in the DOM as screen-reader-only "
     + "text. The panel narrows to --sidebar-rail; a floating shell track also preserves its two "
     + "outer margins.",
-    "It FLOATS by default — margin, card radius, a border all the way around. That is what this "
+    "It FLOATS by default — margin, card radius, its own surface. That is what this "
     + "design system looks like everywhere. `variant=\"flush\"` is the one exception it makes to "
     + "that rule, and it is opt-in: against the edges, full height, separated from the content by "
     + "a single rule. It was measured against four shipping admin dashboards. "

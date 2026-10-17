@@ -15,7 +15,7 @@ import {render, act} from "@testing-library/react";
 import {describe, expect, it, vi} from "vitest";
 import * as React from "react";
 import {StyleSheet, __instancias} from "./native-stubs/react-native";
-import {AureaProvider, Card, RadioGroup, Text, resolverTokens} from "../../packages/native/src/index.js";
+import {AureaProvider, Card, RadioGroup, Text, comOpacidade, resolverTokens} from "../../packages/native/src/index.js";
 
 const t = resolverTokens("dark", "comfortable");
 const Envolve = ({children}: {children: React.ReactNode}) => <AureaProvider>{children}</AureaProvider>;
@@ -64,11 +64,11 @@ describe("CHK-01 · o cartão inteiro é a opção", () => {
 
   it("o escolhido tem a MESMA pele do `Card variant=\"selected\"`", () => {
     render(<Envolve><Card variant="selected"><Text>a</Text></Card></Envolve>);
-    const doCard = estilo(__instancias("View").find((p) => estilo(p).borderColor === t.color.primaryOutline)!);
+    const doCard = estilo(__instancias("View").find((p) => estilo(p).backgroundColor === comOpacidade(t.color.primary, 0.12))!);
     render(<Planos value="pro" />);
     const [gratis, pro] = radios().map(estilo);
     expect([pro.borderColor, pro.backgroundColor]).toEqual([doCard.borderColor, doCard.backgroundColor]);
-    expect(gratis.borderColor).toBe(t.color.border);
+    expect(gratis.borderColor).toBe("transparent");
   });
 
   it("a marca sobe para a linha do título, e o conteúdo a mais fica dentro do cartão", () => {

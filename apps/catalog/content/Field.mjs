@@ -15,7 +15,7 @@ export default {
   features: [
     "One unnamed native control or documented Aurea control gets a real <label for> and a matching id; arbitrary wrappers become groups.",
     "hint and error are descriptions via aria-describedby; they never become the accessible name.",
-    "error also marks the focal control invalid — a red border alone tells a colour-blind user nothing.",
+    "error also marks the focal control invalid — a red field alone tells a colour-blind user nothing.",
     "A child with its own accessible name (label or ARIA), or several children, makes Field a named group instead of adding a second label.",
     "The label is required by the type. A field with no label is not a field, it is a box.",
   ],

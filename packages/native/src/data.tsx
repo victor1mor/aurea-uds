@@ -83,7 +83,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     marginTop: t.size.space1, backgroundColor: t.color.primary,
     // O halo do CSS é `box-shadow: 0 0 0 space-05 surface-1`. No RN sombra não faz anel —
     // uma BORDA da cor da superfície faz o mesmo buraco, e cresce o ponto pelo mesmo tanto.
-    borderWidth: t.size.space05, borderColor: t.color.surface1,
+    borderWidth: t.size.space05, borderColor: "transparent",
   },
   colunaDoEvento: {flex: 1, minWidth: 0, gap: t.size.space05},
   // R-18: o ponto centrado na coluna da moldura, quando a lista tem molduras.
@@ -106,7 +106,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   tabela: {gap: t.size.space2},
   linha: {
     padding: t.size.space3, gap: t.size.space2,
-    borderWidth: t.size.borderWidth, borderColor: t.color.border,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusLg), backgroundColor: t.color.card,
   },
   linhaTocavel: {minHeight: t.size.targetMin ?? 44},

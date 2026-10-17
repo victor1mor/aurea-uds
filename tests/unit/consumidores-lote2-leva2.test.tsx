@@ -14,13 +14,13 @@ const regra = (sel: string) => {
 const wrap = (ui: React.ReactNode) => render(<AureaProvider>{ui}</AureaProvider>);
 
 describe("B-07 · Topbar divider", () => {
-  test("a linha só entra na flush, e sai do token de borda", () => {
+  test("a divisória só entra na flush — e é transparente (sem linha, ADR-0072)", () => {
     const {container} = wrap(<><Topbar variant="flush" divider/><Topbar variant="floating" divider/><Topbar variant="flush"/></>);
     const [a, b, c] = [...container.querySelectorAll("header")];
     expect(a).toHaveClass("topbar-flush", "topbar-divider");
     expect(b).not.toHaveClass("topbar-divider");
     expect(c).not.toHaveClass("topbar-divider");
-    expect(regra(".topbar-divider")).toContain("var(--border-width) solid var(--border)");
+    expect(regra(".topbar-divider")).toContain("var(--border-width) solid transparent");
   });
 });
 

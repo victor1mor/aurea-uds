@@ -214,11 +214,11 @@ describe("E7 · os tons dentro do cartão da marca", () => {
     const views = __instancias("View").map((v) => StyleSheet.flatten(v.style)).filter((e) => e && e.height && e.paddingHorizontal);
     return views.at(-1) ?? {};
   };
-  it("cheio com tom: a cor do tom, com contorno na tinta do cartão", () => {
+  it("cheio com tom: a cor do tom, sem o contorno da tinta (sem linha, ADR-0072)", () => {
     render(<Envolve><Card variant="brand" action={<Button appearance="solid" tone="success">Confirmar</Button>} /></Envolve>);
     const c = caixaDo("Confirmar");
     expect(c.backgroundColor).toBe(t.color.success);
-    expect(c.borderColor).toBe(t.color.primaryForeground);
+    expect(c.borderColor).toBe("transparent");
   });
   it("sem fundo com tom: continua na tinta (a letra colorida não se lê no amarelo)", () => {
     render(<Envolve><Card variant="brand" action={<Button appearance="ghost" tone="danger">Agora não</Button>} /></Envolve>);

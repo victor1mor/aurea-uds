@@ -23,6 +23,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
 import { Button, CloseButton } from "./actions.js";
+import Svg, { Circle } from "react-native-svg";
 import { canto, criarFolha, estadoAcessivel, letraDoToken } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { IconeEmMoldura } from "./moldura.js";
@@ -39,7 +40,7 @@ const folha = criarFolha((t) => ({
     // HER-01: a ÚNICA peça com o canto `circular`, declarada. O anel GIRA, e um contorno que não
     // seja círculo perfeito balança ao girar. A referência também deixa o `Spinner` de
     // fora das 24 peças com canto contínuo.
-    anel: { borderWidth: 2, borderRightColor: "transparent", ...canto(t.size.radiusFull, "circular") },
+    anel: { ...canto(t.size.radiusFull, "circular") },
     // ── Skeleton ───────────────────────────────────────────────────────────────────────────────
     // O raio 7 é cru no CSS (`aurea.css:1111`) e entra aqui **como está**: inventar um token para
     // ele faria o nativo e a web desenharem cantos diferentes para a mesma peça.
@@ -120,12 +121,17 @@ export function Spinner({ size = "md", label, decorative, style, testID }) {
         ? { accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants" }
         : { accessible: true, accessibilityRole: "progressbar",
             accessibilityLabel: label ?? strings.loading };
+    // Sem linha (16/10/2026): o anel era BORDA (3/4 da volta). Agora é o mesmo arco desenhado, como a
+    // máscara da web — 2 de espessura em qualquer tamanho, por isso a conta em unidades do desenho.
+    const traco = (2 * 16) / lado;
+    const raio = 8 - traco / 2;
+    const volta = 2 * Math.PI * raio;
     return (_jsx(Animated.View, { testID: testID, ...acessibilidade, style: [
             s.anel,
-            { width: lado, height: lado, borderColor: t.color.foreground, borderRightColor: "transparent" },
+            { width: lado, height: lado },
             { transform: [{ rotate: giro.interpolate({ inputRange: [0, 1], outputRange: ["0deg", "360deg"] }) }] },
             style,
-        ] }));
+        ], children: _jsx(Svg, { width: lado, height: lado, viewBox: "0 0 16 16", children: _jsx(Circle, { cx: 8, cy: 8, r: raio, fill: "none", stroke: t.color.foreground, strokeWidth: traco, strokeDasharray: `${volta * 0.75} ${volta * 0.25}` }) }) }));
 }
 export const GrupoDeEsqueleto = React.createContext(null);
 /**

@@ -51,14 +51,14 @@ describe("R-24 · o selo preso, do jeito da referência principal", () => {
     expect(e.transform).toEqual([{translateX: t.size.space4 * 0.25}, {translateY: -t.size.space4 * 0.25}]);
   });
 
-  it("um dígito é um círculo de 16: mínimo nos dois lados, sem recheio vertical, com o fio do fundo", () => {
+  it("um dígito é um círculo de 16: mínimo nos dois lados, sem recheio vertical, sem o fio (ADR-0072)", () => {
     render(<Envolve><Badge anchor="top-end" count={3} tone="danger" emphasis="solid" size="sm"><Text>x</Text></Badge></Envolve>);
     const e = selo();
     expect(e.minWidth).toBe(t.size.space4);
     expect(e.minHeight).toBe(t.size.space4);
     expect(e.paddingVertical).toBe(0);
     expect(e.borderWidth).toBe(t.size.borderWidth);
-    expect(e.borderColor).toBe(t.color.background);
+    expect(e.borderColor).toBe("transparent");
   });
 
   it("fora do IconButton não há folga: o selo encosta no canto do alvo", () => {

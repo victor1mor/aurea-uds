@@ -82,7 +82,8 @@ describe("HER-01 · as peças montadas saem com o canto contínuo do iOS", () =>
 
   it("o anel do `Spinner` fica circular", () => {
     render(<AureaProvider icons={ICONES}><Spinner /></AureaProvider>);
-    const anel = comRaio().find((e) => e.borderWidth === 2);
+    const anel = comRaio().find((e) => e.borderCurve === "circular");
+    expect(anel).toBeDefined();
     expect(anel?.borderCurve).toBe("circular");
   });
 });

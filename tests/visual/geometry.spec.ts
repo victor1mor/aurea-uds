@@ -239,14 +239,15 @@ for (const theme of ["dark", "light"] as const) {
     for (const o of offsets) {
       expect(["2px", "0px", "-2px"], `offset fora do contrato: ${o} — ${JSON.stringify(vistos)}`).toContain(o);
     }
-    // ADR-0059: o campo (tem borda) encosta o anel e pinta a borda da MESMA cor — uma faixa só; o
-    // botão cheio e a aba (sem borda) continuam com o vão. Antes o campo dava "2px" com a borda
-    // amarela por dentro: borda, vão e anel, as duas linhas do print do Victor.
+    // ADR-0059: o campo encosta o anel no fundo dele — uma faixa só; o botão cheio e a aba continuam
+    // com o vão. Antes o campo dava "2px" com a borda amarela por dentro: borda, vão e anel, as duas
+    // linhas do print do Victor. Sem linha (ADR-0072, 16/10/2026): o campo não tem mais borda — nem
+    // da cor do anel; o anel é a única linha do foco.
     for (const v of vistos) {
-      const comBorda = /^(input|select|textarea)\./.test(v.alvo);
-      expect(v.offset, `${comBorda ? "peça com borda: o anel encosta" : "peça sem borda: o anel afasta"} — ${JSON.stringify(v)}`)
-        .toBe(comBorda ? "0px" : "2px");
-      if (comBorda) expect(v.borda, `a borda não virou a cor do anel: ${JSON.stringify(v)}`).toBe(v.cor);
+      const campo = /^(input|select|textarea)\./.test(v.alvo);
+      expect(v.offset, `${campo ? "campo: o anel encosta" : "o resto: o anel afasta"} — ${JSON.stringify(v)}`)
+        .toBe(campo ? "0px" : "2px");
+      if (campo) expect(v.borda, `o campo em foco não desenha borda: ${JSON.stringify(v)}`).toBe("rgba(0, 0, 0, 0)");
     }
     // uma cor só, e é a do token
     const cores = [...new Set(vistos.map(v => v.cor))];

@@ -10,7 +10,7 @@ import * as React from "react";
 import {StyleSheet, __instancias, __limpar} from "./native-stubs/react-native";
 import {
   AureaProvider, Checkbox, Combobox, Field, Input, InputGroup, NumberField, Radio, SearchField, Select,
-  Switch, Textarea, criarRegistroDeIcones, resolverTokens,
+  Switch, Textarea, comOpacidade, criarRegistroDeIcones, resolverTokens,
 } from "../../packages/native/src/index.js";
 import {DatePicker} from "../../packages/native/src/sistema.js";
 
@@ -136,7 +136,8 @@ describe("Checkbox e Radio: a marca de 24 e o vão de 12", () => {
 describe("Switch: o interruptor da referência", () => {
   it("trilho 48 × 24 (era 42 × 24)", () => {
     montar(<Switch label="Lembrar" />);
-    const trilho = views().find((e) => e.backgroundColor === t.color.muted && e.borderRadius === t.size.radiusFull);
+    // Sem linha (ADR-0072): o trilho desligado é a cor do texto a 20%.
+    const trilho = views().find((e) => e.backgroundColor === comOpacidade(t.color.foreground, 0.2) && e.borderRadius === t.size.radiusFull);
     expect([trilho?.width, trilho?.height]).toEqual([48, 24]);
   });
   it("bolinha em CÁPSULA de 28 × 20 (era redonda de 18), a 2 da borda de fora", () => {

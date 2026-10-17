@@ -276,7 +276,8 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   // anel: afastada dele, ou encostada com outra cor.
   test("nenhuma peça focada desenha duas linhas — ADR-0059", async ({page}) => {
     const falhas = new Set<string>();
-    const comBorda = new Set<string>();      // tipos de peça com borda que o teste de fato mediu
+    const comBorda = new Set<string>();      // peças com borda visível no foco — desde a ADR-0072, nenhuma
+    let paradas = 0;                          // quantas peças o Tab focou de fato
     for (const f of PAGES.filter(p => pageType(p) === "component")) {
       await abrir(page, url(f), avisar);
       const prevs = await page.locator(".demo-panel[data-panel='preview']").count();
@@ -323,14 +324,81 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             return {fora: false, defeitos, medidas};
           });
           if (r.fora) break;
+          paradas++;
           for (const d of r.defeitos) falhas.add(`${f}: ${d}`);
-          for (const m of r.medidas) comBorda.add(m);
+          for (const m of r.medidas) comBorda.add(`${f}: ${m}`);
         }
       }
     }
-    // Sem isto o teste passaria sem medir nada (um seletor que deixa de casar, um Tab que não entra).
-    expect(comBorda.size, `poucas peças com borda medidas: ${[...comBorda].join(" ")}`).toBeGreaterThan(15);
+    // SEM LINHA (ADR-0072, 16/10/2026): desde que as peças não têm borda, o foco é o anel e mais nada — nenhuma peça
+    // focada (nem o irmão que desenha a marca, nem a moldura) mostra borda. Sem a contagem de paradas, o teste passaria
+    // sem medir nada (um seletor que deixa de casar, um Tab que não entra).
+    expect(paradas, "poucas peças focadas — o Tab não entrou nas prévias").toBeGreaterThan(100);
+    expect([...comBorda], `peças focadas com borda visível (sem linha, ADR-0072):\n${[...comBorda].join("\n")}`).toEqual([]);
     expect([...falhas], `peças focadas com duas linhas (borda e anel separados):\n${[...falhas].join("\n")}`).toEqual([]);
+  });
+
+  // SEM LINHA (ADR-0072, 16/10/2026). O Victor: "quero tudo sem borda, sem exceções". Toda página do catálogo (e das
+  // prévias em documento próprio), nos dois temas: nenhum elemento — nem o `::before`/`::after` — desenha borda
+  // visível, nem o anel fino de `box-shadow` (deslocamento 0, desfoque 0, até 2 px), que é a mesma linha por outro
+  // caminho. O foco (`outline`) não conta: ele mostra onde o teclado está. Os estados que a página parada não mostra (o
+  // mouse, o inválido, o arrastar) são cobrados no código, por `tests/unit/sem-linha.test.tsx`.
+  test("nenhuma peça desenha linha, em nenhuma página, nos dois temas — ADR-0072", async ({page}) => {
+    const falhas = new Set<string>();
+    let medidos = 0;
+    for (const f of PAGES) {
+      await abrir(page, url(f), avisar);
+      for (const tema of ["dark", "light"] as const) {
+        if (tema === "light") {
+          await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
+          await esperarTransicoes(page);
+        }
+        const r = await page.evaluate(() => {
+          const cv = document.createElement("canvas"); cv.width = cv.height = 1;
+          const cx = cv.getContext("2d", {willReadFrequently: true})!;
+          const alfa = (c: string) => { cx.clearRect(0, 0, 1, 1); cx.fillStyle = "transparent"; cx.fillStyle = c; cx.fillRect(0, 0, 1, 1); return cx.getImageData(0, 0, 1, 1).data[3]; };
+          const camadas = (v: string) => { const out: string[] = []; let n = 0, a = ""; for (const ch of v) { if (ch === "(") n++; else if (ch === ")") n--; if (ch === "," && n === 0) { out.push(a); a = ""; } else a += ch; } out.push(a); return out.map(x => x.trim()); };
+          // O recorte (o anel da cor do fundo, que separava a bolinha da `Timeline` do traço e o selo preso da peça) também
+          // é linha: dentro de uma caixa de outra cor, ele aparece. A 2ª rodada desta varredura achou os dois.
+          const anel = (camada: string) => {
+            const cor = camada.match(/^(rgba?\([^)]*\)|oklch\([^)]*\)|oklab\([^)]*\)|color\([^)]*\)|#[0-9a-f]+|[a-z]+)/i)?.[0] ?? "";
+            const px = [...camada.replace(cor, "").matchAll(/(-?[\d.]+)px/g)].map(m => +m[1]);
+            return px.length === 4 && px[0] === 0 && px[1] === 0 && px[2] === 0 && px[3] > 0 && px[3] <= 2 && alfa(cor) > 0;
+          };
+          const linhas = (s: CSSStyleDeclaration) => {
+            const achou: string[] = [];
+            for (const l of ["Top", "Right", "Bottom", "Left"] as const) {
+              const w = parseFloat((s as any)[`border${l}Width`]) || 0;
+              const st = (s as any)[`border${l}Style`];
+              if (w > 0 && st !== "none" && st !== "hidden" && alfa((s as any)[`border${l}Color`]) > 0) achou.push(`borda ${l.toLowerCase()} ${w}px ${(s as any)[`border${l}Color`]}`);
+            }
+            if (s.boxShadow && s.boxShadow !== "none" && camadas(s.boxShadow).some(anel)) achou.push(`anel ${s.boxShadow.slice(0, 60)}`);
+            return achou;
+          };
+          const nome = (e: Element) => e.tagName.toLowerCase() + [...e.classList].slice(0, 3).map(c => "." + c).join("");
+          const out: string[] = [];
+          let n = 0;
+          for (const e of document.body.querySelectorAll("*")) {
+            if (e.getClientRects().length === 0) continue;
+            n++;
+            // A única linha que fica (o Victor, 16/10/2026): a do cartão de contorno, a caixa da vitrine.
+            if (e.classList.contains("card-outline")) continue;
+            for (const x of linhas(getComputedStyle(e))) out.push(`${nome(e)}: ${x}`);
+            for (const ps of ["::before", "::after"]) {
+              const s = getComputedStyle(e, ps);
+              if (s.content === "none" || s.content === "normal") continue;
+              for (const x of linhas(s)) out.push(`${nome(e)}${ps}: ${x}`);
+            }
+          }
+          return {out, n};
+        });
+        medidos += r.n;
+        for (const x of r.out) falhas.add(`${f} · ${tema}: ${x}`);
+      }
+    }
+    // Sem isto o teste passaria sem medir nada.
+    expect(medidos, "poucos elementos medidos").toBeGreaterThan(100000);
+    expect([...falhas].slice(0, 200), `peças com linha (${falhas.size}):\n${[...falhas].slice(0, 200).join("\n")}`).toEqual([]);
   });
 
   // A ABA ESCOLHIDA SE VÊ (ADR-0059, 08/10/2026). A "cápsula elevada" do escolhido era

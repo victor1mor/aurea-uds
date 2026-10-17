@@ -1240,7 +1240,7 @@ const chrome = `
 .block > h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); line-height:var(--text-2xl-leading); font-weight:var(--weight-semibold); }
 .usage-points { margin:0; padding-inline-start:calc(var(--space-6) + var(--space-5)); display:grid; gap:var(--space-2); color:var(--muted-foreground); line-height:var(--leading-relaxed); }
 .block > pre, .block > .code-block-wrap .code-block { margin:0; padding:var(--space-6); border-radius:var(--radius-card); }
-.block > dl, .block > ul { margin:0; padding:var(--space-6); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); }
+.block > dl, .block > ul { margin:0; padding:var(--space-6); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); }
 /* chip que embrulha um Status: o texto do Status já traz a cor certa, o chip só dá a
    cápsula para a linha ficar alinhada com as outras da Reference. */
 .chip-status .status { font:inherit; line-height:1; min-width:0; }
@@ -1260,11 +1260,11 @@ const chrome = `
    todos os demos continuam do mesmo tamanho, que é o ponto.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
-.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
 /* A barra de abas ocupa a largura do card e as abas dividem 50/50 — é o que a referência faz
    (medido: barra w-full, 3px de padding, dois tabs flex:1). A peça é a .segmented da
    Aurea, esticada: pele pill nossa, comportamento de segmented control. */
-.demo-tabs { display:flex; padding:var(--space-2); border-bottom:1px solid var(--border); }
+.demo-tabs { display:flex; padding:var(--space-2); border-bottom:1px solid transparent; }
 .demo-tabs .segmented { flex:1; display:flex; }
 .demo-tabs .segmented button { flex:1; }
 /* A aba ativa é a cápsula elevada da própria .segmented — SEM pintar o texto de amarelo:
@@ -1297,24 +1297,26 @@ const chrome = `
    a herança, mas o rótulo longo ("value / defaultValue") ainda embrulhava em duas linhas e
    o chip media 26px numa fila de 24px. Altura de componente não depende do texto.
    (Sem backtick neste comentário: ele vive DENTRO de um template literal.) */
-.chip { display:inline-flex; align-items:center; min-height:var(--space-6); padding:0 var(--space-2); border:1px solid var(--border); border-radius:var(--radius-control); background:var(--secondary); color:var(--secondary-foreground); font:var(--text-xs)/1 var(--font-code); white-space:nowrap; max-width:100%; text-decoration:none; }
+.chip { display:inline-flex; align-items:center; min-height:var(--space-6); padding:0 var(--space-2); border:1px solid transparent; border-radius:var(--radius-control); background:var(--secondary); color:var(--secondary-foreground); font:var(--text-xs)/1 var(--font-code); white-space:nowrap; max-width:100%; text-decoration:none; }
 .chip-text { min-width:0; overflow:hidden; text-overflow:ellipsis; }
-a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
+a.chip-link:hover { color:var(--primary); border-color:transparent; }
 /* a bala da lista entra na caixa: o recuo dela soma ao padding da superfície. */
 .features { display:grid; gap:var(--space-2); padding-inline-start:calc(var(--space-6) + var(--space-5)); color:var(--muted-foreground); line-height:1.6; }
 /* .grid saiu daqui na Fase 11 (achado A13) e passou a vir do CORE. Esta redefinicao era o
    motivo de o componente Grid parecer pronto em toda pagina deste catalogo e chegar sem nada
    no consumidor: funcionava na nossa documentacao e em lugar nenhum. O teste real da regra do
    core e' esta pagina continuar identica ao pixel — 15rem == 240px. */
-.tile { display:block; padding:var(--space-4); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
-.tile:hover { border-color:var(--primary-outline); }
+.tile { display:block; padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
+.tile:hover { border-color:transparent; }
 .tile p { margin:var(--space-2) 0 0; color:var(--muted-foreground); font-size:var(--text-sm); }
 /* amostra de token: cor num quadrado de raio de controle, dimensão numa régua da largura
    do próprio valor — a prova visual vem do token, não de um número copiado à mão. */
-.swatch { display:block; inline-size:var(--space-10); block-size:var(--space-6); border:1px solid var(--border); border-radius:var(--radius-sm); }
+.swatch { display:block; inline-size:var(--space-10); block-size:var(--space-6); border:1px solid transparent; border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); }
+/* Sem linha (ADR-0072): a amostra perdeu o fio, e a cor igual ao fundo da linha sumia (o --white no claro). A sombra
+   pequena separa, como na amostra do ColorSwatch. */
 .ruler { display:block; block-size:var(--space-2); max-inline-size:100%; border-radius:var(--radius-full); background:var(--primary); }
 .prevnext { display:flex; justify-content:space-between; gap:var(--space-4); margin-top:var(--space-8); }
-.pn { display:flex; flex-direction:column; gap:var(--space-05); padding:var(--space-4); border:1px solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; min-width:0; }
+.pn { display:flex; flex-direction:column; gap:var(--space-05); padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; min-width:0; }
 .pn-next { text-align:end; margin-inline-start:auto; }
 .pn small { color:var(--muted-foreground); }
 .pn > span { color:var(--muted-foreground); font-size:var(--text-sm); }
@@ -1326,7 +1328,7 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
    mínima do cartão, então não impede a descida. No desktop nada muda: lá os dois cabem. */
 .prevnext { flex-wrap:wrap; }
 .pn strong { overflow-wrap:break-word; }
-.pn:hover { border-color:var(--primary-outline); }
+.pn:hover { border-color:transparent; }
 /* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
    O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
    largura) e as ações; embaixo, as áreas do site. */
@@ -1341,24 +1343,28 @@ a.chip-link:hover { color:var(--primary); border-color:var(--primary-outline); }
 .site-search > .kbd, .site-search > .btn-kbds { margin-inline-start:auto; }
 .site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
 .site-area:hover { color:var(--foreground); }
-.site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:var(--primary); }
+.site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:transparent; }
+/* O traço da área ATUAL é o indicador, como o das abas (ADR-0072, item 5): desenho cheio no lugar da borda, que continua
+   transparente, e com a medida dela. Saiu junto com as linhas, e a área atual ficou só com a cor do texto. */
+.site-area { position:relative; }
+.site-area[aria-current="page"]::after { content:""; position:absolute; inset-inline:0; inset-block-end:calc(-1 * var(--focus-width)); block-size:var(--focus-width); background:var(--primary); }
 /* O conteúdo com a largura da referência (912, 816 úteis com o respiro de 48). */
 .site-shell > .content { max-width:57rem; padding:var(--space-8) var(--space-12) var(--space-4); }
 /* "Related Components" em cartões, e o "All Components" em grade de 3, como a referência. */
 .related-grid, .cat-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap:var(--space-4); }
 .cat-grid { gap:var(--space-10) var(--space-4); }
-.related-card { display:grid; gap:var(--space-1); padding:var(--space-4); border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
-a.related-card:hover { border-color:var(--primary-outline); }
+.related-card { display:grid; gap:var(--space-1); padding:var(--space-4); border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
+a.related-card:hover { border-color:transparent; }
 .related-card span { color:var(--muted-foreground); font-size:var(--text-sm); }
 .cat-card { position:relative; display:grid; gap:var(--space-2); }
 /* O componente de verdade, parado (elemento nosso): inerte, recortado na caixa e um pouco menor. */
-.cat-card-preview { display:flex; align-items:center; justify-content:center; aspect-ratio:4 / 3; padding:var(--space-4); overflow:hidden; border:var(--border-width) solid var(--border); border-radius:var(--radius-card); background:var(--surface-inset); zoom:.8; }
+.cat-card-preview { display:flex; align-items:center; justify-content:center; aspect-ratio:4 / 3; padding:var(--space-4); overflow:hidden; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--surface-inset); zoom:.8; }
 .cat-card-icon { color:var(--muted-foreground); }
 .cat-card-foot { display:flex; align-items:center; gap:var(--space-2); }
 .cat-card-name { color:var(--foreground); font-weight:var(--weight-medium); text-decoration:none; }
 /* O link cobre o cartão inteiro: a prévia não mora DENTRO dele (botão dentro de <a> é HTML inválido). */
 .cat-card-name::after { content:""; position:absolute; inset:0; border-radius:var(--radius-card); }
-.cat-card:hover .cat-card-preview { border-color:var(--primary-outline); }
+.cat-card:hover .cat-card-preview { border-color:transparent; }
 .cat-card-name:focus-visible { outline:none; }
 .cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
 /* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */

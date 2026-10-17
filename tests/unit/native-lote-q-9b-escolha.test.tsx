@@ -15,7 +15,7 @@ import {
   StyleSheet, __animacoes, __configsDeAnimacao, __definirPlataforma, __definirReduceMotion, __instancias,
   type ConfigDeGesto,
 } from "./native-stubs/react-native";
-import {AureaProvider, Field, criarRegistroDeIcones, resolverTokens} from "../../packages/native/src/index.js";
+import {AureaProvider, Field, comOpacidade, criarRegistroDeIcones, resolverTokens} from "../../packages/native/src/index.js";
 import {OTPField, Slider, TagGroup, type AureaTagItem} from "../../packages/native/src/escolha.js";
 
 const t = resolverTokens("dark", "comfortable");
@@ -302,14 +302,14 @@ const digitar = (texto: string) => act(() => { (campo().onChangeText as (s: stri
 const casas = (n = 6) => __instancias("View").filter((p) => String(p.testID ?? "").startsWith("o-casa-")).slice(-n);
 
 describe("OTPField · as medidas do nativo da referência, com a pele do campo", () => {
-  it("casas de 44 × 48 com 8 entre elas, em cápsula, com a borda e o fundo do `Input`", () => {
+  it("casas de 44 × 48 com 8 entre elas, em cápsula, com o fundo do `Input`", () => {
     render(<Envolve><OTPField length={6} testID="o" /></Envolve>);
     expect(casas()).toHaveLength(6);
     const c = plano(casas()[0]);
     expect([c.width, c.height]).toEqual([t.size.space10 + t.size.space1, t.size.touchControlHMd]);
     expect([c.width, c.height]).toEqual([44, 48]);
     expect([c.borderWidth, c.borderColor, c.backgroundColor, c.borderRadius, c.borderCurve])
-      .toEqual([t.size.borderWidth, t.color.borderStrong, t.color.fieldBg, t.size.radiusControl, "continuous"]);
+      .toEqual([t.size.borderWidth, "transparent", comOpacidade(t.color.foreground, 0.1), t.size.radiusControl, "continuous"]);
     const fila = plano(__instancias("View").find((p) => p.importantForAccessibility === "no-hide-descendants" && plano(p).gap !== undefined));
     expect(fila.gap).toBe(8);
   });
@@ -377,7 +377,7 @@ describe("OTPField · a casa da vez, a máscara e o leitor de tela", () => {
     act(() => { (campo().onFocus as () => void)(); });
     const c = casas(4).map(plano);
     expect([c[2].borderColor, c[2].borderWidth]).toEqual([t.color.focusStrong, t.size.focusWidth]);
-    expect(c[1].borderColor).toBe(t.color.borderStrong);
+    expect(c[1].borderColor).toBe("transparent");
     const cursor = plano(__instancias("Animated.View").at(-1));
     expect([cursor.width, cursor.height, cursor.backgroundColor]).toEqual([2, 18, t.color.mutedForeground]);
     digitar("1234");
@@ -433,7 +433,7 @@ describe("OTPField · a casa da vez, a máscara e o leitor de tela", () => {
     expect(campo().accessibilityLabel).toBe("Código do SMS");
     expect(campo().accessibilityHint).toBe("Código errado");
     expect(campo()["aria-invalid"]).toBe(true);
-    expect(plano(casas(4)[0]).borderColor).toBe(t.color.danger400);
+    expect(plano(casas(4)[0]).backgroundColor).toBe(t.color.dangerBg);
   });
 
   it("desligado: não edita e esmaece", () => {

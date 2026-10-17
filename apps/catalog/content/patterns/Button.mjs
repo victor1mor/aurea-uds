@@ -19,7 +19,7 @@ import {Avatar, Button, ButtonGroup, Checkbox, IconButton, Badge, Kbd, Switch} f
 // A moldura das provas de eixo responsivo: contêineres de largura FIXA, lado a lado, na mesma
 // viewport. É o que separa os dois mecanismos aos olhos — se as três colunas medissem igual,
 // o que existiria seria uma media query com outro nome.
-const caixa = (w) => ({inlineSize: w, border: "1px dashed var(--border)", borderRadius: "var(--radius-lg)",
+const caixa = (w) => ({inlineSize: w, background: "var(--surface-2)", borderRadius: "var(--radius-lg)",
   padding: "var(--space-3)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"});
 const trio = (conteudo) => h("div", {style: {display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "var(--space-4)"}},
   ...[260, 520, 820].map((w) => h("div", {key: w, className: "container-scope", style: caixa(w)}, conteudo(w))));

@@ -77,6 +77,29 @@ export const comOpacidade = (cor: string, pct: number): string =>
     : cor;
 
 /**
+ * SEM LINHA (16/10/2026), a sugestão: o fundo TRANSLÚCIDO da cor do texto, que se separa de qualquer fundo atrás —
+ * como o trilho desligado do switch da referência (o texto a 20%). Uma cor fixa acaba igual a alguma superfície, e foi
+ * assim que as peças sumiram quando a linha saiu. Nível 1 = 6% (superfície de dentro), 2 = 10% (campo, botão de
+ * contorno), 3 = 20% (marca do checkbox e do rádio, trilho do switch).
+ */
+export const preenchimento = (t: AureaTokens, nivel: 1 | 2 | 3): string =>
+  comOpacidade(t.color.foreground, nivel === 1 ? 0.06 : nivel === 2 ? 0.1 : 0.2);
+
+/**
+ * A mesma mistura, OPACA: a cor da frente a `pct` sobre a do fundo. Para o que tem algo passando POR TRÁS (o traço dos
+ * passos) ou cobre outra peça (as fotos sobrepostas) — translúcido, o que está atrás aparece. Hex de seis, como o
+ * `comOpacidade`; fora disso devolve a cor da frente.
+ */
+export const misturaOpaca = (frente: string, fundo: string, pct: number): string => {
+  const hex = /^#([0-9a-fA-F]{6})$/;
+  const a = hex.exec(frente), b = hex.exec(fundo);
+  if (!a || !b) return frente;
+  const canal = (h: string, i: number) => parseInt(h.slice(i, i + 2), 16);
+  return "#" + [0, 2, 4].map((i) => Math.round(canal(a[1], i) * pct + canal(b[1], i) * (1 - pct))
+    .toString(16).padStart(2, "0")).join("");
+};
+
+/**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
  * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de
@@ -110,11 +133,13 @@ export const peleDoCartao = (t: AureaTokens) => ({
   padding: t.size.cardPad,
   backgroundColor: t.color.card,
   borderWidth: t.size.borderWidth,
-  borderColor: t.color.border,
+  borderColor: "transparent",
 }) satisfies ViewStyle;
 
+// Sem linha (16/10/2026): o escolhido era a linha da marca sobre o fundo de cima; sem linha, o aviso é o FUNDO, na cor
+// da marca a 12% — o mesmo da web (`.card-selected`).
 export const peleDoCartaoEscolhido = (t: AureaTokens) =>
-  ({borderColor: t.color.primaryOutline, backgroundColor: t.color.surface2}) satisfies ViewStyle;
+  ({borderColor: "transparent", backgroundColor: comOpacidade(t.color.primary, 0.12)}) satisfies ViewStyle;
 
 /** O tom de cor com significado — o vocabulário do `Badge` (`AureaBadgeTone`). */
 export type TomDeCor = "neutral" | "primary" | "info" | "success" | "warning" | "danger";

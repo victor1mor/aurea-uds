@@ -78,8 +78,8 @@ describe("R-21 · o que a peça faz com a resposta", () => {
     render(<Envolve><FileInput maxSize={1024 * 1024} onChange={mudar} /></Envolve>);
     await tocar();
     expect(mudar).not.toHaveBeenCalled();
-    // A borda do gatilho fica vermelha, como a do campo inválido.
-    expect(estilo(gatilho()!).borderColor).toBe(t.color.danger400 ?? t.color.destructive);
+    // O fundo do gatilho fica o de perigo, como o do campo inválido (sem linha, ADR-0072).
+    expect(estilo(gatilho()!).backgroundColor).toBe(t.color.dangerBg);
     expect(textos()).toContain(`${defaultStrings.fileTooLarge}: grande.pdf`);
     const aviso = __instancias("Text").find((p) => p.children === `${defaultStrings.fileTooLarge}: grande.pdf`)!;
     // O mesmo vermelho e o mesmo tamanho do erro do `Field`, que é onde o olho procura erro.
@@ -130,7 +130,7 @@ describe("R-21 · o que aparece", () => {
     const e = estilo(gatilho()!);
     expect(e.height).toBe(t.size.touchControlHMd);
     expect(e.borderRadius).toBe(t.size.radiusControl);
-    expect(e.borderColor).toBe(t.color.borderStrong);
+    expect(e.borderColor).toBe("transparent");
   });
   it("nome comprido corta no MEIO, para a extensão continuar à vista", () => {
     render(<Envolve><FileInput value={[DOC]} /></Envolve>);

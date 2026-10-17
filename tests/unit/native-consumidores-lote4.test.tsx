@@ -16,7 +16,7 @@ import {describe, expect, it, vi} from "vitest";
 import * as React from "react";
 import {StyleSheet, __instancias} from "./native-stubs/react-native";
 import {
-  AureaProvider, BottomNav, Button, Card, Text, criarRegistroDeIcones, resolverTokens,
+  AureaProvider, BottomNav, Button, Card, Text, comOpacidade, criarRegistroDeIcones, resolverTokens,
 } from "../../packages/native/src/index.js";
 import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
 
@@ -55,16 +55,16 @@ describe("R-04 · o `Card` responde ao toque com `onPress`", () => {
         <Card testID="c" onPress={() => {}} accessibilityLabel="x" />
         <Card testID="parado" />
       </Envolve>);
-    expect(plano(cartao()?.style).borderColor).toBe(claro.color.borderStrong);
+    expect(plano(cartao()?.style).borderColor).toBe("transparent");
     // o cartão comum continua um `View`, com a borda comum — não virou alvo por engano
     expect(__instancias("Pressable").some((p) => p.testID === "parado")).toBe(false);
     const parado = __instancias("View").find((p) => p.testID === "parado");
-    expect(plano(parado?.style).borderColor).toBe(claro.color.border);
+    expect(plano(parado?.style).borderColor).toBe("transparent");
   });
 
   it("a variante escrita pelo app manda na pele", () => {
     render(<Envolve><Card testID="c" variant="selected" onPress={() => {}} accessibilityLabel="x" /></Envolve>);
-    expect(plano(cartao()?.style).borderColor).toBe(claro.color.primaryOutline);
+    expect(plano(cartao()?.style).backgroundColor).toBe(comOpacidade(claro.color.primary, 0.12));
   });
 
   // A decisão do Victor foi "a reação do `Button`". O teste compara com o `Button` MEDIDO, e não

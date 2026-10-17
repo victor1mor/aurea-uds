@@ -13,7 +13,7 @@ import {StyleSheet, __instancias} from "./native-stubs/react-native";
 
 import {
   AureaProvider, Button, Field, Input, InputGroup, InputGroupAddon, PasswordField, Icon,
-  criarRegistroDeIcones, resolverTokens, useGrupoDeCampo,
+  comOpacidade, criarRegistroDeIcones, resolverTokens, useGrupoDeCampo,
 } from "../../packages/native/src/index.js";
 
 const tokens = resolverTokens("dark", "comfortable");
@@ -39,7 +39,8 @@ describe("InputGroup — a caixa passa a ser dele", () => {
     const s = StyleSheet.flatten(porID("View", "g").style);
     expect(s.borderWidth).toBe(tokens.size.borderWidth);
     expect(s.borderRadius).toBe(tokens.size.radiusControl);
-    expect(s.backgroundColor).toBe(tokens.color.fieldBg);
+    // Sem linha (ADR-0072): o fundo do campo é a cor do texto a 10%, translúcida.
+    expect(s.backgroundColor).toBe(comOpacidade(tokens.color.foreground, 0.1));
     // 0.32.0: o campo adotou a escala de toque (48 no `md`; era o `controlHMd`, 36).
     expect(s.height).toBe(tokens.size.touchControlHMd);
     expect(s.flexDirection).toBe("row");
@@ -84,13 +85,13 @@ describe("InputGroup — a caixa passa a ser dele", () => {
   it("o grupo acende no foco do campo lá dentro", async () => {
     render(<Envolve><InputGroup testID="g"><Input /></InputGroup></Envolve>);
     expect(StyleSheet.flatten(porID("View", "g").style).borderColor)
-      .toBe(tokens.color.borderStrong);
+      .toBe("transparent");
     await act(async () => { (props("TextInput").onFocus as () => void)(); });
     expect(StyleSheet.flatten(porID("View", "g").style).borderColor)
       .toBe(tokens.color.focusStrong);
     await act(async () => { (ultimo("TextInput").onBlur as () => void)(); });
     expect(StyleSheet.flatten(porID("View", "g").style).borderColor)
-      .toBe(tokens.color.borderStrong);
+      .toBe("transparent");
   });
 
   it("herda tamanho, inválido e desabilitado do Field em volta", () => {
@@ -99,7 +100,7 @@ describe("InputGroup — a caixa passa a ser dele", () => {
     </Envolve>);
     const s = StyleSheet.flatten(porID("View", "g").style);
     expect(s.height).toBe(tokens.size.touchControlHSm);  // 0.32.0: a escala de toque
-    expect(s.borderColor).toBe(tokens.color.danger400 ?? tokens.color.destructive);
+    expect(s.backgroundColor).toBe(tokens.color.dangerBg);
   });
 
   it("o nome do Field continua chegando no campo dentro do grupo", () => {

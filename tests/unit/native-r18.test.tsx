@@ -113,7 +113,9 @@ describe("as cores do Badge não mudaram ao sair de dentro dele", () => {
       ["danger", t.color.dangerBg, t.color.danger400 ?? t.color.destructive],
     ] as const) {
       const {unmount} = render(<Palco><Badge tone={tom}>1</Badge></Palco>);
-      const selo = views().find((e) => e.borderColor === acento);
+      const selo = views().find((e) => e.backgroundColor === fundo);
+      expect(selo?.borderColor, tom).toBe("transparent");
+      void acento;
       expect(selo?.backgroundColor, tom).toBe(fundo);
       unmount();
     }

@@ -24,7 +24,7 @@
 import * as React from "react";
 import {Image, View, type ImageSourcePropType, type LayoutChangeEvent, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {IconButton, folgaDoToque, type AureaButtonSize} from "./actions.js";
-import {canto, acentoDoTom, criarFolha, fundoDoTom, preenchimentoDoTom, type TomDeCor} from "./estilos.js";
+import {canto, acentoDoTom, comOpacidade, criarFolha, fundoDoTom, misturaOpaca, preenchimentoDoTom, type TomDeCor} from "./estilos.js";
 import {Card} from "./layout.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
 import {Icon} from "./icon.js";
@@ -49,7 +49,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     flexDirection: "row", alignItems: "center", justifyContent: "center", gap: t.size.space1,
     paddingVertical: t.size.space1, paddingHorizontal: t.size.space3,
     borderWidth: t.size.borderWidth, ...canto(t.size.radiusControl),
-    backgroundColor: t.color.secondary, borderColor: t.color.border,
+    backgroundColor: t.color.secondary, borderColor: "transparent",
   },
   selo_xs: {minHeight: t.size.space4, paddingVertical: 0, paddingHorizontal: t.size.space1, borderWidth: 0},
   selo_sm: {paddingVertical: t.size.space05, paddingHorizontal: t.size.space2},
@@ -68,7 +68,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // atrás. Antes sobrava o recheio vertical do tamanho — o "1" do `sm` media 14,9 × 22, esticado —
   // e o anel era uma sombra de 2.
   sobreposto: {position: "absolute", zIndex: 1, paddingVertical: 0, paddingHorizontal: t.size.space05,
-               borderWidth: t.size.borderWidth, borderColor: t.color.background},
+               borderWidth: t.size.borderWidth, borderColor: "transparent"},
 
   // ── Status ─────────────────────────────────────────────────────────────────────────────────
   estado: {flexDirection: "row", alignItems: "center", gap: t.size.space2},
@@ -81,8 +81,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   // com as iniciais em 12 · 14 · 16 e peso médio. O lado sai no componente (`LADO_DO_AVATAR`).
   avatar: {
     alignItems: "center", justifyContent: "center", overflow: "hidden",
-    ...canto(t.size.radiusFull), backgroundColor: t.color.surface3,
-    borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
+    ...canto(t.size.radiusFull), backgroundColor: misturaOpaca(t.color.foreground, t.color.background, 0.2),
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
   },
   imagem: {width: "100%", height: "100%"},
 
@@ -203,12 +203,15 @@ export function Badge({
   const pele: ViewStyle = emphasis === "solid"
     ? {backgroundColor: cheio ? cheio[0] : acento, borderColor: "transparent"}
     : emphasis === "outline"
-      ? {backgroundColor: "transparent", borderColor: acento}
+      ? {backgroundColor: comOpacidade(acento, 0.16), borderColor: "transparent"}
       : tone === "neutral"
         ? {}
-        : {backgroundColor: fundo, borderColor: acento};
+        : {backgroundColor: fundo, borderColor: "transparent"};
+  // Sem linha (16/10/2026): a letra do selo de CONTORNO vai 20% para a cor do texto, nos dois temas — sobre o acento a 16%,
+  // a de sempre caía abaixo de 4,5:1 (o verde do claro, o `success` do escuro). O par da web é o `.badge-outline`.
+  const letra = tone === "neutral" ? t.color.secondaryForeground : acento;
   const corDoTexto = emphasis === "solid" ? (cheio ? cheio[1] : t.color.background)
-    : tone === "neutral" ? t.color.secondaryForeground : acento;
+    : emphasis === "outline" ? misturaOpaca(letra, t.color.foreground, 0.8) : letra;
 
   const numero = count != null ? formatarContagem(count, max) : undefined;
   const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
@@ -355,9 +358,9 @@ export function Status({variant, state, children, style, ...rest}: StatusProps) 
       <View style={[
         s.pontoDeEstado,
         v === "offline"
-          // Vazado: sem preenchimento, com o anel de 2 por dentro. `borderWidth` faz o que o
-          // `inset 0 0 0 2px` do CSS faz.
-          ? {backgroundColor: "transparent", borderWidth: 2, borderColor: cor}
+          // Sem linha (16/10/2026): era vazado (um anel de 2). Agora é a bolinha cheia, apagada,
+          // como a da web.
+          ? {backgroundColor: comOpacidade(cor, 0.4)}
           : {backgroundColor: cor},
       ]} />
       {typeof rotulo === "string"
