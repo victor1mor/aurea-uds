@@ -80,10 +80,11 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [0.34.0] — em construção
+## [0.34.0] — 2026-10-17
 
-⏳ **Ainda não publicada.** O lote S, feito em 16/10/2026 na branch `claude/lote-s`: **sem linha**
-([ADR-0072](decisions/0072-sem-linha.md)). O Victor marcou na vitrine o segmentado, as abas e o aviso — *"não tem borda,
+✅ **Publicada em 17/10/2026, entre 08:16 e 08:24 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #70 (que levou junto o #69, o registro da 0.33.0, juntado antes). O lote S, feito de 16 a 17/10/2026 na branch
+`claude/lote-s`: **sem linha** ([ADR-0072](decisions/0072-sem-linha.md)). Nenhum componente novo. O Victor marcou na vitrine o segmentado, as abas e o aviso — *"não tem borda,
 não tem linha ao redor, e isso acho bonito"* —, viu a proposta em todas as páginas do site lado a lado com a de hoje, e
 depois cada peça que sumiu ao lado da sugestão de fundo: *"caixa B, o resto tudo B"*.
 
