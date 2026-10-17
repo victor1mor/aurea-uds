@@ -16,6 +16,7 @@
     "lg",
     "xl",
     "2xl",
+    "docs",
     "full"
   ],
   "states": [],
@@ -51,9 +52,9 @@
   "props": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"docs\" | \"full\"",
       "default": "\"xl\"",
-      "description": "How far the content grows, by the names of the breakpoint scale: sm 640, md 768, lg 1024, xl 1280 (the default), 2xl 1536, or full with no cap."
+      "description": "How far the content grows, by the names of the breakpoint scale: sm 640, md 768, lg 1024, xl 1280 (the default), 2xl 1536, docs 1400 (the documentation block, with 24 of padding from 768 up), or full with no cap."
     },
     {
       "name": "children",

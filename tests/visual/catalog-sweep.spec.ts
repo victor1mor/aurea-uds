@@ -482,7 +482,7 @@ test.describe("catálogo · contratos do modelo de página", () => {
   test("o item ativo da lateral e a área ativa do topo se marcam com aria-current", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
     await expect(page.locator('.app-shell > .sidebar a[aria-current="page"]')).toContainText("Button");
-    await expect(page.locator('.site-area[aria-current="page"]')).toHaveText("Components");
+    await expect(page.locator('.topbar-tab[aria-current="page"]')).toHaveText("Components");
   });
 
   // ADR-0067: o menu é o da referência — ordem alfabética, sem glifo em cada item, com os selos de novidade.
@@ -502,29 +502,23 @@ test.describe("catálogo · contratos do modelo de página", () => {
     // "New" é o que ainda não está na superfície publicada (`released-surface.json`). Contado, e não "pelo menos um":
     // logo depois de uma publicação NADA é novo — o registro da 0.32.0 reprovou na CI por exigir um (14/10/2026).
     const publicados = new Set(JSON.parse(readFileSync("scripts/released-surface.json", "utf8")).components);
+    // Só os COMPONENTES: os hooks moram na lateral da área Hooks desde o lote T (cada área com a sua lateral).
     const novos = readdirSync("packages/contracts/registry").filter((f) => f.endsWith(".json"))
-      .map((f) => JSON.parse(readFileSync(join("packages/contracts/registry", f), "utf8")).name as string)
-      .filter((n) => !publicados.has(n));
+      .map((f) => JSON.parse(readFileSync(join("packages/contracts/registry", f), "utf8")) as {name: string; kind?: string})
+      .filter((f) => f.kind !== "hook" && !publicados.has(f.name));
     await expect(lateral.getByText("New", {exact: true})).toHaveCount(novos.length);
   });
 
-  // O Victor, 13/10/2026: "sidebar precisa ser o nosso flutuante" e, do "On this page", que os itens saiam
-  // de dentro da caixa, como na referência. A da esquerda tem o canto de cartão e o fundo da lateral; a da
-  // direita (`asideVariant="plain"`), nenhum dos três à vista: fundo, linha, sombra. A borda de 1 continua
-  // lá, transparente — a variante guarda a geometria da flutuante. Medido a 1440, onde a coluna aparece.
-  test("a lateral da esquerda é a flutuante da Aurea, e o sumário da direita não tem caixa", async ({page}) => {
+  // As duas laterais SEM CAIXA, como as da referência (lote T, 17/10/2026, o Victor: "quero sidebar como da referência, que
+  // não seja mais flutuante" — troca a ordem de 13/10/2026, "sidebar precisa ser o nosso flutuante"). Nenhum dos três à
+  // vista, nas duas: fundo, linha, sombra. Medido a 1440, onde a coluna da direita aparece.
+  test("as duas laterais não têm caixa, como as da referência", async ({page}) => {
     await page.setViewportSize({width: 1440, height: 900});
     await page.goto("/apps/catalog/getting-started.html");
-    const caixas = await page.evaluate(() => {
-      const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
-      const raio = getComputedStyle(document.documentElement).getPropertyValue("--radius-card").trim();
-      const esq = cs(".app-shell > .sidebar:not(.app-shell-aside)"), dir = cs(".app-shell > .app-shell-aside");
-      return {raio, esq: {raio: esq.borderTopLeftRadius, fundo: esq.backgroundColor},
-        dir: {fundo: dir.backgroundColor, linha: dir.borderTopColor, sombra: dir.boxShadow}};
-    });
-    expect(caixas.esq.raio).toBe(caixas.raio);
-    expect(caixas.esq.fundo).not.toBe("rgba(0, 0, 0, 0)");
-    expect(caixas.dir).toEqual({fundo: "rgba(0, 0, 0, 0)", linha: "rgba(0, 0, 0, 0)", sombra: "none"});
+    const caixas = await page.evaluate(() => [".app-shell > .sidebar:not(.app-shell-aside)", ".app-shell > .app-shell-aside"]
+      .map((s) => { const c = getComputedStyle(document.querySelector(s)!); return {fundo: c.backgroundColor, linha: c.borderTopColor, sombra: c.boxShadow}; }));
+    const sem = {fundo: "rgba(0, 0, 0, 0)", linha: "rgba(0, 0, 0, 0)", sombra: "none"};
+    expect(caixas).toEqual([sem, sem]);
   });
 
   // O Victor, 13/10/2026, comparando com o Início da referência: a busca do Início é SÓ o ícone, e a caixa
@@ -825,7 +819,13 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.keyboard.press("Escape");
     // O logo: o desenho do arquivo oficial, nas cores oficiais.
     await page.setViewportSize({width: 1440, height: 900});
-    const tinta = () => page.locator(".topbar-actions a[aria-label='GitHub'] path").evaluate((p) => getComputedStyle(p).fill);
+    // A cor vem do token (`--white`/`--black`, lote T): o navegador a devolve como `oklch()`; o canvas a passa a `rgb`.
+    const tinta = () => page.locator(".topbar-actions a[aria-label='GitHub'] path").evaluate((p) => {
+      const ctx = document.createElement("canvas").getContext("2d")!;
+      ctx.fillStyle = getComputedStyle(p).fill; ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+      return `rgb(${r}, ${g}, ${b})`;
+    });
     await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
     expect(await tinta()).toBe("rgb(255, 255, 255)");
     await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });

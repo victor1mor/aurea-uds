@@ -407,12 +407,25 @@ test("os três consumidores usam o grupo, e o mecanismo antigo não existe mais"
 // A Aurea ESCONDIA a barra em `.sidebar` e `.toc`. Região que rola sem barra visível não avisa
 // que rola e não dá o que arrastar — é um controle removido, não uma escolha de estilo. Este
 // teste guarda os dois lados: a barra existe, e ela não volta a sumir.
-test("nenhuma região do core esconde a própria barra de rolagem", () => {
-  const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, "");
+// UMA exceção, decidida pelo Victor em 17/10/2026 ("escondida sempre"): o índice do arranjo de documentação
+// (`AppShell layout="docs"`), como o da referência. Só ESSAS duas regras, escritas assim; qualquer outra reprova.
+// E o `display:none` no `::-webkit-scrollbar` também tira a barra — o teste não via esse caminho até 17/10/2026.
+const EXCECAO_DA_BARRA = [
+  /\.app-shell-docs > \.sidebar\.app-shell-aside, \.app-shell-docs > \.sidebar\.app-shell-aside > \.toc \{ scrollbar-width:none; \}/,
+  /\.app-shell-docs > \.sidebar\.app-shell-aside::-webkit-scrollbar,\s*\.app-shell-docs > \.sidebar\.app-shell-aside > \.toc::-webkit-scrollbar \{ display:none; \}/,
+];
+test("nenhuma região do core esconde a própria barra de rolagem (menos o índice da documentação)", () => {
+  let semComentario = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  for (const regra of EXCECAO_DA_BARRA) {
+    expect(semComentario, "a exceção está escrita como foi decidida").toMatch(regra);
+    semComentario = semComentario.replace(regra, "");
+  }
   expect(semComentario, "scrollbar-width:none tira a barra do Firefox e do Chrome")
     .not.toMatch(/scrollbar-width:\s*none/);
   expect(semComentario, "::-webkit-scrollbar de largura zero tira a barra do Safari")
     .not.toMatch(/::-webkit-scrollbar\s*\{[^}]*(inline-size|width):\s*0/);
+  expect(semComentario, "::-webkit-scrollbar com display:none também tira a barra")
+    .not.toMatch(/::-webkit-scrollbar\s*\{[^}]*display:\s*none/);
 });
 
 // Os dois caminhos são necessários e a razão está medida: `scrollbar-color` só chegou ao Safari

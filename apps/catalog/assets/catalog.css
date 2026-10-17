@@ -590,6 +590,11 @@ svg.react-flow__connectionline {
   --z-toast:100;
   --sidebar-width:16.5rem;
   --sidebar-rail:4.25rem;
+  --docs-width:87.5rem;
+  --docs-sidebar-width:13.75rem;
+  --docs-aside-width:16.75rem;
+  --docs-toc-width:15rem;
+  --docs-text-width:56.25rem;
   --topbar-height:4rem;
   --content-max:102.5rem;
   --breakpoint-2xs:360px;
@@ -1113,7 +1118,13 @@ img,svg { display:block; }
 .container-sm { max-inline-size:var(--breakpoint-sm); } .container-md { max-inline-size:var(--breakpoint-md); }
 .container-lg { max-inline-size:var(--breakpoint-lg); } .container-2xl { max-inline-size:var(--breakpoint-2xl); }
 .container-full { max-inline-size:none; }
+/* `docs` (lote T, 17/10/2026): o bloco da documentação, `--docs-width` (1400) — o da referência; a escala de pontos não
+   tem esse número. */
+.container-docs { max-inline-size:var(--docs-width); }
 @media (min-width:768px) { .container { padding-inline:var(--space-8); } }
+/* E o recheio dela é o da barra da referência: 16 no celular (o de todo `Container`) e 24 de 768 para cima, e não 32 — a
+   768, com 32, a busca e as ações não cabiam na linha da marca e desciam (a bancada do lote T pegou). */
+@media (min-width:768px) { .container-docs { padding-inline:var(--space-6); } }
 /* GAR-04 e GAR-05 (06/10/2026): `Section` — a faixa de ponta a ponta de uma página de site, com
    fundo próprio e respiro vertical de site. Nenhuma referência aberta tem a peça (as seções de uma
    delas são pagas, não lidas), então o respiro é escolha da Aurea, com tokens que já existem: `--space-16`
@@ -1227,6 +1238,40 @@ img,svg { display:block; }
    64, o nosso padrão), com 6 entre as ações (o gap-1.5 dela). O painel do celular segue a altura, pela mesma variável. */
 .topbar-sm { --topbar-height:calc(var(--space-12) + var(--space-2)); }
 .topbar-sm .topbar-actions { gap:calc(var(--space-1) + var(--space-05)); }
+/* A SEGUNDA LINHA DO CABEÇALHO (`Header tabs`, lote T, 17/10/2026 — os pedidos SITE-04 e SITE-05 do Victor): as áreas do
+   site, cada uma com o ícone, como a linha das áreas da documentação da referência (medida no código dela): 40 de altura,
+   4 abaixo da linha de cima, as áreas a 12 uma da outra, letra 14 em peso médio, o ícone a 8 do nome, com a altura da
+   letra. A área atual tem a cor do texto e o traço de 2 embaixo, na cor de destaque, encostado na linha de baixo. A linha
+   fica por último na ordem do Tab: as áreas vêm depois das ações. */
+.topbar-with-tabs, .topbar-with-tabs > .topbar-inner { flex-wrap:wrap; row-gap:var(--space-1); }
+.topbar-with-tabs { padding-block:0; border-block-end-width:0; }
+/* Com as áreas, a barra tem 100 cravados e a linha de baixo fica PENDURADA logo abaixo dela, sobre o começo da página,
+   como a da referência (a dela é um `::after` com `bottom:-1px`): a borda invisível de 1 do sem linha somava 1 à barra
+   e empurrava tudo o que vem embaixo (medido: a lateral a 117 e não 116). */
+.topbar-with-tabs.topbar-divider::after { inset-block-end:calc(-1 * var(--border-width)); }
+/* A linha de cima tem a altura da barra (56 na `sm`, como a da referência): é a marca que a segura — sem isso a linha
+   ficava da altura da busca (36) e a barra inteira com 89, e não 100. */
+.topbar-with-tabs .brand { min-block-size:var(--topbar-height); }
+/* As áreas ficam EMBAIXO da linha (como lá: a área tem 30 — a letra, 8 e o traço de 2 — numa linha de 40) e numa linha só,
+   que ROLA DE LADO quando não cabe (medido na página da referência a 375: ela não quebra nem some; a página não rola).
+   No celular, 4 entre as áreas; de 768 para cima, 12. Como a linha recorta o que passa dela, o anel do foco fica POR
+   DENTRO da área, como o do item de menu — por fora, ele seria cortado embaixo. */
+.topbar-tabs { flex-basis:100%; display:flex; align-items:flex-end; gap:var(--space-1); min-block-size:var(--space-10);
+  overflow-x:auto; overflow-y:hidden; }
+@media (min-width:768px) { .topbar-tabs { gap:var(--space-3); } }
+.topbar-tab { position:relative; flex-shrink:0; display:inline-flex; align-items:center; gap:var(--space-2);
+  padding:0 var(--space-1) calc(var(--space-2) + var(--focus-width)); color:var(--muted-foreground); font-size:var(--text-sm);
+  font-weight:var(--weight-medium); white-space:nowrap; text-decoration:none; }
+.topbar-tab:focus-visible { outline-offset:calc(-1 * var(--focus-width)); }
+.topbar-tab:hover, .topbar-tab[aria-current] { color:var(--foreground); }
+.topbar-tab[aria-current]::after { content:""; position:absolute; z-index:1; inset-inline:0; inset-block-end:0; block-size:var(--focus-width);
+  background:var(--primary); }
+.topbar-tab-icon { display:inline-flex; font-size:var(--text-sm); }
+.topbar-tab-icon > .icon { inline-size:1em; block-size:1em; }
+/* A LINHA DE BAIXO (`divider`) volta como LINHA (lote T, SITE-05, o Victor: "a linha que vai de uma ponta a outra"): a
+   segunda exceção ao sem linha (ADR-0072), desenhada, de uma ponta à outra da barra, na cor da linha. */
+.topbar-divider::after { content:""; position:absolute; inset-inline:0; inset-block-end:0; block-size:var(--border-width);
+  background:var(--border); pointer-events:none; }
 /* blurred (15/10/2026), só na `flush`: o fundo transparente que embaça o que passa por baixo — o desfoque de 16 da
    referência. Quem pede menos transparência ao sistema, e o navegador sem desfoque, ficam com o fundo cheio. */
 .topbar-flush.topbar-blurred { background:transparent; -webkit-backdrop-filter:blur(var(--space-4)); backdrop-filter:blur(var(--space-4)); }
@@ -1336,6 +1381,60 @@ img,svg { display:block; }
    encostado, não sobre a lateral — a rente já encosta sozinha. */
 .app-shell-flush .sidebar:not(.sidebar-flush) { --shell-top:calc(var(--topbar-height) + var(--space-05)); margin-block-start:var(--space-05); }
 .app-shell-flush .content { margin-block-start:var(--space-05); }
+/* O ARRANJO DE DOCUMENTAÇÃO (`AppShell layout="docs"`, lote T, 17/10/2026 — os pedidos SITE-01 e SITE-02 do Victor): o
+   da documentação da referência, medido no código dela. Um bloco CENTRALIZADO de `--docs-width` (1400) em cinco trilhas —
+   a sobra dos dois lados, iguais, centralizam —: a lateral (`--docs-sidebar-width`, 220), o texto, o índice
+   (`--docs-aside-width`, 268, de 1280 para cima). Sem vão: o espaço vem do recheio de cada coluna. A lateral NÃO flutua
+   (sem caixa; 16 abaixo da linha, 32 acima da borda da tela, 12 no começo); o texto tem 48 dos lados de 1280 para cima e 24
+   abaixo, e cada bloco dele vai até `--docs-text-width` (900). Entre 1024 e 1279 o índice desce para depois do texto,
+   como no `AppShell` de sempre; abaixo de 1024 a lateral é a gaveta. A barra de cima tem 56 + 4 + 40 (a linha das
+   áreas): a lateral e o índice grudam logo abaixo dela. */
+/* O bloco mora DEPOIS da regra do topo rente (`.app-shell-flush .sidebar:not(.sidebar-flush)`) e tem a MESMA força (o
+   `:not`): mais fraca, ou antes dela, a lateral grudava a 66 do topo, por baixo da barra (medido). A linha de baixo
+   fica pendurada fora da barra, como a da referência, e não entra na conta. */
+.app-shell-docs { --docs-top:calc(var(--space-12) + var(--space-2) + var(--space-1) + var(--space-10)); }
+.app-shell-docs > .content > * { max-inline-size:var(--docs-text-width); }
+/* O texto a 24 da borda também no celular (o da página da referência a 375 e a 768; com o recheio de sempre do
+   `AppShell`, ele encostava a 16 — a bancada do lote T pegou). */
+.app-shell-docs > .content.content { margin:0; padding:var(--space-4) var(--space-6); }
+@media (min-width:1024px) {
+  .app-shell-docs { grid-template-columns:minmax(0,1fr) var(--docs-sidebar-width) minmax(0,calc(var(--docs-width) - var(--docs-sidebar-width))) minmax(0,1fr); }
+  /* As duas colunas COMEÇAM 16 abaixo da linha e PARAM 32 acima da borda de baixo da tela, como as da referência
+     medidas na página dela (17/10/2026, o Victor: "a distância do sidebar em relação aos itens de cima está muito
+     próxima" e "a distância no final da página"): a caixa que rola — e a barra dela — não encosta mais na linha. Dentro,
+     8 em cima e 16 embaixo, e o primeiro grupo sem a margem de cima: o "Overview" fica a 24 da linha, como lá. A
+     referência ainda apaga a lista aos poucos nas duas pontas com um degradê; a Aurea não tem degradê, e a lista corta
+     reto. Dos lados, 16 nos dois (12 + 4 lá) e 8 dentro do item e do nome do grupo: a cápsula começa a 16 da borda
+     da coluna e o texto a 24, como lá (medido na página dela a 1280, 17/10/2026). */
+  .app-shell-docs > .sidebar:not(.sidebar-flush) { --shell-top:calc(var(--docs-top) + var(--space-4)); grid-column:2; grid-row:2;
+    block-size:calc(100vh - var(--shell-top) - var(--space-8)); max-block-size:none; margin:var(--space-4) 0 0; border-width:0;
+    padding-block:var(--space-2) var(--space-4); padding-inline:var(--space-4); }
+  .app-shell-docs > .sidebar > .sidebar-nav > .sidebar-list > li:first-child > .sidebar-group-label { margin-block-start:0; }
+  .app-shell-docs > .sidebar .sidebar-item { padding-inline:var(--space-2); }
+  .app-shell-docs > .sidebar .sidebar-group-label { margin-inline:var(--space-2); }
+  .app-shell-docs > .content.content { grid-column:3; grid-row:2; }
+  .app-shell-docs > .sidebar.app-shell-aside { grid-column:3; grid-row:3; block-size:auto; }
+}
+/* O índice ("On this page") SEM a barra de rolagem, como o da referência (o Victor, 17/10/2026: "ocultar a barra de
+   rolagem"). Nem a da coluna nem a do PRÓPRIO índice: numa tela baixa ele encolhe para caber na coluna e rola sozinho
+   (a barra que o Victor ainda viu, 1280 × 663, era a dele). Ele continua rolando com a roda e o toque, e o Tab leva cada
+   link para a vista. É a ÚNICA exceção à regra da barra visível (`engine-batch.test.tsx`): o Victor escolheu "escondida
+   sempre" entre esta e a da lateral, que some parada e volta com o ponteiro (17/10/2026). */
+.app-shell-docs > .sidebar.app-shell-aside, .app-shell-docs > .sidebar.app-shell-aside > .toc { scrollbar-width:none; }
+.app-shell-docs > .sidebar.app-shell-aside::-webkit-scrollbar,
+.app-shell-docs > .sidebar.app-shell-aside > .toc::-webkit-scrollbar { display:none; }
+/* Quem gruda aqui é a COLUNA; o índice dentro dela fica no lugar. Grudado também, ele somava os 16 dele aos da coluna e
+   o "On this page" descia para 49 da linha (medido); assim, sem o recheio de cima, ele fica a 24, como o da referência. */
+/* E ele ocupa a largura da coluna (o `align-self:start` de sempre o encolhia até o nome mais largo, 168). */
+.app-shell-docs > .sidebar.app-shell-aside > .toc { position:static; align-self:stretch; }
+@media (min-width:1280px) {
+  .app-shell-docs { grid-template-columns:minmax(0,1fr) var(--docs-sidebar-width) minmax(0,calc(var(--docs-width) - var(--docs-sidebar-width) - var(--docs-aside-width))) var(--docs-aside-width) minmax(0,1fr); }
+  .app-shell-docs > .content.content { padding:var(--space-8) var(--space-12) var(--space-4); }
+  /* O índice tem 240 (`--docs-toc-width`) no começo da coluna de 268, com 16 dos dois lados, como o da referência: a
+     ponta direita dele fica alinhada com a da barra de cima (o Victor, 17/10/2026: "componentes não alinhados"). */
+  .app-shell-docs > .sidebar.app-shell-aside { grid-column:4; grid-row:2; justify-self:start; inline-size:var(--docs-toc-width);
+    block-size:calc(100vh - var(--shell-top) - var(--space-8)); padding-block-start:0; padding-inline:var(--space-4); }
+}
 /* A margem é LÓGICA desde 03/10/2026 (AN-01): era `margin:space-4 space-4 space-4 0`, física, e na
    escrita da direita para a esquerda o conteúdo encostava na borda da página e deixava 32 de vão na
    junção com a lateral. Medido no banco da moldura; na esquerda para a direita nada muda. */
@@ -4813,12 +4912,12 @@ button.graph-node-body { cursor:pointer; }
    Ou seja: o par padrão cobre Firefox e Chrome e ainda não cobre o Safari da maioria; o caminho
    webkit cobre Safari e Chrome. Juntos cobrem os três, e onde os dois valem o padrão ganha por
    vir depois. Só cor e espessura — nada de desenhar seta ou canto. */
-.carousel-track,.code-block,.combobox-popup,.command-palette,.dialog,.dialog-body,.drawer,.log-stream,.notification-list,.sidebar,.table-region,.table-wrap,.toc {
+.carousel-track,.code-block,.combobox-popup,.command-palette,.dialog,.dialog-body,.drawer,.log-stream,.notification-list,.sidebar,.table-region,.table-wrap,.toc,.topbar-tabs {
   scrollbar-width:thin; scrollbar-color:var(--border-strong) transparent;
 }
-.carousel-track::-webkit-scrollbar,.code-block::-webkit-scrollbar,.combobox-popup::-webkit-scrollbar,.command-palette::-webkit-scrollbar,.dialog::-webkit-scrollbar,.dialog-body::-webkit-scrollbar,.drawer::-webkit-scrollbar,.log-stream::-webkit-scrollbar,.notification-list::-webkit-scrollbar,.sidebar::-webkit-scrollbar,.table-region::-webkit-scrollbar,.table-wrap::-webkit-scrollbar,.toc::-webkit-scrollbar { inline-size:var(--space-2); block-size:var(--space-2); }
-.carousel-track::-webkit-scrollbar-track,.code-block::-webkit-scrollbar-track,.combobox-popup::-webkit-scrollbar-track,.command-palette::-webkit-scrollbar-track,.dialog::-webkit-scrollbar-track,.dialog-body::-webkit-scrollbar-track,.drawer::-webkit-scrollbar-track,.log-stream::-webkit-scrollbar-track,.notification-list::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track,.table-region::-webkit-scrollbar-track,.table-wrap::-webkit-scrollbar-track,.toc::-webkit-scrollbar-track { background:transparent; }
-.carousel-track::-webkit-scrollbar-thumb,.code-block::-webkit-scrollbar-thumb,.combobox-popup::-webkit-scrollbar-thumb,.command-palette::-webkit-scrollbar-thumb,.dialog::-webkit-scrollbar-thumb,.dialog-body::-webkit-scrollbar-thumb,.drawer::-webkit-scrollbar-thumb,.log-stream::-webkit-scrollbar-thumb,.notification-list::-webkit-scrollbar-thumb,.sidebar::-webkit-scrollbar-thumb,.table-region::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb,.toc::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:var(--radius-control); }
+.carousel-track::-webkit-scrollbar,.code-block::-webkit-scrollbar,.combobox-popup::-webkit-scrollbar,.command-palette::-webkit-scrollbar,.dialog::-webkit-scrollbar,.dialog-body::-webkit-scrollbar,.drawer::-webkit-scrollbar,.log-stream::-webkit-scrollbar,.notification-list::-webkit-scrollbar,.sidebar::-webkit-scrollbar,.table-region::-webkit-scrollbar,.table-wrap::-webkit-scrollbar,.toc::-webkit-scrollbar,.topbar-tabs::-webkit-scrollbar { inline-size:var(--space-2); block-size:var(--space-2); }
+.carousel-track::-webkit-scrollbar-track,.code-block::-webkit-scrollbar-track,.combobox-popup::-webkit-scrollbar-track,.command-palette::-webkit-scrollbar-track,.dialog::-webkit-scrollbar-track,.dialog-body::-webkit-scrollbar-track,.drawer::-webkit-scrollbar-track,.log-stream::-webkit-scrollbar-track,.notification-list::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track,.table-region::-webkit-scrollbar-track,.table-wrap::-webkit-scrollbar-track,.toc::-webkit-scrollbar-track,.topbar-tabs::-webkit-scrollbar-track { background:transparent; }
+.carousel-track::-webkit-scrollbar-thumb,.code-block::-webkit-scrollbar-thumb,.combobox-popup::-webkit-scrollbar-thumb,.command-palette::-webkit-scrollbar-thumb,.dialog::-webkit-scrollbar-thumb,.dialog-body::-webkit-scrollbar-thumb,.drawer::-webkit-scrollbar-thumb,.log-stream::-webkit-scrollbar-thumb,.notification-list::-webkit-scrollbar-thumb,.sidebar::-webkit-scrollbar-thumb,.table-region::-webkit-scrollbar-thumb,.table-wrap::-webkit-scrollbar-thumb,.toc::-webkit-scrollbar-thumb,.topbar-tabs::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:var(--radius-control); }
 /* A LATERAL é a exceção (0.32.0; o Victor, 13/10/2026, olhando a da documentação da referência: a barra
    "só aparece se o mouse fica em cima do sidebar e ela é clarinha" — e, sobre o padrão, "pode alterar o
    atual para ser claro e sumir a rolagem"). A barra continua NATIVA e continua lá — a largura fina não
@@ -4972,11 +5071,6 @@ button.graph-node-body { cursor:pointer; }
 @layer aurea{
 
 /* Catálogo — chrome próprio mínimo; o resto é componente Aurea. Espaçamento tokenizado. */
-/* A lateral NÃO encolhe abaixo de 1366px como a dos docs: os rótulos aqui são nomes de
-   componente (o maior, CommandPaletteShell, pede 167px) e cortar nome de componente num
-   catálogo de componentes é inaceitável. 264px = o valor padrão do token. */
-/* ADR-0067: o menu da esquerda e o "On this page" com a largura da referência (220, medida a 1440). */
-.app-shell.site-shell { --sidebar-width:13.75rem; }
 .page-head { display:grid; gap:var(--space-3); margin-bottom:var(--space-6); }
 /* A linha QUEBRA: sem isso o botão "Copy Markdown" espremia o título a 81px no celular, e ele quebrava no meio da
    palavra (14/10/2026). Agora o botão desce quando não cabe ao lado. */
@@ -4996,19 +5090,16 @@ button.graph-node-body { cursor:pointer; }
 .block { display:grid; gap:var(--space-3); }
 .block > h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); line-height:var(--text-2xl-leading); font-weight:var(--weight-semibold); }
 .usage-points { margin:0; padding-inline-start:calc(var(--space-6) + var(--space-5)); display:grid; gap:var(--space-2); color:var(--muted-foreground); line-height:var(--leading-relaxed); }
-.block > pre, .block > .code-block-wrap .code-block { margin:0; padding:var(--space-6); border-radius:var(--radius-card); }
-.block > dl, .block > ul { margin:0; padding:var(--space-6); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); }
+/* A caixa de código do Usage é a do CodeBlock, sem ajuste (lote T, SITE-08 — o Victor: "a caixa do usage deles é mais
+   baixa"): o recheio de 16 do componente, perto dos 14 da referência. */
+.block > pre { margin:0; }
+.block > dl, .block > ul { margin:0; padding:var(--space-6); border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); }
 /* chip que embrulha um Status: o texto do Status já traz a cor certa, o chip só dá a
    cápsula para a linha ficar alinhada com as outras da Reference. */
 .chip-status .status { font:inherit; line-height:1; min-width:0; }
 /* o chip-status embrulha um Status, então quem trunca é o rótulo DELE — mesma razão do
    .chip-text: sem isto, a 320px o pill de "native: planned" perdia a borda direita. */
 .chip-status .status-label { min-width:0; overflow:hidden; text-overflow:ellipsis; }
-/* O índice da página acompanha a rolagem à direita, e só a partir de xl — abaixo disso a
-   coluna roubaria largura do conteúdo (a referência esconde no mesmo ponto). */
-.page-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-6); }
-.page-grid > .toc { display:none; }
-@media (min-width:1280px) { .page-grid { grid-template-columns:minmax(0,1fr) 180px; } .page-grid > .toc { display:grid; } }
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
 /* ALTURA IGUAL para todo demo, e sempre dentro da primeira tela (pedido do Victor: nada
    de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem da referência; abaixo
@@ -5017,27 +5108,10 @@ button.graph-node-body { cursor:pointer; }
    todos os demos continuam do mesmo tamanho, que é o ponto.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
-.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
-/* A barra de abas ocupa a largura do card e as abas dividem 50/50 — é o que a referência faz
-   (medido: barra w-full, 3px de padding, dois tabs flex:1). A peça é a .segmented da
-   Aurea, esticada: pele pill nossa, comportamento de segmented control. */
-.demo-tabs { display:flex; padding:var(--space-2); border-bottom:1px solid transparent; }
-.demo-tabs .segmented { flex:1; display:flex; }
-.demo-tabs .segmented button { flex:1; }
-/* A aba ativa é a cápsula elevada da própria .segmented — SEM pintar o texto de amarelo:
-   #F0B100 sobre a trilha clara do tema light dá 1.6:1 (axe), longe dos 4.5:1 do AA. */
+.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+/* As abas (.demo-tabs), os painéis (.demo-panel) e o código (.demo-code) do demo são os do core (a peça
+   CodeBlock preview): o site não repete as regras deles (a trava do site, lote T, 17/10/2026). */
 .demo-lede { margin:0 0 var(--space-3); }
-/* O painel toma o que sobra da altura fixa e rola por dentro — quem rola é ele, nunca o
-   card. min-height:0 destrava o encolher do flex, senão o conteúdo empurra a caixa. */
-.demo-panel { flex:1; min-height:0; overflow:auto; padding:var(--space-6); }
-/* --surface-inset de novo: o token do tema claro deixou de ser alias de --secondary (era a
-   causa do botão secondary desaparecer dentro do painel), então já afunda sem colidir. */
-.demo-panel[data-panel="preview"] { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--space-4); background:var(--surface-inset); }
-/* O painel de código é o CodeBlock copiável do core, sem moldura própria: o card já é a
-   moldura. Copiar, rolagem interna e o check de confirmação vêm do componente. */
-.demo-code { display:flex; padding:0; overflow:hidden; }
-.demo-code .code-block-wrap { flex:1; }
-.demo-code .code-block { padding:var(--space-6); border:0; border-radius:0; }
 /* preview em documento próprio (só o AppShell hoje): o iframe ocupa o painel inteiro e o painel
    larga o padding — a moldura já é o card, e o shell lá dentro tem a margem dele. */
 .demo-panel:has(> .demo-frame) { padding:0; }
@@ -5054,7 +5128,7 @@ button.graph-node-body { cursor:pointer; }
    a herança, mas o rótulo longo ("value / defaultValue") ainda embrulhava em duas linhas e
    o chip media 26px numa fila de 24px. Altura de componente não depende do texto.
    (Sem backtick neste comentário: ele vive DENTRO de um template literal.) */
-.chip { display:inline-flex; align-items:center; min-height:var(--space-6); padding:0 var(--space-2); border:1px solid transparent; border-radius:var(--radius-control); background:var(--secondary); color:var(--secondary-foreground); font:var(--text-xs)/1 var(--font-code); white-space:nowrap; max-width:100%; text-decoration:none; }
+.chip { display:inline-flex; align-items:center; min-height:var(--space-6); padding:0 var(--space-2); border:var(--border-width) solid transparent; border-radius:var(--radius-control); background:var(--secondary); color:var(--secondary-foreground); font:var(--text-xs)/1 var(--font-code); white-space:nowrap; max-width:100%; text-decoration:none; }
 .chip-text { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 a.chip-link:hover { color:var(--primary); border-color:transparent; }
 /* a bala da lista entra na caixa: o recuo dela soma ao padding da superfície. */
@@ -5063,50 +5137,37 @@ a.chip-link:hover { color:var(--primary); border-color:transparent; }
    motivo de o componente Grid parecer pronto em toda pagina deste catalogo e chegar sem nada
    no consumidor: funcionava na nossa documentacao e em lugar nenhum. O teste real da regra do
    core e' esta pagina continuar identica ao pixel — 15rem == 240px. */
-.tile { display:block; padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
+.tile { display:block; padding:var(--space-4); border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
 .tile:hover { border-color:transparent; }
 .tile p { margin:var(--space-2) 0 0; color:var(--muted-foreground); font-size:var(--text-sm); }
 /* amostra de token: cor num quadrado de raio de controle, dimensão numa régua da largura
    do próprio valor — a prova visual vem do token, não de um número copiado à mão. */
-.swatch { display:block; inline-size:var(--space-10); block-size:var(--space-6); border:1px solid transparent; border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); }
+.swatch { display:block; inline-size:var(--space-10); block-size:var(--space-6); border:var(--border-width) solid transparent; border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); }
 /* Sem linha (ADR-0072): a amostra perdeu o fio, e a cor igual ao fundo da linha sumia (o --white no claro). A sombra
    pequena separa, como na amostra do ColorSwatch. */
 .ruler { display:block; block-size:var(--space-2); max-inline-size:100%; border-radius:var(--radius-full); background:var(--primary); }
-.prevnext { display:flex; justify-content:space-between; gap:var(--space-4); margin-top:var(--space-8); }
-.pn { display:flex; flex-direction:column; gap:var(--space-05); padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; min-width:0; }
-.pn-next { text-align:end; margin-inline-start:auto; }
-.pn small { color:var(--muted-foreground); }
-.pn > span { color:var(--muted-foreground); font-size:var(--text-sm); }
-/* Nome de componente é UMA palavra longa ("CommandPalette", "ConfirmDialog") e não quebra
-   sozinho: a 320px, com a escala de letra da 0.8.8, os dois cartões somavam mais que a coluna
-   e a PÁGINA rolava de lado 4–11px. Quando os dois não cabem lado a lado, o de "Next" desce
-   para a linha de baixo — quebrar o nome no meio ("Breadc/rumb") foi tentado e fica pior. O
-   o break-word é só a rede para um nome maior que a coluna inteira: ele não muda a largura
-   mínima do cartão, então não impede a descida. No desktop nada muda: lá os dois cabem. */
-.prevnext { flex-wrap:wrap; }
-.pn strong { overflow-wrap:break-word; }
-.pn:hover { border-color:transparent; }
+/* Lado a lado enquanto a linha tem 512 ou mais, e um embaixo do outro abaixo disso, como o da referência (cada coluna,
+   (512 - 16) / 2 = 248). Quando só existe um, ele ocupa a linha (o "próximo" à direita), como lá. */
+.prevnext { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, calc((var(--space-16) * 8 - var(--space-4)) / 2)), 1fr)); gap:var(--space-4); margin-block:var(--space-8); }
+.pn { display:grid; gap:var(--space-2); min-inline-size:0; padding:var(--space-4); border-radius:var(--radius-card); color:inherit; font-size:var(--text-sm); text-decoration:none; }
+.pn:hover { background:var(--secondary); }
+.pn-next { text-align:end; }
+.pn-nome { display:flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); min-inline-size:0; font-weight:var(--weight-medium); }
+.pn-next .pn-nome { justify-content:flex-end; }
+.pn-nome strong { font-weight:inherit; overflow-wrap:anywhere; }
 /* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
    O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
    largura) e as ações; embaixo, as áreas do site. */
-.site-shell > .topbar, .site-top { flex-wrap:wrap; row-gap:0; }
+.site-top { flex-wrap:wrap; row-gap:0; }
 .site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
 .site-brand strong { font-size:var(--text-base); font-weight:var(--weight-semibold); }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
-.site-areas { flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
-.site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
+/* A busca ENCOLHE antes de empurrar as ações para a linha de baixo, como a da referência (a 768 ela tem 255 lá): parte de
+   zero, cresce até 400 e, com a sobra, fica no meio (lote T — a 768, com a largura fixa, as ações desciam). */
+.site-search { flex:1 1 0; max-inline-size:25rem; margin-inline:auto; justify-content:flex-start; }
 /* As teclas na PONTA do botão, como a busca da referência. Desde que são uma caixinha por tecla (15/10/2026), elas moram
    num invólucro (".btn-kbds"): é ELE que vai para a ponta — a regra só na tecla parou de alcançar (o Victor viu). */
 .site-search > .kbd, .site-search > .btn-kbds { margin-inline-start:auto; }
-.site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
-.site-area:hover { color:var(--foreground); }
-.site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:transparent; }
-/* O traço da área ATUAL é o indicador, como o das abas (ADR-0072, item 5): desenho cheio no lugar da borda, que continua
-   transparente, e com a medida dela. Saiu junto com as linhas, e a área atual ficou só com a cor do texto. */
-.site-area { position:relative; }
-.site-area[aria-current="page"]::after { content:""; position:absolute; inset-inline:0; inset-block-end:calc(-1 * var(--focus-width)); block-size:var(--focus-width); background:var(--primary); }
-/* O conteúdo com a largura da referência (912, 816 úteis com o respiro de 48). */
-.site-shell > .content { max-width:57rem; padding:var(--space-8) var(--space-12) var(--space-4); }
 /* "Related Components" em cartões, e o "All Components" em grade de 3, como a referência. */
 .related-grid, .cat-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap:var(--space-4); }
 .cat-grid { gap:var(--space-10) var(--space-4); }
@@ -5150,8 +5211,8 @@ a.related-card:hover { border-color:transparent; }
 /* O conteúdo da vitrine centrado na caixa, com os 32 de respiro da referência em cima e embaixo (16 do cartão + 16). */
 .home-painel-miolo { display:flex; justify-content:center; padding-block:var(--space-4); }
 /* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
-.site-github-ink { fill:#fff; }
-[data-theme="light"] .site-github-ink { fill:#000; }
+.site-github-ink { fill:var(--white); }
+[data-theme="light"] .site-github-ink { fill:var(--black); }
 .home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */

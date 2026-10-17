@@ -224,7 +224,7 @@ Grid.Item=GridItem;
 // contêiner com largura máxima por ponto da escala. As seções daquela primeira são pagas e não foram
 // lidas: o respiro da `Section` é escolha da Aurea, com tokens que já existem (ver o `aurea.css`).
 /** A largura máxima do `Container`, pelos nomes da escala de pontos. `xl` (1280) é o padrão. */
-export type ContainerSize="sm"|"md"|"lg"|"xl"|"2xl"|"full";
+export type ContainerSize="sm"|"md"|"lg"|"xl"|"2xl"|"docs"|"full";
 // `HTMLAttributes` + `RefAttributes` escritos aqui, e não o `DivProps`: o `build-api-surface` não
 // enxerga as props de quem estende o `DivProps` (o `Grid` sai vazio no `api-surface.json` pelo mesmo
 // motivo), e o check 11 confere o `size` da ficha contra o tipo por esse arquivo.
@@ -633,7 +633,18 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
   menuLabel?:string;
   /** O `id` do painel do celular. Padrão: `"aurea-header-menu"`. Troque só se a página tiver dois cabeçalhos de site. */
   menuId?:string;
+  /**
+   * A SEGUNDA LINHA (lote T, 17/10/2026): as áreas do site, cada uma com o ícone, como a linha das áreas da documentação da
+   * referência. A atual (`currentTab`) ganha `aria-current="page"` e o traço embaixo. Fica por último na ordem do Tab.
+   */
+  tabs?:HeaderTab[];
+  /** O `id` da área atual da segunda linha. */
+  currentTab?:string;
+  /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
+  tabsLabel?:string;
 }
+/** Uma área da segunda linha do `Header`: o nome, o endereço e, se quiser, o ícone (o desenho que o app passa). */
+export interface HeaderTab{id:string;label:ReactNode;href?:string;icon?:ReactNode;render?:SidebarItem["render"]}
 // O item da barra e o do painel são o MESMO elemento com a mesma pele: o atual é o atual nos dois.
 function linksDoHeader(items:SidebarItem[],current:string|undefined){
   return <ul className="topbar-links">{items.map(it=>{
@@ -641,8 +652,8 @@ function linksDoHeader(items:SidebarItem[],current:string|undefined){
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }
-export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",size="md",blurred,menuActions,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",children,className,...props}:HeaderProps){
-  const site=!!items&&items.length>0;
+export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",size="md",blurred,menuActions,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",tabs,currentTab,tabsLabel="Sections",children,className,...props}:HeaderProps){
+  const site=!!items&&items.length>0,comAbas=!!tabs&&tabs.length>0;
   const miolo=<>
     {brand!=null&&<div className="brand">{brand}</div>}
     {site&&<nav className="topbar-nav" aria-label={navLabel}>{linksDoHeader(items!,current)}</nav>}
@@ -653,8 +664,13 @@ export function Header({variant="floating",divider,brand,items,current,actions,m
       <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}
         {menuActions!=null&&<div className="topbar-menu-actions">{menuActions}</div>}</nav>
     </>}
+    {comAbas&&<nav className="topbar-tabs" aria-label={tabsLabel}>{tabs!.map(t=>{
+      const p={className:"topbar-tab","aria-current":t.id===currentTab?"page" as const:undefined,
+        children:<>{t.icon!=null&&<span className="topbar-tab-icon" aria-hidden="true">{t.icon}</span>}<span>{t.label}</span></>};
+      return <React.Fragment key={t.id}>{t.render?fundirRender(t.render,p,"a"):<a href={t.href} {...p}/>}</React.Fragment>;
+    })}</nav>}
   </>;
-  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",size==="sm"&&"topbar-sm",blurred&&variant==="flush"&&"topbar-blurred",maxWidth&&"topbar-contained",className)} {...props}>
+  return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",size==="sm"&&"topbar-sm",blurred&&variant==="flush"&&"topbar-blurred",maxWidth&&"topbar-contained",comAbas&&"topbar-with-tabs",className)} {...props}>
     {maxWidth?<div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"topbar-inner")}>{miolo}</div>:miolo}
   </header>;
 }

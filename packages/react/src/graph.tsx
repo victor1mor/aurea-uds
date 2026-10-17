@@ -1442,7 +1442,7 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
           `IconButton` da Aurea, num `Panel` do motor (que só posiciona). */}
       <Background gap={editavel&&grid?GRADE:undefined}/>
       {guias.length>0&&<ViewportPortal>
-        {guias.map(g=><div key={`${g.eixo}${g.em}`} className={`graph-guide graph-guide-${g.eixo}`} aria-hidden="true"
+        {guias.map(g=><div key={`${g.eixo}${g.em}`} className={g.eixo==="x"?"graph-guide graph-guide-x":"graph-guide graph-guide-y"} aria-hidden="true"
           style={g.eixo==="x"?{transform:`translate(${g.em}px, ${g.de}px)`,blockSize:g.ate-g.de}:{transform:`translate(${g.de}px, ${g.em}px)`,inlineSize:g.ate-g.de}}/>)}
       </ViewportPortal>}
       <Comandos raiz={raiz} teclado={teclado} focusId={focusId} pedidoDeCaber={pedidoDeCaber} controls={!!controls}

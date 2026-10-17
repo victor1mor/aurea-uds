@@ -649,6 +649,46 @@
         "unit": "rem"
       }
     },
+    "docs-width": {
+      "$type": "dimension",
+      "$description": "The documentation layout (AppShell layout=docs): the centered block that holds the sidebar, the text and the table of contents. 87.5rem = 1400px, measured in the reference documentation source on 17/10/2026.",
+      "$value": {
+        "value": 87.5,
+        "unit": "rem"
+      }
+    },
+    "docs-sidebar-width": {
+      "$type": "dimension",
+      "$description": "The documentation layout: the sidebar column. 13.75rem = 220px, measured in the reference documentation source on 17/10/2026.",
+      "$value": {
+        "value": 13.75,
+        "unit": "rem"
+      }
+    },
+    "docs-aside-width": {
+      "$type": "dimension",
+      "$description": "The documentation layout: the table of contents column, from 1280px up. 16.75rem = 268px, measured in the reference documentation source on 17/10/2026.",
+      "$value": {
+        "value": 16.75,
+        "unit": "rem"
+      }
+    },
+    "docs-toc-width": {
+      "$type": "dimension",
+      "$description": "The documentation layout: the table of contents itself, at the start of its 268px column, so its right edge lines up with the header's. 15rem = 240px, measured in the reference documentation source on 17/10/2026.",
+      "$value": {
+        "value": 15,
+        "unit": "rem"
+      }
+    },
+    "docs-text-width": {
+      "$type": "dimension",
+      "$description": "The documentation layout: the widest a block of the text column gets. 56.25rem = 900px, measured in the reference documentation source on 17/10/2026.",
+      "$value": {
+        "value": 56.25,
+        "unit": "rem"
+      }
+    },
     "topbar-height": {
       "$type": "dimension",
       "$value": {

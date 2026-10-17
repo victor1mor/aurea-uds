@@ -112,7 +112,7 @@
     },
     {
       "name": "maxWidth",
-      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"docs\" | \"full\"",
       "default": "\"xl\"",
       "description": "Footer only: how far the content grows, on the Container's scale."
     },
@@ -142,6 +142,7 @@
     ],
     "maxWidth": [
       "2xl",
+      "docs",
       "full",
       "lg",
       "md",

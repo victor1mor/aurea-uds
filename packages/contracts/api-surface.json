@@ -7,7 +7,7 @@
     "componentes": 144,
     "hooks": 9,
     "aliasesLiterais": 111,
-    "propsDistintas": 365
+    "propsDistintas": 370
   },
   "aliases": {
     "ButtonVariant": {
@@ -2131,13 +2131,14 @@
     },
     "ContainerSize": {
       "module": "markup",
-      "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"full\"",
+      "raw": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"docs\" | \"full\"",
       "union": [
         "sm",
         "md",
         "lg",
         "xl",
         "2xl",
+        "docs",
         "full"
       ]
     },
@@ -7280,6 +7281,33 @@
               ]
             },
             {
+              "name": "layout",
+              "optional": true,
+              "type": "\"app\" | \"docs\"",
+              "values": [
+                "app",
+                "docs"
+              ]
+            },
+            {
+              "name": "topbarTabs",
+              "optional": true,
+              "type": "HeaderTab[]",
+              "values": null
+            },
+            {
+              "name": "topbarCurrentTab",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "topbarTabsLabel",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
               "name": "sidebarScrollbar",
               "optional": true,
               "type": "SidebarScrollbar",
@@ -7901,6 +7929,7 @@
                 "lg",
                 "xl",
                 "2xl",
+                "docs",
                 "full"
               ]
             }
@@ -8003,6 +8032,7 @@
                 "lg",
                 "xl",
                 "2xl",
+                "docs",
                 "full"
               ]
             },
@@ -8050,6 +8080,24 @@
             },
             {
               "name": "menuId",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "tabs",
+              "optional": true,
+              "type": "HeaderTab[]",
+              "values": null
+            },
+            {
+              "name": "currentTab",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "tabsLabel",
               "optional": true,
               "type": "string",
               "values": null
@@ -8617,6 +8665,7 @@
                 "lg",
                 "xl",
                 "2xl",
+                "docs",
                 "full"
               ]
             },
@@ -8894,6 +8943,7 @@
                 "lg",
                 "xl",
                 "2xl",
+                "docs",
                 "full"
               ]
             },
@@ -8941,6 +8991,24 @@
             },
             {
               "name": "menuId",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "tabs",
+              "optional": true,
+              "type": "HeaderTab[]",
+              "values": null
+            },
+            {
+              "name": "currentTab",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "tabsLabel",
               "optional": true,
               "type": "string",
               "values": null

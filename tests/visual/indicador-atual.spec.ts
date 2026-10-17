@@ -17,7 +17,7 @@ for (const tema of ["dark", "light"] as const) {
       const toc = document.querySelector(".toc a");
       if (toc && !document.querySelector(".toc a[aria-current]")) toc.setAttribute("aria-current", "true");
     }, tema);
-    for (const {sel, ps} of [marca('.site-area[aria-current="page"]', "::after"), marca(".toc a[aria-current]", "::before")]) {
+    for (const {sel, ps} of [marca('.topbar-tab[aria-current="page"]', "::after"), marca(".toc a[aria-current]", "::before")]) {
       const m = await page.evaluate(([s, p]) => {
         const e = document.querySelector(s);
         if (!e) return null;
@@ -31,7 +31,7 @@ for (const tema of ["dark", "light"] as const) {
       expect(m!.alfa, `${sel}${ps}: e tem cor`).toBeGreaterThan(0);
     }
     // E quem não é o atual não tem marcador.
-    const outro = await page.evaluate(() => getComputedStyle(document.querySelector(".site-area:not([aria-current])")!, "::after").content);
+    const outro = await page.evaluate(() => getComputedStyle(document.querySelector(".topbar-tab:not([aria-current])")!, "::after").content);
     expect(outro, "a área que não é a atual não tem marcador").toBe("none");
   });
 }
