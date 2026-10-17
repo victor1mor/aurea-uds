@@ -312,7 +312,7 @@ describe("SearchField", () => {
   it("a borda mora no GRUPO, não no campo — uma caixa, não três", () => {
     render(<Envolve><SearchField testID="sf" /></Envolve>);
     expect(estilo("View", __instancias("View").findIndex((p) => p.testID === "sf")).borderColor)
-      .toBe(tokens.color.borderStrong);
+      .toBe("transparent");
     expect(StyleSheet.flatten(porID("TextInput", "sf-campo").style).borderWidth).toBeUndefined();
   });
 });
@@ -475,13 +475,13 @@ describe("NumberField — o foco, achado pela REFERÊNCIA", () => {
   it("marca o foco, como todo campo de texto do pacote", async () => {
     render(<Envolve><NumberField value={10} locale="pt-BR" testID="nf" /></Envolve>);
     expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).borderColor)
-      .toBe(tokens.color.borderStrong);
+      .toBe("transparent");
     await act(async () => { (porID("TextInput", "nf-campo").onFocus as () => void)(); });
     expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).borderColor)
       .toBe(tokens.color.focusStrong);
     await act(async () => { (porID("TextInput", "nf-campo").onBlur as () => void)(); });
     expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).borderColor)
-      .toBe(tokens.color.borderStrong);
+      .toBe("transparent");
   });
 
   // DEFEITO DE ORDEM, e ele é sutil: um campo inválido que está sendo CORRIGIDO precisa mostrar
@@ -491,8 +491,8 @@ describe("NumberField — o foco, achado pela REFERÊNCIA", () => {
       <Envolve>
         <Field label="Litros" error="Só números"><NumberField value={1} testID="nf" /></Field>
       </Envolve>);
-    expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).borderColor)
-      .toBe(tokens.color.danger400);
+    expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).backgroundColor)
+      .toBe(tokens.color.dangerBg);
     await act(async () => { (porID("TextInput", "nf-campo").onFocus as () => void)(); });
     expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).borderColor)
       .toBe(tokens.color.focusStrong);

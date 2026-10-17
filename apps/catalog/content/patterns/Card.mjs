@@ -119,7 +119,7 @@ export default [
   {
     variant: "Contrast",
     name: "The card that stands out",
-    description: "The main card of a screen. In the light theme it is the dark theme's card; in the dark theme, the regular card with a yellow outline. Inside it the whole dark theme applies, so text, badges and buttons adjust by themselves. Not for a list of choices: in the dark theme its outline is close to `selected`.",
+    description: "The main card of a screen. In the light theme it is the dark theme's card; in the dark theme, the regular card (the yellow outline went with the lines in 0.34.0). Inside it the whole dark theme applies, so text, badges and buttons adjust by themselves. Not for a list of choices: in the dark theme its outline is close to `selected`.",
     uses: ["Card", "Badge"],
     code: '<Card variant="contrast">\n  <div className="cluster" style={{justifyContent:"space-between"}}>\n    <strong>Main vehicle</strong>\n    <Badge size="xs" variant="success">UP TO DATE</Badge>\n  </div>\n  <p>18,420 km</p>\n</Card>',
     render: () => h("div", {style: {width: "min(420px,100%)"}},

@@ -43,7 +43,7 @@ const folha = criarFolha((t) => ({
     painel: {
         position: "absolute",
         backgroundColor: t.color.popover,
-        borderWidth: t.size.borderWidth, borderColor: t.color.border,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
         ...canto(t.size.radiusCard),
         boxShadow: [...t.shadowLayers.shadowLg],
     },
@@ -94,7 +94,7 @@ const folha = criarFolha((t) => ({
     fundoDoSubmenu: {
         position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
         backgroundColor: t.color.popover,
-        borderWidth: t.size.borderWidth, borderColor: t.color.border,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
         ...canto(t.size.radiusLg),
         boxShadow: [...t.shadowLayers.shadowMd],
     },

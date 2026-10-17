@@ -34,6 +34,19 @@ export declare function criarFolha<T extends NamedStyles<T> | NamedStyles<Record
  */
 export declare const comOpacidade: (cor: string, pct: number) => string;
 /**
+ * SEM LINHA (16/10/2026), a sugestão: o fundo TRANSLÚCIDO da cor do texto, que se separa de qualquer fundo atrás —
+ * como o trilho desligado do switch da referência (o texto a 20%). Uma cor fixa acaba igual a alguma superfície, e foi
+ * assim que as peças sumiram quando a linha saiu. Nível 1 = 6% (superfície de dentro), 2 = 10% (campo, botão de
+ * contorno), 3 = 20% (marca do checkbox e do rádio, trilho do switch).
+ */
+export declare const preenchimento: (t: AureaTokens, nivel: 1 | 2 | 3) => string;
+/**
+ * A mesma mistura, OPACA: a cor da frente a `pct` sobre a do fundo. Para o que tem algo passando POR TRÁS (o traço dos
+ * passos) ou cobre outra peça (as fotos sobrepostas) — translúcido, o que está atrás aparece. Hex de seis, como o
+ * `comOpacidade`; fora disso devolve a cor da frente.
+ */
+export declare const misturaOpaca: (frente: string, fundo: string, pct: number) => string;
+/**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
  * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de

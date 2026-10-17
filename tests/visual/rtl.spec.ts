@@ -95,22 +95,30 @@ test("o chevron do select troca de lado em RTL", async ({page}) => {
 });
 
 // O par do mapa saiu com o `.map-marker-a` (mockup de docs, Fase 4). O conceito que
-// importava — "glifo desenhado com borda não espelha" — continua, agora medido nos DOIS
-// glifos que o README declara como deliberadamente não espelhados: o check e o spinner.
-test("NÃO espelha glifo desenhado com borda", async ({page}) => {
-  const medir = () => page.evaluate(() => ({
-    check: getComputedStyle(document.querySelector(".checkbox .control-mark")!, "::after").borderLeftWidth,
-    spinner: getComputedStyle(document.querySelector(".spinner")!).borderRightColor,
-  }));
+// importava — "glifo desenhado não espelha" — continua, medido nos DOIS glifos que o README
+// declara como deliberadamente não espelhados: o check e o spinner. Até a 0.33.0 eles eram
+// desenhados com BORDA; sem linha (ADR-0072, 16/10/2026) viraram MÁSCARA, e a medida é a dela:
+// a mesma imagem, na mesma posição, nas duas direções.
+test("NÃO espelha glifo desenhado", async ({page}) => {
+  const medir = () => page.evaluate(() => {
+    const mascara = (s: CSSStyleDeclaration) => ({
+      imagem: s.getPropertyValue("mask-image") || s.getPropertyValue("-webkit-mask-image"),
+      posicao: s.getPropertyValue("mask-position") || s.getPropertyValue("-webkit-mask-position"),
+    });
+    return {
+      check: mascara(getComputedStyle(document.querySelector(".checkbox .control-mark")!, "::after")),
+      spinner: mascara(getComputedStyle(document.querySelector(".spinner")!)),
+    };
+  });
   await load(page, "ltr");
   const ltr = await medir();
   await load(page, "rtl");
   const rtl = await medir();
 
-  // guarda contra teste vazio: sem regra, borderLeftWidth vem "0px" nos dois e a
-  // comparação passaria sem medir nada.
-  expect(ltr.check, "check do checkbox sem borda — a regra existe?").not.toBe("0px");
-  expect(ltr.spinner, "spinner sem border-right-color").toBeTruthy();
-  expect(rtl.check).toBe(ltr.check);      // espelhar quebraria o glifo
-  expect(rtl.spinner).toBe(ltr.spinner);  // idem: o vazado do spinner é físico
+  // guarda contra teste vazio: sem a máscara, a imagem vem "none" nos dois e a comparação
+  // passaria sem medir nada.
+  expect(ltr.check.imagem, "o visto do checkbox sem máscara — a regra existe?").toContain("url(");
+  expect(ltr.spinner.imagem, "o spinner sem máscara — a regra existe?").toContain("url(");
+  expect(rtl.check).toEqual(ltr.check);      // espelhar quebraria o glifo
+  expect(rtl.spinner).toEqual(ltr.spinner);  // idem: o vão da rodinha é físico
 });

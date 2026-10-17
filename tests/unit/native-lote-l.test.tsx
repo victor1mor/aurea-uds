@@ -35,7 +35,7 @@ describe("GAR-07 · o selo com cor de categoria, no nativo", () => {
     const pele = __instancias("View").map((p) => plano(p.style)).find((e) => e.backgroundColor === t.color[`${chave}Bg`]);
     expect(t.color[chave], "o token existe no tema").toBeTruthy();
     expect(pele, "o fundo suave da categoria").toBeDefined();
-    expect(pele!.borderColor).toBe(t.color[chave]);
+    expect(pele!.borderColor).toBe("transparent");
     expect(textoDe("Grupo")!.s.color).toBe(t.color[chave]);
   });
   it("as oito são oito cores diferentes, e nenhuma é a do neutro", () => {

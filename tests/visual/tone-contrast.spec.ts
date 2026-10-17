@@ -50,6 +50,11 @@ const razao = (a: string, b: string) => {
   return (x + 0.05) / (y + 0.05);
 };
 
+// O piso do fundo do botão de contorno, sem a linha. Medido em 16/10/2026 nos três navegadores, com a "C" da bancada (o
+// tom a 16%): o mais apagado é o vermelho do escuro, 1,07:1; o neutro fica em 1,21 (claro) e 1,34 (escuro). Um fundo que
+// some (o do botão suave, 1,00:1 no verde do escuro) reprova.
+const PISO_DO_FUNDO = 1.05;
+
 for (const tema of ["dark", "light"] as const) {
   test(`contraste · matriz de tom · tema ${tema}`, async ({page}) => {
     // Uma página real do catálogo: assim o CSS medido é o mesmo que o consumidor recebe, com a
@@ -100,11 +105,12 @@ for (const tema of ["dark", "light"] as const) {
       // "texto grande", então não vale a exceção de 3:1.
       expect(razao(c.fg, c.bg), `${a} × ${t}: rótulo a ${razao(c.fg, c.bg).toFixed(2)}:1`)
         .toBeGreaterThanOrEqual(4.5);
-      // 3:1 = SC 1.4.11, contraste de componente de interface: a borda é o que diz onde o
-      // botão começa e termina, então ela é informação, não enfeite.
+      // Sem linha (ADR-0072, decisão do Victor): o de contorno não tem mais a borda a 3:1; o que diz onde ele começa e
+      // termina é o FUNDO. O piso cobra que o fundo apareça; a conta é o fundo pintado contra a página.
       if (a === "outline") {
-        expect(razao(c.bd, c.pagina), `${a} × ${t}: borda a ${razao(c.bd, c.pagina).toFixed(2)}:1`)
-          .toBeGreaterThanOrEqual(3);
+        expect(c.bd, `${a} × ${t}: sem linha`).toBe("rgba(0, 0, 0, 0)");
+        expect(razao(c.bg, c.pagina), `${a} × ${t}: o fundo a ${razao(c.bg, c.pagina).toFixed(2)}:1 da página`)
+          .toBeGreaterThanOrEqual(PISO_DO_FUNDO);
       }
     }
   });
@@ -244,30 +250,31 @@ for (const tema of ["dark", "light"] as const) {
   });
 }
 
-// O SUAVE COM O MOUSE EM CIMA (0.33.0, 15/10/2026). A matriz de cima mede o botão parado; o suave escurece o fundo ao
+// O SUAVE E O CONTORNO COM O MOUSE EM CIMA (0.33.0, 15/10/2026; o contorno desde o lote S, 16/10/2026, que o pinta com o
+// tom a 22% no mouse e escurece a letra no claro — sem isso, o azul do claro caía a 4,10:1). A matriz de cima mede o botão parado; o suave escurece o fundo ao
 // passar o mouse, e foi aí que o rótulo caía: `info` a 3,69:1, vermelho a 4,42 e verde a 4,23 no claro, com o tom a 22%
 // por cima da página. O mouse é de verdade (o `:hover` não se força por código), e o fundo é o que aparece — o do botão
 // pintado por cima do da página.
 for (const tema of ["dark", "light"] as const) {
-  test(`contraste · o suave com o mouse em cima · tema ${tema}`, async ({page}) => {
+  test(`contraste · o suave e o contorno com o mouse em cima · tema ${tema}`, async ({page}) => {
     await page.goto("/apps/catalog/button.html");
     await page.evaluate((t) => {
       document.documentElement.dataset.theme = t;
       const caixa = document.createElement("div");
       caixa.id = "suaves";
-      caixa.style.cssText = "position:fixed;inset-block-start:0;inset-inline-start:0;z-index:999;display:flex;gap:16px;padding:16px";
-      for (const tom of ["brand", "danger", "success", "warning", "info"]) {
+      caixa.style.cssText = "position:fixed;inset-block-start:0;inset-inline-start:0;z-index:999;display:flex;flex-wrap:wrap;gap:16px;padding:16px";
+      for (const ap of ["soft", "outline"]) for (const tom of ["brand", "danger", "success", "warning", "info"]) {
         const b = document.createElement("button");
-        b.className = `btn btn-soft btn-tone-${tom}`;
-        b.id = `suave-${tom}`;
+        b.className = `btn btn-${ap} btn-tone-${tom}`;
+        b.id = `${ap}-${tom}`;
         b.textContent = "Action";
         caixa.append(b);
       }
       document.body.append(caixa);
     }, tema);
     await esperarTransicoes(page);
-    for (const tom of ["brand", "danger", "success", "warning", "info"]) {
-      await page.hover(`#suave-${tom}`);
+    for (const ap of ["soft", "outline"]) for (const tom of ["brand", "danger", "success", "warning", "info"]) {
+      await page.hover(`#${ap}-${tom}`);
       await esperarTransicoes(page);
       const c = await page.evaluate((id) => {
         const b = document.getElementById(id)!;
@@ -279,9 +286,9 @@ for (const tema of ["dark", "light"] as const) {
         };
         const pagina = getComputedStyle(document.body).backgroundColor;
         return {fg: getComputedStyle(b).color, bg: pinta(getComputedStyle(b).backgroundColor, pagina), sobre: b.matches(":hover")};
-      }, `suave-${tom}`);
-      expect(c.sobre, `o mouse está em cima do ${tom}`).toBe(true);
-      expect(razao(c.fg, c.bg), `soft × ${tom} com o mouse: rótulo a ${razao(c.fg, c.bg).toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      }, `${ap}-${tom}`);
+      expect(c.sobre, `o mouse está em cima do ${ap} ${tom}`).toBe(true);
+      expect(razao(c.fg, c.bg), `${ap} × ${tom} com o mouse: rótulo a ${razao(c.fg, c.bg).toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
     }
   });
 }

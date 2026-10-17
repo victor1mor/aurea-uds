@@ -49,7 +49,7 @@ import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-n
 import {IconButton} from "./actions.js";
 // Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
 import type {AureaIcon} from "./icon.js";
-import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -100,14 +100,14 @@ const folha = criarFolha((t: AureaTokens) => ({
   // não cabe em 64dp — nem aqui nem na web**, e é para isso que existe o `fullWidth`.
   campo: {
     width: t.size.space16, textAlign: "center",
-    borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
+    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
     // A mesma correção de Android do `Input` do Lote 4 — ver `inputs.tsx:280-296`.
     paddingVertical: 0, textAlignVertical: "center",
   },
   campoLargo: {width: undefined, flex: 1, minWidth: t.size.space16},
   campoDisplay: {width: t.size.space24},
-  invalido: {borderColor: t.color.danger400 ?? t.color.destructive},
+  invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   desabilitado: {opacity: t.size.opacityDisabled},
 }));
 

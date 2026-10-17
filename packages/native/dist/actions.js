@@ -22,7 +22,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import { AccessibilityInfo, Platform, Pressable, Share, View } from "react-native";
-import { canto, criarFolha, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
+import { canto, comOpacidade, criarFolha, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
 import { AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
@@ -102,6 +102,16 @@ function pintar(t, tone) {
  * o da marca também seguem na tinta (neutro 1,61; marca é amarelo no amarelo, 1,00).
  */
 const TONS_COM_COR = new Set(["success", "danger", "warning", "info"]);
+/**
+ * SEM LINHA (16/10/2026), a "C" da bancada, escolhida pelo Victor: no tema CLARO, a letra do botão de CONTORNO com tom de
+ * estado vai 20% para a cor do texto. O fundo é o tom a 16%, e o azul do claro, que já fica perto do limite contra a
+ * página branca, caía a 4,02:1 sobre ele (o mínimo é 4,5). Fora disso, a letra de sempre. O par da web está no fim do
+ * `aurea.css` (`[data-theme="light"] .btn-outline.btn-tone-*`).
+ */
+function corDaLetra(t, tone, appearance, marca, sobre) {
+    const deEstado = tone === "info" || tone === "success" || tone === "warning" || tone === "danger";
+    return appearance === "outline" && !marca && deEstado && t.theme === "light" ? misturaOpaca(sobre, t.color.foreground, 0.8) : sobre;
+}
 function pintarSobreAMarca(base, marca, tone, appearance) {
     if (marca == null)
         return base;
@@ -221,14 +231,20 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
         height: medida.altura,
         paddingHorizontal: medida.recheio,
         gap: medida.vao,
-        backgroundColor: appearance === "solid" ? cor.solido : "transparent",
-        borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
+        // Sem linha (16/10/2026): o de CONTORNO, sem a linha, ganha o fundo — o tom a 16%, o neutro a 10%. A letra do tom de
+        // estado, no claro, vai 20% para a cor do texto (`corDaLetra`): a "C" da bancada.
+        backgroundColor: appearance === "solid" ? cor.solido
+            // Dentro do cartão da marca, a mesma tinta escura do campo (a 14%): o branco a 10% clareava o amarelo e sumia.
+            : appearance === "outline" ? (marca ? comOpacidade(marca.tinta, 0.14)
+                : tone && tone !== "neutral" ? comOpacidade(cor.solido, 0.16) : preenchimento(t, 2))
+                : "transparent",
+        borderColor: "transparent",
         ...(fullWidth ? { flex: 1 } : null),
         // A regra do botão-link da referência: `height: auto; padding: 0`, e a do botão dela já
         // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
         ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
-    }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo]);
-    const corDoTexto = appearance === "solid" ? cor.texto : cor.sobre;
+    }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo, marca, tone, t]);
+    const corDoTexto = appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
     return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
             tocando && s.pressionado, disabled && s.inerte,
@@ -286,15 +302,19 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
     const caixa = React.useMemo(() => ({
         height: lado, width: lado, paddingHorizontal: 0,
         ...canto(t.size.radiusControl),
-        backgroundColor: appearance === "solid" ? cor.solido : "transparent",
-        borderColor: cor.contorno ?? (appearance === "outline" ? corDaBorda : "transparent"),
-    }), [t, lado, appearance, cor.solido, cor.contorno, corDaBorda]);
+        // Sem linha (16/10/2026): o de contorno ganha o fundo, como o `Button` — a tinta do cartão da marca, o tom, ou o neutro.
+        backgroundColor: appearance === "solid" ? cor.solido
+            : appearance === "outline" ? (marca ? comOpacidade(marca.tinta, 0.14)
+                : tone && tone !== "neutral" ? comOpacidade(cor.solido, 0.16) : preenchimento(t, 2))
+                : "transparent",
+        borderColor: "transparent",
+    }), [t, lado, appearance, cor.solido, cor.contorno, corDaBorda, marca, tone]);
     return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: label, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             // Largura FIXA, como o só-ícone da referência: ele nunca estica,
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
             s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,
-        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, weight: pesoDoIcone, color: corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : cor.sobre }) }) }));
+        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, weight: pesoDoIcone, color: corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre) }) }) }));
 }
 export function ThemeToggle(props) {
     const { theme, toggleTheme } = useAureaTheme();

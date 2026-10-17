@@ -75,7 +75,7 @@ export default {
     },
     {
       title: "Variants",
-      description: "primary has the border; secondary is the neutral fill with no visible border — the same two as Input.",
+      description: "Since 0.34.0 neither has a line: both are a translucent fill of the text colour — the same two as Input.",
       code: `<Field label="Primary"><ColorField defaultValue="#0485f7" /></Field>
 <Field label="Secondary"><ColorField variant="secondary" defaultValue="#0485f7" /></Field>`,
       render: () => h("div", {style: coluna},

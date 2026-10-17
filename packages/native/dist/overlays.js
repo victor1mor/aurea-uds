@@ -79,7 +79,7 @@ const folha = criarFolha((t) => ({
     // título 18 em peso médio e descrição 16 (no componente).
     superficie: {
         width: "100%", maxWidth: 560, padding: t.size.space5,
-        borderWidth: t.size.borderWidth, borderColor: t.color.border,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
         ...canto(t.size.radiusCard),
         backgroundColor: t.color.popover,
         ...(t.shadow.shadowLg ? { boxShadow: [t.shadow.shadowLg] } : null),
@@ -117,8 +117,8 @@ const folha = criarFolha((t) => ({
         backgroundColor: t.color.surface1,
         ...(t.shadow.shadowLg ? { boxShadow: [t.shadow.shadowLg] } : null),
     },
-    gavetaDireita: { right: 0, borderLeftWidth: t.size.borderWidth, borderLeftColor: t.color.border },
-    gavetaEsquerda: { left: 0, borderRightWidth: t.size.borderWidth, borderRightColor: t.color.border },
+    gavetaDireita: { right: 0, borderLeftWidth: t.size.borderWidth, borderLeftColor: "transparent" },
+    gavetaEsquerda: { left: 0, borderRightWidth: t.size.borderWidth, borderRightColor: "transparent" },
     folhaBaixo: {
         position: "absolute", left: 0, right: 0, bottom: 0,
         maxHeight: "90%",
@@ -131,7 +131,7 @@ const folha = criarFolha((t) => ({
         // do telefone. Decisão do Victor, olhando as duas na bancada. A lista do `Select` e a folha do
         // `Combobox` sobem do mesmo jeito e levam o mesmo token.
         ...cantosDeCima(t.size.radiusSheet),
-        borderTopWidth: t.size.borderWidth, borderTopColor: t.color.border,
+        borderTopWidth: t.size.borderWidth, borderTopColor: "transparent",
         ...(t.shadow.shadowLg ? { boxShadow: [t.shadow.shadowLg] } : null),
     },
     folhaSemPuxador: { paddingTop: t.size.space5 },

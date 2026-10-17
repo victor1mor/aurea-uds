@@ -100,8 +100,8 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   referência principal — anatomia, partes, medidas, espaçamento, estados, comportamento, teclado,
   onde cada coisa fica — e por cima dela só entra o que é da Aurea: o amarelo e as cores dos temas
   (ADR-0061); os cantos (22 no cartão, 32 na folha de baixo, cápsula nos controles; nada quadrado);
-  a Atkinson Hyperlegible e o Phosphor; as densidades; nenhum degradê; e a acessibilidade de baixa
-  visão (contraste medido, toque de 44, foco visível). Divergir em qualquer outra coisa é pergunta
+  a Atkinson Hyperlegible e o Phosphor; as densidades; nenhum degradê; **nenhuma linha** (ADR-0072); e a
+  acessibilidade de baixa visão (contraste medido, toque de 44, foco visível). Divergir em qualquer outra coisa é pergunta
   ao Victor, com o motivo.
   - **O alcance, decidido pelo Victor em 11/10/2026:** vale para as peças E para o site da Aurea (o
     site segue a documentação da referência, com a cara da Aurea). *"A questão é não colocar nomes
@@ -606,6 +606,13 @@ no git.
   borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
   `paleta-adr0061.test.tsx` reprova.
 - Sem gradientes (nem funcionais).
+- **Sem linha** (decisão do Victor, 16/10/2026, [ADR-0072](decisions/0072-sem-linha.md)): nenhuma peça desenha
+  borda — a cor de toda borda é transparente (a espessura fica, nenhuma medida muda), e o anel fino de `box-shadow`
+  não entra. O que só a linha separava do fundo ganha FUNDO translúcido da cor do texto (`--fill-1` 6%, `--fill-2`
+  10%, `--fill-3` 20%; no nativo, `preenchimento()`), e OPACO onde algo passa por trás ou uma peça cobre outra
+  (`-solid`; `misturaOpaca()`). O aviso que era linha (inválido, escolhido, erro) é fundo. O foco fica (no nativo, é
+  borda). A ÚNICA linha: a do cartão de contorno, clara (o texto a 10%). Quem cobra: `tests/unit/sem-linha.test.tsx`
+  (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção

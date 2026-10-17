@@ -1500,7 +1500,7 @@ for (const theme of ["dark", "light"] as const) {
             passo12: {
               area: {w: caixa(".color-area").width, h: caixa(".color-area").height, raio: parseFloat(est(".color-area").borderTopLeftRadius),
                      pintada: est(".color-area").backgroundImage, pino: caixa(".color-area-thumb").width,
-                     anel: parseFloat(est(".color-area-thumb").borderTopWidth), anelCor: est(".color-area-thumb").borderTopColor,
+                     anel: parseFloat(est(".color-area-thumb").borderTopWidth), fundoPino: est(".color-area-thumb").backgroundColor,
                      entrada: est(".color-area-input").opacity},
               matiz: {pino: [caixa(".slider-color .slider-thumb").width, caixa(".slider-color .slider-thumb").height],
                       anel: parseFloat(est(".slider-color .slider-thumb").borderTopWidth), trilho: caixa(".slider-color .slider-track").height,
@@ -1516,7 +1516,7 @@ for (const theme of ["dark", "light"] as const) {
               campoCor: {alt: caixa(".cfd-campo .input").height, input: caixa(".cfd-input").height,
                          amostra: caixa(".cfd-campo .color-swatch").width, xadrez: est(".cfd-campo .color-swatch").backgroundImage,
                          fundoSec: est(".cfd-sec").backgroundColor, fundoInputSec: est(".cfd-input-sec").backgroundColor,
-                         bordaSec: est(".cfd-sec").borderTopColor, bordaInputSec: est(".cfd-input-sec").borderTopColor, bordaPrim: est(".cfd-campo").borderTopColor},
+                         bordaSec: est(".cfd-sec").borderTopColor, bordaInputSec: est(".cfd-input-sec").borderTopColor, fundoPrim: est(".cfd-campo").backgroundColor},
               seletor: {vao: parseFloat(est(".color-picker-trigger").columnGap), amostra: caixa(".color-picker-trigger .color-swatch").width,
                         letra: parseFloat(est(".color-picker-trigger").fontSize), fundo: est(".color-picker-trigger").backgroundColor},
               data: {fundo: est(".date-picker-trigger").backgroundImage, alt: caixa(".date-picker-trigger").height,
@@ -1727,8 +1727,8 @@ for (const theme of ["dark", "light"] as const) {
                       capsQuebra: est(".agent-caps").flexWrap,
                       // H.b: o estado do passo entra por BORDA lateral, não por fundo —
                       // fundo colorido compete com o texto do passo.
-                      passoBordaRod: est('.invocation-step[data-state="running"]').borderInlineStartColor,
-                      passoBordaOk: est('.invocation-step[data-state="done"]').borderInlineStartColor,
+                      passoFundoRod: est('.invocation-step[data-state="running"]').backgroundColor,
+                      passoFundoOk: est('.invocation-step[data-state="done"]').backgroundColor,
                       passoFundo: est('.invocation-step[data-state="error"]').backgroundColor,
                       tarefaRaio: parseFloat(est(".task-item").borderTopLeftRadius),
                       tarefaLinha: est(".task-line").display,
@@ -1807,8 +1807,8 @@ for (const theme of ["dark", "light"] as const) {
                       grafoRaio: parseFloat(est(".dependency-graph").borderTopLeftRadius),
                       noRaio: parseFloat(est(".graph-node-body").borderTopLeftRadius),
                       noFundo: est(".graph-node-body").backgroundColor,
-                      noBorda: est(".graph-node .graph-node-body").borderTopColor,
-                      noBordaSel: est(".graph-node[data-selected] .graph-node-body").borderTopColor,
+                      noFundo: est(".graph-node .graph-node-body").backgroundColor,
+                      noFundoSel: est(".graph-node[data-selected] .graph-node-body").backgroundColor,
                       tipoCaixa: est(".graph-node-kind").textTransform,
                       tipoCor: est(".graph-node-kind").color,
                       rotuloCor: est(".graph-node-label").color},
@@ -2323,14 +2323,18 @@ for (const theme of ["dark", "light"] as const) {
     for (const v of ["info", "success", "warning", "danger"]) {
       expect(bl.fundos[`${v}/solid`], `badge ${v}: solid tem fundo PRÓPRIO, não o do soft`)
         .not.toBe(bl.fundos[`${v}/soft`]);
-      expect(bl.fundos[`${v}/outline`], `badge ${v}: outline não tem fundo`)
-        .toBe("rgba(0, 0, 0, 0)");
+      // Sem linha (ADR-0072): o de contorno perdeu a linha e ganhou o tom a 16% — sem ele, o selo era só texto.
+      expect(bl.fundos[`${v}/outline`], `badge ${v}: outline tem fundo (o tom a 16%), sem linha`)
+        .not.toBe("rgba(0, 0, 0, 0)");
+      expect(bl.fundos[`${v}/outline`], `badge ${v}: e o fundo do outline não é o do soft`)
+        .not.toBe(bl.fundos[`${v}/soft`]);
     }
     expect(bl.alturas.sm, "sm é menor que md").toBeLessThan(bl.alturas.md);
     expect(bl.alturas.lg, "lg é maior que md").toBeGreaterThan(bl.alturas.md);
     expect(bl.pontoNoChip, "o ponto de estado entra no chip").toBe(true);
-    expect(bl.anel, "o ANEL DE RECORTE é o que separa o contador do que está atrás — sem ele o "
-      + "badge derrete no ícone, que foi o defeito que o Victor viu").not.toBe("none");
+    // Sem linha (ADR-0072, item 6, 16/10/2026): o anel de recorte saiu — dentro de uma caixa de outra cor ele aparecia
+    // como linha. Antes ele era cobrado aqui como o que separava o contador do ícone.
+    expect(bl.anel, "o selo preso não desenha o anel de recorte (ADR-0072, item 6)").toBe("none");
     expect(bl.ariaEscondido, "o sobreposto é decoração: o número mora no nome de quem é decorado")
       .toBe("true");
     // O canto REDONDO recolhe 14% (a sobreposição circular da referência). Sem isso o contador de um avatar fica
@@ -2703,16 +2707,19 @@ for (const theme of ["dark", "light"] as const) {
     expect([p12.area.w, p12.area.h], "ColorArea: quadrada, até 224").toEqual([224, 224]);
     expect(p12.area.raio, "canto 16 (--radius-lg)").toBe(16);
     expect(p12.area.pintada, "a pintura chega pela variável — o gradiente da exceção").toMatch(/^linear-gradient/);
-    expect([p12.area.pino, p12.area.anel], "o pino tem 16, com o anel de 3").toEqual([16, 3]);
-    expect(p12.area.anelCor, "o anel é branco nos dois temas (fica sobre a cor)").toBe("rgb(255, 255, 255)");
+    // Sem linha (ADR-0072): o pino era um aro branco de 3; agora é desenho cheio — o branco por baixo e a cor numa
+    // bolinha por cima, com sombra. A medida (16) não muda.
+    expect([p12.area.pino, p12.area.anel], "o pino tem 16, sem aro").toEqual([16, 0]);
+    expect(p12.area.fundoPino, "o branco por baixo, nos dois temas (fica sobre a cor)").toMatch(/^(oklch\(1 0 0\)|rgb\(255, 255, 255\))$/);
     expect(Number(p12.area.entrada), "os dois range ficam escondidos").toBeLessThan(0.01);
     expect(p12.matiz.pino, "Slider channel=hue: o pino redondo de 16").toEqual([16, 16]);
-    expect([p12.matiz.anel, p12.matiz.trilho], "com o anel de 3, na trilha de 20").toEqual([3, 20]);
+    expect([p12.matiz.anel, p12.matiz.trilho], "sem aro (ADR-0072), na trilha de 20").toEqual([0, 20]);
     expect(p12.matiz.pintada, "a trilha pintada com o círculo de cores").toMatch(/^linear-gradient/);
     expect(p12.matiz.cheio, "sem o preenchimento: a cor é a trilha").toBe(false);
     expect([p12.amostras.tam, p12.amostras.borda, p12.amostras.vao], "ColorSwatch options: 32, borda 2, vão 8").toEqual([32, 2, 8]);
     expect(p12.amostras.bordaLivre, "a livre tem a borda transparente").toBe("rgba(0, 0, 0, 0)");
-    expect(p12.amostras.bordaEscolhida, "a escolhida, a borda na cor dela").toBe("rgb(240, 194, 0)");
+    // Sem linha (ADR-0072): a escolhida perdeu a borda na cor dela; o que a marca é encolher e mostrar o visto.
+    expect(p12.amostras.bordaEscolhida, "a escolhida também sem borda").toBe("rgba(0, 0, 0, 0)");
     expect([p12.amostras.encolhe, p12.amostras.visto], "a escolhida encolhe a 77% e mostra o visto").toEqual(["0.77", "1"]);
     expect(p12.amostras.tinta, "o visto no amarelo é preto (o contraste)").toBe("rgb(0, 0, 0)");
     expect(Number(p12.amostras.botaoInvisivel), "o botão de opção nativo fica invisível").toBe(0);
@@ -2723,9 +2730,9 @@ for (const theme of ["dark", "light"] as const) {
     // igual ao `primary`).
     expect(p12.campoCor.fundoSec, "ColorField secondary: o fundo do Input secondary").toBe(p12.campoCor.fundoInputSec);
     expect(p12.campoCor.bordaSec, "ColorField secondary: a borda do Input secondary").toBe(p12.campoCor.bordaInputSec);
-    // O fundo do campo é o mesmo token nas duas peles (medido: `--field-bg` = `--secondary` nos dois temas); o que
-    // separa o `secondary` é a borda, que some.
-    expect(p12.campoCor.bordaSec, "e a borda diferente da do primary").not.toBe(p12.campoCor.bordaPrim);
+    // Até a 0.33.0 o que separava o `secondary` era a borda, que ele não tinha. Sem linha (ADR-0072), nenhum dos dois
+    // tem borda, e o que separa é o fundo: o `secondary` fica no dele (`--secondary`), o comum ganhou o texto a 10%.
+    expect(p12.campoCor.fundoSec, "e o fundo diferente do do primary").not.toBe(p12.campoCor.fundoPrim);
     expect([p12.seletor.vao, p12.seletor.amostra], "ColorPicker: o gatilho é a amostra de 32 com o nome, vão de 12").toEqual([12, 32]);
     expect(p12.seletor.letra, "o nome em 14 (--text-sm)").toBe(14);
     expect(p12.seletor.fundo, "o gatilho não tem caixa").toBe("rgba(0, 0, 0, 0)");
@@ -2899,8 +2906,10 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.agentes.escopoVisivel, "o escopo da ferramenta é VISÍVEL — conceder /etc achando que é /docs é o defeito").toBe(true);
     expect(e.agentes.escopoFonte, "e sai na monoespaçada do sistema, porque caminho não é prosa").toBe(e.agentes.monoToken);
     expect(e.agentes.permLinha, "nome e escolha na mesma linha").toBe("flex");
-    expect(e.agentes.passoBordaRod, "o passo rodando se distingue do concluído pela borda").not.toBe(e.agentes.passoBordaOk);
-    expect(e.agentes.passoFundo, "e o estado NÃO vira fundo colorido, que competiria com o texto do passo").toBe("rgba(0, 0, 0, 0)");
+    // Sem linha (ADR-0072, item 4): o traço do lado, que dizia o estado do passo, virou fundo leve — o rodando, a marca a
+    // 8%; o com erro, o fundo de perigo. Antes este teste cobrava o contrário (o estado não virava fundo).
+    expect(e.agentes.passoFundoRod, "o passo rodando se distingue do concluído pelo fundo").not.toBe(e.agentes.passoFundoOk);
+    expect(e.agentes.passoFundo, "e o passo com erro tem fundo próprio").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.agentes.tarefaRaio, "a tarefa da fila é superfície flutuante, como card").toBe(e.agentes.radiusCard);
     expect(e.agentes.tarefaLinha, "e título, prioridade e estado ficam na mesma linha").toBe("flex");
     expect(e.agentes.rotuloCaixa, "o rótulo de seção do inspetor é caixa alta, como todo cabeçalho de grupo").toBe("uppercase");
@@ -2927,14 +2936,15 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.agentes.razaoRiscado, "e ela vem riscada").toBe("line-through");
     expect(e.agentes.razaoNormal, "enquanto a guardada não").toBe("none");
     expect(e.agentes.razaoRaio, "cada lançamento é superfície flutuante, como a tarefa da fila").toBe(e.agentes.radiusCard);
-    expect(e.agentes.recadoBordaErro, "o recado que falhou se distingue pela BORDA").not.toBe(e.agentes.recadoBordaOk);
-    expect(e.agentes.recadoFundoErro, "e NÃO por fundo colorido, que disputaria leitura com o texto do recado").toBe(e.agentes.recadoFundoOk);
+    // Sem linha (ADR-0072, item 4): o recado que falhou se distinguia pela borda; agora pelo fundo de perigo, e sem borda.
+    expect(e.agentes.recadoBordaErro, "o recado que falhou não desenha borda").toBe("rgba(0, 0, 0, 0)");
+    expect(e.agentes.recadoFundoErro, "e se distingue pelo FUNDO").not.toBe(e.agentes.recadoFundoOk);
     expect(e.agentes.regraDesligadaExiste, "a regra desligada CONTINUA no cartão — quem precisa religar tem de achá-la").toBe(true);
     expect(e.agentes.regraDesligada, "ela recua no texto").not.toBe(e.agentes.regraLigada);
     expect(e.agentes.regraFundoDesligada, "e o cartão dela continua sendo um cartão igual ao da ligada").toBe(e.agentes.regraFundoLigada);
     expect(e.agentes.grafoRaio, "a tela do grafo é superfície flutuante, como todo cartão").toBe(e.agentes.radiusCard);
     expect(e.agentes.noRaio, "e o NÓ também — é aqui que ele deixa de parecer React Flow (lá o raio é 3px)").toBe(e.agentes.radiusCard);
-    expect(e.agentes.noBordaSel, "o nó selecionado muda a borda").not.toBe(e.agentes.noBorda);
+    expect(e.agentes.noFundoSel, "o nó selecionado muda o fundo (ADR-0072, item 4)").not.toBe(e.agentes.noFundo);
     expect(e.agentes.tipoCaixa, "e o TIPO do nó é texto em caixa alta — a referência pinta dez tipos em dez cores").toBe("uppercase");
     expect(e.agentes.tipoCor, "ele é subordinado ao rótulo, não um segundo destaque").not.toBe(e.agentes.rotuloCor);
     expect(e.qr.quadrado, "o QR é quadrado — deformado ele não escaneia").toBe(true);
@@ -2990,7 +3000,7 @@ for (const theme of ["dark", "light"] as const) {
     // O item PEGO se distingue por ELEVAÇÃO e borda, não por cor de fundo: fundo colorido é a
     // quinta recusa da mesma coisa neste repositório, e aqui ela disputaria leitura com o rótulo.
     expect(e.ordenavel.sombraPego, "o item pego se eleva").not.toBe(e.ordenavel.sombraSolto);
-    expect(e.ordenavel.bordaPego, "e muda a borda").not.toBe(e.ordenavel.bordaSolto);
+    expect(e.ordenavel.bordaPego, "e sem borda (ADR-0072): quem diz que está pego é a sombra").toBe("rgba(0, 0, 0, 0)");
     expect(e.ordenavel.fundoPego, "mas continua sendo a mesma superfície — pego não vira fundo colorido")
       .toBe(e.ordenavel.fundoSolto);
 
@@ -3017,7 +3027,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.blocos.corpoMin, "o corpo do bloco pode encolher abaixo do conteúdo").toBe("0px");
     expect(e.blocos.corpoEstoura, "e a figura larga cabe na coluna em vez de estourá-la").toBeLessThanOrEqual(0);
     expect(e.blocos.sombraPego, "o bloco pego se eleva").not.toBe(e.blocos.sombraSolto);
-    expect(e.blocos.bordaPego, "e muda a borda").not.toBe(e.blocos.bordaSolto);
+    expect(e.blocos.bordaPego, "e sem borda (ADR-0072): quem diz que está pego é a sombra").toBe("rgba(0, 0, 0, 0)");
     expect(e.blocos.fundoPego, "mas continua a mesma superfície — pego não vira fundo colorido")
       .toBe(e.blocos.fundoSolto);
 

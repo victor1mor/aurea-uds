@@ -158,7 +158,7 @@ export default {
     code: `<Card>
   <Card.Header>
     <Card.Title>A floating surface</Card.Title>
-    <Card.Description>Radius 22px, one border, no shadow stack.</Card.Description>
+    <Card.Description>Radius 22px, no line, no shadow stack.</Card.Description>
   </Card.Header>
   <Card.Content>
     <p>The parts are optional: a card can hold anything.</p>
@@ -171,7 +171,7 @@ export default {
     render: () => h("div", {style: wide}, h(A.Card, null,
       h(A.Card.Header, null,
         h(A.Card.Title, null, "A floating surface"),
-        h(A.Card.Description, null, "Radius 22px, one border, no shadow stack.")),
+        h(A.Card.Description, null, "Radius 22px, no line, no shadow stack.")),
       h(A.Card.Content, null, h("p", {style: {margin: 0}}, "The parts are optional: a card can hold anything.")),
       h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Save"), h(A.Button, null, "Cancel")))),
   },
@@ -1288,7 +1288,7 @@ export default {
     // ver os dois juntos é o que explica a diferença para uma media query.
     render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start"}},
       ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
-        border: "1px dashed var(--border)", borderRadius: "var(--radius-lg)"}},
+        background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
         h(A.Toolbar, {label: `Ações ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
           h(A.Button, null, "Salvar"), h(A.Button, null, "Descartar"))))),
   },
@@ -1303,7 +1303,7 @@ export default {
     // efeito, que é o que se pode ver — o valor em si é um string.
     render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start"}},
       ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
-        border: "1px dashed var(--border)", borderRadius: "var(--radius-lg)"}},
+        background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
         h(A.ToggleGroup, {label: `Alinhar ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
           h(A.Toggle, {value: "e"}, "Esquerda"), h(A.Toggle, {value: "c"}, "Centro"))))),
   },

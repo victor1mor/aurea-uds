@@ -88,12 +88,12 @@ const umMenu = (items: MenuEntry[], extra: Partial<React.ComponentProps<typeof D
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
 describe("Popover · a anatomia da referência na pele da Aurea", () => {
-  it("o painel: fundo `popover`, borda, canto 22 contínuo, sombra LG, 12 × 16 de recheio", async () => {
+  it("o painel: fundo `popover`, sem linha, canto 22 contínuo, sombra LG, 12 × 16 de recheio", async () => {
     montar(umPopover());
     await abrir();
     const e = estiloDoPainel();
     expect(e.backgroundColor).toBe(ESCURO.color.popover);
-    expect([e.borderWidth, e.borderColor]).toEqual([ESCURO.size.borderWidth, ESCURO.color.border]);
+    expect([e.borderWidth, e.borderColor]).toEqual([ESCURO.size.borderWidth, "transparent"]);
     expect([e.borderRadius, e.borderCurve]).toEqual([ESCURO.size.radiusCard, "continuous"]);
     expect(e.boxShadow).toEqual([...ESCURO.shadowLayers.shadowLg]);
     expect([e.paddingVertical, e.paddingHorizontal]).toEqual([ESCURO.size.space3, ESCURO.size.space4]);
@@ -463,7 +463,7 @@ describe("DropdownMenu · o submenu abre no lugar", () => {
     // A superfície do submenu aberto: fundo, linha e canto 16, numa camada atrás das linhas.
     const fundo = __instancias("View").map((p) => plano(p.style))
       .findLast((e) => e.position === "absolute" && e.borderRadius === ESCURO.size.radiusLg);
-    expect([fundo?.backgroundColor, fundo?.borderColor, fundo?.borderCurve]).toEqual([ESCURO.color.popover, ESCURO.color.border, "continuous"]);
+    expect([fundo?.backgroundColor, fundo?.borderColor, fundo?.borderCurve]).toEqual([ESCURO.color.popover, "transparent", "continuous"]);
   });
 
   it("o item de dentro chama o `onClick` e fecha o menu inteiro", async () => {
@@ -511,7 +511,7 @@ describe("dentro de um `Card variant=\"contrast\"` — a janela sai no tema do A
     await abrir();
     expect(estiloDoPainel().backgroundColor).toBe(CLARO.color.popover);
     expect(estiloDoPainel().backgroundColor).not.toBe(ESCURO.color.popover);
-    expect(estiloDoPainel().borderColor).toBe(CLARO.color.border);
+    expect(estiloDoPainel().borderColor).toBe("transparent");
     expect(__instancias("Path").at(-2)?.fill).toBe(CLARO.color.popover);
     expect(texto("Ajuda").e.color).toBe(CLARO.color.foreground);
     expect(texto("Texto do corpo").e.color).toBe(CLARO.color.mutedForeground);

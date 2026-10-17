@@ -18,7 +18,7 @@ export default [
   {
     variant: "With error",
     name: "Rejected value",
-    description: "The error joins the accessible description and marks the control invalid. A red border alone tells a colour-blind user nothing.",
+    description: "The error joins the accessible description and marks the control invalid. A red field alone tells a colour-blind user nothing.",
     uses: ["Field", "Input"],
     code: '<Field label="Slug" error="Already taken.">\n  <Input defaultValue="button" />\n</Field>',
     render: () => h("div", {style: stack},

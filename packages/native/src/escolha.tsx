@@ -15,7 +15,7 @@ import {
   type AccessibilityActionEvent, type GestureResponderEvent, type LayoutChangeEvent,
   type PanResponderGestureState, type StyleProp, type TextStyle, type ViewStyle,
 } from "react-native";
-import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
 import {Icon, type AureaIcon, type AureaIconRegistry} from "./icon.js";
 import {Label, useCampo} from "./inputs.js";
 import {driverNativo, useReduceMotion} from "./movimento.js";
@@ -62,12 +62,12 @@ const folha = criarFolha((t: AureaTokens) => ({
   casa: {
     width: t.size.space10 + t.size.space1, height: t.size.touchControlHMd,
     alignItems: "center", justifyContent: "center",
-    borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
+    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
   },
   // A casa ativa: a borda da cor do foco, com a espessura do anel (o contorno de 2 da referência).
   casaAtiva: {borderColor: t.color.focusStrong, borderWidth: t.size.focusWidth},
-  casaInvalida: {borderColor: t.color.danger400 ?? t.color.destructive},
+  casaInvalida: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   // O dígito da referência: 18 em seminegrito, na linha de 28 do `text-lg`.
   digito: {fontSize: t.size.textLg, lineHeight: t.size.textLg * t.size.textLgLeading,
            fontFamily: t.font.ui[600], color: t.color.foreground},
@@ -512,7 +512,7 @@ export function OTPField({length, value, defaultValue, onValueChange, mask, disa
                 ativa && s.casaAtiva,
                 invalido && s.casaInvalida,
                 // Sobre a marca vale a tinta, inclusive no lugar do vermelho — a regra do `Input`.
-                pele && {borderColor: pele.borderColor, backgroundColor: pele.backgroundColor},
+                pele && {borderColor: "transparent", backgroundColor: pele.backgroundColor},
               ]}>
               {digito != null
                 ? (mask

@@ -27,11 +27,16 @@ const GLIFOS: Record<string, string> = {
   // que mais contrasta com ela (a conta da WCAG) —, por isso não entra em `TEXTO_AO_LADO`: no alto contraste a
   // amostra inteira sai da troca (`forced-color-adjust:none`, como a área e a trilha), senão a COR, que é o
   // conteúdo dela, vira a cor da tela. Medido em 14/10/2026: sem isso, a amostra sumia.
+  // A rodinha do `Spinner` e o visto do `Checkbox` (sem linha, ADR-0072, 16/10/2026): eram linha (borda), que o alto
+  // contraste pinta; viraram máscara, que ele apagava.
+  ".spinner": `<p style="display:flex;align-items:center;gap:8px"><span class="spinner" data-glifo></span><span class="spinner-texto">Carregando</span></p>`,
+  ".control-mark::after": `<label class="checkbox"><input type="checkbox" checked aria-label="Aceito"><span class="control-mark" data-glifo></span><span class="checkbox-texto">Aceito</span></label>`,
   ".color-swatch-option::after": `<div class="color-swatch-picker" role="radiogroup" aria-label="Cor"><label class="color-swatch-option color-swatch-option-dark" data-glifo style="--color-swatch-current:#0485f7"><input type="radio" class="color-swatch-input" name="g" value="#0485f7" aria-label="Oceano" checked><span class="color-swatch" aria-hidden="true"></span></label></div>`,
 };
 
 async function tinta(p: Page, l: Locator) {
-  const b64 = (await l.screenshot()).toString("base64");
+  // A rodinha do `Spinner` gira sem parar, e a foto espera a peça parar: com as animações desligadas, ela sai parada.
+  const b64 = (await l.screenshot({animations: "disabled"})).toString("base64");
   return p.evaluate(async (s) => {
     const img = new Image();
     img.src = "data:image/png;base64," + s;
@@ -103,6 +108,7 @@ const TEXTO_AO_LADO: Record<string, string> = {
   ".accordion-chevron": ".accordion-title",
   ".toast-anchored-icon": ".toast-anchored > span:last-child",
   ".toc-label-icon": ".toc-label",
+  ".spinner": ".spinner-texto",
 };
 
 test("no alto contraste, cada glifo tem a cor do texto ao lado", async ({page: p}) => {
@@ -114,6 +120,18 @@ test("no alto contraste, cada glifo tem a cor do texto ao lado", async ({page: p
     texto: getComputedStyle(document.querySelector(texto)!).color,
   })), Object.entries(TEXTO_AO_LADO));
   for (const c of cores) expect(c.tinta, c.glifo).toBe(c.texto);
+});
+
+// O VISTO DO CHECKBOX não é seletor que o `querySelector` alcança (é o `::after`): ele se mede aqui. Fica sobre a marca, e
+// tem a cor do texto do rótulo ao lado. Provado contra o defeito (16/10/2026): sem a regra do alto contraste, sumia.
+test("no alto contraste, o visto do Checkbox tem a cor do texto ao lado", async ({page: p}) => {
+  await montar(p);
+  await altoContraste(p);
+  const m = await p.evaluate(() => ({
+    visto: getComputedStyle(document.querySelector(".checkbox .control-mark")!, "::after").backgroundColor,
+    texto: getComputedStyle(document.querySelector(".checkbox-texto")!).color,
+  }));
+  expect(m.visto).toBe(m.texto);
 });
 
 // A AMOSTRA DE COR NÃO É GLIFO SOBRE TEXTO: a cor É o conteúdo dela. Medido em 14/10/2026 com o alto contraste

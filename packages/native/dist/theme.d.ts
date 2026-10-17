@@ -161,6 +161,12 @@ export declare function TemaDentro({ tema, children }: {
  *
  * ⚠ **O texto digitado e o marcador de dica ficam da MESMA cor**, porque só existe uma tinta. É
  * perda real de hierarquia, declarada e não escondida: sobre o amarelo não há segunda cor.
+ *
+ * ⚠ **Sem linha (16/10/2026, o Victor: "quero tudo sem borda sem exceções").** O contorno da tinta
+ * saiu, e sem ele o campo sumia no amarelo (fundo transparente, nenhuma linha). Agora o campo é a
+ * TINTA a 14% sobre o amarelo — o amarelo um pouco mais escuro, como o campo fora do cartão é a
+ * superfície um pouco diferente da página. A 1.4.11 (3:1 para o limite do campo), que só o contorno
+ * alcançava, deixa de ser cumprida aqui, como em todo campo sem linha: decisão do Victor, ADR-0072.
  */
 export declare function usePeleSobreAMarca(): {
     borderColor: string;

@@ -35,13 +35,14 @@ const style = (page: import("@playwright/test").Page, sel: string, prop: string)
 for (const theme of ["dark", "light"] as const) {
   // O bug que este teste tranca: --subtle-foreground e --muted-foreground são o MESMO
   // valor no tema claro, então um `offline` que dependesse SÓ da cor saía pixel-idêntico
-  // ao `neutral` — uma variante que não varia. Quem separa é o ponto vazado.
+  // ao `neutral` — uma variante que não varia. Quem separa é o ponto APAGADO: a cor a 40% (até a
+  // 0.33.0 era o ponto vazado, um anel; sem linha, ADR-0072, virou cheio e apagado).
   test(`status: offline não colapsa no neutral (${theme})`, async ({page}) => {
     await load(page, theme);
     const neutral = await style(page, "#s-neutral .status-dot", "background-color");
     const offline = await style(page, "#s-offline .status-dot", "background-color");
     expect(offline).not.toBe(neutral);
-    expect(offline).toBe("rgba(0, 0, 0, 0)");
+    expect(offline, "o offline é o ponto apagado, a cor a 40%").toMatch(/(\/ |, )0?\.4\)$/);
     expect(neutral).not.toBe("rgba(0, 0, 0, 0)");
   });
 

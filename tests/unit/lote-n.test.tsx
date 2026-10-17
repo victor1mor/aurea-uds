@@ -44,10 +44,10 @@ describe("MT-01 · Card contrast", () => {
     expect(el.getAttribute("data-theme")).toBe("dark");
   });
 
-  test("no claro, sem linha em volta; no escuro, o amarelo pelo tema do ANCESTRAL, com a guarda do GAR-05", () => {
+  test("sem linha em volta nos dois temas (sem linha, ADR-0072); a regra do escuro continua com a guarda do GAR-05", () => {
     expect(regra(".card-contrast")).toMatch(/border-color:\s*transparent/);
     const escuro = css.match(/\[data-theme="dark"\] \.card-contrast:where\(([^)]*\)[^)]*)\)\s*\{([^}]*)\}/);
-    expect(escuro?.[2]).toMatch(/border-color:\s*var\(--primary\)/);
+    expect(escuro?.[2]).toMatch(/border-color:\s*transparent/);
     // A guarda: fora de uma faixa clara, ou numa faixa escura dentro de uma clara.
     expect(escuro?.[1]).toContain(':not([data-theme="light"] *)');
     expect(escuro?.[1]).toContain('[data-theme="light"] [data-theme="dark"] *');
@@ -69,9 +69,9 @@ describe("MT-02 · Card accent", () => {
     });
   }
 
-  test("o traço é a borda de cima, e vence o escolhido, o perigo e o contorno do contrast", () => {
+  test("o traço é um desenho cheio no topo (sem linha, ADR-0072), e vence o escolhido, o perigo e o contrast", () => {
     // Duas classes de força, e DEPOIS das regras que mudam a borda inteira.
-    expect(regra(".card.card-accent")).toMatch(/border-top:\s*var\(--accent-width\)\s+solid\s+var\(--card-accent\)/);
+    expect(regra(".card.card-accent")).toMatch(/box-shadow:\s*inset 0 var\(--accent-width\) 0 0 var\(--card-accent\)/);
     const traco = css.indexOf(".card.card-accent");
     for (const antes of [".card-selected", ".card-danger", '[data-theme="dark"] .card-contrast']) {
       expect(css.indexOf(antes)).toBeGreaterThan(-1);

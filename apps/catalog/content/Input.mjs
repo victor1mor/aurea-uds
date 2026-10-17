@@ -25,7 +25,7 @@ export default {
   examples: [
     {
       title: "In a card",
-      description: "Inside a card the field background disappears against the card's. variant=\"secondary\" uses the neutral fill instead, with no visible border.",
+      description: "The field is a translucent fill of the text colour, so it stays visible on the page, on a card and on a grey surface. Since 0.34.0 variant=\"secondary\" looks the same.",
       code: [
         "<Card>",
         '  <Field label="Project name"><Input variant="secondary" placeholder="Aurea" /></Field>',

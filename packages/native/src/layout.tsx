@@ -16,7 +16,7 @@ import {Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewSt
 // `@aurea-uds/react` ja' faz (o `Stack` da web e' `HTMLAttributes & RefAttributes`, sem
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
-import {canto, criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {canto, comOpacidade, criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Text} from "./text.js";
 import {useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -44,14 +44,15 @@ const folha = criarFolha((t: AureaTokens) => ({
   cardBase: peleDoCartao(t),
   card_base: {},
   card_raised: {boxShadow: [t.shadow.shadowLg]},
-  card_interactive: {borderColor: t.color.borderStrong},
+  card_interactive: {borderColor: "transparent"},
   // `inset` recessa em vez de flutuar — é o painel DENTRO de um card, e a ficha da web diz isso.
   card_inset: {backgroundColor: t.color.surfaceInset, borderColor: "transparent"},
   // 0.32.0: `outline` é o cartão da cor de onde ele está, só com a linha em volta — o mesmo nome da
   // web. Sem fundo; a borda, o raio e o recheio continuam os do `cardBase`.
-  card_outline: {backgroundColor: "transparent"},
+  // Sem linha (ADR-0072): a ÚNICA linha que fica — clara, o texto a 10% (a "B" da caixa da vitrine, o Victor, 16/10).
+  card_outline: {backgroundColor: "transparent", borderColor: comOpacidade(t.color.foreground, 0.1)},
   card_selected: peleDoCartaoEscolhido(t),
-  card_danger: {borderColor: t.color.danger400 ?? t.color.destructive, backgroundColor: t.color.dangerBg},
+  card_danger: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   // O amarelo é o DE PREENCHER — `primary`, o mesmo do botão sólido. A borda some: uma superfície
   // cheia não precisa de contorno, e um contorno sobre o amarelo mede 2,43 no claro (invisível).
   card_brand: {backgroundColor: t.color.primary, borderColor: "transparent"},
@@ -59,7 +60,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // `cardBase` já é o cartão do escuro. No claro, sem linha em volta (13,3:1 contra a tela); no
   // escuro, o amarelo, com a borda de sempre.
   card_contrast: {borderColor: "transparent"},
-  contrasteNoEscuro: {borderColor: t.color.primary},
+  contrasteNoEscuro: {borderColor: "transparent"},
   // MT-02 (ADR-0063): o traço no topo. Uma borda mais grossa só em cima, com o canto 22, desenha
   // errado no Android (react-native#51926, fechada sem conserto em 24/03/2026: a borda sai do
   // contorno e deixa vão). Então o traço é uma faixa de `accentWidth` numa camada que se recorta no

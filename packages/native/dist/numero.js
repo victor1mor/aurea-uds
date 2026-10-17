@@ -48,7 +48,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Platform, TextInput, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, preenchimento } from "./estilos.js";
 import { useCampo } from "./inputs.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca } from "./theme.js";
 // 0.32.0: o campo comum na altura de TOQUE, como o `Input` (40 · 48 · 56; era 32 · 36 · 40). O
@@ -80,14 +80,14 @@ const folha = criarFolha((t) => ({
     // não cabe em 64dp — nem aqui nem na web**, e é para isso que existe o `fullWidth`.
     campo: {
         width: t.size.space16, textAlign: "center",
-        borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-        ...canto(t.size.radiusControl), backgroundColor: t.color.fieldBg,
+        borderWidth: t.size.borderWidth, borderColor: "transparent",
+        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
         // A mesma correção de Android do `Input` do Lote 4 — ver `inputs.tsx:280-296`.
         paddingVertical: 0, textAlignVertical: "center",
     },
     campoLargo: { width: undefined, flex: 1, minWidth: t.size.space16 },
     campoDisplay: { width: t.size.space24 },
-    invalido: { borderColor: t.color.danger400 ?? t.color.destructive },
+    invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
     desabilitado: { opacity: t.size.opacityDisabled },
 }));
 // ─────────────────────────────────────────────────────────────────────────────────────────────

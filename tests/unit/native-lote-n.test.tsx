@@ -32,11 +32,11 @@ describe("MT-01 · Card contrast: o tema escuro dentro do cartão", () => {
     expect(textoDe("Oi")?.s.color).toBe(ESCURO.color.foreground);
   });
 
-  it("no escuro, o contorno amarelo, com a borda de sempre", () => {
+  it("no escuro, sem o contorno amarelo (sem linha, ADR-0072)", () => {
     render(<AureaProvider theme="dark"><Card variant="contrast" testID="c"><Text>Oi</Text></Card></AureaProvider>);
     const s = viewCom("c");
     expect(s.backgroundColor).toBe(ESCURO.color.card);
-    expect(s.borderColor).toBe(ESCURO.color.primary);
+    expect(s.borderColor).toBe("transparent");
     expect(s.borderWidth).toBe(ESCURO.size.borderWidth);
   });
 

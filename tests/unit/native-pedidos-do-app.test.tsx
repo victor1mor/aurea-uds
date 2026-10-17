@@ -17,7 +17,7 @@ import {StyleSheet, __instancias} from "./native-stubs/react-native";
 import {
   AureaProvider, Badge, BottomNav, BottomNavProvider, Button, Card, Checkbox, Field, Grid, IconButton,
   NavList, NumberField, Screen, Select, SegmentedControl, Switch, Tabs, Text,
-  criarRegistroDeIcones, resolverTokens, useBottomNavSpace,
+  comOpacidade, criarRegistroDeIcones, resolverTokens, useBottomNavSpace,
 } from "../../packages/native/src/index.js";
 import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
 
@@ -411,7 +411,7 @@ const campoDoTeste = (id: string) =>
   StyleSheet.flatten(__instancias("TextInput").find((p) => p.testID === id)?.style) ?? {};
 
 describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
-  it("o campo dentro do cartão troca `borderStrong` (2,43) pela tinta (4,54) e larga o fundo", () => {
+  it("o campo dentro do cartão é a tinta a 14% sobre o amarelo (sem linha, ADR-0072)", () => {
     render(
       <Envolve>
         <Card variant="brand" action={<Text>Confirmar</Text>}>
@@ -419,18 +419,17 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
         </Card>
       </Envolve>);
     const e = campoDoTeste("km-campo");
-    expect(e.borderColor).toBe(claro.color.primaryForeground);
-    expect(e.borderColor).not.toBe(claro.color.borderStrong);
-    // sem fundo: NENHUMA superfície neutra do sistema separa do amarelo no tema claro
-    expect(e.backgroundColor).toBe("transparent");
+    expect(e.borderColor).toBe("transparent");
+    expect(e.backgroundColor).toBe(comOpacidade(claro.color.primaryForeground, 0.14));
+    // NENHUMA superfície neutra do sistema separa do amarelo no tema claro: o fundo é a própria tinta, clarinha.
     expect(e.color).toBe(claro.color.primaryForeground);
   });
 
-  it("FORA do cartão nada muda — o campo continua com a borda e o fundo de sempre", () => {
+  it("FORA do cartão nada muda — o campo continua com o fundo de sempre", () => {
     render(<Envolve><Card><NumberField value={1200} onChange={() => {}} testID="km" /></Card></Envolve>);
     const e = campoDoTeste("km-campo");
-    expect(e.borderColor).toBe(claro.color.borderStrong);
-    expect(e.backgroundColor).toBe(claro.color.fieldBg);
+    expect(e.borderColor).toBe("transparent");
+    expect(e.backgroundColor).toBe(comOpacidade(claro.color.foreground, 0.1));
   });
 
   // 🔴 O caso que a intuição erra: inválido NÃO pode vencer aqui.
@@ -444,8 +443,8 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
         </Card>
       </Envolve>);
     const e = campoDoTeste("km-campo");
-    expect(e.borderColor).toBe(claro.color.primaryForeground);
-    expect(e.borderColor).not.toBe(claro.color.danger400 ?? claro.color.destructive);
+    expect(e.backgroundColor).toBe(comOpacidade(claro.color.primaryForeground, 0.14));
+    expect(e.backgroundColor).not.toBe(claro.color.dangerBg);
   });
 
   it("o glifo do `IconButton` sem fundo vira tinta — ele media 1,83 no tema escuro", () => {
@@ -472,14 +471,13 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
     expect(letras).toContain(claro.color.primary);
   });
 
-  it("o botão CONTORNADO usa a tinta na borda — a `border` do tema mede 1,38", () => {
+  it("o botão CONTORNADO não pinta borda nenhuma (sem linha, ADR-0072)", () => {
     render(
       <Envolve>
         <Card variant="brand" action={<Button appearance="outline">Registrar</Button>} />
       </Envolve>);
     const caixas = __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {});
-    expect(caixas.some((e) => e.borderColor === claro.color.primaryForeground)).toBe(true);
-    expect(caixas.some((e) => e.borderColor === claro.color.border)).toBe(false);
+    expect(caixas.some((e) => typeof e.borderColor === "string" && e.borderColor !== "transparent")).toBe(false);
   });
 });
 

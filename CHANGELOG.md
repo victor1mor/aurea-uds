@@ -80,6 +80,54 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.34.0] — em construção
+
+⏳ **Ainda não publicada.** O lote S, feito em 16/10/2026 na branch `claude/lote-s`: **sem linha**
+([ADR-0072](decisions/0072-sem-linha.md)). O Victor marcou na vitrine o segmentado, as abas e o aviso — *"não tem borda,
+não tem linha ao redor, e isso acho bonito"* —, viu a proposta em todas as páginas do site lado a lado com a de hoje, e
+depois cada peça que sumiu ao lado da sugestão de fundo: *"caixa B, o resto tudo B"*.
+
+### Mudou
+
+- **Nenhuma peça desenha borda**, na web, no site e no nativo: a cor de toda borda é transparente (a espessura fica — nenhuma
+  medida muda) e o anel fino de `box-shadow` sai. O foco continua (o anel; no nativo, a borda da cor do foco).
+- **O que sumia junto com o fundo ganha fundo** — medido nas 149 páginas: 81 casos. Fundos translúcidos da cor do texto, que
+  se separam de qualquer fundo atrás: `--fill-1` (6%), `--fill-2` (10%: `Input`, `Textarea`, `Select`, `SearchField`,
+  `NumberField`, `OTPField`, `InputGroup`, `MultiCombobox`, o `Button` de contorno, `Toolbar`, `CodeBlock`, `LogStream`,
+  `FileInput`), `--fill-3` (20%: a marca do `Checkbox` e do `Radio`, o trilho do `Switch`); o tom a 16% no `Button` de
+  contorno com tom (22% com o mouse) e no `Badge` de contorno; opacos (`--fill-2-solid`, `--fill-3-solid`) na bolinha do `Stepper`, no
+  `Avatar` e no nó do `DependencyGraph`. No nativo, `preenchimento()` e `misturaOpaca()`; o campo dentro do `Card
+  variant="brand"` é a tinta dele a 14%, e o `Button`/`IconButton` de contorno ali também.
+- **No tema claro, a letra do `Button` e do `IconButton` de contorno com tom de estado** (`info`, `success`, `warning`,
+  `danger`) vai 20% para a cor do texto: sobre o tom a 16%, o azul caía a 4,02:1. Medido, o pior caso é o azul com o
+  mouse, a 4,64:1 (web e nativo; `tone-contrast.spec.ts` e `native-contorno-tom.test.tsx`).
+- **A letra do `Badge` de contorno vai 20% para a cor do texto, nos dois temas**: sobre o acento a 16%, o verde do claro
+  caía a 3,79:1 e o `success` do escuro a 4,15:1 dentro do cartão; o pior caso passa a 4,79:1. O suave e o plano têm
+  fundo próprio e ficam como eram. No `LogStream`, o nível `info` também (4,08:1 no claro, sobre o fundo novo).
+- **O aviso que era linha é fundo**: o campo inválido (`--danger-bg`), o `Card` escolhido (a marca a 12%), o passo com erro, a
+  execução rodando ou com erro, a mensagem de erro, o item ativo da mídia, o nó e o contêiner escolhidos do mapa.
+- **O que era desenhado com linha virou desenho cheio**: o visto do `Checkbox`, o `Spinner` (o mesmo arco), os pinos do
+  `Slider` de cor e da `ColorArea` (branco por baixo, a cor numa bolinha por cima), a amostra do `ColorSwatch` (com sombra), o
+  "fora do ar" do `Status`, o traço do `Card accent`, o cursor do `CodeEditor`. No alto contraste do Windows, a rodinha
+  do `Spinner` e o visto do `Checkbox` saem da troca de cores e pintam na cor do texto (desenho por máscara é fundo, e a
+  troca apagava os dois).
+- **O marcador do item atual continua**: a barra do item atual do `TableOfContents` era borda de um lado; volta como
+  desenho cheio, no mesmo lugar e com a mesma medida (`tests/visual/indicador-atual.spec.ts`).
+- **A única linha**: o `Card variant="outline"` (a caixa da vitrine do Início), clara — o texto a 10%.
+
+### Consertado
+
+- **O passo concluído do `Stepper` nunca ficava amarelo na web**: o componente escreve `step-done`/`step-active` e o core só
+  lia `.step.done`/`.step.active`. As duas formas valem (`tests/unit/stepper-estado.test.tsx`).
+
+### ⚠ Pode quebrar
+
+- **Aparência, em todas as peças.** Quem identificava estado pela linha (o inválido vermelho, o escolhido) passa a ver o
+  fundo. Variantes que eram a própria linha ficam parecidas com outras: o `Badge` e o `Button` de contorno ganham fundo, o
+  `Card variant="contrast"` no escuro perde o contorno amarelo, as `Tabs` `secondary` perdem o fio de baixo, a `Table` perde
+  as linhas entre as linhas, o `Card` tocável do nativo fica igual ao comum.
+- **Nativo:** `usePeleSobreAMarca()` devolve `backgroundColor` com a tinta a 14% (era `transparent`).
+
 ## [0.33.0] — 2026-10-16
 
 ✅ **Publicada em 16/10/2026, entre 12:29 e 12:45 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do

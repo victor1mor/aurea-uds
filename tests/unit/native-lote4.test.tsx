@@ -44,7 +44,7 @@ describe("Field — a ligação que a web faz e o RN não tem", () => {
     render(<Envolve><Field label="Litros" error="Só números"><Input /></Field></Envolve>);
     expect(props("TextInput")["aria-invalid"]).toBe(true);
     expect(props("TextInput").accessibilityHint).toBe("Só números");
-    expect(estilo("TextInput").borderColor).toBe(tokens.color.danger400);
+    expect(estilo("TextInput").backgroundColor).toBe(tokens.color.dangerBg);
   });
 
   // DEFEITO: mostrar dica E erro ao mesmo tempo. A informação que importa naquele momento é uma.
@@ -120,7 +120,7 @@ describe("Input e Textarea", () => {
 
   it("o foco muda a borda — é a única pista de qual campo o teclado alimenta", () => {
     render(<Envolve><Input /></Envolve>);
-    expect(estilo("TextInput").borderColor).toBe(tokens.color.borderStrong);
+    expect(estilo("TextInput").borderColor).toBe("transparent");
     act(() => { (props("TextInput").onFocus as () => void)(); });
     expect(estiloDoUltimo("TextInput").borderColor).toBe(tokens.color.focusStrong);
   });

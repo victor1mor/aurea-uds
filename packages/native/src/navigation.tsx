@@ -34,7 +34,7 @@ import {
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
-import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido} from "./estilos.js";
+import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -54,7 +54,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   topo_floating: {
     marginHorizontal: t.size.space4, marginTop: t.size.space4,
     paddingVertical: t.size.space2, paddingHorizontal: t.size.space4,
-    borderWidth: t.size.borderWidth, borderColor: t.color.border,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusCard), backgroundColor: t.color.card,
   },
   topo_flush: {paddingVertical: t.size.space2, paddingHorizontal: t.size.space5,
@@ -67,7 +67,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   topo_pill: {
     alignSelf: "center", marginTop: t.size.space4, justifyContent: "flex-start",
     gap: t.size.space2, padding: t.size.space2,
-    borderWidth: t.size.borderWidth, borderColor: t.color.border,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusControl), backgroundColor: t.color.card,
   },
 
@@ -86,7 +86,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   barra: {
     position: "absolute", bottom: 0, zIndex: t.size.zSticky,
     flexDirection: "row", gap: t.size.space1, margin: t.size.space4, padding: t.size.space1,
-    borderWidth: t.size.borderWidth, borderColor: t.color.border,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusControl), backgroundColor: t.color.card,
     boxShadow: [t.shadow.shadowMd],
   },
@@ -263,7 +263,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   //   indicador (secundária)          border-bottom 2px na cor de destaque → `fioDoEscolhido`
   abasSecundarias: {
     flexDirection: "row", gap: t.size.space1,
-    borderBottomWidth: t.size.borderWidth, borderColor: t.color.border,
+    borderBottomWidth: t.size.borderWidth, borderColor: "transparent",
   },
   abaSecundaria: {
     alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
@@ -278,8 +278,8 @@ const folha = criarFolha((t: AureaTokens) => ({
   bolinha: {
     width: 32, height: 32, marginBottom: t.size.space2,
     alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
-    borderWidth: t.size.borderWidth, borderColor: t.color.borderStrong,
-    backgroundColor: t.color.surface1,
+    borderWidth: t.size.borderWidth, borderColor: "transparent",
+    backgroundColor: misturaOpaca(t.color.foreground, t.color.background, 0.2),
   },
 }));
 
@@ -500,7 +500,8 @@ export function BottomNav({
               backgroundColor: t.color.popover, boxShadow: [t.shadow.shadowMd],
             },
             ativo && indicator === "circle-outline" && {
-              borderWidth: t.size.borderWidth, borderColor: t.color.primaryEmphasis,
+              borderWidth: t.size.borderWidth, borderColor: "transparent",
+              backgroundColor: comOpacidade(t.color.primaryEmphasis, 0.10),
             },
             ativo && capsula && {backgroundColor: t.color.primary},
           ]}>
@@ -817,8 +818,8 @@ export function Stepper({
           <>
             <View style={[
               s.bolinha,
-              st === "error" && {borderColor: cor},
-              st === "active" && {borderColor: t.color.primaryEmphasis},
+              st === "error" && {borderColor: "transparent", backgroundColor: t.color.dangerBg},
+              st === "active" && {borderColor: "transparent", backgroundColor: comOpacidade(t.color.primary, 0.14)},
             ]}>
               {st === "done" && doneIcon
                 ? <Icon name={doneIcon} size="sm" color={cor} />

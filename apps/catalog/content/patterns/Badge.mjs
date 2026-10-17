@@ -58,7 +58,7 @@ export default [
   {
     variant: "Category",
     name: "One category in three emphases",
-    description: "The categories take the same three emphases as every other badge: soft for a list, solid for the one that must stand out, outline when the surface is already busy.",
+    description: "The categories take the same three emphases as every other badge: soft for a list, solid for the one that must stand out, outline (since 0.34.0 a light tint, no line) when the surface is already busy.",
     uses: ["Badge"],
     code: `<Badge variant="teal">Research</Badge>
 <Badge variant="teal" emphasis="solid">Research</Badge>

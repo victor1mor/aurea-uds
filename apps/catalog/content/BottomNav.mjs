@@ -137,7 +137,7 @@ export default {
     },
     {
       title: "Floating circle subtle — a ring, no fill",
-      description: "An outline around the icon frame. It marks position without adding mass, "
+      description: "A soft disc behind the icon frame (no line since 0.34.0). It marks position without adding mass, "
         + "which is what a navigation bar wants.",
       code: `<BottomNav indicator="circle-outline" label="Garage" current={route} items={items} />`,
       embed: true,
