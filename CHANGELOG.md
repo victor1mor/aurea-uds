@@ -80,6 +80,21 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.35.0] — em construção
+
+⏳ **Ainda não publicada.** O lote T, na branch `claude/lote-t`: a trava do site, o mapa de rede (MNT-28) e os acertos do
+site pedidos pelo Victor em 17/10/2026.
+
+### Mudou
+
+- **`DependencyGraph`, no modo de arrumar (MNT-28): o nó movido volta a ficar alinhado.** Com a grade ligada, o arranjo
+  automático já sai na grade de 16, e as linhas do arrumador acompanham o nó. Ao arrastar, o nó encaixa na borda ou no
+  centro do vizinho que estiver a até 8, e também onde a linha ligada a ele fica reta; aparece a guia, na cor e na
+  espessura do foco (`.graph-guide`). Antes, o nó saía do arranjo fora da grade (0, 270, 540) e só voltava a 528 ou
+  544, com um degrau na linha — e a linha que sai de uma porta fora do centro nunca ficava reta.
+
+---
+
 ## [0.34.0] — 2026-10-17
 
 ✅ **Publicada em 17/10/2026, entre 08:16 e 08:24 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do

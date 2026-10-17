@@ -38,13 +38,13 @@
 // Quem importa a folha é o CONSUMIDOR, uma vez, como já importa o `@aurea-uds/core/css`: um
 // `import "…css"` dentro deste módulo quebraria em Node puro e o build daqui é `tsc` só.
 import React, {type ReactNode} from "react";
-import {ReactFlow, ReactFlowProvider, Background, BaseEdge, EdgeLabelRenderer, EdgeText, Handle, MiniMap, Panel, Position, SelectionMode, applyNodeChanges, getBezierPath, getSmoothStepPath, useNodesInitialized, useOnViewportChange, useReactFlow, useStore, type AriaLabelConfig, type Node, type Edge, type EdgeProps, type NodeChange, type NodePositionChange, type NodeProps} from "@xyflow/react";
+import {ReactFlow, ReactFlowProvider, Background, BaseEdge, EdgeLabelRenderer, EdgeText, Handle, MiniMap, Panel, Position, SelectionMode, ViewportPortal, applyNodeChanges, getBezierPath, getSmoothStepPath, useNodesInitialized, useOnViewportChange, useReactFlow, useStore, type AriaLabelConfig, type Node, type Edge, type EdgeProps, type NodeChange, type NodePositionChange, type NodeProps} from "@xyflow/react";
 import {cx, useAureaStrings} from "./internal.js";
 import {Icon, type AureaIcon} from "./system.js";
 import {Badge} from "./markup.js";
 import {IconButton, Toolbar, ToolbarButton, ToolbarSeparator} from "./actions.js";
 import {alinhar, distribuir, subarvores, recolher, remapear, simplificar, pontes, tracado, meioDoTracado, ladoDoTrecho, rotaCruza,
-  bordaNaDirecao, rotulosQueSomem, contornoDeNuvem, type Borda, type Caixa, type Ponto, type Ponte} from "./graph-geometria.js";
+  bordaNaDirecao, rotulosQueSomem, contornoDeNuvem, naGrade, rotaNaGrade, guiasDoArraste, type Borda, type Caixa, type Guia, type Ponto, type Ponte, type PontaDoArraste} from "./graph-geometria.js";
 
 // ── RODADA 1 DA REDE (ADR-0064, 10/10/2026) ──────────────────────────────────────────────
 // Um app de topologia de rede pediu o mapa no padrão do mercado (MNT-06 a MNT-19). A referência
@@ -149,6 +149,8 @@ const LARGURA=180,ALTURA=52,VAO_X=90,VAO_Y=24;
 const CABECA_DO_GRUPO=40,RECHEIO_DO_GRUPO=16;
 // A grade do modo de arrumar: `--space-4` (16). As setas andam um passo dela; com Shift, quatro.
 const GRADE=16;
+// As guias do arraste (MNT-28): o nó encaixa no vizinho a até `--space-2` (8) dele, em unidade do mapa.
+const TOLERANCIA_DA_GUIA=8;
 // A ponte no cruzamento: meia elipse de raio `--radius-xs` (6) — o tamanho do salto do draw.io.
 const RAIO_DA_PONTE=6;
 // O desvio de linhas (`@tisoap/react-flow-smart-edge`): folga em volta do nó e malha da busca, as duas
@@ -884,7 +886,23 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
   // `entradaElk` muda junto com a chave; a chave é o que diz se mudou DE VERDADE.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[chaveElk]);
-  const autoDe=React.useCallback((id:string):Ponto=>elk?.posicoes.get(id)??automatico.posicoes.get(id)??{x:0,y:0},[elk,automatico]);
+  // MNT-28: com a grade ligada, o arranjo automático JÁ na grade — o motor e a arrumação simples —, e a rota do
+  // motor acompanha o nó (`rotaNaGrade`). Assim o nó arrastado volta exatamente à linha dos outros.
+  const naGradeLigada=editavel&&grid;
+  const elkVisto=React.useMemo<SaidaElk|null>(()=>{
+    if(!elk||!naGradeLigada)return elk;
+    const posicoes=new Map<string,Ponto>(),delta=new Map<string,Ponto>();
+    for(const [id,p] of elk.posicoes){const q={x:naGrade(p.x,GRADE),y:naGrade(p.y,GRADE)};posicoes.set(id,q);delta.set(id,{x:q.x-p.x,y:q.y-p.y})}
+    const pontas=new Map((entradaElk?.arestas??[]).map(a=>[a.id,a] as const)),zero={x:0,y:0};
+    const rotas=new Map<string,Ponto[]>();
+    for(const [id,r] of elk.rotas){const a=pontas.get(id);rotas.set(id,a?rotaNaGrade(r,delta.get(a.de)??zero,delta.get(a.para)??zero):r)}
+    return {posicoes,rotas};
+  },[elk,naGradeLigada,entradaElk]);
+  const autoDe=React.useCallback((id:string):Ponto=>{
+    const doMotor=elkVisto?.posicoes.get(id);if(doMotor)return doMotor;
+    const a=automatico.posicoes.get(id)??{x:0,y:0};
+    return naGradeLigada?{x:naGrade(a.x,GRADE),y:naGrade(a.y,GRADE)}:a;
+  },[elkVisto,automatico,naGradeLigada]);
 
   // ── ONDE CADA UM ESTÁ (coordenada ABSOLUTA) ──────────────────────────────────────────────────
   const posFinal=React.useMemo(()=>{
@@ -1005,7 +1023,61 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
   },[nosDoMotor,editavel]);
   const confirmar=React.useRef<(c:NodePositionChange[])=>void>(()=>{});
   const abertosAgora=React.useRef(abertos);abertosAgora.current=abertos;
-  const aoMudarNos=React.useCallback((mudancas:NodeChange[])=>{
+  // ── AS GUIAS DO ARRASTE (MNT-28) ───────────────────────────────────────────────────────────────
+  // Um nó só, arrastado no modo de arrumar: ele encaixa na borda ou no centro do vizinho mais perto
+  // (`guiasDoArraste`), e a guia aparece. A posição encaixada vale também ao soltar — no fim do arraste o
+  // motor manda a posição DELE, e a que fica é a nossa.
+  const [guias,setGuias]=React.useState<readonly Guia[]>([]);
+  const agora=React.useRef({caixas,paiAberto,ocultos,editavel});agora.current={caixas,paiAberto,ocultos,editavel};
+  const encaixado=React.useRef(new Map<string,Ponto>());
+  // As pontas das linhas do nó arrastado, para ele encaixar onde a linha fica RETA (o Victor, 17/10/2026: a linha da
+  // porta 1 do Núcleo "nunca fica reta"). A mesma conta do traçado: a alça, a porta e o afastamento das paralelas.
+  const pontasDe=React.useRef<(id:string)=>PontaDoArraste[]>(()=>[]);
+  pontasDe.current=id=>{
+    const alca=(no:string,porta:string|undefined,tipo:"source"|"target")=>{
+      const n=porId.get(no),c=caixas.get(no);if(!n||!c)return undefined;
+      const lista=alcasDoNo(abertos.has(no)||contemFilhos.has(no)?{...n,ports:undefined}:n,orientation,{larg:c.larg,alt:c.alt});
+      return (porta&&lista.find(a=>a.id===porta&&a.type===tipo))||lista.find(a=>!a.id&&a.type===tipo);
+    };
+    const deitada=(a:Alca)=>a.position===Position.Left||a.position===Position.Right;
+    const saida:PontaDoArraste[]=[];
+    desenhadas.forEach(({item:e},i)=>{
+      if((e.from!==id&&e.to!==id)||e.from===e.to||ocultos.has(e.from)||ocultos.has(e.to))return;
+      const sou=e.from===id,outro=sou?e.to:e.from,cm=caixas.get(id),co=caixas.get(outro);
+      const am=alca(id,sou?e.fromPort:e.toPort,sou?"source":"target"),ao=alca(outro,sou?e.toPort:e.fromPort,sou?"target":"source");
+      if(!cm||!co||!am||!ao||deitada(am)!==deitada(ao))return;
+      const desl=ident[i].deslocamento,ddx=vertical?desl:0,ddy=vertical?0:desl;
+      const pm=pontoDaAlca(cm,am),po=pontoDaAlca(co,ao);
+      saida.push({meu:{x:pm.x-cm.x+ddx,y:pm.y-cm.y+ddy},outro:{x:po.x+ddx,y:po.y+ddy},eixo:deitada(am)?"y":"x"});
+    });
+    return saida;
+  };
+  const comGuias=React.useCallback((mudancas:NodeChange[]):NodeChange[]=>{
+    const {caixas:cx,paiAberto:paiDe,ocultos:oc,editavel:ed}=agora.current,grupos=abertosAgora.current;
+    const arrastes=mudancas.filter((c):c is NodePositionChange=>c.type==="position"&&!!c.dragging&&!!c.position);
+    let saida=mudancas;
+    const c=arrastes.length===1?arrastes[0]:undefined,eu=c?cx.get(c.id):undefined;
+    if(ed&&c&&eu&&!grupos.has(c.id)){
+      const pai=paiDe(c.id),cp=pai?cx.get(pai):undefined,ox=cp?.x??0,oy=cp?.y??0;
+      const outros=[...cx].filter(([id])=>id!==c.id&&!oc.has(id)&&!grupos.has(id)).map(([,x])=>x);
+      const r=guiasDoArraste({...eu,x:c.position!.x+ox,y:c.position!.y+oy},outros,TOLERANCIA_DA_GUIA,pontasDe.current(c.id));
+      const rel={x:r.x-ox,y:r.y-oy};
+      encaixado.current.set(c.id,rel);
+      saida=saida.map(m=>m===c?{...c,position:rel}:m);
+      setGuias(g=>g.length===r.guias.length&&g.every((x,i)=>x.eixo===r.guias[i].eixo&&x.em===r.guias[i].em&&x.de===r.guias[i].de&&x.ate===r.guias[i].ate)?g:r.guias);
+    }else if(arrastes.length)setGuias(g=>g.length?[]:g);
+    if(mudancas.some(m=>m.type==="position"&&!m.dragging)){
+      saida=saida.map(m=>{
+        if(m.type!=="position"||m.dragging)return m;
+        const e=encaixado.current.get(m.id);if(!e)return m;
+        encaixado.current.delete(m.id);return {...m,position:e};
+      });
+      setGuias(g=>g.length?[]:g);
+    }
+    return saida;
+  },[]);
+  const aoMudarNos=React.useCallback((mudancasDoMotor:NodeChange[])=>{
+    const mudancas=comGuias(mudancasDoMotor);
     setNosVivos(anteriores=>applyNodeChanges(mudancas,anteriores).map(semAlcasDeclaradas));
     const dims=mudancas.filter(c=>c.type==="dimensions"&&!!c.dimensions&&!abertosAgora.current.has(c.id));
     if(dims.length)setMedidas(md=>{
@@ -1019,7 +1091,7 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
     // SOLTOU (fim do arraste) ou ANDOU PELA SETA: a mudança de posição que não está mais arrastando.
     const soltos=mudancas.filter((c):c is NodePositionChange=>c.type==="position"&&!c.dragging&&!!c.position);
     if(soltos.length)confirmar.current(soltos);
-  },[]);
+  },[comGuias]);
 
   // ── O DESFAZER (MNT-13.5) E O AVISO PARA O APP GUARDAR (MNT-13.6) ─────────────────────────────
   const pilha=React.useRef<{lista:Comando[];ponteiro:number}>({lista:[],ponteiro:0});
@@ -1144,8 +1216,8 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
       if(!cs||!ct||!porId.has(e.from)||!porId.has(e.to))return;
       if(layout==="radial"){mapa.set(id,[bordaNaDirecao(cs,centroDe(ct)),bordaNaDirecao(ct,centroDe(cs))]);return}
       if(edgeShape!=="step")return;
-      const doElk=elk?.rotas.get(id);
-      const noLugar=(no:string)=>{const a=elk?.posicoes.get(no),c=caixas.get(no);return !!a&&!!c&&Math.abs(a.x-c.x)<0.5&&Math.abs(a.y-c.y)<0.5};
+      const doElk=elkVisto?.rotas.get(id);
+      const noLugar=(no:string)=>{const a=elkVisto?.posicoes.get(no),c=caixas.get(no);return !!a&&!!c&&Math.abs(a.x-c.x)<0.5&&Math.abs(a.y-c.y)<0.5};
       if(doElk&&noLugar(e.from)&&noLugar(e.to)&&naBorda(doElk[0],cs)&&naBorda(doElk[doElk.length-1],ct)&&!rotaCruza(doElk,menos(e.from,e.to))){mapa.set(id,doElk);return}
       const as=alcaDe(e.from,e.fromPort,"source"),at=alcaDe(e.to,e.toPort,"target");
       const desl=ident[i].deslocamento,ddx=vertical?desl:0,ddy=vertical?0:desl;
@@ -1162,7 +1234,7 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
       pendentes.push({id,de:e.from,para:e.to,s:sp,t:tp,ls:as.position,lt:at.position,chave});
     });
     return {mapa,pendentes,obstaculos};
-  },[desenhadas,ident,caixas,abertos,ocultos,movendo,porId,contemFilhos,orientation,layout,edgeShape,elk,desvios,vertical]);
+  },[desenhadas,ident,caixas,abertos,ocultos,movendo,porId,contemFilhos,orientation,layout,edgeShape,elkVisto,desvios,vertical]);
   const chavePendentes=tracados.pendentes.map(p=>`${p.id}@${p.chave}`).join("|");
   React.useEffect(()=>{
     if(!tracados.pendentes.length||movendo.size)return;
@@ -1369,6 +1441,10 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
           `style.css`, que é a identidade deles e não entra. Os botões de zoom (`controls`) são
           `IconButton` da Aurea, num `Panel` do motor (que só posiciona). */}
       <Background gap={editavel&&grid?GRADE:undefined}/>
+      {guias.length>0&&<ViewportPortal>
+        {guias.map(g=><div key={`${g.eixo}${g.em}`} className={`graph-guide graph-guide-${g.eixo}`} aria-hidden="true"
+          style={g.eixo==="x"?{transform:`translate(${g.em}px, ${g.de}px)`,blockSize:g.ate-g.de}:{transform:`translate(${g.de}px, ${g.em}px)`,inlineSize:g.ate-g.de}}/>)}
+      </ViewportPortal>}
       <Comandos raiz={raiz} teclado={teclado} focusId={focusId} pedidoDeCaber={pedidoDeCaber} controls={!!controls}
                 apiRef={apiRef} linhas={linhas} forma={edgeShape} titulo={label??s.graphLabel} desenho={tracados}
                 editavel={editavel} barra={barra} acoes={acoes}/>

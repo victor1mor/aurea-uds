@@ -371,6 +371,16 @@
         "bottom"
       ]
     },
+    "Guia": {
+      "module": "graph-geometria",
+      "raw": "{ eixo: \"x\" | \"y\"; em: number; de: number; ate: number; }",
+      "union": null
+    },
+    "PontaDoArraste": {
+      "module": "graph-geometria",
+      "raw": "{ meu: Ponto; outro: Ponto; eixo: \"x\" | \"y\"; }",
+      "union": null
+    },
     "Ponte": {
       "module": "graph-geometria",
       "raw": "{ de: number; ate: number; }",

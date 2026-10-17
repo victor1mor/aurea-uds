@@ -4627,6 +4627,12 @@ button.graph-node-body { cursor:pointer; }
 /* A pastilha do meio (marca, número, grupo) e o nome da porta na ponta são HTML sobre o desenho. */
 .graph-edge-chip { position:absolute; z-index:var(--graph-label-z); display:inline-flex; align-items:center; gap:var(--space-1); padding:var(--space-05) var(--space-2); border-radius:var(--radius-control); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:all; }
 .graph-edge-end { position:absolute; z-index:var(--graph-label-z); padding:0 var(--space-1); border-radius:var(--radius-xs); background:var(--xy-edge-label-background-color); color:var(--xy-edge-label-color); font-size:var(--graph-edge-label-size,var(--text-xs)); line-height:var(--leading-tight); white-space:nowrap; pointer-events:none; }
+/* As guias do arraste (MNT-28, 17/10/2026): onde o nó encaixa no vizinho, como no draw.io — desenho cheio, na espessura
+   do foco e na cor dele (a que se vê nos dois temas), por cima das linhas e dos nós e sem receber o ponteiro. A posição e
+   o comprimento vêm do mapa, como os da pastilha da linha. */
+.graph-guide { position:absolute; z-index:var(--graph-label-z); background:var(--focus-strong); pointer-events:none; }
+.graph-guide-x { inline-size:var(--focus-width); margin-inline-start:calc(var(--focus-width) / -2); }
+.graph-guide-y { block-size:var(--focus-width); margin-block-start:calc(var(--focus-width) / -2); }
 /* `nodrag`/`nopan`: a pastilha é HTML sobre o mapa, e as duas classes dizem ao motor para não arrastar
    nem rolar a tela por ela (o botão do grupo precisa do clique). Fora do botão, o cursor é o comum. */
 .graph-edge-chip.nodrag.nopan { cursor:default; }

@@ -39,6 +39,30 @@ export declare function remapear<T extends {
     para: string;
     n: number;
 }[];
+export declare const naGrade: (v: number, passo: number) => number;
+export declare function rotaNaGrade(rota: readonly Ponto[], dDe: Ponto, dPara: Ponto): Ponto[];
+export type Guia = {
+    eixo: "x" | "y";
+    em: number;
+    de: number;
+    ate: number;
+};
+/**
+ * A ponta de uma linha ligada ao nó arrastado (o Victor, 17/10/2026: "todos consigo alinhar, menos esse — nunca fica
+ * reto"): a porta 1 fica a um terço do lado do Núcleo, e nem a borda nem o centro do outro nó caem embaixo dela. `meu` é
+ * onde a linha sai do nó arrastado, medido do canto dele; `outro`, onde ela chega no outro nó, no mapa. `eixo` é o que
+ * acerta para a linha ficar reta: `x` quando as duas pontas são de cima e de baixo; `y`, quando são dos lados.
+ */
+export type PontaDoArraste = {
+    meu: Ponto;
+    outro: Ponto;
+    eixo: "x" | "y";
+};
+export declare function guiasDoArraste(eu: Caixa, outros: readonly Caixa[], tolerancia: number, pontas?: readonly PontaDoArraste[]): {
+    x: number;
+    y: number;
+    guias: Guia[];
+};
 /** Tira os pontos repetidos e os do meio de um trecho reto: a ponte e o canto contam os trechos. */
 export declare function simplificar(pontos: readonly Ponto[]): Ponto[];
 /** O ponto no MEIO do comprimento — onde fica o rótulo e a pastilha da linha. */

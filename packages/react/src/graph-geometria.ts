@@ -163,6 +163,94 @@ export function remapear<T extends {from:string;to:string}>(arestas:readonly T[]
   return saida;
 }
 
+// ── NA GRADE (MNT-28, 17/10/2026) ─────────────────────────────────────────────────────────────
+// O arranjo automático põe os nós onde o motor quer (0, 270, 540…), fora da grade de 16 do modo de
+// arrumar: o nó arrastado só voltava a 528 ou 544, e a linha ganhava um degrau (o Victor, comparando com
+// o draw.io). Com a grade ligada, cada nó vai para o ponto da grade mais perto, e a rota em ângulo reto
+// acompanha: a ponta anda com o nó, e a primeira e a última dobra corrigem só o eixo do trecho delas,
+// para o trecho continuar reto. A reta que sai do eixo vira um degrau no meio.
+export const naGrade=(v:number,passo:number)=>Math.round(v/passo)*passo;
+export function rotaNaGrade(rota:readonly Ponto[],dDe:Ponto,dPara:Ponto):Ponto[]{
+  if(rota.length<2)return rota.map(p=>({x:p.x,y:p.y}));
+  const p=rota.map(q=>({x:q.x,y:q.y})),n=p.length-1;
+  const deitado=(a:Ponto,b:Ponto)=>Math.abs(a.y-b.y)<0.5;
+  const h0=deitado(rota[0],rota[1]),hN=deitado(rota[n-1],rota[n]);
+  p[0]={x:p[0].x+dDe.x,y:p[0].y+dDe.y};
+  p[n]={x:p[n].x+dPara.x,y:p[n].y+dPara.y};
+  if(n===1){
+    if(h0&&Math.abs(p[0].y-p[1].y)>=0.5){const mx=(p[0].x+p[1].x)/2;return simplificar([p[0],{x:mx,y:p[0].y},{x:mx,y:p[1].y},p[1]])}
+    if(!h0&&Math.abs(p[0].x-p[1].x)>=0.5){const my=(p[0].y+p[1].y)/2;return simplificar([p[0],{x:p[0].x,y:my},{x:p[1].x,y:my},p[1]])}
+    return p;
+  }
+  p[1]=h0?{x:p[1].x,y:p[0].y}:{x:p[0].x,y:p[1].y};
+  p[n-1]=hN?{x:p[n-1].x,y:p[n].y}:{x:p[n].x,y:p[n-1].y};
+  return simplificar(p);
+}
+
+// ── AS GUIAS DO ARRASTE (MNT-28) ──────────────────────────────────────────────────────────────
+// Como no draw.io: ao arrastar, o nó encaixa na borda ou no centro de um vizinho que esteja perto — a
+// esquerda na esquerda, o centro no centro, a direita na direita; o mesmo em cima, no meio e embaixo —, e
+// aparece a guia, de um ao outro. Cada eixo encaixa sozinho, no vizinho mais perto. O encaixe da guia
+// manda sobre o da grade: é o que faz o nó voltar à linha dos outros.
+export type Guia={eixo:"x"|"y";em:number;de:number;ate:number};
+/**
+ * A ponta de uma linha ligada ao nó arrastado (o Victor, 17/10/2026: "todos consigo alinhar, menos esse — nunca fica
+ * reto"): a porta 1 fica a um terço do lado do Núcleo, e nem a borda nem o centro do outro nó caem embaixo dela. `meu` é
+ * onde a linha sai do nó arrastado, medido do canto dele; `outro`, onde ela chega no outro nó, no mapa. `eixo` é o que
+ * acerta para a linha ficar reta: `x` quando as duas pontas são de cima e de baixo; `y`, quando são dos lados.
+ */
+export type PontaDoArraste={meu:Ponto;outro:Ponto;eixo:"x"|"y"};
+export function guiasDoArraste(eu:Caixa,outros:readonly Caixa[],tolerancia:number,pontas:readonly PontaDoArraste[]=[]):{x:number;y:number;guias:Guia[]}{
+  const marcasX=(c:Caixa)=>[c.x,c.x+c.larg/2,c.x+c.larg],marcasY=(c:Caixa)=>[c.y,c.y+c.alt/2,c.y+c.alt];
+  let dx=0,dy=0,melhorX=Infinity,melhorY=Infinity;
+  let retaX:PontaDoArraste|undefined,retaY:PontaDoArraste|undefined;
+  const mx=marcasX(eu),my=marcasY(eu);
+  for(const o of outros){
+    const ox=marcasX(o),oy=marcasY(o);
+    for(let i=0;i<3;i++){
+      const ex=ox[i]-mx[i],ey=oy[i]-my[i];
+      if(Math.abs(ex)<=tolerancia&&Math.abs(ex)<melhorX){melhorX=Math.abs(ex);dx=ex}
+      if(Math.abs(ey)<=tolerancia&&Math.abs(ey)<melhorY){melhorY=Math.abs(ey);dy=ey}
+    }
+  }
+  // A linha reta vem DEPOIS e ganha no empate: com a mesma distância, endireitar a linha vale mais que alinhar a caixa.
+  for(const p of pontas){
+    if(p.eixo==="x"){const e=p.outro.x-(eu.x+p.meu.x);if(Math.abs(e)<=tolerancia&&Math.abs(e)<=melhorX){melhorX=Math.abs(e);dx=e;retaX=p}}
+    else{const e=p.outro.y-(eu.y+p.meu.y);if(Math.abs(e)<=tolerancia&&Math.abs(e)<=melhorY){melhorY=Math.abs(e);dy=e;retaY=p}}
+  }
+  const novo:Caixa={...eu,x:eu.x+dx,y:eu.y+dy};
+  if(retaX||retaY){
+    // A guia da linha reta corre por cima da própria linha, de uma ponta à outra.
+    const guias:Guia[]=[];
+    if(retaX){const y0=novo.y+retaX.meu.y;guias.push({eixo:"x",em:retaX.outro.x,de:Math.min(y0,retaX.outro.y),ate:Math.max(y0,retaX.outro.y)})}
+    if(retaY){const x0=novo.x+retaY.meu.x;guias.push({eixo:"y",em:retaY.outro.y,de:Math.min(x0,retaY.outro.x),ate:Math.max(x0,retaY.outro.x)})}
+    const resto=guiasDeAlinhamento(novo,outros,retaX?Infinity:melhorX,retaY?Infinity:melhorY);
+    return {x:novo.x,y:novo.y,guias:[...guias,...resto]};
+  }
+  return {x:novo.x,y:novo.y,guias:guiasDeAlinhamento(novo,outros,melhorX,melhorY)};
+}
+function guiasDeAlinhamento(novo:Caixa,outros:readonly Caixa[],melhorX:number,melhorY:number):Guia[]{
+  const marcasX=(c:Caixa)=>[c.x,c.x+c.larg/2,c.x+c.larg],marcasY=(c:Caixa)=>[c.y,c.y+c.alt/2,c.y+c.alt];
+  // UMA guia por eixo: com o mesmo tamanho, alinhar o topo alinha também o meio e a base, e três linhas juntas
+  // não dizem nada. Vale a do centro, se ele alinhou; senão, a da borda. Ela vai de ponta a ponta de quem alinhou.
+  const guias:Guia[]=[];
+  const umaGuia=(eixo:"x"|"y",marcas:(c:Caixa)=>number[])=>{
+    const minhas=marcas(novo);
+    for(const i of [1,0,2]){
+      const juntos=outros.filter(o=>Math.abs(marcas(o)[i]-minhas[i])<0.5);
+      if(!juntos.length)continue;
+      const todos=[novo,...juntos];
+      guias.push(eixo==="x"
+        ?{eixo,em:minhas[i],de:Math.min(...todos.map(c=>c.y)),ate:Math.max(...todos.map(c=>c.y+c.alt))}
+        :{eixo,em:minhas[i],de:Math.min(...todos.map(c=>c.x)),ate:Math.max(...todos.map(c=>c.x+c.larg))});
+      return;
+    }
+  };
+  if(melhorX<Infinity)umaGuia("x",marcasX);
+  if(melhorY<Infinity)umaGuia("y",marcasY);
+  return guias;
+}
+
 // ── O TRAÇADO (MNT-12.1 e 12.3) ───────────────────────────────────────────────────────────────
 /** Tira os pontos repetidos e os do meio de um trecho reto: a ponte e o canto contam os trechos. */
 export function simplificar(pontos:readonly Ponto[]):Ponto[]{
