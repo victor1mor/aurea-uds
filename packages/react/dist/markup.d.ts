@@ -101,7 +101,7 @@ export interface GridItemProps extends DivProps {
 /** O item da grade que sabe quantas colunas ocupa (GAR-03). Mora em `Grid.Item`, como `Card.Media`. */
 declare function GridItem({ span, className, ...props }: GridItemProps): React.JSX.Element;
 /** A largura máxima do `Container`, pelos nomes da escala de pontos. `xl` (1280) é o padrão. */
-export type ContainerSize = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+export type ContainerSize = "sm" | "md" | "lg" | "xl" | "2xl" | "docs" | "full";
 export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
     /** Até onde o conteúdo cresce: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280 (padrão) · `2xl` 1536 · `full` sem teto. */
     size?: ContainerSize;
@@ -348,8 +348,25 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     menuLabel?: string;
     /** O `id` do painel do celular. Padrão: `"aurea-header-menu"`. Troque só se a página tiver dois cabeçalhos de site. */
     menuId?: string;
+    /**
+     * A SEGUNDA LINHA (lote T, 17/10/2026): as áreas do site, cada uma com o ícone, como a linha das áreas da documentação da
+     * referência. A atual (`currentTab`) ganha `aria-current="page"` e o traço embaixo. Fica por último na ordem do Tab.
+     */
+    tabs?: HeaderTab[];
+    /** O `id` da área atual da segunda linha. */
+    currentTab?: string;
+    /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
+    tabsLabel?: string;
 }
-export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, itemsJustify, size, blurred, menuActions, navLabel, menuLabel, menuId, children, className, ...props }: HeaderProps): React.JSX.Element;
+/** Uma área da segunda linha do `Header`: o nome, o endereço e, se quiser, o ícone (o desenho que o app passa). */
+export interface HeaderTab {
+    id: string;
+    label: ReactNode;
+    href?: string;
+    icon?: ReactNode;
+    render?: SidebarItem["render"];
+}
+export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, itemsJustify, size, blurred, menuActions, navLabel, menuLabel, menuId, tabs, currentTab, tabsLabel, children, className, ...props }: HeaderProps): React.JSX.Element;
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;

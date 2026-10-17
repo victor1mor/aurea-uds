@@ -100,6 +100,30 @@
       "description": "Passes Topbar's `divider` to the flush bar the shell builds."
     },
     {
+      "name": "layout",
+      "type": "\"app\" | \"docs\"",
+      "default": "\"app\"",
+      "description": "The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. Below 1024 the sidebar is the drawer and the text keeps 24 from the edge."
+    },
+    {
+      "name": "topbarTabs",
+      "type": "HeaderTab[]",
+      "default": "—",
+      "description": "The second row of the bar on top: the site's areas, forwarded as the Header's tabs."
+    },
+    {
+      "name": "topbarCurrentTab",
+      "type": "string",
+      "default": "—",
+      "description": "The id of the current area, forwarded as the Header's currentTab."
+    },
+    {
+      "name": "topbarTabsLabel",
+      "type": "string",
+      "default": "\"Sections\"",
+      "description": "The accessible name of the second row, forwarded as the Header's tabsLabel."
+    },
+    {
       "name": "contentVariant",
       "type": "\"surface\" | \"plain\"",
       "default": "\"surface\"",
@@ -189,6 +213,10 @@
       "floating",
       "flush",
       "plain"
+    ],
+    "layout": [
+      "app",
+      "docs"
     ]
   }
 }

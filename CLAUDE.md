@@ -485,6 +485,19 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    17/10/2026** (entre 08:16 e 08:24, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #70 (que levou
    junto o #69, o registro da 0.33.0).
 
+31. **`0.35.0`, o lote T, feito em 17/10/2026** na branch `claude/lote-t` — o mapa de rede (MNT-28: o nó movido encaixa na
+   grade, no vizinho e onde a linha fica reta) e o site no arranjo da documentação da referência, pedido a pedido com as
+   fotos dela ao lado das nossas: `AppShell layout="docs"`, `Header tabs`, `Container size="docs"`, cinco tokens de
+   largura, a segunda linha da ADR-0072 e cada área com a sua lateral — [ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md),
+   seção "Lote T". Aprovado na bancada (*"aprovado, pode seguir"*). A trava do site (`scripts/trava_do_site.py`) entrou
+   como rascunho, FORA do validador: 30 reprovações, que são o trabalho do próximo lote. ⚠ **As regras novas:** medida de
+   site se tira da PÁGINA da referência, na largura da tela do Victor (a dele: 1920 com zoom de 150% = 1280 × 663), e se
+   repete como número na prova (`site-docs-arranjo.spec.ts`); e o texto se mede pelo TEXTO (`Range`), não pela caixa do
+   item — medi a caixa, chamei de texto, e levei um "16" errado ao Victor. ⚠ **As lições:** a barra de rolagem
+   escondida na coluna apareceu no índice de DENTRO, que numa tela baixa encolhe e rola sozinho; um `sticky` dentro de
+   outro soma os deslocamentos; e a borda transparente do sem linha ainda soma 1 à medida (a barra tinha 101, e tudo
+   embaixo ficava 1 abaixo da referência).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -628,7 +641,8 @@ no git.
   não entra. O que só a linha separava do fundo ganha FUNDO translúcido da cor do texto (`--fill-1` 6%, `--fill-2`
   10%, `--fill-3` 20%; no nativo, `preenchimento()`), e OPACO onde algo passa por trás ou uma peça cobre outra
   (`-solid`; `misturaOpaca()`). O aviso que era linha (inválido, escolhido, erro) é fundo. O foco fica (no nativo, é
-  borda). A ÚNICA linha: a do cartão de contorno, clara (o texto a 10%). Quem cobra: `tests/unit/sem-linha.test.tsx`
+  borda). As DUAS linhas: a do cartão de contorno, clara (o texto a 10%), e a de ponta a ponta embaixo das áreas do
+  site (`Header` com `tabs` e `divider`, decisão do Victor de 17/10/2026, ADR-0072 item 9). Quem cobra: `tests/unit/sem-linha.test.tsx`
   (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça

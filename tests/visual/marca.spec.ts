@@ -79,7 +79,12 @@ async function medir(page: Page, marca: string, tema: string): Promise<Medida> {
     };
     const lateral = document.querySelector(".app-shell > .sidebar")!;
     const painelCor = getComputedStyle(lateral).backgroundColor;
-    const painel = rgb(painelCor);
+    // O painel se compõe sobre a PÁGINA, e não sobre o branco: desde o lote T (17/10/2026) a lateral do site é a SEM
+    // caixa (`plain`, fundo transparente), e sobre o branco o texto claro do escuro dava 1:1 contra um painel que não
+    // existe. Com a caixa (fundo opaco), o resultado é o mesmo de antes.
+    const paginaRgb = rgb(getComputedStyle(document.body).backgroundColor);
+    const atrasRgb = rgb(getComputedStyle(document.querySelector(".app-shell")!).backgroundColor, `rgb(${paginaRgb.join(",")})`);
+    const painel = rgb(painelCor, `rgb(${atrasRgb.join(",")})`);
     const painelHex = `rgb(${painel.join(",")})`;
     // ADR-0067: a lateral do site é a `Sidebar` da Aurea — o atual se marca com aria-current.
     const ativo = lateral.querySelector('a[aria-current="page"]')!;

@@ -71,6 +71,11 @@
   --z-toast:100;
   --sidebar-width:16.5rem;
   --sidebar-rail:4.25rem;
+  --docs-width:87.5rem;
+  --docs-sidebar-width:13.75rem;
+  --docs-aside-width:16.75rem;
+  --docs-toc-width:15rem;
+  --docs-text-width:56.25rem;
   --topbar-height:4rem;
   --content-max:102.5rem;
   --breakpoint-2xs:360px;

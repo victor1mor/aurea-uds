@@ -4,6 +4,7 @@
 - **Estado:** aceita · feita na branch `claude/lote-s`, na `0.34.0`. A primeira versão (só tirar a linha) foi
   REPROVADA na bancada — peças sumiram junto com o fundo —; os fundos novos (item 7) e a linha clara da caixa da
   vitrine (item 8) foram escolhidos pelo Victor, peça a peça, olhando a bancada: *"caixa B, o resto tudo B"*.
+  **Ampliada em 17/10/2026** (lote T, `0.35.0`): a segunda linha, a de ponta a ponta embaixo das áreas do site (item 9).
 - **Origem:** o Victor, 16/10/2026, marcando na vitrine o segmentado, as abas e o aviso: *"não tem borda não tem linha
   ao redor e isso acho bonito quero fazer isso em todos os componentes, sem exceção, precisa me provar que fez em
   todos"*. Depois de ver a proposta simulada em todas as páginas do site, lado a lado com a de hoje, e as peças em que
@@ -23,7 +24,8 @@ que ele marcou como bonitas já estavam nessa faixa (o segmentado 1,3:1, o aviso
 
 ## Decisão
 
-1. **Nenhuma peça desenha borda** — com UMA exceção, decidida pelo Victor: o cartão de contorno (item 8). Toda cor de borda é `transparent` — no core, no site, nas peças da web, nos
+1. **Nenhuma peça desenha borda** — com DUAS exceções, decididas pelo Victor: o cartão de contorno (item 8) e a linha
+   embaixo das áreas do site (item 9). Toda cor de borda é `transparent` — no core, no site, nas peças da web, nos
    exemplos do site e no nativo — e o anel fino de `box-shadow` (deslocamento 0, desfoque 0, até 2 de espessura) sai,
    porque é a mesma linha por outro caminho. **A espessura fica**: a borda continua lá, transparente, e nenhuma
    medida de peça muda.
@@ -65,6 +67,12 @@ que ele marcou como bonitas já estavam nessa faixa (o segmentado 1,3:1, o aviso
    texto a 10% (1,34:1 no escuro, 1,21:1 no claro). Sem ela a caixa, que não tem fundo, deixava de existir; o Victor viu
    as três saídas (sumir, linha clara, fundo leve) na página inicial de verdade e escolheu a linha clara. As duas provas
    a trazem por escrito, só para esse seletor sozinho.
+9. **A segunda linha: a de ponta a ponta embaixo das áreas do site** (o `Header` com `tabs` e `divider`; no site, a
+   barra de cima com a linha das áreas). Decidida pelo Victor em 17/10/2026, olhando a documentação da referência ao
+   lado da nossa: *"adicione essa linha que tem abaixo das opções Docs Components Patterns…"* e, à pergunta se era a
+   linha que vai de uma ponta à outra, *"sim"*. É a da referência: 1 de altura, pendurada logo abaixo da barra (a
+   barra fica com 100 cravados), na cor da linha da Aurea (`--border`), e o traço da área atual encosta nela. É
+   desenhada como fundo de um `::after`, e não como borda — por isso as duas provas não a veem; ela vale só ali.
 
 ## Alternativas rejeitadas
 

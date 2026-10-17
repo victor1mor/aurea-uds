@@ -403,11 +403,16 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
         : h("div", {key: nome, className: "related-card"}, h("strong", null, nome), resumo ? h("span", null, resumo) : null)))) : null,
     // rótulo distinto do <nav> do componente Pagination: dois landmarks de navegação com
     // o MESMO nome é violação (axe landmark-unique) e o leitor de tela não distingue.
+    // O ANTERIOR E O PRÓXIMO como os da referência (lote T, SITE-09 — o Victor: "nossos botões estão quebrando por conta
+    // de texto longo; faça como eles, se o texto for longo coloque …"): lado a lado, a seta junto do nome, e a descrição
+    // numa linha só, cortada com "…" (o `Text truncate`). Sem descrição, "Previous page" / "Next page", como lá.
     h("nav", {className: "prevnext", "aria-label": "Previous and next"},
-      prev ? h("a", {className: "pn", href: prev.href}, h("small", null, "← Previous"), h("strong", null, prev.name),
-        prev.summary ? h("span", null, prev.summary) : null) : h("span"),
-      next ? h("a", {className: "pn pn-next", href: next.href}, h("small", null, "Next →"), h("strong", null, next.name),
-        next.summary ? h("span", null, next.summary) : null) : h("span")),
+      prev ? h("a", {className: "pn", href: prev.href},
+        h("span", {className: "pn-nome"}, h(A.Icon, {name: "caret-left"}), h("strong", null, prev.name)),
+        h(A.Text, {type: "body-sm", tone: "muted", truncate: true}, prev.summary || "Previous page")) : null,
+      next ? h("a", {className: "pn pn-next", href: next.href},
+        h("span", {className: "pn-nome"}, h("strong", null, next.name), h(A.Icon, {name: "caret-right"})),
+        h(A.Text, {type: "body-sm", tone: "muted", truncate: true}, next.summary || "Next page")) : null),
     // O texto do "Copy Markdown": vai na própria página, sem rede, e o catalog.js copia. Vai como JSON, com
     // todo "<" escrito "<": cru, o código dos exemplos ("<Link href=…>") aparecia como TAG no HTML — o
     // check 45 do validate.py leu um link de exemplo como recurso de fora, e um "</script>" fecharia o bloco.
@@ -429,8 +434,19 @@ function paraMarkdown({title, lede, imports, demo, points = [], exemplos = [], p
   ].filter(Boolean).join("\n\n") + "\n";
 }
 
-// prev/next: o vizinho na ordem linear do tipo, ou nada nas pontas — com o resumo, como os cartões da referência.
-const pn = (item, href, resumo = () => null) => item ? {name: item.name ?? item, href: href(item), summary: resumo(item)} : null;
+// O ANTERIOR E O PRÓXIMO são os VIZINHOS NA LATERAL da área, como na documentação da referência: lá a lista é a árvore da
+// área, em ordem — a mesma da lateral (conferido no código do motor dela, 17/10/2026). Antes cada tipo tinha a sua ordem
+// (a dos componentes, por categoria): o Carousel apontava para AvatarGroup e Gallery, e não para Card e Chart, os vizinhos
+// dele na lateral. Com o resumo de cada página, como os da referência; sem resumo, o texto padrão ("Previous page").
+const resumoDaPagina = arquivo => fichas.find(f => `${slug(f.name)}.html` === arquivo)?.summary
+  ?? patterns.find(x => `${x.slug}.html` === arquivo)?.description
+  ?? blocks.find(x => `${x.slug}.html` === arquivo)?.description ?? null;
+const vizinhos = (area, arquivo) => {
+  const linha = MENUS[area]().flatMap(g => g.items);
+  const k = linha.findIndex(x => x.id === arquivo);
+  const um = x => x ? {name: x.label, href: x.href, summary: resumoDaPagina(x.id)} : null;
+  return k < 0 ? {prev: null, next: null} : {prev: um(linha[k - 1]), next: um(linha[k + 1])};
+};
 
 // Componente de PÁGINA (hoje só o AppShell) é dono do <main>, do <header> e do <aside> do
 // documento. Renderizado dentro de outra página ele duplica os landmarks dela — medido com axe
@@ -575,8 +591,7 @@ function componentPage(f, i) {
               h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--subtle-foreground)"}}, pr.default || "—")),
               h("td", null, pr.description))))))} : null,
     ],
-    prev: pn(ordered[i - 1], x => `./${slug(x.name)}.html`, x => x.summary),
-    next: pn(ordered[i + 1], x => `./${slug(x.name)}.html`, x => x.summary),
+    ...vizinhos(f.kind === "hook" ? "hooks" : "components", `${slug(f.name)}.html`),
     markdown: paraMarkdown({title: f.name, lede: c?.description || f.summary,
       imports: c?.install || bruto.install || `import {${f.name}} from "@aurea-uds/react";`,
       demo: main, points: c?.features || [], exemplos, props: f.props || []}),
@@ -723,8 +738,7 @@ function patternPage(p, i) {
       : p.render, code: p.code, description: p.note},
     imports: importLine(p.uses || [p.component]),
     related: relacionados([p.component, ...(p.uses || [])]),
-    prev: pn(patterns[i - 1], x => `./${x.slug}.html`, x => x.description),
-    next: pn(patterns[i + 1], x => `./${x.slug}.html`, x => x.description),
+    ...vizinhos("patterns", `${p.slug}.html`),
     markdown: paraMarkdown({title: p.name, lede: p.description, imports: importLine(p.uses || [p.component]), demo: {code: p.code}}),
   });
 }
@@ -741,8 +755,7 @@ function blockPage(b, i) {
       : b.render},
     imports: importLine(b.uses),
     related: relacionados(b.uses),
-    prev: pn(blocks[i - 1], x => `./${x.slug}.html`, x => x.description),
-    next: pn(blocks[i + 1], x => `./${x.slug}.html`, x => x.description),
+    ...vizinhos("blocks", `${b.slug}.html`),
     markdown: paraMarkdown({title: b.name, lede: b.description, imports: importLine(b.uses), demo: {code: b.code}}),
   });
 }
@@ -871,8 +884,7 @@ function recipePage(id, archetype, i, ids) {
       imports: importLine(c.uses), demo: {code: c.code}}),
     extras: secoes.map(s => ({id: s.id, label: s.label,
       node: h("section", {className: "block", key: s.id, id: s.id}, h("h2", null, s.label), ...s.nodes)})),
-    prev: ids[i - 1] ? {name: recipeTitle(ids[i - 1]), href: `./recipe-${slug(ids[i - 1])}.html`} : null,
-    next: ids[i + 1] ? {name: recipeTitle(ids[i + 1]), href: `./recipe-${slug(ids[i + 1])}.html`} : null,
+    ...vizinhos("recipes", `recipe-${slug(id)}.html`),
   });
 }
 
@@ -1026,6 +1038,10 @@ function hooksPage() {
 const AREAS = [["Docs", "getting-started.html", "start"], ["Components", "components.html", "components"],
   ["Patterns", "patterns.html", "patterns"], ["Blocks", "blocks.html", "blocks"], ["Recipes", "recipes.html", "recipes"],
   ["Hooks", "hooks.html", "hooks"], ["Tokens", "tokens.html", "tokens"]];
+// O ÍCONE de cada área (lote T, SITE-04: "o ícone em cada área do topo", como a linha das áreas da documentação da
+// referência). Docs é o livro aberto dela; Components, os quatro losangos (o mais perto do dela); os outros, propostos.
+const ICONE_DA_AREA = {start: "book-open", components: "diamonds-four", patterns: "puzzle-piece", blocks: "squares-four",
+  recipes: "cooking-pot", hooks: "brackets-curly", tokens: "swatches"};
 
 // O MENU de cada área, como itens da `Sidebar` (grupos com título; o id do item é o arquivo dele).
 // Componentes: "Overview" e a lista em ordem ALFABÉTICA, como a da referência, com os selos
@@ -1033,13 +1049,22 @@ const AREAS = [["Docs", "getting-started.html", "start"], ["Components", "compon
 const seloBadge = nome => { const s = seloDe(nome); return s ? h(A.Badge, {size: "xs", tone: s === "New" ? "primary" : "neutral"}, s) : undefined; };
 const item = (label, href, badge) => ({id: href, label, href: `./${href}`, ...(badge ? {badge} : {})});
 const alfabetico = list => [...list].sort((a, b) => a.name.localeCompare(b.name));
+// CADA ÁREA COM A SUA LATERAL, como na documentação da referência, onde cada área do topo tem a sua árvore (lote T,
+// 17/10/2026 — o Victor, com as fotos de Tokens e Hooks mostrando a lista de componentes: "adivinha?"). Docs, Hooks e
+// Tokens usavam o menu de Components. A área Docs completa, com os itens da referência, é o SITE-03 (lote U).
+const menuDocs = () => [{id: "overview", label: "Overview", items: [item("Getting Started", "getting-started.html")]}];
 const menuComponentes = () => [
-  {id: "overview", label: "Overview", items: [item("Getting Started", "getting-started.html"), item("All Components", "components.html")]},
+  {id: "overview", label: "Overview", items: [item("All Components", "components.html")]},
   {id: "components", label: "Components", items: alfabetico(fichas.filter(f => f.kind !== "hook"))
     .map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
+].filter(g => g.items.length);
+// Os hooks moram na área Hooks: a página de cada um marca "Hooks" no topo, e não "Components".
+const menuHooks = () => [
+  {id: "overview", label: "Overview", items: [item("All Hooks", "hooks.html")]},
   {id: "hooks", label: "Hooks", items: alfabetico(fichas.filter(f => f.kind === "hook"))
     .map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
 ].filter(g => g.items.length);
+const menuTokens = () => [{id: "overview", label: "Overview", items: [item("All Tokens", "tokens.html")]}];
 const menuPatterns = () => [{id: "overview", label: "Overview", items: [item("All Patterns", "patterns.html")]},
   ...Object.entries(patternsByComponent).map(([cmp, list]) => ({id: `p-${slug(cmp)}`, label: cmp,
     items: list.map(p => item(p.name, `${p.slug}.html`))}))];
@@ -1049,7 +1074,7 @@ const menuBlocks = () => [{id: "overview", label: "Overview", items: [item("All 
 const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
 const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
   {id: "archetypes", label: "Archetypes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
-const MENUS = {start: menuComponentes, components: menuComponentes, hooks: menuComponentes, tokens: menuComponentes,
+const MENUS = {start: menuDocs, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
 const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
@@ -1128,12 +1153,9 @@ function topoDoSite(section) {
       // A chave de três posições do topo da referência (15/10/2026): claro, escuro e sistema.
       chaveDeTema(),
       botaoGitHub()),
-    // AS ÁREAS POR ÚLTIMO NO CÓDIGO, porque aparecem na segunda linha. Vinham primeiro e desciam por `order:3`:
-    // o Tab ia da marca para a linha de baixo e voltava para a busca, em cima (WCAG 2.4.3; a trava
-    // `ordem-de-foco.spec.ts` pegou nas 410 páginas, 14/10/2026).
-    h("nav", {"aria-label": "Sections", className: "site-areas"},
-      ...AREAS.map(([label, href, id]) => h("a", {key: id, className: "site-area", href: `./${href}`,
-        ...(id === section ? {"aria-current": "page"} : {})}, label))));
+    // AS ÁREAS são a segunda linha do `Header` (`topbarTabs`, lote T): elas saíram daqui. O `Header` as põe por último na
+    // ordem do Tab, depois das ações — a regra da `ordem-de-foco.spec.ts` (WCAG 2.4.3, 14/10/2026) continua valendo.
+  );
   return {brand, topbar};
 }
 
@@ -1177,12 +1199,15 @@ function shell(activeHref, inner, section = "components") {
   }
   const menu = (MENUS[section] || menuComponentes)();
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
-    // A lateral da esquerda é a superfície FLUTUANTE da Aurea (o Victor, 13/10/2026: "sidebar precisa ser o
-    // nosso flutuante"), com a barra de rolagem clara que só aparece com o ponteiro em cima (o padrão da
-    // `Sidebar` desde a 0.32.0); a da direita, o "On this page", é a variante SEM CAIXA (`asideVariant:
-    // "plain"`) — variante do componente, e não regra do site (o Victor, 13/10/2026: "não edite componente
+    // O ARRANJO DE DOCUMENTAÇÃO da referência (lote T, 17/10/2026 — o Victor: "quero sidebar como da referência, que
+    // não seja mais flutuante", e o conteúdo centralizado): `layout="docs"` (o bloco de 1400 no centro) e a lateral
+    // SEM CAIXA (`sidebarVariant: "plain"`). Troca a decisão de 13/10/2026 ("sidebar precisa ser o nosso flutuante").
+    // As áreas do site são a segunda linha da barra (`topbarTabs`), com o ícone, e a linha de ponta a ponta embaixo
+    // (`topbarDivider`). Variantes do componente, e não regra do site (o Victor, 13/10/2026: "não edite componente
     // nosso, deve sempre criar novas variações").
-    h(A.AppShell, {brand, topbar, topbarVariant: "flush", contentVariant: "plain",
+    h(A.AppShell, {brand, topbar, topbarVariant: "flush", contentVariant: "plain", layout: "docs", sidebarVariant: "plain",
+      topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section,
+      topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${href}`, icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
       navItems: menu, currentNavId: activeHref || undefined, navLabel: "Contents", className: "site-shell",
       ...(toc.length ? {aside: h(A.TableOfContents, {items: toc}), asideLabel: "On this page", asideVariant: "plain"} : {})},
       node)));
@@ -1215,11 +1240,6 @@ function spriteFor(htmls) {
 
 const chrome = `
 /* Catálogo — chrome próprio mínimo; o resto é componente Aurea. Espaçamento tokenizado. */
-/* A lateral NÃO encolhe abaixo de 1366px como a dos docs: os rótulos aqui são nomes de
-   componente (o maior, CommandPaletteShell, pede 167px) e cortar nome de componente num
-   catálogo de componentes é inaceitável. 264px = o valor padrão do token. */
-/* ADR-0067: o menu da esquerda e o "On this page" com a largura da referência (220, medida a 1440). */
-.app-shell.site-shell { --sidebar-width:13.75rem; }
 .page-head { display:grid; gap:var(--space-3); margin-bottom:var(--space-6); }
 /* A linha QUEBRA: sem isso o botão "Copy Markdown" espremia o título a 81px no celular, e ele quebrava no meio da
    palavra (14/10/2026). Agora o botão desce quando não cabe ao lado. */
@@ -1239,19 +1259,16 @@ const chrome = `
 .block { display:grid; gap:var(--space-3); }
 .block > h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); line-height:var(--text-2xl-leading); font-weight:var(--weight-semibold); }
 .usage-points { margin:0; padding-inline-start:calc(var(--space-6) + var(--space-5)); display:grid; gap:var(--space-2); color:var(--muted-foreground); line-height:var(--leading-relaxed); }
-.block > pre, .block > .code-block-wrap .code-block { margin:0; padding:var(--space-6); border-radius:var(--radius-card); }
-.block > dl, .block > ul { margin:0; padding:var(--space-6); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); }
+/* A caixa de código do Usage é a do CodeBlock, sem ajuste (lote T, SITE-08 — o Victor: "a caixa do usage deles é mais
+   baixa"): o recheio de 16 do componente, perto dos 14 da referência. */
+.block > pre { margin:0; }
+.block > dl, .block > ul { margin:0; padding:var(--space-6); border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); }
 /* chip que embrulha um Status: o texto do Status já traz a cor certa, o chip só dá a
    cápsula para a linha ficar alinhada com as outras da Reference. */
 .chip-status .status { font:inherit; line-height:1; min-width:0; }
 /* o chip-status embrulha um Status, então quem trunca é o rótulo DELE — mesma razão do
    .chip-text: sem isto, a 320px o pill de "native: planned" perdia a borda direita. */
 .chip-status .status-label { min-width:0; overflow:hidden; text-overflow:ellipsis; }
-/* O índice da página acompanha a rolagem à direita, e só a partir de xl — abaixo disso a
-   coluna roubaria largura do conteúdo (a referência esconde no mesmo ponto). */
-.page-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-6); }
-.page-grid > .toc { display:none; }
-@media (min-width:1280px) { .page-grid { grid-template-columns:minmax(0,1fr) 180px; } .page-grid > .toc { display:grid; } }
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
 /* ALTURA IGUAL para todo demo, e sempre dentro da primeira tela (pedido do Victor: nada
    de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem da referência; abaixo
@@ -1260,27 +1277,10 @@ const chrome = `
    todos os demos continuam do mesmo tamanho, que é o ponto.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
-.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
-/* A barra de abas ocupa a largura do card e as abas dividem 50/50 — é o que a referência faz
-   (medido: barra w-full, 3px de padding, dois tabs flex:1). A peça é a .segmented da
-   Aurea, esticada: pele pill nossa, comportamento de segmented control. */
-.demo-tabs { display:flex; padding:var(--space-2); border-bottom:1px solid transparent; }
-.demo-tabs .segmented { flex:1; display:flex; }
-.demo-tabs .segmented button { flex:1; }
-/* A aba ativa é a cápsula elevada da própria .segmented — SEM pintar o texto de amarelo:
-   #F0B100 sobre a trilha clara do tema light dá 1.6:1 (axe), longe dos 4.5:1 do AA. */
+.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+/* As abas (.demo-tabs), os painéis (.demo-panel) e o código (.demo-code) do demo são os do core (a peça
+   CodeBlock preview): o site não repete as regras deles (a trava do site, lote T, 17/10/2026). */
 .demo-lede { margin:0 0 var(--space-3); }
-/* O painel toma o que sobra da altura fixa e rola por dentro — quem rola é ele, nunca o
-   card. min-height:0 destrava o encolher do flex, senão o conteúdo empurra a caixa. */
-.demo-panel { flex:1; min-height:0; overflow:auto; padding:var(--space-6); }
-/* --surface-inset de novo: o token do tema claro deixou de ser alias de --secondary (era a
-   causa do botão secondary desaparecer dentro do painel), então já afunda sem colidir. */
-.demo-panel[data-panel="preview"] { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--space-4); background:var(--surface-inset); }
-/* O painel de código é o CodeBlock copiável do core, sem moldura própria: o card já é a
-   moldura. Copiar, rolagem interna e o check de confirmação vêm do componente. */
-.demo-code { display:flex; padding:0; overflow:hidden; }
-.demo-code .code-block-wrap { flex:1; }
-.demo-code .code-block { padding:var(--space-6); border:0; border-radius:0; }
 /* preview em documento próprio (só o AppShell hoje): o iframe ocupa o painel inteiro e o painel
    larga o padding — a moldura já é o card, e o shell lá dentro tem a margem dele. */
 .demo-panel:has(> .demo-frame) { padding:0; }
@@ -1297,7 +1297,7 @@ const chrome = `
    a herança, mas o rótulo longo ("value / defaultValue") ainda embrulhava em duas linhas e
    o chip media 26px numa fila de 24px. Altura de componente não depende do texto.
    (Sem backtick neste comentário: ele vive DENTRO de um template literal.) */
-.chip { display:inline-flex; align-items:center; min-height:var(--space-6); padding:0 var(--space-2); border:1px solid transparent; border-radius:var(--radius-control); background:var(--secondary); color:var(--secondary-foreground); font:var(--text-xs)/1 var(--font-code); white-space:nowrap; max-width:100%; text-decoration:none; }
+.chip { display:inline-flex; align-items:center; min-height:var(--space-6); padding:0 var(--space-2); border:var(--border-width) solid transparent; border-radius:var(--radius-control); background:var(--secondary); color:var(--secondary-foreground); font:var(--text-xs)/1 var(--font-code); white-space:nowrap; max-width:100%; text-decoration:none; }
 .chip-text { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 a.chip-link:hover { color:var(--primary); border-color:transparent; }
 /* a bala da lista entra na caixa: o recuo dela soma ao padding da superfície. */
@@ -1306,50 +1306,37 @@ a.chip-link:hover { color:var(--primary); border-color:transparent; }
    motivo de o componente Grid parecer pronto em toda pagina deste catalogo e chegar sem nada
    no consumidor: funcionava na nossa documentacao e em lugar nenhum. O teste real da regra do
    core e' esta pagina continuar identica ao pixel — 15rem == 240px. */
-.tile { display:block; padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
+.tile { display:block; padding:var(--space-4); border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; }
 .tile:hover { border-color:transparent; }
 .tile p { margin:var(--space-2) 0 0; color:var(--muted-foreground); font-size:var(--text-sm); }
 /* amostra de token: cor num quadrado de raio de controle, dimensão numa régua da largura
    do próprio valor — a prova visual vem do token, não de um número copiado à mão. */
-.swatch { display:block; inline-size:var(--space-10); block-size:var(--space-6); border:1px solid transparent; border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); }
+.swatch { display:block; inline-size:var(--space-10); block-size:var(--space-6); border:var(--border-width) solid transparent; border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); }
 /* Sem linha (ADR-0072): a amostra perdeu o fio, e a cor igual ao fundo da linha sumia (o --white no claro). A sombra
    pequena separa, como na amostra do ColorSwatch. */
 .ruler { display:block; block-size:var(--space-2); max-inline-size:100%; border-radius:var(--radius-full); background:var(--primary); }
-.prevnext { display:flex; justify-content:space-between; gap:var(--space-4); margin-top:var(--space-8); }
-.pn { display:flex; flex-direction:column; gap:var(--space-05); padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:inherit; text-decoration:none; min-width:0; }
-.pn-next { text-align:end; margin-inline-start:auto; }
-.pn small { color:var(--muted-foreground); }
-.pn > span { color:var(--muted-foreground); font-size:var(--text-sm); }
-/* Nome de componente é UMA palavra longa ("CommandPalette", "ConfirmDialog") e não quebra
-   sozinho: a 320px, com a escala de letra da 0.8.8, os dois cartões somavam mais que a coluna
-   e a PÁGINA rolava de lado 4–11px. Quando os dois não cabem lado a lado, o de "Next" desce
-   para a linha de baixo — quebrar o nome no meio ("Breadc/rumb") foi tentado e fica pior. O
-   o break-word é só a rede para um nome maior que a coluna inteira: ele não muda a largura
-   mínima do cartão, então não impede a descida. No desktop nada muda: lá os dois cabem. */
-.prevnext { flex-wrap:wrap; }
-.pn strong { overflow-wrap:break-word; }
-.pn:hover { border-color:transparent; }
+/* Lado a lado enquanto a linha tem 512 ou mais, e um embaixo do outro abaixo disso, como o da referência (cada coluna,
+   (512 - 16) / 2 = 248). Quando só existe um, ele ocupa a linha (o "próximo" à direita), como lá. */
+.prevnext { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, calc((var(--space-16) * 8 - var(--space-4)) / 2)), 1fr)); gap:var(--space-4); margin-block:var(--space-8); }
+.pn { display:grid; gap:var(--space-2); min-inline-size:0; padding:var(--space-4); border-radius:var(--radius-card); color:inherit; font-size:var(--text-sm); text-decoration:none; }
+.pn:hover { background:var(--secondary); }
+.pn-next { text-align:end; }
+.pn-nome { display:flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); min-inline-size:0; font-weight:var(--weight-medium); }
+.pn-next .pn-nome { justify-content:flex-end; }
+.pn-nome strong { font-weight:inherit; overflow-wrap:anywhere; }
 /* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
    O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
    largura) e as ações; embaixo, as áreas do site. */
-.site-shell > .topbar, .site-top { flex-wrap:wrap; row-gap:0; }
+.site-top { flex-wrap:wrap; row-gap:0; }
 .site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
 .site-brand strong { font-size:var(--text-base); font-weight:var(--weight-semibold); }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
-.site-areas { flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-5); padding-block:var(--space-2); }
-.site-search { inline-size:min(100%, 25rem); margin-inline:auto; justify-content:flex-start; }
+/* A busca ENCOLHE antes de empurrar as ações para a linha de baixo, como a da referência (a 768 ela tem 255 lá): parte de
+   zero, cresce até 400 e, com a sobra, fica no meio (lote T — a 768, com a largura fixa, as ações desciam). */
+.site-search { flex:1 1 0; max-inline-size:25rem; margin-inline:auto; justify-content:flex-start; }
 /* As teclas na PONTA do botão, como a busca da referência. Desde que são uma caixinha por tecla (15/10/2026), elas moram
    num invólucro (".btn-kbds"): é ELE que vai para a ponta — a regra só na tecla parou de alcançar (o Victor viu). */
 .site-search > .kbd, .site-search > .btn-kbds { margin-inline-start:auto; }
-.site-area { padding-block:var(--space-1); border-bottom:var(--focus-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
-.site-area:hover { color:var(--foreground); }
-.site-area[aria-current="page"] { color:var(--foreground); border-bottom-color:transparent; }
-/* O traço da área ATUAL é o indicador, como o das abas (ADR-0072, item 5): desenho cheio no lugar da borda, que continua
-   transparente, e com a medida dela. Saiu junto com as linhas, e a área atual ficou só com a cor do texto. */
-.site-area { position:relative; }
-.site-area[aria-current="page"]::after { content:""; position:absolute; inset-inline:0; inset-block-end:calc(-1 * var(--focus-width)); block-size:var(--focus-width); background:var(--primary); }
-/* O conteúdo com a largura da referência (912, 816 úteis com o respiro de 48). */
-.site-shell > .content { max-width:57rem; padding:var(--space-8) var(--space-12) var(--space-4); }
 /* "Related Components" em cartões, e o "All Components" em grade de 3, como a referência. */
 .related-grid, .cat-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap:var(--space-4); }
 .cat-grid { gap:var(--space-10) var(--space-4); }
@@ -1393,8 +1380,8 @@ a.related-card:hover { border-color:transparent; }
 /* O conteúdo da vitrine centrado na caixa, com os 32 de respiro da referência em cima e embaixo (16 do cartão + 16). */
 .home-painel-miolo { display:flex; justify-content:center; padding-block:var(--space-4); }
 /* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
-.site-github-ink { fill:#fff; }
-[data-theme="light"] .site-github-ink { fill:#000; }
+.site-github-ink { fill:var(--white); }
+[data-theme="light"] .site-github-ink { fill:var(--black); }
 .home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
@@ -1670,13 +1657,14 @@ const paginas = [
   ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
   ["blocks.html", pageHtml("Blocks", "blocks.html", blocksIndex(), "blocks")],
   ["recipes.html", pageHtml("Recipes", "recipes.html", recipesIndex(), "recipes")],
-  ["hooks.html", pageHtml("Hooks", null, hooksPage(), "hooks")],
-  ["tokens.html", pageHtml("Tokens", null, tokensPage(), "tokens")],
+  ["hooks.html", pageHtml("Hooks", "hooks.html", hooksPage(), "hooks")],
+  ["tokens.html", pageHtml("Tokens", "tokens.html", tokensPage(), "tokens")],
   ...patterns.map((p, i) => [`${p.slug}.html`, pageHtml(p.name, `${p.slug}.html`, patternPage(p, i), "patterns")]),
   ...blocks.map((b, i) => [`${b.slug}.html`, pageHtml(b.name, `${b.slug}.html`, blockPage(b, i), "blocks")]),
   ...archetypeIds.map((id, i) => [`recipe-${slug(id)}.html`,
     pageHtml(recipeTitle(id), `recipe-${slug(id)}.html`, recipePage(id, contract.applicationPatterns.archetypes[id], i, archetypeIds), "recipes")]),
-  ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i))]),
+  ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i),
+    f.kind === "hook" ? "hooks" : "components")]),
 ];
 
 // O MODELO cobra o gerador aqui, na hora, antes de escrever: se uma seção obrigatória do tipo

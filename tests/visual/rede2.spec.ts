@@ -256,9 +256,11 @@ test("rótulos: nenhum rótulo à vista cobre outro nem um nó; o que encosta so
   expect(r.tapados).toEqual([]);
   expect(r.somem).toBeGreaterThan(0);
   // 5, e não 6: desde o MNT-24 (12/10/2026) o caber reserva em cima a altura da barra do modo de arrumar,
-  // o mapa cabe num zoom um pouco menor e um rótulo a mais encosta e some. O que importa continua cobrado
+  // o mapa cabe num zoom um pouco menor e um rótulo a mais encosta e some. 4, e não 5: desde o MNT-28
+  // (17/10/2026), com a grade ligada, o arranjo vai à grade, os nós andam até 8, e o "×" da linha da câmera
+  // (`a3-cam`) encosta no nó dela e some (medido: na 0.34.0 ele aparecia). O que importa continua cobrado
   // acima: nenhum à vista cobre outro, e o que encosta some — sem esconder todos.
-  expect(r.vistos).toBeGreaterThanOrEqual(5);
+  expect(r.vistos).toBeGreaterThanOrEqual(4);
   for (let k = 0; k < 4; k++) await p.evaluate(() => (window as unknown as {__mapa2: {zoomOut(): void}}).__mapa2.zoomOut());
   await expect(mapa(p)).toHaveAttribute("data-far", "");
   const fim = mapa(p).locator(".graph-edge-end").first();

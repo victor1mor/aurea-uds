@@ -1,7 +1,8 @@
 # ADR-0067 — O site segue a documentação da referência
 
 - **Data:** 13/10/2026
-- **Estado:** aceita · em construção na `0.32.0` (passo 11).
+- **Estado:** aceita · em construção na `0.32.0` (passo 11). **Ampliada em 17/10/2026** (lote T, `0.35.0`): o arranjo
+  de documentação da referência, medido na página dela (a seção "Lote T", no fim).
 - **Origem:** três ordens do Victor, de 13/10/2026, olhando o rascunho da página nova na bancada.
   1. O molde do site: *"A, referencia é [a referência principal], com alguns elementos nosso para
      diferencia"* (o nome da biblioteca não se escreve aqui, pela regra do `CLAUDE.md` §2).
@@ -73,3 +74,29 @@ cita como mudado.
 - As fotos `index` e `topo` do catálogo mudam inteiras: regeram-se na CI, olhando cada uma.
 - Endereços: a página inicial passa a ser o Início, e o catálogo de componentes vai para
   `components.html`. As âncoras de categoria (`#cat-…`) vão junto.
+
+## Lote T (17/10/2026): o arranjo de documentação
+
+Pedidos do Victor de 17/10/2026, com as fotos da documentação da referência ao lado das nossas (SITE-01 a 10 no
+documento de achados), aprovados na bancada (*"aprovado, pode seguir"*). Cada medida foi lida na PÁGINA da referência,
+na largura da tela do Victor e a 1440, e repetida como número na prova (`tests/visual/site-docs-arranjo.spec.ts`).
+
+- **A lateral não flutua** (SITE-01): sem caixa, na coluna de 220. Troca a escolha de 13/10/2026 (*"sidebar precisa ser o
+  nosso flutuante"*), pela ordem nova dele: *"quero sidebar como da referência, que não seja mais flutuante"*.
+- **Tudo num bloco de 1400 no centro** (SITE-02): a lateral, o texto (912, cada bloco até 900) e, de 1280 para cima, o
+  índice (240 no começo de uma coluna de 268, alinhado com a ponta direita da barra). A peça: `AppShell layout="docs"`.
+- **As áreas na segunda linha da barra, com ícone** (SITE-04), e **a linha de ponta a ponta embaixo** (SITE-05, a
+  segunda exceção da [ADR-0072](0072-sem-linha.md)). A peça: `Header tabs`. No celular a linha das áreas rola de lado,
+  como a dela.
+- **As distâncias da referência:** as colunas começam 16 abaixo da barra e param 32 acima da borda de baixo; o primeiro
+  grupo e o título do índice a 24 da barra; na lateral, a cápsula do item a 16 e o texto a 24; o índice sem barra de
+  rolagem — a única exceção à regra da barra visível, escolhida pelo Victor (*"escondida sempre"*) entre ela e a da
+  lateral, que some parada e volta com o ponteiro. A referência apaga as pontas da lista com degradê — não copiado (a Aurea não tem degradê).
+- **A caixa do Usage é o `CodeBlock` padrão** (SITE-08), e **o anterior e o próximo ficam lado a lado**, com a descrição
+  numa linha que termina em "…" (SITE-09).
+- **Cada área tem a sua lateral, e o anterior/próximo são os vizinhos NELA** — como lá, onde o motor da documentação tira
+  os vizinhos da árvore da área. Docs, Hooks e Tokens usavam o menu de Components; as páginas de hook marcam "Hooks".
+- **Ficam para o lote U** (decisão do Victor, 17/10/2026): a área Docs completa, com os itens da referência (SITE-03); o
+  menu "Copy" completo e o "Copy Prompt" (SITE-06); as notas de versão; e, em tela menor, o que a referência faz e nós
+  ainda não — a lateral a partir de 768, a busca em ícone abaixo de 768, o índice em barra fixa entre 1024 e 1279.
+  **Depois dele:** a troca Web | Native, à direita (SITE-07), o MCP e a migração.

@@ -1,7 +1,7 @@
 import { type HTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
-import { type HeaderVariant, type SidebarVariant, type SidebarScrollbar, type SidebarItem } from "./navigation.js";
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, sidebarVariant, sidebarScrollbar, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarItem } from "./navigation.js";
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, layout, sidebarVariant, sidebarScrollbar, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
     navItems?: SidebarItem[];
@@ -11,6 +11,16 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     topbarVariant?: Exclude<HeaderVariant, "pill">;
     topbarDivider?: boolean;
     sidebarVariant?: SidebarVariant;
+    /** O arranjo (lote T, 17/10/2026): `"app"` (o padrão, o de sempre) ou `"docs"`, o da documentação da referência — um
+     *  bloco CENTRALIZADO de 1400 com a lateral de 220, o texto e o índice de 268 (de 1280 para cima), a barra de cima de 56
+     *  com a linha das áreas (`topbarTabs`) embaixo. A lateral fica onde a variante dela mandar (`plain`: sem caixa). */
+    layout?: "app" | "docs";
+    /** A segunda linha da barra de cima: as áreas do site, com ícone (o `tabs` do `Header`). */
+    topbarTabs?: HeaderTab[];
+    /** O `id` da área atual da segunda linha. */
+    topbarCurrentTab?: string;
+    /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
+    topbarTabsLabel?: string;
     /** 0.32.0: a barra de rolagem da lateral da esquerda — o `scrollbar` da `Sidebar`. Padrão `hover` (clara, só com o
      *  ponteiro em cima); `visible` é a barra sempre à vista. */
     sidebarScrollbar?: SidebarScrollbar;

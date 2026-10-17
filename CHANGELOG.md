@@ -80,6 +80,48 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.35.0] — 2026-10-17
+
+⏳ **Ainda não publicada.** O lote T, feito em 17/10/2026 na branch `claude/lote-t`: o mapa de rede (MNT-28) e o site no
+arranjo da documentação da referência, medido na página dela (SITE-01, 02, 04, 05, 08 e 09, e os acertos da tarde) —
+[ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md), seção "Lote T", e a segunda exceção da
+[ADR-0072](decisions/0072-sem-linha.md). Aprovado pelo Victor na bancada (*"aprovado, pode seguir"*). Nenhum componente
+novo: as peças novas entram como variações.
+
+### Novo
+
+- **`AppShell layout="docs"`** — o arranjo da documentação da referência: um bloco de 1400 no centro da tela, com a
+  lateral (220), o texto (912; cada bloco até 900) e, de 1280 para cima, o índice (240 no começo de uma coluna de 268,
+  alinhado com a ponta direita da barra). As colunas começam 16 abaixo da barra e param 32 acima da borda de baixo; na
+  lateral, 16 dos dois lados e 8 dentro do item (a cápsula a 16, o texto a 24); o índice não mostra barra de rolagem —
+  a única região da Aurea sem barra, por decisão do Victor (o teste da barra visível aceita essa e nenhuma outra).
+  Abaixo de 1024 a lateral é a gaveta, e o texto fica a 24 da borda. Junto, `topbarTabs`, `topbarCurrentTab` e
+  `topbarTabsLabel`, que passam a segunda linha ao `Header`.
+- **`Header` com `tabs`, `currentTab` e `tabsLabel`** — a segunda linha da barra: as áreas do site, cada uma com o ícone,
+  40 de altura, a atual com `aria-current="page"` e o traço de 2 na cor de destaque. Fica por último na ordem do Tab. No
+  celular ela rola de lado, como a da referência (a página não rola), e o anel do foco fica por dentro de cada área.
+  Com `tabs`, a barra tem a altura exata, e a linha do `divider` fica pendurada logo abaixo.
+- **`Container size="docs"`** (e `maxWidth="docs"` no `Header` e na `Section`): o bloco de 1400, com 24 de recheio de
+  768 para cima.
+- **Cinco tokens de largura**, medidos na referência: `--docs-width` (1400), `--docs-sidebar-width` (220),
+  `--docs-aside-width` (268), `--docs-toc-width` (240) e `--docs-text-width` (900).
+
+### Mudou
+
+- **A linha de ponta a ponta embaixo das áreas do site** é a segunda linha que a Aurea desenha (ADR-0072, item 9), por
+  decisão do Victor.
+- **O site** (`aureauds.dev`): a lateral sem caixa; tudo num bloco no centro; as áreas com ícone; a caixa do Usage é o
+  `CodeBlock` padrão; o anterior e o próximo lado a lado, com a descrição numa linha que termina em "…"; cada área com a
+  sua lateral (Docs, Hooks e Tokens usavam a de Components; as páginas de hook marcam "Hooks"); e o anterior/próximo são
+  os vizinhos na lateral da área, como na referência (eram por categoria). A 768, a barra numa linha só.
+- **`DependencyGraph`, no modo de arrumar (MNT-28): o nó movido volta a ficar alinhado.** Com a grade ligada, o arranjo
+  automático já sai na grade de 16, e as linhas do arrumador acompanham o nó. Ao arrastar, o nó encaixa na borda ou no
+  centro do vizinho que estiver a até 8, e também onde a linha ligada a ele fica reta; aparece a guia, na cor e na
+  espessura do foco (`.graph-guide`). Antes, o nó saía do arranjo fora da grade (0, 270, 540) e só voltava a 528 ou
+  544, com um degrau na linha — e a linha que sai de uma porta fora do centro nunca ficava reta.
+
+---
+
 ## [0.34.0] — 2026-10-17
 
 ✅ **Publicada em 17/10/2026, entre 08:16 e 08:24 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do

@@ -11,7 +11,7 @@ import {useValorResponsivo} from "./responsivo-runtime.js";
 import {ESCALA} from "./escala.js";
 import {IconButton} from "./actions.js";
 import {Tooltip} from "./overlays.js";
-import {Sidebar, Header, type HeaderVariant, type SidebarVariant, type SidebarScrollbar, type SidebarItem} from "./navigation.js";
+import {Sidebar, Header, type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarItem} from "./navigation.js";
 
 // ── Auxiliar de topo: mora ANTES do primeiro export, e a posição é obrigatória ───────────────
 // O check 22 mede o corpo de um componente do `export` dele até o PRÓXIMO export — fatia longa
@@ -140,7 +140,17 @@ function useLargura(query:string){
     ()=>typeof window!=="undefined"&&typeof window.matchMedia==="function"&&window.matchMedia(query).matches,
     ()=>false);
 }
-export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,sidebarVariant,sidebarScrollbar,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,layout="app",sidebarVariant,sidebarScrollbar,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+  /** O arranjo (lote T, 17/10/2026): `"app"` (o padrão, o de sempre) ou `"docs"`, o da documentação da referência — um
+   *  bloco CENTRALIZADO de 1400 com a lateral de 220, o texto e o índice de 268 (de 1280 para cima), a barra de cima de 56
+   *  com a linha das áreas (`topbarTabs`) embaixo. A lateral fica onde a variante dela mandar (`plain`: sem caixa). */
+  layout?:"app"|"docs";
+  /** A segunda linha da barra de cima: as áreas do site, com ícone (o `tabs` do `Header`). */
+  topbarTabs?:HeaderTab[];
+  /** O `id` da área atual da segunda linha. */
+  topbarCurrentTab?:string;
+  /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
+  topbarTabsLabel?:string;
   /** 0.32.0: a barra de rolagem da lateral da esquerda — o `scrollbar` da `Sidebar`. Padrão `hover` (clara, só com o
    *  ponteiro em cima); `visible` é a barra sempre à vista. */
   sidebarScrollbar?:SidebarScrollbar;
@@ -189,14 +199,14 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
   // ícones que o shell desenha.
   const paraOComeco=!efetiva, direita=useDirection()==="rtl";
-  return <div className={cx("app-shell",topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
+  return <div className={cx("app-shell",layout==="docs"&&"app-shell-docs",topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
     É requisito de acessibilidade, não enfeite (WCAG 2.4.1, "pular blocos"): sem ele, quem navega
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Header variant={topbarVariant} divider={topbarDivider} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Header>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>{aside!=null&&<Sidebar placement="right" variant={asideVariant??sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel}>{aside}</Sidebar>}</div>}
+<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} {...(layout==="docs"?{maxWidth:"docs" as const,size:"sm" as const}:{})} brand={<><IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID}/>{brand}</>}>{topbar}</Header>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar><main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>{aside!=null&&<Sidebar placement="right" variant={asideVariant??sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel}>{aside}</Sidebar>}</div>}
 
 // ── Separator ────────────────────────────────────────────────────────────────────────────────
 // A LINHA DO SISTEMA, e ela é de CLIENTE por necessidade, não por vizinhança.
