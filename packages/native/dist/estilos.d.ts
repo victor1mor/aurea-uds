@@ -103,8 +103,10 @@ export declare const acentoDoTom: (t: AureaTokens, tom: TomDeCor) => string;
 export declare const letraDoToken: (t: AureaTokens, token: string) => string | undefined;
 /**
  * O FUNDO CHEIO de um tom de estado e a letra em cima dele — o par do botão cheio (ADR-0061, 0.27.0):
- * o selo cheio é o botão cheio do mesmo tom. `primary` e `neutral` não têm o par: `undefined`, e
- * quem chama enche com o acento, como antes.
+ * o selo cheio é o botão cheio do mesmo tom. O `primary` enche com o acento e escreve com a letra do
+ * botão amarelo (`primaryForeground`, a tinta cinza-escura): desde a ADR-0073 o acento do claro é o
+ * próprio amarelo, e a letra de antes (`background`, clara) media 1,75:1 em cima dele. O `neutral` não
+ * tem o par: `undefined`, e quem chama enche com o acento, como antes.
  */
 export declare const preenchimentoDoTom: (t: AureaTokens, tom: TomDeCor) => [string, string] | undefined;
 /** O fundo SUAVE de um tom (`--<tom>-bg`). `primary` e `neutral` não têm token: `undefined`. */

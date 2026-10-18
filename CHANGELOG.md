@@ -85,6 +85,30 @@ em inglês e ficam como estão: são registro.
 ⏳ **Ainda não publicada.** O lote U, na branch `claude/lote-u`. Cada passo entra no `main` depois de aprovado na
 bancada; a versão sobe quando o lote fechar.
 
+### Mudou
+
+- **As cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md), substitui a
+  ADR-0054).** O Victor, olhando o site no tema claro: *"eu odeio esse marrom do modo claro, não conseguimos usar mesmo
+  amarelo?"* — e escolheu peça a peça, olhando a bancada:
+  - **no tema claro, a letra e o ícone de destaque são o amarelo da marca**, o mesmo do escuro (`primary-emphasis`,
+    `primary-outline`, `link`, `link-hover`): o item atual da lateral, os links, o selo primário, a página atual, a
+    etiqueta escolhida, o calendário, o link atual do cabeçalho, o botão secundário. Mede 1,75:1 no fundo da página, e
+    foi escolhido sabendo disso; antes, o ouro escurecido `#826202`;
+  - **o anel de foco do claro é a cor do texto** (14,24:1; 8,13:1 em volta do botão amarelo); antes, o marrom;
+  - **o controle marcado é o amarelo nos dois temas** (rádio, checkbox, chave); antes, o marrom no claro;
+  - **sobre o amarelo, a letra é o cinza-escuro**, nos dois temas (o token novo `brand-yellow-ink`, 8,13:1): o botão
+    principal, o visto, o dia escolhido, o número do aviso e o selo primário cheio; antes, o marrom;
+  - **o marrom fica** no bichinho da chave ligada, no centro do pino do `Slider`, no play do `MediaEmbed` e no item
+    escolhido do `BottomNav` cheio (`circle-bold`, `capsule`, `expand`) — o token novo `primary-mark`;
+  - **a bolinha do rádio é branca** (o token novo `control-selected-dot`);
+  - **o play do `MediaEmbed` sem o anel escuro**, e a caixa do vídeo sem o aro escuro de 1 em volta da capa;
+  - **o selo primário de contorno escreve com o amarelo puro**, o mesmo do suave; misturado ao texto, ele virava
+    mostarda só nesta peça. Na web, só sem `data-brand` (a `lory` não muda).
+
+  Web e nativo. As marcas (`data-brand`) não mudam. Quem cobra: `tests/unit/amarelo-no-claro.test.tsx` (reescrito), o
+  axe da varredura, o `marca.spec.ts`, o `tone-contrast.spec.ts` e o `skin.spec.ts`, que aceitam SÓ o `--primary` como
+  letra no claro.
+
 ### Consertado
 
 - **`DependencyGraph`: o `layer` passa a valer na arrumação `layered` (MNT-27).** O app de topologia mediu na 0.32.0:
@@ -107,6 +131,11 @@ bancada; a versão sobe quando o lote fechar.
 
 - **A arrumação de quem já manda `layer` em todos os nós muda**: até a 0.35.0 ele era ignorado, e agora as faixas
   valem.
+- **Os valores de nove tokens de cor mudam** (ADR-0073): no claro, `primary-emphasis`, `primary-outline`, `link`,
+  `link-hover`, `focus-strong` e `control-selected`; nos dois temas, `primary-foreground`, `sidebar-primary-foreground`
+  e `control-selected-foreground` (do marrom para o cinza-escuro). Quem usa esses tokens na própria tela recebe a cor
+  nova; quem conta com 4,5:1 da letra de destaque no claro deixa de ter. O `brand-yellow-text` continua existindo,
+  sem uso nos temas.
 
 ---
 

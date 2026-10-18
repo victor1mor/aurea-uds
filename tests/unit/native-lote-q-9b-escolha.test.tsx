@@ -73,7 +73,9 @@ describe("Slider · as medidas do nativo da referência", () => {
     expect([a.width, a.height, a.padding, a.borderRadius, a.backgroundColor])
       .toEqual([28, 20, t.size.space05, t.size.radiusFull, t.color.controlSelected]);
     const bolinha = plano(__instancias("Animated.View").at(-1));
-    expect([bolinha.flex, bolinha.backgroundColor, bolinha.borderRadius]).toEqual([1, t.color.controlSelectedForeground, t.size.radiusFull]);
+    // A bolinha é a marca marrom sobre o amarelo (`primaryMark`), como o centro do pino da web — decisão do Victor,
+    // 17/10/2026: *"slider não coloque preto coloque marrom"* (ADR-0073).
+    expect([bolinha.flex, bolinha.backgroundColor, bolinha.borderRadius]).toEqual([1, t.color.primaryMark, t.size.radiusFull]);
     expect(bolinha.boxShadow).toEqual([...t.shadowLayers.shadowSm]);
     const raiz = plano(__instancias("View").find((p) => p.testID === "s"));
     expect(raiz.gap).toBe(8);
@@ -83,7 +85,7 @@ describe("Slider · as medidas do nativo da referência", () => {
   it("no tema claro a marca é a do controle marcado (a do `Switch`)", () => {
     render(<Envolve tema="light"><Slider label="Volume" defaultValue={30} /></Envolve>);
     expect(plano(alcas()[0]).backgroundColor).toBe(claro.color.controlSelected);
-    expect(plano(__instancias("Animated.View").at(-1)).backgroundColor).toBe(claro.color.controlSelectedForeground);
+    expect(plano(__instancias("Animated.View").at(-1)).backgroundColor).toBe(claro.color.primaryMark);
   });
 
   it("na vertical o trilho tem 20 de largura e a alça é 20 × 28, e nunca some sem altura no pai", () => {

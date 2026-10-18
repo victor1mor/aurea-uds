@@ -51,7 +51,7 @@ const folha = criarFolha((t: AureaTokens) => ({
          backgroundColor: t.color.controlSelected},
   alcaDeitada: {width: t.size.space7, height: t.size.space5},
   alcaEmPe: {width: t.size.space5, height: t.size.space7},
-  bolinha: {flex: 1, ...canto(t.size.radiusFull), backgroundColor: t.color.controlSelectedForeground,
+  bolinha: {flex: 1, ...canto(t.size.radiusFull), backgroundColor: t.color.primaryMark,
             boxShadow: [...t.shadowLayers.shadowSm]},
 
   // ── OTPField ────────────────────────────────────────────────────────────────────────────────

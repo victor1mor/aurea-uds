@@ -48,7 +48,7 @@
     },
     "brand-yellow-text": {
       "$type": "color",
-      "$description": "O amarelo da marca como LETRA ou ÍCONE sobre fundo claro (ADR-0054, 02/10/2026). Mesmo matiz do --primary (86), escurecido até 4,5:1 no pior fundo do tema claro — o #ebebeb com o véu de 10% do selo. O amarelo puro mede 1,9:1 no branco e some; o marrom (`brand-yellow-foreground`) passava, mas é outra cor.",
+      "$description": "Sem uso nos temas desde a ADR-0073 (18/10/2026): a letra de destaque do tema claro passou a ser o próprio amarelo da marca, por decisão do Victor. Fica para não quebrar quem a lê. Era o amarelo da marca como LETRA ou ÍCONE sobre fundo claro (ADR-0054, 02/10/2026): mesmo matiz do --primary (86), escurecido até 4,5:1 no pior fundo do tema claro.",
       "$value": {
         "colorSpace": "oklch",
         "components": [
@@ -56,6 +56,19 @@
           0.105,
           86.047
         ]
+      }
+    },
+    "brand-yellow-ink": {
+      "$type": "color",
+      "$description": "The dark grey drawn ON the brand yellow (the label of the primary button, the check of the checkbox), in both themes: the text grey of the light theme, 8.13:1 on the yellow. Replaces the brown there (decision of 18/10/2026, ADR-0073).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.14118,
+          0.14118,
+          0.14118
+        ],
+        "hex": "#242424"
       }
     },
     "white": {
@@ -1356,7 +1369,7 @@
       "primary-foreground": {
         "$type": "color",
         "$description": "Text and glyphs ON the yellow. Dark on purpose: yellow is a light colour in both themes.",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow-ink}"
       },
       "link": {
         "$type": "color",
@@ -1605,7 +1618,7 @@
       "sidebar-primary-foreground": {
         "$type": "color",
         "$description": "Reserved: text on --sidebar-primary.",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow-ink}"
       },
       "sidebar-accent": {
         "$type": "color",
@@ -1826,7 +1839,24 @@
       "control-selected-foreground": {
         "$type": "color",
         "$description": "The glyph drawn ON --control-selected: the tick, the dot.",
-        "$value": "{primary-foreground}"
+        "$value": "{brand-yellow-ink}"
+      },
+      "control-selected-dot": {
+        "$type": "color",
+        "$description": "The dot of the checked Radio: white on the yellow, in both themes (decision of 17/10/2026, ADR-0073).",
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.985,
+            0,
+            0
+          ]
+        }
+      },
+      "primary-mark": {
+        "$type": "color",
+        "$description": "The brown mark kept on the yellow where the Victor chose it (17/10/2026): the knob of the checked Switch, the centre of the Slider thumb, the play of the MediaEmbed and the current item of the filled BottomNav.",
+        "$value": "{brand-yellow-foreground}"
       },
       "selection": {
         "$type": "color",
@@ -2340,30 +2370,16 @@
       },
       "primary-foreground": {
         "$type": "color",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow-ink}"
       },
       "link": {
         "$type": "color",
-        "$value": {
-          "colorSpace": "oklch",
-          "components": [
-            0.52,
-            0.106,
-            86.047
-          ]
-        },
+        "$value": "{brand-yellow}",
         "$description": "Cor de LINK em prosa. NÃO é `--primary`: medido em 22/08/2026, o amarelo da marca sobre o fundo claro dá 1,73:1 e o AA de texto pede 4,5:1. No escuro o link segue sendo o amarelo (10,34:1) e aponta para `{brand-yellow}`; no claro é a mesma matiz com croma e luminosidade escolhidos por medição. Identidade e papel semântico são coisas diferentes (ADR-0044)."
       },
       "link-hover": {
         "$type": "color",
-        "$value": {
-          "colorSpace": "oklch",
-          "components": [
-            0.44,
-            0.106,
-            86.047
-          ]
-        },
+        "$value": "{brand-yellow}",
         "$description": "O link sob o ponteiro. Mesmo papel do `--link`, um degrau adiante — a diferença tem de ser perceptível sem depender só de sublinhado."
       },
       "secondary": {
@@ -2560,7 +2576,7 @@
       },
       "sidebar-primary-foreground": {
         "$type": "color",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow-ink}"
       },
       "sidebar-accent": {
         "$type": "color",
@@ -2726,22 +2742,27 @@
       },
       "focus-strong": {
         "$type": "color",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{foreground}"
       },
       "primary-emphasis": {
         "$type": "color",
-        "$value": "{brand-yellow-text}"
+        "$value": "{brand-yellow}"
       },
       "primary-outline": {
         "$type": "color",
-        "$value": "{brand-yellow-text}"
+        "$value": "{brand-yellow}"
       },
       "control-selected": {
         "$type": "color",
-        "$value": "{brand-yellow-foreground}"
+        "$value": "{brand-yellow}"
       },
       "control-selected-foreground": {
         "$type": "color",
+        "$value": "{brand-yellow-ink}"
+      },
+      "control-selected-dot": {
+        "$type": "color",
+        "$description": "The dot of the checked Radio: white on the yellow, in both themes (decision of 17/10/2026, ADR-0073).",
         "$value": {
           "colorSpace": "oklch",
           "components": [
@@ -2750,6 +2771,11 @@
             0
           ]
         }
+      },
+      "primary-mark": {
+        "$type": "color",
+        "$description": "The brown mark kept on the yellow where the Victor chose it (17/10/2026): the knob of the checked Switch, the centre of the Slider thumb, the play of the MediaEmbed and the current item of the filled BottomNav.",
+        "$value": "{brand-yellow-foreground}"
       },
       "success-400": {
         "$value": {
@@ -3605,6 +3631,28 @@
             ]
           }
         },
+        "control-selected-dot": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.16,
+              0.02,
+              250
+            ]
+          }
+        },
+        "primary-mark": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.16,
+              0.02,
+              250
+            ]
+          }
+        },
         "overlay": {
           "$type": "color",
           "$value": {
@@ -4272,6 +4320,28 @@
             ]
           }
         },
+        "control-selected-dot": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        "primary-mark": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              1,
+              0,
+              0
+            ]
+          }
+        },
         "overlay": {
           "$type": "color",
           "$value": {
@@ -4516,6 +4586,29 @@
               0.95,
               0.04,
               235
+            ]
+          }
+        },
+        "link": {
+          "$type": "color",
+          "$description": "Kept as it was before 18/10/2026 (the Aurea light link at the time), so this brand does not change when the Aurea light link becomes the brand yellow.",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.52,
+              0.106,
+              86.047
+            ]
+          }
+        },
+        "link-hover": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.44,
+              0.106,
+              86.047
             ]
           }
         }

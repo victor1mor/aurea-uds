@@ -36,6 +36,11 @@ export const base = {
     "p3": "color(display-p3 0.4921 0.3908 0.1193)",
     "oklch": "oklch(0.516 0.105 86.047)"
   },
+  "brandYellowInk": {
+    "hex": "#242424",
+    "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+    "oklch": null
+  },
   "white": {
     "hex": "#ffffff",
     "p3": "color(display-p3 1 1 1)",
@@ -399,9 +404,9 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "primaryForeground": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "link": {
       "hex": "#f0b100",
@@ -509,9 +514,9 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "sidebarPrimaryForeground": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "sidebarAccent": {
       "hex": "#333333",
@@ -629,6 +634,16 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "controlSelectedForeground": {
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
+    },
+    "controlSelectedDot": {
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9803 0.9803 0.9803)",
+      "oklch": "oklch(0.985 0 0)"
+    },
+    "primaryMark": {
       "hex": "#733e0a",
       "p3": "color(display-p3 0.4225 0.2527 0.0951)",
       "oklch": "oklch(0.421 0.095 57.708)"
@@ -871,19 +886,19 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "primaryForeground": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "link": {
-      "hex": "#846301",
-      "p3": "color(display-p3 0.4976 0.3951 0.1201)",
-      "oklch": "oklch(0.52 0.106 86.047)"
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "linkHover": {
-      "hex": "#6c4d00",
-      "p3": "color(display-p3 0.4058 0.3056 0)",
-      "oklch": "oklch(0.44 0.106 86.047)"
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "secondary": {
       "hex": "#ebebeb",
@@ -976,14 +991,14 @@ export const themes = {
       "oklch": null
     },
     "sidebarPrimary": {
-      "hex": "#826202",
-      "p3": "color(display-p3 0.4921 0.3908 0.1193)",
-      "oklch": "oklch(0.516 0.105 86.047)"
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "sidebarPrimaryForeground": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "sidebarAccent": {
       "hex": "#ebebeb",
@@ -1081,29 +1096,39 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "focusStrong": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
     },
     "primaryEmphasis": {
-      "hex": "#826202",
-      "p3": "color(display-p3 0.4921 0.3908 0.1193)",
-      "oklch": "oklch(0.516 0.105 86.047)"
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "primaryOutline": {
-      "hex": "#826202",
-      "p3": "color(display-p3 0.4921 0.3908 0.1193)",
-      "oklch": "oklch(0.516 0.105 86.047)"
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "controlSelected": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "controlSelectedForeground": {
+      "hex": "#242424",
+      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "oklch": null
+    },
+    "controlSelectedDot": {
       "hex": "#fafafa",
       "p3": "color(display-p3 0.9803 0.9803 0.9803)",
       "oklch": "oklch(0.985 0 0)"
+    },
+    "primaryMark": {
+      "hex": "#733e0a",
+      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
+      "oklch": "oklch(0.421 0.095 57.708)"
     },
     "success400": {
       "hex": "#0e700e",

@@ -127,7 +127,8 @@ describe("Checkbox e Radio: a marca de 24 e o vão de 12", () => {
     const m = marca();
     expect([m.width, m.height]).toEqual([24, 24]);
     expect(m.borderRadius).toBe(t.size.radiusFull);
-    const ponto = views().find((e) => e.backgroundColor === t.color.controlSelectedForeground);
+    // O ponto é branco (`controlSelectedDot`, ADR-0073: *"pode deixar branco"*, 17/10/2026).
+    const ponto = views().find((e) => e.backgroundColor === t.color.controlSelectedDot);
     expect([ponto?.width, ponto?.height]).toEqual([10, 10]);
     expect(plano(__instancias("Pressable").at(-1)!.style).gap).toBe(t.size.space3);
   });

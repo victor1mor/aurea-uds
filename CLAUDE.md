@@ -627,10 +627,15 @@ no git.
   `0.13.0`**, publicada em 01/10/2026. Decidido também: o item escolhido usa o Phosphor Fill, o código usa a Atkinson
   Hyperlegible Mono, e a IBM Plex Serif sai (o `--font-editorial` fica como apelido da fonte do
   texto até a `1.0`, para não quebrar quem o usa). Aberto: o peso do ícone pequeno (ADR, "A medida").
-- **No tema claro, o amarelo como LETRA ou ÍCONE é o `brand-yellow-text`** (`#826202`, o mesmo
-  matiz, escurecido até 4,5:1 no pior fundo), e não o marrom (decisão do Victor, 02/10/2026,
-  [ADR-0054](decisions/0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)). Onde o amarelo é
-  FUNDO, é o amarelo de verdade. O foco e o controle marcado continuam no marrom.
+- ~~No tema claro, o amarelo como LETRA ou ÍCONE é o `brand-yellow-text` (`#826202`), ADR-0054~~ →
+  **no tema claro, a letra e o ícone de destaque são o PRÓPRIO amarelo da marca**, o mesmo do escuro
+  (decisão do Victor, 18/10/2026, *"b aprovaro"*, sabendo que mede 1,75:1 —
+  [ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)). **Sobre o amarelo, a letra é o
+  cinza-escuro** `brand-yellow-ink` (`#242424`), nos dois temas; o marrom fica só onde ele pediu (`primary-mark`: o
+  bichinho da chave, o centro do `Slider`, o play do `MediaEmbed` e o `BottomNav` cheio). O foco do claro é a cor do
+  texto; o controle marcado é o amarelo nos dois temas, e a bolinha do rádio é branca. ⚠ As travas de contraste
+  aceitam SÓ esta exceção (o `--primary` como letra no claro): `amarelo-no-claro.test.tsx`, o axe da varredura e o
+  `marca.spec`.
 - **Os neutros e as cores de estado dos dois temas seguem a paleta de referência** (decisão do
   Victor, 09/10/2026, [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md));
   o amarelo da marca, os raios, a fonte e os ícones continuam os nossos. O fundo cheio de estado

@@ -3,6 +3,7 @@
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
   --brand-yellow-text:oklch(0.516 0.105 86.047);
+  --brand-yellow-ink:#242424;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
   --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
@@ -151,7 +152,7 @@
   --popover:#292929;
   --popover-foreground:#ffffff;
   --primary:var(--brand-yellow);
-  --primary-foreground:var(--brand-yellow-foreground);
+  --primary-foreground:var(--brand-yellow-ink);
   --link:var(--brand-yellow);
   --link-hover:var(--brand-yellow);
   --secondary:#333333;
@@ -173,7 +174,7 @@
   --sidebar:#292929;
   --sidebar-foreground:#ffffff;
   --sidebar-primary:var(--brand-yellow);
-  --sidebar-primary-foreground:var(--brand-yellow-foreground);
+  --sidebar-primary-foreground:var(--brand-yellow-ink);
   --sidebar-accent:#333333;
   --sidebar-accent-foreground:#ffffff;
   --sidebar-border:#525252;
@@ -197,7 +198,9 @@
   --primary-emphasis:var(--primary);
   --primary-outline:var(--primary);
   --control-selected:var(--primary);
-  --control-selected-foreground:var(--primary-foreground);
+  --control-selected-foreground:var(--brand-yellow-ink);
+  --control-selected-dot:oklch(0.985 0 0);
+  --primary-mark:var(--brand-yellow-foreground);
   --selection:oklch(0.795 0.184 86.047 / 0.22);
   --success-bg:#052505;
   --warning-bg:#4a1e04;
@@ -241,9 +244,9 @@
   --popover:#ffffff;
   --popover-foreground:#242424;
   --primary:var(--brand-yellow);
-  --primary-foreground:var(--brand-yellow-foreground);
-  --link:oklch(0.52 0.106 86.047);
-  --link-hover:oklch(0.44 0.106 86.047);
+  --primary-foreground:var(--brand-yellow-ink);
+  --link:var(--brand-yellow);
+  --link-hover:var(--brand-yellow);
   --secondary:#ebebeb;
   --secondary-foreground:#242424;
   --muted:var(--secondary);
@@ -263,7 +266,7 @@
   --sidebar:var(--card);
   --sidebar-foreground:#242424;
   --sidebar-primary:var(--primary-emphasis);
-  --sidebar-primary-foreground:var(--brand-yellow-foreground);
+  --sidebar-primary-foreground:var(--brand-yellow-ink);
   --sidebar-accent:var(--secondary);
   --sidebar-accent-foreground:#242424;
   --sidebar-border:#e0e0e0;
@@ -283,11 +286,13 @@
   --secondary-hover:var(--surface-hover);
   --segment:oklch(1 0 0);
   --focus:var(--primary);
-  --focus-strong:var(--brand-yellow-foreground);
-  --primary-emphasis:var(--brand-yellow-text);
-  --primary-outline:var(--brand-yellow-text);
-  --control-selected:var(--brand-yellow-foreground);
-  --control-selected-foreground:oklch(0.985 0 0);
+  --focus-strong:var(--foreground);
+  --primary-emphasis:var(--brand-yellow);
+  --primary-outline:var(--brand-yellow);
+  --control-selected:var(--brand-yellow);
+  --control-selected-foreground:var(--brand-yellow-ink);
+  --control-selected-dot:oklch(0.985 0 0);
+  --primary-mark:var(--brand-yellow-foreground);
   --success-400:#0e700e;
   --warning-400:#8a3707;
   --danger-400:#b10e1c;
@@ -365,6 +370,8 @@
   --selection:oklch(0.32 0.08 50);
   --control-selected:oklch(0.72 0.19 48);
   --control-selected-foreground:oklch(0.16 0.02 250);
+  --control-selected-dot:oklch(0.16 0.02 250);
+  --primary-mark:oklch(0.16 0.02 250);
   --overlay:oklch(0 0 0 / 0.6);
   --chart-1:oklch(0.74 0.18 50);
   --chart-2:oklch(0.84 0.14 88);
@@ -427,6 +434,8 @@
   --selection:oklch(0.96 0.04 60);
   --control-selected:oklch(0.682 0.197 44.5);
   --control-selected-foreground:oklch(1 0 0);
+  --control-selected-dot:oklch(1 0 0);
+  --primary-mark:oklch(1 0 0);
   --overlay:oklch(0.16 0.018 250 / 0.45);
   --chart-1:oklch(0.682 0.197 44.5);
   --chart-2:oklch(0.82 0.15 88);
@@ -449,6 +458,8 @@
   --warning-bg:oklch(0.95 0.06 80);
   --danger-bg:oklch(0.95 0.05 25);
   --info-bg:oklch(0.95 0.04 235);
+  --link:oklch(0.52 0.106 86.047);
+  --link-hover:oklch(0.44 0.106 86.047);
 }
 [data-density="compact"]{
   --control-h-xs:1.5rem;

@@ -253,12 +253,32 @@ test.describe("catálogo · varredura de todas as páginas", () => {
           await esperarTransicoes(page);
         }
         await page.addScriptTag({path: AXE});
-        const v = await page.evaluate(async () => {
+        const v = await page.evaluate(async (claro) => {
           const r = await (window as any).axe.run(document, {
             runOnly: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"],
           });
-          return r.violations.flatMap((x: any) => x.nodes.map((n: any) => `${x.id} · ${n.html.slice(0, 60)}`));
-        });
+          // ADR-0073 (18/10/2026): no tema claro, a letra de destaque é o amarelo da marca, que mede
+          // 1,76:1 no fundo claro — decisão do Victor, tomada sabendo disso. A exceção é SÓ ela: uma
+          // acusação de contraste cuja letra é exatamente o `--primary` da página. Qualquer outra cor
+          // continua reprovando, e no escuro não há exceção nenhuma.
+          const amarelo = (() => {
+            const sonda = document.createElement("span");
+            sonda.style.color = "var(--primary)";
+            document.body.append(sonda);
+            const c = document.createElement("canvas").getContext("2d")!;
+            c.fillStyle = getComputedStyle(sonda).color;
+            c.fillRect(0, 0, 1, 1);
+            sonda.remove();
+            return Array.from(c.getImageData(0, 0, 1, 1).data.slice(0, 3));
+          })();
+          const ehAmarelo = (hex: string | undefined) => {
+            if (!claro || !hex || !/^#[0-9a-f]{6}$/i.test(hex)) return false;
+            return [1, 3, 5].every((i, k) => Math.abs(parseInt(hex.slice(i, i + 2), 16) - amarelo[k]) <= 2);
+          };
+          return r.violations.flatMap((x: any) => x.nodes
+            .filter((n: any) => !(x.id === "color-contrast" && ehAmarelo(n.any?.[0]?.data?.fgColor)))
+            .map((n: any) => `${x.id} · ${n.html.slice(0, 60)}`));
+        }, theme === "light");
         for (const one of v) falhas.push(`${f}: ${one}`);
       }
       expect(falhas, `violações axe (${theme}):\n${falhas.join("\n")}`).toEqual([]);

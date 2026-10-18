@@ -38,7 +38,7 @@ const TEMAS = ["light", "dark"] as const;
 const PAGINA = "/apps/catalog/memoryledger.html";
 const AA = 4.5;
 
-type Medida = {ativo: number; repouso: number; rotulo: number; lumPagina: number; lumPainel: number};
+type Medida = {ativo: number; ativoAmarelo: boolean; repouso: number; rotulo: number; lumPagina: number; lumPainel: number};
 
 async function medir(page: Page, marca: string, tema: string): Promise<Medida> {
   await page.evaluate(([m, t]) => {
@@ -93,8 +93,16 @@ async function medir(page: Page, marca: string, tema: string): Promise<Medida> {
     const csAtivo = getComputedStyle(ativo);
     // O ativo tem fundo PRÓPRIO: medir contra o painel mentiria a favor.
     const fundoAtivo = rgb(csAtivo.backgroundColor, painelHex);
+    // A letra do atual É o amarelo da marca (`--primary` do lugar)? É a exceção da ADR-0073.
+    const sonda = document.createElement("span");
+    sonda.style.color = "var(--primary)";
+    lateral.append(sonda);
+    const amarelo = rgb(getComputedStyle(sonda).color);
+    sonda.remove();
+    const letraAtivo = rgb(csAtivo.color, `rgb(${fundoAtivo.join(",")})`);
     return {
-      ativo: razao(rgb(csAtivo.color, `rgb(${fundoAtivo.join(",")})`), fundoAtivo),
+      ativo: razao(letraAtivo, fundoAtivo),
+      ativoAmarelo: letraAtivo.every((v, i) => Math.abs(v - amarelo[i]) <= 2),
       repouso: razao(rgb(getComputedStyle(repouso).color, painelHex), painel),
       rotulo: razao(rgb(getComputedStyle(rotulo).color, painelHex), painel),
       lumPagina: lum(rgb(getComputedStyle(document.body).backgroundColor)),
@@ -110,8 +118,15 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
       test(`${nome} · ${tema}`, async ({page}) => {
         await page.goto(PAGINA);
         const m = await medir(page, marca, tema);
-        expect.soft(m.ativo, `${nome}/${tema}: o item ATUAL contra o fundo dele`)
-          .toBeGreaterThanOrEqual(AA);
+        // ADR-0073 (18/10/2026): na Aurea, no tema claro, a letra do atual é o amarelo da marca
+        // (1,76:1), por decisão do Victor tomada sabendo disso. A exceção é SÓ essa combinação, e
+        // ela cobra o contrário: que a letra SEJA o amarelo. As marcas e o escuro seguem no AA.
+        if (nome === "aurea" && tema === "light") {
+          expect.soft(m.ativoAmarelo, `${nome}/${tema}: o item ATUAL é o amarelo da marca (ADR-0073)`).toBe(true);
+        } else {
+          expect.soft(m.ativo, `${nome}/${tema}: o item ATUAL contra o fundo dele`)
+            .toBeGreaterThanOrEqual(AA);
+        }
         expect.soft(m.repouso, `${nome}/${tema}: o item em REPOUSO contra o painel — a maioria `
           + "da lateral, e o papel que passou despercebido em 20/08/2026")
           .toBeGreaterThanOrEqual(AA);

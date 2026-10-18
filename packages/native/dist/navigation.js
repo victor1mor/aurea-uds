@@ -355,12 +355,13 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             const ativo = it.id === current;
             const corDoTexto = !ativo ? t.color.mutedForeground
                 : indicator === "none" ? t.color.primaryEmphasis
-                    : indicator === "circle-bold" || indicator === "expand" ? t.color.primaryForeground
+                    : indicator === "circle-bold" || indicator === "expand" ? t.color.primaryMark
                         : indicator === "subtle" || indicator === "pill" ? t.color.primaryEmphasis
                             : redondo ? t.color.primaryEmphasis
                                 : t.color.foreground;
-            // Na `capsule` o ícone está SOBRE o amarelo e o rótulo não: cada um tem a sua cor.
-            const corDoIcone = ativo && capsula ? t.color.primaryForeground : corDoTexto;
+            // Na `capsule` o ícone está SOBRE o amarelo e o rótulo não: cada um tem a sua cor. Sobre o
+            // amarelo, a marca marrom (`primaryMark`), e não a tinta escura (decisão do Victor, 17/10/2026).
+            const corDoIcone = ativo && capsula ? t.color.primaryMark : corDoTexto;
             // No `expand` o nome só aparece no escolhido; nos outros ele vira o nome do item para o
             // leitor de tela (o texto simples) ou fica na árvore sem ocupar lugar (o que não é texto).
             const nomeVisivel = !expande || ativo;
