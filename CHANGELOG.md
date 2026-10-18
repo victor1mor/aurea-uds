@@ -82,7 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.35.0] — 2026-10-17
 
-⏳ **Ainda não publicada.** O lote T, feito em 17/10/2026 na branch `claude/lote-t`: o mapa de rede (MNT-28) e o site no
+✅ **Publicada em 17/10/2026, entre 17:58 e 18:04 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #72. O lote T, feito em 17/10/2026 na branch `claude/lote-t`: o mapa de rede (MNT-28) e o site no
 arranjo da documentação da referência, medido na página dela (SITE-01, 02, 04, 05, 08 e 09, e os acertos da tarde) —
 [ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md), seção "Lote T", e a segunda exceção da
 [ADR-0072](decisions/0072-sem-linha.md). Aprovado pelo Victor na bancada (*"aprovado, pode seguir"*). Nenhum componente
