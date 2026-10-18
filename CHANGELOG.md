@@ -97,6 +97,12 @@ bancada; a versão sobe quando o lote fechar.
   como sem faixas e avisa uma vez no console. Quem cobra: `tests/visual/rede-mnt27.spec.ts`, no banco novo
   `apps/keyboard-probe/rede4.html`.
 
+- **`Radio`: a bolinha do marcado fica no centro.** Ela tinha 7 dentro de um miolo de 14 (a metade): a folga de 3,5
+  virava 3 de um lado e 4 do outro, e a bolinha ficava meio ponto acima e à esquerda do centro em todo zoom (o Victor
+  viu: *"é torta dentro"*). Agora ela tem 6 de 14, como a da referência, encolhida POR ESCALA a partir do miolo
+  inteiro. Medido na imagem: no centro no Chrome e no Safari em todo zoom, e no Firefox a 100% (com zoom, ele a põe
+  meio ponto de tela fora). Quem cobra: `tests/visual/radio-ponto.spec.ts`.
+
 ### ⚠ Pode quebrar
 
 - **A arrumação de quem já manda `layer` em todos os nós muda**: até a 0.35.0 ele era ignorado, e agora as faixas

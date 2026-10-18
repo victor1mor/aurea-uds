@@ -1562,7 +1562,12 @@ img,svg { display:block; }
 /* A opção marcada fica CHEIA, com o ponto no meio, como a da referência (o ponto dela tem 8 numa
    marca de 16: a metade). Era vazia, com o ponto amarelo. */
 .radio input:checked + .control-mark { background:var(--control-selected); border-color:transparent; }
-.radio input:checked + .control-mark:after { content:""; width:50%; height:50%; border-radius:50%; background:var(--control-selected-foreground); }
+/* A BOLINHA tem 6 de 14, a da referência (`scale: 0.4286` no CSS publicado dela, 3.2.6), e é ENCOLHIDA POR ESCALA a
+   partir do miolo inteiro, e não desenhada pequena (17/10/2026 — o Victor: "a bolinha do rádio não está centralizada, é
+   torta"). Medido na imagem: a de antes, 7 dentro de 14, ficava meio ponto acima e à esquerda do centro em todo zoom —
+   a folga de 3,5 virava 3 de um lado e 4 do outro. A escala gira em torno do centro exato da caixa. */
+.radio input:checked + .control-mark:after { content:""; inline-size:100%; block-size:100%; border-radius:50%;
+  background:var(--control-selected-foreground); scale:calc(3 / 7); }
 .switch { display:inline-flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-medium); cursor:pointer; } .switch input { position:absolute; opacity:0; }
 /* O TRILHO DO SWITCH (0.32.0): o da referência, 40 × 20 (sm 32 × 16, lg 48 × 24) — a largura é o
    dobro da altura. Era 42 × 24. A altura é a de controle MENOS 16: dá exatamente os três dela
@@ -3124,7 +3129,8 @@ button.tag-main { cursor:pointer; }
 /* A largura é a do GLIFO que mora dentro (`--icon-sm`, o mesmo do `<Icon size="sm">`), e não um
    px cru: assim o slot acompanha a escala de glifo do sistema em vez de fixar um número. */
 .menu-mark { flex:none; display:inline-flex; align-items:center; justify-content:center; inline-size:var(--icon-sm); block-size:var(--icon-sm); color:var(--primary); }
-/* METADE do slot, pela mesma razão do `.control-mark:after` do rádio: a marca é proporcional. */
+/* METADE do slot: a marca é proporcional, e PAR (8 em 16), então fica no centro em qualquer zoom — o ponto do `Radio`
+   precisou de escala porque o dele era ímpar (17/10/2026). */
 .menu-ponto { inline-size:calc(var(--icon-sm) / 2); block-size:calc(var(--icon-sm) / 2); border-radius:50%; background:currentColor; }
 /* O rótulo de grupo NÃO é item: não é focável, não é clicável, e a pele não pode sugerir que é. */
 .menu-label { padding:var(--space-2) var(--menu-px) var(--space-1); color:var(--muted-foreground); font-size:var(--text-xs); font-weight:var(--weight-semibold); }
