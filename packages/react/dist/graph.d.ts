@@ -34,7 +34,10 @@ export interface GraphNodeItem {
         tone?: GraphTone;
     };
     ports?: GraphPort[];
-    /** A camada sugerida pelo app, contada de 0 (só na arrumação `layered`). */
+    /** A FAIXA do nó na arrumação `layered`: é ORDEM, não número — 0, 5 e 10 viram a 1ª, a 2ª e a 3ª, e nós com o mesmo
+     *  `layer` saem na mesma altura (MNT-27). Vale quando TODO nó fora de contêiner tem um; faltando em algum, o mapa sai
+     *  como sem `layer` e avisa uma vez no console. O contêiner entra na faixa dele (ou na menor dos nós de dentro), e
+     *  DENTRO dele o motor arruma sozinho: lá o `layer` não vale. */
     layer?: number;
     /** O CONTÊINER deste nó (site, andar, rack): um só. O contêiner é um nó como os outros, e vira
      *  a caixa em volta dos filhos, com o botão de fechar (MNT-16.6). VLAN não é contêiner: um

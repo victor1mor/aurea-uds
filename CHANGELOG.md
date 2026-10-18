@@ -80,6 +80,30 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.36.0] — em construção
+
+⏳ **Ainda não publicada.** O lote U, na branch `claude/lote-u`. Cada passo entra no `main` depois de aprovado na
+bancada; a versão sobe quando o lote fechar.
+
+### Consertado
+
+- **`DependencyGraph`: o `layer` passa a valer na arrumação `layered` (MNT-27).** O app de topologia mediu na 0.32.0:
+  os dois firewalls da mesma faixa saíam em alturas diferentes, e o secundário caía ABAIXO do núcleo. A opção que ia ao
+  motor (`layerChoiceConstraint`) só é lida pelo arrumador interativo do ELK, que o `elkjs` não tem — medido no 0.12.0,
+  o mapa saía igual com e sem ela. Agora vai a PARTIÇÃO do motor: nós com o mesmo `layer` saem na mesma altura, e as
+  faixas na ordem pedida. O `layer` é ORDEM, não número (0, 5 e 10 viram a 1ª, a 2ª e a 3ª faixa), e vale quando todo
+  nó fora de contêiner tem um; o contêiner entra na faixa dele, ou na menor dos nós de dentro, e DENTRO dele o motor
+  arruma sozinho (mandar a faixa lá dentro quebrava o mapa inteiro, medido). Com `layer` em só alguns nós, o mapa sai
+  como sem faixas e avisa uma vez no console. Quem cobra: `tests/visual/rede-mnt27.spec.ts`, no banco novo
+  `apps/keyboard-probe/rede4.html`.
+
+### ⚠ Pode quebrar
+
+- **A arrumação de quem já manda `layer` em todos os nós muda**: até a 0.35.0 ele era ignorado, e agora as faixas
+  valem.
+
+---
+
 ## [0.35.0] — 2026-10-17
 
 ✅ **Publicada em 17/10/2026, entre 17:58 e 18:04 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
