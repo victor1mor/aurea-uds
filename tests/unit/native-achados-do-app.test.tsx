@@ -32,14 +32,15 @@ const porID = (primitivo: string, id: string): Props =>
   __instancias(primitivo).filter((p) => p.testID === id).at(-1) ?? {};
 
 describe("1 · o tom da marca escrevendo texto", () => {
-  // O DEFEITO: o amarelo de PREENCHER usado para ESCREVER mede 1,73:1 no tema claro, contra os
-  // 4,5:1 que a WCAG exige. O `link` é o mesmo matiz mais escuro: 5,02:1.
-  it("ghost com tom da marca escreve em `link`, não em `primary`", () => {
+  // O texto da marca escreve no papel de LETRA (`link`), e não no de preencher (`primary`): são papéis
+  // diferentes mesmo quando o valor coincide. Desde a ADR-0073 (18/10/2026) eles coincidem no claro da
+  // Aurea — a letra de destaque é o amarelo da marca, por decisão do Victor —, mas uma marca (`data-brand`)
+  // pode separar os dois de novo. Antes era o ouro escurecido, 5,02:1.
+  it("ghost com tom da marca escreve em `link`", () => {
     render(<Envolve><Button appearance="ghost" tone="brand" testID="b">Entrar</Button></Envolve>);
     const texto = __instancias("Text").at(-1) ?? {};
     const cor = StyleSheet.flatten(texto.style).color;
     expect(cor).toBe(claro.color.link);
-    expect(cor).not.toBe(claro.color.primary);
   });
 
   it("outline também", () => {

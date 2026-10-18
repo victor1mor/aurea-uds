@@ -4,6 +4,7 @@
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
   --brand-yellow-text:oklch(0.516 0.105 86.047);
+  --brand-yellow-ink:#242424;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
   --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
@@ -152,7 +153,7 @@
   --popover:#292929;
   --popover-foreground:#ffffff;
   --primary:var(--brand-yellow);
-  --primary-foreground:var(--brand-yellow-foreground);
+  --primary-foreground:var(--brand-yellow-ink);
   --link:var(--brand-yellow);
   --link-hover:var(--brand-yellow);
   --secondary:#333333;
@@ -174,7 +175,7 @@
   --sidebar:#292929;
   --sidebar-foreground:#ffffff;
   --sidebar-primary:var(--brand-yellow);
-  --sidebar-primary-foreground:var(--brand-yellow-foreground);
+  --sidebar-primary-foreground:var(--brand-yellow-ink);
   --sidebar-accent:#333333;
   --sidebar-accent-foreground:#ffffff;
   --sidebar-border:#525252;
@@ -198,7 +199,9 @@
   --primary-emphasis:var(--primary);
   --primary-outline:var(--primary);
   --control-selected:var(--primary);
-  --control-selected-foreground:var(--primary-foreground);
+  --control-selected-foreground:var(--brand-yellow-ink);
+  --control-selected-dot:oklch(0.985 0 0);
+  --primary-mark:var(--brand-yellow-foreground);
   --selection:oklch(0.795 0.184 86.047 / 0.22);
   --success-bg:#052505;
   --warning-bg:#4a1e04;
@@ -242,9 +245,9 @@
   --popover:#ffffff;
   --popover-foreground:#242424;
   --primary:var(--brand-yellow);
-  --primary-foreground:var(--brand-yellow-foreground);
-  --link:oklch(0.52 0.106 86.047);
-  --link-hover:oklch(0.44 0.106 86.047);
+  --primary-foreground:var(--brand-yellow-ink);
+  --link:var(--brand-yellow);
+  --link-hover:var(--brand-yellow);
   --secondary:#ebebeb;
   --secondary-foreground:#242424;
   --muted:var(--secondary);
@@ -264,7 +267,7 @@
   --sidebar:var(--card);
   --sidebar-foreground:#242424;
   --sidebar-primary:var(--primary-emphasis);
-  --sidebar-primary-foreground:var(--brand-yellow-foreground);
+  --sidebar-primary-foreground:var(--brand-yellow-ink);
   --sidebar-accent:var(--secondary);
   --sidebar-accent-foreground:#242424;
   --sidebar-border:#e0e0e0;
@@ -284,11 +287,13 @@
   --secondary-hover:var(--surface-hover);
   --segment:oklch(1 0 0);
   --focus:var(--primary);
-  --focus-strong:var(--brand-yellow-foreground);
-  --primary-emphasis:var(--brand-yellow-text);
-  --primary-outline:var(--brand-yellow-text);
-  --control-selected:var(--brand-yellow-foreground);
-  --control-selected-foreground:oklch(0.985 0 0);
+  --focus-strong:var(--foreground);
+  --primary-emphasis:var(--brand-yellow);
+  --primary-outline:var(--brand-yellow);
+  --control-selected:var(--brand-yellow);
+  --control-selected-foreground:var(--brand-yellow-ink);
+  --control-selected-dot:oklch(0.985 0 0);
+  --primary-mark:var(--brand-yellow-foreground);
   --success-400:#0e700e;
   --warning-400:#8a3707;
   --danger-400:#b10e1c;
@@ -366,6 +371,8 @@
   --selection:oklch(0.32 0.08 50);
   --control-selected:oklch(0.72 0.19 48);
   --control-selected-foreground:oklch(0.16 0.02 250);
+  --control-selected-dot:oklch(0.16 0.02 250);
+  --primary-mark:oklch(0.16 0.02 250);
   --overlay:oklch(0 0 0 / 0.6);
   --chart-1:oklch(0.74 0.18 50);
   --chart-2:oklch(0.84 0.14 88);
@@ -428,6 +435,8 @@
   --selection:oklch(0.96 0.04 60);
   --control-selected:oklch(0.682 0.197 44.5);
   --control-selected-foreground:oklch(1 0 0);
+  --control-selected-dot:oklch(1 0 0);
+  --primary-mark:oklch(1 0 0);
   --overlay:oklch(0.16 0.018 250 / 0.45);
   --chart-1:oklch(0.682 0.197 44.5);
   --chart-2:oklch(0.82 0.15 88);
@@ -450,6 +459,8 @@
   --warning-bg:oklch(0.95 0.06 80);
   --danger-bg:oklch(0.95 0.05 25);
   --info-bg:oklch(0.95 0.04 235);
+  --link:oklch(0.52 0.106 86.047);
+  --link-hover:oklch(0.44 0.106 86.047);
 }
 [data-density="compact"]{
   --control-h-xs:1.5rem;
@@ -1279,7 +1290,7 @@ img,svg { display:block; }
    altura da barra não muda. O mesmo no `navigation.tsx`. */
 .bottom-nav.bottom-nav-ind-circle-bold .bottom-nav-item { padding:0; }
 .bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; min-height:var(--control-h-lg); padding:var(--space-1); border-radius:var(--radius-full); }
-.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { color:var(--primary-foreground); }
+.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { color:var(--primary-mark); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-disc { background:var(--primary); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .icon { opacity:1; }
 /* O contador do `circle-bold` INVERTE, como o do `.btn-primary`, e a volta atrás está medida.
@@ -1287,8 +1298,8 @@ img,svg { display:block; }
    do Victor mostram. O gate de contraste reprovou no tema CLARO: sobre o amarelo sólido, nem o
    fundo do contador nem o anel branco chegam a 3:1. No escuro passava, e é assim que este defeito
    se esconde. Fio fino não substitui contraste quando as duas cores são claras. */
-.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .badge { background:var(--primary-foreground); color:var(--primary); border-color:transparent; }
-.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-badge { color:var(--primary-foreground); }
+.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .badge { background:var(--primary-mark); color:var(--primary); border-color:transparent; }
+.bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-badge { color:var(--primary-mark); }
 /* ── CÁPSULA (`capsule`) — a "A" da bancada do Victor, 03/10/2026: o modelo de uma das referências ─
    A moldura do ícone vira a cápsula de 56 × 32 do indicador ativo dessa referência
    (`--bottomnav-bold` × `--bottomnav-ring`), em TODOS os itens; só a do escolhido é pintada, de
@@ -1299,9 +1310,9 @@ img,svg { display:block; }
    mesma razão medida do `circle-bold`, logo acima. */
 .bottom-nav-ind-capsule .bottom-nav-mark { width:var(--bottomnav-bold,3.5rem); height:var(--bottomnav-ring); border-radius:var(--radius-full); }
 .bottom-nav-ind-capsule .bottom-nav-badge { inset-inline-end:calc((var(--bottomnav-bold,3.5rem) - var(--bottomnav-ring)) / 2 - var(--space-05)); }
-.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .bottom-nav-mark { background:var(--primary); color:var(--primary-foreground); }
+.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .bottom-nav-mark { background:var(--primary); color:var(--primary-mark); }
 .bottom-nav-ind-capsule .bottom-nav-item[aria-current] .icon { opacity:1; }
-.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .badge { background:var(--primary-foreground); color:var(--primary); border-color:transparent; }
+.bottom-nav-ind-capsule .bottom-nav-item[aria-current] .badge { background:var(--primary-mark); color:var(--primary); border-color:transparent; }
 /* No `content`, o recheio de sempre (`--space-1`) e não o `--space-3`: com ele cada item teria 80. */
 .bottom-nav-content:not(.bottom-nav-edge).bottom-nav-ind-capsule .bottom-nav-item { padding-inline:var(--space-1); }
 /* ── EXPANDE (`expand`) — a "C" da bancada do Victor, 03/10/2026 ───────────────────────────────
@@ -1315,9 +1326,9 @@ img,svg { display:block; }
 .bottom-nav-ind-expand .bottom-nav-item { flex-direction:row; gap:var(--space-2); min-width:var(--target-min); min-height:var(--target-min); padding:0; }
 .bottom-nav-ind-expand .bottom-nav-mark { width:var(--icon-lg); }
 .bottom-nav-ind-expand .bottom-nav-label { font-size:var(--text-sm); }
-.bottom-nav-ind-expand .bottom-nav-item[aria-current] { flex:none; inline-size:calc(var(--icon-lg) + var(--space-2) + var(--space-20) + 2 * var(--space-3)); padding-inline:var(--space-3); background:var(--primary); color:var(--primary-foreground); }
+.bottom-nav-ind-expand .bottom-nav-item[aria-current] { flex:none; inline-size:calc(var(--icon-lg) + var(--space-2) + var(--space-20) + 2 * var(--space-3)); padding-inline:var(--space-3); background:var(--primary); color:var(--primary-mark); }
 .bottom-nav-ind-expand .bottom-nav-item[aria-current] .icon { opacity:1; }
-.bottom-nav-ind-expand .bottom-nav-item[aria-current] .badge { background:var(--primary-foreground); color:var(--primary); border-color:transparent; }
+.bottom-nav-ind-expand .bottom-nav-item[aria-current] .badge { background:var(--primary-mark); color:var(--primary); border-color:transparent; }
 .bottom-nav-content:not(.bottom-nav-edge).bottom-nav-ind-expand .bottom-nav-item:not([aria-current]) { flex:none; inline-size:var(--target-min); padding-inline:0; }
 
 /* ── A LINHA DE LISTA TOCÁVEL (§4.3 do CONSUMIDOR-1) ──────────────────────────
@@ -2059,7 +2070,7 @@ img,svg { display:block; }
    torta"). Medido na imagem: a de antes, 7 dentro de 14, ficava meio ponto acima e à esquerda do centro em todo zoom —
    a folga de 3,5 virava 3 de um lado e 4 do outro. A escala gira em torno do centro exato da caixa. */
 .radio input:checked + .control-mark:after { content:""; inline-size:100%; block-size:100%; border-radius:50%;
-  background:var(--control-selected-foreground); scale:calc(3 / 7); }
+  background:var(--control-selected-dot); scale:calc(3 / 7); }
 .switch { display:inline-flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-medium); cursor:pointer; } .switch input { position:absolute; opacity:0; }
 /* O TRILHO DO SWITCH (0.32.0): o da referência, 40 × 20 (sm 32 × 16, lg 48 × 24) — a largura é o
    dobro da altura. Era 42 × 24. A altura é a de controle MENOS 16: dá exatamente os três dela
@@ -2083,7 +2094,7 @@ img,svg { display:block; }
    mesma distância nos dois sentidos de escrita. */
 .switch-track:after { --thumb-h:calc(var(--switch-h) - 2 * var(--space-05)); --thumb-w:calc(var(--thumb-h) * 11 / 8); content:""; position:absolute; inset-inline-start:calc(var(--space-05) - var(--border-width)); top:calc(var(--space-05) - var(--border-width)); block-size:var(--thumb-h); inline-size:var(--thumb-w); border-radius:var(--radius-full); background:var(--muted-foreground); transition:transform var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard); }
 .switch-track { --switch-x:calc(var(--switch-h) * 2 - (var(--switch-h) - 2 * var(--space-05)) * 11 / 8 - 2 * var(--space-05)); }
-.switch input:checked + .switch-track { background:var(--control-selected); border-color:transparent; } .switch input:checked + .switch-track:after { transform:translateX(var(--switch-x)); background:var(--control-selected-foreground); }
+.switch input:checked + .switch-track { background:var(--control-selected); border-color:transparent; } .switch input:checked + .switch-track:after { transform:translateX(var(--switch-x)); background:var(--primary-mark); }
 .range { width:100%; accent-color:var(--primary); }
 /* Slider VERTICAL, no `<input type=range>` NATIVO — sem trocar de motor.
 
@@ -2123,7 +2134,7 @@ img,svg { display:block; }
 .slider-track { position:relative; inline-size:100%; block-size:var(--space-5); border-inline:var(--space-3) solid transparent; border-radius:var(--radius-full); background:var(--secondary); }
 .slider-fill { box-sizing:content-box; block-size:100%; margin-inline-start:calc(-1 * var(--space-3)); padding-inline-start:var(--space-3); border-radius:var(--radius-full); background:var(--primary); }
 .slider-thumb { display:grid; place-items:center; inline-size:calc(var(--space-6) + var(--space-1)); block-size:100%; border-radius:var(--radius-full); background:var(--primary); cursor:grab; }
-.slider-thumb::after { content:""; inline-size:var(--space-6); block-size:var(--space-4); border-radius:var(--radius-full); background:var(--primary-foreground); box-shadow:var(--shadow-sm); transition:scale var(--duration-fast) var(--ease-standard); }
+.slider-thumb::after { content:""; inline-size:var(--space-6); block-size:var(--space-4); border-radius:var(--radius-full); background:var(--primary-mark); box-shadow:var(--shadow-sm); transition:scale var(--duration-fast) var(--ease-standard); }
 .slider-thumb[data-dragging] { cursor:grabbing; }
 .slider-thumb[data-dragging]::after { scale:.9; }
 .slider-thumb:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
@@ -2277,7 +2288,9 @@ img,svg { display:block; }
    numa fila, `align-self:flex-start` tiraria o selo do meio; o tamanho definido só desliga o
    esticar, que é o que a coluna faz com um item sem tamanho. */
 .badge-fit { inline-size:fit-content; }
-.badge-primary { --badge-accent:var(--primary-emphasis); color:var(--primary-emphasis); border-color:transparent; background:color-mix(in srgb,var(--primary) 10%,transparent); }
+/* O cheio da marca enche com o acento e escreve com a letra do botão amarelo (`--primary-foreground`): desde a ADR-0073
+   o acento do claro é o próprio amarelo, e a letra de antes (`--background`, clara) media 1,75:1 em cima dele. */
+.badge-primary { --badge-accent:var(--primary-emphasis); --badge-on:var(--primary-foreground); color:var(--primary-emphasis); border-color:transparent; background:color-mix(in srgb,var(--primary) 10%,transparent); }
 /* TAMANHOS. O md é a base (24px), que não muda — é o que as 103 fichas já usam. */
 .badge-xs { min-height:var(--space-4); padding:0 var(--space-1); border-width:0; }
 .badge-sm { min-height:var(--space-5); padding:0 calc(var(--space-1) + var(--space-05) - var(--border-width)); }
@@ -2362,8 +2375,8 @@ img,svg { display:block; }
    `--background` como texto do sólido serve aos DOIS temas porque o acento já vira com o
    tema: `--success-400` é verde CLARO no escuro e verde ESCURO no claro. */
 /* O selo CHEIO de estado é o botão cheio do mesmo tom (ADR-0061): a mesma cor funda e a mesma letra
-   (`--badge-fill`/`--badge-on`). Quem não declara o par (as categorias, a marca, o neutro) segue
-   enchendo com o acento, como antes. */
+   (`--badge-fill`/`--badge-on`). Quem não declara o par (as categorias, o neutro) segue enchendo com o
+   acento, como antes; a marca enche com o acento e declara só a letra (ADR-0073). */
 .badge-solid { background:var(--badge-fill, var(--badge-accent)); color:var(--badge-on, var(--background)); border-color:transparent; }
 .badge-outline { background:transparent; color:var(--badge-accent); border-color:transparent; }
 /* flat (15/10/2026): o tom de sempre sem a linha em volta — o selo da referência não tem borda em forma nenhuma. A
@@ -3182,15 +3195,17 @@ button.tag-main { cursor:pointer; }
    `.image`; aqui fica só o que não varia. O `<iframe>` é absoluto porque a altura é da caixa, não
    dele. A fachada é um `<button>` que cobre a caixa inteira: o alvo de clique é o vídeo todo, e o
    anel de foco é o `:focus-visible` global da casa. A pastilha de tocar é amarela porque é a ação
-   da tela — o mesmo combinado do `Card variant="brand"`: amarelo só para pedir ação. O anel de
-   `--media-scrim` em volta dela não é enfeite: a capa é do consumidor, e numa capa amarela a
-   pastilha sumia — medido na primeira imagem mostrada ao Victor, em 24/09/2026. */
+   da tela — o mesmo combinado do `Card variant="brand"`: amarelo só para pedir ação. O ícone dela
+   é o marrom da marca (`--primary-mark`), e ela não tem mais o anel escuro em volta: decisão do
+   Victor, 17/10/2026 (*"não quero preto"*). Numa capa amarela, quem a separa é a sombra. A caixa
+   pinta o fundo só por dentro da borda transparente (`background-clip`): sem isso, o fundo escuro
+   aparecia como um aro de 1 em volta da capa. */
 .media-embed { display:grid; gap:var(--space-2); min-inline-size:0; }
-.media-embed-frame { position:relative; overflow:hidden; border:1px solid transparent; border-radius:var(--radius-card); background:var(--media-canvas); }
+.media-embed-frame { position:relative; overflow:hidden; border:1px solid transparent; border-radius:var(--radius-card); background:var(--media-canvas); background-clip:padding-box; }
 .media-embed-frame>iframe { position:absolute; inset:0; inline-size:100%; block-size:100%; border:0; }
 .media-embed-facade { position:absolute; inset:0; display:grid; place-items:center; padding:0; border:0; border-radius:inherit; background:var(--media-canvas); color:var(--media-foreground); cursor:pointer; }
 .media-embed-facade>img { position:absolute; inset:0; inline-size:100%; block-size:100%; object-fit:cover; }
-.media-embed-play { position:relative; display:grid; place-items:center; inline-size:var(--control-h-lg); block-size:var(--control-h-lg); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); box-shadow:0 0 0 var(--space-1) var(--media-scrim),var(--shadow-lg); }
+.media-embed-play { position:relative; display:grid; place-items:center; inline-size:var(--control-h-lg); block-size:var(--control-h-lg); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-mark); box-shadow:var(--shadow-lg); }
 .media-embed-facade:hover .media-embed-play { transform:scale(1.06); }
 .media-embed-link { display:inline-flex; align-items:center; gap:var(--space-1); justify-self:start; color:var(--muted-foreground); font-size:var(--text-sm); }
 .media-embed-link:hover { color:var(--foreground); }
@@ -4501,6 +4516,11 @@ button.graph-node-body { cursor:pointer; }
    da "C" dos botões): com a letra de sempre, o verde caía a 3,79:1 no claro e o `success` a 4,15:1 no escuro, dentro do
    cartão. Medido em 16/10/2026: o pior caso passa a 4,79:1. Os outros selos (suave, plano) têm fundo próprio e não mudam. */
 .badge-outline { background-color:color-mix(in oklab,var(--badge-accent) 16%,transparent); color:color-mix(in oklab,var(--badge-accent) 80%,var(--foreground)); }
+/* Menos o primário da Aurea (ADR-0073, decisão do Victor de 18/10/2026, "A"): a letra é o próprio amarelo, a mesma
+   do selo suave e do botão de contorno da marca — misturado ao texto, ele virava mostarda (2,36:1) só nesta peça. A
+   referência principal usa a mesma letra no suave e no contorno. Só sem `data-brand`: na `lory` do claro, sem a
+   mistura, a letra cairia de 5,56 para 4,42:1. */
+.badge-primary.badge-outline:not(:where([data-brand],[data-brand] *)) { color:var(--badge-accent); }
 /* O registro ganhou o fundo dos campos; o nível `info` (o azul) caía a 4,08:1 sobre ele no claro. A mesma letra 20% para o texto. */
 .log-stream .log-level.info { color:color-mix(in oklab,var(--info-400) 80%,var(--foreground)); }
 .step:not(.step-done,.step-active,.step-error,.done,.active) .step-dot { background-color:var(--fill-3-solid); }

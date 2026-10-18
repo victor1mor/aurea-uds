@@ -49,6 +49,13 @@ const razao = (a: string, b: string) => {
   const [x, y] = [lum(paraSrgb(a)), lum(paraSrgb(b))].sort((p, q) => q - p);
   return (x + 0.05) / (y + 0.05);
 };
+// ADR-0073 (18/10/2026): no tema claro, a letra de destaque é o amarelo da marca (`--primary`), que mede 1,75:1 no fundo
+// da página — decisão do Victor, tomada sabendo disso. A exceção é SÓ essa cor, só no claro: uma letra que é exatamente o
+// `--primary` do lugar não cobra o 4,5:1. Qualquer outra cor, e o escuro inteiro, continuam cobrando.
+const mesmaCor = (a: string, b: string) => {
+  const [x, y] = [paraSrgb(a), paraSrgb(b)];
+  return x.every((v, i) => Math.abs(v - y[i]) <= 2 / 255);
+};
 
 // O piso do fundo do botão de contorno, sem a linha. Medido em 16/10/2026 nos três navegadores, com a "C" da bancada (o
 // tom a 16%): o mais apagado é o vermelho do escuro, 1,07:1; o neutro fica em 1,21 (claro) e 1,34 (escuro). Um fundo que
@@ -94,6 +101,10 @@ for (const tema of ["dark", "light"] as const) {
         r[`${a}/${t}`] = {fg: s.color, bd: s.borderTopColor, pagina,
           bg: s.backgroundColor === "rgba(0, 0, 0, 0)" ? pagina : sobre(s.backgroundColor, pagina)};
       }
+      const sonda = document.createElement("span");
+      sonda.style.color = "var(--primary)";
+      caixa.append(sonda);
+      r["primaria"] = {fg: getComputedStyle(sonda).color, bg: "", bd: "", pagina: ""};
       caixa.remove();
       return r;
     }, {APARENCIAS: [...APARENCIAS], TONS: [...TONS],
@@ -102,9 +113,16 @@ for (const tema of ["dark", "light"] as const) {
     for (const a of APARENCIAS) for (const t of TONS) {
       const c = medidas[`${a}/${t}`];
       // 4.5:1 = WCAG 2.2 SC 1.4.3 para texto normal. O rótulo do botão é 13px/500: não é
-      // "texto grande", então não vale a exceção de 3:1.
-      expect(razao(c.fg, c.bg), `${a} × ${t}: rótulo a ${razao(c.fg, c.bg).toFixed(2)}:1`)
-        .toBeGreaterThanOrEqual(4.5);
+      // "texto grande", então não vale a exceção de 3:1. A letra amarela do claro é a exceção da ADR-0073.
+      if (!(tema === "light" && mesmaCor(c.fg, medidas.primaria.fg))) {
+        expect(razao(c.fg, c.bg), `${a} × ${t}: rótulo a ${razao(c.fg, c.bg).toFixed(2)}:1`)
+          .toBeGreaterThanOrEqual(4.5);
+      } else {
+        // Mesmo na exceção, a letra amarela não pode cair sobre amarelo (1,00:1): no fundo neutro do claro ela dá de 1,54
+        // a 1,91.
+        expect(razao(c.fg, c.bg), `${a} × ${t}: letra amarela sobre ${c.bg}, ${razao(c.fg, c.bg).toFixed(2)}:1`)
+          .toBeGreaterThanOrEqual(1.4);
+      }
       // Sem linha (ADR-0072, decisão do Victor): o de contorno não tem mais a borda a 3:1; o que diz onde ele começa e
       // termina é o FUNDO. O piso cobra que o fundo apareça; a conta é o fundo pintado contra a página.
       if (a === "outline") {
@@ -160,7 +178,7 @@ for (const tema of ["dark", "light"] as const) {
       for (const n of ns) { sonda.style.color = `var(${n})`; out[n] = getComputedStyle(sonda).color; }
       sonda.remove();
       return out;
-    }, [...PAPEIS_DE_TEXTO, ...SUPERFICIES]);
+    }, [...PAPEIS_DE_TEXTO, ...SUPERFICIES, "--primary"]);
 
     // Controle NEGATIVO, e ele já pagou: a primeira versão desta medição dava
     // `--foreground` sobre `--background` = 1,00:1, o que é impossível — o corpo do texto é
@@ -171,6 +189,8 @@ for (const tema of ["dark", "light"] as const) {
       `abaixo de 10 quem está errado é a medição, não o sistema`).toBeGreaterThan(10);
 
     for (const papel of PAPEIS_DE_TEXTO) for (const sup of SUPERFICIES) {
+      // ADR-0073: no claro, o link é o amarelo da marca — a exceção, e só ela.
+      if (tema === "light" && mesmaCor(cores[papel], cores["--primary"])) continue;
       const r = razao(cores[papel], cores[sup]);
       expect(r, `${papel} sobre ${sup}: ${r.toFixed(2)}:1 (SC 1.4.3 pede 4.5)`)
         .toBeGreaterThanOrEqual(4.5);
@@ -197,17 +217,28 @@ for (const tema of ["dark", "light"] as const) {
       document.body.append(p);
     }, tema);
     await esperarTransicoes(page);
-    const {link, fundo, corpo} = await page.evaluate(() => {
+    const {link, fundo, corpo, primaria} = await page.evaluate(() => {
       const a = document.getElementById("prova-a")!;
       let n: HTMLElement | null = a.parentElement, bg = "";
       while (n) { const c = getComputedStyle(n).backgroundColor;
         if (c && c !== "rgba(0, 0, 0, 0)") { bg = c; break; } n = n.parentElement; }
-      return {link: getComputedStyle(a).color, fundo: bg,
+      const sonda = document.createElement("span");
+      sonda.style.color = "var(--primary)";
+      document.body.append(sonda);
+      const primaria = getComputedStyle(sonda).color;
+      sonda.remove();
+      return {link: getComputedStyle(a).color, fundo: bg, primaria,
         corpo: getComputedStyle(document.getElementById("prova-link")!).color};
     });
     const r = razao(link, fundo);
-    expect(r, `link em prosa a ${r.toFixed(2)}:1 no tema ${tema} — SC 1.4.3 pede 4.5`)
-      .toBeGreaterThanOrEqual(4.5);
+    // ADR-0073: no claro, o link é o amarelo da marca (1,75:1), por decisão do Victor. A trava cobra o contrário: que
+    // ele SEJA o amarelo. No escuro, o 4,5:1 continua.
+    if (tema === "light") {
+      expect(mesmaCor(link, primaria), `o link do claro é o amarelo da marca (ADR-0073), e não ${link}`).toBe(true);
+    } else {
+      expect(r, `link em prosa a ${r.toFixed(2)}:1 no tema ${tema} — SC 1.4.3 pede 4.5`)
+        .toBeGreaterThanOrEqual(4.5);
+    }
     // e ele tem de se DISTINGUIR do corpo: um link da cor do texto, num parágrafo, só existe
     // para quem passa o ponteiro. SC 1.4.1 — cor não pode ser o único sinal, mas quando ela é
     // um dos sinais, precisa ser um sinal.

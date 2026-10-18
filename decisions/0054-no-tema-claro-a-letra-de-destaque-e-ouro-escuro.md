@@ -1,7 +1,9 @@
 # ADR-0054 — No tema claro, a letra de destaque é o amarelo escurecido, e não o marrom
 
 - **Data:** 02/10/2026
-- **Estado:** aceita · executada na `0.16.0`, publicada em 02/10/2026.
+- **Estado:** ~~aceita · executada na `0.16.0`, publicada em 02/10/2026.~~ **Substituída pela
+  [ADR-0073](0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md) em 18/10/2026**: a letra de destaque do claro
+  passa a ser o próprio amarelo da marca, por decisão do Victor. O texto abaixo é histórico.
 - **Autoria:** decisão do Victor, olhando o app no tema claro: *"esse marrom me incomoda muito,
   quero amarelo como no modo escuro"*. Entre as quatro saídas da prancha, escolheu a **D**.
 - **Muda:** a seção 5 do `CLAUDE.md` (identidade), na cor de destaque do tema claro. O amarelo

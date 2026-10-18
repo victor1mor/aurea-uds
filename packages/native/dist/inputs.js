@@ -398,10 +398,10 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
                         ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusXs) },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
                 ], children: checked && (papel === "radio"
-                    // O ponto do rádio é da cor de primeiro plano da seleção, sobre a marca já pintada.
+                    // O ponto do rádio é branco, sobre a marca já pintada (decisão do Victor, 17/10/2026).
                     // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
                     ? _jsx(View, { style: { width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
-                            ...canto(t.size.radiusFull), backgroundColor: t.color.controlSelectedForeground } })
+                            ...canto(t.size.radiusFull), backgroundColor: t.color.controlSelectedDot } })
                     // O visto. Era desenhado com DUAS BORDAS de um retângulo girado; sem linha (16/10/2026), ele é
                     // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
                     // que o pacote já usa — sem depender do registro de ícones do app.
@@ -447,7 +447,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
             escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
                 borderColor: "transparent" },
         ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
-                backgroundColor: t.color.controlSelectedForeground } }) }, "marca"));
+                backgroundColor: t.color.controlSelectedDot } }) }, "marca"));
     // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
     // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
     const glifo = icon != null && (_jsx(Icon, { name: icon, size: "lg", weight: escolhido ? "fill" : "regular", color: erro ? perigo : t.color.foreground }, "icone"));
@@ -550,7 +550,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
                 ], children: _jsx(Animated.View, { style: [
                         s.polegar,
                         { width: larguraDoPolegar, height: alturaDoPolegar,
-                            backgroundColor: checked ? t.color.controlSelectedForeground : t.color.mutedForeground,
+                            backgroundColor: checked ? t.color.primaryMark : t.color.mutedForeground,
                             transform: [{ translateX: pos.interpolate({ inputRange: [0, 1], outputRange: [0, curso] }) }] },
                     ] }) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }))] }));
@@ -599,7 +599,7 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
 /**
  * O indicador da opção escolhida, nas listas do `Select` e do `Combobox` (0.32.0): o da referência
  * — a caixa de 20 com o `check` de 16 — e o mesmo glifo da coluna `.combobox-check` da web. A cor
- * é a do destaque que se lê como ícone nos dois temas (`primaryEmphasis`, ADR-0054). Sai do
+ * é a do destaque (`primaryEmphasis`): o amarelo da marca nos dois temas, desde a ADR-0073. Sai do
  * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
  * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
  */

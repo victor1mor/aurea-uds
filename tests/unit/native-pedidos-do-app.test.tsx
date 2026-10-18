@@ -28,6 +28,12 @@ const ICONES = criarRegistroDeIcones({
 });
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider theme="light" icons={ICONES}>{children}</AureaProvider>;
+// ADR-0073 (18/10/2026): no tema claro a tinta sobre o amarelo (`brand-yellow-ink`) é o MESMO cinza-escuro
+// do texto, e um teste que pergunta "é a tinta, e não o texto?" ali não separa nada. Esses testes rodam no
+// ESCURO, onde o texto é claro e a tinta continua escura.
+const escuro = resolverTokens("dark", "comfortable");
+const EnvolveEscuro = ({children}: {children: React.ReactNode}) =>
+  <AureaProvider theme="dark" icons={ICONES}>{children}</AureaProvider>;
 
 type Props = Record<string, unknown>;
 
@@ -343,16 +349,16 @@ describe("A2 · `Card variant=\"brand\"`", () => {
 
   it("o texto dentro dele é FORÇADO, e vence até o tom explícito", () => {
     render(
-      <Envolve>
+      <EnvolveEscuro>
         <Card variant="brand" action={<Text>Registrar</Text>}>
           <Text>Faltam 300 km</Text>
           <Text tone="muted">desde a última troca</Text>
         </Card>
-      </Envolve>);
+      </EnvolveEscuro>);
     const cores = __instancias("Text").map((p) => StyleSheet.flatten(p.style)?.color);
-    expect(cores.every((c) => c === claro.color.primaryForeground)).toBe(true);
+    expect(cores.every((c) => c === escuro.color.primaryForeground)).toBe(true);
     // e NENHUM deles caiu no esmaecido, que mede 1,35 no tema escuro
-    expect(cores).not.toContain(claro.color.mutedForeground);
+    expect(cores).not.toContain(escuro.color.mutedForeground);
   });
 
   it("um cartão comum NÃO força cor nenhuma", () => {
@@ -406,23 +412,27 @@ const ICONES_ANOTADOS = criarRegistroDeIcones({
 });
 const EnvolveAnotado = ({children}: {children: React.ReactNode}) =>
   <AureaProvider theme="light" icons={ICONES_ANOTADOS}>{children}</AureaProvider>;
+// No ESCURO, onde o glifo media 1,83 (ver `EnvolveEscuro`, no topo).
+const EnvolveAnotadoEscuro = ({children}: {children: React.ReactNode}) =>
+  <AureaProvider theme="dark" icons={ICONES_ANOTADOS}>{children}</AureaProvider>;
 
 const campoDoTeste = (id: string) =>
   StyleSheet.flatten(__instancias("TextInput").find((p) => p.testID === id)?.style) ?? {};
 
 describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
   it("o campo dentro do cartão é a tinta a 14% sobre o amarelo (sem linha, ADR-0072)", () => {
+    // No ESCURO: no claro a tinta e o texto são o mesmo cinza (ADR-0073), e a letra não provaria nada.
     render(
-      <Envolve>
+      <EnvolveEscuro>
         <Card variant="brand" action={<Text>Confirmar</Text>}>
           <NumberField value={1200} onChange={() => {}} testID="km" />
         </Card>
-      </Envolve>);
+      </EnvolveEscuro>);
     const e = campoDoTeste("km-campo");
     expect(e.borderColor).toBe("transparent");
-    expect(e.backgroundColor).toBe(comOpacidade(claro.color.primaryForeground, 0.14));
-    // NENHUMA superfície neutra do sistema separa do amarelo no tema claro: o fundo é a própria tinta, clarinha.
-    expect(e.color).toBe(claro.color.primaryForeground);
+    expect(e.backgroundColor).toBe(comOpacidade(escuro.color.primaryForeground, 0.14));
+    // NENHUMA superfície neutra do sistema separa do amarelo: o fundo é a própria tinta, clarinha.
+    expect(e.color).toBe(escuro.color.primaryForeground);
   });
 
   it("FORA do cartão nada muda — o campo continua com o fundo de sempre", () => {
@@ -450,11 +460,11 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
   it("o glifo do `IconButton` sem fundo vira tinta — ele media 1,83 no tema escuro", () => {
     RegistroDeGlifos.length = 0;
     render(
-      <EnvolveAnotado>
+      <EnvolveAnotadoEscuro>
         <Card variant="brand" action={<IconButton name="check" label="Confirmar" />} />
-      </EnvolveAnotado>);
-    expect(RegistroDeGlifos).toContain(claro.color.primaryForeground);
-    expect(RegistroDeGlifos).not.toContain(claro.color.foreground);
+      </EnvolveAnotadoEscuro>);
+    expect(RegistroDeGlifos).toContain(escuro.color.primaryForeground);
+    expect(RegistroDeGlifos).not.toContain(escuro.color.foreground);
   });
 
   it("o botão CHEIO inverte: fundo na tinta, letra no amarelo do cartão", () => {
@@ -489,7 +499,7 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
 describe("a tinta PARA nas superfícies que saem do cartão", () => {
   it("a folha do `Select` aberta dentro do cartão da marca não herda a tinta", () => {
     render(
-      <Envolve>
+      <AureaProvider theme="dark" icons={ICONES}>
         <Card variant="brand" action={<Text>Confirmar</Text>}>
           {/* SEM valor escolhido de propósito: assim "Gasolina" existe SÓ dentro da folha, e o
               gatilho (que fica no cartão e DEVE ter a tinta) mostra o texto de espera. Com um
@@ -498,7 +508,7 @@ describe("a tinta PARA nas superfícies que saem do cartão", () => {
           <Select items={[{value: "a", label: "Gasolina"}]} placeholder="Escolha" onChange={() => {}}
                   testID="combustivel" />
         </Card>
-      </Envolve>);
+      </AureaProvider>);
     act(() => {
       const gatilho = __instancias("Pressable").find((p) => p.testID === "combustivel");
       (gatilho?.onPress as (() => void) | undefined)?.();
@@ -507,7 +517,7 @@ describe("a tinta PARA nas superfícies que saem do cartão", () => {
       .filter((p) => p.children === "Gasolina")
       .map((p) => StyleSheet.flatten(p.style)?.color);
     expect(dentroDaFolha.length).toBeGreaterThan(0);
-    expect(dentroDaFolha).not.toContain(claro.color.primaryForeground);
+    expect(dentroDaFolha).not.toContain(escuro.color.primaryForeground);
   });
 });
 

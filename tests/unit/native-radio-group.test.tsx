@@ -73,14 +73,14 @@ describe("RadioGroup · as medidas da referência", () => {
     expect(e.gap).toBe(t.size.space3);
     expect(e.minHeight).toBe(t.size.targetMin);
   });
-  it("a marca tem 24, e o ponto do escolhido tem 10 na cor da seleção", () => {
+  it("a marca tem 24, e o ponto do escolhido tem 10, branco (ADR-0073)", () => {
     render(<Envolve><Entrega inicial="normal" /></Envolve>);
     expect(marcas().slice(-3)).toHaveLength(3);
     const escolhida = marcas().find((e) => e.backgroundColor === t.color.controlSelected)!;
     expect(escolhida.borderRadius).toBe(t.size.radiusFull);
     const ponto = __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {})
       .find((e) => e.width === t.size.space2 + t.size.space05)!;
-    expect(ponto.backgroundColor).toBe(t.color.controlSelectedForeground);
+    expect(ponto.backgroundColor).toBe(t.color.controlSelectedDot);
   });
   it("o grupo põe 12 entre as linhas, em coluna", () => {
     render(<Envolve><Entrega /></Envolve>);

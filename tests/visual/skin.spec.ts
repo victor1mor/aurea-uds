@@ -874,6 +874,13 @@ for (const theme of ["dark", "light"] as const) {
           const pagina = srgb(getComputedStyle(document.body).backgroundColor);
           const contrastes: Record<string, number> = {};
           const fundos: Record<string, string> = {};
+          // A letra é exatamente o amarelo da marca? É a exceção da ADR-0073 no claro.
+          const sondaAmarela = document.createElement("span");
+          sondaAmarela.style.color = "var(--primary)";
+          document.body.append(sondaAmarela);
+          const amarelo = srgb(getComputedStyle(sondaAmarela).color);
+          sondaAmarela.remove();
+          const letraAmarela: Record<string, boolean> = {};
           for (const v of ["neutral", "primary", "info", "success", "warning", "danger"]) {
             for (const e of ["soft", "solid", "outline"]) {
               const el = document.querySelector(`.lab-${v}-${e}`)!;
@@ -881,6 +888,7 @@ for (const theme of ["dark", "light"] as const) {
               const fundo = srgb(cs.backgroundColor, `rgb(${pagina.join(",")})`);
               contrastes[`${v}/${e}`] = razao(srgb(cs.color, `rgb(${fundo.join(",")})`), fundo);
               fundos[`${v}/${e}`] = cs.backgroundColor;
+              letraAmarela[`${v}/${e}`] = srgb(cs.color).every((x, i) => Math.abs(x - amarelo[i]) <= 2);
             }
           }
           const alt = (s: string) => document.querySelector(s)!.getBoundingClientRect().height;
@@ -891,7 +899,7 @@ for (const theme of ["dark", "light"] as const) {
             return {passa: o.right - alvo.right, acima: alvo.top - o.top};
           };
           return {
-            contrastes, fundos,
+            contrastes, fundos, letraAmarela,
             alturas: {sm: alt(".lab-size-sm"), md: alt(".lab-size-md"), lg: alt(".lab-size-lg")},
             pontoNoChip: document.querySelector(".lab-dot .badge-dot") != null,
             anel: getComputedStyle(document.querySelector(".lab-square")!).boxShadow,
@@ -1368,7 +1376,7 @@ for (const theme of ["dark", "light"] as const) {
                 const d = ctx.getImageData(0, 0, 1, 1).data;
                 return `rgb(${d[0]}, ${d[1]}, ${d[2]})`;
               };
-              return {texto: sonda("--sidebar-primary"), fundo: sonda("--sidebar-accent")};
+              return {texto: sonda("--sidebar-primary"), fundo: sonda("--sidebar-accent"), amarelo: sonda("--primary")};
             })(),
             // a COLUNA dos dois shells: A tem o trilho aninhado (não deve encolher),
             // B tem o trilho como filho direto (deve encolher)
@@ -2300,8 +2308,15 @@ for (const theme of ["dark", "light"] as const) {
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
       };
       const [a, b2] = [lum(px(m.sidebar.acentoDaLateral.texto)), lum(px(m.sidebar.acentoDaLateral.fundo))].sort((x, y) => y - x);
-      expect((a + 0.05) / (b2 + 0.05), `o acento da lateral (--sidebar-primary) contra o fundo do `
-        + "item atual (--sidebar-accent) tem de ser legível — AA, 4,5:1").toBeGreaterThanOrEqual(4.5);
+      // ADR-0073 (18/10/2026): no tema claro, o item atual é o amarelo da marca (1,60:1 sobre a cápsula), por decisão do
+      // Victor, tomada sabendo disso. A exceção é só essa cor, só no claro, e ela cobra o contrário: que SEJA o amarelo.
+      if (theme === "light") {
+        expect(m.sidebar.acentoDaLateral.texto, "no claro, o acento da lateral é o amarelo da marca (ADR-0073)")
+          .toBe(m.sidebar.acentoDaLateral.amarelo);
+      } else {
+        expect((a + 0.05) / (b2 + 0.05), `o acento da lateral (--sidebar-primary) contra o fundo do `
+          + "item atual (--sidebar-accent) tem de ser legível — AA, 4,5:1").toBeGreaterThanOrEqual(4.5);
+      }
     }
     expect(m.sidebar.colunas.length, "o fixture tem dois shells: o do defeito e o da prova")
       .toBe(2);
@@ -2315,6 +2330,8 @@ for (const theme of ["dark", "light"] as const) {
     // 25a. BADGE reescrito (17/08/2026, a pedido do Victor: "o nosso atual é pobre").
     const bl = m.badgeLab;
     for (const [combo, r] of Object.entries(bl.contrastes)) {
+      // ADR-0073: no claro, a letra que é exatamente o amarelo da marca é a exceção aprovada (o selo primário suave).
+      if (theme === "light" && bl.letraAmarela[combo]) continue;
       expect(r, `badge ${combo}: texto legível (AA, 4.5:1) — as 18 combinações se medem, não `
         + "se conferem no olho").toBeGreaterThanOrEqual(4.5);
     }
