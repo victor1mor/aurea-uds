@@ -171,6 +171,7 @@ const LADO_ELK = { top: "NORTH", right: "EAST", bottom: "SOUTH", left: "WEST" };
 // E no nó com porta, a linha SEM porta vai a uma porta "de base", no meio do lado de entrada ou de
 // saída: medido no protótipo, sem ela o arrumador ligava a linha no CANTO do nó (o 0,0 da caixa).
 let avisouSemElk = false;
+let avisouFaixa = false;
 let elkNaTela = null;
 // FORA DA TELA PRINCIPAL (MNT-19.1): o `elk.bundled.js` roda na própria tela (é um "falso trabalhador").
 // Com `layoutWorker`, o APP entrega o trabalhador de verdade — o jeito de criar um trabalhador muda de
@@ -224,13 +225,36 @@ async function arrumarComElk(elk, e) {
         }
         arestas = arvore;
     }
+    // A FAIXA QUE O APP PEDE (`layer`, MNT-27, 17/10/2026). A opção que ia antes (`layerChoiceConstraint`) só é lida pelo
+    // arrumador interativo do ELK, que o `elkjs` não tem: medido no 0.12.0, o mapa saía igual com e sem ela — o firewall
+    // secundário caía abaixo do núcleo, como o app relatou. O que funciona é a PARTIÇÃO do motor (ordem das faixas). Medido
+    // no motor: (1) com partição em só alguns nós, nada muda — por isso ela liga só quando TODO nó de cima tem faixa;
+    // (2) com partição DENTRO de contêiner, o mapa inteiro quebra (o núcleo ia para baixo) — por isso ela vai só nos nós
+    // de cima e no contêiner, que entra na faixa dele ou na menor dos de dentro; lá dentro, o motor arruma sozinho.
+    const paiDoGrupo = new Map(e.grupos.map(g => [g.id, g.pai]));
+    const topoDe = (pai) => { let t = pai; while (t && paiDoGrupo.get(t))
+        t = paiDoGrupo.get(t); return t; };
+    const faixaDoGrupo = (id) => {
+        const g = e.grupos.find(x => x.id === id);
+        if (g?.camada != null)
+            return g.camada;
+        const de = e.folhas.filter(f => f.camada != null && topoDe(f.pai) === id).map(f => f.camada);
+        return de.length ? Math.min(...de) : undefined;
+    };
+    const deCima = [...e.folhas.filter(f => !(hierarquia && f.pai)).map(f => f.camada), ...(hierarquia ? e.grupos.filter(g => !g.pai).map(g => faixaDoGrupo(g.id)) : [])];
+    const algumaFaixa = e.algoritmo === "layered" && e.folhas.some(f => f.camada != null);
+    const porFaixa = algumaFaixa && deCima.every(c => c != null);
+    if (algumaFaixa && !porFaixa && !avisouFaixa) {
+        avisouFaixa = true;
+        console.warn("DependencyGraph: `layer` só vale quando todo nó fora de contêiner tem um (e todo contêiner, ou um nó dentro dele). Ficou a arrumação sem faixas.");
+    }
     const comPortas = new Set(e.algoritmo === "layered" ? e.folhas.filter(f => f.portas.length).map(f => f.id) : []);
     const noElk = (f) => {
         const opcoes = {};
         if (f.raiz && e.algoritmo === "layered")
             opcoes["elk.layered.layering.layerConstraint"] = "FIRST";
-        if (f.camada != null && e.algoritmo === "layered")
-            opcoes["elk.layered.layering.layerChoiceConstraint"] = String(f.camada);
+        if (porFaixa && !f.pai)
+            opcoes["elk.partitioning.partition"] = String(f.camada);
         if (!comPortas.has(f.id))
             return { id: f.id, width: f.larg, height: f.alt, layoutOptions: opcoes };
         opcoes["elk.portConstraints"] = "FIXED_POS";
@@ -252,7 +276,8 @@ async function arrumarComElk(elk, e) {
     const recheio = `[top=${RECHEIO_DO_GRUPO + CABECA_DO_GRUPO},left=${RECHEIO_DO_GRUPO},bottom=${RECHEIO_DO_GRUPO},right=${RECHEIO_DO_GRUPO}]`;
     if (hierarquia)
         for (const g of e.grupos)
-            caixas.set(g.id, { id: g.id, children: [], layoutOptions: { "elk.padding": recheio } });
+            caixas.set(g.id, { id: g.id, children: [], layoutOptions: { "elk.padding": recheio,
+                    ...(porFaixa && !g.pai ? { "elk.partitioning.partition": String(faixaDoGrupo(g.id)) } : {}) } });
     const dentro = (pai) => (pai && caixas.get(pai)) || raiz;
     if (hierarquia)
         for (const g of e.grupos)
@@ -265,6 +290,7 @@ async function arrumarComElk(elk, e) {
         ...(e.algoritmo === "layered" ? { "elk.algorithm": "layered", "elk.direction": vertical ? "DOWN" : "RIGHT",
             "elk.layered.spacing.nodeNodeBetweenLayers": String(VAO_X),
             "elk.layered.nodePlacement.strategy": "BRANDES_KOEPF", "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
+            ...(porFaixa ? { "elk.partitioning.activate": "true" } : {}),
             ...(hierarquia ? { "elk.hierarchyHandling": "INCLUDE_CHILDREN" } : {}) }
             : e.algoritmo === "mrtree" ? { "elk.algorithm": "mrtree", "elk.direction": vertical ? "DOWN" : "RIGHT" }
                 : { "elk.algorithm": "radial" }) };
@@ -654,8 +680,8 @@ export function DependencyGraph({ nodes, edges, label, selectedId, onSelect, con
     const algoritmo = layout === "layered" ? "layered" : layout === "tree" ? "mrtree" : layout === "radial" ? "radial" : null;
     const entradaElk = React.useMemo(() => algoritmo ? { algoritmo, orientacao: orientation,
         folhas: folhas.map(n => ({ id: n.id, ...tamanho(n.id), portas: n.ports ?? [], camada: n.layer, pai: paiAberto(n.id), raiz: n.id === rootId })),
-        grupos: [...abertos].sort((a, b) => profundidade(a) - profundidade(b)).map(id => ({ id, pai: paiAberto(id) })),
-        arestas: desenhadas.map((x, i) => ({ id: ident[i].id, de: x.item.from, para: x.item.to, portaDe: x.item.fromPort, portaPara: x.item.toPort })) } : null, [algoritmo, orientation, folhas, tamanho, paiAberto, rootId, abertos, profundidade, desenhadas, ident]);
+        grupos: [...abertos].sort((a, b) => profundidade(a) - profundidade(b)).map(id => ({ id, pai: paiAberto(id), camada: porId.get(id)?.layer })),
+        arestas: desenhadas.map((x, i) => ({ id: ident[i].id, de: x.item.from, para: x.item.to, portaDe: x.item.fromPort, portaPara: x.item.toPort })) } : null, [algoritmo, orientation, folhas, tamanho, paiAberto, rootId, abertos, profundidade, desenhadas, ident, porId]);
     const chaveElk = React.useMemo(() => entradaElk ? JSON.stringify(entradaElk) : "", [entradaElk]);
     // A arrumação chega DEPOIS (é assíncrona e o pacote é opcional); até lá, e no servidor, a simples.
     const [elk, setElk] = React.useState(null);
