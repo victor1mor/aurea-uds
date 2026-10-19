@@ -82,9 +82,10 @@ frases soltas: `<AureaProvider strings={{ close: "Fechar" }}>`.
 ### Server Components
 
 O entry point principal é um módulo de **servidor**, então importar dele num Server Component
-funciona. Os módulos interativos carregam `"use client"` sozinhos, e três ficam no servidor: o
-entry point principal, o `Accordion` (só marcação) e as funções de apoio — `cx`, `defaultStrings`,
-`ptBR`, `defaultSpriteUrl` —, que por isso podem ser *chamadas* no servidor.
+funciona. Os módulos interativos carregam `"use client"` sozinhos, e ficam no servidor: o entry
+point principal, as peças que são só marcação (`Card`, `Stack`, `Cluster`, `Grid` e as outras do
+`markup.tsx`, [ADR-0026](decisions/0026-marcacao-pura-e-de-servidor.md)) e as funções de apoio —
+`cx`, `defaultStrings`, `ptBR`, `defaultSpriteUrl` —, que por isso podem ser *chamadas* no servidor.
 
 Duas aplicações de prova são construídas a cada verificação — uma num framework com componentes de
 servidor, outra num bundler só de cliente —, e o build reprova se uma diretiva faltar ou
@@ -188,7 +189,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-411 páginas geradas — 146 de componente, 219 de padrão, 15 de bloco, 23 de receita e 8 índices de área — a partir de 137 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 102 trazem um starter — o preview real e o código, ainda sem exemplos extras. 137 componentes publicam a tabela de props.
+426 páginas geradas — 146 de componente, 219 de padrão, 15 de bloco, 23 de receita, 15 de documentação e 8 índices de área — a partir de 137 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 102 trazem um starter — o preview real e o código, ainda sem exemplos extras. 137 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

@@ -137,6 +137,27 @@ bancada; a versão sobe quando o lote fechar.
   nova; quem conta com 4,5:1 da letra de destaque no claro deixa de ter. O `brand-yellow-text` continua existindo,
   sem uso nos temas.
 
+### O site
+
+- **A área "Getting Started" (SITE-03).** A área "Docs" do site tinha uma página. Agora tem 16, na ordem da área da
+  referência e com o ícone de cada uma na lateral: **Overview** — Introduction, Quick Start, Design Principles,
+  Frameworks, Showcase, Roadmap; **Handbook** — Colors, Theming, Dark Mode, Styling, Animation, Composition, e quatro
+  só da Aurea: Density, Icons, RTL e Accessibility. Escolhas do Victor (18/10/2026): ficam fora o que a Aurea não tem
+  (CLI, MCP, Figma); Showcase e Roadmap entram. Cada página é um arquivo de texto em `apps/catalog/content/docs/`, lido
+  por `scripts/docs-markdown.mjs` (vocabulário fechado: marca desconhecida derruba a montagem) e desenhado com as
+  peças da Aurea (o Prose, o CodeBlock, o Table e o Link; nenhuma muda, fora a correção do Prose abaixo). A montagem também derruba link interno que aponta para página
+  ou âncora que não existe. A aba do topo passa a se chamar "Getting Started"; no Início continua "Docs", como no
+  Início da referência (com o nome longo, o topo do Início quebrava de 776 a 800). Quem cobra:
+  `tests/unit/docs-markdown.test.tsx` e `tests/visual/site-getting-started.spec.ts`.
+
+### Consertado no site e no core
+
+- **`Prose`: código no meio do texto quebra a linha.** Um `window.Aurea.setDensity("compact")` num parágrafo empurrava
+  a página para o lado a 320 (+25, medido na página Density). O `.prose code` ganha `overflow-wrap:anywhere`; dentro do
+  `pre` nada muda. Quem cobra: a varredura "nenhuma página rola de lado" (sem a correção, reprova).
+- **README:** a frase sobre o que fica no servidor citava o Accordion como "só marcação"; o arquivo dele começa com
+  `"use client"` desde a primeira versão pública. Agora cita as peças do `markup.tsx` (ADR-0026).
+
 ---
 
 ## [0.35.0] — 2026-10-17

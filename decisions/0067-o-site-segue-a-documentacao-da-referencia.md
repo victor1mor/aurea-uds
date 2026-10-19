@@ -100,3 +100,22 @@ na largura da tela do Victor e a 1440, e repetida como número na prova (`tests/
   menu "Copy" completo e o "Copy Prompt" (SITE-06); as notas de versão; e, em tela menor, o que a referência faz e nós
   ainda não — a lateral a partir de 768, a busca em ícone abaixo de 768, o índice em barra fixa entre 1024 e 1279.
   **Depois dele:** a troca Web | Native, à direita (SITE-07), o MCP e a migração.
+
+## Lote U (18/10/2026): a área Getting Started
+
+O SITE-03, com o "pode" do Victor (*"Comece pelo SITE-03, a área Docs"*). A árvore é a da área da referência, lida no
+menu dela (o `meta.json` do ramo `v3`): **Overview** e **Handbook**, cada página com o ícone dela na lateral (o
+equivalente no Phosphor). O grupo "UI for Agents" entra com o SITE-06, que faz o `llms.txt`.
+
+- **Entram só as páginas com conteúdo de verdade, mais as que o Victor mandou construir.** Ficam fora CLI, MCP e Figma
+  (a Aurea não tem nenhum dos três); Showcase e Roadmap entram (*"pq nao?"*, e a escolha dele). No fim do Handbook, quatro
+  páginas só da Aurea: Density, Icons, RTL e Accessibility (*"Sim, as quatro"*).
+- **O texto mora em arquivo, e não em código:** `apps/catalog/content/docs/<nome>.md`, como os da referência. O mesmo
+  texto vira a página e o "Copy Markdown" (e, no SITE-06, o `.md` de cada página). O leitor (`scripts/docs-markdown.mjs`)
+  tem vocabulário fechado: o que ele não conhece derruba a montagem, com o arquivo e a linha.
+- **Desenhado só com a Aurea:** `Prose` (a pele do texto longo), `CodeBlock`, `Table` (que rola dentro da própria caixa;
+  a tabela crua do `Prose` empurrava a página para o lado a 375) e `Link`. Os exemplos vivos (`::: demo`) usam a caixa
+  Preview | Code das páginas de componente.
+- **O nome:** a aba das áreas diz "Getting Started", como a da referência; no Início, "Docs", como no Início dela.
+- **Medido, ainda diferente da referência:** a entrelinha do texto (27 na nossa, 24 na dela) e o espaço acima do título
+  de seção (32 e 48). Os dois vêm do `Prose`; vão ao Victor antes de mudar a peça.

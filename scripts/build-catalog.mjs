@@ -18,6 +18,7 @@ import {dirname, join} from "node:path";
 import * as A from "../packages/react/dist/index.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
+import {lerDoc, paraTexto} from "./docs-markdown.mjs";
 import {linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
 // A aba "Components" da vitrine do Início (15/10/2026): o MESMO arquivo que o `home.js` deixa vivo.
 import {VitrineComponentes} from "../apps/catalog/live/vitrine-componentes.mjs";
@@ -58,9 +59,6 @@ const muted = {margin: "var(--space-1) 0 0", color: "var(--muted-foreground)", f
 // Nome de componente é alfanumérico, mas categoria ("Data Display") e título de exemplo
 // ("Without Tag") viram id/âncora — sem isto sairia id com espaço, que é HTML inválido.
 const slug = name => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const INSTALL_CMD = "pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts";
-// A ordem importa: as fontes ANTES do core (o core não embute fonte nenhuma).
-const IMPORT_CSS = 'import "@aurea-uds/fonts/css";\nimport "@aurea-uds/core/css";';
 
 // ── registry + conteúdo ───────────────────────────────────────────────────────
 const regDir = join(root, "packages/contracts/registry");
@@ -377,6 +375,32 @@ function chipLink(label, href) { return h("a", {key: label, className: "chip chi
 //   extras    [{id, label, node, toc}] na ordem que o tipo declara (page-model.EXTRAS)
 //   markdown  o texto que o "Copy Markdown" copia
 // Devolve o conteúdo e o índice da página — o índice vai para a coluna da direita do shell.
+// A CABEÇA, o ANTERIOR/PRÓXIMO e o TEXTO DO "COPY MARKDOWN" são os mesmos na página de item e na de documentação
+// (lote U, SITE-03) — na referência as duas têm a mesma moldura. Uma função cada, para as duas não divergirem.
+const cabecaDaPagina = (title, lede, pills = []) => h("header", {className: "page-head"},
+  h("div", {className: "page-head-row"}, h("h1", null, title),
+    h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown")),
+  h("p", {className: "page-lede"}, lede),
+  pills.length ? h("div", {className: "page-pills"}, ...pills.map(([rotulo, icone, href]) =>
+    h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, target: "_blank", rel: "noreferrer"}, rotulo))) : null);
+// rótulo distinto do <nav> do componente Pagination: dois landmarks de navegação com
+// o MESMO nome é violação (axe landmark-unique) e o leitor de tela não distingue.
+// O ANTERIOR E O PRÓXIMO como os da referência (lote T, SITE-09 — o Victor: "nossos botões estão quebrando por conta
+// de texto longo; faça como eles, se o texto for longo coloque …"): lado a lado, a seta junto do nome, e a descrição
+// numa linha só, cortada com "…" (o `Text truncate`). Sem descrição, "Previous page" / "Next page", como lá.
+const anteriorProximo = (prev, next) => h("nav", {className: "prevnext", "aria-label": "Previous and next"},
+  prev ? h("a", {className: "pn", href: prev.href},
+    h("span", {className: "pn-nome"}, h(A.Icon, {name: "caret-left"}), h("strong", null, prev.name)),
+    h(A.Text, {type: "body-sm", tone: "muted", truncate: true}, prev.summary || "Previous page")) : null,
+  next ? h("a", {className: "pn pn-next", href: next.href},
+    h("span", {className: "pn-nome"}, h("strong", null, next.name), h(A.Icon, {name: "caret-right"})),
+    h(A.Text, {type: "body-sm", tone: "muted", truncate: true}, next.summary || "Next page")) : null);
+// O texto do "Copy Markdown": vai na própria página, sem rede, e o catalog.js copia. Vai como JSON, com
+// todo "<" escrito "<": cru, o código dos exemplos ("<Link href=…>") aparecia como TAG no HTML — o
+// check 45 do validate.py leu um link de exemplo como recurso de fora, e um "</script>" fecharia o bloco.
+const textoParaCopiar = markdown => h("script", {type: "application/json", id: "page-markdown",
+  dangerouslySetInnerHTML: {__html: JSON.stringify(markdown).replace(/</g, "\\u003c")}});
+
 function itemPage({title, lede, pills = [], demo, imports, points = [], related = [], extras = [], prev, next, markdown}) {
   const secoes = extras.filter(Boolean);
   // O índice sai das seções que a página REALMENTE tem — nunca de uma lista escrita à mão.
@@ -384,12 +408,7 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
     ...secoes.flatMap(s => [{id: s.id, label: s.label}, ...(s.toc || [])]),
     ...(related.length ? [{id: "related", label: "Related Components"}] : [])];
   const node = h(Fragment, null,
-    h("header", {className: "page-head"},
-      h("div", {className: "page-head-row"}, h("h1", null, title),
-        h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown")),
-      h("p", {className: "page-lede"}, lede),
-      pills.length ? h("div", {className: "page-pills"}, ...pills.map(([rotulo, icone, href]) =>
-        h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, target: "_blank", rel: "noreferrer"}, rotulo))) : null),
+    cabecaDaPagina(title, lede, pills),
     h("section", {className: "block", id: "usage"}, h("h2", null, "Usage"),
       h(A.CodeBlock, {language: "tsx", copyable: true, className: "usage-import"}, imports),
       demo.description ? h("p", {className: "demo-lede"}, demo.description) : null,
@@ -401,23 +420,8 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
       h("div", {className: "related-grid"}, ...related.map(([nome, href, resumo]) => href
         ? h("a", {key: nome, className: "related-card", href}, h("strong", null, nome), resumo ? h("span", null, resumo) : null)
         : h("div", {key: nome, className: "related-card"}, h("strong", null, nome), resumo ? h("span", null, resumo) : null)))) : null,
-    // rótulo distinto do <nav> do componente Pagination: dois landmarks de navegação com
-    // o MESMO nome é violação (axe landmark-unique) e o leitor de tela não distingue.
-    // O ANTERIOR E O PRÓXIMO como os da referência (lote T, SITE-09 — o Victor: "nossos botões estão quebrando por conta
-    // de texto longo; faça como eles, se o texto for longo coloque …"): lado a lado, a seta junto do nome, e a descrição
-    // numa linha só, cortada com "…" (o `Text truncate`). Sem descrição, "Previous page" / "Next page", como lá.
-    h("nav", {className: "prevnext", "aria-label": "Previous and next"},
-      prev ? h("a", {className: "pn", href: prev.href},
-        h("span", {className: "pn-nome"}, h(A.Icon, {name: "caret-left"}), h("strong", null, prev.name)),
-        h(A.Text, {type: "body-sm", tone: "muted", truncate: true}, prev.summary || "Previous page")) : null,
-      next ? h("a", {className: "pn pn-next", href: next.href},
-        h("span", {className: "pn-nome"}, h("strong", null, next.name), h(A.Icon, {name: "caret-right"})),
-        h(A.Text, {type: "body-sm", tone: "muted", truncate: true}, next.summary || "Next page")) : null),
-    // O texto do "Copy Markdown": vai na própria página, sem rede, e o catalog.js copia. Vai como JSON, com
-    // todo "<" escrito "<": cru, o código dos exemplos ("<Link href=…>") aparecia como TAG no HTML — o
-    // check 45 do validate.py leu um link de exemplo como recurso de fora, e um "</script>" fecharia o bloco.
-    h("script", {type: "application/json", id: "page-markdown",
-      dangerouslySetInnerHTML: {__html: JSON.stringify(markdown || `# ${title}\n\n${lede}\n`).replace(/</g, "\\u003c")}}));
+    anteriorProximo(prev, next),
+    textoParaCopiar(markdown || `# ${title}\n\n${lede}\n`));
   return {node, toc};
 }
 
@@ -440,7 +444,8 @@ function paraMarkdown({title, lede, imports, demo, points = [], exemplos = [], p
 // dele na lateral. Com o resumo de cada página, como os da referência; sem resumo, o texto padrão ("Previous page").
 const resumoDaPagina = arquivo => fichas.find(f => `${slug(f.name)}.html` === arquivo)?.summary
   ?? patterns.find(x => `${x.slug}.html` === arquivo)?.description
-  ?? blocks.find(x => `${x.slug}.html` === arquivo)?.description ?? null;
+  ?? blocks.find(x => `${x.slug}.html` === arquivo)?.description
+  ?? docs.find(d => d.arquivo === arquivo)?.description ?? null;
 const vizinhos = (area, arquivo) => {
   const linha = MENUS[area]().flatMap(g => g.items);
   const k = linha.findIndex(x => x.id === arquivo);
@@ -678,28 +683,130 @@ function homePage() {
   return {node, toc: []};
 }
 
-// ── Getting Started (getting-started.html) ───────────────────────────────────
-// A instalação mora AQUI, uma vez — como na referência —, e não em cada página de item.
-function gettingStartedPage() {
-  const toc = [{id: "installation", label: "Installation"}, {id: "provider", label: "Provider"},
-    {id: "first-component", label: "Your first component"}, {id: "native", label: "React Native"}];
+// ── A área "Getting Started" (lote U, SITE-03) ───────────────────────────────
+// As páginas da área, na ORDEM do menu da referência (o `meta.json` dela, ramo `v3`, lido em 18/10/2026): Overview e
+// Handbook. Decisões do Victor (18/10/2026): entram as que a Aurea tem de verdade, mais Showcase e Roadmap (construídos
+// neste lote), e quatro páginas só da Aurea no fim do Handbook (Density, Icons, RTL, Accessibility). CLI, MCP e Figma
+// ficam fora (a Aurea não tem). O grupo "UI for Agents" entra com o SITE-06, que faz o `llms.txt`.
+// Cada página é um arquivo de texto em `content/docs/` (o leitor, `docs-markdown.mjs`). A primeira continua no
+// `getting-started.html` — o endereço que o botão "Get started" do Início e quem já tem o link usam.
+const DOCS = [
+  {id: "overview", label: "Overview", paginas: ["introduction", "quick-start", "design-principles", "frameworks", "showcase", "roadmap"]},
+  {id: "handbook", label: "Handbook", paginas: ["colors", "theming", "dark-mode", "styling", "animation", "composition",
+    "density", "icons", "rtl", "accessibility"]},
+];
+const docsDir = join(contentDir, "docs");
+const arquivoDoDoc = nome => nome === "introduction" ? "getting-started.html" : `docs-${nome}.html`;
+const docs = DOCS.flatMap(g => g.paginas).map(nome => {
+  const caminho = join(docsDir, `${nome}.md`);
+  if (!existsSync(caminho)) throw new Error(`a área Getting Started lista "${nome}", e não existe content/docs/${nome}.md`);
+  const texto = readFileSync(caminho, "utf8");
+  return {nome, arquivo: arquivoDoDoc(nome), texto, ...lerDoc(texto, `content/docs/${nome}.md`)};
+});
+// Arquivo na pasta que o menu não lista é página que ninguém acha — e que a contagem não vê.
+for (const f of readdirSync(docsDir).filter(f => f.endsWith(".md"))) {
+  if (!docs.some(d => `${d.nome}.md` === f)) throw new Error(`content/docs/${f} existe e não está no menu (DOCS)`);
+}
+
+// Os EXEMPLOS VIVOS das páginas (`::: demo <id>`): o que o texto não sabe desenhar. O código que o leitor vê é o bloco
+// que vem logo depois da diretiva, no próprio texto — aqui mora só o desenho.
+// Um painel com o seu próprio tema, marca ou densidade: o atributo na própria caixa, como a página "Theming" ensina. O
+// fundo é o da página daquele tema (sem ele a caixa mostraria o fundo da página de fora).
+const painelComAtributos = (attrs, rotulo, ...filhos) => h("div", {...attrs, key: rotulo,
+  style: {background: "var(--background)", color: "var(--foreground)", padding: "var(--space-4)", borderRadius: "var(--radius-card)"}},
+  h(A.Stack, {gap: "tight"}, h(A.Text, {type: "body-sm", tone: "muted"}, rotulo), ...filhos));
+const amostras = (titulo, tokens) => h(A.Cluster, {gap: "normal", key: titulo, align: "center"},
+  h(A.Text, {type: "body-sm", weight: "semibold"}, titulo),
+  ...tokens.map(t => h(A.Cluster, {key: t, gap: "tight"},
+    h(A.ColorSwatch, {color: `var(${t})`, label: t, size: "sm"}), h(A.Code, null, t))));
+const DEMOS_DOCS = {
+  "first-button": () => h(A.Button, {variant: "primary"}, "Save"),
+  // Colors: as cores de cada papel, no tema da página (a amostra muda quando o tema muda). Cabe na caixa sem rolar
+  // (ADR-0002): as categorias ficam na tabela da página e na do `Badge`.
+  "color-roles": () => h(A.Stack, {gap: "normal"},
+    amostras("Accent", ["--primary", "--primary-foreground", "--link"]),
+    amostras("Neutrals", ["--background", "--card", "--secondary"]),
+    amostras("Fills", ["--fill-1", "--fill-2", "--fill-3"]),
+    amostras("Status", ["--success", "--warning", "--destructive", "--info"]),
+    amostras("On the page", ["--success-400", "--warning-400", "--danger-400", "--info-400"])),
+  // Theming: os três eixos, cada painel com o seu atributo.
+  "theme-axes": () => h(A.Cluster, {gap: "normal", align: "start"},
+    ...[[{"data-theme": "light"}, 'data-theme="light"'], [{"data-theme": "dark"}, 'data-theme="dark"'],
+      [{"data-theme": "dark", "data-density": "compact"}, 'data-density="compact"'],
+      [{"data-theme": "dark", "data-brand": "lory"}, 'data-brand="lory"']].map(([attrs, rotulo]) =>
+      // Dois botões, e não um selo primário: o selo escreve com o amarelo, e a exceção do amarelo como letra no claro
+      // (ADR-0073) vale para a página no claro — num painel claro dentro da página escura, o axe o reprova (medido).
+      painelComAtributos(attrs, rotulo, h(A.Cluster, {gap: "tight"}, h(A.Button, {variant: "primary"}, "Save"),
+        h(A.Button, null, "Cancel"))))),
+  // Dark Mode: os dois modos do `ThemeToggle`.
+  "theme-toggle": () => h(A.Cluster, {gap: "loose"}, h(A.ThemeToggle), h(A.ThemeToggle, {mode: "light-dark-system"})),
+  // Density: a mesma dupla nas três densidades.
+  // Uma linha por densidade, para a caixa não rolar (ADR-0002).
+  "density-scale": () => h(A.Stack, {gap: "tight"},
+    ...["compact", "comfortable", "spacious"].map(d => h(A.Cluster, {key: d, gap: "normal", wrap: false, "data-density": d},
+      h(A.Code, null, d), h(A.Button, {variant: "primary"}, "Save"), h(A.Input, {placeholder: "Name", "aria-label": `Name (${d})`})))),
+  // Styling: os dois eixos do botão e o atalho `variant`.
+  "styling-tone-appearance": () => h(A.Cluster, null,
+    h(A.Button, {variant: "primary"}, "Save"), h(A.Button, {appearance: "outline", tone: "success"}, "Approve"),
+    h(A.Button, {appearance: "soft", tone: "danger"}, "Delete"), h(A.Button, {appearance: "ghost", size: "sm"}, "Cancel")),
+  // Composition: as partes do cartão.
+  "composition-card-parts": () => h(A.Card, null,
+    h(A.Card.Header, null, h(A.Card.Title, null, "Weekly report"), h(A.Card.Description, null, "Sent every Monday at 9:00.")),
+    h(A.Card.Content, null, "12 people receive it."),
+    h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Edit"), h(A.Button, null, "Pause"))),
+  // Icons: a forma normal e a cheia.
+  "icons-regular-fill": () => h(A.Cluster, null,
+    h(A.Icon, {name: "house"}), h(A.Icon, {name: "house", weight: "fill"}),
+    h(A.Icon, {name: "bell", size: "lg"}), h(A.Icon, {name: "bell", size: "lg", weight: "fill"})),
+  // RTL: a mesma linha do tempo, espelhada só dentro da caixa.
+  "rtl-timeline": () => h("div", {dir: "rtl"}, h(A.Timeline, {items: [
+    {title: "Created", description: "Draft opened", time: "10:02"}, {title: "Reviewed", time: "11:40"}]})),
+};
+
+// O texto do meio da linha, com as peças da Aurea: o link é o `Link` (o de fora, com a setinha e a aba nova).
+const pedacos = (lista, chave) => lista.map((p, n) => p.strong !== undefined ? h("strong", {key: `${chave}${n}`}, p.strong)
+  : p.code !== undefined ? h("code", {key: `${chave}${n}`}, p.code)
+  : p.link !== undefined ? h(A.Link, {key: `${chave}${n}`, href: p.href, external: /^https?:/.test(p.href)}, p.link)
+  : p.t);
+
+function docPage(doc) {
+  const {blocos} = doc;
+  const toc = blocos.filter(b => b.tipo === "h2" || b.tipo === "h3")
+    .map(b => ({id: b.id, label: b.rotulo, ...(b.tipo === "h3" ? {sub: true} : {})}));
+  const filhos = [];
+  // A tabela é o `Table` da Aurea, e não a tabela crua do `Prose`: a crua não rola, e a 375 três páginas rolavam para o
+  // lado (medido). O `Table` rola dentro da própria caixa, que é uma região com nome — a legenda. O nome sai do título
+  // da seção; duas tabelas na mesma seção ganham número, porque região com nome repetido é landmark repetido (axe).
+  let secao = doc.title;
+  const legendas = new Map();
+  for (let n = 0; n < blocos.length; n++) {
+    const b = blocos[n];
+    if (b.tipo === "h2" || b.tipo === "h3") secao = b.rotulo;
+    if (b.tipo === "h2" || b.tipo === "h3") filhos.push(h(b.tipo, {key: n, id: b.id}, ...pedacos(b.texto, "t")));
+    else if (b.tipo === "p") filhos.push(h("p", {key: n}, ...pedacos(b.texto, "t")));
+    else if (b.tipo === "ul" || b.tipo === "ol") filhos.push(h(b.tipo, {key: n}, ...b.itens.map((it, k) => h("li", {key: k}, ...pedacos(it, "t")))));
+    else if (b.tipo === "codigo") filhos.push(h(A.CodeBlock, {key: n, language: b.lingua, copyable: true}, b.codigo));
+    else if (b.tipo === "tabela") {
+      const vez = (legendas.get(secao) || 0) + 1;
+      legendas.set(secao, vez);
+      filhos.push(h(A.Table, {key: n, caption: vez === 1 ? secao : `${secao} (${vez})`},
+        h("thead", null, h("tr", null, ...b.cabecalho.map((c, k) => h("th", {key: k, scope: "col"}, ...pedacos(c, "t"))))),
+        h("tbody", null, ...b.linhas.map((l, k) => h("tr", {key: k}, ...l.map((c, j) => h("td", {key: j}, ...pedacos(c, "t"))))))));
+    }
+    else if (b.tipo === "demo") {
+      const desenho = DEMOS_DOCS[b.id];
+      if (!desenho) throw new Error(`content/docs/${doc.nome}.md: "::: demo ${b.id}" não tem desenho em DEMOS_DOCS`);
+      // O bloco de código logo depois é o código DESTE exemplo: vira a aba "Code" da caixa, e não sai repetido embaixo.
+      const codigo = blocos[n + 1]?.tipo === "codigo" ? blocos[++n].codigo : null;
+      filhos.push(h(Fragment, {key: n}, demoBlock(desenho, codigo)));
+    }
+  }
+  const {prev, next} = vizinhos("start", doc.arquivo);
   const node = h(Fragment, null,
-    h("header", {className: "page-head"},
-      h("div", {className: "page-head-row"}, h("h1", null, "Getting Started")),
-      h("p", {className: "page-lede"}, "Install the packages, load the fonts before the core, and wrap the app in the provider.")),
-    h("section", {className: "block", id: "installation"}, h("h2", null, "Installation"),
-      h(A.CodeBlock, {language: "bash", copyable: true}, "pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons"),
-      h("p", {className: "demo-lede"}, "The fonts load BEFORE the core: the core embeds no font."),
-      h(A.CodeBlock, {language: "tsx", copyable: true}, IMPORT_CSS)),
-    h("section", {className: "block", id: "provider"}, h("h2", null, "Provider"),
-      h("p", {className: "demo-lede"}, "The provider hands out the default sentences, tells the components where the icon sprite is, and mounts what tooltips and toasts use."),
-      h(A.CodeBlock, {language: "tsx", copyable: true},
-        'import {AureaProvider} from "@aurea-uds/react";\n\nexport default function App() {\n  return <AureaProvider><Screen /></AureaProvider>;\n}')),
-    h("section", {className: "block", id: "first-component"}, h("h2", null, "Your first component"),
-      demoBlock(() => h(A.Button, {variant: "primary"}, "Save"), 'import {Button} from "@aurea-uds/react";\n\n<Button variant="primary">Save</Button>', "preview")),
-    h("section", {className: "block", id: "native"}, h("h2", null, "React Native"),
-      h("p", {className: "demo-lede"}, "Mobile is another package, with its own list of components and its own dependencies — not the web list with fewer items."),
-      h(A.CodeBlock, {language: "bash", copyable: true}, "pnpm add @aurea-uds/native")));
+    cabecaDaPagina(doc.title, doc.description),
+    h(A.Prose, null, ...filhos),
+    anteriorProximo(prev, next),
+    textoParaCopiar(paraTexto(doc.texto)));
   return {node, toc};
 }
 
@@ -1033,9 +1140,9 @@ function hooksPage() {
 // Aurea: o `AppShell` (com a coluna da direita, feita para isto no passo 4), a `Sidebar` pelos
 // `navItems` e o `TableOfContents`. As áreas não levam mais contagem (era ruído; o número vai para o
 // título de cada página).
-// "Docs", e não "Getting Started" (15/10/2026): o nome do link da referência para a mesma página, e o mais curto — com
-// "Getting Started" o topo do Início não cabia numa linha de 768 a 949 (medido; o Victor viu a barra cortada).
-const AREAS = [["Docs", "getting-started.html", "start"], ["Components", "components.html", "components"],
+// "Getting Started", como a área da referência (lote U, SITE-03 — o Victor, 18/10/2026). Era "Docs" desde 15/10/2026,
+// porque com o nome longo o topo do Início não cabia numa linha de 768 a 949.
+const AREAS = [["Getting Started", "getting-started.html", "start"], ["Components", "components.html", "components"],
   ["Patterns", "patterns.html", "patterns"], ["Blocks", "blocks.html", "blocks"], ["Recipes", "recipes.html", "recipes"],
   ["Hooks", "hooks.html", "hooks"], ["Tokens", "tokens.html", "tokens"]];
 // O ÍCONE de cada área (lote T, SITE-04: "o ícone em cada área do topo", como a linha das áreas da documentação da
@@ -1051,8 +1158,9 @@ const item = (label, href, badge) => ({id: href, label, href: `./${href}`, ...(b
 const alfabetico = list => [...list].sort((a, b) => a.name.localeCompare(b.name));
 // CADA ÁREA COM A SUA LATERAL, como na documentação da referência, onde cada área do topo tem a sua árvore (lote T,
 // 17/10/2026 — o Victor, com as fotos de Tokens e Hooks mostrando a lista de componentes: "adivinha?"). Docs, Hooks e
-// Tokens usavam o menu de Components. A área Docs completa, com os itens da referência, é o SITE-03 (lote U).
-const menuDocs = () => [{id: "overview", label: "Overview", items: [item("Getting Started", "getting-started.html")]}];
+// Tokens usavam o menu de Components. A área Getting Started sai da lista `DOCS` (SITE-03, lote U).
+const menuDocs = () => DOCS.map(g => ({id: g.id, label: g.label,
+  items: g.paginas.map(nome => docs.find(d => d.nome === nome)).map(d => ({...item(d.title, d.arquivo), ...(d.icon ? {icon: d.icon} : {})}))}));
 const menuComponentes = () => [
   {id: "overview", label: "Overview", items: [item("All Components", "components.html")]},
   {id: "components", label: "Components", items: alfabetico(fichas.filter(f => f.kind !== "hook"))
@@ -1128,7 +1236,9 @@ function topoDoSite(section) {
   // (`itemsJustify="start"`) — e as ações na outra ponta. No celular os links vão para o menu do próprio `Header`.
   if (section === "home") {
     return {brand, home: {
-      items: AREAS.map(([label, href, id]) => ({id, label, href: `./${href}`})),
+      // No Início a área é "Docs", como no Início da referência (conferido na página dela, 18/10/2026): só a barra das
+      // áreas, dentro da documentação, diz "Getting Started". Com o nome longo, o topo quebrava de 776 a 800 (medido).
+      items: AREAS.map(([label, href, id]) => ({id, label: id === "start" ? "Docs" : label, href: `./${href}`})),
       actions: h(Fragment, null,
         h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm",
           href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}),
@@ -1601,9 +1711,10 @@ write(join(outDir, "assets/catalog.js"), catalogJs);
 // das páginas — nada escrito à mão. Vai como script clássico (`window.AUREA_SEARCH`), e não como JSON
 // buscado por rede, porque o site abre direto do disco e `file://` bloqueia o `fetch`.
 const indiceDaBusca = [
-  ...[["Getting Started", "getting-started.html"], ["All Components", "components.html"], ["Patterns", "patterns.html"],
+  ...[["All Components", "components.html"], ["Patterns", "patterns.html"],
     ["Blocks", "blocks.html"], ["Recipes", "recipes.html"], ["Hooks", "hooks.html"], ["Tokens", "tokens.html"]]
     .map(([label, href]) => ({label, href, group: "Pages"})),
+  ...docs.map(d => ({label: d.title, href: d.arquivo, group: "Getting Started"})),
   ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components"})),
   ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks"})),
   ...patterns.map(p => ({label: `${p.component} · ${p.name}`, href: `${p.slug}.html`, group: "Patterns"})),
@@ -1652,7 +1763,7 @@ ${TEMA_SALVO}</head>
 // instalação, uma vez, em `getting-started.html`.
 const paginas = [
   ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
-  ["getting-started.html", pageHtml("Getting Started", "getting-started.html", gettingStartedPage(), "start")],
+  ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, docPage(d), "start")]),
   ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
   ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
   ["blocks.html", pageHtml("Blocks", "blocks.html", blocksIndex(), "blocks")],
@@ -1666,6 +1777,26 @@ const paginas = [
   ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i),
     f.kind === "hook" ? "hooks" : "components")]),
 ];
+
+// OS LINKS das páginas de documentação apontam para páginas que EXISTEM (lote U, SITE-03). O texto é escrito à mão, e o
+// nome do arquivo de um componente não é o que se adivinha (`ThemeToggle` → `themetoggle.html`, sem hífen): um link
+// quebrado no texto só aparecia para quem clicasse. A âncora (`#…`) também tem de existir na página de destino.
+{
+  const existentes = new Map(paginas.map(([f, html]) => [f, html]));
+  const quebrados = [];
+  for (const d of docs) for (const b of d.blocos) {
+    const linhas = b.texto ? [b.texto] : b.itens ? b.itens : b.tipo === "tabela" ? [b.cabecalho, ...b.linhas].flat() : [];
+    for (const p of linhas.flat()) {
+      if (!p.href || /^https?:/.test(p.href)) continue;
+      const [arq, ancora] = p.href.replace(/^\.\//, "").split("#");
+      const alvo = arq || d.arquivo;
+      const html = existentes.get(alvo);
+      if (!html) quebrados.push(`${d.nome}.md → ${p.href} (a página não existe)`);
+      else if (ancora && !html.includes(`id="${ancora}"`)) quebrados.push(`${d.nome}.md → ${p.href} (a âncora não existe)`);
+    }
+  }
+  if (quebrados.length) throw new Error(`links quebrados nas páginas de documentação:\n  ${quebrados.join("\n  ")}`);
+}
 
 // O MODELO cobra o gerador aqui, na hora, antes de escrever: se uma seção obrigatória do tipo
 // não saiu no HTML, o build morre. O gate de navegador (catalog-sweep) faz a outra metade — a
