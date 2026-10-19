@@ -198,6 +198,22 @@
         "unit": "rem"
       }
     },
+    "text-6xl": {
+      "$type": "dimension",
+      "$description": "Cover title (60). The next step of the reference's published scale after text-5xl (ADR-0050); asked for page openings, GAR-22 (lote U, 19/10/2026). Line height: leading-none.",
+      "$value": {
+        "value": 3.75,
+        "unit": "rem"
+      }
+    },
+    "text-7xl": {
+      "$type": "dimension",
+      "$description": "Large cover title (72), the step after text-6xl on the same scale (GAR-22). Line height: leading-none.",
+      "$value": {
+        "value": 4.5,
+        "unit": "rem"
+      }
+    },
     "leading-tight": {
       "$type": "number",
       "$value": 1.2

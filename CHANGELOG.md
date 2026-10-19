@@ -85,6 +85,25 @@ em inglês e ficam como estão: são registro.
 ⏳ **Ainda não publicada.** O lote U, na branch `claude/lote-u`. Cada passo entra no `main` depois de aprovado na
 bancada; a versão sobe quando o lote fechar.
 
+### Novo
+
+- **`Section variant="hero"`, a abertura de página (GAR-21, [ADR-0074](decisions/0074-a-abertura-o-aviso-de-cookies-e-o-chip.md)).**
+  A sobrelinha (`eyebrow`), o título (`title`, o `<h1>`; `titleAs="h2"` fora da primeira faixa), o texto
+  (`description`), os botões ou o campo de e-mail (`actions`) e a imagem (`media`). `align="start"` (o padrão) põe a
+  imagem ao lado do texto a partir de 1024; `align="center"` centra tudo, com a imagem embaixo. No celular, tudo empilha.
+  O título cresce 36, 60 (a partir de 768) e 72 (a partir de 1024) com a largura da FAIXA, e não da janela. Os vãos são
+  os do início da referência. Quem cobra: `tests/visual/skin.spec.ts`.
+- **Os tokens `--text-6xl` (60) e `--text-7xl` (72)** (GAR-22), o degrau seguinte da escala de letras depois do
+  `--text-5xl`, com `--leading-none`. Web e nativo (`t.size.text6xl`, `t.size.text7xl`).
+- **`Banner variant="consent"`, o aviso de cookies (GAR-19).** Três botões de mesmo peso — "Reject non-essential
+  cookies", "Accept all cookies" e "Choose cookies" (em português, os do guia da ANPD) —, a janela de preferências com
+  uma chave por categoria (`categories`; as não necessárias começam desligadas, as necessárias ficam "Always on") e a
+  confirmação, que recebe o foco. A escolha chega pelo `onConsent(choice, action)`; para mudar depois, o app mostra o
+  aviso de novo com `value`. Mora no alto da página e não fica preso à tela. Só na web. Quem cobra:
+  `tests/visual/aviso-de-cookies.spec.ts`, no banco novo `apps/keyboard-probe/lote-u.html`.
+- **`Chip`, outro nome do Badge** (GAR-20), como o Topbar é do Header: o mesmo componente, na web e no nativo.
+  Quem cobra: `tests/visual/skin.spec.ts` (a mesma marcação).
+
 ### Mudou
 
 - **As cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md), substitui a
@@ -111,6 +130,12 @@ bancada; a versão sobe quando o lote fechar.
 
 ### Consertado
 
+- **`DependencyGraph`: o clique de mouse no nó chega ao `onSelect` fora do modo de arrumar** (o pedido 16 do app de
+  topologia). O app passava só o `onSelect`, sem `editable` nem `onNodeHover`: o motor tirava o ponteiro do invólucro do
+  nó, e o clique no corpo não chegava (pelo teclado chegava); o botão de recolher também não recebia o clique. Os botões
+  do nó pegam o ponteiro de volta; sem `onSelect`, o corpo continua sem ponteiro, como a trava pede. Quem cobra:
+  `tests/visual/rede-clique.spec.ts` (sem a regra, reprova).
+
 - **`DependencyGraph`: o `layer` passa a valer na arrumação `layered` (MNT-27).** O app de topologia mediu na 0.32.0:
   os dois firewalls da mesma faixa saíam em alturas diferentes, e o secundário caía ABAIXO do núcleo. A opção que ia ao
   motor (`layerChoiceConstraint`) só é lida pelo arrumador interativo do ELK, que o `elkjs` não tem — medido no 0.12.0,
@@ -136,6 +161,12 @@ bancada; a versão sobe quando o lote fechar.
   e `control-selected-foreground` (do marrom para o cinza-escuro). Quem usa esses tokens na própria tela recebe a cor
   nova; quem conta com 4,5:1 da letra de destaque no claro deixa de ter. O `brand-yellow-text` continua existindo,
   sem uso nos temas.
+
+### ⚠ Pode quebrar a compilação
+
+- O `AureaStrings` (web) ganhou onze frases, as do aviso de cookies: `consentTitle`, `consentReject`, `consentAccept`,
+  `consentChoose`, `consentPreferences`, `consentSave`, `consentRequired`, `consentAccepted`, `consentRejected`,
+  `consentSaved` e `consentHide`. Quem monta o objeto INTEIRO com esse tipo (uma tradução própria) precisa delas.
 
 ### O site
 
@@ -189,6 +220,13 @@ bancada; a versão sobe quando o lote fechar.
 
 ### Consertado no site e no core
 
+- **O Início usa a abertura nova** (`Section variant="hero"`, centrada): o título passa do 30/36/48 da referência ao
+  36/60/72 da Aurea (decisão do Victor, GAR-22); os vãos e o texto ficam os mesmos. Quem cobra: o `catalog-sweep.spec.ts`.
+- **O comentário do `aurea.css` que citava "o .chip do catálogo"** (GAR-20) passa a dizer que aquela é a classe do site,
+  e não peça da Aurea.
+- **As travas do CHANGELOG leem a seção em construção.** Enquanto os pacotes não sobem de número, o `validate.py` cobrava
+  o nome do componente novo só no `[Unreleased]`, e o aviso de frase nova dentro da `0.35.0`, já publicada. Agora as duas
+  leem também a seção `## [x] — em construção`.
 - **`Prose`: código no meio do texto quebra a linha.** Um `window.Aurea.setDensity("compact")` num parágrafo empurrava
   a página para o lado a 320 (+25, medido na página Density). O `.prose code` ganha `overflow-wrap:anywhere`; dentro do
   `pre` nada muda. Quem cobra: a varredura "nenhuma página rola de lado" (sem a correção, reprova).

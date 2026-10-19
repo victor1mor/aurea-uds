@@ -241,13 +241,13 @@ export function Container({size="xl",className,...props}:ContainerProps){
   return <div className={cx("container",size!=="xl"&&`container-${size}`,className)} {...props}/>}
 /** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
 export type SectionSurface="background"|"card"|"inset";
-/** `base` é a faixa comum; `footer` é o rodapé do site (GAR-06, 07/10/2026). */
-export type SectionVariant="base"|"footer";
+/** `base` é a faixa comum; `footer` é o rodapé do site (GAR-06, 07/10/2026); `hero` é a abertura da página (GAR-21, 19/10/2026). */
+export type SectionVariant="base"|"footer"|"hero";
 /** Uma coluna de links do rodapé: o título e os itens. */
 export interface SectionFooterGroup{title:ReactNode;items:SidebarItem[]}
 /** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
 export type SectionSpacing="sm"|"md";
-export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement>{
+export interface SectionProps extends Omit<HTMLAttributes<HTMLElement>,"title">, RefAttributes<HTMLElement>{
   surface?:SectionSurface;
   spacing?:SectionSpacing;
   /**
@@ -265,16 +265,30 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
   brand?:ReactNode;
   /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
   links?:SectionFooterGroup[];
-  /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
   /** Só no `footer` (15/10/2026): `"columns"` (o padrão, o rodapé de site grande) ou `"inline"` — UMA linha centrada, como
    *  o rodapé da página inicial da referência: a frase legal, os links (sem os títulos das colunas) e o que vier dentro
    *  (os ícones sociais). A marca não entra. */
   layout?:"columns"|"inline";
+  /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
   legal?:ReactNode;
-  /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
+  /** No `footer` e no `hero`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
   maxWidth?:ContainerSize;
   /** Só no `footer`: o nome da navegação do rodapé para o leitor de tela. Padrão: `"Footer"`. */
   navLabel?:string;
+  /** No `hero`: o título da abertura. Nas outras variações, um texto aqui é o atributo `title` do HTML, como antes. */
+  title?:ReactNode;
+  /** Só no `hero`: a etiqueta do título. Padrão: `"h1"` — a abertura é o começo da página. */
+  titleAs?:"h1"|"h2";
+  /** Só no `hero`: a sobrelinha, acima do título — um selo, uma frase curta, um link para o que mudou. */
+  eyebrow?:ReactNode;
+  /** Só no `hero`: o texto abaixo do título. */
+  description?:ReactNode;
+  /** Só no `hero`: os botões, ou o campo de e-mail com o botão. */
+  actions?:ReactNode;
+  /** Só no `hero`: a imagem, ou a peça que prova o que o texto diz. Com `align="start"`, fica ao lado do texto a partir de 1024. */
+  media?:ReactNode;
+  /** Só no `hero`: `"start"` (o padrão; o texto à esquerda e a imagem ao lado) ou `"center"` (tudo centrado, a imagem embaixo). */
+  align?:"start"|"center";
 }
 /**
  * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
@@ -286,12 +300,32 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
 // (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
 // fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
 // coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
-export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,layout="columns",maxWidth="xl",navLabel="Footer",children,className,...props}:SectionProps){
+// GAR-21 e GAR-22 (lote U, 19/10/2026): a abertura de página é outra VARIAÇÃO, `hero`. Nenhuma referência da fila tem a
+// peça aberta; a anatomia é a do pedido (sobrelinha, título, texto, botões ou e-mail, imagem ao lado, empilhado no
+// celular) e os vãos são os do início da referência, medidos em 15/10/2026. O título cresce 36, 60 e 72 com a largura
+// da FAIXA (`--text-4xl`, `--text-6xl` a partir de 768, `--text-7xl` a partir de 1024), decisão do Victor de 19/10/2026.
+export function Section({surface="background",spacing="md",theme,variant="base",brand,links,legal,layout="columns",maxWidth="xl",navLabel="Footer",title,titleAs:Titulo="h1",eyebrow,description,actions,media,align="start",children,className,...props}:SectionProps){
   const pele=cx("section",surface!=="background"&&`section-${surface}`,spacing!=="md"&&`section-spacing-${spacing}`);
-  if(variant!=="footer")return <section data-theme={theme} className={cx(pele,className)} {...props}>{children}</section>;
+  // Fora do `hero`, o `title` em texto continua sendo o atributo do HTML, como era antes de ele virar o título da abertura.
+  const atributo=variant!=="hero"&&typeof title==="string"?{title}:{};
+  if(variant==="hero")return <section data-theme={theme} className={cx(pele,"section-hero",align==="center"&&"section-hero-center",align!=="center"&&media!=null&&"section-hero-split",className)} {...props}>
+    <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"section-hero-inner")}>
+      <div className="section-hero-content">
+        {eyebrow!=null&&<div className="section-hero-eyebrow">{eyebrow}</div>}
+        <div className="section-hero-text">
+          {title!=null&&<Titulo className="section-hero-title">{title}</Titulo>}
+          {description!=null&&<p className="section-hero-description">{description}</p>}
+        </div>
+        {actions!=null&&<div className="section-hero-actions">{actions}</div>}
+        {children}
+      </div>
+      {media!=null&&<div className="section-hero-media">{media}</div>}
+    </div>
+  </section>;
+  if(variant!=="footer")return <section data-theme={theme} className={cx(pele,className)} {...atributo} {...props}>{children}</section>;
   if(layout==="inline"){
     const itens=(links??[]).flatMap((g)=>g.items);
-    return <footer data-theme={theme} className={cx(pele,"section-footer","section-footer-inline",className)} {...props}>
+    return <footer data-theme={theme} className={cx(pele,"section-footer","section-footer-inline",className)} {...atributo} {...props}>
       <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"section-footer-line")}>
         {legal!=null&&<p className="section-footer-inline-legal">{legal}</p>}
         {itens.length>0&&<nav aria-label={navLabel}><ul className="section-footer-inline-links">{itens.map(it=><li key={it.id}>{it.render
@@ -301,7 +335,7 @@ export function Section({surface="background",spacing="md",theme,variant="base",
       </div>
     </footer>;
   }
-  return <footer data-theme={theme} className={cx(pele,"section-footer",className)} {...props}>
+  return <footer data-theme={theme} className={cx(pele,"section-footer",className)} {...atributo} {...props}>
     <div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`)}>
       <div className="section-footer-top">
         {brand!=null&&<div className="section-footer-brand">{brand}</div>}
@@ -485,6 +519,10 @@ export function Badge({variant:variantProp="neutral",tone,emphasis="soft",size="
   // botão do sino é anunciado "sino 8" e ninguém sabe o que é o 8.
   return <span className="badge-anchor">{children}{!escondido&&React.cloneElement(chip,{"aria-hidden":true})}</span>;
 }
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export type ChipProps=BadgeProps;
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export function Chip(props:BadgeProps){return <Badge {...props}/>}
 /** O tom da barra: a mesma lista fechada do `ButtonTone`. Pausado é `neutral`; falha é `danger`. */
 export type ProgressTone="brand"|"neutral"|"success"|"warning"|"danger"|"info";
 export interface ProgressProps{

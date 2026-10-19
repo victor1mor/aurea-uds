@@ -178,6 +178,10 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
     const escondido = invisible || (count === 0 && !showZero) || (miolo == null && !dot);
     return _jsxs(View, { style: s.ancora, ...rest, children: [children, !escondido && selo] });
 }
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export function Chip(props) {
+    return _jsx(Badge, { ...props });
+}
 const CATEGORIAS = new Set(["red", "orange", "green", "teal", "cyan", "blue", "violet", "pink"]);
 const ehCategoria = (tom) => CATEGORIAS.has(tom);
 /**

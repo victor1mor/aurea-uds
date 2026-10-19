@@ -37,10 +37,10 @@ const wide = {width: "min(30rem,100%)"};
 const PORTAL = "This page is static HTML: the popup lives in a portal and only exists in a real "
   + "React app. The preview shows the trigger; the code is the whole composition.";
 
-// A "foto" das páginas de imagem e de galeria: SVG em data URI, porque o catálogo é gerado e
+// A "foto" das páginas de imagem e de galeria (e da abertura, `patterns/Section.mjs`): SVG em data URI, porque o catálogo é gerado e
 // commitado e um preview que busca bytes na rede não sobrevive a uma máquina sem rede — nem ao
 // `dist == build` da CI. 3:2 de propósito, para as caixas de 16/9 e 1/1 terem o que cortar.
-const FOTO = "data:image/svg+xml," + encodeURIComponent(
+export const FOTO = "data:image/svg+xml," + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">'
   + '<rect width="300" height="200" fill="#3f3f46"/>'
   + '<circle cx="150" cy="100" r="54" fill="#eab308"/></svg>');
@@ -485,6 +485,17 @@ export default {
 />`,
     render: () => h("div", {style: wide}, h(CodeEditor,
       {defaultValue: "const total = items.reduce((n, i) => n + i.price, 0);"})),
+  },
+  Chip: {
+    description: "Another name for Badge: the same component, the same props, the same look. "
+      + "Use whichever name your team reads more easily; every example on the Badge page works with Chip.",
+    code: `<Cluster>
+  <Chip tone="success">Paid</Chip>
+  <Chip tone="primary" emphasis="solid">New</Chip>
+  <Chip tone="blue">Design</Chip>
+</Cluster>`,
+    render: () => h(A.Cluster, null, h(A.Chip, {tone: "success"}, "Paid"),
+      h(A.Chip, {tone: "primary", emphasis: "solid"}, "New"), h(A.Chip, {tone: "blue"}, "Design")),
   },
   Cluster: {
     code: `<Cluster>

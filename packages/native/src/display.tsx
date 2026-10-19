@@ -271,6 +271,12 @@ export function Badge({
   const escondido = invisible || (count === 0 && !showZero) || (miolo == null && !dot);
   return <View style={s.ancora} {...rest}>{children}{!escondido && selo}</View>;
 }
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export type ChipProps = BadgeProps;
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export function Chip(props: BadgeProps) {
+  return <Badge {...props} />;
+}
 
 const CATEGORIAS: ReadonlySet<string> = new Set<AureaBadgeCategory>(
   ["red", "orange", "green", "teal", "cyan", "blue", "violet", "pink"]);

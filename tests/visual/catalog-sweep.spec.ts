@@ -743,8 +743,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const m = await page.evaluate(() => {
       const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
       const topo = r(".site-top"), marca = r(".site-brand"), link = r(".site-top .topbar-nav .topbar-link");
-      const acoes = r(".site-top .topbar-actions"), h1 = r(".home-texto h1"), p = r(".home-texto p");
-      const selo = r(".home-selo"), botoes = r(".home-acoes");
+      const acoes = r(".site-top .topbar-actions"), h1 = r(".home-hero .section-hero-title"), p = r(".home-hero .section-hero-description");
+      const selo = r(".home-selo"), botoes = r(".home-hero .section-hero-actions");
       const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16;
       const cs = getComputedStyle(document.querySelector(".site-top")!);
       return {altura: topo.height, alturaPadrao: em("--space-12") + em("--space-2"),
@@ -753,8 +753,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
         mesmaLinha: Math.abs((link.top + link.height / 2) - (marca.top + marca.height / 2)),
         marcaAoLink: link.left - marca.right, vaoDaBarra: em("--space-4"),
         sobra: document.documentElement.clientWidth - acoes.right, marcaEsq: marca.left,
-        linhaDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-texto p")!).lineHeight),
-        letraDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-texto p")!).fontSize),
+        linhaDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-hero .section-hero-description")!).lineHeight),
+        letraDoTexto: parseFloat(getComputedStyle(document.querySelector(".home-hero .section-hero-description")!).fontSize),
         tituloAoTexto: p.top - h1.bottom, seloAoTitulo: h1.top - selo.bottom, textoAosBotoes: botoes.top - p.bottom,
         abas: r(".home-abas").left - r(".home-painel:not([hidden])").left, espaco2: em("--space-2")};
     });
@@ -790,16 +790,17 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(m.abas, "as abas no canto, 8 para dentro").toBeCloseTo(m.espaco2, 0);
     // O selo sem a linha em volta, como o da referência (o `Badge` `flat`).
     await expect(page.locator(".home-selo .badge")).toHaveCSS("border-top-color", /rgba\(0, 0, 0, 0\)|transparent/);
-    // 15/10/2026 (o Victor: "iguale"): as letras da referência — o nome 16 em 600, sem a versão ao lado; o título com
-    // 48 de linha; a nota em 12, que é o link para o repositório. Antes: 18 em 700 com a versão, 53, e 14 sem link.
+    // 15/10/2026 (o Victor: "iguale"): as letras da referência — o nome 16 em 600, sem a versão ao lado; a nota em 12, que
+    // é o link para o repositório. Antes: 18 em 700 com a versão, e 14 sem link. O título era o 48/48 da referência; desde
+    // 19/10/2026 é a abertura da Aurea (GAR-21 e GAR-22, decisão do Victor): 72/72 na faixa larga.
     const l = await page.evaluate(() => {
       const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
       return {nome: [cs(".site-brand strong").fontSize, cs(".site-brand strong").fontWeight],
         versao: document.querySelectorAll(".site-top .site-version").length,
-        titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight], nota: cs(".home-nota").fontSize,
+        titulo: [cs(".home-hero .section-hero-title").fontSize, cs(".home-hero .section-hero-title").lineHeight], nota: cs(".home-nota").fontSize,
         link: document.querySelector(".home-nota")!.getAttribute("href")};
     });
-    expect(l).toEqual({nome: ["16px", "600"], versao: 0, titulo: ["48px", "48px"], nota: "12px",
+    expect(l).toEqual({nome: ["16px", "600"], versao: 0, titulo: ["72px", "72px"], nota: "12px",
       link: "https://github.com/victor1mor/aurea-uds"});
     // E no monitor grande o topo fica no centro, como o da referência (no 24" do Victor ia para os cantos): o miolo
     // tem a largura do `Container` `2xl`, com o respiro dele.
@@ -812,8 +813,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(c.logo, "a logo no começo do miolo centrado, e não na borda").toBeCloseTo(c.esperado, 0);
   });
 
-  // 15/10/2026 (o Victor: "analise cada milímetro"): no celular, as medidas da referência em 375 — o título 30/36, o
-  // texto 16/24, 8 do selo ao título e dos botões à nota, as abas da vitrine escondidas (só a primeira vitrine), e a barra
+  // 15/10/2026 (o Victor: "analise cada milímetro"): no celular, as medidas da referência em 375 — o título (30/36 até
+  // 19/10/2026; desde então o 36/40 da abertura da Aurea, GAR-22), o texto 16/24, 8 do selo ao título e dos botões à nota, as abas da vitrine escondidas (só a primeira vitrine), e a barra
   // numa linha só (o GitHub sai dela). E o logo do GitHub é o oficial, em branco no escuro e preto no claro.
   test("o Início no celular tem as medidas da referência, e o logo do GitHub é o oficial", async ({page}) => {
     await page.setViewportSize({width: 375, height: 812});
@@ -821,13 +822,15 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const m = await page.evaluate(() => {
       const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
       const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
-      return {titulo: [cs(".home-texto h1").fontSize, cs(".home-texto h1").lineHeight],
-        texto: [cs(".home-texto p").fontSize, cs(".home-texto p").lineHeight],
-        seloAoTitulo: r(".home-texto h1").top - r(".home-selo").bottom, botoesANota: r(".home-nota").top - r(".home-acoes").bottom,
+      return {titulo: [cs(".home-hero .section-hero-title").fontSize, cs(".home-hero .section-hero-title").lineHeight],
+        texto: [cs(".home-hero .section-hero-description").fontSize, cs(".home-hero .section-hero-description").lineHeight],
+        seloAoTitulo: r(".home-hero .section-hero-title").top - r(".home-selo").bottom, botoesANota: r(".home-nota").top - r(".home-hero .section-hero-actions").bottom,
         abas: r(".home-abas").height, topo: r(".site-top").height, alturaPadrao: ["--space-12", "--space-2"].reduce((t, v) => t + parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16, 0),
         lado: document.documentElement.scrollWidth - document.documentElement.clientWidth};
     });
-    expect(m.titulo).toEqual(["30px", "36px"]);
+    // A entrelinha é 36 × 1,111111 (o --text-4xl-leading): o WebKit devolve 39,999996, os outros 40.
+    expect(parseFloat(m.titulo[0])).toBe(36);
+    expect(parseFloat(m.titulo[1])).toBeCloseTo(40, 1);
     expect(m.texto).toEqual(["16px", "24px"]);
     expect(m.seloAoTitulo).toBeCloseTo(8, 0);
     expect(m.botoesANota).toBeCloseTo(8, 0);

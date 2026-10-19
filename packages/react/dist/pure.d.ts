@@ -247,6 +247,17 @@ export interface AureaStrings {
     colorNameFormat: string;
     colorHex: string;
     colorSwatches: string;
+    consentTitle: string;
+    consentReject: string;
+    consentAccept: string;
+    consentChoose: string;
+    consentPreferences: string;
+    consentSave: string;
+    consentRequired: string;
+    consentAccepted: string;
+    consentRejected: string;
+    consentSaved: string;
+    consentHide: string;
     universalState: Record<UniversalState, string>;
 }
 export declare const defaultStrings: AureaStrings;

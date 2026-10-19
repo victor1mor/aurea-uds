@@ -670,18 +670,19 @@ function homePage() {
     className: n === 0 ? "active" : undefined, "aria-selected": n === 0 ? "true" : "false",
     "aria-controls": `vit-${n}-panel`, tabIndex: n === 0 ? 0 : -1}, b.name);
   const node = h("div", {className: "home"},
-    h("section", {className: "home-hero"},
+    // A abertura é a peça da Aurea (GAR-21, 19/10/2026): a `Section` com `variant="hero"`, centrada. Os vãos e o texto são
+    // os do início da referência (estão na peça); o título segue a escala decidida pelo Victor — 36, 60 e 72 com a largura
+    // da faixa —, e não mais o 30/36/48 da referência.
+    h(A.Section, {variant: "hero", align: "center", className: "home-hero",
       // O selo é um LINK para o que mudou, com o foguete, sem borda e com o fundo clarinho — como o da referência
       // (15/10/2026). O `Badge` com `emphasis="flat"` (o tom clarinho, sem a linha) e o ícone no encaixe `leading`.
-      h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`},
+      eyebrow: h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`},
         h(A.Badge, {tone: "primary", emphasis: "flat", leading: h(A.Icon, {name: "rocket"})}, `Aurea v${VERSAO} — what's new`)),
-      // O título e o texto JUNTOS, sem vão entre eles, como no início da referência (o Victor, 14/10/2026).
-      h("div", {className: "home-texto"},
-        h("h1", null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
-        h("p", null, "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little.")),
-      h("div", {className: "home-acoes"},
+      title: h(Fragment, null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
+      description: "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little.",
+      actions: h(Fragment, null,
         h(A.Button, {variant: "primary", href: "./getting-started.html"}, "Get started"),
-        h(A.Button, {variant: "outline", href: "./components.html"}, "View components")),
+        h(A.Button, {variant: "outline", href: "./components.html"}, "View components"))},
       // Como a da referência (o Victor, 15/10/2026: "mude para igual a deles"): o link para o repositório, em letra 12.
       // Sem o número de estrelas: ele muda sozinho, e a página é gerada e conferida pela CI — o número escrito nela
       // ficaria velho, e buscado na montagem faria a página mudar a cada estrela.
@@ -1603,31 +1604,22 @@ a.related-card:hover { border-color:transparent; }
 .site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
 /* A vitrine com os 1200 da referência (15/10/2026): o 1280 da escala menos o --space-20. */
 .home { display:grid; gap:var(--space-12); width:min(100%, calc(var(--breakpoint-xl) - var(--space-20))); }
-/* As medidas do início da referência (lidas na página dela, 14/10/2026, a 1440): 16 entre as peças, o título e o texto
-   colados, e o texto com 18 de letra em 28 de linha (o Victor: "as linhas estão distantes, deixe como a referência"). */
-/* Os vãos e as letras da referência, nas três larguras dela (lidos no código e medidos, 15/10/2026): o selo e o título
-   a 8 (16 a partir de 1024); o texto colado no título; os botões a 16; a nota a 8 (16 a partir de 1024). O título 30/36
-   no celular, 36/40 a partir de 640 e 48/48 a partir de 1024; o texto 16/24, e 18/28 a partir de 768, em 672 de largura
-   (o 640 da escala mais o --space-8). A segunda linha do título fica no cinza da Aurea (7,3:1): a da referência apaga
-   até ~4,4:1, e a Aurea é de baixa visão. As letras do título, juntas pelo --tracking-tight da Aurea. */
-.home-hero { display:grid; justify-items:center; text-align:center; }
-.home-texto { display:grid; justify-items:center; margin-block-start:var(--space-2); }
-.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); line-height:var(--text-3xl-leading); font-weight:var(--weight-bold); letter-spacing:var(--tracking-tight); text-wrap:balance; }
-.home-hero h1 span { color:var(--muted-foreground); }
-.home-texto > p { max-width:calc(var(--breakpoint-sm) + var(--space-8)); margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); text-wrap:balance; }
-.home-acoes { margin-block-start:var(--space-4); }
-.home-hero > .home-nota { display:inline-flex; align-items:center; gap:var(--space-2); margin-block-start:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); text-decoration:none; }
-.home-hero > .home-nota:hover { color:var(--foreground); }
-@media (min-width:640px) { .home-hero h1 { font-size:var(--text-4xl); line-height:var(--text-4xl-leading); } }
-@media (min-width:768px) { .home-texto > p { font-size:var(--text-lg); line-height:var(--text-lg-leading); } }
-@media (min-width:1024px) { .home-texto, .home-hero > .home-nota { margin-block-start:var(--space-4); } .home-hero h1 { font-size:var(--text-5xl); line-height:var(--leading-none); } }
+/* A abertura é a Section variant="hero" (GAR-21, 19/10/2026): os vãos, o texto e o título moram na peça. Aqui fica só
+   o que é do Início: sem o respiro de faixa (o .home já dá o vão até a vitrine), a segunda linha do título no cinza da
+   Aurea (7,3:1 — a da referência apaga até ~4,4:1, e a Aurea é de baixa visão) e a nota de 12 com o logo do GitHub. */
+.home-hero.section { padding-block:0; }
+/* O Início não é uma faixa de ponta a ponta: ele mora dentro do miolo do site, que já tem a margem do lado. Sem isto o
+   Container da faixa somava outros 16 de cada lado, e no celular o texto ficava com 311 em vez dos 343 da página. */
+.home-hero > .container { padding-inline:0; }
+.home-hero .section-hero-title span { color:var(--muted-foreground); }
+.home-nota { display:inline-flex; align-items:center; gap:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); text-decoration:none; }
+.home-nota:hover { color:var(--foreground); }
 .home-selo { display:inline-flex; border-radius:var(--radius-control); text-decoration:none; }
 /* O conteúdo da vitrine centrado na caixa, com os 32 de respiro da referência em cima e embaixo (16 do cartão + 16). */
 .home-painel-miolo { display:flex; justify-content:center; padding-block:var(--space-4); }
 /* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
 .site-github-ink { fill:var(--white); }
 [data-theme="light"] .site-github-ink { fill:var(--black); }
-.home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
 .home-abas { justify-self:start; margin-inline-start:var(--space-2); }

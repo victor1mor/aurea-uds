@@ -95,17 +95,25 @@ export function Container({ size = "xl", className, ...props }) {
 // (`spacing`) e o tema próprio (`theme` — rodapé escuro numa página clara). Nenhuma referência da
 // fila tem um rodapé aberto; o desenho é da Aurea, com tokens que já existem. Os links de cada
 // coluna são `SidebarItem`, a mesma forma dos menus, e o `render` leva o link do roteador.
-export function Section({ surface = "background", spacing = "md", theme, variant = "base", brand, links, legal, layout = "columns", maxWidth = "xl", navLabel = "Footer", children, className, ...props }) {
+// GAR-21 e GAR-22 (lote U, 19/10/2026): a abertura de página é outra VARIAÇÃO, `hero`. Nenhuma referência da fila tem a
+// peça aberta; a anatomia é a do pedido (sobrelinha, título, texto, botões ou e-mail, imagem ao lado, empilhado no
+// celular) e os vãos são os do início da referência, medidos em 15/10/2026. O título cresce 36, 60 e 72 com a largura
+// da FAIXA (`--text-4xl`, `--text-6xl` a partir de 768, `--text-7xl` a partir de 1024), decisão do Victor de 19/10/2026.
+export function Section({ surface = "background", spacing = "md", theme, variant = "base", brand, links, legal, layout = "columns", maxWidth = "xl", navLabel = "Footer", title, titleAs: Titulo = "h1", eyebrow, description, actions, media, align = "start", children, className, ...props }) {
     const pele = cx("section", surface !== "background" && `section-${surface}`, spacing !== "md" && `section-spacing-${spacing}`);
+    // Fora do `hero`, o `title` em texto continua sendo o atributo do HTML, como era antes de ele virar o título da abertura.
+    const atributo = variant !== "hero" && typeof title === "string" ? { title } : {};
+    if (variant === "hero")
+        return _jsx("section", { "data-theme": theme, className: cx(pele, "section-hero", align === "center" && "section-hero-center", align !== "center" && media != null && "section-hero-split", className), ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "section-hero-inner"), children: [_jsxs("div", { className: "section-hero-content", children: [eyebrow != null && _jsx("div", { className: "section-hero-eyebrow", children: eyebrow }), _jsxs("div", { className: "section-hero-text", children: [title != null && _jsx(Titulo, { className: "section-hero-title", children: title }), description != null && _jsx("p", { className: "section-hero-description", children: description })] }), actions != null && _jsx("div", { className: "section-hero-actions", children: actions }), children] }), media != null && _jsx("div", { className: "section-hero-media", children: media })] }) });
     if (variant !== "footer")
-        return _jsx("section", { "data-theme": theme, className: cx(pele, className), ...props, children: children });
+        return _jsx("section", { "data-theme": theme, className: cx(pele, className), ...atributo, ...props, children: children });
     if (layout === "inline") {
         const itens = (links ?? []).flatMap((g) => g.items);
-        return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", "section-footer-inline", className), ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "section-footer-line"), children: [legal != null && _jsx("p", { className: "section-footer-inline-legal", children: legal }), itens.length > 0 && _jsx("nav", { "aria-label": navLabel, children: _jsx("ul", { className: "section-footer-inline-links", children: itens.map(it => _jsx("li", { children: it.render
+        return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", "section-footer-inline", className), ...atributo, ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "section-footer-line"), children: [legal != null && _jsx("p", { className: "section-footer-inline-legal", children: legal }), itens.length > 0 && _jsx("nav", { "aria-label": navLabel, children: _jsx("ul", { className: "section-footer-inline-links", children: itens.map(it => _jsx("li", { children: it.render
                                     ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
                                     : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) }) }), children] }) });
     }
-    return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", className), ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`), children: [_jsxs("div", { className: "section-footer-top", children: [brand != null && _jsx("div", { className: "section-footer-brand", children: brand }), links && links.length > 0 && _jsx("nav", { className: "section-footer-nav", "aria-label": navLabel, children: links.map((g, n) => _jsxs("div", { className: "section-footer-group", children: [_jsx("h2", { className: "section-footer-title", children: g.title }), _jsx("ul", { className: "section-footer-links", children: g.items.map(it => _jsx("li", { children: it.render
+    return _jsx("footer", { "data-theme": theme, className: cx(pele, "section-footer", className), ...atributo, ...props, children: _jsxs("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`), children: [_jsxs("div", { className: "section-footer-top", children: [brand != null && _jsx("div", { className: "section-footer-brand", children: brand }), links && links.length > 0 && _jsx("nav", { className: "section-footer-nav", "aria-label": navLabel, children: links.map((g, n) => _jsxs("div", { className: "section-footer-group", children: [_jsx("h2", { className: "section-footer-title", children: g.title }), _jsx("ul", { className: "section-footer-links", children: g.items.map(it => _jsx("li", { children: it.render
                                                 ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
                                                 : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) })] }, n)) }), children] }), legal != null && _jsx("div", { className: "section-footer-legal", children: legal })] }) });
 }
@@ -150,6 +158,8 @@ export function Badge({ variant: variantProp = "neutral", tone, emphasis = "soft
     // botão do sino é anunciado "sino 8" e ninguém sabe o que é o 8.
     return _jsxs("span", { className: "badge-anchor", children: [children, !escondido && React.cloneElement(chip, { "aria-hidden": true })] });
 }
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export function Chip(props) { return _jsx(Badge, { ...props }); }
 // AN-07 (03/10/2026). Tudo novo é acréscimo: com `value` e sem `detail` nem `tone`, a marcação é a
 // de antes, mais a classe da caixa de fora. A anatomia é a da barra de progresso da referência: a
 // saída no alto à direita, o trilho embaixo, e sem `aria-valuenow` quando não há total.

@@ -18,14 +18,36 @@ export declare function Alert({ variant, state, title, icon, onDismiss, action, 
     /** O botão do aviso ("Atualizar", "Desfazer"): depois do texto, antes do X. No celular, embaixo do texto. */
     action?: ReactNode;
 }): React.JSX.Element;
-export type BannerVariant = "info" | "success" | "warning" | "danger";
-export declare function Banner({ variant, state, title, icon, onDismiss, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export type BannerVariant = "info" | "success" | "warning" | "danger" | "consent";
+/** Uma categoria de cookies do aviso de consentimento (GAR-19): a chave, o nome, para que serve e se é necessária. */
+export interface ConsentCategory {
+    /** A chave da categoria na escolha que o `onConsent` devolve. */
+    id: string;
+    label: ReactNode;
+    /** Para que serve: o que a pessoa ganha ou perde ligando. */
+    description?: ReactNode;
+    /** Necessária para o site funcionar: sempre ligada, sem chave para desligar. */
+    required?: boolean;
+}
+/** A escolha: a chave de cada categoria, ligada ou não. As necessárias vêm sempre ligadas. */
+export type ConsentChoice = Record<string, boolean>;
+/** Como a pessoa escolheu: aceitou tudo, rejeitou o que não é necessário, ou escolheu na janela. */
+export type ConsentAction = "accept-all" | "reject" | "custom";
+export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title">, RefAttributes<HTMLDivElement> {
     variant?: BannerVariant;
     state?: UniversalState;
     title?: ReactNode;
     icon?: IconName;
+    /** Desenha o X. No `consent`, é o botão "Ocultar esta mensagem" da confirmação; sem ele, o aviso some sozinho. */
     onDismiss?: () => void;
-}): React.JSX.Element;
+    /** Só no `consent`: as categorias da janela de preferências, na ordem em que aparecem. */
+    categories?: ConsentCategory[];
+    /** Só no `consent`: a escolha que já está guardada — para a pessoa voltar e mudar. Sem ela, só as necessárias ligadas. */
+    value?: ConsentChoice;
+    /** Só no `consent`: a escolha feita, para o app guardar e obedecer. As necessárias vêm sempre `true`. */
+    onConsent?: (choice: ConsentChoice, action: ConsentAction) => void;
+}
+export declare function Banner(props: BannerProps): React.JSX.Element;
 export type SpinnerSize = "sm" | "md" | "lg" | "xl";
 export declare function Spinner({ size, label, decorative, className, ...props }: HTMLAttributes<HTMLSpanElement> & RefAttributes<HTMLSpanElement> & {
     size?: Responsive<SpinnerSize>;

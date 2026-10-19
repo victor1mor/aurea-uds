@@ -1797,6 +1797,12 @@ else:
                       f"componentes fora da superfície publicada ({_rel['version']})")
     else:
         _corpo = _ch.split("## [Unreleased]", 1)[1].split("\n## [", 1)[0]
+        # A versão EM CONSTRUÇÃO (19/10/2026, lote U): o lote escreve a seção dela — `## [0.36.0] — em construção` —
+        # antes de os pacotes subirem de número, e ela também é "o que ainda não saiu". Sem isto, o nome tinha de ir
+        # para o [Unreleased] e depois mudar de seção à mão.
+        _emc = re.search(r"^## \[[0-9.]+\] — em construção$", _ch, re.M)
+        if _emc:
+            _corpo += _ch[_emc.end():].split("\n## [", 1)[0]
         # `\b` não serve: `Chart` casaria dentro de `ChartLegend` e daria por documentado o
         # que não está. A borda é o que NÃO pode ser parte de um nome de componente.
         _faltando = [c for c in _novos
@@ -1831,6 +1837,11 @@ if CHANGELOG.is_file() and SURFACE.is_file():
     else:
         _v31b = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
         _ch31b = CHANGELOG.read_text(encoding="utf-8")
+        # Enquanto os pacotes não sobem de número, a seção que vale é a da versão EM CONSTRUÇÃO (19/10/2026): ler a
+        # [0.35.0], já publicada, pediria o aviso dentro de uma versão que não muda mais.
+        _emc31b = re.search(r"^## \[([0-9.]+)\] — em construção$", _ch31b, re.M)
+        if _v31b == _rel31b["version"] and _emc31b:
+            _v31b = _emc31b.group(1)
         _sec31b = _ch31b.split(f"## [{_v31b}]", 1)[1].split("\n## [", 1)[0] if f"## [{_v31b}]" in _ch31b else ""
         _tit31b = "### ⚠ Pode quebrar a compilação"
         _aviso31b = _sec31b.split(_tit31b, 1)[1].split("\n### ", 1)[0] if _tit31b in _sec31b else ""

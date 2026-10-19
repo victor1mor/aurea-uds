@@ -76,7 +76,10 @@ function Banco() {
       textSize={q.has("grande") ? "lg" : "md"} highContrast={q.has("contraste")} highlightNeighbors={q.has("vizinhos")}
       highlight={q.has("caminho") ? CAMINHO : null} hiddenIds={q.has("ocultar") ? ["acc-1", "acc-2"] : undefined}
       selectedId={escolhido} onSelect={setEscolhido} focusId={q.get("foco")}
-      onNodeHover={(id) => anotar(`hover:${id}`)} onNodeContextMenu={(id) => anotar(`menu:${id}`)} onEdgeSelect={(id) => anotar(`aresta:${id}`)}
+      // `?so-escolha`: só o `onSelect`, como o app de topologia (pedido 16, 19/10/2026). Com o `onNodeHover`, o motor já dava
+      // ponteiro ao nó, e por isso este banco não pegava o clique que não chegava.
+      {...(q.has("so-escolha") ? {} : {onNodeHover: (id: string | null) => anotar(`hover:${id}`), onNodeContextMenu: (id: string) => anotar(`menu:${id}`),
+        onEdgeSelect: (id: string) => anotar(`aresta:${id}`)})}
       apiRef={(a) => { api.current = a; window.__mapa = a; }} />
   </main>;
 }

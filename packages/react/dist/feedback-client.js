@@ -9,13 +9,15 @@ import { Popover as BasePopover } from "@base-ui/react/popover";
 import { cx, useAureaStrings, usePortalContainer, stateSeverity } from "./internal.js";
 import { Icon } from "./system.js";
 import { Button, IconButton, CloseButton } from "./actions.js";
+// NotificationCenter aceita `side`: o tipo é do módulo que define overlay, não uma cópia.
+import { Dialog } from "./overlays.js";
 // `oracle` saiu daqui (achado M9, 26/07/2026): estava no tipo e no CSS, e NÃO estava na
 // ficha — ou seja, era superfície pública que o contrato não declarava. E é vocabulário do
 // app de origem (papel de agente), não do sistema, como as classes de domínio que o achado
 // A6 mapeou. As classes `.badge-oracle`/`.btn-oracle` seguem no core porque o
 // `apps/docs/index.html` escrito à mão as usa; saem junto com ele, na Fase 4 do plano.
 // `.btn-oracle` nunca foi alcançável pelo React — `ButtonVariant` não tem `oracle`.
-import { Skeleton } from "./markup.js";
+import { Skeleton, Badge, Switch } from "./markup.js";
 // Status (DIRECTION §3.6): condição OPERACIONAL — ponto + rótulo. Não é Badge: Badge é
 // metadado curto num pill; Status diz em que estado a coisa está. Reusa o .status-dot que
 // já existia solto. A variante colore só o PONTO (currentColor); o rótulo fica legível em
@@ -54,7 +56,50 @@ const ICONE_DA_VARIANTE = { info: "info",
 // `action` (15/10/2026, o "Upgrade" da referência): o botão do aviso, depois do texto e antes do X; no celular ele desce
 // para baixo do texto, na mesma coluna (a referência repete o botão; aqui ele só muda de lugar).
 export function Alert({ variant, state, title, icon, onDismiss, action, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, action != null && "alert-has-action", className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), action != null && _jsx("div", { className: "alert-action", children: action }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
-export function Banner({ variant, state, title, icon, onDismiss, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("banner", `banner-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [icon ? _jsx(Icon, { name: icon }) : _jsx("span", {}), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] }); }
+export function Banner(props) {
+    if (props.variant === "consent")
+        return _jsx(BannerConsent, { ...props });
+    const { variant, state, title, icon, onDismiss, children, className, categories: _c, value: _v, onConsent: _o, ...rest } = props;
+    const s = useAureaStrings();
+    const v = variant ?? (state ? stateSeverity(state) : "info");
+    return _jsxs("div", { className: cx("banner", `banner-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...rest, children: [icon ? _jsx(Icon, { name: icon }) : _jsx("span", {}), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] });
+}
+// GAR-19 (lote U, 19/10/2026): o aviso de cookies é uma VARIAÇÃO do Banner (decisão do Victor). Nenhuma referência da fila
+// tem a peça aberta; as regras vêm de duas fontes primárias, lidas em 19/10/2026:
+// - o guia de cookies da ANPD (págs. 30–33): no primeiro nível, o botão de rejeitar os não necessários, tão fácil de ver
+//   quanto o de aceitar (nada de destaque só no aceite); categoria não necessária DESLIGADA por padrão; um segundo nível
+//   com as categorias; e um jeito direto de mudar a escolha depois. Os três botões são os do exemplo do guia.
+// - o aviso de cookies do governo britânico: no alto da página, sem `position:fixed` (que cobriria o foco — WCAG 2.4.11),
+//   uma região com nome e título h2, e a confirmação depois da escolha com `role="alert"`, que recebe o foco.
+// O app guarda a escolha (`onConsent`) e deixa de desenhar o aviso; para mudar depois, desenha de novo, com `value`.
+function BannerConsent({ title, icon: _icon, state: _state, variant: _variant, onDismiss, categories = [], value, onConsent, children, className, ...props }) {
+    const s = useAureaStrings();
+    const tituloId = React.useId();
+    const inicial = React.useCallback(() => Object.fromEntries(categories.map(c => [c.id, c.required ? true : value?.[c.id] === true])), [categories, value]);
+    const [escolha, setEscolha] = React.useState(inicial);
+    const [aberta, setAberta] = React.useState(false);
+    const [feito, setFeito] = React.useState(null);
+    const [oculto, setOculto] = React.useState(false);
+    const aviso = React.useRef(null);
+    // A confirmação recebe o foco quando aparece: o botão que a pessoa apertou some com a pergunta.
+    React.useEffect(() => { if (feito)
+        aviso.current?.focus(); }, [feito]);
+    const escolher = (acao, custom) => {
+        const final = Object.fromEntries(categories.map(c => [c.id, c.required ? true : acao === "accept-all" ? true : acao === "reject" ? false : custom?.[c.id] === true]));
+        setEscolha(final);
+        setAberta(false);
+        setFeito(acao);
+        onConsent?.(final, acao);
+    };
+    if (oculto)
+        return null;
+    const confirmacao = feito === "accept-all" ? s.consentAccepted : feito === "reject" ? s.consentRejected : s.consentSaved;
+    return _jsxs("div", { role: "region", "aria-labelledby": tituloId, className: cx("banner", "banner-consent", className), ...props, children: [_jsx("h2", { id: tituloId, className: "banner-consent-title", children: title ?? s.consentTitle }), feito
+                ? _jsxs(_Fragment, { children: [_jsx("div", { ref: aviso, role: "alert", tabIndex: -1, className: "banner-consent-message", children: confirmacao }), _jsx("div", { className: "banner-consent-actions", children: _jsx(Button, { variant: "secondary", onClick: () => { onDismiss ? onDismiss() : setOculto(true); }, children: s.consentHide }) })] })
+                : _jsxs(_Fragment, { children: [_jsx("div", { className: "banner-consent-text", children: children }), _jsxs("div", { className: "banner-consent-actions", children: [_jsx(Button, { variant: "secondary", onClick: () => escolher("reject"), children: s.consentReject }), _jsx(Button, { variant: "secondary", onClick: () => escolher("accept-all"), children: s.consentAccept }), _jsx(Button, { variant: "tertiary", onClick: () => { setEscolha(inicial()); setAberta(true); }, children: s.consentChoose })] })] }), _jsx(Dialog, { open: aberta, title: s.consentPreferences, onClose: () => setAberta(false), footer: _jsxs(_Fragment, { children: [_jsx(Button, { variant: "secondary", onClick: () => escolher("reject"), children: s.consentReject }), _jsx(Button, { variant: "secondary", onClick: () => escolher("accept-all"), children: s.consentAccept }), _jsx(Button, { variant: "primary", onClick: () => escolher("custom", escolha), children: s.consentSave })] }), children: _jsx("div", { className: "banner-consent-categories", children: categories.map(c => c.required
+                        ? _jsxs("div", { className: "banner-consent-required", children: [_jsxs("div", { className: "banner-consent-required-head", children: [_jsx("strong", { children: c.label }), _jsx(Badge, { children: s.consentRequired })] }), c.description != null && _jsx("p", { children: c.description })] }, c.id)
+                        : _jsx(Switch, { label: c.label, description: c.description, checked: escolha[c.id] === true, onChange: (e) => { const ligado = e.currentTarget.checked; setEscolha(atual => ({ ...atual, [c.id]: ligado })); } }, c.id)) }) })] });
+}
 export function Spinner({ size = "md", label, decorative, className, ...props }) { const s = useAureaStrings(); return _jsx("span", { className: cx("spinner", peleDoEixo("spinner", size, "sm", "spinner"), className), ...(decorative ? { "aria-hidden": true } : { role: "status", "aria-label": label ?? s.loading }), ...props }); }
 // `children` como FUNÇÃO é de propósito para o caso `loading`: assim o consumidor não paga o
 // render do conteúdo enquanto ele não existe. Aceita nó também, porque a maioria das telas já
