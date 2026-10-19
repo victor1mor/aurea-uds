@@ -170,6 +170,16 @@ O provider não mexe no DOM: pôr `dir` no `<html>` é da aplicação. Não se e
 visto do `Checkbox`, o spinner (glifos desenhados com borda) e o
 `Drawer side="left"|"right"` (o nome promete um lado físico).
 
+## Para assistentes de IA
+
+A documentação também sai em texto para assistentes de IA: o índice em `https://aureauds.dev/llms.txt`, tudo num
+arquivo só em `https://aureauds.dev/llms-full.txt`, e cada página em `.md`, ao lado do `.html`. A skill da Aurea mora em
+[`skills/aurea-uds/SKILL.md`](skills/aurea-uds/SKILL.md) e se instala com:
+
+```bash
+npx skills add victor1mor/aurea-uds
+```
+
 ## Ver o catálogo
 
 Construa e abra qualquer página direto do disco — as páginas não precisam de servidor:
@@ -189,7 +199,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-426 páginas geradas — 146 de componente, 219 de padrão, 15 de bloco, 23 de receita, 15 de documentação e 8 índices de área — a partir de 137 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 102 trazem um starter — o preview real e o código, ainda sem exemplos extras. 137 componentes publicam a tabela de props.
+429 páginas geradas — 146 de componente, 219 de padrão, 15 de bloco, 23 de receita, 18 de documentação e 8 índices de área — a partir de 137 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 102 trazem um starter — o preview real e o código, ainda sem exemplos extras. 137 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

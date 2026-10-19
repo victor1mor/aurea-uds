@@ -10,7 +10,9 @@ import {test, expect} from "@playwright/test";
 const base = process.env.BASE_SITE ?? "";
 const PAGINAS = ["getting-started", "docs-quick-start", "docs-design-principles", "docs-frameworks", "docs-showcase",
   "docs-roadmap", "docs-colors", "docs-theming", "docs-dark-mode", "docs-styling", "docs-animation", "docs-composition",
-  "docs-density", "docs-icons", "docs-rtl", "docs-accessibility"];
+  "docs-density", "docs-icons", "docs-rtl", "docs-accessibility",
+  // UI for Agents (SITE-06)
+  "docs-llms-txt", "docs-agent-skills", "docs-agents-md"];
 
 test("cada item da lateral da área tem o seu ícone, como os da referência", async ({page}) => {
   await page.goto(`${base}/apps/catalog/docs-quick-start.html`);
@@ -50,4 +52,34 @@ test("o Copy Markdown leva o texto da página, com o título e a descrição, e 
   expect(md.startsWith("# Quick Start\n\n")).toBe(true);
   expect(md).toContain('<Button variant="primary">Save</Button>');
   expect(md).not.toContain(":::");
+});
+
+// SITE-06 (18/10/2026): o "Copy Markdown" com a setinha e o "Copy Prompt", como os da documentação da referência — sem os
+// itens do servidor MCP (decisão do Victor). Contra o site do `main` de antes, os dois reprovam: lá não há nem a setinha
+// nem o "Copy Prompt".
+test("a setinha do Copy Markdown abre o menu com o .md da página e os dois assistentes", async ({page}) => {
+  await page.goto(`${base}/apps/catalog/docs-theming.html`);
+  await page.getByRole("button", {name: "More page actions"}).click();
+  const itens = page.getByRole("menu").getByRole("menuitem");
+  await expect(itens).toHaveText(["View as Markdown", "Open in ChatGPT", "Open in Claude"]);
+  const md = await itens.nth(0).getAttribute("href");
+  expect(md).toMatch(/\/docs-theming\.md$/);
+  const pergunta = `Read ${md}, I want to ask questions about it.`;
+  expect(new URL((await itens.nth(1).getAttribute("href"))!).searchParams.get("q")).toBe(pergunta);
+  expect(new URL((await itens.nth(2).getAttribute("href"))!).searchParams.get("q")).toBe(pergunta);
+  // O .md existe, ao lado da página.
+  expect((await page.request.get(md!)).status()).toBe(200);
+});
+
+test("o Copy Prompt copia o texto da Aurea, com a skill e o llms.txt deste site", async ({page}) => {
+  await page.goto(`${base}/apps/catalog/button.html`);
+  await page.evaluate(() => {
+    (window as unknown as {copiado: string}).copiado = "";
+    navigator.clipboard.writeText = async (t: string) => { (window as unknown as {copiado: string}).copiado = t; };
+  });
+  await page.getByRole("button", {name: "Copy Prompt"}).click();
+  const texto = await page.evaluate(() => (window as unknown as {copiado: string}).copiado);
+  expect(texto).toContain("npx skills add victor1mor/aurea-uds");
+  expect(texto).toContain(new URL("llms.txt", page.url()).href);
+  await expect(page.getByRole("button", {name: "Copied"})).toBeVisible();
 });

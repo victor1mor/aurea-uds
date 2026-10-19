@@ -18,6 +18,8 @@ import {CommandPalette} from "../../../packages/react/dist/index.js";
 // O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
 // sob o MESMO provedor (ver `tema.tsx`).
 import {ChavesDeTema, ProvedorDoSite, SetinhaDoTopo, TemaDoTopo} from "./tema";
+// A setinha do "Copy Markdown" (SITE-06, 18/10/2026), sob o mesmo provedor.
+import {AcoesDaPagina} from "./acoes";
 
 type Entrada = {label: string; href: string; group: string};
 declare global {interface Window {AUREA_SEARCH?: Entrada[]}}
@@ -62,5 +64,5 @@ export function montarSite(...extras: ReactNode[]) {
   const raiz = document.createElement("div");
   raiz.id = "site-search-root";
   document.body.append(raiz);
-  createRoot(raiz).render(h(ProvedorDoSite, null, h(Busca), h(TemaDoTopo), h(ChavesDeTema), h(SetinhaDoTopo), ...extras));
+  createRoot(raiz).render(h(ProvedorDoSite, null, h(Busca), h(TemaDoTopo), h(ChavesDeTema), h(SetinhaDoTopo), h(AcoesDaPagina), ...extras));
 }
