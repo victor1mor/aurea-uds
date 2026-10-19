@@ -1,0 +1,29 @@
+# v0.8.7
+
+In React Native, the brand Card now keeps its fields, buttons and focus readable on the yellow, and menus or sheets opened from inside it no longer inherit its colors.
+
+A patch for React Native that completes the yellow brand card introduced in v0.8.6. In v0.8.6 only the text inside the card got a readable color; borders, icons, fields and buttons still used colors that do not show on the yellow. They now use the same dark ink as the text.
+
+## Fixed
+
+- **[`Card`](./card.html) `variant="brand"`: the ink now reaches borders and icons, not only text.** Field outlines, the invalid border, the focus ring and icon-only buttons were below 3:1 against the yellow in at least one theme. They now use `primary-foreground`, the only system color that reads on the yellow in both themes.
+- **Fields inside the brand card**: they drop their background and are drawn as an outline in the ink color, since no background color separates from the yellow.
+- **Invalid fields inside the brand card**: the red border would read worse than the normal one on the yellow, so the field keeps the ink outline. The error is shown by the `Field` message and announced to screen readers.
+- **Focus inside the brand card**: it is shown by a thicker outline, not by color, because in the dark theme the focus color is the same yellow.
+- **Buttons inside the brand card**: the filled [`Button`](./button.html) inverts (ink background, yellow label); outline and ghost buttons use the ink.
+- **Overlays opened from inside the brand card no longer inherit its ink.** A `Select` sheet opened from inside the card would have painted dark brown text on a normal background. The six overlay components of the package now reset the brand ink.
+- **Known limit**: the components that read the brand ink are `Text`, the field family, `Button` and `IconButton`. Other components, and content your app places inside the card, may still be hard to read on the yellow.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.8.7 @aurea-uds/core@0.8.7 @aurea-uds/fonts@0.8.7 @aurea-uds/icons@0.8.7
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.8.7
+```

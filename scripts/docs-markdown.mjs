@@ -55,8 +55,10 @@ export function lerDoc(texto, arquivo) {
   }
   for (const k of ["title", "description"]) if (!meta[k]) throw new Error(`${arquivo}: o cabeçalho não tem "${k}"`);
   // `icon` (opcional): o ícone do item na lateral, como os da área da referência — um nome do Phosphor.
-  const desconhecidas = Object.keys(meta).filter(k => !["title", "description", "icon"].includes(k));
+  // `date` (opcional): o dia de uma nota de versão (as notas da área Releases usam o mesmo leitor), em AAAA-MM-DD.
+  const desconhecidas = Object.keys(meta).filter(k => !["title", "description", "icon", "date"].includes(k));
   if (desconhecidas.length) throw new Error(`${arquivo}: chave de cabeçalho que o gerador não lê — ${desconhecidas.join(", ")}`);
+  if (meta.date && !/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) throw new Error(`${arquivo}: "date" fora da forma AAAA-MM-DD — "${meta.date}"`);
 
   const blocos = [];
   const ids = new Set();
@@ -124,7 +126,7 @@ export function lerDoc(texto, arquivo) {
     while (i < linhas.length && linhas[i].trim() && !/^(#|```|:::|\||- |\d+\. )/.test(linhas[i])) para.push(linhas[i++].trim());
     blocos.push({tipo: "p", texto: lerLinha(para.join(" "), onde())});
   }
-  return {title: meta.title, description: meta.description, icon: meta.icon, blocos};
+  return {title: meta.title, description: meta.description, icon: meta.icon, date: meta.date, blocos};
 }
 
 // O texto da página para quem copia (o "Copy Markdown") ou lê por máquina: o arquivo, sem o cabeçalho e sem as

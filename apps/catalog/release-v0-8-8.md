@@ -1,0 +1,49 @@
+# v0.8.8
+
+Web fixes for Combobox, the mobile drawer, DependencyGraph and DataGrid, React Native fixes found on Android, BottomNavProvider, and a new type scale.
+
+A large fix release. On the web it corrects item layout in `Combobox`, the mobile drawer, graph edges and table search. In React Native it fixes `NumberField`, controls without labels, `Grid` cells and the floating `BottomNav`. It also introduces a new type scale with clearly distinct steps.
+
+## New
+
+- **`BottomNavProvider` and `useBottomNavSpace()` (React Native)**: the floating bar measures its own height and reports it to the provider, and `Screen` with `scroll` reserves that space so the end of the content is not hidden. For screens without `Screen`, the number is available from the hook. Outside a provider both are zero.
+
+## Changed
+
+- **New type scale with five visible steps.** The small end had four steps four points apart (12, 13, 14, 16), which read as mistakes rather than hierarchy. Caption and supporting text become 13, body and control text 16, card titles 20, screen titles 25, and highlighted numbers 31. Nothing gets smaller.
+- The ten size names stay, and some now point to the same value, so no component had to change `size`. The web tokens change too, since the scale lives in `aurea.tokens.json`.
+- **Menu item radius goes from 8 to 18**, and the `.menu` panel gets the card radius and `--space-1` padding. This applies to every list using `.menu`: [`Combobox`](./combobox.html), [`MultiCombobox`](./multicombobox.html), [`DropdownMenu`](./dropdownmenu.html), [`ContextMenu`](./contextmenu.html), [`Menubar`](./menubar.html) and the [`CommandPalette`](./commandpalette.html) list.
+
+## Fixed
+
+### Web
+
+- **`Combobox` and `MultiCombobox`**: item text fell into the check column when the item was not selected, so long labels wrapped onto four lines. The column now always exists, and each item is 36 tall. The core also places the last child in the second column for hand-written HTML.
+- **The mobile drawer did not close when an item was picked.** It now closes, both with the declarative list and with navigation passed as `children`, in `@aurea-uds/react` and in `aurea.js`.
+- **Widening the window left the drawer stuck over the page**, without its overlay or close button. Crossing `lg` (1024 pixels) now closes it.
+- **[`DependencyGraph`](./dependencygraph.html)**: edge labels were black on black. Labels now read the colour variables directly, and the gap between columns grows with the longest label so labels do not slide under nodes. Graphs without labels are unchanged.
+- **`DependencyGraph`**: two edges between the same pair of nodes became one. `GraphEdgeItem` gets `id?: string`, and parallel edges leave the node at different heights. Without `id`, the first edge of each pair keeps its usual id.
+- **[`DataGrid`](./datagrid.html)**: global search ignored a column that was empty in the first row. It now uses the first present value. `enableGlobalFilter: false` on a column still wins.
+- **Floating `BottomNav`**: the iPhone safe area was added as `padding-bottom` inside the pill. It is now `margin-bottom`, and `.bottom-nav-edge` keeps its padding.
+
+### React Native
+
+- **[`NumberField`](./numberfield.html) only reported the number on blur.** Tapping "Save" with the keyboard open could save the previous value without any error. It now reports on every keystroke, following the `locale` rules: in pt-BR `"12,"` is `12`, `"1.234,5"` is `1234.5`, clearing the field is `null`, and `","` or `"-"` alone report nothing.
+- `min` and `max` are not applied while typing, so the field never overwrites what you are typing. They are applied on blur, and if that changes the number it is reported again. Formatting still happens only on blur.
+- **[`Switch`](./switch.html) without a label stretched and hid the row name in [`NavList`](./navlist.html).** Without label and description, the root is now just the track. `Checkbox` and `Radio` had the same issue and are fixed too.
+- **[`Grid`](./grid.html) children did not fill their cell**, so two `KPI` side by side had different heights when one wrapped its text. Children now fill the cell height.
+- **The floating [`BottomNav`](./bottomnav.html) slid behind the Android buttons and did not float.** `floating` is now `position: absolute`: the screen uses the full height and scrolls under the pill, and the system inset becomes `marginBottom`. Do not wrap the bar in a painted `View`. The `edge` variant is unchanged.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.8.8 @aurea-uds/core@0.8.8 @aurea-uds/fonts@0.8.8 @aurea-uds/icons@0.8.8
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.8.8
+```

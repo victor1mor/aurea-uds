@@ -1,0 +1,51 @@
+# v0.15.0
+
+React Native gets custom icon components in every icon prop, a richer Timeline, a new FileInput, and a PhotoInput that opens the photo.
+
+A React Native release. Every icon prop now accepts your own drawing, `Timeline` gains icons and tones, and a new `FileInput` picks files from the device. `EmptyState` and `PhotoInput` also look different.
+
+## New
+
+### React Native
+
+- **`AureaIcon` type**: every icon prop (`Icon`, `IconButton`, `BottomNav` and `NavList` items, `Alert`, `EmptyState`, `RadioGroup.Item` and more) accepts either a glyph name (`"truck"`) or a component, such as one made with `criarGlifo` or imported from `icons/*`. A logo can be passed as `icon={Logo}`, with no name registration and no `declare module`. The component receives the `size` and `color` the host asks for. Unknown names still fail in TypeScript.
+- A component passed directly has no filled variant for the selected state; the filled shape comes from the registry, as `<name>-fill`.
+- **[`Timeline`](./timeline.html)**: new `icon`, `tone`, `trailing` and `between` props. `icon` replaces the dot with a glyph in a 40-point round frame; `tone` colours the frame with the `Badge` colours; `trailing` shows a value to the right of the title; `between` describes what happened between one item and the next, next to the line (for example "6 days later"). One item with `icon` is enough to widen the whole column. Without `icon`, nothing changes.
+- **[`FileInput`](./fileinput.html)**, from `@aurea-uds/native/system/file`: picks a file from the device with the system picker (`expo-document-picker`, an optional peer, `>=12`). It returns `{uri, name, size, mimeType}`, never the content. Props: `accept`, `max` (1), `maxSize`, `disabled`, `addIcon`, `fileIcon`, `removeIcon`. Cancelling changes nothing; a file that is too large or of the wrong type is rejected with a red message below.
+- `FileInput` has its own entry point so that apps using `DatePicker` from `/system` do not need to install the file picker.
+- **New strings**: `fileChoose`, `fileRemove`, `fileTooLarge`, `fileWrongType`, `photo`, `positionOf`, `photoOpen` and `photoAdd`.
+
+## Changed
+
+### React Native
+
+- **[`EmptyState`](./emptystate.html)**: the glyph now sits in a 64-point round frame on the `muted` background. The glyph stays at 32 and uses `mutedForeground`.
+- **`PhotoInput` lets you look at the photo**: thumbnails are now 64-point squares, the same size as the add button. Tapping a thumbnail opens the photo full size, with the same zoom as [`Gallery`](./gallery.html). The remove button has a background and sits fully outside the photo.
+- Screen readers hear "Photo 2 of 3" and "Opens the photo" on a thumbnail, and "Remove photo 2" on its remove button.
+
+## Fixed
+
+### React Native
+
+- **`PhotoInput`**: the add button only had an accessible name inside a `Field`. Outside one, screen readers now hear "Add photo".
+- **`PhotoInput`**: when disabled, the remove button still removed the photo. It no longer does; viewing the photo still works.
+- **In the browser, React Native no longer requests the native animation driver.** `Spinner`, `Skeleton`, `Switch`, `Drawer`, `BottomSheet`, `Combobox` and `Toast` always set `useNativeDriver: true`, which logged a warning on the web. They now use it only on devices. Nothing changes on devices.
+
+## Breaking changes
+
+- **`AureaStrings` (React Native)** has eight new keys: `fileChoose`, `fileRemove`, `fileTooLarge`, `fileWrongType`, `photo`, `photoAdd`, `photoOpen` and `positionOf`. If you build the full object with this type, add them. Passing only some strings to the provider is unaffected.
+- **Appearance**: the `EmptyState` glyph now has a frame, and `PhotoInput` thumbnails are square with the remove button outside the photo.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.15.0 @aurea-uds/core@0.15.0 @aurea-uds/fonts@0.15.0 @aurea-uds/icons@0.15.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.15.0
+```

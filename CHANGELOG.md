@@ -160,6 +160,16 @@ bancada; a versão sobe quando o lote fechar.
   dela. Três páginas novas, no grupo "UI for Agents": LLMs.txt, Agent Skills e AGENTS.md. O site manda `.md` e `.txt`
   com `charset=utf-8`. Quem cobra: `tests/unit/site-llms.test.tsx` e `tests/visual/site-getting-started.spec.ts`.
 
+- **A área Releases (as notas de versão).** Uma área nova no topo do site, com o foguete, depois de Components, como a
+  da referência: "All Releases" (a última no alto, um resumo de cada versão) e uma página por versão, com a data, o
+  comando de atualizar (os pacotes da web e, desde a 0.7.0, o do React Native), o que entrou, o que mudou, o que foi
+  consertado e o que pode quebrar. Decisões do Victor (19/10/2026): **todas as versões**, em inglês, escritas a partir
+  deste CHANGELOG (só o que muda para quem usa), numa área própria; no Início ela não entra, como no da referência. As
+  51 versões publicadas têm a sua página; as 8 que saíram dentro de outra são uma seção da nota de quem as publicou. O
+  texto mora em `apps/catalog/content/releases/`, e a montagem para se uma versão com data neste arquivo ficar sem
+  nota, ou com outra data. As notas entram no `llms.txt` e no `llms-full.txt`. Quem cobra:
+  `tests/visual/site-releases.spec.ts`.
+
 ### Consertado no site e no core
 
 - **`Prose`: código no meio do texto quebra a linha.** Um `window.Aurea.setDensity("compact")` num parágrafo empurrava

@@ -18,7 +18,7 @@ import {dirname, join} from "node:path";
 import * as A from "../packages/react/dist/index.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
-import {lerDoc, paraTexto} from "./docs-markdown.mjs";
+import {lerDoc, lerLinha, paraTexto} from "./docs-markdown.mjs";
 import {linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
 // A aba "Components" da vitrine do Início (15/10/2026): o MESMO arquivo que o `home.js` deixa vivo.
 import {VitrineComponentes} from "../apps/catalog/live/vitrine-componentes.mjs";
@@ -94,6 +94,8 @@ const MAT = {Stable: "success", Universal: "primary", Ready: "info", Draft: "war
 // A versão no topo, o endereço do código-fonte nas pílulas, e os selos do menu — tudo dos DADOS.
 const VERSAO = JSON.parse(readFileSync(join(root, "packages/react/package.json"), "utf8")).version;
 const REPO = "https://github.com/victor1mor/aurea-uds";
+// O endereço do site publicado: os textos para assistentes de IA (SITE-06) são lidos FORA dele.
+const SITE = "https://aureauds.dev";
 // O ano do rodapé: o da última versão publicada, e não o relógio (a página é gerada e conferida pela CI).
 const ANO = JSON.parse(readFileSync(join(root, "scripts/released-surface.json"), "utf8")).date.slice(0, 4);
 // O LOGO DO GITHUB (o Victor, 15/10/2026: "A, pode baixar o oficial do GitHub") — só no SITE, nunca na biblioteca
@@ -455,7 +457,8 @@ function paraMarkdown({title, lede, imports, demo, points = [], exemplos = [], p
 const resumoDaPagina = arquivo => fichas.find(f => `${slug(f.name)}.html` === arquivo)?.summary
   ?? patterns.find(x => `${x.slug}.html` === arquivo)?.description
   ?? blocks.find(x => `${x.slug}.html` === arquivo)?.description
-  ?? docs.find(d => d.arquivo === arquivo)?.description ?? null;
+  ?? docs.find(d => d.arquivo === arquivo)?.description
+  ?? releases.find(r => r.arquivo === arquivo)?.description ?? null;
 const vizinhos = (area, arquivo) => {
   const linha = MENUS[area]().flatMap(g => g.items);
   const k = linha.findIndex(x => x.id === arquivo);
@@ -799,12 +802,15 @@ const DEMOS_DOCS = {
 };
 
 // O texto do meio da linha, com as peças da Aurea: o link é o `Link` (o de fora, com a setinha e a aba nova).
-const pedacos = (lista, chave) => lista.map((p, n) => p.strong !== undefined ? h("strong", {key: `${chave}${n}`}, p.strong)
+// O negrito também é lido por dentro: `**`Button`**` (o nome de uma peça, em negrito) sairia com as crases à mostra.
+const pedacos = (lista, chave) => lista.map((p, n) => p.strong !== undefined ? h("strong", {key: `${chave}${n}`}, ...pedacos(lerLinha(p.strong, "negrito"), `${chave}${n}s`))
   : p.code !== undefined ? h("code", {key: `${chave}${n}`}, p.code)
   : p.link !== undefined ? h(A.Link, {key: `${chave}${n}`, href: p.href, external: /^https?:/.test(p.href)}, p.link)
   : p.t);
 
-function docPage(doc) {
+// `area`: a lateral e o anterior/próximo (a Getting Started, ou a Releases para as notas de versão); `sobTitulo`: o que vem
+// logo abaixo da descrição (a data da nota); `markdown`: o texto do "Copy Markdown", quando não é o do arquivo puro.
+function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) {
   const {blocos} = doc;
   const toc = blocos.filter(b => b.tipo === "h2" || b.tipo === "h3")
     .map(b => ({id: b.id, label: b.rotulo, ...(b.tipo === "h3" ? {sub: true} : {})}));
@@ -836,13 +842,90 @@ function docPage(doc) {
       filhos.push(h(Fragment, {key: n}, demoBlock(desenho, codigo)));
     }
   }
-  const {prev, next} = vizinhos("start", doc.arquivo);
+  const {prev, next} = vizinhos(area, doc.arquivo);
   const node = h(Fragment, null,
     cabecaDaPagina(doc.title, doc.description),
+    sobTitulo,
     h(A.Prose, null, ...filhos),
     anteriorProximo(prev, next),
-    textoParaCopiar(paraTexto(doc.texto)));
+    textoParaCopiar(markdown ?? paraTexto(doc.texto)));
   return {node, toc};
+}
+
+// ── A área Releases (lote U, 19/10/2026) ─────────────────────────────────────
+// As notas de versão da referência: uma área no topo (o foguete), "All Releases" com a última no alto e uma página por
+// versão. Decisões do Victor (19/10/2026): TODAS as versões, em inglês, escritas a partir do CHANGELOG (que é em
+// português e conta o processo; a nota conta só o que muda para quem usa), numa área própria. A versão que não saiu
+// sozinha no npm entra DENTRO da nota de quem a publicou ("## Includes v0.12.0"), como a referência faz com uma beta dela.
+// O comando de atualizar e os links o gerador põe: escritos à mão em 51 notas, um errava.
+const relDir = join(contentDir, "releases");
+const comparar = (a, b) => { const x = a.split(".").map(Number), y = b.split(".").map(Number);
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] - y[i]; return 0; };
+const slugVersao = v => `v${v.replaceAll(".", "-")}`;
+const releases = (existsSync(relDir) ? readdirSync(relDir).filter(f => f.endsWith(".md")) : []).map(f => {
+  const texto = readFileSync(join(relDir, f), "utf8");
+  const doc = lerDoc(texto, `content/releases/${f}`);
+  const versao = doc.title.replace(/^v/, "");
+  if (!/^\d+\.\d+\.\d+$/.test(versao) || `${slugVersao(versao)}.md` !== f) throw new Error(`content/releases/${f}: o título "${doc.title}" não é a versão do nome do arquivo`);
+  if (!doc.date) throw new Error(`content/releases/${f}: falta a "date"`);
+  const incluidas = doc.blocos.filter(b => b.tipo === "h2" && /^Includes v/.test(b.rotulo))
+    .map(b => ({versao: b.rotulo.replace(/^Includes v/, ""), id: b.id}));
+  return {...doc, nome: f.replace(/\.md$/, ""), arquivo: `release-${slugVersao(versao)}.html`, versao, texto, incluidas};
+}).sort((a, b) => comparar(b.versao, a.versao));
+// A TRAVA: toda versão com data no CHANGELOG tem nota (a própria, ou dentro da de quem a publicou), com a MESMA data; e
+// nota sem versão no CHANGELOG não existe. A "em construção" não tem data, e fica fora até sair.
+const versoesDoChangelog = [...changelog.matchAll(/^## \[(\d+\.\d+\.\d+)\] — (\d{4}-\d{2}-\d{2})/gm)].map(m => ({versao: m[1], date: m[2]}));
+for (const c of versoesDoChangelog) {
+  const propria = releases.find(r => r.versao === c.versao);
+  if (!propria && !releases.some(r => r.incluidas.some(i => i.versao === c.versao))) {
+    throw new Error(`a versão ${c.versao} está no CHANGELOG e não tem nota em content/releases/ (nem "## Includes v${c.versao}" na nota de quem a publicou)`);
+  }
+  if (propria && propria.date !== c.date) throw new Error(`content/releases/${propria.nome}.md: date ${propria.date}, e o CHANGELOG diz ${c.date}`);
+}
+for (const r of releases) if (!versoesDoChangelog.some(c => c.versao === r.versao)) throw new Error(`content/releases/${r.nome}.md: a versão ${r.versao} não está no CHANGELOG`);
+const dataLonga = d => new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", {year: "numeric", month: "long", day: "numeric", timeZone: "UTC"});
+// O comando de atualizar: os quatro pacotes da web e, desde a 0.7.0, o do React Native.
+const comandos = r => [
+  ["On the web", `pnpm add ${["react", "core", "fonts", "icons"].map(p => `@aurea-uds/${p}@${r.versao}`).join(" ")}`],
+  ...(comparar(r.versao, "0.7.0") >= 0 ? [["On React Native", `pnpm add @aurea-uds/native@${r.versao}`]] : [])];
+const titulo = (id, texto) => ({tipo: "h2", id, rotulo: texto, texto: [{t: texto}]});
+function releasePage(r) {
+  const corte = r.blocos.findIndex(b => b.tipo === "h2");
+  const inicio = corte < 0 ? r.blocos : r.blocos.slice(0, corte), resto = corte < 0 ? [] : r.blocos.slice(corte);
+  const atualizar = [titulo("update", "Update"),
+    ...comandos(r).flatMap(([onde, cmd]) => [{tipo: "p", texto: [{t: `${onde}:`}]}, {tipo: "codigo", lingua: "bash", codigo: cmd}])];
+  const links = [titulo("links", "Links"), {tipo: "ul", itens: [
+    [{link: "All releases", href: "./releases.html"}],
+    [{link: "Changelog, with every detail (in Portuguese)", href: `${REPO}/blob/main/CHANGELOG.md`}],
+    [{link: `@aurea-uds/react ${r.versao} on npm`, href: `https://www.npmjs.com/package/@aurea-uds/react/v/${r.versao}`}]]}];
+  const markdown = [paraTexto(r.texto).trimEnd(), "## Update",
+    ...comandos(r).flatMap(([onde, cmd]) => [`${onde}:`, "```bash\n" + cmd + "\n```"])].join("\n\n") + "\n";
+  return docPage({...r, blocos: [...inicio, ...atualizar, ...resto, ...links]}, {area: "releases", markdown,
+    sobTitulo: h(A.Text, {type: "body-sm", tone: "muted"}, h("time", {dateTime: r.date}, dataLonga(r.date)))});
+}
+// "All Releases": a última no alto; depois todas, da mais nova à mais velha, com as que saíram dentro de outra no lugar
+// delas, levando à seção da nota de quem as publicou.
+function releasesPage() {
+  const blocos = [{tipo: "p", texto: [{t: "Every release of Aurea, newest first. All seven packages are released together, with the same version number. The changelog on GitHub, in Portuguese, has every detail."}]}];
+  const entrada = r => [{tipo: "h3", id: slugVersao(r.versao), rotulo: r.title, texto: [{t: r.title}]},
+    {tipo: "p", texto: [{strong: dataLonga(r.date)}]}, {tipo: "p", texto: [{t: r.description}]},
+    {tipo: "p", texto: [{link: "Read full release notes →", href: `./${r.arquivo}`}]}];
+  const dentro = (i, pai) => [{tipo: "h3", id: slugVersao(i.versao), rotulo: `v${i.versao}`, texto: [{t: `v${i.versao}`}]},
+    {tipo: "p", texto: [{t: `Released inside v${pai.versao}.`}]},
+    {tipo: "p", texto: [{link: `Read the notes in v${pai.versao}`, href: `./${pai.arquivo}#${i.id}`}]}];
+  blocos.push(titulo("latest-release", "Latest Release"), ...(releases[0] ? entrada(releases[0]) : []));
+  blocos.push(titulo("all-releases", "All Releases"));
+  for (const [k, r] of releases.entries()) {
+    if (k > 0) blocos.push(...entrada(r));
+    for (const i of r.incluidas) blocos.push(...dentro(i, r));
+  }
+  const doc = {title: "All Releases", description: "Every update to Aurea: what is new, what changed, what was fixed and what may break.",
+    arquivo: "releases.html", nome: "releases", blocos, texto: ""};
+  const markdown = ["# All Releases", doc.description,
+    ...releases.map(r => `## ${r.title}\n\n${dataLonga(r.date)}\n\n${r.description}\n\n[Read full release notes →](${SITE}/${r.arquivo.replace(/\.html$/, ".md")})`)].join("\n\n") + "\n";
+  // O índice da página fica só com os dois títulos: as 60 versões estão na lateral.
+  const pagina = docPage(doc, {area: "releases", markdown});
+  return {...pagina, toc: pagina.toc.filter(t => !t.sub)};
 }
 
 // ── chips e import de "Uses", comuns a pattern / block / recipe ───────────────
@@ -1177,12 +1260,14 @@ function hooksPage() {
 // título de cada página).
 // "Getting Started", como a área da referência (lote U, SITE-03 — o Victor, 18/10/2026). Era "Docs" desde 15/10/2026,
 // porque com o nome longo o topo do Início não cabia numa linha de 768 a 949.
+// "Releases" depois de "Components", na ordem da barra da referência (lote U, 19/10/2026).
 const AREAS = [["Getting Started", "getting-started.html", "start"], ["Components", "components.html", "components"],
+  ["Releases", "releases.html", "releases"],
   ["Patterns", "patterns.html", "patterns"], ["Blocks", "blocks.html", "blocks"], ["Recipes", "recipes.html", "recipes"],
   ["Hooks", "hooks.html", "hooks"], ["Tokens", "tokens.html", "tokens"]];
 // O ÍCONE de cada área (lote T, SITE-04: "o ícone em cada área do topo", como a linha das áreas da documentação da
 // referência). Docs é o livro aberto dela; Components, os quatro losangos (o mais perto do dela); os outros, propostos.
-const ICONE_DA_AREA = {start: "book-open", components: "diamonds-four", patterns: "puzzle-piece", blocks: "squares-four",
+const ICONE_DA_AREA = {start: "book-open", components: "diamonds-four", releases: "rocket", patterns: "puzzle-piece", blocks: "squares-four",
   recipes: "cooking-pot", hooks: "brackets-curly", tokens: "swatches"};
 
 // O MENU de cada área, como itens da `Sidebar` (grupos com título; o id do item é o arquivo dele).
@@ -1217,7 +1302,10 @@ const menuBlocks = () => [{id: "overview", label: "Overview", items: [item("All 
 const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
 const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
   {id: "archetypes", label: "Archetypes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
-const MENUS = {start: menuDocs, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
+// Releases: "All Releases" e as versões, da mais nova à mais velha, como a da referência.
+const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html")]},
+  {id: "releases", label: "Releases", items: releases.map(r => item(r.title, r.arquivo))}];
+const MENUS = {start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
 const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
@@ -1273,7 +1361,8 @@ function topoDoSite(section) {
     return {brand, home: {
       // No Início a área é "Docs", como no Início da referência (conferido na página dela, 18/10/2026): só a barra das
       // áreas, dentro da documentação, diz "Getting Started". Com o nome longo, o topo quebrava de 776 a 800 (medido).
-      items: AREAS.map(([label, href, id]) => ({id, label: id === "start" ? "Docs" : label, href: `./${href}`})),
+      // E sem "Releases", que o Início da referência também não tem (o topo dele já é justo de 768 a 1023).
+      items: AREAS.filter(([, , id]) => id !== "releases").map(([label, href, id]) => ({id, label: id === "start" ? "Docs" : label, href: `./${href}`})),
       actions: h(Fragment, null,
         h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm",
           href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}),
@@ -1759,6 +1848,8 @@ const indiceDaBusca = [
     ["Blocks", "blocks.html"], ["Recipes", "recipes.html"], ["Hooks", "hooks.html"], ["Tokens", "tokens.html"]]
     .map(([label, href]) => ({label, href, group: "Pages"})),
   ...docs.map(d => ({label: d.title, href: d.arquivo, group: "Getting Started"})),
+  {label: "All Releases", href: "releases.html", group: "Releases"},
+  ...releases.map(r => ({label: r.title, href: r.arquivo, group: "Releases"})),
   ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components"})),
   ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks"})),
   ...patterns.map(p => ({label: `${p.component} · ${p.name}`, href: `${p.slug}.html`, group: "Patterns"})),
@@ -1808,6 +1899,8 @@ ${TEMA_SALVO}</head>
 const paginas = [
   ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
   ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, docPage(d), "start")]),
+  ["releases.html", pageHtml("All Releases", "releases.html", releasesPage(), "releases")],
+  ...releases.map(r => [r.arquivo, pageHtml(`${r.title} release notes`, r.arquivo, releasePage(r), "releases")]),
   ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
   ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
   ["blocks.html", pageHtml("Blocks", "blocks.html", blocksIndex(), "blocks")],
@@ -1828,7 +1921,7 @@ const paginas = [
 {
   const existentes = new Map(paginas.map(([f, html]) => [f, html]));
   const quebrados = [];
-  for (const d of docs) for (const b of d.blocos) {
+  for (const d of [...docs, ...releases]) for (const b of d.blocos) {
     const linhas = b.texto ? [b.texto] : b.itens ? b.itens : b.tipo === "tabela" ? [b.cabecalho, ...b.linhas].flat() : [];
     for (const p of linhas.flat()) {
       if (!p.href || /^https?:/.test(p.href)) continue;
@@ -1847,7 +1940,6 @@ const paginas = [
 // arquivo só — com TUDO, por decisão do Victor (18/10/2026): a área Getting Started, os componentes, os hooks, os
 // padrões, os blocos e as receitas. O texto de cada página é o mesmo do "Copy Markdown" (o JSON `page-markdown`), lido
 // do HTML pronto: uma fonte só. O endereço é o do site publicado, porque o arquivo é lido FORA dele.
-const SITE = "https://aureauds.dev";
 const textoDaPagina = html => {
   const m = html.match(/<script type="application\/json" id="page-markdown">([\s\S]*?)<\/script>/);
   return m ? JSON.parse(m[1]) : null;
@@ -1861,6 +1953,7 @@ const GRUPOS_LLMS = [
   ["Patterns", patterns.map(p => entrada(`${p.slug}.html`, `${p.component} · ${p.name}`, p.description))],
   ["Blocks", blocks.map(b => entrada(`${b.slug}.html`, b.name, b.description))],
   ["Recipes", archetypeIds.map(id => entrada(`recipe-${slug(id)}.html`, recipeTitle(id), null))],
+  ["Releases", releases.map(r => entrada(r.arquivo, r.title, r.description))],
 ];
 for (const [grupo, lista] of GRUPOS_LLMS) for (const e of lista) {
   if (!e.md) throw new Error(`${e.arquivo} (${grupo}): a página não tem o texto do "Copy Markdown" — o .md e o llms.txt sairiam sem ela`);

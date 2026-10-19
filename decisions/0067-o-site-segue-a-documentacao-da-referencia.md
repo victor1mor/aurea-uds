@@ -128,3 +128,12 @@ Prompt" com **o texto e o ícone da Aurea** (logo de terceiro não entra — §5
 **tudo**. O texto de cada `.md` é o do "Copy Markdown" (uma fonte); a skill mora em `skills/aurea-uds/SKILL.md`, no
 formato Agent Skills, e o `aurea-agents.md` do site é o corpo dela. O nome não é `AGENTS.md` de propósito: um arquivo com
 esse nome dentro do repositório seria lido como regra pelos assistentes que trabalham na própria Aurea.
+
+### As notas de versão (19/10/2026): a área Releases
+
+A área da referência: o foguete no topo, depois de Components; "All Releases" com a última no alto; uma página por
+versão, com a data e o comando de atualizar. Decisões do Victor: **todas as versões**, em inglês, escritas a partir do
+CHANGELOG — que é em português e conta o processo; a nota conta só o que muda para quem usa —, numa **área própria**. A
+versão que saiu dentro de outra é uma seção da nota de quem a publicou, como a referência faz com uma beta dela. O comando
+de atualizar e os links o gerador escreve; o texto, cada nota. A montagem para se uma versão com data no CHANGELOG ficar
+sem nota ou com outra data — e o passo 8 do "Como cada lote anda" (CLAUDE.md) passa a incluir a nota.

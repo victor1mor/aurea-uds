@@ -1,0 +1,43 @@
+# v0.13.0
+
+New typeface and icon set. Atkinson Hyperlegible Next replaces IBM Plex, and Phosphor icons replace Carbon. Icon names change.
+
+Aurea switches its typeface and its icons across all seven packages. Text now uses **Atkinson Hyperlegible Next** (and **Atkinson Hyperlegible Mono** for code), and icons are **Phosphor**, Regular weight, with the filled shape on selected items. This release breaks every app that uses icons: read the breaking changes before upgrading.
+
+## New
+
+- **`weight` on [`Icon`](./icon.html)**, on the web and in React Native: `"regular"` (default) or `"fill"`. New type: `IconWeight`. On the web, an app's own icon requested as `fill` falls back to regular instead of rendering an empty `<use>`.
+- **Name mapping table**: `@aurea-uds/icons/carbon-para-phosphor.json` lists 260 Carbon icon names with their Phosphor replacement.
+
+## Changed
+
+- **Icons: Phosphor instead of Carbon** (`@phosphor-icons/core` 2.1.1, MIT), from the same source on both targets. 1,433 icons, each in two shapes (regular and `-fill`): 2,866 symbols in the sprite and 2,866 components in `@aurea-uds/native/icons/*`.
+- The 79 Phosphor brand logos are not included.
+- The Regular stroke matches the previous icons: 1/16 of the size.
+- **Selected items show the filled icon**: [`Sidebar`](./sidebar.html) and [`BottomNav`](./bottomnav.html) on the web, `BottomNav` in React Native.
+- **Still filled**: the `Alert` and `Toast` variant glyphs, the moon and sun of [`ThemeToggle`](./themetoggle.html), the completed-upload check in `FileInput`, and the `MediaEmbed` play button. Icons you choose render as you request them.
+- **Typeface: Atkinson Hyperlegible Next and Mono instead of IBM Plex** (SIL OFL 1.1). Eight files in two formats: Latin-only `.woff2` for the web and full `.ttf` for devices. The font has the same vertical metrics as IBM Plex, so existing line heights still fit.
+- **IBM Plex Serif is removed.** `--font-editorial` and the React Native `editorial` role remain as aliases of the body font until 1.0.
+
+## Breaking changes
+
+- **Icon names are Phosphor names.** Carbon names no longer compile. Use `@aurea-uds/icons/carbon-para-phosphor.json` to migrate. Common ones: `close` to `x`, `add` to `plus`, `chevron--down` to `caret-down`, `search` to `magnifying-glass`, `settings` to `gear`, `home` to `house`, `trash-can` to `trash`, `checkmark` to `check`, `menu` to `list`, `notification` to `bell`. The `*--filled` names become the same name with `weight="fill"`.
+- **Six names exist in both sets with different drawings**, so they compile but look wrong: `list`, `notification`, `radio`, `subtract`, `tree` and `video`. Replace them using the table even without a compiler error (Carbon `list` is `list-bullets`; Phosphor `list` is the three-line menu).
+- **Web**: copy the new sprite, `@aurea-uds/icons/dist/aurea-icons.svg`, to where your app serves it. Symbol ids are `i-<name>`, and `i-<name>-fill` for the filled shape.
+- **React Native**: update deep imports (`@aurea-uds/native/icons/plus`, no longer `.../icons/add`) and the registry keys. For selected items, alerts and `ThemeToggle` to render filled, also register the filled shape, for example `{house: House, "house-fill": HouseFill}`. Without it, the regular shape is used.
+- **Types**: `CarbonIconName` is removed; use `PhosphorIconName`.
+- **Fonts**: just update `@aurea-uds/fonts`. In React Native, `AUREA_FONTS` and `FONT_FAMILIES` already carry the new names (`AtkinsonHyperlegibleNext-SemiBold` and so on).
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.13.0 @aurea-uds/core@0.13.0 @aurea-uds/fonts@0.13.0 @aurea-uds/icons@0.13.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.13.0
+```

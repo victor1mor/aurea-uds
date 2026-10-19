@@ -1,0 +1,26 @@
+# v0.16.0
+
+In the light theme, emphasis text and icons move from brown to a darkened brand yellow that still meets 4.5:1 contrast.
+
+A visual change to the light theme, on the web and in React Native. Emphasis text and icons now use a darker shade of the brand yellow instead of brown. No API changes.
+
+## Changed
+
+- **Light theme emphasis colour**: the `primary-emphasis` and `primary-outline` tokens now point to the new `brand-yellow-text` token, `oklch(0.516 0.105 86.047)` (`#826202`). It is the same hue as the primary yellow, darkened to reach 4.5:1 on the hardest light-theme background. It replaces the brown `brand-yellow-foreground` (`#733e0a`).
+- **Where you see it**: the selected [`BottomNav`](./bottomnav.html) item without an indicator, the `primary` [`Badge`](./badge.html), `primary` text, and the outline of a selected card.
+- **What stays the same**: the primary yellow itself, the dark theme (where emphasis text is already the pure yellow), the light-theme focus ring and checked controls (still brown), text placed on top of yellow, and the `data-brand` brands.
+- The pure yellow is not used as text in the light theme: it only reaches about 1.9:1 on white.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.16.0 @aurea-uds/core@0.16.0 @aurea-uds/fonts@0.16.0 @aurea-uds/icons@0.16.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.16.0
+```

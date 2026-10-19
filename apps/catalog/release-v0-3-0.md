@@ -1,0 +1,68 @@
+# v0.3.0
+
+Eleven new components, including BlockEditor, Carousel, CommandPalette and Form, server rendering for 22 markup components, a React Native token target and accessibility fixes in Field and Toggle.
+
+This release adds eleven components, a theme hook, a shared URL format for screen state and a third token target for React Native. Twenty-two components that are pure markup now render on the server, from the main entry point and from the category subpaths alike, with nothing to change on your side. Three accessibility fixes change public types; read the breaking changes before upgrading.
+
+## New
+
+- **[`BlockEditor`](./blockeditor.html)**: the frame around a list of content blocks, with reordering by drag and by keyboard, a handle, an optional remove button and a slot for your own editor. It ships no rich-text editing on purpose. Blocks are controlled through `blocks`, `onReorder(from, to)` and an optional `onRemove(index)`; without `onRemove` no remove button is rendered.
+- **[`SortableList`](./sortablelist.html)**: a list you reorder by dragging or by keyboard. **Space** picks an item up, the **arrow keys** move it, **Space** drops it and **Escape** puts it back, with every step announced in a live region. Pointer events cover mouse, touch and pen. Controlled through `items` and `onReorder(from, to)`, with no new dependency.
+- **[`Prose`](./prose.html)**: styling for long-form text such as CMS articles, as a single `<div>`; bring your own Markdown renderer. Body text uses `--text-base` and `--leading-relaxed`, and the line length stops at `--prose-measure` (68ch by default). Every rule is scoped under `.prose`, so tables and headings outside it are untouched. It accepts `dangerouslySetInnerHTML`: sanitize that HTML first.
+- **[`Gallery`](./gallery.html)**: a grid of media tiles. Each tile is a real button, the selected one is marked with `aria-current`, and the selection is controlled by you. Enlarging opens the existing `Dialog` and shows the whole picture (`fit="contain"`). Without `onSelect` and `zoom`, tiles render as plain content.
+- **[`Image`](./image.html)**: reserves its box before the image loads, so the page does not jump. Pass `ratio="16/9"`, or `width` and `height`. A broken `src` keeps the same box and shows the `alt` text under `role="img"`. `render` swaps the `<img>` for your framework's optimized image.
+- **[`Carousel`](./carousel.html)**: a native scroll container with scroll snapping, so touch, wheel and keyboard come from the browser. Props are `label`, `controls` and `indicators`; each slide is labelled for you ("Slide 3 of 8"). Set `--carousel-slide` (default `100%`) to show several slides at once. Indicator dots are 24×24 targets. No loop, autoplay, mouse drag or vertical axis.
+- **[`ConfirmDialog`](./confirmdialog.html)**: a confirmation with `role="alertdialog"` that a click outside cannot close. Focus opens on the safe (cancel) button. Props: `open`, `title`, `description`, `confirmLabel`, `cancelLabel`, `destructive`, `onConfirm`, `onCancel`.
+- **[`CommandPalette`](./commandpalette.html)**: the command palette with filtering wired up, next to the existing `CommandPaletteShell`. Commands are data (`{id, label, icon?, kbd?, run}`), and the palette closes before a command runs. Grouping is not supported in this version.
+- **[`Form`](./form.html)**: shows errors and does not validate. Pass `errors` keyed by each field's `name`; `onSubmit` receives the collected values. Validate wherever suits you and hand the result over.
+- **[`Field`](./field.html) `name`**: optional. With it, the child becomes a form control and receives `aria-invalid` and the error message id; without it, `Field` behaves as before.
+- **[`DataState`](./datastate.html)**: one region with loading, error, empty and content faces. `loading`, `error` and `empty` replace the content; the universal states (`stale`, `partial`, `degraded`, `offline`, `waiting_*`) keep it on screen with a notice above. The region carries `aria-busy="true"` while loading, and a function passed as `children` is not called until there is data.
+- **[`AccessGate`](./accessgate.html)**: hides an action (`mode="hide"`) or shows it inert (`mode="disable"`) based on an `allowed` answer you already computed. In disable mode `reason` is required by the type. It is not a security measure: the server still has to refuse.
+- **`useAureaTheme()`**: reads the theme and density Aurea puts on `<html>` and returns `{theme, density, setTheme, setDensity, toggleTheme}`. It follows whoever changes the attribute, `theme` is `null` while unknown (including on the server), and it persists nothing.
+- **`screenStateToParams` / `screenStateFromParams`**: a shared URL format for screen state, adding `tab`, `view` and `detail` to the five grid keys. They only convert; they never touch browser history, and they can run on the server.
+- **`@aurea-uds/tokens/native`**: the tokens as a JavaScript module of plain objects, in dp, for React Native, generated from the same DTCG source as the CSS. Colors are hex, because React Native does not accept wide-gamut color strings; values outside sRGB are clipped. There is no native component library yet.
+- **New strings**: `carouselLabel`, `carouselSlide`, `carouselOf`, `carouselPrev`, `carouselNext`, `confirmCancel` and `confirmProceed`.
+
+## Changed
+
+- **Pure markup renders on the server.** Twenty-two components that need no browser (such as `Card`) moved to a module without the `"use client"` directive, so they render on the server and ship no JavaScript. This holds for `@aurea-uds/react` and for every `@aurea-uds/react/<category>` subpath; the public surface is unchanged.
+- **[`Input`](./input.html) `formatOnBlur`**: normalizes the value after focus leaves, so typing and pasting stay free. The format itself is yours.
+- **[`NumberField`](./numberfield.html) `format`, `locale` and `name`**: `format` takes `Intl.NumberFormatOptions` and formats on blur (currency, for example). With `name`, a hidden input submits the raw number, not the formatted text.
+- **[`Button`](./button.html) `aria-disabled` now blocks activation.** Behavior change: before, the button announced itself as disabled and still ran `onClick`. It now stays focusable (so a `Tooltip` explaining why can be reached by keyboard) but does not act, and it no longer lights up on hover.
+
+## Fixed
+
+- **Links in running text failed contrast in the light theme** (1.68:1). Unstyled links (`a:not([class])`) now use a deepened yellow that measures 6.92:1. Links inside components keep their own colors.
+- **`Button` and `IconButton` with `href`**: a disabled or loading link still ran the `onClick`. Enabled links are unaffected.
+- **[`MediaPlayer`](./mediaplayer.html) `kind="audio"`** dropped the `onClick` you passed.
+- **[`FileInput`](./fileinput.html) gave duplicate ids after restoring a queue**, so removing a new file could remove a restored one too. New ids now skip every id already in use.
+- **`FileInput` items restored as `pending`, `uploading` or `paused` were inert** and held the queue back. They now come back as `canceled`.
+- **`FileInput` leaked object URLs** when a preview was replaced. Every path that changes the list now releases them.
+- **`@aurea-uds/react/agents` did not resolve**, although it was built. It now resolves like the other category subpaths. Calendar, Chart and DependencyGraph remain optional-engine subpaths.
+- **`@aurea-uds/tokens/css` now ships a TypeScript declaration**, so a tokens-only import type-checks under bundler resolution.
+- **A toast's `type` painted nothing.** `info`, `success`, `warning` and `danger` now get the same tinted border and background as `Alert` and `Banner`.
+- **[`DataList`](./datalist.html) caused horizontal scroll on narrow screens** when a term was long. The term column can now shrink, and below 640px the list stacks into one column.
+
+## Breaking changes
+
+- **[`Field`](./field.html) no longer renders a `<label>` wrapper.** It renders `<div class="field">`, with a real `<label for>` when the child is a single labelable control, or a named group (`role="group"` with `aria-labelledby`) otherwise. `hint` and `error` are now only descriptions (through `aria-describedby`) and are no longer part of the control's name; `error` also sets `aria-invalid`. The `htmlFor` prop is gone, the props are based on `HTMLAttributes<HTMLDivElement>`, `id` is the control's id, and CSS written as `label.field` no longer matches.
+- **When a `Field` wraps a layout element, each control inside needs its own name**, because one label cannot name two controls (see the example below).
+- **[`Toggle`](./toggle.html) requires a name.** Either `children` or `label` is now required by the type, and a runtime check reports blank labels for JavaScript users. Write `<Toggle icon="checkmark" label="Mark as done" />` instead of `<Toggle icon="checkmark" />`.
+- **[`Combobox`](./combobox.html) and `MultiCombobox` accept `aria-describedby` and `aria-invalid`** and forward them to the input, so the error state from `Field` reaches it. Additive in practice.
+
+```tsx
+<Field label="Quality">
+  <div className="row">
+    <Range aria-label="Quality" />
+    <Input type="number" aria-label="Quality, exact value" />
+  </div>
+</Field>
+```
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.3.0 @aurea-uds/core@0.3.0 @aurea-uds/fonts@0.3.0 @aurea-uds/icons@0.3.0
+```

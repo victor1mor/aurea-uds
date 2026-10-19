@@ -1,0 +1,28 @@
+# v0.8.4
+
+In React Native, the Combobox clear button is reachable by VoiceOver on iPhone, and the arrow now opens the list.
+
+A single fix for the React Native `Combobox`. Its clear button was a button inside another button, which VoiceOver on iPhone hides.
+
+## Fixed
+
+### React Native
+
+- **[`Combobox`](./combobox.html): the clear button moved out of the trigger.** On iPhone it was visible but did not exist for VoiceOver. The capsule is now a frame, and the trigger, the clear button and the arrow are siblings inside it. Android was not affected.
+- **The arrow now opens the list when tapped.** It stays silent for screen readers, since the trigger already announces the label, the value and whether the list is open.
+- **Small behavior change**: the empty space at the right end of the capsule no longer opens the list. The text and the arrow do.
+- No new icon, string or dependency.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.8.4 @aurea-uds/core@0.8.4 @aurea-uds/fonts@0.8.4 @aurea-uds/icons@0.8.4
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.8.4
+```
