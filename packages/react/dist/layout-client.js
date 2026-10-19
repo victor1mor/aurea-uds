@@ -11,6 +11,7 @@ import { useValorResponsivo } from "./responsivo-runtime.js";
 import { ESCALA } from "./escala.js";
 import { IconButton } from "./actions.js";
 import { Tooltip } from "./overlays.js";
+import { Icon } from "./system.js";
 import { Sidebar, Header } from "./navigation.js";
 // ── Auxiliar de topo: mora ANTES do primeiro export, e a posição é obrigatória ───────────────
 // O check 22 mede o corpo de um componente do `export` dele até o PRÓXIMO export — fatia longa
@@ -92,24 +93,32 @@ const SHELL_NAV_ID = "aurea-shell-nav";
 // CSS acima de lg. Girar um tablet ou encaixar a janela de lado no Windows bastava. O número é o
 // `ESCALA.lg`, gerado dos tokens pela mesma leitura que escreve o `@media (max-width:1023px)` do
 // core: um número só, e o `consumidores-lote1.test` cobra que o do `aurea.js` é o mesmo.
-function useGavetaFechaNoDesktop() {
+// No `layout="docs"` (lote U, 19/10/2026) a lateral é coluna desde 768 (`ESCALA.md`), como a da documentação da
+// referência, e o índice, que abaixo de 1280 é a gaveta da barra do índice, volta a ser coluna em 1280 (`ESCALA.xl`): cada
+// gaveta fecha no corte DELA.
+const SHELL_TOC_ID = "aurea-shell-toc";
+function useGavetaFechaNoDesktop(docs = false) {
     useEffect(() => {
         if (typeof window === "undefined" || typeof window.matchMedia !== "function")
             return;
-        const mq = window.matchMedia(`(min-width: ${ESCALA.lg}px)`);
-        const aoMudar = (e) => {
+        const fechar = (id) => (e) => {
             if (!e.matches)
                 return;
-            const gaveta = document.getElementById(SHELL_NAV_ID);
+            const gaveta = document.getElementById(id);
             try {
                 if (gaveta?.matches(":popover-open"))
                     gaveta.hidePopover();
             }
             catch { /* motor sem popover */ }
         };
-        mq.addEventListener?.("change", aoMudar);
-        return () => mq.removeEventListener?.("change", aoMudar);
-    }, []);
+        const pares = [[window.matchMedia(`(min-width: ${docs ? ESCALA.md : ESCALA.lg}px)`), fechar(SHELL_NAV_ID)]];
+        if (docs)
+            pares.push([window.matchMedia(`(min-width: ${ESCALA.xl}px)`), fechar(SHELL_TOC_ID)]);
+        for (const [mq, f] of pares)
+            mq.addEventListener?.("change", f);
+        return () => { for (const [mq, f] of pares)
+            mq.removeEventListener?.("change", f); };
+    }, [docs]);
 }
 // A LISTA DA LATERAL ENTRA PELO SHELL (A-03, 24/09/2026). O shell cria o `<Sidebar>` e só
 // repassava `children`; quem queria a lista declarativa (`items` + `current`) tinha de passar OUTRO
@@ -148,7 +157,8 @@ function useLargura(query) {
 }
 export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, layout = "app", sidebarVariant, sidebarScrollbar, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant = "surface", aside, asideLabel, asideVariant, children, className, ...props }) {
     const s = useAureaStrings();
-    useGavetaFechaNoDesktop();
+    const docs = layout === "docs";
+    useGavetaFechaNoDesktop(docs);
     const controlado = sidebarCollapsed !== undefined;
     // `null` = ninguém escolheu, e vale a largura.
     const [escolha, setEscolha] = useState(defaultSidebarCollapsed ?? null);
@@ -180,7 +190,13 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
     // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
     // ícones que o shell desenha.
     const paraOComeco = !efetiva, direita = useDirection() === "rtl";
-    return _jsxs("div", { className: cx("app-shell", layout === "docs" && "app-shell-docs", topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsx(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, ...(layout === "docs" ? { maxWidth: "docs", size: "sm" } : {}), brand: _jsxs(_Fragment, { children: [_jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID }), brand] }), children: topbar }), sidebarCollapsible && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children }), aside != null && _jsx(Sidebar, { placement: "right", variant: asideVariant ?? sidebarVariant, className: "app-shell-aside", "aria-label": asideLabel ?? s.tocLabel, children: aside })] });
+    // O BOTÃO DA GAVETA. No `layout="docs"` ele vai para o FIM da barra, depois das ações, como o da documentação da
+    // referência no celular (o "Open Sidebar" à direita, 19/10/2026): ali ele vem por último também na ordem do Tab, e a
+    // gaveta abre pelo mesmo lado (a folha). No shell de sempre, continua antes da marca.
+    // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
+    // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
+    const botaoDaGaveta = _jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID, ...(docs ? { size: "sm" } : {}) });
+    return _jsxs("div", { className: cx("app-shell", layout === "docs" && "app-shell-docs", topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, ...(docs ? { maxWidth: "docs", size: "sm" } : {}), brand: docs ? brand : _jsxs(_Fragment, { children: [botaoDaGaveta, brand] }), children: [topbar, docs && botaoDaGaveta] }), sidebarCollapsible && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children }), aside != null && _jsx(Sidebar, { placement: "right", variant: asideVariant ?? sidebarVariant, className: "app-shell-aside", "aria-label": asideLabel ?? s.tocLabel, ...(docs ? { id: SHELL_TOC_ID, popover: "auto", onToggle: focoDaGaveta } : {}), children: aside })] });
 }
 export function Separator({ orientation, spacing = "none", className, ...props }) {
     const ancora = useRef(null);

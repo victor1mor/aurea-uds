@@ -72,7 +72,8 @@ test("a setinha do Copy Markdown abre o menu com o .md da página e os dois assi
 });
 
 test("o Copy Prompt copia o texto da Aurea, com a skill e o llms.txt deste site", async ({page}) => {
-  await page.goto(`${base}/apps/catalog/button.html`);
+  // Na Quick Start: desde 19/10/2026 ele só aparece nas páginas de começar, como na referência (`site-celular.spec.ts`).
+  await page.goto(`${base}/apps/catalog/docs-quick-start.html`);
   await page.evaluate(() => {
     (window as unknown as {copiado: string}).copiado = "";
     navigator.clipboard.writeText = async (t: string) => { (window as unknown as {copiado: string}).copiado = t; };

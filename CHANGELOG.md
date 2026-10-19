@@ -170,6 +170,23 @@ bancada; a versão sobe quando o lote fechar.
   nota, ou com outra data. As notas entram no `llms.txt` e no `llms-full.txt`. Quem cobra:
   `tests/visual/site-releases.spec.ts`.
 
+- **O site no celular e no tablet, como a documentação da referência** (o Victor, 19/10/2026: *"tudo como ela"*). Medido
+  na página dela a 375, 768 e 1100. Mudam o `AppShell layout="docs"` (só esta variação) e o topo do site:
+  - **celular:** o topo em duas linhas — a logo e os botões só de ícone (tema, GitHub, a lupa no lugar da busca larga) e
+    o botão da gaveta **por último, à direita**; a gaveta abre pela direita, com fundo, e a chave claro/escuro no alto
+    dela; o título a 32 da barra do índice;
+  - **a barra do índice** (abaixo de 1280): 40 de altura, presa logo abaixo do topo, com o nome da seção em vista; tocar
+    desce a lista, e escolher uma seção leva a ela e fecha a lista. O índice deixa de ir para o fim da página;
+  - **tablet:** a lateral é coluna desde 768 (era desde 1024);
+  - o botão da gaveta do arranjo é o `sm`, como o resto do topo (era 4 maior, fora da linha). Com o dedo, todos sobem
+    para 44.
+  - **O "Copy Prompt" só nas páginas de começar** (Introduction e Quick Start), como na referência — corrige o SITE-06.
+    O Victor perguntou o padrão do mercado: o menu de copiar a página fica em toda página; o texto de configuração, onde
+    se configura.
+
+  Quem cobra: `tests/visual/site-celular.spec.ts` (reprova contra o site de antes) e o `site-docs-arranjo.spec.ts`
+  (a 768 o texto fica depois da lateral, como lá).
+
 ### Consertado no site e no core
 
 - **`Prose`: código no meio do texto quebra a linha.** Um `window.Aurea.setDensity("compact")` num parágrafo empurrava

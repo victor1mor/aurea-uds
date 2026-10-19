@@ -1511,6 +1511,75 @@ img,svg { display:block; }
 }
 }
 
+/* O ARRANJO DE DOCUMENTAÇÃO NO CELULAR E NO TABLET (`AppShell layout="docs"`, lote U, 19/10/2026 — o Victor: "tudo como
+   ela"), medido na página da documentação da referência a 375, 768 e 1100:
+   - a LATERAL é coluna desde 768 (e não desde 1024): de 768 a 1023 ela fica à esquerda do texto, como lá;
+   - abaixo de 768 ela é a gaveta, e abre pela DIREITA, do lado do botão (que o `AppShell` põe no fim da barra);
+   - o índice ("On this page") é coluna só de 1280 para cima. Abaixo, ele é a GAVETA da BARRA DO ÍNDICE: uma barra de 40
+     presa logo abaixo do topo, na coluna do texto, com o nome da seção em vista e a setinha; tocar desce a lista. A
+     referência desenha um círculo de progresso; aqui é o ícone de lista, e nenhuma linha (ADR-0072).
+   Estas regras vêm DEPOIS das da gaveta de sempre e levam a classe do arranjo — com a mesma força, a ordem decide. */
+.docs-toc-bar { display:none; }
+@media (min-width:768px) and (max-width:1023px) {
+  .app-shell.app-shell-docs { grid-template-columns:var(--docs-sidebar-width) minmax(0,1fr); }
+  .app-shell-docs .btn.nav-toggle { display:none; }
+  .app-shell-docs > .sidebar[popover]:not(.app-shell-aside):not(:popover-open) { display:flex; }
+  .app-shell-docs > .sidebar:not(.app-shell-aside):not(.sidebar-flush) { --shell-top:calc(var(--docs-top) + var(--space-4)); grid-column:1; grid-row:2 / span 2;
+    position:sticky; inset-block-start:var(--shell-top); align-self:start; block-size:calc(100vh - var(--shell-top) - var(--space-8));
+    max-block-size:none; margin:var(--space-4) 0 0; border-width:0; padding-block:var(--space-2) var(--space-4); padding-inline:var(--space-4); }
+  .app-shell-docs > .sidebar > .sidebar-nav > .sidebar-list > li:first-child > .sidebar-group-label { margin-block-start:0; }
+  .app-shell-docs > .sidebar .sidebar-item { padding-inline:var(--space-2); }
+  .app-shell-docs > .sidebar .sidebar-group-label { margin-inline:var(--space-2); }
+  .app-shell-docs > .docs-toc-bar { grid-column:2; grid-row:2; }
+  .app-shell-docs > .content.content { grid-column:2; grid-row:3; }
+}
+@media (min-width:1024px) and (max-width:1279px) {
+  .app-shell-docs > .sidebar:not(.app-shell-aside):not(.sidebar-flush) { grid-row:2 / span 2; }
+  .app-shell-docs > .docs-toc-bar { grid-column:3; grid-row:2; }
+  .app-shell-docs > .content.content { grid-row:3; }
+}
+@media (max-width:1279px) {
+  .app-shell-docs > .docs-toc-bar { display:block; position:sticky; inset-block-start:var(--docs-top); z-index:var(--z-sticky); background:var(--background); }
+  .docs-toc-toggle { display:flex; align-items:center; gap:var(--space-2); inline-size:100%; min-block-size:var(--space-10); padding:0 var(--space-6);
+    border:0; background:transparent; color:var(--muted-foreground); font:inherit; font-size:var(--text-sm); text-align:start; cursor:pointer; }
+  .docs-toc-toggle:hover { color:var(--foreground); }
+  .docs-toc-toggle:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
+  .docs-toc-current { flex:1; min-inline-size:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .app-shell-docs:has(> .app-shell-aside:popover-open) .docs-toc-toggle > .icon:last-child { rotate:180deg; }
+}
+@supports selector(:popover-open) {
+@media (max-width:1279px) {
+  .app-shell-docs > .sidebar.app-shell-aside[popover]:not(:popover-open) { display:none; }
+  /* Aberto, ele desce da barra: preso logo abaixo dela, na largura da coluna do texto, uma superfície que flutua por cima
+     do texto (o fundo opaco do popover, o canto do cartão). Sem véu: a lista é um atalho, não uma janela. */
+  .app-shell-docs > .sidebar.app-shell-aside[popover]:popover-open { position:fixed; inset-block-start:calc(var(--docs-top) + var(--space-10));
+    inset-block-end:auto; inset-inline:var(--space-4); inline-size:auto; block-size:auto;
+    max-block-size:calc(100dvh - var(--docs-top) - var(--space-10) - var(--space-4)); margin:0; padding:var(--space-2) var(--space-4) var(--space-4);
+    overflow:auto; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
+  .app-shell-docs > .sidebar.app-shell-aside[popover]::backdrop { background:transparent; }
+}
+@media (min-width:768px) and (max-width:1279px) {
+  .app-shell-docs > .sidebar.app-shell-aside[popover]:popover-open { inset-inline-start:calc(var(--docs-sidebar-width) + var(--space-4)); }
+}
+@media (max-width:767px) {
+  /* A gaveta ABERTA é uma superfície, mesmo com a lateral sem caixa (`sidebarVariant="plain"`) do desktop: sem o fundo,
+     a lista se misturava ao texto da página por baixo (medido a 375). O fundo e o canto do popover, como o do índice. */
+  .app-shell-docs > .sidebar[popover]:not(.app-shell-aside):popover-open { inset-inline-start:auto; inset-inline-end:var(--space-4);
+    padding:var(--space-2) var(--space-4) var(--space-4); border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
+  .app-shell-docs > .sidebar[popover]:not(.app-shell-aside):popover-open .sidebar-item { padding-inline:var(--space-2); }
+  .app-shell-docs > .sidebar[popover]:not(.app-shell-aside):popover-open .sidebar-group-label { margin-inline:var(--space-2); }
+}
+}
+/* De 1280 para cima o índice é a coluna, e o atributo de gaveta não pode encolhê-lo: a regra da gaveta fechada
+   (`.sidebar[popover]:not(:popover-open)`, `width:auto`) vem antes na folha com a mesma força e o deixava com 200 (medido). */
+@media (min-width:1280px) {
+  .app-shell-docs > .sidebar.app-shell-aside[popover] { inline-size:var(--docs-toc-width); }
+}
+/* No celular o título fica a 32 da barra do índice, como o da referência a 375 (de 768 para cima, 16 nas duas). */
+@media (max-width:767px) {
+  .app-shell-docs > .content.content { padding-block-start:var(--space-8); }
+}
+
 /* ── A LISTA DA LATERAL (PLANO-1.0, item B1) ───────────────────────────────────────
    Até 06/08/2026 a Sidebar era só a caixa: item, grupo, aninhamento e marca de item atual
    existiam neste arquivo como `.doc-nav`, que é CHROME do catálogo (achado A6) e nunca foi
@@ -5252,6 +5321,14 @@ a.related-card:hover { border-color:transparent; }
 @media (min-width:768px) and (max-width:1023px) { .site-more { display:inline-flex; } }
 .site-more-panel { display:flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); }
 .site-so-estreito { display:none !important; }
+/* O celular do arranjo de documentação (lote U, 19/10/2026): a lupa no lugar da busca larga, e a chave de tema no alto da
+   gaveta, que é onde a referência a põe. */
+.site-so-celular { display:none !important; }
+.site-gaveta-topo { display:none; }
+@media (max-width:767px) { .site-so-celular { display:inline-flex !important; }
+  /* Sem a busca larga no meio, as ações vão para a ponta, junto do botão da gaveta, como na referência. */
+  .site-shell .site-actions { margin-inline-start:auto; }
+  .site-gaveta-topo { display:flex; order:-1; justify-content:flex-end; padding:var(--space-2) var(--space-2) var(--space-4); } }
 @media (max-width:1023px) { .site-so-estreito { display:inline-flex !important; } }
 /* A aba "Components" (15/10/2026), na composição da vitrine da referência, lida no código dela: três colunas de até 360
    (o --breakpoint-2xs), 32 entre elas e 40 entre as peças de cada uma; no celular uma coluna só, a do meio primeiro;

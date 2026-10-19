@@ -15,9 +15,11 @@ const SIDEBAR_DEMOS = [
   "/apps/catalog/embeds/sidebar-bring-your-own-navigation.html",
 ];
 
+// O `AppShell` de sempre (a prévia dele): gaveta abaixo de 1024. O arranjo de documentação do site (`layout="docs"`) é coluna
+// desde 768, como o da referência (lote U, 19/10/2026) — a gaveta dele é cobrada no `site-celular.spec.ts`.
 async function expectDrawerAt(page: Page, width: number) {
   await page.setViewportSize({width, height: HEIGHT});
-  await page.goto("/apps/catalog/button.html");
+  await page.goto("/apps/catalog/embeds/appshell.html");
 
   // A navegação: a coluna da direita (`.app-shell-aside`, DOC-01) desce para depois do conteúdo abaixo
   // de 1280, de propósito, e não é gaveta.
