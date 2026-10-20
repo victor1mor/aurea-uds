@@ -3,7 +3,7 @@
   "category": "Code",
   "layer": "Component",
   "maturity": "Stable",
-  "summary": "Read-only syntax-highlighted code display.",
+  "summary": "Read-only code display, with line numbers and syntax colors when you pass the highlighter.",
   "icon": "code-block",
   "platforms": {
     "web": "stable",
@@ -17,15 +17,23 @@
   ],
   "tokens": [
     "--border",
+    "--danger-400",
     "--font-code",
+    "--foreground",
+    "--info-400",
     "--muted-foreground",
     "--radius-lg",
-    "--surface-inset"
+    "--space-4",
+    "--space-6",
+    "--success-400",
+    "--surface-inset",
+    "--warning-400",
+    "--weight-semibold"
   ],
   "a11y": {
     "role": null,
     "keyboard": [],
-    "apg": "No APG pattern: it is <pre><code>, and native semantics are what a screen reader needs — the <pre> preserves the line structure that the code depends on. Without `copyable` there is nothing to focus. With it, the copy button is a real <button> with an accessible name, reachable by Tab like any other."
+    "apg": "No APG pattern: it is <pre><code>, and native semantics are what a screen reader needs — the <pre> preserves the line structure that the code depends on. Without `copyable` there is nothing to focus. With it, the copy button is a real <button> with an accessible name, reachable by Tab like any other. With `lineNumbers`, the numbers are CSS generated content with an empty alternative text: screen readers skip them, and selecting or copying the code brings only the code."
   },
   "dependencies": {
     "engine": null,
@@ -54,7 +62,7 @@
       "name": "language",
       "type": "string",
       "default": "text",
-      "description": "Written to data-language, which is what labels the block. It does not highlight — the component is a display, not a parser."
+      "description": "Written to data-language, which labels the block, and handed to `highlight`, which picks the grammar by it: tsx, ts, jsx, js, css, html, json and bash."
     },
     {
       "name": "copyable",
@@ -67,6 +75,18 @@
       "type": "ReactNode",
       "default": "—",
       "description": "The live example of the code. With it, the block becomes the example box of Aurea's site: the Preview | Code tabs (a segmented control across the width; arrows, Home and End move between them), the preview on the recessed surface and the code without a frame."
+    },
+    {
+      "name": "lineNumbers",
+      "type": "boolean",
+      "default": "false",
+      "description": "Shows the number of each line on the left, in a 16px column 24px from the code. The column grows with the digits of the last line, so it does not jump at line 100. The number is drawing: it is not in the copied text and not read by screen readers."
+    },
+    {
+      "name": "highlight",
+      "type": "CodeHighlighter",
+      "default": "—",
+      "description": "Colors the code. Pass `highlightCode` from `@aurea-uds/react/code-highlight`; its grammars are optional peers (@lezer/javascript, @lezer/css, @lezer/html, @lezer/json, @codemirror/legacy-modes). A language it does not know comes back plain. The colors are the same as the CodeEditor's, mixed 20% with the text so each one reads at 4.5:1 or more on the block."
     },
     {
       "name": "className",

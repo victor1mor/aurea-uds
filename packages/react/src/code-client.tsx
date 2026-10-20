@@ -34,11 +34,31 @@ function CaixaDeExemplo({preview,codigo,className}:{preview:React.ReactNode;codi
     <div className="demo-panel demo-code" data-panel="code" role="tabpanel" id={`${id}-code-panel`} aria-labelledby={`${id}-code`} tabIndex={0} hidden={aba!=="code"}>{codigo}</div>
   </div>;
 }
-export function CodeBlock({children,language="text",copyable,preview,className}:{children:string;language?:string;copyable?:boolean;
+/** Um pedaço de uma linha de código, com a classe da cor (`tok-keyword`, `tok-string`…) quando tem cor. */
+export interface CodeToken{text:string;className?:string}
+/** Uma linha de código: os pedaços, na ordem. */
+export type CodeLine=CodeToken[];
+/** Quem colore: recebe o código e a língua e devolve as linhas, ou `null` quando não conhece a língua. O da Aurea é o
+ *  `highlightCode` de `@aurea-uds/react/code-highlight`. */
+export type CodeHighlighter=(code:string,language:string)=>CodeLine[]|null;
+// lineNumbers e highlight (lote V, 20/10/2026): as linhas viram um <span class="code-line"> cada, com o "\n" entre
+// elas — o texto do bloco continua IGUAL ao código (copiar com o mouse traz o mesmo texto), e o número é desenhado pelo
+// CSS, sem entrar no texto nem no leitor de tela. Sem as duas, a marcação é a de antes, sem mudar nada.
+// O "\n" do fim (o código que termina em quebra de linha) não vira uma linha numerada e vazia: ele sai depois da última.
+function linhasDoCodigo(codigo:string,language:string,highlight?:CodeHighlighter):CodeLine[]{
+  const linhas=highlight?.(codigo,language)??codigo.split("\n").map(l=>l===""?[]:[{text:l}]);
+  return codigo.endsWith("\n")&&linhas.length>1&&linhas[linhas.length-1]!.length===0?linhas.slice(0,-1):linhas;
+}
+export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,className}:{children:string;language?:string;copyable?:boolean;
   /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
-  preview?:React.ReactNode;className?:string}){
+  preview?:React.ReactNode;
+  /** Mostra o número de cada linha à esquerda. O número não entra no texto copiado nem é lido pelo leitor de tela. */
+  lineNumbers?:boolean;
+  /** Colore o código. Passe o `highlightCode` de `@aurea-uds/react/code-highlight` (os analisadores são peer opcional). */
+  highlight?:CodeHighlighter;
+  className?:string}){
 if(preview!==undefined)return <CaixaDeExemplo preview={preview} className={className}
-  codigo={<CodeBlock language={language} copyable={copyable}>{children}</CodeBlock>}/>;
+  codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 const s=useAureaStrings();
 // tabIndex no <pre>: `.code-block` é `overflow:auto` por construção, então é REGIÃO ROLÁVEL
 // e não tem nada focável dentro — quem navega por teclado não alcança o código que passa da
@@ -46,7 +66,13 @@ const s=useAureaStrings();
 // demo do catálogo já tinha corrigido em 30/07/2026 no lado dele; aqui, na biblioteca, ele
 // seguia aberto e só não aparecia porque nenhuma linha era comprida o bastante. Quem o achou
 // foi o `catalog-sweep` em 10/08/2026, quando o bloco do I1 fez a linha de import crescer.
-const pre=<pre className={cx("code-block",!copyable&&className)} data-language={language} tabIndex={0}><code>{children}</code></pre>;
+const linhas=lineNumbers||highlight?linhasDoCodigo(children,language,highlight):null;
+const colorido=linhas!=null&&highlight!=null&&linhas.some(l=>l.some(p=>p.className));
+// Os algarismos da última linha: a coluna do número tem a largura deles (99 → 2, 100 → 3).
+const digitos=lineNumbers&&linhas?{"--code-line-digits":String(linhas.length).length} as React.CSSProperties:undefined;
+const pre=<pre className={cx("code-block",lineNumbers&&"code-block-numbered",colorido&&"code-block-highlighted",!copyable&&className)} style={digitos} data-language={language} tabIndex={0}><code>{linhas
+  ?<>{linhas.map((l,i)=><React.Fragment key={i}><span className="code-line">{l.map((p,j)=>p.className?<span key={j} className={p.className}>{p.text}</span>:p.text)}</span>{i<linhas.length-1?"\n":null}</React.Fragment>)}{children.endsWith("\n")?"\n":null}</>
+  :children}</code></pre>;
 if(!copyable)return pre;
 // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
 // texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.

@@ -16,6 +16,8 @@ import {readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, unlinkS
 import {fileURLToPath, pathToFileURL} from "node:url";
 import {dirname, join} from "node:path";
 import * as A from "../packages/react/dist/index.js";
+// As cores do código (lote V, 20/10/2026): o módulo da própria Aurea, `@aurea-uds/react/code-highlight`.
+import {highlightCode} from "../packages/react/dist/code-highlight.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
 import {lerDoc, lerLinha, paraTexto} from "./docs-markdown.mjs";
@@ -349,8 +351,12 @@ function demoBlock(render, code, anchor) {
       // explica na lede da demo — nunca uma caixa vazia sem explicação.
       previewHtml ? null : h("span", {style: muted}, "Interactive — see the code.")),
     code ? h("div", {className: "demo-panel demo-code", "data-panel": "code", ...panelAttrs("code"), hidden: true},
-      h(A.CodeBlock, {language: "tsx", copyable: true}, code)) : null);
+      h(A.CodeBlock, {language: "tsx", copyable: true, lineNumbers: true, highlight: highlightCode}, code)) : null);
 }
+// O número de linha como na documentação da referência (medido na página dela, 20/10/2026): no código dos EXEMPLOS,
+// sempre; no código do meio do texto, só nos longos (os de 22 e 24 linhas tinham, o de 19 não); na linha de `import` e
+// na assinatura, nunca. As cores, em todos.
+const LINHAS_PARA_NUMERO = 20;
 
 // O rótulo vai num elemento PRÓPRIO: text-overflow:ellipsis não age sobre o texto anônimo
 // de um container flex. Sem isto, a 320px o chip cortava no meio da letra e perdia a borda
@@ -426,7 +432,7 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
   const node = h(Fragment, null,
     cabecaDaPagina(title, lede, pills),
     h("section", {className: "block", id: "usage"}, h("h2", null, "Usage"),
-      h(A.CodeBlock, {language: "tsx", copyable: true, className: "usage-import"}, imports),
+      h(A.CodeBlock, {language: "tsx", copyable: true, highlight: highlightCode, className: "usage-import"}, imports),
       demo.description ? h("p", {className: "demo-lede"}, demo.description) : null,
       demoBlock(demo.render, demo.code, "preview"),
       points.length ? h("ul", {className: "usage-points"}, ...points.map((t, n) => h("li", {key: n}, t))) : null),
@@ -831,7 +837,8 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     if (b.tipo === "h2" || b.tipo === "h3") filhos.push(h(b.tipo, {key: n, id: b.id}, ...pedacos(b.texto, "t")));
     else if (b.tipo === "p") filhos.push(h("p", {key: n}, ...pedacos(b.texto, "t")));
     else if (b.tipo === "ul" || b.tipo === "ol") filhos.push(h(b.tipo, {key: n}, ...b.itens.map((it, k) => h("li", {key: k}, ...pedacos(it, "t")))));
-    else if (b.tipo === "codigo") filhos.push(h(A.CodeBlock, {key: n, language: b.lingua, copyable: true}, b.codigo));
+    else if (b.tipo === "codigo") filhos.push(h(A.CodeBlock, {key: n, language: b.lingua, copyable: true, highlight: highlightCode,
+      lineNumbers: b.codigo.split("\n").length >= LINHAS_PARA_NUMERO}, b.codigo));
     else if (b.tipo === "tabela") {
       const vez = (legendas.get(secao) || 0) + 1;
       legendas.set(secao, vez);
@@ -1249,9 +1256,9 @@ function hooksPage() {
         h("code", {style: {fontSize: "var(--text-xs)", overflowWrap: "anywhere"}}, g.source)),
       h("p", {style: muted}, g.lede),
       h("h3", null, "Signature"),
-      h(A.CodeBlock, {language: "tsx", copyable: true}, g.signature),
+      h(A.CodeBlock, {language: "tsx", copyable: true, highlight: highlightCode}, g.signature),
       h("h3", null, "Example"),
-      h(A.CodeBlock, {language: "tsx", copyable: true}, g.example),
+      h(A.CodeBlock, {language: "tsx", copyable: true, lineNumbers: true, highlight: highlightCode}, g.example),
       h("h3", null, "Notes"),
       h(A.DataList, {items: g.notes.map(([term, value]) => ({term, value}))})))),
     h(A.TableOfContents, {items: toc}));

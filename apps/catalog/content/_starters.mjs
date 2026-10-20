@@ -20,6 +20,8 @@
 // Nesses casos o preview mostra o DISPARADOR real e a nota diz por quê; o código é completo.
 import {createElement as h} from "react";
 import * as A from "../../../packages/react/dist/index.js";
+// As cores do código, para o exemplo do `CodeBlock` (lote V, 20/10/2026).
+import {highlightCode} from "../../../packages/react/dist/code-highlight.js";
 // Os seis módulos de motor opcional vêm por subpath — o catálogo consome a biblioteca como um
 // consumidor consome, e é assim que se descobre se a fronteira da Fase 9 é usável.
 import {CodeEditor} from "../../../packages/react/dist/code-editor.js";
@@ -466,11 +468,21 @@ export default {
         h(ChartTooltip, {defaultIndex: 3}))),
   },
   CodeBlock: {
-    code: `<CodeBlock language="tsx" copyable>
-  {'import {Button} from "@aurea-uds/react";'}
+    description: "Code to read and copy. With lineNumbers, the number of each line; with highlight, the colors — pass "
+      + "highlightCode from @aurea-uds/react/code-highlight (its grammars are optional peers). Without them, plain text.",
+    code: `import {CodeBlock} from "@aurea-uds/react";
+import {highlightCode} from "@aurea-uds/react/code-highlight";
+
+<CodeBlock language="tsx" copyable lineNumbers highlight={highlightCode}>
+  {code}
 </CodeBlock>`,
-    render: () => h("div", {style: wide}, h(A.CodeBlock, {language: "tsx", copyable: true},
-      'import {Button} from "@aurea-uds/react";')),
+    render: () => h("div", {style: wide}, h(A.CodeBlock, {language: "tsx", copyable: true, lineNumbers: true, highlight: highlightCode},
+      `import {Button} from "@aurea-uds/react";
+
+// Saves the draft, then goes back.
+export function Actions() {
+  return <Button variant="primary" size="sm">Save</Button>;
+}`)),
   },
   CodeEditor: {
     install: 'import {CodeEditor} from "@aurea-uds/react/code-editor";',

@@ -1021,7 +1021,8 @@ else:
 # leve: bastaria um `import {basicSetup} from "codemirror"` em `inputs.tsx` para quem instala a
 # biblioteca só pelo Button voltar a precisar do CodeMirror — e o erro apareceria no consumidor,
 # em runtime, com "Cannot find module". Aqui aparece no build.
-PESADAS = {"codemirror": "code-editor", "@codemirror/": "code-editor", "@lezer/": "code-editor",
+PESADAS = {"codemirror": "code-editor", "@codemirror/": ("code-editor", "code-highlight"),
+           "@lezer/": ("code-editor", "code-highlight"),
            "@tanstack/react-table": "data-grid", "qr": "qrcode", "recharts": "chart",
            "react-day-picker": "calendar", "@xyflow/react": "graph",
            # Rodada 1 da rede (ADR-0064, 10/10/2026): a arrumação em camadas e a foto do mapa. Os
@@ -1034,10 +1035,13 @@ for fp in sorted((root / "packages/react/src").glob("*.tsx")):
     for imp in re.findall(r'^import[^"\']*["\']([^"\']+)["\']', fonte, re.M):
         for pacote, dono in PESADAS.items():
             if imp == pacote or (pacote.endswith("/") and imp.startswith(pacote)):
-                if fp.stem != dono:
+                # Lote V (20/10/2026): o `@lezer/` e o `@codemirror/` têm DOIS donos — o editor e as cores do
+                # `CodeBlock` (`code-highlight`), cada um no seu módulo, nenhum no barril principal.
+                donos = dono if isinstance(dono, tuple) else (dono,)
+                if fp.stem not in donos:
                     errors.append(
                         f"dependência pesada fora de casa: {fp.name} importa '{imp}', que é peer "
-                        f"OPCIONAL e só pode ser importado por {dono}.tsx. Quem instala a "
+                        f"OPCIONAL e só pode ser importado por {' ou '.join(d + '.tsx' for d in donos)}. Quem instala a "
                         f"biblioteca sem esse pacote quebraria ao importar {fp.stem}.")
 
 # ══ LOTE 0 do BUILDING.md — as travas do procedimento de construção ═══════════════════════
@@ -1804,9 +1808,10 @@ else:
         if _emc:
             _corpo += _ch[_emc.end():].split("\n## [", 1)[0]
         # E a versão já DATADA, com os pacotes subidos, que ainda não foi registrada como publicada (20/10/2026, ao
-        # fechar a 0.36.0): enquanto o `released-surface.json` não anda, a seção dela é o que ainda não saiu.
+        # fechar a 0.36.0): enquanto o `released-surface.json` não anda, a seção dela é o que ainda não saiu. Vale junto
+        # com a em construção: o lote seguinte pode começar antes de o registro da anterior chegar ao `main`.
         _vpac = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
-        if not _emc and _vpac != _rel["version"] and f"## [{_vpac}]" in _ch:
+        if _vpac != _rel["version"] and f"## [{_vpac}]" in _ch:
             _corpo += _ch.split(f"## [{_vpac}]", 1)[1].split("\n## [", 1)[0]
         # `\b` não serve: `Chart` casaria dentro de `ChartLegend` e daria por documentado o
         # que não está. A borda é o que NÃO pode ser parte de um nome de componente.
