@@ -1,0 +1,27 @@
+# v0.12.3
+
+Adds RadioGroup to React Native, with full-row touch targets and the indicator at the start or end of each row.
+
+React Native gets a [`RadioGroup`](./radiogroup.html). Only the React Native package changes.
+
+## New
+
+- **`RadioGroup` (React Native)**: the group holds the selection, and each `RadioGroup.Item` is a full, tappable row with the text and the indicator.
+- **Sizes**: 12-point gap, 24-point indicator, 10-point dot, a medium `base` label and a muted `sm` description. The selected indicator uses the selection colour.
+- **Props**: `disabled` and `invalid` on the group and on each item, `orientation`, an accessible name (`label`) and `indicatorPlacement`: `end` (default) or `start`, set on the group or on a single item.
+- **Free children**: you can place a `Separator` between items, or the whole group inside a `Card`.
+- The standalone `Radio` indicator is unchanged.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.12.3 @aurea-uds/core@0.12.3 @aurea-uds/fonts@0.12.3 @aurea-uds/icons@0.12.3
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.12.3
+```

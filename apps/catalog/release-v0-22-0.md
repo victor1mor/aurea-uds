@@ -1,0 +1,61 @@
+# v0.22.0
+
+Layout parts for site pages (Container, Grid.Item span, Section with surface and theme). Also ships v0.21.0 and v0.20.0.
+
+This release adds the layout parts of a website page on the web: `Container`, column spans for `Grid`, and full-width `Section` bands that can switch theme. It also ships v0.21.0 (a choice card for `RadioGroup` in React Native) and v0.20.0 (continuous iOS corners, `fullWidth` segmented controls, a plain `Tabs` panel and photo dates in `PhotoInput`). Nothing was removed or renamed, and no dependency was added.
+
+## New
+
+- **[`Container`](./container.html)** (web): the reading width of a site page. Centered, with a maximum width (`size`: `sm` 640, `md` 768, `lg` 1024, `xl` 1280 by default, `2xl` 1536, `full`) and side padding of 16 that becomes 32 from `md` up.
+- **`Grid.Item` with `span`** (web): the item says how many of the 12 columns it takes, for example `<Grid columns={12}><Grid.Item span={{base: "12", viewport: {md: "7"}}}>`. It uses the existing responsive layer (`vp-*` by viewport, `ct-*` by container), with the new `grid-span` family.
+- **[`Section`](./section.html)** (web): a full-width band of a site page, a `<section>` with `surface` (`background`, `card`, `inset`) and `spacing` (`md`: 64, and 96 from `md` up; `sm`: half of that).
+- **`Section theme`** (web): `theme="dark"` makes a dark band inside a light page, and the other way around.
+
+## Fixed
+
+- **Light-theme rules leaked into a dark section** (web). The 22 `[data-theme="light"] X` selectors in the core still applied inside `<section data-theme="dark">`, so outline buttons, section labels and selected items got light-theme ink on a dark background. Each now carries a zero-specificity guard; rule precedence does not change, and pages without a dark band compute the same styles. Known limit: four alternating nested levels are not covered.
+
+## Includes v0.21.0
+
+### New
+
+- **[`RadioGroup`](./radiogroup.html) `variant="card"`** (React Native): the whole card is the option, announced as a radio button by screen readers (before, cards built from `Card` plus a press handler were announced as buttons). It uses the `Card` look: the regular card, and the selected look of `variant="selected"`. The mark moves to the title line, and the item accepts `children` for extra content inside the card (price, list).
+
+### Fixed
+
+- **A horizontal interactive [`Card`](./card.html) lost its image column** (web). `.card-interactive { display:block }` came after `.card-horizontal { display:grid }` with the same specificity and won. The interactive block is now a zero-specificity default, so the orientation wins regardless of rule order.
+- **Cards and menu items rendered as links were underlined** (web). The `<a>` of a `Card` with `render` and the `<a class="menu-item">` of a `DropdownMenu` item with `href` inherited the browser underline. Other parts that become links already removed it.
+
+## Includes v0.20.0
+
+### New
+
+- **`fullWidth` on [`SegmentedControl`](./segmentedcontrol.html)** (web and React Native): the control fills the row, and each segment grows from its label without shrinking below it. When the options do not fit, it scrolls, as without the prop.
+- **`panel` on [`Tabs`](./tabs.html)** (web and React Native): `"card"` (default) or `"plain"`. With `panel="plain"` the panel is only top spacing (`space3`), with no box, so content is no longer inset by padding plus border. On the web the new class is `.tabs-panel`.
+- **`exif` on `PhotoInput`** (React Native): the date the photo was taken, in `takenAt`. Off by default. Reads `DateTimeOriginal` (with the `OffsetTimeOriginal` time zone when present; otherwise the device time), and stays empty when the photo has no date. The EXIF data itself never leaves the component, because gallery photos carry location.
+- **Multiple photos at once**: from the gallery, when `max` still allows more than one photo, several can be picked together (`allowsMultipleSelection` plus `selectionLimit`, Android and iOS 14+).
+- **Token `radius-sheet`** (`radiusSheet` in React Native, `--radius-sheet` on the web): the 32 corner of bottom sheets.
+
+### Changed
+
+- **Continuous iOS corners across React Native.** Every radius in the package now goes through one helper that sets the radius together with `borderCurve: "continuous"`. Only iOS 13+ draws it; Android and the browser do not change. The `Spinner` ring stays circular because it spins.
+- **[`Alert`](./alert.html) and `Toast` corners are 22** (were 16), on the web and in React Native: the Aurea panel radius, the same as `Popover`, `Dialog` and `Banner`.
+- **Bottom sheets have a 32 corner** (was 22) in React Native: `BottomSheet`, the `Select` list and the `Combobox` sheet.
+
+### Fixed
+
+- **The React Native `SegmentedControl` wrapped labels onto two lines** in the browser, because `flex: 1` split the width into equal parts. On devices the label did not wrap, but the capsule did not fill the row. Each segment is now as wide as its label, like a `Tabs` tab and the web segmented control.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.22.0 @aurea-uds/core@0.22.0 @aurea-uds/fonts@0.22.0 @aurea-uds/icons@0.22.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.22.0
+```

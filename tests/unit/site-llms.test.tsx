@@ -24,7 +24,7 @@ describe("os arquivos para assistentes de IA", () => {
     }
     // Os grupos, na ordem da decisão do Victor ("Tudo").
     expect([...indice.matchAll(/^## (.+)$/gm)].map((m) => m[1]))
-      .toEqual(["Getting Started", "Components", "Hooks", "Patterns", "Blocks", "Recipes"]);
+      .toEqual(["Getting Started", "Components", "Hooks", "Patterns", "Blocks", "Recipes", "Releases"]);
   });
 
   test("o .md de cada página é o texto do Copy Markdown dela", () => {

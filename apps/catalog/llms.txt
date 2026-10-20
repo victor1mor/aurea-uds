@@ -437,3 +437,56 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Regulated records](https://aureauds.dev/recipe-regulated-records.md)
 - [Creative workspace](https://aureauds.dev/recipe-creative-workspace.md)
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
+
+## Releases
+- [v0.35.0](https://aureauds.dev/release-v0-35-0.md): A documentation layout for the AppShell, a second row of area tabs in the Header, five docs width tokens, and snapping in the editable DependencyGraph.
+- [v0.34.0](https://aureauds.dev/release-v0-34-0.md): No lines. Components no longer draw borders on web or React Native; what needed a border to stand out now gets a translucent fill.
+- [v0.33.0](https://aureauds.dev/release-v0-33-0.md): RadioGroup on the web, a three-position ThemeToggle with a system preference, Card parts, soft buttons, a blurred Header, and popups that stay above fixed headers.
+- [v0.32.0](https://aureauds.dev/release-v0-32-0.md): Twelve new components, including Slider, ListBox, DatePicker on the web and a full color family; redesigned controls and dialogs; and a 48px touch scale for React Native.
+- [v0.31.0](https://aureauds.dev/release-v0-31-0.md): Editing for the DependencyGraph - drag, align and pin nodes, undo, containers that collapse, routed edges, tree and radial layouts, and options for large graphs.
+- [v0.30.0](https://aureauds.dev/release-v0-30-0.md): Reading large graphs with the DependencyGraph - vertical layered layout, icons, badges and ports, edges that explain themselves without color, minimap, path highlight and export.
+- [v0.29.0](https://aureauds.dev/release-v0-29-0.md): A Card that stands out in both themes, a colored accent strip on top of cards, and a fix for dark sections inside the lory brand.
+- [v0.28.0](https://aureauds.dev/release-v0-28-0.md): Share buttons that fall back to copying the link, a phone frame for screenshots, an extra-bold weight and tabular numbers.
+- [v0.27.0](https://aureauds.dev/release-v0-27-0.md): New neutral and status colors for both themes, with separate tokens for fills and text. Also ships v0.26.0 (category badges, KPI direction) and v0.26.1.
+- [v0.25.0](https://aureauds.dev/release-v0-25-0.md): Focus is drawn as a single line instead of border plus ring, and the selected tab is finally visible against its track.
+- [v0.24.1](https://aureauds.dev/release-v0-24-1.md): Fixes the anchored Badge in React Native and the KPI number size on the web, and adds a CSS variable for chart text size.
+- [v0.24.0](https://aureauds.dev/release-v0-24-0.md): Comparison tables: sticky header and first column, a two-item mobile fit, a "differences only" switch, and styling for groups and best values.
+- [v0.23.0](https://aureauds.dev/release-v0-23-0.md): Topbar is renamed Header (the old name still works), with a site header that collapses into a mobile menu, and a site footer section.
+- [v0.22.0](https://aureauds.dev/release-v0-22-0.md): Layout parts for site pages (Container, Grid.Item span, Section with surface and theme). Also ships v0.21.0 and v0.20.0.
+- [v0.19.1](https://aureauds.dev/release-v0-19-1.md): Fixes square BottomNav indicators on Android. Also ships v0.19.0: lazy TreeView, batch Gallery, attachments and replies in chat, long conversations.
+- [v0.18.0](https://aureauds.dev/release-v0-18-0.md): Indeterminate Progress with detail and tone, named Grid minimums, NavList avatars and indicators, and a collapsible AppShell sidebar.
+- [v0.17.0](https://aureauds.dev/release-v0-17-0.md): BottomNav no longer shifts when switching tabs, is shorter with labels closer to icons, and gains the capsule and expand indicators.
+- [v0.16.1](https://aureauds.dev/release-v0-16-1.md): Fixes the BottomNav circle-bold indicator, which collapsed into a thin line in the browser and cut the label on the compact bar.
+- [v0.16.0](https://aureauds.dev/release-v0-16-0.md): In the light theme, emphasis text and icons move from brown to a darkened brand yellow that still meets 4.5:1 contrast.
+- [v0.15.0](https://aureauds.dev/release-v0-15-0.md): React Native gets custom icon components in every icon prop, a richer Timeline, a new FileInput, and a PhotoInput that opens the photo.
+- [v0.14.1](https://aureauds.dev/release-v0-14-1.md): A busy IconButton now shows only a centred spinner. Also ships v0.14.0, with new React Native props for Tabs, Combobox, NumberField and RadioGroup.
+- [v0.13.0](https://aureauds.dev/release-v0-13-0.md): New typeface and icon set. Atkinson Hyperlegible Next replaces IBM Plex, and Phosphor icons replace Carbon. Icon names change.
+- [v0.12.4](https://aureauds.dev/release-v0-12-4.md): React Native components running in the browser now expose their state to screen readers through aria attributes.
+- [v0.12.3](https://aureauds.dev/release-v0-12-3.md): Adds RadioGroup to React Native, with full-row touch targets and the indicator at the start or end of each row.
+- [v0.12.2](https://aureauds.dev/release-v0-12-2.md): The BottomNav is shorter on the web and in React Native, with the icon closer to its label.
+- [v0.12.1](https://aureauds.dev/release-v0-12-1.md): React Native fixes for bottom sheets and Grid, plus LinkButton. Also ships v0.12.0 with typed icon names, round icon buttons, ThemeToggle and text components.
+- [v0.11.0](https://aureauds.dev/release-v0-11-0.md): React Native fixes for Android (clipped button text, lists that did not scroll, sheets behind system buttons), new Badge sizes and centred Radio and Checkbox marks.
+- [v0.10.1](https://aureauds.dev/release-v0-10-1.md): criarGlifo can now draw stroked shapes, so line-drawn logos work in React Native without importing an SVG library.
+- [v0.10.0](https://aureauds.dev/release-v0-10-0.md): Web layout additions for Topbar, AppShell, Field and Card, a clearer current item in the Sidebar, and a fix for a stretched top bar.
+- [v0.9.0](https://aureauds.dev/release-v0-9-0.md): Layout props for the web primitives, Button, Card, Separator and Dialog. The default Dialog width changes from 560 to 448.
+- [v0.8.14](https://aureauds.dev/release-v0-8-14.md): Additive props for Badge, Cluster, Topbar and Screen, a shared disabled-opacity token, and criarGlifo for custom glyphs in React Native.
+- [v0.8.13](https://aureauds.dev/release-v0-8-13.md): The React Native Card responds to taps with onPress, and the BottomNav can size itself to its tabs with width="content".
+- [v0.8.12](https://aureauds.dev/release-v0-8-12.md): A new type scale (12 to 48). Web components return to 14 pixels, while React Native components use 16.
+- [v0.8.11](https://aureauds.dev/release-v0-8-11.md): Adds MediaEmbed, which shows a video from another site (YouTube, Vimeo) in Aurea's frame, with an optional poster that loads nothing until clicked.
+- [v0.8.10](https://aureauds.dev/release-v0-8-10.md): Select gets Aurea's own skin and floating list instead of the browser's native control. Also ships v0.8.9, with navItems on AppShell and labelWidth on Field.
+- [v0.8.8](https://aureauds.dev/release-v0-8-8.md): Web fixes for Combobox, the mobile drawer, DependencyGraph and DataGrid, React Native fixes found on Android, BottomNavProvider, and a new type scale.
+- [v0.8.7](https://aureauds.dev/release-v0-8-7.md): In React Native, the brand Card now keeps its fields, buttons and focus readable on the yellow, and menus or sheets opened from inside it no longer inherit its colors.
+- [v0.8.6](https://aureauds.dev/release-v0-8-6.md): React Native gets a yellow brand Card that requires an action, and SegmentedControl and Tabs now scroll sideways with a visible hint when the options do not fit.
+- [v0.8.5](https://aureauds.dev/release-v0-8-5.md): React Native gets Tabs, new props on Badge, Switch and NavList, and fixes for controls that VoiceOver on iPhone could not reach.
+- [v0.8.4](https://aureauds.dev/release-v0-8-4.md): In React Native, the Combobox clear button is reachable by VoiceOver on iPhone, and the arrow now opens the list.
+- [v0.8.3](https://aureauds.dev/release-v0-8-3.md): React Native fixes for brand and destructive text contrast and for Input dropping props, plus Separator, a link tone on Text and new PasswordField props.
+- [v0.8.2](https://aureauds.dev/release-v0-8-2.md): React Native gets InputGroup, InputGroupAddon and PasswordField, and Button accepts any drawing in leading and trailing.
+- [v0.8.1](https://aureauds.dev/release-v0-8-1.md): React Native fixes for NumberField focus and width, the Combobox sheet hidden behind the iOS keyboard, and hard-coded sheet heights.
+- [v0.8.0](https://aureauds.dev/release-v0-8-0.md): Five new React Native components (Combobox, SearchField, NumberField, Image and Gallery), number formatting helpers and new strings, with no new dependencies.
+- [v0.7.0](https://aureauds.dev/release-v0-7-0.md): The first release of @aurea-uds/native, with 46 React Native components, plus fixes for crashing accessibility roles and a theme switch that got out of sync on the web.
+- [v0.6.0](https://aureauds.dev/release-v0-6-0.md): Nine new web components, menus with submenus, checkboxes and radio groups, new hooks, and one breaking change: size on field components is now sm, md or lg.
+- [v0.5.0](https://aureauds.dev/release-v0-5-0.md): Brands arrive as a second axis next to the theme, starting with lory, and the sidebar now paints itself with its own tokens.
+- [v0.4.0](https://aureauds.dev/release-v0-4-0.md): BottomNav, NavList and Separator arrive, Badge is rewritten, Sidebar gains a flush variant, and Button's pressed prop is deprecated in favor of Toggle.
+- [v0.3.0](https://aureauds.dev/release-v0-3-0.md): Eleven new components, including BlockEditor, Carousel, CommandPalette and Form, server rendering for 22 markup components, a React Native token target and accessibility fixes in Field and Toggle.
+- [v0.2.0](https://aureauds.dev/release-v0-2-0.md): React Server Components support, 27 new components including a new AI and Agents category, a server-backed DataGrid, universal states and five breaking changes.
+- [v0.1.0](https://aureauds.dev/release-v0-1-0.md): The first public release of Aurea UDS, published as six packages on npm.

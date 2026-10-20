@@ -1,0 +1,29 @@
+# v0.8.11
+
+Adds MediaEmbed, which shows a video from another site (YouTube, Vimeo) in Aurea's frame, with an optional poster that loads nothing until clicked.
+
+A new web component, `MediaEmbed`, to show videos from other sites inside the same frame as [`MediaPlayer`](./mediaplayer.html): card radius, border and dark background.
+
+## New
+
+- **`MediaEmbed`**: a video from another site (YouTube, Vimeo) in Aurea's frame.
+- **`title` is required by the type**: it is the video's accessible name.
+- **`ratio`** (`16/9` by default) is reserved before loading, so the page does not jump.
+- **Privacy defaults**: `referrerPolicy="strict-origin-when-cross-origin"` and `loading="lazy"`.
+- **With `poster`, nothing from the other site loads until the click.** Until then you see the image and a play button. On click the video loads and starts playing (`autoplay={false}` turns that off), and focus moves to it.
+- **`href`** shows a link to the video on its original site, a way out when the owner blocks embedding. The page cannot detect that block, so the link is always visible.
+- Enter and Space open the video.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.8.11 @aurea-uds/core@0.8.11 @aurea-uds/fonts@0.8.11 @aurea-uds/icons@0.8.11
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.8.11
+```

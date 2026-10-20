@@ -14,6 +14,8 @@ const CASOS = [
   {pagina: "getting-started.html", area: "Getting Started", grupos: ["Overview", "Handbook", "UI for Agents"], itens: ["Introduction", "Quick Start", "Colors", "Accessibility"]},
   {pagina: "docs-theming.html", area: "Getting Started", grupos: ["Overview", "Handbook", "UI for Agents"], itens: ["Introduction", "Theming"]},
   {pagina: "tokens.html", area: "Tokens", grupos: ["Overview"], itens: ["All Tokens"]},
+  // As notas de versão (lote U, 19/10/2026): a área própria, como a da referência.
+  {pagina: "release-v0-35-0.html", area: "Releases", grupos: ["Overview", "Releases"], itens: ["All Releases", "v0.35.0", "v0.1.0"]},
   {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks"]},
   {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks", "useToast"]},
   {pagina: "button.html", area: "Components", grupos: ["Overview", "Components"], itens: ["All Components", "Button"]},
@@ -35,7 +37,9 @@ for (const c of CASOS) {
 test("o anterior e o próximo são os vizinhos na lateral da área", async ({page}) => {
   for (const [pagina, antes, depois] of [["carousel.html", "Card", "Chart"], ["accessgate.html", "All Components", "Accordion"],
     // Na área Getting Started o vizinho atravessa o grupo, como na referência: depois do último do Overview, o primeiro do Handbook.
-    ["docs-roadmap.html", "Showcase", "Colors"], ["docs-quick-start.html", "Introduction", "Design Principles"]]) {
+    ["docs-roadmap.html", "Showcase", "Colors"], ["docs-quick-start.html", "Introduction", "Design Principles"],
+    // Nas notas, da mais nova para a mais velha, como na lateral.
+    ["release-v0-34-0.html", "v0.35.0", "v0.33.0"]]) {
     await page.goto(`${base}/apps/catalog/${pagina}`);
     const pn = page.locator('nav[aria-label="Previous and next"] strong');
     await expect(pn, pagina).toHaveText([antes, depois]);

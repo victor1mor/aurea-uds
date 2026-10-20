@@ -544,7 +544,11 @@ continua só com ele (o npm pede o segundo fator).
    `packages/contracts/aurea.contract.json`), com a seção no `CHANGELOG.md`.
 7. **Pedir o "pode"**, empurrar a branch e abrir o pedido de junção para o `main`. Quem junta e
    publica é o Victor.
-8. Depois que ele publicar, anotar aqui e no `CHANGELOG.md`.
+8. Depois que ele publicar, anotar aqui e no `CHANGELOG.md` — e escrever a **nota de versão em inglês**,
+   `apps/catalog/content/releases/vX-Y-Z.md` (a área Releases do site, decisão do Victor de 19/10/2026), com a data do
+   CHANGELOG. Só o que muda para quem usa; nada do processo, de pessoa ou de app. Versão que sai dentro de outra vira
+   `## Includes vX.Y.Z` na nota de quem a publicou. ⚠ Sem a nota, o `build-catalog` para: a trava cobra toda versão com
+   data no CHANGELOG.
 
 **Duas regras do Victor, de 23/09/2026:** o `main` fica **sempre** atualizado (lote aprovado vai
 para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.

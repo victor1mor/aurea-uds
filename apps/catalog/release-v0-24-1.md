@@ -1,0 +1,29 @@
+# v0.24.1
+
+Fixes the anchored Badge in React Native and the KPI number size on the web, and adds a CSS variable for chart text size.
+
+A patch release with two fixes and one opt-in CSS variable. No new props.
+
+## New
+
+- **`--chart-text`** (web): the size of chart axis and legend text. It was locked to `--text-xs`, and the CSS rule won over the chart's own `tick` setting. Set it on the container, for example `--chart-text: var(--text-sm)` or `var(--text-base)`. Without it, text stays `--text-xs`.
+
+## Fixed
+
+- **React Native: an anchored [`Badge`](./badge.html) was stretched and out of place.** A `Badge anchor="top-end"` around an `IconButton` attached to the 44 touch area instead of the 36 drawn circle, used a fixed `-8` offset and kept vertical padding: a "1" measured 14.9 × 22, with its center outside the circle.
+- **How the anchored badge sits now**: it touches the target's corner and moves out by 25% of its own size; minimum size is a 16 square (`xs`/`sm`), 28 (`md`) or 32 (`lg`), which becomes a circle with one digit; no vertical padding; a 1-unit ring in the background color. Around an `IconButton` it ignores the touch area and attaches to the circle. Apps need no change.
+- **Web: the [`KPI`](./kpi.html) number had no size.** It rendered at 14, the same as the label, with the trend at the browser's `small`. The number is now `--text-3xl` with tabular digits, and the trend is `--text-sm`. The React Native KPI is unchanged.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.24.1 @aurea-uds/core@0.24.1 @aurea-uds/fonts@0.24.1 @aurea-uds/icons@0.24.1
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.24.1
+```

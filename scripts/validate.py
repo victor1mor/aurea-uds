@@ -1948,10 +1948,10 @@ if not _m_area:
     sys.exit("validate: não achei AREA_PAGES em scripts/page-model.mjs — a fonte do modelo mudou de forma")
 AREA_PAGES = set(re.findall(r'"([^"]+\.html)"', _m_area.group(1)))
 # As páginas de documentação da área Getting Started (lote U, SITE-03): o prefixo também é LIDO do modelo.
-_m_doc = re.search(r'export const DOC_PREFIX = "([^"]+)";', _PAGE_MODEL)
+_m_doc = re.search(r'export const DOC_PREFIXES = \[(.*?)\];', _PAGE_MODEL)
 if not _m_doc:
-    sys.exit("validate: não achei DOC_PREFIX em scripts/page-model.mjs — a fonte do modelo mudou de forma")
-DOC_PREFIX = _m_doc.group(1)
+    sys.exit("validate: não achei DOC_PREFIXES em scripts/page-model.mjs — a fonte do modelo mudou de forma")
+DOC_PREFIXES = tuple(re.findall(r'"([^"]+)"', _m_doc.group(1)))
 STATE_MD = root / "STATE.md"
 README_MD = root / "README.md"
 MARK_BEGIN = "<!-- state:begin -->"
@@ -1970,7 +1970,7 @@ def project_state():
     for p in pages:
         if p in AREA_PAGES:
             kind["area"] += 1
-        elif p.startswith(DOC_PREFIX):
+        elif p.startswith(DOC_PREFIXES):
             kind["doc"] += 1
         elif p.startswith("pattern-"):
             kind["pattern"] += 1

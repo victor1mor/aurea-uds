@@ -1,0 +1,59 @@
+# v0.34.0
+
+No lines. Components no longer draw borders on web or React Native; what needed a border to stand out now gets a translucent fill.
+
+Aurea no longer draws borders. Every border color is now transparent, but the border width stays, so no size changes. Parts that used to rely on a line to stand out get a translucent fill in the text color instead. Focus rings stay. No new components.
+
+## Changed
+
+### No lines
+
+- **No component draws a border**, on the web, in the CSS and in React Native. Every border color is transparent; the width stays, so no measurement changes. Thin `box-shadow` rings are gone too.
+- **Focus stays visible**: the focus ring on the web, and a border in the focus color in React Native.
+- **The only remaining line**: `Card variant="outline"`, in a light line (the text color at 10%).
+
+### Fills that replace the line
+
+- **Parts that disappeared into the background now get a fill**: translucent fills of the text color that stand out on any background behind them.
+- **`--fill-1`** (6%).
+- **`--fill-2`** (10%): `Input`, `Textarea`, `Select`, `SearchField`, `NumberField`, `OTPField`, `InputGroup`, `MultiCombobox`, the outline `Button`, `Toolbar`, `CodeBlock`, `LogStream` and `FileInput`.
+- **`--fill-3`** (20%): the box of `Checkbox` and `Radio`, and the track of `Switch`.
+- **Opaque fills** (`--fill-2-solid`, `--fill-3-solid`): the dot of `Stepper`, the `Avatar`, and the `DependencyGraph` node.
+- **Outline `Button` with a tone, and outline `Badge`**: the tone at 16% as background (22% on hover for the button).
+- **React Native**: fields inside `Card variant="brand"` use the card's ink at 14%, and so do the outline `Button` and `IconButton` there.
+
+### Contrast
+
+- **Light theme, outline `Button` and `IconButton` with a status tone** (`info`, `success`, `warning`, `danger`): the text moves 20% toward the text color. On the new 16% background, blue had dropped to 4.02:1. The worst case is now blue on hover, at 4.64:1 (web and React Native).
+- **Outline `Badge`, both themes**: the text moves 20% toward the text color. The worst case is now 4.79:1. The soft and flat badges keep their own background and do not change.
+- **`LogStream`**: the `info` level text also moves toward the text color (it was 4.08:1 in the light theme on the new background).
+
+### States that used to be a line
+
+- **Signals that were a line are now a fill**: the invalid field (`--danger-bg`), the selected `Card` (brand color at 12%), the `Stepper` step with an error, a running or failed run, the error message, the active media item, and the selected node and container in the `DependencyGraph`.
+- **Drawings that were strokes are now solid shapes**: the `Checkbox` check, the `Spinner` (same arc), the thumbs of the color `Slider` and the `ColorArea` (white underneath, a dot in the color on top), the `ColorSwatch` swatch (with a shadow), the offline mark of `Status`, the `Card accent` stroke, and the `CodeEditor` cursor.
+- **Windows high contrast**: the `Spinner` and the `Checkbox` check opt out of the color override and paint in the text color, so they no longer vanish.
+- **`TableOfContents`**: the marker of the current item was a one-sided border. It is now a solid shape, in the same place and at the same size.
+
+## Fixed
+
+- **`Stepper` on the web**: a completed step never turned yellow. The component wrote `step-done` and `step-active`, while the CSS only read `.step.done` and `.step.active`. Both forms now work.
+
+## Breaking changes
+
+- **Appearance, across all components.** If you identified a state by its line (the red invalid field, the selected item), you now see a fill instead.
+- **Variants that were only a line now look closer to others**: outline `Badge` and `Button` get a background, `Card variant="contrast"` in the dark theme loses its yellow outline, `Tabs` `secondary` loses the bottom line, `Table` loses the lines between rows, and the pressable `Card` in React Native looks the same as the regular one.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.34.0 @aurea-uds/core@0.34.0 @aurea-uds/fonts@0.34.0 @aurea-uds/icons@0.34.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.34.0
+```

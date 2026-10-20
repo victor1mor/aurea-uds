@@ -1,0 +1,50 @@
+# v0.4.0
+
+BottomNav, NavList and Separator arrive, Badge is rewritten, Sidebar gains a flush variant, and Button's pressed prop is deprecated in favor of Toggle.
+
+This release adds `BottomNav` for phone navigation, `NavList` for tappable list rows and `Separator`. `Badge` gains emphasis, sizes, counters and corner anchoring without changing its defaults, and `Sidebar` gets an opt-in `flush` variant. If you pass a complete custom strings dictionary, add the new `bottomNavLabel` key.
+
+## New
+
+- **[`BottomNav`](./bottomnav.html)**: the bar for an app's top-level navigation on a phone. It takes the same `SidebarItem` list as `Sidebar`, so one list feeds both; nested `items` are ignored.
+- **`BottomNav` semantics**: a `<nav>` landmark with links, and `aria-current="page"` on the current one. It is not a tab list, because it changes page.
+- **`BottomNav` and the iPhone home indicator**: it reserves room with `env(safe-area-inset-bottom)`, which works only if your page declares `viewport-fit=cover`. It is positioned with `sticky`.
+- **`BottomNav` `variant` and `indicator`**: `variant` sets where the bar sits (`floating` or `edge`); `indicator` sets the shape that marks the current item (`none`, `subtle`, `pill`, `circle`, `circle-raised`, `circle-bold`, `circle-outline`). The current item is always in the brand gold, and every item keeps its label.
+- **[`NavList`](./navlist.html)**: a list of rows that open something, with leading icon, label, optional second line, optional trailing value and chevron. Items are `{id, label, description?, value?, icon?, href?, onClick?, disabled?}`.
+- **`NavList` rows**: with `href` the row is a link with a chevron; without it the row is a button with no chevron. It is not a landmark and has no current item. Disabled rows stay in the tab order (`aria-disabled`), and rows grow to 44px on touch screens.
+- **A [`Card`](./card.html) whose direct child is a `NavList`** tightens its padding so the rows reach the edges.
+- **[`Separator`](./separator.html)**: a rule between things, `horizontal` or `vertical`. It is a native `<hr>` and ships no JavaScript. Inside a `Toolbar`, keep using `ToolbarSeparator`.
+- **[`Sidebar`](./sidebar.html) `variant="flush"`**: an opt-in panel that sits against the edges at full height, separated from the content by a rule. The default still floats.
+- **[`AppShell`](./appshell.html) `sidebarVariant`**: passes the variant through, as in `<AppShell sidebarVariant="flush">`.
+- **The collapsed sidebar rail shows a [`Tooltip`](./tooltip.html)** with the item name.
+- **[`Badge`](./badge.html)**: `emphasis` (`soft`, `outline`, `solid`), `size` (`sm`, `md`, `lg`), `dot`, `leading`/`trailing`, `image`/`imageAlt`, `count` with `max` (shows `99+`) and `showZero`.
+- **`Badge` anchoring**: `anchor` places it on any of four corners of a child, as a counter; `anchorShape="circle"` pulls it in for round children; `invisible` hides it; `--badge-ring` overrides the cutout ring color. An anchored badge is `aria-hidden`, so put the count in the accessible name of the thing it decorates.
+- **`formatBadgeCount(count, max)`**: returns the same string the badge shows, for use in accessible names.
+- **New string `bottomNavLabel`** (`"Main"` / `"Principal"`) in `AureaStrings`.
+
+## Changed
+
+- **[`Toggle`](./toggle.html) is the way to build a pressed button.** `Button`'s `pressed` prop is deprecated and will be removed in 1.0; it still works. `Toggle` owns its state, reports `onPressedChange` and requires an accessible name when it shows only an icon. Its label should not change between states.
+- **`BottomNav` variant names**: `flat`, `surface`, `pill` and `dock` are deprecated aliases that map onto the new `variant` and `indicator` pair.
+- **`BottomNav` no longer paints a hover background.** Focus styles are unchanged.
+- **The sidebar rail is 68px wide** (`--sidebar-rail` is `4.25rem`, was 88px), and each rail item is a 36px square.
+- **Sidebar item icons are 20px** (`--icon-md`), up from 16px.
+- **The `AppShell` sidebar becomes a drawer below 1024px** (`lg`), instead of below 768px.
+- **`Badge` defaults are unchanged**: `md` size, `soft` emphasis and `children` content work as before.
+
+## Fixed
+
+- **A floating sidebar lost 32px to its own margins.** A 264px panel rendered at 232px, and the 68px rail at 36px. The shell grid now adds the margins when the panel floats.
+- **`Tooltip` passes the trigger's own `id` through.** A trigger that already had an `id` made the tooltip open and close immediately.
+
+## Breaking changes
+
+- **`AureaStrings` has a new required key, `bottomNavLabel`.** If you pass a complete custom dictionary, add it. `defaultStrings` and `ptBR` already include it.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.4.0 @aurea-uds/core@0.4.0 @aurea-uds/fonts@0.4.0 @aurea-uds/icons@0.4.0
+```
