@@ -288,12 +288,13 @@
     "componentes": 137,
     "fichas": 137,
     "hooks": 9,
-    "paginas_total": 411,
+    "paginas_total": 426,
     "paginas": {
       "component": 146,
       "pattern": 219,
       "block": 15,
       "recipe": 23,
+      "doc": 15,
       "area": 8
     },
     "conteudo_rico": 44,
@@ -313,9 +314,9 @@
       "Ready": 48,
       "Stable": 97
     },
-    "testes_unit": 2101,
+    "testes_unit": 2105,
     "componentes_citados_no_teste": 144,
-    "specs_visuais": 45,
+    "specs_visuais": 46,
     "baselines": 48,
     "baselines_linux": 24,
     "classes_core": 935,
@@ -326,6 +327,6 @@
   },
   "gates": {
     "validate": 43,
-    "playwrightSpecs": 45
+    "playwrightSpecs": 46
   }
 }

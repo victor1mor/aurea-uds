@@ -10,7 +10,9 @@ const grupos = (page: import("@playwright/test").Page) =>
   page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label").allTextContents();
 
 const CASOS = [
-  {pagina: "getting-started.html", area: "Docs", grupos: ["Overview"], itens: ["Getting Started"]},
+  // A área Getting Started com a árvore da referência (lote U, SITE-03, 18/10/2026): Overview e Handbook.
+  {pagina: "getting-started.html", area: "Getting Started", grupos: ["Overview", "Handbook"], itens: ["Introduction", "Quick Start", "Colors", "Accessibility"]},
+  {pagina: "docs-theming.html", area: "Getting Started", grupos: ["Overview", "Handbook"], itens: ["Introduction", "Theming"]},
   {pagina: "tokens.html", area: "Tokens", grupos: ["Overview"], itens: ["All Tokens"]},
   {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks"]},
   {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks", "useToast"]},
@@ -24,14 +26,16 @@ for (const c of CASOS) {
     expect(await grupos(page)).toEqual(c.grupos);
     const nomes = await page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-label").allTextContents();
     for (const item of c.itens) expect(nomes, `"${item}" está na lateral`).toContain(item);
-    // O que é de outra área não aparece: o Getting Started só em Docs, os componentes só em Components.
-    if (c.area !== "Docs") expect(nomes).not.toContain("Getting Started");
+    // O que é de outra área não aparece: a Introduction só no Getting Started, os componentes só em Components.
+    if (c.area !== "Getting Started") expect(nomes).not.toContain("Introduction");
     if (c.area !== "Components") expect(nomes).not.toContain("Button");
   });
 }
 
 test("o anterior e o próximo são os vizinhos na lateral da área", async ({page}) => {
-  for (const [pagina, antes, depois] of [["carousel.html", "Card", "Chart"], ["accessgate.html", "All Components", "Accordion"]]) {
+  for (const [pagina, antes, depois] of [["carousel.html", "Card", "Chart"], ["accessgate.html", "All Components", "Accordion"],
+    // Na área Getting Started o vizinho atravessa o grupo, como na referência: depois do último do Overview, o primeiro do Handbook.
+    ["docs-roadmap.html", "Showcase", "Colors"], ["docs-quick-start.html", "Introduction", "Design Principles"]]) {
     await page.goto(`${base}/apps/catalog/${pagina}`);
     const pn = page.locator('nav[aria-label="Previous and next"] strong');
     await expect(pn, pagina).toHaveText([antes, depois]);

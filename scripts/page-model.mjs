@@ -86,8 +86,11 @@ export const AREA_PAGES = ["index.html", "components.html", "getting-started.htm
   // o núcleo do modelo é preview + código, e hook não tem prévia estática. `useToast` só existe
   // depois de um clique — a página traz assinatura, exemplo e limites, que é o que dá para ler.
   "hooks.html"];
+// As páginas da área Getting Started (lote U, SITE-03): texto, como as da documentação da referência — não são item
+// (não têm preview e código obrigatórios). A primeira é o `getting-started.html`, que já está na lista acima.
+export const DOC_PREFIX = "docs-";
 export function pageType(file) {
-  if (AREA_PAGES.includes(file)) return null;
+  if (AREA_PAGES.includes(file) || file.startsWith(DOC_PREFIX)) return null;
   // embeds/*.html são o preview de um componente de PÁGINA (AppShell) num documento próprio.
   // São páginas de verdade — passam pelos mesmos gates de a11y — e não são itens do catálogo.
   if (file.includes("/")) return null;

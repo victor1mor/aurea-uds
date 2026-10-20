@@ -2819,7 +2819,10 @@ button.tag-main { cursor:pointer; }
 /* `0.9em` e não um token: código dentro do texto se mede em relação à LINHA em que está, e um
    valor absoluto o deixaria maior que o parágrafo dentro de um h2. É o mesmo motivo pelo qual o
    `.badge` tem `line-height:1` — geometria que depende do contexto se escreve relativa. */
-.prose code { padding:var(--space-05) var(--space-1); border-radius:var(--radius-xs); background:var(--surface-2); font-family:var(--font-code); font-size:0.9em; }
+/* `overflow-wrap:anywhere` (18/10/2026, lote U): código no meio do texto é uma palavra só — `window.Aurea.setDensity("compact")`
+   —, e sem a quebra ele empurrava a página para o lado a 320 (medido na página Density do site; a WCAG 1.4.10 pede que
+   nada role para o lado). Dentro do `pre` ela não age: lá o `white-space` não quebra, e a caixa rola. */
+.prose code { padding:var(--space-05) var(--space-1); border-radius:var(--radius-xs); background:var(--surface-2); font-family:var(--font-code); font-size:0.9em; overflow-wrap:anywhere; }
 .prose pre { overflow-x:auto; padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--surface-2); }
 .prose pre code { padding:0; border-radius:0; background:transparent; font-size:var(--text-sm); }
 .prose img { max-width:100%; height:auto; border-radius:var(--radius-lg); }

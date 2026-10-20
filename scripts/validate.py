@@ -1947,6 +1947,11 @@ _m_area = re.search(r"export const AREA_PAGES = \[(.*?)\];", _PAGE_MODEL, re.S)
 if not _m_area:
     sys.exit("validate: não achei AREA_PAGES em scripts/page-model.mjs — a fonte do modelo mudou de forma")
 AREA_PAGES = set(re.findall(r'"([^"]+\.html)"', _m_area.group(1)))
+# As páginas de documentação da área Getting Started (lote U, SITE-03): o prefixo também é LIDO do modelo.
+_m_doc = re.search(r'export const DOC_PREFIX = "([^"]+)";', _PAGE_MODEL)
+if not _m_doc:
+    sys.exit("validate: não achei DOC_PREFIX em scripts/page-model.mjs — a fonte do modelo mudou de forma")
+DOC_PREFIX = _m_doc.group(1)
 STATE_MD = root / "STATE.md"
 README_MD = root / "README.md"
 MARK_BEGIN = "<!-- state:begin -->"
@@ -1961,10 +1966,12 @@ def project_state():
     ninguém ter tocado em nada.
     """
     pages = sorted(p.name for p in CATALOG.glob("*.html"))
-    kind = {"component": 0, "pattern": 0, "block": 0, "recipe": 0, "area": 0}
+    kind = {"component": 0, "pattern": 0, "block": 0, "recipe": 0, "doc": 0, "area": 0}
     for p in pages:
         if p in AREA_PAGES:
             kind["area"] += 1
+        elif p.startswith(DOC_PREFIX):
+            kind["doc"] += 1
         elif p.startswith("pattern-"):
             kind["pattern"] += 1
         elif p.startswith("block-"):
@@ -2049,7 +2056,8 @@ def render_readme_block(s):
     público é todo em português)."""
     p = s["paginas"]
     return (f"\n{s['paginas_total']} páginas geradas — {p['component']} de componente, "
-            f"{p['pattern']} de padrão, {p['block']} de bloco, {p['recipe']} de receita e "
+            f"{p['pattern']} de padrão, {p['block']} de bloco, {p['recipe']} de receita, "
+            f"{p['doc']} de documentação e "
             f"{p['area']} índices de área — a partir de {s['fichas']} fichas. "
             f"Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, "
             f"procedência e anterior/próximo. {s['conteudo_rico']} componentes têm conteúdo "
@@ -2115,6 +2123,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Pattern | {p['pattern']} |
 | Block | {p['block']} |
 | Recipe | {p['recipe']} |
+| Documentação | {p['doc']} |
 | Índice de área | {p['area']} |
 | **Total** | **{s['paginas_total']}** |
 
@@ -3272,7 +3281,7 @@ _CAT45 = root / "apps/catalog"
 if _PKG45.is_file() and _CAT45.is_dir():
     _pj45 = json.loads(_PKG45.read_text(encoding="utf8"))
     _decl45 = set(_pj45.get("dependencies", {})) | set(_pj45.get("peerDependencies", {}))
-    _fontes45 = [root / f"scripts/{n}" for n in ("build-catalog.mjs", "page-model.mjs", "montar-site.mjs", "token-value.mjs")]
+    _fontes45 = [root / f"scripts/{n}" for n in ("build-catalog.mjs", "page-model.mjs", "docs-markdown.mjs", "montar-site.mjs", "token-value.mjs")]
     _fontes45 += sorted(p for p in _CAT45.rglob("*") if p.suffix in {".mjs", ".js", ".ts", ".tsx", ".jsx"} and "node_modules" not in p.parts)
     # Só importação de verdade: no começo da linha, ou `import("...")`. Exemplo de código dentro de
     # texto (`code: \`import ...\``) não começa a linha e não conta.
