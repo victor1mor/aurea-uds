@@ -1803,6 +1803,11 @@ else:
         _emc = re.search(r"^## \[[0-9.]+\] — em construção$", _ch, re.M)
         if _emc:
             _corpo += _ch[_emc.end():].split("\n## [", 1)[0]
+        # E a versão já DATADA, com os pacotes subidos, que ainda não foi registrada como publicada (20/10/2026, ao
+        # fechar a 0.36.0): enquanto o `released-surface.json` não anda, a seção dela é o que ainda não saiu.
+        _vpac = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
+        if not _emc and _vpac != _rel["version"] and f"## [{_vpac}]" in _ch:
+            _corpo += _ch.split(f"## [{_vpac}]", 1)[1].split("\n## [", 1)[0]
         # `\b` não serve: `Chart` casaria dentro de `ChartLegend` e daria por documentado o
         # que não está. A borda é o que NÃO pode ser parte de um nome de componente.
         _faltando = [c for c in _novos
