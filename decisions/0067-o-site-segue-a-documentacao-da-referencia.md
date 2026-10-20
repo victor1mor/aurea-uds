@@ -137,3 +137,13 @@ CHANGELOG — que é em português e conta o processo; a nota conta só o que mu
 versão que saiu dentro de outra é uma seção da nota de quem a publicou, como a referência faz com uma beta dela. O comando
 de atualizar e os links o gerador escreve; o texto, cada nota. A montagem para se uma versão com data no CHANGELOG ficar
 sem nota ou com outra data — e o passo 8 do "Como cada lote anda" (CLAUDE.md) passa a incluir a nota.
+
+### O celular e o tablet (19/10/2026)
+
+Medidos na página da documentação da referência a 375, 768 e 1100, com o "tudo como ela" do Victor. No `AppShell
+layout="docs"`: a lateral é coluna desde 768; abaixo, a gaveta abre pelo FIM da barra, onde fica o botão dela (depois das
+ações, também na ordem do Tab); abaixo de 1280 o índice é a gaveta de uma barra de 40 presa sob o topo, com o nome da
+seção em vista (escrito pelo vigia do índice do `aurea.js`). No site: o topo do celular em duas linhas com a lupa, e a
+chave claro/escuro no alto da gaveta. Os botões ficam com os 44 de toque da Aurea (a referência usa 34). E o "Copy Prompt"
+volta a ser só das páginas de começar, como na referência (o padrão do mercado, pesquisado: o menu de copiar a página em
+toda página; o texto de configuração, onde se configura).

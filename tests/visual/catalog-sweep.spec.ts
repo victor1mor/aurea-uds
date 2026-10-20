@@ -670,7 +670,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
   // os resultados vêm em grupos, e o Enter leva à página. Sem JavaScript, o botão é um link para o catálogo.
   test("a busca abre pelo botão e pelo Ctrl+K, agrupa os resultados e o Enter leva à página", async ({page}) => {
     await page.goto("/apps/catalog/getting-started.html");
-    const botao = page.locator("[data-site-search]");
+    // O botão À VISTA: desde 19/10/2026 há dois (a busca larga e a lupa do celular), cada um na sua largura.
+    const botao = page.locator("[data-site-search]:visible");
     await expect(botao).toHaveAttribute("href", "./components.html");
     await botao.click();
     const busca = page.getByRole("dialog", {name: "Search the site"});

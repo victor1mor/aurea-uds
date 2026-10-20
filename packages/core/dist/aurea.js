@@ -240,6 +240,10 @@
     }
     if (!targets.length) return;
     var seen = {};
+    // A BARRA DO ÍNDICE do `AppShell layout="docs"` (lote U, 19/10/2026): abaixo de 1280 o índice é a gaveta dela, e ela
+    // mostra o nome da seção em vista, como a da referência. É o mesmo cálculo; aqui só se escreve o nome lá.
+    var shell = toc.closest ? toc.closest(".app-shell") : null;
+    var nomeNaBarra = shell ? shell.querySelector("[data-toc-current]") : null;
     var observer = new IntersectionObserver(function (entries) {
       // Se o React assumiu este índice depois de nós, saímos. A ordem importa e não é
       // controlável: `initTocs` roda no DOMContentLoaded, e a hidratação pode vir depois. Sem
@@ -255,6 +259,7 @@
         if (id === current) links[id].setAttribute("aria-current", "true");
         else links[id].removeAttribute("aria-current");
       }
+      if (nomeNaBarra && links[current]) nomeNaBarra.textContent = links[current].textContent;
     }, {rootMargin: "0px 0px -75% 0px"});
     for (var k = 0; k < targets.length; k++) observer.observe(targets[k]);
   }
@@ -350,6 +355,19 @@
       for (var g = 0; g < abertas.length; g++) if (estaAberta(abertas[g])) abertas[g].hidePopover();
     };
     if (desktop.addEventListener) desktop.addEventListener("change", aoSubir);
+    // No `layout="docs"` (lote U) a lateral é coluna desde 768 e o índice desde 1280: cada gaveta fecha no corte DELA.
+    // 768 e 1280 são o `--breakpoint-md` e o `--breakpoint-xl`, os cortes do arranjo na folha.
+    var cortes = [["(min-width: 768px)", ".app-shell-docs > .sidebar[popover]:not(.app-shell-aside)"],
+      ["(min-width: 1280px)", ".app-shell-docs > .sidebar.app-shell-aside[popover]"]];
+    cortes.forEach(function (par) {
+      var mq = window.matchMedia(par[0]);
+      if (!mq.addEventListener) return;
+      mq.addEventListener("change", function (e) {
+        if (!e.matches) return;
+        var gavetas = document.querySelectorAll(par[1]);
+        for (var g = 0; g < gavetas.length; g++) if (estaAberta(gavetas[g])) gavetas[g].hidePopover();
+      });
+    });
   }
 
   function toastStack() {

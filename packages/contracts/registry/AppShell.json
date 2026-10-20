@@ -103,7 +103,7 @@
       "name": "layout",
       "type": "\"app\" | \"docs\"",
       "default": "\"app\"",
-      "description": "The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. Below 1024 the sidebar is the drawer and the text keeps 24 from the edge."
+      "description": "The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. From 768 up the sidebar is a column; below, it is a drawer that opens from the end of the bar, where its button goes (after the bar's actions). Below 1280 the table of contents is a sticky bar under the top bar, 40 high, with the name of the section in view; it opens the list as a drawer. On a phone the text keeps 24 from the edge and 32 below that bar."
     },
     {
       "name": "topbarTabs",
@@ -133,7 +133,7 @@
       "name": "aside",
       "type": "ReactNode",
       "default": "—",
-      "description": "The right-hand column — a documentation page's \"On this page\" (a TableOfContents). From 1280 up it is the third column; below, it follows the content."
+      "description": "The right-hand column — a documentation page's \"On this page\" (a TableOfContents). From 1280 up it is the third column; below, it follows the content. With the docs layout, below 1280 it is the drawer of the table-of-contents bar instead."
     },
     {
       "name": "asideLabel",
@@ -174,9 +174,11 @@
   "dependencies": {
     "engine": null,
     "icons": [
+      "caret-down",
       "caret-left",
       "caret-right",
-      "list"
+      "list",
+      "list-bullets"
     ]
   },
   "related": {

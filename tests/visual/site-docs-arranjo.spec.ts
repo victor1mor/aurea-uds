@@ -64,7 +64,9 @@ test("768: a marca, a busca e as ações numa linha só", async ({page}) => {
   const acoes = await caixa(page, ".site-actions");
   expect(acoes.y, "as ações não descem para outra linha").toBeLessThan(marca.baixo);
   perto(marca.x, 24, "a barra tem 24 de recheio de 768 para cima");
-  perto((await caixa(page, ".content h1")).x, 24, "e o texto, 24 da borda");
+  // Desde 19/10/2026 a lateral é coluna a 768, como a da referência (o título dela a 244 nessa largura, medido): o texto
+  // fica a 24 da lateral.
+  perto((await caixa(page, ".content h1")).x, 220 + 24, "e o texto, 24 depois da lateral");
 });
 
 test("375: a linha das áreas rola de lado, e a página não", async ({page}) => {

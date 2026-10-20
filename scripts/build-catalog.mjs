@@ -385,13 +385,17 @@ function chipLink(label, href) { return h("a", {key: label, className: "chip chi
 // skill e ler o `llms.txt`) com um ícone do Phosphor, porque logo de terceiro não entra (CLAUDE.md §5).
 // Os dois botões copiam pela cola do site (`catalog.js`), sem React. A setinha sai parada aqui, filha direta do
 // `ButtonGroup` (a pele do grupo só une `.btn` filho direto); a parte viva (`live/acoes.tsx`) a troca pelo `DropdownMenu`.
-const acoesDaPagina = () => h(A.Cluster, {gap: "tight"},
-  h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "sparkle", "data-copy-prompt": "", type: "button"}, "Copy Prompt"),
+// O "Copy Prompt" só nas páginas de COMEÇAR (19/10/2026), como na referência — lido no código do site dela: só na
+// Introduction e na Quick Start. O Victor perguntou o padrão do mercado: o menu de copiar a página fica em toda página; o
+// texto de configuração, onde se configura (decisão: "Só nas duas").
+const PAGINAS_COM_PROMPT = new Set(["getting-started.html", "docs-quick-start.html"]);
+const acoesDaPagina = (prompt = false) => h(A.Cluster, {gap: "tight"},
+  prompt ? h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "sparkle", "data-copy-prompt": "", type: "button"}, "Copy Prompt") : null,
   h(A.ButtonGroup, {variant: "tertiary", size: "sm", label: "Page as Markdown"},
     h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown"),
     h(A.IconButton, {variant: "tertiary", size: "sm", icon: "caret-down", label: "More page actions", "data-page-menu": ""})));
-const cabecaDaPagina = (title, lede, pills = []) => h("header", {className: "page-head"},
-  h("div", {className: "page-head-row"}, h("h1", null, title), acoesDaPagina()),
+const cabecaDaPagina = (title, lede, pills = [], prompt = false) => h("header", {className: "page-head"},
+  h("div", {className: "page-head-row"}, h("h1", null, title), acoesDaPagina(prompt)),
   h("p", {className: "page-lede"}, lede),
   pills.length ? h("div", {className: "page-pills"}, ...pills.map(([rotulo, icone, href]) =>
     h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, target: "_blank", rel: "noreferrer"}, rotulo))) : null);
@@ -844,7 +848,7 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
   }
   const {prev, next} = vizinhos(area, doc.arquivo);
   const node = h(Fragment, null,
-    cabecaDaPagina(doc.title, doc.description),
+    cabecaDaPagina(doc.title, doc.description, [], PAGINAS_COM_PROMPT.has(doc.arquivo)),
     sobTitulo,
     h(A.Prose, null, ...filhos),
     anteriorProximo(prev, next),
@@ -1378,15 +1382,20 @@ function topoDoSite(section) {
     // sem JavaScript o botão leva ao catálogo, onde está a lista inteira. No Início, como no da
     // referência, a busca é SÓ o ícone, junto das outras chaves (o Victor, 13/10/2026).
     // As teclas SEPARADAS, uma caixinha cada, como a busca da referência (o Victor, 15/10/2026: "o Ctrl K separado").
+    // NO CELULAR (lote U, 19/10/2026, "tudo como ela"): a busca larga sai e entra a lupa, depois do GitHub, como no topo
+    // da referência a 375; a chave claro/escuro desce para o alto da gaveta; o GitHub fica. O botão da gaveta, o `AppShell`
+    // põe por último. Tudo numa linha, com os 44 de toque da Aurea.
     h(A.Button, {variant: "tertiary", leadingIcon: "magnifying-glass", kbd: ["Ctrl", "K"],
-      className: "site-search", href: "./components.html", "data-site-search": ""}, "Search"),
+      className: "site-search hide-below-md", href: "./components.html", "data-site-search": ""}, "Search"),
     h("span", {className: "site-actions"},
       // A MARCA (20/08/2026, ADR-0036) ao lado do tema, porque são o mesmo tipo de chave — desde 14/10/2026 no botão
       // "Theme" da referência, e não mais numa caixa de seleção.
       botaoTema(),
       // A chave de três posições do topo da referência (15/10/2026): claro, escuro e sistema.
-      chaveDeTema(),
-      botaoGitHub()),
+      chaveDeTema("hide-below-md"),
+      botaoGitHub(""),
+      h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm", href: "./components.html",
+        "data-site-search": "", className: "site-so-celular"})),
     // AS ÁREAS são a segunda linha do `Header` (`topbarTabs`, lote T): elas saíram daqui. O `Header` as põe por último na
     // ordem do Tab, depois das ações — a regra da `ordem-de-foco.spec.ts` (WCAG 2.4.3, 14/10/2026) continua valendo.
   );
@@ -1443,6 +1452,8 @@ function shell(activeHref, inner, section = "components") {
       topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section,
       topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${href}`, icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
       navItems: menu, currentNavId: activeHref || undefined, navLabel: "Contents", className: "site-shell",
+      // A chave claro/escuro no alto da gaveta do celular, como a da referência (lote U, 19/10/2026): no topo ela não cabe.
+      navigation: h("div", {className: "site-gaveta-topo"}, chaveDeTema()),
       ...(toc.length ? {aside: h(A.TableOfContents, {items: toc}), asideLabel: "On this page", asideVariant: "plain"} : {})},
       node)));
 }
@@ -1626,6 +1637,14 @@ a.related-card:hover { border-color:transparent; }
 @media (min-width:768px) and (max-width:1023px) { .site-more { display:inline-flex; } }
 .site-more-panel { display:flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); }
 .site-so-estreito { display:none !important; }
+/* O celular do arranjo de documentação (lote U, 19/10/2026): a lupa no lugar da busca larga, e a chave de tema no alto da
+   gaveta, que é onde a referência a põe. */
+.site-so-celular { display:none !important; }
+.site-gaveta-topo { display:none; }
+@media (max-width:767px) { .site-so-celular { display:inline-flex !important; }
+  /* Sem a busca larga no meio, as ações vão para a ponta, junto do botão da gaveta, como na referência. */
+  .site-shell .site-actions { margin-inline-start:auto; }
+  .site-gaveta-topo { display:flex; order:-1; justify-content:flex-end; padding:var(--space-2) var(--space-2) var(--space-4); } }
 @media (max-width:1023px) { .site-so-estreito { display:inline-flex !important; } }
 /* A aba "Components" (15/10/2026), na composição da vitrine da referência, lida no código dela: três colunas de até 360
    (o --breakpoint-2xs), 32 entre elas e 40 entre as peças de cada uma; no celular uma coluna só, a do meio primeiro;
