@@ -175,6 +175,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 
 | `0.34.0` | O lote S — **sem linha**: nenhuma peça desenha borda (transparente, nenhuma medida muda), na web e no nativo; a única que fica é a do `Card variant="outline"`, clara; o que sumia ganha fundo (o texto a 6, 10 e 20%), o contorno com tom leva o tom a 16% e a letra mais escura (a "C"), o aviso que era linha vira fundo e o desenho de linha vira desenho cheio — [ADR-0072](decisions/0072-sem-linha.md), pedido #70. **Publicada em 17/10/2026** (entre 08:16 e 08:24, Brasília, medido no npm), pelo terminal do Victor |
 | `0.35.0` | O lote T — o site no arranjo da documentação da referência: `AppShell layout="docs"`, `Header tabs`, `Container size="docs"`, cinco tokens de largura, cada área com a sua lateral, a segunda linha da ADR-0072 (a de ponta a ponta embaixo das áreas) e o índice sem barra de rolagem; e o MNT-28 (o nó movido encaixa na grade, no vizinho e onde a linha fica reta) — [ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md), seção "Lote T", pedido #72. **Publicada em 17/10/2026** (entre 17:58 e 18:04, Brasília, medido no npm), pelo terminal do Victor |
+| `0.36.0` | O lote U — as cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)), a bolinha do `Radio`, as faixas do mapa (MNT-27) e o clique no nó (pedido 16); a abertura de página (`Section variant="hero"`, `--text-6xl` e `--text-7xl`), o aviso de cookies (`Banner variant="consent"`) e o `Chip` (GAR-19 a 22, [ADR-0074](decisions/0074-a-abertura-o-aviso-de-cookies-e-o-chip.md)); o site com as áreas Getting Started e Releases, os textos para assistentes de IA e o celular e o tablet — pedidos #75 a #82. **Publicada em 20/10/2026** (por volta das 12:12, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -499,6 +500,20 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    outro soma os deslocamentos; e a borda transparente do sem linha ainda soma 1 à medida (a barra tinha 101, e tudo
    embaixo ficava 1 abaixo da referência). **Publicada em 17/10/2026** (entre 17:58 e 18:04, Brasília, medido no npm),
    pelo terminal do Victor, da junção do pedido #72.
+
+32. **`0.36.0`, o lote U, feito de 17 a 19/10/2026** em oito passos, cada um aprovado na bancada e juntado no `main`
+   (pedidos #75 a #81), e fechada em 20/10/2026 no pedido #82 (*"Pode fechar a 0.36.0 agora"* — os apps consomem pelo
+   npm, não pelo GitHub). As cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)),
+   a bolinha do `Radio`, o MNT-27, o pedido 16; os GAR-19 a 22 ([ADR-0074](decisions/0074-a-abertura-o-aviso-de-cookies-e-o-chip.md));
+   e o site: Getting Started, Copy Prompt e `llms.txt`, Releases, celular e tablet. ⚠ **As regras novas:** a abertura
+   mede a largura da FAIXA (`@container`), não a da janela; o `validate.py` cobra o componente e a frase novos também na
+   seção `## [x] — em construção` e na da versão datada ainda não registrada; e nome de componente entre crases na versão
+   em construção põe o selo "Updated" no site — só crases em quem mudou. ⚠ **As lições:** a suíte local não cabia antes
+   de o Victor desligar, e a CI fez o papel dela (a varredura do WebKit caiu uma vez por lentidão da máquina do GitHub,
+   21 → 91 min, sem código novo, e passou rodada de novo); o `check-pack` reprova no Git Bash (rodar pelo PowerShell); e
+   um teste com a última versão escrita à mão reprovaria a cada versão (`site-releases.spec.ts` passou a ler o
+   `package.json`). **Publicada em 20/10/2026** (por volta das 12:12, Brasília, medido no npm), pelo terminal do Victor,
+   da junção do pedido #82.
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

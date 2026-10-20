@@ -82,7 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.36.0] — 2026-10-20
 
-⏳ **Ainda não publicada.** O lote U, feito de 17 a 19/10/2026 em oito passos, cada um aprovado na bancada pelo Victor e
+✅ **Publicada em 20/10/2026, por volta das 12:12 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #82. O lote U, feito de 17 a 19/10/2026 em oito passos, cada um aprovado na bancada pelo Victor e
 juntado no `main` (pedidos #75 a #81): as cores do amarelo (ADR-0073), a bolinha do `Radio`, as faixas do mapa de rede
 (MNT-27) e o clique no nó (o pedido 16 do app de topologia); a abertura de página, o aviso de cookies e o `Chip`
 (GAR-19 a 22, ADR-0074); e o site com as áreas Getting Started e Releases, os textos para assistentes de IA e o arranjo
