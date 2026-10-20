@@ -424,6 +424,12 @@ new MutationObserver(() => espelhaTema()).observe(document.documentElement, {att
 // -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
 // Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
 // confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
+const copiarNoBotao = (botao, texto) => navigator.clipboard.writeText(texto).then(() => {
+  const alvo = [...botao.querySelectorAll("span")].filter(s => !s.querySelector("svg") && s.textContent.trim()).pop() || botao;
+  const antes = alvo.textContent;
+  alvo.textContent = "Copied";
+  setTimeout(() => { alvo.textContent = antes; }, 2000);
+}, () => {});
 document.addEventListener("click", e => {
   const botao = e.target.closest("[data-copy-page]");
   if (!botao) return;
@@ -431,12 +437,15 @@ document.addEventListener("click", e => {
   if (!fonte || !navigator.clipboard) return;
   let texto;
   try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
-  navigator.clipboard.writeText(texto).then(() => {
-    const alvo = [...botao.querySelectorAll("span")].filter(s => !s.querySelector("svg") && s.textContent.trim()).pop() || botao;
-    const antes = alvo.textContent;
-    alvo.textContent = "Copied";
-    setTimeout(() => { alvo.textContent = antes; }, 2000);
-  }, () => {});
+  copiarNoBotao(botao, texto);
+});
+// -- "Copy Prompt" (lote U, SITE-06) ---------------------------------------------------------
+// O texto que prepara um assistente de IA para a Aurea: instalar a skill e ler o llms.txt. O endereco
+// sai da propria pagina (o site, a bancada ou o disco), e nao escrito aqui.
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copy-prompt]");
+  if (!botao || !navigator.clipboard) return;
+  copiarNoBotao(botao, "These are the official instructions from Aurea UDS to set up an AI development environment for building interfaces with Aurea: `@aurea-uds/react` on the web and `@aurea-uds/native` on React Native.\n\nComplete the following steps yourself by running the commands directly. Do not ask the user to run them.\n\n## 1. Install the Aurea skill\n\n```bash\nnpx skills add victor1mor/aurea-uds\n```\n\nThe installer finds your agent and puts the skill where it reads skills from.\n\n## 2. Read the documentation index\n\nFetch {base}llms.txt. It lists every page of the documentation, each one as Markdown. Read the pages you need before writing code. The whole documentation in one file is {base}llms-full.txt.\n\n## 3. Ask before installing packages\n\nAsk whether the app is for the web or for React Native. The two have different packages and different component lists.\n".replaceAll("{base}", new URL("./", location.href).href));
 });
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
 // Quem escolhe é o botão "Theme" (14/10/2026), vivo no search.js: ele avisa com o evento 'aurea-brand', e a

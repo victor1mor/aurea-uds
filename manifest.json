@@ -288,13 +288,13 @@
     "componentes": 137,
     "fichas": 137,
     "hooks": 9,
-    "paginas_total": 426,
+    "paginas_total": 429,
     "paginas": {
       "component": 146,
       "pattern": 219,
       "block": 15,
       "recipe": 23,
-      "doc": 15,
+      "doc": 18,
       "area": 8
     },
     "conteudo_rico": 44,
@@ -314,7 +314,7 @@
       "Ready": 48,
       "Stable": 97
     },
-    "testes_unit": 2105,
+    "testes_unit": 2110,
     "componentes_citados_no_teste": 144,
     "specs_visuais": 46,
     "baselines": 48,

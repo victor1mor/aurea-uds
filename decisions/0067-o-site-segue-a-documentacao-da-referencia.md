@@ -119,3 +119,12 @@ equivalente no Phosphor). O grupo "UI for Agents" entra com o SITE-06, que faz o
 - **O nome:** a aba das áreas diz "Getting Started", como a da referência; no Início, "Docs", como no Início dela.
 - **Medido, ainda diferente da referência:** a entrelinha do texto (27 na nossa, 24 na dela) e o espaço acima do título
   de seção (32 e 48). Os dois vêm do `Prose`; vão ao Victor antes de mudar a peça.
+
+### SITE-06 (18/10/2026): o site para assistentes de IA
+
+As ações da página da referência, lidas no código do site dela: o "Copy Prompt" e o "Copy Markdown" com a setinha
+("View as Markdown" e os assistentes). Decisões do Victor: **sem os itens do servidor MCP** (entram com ele); o "Copy
+Prompt" com **o texto e o ícone da Aurea** (logo de terceiro não entra — §5 do CLAUDE.md); e o `llms-full.txt` com
+**tudo**. O texto de cada `.md` é o do "Copy Markdown" (uma fonte); a skill mora em `skills/aurea-uds/SKILL.md`, no
+formato Agent Skills, e o `aurea-agents.md` do site é o corpo dela. O nome não é `AGENTS.md` de propósito: um arquivo com
+esse nome dentro do repositório seria lido como regra pelos assistentes que trabalham na própria Aurea.

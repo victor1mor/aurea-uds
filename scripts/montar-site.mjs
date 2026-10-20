@@ -29,7 +29,11 @@ export function recursosExternos(texto) {
 }
 
 /** O `_headers` do site (Workers, arquivos estáticos): o padrão da Cloudflare mais `no-transform`. */
-export const CABECALHOS = "/*\n  Cache-Control: public, max-age=0, must-revalidate, no-transform\n";
+// E os textos para assistentes de IA (lote U, SITE-06) com o tipo e o `charset` escritos: a documentação da Cloudflare
+// diz só que o tipo sai da extensão, sem falar de `charset` — e sem ele um "—" pode chegar quebrado.
+export const CABECALHOS = "/*\n  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
+  + "/*.md\n  Content-Type: text/markdown; charset=utf-8\n"
+  + "/*.txt\n  Content-Type: text/plain; charset=utf-8\n";
 
 function arquivos(dir) {
   return readdirSync(dir).flatMap((n) => {
@@ -67,7 +71,9 @@ if (isMain && conferir > 0) {
 } else if (isMain) {
   rmSync(destino, {recursive: true, force: true});
   mkdirSync(destino, {recursive: true});
-  for (const n of readdirSync(origem).filter((n) => n.endsWith(".html"))) cpSync(join(origem, n), join(destino, n));
+  // As páginas e, ao lado delas, os textos para assistentes de IA (SITE-06): o `.md` de cada página, o `llms.txt`, o
+  // `llms-full.txt` e o `aurea-agents.md`.
+  for (const n of readdirSync(origem).filter((n) => /\.(html|md|txt)$/.test(n))) cpSync(join(origem, n), join(destino, n));
   for (const d of ["assets", "embeds"]) cpSync(join(origem, d), join(destino, d), {recursive: true});
   // A Cloudflare INJETA um script dela (Web Analytics, `static.cloudflareinsights.com`) nas páginas
   // que um navegador pede — medido em aureauds.dev em 01/10/2026: o `curl` comum não via, o de

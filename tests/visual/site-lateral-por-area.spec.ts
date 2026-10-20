@@ -10,9 +10,9 @@ const grupos = (page: import("@playwright/test").Page) =>
   page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label").allTextContents();
 
 const CASOS = [
-  // A área Getting Started com a árvore da referência (lote U, SITE-03, 18/10/2026): Overview e Handbook.
-  {pagina: "getting-started.html", area: "Getting Started", grupos: ["Overview", "Handbook"], itens: ["Introduction", "Quick Start", "Colors", "Accessibility"]},
-  {pagina: "docs-theming.html", area: "Getting Started", grupos: ["Overview", "Handbook"], itens: ["Introduction", "Theming"]},
+  // A área Getting Started com a árvore da referência (lote U, SITE-03 e SITE-06, 18/10/2026): Overview, Handbook e UI for Agents.
+  {pagina: "getting-started.html", area: "Getting Started", grupos: ["Overview", "Handbook", "UI for Agents"], itens: ["Introduction", "Quick Start", "Colors", "Accessibility"]},
+  {pagina: "docs-theming.html", area: "Getting Started", grupos: ["Overview", "Handbook", "UI for Agents"], itens: ["Introduction", "Theming"]},
   {pagina: "tokens.html", area: "Tokens", grupos: ["Overview"], itens: ["All Tokens"]},
   {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks"]},
   {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks", "useToast"]},

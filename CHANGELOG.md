@@ -150,6 +150,16 @@ bancada; a versão sobe quando o lote fechar.
   Início da referência (com o nome longo, o topo do Início quebrava de 776 a 800). Quem cobra:
   `tests/unit/docs-markdown.test.tsx` e `tests/visual/site-getting-started.spec.ts`.
 
+- **Para assistentes de IA (SITE-06).** O topo de cada página ganha o "Copy Prompt" e a setinha do "Copy Markdown",
+  como na documentação da referência. A setinha abre "View as Markdown", "Open in ChatGPT" e "Open in Claude"; os dois
+  itens que instalam o servidor MCP ficam para quando ele existir (decisão do Victor, 18/10/2026). O "Copy Prompt" copia
+  o texto da Aurea — instalar a skill e ler o `llms.txt` —, com um ícone do Phosphor no lugar dos logos de terceiros.
+  Ao lado de cada página sai o `.md` dela; e o site publica o `llms.txt` (o índice), o `llms-full.txt` (tudo: a área
+  Getting Started, os componentes, os hooks, os padrões, os blocos e as receitas) e o `aurea-agents.md`. A skill mora no
+  repositório, em `skills/aurea-uds/SKILL.md` (`npx skills add victor1mor/aurea-uds`), e o `aurea-agents.md` é o corpo
+  dela. Três páginas novas, no grupo "UI for Agents": LLMs.txt, Agent Skills e AGENTS.md. O site manda `.md` e `.txt`
+  com `charset=utf-8`. Quem cobra: `tests/unit/site-llms.test.tsx` e `tests/visual/site-getting-started.spec.ts`.
+
 ### Consertado no site e no core
 
 - **`Prose`: código no meio do texto quebra a linha.** Um `window.Aurea.setDensity("compact")` num parágrafo empurrava

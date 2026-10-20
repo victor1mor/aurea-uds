@@ -377,9 +377,19 @@ function chipLink(label, href) { return h("a", {key: label, className: "chip chi
 // Devolve o conteúdo e o índice da página — o índice vai para a coluna da direita do shell.
 // A CABEÇA, o ANTERIOR/PRÓXIMO e o TEXTO DO "COPY MARKDOWN" são os mesmos na página de item e na de documentação
 // (lote U, SITE-03) — na referência as duas têm a mesma moldura. Uma função cada, para as duas não divergirem.
+// AS AÇÕES DA PÁGINA (lote U, SITE-06), as da documentação da referência: o "Copy Prompt" e o "Copy Markdown" com a
+// setinha. Decisões do Victor (18/10/2026): o menu tem "View as Markdown", "Open in ChatGPT" e "Open in Claude" — os dois
+// itens que instalam o servidor MCP entram quando ele existir —, e o "Copy Prompt" copia o texto da Aurea (instalar a
+// skill e ler o `llms.txt`) com um ícone do Phosphor, porque logo de terceiro não entra (CLAUDE.md §5).
+// Os dois botões copiam pela cola do site (`catalog.js`), sem React. A setinha sai parada aqui, filha direta do
+// `ButtonGroup` (a pele do grupo só une `.btn` filho direto); a parte viva (`live/acoes.tsx`) a troca pelo `DropdownMenu`.
+const acoesDaPagina = () => h(A.Cluster, {gap: "tight"},
+  h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "sparkle", "data-copy-prompt": "", type: "button"}, "Copy Prompt"),
+  h(A.ButtonGroup, {variant: "tertiary", size: "sm", label: "Page as Markdown"},
+    h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown"),
+    h(A.IconButton, {variant: "tertiary", size: "sm", icon: "caret-down", label: "More page actions", "data-page-menu": ""})));
 const cabecaDaPagina = (title, lede, pills = []) => h("header", {className: "page-head"},
-  h("div", {className: "page-head-row"}, h("h1", null, title),
-    h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown")),
+  h("div", {className: "page-head-row"}, h("h1", null, title), acoesDaPagina()),
   h("p", {className: "page-lede"}, lede),
   pills.length ? h("div", {className: "page-pills"}, ...pills.map(([rotulo, icone, href]) =>
     h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, target: "_blank", rel: "noreferrer"}, rotulo))) : null);
@@ -694,7 +704,32 @@ const DOCS = [
   {id: "overview", label: "Overview", paginas: ["introduction", "quick-start", "design-principles", "frameworks", "showcase", "roadmap"]},
   {id: "handbook", label: "Handbook", paginas: ["colors", "theming", "dark-mode", "styling", "animation", "composition",
     "density", "icons", "rtl", "accessibility"]},
+  // UI for Agents (SITE-06): sem o "MCP Server", que ainda não existe (decisão do Victor, 17/10/2026).
+  {id: "agents", label: "UI for Agents", paginas: ["llms-txt", "agent-skills", "agents-md"]},
 ];
+// O TEXTO DO "COPY PROMPT" (SITE-06): o da referência, na forma (instruções que o próprio assistente executa), com o que
+// a Aurea tem — a skill e o `llms.txt`; sem o servidor MCP, que ainda não existe. `{base}` é o endereço do site, que a
+// cola do navegador põe na hora.
+const PROMPT_DE_CONFIGURACAO = `These are the official instructions from Aurea UDS to set up an AI development environment for building interfaces with Aurea: \`@aurea-uds/react\` on the web and \`@aurea-uds/native\` on React Native.
+
+Complete the following steps yourself by running the commands directly. Do not ask the user to run them.
+
+## 1. Install the Aurea skill
+
+\`\`\`bash
+npx skills add victor1mor/aurea-uds
+\`\`\`
+
+The installer finds your agent and puts the skill where it reads skills from.
+
+## 2. Read the documentation index
+
+Fetch {base}llms.txt. It lists every page of the documentation, each one as Markdown. Read the pages you need before writing code. The whole documentation in one file is {base}llms-full.txt.
+
+## 3. Ask before installing packages
+
+Ask whether the app is for the web or for React Native. The two have different packages and different component lists.
+`;
 const docsDir = join(contentDir, "docs");
 const arquivoDoDoc = nome => nome === "introduction" ? "getting-started.html" : `docs-${nome}.html`;
 const docs = DOCS.flatMap(g => g.paginas).map(nome => {
@@ -1585,6 +1620,12 @@ new MutationObserver(() => espelhaTema()).observe(document.documentElement, {att
 // -- "Copy Markdown" (ADR-0067) -------------------------------------------------------------
 // Copia o texto da pagina, que mora nela mesma num script type="application/json" (sem rede). A
 // confirmacao fica no proprio botao por dois segundos, como o "copiar" do bloco de codigo.
+const copiarNoBotao = (botao, texto) => navigator.clipboard.writeText(texto).then(() => {
+  const alvo = [...botao.querySelectorAll("span")].filter(s => !s.querySelector("svg") && s.textContent.trim()).pop() || botao;
+  const antes = alvo.textContent;
+  alvo.textContent = "Copied";
+  setTimeout(() => { alvo.textContent = antes; }, 2000);
+}, () => {});
 document.addEventListener("click", e => {
   const botao = e.target.closest("[data-copy-page]");
   if (!botao) return;
@@ -1592,12 +1633,15 @@ document.addEventListener("click", e => {
   if (!fonte || !navigator.clipboard) return;
   let texto;
   try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
-  navigator.clipboard.writeText(texto).then(() => {
-    const alvo = [...botao.querySelectorAll("span")].filter(s => !s.querySelector("svg") && s.textContent.trim()).pop() || botao;
-    const antes = alvo.textContent;
-    alvo.textContent = "Copied";
-    setTimeout(() => { alvo.textContent = antes; }, 2000);
-  }, () => {});
+  copiarNoBotao(botao, texto);
+});
+// -- "Copy Prompt" (lote U, SITE-06) ---------------------------------------------------------
+// O texto que prepara um assistente de IA para a Aurea: instalar a skill e ler o llms.txt. O endereco
+// sai da propria pagina (o site, a bancada ou o disco), e nao escrito aqui.
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copy-prompt]");
+  if (!botao || !navigator.clipboard) return;
+  copiarNoBotao(botao, ${JSON.stringify(PROMPT_DE_CONFIGURACAO)}.replaceAll("{base}", new URL("./", location.href).href));
 });
 // A MARCA troca pelo mesmo caminho do tema: atributo no <html>, gravado, espelhado nos iframes.
 // Quem escolhe é o botão "Theme" (14/10/2026), vivo no search.js: ele avisa com o evento 'aurea-brand', e a
@@ -1798,6 +1842,45 @@ const paginas = [
   if (quebrados.length) throw new Error(`links quebrados nas páginas de documentação:\n  ${quebrados.join("\n  ")}`);
 }
 
+// OS ARQUIVOS PARA ASSISTENTES DE IA (lote U, SITE-06), os da documentação da referência: o `.md` de cada página, ao
+// lado dela (o "View as Markdown"); o `llms.txt`, o índice (o formato de llmstxt.org); e o `llms-full.txt`, tudo num
+// arquivo só — com TUDO, por decisão do Victor (18/10/2026): a área Getting Started, os componentes, os hooks, os
+// padrões, os blocos e as receitas. O texto de cada página é o mesmo do "Copy Markdown" (o JSON `page-markdown`), lido
+// do HTML pronto: uma fonte só. O endereço é o do site publicado, porque o arquivo é lido FORA dele.
+const SITE = "https://aureauds.dev";
+const textoDaPagina = html => {
+  const m = html.match(/<script type="application\/json" id="page-markdown">([\s\S]*?)<\/script>/);
+  return m ? JSON.parse(m[1]) : null;
+};
+const htmlDe = new Map(paginas);
+const entrada = (arquivo, nome, resumo) => ({arquivo, nome, resumo, md: textoDaPagina(htmlDe.get(arquivo) || "")});
+const GRUPOS_LLMS = [
+  ["Getting Started", docs.map(d => entrada(d.arquivo, d.title, d.description))],
+  ["Components", alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => entrada(`${slug(f.name)}.html`, f.name, f.summary))],
+  ["Hooks", alfabetico(fichas.filter(f => f.kind === "hook")).map(f => entrada(`${slug(f.name)}.html`, f.name, f.summary))],
+  ["Patterns", patterns.map(p => entrada(`${p.slug}.html`, `${p.component} · ${p.name}`, p.description))],
+  ["Blocks", blocks.map(b => entrada(`${b.slug}.html`, b.name, b.description))],
+  ["Recipes", archetypeIds.map(id => entrada(`recipe-${slug(id)}.html`, recipeTitle(id), null))],
+];
+for (const [grupo, lista] of GRUPOS_LLMS) for (const e of lista) {
+  if (!e.md) throw new Error(`${e.arquivo} (${grupo}): a página não tem o texto do "Copy Markdown" — o .md e o llms.txt sairiam sem ela`);
+}
+const arquivosDeTexto = [
+  ...GRUPOS_LLMS.flatMap(([, lista]) => lista.map(e => [e.arquivo.replace(/\.html$/, ".md"), e.md])),
+  ["llms.txt", [
+    "# Aurea UDS",
+    "> A design system with one look for the web (React and plain CSS) and for React Native, made to be read by people with low vision.",
+    `Every page below is Markdown. The whole documentation in one file: ${SITE}/llms-full.txt. Notes for AI coding agents: ${SITE}/aurea-agents.md.`,
+    ...GRUPOS_LLMS.map(([grupo, lista]) => [`## ${grupo}`, ...lista.map(e =>
+      `- [${e.nome}](${SITE}/${e.arquivo.replace(/\.html$/, ".md")})${e.resumo ? `: ${e.resumo.replace(/\s+/g, " ")}` : ""}`)].join("\n")),
+  ].join("\n\n") + "\n"],
+  ["llms-full.txt", GRUPOS_LLMS.flatMap(([, lista]) => lista.map(e =>
+    `<page url="${SITE}/${e.arquivo}">\n${e.md.trim()}\n</page>\n`)).join("\n")],
+  // As notas para o AGENTS.md do app: o corpo da skill da Aurea (`skills/aurea-uds/SKILL.md`), sem o cabeçalho — a
+  // mesma fonte, para os dois não divergirem.
+  ["aurea-agents.md", readFileSync(join(root, "skills/aurea-uds/SKILL.md"), "utf8").replace(/\r\n/g, "\n").replace(/^---\n[\s\S]*?\n---\n+/, "")],
+];
+
 // O MODELO cobra o gerador aqui, na hora, antes de escrever: se uma seção obrigatória do tipo
 // não saiu no HTML, o build morre. O gate de navegador (catalog-sweep) faz a outra metade — a
 // que uma string não sabe fazer: cobrar que não exista seção FORA do modelo.
@@ -1822,6 +1905,8 @@ const estadosVivos = ["light", "dark", "system"].map(tema =>
   renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: "", theme: tema}, h(A.ThemeToggle, {mode: "light-dark-system"}))));
 const spriteInline = spriteFor([...paginas, ...embeds].map(([, html]) => html).concat(estadosVivos));
 for (const [file, html] of [...paginas, ...embeds]) write(join(outDir, file), html.replace(SPRITE_SLOT, spriteInline));
+// Os arquivos para assistentes de IA (SITE-06), ao lado das páginas.
+for (const [file, texto] of arquivosDeTexto) write(join(outDir, file), texto);
 
 const rich = Object.keys(content).length;
 console.log(`build-catalog: ${paginas.length} pages — ${ordered.length} components `
