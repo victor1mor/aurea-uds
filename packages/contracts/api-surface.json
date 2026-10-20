@@ -3,11 +3,11 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 39,
+    "modulos": 40,
     "componentes": 145,
     "hooks": 9,
     "aliasesLiterais": 112,
-    "propsDistintas": 374
+    "propsDistintas": 375
   },
   "aliases": {
     "ButtonVariant": {
@@ -207,6 +207,16 @@
     "DatePickerProps": {
       "module": "calendar",
       "raw": "DatePickerBase & ({ range?: false; value?: Date; defaultValue?: Date; onChange?: (d: Date) => void; } | { range: true; value?: DateRange; defaultValue?: DateRange; onChange?: (r: DateRange) => void; })",
+      "union": null
+    },
+    "CodeLine": {
+      "module": "code-client",
+      "raw": "CodeToken[]",
+      "union": null
+    },
+    "CodeHighlighter": {
+      "module": "code-client",
+      "raw": "(code: string, language: string) => CodeLine[] | null",
       "union": null
     },
     "ColorSpace": {
@@ -4262,6 +4272,18 @@
               "values": null
             },
             {
+              "name": "lineNumbers",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "highlight",
+              "optional": true,
+              "type": "CodeHighlighter",
+              "values": null
+            },
+            {
               "name": "className",
               "optional": true,
               "type": "string",
@@ -4319,6 +4341,11 @@
           ]
         }
       ],
+      "hooks": [],
+      "clientDirective": false
+    },
+    "code-highlight": {
+      "components": [],
       "hooks": [],
       "clientDirective": false
     },

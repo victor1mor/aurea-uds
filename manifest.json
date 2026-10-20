@@ -86,9 +86,14 @@
       ],
       "optionalPeers": [
         "@codemirror/language",
+        "@codemirror/legacy-modes",
         "@codemirror/state",
         "@codemirror/view",
+        "@lezer/css",
         "@lezer/highlight",
+        "@lezer/html",
+        "@lezer/javascript",
+        "@lezer/json",
         "@tanstack/react-table",
         "@tisoap/react-flow-smart-edge",
         "@xyflow/react",
@@ -107,6 +112,7 @@
         "./chart",
         "./code",
         "./code-editor",
+        "./code-highlight",
         "./communication",
         "./data-display",
         "./data-grid",
@@ -315,12 +321,12 @@
       "Ready": 48,
       "Stable": 98
     },
-    "testes_unit": 2110,
+    "testes_unit": 2118,
     "componentes_citados_no_teste": 145,
-    "specs_visuais": 50,
+    "specs_visuais": 51,
     "baselines": 48,
     "baselines_linux": 24,
-    "classes_core": 957,
+    "classes_core": 967,
     "token_declaracoes": 487,
     "token_nomes": 234,
     "token_usados": 185,
@@ -328,6 +334,6 @@
   },
   "gates": {
     "validate": 43,
-    "playwrightSpecs": 50
+    "playwrightSpecs": 51
   }
 }

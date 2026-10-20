@@ -3068,6 +3068,26 @@ button.tag-main { cursor:pointer; }
    é inalcançável por teclado (axe scrollable-region-focusable). Quem escreve esta marcação à
    mão precisa de `tabindex="0"` no <pre> — o componente React já o emite. */
 .code-block { overflow:auto; padding:16px; border:1px solid transparent; border-radius:var(--radius-lg); background:var(--surface-inset); color:var(--muted-foreground); font:12px/1.7 var(--font-code); }
+/* Lote V (20/10/2026): o número da linha e as cores do código (`CodeBlock lineNumbers` e `highlight`). O número é o da
+   referência, medido na página dela: uma coluna de 16 (--space-4), alinhada à direita, a 24 do código (--space-6); ela
+   cresce com os algarismos da última linha (`--code-line-digits`, que o componente escreve), para a coluna não pular
+   na linha 100. A cor é a apagada da Aurea, que se lê (a da referência apaga até ~2:1). O número é DESENHO: não entra
+   no texto copiado (`user-select:none`) nem no leitor de tela (o texto alternativo vazio depois da barra; quem não
+   entende a barra fica com a linha de cima).
+   As cores são as do `CodeEditor` (o `aureaHighlightStyle`), pelos mesmos tokens. Com cor, o texto sem cor é o do
+   tema (`--foreground`), e não o apagado: o apagado fica para o comentário. */
+.code-block-numbered { counter-reset:aurea-linha; }
+.code-block-numbered .code-line::before { counter-increment:aurea-linha; content:counter(aurea-linha); content:counter(aurea-linha) / ""; display:inline-block; min-inline-size:max(var(--space-4), calc(var(--code-line-digits, 2) * 1ch)); margin-inline-end:var(--space-6); color:var(--muted-foreground); text-align:end; -webkit-user-select:none; user-select:none; }
+.code-block-highlighted { color:var(--foreground); }
+.code-block .tok-comment { color:var(--muted-foreground); font-style:italic; }
+/* As cores levam 20% do texto, como o nível do registro, que mora no mesmo fundo (`.log-stream`, ADR-0072): puras, o azul
+   caía a 4,08:1 no claro e o verde a 4,44:1 no escuro (medido no site, 20/10/2026). */
+.code-block .tok-keyword { color:color-mix(in oklab,var(--info-400) 80%,var(--foreground)); }
+.code-block .tok-string { color:color-mix(in oklab,var(--success-400) 80%,var(--foreground)); }
+.code-block .tok-number { color:color-mix(in oklab,var(--warning-400) 80%,var(--foreground)); }
+.code-block .tok-property { color:var(--foreground); }
+.code-block .tok-function { color:var(--foreground); font-weight:var(--weight-semibold); }
+.code-block .tok-invalid { color:color-mix(in oklab,var(--danger-400) 80%,var(--foreground)); }
 /* Bloco de código COM copiar: a moldura não rola, o <pre> rola por dentro e o gatilho fica
    parado no canto. O comportamento é do core (aurea.js, [data-aurea-copy]); aqui só a pele.
    O check em amarelo é confirmação instantânea — dura 1,5s e volta ao ícone de copiar. */

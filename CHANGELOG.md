@@ -80,6 +80,52 @@ em inglês e ficam como estão: são registro.
 
 ---
 
+## [0.37.0] — em construção
+
+⏳ **Ainda não publicada.** O lote V, na branch `claude/codigo-com-cores`. Cada passo entra no `main` depois de aprovado
+na bancada; a versão sobe quando o lote fechar.
+
+### Novo
+
+- **`CodeBlock` com número de linha e cores** ([ADR-0075](decisions/0075-o-codigo-com-cores-e-numero-de-linha.md)). O
+  Victor, comparando as caixas de código do site com as da referência: *"não são como dos outros, com numero de linhas
+  laterais e cores"*. Duas props novas:
+  - `lineNumbers`: o número de cada linha à esquerda, numa coluna de 16 a 24 do código (as medidas da referência), que
+    cresce com os algarismos da última linha. O número é desenho do CSS: não entra no texto copiado nem é lido pelo
+    leitor de tela;
+  - `highlight`: as cores. Passe o `highlightCode` do módulo novo **`@aurea-uds/react/code-highlight`**, que colore com
+    o motor do CodeEditor (o `@lezer/highlight`) e as gramáticas do Lezer — tsx, ts, jsx, js, css, html, json e bash.
+    As gramáticas são peer OPCIONAL (`@lezer/javascript`, `@lezer/css`, `@lezer/html`, `@lezer/json`,
+    `@codemirror/legacy-modes`); quem não usa as cores não as instala. As cores são as do CodeEditor, misturadas 20%
+    com o texto, como o nível do registro, que mora no mesmo fundo: puras, o azul caía a 4,08:1 no claro e o verde a
+    4,44:1 no escuro. O trecho de JSX solto (várias linhas, uma embaixo da outra) é lido dentro de um fragmento quando a
+    leitura direta erra.
+
+  Sem as duas props, a marcação é a de antes, byte a byte. Quem cobra: `tests/unit/codigo-com-cores.test.tsx` e
+  `tests/visual/codigo-com-cores.spec.ts`.
+
+### Consertado
+
+- **A ficha do `CodeBlock` prometia código colorido e o código desenhava texto puro**; a própria ficha se contradizia
+  (o resumo dizia "syntax-highlighted", e a descrição de `language` dizia que ele não colore). Agora as duas dizem o que
+  o componente faz.
+
+### O site
+
+- **As caixas de código têm cores e número de linha**, como a documentação da referência (medida na página dela,
+  20/10/2026): o código dos exemplos, sempre com número; o do meio do texto, com número só a partir de 20 linhas (lá,
+  as de 22 e 24 linhas tinham, e a de 19 não); a linha de `import` e a assinatura dos hooks, só com cor.
+
+### Para quem cuida do repositório
+
+- **O `@codemirror/language` de desenvolvimento sobe para a 6.13.1** (a faixa aceita, `^6.12.4`, não muda): o modo
+  de bash 6.5.5 usa o pacote novo `@codemirror/streamparser`, que só a 6.13 entende.
+- **O check 19 do `validate.py` aceita dois donos** para o `@lezer/` e o `@codemirror/`: o `code-editor` e o
+  `code-highlight`, cada um no seu módulo, nenhum no barril principal.
+- **O check 31 lê a seção em construção E a da versão datada que ainda não foi registrada**, juntas: o lote seguinte pode
+  começar antes de o registro da anterior chegar ao `main` (foi o caso deste: a 0.36.0 publicada, o registro no pedido
+  #83, e esta branch saída antes dele).
+
 ## [0.36.0] — 2026-10-20
 
 ✅ **Publicada em 20/10/2026, por volta das 12:12 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do

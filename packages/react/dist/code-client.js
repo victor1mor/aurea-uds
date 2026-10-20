@@ -1,5 +1,5 @@
 "use client";
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
@@ -29,9 +29,17 @@ function CaixaDeExemplo({ preview, codigo, className }) {
     const botao = (a, rotulo) => _jsx("button", { type: "button", role: "tab", id: `${id}-${a}`, ref: a === "preview" ? refPrevia : refCodigo, className: aba === a ? "active" : undefined, "aria-selected": aba === a, "aria-controls": `${id}-${a}-panel`, tabIndex: aba === a ? 0 : -1, onClick: () => setAba(a), onKeyDown: tecla, children: rotulo });
     return _jsxs("div", { className: cx("demo code-preview", className), children: [_jsx("div", { className: "demo-tabs", children: _jsxs("div", { className: "segmented", role: "tablist", children: [botao("preview", s.codeBlockPreview), botao("code", s.codeBlockCode)] }) }), _jsx("div", { className: "demo-panel", "data-panel": "preview", role: "tabpanel", id: `${id}-preview-panel`, "aria-labelledby": `${id}-preview`, tabIndex: 0, hidden: aba !== "preview", children: preview }), _jsx("div", { className: "demo-panel demo-code", "data-panel": "code", role: "tabpanel", id: `${id}-code-panel`, "aria-labelledby": `${id}-code`, tabIndex: 0, hidden: aba !== "code", children: codigo })] });
 }
-export function CodeBlock({ children, language = "text", copyable, preview, className }) {
+// lineNumbers e highlight (lote V, 20/10/2026): as linhas viram um <span class="code-line"> cada, com o "\n" entre
+// elas — o texto do bloco continua IGUAL ao código (copiar com o mouse traz o mesmo texto), e o número é desenhado pelo
+// CSS, sem entrar no texto nem no leitor de tela. Sem as duas, a marcação é a de antes, sem mudar nada.
+// O "\n" do fim (o código que termina em quebra de linha) não vira uma linha numerada e vazia: ele sai depois da última.
+function linhasDoCodigo(codigo, language, highlight) {
+    const linhas = highlight?.(codigo, language) ?? codigo.split("\n").map(l => l === "" ? [] : [{ text: l }]);
+    return codigo.endsWith("\n") && linhas.length > 1 && linhas[linhas.length - 1].length === 0 ? linhas.slice(0, -1) : linhas;
+}
+export function CodeBlock({ children, language = "text", copyable, preview, lineNumbers, highlight, className }) {
     if (preview !== undefined)
-        return _jsx(CaixaDeExemplo, { preview: preview, className: className, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, children: children }) });
+        return _jsx(CaixaDeExemplo, { preview: preview, className: className, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, lineNumbers: lineNumbers, highlight: highlight, children: children }) });
     const s = useAureaStrings();
     // tabIndex no <pre>: `.code-block` é `overflow:auto` por construção, então é REGIÃO ROLÁVEL
     // e não tem nada focável dentro — quem navega por teclado não alcança o código que passa da
@@ -39,7 +47,13 @@ export function CodeBlock({ children, language = "text", copyable, preview, clas
     // demo do catálogo já tinha corrigido em 30/07/2026 no lado dele; aqui, na biblioteca, ele
     // seguia aberto e só não aparecia porque nenhuma linha era comprida o bastante. Quem o achou
     // foi o `catalog-sweep` em 10/08/2026, quando o bloco do I1 fez a linha de import crescer.
-    const pre = _jsx("pre", { className: cx("code-block", !copyable && className), "data-language": language, tabIndex: 0, children: _jsx("code", { children: children }) });
+    const linhas = lineNumbers || highlight ? linhasDoCodigo(children, language, highlight) : null;
+    const colorido = linhas != null && highlight != null && linhas.some(l => l.some(p => p.className));
+    // Os algarismos da última linha: a coluna do número tem a largura deles (99 → 2, 100 → 3).
+    const digitos = lineNumbers && linhas ? { "--code-line-digits": String(linhas.length).length } : undefined;
+    const pre = _jsx("pre", { className: cx("code-block", lineNumbers && "code-block-numbered", colorido && "code-block-highlighted", !copyable && className), style: digitos, "data-language": language, tabIndex: 0, children: _jsx("code", { children: linhas
+                ? _jsxs(_Fragment, { children: [linhas.map((l, i) => _jsxs(React.Fragment, { children: [_jsx("span", { className: "code-line", children: l.map((p, j) => p.className ? _jsx("span", { className: p.className, children: p.text }, j) : p.text) }), i < linhas.length - 1 ? "\n" : null] }, i)), children.endsWith("\n") ? "\n" : null] })
+                : children }) });
     if (!copyable)
         return pre;
     // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo

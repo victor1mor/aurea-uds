@@ -137,6 +137,8 @@
       "dist/code-client.js",
       "dist/code-editor.d.ts",
       "dist/code-editor.js",
+      "dist/code-highlight.d.ts",
+      "dist/code-highlight.js",
       "dist/code.d.ts",
       "dist/code.js",
       "dist/color.d.ts",

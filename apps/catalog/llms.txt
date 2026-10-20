@@ -57,7 +57,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [CloseButton](https://aureauds.dev/closebutton.md): The round close button: a 24 circle on the neutral fill with a 16 X in the Bold stroke, named "Close" by itself.
 - [Cluster](https://aureauds.dev/cluster.md): Horizontal wrapping/layout primitive.
 - [Code](https://aureauds.dev/code.md): A short piece of code inside a sentence. For a block of code use CodeBlock.
-- [CodeBlock](https://aureauds.dev/codeblock.md): Read-only syntax-highlighted code display.
+- [CodeBlock](https://aureauds.dev/codeblock.md): Read-only code display, with line numbers and syntax colors when you pass the highlighter.
 - [CodeEditor](https://aureauds.dev/codeeditor.md): Editable code surface.
 - [Collapsible](https://aureauds.dev/collapsible.md): One section that opens and closes, with the open state owned by the app.
 - [ColorArea](https://aureauds.dev/colorarea.md): The square where you pick two channels of a colour for the third one fixed — saturation and brightness by default, or any pair of HSB, HSL or RGB — by pointer, touch or keyboard. The screen reader hears the channels and the colour's name.
