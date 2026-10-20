@@ -164,6 +164,7 @@
     "ChartTooltip",
     "Checkbox",
     "CheckboxGroup",
+    "Chip",
     "CloseButton",
     "Cluster",
     "Code",
@@ -285,48 +286,48 @@
     "useValorResponsivo"
   ],
   "state": {
-    "componentes": 137,
-    "fichas": 137,
+    "componentes": 138,
+    "fichas": 138,
     "hooks": 9,
-    "paginas_total": 481,
+    "paginas_total": 486,
     "paginas": {
-      "component": 146,
-      "pattern": 219,
+      "component": 147,
+      "pattern": 223,
       "block": 15,
       "recipe": 23,
       "doc": 69,
       "area": 9
     },
     "conteudo_rico": 44,
-    "starters": 102,
+    "starters": 103,
     "receitas_com_preview": 23,
     "patterns_content": 80,
     "blocks_content": 2,
     "receitas": 23,
-    "props": 137,
-    "variants": 29,
-    "sizes": 34,
-    "states": 121,
-    "tokens_ficha": 138,
-    "apg": 142,
+    "props": 138,
+    "variants": 30,
+    "sizes": 35,
+    "states": 122,
+    "tokens_ficha": 139,
+    "apg": 143,
     "maturidade": {
       "Deprecated": 1,
       "Ready": 48,
-      "Stable": 97
+      "Stable": 98
     },
     "testes_unit": 2110,
-    "componentes_citados_no_teste": 144,
-    "specs_visuais": 48,
+    "componentes_citados_no_teste": 145,
+    "specs_visuais": 50,
     "baselines": 48,
     "baselines_linux": 24,
-    "classes_core": 938,
-    "token_declaracoes": 485,
-    "token_nomes": 232,
-    "token_usados": 182,
-    "token_sem_uso": 50
+    "classes_core": 957,
+    "token_declaracoes": 487,
+    "token_nomes": 234,
+    "token_usados": 185,
+    "token_sem_uso": 49
   },
   "gates": {
     "validate": 43,
-    "playwrightSpecs": 48
+    "playwrightSpecs": 50
   }
 }

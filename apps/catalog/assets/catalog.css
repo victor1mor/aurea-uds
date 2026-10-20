@@ -539,6 +539,8 @@ svg.react-flow__connectionline {
   --text-3xl:1.875rem;
   --text-4xl:2.25rem;
   --text-5xl:3rem;
+  --text-6xl:3.75rem;
+  --text-7xl:4.5rem;
   --leading-tight:1.2;
   --leading-normal:1.5;
   --leading-relaxed:1.7;
@@ -1147,6 +1149,43 @@ img,svg { display:block; }
 .section-inset { background:var(--surface-inset); }
 .section-spacing-sm { padding-block:var(--space-8); }
 @media (min-width:768px) { .section { padding-block:var(--space-24); } .section-spacing-sm { padding-block:var(--space-12); } }
+/* GAR-21 e GAR-22 (lote U, 19/10/2026): a `Section` variant="hero" — a abertura de página. Os vãos são os do início da
+   referência (medidos em 15/10/2026): a sobrelinha a 8 do título (16 a partir de 1024), o texto colado no título, os
+   botões a 16, o que vier depois a 8 (16 a partir de 1024); o texto 16/24, e 18/28 a partir de 768, em 672 de largura (o
+   640 da escala mais o --space-8). O título 36, 60 a partir de 768 e 72 a partir de 1024 (os três tamanhos são decisão
+   do Victor; as larguras, desta peça). Com imagem e align="start", o texto e a imagem lado a lado a partir de 1024;
+   abaixo disso, a imagem desce.
+   As larguras são da FAIXA, e não da janela (`@container`, como o `.media-player`): de ponta a ponta, a faixa tem a
+   largura da janela e dá o mesmo; numa coluna mais estreita (a prévia do catálogo), o título não passa dela. O 72 entra
+   em 1024, e não em 1280: numa janela de 1280 a barra de rolagem deixa a faixa com menos de 1280, e o 72 não apareceria
+   na tela larga mais comum. */
+.section-hero { container:aurea-hero / inline-size; }
+.section-hero-content { display:grid; justify-items:start; min-inline-size:0; }
+.section-hero-center .section-hero-content { justify-items:center; text-align:center; }
+.section-hero-text { display:grid; justify-items:inherit; }
+/* A sobrelinha em flex: com um selo ou link dentro de um bloco comum, a linha de texto do bloco somava 2 à altura dele. */
+.section-hero-eyebrow { display:flex; align-items:center; }
+.section-hero-content > * + * { margin-block-start:var(--space-2); }
+.section-hero-content > * + .section-hero-actions { margin-block-start:var(--space-4); }
+.section-hero-title { margin:0; color:var(--foreground); font-family:var(--font-heading); font-size:var(--text-4xl); line-height:var(--text-4xl-leading); font-weight:var(--weight-bold); letter-spacing:var(--tracking-tight); text-wrap:balance; }
+.section-hero-description { max-inline-size:calc(var(--breakpoint-sm) + var(--space-8)); margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); text-wrap:pretty; }
+.section-hero-center .section-hero-description { text-wrap:balance; }
+.section-hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); }
+.section-hero-center .section-hero-actions { justify-content:center; }
+/* O campo de e-mail no lugar dos botões: o formulário cresce até 480 (o --breakpoint-xs), e não fica do tamanho do texto
+   de exemplo. */
+.section-hero-actions > form { flex:1 1 auto; max-inline-size:var(--breakpoint-xs); }
+.section-hero-media { min-inline-size:0; margin-block-start:var(--space-12); }
+@container aurea-hero (min-width:768px) {
+  .section-hero-title { font-size:var(--text-6xl); line-height:var(--leading-none); }
+  .section-hero-description { font-size:var(--text-lg); line-height:var(--text-lg-leading); }
+}
+@container aurea-hero (min-width:1024px) {
+  .section-hero-content > * + :not(.section-hero-actions) { margin-block-start:var(--space-4); }
+  .section-hero-split .section-hero-inner { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:var(--space-12); }
+  .section-hero-split .section-hero-media { margin-block-start:0; }
+  .section-hero-title { font-size:var(--text-7xl); }
+}
 /* GAR-06 (07/10/2026): a `Section` variant="footer" — o rodapé de site, uma faixa como as outras
    (fundo, respiro e tema vêm dela). No celular tudo empilha numa coluna; a partir de 768 a marca
    fica à esquerda e as colunas de links se repartem à direita, cada uma com pelo menos 8rem (a
@@ -2861,7 +2900,8 @@ img,svg { display:block; }
 /* `line-height:1` não é enfeite: sem ele o .badge herdava a entrelinha do pai e a MESMA
    classe media 26px dentro do .brand (lh 18px) e 22px dentro de um .btn-nav (lh 12px) — na
    mesma barra (achado A2, 26/07/2026). Geometria de componente não se decide pelo contexto.
-   O .chip do catálogo já tinha aprendido isso; o .badge não. */
+   A etiqueta de código do SITE (a classe `.chip` do `scripts/build-catalog.mjs`, que não é peça da Aurea) já tinha
+   aprendido isso; o .badge não. Desde 19/10/2026 (GAR-20), o componente `Chip` existe: é outro nome do `Badge`. */
 /* 0.32.0: as medidas do Chip da referência (o `Badge` da Aurea é o Chip dela), lidas no CSS publicado:
    24 de altura, 10 até o texto (8 da caixa + 2 do rótulo — aqui, com a borda de 1 que é nossa, 9), 4
    entre o glifo e o texto (era 6); `sm` 20 com 6 até o texto, `lg` 28 com 14 e letra de 14. A cápsula e a
@@ -3083,7 +3123,23 @@ img,svg { display:block; }
    Só o ícone DIRETO do alerta: um ícone dentro do corpo (num botão, num link) é do corpo. */
 .alert>.icon { --step-icon:var(--icon-sm); margin:var(--space-1); color:var(--alert-tone); }
 .banner strong { font-size:var(--text-sm); } .banner p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
-@media (max-width:640px) { .banner { grid-template-columns:auto minmax(0,1fr); } .banner>:last-child { grid-column:2; justify-self:start; } }
+/* GAR-19 (lote U, 19/10/2026): o aviso de cookies, Banner variant="consent". Uma coluna: o título (h2), o texto e os
+   três botões de MESMO peso numa linha que quebra — rejeitar tão fácil de ver quanto aceitar (o guia da ANPD) —; depois
+   da escolha, a confirmação no lugar deles. O aviso mora no alto da página e não fica preso: com position:fixed ele
+   cobriria o que recebe o foco (WCAG 2.4.11). A janela de preferências é o Dialog, e as categorias, o Switch. */
+/* O fundo e a sombra são os do cartão, como os do Alert: no fundo cinza do Banner comum, os botões cinza sumiam (medido na
+   bancada). */
+.banner-consent { grid-template-columns:minmax(0,1fr); align-items:start; gap:var(--space-3); background:var(--card); box-shadow:var(--shadow-sm); }
+.banner-consent-title { margin:0; color:var(--foreground); font-size:var(--text-base); font-weight:var(--weight-semibold); line-height:var(--leading-tight); }
+.banner-consent-text { min-inline-size:0; color:var(--muted-foreground); font-size:var(--text-sm); }
+.banner-consent-text > * + * { margin-block-start:var(--space-2); }
+.banner-consent-actions { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.banner-consent-message { color:var(--foreground); font-size:var(--text-sm); }
+.banner-consent-categories { display:grid; gap:var(--space-5); }
+.banner-consent-required { display:grid; gap:var(--space-1); }
+.banner-consent-required-head { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); }
+.banner-consent-required p { margin:0; color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); }
+@media (max-width:640px) { .banner:not(.banner-consent) { grid-template-columns:auto minmax(0,1fr); } .banner:not(.banner-consent)>:last-child { grid-column:2; justify-self:start; } }
 .progress { height:8px; overflow:hidden; border-radius:999px; background:var(--surface-3); }
 .progress>span { display:block; height:100%; border-radius:inherit; background:var(--primary); }
 /* AN-07 (03/10/2026): a caixa de fora, o texto de apoio e o tom. A anatomia é a da barra de progresso da
@@ -4761,6 +4817,15 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
 .graph-node { position:relative; inline-size:var(--graph-node-w,180px); }
 .graph-node-body { display:grid; gap:var(--space-05); inline-size:100%; padding:var(--space-2) var(--space-3); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:var(--foreground); font-family:inherit; font-size:var(--text-sm); text-align:start; }
 button.graph-node-body { cursor:pointer; }
+/* O PONTEIRO NOS BOTÕES DO NÓ (lote U, 19/10/2026 — o pedido 16 do app de topologia). Fora do modo de arrumar, o nó vai ao
+   motor como não escolhível (`selectable:false`, pela trava `alvo-clicavel`), e o motor tira o ponteiro do invólucro
+   (`.react-flow__node`) quando o nó não é escolhível nem arrastável e o app não passa `onNodeClick`/`onNodeMouse*` — os
+   botões de dentro herdavam o `none`, e o clique de mouse no corpo não chegava ao `onSelect` (pelo teclado chegava). Os
+   botões pegam o ponteiro de volta: o corpo só é botão quando há `onSelect` (sem ele, segue sem ponteiro, como a trava
+   pede); o de recolher e o de fechar o contêiner são sempre botões. A regra sai presa ao `.dependency-graph`, e não à
+   classe do motor (o check 15 barra classe de terceiro no core): o `pointer-events` herda, e o `auto` no botão vale
+   embaixo de qualquer invólucro. */
+.dependency-graph :is(button.graph-node-body,.graph-node-toggle,.graph-group-toggle) { pointer-events:auto; }
 .graph-node[data-selected] .graph-node-body { border-color:transparent; background:color-mix(in oklab,var(--primary) 14%,var(--card)); }
 .graph-node-label { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:var(--weight-medium); }
 /* `kind` é TEXTO, e não cor: a referência pinta dez tipos de nó em dez cores, e é a quarta vez
@@ -5287,31 +5352,22 @@ a.related-card:hover { border-color:transparent; }
 .site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
 /* A vitrine com os 1200 da referência (15/10/2026): o 1280 da escala menos o --space-20. */
 .home { display:grid; gap:var(--space-12); width:min(100%, calc(var(--breakpoint-xl) - var(--space-20))); }
-/* As medidas do início da referência (lidas na página dela, 14/10/2026, a 1440): 16 entre as peças, o título e o texto
-   colados, e o texto com 18 de letra em 28 de linha (o Victor: "as linhas estão distantes, deixe como a referência"). */
-/* Os vãos e as letras da referência, nas três larguras dela (lidos no código e medidos, 15/10/2026): o selo e o título
-   a 8 (16 a partir de 1024); o texto colado no título; os botões a 16; a nota a 8 (16 a partir de 1024). O título 30/36
-   no celular, 36/40 a partir de 640 e 48/48 a partir de 1024; o texto 16/24, e 18/28 a partir de 768, em 672 de largura
-   (o 640 da escala mais o --space-8). A segunda linha do título fica no cinza da Aurea (7,3:1): a da referência apaga
-   até ~4,4:1, e a Aurea é de baixa visão. As letras do título, juntas pelo --tracking-tight da Aurea. */
-.home-hero { display:grid; justify-items:center; text-align:center; }
-.home-texto { display:grid; justify-items:center; margin-block-start:var(--space-2); }
-.home-hero h1 { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); line-height:var(--text-3xl-leading); font-weight:var(--weight-bold); letter-spacing:var(--tracking-tight); text-wrap:balance; }
-.home-hero h1 span { color:var(--muted-foreground); }
-.home-texto > p { max-width:calc(var(--breakpoint-sm) + var(--space-8)); margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); text-wrap:balance; }
-.home-acoes { margin-block-start:var(--space-4); }
-.home-hero > .home-nota { display:inline-flex; align-items:center; gap:var(--space-2); margin-block-start:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); text-decoration:none; }
-.home-hero > .home-nota:hover { color:var(--foreground); }
-@media (min-width:640px) { .home-hero h1 { font-size:var(--text-4xl); line-height:var(--text-4xl-leading); } }
-@media (min-width:768px) { .home-texto > p { font-size:var(--text-lg); line-height:var(--text-lg-leading); } }
-@media (min-width:1024px) { .home-texto, .home-hero > .home-nota { margin-block-start:var(--space-4); } .home-hero h1 { font-size:var(--text-5xl); line-height:var(--leading-none); } }
+/* A abertura é a Section variant="hero" (GAR-21, 19/10/2026): os vãos, o texto e o título moram na peça. Aqui fica só
+   o que é do Início: sem o respiro de faixa (o .home já dá o vão até a vitrine), a segunda linha do título no cinza da
+   Aurea (7,3:1 — a da referência apaga até ~4,4:1, e a Aurea é de baixa visão) e a nota de 12 com o logo do GitHub. */
+.home-hero.section { padding-block:0; }
+/* O Início não é uma faixa de ponta a ponta: ele mora dentro do miolo do site, que já tem a margem do lado. Sem isto o
+   Container da faixa somava outros 16 de cada lado, e no celular o texto ficava com 311 em vez dos 343 da página. */
+.home-hero > .container { padding-inline:0; }
+.home-hero .section-hero-title span { color:var(--muted-foreground); }
+.home-nota { display:inline-flex; align-items:center; gap:var(--space-2); color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); text-decoration:none; }
+.home-nota:hover { color:var(--foreground); }
 .home-selo { display:inline-flex; border-radius:var(--radius-control); text-decoration:none; }
 /* O conteúdo da vitrine centrado na caixa, com os 32 de respiro da referência em cima e embaixo (16 do cartão + 16). */
 .home-painel-miolo { display:flex; justify-content:center; padding-block:var(--space-4); }
 /* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
 .site-github-ink { fill:var(--white); }
 [data-theme="light"] .site-github-ink { fill:var(--black); }
-.home-acoes { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-3); }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
 .home-abas { justify-self:start; margin-inline-start:var(--space-2); }

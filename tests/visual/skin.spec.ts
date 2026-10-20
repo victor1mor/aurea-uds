@@ -3448,3 +3448,72 @@ for (const theme of ["dark", "light"] as const) {
     expect(m.rodapeTag).toBe("FOOTER");
   });
 }
+
+// ── GAR-20, GAR-21 e GAR-22 (lote U, 19/10/2026): a abertura de página e o Chip ───────────────────────────
+// A `Section variant="hero"` só com o core, em três FAIXAS na mesma janela de 1440 — 375, 900 e 1300 de largura. O
+// título cresce com a largura da FAIXA, não da janela: 36, 60 e 72 (`--text-4xl`, `--text-6xl` a partir de 768,
+// `--text-7xl` a partir de 1024); a imagem desce abaixo de 1024 e fica ao lado a partir dele; a sobrelinha a 8 do título
+// (16 a partir de 1024), o título e o texto colados, os botões a 16 do texto. Centrada, o título e os botões no meio.
+// E o `Chip` é o `Badge`: a mesma marcação, com outro nome.
+// Provado contra o defeito (19/10/2026): sem as regras da abertura no core, o título sai com o tamanho do navegador nas
+// três faixas e a imagem nunca vai para o lado; com `@media` no lugar de `@container`, as faixas de 375 e de 900 saem
+// com o título de 72 da janela.
+const FAIXAS = [375, 900, 1300] as const;
+const abertura = (largura: number, extra: Record<string, unknown> = {}) => h("div", {key: largura, id: `faixa-${largura}`, style: {width: `${largura}px`}},
+  h(A.Section, {variant: "hero", spacing: "sm",
+    eyebrow: h(A.Badge, {tone: "primary", emphasis: "flat"}, "New"),
+    title: "Plan the week in one screen",
+    description: "Tasks, people and dates side by side, on the web and on the phone.",
+    actions: h("span", {className: "acoes-teste"}, h(A.Button, {variant: "primary"}, "Start"), h(A.Button, {variant: "outline"}, "Tour")),
+    media: h("div", {className: "midia-teste", style: {height: "200px"}}), ...extra}));
+const ABERTURAS = renderToStaticMarkup(h("div", null, ...FAIXAS.map((l) => abertura(l)),
+  h("div", {id: "faixa-centro", style: {width: "1300px"}}, h(A.Section, {variant: "hero", align: "center", spacing: "sm",
+    title: "One design system", actions: h(A.Button, {variant: "primary"}, "Start")}))));
+for (const theme of ["dark", "light"] as const) {
+  test(`pele: Section hero · a abertura cresce com a faixa · ${theme}`, async ({page: p, baseURL}) => {
+    const url = `${baseURL}/__abertura-${theme}`;
+    await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+      body: `<!doctype html><html data-theme="${theme}"><head><meta charset="utf-8">
+        <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+        <body style="margin:0">${ABERTURAS}</body></html>`}));
+    await p.setViewportSize({width: 1440, height: 900});
+    await p.goto(url, {waitUntil: "networkidle"});
+    const m = await p.evaluate((faixas) => {
+      const em = (v: string) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) * 16;
+      const uma = (l: number) => {
+        const q = (s: string) => document.querySelector(`#faixa-${l} ${s}`)!;
+        const r = (s: string) => q(s).getBoundingClientRect();
+        return {titulo: parseFloat(getComputedStyle(q(".section-hero-title")).fontSize),
+          tag: q(".section-hero-title").tagName,
+          seloAoTitulo: r(".section-hero-title").top - r(".section-hero-eyebrow").bottom,
+          tituloAoTexto: r(".section-hero-description").top - r(".section-hero-title").bottom,
+          textoAosBotoes: r(".section-hero-actions").top - r(".section-hero-description").bottom,
+          midiaAoLado: r(".midia-teste").left > r(".section-hero-content").right,
+          midiaEmbaixo: r(".midia-teste").top > r(".section-hero-actions").bottom};
+      };
+      const c = (s: string) => document.querySelector(`#faixa-centro ${s}`)!.getBoundingClientRect();
+      const faixa = c(".section-hero-inner");
+      return {faixas: Object.fromEntries(faixas.map((l) => [l, uma(l)])),
+        t4: em("--text-4xl"), t6: em("--text-6xl"), t7: em("--text-7xl"), s2: em("--space-2"), s4: em("--space-4"),
+        centro: {alinhado: getComputedStyle(document.querySelector("#faixa-centro .section-hero-title")!).textAlign,
+          meioDaFaixa: faixa.left + faixa.width / 2, meioDoBotao: c(".btn").left + c(".btn").width / 2}};
+    }, [...FAIXAS]);
+    const f = m.faixas;
+    expect([f[375].titulo, f[900].titulo, f[1300].titulo], "36, 60 e 72 pela largura da FAIXA").toEqual([m.t4, m.t6, m.t7]);
+    expect(f[375].tag).toBe("H1");
+    for (const l of FAIXAS) {
+      expect(f[l].tituloAoTexto, `${l}: o título e o texto colados`).toBeCloseTo(0, 0);
+      expect(f[l].textoAosBotoes, `${l}: os botões a 16`).toBeCloseTo(m.s4, 0);
+    }
+    expect([f[375].seloAoTitulo, f[900].seloAoTitulo, f[1300].seloAoTitulo]).toEqual([m.s2, m.s2, m.s4]);
+    expect([f[375].midiaEmbaixo, f[900].midiaEmbaixo, f[1300].midiaAoLado], "a imagem desce até 1024 e vai para o lado depois").toEqual([true, true, true]);
+    expect(f[1300].midiaEmbaixo).toBe(false);
+    expect(m.centro.alinhado).toBe("center");
+    expect(m.centro.meioDoBotao, "centrada, o botão no meio da faixa").toBeCloseTo(m.centro.meioDaFaixa, 0);
+  });
+}
+test("pele: Chip é o Badge com outro nome — a mesma marcação", () => {
+  for (const props of [{tone: "success"}, {tone: "primary", emphasis: "solid", size: "sm"}, {count: 120, max: 99}] as const) {
+    expect(renderToStaticMarkup(h(A.Chip, props, "x"))).toBe(renderToStaticMarkup(h(A.Badge, props, "x")));
+  }
+});

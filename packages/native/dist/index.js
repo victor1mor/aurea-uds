@@ -40,7 +40,7 @@ export { Stack, Cluster, Grid, Card, Separator } from "./layout.js";
 export { Button, IconButton, LinkButton, ThemeToggle, CloseButton } from "./actions.js";
 // ── Lote 2 — o painel, que é só leitura ────────────────────────────────────────────────────
 export { Spinner, Skeleton, Progress, Alert, EmptyState, DataState, ICONE_DA_VARIANTE } from "./feedback.js";
-export { Badge, Status, Avatar, KPI, formatarContagem } from "./display.js";
+export { Badge, Chip, Status, Avatar, KPI, formatarContagem } from "./display.js";
 // As frases visíveis, e o hook que as lê. A tabela é do tamanho do que o alvo nativo desenha —
 // ver o cabeçalho de `strings.ts`, que escreve por que ela NÃO é a da web.
 export { useAureaStrings } from "./theme.js";

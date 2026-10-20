@@ -4,10 +4,10 @@
   "schemaVersion": "1.0",
   "totals": {
     "modulos": 39,
-    "componentes": 144,
+    "componentes": 145,
     "hooks": 9,
-    "aliasesLiterais": 111,
-    "propsDistintas": 370
+    "aliasesLiterais": 112,
+    "propsDistintas": 374
   },
   "aliases": {
     "ButtonVariant": {
@@ -316,12 +316,27 @@
     },
     "BannerVariant": {
       "module": "feedback-client",
-      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
+      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"consent\"",
       "union": [
         "info",
         "success",
         "warning",
-        "danger"
+        "danger",
+        "consent"
+      ]
+    },
+    "ConsentChoice": {
+      "module": "feedback-client",
+      "raw": "Record<string, boolean>",
+      "union": null
+    },
+    "ConsentAction": {
+      "module": "feedback-client",
+      "raw": "\"accept-all\" | \"reject\" | \"custom\"",
+      "union": [
+        "accept-all",
+        "reject",
+        "custom"
       ]
     },
     "SpinnerSize": {
@@ -2153,10 +2168,11 @@
     },
     "SectionVariant": {
       "module": "markup",
-      "raw": "\"base\" | \"footer\"",
+      "raw": "\"base\" | \"footer\" | \"hero\"",
       "union": [
         "base",
-        "footer"
+        "footer",
+        "hero"
       ]
     },
     "SectionSpacing": {
@@ -2304,6 +2320,11 @@
         "auto",
         "content"
       ]
+    },
+    "ChipProps": {
+      "module": "markup",
+      "raw": "BadgeProps",
+      "union": null
     },
     "ProgressTone": {
       "module": "markup",
@@ -4981,7 +5002,7 @@
         {
           "name": "Banner",
           "kind": "function",
-          "propsType": null,
+          "propsType": "BannerProps",
           "props": [
             {
               "name": "variant",
@@ -4991,7 +5012,8 @@
                 "info",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "consent"
               ]
             },
             {
@@ -5024,6 +5046,24 @@
               "name": "onDismiss",
               "optional": true,
               "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "categories",
+              "optional": true,
+              "type": "ConsentCategory[]",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "ConsentChoice",
+              "values": null
+            },
+            {
+              "name": "onConsent",
+              "optional": true,
+              "type": "(choice: ConsentChoice, action: ConsentAction) => void",
               "values": null
             }
           ]
@@ -7703,6 +7743,174 @@
           ]
         },
         {
+          "name": "Chip",
+          "kind": "function",
+          "propsType": "BadgeProps",
+          "props": [
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "BadgeVariant",
+              "values": [
+                "neutral",
+                "primary",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "running",
+                "paused",
+                "offline",
+                "review",
+                "red",
+                "orange",
+                "green",
+                "teal",
+                "cyan",
+                "blue",
+                "violet",
+                "pink"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "BadgeVariant",
+              "values": [
+                "neutral",
+                "primary",
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "running",
+                "paused",
+                "offline",
+                "review",
+                "red",
+                "orange",
+                "green",
+                "teal",
+                "cyan",
+                "blue",
+                "violet",
+                "pink"
+              ]
+            },
+            {
+              "name": "emphasis",
+              "optional": true,
+              "type": "BadgeEmphasis",
+              "values": [
+                "soft",
+                "solid",
+                "outline",
+                "flat"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "BadgeSize",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "dot",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "leading",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "trailing",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "image",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "imageAlt",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "count",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "max",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "showZero",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "fit",
+              "optional": true,
+              "type": "BadgeFit",
+              "values": [
+                "auto",
+                "content"
+              ]
+            },
+            {
+              "name": "anchor",
+              "optional": true,
+              "type": "BadgePlacement",
+              "values": [
+                "top-end",
+                "top-start",
+                "bottom-end",
+                "bottom-start"
+              ]
+            },
+            {
+              "name": "anchorShape",
+              "optional": true,
+              "type": "\"square\" | \"circle\"",
+              "values": [
+                "square",
+                "circle"
+              ]
+            },
+            {
+              "name": "invisible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "badgeContent",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            }
+          ]
+        },
+        {
           "name": "Cluster",
           "kind": "function",
           "propsType": "ClusterProps",
@@ -8625,7 +8833,8 @@
               "type": "SectionVariant",
               "values": [
                 "base",
-                "footer"
+                "footer",
+                "hero"
               ]
             },
             {
@@ -8674,6 +8883,54 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "title",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "titleAs",
+              "optional": true,
+              "type": "\"h1\" | \"h2\"",
+              "values": [
+                "h1",
+                "h2"
+              ]
+            },
+            {
+              "name": "eyebrow",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "description",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "actions",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "media",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "align",
+              "optional": true,
+              "type": "\"start\" | \"center\"",
+              "values": [
+                "start",
+                "center"
+              ]
             }
           ]
         },

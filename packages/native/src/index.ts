@@ -78,9 +78,9 @@ export type {
   AureaSpinnerSize, AureaAlertVariant, AureaDataStateValue, AureaProgressTone,
 } from "./feedback.js";
 
-export {Badge, Status, Avatar, KPI, formatarContagem} from "./display.js";
+export {Badge, Chip, Status, Avatar, KPI, formatarContagem} from "./display.js";
 export type {
-  BadgeProps, StatusProps, AvatarProps, KPIProps, AureaKPIDirection, AureaKPITone, AureaKPIVariant,
+  BadgeProps, ChipProps, StatusProps, AvatarProps, KPIProps, AureaKPIDirection, AureaKPITone, AureaKPIVariant,
   AureaBadgeAnchor, AureaBadgeCategory, AureaBadgeEmphasis, AureaBadgeFit, AureaBadgeSize, AureaBadgeTone,
   AureaStatusVariant, AureaAvatarSize,
 } from "./display.js";

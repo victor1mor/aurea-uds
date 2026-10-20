@@ -114,8 +114,8 @@ export interface ContainerProps extends HTMLAttributes<HTMLDivElement>, RefAttri
 export declare function Container({ size, className, ...props }: ContainerProps): React.JSX.Element;
 /** O fundo da faixa: o da página (padrão), o de cartão ou o rebaixado. */
 export type SectionSurface = "background" | "card" | "inset";
-/** `base` é a faixa comum; `footer` é o rodapé do site (GAR-06, 07/10/2026). */
-export type SectionVariant = "base" | "footer";
+/** `base` é a faixa comum; `footer` é o rodapé do site (GAR-06, 07/10/2026); `hero` é a abertura da página (GAR-21, 19/10/2026). */
+export type SectionVariant = "base" | "footer" | "hero";
 /** Uma coluna de links do rodapé: o título e os itens. */
 export interface SectionFooterGroup {
     title: ReactNode;
@@ -123,7 +123,7 @@ export interface SectionFooterGroup {
 }
 /** O respiro de cima e de baixo: `md` (padrão, 64 e 96 a partir do `md`) ou `sm` (32 e 48). */
 export type SectionSpacing = "sm" | "md";
-export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes<HTMLElement> {
+export interface SectionProps extends Omit<HTMLAttributes<HTMLElement>, "title">, RefAttributes<HTMLElement> {
     surface?: SectionSurface;
     spacing?: SectionSpacing;
     /**
@@ -141,23 +141,37 @@ export interface SectionProps extends HTMLAttributes<HTMLElement>, RefAttributes
     brand?: ReactNode;
     /** Só no `footer`: as colunas de links, cada uma com título. Os itens são `SidebarItem` (`id`, `label`, `href`, `render`). */
     links?: SectionFooterGroup[];
-    /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
     /** Só no `footer` (15/10/2026): `"columns"` (o padrão, o rodapé de site grande) ou `"inline"` — UMA linha centrada, como
      *  o rodapé da página inicial da referência: a frase legal, os links (sem os títulos das colunas) e o que vier dentro
      *  (os ícones sociais). A marca não entra. */
     layout?: "columns" | "inline";
+    /** Só no `footer`: a linha de baixo — direitos, termos, privacidade. */
     legal?: ReactNode;
-    /** Só no `footer`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
+    /** No `footer` e no `hero`: até onde o miolo cresce, pela escala do `Container`. Padrão: `xl`. */
     maxWidth?: ContainerSize;
     /** Só no `footer`: o nome da navegação do rodapé para o leitor de tela. Padrão: `"Footer"`. */
     navLabel?: string;
+    /** No `hero`: o título da abertura. Nas outras variações, um texto aqui é o atributo `title` do HTML, como antes. */
+    title?: ReactNode;
+    /** Só no `hero`: a etiqueta do título. Padrão: `"h1"` — a abertura é o começo da página. */
+    titleAs?: "h1" | "h2";
+    /** Só no `hero`: a sobrelinha, acima do título — um selo, uma frase curta, um link para o que mudou. */
+    eyebrow?: ReactNode;
+    /** Só no `hero`: o texto abaixo do título. */
+    description?: ReactNode;
+    /** Só no `hero`: os botões, ou o campo de e-mail com o botão. */
+    actions?: ReactNode;
+    /** Só no `hero`: a imagem, ou a peça que prova o que o texto diz. Com `align="start"`, fica ao lado do texto a partir de 1024. */
+    media?: ReactNode;
+    /** Só no `hero`: `"start"` (o padrão; o texto à esquerda e a imagem ao lado) ou `"center"` (tudo centrado, a imagem embaixo). */
+    align?: "start" | "center";
 }
 /**
  * A faixa de ponta a ponta de uma página de site (GAR-04): `<section>` com fundo e respiro de site.
  * O conteúdo vai dentro de um `Container`. Dê um nome à faixa (`aria-labelledby` no título dela)
  * quando ela for uma região que o leitor de tela deva listar.
  */
-export declare function Section({ surface, spacing, theme, variant, brand, links, legal, layout, maxWidth, navLabel, children, className, ...props }: SectionProps): React.JSX.Element;
+export declare function Section({ surface, spacing, theme, variant, brand, links, legal, layout, maxWidth, navLabel, title, titleAs: Titulo, eyebrow, description, actions, media, align, children, className, ...props }: SectionProps): React.JSX.Element;
 export type KPIDirection = "up" | "down" | "flat";
 export type KPITone = "success" | "danger" | "neutral";
 export type KPIVariant = "card" | "plain";
@@ -263,6 +277,10 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     badgeContent?: ReactNode;
 }
 export declare function Badge({ variant: variantProp, tone, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export type ChipProps = BadgeProps;
+/** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
+export declare function Chip(props: BadgeProps): React.JSX.Element;
 /** O tom da barra: a mesma lista fechada do `ButtonTone`. Pausado é `neutral`; falha é `danger`. */
 export type ProgressTone = "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 export interface ProgressProps {

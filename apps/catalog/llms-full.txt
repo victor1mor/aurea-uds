@@ -2774,7 +2774,7 @@ On a circle the badge is pulled 14% back into the corner. Without that it floats
 <page url="https://aureauds.dev/banner.html">
 # Banner
 
-Prominent message spanning a wide region.
+Prominent message spanning a wide region. variant="consent" is the cookie notice, with the preferences window.
 
 ## Usage
 
@@ -2792,12 +2792,15 @@ import {Banner} from "@aurea-uds/react";
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `info \| success \| warning \| danger` | info | Tone, and the same live-region rule as Alert: `danger` is role="alert", the rest role="status". |
-| `title` | `ReactNode` | — | Rendered as a <strong> above the body. |
+| `variant` | `info \| success \| warning \| danger \| consent` | info | Tone, and the same live-region rule as Alert: `danger` is role="alert", the rest role="status". `consent` is the cookie notice: a region named by its h2, the text, and three buttons of the SAME weight — reject the non-essential, accept all, choose — then the confirmation, which takes the focus. Put it at the top of the page, before the skip link, and do not fix it to the screen. |
+| `title` | `ReactNode` | — | Rendered as a <strong> above the body. On consent it is the h2 that names the region; without it, the strings' consentTitle. |
 | `icon` | `IconName` | — | Glyph in the leading column. Leave it out and the column still holds its place — an empty span keeps the three-column grid — so banners stacked together stay aligned. |
-| `onDismiss` | `() => void` | — | Passing it is what draws the close button. Without it the banner cannot be dismissed, which is the right default for something the reader has to see. |
+| `onDismiss` | `() => void` | — | Passing it is what draws the close button. Without it the banner cannot be dismissed, which is the right default for something the reader has to see. On consent it is the "Hide this message" button of the confirmation; without it the notice hides itself. |
 | `children` | `ReactNode` | — | The body, under the title. |
 | `state` | `waiting_user \| waiting_approval \| waiting_dependency \| offline \| stale \| partial \| degraded` | — | Universal state (Part J) — same axis and same derivation as on Alert: `variant` is severity, `state` is the condition. It sets `data-state`, picks the severity when no `variant` is given, and supplies the message when there are no children. A banner is the page-width place to say “no connection” or “working with reduced capability”, which is why it carries the same vocabulary as the inline alert instead of a second one. |
+| `categories` | `ConsentCategory[]` | [] | Only on consent: the categories of the preferences window, in order — {id, label, description?, required?}. Required ones are always on and have no switch; the others start OFF. |
+| `value` | `ConsentChoice` | — | Only on consent: the choice already stored, {[id]: boolean}, so the person can come back and change it — show the notice again from a "Cookie settings" link. Without it, only the required categories are on. |
+| `onConsent` | `(choice: ConsentChoice, action: "accept-all" \| "reject" \| "custom") => void` | — | Only on consent: the choice made, for the app to store and obey. Required categories always come as true. |
 </page>
 
 <page url="https://aureauds.dev/blockeditor.html">
@@ -3627,6 +3630,45 @@ The error closes the group, and every checkbox is marked invalid.
 | `name` | `string` | — | The name of every checkbox, for the form. |
 | `disabled` | `boolean` | false | Disables every checkbox inside. |
 | `required` | `boolean` | false | The red asterisk after the label, like Field. |
+</page>
+
+<page url="https://aureauds.dev/chip.html">
+# Chip
+
+Another name for Badge, for those who know this piece as a chip. Identical in everything: the same props, the same look, the same behaviour.
+
+## Usage
+
+```tsx
+import {Chip} from "@aurea-uds/react";
+```
+
+```tsx
+<Cluster>
+  <Chip tone="success">Paid</Chip>
+  <Chip tone="primary" emphasis="solid">New</Chip>
+  <Chip tone="blue">Design</Chip>
+</Cluster>
+```
+
+## API Reference
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `neutral \| primary \| info \| success \| warning \| danger \| running \| paused \| offline \| review \| red \| orange \| green \| teal \| cyan \| blue \| violet \| pink` | neutral | Tone of the label. The four operational ones exist because the state of a job is metadata as often as it is a condition; when it is a condition standing on its own, use Status. The eight colour names (red, orange, green, teal, cyan, blue, violet, pink) are CATEGORIES, not states — they mark a group (a section, a type of item) and say nothing about health. They skip yellow, which belongs to the brand, and pass AA in both themes in all three emphases. Pair the colour with a word or a leading icon: colour alone is never the label. |
+| `tone` | `BadgeVariant` | — | The colour, with the native package's name — the same names on web and native. The same axis as variant; it wins when both are given. |
+| `emphasis` | `soft \| outline \| solid \| flat` | soft | How loud the tone is. `soft` is the tinted pill you already know; `outline` is contour only; `solid` fills with the accent and is what a notification counter wants. All 36 combinations of variant × emphasis × theme were measured for contrast — the lowest is 5.6:1, and the skin spec keeps it that way. flat is the soft tone without the line around it, as the reference's chip. |
+| `size` | `xs \| sm \| md \| lg` | md | `md` is the historical size and did not move, so nothing that already uses Badge changed. `xs` (16px, borderless) is the counter that rides on an icon — it is what BottomNav asks for; `sm` sits between them; `lg` is for a standalone label. Every size is its OWN class, never a contextual override: `geometry.spec` holds `.badge` to one height per page, and a rule that shrank it by context reproved — correctly. |
+| `dot` | `boolean` | false | A status dot before the text, inheriting the current colour. With `anchor` and nothing to show, the dot IS the badge — the plain 8px mark that means "something new". |
+| `leading / trailing` | `ReactNode` | — | A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that ADR-0026 saved. |
+| `image / imageAlt` | `string` | — | A round picture at the start — an avatar or a flag. Empty alt when it is decorative, which is the usual case beside a name. |
+| `count / max / showZero` | `number / number / boolean` | — / 99 / false | Numeric content. Over `max` it reads `99+`. Zero hides itself unless `showZero`, because an empty inbox does not deserve a mark. `formatBadgeCount(count, max)` is exported so the accessible name can say the same string the eye sees. |
+| `fit` | `"auto" \| "content"` | "auto" | `content` keeps the badge as wide as its text even inside a column. The default follows the container, and that was measured: `.stack` declares no `align-items`, so a badge inside it stretches (300 px in a 300 px column, 55 px loose in a block). Implemented as `inline-size: fit-content`, not `align-self`, so a badge in a row keeps its vertical centring. Ignored with `anchor`. The native Badge takes the same prop. |
+| `anchor` | `top-end \| top-start \| bottom-end \| bottom-start` | — | Switches to the OVERLAY shape: `children` becomes the thing being decorated (a bell, an avatar, a menu row) and the badge hangs off that corner. Without it, `children` is the pill's content and nothing about the old usage changes. |
+| `anchorShape` | `square \| circle` | square | `circle` pulls the badge 14% back into the corner — the `overlap` of one of the references, and the number is theirs, measured in their source. Without it a counter on a round avatar floats off the edge. |
+| `invisible` | `boolean` | false | Hides the overlay without moving the child. Use it when the count is loading rather than absent. |
+| `children` | `ReactNode` | — | The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component. |
+| `badgeContent` | `ReactNode` | — | What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name. |
 </page>
 
 <page url="https://aureauds.dev/closebutton.html">
@@ -7351,7 +7393,7 @@ When the query costs something to run, give it an explicit button as well as Ent
 <page url="https://aureauds.dev/section.html">
 # Section
 
-An edge-to-edge band of a website page, with its own surface, site spacing and, optionally, its own theme. variant="footer" makes it the site's footer.
+An edge-to-edge band of a website page, with its own surface, site spacing and, optionally, its own theme. variant="footer" makes it the site's footer; variant="hero" makes it the page opening.
 
 ## Usage
 
@@ -7381,13 +7423,20 @@ import {Section} from "@aurea-uds/react";
 | `surface` | `"background" \| "card" \| "inset"` | "background" | The band's background: the page's (the default), a card surface, or the recessed inset surface. |
 | `spacing` | `"sm" \| "md"` | "md" | The space above and below: md is --space-16 (64) and --space-24 (96) from the md breakpoint up; sm is half of that. Aurea's choice from existing tokens: none of the references had a section to read. |
 | `theme` | `"light" \| "dark"` | — | A theme for this band only: theme="dark" makes a dark band inside a light page, and the other way round. The background, the text and every piece inside follow the band's theme, and the page's light-theme rules do not leak into it. |
-| `variant` | `"base" \| "footer"` | "base" | footer makes the band the website's footer: a <footer> with the brand, the link columns and the legal line, its content already in a Container. Surface, spacing and theme keep working — a dark footer on a light page is theme="dark". On a phone everything stacks in one column. |
+| `variant` | `"base" \| "footer" \| "hero"` | "base" | footer makes the band the website's footer: a <footer> with the brand, the link columns and the legal line, its content already in a Container. Surface, spacing and theme keep working — a dark footer on a light page is theme="dark". On a phone everything stacks in one column. `hero` is the opening of a page: eyebrow, title, text, buttons or an e-mail field, and an image beside them; on a phone, everything stacks. |
 | `brand` | `ReactNode` | — | Footer only: the brand and a short line, top left. |
 | `links` | `SectionFooterGroup[]` | — | Footer only: the link columns, each { title, items }. The items are SidebarItem (id, label, href, render), the same shape as the menus. From 768px the columns share the width, each at least 8rem. |
 | `legal` | `ReactNode` | — | Footer only: the bottom line — rights, terms, privacy — under a hairline. |
 | `layout` | `"columns" \| "inline"` | "columns" | Only on footer: columns is the large site footer; inline is ONE centred line, as the reference's home page footer — the legal sentence, the links (without the column titles) and the children (social icons). The brand does not go in. |
 | `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | "xl" | Footer only: how far the content grows, on the Container's scale. |
 | `navLabel` | `string` | "Footer" | Footer only: the footer navigation's name for screen readers. Pass it in the page's language. |
+| `title` | `ReactNode` | — | Only on hero: the title of the opening, the page's h1. It grows with the width of the BAND, not of the window: --text-4xl (36), --text-6xl (60) from 768 and --text-7xl (72) from 1024. On the other variants a string here is still the HTML title attribute. |
+| `titleAs` | `"h1" \| "h2"` | "h1" | Only on hero: the tag of the title. The opening is the start of the page, so h1; h2 when the band opens a section further down. |
+| `eyebrow` | `ReactNode` | — | Only on hero: the line above the title — a badge, a short phrase, a link to what changed. 8 above the title, 16 from 1024. |
+| `description` | `ReactNode` | — | Only on hero: the text under the title, glued to it. 16/24, and 18/28 from 768, at most 672 wide. |
+| `actions` | `ReactNode` | — | Only on hero: the buttons, or a form with the e-mail field and its button (the form grows up to 480). 16 under the text. |
+| `media` | `ReactNode` | — | Only on hero: the image, or the piece that proves what the text says. With align="start" it sits beside the text from 1024 and under it before that. It takes the width of its column: size a phone frame in the app. |
+| `align` | `"start" \| "center"` | "start" | Only on hero: start puts the text on the left and the image beside it; center puts everything on the middle line, with the image under the text. What comes as children goes after the buttons. |
 | `children` | `ReactNode` | — | The band's content, usually inside a Container. |
 | `className` | `string` | — | Extra classes on the <section>. |
 </page>
@@ -9648,6 +9697,34 @@ import {Banner} from "@aurea-uds/react";
 ```tsx
 <Banner variant="warning" title="Reduced capacity">
   Runs are queueing. Scheduled jobs may start late until 18:00 UTC.
+</Banner>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-banner-the-cookie-notice.html">
+# The cookie notice
+
+variant="consent" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored. On this static page the buttons do not answer; in your app they do.
+
+## Usage
+
+```tsx
+import {Banner, Dialog, Switch, Link} from "@aurea-uds/react";
+```
+
+```tsx
+<Banner
+  variant="consent"
+  categories={[
+    {id: "necessary", label: "Necessary", description: "Sign-in, the cart, your cookie choice.", required: true},
+    {id: "analytics", label: "Analytics", description: "Visits counted without saying who you are."},
+    {id: "marketing", label: "Marketing", description: "Ads for what you saw here, on other sites."},
+  ]}
+  value={stored}
+  onConsent={(choice) => store(choice)}
+  onDismiss={() => setShown(false)}
+>
+  <p>We use necessary cookies to make this site work and, if you allow it, others to measure visits and show ads. <Link href="/privacy">Privacy policy</Link>.</p>
 </Banner>
 ```
 </page>
@@ -12631,6 +12708,90 @@ import {SearchField} from "@aurea-uds/react";
 
 ```tsx
 <SearchField aria-label="Filter members" placeholder="Filter members…" onChange={setQuery} />
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-section-the-page-opening-text-beside-the-proof.html">
+# The page opening, text beside the proof
+
+variant="hero" is the opening of a page: an eyebrow, the title (the page's h1), a line of text, the buttons, and the image beside it. The title grows with the width of the band, not of the window — 36, then 60 from 768 and 72 from 1024 — and the image sits beside the text from 1024; below that, it goes under. The image takes the width of its column: size it in the app.
+
+## Usage
+
+```tsx
+import {Section, Badge, Button, Image} from "@aurea-uds/react";
+```
+
+```tsx
+<Section
+  variant="hero"
+  eyebrow={<Badge tone="primary" emphasis="flat">New in 2.0</Badge>}
+  title="Plan the week in one screen"
+  description="Tasks, people and dates side by side, on the web and on the phone."
+  actions={<>
+    <Button variant="primary" href="/start">Get started</Button>
+    <Button variant="outline" href="/tour">Take the tour</Button>
+  </>}
+  media={<Image src="/week.png" alt="The app's week view" ratio="4/3" />}
+/>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-section-the-page-opening-centred.html">
+# The page opening, centred
+
+align="center" puts everything on the middle line, with the image (if any) under the text. What comes inside the Section goes after the buttons: a short note, a link.
+
+## Usage
+
+```tsx
+import {Section, Badge, Button} from "@aurea-uds/react";
+```
+
+```tsx
+<Section
+  variant="hero"
+  align="center"
+  eyebrow={<Badge tone="primary" emphasis="flat">Version 2.0 is out</Badge>}
+  title="One design system. Web and native."
+  description="The same look on both sides, made for people who see little."
+  actions={<>
+    <Button variant="primary" href="/start">Get started</Button>
+    <Button variant="outline" href="/components">View components</Button>
+  </>}
+>
+  <Link href="/github">Open source on GitHub</Link>
+</Section>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-section-the-page-opening-with-an-e-mail-field.html">
+# The page opening with an e-mail field
+
+actions takes anything: here, the e-mail field with its button, inside a form. The field keeps its name for the screen reader (aria-label), because the placeholder is not a label.
+
+## Usage
+
+```tsx
+import {Section, InputGroup, Input, Button} from "@aurea-uds/react";
+```
+
+```tsx
+<Section
+  variant="hero"
+  title="Get the monthly notes"
+  description="One e-mail a month with what changed. No spam."
+  actions={
+    <form onSubmit={subscribe}>
+      <InputGroup>
+        <Input type="email" name="email" autoComplete="email" aria-label="E-mail address" placeholder="you@example.com" required />
+        <InputGroupAddon side="end" layout="inline">
+          <Button type="submit" variant="primary" size="sm">Subscribe</Button>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
+  }
+/>
 ```
 </page>
 

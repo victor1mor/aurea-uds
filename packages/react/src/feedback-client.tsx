@@ -9,7 +9,7 @@ import {cx, useAureaStrings, usePortalContainer, stateSeverity, type UniversalSt
 import {Icon, type IconName} from "./system.js";
 import {Button, IconButton, CloseButton} from "./actions.js";
 // NotificationCenter aceita `side`: o tipo é do módulo que define overlay, não uma cópia.
-import {type OverlaySide} from "./overlays.js";
+import {Dialog, type OverlaySide} from "./overlays.js";
 
 // `oracle` saiu daqui (achado M9, 26/07/2026): estava no tipo e no CSS, e NÃO estava na
 // ficha — ou seja, era superfície pública que o contrato não declarava. E é vocabulário do
@@ -17,7 +17,7 @@ import {type OverlaySide} from "./overlays.js";
 // A6 mapeou. As classes `.badge-oracle`/`.btn-oracle` seguem no core porque o
 // `apps/docs/index.html` escrito à mão as usa; saem junto com ele, na Fase 4 do plano.
 // `.btn-oracle` nunca foi alcançável pelo React — `ButtonVariant` não tem `oracle`.
-import {Skeleton, type BadgeVariant} from "./markup.js";
+import {Skeleton, Badge, Switch, type BadgeVariant} from "./markup.js";
 export type StatusVariant="neutral"|"online"|"offline"|"busy"|"away"|"running"|"success"|"warning"|"danger"|"info";
 // Status (DIRECTION §3.6): condição OPERACIONAL — ponto + rótulo. Não é Badge: Badge é
 // metadado curto num pill; Status diz em que estado a coisa está. Reusa o .status-dot que
@@ -68,8 +68,96 @@ export function Alert({variant,state,title,icon,onDismiss,action,children,classN
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios
 // preservam as 3 colunas do grid quando não há ícone ou botão de dispensar.
 // O Banner NÃO ganhou o `accent` do Alert (0.32.0): ele não existe na referência, e a lista dele fica.
-export type BannerVariant="info"|"success"|"warning"|"danger";
-export function Banner({variant,state,title,icon,onDismiss,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:BannerVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+export type BannerVariant="info"|"success"|"warning"|"danger"|"consent";
+/** Uma categoria de cookies do aviso de consentimento (GAR-19): a chave, o nome, para que serve e se é necessária. */
+export interface ConsentCategory{
+  /** A chave da categoria na escolha que o `onConsent` devolve. */
+  id:string;
+  label:ReactNode;
+  /** Para que serve: o que a pessoa ganha ou perde ligando. */
+  description?:ReactNode;
+  /** Necessária para o site funcionar: sempre ligada, sem chave para desligar. */
+  required?:boolean;
+}
+/** A escolha: a chave de cada categoria, ligada ou não. As necessárias vêm sempre ligadas. */
+export type ConsentChoice=Record<string,boolean>;
+/** Como a pessoa escolheu: aceitou tudo, rejeitou o que não é necessário, ou escolheu na janela. */
+export type ConsentAction="accept-all"|"reject"|"custom";
+export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>,"title">, RefAttributes<HTMLDivElement>{
+  variant?:BannerVariant;
+  state?:UniversalState;
+  title?:ReactNode;
+  icon?:IconName;
+  /** Desenha o X. No `consent`, é o botão "Ocultar esta mensagem" da confirmação; sem ele, o aviso some sozinho. */
+  onDismiss?:()=>void;
+  /** Só no `consent`: as categorias da janela de preferências, na ordem em que aparecem. */
+  categories?:ConsentCategory[];
+  /** Só no `consent`: a escolha que já está guardada — para a pessoa voltar e mudar. Sem ela, só as necessárias ligadas. */
+  value?:ConsentChoice;
+  /** Só no `consent`: a escolha feita, para o app guardar e obedecer. As necessárias vêm sempre `true`. */
+  onConsent?:(choice:ConsentChoice,action:ConsentAction)=>void;
+}
+export function Banner(props:BannerProps){
+  if(props.variant==="consent")return <BannerConsent {...props}/>;
+  const {variant,state,title,icon,onDismiss,children,className,categories:_c,value:_v,onConsent:_o,...rest}=props;
+  const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...rest}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+// GAR-19 (lote U, 19/10/2026): o aviso de cookies é uma VARIAÇÃO do Banner (decisão do Victor). Nenhuma referência da fila
+// tem a peça aberta; as regras vêm de duas fontes primárias, lidas em 19/10/2026:
+// - o guia de cookies da ANPD (págs. 30–33): no primeiro nível, o botão de rejeitar os não necessários, tão fácil de ver
+//   quanto o de aceitar (nada de destaque só no aceite); categoria não necessária DESLIGADA por padrão; um segundo nível
+//   com as categorias; e um jeito direto de mudar a escolha depois. Os três botões são os do exemplo do guia.
+// - o aviso de cookies do governo britânico: no alto da página, sem `position:fixed` (que cobriria o foco — WCAG 2.4.11),
+//   uma região com nome e título h2, e a confirmação depois da escolha com `role="alert"`, que recebe o foco.
+// O app guarda a escolha (`onConsent`) e deixa de desenhar o aviso; para mudar depois, desenha de novo, com `value`.
+function BannerConsent({title,icon:_icon,state:_state,variant:_variant,onDismiss,categories=[],value,onConsent,children,className,...props}:BannerProps){
+  const s=useAureaStrings();
+  const tituloId=React.useId();
+  const inicial=React.useCallback(()=>Object.fromEntries(categories.map(c=>[c.id,c.required?true:value?.[c.id]===true])),[categories,value]);
+  const [escolha,setEscolha]=React.useState<ConsentChoice>(inicial);
+  const [aberta,setAberta]=React.useState(false);
+  const [feito,setFeito]=React.useState<ConsentAction|null>(null);
+  const [oculto,setOculto]=React.useState(false);
+  const aviso=React.useRef<HTMLDivElement>(null);
+  // A confirmação recebe o foco quando aparece: o botão que a pessoa apertou some com a pergunta.
+  React.useEffect(()=>{if(feito)aviso.current?.focus()},[feito]);
+  const escolher=(acao:ConsentAction,custom?:ConsentChoice)=>{
+    const final=Object.fromEntries(categories.map(c=>[c.id,c.required?true:acao==="accept-all"?true:acao==="reject"?false:custom?.[c.id]===true]));
+    setEscolha(final);setAberta(false);setFeito(acao);onConsent?.(final,acao);
+  };
+  if(oculto)return null;
+  const confirmacao=feito==="accept-all"?s.consentAccepted:feito==="reject"?s.consentRejected:s.consentSaved;
+  return <div role="region" aria-labelledby={tituloId} className={cx("banner","banner-consent",className)} {...props}>
+    <h2 id={tituloId} className="banner-consent-title">{title??s.consentTitle}</h2>
+    {feito
+      ?<>
+        <div ref={aviso} role="alert" tabIndex={-1} className="banner-consent-message">{confirmacao}</div>
+        <div className="banner-consent-actions"><Button variant="secondary" onClick={()=>{onDismiss?onDismiss():setOculto(true)}}>{s.consentHide}</Button></div>
+      </>
+      :<>
+        <div className="banner-consent-text">{children}</div>
+        <div className="banner-consent-actions">
+          <Button variant="secondary" onClick={()=>escolher("reject")}>{s.consentReject}</Button>
+          <Button variant="secondary" onClick={()=>escolher("accept-all")}>{s.consentAccept}</Button>
+          <Button variant="tertiary" onClick={()=>{setEscolha(inicial());setAberta(true)}}>{s.consentChoose}</Button>
+        </div>
+      </>}
+    <Dialog open={aberta} title={s.consentPreferences} onClose={()=>setAberta(false)} footer={<>
+      <Button variant="secondary" onClick={()=>escolher("reject")}>{s.consentReject}</Button>
+      <Button variant="secondary" onClick={()=>escolher("accept-all")}>{s.consentAccept}</Button>
+      <Button variant="primary" onClick={()=>escolher("custom",escolha)}>{s.consentSave}</Button>
+    </>}>
+      <div className="banner-consent-categories">
+        {categories.map(c=>c.required
+          ?<div key={c.id} className="banner-consent-required">
+            <div className="banner-consent-required-head"><strong>{c.label}</strong><Badge>{s.consentRequired}</Badge></div>
+            {c.description!=null&&<p>{c.description}</p>}
+          </div>
+          :<Switch key={c.id} label={c.label} description={c.description} checked={escolha[c.id]===true}
+            onChange={(e)=>{const ligado=e.currentTarget.checked;setEscolha(atual=>({...atual,[c.id]:ligado}))}}/>)}
+      </div>
+    </Dialog>
+  </div>;
+}
 // A barra grampeava 0..100 e o `aria-valuenow` NÃO — medido ao publicar o contrato de API na
 // Parte E: com value=150 o desenho parava em 100% e o leitor de tela anunciava "150 de 100".
 // A causa é a de sempre: o grampo existia num lugar só. Agora é UMA expressão que serve os dois,

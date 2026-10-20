@@ -3,7 +3,7 @@
   "category": "Layout",
   "layer": "Primitive",
   "maturity": "Ready",
-  "summary": "An edge-to-edge band of a website page, with its own surface, site spacing and, optionally, its own theme. variant=\"footer\" makes it the site's footer.",
+  "summary": "An edge-to-edge band of a website page, with its own surface, site spacing and, optionally, its own theme. variant=\"footer\" makes it the site's footer; variant=\"hero\" makes it the page opening.",
   "icon": "list",
   "platforms": {
     "web": "stable",
@@ -25,9 +25,14 @@
     "--background",
     "--border",
     "--border-width",
+    "--breakpoint-sm",
+    "--breakpoint-xs",
     "--card",
     "--card-foreground",
+    "--font-heading",
     "--foreground",
+    "--leading-none",
+    "--leading-normal",
     "--leading-tight",
     "--muted-foreground",
     "--space-12",
@@ -35,16 +40,26 @@
     "--space-2",
     "--space-24",
     "--space-3",
+    "--space-4",
     "--space-6",
     "--space-8",
     "--surface-inset",
+    "--text-4xl",
+    "--text-4xl-leading",
+    "--text-6xl",
+    "--text-7xl",
+    "--text-base",
+    "--text-lg",
+    "--text-lg-leading",
     "--text-sm",
+    "--tracking-tight",
+    "--weight-bold",
     "--weight-semibold"
   ],
   "a11y": {
     "role": "region",
     "keyboard": [],
-    "apg": "A <section> element. It is only announced as a region (a landmark) when it has an accessible name, so give the band a heading and point aria-labelledby at it when screen-reader users should be able to jump to it. No keyboard interaction: it is a layout band. With variant=\"footer\" it is a <footer>, which is the page's contentinfo landmark when it is not nested in another sectioning element; its links sit in a <nav> named by `navLabel`, each column under an <h2>."
+    "apg": "A <section> element. It is only announced as a region (a landmark) when it has an accessible name, so give the band a heading and point aria-labelledby at it when screen-reader users should be able to jump to it. No keyboard interaction: it is a layout band. With variant=\"footer\" it is a <footer>, which is the page's contentinfo landmark when it is not nested in another sectioning element; its links sit in a <nav> named by `navLabel`, each column under an <h2>. With variant=\"hero\" it is a <section> whose title is the page's <h1> (titleAs=\"h2\" when it is not the first band); point aria-labelledby at the title to list it as a region."
   },
   "dependencies": {
     "engine": null,
@@ -82,9 +97,9 @@
     },
     {
       "name": "variant",
-      "type": "\"base\" | \"footer\"",
+      "type": "\"base\" | \"footer\" | \"hero\"",
       "default": "\"base\"",
-      "description": "footer makes the band the website's footer: a <footer> with the brand, the link columns and the legal line, its content already in a Container. Surface, spacing and theme keep working — a dark footer on a light page is theme=\"dark\". On a phone everything stacks in one column."
+      "description": "footer makes the band the website's footer: a <footer> with the brand, the link columns and the legal line, its content already in a Container. Surface, spacing and theme keep working — a dark footer on a light page is theme=\"dark\". On a phone everything stacks in one column. `hero` is the opening of a page: eyebrow, title, text, buttons or an e-mail field, and an image beside them; on a phone, everything stacks."
     },
     {
       "name": "brand",
@@ -123,6 +138,48 @@
       "description": "Footer only: the footer navigation's name for screen readers. Pass it in the page's language."
     },
     {
+      "name": "title",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Only on hero: the title of the opening, the page's h1. It grows with the width of the BAND, not of the window: --text-4xl (36), --text-6xl (60) from 768 and --text-7xl (72) from 1024. On the other variants a string here is still the HTML title attribute."
+    },
+    {
+      "name": "titleAs",
+      "type": "\"h1\" | \"h2\"",
+      "default": "\"h1\"",
+      "description": "Only on hero: the tag of the title. The opening is the start of the page, so h1; h2 when the band opens a section further down."
+    },
+    {
+      "name": "eyebrow",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Only on hero: the line above the title — a badge, a short phrase, a link to what changed. 8 above the title, 16 from 1024."
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Only on hero: the text under the title, glued to it. 16/24, and 18/28 from 768, at most 672 wide."
+    },
+    {
+      "name": "actions",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Only on hero: the buttons, or a form with the e-mail field and its button (the form grows up to 480). 16 under the text."
+    },
+    {
+      "name": "media",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "Only on hero: the image, or the piece that proves what the text says. With align=\"start\" it sits beside the text from 1024 and under it before that. It takes the width of its column: size a phone frame in the app."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\"",
+      "default": "\"start\"",
+      "description": "Only on hero: start puts the text on the left and the image beside it; center puts everything on the middle line, with the image under the text. What comes as children goes after the buttons."
+    },
+    {
       "name": "children",
       "type": "ReactNode",
       "default": "—",
@@ -136,6 +193,10 @@
     }
   ],
   "axes": {
+    "align": [
+      "center",
+      "start"
+    ],
     "layout": [
       "columns",
       "inline"
@@ -153,9 +214,14 @@
       "dark",
       "light"
     ],
+    "titleAs": [
+      "h1",
+      "h2"
+    ],
     "variant": [
       "base",
-      "footer"
+      "footer",
+      "hero"
     ]
   }
 }
