@@ -7,7 +7,7 @@
   "icon": "books",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [
     "base",

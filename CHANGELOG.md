@@ -82,8 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.37.0] — em construção
 
-⏳ **Ainda não publicada.** O lote V, na branch `claude/codigo-com-cores`. Cada passo entra no `main` depois de aprovado
-na bancada; a versão sobe quando o lote fechar.
+⏳ **Ainda não publicada.** O lote V (no `main` desde o pedido #84) e o lote 1, as travas, passo 1 (branch
+`claude/lote-1-fichas`). Cada passo entra no `main` depois de aprovado na bancada; a versão sobe quando o lote fechar.
 
 ### Novo
 
@@ -109,6 +109,26 @@ na bancada; a versão sobe quando o lote fechar.
 - **A ficha do `CodeBlock` prometia código colorido e o código desenhava texto puro**; a própria ficha se contradizia
   (o resumo dizia "syntax-highlighted", e a descrição de `language` dizia que ele não colore). Agora as duas dizem o que
   o componente faz.
+- **56 fichas diziam que a peça não existia no nativo** (`platforms.native: "planned"`), e o pacote nativo já a
+  exportava — o site publicava "native: planned" no botão, no cartão, na janela, na caixa e em mais 52 peças, e em três
+  ganchos. Agora dizem `stable`, o valor de toda peça nova do nativo desde 25/09/2026. Achado da dissecação do site
+  (19/10/2026); o check 48, abaixo, reprova a volta.
+- **A ficha do Prose dizia que a IBM Plex Serif vem no pacote de fontes.** Ela saiu na 0.13.0; o
+  `--font-editorial` é apelido da fonte do texto, e a descrição agora diz isso.
+- **O desativado não aparecia em sete peças.** O `disabled` chegava ao campo e nada mudava na tela: no `Checkbox`, no
+  `Radio` e no `Switch` (o campo é invisível e quem desenha é a marca) e, por eles, nas opções do `CheckboxGroup` e do
+  `RadioGroup`; no gatilho do `Collapsible` (que ainda acendia no hover); e no `InputGroup`, em que só o texto recuava e
+  o fundo e o ícone ficavam iguais. Agora a peça inteira recua para `--opacity-disabled` (0,5), com o cursor de
+  proibido — como na referência, que desenha o desativado na raiz do controle. No grupo de campo, quem recua é a
+  moldura, e só o CAMPO desativado conta (um botão de limpar desativado não desativa o grupo). Quem cobra:
+  `tests/visual/desativado.spec.ts`.
+- **`AutomationCard` com `enabled={false}` não recuava.** O atributo saía `data-enabled="false"` e escapava da regra do
+  recuo, que só pegava a prop omitida. Agora `data-enabled` só sai quando a regra está ligada. Quem cobra:
+  `tests/unit/components.test.tsx`.
+- **Seis estados que as fichas prometiam e o código não tem saíram das fichas:** o estado misto da caixa (o "marcar
+  todos" da tabela de dados também não o desenha), a aba e o segmento desativados da web (no nativo existem), o
+  "carregando" do player de vídeo, o hover do Slider (a referência também não tem) e o desativado do Field (o estado é
+  do controle de dentro, como a documentação dele já dizia). Voltam às fichas quando forem construídos.
 
 ### O site
 
@@ -125,6 +145,16 @@ na bancada; a versão sobe quando o lote fechar.
 - **O check 31 lê a seção em construção E a da versão datada que ainda não foi registrada**, juntas: o lote seguinte pode
   começar antes de o registro da anterior chegar ao `main` (foi o caso deste: a 0.36.0 publicada, o registro no pedido
   #83, e esta branch saída antes dele).
+- **Check 48 do `validate.py`: a plataforma da ficha é o que o pacote exporta, nos dois sentidos** (lote 1, as
+  travas). A web lê a superfície que o compilador emite (`api-surface.json`); o nativo, a mesma leitura do check 39,
+  que virou a função `_exportados_nativos`. Provado contra o `main` de 20/10/2026: reprova as 56.
+- **Check 49 do `validate.py`: o estado que a ficha promete existe no código** (lote 1, as travas). Cada palavra de
+  `states` (fora `default` e os universais, que são o check 30) precisa de prova na peça: o estado que se vê, uma regra
+  do core com a classe da peça e o seletor do estado; os outros, a palavra no código, nos seletores ou nos tipos da
+  assinatura (inclusive a união de textos fixos um degrau abaixo, onde mora o valor de dado). A prova que a leitura não
+  acha mora em `PROVA_DO_ESTADO49`, com o motivo (55 linhas, cada uma lida no código); o estado ainda sem código, em
+  `EM_DIVIDA49`, com o lote que o constrói (uma: o hover da barra de baixo, lote 2). As duas listas se cobram: reprovam
+  a dívida paga e a linha que sobra. Só a web: o nativo não tem CSS. Provado contra o `main` de 20/10/2026: reprova 11.
 
 ## [0.36.0] — 2026-10-20
 

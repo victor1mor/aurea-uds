@@ -28,13 +28,12 @@
   "icon": "faders",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [],
   "sizes": [],
   "states": [
     "default",
-    "hover",
     "focus",
     "dragging",
     "disabled"

@@ -2051,6 +2051,15 @@ describe("Camada operacional — relação (H.f)", () => {
     // e o resultado sai por PALAVRA, como os cinco estados do HealthMatrix.
     expect(screen.getByText("Failed")).toBeInTheDocument();
   });
+
+  // Lote 1, as travas (20/10/2026): `enabled={false}` escrevia `data-enabled="false"`, e a regra do recuo
+  // (`.automation:not([data-enabled])`) só pegava a prop OMITIDA — desligada de propósito, a regra não recuava.
+  test("`enabled={false}` recua como a omitida: o atributo só sai quando ligada", () => {
+    const {container, rerender} = wrap(<AutomationCard name="R" trigger="t" action="a" enabled={false} />);
+    expect(container.querySelector(".automation")).not.toHaveAttribute("data-enabled");
+    rerender(<AureaProvider><AutomationCard name="R" trigger="t" action="a" enabled /></AureaProvider>);
+    expect(container.querySelector(".automation")).toHaveAttribute("data-enabled", "true");
+  });
 });
 
 // H14 — o grafo. Vem do subpath, como o consumidor importa: se a fronteira estiver errada,

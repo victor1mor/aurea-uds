@@ -8,7 +8,7 @@
   "icon": "sun",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [],
   "sizes": [],

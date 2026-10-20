@@ -7,7 +7,7 @@
   "icon": "pencil-simple",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [
     "primary",

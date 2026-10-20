@@ -75,7 +75,7 @@
       "name": "--font-editorial",
       "type": "CSS custom property",
       "default": "not applied",
-      "description": "IBM Plex Serif ships with the fonts package and Prose deliberately does NOT switch to it: serif body text is an appearance decision, and those go to the owner of the design system with a before and after, never into a component by default. Point font-family at this token on .prose if you want it."
+      "description": "An alias of the body font, kept so code that already uses it keeps working: the fonts package has no serif face, and Prose reads in the body font. To give long-form text a different face, point font-family at a typeface of your own on .prose."
     }
   ]
 }

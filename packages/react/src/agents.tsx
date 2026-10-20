@@ -578,7 +578,9 @@ export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttr
 // cartão responder por dois contratos — o erro que o `TaskQueue` recusou no H.b.
 export function AutomationCard({name,description,trigger,action,enabled,onToggle,lastRun,lastResult,details,actions,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{name:ReactNode;description?:ReactNode;trigger:ReactNode;action:ReactNode;enabled?:boolean;onToggle?:(enabled:boolean)=>void;lastRun?:ReactNode;lastResult?:"success"|"failure";details?:Array<{term:string;value:ReactNode}>;actions?:ReactNode}){
   const s=useAureaStrings();
-  return <article className={cx("card","automation",className)} data-enabled={enabled??undefined} {...props}>
+  // `data-enabled` só quando LIGADA: o `false` saía como `data-enabled="false"` e escapava da regra que faz a regra
+  // desligada recuar (`:not([data-enabled])`) — achado do check 49, lote 1, 20/10/2026.
+  return <article className={cx("card","automation",className)} data-enabled={enabled||undefined} {...props}>
     <header className="automation-head">
       <div className="automation-id">
         <strong>{name}</strong>

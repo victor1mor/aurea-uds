@@ -7,7 +7,7 @@
   "icon": "file",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [],
   "sizes": [],
@@ -16,8 +16,7 @@
   },
   "states": [
     "default",
-    "invalid",
-    "disabled"
+    "invalid"
   ],
   "tokens": [
     "--danger-400",

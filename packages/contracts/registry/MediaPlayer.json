@@ -19,8 +19,7 @@
   },
   "states": [
     "playing",
-    "paused",
-    "buffering"
+    "paused"
   ],
   "tokens": [
     "--border",

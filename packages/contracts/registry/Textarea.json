@@ -7,7 +7,7 @@
   "icon": "file-text",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [
     "primary",

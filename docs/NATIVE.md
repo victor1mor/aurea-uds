@@ -1199,9 +1199,10 @@ aqui existe o app que na web não existia.
 
 O que continua valendo:
 
-- **Não promete paridade.** Nunca houve promessa de que o nativo teria os mesmos componentes. As
+- **Não promete paridade.** Nunca houve promessa de que o nativo teria os mesmos componentes. ~~As
   fichas declaram `platforms.native: "planned"` em 122 das 124 (`DependencyGraph` e `Kbd` são
-  `n-a`), e isso é o teto honesto até a Etapa 4 rodar.
+  `n-a`), e isso é o teto honesto até a Etapa 4 rodar.~~ (31/08/2026; a Etapa 4 rodou. Desde
+  20/10/2026 a ficha diz o que o pacote exporta, e o check 48 do `validate.py` reprova a diferença.)
 - **Não mexe em nada da web.** Nenhuma linha deste documento pede mudança no que já está
   publicado.
 - **Não começa a Etapa 4.** Nenhum componente foi escrito, nenhum pacote foi criado, nenhuma
@@ -1416,9 +1417,11 @@ uma segunda linguagem.
   um gate ser desligado. É o **quinto** gate do alvo nativo.
 - **`MultiCombobox` não entrou** — é seleção múltipla, que a demanda não pede. Escopo novo é lote
   novo, não acréscimo silencioso (`BUILDING.md` §3.4).
-- **As 46 fichas dos Lotes 0–6 continuam dizendo `native: "planned"`** no registry, e isso é
-  falso desde 11/09/2026. As cinco deste lote foram corrigidas para `supported`; as outras são
+- ~~**As 46 fichas dos Lotes 0–6 continuam dizendo `native: "planned"`** no registry, e isso é
+  falso desde 11/09/2026.~~ As cinco deste lote foram corrigidas para `supported`; as outras eram
   dívida anterior e **decisão do Victor**, não trabalho que este lote podia assumir sozinho.
+  **Fechado em 20/10/2026** (lote 1, as travas, com o "pode" do Victor): as 53 que sobravam dizem
+  `stable`, e o check 48 do `validate.py` reprova ficha que negue ou prometa o que o pacote exporta.
 
 ---
 

@@ -7,7 +7,7 @@
   "icon": "chart-line",
   "platforms": {
     "web": "supported",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [],
   "sizes": [],
