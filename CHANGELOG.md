@@ -80,10 +80,13 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [0.36.0] — em construção
+## [0.36.0] — 2026-10-20
 
-⏳ **Ainda não publicada.** O lote U, na branch `claude/lote-u`. Cada passo entra no `main` depois de aprovado na
-bancada; a versão sobe quando o lote fechar.
+⏳ **Ainda não publicada.** O lote U, feito de 17 a 19/10/2026 em oito passos, cada um aprovado na bancada pelo Victor e
+juntado no `main` (pedidos #75 a #81): as cores do amarelo (ADR-0073), a bolinha do `Radio`, as faixas do mapa de rede
+(MNT-27) e o clique no nó (o pedido 16 do app de topologia); a abertura de página, o aviso de cookies e o `Chip`
+(GAR-19 a 22, ADR-0074); e o site com as áreas Getting Started e Releases, os textos para assistentes de IA e o arranjo
+de celular e tablet. Fechada em 20/10/2026, a pedido do Victor (os apps consomem pelo npm).
 
 ### Novo
 
@@ -226,7 +229,8 @@ bancada; a versão sobe quando o lote fechar.
   e não peça da Aurea.
 - **As travas do CHANGELOG leem a seção em construção.** Enquanto os pacotes não sobem de número, o `validate.py` cobrava
   o nome do componente novo só no `[Unreleased]`, e o aviso de frase nova dentro da `0.35.0`, já publicada. Agora as duas
-  leem também a seção `## [x] — em construção`.
+  leem também a seção `## [x] — em construção` e, depois que os pacotes sobem de número, a da versão datada que ainda
+  não foi registrada como publicada.
 - **`Prose`: código no meio do texto quebra a linha.** Um `window.Aurea.setDensity("compact")` num parágrafo empurrava
   a página para o lado a 320 (+25, medido na página Density). O `.prose code` ganha `overflow-wrap:anywhere`; dentro do
   `pre` nada muda. Quem cobra: a varredura "nenhuma página rola de lado" (sem a correção, reprova).

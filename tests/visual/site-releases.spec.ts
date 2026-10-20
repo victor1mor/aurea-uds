@@ -1,4 +1,5 @@
 import {test, expect} from "@playwright/test";
+import {readFileSync} from "node:fs";
 
 // A ÁREA RELEASES (lote U, 19/10/2026): as notas de versão da referência — uma área no topo, "All Releases" com a última
 // no alto e uma página por versão, com a data e o comando de atualizar. Decisões do Victor: todas as versões, em inglês,
@@ -7,13 +8,16 @@ import {test, expect} from "@playwright/test";
 // Provado contra o defeito (19/10/2026): contra o site do `main` de antes (`BASE_SITE=http://127.0.0.1:8128`), os quatro
 // reprovam — lá não há a área.
 const base = process.env.BASE_SITE ?? "";
+// A última versão sai do pacote, e não escrita aqui: escrita, o teste reprovava a cada versão nova (achado ao fechar a
+// 0.36.0, 20/10/2026).
+const VERSAO: string = JSON.parse(readFileSync("packages/react/package.json", "utf8")).version;
 
 test("All Releases mostra a última no alto e leva cada versão à nota dela", async ({page}) => {
   await page.goto(`${base}/apps/catalog/releases.html`);
   await expect(page.locator(".topbar-tab[aria-current]")).toHaveText("Releases");
   const ultima = page.locator("#latest-release ~ h3").first();
-  await expect(ultima).toHaveText("v0.35.0");
-  await expect(page.getByRole("link", {name: "Read full release notes →"}).first()).toHaveAttribute("href", "./release-v0-35-0.html");
+  await expect(ultima).toHaveText(`v${VERSAO}`);
+  await expect(page.getByRole("link", {name: "Read full release notes →"}).first()).toHaveAttribute("href", `./release-v${VERSAO.replaceAll(".", "-")}.html`);
 });
 
 test("a versão que saiu dentro de outra leva à seção da nota de quem a publicou", async ({page}) => {

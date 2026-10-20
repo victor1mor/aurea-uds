@@ -444,6 +444,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.36.0](https://aureauds.dev/release-v0-36-0.md): A page opening for Section, a cookie notice for Banner, Chip as another name for Badge, two larger text tokens, the brand yellow as the accent text in the light theme, and fixes to DependencyGraph and Radio.
 - [v0.35.0](https://aureauds.dev/release-v0-35-0.md): A documentation layout for the AppShell, a second row of area tabs in the Header, five docs width tokens, and snapping in the editable DependencyGraph.
 - [v0.34.0](https://aureauds.dev/release-v0-34-0.md): No lines. Components no longer draw borders on web or React Native; what needed a border to stand out now gets a translucent fill.
 - [v0.33.0](https://aureauds.dev/release-v0-33-0.md): RadioGroup on the web, a three-position ThemeToggle with a system preference, Card parts, soft buttons, a blurred Header, and popups that stay above fixed headers.
