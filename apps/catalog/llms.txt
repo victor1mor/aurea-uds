@@ -444,6 +444,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.37.1](https://aureauds.dev/release-v0-37-1.md): Wide content no longer widens the page inside DataState, Form and the Dialog body, and field placeholders reach 4.5:1 in the lory brand.
 - [v0.37.0](https://aureauds.dev/release-v0-37-0.md): Line numbers and syntax colors for CodeBlock, a brand blue as the accent text in the light theme, and a visible disabled state in seven components.
 - [v0.36.0](https://aureauds.dev/release-v0-36-0.md): A page opening for Section, a cookie notice for Banner, Chip as another name for Badge, two larger text tokens, the brand yellow as the accent text in the light theme, and fixes to DependencyGraph and Radio.
 - [v0.35.0](https://aureauds.dev/release-v0-35-0.md): A documentation layout for the AppShell, a second row of area tabs in the Header, five docs width tokens, and snapping in the editable DependencyGraph.

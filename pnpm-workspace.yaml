@@ -54,6 +54,10 @@ overrides:
   'source-map-js@>=1.0.0 <1.2.2': '^1.2.2'
   'compression@<1.8.2': '^1.8.2'
   'sharp@<0.35.5': '^0.35.5'
+  # 21/10/2026 (moderado): uuid <11.1.1, sem o limite do buffer em v3/v5/v6 quando se passa `buf`. Chega pelo
+  # xcode 3.0.1, sob o @expo/config-plugins das devDependencies do @aurea-uds/native (pede o 7.0.3). O xcode so' chama
+  # `require('uuid').v4()`, e a entrada CommonJS do 11 tem o mesmo `v4` — lido no codigo dos dois.
+  'uuid@<11.1.1': '^11.1.1'
 
 auditConfig:
   # DUAS VULNERABILIDADES `high` SEM PATCH PUBLICADO, aceitas em 02/09/2026 com registro.

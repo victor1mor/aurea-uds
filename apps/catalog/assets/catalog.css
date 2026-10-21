@@ -877,7 +877,7 @@ svg.react-flow__connectionline {
   --segment:oklch(0.312 0.02 250);
   --muted:oklch(0.19 0.02 250);
   --muted-foreground:oklch(0.72 0.015 250);
-  --subtle-foreground:oklch(0.58 0.016 250);
+  --subtle-foreground:oklch(0.72 0.015 250);
   --accent:oklch(0.32 0.08 50);
   --accent-foreground:oklch(0.85 0.14 60);
   --destructive:oklch(0.7 0.19 25);
@@ -940,8 +940,8 @@ svg.react-flow__connectionline {
   --secondary-foreground:oklch(0.24 0.022 250);
   --secondary-hover:oklch(0.94 0.006 70);
   --muted:oklch(0.965 0.006 70);
-  --muted-foreground:oklch(0.52 0.018 255);
-  --subtle-foreground:oklch(0.65 0.014 255);
+  --muted-foreground:oklch(0.49 0.018 255);
+  --subtle-foreground:oklch(0.49 0.018 255);
   --accent:oklch(0.96 0.04 60);
   --accent-foreground:oklch(0.52 0.17 45);
   --destructive:oklch(0.62 0.21 26);
@@ -2625,7 +2625,10 @@ img,svg { display:block; }
 /* Form (M1): empilhar campos com respiro. Nada além disso — sem borda, sem fundo, sem largura.
    Formulário é ARRANJO, e arranjo é do Stack/Grid; se esta classe crescer, ela vira uma terceira
    maneira de fazer layout e passa a brigar com as duas que já existem. */
-.form { display:grid; gap:var(--space-5); }
+/* `minmax(0, 1fr)` (MNT-33, 21/10/2026): a coluna implícita (`auto`) não fica menor que o conteúdo, e uma tabela larga
+   dentro de um invólucro do app alargava a PÁGINA em vez de rolar na caixa dela (a 640 px, 104 px para o lado). O mesmo
+   no `.data-state` e no `.dialog-body`: as grades que embrulham conteúdo do app. */
+.form { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-5); }
 /* description (B-12): a frase de ajuda embaixo do controle, com a letra e a cor do `.hint`. */
 .field-description { color:var(--muted-foreground); font-size:var(--text-xs); line-height:var(--space-4); }
 /* o erro com 4 de recuo, como o da referência (0.32.0) */
@@ -3198,7 +3201,7 @@ img,svg { display:block; }
 /* DataState (M3): a região que troca de cara. Ela NÃO desenha nada próprio — só empilha o que
    já existe (esqueleto, alerta, estado vazio, conteúdo) com respiro entre eles. Se ganhar borda
    ou fundo, viram duas superfícies para a mesma coisa — o defeito que a `.table-region` cobrou. */
-.data-state { display:grid; gap:var(--space-3); }
+.data-state { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-3); }
 .skeleton { position:relative; overflow:hidden; border-radius:var(--radius-sm); background:var(--surface-3); }
 .skeleton { animation:skeleton-pulse 1.35s ease-in-out infinite; } @keyframes skeleton-pulse { 50% { opacity:.55; } }
 /* 0.32.0: `animation="none"` para o pulso; e quem pediu menos movimento ao sistema também não o vê. */
@@ -4137,7 +4140,7 @@ button.tag-main { cursor:pointer; }
 .dialog-icon-success { background:var(--success-bg); color:var(--success-400); }
 .dialog-icon-warning { background:var(--warning-bg); color:var(--warning-400); }
 .dialog-icon-danger { background:var(--danger-bg); color:var(--danger-400); }
-.dialog-body { --dialog-ring:calc(var(--focus-width) + var(--focus-offset)); display:grid; gap:14px; flex:1 1 auto; min-block-size:0; overflow-y:auto; overscroll-behavior:contain; margin-inline:calc(-1 * var(--dialog-ring)); padding:var(--dialog-ring); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
+.dialog-body { --dialog-ring:calc(var(--focus-width) + var(--focus-offset)); display:grid; grid-template-columns:minmax(0, 1fr); gap:14px; flex:1 1 auto; min-block-size:0; overflow-y:auto; overscroll-behavior:contain; margin-inline:calc(-1 * var(--dialog-ring)); padding:var(--dialog-ring); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); }
 .dialog-header + .dialog-body { margin-block-start:calc(var(--space-2) - var(--dialog-ring)); }
 .dialog-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:var(--space-2); }
 .dialog-body + .dialog-footer { margin-block-start:calc(var(--space-5) - var(--dialog-ring)); }

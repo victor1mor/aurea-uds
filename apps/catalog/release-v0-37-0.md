@@ -22,6 +22,7 @@ This release adds line numbers and syntax colors to [CodeBlock](./codeblock.html
 - **A disabled `Collapsible` trigger** fades and no longer lights up on hover.
 - **A disabled field inside `InputGroup`** fades the whole group, including the icon. A disabled button in an addon, such as a clear button, does not.
 - **[AutomationCard](./automationcard.html) with `enabled={false}` recedes**, the same as an automation without `enabled`.
+- **[CodeEditor](./codeeditor.html) content says it takes the keyboard** (`tabindex="0"`, editable and read-only). With code taller than the editor, the area scrolled but nothing inside it was announced as focusable. Tab order does not change; in read-only mode, this is what lets the keyboard reach the code to scroll it.
 - **Component metadata** (`@aurea-uds/contracts`): 56 entries said React Native support was planned for components that the native package already exports; they now say `stable`. Six states that were listed but are not implemented were removed: the indeterminate `Checkbox`, disabled tabs in `Tabs` and `SegmentedControl` on the web, the buffering state of `MediaPlayer`, the `Slider` hover and the disabled `Field`.
 
 ## Breaking changes
