@@ -7,8 +7,9 @@
 // O índice é o `window.AUREA_SEARCH` que o gerador escreve em `assets/search-index.js`, dos mesmos
 // dados das páginas. Sem JavaScript, o botão continua sendo um link para o catálogo.
 //
-// Pacote PRÓPRIO (`assets/search.js`, IIFE): o `live.js` só roda dentro das molduras de prévia, e
-// juntar os dois faria toda página baixar os exemplos de todos os componentes.
+// Pacote PRÓPRIO (`assets/search.js`, IIFE) nas páginas SEM caixa viva: juntar com o `live.js` faria toda página
+// baixar os exemplos de todos os componentes. A página de componente carrega só o `live.js` (21/10/2026), que monta
+// estas peças E as caixas vivas, sob o mesmo provedor (`vivo.tsx`).
 //
 // Este arquivo MONTA as peças vivas do site; quem entra é o `busca.tsx` (o `search.js`, das páginas todas) ou o
 // `inicio.tsx` (o `home.js`, só do Início, que leva também a vitrine — 15/10/2026). Os dois sob o MESMO provedor.

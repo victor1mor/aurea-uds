@@ -1,7 +1,8 @@
 import {createElement as h} from "react";
 import {Switch, Card} from "../../../packages/react/dist/index.js";
 
-const stack = {display: "grid", gap: "var(--space-3)", width: "min(420px, 100%)"};
+// `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza (ver o Checkbox.mjs).
+const stack = {display: "grid", gap: "var(--space-3)", maxWidth: "min(420px, 100%)"};
 
 export default {
   description:
@@ -42,7 +43,7 @@ export default {
         '  <Switch label="Push" />',
         '</Card>',
       ].join("\n"),
-      render: () => h("div", {style: {width: "min(420px,100%)"}},
+      render: () => h("div", {style: {maxWidth: "min(420px,100%)"}},
         h(Card, null, h("div", {style: stack},
           h("strong", null, "Notifications"),
           h(Switch, {label: "Email", defaultChecked: true}),

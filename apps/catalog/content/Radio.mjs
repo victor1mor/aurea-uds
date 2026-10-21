@@ -1,7 +1,8 @@
 import {createElement as h} from "react";
 import {Radio, Field} from "../../../packages/react/dist/index.js";
 
-const stack = {display: "grid", gap: "var(--space-2)", width: "min(420px, 100%)"};
+// `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza (ver o Checkbox.mjs).
+const stack = {display: "grid", gap: "var(--space-2)", maxWidth: "min(420px, 100%)"};
 
 export default {
   description:
@@ -64,7 +65,7 @@ export default {
         '  <div className="stack">…radios…</div>',
         '</Field>',
       ].join("\n"),
-      render: () => h("div", {style: {width: "min(420px,100%)"}},
+      render: () => h("div", {style: {maxWidth: "min(420px,100%)"}},
         h(Field, {label: "Visibility", hint: "Who can open this workspace"},
           h("div", {style: {...stack, marginTop: "var(--space-2)"}},
             h(Radio, {name: "vis", label: "Private", defaultChecked: true}),

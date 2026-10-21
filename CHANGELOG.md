@@ -17,6 +17,43 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site: a parte viva em toda caixa, as molduras e o centro (21/10/2026)
+
+Só o site — nenhum pacote muda. O Victor, no site publicado: *"o fundo de alguns é cinza e não preto"*, *"alguns
+componentes não esta sendo apresentados de forma centralizada, alguns nem aparecem na caixa"*, *"o bottonnav quando
+clico nas opções dele os icones somem"*, e *"adicione o javascript ao site da aurea assim todos os componente funciona
+como deveria funcionar"*.
+
+- **As molduras** (`embeds/*.html`, 43): o `#root` é a caixa de prévia do core (o fundo `--surface-inset`, o recheio e o
+  centro); a moldura que é página (a lateral, o AppShell, a abertura de página) fica com o fundo e sem o centro. O
+  exemplo da lateral não pinta mais o cinza do app.
+- **A forma cheia de todo ícone** vai no desenho embutido (86, +32,7 KB): o `BottomNav` perdia o ícone ao trocar de
+  item (`wrench-fill`, `user-fill`) — o mesmo defeito da chave de tema de 15/10, consertado só para ela.
+- **A parte viva em toda caixa das páginas de componente**: sob o provedor ÚNICO do site, junto da busca, por portal,
+  quando a caixa chega perto da tela; o HTML pronto continua sendo o piso e só sai depois que o vivo está no lugar. A
+  página de componente carrega o `assets/live.js` (457 KB em gzip) NO LUGAR do `search.js` — com duas raízes, a página
+  tinha duas regiões de avisos com o mesmo nome (o `landmark-unique` do axe, a lição do Início de 14/10). Nas sete
+  páginas cujo exemplo usa motor pesado (os gráficos, o editor, a grade, o mapa, o QR —
+  `content/_starters-motores.mjs`), o `assets/live-motores.js` (1,19 MB). O exemplo do `AureaProvider` não desenha mais
+  um segundo provedor (pela mesma razão).
+- **Os exemplos que abrem**: o botão do `Dialog`, `ConfirmDialog`, `Drawer`, `CommandPalette` e `CommandPaletteShell`
+  abre a janela; o `HoverCard` tem o cartão; os ganchos `useTheme`, `useDensity` e `useToast` mexem na página; os
+  exemplos controlados guardam o valor (`content/_estado.mjs`: `Tabs`, `SegmentedControl`, `SortableList`,
+  `BlockEditor`, `AutomationCard`, o mapa). Saíram as notas de "página estática". O `CommandPaletteShell` tinha texto e
+  exemplo de antes do lote R ("não modal", aberta de saída). O "Sizes" do `Combobox`, o `useAureaStrings` e o
+  `useSpriteUrl` ganharam desenho (eram `render: null`); o `useSpriteUrl` ensinava `#chevron--down`, nome da época
+  dos ícones Carbon.
+- **17 exemplos no centro**: a caixa de largura fixa virou limite (`maxWidth`), como a referência mostra — a peça no
+  centro, na largura dela (`Checkbox`, `Radio`, `Switch`, `Collapsible`, `DataList`, `Timeline`, `TreeView`); a
+  `Gallery` com a largura de quatro colunas; a `Table` com a largura do painel (cortava a coluna "Role"); o
+  `TableOfContents` numa caixa (ele se prende ao topo); o `ContainerScope` e o `useValorResponsivo` centralizam as
+  duas caixas quando quebram a linha.
+- **Quem cobra**: `tests/visual/moldura-da-previa.spec.ts` (o `BottomNav` clicado item a item; o fundo e o centro de
+  toda moldura; o centro de toda caixa do meio da página, já viva, na tela do Victor — 1280 × 663 —, com as exceções
+  escritas e o motivo de cada uma) e `tests/visual/parte-viva.spec.ts` (toda caixa de toda página de componente acende,
+  sem erro no console; o editor monta, a janela abre e fecha, a aba troca, a caixa de seleção marca). Os dois reprovam
+  o site de antes.
+
 ### A CI mais curta, e a queda do WebKit (03/10/2026)
 
 - **A varredura do catálogo roda em três jobs ao mesmo tempo**, um por navegador (`varredura`, no

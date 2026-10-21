@@ -132,7 +132,15 @@ for (const file of existsSync(contentDir) ? readdirSync(contentDir).filter(f => 
 // STARTERS: o par preview+código mínimo de quem ainda não tem arquivo próprio (ADR-0001 —
 // preview e código são núcleo, não luxo). Morava aqui dentro como o objeto `fallback`, sem
 // código nenhum e com 9 entradas mortas; virou conteúdo, que é o que é.
-const {default: starters} = await import(pathToFileURL(join(contentDir, "_starters.mjs")).href);
+// Em DOIS arquivos desde 21/10/2026: os de motor pesado (gráficos, editor, grade, mapa, QR) moram no
+// `_starters-motores.mjs`, porque a página deles carrega a parte viva com os motores (`live-motores.js`) e as outras a
+// leve (`live.js`). Para o gerador é uma lista só; uma chave nos dois arquivos derruba o build.
+const {default: startersLeves} = await import(pathToFileURL(join(contentDir, "_starters.mjs")).href);
+const {default: startersMotores} = await import(pathToFileURL(join(contentDir, "_starters-motores.mjs")).href);
+const nosDois = Object.keys(startersMotores).filter(k => k in startersLeves);
+if (nosDois.length) throw new Error(`_starters.mjs e _starters-motores.mjs têm a mesma entrada: ${nosDois.join(", ")}`);
+const starters = {...startersLeves, ...startersMotores};
+const COM_MOTOR = new Set(Object.keys(startersMotores));
 const {default: recipeContent} = await import(pathToFileURL(join(contentDir, "_recipes.mjs")).href);
 // HOOKS (16/08/2026): a metade da API pública que não tem ficha — ficha é de componente. Sem esta
 // página eles não existem em lugar nenhum que se leia, e foi assim que EU mesmo concluí que a
@@ -312,7 +320,11 @@ if (paraPreRender.length) {
 // `anchor` marca o bloco PRINCIPAL da página: é o par preview/code que o modelo exige, e o
 // gate procura por `#preview`. Os exemplos extras não recebem âncora.
 let uid = 0;
-function demoBlock(render, code, anchor) {
+// `vivo` (21/10/2026): {componente, indice} do exemplo que a caixa desenha. Vira `data-vivo="Componente:indice"`, e a
+// parte viva da página (`assets/live.js`, `live/vivo.tsx`) acende a caixa com o MESMO exemplo — o Victor: "adicione o
+// javascript ao site da aurea assim todos os componente funciona como deveria funcionar". Sem `vivo`, a caixa continua
+// só desenho (os padrões, os blocos e as receitas, por enquanto).
+function demoBlock(render, code, anchor, vivo = null) {
   const id = `d${uid++}`;
   let previewHtml = null;
   // Demo que estoura DERRUBA o build. Antes era console.warn: a página saía com "Preview
@@ -345,7 +357,9 @@ function demoBlock(render, code, anchor) {
   return h("div", {className: "demo", id: anchor, "data-demo": id},
     code ? h("div", {className: "demo-tabs"},
       h("div", {className: "segmented", role: "tablist"}, tab("preview", "Preview", true), tab("code", "Code", false))) : null,
-    h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"), ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
+    h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"),
+      ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`} : {}),
+      ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
       // Componente cujo conteúdo vive num portal renderiza só o disparador; quem não renderiza
       // nada (Dialog, Drawer) mostra o disparador do próprio starter. O `note` do conteúdo
       // explica na lede da demo — nunca uma caixa vazia sem explicação.
@@ -434,7 +448,7 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
     h("section", {className: "block", id: "usage"}, h("h2", null, "Usage"),
       h(A.CodeBlock, {language: "tsx", copyable: true, highlight: highlightCode, className: "usage-import"}, imports),
       demo.description ? h("p", {className: "demo-lede"}, demo.description) : null,
-      demoBlock(demo.render, demo.code, "preview"),
+      demoBlock(demo.render, demo.code, "preview", demo.vivo),
       points.length ? h("ul", {className: "usage-points"}, ...points.map((t, n) => h("li", {key: n}, t))) : null),
     ...secoes.map(s => s.node),
     // A proveniência ("Uses" da ADR-0001) vira os cartões de "Related Components", como na referência.
@@ -543,7 +557,9 @@ function componentPage(f, i) {
     // dentro resolve 100% de zero. Medido no navegador em 01/08/2026: a caixa media 0×220 e o
     // desenho vazava para fora dela.
     ...(bruto.prerender ? {render: () => h("div", {style: {width: "100%"},
-      dangerouslySetInnerHTML: {__html: preRenderizado[f.name]}})} : {})};
+      dangerouslySetInnerHTML: {__html: preRenderizado[f.name]}})} : {}),
+    // A caixa acende com o exemplo ORIGINAL (o `render` do conteúdo, não o pré-desenhado); a moldura acende sozinha.
+    vivo: bruto.embed ? null : {componente: f.name, indice: 0}};
   // Variante, tamanho e estado são EIXOS DIFERENTES (DIRECTION.md §5) — juntar os três num
   // rótulo "Variants" era mentira: `lg` não é variante e `hover` não é nem uma coisa nem outra.
   // Eixo declarado que a página não mostra é eixo que ninguém descobre. `variants` e `sizes`
@@ -594,7 +610,7 @@ function componentPage(f, i) {
                   // `n` é o índice DENTRO de `slice(1)`, então o índice real é `n + 1`
                   {componente: f.name, indice: n + 1}, ex.layoutProprio === true,
                   ex.tituloProprio === true)
-              : ex.render, ex.code))))} : null,
+              : ex.render, ex.code, undefined, ex.embed ? null : {componente: f.name, indice: n + 1}))))} : null,
       // A "Reference" da Aurea, no nome e no lugar da referência ("Styling Reference"): os eixos, a
       // acessibilidade, os tokens e as plataformas. Toda linha é uma fila de chips do MESMO tamanho.
       {id: "styling", label: "Styling Reference",
@@ -1911,6 +1927,14 @@ try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")documen
 `;
 
 function pageHtml(title, activeHref, inner, section = "components") {
+  const corpo = shell(activeHref, inner, section);
+  // A PARTE VIVA (21/10/2026): a página que tem caixa marcada (`data-vivo`) carrega o `live.js` NO LUGAR do
+  // `search.js` — ele monta as peças do topo E as caixas, sob o mesmo provedor (com dois, a página teria duas regiões de
+  // avisos com o mesmo nome: o `landmark-unique` do axe, medido). Se uma caixa é de componente com motor pesado
+  // (`_starters-motores.mjs`), o `live-motores.js`, que é o mesmo com os motores. Um arquivo só por página.
+  const vivas = [...corpo.matchAll(/data-vivo="([^":]+):/g)].map(m => m[1]);
+  const script = section === "home" ? "home"
+    : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) ? "live-motores" : "live";
   return `<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
@@ -1919,8 +1943,8 @@ function pageHtml(title, activeHref, inner, section = "components") {
 <title>${title} — Aurea UDS</title>
 <link rel="stylesheet" href="./assets/catalog.css">
 ${TEMA_SALVO}</head>
-<body>${SPRITE_SLOT}${shell(activeHref, inner, section)}<script src="./assets/catalog.js"></script>
-<script src="./assets/search-index.js" defer></script><script src="./assets/${section === "home" ? "home" : "search"}.js" defer></script></body>
+<body>${SPRITE_SLOT}${corpo}<script src="./assets/catalog.js"></script>
+<script src="./assets/search-index.js" defer></script><script src="./assets/${script}.js" defer></script></body>
 </html>
 `;
 }

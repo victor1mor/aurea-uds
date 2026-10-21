@@ -31,7 +31,7 @@ export default {
     "onInputChange plus loading: the search can be remote and the wait is announced, not silent.",
     "Base UI keyboard: arrows, Enter, Escape, and Backspace removing the last chip.",
     "disabled reaches the chips too: no removing what you cannot add.",
-    "The previews show the CLOSED field; the popup lives in a portal and only exists in a real app.",
+    "The list opens in a portal, above the page: type or press the arrow in the previews to open it.",
   ],
 
   examples: [

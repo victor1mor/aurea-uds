@@ -14,30 +14,105 @@
 // rico (`features` e `examples`) continua como dívida de conteúdo. `props` não entra mais nessa
 // frase: o achado M8 fechou na Parte E e todas as fichas publicam a API.
 //
-// `note` é a única concessão declarada: componente cujo conteúdo vive num PORTAL (Dialog,
-// Drawer, Tooltip, Popover, os dois menus, NotificationCenter) não existe em página estática —
-// renderToStaticMarkup não renderiza portal (medido em 30/07/2026: Dialog aberto = 0 bytes).
-// Nesses casos o preview mostra o DISPARADOR real e a nota diz por quê; o código é completo.
-import {createElement as h} from "react";
+// `note` foi a concessão declarada da página estática: componente cujo conteúdo vive num PORTAL
+// (Dialog, Drawer, Tooltip, Popover, os dois menus, NotificationCenter) não existe no HTML pronto —
+// renderToStaticMarkup não renderiza portal (medido em 30/07/2026: Dialog aberto = 0 bytes). Desde
+// 21/10/2026 a parte viva acende toda caixa: o HTML pronto mostra o DISPARADOR, e o vivo abre a
+// janela (ver "OS EXEMPLOS QUE ABREM", abaixo). A nota ficou só onde diz algo além disso.
+import {createElement as h, Fragment, useState} from "react";
 import * as A from "../../../packages/react/dist/index.js";
 // As cores do código, para o exemplo do `CodeBlock` (lote V, 20/10/2026).
 import {highlightCode} from "../../../packages/react/dist/code-highlight.js";
-// Os seis módulos de motor opcional vêm por subpath — o catálogo consome a biblioteca como um
-// consumidor consome, e é assim que se descobre se a fronteira da Fase 9 é usável.
-import {CodeEditor} from "../../../packages/react/dist/code-editor.js";
-import {DataGrid} from "../../../packages/react/dist/data-grid.js";
-import {QRCode} from "../../../packages/react/dist/qrcode.js";
-import {DependencyGraph} from "../../../packages/react/dist/graph.js";
-import {Chart, ChartTooltip, ChartLegend} from "../../../packages/react/dist/chart.js";
+// Os módulos de motor opcional vêm por subpath — o catálogo consome a biblioteca como um
+// consumidor consome, e é assim que se descobre se a fronteira da Fase 9 é usável. Os pesados (gráficos, editor,
+// grade, mapa, QR) moram no `_starters-motores.mjs` desde 21/10/2026; aqui fica o calendário, que é leve.
 import {Calendar} from "../../../packages/react/dist/calendar.js";
-import {AreaChart, Area, BarChart, Bar, CartesianGrid, XAxis} from "recharts";
+import {ComOrdem, ComValor} from "./_estado.mjs";
 
-const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
+export const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 const stack = {display: "grid", gap: "var(--space-3)"};
-const wide = {width: "min(30rem,100%)"};
+export const wide = {width: "min(30rem,100%)"};
+// O mesmo limite, para peça que tem a largura do conteúdo (21/10/2026): a caixa encolhe até ela e o painel a
+// centraliza. Com `wide`, a lista curta ficava encostada à esquerda de uma caixa de 30rem (o Victor apontou).
+const ate = {maxWidth: "min(30rem,100%)"};
 
-const PORTAL = "This page is static HTML: the popup lives in a portal and only exists in a real "
-  + "React app. The preview shows the trigger; the code is the whole composition.";
+// OS EXEMPLOS QUE ABREM (21/10/2026). Com a parte viva em toda caixa, o botão do exemplo abre a janela, como no código
+// ao lado — antes, a caixa era HTML pronto e o botão era só a forma, com uma nota dizendo isso. No HTML pronto a janela
+// fechada não desenha nada, então a caixa continua mostrando o botão. Cada um é o código da aba "Code", com o estado.
+function AbreDialog() {
+  const [open, setOpen] = useState(false);
+  return h(Fragment, null,
+    h(A.Button, {variant: "danger", onClick: () => setOpen(true)}, "Delete project"),
+    h(A.Dialog, {open, onClose: () => setOpen(false), title: "Delete project", icon: "trash", iconTone: "danger",
+      footer: h(Fragment, null,
+        h(A.Button, {variant: "tertiary", onClick: () => setOpen(false)}, "Cancel"),
+        h(A.Button, {variant: "danger", onClick: () => setOpen(false)}, "Delete"))},
+      "This removes every component and token in it. It cannot be undone."));
+}
+function AbreConfirmDialog() {
+  const [open, setOpen] = useState(false);
+  return h(Fragment, null,
+    h(A.Button, {variant: "danger", onClick: () => setOpen(true)}, "Delete article"),
+    h(A.ConfirmDialog, {open, title: "Delete this article?",
+      description: "It leaves the site immediately, and this cannot be undone.",
+      confirmLabel: "Delete", destructive: true, icon: "trash",
+      onConfirm: () => setOpen(false), onCancel: () => setOpen(false)}));
+}
+function AbreDrawer() {
+  const [open, setOpen] = useState(false);
+  return h(Fragment, null,
+    h(A.Button, {onClick: () => setOpen(true)}, "Edit member"),
+    h(A.Drawer, {open, onClose: () => setOpen(false), title: "Edit member", side: "right",
+      footer: h(A.Button, {variant: "primary", onClick: () => setOpen(false)}, "Save")},
+      h(A.Field, {label: "Name"}, h(A.Input, {defaultValue: "Analyst"}))));
+}
+function AbrePaleta() {
+  const [open, setOpen] = useState(false);
+  const fecha = () => setOpen(false);
+  return h(Fragment, null,
+    h(A.Button, {leadingIcon: "magnifying-glass", kbd: "⌘K", onClick: () => setOpen(true)}, "Search"),
+    h(A.CommandPalette, {open, onClose: fecha, items: [
+      {id: "button", label: "Button", icon: "squares-four", group: "Components", run: fecha},
+      {id: "close", label: "CloseButton", icon: "squares-four", group: "Components", run: fecha},
+      {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", group: "Actions", run: fecha}]}));
+}
+function AbreCasca() {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const fecha = () => setOpen(false);
+  return h(Fragment, null,
+    h(A.Button, {leadingIcon: "magnifying-glass", onClick: () => setOpen(true)}, "Open palette"),
+    h(A.CommandPaletteShell, {open, query, onQueryChange: setQuery, onClose: fecha},
+      h("div", {className: "menu"},
+        h("button", {className: "menu-item", type: "button", onClick: fecha}, "Go to Button"),
+        h("button", {className: "menu-item", type: "button", onClick: fecha}, "Toggle theme"))));
+}
+// Os três ganchos que mexem na PÁGINA (tema, densidade, aviso): o exemplo vivo mexe nesta página, como no app.
+function UsaTema() {
+  const {theme, toggleTheme} = A.useTheme();
+  return h(A.IconButton, {icon: theme === "light" ? "moon" : "sun",
+    label: theme === "light" ? "Switch to dark" : "Switch to light", onClick: toggleTheme});
+}
+function UsaDensidade() {
+  const {density, setDensity} = A.useDensity();
+  return h(A.SegmentedControl, {value: density ?? "comfortable", onChange: setDensity, items: [
+    {value: "compact", label: "Compact"},
+    {value: "comfortable", label: "Comfortable"},
+    {value: "spacious", label: "Spacious"}]});
+}
+// Os dois ganchos que só LEEM do provedor: o exemplo mostra o que eles leem (eram `render: null`, caixa vazia).
+function MostraFrase() {
+  const s = A.useAureaStrings();
+  return h("p", null, s.loading);
+}
+function MostraGlifo() {
+  const url = A.useSpriteUrl();
+  return h("svg", {className: "icon", "aria-hidden": true}, h("use", {href: `${url}#i-caret-down`}));
+}
+function UsaAviso() {
+  const toast = A.useToast();
+  return h(A.Button, {onClick: () => toast.add({title: "Saved", type: "success"})}, "Save");
+}
 
 // A "foto" das páginas de imagem e de galeria (e da abertura, `patterns/Section.mjs`): SVG em data URI, porque o catálogo é gerado e
 // commitado e um preview que busca bytes na rede não sobrevive a uma máquina sem rede — nem ao
@@ -67,12 +142,7 @@ const CAPA = "data:image/svg+xml," + encodeURIComponent(
   + '<path d="M0 180 L90 90 L150 140 L220 60 L320 160 L320 180 Z" fill="#52525b"/>'
   + '<circle cx="262" cy="42" r="16" fill="#a1a1aa"/></svg>');
 
-// Série de exemplo das três páginas de Chart. Uma só, para que as três mostrem o mesmo dado
-// visto de três jeitos — é o que faz a página da legenda e a do tooltip serem comparáveis.
 const MES_FIXO = new Date(2026, 7, 1);
-const SERIE = [{month: "Jan", runs: 128, errors: 9}, {month: "Feb", runs: 194, errors: 14},
-  {month: "Mar", runs: 173, errors: 6}, {month: "Apr", runs: 241, errors: 11},
-  {month: "May", runs: 287, errors: 8}, {month: "Jun", runs: 264, errors: 17}];
 
 export default {
   // 0.33.0: o terceiro com `action`, o botão do aviso da referência ("Upgrade"), antes do X.
@@ -126,8 +196,11 @@ export default {
     code: `<AureaProvider spriteUrl="/assets/aurea-icons.svg" direction="ltr" strings={{close: "Fechar"}}>
   <App />
 </AureaProvider>`,
-    render: () => h(A.AureaProvider, {spriteUrl: ""}, h("div", {style: row},
-      h(A.Icon, {name: "check"}), h("span", null, "Icons resolve through the provider."))),
+    // Sem um SEGUNDO provedor (21/10/2026): a caixa já mora sob o do site, e cada provedor monta a sua região de avisos
+    // — com a parte viva, a página ganhava duas com o mesmo nome (o `landmark-unique` do axe). O ícone que resolve é o
+    // efeito do provedor; a aba "Code" ensina o provedor.
+    render: () => h("div", {style: row},
+      h(A.Icon, {name: "check"}), h("span", null, "Icons resolve through the provider.")),
   },
   // 0.33.0: com `tone` e `emphasis="soft"` — a cor da letra e o fundo clarinho do tom, como os da referência.
   Avatar: {
@@ -201,7 +274,6 @@ export default {
   // mesma concessão declarada dos outros componentes de portal. O selecionado entra para a prévia
   // mostrar a linguagem de "escolhido" que a casa já tem — a mesma da aba ativa.
   Gallery: {
-    note: PORTAL,
     description: "A grid of pictures you can pick from. Enlarging opens the Dialog this library "
       + "already has — no second floating surface is born for it.",
     code: `<Gallery
@@ -218,7 +290,9 @@ export default {
     // `width:100%` no invólucro: o painel da prévia é flex e centraliza, então o `div` solto
     // encolhia até a largura mínima e a grade caía para DUAS colunas em duas linhas — 10px além
     // da caixa depois da escala de letra da 0.8.8. Com a largura do painel, fica uma linha só.
-    render: () => h("div", {style: {width: "100%"}},
+    // E a largura de QUATRO colunas, e não a do painel inteiro (21/10/2026): a grade reparte o painel em colunas de
+    // `--gallery-min`, e as que sobram ficavam vazias à direita — as quatro fotos encostadas à esquerda.
+    render: () => h("div", {style: {width: "min(100%, calc(var(--gallery-min, 8rem) * 4 + var(--space-3) * 3))"}},
       h(A.Gallery, {label: "Product photos", selected: "back", zoom: true,
         items: ["Front", "Back", "In use", "Packaging"].map(t =>
           ({id: t.toLowerCase().replace(" ", ""), src: FOTO, alt: t, caption: t}))})),
@@ -246,7 +320,7 @@ export default {
   })}
 />`,
     render: () => h("div", {style: {width: "min(24rem,100%)"}},
-      h(A.SortableList, {label: "Pipeline stages", onReorder: () => {}, items: [
+      h(ComOrdem, {componente: A.SortableList, label: "Pipeline stages", items: [
         {id: "a", label: "Draft"}, {id: "b", label: "In review"}, {id: "c", label: "Published"}]})),
   },
   // BlockEditor (N1). A PRÉVIA É A EXPLICAÇÃO DO COMPONENTE: o que aparece com pele da Aurea é a
@@ -282,7 +356,7 @@ export default {
     // prévia tem para dizer: uma moldura só, conteúdos diferentes dentro. O bloco de título saiu da
     // prévia e continua no `code` abaixo, onde não custa altura.
     render: () => h("div", {style: {width: "min(22rem,100%)"}},
-      h(A.BlockEditor, {label: "Article", onReorder: () => {}, onRemove: () => {}, blocks: [
+      h(ComOrdem, {componente: A.BlockEditor, lista: "blocks", label: "Article", onRemove: () => {}, blocks: [
         {id: "p", kind: "Text", children: h(A.Textarea, {"aria-label": "Paragraph", rows: 2,
           defaultValue: "The king came up with a plan."})},
         {id: "i", kind: "Image", children: h("figure", {style: {margin: 0}},
@@ -406,67 +480,6 @@ export default {
       selected: {from: new Date(2026, 7, 12), to: new Date(2026, 7, 18)},
       disabled: {before: new Date(2026, 7, 6)}}),
   },
-  // ── Chart (Lote 3) ────────────────────────────────────────────────────────────────────────
-  // `prerender: true` porque o Recharts 3 monta o desenho por EFEITO: renderToStaticMarkup
-  // devolve a <div> embrulho e nenhum <svg> (medido em 01/08/2026, 127 bytes). O gerador monta
-  // estas três num DOM de verdade e grava o HTML — ver o bloco PRERENDER do build-catalog.
-  // O código continua sendo o componente, sem nada de prerender: é assim que o consumidor usa.
-  Chart: {
-    install: 'import {Chart} from "@aurea-uds/react/chart";',
-    code: `<Chart label="Runs per month">
-  <AreaChart data={data}>
-    <CartesianGrid vertical={false} />
-    <XAxis dataKey="month" tickLine={false} axisLine={false} />
-    <Area dataKey="runs" name="Runs" stroke="var(--chart-2)" fill="var(--chart-2)" fillOpacity={0.15} />
-  </AreaChart>
-</Chart>`,
-    prerender: true,
-    render: () => h(Chart, {label: "Runs per month"},
-      h(AreaChart, {data: SERIE},
-        h(CartesianGrid, {vertical: false}),
-        h(XAxis, {dataKey: "month", tickLine: false, axisLine: false}),
-        h(Area, {dataKey: "runs", name: "Runs", stroke: "var(--chart-2)",
-          fill: "var(--chart-2)", fillOpacity: 0.15}))),
-  },
-  ChartLegend: {
-    install: 'import {Chart, ChartLegend} from "@aurea-uds/react/chart";',
-    code: `<Chart label="Runs and errors">
-  <BarChart data={data}>
-    <XAxis dataKey="month" tickLine={false} axisLine={false} />
-    <Bar dataKey="runs" name="Runs" fill="var(--chart-2)" />
-    <Bar dataKey="errors" name="Errors" fill="var(--chart-4)" />
-    <ChartLegend />
-  </BarChart>
-</Chart>`,
-    prerender: true,
-    render: () => h(Chart, {label: "Runs and errors"},
-      h(BarChart, {data: SERIE},
-        h(XAxis, {dataKey: "month", tickLine: false, axisLine: false}),
-        h(Bar, {dataKey: "runs", name: "Runs", fill: "var(--chart-2)"}),
-        h(Bar, {dataKey: "errors", name: "Errors", fill: "var(--chart-4)"}),
-        h(ChartLegend, {}))),
-  },
-  ChartTooltip: {
-    install: 'import {Chart, ChartTooltip} from "@aurea-uds/react/chart";',
-    // `defaultIndex` fixa o ponto ativo. Numa página estática não há ponteiro, e sem ele o
-    // tooltip nunca apareceria no preview; num app real ele é opcional.
-    description: "The tooltip follows the pointer. Here it is pinned to one point so a static "
-      + "page can show it.",
-    code: `<Chart label="Runs per month">
-  <AreaChart data={data}>
-    <XAxis dataKey="month" tickLine={false} axisLine={false} />
-    <Area dataKey="runs" name="Runs" stroke="var(--chart-2)" fill="var(--chart-2)" fillOpacity={0.15} />
-    <ChartTooltip />
-  </AreaChart>
-</Chart>`,
-    prerender: true,
-    render: () => h(Chart, {label: "Runs per month"},
-      h(AreaChart, {data: SERIE},
-        h(XAxis, {dataKey: "month", tickLine: false, axisLine: false}),
-        h(Area, {dataKey: "runs", name: "Runs", stroke: "var(--chart-2)",
-          fill: "var(--chart-2)", fillOpacity: 0.15}),
-        h(ChartTooltip, {defaultIndex: 3}))),
-  },
   CodeBlock: {
     description: "Code to read and copy. With lineNumbers, the number of each line; with highlight, the colors — pass "
       + "highlightCode from @aurea-uds/react/code-highlight (its grammars are optional peers). Without them, plain text.",
@@ -483,20 +496,6 @@ import {highlightCode} from "@aurea-uds/react/code-highlight";
 export function Actions() {
   return <Button variant="primary" size="sm">Save</Button>;
 }`)),
-  },
-  CodeEditor: {
-    install: 'import {CodeEditor} from "@aurea-uds/react/code-editor";',
-    description: "CodeMirror 6 with the Aurea theme. The editor mounts on the client, so a "
-      + "static page shows only its host element — the code is what you run.",
-    code: `import {javascript} from "@codemirror/lang-javascript";
-
-<CodeEditor
-  defaultValue={'const total = items.reduce((n, i) => n + i.price, 0);'}
-  extensions={[javascript()]}
-  onChange={setSource}
-/>`,
-    render: () => h("div", {style: wide}, h(CodeEditor,
-      {defaultValue: "const total = items.reduce((n, i) => n + i.price, 0);"})),
   },
   Chip: {
     description: "Another name for Badge: the same component, the same props, the same look. "
@@ -519,10 +518,6 @@ export function Actions() {
       h(A.Badge, null, "three")),
   },
   CommandPalette: {
-    note: "This page is static HTML: the list lives in a portal and only exists in a real React "
-      + "app, so the preview shows the trigger. Rendering the palette open here would draw an "
-      + "input announcing itself as expanded with nothing to point at — a lie the accessibility "
-      + "gate caught. The code is the whole composition.",
     description: "The palette with the engine wired up: commands are data, it filters as you "
       + "type, moves with the arrows and runs with Enter. Closing happens BEFORE the command "
       + "runs, so one that navigates does not leave the palette over the new screen. For a "
@@ -536,34 +531,26 @@ export function Actions() {
   {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", group: "Actions", run: toggleTheme},
 ]} />
 // Items with a group come together under its title; the line under the list teaches the keys.`,
-    render: () => h(A.Button, {leadingIcon: "magnifying-glass", kbd: "⌘K"}, "Search"),
+    render: () => h(AbrePaleta),
   },
   CommandPaletteShell: {
-    description: "Non-modal by design: you own open and query. For a modal palette, put it "
-      + "in a Dialog — declaring aria-modal without focus containment is worse than neither.",
-    code: `<CommandPaletteShell open={open} query={query} onQueryChange={setQuery}>
+    // O texto e o exemplo ficaram para trás quando a casca virou janela do motor, com `onClose` (lote R, 16/10/2026):
+    // diziam "não modal" e abriam a paleta já aberta. Com a parte viva (21/10/2026), aberta de saída ela cobria a página
+    // inteira e prendia o foco ao carregar. Agora é como a CommandPalette ao lado: o botão abre.
+    description: "The window of the palette, with the search field on top: you compose the list, and you own open and "
+      + "query. It is a modal dialog — Esc and a click outside call onClose. For the palette with the commands wired "
+      + "up, use CommandPalette.",
+    code: `<Button leadingIcon="magnifying-glass" onClick={() => setOpen(true)}>Open palette</Button>
+
+<CommandPaletteShell open={open} query={query} onQueryChange={setQuery} onClose={() => setOpen(false)}>
   <div className="menu">
     <button className="menu-item" type="button">Go to Button</button>
     <button className="menu-item" type="button">Toggle theme</button>
   </div>
 </CommandPaletteShell>`,
-    // A `.command-overlay` é `position:fixed; inset:0; z-index:var(--z-modal)`. Sem um bloco
-    // contentor ela resolve contra o VIEWPORT: a prévia cobria a página inteira, com scrim e
-    // blur, e como o HTML é estático não havia estado para fechá-la — a página do componente
-    // ficava impossível de usar. `transform` cria o bloco contentor (é o que a CSS Transforms
-    // §3 manda) e o `fixed` passa a resolver contra esta caixa. É o mesmo motivo do
-    // `overflow:hidden`: o overlay tem `padding-top: var(--space-16)` e sem teto ele empurraria
-    // a caixa. Nada muda no componente — o que se conserta é a MOLDURA da prévia.
-    render: () => h("div", {style: {...wide, position: "relative", height: "17rem",
-      overflow: "hidden", transform: "translateZ(0)", borderRadius: "var(--radius-card)"}},
-      h(A.CommandPaletteShell,
-        {open: true, query: "", onQueryChange: () => {}},
-        h("div", {className: "menu"},
-          h("button", {className: "menu-item", type: "button"}, "Go to Button"),
-          h("button", {className: "menu-item", type: "button"}, "Toggle theme")))),
+    render: () => h(AbreCasca),
   },
   ContextMenu: {
-    note: PORTAL,
     code: `<ContextMenu label="Row actions" items={[
   {label: "Rename", leadingIcon: "pencil-simple"},
   "separator",
@@ -576,30 +563,12 @@ export function Actions() {
       {label: "Delete", leadingIcon: "trash"},
     ]}, h(A.Card, null, "Right-click me, or focus and press Shift+F10."))),
   },
-  DataGrid: {
-    install: 'import {DataGrid} from "@aurea-uds/react/data-grid";',
-    code: `<DataGrid
-  label="Members"
-  filterable
-  data={[{name: "Messenger", role: "Owner"}, {name: "Analyst", role: "Editor"}]}
-  columns={[
-    {accessorKey: "name", header: "Name"},
-    {accessorKey: "role", header: "Role"},
-  ]}
-/>`,
-    render: () => h("div", {style: wide}, h(DataGrid, {
-      label: "Members", filterable: true,
-      data: [{name: "Messenger", role: "Owner"}, {name: "Analyst", role: "Editor"},
-        {name: "Curator", role: "Viewer"}],
-      columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}],
-    })),
-  },
   DataList: {
     code: `<DataList items={[
   {term: "Plan", value: "Pro"},
   {term: "Seats", value: "12"},
 ]} />`,
-    render: () => h("div", {style: wide}, h(A.DataList, {items: [{term: "Plan", value: "Pro"},
+    render: () => h("div", {style: ate}, h(A.DataList, {items: [{term: "Plan", value: "Pro"},
       {term: "Seats", value: "12"}]})),
   },
   DataState: {
@@ -622,7 +591,6 @@ export function Actions() {
       h(A.DataState, {state: "stale"}, h("p", null, "120 rows"))),
   },
   Dialog: {
-    note: PORTAL,
     code: `<Button variant="danger" onClick={() => setOpen(true)}>Delete project</Button>
 
 <Dialog
@@ -636,7 +604,7 @@ export function Actions() {
 >
   This removes every component and token in it. It cannot be undone.
 </Dialog>`,
-    render: () => h(A.Button, {variant: "danger"}, "Delete project"),
+    render: () => h(AbreDialog),
   },
   AccessGate: {
     description: "You decide who can do what; this decides how the answer LOOKS. Two ways, and "
@@ -659,10 +627,8 @@ export function Actions() {
         h(A.Button, {variant: "primary"}, "Publish"))),
   },
   ConfirmDialog: {
-    note: "This page is static HTML: the alert lives in a portal and only exists in a real React "
-      + "app. The preview shows the trigger; the code is the whole composition. The difference "
-      + "from Dialog is not how it looks — it is that a click outside cannot answer for the user, "
-      + "and the focus opens on the safe button.",
+    description: "The difference from Dialog is not how it looks — it is that a click outside cannot answer for the "
+      + "user, and the focus opens on the safe button.",
     code: `<Button variant="danger" onClick={() => setOpen(true)}>Delete article</Button>
 
 <ConfirmDialog
@@ -675,10 +641,9 @@ export function Actions() {
   onConfirm={() => { remove(); setOpen(false); }}
   onCancel={() => setOpen(false)}
 />`,
-    render: () => h(A.Button, {variant: "danger"}, "Delete article"),
+    render: () => h(AbreConfirmDialog),
   },
   Drawer: {
-    note: PORTAL,
     code: `<Button onClick={() => setOpen(true)}>Edit member</Button>
 
 <Drawer open={open} onClose={() => setOpen(false)} title="Edit member" side="right"
@@ -688,10 +653,9 @@ export function Actions() {
 
 // On a phone, the panel that rises from the bottom (swipe down to close):
 <Drawer open={open} onClose={() => setOpen(false)} title="Filters" side="bottom">…</Drawer>`,
-    render: () => h(A.Button, null, "Edit member"),
+    render: () => h(AbreDrawer),
   },
   DropdownMenu: {
-    note: PORTAL,
     code: `<DropdownMenu
   label="Record actions"
   trigger={<Button variant="outline" trailingIcon="caret-down">Actions</Button>}
@@ -918,7 +882,6 @@ export function Actions() {
     ]})),
   },
   NotificationCenter: {
-    note: PORTAL,
     code: `<NotificationCenter
   onMarkAllRead={markAll}
   items={[
@@ -932,7 +895,6 @@ export function Actions() {
     ]}),
   },
   Popover: {
-    note: PORTAL,
     code: `<Popover
   title="Filters"
   arrow
@@ -1070,47 +1032,6 @@ export function Actions() {
       {id: "3", name: "Search", state: "down"},
       {id: "4", name: "Billing", state: "maintenance"}]})),
   },
-  DependencyGraph: {
-    // Subpath próprio + a folha ESTRUTURAL do motor. Só ela: o `style.css` dele é a
-    // identidade deles e não entra (ver a ficha e o REFERENCES.md).
-    install: 'import {DependencyGraph} from "@aurea-uds/react/graph";\nimport "@xyflow/react/dist/base.css";',
-    // A prévia RENDERIZA, e isso é correção de 09/08/2026. A primeira versão dizia que grafo
-    // não cabia em HTML estático e mostrava uma caixa vazia com uma frase dentro — o Victor
-    // perguntou "cadê?" e estava certo. A conclusão era minha, não medida: o motor tem caminho
-    // de SSR documentado, e são três coisas no componente (`initialWidth`, `initialHeight` e
-    // `handles` por nó, mais o viewport inicial no provider). Sem elas o motor não tem o que
-    // medir e não desenha; com elas, `renderToStaticMarkup` devolve o grafo inteiro.
-    code: `<DependencyGraph
-  nodes={[
-    {id: "ingest", label: "Ingest", kind: "source"},
-    {id: "embed", label: "Embed", kind: "model"},
-    {id: "index", label: "Index", kind: "store"},
-    {id: "answer", label: "Answer", kind: "agent"},
-  ]}
-  edges={[
-    {from: "ingest", to: "embed"},
-    {from: "embed", to: "index"},
-    {from: "index", to: "answer"},
-  ]}
-  onSelect={setSelected}
-  selectedId={selected}
-/>`,
-    // Quatro nos em TRES colunas, e a escolha e medida: o enquadramento nunca amplia, entao a
-    // profundidade do exemplo decide a escala. Cinco em cadeia caiam a 0,46 num painel de
-    // 635px e o rotulo ficava ilegivel; com tres colunas fica ~0,8, e ainda mostra um RAMO,
-    // que e o que um grafo existe para mostrar.
-    render: () => h(DependencyGraph, {
-      height: "20rem", selectedId: "embed", onSelect: () => {},
-      nodes: [
-        {id: "ingest", label: "Ingest", kind: "source"},
-        {id: "embed", label: "Embed", kind: "model"},
-        {id: "index", label: "Index", kind: "store"},
-        {id: "answer", label: "Answer", kind: "agent"}],
-      edges: [
-        {from: "ingest", to: "embed"},
-        {from: "embed", to: "index"},
-        {from: "embed", to: "answer", animated: true}]}),
-  },
   InterAgentMessage: {
     install: 'import {InterAgentMessage} from "@aurea-uds/react";',
     code: `<InterAgentMessage messages={[
@@ -1144,12 +1065,12 @@ export function Actions() {
   lastResult="success"
 />`,
     render: () => h("div", {style: stack},
-      h(A.AutomationCard, {name: "Nightly reindex", enabled: true, onToggle: () => {},
+      h(ComValor, {componente: A.AutomationCard, valor: "enabled", aviso: "onToggle", name: "Nightly reindex", enabled: true,
         // sem `description`: com a escala de letra da 0.8.8 a linha dela empurrava o segundo
         // cartão 18px para fora da caixa, e o código ao lado nunca a mostrou.
         trigger: "Every day at 02:00 UTC", action: "Run the indexer on changed documents",
         lastRun: "yesterday, 02:00", lastResult: "success"}),
-      h(A.AutomationCard, {name: "Purge stale drafts", onToggle: () => {},
+      h(ComValor, {componente: A.AutomationCard, valor: "enabled", aviso: "onToggle", name: "Purge stale drafts",
         trigger: "On draft older than 30 days", action: "Move it to the archive",
         lastRun: "6 days ago", lastResult: "failure"})),
   },
@@ -1188,23 +1109,6 @@ export function Actions() {
        source: "Team runbook, section 4."},
       {id: "3", content: "Old shipping address", scope: "episodic", operation: "forgotten", time: "10:41"}]}),
   },
-  QRCode: {
-    description: "Three sizes, side by side, because the choice is about SCANNING and not about "
-      + "layout: the smaller the box, the fewer pixels each module gets, and below roughly four "
-      + "an ordinary phone camera starts to miss it. The preview showed only sm, which is why "
-      + "this page used to display a code nobody could read.",
-    install: 'import {QRCode} from "@aurea-uds/react/qrcode";',
-    code: `<QRCode value="https://aureauds.dev" size="sm" />
-<QRCode value="https://aureauds.dev" size="md" />
-<QRCode value="https://aureauds.dev" size="lg" />`,
-    // `flex-end` alinha os três pela BASE: comparação de tamanho com as caixas centradas na
-    // vertical faria o `sm` parecer flutuando, e o que a página compara é altura.
-    render: () => h("div", {style: {...row, alignItems: "flex-end", gap: "var(--space-5)"}},
-      [["sm", "7.5rem"], ["md", "10rem"], ["lg", "15rem"]].map(([tam, medida]) =>
-        h("div", {key: tam, style: {display: "grid", gap: "var(--space-2)", justifyItems: "center"}},
-          h(QRCode, {value: "https://aureauds.dev", size: tam}),
-          h("span", {className: "muted"}, `${tam} · ${medida}`)))),
-  },
   Skeleton: {
     code: `<Skeleton style={{height: "0.875rem", width: "70%"}} />
 <Skeleton style={{height: "0.875rem", width: "90%"}} />`,
@@ -1228,7 +1132,9 @@ export function Actions() {
     <tr><td>Analyst</td><td>Editor</td></tr>
   </tbody>
 </Table>`,
-    render: () => h("div", {style: wide}, h(A.Table, {caption: "Team"},
+    // A largura do painel (21/10/2026): na caixa de 30rem a tabela de 720 rolava de lado, cortada na coluna "Role", com
+    // 814 de painel sobrando — o Victor apontou.
+    render: () => h("div", {style: {width: "100%"}}, h(A.Table, {caption: "Team"},
       h("thead", null, h("tr", null, h("th", null, "Name"), h("th", null, "Role"))),
       h("tbody", null,
         h("tr", null, h("td", null, "Messenger"), h("td", null, "Owner")),
@@ -1244,10 +1150,12 @@ export function Actions() {
 ]} />`,
     // rótulo próprio: o padrão é "On this page", e a página já tem um índice com esse nome —
     // dois <nav> com o mesmo nome acessível é violação (axe landmark-unique), medido.
-    render: () => h(A.TableOfContents, {label: "Example sections", current: "preview", items: [
+    // Numa caixa simples (21/10/2026): o índice se prende ao TOPO (`.toc`: `align-self:start`, `sticky`), que é o certo
+    // ao lado do texto e saía grudado no alto da prévia. A caixa é que o painel centraliza.
+    render: () => h("div", null, h(A.TableOfContents, {label: "Example sections", current: "preview", items: [
       {id: "preview", label: "Preview"}, {id: "installation", label: "Installation"},
       {id: "reference", label: "Reference"},
-    ]}),
+    ]})),
   },
   AvatarGroup: {
     code: `<AvatarGroup max={3} total={9} label="Reviewers">
@@ -1280,7 +1188,6 @@ export function Actions() {
   {label: "Edit", items: [{label: "Undo"}, {label: "Redo"}]},
   {label: "View", items: [{label: "Zoom in"}, {label: "Zoom out"}]},
 ]} />`,
-    note: "The row is real; the menus open in a portal, which a static page cannot render.",
     render: () => h(A.Menubar, {
       label: "Main",
       menus: [
@@ -1309,7 +1216,7 @@ export function Actions() {
 </ContainerScope>`,
     // Dois contêineres lado a lado, MESMA viewport: é o que a primitive existe para permitir, e
     // ver os dois juntos é o que explica a diferença para uma media query.
-    render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start"}},
+    render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start", justifyContent: "center"}},
       ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
         background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
         h(A.Toolbar, {label: `Ações ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
@@ -1324,7 +1231,7 @@ export function Actions() {
 );`,
     // O hook resolve; quem mostra o resultado é o componente que o consome. O preview mostra o
     // efeito, que é o que se pode ver — o valor em si é um string.
-    render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start"}},
+    render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start", justifyContent: "center"}},
       ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
         background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
         h(A.ToggleGroup, {label: `Alinhar ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
@@ -1371,8 +1278,8 @@ const container = usePortalContainer();`,
 />`,
     // O rótulo diz a AÇÃO, não o estado: um botão rotulado "Dark" não diz se liga ou desliga,
     // e um leitor de tela anuncia exatamente o rótulo. É a mesma regra do `passwordShow`.
-    note: "Reads and writes data-theme on the document root, so the whole page follows. A static page has no provider, so the button here is only the shape.",
-    render: () => h(A.IconButton, {icon: "sun", label: "Switch to light"}),
+    note: "Reads and writes data-theme on the document root, so the whole page follows — this button switches the theme of this page.",
+    render: () => h(UsaTema),
   },
 
   useDensity: {
@@ -1388,10 +1295,7 @@ const container = usePortalContainer();`,
   ]}
 />`,
     note: "Density is the third axis of the system, next to theme and direction: it changes control height, row height and padding across every component at once.",
-    render: () => h(A.SegmentedControl, {value: "comfortable", onChange: () => {}, items: [
-      {value: "compact", label: "Compact"},
-      {value: "comfortable", label: "Comfortable"},
-      {value: "spacious", label: "Spacious"}]}),
+    render: () => h(UsaDensidade),
   },
 
   useToast: {
@@ -1409,24 +1313,25 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 
 // where the stack lives (the default is the bottom middle)
 <AureaProvider toastPlacement="top-end">…</AureaProvider>`,
-    note: "The toast list is mounted by AureaProvider and lives in a portal, which a static page cannot render. The button is real; the toast needs the runtime.",
-    render: () => h(A.Button, null, "Save"),
+    note: "The toast list is mounted by AureaProvider. The button shows a toast at the bottom of this page.",
+    render: () => h(UsaAviso),
   },
 
   useAureaStrings: {
     code: `const s = useAureaStrings();
 
 <p>{s.loading}</p>   // "Loading" — or your own dictionary`,
-    note: "Reads the dictionary the provider is using. Nothing renders on its own.",
-    render: null,
+    note: "Reads the dictionary the provider is using. Nothing renders on its own: the preview prints one entry.",
+    render: () => h(MostraFrase),
   },
 
   useSpriteUrl: {
     code: `const url = useSpriteUrl();
 
-<svg><use href={\`\${url}#chevron--down\`} /></svg>`,
-    note: "Reads where the provider is loading glyphs from. Nothing renders on its own.",
-    render: null,
+<svg><use href={\`\${url}#i-caret-down\`} /></svg>`,
+    note: "Reads where the provider is loading glyphs from. Nothing renders on its own: the preview draws one glyph "
+      + "with it. On this site the sprite is inside the page, so the address is empty.",
+    render: () => h(MostraGlifo),
   },
 
   InputGroup: {
@@ -1473,7 +1378,7 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
     code: `<Collapsible trigger="Advanced options" defaultOpen>
   <p>Everything here is optional.</p>
 </Collapsible>`,
-    render: () => h("div", {style: {width: "min(420px, 100%)"}},
+    render: () => h("div", {style: {maxWidth: "min(420px, 100%)"}},
       h(A.Collapsible, {trigger: "Advanced options", defaultOpen: true},
         h("p", {className: "muted"}, "Everything here is optional."))),
   },
@@ -1532,25 +1437,24 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
   // reprovou contraste AA no tema claro dentro do painel de demo — pego pelo axe da varredura.
   // É o mesmo achado da Fase 7 visto de novo: link solto não é componente do sistema.
   HoverCard: {
-    note: PORTAL,
     code: `<HoverCard trigger={<Button variant="link" href="#curator">Curator</Button>}>
   <strong>Curator</strong>
   <p className="muted">Reviews and files what comes in.</p>
 </HoverCard>`,
-    render: () => h(A.Button, {variant: "link", href: "#curator"}, "Curator"),
+    render: () => h(A.HoverCard, {trigger: h(A.Button, {variant: "link", href: "#curator"}, "Curator")},
+      h("strong", null, "Curator"), h("p", {className: "muted"}, "Reviews and files what comes in.")),
   },
   Timeline: {
     code: `<Timeline items={[
   {title: "Created", description: "by Curator", time: "09:00"},
   {title: "Shipped", time: "14:20"},
 ]} />`,
-    render: () => h("div", {style: wide}, h(A.Timeline, {items: [
+    render: () => h("div", {style: ate}, h(A.Timeline, {items: [
       {title: "Created", description: "by Curator", time: "09:00"},
       {title: "Shipped", time: "14:20"},
     ]})),
   },
   Tooltip: {
-    note: PORTAL,
     code: `<Tooltip content="Copy to clipboard" side="top">
   <IconButton icon="copy" label="Copy" />
 </Tooltip>
@@ -1607,7 +1511,7 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
     {id: "readme", label: "README.md"},
   ]}
 />`,
-    render: () => h("div", {style: wide}, h(A.TreeView, {label: "Files",
+    render: () => h("div", {style: ate}, h(A.TreeView, {label: "Files",
       defaultExpandedIds: ["src"], items: [
         {id: "src", label: "src", children: [{id: "index", label: "index.tsx"},
           {id: "tokens", label: "tokens.css"}]},

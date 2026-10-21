@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {Tabs} from "../../../packages/react/dist/index.js";
+import {ComValor} from "./_estado.mjs";
 
 const wide = {width: "100%", maxWidth: "32rem"};
 const ABAS = [
@@ -28,13 +29,13 @@ export default {
       title: "Default",
       description: "The capsule track.",
       code: '<Tabs label="Report" value={tab} onChange={setTab} tabs={tabs} />',
-      render: () => h("div", {style: wide}, h(Tabs, {label: "Report", value: "overview", onChange: () => {}, tabs: ABAS})),
+      render: () => h("div", {style: wide}, h(ComValor, {componente: Tabs, label: "Report", value: "overview", tabs: ABAS})),
     },
     {
       title: "Secondary",
       description: "No track: a line under the list, and the chosen tab marked by the selected line.",
       code: '<Tabs variant="secondary" label="Report" value={tab} onChange={setTab} tabs={tabs} panel="plain" />',
-      render: () => h("div", {style: wide}, h(Tabs, {variant: "secondary", label: "Report secondary", value: "detail", onChange: () => {}, tabs: ABAS, panel: "plain"})),
+      render: () => h("div", {style: wide}, h(ComValor, {componente: Tabs, variant: "secondary", label: "Report secondary", value: "detail", tabs: ABAS, panel: "plain"})),
     },
   ],
 };

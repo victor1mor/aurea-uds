@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {SegmentedControl} from "../../../packages/react/dist/index.js";
+import {ComValor} from "./_estado.mjs";
 
 const stack = {display: "grid", gap: "var(--space-4)", justifyItems: "center"};
 
@@ -28,7 +29,7 @@ export default {
         '  items={[{value: "list", label: "List"}, {value: "board", label: "Board"}]} />',
       ].join("\n"),
       render: () => h("div", {style: stack},
-        h(SegmentedControl, {label: "View", value: "board", onChange: () => {},
+        h(ComValor, {componente: SegmentedControl, label: "View", value: "board", 
           items: [{value: "list", label: "List"}, {value: "board", label: "Board"}]})),
     },
     {
@@ -39,7 +40,7 @@ export default {
         '  items={[{value: "24h", label: "24h"}, {value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}]} />',
       ].join("\n"),
       render: () => h("div", {style: stack},
-        h(SegmentedControl, {label: "Range", value: "7d", onChange: () => {},
+        h(ComValor, {componente: SegmentedControl, label: "Range", value: "7d", 
           items: [{value: "24h", label: "24h"}, {value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}]})),
     },
     {
@@ -47,7 +48,7 @@ export default {
       description: "Five is the limit. At this width it already asks to become a Select — which is the signal to switch.",
       code: '// five options: still a track. six: use Select.',
       render: () => h("div", {style: stack},
-        h(SegmentedControl, {label: "Density", value: "comfortable", onChange: () => {},
+        h(ComValor, {componente: SegmentedControl, label: "Density", value: "comfortable", 
           items: [{value: "xs", label: "XS"}, {value: "compact", label: "Compact"},
             {value: "comfortable", label: "Comfortable"}, {value: "spacious", label: "Spacious"},
             {value: "xl", label: "XL"}]})),

@@ -9,9 +9,9 @@ import {Combobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Combobox size="sm" items={items} />
-<Combobox items={items} />
-<Combobox size="lg" items={items} />
+<Combobox size="sm" aria-label="Small" placeholder="Small" items={items} />
+<Combobox aria-label="Medium" placeholder="Medium (default)" items={items} />
+<Combobox size="lg" aria-label="Large" placeholder="Large" items={items} />
 ```
 
 - Base UI underneath: arrows move, Enter picks, Escape closes, and focus returns where it came from.
@@ -24,7 +24,7 @@ import {Combobox} from "@aurea-uds/react";
 
 - disabled goes on the whole control: field and both buttons, never one without the other.
 
-- The previews show the CLOSED field; the popup lives in a portal and only exists in a real app.
+- The list opens in a portal, above the page: type or press the arrow in the previews to open it.
 
 ## Examples
 

@@ -323,7 +323,7 @@
     },
     "testes_unit": 2119,
     "componentes_citados_no_teste": 145,
-    "specs_visuais": 53,
+    "specs_visuais": 55,
     "baselines": 48,
     "baselines_linux": 24,
     "classes_core": 967,
@@ -334,6 +334,6 @@
   },
   "gates": {
     "validate": 45,
-    "playwrightSpecs": 53
+    "playwrightSpecs": 55
   }
 }

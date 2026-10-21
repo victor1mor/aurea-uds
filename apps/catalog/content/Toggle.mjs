@@ -52,8 +52,7 @@ export default {
       render: () => h("div", {style: row},
         h(Toggle, {icon: "speaker-slash", label: "Mute"}),
         h(Toggle, {icon: "star", label: "Favourite", defaultPressed: true})),
-      note: "This catalog page is static HTML, so the preview shows the two states side by side "
-        + "instead of switching. Pressing is real in your app, not here.",
+      note: "The preview shows the two states side by side; press either one to switch it.",
     },
     {
       title: "Ghost",
