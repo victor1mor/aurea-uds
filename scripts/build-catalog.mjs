@@ -496,7 +496,7 @@ function embedPreview(chave, render, rotulo = chave, alvo = null, layoutProprio 
 <title>${rotulo} preview — Aurea UDS</title>
 <link rel="stylesheet" href="../assets/catalog.css">
 </head>
-<body>${SPRITE_SLOT}
+<body class="embed-doc">${SPRITE_SLOT}
 <!-- A MOLDURA E UM DOCUMENTO, NAO UM FRAGMENTO - e isso custou 12 reprovacoes em 18/08/2026. A
      varredura e o axe cobram page-has-heading-one e landmark-one-main de TODA pagina, e os dois
      estao certos: documento sem titulo e sem conteudo principal nao e pagina. A saida nao foi
@@ -505,7 +505,7 @@ function embedPreview(chave, render, rotulo = chave, alvo = null, layoutProprio 
      layoutProprio existe para quem ja monta os proprios landmarks: a lateral poe o main AO LADO
      do aside, porque aside DENTRO de main e landmark-complementary-is-top-level. -->
 ${tituloProprio ? "" : `<header><h1 class="sr-only">${rotulo} preview</h1></header>`}
-<${layoutProprio ? "div" : "main"} id="root"${alvo ? ` data-componente="${alvo.componente}" data-indice="${alvo.indice}"` : ""}>${
+<${layoutProprio ? "div" : "main"} id="root"${layoutProprio || tituloProprio ? "" : ` class="demo-panel" data-panel="preview"`}${alvo ? ` data-componente="${alvo.componente}" data-indice="${alvo.indice}"` : ""}>${
   // `renderToString` e NÃO `renderToStaticMarkup` quando a moldura vai hidratar: o segundo não
   // emite os marcadores de hidratação, e o React 19 reclama de divergência e joga a árvore fora —
   // a prévia piscaria e voltaria ao estático. Sem alvo, segue estático como sempre.
@@ -1484,7 +1484,14 @@ const sprite = readFileSync(join(root, "packages/icons/dist/aurea-icons.svg"), "
 // um exemplo novo com ícone fora dela renderizava um <use> para um símbolo inexistente, ou
 // seja um ícone invisível — e nenhum gate pega isso, porque o sprite é inline e não há 404.
 function spriteFor(htmls) {
-  const usados = [...new Set(htmls.flatMap(x => [...x.matchAll(/#i-([a-z0-9-]+)/g)].map(m => m[1])))].sort();
+  const vistos = [...new Set(htmls.flatMap(x => [...x.matchAll(/#i-([a-z0-9-]+)/g)].map(m => m[1])))];
+  // A FORMA CHEIA de todo ícone usado vai junto (21/10/2026). O item escolhido troca para ela (Sidebar, BottomNav, a
+  // chave de tema), e a página pronta só tem a do item que já nasce escolhido: no site, o BottomNav perdia o ícone ao
+  // clicar em "Service" e "Profile" (`wrench-fill`, `user-fill`). A chave de tema de 15/10 era o mesmo defeito, e o
+  // conserto dela (os estados vivos, abaixo) valia só para ela. Com a parte viva em toda caixa, qualquer peça pode
+  // trocar de item — então a regra é de todo ícone, medida: 86 formas cheias, 32,7 KB a mais no desenho embutido.
+  const usados = [...new Set([...vistos, ...vistos.map(id => `${id}-fill`)
+    .filter(id => sprite.includes(`<symbol id="i-${id}"`))])].sort();
   const faltando = usados.filter(id => !sprite.includes(`<symbol id="i-${id}"`));
   if (faltando.length) throw new Error(`sprite: glifo(s) inexistente(s) no pacote de ícones: ${faltando.join(", ")}`);
   return `<svg width="0" height="0" style="position:absolute" aria-hidden="true">${
@@ -1538,6 +1545,13 @@ const chrome = `
    larga o padding — a moldura já é o card, e o shell lá dentro tem a margem dele. */
 .demo-panel:has(> .demo-frame) { padding:0; }
 .demo-frame { flex:1; align-self:stretch; width:100%; min-height:0; border:0; border-radius:var(--radius-card); }
+/* O DOCUMENTO da moldura (21/10/2026). O Victor viu no site as 43 molduras com o fundo da PÁGINA (cinza, e não o preto
+   da caixa) e a peça no canto de cima, à esquerda — o rótulo do ColorField e do DatePicker cortado pelo canto de 22. A
+   regra não se repete: o #root da moldura É a caixa de prévia do core (o fundo, o recheio e o centro); aqui só entra o
+   que é da moldura — ocupar a altura dela. A moldura que é PÁGINA fica com a altura e o fundo, sem o centro: quem monta
+   o próprio arranjo (a lateral, o AppShell) e quem traz o h1 do documento (a abertura de página, que rola dentro da
+   moldura — centralizada, ela passava 372 da caixa por cima, onde a rolagem não alcança). */
+.embed-doc { min-height:100dvh; display:flex; flex-direction:column; background:var(--surface-inset); }
 .example { display:grid; gap:var(--space-3); margin-top:var(--space-5); }
 .example h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); line-height:var(--text-xl-leading); font-weight:var(--weight-semibold); }
 .facts { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--space-3) var(--space-5); margin:0; }
