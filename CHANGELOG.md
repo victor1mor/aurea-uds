@@ -145,6 +145,10 @@ em inglês e ficam como estão: são registro.
 - **O check 31 lê a seção em construção E a da versão datada que ainda não foi registrada**, juntas: o lote seguinte pode
   começar antes de o registro da anterior chegar ao `main` (foi o caso deste: a 0.36.0 publicada, o registro no pedido
   #83, e esta branch saída antes dele).
+- **O `vite` de desenvolvimento sobe de 8.1.5 para 8.1.6** (catálogo, `keyboard-probe` e `proof-client`). Um alerta grave
+  novo (GHSA-587h-7wmj-h5pm, no `launch-editor`, faixa 8.0.0 a 8.1.5) reprovou a auditoria da CI do pedido #85 sem
+  nenhuma dependência nossa mudar; a 8.1.6 é a versão corrigida (publicada em 06/10/2026). Só ferramenta de
+  desenvolvimento: nenhum pacote publicado usa o `vite`, e a montagem sai igual, byte a byte.
 - **Check 48 do `validate.py`: a plataforma da ficha é o que o pacote exporta, nos dois sentidos** (lote 1, as
   travas). A web lê a superfície que o compilador emite (`api-surface.json`); o nativo, a mesma leitura do check 39,
   que virou a função `_exportados_nativos`. Provado contra o `main` de 20/10/2026: reprova as 56.
