@@ -5,6 +5,7 @@
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
   --brand-yellow-text:oklch(0.516 0.105 86.047);
   --brand-yellow-ink:#242424;
+  --brand-blue:#0246f1;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
   --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
@@ -248,8 +249,8 @@
   --popover-foreground:#242424;
   --primary:var(--brand-yellow);
   --primary-foreground:var(--brand-yellow-ink);
-  --link:var(--brand-yellow);
-  --link-hover:var(--brand-yellow);
+  --link:var(--brand-blue);
+  --link-hover:var(--brand-blue);
   --secondary:#ebebeb;
   --secondary-foreground:#242424;
   --muted:var(--secondary);
@@ -290,8 +291,8 @@
   --segment:oklch(1 0 0);
   --focus:var(--primary);
   --focus-strong:var(--foreground);
-  --primary-emphasis:var(--brand-yellow);
-  --primary-outline:var(--brand-yellow);
+  --primary-emphasis:var(--brand-blue);
+  --primary-outline:var(--brand-blue);
   --control-selected:var(--brand-yellow);
   --control-selected-foreground:var(--brand-yellow-ink);
   --control-selected-dot:oklch(0.985 0 0);
@@ -2380,7 +2381,14 @@ img,svg { display:block; }
 .btn[aria-pressed="true"]:not(.btn-icon)::after,.segmented button.active::after,.tabs-secondary .tab[data-active]::after,
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
-.doc-nav a.active::after,.sidebar-item[aria-current]::after { background:color-mix(in oklab, var(--sidebar-primary) 75%, transparent); }
+.doc-nav a.active::after,.sidebar-item[aria-current]::after { background:var(--sidebar-current-line, color-mix(in oklab, var(--sidebar-primary) 75%, transparent)); }
+/* ADR-0076 (20/10/2026), o Victor olhando a bancada: "não quero ele azul, não pode ser na cor do botão?". No claro da Aurea
+   padrão, o item atual da lateral é o botão primário: o fundo amarelo e a letra cinza-escura dele (8,13:1). O fundo já
+   marca o estado, e o fio de baixo some (`--sidebar-current-line` transparente: regra no `::after` não aceitaria a guarda
+   de tema no fim). Só sem `data-brand` (a `lory` tem a lateral dela) e só no claro (no escuro, a letra amarela continua).
+   Sobre o amarelo, a letra de destaque de DENTRO do item (o selo primário de contagem, um ícone de destaque) é a tinta do
+   botão: o azul sobre o amarelo mede 3,49:1 — o axe da varredura achou, no "12" do exemplo da `Sidebar`. */
+[data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
 [data-theme="light"] .is-selected:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
 [data-theme="light"] .btn[aria-pressed="true"]:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented button.active:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
@@ -2408,9 +2416,14 @@ img,svg { display:block; }
    numa fila, `align-self:flex-start` tiraria o selo do meio; o tamanho definido só desliga o
    esticar, que é o que a coluna faz com um item sem tamanho. */
 .badge-fit { inline-size:fit-content; }
-/* O cheio da marca enche com o acento e escreve com a letra do botão amarelo (`--primary-foreground`): desde a ADR-0073
-   o acento do claro é o próprio amarelo, e a letra de antes (`--background`, clara) media 1,75:1 em cima dele. */
+/* O cheio da marca escreve com a letra do botão amarelo (`--primary-foreground`): na ADR-0073 o acento do claro virou o
+   próprio amarelo, e a letra de antes (`--background`, clara) media 1,75:1 em cima dele. O fundo, na Aurea padrão, é o
+   primário desde a ADR-0076 (a regra logo abaixo). */
 .badge-primary { --badge-accent:var(--primary-emphasis); --badge-on:var(--primary-foreground); color:var(--primary-emphasis); border-color:transparent; background:color-mix(in srgb,var(--primary) 10%,transparent); }
+/* ADR-0076 (20/10/2026): na Aurea padrão a letra de destaque do claro é o AZUL, e o cheio continua o AMARELO — o fundo do
+   selo cheio é o primário, e não o acento (com o acento, sairia a letra cinza no azul, 1,99:1). Só sem `data-brand`, como o
+   contorno lá embaixo: na `lory` do claro o primário com a letra dela mede 3,08:1, e o acento dela já é o fundo certo. */
+.badge-primary:not(:where([data-brand],[data-brand] *)) { --badge-fill:var(--primary); }
 /* TAMANHOS. O md é a base (24px), que não muda — é o que as 103 fichas já usam. */
 .badge-xs { min-height:var(--space-4); padding:0 var(--space-1); border-width:0; }
 .badge-sm { min-height:var(--space-5); padding:0 calc(var(--space-1) + var(--space-05) - var(--border-width)); }
@@ -2496,7 +2509,7 @@ img,svg { display:block; }
    tema: `--success-400` é verde CLARO no escuro e verde ESCURO no claro. */
 /* O selo CHEIO de estado é o botão cheio do mesmo tom (ADR-0061): a mesma cor funda e a mesma letra
    (`--badge-fill`/`--badge-on`). Quem não declara o par (as categorias, o neutro) segue enchendo com o
-   acento, como antes; a marca enche com o acento e declara só a letra (ADR-0073). */
+   acento, como antes; a marca declara a letra (ADR-0073) e, na Aurea padrão, o fundo é o primário (ADR-0076). */
 .badge-solid { background:var(--badge-fill, var(--badge-accent)); color:var(--badge-on, var(--background)); border-color:transparent; }
 .badge-outline { background:transparent; color:var(--badge-accent); border-color:transparent; }
 /* flat (15/10/2026): o tom de sempre sem a linha em volta — o selo da referência não tem borda em forma nenhuma. A
@@ -4684,8 +4697,9 @@ button.graph-node-body { cursor:pointer; }
    da "C" dos botões): com a letra de sempre, o verde caía a 3,79:1 no claro e o `success` a 4,15:1 no escuro, dentro do
    cartão. Medido em 16/10/2026: o pior caso passa a 4,79:1. Os outros selos (suave, plano) têm fundo próprio e não mudam. */
 .badge-outline { background-color:color-mix(in oklab,var(--badge-accent) 16%,transparent); color:color-mix(in oklab,var(--badge-accent) 80%,var(--foreground)); }
-/* Menos o primário da Aurea (ADR-0073, decisão do Victor de 18/10/2026, "A"): a letra é o próprio amarelo, a mesma
-   do selo suave e do botão de contorno da marca — misturado ao texto, ele virava mostarda (2,36:1) só nesta peça. A
+/* Menos o primário da Aurea (ADR-0073, decisão do Victor de 18/10/2026, "A"): a letra é o próprio acento (o amarelo no
+   escuro; o azul no claro, desde a ADR-0076), a mesma do selo suave e do botão de contorno da marca — misturado ao texto,
+   o amarelo virava mostarda (2,36:1) só nesta peça. A
    referência principal usa a mesma letra no suave e no contorno. Só sem `data-brand`: na `lory` do claro, sem a
    mistura, a letra cairia de 5,56 para 4,42:1. */
 .badge-primary.badge-outline:not(:where([data-brand],[data-brand] *)) { color:var(--badge-accent); }

@@ -3,6 +3,8 @@
 - **Data:** 18/10/2026
 - **Estado:** aceita · feita na branch `claude/lote-u-cores`, para a `0.36.0`. **Substitui a
   [ADR-0054](0054-no-tema-claro-a-letra-de-destaque-e-ouro-escuro.md)** (o ouro escurecido `#826202`).
+  ⚠ **O item 1 e "O custo, escrito" foram substituídos pela [ADR-0076](0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)**
+  (20/10/2026): no claro, a letra de destaque passou a ser o azul da marca. Os itens 2 a 9 continuam valendo.
 - **Origem:** o Victor, 17/10/2026, olhando a lateral do site no tema claro: *"eu odeio esse marrom do modo claro, não
   conseguimos usar mesmo amarelo?"*. Viu numa bancada todas as peças que usavam o marrom, com o amarelo ao lado, e
   escolheu peça a peça (17 e 18/10/2026). Para a letra, recusou o cinza-escuro (*"eu quero amarelo, não preto"*),

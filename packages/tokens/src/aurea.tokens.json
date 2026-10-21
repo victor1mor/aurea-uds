@@ -71,6 +71,19 @@
         "hex": "#242424"
       }
     },
+    "brand-blue": {
+      "$type": "color",
+      "$description": "The second brand colour: the accent TEXT of the light theme (links, the current item, the outline badge, the secondary button label). The brand yellow stays the fill and the dark theme's accent; as text on the light theme it measured 1.75:1. 6.12:1 on the light background, 6.67 on the card, 5.59 on the field (ADR-0076).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.00784,
+          0.27451,
+          0.9451
+        ],
+        "hex": "#0246f1"
+      }
+    },
     "white": {
       "$type": "color",
       "$description": "Branco puro, o MESMO nos dois temas (15/10/2026). A opção escolhida da chave de tema de três posições, como a da referência: no tema escuro ela também é branca, e é isso que deixa a lua preta à vista.",
@@ -2390,12 +2403,12 @@
       },
       "link": {
         "$type": "color",
-        "$value": "{brand-yellow}",
-        "$description": "Cor de LINK em prosa. NÃO é `--primary`: medido em 22/08/2026, o amarelo da marca sobre o fundo claro dá 1,73:1 e o AA de texto pede 4,5:1. No escuro o link segue sendo o amarelo (10,34:1) e aponta para `{brand-yellow}`; no claro é a mesma matiz com croma e luminosidade escolhidos por medição. Identidade e papel semântico são coisas diferentes (ADR-0044)."
+        "$value": "{brand-blue}",
+        "$description": "Cor de LINK em prosa. No claro é o azul da marca (ADR-0076, 20/10/2026): o amarelo como letra media 1,75:1, e o AA de texto pede 4,5:1. No escuro o link segue sendo o amarelo. Identidade e papel semântico são coisas diferentes (ADR-0044)."
       },
       "link-hover": {
         "$type": "color",
-        "$value": "{brand-yellow}",
+        "$value": "{brand-blue}",
         "$description": "O link sob o ponteiro. Mesmo papel do `--link`, um degrau adiante — a diferença tem de ser perceptível sem depender só de sublinhado."
       },
       "secondary": {
@@ -2762,11 +2775,11 @@
       },
       "primary-emphasis": {
         "$type": "color",
-        "$value": "{brand-yellow}"
+        "$value": "{brand-blue}"
       },
       "primary-outline": {
         "$type": "color",
-        "$value": "{brand-yellow}"
+        "$value": "{brand-blue}"
       },
       "control-selected": {
         "$type": "color",

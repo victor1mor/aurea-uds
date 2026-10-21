@@ -82,8 +82,8 @@ em inglês e ficam como estão: são registro.
 
 ## [0.37.0] — em construção
 
-⏳ **Ainda não publicada.** O lote V (no `main` desde o pedido #84) e o lote 1, as travas, passo 1 (branch
-`claude/lote-1-fichas`). Cada passo entra no `main` depois de aprovado na bancada; a versão sobe quando o lote fechar.
+⏳ **Ainda não publicada.** O lote V (no `main` desde o pedido #84), o lote 1, as travas, passo 1 (branch
+`claude/lote-1-fichas`, pedido #85) e o azul como letra de destaque do claro (branch `claude/amarelo-azul`). Cada passo entra no `main` depois de aprovado na bancada; a versão sobe quando o lote fechar.
 
 ### Novo
 
@@ -103,6 +103,23 @@ em inglês e ficam como estão: são registro.
 
   Sem as duas props, a marcação é a de antes, byte a byte. Quem cobra: `tests/unit/codigo-com-cores.test.tsx` e
   `tests/visual/codigo-com-cores.spec.ts`.
+
+### Mudou
+
+- **No tema claro, a letra de destaque é o azul da marca** ([ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)).
+  O amarelo como letra no claro (ADR-0073) media de 1,60 a 1,91:1, e a WCAG pede 4,5:1 para texto; um app que adotou a
+  0.36.0 mediu os links a 1,75:1. O Victor escolheu, entre seis caminhos rodando: o amarelo continua a marca (o fundo
+  cheio, o controle marcado e o destaque do escuro), e no claro a letra de destaque passa ao token novo `brand-blue`
+  (`#0246f1`): 6,12:1 no fundo, 6,67 no cartão, 5,59 no campo. Mudam no claro `--link`, `--link-hover`,
+  `--primary-emphasis`, `--primary-outline` e, por eles, `--sidebar-primary` — os links, o item atual da lateral, o selo
+  primário suave e de contorno, a página atual da paginação, o rótulo do botão secundário e o resto da lista da ADR-0073.
+  Web e nativo. As marcas (`data-brand`) não mudam.
+- **O selo primário cheio do `Badge` enche com o amarelo** (o primário), e não com o acento — com o acento azul, a letra
+  cinza mediria 1,99:1. Na web, só sem `data-brand`; no nativo, sempre. Na tela, o selo cheio fica como estava.
+- **O item atual da `Sidebar` é o botão primário no claro**: o fundo amarelo e a letra cinza-escura (8,13:1), sem o fio
+  de baixo, em vez da letra azul num fundo cinza (o Victor, na bancada: *"não pode ser na cor do botão?"*). O selo de
+  contagem dentro dele também escreve com a tinta (em azul, sobre o amarelo, media 3,49:1 — o axe achou). Só na Aurea
+  padrão; no escuro e na `lory`, como era. Quem cobra: `tests/visual/item-atual-lateral.spec.ts`.
 
 ### Consertado
 
@@ -145,6 +162,9 @@ em inglês e ficam como estão: são registro.
 - **O check 31 lê a seção em construção E a da versão datada que ainda não foi registrada**, juntas: o lote seguinte pode
   começar antes de o registro da anterior chegar ao `main` (foi o caso deste: a 0.36.0 publicada, o registro no pedido
   #83, e esta branch saída antes dele).
+- **As travas de contraste perdem a exceção do amarelo no claro** (ADR-0076): o `amarelo-no-claro.test.tsx` cobra o azul
+  em TODO fundo do claro; o axe da varredura do catálogo, o `marca.spec` e o `tone-contrast.spec` (três pontos) cobram
+  4,5:1 nos dois temas, sem exceção.
 - **O `vite` de desenvolvimento sobe de 8.1.5 para 8.1.6** (catálogo, `keyboard-probe` e `proof-client`). Um alerta grave
   novo (GHSA-587h-7wmj-h5pm, no `launch-editor`, faixa 8.0.0 a 8.1.5) reprovou a auditoria da CI do pedido #85 sem
   nenhuma dependência nossa mudar; a 8.1.6 é a versão corrigida (publicada em 06/10/2026). Só ferramenta de

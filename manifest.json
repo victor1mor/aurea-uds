@@ -323,17 +323,17 @@
     },
     "testes_unit": 2119,
     "componentes_citados_no_teste": 145,
-    "specs_visuais": 52,
+    "specs_visuais": 53,
     "baselines": 48,
     "baselines_linux": 24,
     "classes_core": 967,
-    "token_declaracoes": 487,
-    "token_nomes": 234,
+    "token_declaracoes": 488,
+    "token_nomes": 235,
     "token_usados": 185,
-    "token_sem_uso": 49
+    "token_sem_uso": 50
   },
   "gates": {
     "validate": 45,
-    "playwrightSpecs": 52
+    "playwrightSpecs": 53
   }
 }

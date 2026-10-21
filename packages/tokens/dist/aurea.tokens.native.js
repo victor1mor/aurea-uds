@@ -41,6 +41,11 @@ export const base = {
     "p3": "color(display-p3 0.1412 0.1412 0.1412)",
     "oklch": null
   },
+  "brandBlue": {
+    "hex": "#0246f1",
+    "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+    "oklch": null
+  },
   "white": {
     "hex": "#ffffff",
     "p3": "color(display-p3 1 1 1)",
@@ -893,14 +898,14 @@ export const themes = {
       "oklch": null
     },
     "link": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#0246f1",
+      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "oklch": null
     },
     "linkHover": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#0246f1",
+      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "oklch": null
     },
     "secondary": {
       "hex": "#ebebeb",
@@ -993,9 +998,9 @@ export const themes = {
       "oklch": null
     },
     "sidebarPrimary": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#0246f1",
+      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "oklch": null
     },
     "sidebarPrimaryForeground": {
       "hex": "#242424",
@@ -1103,14 +1108,14 @@ export const themes = {
       "oklch": null
     },
     "primaryEmphasis": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#0246f1",
+      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "oklch": null
     },
     "primaryOutline": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#0246f1",
+      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "oklch": null
     },
     "controlSelected": {
       "hex": "#f0b100",
