@@ -321,9 +321,9 @@
       "Ready": 48,
       "Stable": 98
     },
-    "testes_unit": 2118,
+    "testes_unit": 2119,
     "componentes_citados_no_teste": 145,
-    "specs_visuais": 51,
+    "specs_visuais": 52,
     "baselines": 48,
     "baselines_linux": 24,
     "classes_core": 967,
@@ -333,7 +333,7 @@
     "token_sem_uso": 49
   },
   "gates": {
-    "validate": 43,
-    "playwrightSpecs": 51
+    "validate": 45,
+    "playwrightSpecs": 52
   }
 }

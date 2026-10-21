@@ -2742,7 +2742,14 @@ _nsrc = root / "packages/native/src"
 # fica cego para todo arquivo novo que não a siga** — e o certo é ele reprovar por ausência de
 # teste, não por ausência de "lote" no nome.
 _ntestes = sorted((root / "tests/unit").glob("native-*.test.tsx"))
-if _nsrc.is_dir() and _ntestes:
+
+
+def _exportados_nativos():
+    """Todo nome que sai de `@aurea-uds/native`, por todas as portas do `exports` (menos os ícones).
+
+    Mora numa função desde 20/10/2026 porque o check 48 (a plataforma da ficha) pergunta a mesma
+    coisa — e uma segunda leitura escrita à parte ficaria cega para a próxima porta que esta aprender.
+    """
     _barril = (_nsrc / "index.ts").read_text(encoding="utf-8")
     # Só os VALORES exportados — `export type {…}` é contrato de tipo e não desenha nada.
     #
@@ -2783,7 +2790,11 @@ if _nsrc.is_dir() and _ntestes:
                 for _m in re.finditer(r"^export (?:function|const) (\w+)", _mod.read_text(encoding="utf-8"), re.M):
                     _exportados.add(_m.group(1))
                 break
+    return _exportados
 
+
+if _nsrc.is_dir() and _ntestes:
+    _exportados = _exportados_nativos()
     _txt_teste = "\n".join(f.read_text(encoding="utf-8") for f in _ntestes)
     _sem_teste = sorted(n for n in _exportados if n not in _txt_teste)
     if _sem_teste:
@@ -3587,6 +3598,299 @@ if _ach47:
     errors.append(f"check 47: {len(_ach47)} texto(s) público(s) de ficha com número de pedido ou versão — "
                   f"{', '.join(_ach47[:12])}{'…' if len(_ach47) > 12 else ''}. O histórico vai para o "
                   "CHANGELOG; a ficha diz o que a prop faz HOJE (DOC-15)")
+
+# ── 48. a plataforma da ficha é o que o pacote EXPORTA, nos dois sentidos ───────────────────
+# Lote 1, as travas (20/10/2026). Achado da dissecação do site (19/10): 52 fichas diziam
+# `platforms.native: "planned"` e o pacote nativo JÁ exportava a peça — o site publicava "native:
+# planned" no `Button`, no `Card`, no `Dialog`. O NATIVE.md sabia desde 11/09 ("isso é falso"), e
+# saber não bastou: a frase não reprovava nada. A ficha é escrita à mão; o pacote é o fato.
+#   • ficha diz `stable`/`supported` e o pacote NÃO exporta  → promete o que não existe;
+#   • ficha diz `planned`/`n-a` e o pacote exporta            → nega o que existe.
+# A web lê a superfície que o tsc emite (`api-surface.json`); o nativo, a MESMA leitura do check 39
+# (`_exportados_nativos`). Componente do nativo SEM ficha (a `LinkButton`, a `BottomSheet`) não é
+# mentira de ficha — é a documentação do nativo que falta, e não se cobra aqui.
+# Provado contra o defeito: no `main` de 20/10 reprova as 53; e uma ficha com `web: "stable"` para
+# um nome que a web não exporta também reprova.
+_web48 = set()
+if API_SURFACE.is_file():
+    for _mod48 in json.loads(API_SURFACE.read_text(encoding="utf-8")).get("modules", {}).values():
+        _web48.update(c["name"] for c in _mod48.get("components", []))
+        _web48.update(h["name"] if isinstance(h, dict) else h for h in _mod48.get("hooks", []))
+_nat48 = _exportados_nativos() if _nsrc.is_dir() else set()
+# Trava contra cegueira: uma leitura que devolve pouco aprovaria toda ficha "planned", calada.
+if len(_web48) < 100 or len(_nat48) < 50:
+    errors.append(f"check 48: a leitura dos pacotes voltou curta (web {len(_web48)}, nativo {len(_nat48)}) — "
+                  "a trava está cega e aprovaria qualquer plataforma")
+else:
+    _promete48, _nega48 = [], []
+    for _fp48 in sorted((root / "packages/contracts/registry").glob("*.json")):
+        _f48 = json.loads(_fp48.read_text(encoding="utf-8"))
+        for _plat48, _sai48 in (("web", _web48), ("native", _nat48)):
+            _st48 = (_f48.get("platforms") or {}).get(_plat48)
+            if _st48 is None:
+                continue
+            if _st48 in ("stable", "supported") and _f48["name"] not in _sai48:
+                _promete48.append(f"{_f48['name']} ({_plat48}: {_st48})")
+            elif _st48 in ("planned", "n-a") and _f48["name"] in _sai48:
+                _nega48.append(f"{_f48['name']} ({_plat48}: {_st48})")
+    if _promete48:
+        errors.append(f"check 48: {len(_promete48)} ficha(s) prometem uma plataforma que o pacote não exporta — "
+                      f"{', '.join(_promete48)}. O site publica a promessa")
+    if _nega48:
+        errors.append(f"check 48: {len(_nega48)} ficha(s) negam uma plataforma que o pacote exporta — "
+                      f"{', '.join(_nega48[:12])}{'…' if len(_nega48) > 12 else ''}. Escreva o que o pacote "
+                      "tem: `stable` (o valor de toda peça nova desde 25/09/2026)")
+
+# ── 49. o estado que a ficha PROMETE existe no código ───────────────────────────────────────
+# Lote 1, as travas (20/10/2026). O caso que a fez nascer: a ficha do `CodeBlock` prometia código
+# colorido e o componente desenhava texto puro (lote V); a dissecação achou outros — o `Checkbox`
+# prometia o estado misto e o CSS não o desenha (e o "marcar todos" da `DataGrid` aparece vazio), o
+# `Tabs` da web prometia a aba desativada e não há prop nem regra. O check 27 já cobra o sentido
+# contrário (o core pinta, alguma ficha declara); este cobra o da PROMESSA: cada palavra de `states`
+# (fora `default` e os universais, que são o check 30) tem prova no código da peça.
+#
+# O que conta como prova:
+#   • estado que SE VÊ (`_VISUAL49`: desativado, inválido, marcado, aberto…) — uma regra do core com
+#     uma classe da peça E o seletor do estado (ou o estado escrito como classe: `.progress-
+#     indeterminate`). Funcionar sem desenhar não basta: um `<input disabled>` escondido sob uma marca
+#     desenhada continua parecendo ativo;
+#   • os outros — a palavra no código da peça, nos seletores dela ou nos tipos da assinatura.
+# "O código da peça" segue o que ela monta: o componente que ela desenha (`<Badge {...props}/>`, até
+# três degraus) e, só no primeiro degrau, os auxiliares que ela chama — seguir auxiliar mais fundo
+# trouxe classes de peças vizinhas e deixou a trava CEGA para o desativado do `Checkbox` (medido).
+# A parte da peça vem como prefixo (`item-hover`, `row-selected`): conta o estado depois dele.
+#
+# LIMITE DECLARADO: só a web. O nativo não tem CSS; o estado dele se lê no `StyleSheet` e fica para
+# a trava do nativo. E a trava lê PALAVRA e SELETOR: um estado com a regra certa e o desenho errado
+# passa — o desenho é a bancada.
+# Provado contra o defeito: no `main` de 20/10/2026 (`005cd2b8`) reprova 11 — o desativado da caixa, do rádio, da
+# chave, da sanfona e do grupo de campo, o estado misto da caixa, as abas e o segmento desativados, o "carregando"
+# do player, o hover do `Slider` e o desativado do `Field`. E a lista se cobra sozinha: uma regra de hover na barra
+# de baixo reprova a dívida paga, e uma linha para um estado que a ficha não declara reprova como sobra.
+_VISUAL49 = {
+    "hover": r":hover",
+    "disabled": r":disabled|\[disabled\]|\[data-disabled\]|\[aria-disabled",
+    "invalid": r"\[aria-invalid|\[data-invalid\]|:invalid|:user-invalid",
+    "checked": r":checked|\[data-checked\]|\[aria-checked",
+    "indeterminate": r":indeterminate|\[data-indeterminate\]|aria-checked=\"mixed\"",
+    "selected": r"\[aria-selected|\[data-selected\]|:checked|\[aria-checked|\[data-checked\]|\[aria-current",
+    "pressed": r"\[aria-pressed|\[data-pressed\]|:active|\[data-state=\"on\"\]",
+    "open": r"\[open\]|\[data-open\]|\[data-panel-open\]|\[data-popup-open\]|:popover-open|\[aria-expanded=\"true\"\]|\[data-starting-style\]",
+    "closed": r"\[data-closed\]|\[data-ending-style\]|:not\(\[open\]\)|\[aria-expanded=\"false\"\]",
+    "expanded": r"\[open\]|\[aria-expanded=\"true\"\]|\[data-panel-open\]|\[data-open\]",
+    "collapsed": r":not\(\[open\]\)|\[aria-expanded=\"false\"\]|\[data-closed\]",
+    "current": r"\[aria-current",
+    "highlighted": r"\[data-highlighted\]",
+    "readonly": r"\[readonly\]|:read-only|\[data-readonly\]|\[aria-readonly",
+    "read-only": r"\[readonly\]|:read-only|\[data-readonly\]|\[aria-readonly",
+}
+# O foco tem dono próprio: o check 44 lê TODA regra de foco do core, e o anel é um só para todas as peças.
+_FOCO49 = {"focus", "focus-visible", "focused"}
+# Quem desenha o aberto desenha o fechado pela ausência.
+_COMPLEMENTO49 = {"closed": "open", "collapsed": "expanded"}
+_PARTE49 = re.compile(r"^(item|row|nav|step|column|detail|bulk)-")
+# A prova que a leitura padrão não acha, escrita aqui com o motivo: (peça, estado) → (padrão, motivo).
+# Cada linha é a afirmação de que AQUELE trecho é o estado. Se o trecho sumir, reprova. Montada em 20/10/2026 a
+# partir da classificação dos 82 estados que a primeira versão não provava — cada um lido no código.
+_BADGE49 = {
+    "count-over-max": (r"formatBadgeCount\(", "acima de `max`, o número sai como `max+` (`formatBadgeCount`)"),
+    "count-zero-hidden": (r"count===0&&!showZero", "o zero some, a menos que `showZero`"),
+    "anchored": (r"badge-overlay", "o modo sobreposto (`anchor`) é a classe `badge-overlay`"),
+    "anchored-on-circle": (r"badge-on-circle", "preso ao círculo (`anchorShape=\"circle\"`): `badge-on-circle`"),
+}
+_RO49 = "funciona (o atributo chega ao campo); como na referência, o somente leitura não muda o desenho"
+PROVA_DO_ESTADO49 = {
+    ("AccessGate", "denied"): (r"if\(allowed\)return children", "negado é `allowed` falso: some (`hide`) ou fica inerte com `aria-disabled`, desenhado pela peça de dentro"),
+    ("AgentCard", "with-state"): (r"state&&<AgentStatus", "conteúdo opcional: o selo só com `state`"),
+    ("AgentCard", "with-capabilities"): (r"capabilities\?\.length&&<ul className=\"agent-caps\"", "conteúdo opcional: a lista só com `capabilities`"),
+    ("AgentInspector", "with-sections"): (r"sections\?\.map\(", "conteúdo opcional: as seções de `sections`"),
+    ("AppShell", "nav-expanded"): (r"aria-expanded=\{!efetiva\}", "aberta é a ausência da recolhida: `aria-expanded` no botão, e `.sidebar-collapsed` só quando recolhida"),
+    ("AutomationCard", "disabled"): (r"\.automation:not\(\[data-enabled\]\)", "desligada é sem `data-enabled` (o atributo só sai ligada), e a regra a faz recuar"),
+    ("AutomationCard", "succeeded"): (r"lastResult\?:\"success\"\|\"failure\"", "o resultado da última execução, `lastResult=\"success\"`, dito pelo `Status`"),
+    ("AutomationCard", "failed"): (r"lastResult\?:\"success\"\|\"failure\"", "o resultado da última execução, `lastResult=\"failure\"`, dito pelo `Status`"),
+    ("AvatarGroup", "overflowing"): (r"resto>0&&<span className=\{cx\(\"avatar\",\"avatar-count", "passou do máximo: o resto vira o \"+N\""),
+    **{(p, e): v for p in ("Badge", "Chip") for e, v in _BADGE49.items()},
+    ("ChartTooltip", "inactive"): (r"if \(!active", "inativa é `active` falso, vindo do motor do gráfico: não desenha nada"),
+    ("CheckboxGroup", "invalid"): (r"\"aria-invalid\":true", "o grupo põe `aria-invalid` em cada caixa, e a regra da caixa desenha"),
+    ("CheckboxGroup", "disabled"): (r"disabled:p\.disabled\?\?disabled", "o grupo passa `disabled` a cada caixa, e a regra da caixa desenha"),
+    ("RadioGroup", "invalid"): (r"\"aria-invalid\":true", "o grupo põe `aria-invalid` em cada opção, e a regra do rádio desenha"),
+    ("RadioGroup", "disabled"): (r"disabled:p\.disabled\?\?disabled", "o grupo passa `disabled` a cada opção, e a regra do rádio desenha"),
+    ("CodeEditor", "read-only"): (r"EditorState\.readOnly\.of\(readOnly\)", _RO49 + " (o CodeMirror escreve `aria-readonly`)"),
+    ("ColorField", "readonly"): (r"readOnly=\{readOnly\}", _RO49 + "; as setas também param"),
+    ("Input", "readonly"): (r"\.\.\.props\},ref\)\{\s*return <input ref=\{ref\}", _RO49),
+    ("Textarea", "readonly"): (r"<textarea ref=\{ref\}[^>]*\{\.\.\.props\}", _RO49),
+    ("PasswordField", "readonly"): (r"<Input id=\{campoId\}[^>]*\{\.\.\.props\}", _RO49),
+    ("NumberField", "readonly"): (r"readOnly=\{readOnly\} required=\{required\}", _RO49),
+    ("NumberField", "at-min"): (r"min=\{min\} max=\{max\}", "na borda o motor desliga o botão (`disabled`), e `.number-field-button:disabled` o recua"),
+    ("NumberField", "at-max"): (r"min=\{min\} max=\{max\}", "na borda o motor desliga o botão (`disabled`), e `.number-field-button:disabled` o recua"),
+    ("Combobox", "highlighted"): (r"renderComboboxItem", "o item é o `renderComboboxItem` (`menu-item`), que o motor marca com `data-highlighted` e o core pinta"),
+    ("MultiCombobox", "highlighted"): (r"renderComboboxItem", "a mesma lista do `Combobox`: `menu-item` com o `data-highlighted` do motor"),
+    ("DataGrid", "sorted"): (r"aria-sort=", "a coluna ordenada leva `aria-sort`, e `th[aria-sort]` pinta o ícone"),
+    ("DataGrid", "column-resizing"): (r"enableColumnResizing", "a largura muda ao vivo pela alça `.datagrid-resizer`"),
+    ("DatePicker", "filled"): (r"data-placeholder=\{vazio", "preenchido é a ausência de `data-placeholder`"),
+    ("EventStream", "following"): (r"if\(follow\)", "seguindo é a prop `follow`: rola até o fim e marca `aria-busy`"),
+    ("Field", "invalid"): (r"injecao\[\"aria-invalid\"\]=invalidoFinal", "o `error` põe `aria-invalid` no controle de dentro, e a regra do controle desenha"),
+    ("Header", "wrapped"): (r"flex-wrap:wrap", "a barra quebra a linha quando falta largura (`flex-wrap`)"),
+    ("Topbar", "wrapped"): (r"flex-wrap:wrap", "o `Topbar` é o `Header`: a barra quebra a linha quando falta largura"),
+    ("HumanApproval", "pending"): (r"\{decision\s*\?<Alert", "pendente é sem `decision`: os botões de aprovar e recusar"),
+    ("HumanApproval", "low-risk"): (r"RiskLevel=\"low\"\|\"medium\"\|\"high\"", "o risco do pedido (`risk`), dito por um selo"),
+    ("HumanApproval", "medium-risk"): (r"RiskLevel=\"low\"\|\"medium\"\|\"high\"", "o risco do pedido (`risk`), dito por um selo"),
+    ("HumanApproval", "high-risk"): (r"RiskLevel=\"low\"\|\"medium\"\|\"high\"", "o risco do pedido (`risk`), dito por um selo"),
+    ("MediaEmbed", "loaded"): (r"useState\(!poster\)", "carregado é `ativo`: o `iframe` no lugar da capa"),
+    ("MediaPlayer", "paused"): (r"setPlaying\(false\)", "pausado é `playing` falso: o botão troca para tocar"),
+    ("MessageComposer", "attachments"): (r"anexos\.length>0&&<ul className=\"file-list\"", "com anexos, a lista deles acima do campo"),
+    ("MessageComposer", "replying"): (r"replyTo\s*\?<div className=\"message-quote\"", "respondendo é `replyTo`: a citação com o X de cancelar"),
+    ("MessageList", "reply"): (r"m\.replyTo", "a mensagem que responde outra traz a citação"),
+    ("OTPField", "filled"): (r"<BaseOTPField\.Root", "o motor escreve `data-filled`; o que se vê é o dígito"),
+    ("OTPField", "complete"): (r"<BaseOTPField\.Root", "o motor escreve `data-complete` quando todas as caixas têm dígito"),
+    ("Progress", "determinate"): (r"aria-valuenow", "com total: `aria-valuenow` e a largura em %, o contrário de `.progress-indeterminate`"),
+    ("ProgressCircle", "determinate"): (r"aria-valuenow", "com total: `aria-valuenow` e o traço proporcional, o contrário de `.progress-circle-indeterminate`"),
+    ("Range", "disabled"): (r"type=\"range\"", "controle nativo: o `.range` não tira a aparência, e o navegador desenha o desativado (medido no Chromium)"),
+    ("Spinner", "spinning"): (r"animation:spin", "gira sempre: é o que a peça faz"),
+    ("TraceTimeline", "nested"): (r"--trace-depth", "o recuo pela profundidade do trecho (`depth` → `--trace-depth`)"),
+}
+# Estado prometido que o código ainda não tem, aceito com motivo e o lote que o constrói. Reprova
+# quando sobra: a dívida paga (a prova apareceu) ou a palavra que saiu da ficha tiram a linha.
+EM_DIVIDA49 = {
+    ("BottomNav", "item-hover"): "o item não responde ao mouse; o item que é link pega a cor de link geral, por acidente. "
+                                 "O desenho do hover é decisão — lote 2, os defeitos reais",
+}
+
+
+_FATIAS49 = {}
+
+
+def _fatia49(nome, so_export=True):
+    if (nome, so_export) in _FATIAS49:
+        return _FATIAS49[(nome, so_export)]
+    _pre = r"^export\s+(?:function|const)\s+" if so_export else r"^(?:export\s+)?(?:function|const)\s+"
+    _fim = r"^export\s" if so_export else r"^(?:export\s|function\s|const\s)"
+    _achou = ""
+    for _t in _SEM_COMENTARIO_TSX.values():
+        _m = re.search(_pre + re.escape(nome) + r"\b", _t, re.M)
+        if _m:
+            _resto = _t[_m.end():]
+            _p = re.search(_fim, _resto, re.M)
+            _achou = _resto[:_p.start()] if _p else _resto
+            break
+    _FATIAS49[(nome, so_export)] = _achou
+    return _achou
+
+
+def _codigo49(nome, prof=0, vistos=None):
+    vistos = set() if vistos is None else vistos
+    if nome in vistos or prof > 3:
+        return ""
+    vistos.add(nome)
+    _c = _fatia49(nome) or _fatia49(nome, False)
+    _refs = set(re.findall(r"<([A-Z][A-Za-z0-9]*)\b", _c))
+    if prof == 0:
+        _refs |= set(re.findall(r"\b([a-z][A-Za-z0-9]*)\(", _c))
+    return _c + "".join("\n" + _codigo49(r, prof + 1, vistos) for r in sorted(_refs) if r not in vistos)
+
+
+def _decl_tipo49(nome):
+    return [m.group(0) for _t in _SEM_COMENTARIO_TSX.values() for m in re.finditer(
+        r"^(?:export\s+)?(?:type|interface)\s+" + nome + r"\b[^\n]*(?:\n(?![a-z]|export)[^\n]*)*", _t, re.M)]
+
+
+def _tipos49(codigo):
+    """Os tipos que a assinatura cita — e, um degrau abaixo, só a UNIÃO DE TEXTOS FIXOS (`"queued"|"running"`): é
+    onde mora o valor de dado que a ficha lista como estado (a saúde de cada serviço, o estado de cada tarefa)."""
+    _out = []
+    for _nome in sorted(set(re.findall(r"\b([A-Z][A-Za-z0-9]+)\b", codigo[:600]))):
+        _out += _decl_tipo49(_nome)
+    for _nome in sorted(set(re.findall(r"\b([A-Z][A-Za-z0-9]+)\b", "\n".join(_out)))):
+        _out += [d for d in _decl_tipo49(_nome) if re.fullmatch(r'(?:export\s+)?type\s+\w+\s*=\s*"[^"\n]*"(?:\s*\|\s*"[^"\n]*")*\s*;?', d.strip())]
+    return "\n".join(_out)
+
+
+def _regras49(texto):
+    """(seletor, corpo, classes do seletor) de cada regra do CSS, entrando nos @media/@supports/@layer."""
+    _out, _pilha, _ini = [], [], 0
+    for _k, _ch in enumerate(texto):
+        if _ch == "{":
+            _pilha.append((texto[_ini:_k].strip(), _k + 1))
+            _ini = _k + 1
+        elif _ch == "}":
+            if _pilha:
+                _sel, _abre = _pilha.pop()
+                if not _sel.startswith("@"):
+                    _out.append((_sel, texto[_abre:_k], set(re.findall(r"\.([a-z][a-z0-9-]*)", _sel))))
+            _ini = _k + 1
+        elif _ch == ";" and not _pilha:
+            _ini = _k + 1
+    return _out
+
+
+_REGRAS49 = _regras49(_css_sem_comentario)
+_DECL49 = set(re.findall(r"\.([a-z][a-z0-9-]*)", _css_sem_comentario))
+
+
+def _classes49(codigo):
+    _str = "\n".join(a or b or c for a, b, c in re.findall(r'"([^"\n]*)"|\'([^\'\n]*)\'|`([^`]*)`', codigo))
+    _cl = {w for w in re.split(r"[^a-z0-9-]+", _str) if w in _DECL49}
+    for _p in re.findall(r"([a-z][a-z0-9-]*-)\$\{", codigo):
+        _cl |= {d for d in _DECL49 if d.startswith(_p)}
+    return _cl
+
+
+def _formas49(s):
+    _k = s.replace("_", "-")
+    return {s, _k, re.sub(r"-([a-z])", lambda m: m.group(1).upper(), _k), _k.replace("-", "_")}
+
+
+_sem49, _vistos49, _conferidos49, _pagas49 = [], set(), 0, []
+for _fp49 in sorted((root / "packages/contracts/registry").glob("*.json")):
+    _f49 = json.loads(_fp49.read_text(encoding="utf-8"))
+    if _f49.get("kind", "component") != "component" or (_f49.get("platforms") or {}).get("web") not in ("stable", "supported"):
+        continue
+    _n49 = _f49["name"]
+    _cod49 = _codigo49(_n49)
+    _cl49 = _classes49(_cod49)
+    _minhas49 = [(s, c) for s, c, cls in _REGRAS49 if cls & _cl49]
+    _st49 = "\n".join(s for s, _ in _minhas49)
+    _tp49 = _tipos49(_cod49)
+    for _e49 in _f49.get("states") or []:
+        if _e49 == "default" or _e49 in UNIVERSAIS:
+            continue
+        _conferidos49 += 1
+        _par49 = (_n49, _e49)
+        _vistos49.add(_par49)
+        _b49 = _PARTE49.sub("", _e49)
+        if _par49 in PROVA_DO_ESTADO49:
+            # A prova declarada lê também o CORPO das regras da peça: há estado que é declaração (`flex-wrap:wrap`).
+            _ok49 = re.search(PROVA_DO_ESTADO49[_par49][0], _cod49 + "\n" + _tp49 + "\n"
+                              + "\n".join(f"{s} {{{c}}}" for s, c in _minhas49)) is not None
+        elif _b49 in _FOCO49:
+            _ok49 = True
+        elif _b49 in _VISUAL49:
+            _ok49 = (re.search(_VISUAL49[_b49], _st49) is not None
+                     or re.search(r"\.[a-z0-9-]*-" + re.escape(_b49) + r"(?![a-z0-9-])", _st49) is not None
+                     or (_b49 in _COMPLEMENTO49 and re.search(_VISUAL49[_COMPLEMENTO49[_b49]], _st49) is not None))
+        else:
+            _alvo49 = _cod49 + "\n" + _st49 + "\n" + _tp49
+            _ok49 = any(re.search(r"(?<![A-Za-z0-9])" + re.escape(w) + r"(?![A-Za-z0-9])", _alvo49)
+                        for w in _formas49(_b49) | _formas49(_e49))
+        if _par49 in EM_DIVIDA49:
+            if _ok49:
+                _pagas49.append(f"{_n49}.{_e49}")
+            continue
+        if not _ok49:
+            _sem49.append(f"{_n49}.{_e49}" + (" (a prova declarada em PROVA_DO_ESTADO49 sumiu)" if _par49 in PROVA_DO_ESTADO49 else ""))
+if _conferidos49 < 300:
+    errors.append(f"check 49: só {_conferidos49} estado(s) conferido(s) — a leitura das fichas está cega")
+if _sem49:
+    errors.append(f"check 49: {len(_sem49)} estado(s) que a ficha promete sem prova no código — "
+                  f"{', '.join(_sem49[:20])}{'…' if len(_sem49) > 20 else ''}. Ou o código ganha o estado (e o "
+                  "CSS que o desenha), ou a ficha deixa de prometê-lo; a prova que a leitura não acha vai em "
+                  "PROVA_DO_ESTADO49, com o motivo")
+if _pagas49:
+    errors.append(f"check 49: dívida paga — {', '.join(_pagas49)} já tem prova no código. Tire de EM_DIVIDA49")
+_sobra49 = sorted(f"{a}.{b}" for a, b in (set(PROVA_DO_ESTADO49) | set(EM_DIVIDA49)) - _vistos49)
+if _sobra49:
+    errors.append(f"check 49: linha que sobrou em PROVA_DO_ESTADO49/EM_DIVIDA49 — {', '.join(_sobra49)}: a ficha "
+                  "não declara mais o estado. Tire a linha")
 
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")

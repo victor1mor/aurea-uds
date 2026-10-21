@@ -7,7 +7,7 @@
   "icon": "check",
   "platforms": {
     "web": "stable",
-    "native": "planned"
+    "native": "stable"
   },
   "variants": [],
   "sizes": [
@@ -21,7 +21,6 @@
   "states": [
     "default",
     "checked",
-    "indeterminate",
     "focus",
     "disabled",
     "invalid"

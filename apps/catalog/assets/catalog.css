@@ -2495,6 +2495,11 @@ img,svg { display:block; }
    linha passa a ser só o adorno de 100%, que é o que se quer. */
 .input-group>.input,.input-group>.select,.input-group>.textarea { flex:1 1 0; min-inline-size:0; background:transparent; border:0; border-radius:0; }
 .input-group>.input:focus-visible,.input-group>.select:focus-visible,.input-group>.textarea:focus-visible { outline:none; }
+/* Desativado (lote 1, 20/10/2026): no grupo, quem pinta o estado é a moldura, como no inválido — só o texto recuava, e o
+   fundo e o ícone ficavam iguais. O campo de dentro não recua de novo (seriam 0,25). Só o CAMPO conta: um botão
+   desativado no adorno (o de limpar, sem texto) não desativa o grupo. */
+.input-group:has(> :is(.input,.select,.textarea):disabled) { opacity:var(--opacity-disabled); cursor:not-allowed; }
+.input-group>.input:disabled,.input-group>.select:disabled,.input-group>.textarea:disabled { opacity:1; }
 /* O adorno não estica nem encolhe, e nunca rouba o clique do campo — a menos que ele PRÓPRIO
    seja clicável, e aí quem devolve o ponteiro é o botão de dentro. */
 .input-group-addon { display:inline-flex; flex:none; align-items:center; gap:var(--space-1); color:var(--subtle-foreground); }
@@ -2600,7 +2605,9 @@ img,svg { display:block; }
    de virar a seta seriam dois idiomas para "isto está aberto". */
 .collapsible { display:grid; }
 .collapsible-trigger { display:flex; align-items:center; gap:var(--space-2); inline-size:100%; min-block-size:var(--control-h-sm); padding:0; border:0; background:transparent; color:var(--foreground); font:inherit; font-weight:var(--weight-medium); text-align:start; cursor:pointer; }
-.collapsible-trigger:hover { color:var(--primary); }
+.collapsible-trigger:hover:not([data-disabled]) { color:var(--primary); }
+/* Desativado (lote 1, 20/10/2026): o motor marca o gatilho com `data-disabled`; ele recua e não acende no hover. */
+.collapsible-trigger[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .collapsible-chevron { flex:none; transition:transform var(--duration-fast) var(--ease-standard); }
 .collapsible-trigger[data-panel-open] .collapsible-chevron { transform:rotate(180deg); }
 .collapsible-panel { overflow:hidden; }
@@ -2721,6 +2728,10 @@ img,svg { display:block; }
 .switch-track:after { --thumb-h:calc(var(--switch-h) - 2 * var(--space-05)); --thumb-w:calc(var(--thumb-h) * 11 / 8); content:""; position:absolute; inset-inline-start:calc(var(--space-05) - var(--border-width)); top:calc(var(--space-05) - var(--border-width)); block-size:var(--thumb-h); inline-size:var(--thumb-w); border-radius:var(--radius-full); background:var(--muted-foreground); transition:transform var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard); }
 .switch-track { --switch-x:calc(var(--switch-h) * 2 - (var(--switch-h) - 2 * var(--space-05)) * 11 / 8 - 2 * var(--space-05)); }
 .switch input:checked + .switch-track { background:var(--control-selected); border-color:transparent; } .switch input:checked + .switch-track:after { transform:translateX(var(--switch-x)); background:var(--primary-mark); }
+/* DESATIVADO (lote 1, as travas, 20/10/2026 — o check 49 achou): o `<input>` é invisível e quem desenha é a marca,
+   então o `disabled` chegava ao campo e nada mudava na tela. A peça inteira recua, marca e nome, como na referência
+   (o estado de desativado dela vai na raiz do controle, a 0,5). Vale também para as opções de um grupo desativado. */
+.checkbox:has(> input:disabled),.radio:has(> input:disabled),.switch:has(> input:disabled) { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .range { width:100%; accent-color:var(--primary); }
 /* Slider VERTICAL, no `<input type=range>` NATIVO — sem trocar de motor.
 
