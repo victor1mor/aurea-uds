@@ -117,6 +117,22 @@ como deveria funcionar"*.
 
 ---
 
+## [0.38.0] — em construção
+
+⏳ **Ainda não publicada.** Começou no pedido #88 (o site com a parte viva), que vem depois da 0.37.0. A versão sobe
+quando o lote fechar.
+
+### Consertado
+
+- **`CodeEditor`: o conteúdo declara que recebe o teclado** (`tabindex="0"`, nos dois modos, editável e só de
+  leitura). O CodeMirror põe `tabindex="-1"` na área de rolagem; com o código mais alto que o editor, o axe reprovava
+  `scrollable-region-focusable` — a área rolava e, para ele, nada dentro recebia o teclado. Achado pela varredura do
+  site, quando o editor passou a montar de verdade na página dele; provado no navegador (sem rolar, nenhuma violação;
+  rolando, uma; com o atributo, nenhuma). Na tecla Tab nada muda: o conteúdo já era parada de foco. No modo só de
+  leitura, é o que deixa o teclado chegar ao código para rolar. Quem cobra: `tests/unit/components.test.tsx`.
+
+---
+
 ## [0.37.0] — 2026-10-21
 
 ⏳ **Ainda não publicada.** O lote V (o código com cores e número de linha, ADR-0075, pedido #84), o lote 1, as travas,

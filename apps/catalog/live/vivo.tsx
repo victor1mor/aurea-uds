@@ -85,20 +85,37 @@ function preparar(starters: Starters, painel: HTMLElement): Ligada | null {
   }
 }
 
+// As caixas que JÁ estão perto da tela acendem no primeiro desenho, que o `montarSite` faz síncrono — ainda dentro do
+// script, antes de a página terminar de carregar. Medido na CI (21/10/2026): acendendo depois, pelo observador, o WebKit
+// mediu o `Card.Header` no instante da troca, num elemento que acabava de sair da página (tudo zero). Com isto, a página
+// "pronta" já é a viva, para o teste e para quem lê; só as de mais abaixo acendem ao rolar.
+const MARGEM = 300;
+const perto = (c: HTMLElement) => {
+  const r = c.getBoundingClientRect();
+  return r.width > 0 && r.bottom > -MARGEM && r.top < innerHeight + MARGEM;
+};
+const preparadas = new WeakSet<Element>();
+
 function CaixasVivas({starters}: {starters: Starters}) {
-  const [ligadas, setLigadas] = useState<Ligada[]>([]);
+  const [ligadas, setLigadas] = useState<Ligada[]>(() => {
+    const caixas = [...document.querySelectorAll<HTMLElement>("[data-vivo]")].filter(perto);
+    caixas.forEach((c) => preparadas.add(c));
+    return caixas.map((c) => preparar(starters, c)).filter((l): l is Ligada => l !== null);
+  });
   useEffect(() => {
     const olho = new IntersectionObserver((vistas) => {
       const novas: Ligada[] = [];
       for (const v of vistas) {
         if (!v.isIntersecting) continue;
         olho.unobserve(v.target);
+        if (preparadas.has(v.target)) continue;
+        preparadas.add(v.target);
         const l = preparar(starters, v.target as HTMLElement);
         if (l) novas.push(l);
       }
       if (novas.length) setLigadas((xs) => [...xs, ...novas]);
-    }, {rootMargin: "300px 0px"});
-    for (const c of document.querySelectorAll<HTMLElement>("[data-vivo]")) olho.observe(c);
+    }, {rootMargin: `${MARGEM}px 0px`});
+    for (const c of document.querySelectorAll<HTMLElement>("[data-vivo]")) if (!preparadas.has(c)) olho.observe(c);
     return () => olho.disconnect();
   }, [starters]);
   return h(Fragment, null, ...ligadas.map((l) =>

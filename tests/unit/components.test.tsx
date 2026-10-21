@@ -3134,6 +3134,19 @@ describe("CodeEditor", () => {
     const {container} = wrap(<CodeEditor defaultValue="x" readOnly />);
     expect(container.querySelector(".cm-content")?.getAttribute("contenteditable")).toBe("false");
   });
+
+  // 21/10/2026: o CodeMirror põe `tabindex="-1"` na área de rolagem (`.cm-scroller`), e o conteúdo editável não
+  // DECLARA que é parada de foco. Quando o código passa da altura, o axe reprova `scrollable-region-focusable`: a área
+  // rola e, para ele, nada dentro dela recebe o teclado. Achado pela varredura do site, com a parte viva (o editor
+  // monta de verdade). O conteúdo já era parada de Tab; o atributo só diz isso — e, no readOnly, é o que deixa o teclado
+  // chegar ao código para rolar.
+  test("o conteúdo declara que recebe o teclado, editável ou só de leitura", () => {
+    for (const readOnly of [false, true]) {
+      const {container, unmount} = wrap(<CodeEditor defaultValue="x" readOnly={readOnly} />);
+      expect(container.querySelector(".cm-content")?.getAttribute("tabindex"), `readOnly=${readOnly}`).toBe("0");
+      unmount();
+    }
+  });
 });
 
 describe("Chat", () => {
