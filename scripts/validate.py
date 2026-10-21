@@ -156,8 +156,10 @@ PATTERNS_REF = [
 # sigla da lista. O código-fonte nosso que vai dentro deles já é varrido arquivo por arquivo.
 # O `search.js` (a busca do site, 13/10/2026) é o mesmo caso: leva a `CommandPalette`, e com ela o
 # mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`. O `home.js` (o Início, 15/10/2026) é o
-# `search.js` mais a vitrine: o mesmo caso, o mesmo achado.
-REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js", root / "apps/catalog/assets/home.js"}
+# `search.js` mais a vitrine: o mesmo caso, o mesmo achado. O `live-motores.js` (21/10/2026) é o `live.js` mais os
+# motores pesados (gráficos, editor, grade, mapa, QR): código de dependência montado, o mesmo caso.
+REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js", root / "apps/catalog/assets/home.js",
+            root / "apps/catalog/assets/live-motores.js"}
 REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
 
 
@@ -993,10 +995,16 @@ def _chaves_mjs(path):
 
 _proprios = {p.stem for p in CONTENT_DIR.glob("*.mjs") if not p.name.startswith("_")}
 _starters = _chaves_mjs(CONTENT_DIR / "_starters.mjs")
+# Os de motor pesado moram num arquivo próprio desde 21/10/2026 (a página deles carrega a parte viva com os motores).
+# Para o modelo de página é uma lista só — e a mesma chave nos dois é uma fonte a mais.
+_starters_motores = _chaves_mjs(CONTENT_DIR / "_starters-motores.mjs")
 _recipes = _chaves_mjs(CONTENT_DIR / "_recipes.mjs")
-if _starters is None or _recipes is None:
-    errors.append("modelo de página: falta apps/catalog/content/_starters.mjs ou _recipes.mjs")
+if _starters is None or _starters_motores is None or _recipes is None:
+    errors.append("modelo de página: falta apps/catalog/content/_starters.mjs, _starters-motores.mjs ou _recipes.mjs")
 else:
+    if _starters & _starters_motores:
+        errors.append(f"modelo de página: starter nos dois arquivos: {', '.join(sorted(_starters & _starters_motores))}")
+    _starters = _starters | _starters_motores
     _sem_fonte = sorted(fichas - _proprios - _starters)
     if _sem_fonte:
         errors.append(f"modelo de página: {len(_sem_fonte)} componente(s) sem preview nem starter: "

@@ -7,11 +7,13 @@
 // O índice é o `window.AUREA_SEARCH` que o gerador escreve em `assets/search-index.js`, dos mesmos
 // dados das páginas. Sem JavaScript, o botão continua sendo um link para o catálogo.
 //
-// Pacote PRÓPRIO (`assets/search.js`, IIFE): o `live.js` só roda dentro das molduras de prévia, e
-// juntar os dois faria toda página baixar os exemplos de todos os componentes.
+// Pacote PRÓPRIO (`assets/search.js`, IIFE) nas páginas SEM caixa viva: juntar com o `live.js` faria toda página
+// baixar os exemplos de todos os componentes. A página de componente carrega só o `live.js` (21/10/2026), que monta
+// estas peças E as caixas vivas, sob o mesmo provedor (`vivo.tsx`).
 //
 // Este arquivo MONTA as peças vivas do site; quem entra é o `busca.tsx` (o `search.js`, das páginas todas) ou o
 // `inicio.tsx` (o `home.js`, só do Início, que leva também a vitrine — 15/10/2026). Os dois sob o MESMO provedor.
+import {flushSync} from "react-dom";
 import {createRoot} from "react-dom/client";
 import {createElement as h, type ReactNode, useEffect, useMemo, useState} from "react";
 import {CommandPalette} from "../../../packages/react/dist/index.js";
@@ -64,5 +66,8 @@ export function montarSite(...extras: ReactNode[]) {
   const raiz = document.createElement("div");
   raiz.id = "site-search-root";
   document.body.append(raiz);
-  createRoot(raiz).render(h(ProvedorDoSite, null, h(Busca), h(TemaDoTopo), h(ChavesDeTema), h(SetinhaDoTopo), h(AcoesDaPagina), ...extras));
+  // SÍNCRONO (21/10/2026): o primeiro desenho acontece aqui, dentro do script, e não num quadro depois. As caixas vivas
+  // que já estão na tela (`vivo.tsx`) trocam o desenho pronto pelo vivo antes de a página terminar de carregar.
+  const r = createRoot(raiz);
+  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(TemaDoTopo), h(ChavesDeTema), h(SetinhaDoTopo), h(AcoesDaPagina), ...extras)));
 }

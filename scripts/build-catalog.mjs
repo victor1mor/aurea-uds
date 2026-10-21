@@ -132,7 +132,15 @@ for (const file of existsSync(contentDir) ? readdirSync(contentDir).filter(f => 
 // STARTERS: o par preview+código mínimo de quem ainda não tem arquivo próprio (ADR-0001 —
 // preview e código são núcleo, não luxo). Morava aqui dentro como o objeto `fallback`, sem
 // código nenhum e com 9 entradas mortas; virou conteúdo, que é o que é.
-const {default: starters} = await import(pathToFileURL(join(contentDir, "_starters.mjs")).href);
+// Em DOIS arquivos desde 21/10/2026: os de motor pesado (gráficos, editor, grade, mapa, QR) moram no
+// `_starters-motores.mjs`, porque a página deles carrega a parte viva com os motores (`live-motores.js`) e as outras a
+// leve (`live.js`). Para o gerador é uma lista só; uma chave nos dois arquivos derruba o build.
+const {default: startersLeves} = await import(pathToFileURL(join(contentDir, "_starters.mjs")).href);
+const {default: startersMotores} = await import(pathToFileURL(join(contentDir, "_starters-motores.mjs")).href);
+const nosDois = Object.keys(startersMotores).filter(k => k in startersLeves);
+if (nosDois.length) throw new Error(`_starters.mjs e _starters-motores.mjs têm a mesma entrada: ${nosDois.join(", ")}`);
+const starters = {...startersLeves, ...startersMotores};
+const COM_MOTOR = new Set(Object.keys(startersMotores));
 const {default: recipeContent} = await import(pathToFileURL(join(contentDir, "_recipes.mjs")).href);
 // HOOKS (16/08/2026): a metade da API pública que não tem ficha — ficha é de componente. Sem esta
 // página eles não existem em lugar nenhum que se leia, e foi assim que EU mesmo concluí que a
@@ -312,7 +320,11 @@ if (paraPreRender.length) {
 // `anchor` marca o bloco PRINCIPAL da página: é o par preview/code que o modelo exige, e o
 // gate procura por `#preview`. Os exemplos extras não recebem âncora.
 let uid = 0;
-function demoBlock(render, code, anchor) {
+// `vivo` (21/10/2026): {componente, indice} do exemplo que a caixa desenha. Vira `data-vivo="Componente:indice"`, e a
+// parte viva da página (`assets/live.js`, `live/vivo.tsx`) acende a caixa com o MESMO exemplo — o Victor: "adicione o
+// javascript ao site da aurea assim todos os componente funciona como deveria funcionar". Sem `vivo`, a caixa continua
+// só desenho (os padrões, os blocos e as receitas, por enquanto).
+function demoBlock(render, code, anchor, vivo = null) {
   const id = `d${uid++}`;
   let previewHtml = null;
   // Demo que estoura DERRUBA o build. Antes era console.warn: a página saía com "Preview
@@ -345,7 +357,9 @@ function demoBlock(render, code, anchor) {
   return h("div", {className: "demo", id: anchor, "data-demo": id},
     code ? h("div", {className: "demo-tabs"},
       h("div", {className: "segmented", role: "tablist"}, tab("preview", "Preview", true), tab("code", "Code", false))) : null,
-    h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"), ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
+    h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"),
+      ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`} : {}),
+      ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
       // Componente cujo conteúdo vive num portal renderiza só o disparador; quem não renderiza
       // nada (Dialog, Drawer) mostra o disparador do próprio starter. O `note` do conteúdo
       // explica na lede da demo — nunca uma caixa vazia sem explicação.
@@ -434,7 +448,7 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
     h("section", {className: "block", id: "usage"}, h("h2", null, "Usage"),
       h(A.CodeBlock, {language: "tsx", copyable: true, highlight: highlightCode, className: "usage-import"}, imports),
       demo.description ? h("p", {className: "demo-lede"}, demo.description) : null,
-      demoBlock(demo.render, demo.code, "preview"),
+      demoBlock(demo.render, demo.code, "preview", demo.vivo),
       points.length ? h("ul", {className: "usage-points"}, ...points.map((t, n) => h("li", {key: n}, t))) : null),
     ...secoes.map(s => s.node),
     // A proveniência ("Uses" da ADR-0001) vira os cartões de "Related Components", como na referência.
@@ -496,7 +510,7 @@ function embedPreview(chave, render, rotulo = chave, alvo = null, layoutProprio 
 <title>${rotulo} preview — Aurea UDS</title>
 <link rel="stylesheet" href="../assets/catalog.css">
 </head>
-<body>${SPRITE_SLOT}
+<body class="embed-doc">${SPRITE_SLOT}
 <!-- A MOLDURA E UM DOCUMENTO, NAO UM FRAGMENTO - e isso custou 12 reprovacoes em 18/08/2026. A
      varredura e o axe cobram page-has-heading-one e landmark-one-main de TODA pagina, e os dois
      estao certos: documento sem titulo e sem conteudo principal nao e pagina. A saida nao foi
@@ -505,7 +519,7 @@ function embedPreview(chave, render, rotulo = chave, alvo = null, layoutProprio 
      layoutProprio existe para quem ja monta os proprios landmarks: a lateral poe o main AO LADO
      do aside, porque aside DENTRO de main e landmark-complementary-is-top-level. -->
 ${tituloProprio ? "" : `<header><h1 class="sr-only">${rotulo} preview</h1></header>`}
-<${layoutProprio ? "div" : "main"} id="root"${alvo ? ` data-componente="${alvo.componente}" data-indice="${alvo.indice}"` : ""}>${
+<${layoutProprio ? "div" : "main"} id="root"${layoutProprio || tituloProprio ? "" : ` class="demo-panel" data-panel="preview"`}${alvo ? ` data-componente="${alvo.componente}" data-indice="${alvo.indice}"` : ""}>${
   // `renderToString` e NÃO `renderToStaticMarkup` quando a moldura vai hidratar: o segundo não
   // emite os marcadores de hidratação, e o React 19 reclama de divergência e joga a árvore fora —
   // a prévia piscaria e voltaria ao estático. Sem alvo, segue estático como sempre.
@@ -543,7 +557,9 @@ function componentPage(f, i) {
     // dentro resolve 100% de zero. Medido no navegador em 01/08/2026: a caixa media 0×220 e o
     // desenho vazava para fora dela.
     ...(bruto.prerender ? {render: () => h("div", {style: {width: "100%"},
-      dangerouslySetInnerHTML: {__html: preRenderizado[f.name]}})} : {})};
+      dangerouslySetInnerHTML: {__html: preRenderizado[f.name]}})} : {}),
+    // A caixa acende com o exemplo ORIGINAL (o `render` do conteúdo, não o pré-desenhado); a moldura acende sozinha.
+    vivo: bruto.embed ? null : {componente: f.name, indice: 0}};
   // Variante, tamanho e estado são EIXOS DIFERENTES (DIRECTION.md §5) — juntar os três num
   // rótulo "Variants" era mentira: `lg` não é variante e `hover` não é nem uma coisa nem outra.
   // Eixo declarado que a página não mostra é eixo que ninguém descobre. `variants` e `sizes`
@@ -594,7 +610,7 @@ function componentPage(f, i) {
                   // `n` é o índice DENTRO de `slice(1)`, então o índice real é `n + 1`
                   {componente: f.name, indice: n + 1}, ex.layoutProprio === true,
                   ex.tituloProprio === true)
-              : ex.render, ex.code))))} : null,
+              : ex.render, ex.code, undefined, ex.embed ? null : {componente: f.name, indice: n + 1}))))} : null,
       // A "Reference" da Aurea, no nome e no lugar da referência ("Styling Reference"): os eixos, a
       // acessibilidade, os tokens e as plataformas. Toda linha é uma fila de chips do MESMO tamanho.
       {id: "styling", label: "Styling Reference",
@@ -1484,7 +1500,14 @@ const sprite = readFileSync(join(root, "packages/icons/dist/aurea-icons.svg"), "
 // um exemplo novo com ícone fora dela renderizava um <use> para um símbolo inexistente, ou
 // seja um ícone invisível — e nenhum gate pega isso, porque o sprite é inline e não há 404.
 function spriteFor(htmls) {
-  const usados = [...new Set(htmls.flatMap(x => [...x.matchAll(/#i-([a-z0-9-]+)/g)].map(m => m[1])))].sort();
+  const vistos = [...new Set(htmls.flatMap(x => [...x.matchAll(/#i-([a-z0-9-]+)/g)].map(m => m[1])))];
+  // A FORMA CHEIA de todo ícone usado vai junto (21/10/2026). O item escolhido troca para ela (Sidebar, BottomNav, a
+  // chave de tema), e a página pronta só tem a do item que já nasce escolhido: no site, o BottomNav perdia o ícone ao
+  // clicar em "Service" e "Profile" (`wrench-fill`, `user-fill`). A chave de tema de 15/10 era o mesmo defeito, e o
+  // conserto dela (os estados vivos, abaixo) valia só para ela. Com a parte viva em toda caixa, qualquer peça pode
+  // trocar de item — então a regra é de todo ícone, medida: 86 formas cheias, 32,7 KB a mais no desenho embutido.
+  const usados = [...new Set([...vistos, ...vistos.map(id => `${id}-fill`)
+    .filter(id => sprite.includes(`<symbol id="i-${id}"`))])].sort();
   const faltando = usados.filter(id => !sprite.includes(`<symbol id="i-${id}"`));
   if (faltando.length) throw new Error(`sprite: glifo(s) inexistente(s) no pacote de ícones: ${faltando.join(", ")}`);
   return `<svg width="0" height="0" style="position:absolute" aria-hidden="true">${
@@ -1538,6 +1561,13 @@ const chrome = `
    larga o padding — a moldura já é o card, e o shell lá dentro tem a margem dele. */
 .demo-panel:has(> .demo-frame) { padding:0; }
 .demo-frame { flex:1; align-self:stretch; width:100%; min-height:0; border:0; border-radius:var(--radius-card); }
+/* O DOCUMENTO da moldura (21/10/2026). O Victor viu no site as 43 molduras com o fundo da PÁGINA (cinza, e não o preto
+   da caixa) e a peça no canto de cima, à esquerda — o rótulo do ColorField e do DatePicker cortado pelo canto de 22. A
+   regra não se repete: o #root da moldura É a caixa de prévia do core (o fundo, o recheio e o centro); aqui só entra o
+   que é da moldura — ocupar a altura dela. A moldura que é PÁGINA fica com a altura e o fundo, sem o centro: quem monta
+   o próprio arranjo (a lateral, o AppShell) e quem traz o h1 do documento (a abertura de página, que rola dentro da
+   moldura — centralizada, ela passava 372 da caixa por cima, onde a rolagem não alcança). */
+.embed-doc { min-height:100dvh; display:flex; flex-direction:column; background:var(--surface-inset); }
 .example { display:grid; gap:var(--space-3); margin-top:var(--space-5); }
 .example h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); line-height:var(--text-xl-leading); font-weight:var(--weight-semibold); }
 .facts { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--space-3) var(--space-5); margin:0; }
@@ -1897,6 +1927,14 @@ try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")documen
 `;
 
 function pageHtml(title, activeHref, inner, section = "components") {
+  const corpo = shell(activeHref, inner, section);
+  // A PARTE VIVA (21/10/2026): a página que tem caixa marcada (`data-vivo`) carrega o `live.js` NO LUGAR do
+  // `search.js` — ele monta as peças do topo E as caixas, sob o mesmo provedor (com dois, a página teria duas regiões de
+  // avisos com o mesmo nome: o `landmark-unique` do axe, medido). Se uma caixa é de componente com motor pesado
+  // (`_starters-motores.mjs`), o `live-motores.js`, que é o mesmo com os motores. Um arquivo só por página.
+  const vivas = [...corpo.matchAll(/data-vivo="([^":]+):/g)].map(m => m[1]);
+  const script = section === "home" ? "home"
+    : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) ? "live-motores" : "live";
   return `<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
@@ -1905,8 +1943,8 @@ function pageHtml(title, activeHref, inner, section = "components") {
 <title>${title} — Aurea UDS</title>
 <link rel="stylesheet" href="./assets/catalog.css">
 ${TEMA_SALVO}</head>
-<body>${SPRITE_SLOT}${shell(activeHref, inner, section)}<script src="./assets/catalog.js"></script>
-<script src="./assets/search-index.js" defer></script><script src="./assets/${section === "home" ? "home" : "search"}.js" defer></script></body>
+<body>${SPRITE_SLOT}${corpo}<script src="./assets/catalog.js"></script>
+<script src="./assets/search-index.js" defer></script><script src="./assets/${script}.js" defer></script></body>
 </html>
 `;
 }

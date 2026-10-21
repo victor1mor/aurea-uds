@@ -22,9 +22,10 @@ export default defineConfig({
   plugins: [react()],
   base: "./",
   build: {
-    // ponytail: 520 kB é o teto do runtime único medido em 512 kB. Se passar, gere IIFEs clássicos
-    // por componente; aumentar este número esconderia custo de parse sem resolver o suporte a file://.
-    chunkSizeWarningLimit: 520,
+    // O teto subiu com a parte viva em toda caixa (21/10/2026): os exemplos de partida entraram, e o arquivo foi a
+    // 1,39 MB cru (436 KB em gzip). O que pesava de verdade — os cinco motores — saiu para o `live-motores.js`, que só
+    // carrega nas páginas deles: é a separação por peso que este aviso pedia. Se passar daqui, separe de novo.
+    chunkSizeWarningLimit: 1450,
     outDir: "assets",
     emptyOutDir: false,
     rollupOptions: {

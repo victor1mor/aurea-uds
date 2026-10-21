@@ -1,7 +1,9 @@
 import {createElement as h} from "react";
 import {Checkbox} from "../../../packages/react/dist/index.js";
 
-const stack = {display: "grid", gap: "var(--space-3)", width: "min(460px, 100%)"};
+// `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza, como na referência. Com
+// `width`, o texto curto ficava encostado à esquerda de uma caixa de 460 (o Victor apontou).
+const stack = {display: "grid", gap: "var(--space-3)", maxWidth: "min(460px, 100%)"};
 
 export default {
   description:

@@ -29,7 +29,9 @@ const moldura = (props, rotulo = "Sidebar") => {
   const painel = props.collapsed ? "var(--sidebar-rail)" : "var(--sidebar-width)";
   const coluna = props.variant === "flush" ? painel : `calc(${painel} + var(--space-4) * 2)`;
   return h("div", {style: {display: "grid", gridTemplateColumns: `${coluna} minmax(0,1fr)`,
-    height: "100vh", background: "var(--background)",
+    // Sem fundo próprio (21/10/2026): pintava o cinza da página do app, e a moldura saía cinza no meio das caixas pretas
+    // do site — o Victor apontou. O fundo é o da moldura, o da caixa de prévia, como em toda outra.
+    height: "100vh",
     // A moldura DIZ A VERDADE SOBRE SI: a lateral reserva `--shell-top` no topo, que é a altura
     // do `Topbar` mais as folgas — e aqui não há topo nenhum. Sem isto a prévia abria com ~90px
     // de vazio guardados para um componente que não está na moldura. Quem mente sobre o contexto

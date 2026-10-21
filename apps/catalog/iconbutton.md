@@ -41,7 +41,7 @@ Five square targets. The glyph keeps its own scale; the box grows with the densi
 
 ### With tooltip
 
-When the glyph is not self-evident, the tooltip says the same words as the label — never different ones. The preview shows the trigger: the balloon lives in a portal and only appears on hover, in a real app.
+When the glyph is not self-evident, the tooltip says the same words as the label — never different ones. Point at the button, or reach it with Tab, to see the balloon.
 
 ```tsx
 <Tooltip content="Duplicate">

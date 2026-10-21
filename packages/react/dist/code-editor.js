@@ -92,7 +92,10 @@ export function CodeEditor({ defaultValue = "", onChange, extensions, readOnly =
     const dynExt = () => [
         EditorState.readOnly.of(readOnly),
         EditorView.editable.of(!readOnly),
-        EditorView.contentAttributes.of({ "aria-label": label }),
+        // `tabindex="0"` (21/10/2026): o CodeMirror põe -1 na área de rolagem, e com o código mais alto que o editor o axe
+        // reprovava `scrollable-region-focusable` — a área rola e nada dentro DIZ que recebe o teclado. O conteúdo já era
+        // parada de Tab (contenteditable); no readOnly, é o que deixa o teclado chegar ao código para rolar.
+        EditorView.contentAttributes.of({ "aria-label": label, tabindex: "0" }),
         ...(extensions ?? []),
     ];
     React.useEffect(() => {

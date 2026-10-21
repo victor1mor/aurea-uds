@@ -55,7 +55,7 @@ export default {
     },
     {
       title: "With tooltip",
-      description: "When the glyph is not self-evident, the tooltip says the same words as the label — never different ones. The preview shows the trigger: the balloon lives in a portal and only appears on hover, in a real app.",
+      description: "When the glyph is not self-evident, the tooltip says the same words as the label — never different ones. Point at the button, or reach it with Tab, to see the balloon.",
       code: [
         '<Tooltip content="Duplicate">',
         '  <IconButton icon="copy" label="Duplicate" />',

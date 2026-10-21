@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {ButtonGroup, Button, SegmentedControl} from "../../../packages/react/dist/index.js";
+import {ComValor} from "./_estado.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 
@@ -83,7 +84,7 @@ export default {
         '<SegmentedControl label="View" value="board" onChange={setView}',
         '  items={[{value: "list", label: "List"}, {value: "board", label: "Board"}]} />',
       ].join("\n"),
-      render: () => h(SegmentedControl, {label: "View", value: "board", onChange: () => {},
+      render: () => h(ComValor, {componente: SegmentedControl, label: "View", value: "board", 
         items: [{value: "list", label: "List"}, {value: "board", label: "Board"}]}),
     },
     {

@@ -9,7 +9,9 @@ import {CommandPaletteShell} from "@aurea-uds/react";
 ```
 
 ```tsx
-<CommandPaletteShell open={open} query={query} onQueryChange={setQuery}>
+<Button leadingIcon="magnifying-glass" onClick={() => setOpen(true)}>Open palette</Button>
+
+<CommandPaletteShell open={open} query={query} onQueryChange={setQuery} onClose={() => setOpen(false)}>
   <div className="menu">
     <button className="menu-item" type="button">Go to Button</button>
     <button className="menu-item" type="button">Toggle theme</button>

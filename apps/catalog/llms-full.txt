@@ -4435,9 +4435,9 @@ import {Combobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Combobox size="sm" items={items} />
-<Combobox items={items} />
-<Combobox size="lg" items={items} />
+<Combobox size="sm" aria-label="Small" placeholder="Small" items={items} />
+<Combobox aria-label="Medium" placeholder="Medium (default)" items={items} />
+<Combobox size="lg" aria-label="Large" placeholder="Large" items={items} />
 ```
 
 - Base UI underneath: arrows move, Enter picks, Escape closes, and focus returns where it came from.
@@ -4450,7 +4450,7 @@ import {Combobox} from "@aurea-uds/react";
 
 - disabled goes on the whole control: field and both buttons, never one without the other.
 
-- The previews show the CLOSED field; the popup lives in a portal and only exists in a real app.
+- The list opens in a portal, above the page: type or press the arrow in the previews to open it.
 
 ## Examples
 
@@ -4549,7 +4549,9 @@ import {CommandPaletteShell} from "@aurea-uds/react";
 ```
 
 ```tsx
-<CommandPaletteShell open={open} query={query} onQueryChange={setQuery}>
+<Button leadingIcon="magnifying-glass" onClick={() => setOpen(true)}>Open palette</Button>
+
+<CommandPaletteShell open={open} query={query} onQueryChange={setQuery} onClose={() => setOpen(false)}>
   <div className="menu">
     <button className="menu-item" type="button">Go to Button</button>
     <button className="menu-item" type="button">Toggle theme</button>
@@ -5681,7 +5683,7 @@ Five square targets. The glyph keeps its own scale; the box grows with the densi
 
 ### With tooltip
 
-When the glyph is not self-evident, the tooltip says the same words as the label — never different ones. The preview shows the trigger: the balloon lives in a portal and only appears on hover, in a real app.
+When the glyph is not self-evident, the tooltip says the same words as the label — never different ones. Point at the button, or reach it with Tab, to see the balloon.
 
 ```tsx
 <Tooltip content="Duplicate">
@@ -6518,7 +6520,7 @@ const [tags, setTags] = useState([]);
 
 - disabled reaches the chips too: no removing what you cannot add.
 
-- The previews show the CLOSED field; the popup lives in a portal and only exists in a real app.
+- The list opens in a portal, above the page: type or press the arrow in the previews to open it.
 
 ## Examples
 
@@ -9190,7 +9192,7 @@ import {useSpriteUrl} from "@aurea-uds/react";
 ```tsx
 const url = useSpriteUrl();
 
-<svg><use href={`${url}#chevron--down`} /></svg>
+<svg><use href={`${url}#i-caret-down`} /></svg>
 ```
 </page>
 

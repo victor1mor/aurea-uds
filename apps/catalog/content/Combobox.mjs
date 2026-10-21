@@ -28,7 +28,7 @@ export default {
     "Typing filters the list; the value is still one option, never free text.",
     "An empty result says so in words, from the i18n dictionary.",
     "disabled goes on the whole control: field and both buttons, never one without the other.",
-    "The previews show the CLOSED field; the popup lives in a portal and only exists in a real app.",
+    "The list opens in a portal, above the page: type or press the arrow in the previews to open it.",
   ],
 
   examples: [
@@ -38,11 +38,16 @@ export default {
         "The two buttons on the right grow with the field — at lg they step up, and the room " +
         "reserved for them steps up with them. Otherwise they float in the middle of the height.",
       code: [
-        '<Combobox size="sm" items={items} />',
-        '<Combobox items={items} />',
-        '<Combobox size="lg" items={items} />',
+        '<Combobox size="sm" aria-label="Small" placeholder="Small" items={items} />',
+        '<Combobox aria-label="Medium" placeholder="Medium (default)" items={items} />',
+        '<Combobox size="lg" aria-label="Large" placeholder="Large" items={items} />',
       ].join("\n"),
-      render: null,
+      // Era `render: null` — o primeiro exemplo da página, e a caixa do "Usage" saía com "Interactive — see the code."
+      // (o Victor apontou, 21/10/2026). O campo FECHADO sai no HTML pronto; a lista abre com a parte viva.
+      render: () => h("div", {style: stack},
+        h(Combobox, {size: "sm", "aria-label": "Small", placeholder: "Small", items: components}),
+        h(Combobox, {"aria-label": "Medium", placeholder: "Medium (default)", items: components}),
+        h(Combobox, {size: "lg", "aria-label": "Large", placeholder: "Large", items: components})),
     },
     {
       title: "Single choice",

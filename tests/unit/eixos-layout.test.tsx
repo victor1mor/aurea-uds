@@ -150,7 +150,8 @@ test("nenhuma classe do enum achatado sobrou no core nem no catálogo", () => {
     expect(css.includes(`.input-group-addon-${morta}`), `input-group-addon-${morta} ficou no core`)
       .toBe(false);
   }
-  const starters = readFileSync("apps/catalog/content/_starters.mjs", "utf8");
+  const starters = readFileSync("apps/catalog/content/_starters.mjs", "utf8")
+    + readFileSync("apps/catalog/content/_starters-motores.mjs", "utf8");
   expect(starters, "starter ainda usa o enum achatado").not.toMatch(/align[=:]\s*"?(inline|block)-/);
 });
 

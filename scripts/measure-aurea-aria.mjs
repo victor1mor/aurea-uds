@@ -6,7 +6,9 @@ import {renderToStaticMarkup} from "react-dom/server";
 import {JSDOM} from "jsdom";
 import {readFileSync, readdirSync, writeFileSync} from "node:fs";
 
-const starters = (await import("../apps/catalog/content/_starters.mjs")).default;
+// Os de motor pesado moram no `_starters-motores.mjs` desde 21/10/2026: a lista é a soma dos dois.
+const starters = {...(await import("../apps/catalog/content/_starters.mjs")).default,
+  ...(await import("../apps/catalog/content/_starters-motores.mjs")).default};
 const conteudo = {};
 for (const f of readdirSync("apps/catalog/content").filter(f => /^[A-Z].*\.mjs$/.test(f))) {
   const m = await import(`../apps/catalog/content/${f}`);
