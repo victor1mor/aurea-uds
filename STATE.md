@@ -37,9 +37,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Pattern | 223 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 71 |
+| Documentação | 72 |
 | Índice de área | 9 |
-| **Total** | **488** |
+| **Total** | **489** |
 
 ## Cobertura das fichas
 
@@ -72,7 +72,7 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 |---|---|
 | Chamadas de `test()` nos testes unitários | 2120 |
 | Componentes citados nos testes unitários | 145 de 138 |
-| Specs de navegador (Playwright) | 55 |
+| Specs de navegador (Playwright) | 57 |
 | Baselines de screenshot no repositório | 48 |
 | Baselines `-linux.png` (o que a CI compara) | 24 |
 

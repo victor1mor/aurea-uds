@@ -176,6 +176,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.34.0` | O lote S — **sem linha**: nenhuma peça desenha borda (transparente, nenhuma medida muda), na web e no nativo; a única que fica é a do `Card variant="outline"`, clara; o que sumia ganha fundo (o texto a 6, 10 e 20%), o contorno com tom leva o tom a 16% e a letra mais escura (a "C"), o aviso que era linha vira fundo e o desenho de linha vira desenho cheio — [ADR-0072](decisions/0072-sem-linha.md), pedido #70. **Publicada em 17/10/2026** (entre 08:16 e 08:24, Brasília, medido no npm), pelo terminal do Victor |
 | `0.35.0` | O lote T — o site no arranjo da documentação da referência: `AppShell layout="docs"`, `Header tabs`, `Container size="docs"`, cinco tokens de largura, cada área com a sua lateral, a segunda linha da ADR-0072 (a de ponta a ponta embaixo das áreas) e o índice sem barra de rolagem; e o MNT-28 (o nó movido encaixa na grade, no vizinho e onde a linha fica reta) — [ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md), seção "Lote T", pedido #72. **Publicada em 17/10/2026** (entre 17:58 e 18:04, Brasília, medido no npm), pelo terminal do Victor |
 | `0.36.0` | O lote U — as cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)), a bolinha do `Radio`, as faixas do mapa (MNT-27) e o clique no nó (pedido 16); a abertura de página (`Section variant="hero"`, `--text-6xl` e `--text-7xl`), o aviso de cookies (`Banner variant="consent"`) e o `Chip` (GAR-19 a 22, [ADR-0074](decisions/0074-a-abertura-o-aviso-de-cookies-e-o-chip.md)); o site com as áreas Getting Started e Releases, os textos para assistentes de IA e o celular e o tablet — pedidos #75 a #82. **Publicada em 20/10/2026** (por volta das 12:12, Brasília, medido no npm), pelo terminal do Victor |
+| `0.37.0` | O `CodeBlock` com número de linha e cores ([ADR-0075](decisions/0075-o-codigo-com-cores-e-numero-de-linha.md)); o lote 1, passo 1 — as fichas dizem a verdade (checks 48 e 49) e o desativado de sete peças; o azul da marca como letra de destaque do claro e o item atual da lateral na cor do botão ([ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)); o `CodeEditor` que recebe o teclado; e, junto, o site com a parte viva em toda caixa — pedidos #84 a #88. **Publicada em 21/10/2026** (por volta das 16:45, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -515,6 +516,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    `package.json`). **Publicada em 20/10/2026** (por volta das 12:12, Brasília, medido no npm), pelo terminal do Victor,
    da junção do pedido #82.
 
+33. **`0.37.0`, feita de 20 a 21/10/2026** — o `CodeBlock` com número de linha e cores (ADR-0075, #84); o lote 1, passo 1:
+   as fichas dizem a verdade (o check 48, a plataforma da ficha é o que o pacote exporta; o check 49, o estado prometido
+   tem prova no código) e o desativado de sete peças (#85); o azul da marca como letra de destaque do claro e o item
+   atual da lateral na cor do botão (ADR-0076, #86); o fechamento (#87); e o site com a parte viva em toda caixa (#88),
+   que achou e consertou o `CodeEditor` que não dizia receber o teclado. ⚠ **As regras novas:** as caixas do site
+   acendem sob o provedor ÚNICO do site (`live/vivo.tsx`, por portal) — com uma segunda raiz, a página ganha duas
+   regiões de avisos com o mesmo nome; a página de componente carrega o `live.js` (ou o `live-motores.js`) NO LUGAR do
+   `search.js`. ⚠ **As lições:** o `publicar.mjs` não monta, empacota o `dist/` que houver — antes de mandar o Victor
+   publicar, `pnpm build` na pasta dele; e conserto de pacote juntado antes do publish sai na versão que está sendo
+   publicada, não na seguinte. **Publicada em 21/10/2026** (por volta das 16:45, Brasília, medido no npm), pelo terminal
+   do Victor, da junção do pedido #88.
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -826,8 +839,12 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
 - **Decisão dada é só registrar:** anotar e parar. Não emendar "baixo? instalo? guardo onde?".
 
 **Como a fila anda**
-- **Rodadas maiores** (ordem de 10/10/2026): juntar mais componentes em cada versão — construir é mais
-  rápido que validar e passar pela CI. O que cresce é o lote, nunca o atalho.
+- ~~**Rodadas maiores** (ordem de 10/10/2026): juntar mais componentes em cada versão.~~ → **Lotes de até 3 horas**
+  (ordem do Victor, 21/10/2026: *"não ultrapassa 3hrs ... pelo menos 3 atualizações por dia"*): o ciclo inteiro —
+  construir (até 1h15, com a versão, o CHANGELOG e a nota), a conferência rápida, a bancada AO MESMO TEMPO que a suíte
+  do Chromium (39 min), a CI (34 min), juntar e publicar — cabe em ~2h50. Cada lote vira uma versão; o registro da
+  publicada vai dentro do lote seguinte. Lote que passar de 1h15 de construção se divide ANTES de começar. A fila
+  dividida assim mora no documento de achados ("ORDEM NOVA"). O que encolhe é o lote, nunca a conferência.
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
 - **O caminho até a `1.0`** (08 e 09/10/2026): terminar a fila do documento de achados → auditar a

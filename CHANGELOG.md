@@ -117,25 +117,41 @@ como deveria funcionar"*.
 
 ---
 
-## [0.38.0] — em construção
+## [0.37.1] — 2026-10-21
 
-⏳ **Ainda não publicada.** Começou no pedido #88 (o site com a parte viva), que vem depois da 0.37.0. A versão sobe
-quando o lote fechar.
+⏳ **Ainda não publicada.** O lote 0-A da fila nova (lotes de até 3 horas, decisão do Victor de 21/10/2026): os
+pedidos do app de rede MNT-33 e MNT-29, medidos na 0.36.0 — o app usa a marca `lory`.
 
 ### Consertado
 
-- **`CodeEditor`: o conteúdo declara que recebe o teclado** (`tabindex="0"`, nos dois modos, editável e só de
-  leitura). O CodeMirror põe `tabindex="-1"` na área de rolagem; com o código mais alto que o editor, o axe reprovava
-  `scrollable-region-focusable` — a área rolava e, para ele, nada dentro recebia o teclado. Achado pela varredura do
-  site, quando o editor passou a montar de verdade na página dele; provado no navegador (sem rolar, nenhuma violação;
-  rolando, uma; com o atributo, nenhuma). Na tecla Tab nada muda: o conteúdo já era parada de foco. No modo só de
-  leitura, é o que deixa o teclado chegar ao código para rolar. Quem cobra: `tests/unit/components.test.tsx`.
+- **O conteúdo largo não alarga mais a página dentro do `DataState`, do `Form` e do corpo do `Dialog`** (MNT-33). As três
+  são grades sem coluna definida: a coluna implícita não ficava menor que o conteúdo, e uma tabela larga, dentro de um
+  invólucro do app, empurrava a página em vez de rolar na caixa dela (a 640 px, 104 px para o lado). Agora
+  `grid-template-columns: minmax(0, 1fr)`. O `Collapsible` não tinha o defeito (o painel dele já segura a largura).
+  Quem cobra: `tests/visual/conteudo-largo-nao-alarga.spec.ts`, que reprova o CSS de antes nas três.
+- **O texto de exemplo dos campos passa de 4,5:1 na marca `lory`** (MNT-29). O defeito era da marca, e não do campo: na
+  `lory`, a cor fraca (`--subtle-foreground`, a do `::placeholder` e de mais 15 textos do core) dava 2,51 a 2,62 no claro
+  e 3,15 a 3,58 no escuro, e até a média (`--muted-foreground`) dava 4,27 no claro. Agora, na `lory`, a fraca é igual à
+  média (como já é na Aurea sem marca), e a média do claro passou de 0,52 para 0,49 de luminosidade (o tom e a
+  saturação ficam): 4,87 a 5,10 no claro e 5,50 a 6,22 no escuro, sobre o campo, o cartão e a página. A referência mede
+  4,83 e 6,75. A Aurea sem marca não muda. Quem cobra: `tests/visual/texto-de-exemplo-contraste.spec.ts`.
+
+### Para quem cuida do repositório
+
+- **O registro da 0.37.0** (publicada às 16:45): o `released-surface.json` do commit do publish (`acb59b59`), o CHANGELOG
+  e o CLAUDE.md. O conserto do `CodeEditor`, anotado como 0.38.0, saiu na 0.37.0 e passou para ela (e para a nota).
+- **Lotes de até 3 horas** (ordem do Victor, 21/10/2026): o CLAUDE.md §11 troca a regra "rodadas maiores".
+- **`vitest` 4.1.11** (o aviso moderado do `@vitest/mocker`) e **`uuid` 11.1.1** por `overrides` (o aviso moderado do
+  `uuid` 7, sob o `xcode` do Expo; o `xcode` só chama `v4()`, que o 11 tem). O `pnpm audit` volta a mostrar só os 4
+  aceitos.
 
 ---
 
 ## [0.37.0] — 2026-10-21
 
-⏳ **Ainda não publicada.** O lote V (o código com cores e número de linha, ADR-0075, pedido #84), o lote 1, as travas,
+✅ **Publicada em 21/10/2026, por volta das 16:45 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #88 (que levou o #87, o fechamento da versão, e o conserto do `CodeEditor`, abaixo). O lote V (o código com
+cores e número de linha, ADR-0075, pedido #84), o lote 1, as travas,
 passo 1 (os checks 48 e 49, as fichas que dizem a verdade e o desativado de sete peças, pedido #85) e o azul da marca como
 letra de destaque do tema claro (ADR-0076, pedido #86), cada um aprovado na bancada pelo Victor e juntado no `main`.
 Fechada em 21/10/2026, a pedido do Victor: o app que adotou a 0.36.0 mediu a letra amarela do claro a 1,75:1, e a
@@ -202,6 +218,14 @@ correção só chega a ele pelo npm.
   todos" da tabela de dados também não o desenha), a aba e o segmento desativados da web (no nativo existem), o
   "carregando" do player de vídeo, o hover do Slider (a referência também não tem) e o desativado do Field (o estado é
   do controle de dentro, como a documentação dele já dizia). Voltam às fichas quando forem construídos.
+
+- **`CodeEditor`: o conteúdo declara que recebe o teclado** (`tabindex="0"`, nos dois modos, editável e só de
+  leitura). O CodeMirror põe `tabindex="-1"` na área de rolagem; com o código mais alto que o editor, o axe reprovava
+  `scrollable-region-focusable` — a área rolava e, para ele, nada dentro recebia o teclado. Achado pela varredura do
+  site, quando o editor passou a montar de verdade na página dele; provado no navegador (sem rolar, nenhuma violação;
+  rolando, uma; com o atributo, nenhuma). Na tecla Tab nada muda: o conteúdo já era parada de foco. No modo só de
+  leitura, é o que deixa o teclado chegar ao código para rolar. Quem cobra: `tests/unit/components.test.tsx`.
+  Saiu nesta versão porque foi juntado (pedido #88) antes do publish; estava anotado como 0.38.0.
 
 ### O site
 
