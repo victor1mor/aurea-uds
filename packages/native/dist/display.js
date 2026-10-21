@@ -132,8 +132,9 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
     // a de sempre caía abaixo de 4,5:1 (o verde do claro, o `success` do escuro). O par da web é o `.badge-outline`.
     const letra = tone === "neutral" ? t.color.secondaryForeground : acento;
     const corDoTexto = emphasis === "solid" ? (cheio ? cheio[1] : t.color.background)
-        // Menos o primário (ADR-0073, "A", 18/10/2026): a letra é o próprio amarelo, a mesma do suave — misturado ao texto, ele
-        // virava mostarda só nesta peça. O nativo não tem marca (`data-brand`), então vale sempre.
+        // Menos o primário (ADR-0073, "A", 18/10/2026): a letra é o próprio acento, a mesma do suave (o amarelo no escuro; o
+        // azul no claro, desde a ADR-0076) — misturado ao texto, o amarelo virava mostarda só nesta peça. O nativo não tem
+        // marca (`data-brand`), então vale sempre.
         : emphasis === "outline" && tone !== "primary" ? misturaOpaca(letra, t.color.foreground, 0.8) : letra;
     const numero = count != null ? formatarContagem(count, max) : undefined;
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);

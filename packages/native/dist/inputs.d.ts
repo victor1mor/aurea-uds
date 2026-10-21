@@ -387,7 +387,7 @@ export declare function SegmentedControl({ items, value, onChange, label, disabl
 /**
  * O indicador da opção escolhida, nas listas do `Select` e do `Combobox` (0.32.0): o da referência
  * — a caixa de 20 com o `check` de 16 — e o mesmo glifo da coluna `.combobox-check` da web. A cor
- * é a do destaque (`primaryEmphasis`): o amarelo da marca nos dois temas, desde a ADR-0073. Sai do
+ * é a do destaque (`primaryEmphasis`): o amarelo no escuro e, desde a ADR-0076, o azul no claro. Sai do
  * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
  * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
  */

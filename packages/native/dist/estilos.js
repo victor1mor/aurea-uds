@@ -131,12 +131,12 @@ const PAR_DE_LETRA = {
 export const letraDoToken = (t, token) => (PAR_DE_LETRA[token] ? t.color[PAR_DE_LETRA[token]] : undefined) ?? t.color[token];
 /**
  * O FUNDO CHEIO de um tom de estado e a letra em cima dele — o par do botão cheio (ADR-0061, 0.27.0):
- * o selo cheio é o botão cheio do mesmo tom. O `primary` enche com o acento e escreve com a letra do
- * botão amarelo (`primaryForeground`, a tinta cinza-escura): desde a ADR-0073 o acento do claro é o
- * próprio amarelo, e a letra de antes (`background`, clara) media 1,75:1 em cima dele. O `neutral` não
- * tem o par: `undefined`, e quem chama enche com o acento, como antes.
+ * o selo cheio é o botão cheio do mesmo tom. O `primary` enche com o PRIMÁRIO (o amarelo) e escreve com a
+ * letra do botão amarelo (`primaryForeground`, a tinta cinza-escura). Até a ADR-0076 enchia com o acento,
+ * que era o próprio amarelo nos dois temas; desde ela o acento do claro é o azul, e a tinta cinza no azul
+ * mediria 1,99:1. O `neutral` não tem o par: `undefined`, e quem chama enche com o acento, como antes.
  */
-export const preenchimentoDoTom = (t, tom) => tom === "primary" ? [t.color.primaryEmphasis, t.color.primaryForeground]
+export const preenchimentoDoTom = (t, tom) => tom === "primary" ? [t.color.primary, t.color.primaryForeground]
     : tom === "success" ? [t.color.success, t.color.successForeground]
         : tom === "warning" ? [t.color.warning, t.color.warningForeground]
             : tom === "info" ? [t.color.info, t.color.infoForeground]

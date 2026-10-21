@@ -4,6 +4,7 @@
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
   --brand-yellow-text:oklch(0.516 0.105 86.047);
   --brand-yellow-ink:#242424;
+  --brand-blue:#0246f1;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
   --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
@@ -247,8 +248,8 @@
   --popover-foreground:#242424;
   --primary:var(--brand-yellow);
   --primary-foreground:var(--brand-yellow-ink);
-  --link:var(--brand-yellow);
-  --link-hover:var(--brand-yellow);
+  --link:var(--brand-blue);
+  --link-hover:var(--brand-blue);
   --secondary:#ebebeb;
   --secondary-foreground:#242424;
   --muted:var(--secondary);
@@ -289,8 +290,8 @@
   --segment:oklch(1 0 0);
   --focus:var(--primary);
   --focus-strong:var(--foreground);
-  --primary-emphasis:var(--brand-yellow);
-  --primary-outline:var(--brand-yellow);
+  --primary-emphasis:var(--brand-blue);
+  --primary-outline:var(--brand-blue);
   --control-selected:var(--brand-yellow);
   --control-selected-foreground:var(--brand-yellow-ink);
   --control-selected-dot:oklch(0.985 0 0);

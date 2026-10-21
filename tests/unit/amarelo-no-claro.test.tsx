@@ -1,10 +1,12 @@
-// ADR-0073 (18/10/2026) · no tema claro, a letra e o ícone de destaque são o AMARELO DA MARCA, o
-// mesmo do escuro. Substitui a ADR-0054 (o ouro escurecido `#826202`). Decisão do Victor, depois da
-// pesquisa nas seis referências: *"b aprovaro"* — sabendo que o amarelo mede 1,76:1 no fundo claro.
+// ADR-0073 (18/10/2026) · no tema claro, a letra e o ícone de destaque eram o AMARELO DA MARCA, o
+// mesmo do escuro (*"b aprovaro"*, sabendo que o amarelo mede 1,76:1 no fundo claro). ~~O item 1~~ foi
+// SUBSTITUÍDO pela ADR-0076 (20/10/2026): o app mediu a letra a 1,6–1,9:1, e o Victor escolheu, na
+// bancada, o "Amarelo + azul" — o amarelo continua a marca (o cheio, o marcado, o escuro), e a letra de
+// destaque do claro é o AZUL da marca (`brand-blue`, `#0246f1`). O resto da ADR-0073 continua valendo.
 //
 // Cada trava reprova o código de antes:
-//   1. no claro, `primaryEmphasis`, `primaryOutline`, `link` e `linkHover` SÃO o amarelo — antes, o
-//      ouro `#826202` e, no link, o `oklch(0.52 …)`;
+//   1. no claro, `primaryEmphasis`, `primaryOutline`, `link` e `linkHover` SÃO o azul da marca, e passam
+//      4,5:1 em TODO fundo do claro — antes, o amarelo (1,60 a 1,91:1); no escuro, o amarelo, como antes;
 //   2. o foco do claro é a cor do TEXTO (cinza-escuro), e não o marrom; ele se vê em todo fundo do
 //      claro E em volta do botão amarelo (3:1, WCAG 1.4.11);
 //   3. o controle marcado é o amarelo nos DOIS temas — antes, o marrom no claro;
@@ -35,10 +37,14 @@ const contraste = (a: string, b: string) => {
 const FUNDOS = ["background", "card", "popover", "surface1", "surface2", "surface3", "muted",
   "secondary", "fieldBg", "surfaceInset", "accent"].filter((k) => claro[k]).map((k) => [k, claro[k].hex] as const);
 
-describe("ADR-0073 · a letra de destaque do claro é o amarelo da marca", () => {
-  it("no claro, destaque, contorno e link são o amarelo da marca, o mesmo do escuro", () => {
+describe("ADR-0076 · a letra de destaque do claro é o azul da marca; o resto da ADR-0073 fica", () => {
+  it("no claro, destaque, contorno e link são o azul da marca e passam 4,5:1 em todo fundo; no escuro, o amarelo", () => {
+    expect(FUNDOS.length).toBeGreaterThan(5);
     for (const nome of ["primaryEmphasis", "primaryOutline", "link", "linkHover"]) {
-      expect(claro[nome].hex, nome).toBe(claro.primary.hex);
+      expect(claro[nome].hex, nome).toBe(raiz.brandBlue.hex);
+      for (const [fundo, cor] of FUNDOS) {
+        expect(contraste(claro[nome].hex, cor), `${nome} × ${fundo}`).toBeGreaterThanOrEqual(4.5);
+      }
     }
     expect(temas.dark.primaryEmphasis.hex).toBe(temas.dark.primary.hex);
   });
@@ -72,35 +78,39 @@ describe("ADR-0073 · a letra de destaque do claro é o amarelo da marca", () =>
 });
 
 // O selo primário CHEIO enchia com o acento e escrevia com o fundo da página (clara). Com o acento do claro
-// virando o amarelo, a letra clara mediu 1,75:1 — achado pelo axe da varredura, 18/10/2026. Agora escreve
-// com a letra do botão amarelo (`primary-foreground`), nos dois alvos. Provado contra o defeito: sem a
-// troca, os dois testes reprovam.
-describe("ADR-0073 · o selo primário cheio escreve com a tinta, e não com o fundo", () => {
-  it("web: o `.badge-primary` declara a letra do cheio", () => {
+// virando o amarelo, a letra clara mediu 1,75:1 — achado pelo axe da varredura, 18/10/2026. Passou a escrever
+// com a letra do botão amarelo (`primary-foreground`), nos dois alvos. E desde a ADR-0076 o acento do claro é
+// o azul: o cheio passa a encher com o PRIMÁRIO (o amarelo), senão sairia a tinta cinza no azul, 1,99:1. Na web,
+// só sem `data-brand` (na `lory` do claro, o primário com a letra dela mede 3,08:1). Provado contra o defeito:
+// sem a troca, os testes reprovam.
+describe("ADR-0073 e 0076 · o selo primário cheio enche com o amarelo e escreve com a tinta", () => {
+  it("web: o `.badge-primary` declara a letra do cheio, e o fundo é o primário fora de marca", () => {
     const core = readFileSync("packages/core/src/aurea.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
     const regra = core.match(/\.badge-primary \{([^}]*)\}/)?.[1] ?? "";
     expect(regra).toContain("--badge-on:var(--primary-foreground)");
+    expect(core).toContain(".badge-primary:not(:where([data-brand],[data-brand] *)) { --badge-fill:var(--primary); }");
   });
-  it("nativo: no claro, a letra do selo cheio lê sobre o amarelo", () => {
+  it("nativo: no claro, o selo cheio é o amarelo com a tinta em cima", () => {
     const t = resolverTokens("light", "comfortable");
     render(<AureaProvider theme="light"><Badge tone="primary" emphasis="solid">Novo</Badge></AureaProvider>);
     const plano = (e: unknown) => (StyleSheet.flatten(e as never) ?? {}) as Record<string, unknown>;
     const letra = plano(__instancias("Text").find((p) => p.children === "Novo")!.style).color as string;
     expect(letra).toBe(t.color.primaryForeground);
-    expect(__instancias("View").map((p) => plano(p.style)).some((e) => e.backgroundColor === t.color.primaryEmphasis)).toBe(true);
-    expect(contraste(letra, t.color.primaryEmphasis)).toBeGreaterThanOrEqual(4.5);
+    expect(__instancias("View").map((p) => plano(p.style)).some((e) => e.backgroundColor === t.color.primary)).toBe(true);
+    expect(contraste(letra, t.color.primary)).toBeGreaterThanOrEqual(4.5);
   });
 });
 
 // O selo primário de CONTORNO escurecia a letra 20% com o texto (a "C" do lote S) e, com o amarelo, virava mostarda
-// (2,36:1) só nesta peça. Decisão do Victor, 18/10/2026: "A" — a letra é o amarelo, a mesma do suave, como a referência
-// principal faz. Na web, só sem `data-brand` (na `lory` do claro, sem a mistura, a letra cairia para 4,42:1).
-describe("ADR-0073 · o selo primário de contorno escreve com o amarelo, sem mistura", () => {
+// (2,36:1) só nesta peça. Decisão do Victor, 18/10/2026: "A" — a letra é o acento, a mesma do suave, como a referência
+// principal faz. Na web, só sem `data-brand` (na `lory` do claro, sem a mistura, a letra cairia para 4,42:1). Desde a
+// ADR-0076, o acento do claro é o azul: a letra do contorno também.
+describe("ADR-0073 · o selo primário de contorno escreve com o acento, sem mistura", () => {
   it("web: a regra existe, e só fora de marca", () => {
     const core = readFileSync("packages/core/src/aurea.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
     expect(core).toContain(".badge-primary.badge-outline:not(:where([data-brand],[data-brand] *)) { color:var(--badge-accent); }");
   });
-  it("nativo: no claro, a letra do contorno primário é o amarelo, e a dos estados continua misturada", () => {
+  it("nativo: no claro, a letra do contorno primário é o acento, e a dos estados continua misturada", () => {
     const t = resolverTokens("light", "comfortable");
     render(<AureaProvider theme="light"><Badge tone="primary" emphasis="outline">Marca</Badge>
       <Badge tone="success" emphasis="outline">Pago</Badge></AureaProvider>);

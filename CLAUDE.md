@@ -647,14 +647,22 @@ no git.
   Hyperlegible Mono, e a IBM Plex Serif sai (o `--font-editorial` fica como apelido da fonte do
   texto até a `1.0`, para não quebrar quem o usa). Aberto: o peso do ícone pequeno (ADR, "A medida").
 - ~~No tema claro, o amarelo como LETRA ou ÍCONE é o `brand-yellow-text` (`#826202`), ADR-0054~~ →
-  **no tema claro, a letra e o ícone de destaque são o PRÓPRIO amarelo da marca**, o mesmo do escuro
+  ~~**no tema claro, a letra e o ícone de destaque são o PRÓPRIO amarelo da marca**, o mesmo do escuro
   (decisão do Victor, 18/10/2026, *"b aprovaro"*, sabendo que mede 1,75:1 —
-  [ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)). **Sobre o amarelo, a letra é o
+  [ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md))~~ → **no tema claro, a letra de
+  destaque é o AZUL da marca**, `brand-blue` (`#0246f1`, 5,59 a 6,67:1 nos fundos do claro): `link`, `link-hover`,
+  `primary-emphasis`, `primary-outline` e, por eles, o `sidebar-primary`. O amarelo continua a marca: o cheio, o
+  controle marcado e o destaque do escuro (decisão do Victor, 20/10/2026, *"Amarelo + azul"*, olhando seis caminhos
+  rodando — [ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)). O selo primário cheio enche
+  com o amarelo (fora de marca), e o item atual da lateral, no claro, é o botão primário (fundo amarelo, letra
+  cinza-escura, sem o fio — *"não pode ser na cor do botão?"*). **Sobre o amarelo, a letra é o
   cinza-escuro** `brand-yellow-ink` (`#242424`), nos dois temas; o marrom fica só onde ele pediu (`primary-mark`: o
   bichinho da chave, o centro do `Slider`, o play do `MediaEmbed` e o `BottomNav` cheio). O foco do claro é a cor do
-  texto; o controle marcado é o amarelo nos dois temas, e a bolinha do rádio é branca. ⚠ As travas de contraste
+  texto; o controle marcado é o amarelo nos dois temas, e a bolinha do rádio é branca. ~~⚠ As travas de contraste
   aceitam SÓ esta exceção (o `--primary` como letra no claro): `amarelo-no-claro.test.tsx`, o axe da varredura e o
-  `marca.spec`.
+  `marca.spec`.~~ Desde a ADR-0076, as travas de contraste não aceitam exceção nenhuma: o 4,5:1 vale nos dois temas.
+  Temas extras decididos, sem prioridade: Amarelo + âmbar, Oliva + folhagem e Azul elétrico (ADR-0076, "O que fica
+  para depois").
 - **Os neutros e as cores de estado dos dois temas seguem a paleta de referência** (decisão do
   Victor, 09/10/2026, [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md));
   o amarelo da marca, os raios, a fonte e os ícones continuam os nossos. O fundo cheio de estado
