@@ -80,10 +80,13 @@ em inglês e ficam como estão: são registro.
 
 ---
 
-## [0.37.0] — em construção
+## [0.37.0] — 2026-10-21
 
-⏳ **Ainda não publicada.** O lote V (no `main` desde o pedido #84), o lote 1, as travas, passo 1 (branch
-`claude/lote-1-fichas`, pedido #85) e o azul como letra de destaque do claro (branch `claude/amarelo-azul`). Cada passo entra no `main` depois de aprovado na bancada; a versão sobe quando o lote fechar.
+⏳ **Ainda não publicada.** O lote V (o código com cores e número de linha, ADR-0075, pedido #84), o lote 1, as travas,
+passo 1 (os checks 48 e 49, as fichas que dizem a verdade e o desativado de sete peças, pedido #85) e o azul da marca como
+letra de destaque do tema claro (ADR-0076, pedido #86), cada um aprovado na bancada pelo Victor e juntado no `main`.
+Fechada em 21/10/2026, a pedido do Victor: o app que adotou a 0.36.0 mediu a letra amarela do claro a 1,75:1, e a
+correção só chega a ele pelo npm.
 
 ### Novo
 
