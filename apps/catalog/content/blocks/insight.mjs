@@ -1,5 +1,5 @@
 import {createElement as h} from "react";
-import {Card, KPI, Badge, Button, Status, Timeline, DataList, Avatar, Alert, CodeBlock,
+import {Card, KPI, Badge, Button, IconButton, Status, Timeline, DataList, Avatar, Alert, CodeBlock,
   MessageList, InvocationPanel, HumanApproval, Toolbar, ToolbarButton,
   TreeView, Table, Progress, SegmentedControl, Select, EmptyState,
   HealthMatrix, Field, Range, MediaPlayer} from "../../../../packages/react/dist/index.js";
@@ -442,7 +442,13 @@ export function analyticsWorkbench(state) {
           h(SegmentedControl, {label: "Time range", value: "30d", onChange: () => {}, items: [
             {value: "7d", label: "7d"}, {value: "30d", label: "30d"}, {value: "90d", label: "90d"}]}),
           h(Status, e.state ? {state: e.state} : {variant: e.variant}, e.label),
-          ...acoes.map(a => h(Button, {key: a, variant: "outline", size: "sm"}, a === "refresh" ? "Refresh" : a)))),
+          // 22/10/2026, a fonte nova (ADR-0077): a Inter é mais larga que a Atkinson no tamanho do texto, e a faixa
+          // passou a pedir 761 num vão de 766 — no Windows coube por 5, no Linux da CI o Export desceu (+40 numa caixa
+          // de 350). O "Refresh" vira botão só de ícone, com o mesmo nome para o leitor de tela (o teste o acha por ele):
+          // medido, a faixa volta a ter folga de ~50.
+          ...acoes.map(a => a === "refresh"
+            ? h(IconButton, {key: a, icon: "arrow-clockwise", label: "Refresh", variant: "outline", size: "sm"})
+            : h(Button, {key: a, variant: "outline", size: "sm"}, a)))),
       regiao("Filters", h("div", null,
         h(Select, {defaultValue: "all", "aria-label": "Space"},
           h("option", {value: "all"}, "All spaces"), h("option", {value: "brand"}, "Brand")))),

@@ -2652,7 +2652,7 @@ for (const theme of ["dark", "light"] as const) {
       .toBe("wrap");
     // 0.32.0: a tecla da referência — 24 de altura, letra do texto em peso médio, fundo neutro,
     // sem borda — com o canto da Aurea (cápsula). Até a 0.31.0 era 20, de código e com borda.
-    expect(e.kbd.fonte, "o Kbd usa a fonte do texto, como a referência").toContain("Atkinson Hyperlegible Next");
+    expect(e.kbd.fonte, "o Kbd usa a fonte do texto, como a referência — a PRIMEIRA da lista").toMatch(/^"?Inter"?,/);
     expect(e.kbd.borda, "o Kbd não tem borda: o fundo neutro é o que o separa").toBe(0);
     expect(e.kbd.alt, "o Kbd tem 24 de altura (--space-6)").toBeCloseTo(24, 0);
     expect(e.kbd.raio, "o Kbd é cápsula: --radius-control").toBe(e.kbd.radiusControl);
@@ -2838,7 +2838,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.topbar.alt, "e mede --topbar-height").toBe(e.topbar.topbarH);
 
     // 31. Código, comunicação e mídia.
-    expect(e.codeBlock.fonte, "o CodeBlock usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
+    expect(e.codeBlock.fonte, "o CodeBlock usa a fonte de código — a PRIMEIRA da lista").toMatch(/^"?IBM Plex Mono"?,/);
     expect(e.codeBlock.over, "código longo rola dentro do bloco em vez de esticar a página")
       .toBe("auto");
     expect(e.codeBlock.botaoPos, "o botão de copiar flutua sobre o código").toBe("absolute");
@@ -2857,7 +2857,7 @@ for (const theme of ["dark", "light"] as const) {
       .toBeGreaterThan(200);
     expect(e.log.erroCor, "o nível `error` tem de PINTAR — era a mesma cor da linha normal")
       .not.toBe(e.log.normalCor);
-    expect(e.log.fonte, "o log usa a fonte de código").toContain("Atkinson Hyperlegible Mono");
+    expect(e.log.fonte, "o log usa a fonte de código — a PRIMEIRA da lista").toMatch(/^"?IBM Plex Mono"?,/);
     expect(e.mensagem.balaoRaio, "o balão de mensagem tem cápsula própria").toBeGreaterThan(0);
     expect(e.mensagem.balaoBg, "e superfície própria, senão a mensagem some no fundo")
       .not.toBe("rgba(0, 0, 0, 0)");

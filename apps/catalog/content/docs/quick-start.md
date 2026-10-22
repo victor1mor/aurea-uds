@@ -93,7 +93,7 @@ Mobile is another package, `@aurea-uds/native`, with its own list of components 
 pnpm add @aurea-uds/native react-native-svg react-native-safe-area-context
 ```
 
-It needs React 19 or newer and React Native 0.76 or newer. For the text to use Atkinson Hyperlegible, add `@aurea-uds/fonts` and load its native files. The example below uses `useFonts` from Expo:
+It needs React 19 or newer and React Native 0.76 or newer. For the text to use the Aurea fonts, add `@aurea-uds/fonts` and load its native files. The example below uses `useFonts` from Expo:
 
 ```tsx
 import {AureaProvider, Button, Screen} from "@aurea-uds/native";

@@ -117,9 +117,82 @@ como deveria funcionar"*.
 
 ---
 
+## [0.39.0] — 2026-10-22
+
+⏳ **Ainda não publicada.** A fonte nova da Aurea na WEB ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)):
+o texto em **Inter**, os títulos em **Sora** e o código em **IBM Plex Mono**. Decisão do Victor, depois de ver as duas fontes na
+mesma tela e de ouvir quem passou pela mesa dele (*"todos votaram em Sora + Inter + Plex Mono"*); e *"a fonte não irá ser mudada
+de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
+
+### ⚠ Pode quebrar a compilação ou a aparência
+
+- **A web não carrega mais a Atkinson Hyperlegible.** O `@aurea-uds/fonts/css` declara a `Inter`, a `Sora` e a `IBM Plex Mono`.
+  Quem escreveu `"Atkinson Hyperlegible Next"` ou `"Atkinson Hyperlegible Mono"` no próprio CSS cai na fonte do sistema:
+  troque pelos tokens (`var(--font-ui)`, `var(--font-heading)`, `var(--font-code)`).
+- **Todo título, do `h1` ao `h6`, passa a usar a Sora** — os da Aurea e os do app —, por uma regra de força zero
+  (`:where(h1,h2,h3,h4,h5,h6)`). Quem fixa outra fonte NO PRÓPRIO título (uma classe, uma regra `h1{…}`) ganha dela; a fonte
+  que o título só HERDA do pai (`body{font-family:…}`) perde — para manter a fonte do app nos títulos, escreva-a neles.
+- **O `numeric` (do `Text`, do `Heading`, do `Paragraph` e do `Code`) e o número do `KPI` passam para a IBM Plex
+  Mono**, com os algarismos da mesma largura — como os valores e os números de identificação no sistema que serviu de
+  modelo. Os outros números (a tabela, o contador, a paginação, o calendário) continuam na Inter, também com os
+  algarismos da mesma largura: na tabela, a célula de valor que deve sair na Plex Mono leva `numeric`
+  (`<Text numeric>`). Os pesos da Plex Mono são 400, 500 e 600; o negrito usa o 600.
+- **No React Native, os nomes de fonte dos tokens já são os novos** (`fontUi` Inter, `fontHeading` Sora, `fontCode`
+  IBM Plex Mono), mas os arquivos ainda não: os `.ttf` e o `@aurea-uds/fonts/native` continuam os da Atkinson até a
+  `0.39.1`. O app que passa o mapa `fontFamilies` ao `AureaProvider` (o `FONT_FAMILIES` do pacote, como manda o
+  exemplo) não muda nada — o título também usa o mapa do texto. O que não passa pede ao aparelho famílias que ainda
+  não estão nele, e cai na fonte do sistema até a `0.39.1`.
+- **As medidas de texto mudam**: no tamanho do texto (14 px), a Inter é MAIS LARGA que a Atkinson — de 7 a 9% numa frase
+  no peso normal, de 4 a 5% no seminegrito (medido nas larguras das letras dos arquivos) —, e rótulos, abas e células ficam
+  um pouco mais largos. De 30 px para cima, nos títulos grandes, ela fica mais estreita. O número do `KPI` não entra nesta
+  conta: ele agora é IBM Plex Mono (acima). Os tamanhos de letra e as entrelinhas não mudam.
+- **No `DependencyGraph`, o tipo do nó (a linha em maiúsculas, como "SWITCH DE ACESSO") pode quebrar em duas linhas**
+  onde cabia em uma: na Inter, as maiúsculas são mais largas. O nó fica mais alto (no banco de testes, 59 → 77) e o mapa,
+  um pouco maior. Decisão do Victor: aceitar — nada do texto some.
+
+### Mudado
+
+- **`--font-ui`: Inter** (a 4.1 do autor, variável, com o tamanho óptico de 14 a 32, sem o `ss02` — igual ao sistema que
+  serviu de modelo). **`--font-heading`: Sora** (variável, 100 a 800). **`--font-code`: IBM Plex Mono** (400, 500 e 600).
+  O `--font-editorial` continua apelido do texto, até a `1.0`.
+- **O pacote `@aurea-uds/fonts`**: seis arquivos novos na web. A Inter e a Sora são variáveis (um arquivo cobre todos os pesos,
+  inclusive o 800 do `--weight-extrabold`), cortadas dos arquivos oficiais para o recorte latino que a web servia, de 218
+  caracteres (por `packages/fonts/cortar-fontes.py`, que qualquer um refaz e confere pelo resumo), com todos os recursos de
+  desenho, como os números de largura igual. A Inter tem 217 deles (a original não tem a barra de divisão `∕`) e a Sora
+  217 (não tem o espaço fino, que cai na Inter). A IBM Plex Mono são os arquivos da própria IBM sem mudança nenhuma — a
+  licença dela reserva o nome "Plex" —, e o recorte `Latin1` dela cobre 214 dos 218 (faltam os dois acentos soltos, o
+  espaço fino e a barra de divisão). As três sob a SIL OFL 1.1; o `LICENSE` do pacote leva o copyright de cada uma.
+- **O contrato** (`aurea.contract.json`) declara as fontes novas, com o papel `heading`.
+- **O site** deixa de dizer que a fonte foi feita para baixa visão; o que segue valendo é o resto (contraste medido nos dois
+  temas, foco visível, toque de 44, texto a 200% sem rolar de lado).
+
+### Não muda
+
+- **Os arquivos de fonte do React Native continuam os da Atkinson Hyperlegible até a `0.39.1`** (os `.ttf` e o
+  `@aurea-uds/fonts/native` são os de hoje; só os nomes dos tokens trocaram, acima). Os `.woff2` da Atkinson ficam no
+  pacote só para a vitrine do nativo, e saem com ele.
+
+### Para quem cuida do repositório
+
+- **O bloco analytics-workbench do site**: o "Refresh" da faixa de cima vira botão só de ícone, com o mesmo nome para o
+  leitor de tela. Com a Inter, a faixa pedia 761 num vão de 766, e no Linux da CI o Export descia uma linha (a varredura
+  pegou: a prévia rolava dentro da caixa). Medido, a folga volta a 51.
+- **O `next` do app de prova** (`apps/proof-server`, que não é publicado) sobe de 16.3.8 para 16.4.2: três avisos de
+  segurança novos de 22/10/2026 (dois críticos e um alto, corrigidos a partir da 16.4.1) reprovavam a auditoria da CI.
+- **O teste do arraste do mapa** (`rede2.spec.ts`) procura onde soltar longe das guias dos vizinhos: com o nó mais alto, o
+  arraste fixo de antes caía na guia, e o teste deixava de medir a grade.
+- **O registro da 0.38.0** (publicada entre 11:08 e 11:22 de 22/10/2026): o `released-surface.json` do commit do publish
+  (`0a91ce37`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
+- **Quem cobra:** `tests/unit/fonte-adr0077.test.tsx` (lê os `.woff2` por dentro: a cobertura, os eixos, o `tnum`; o resumo
+  dos arquivos da IBM; os tokens e a regra dos títulos — reprova com o pacote da 0.38.0), o `skin.spec.ts` (na máquina local; a CI não o roda) e o `validate.py`
+  (o `LICENSE` das fontes).
+
+---
+
 ## [0.38.0] — 2026-10-22
 
-⏳ **Ainda não publicada.** O lote 0-B da fila nova: o pedido do app de rede MNT-31 — o app usa a marca `lory`.
+✅ **Publicada em 22/10/2026, entre 11:08 e 11:22 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do pedido
+#90. O lote 0-B da fila nova: o pedido do app de rede MNT-31 — o app usa a marca `lory`.
 
 ### Acrescentado
 

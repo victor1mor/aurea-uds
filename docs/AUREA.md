@@ -41,7 +41,7 @@ A equação que define tudo:
   organização (categoria, maturidade, plataformas) mostra isso desde o começo.
 - **Identidade inegociável** (detalhe em `CLAUDE.md`): superfícies flutuantes; raio
   22px em card/dialog; pill nos controles; amarelo `oklch(0.795 0.184 86.047)`
-  invariável; Atkinson Hyperlegible e ícones Phosphor (ADR-0053; antes de 01/10/2026, IBM Plex e Carbon); sem gradiente; dark/light equivalentes;
+  invariável; Inter (texto), Sora (títulos) e IBM Plex Mono (código e valores) — ADR-0077, 22/10/2026 — e ícones Phosphor (ADR-0053; de 01/10 a 22/10/2026 a fonte foi a Atkinson Hyperlegible; antes, IBM Plex e Carbon); sem gradiente; dark/light equivalentes;
   densidades compact/comfortable/spacious. Nada disso muda sem autorização.
 
 ---

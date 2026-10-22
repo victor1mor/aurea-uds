@@ -100,7 +100,7 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   referência principal — anatomia, partes, medidas, espaçamento, estados, comportamento, teclado,
   onde cada coisa fica — e por cima dela só entra o que é da Aurea: o amarelo e as cores dos temas
   (ADR-0061); os cantos (22 no cartão, 32 na folha de baixo, cápsula nos controles; nada quadrado);
-  a Atkinson Hyperlegible e o Phosphor; as densidades; nenhum degradê; **nenhuma linha** (ADR-0072); e a
+  a Inter, a Sora e a IBM Plex Mono (ADR-0077) e o Phosphor; as densidades; nenhum degradê; **nenhuma linha** (ADR-0072); e a
   acessibilidade de baixa visão (contraste medido, toque de 44, foco visível). Divergir em qualquer outra coisa é pergunta
   ao Victor, com o motivo.
   - **O alcance, decidido pelo Victor em 11/10/2026:** vale para as peças E para o site da Aurea (o
@@ -178,6 +178,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.36.0` | O lote U — as cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)), a bolinha do `Radio`, as faixas do mapa (MNT-27) e o clique no nó (pedido 16); a abertura de página (`Section variant="hero"`, `--text-6xl` e `--text-7xl`), o aviso de cookies (`Banner variant="consent"`) e o `Chip` (GAR-19 a 22, [ADR-0074](decisions/0074-a-abertura-o-aviso-de-cookies-e-o-chip.md)); o site com as áreas Getting Started e Releases, os textos para assistentes de IA e o celular e o tablet — pedidos #75 a #82. **Publicada em 20/10/2026** (por volta das 12:12, Brasília, medido no npm), pelo terminal do Victor |
 | `0.37.0` | O `CodeBlock` com número de linha e cores ([ADR-0075](decisions/0075-o-codigo-com-cores-e-numero-de-linha.md)); o lote 1, passo 1 — as fichas dizem a verdade (checks 48 e 49) e o desativado de sete peças; o azul da marca como letra de destaque do claro e o item atual da lateral na cor do botão ([ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)); o `CodeEditor` que recebe o teclado; e, junto, o site com a parte viva em toda caixa — pedidos #84 a #88. **Publicada em 21/10/2026** (por volta das 16:45, Brasília, medido no npm), pelo terminal do Victor |
 | `0.37.1` | O lote 0-A, o primeiro dos lotes de até 3 horas: o conteúdo largo não alarga a página no `DataState`, no `Form` e no corpo do `Dialog` (MNT-33), e o texto de exemplo dos campos a 4,5:1 ou mais na marca `lory` (MNT-29) — pedido #89. **Publicada em 22/10/2026** (entre 08:41 e 08:50, Brasília, medido no npm), pelo terminal do Victor |
+| `0.38.0` | O lote 0-B: a legenda do `DependencyGraph` que fecha (`legendCollapsible`) e o botão do minimapa junto do zoom (`minimapToggle`) — MNT-31, a L1 e a M2 da bancada; e o teste da lateral que ainda cobrava o amarelo no claro — pedido #90. **Publicada em 22/10/2026** (entre 11:08 e 11:22, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -537,6 +538,14 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    página real dá 4,69) — a folha vai no `<head>`. **Publicada em 22/10/2026** (entre 08:41 e 08:50, Brasília, medido
    no npm), pelo terminal do Victor, da junção do pedido #89. O registro entrou no lote seguinte (0-B, pedido #90).
 
+35. **`0.38.0`, o lote 0-B, feito em 21 e 22/10/2026** — o MNT-31 do app de rede: a legenda e o minimapa do mapa cobriam os
+   nós dos cantos de baixo. Quatro formas rodando na bancada; o Victor escolheu *"L1 para legenda e M2 para minimapa"*:
+   `legendCollapsible` (o botão "Legenda" parado no canto, a lista sobe acima dele) e `minimapToggle` (o botão "Visão
+   geral" junto dos de zoom). ⚠ **A lição:** o motor do mapa NÃO repassa o `id` ao minimapa — o `aria-controls` do botão
+   apontava para um nome que não existia; o nome fica numa caixa em volta. E a ficha do componente é contrato: prop nova sem
+   a ficha reprova no validador. **Publicada em 22/10/2026** (entre 11:08 e 11:22, Brasília, medido no npm), pelo terminal
+   do Victor, da junção do pedido #90. O registro entrou no lote seguinte (a fonte, 0.39.0).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -662,8 +671,14 @@ no git.
   cada MARCA** ([ADR-0036](decisions/0036-marca-e-um-eixo-e-o-amarelo-continua-invariavel.md)).
   Marca é um eixo próprio (`data-brand`), ortogonal a `data-theme`, e **redefine só COR**. Sem
   `data-brand`, nada muda. Trocar o amarelo do padrão é proibido.
-- ~~IBM Plex Sans / Serif / Mono; Carbon Icons~~ → **Atkinson Hyperlegible Next e ícones Phosphor
-  Regular** (decisão do Victor, 01/10/2026,
+- **A FONTE É A INTER (texto), A SORA (títulos, todo h1 a h6) E A IBM PLEX MONO (código e valores: o `numeric` e o número do `KPI`)**
+  (decisão do Victor, 22/10/2026, *"vamos mudar mesmo"* — todos os que ele ouviu escolheram essa tela —, e *"a fonte
+  não irá ser mudada de novo, essa é a última vez"*; [ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)).
+  A Inter vai SEM o `ss02`, igual ao sistema que serviu de modelo; os arquivos são os do autor, cortados para o latino;
+  os da IBM Plex Mono vão sem mudança (nome reservado "Plex"). A Atkinson SAI de tudo: a web na `0.39.0`, o nativo na
+  `0.39.1`. Os ícones continuam os Phosphor.
+- ~~IBM Plex Sans / Serif / Mono; Carbon Icons~~ → ~~**Atkinson Hyperlegible Next**~~ (fonte trocada pela ADR-0077,
+  acima) **e ícones Phosphor Regular** (decisão do Victor, 01/10/2026,
   [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). **Feita na
   `0.13.0`**, publicada em 01/10/2026. Decidido também: o item escolhido usa o Phosphor Fill, o código usa a Atkinson
   Hyperlegible Mono, e a IBM Plex Serif sai (o `--font-editorial` fica como apelido da fonte do
@@ -822,7 +837,8 @@ hoje `Header`).
   equivalente**: ele segue depois de um erro, o que transforma uma cadeia de verificação em
   teatro. Para ele, **um comando por linha**; quando o comando é nosso, a ordem vai para dentro do
   script.
-- Licença Apache-2.0; Atkinson Hyperlegible sob OFL 1.1; Phosphor Icons sob MIT (ADR-0053, desde a
+- Licença Apache-2.0; Inter, Sora e IBM Plex Mono sob OFL 1.1 (ADR-0077, desde a `0.39.0`; a Atkinson Hyperlegible,
+  OFL 1.1, de 01/10 a 22/10/2026 e no nativo até a `0.39.1`); Phosphor Icons sob MIT (ADR-0053, desde a
   `0.13.0`; até a `0.12.4`, IBM Plex e Carbon).
 
 ## 10. Decisões já tomadas pelo Victor (16/07/2026)

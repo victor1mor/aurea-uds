@@ -1,4 +1,4 @@
-/* Aurea core — component styles. Built with @aurea-uds/tokens into dist/aurea.css. Load @aurea-uds/fonts/css for Atkinson Hyperlegible (ADR-0053). */
+/* Aurea core — component styles. Built with @aurea-uds/tokens into dist/aurea.css. Load @aurea-uds/fonts/css for Inter, Sora and IBM Plex Mono (ADR-0077). */
 /* ========================================================================== */
 /* 02. RESET, ACESSIBILIDADE E BASE                                            */
 /* ========================================================================== */
@@ -7,6 +7,11 @@ html { scroll-behavior:smooth; }
 body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-ui); font-size:var(--text-sm); line-height:var(--leading-normal); }
 ::selection { background:var(--selection); }
 button,input,textarea,select { font:inherit; }
+/* ADR-0077 (22/10/2026): todo título, do h1 ao h6, na fonte de título (a Sora), por uma regra geral de força zero,
+   como no sistema que serviu de modelo: quem fixa outra fonte NO PRÓPRIO título ganha dela; a fonte que o título só
+   herda do pai (`body{font-family:…}`) perde. O modelo deixa o h6 na fonte do texto; aqui ele vai junto (decisão do
+   Victor, 22/10/2026): a referência trata o h6 como os outros títulos, e o `Heading` de nível 6 já era Sora. */
+:where(h1,h2,h3,h4,h5,h6) { font-family:var(--font-heading); }
 button,a,[role="button"],input,textarea,select { outline:none; }
 :focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); box-shadow:none; }
 /* UMA LINHA SÓ (ADR-0059, 08/10/2026). O anel afastado, sozinho, é uma linha — mas na peça que tem
@@ -2487,7 +2492,9 @@ button.tag-main { cursor:pointer; }
    `--text-3xl`, e o CSS nunca aplicou — medido no navegador, o valor saía com 14, igual ao rótulo,
    e a tendência com 11,7 (o `small` do navegador encolhe a letra). O número é a razão do
    componente; os algarismos ficam tabulares para não dançar quando o valor muda. */
-.kpi > strong { font-size:var(--text-3xl); line-height:var(--leading-tight); font-variant-numeric:tabular-nums; }
+/* ADR-0077 (22/10/2026, decisão do Victor): o número do indicador na fonte de código, a IBM Plex Mono — como os
+   valores no sistema que serviu de modelo. Os pesos publicados dela são 400, 500 e 600: o `strong` (700) usa o 600. */
+.kpi > strong { font-family:var(--font-code); font-size:var(--text-3xl); line-height:var(--leading-tight); font-variant-numeric:tabular-nums; }
 .kpi > small { font-size:var(--text-sm); }
 /* A TENDÊNCIA COM DIREÇÃO (GAR-09, ADR-0060, 09/10/2026): seta, palavra para o leitor de tela e cor,
    nunca a cor sozinha. A seta é o `trend-up`/`trend-down`/`minus` do Phosphor (o mesmo desenho do
@@ -2950,8 +2957,11 @@ button.tag-main { cursor:pointer; }
 .typography-weight-bold { font-weight:var(--weight-bold); }
 .typography-weight-extrabold { font-weight:var(--weight-extrabold); }
 /* GAR-16 (0.28.0): algarismos da mesma largura, para número que alinha em coluna ou muda na tela.
-   Ligado só onde se pede — no texto corrido o "1" estreito é o certo. */
-.typography-numeric { font-variant-numeric:tabular-nums; }
+   Ligado só onde se pede — no texto corrido o "1" estreito é o certo.
+   ADR-0077 (22/10/2026, decisão do Victor): e na fonte de código, a IBM Plex Mono — o valor e o número de
+   identificação, como no sistema que serviu de modelo (na tabela dele, só a coluna de número e a de valor; o resto
+   da tabela fica no texto). Vem depois dos `.typography-h*`, e por isso o título com `numeric` também troca. */
+.typography-numeric { font-family:var(--font-code); font-variant-numeric:tabular-nums; }
 .typography-align-start { text-align:start; }
 .typography-align-center { text-align:center; }
 .typography-align-end { text-align:end; }
@@ -2973,7 +2983,7 @@ button.tag-main { cursor:pointer; }
 
    A FONTE não muda: a prosa usa a do texto. ~~`--font-editorial` (IBM Plex Serif) existe e está
    sem uso~~ — desde a ADR-0053 (01/10/2026) a Plex Serif saiu, e `--font-editorial` é apelido da
-   fonte do texto (Atkinson Hyperlegible Next), mantido só para não quebrar quem o usa; sai na 1.0. */
+   fonte do texto (desde a ADR-0077, a Inter), mantido só para não quebrar quem o usa; sai na 1.0. */
 .prose { max-width:var(--prose-measure,68ch); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .prose > * + * { margin-block-start:var(--space-4); }
 .prose > h2,.prose > h3,.prose > h4 { margin-block-start:var(--space-8); }

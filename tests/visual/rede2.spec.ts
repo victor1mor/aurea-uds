@@ -117,9 +117,28 @@ test("arrumar: a seta anda um passo da grade, o arraste encaixa, o fixo não sai
   expect(passo2.x - passo1.x).toBe(16);
   expect(passo2.y).toBe(passo1.y);
   const d0 = (await caixa(p, "acc-2"))!;
+  // A ENTRADA cai longe de toda guia de vizinho (MNT-28: o topo, o centro e a base de cada nó, a até 8 do mapa, valem
+  // MAIS que a grade), para este passo exercitar SÓ a grade. Até a 0.38.0 o arraste era um +53 fixo; com a Inter
+  // (ADR-0077) o tipo do nó quebra em duas linhas, o nó cresce de 59 para 77, e o mesmo +53 punha a base dele na do
+  // vizinho — encaixe certo, mas fora da grade, e o teste deixava de medir o que diz. A procura começa no +53 e desce
+  // até o topo, o centro e a base ficarem a mais de 16 do mapa (a grade arredonda até 8, e a guia pega a até 8) de toda
+  // guia.
+  const {zoom, guiasY} = await p.evaluate(() => {
+    const nos = [...document.querySelectorAll<HTMLElement>(".dependency-graph .react-flow__node")];
+    const eu = nos.find((n) => n.dataset.id === "acc-2")!;
+    return {zoom: eu.getBoundingClientRect().width / eu.offsetWidth,
+      guiasY: nos.filter((n) => n !== eu && n.querySelector(".graph-node")).flatMap((n) => {
+        const r = n.getBoundingClientRect(); return [r.top, r.top + r.height / 2, r.bottom];
+      })};
+  });
+  const livre = (dy: number) => [0, d0.height / 2, d0.height].every((parte) =>
+    guiasY.every((g) => Math.abs(d0.y + dy + parte - g) > 16 * zoom));
+  let dy = 53;
+  while (!livre(dy) && dy < 400) dy += 2;
+  expect(livre(dy), "achou onde soltar longe de toda guia de vizinho").toBe(true);
   await p.mouse.move(d0.x + d0.width / 2, d0.y + 8);
   await p.mouse.down();
-  await p.mouse.move(d0.x + d0.width / 2 + 101, d0.y + 8 + 53, {steps: 8});
+  await p.mouse.move(d0.x + d0.width / 2 + 101, d0.y + 8 + dy, {steps: 8});
   await p.mouse.up();
   await parar(p);
   const pos = await p.evaluate(() => (window as unknown as {__arrumacao2: {positions: Record<string, {x: number; y: number}>}}).__arrumacao2.positions["acc-2"]);

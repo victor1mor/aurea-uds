@@ -4,13 +4,13 @@ description: What Aurea does for people with low vision, keyboard and screen-rea
 icon: eye
 ---
 
-Low vision is the first audience Aurea designs for. This page lists what the components do on their own, what the test suite checks, and the two places where Aurea knowingly falls short of WCAG.
+Low vision is the first audience Aurea designs for. This page lists what the components do on their own, what the test suite checks, and the places where Aurea knowingly falls short.
 
 ## At a glance
 
 | Area | What Aurea does | Checked by |
 |---|---|---|
-| Type | Atkinson Hyperlegible Next for text, the Mono for code | the fonts package |
+| Type | Inter for text, Sora for titles, IBM Plex Mono for code and values | the fonts package |
 | Contrast | measured in the browser, in both themes | axe on every page, a contrast matrix for buttons |
 | Focus | one visible ring, 2px, on every focusable piece | a sweep that tabs through every preview |
 | Touch | 44px targets on touch screens and on native | geometry tests, native unit tests |
@@ -22,9 +22,9 @@ Low vision is the first audience Aurea designs for. This page lists what the com
 
 ## Readable type
 
-The text font is **Atkinson Hyperlegible Next**. Code uses **Atkinson Hyperlegible Mono**. Both ship in `@aurea-uds/fonts`: WOFF2 for the web, TTF for React Native.
+Text uses **Inter**, a typeface drawn for screens. Titles, from `h1` to `h6`, use **Sora**. Code and values use **IBM Plex Mono**. All three ship in `@aurea-uds/fonts` as WOFF2 for the web.
 
-The family was made to increase legibility for readers with low vision. Letters that are easy to confuse, such as `I`, `l` and `1`, or `O` and `0`, have distinct shapes.
+Values, such as the figure of a KPI or a number marked `numeric`, use IBM Plex Mono, where every digit has the same width. Other numbers that are read in columns, in tables, also use digits of the same width, in Inter, so the columns line up. Inter also adjusts its shapes to the size of the text on its own (its optical size covers 14 to 32 pixels): more open in small text, a little tighter in large text.
 
 The selected item of a navigation (a tab, the current menu item, the bottom bar) switches its icon to the filled weight. The state changes shape, not only colour.
 
@@ -41,15 +41,15 @@ Contrast is checked on the colour the browser actually paints, after every token
 
 ### Known trade-offs
 
-Aurea has two documented gaps against WCAG. Both are deliberate project decisions, made with the numbers in front of them.
+Aurea has one documented gap against WCAG and one documented loss for readers with low vision. Both are deliberate project decisions, made with the numbers in front of them.
 
-**1. Accent text in the light theme.** In the light theme, accent text and icons use the brand yellow itself: the current sidebar item, links, the primary badge, the current page of a pagination, the "today" of a calendar, and similar accents. The yellow measures **1.75:1** on the light page background, 1.91:1 on the white of a card and 1.60:1 on the grey of a field. WCAG asks for 4.5:1 for text (1.4.3) and 3:1 for icons (1.4.11). It does not pass.
+**1. Field boundaries.** Aurea draws no lines (see [Design Principles](./docs-design-principles.html)). Fields and controls are separated from the page by a translucent fill instead of a border. That boundary measures 1.34:1 for fields and 1.92:1 for controls in the dark theme, and 1.21:1 and 1.49:1 in the light theme. WCAG 1.4.11 asks for 3:1, so fields do not meet it.
 
-The exception is exactly one colour in one theme: `--primary` used as text in the light theme. Any other colour that fails still fails the build, and the dark theme has no exception. Brands (`data-brand`) keep their own accent colours.
+**2. Letters that look alike.** The text font is Inter, set without its disambiguation alternates (`ss02`). The capital `I` and the lowercase `l` are the same straight stroke, and the zero differs from the letter `O` only by its width. Titles, in Sora, behave the same way. WCAG does not ask for a particular typeface, but readers with low vision lose a help the previous typeface gave them. What still protects them is the rest of this page: contrast measured in both themes, a visible focus, 44px targets, and pages that do not scroll sideways with text at 200%.
 
-**2. Field boundaries.** Aurea draws no lines (see [Design Principles](./docs-design-principles.html)). Fields and controls are separated from the page by a translucent fill instead of a border. That boundary measures 1.34:1 for fields and 1.92:1 for controls in the dark theme, and 1.21:1 and 1.49:1 in the light theme. WCAG 1.4.11 asks for 3:1, so fields do not meet it.
+Accent text in the light theme passes: since v0.37.0 it uses the brand blue, and no colour has an exception in either theme.
 
-If your product must meet WCAG AA in full, account for both points.
+If your product must meet WCAG AA in full, account for the field boundaries.
 
 ## Focus
 

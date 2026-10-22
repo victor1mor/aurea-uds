@@ -10,7 +10,7 @@ On the web, the interactive behavior comes from [Base UI](https://base-ui.com): 
 
 ## Why Aurea?
 
-**Readable first.** The typeface is Atkinson Hyperlegible Next, designed for low vision. Contrast is measured by tests in both themes, focus is always visible, and touch targets are at least 44px on touch screens.
+**Readable first.** Contrast is measured by tests in both themes, focus is always visible, and touch targets are at least 44px on touch screens. Text uses Inter, titles use Sora, and code uses IBM Plex Mono.
 
 **One look, two platforms.** The web and the native packages share the same tokens. A button on a phone and a button in a browser have the same color, shape and spacing.
 
@@ -37,7 +37,7 @@ On the web, the interactive behavior comes from [Base UI](https://base-ui.com): 
 |---|---|
 | `@aurea-uds/react` | The React components, typed |
 | `@aurea-uds/core` | The CSS (tokens and components) and a small plain-JavaScript behavior layer |
-| `@aurea-uds/fonts` | Atkinson Hyperlegible Next and Mono, for the web and for React Native |
+| `@aurea-uds/fonts` | Inter, Sora and IBM Plex Mono for the web, and the files for React Native |
 | `@aurea-uds/icons` | The Phosphor icon sprite |
 | `@aurea-uds/tokens` | The tokens in DTCG format, as CSS, JSON and a native module |
 | `@aurea-uds/native` | The React Native components |

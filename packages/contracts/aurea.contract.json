@@ -1,12 +1,13 @@
 {
   "name": "Aurea — Universal Design System",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "status": "organized-source-of-truth",
   "language": "pt-BR",
   "fonts": {
-    "ui": "Atkinson Hyperlegible Next",
-    "editorial": "Atkinson Hyperlegible Next",
-    "code": "Atkinson Hyperlegible Mono"
+    "ui": "Inter",
+    "heading": "Sora",
+    "editorial": "Inter",
+    "code": "IBM Plex Mono"
   },
   "iconSystem": {
     "library": "Phosphor Icons",
@@ -348,7 +349,7 @@
     "A sidebar é um único painel arredondado com menu accent subtle.",
     "Não usar gradientes decorativos, paletas alternativas ou cores hardcoded. A única paleta além da semântica são as oito cores de CATEGORIA do Badge (category-red a category-pink, ADR-0060): marcam grupo, não estado; não mudam com a marca; e nunca vão sozinhas, sem palavra.",
     "A escala chart-1 a chart-5 é a única escala categórica/sequencial azul.",
-    "Atkinson Hyperlegible Next (texto), Atkinson Hyperlegible Mono (código) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0053); não trocar sem atualizar este contrato.",
+    "Inter (texto), Sora (títulos, todo h1 a h6), IBM Plex Mono (código e valores: o numeric e o número do KPI) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0077 para as fontes, ADR-0053 para os ícones); não trocar sem atualizar este contrato. No React Native, os tokens já dizem as fontes novas, e os arquivos ainda são os da Atkinson Hyperlegible até a 0.39.1.",
     "Consumidores usam somente os pacotes @aurea-uds do monorepo; cópias manuais são proibidas.",
     "Quando faltar um padrão, atualizar primeiro este arquivo e depois a aplicação.",
     "Players usam exclusivamente os tokens --media-*; controles permanecem escuros e legíveis nos dois temas.",
@@ -365,8 +366,9 @@
   },
   "brandOverrides": {
     "fonts": [
-      "Atkinson Hyperlegible Next",
-      "Atkinson Hyperlegible Mono"
+      "Inter",
+      "Sora",
+      "IBM Plex Mono"
     ],
     "icons": "Phosphor Icons embedded (Regular; Fill on the selected item)",
     "primaryLockedAcrossThemes": "oklch(0.795 0.184 86.047)"

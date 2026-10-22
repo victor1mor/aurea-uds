@@ -282,8 +282,11 @@ describe("GAR-16 · títulos e números", () => {
     expect(tokens).toContain("--font-heading:");
     expect(tokens).toContain("--weight-extrabold:800;");
   });
+  // ADR-0077 (22/10/2026): o 800 continua publicado, agora DENTRO dos arquivos variáveis — a Inter cobre 100 a 900 e a
+  // Sora, 100 a 800. Antes era um arquivo só para ele (o da Atkinson).
   test("a fonte 800 é publicada na web", () => {
-    expect(fontes).toMatch(/font-weight:800;[^}]*atkinson-hyperlegible-next-800-normal\.woff2/);
+    expect(fontes).toMatch(/font-family:"Inter";font-style:normal;font-weight:100 900;/);
+    expect(fontes).toMatch(/font-family:"Sora";font-style:normal;font-weight:100 800;/);
   });
   test("os títulos usam a fonte de título, no peso de sempre", () => {
     const t = regra(".typography-h1,.typography-h2,.typography-h3,.typography-h4,.typography-h5,.typography-h6");
