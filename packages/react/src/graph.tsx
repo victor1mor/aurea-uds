@@ -42,7 +42,7 @@ import {ReactFlow, ReactFlowProvider, Background, BaseEdge, EdgeLabelRenderer, E
 import {cx, useAureaStrings} from "./internal.js";
 import {Icon, type AureaIcon} from "./system.js";
 import {Badge} from "./markup.js";
-import {IconButton, Toolbar, ToolbarButton, ToolbarSeparator} from "./actions.js";
+import {Button, IconButton, Toolbar, ToolbarButton, ToolbarSeparator} from "./actions.js";
 import {alinhar, distribuir, subarvores, recolher, remapear, simplificar, pontes, tracado, meioDoTracado, ladoDoTrecho, rotaCruza,
   bordaNaDirecao, rotulosQueSomem, contornoDeNuvem, naGrade, rotaNaGrade, guiasDoArraste, type Borda, type Caixa, type Guia, type Ponto, type Ponte, type PontaDoArraste} from "./graph-geometria.js";
 
@@ -681,6 +681,15 @@ export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivE
   controls?:boolean;
   /** A legenda das espécies de linha, montada sozinha pelo `legend` de cada aresta (MNT-15). */
   legend?:boolean;
+  /** A legenda ganha o botão "Legenda", parado no canto, que a abre e fecha; aberta, a lista sobe acima
+   *  dele; fechada, sobra só o botão (MNT-31). */
+  legendCollapsible?:boolean;
+  /** A legenda que fecha começa aberta. Ligado por padrão. */
+  defaultLegendOpen?:boolean;
+  /** O botão que esconde e mostra o minimapa, junto dos botões de zoom, em cima (MNT-31). */
+  minimapToggle?:boolean;
+  /** O minimapa com botão começa aberto. Ligado por padrão. */
+  defaultMinimapOpen?:boolean;
   /** Centraliza e marca este nó — o "ir até" de uma busca (MNT-18.2). */
   focusId?:string|null;
   /** Destaca um caminho (nós e arestas) e apaga o resto (MNT-18.3). */
@@ -796,7 +805,8 @@ type Acoes={desfazer():void;refazer():void;alinhar(b:Borda):void;distribuir(e:"h
 type Barra={podeDesfazer:boolean;podeRefazer:boolean;alinhaveis:number;escolhidos:number;todosFixos:boolean};
 
 export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectable,onConnect,onNodeMove,height,className,
-  orientation="horizontal",layout="simple",rootId,edgeShape="curve",groupParallel,minimap,controls,legend,focusId,highlight,
+  orientation="horizontal",layout="simple",rootId,edgeShape="curve",groupParallel,minimap,controls,legend,
+  legendCollapsible,defaultLegendOpen=true,minimapToggle,defaultMinimapOpen=true,focusId,highlight,
   highlightNeighbors,hiddenIds,onNodeHover,onNodeContextMenu,onEdgeSelect,textSize="md",highContrast,apiRef,
   editable,grid=true,onLayoutChange,onSelectionChange,collapsible,onCollapseChange,visibleOnly,layoutWorker,style,...props}:DependencyGraphProps){
   const s=useAureaStrings();
@@ -1330,6 +1340,30 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
     return {tipos,estados};
   },[edges]);
   const idDaLegenda=React.useId();
+  // MNT-31: a legenda e o minimapa cobriam os nós dos cantos de baixo. A legenda ganha o botão de
+  // esconder no próprio canto — o botão fica parado e a lista sobe acima dele —, e o minimapa, o dele
+  // junto dos botões de zoom (a L1 e a M2 da bancada, escolha do Victor de 21/10/2026).
+  const [legendaAberta,setLegendaAberta]=React.useState(defaultLegendOpen);
+  const [minimapaAberto,setMinimapaAberto]=React.useState(defaultMinimapOpen);
+  const idDoMinimapa=React.useId();
+  const temLegenda=!!legend&&(legenda.tipos.length>0||legenda.estados.length>0);
+  const mostraMinimapa=!!minimap&&(!minimapToggle||minimapaAberto);
+  const listasDaLegenda=<>
+    {/* Com as duas partes, cada uma tem o título à vista, que dá nome à lista; com uma só, a legenda
+        é a lista de antes, sem título. */}
+    {legenda.tipos.length>0&&<div className="graph-legend-part">
+      {legenda.estados.length>0&&<p className="graph-legend-title" id={`${idDaLegenda}-tipo`}>{s.graphLegendKind}</p>}
+      <ul aria-labelledby={legenda.estados.length>0?`${idDaLegenda}-tipo`:undefined}>
+        {legenda.tipos.map(t=><li key={t.nome}><AmostraDaLinha padrao={t.padrao} peso={t.peso} marca={t.marca}/><span>{t.nome}</span></li>)}
+      </ul>
+    </div>}
+    {legenda.estados.length>0&&<div className="graph-legend-part">
+      {legenda.tipos.length>0&&<p className="graph-legend-title" id={`${idDaLegenda}-estado`}>{s.graphLegendStatus}</p>}
+      <ul aria-labelledby={legenda.tipos.length>0?`${idDaLegenda}-estado`:undefined}>
+        {legenda.estados.map(e=><li key={e.nome}><AmostraDaLinha tom={e.tom} marca={e.marca}/><span>{e.nome}</span></li>)}
+      </ul>
+    </div>}
+  </>;
   // O texto que o MOTOR põe na tela (descrição do nó para o leitor de tela, aviso de "movido", nome das
   // alças e do minimapa) sai na língua da Aurea — o padrão dele é inglês.
   const rotulosDoMotor=React.useMemo<Partial<AriaLabelConfig>>(()=>({
@@ -1466,27 +1500,27 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
           style={g.eixo==="x"?{transform:`translate(${g.em}px, ${g.de}px)`,blockSize:g.ate-g.de}:{transform:`translate(${g.de}px, ${g.em}px)`,inlineSize:g.ate-g.de}}/>)}
       </ViewportPortal>}
       <Comandos raiz={raiz} teclado={teclado} focusId={focusId} pedidoDeCaber={pedidoDeCaber} controls={!!controls}
+                minimapa={minimap&&minimapToggle?{aberto:minimapaAberto,alternar:()=>setMinimapaAberto(a=>!a),id:idDoMinimapa}:undefined}
                 apiRef={apiRef} linhas={linhas} forma={edgeShape} titulo={label??s.graphLabel} desenho={tracados}
                 editavel={editavel} barra={barra} acoes={acoes}/>
-      {minimap&&<MiniMap pannable zoomable ariaLabel={s.graphOverview} className="graph-minimap"/>}
-      {legend&&(legenda.tipos.length>0||legenda.estados.length>0)&&<Panel position="bottom-left">
-        {/* Com as duas partes, cada uma tem o título à vista, que dá nome à lista; com uma só, a legenda
-            é a lista de antes, sem título. */}
-        <div className="graph-legend" role="group" aria-label={s.graphLegend}>
-          {legenda.tipos.length>0&&<>
-            {legenda.estados.length>0&&<p className="graph-legend-title" id={`${idDaLegenda}-tipo`}>{s.graphLegendKind}</p>}
-            <ul aria-labelledby={legenda.estados.length>0?`${idDaLegenda}-tipo`:undefined}>
-              {legenda.tipos.map(t=><li key={t.nome}><AmostraDaLinha padrao={t.padrao} peso={t.peso} marca={t.marca}/><span>{t.nome}</span></li>)}
-            </ul>
-          </>}
-          {legenda.estados.length>0&&<>
-            {legenda.tipos.length>0&&<p className="graph-legend-title" id={`${idDaLegenda}-estado`}>{s.graphLegendStatus}</p>}
-            <ul aria-labelledby={legenda.tipos.length>0?`${idDaLegenda}-estado`:undefined}>
-              {legenda.estados.map(e=><li key={e.nome}><AmostraDaLinha tom={e.tom} marca={e.marca}/><span>{e.nome}</span></li>)}
-            </ul>
-          </>}
-        </div>
-      </Panel>}
+      {/* O MINIMAPA. Com o botão junto do zoom (MNT-31), ele fica onde sempre ficou e só aparece e some.
+          O motor não repassa o `id` ao minimapa: quem tem o nome que o botão aponta é a caixa em volta,
+          que não posiciona nada — o painel do motor se posiciona pelo mapa. */}
+      {mostraMinimapa&&(minimapToggle?<div id={idDoMinimapa}><MiniMap pannable zoomable ariaLabel={s.graphOverview} className="graph-minimap"/></div>
+        :<MiniMap pannable zoomable ariaLabel={s.graphOverview} className="graph-minimap"/>)}
+      {/* A LEGENDA por cima do desenho, no canto de baixo à esquerda. A que fecha (MNT-31) é uma doca:
+          o botão "Legenda" fica parado no canto, e a lista sobe acima dele. */}
+      {temLegenda&&(legendCollapsible
+        ?<Panel position="bottom-left" className="graph-dock">
+          {legendaAberta&&<div className="graph-legend" id={`${idDaLegenda}-lista`} role="group" aria-label={s.graphLegend}>{listasDaLegenda}</div>}
+          <div className="graph-controls">
+            <Button variant="ghost" leadingIcon="list-bullets" trailingIcon={legendaAberta?"caret-down":"caret-up"} aria-expanded={legendaAberta}
+                    aria-controls={legendaAberta?`${idDaLegenda}-lista`:undefined} onClick={()=>setLegendaAberta(a=>!a)}>{s.graphLegend}</Button>
+          </div>
+        </Panel>
+        :<Panel position="bottom-left">
+          <div className="graph-legend" role="group" aria-label={s.graphLegend}>{listasDaLegenda}</div>
+        </Panel>)}
     </ReactFlow>
     </ReactFlowProvider>
   </div>;
@@ -1520,9 +1554,11 @@ function esconderRotulos(el:HTMLElement|null){
  * até", as setas de nó em nó, os botões de zoom, a barra do modo de arrumar, os rótulos que somem e
  * o `apiRef`.
  */
-function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,forma,titulo,desenho,editavel,barra,acoes}:{
+function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,minimapa,apiRef,linhas,forma,titulo,desenho,editavel,barra,acoes}:{
   raiz:React.RefObject<HTMLDivElement|null>;teclado:React.RefObject<((id:string,tecla:string)=>void)|undefined>;
   focusId?:string|null;pedidoDeCaber:number;controls:boolean;
+  /** O botão do minimapa junto dos de zoom (`minimapToggle`, MNT-31). */
+  minimapa?:{aberto:boolean;alternar:()=>void;id:string};
   apiRef?:React.Ref<DependencyGraphApi>;linhas:{item:GraphEdgeItem;rota?:Ponto[]}[];forma:GraphEdgeShape;titulo:string;
   desenho:unknown;editavel:boolean;barra:Barra;acoes:React.RefObject<Acoes>}){
   const rf=useReactFlow();
@@ -1665,10 +1701,14 @@ function Comandos({raiz,teclado,focusId,pedidoDeCaber,controls,apiRef,linhas,for
         <ToolbarButton className="btn-icon" aria-label={s.graphRelayout} disabled={false} onClick={()=>a.reorganizar()}><Icon name="tree-structure"/></ToolbarButton>
       </Toolbar>
     </Panel>}
-    {controls&&<Panel ref={zoomRef} position="top-right" className="graph-controls">
-      <IconButton icon="magnifying-glass-plus" label={s.graphZoomIn} onClick={()=>void rf.zoomIn({duration:duracao()})}/>
-      <IconButton icon="magnifying-glass-minus" label={s.graphZoomOut} onClick={()=>void rf.zoomOut({duration:duracao()})}/>
-      <IconButton icon="corners-out" label={s.graphFit} onClick={()=>caber()}/>
+    {(controls||minimapa)&&<Panel ref={zoomRef} position="top-right" className="graph-controls">
+      {controls&&<>
+        <IconButton icon="magnifying-glass-plus" label={s.graphZoomIn} onClick={()=>void rf.zoomIn({duration:duracao()})}/>
+        <IconButton icon="magnifying-glass-minus" label={s.graphZoomOut} onClick={()=>void rf.zoomOut({duration:duracao()})}/>
+        <IconButton icon="corners-out" label={s.graphFit} onClick={()=>caber()}/>
+      </>}
+      {minimapa&&<IconButton icon="map-trifold" label={s.graphOverview} aria-expanded={minimapa.aberto}
+                             aria-controls={minimapa.aberto?minimapa.id:undefined} onClick={minimapa.alternar}/>}
     </Panel>}
   </>;
 }

@@ -177,6 +177,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.35.0` | O lote T — o site no arranjo da documentação da referência: `AppShell layout="docs"`, `Header tabs`, `Container size="docs"`, cinco tokens de largura, cada área com a sua lateral, a segunda linha da ADR-0072 (a de ponta a ponta embaixo das áreas) e o índice sem barra de rolagem; e o MNT-28 (o nó movido encaixa na grade, no vizinho e onde a linha fica reta) — [ADR-0067](decisions/0067-o-site-segue-a-documentacao-da-referencia.md), seção "Lote T", pedido #72. **Publicada em 17/10/2026** (entre 17:58 e 18:04, Brasília, medido no npm), pelo terminal do Victor |
 | `0.36.0` | O lote U — as cores do amarelo ([ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)), a bolinha do `Radio`, as faixas do mapa (MNT-27) e o clique no nó (pedido 16); a abertura de página (`Section variant="hero"`, `--text-6xl` e `--text-7xl`), o aviso de cookies (`Banner variant="consent"`) e o `Chip` (GAR-19 a 22, [ADR-0074](decisions/0074-a-abertura-o-aviso-de-cookies-e-o-chip.md)); o site com as áreas Getting Started e Releases, os textos para assistentes de IA e o celular e o tablet — pedidos #75 a #82. **Publicada em 20/10/2026** (por volta das 12:12, Brasília, medido no npm), pelo terminal do Victor |
 | `0.37.0` | O `CodeBlock` com número de linha e cores ([ADR-0075](decisions/0075-o-codigo-com-cores-e-numero-de-linha.md)); o lote 1, passo 1 — as fichas dizem a verdade (checks 48 e 49) e o desativado de sete peças; o azul da marca como letra de destaque do claro e o item atual da lateral na cor do botão ([ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)); o `CodeEditor` que recebe o teclado; e, junto, o site com a parte viva em toda caixa — pedidos #84 a #88. **Publicada em 21/10/2026** (por volta das 16:45, Brasília, medido no npm), pelo terminal do Victor |
+| `0.37.1` | O lote 0-A, o primeiro dos lotes de até 3 horas: o conteúdo largo não alarga a página no `DataState`, no `Form` e no corpo do `Dialog` (MNT-33), e o texto de exemplo dos campos a 4,5:1 ou mais na marca `lory` (MNT-29) — pedido #89. **Publicada em 22/10/2026** (entre 08:41 e 08:50, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -527,6 +528,14 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    publicar, `pnpm build` na pasta dele; e conserto de pacote juntado antes do publish sai na versão que está sendo
    publicada, não na seguinte. **Publicada em 21/10/2026** (por volta das 16:45, Brasília, medido no npm), pelo terminal
    do Victor, da junção do pedido #88.
+
+34. **`0.37.1`, o lote 0-A, feito em 21/10/2026** — o primeiro lote da regra nova (até 3 horas, uma versão por lote): os
+   pedidos do app de rede MNT-33 (`minmax(0, 1fr)` no `.data-state`, no `.form` e no `.dialog-body`) e MNT-29 (era da
+   MARCA: na `lory`, a cor fraca dava 2,51 a 3,58; agora 4,87 a 6,22), e o registro da 0.37.0. ⚠ **As lições:** o
+   teste com a tabela DIRETO na grade passava com o defeito — o caso real do app tem um invólucro, e só com ele a prova
+   reprova o CSS de antes; e teste que acrescenta a folha DEPOIS de desenhar mede a transição do fundo (2,24 onde a
+   página real dá 4,69) — a folha vai no `<head>`. **Publicada em 22/10/2026** (entre 08:41 e 08:50, Brasília, medido
+   no npm), pelo terminal do Victor, da junção do pedido #89. O registro entrou no lote seguinte (0-B, pedido #90).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

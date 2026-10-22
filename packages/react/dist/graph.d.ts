@@ -154,6 +154,15 @@ export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivE
     controls?: boolean;
     /** A legenda das espécies de linha, montada sozinha pelo `legend` de cada aresta (MNT-15). */
     legend?: boolean;
+    /** A legenda ganha o botão "Legenda", parado no canto, que a abre e fecha; aberta, a lista sobe acima
+     *  dele; fechada, sobra só o botão (MNT-31). */
+    legendCollapsible?: boolean;
+    /** A legenda que fecha começa aberta. Ligado por padrão. */
+    defaultLegendOpen?: boolean;
+    /** O botão que esconde e mostra o minimapa, junto dos botões de zoom, em cima (MNT-31). */
+    minimapToggle?: boolean;
+    /** O minimapa com botão começa aberto. Ligado por padrão. */
+    defaultMinimapOpen?: boolean;
     /** Centraliza e marca este nó — o "ir até" de uma busca (MNT-18.2). */
     focusId?: string | null;
     /** Destaca um caminho (nós e arestas) e apaga o resto (MNT-18.3). */
@@ -198,4 +207,4 @@ export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivE
     /** O trabalhador que arruma FORA da tela principal (MNT-19.1). A receita de cada empacotador está no README. */
     layoutWorker?: () => Worker;
 }
-export declare function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation, layout, rootId, edgeShape, groupParallel, minimap, controls, legend, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize, highContrast, apiRef, editable, grid, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, ...props }: DependencyGraphProps): React.JSX.Element;
+export declare function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation, layout, rootId, edgeShape, groupParallel, minimap, controls, legend, legendCollapsible, defaultLegendOpen, minimapToggle, defaultMinimapOpen, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize, highContrast, apiRef, editable, grid, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, ...props }: DependencyGraphProps): React.JSX.Element;

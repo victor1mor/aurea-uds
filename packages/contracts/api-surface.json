@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 9,
     "aliasesLiterais": 112,
-    "propsDistintas": 375
+    "propsDistintas": 379
   },
   "aliases": {
     "ButtonVariant": {
@@ -5571,6 +5571,30 @@
             },
             {
               "name": "legend",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "legendCollapsible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultLegendOpen",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "minimapToggle",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "defaultMinimapOpen",
               "optional": true,
               "type": "boolean",
               "values": null

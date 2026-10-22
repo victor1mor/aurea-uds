@@ -59,4 +59,31 @@ export default [
       label: "Network map", height: "21rem", nodes: NOS, edges: ARESTAS,
     })),
   },
+  // MNT-31 (21/10/2026): a legenda e o minimapa cobriam os nós dos cantos de baixo. A escolha do Victor na
+  // bancada: a legenda com o botão parado no canto, e o botão do minimapa junto dos de zoom.
+  {
+    variant: "Network",
+    name: "The legend and the overview step aside",
+    description: "On a large map the legend and the overview cover the devices in the bottom corners. With legendCollapsible the legend gets a Legend button that stays in its corner: open, the list rises above it; closed, only the button is left. With minimapToggle the overview gets a button beside the zoom buttons, at the top. Both start open; defaultLegendOpen and defaultMinimapOpen start them closed.",
+    uses: ["DependencyGraph"],
+    code: `<DependencyGraph
+  orientation="vertical"
+  layout="layered"
+  rootId="internet"
+  edgeShape="step"
+  controls
+  legend
+  legendCollapsible       // the Legend button, in the bottom-left corner
+  minimap
+  minimapToggle           // the overview button, beside the zoom buttons
+  defaultMinimapOpen={false}
+  nodes={nodes}
+  edges={edges}
+/>`,
+    render: () => h("div", {style: {width: "100%"}}, h(DependencyGraph, {
+      orientation: "vertical", rootId: "internet", edgeShape: "step", groupParallel: true, controls: true,
+      legend: true, legendCollapsible: true, minimap: true, minimapToggle: true, defaultMinimapOpen: false,
+      label: "Network map with the legend and the overview tucked away", height: "21rem", nodes: NOS, edges: ARESTAS,
+    })),
+  },
 ];

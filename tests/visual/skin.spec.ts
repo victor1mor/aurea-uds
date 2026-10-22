@@ -1376,7 +1376,7 @@ for (const theme of ["dark", "light"] as const) {
                 const d = ctx.getImageData(0, 0, 1, 1).data;
                 return `rgb(${d[0]}, ${d[1]}, ${d[2]})`;
               };
-              return {texto: sonda("--sidebar-primary"), fundo: sonda("--sidebar-accent"), amarelo: sonda("--primary")};
+              return {texto: sonda("--sidebar-primary"), fundo: sonda("--sidebar-accent")};
             })(),
             // a COLUNA dos dois shells: A tem o trilho aninhado (não deve encolher),
             // B tem o trilho como filho direto (deve encolher)
@@ -2308,15 +2308,12 @@ for (const theme of ["dark", "light"] as const) {
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
       };
       const [a, b2] = [lum(px(m.sidebar.acentoDaLateral.texto)), lum(px(m.sidebar.acentoDaLateral.fundo))].sort((x, y) => y - x);
-      // ADR-0073 (18/10/2026): no tema claro, o item atual é o amarelo da marca (1,60:1 sobre a cápsula), por decisão do
-      // Victor, tomada sabendo disso. A exceção é só essa cor, só no claro, e ela cobra o contrário: que SEJA o amarelo.
-      if (theme === "light") {
-        expect(m.sidebar.acentoDaLateral.texto, "no claro, o acento da lateral é o amarelo da marca (ADR-0073)")
-          .toBe(m.sidebar.acentoDaLateral.amarelo);
-      } else {
-        expect((a + 0.05) / (b2 + 0.05), `o acento da lateral (--sidebar-primary) contra o fundo do `
-          + "item atual (--sidebar-accent) tem de ser legível — AA, 4,5:1").toBeGreaterThanOrEqual(4.5);
-      }
+      // ~~ADR-0073 (18/10/2026): no tema claro, o acento da lateral era o amarelo da marca (1,60:1), e este teste cobrava
+      // que fosse.~~ Desde a ADR-0076 (20/10/2026) a letra de destaque do claro é o azul da marca, e nenhuma trava de
+      // contraste aceita exceção: o 4,5:1 vale nos dois temas. Este teste ficou cobrando o amarelo até 21/10/2026 —
+      // passava despercebido porque a CI não roda o `skin.spec` (item 109 do documento de achados).
+      expect((a + 0.05) / (b2 + 0.05), `o acento da lateral (--sidebar-primary) contra o fundo do `
+        + "item atual (--sidebar-accent) tem de ser legível — AA, 4,5:1").toBeGreaterThanOrEqual(4.5);
     }
     expect(m.sidebar.colunas.length, "o fixture tem dois shells: o do defeito e o da prova")
       .toBe(2);
