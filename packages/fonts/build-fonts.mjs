@@ -23,6 +23,30 @@ import {dirname, join} from "node:path";
 const dir = dirname(fileURLToPath(import.meta.url));
 mkdirSync(join(dir, "dist"), {recursive: true});
 
+// ── ADR-0077 (22/10/2026): A FONTE DA WEB É A INTER, A SORA E A IBM PLEX MONO ─────────────────
+// Texto em Inter, título em Sora, número e código em IBM Plex Mono — as três sob a SIL OFL 1.1. A
+// Inter e a Sora são VARIÁVEIS (um arquivo cobre todos os pesos; a Inter, também o tamanho óptico),
+// cortadas do arquivo oficial para o mesmo recorte latino de antes por `cortar-fontes.py`. A IBM Plex
+// Mono é a da própria IBM, SEM mudança nenhuma (a licença dela reserva o nome "Plex"): os recortes
+// `Latin1` de `@ibm/plex-mono` 2.5.0, um peso por arquivo.
+// O `weight` de um arquivo variável é a FAIXA que ele cobre ("100 900"): o navegador escolhe o peso
+// dentro dela, e o tamanho óptico da Inter acompanha o tamanho da letra sozinho
+// (`font-optical-sizing:auto`, o padrão do navegador).
+const INTER = "Inter", SORA = "Sora", PLEX_MONO = "IBM Plex Mono";
+const WEB = [
+  {file: "inter-variable-normal.woff2",    family: INTER,     weight: "100 900", style: "normal"},
+  {file: "inter-variable-italic.woff2",    family: INTER,     weight: "100 900", style: "italic"},
+  {file: "sora-variable-normal.woff2",     family: SORA,      weight: "100 800", style: "normal"},
+  {file: "ibm-plex-mono-400-normal.woff2", family: PLEX_MONO, weight: 400,       style: "normal"},
+  {file: "ibm-plex-mono-500-normal.woff2", family: PLEX_MONO, weight: 500,       style: "normal"},
+  {file: "ibm-plex-mono-600-normal.woff2", family: PLEX_MONO, weight: 600,       style: "normal"},
+];
+
+// ── O ALVO NATIVO, AINDA NA ATKINSON (até a 0.39.1) ──────────────────────────────────────────────
+// A troca do nativo é o lote seguinte (F-2): ele precisa dos .ttf estáticos das fontes novas e do
+// teste no aparelho. Até lá, o aparelho segue com a Atkinson, e estes arquivos ficam no pacote — os
+// .woff2 dela, só porque a vitrine do nativo (`native-vitrine.test.tsx`) desenha com eles; a web não
+// os carrega mais. Saem todos juntos, com o nativo.
 // file -> @font-face metadata. Atkinson Hyperlegible Next e Mono, SIL Open Font License 1.1.
 // `role` é o token de tipografia que a fonte serve (--font-ui / --font-code), e existe para o
 // alvo nativo poder indexar por papel em vez de por nome de família.
@@ -48,8 +72,8 @@ const FONTS = [
 ];
 
 // ── alvo WEB ───────────────────────────────────────────────────────────────
-let css = "/* Aurea fonts — Atkinson Hyperlegible Next e Mono (SIL OFL 1.1). Generated from files/. Do not edit. */\n";
-for (const f of FONTS) {
+let css = "/* Aurea fonts — Inter, Sora e IBM Plex Mono (SIL OFL 1.1). Generated from files/. Do not edit. */\n";
+for (const f of WEB) {
   if (!existsSync(join(dir, "files", f.file))) throw new Error("missing font file: " + f.file);
   css += `@font-face{font-family:"${f.family}";font-style:${f.style};font-weight:${f.weight};`
        + `font-display:swap;src:url("../files/${f.file}") format("woff2");}\n`;

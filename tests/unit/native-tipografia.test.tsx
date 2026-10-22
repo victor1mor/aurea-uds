@@ -18,7 +18,10 @@ describe("B-02 · nativo · o papel do Text", () => {
     render(<Envolve><Text type="h2">Relatórios</Text></Envolve>);
     const e = estilo();
     expect(e.fontSize).toBe(t.size.text3xl);
-    expect(e.fontFamily).toBe(t.font.ui[600]);
+    // O título usa a fonte de TÍTULO (`fontHeading`). Até a 0.38.0 ela era a mesma do texto e o teste dizia `ui`; desde a
+    // ADR-0077 (0.39.0) os tokens do nativo dizem Sora e Inter, e as duas se separam.
+    expect(t.font.heading[600]).not.toBe(t.font.ui[600]);
+    expect(e.fontFamily).toBe(t.font.heading[600]);
     expect(e.lineHeight).toBe(t.size.text3xl * t.size.leadingTight);
     expect(e.letterSpacing).toBe(t.size.text3xl * t.tracking.trackingTight);
   });
@@ -44,7 +47,7 @@ describe("B-02 · nativo · o papel do Text", () => {
     render(<Envolve><Text type="h1" size="lg" weight={700}>x</Text></Envolve>);
     const e = estilo();
     expect(e.fontSize).toBe(t.size.textLg);
-    expect(e.fontFamily).toBe(t.font.ui[700]);
+    expect(e.fontFamily).toBe(t.font.heading[700]);
   });
 });
 

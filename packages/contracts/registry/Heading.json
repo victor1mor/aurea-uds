@@ -135,7 +135,7 @@
       "name": "numeric",
       "type": "boolean",
       "default": "false",
-      "description": "Tabular figures (font-variant-numeric: tabular-nums) — for numbers that line up in a column (price, year, spec sheet) or change on screen. Off by default: in running text the narrow \"1\" is right. Native: the same prop sets fontVariant [\"tabular-nums\"]."
+      "description": "Value figures: on the web, the code font (IBM Plex Mono, ADR-0077) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow \"1\" is right. Native: the same prop sets fontVariant [\"tabular-nums\"]; the native font change comes with the native typeface files."
     }
   ]
 }

@@ -111,7 +111,7 @@
     "font-ui": {
       "$type": "fontFamily",
       "$value": [
-        "Atkinson Hyperlegible Next",
+        "Inter",
         "Segoe UI",
         "sans-serif"
       ]
@@ -119,24 +119,26 @@
     "font-heading": {
       "$type": "fontFamily",
       "$value": [
-        "Atkinson Hyperlegible Next",
+        "Sora",
+        "Inter",
         "Segoe UI",
         "sans-serif"
       ],
-      "$description": "A fonte dos títulos (GAR-16, 0.28.0). Hoje é a mesma do texto; existe para o título poder ter fonte própria sem tocar no resto — o nome que a maioria dos sistemas usa."
+      "$description": "A fonte dos títulos (GAR-16, 0.28.0): a Sora desde a ADR-0077 (22/10/2026). Vale para todo título, do h1 ao h6 (o sistema que serviu de modelo deixa o h6 no texto; a Aurea não — decisão do Victor, 22/10/2026); o texto é a Inter."
     },
     "font-editorial": {
       "$type": "fontFamily",
       "$value": [
-        "Atkinson Hyperlegible Next",
+        "Inter",
         "Segoe UI",
         "sans-serif"
-      ]
+      ],
+      "$description": "Apelido da fonte do texto desde a ADR-0053 (a serifada saiu); sai na 1.0."
     },
     "font-code": {
       "$type": "fontFamily",
       "$value": [
-        "Atkinson Hyperlegible Mono",
+        "IBM Plex Mono",
         "SFMono-Regular",
         "Consolas",
         "monospace"

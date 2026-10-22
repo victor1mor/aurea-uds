@@ -3,6 +3,8 @@
 - **Data:** 01/10/2026
 - **Estado:** aceita · **executada na `0.13.0`** (01/10/2026, "pode" do Victor: *"pode, faça
   tudo"*), ainda não publicada. ~~A troca ainda não foi feita~~.
+  **A parte da FONTE foi substituída em 22/10/2026 pela [ADR-0077](0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)**
+  (a Inter, a Sora e a IBM Plex Mono); a parte dos ÍCONES continua valendo.
 - **Autoria:** decisão do Victor, olhando lado a lado seis fontes e sete coleções de ícones com
   as cores, as cápsulas e os cartões da Aurea. Nas palavras dele: *"vamos usar Phosphor Regular e
   Atkinson Hyperlegible Next"*.

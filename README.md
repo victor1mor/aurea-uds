@@ -9,7 +9,7 @@
 - cartões, janelas e painéis com raio de 22 px;
 - botões de texto, campos, filtros e abas em cápsula;
 - o amarelo principal é o mesmo nos temas claro e escuro;
-- a letra é a Atkinson Hyperlegible Next (e a Mono para código), feita para quem enxerga pouco;
+- a letra é a Inter no texto, a Sora nos títulos e a IBM Plex Mono no código (ADR-0077);
 - ícones do Phosphor, com a forma cheia no item escolhido;
 - três densidades: compacta, confortável e espaçosa;
 - nenhum gradiente. Todo valor de cor, raio, letra e espaço sai de um token.
@@ -199,14 +199,14 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-491 páginas geradas — 147 de componente, 224 de padrão, 15 de bloco, 23 de receita, 73 de documentação e 9 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 103 trazem um starter — o preview real e o código, ainda sem exemplos extras. 138 componentes publicam a tabela de props.
+492 páginas geradas — 147 de componente, 224 de padrão, 15 de bloco, 23 de receita, 74 de documentação e 9 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 103 trazem um starter — o preview real e o código, ainda sem exemplos extras. 138 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza
 
 - `apps/catalog`: o catálogo, **gerado** a partir do registry por `scripts/build-catalog.mjs`;
 - `packages/tokens`: os tokens no formato DTCG 2025.10 e o CSS gerado;
-- `packages/fonts`: a Atkinson Hyperlegible Next e Mono (WOFF2 e TTF) e o `fonts.css`;
+- `packages/fonts`: a Inter, a Sora e a IBM Plex Mono (WOFF2) e o `fonts.css`; e, para o React Native, os TTF — ainda os da Atkinson Hyperlegible, até a troca do nativo (ADR-0077);
 - `packages/contracts`: o contrato do projeto e o registry (uma ficha por componente);
 - `packages/core`: o CSS gerado (tokens e componentes) e o comportamento em JavaScript puro;
 - `packages/icons`: o sprite de ícones do Phosphor e a tabela de nomes do Carbon para o Phosphor;
@@ -231,5 +231,5 @@ Leia o [CONTRIBUTING.md](CONTRIBUTING.md). Para relatar uma falha de segurança,
 
 ## Licença
 
-Apache 2.0 — veja o [LICENSE](LICENSE) e o [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (Atkinson
-Hyperlegible sob OFL 1.1, Phosphor Icons sob MIT).
+Apache 2.0 — veja o [LICENSE](LICENSE) e o [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (Inter, Sora,
+IBM Plex Mono e Atkinson Hyperlegible sob OFL 1.1, Phosphor Icons sob MIT).

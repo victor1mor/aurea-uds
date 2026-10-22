@@ -36,7 +36,7 @@ packages/
               formas (hex/p3/oklch). Ver NATIVE.md Etapa 2.
   core/       o CSS do sistema + aurea.js (comportamento vanilla).
   icons/      sprite Phosphor (Regular e Fill).                  [NOTICE obrigatório]
-  fonts/      Atkinson Hyperlegible Next e Mono.                 [ADR-0006, ADR-0053]
+  fonts/      Inter, Sora e IBM Plex Mono (web); o nativo ainda na Atkinson. [ADR-0006, ADR-0077]
   react/      os componentes, separados por categoria/fronteira. [ADR-0004, Fase 9]
               markup.tsx = os 22 de marcação pura, SEM diretiva.  [ADR-0026]
               <categoria>.tsx = VITRINE, só reexporta, sem

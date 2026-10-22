@@ -39,7 +39,7 @@ The accent is the brand yellow, `oklch(0.795 0.184 86.047)`. It is the same in b
 | `--control-selected-foreground` | The check mark on a checked control |
 | `--control-selected-dot` | The white dot of a checked radio |
 
-In the light theme the yellow is also the text color for emphasis and links. It measures 1.75:1 on the light page background, below the 4.5:1 that body text needs. Use it for emphasis, never for long text.
+In the light theme, emphasis text and links use the brand blue (`#0246f1`), which measures 5.59:1 to 6.67:1 on the light backgrounds. The yellow stays the brand: fills, checked controls, and emphasis in the dark theme.
 
 ## Neutrals
 

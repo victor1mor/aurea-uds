@@ -535,7 +535,9 @@ if contract:
 
 # ── 10. licenças nos pacotes (auditoria 18/07/2026, ALTO 6) ────────
 # Cada pacote publicável leva a própria LICENSE (npm inclui LICENSE sempre;
-# NOTICE precisa estar em "files"). Fontes = OFL com o copyright da Atkinson Hyperlegible;
+# NOTICE precisa estar em "files"). Fontes = OFL com o copyright de cada família que o pacote leva:
+# desde a ADR-0077 (22/10/2026), a Inter, a Sora e a IBM Plex Mono — esta com o nome reservado "Plex",
+# que proíbe modificar o arquivo e manter o nome —, e a Atkinson enquanto o nativo a usar (até a 0.39.1);
 # ícones = NOTICE de atribuição do Phosphor (MIT). Até a 0.12.4 eram IBM Plex e Carbon (ADR-0053).
 for pkg_dir in sorted((root / "packages").iterdir()):
     pj = pkg_dir / "package.json"
@@ -550,9 +552,12 @@ fonts_lic = (root / "packages/fonts/LICENSE")
 if fonts_lic.is_file():
     lic_text = fonts_lic.read_text(encoding="utf-8")
     if ("SIL OPEN FONT LICENSE" not in lic_text.upper()
+            or "The Inter Project Authors" not in lic_text
+            or "The Sora Project Authors" not in lic_text
+            or 'IBM Corp. with Reserved Font Name "Plex"' not in lic_text
             or "Atkinson Hyperlegible Next Project Authors" not in lic_text
             or "Atkinson Hyperlegible Mono Project Authors" not in lic_text):
-        errors.append("fonts/LICENSE: não é a OFL da Atkinson Hyperlegible Next e Mono (ADR-0053)")
+        errors.append("fonts/LICENSE: falta o copyright de alguma família que o pacote leva (Inter, Sora, IBM Plex Mono e, até a 0.39.1, Atkinson — ADR-0077)")
 icons_manifest = json.loads((root / "packages/icons/package.json").read_text(encoding="utf-8"))
 if not (root / "packages/icons/NOTICE").is_file():
     errors.append("icons: sem NOTICE de atribuição do Phosphor")
@@ -2265,7 +2270,10 @@ def project_manifest(s):
         "schemaVersion": "1.0",
         "project": {"name": "Aurea Universal Design System", "short": "Aurea UDS",
                     "npmScope": "@aurea-uds", "license": "Apache-2.0",
-                    "thirdParty": [{"name": "Atkinson Hyperlegible", "license": "OFL-1.1"},
+                    "thirdParty": [{"name": "Inter", "license": "OFL-1.1"},
+                                   {"name": "Sora", "license": "OFL-1.1"},
+                                   {"name": "IBM Plex Mono", "license": "OFL-1.1"},
+                                   {"name": "Atkinson Hyperlegible", "license": "OFL-1.1"},
                                    {"name": "Phosphor Icons", "license": "MIT"}]},
         "packages": pkgs,
         "components": reg,
@@ -2621,8 +2629,16 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
 # O defeito que ele pega é o do achado I1 com outra roupa: um estilo entra no alvo web e ninguém
 # regrava o nativo. Aí o app cai na fonte de sistema **num peso só**, que é o tipo de coisa que
 # passa despercebida numa tela e destrói a identidade em outra.
+#
+# ADR-0077 (22/10/2026): a WEB trocou de fonte na 0.39.0 e o nativo troca no lote seguinte (F-2). Até lá,
+# os seis arquivos abaixo são SÓ da web, e o espelho do nativo são os .woff2 da Atkinson, que ficam no
+# pacote para isso. A lista é fechada de propósito: um .woff2 novo fora dela volta a cobrar o .ttf. O F-2
+# reescreve este check — a web variável (um arquivo por família) e o nativo estático (um por peso) não
+# têm mais os mesmos nomes.
+_SO_DA_WEB = {"inter-variable-normal", "inter-variable-italic", "sora-variable-normal",
+              "ibm-plex-mono-400-normal", "ibm-plex-mono-500-normal", "ibm-plex-mono-600-normal"}
 _fdir = root / "packages/fonts"
-_woff2 = sorted(p.stem for p in (_fdir / "files").glob("*.woff2"))
+_woff2 = sorted(p.stem for p in (_fdir / "files").glob("*.woff2") if p.stem not in _SO_DA_WEB)
 _ttf = sorted(p.stem for p in (_fdir / "files-native").glob("*.ttf"))
 if not _ttf:
     errors.append("check 37: packages/fonts/files-native/ não tem .ttf — o React Native NÃO LÊ "

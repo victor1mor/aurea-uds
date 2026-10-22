@@ -4,6 +4,12 @@
 - **Estado:** nasceu como **proposta**; em 15/08/2026 o Victor autorizou e fechou as **Etapas 1,
   2 e 3** ([ADR-0027](../decisions/0027-a-cor-no-alvo-nativo.md) ·
   [ADR-0028](../decisions/0028-unistyles-como-motor-de-estilo-nativo.md)).
+⚠ **22/10/2026 — ADR-0077:** a fonte da Aurea passou a ser a **Inter, a Sora e a IBM Plex Mono**. **A web trocou na
+0.39.0; o nativo troca na 0.39.1** (os `.ttf` e o teste no aparelho). Os NOMES de fonte dos tokens do nativo já são os
+novos na 0.39.0 (decisão do Victor, 22/10/2026); os arquivos, não. Até lá, o app passa o `FONT_FAMILIES` do pacote (o
+mapa da Atkinson) ao `AureaProvider`, e o aparelho segue na Atkinson, abaixo; sem o mapa, ele pede famílias que ainda
+não tem e cai na fonte do sistema.
+
 ⚠ **01/10/2026 — ADR-0053:** a fonte passou a ser a **Atkinson Hyperlegible Next e Mono** e os ícones
 o **Phosphor** (regular e `-fill`). As menções à IBM Plex e ao Carbon abaixo são **registro** do
 Lote 0 e do que se mediu na época; o que vale hoje está na ADR, no `packages/fonts/README.md` e no

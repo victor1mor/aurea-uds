@@ -1,12 +1,14 @@
 {
   "name": "@aurea-uds/fonts",
-  "version": "0.38.0",
-  "description": "Atkinson Hyperlegible Next e Mono para a Aurea: WOFF2 para a web (@aurea-uds/fonts/css) e TTF para React Native (@aurea-uds/fonts/native).",
+  "version": "0.39.0",
+  "description": "As fontes da Aurea: Inter (texto), Sora (títulos) e IBM Plex Mono (código), em WOFF2 para a web (@aurea-uds/fonts/css). Para o React Native (@aurea-uds/fonts/native), ainda os TTF da Atkinson Hyperlegible, até a troca do nativo.",
   "keywords": [
     "aurea",
     "design-system",
     "fonts",
-    "atkinson-hyperlegible",
+    "inter",
+    "sora",
+    "ibm-plex-mono",
     "react-native"
   ],
   "license": "OFL-1.1",

@@ -7,10 +7,10 @@
   --brand-blue:#0246f1;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
-  --font-ui:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
-  --font-heading:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
-  --font-editorial:"Atkinson Hyperlegible Next","Segoe UI",sans-serif;
-  --font-code:"Atkinson Hyperlegible Mono",SFMono-Regular,Consolas,monospace;
+  --font-ui:Inter,"Segoe UI",sans-serif;
+  --font-heading:Sora,Inter,"Segoe UI",sans-serif;
+  --font-editorial:Inter,"Segoe UI",sans-serif;
+  --font-code:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
   --text-xs:0.75rem;
   --text-sm:0.875rem;
   --text-md:var(--text-sm);

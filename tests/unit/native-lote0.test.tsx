@@ -203,7 +203,9 @@ describe("AureaProvider", () => {
   // FAMÍLIAS PRÓPRIAS no .ttf, medido na tabela `name`. O app parece certo e não é.
   it("sem fontFamilies devolve a família pedida; com o mapa, o nome PostScript", () => {
     const {unmount} = render(<AureaProvider><Sonda /></AureaProvider>);
-    expect(screen.getByTestId("fonte")).toHaveTextContent("Atkinson Hyperlegible Next");
+    // A família pedida é a do token (`--font-ui`): desde a ADR-0077, a Inter. Os arquivos do aparelho continuam os da
+    // Atkinson até a 0.39.1 — e por isso o mapa de famílias, abaixo, é o caminho certo.
+    expect(screen.getByTestId("fonte")).toHaveTextContent("Inter");
     unmount();
 
     const mapa = {
@@ -309,8 +311,10 @@ describe("fontes nativas", () => {
   // DEFEITO: o alvo nativo ficar para trás do web. São os MESMOS 9 estilos, em outro formato
   // (ADR-0053: Atkinson Hyperlegible Next em 5, Mono em 3; a IBM Plex tinha 11, com a Serif. O 800
   // da Next entrou na 0.28.0, GAR-16 — eram 8).
+  // ADR-0077 (22/10/2026): a WEB trocou de fonte na 0.39.0 e o nativo troca na 0.39.1. Até lá, o espelho do nativo são só
+  // os .woff2 da Atkinson, que ficam no pacote para isso; os da Inter, da Sora e da IBM Plex Mono são só da web.
   it("9 .ttf, um por .woff2, e todos com nome PostScript distinto", async () => {
-    const woff2 = readdirSync(RAIZ + "packages/fonts/files").filter((f) => f.endsWith(".woff2"));
+    const woff2 = readdirSync(RAIZ + "packages/fonts/files").filter((f) => f.startsWith("atkinson-") && f.endsWith(".woff2"));
     const ttf = readdirSync(RAIZ + "packages/fonts/files-native").filter((f) => f.endsWith(".ttf"));
     expect(ttf).toHaveLength(9);
     expect(ttf.map((f) => f.replace(/\.ttf$/, "")).sort())

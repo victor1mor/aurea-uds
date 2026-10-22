@@ -43,6 +43,12 @@
       "files/atkinson-hyperlegible-next-600-normal.woff2",
       "files/atkinson-hyperlegible-next-700-normal.woff2",
       "files/atkinson-hyperlegible-next-800-normal.woff2",
+      "files/ibm-plex-mono-400-normal.woff2",
+      "files/ibm-plex-mono-500-normal.woff2",
+      "files/ibm-plex-mono-600-normal.woff2",
+      "files/inter-variable-italic.woff2",
+      "files/inter-variable-normal.woff2",
+      "files/sora-variable-normal.woff2",
       "package.json"
     ],
     "@aurea-uds/icons": [
