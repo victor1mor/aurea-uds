@@ -117,7 +117,7 @@ como deveria funcionar"*.
 
 ---
 
-## [0.38.0] — 2026-10-21
+## [0.38.0] — 2026-10-22
 
 ⏳ **Ainda não publicada.** O lote 0-B da fila nova: o pedido do app de rede MNT-31 — o app usa a marca `lory`.
 
@@ -144,13 +144,16 @@ como deveria funcionar"*.
 - **O teste velho da lateral no `skin.spec.ts`**: ele ainda cobrava o acento da lateral AMARELO no claro (a ADR-0073).
   Desde a ADR-0076 é o azul, e o 4,5:1 vale nos dois temas, sem exceção. A CI não roda o `skin.spec`, por isso passou.
 - **O exemplo do catálogo** "The legend and the overview step aside", nos padrões do mapa.
+- **O registro da 0.37.1** (publicada entre 08:41 e 08:50 de 22/10/2026): o `released-surface.json` do commit do publish
+  (`c150e13e`, sem peça nem frase nova), o CHANGELOG, a data da nota `v0-37-1` (22/10, o dia do publish) e o CLAUDE.md.
 
 ---
 
-## [0.37.1] — 2026-10-21
+## [0.37.1] — 2026-10-22
 
-⏳ **Ainda não publicada.** O lote 0-A da fila nova (lotes de até 3 horas, decisão do Victor de 21/10/2026): os
-pedidos do app de rede MNT-33 e MNT-29, medidos na 0.36.0 — o app usa a marca `lory`.
+✅ **Publicada em 22/10/2026, entre 08:41 e 08:50 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #89. O lote 0-A da fila nova (lotes de até 3 horas, decisão do Victor de 21/10/2026): os pedidos do app de rede
+MNT-33 e MNT-29, medidos na 0.36.0 — o app usa a marca `lory`.
 
 ### Consertado
 
