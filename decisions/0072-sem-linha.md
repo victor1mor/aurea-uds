@@ -5,6 +5,9 @@
   REPROVADA na bancada — peças sumiram junto com o fundo —; os fundos novos (item 7) e a linha clara da caixa da
   vitrine (item 8) foram escolhidos pelo Victor, peça a peça, olhando a bancada: *"caixa B, o resto tudo B"*.
   **Ampliada em 17/10/2026** (lote T, `0.35.0`): a segunda linha, a de ponta a ponta embaixo das áreas do site (item 9).
+  **Mudada em 22/10/2026 pela [ADR-0078](0078-no-claro-o-campo-e-branco-com-sombra.md)** (`0.40.0`): no tema CLARO, o
+  CAMPO solto na página é branco com a sombra `--shadow-sm`; dentro de uma superfície branca e no escuro, o item 7 vale
+  como era.
 - **Origem:** o Victor, 16/10/2026, marcando na vitrine o segmentado, as abas e o aviso: *"não tem borda não tem linha
   ao redor e isso acho bonito quero fazer isso em todos os componentes, sem exceção, precisa me provar que fez em
   todos"*. Depois de ver a proposta simulada em todas as páginas do site, lado a lado com a de hoje, e as peças em que

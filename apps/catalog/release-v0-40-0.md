@@ -1,0 +1,33 @@
+# v0.40.0
+
+White fields in the light theme.
+
+In the light theme, a field that sits on the page is now white, with a soft shadow. Inside a white surface it keeps the grey fill, and the dark theme does not change.
+
+## ⚠ May break
+
+- **In the light theme, fields on the page are white** (the card colour) **with the `--shadow-sm` shadow**: `Input`, `Textarea`, `Select` (and the `DatePicker` trigger), `InputGroup` (and `SearchField`), `NumberField`, `Combobox`, `ColorField` and the slots of `OTPField`. They used to be a translucent grey. A field inside a group stays transparent, without a shadow.
+- **Inside a white surface the field stays grey, without a shadow**: cards (except the outline and inset ones), dialogs, drawers, popovers, menus, the command palette, the app content panel (except plain), card-coloured sections, alerts, the cookie banner, toasts, accordion surfaces, the data grid detail and table cells. The surface decides on its own; your app does nothing.
+- **The dark theme does not change.** The `secondary` variant of a field does not change either.
+
+## Added
+
+- **Two CSS variables, `--field-fill` and `--field-lift`**: the fill and the shadow a field takes where it sits. A white surface of your own can give its fields the grey back with `--field-fill: var(--fill-2); --field-lift: none`.
+
+## Not changed
+
+- **React Native fields stay as they were until v0.40.1**, together with the new typeface on native.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.40.0 @aurea-uds/core@0.40.0 @aurea-uds/fonts@0.40.0 @aurea-uds/icons@0.40.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.40.0
+```

@@ -15,7 +15,7 @@
   (`packages/fonts/files/ibm-plex-mono-{400,500,600}-normal.woff2`) são os da própria IBM, **sem mudança
   nenhuma**: os recortes `Latin1` de `@ibm/plex-mono` 2.5.0 (`fonts/split/woff2/IBMPlexMono-{Regular,Medium,
   SemiBold}-Latin1.woff2`), só com outro nome de arquivo. O resumo (sha256) de cada um está no README do pacote.
-- **Atkinson Hyperlegible Next e Mono** (de 01/10/2026 até a 0.39.1, ADR-0053; a web saiu dela na 0.39.0, ADR-0077 —
+- **Atkinson Hyperlegible Next e Mono** (de 01/10/2026 até a 0.40.1, ADR-0053; a web saiu dela na 0.39.0, ADR-0077 —
   o nativo sai no lote seguinte): The Atkinson Hyperlegible
   Next Project Authors e The Atkinson Hyperlegible Mono Project Authors, SIL Open Font License
   1.1, **sem nome reservado**. Redistribuídas em **dois formatos**, para dois alvos:

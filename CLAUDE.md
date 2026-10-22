@@ -179,6 +179,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.37.0` | O `CodeBlock` com número de linha e cores ([ADR-0075](decisions/0075-o-codigo-com-cores-e-numero-de-linha.md)); o lote 1, passo 1 — as fichas dizem a verdade (checks 48 e 49) e o desativado de sete peças; o azul da marca como letra de destaque do claro e o item atual da lateral na cor do botão ([ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)); o `CodeEditor` que recebe o teclado; e, junto, o site com a parte viva em toda caixa — pedidos #84 a #88. **Publicada em 21/10/2026** (por volta das 16:45, Brasília, medido no npm), pelo terminal do Victor |
 | `0.37.1` | O lote 0-A, o primeiro dos lotes de até 3 horas: o conteúdo largo não alarga a página no `DataState`, no `Form` e no corpo do `Dialog` (MNT-33), e o texto de exemplo dos campos a 4,5:1 ou mais na marca `lory` (MNT-29) — pedido #89. **Publicada em 22/10/2026** (entre 08:41 e 08:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.38.0` | O lote 0-B: a legenda do `DependencyGraph` que fecha (`legendCollapsible`) e o botão do minimapa junto do zoom (`minimapToggle`) — MNT-31, a L1 e a M2 da bancada; e o teste da lateral que ainda cobrava o amarelo no claro — pedido #90. **Publicada em 22/10/2026** (entre 11:08 e 11:22, Brasília, medido no npm), pelo terminal do Victor |
+| `0.39.0` | O lote F-1: a fonte nova da web — Inter no texto, Sora em todo título (h1 a h6) e IBM Plex Mono no código e nos valores (o `numeric` e o número do `KPI`) ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)); os nomes de fonte do nativo trocados, os arquivos do nativo na `0.40.1` — pedido #91. **Publicada em 22/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -546,6 +547,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    a ficha reprova no validador. **Publicada em 22/10/2026** (entre 11:08 e 11:22, Brasília, medido no npm), pelo terminal
    do Victor, da junção do pedido #90. O registro entrou no lote seguinte (a fonte, 0.39.0).
 
+36. **`0.39.0`, o lote F-1, feito em 22/10/2026** — a fonte nova da web ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)):
+   a Inter (a do autor, sem o `ss02`, cortada para o latino), a Sora (em todo h1 a h6, por `:where()` de força zero) e a
+   IBM Plex Mono (os arquivos da IBM sem mudança, pelo nome reservado), no código, no `numeric` e no número do `KPI` —
+   as quatro escolhas do Victor depois da revisão independente. Aprovada na bancada (*"Aprovado, pode seguir"*).
+   ⚠ **As lições:** a revisão independente achou onze pontos que a sessão não tinha visto (o validador reprovando, uma
+   frase falsa sobre a largura da Inter, a Plex Mono prometida nos números e ausente do CSS); o `vitest` rodado JUNTO
+   com a suíte do Playwright estourou o tempo de vários testes — os dois em sequência; a troca de fonte mexeu onde
+   ninguém olhava: o tipo do nó do mapa quebrou em duas linhas (aceito pelo Victor) e a faixa de controles de um bloco
+   do site desceu uma linha só no Linux da CI; e um aviso de segurança novo do `next` (o app de prova) reprovou a
+   auditoria no meio do pedido. **Publicada em 22/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo
+   terminal do Victor, da junção do pedido #91. O registro entrou no lote seguinte (os campos, 0.40.0).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -676,7 +689,7 @@ no git.
   não irá ser mudada de novo, essa é a última vez"*; [ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)).
   A Inter vai SEM o `ss02`, igual ao sistema que serviu de modelo; os arquivos são os do autor, cortados para o latino;
   os da IBM Plex Mono vão sem mudança (nome reservado "Plex"). A Atkinson SAI de tudo: a web na `0.39.0`, o nativo na
-  `0.39.1`. Os ícones continuam os Phosphor.
+  `0.40.1`. Os ícones continuam os Phosphor.
 - ~~IBM Plex Sans / Serif / Mono; Carbon Icons~~ → ~~**Atkinson Hyperlegible Next**~~ (fonte trocada pela ADR-0077,
   acima) **e ícones Phosphor Regular** (decisão do Victor, 01/10/2026,
   [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). **Feita na
@@ -715,6 +728,10 @@ no git.
   borda). As DUAS linhas: a do cartão de contorno, clara (o texto a 10%), e a de ponta a ponta embaixo das áreas do
   site (`Header` com `tabs` e `divider`, decisão do Victor de 17/10/2026, ADR-0072 item 9). Quem cobra: `tests/unit/sem-linha.test.tsx`
   (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
+  **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
+  [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`
+  (a sombra da referência); dentro de uma superfície branca (cartão, janela, folha, menu, painel do app), o `--fill-2` de
+  sempre, e a superfície escolhe sozinha (`--field-fill`/`--field-lift`); no escuro, nada muda. O nativo segue na `0.40.1`.
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
@@ -838,7 +855,7 @@ hoje `Header`).
   teatro. Para ele, **um comando por linha**; quando o comando é nosso, a ordem vai para dentro do
   script.
 - Licença Apache-2.0; Inter, Sora e IBM Plex Mono sob OFL 1.1 (ADR-0077, desde a `0.39.0`; a Atkinson Hyperlegible,
-  OFL 1.1, de 01/10 a 22/10/2026 e no nativo até a `0.39.1`); Phosphor Icons sob MIT (ADR-0053, desde a
+  OFL 1.1, de 01/10 a 22/10/2026 e no nativo até a `0.40.1`); Phosphor Icons sob MIT (ADR-0053, desde a
   `0.13.0`; até a `0.12.4`, IBM Plex e Carbon).
 
 ## 10. Decisões já tomadas pelo Victor (16/07/2026)

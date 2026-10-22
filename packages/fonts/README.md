@@ -28,7 +28,7 @@ zero. Quem fixa outra fonte no próprio título ganha dela; a fonte que o títul
 Inter). Continua existindo só para não quebrar quem o usa; sai na `1.0`.
 
 ⚠ **Os arquivos do React Native ainda são os da Atkinson Hyperlegible** (`@aurea-uds/fonts/native`), até a
-`0.39.1`: a troca do aparelho é o lote seguinte, com os `.ttf` das fontes novas e o teste no aparelho. Os
+`0.40.1`: a troca do aparelho é o lote seguinte, com os `.ttf` das fontes novas e o teste no aparelho. Os
 tokens do nativo já dizem os nomes novos — passe o `FONT_FAMILIES` deste pacote ao `AureaProvider`, como
 no exemplo, e nada muda até lá.
 
@@ -58,7 +58,7 @@ O script imprime o resumo (sha256) de cada arquivo. Os da IBM se conferem contra
 | `ibm-plex-mono-600-normal.woff2` | `b7acd05041ab65f3` |
 
 Os `atkinson-*.woff2` de `files/` e os `.ttf` de `files-native/` são da Atkinson e ficam só até a
-`0.39.1`, para o nativo.
+`0.40.1`, para o nativo.
 
 ## Por que um pacote só dele
 
