@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aurea — MNT-31 (legenda e minimapa)</title>
+<style>
+  /* Só a moldura do banco: uma coluna na largura em que o Victor lê (640, a 200%). */
+  body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-ui); }
+  .rede5 { display:grid; gap:var(--space-8); max-inline-size:640px; margin-inline:auto; padding:var(--space-6) var(--space-4); }
+  .caso { display:grid; gap:var(--space-2); }
+  .caso h2 { margin:0; font-size:var(--text-lg); }
+  .hint { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
+  .barra { display:flex; flex-wrap:wrap; gap:var(--space-3); }
+</style></head>
+<body><div id="root"></div><script type="module" src="/src/rede5.tsx"></script></body>
+</html>

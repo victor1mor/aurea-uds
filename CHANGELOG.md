@@ -117,6 +117,36 @@ como deveria funcionar"*.
 
 ---
 
+## [0.38.0] — 2026-10-21
+
+⏳ **Ainda não publicada.** O lote 0-B da fila nova: o pedido do app de rede MNT-31 — o app usa a marca `lory`.
+
+### Acrescentado
+
+- **A legenda e o minimapa do `DependencyGraph` saem da frente** (MNT-31). Num mapa grande, a legenda (canto de baixo à
+  esquerda) e o minimapa (canto de baixo à direita) cobriam os nós daqueles cantos, e nada os recolhia. Escolha do
+  Victor na bancada, entre quatro formas rodando:
+  - `legendCollapsible` — a legenda ganha o botão "Legenda", parado no canto: aberta, a lista sobe acima dele; fechada,
+    sobra só o botão. `defaultLegendOpen={false}` começa fechada.
+  - `minimapToggle` — o minimapa ganha o botão "Visão geral", junto dos botões de zoom, em cima; ele continua no canto
+    de sempre e só aparece e some. `defaultMinimapOpen={false}` começa escondido. Sem o `controls`, o botão aparece
+    sozinho no canto de cima.
+
+  Os dois botões dizem o estado ao leitor de tela (`aria-expanded`) e apontam para o que abrem (`aria-controls`). Sem as
+  props novas, nada muda. Nenhuma frase nova: os botões usam "Legenda" e "Visão geral", que já existiam. Quem cobra:
+  `tests/unit/rede-mnt31.test.tsx` e `tests/visual/rede-mnt31.spec.ts` — este mede, no caso de antes, que a legenda e o
+  minimapa cobrem nós (a medida enxerga o defeito) e, fechados, que não cobrem nenhum.
+
+### Para quem cuida do repositório
+
+- **O banco `apps/keyboard-probe/rede5.html`**, com os casos da escolha, o tema e a marca por botão. A rede de exemplo
+  dos bancos foi para `src/rede-dados.ts`, que o `rede.tsx` também usa.
+- **O teste velho da lateral no `skin.spec.ts`**: ele ainda cobrava o acento da lateral AMARELO no claro (a ADR-0073).
+  Desde a ADR-0076 é o azul, e o 4,5:1 vale nos dois temas, sem exceção. A CI não roda o `skin.spec`, por isso passou.
+- **O exemplo do catálogo** "The legend and the overview step aside", nos padrões do mapa.
+
+---
+
 ## [0.37.1] — 2026-10-21
 
 ⏳ **Ainda não publicada.** O lote 0-A da fila nova (lotes de até 3 horas, decisão do Victor de 21/10/2026): os

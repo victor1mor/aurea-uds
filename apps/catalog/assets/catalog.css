@@ -4954,7 +4954,11 @@ button.graph-node-body { cursor:pointer; }
    a lista sozinha, como era. */
 .graph-legend ul { display:grid; gap:var(--space-1); margin:0; padding:0; list-style:none; }
 .graph-legend-title { margin:0; color:var(--muted-foreground); font-weight:var(--weight-medium); }
-.graph-legend ul + .graph-legend-title { margin-block-start:var(--space-2); }
+.graph-legend-part { display:grid; gap:var(--space-1); }
+.graph-legend-part + .graph-legend-part { margin-block-start:var(--space-2); }
+/* A DOCA DA LEGENDA (MNT-31, 21/10/2026): o botão que a esconde fica parado no canto, e a lista sobe
+   acima dele — abrir e fechar não tira o botão do lugar. */
+.graph-dock { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-2); }
 .graph-legend li { display:flex; align-items:center; gap:var(--space-2); }
 .graph-legend-sample { inline-size:var(--space-8); block-size:var(--space-2); overflow:visible; }
 .graph-legend-sample .graph-edge,.graph-legend-sample .graph-edge-double-core { fill:none; }

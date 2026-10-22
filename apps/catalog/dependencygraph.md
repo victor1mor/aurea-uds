@@ -49,6 +49,10 @@ import "@xyflow/react/dist/base.css";
 | `minimap` | `boolean` | false | An overview in the corner, with the visible area marked. It can be dragged and zoomed. |
 | `controls` | `boolean` | false | Zoom in, zoom out and fit-to-screen buttons in the corner. |
 | `legend` | `boolean` | false | A legend built from what is on the canvas, in two parts: the KIND of link (one row per distinct `legend` name, drawn without colour) and its STATE (one row per distinct `status.label`, drawn in its tone). Each sample shows what all the lines in its row share — a fibre row stays double even when only some fibre lines are thick. With only one part, it is a single list without titles. |
+| `legendCollapsible` | `boolean` | false | The legend gets a Legend button that stays in the bottom-left corner: open, the list rises above it; closed, only the button is left, and the devices in that corner show. The button says whether it is open (`aria-expanded`) and points to the list (`aria-controls`). |
+| `defaultLegendOpen` | `boolean` | true | Whether the collapsible legend starts open. Only applies with `legendCollapsible`. |
+| `minimapToggle` | `boolean` | false | The overview gets an Overview button beside the zoom buttons, at the top. The overview stays in its corner and only shows and hides. Without `controls`, the button stands alone in the top corner. It says whether the overview is shown (`aria-expanded`) and points to it (`aria-controls`). |
+| `defaultMinimapOpen` | `boolean` | true | Whether the overview with a button starts shown. Only applies with `minimapToggle`. |
 | `focusId` | `string \| null` | — | Centres the canvas on this node and marks it — the 'go to' of a search. The mark is the brand border, not the keyboard focus ring. |
 | `highlight` | `{nodes?: string[]; edges?: string[]} \| null` | — | Lights a path and dims everything else. Edges are matched by their `id`; without edge ids, an edge stays lit when both its ends are lit. |
 | `highlightNeighbors` | `boolean` | false | With a selected node, lights it, its neighbours and the edges between them, and dims the rest. |
