@@ -177,6 +177,8 @@ de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
 - **O bloco analytics-workbench do site**: o "Refresh" da faixa de cima vira botão só de ícone, com o mesmo nome para o
   leitor de tela. Com a Inter, a faixa pedia 761 num vão de 766, e no Linux da CI o Export descia uma linha (a varredura
   pegou: a prévia rolava dentro da caixa). Medido, a folga volta a 51.
+- **O `next` do app de prova** (`apps/proof-server`, que não é publicado) sobe de 16.3.8 para 16.4.2: três avisos de
+  segurança novos de 22/10/2026 (dois críticos e um alto, corrigidos a partir da 16.4.1) reprovavam a auditoria da CI.
 - **O teste do arraste do mapa** (`rede2.spec.ts`) procura onde soltar longe das guias dos vizinhos: com o nó mais alto, o
   arraste fixo de antes caía na guia, e o teste deixava de medir a grade.
 - **O registro da 0.38.0** (publicada entre 11:08 e 11:22 de 22/10/2026): o `released-surface.json` do commit do publish
