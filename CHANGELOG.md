@@ -146,6 +146,9 @@ de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
   no peso normal, de 4 a 5% no seminegrito (medido nas larguras das letras dos arquivos) —, e rótulos, abas e células ficam
   um pouco mais largos. De 30 px para cima, nos títulos grandes, ela fica mais estreita. O número do `KPI` não entra nesta
   conta: ele agora é IBM Plex Mono (acima). Os tamanhos de letra e as entrelinhas não mudam.
+- **No `DependencyGraph`, o tipo do nó (a linha em maiúsculas, como "SWITCH DE ACESSO") pode quebrar em duas linhas**
+  onde cabia em uma: na Inter, as maiúsculas são mais largas. O nó fica mais alto (no banco de testes, 59 → 77) e o mapa,
+  um pouco maior. Decisão do Victor: aceitar — nada do texto some.
 
 ### Mudado
 
@@ -171,6 +174,11 @@ de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
 
 ### Para quem cuida do repositório
 
+- **O bloco analytics-workbench do site**: o "Refresh" da faixa de cima vira botão só de ícone, com o mesmo nome para o
+  leitor de tela. Com a Inter, a faixa pedia 761 num vão de 766, e no Linux da CI o Export descia uma linha (a varredura
+  pegou: a prévia rolava dentro da caixa). Medido, a folga volta a 51.
+- **O teste do arraste do mapa** (`rede2.spec.ts`) procura onde soltar longe das guias dos vizinhos: com o nó mais alto, o
+  arraste fixo de antes caía na guia, e o teste deixava de medir a grade.
 - **O registro da 0.38.0** (publicada entre 11:08 e 11:22 de 22/10/2026): o `released-surface.json` do commit do publish
   (`0a91ce37`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
 - **Quem cobra:** `tests/unit/fonte-adr0077.test.tsx` (lê os `.woff2` por dentro: a cobertura, os eixos, o `tnum`; o resumo
