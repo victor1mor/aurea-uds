@@ -117,12 +117,55 @@ como deveria funcionar"*.
 
 ---
 
+## [0.40.0] — 2026-10-22
+
+⏳ **Ainda não publicada.** Os campos brancos no tema claro ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)).
+O Victor comparou a página inicial com a da referência e viu a bancada nos temas da Aurea, no notebook e no monitor de baixa
+visão: *"gostei Branco + sombra ... dá pra ver também por conta da sombra"*; e *"Pode seguir com a sugestão dos campos: branco
+com sombra no claro, escuro como hoje, cinza dentro de cartão"*. O React Native segue na `0.40.1`, junto com a fonte do nativo.
+
+### ⚠ Pode quebrar a aparência
+
+- **No tema claro, o campo solto na página fica BRANCO** (a cor do cartão), **com a sombra leve `--shadow-sm`** — a mesma do
+  campo da referência, número por número. Vale para o `Input`, o `Textarea`, o `Select` (e o gatilho do `DatePicker`), o
+  `InputGroup` (e o `SearchField`), o `NumberField`, o `Combobox`, o `ColorField` e as casas do `OTPField`. Era o cinza
+  translúcido da cor do texto (ADR-0072). O campo de dentro de um grupo fica transparente e sem sombra.
+- **Dentro de uma superfície que pinta a cor do cartão, o campo continua o cinza de antes, sem sombra**: o cartão (menos o
+  de contorno, que é transparente, e o inset, que é cinza), a janela, a gaveta, o popover, o menu, a paleta de comandos, o
+  painel do app (menos o plain), a faixa de superfície cartão, o aviso, o aviso de cookies, o toast, a superfície do
+  acordeão, o detalhe da grade de dados e a célula da tabela. **A superfície escolhe sozinha**; o app não faz nada.
+- **No tema escuro, nada muda.**
+- O `variant="secondary"` do campo continua como era.
+
+### Acrescentado
+
+- **Duas variáveis no core, `--field-fill` e `--field-lift`**: o fundo e a sombra do campo onde ele está. Um app com uma
+  superfície branca própria devolve o cinza com `--field-fill: var(--fill-2); --field-lift: none`. O valor "de página"
+  (`--field-fill-page`, `--field-lift-page`) mora em cada elemento de tema e segue a faixa de outro tema.
+
+### Não muda
+
+- **Os campos do React Native continuam como eram até a `0.40.1`**, que leva junto a fonte do nativo (o nativo pinta o
+  campo em nove lugares e não sabe hoje se está dentro de um cartão).
+
+### Para quem cuida do repositório
+
+- **O registro da 0.39.0** (publicada entre 17:23 e 17:29 de 22/10/2026): o `released-surface.json` do commit do publish
+  (`64097eec`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md. E os textos que prometiam a fonte do nativo na
+  `0.39.1` passam a dizer `0.40.1` (na seção da 0.39.0, riscado, com a correção ao lado).
+- **Quem cobra:** `tests/visual/campos-brancos.spec.ts` (na máquina local; a CI não o roda) — 12 casos no navegador, o
+  fundo e a sombra calculados; com o CSS da 0.39.0 reprova 7 — e `tests/unit/campos-brancos.test.tsx` (na CI). E as fotos
+  do catálogo.
+
+---
+
 ## [0.39.0] — 2026-10-22
 
-⏳ **Ainda não publicada.** A fonte nova da Aurea na WEB ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)):
+✅ **Publicada em 22/10/2026, entre 17:23 e 17:29 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #91. A fonte nova da Aurea na WEB ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)):
 o texto em **Inter**, os títulos em **Sora** e o código em **IBM Plex Mono**. Decisão do Victor, depois de ver as duas fontes na
 mesma tela e de ouvir quem passou pela mesa dele (*"todos votaram em Sora + Inter + Plex Mono"*); e *"a fonte não irá ser mudada
-de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
+de novo, essa é a última vez"*. O React Native troca na ~~`0.39.1`~~ `0.40.1` (a `0.40.0` foram os campos brancos, ADR-0078).
 
 ### ⚠ Pode quebrar a compilação ou a aparência
 
@@ -139,9 +182,9 @@ de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
   (`<Text numeric>`). Os pesos da Plex Mono são 400, 500 e 600; o negrito usa o 600.
 - **No React Native, os nomes de fonte dos tokens já são os novos** (`fontUi` Inter, `fontHeading` Sora, `fontCode`
   IBM Plex Mono), mas os arquivos ainda não: os `.ttf` e o `@aurea-uds/fonts/native` continuam os da Atkinson até a
-  `0.39.1`. O app que passa o mapa `fontFamilies` ao `AureaProvider` (o `FONT_FAMILIES` do pacote, como manda o
+  ~~`0.39.1`~~ `0.40.1`. O app que passa o mapa `fontFamilies` ao `AureaProvider` (o `FONT_FAMILIES` do pacote, como manda o
   exemplo) não muda nada — o título também usa o mapa do texto. O que não passa pede ao aparelho famílias que ainda
-  não estão nele, e cai na fonte do sistema até a `0.39.1`.
+  não estão nele, e cai na fonte do sistema até a ~~`0.39.1`~~ `0.40.1`.
 - **As medidas de texto mudam**: no tamanho do texto (14 px), a Inter é MAIS LARGA que a Atkinson — de 7 a 9% numa frase
   no peso normal, de 4 a 5% no seminegrito (medido nas larguras das letras dos arquivos) —, e rótulos, abas e células ficam
   um pouco mais largos. De 30 px para cima, nos títulos grandes, ela fica mais estreita. O número do `KPI` não entra nesta
@@ -168,7 +211,7 @@ de novo, essa é a última vez"*. O React Native troca na `0.39.1`.
 
 ### Não muda
 
-- **Os arquivos de fonte do React Native continuam os da Atkinson Hyperlegible até a `0.39.1`** (os `.ttf` e o
+- **Os arquivos de fonte do React Native continuam os da Atkinson Hyperlegible até a ~~`0.39.1`~~ `0.40.1`** (os `.ttf` e o
   `@aurea-uds/fonts/native` são os de hoje; só os nomes dos tokens trocaram, acima). Os `.woff2` da Atkinson ficam no
   pacote só para a vitrine do nativo, e saem com ele.
 

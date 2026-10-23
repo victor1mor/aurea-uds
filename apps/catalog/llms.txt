@@ -445,6 +445,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.40.0](https://aureauds.dev/release-v0-40-0.md): White fields in the light theme.
 - [v0.39.0](https://aureauds.dev/release-v0-39-0.md): A new typeface on the web — Inter for text, Sora for titles and IBM Plex Mono for code.
 - [v0.38.0](https://aureauds.dev/release-v0-38-0.md): The legend and the overview of DependencyGraph can step aside, so they no longer cover the devices in the bottom corners.
 - [v0.37.1](https://aureauds.dev/release-v0-37-1.md): Wide content no longer widens the page inside DataState, Form and the Dialog body, and field placeholders reach 4.5:1 in the lory brand.

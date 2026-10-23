@@ -537,7 +537,7 @@ if contract:
 # Cada pacote publicável leva a própria LICENSE (npm inclui LICENSE sempre;
 # NOTICE precisa estar em "files"). Fontes = OFL com o copyright de cada família que o pacote leva:
 # desde a ADR-0077 (22/10/2026), a Inter, a Sora e a IBM Plex Mono — esta com o nome reservado "Plex",
-# que proíbe modificar o arquivo e manter o nome —, e a Atkinson enquanto o nativo a usar (até a 0.39.1);
+# que proíbe modificar o arquivo e manter o nome —, e a Atkinson enquanto o nativo a usar (até a 0.40.1);
 # ícones = NOTICE de atribuição do Phosphor (MIT). Até a 0.12.4 eram IBM Plex e Carbon (ADR-0053).
 for pkg_dir in sorted((root / "packages").iterdir()):
     pj = pkg_dir / "package.json"
@@ -557,7 +557,7 @@ if fonts_lic.is_file():
             or 'IBM Corp. with Reserved Font Name "Plex"' not in lic_text
             or "Atkinson Hyperlegible Next Project Authors" not in lic_text
             or "Atkinson Hyperlegible Mono Project Authors" not in lic_text):
-        errors.append("fonts/LICENSE: falta o copyright de alguma família que o pacote leva (Inter, Sora, IBM Plex Mono e, até a 0.39.1, Atkinson — ADR-0077)")
+        errors.append("fonts/LICENSE: falta o copyright de alguma família que o pacote leva (Inter, Sora, IBM Plex Mono e, até a 0.40.1, Atkinson — ADR-0077)")
 icons_manifest = json.loads((root / "packages/icons/package.json").read_text(encoding="utf-8"))
 if not (root / "packages/icons/NOTICE").is_file():
     errors.append("icons: sem NOTICE de atribuição do Phosphor")

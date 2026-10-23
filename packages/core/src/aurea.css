@@ -4182,8 +4182,22 @@ button.graph-node-body { cursor:pointer; }
 /* O `secondary` do campo tem fundo próprio (`--secondary`, sem linha desde antes) e fica como era — sem o `:where`, esta
    regra (vinda depois) pintava por cima dele e o `secondary` ficava igual ao comum. O `:where` mantém a força de uma
    classe, e o inválido (que vem antes, com mais força) continua vencendo. */
-.input:where(:not(.input-secondary)),.textarea:where(:not(.textarea-secondary)),.select,.input-group:where(:not(:has(>.input-secondary))),.number-field-group,.combobox-multi { background-color:var(--fill-2); }
-.input-group > :is(.input,.select,.textarea),.number-field-group .input,.combobox-multi .input { background-color:transparent; }
+/* ── OS CAMPOS BRANCOS NO CLARO (ADR-0078, 22/10/2026) ─────────────────────────────────────────────────────────────
+   O Victor viu na bancada, no notebook e no monitor dele: *"gostei Branco + sombra ... dá pra ver também por conta da
+   sombra"*. É o campo da referência: no CLARO, a cor do cartão com a sombra leve (`--shadow-sm`, a MESMA dela); no
+   ESCURO, o de antes (o texto a 10%) — o dela, a superfície sem sombra, mede 1,13:1 contra 1,34:1, e sombra preta não
+   se vê no escuro. DENTRO de uma superfície branca (cartão, janela, folha, menu, painel do app), o campo volta ao cinza:
+   branco no branco só a sombra separa, e no escuro sumiria. A referência faz o mesmo com a variação `secondary`, mas
+   deixa o app escolher; aqui a superfície escolhe sozinha.
+   · O fundo "de página" mora em cada elemento de tema, como os `--fill-*` (segue a faixa de outro tema, GAR-05).
+   · As superfícies que pintam a cor do cartão devolvem o cinza. As que NÃO pintam ficam de fora: o cartão de contorno
+     (transparente — a caixa da vitrine) e o `inset` (cinza). O painel de prévia do site é página: volta ao branco. */
+:root,[data-theme] { --field-fill-page:var(--fill-2); --field-lift-page:none; }
+[data-theme="light"] { --field-fill-page:var(--card); --field-lift-page:var(--shadow-sm); }
+:root,[data-theme],.demo-panel[data-panel="preview"] { --field-fill:var(--field-fill-page); --field-lift:var(--field-lift-page); }
+:is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th)) { --field-fill:var(--fill-2); --field-lift:none; }
+.input:where(:not(.input-secondary)),.textarea:where(:not(.textarea-secondary)),.select,.input-group:where(:not(:has(>.input-secondary))),.number-field-group,.combobox-multi { background-color:var(--field-fill); box-shadow:var(--field-lift); }
+.input-group > :is(.input,.select,.textarea),.number-field-group .input,.combobox-multi .input { background-color:transparent; box-shadow:none; }
 .control-mark,.switch-track { background-color:var(--fill-3); }
 .btn-outline { --btn-bg:var(--fill-2); }
 .btn-outline.btn-tone-brand,.btn-primary-outline { --btn-bg:color-mix(in oklab,var(--primary) 16%,transparent); }

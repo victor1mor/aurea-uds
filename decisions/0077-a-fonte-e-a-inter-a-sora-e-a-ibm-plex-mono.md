@@ -1,7 +1,7 @@
 # ADR-0077 — A fonte é a Inter, a Sora e a IBM Plex Mono
 
 - **Data:** 22/10/2026
-- **Estado:** aceita · feita na branch `claude/fonte`: **a web na `0.39.0`**; o nativo na `0.39.1` (os `.ttf` das fontes
+- **Estado:** aceita · feita na branch `claude/fonte`: **a web na `0.39.0`**; o nativo na `0.40.1` — era a `0.39.1`; a `0.40.0` foram os campos brancos, ADR-0078 — (os `.ttf` das fontes
   novas e o teste no aparelho). **Substitui a parte da fonte da [ADR-0053](0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)**;
   a parte dos ícones (Phosphor Regular, Fill no item escolhido) continua valendo.
 - **Origem:** o Victor quer que a Aurea seja adotada na empresa dele, e mediu-se o sistema interno que o chefe dele
@@ -45,7 +45,7 @@
      `packages/fonts/cortar-fontes.py`, com todos os recursos de desenho;
    - a IBM Plex Mono são os recortes `Latin1` da própria IBM (`@ibm/plex-mono` 2.5.0), um peso por arquivo (400, 500 e
      600), **sem mudança** — o resumo de cada um está no README do pacote.
-4. **A Atkinson sai de tudo.** A web na `0.39.0`; o nativo, e os arquivos dela do pacote, na `0.39.1`. Os NOMES de
+4. **A Atkinson sai de tudo.** A web na `0.39.0`; o nativo, e os arquivos dela do pacote, na `0.40.1`. Os NOMES de
    fonte dos tokens do nativo já trocam na `0.39.0` (decisão do Victor, 22/10/2026); o app que passa o `fontFamilies`
    não vê diferença até os arquivos chegarem.
 

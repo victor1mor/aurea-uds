@@ -245,6 +245,8 @@ Aurea components do not draw borders. Every border colour is transparent. The bo
 
 What a line used to separate is separated by a fill instead. The fills are the text colour, made translucent: `--fill-1` at 6%, `--fill-2` at 10%, `--fill-3` at 20%. Because they are translucent, they stay visible on any surface. Where something passes behind a piece, the opaque version is used (`--fill-2-solid`, `--fill-3-solid`).
 
+Fields are the one exception in the light theme: a field on the page is white, with a soft shadow (`--shadow-sm`). Inside a white surface it keeps the translucent fill, and in the dark theme nothing changes.
+
 Two lines remain, by decision:
 
 - the outline card, `Card variant="outline"`, with a light line;
@@ -631,7 +633,7 @@ Neutrals are the grays that fill quiet controls and hover states.
 
 ## Fills
 
-Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background.
+Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background. In the light theme, fields on the page are the exception: they are white, with a soft shadow, and keep the fill only inside a white surface.
 
 | Token | Use |
 |---|---|
@@ -1271,7 +1273,7 @@ In Aurea every color, radius, font size and space comes from a token. The tokens
 Two rules of the system apply to your CSS as well:
 
 - **No gradients.** Aurea uses flat color only.
-- **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines. A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline. The focus ring stays.
+- **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines. A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline; in the light theme, a field on the page is white with a soft shadow instead (`--field-fill`, `--field-lift`). The focus ring stays.
 
 All tokens, with their values in each theme, are on the [Tokens](./tokens.html) page. To change the tokens themselves, see [Theming](./docs-theming.html).
 
@@ -2024,7 +2026,7 @@ Contrast is checked on the colour the browser actually paints, after every token
 
 Aurea has one documented gap against WCAG and one documented loss for readers with low vision. Both are deliberate project decisions, made with the numbers in front of them.
 
-**1. Field boundaries.** Aurea draws no lines (see [Design Principles](./docs-design-principles.html)). Fields and controls are separated from the page by a translucent fill instead of a border. That boundary measures 1.34:1 for fields and 1.92:1 for controls in the dark theme, and 1.21:1 and 1.49:1 in the light theme. WCAG 1.4.11 asks for 3:1, so fields do not meet it.
+**1. Field boundaries.** Aurea draws no lines (see [Design Principles](./docs-design-principles.html)). Fields and controls are separated from the page by a fill instead of a border. In the light theme, a field on the page is white with a soft shadow: its fill measures 1.09:1 against the page, and the shadow draws the edge. Inside a white surface, and in the dark theme, fields keep a translucent fill. That boundary measures 1.34:1 for fields and 1.92:1 for controls in the dark theme, and 1.21:1 and 1.49:1 in the light theme. WCAG 1.4.11 asks for 3:1, so fields do not meet it.
 
 **2. Letters that look alike.** The text font is Inter, set without its disambiguation alternates (`ss02`). The capital `I` and the lowercase `l` are the same straight stroke, and the zero differs from the letter `O` only by its width. Titles, in Sora, behave the same way. WCAG does not ask for a particular typeface, but readers with low vision lose a help the previous typeface gave them. What still protects them is the rest of this page: contrast measured in both themes, a visible focus, 44px targets, and pages that do not scroll sideways with text at 200%.
 
@@ -15053,6 +15055,42 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
 ```
 </page>
 
+<page url="https://aureauds.dev/release-v0-40-0.html">
+# v0.40.0
+
+White fields in the light theme.
+
+In the light theme, a field that sits on the page is now white, with a soft shadow. Inside a white surface it keeps the grey fill, and the dark theme does not change.
+
+## ⚠ May break
+
+- **In the light theme, fields on the page are white** (the card colour) **with the `--shadow-sm` shadow**: `Input`, `Textarea`, `Select` (and the `DatePicker` trigger), `InputGroup` (and `SearchField`), `NumberField`, `Combobox`, `ColorField` and the slots of `OTPField`. They used to be a translucent grey. A field inside a group stays transparent, without a shadow.
+- **Inside a white surface the field stays grey, without a shadow**: cards (except the outline and inset ones), dialogs, drawers, popovers, menus, the command palette, the app content panel (except plain), card-coloured sections, alerts, the cookie banner, toasts, accordion surfaces, the data grid detail and table cells. The surface decides on its own; your app does nothing.
+- **The dark theme does not change.** The `secondary` variant of a field does not change either.
+
+## Added
+
+- **Two CSS variables, `--field-fill` and `--field-lift`**: the fill and the shadow a field takes where it sits. A white surface of your own can give its fields the grey back with `--field-fill: var(--fill-2); --field-lift: none`.
+
+## Not changed
+
+- **React Native fields stay as they were until v0.40.1**, together with the new typeface on native.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.40.0 @aurea-uds/core@0.40.0 @aurea-uds/fonts@0.40.0 @aurea-uds/icons@0.40.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.40.0
+```
+</page>
+
 <page url="https://aureauds.dev/release-v0-39-0.html">
 # v0.39.0
 
@@ -15065,7 +15103,7 @@ Aurea changes its typeface on the web. Text now uses **Inter**, titles use **Sor
 - **The web no longer loads Atkinson Hyperlegible.** `@aurea-uds/fonts/css` now declares `Inter`, `Sora` and `IBM Plex Mono`. If your own CSS names `"Atkinson Hyperlegible Next"` or `"Atkinson Hyperlegible Mono"`, it falls back to the system font: use the tokens instead (`var(--font-ui)`, `var(--font-heading)`, `var(--font-code)`).
 - **Every heading from `h1` to `h6` now uses Sora**, both Aurea's and your app's, through a zero-specificity rule (`:where(h1,h2,h3,h4,h5,h6)`). A font set on the heading itself (a class, an `h1` rule) wins over it. A font the heading only inherits, such as one set on `body`, does not: to keep your font in headings, set it on them.
 - **`numeric` and the figure of a `KPI` now use IBM Plex Mono**, with digits of the same width: on `Text`, `Heading`, `Paragraph` and `Code`, it is meant for values and identifiers. Other numbers (tables, counters, pagination, calendars) stay in Inter, also with digits of the same width. In a table, give `numeric` to the value cells that should use IBM Plex Mono (`<Text numeric>`). IBM Plex Mono ships in weights 400, 500 and 600; bold uses 600.
-- **React Native tokens already name the new fonts** (`fontUi` Inter, `fontHeading` Sora, `fontCode` IBM Plex Mono), but the font files do not change until v0.39.1. If your app passes `fontFamilies` to `AureaProvider` (the package's `FONT_FAMILIES`, as the example does), nothing changes: headings use the text map too. If it does not, the device is asked for families it does not have yet, and falls back to the system font until v0.39.1.
+- **React Native tokens already name the new fonts** (`fontUi` Inter, `fontHeading` Sora, `fontCode` IBM Plex Mono), but the font files do not change until v0.40.1. If your app passes `fontFamilies` to `AureaProvider` (the package's `FONT_FAMILIES`, as the example does), nothing changes: headings use the text map too. If it does not, the device is asked for families it does not have yet, and falls back to the system font until v0.40.1.
 - **Text measures change slightly.** At text size Inter is wider than Atkinson Hyperlegible: about 7 to 9% for a sentence at 14px in the regular weight, 4 to 5% in semibold. Labels, tabs and table cells take a little more room. From 30px up Inter is narrower. The figure of a `KPI` is now IBM Plex Mono (above), so this does not apply to it.
 - **In `DependencyGraph`, a node's type line (the uppercase one, such as "ACCESS SWITCH") may wrap to two lines** where it used to fit in one: Inter's capitals are wider. The node grows taller and the map a little larger. Nothing of the text is cut. Font sizes and line heights do not change.
 
@@ -15077,7 +15115,7 @@ Aurea changes its typeface on the web. Text now uses **Inter**, titles use **Sor
 
 ## Not changed
 
-- **React Native font files stay Atkinson Hyperlegible until v0.39.1.** `@aurea-uds/fonts/native` and its `.ttf` files are the same as before; only the token names changed (above).
+- **React Native font files stay Atkinson Hyperlegible until v0.40.1.** `@aurea-uds/fonts/native` and its `.ttf` files are the same as before; only the token names changed (above).
 
 ## Update
 

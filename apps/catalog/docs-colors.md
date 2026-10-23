@@ -57,7 +57,7 @@ Neutrals are the grays that fill quiet controls and hover states.
 
 ## Fills
 
-Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background.
+Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background. In the light theme, fields on the page are the exception: they are white, with a soft shadow, and keep the fill only inside a white surface.
 
 | Token | Use |
 |---|---|

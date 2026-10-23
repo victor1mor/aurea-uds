@@ -42,7 +42,7 @@ const WEB = [
   {file: "ibm-plex-mono-600-normal.woff2", family: PLEX_MONO, weight: 600,       style: "normal"},
 ];
 
-// ── O ALVO NATIVO, AINDA NA ATKINSON (até a 0.39.1) ──────────────────────────────────────────────
+// ── O ALVO NATIVO, AINDA NA ATKINSON (até a 0.40.1) ──────────────────────────────────────────────
 // A troca do nativo é o lote seguinte (F-2): ele precisa dos .ttf estáticos das fontes novas e do
 // teste no aparelho. Até lá, o aparelho segue com a Atkinson, e estes arquivos ficam no pacote — os
 // .woff2 dela, só porque a vitrine do nativo (`native-vitrine.test.tsx`) desenha com eles; a web não
