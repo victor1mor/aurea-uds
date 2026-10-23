@@ -3373,6 +3373,14 @@ _FERRAMENTAS45 = {
     "vite": "monta a parte viva do catálogo (`apps/catalog/vite.config.ts`)",
     "@vitejs/plugin-react": "idem",
     "jsdom": "monta o HTML dos gráficos no build (`scripts/build-catalog.mjs`)",
+    # O NATIVO NO SITE (bloco 1, o 5-A — o Victor, 23/10/2026, 14:56: "Pode: o site usa o react-native-web, o react-native-svg
+    # e o react-native-safe-area-context para mostrar o nativo, com o motivo escrito na trava 45"). As páginas do nativo
+    # rodam as peças do `@aurea-uds/native` no navegador: o `react-native` dos exemplos vira o `react-native-web` na
+    # montagem (`apps/catalog/vite.nativo-ssr.config.ts`), e as outras duas são as que o pacote nativo pede.
+    "react-native": "nas páginas do nativo, trocado pelo `react-native-web` na montagem",
+    "react-native-web": "roda as peças do nativo no navegador",
+    "react-native-svg": "o desenho dos ícones e gráficos do nativo",
+    "react-native-safe-area-context": "a área segura da tela do nativo (o `Screen`)",
 }
 _PKG45 = root / "packages/react/package.json"
 _CAT45 = root / "apps/catalog"
