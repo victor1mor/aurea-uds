@@ -251,6 +251,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <Bloco0401 t={t} />
       <Bloco0320b t={t} />
       <Bloco0320 t={t} />
       <BlocoLoteN t={t} />
@@ -274,13 +275,13 @@ function Tela({irParaScreen, irParaLote2}) {
           400 Italic — o único itálico do pacote
         </Text>
         <Text style={s.nota}>
-          `code[700]` NÃO existe na Atkinson Hyperlegible Mono — o provider fecha a grade caindo
+          `code[700]` NÃO existe na IBM Plex Mono do pacote — o provider fecha a grade caindo
           para o peso mais próximo. Aqui isso dá {t.font.code[700]}; não pode sair vazio. O
           `editorial` é apelido do texto desde a ADR-0053: {t.font.editorial[400]}.
         </Text>
         <Text style={{color: t.color.foreground, fontSize: t.size.textLg,
                       fontFamily: t.font.editorial[700], marginTop: t.size.space2}}>
-          Editorial 700 — a mesma Atkinson do texto (a serifada saiu)
+          Editorial 700 — a mesma Inter do texto (a serifada saiu)
         </Text>
         <Text style={{color: t.color.foreground, fontSize: t.size.textMd,
                       fontFamily: t.font.code[400]}}>
@@ -1675,6 +1676,41 @@ function Bloco0320({t}) {
 // popover não fica embaixo da barra de status nem sai da tela; a onda do toque nasce no dedo e não
 // pisca no primeiro toque; o fio do ScrollShadow só aparece na ponta onde há mais lista; o X da
 // etiqueta e a etiqueta são DOIS alvos para o VoiceOver e o TalkBack; o código abre o teclado de números.
+// 0.40.1 (ADR-0077 e ADR-0078): a fonte nova no aparelho — Inter no texto, Sora nos títulos, IBM Plex Mono no código e
+// nos valores — e o campo branco com sombra no CLARO (cinza dentro do cartão; no escuro, como antes).
+function Bloco0401({t}) {
+  const [texto, setTexto] = React.useState("");
+  const fila = {flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center"};
+  return (
+    <Bloco t={t} n="0.40.1" titulo="A fonte nova e os campos brancos"
+      criterio={"1) As linhas de texto saem na Inter, e o 500, o 600 e o 800 são desenhos diferentes do 400 (não o "
+        + "Regular engrossado). 2) Os títulos (Heading) saem na Sora — mais largos e geométricos que o texto. "
+        + "3) O código, o número com numeric e o número do KPI saem na IBM Plex Mono (todos os dígitos da mesma largura). "
+        + "4) No tema CLARO: o campo solto é BRANCO com uma sombra leve; o campo dentro do cartão é CINZA, sem sombra. "
+        + "5) Troque para o ESCURO (bloco 3): os dois campos ficam como antes (cinza, sem sombra). "
+        + "6) A perna do g, do p e do ç aparece inteira em todo tamanho."}>
+      {[["400", "Regular"], ["500", "Medium"], ["600", "SemiBold"], ["700", "Bold"], ["800", "ExtraBold"]].map(([p, nome]) => (
+        <AText key={p} weight={Number(p)}>{`Inter ${p} ${nome} — paginação, jogo, açúcar`}</AText>
+      ))}
+      <AText italic>Inter 400 Italic — o único itálico do pacote</AText>
+      <Heading type="h2">Sora no título — Relatórios</Heading>
+      <Heading type="h4">Sora h4 — Contratos vigentes</Heading>
+      <Code>const total = 41118.00;</Code>
+      <View style={fila}>
+        <AText>Texto: 1.111.111,11</AText>
+        <AText numeric>Valor: 1.111.111,11</AText>
+      </View>
+      <KPI label="Valor sob gestão" value="R$ 704 mil" trend="+7%" direction="up" />
+      <AText tone="muted">Campo solto (no claro: branco com sombra):</AText>
+      <Field label="E-mail"><Input value={texto} onChangeText={setTexto} placeholder="john@email.com" /></Field>
+      <Card>
+        <AText tone="muted">Dentro do cartão (cinza, sem sombra):</AText>
+        <Field label="E-mail"><Input placeholder="john@email.com" /></Field>
+      </Card>
+    </Bloco>
+  );
+}
+
 function Bloco0320b({t}) {
   const [abertos, setAbertos] = React.useState(["a"]);
   const [faixa, setFaixa] = React.useState([20, 80]);

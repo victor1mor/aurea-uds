@@ -24,7 +24,10 @@ describe("ADR-0078 · o campo branco no claro", () => {
     expect(regra, "a regra das superfícies").not.toBeNull();
     const lista = regra![1];
     for (const s of [".card:not(.card-outline):not(.card-inset)", ".content:not(.content-plain)", ".dialog", ".drawer", ".popover",
-      ".menu", ".command-palette", ".section-card", ".demo"]) expect(lista, `superfície ${s}`).toContain(s);
+      ".menu", ".command-palette", ".section-card", ".demo",
+      // 0.40.1: as que a 0.40.0 esqueceu e que recebem campo do app.
+      ".topbar-floating", ".topbar-pill", ".sortable-item", ".app-shell-docs > .sidebar[popover]:popover-open",
+    ]) expect(sem(lista), `superfície ${s}`).toContain(sem(s));
   });
   test("o campo pinta com as duas variáveis, e o de dentro do grupo fica sem fundo e sem sombra", () => {
     tem(".input:where(:not(.input-secondary)),.textarea:where(:not(.textarea-secondary)),.select,.input-group:where(:not(:has(>.input-secondary))),.number-field-group,.combobox-multi { background-color:var(--field-fill); box-shadow:var(--field-lift); }");

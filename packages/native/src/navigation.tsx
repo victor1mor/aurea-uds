@@ -35,6 +35,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
 import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca} from "./estilos.js";
+import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -632,7 +633,8 @@ export function Header({variant = "floating", inset = "bar", brand, children, st
       ]}
       {...rest}>
       {brand != null && <View>{brand}</View>}
-      {children}
+      {/* ADR-0078 (0.40.1): a barra flutuante e a de pílula pintam a cor do cartão — a busca dentro delas fica cinza. */}
+      {variant === "flush" ? children : <NaSuperficie.Provider value>{children}</NaSuperficie.Provider>}
     </View>
   );
 }

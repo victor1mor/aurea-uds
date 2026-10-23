@@ -34,7 +34,8 @@ import {Linking, Platform, Pressable, View, type StyleProp, type ViewStyle} from
 import RNDateTimePicker, {DateTimePickerAndroid} from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "./actions.js";
-import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo} from "./estilos.js";
+import {useNaSuperficie} from "./superficie.js";
 import {Alert} from "./feedback.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {alturaDoTamanho, respiroDoTamanho, useCampo, type AureaFieldSize} from "./inputs.js";
@@ -47,7 +48,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   gatilho: {
     flexDirection: "row", alignItems: "center", justifyContent: "space-between",
     width: "100%", borderWidth: t.size.borderWidth, borderColor: "transparent",
-    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+    ...canto(t.size.radiusControl),
   },
   invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   // No navegador o texto e o ícone vão numa caixa escondida do leitor de tela (E16): a mesma
@@ -166,6 +167,8 @@ export function DatePicker({
   format, placeholder, icon = "calendar", style, testID,
 }: DatePickerProps) {
   const t = useAureaTokens();
+  // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+  const naSuperficie = useNaSuperficie();
   const s = folha(t);
   const strings = useAureaStrings();
   const campo = useCampo();
@@ -210,6 +213,7 @@ export function DatePicker({
   // dos lados (era 13). Era uma cópia das contas de lá.
   const pele = [
     s.gatilho,
+    fundoDeCampo(t, naSuperficie),
     {height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam)},
     campo?.invalido && s.invalido,
     inativo && s.desabilitado,

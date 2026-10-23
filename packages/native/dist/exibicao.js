@@ -4,7 +4,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //
 // As quatro são as do pacote nativo da referência — anatomia, medidas, estados, comportamento e
 // acessibilidade lidos no pacote publicado dela —, com o que é da Aurea por cima: as cores do tema,
-// o canto 22 do cartão e a cápsula, a Atkinson, os ícones Phosphor, sem degradê, "menos movimento".
+// o canto 22 do cartão e a cápsula, a Inter e a Sora (ADR-0077), os ícones Phosphor, sem degradê, "menos movimento".
 //
 // Medido no pacote dela antes de escrito (a classe vira dp: `px-3` = 12, `py-4` = 16, `gap-4` = 16):
 //
@@ -28,6 +28,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, Pressable, View, } from "react-native";
 import { canto, comOpacidade, criarFolha, estadoAcessivel, REACAO_AO_TOQUE } from "./estilos.js";
+import { NaSuperficie } from "./superficie.js";
 import { GrupoDeEsqueleto, Skeleton, usePulsoDoEsqueleto } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { driverNativo, useReduceMotion } from "./movimento.js";
@@ -139,7 +140,9 @@ export function Accordion({ items, variant = "default", multiple = false, defaul
             setInterno(novo);
         onValueChange?.(novo);
     };
-    return (_jsx(View, { testID: testID, style: [s.accordion, surface && s.accordionSurface, style], children: items.map((item, i) => (_jsxs(React.Fragment, { children: [i > 0 ? _jsx(View, { style: [s.fio, surface && s.fioSurface] }) : null, _jsx(ItemDoAccordion, { item: item, aberto: abertos.includes(item.id), surface: surface, onAlternar: alternar, testID: testID ? `${testID}-${item.id}` : undefined })] }, item.id))) }));
+    const corpo = (_jsx(View, { testID: testID, style: [s.accordion, surface && s.accordionSurface, style], children: items.map((item, i) => (_jsxs(React.Fragment, { children: [i > 0 ? _jsx(View, { style: [s.fio, surface && s.fioSurface] }) : null, _jsx(ItemDoAccordion, { item: item, aberto: abertos.includes(item.id), surface: surface, onAlternar: alternar, testID: testID ? `${testID}-${item.id}` : undefined })] }, item.id))) }));
+    // ADR-0078: o `surface` é um cartão — o campo de dentro fica cinza. O comum herda o que está em volta.
+    return surface ? _jsx(NaSuperficie.Provider, { value: true, children: corpo }) : corpo;
 }
 function ItemDoAccordion({ item, aberto, surface, onAlternar, testID }) {
     const t = useAureaTokens();
@@ -277,7 +280,7 @@ export function ScrollShadow({ children, orientation, visibility = "auto", isEna
         return _jsxs(View, { testID: testID, style: style, children: [rolador, fios] });
     }
     // Na superfície, os fios ficam na borda da JANELA da lista (o miolo), e não na da caixa.
-    return (_jsx(View, { testID: testID, style: [s.superficieDaLista, style], children: _jsxs(View, { style: s.miolo, children: [rolador, fios] }) }));
+    return (_jsx(View, { testID: testID, style: [s.superficieDaLista, style], children: _jsxs(View, { style: s.miolo, children: [_jsx(NaSuperficie.Provider, { value: true, children: rolador }), fios] }) }));
 }
 /**
  * Um comando para vários esqueletos — o skeleton-group da referência. O `isLoading` e a `animation`

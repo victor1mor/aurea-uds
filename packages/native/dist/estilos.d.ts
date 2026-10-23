@@ -41,6 +41,13 @@ export declare const comOpacidade: (cor: string, pct: number) => string;
  */
 export declare const preenchimento: (t: AureaTokens, nivel: 1 | 2 | 3) => string;
 /**
+ * O fundo do CAMPO (ADR-0078, a web na 0.40.0, o nativo na 0.40.1). No CLARO, solto na tela: a cor do cartão com a
+ * sombra leve (`shadowSm`, a mesma da referência); dentro de uma superfície branca (`useNaSuperficie()`, em
+ * `superficie.tsx`) e no ESCURO, o cinza de antes (`preenchimento(t, 2)`), sem sombra. Quem chama põe este estilo
+ * logo depois da pele do campo, antes dos estados (inválido, desativado), que continuam vencendo.
+ */
+export declare const fundoDeCampo: (t: AureaTokens, naSuperficie: boolean) => ViewStyle;
+/**
  * A mesma mistura, OPACA: a cor da frente a `pct` sobre a do fundo. Para o que tem algo passando POR TRÁS (o traço dos
  * passos) ou cobre outra peça (as fotos sobrepostas) — translúcido, o que está atrás aparece. Hex de seis, como o
  * `comOpacidade`; fora disso devolve a cor da frente.

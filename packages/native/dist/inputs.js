@@ -45,7 +45,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo } from "./estilos.js";
+import { useNaSuperficie } from "./superficie.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -72,7 +73,7 @@ const folha = criarFolha((t) => ({
     caixa: {
         width: "100%", minWidth: 0,
         borderWidth: t.size.borderWidth, borderColor: "transparent",
-        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+        ...canto(t.size.radiusControl),
         color: t.color.foreground,
     },
     // O `.textarea` é o único da família com raio LG em vez do de controle: uma caixa alta em
@@ -88,7 +89,7 @@ const folha = criarFolha((t) => ({
     grupo: {
         flexDirection: "row", alignItems: "center", width: "100%", minWidth: 0,
         borderWidth: t.size.borderWidth, borderColor: "transparent",
-        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+        ...canto(t.size.radiusControl),
         gap: t.size.space1,
     },
     // Dentro do grupo o campo perde a caixa e vira só o texto — a borda passou a ser do grupo.
@@ -231,6 +232,8 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
 // `returnKeyType`, `onSubmitEditing`, `maxLength`. Defeito publicado na `0.8.2`.
 ...rest }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const campo = useCampo();
@@ -263,6 +266,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
             // desenhando daria borda dentro de borda — que é exatamente o defeito que o `.input-group
             // > .input` da web zera à mão (`aurea.css:751`).
             grupo ? s.campoNoGrupo : s.caixa,
+            !grupo && fundoDeCampo(t, naSuperficie),
             grupo
                 ? { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400], color: t.color.foreground }
                 : { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
@@ -329,6 +333,8 @@ export function Textarea({ rows, size, style, ...rest }) {
  */
 export function InputGroup({ size, disabled, children, style, testID, ...rest }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const campo = useCampo();
@@ -340,6 +346,7 @@ export function InputGroup({ size, disabled, children, style, testID, ...rest })
     const ctx = React.useMemo(() => ({ size: tam, disabled: inativo, aoFocar: setFocado }), [tam, inativo]);
     return (_jsx(View, { testID: testID, style: [
             s.grupo,
+            fundoDeCampo(t, naSuperficie),
             { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam) },
             campo?.invalido && s.invalido,
             // O foco vem do campo lá dentro, por contexto: no React Native não existe `:focus-within`,
@@ -625,6 +632,8 @@ export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicad
  */
 export function Select({ items, value, onChange, placeholder, disabled, size, chevron = "caret-down", style, testID, }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
     const tf = useTokensDoApp();
@@ -637,6 +646,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
     const escolhido = items.find((i) => i.value === value);
     return (_jsxs(_Fragment, { children: [_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: escolhido?.label }, ...estadoAcessivel({ disabled: !!inativo, expanded: aberto }), style: [
                     s.caixa,
+                    fundoDeCampo(t, naSuperficie),
                     // 0.32.0: o gatilho da referência — 16 dos lados (era 13) e 12 entre o valor e a seta.
                     // Os 12 de cima e de baixo dela são a altura de toque: 48 menos a linha de 24 do valor.
                     { flexDirection: "row", alignItems: "center", justifyContent: "space-between",

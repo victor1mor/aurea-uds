@@ -57,6 +57,15 @@ export const comOpacidade = (cor, pct) => /^#[0-9a-fA-F]{6}$/.test(cor)
  */
 export const preenchimento = (t, nivel) => comOpacidade(t.color.foreground, nivel === 1 ? 0.06 : nivel === 2 ? 0.1 : 0.2);
 /**
+ * O fundo do CAMPO (ADR-0078, a web na 0.40.0, o nativo na 0.40.1). No CLARO, solto na tela: a cor do cartão com a
+ * sombra leve (`shadowSm`, a mesma da referência); dentro de uma superfície branca (`useNaSuperficie()`, em
+ * `superficie.tsx`) e no ESCURO, o cinza de antes (`preenchimento(t, 2)`), sem sombra. Quem chama põe este estilo
+ * logo depois da pele do campo, antes dos estados (inválido, desativado), que continuam vencendo.
+ */
+export const fundoDeCampo = (t, naSuperficie) => t.theme === "light" && !naSuperficie
+    ? { backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm] }
+    : { backgroundColor: preenchimento(t, 2) };
+/**
  * A mesma mistura, OPACA: a cor da frente a `pct` sobre a do fundo. Para o que tem algo passando POR TRÁS (o traço dos
  * passos) ou cobre outra peça (as fotos sobrepostas) — translúcido, o que está atrás aparece. Hex de seis, como o
  * `comOpacidade`; fora disso devolve a cor da frente.

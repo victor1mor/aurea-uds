@@ -15,7 +15,8 @@ import {
   type AccessibilityActionEvent, type GestureResponderEvent, type LayoutChangeEvent,
   type PanResponderGestureState, type StyleProp, type TextStyle, type ViewStyle,
 } from "react-native";
-import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, fundoDeCampo} from "./estilos.js";
+import {useNaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon, type AureaIconRegistry} from "./icon.js";
 import {Label, useCampo} from "./inputs.js";
 import {driverNativo, useReduceMotion} from "./movimento.js";
@@ -63,7 +64,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     width: t.size.space10 + t.size.space1, height: t.size.touchControlHMd,
     alignItems: "center", justifyContent: "center",
     borderWidth: t.size.borderWidth, borderColor: "transparent",
-    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+    ...canto(t.size.radiusControl),
   },
   // A casa ativa: a borda da cor do foco, com a espessura do anel (o contorno de 2 da referência).
   casaAtiva: {borderColor: t.color.focusStrong, borderWidth: t.size.focusWidth},
@@ -297,8 +298,10 @@ export function Slider<V extends number | readonly number[]>({
   const folga = (t.size.targetMin - t.size.space5) / 2;
   const nomeDoGrupo = typeof label === "string" ? label : campo?.label;
 
+  // ADR-0077: o valor do `Slider` fica na fonte do texto, com algarismos de mesma largura (o `.slider-output` da
+  // web); o `numeric` sozinho seria a IBM Plex Mono, que é do app e do `KPI`.
   const valorEscrito = showValue ? (
-    <Text size="xs" weight={500} numeric>{valores.map(texto).join(" – ")}</Text>
+    <Text size="xs" weight={500} numeric font="ui">{valores.map(texto).join(" – ")}</Text>
   ) : null;
 
   const trilhoDesenhado = (
@@ -469,6 +472,8 @@ function proximoCodigo(anterior: string, texto: string, tamanho: number): string
  */
 export function OTPField({length, value, defaultValue, onValueChange, mask, disabled, label, style, testID}: OTPFieldProps) {
   const t = useAureaTokens();
+  // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+  const naSuperficie = useNaSuperficie();
   const s = folha(t);
   const strings = useAureaStrings();
   const campo = useCampo();
@@ -509,6 +514,7 @@ export function OTPField({length, value, defaultValue, onValueChange, mask, disa
               testID={testID ? `${testID}-casa-${i}` : undefined}
               style={[
                 s.casa,
+                fundoDeCampo(t, naSuperficie),
                 ativa && s.casaAtiva,
                 invalido && s.casaInvalida,
                 // Sobre a marca vale a tinta, inclusive no lugar do vermelho — a regra do `Input`.

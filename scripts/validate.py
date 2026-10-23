@@ -537,7 +537,8 @@ if contract:
 # Cada pacote publicável leva a própria LICENSE (npm inclui LICENSE sempre;
 # NOTICE precisa estar em "files"). Fontes = OFL com o copyright de cada família que o pacote leva:
 # desde a ADR-0077 (22/10/2026), a Inter, a Sora e a IBM Plex Mono — esta com o nome reservado "Plex",
-# que proíbe modificar o arquivo e manter o nome —, e a Atkinson enquanto o nativo a usar (até a 0.40.1);
+# que proíbe modificar o arquivo e manter o nome. A Atkinson saiu de tudo na 0.40.1 (o nativo era o último): o
+# copyright dela no LICENSE seria uma família que o pacote não leva mais, e reprova;
 # ícones = NOTICE de atribuição do Phosphor (MIT). Até a 0.12.4 eram IBM Plex e Carbon (ADR-0053).
 for pkg_dir in sorted((root / "packages").iterdir()):
     pj = pkg_dir / "package.json"
@@ -554,10 +555,10 @@ if fonts_lic.is_file():
     if ("SIL OPEN FONT LICENSE" not in lic_text.upper()
             or "The Inter Project Authors" not in lic_text
             or "The Sora Project Authors" not in lic_text
-            or 'IBM Corp. with Reserved Font Name "Plex"' not in lic_text
-            or "Atkinson Hyperlegible Next Project Authors" not in lic_text
-            or "Atkinson Hyperlegible Mono Project Authors" not in lic_text):
-        errors.append("fonts/LICENSE: falta o copyright de alguma família que o pacote leva (Inter, Sora, IBM Plex Mono e, até a 0.40.1, Atkinson — ADR-0077)")
+            or 'IBM Corp. with Reserved Font Name "Plex"' not in lic_text):
+        errors.append("fonts/LICENSE: falta o copyright de alguma família que o pacote leva (Inter, Sora e IBM Plex Mono — ADR-0077)")
+    if "Atkinson" in lic_text:
+        errors.append("fonts/LICENSE: ainda cita a Atkinson Hyperlegible, que saiu do pacote na 0.40.1 (ADR-0077)")
 icons_manifest = json.loads((root / "packages/icons/package.json").read_text(encoding="utf-8"))
 if not (root / "packages/icons/NOTICE").is_file():
     errors.append("icons: sem NOTICE de atribuição do Phosphor")
@@ -2273,7 +2274,6 @@ def project_manifest(s):
                     "thirdParty": [{"name": "Inter", "license": "OFL-1.1"},
                                    {"name": "Sora", "license": "OFL-1.1"},
                                    {"name": "IBM Plex Mono", "license": "OFL-1.1"},
-                                   {"name": "Atkinson Hyperlegible", "license": "OFL-1.1"},
                                    {"name": "Phosphor Icons", "license": "MIT"}]},
         "packages": pkgs,
         "components": reg,
@@ -2630,26 +2630,41 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
 # regrava o nativo. Aí o app cai na fonte de sistema **num peso só**, que é o tipo de coisa que
 # passa despercebida numa tela e destrói a identidade em outra.
 #
-# ADR-0077 (22/10/2026): a WEB trocou de fonte na 0.39.0 e o nativo troca no lote seguinte (F-2). Até lá,
-# os seis arquivos abaixo são SÓ da web, e o espelho do nativo são os .woff2 da Atkinson, que ficam no
-# pacote para isso. A lista é fechada de propósito: um .woff2 novo fora dela volta a cobrar o .ttf. O F-2
-# reescreve este check — a web variável (um arquivo por família) e o nativo estático (um por peso) não
-# têm mais os mesmos nomes.
-_SO_DA_WEB = {"inter-variable-normal", "inter-variable-italic", "sora-variable-normal",
-              "ibm-plex-mono-400-normal", "ibm-plex-mono-500-normal", "ibm-plex-mono-600-normal"}
+# ADR-0077 (0.40.1): a web e o nativo deixaram de ter os mesmos NOMES de arquivo — a web tem a Inter e a
+# Sora VARIÁVEIS (um arquivo por família e estilo), o nativo tem um .ttf ESTÁTICO por peso, porque o React
+# Native não lê fonte variável no Android. A comparação passa a ser por FAMÍLIA e ESTILO: toda família da
+# web tem .ttf no nativo, com os mesmos estilos (normal, itálico), e nenhuma família é só do nativo; onde a
+# web é estática (a IBM Plex Mono, um arquivo por peso), arquivo por arquivo. O defeito que ele pega continua
+# o mesmo: uma família (ou o itálico) entra na web e ninguém gera o .ttf.
 _fdir = root / "packages/fonts"
-_woff2 = sorted(p.stem for p in (_fdir / "files").glob("*.woff2") if p.stem not in _SO_DA_WEB)
+_PARTES = re.compile(r"^(?P<fam>.+?)-(?P<peso>variable|\d{3})-(?P<estilo>normal|italic)$")
+def _partes(stems):
+    out = []
+    for s in stems:
+        m = _PARTES.match(s)
+        if not m:
+            errors.append(f"check 37: o arquivo de fonte {s} não segue o padrão família-peso-estilo")
+            continue
+        out.append((m["fam"], m["peso"], m["estilo"], s))
+    return out
+_web = _partes(sorted(p.stem for p in (_fdir / "files").glob("*.woff2")))
 _ttf = sorted(p.stem for p in (_fdir / "files-native").glob("*.ttf"))
+_nat = _partes(_ttf)
 if not _ttf:
     errors.append("check 37: packages/fonts/files-native/ não tem .ttf — o React Native NÃO LÊ "
                   "woff2, e sem eles a fonte da Aurea não aparece no aparelho (NATIVE.md §5.2.1)")
-elif _ttf != _woff2:
-    _faltam = sorted(set(_woff2) - set(_ttf))
-    _sobram = sorted(set(_ttf) - set(_woff2))
-    errors.append("check 37: os dois alvos de fonte divergem — "
-                  + (f"sem .ttf: {', '.join(_faltam)}. " if _faltam else "")
-                  + (f"sem .woff2: {', '.join(_sobram)}. " if _sobram else "")
-                  + "São os MESMOS estilos em dois formatos; um lado a mais é um lado esquecido")
+else:
+    _fw = {(f, e) for f, _, e, _ in _web}
+    _fn = {(f, e) for f, _, e, _ in _nat}
+    if _fw != _fn:
+        errors.append("check 37: os dois alvos de fonte divergem — "
+                      + (f"sem .ttf: {sorted(_fw - _fn)}. " if _fw - _fn else "")
+                      + (f"só no nativo: {sorted(_fn - _fw)}. " if _fn - _fw else "")
+                      + "Toda família e estilo da web tem .ttf no nativo; um lado a mais é um lado esquecido")
+    _estaticos = {s for f, peso, e, s in _web if peso != "variable"}
+    _sem = sorted(_estaticos - set(_ttf))
+    if _sem:
+        errors.append(f"check 37: a web tem estes pesos estáticos e o nativo não: {', '.join(_sem)}")
 _fnat = _fdir / "dist/fonts.native.js"
 if not _fnat.is_file():
     errors.append("check 37: packages/fonts/dist/fonts.native.js não existe — rode "

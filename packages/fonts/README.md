@@ -27,10 +27,26 @@ zero. Quem fixa outra fonte no próprio título ganha dela; a fonte que o títul
 ⚠ `--font-editorial` não tem fonte própria desde a ADR-0053: ele aponta para a fonte do texto (hoje a
 Inter). Continua existindo só para não quebrar quem o usa; sai na `1.0`.
 
-⚠ **Os arquivos do React Native ainda são os da Atkinson Hyperlegible** (`@aurea-uds/fonts/native`), até a
-`0.40.1`: a troca do aparelho é o lote seguinte, com os `.ttf` das fontes novas e o teste no aparelho. Os
-tokens do nativo já dizem os nomes novos — passe o `FONT_FAMILIES` deste pacote ao `AureaProvider`, como
-no exemplo, e nada muda até lá.
+## No React Native
+
+O React Native não lê `woff2`, e no Android não lê fonte variável: o nativo recebe as mesmas três famílias em
+`.ttf` estático, um arquivo por peso (`@aurea-uds/fonts/native`). Carregue o `AUREA_FONTS` e passe o
+`FONT_FAMILIES` ao `AureaProvider`:
+
+```tsx
+import {AureaProvider} from "@aurea-uds/native";
+import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
+import {useFonts} from "expo-font";
+
+const [pronto] = useFonts(AUREA_FONTS);
+// ...
+<AureaProvider fontFamilies={FONT_FAMILIES}>{/* o app */}</AureaProvider>
+```
+
+No aparelho, cada peso é uma família própria, com o nome PostScript do arquivo (ADR-0039): `Inter-SemiBold`,
+`Sora-Bold`, `IBMPlexMono-Medm`. O `FONT_FAMILIES` faz o papel e o peso pedidos apontarem para eles; sem ele, o
+aparelho cai na fonte do sistema. São 14 arquivos, **completos** (todos os alfabetos que cada fonte desenha):
+3,17 MB no app (decisão do Victor, 22/10/2026, ADR-0077).
 
 ## De onde vêm os arquivos
 
@@ -57,8 +73,38 @@ O script imprime o resumo (sha256) de cada arquivo. Os da IBM se conferem contra
 | `ibm-plex-mono-500-normal.woff2` | `41201b658a328b9d` |
 | `ibm-plex-mono-600-normal.woff2` | `b7acd05041ab65f3` |
 
-Os `atkinson-*.woff2` de `files/` e os `.ttf` de `files-native/` são da Atkinson e ficam só até a
-`0.40.1`, para o nativo.
+Os `.ttf` do nativo (`files-native/`):
+
+| arquivo | origem | como |
+|---|---|---|
+| `inter-{400,500,600,700,800}-normal.ttf`, `inter-400-italic.ttf` | Inter 4.1 do autor (`Inter-4.1.zip`, pasta `extras/ttf/`) | **sem mudança**, só o nome do arquivo |
+| `sora-{400,500,600,700,800}-normal.ttf` | a mesma `Sora[wght].ttf` da web | fixada num peso por arquivo, com o nome de cada peso |
+| `ibm-plex-mono-{400,500,600}-normal.ttf` | `@ibm/plex-mono` 2.5.0, `fonts/complete/ttf/IBMPlexMono-{Regular,Medium,SemiBold}.ttf` | **sem mudança** (o nome reservado "Plex") |
+
+```bash
+python packages/fonts/fontes-nativas.py <Inter-4.1.zip> <ibm-plex-mono.zip> <Sora[wght].ttf>
+```
+
+O script sai igual a cada rodada e imprime o resumo de cada arquivo:
+
+| arquivo | sha256 (começo) |
+|---|---|
+| `inter-400-normal.ttf` | `40d692fce188e447` |
+| `inter-400-italic.ttf` | `bbc051dd204b5019` |
+| `inter-500-normal.ttf` | `97ad806f526e4154` |
+| `inter-600-normal.ttf` | `78a843fade9d4612` |
+| `inter-700-normal.ttf` | `288316099b1e0a47` |
+| `inter-800-normal.ttf` | `e6756ad5690b7760` |
+| `sora-400-normal.ttf` | `d160a9b5551b207a` |
+| `sora-500-normal.ttf` | `5924a0b3b90f6591` |
+| `sora-600-normal.ttf` | `71962517584791ef` |
+| `sora-700-normal.ttf` | `f09649958726cec7` |
+| `sora-800-normal.ttf` | `4ea25ce1d1f41736` |
+| `ibm-plex-mono-400-normal.ttf` | `7c6fbddca4b700be` |
+| `ibm-plex-mono-500-normal.ttf` | `98fbd727aae340b2` |
+| `ibm-plex-mono-600-normal.ttf` | `f04d7c488ddf7d1f` |
+
+Até a `0.40.0` o nativo era a Atkinson Hyperlegible; nenhum arquivo dela fica no pacote.
 
 ## Por que um pacote só dele
 
@@ -67,7 +113,7 @@ recortes — possa dispensá-lo sem copiar e alterar a folha de estilo.
 
 ## Licença
 
-As quatro famílias estão sob a **SIL Open Font License 1.1**, e o texto da licença vai junto com o
+As três famílias estão sob a **SIL Open Font License 1.1**, e o texto da licença vai junto com o
 pacote, com o copyright de cada uma. A IBM Plex Mono tem o **nome reservado "Plex"**: arquivo
 modificado não pode levar esse nome — por isso os dela vão sem mudança. A OFL não é a Apache-2.0:
 leia-a antes de redistribuir os arquivos de fonte.

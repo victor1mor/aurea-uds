@@ -49,7 +49,8 @@ import {
   type ViewProps, type ViewStyle,
 } from "react-native";
 import Svg, {Path} from "react-native-svg";
-import {canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
+import {useNaSuperficie} from "./superficie.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
@@ -85,7 +86,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   caixa: {
     width: "100%", minWidth: 0,
     borderWidth: t.size.borderWidth, borderColor: "transparent",
-    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+    ...canto(t.size.radiusControl),
     color: t.color.foreground,
   },
   // O `.textarea` é o único da família com raio LG em vez do de controle: uma caixa alta em
@@ -102,7 +103,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   grupo: {
     flexDirection: "row", alignItems: "center", width: "100%", minWidth: 0,
     borderWidth: t.size.borderWidth, borderColor: "transparent",
-    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+    ...canto(t.size.radiusControl),
     gap: t.size.space1,
   },
   // Dentro do grupo o campo perde a caixa e vira só o texto — a borda passou a ser do grupo.
@@ -422,6 +423,8 @@ export function Input({
   ...rest
 }: InputProps) {
   const t = useAureaTokens();
+  // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+  const naSuperficie = useNaSuperficie();
   const s = folha(t);
   const peleDaMarca = usePeleSobreAMarca();
   const campo = useCampo();
@@ -472,6 +475,7 @@ export function Input({
         // desenhando daria borda dentro de borda — que é exatamente o defeito que o `.input-group
         // > .input` da web zera à mão (`aurea.css:751`).
         grupo ? s.campoNoGrupo : s.caixa,
+        !grupo && fundoDeCampo(t, naSuperficie),
         grupo
           ? {fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400], color: t.color.foreground}
           : {height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
@@ -590,6 +594,8 @@ export interface InputGroupProps extends ViewProps {
  */
 export function InputGroup({size, disabled, children, style, testID, ...rest}: InputGroupProps) {
   const t = useAureaTokens();
+  // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+  const naSuperficie = useNaSuperficie();
   const s = folha(t);
   const peleDaMarca = usePeleSobreAMarca();
   const campo = useCampo();
@@ -609,6 +615,7 @@ export function InputGroup({size, disabled, children, style, testID, ...rest}: I
       testID={testID}
       style={[
         s.grupo,
+        fundoDeCampo(t, naSuperficie),
         {height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam)},
         campo?.invalido && s.invalido,
         // O foco vem do campo lá dentro, por contexto: no React Native não existe `:focus-within`,
@@ -1274,6 +1281,8 @@ export function Select({
   items, value, onChange, placeholder, disabled, size, chevron = "caret-down", style, testID,
 }: SelectProps) {
   const t = useAureaTokens();
+  // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+  const naSuperficie = useNaSuperficie();
   const s = folha(t);
   // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
   const tf = useTokensDoApp();
@@ -1298,6 +1307,7 @@ export function Select({
         {...estadoAcessivel({disabled: !!inativo, expanded: aberto})}
         style={[
           s.caixa,
+          fundoDeCampo(t, naSuperficie),
           // 0.32.0: o gatilho da referência — 16 dos lados (era 13) e 12 entre o valor e a seta.
           // Os 12 de cima e de baixo dela são a altura de toque: 48 menos a linha de 24 do valor.
           {flexDirection: "row", alignItems: "center", justifyContent: "space-between",

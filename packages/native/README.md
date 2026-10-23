@@ -68,7 +68,8 @@ pnpm add @aurea-uds/native react-native-svg react-native-safe-area-context
 
 Quatro **peers obrigatórios**: `react` (≥19), `react-native` (≥0.76, pela Nova Arquitetura),
 `react-native-svg` (≥15, pelos ícones) e `react-native-safe-area-context` (≥5, pelo `Screen`).
-Para o texto sair na Atkinson Hyperlegible (a fonte da Aurea desde a ADR-0053), some `@aurea-uds/fonts`.
+Para o texto sair nas fontes da Aurea (Inter, Sora nos títulos e IBM Plex Mono no código — ADR-0077), some
+`@aurea-uds/fonts`.
 
 O último costuma **já estar instalado**: `react-navigation` e `expo-router` o arrastam. Declará-lo
 como peer não adiciona peso ao app — só diz o que já ia estar lá.

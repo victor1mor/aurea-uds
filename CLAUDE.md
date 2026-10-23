@@ -180,6 +180,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.37.1` | O lote 0-A, o primeiro dos lotes de até 3 horas: o conteúdo largo não alarga a página no `DataState`, no `Form` e no corpo do `Dialog` (MNT-33), e o texto de exemplo dos campos a 4,5:1 ou mais na marca `lory` (MNT-29) — pedido #89. **Publicada em 22/10/2026** (entre 08:41 e 08:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.38.0` | O lote 0-B: a legenda do `DependencyGraph` que fecha (`legendCollapsible`) e o botão do minimapa junto do zoom (`minimapToggle`) — MNT-31, a L1 e a M2 da bancada; e o teste da lateral que ainda cobrava o amarelo no claro — pedido #90. **Publicada em 22/10/2026** (entre 11:08 e 11:22, Brasília, medido no npm), pelo terminal do Victor |
 | `0.39.0` | O lote F-1: a fonte nova da web — Inter no texto, Sora em todo título (h1 a h6) e IBM Plex Mono no código e nos valores (o `numeric` e o número do `KPI`) ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)); os nomes de fonte do nativo trocados, os arquivos do nativo na `0.40.1` — pedido #91. **Publicada em 22/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
+| `0.40.0` | Os campos brancos no claro: o campo solto na página é a cor do cartão com o `--shadow-sm` (a sombra da referência); dentro de uma superfície branca, o cinza de antes; no escuro, nada muda — a web e o site ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)), pedido #92. **Publicada em 22/10/2026** (entre 23:41 e 23:45, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -559,6 +560,17 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    auditoria no meio do pedido. **Publicada em 22/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo
    terminal do Victor, da junção do pedido #91. O registro entrou no lote seguinte (os campos, 0.40.0).
 
+37. **`0.40.0`, os campos brancos, feita em 22/10/2026** ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md))
+   — o Victor comparou a página inicial com a da referência (*"porque nossos caixas não são brancas?"*) e viu a bancada nos
+   temas da Aurea, no notebook e no monitor de baixa visão: *"gostei Branco + sombra"*. No claro, o campo solto é branco
+   com o `--shadow-sm`; dentro de uma superfície branca, o cinza de antes, e a superfície escolhe sozinha
+   (`--field-fill`/`--field-lift`); no escuro, nada muda. Aprovada pela bancada (*"Aprovado, pode seguir com a 0.40.0"*).
+   ⚠ **A lição:** a lista das superfícies brancas esqueceu quatro que recebem campo (o `Header` flutuante e o de pílula,
+   a lateral aberta da documentação e o item da `SortableList`) — achado no lote seguinte, perguntando "quem mais pinta a
+   cor do cartão?" com a lista das 40 regras que pintam `--card`/`--popover`, e consertado na 0.40.1. **Publicada em
+   22/10/2026** (entre 23:41 e 23:45, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #92. O
+   registro entrou no lote seguinte (o nativo, 0.40.1).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -689,7 +701,7 @@ no git.
   não irá ser mudada de novo, essa é a última vez"*; [ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)).
   A Inter vai SEM o `ss02`, igual ao sistema que serviu de modelo; os arquivos são os do autor, cortados para o latino;
   os da IBM Plex Mono vão sem mudança (nome reservado "Plex"). A Atkinson SAI de tudo: a web na `0.39.0`, o nativo na
-  `0.40.1`. Os ícones continuam os Phosphor.
+  `0.40.1` (14 `.ttf` COMPLETOS, 3,17 MB — *"Completas"*, 22/10/2026). Os ícones continuam os Phosphor.
 - ~~IBM Plex Sans / Serif / Mono; Carbon Icons~~ → ~~**Atkinson Hyperlegible Next**~~ (fonte trocada pela ADR-0077,
   acima) **e ícones Phosphor Regular** (decisão do Victor, 01/10/2026,
   [ADR-0053](decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). **Feita na
@@ -731,7 +743,10 @@ no git.
   **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
   [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`
   (a sombra da referência); dentro de uma superfície branca (cartão, janela, folha, menu, painel do app), o `--fill-2` de
-  sempre, e a superfície escolhe sozinha (`--field-fill`/`--field-lift`); no escuro, nada muda. O nativo segue na `0.40.1`, junto com a fonte do nativo.
+  sempre, e a superfície escolhe sozinha (`--field-fill`/`--field-lift`); no escuro, nada muda. No nativo (`0.40.1`), o mesmo por `fundoDeCampo()`: a superfície branca liga um
+  contexto interno (`superficie.tsx`) que o campo lê. ⚠ **Peça nova que pinta a cor do cartão (ou do popover) e
+  recebe conteúdo do app entra na lista** (a regra das superfícies no `aurea.css`; no nativo, liga o contexto) — a
+  0.40.0 esqueceu o `Header` flutuante, e a 0.40.1 consertou.
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
@@ -855,7 +870,7 @@ hoje `Header`).
   teatro. Para ele, **um comando por linha**; quando o comando é nosso, a ordem vai para dentro do
   script.
 - Licença Apache-2.0; Inter, Sora e IBM Plex Mono sob OFL 1.1 (ADR-0077, desde a `0.39.0`; a Atkinson Hyperlegible,
-  OFL 1.1, de 01/10 a 22/10/2026 e no nativo até a `0.40.1`); Phosphor Icons sob MIT (ADR-0053, desde a
+  OFL 1.1, de 01/10 a 22/10/2026 e no nativo até a `0.40.0`); Phosphor Icons sob MIT (ADR-0053, desde a
   `0.13.0`; até a `0.12.4`, IBM Plex e Carbon).
 
 ## 10. Decisões já tomadas pelo Victor (16/07/2026)

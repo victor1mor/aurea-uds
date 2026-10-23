@@ -117,9 +117,70 @@ como deveria funcionar"*.
 
 ---
 
+## [0.40.1] — 2026-10-22
+
+⏳ **Ainda não publicada.** A fonte nova e os campos brancos no **React Native**
+([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md), seção "O nativo";
+[ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md), seção "O nativo"). O Victor: *"não esqueça de alterar
+fontes do nativo"*, *"pode fazer juntos"*; e, sobre o peso dos arquivos, *"Completas"*. Na web, só as superfícies brancas
+que a 0.40.0 esqueceu (*"Na 0.40.1"*, o Victor).
+
+### ⚠ Pode quebrar a aparência ou o tamanho do app
+
+- **O `@aurea-uds/fonts/native` traz a Inter, a Sora e a IBM Plex Mono**, em `.ttf` estático, um por peso: a Inter 400,
+  o itálico 400, 500, 600, 700 e 800; a Sora 400 a 800; a IBM Plex Mono 400, 500 e 600. São **14 arquivos completos,
+  3,17 MB** no app que carrega o `AUREA_FONTS` — eram 9 da Atkinson, 0,40 MB. Quem usa o `AUREA_FONTS` e passa o
+  `FONT_FAMILIES` ao `AureaProvider` não muda nada no código.
+- **Os nomes do `FONT_FAMILIES` mudam**: o texto vai para `Inter-Regular`, `Inter-Medium`, `Inter-SemiBold`, `Inter-Bold`,
+  `Inter-ExtraBold` e `Inter-Italic`; o código para `IBMPlexMono`, `IBMPlexMono-Medm` e `IBMPlexMono-SmBld`. **O título
+  ganha fonte própria**: o papel `heading` aponta para `Sora-Regular` a `Sora-ExtraBold` (antes, a fonte do texto).
+- **Os arquivos da Atkinson saem do pacote** (os 9 `.ttf` e os 9 `.woff2` que só a vitrine do nativo usava). Quem
+  carrega um deles pelo caminho, ou escreve um nome `AtkinsonHyperlegible…` no próprio estilo, deixa de achar a fonte.
+- **O `numeric` (`Text`) e o número do `KPI` saem na IBM Plex Mono**, como na web desde a 0.39.0. O `font` pedido pelo
+  app continua mandando. Os números de dentro das peças — a célula da `Table` e o valor do `Slider` — ficam na Inter,
+  com algarismos de mesma largura, como na web.
+- **No tema claro, o campo solto na tela fica branco (a cor do cartão) com a sombra leve** — as três camadas do
+  `--shadow-sm`, como na web desde a 0.40.0: o `Input`, o `InputGroup` (e o `PasswordField`), o `Select`, o `Combobox`, o
+  `SearchField`, o `NumberField`, as casas do `OTPField` e o gatilho do `DatePicker`. Era o cinza translúcido da cor do
+  texto (ADR-0072).
+- **Dentro de uma superfície branca, o campo continua o cinza de antes, sem sombra**: o `Card` (o de contorno e o
+  `inset` herdam de quem está em volta), o `Card variant="contrast"`, o `Dialog`, o `Drawer`, a `BottomSheet`, o
+  conteúdo do `Popover`, o `Accordion` com `surface`, o `Header` flutuante e o de pílula e o `ScrollShadow` de
+  superfície (o padrão). **A superfície escolhe sozinha**; o app não faz nada.
+- **No tema escuro, nada muda.**
+
+### ⚠ Pode quebrar a aparência — na web
+
+- **O campo dentro do `Header` flutuante e do de pílula, da lateral da documentação aberta (o popover do celular e do
+  tablet) e do item da `SortableList` volta ao cinza, sem sombra.** As quatro pintam a cor do cartão, e a 0.40.0 as
+  deixou fora da lista: o campo saía branco no branco, separado só pela sombra.
+
+### Para quem cuida do repositório
+
+- **O registro da 0.40.0** (publicada entre 23:41 e 23:45 de 22/10/2026): o `released-surface.json` do commit do
+  publish (`27157bd6`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
+- **`packages/fonts/fontes-nativas.py`** faz os 14 `.ttf` dos arquivos oficiais e sai igual a cada rodada (o resumo de
+  cada um está no README do pacote). A Inter e a IBM Plex Mono vão sem mudança; a Sora é fixada num peso por arquivo.
+- **O check 37 do `validate.py`** compara a web e o nativo por família e estilo (a web tem a Inter e a Sora variáveis, o
+  nativo um arquivo por peso), e cada peso fixo da web (a IBM Plex Mono) tem de existir no nativo. O `LICENSE` das fontes
+  reprova se ainda falar da Atkinson.
+- **Quem cobra:** `tests/unit/native-campos-brancos.test.tsx` (31 casos: os seis campos de texto e escolha soltos, no
+  cartão, no cartão de contorno e no escuro; o `Header` e o `ScrollShadow`; o `numeric` e o `KPI` — com o nativo da
+  0.40.0, reprovavam 14 dos 26 primeiros; sem o contexto no `Header` e no `ScrollShadow`, reprovam os 3 de cinza deles),
+  `tests/unit/native-lote0.test.tsx` (os 14 `.ttf`, nenhum da Atkinson, e o mapa de nomes) e, na web,
+  `tests/visual/campos-brancos.spec.ts` e `tests/unit/campos-brancos.test.tsx` (as quatro superfícies novas).
+- **A pergunta "quem mais pinta a cor do cartão?"**, respondida por medição: das 40 regras da web que pintam `--card` ou
+  `--popover`, as que recebem campo do app estão na lista; as outras (a barra de baixo, a dica, o selo, a moldura de
+  celular, as peças do mapa…) não recebem. No nativo, o `Alert`, o `Toast` e a célula da `Table` são um elemento só
+  para o leitor de tela (o check 43 proíbe campo dentro), e ficam de fora.
+- **O aparelho:** o bloco `0.40.1`, no topo do `apps/native-smoke` (`node apps/native-smoke/rodar.mjs`).
+
+---
+
 ## [0.40.0] — 2026-10-22
 
-⏳ **Ainda não publicada.** Os campos brancos no tema claro ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)).
+✅ **Publicada em 22/10/2026, entre 23:41 e 23:45 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #92. Os campos brancos no tema claro ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)).
 O Victor comparou a página inicial com a da referência e viu a bancada nos temas da Aurea, no notebook e no monitor de baixa
 visão: *"gostei Branco + sombra ... dá pra ver também por conta da sombra"*; e *"Pode seguir com a sugestão dos campos: branco
 com sombra no claro, escuro como hoje, cinza dentro de cartão"*. O React Native segue na `0.40.1`, junto com a fonte do nativo.
@@ -146,7 +207,7 @@ com sombra no claro, escuro como hoje, cinza dentro de cartão"*. O React Native
 ### Não muda
 
 - **Os campos do React Native continuam como eram até a `0.40.1`**, que leva junto a fonte do nativo (o nativo pinta o
-  campo em nove lugares e não sabe hoje se está dentro de um cartão).
+  campo em oito peças e não sabe hoje se está dentro de um cartão).
 
 ### Para quem cuida do repositório
 

@@ -79,8 +79,8 @@ export type AureaProviderProps = {
    */
   defaultDensity?: AureaDensity;
   /**
-   * O mapa `papel -> peso -> família` que faz o texto sair na Atkinson Hyperlegible. Sem ele, o
-   * tema devolve a família PEDIDA ("Atkinson Hyperlegible Next"), que no aparelho vira fonte de
+   * O mapa `papel -> peso -> família` que faz o texto sair na Inter, o título na Sora e o código na IBM
+   * Plex Mono (ADR-0077). Sem ele, o tema devolve a família PEDIDA ("Inter"), que no aparelho vira fonte de
    * sistema para todo peso que
    * não seja Regular/Italic/Bold — **medido na tabela `name` dos .ttf**: Medium e SemiBold são
    * famílias próprias, não pesos da mesma família (ADR-0039).

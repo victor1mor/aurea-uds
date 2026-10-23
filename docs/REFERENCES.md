@@ -15,7 +15,7 @@ repositório** (decisão do Victor, 07/10/2026). Elas ficam com o Victor, fora d
 | [Inter](https://github.com/rsms/inter) | a fonte do texto (desde 22/10/2026, ADR-0077), da versão 4.1 do autor, cortada para o latino | OFL-1.1 | `packages/fonts/LICENSE` |
 | [Sora](https://github.com/sora-xor/sora-font) | a fonte dos títulos (desde 22/10/2026, ADR-0077), do `google/fonts`, cortada para o latino | OFL-1.1 | `packages/fonts/LICENSE` |
 | [IBM Plex Mono](https://github.com/IBM/plex) | a fonte do código e dos valores (desde 22/10/2026, ADR-0077), os arquivos da IBM sem mudança (nome reservado "Plex") | OFL-1.1 | `packages/fonts/LICENSE` |
-| [Atkinson Hyperlegible Next e Mono](https://github.com/googlefonts/atkinson-hyperlegible-next) | as duas famílias tipográficas (de 01/10/2026, ADR-0053; a web saiu dela em 22/10/2026, o nativo sai na 0.40.1) | OFL-1.1 | `packages/fonts/LICENSE` |
+| [Atkinson Hyperlegible Next e Mono](https://github.com/googlefonts/atkinson-hyperlegible-next) | as duas famílias tipográficas (de 01/10/2026, ADR-0053; saiu em 22/10/2026, ADR-0077 — a web e depois o nativo; nenhum arquivo dela fica no pacote) | OFL-1.1 | `packages/fonts/LICENSE` |
 | ~~Carbon Icons~~ | ~~os glifos~~ — até a `0.12.4` | Apache-2.0 | — |
 | ~~IBM Plex~~ | ~~as três famílias tipográficas~~ — até a `0.12.4` | OFL-1.1 | — |
 

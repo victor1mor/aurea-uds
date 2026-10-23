@@ -6,8 +6,10 @@
 // IBM Plex simplesmente não aparece no aparelho e o app cai na fonte de sistema, que é a
 // identidade que o CLAUDE.md declara intocável.
 //
-// ADR-0053 (01/10/2026): a fonte é a Atkinson Hyperlegible Next (texto) e a Atkinson Hyperlegible
-// Mono (código), as duas sob a SIL OFL 1.1. A IBM Plex saiu, a Serif junto. Os arquivos foram
+// ~~ADR-0053 (01/10/2026): a fonte é a Atkinson Hyperlegible Next (texto) e a Atkinson Hyperlegible
+// Mono (código)~~ — trocada pela ADR-0077 (22/10/2026): Inter, Sora e IBM Plex Mono, a web na 0.39.0 e o
+// nativo na 0.40.1 (as listas WEB e NATIVO, abaixo). O resto deste parágrafo é a história da Atkinson,
+// as duas sob a SIL OFL 1.1. A IBM Plex saiu, a Serif junto. Os arquivos foram
 // gerados das fontes variáveis do Google Fonts (`ofl/atkinsonhyperlegiblenext` e
 // `ofl/atkinsonhyperlegiblemono`), um peso fixo por arquivo: o `.ttf` completo para o aparelho,
 // e o `.woff2` só com o alfabeto latino (o mesmo intervalo do subset `latin` do fontsource, que
@@ -42,33 +44,29 @@ const WEB = [
   {file: "ibm-plex-mono-600-normal.woff2", family: PLEX_MONO, weight: 600,       style: "normal"},
 ];
 
-// ── O ALVO NATIVO, AINDA NA ATKINSON (até a 0.40.1) ──────────────────────────────────────────────
-// A troca do nativo é o lote seguinte (F-2): ele precisa dos .ttf estáticos das fontes novas e do
-// teste no aparelho. Até lá, o aparelho segue com a Atkinson, e estes arquivos ficam no pacote — os
-// .woff2 dela, só porque a vitrine do nativo (`native-vitrine.test.tsx`) desenha com eles; a web não
-// os carrega mais. Saem todos juntos, com o nativo.
-// file -> @font-face metadata. Atkinson Hyperlegible Next e Mono, SIL Open Font License 1.1.
-// `role` é o token de tipografia que a fonte serve (--font-ui / --font-code), e existe para o
-// alvo nativo poder indexar por papel em vez de por nome de família.
-//
-// ⚠ O papel `editorial` NÃO tem arquivo desde a ADR-0053: a IBM Plex Serif saiu, e a Atkinson
-// não tem serifada. Ele continua existindo como APELIDO do `ui` (os mesmos arquivos), para não
-// quebrar quem o usa — o `--font-editorial` do core e o `font.editorial` do nativo. Sai na 1.0.
-const UI = "Atkinson Hyperlegible Next", CODIGO = "Atkinson Hyperlegible Mono";
-const FONTS = [
-  {file: "atkinson-hyperlegible-next-400-normal.woff2", family: UI,     role: "ui",   weight: 400, style: "normal"},
-  {file: "atkinson-hyperlegible-next-400-italic.woff2", family: UI,     role: "ui",   weight: 400, style: "italic"},
-  {file: "atkinson-hyperlegible-next-500-normal.woff2", family: UI,     role: "ui",   weight: 500, style: "normal"},
-  {file: "atkinson-hyperlegible-next-600-normal.woff2", family: UI,     role: "ui",   weight: 600, style: "normal"},
-  {file: "atkinson-hyperlegible-next-700-normal.woff2", family: UI,     role: "ui",   weight: 700, style: "normal"},
-  // GAR-16 (09/10/2026): o 800, para título de quem quiser (`--weight-extrabold`). Cortado da MESMA
-  // fonte variável do Google Fonts, pelo mesmo processo dos outros: refeito para o 700 e comparado
-  // com o arquivo daqui, só a data de criação (`head.modified`) mudou — as outras tabelas são
-  // idênticas byte a byte, no .ttf e no .woff2. No CSS ele só é baixado quando alguma regra pede 800.
-  {file: "atkinson-hyperlegible-next-800-normal.woff2", family: UI,     role: "ui",   weight: 800, style: "normal"},
-  {file: "atkinson-hyperlegible-mono-400-normal.woff2", family: CODIGO, role: "code", weight: 400, style: "normal"},
-  {file: "atkinson-hyperlegible-mono-500-normal.woff2", family: CODIGO, role: "code", weight: 500, style: "normal"},
-  {file: "atkinson-hyperlegible-mono-600-normal.woff2", family: CODIGO, role: "code", weight: 600, style: "normal"},
+// ── O ALVO NATIVO (ADR-0077, 0.40.1) ────────────────────────────────────────────────────────────────
+// As MESMAS três famílias da web, em .ttf estático, um peso por arquivo — o React Native não lê woff2 nem
+// fonte variável no Android. Saem de `fontes-nativas.py`: a Inter e a IBM Plex Mono são os .ttf dos autores
+// sem mudança; a Sora, a variável da web instanciada por peso. `role` é o token de tipografia que a fonte
+// serve (`ui`, `heading`, `code`), para o nativo indexar por papel e não por nome de família.
+// ⚠ O papel `editorial` NÃO tem arquivo desde a ADR-0053 (a serifada saiu): é APELIDO do `ui`, sem itálico,
+// para não quebrar quem o usa — o `--font-editorial` do core e o `font.editorial` do nativo. Sai na 1.0.
+// Até a 0.40.0 o nativo era a Atkinson Hyperlegible Next e Mono (ADR-0053), e o título usava a fonte do texto.
+const NATIVO = [
+  {arquivo: "inter-400-normal.ttf",         role: "ui",      weight: 400, style: "normal"},
+  {arquivo: "inter-400-italic.ttf",         role: "ui",      weight: 400, style: "italic"},
+  {arquivo: "inter-500-normal.ttf",         role: "ui",      weight: 500, style: "normal"},
+  {arquivo: "inter-600-normal.ttf",         role: "ui",      weight: 600, style: "normal"},
+  {arquivo: "inter-700-normal.ttf",         role: "ui",      weight: 700, style: "normal"},
+  {arquivo: "inter-800-normal.ttf",         role: "ui",      weight: 800, style: "normal"},
+  {arquivo: "sora-400-normal.ttf",          role: "heading", weight: 400, style: "normal"},
+  {arquivo: "sora-500-normal.ttf",          role: "heading", weight: 500, style: "normal"},
+  {arquivo: "sora-600-normal.ttf",          role: "heading", weight: 600, style: "normal"},
+  {arquivo: "sora-700-normal.ttf",          role: "heading", weight: 700, style: "normal"},
+  {arquivo: "sora-800-normal.ttf",          role: "heading", weight: 800, style: "normal"},
+  {arquivo: "ibm-plex-mono-400-normal.ttf", role: "code",    weight: 400, style: "normal"},
+  {arquivo: "ibm-plex-mono-500-normal.ttf", role: "code",    weight: 500, style: "normal"},
+  {arquivo: "ibm-plex-mono-600-normal.ttf", role: "code",    weight: 600, style: "normal"},
 ];
 
 // ── alvo WEB ───────────────────────────────────────────────────────────────
@@ -122,12 +120,10 @@ function readNameTable(file) {
   return out;
 }
 
-const medidos = FONTS.map((f) => {
-  const arquivo = f.file.replace(/\.woff2$/, ".ttf");
-  const caminho = join(dir, "files-native", arquivo);
-  if (!existsSync(caminho)) throw new Error("missing native font file: " + arquivo);
-  const nomes = readNameTable(caminho);
-  return {...f, arquivo, ...nomes};
+const medidos = NATIVO.map((f) => {
+  const caminho = join(dir, "files-native", f.arquivo);
+  if (!existsSync(caminho)) throw new Error("missing native font file: " + f.arquivo);
+  return {...f, ...readNameTable(caminho)};
 });
 
 // Um nome PostScript repetido faria duas fontes disputarem a mesma chave e uma sumiria em
@@ -142,35 +138,32 @@ const porPapel = {};
 for (const m of medidos) {
   (porPapel[m.role] ??= {})[`${m.weight}${m.style === "italic" ? "i" : ""}`] = m.postscript;
 }
-// `editorial` é apelido do `ui` desde a ADR-0053 (ver o comentário da lista FONTS). Sem itálico,
+// `editorial` é apelido do `ui` desde a ADR-0053 (ver o comentário da lista NATIVO). Sem itálico,
 // como a serifada que ele substitui não tinha.
 porPapel.editorial = Object.fromEntries(Object.entries(porPapel.ui).filter(([k]) => !k.endsWith("i")));
-// `heading` (GAR-16, 0.28.0) é o papel do título — o `--font-heading` da web. Hoje é a mesma fonte do
-// texto, então aponta para os arquivos do `ui`, sem itálico; existe para o título poder ter fonte
-// própria um dia sem tocar no resto.
-porPapel.heading = Object.fromEntries(Object.entries(porPapel.ui).filter(([k]) => !k.endsWith("i")));
+// `heading` (GAR-16, 0.28.0) é o papel do título — o `--font-heading` da web. Desde a 0.40.1 (ADR-0077) ele
+// tem arquivos próprios, a Sora; até a 0.40.0 apontava para os do texto.
 
 const cab = `// Aurea — alvo NATIVO das fontes. GERADO por packages/fonts/build-fonts.mjs. NÃO EDITAR.
 //
 // Lote 0 do NATIVE.md (§5.2.1). O React Native não lê woff2, então o alvo web não atravessa:
 // estes são os MESMOS estilos da web, em .ttf estático.
 //
-// ⚠ NÃO use \`fontWeight\` para escolher o peso. MEDIDO na tabela \`name\` de cada arquivo:
-// só Regular, Italic e Bold moram na família "Atkinson Hyperlegible Next" — o Medium está em
-// "Atkinson Hyperlegible Next Medium" e o SemiBold em "… SemiBold", cada um uma FAMÍLIA PRÓPRIA.
-// É o formato RIBBI, e vale para as duas famílias (era assim também na IBM Plex). Pedir a família
-// + \`fontWeight:"600"\` devolve o Regular sintetizado, não o SemiBold desenhado.
+// ⚠ NÃO use \`fontWeight\` para escolher o peso. Os arquivos estão no formato RIBBI: só Regular,
+// Italic e Bold moram na família principal ("Inter", "Sora", "IBM Plex Mono"); o Medium e o SemiBold
+// são FAMÍLIAS PRÓPRIAS ("Inter Medium", "Sora SemiBold"…). Pedir a família + \`fontWeight:"600"\`
+// devolve o Regular sintetizado, não o SemiBold desenhado. (Era assim também na Atkinson e na IBM Plex.)
 //
 // A forma correta é uma só: \`fontFamily\` recebe o NOME POSTSCRIPT, que é a chave deste mapa.
 // O \`FONT_FAMILIES\` abaixo faz essa tradução por papel de tipografia e peso.
 //
 //   import {AUREA_FONTS, FONT_FAMILIES} from "@aurea-uds/fonts/native";
 //   const [pronto] = useFonts(AUREA_FONTS);              // expo-font
-//   <Text style={{fontFamily: FONT_FAMILIES.ui["600"]}}> // "AtkinsonHyperlegibleNext-SemiBold"
+//   <Text style={{fontFamily: FONT_FAMILIES.ui["600"]}}> // "Inter-SemiBold"
 //
-// Glifos: estes .ttf são COMPLETOS, enquanto o alvo web serve o subset \`latin\`. Mesma origem
-// de desenho (as fontes variáveis do Google Fonts, um peso fixo por arquivo), tamanhos diferentes
-// — no nativo a fonte é asset local do bundle, não transferência de rede por página.
+// Texto em Inter, título em Sora, código e valores em IBM Plex Mono (ADR-0077). Glifos: estes .ttf
+// são COMPLETOS, enquanto o alvo web serve o recorte latino — no nativo a fonte é asset local do
+// bundle, não transferência de rede por página.
 `;
 
 let njs = cab + "\n";

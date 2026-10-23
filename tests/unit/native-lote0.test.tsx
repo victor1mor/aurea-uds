@@ -192,10 +192,14 @@ describe("AureaProvider", () => {
       Object.entries(mapa.ui as Record<string, string>).filter(([k]) => !k.endsWith("i"))));
 
     const t = resolverTokens("dark", "comfortable", mapa);
-    expect(t.font.editorial[400]).toBe("AtkinsonHyperlegibleNext-Regular");
-    expect(t.font.code[700]).toBe("AtkinsonHyperlegibleMono-SemiBold");
-    expect(t.font.ui[600]).toBe("AtkinsonHyperlegibleNext-SemiBold");
-    expect(t.font.ui.italic).toBe("AtkinsonHyperlegibleNext-Italic");
+    // ADR-0077 (0.40.1): a Inter no texto, a IBM Plex Mono no código (sem 700: o 700 cai no 600 desenhado) e a Sora
+    // no TÍTULO, com arquivos próprios — até a 0.40.0 o `heading` apontava para os do texto.
+    expect(t.font.editorial[400]).toBe("Inter-Regular");
+    expect(t.font.code[700]).toBe("IBMPlexMono-SmBld");
+    expect(t.font.ui[600]).toBe("Inter-SemiBold");
+    expect(t.font.ui.italic).toBe("Inter-Italic");
+    expect(t.font.heading[600]).toBe("Sora-SemiBold");
+    expect(t.font.heading[800]).toBe("Sora-ExtraBold");
   });
 
   // DEFEITO SILENCIOSO, e é o pior deste lote: sem o mapa de famílias o texto sai em fonte de
@@ -203,21 +207,18 @@ describe("AureaProvider", () => {
   // FAMÍLIAS PRÓPRIAS no .ttf, medido na tabela `name`. O app parece certo e não é.
   it("sem fontFamilies devolve a família pedida; com o mapa, o nome PostScript", () => {
     const {unmount} = render(<AureaProvider><Sonda /></AureaProvider>);
-    // A família pedida é a do token (`--font-ui`): desde a ADR-0077, a Inter. Os arquivos do aparelho continuam os da
-    // Atkinson até a 0.40.1 — e por isso o mapa de famílias, abaixo, é o caminho certo.
+    // A família pedida é a do token (`--font-ui`): desde a ADR-0077, a Inter. No aparelho, só o mapa de famílias,
+    // abaixo, acha o SemiBold desenhado — o "Inter" sozinho é o Regular.
     expect(screen.getByTestId("fonte")).toHaveTextContent("Inter");
     unmount();
 
     const mapa = {
-      ui: {400: "AtkinsonHyperlegibleNext-Regular", 500: "AtkinsonHyperlegibleNext-Medium",
-           600: "AtkinsonHyperlegibleNext-SemiBold", 700: "AtkinsonHyperlegibleNext-Bold"},
-      editorial: {400: "AtkinsonHyperlegibleNext-Regular", 500: "AtkinsonHyperlegibleNext-Medium",
-                  600: "AtkinsonHyperlegibleNext-SemiBold", 700: "AtkinsonHyperlegibleNext-Bold"},
-      code: {400: "AtkinsonHyperlegibleMono-Regular", 500: "AtkinsonHyperlegibleMono-Medium",
-             600: "AtkinsonHyperlegibleMono-SemiBold", 700: "AtkinsonHyperlegibleMono-Bold"},
+      ui: {400: "Inter-Regular", 500: "Inter-Medium", 600: "Inter-SemiBold", 700: "Inter-Bold"},
+      editorial: {400: "Inter-Regular", 500: "Inter-Medium", 600: "Inter-SemiBold", 700: "Inter-Bold"},
+      code: {400: "IBMPlexMono", 500: "IBMPlexMono-Medm", 600: "IBMPlexMono-SmBld"},
     } as const;
     render(<AureaProvider fontFamilies={mapa}><Sonda /></AureaProvider>);
-    expect(screen.getByTestId("fonte")).toHaveTextContent("AtkinsonHyperlegibleNext-SemiBold");
+    expect(screen.getByTestId("fonte")).toHaveTextContent("Inter-SemiBold");
   });
 });
 
@@ -308,25 +309,25 @@ describe("ícones nativos — o que o gerador não pode errar em silêncio", () 
 });
 
 describe("fontes nativas", () => {
-  // DEFEITO: o alvo nativo ficar para trás do web. São os MESMOS 9 estilos, em outro formato
-  // (ADR-0053: Atkinson Hyperlegible Next em 5, Mono em 3; a IBM Plex tinha 11, com a Serif. O 800
-  // da Next entrou na 0.28.0, GAR-16 — eram 8).
-  // ADR-0077 (22/10/2026): a WEB trocou de fonte na 0.39.0 e o nativo troca na 0.40.1. Até lá, o espelho do nativo são só
-  // os .woff2 da Atkinson, que ficam no pacote para isso; os da Inter, da Sora e da IBM Plex Mono são só da web.
-  it("9 .ttf, um por .woff2, e todos com nome PostScript distinto", async () => {
-    const woff2 = readdirSync(RAIZ + "packages/fonts/files").filter((f) => f.startsWith("atkinson-") && f.endsWith(".woff2"));
+  // DEFEITO: o alvo nativo ficar para trás do web. Desde a ADR-0077 (0.40.1) a web tem a Inter e a Sora VARIÁVEIS e
+  // o nativo um .ttf ESTÁTICO por peso (o Android não lê fonte variável): a conta é por família — as três da web
+  // estão no nativo, e nenhuma família é só do nativo. Até a 0.40.0 eram os 9 estilos da Atkinson, um por um.
+  it("14 .ttf das três famílias da web, todos com nome PostScript distinto, e nenhum da Atkinson", async () => {
+    const familia = (f: string) => f.replace(/-(variable|\d{3})-(normal|italic)\.(woff2|ttf)$/, "");
+    const woff2 = readdirSync(RAIZ + "packages/fonts/files").filter((f) => f.endsWith(".woff2"));
     const ttf = readdirSync(RAIZ + "packages/fonts/files-native").filter((f) => f.endsWith(".ttf"));
-    expect(ttf).toHaveLength(9);
-    expect(ttf.map((f) => f.replace(/\.ttf$/, "")).sort())
-      .toEqual(woff2.map((f) => f.replace(/\.woff2$/, "")).sort());
+    expect(ttf).toHaveLength(14);
+    expect([...new Set(ttf.map(familia))].sort()).toEqual([...new Set(woff2.map(familia))].sort());
+    expect([...new Set(ttf.map(familia))].sort()).toEqual(["ibm-plex-mono", "inter", "sora"]);
+    expect([...woff2, ...ttf].filter((f) => /atkinson/i.test(f)), "a Atkinson saiu de tudo").toEqual([]);
 
     const gerado = readFileSync(RAIZ + "packages/fonts/dist/fonts.native.js", "utf8");
     const chaves = [...gerado.matchAll(/^  "([^"]+)": require/gm)].map((m) => m[1]);
-    expect(chaves).toHaveLength(9);
-    expect(new Set(chaves).size).toBe(9);
-    // O nome MEDIDO na tabela `name`, não escrito à mão — se o gerador voltar a inventar, muda.
-    expect(chaves).toContain("AtkinsonHyperlegibleNext-SemiBold");
-    expect(chaves).toContain("AtkinsonHyperlegibleMono-Regular");
-    expect(chaves).toContain("AtkinsonHyperlegibleNext-ExtraBold");
+    expect(chaves).toHaveLength(14);
+    expect(new Set(chaves).size).toBe(14);
+    // O nome MEDIDO na tabela `name`, não escrito à mão — se o gerador voltar a inventar, muda. Os da IBM são os dela.
+    expect(chaves).toContain("Inter-SemiBold");
+    expect(chaves).toContain("Sora-ExtraBold");
+    expect(chaves).toContain("IBMPlexMono-SmBld");
   });
 });

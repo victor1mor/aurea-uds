@@ -3,7 +3,7 @@
 //
 // As quatro são as do pacote nativo da referência — anatomia, medidas, estados, comportamento e
 // acessibilidade lidos no pacote publicado dela —, com o que é da Aurea por cima: as cores do tema,
-// o canto 22 do cartão e a cápsula, a Atkinson, os ícones Phosphor, sem degradê, "menos movimento".
+// o canto 22 do cartão e a cápsula, a Inter e a Sora (ADR-0077), os ícones Phosphor, sem degradê, "menos movimento".
 //
 // Medido no pacote dela antes de escrito (a classe vira dp: `px-3` = 12, `py-4` = 16, `gap-4` = 16):
 //
@@ -31,6 +31,7 @@ import {
   type NativeSyntheticEvent, type PressableProps, type StyleProp, type ViewStyle,
 } from "react-native";
 import {canto, comOpacidade, criarFolha, estadoAcessivel, REACAO_AO_TOQUE} from "./estilos.js";
+import {NaSuperficie} from "./superficie.js";
 import {GrupoDeEsqueleto, Skeleton, usePulsoDoEsqueleto, type AureaSkeletonAnimation, type GrupoDeEsqueletoValor} from "./feedback.js";
 import {Icon} from "./icon.js";
 import {driverNativo, useReduceMotion} from "./movimento.js";
@@ -184,7 +185,7 @@ export function Accordion({
     onValueChange?.(novo);
   };
 
-  return (
+  const corpo = (
     <View testID={testID} style={[s.accordion, surface && s.accordionSurface, style]}>
       {items.map((item, i) => (
         <React.Fragment key={item.id}>
@@ -195,6 +196,8 @@ export function Accordion({
       ))}
     </View>
   );
+  // ADR-0078: o `surface` é um cartão — o campo de dentro fica cinza. O comum herda o que está em volta.
+  return surface ? <NaSuperficie.Provider value>{corpo}</NaSuperficie.Provider> : corpo;
 }
 
 function ItemDoAccordion({item, aberto, surface, onAlternar, testID}: {
@@ -420,7 +423,8 @@ export function ScrollShadow({
   // Na superfície, os fios ficam na borda da JANELA da lista (o miolo), e não na da caixa.
   return (
     <View testID={testID} style={[s.superficieDaLista, style]}>
-      <View style={s.miolo}>{rolador}{fios}</View>
+      {/* ADR-0078 (0.40.1): a superfície pinta a cor do cartão — o campo da lista fica cinza. */}
+      <View style={s.miolo}><NaSuperficie.Provider value>{rolador}</NaSuperficie.Provider>{fios}</View>
     </View>
   );
 }

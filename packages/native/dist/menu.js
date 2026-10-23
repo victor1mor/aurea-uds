@@ -28,6 +28,7 @@ import { Animated, Easing, Linking, Modal, Pressable, ScrollView, View, useWindo
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaInsetsContext, initialWindowMetrics } from "react-native-safe-area-context";
 import { canto, criarFolha, estadoAcessivel, letraDoToken } from "./estilos.js";
+import { NaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
 import { ForaDaMarca, useTokensDoApp } from "./theme.js";
@@ -318,7 +319,7 @@ function Seta({ tf, lado, ancora, painel }) {
  */
 export function Popover({ trigger, title, children, side = "bottom", arrow = false, testID }) {
     const c = useCamada(trigger);
-    return (_jsxs(_Fragment, { children: [c.gatilho, _jsxs(CamadaPresa, { c: c, side: side, seta: arrow, testID: testID, children: [_jsx(TituloDoPopover, { title: title }), typeof children === "string" ? _jsx(Text, { size: "md", tone: "muted", children: children }) : children] })] }));
+    return (_jsxs(_Fragment, { children: [c.gatilho, _jsxs(CamadaPresa, { c: c, side: side, seta: arrow, testID: testID, children: [_jsx(TituloDoPopover, { title: title }), _jsx(NaSuperficie.Provider, { value: true, children: typeof children === "string" ? _jsx(Text, { size: "md", tone: "muted", children: children }) : children })] })] }));
 }
 function TituloDoPopover({ title }) {
     const s = folha(useTokensDoApp());

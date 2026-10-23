@@ -48,7 +48,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Platform, TextInput, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, criarFolha, estadoAcessivel, preenchimento } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, fundoDeCampo } from "./estilos.js";
+import { useNaSuperficie } from "./superficie.js";
 import { useCampo } from "./inputs.js";
 import { useAureaStrings, useAureaTokens, usePeleSobreAMarca } from "./theme.js";
 // 0.32.0: o campo comum na altura de TOQUE, como o `Input` (40 · 48 · 56; era 32 · 36 · 40). O
@@ -81,7 +82,7 @@ const folha = criarFolha((t) => ({
     campo: {
         width: t.size.space16, textAlign: "center",
         borderWidth: t.size.borderWidth, borderColor: "transparent",
-        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+        ...canto(t.size.radiusControl),
         // A mesma correção de Android do `Input` do Lote 4 — ver `inputs.tsx:280-296`.
         paddingVertical: 0, textAlignVertical: "center",
     },
@@ -253,6 +254,8 @@ const paraEdicao = (n, locale) => {
  */
 export function NumberField({ value, defaultValue, onValueChange, min, max, step = 1, format, locale, disabled, readOnly, size, fullWidth = false, label, placeholder, keyboardType, icons = { increment: "plus", decrement: "minus" }, style, testID, }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const strings = useAureaStrings();
@@ -369,6 +372,7 @@ export function NumberField({ value, defaultValue, onValueChange, min, max, step
                 // campo solto. Sem um dos dois, é um nó anônimo para o leitor de tela.
                 accessibilityLabel: label ?? campo?.label, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), "aria-invalid": campo?.invalido, style: [
                     s.campo,
+                    fundoDeCampo(t, naSuperficie),
                     tam === "display" && s.campoDisplay,
                     fullWidth && s.campoLargo,
                     { height: alturaDoTamanho(t, tam), fontSize: fonteDoTamanho(t, tam),

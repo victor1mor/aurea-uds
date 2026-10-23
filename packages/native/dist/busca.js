@@ -69,7 +69,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo } from "./estilos.js";
+import { useNaSuperficie } from "./superficie.js";
 import { Spinner } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { KeyboardAvoiding, alturaDoTamanho, indicadorDaEscolhida, respiroDoGatilho, respiroDoTamanho, useCampo, } from "./inputs.js";
@@ -101,7 +102,7 @@ const folha = criarFolha((t) => ({
     caixa: {
         width: "100%", minWidth: 0,
         borderWidth: t.size.borderWidth, borderColor: "transparent",
-        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+        ...canto(t.size.radiusControl),
         flexDirection: "row", alignItems: "center",
     },
     invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
@@ -214,6 +215,8 @@ const folha = criarFolha((t) => ({
  */
 export function Combobox({ items, value, onValueChange, onSearchChange, searchDelay = ESPERA_PADRAO, loading, onEndReached, placeholder, searchPlaceholder, empty, clearable = true, draggable = true, disabled, size, chevron = "caret-down", searchIcon = "magnifying-glass", searchKeyboardType, style, testID, }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
     const tf = useTokensDoApp();
@@ -304,6 +307,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
     const nada = !loading && filtrados.length === 0;
     return (_jsxs(_Fragment, { children: [_jsxs(View, { style: [
                     s.caixa,
+                    fundoDeCampo(t, naSuperficie),
                     // 0.32.0: o gatilho do `Select` — altura de toque, 16 dos lados no `md` e 12 entre o
                     // texto e as ações (era 13 e nada).
                     { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoGatilho(t, tam), gap: t.size.space3 },
@@ -375,6 +379,8 @@ const dobrar = (v) => {
  */
 export function SearchField({ value, onChangeText, onSearchChange, searchDelay = ESPERA_PADRAO, placeholder, disabled, size, icon = "magnifying-glass", clearable = true, onSubmit, style, testID, }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const strings = useAureaStrings();
@@ -413,6 +419,7 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
     }, [cancelar, onChangeText, searchDelay]);
     return (_jsxs(View, { testID: testID, style: [
             s.caixa,
+            fundoDeCampo(t, naSuperficie),
             { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
                 gap: t.size.space1 },
             campo?.invalido && s.invalido,

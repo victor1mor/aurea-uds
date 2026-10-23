@@ -62,7 +62,7 @@ export type AureaTokens = {
     /** 1rem em dp. Medido no navegador (raiz sem `font-size` = 16px), não presumido. */
     remInDp: number;
 };
-/** O mapa que o consumidor injeta para o texto sair na Atkinson Hyperlegible. Ver `AureaProviderProps`. */
+/** O mapa que o consumidor injeta para o texto sair na Inter, na Sora e na IBM Plex Mono. Ver `AureaProviderProps`. */
 export type AureaFontFamilies = {
     ui: AureaFontInput;
     editorial: AureaFontInput;

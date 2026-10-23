@@ -65,6 +65,7 @@ import {
 } from "react-native";
 import {Button} from "./actions.js";
 import {canto, cantosDeCima, criarFolha} from "./estilos.js";
+import {NaSuperficie} from "./superficie.js";
 import {CloseButton, IconButton} from "./actions.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
@@ -240,7 +241,8 @@ export function Dialog({
                 style={[s.tituloDaJanela, s.tituloComFechar]}>{title}</Text>
           <View style={s.fechar}><CloseButton onPress={onClose} /></View>
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>
-            {children}
+            {/* ADR-0078: a janela é superfície branca; o campo de dentro fica cinza. */}
+            <NaSuperficie.Provider value>{children}</NaSuperficie.Provider>
           </Corpo>
           {footer ? <View style={s.rodape}>{footer}</View> : null}
         </View>
@@ -410,7 +412,8 @@ export function Drawer({
                 style={[s.tituloDaJanela, s.tituloComFechar]}>{title}</Text>
           <View style={[s.fechar, s.fecharDaGaveta]}><CloseButton label={strings.close} onPress={onClose} /></View>
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>
-            {children}
+            {/* ADR-0078: a janela é superfície branca; o campo de dentro fica cinza. */}
+            <NaSuperficie.Provider value>{children}</NaSuperficie.Provider>
           </Corpo>
         </Animated.View>
       </View>
@@ -518,7 +521,8 @@ export function BottomSheet({
             </View>
           ) : null}
           <Corpo {...(scroll ? {contentContainerStyle: s.corpo} : {style: s.corpo})}>
-            {children}
+            {/* ADR-0078: a janela é superfície branca; o campo de dentro fica cinza. */}
+            <NaSuperficie.Provider value>{children}</NaSuperficie.Provider>
           </Corpo>
           {/* E10: o recuo da barra do sistema — o mesmo `RecuoDaFolha` do `Select` e do
               `Combobox` (`screen.tsx`, onde está por que o `SafeAreaView` não servia aqui). */}

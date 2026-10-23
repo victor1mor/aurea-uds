@@ -30,6 +30,7 @@ import {
 import Svg, {Path} from "react-native-svg";
 import {SafeAreaInsetsContext, initialWindowMetrics} from "react-native-safe-area-context";
 import {canto, criarFolha, estadoAcessivel, letraDoToken, type EstadoAcessivel} from "./estilos.js";
+import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Text} from "./text.js";
 import {ForaDaMarca, useTokensDoApp} from "./theme.js";
@@ -429,7 +430,8 @@ export function Popover({trigger, title, children, side = "bottom", arrow = fals
       {c.gatilho}
       <CamadaPresa c={c} side={side} seta={arrow} testID={testID}>
         <TituloDoPopover title={title} />
-        {typeof children === "string" ? <Text size="md" tone="muted">{children}</Text> : children}
+        {/* ADR-0078: o popover é superfície branca; o campo de dentro fica cinza. */}
+        <NaSuperficie.Provider value>{typeof children === "string" ? <Text size="md" tone="muted">{children}</Text> : children}</NaSuperficie.Provider>
       </CamadaPresa>
     </>
   );
