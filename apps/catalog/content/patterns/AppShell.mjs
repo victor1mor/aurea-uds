@@ -105,4 +105,69 @@ export default [
     }, h("h1", null, "Editor"), h("p", {className: "muted"},
       "The full width goes to the work; the sections are one click away.")),
   },
+  // A LATERAL ATÉ O TOPO (MNT-34, 0.42.0): a marca no topo da lateral, a pessoa no pé, e o botão de recolher ao lado do
+  // título — o desenho das quinze laterais aprovadas pelo Victor.
+  {
+    variant: "Sidebar to the top",
+    name: "The sidebar from top to bottom",
+    description: "`layout=\"sidebar\"` drops the bar that spans the window: the sidebar runs from the top to the bottom, the brand lives at its top and the person at its bottom, and only the list scrolls. The collapse button sits beside the page title (`AppShell.SidebarToggle`).",
+    uses: ["AppShell", "Sidebar", "Avatar", "IconButton"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarVariant="flush"
+  sidebarCollapsible
+  brand={<Sidebar.Brand logo="A" name="Acme" description="Workspace" />}
+  sidebarFooter={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+  navItems={items}
+  currentNavId="reports"
+>
+  <div style={{display: "flex", alignItems: "center", gap: "var(--space-3)"}}>
+    <AppShell.SidebarToggle />
+    <h1>Reports</h1>
+  </div>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: true,
+      brand: h(A.Sidebar.Brand, {logo: "A", name: "Acme", description: "Workspace"}),
+      sidebarFooter: h(A.Sidebar.User, {avatar: h(A.Avatar, {fallback: "KM", alt: ""}), name: "Kate Moore", description: "Admin",
+        action: h(A.IconButton, {icon: "sign-out", label: "Log out", size: "sm"})}),
+      navItems: [{id: "overview", label: "Overview", icon: "house", href: "#"}, {id: "reports", label: "Reports", icon: "file-text", href: "#"},
+        {id: "exports", label: "Exports", icon: "export", href: "#"}],
+      currentNavId: "reports",
+    }, h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-3)"}}, h(A.AppShell.SidebarToggle, null), h("h1", {style: {margin: 0}}, "Reports")),
+      h("p", {className: "muted"}, "Six months of runs, by outcome.")),
+  },
+  {
+    variant: "Sidebar to the top, with a bar",
+    name: "A bar over the content alone",
+    description: "Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. The sidebar keeps running from top to bottom.",
+    uses: ["AppShell", "Sidebar", "SearchField"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarVariant="flush"
+  sidebarCollapsible
+  brand={<Sidebar.Brand logo="A" name="Acme" description="Workspace" />}
+  topbar={<><strong>Reports</strong><SearchField aria-label="Search" placeholder="Search…" /></>}
+  navItems={items}
+  currentNavId="reports"
+>
+  <h1>Reports</h1>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: true,
+      brand: h(A.Sidebar.Brand, {logo: "A", name: "Acme", description: "Workspace"}),
+      topbar: h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-3)", flex: 1}}, h("strong", null, "Reports"),
+        h("div", {style: {minWidth: "180px", marginInlineStart: "auto"}}, h(A.SearchField, {"aria-label": "Search", placeholder: "Search…"}))),
+      navItems: [{id: "overview", label: "Overview", icon: "house", href: "#"}, {id: "reports", label: "Reports", icon: "file-text", href: "#"},
+        {id: "exports", label: "Exports", icon: "export", href: "#"}],
+      currentNavId: "reports",
+    }, h("h1", null, "Reports"), h("p", {className: "muted"}, "Six months of runs, by outcome.")),
+  },
 ];

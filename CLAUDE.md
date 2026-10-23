@@ -182,6 +182,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.39.0` | O lote F-1: a fonte nova da web — Inter no texto, Sora em todo título (h1 a h6) e IBM Plex Mono no código e nos valores (o `numeric` e o número do `KPI`) ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)); os nomes de fonte do nativo trocados, os arquivos do nativo na `0.40.1` — pedido #91. **Publicada em 22/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
 | `0.40.0` | Os campos brancos no claro: o campo solto na página é a cor do cartão com o `--shadow-sm` (a sombra da referência); dentro de uma superfície branca, o cinza de antes; no escuro, nada muda — a web e o site ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)), pedido #92. **Publicada em 22/10/2026** (entre 23:41 e 23:45, Brasília, medido no npm), pelo terminal do Victor |
 | `0.40.1` | O nativo: a Inter, a Sora e a IBM Plex Mono em 14 `.ttf` completos (3,17 MB, *"Completas"*), o título na Sora, o `numeric` e o número do `KPI` na Plex Mono; os campos brancos no claro pelo contexto da superfície ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md) e [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)); na web, as quatro superfícies brancas que a 0.40.0 esqueceu — pedido #93. **Publicada em 23/10/2026** (entre 10:44 e 10:54, Brasília, medido no npm), pelo terminal do Victor |
+| `0.41.0` | A lateral com o topo e o pé fixos: `header` e `footer` no `Sidebar`, e as partes `Sidebar.Brand`, `Sidebar.User`, `Sidebar.Nav` e `Sidebar.Show` — o 4-C das quinze laterais ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)), pedido #94. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -582,6 +583,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (`scripts/package-files.json`) ainda citava os arquivos da Atkinson — o `check-pack --write` regrava. **Publicada em
    23/10/2026** (entre 10:44 e 10:54, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #93. O
    registro entrou no lote seguinte (a lateral, 0.41.0). Falta o teste no aparelho (bloco 0.40.1).
+
+39. **`0.41.0`, a lateral com o topo e o pé fixos, feita em 23/10/2026** ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md))
+   — o 4-C das quinze laterais que o Victor aprovou em 21/10/2026, e o pedido de um segundo app: `header` e `footer` no
+   `Sidebar` (só a lista do meio rola) e as partes `Sidebar.Brand` (a marca do app, em ladrilho ou solta), `Sidebar.User`
+   (a pessoa e o sair), `Sidebar.Nav` e `Sidebar.Show` (o que aparece só aberta ou só recolhida). Aprovada na bancada em
+   tela cheia (*"Aprovado o 4-C"*), depois de *"pq 9 e 10 têm distância maior da lateral? deixe como 8 e 11"* — as duas
+   passaram ao arranjo encostado. ⚠ **As lições:** a nota de versão com lista dentro de lista parou o `build-catalog`
+   (o leitor das notas só lê lista de um nível); e a regra da barra de rolagem mudou de seletor (`.sidebar-body`), e o
+   `engine-batch.test` ainda cobrava o antigo. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor,
+   da junção do pedido #94. O registro entrou no lote seguinte (a lateral até o topo, 0.42.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

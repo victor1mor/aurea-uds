@@ -117,9 +117,41 @@ como deveria funcionar"*.
 
 ---
 
+## [0.42.0] — 2026-10-23
+
+⏳ **Ainda não publicada.** A lateral até o topo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o MNT-34 de um app
+de rede e o pedido de um segundo app: a lateral do alto até embaixo, com a marca nela, e sem a barra que atravessa a tela.
+O Victor, na bancada com a peça de verdade: *"mantenha o atual e faça também os outros 4"*, *"quero o botão de recolher
+conforme eu tinha aprovado"* e *"Aprovado o MNT-34"*. Só a web.
+
+### Acrescentado
+
+- **`AppShell layout="sidebar"`**: a lateral vai do topo ao fim da janela (a de canto encostada; a flutuante com a margem
+  dela) e a marca (`brand`) mora no topo dela. A barra de cima só existe se o app passar `topbar`, e fica só em cima do
+  conteúdo — a pequena (56), rente, com os itens a partir da esquerda. Sem `layout`, o arranjo de sempre, igual.
+- **`AppShell.SidebarToggle`**: o botão de recolher das quinze laterais — o de ícone, sem fundo, com o desenho de
+  lateral, a 12 do título. Com a barra, o shell o põe no começo dela; sem barra, o app o põe ao lado do próprio título. A
+  bolinha da junção continua só no arranjo de sempre.
+- **`sidebarFooter`** no `AppShell`: o pé fixo da lateral (a pessoa e o sair, a lista curta), em qualquer arranjo.
+- **O respiro:** com a lateral de canto, o conteúdo fica a 16 dela. Abaixo de 1024, sem barra, uma faixa de 56 com o
+  botão da gaveta e a marca.
+
+### Para quem cuida do repositório
+
+- **O registro da 0.41.0** (publicada entre 14:44 e 14:50 de 23/10/2026): o `released-surface.json` do commit do
+  publish (`fb969c54`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
+- **Quem cobra:** `tests/unit/appshell-lateral-ate-o-topo.test.tsx` (com o `AppShell` da 0.41.0, reprovam 5 de 6) e
+  `tests/visual/appshell-lateral-ate-o-topo.spec.ts` (as medidas da bancada aprovada; com o CSS da 0.41.0, reprovam 4 de 5).
+  O teste de navegador achou um defeito antes de sair: na barra do conteúdo, um título sozinho ia para a ponta direita.
+- **A ficha do `AppShell`** ganhou o `layout` "sidebar", o `sidebarFooter`, o `AppShell.SidebarToggle` e o ícone
+  `sidebar-simple` na lista dos que ele desenha (check 46); a página dele no site, dois exemplos.
+
+---
+
 ## [0.41.0] — 2026-10-23
 
-⏳ **Ainda não publicada.** A lateral com o topo e o pé fixos ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)) —
+✅ **Publicada em 23/10/2026, entre 14:44 e 14:50 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do pedido #94.
+A lateral com o topo e o pé fixos ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)) —
 o pedaço 4-C das quinze laterais aprovadas pelo Victor em 21/10/2026, e o pedido de um segundo app (o topo e o pé presos,
 só a lista rola). Visto na bancada com o código real, em tela cheia: *"Aprovado o 4-C"*. Só a web.
 
