@@ -21,10 +21,6 @@
         "license": "OFL-1.1"
       },
       {
-        "name": "Atkinson Hyperlegible",
-        "license": "OFL-1.1"
-      },
-      {
         "name": "Phosphor Icons",
         "license": "MIT"
       }
@@ -32,7 +28,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -42,7 +38,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -52,7 +48,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -62,7 +58,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -72,7 +68,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -91,7 +87,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -143,7 +139,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.40.0",
+      "version": "0.40.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -307,13 +303,13 @@
     "componentes": 138,
     "fichas": 138,
     "hooks": 9,
-    "paginas_total": 493,
+    "paginas_total": 494,
     "paginas": {
       "component": 147,
       "pattern": 224,
       "block": 15,
       "recipe": 23,
-      "doc": 75,
+      "doc": 76,
       "area": 9
     },
     "conteudo_rico": 44,
@@ -333,7 +329,7 @@
       "Ready": 48,
       "Stable": 98
     },
-    "testes_unit": 2138,
+    "testes_unit": 2147,
     "componentes_citados_no_teste": 145,
     "specs_visuais": 59,
     "baselines": 48,

@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Avatar, Badge } from "./display.js";
 import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca } from "./estilos.js";
+import { NaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
 import { FilaRolante } from "./rolagem.js";
@@ -465,7 +466,7 @@ export function Header({ variant = "floating", inset = "bar", brand, children, s
             s.topo, s[`topo_${variant}`],
             variant === "flush" && inset !== "bar" && s[`topo_recuo_${inset}`],
             style,
-        ], ...rest, children: [brand != null && _jsx(View, { children: brand }), children] }));
+        ], ...rest, children: [brand != null && _jsx(View, { children: brand }), variant === "flush" ? children : _jsx(NaSuperficie.Provider, { value: true, children: children })] }));
 }
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export function Topbar(props) {

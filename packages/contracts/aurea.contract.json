@@ -1,6 +1,6 @@
 {
   "name": "Aurea — Universal Design System",
-  "version": "0.40.0",
+  "version": "0.40.1",
   "status": "organized-source-of-truth",
   "language": "pt-BR",
   "fonts": {
@@ -349,7 +349,7 @@
     "A sidebar é um único painel arredondado com menu accent subtle.",
     "Não usar gradientes decorativos, paletas alternativas ou cores hardcoded. A única paleta além da semântica são as oito cores de CATEGORIA do Badge (category-red a category-pink, ADR-0060): marcam grupo, não estado; não mudam com a marca; e nunca vão sozinhas, sem palavra.",
     "A escala chart-1 a chart-5 é a única escala categórica/sequencial azul.",
-    "Inter (texto), Sora (títulos, todo h1 a h6), IBM Plex Mono (código e valores: o numeric e o número do KPI) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0077 para as fontes, ADR-0053 para os ícones); não trocar sem atualizar este contrato. No React Native, os tokens já dizem as fontes novas, e os arquivos ainda são os da Atkinson Hyperlegible até a 0.40.1.",
+    "Inter (texto), Sora (títulos, todo h1 a h6), IBM Plex Mono (código e valores: o numeric e o número do KPI) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0077 para as fontes, ADR-0053 para os ícones); não trocar sem atualizar este contrato. No React Native, as mesmas três famílias, em TTF estático por peso (@aurea-uds/fonts/native).",
     "Consumidores usam somente os pacotes @aurea-uds do monorepo; cópias manuais são proibidas.",
     "Quando faltar um padrão, atualizar primeiro este arquivo e depois a aplicação.",
     "Players usam exclusivamente os tokens --media-*; controles permanecem escuros e legíveis nos dois temas.",

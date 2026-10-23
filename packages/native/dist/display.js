@@ -40,7 +40,7 @@ const folha = criarFolha((t) => ({
     // Até a 0.10.1 eram `3px 9px` e `gap:6` crus, e o texto saía com entrelinha 1,0: no Android a
     // perna do g e do p era cortada (a mesma causa do E1 no `Button`). A linha da referência é ≥ 1,33 ×
     // a letra, e a letra precisa de 1,3 (a IBM Plex e a Atkinson Hyperlegible da ADR-0053, medidas
-    // na tabela `hhea`). O raio continua a cápsula da Aurea (identidade) e a
+    // na tabela `hhea`). Desde a ADR-0077 (0.40.1), menos: a Inter 1,21, a Sora 1,26, a IBM Plex Mono 1,3. O raio continua a cápsula da Aurea (identidade) e a
     // borda continua nossa.
     // ⚠ O `xs` NÃO existe na referência (é o contador sobre ícone): fica a medida nossa, 16 de altura,
     // agora com letra 12 e linha 16 para caber a letra inteira.

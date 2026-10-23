@@ -4697,11 +4697,15 @@ button.graph-node-body { cursor:pointer; }
    deixa o app escolher; aqui a superfície escolhe sozinha.
    · O fundo "de página" mora em cada elemento de tema, como os `--fill-*` (segue a faixa de outro tema, GAR-05).
    · As superfícies que pintam a cor do cartão devolvem o cinza. As que NÃO pintam ficam de fora: o cartão de contorno
-     (transparente — a caixa da vitrine) e o `inset` (cinza). O painel de prévia do site é página: volta ao branco. */
+     (transparente — a caixa da vitrine) e o `inset` (cinza). O painel de prévia do site é página: volta ao branco.
+   · 0.40.1: entraram as que a 0.40.0 esqueceu e que recebem campo do app — o `Header` flutuante e o de pílula (a busca
+     na barra), a lateral da documentação aberta como popover e o item da `SortableList`. Quem pinta a cor do cartão e
+     NÃO recebe campo fica de fora (a barra de baixo, a dica, o selo, a moldura de celular, as peças do mapa). Peça nova
+     que pinta `--card` ou `--popover` e recebe conteúdo do app entra nesta lista. */
 :root,[data-theme] { --field-fill-page:var(--fill-2); --field-lift-page:none; }
 [data-theme="light"] { --field-fill-page:var(--card); --field-lift-page:var(--shadow-sm); }
 :root,[data-theme],.demo-panel[data-panel="preview"] { --field-fill:var(--field-fill-page); --field-lift:var(--field-lift-page); }
-:is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th)) { --field-fill:var(--fill-2); --field-lift:none; }
+:is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open) { --field-fill:var(--fill-2); --field-lift:none; }
 .input:where(:not(.input-secondary)),.textarea:where(:not(.textarea-secondary)),.select,.input-group:where(:not(:has(>.input-secondary))),.number-field-group,.combobox-multi { background-color:var(--field-fill); box-shadow:var(--field-lift); }
 .input-group > :is(.input,.select,.textarea),.number-field-group .input,.combobox-multi .input { background-color:transparent; box-shadow:none; }
 .control-mark,.switch-track { background-color:var(--fill-3); }

@@ -18,6 +18,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 // envelope). O `ViewProps`/`TextProps` do RN 0.87 ja' declaram `ref`, entao ele viaja no
 // `...rest` sem nada a mais.
 import { canto, comOpacidade, criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
+import { NaSuperficie } from "./superficie.js";
 import { Text } from "./text.js";
 import { useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -217,13 +218,19 @@ export function Separator({ orientation = "horizontal", label, style, ...rest })
  * Cartão com duas ações não tem `onPress`: cada ação é um botão dentro de um cartão comum.
  */
 export function Card(props) {
+    // ADR-0078 (0.40.1): o cartão é superfície branca, e o campo de dentro volta ao cinza. O de contorno
+    // (transparente) e o `inset` (cinza) não são: HERDAM o que está em volta, como na web (eles não entram na
+    // lista de superfícies do `aurea.css`) — numa tela, o campo de dentro fica branco; dentro de outro cartão,
+    // cinza.
     // MT-01 (ADR-0063, 10/10/2026): o `contrast` é o tema escuro DENTRO do cartão, então TODO filho
     // se ajusta — texto, selo, botão, campo —, e não só a lista declarada do `brand`. A marca não
     // atravessa: dentro de um cartão amarelo, o `contrast` não é amarelo, e a tinta dele não vale.
     if (props.variant === "contrast") {
-        return (_jsx(TemaDentro, { tema: "dark", children: _jsx(SobreAMarca.Provider, { value: null, children: _jsx(CorpoDoCartao, { ...props }) }) }));
+        return (_jsx(NaSuperficie.Provider, { value: true, children: _jsx(TemaDentro, { tema: "dark", children: _jsx(SobreAMarca.Provider, { value: null, children: _jsx(CorpoDoCartao, { ...props }) }) }) }));
     }
-    return _jsx(CorpoDoCartao, { ...props });
+    if (props.variant === "outline" || props.variant === "inset")
+        return _jsx(CorpoDoCartao, { ...props });
+    return _jsx(NaSuperficie.Provider, { value: true, children: _jsx(CorpoDoCartao, { ...props }) });
 }
 /** A cor CHEIA de cada tom do traço — a mesma nos dois temas (ADR-0063, exceção à ADR-0061). */
 const COR_DO_TRACO = {

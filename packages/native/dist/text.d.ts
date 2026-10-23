@@ -34,6 +34,8 @@ export interface TextProps extends TextPropsRN {
     /**
      * GAR-16 (0.28.0): algarismos da mesma largura (`fontVariant: ["tabular-nums"]`, iOS e Android) —
      * para número que alinha em coluna ou muda na tela. Desligado por padrão, como na web.
+     * ADR-0077 (0.40.1): e na fonte de código, a IBM Plex Mono — o valor e o número de identificação, como
+     * na web. O `font` passado explicitamente continua mandando.
      */
     numeric?: boolean;
 }
@@ -41,9 +43,9 @@ export interface TextProps extends TextPropsRN {
  * Texto da Aurea. Sem provider acima, `useAureaTokens` levanta — de propósito: um padrão
  * silencioso aqui desenharia o app inteiro no tema errado sem nada acusar.
  *
- * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** Na Atkinson
- * Hyperlegible (como era na IBM Plex) só Regular, Italic e Bold moram na família "Atkinson
- * Hyperlegible Next"; Medium e SemiBold são famílias
+ * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** Na Inter, na Sora
+ * e na IBM Plex Mono (ADR-0077; era assim também na Atkinson e na IBM Plex) só Regular, Italic e Bold
+ * moram na família principal; Medium e SemiBold são famílias
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */

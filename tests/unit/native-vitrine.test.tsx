@@ -14,8 +14,9 @@
 //         nunca como prova de layout final.
 //   NÃO é · substituto do `apps/native-smoke/`, que roda no Android de verdade.
 //
-// A tipografia é a Atkinson Hyperlegible (ADR-0053) servida dos `.woff2` do próprio repositório — no aparelho quem serve
-// são os `.ttf` do `@aurea-uds/fonts/native`. Mesma família, arquivo diferente.
+// A tipografia é a da ADR-0077 — a Inter, a Sora e a IBM Plex Mono — servida dos `.woff2` do próprio repositório; no
+// aparelho quem serve são os `.ttf` do `@aurea-uds/fonts/native`. Mesmas famílias, arquivos diferentes. (Até a 0.40.0,
+// a Atkinson Hyperlegible, ADR-0053.)
 import {render, act} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
 import * as React from "react";
@@ -298,15 +299,15 @@ describe("vitrine do alvo nativo", () => {
 <meta charset="utf-8">
 <title>Vitrine — alvo nativo, Lote 7</title>
 <style>
-  @font-face { font-family:"Atkinson Hyperlegible Next"; font-weight:400;
-    src:url("file://${fontes}/atkinson-hyperlegible-next-400-normal.woff2") format("woff2"); }
-  @font-face { font-family:"Atkinson Hyperlegible Next"; font-weight:500;
-    src:url("file://${fontes}/atkinson-hyperlegible-next-500-normal.woff2") format("woff2"); }
-  @font-face { font-family:"Atkinson Hyperlegible Next"; font-weight:600;
-    src:url("file://${fontes}/atkinson-hyperlegible-next-600-normal.woff2") format("woff2"); }
+  @font-face { font-family:"Inter"; font-weight:100 900;
+    src:url("file://${fontes}/inter-variable-normal.woff2") format("woff2"); }
+  @font-face { font-family:"Sora"; font-weight:100 800;
+    src:url("file://${fontes}/sora-variable-normal.woff2") format("woff2"); }
+  @font-face { font-family:"IBM Plex Mono"; font-weight:400;
+    src:url("file://${fontes}/ibm-plex-mono-400-normal.woff2") format("woff2"); }
   * { box-sizing:border-box; }
   body { margin:0; padding:32px; background:#16171a; color:#e8e8ea;
-         font:14px/1.5 "Atkinson Hyperlegible Next", system-ui, sans-serif; }
+         font:14px/1.5 "Inter", system-ui, sans-serif; }
   h1 { font-size:22px; margin:0 0 6px; }
   .aviso { max-width:980px; margin:0 0 28px; padding:14px 16px; border-radius:12px;
            background:#2a2418; border:1px solid #6b5a1f; color:#e8d9a8; font-size:13px; }

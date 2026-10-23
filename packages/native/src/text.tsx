@@ -63,6 +63,8 @@ export interface TextProps extends TextPropsRN {
   /**
    * GAR-16 (0.28.0): algarismos da mesma largura (`fontVariant: ["tabular-nums"]`, iOS e Android) —
    * para número que alinha em coluna ou muda na tela. Desligado por padrão, como na web.
+   * ADR-0077 (0.40.1): e na fonte de código, a IBM Plex Mono — o valor e o número de identificação, como
+   * na web. O `font` passado explicitamente continua mandando.
    */
   numeric?: boolean;
 }
@@ -161,9 +163,9 @@ const folha = criarFolha((t: AureaTokens) => {
  * Texto da Aurea. Sem provider acima, `useAureaTokens` levanta — de propósito: um padrão
  * silencioso aqui desenharia o app inteiro no tema errado sem nada acusar.
  *
- * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** Na Atkinson
- * Hyperlegible (como era na IBM Plex) só Regular, Italic e Bold moram na família "Atkinson
- * Hyperlegible Next"; Medium e SemiBold são famílias
+ * ⚠ **`fontWeight` não aparece em lugar nenhum deste arquivo, e isso é a ADR-0039.** Na Inter, na Sora
+ * e na IBM Plex Mono (ADR-0077; era assim também na Atkinson e na IBM Plex) só Regular, Italic e Bold
+ * moram na família principal; Medium e SemiBold são famílias
  * próprias. Pedir peso 600 por `fontWeight` devolveria o Regular sintetizado — **em silêncio**.
  * Quem escolhe a fonte aqui é o `fontFamily`, com o nome PostScript que o provider já resolveu.
  */
@@ -177,7 +179,9 @@ export function Text({
   // Sem `type`, os padrões de sempre (`md`, 400, `ui`, `normal`) — nada muda para quem já usa.
   const papel = type ? PAPEL[type] : undefined;
   const weight = pesoPedido ?? papel?.peso ?? 400;
-  const font = fontePedida ?? papel?.fonte ?? "ui";
+  // ADR-0077 (0.40.1): o `numeric` vai na fonte de CÓDIGO, a IBM Plex Mono — os valores e os números de identificação,
+  // como a `.typography-numeric` da web. A fonte pedida explicitamente (`font`) continua ganhando.
+  const font = fontePedida ?? (numeric ? "code" : papel?.fonte ?? "ui");
   const tracking = trackingPedido ?? (papel?.junto ? "tight" : undefined);
 
   const proprio = React.useMemo(() => {
@@ -189,7 +193,7 @@ export function Text({
       : papel ? t.size[papel.entrelinha] ?? t.size.leadingNormal : t.size.leadingNormal;
     const escala = t.font[font];
     // O itálico é UMA fonte, não um estilo sintético: `fontStyle:"italic"` faria o sistema
-    // inclinar o desenho reto, e a Atkinson tem itálico desenhado. Só o `ui` o tem — nos outros
+    // inclinar o desenho reto, e a Inter tem itálico desenhado. Só o `ui` o tem — nos outros
     // papéis o pedido cai no peso pedido, que é o comportamento honesto.
     const familia = italic && escala.italic ? escala.italic : escala[weight];
     return {

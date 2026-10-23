@@ -35,7 +35,8 @@ import { Linking, Platform, Pressable, View } from "react-native";
 import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { IconButton } from "./actions.js";
-import { canto, criarFolha, estadoAcessivel, preenchimento } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo } from "./estilos.js";
+import { useNaSuperficie } from "./superficie.js";
 import { Alert } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { alturaDoTamanho, respiroDoTamanho, useCampo } from "./inputs.js";
@@ -46,7 +47,7 @@ const folha = criarFolha((t) => ({
     gatilho: {
         flexDirection: "row", alignItems: "center", justifyContent: "space-between",
         width: "100%", borderWidth: t.size.borderWidth, borderColor: "transparent",
-        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+        ...canto(t.size.radiusControl),
     },
     invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
     // No navegador o texto e o ícone vão numa caixa escondida do leitor de tela (E16): a mesma
@@ -139,6 +140,8 @@ const doCampoWeb = (texto, mode, base) => {
  */
 export function DatePicker({ value, onChange, mode = "date", minimumDate, maximumDate, disabled, size, format, placeholder, icon = "calendar", style, testID, }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     const strings = useAureaStrings();
     const campo = useCampo();
@@ -171,6 +174,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
     // dos lados (era 13). Era uma cópia das contas de lá.
     const pele = [
         s.gatilho,
+        fundoDeCampo(t, naSuperficie),
         { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam) },
         campo?.invalido && s.invalido,
         inativo && s.desabilitado,

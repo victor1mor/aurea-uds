@@ -49,6 +49,10 @@ const BRANCAS: Record<string, string> = {
   "a janela": `<div class="dialog">${campos}</div>`,
   "o painel do app": `<main class="content">${campos}</main>`,
   "a célula da tabela": `<table class="table"><tbody><tr><td>${campos}</td></tr></tbody></table>`,
+  // 0.40.1: as que a 0.40.0 esqueceu e que recebem campo do app (com o CSS da 0.40.0, as três reprovam).
+  "o Header flutuante": `<header class="topbar topbar-floating">${campos}</header>`,
+  "o Header de pílula": `<header class="topbar topbar-pill">${campos}</header>`,
+  "o item da SortableList": `<ul class="sortable-list"><li class="sortable-item">${campos}</li></ul>`,
 };
 for (const [nome, html] of Object.entries(BRANCAS)) {
   test(`claro, dentro de ${nome} (superfície branca): o campo volta ao cinza, sem sombra`, async ({page}) => {
@@ -59,6 +63,24 @@ for (const [nome, html] of Object.entries(BRANCAS)) {
     }
   });
 }
+
+test("claro, dentro da lateral da documentação aberta (popover): o campo volta ao cinza, sem sombra", async ({page}) => {
+  // 0.40.1: no celular e no tablet, a lateral do `AppShell layout="docs"` abre como popover, com o fundo do popover.
+  await page.setViewportSize({width: 375, height: 800});
+  await page.setContent(`<!doctype html><html data-theme="light"><head><meta charset="utf-8"><style>${CSS}</style></head>`
+    + `<body style="margin:0"><div class="app-shell app-shell-docs"><nav class="sidebar" popover="manual" id="lateral">${campos}</nav></div></body></html>`);
+  await page.evaluate(() => document.getElementById("lateral")!.showPopover());
+  const m = await page.evaluate(() => Object.fromEntries(["texto", "lista", "casa", "grupo"].map((id) => {
+    const cs = getComputedStyle(document.getElementById(id)!);
+    return [id, {fundo: cs.backgroundColor, sombra: cs.boxShadow}];
+  })));
+  const lateral = await page.evaluate(() => getComputedStyle(document.getElementById("lateral")!).backgroundColor);
+  expect(lateral, "a lateral aberta pinta o fundo do popover (branco)").toBe(BRANCO);
+  for (const id of NA_PAGINA) {
+    expect(m[id].fundo, `lateral aberta · ${id}: não é branco`).not.toBe(BRANCO);
+    expect(m[id].sombra, `lateral aberta · ${id}: sem sombra`).toBe("none");
+  }
+});
 
 const NAO_BRANCAS: Record<string, string> = {
   "o cartão de contorno (transparente, a caixa da vitrine)": `<div class="card card-outline">${campos}</div>`,

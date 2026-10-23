@@ -12,7 +12,8 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // do `BottomSheet` (`overlays.tsx`).
 import * as React from "react";
 import { Animated, PanResponder, Platform, Pressable, TextInput, View, } from "react-native";
-import { canto, criarFolha, estadoAcessivel, preenchimento } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, fundoDeCampo } from "./estilos.js";
+import { useNaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Label, useCampo } from "./inputs.js";
 import { driverNativo, useReduceMotion } from "./movimento.js";
@@ -56,7 +57,7 @@ const folha = criarFolha((t) => ({
         width: t.size.space10 + t.size.space1, height: t.size.touchControlHMd,
         alignItems: "center", justifyContent: "center",
         borderWidth: t.size.borderWidth, borderColor: "transparent",
-        ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+        ...canto(t.size.radiusControl),
     },
     // A casa ativa: a borda da cor do foco, com a espessura do anel (o contorno de 2 da referência).
     casaAtiva: { borderColor: t.color.focusStrong, borderWidth: t.size.focusWidth },
@@ -238,7 +239,9 @@ export function Slider({ label, labelHidden, value, defaultValue, onValueChange,
     // A área de toque chega aos 44 no eixo de fora (o trilho tem 20).
     const folga = (t.size.targetMin - t.size.space5) / 2;
     const nomeDoGrupo = typeof label === "string" ? label : campo?.label;
-    const valorEscrito = showValue ? (_jsx(Text, { size: "xs", weight: 500, numeric: true, children: valores.map(texto).join(" – ") })) : null;
+    // ADR-0077: o valor do `Slider` fica na fonte do texto, com algarismos de mesma largura (o `.slider-output` da
+    // web); o `numeric` sozinho seria a IBM Plex Mono, que é do app e do `KPI`.
+    const valorEscrito = showValue ? (_jsx(Text, { size: "xs", weight: 500, numeric: true, font: "ui", children: valores.map(texto).join(" – ") })) : null;
     const trilhoDesenhado = (_jsxs(View, { ...gestoDoTrilho.panHandlers, onLayout: (e) => {
             const { width, height } = e.nativeEvent.layout;
             setTrilho(vertical ? height : width);
@@ -317,6 +320,8 @@ function proximoCodigo(anterior, texto, tamanho) {
  */
 export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, label, style, testID }) {
     const t = useAureaTokens();
+    // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+    const naSuperficie = useNaSuperficie();
     const s = folha(t);
     const strings = useAureaStrings();
     const campo = useCampo();
@@ -342,6 +347,7 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
                     const ativa = focado && i === valor.length;
                     return (_jsx(View, { testID: testID ? `${testID}-casa-${i}` : undefined, style: [
                             s.casa,
+                            fundoDeCampo(t, naSuperficie),
                             ativa && s.casaAtiva,
                             invalido && s.casaInvalida,
                             // Sobre a marca vale a tinta, inclusive no lugar do vermelho — a regra do `Input`.

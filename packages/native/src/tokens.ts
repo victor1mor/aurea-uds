@@ -77,7 +77,7 @@ export type AureaTokens = {
   remInDp: number;
 };
 
-/** O mapa que o consumidor injeta para o texto sair na Atkinson Hyperlegible. Ver `AureaProviderProps`. */
+/** O mapa que o consumidor injeta para o texto sair na Inter, na Sora e na IBM Plex Mono. Ver `AureaProviderProps`. */
 export type AureaFontFamilies = {ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput;
   /** O papel do título (GAR-16, 0.28.0). Opcional: sem ele, o título usa o mapa do `ui` — que é a
    *  mesma fonte hoje, e é o que acontece com quem ainda passa o mapa de antes da 0.28.0. */
@@ -160,7 +160,7 @@ export function resolverTokens(
   }
 
   // Sem mapa injetado, a família CRUA do token preenche os quatro pesos: é o token dizendo
-  // "Atkinson Hyperlegible Next", que no aparelho vira Regular ou fonte de sistema. Honesto e previsível —
+  // "Inter", que no aparelho vira Regular ou fonte de sistema. Honesto e previsível —
   // e é por isso que o `fontFamilies` do provider existe.
   const font = {
     ui: normalizarEscala(fontFamilies?.ui, texto.fontUi ?? "System"),

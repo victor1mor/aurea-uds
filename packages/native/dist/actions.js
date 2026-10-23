@@ -253,7 +253,9 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
                     // (a folha do botão dela usa a entrelinha de cada degrau da escala). Era `none` (1,0), e a letra
                     // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a
                     // Atkinson Hyperlegible (ADR-0053) sobe 0,984 e desce 0,316, o mesmo 1,3 (medido na
-                    // tabela `hhea` dos dois arquivos, 01/10/2026): no Android o RN
+                    // tabela `hhea` dos dois arquivos, 01/10/2026). Desde a ADR-0077 (0.40.1): a Inter pede 1,21 (sobe
+                    // 0,969, desce 0,241), a Sora 1,26 e a IBM Plex Mono os mesmos 1,3 (medido na `hhea`, 22/10/2026) —
+                    // todas cabem nesta linha. No Android o RN
                     // corta o que passa da linha, e a perna do g, do p e do ç sumia. Cabe em todo tamanho e
                     // densidade (conta da 0.32.0): `xs`/`sm` têm linha de 21 e o menor botão mede 28 (`xs`
                     // no compacto); o `md` tem linha de 24 e mede 44 ou mais; `lg`/`xl`, 27 e 52 ou mais.

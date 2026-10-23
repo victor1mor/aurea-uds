@@ -49,7 +49,8 @@ import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-n
 import {IconButton} from "./actions.js";
 // Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
 import type {AureaIcon} from "./icon.js";
-import {canto, criarFolha, estadoAcessivel, preenchimento} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, fundoDeCampo} from "./estilos.js";
+import {useNaSuperficie} from "./superficie.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -101,7 +102,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   campo: {
     width: t.size.space16, textAlign: "center",
     borderWidth: t.size.borderWidth, borderColor: "transparent",
-    ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
+    ...canto(t.size.radiusControl),
     // A mesma correção de Android do `Input` do Lote 4 — ver `inputs.tsx:280-296`.
     paddingVertical: 0, textAlignVertical: "center",
   },
@@ -335,6 +336,8 @@ export function NumberField({
   icons = {increment: "plus", decrement: "minus"}, style, testID,
 }: NumberFieldProps) {
   const t = useAureaTokens();
+  // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
+  const naSuperficie = useNaSuperficie();
   const s = folha(t);
   const peleDaMarca = usePeleSobreAMarca();
   const strings = useAureaStrings();
@@ -479,6 +482,7 @@ export function NumberField({
         aria-invalid={campo?.invalido}
         style={[
           s.campo,
+          fundoDeCampo(t, naSuperficie),
           tam === "display" && s.campoDisplay,
           fullWidth && s.campoLargo,
           {height: alturaDoTamanho(t, tam), fontSize: fonteDoTamanho(t, tam),

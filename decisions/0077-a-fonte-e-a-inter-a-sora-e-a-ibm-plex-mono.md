@@ -1,8 +1,9 @@
 # ADR-0077 — A fonte é a Inter, a Sora e a IBM Plex Mono
 
 - **Data:** 22/10/2026
-- **Estado:** aceita · feita na branch `claude/fonte`: **a web na `0.39.0`**; o nativo na `0.40.1` — era a `0.39.1`; a `0.40.0` foram os campos brancos, ADR-0078 — (os `.ttf` das fontes
-  novas e o teste no aparelho). **Substitui a parte da fonte da [ADR-0053](0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)**;
+- **Estado:** aceita · **a web na `0.39.0`** (branch `claude/fonte`); **o nativo na `0.40.1`** (branch `claude/nativo`;
+  era a `0.39.1` — a `0.40.0` foram os campos brancos, ADR-0078): os `.ttf` das fontes novas, ver "O nativo", abaixo.
+  **Substitui a parte da fonte da [ADR-0053](0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)**;
   a parte dos ícones (Phosphor Regular, Fill no item escolhido) continua valendo.
 - **Origem:** o Victor quer que a Aurea seja adotada na empresa dele, e mediu-se o sistema interno que o chefe dele
   criou (o mapa fica fora do repositório, no documento de achados). A fonte de lá: Sora nos títulos, Inter no texto,
@@ -49,6 +50,29 @@
    fonte dos tokens do nativo já trocam na `0.39.0` (decisão do Victor, 22/10/2026); o app que passa o `fontFamilies`
    não vê diferença até os arquivos chegarem.
 
+## O nativo (0.40.1)
+
+- **O React Native não lê `woff2` nem fonte variável no Android**: um `.ttf` estático por peso, como a Atkinson era
+  (ADR-0039 — uma família por peso, o nome é o PostScript lido na tabela `name`). São 14 arquivos em
+  `packages/fonts/files-native/`, feitos por `packages/fonts/fontes-nativas.py`, que imprime o resumo (sha256) de
+  cada um e sai igual a cada rodada:
+  - **Inter** — 400, o itálico 400, 500, 600, 700 e 800: os `.ttf` estáticos do próprio autor (`Inter-4.1.zip`, pasta
+    `extras/ttf/`), **sem mudança**;
+  - **Sora** — 400 a 800: a fonte variável do Google Fonts (a mesma da web) fixada num peso por arquivo, com o nome de
+    cada peso escrito à mão (a tabela de estilos dela não tem o 500);
+  - **IBM Plex Mono** — 400, 500 e 600: os `.ttf` da própria IBM (`@ibm/plex-mono` 2.5.0, `fonts/complete/ttf/`),
+    **sem mudança** (o nome reservado).
+- **O título é Sora também no nativo**: o mapa `heading` deixa de apontar para a fonte do texto. O `numeric` (`Text`) e
+  o número do `KPI` saem na IBM Plex Mono, como na web; o `font` pedido pelo app continua mandando. Os números de
+  dentro das peças — a célula da `Table` e o valor do `Slider` — ficam na Inter com algarismos de mesma largura (pedem
+  `numeric` com `font="ui"`), como o `.slider-output` e a tabela da web.
+- **Os arquivos vão COMPLETOS**, com todos os alfabetos que cada fonte desenha (decisão do Victor, 22/10/2026,
+  *"Completas"*, olhando as três medidas): 3,17 MB no app, contra 0,40 MB da Atkinson. Cortar a Inter e a Sora no
+  alfabeto latino daria 1,99 MB; no recorte da web, 1,37 MB. A referência principal não traz fonte no nativo (usa a do
+  sistema); o pacote de mercado da Inter para o React Native traz cada peso completo, cerca de 340 KB.
+- **A altura da linha cobre a letra** (o Android corta o que passa dela): a Inter pede 1,21 do tamanho, a Sora 1,26 e a
+  IBM Plex Mono 1,30 (a `hhea` de cada arquivo) — dentro do 1,3 que as peças de uma linha já usavam.
+
 ## O custo, escrito
 
 - **A Aurea deixa de ter uma fonte desenhada para baixa visão.** Na Inter sem o `ss02`, o `I` maiúsculo e o `l`
@@ -70,4 +94,8 @@
   e o número do `KPI` usam a fonte de código.
 - `tests/visual/skin.spec.ts` — o `Kbd` na fonte do texto, o `CodeBlock` e o log na fonte de código (roda na máquina
   local; a CI não o roda).
-- `scripts/validate.py` — o `LICENSE` do pacote leva o copyright de cada família.
+- `scripts/validate.py` — o `LICENSE` do pacote leva o copyright de cada família, e nada da Atkinson; e o check 37: a
+  web e o nativo têm as mesmas famílias e estilos, e cada peso fixo da web (a IBM Plex Mono) existe no nativo.
+- `tests/unit/native-lote0.test.tsx` — os 14 `.ttf` das três famílias, nenhum da Atkinson, e o mapa de nomes do nativo.
+- `tests/unit/native-campos-brancos.test.tsx` — o `numeric` e o número do `KPI` do nativo na IBM Plex Mono.
+- O aparelho: o bloco `0.40.1` do `apps/native-smoke`.

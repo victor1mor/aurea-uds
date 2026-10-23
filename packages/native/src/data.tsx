@@ -411,7 +411,9 @@ export function Table<T>({
           <View accessible>
             {(() => {
               const v = conteudo(principal, linha);
-              return typeof v === "string" ? <Text size="md" weight={600} numeric>{v}</Text> : v;
+              // ADR-0077: o número da tabela fica na fonte do texto, com algarismos de mesma largura (como na web);
+              // o `numeric` sozinho seria a IBM Plex Mono, que é do app e do `KPI`.
+              return typeof v === "string" ? <Text size="md" weight={600} numeric font="ui">{v}</Text> : v;
             })()}
           </View>
         ) : null}
@@ -424,7 +426,7 @@ export function Table<T>({
               {typeof coluna.header === "string"
                 ? <Text size="sm" tone="muted" style={s.nomeDaColuna}>{coluna.header}</Text>
                 : coluna.header}
-              {typeof v === "string" ? <Text size="sm" numeric style={s.valor}>{v}</Text> : v}
+              {typeof v === "string" ? <Text size="sm" numeric font="ui" style={s.valor}>{v}</Text> : v}
             </View>
           );
         })}
