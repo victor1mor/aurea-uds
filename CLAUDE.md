@@ -181,6 +181,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.38.0` | O lote 0-B: a legenda do `DependencyGraph` que fecha (`legendCollapsible`) e o botão do minimapa junto do zoom (`minimapToggle`) — MNT-31, a L1 e a M2 da bancada; e o teste da lateral que ainda cobrava o amarelo no claro — pedido #90. **Publicada em 22/10/2026** (entre 11:08 e 11:22, Brasília, medido no npm), pelo terminal do Victor |
 | `0.39.0` | O lote F-1: a fonte nova da web — Inter no texto, Sora em todo título (h1 a h6) e IBM Plex Mono no código e nos valores (o `numeric` e o número do `KPI`) ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md)); os nomes de fonte do nativo trocados, os arquivos do nativo na `0.40.1` — pedido #91. **Publicada em 22/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
 | `0.40.0` | Os campos brancos no claro: o campo solto na página é a cor do cartão com o `--shadow-sm` (a sombra da referência); dentro de uma superfície branca, o cinza de antes; no escuro, nada muda — a web e o site ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)), pedido #92. **Publicada em 22/10/2026** (entre 23:41 e 23:45, Brasília, medido no npm), pelo terminal do Victor |
+| `0.40.1` | O nativo: a Inter, a Sora e a IBM Plex Mono em 14 `.ttf` completos (3,17 MB, *"Completas"*), o título na Sora, o `numeric` e o número do `KPI` na Plex Mono; os campos brancos no claro pelo contexto da superfície ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md) e [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)); na web, as quatro superfícies brancas que a 0.40.0 esqueceu — pedido #93. **Publicada em 23/10/2026** (entre 10:44 e 10:54, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -570,6 +571,17 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    cor do cartão?" com a lista das 40 regras que pintam `--card`/`--popover`, e consertado na 0.40.1. **Publicada em
    22/10/2026** (entre 23:41 e 23:45, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #92. O
    registro entrou no lote seguinte (o nativo, 0.40.1).
+
+38. **`0.40.1`, o nativo, feita de 22 a 23/10/2026** — a fonte nova no aparelho (os `.ttf` da Inter e da IBM Plex Mono
+   sem mudança, a Sora fixada num peso por arquivo por `packages/fonts/fontes-nativas.py`; completos, *"Completas"*, 3,17 MB
+   contra 0,40 MB da Atkinson), o título na Sora, o `numeric` e o `KPI` na Plex Mono, e os campos brancos do nativo
+   (`fundoDeCampo()` e o contexto `superficie.tsx`). Aprovada pela bancada no `react-native-web` (*"Aprovado, pode
+   seguir"*). ⚠ **As lições:** o `vitest` inteiro achou um defeito meu — a `Table` e o `Slider` usavam o `numeric` só pelos
+   algarismos de mesma largura e passaram para a Plex Mono; dentro das peças, `numeric` com `font="ui"`. A pergunta "quem
+   mais pinta a cor do cartão?" achou quatro superfícies da web que a 0.40.0 esqueceu. E a lista do pacote
+   (`scripts/package-files.json`) ainda citava os arquivos da Atkinson — o `check-pack --write` regrava. **Publicada em
+   23/10/2026** (entre 10:44 e 10:54, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #93. O
+   registro entrou no lote seguinte (a lateral, 0.41.0). Falta o teste no aparelho (bloco 0.40.1).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

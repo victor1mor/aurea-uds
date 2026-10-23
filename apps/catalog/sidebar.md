@@ -30,6 +30,8 @@ import {Sidebar} from "@aurea-uds/react";
 
 - AppShell forwards it: `<AppShell sidebarVariant="flush">`. Without that the variant would be unreachable for anyone composing through the shell, which is the normal path.
 
+- A fixed top and bottom: `header` (the app brand, a search) and `footer` (the person and the sign-out, a short list) stay put, and only the list in the middle scrolls. Four parts fill them — `Sidebar.Brand`, `Sidebar.User`, `Sidebar.Nav` and `Sidebar.Show` — and each one knows when the sidebar is collapsed.
+
 - Below the lg breakpoint (1024px) the AppShell turns it into a drawer with the native popover — Escape and click-outside stay native, and the shell normalises focus across the three browser engines.
 
 - No roving tabindex: site navigation has no APG pattern, and in a sidebar people expect Tab to walk the items one by one.
@@ -83,6 +85,44 @@ The fourth combination: collapsed AND flush. The reference does the opposite of 
 <Sidebar collapsed variant="flush" label="Components" current="button" items={items} />
 ```
 
+### A fixed top and bottom
+
+The brand at the top and the person at the bottom stay put; only the list scrolls. Sidebar.Brand puts the logo in a square of the primary colour; Sidebar.User puts the person in a box, with the action beside the name.
+
+```tsx
+<Sidebar
+  variant="flush"
+  label="Components"
+  current="button"
+  items={items}
+  header={<Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />}
+  footer={
+    <Sidebar.User
+      avatar={<Avatar fallback="KM" alt="" />}
+      name="Kate Moore"
+      description="Admin"
+      action={<IconButton icon="sign-out" label="Log out" size="sm" />}
+    />
+  }
+/>
+```
+
+### A fixed top and bottom, collapsed
+
+Collapsed, the brand keeps only its logo, the search turns into a button (Sidebar.Show), and the person becomes the avatar with the action under it. The names stay for screen readers.
+
+```tsx
+<Sidebar collapsed variant="flush" label="Components" current="button" items={items}
+  header={<>
+    <Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />
+    <Sidebar.Show when="expanded"><SearchField placeholder="Search" aria-label="Search" /></Sidebar.Show>
+    <Sidebar.Show when="collapsed"><IconButton icon="magnifying-glass" label="Search" /></Sidebar.Show>
+  </>}
+  footer={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+/>
+```
+
 ### Bring your own navigation
 
 children still works and is not legacy: when the list comes from a router or a CMS, the <nav> and its label are yours.
@@ -106,5 +146,11 @@ children still works and is not legacy: when the list comes from a router or a C
 | `collapsed` | `boolean` | false | Icon rail. Labels stay in the DOM as screen-reader-only text, and the panel narrows to --sidebar-rail. In AppShell, a floating rail keeps its outer margins in the grid track; flush uses the token as the raw track width. Controlled by you: the sidebar never decides on its own when to collapse. |
 | `label` | `string` | "Sidebar" | Accessible name of the <nav> that `items` renders. Two navigation landmarks with the same name fail axe, so name it when a page has more than one. |
 | `children` | `ReactNode` | — | Escape hatch, not legacy: when the list comes from a router or a CMS, pass your own markup and the <nav> and its label are yours. Rendered after `items` when both are given. |
+| `header` | `ReactNode` | — | The fixed top of the sidebar: the app brand (Sidebar.Brand), a search. It does not scroll with the list. With header or footer, only the middle (the list and children) scrolls. |
+| `footer` | `ReactNode` | — | The fixed bottom of the sidebar: the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav), a highlight card. It does not scroll with the list. |
+| `Sidebar.Brand` | `component` | — | The app brand at the top: logo, name and description. variant="tile" (default) puts the logo in a 36 square in the primary colour; plain is the bare logo and a title-size name. Collapsed, only the logo shows; the name stays for screen readers. |
+| `Sidebar.User` | `component` | — | The person at the bottom, in a box of the text colour at 6%: avatar, name, description and an action (sign out). Collapsed, the avatar and the action stack in the centre of the rail, without the box; the name stays for screen readers. |
+| `Sidebar.Nav` | `component` | — | A second list with the sidebar skin (Support, Settings). label is required: two navigation landmarks with the same name fail axe. It follows the sidebar's collapsed state and current item. |
+| `Sidebar.Show` | `component` | — | Content shown only while the sidebar is expanded (when="expanded": the search field, a highlight card) or only while it is collapsed (when="collapsed": the search button). |
 | `placement` | `left \| right` | left | Which side the sidebar lives on. On the right, the flush variant's line moves to the inner side. It is the AppShell's aside column. |
 | `scrollbar` | `hover \| visible` | hover | hover is a light scrollbar that is invisible at rest and comes back with the pointer over the sidebar, with keyboard focus inside it, and always on a screen without hover (touch). It stays native and keeps its width, so nothing jumps when it shows. visible keeps the bar on screen all the time, for whoever needs it. |

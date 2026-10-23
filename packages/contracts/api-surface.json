@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 9,
     "aliasesLiterais": 112,
-    "propsDistintas": 379
+    "propsDistintas": 380
   },
   "aliases": {
     "ButtonVariant": {
@@ -9867,6 +9867,18 @@
               "name": "label",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "header",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "footer",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             }
           ]

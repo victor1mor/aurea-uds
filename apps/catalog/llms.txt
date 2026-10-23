@@ -445,6 +445,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.41.0](https://aureauds.dev/release-v0-41-0.md): A sidebar with a fixed top and bottom.
 - [v0.40.1](https://aureauds.dev/release-v0-40-1.md): The new typeface and the white fields reach React Native.
 - [v0.40.0](https://aureauds.dev/release-v0-40-0.md): White fields in the light theme.
 - [v0.39.0](https://aureauds.dev/release-v0-39-0.md): A new typeface on the web — Inter for text, Sora for titles and IBM Plex Mono for code.

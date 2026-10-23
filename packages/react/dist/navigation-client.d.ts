@@ -98,7 +98,7 @@ export interface SidebarItem {
 export type SidebarVariant = "floating" | "flush" | "plain";
 export type SidebarScrollbar = "hover" | "visible";
 export type SidebarPlacement = "left" | "right";
-export declare function Sidebar({ items, current, collapsed, variant, placement, scrollbar, label, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+export declare function Sidebar({ items, current, collapsed, variant, placement, scrollbar, label, header, footer, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
     items?: SidebarItem[];
     current?: string;
     collapsed?: boolean;
@@ -106,7 +106,44 @@ export declare function Sidebar({ items, current, collapsed, variant, placement,
     placement?: SidebarPlacement;
     scrollbar?: SidebarScrollbar;
     label?: string;
+    /** O topo fixo (4-C): a marca do app (`Sidebar.Brand`), a busca. Não rola com a lista. */
+    header?: ReactNode;
+    /** O pé fixo (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`), o cartão de destaque. Não rola com a lista. */
+    footer?: ReactNode;
 }): React.JSX.Element;
+export declare namespace Sidebar {
+    export { SidebarBrand as Brand };
+    export { SidebarUser as User };
+    export { SidebarNav as Nav };
+    export { SidebarShow as Show };
+}
+/** A marca do app no topo da lateral: o `logo` (a letra, o desenho, a imagem), o nome e o subtítulo. `variant="tile"` (o
+ *  padrão, a 11 das quinze) põe o logo num quadrinho na cor primária; `plain` (da 8 à 10) é o desenho solto e o nome
+ *  grande. Recolhida, fica só o logo. */
+declare function SidebarBrand({ logo, name, description, variant, className, ...props }: Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
+    logo: ReactNode;
+    name: ReactNode;
+    description?: ReactNode;
+    variant?: "tile" | "plain";
+}): React.JSX.Element;
+/** A pessoa no pé da lateral, numa caixinha: a foto (`avatar`), o nome, o papel e a ação (o sair). Recolhida, a foto e a ação, empilhadas. */
+declare function SidebarUser({ avatar, name, description, action, className, ...props }: Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
+    avatar: ReactNode;
+    name: ReactNode;
+    description?: ReactNode;
+    action?: ReactNode;
+}): React.JSX.Element;
+/** Uma segunda lista com a pele da lateral (a do pé: Suporte, Ajustes). `label` é obrigatório: duas listas com o mesmo nome confundem o leitor de tela. */
+declare function SidebarNav({ items, current, label, className, ...props }: Omit<HTMLAttributes<HTMLElement>, "children"> & {
+    items: SidebarItem[];
+    current?: string;
+    label: string;
+}): React.JSX.Element;
+/** O que só aparece com a lateral aberta (`when="expanded"`: a busca, o cartão de destaque) ou só recolhida (`when="collapsed"`: o botão da lupa). */
+declare function SidebarShow({ when, children }: {
+    when: "expanded" | "collapsed";
+    children?: ReactNode;
+}): React.JSX.Element | null;
 export type BottomNavVariant = "floating" | "edge";
 export type BottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-bold" | "circle-outline" | "capsule" | "expand";
 export type BottomNavWidth = "full" | "content";
@@ -177,3 +214,4 @@ export declare function CommandPaletteShell({ open, query, onQueryChange, onClos
     label?: string;
     children?: ReactNode;
 }): React.JSX.Element;
+export {};

@@ -1,0 +1,29 @@
+# v0.41.0
+
+A sidebar with a fixed top and bottom.
+
+`Sidebar` gets a fixed top and a fixed bottom: the app brand stays at the top, the person and the sign-out stay at the bottom, and only the list in the middle scrolls. Nothing changes for a sidebar that does not use them.
+
+## Added
+
+- **`header` and `footer` on `Sidebar`.** With either of them, only the middle (the list and any `children`) scrolls; the top and the bottom stay in place. Without them, the sidebar renders exactly as before.
+- **`Sidebar.Brand`** — the app brand at the top: `logo`, `name` and `description`. `variant="tile"` (the default) puts the logo in a 36 square of the primary colour; `plain` shows the bare logo and a title-size name.
+- **`Sidebar.User`** — the person at the bottom, in a soft box: `avatar`, `name`, `description` and an `action` (sign out).
+- **`Sidebar.Nav`** — a second list with the sidebar skin (Support, Settings). `label` is required.
+- **`Sidebar.Show`** — content shown only while the sidebar is expanded (`when="expanded"`) or only while it is collapsed (`when="collapsed"`).
+- **Collapsed**, the brand keeps only its logo, and the person becomes the avatar with the action under it, centred, without the box. The names stay for screen readers.
+- A flush sidebar with a top or a bottom gets 12 of breathing room at both ends. The scrollbar that shows on hover now belongs to the middle, which is what scrolls.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.41.0 @aurea-uds/core@0.41.0 @aurea-uds/fonts@0.41.0 @aurea-uds/icons@0.41.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.41.0
+```
