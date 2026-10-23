@@ -89,7 +89,9 @@ const folha = criarFolha((t: AureaTokens) => ({
   // O ponto do rádio: 8, o da referência e o `.menu-ponto` da web. Forma, não ícone.
   ponto: {
     width: t.size.space2, height: t.size.space2, ...canto(t.size.radiusFull),
-    backgroundColor: t.color.primaryEmphasis,
+    // A cor do ponto é a do TEXTO da linha, como na web (`.menu-ponto` pinta com `currentColor`) — era o destaque, azul
+    // no claro e amarelo no escuro (bloco 1, 23/10/2026).
+    backgroundColor: t.color.foreground,
   },
   // O rótulo de seção: 14 em peso médio e esmaecido (no componente), alinhado ao texto dos itens.
   rotuloDoGrupo: {paddingHorizontal: t.size.space3, paddingTop: t.size.space2, paddingBottom: t.size.space1},
@@ -588,7 +590,7 @@ function renderizar(items: MenuEntry[], prefixo: string, paiSub: string | null, 
         return (
           <Linha key={k} ctx={ctx} papel="checkbox" rotulo={cb.label} icone={cb.leadingIcon}
             estado={{checked: ligado}} inativo={!!cb.disabled || apagado(k, subAberto)}
-            marca={ligado ? <Icon name="check" size="sm" color={ctx.tf.color.primaryEmphasis} /> : null}
+            marca={ligado ? <Icon name="check" size="sm" color={ctx.tf.color.foreground} /> : null}
             aoTocar={() => {
               // Alterna e FICA aberto — a escolha múltipla da referência e o item da web.
               if (cb.checked === undefined) ctx.marcar(k, !ligado);

@@ -530,7 +530,8 @@ export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circl
     return (_jsx(View, { accessibilityRole: "list", accessibilityLabel: label ?? strings.stepperLabel, style: [s.trilha, style], ...rest, children: items.map((it, n) => {
             const st = it.state ?? "default";
             const cor = st === "error" ? (t.color.danger400 ?? t.color.destructive)
-                : st === "active" ? t.color.primaryEmphasis
+                // o passo atual na cor do TEXTO, como na web (`.step-active`) — era o destaque, azul no claro (23/10/2026)
+                : st === "active" ? t.color.foreground
                     : t.color.foreground;
             const miolo = (_jsxs(_Fragment, { children: [_jsx(View, { style: [
                             s.bolinha,

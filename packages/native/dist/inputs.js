@@ -45,7 +45,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo } from "./estilos.js";
+import { canto, cantosDeCima, corDoEscolhido, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
@@ -591,12 +591,11 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
                                 // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
                                 // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
                                 //
-                                // ⚠ **Uma divergência declarada, não escondida:** para o `.segmented` a
-                                // web usa uma mistura própria (`primary 45% + foreground`) em vez do
-                                // token, enquanto para o `.bottom-nav` usa o token. São dois âmbares
-                                // parecidos para a MESMA linguagem, e isso é incoerência DA WEB. Escolhi
-                                // o token, que deixa os dois componentes daqui iguais entre si.
-                                style: { color: ativo ? t.color.primaryEmphasis : t.color.mutedForeground }, children: it.label })
+                                // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
+                                // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
+                                // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
+                                // azul?"*). A aba escolhida é a mistura da web, `corDoEscolhido`.
+                                style: { color: ativo ? corDoEscolhido(t) : t.color.mutedForeground }, children: it.label })
                             : it.label, ativo && _jsx(View, { style: s.fioDoSegmento })] }, it.value));
             }) }) }));
 }
@@ -610,7 +609,7 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
  * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
  * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
  */
-export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicador, children: _jsx(Icon, { name: "check", size: "sm", color: t.color.primaryEmphasis }) }));
+export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicador, children: _jsx(Icon, { name: "check", size: "sm", color: t.color.primary }) }));
 /**
  * A escolha de um de muitos.
  *

@@ -20,6 +20,7 @@ import {
   comOpacidade, criarRegistroDeIcones, resolverTokens, useBottomNavSpace,
 } from "../../packages/native/src/index.js";
 import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
+import {corDoEscolhido, misturaNoOklab} from "../../packages/native/src/estilos.js";
 
 const claro = resolverTokens("light", "comfortable");
 const Glifo = () => null;
@@ -120,10 +121,15 @@ describe("B1 · linha sem ação não é `link`", () => {
 describe("C4 · o segmento escolhido usa a MARCA, não o texto comum", () => {
   const CASO = [{value: "a", label: "Um"}, {value: "b", label: "Dois"}];
 
-  it("o rótulo escolhido é `primaryEmphasis`", () => {
+  // ~~`primaryEmphasis`~~ → a cor do escolhido DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o `primaryEmphasis` é o
+  // AZUL no claro, e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é azul?"*). No claro, a mistura
+  // da web (a marca a 45% sobre o texto, no oklab); o azul de antes reprova.
+  it("o rótulo escolhido é a cor do escolhido da web — no claro, a mistura, e não o azul", () => {
     render(<Envolve><SegmentedControl items={CASO} value="a" /></Envolve>);
     const cores = __instancias("Text").map((p) => StyleSheet.flatten(p.style)?.color);
-    expect(cores).toContain(claro.color.primaryEmphasis);
+    expect(cores).toContain(corDoEscolhido(claro));
+    expect(corDoEscolhido(claro)).toBe(misturaNoOklab(claro.color.primary, claro.color.foreground, 0.45));
+    expect(cores).not.toContain(claro.color.primaryEmphasis);
     // e NÃO o cinza de antes, nem o texto comum
     expect(cores).not.toContain(claro.color.foreground);
   });

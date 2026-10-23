@@ -110,6 +110,43 @@ export const misturaOpaca = (frente: string, fundo: string, pct: number): string
     .toString(16).padStart(2, "0")).join("");
 };
 
+// A mistura no OKLAB, a do `color-mix(in oklab, …)` da web (bloco 1, 23/10/2026). O `misturaOpaca` acima mistura canal
+// a canal, e a cor do meio sai outra: para a cor do escolhido, `#806314` por canal contra `#79602f` no oklab — este o mais
+// perto do que o navegador pinta na web (medido). Hex de seis; fora disso devolve a cor da frente.
+const linear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const tela = (c: number) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+const paraOklab = (hex: string): [number, number, number] => {
+  const [r, g, b] = [1, 3, 5].map((i) => linear(parseInt(hex.slice(i, i + 2), 16) / 255));
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+};
+const doOklab = ([L, a, b]: [number, number, number]): string => {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return "#" + [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s]
+    .map((c) => Math.round(Math.min(1, Math.max(0, tela(c))) * 255).toString(16).padStart(2, "0")).join("");
+};
+export const misturaNoOklab = (frente: string, fundo: string, pct: number): string => {
+  const hex = /^#[0-9a-fA-F]{6}$/;
+  if (!hex.test(frente) || !hex.test(fundo)) return frente;
+  const a = paraOklab(frente), b = paraOklab(fundo);
+  return doOklab([0, 1, 2].map((i) => a[i] * pct + b[i] * (1 - pct)) as [number, number, number]);
+};
+
+/**
+ * A COR DO ESCOLHIDO, a mesma da web (bloco 1, 23/10/2026): no claro, a marca a 45% sobre a cor do texto, no oklab — o
+ * `.is-selected`, o `.segmented .active` e o botão pressionado da web; no escuro, o destaque (o amarelo). Era o
+ * `primaryEmphasis`, que no claro é o AZUL (ADR-0076): o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web
+ * não é azul?"*) e pediu o conserto, 23/10/2026.
+ */
+export const corDoEscolhido = (t: AureaTokens): string =>
+  t.theme === "light" ? misturaNoOklab(t.color.primary, t.color.foreground, 0.45) : t.color.primaryEmphasis;
+
 /**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *

@@ -49,7 +49,7 @@ import {
   type ViewProps, type ViewStyle,
 } from "react-native";
 import Svg, {Path} from "react-native-svg";
-import {canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
+import {canto, cantosDeCima, corDoEscolhido, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
@@ -1210,12 +1210,11 @@ export function SegmentedControl({
                       // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
                       // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
                       //
-                      // ⚠ **Uma divergência declarada, não escondida:** para o `.segmented` a
-                      // web usa uma mistura própria (`primary 45% + foreground`) em vez do
-                      // token, enquanto para o `.bottom-nav` usa o token. São dois âmbares
-                      // parecidos para a MESMA linguagem, e isso é incoerência DA WEB. Escolhi
-                      // o token, que deixa os dois componentes daqui iguais entre si.
-                      style={{color: ativo ? t.color.primaryEmphasis : t.color.mutedForeground}}>
+                      // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
+                      // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
+                      // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
+                      // azul?"*). A aba escolhida é a mistura da web, `corDoEscolhido`.
+                      style={{color: ativo ? corDoEscolhido(t) : t.color.mutedForeground}}>
                   {it.label}
                 </Text>
               : it.label}
@@ -1241,7 +1240,8 @@ export function SegmentedControl({
  */
 export const indicadorDaEscolhida = (t: AureaTokens) => (
   <View style={folha(t).indicador}>
-    <Icon name="check" size="sm" color={t.color.primaryEmphasis} />
+    {/* A cor do visto da web (`.combobox-check`): a marca, nos dois temas — o destaque era o azul no claro (23/10/2026). */}
+    <Icon name="check" size="sm" color={t.color.primary} />
   </View>
 );
 

@@ -53,6 +53,14 @@ export declare const fundoDeCampo: (t: AureaTokens, naSuperficie: boolean) => Vi
  * `comOpacidade`; fora disso devolve a cor da frente.
  */
 export declare const misturaOpaca: (frente: string, fundo: string, pct: number) => string;
+export declare const misturaNoOklab: (frente: string, fundo: string, pct: number) => string;
+/**
+ * A COR DO ESCOLHIDO, a mesma da web (bloco 1, 23/10/2026): no claro, a marca a 45% sobre a cor do texto, no oklab — o
+ * `.is-selected`, o `.segmented .active` e o botão pressionado da web; no escuro, o destaque (o amarelo). Era o
+ * `primaryEmphasis`, que no claro é o AZUL (ADR-0076): o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web
+ * não é azul?"*) e pediu o conserto, 23/10/2026.
+ */
+export declare const corDoEscolhido: (t: AureaTokens) => string;
 /**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
