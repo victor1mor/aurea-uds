@@ -117,9 +117,46 @@ como deveria funcionar"*.
 
 ---
 
+## [0.41.0] — 2026-10-23
+
+⏳ **Ainda não publicada.** A lateral com o topo e o pé fixos ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)) —
+o pedaço 4-C das quinze laterais aprovadas pelo Victor em 21/10/2026, e o pedido de um segundo app (o topo e o pé presos,
+só a lista rola). Visto na bancada com o código real, em tela cheia: *"Aprovado o 4-C"*. Só a web.
+
+### Acrescentado
+
+- **`header` e `footer` na `Sidebar`**: o topo e o pé fixos. Com qualquer um deles, só o meio (a lista e o que vier em
+  `children`) rola; o topo e o pé ficam no lugar. Sem eles, a lateral é a de sempre, com o mesmo HTML.
+- **Quatro partes da `Sidebar`**, para o topo e o pé:
+  - `Sidebar.Brand` — a marca do app: `logo`, `name`, `description`. `variant="tile"` (o padrão) põe o logo num
+    quadrinho de 36 na cor primária; `plain`, o desenho solto e o nome no tamanho de título.
+  - `Sidebar.User` — a pessoa numa caixinha (o texto a 6%): `avatar`, `name`, `description`, `action` (o sair).
+  - `Sidebar.Nav` — uma segunda lista com a pele da lateral (Suporte, Ajustes); `label` obrigatório.
+  - `Sidebar.Show` — o que só aparece aberta (`when="expanded"`) ou só recolhida (`when="collapsed"`).
+- **Recolhida**, a marca fica só com o logo, e a pessoa vira a foto e a ação empilhadas, sem a caixinha, centradas; os
+  nomes continuam para o leitor de tela.
+- Na lateral de canto (`variant="flush"`) com topo ou pé, 12 de folga em cima e embaixo. A barra de rolagem que aparece
+  com o ponteiro vale para o meio.
+
+### Para quem cuida do repositório
+
+- **O registro da 0.40.1** (publicada entre 10:44 e 10:54 de 23/10/2026): o `released-surface.json` do commit do
+  publish (`e6c9e93b`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
+- **Um teste antigo atualizado:** `tests/unit/engine-batch.test.tsx` conferia o texto da regra da barra de rolagem só da
+  caixa; agora confere a da caixa e a do meio.
+- **Quem cobra:** `tests/unit/sidebar-topo-pe.test.tsx` (com a `Sidebar` da 0.40.1, reprovam 7 de 8) e
+  `tests/visual/sidebar-topo-pe.spec.ts` (as medidas da variação 11 das quinze, só o meio rola, o recolhido no centro; com
+  o CSS da 0.40.1, reprovam 3 de 4).
+- **A ficha da `Sidebar`** ganhou `header`, `footer` e as quatro partes; a página dela no site, dois exemplos (aberta e
+  recolhida).
+- **Na série da lateral, o próximo é o MNT-34** (a lateral até o topo no `AppShell`), e depois o 4-A e o 4-B.
+
+---
+
 ## [0.40.1] — 2026-10-22
 
-⏳ **Ainda não publicada.** A fonte nova e os campos brancos no **React Native**
+✅ **Publicada em 23/10/2026, entre 10:44 e 10:54 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do
+pedido #93. A fonte nova e os campos brancos no **React Native**
 ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md), seção "O nativo";
 [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md), seção "O nativo"). O Victor: *"não esqueça de alterar
 fontes do nativo"*, *"pode fazer juntos"*; e, sobre o peso dos arquivos, *"Completas"*. Na web, só as superfícies brancas

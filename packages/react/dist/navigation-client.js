@@ -265,11 +265,49 @@ function fecharGavetaAoEscolher(e) {
     }
     catch { /* motor sem popover: não há gaveta */ }
 }
-export function Sidebar({ items, current, collapsed, variant = "floating", placement = "left", scrollbar = "hover", label, children, className, onClick, ...props }) {
+// O TOPO E O PÉ FIXOS (4-C, o item 107 — as quinze laterais aprovadas pelo Victor em 21/10/2026, e o PV-15 de um
+// segundo app). `header` e `footer` ficam presos; só o meio (a lista e o que vier em `children`) rola. Sem eles, a
+// lateral continua a caixa de sempre — o mesmo HTML. As partes que moram neles (`Sidebar.Brand`, `Sidebar.User`,
+// `Sidebar.Nav`, `Sidebar.Show`) sabem se a lateral está recolhida por este contexto, interno: o estado de recolher
+// com gancho, para o app, é o 4-B.
+const SidebarContext = React.createContext({ collapsed: false });
+export function Sidebar({ items, current, collapsed, variant = "floating", placement = "left", scrollbar = "hover", label, header, footer, children, className, onClick, ...props }) {
     const s = useAureaStrings();
     const baseId = React.useId();
-    return _jsxs("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: [items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) }), children] });
+    const lista = items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) });
+    const partes = header != null || footer != null;
+    const contexto = React.useMemo(() => ({ collapsed: !!collapsed, current }), [collapsed, current]);
+    return _jsx("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", partes && "sidebar-with-parts", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: _jsx(SidebarContext.Provider, { value: contexto, children: partes
+                ? _jsxs(_Fragment, { children: [header != null && _jsx("div", { className: "sidebar-header", children: header }), _jsxs("div", { className: "sidebar-body", children: [lista, children] }), footer != null && _jsx("div", { className: "sidebar-footer", children: footer })] })
+                : _jsxs(_Fragment, { children: [lista, children] }) }) });
 }
+/** A marca do app no topo da lateral: o `logo` (a letra, o desenho, a imagem), o nome e o subtítulo. `variant="tile"` (o
+ *  padrão, a 11 das quinze) põe o logo num quadrinho na cor primária; `plain` (da 8 à 10) é o desenho solto e o nome
+ *  grande. Recolhida, fica só o logo. */
+function SidebarBrand({ logo, name, description, variant = "tile", className, ...props }) {
+    const { collapsed } = React.useContext(SidebarContext);
+    return _jsxs("div", { className: cx("sidebar-brand", variant === "plain" && "sidebar-brand-plain", className), ...props, children: [_jsx("span", { className: "sidebar-brand-logo", "aria-hidden": "true", children: logo }), _jsxs("span", { className: cx("sidebar-brand-text", collapsed && "sr-only"), children: [_jsx("strong", { className: "sidebar-brand-name", children: name }), description != null && _jsx("span", { className: "sidebar-brand-description", children: description })] })] });
+}
+/** A pessoa no pé da lateral, numa caixinha: a foto (`avatar`), o nome, o papel e a ação (o sair). Recolhida, a foto e a ação, empilhadas. */
+function SidebarUser({ avatar, name, description, action, className, ...props }) {
+    const { collapsed } = React.useContext(SidebarContext);
+    return _jsxs("div", { className: cx("sidebar-user", className), ...props, children: [avatar, _jsxs("span", { className: cx("sidebar-user-text", collapsed && "sr-only"), children: [_jsx("strong", { className: "sidebar-user-name", children: name }), description != null && _jsx("span", { className: "sidebar-user-description", children: description })] }), action] });
+}
+/** Uma segunda lista com a pele da lateral (a do pé: Suporte, Ajustes). `label` é obrigatório: duas listas com o mesmo nome confundem o leitor de tela. */
+function SidebarNav({ items, current, label, className, ...props }) {
+    const ctx = React.useContext(SidebarContext);
+    const baseId = React.useId();
+    return _jsx("nav", { className: cx("sidebar-nav", className), "aria-label": label, ...props, children: sidebarList(items, { baseId, current: current ?? ctx.current, collapsed: ctx.collapsed }) });
+}
+/** O que só aparece com a lateral aberta (`when="expanded"`: a busca, o cartão de destaque) ou só recolhida (`when="collapsed"`: o botão da lupa). */
+function SidebarShow({ when, children }) {
+    const { collapsed } = React.useContext(SidebarContext);
+    return (when === "collapsed") === collapsed ? _jsx(_Fragment, { children: children }) : null;
+}
+Sidebar.Brand = SidebarBrand;
+Sidebar.User = SidebarUser;
+Sidebar.Nav = SidebarNav;
+Sidebar.Show = SidebarShow;
 const LEGADO = {
     flat: ["edge", "none"], surface: ["floating", "circle"], pill: ["floating", "pill"], dock: ["floating", "circle"]
 };

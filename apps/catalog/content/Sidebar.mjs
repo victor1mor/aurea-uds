@@ -1,5 +1,5 @@
-import {createElement as h} from "react";
-import {Sidebar, Badge} from "../../../packages/react/dist/index.js";
+import {createElement as h, Fragment} from "react";
+import {Sidebar, Badge, Avatar, IconButton, SearchField} from "../../../packages/react/dist/index.js";
 
 // A CAIXA DE RECORTE SAIU (18/08/2026). Ela existia porque a `.sidebar` mede a altura em
 // `calc(100vh - …)` e não cabia num painel de demo — e a saída de então foi CORTAR, com o
@@ -52,6 +52,16 @@ const moldura = (props, rotulo = "Sidebar") => {
 };
 const demo = (props) => moldura(props);
 
+// O topo e o pé fixos (4-C, 23/10/2026): a marca do app em cima, a pessoa e o sair embaixo — a variação 11 das quinze
+// laterais aprovadas pelo Victor. Os mesmos três itens: a lista do meio é a de sempre.
+const marcaDoApp = h(Sidebar.Brand, {logo: "A", name: "Acme Plans", description: "Workspace"});
+const pessoa = h(Sidebar.User, {avatar: h(Avatar, {fallback: "KM", alt: ""}), name: "Kate Moore", description: "Admin",
+  action: h(IconButton, {icon: "sign-out", label: "Log out", size: "sm"})});
+const busca = [
+  h(Sidebar.Show, {key: "a", when: "expanded"}, h(SearchField, {placeholder: "Search", "aria-label": "Search"})),
+  h(Sidebar.Show, {key: "r", when: "collapsed"}, h(IconButton, {icon: "magnifying-glass", label: "Search"})),
+];
+
 const ITENS = [
   {id: "button", label: "Button", icon: "plus", href: "../button.html",
     badge: h(Badge, {variant: "primary"}, "12")},
@@ -81,6 +91,9 @@ export default {
     + "applications that want it.",
     "AppShell forwards it: `<AppShell sidebarVariant=\"flush\">`. Without that the variant would "
     + "be unreachable for anyone composing through the shell, which is the normal path.",
+    "A fixed top and bottom: `header` (the app brand, a search) and `footer` (the person and the sign-out, a short "
+    + "list) stay put, and only the list in the middle scrolls. Four parts fill them — `Sidebar.Brand`, `Sidebar.User`, "
+    + "`Sidebar.Nav` and `Sidebar.Show` — and each one knows when the sidebar is collapsed.",
     "Below the lg breakpoint (1024px) the AppShell turns it into a drawer with the native "
     + "popover — Escape and click-outside stay native, and the shell normalises focus across "
     + "the three browser engines.",
@@ -177,6 +190,49 @@ export default {
       layoutProprio: true,
       render: () => moldura({label: "Components rail flush", variant: "flush", collapsed: true,
         current: "button", items: ITENS}, "Sidebar slim flush"),
+    },
+    {
+      title: "A fixed top and bottom",
+      description: "The brand at the top and the person at the bottom stay put; only the list scrolls. Sidebar.Brand "
+        + "puts the logo in a square of the primary colour; Sidebar.User puts the person in a box, with the action "
+        + "beside the name.",
+      code: `<Sidebar
+  variant="flush"
+  label="Components"
+  current="button"
+  items={items}
+  header={<Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />}
+  footer={
+    <Sidebar.User
+      avatar={<Avatar fallback="KM" alt="" />}
+      name="Kate Moore"
+      description="Admin"
+      action={<IconButton icon="sign-out" label="Log out" size="sm" />}
+    />
+  }
+/>`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components with parts", variant: "flush", current: "button", items: ITENS,
+        header: marcaDoApp, footer: pessoa}),
+    },
+    {
+      title: "A fixed top and bottom, collapsed",
+      description: "Collapsed, the brand keeps only its logo, the search turns into a button (Sidebar.Show), and the "
+        + "person becomes the avatar with the action under it. The names stay for screen readers.",
+      code: `<Sidebar collapsed variant="flush" label="Components" current="button" items={items}
+  header={<>
+    <Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />
+    <Sidebar.Show when="expanded"><SearchField placeholder="Search" aria-label="Search" /></Sidebar.Show>
+    <Sidebar.Show when="collapsed"><IconButton icon="magnifying-glass" label="Search" /></Sidebar.Show>
+  </>}
+  footer={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+/>`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components with parts rail", variant: "flush", collapsed: true, current: "button",
+        items: ITENS, header: h(Fragment, null, marcaDoApp, ...busca), footer: pessoa}),
     },
     {
       title: "Bring your own navigation",

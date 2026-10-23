@@ -445,14 +445,18 @@ test("a barra segue o tema nos dois caminhos, o padrão e o do webkit", () => {
 test("a barra da lateral some parada e volta com o ponteiro, o foco e o toque; `visible` é a de antes", () => {
   const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, "");
   const visivel = /color-mix\(in oklab, var\(--sidebar-foreground\) \d+%, transparent\)/.source;
-  expect(semComentario).toMatch(/\.sidebar \{ scrollbar-color:transparent transparent; \}/);
-  expect(semComentario).toMatch(new RegExp(`\\.sidebar:is\\(:hover,:focus-within\\) \\{ scrollbar-color:${visivel} transparent; \\}`));
-  expect(semComentario).toMatch(new RegExp(`\\.sidebar:is\\(:hover,:focus-within\\)::-webkit-scrollbar-thumb \\{ background:${visivel}; \\}`));
+  // 4-C (0.41.0): com o topo e o pé fixos quem rola é o meio (`.sidebar-body`), e cada regra vale para os dois — a caixa
+  // (sem partes) e o meio (com partes). A barra do meio acende com o ponteiro e o foco na lateral INTEIRA.
+  const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regra = (seletores: string, corpo: string) => new RegExp(`${esc(seletores)} \\{ ${corpo} \\}`);
+  expect(semComentario).toMatch(regra(".sidebar, .sidebar-body", "scrollbar-color:transparent transparent;"));
+  expect(semComentario).toMatch(regra(".sidebar:is(:hover,:focus-within), .sidebar:is(:hover,:focus-within) > .sidebar-body", `scrollbar-color:${visivel} transparent;`));
+  expect(semComentario).toMatch(regra(".sidebar:is(:hover,:focus-within)::-webkit-scrollbar-thumb, .sidebar:is(:hover,:focus-within) > .sidebar-body::-webkit-scrollbar-thumb", `background:${visivel};`));
   const toque = semComentario.match(/@media \(hover: none\) \{([\s\S]*?)\n\}/)?.[1] ?? "";
-  expect(toque).toMatch(new RegExp(`\\.sidebar \\{ scrollbar-color:${visivel} transparent; \\}`));
-  expect(toque).toMatch(new RegExp(`\\.sidebar::-webkit-scrollbar-thumb \\{ background:${visivel}; \\}`));
-  const iVisivel = semComentario.indexOf(".sidebar.sidebar-scrollbar-visible { scrollbar-color:var(--border-strong) transparent; }");
-  expect(iVisivel).toBeGreaterThan(semComentario.indexOf(".sidebar:is(:hover,:focus-within) {"));
+  expect(toque).toMatch(regra(".sidebar, .sidebar-body", `scrollbar-color:${visivel} transparent;`));
+  expect(toque).toMatch(regra(".sidebar::-webkit-scrollbar-thumb, .sidebar-body::-webkit-scrollbar-thumb", `background:${visivel};`));
+  const iVisivel = semComentario.indexOf(".sidebar.sidebar-scrollbar-visible, .sidebar.sidebar-scrollbar-visible > .sidebar-body { scrollbar-color:var(--border-strong) transparent; }");
+  expect(iVisivel).toBeGreaterThan(semComentario.indexOf(".sidebar:is(:hover,:focus-within), "));
   expect(iVisivel).toBeGreaterThan(semComentario.indexOf("@media (hover: none) {"));
-  expect(semComentario).toMatch(/\.sidebar\.sidebar-scrollbar-visible::-webkit-scrollbar-thumb \{ background:var\(--border-strong\); \}/);
+  expect(semComentario).toMatch(regra(".sidebar.sidebar-scrollbar-visible::-webkit-scrollbar-thumb, .sidebar.sidebar-scrollbar-visible > .sidebar-body::-webkit-scrollbar-thumb", "background:var\\(--border-strong\\);"));
 });

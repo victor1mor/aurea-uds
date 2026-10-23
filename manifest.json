@@ -28,7 +28,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -38,7 +38,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -48,7 +48,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -58,7 +58,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -68,7 +68,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -87,7 +87,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -139,7 +139,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.40.1",
+      "version": "0.41.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -303,13 +303,13 @@
     "componentes": 138,
     "fichas": 138,
     "hooks": 9,
-    "paginas_total": 494,
+    "paginas_total": 495,
     "paginas": {
       "component": 147,
       "pattern": 224,
       "block": 15,
       "recipe": 23,
-      "doc": 76,
+      "doc": 77,
       "area": 9
     },
     "conteudo_rico": 44,
@@ -329,12 +329,12 @@
       "Ready": 48,
       "Stable": 98
     },
-    "testes_unit": 2147,
+    "testes_unit": 2155,
     "componentes_citados_no_teste": 145,
-    "specs_visuais": 59,
+    "specs_visuais": 60,
     "baselines": 48,
     "baselines_linux": 24,
-    "classes_core": 969,
+    "classes_core": 983,
     "token_declaracoes": 488,
     "token_nomes": 235,
     "token_usados": 185,
@@ -342,6 +342,6 @@
   },
   "gates": {
     "validate": 45,
-    "playwrightSpecs": 59
+    "playwrightSpecs": 60
   }
 }

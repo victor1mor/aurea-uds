@@ -397,13 +397,59 @@ function fecharGavetaAoEscolher(e:React.MouseEvent<HTMLElement>){
 // nome de uma das referências da fila (a principal não tem moldura de página). Na direita, o fio da
 // lateral encostada passa para o outro lado. É a coluna "Nesta página" do `AppShell` (`aside`).
 export type SidebarPlacement="left"|"right";
-export function Sidebar({items,current,collapsed,variant="floating",placement="left",scrollbar="hover",label,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string}){
+// O TOPO E O PÉ FIXOS (4-C, o item 107 — as quinze laterais aprovadas pelo Victor em 21/10/2026, e o PV-15 de um
+// segundo app). `header` e `footer` ficam presos; só o meio (a lista e o que vier em `children`) rola. Sem eles, a
+// lateral continua a caixa de sempre — o mesmo HTML. As partes que moram neles (`Sidebar.Brand`, `Sidebar.User`,
+// `Sidebar.Nav`, `Sidebar.Show`) sabem se a lateral está recolhida por este contexto, interno: o estado de recolher
+// com gancho, para o app, é o 4-B.
+const SidebarContext=React.createContext<{collapsed:boolean;current?:string}>({collapsed:false});
+export function Sidebar({items,current,collapsed,variant="floating",placement="left",scrollbar="hover",label,header,footer,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string;
+  /** O topo fixo (4-C): a marca do app (`Sidebar.Brand`), a busca. Não rola com a lista. */
+  header?:ReactNode;
+  /** O pé fixo (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`), o cartão de destaque. Não rola com a lista. */
+  footer?:ReactNode}){
 const s=useAureaStrings();
 const baseId=React.useId();
-return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
-{items&&items.length>0&&<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}>{sidebarList(items,{baseId,current,collapsed})}</nav>}
-{children}
+const lista=items&&items.length>0&&<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}>{sidebarList(items,{baseId,current,collapsed})}</nav>;
+const partes=header!=null||footer!=null;
+const contexto=React.useMemo(()=>({collapsed:!!collapsed,current}),[collapsed,current]);
+return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",partes&&"sidebar-with-parts",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+<SidebarContext.Provider value={contexto}>
+{partes
+?<>{header!=null&&<div className="sidebar-header">{header}</div>}<div className="sidebar-body">{lista}{children}</div>{footer!=null&&<div className="sidebar-footer">{footer}</div>}</>
+:<>{lista}{children}</>}
+</SidebarContext.Provider>
 </aside>}
+/** A marca do app no topo da lateral: o `logo` (a letra, o desenho, a imagem), o nome e o subtítulo. `variant="tile"` (o
+ *  padrão, a 11 das quinze) põe o logo num quadrinho na cor primária; `plain` (da 8 à 10) é o desenho solto e o nome
+ *  grande. Recolhida, fica só o logo. */
+function SidebarBrand({logo,name,description,variant="tile",className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&{logo:ReactNode;name:ReactNode;description?:ReactNode;variant?:"tile"|"plain"}){
+const {collapsed}=React.useContext(SidebarContext);
+return <div className={cx("sidebar-brand",variant==="plain"&&"sidebar-brand-plain",className)} {...props}>
+<span className="sidebar-brand-logo" aria-hidden="true">{logo}</span>
+<span className={cx("sidebar-brand-text",collapsed&&"sr-only")}><strong className="sidebar-brand-name">{name}</strong>{description!=null&&<span className="sidebar-brand-description">{description}</span>}</span>
+</div>}
+/** A pessoa no pé da lateral, numa caixinha: a foto (`avatar`), o nome, o papel e a ação (o sair). Recolhida, a foto e a ação, empilhadas. */
+function SidebarUser({avatar,name,description,action,className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&{avatar:ReactNode;name:ReactNode;description?:ReactNode;action?:ReactNode}){
+const {collapsed}=React.useContext(SidebarContext);
+return <div className={cx("sidebar-user",className)} {...props}>
+{avatar}
+<span className={cx("sidebar-user-text",collapsed&&"sr-only")}><strong className="sidebar-user-name">{name}</strong>{description!=null&&<span className="sidebar-user-description">{description}</span>}</span>
+{action}
+</div>}
+/** Uma segunda lista com a pele da lateral (a do pé: Suporte, Ajustes). `label` é obrigatório: duas listas com o mesmo nome confundem o leitor de tela. */
+function SidebarNav({items,current,label,className,...props}:Omit<HTMLAttributes<HTMLElement>,"children">&{items:SidebarItem[];current?:string;label:string}){
+const ctx=React.useContext(SidebarContext);
+const baseId=React.useId();
+return <nav className={cx("sidebar-nav",className)} aria-label={label} {...props}>{sidebarList(items,{baseId,current:current??ctx.current,collapsed:ctx.collapsed})}</nav>}
+/** O que só aparece com a lateral aberta (`when="expanded"`: a busca, o cartão de destaque) ou só recolhida (`when="collapsed"`: o botão da lupa). */
+function SidebarShow({when,children}:{when:"expanded"|"collapsed";children?:ReactNode}){
+const {collapsed}=React.useContext(SidebarContext);
+return (when==="collapsed")===collapsed?<>{children}</>:null}
+Sidebar.Brand=SidebarBrand;
+Sidebar.User=SidebarUser;
+Sidebar.Nav=SidebarNav;
+Sidebar.Show=SidebarShow;
 // ── NAVEGAÇÃO INFERIOR ────────────────────────────────────────────────────────────────
 // A lacuna ESTRUTURAL medida no `CONSUMIDOR-1.md` §4.1: `Topbar` e `Sidebar` são
 // vocabulário de DESKTOP, e aplicativo não navega assim.

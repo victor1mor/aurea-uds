@@ -1692,6 +1692,32 @@ img,svg { display:block; }
 /* recolhida, o item tem só a largura do ícone: com os 15px de cada lado o fio sumiria. */
 .sidebar-collapsed .sidebar-item[aria-current]::after { inset-inline:var(--space-2); }
 .sidebar-collapsed .sidebar-sub { padding-inline-start:0; }
+/* O TOPO E O PÉ FIXOS (4-C, 23/10/2026) — o desenho das quinze laterais aprovadas pelo Victor em 21/10/2026 (item 107).
+   Com `header` ou `footer`, a caixa não rola mais: só o meio (`.sidebar-body`) rola, e o topo e o pé ficam presos. Sem
+   linha entre as partes (ADR-0072): o vão separa. Sem eles, nada muda — o HTML é o de sempre. */
+.sidebar-with-parts { overflow:hidden; }
+/* Na de canto, o topo e o pé ganham 12 da borda da janela, como nas quinze (a flutuante já tem a margem dela). */
+.sidebar-flush.sidebar-with-parts { padding-block:var(--space-3); }
+.sidebar-header, .sidebar-footer { flex:none; display:grid; gap:var(--space-2); }
+.sidebar-header { padding-block-end:var(--space-2); }
+.sidebar-body { flex:1 1 auto; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:var(--space-1); }
+.sidebar-footer { gap:var(--space-3); padding-block-start:var(--space-3); }
+/* A marca do app: o quadrinho na cor primária, com a letra na fonte de título, o nome e o subtítulo. */
+.sidebar-brand { display:flex; align-items:center; gap:var(--space-3); min-width:0; padding:var(--space-2) var(--space-3); }
+.sidebar-brand-logo { display:grid; place-items:center; flex:none; inline-size:var(--control-h-md); block-size:var(--control-h-md); overflow:hidden; border-radius:var(--radius-lg); background:var(--primary); color:var(--primary-foreground); font-family:var(--font-heading); font-weight:var(--weight-bold); }
+/* `plain` (da 8 à 10 das quinze): o desenho solto, sem o quadrinho, e o nome na fonte e no tamanho de título. */
+.sidebar-brand-plain { gap:var(--space-2); }
+.sidebar-brand-plain .sidebar-brand-logo { inline-size:auto; block-size:auto; overflow:visible; border-radius:0; background:transparent; color:inherit; }
+.sidebar-brand-plain .sidebar-brand-name { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.sidebar-brand-text, .sidebar-user-text { display:grid; flex:1; min-width:0; line-height:var(--leading-tight); }
+.sidebar-brand-name, .sidebar-user-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--sidebar-foreground); font-size:var(--text-sm); }
+.sidebar-brand-description, .sidebar-user-description { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted-foreground); font-size:var(--text-xs); }
+/* A pessoa: numa caixinha do texto a 6% (`--fill-1`), com o canto do item da lateral. */
+.sidebar-user { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-3) var(--space-1); border-radius:calc(var(--radius-card) - var(--space-1)); background:var(--fill-1); }
+/* Recolhida: a marca vira só o quadrinho, e a pessoa, a foto e a ação empilhadas, sem a caixinha. Os nomes vão para o
+   leitor de tela (o React troca a classe por `.sr-only`, como o rótulo do item). */
+.sidebar-collapsed .sidebar-brand { justify-content:center; padding-inline:0; }
+.sidebar-collapsed .sidebar-user { flex-direction:column; padding-inline:0; background:transparent; }
 /* Estas regras tocam `.app-shell` porque a coluna do grid é do shell: a
    lateral não consegue encolher a própria trilha. `--sidebar-rail` continua sendo a largura
    do PAINEL; a flutuante soma as margens na trilha, a rente usa o token cru.
@@ -5144,17 +5170,18 @@ button.graph-node-body { cursor:pointer; }
    A cor sai da escala da LATERAL, não da página: é o texto dela, esmaecido.
    O desenho de antes — a barra sempre à vista, na cor de borda forte — não saiu: é a variante
    `scrollbar="visible"` (`.sidebar-scrollbar-visible`), para quem precisa da barra o tempo todo. */
-.sidebar { scrollbar-color:transparent transparent; }
-.sidebar::-webkit-scrollbar-thumb { background:transparent; }
-.sidebar:is(:hover,:focus-within) { scrollbar-color:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent) transparent; }
-.sidebar:is(:hover,:focus-within)::-webkit-scrollbar-thumb { background:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent); }
+.sidebar, .sidebar-body { scrollbar-color:transparent transparent; }
+.sidebar::-webkit-scrollbar-thumb, .sidebar-body::-webkit-scrollbar-thumb { background:transparent; }
+/* 4-C: com o topo e o pé fixos, quem rola é o meio (`.sidebar-body`) — a mesma barra, acesa pela lateral inteira. */
+.sidebar:is(:hover,:focus-within), .sidebar:is(:hover,:focus-within) > .sidebar-body { scrollbar-color:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent) transparent; }
+.sidebar:is(:hover,:focus-within)::-webkit-scrollbar-thumb, .sidebar:is(:hover,:focus-within) > .sidebar-body::-webkit-scrollbar-thumb { background:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent); }
 @media (hover: none) {
-  .sidebar { scrollbar-color:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent) transparent; }
-  .sidebar::-webkit-scrollbar-thumb { background:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent); }
+  .sidebar, .sidebar-body { scrollbar-color:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent) transparent; }
+  .sidebar::-webkit-scrollbar-thumb, .sidebar-body::-webkit-scrollbar-thumb { background:color-mix(in oklab, var(--sidebar-foreground) 45%, transparent); }
 }
 /* Duas classes, depois das de cima: ganha do "em cima" e do "sem ponteiro" com a mesma força, pela ordem. */
-.sidebar.sidebar-scrollbar-visible { scrollbar-color:var(--border-strong) transparent; }
-.sidebar.sidebar-scrollbar-visible::-webkit-scrollbar-thumb { background:var(--border-strong); }
+.sidebar.sidebar-scrollbar-visible, .sidebar.sidebar-scrollbar-visible > .sidebar-body { scrollbar-color:var(--border-strong) transparent; }
+.sidebar.sidebar-scrollbar-visible::-webkit-scrollbar-thumb, .sidebar.sidebar-scrollbar-visible > .sidebar-body::-webkit-scrollbar-thumb { background:var(--border-strong); }
 
 /* ========================================================================== */
 /* 99. EIXO RESPONSIVO — a infraestrutura do G-AXIS-04                        */

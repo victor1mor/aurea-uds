@@ -111,6 +111,42 @@
       "description": "Escape hatch, not legacy: when the list comes from a router or a CMS, pass your own markup and the <nav> and its label are yours. Rendered after `items` when both are given."
     },
     {
+      "name": "header",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The fixed top of the sidebar: the app brand (Sidebar.Brand), a search. It does not scroll with the list. With header or footer, only the middle (the list and children) scrolls."
+    },
+    {
+      "name": "footer",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The fixed bottom of the sidebar: the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav), a highlight card. It does not scroll with the list."
+    },
+    {
+      "name": "Sidebar.Brand",
+      "type": "component",
+      "default": "—",
+      "description": "The app brand at the top: logo, name and description. variant=\"tile\" (default) puts the logo in a 36 square in the primary colour; plain is the bare logo and a title-size name. Collapsed, only the logo shows; the name stays for screen readers."
+    },
+    {
+      "name": "Sidebar.User",
+      "type": "component",
+      "default": "—",
+      "description": "The person at the bottom, in a box of the text colour at 6%: avatar, name, description and an action (sign out). Collapsed, the avatar and the action stack in the centre of the rail, without the box; the name stays for screen readers."
+    },
+    {
+      "name": "Sidebar.Nav",
+      "type": "component",
+      "default": "—",
+      "description": "A second list with the sidebar skin (Support, Settings). label is required: two navigation landmarks with the same name fail axe. It follows the sidebar's collapsed state and current item."
+    },
+    {
+      "name": "Sidebar.Show",
+      "type": "component",
+      "default": "—",
+      "description": "Content shown only while the sidebar is expanded (when=\"expanded\": the search field, a highlight card) or only while it is collapsed (when=\"collapsed\": the search button)."
+    },
+    {
       "name": "placement",
       "type": "left | right",
       "default": "left",
