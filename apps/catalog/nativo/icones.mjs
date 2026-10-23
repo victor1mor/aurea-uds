@@ -25,6 +25,7 @@ import IcDotsThree from "../../../packages/native/icons/dots-three.js";
 import IcDownloadSimple from "../../../packages/native/icons/download-simple.js";
 import IcEnvelopeSimple from "../../../packages/native/icons/envelope-simple.js";
 import IcEye from "../../../packages/native/icons/eye.js";
+import IcEyeSlash from "../../../packages/native/icons/eye-slash.js";
 import IcFile from "../../../packages/native/icons/file.js";
 import IcFileText from "../../../packages/native/icons/file-text.js";
 import IcFolder from "../../../packages/native/icons/folder.js";
@@ -93,6 +94,7 @@ export const ICONES_DO_SITE = {
   "download-simple": IcDownloadSimple,
   "envelope-simple": IcEnvelopeSimple,
   "eye": IcEye,
+  "eye-slash": IcEyeSlash,
   "file": IcFile,
   "file-text": IcFileText,
   "folder": IcFolder,

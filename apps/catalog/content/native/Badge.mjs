@@ -24,11 +24,14 @@ export default {
       peca: v => h(Badge, {tone: "success", emphasis: v}, v)}),
     cada({titulo: "Sizes", descricao: "From the small counter to the large pill.",
       valores: ["xs", "sm", "md", "lg"], codigo: v => `<Badge size="${v}">${v}</Badge>`, peca: v => h(Badge, {size: v}, v)}),
-    cada({titulo: "Width", descricao: "fit=\"content\" keeps the badge as wide as its text inside a column; auto follows the container.",
-      valores: ["auto", "content"], coluna: true, codigo: v => `<Badge fit="${v}">fit ${v}</Badge>`, peca: v => h(Badge, {fit: v}, `fit ${v}`)}),
+    // Numa coluna que ESTICA o que tem dentro (a de um cartão): numa que encolhe, os dois saíam iguais (achado do grupo 2).
+    cada({titulo: "Width", descricao: "Inside a column that stretches its children, auto follows the column and fit=\"content\" keeps the badge as wide as its text.",
+      valores: ["auto", "content"], estilo: {display: "grid", gap: "var(--space-3)", width: "min(20rem, 100%)", justifyItems: "stretch"},
+      codigo: v => `<Badge fit="${v}">fit ${v}</Badge>`, peca: v => h(Badge, {fit: v}, `fit ${v}`)}),
+    // O glifo do `IconButton` do nativo é `name`, não `icon` (com `icon`, o sino não aparecia — achado do grupo 2).
     cada({titulo: "On a corner", descricao: "anchor hangs the badge on a corner of what it decorates; the count goes in that thing's name.",
       valores: ["top-end", "top-start", "bottom-end", "bottom-start"],
-      codigo: v => `<Badge anchor="${v}" count={3} tone="danger" emphasis="solid">\n  <IconButton icon="star" label="Starred, 3 new" />\n</Badge>`,
-      peca: v => h(Badge, {anchor: v, count: 3, tone: "danger", emphasis: "solid"}, h(IconButton, {icon: "star", label: `Starred, 3 new (${v})`}))}),
+      codigo: v => `<Badge anchor="${v}" count={3} tone="danger" emphasis="solid">\n  <IconButton name="star" label="Starred, 3 new" />\n</Badge>`,
+      peca: v => h(Badge, {anchor: v, count: 3, tone: "danger", emphasis: "solid"}, h(IconButton, {name: "star", label: `Starred, 3 new (${v})`}))}),
   ],
 };
