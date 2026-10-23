@@ -12,9 +12,10 @@ export const resolveDoNativo = {
   alias: [
     {find: /^react-native$/, replacement: "react-native-web"},
     {find: /^@react-native\/assets-registry\/registry$/, replacement: `${aqui}nativo/registro-de-assets.js`},
-    // As duas bibliotecas de aparelho do `@aurea-uds/native/system`, no navegador (ver os dois arquivos).
+    // As três bibliotecas de aparelho do `@aurea-uds/native/system` e do `/system/file`, no navegador (ver os três arquivos).
     {find: /^@react-native-community\/datetimepicker$/, replacement: `${aqui}nativo/datetimepicker-no-navegador.mjs`},
     {find: /^expo-image-picker$/, replacement: `${aqui}nativo/expo-image-picker-no-navegador.mjs`},
+    {find: /^expo-document-picker$/, replacement: `${aqui}nativo/expo-document-picker-no-navegador.mjs`},
   ],
   dedupe: ["react", "react-dom", "react-native-web", "react-native-svg", "react-native-safe-area-context"],
   extensions: [".web.mjs", ".web.js", ".web.ts", ".web.tsx", ".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],

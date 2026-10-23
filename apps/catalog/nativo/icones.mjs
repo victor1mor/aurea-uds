@@ -26,6 +26,7 @@ import IcDownloadSimple from "../../../packages/native/icons/download-simple.js"
 import IcEnvelopeSimple from "../../../packages/native/icons/envelope-simple.js";
 import IcEye from "../../../packages/native/icons/eye.js";
 import IcFile from "../../../packages/native/icons/file.js";
+import IcFileText from "../../../packages/native/icons/file-text.js";
 import IcFolder from "../../../packages/native/icons/folder.js";
 import IcFunnel from "../../../packages/native/icons/funnel.js";
 import IcGear from "../../../packages/native/icons/gear.js";
@@ -43,6 +44,7 @@ import IcMagnifyingGlass from "../../../packages/native/icons/magnifying-glass.j
 import IcMinus from "../../../packages/native/icons/minus.js";
 import IcMoon from "../../../packages/native/icons/moon.js";
 import IcMoonFill from "../../../packages/native/icons/moon-fill.js";
+import IcPaperclip from "../../../packages/native/icons/paperclip.js";
 import IcPencilSimple from "../../../packages/native/icons/pencil-simple.js";
 import IcPlus from "../../../packages/native/icons/plus.js";
 import IcShareNetwork from "../../../packages/native/icons/share-network.js";
@@ -53,6 +55,8 @@ import IcStarFill from "../../../packages/native/icons/star-fill.js";
 import IcSun from "../../../packages/native/icons/sun.js";
 import IcSunFill from "../../../packages/native/icons/sun-fill.js";
 import IcTrash from "../../../packages/native/icons/trash.js";
+import IcTrendDown from "../../../packages/native/icons/trend-down.js";
+import IcTrendUp from "../../../packages/native/icons/trend-up.js";
 import IcUploadSimple from "../../../packages/native/icons/upload-simple.js";
 import IcUser from "../../../packages/native/icons/user.js";
 import IcUserFill from "../../../packages/native/icons/user-fill.js";
@@ -90,6 +94,7 @@ export const ICONES_DO_SITE = {
   "envelope-simple": IcEnvelopeSimple,
   "eye": IcEye,
   "file": IcFile,
+  "file-text": IcFileText,
   "folder": IcFolder,
   "funnel": IcFunnel,
   "gear": IcGear,
@@ -107,6 +112,7 @@ export const ICONES_DO_SITE = {
   "minus": IcMinus,
   "moon": IcMoon,
   "moon-fill": IcMoonFill,
+  "paperclip": IcPaperclip,
   "pencil-simple": IcPencilSimple,
   "plus": IcPlus,
   "share-network": IcShareNetwork,
@@ -117,6 +123,8 @@ export const ICONES_DO_SITE = {
   "sun": IcSun,
   "sun-fill": IcSunFill,
   "trash": IcTrash,
+  "trend-down": IcTrendDown,
+  "trend-up": IcTrendUp,
   "upload-simple": IcUploadSimple,
   "user": IcUser,
   "user-fill": IcUserFill,
