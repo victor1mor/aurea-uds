@@ -43,3 +43,4 @@ site-dist/
 # O desenho do nativo na montagem do site (bloco 1, o 5-A): o Vite o monta antes do `build-catalog`, que o importa.
 # Descartável, como a saída dos proof-*.
 apps/catalog/.nativo/
+apps/catalog/.nativo-conferir/
