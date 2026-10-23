@@ -164,8 +164,9 @@ que a 0.40.0 esqueceu (*"Na 0.40.1"*, o Victor).
 - **O check 37 do `validate.py`** compara a web e o nativo por família e estilo (a web tem a Inter e a Sora variáveis, o
   nativo um arquivo por peso), e cada peso fixo da web (a IBM Plex Mono) tem de existir no nativo. O `LICENSE` das fontes
   reprova se ainda falar da Atkinson.
-- **Quem cobra:** `tests/unit/native-campos-brancos.test.tsx` (31 casos: os seis campos de texto e escolha soltos, no
-  cartão, no cartão de contorno e no escuro; o `Header` e o `ScrollShadow`; o `numeric` e o `KPI` — com o nativo da
+- **Quem cobra:** `tests/unit/native-campos-brancos.test.tsx` (32 casos: os seis campos de texto e escolha soltos, no
+  cartão, no cartão de contorno e no escuro; o `Header` e o `ScrollShadow`; o `numeric`, o `KPI`, a `Table` e o
+  `Slider` — com o nativo da
   0.40.0, reprovavam 14 dos 26 primeiros; sem o contexto no `Header` e no `ScrollShadow`, reprovam os 3 de cinza deles),
   `tests/unit/native-lote0.test.tsx` (os 14 `.ttf`, nenhum da Atkinson, e o mapa de nomes) e, na web,
   `tests/visual/campos-brancos.spec.ts` e `tests/unit/campos-brancos.test.tsx` (as quatro superfícies novas).

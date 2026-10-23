@@ -80,6 +80,6 @@
 - As fotos do catálogo (`catalog.spec.ts`, `matrix.spec.ts`).
 - `tests/unit/native-campos-brancos.test.tsx` (na CI) — no nativo, os seis campos de texto e escolha: soltos no claro,
   brancos com as três camadas da sombra; dentro do `Card`, cinza sem sombra; o cartão de contorno herda; no escuro,
-  cinza; o `Header` e o `ScrollShadow` (31 casos, com o `numeric` e o `KPI` da ADR-0077). Com o nativo da 0.40.0,
+  cinza; o `Header` e o `ScrollShadow` (32 casos, com o `numeric`, o `KPI`, a `Table` e o `Slider` da ADR-0077). Com o nativo da 0.40.0,
   reprovavam 14 dos 26 primeiros; sem o contexto no `Header` e no `ScrollShadow`, reprovam os 3 casos de cinza deles.
 - O aparelho: o bloco `0.40.1` do `apps/native-smoke`.
