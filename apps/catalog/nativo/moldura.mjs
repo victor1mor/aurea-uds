@@ -32,7 +32,17 @@ export const FONTES_NO_NAVEGADOR = {
 };
 export const FACES = faces;
 
-const registro = criarRegistroDeIcones(ICONES_DO_SITE);
+// O registro ANOTA todo nome pedido que não tem (o `Icon` do nativo não desenha nada quando falta, e só avisa no console):
+// a montagem do site lê `ICONES_QUE_FALTAM` depois de desenhar e para com a lista — a lista do site se completa medida.
+export const ICONES_QUE_FALTAM = new Set();
+const NAO_E_ICONE = new Set(["then", "constructor", "toJSON", "valueOf", "toString"]);
+const registro = new Proxy(criarRegistroDeIcones(ICONES_DO_SITE), {
+  get(alvo, chave) {
+    const v = alvo[chave];
+    if (v === undefined && typeof chave === "string" && /^[a-z0-9-]+$/.test(chave) && !NAO_E_ICONE.has(chave)) ICONES_QUE_FALTAM.add(chave);
+    return v;
+  },
+});
 
 // `tema`: "light" ou "dark" — o do site, que a parte viva lê do `<html data-theme>`.
 export function Moldura({tema, children}) {

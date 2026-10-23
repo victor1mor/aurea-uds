@@ -105,6 +105,58 @@ export async function medirCatalogo(raiz) {
   };
 }
 
+// ── O NATIVO (bloco 1, o 5-A — 23/10/2026) ──────────────────────────────────────────────────────────────────────────────
+// As mesmas duas perguntas para o `@aurea-uds/native`: todo nome que as três portas do pacote exportam (`.`, `./system`,
+// `./system/file`) tem a sua página no site, e todo valor das props do TIPO de cada peça (as uniões literais que o
+// `api-surface-native.json` leu do compilador) aparece no código de um exemplo da página. As constantes (o nome todo em
+// maiúsculas, com sublinhado: `ICONE_DA_VARIANTE`, `AUREA_UNIVERSAL_STATES`) não são peça e ficam fora da conta de páginas.
+//
+// O `conteudo` vem de fora porque os exemplos do nativo só carregam pelo pacote que o Vite monta (o Node não troca o
+// `react-native` pelo `react-native-web`): o `build-catalog.mjs` passa o do `.nativo/ssr.mjs`, e o teste passa um de mentira.
+export const PORTAS_DO_NATIVO = ["index.d.ts", "sistema.d.ts", "arquivo.d.ts"];
+export function exportadosDoNativo(raiz) {
+  const nomes = new Set();
+  for (const porta of PORTAS_DO_NATIVO) {
+    const texto = readFileSync(join(raiz, "packages/native/dist", porta), "utf8");
+    for (const m of texto.matchAll(/export\s*\{([^}]*)\}/g))
+      for (const n of m[1].split(",").map((x) => x.trim().split(/\s+as\s+/).pop()).filter(Boolean)) if (/^[A-Z]/.test(n)) nomes.add(n);
+    for (const m of texto.matchAll(/export declare (?:function|const) ([A-Z]\w*)/g)) nomes.add(m[1]);
+  }
+  return [...nomes].sort();
+}
+// Com o sublinhado: o `KPI` também é todo em maiúsculas, e é peça.
+export const ehConstante = (nome) => /^[A-Z][A-Z0-9]*_[A-Z0-9_]+$/.test(nome);
+
+export function medirNativo(raiz, conteudo) {
+  const superficie = JSON.parse(readFileSync(join(raiz, "packages/contracts/api-surface-native.json"), "utf8"));
+  const peca = {};
+  for (const m of Object.values(superficie.modules)) for (const c of m.components) peca[c.name] ??= c;
+  const nomes = exportadosDoNativo(raiz);
+  const pecas = nomes.filter((n) => !ehConstante(n));
+  const semPagina = pecas.filter((n) => !conteudo[n]);
+  const semTipo = pecas.filter((n) => !peca[n]);
+  const sobrando = Object.keys(conteudo).filter((n) => !pecas.includes(n));
+  let valores = 0, naPagina = 0;
+  const faltam = {};
+  for (const n of pecas) {
+    if (!peca[n] || !conteudo[n]) continue;
+    const codigo = (conteudo[n].examples || []).map((e) => e.code || "").join("\n");
+    for (const p of peca[n].props) for (const v of p.values || []) {
+      valores++;
+      if (aparece(codigo, p.name, v)) naPagina++;
+      else (faltam[n] ??= []).push(`${p.name}=${v}`);
+    }
+  }
+  const erros = [];
+  if (semPagina.length) erros.push(`nativo: ${semPagina.length} peça(s) sem página: ${semPagina.join(", ")}`);
+  if (semTipo.length) erros.push(`nativo: ${semTipo.length} peça(s) que o leitor da API não achou: ${semTipo.join(", ")}`);
+  if (sobrando.length) erros.push(`nativo: página de algo que o pacote não exporta: ${sobrando.join(", ")}`);
+  const nFaltam = Object.values(faltam).reduce((a, l) => a + l.length, 0);
+  if (nFaltam) erros.push(`nativo: ${nFaltam} valor(es) sem exemplo, em ${Object.keys(faltam).length} peça(s): `
+    + Object.entries(faltam).map(([n, l]) => `${n} (${l.join(", ")})`).join("; "));
+  return {pecas: pecas.length, constantes: nomes.filter(ehConstante), semPagina, valores, naPagina, faltam, erros};
+}
+
 // Rodado solto: o relatório e a saída 1 se falta algo.
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   const r = await medirCatalogo(resolve(import.meta.dirname, ".."));

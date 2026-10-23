@@ -7,7 +7,7 @@
     "componentes": 90,
     "hooks": 15,
     "aliasesLiterais": 64,
-    "propsDistintas": 188
+    "propsDistintas": 204
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -44,7 +44,7 @@
     },
     "AureaFile": {
       "module": "arquivo",
-      "raw": "{ /** O endereço local do arquivo — é ele que o app envia. */ uri: string; name: string; /** Em bytes. Pode faltar: nem todo provedor de arquivos do Android informa. */ size?: number; mimeType?: string; }",
+      "raw": "{ uri: string; name: string; size?: number; mimeType?: string; }",
       "union": null
     },
     "AureaChartMark": {
@@ -58,7 +58,7 @@
     },
     "AureaTimelineItem": {
       "module": "data",
-      "raw": "{ title: React.ReactNode; description?: React.ReactNode; /** Nó, não string: uma data absoluta e uma relativa são igualmente bem-vindas — como na web. */ time?: React.ReactNode; /** * R-18, 02/10/2026: o glifo numa moldura redonda, no lugar do ponto. Moldura de 40 (o `Avatar` * `sm` da referência) e glifo de 20. Basta um item com `icon` para a coluna inteira ter a * largura da moldura — os itens sem ícone ficam com o ponto, no centro dela. */ icon?: AureaIcon; /** A cor da moldura, com o vocabulário do `Badge`. Sem `icon`, não faz nada. Padrão: `neutral`. */ tone?: Exclude<AureaBadgeTone, AureaBadgeCategory>; /** O que vai à DIREITA do título — um valor, um selo. */ trailing?: React.ReactNode; /** * O que aconteceu ENTRE este item e o próximo, escrito ao lado da linha: *\"6 dias depois\"*, * *\"3 h depois\"*. Proposta aprovada na prancha de 02/10/2026: a linha deixa de ser enfeite e * passa a dizer alguma coisa. No último item não aparece, porque não há próximo. */ between?: React.ReactNode; }",
+      "raw": "{ title: React.ReactNode; description?: React.ReactNode; time?: React.ReactNode; icon?: AureaIcon; tone?: Exclude<AureaBadgeTone, AureaBadgeCategory>; trailing?: React.ReactNode; between?: React.ReactNode; }",
       "union": null
     },
     "AureaDataListItem": {
@@ -225,7 +225,7 @@
     },
     "EstadoAcessivel": {
       "module": "estilos",
-      "raw": "{ checked?: boolean | \"mixed\"; selected?: boolean; disabled?: boolean; expanded?: boolean; busy?: boolean; /** O botão que liga e desliga. No aparelho vira `checked`; na web vira `aria-pressed`. */ pressed?: boolean; }",
+      "raw": "{ checked?: boolean | \"mixed\"; selected?: boolean; disabled?: boolean; expanded?: boolean; busy?: boolean; pressed?: boolean; }",
       "union": null
     },
     "AureaAccordionVariant": {
@@ -2058,7 +2058,7 @@
     },
     "AureaPhoto": {
       "module": "sistema",
-      "raw": "{ uri: string; width?: number; height?: number; /** * Quando a foto foi TIRADA, lida do EXIF (R-23). Só vem com a prop `exif`, e fica vazia quando * a foto não traz a data — a que passou por um aplicativo de mensagens, por exemplo, perde o EXIF no caminho. */ takenAt?: Date; }",
+      "raw": "{ uri: string; width?: number; height?: number; takenAt?: Date; }",
       "union": null
     },
     "AureaUniversalState": {
@@ -2186,7 +2186,7 @@
     },
     "AureaProviderProps": {
       "module": "theme",
-      "raw": "{ children: React.ReactNode; /** Controlado: quando presente, manda, e `setTheme` só avisa. */ theme?: AureaThemeName; /** Controlado: quando presente, manda, e `setDensity` só avisa. */ density?: AureaDensity; /** * Tema inicial do modo não controlado. Ausente, segue o **aparelho** (`useColorScheme`) até * alguém chamar `setTheme` — a partir daí a escolha da pessoa manda e o sistema não a desfaz. */ defaultTheme?: AureaThemeName; /** * Densidade inicial do modo não controlado. Um app de consumidor final não expõe densidade ao * usuário (NATIVE.md §5.4): ali isto é uma escolha do app, feita uma vez. */ defaultDensity?: AureaDensity; /** * O mapa `papel -> peso -> família` que faz o texto sair na Inter, o título na Sora e o código na IBM * Plex Mono (ADR-0077). Sem ele, o tema devolve a família PEDIDA (\"Inter\"), que no aparelho vira fonte de * sistema para todo peso que * não seja Regular/Italic/Bold — **medido na tabela `name` dos .ttf**: Medium e SemiBold são * famílias próprias, não pesos da mesma família (ADR-0039). * * import {AUREA_FONTS, FONT_FAMILIES} from \"@aurea-uds/fonts/native\"",
+      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
       "union": null
     },
     "AureaToastType": {
@@ -2218,7 +2218,7 @@
     },
     "AureaFontScale": {
       "module": "tokens",
-      "raw": "Record<400 | 500 | 600 | 700 | 800, string> & { /** Só o papel `ui` tem itálico no pacote de fontes; nos outros é `undefined`. */ italic?: string; }",
+      "raw": "Record<400 | 500 | 600 | 700 | 800, string> & { italic?: string; }",
       "union": null
     },
     "AureaFontInput": {
@@ -2228,12 +2228,12 @@
     },
     "AureaTokens": {
       "module": "tokens",
-      "raw": "{ theme: AureaThemeName; density: AureaDensity; /** Cores em **hex**, e só hex. Ver a nota sobre a ADR-0027 abaixo. */ color: Record<string, string>; /** Todo token numérico, em dp — espaçamento, raio, tipografia, altura, duração, camada. */ size: Record<string, number>; /** Família por papel de tipografia e peso. */ font: { ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale; heading: AureaFontScale; }; /** * `boxShadow` do RN 0.76+ — **a primeira camada** de cada sombra. Para a sombra INTEIRA, use * `shadowLayers` (a `shadowSm` tem três camadas; aqui está só a primeira). */ shadow: Record<string, AureaShadow>; /** * Toda sombra com TODAS as camadas, na forma de lista que o `boxShadow` do RN 0.76+ aceita: * `boxShadow: t.shadowLayers.shadowSm`. Desde a 0.25.0 (ADR-0059). */ shadowLayers: Record<string, readonly AureaShadow[]>; /** `cubicBezier` como os 4 números do DTCG. Não há curva de CSS no RN. */ easing: Record<string, readonly [number, number, number, number]>; /** RAZÃO de `em`, não dp: `letterSpacing` no RN é absoluto, então multiplique pelo `fontSize`. */ tracking: Record<string, number>; /** 1rem em dp. Medido no navegador (raiz sem `font-size` = 16px), não presumido. */ remInDp: number; }",
+      "raw": "{ theme: AureaThemeName; density: AureaDensity; color: Record<string, string>; size: Record<string, number>; font: { ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale; heading: AureaFontScale; }; shadow: Record<string, AureaShadow>; shadowLayers: Record<string, readonly AureaShadow[]>; easing: Record<string, readonly [number, number, number, number]>; tracking: Record<string, number>; remInDp: number; }",
       "union": null
     },
     "AureaFontFamilies": {
       "module": "tokens",
-      "raw": "{ ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput; /** O papel do título (GAR-16, 0.28.0). Opcional: sem ele, o título usa o mapa do `ui` — que é a * mesma fonte hoje, e é o que acontece com quem ainda passa o mapa de antes da 0.28.0. */ heading?: AureaFontInput; }",
+      "raw": "{ ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput; heading?: AureaFontInput; }",
       "union": null
     }
   },
@@ -3917,7 +3917,38 @@
           "name": "PressableFeedback",
           "kind": "const",
           "propsType": null,
-          "props": []
+          "props": [
+            {
+              "name": "children",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            },
+            {
+              "name": "isDisabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "animation",
+              "optional": true,
+              "type": "boolean | \"disable-all\"",
+              "values": null
+            },
+            {
+              "name": "scale",
+              "optional": true,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<ViewStyle>",
+              "values": null
+            }
+          ]
         },
         {
           "name": "ScrollShadow",
@@ -3986,7 +4017,47 @@
           "name": "SkeletonGroup",
           "kind": "const",
           "propsType": null,
-          "props": []
+          "props": [
+            {
+              "name": "children",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            },
+            {
+              "name": "isLoading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "isSkeletonOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "animation",
+              "optional": true,
+              "type": "AureaSkeletonAnimation",
+              "values": [
+                "pulse",
+                "none"
+              ]
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<ViewStyle>",
+              "values": null
+            },
+            {
+              "name": "testID",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
         }
       ],
       "hooks": [],
@@ -4574,8 +4645,114 @@
         {
           "name": "Input",
           "kind": "function",
-          "propsType": null,
-          "props": []
+          "propsType": "InputProps",
+          "props": [
+            {
+              "name": "ref",
+              "optional": true,
+              "type": "React.Ref<React.ComponentRef<typeof TextInput>>",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChangeText",
+              "optional": true,
+              "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "AureaFieldSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "keyboardType",
+              "optional": true,
+              "type": "KeyboardTypeOptions",
+              "values": null
+            },
+            {
+              "name": "secureTextEntry",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "autoCapitalize",
+              "optional": true,
+              "type": "\"none\" | \"sentences\" | \"words\" | \"characters\"",
+              "values": [
+                "none",
+                "sentences",
+                "words",
+                "characters"
+              ]
+            },
+            {
+              "name": "formatOnBlur",
+              "optional": true,
+              "type": "(value: string) => string",
+              "values": null
+            },
+            {
+              "name": "onBlur",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onFocus",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "multiline",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<TextStyle>",
+              "values": null
+            },
+            {
+              "name": "testID",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
         },
         {
           "name": "InputGroup",
@@ -4662,6 +4839,93 @@
           "kind": "function",
           "propsType": "PasswordFieldProps",
           "props": [
+            {
+              "name": "ref",
+              "optional": true,
+              "type": "React.Ref<React.ComponentRef<typeof TextInput>>",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChangeText",
+              "optional": true,
+              "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "AureaFieldSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "autoCapitalize",
+              "optional": true,
+              "type": "\"none\" | \"sentences\" | \"words\" | \"characters\"",
+              "values": [
+                "none",
+                "sentences",
+                "words",
+                "characters"
+              ]
+            },
+            {
+              "name": "formatOnBlur",
+              "optional": true,
+              "type": "(value: string) => string",
+              "values": null
+            },
+            {
+              "name": "onBlur",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onFocus",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<TextStyle>",
+              "values": null
+            },
+            {
+              "name": "testID",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
             {
               "name": "defaultVisible",
               "optional": true,
@@ -4760,7 +5024,71 @@
           "name": "RadioGroup",
           "kind": "const",
           "propsType": null,
-          "props": []
+          "props": [
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onValueChange",
+              "optional": true,
+              "type": "(value: string) => void",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "invalid",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "label",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"vertical\" | \"horizontal\"",
+              "values": [
+                "vertical",
+                "horizontal"
+              ]
+            },
+            {
+              "name": "indicatorPlacement",
+              "optional": true,
+              "type": "AureaRadioIndicatorPlacement",
+              "values": [
+                "start",
+                "end"
+              ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "AureaRadioGroupVariant",
+              "values": [
+                "list",
+                "card"
+              ]
+            },
+            {
+              "name": "children",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            }
+          ]
         },
         {
           "name": "SegmentedControl",
@@ -4959,6 +5287,111 @@
           "kind": "function",
           "propsType": "TextareaProps",
           "props": [
+            {
+              "name": "ref",
+              "optional": true,
+              "type": "React.Ref<React.ComponentRef<typeof TextInput>>",
+              "values": null
+            },
+            {
+              "name": "value",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "onChangeText",
+              "optional": true,
+              "type": "(v: string) => void",
+              "values": null
+            },
+            {
+              "name": "placeholder",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "AureaFieldSize",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "keyboardType",
+              "optional": true,
+              "type": "KeyboardTypeOptions",
+              "values": null
+            },
+            {
+              "name": "secureTextEntry",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "autoCapitalize",
+              "optional": true,
+              "type": "\"none\" | \"sentences\" | \"words\" | \"characters\"",
+              "values": [
+                "none",
+                "sentences",
+                "words",
+                "characters"
+              ]
+            },
+            {
+              "name": "formatOnBlur",
+              "optional": true,
+              "type": "(value: string) => string",
+              "values": null
+            },
+            {
+              "name": "onBlur",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "onFocus",
+              "optional": true,
+              "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "multiline",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<TextStyle>",
+              "values": null
+            },
+            {
+              "name": "testID",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
             {
               "name": "rows",
               "optional": true,
@@ -6791,6 +7224,36 @@
                 "comfortable",
                 "spacious"
               ]
+            },
+            {
+              "name": "fontFamilies",
+              "optional": true,
+              "type": "AureaFontFamilies",
+              "values": null
+            },
+            {
+              "name": "icons",
+              "optional": true,
+              "type": "AureaIconRegistry",
+              "values": null
+            },
+            {
+              "name": "strings",
+              "optional": true,
+              "type": "AureaStrings",
+              "values": null
+            },
+            {
+              "name": "onThemeChange",
+              "optional": true,
+              "type": "(t: AureaThemeName) => void",
+              "values": null
+            },
+            {
+              "name": "onDensityChange",
+              "optional": true,
+              "type": "(d: AureaDensity) => void",
+              "values": null
             }
           ]
         },

@@ -10,9 +10,9 @@
 import {createElement as h} from "react";
 import {renderToStaticMarkup, renderToString} from "react-dom/server";
 import {AppRegistry} from "react-native-web";
-import {FACES, Moldura} from "./moldura.mjs";
+import {FACES, ICONES_QUE_FALTAM, Moldura} from "./moldura.mjs";
 
-export {FACES};
+export {FACES, ICONES_QUE_FALTAM};
 
 const modulos = import.meta.glob(["../content/native/*.mjs"], {import: "default", eager: true});
 export const conteudo = Object.fromEntries(Object.entries(modulos)

@@ -103,9 +103,14 @@ const pseudoInterfaces = [];    // aliases que são interseção com objeto lite
 
 const files = fs.readdirSync(DIST).filter((f) => f.endsWith(".d.ts")).sort();
 
+// Os COMENTÁRIOS saem antes de procurar os tipos (bloco 1, 23/10/2026). O corte de cada interface conta as chaves, e uma
+// chave sem par dentro de um `/** … */` levava o corte até o fim do arquivo: o leitor pulava todo tipo que vinha depois.
+// O `InputProps` do nativo sumia assim, e o `Input` saía com zero props. Os comentários continuam fora do `parseMembers`.
+const lerSemComentario = (file) => fs.readFileSync(path.join(DIST, file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+
 // Passo 1 — aliases e interfaces de todos os módulos, porque um módulo estende o tipo do outro.
 for (const file of files) {
-  const src = fs.readFileSync(path.join(DIST, file), "utf8");
+  const src = lerSemComentario(file);
   const mod = file.replace(/\.d\.ts$/, "");
 
   // O corpo de um alias vai até o `;` de PROFUNDIDADE ZERO. Parar no primeiro `;` cru quebrava
@@ -297,17 +302,14 @@ for (const file of files) {
   const mod = file.replace(/\.d\.ts$/, "");
   const comps = [];
 
-  // export declare const X: React.ForwardRefExoticComponent<Omit<XProps, "ref"> & ...>
-  // Context não é componente, e um `const` cujo tipo é uma função é hook ou utilitário.
-  for (const m of src.matchAll(/export\s+declare\s+const\s+([A-Z][\w$]*)\s*:\s*([^;]+);/g)) {
-    if (/\bContext<;?/.test(m[2]) || /=>/.test(m[2])) continue;
-    const propsName = /Omit<\s*([A-Za-z_$][\w$]*)\s*,/.exec(m[2])?.[1]
-      ?? /ForwardRefExoticComponent<\s*([A-Za-z_$][\w$]*)/.exec(m[2])?.[1];
-    comps.push({name: m[1], kind: "const", propsType: propsName ?? null, props: resolveProps(propsName)});
-  }
+  const funcoes = {};
 
   // export declare function X(arg: T): React.JSX.Element
-  for (const m of src.matchAll(/export\s+declare\s+function\s+([A-Z][\w$]*)\s*(?:<[^(]*>)?\s*\(/g)) {
+  // Também a função NÃO exportada (bloco 1, 23/10/2026): a peça composta do nativo é `const X: typeof Raiz & {Item: …}`,
+  // e as props dela são as da `Raiz`, que o arquivo declara sem `export`. Toda função guarda as props em `funcoes`; só a
+  // exportada vira componente.
+  for (const m of src.matchAll(/(export\s+)?declare\s+function\s+([A-Z][\w$]*)\s*(?:<[^(]*>)?\s*\(/g)) {
+    const exportada = Boolean(m[1]), nome = m[2];
     const paren = src.indexOf("(", m.index + m[0].length - 1);
     const args = balanced(src, paren, "(", ")").slice(1, -1);
     const colon = (() => {
@@ -352,7 +354,19 @@ for (const file of files) {
     }
     const seen = new Set();
     props = props.filter((p) => !seen.has(p.name) && seen.add(p.name));
-    comps.push({name: m[1], kind: "function", propsType: propsName, props});
+    funcoes[nome] = props;
+    if (exportada) comps.push({name: nome, kind: "function", propsType: propsName, props});
+  }
+
+  // export declare const X: React.ForwardRefExoticComponent<Omit<XProps, "ref"> & ...>
+  // Context não é componente, e um `const` cujo tipo é uma função é hook ou utilitário.
+  for (const m of src.matchAll(/export\s+declare\s+const\s+([A-Z][\w$]*)\s*:\s*([^;]+);/g)) {
+    if (/\bContext<;?/.test(m[2]) || /=>/.test(m[2])) continue;
+    const propsName = /Omit<\s*([A-Za-z_$][\w$]*)\s*,/.exec(m[2])?.[1]
+      ?? /ForwardRefExoticComponent<\s*([A-Za-z_$][\w$]*)/.exec(m[2])?.[1];
+    const raiz = propsName ? null : /^\s*typeof\s+([A-Za-z_$][\w$]*)/.exec(m[2])?.[1];
+    comps.push({name: m[1], kind: "const", propsType: propsName ?? null,
+      props: raiz && funcoes[raiz] ? funcoes[raiz] : resolveProps(propsName)});
   }
 
   const hooks = [

@@ -919,13 +919,14 @@ function nativePage(nome) {
   const descricaoDaWeb = Object.fromEntries((Array.isArray(ficha?.props) ? ficha.props : []).map(p => [p.name, p.description]));
   const tipo = p => p.values ? p.values.map(v => `"${v}"`).join(" | ") : p.type;
   const api = {id: "api", label: "API Reference", node: h("section", {className: "block", id: "api"}, h("h2", null, "API Reference"),
-    h("p", null, "Read from the types of the published package. Where the prop has the same name on the web, the "
-      + "description is the web's: the two packages share names on purpose."),
+    h("p", null, "Read from the types of the published package. A prop with the same name on the web means the same "
+      + "thing — the two packages share names on purpose; where the native one differs, the description says so."),
     h(A.Table, {caption: `${nome} props`},
       h("thead", null, h("tr", null, ...["Prop", "Type", "Description"].map(x => h("th", {key: x, scope: "col"}, x)))),
       h("tbody", null, ...peca.props.map(p => h("tr", {key: p.name},
         h("td", null, h("code", null, p.name + (p.optional ? "" : " *"))), h("td", null, h("code", null, tipo(p))),
-        h("td", null, descricaoDaWeb[p.name] || "—"))))))};
+        // a frase do NATIVO (`api` no arquivo de exemplos) ganha da da web: onde o nativo é diferente, ela diz o dele
+        h("td", null, c.api?.[p.name] || descricaoDaWeb[p.name] || "—"))))))};
   const exemplos = resto.length ? {id: "examples", label: "Examples",
     toc: resto.map(ex => ({id: slug(ex.title), label: ex.title, sub: true})),
     node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
