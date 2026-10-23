@@ -20,7 +20,7 @@ import * as A from "../packages/react/dist/index.js";
 import {highlightCode} from "../packages/react/dist/code-highlight.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
-import {medirCatalogo, MODELO_DA_RODADA} from "./catalogo-fiel.mjs";
+import {medirCatalogo, medirNativo, MODELO_DA_RODADA} from "./catalogo-fiel.mjs";
 import {lerDoc, lerLinha, paraTexto} from "./docs-markdown.mjs";
 import {linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
 // A aba "Components" da vitrine do Início (15/10/2026): o MESMO arquivo que o `home.js` deixa vivo.
@@ -65,9 +65,12 @@ const slug = name => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|
 
 // ── registry + conteúdo ───────────────────────────────────────────────────────
 const regDir = join(root, "packages/contracts/registry");
-const fichas = readdirSync(regDir).filter(f => f.endsWith(".json"))
+// TODAS as fichas, e as da WEB (bloco 1, 23/10/2026): a peça que só existe no nativo (`platforms.web: "n-a"` — a `BottomSheet`,
+// o `Screen`…) tem ficha e página do NATIVO, e nenhuma página de componente da web. Tudo o que monta o site da web lê `fichas`.
+const todasAsFichas = readdirSync(regDir).filter(f => f.endsWith(".json"))
   .map(f => JSON.parse(readFileSync(join(regDir, f), "utf8")))
   .sort((a, b) => a.name.localeCompare(b.name));
+const fichas = todasAsFichas.filter(f => f.platforms?.web !== "n-a");
 
 // A ORDEM DOS GRUPOS (ADR-0070, 14/10/2026): os 15 da referência, em ordem alfabética, como na página "All
 // Components" dela; depois os 3 da Aurea que ela não tem. Dentro do grupo, a ordem alfabética das fichas.
@@ -214,6 +217,9 @@ const pecasNativas = new Map(Object.entries(superficieNativa.modules)
 const nativos = Object.keys(nativo.conteudo).sort((a, b) => a.localeCompare(b));
 for (const n of nativos) if (!pecasNativas.has(n)) throw new Error(`content/native/${n}.mjs: o pacote nativo não tem ${n}`);
 const paginaNativa = nome => `native-${slug(nome)}.html`;
+// A TRAVA DO NATIVO: toda peça que o pacote exporta com página, e todo valor das props do tipo dela num exemplo.
+const fielNativo = medirNativo(root, nativo.conteudo);
+if (fielNativo.erros.length) throw new Error(`o catálogo do nativo deixou de ser fiel — ${fielNativo.erros.join(" · ")}`);
 
 // BLOCKS: apps/catalog/content/blocks/*.mjs (default = lista). Seção/tela inteira montada
 // com componentes reais — maior que pattern, menor que uma tela de produto.
@@ -914,7 +920,7 @@ const previaNativa = (nome, indice) => () => h("div", {className: "nativo-previa
 function nativePage(nome) {
   const c = nativo.conteudo[nome];
   const peca = pecasNativas.get(nome);
-  const ficha = fichas.find(f => f.name === nome);
+  const ficha = todasAsFichas.find(f => f.name === nome);
   const [principal, ...resto] = c.examples;
   const descricaoDaWeb = Object.fromEntries((Array.isArray(ficha?.props) ? ficha.props : []).map(p => [p.name, p.description]));
   const tipo = p => p.values ? p.values.map(v => `"${v}"`).join(" | ") : p.type;
@@ -947,7 +953,7 @@ function nativeIndex() {
     cabecaDaPagina("All Components", "Every piece of @aurea-uds/native, the React Native package, running here through "
       + "react-native-web — the same look as the web, in a phone's own components."),
     h("div", {className: "related-grid"}, ...nativos.map(n => h("a", {key: n, className: "related-card", href: `./${paginaNativa(n)}`},
-      h("strong", null, n), h("span", null, fichas.find(f => f.name === n)?.summary || nativo.conteudo[n].description || "")))));
+      h("strong", null, n), h("span", null, todasAsFichas.find(f => f.name === n)?.summary || nativo.conteudo[n].description || "")))));
   return {node, toc: []};
 }
 
@@ -966,6 +972,10 @@ function saudePage() {
     ["… in an example on the component's page", String(w.naPagina), ""],
     ["… as the default value, which every example without the prop shows", String(w.porPadrao), ""],
     ["… in a pattern of the same component", String(w.emPadrao), ""],
+    ["Every piece the native package exports has a page", `${fielNativo.pecas - fielNativo.semPagina.length} of ${fielNativo.pecas}`,
+      palavra(!fielNativo.semPagina.length)],
+    ["Every value of the native props is shown in an example", `${fielNativo.naPagina} of ${fielNativo.valores}`,
+      palavra(!Object.keys(fielNativo.faltam).length)],
   ];
   const toc = [{id: "catalogue", label: "The catalogue is complete"}, {id: "checks", label: "The last 30 checks"}];
   const node = h(Fragment, null,
@@ -973,8 +983,8 @@ function saudePage() {
       + "published even when a check fails — it never hides a failure."),
     h(A.Prose, null,
       h("h2", {id: "catalogue"}, "The catalogue is complete"),
-      h("p", null, "Measured on every build of this site, from the published package and the code of the examples. The build "
-        + "stops when one of these fails."),
+      h("p", null, "Measured on every build of this site, from the published packages — the web one and the React Native one — "
+        + "and the code of the examples. The build stops when one of these fails."),
       h(A.Table, {caption: "The catalogue is complete"},
         h("thead", null, h("tr", null, ...["What", "Count", "Result"].map(c => h("th", {key: c, scope: "col"}, c)))),
         h("tbody", null, ...linhas.map(([o, n, r], k) => h("tr", {key: k}, h("td", null, o), h("td", null, h(A.Text, {numeric: true}, n)),

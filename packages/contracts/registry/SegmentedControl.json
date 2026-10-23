@@ -10,7 +10,10 @@
     "native": "stable"
   },
   "variants": [],
-  "sizes": [],
+  "sizes": [
+    "md",
+    "sm"
+  ],
   "states": [
     "default",
     "selected",
@@ -55,9 +58,9 @@
   "props": [
     {
       "name": "items",
-      "type": "Array<{value, label}>",
+      "type": "Array<{value, label, href?}>",
       "default": "—",
-      "description": "The options. Two to five: past that it is a Select, not a segmented control."
+      "description": "The options. Two to five: past that it is a Select, not a segmented control. With href on EVERY item, the control is a <nav> of links — the current one gets aria-current=\"page\" — instead of a choice: going to another page is navigation, and a screen reader hears \"link\", not \"option\". It is the Web | Native switch of this site."
     },
     {
       "name": "value",
@@ -69,7 +72,7 @@
       "name": "onChange",
       "type": "(v: string) => void",
       "default": "—",
-      "description": "Fires with the new value."
+      "description": "Fires with the new value. Not needed when the items are links (href)."
     },
     {
       "name": "label",
@@ -82,6 +85,12 @@
       "type": "boolean",
       "default": "false",
       "description": "Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native."
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\"",
+      "default": "md",
+      "description": "sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text."
     }
   ]
 }

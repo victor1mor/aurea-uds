@@ -1,0 +1,95 @@
+{
+  "name": "BottomSheet",
+  "category": "Overlays",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "The panel that rises from the bottom of the phone, with the grabber, the drag to close and a 32 corner. Native only; on the web, Drawer side=\"bottom\".",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "closed",
+    "open",
+    "dragging"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "A modal dialog for the screen reader, named by its title. Back on Android and the swipe down close it."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Drawer",
+      "Dialog"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/overlays.tsx#BottomSheet"
+  },
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "—",
+      "description": "Whether the sheet is open."
+    },
+    {
+      "name": "title",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The sheet's title, which names it for the screen reader."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The content."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "default": "—",
+      "description": "Called when the person closes it: the drag down, the backdrop, Back."
+    },
+    {
+      "name": "grabber",
+      "type": "boolean",
+      "default": "—",
+      "description": "Shows the small bar at the top that says it can be dragged."
+    },
+    {
+      "name": "draggable",
+      "type": "boolean",
+      "default": "—",
+      "description": "Lets the person drag it down to close."
+    },
+    {
+      "name": "scroll",
+      "type": "boolean",
+      "default": "—",
+      "description": "Makes the content scroll inside the sheet."
+    },
+    {
+      "name": "style",
+      "type": "StyleProp<ViewStyle>",
+      "default": "—",
+      "description": "Extra style on the panel."
+    },
+    {
+      "name": "testID",
+      "type": "string",
+      "default": "—",
+      "description": "The id for tests."
+    }
+  ]
+}

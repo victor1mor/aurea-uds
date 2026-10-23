@@ -1,0 +1,118 @@
+{
+  "name": "LinkButton",
+  "category": "Buttons",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A text button that sits flush with the text around it, with no box: \"Choose by brand\", \"Add it by hand\". Native only; on the web, Button with variant=\"link\".",
+  "icon": "link",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "pressed",
+    "disabled"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "A button for the screen reader. The touch target keeps 44 even though the text is smaller."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Button",
+      "Link"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/actions.tsx#LinkButton"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The label."
+    },
+    {
+      "name": "tone",
+      "type": "AureaButtonTone",
+      "default": "—",
+      "description": "What the colour means."
+    },
+    {
+      "name": "size",
+      "type": "AureaButtonSize",
+      "default": "—",
+      "description": "The text size, from the control scale; the touch target stays 44."
+    },
+    {
+      "name": "leadingIcon",
+      "type": "AureaIcon",
+      "default": "—",
+      "description": "Glyph before the label."
+    },
+    {
+      "name": "trailingIcon",
+      "type": "AureaIcon",
+      "default": "—",
+      "description": "Glyph after the label."
+    },
+    {
+      "name": "leading",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "Any drawing before the label, for a mark that is not one of our icons."
+    },
+    {
+      "name": "trailing",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The same, after the label."
+    },
+    {
+      "name": "icons",
+      "type": "AureaIconRegistry",
+      "default": "—",
+      "description": "An icon registry, when there is none above."
+    },
+    {
+      "name": "pressed",
+      "type": "boolean",
+      "default": "—",
+      "description": "Toggle state, announced as checked."
+    },
+    {
+      "name": "share",
+      "type": "AureaShareData",
+      "default": "—",
+      "description": "Opens the phone's share sheet with this content."
+    }
+  ],
+  "axes": {
+    "tone": [
+      "brand",
+      "danger",
+      "info",
+      "neutral",
+      "success",
+      "warning"
+    ],
+    "size": [
+      "lg",
+      "md",
+      "sm",
+      "xl",
+      "xs"
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "name": "ToastHost",
+  "category": "Feedback",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Holds the stack of toasts and draws it over the app — React Native has no portal, so it goes once, as high as possible, inside the provider. Native only.",
+  "icon": "bell",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "empty",
+    "with-toasts"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "The toasts it draws are live regions: danger is an alert, the others a status."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Toast",
+      "AureaProvider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/toast.tsx#ToastHost"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The app."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "—",
+      "description": "How many toasts show at once."
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "default": "—",
+      "description": "How long a toast stays, in milliseconds."
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "default": "—",
+      "description": "Extra room at the bottom, above a bar."
+    },
+    {
+      "name": "style",
+      "type": "StyleProp<ViewStyle>",
+      "default": "—",
+      "description": "Extra style on the host."
+    },
+    {
+      "name": "testID",
+      "type": "string",
+      "default": "—",
+      "description": "The id for tests."
+    }
+  ]
+}

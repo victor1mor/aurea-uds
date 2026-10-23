@@ -1,0 +1,51 @@
+{
+  "name": "IconRegistryProvider",
+  "category": "Utilities",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Hands the icon drawings to every piece below it, so an icon is only bundled when the app imports it. Native only.",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No role: it renders no element. An Icon whose name is not in the registry draws nothing and warns once in development."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Icon",
+      "AureaProvider"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/icon.tsx#IconRegistryProvider"
+  },
+  "props": [
+    {
+      "name": "registry",
+      "type": "AureaIconRegistry",
+      "default": "—",
+      "description": "The map from icon name to drawing, made with criarRegistroDeIcones from the icons the app imports one by one."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The part of the app that reads the registry."
+    }
+  ]
+}

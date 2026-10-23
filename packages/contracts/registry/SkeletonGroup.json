@@ -1,0 +1,81 @@
+{
+  "name": "SkeletonGroup",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "One switch for many skeletons: they pulse together, and the content shows when loading ends. Native only.",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "loading",
+    "loaded"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "While loading, the group is hidden from the screen reader; the content arrives as it is."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Skeleton"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/exibicao.tsx#SkeletonGroup"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The skeletons and what they stand for."
+    },
+    {
+      "name": "isLoading",
+      "type": "boolean",
+      "default": "—",
+      "description": "Shows the skeletons instead of the content."
+    },
+    {
+      "name": "isSkeletonOnly",
+      "type": "boolean",
+      "default": "—",
+      "description": "Hides the whole group when loading ends, for a group made only of skeletons."
+    },
+    {
+      "name": "animation",
+      "type": "AureaSkeletonAnimation",
+      "default": "—",
+      "description": "pulse breathes; none stays still. With reduced motion, it stays still."
+    },
+    {
+      "name": "style",
+      "type": "StyleProp<ViewStyle>",
+      "default": "—",
+      "description": "Extra style."
+    },
+    {
+      "name": "testID",
+      "type": "string",
+      "default": "—",
+      "description": "The id for tests."
+    }
+  ],
+  "axes": {
+    "animation": [
+      "none",
+      "pulse"
+    ]
+  }
+}

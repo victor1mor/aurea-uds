@@ -53,5 +53,25 @@ export default {
             {value: "comfortable", label: "Comfortable"}, {value: "spacious", label: "Spacious"},
             {value: "xl", label: "XL"}]})),
     },
+    {
+      title: "Sizes",
+      description: "sm is the low capsule — the switch at the end of this site's areas row; md, the default, is the control height.",
+      code: `<SegmentedControl size="sm" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />`,
+      render: () => h("div", {style: {display: "grid", gap: "var(--space-3)", justifyItems: "start"}},
+        ...["sm", "md"].map(s => h(ComValor, {key: s, componente: SegmentedControl, valor: "value", aviso: "onChange", size: s,
+          label: `View, ${s}`, value: "list", items: [{value: "list", label: "List"}, {value: "grid", label: "Grid"}]}))),
+    },
+    {
+      title: "As navigation",
+      description: "With href on every item it is a <nav> of links: going to another page is navigation, and the current "
+        + "one is marked with aria-current=\"page\" — the Web | Native switch at the top of this site.",
+      code: `<SegmentedControl size="sm" label="Platform" value="web" items={[
+  {value: "web", label: "Web", href: "/button.html"},
+  {value: "native", label: "Native", href: "/native-button.html"},
+]} />`,
+      render: () => h(SegmentedControl, {size: "sm", label: "Platform, example", value: "web",
+        items: [{value: "web", label: "Web", href: "#web"}, {value: "native", label: "Native", href: "#native"}]}),
+    },
   ],
 };

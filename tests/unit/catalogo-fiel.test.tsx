@@ -8,7 +8,7 @@
 import {mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from "node:fs";
 import {join} from "node:path";
 import {afterAll, describe, expect, test} from "vitest";
-import {APELIDOS, aparece, medirCatalogo, MODELO_DA_RODADA} from "../../scripts/catalogo-fiel.mjs";
+import {APELIDOS, aparece, ehConstante, exportadosDoNativo, medirCatalogo, medirNativo, MODELO_DA_RODADA} from "../../scripts/catalogo-fiel.mjs";
 import {emBrasilia, palavra, preencher} from "../../scripts/saude-rodadas.mjs";
 
 const raiz = join(__dirname, "../..");
@@ -90,6 +90,28 @@ describe("a trava num catálogo de mentira, com um valor sem exemplo", () => {
     const r = await medirCatalogo(arvore(['<Pill size="sm" />', '<Pill size="lg" />']));
     expect(r.web.faltam).toEqual({});
     expect(r.erros).toEqual([]);
+  });
+});
+
+describe("a trava do nativo (os exemplos de mentira: os de verdade só carregam pelo pacote do Vite)", () => {
+  const nomes = exportadosDoNativo(raiz).filter((n) => !ehConstante(n));
+  test("as portas do pacote dão as peças, e as constantes ficam de fora", () => {
+    expect(nomes.length).toBeGreaterThan(70);
+    expect(nomes).toContain("KPI");
+    expect(nomes).not.toContain("ICONE_DA_VARIANTE");
+  });
+  test("peça sem página reprova, com o nome", () => {
+    const r = medirNativo(raiz, {});
+    expect(r.semPagina).toEqual(nomes);
+    expect(r.erros.join(" ")).toContain("sem página");
+  });
+  test("valor sem exemplo reprova; com o exemplo, passa", () => {
+    const vazio = Object.fromEntries(nomes.map((n) => [n, {examples: [{title: "x", code: ""}]}]));
+    const r = medirNativo(raiz, vazio);
+    expect(r.faltam.Button).toEqual(expect.arrayContaining(["size=lg", "tone=brand"]));
+    const valores = r.faltam.Button.map((pv) => `<Button ${pv.replace("=", '="')}" />`).join("\n");
+    const r2 = medirNativo(raiz, {...vazio, Button: {examples: [{title: "x", code: valores}]}});
+    expect(r2.faltam.Button).toBeUndefined();
   });
 });
 

@@ -158,8 +158,10 @@ PATTERNS_REF = [
 # mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`. O `home.js` (o Início, 15/10/2026) é o
 # `search.js` mais a vitrine: o mesmo caso, o mesmo achado. O `live-motores.js` (21/10/2026) é o `live.js` mais os
 # motores pesados (gráficos, editor, grade, mapa, QR): código de dependência montado, o mesmo caso.
+# O `live-nativo.js` (bloco 1, 23/10/2026) é o mesmo caso: as peças do topo do site (o mesmo gerador de id) e o
+# `react-native-web` montados — medido: um achado só, no mesmo trecho.
 REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js", root / "apps/catalog/assets/home.js",
-            root / "apps/catalog/assets/live-motores.js"}
+            root / "apps/catalog/assets/live-motores.js", root / "apps/catalog/assets/live-nativo.js"}
 REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
 
 
@@ -641,6 +643,17 @@ exported = set(re.findall(r"export function ([A-Z][A-Za-z0-9]*)", tsx)) | {
 # Hook público é `export const useX = …` ou `export function useX(…)`. Mesma varredura, outro
 # formato de nome — e é isto que permite a ficha de hook existir sem afrouxar a de componente.
 exported_hooks = set(re.findall(r"export (?:function|const) (use[A-Z][A-Za-z0-9]*)", tsx))
+
+
+# A PEÇA QUE SÓ EXISTE NO NATIVO (bloco 1, 23/10/2026): `platforms.web: "n-a"` — a `BottomSheet`, o `Screen`, o
+# `ToastHost`… Ela tem ficha (o contrato publicado diz o que existe, e onde) e página do NATIVO no site, e não é
+# componente do pacote da web: as cobranças que perguntam pela web (exportada pelo `@aurea-uds/react`, o
+# `source.react`, a página de componente) não valem para ela; o `source.native` vale no lugar do `source.react`.
+def _so_nativo(f):
+    return (f.get("platforms") or {}).get("web") == "n-a"
+
+
+FONTE_NATIVA_RE = re.compile(r"^packages/native/src/([\w-]+\.tsx)#([A-Z][A-Za-z0-9]*)$")
 for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     rel = fp.relative_to(root)
     try:
@@ -660,6 +673,14 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     elif kind == "hook":
         if f["name"] not in exported_hooks:
             errors.append(f"{rel}: '{f['name']}' não é hook exportado do pacote react")
+    elif _so_nativo(f):
+        _mn = FONTE_NATIVA_RE.match((f.get("source") or {}).get("native") or "")
+        if not _mn:
+            errors.append(f"{rel}: peça só do nativo sem source.native na forma packages/native/src/<arquivo>.tsx#<Componente>")
+        elif not re.search(rf"^export\s+(?:function|const)\s+{_mn.group(2)}\b",
+                           (root / "packages/native/src" / _mn.group(1)).read_text(encoding="utf-8")
+                           if (root / "packages/native/src" / _mn.group(1)).is_file() else "", re.M):
+            errors.append(f"{rel}: source.native aponta para {_mn.group(1)}, que não declara '{_mn.group(2)}'")
     elif f["name"] not in exported:
         errors.append(f"{rel}: '{f['name']}' não é componente exportado do pacote react")
     if f.get("icon") and f["icon"] not in ALLOWED_ICONS:
@@ -696,7 +717,8 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
                     errors.append(f"{rel}: prop {pr.get('name', '?')} sem: {', '.join(falta)}")
 # cobertura conjunto-exato (replicação concluída): todo componente exportado do
 # pacote react tem ficha. O sentido inverso (ficha sem componente) já é pego acima.
-fichas = {fp.stem for fp in (root / "packages/contracts/registry").glob("*.json")}
+fichas = {fp.stem for fp in (root / "packages/contracts/registry").glob("*.json")
+          if not _so_nativo(json.loads(fp.read_text(encoding="utf-8")))}
 # Nem todo export em PascalCase é componente. Estes dois são os contextos React que o
 # `internal.tsx` precisa expor para o `system.tsx` montar o AureaProvider — apareceram com o
 # split da Fase 9. Lista explícita e curta, no idioma das outras allowlists deste arquivo:
@@ -1480,6 +1502,8 @@ for _fp in sorted((root / "packages/react/src").glob("*.tsx")):
     _declara[_fp.name] = set(DECL_RE.findall(_fp.read_text(encoding="utf-8")))
 for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     f = json.loads(fp.read_text(encoding="utf-8"))
+    if _so_nativo(f):
+        continue
     alvo = (f.get("source") or {}).get("react") or ""
     m = FONTE_RE.match(alvo)
     if not m:
@@ -2049,7 +2073,10 @@ def project_state():
         # (G-DX-01), somar os dois faria o número de fichas crescer sem o de componentes crescer,
         # e a trava logo abaixo — que existe para pegar export em PascalCase que não é componente
         # — reprovaria por um motivo falso.
-        "fichas": sum(1 for f in reg.values() if f.get("kind", "component") != "hook"),
+        # E conta só as da WEB: a peça só do nativo (`_so_nativo`, bloco 1 — 23/10/2026) tem ficha e não é componente
+        # do pacote da web; ela tem a contagem dela, logo abaixo.
+        "fichas": sum(1 for f in reg.values() if f.get("kind", "component") != "hook" and not _so_nativo(f)),
+        "fichas_so_nativo": sum(1 for f in reg.values() if _so_nativo(f)),
         "hooks": sum(1 for f in reg.values() if f.get("kind") == "hook"),
         "paginas_total": len(pages),
         "paginas": kind,

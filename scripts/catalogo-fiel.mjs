@@ -73,7 +73,7 @@ export async function medirCatalogo(raiz) {
   let total = 0, naPagina = 0, porPadrao = 0, emPadrao = 0;
   const faltam = {};
   for (const f of fichas) {
-    if (!f.platforms?.web || f.platforms.web === "planned") continue;
+    if (!f.platforms?.web || f.platforms.web === "planned" || f.platforms.web === "n-a") continue;
     const dono = APELIDOS[f.name];
     if (dono && !new RegExp(`\\b${dono}\\b`).test(f.summary || "")) erros.push(`${f.name}: é apelido de ${dono}, e o summary da ficha não diz`);
     const eixos = {...(f.axes || {})};

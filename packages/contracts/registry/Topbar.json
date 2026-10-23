@@ -165,6 +165,12 @@
       "type": "string",
       "default": "\"Sections\"",
       "description": "The accessible name of the second row."
+    },
+    {
+      "name": "tabsEnd",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "What sits at the END of the second row, opposite the areas: the Web | Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs."
     }
   ],
   "axes": {

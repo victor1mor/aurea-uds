@@ -1,0 +1,96 @@
+{
+  "name": "Screen",
+  "category": "Layout",
+  "layer": "Shell",
+  "maturity": "Stable",
+  "summary": "The frame of a phone screen: the safe area, the page padding, the background and, when asked, the scroll and the pull to refresh. Native only.",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "scroll",
+    "refreshing"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No role of its own: the screen reader reads what is inside, in order. With onRefresh, the pull to refresh is the platform's own control."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "BottomNavProvider",
+      "KeyboardAvoiding"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/screen.tsx#Screen"
+  },
+  "props": [
+    {
+      "name": "edges",
+      "type": "readonly AureaScreenEdge[]",
+      "default": "—",
+      "description": "Which edges keep clear of the notch and the gesture bar."
+    },
+    {
+      "name": "padded",
+      "type": "boolean",
+      "default": "—",
+      "description": "Adds the page padding. With scroll, it goes inside the scrolling area, so the scrollbar stays at the edge."
+    },
+    {
+      "name": "scroll",
+      "type": "boolean",
+      "default": "—",
+      "description": "Makes the content scroll."
+    },
+    {
+      "name": "background",
+      "type": "AureaScreenBackground",
+      "default": "—",
+      "description": "The colour behind the screen: the page, or one of the two surface steps."
+    },
+    {
+      "name": "onRefresh",
+      "type": "() => void",
+      "default": "—",
+      "description": "Turns on the pull to refresh and is called when the person pulls."
+    },
+    {
+      "name": "refreshing",
+      "type": "boolean",
+      "default": "—",
+      "description": "Shows the refresh spinner while the new data loads."
+    },
+    {
+      "name": "footer",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "What stays at the bottom, out of the scroll: an action bar."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The content of the screen."
+    }
+  ],
+  "axes": {
+    "background": [
+      "background",
+      "surface1",
+      "surface2"
+    ]
+  }
+}
