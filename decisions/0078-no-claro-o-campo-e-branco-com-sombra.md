@@ -1,8 +1,8 @@
 # ADR-0078 — No claro, o campo é branco com sombra; dentro de uma superfície branca, continua cinza
 
 - **Data:** 22/10/2026
-- **Estado:** aceita · feita na branch `claude/campos`, na `0.40.0` (a web e o site). O React Native entra na `0.40.1`,
-  junto com a fonte do nativo (ADR-0077): ele pinta o campo em nove lugares e não sabe hoje se está dentro de um cartão.
+- **Estado:** aceita · feita na branch `claude/campos`, na `0.40.0` (a web e o site). O React Native entra na `0.40.1`, junto com a fonte do
+  nativo (ADR-0077; o Victor, *"pode fazer juntos"*): ele pinta o campo em nove lugares e não sabe hoje se está dentro de um cartão.
   **Muda o item 7 da [ADR-0072](0072-sem-linha.md) só para os campos, e só no tema claro.**
 - **Origem:** o Victor comparou a página inicial da Aurea com a da referência, as duas na mesma largura: *"porque nossos
   caixas não são brancas?"* — e o sistema que serviu de modelo à ADR-0077 também usa o campo branco. Viu a bancada com quatro saídas nos temas da Aurea (claro, escuro e a marca `lory`), no

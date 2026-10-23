@@ -731,7 +731,7 @@ no git.
   **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
   [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`
   (a sombra da referência); dentro de uma superfície branca (cartão, janela, folha, menu, painel do app), o `--fill-2` de
-  sempre, e a superfície escolhe sozinha (`--field-fill`/`--field-lift`); no escuro, nada muda. O nativo segue na `0.40.1`.
+  sempre, e a superfície escolhe sozinha (`--field-fill`/`--field-lift`); no escuro, nada muda. O nativo segue na `0.40.1`, junto com a fonte do nativo.
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção

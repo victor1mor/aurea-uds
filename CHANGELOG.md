@@ -122,7 +122,7 @@ como deveria funcionar"*.
 ⏳ **Ainda não publicada.** Os campos brancos no tema claro ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)).
 O Victor comparou a página inicial com a da referência e viu a bancada nos temas da Aurea, no notebook e no monitor de baixa
 visão: *"gostei Branco + sombra ... dá pra ver também por conta da sombra"*; e *"Pode seguir com a sugestão dos campos: branco
-com sombra no claro, escuro como hoje, cinza dentro de cartão"*. O React Native segue na `0.40.1`, junto com a fonte.
+com sombra no claro, escuro como hoje, cinza dentro de cartão"*. O React Native segue na `0.40.1`, junto com a fonte do nativo.
 
 ### ⚠ Pode quebrar a aparência
 
@@ -145,8 +145,8 @@ com sombra no claro, escuro como hoje, cinza dentro de cartão"*. O React Native
 
 ### Não muda
 
-- **Os campos do React Native continuam como eram até a `0.40.1`** (o nativo pinta o campo em nove lugares e não sabe hoje
-  se está dentro de um cartão; entra junto com a fonte do nativo).
+- **Os campos do React Native continuam como eram até a `0.40.1`**, que leva junto a fonte do nativo (o nativo pinta o
+  campo em nove lugares e não sabe hoje se está dentro de um cartão).
 
 ### Para quem cuida do repositório
 
