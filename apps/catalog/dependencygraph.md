@@ -27,6 +27,25 @@ import "@xyflow/react/dist/base.css";
 />
 ```
 
+## Examples
+
+### Tree and circle
+
+Besides the layers, two arrangements of its own: tree, from the root down, and radial, the root in the middle with the rest around it.
+
+```tsx
+<DependencyGraph layout="tree" nodes={nodes} edges={edges} height="18rem" />
+<DependencyGraph layout="radial" nodes={nodes} edges={edges} height="18rem" />
+```
+
+### Large text
+
+textSize="lg" makes the names on the nodes and lines larger, for people who see little.
+
+```tsx
+<DependencyGraph textSize="lg" nodes={nodes} edges={edges} height="18rem" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

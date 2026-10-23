@@ -40,6 +40,10 @@ const ITENS = [
   {id: "me", label: "Profile", icon: "user"},
 ];
 
+// Os quatro nomes de 17/08/2026, cada um com o rótulo PRÓPRIO: as quatro barras moram na mesma moldura, e dois
+// landmarks de navegação com o mesmo nome reprovam no axe (`landmark-unique`).
+const LEGADO = [["flat", "Garage flat"], ["surface", "Garage surface"], ["pill", "Garage pill"], ["dock", "Garage dock"]];
+
 const CODIGO_ITENS = `const items = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
@@ -198,6 +202,25 @@ export default {
 />`,
       embed: true,
       render: () => demo({label: "Garage router", inicial: "fuel", items: ITENS.slice(0, 3)}),
+    },
+    {
+      title: "Content width — the pill as wide as its items",
+      description: "width=\"content\" sizes the floating pill to its items and centres it, instead of spanning the "
+        + "screen. It only applies while the bar floats; the edge bar stays as wide as the screen.",
+      code: `<BottomNav width="content" indicator="capsule" label="Garage content" current={route} items={items} />`,
+      embed: true,
+      render: () => demo({width: "content", indicator: "capsule", label: "Garage content", inicial: "fuel"}),
+    },
+    {
+      title: "The four older names",
+      description: "flat, surface, pill and dock still work and map onto the pair: flat is edge with no indicator, "
+        + "surface and dock are floating with the circle, pill is floating with the pill. They are deprecated — "
+        + "write variant and indicator instead.",
+      code: LEGADO.map(([v, rotulo]) => `<BottomNav variant="${v}" label="${rotulo}" current={route} items={items} />`)
+        .join("\n"),
+      embed: true,
+      render: () => h("div", {style: {display: "grid", gap: "var(--space-4)"}},
+        ...LEGADO.map(([v, rotulo]) => h(Barra, {key: v, variant: v, label: rotulo, inicial: "fuel"}))),
     },
   ],
 };

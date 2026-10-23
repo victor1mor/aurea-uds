@@ -89,6 +89,52 @@ One unavailable option does not disable the set, and it keeps its place so the r
 </ButtonGroup>
 ```
 
+### Every variant
+
+Any Button variant, set once on the group. The joined capsule and the hairline between the buttons stay the same; only the weight and the tone change.
+
+```tsx
+<ButtonGroup label="Primary" variant="primary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Secondary" variant="secondary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Tertiary" variant="tertiary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Outline" variant="outline"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Ghost" variant="ghost"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Primary outline" variant="primary-outline"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Primary ghost" variant="primary-ghost"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger" variant="danger"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger outline" variant="danger-outline"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger ghost" variant="danger-ghost"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger soft" variant="danger-soft"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Link" variant="link"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Link primary" variant="link-primary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Link danger" variant="link-danger"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Nav" variant="nav"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+```
+
+### Every size
+
+The five button heights, from the density tokens. The group passes the size to every button inside.
+
+```tsx
+<ButtonGroup label="Extra small" size="xs"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Small" size="sm"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Medium" size="md"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Large" size="lg"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Extra large" size="xl"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+```
+
+### Vertical
+
+The same buttons stacked. Visual only: the order, the semantics and the Tab stops do not change.
+
+```tsx
+<ButtonGroup label="Align" orientation="vertical">
+  <Button>Top</Button>
+  <Button>Middle</Button>
+  <Button>Bottom</Button>
+</ButtonGroup>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

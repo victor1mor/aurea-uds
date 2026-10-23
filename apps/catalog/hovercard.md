@@ -15,6 +15,19 @@ import {HoverCard} from "@aurea-uds/react";
 </HoverCard>
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<HoverCard side="top" trigger={<Button variant="link" href="#side-top">Side top</Button>}>…</HoverCard>
+<HoverCard side="right" trigger={<Button variant="link" href="#side-right">Side right</Button>}>…</HoverCard>
+<HoverCard side="bottom" trigger={<Button variant="link" href="#side-bottom">Side bottom</Button>}>…</HoverCard>
+<HoverCard side="left" trigger={<Button variant="link" href="#side-left">Side left</Button>}>…</HoverCard>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

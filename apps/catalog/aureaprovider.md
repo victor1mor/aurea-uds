@@ -14,6 +14,57 @@ import {AureaProvider} from "@aurea-uds/react";
 </AureaProvider>
 ```
 
+## Examples
+
+### Theme
+
+defaultTheme seeds the theme and lets the user change it; theme controls it from your state. "system" follows the computer and keeps following it. The switch below is this site's own provider, live.
+
+```tsx
+<AureaProvider defaultTheme="light">…</AureaProvider>
+<AureaProvider defaultTheme="dark">…</AureaProvider>
+<AureaProvider defaultTheme="system">…</AureaProvider>
+<AureaProvider theme="light" onThemePreferenceChange={setTheme}>…</AureaProvider>
+<AureaProvider theme="dark" onThemePreferenceChange={setTheme}>…</AureaProvider>
+<AureaProvider theme="system" onThemePreferenceChange={setTheme}>…</AureaProvider>
+```
+
+### Density
+
+The same two forms for the density: defaultDensity seeds it, density controls it. The control below changes this site's density, live — every control on the page follows.
+
+```tsx
+<AureaProvider defaultDensity="compact">…</AureaProvider>
+<AureaProvider defaultDensity="comfortable">…</AureaProvider>
+<AureaProvider defaultDensity="spacious">…</AureaProvider>
+<AureaProvider density="compact" onDensityChange={setDensity}>…</AureaProvider>
+<AureaProvider density="comfortable" onDensityChange={setDensity}>…</AureaProvider>
+<AureaProvider density="spacious" onDensityChange={setDensity}>…</AureaProvider>
+```
+
+### Direction
+
+direction="rtl" tells the engine that the inline axis runs right to left, so popups and arrow keys mirror. The CSS mirrors on its own from the dir attribute — the box below is a dir="rtl" page in miniature.
+
+```tsx
+<html dir="rtl">
+  <AureaProvider direction="rtl">…</AureaProvider>
+</html>
+```
+
+### Where the toasts appear
+
+toastPlacement picks one of six places for the messages of useToast(). bottom, the middle of the bottom edge, is the default — and the one this site uses: the button shows it.
+
+```tsx
+<AureaProvider toastPlacement="top-start">…</AureaProvider>
+<AureaProvider toastPlacement="top">…</AureaProvider>
+<AureaProvider toastPlacement="top-end">…</AureaProvider>
+<AureaProvider toastPlacement="bottom-start">…</AureaProvider>
+<AureaProvider toastPlacement="bottom">…</AureaProvider>
+<AureaProvider toastPlacement="bottom-end">…</AureaProvider>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

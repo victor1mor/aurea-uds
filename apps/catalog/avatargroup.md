@@ -17,6 +17,30 @@ import {AvatarGroup} from "@aurea-uds/react";
 </AvatarGroup>
 ```
 
+## Examples
+
+### Sizes
+
+The size reaches every avatar in the group and the counter at the end.
+
+```tsx
+<AvatarGroup max={3} total={9} label="Reviewers" size="sm">
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
+</AvatarGroup>
+<AvatarGroup max={3} total={9} label="Reviewers" size="md">
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
+</AvatarGroup>
+<AvatarGroup max={3} total={9} label="Reviewers" size="lg">
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
+</AvatarGroup>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

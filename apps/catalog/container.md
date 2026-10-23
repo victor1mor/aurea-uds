@@ -9,9 +9,25 @@ import {Container} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Container>
-  <Heading level={2}>Fichas técnicas</Heading>
+<Container size="sm">
+  <Card>Content, centred and capped</Card>
 </Container>
+```
+
+## Examples
+
+### Sizes
+
+The cap, on the width scale: sm 640, md 768, lg 1024, xl 1280 (the default), 2xl 1536, docs (the text column of a documentation page) and full, no cap. In this box the larger ones fill the width.
+
+```tsx
+<Container size="sm"><Card>size sm</Card></Container>
+<Container size="md"><Card>size md</Card></Container>
+<Container size="lg"><Card>size lg</Card></Container>
+<Container size="xl"><Card>size xl</Card></Container>
+<Container size="2xl"><Card>size 2xl</Card></Container>
+<Container size="docs"><Card>size docs</Card></Container>
+<Container size="full"><Card>size full</Card></Container>
 ```
 
 ## API Reference

@@ -16,6 +16,80 @@ import {Cluster} from "@aurea-uds/react";
 </Cluster>
 ```
 
+## Examples
+
+### Gap
+
+The space between the items, from the density scale: tight, normal or loose.
+
+```tsx
+<Cluster gap="tight">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster gap="normal">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster gap="loose">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+```
+
+### Justify
+
+Where the row sits along the line. between pushes the first and the last item to the ends.
+
+```tsx
+<Cluster justify="start">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster justify="center">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster justify="end">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster justify="between">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+```
+
+### Align
+
+How items of different heights line up across the row. baseline lines up the text.
+
+```tsx
+<Cluster align="start">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+<Cluster align="center">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+<Cluster align="end">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+<Cluster align="baseline">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -63,6 +63,15 @@ State belongs to the control, not to the wrapper: Field only shows what the cont
 <Field label="Plan"><Input defaultValue="Pro" disabled /></Field>
 ```
 
+### Label beside the control
+
+orientation="horizontal" puts the label to the left of the control — the settings-form row. The error still falls under the control, because it talks about the value.
+
+```tsx
+<Field label="Display name" orientation="horizontal"><Input defaultValue="Ana Prado" /></Field>
+<Field label="Handle" orientation="horizontal" error="Already taken."><Input defaultValue="ana" /></Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

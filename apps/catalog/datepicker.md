@@ -48,6 +48,22 @@ import {ptBR} from "react-day-picker/locale";
 </Field>
 ```
 
+### Sizes
+
+The field height, on the same scale as Select and Input. md is the default.
+
+```tsx
+<Field label="Small">
+  <DatePicker size="sm" defaultValue={new Date(2026, 7, 12)} />
+</Field>
+<Field label="Medium">
+  <DatePicker defaultValue={new Date(2026, 7, 12)} />
+</Field>
+<Field label="Large">
+  <DatePicker size="lg" defaultValue={new Date(2026, 7, 12)} />
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

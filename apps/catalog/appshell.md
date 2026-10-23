@@ -18,6 +18,58 @@ import {AppShell} from "@aurea-uds/react";
 </AppShell>
 ```
 
+## Examples
+
+### The documentation arrangement
+
+layout="docs" is the arrangement of this site: one block in the middle of the screen with the sidebar, the text and the table of contents. Here the sidebar, the content and the aside have no box (plain).
+
+```tsx
+<AppShell
+  layout="docs"
+  sidebarVariant="plain"
+  contentVariant="plain"
+  asideVariant="plain"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
+### A floating aside, and the scrollbar always on
+
+asideVariant="floating" puts the right column in a card of its own; sidebarScrollbar="visible" keeps the sidebar's scrollbar showing, instead of only under the pointer.
+
+```tsx
+<AppShell
+  asideVariant="floating"
+  sidebarScrollbar="visible"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
+### A flush aside
+
+asideVariant="flush" glues the right column to the edge of the window, like the flush sidebar.
+
+```tsx
+<AppShell
+  asideVariant="flush"
+  sidebarVariant="flush"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

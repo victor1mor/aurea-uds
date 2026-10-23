@@ -35,6 +35,49 @@ The X removes; so does Delete on the active tag.
   description="Remove a filter to widen the search" />
 ```
 
+### Single selection
+
+One at a time: picking a tag releases the one before. Picking the same tag again clears it.
+
+```tsx
+const topics = [
+  {id: "news", label: "News"}, {id: "travel", label: "Travel"},
+  {id: "gaming", label: "Gaming"}, {id: "shopping", label: "Shopping"},
+];
+
+<TagGroup label="Section" selectionMode="single" defaultSelectedKeys={["news"]} items={topics} />
+```
+
+### Sizes
+
+20, 24 and 32 high — the reference library's tag. md is the default.
+
+```tsx
+const topics = [
+  {id: "news", label: "News"}, {id: "travel", label: "Travel"},
+  {id: "gaming", label: "Gaming"}, {id: "shopping", label: "Shopping"},
+];
+
+<TagGroup label="Small tags" size="sm" items={topics} />
+<TagGroup label="Medium tags" size="md" items={topics} />
+<TagGroup label="Large tags" size="lg" items={topics} />
+```
+
+### On a grey surface
+
+On a grey surface the neutral tag disappears into it. variant="surface" fills the tags with the card colour instead.
+
+```tsx
+const topics = [
+  {id: "news", label: "News"}, {id: "travel", label: "Travel"},
+  {id: "gaming", label: "Gaming"}, {id: "shopping", label: "Shopping"},
+];
+
+<Card variant="inset">
+  <TagGroup label="Saved topics" variant="surface" items={topics} />
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -44,6 +44,22 @@ The vertical rule stretches to the tallest sibling. Useful between counts, autho
 </Cluster>
 ```
 
+### Spacing
+
+The space on both sides of the line, in the three steps of the layout gap. none, the default, leaves the spacing to the parent; on a vertical separator the space goes to the sides.
+
+```tsx
+<Card>
+  <p>Account</p>
+  <Separator spacing="tight" />
+  <p>Billing</p>
+  <Separator spacing="normal" />
+  <p>Team</p>
+  <Separator spacing="loose" />
+  <p>Security</p>
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -25,6 +25,28 @@ function UmCanal() {
       h(ColorSwatch, {color: cor, label: "The colour"}), h("code", null, cor)));
 }
 
+// Os canais de um espaço, repartindo uma cor só. O código e o desenho saem da MESMA lista (`CANAIS_HSL`,
+// `CANAIS_RGB`), com a largura que o desenho usa.
+const CANAIS_HSL = {inicio: "hsl(200, 80%, 50%)", espaco: "hsl", amostra: "The HSL colour",
+  canais: [["hue", "Hue"], ["saturation", "Saturation"], ["lightness", "Lightness"]]};
+const CANAIS_RGB = {inicio: "rgba(240, 194, 0, 0.8)", espaco: "rgb", amostra: "The RGB colour",
+  canais: [["red", "Red"], ["green", "Green"], ["blue", "Blue"], ["alpha", "Alpha"]]};
+
+function Canais({inicio, espaco, amostra, canais}) {
+  const [cor, setCor] = useState(inicio);
+  return h("div", {style: coluna},
+    h("div", {style: linha}, ...canais.map(([canal, nome]) => h(Field, {key: canal, label: nome},
+      h(ColorField, {channel: canal, colorSpace: espaco, value: cor, onValueChange: setCor, width: "6rem"})))),
+    h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-2)"}},
+      h(ColorSwatch, {color: cor, label: amostra}), h("code", null, cor)));
+}
+
+const codigoDosCanais = ({inicio, espaco, amostra, canais}) => `const [colour, setColour] = useState("${inicio}");
+
+${canais.map(([canal, nome]) => `<Field label="${nome}"><ColorField channel="${canal}" colorSpace="${espaco}" `
+  + `value={colour} onValueChange={setColour} width="6rem" /></Field>`).join("\n")}
+<ColorSwatch color={colour} label="${amostra}" />`;
+
 function ComOValor() {
   const [cor, setCor] = useState("#16a34a");
   return h("div", {style: coluna},
@@ -181,6 +203,21 @@ export default {
 </form>`,
       embed: true,
       render: () => h(NoFormulario),
+    },
+    {
+      title: "HSL channels",
+      description: "colorSpace=\"hsl\" makes hue and saturation the HSL ones, beside lightness. Three fields share one colour.",
+      code: codigoDosCanais(CANAIS_HSL),
+      embed: true,
+      render: () => h(Canais, CANAIS_HSL),
+    },
+    {
+      title: "RGB channels and alpha",
+      description: "Red, green and blue from 0 to 255, and alpha. They are RGB channels with or without "
+        + "colorSpace=\"rgb\"; the prop only changes hue and saturation, so one value can go to every field of a picker.",
+      code: codigoDosCanais(CANAIS_RGB),
+      embed: true,
+      render: () => h(Canais, CANAIS_RGB),
     },
   ],
 };

@@ -3521,6 +3521,11 @@ button.tag-main { cursor:pointer; }
    identificação, como no sistema que serviu de modelo (na tabela dele, só a coluna de número e a de valor; o resto
    da tabela fica no texto). Vem depois dos `.typography-h*`, e por isso o título com `numeric` também troca. */
 .typography-numeric { font-family:var(--font-code); font-variant-numeric:tabular-nums; }
+/* O alinhamento só existe num bloco: o `Text` (um <span>) e o `Code` (um <code>) são texto em linha, e com o
+   `text-align` sozinho o `align` deles não fazia nada — achado pelo exemplo de cada valor (bloco 1, o catálogo fiel,
+   23/10/2026). Com `align`, a peça vira bloco, como já faz o `truncate`; no `Heading` e no `Paragraph`, que já são
+   bloco, nada muda. */
+.typography-align-start, .typography-align-center, .typography-align-end, .typography-align-justify { display:block; }
 .typography-align-start { text-align:start; }
 .typography-align-center { text-align:center; }
 .typography-align-end { text-align:end; }

@@ -3,6 +3,8 @@ import {Switch, Card} from "../../../packages/react/dist/index.js";
 
 // `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza (ver o Checkbox.mjs).
 const stack = {display: "grid", gap: "var(--space-3)", maxWidth: "min(420px, 100%)"};
+// Os três tamanhos, cada um com o nome próprio: o código e o desenho saem desta lista.
+const TAMANHOS = [["sm", "Compact mode"], ["md", "Sound effects"], ["lg", "Large text"]];
 
 export default {
   description:
@@ -79,6 +81,14 @@ export default {
       render: () => h("div", {style: stack},
         h(Switch, {label: "Audit log", disabled: true}),
         h(Switch, {label: "SSO", defaultChecked: true, disabled: true})),
+    },
+    {
+      title: "Sizes",
+      description: "The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.",
+      code: TAMANHOS.map(([size, label]) =>
+        `<Switch label="${label}" defaultChecked${size === "md" ? "" : ` size="${size}"`} />`).join("\n"),
+      render: () => h("div", {style: stack}, ...TAMANHOS.map(([size, label]) =>
+        h(Switch, {key: size, label, defaultChecked: true, ...(size === "md" ? {} : {size})}))),
     },
   ],
 };

@@ -14,6 +14,29 @@ import {Icon} from "@aurea-uds/react";
 <Icon name="check" size="xl" />
 ```
 
+## Examples
+
+### Weights
+
+regular is the line icon; bold is heavier for small sizes; fill is the solid shape the chosen item uses.
+
+```tsx
+<Icon name="star" weight="regular" />
+<Icon name="star" weight="bold" />
+<Icon name="star" weight="fill" />
+```
+
+### Sizes
+
+From the icon scale; the icon follows the text size when no size is given.
+
+```tsx
+<Icon name="star" size="sm" />
+<Icon name="star" size="md" />
+<Icon name="star" size="lg" />
+<Icon name="star" size="xl" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

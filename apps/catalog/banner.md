@@ -14,6 +14,33 @@ import {Banner} from "@aurea-uds/react";
 </Banner>
 ```
 
+## Examples
+
+### Variants
+
+The same live-region rule as Alert: danger interrupts, the others wait. The cookie notice, consent, has a page of its own on the site.
+
+```tsx
+<Banner variant="info">A info banner.</Banner>
+<Banner variant="success">A success banner.</Banner>
+<Banner variant="warning">A warning banner.</Banner>
+<Banner variant="danger">A danger banner.</Banner>
+```
+
+### Every state
+
+The condition, apart from the severity. Without a variant, the state picks it; without children, it supplies the message.
+
+```tsx
+<Banner state="stale" />
+<Banner state="partial" />
+<Banner state="degraded" />
+<Banner state="offline" />
+<Banner state="waiting_user" />
+<Banner state="waiting_approval" />
+<Banner state="waiting_dependency" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -57,5 +57,49 @@ export default {
         h(ToolbarSeparator),
         h(ToolbarButton, {variant: "danger-ghost", leadingIcon: "trash"}, "Delete")),
     },
+      {
+        title: "Appearances",
+        description: "ghost is the default inside a toolbar, where the bar already frames the action.",
+        code: [
+          '<Toolbar label="Appearances">',
+          ...["solid", "soft", "outline", "ghost", "link", "nav"].map(v => `  <ToolbarButton appearance="${v}">${v}</ToolbarButton>`),
+          '</Toolbar>',
+        ].join("\n"),
+        render: () => h(Toolbar, {label: "Appearances"},
+          ...["solid", "soft", "outline", "ghost", "link", "nav"].map(v => h(ToolbarButton, {key: v, appearance: v}, v))),
+      },
+      {
+        title: "Tones",
+        description: "What the colour means, with the solid appearance.",
+        code: [
+          '<Toolbar label="Tones">',
+          ...["neutral", "brand", "info", "success", "warning", "danger"].map(v => `  <ToolbarButton tone="${v}" appearance="solid">${v}</ToolbarButton>`),
+          '</Toolbar>',
+        ].join("\n"),
+        render: () => h(Toolbar, {label: "Tones"},
+          ...["neutral", "brand", "info", "success", "warning", "danger"].map(v => h(ToolbarButton, {key: v, tone: v, appearance: "solid"}, v))),
+      },
+      {
+        title: "Every shortcut",
+        description: "The same variant shortcuts as Button.",
+        code: [
+          '<Toolbar label="Every shortcut">',
+          ...["primary", "secondary", "tertiary", "outline", "ghost", "link", "nav", "primary-outline", "primary-ghost", "link-primary", "danger", "danger-soft", "danger-outline", "danger-ghost", "link-danger"].map(v => `  <ToolbarButton variant="${v}">${v}</ToolbarButton>`),
+          '</Toolbar>',
+        ].join("\n"),
+        render: () => h(Toolbar, {label: "Every shortcut"},
+          ...["primary", "secondary", "tertiary", "outline", "ghost", "link", "nav", "primary-outline", "primary-ghost", "link-primary", "danger", "danger-soft", "danger-outline", "danger-ghost", "link-danger"].map(v => h(ToolbarButton, {key: v, variant: v}, v))),
+      },
+      {
+        title: "Every size",
+        description: "The size step shared with Button.",
+        code: [
+          '<Toolbar label="Every size">',
+          ...["xs", "sm", "md", "lg", "xl"].map(v => `  <ToolbarButton size="${v}">${v}</ToolbarButton>`),
+          '</Toolbar>',
+        ].join("\n"),
+        render: () => h(Toolbar, {label: "Every size"},
+          ...["xs", "sm", "md", "lg", "xl"].map(v => h(ToolbarButton, {key: v, size: v}, v))),
+      },
   ],
 };

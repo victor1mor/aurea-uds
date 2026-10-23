@@ -60,6 +60,16 @@ Selectable and copyable, not editable — for a log or a generated snippet you m
 <Textarea rows={3} readOnly defaultValue={log} />
 ```
 
+### Secondary, in a card
+
+variant="secondary" is the neutral fill, for a text area inside a card — the same two variants as Input.
+
+```tsx
+<Card>
+  <Field label="Notes"><Textarea variant="secondary" rows={3} /></Field>
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

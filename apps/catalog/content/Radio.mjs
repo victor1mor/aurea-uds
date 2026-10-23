@@ -3,6 +3,8 @@ import {Radio, Field} from "../../../packages/react/dist/index.js";
 
 // `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza (ver o Checkbox.mjs).
 const stack = {display: "grid", gap: "var(--space-2)", maxWidth: "min(420px, 100%)"};
+// Os três tamanhos num grupo só (o mesmo `name`), cada um com o nome próprio: o código e o desenho saem desta lista.
+const TAMANHOS = [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]];
 
 export default {
   description:
@@ -71,6 +73,14 @@ export default {
             h(Radio, {name: "vis", label: "Private", defaultChecked: true}),
             h(Radio, {name: "vis", label: "Members only"}),
             h(Radio, {name: "vis", label: "Anyone with the link"})))),
+    },
+    {
+      title: "Sizes",
+      description: "The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.",
+      code: TAMANHOS.map(([size, label]) => `<Radio name="size" label="${label}"`
+        + `${size === "md" ? " defaultChecked" : ` size="${size}"`} />`).join("\n"),
+      render: () => h("div", {style: stack}, ...TAMANHOS.map(([size, label]) =>
+        h(Radio, {key: size, name: "size", label, ...(size === "md" ? {defaultChecked: true} : {size})}))),
     },
   ],
 };

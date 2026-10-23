@@ -14,6 +14,47 @@ import {Paragraph} from "@aurea-uds/react";
 <Paragraph size="xs" color="muted">Figures are rounded to the nearest unit.</Paragraph>
 ```
 
+## Examples
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Paragraph weight="normal">A paragraph in normal.</Paragraph>
+<Paragraph weight="medium">A paragraph in medium.</Paragraph>
+<Paragraph weight="semibold">A paragraph in semibold.</Paragraph>
+<Paragraph weight="bold">A paragraph in bold.</Paragraph>
+<Paragraph weight="extrabold">A paragraph in extrabold.</Paragraph>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Paragraph tone="default">A paragraph in default.</Paragraph>
+<Paragraph tone="muted">A paragraph in muted.</Paragraph>
+<Paragraph tone="subtle">A paragraph in subtle.</Paragraph>
+<Paragraph tone="primary">A paragraph in primary.</Paragraph>
+<Paragraph tone="link">A paragraph in link.</Paragraph>
+<Paragraph tone="info">A paragraph in info.</Paragraph>
+<Paragraph tone="success">A paragraph in success.</Paragraph>
+<Paragraph tone="warning">A paragraph in warning.</Paragraph>
+<Paragraph tone="danger">A paragraph in danger.</Paragraph>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Paragraph align="start">A paragraph aligned to start: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+<Paragraph align="center">A paragraph aligned to center: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+<Paragraph align="end">A paragraph aligned to end: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+<Paragraph align="justify">A paragraph aligned to justify: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

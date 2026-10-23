@@ -13,7 +13,8 @@ import {AureaProvider} from "../../../packages/react/dist/index.js";
 import {montarSite} from "./site";
 
 type Exemplo = {render?: () => unknown};
-export type Starters = Record<string, Exemplo>;
+// O de partida pode trazer `examples`, os exemplos DEPOIS do principal (bloco 1, o catálogo fiel — 23/10/2026).
+export type Starters = Record<string, Exemplo & {examples?: Exemplo[]}>;
 
 // `import.meta.glob` com padrão NEGATIVO, e não um literal de template solto: o glob aberto casava também os arquivos `_`
 // do gerador. `import: "default"` traz só os objetos de conteúdo. O IIFE precisa deles eager no mesmo arquivo porque
@@ -21,11 +22,12 @@ export type Starters = Record<string, Exemplo>;
 const modulos = import.meta.glob<{examples?: Exemplo[]}>(["../content/*.mjs", "!../content/_*.mjs"],
   {import: "default", eager: true});
 
-// O MESMO caminho do gerador (`componentPage`): com arquivo próprio, o exemplo `i` dele; sem, o de partida (só o 0).
+// O MESMO caminho do gerador (`componentPage`): com arquivo próprio, o exemplo `i` dele; sem, o de partida no 0 e os
+// `examples` dele do 1 em diante.
 function exemplo(starters: Starters, nome: string, indice: number): Exemplo | undefined {
   const c = modulos[`../content/${nome}.mjs`];
   if (c) return c.examples?.[indice];
-  return indice === 0 ? starters[nome] : undefined;
+  return indice === 0 ? starters[nome] : starters[nome]?.examples?.[indice - 1];
 }
 
 // A moldura é um documento com UM exemplo; a página de componente, as caixas — e, junto, as peças vivas do topo do

@@ -1,8 +1,23 @@
 import {createElement as h} from "react";
 import {ButtonGroup, Button, SegmentedControl} from "../../../packages/react/dist/index.js";
 import {ComValor} from "./_estado.mjs";
+import {jsxProp} from "./_eixos.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
+const coluna = {display: "grid", gap: "var(--space-3)", justifyItems: "start"};
+
+// Um grupo por linha da lista, e o código e o desenho saem da MESMA lista — o `eixo` do `_eixos.mjs` não serve aqui
+// porque os filhos são botões (elementos), e cada grupo leva um nome próprio.
+const BOTOES = ["Day", "Week", "Month"];
+const grupos = (lista) => ({
+  code: lista.map((p) => `<ButtonGroup ${Object.entries(p).map(([k, v]) => jsxProp(k, v)).join(" ")}>`
+    + BOTOES.map((b) => `<Button>${b}</Button>`).join("") + "</ButtonGroup>").join("\n"),
+  render: () => h("div", {style: coluna}, ...lista.map((p) =>
+    h(ButtonGroup, {key: p.label, ...p}, ...BOTOES.map((b) => h(Button, {key: b}, b))))),
+});
+const VARIANTES = ["primary", "secondary", "tertiary", "outline", "ghost", "primary-outline", "primary-ghost",
+  "danger", "danger-outline", "danger-ghost", "danger-soft", "link", "link-primary", "link-danger", "nav"];
+const nomeDe = (v) => v[0].toUpperCase() + v.slice(1).replace(/-/g, " ");
 
 export default {
   description:
@@ -99,6 +114,31 @@ export default {
       ].join("\n"),
       render: () => h(ButtonGroup, {label: "Plan"},
         h(Button, null, "Monthly"), h(Button, null, "Yearly"), h(Button, {disabled: true}, "Lifetime")),
+    },
+    {
+      title: "Every variant",
+      description: "Any Button variant, set once on the group. The joined capsule and the hairline between the "
+        + "buttons stay the same; only the weight and the tone change.",
+      ...grupos(VARIANTES.map((v) => ({label: nomeDe(v), variant: v}))),
+    },
+    {
+      title: "Every size",
+      description: "The five button heights, from the density tokens. The group passes the size to every button inside.",
+      ...grupos([["xs", "Extra small"], ["sm", "Small"], ["md", "Medium"], ["lg", "Large"], ["xl", "Extra large"]]
+        .map(([size, label]) => ({label, size}))),
+    },
+    {
+      title: "Vertical",
+      description: "The same buttons stacked. Visual only: the order, the semantics and the Tab stops do not change.",
+      code: [
+        '<ButtonGroup label="Align" orientation="vertical">',
+        '  <Button>Top</Button>',
+        '  <Button>Middle</Button>',
+        '  <Button>Bottom</Button>',
+        '</ButtonGroup>',
+      ].join("\n"),
+      render: () => h(ButtonGroup, {label: "Align", orientation: "vertical"},
+        h(Button, null, "Top"), h(Button, null, "Middle"), h(Button, null, "Bottom")),
     },
   ],
 };

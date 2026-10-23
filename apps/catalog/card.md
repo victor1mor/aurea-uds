@@ -24,6 +24,23 @@ import {Card} from "@aurea-uds/react";
 </Card>
 ```
 
+## Examples
+
+### Variants
+
+base is the floating surface; raised lifts it with a shadow; interactive answers the pointer; inset sinks into the page; outline is the one card with a line; selected and danger mark a state; contrast is the dark theme inside the card.
+
+```tsx
+<Card variant="base">variant base</Card>
+<Card variant="raised">variant raised</Card>
+<Card variant="interactive">variant interactive</Card>
+<Card variant="inset">variant inset</Card>
+<Card variant="outline">variant outline</Card>
+<Card variant="selected">variant selected</Card>
+<Card variant="danger">variant danger</Card>
+<Card variant="contrast">variant contrast</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

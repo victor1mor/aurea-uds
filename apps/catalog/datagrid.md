@@ -20,6 +20,24 @@ import {DataGrid} from "@aurea-uds/react/data-grid";
 />
 ```
 
+## Examples
+
+### Every state
+
+loading and error replace the rows; the other states keep the rows you already had and put the notice above them.
+
+```tsx
+<DataGrid label="Members" data={members} columns={columns} state="loading" />
+<DataGrid label="Members" data={members} columns={columns} state="error" />
+<DataGrid label="Members" data={members} columns={columns} state="stale" />
+<DataGrid label="Members" data={members} columns={columns} state="partial" />
+<DataGrid label="Members" data={members} columns={columns} state="degraded" />
+<DataGrid label="Members" data={members} columns={columns} state="offline" />
+<DataGrid label="Members" data={members} columns={columns} state="waiting_user" />
+<DataGrid label="Members" data={members} columns={columns} state="waiting_approval" />
+<DataGrid label="Members" data={members} columns={columns} state="waiting_dependency" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -28,6 +28,8 @@ import {highlightCode} from "../../../packages/react/dist/code-highlight.js";
 // grade, mapa, QR) moram no `_starters-motores.mjs` desde 21/10/2026; aqui fica o calendário, que é leve.
 import {Calendar} from "../../../packages/react/dist/calendar.js";
 import {ComOrdem, ComValor} from "./_estado.mjs";
+// O exemplo de cada valor de variação, com o código e a peça da mesma lista (bloco 1, o catálogo fiel — 23/10/2026).
+import {cada, eixo} from "./_eixos.mjs";
 
 export const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 const stack = {display: "grid", gap: "var(--space-3)"};
@@ -35,6 +37,17 @@ export const wide = {width: "min(30rem,100%)"};
 // O mesmo limite, para peça que tem a largura do conteúdo (21/10/2026): a caixa encolhe até ela e o painel a
 // centraliza. Com `wide`, a lista curta ficava encostada à esquerda de uma caixa de 30rem (o Victor apontou).
 const ate = {maxWidth: "min(30rem,100%)"};
+// O de dentro dos exemplos de arranjo (bloco 1, o catálogo fiel — 23/10/2026): o mesmo grupo em cada valor, para só o
+// arranjo mudar de uma linha para a outra.
+const GRUPO_DE_TRES = {codigo: "\n  <Badge>one</Badge>\n  <Badge>two</Badge>\n  <Badge>three</Badge>\n",
+  elemento: ["one", "two", "three"].map(n => h(A.Badge, {key: n}, n))};
+const DOIS_CARTOES = {codigo: "\n  <Card>First</Card>\n  <Card>Second</Card>\n",
+  elemento: ["First", "Second"].map(n => h(A.Card, {key: n}, n))};
+const TRES_ESTILOS = {codigo: `
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+`, elemento: [["bold", "Bold"], ["italic", "Italic"], ["underline", "Underline"]].map(([v, r]) => h(A.Toggle, {key: v, value: v}, r))};
 
 // OS EXEMPLOS QUE ABREM (21/10/2026). Com a parte viva em toda caixa, o botão do exemplo abre a janela, como no código
 // ao lado — antes, a caixa era HTML pronto e o botão era só a forma, com uma nota dizendo isso. No HTML pronto a janela
@@ -57,6 +70,52 @@ function AbreConfirmDialog() {
       description: "It leaves the site immediately, and this cannot be undone.",
       confirmLabel: "Delete", destructive: true, icon: "trash",
       onConfirm: () => setOpen(false), onCancel: () => setOpen(false)}));
+}
+// UM BOTÃO POR VALOR (bloco 1, o catálogo fiel — 23/10/2026): a janela só se vê aberta, então o exemplo de cada valor de
+// uma variação dela é uma fileira de botões, e cada um abre a janela com aquele valor. `props(valor, fecha)` dá as
+// props da janela; `codigo(valor)`, a linha do código — os dois da mesma lista.
+function CadaJanela({Comp, prop, valores, props}) {
+  const [aberto, setAberto] = useState(null);
+  const fecha = () => setAberto(null);
+  return h("div", {style: row},
+    ...valores.map(v => h(A.Button, {key: `b-${v}`, variant: "secondary", onClick: () => setAberto(v)}, `${prop}: ${v}`)),
+    ...valores.map(v => h(Comp, {key: `j-${v}`, ...props(v, fecha), [prop]: v, open: aberto === v})));
+}
+// O AppShell é página inteira (dono do <main> e do h1): cada exemplo dele mora numa moldura própria, como o principal.
+// Um exemplo junta vários valores de uma vez, e o código diz os mesmos que a moldura usa.
+const cascaDeApp = (titulo, descricao, props) => ({
+  title: titulo, description: descricao, embed: true, layoutProprio: true, tituloProprio: true,
+  code: `<AppShell\n${Object.entries(props).map(([k, v]) => `  ${k}="${v}"`).join("\n")}\n  brand={<strong>Acme</strong>}\n`
+    + `  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}\n`
+    + `  aside={<p>On this page</p>}\n>\n  <h1>Inbox</h1>\n</AppShell>`,
+  render: () => h(A.AppShell, {...props, brand: h("strong", null, "Acme"),
+    navigation: h("nav", {className: "doc-nav", "aria-label": "Contents"},
+      h("a", {href: "#", className: "active", "aria-current": "page"}, "Inbox"), h("a", {href: "#"}, "Archive")),
+    aside: h("p", null, "On this page"), asideLabel: "On this page"},
+    h("h1", null, "Inbox"), h("p", null, "Twelve new messages since yesterday.")),
+});
+const janelas = ({titulo, descricao, Comp, prop, valores, props, codigo}) => ({
+  title: titulo, description: descricao,
+  code: valores.map(codigo).join("\n"),
+  render: () => h(CadaJanela, {Comp, prop, valores, props}),
+});
+function GaleriaDeVarias() {
+  const [escolhidas, setEscolhidas] = useState(["front"]);
+  return h(A.Gallery, {label: "Photos to share", selectionMode: "multiple", selectedIds: escolhidas,
+    onSelectionChange: setEscolhidas,
+    items: ["Front", "Back", "In use", "Packaging"].map(t => ({id: t.toLowerCase().replace(" ", ""), src: FOTO, alt: t, caption: t}))});
+}
+// Os exemplos do AureaProvider mexem no provedor DO SITE (bloco 1, o catálogo fiel — 23/10/2026): um segundo provedor na
+// página monta uma segunda região de avisos com o mesmo nome (o achado e do item 105, o 2-C da fila).
+function DensidadeDoSite() {
+  const {density, setDensity} = A.useAureaTheme();
+  return h(A.SegmentedControl, {label: "Density", value: density ?? "comfortable", onChange: setDensity,
+    items: [{value: "compact", label: "Compact"}, {value: "comfortable", label: "Comfortable"}, {value: "spacious", label: "Spacious"}]});
+}
+function MostraUmAviso() {
+  const toast = A.useToast();
+  return h(A.Button, {variant: "secondary", onClick: () => toast.add({title: "Saved", description: "A toast, where this site puts them."})},
+    "Show a toast");
 }
 function AbreDrawer() {
   const [open, setOpen] = useState(false);
@@ -157,6 +216,14 @@ export default {
       h(A.Alert, {variant: "danger", title: "Upload failed"}, "The file exceeds 10 MB."),
       h(A.Alert, {title: "You have 2 credits left", action: h(A.Button, {variant: "tertiary"}, "Upgrade")},
         "Get a paid plan for more credits")),
+
+    examples: [
+      eixo({titulo: "Variants", descricao: "How serious it is. danger interrupts the screen reader (role=alert); the others wait for a pause (role=status).",
+        Comp: A.Alert, nome: "Alert", prop: "variant", valores: ["info", "success", "warning", "danger", "accent"],
+        estilo: {display: "grid", gap: "var(--space-3)", ...wide}, filho: (v) => `A ${v} alert.`}),
+      eixo({titulo: "Every state", descricao: "What is happening, apart from how serious it is. Without children, the alert says the state in words of its own.",
+        Comp: A.Alert, nome: "Alert", prop: "state", valores: ["stale", "partial", "degraded", "offline", "waiting_user", "waiting_approval", "waiting_dependency"], estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+    ],
   },
   AppShell: {
     // O único componente de PÁGINA: ele é dono do <main>, do <header> e do <aside> do documento.
@@ -189,6 +256,16 @@ export default {
         h("a", {href: "#"}, "Archive")),
       topbar: h(A.Button, {variant: "primary", size: "sm"}, "New"),
     }, h("h1", null, "Inbox")),
+    examples: [
+      cascaDeApp("The documentation arrangement", "layout=\"docs\" is the arrangement of this site: one block in the middle "
+        + "of the screen with the sidebar, the text and the table of contents. Here the sidebar, the content and the aside "
+        + "have no box (plain).", {layout: "docs", sidebarVariant: "plain", contentVariant: "plain", asideVariant: "plain"}),
+      cascaDeApp("A floating aside, and the scrollbar always on", "asideVariant=\"floating\" puts the right column in a card "
+        + "of its own; sidebarScrollbar=\"visible\" keeps the sidebar's scrollbar showing, instead of only under the pointer.",
+        {asideVariant: "floating", sidebarScrollbar: "visible"}),
+      cascaDeApp("A flush aside", "asideVariant=\"flush\" glues the right column to the edge of the window, like the flush sidebar.",
+        {asideVariant: "flush", sidebarVariant: "flush"}),
+    ],
   },
   AureaProvider: {
     description: "Configuration for the whole app, once: where the icon sprite lives, the "
@@ -201,6 +278,52 @@ export default {
     // efeito do provedor; a aba "Code" ensina o provedor.
     render: () => h("div", {style: row},
       h(A.Icon, {name: "check"}), h("span", null, "Icons resolve through the provider.")),
+    examples: [
+      {
+        title: "Theme",
+        description: "defaultTheme seeds the theme and lets the user change it; theme controls it from your state. "
+          + "\"system\" follows the computer and keeps following it. The switch below is this site's own provider, live.",
+        code: `<AureaProvider defaultTheme="light">…</AureaProvider>
+<AureaProvider defaultTheme="dark">…</AureaProvider>
+<AureaProvider defaultTheme="system">…</AureaProvider>
+<AureaProvider theme="light" onThemePreferenceChange={setTheme}>…</AureaProvider>
+<AureaProvider theme="dark" onThemePreferenceChange={setTheme}>…</AureaProvider>
+<AureaProvider theme="system" onThemePreferenceChange={setTheme}>…</AureaProvider>`,
+        render: () => h(A.ThemeToggle, {mode: "light-dark-system"}),
+      },
+      {
+        title: "Density",
+        description: "The same two forms for the density: defaultDensity seeds it, density controls it. The control below "
+          + "changes this site's density, live — every control on the page follows.",
+        code: `<AureaProvider defaultDensity="compact">…</AureaProvider>
+<AureaProvider defaultDensity="comfortable">…</AureaProvider>
+<AureaProvider defaultDensity="spacious">…</AureaProvider>
+<AureaProvider density="compact" onDensityChange={setDensity}>…</AureaProvider>
+<AureaProvider density="comfortable" onDensityChange={setDensity}>…</AureaProvider>
+<AureaProvider density="spacious" onDensityChange={setDensity}>…</AureaProvider>`,
+        render: () => h(DensidadeDoSite),
+      },
+      {
+        title: "Direction",
+        description: "direction=\"rtl\" tells the engine that the inline axis runs right to left, so popups and arrow keys "
+          + "mirror. The CSS mirrors on its own from the dir attribute — the box below is a dir=\"rtl\" page in miniature.",
+        code: `<html dir="rtl">
+  <AureaProvider direction="rtl">…</AureaProvider>
+</html>`,
+        render: () => h("div", {dir: "rtl", style: {...stack, ...wide}},
+          h(A.InputGroup, null, h(A.InputGroupAddon, null, h(A.Icon, {name: "magnifying-glass"})),
+            h(A.Input, {placeholder: "Search", "aria-label": "Search, right to left"})),
+          h("div", {style: row}, h(A.Button, {variant: "primary"}, "Save"), h(A.Button, {variant: "secondary"}, "Cancel"))),
+      },
+      {
+        title: "Where the toasts appear",
+        description: "toastPlacement picks one of six places for the messages of useToast(). bottom, the middle of the "
+          + "bottom edge, is the default — and the one this site uses: the button shows it.",
+        code: ["top-start", "top", "top-end", "bottom-start", "bottom", "bottom-end"]
+          .map(v => `<AureaProvider toastPlacement="${v}">…</AureaProvider>`).join("\n"),
+        render: () => h(MostraUmAviso),
+      },
+    ],
   },
   // 0.33.0: com `tone` e `emphasis="soft"` — a cor da letra e o fundo clarinho do tom, como os da referência.
   Avatar: {
@@ -211,6 +334,13 @@ export default {
     render: () => h("div", {style: row}, h(A.Avatar, {fallback: "AU"}), h(A.Avatar, {fallback: "VM", size: "lg"}),
       h(A.Avatar, {fallback: "B", tone: "info", emphasis: "soft"}),
       h(A.Avatar, {fallback: h(A.Icon, {name: "floppy-disk"}), tone: "warning", emphasis: "soft"})),
+    examples: [
+      eixo({titulo: "Tones", descricao: "The colour of the fallback, with soft emphasis: the tone tints the circle and the letters stay readable.",
+        Comp: A.Avatar, nome: "Avatar", prop: "tone", valores: ["neutral", "brand", "info", "success", "warning", "danger"],
+        base: {fallback: "AU", emphasis: "soft"}}),
+      eixo({titulo: "Sizes", descricao: "Three sizes from the control scale.", Comp: A.Avatar, nome: "Avatar", prop: "size",
+        valores: ["sm", "md", "lg"], base: {fallback: "AU"}}),
+    ],
   },
   Banner: {
     code: `<Banner variant="success" title="Saved" icon="check" onDismiss={() => setShown(false)}>
@@ -218,6 +348,14 @@ export default {
 </Banner>`,
     render: () => h("div", {style: wide}, h(A.Banner, {variant: "success", title: "Saved",
       icon: "check", onDismiss: () => {}}, "Your changes are live.")),
+
+    examples: [
+      eixo({titulo: "Variants", descricao: "The same live-region rule as Alert: danger interrupts, the others wait. The cookie notice, consent, has a page of its own on the site.",
+        Comp: A.Banner, nome: "Banner", prop: "variant", valores: ["info", "success", "warning", "danger"],
+        estilo: {display: "grid", gap: "var(--space-3)", ...wide}, filho: (v) => `A ${v} banner.`}),
+      eixo({titulo: "Every state", descricao: "The condition, apart from the severity. Without a variant, the state picks it; without children, it supplies the message.",
+        Comp: A.Banner, nome: "Banner", prop: "state", valores: ["stale", "partial", "degraded", "offline", "waiting_user", "waiting_approval", "waiting_dependency"], estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+    ],
   },
   Breadcrumb: {
     code: `<Breadcrumb items={[
@@ -249,6 +387,12 @@ export default {
         h(A.Card.Description, null, "Radius 22px, no line, no shadow stack.")),
       h(A.Card.Content, null, h("p", {style: {margin: 0}}, "The parts are optional: a card can hold anything.")),
       h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Save"), h(A.Button, null, "Cancel")))),
+    examples: [
+      eixo({titulo: "Variants", descricao: "base is the floating surface; raised lifts it with a shadow; interactive answers the pointer; inset sinks into the page; outline is the one card with a line; selected and danger mark a state; contrast is the dark theme inside the card.",
+        Comp: A.Card, nome: "Card", prop: "variant", valores: ["base", "raised", "interactive", "inset", "outline", "selected", "danger", "contrast"],
+        estilo: {display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))", gap: "var(--space-3)", width: "100%"},
+        filho: (v) => `variant ${v}`}),
+    ],
   },
   // Image (L4). A foto é um SVG em data URI porque o catálogo é HTML gerado e COMMITADO: preview
   // que busca bytes na rede reprova sem rede, e um byte diferente move o gate de pixel.
@@ -296,6 +440,20 @@ export default {
       h(A.Gallery, {label: "Product photos", selected: "back", zoom: true,
         items: ["Front", "Back", "In use", "Packaging"].map(t =>
           ({id: t.toLowerCase().replace(" ", ""), src: FOTO, alt: t, caption: t}))})),
+    examples: [
+      {
+        title: "Choosing several",
+        description: 'With selectionMode="multiple" every tile is a toggle: click to add or remove it, in the order chosen.',
+        code: `<Gallery
+  label="Photos to share"
+  items={photos}
+  selectionMode="multiple"
+  selectedIds={chosen}
+  onSelectionChange={setChosen}
+/>`,
+        render: () => h("div", {style: {width: "min(100%, calc(var(--gallery-min, 8rem) * 4 + var(--space-3) * 3))"}}, h(GaleriaDeVarias)),
+      },
+    ],
   },
   // SortableList (L3). A prévia é ESTÁTICA e reordenar exige estado, então o que ela mostra é a
   // anatomia: alça focável, rótulo, e a lista na ordem que o consumidor mandou. O código traz o
@@ -389,6 +547,18 @@ export default {
       + "the brand yellow sun in the dark one. It shows where it goes, and its name says so.",
     code: `<ThemeToggle />`,
     render: () => h(A.ThemeToggle, null),
+    examples: [
+      {
+        title: "Three positions — light, dark and the system",
+        description: "mode=\"light-dark-system\" is the switch at the top of this site: three choices in one capsule, "
+          + "and \"System\" follows the computer. It is a radio group named \"Theme\": Tab enters on the chosen one, "
+          + "the arrows move and choose.",
+        code: `<ThemeToggle mode="light-dark-system" />`,
+        render: () => h(A.ThemeToggle, {mode: "light-dark-system"}),
+      },
+      eixo({titulo: "Sizes", descricao: "The control sizes, from xs to xl; on a touch screen every size floors at 44.",
+        Comp: A.ThemeToggle, nome: "ThemeToggle", prop: "size", valores: ["xs", "sm", "md", "lg", "xl"]}),
+    ],
   },
   // Tipografia (B-02, 25/09/2026), no molde da referência: uma lista fechada de papéis. As
   // prévias mostram a lista INTEIRA de cada peça, porque o que se escolhe é o papel — ver todos lado
@@ -410,6 +580,18 @@ export default {
       h(A.Text, {weight: "semibold"}, "Semibold"),
       h(A.Text, {weight: "extrabold"}, "Extrabold, for a cover title"),
       h(A.Text, {numeric: true}, "$ 41,118.00")),
+
+    examples: [
+      eixo({titulo: "Roles", descricao: "The closed list of roles. A role is a size, a weight and a line height together — there is no size between h3 and h4.",
+        Comp: A.Text, nome: "Text", prop: "type", valores: ["h1", "h2", "h3", "h4", "h5", "h6", "body", "body-sm", "body-xs", "code"],
+        filho: (v) => `Role ${v}`, coluna: true}),
+      eixo({titulo: "Weights", descricao: "The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.",
+        Comp: A.Text, nome: "Text", prop: "weight", valores: ["normal", "medium", "semibold", "bold", "extrabold"], filho: (v) => `Weight ${v}`, coluna: true}),
+      eixo({titulo: "Tones", descricao: "The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.",
+        Comp: A.Text, nome: "Text", prop: "tone", valores: ["default", "muted", "subtle", "primary", "link", "info", "success", "warning", "danger"], filho: (v) => `Tone ${v}`, coluna: true}),
+      eixo({titulo: "Alignment", descricao: "start and end follow the writing direction, so the same value mirrors in a right-to-left page.",
+        Comp: A.Text, nome: "Text", prop: "align", valores: ["start", "center", "end", "justify"], filho: (v) => `Aligned to ${v}`, coluna: true}),
+    ],
   },
   Heading: {
     // Do 2 ao 6, e não do 1: uma página tem UM h1, e aqui ele é o título da própria página do
@@ -424,6 +606,15 @@ export default {
     render: () => h(A.Stack, {gap: "tight"},
       ...[["2", "This month"], ["3", "By team"], ["4", "Analyst"], ["5", "Notes"], ["6", "Footnote"]]
         .map(([n, t]) => h(A.Heading, {key: n, level: Number(n)}, t))),
+
+    examples: [
+      eixo({titulo: "Weights", descricao: "The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.",
+        Comp: A.Heading, nome: "Heading", base: {level: 3}, prop: "weight", valores: ["normal", "medium", "semibold", "bold", "extrabold"], filho: (v) => `Heading, ${v}`, coluna: true}),
+      eixo({titulo: "Tones", descricao: "The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.",
+        Comp: A.Heading, nome: "Heading", base: {level: 3}, prop: "tone", valores: ["default", "muted", "subtle", "primary", "link", "info", "success", "warning", "danger"], filho: (v) => `Heading, ${v}`, coluna: true}),
+      eixo({titulo: "Alignment", descricao: "start and end follow the writing direction, so the same value mirrors in a right-to-left page.",
+        Comp: A.Heading, nome: "Heading", base: {level: 3}, prop: "align", valores: ["start", "center", "end", "justify"], filho: (v) => `Heading, ${v}`, coluna: true}),
+    ],
   },
   Paragraph: {
     description: "A paragraph of body text at 16, 14 or 12px, with relaxed leading.",
@@ -434,11 +625,29 @@ export default {
       h(A.Paragraph, null, "The weekly report is ready for review."),
       h(A.Paragraph, {size: "sm"}, "Generated by Writer at 09:40."),
       h(A.Paragraph, {size: "xs", color: "muted"}, "Figures are rounded to the nearest unit.")),
+
+    examples: [
+      eixo({titulo: "Weights", descricao: "The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.",
+        Comp: A.Paragraph, nome: "Paragraph", prop: "weight", valores: ["normal", "medium", "semibold", "bold", "extrabold"], filho: (v) => `A paragraph in ${v}.`, coluna: true}),
+      eixo({titulo: "Tones", descricao: "The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.",
+        Comp: A.Paragraph, nome: "Paragraph", prop: "tone", valores: ["default", "muted", "subtle", "primary", "link", "info", "success", "warning", "danger"], filho: (v) => `A paragraph in ${v}.`, coluna: true}),
+      eixo({titulo: "Alignment", descricao: "start and end follow the writing direction, so the same value mirrors in a right-to-left page.",
+        Comp: A.Paragraph, nome: "Paragraph", prop: "align", valores: ["start", "center", "end", "justify"], filho: (v) => `A paragraph aligned to ${v}: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.`, coluna: true}),
+    ],
   },
   Code: {
     description: "A short piece of code inside a sentence. For a block with copy and highlighting, CodeBlock.",
     code: `<Paragraph>Run <Code>pnpm build</Code> before you publish.</Paragraph>`,
     render: () => h(A.Paragraph, null, "Run ", h(A.Code, null, "pnpm build"), " before you publish."),
+
+    examples: [
+      eixo({titulo: "Weights", descricao: "The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.",
+        Comp: A.Code, nome: "Code", prop: "weight", valores: ["normal", "medium", "semibold", "bold", "extrabold"], filho: (v) => `weight-${v}`, coluna: true}),
+      eixo({titulo: "Tones", descricao: "The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.",
+        Comp: A.Code, nome: "Code", prop: "tone", valores: ["default", "muted", "subtle", "primary", "link", "info", "success", "warning", "danger"], filho: (v) => `tone-${v}`, coluna: true}),
+      eixo({titulo: "Alignment", descricao: "start and end follow the writing direction, so the same value mirrors in a right-to-left page.",
+        Comp: A.Code, nome: "Code", prop: "align", valores: ["start", "center", "end", "justify"], filho: (v) => `align-${v}`, coluna: true}),
+    ],
   },
   // O carrossel (L1) não tem motor, e esta página é a prova: o catálogo é HTML ESTÁTICO, sem uma
   // linha de JavaScript, e a faixa continua rolando com o dedo, com a roda e com as setas do
@@ -516,6 +725,19 @@ export function Actions() {
 </Cluster>`,
     render: () => h(A.Cluster, null, h(A.Badge, null, "one"), h(A.Badge, null, "two"),
       h(A.Badge, null, "three")),
+    examples: [
+      eixo({titulo: "Gap", descricao: "The space between the items, from the density scale: tight, normal or loose.",
+        Comp: A.Cluster, nome: "Cluster", prop: "gap", valores: ["tight", "normal", "loose"], coluna: true, filho: () => GRUPO_DE_TRES}),
+      eixo({titulo: "Justify", descricao: "Where the row sits along the line. between pushes the first and the last item to the ends.",
+        Comp: A.Cluster, nome: "Cluster", prop: "justify", valores: ["start", "center", "end", "between"],
+        estilo: {display: "grid", gap: "var(--space-3)", width: "100%"}, filho: () => GRUPO_DE_TRES}),
+      eixo({titulo: "Align", descricao: "How items of different heights line up across the row. baseline lines up the text.",
+        Comp: A.Cluster, nome: "Cluster", prop: "align", valores: ["start", "center", "end", "baseline"], coluna: true,
+        filho: () => ({codigo: `
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+`, elemento: [h(A.Button, {key: 1, size: "lg"}, "Large"), h(A.Badge, {key: 2}, "Small")]})}),
+    ],
   },
   CommandPalette: {
     description: "The palette with the engine wired up: commands are data, it filters as you "
@@ -589,6 +811,13 @@ export function Actions() {
       h(A.DataState, {state: "empty", emptyTitle: "No invoices"}, h("p", null, "120 rows")),
       // o quarto: o conteudo CONTINUA, com o aviso em cima
       h(A.DataState, {state: "stale"}, h("p", null, "120 rows"))),
+
+    examples: [
+      eixo({titulo: "Every state", descricao: "The three terminal faces (loading, error, empty) replace the content; every other state keeps the content and puts its notice above it.",
+        Comp: A.DataState, nome: "DataState", prop: "state", valores: ["loading", "error", "empty", ...["stale", "partial", "degraded", "offline", "waiting_user", "waiting_approval", "waiting_dependency"]], coluna: true,
+        estilo: {display: "grid", gap: "var(--space-4)", ...wide},
+        filho: () => ({codigo: "<p>120 rows</p>", elemento: h("p", null, "120 rows")})}),
+    ],
   },
   Dialog: {
     code: `<Button variant="danger" onClick={() => setOpen(true)}>Delete project</Button>
@@ -605,6 +834,21 @@ export function Actions() {
   This removes every component and token in it. It cannot be undone.
 </Dialog>`,
     render: () => h(AbreDialog),
+    examples: [
+      janelas({titulo: "Placement", descricao: "auto, the default, sits at the bottom on a phone (where the thumb is) and in the "
+        + "centre from 640 up. bottom, center and top fix it in one place on every screen.",
+        Comp: A.Dialog, prop: "placement", valores: ["auto", "bottom", "center", "top"],
+        props: (v, fecha) => ({onClose: fecha, title: `Placement ${v}`, children: `This dialog uses placement="${v}".`}),
+        codigo: v => `<Dialog open={open} onClose={close} title="Placement ${v}" placement="${v}">…</Dialog>`}),
+      janelas({titulo: "Sizes", descricao: "The width: xs 320, sm 384, md 448 (the default), lg 512, xl 1024 and full, the whole "
+        + "screen.", Comp: A.Dialog, prop: "size", valores: ["xs", "sm", "md", "lg", "xl", "full"],
+        props: (v, fecha) => ({onClose: fecha, title: `Size ${v}`, children: `This dialog uses size="${v}".`}),
+        codigo: v => `<Dialog open={open} onClose={close} title="Size ${v}" size="${v}">…</Dialog>`}),
+      janelas({titulo: "Icon tones", descricao: "The colour of the circle behind the icon: the state colours, or brand.",
+        Comp: A.Dialog, prop: "iconTone", valores: ["neutral", "brand", "info", "success", "warning", "danger"],
+        props: (v, fecha) => ({onClose: fecha, title: `Icon tone ${v}`, icon: "info", children: `This dialog uses iconTone="${v}".`}),
+        codigo: v => `<Dialog open={open} onClose={close} title="Icon tone ${v}" icon="info" iconTone="${v}">…</Dialog>`}),
+    ],
   },
   AccessGate: {
     description: "You decide who can do what; this decides how the answer LOOKS. Two ways, and "
@@ -642,6 +886,18 @@ export function Actions() {
   onCancel={() => setOpen(false)}
 />`,
     render: () => h(AbreConfirmDialog),
+    examples: [
+      janelas({titulo: "Placement", descricao: "The same four places as Dialog: auto (bottom on a phone, centre from 640 up), "
+        + "bottom, center and top.", Comp: A.ConfirmDialog, prop: "placement", valores: ["auto", "bottom", "center", "top"],
+        props: (v, fecha) => ({title: `Placement ${v}`, description: `This confirmation uses placement="${v}".`,
+          confirmLabel: "Confirm", onConfirm: fecha, onCancel: fecha}),
+        codigo: v => `<ConfirmDialog open={open} title="Placement ${v}" placement="${v}" onConfirm={confirm} onCancel={close} />`}),
+      janelas({titulo: "Icon tones", descricao: "The colour of the circle behind the icon. destructive picks danger on its own.",
+        Comp: A.ConfirmDialog, prop: "iconTone", valores: ["neutral", "brand", "info", "success", "warning", "danger"],
+        props: (v, fecha) => ({title: `Icon tone ${v}`, description: `This confirmation uses iconTone="${v}".`, icon: "info",
+          confirmLabel: "Confirm", onConfirm: fecha, onCancel: fecha}),
+        codigo: v => `<ConfirmDialog open={open} title="Icon tone ${v}" icon="info" iconTone="${v}" onConfirm={confirm} onCancel={close} />`}),
+    ],
   },
   Drawer: {
     code: `<Button onClick={() => setOpen(true)}>Edit member</Button>
@@ -654,6 +910,12 @@ export function Actions() {
 // On a phone, the panel that rises from the bottom (swipe down to close):
 <Drawer open={open} onClose={() => setOpen(false)} title="Filters" side="bottom">…</Drawer>`,
     render: () => h(AbreDrawer),
+    examples: [
+      janelas({titulo: "Sides", descricao: "Which edge the panel comes from. bottom is the sheet that rises on a phone, with a 32 corner.",
+        Comp: A.Drawer, prop: "side", valores: ["right", "left", "top", "bottom"],
+        props: (v, fecha) => ({onClose: fecha, title: `Side ${v}`, children: `This panel uses side="${v}".`}),
+        codigo: v => `<Drawer open={open} onClose={close} title="Side ${v}" side="${v}">…</Drawer>`}),
+    ],
   },
   DropdownMenu: {
     code: `<DropdownMenu
@@ -670,6 +932,12 @@ export function Actions() {
       trigger: h(A.Button, {variant: "outline", trailingIcon: "caret-down"}, "Actions"),
       items: [{label: "Duplicate", leadingIcon: "copy"}, {label: "Rename", leadingIcon: "pencil-simple"},
         "separator", {label: "Delete", leadingIcon: "trash"}]}),
+    examples: [
+      cada({titulo: "Sides", descricao: "Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.", valores: ["top", "right", "bottom", "left"],
+        codigo: v => `<DropdownMenu label="Side ${v}" side="${v}" trigger={<Button variant="outline">Side ${v}</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />`,
+        peca: v => h(A.DropdownMenu, {label: `Side ${v}`, side: v, trigger: h(A.Button, {variant: "outline"}, `Side ${v}`),
+          items: [{label: "Duplicate"}, {label: "Rename"}]})}),
+    ],
   },
   EmptyState: {
     code: `<EmptyState
@@ -681,6 +949,15 @@ export function Actions() {
     render: () => h("div", {style: wide}, h(A.EmptyState, {titleAs: "h2", title: "No results",
       description: "Try a different filter.",
       action: h(A.Button, {variant: "primary", leadingIcon: "plus"}, "New project")})),
+
+    examples: [
+      eixo({titulo: "Every state", descricao: "With a state, the empty view says why it is empty. It stays neutral on purpose: an absence is not an alarm.",
+        Comp: A.EmptyState, nome: "EmptyState", prop: "state", valores: ["stale", "partial", "degraded", "offline", "waiting_user", "waiting_approval", "waiting_dependency"], base: {titleAs: "h4", title: "Nothing to show"},
+        estilo: {display: "grid", gap: "var(--space-4)", ...wide}}),
+      eixo({titulo: "The title's tag", descricao: "The heading level belongs to the page, not to the component: h3 by default, the level that fits where it sits, or p when it is not a heading at all.",
+        Comp: A.EmptyState, nome: "EmptyState", prop: "titleAs", valores: ["h3", "h4", "p"], base: {title: "No results", description: "Try a different filter."},
+        estilo: {display: "grid", gap: "var(--space-4)", ...wide}}),
+    ],
   },
   Form: {
     description: "Aurea shows the error; you decide what an error is. Pass what you already "
@@ -708,17 +985,32 @@ export function Actions() {
 </Grid>`,
     render: () => h("div", {style: {width: "100%"}}, h(A.Grid, null,
       h(A.Card, null, "One"), h(A.Card, null, "Two"), h(A.Card, null, "Three"))),
+    examples: [
+      eixo({titulo: "Gap", descricao: "The space between the cells, from the density scale: tight, normal or loose.",
+        Comp: A.Grid, nome: "Grid", prop: "gap", valores: ["tight", "normal", "loose"], estilo: {display: "grid", gap: "var(--space-6)", width: "100%"},
+        filho: () => ({codigo: `
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+`, elemento: ["One", "Two", "Three"].map(n => h(A.Card, {key: n}, n))})}),
+    ],
   },
   // GAR-02 a GAR-05 (06/10/2026): a página de site. A prévia mostra as três peças juntas, porque é
   // assim que elas trabalham: a faixa de ponta a ponta, o container de leitura, e a grade de 12.
   Container: {
     description: "The reading width of a website page: centred, capped at 1280 by default, with a "
       + "side gutter of 16 that grows to 32 from the md breakpoint. It goes inside a Section.",
-    code: `<Container>
-  <Heading level={2}>Fichas técnicas</Heading>
+    code: `<Container size="sm">
+  <Card>Content, centred and capped</Card>
 </Container>`,
     render: () => h("div", {style: {width: "100%"}}, h(A.Container, {size: "sm"},
       h(A.Card, null, "Content, centred and capped"))),
+    examples: [
+      eixo({titulo: "Sizes", descricao: "The cap, on the width scale: sm 640, md 768, lg 1024, xl 1280 (the default), 2xl 1536, docs (the text column of a documentation page) and full, no cap. In this box the larger ones fill the width.",
+        Comp: A.Container, nome: "Container", prop: "size", valores: ["sm", "md", "lg", "xl", "2xl", "docs", "full"],
+        estilo: {display: "grid", gap: "var(--space-3)", width: "100%"},
+        filho: (v) => ({codigo: `<Card>size ${v}</Card>`, elemento: h(A.Card, null, `size ${v}`)})}),
+    ],
   },
   Section: {
     description: "An edge-to-edge band of a website page, with its own surface and site spacing. "
@@ -739,6 +1031,23 @@ export function Actions() {
       h(A.Container, null, h(A.Grid, {columns: 12},
         h(A.Grid.Item, {span: {base: "12", viewport: {md: "7"}}}, h("strong", null, "A dark band")),
         h(A.Grid.Item, {span: {base: "12", viewport: {md: "5"}}}, h(A.Button, {variant: "primary-outline"}, "Its own theme")))))),
+    examples: [
+      eixo({titulo: "Surfaces", descricao: "The band's background: the page's (the default), a card surface, or the recessed inset one.",
+        Comp: A.Section, nome: "Section", prop: "surface", valores: ["background", "card", "inset"], base: {spacing: "sm"},
+        estilo: {display: "grid", width: "100%"},
+        filho: (v) => ({codigo: `<Container>surface ${v}</Container>`, elemento: h(A.Container, null, `surface ${v}`)})}),
+      eixo({titulo: "A theme for the band", descricao: "The band takes its own theme, whatever the page's: a dark band in a light page, or the other way round.",
+        Comp: A.Section, nome: "Section", prop: "theme", valores: ["light", "dark"], base: {spacing: "sm"},
+        estilo: {display: "grid", width: "100%"},
+        filho: (v) => ({codigo: `<Container>theme ${v}</Container>`, elemento: h(A.Container, null, `theme ${v}`)})}),
+      eixo({titulo: "Footer widths", descricao: "On the footer, how far the content grows, on the Container's scale. inline is the one-line footer.",
+        Comp: A.Section, nome: "Section", prop: "maxWidth", valores: ["sm", "md", "lg", "xl", "2xl", "docs", "full"],
+        base: {variant: "footer", layout: "inline", legal: "© 2026 Acme"}, estilo: {display: "grid", width: "100%"}}),
+      eixo({titulo: "An opening further down", descricao: "On the hero, the title is the page's h1 by default; titleAs=\"h2\" when the band opens a section further down the page.",
+        Comp: A.Section, nome: "Section", prop: "titleAs", valores: ["h2"],
+        base: {variant: "hero", spacing: "sm", title: "Reports, ready by nine", description: "Every team gets its numbers before the first meeting."},
+        estilo: {display: "grid", width: "100%"}}),
+    ],
   },
   Icon: {
     description: "One <svg><use> pointing at the shared icon sprite. The sprite URL comes "
@@ -748,11 +1057,23 @@ export function Actions() {
 <Icon name="check" size="xl" />`,
     render: () => h("div", {style: row}, h(A.Icon, {name: "magnifying-glass"}),
       h(A.Icon, {name: "plus", size: "lg"}), h(A.Icon, {name: "check", size: "xl"})),
+    examples: [
+      eixo({titulo: "Weights", descricao: "regular is the line icon; bold is heavier for small sizes; fill is the solid shape the chosen item uses.",
+        Comp: A.Icon, nome: "Icon", prop: "weight", valores: ["regular", "bold", "fill"], base: {name: "star"}}),
+      eixo({titulo: "Sizes", descricao: "From the icon scale; the icon follows the text size when no size is given.",
+        Comp: A.Icon, nome: "Icon", prop: "size", valores: ["sm", "md", "lg", "xl"], base: {name: "star"}}),
+    ],
   },
   KPI: {
     code: `<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" />`,
     render: () => h("div", {style: wide}, h(A.KPI, {label: "Revenue", value: "$48.2k",
       trend: "+12% vs last month"})),
+    examples: [
+      eixo({titulo: "Tones", descricao: "What the change means, apart from its direction: a cost going up is bad news, so the tone is set by you, not guessed.",
+        Comp: A.KPI, nome: "KPI", prop: "tone", valores: ["neutral", "success", "danger"],
+        base: {label: "Revenue", value: "$48.2k", trend: "+12% vs last month", direction: "up"},
+        estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+    ],
   },
   Kbd: {
     code: `Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to search.`,
@@ -893,6 +1214,12 @@ export function Actions() {
       {id: "1", title: "Build passed", time: "2m", group: "Today"},
       {id: "2", title: "New member", time: "1h", group: "Today", read: true},
     ]}),
+    examples: [
+      cada({titulo: "Sides", descricao: "Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.", valores: ["top", "right", "bottom", "left"],
+        codigo: v => `<NotificationCenter label="Notifications, side ${v}" side="${v}" items={items} />`,
+        peca: v => h(A.NotificationCenter, {label: `Notifications, side ${v}`, side: v,
+          items: [{id: "1", title: "Build passed", time: "2m", group: "Today"}]})}),
+    ],
   },
   Popover: {
     code: `<Popover
@@ -903,19 +1230,34 @@ export function Actions() {
   <Checkbox label="Only mine" />
   <Checkbox label="Archived" />
 </Popover>`,
-    render: () => h(A.Popover, {title: "Filters", trigger: h(A.Button, {variant: "outline"}, "Filters")},
-      h(A.Checkbox, {label: "Only mine"})),
+    render: () => h(A.Popover, {title: "Filters", arrow: true, trigger: h(A.Button, {variant: "outline"}, "Filters")},
+      h(A.Checkbox, {label: "Only mine"}), h(A.Checkbox, {label: "Archived"})),
+    examples: [
+      cada({titulo: "Sides", descricao: "Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.", valores: ["top", "right", "bottom", "left"],
+        codigo: v => `<Popover title="Side ${v}" side="${v}" arrow trigger={<Button variant="outline">Side ${v}</Button>}>…</Popover>`,
+        peca: v => h(A.Popover, {title: `Side ${v}`, side: v, arrow: true, trigger: h(A.Button, {variant: "outline"}, `Side ${v}`)},
+          h("p", null, `This popover opens on the ${v}.`))}),
+    ],
   },
   // Parte H — a camada operacional (09/08/2026). Os três primeiros da família.
   AgentStatus: {
     install: 'import {AgentStatus} from "@aurea-uds/react";',
-    code: `<AgentStatus state="running" />`,
+    code: `<AgentStatus state="idle" />
+<AgentStatus state="running" />
+<AgentStatus state="paused" />
+<AgentStatus state="error" />
+<AgentStatus state="completed" />`,
     render: () => h("div", {className: "cluster"},
       h(A.AgentStatus, {key: "i", state: "idle"}),
       h(A.AgentStatus, {key: "r", state: "running"}),
       h(A.AgentStatus, {key: "p", state: "paused"}),
       h(A.AgentStatus, {key: "e", state: "error"}),
       h(A.AgentStatus, {key: "c", state: "completed"})),
+
+    examples: [
+      eixo({titulo: "Every state", descricao: "thinking is the one between running and the answer: the agent is working, and has nothing to show yet.",
+        Comp: A.AgentStatus, nome: "AgentStatus", prop: "state", valores: ["idle", "running", "thinking", "paused", "error", "completed"]}),
+    ],
   },
   AgentCard: {
     install: 'import {AgentCard} from "@aurea-uds/react";',
@@ -929,6 +1271,12 @@ export function Actions() {
     render: () => h(A.AgentCard, {name: "Curator", model: "opus-5", state: "running",
       description: "Keeps the reference library tidy.",
       capabilities: [{name: "search", icon: "magnifying-glass"}, {name: "summarise"}]}),
+
+    examples: [
+      eixo({titulo: "Every state", descricao: "The state is a word on the card, not only a colour: idle, running, thinking, paused, error, completed.",
+        Comp: A.AgentCard, nome: "AgentCard", prop: "state", valores: ["idle", "running", "thinking", "paused", "error", "completed"], base: {name: "Curator", model: "opus-5"},
+        estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+    ],
   },
   AgentInspector: {
     install: 'import {AgentInspector} from "@aurea-uds/react";',
@@ -978,6 +1326,15 @@ export function Actions() {
       description: "Removes rows that were archived more than a year ago.",
       details: [{term: "Table", value: "invoices"}, {term: "Rows", value: "12"}],
       reasoning: "They no longer appear in any report.", deadline: "in 2 hours"}),
+
+    examples: [
+      eixo({titulo: "Risk", descricao: "How much the action can break. The word goes on the card; the colour only repeats it.",
+        Comp: A.HumanApproval, nome: "HumanApproval", prop: "risk", valores: ["low", "medium", "high"],
+        base: {title: "Send the weekly report"}, estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+      eixo({titulo: "Decided", descricao: "Once decided, the pair of buttons becomes the result instead of disappearing, so the trace of the choice stays.",
+        Comp: A.HumanApproval, nome: "HumanApproval", prop: "decision", valores: ["approved", "denied"],
+        base: {title: "Send the weekly report", risk: "low"}, estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+    ],
   },
   ToolPermission: {
     install: 'import {ToolPermission} from "@aurea-uds/react";',
@@ -1063,6 +1420,14 @@ export function Actions() {
   onToggle={setEnabled}
   lastRun="yesterday, 02:00"
   lastResult="success"
+/>
+<AutomationCard
+  name="Purge stale drafts"
+  trigger="On draft older than 30 days"
+  action="Move it to the archive"
+  onToggle={setEnabled}
+  lastRun="6 days ago"
+  lastResult="failure"
 />`,
     render: () => h("div", {style: stack},
       h(ComValor, {componente: A.AutomationCard, valor: "enabled", aviso: "onToggle", name: "Nightly reindex", enabled: true,
@@ -1084,6 +1449,16 @@ export function Actions() {
       {id: "1", model: "opus", provider: "anthropic", tokens: 1840000},
       {id: "2", model: "haiku", provider: "anthropic", tokens: 620000},
       {id: "3", model: "embed-3", provider: "local", tokens: 95000}]}),
+
+    examples: [
+      eixo({titulo: "Metrics", descricao: "Which measure the bars compare: tokens, cost or requests. The rows sort by the one in view.",
+        Comp: A.ModelUsage, nome: "ModelUsage", prop: "metric", valores: ["tokens", "cost", "requests"],
+        baseCodigo: "entries={entries}", base: {entries: [
+          {id: "1", model: "opus", provider: "anthropic", tokens: 1840000, cost: 27.6, requests: 410},
+          {id: "2", model: "haiku", provider: "anthropic", tokens: 620000, cost: 0.78, requests: 1290},
+          {id: "3", model: "embed-3", provider: "local", tokens: 95000, cost: 0, requests: 3020}]},
+        estilo: {display: "grid", gap: "var(--space-4)", ...wide}}),
+    ],
   },
   CostMeter: {
     install: 'import {CostMeter} from "@aurea-uds/react";',
@@ -1115,6 +1490,12 @@ export function Actions() {
     render: () => h("div", {style: {...stack, ...wide}},
       h(A.Skeleton, {style: {height: "0.875rem", width: "70%"}}),
       h(A.Skeleton, {style: {height: "0.875rem", width: "90%"}})),
+    examples: [
+      eixo({titulo: "Animation", descricao: "pulse breathes while loading; none stays still — and with reduced motion, pulse stays still too.",
+        Comp: A.Skeleton, nome: "Skeleton", prop: "animation", valores: ["pulse", "none"],
+        baseCodigo: 'style={{height: "0.875rem", width: "70%"}}', base: {style: {height: "0.875rem", width: "70%"}},
+        estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+    ],
   },
   Stack: {
     code: `<Stack>
@@ -1123,6 +1504,17 @@ export function Actions() {
 </Stack>`,
     render: () => h("div", {style: wide}, h(A.Stack, null,
       h(A.Card, null, "First"), h(A.Card, null, "Second"))),
+    examples: [
+      eixo({titulo: "Gap", descricao: "The space between the items, from the density scale: tight, normal or loose.",
+        Comp: A.Stack, nome: "Stack", prop: "gap", valores: ["tight", "normal", "loose"], estilo: {display: "grid", gap: "var(--space-6)", ...wide},
+        filho: () => DOIS_CARTOES}),
+      eixo({titulo: "Align", descricao: "Where each item sits across the column. stretch, the default, makes every item as wide as the stack.",
+        Comp: A.Stack, nome: "Stack", prop: "align", valores: ["start", "center", "end", "stretch"], estilo: {display: "grid", gap: "var(--space-6)", ...wide},
+        filho: () => ({codigo: `
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+`, elemento: [h(A.Button, {key: 1}, "Save"), h(A.Button, {key: 2, variant: "secondary"}, "Cancel")]})}),
+    ],
   },
   Table: {
     code: `<Table caption="Team">
@@ -1167,6 +1559,15 @@ export function Actions() {
     render: () => h(A.AvatarGroup, {max: 3, total: 9, label: "Reviewers"},
       h(A.Avatar, {key: 1, fallback: "AM"}), h(A.Avatar, {key: 2, fallback: "CT"}),
       h(A.Avatar, {key: 3, fallback: "RS"}), h(A.Avatar, {key: 4, fallback: "JP"})),
+    examples: [
+      eixo({titulo: "Sizes", descricao: "The size reaches every avatar in the group and the counter at the end.",
+        Comp: A.AvatarGroup, nome: "AvatarGroup", prop: "size", valores: ["sm", "md", "lg"], base: {max: 3, total: 9, label: "Reviewers"}, coluna: true,
+        filho: () => ({codigo: `
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
+`, elemento: ["AM", "CT", "RS"].map(f => h(A.Avatar, {key: f, fallback: f}))})}),
+    ],
   },
   Stepper: {
     code: `<Stepper label="Publishing" items={[
@@ -1356,6 +1757,19 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
         h(A.InputGroupAddon, null, h(A.Icon, {name: "magnifying-glass"})),
         h(A.Input, {placeholder: "Search", "aria-label": "Search"}),
         h(A.InputGroupAddon, {side: "end", layout: "inline"}, "\u2318K"))),
+    examples: [
+      {
+        title: "On its own line",
+        description: 'layout="block" puts the addon on its own line above the control instead of beside it.',
+        code: `<InputGroup>
+  <InputGroupAddon side="start" layout="block">Search the reports</InputGroupAddon>
+  <Input placeholder="Search" aria-label="Search the reports" />
+</InputGroup>`,
+        render: () => h("div", {style: {width: "min(360px, 100%)"}}, h(A.InputGroup, null,
+          h(A.InputGroupAddon, {side: "start", layout: "block"}, "Search the reports"),
+          h(A.Input, {placeholder: "Search", "aria-label": "Search the reports"}))),
+      },
+    ],
   },
 
   Label: {
@@ -1372,6 +1786,11 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 </Field>`,
     render: () => h("div", {style: {width: "min(320px, 100%)"}},
       h(A.Field, {label: "Password"}, h(A.PasswordField, {defaultValue: "correct-horse"}))),
+    examples: [
+      eixo({titulo: "Sizes", descricao: "The control sizes; the show/hide button keeps a 44 target on touch at every size.",
+        Comp: A.PasswordField, nome: "PasswordField", prop: "size", valores: ["sm", "md", "lg"], base: {"aria-label": "Password"},
+        estilo: {display: "grid", gap: "var(--space-3)", width: "min(320px, 100%)"}}),
+    ],
   },
 
   Collapsible: {
@@ -1395,6 +1814,14 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
         h(A.Toggle, {value: "bold"}, "Bold"),
         h(A.Toggle, {value: "italic"}, "Italic"),
         h(A.Toggle, {value: "underline"}, "Underline"))),
+    examples: [
+      eixo({titulo: "Orientation", descricao: "vertical stacks the toggles; the arrow keys follow the direction.",
+        Comp: A.ToggleGroup, nome: "ToggleGroup", prop: "orientation", valores: ["horizontal", "vertical"],
+        base: {label: "Text style", multiple: true, defaultValue: ["bold"]}, filho: () => TRES_ESTILOS}),
+      eixo({titulo: "Sizes", descricao: "The size reaches every toggle in the group.", Comp: A.ToggleGroup, nome: "ToggleGroup",
+        prop: "size", valores: ["sm", "md", "lg"], base: {label: "Text style", multiple: true, defaultValue: ["bold"]}, coluna: true,
+        filho: () => TRES_ESTILOS}),
+    ],
   },
 
   Spinner: {
@@ -1405,6 +1832,10 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       h(A.Spinner, {size: "sm"}),
       h(A.Spinner, {label: "Loading results"}),
       h(A.Spinner, {size: "lg"})),
+    examples: [
+      eixo({titulo: "Sizes", descricao: "Four sizes; the label is what the screen reader says.", Comp: A.Spinner, nome: "Spinner",
+        prop: "size", valores: ["sm", "md", "lg", "xl"], base: {label: "Loading"}}),
+    ],
   },
   // O segundo campo é o item L6 do lado do número: moeda sem biblioteca de moeda. O motor formata
   // pelo `Intl` da plataforma e no BLUR, e guarda o número cru num input escondido — então o que o
@@ -1425,6 +1856,11 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       h(A.NumberField, {defaultValue: 1, min: 0, max: 99, label: "Quantity"}),
       h(A.NumberField, {label: "Price", name: "price", defaultValue: 1234.5,
         format: {style: "currency", currency: "BRL"}, locale: "pt-BR"})),
+    examples: [
+      eixo({titulo: "Drag to change", descricao: "scrubbable adds a handle you pull to change the value; scrubDirection says which way. The buttons and the keys keep working.",
+        Comp: A.NumberField, nome: "NumberField", prop: "scrubDirection", valores: ["horizontal", "vertical"],
+        base: {scrubbable: true, defaultValue: 50, min: 0, max: 100, label: "Opacity"}, coluna: true}),
+    ],
   },
   // 0.33.0: o segundo com `groupSize`, o tracinho do 3 + 3 da referência.
   OTPField: {
@@ -1432,6 +1868,16 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 <OTPField length={6} groupSize={3} label="Verification code, in two groups" />`,
     render: () => h("div", {style: stack}, h(A.OTPField, {length: 6, label: "Verification code"}),
       h(A.OTPField, {length: 6, groupSize: 3, label: "Verification code, in two groups"})),
+    examples: [
+      {
+        title: "Variants",
+        description: "primary is the field on the page; secondary is the one inside a card or a dialog, a step darker.",
+        code: `<OTPField length={6} variant="primary" label="Code, primary" />
+<OTPField length={6} variant="secondary" label="Code, secondary" />`,
+        render: () => h("div", {style: stack}, h(A.OTPField, {length: 6, variant: "primary", label: "Code, primary"}),
+          h(A.OTPField, {length: 6, variant: "secondary", label: "Code, secondary"})),
+      },
+    ],
   },
   // O disparador é um `Button variant="link"`, não um `<a>` cru: um link sem pele da Aurea
   // reprovou contraste AA no tema claro dentro do painel de demo — pego pelo axe da varredura.
@@ -1443,6 +1889,12 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 </HoverCard>`,
     render: () => h(A.HoverCard, {trigger: h(A.Button, {variant: "link", href: "#curator"}, "Curator")},
       h("strong", null, "Curator"), h("p", {className: "muted"}, "Reviews and files what comes in.")),
+    examples: [
+      cada({titulo: "Sides", descricao: "Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.", valores: ["top", "right", "bottom", "left"],
+        codigo: v => `<HoverCard side="${v}" trigger={<Button variant="link" href="#side-${v}">Side ${v}</Button>}>…</HoverCard>`,
+        peca: v => h(A.HoverCard, {side: v, trigger: h(A.Button, {variant: "link", href: `#side-${v}`}, `Side ${v}`)},
+          h("p", null, `This card opens on the ${v}.`))}),
+    ],
   },
   Timeline: {
     code: `<Timeline items={[
@@ -1463,8 +1915,14 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 <Tooltip content="Monthly recurring revenue" arrow>
   <span>MRR</span>
 </Tooltip>`,
-    render: () => h(A.Tooltip, {content: "Copy to clipboard"},
-      h(A.IconButton, {icon: "copy", label: "Copy"})),
+    render: () => h("div", {style: row},
+      h(A.Tooltip, {content: "Copy to clipboard", side: "top"}, h(A.IconButton, {icon: "copy", label: "Copy"})),
+      h(A.Tooltip, {content: "Monthly recurring revenue", arrow: true}, h("span", null, "MRR"))),
+    examples: [
+      cada({titulo: "Sides", descricao: "Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.", valores: ["top", "right", "bottom", "left"],
+        codigo: v => `<Tooltip content="Opens on the ${v}" side="${v}"><Button variant="outline">Side ${v}</Button></Tooltip>`,
+        peca: v => h(A.Tooltip, {content: `Opens on the ${v}`, side: v}, h(A.Button, {variant: "outline"}, `Side ${v}`))}),
+    ],
   },
   Header: {
     description: "The top bar of an app or a website — header, navbar, top bar. With items it is the "
@@ -1487,6 +1945,32 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       maxWidth: "xl", brand: h("strong", null, "Acme"),
       items: [{id: "home", label: "Home", href: "#"}, {id: "pricing", label: "Pricing", href: "#"}, {id: "docs", label: "Docs", href: "#"}],
       current: "pricing", actions: h(A.Button, {variant: "primary", size: "sm"}, "Sign up")})),
+    examples: [
+      eixo({titulo: "Variants", descricao: "floating is a detached card; flush merges into the page and frames the window; pill is a capsule floating over the content.",
+        Comp: A.Header, nome: "Header", prop: "variant", valores: ["floating", "flush", "pill"],
+        baseCodigo: "brand={<strong>Acme</strong>}", base: {brand: h("strong", null, "Acme")},
+        estilo: {display: "grid", gap: "var(--space-4)", width: "100%"}}),
+      eixo({titulo: "Content widths", descricao: "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it.",
+        Comp: A.Header, nome: "Header", prop: "maxWidth", valores: ["sm", "md", "lg", "xl", "2xl", "docs", "full"],
+        baseCodigo: "variant=\"flush\" brand={<strong>Acme</strong>}", base: {variant: "flush", brand: h("strong", null, "Acme")},
+        estilo: {display: "grid", gap: "var(--space-2)", width: "100%"}}),
+      {
+        title: "Links at the start",
+        description: "itemsJustify=\"start\" puts the links right after the brand; end, the default, puts them just before the actions.",
+        code: `<Header
+  variant="flush"
+  brand={<strong>Acme</strong>}
+  items={[{id: "home", label: "Home", href: "/"}, {id: "docs", label: "Docs", href: "/docs"}]}
+  current="home"
+  itemsJustify="start"
+  navLabel="Links at the start"
+  menuId="header-start-menu"
+/>`,
+        render: () => h("div", {style: {width: "100%", position: "relative"}}, h(A.Header, {variant: "flush",
+          brand: h("strong", null, "Acme"), items: [{id: "home", label: "Home", href: "#"}, {id: "docs", label: "Docs", href: "#"}],
+          current: "home", itemsJustify: "start", navLabel: "Links at the start", menuId: "header-start-menu"})),
+      },
+    ],
   },
   Topbar: {
     description: "The old name of Header (renamed on 07/10/2026). Same component, still works the same; "

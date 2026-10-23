@@ -18,6 +18,22 @@ import {Gallery} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Choosing several
+
+With selectionMode="multiple" every tile is a toggle: click to add or remove it, in the order chosen.
+
+```tsx
+<Gallery
+  label="Photos to share"
+  items={photos}
+  selectionMode="multiple"
+  selectedIds={chosen}
+  onSelectionChange={setChosen}
+/>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

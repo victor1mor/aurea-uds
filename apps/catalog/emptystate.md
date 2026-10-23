@@ -17,6 +17,32 @@ import {EmptyState} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Every state
+
+With a state, the empty view says why it is empty. It stays neutral on purpose: an absence is not an alarm.
+
+```tsx
+<EmptyState titleAs="h4" title="Nothing to show" state="stale" />
+<EmptyState titleAs="h4" title="Nothing to show" state="partial" />
+<EmptyState titleAs="h4" title="Nothing to show" state="degraded" />
+<EmptyState titleAs="h4" title="Nothing to show" state="offline" />
+<EmptyState titleAs="h4" title="Nothing to show" state="waiting_user" />
+<EmptyState titleAs="h4" title="Nothing to show" state="waiting_approval" />
+<EmptyState titleAs="h4" title="Nothing to show" state="waiting_dependency" />
+```
+
+### The title's tag
+
+The heading level belongs to the page, not to the component: h3 by default, the level that fits where it sits, or p when it is not a heading at all.
+
+```tsx
+<EmptyState title="No results" description="Try a different filter." titleAs="h3" />
+<EmptyState title="No results" description="Try a different filter." titleAs="h4" />
+<EmptyState title="No results" description="Try a different filter." titleAs="p" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

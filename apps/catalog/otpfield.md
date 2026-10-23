@@ -13,6 +13,17 @@ import {OTPField} from "@aurea-uds/react";
 <OTPField length={6} groupSize={3} label="Verification code, in two groups" />
 ```
 
+## Examples
+
+### Variants
+
+primary is the field on the page; secondary is the one inside a card or a dialog, a step darker.
+
+```tsx
+<OTPField length={6} variant="primary" label="Code, primary" />
+<OTPField length={6} variant="secondary" label="Code, secondary" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

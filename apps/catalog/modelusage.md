@@ -15,6 +15,18 @@ import {ModelUsage} from "@aurea-uds/react";
 ]} />
 ```
 
+## Examples
+
+### Metrics
+
+Which measure the bars compare: tokens, cost or requests. The rows sort by the one in view.
+
+```tsx
+<ModelUsage entries={entries} metric="tokens" />
+<ModelUsage entries={entries} metric="cost" />
+<ModelUsage entries={entries} metric="requests" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

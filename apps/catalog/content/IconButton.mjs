@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {IconButton, Tooltip, ButtonGroup} from "../../../packages/react/dist/index.js";
+import {cada} from "./_eixos.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 
@@ -104,5 +105,21 @@ export default {
         h(IconButton, {icon: "pencil-simple", label: "Edit"}),
         h(IconButton, {icon: "trash", label: "Delete", variant: "danger-ghost"})),
     },
+      cada({titulo: "Appearances", descricao: "How much weight the circle carries, from the fill to the bare glyph. nav is the navigation item.",
+        valores: ["solid", "soft", "outline", "ghost", "link", "nav"], estilo: row,
+        codigo: v => `<IconButton icon="star" label="Appearance ${v}" appearance="${v}" />`,
+        peca: v => h(IconButton, {icon: "star", label: `Appearance ${v}`, appearance: v})}),
+      cada({titulo: "Tones", descricao: "What the colour means; every tone works with every appearance. Here, solid.",
+        valores: ["neutral", "brand", "info", "success", "warning", "danger"], estilo: row,
+        codigo: v => `<IconButton icon="star" label="Tone ${v}" appearance="solid" tone="${v}" />`,
+        peca: v => h(IconButton, {icon: "star", label: `Tone ${v}`, appearance: "solid", tone: v})}),
+      cada({titulo: "Every shortcut", descricao: "variant is the short name for an (appearance, tone) pair — the same list as Button.",
+        valores: ["primary", "secondary", "tertiary", "outline", "ghost", "link", "nav", "primary-outline", "primary-ghost", "link-primary", "danger", "danger-soft", "danger-outline", "danger-ghost", "link-danger"], estilo: row,
+        codigo: v => `<IconButton icon="star" label="Variant ${v}" variant="${v}" />`,
+        peca: v => h(IconButton, {icon: "star", label: `Variant ${v}`, variant: v})}),
+      cada({titulo: "Every size", descricao: "The control scale; on a touch screen every size keeps a 44 target.",
+        valores: ["xs", "sm", "md", "lg", "xl"], estilo: row,
+        codigo: v => `<IconButton icon="star" label="Size ${v}" size="${v}" />`,
+        peca: v => h(IconButton, {icon: "star", label: `Size ${v}`, size: v})}),
   ],
 };

@@ -43,6 +43,24 @@ What the colour means. Paused is neutral; failed is danger.
 <Progress value={58} label="Upload" tone="danger" detail="Failed at 58%" />
 ```
 
+### Info
+
+For work that is neither good nor bad news — a sync, an import. Without a tone the bar is the brand's.
+
+```tsx
+<Progress value={45} label="Import" tone="info" detail="450 of 1,000 rows" />
+```
+
+### Track sizes
+
+The track is 4, 8 or 12 thick — the reference library's. md is the default.
+
+```tsx
+<Progress value={60} label="Small track" showLabel size="sm" />
+<Progress value={60} label="Medium track" showLabel />
+<Progress value={60} label="Large track" showLabel size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

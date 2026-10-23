@@ -20,6 +20,7 @@ import * as A from "../packages/react/dist/index.js";
 import {highlightCode} from "../packages/react/dist/code-highlight.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
+import {medirCatalogo, MODELO_DA_RODADA} from "./catalogo-fiel.mjs";
 import {lerDoc, lerLinha, paraTexto} from "./docs-markdown.mjs";
 import {linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
 // A aba "Components" da vitrine do Início (15/10/2026): o MESMO arquivo que o `home.js` deixa vivo.
@@ -172,6 +173,10 @@ for (const g of hooks) {
 // não viu porque ele cobra que a ENTRADA exista, não que ela desenhe: é o mesmo "gate de nome
 // não é gate de efeito" que o Lote 3 já tinha encontrado no preview vazio do Chart.
 const CHAVES_STARTER = new Set(["install", "code", "render", "note", "embed", "prerender", "description",
+  // "examples": os exemplos DEPOIS do principal, com a mesma forma dos de um arquivo próprio (bloco 1, o catálogo fiel —
+  // 23/10/2026: toda variação da ficha em exemplo vivo). Mora aqui, e não num arquivo próprio, para os de motor pesado
+  // continuarem fora do `live.js` leve: o glob da parte viva leva todo `content/<Nome>.mjs` para ele.
+  "examples",
   // "layoutProprio"/"tituloProprio": o conteúdo declara que monta os PRÓPRIOS landmarks e o
   // próprio h1. Sem elas o gerador acrescenta `<main>` e `<h1>` na moldura — e o AppShell, que
   // já tem os dois, saía com "2 h1 na página" na varredura (18/08/2026).
@@ -186,9 +191,16 @@ for (const name of Object.keys(starters)) {
       + "Quem desenha o preview é `render`, uma FUNÇÃO. Chave desconhecida não desenha nada e "
       + "a página sai com o texto de fallback, sem ninguém reclamar.");
   }
+  const malFeitos = (starters[name].examples || []).filter(ex => !ex.title || !ex.code || typeof ex.render !== "function");
+  if (malFeitos.length) throw new Error(`_starters.mjs: "${name}" tem ${malFeitos.length} exemplo(s) sem title, code ou render — `
+    + "o exemplo extra do starter tem a forma do de um arquivo próprio.");
 }
 const semPreview = fichas.filter(f => !content[f.name] && !starters[f.name]).map(f => f.name);
 if (semPreview.length) throw new Error(`sem preview nem starter (o modelo exige): ${semPreview.join(", ")}`);
+// O CATÁLOGO FIEL (bloco 1 — 23/10/2026): todo nome exportado com página e todo valor de variação da ficha num exemplo.
+// A montagem PARA quando falta, e a página `saude.html` mostra os números (ver `scripts/catalogo-fiel.mjs`).
+const fiel = await medirCatalogo(root);
+if (fiel.erros.length) throw new Error(`o catálogo deixou de ser fiel — ${fiel.erros.join(" · ")}`);
 
 // BLOCKS: apps/catalog/content/blocks/*.mjs (default = lista). Seção/tela inteira montada
 // com componentes reais — maior que pattern, menor que uma tela de produto.
@@ -582,7 +594,7 @@ function componentPage(f, i) {
       h(A.Status, {variant: s === "planned" ? "offline" : s === "n-a" ? "neutral" : "online"}, `${p}: ${s}`)));
   const usa = f.related.components || [];
   const resumoDe = nome => fichas.find(x => x.name === nome)?.summary || null;
-  const exemplos = c ? c.examples.slice(1) : [];
+  const exemplos = c ? c.examples.slice(1) : (starters[f.name]?.examples || []);
   const fonte = f.source?.react ? f.source.react.split("#")[0] : null;
   return itemPage({
     title: f.name, lede: c?.description || f.summary,
@@ -877,6 +889,47 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     h(A.Prose, null, ...filhos),
     anteriorProximo(prev, next),
     textoParaCopiar(markdown ?? paraTexto(doc.texto)));
+  return {node, toc};
+}
+
+// ── A SAÚDE (`saude.html`, o 1-F — bloco 1, 23/10/2026) ─────────────────────────
+// Decisão do Victor (19/10/2026): uma página no site, feita com a Aurea, com letra grande, "OK"/"FAILED" em palavra, o
+// horário de Brasília e as 30 últimas rodadas — publicada MESMO quando a CI está vermelha. Os números do catálogo saem
+// desta montagem; as rodadas, da publicação (`scripts/saude-rodadas.mjs`, no `site.yml`), que copia a linha-modelo da
+// tabela para cada rodada — a publicação não instala nada e não roda o React, só troca texto.
+function saudePage() {
+  const w = fiel.web;
+  const palavra = ok => ok ? "OK" : "FAILED";
+  const linhas = [
+    ["Every name the web package exports has a page", `${w.exportados - w.semPagina.length} of ${w.exportados}`, palavra(!w.semPagina.length)],
+    ["Every variation value in the specs is shown in an example", `${w.naPagina + w.porPadrao + w.emPadrao} of ${w.valores}`,
+      palavra(!Object.keys(w.faltam).length)],
+    ["… in an example on the component's page", String(w.naPagina), ""],
+    ["… as the default value, which every example without the prop shows", String(w.porPadrao), ""],
+    ["… in a pattern of the same component", String(w.emPadrao), ""],
+  ];
+  const toc = [{id: "catalogue", label: "The catalogue is complete"}, {id: "checks", label: "The last 30 checks"}];
+  const node = h(Fragment, null,
+    cabecaDaPagina("Health", "What the library promises, measured. The site is rebuilt from the measurement, and this page is "
+      + "published even when a check fails — it never hides a failure."),
+    h(A.Prose, null,
+      h("h2", {id: "catalogue"}, "The catalogue is complete"),
+      h("p", null, "Measured on every build of this site, from the published package and the code of the examples. The build "
+        + "stops when one of these fails."),
+      h(A.Table, {caption: "The catalogue is complete"},
+        h("thead", null, h("tr", null, ...["What", "Count", "Result"].map(c => h("th", {key: c, scope: "col"}, c)))),
+        h("tbody", null, ...linhas.map(([o, n, r], k) => h("tr", {key: k}, h("td", null, o), h("td", null, h(A.Text, {numeric: true}, n)),
+          h("td", null, r ? h("strong", null, r) : null))))),
+      h("h2", {id: "checks"}, "The last 30 checks"),
+      h("p", null, "Every run of the checks on the main branch: the build, the unit tests, the screenshots and the sweep of every "
+        + "page in three browsers. Times in Brasília (UTC−3)."),
+      h(A.Table, {caption: "The last 30 checks"},
+        h("thead", null, h("tr", null, ...["When", "Commit", "Result", "Checks"].map(c => h("th", {key: c, scope: "col"}, c)))),
+        h("tbody", {"data-saude-rodadas": ""},
+          h("tr", {"data-modelo": ""}, h("td", null, MODELO_DA_RODADA.data), h("td", null, h("code", null, MODELO_DA_RODADA.commit)),
+            h("td", null, h("strong", null, MODELO_DA_RODADA.resultado)), h("td", null, MODELO_DA_RODADA.trabalhos)))),
+      h("p", {"data-saude-vazia": ""}, "The list is filled in when the site is published.")),
+    anteriorProximo(vizinhos("releases", "saude.html").prev, vizinhos("releases", "saude.html").next));
   return {node, toc};
 }
 
@@ -1331,7 +1384,7 @@ const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
 const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
   {id: "archetypes", label: "Archetypes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
 // Releases: "All Releases" e as versões, da mais nova à mais velha, como a da referência.
-const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html")]},
+const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
   {id: "releases", label: "Releases", items: releases.map(r => item(r.title, r.arquivo))}];
 const MENUS = {start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
@@ -1897,6 +1950,7 @@ const indiceDaBusca = [
     .map(([label, href]) => ({label, href, group: "Pages"})),
   ...docs.map(d => ({label: d.title, href: d.arquivo, group: "Getting Started"})),
   {label: "All Releases", href: "releases.html", group: "Releases"},
+  {label: "Health", href: "saude.html", group: "Releases"},
   ...releases.map(r => ({label: r.title, href: r.arquivo, group: "Releases"})),
   ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components"})),
   ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks"})),
@@ -1956,6 +2010,7 @@ const paginas = [
   ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
   ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, docPage(d), "start")]),
   ["releases.html", pageHtml("All Releases", "releases.html", releasesPage(), "releases")],
+  ["saude.html", pageHtml("Health", "saude.html", saudePage(), "releases")],
   ...releases.map(r => [r.arquivo, pageHtml(`${r.title} release notes`, r.arquivo, releasePage(r), "releases")]),
   ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
   ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],

@@ -13,6 +13,16 @@ import {Chart, ChartTooltip, ChartLegend} from "../../../packages/react/dist/cha
 import {AreaChart, Area, BarChart, Bar, CartesianGrid, XAxis} from "recharts";
 import {row, wide} from "./_starters.mjs";
 import {ComValor} from "./_estado.mjs";
+import {cada, eixo} from "./_eixos.mjs";
+
+// O mapa dos exemplos de arranjo (bloco 1, o catálogo fiel — 23/10/2026): o mesmo do principal, com um galho a mais,
+// para a árvore e o círculo terem o que abrir.
+const NOS = [
+  {id: "ingest", label: "Ingest", kind: "source"}, {id: "embed", label: "Embed", kind: "model"},
+  {id: "index", label: "Index", kind: "store"}, {id: "answer", label: "Answer", kind: "agent"},
+  {id: "audit", label: "Audit", kind: "agent"}];
+const LINHAS = [{from: "ingest", to: "embed"}, {from: "embed", to: "index"}, {from: "embed", to: "answer"},
+  {from: "index", to: "audit"}];
 
 // Série de exemplo das três páginas de Chart. Uma só, para que as três mostrem o mesmo dado
 // visto de três jeitos — é o que faz a página da legenda e a do tooltip serem comparáveis.
@@ -113,6 +123,15 @@ export default {
         {name: "Curator", role: "Viewer"}],
       columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}],
     })),
+    examples: [
+      eixo({titulo: "Every state", descricao: "loading and error replace the rows; the other states keep the rows you already had and put the notice above them.",
+        Comp: DataGrid, nome: "DataGrid", prop: "state",
+        valores: ["loading", "error", "stale", "partial", "degraded", "offline", "waiting_user", "waiting_approval", "waiting_dependency"],
+        baseCodigo: 'label="Members" data={members} columns={columns}',
+        base: {label: "Members", data: [{name: "Messenger", role: "Owner"}, {name: "Analyst", role: "Editor"}],
+          columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}]},
+        estilo: {display: "grid", gap: "var(--space-4)", ...wide}}),
+    ],
   },
   DependencyGraph: {
     // Subpath próprio + a folha ESTRUTURAL do motor. Só ela: o `style.css` dele é a
@@ -154,6 +173,16 @@ export default {
         {from: "ingest", to: "embed"},
         {from: "embed", to: "index"},
         {from: "embed", to: "answer", animated: true}]}),
+    examples: [
+      cada({titulo: "Tree and circle", descricao: "Besides the layers, two arrangements of its own: tree, from the root down, and radial, the root in the middle with the rest around it.",
+        valores: ["tree", "radial"], estilo: {display: "grid", gap: "var(--space-4)", width: "100%"},
+        codigo: v => `<DependencyGraph layout="${v}" nodes={nodes} edges={edges} height="18rem" />`,
+        peca: v => h(DependencyGraph, {layout: v, height: "18rem", nodes: NOS, edges: LINHAS})}),
+      cada({titulo: "Large text", descricao: "textSize=\"lg\" makes the names on the nodes and lines larger, for people who see little.",
+        valores: ["lg"], estilo: {display: "grid", width: "100%"},
+        codigo: v => `<DependencyGraph textSize="${v}" nodes={nodes} edges={edges} height="18rem" />`,
+        peca: v => h(DependencyGraph, {textSize: v, height: "18rem", nodes: NOS, edges: LINHAS})}),
+    ],
   },
   QRCode: {
     description: "Three sizes, side by side, because the choice is about SCANNING and not about "

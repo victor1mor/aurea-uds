@@ -32,6 +32,33 @@ A Badge is a pill of metadata; a Status is a state on the line.
 <Badge variant="success">v1.7.0</Badge>
 ```
 
+### Semantic names
+
+The same dots in the vocabulary of a job or a service: running, success, warning, danger and info. Neutral is the default. The label still says what the colour means.
+
+```tsx
+<Status variant="neutral">Draft</Status>
+<Status variant="running">Running</Status>
+<Status variant="success">Healthy</Status>
+<Status variant="warning">Slow</Status>
+<Status variant="danger">Down</Status>
+<Status variant="info">Scheduled</Status>
+```
+
+### Universal states
+
+state is the condition, an axis apart from the colour. With no children the label comes from the shared string table, so the same condition reads the same on every screen; with no variant the dot follows the severity — waiting is info, the rest is warning, and offline keeps its hollow dot.
+
+```tsx
+<Status state="waiting_user" />
+<Status state="waiting_approval" />
+<Status state="waiting_dependency" />
+<Status state="offline" />
+<Status state="stale" />
+<Status state="partial" />
+<Status state="degraded" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -12,6 +12,28 @@ import {ThemeToggle} from "@aurea-uds/react";
 <ThemeToggle />
 ```
 
+## Examples
+
+### Three positions — light, dark and the system
+
+mode="light-dark-system" is the switch at the top of this site: three choices in one capsule, and "System" follows the computer. It is a radio group named "Theme": Tab enters on the chosen one, the arrows move and choose.
+
+```tsx
+<ThemeToggle mode="light-dark-system" />
+```
+
+### Sizes
+
+The control sizes, from xs to xl; on a touch screen every size floors at 44.
+
+```tsx
+<ThemeToggle size="xs" />
+<ThemeToggle size="sm" />
+<ThemeToggle size="md" />
+<ThemeToggle size="lg" />
+<ThemeToggle size="xl" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

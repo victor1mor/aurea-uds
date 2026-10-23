@@ -2,6 +2,9 @@ import {createElement as h} from "react";
 import {Separator, Card, Stack, Cluster} from "../../../packages/react/dist/index.js";
 
 const box = {width: "min(22rem,100%)"};
+// O espaço dos dois lados da linha: um trecho de texto antes de cada separador, e o código e o desenho saem desta
+// lista. Sem `Stack` em volta de propósito — o vão dele somaria ao espaço que se quer mostrar.
+const ESPACOS = [["Account", "tight"], ["Billing", "normal"], ["Team", "loose"]];
 
 export default {
   description:
@@ -57,6 +60,20 @@ export default {
         h("span", null, "4 closed"),
         h(Separator, {orientation: "vertical"}),
         h("span", null, "updated today")),
+    },
+    {
+      title: "Spacing",
+      description: "The space on both sides of the line, in the three steps of the layout gap. none, the default, "
+        + "leaves the spacing to the parent; on a vertical separator the space goes to the sides.",
+      code: `<Card>
+${ESPACOS.map(([texto, spacing]) => `  <p>${texto}</p>\n  <Separator spacing="${spacing}" />`).join("\n")}
+  <p>Security</p>
+</Card>`,
+      render: () => h("div", {style: box}, h(Card, null,
+        ...ESPACOS.flatMap(([texto, spacing]) => [
+          h("p", {key: texto, style: {margin: 0}}, texto),
+          h(Separator, {key: spacing, spacing})]),
+        h("p", {style: {margin: 0}}, "Security"))),
     },
   ],
 };

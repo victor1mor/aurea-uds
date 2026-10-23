@@ -1,11 +1,24 @@
 import {createElement as h} from "react";
-import {Badge, Avatar, Icon} from "../../../packages/react/dist/index.js";
+import {Badge, Avatar, Icon, Stack} from "../../../packages/react/dist/index.js";
+import {eixo} from "./_eixos.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 // O botão do sino é marcação crua de propósito: o que se mostra aqui é o BADGE, e um IconButton
 // de verdade traria o foco e o hover dele para a foto. A classe é a mesma que o core já publica.
 const sino = (rotulo) => h("button", {className: "btn btn-icon btn-secondary", "aria-label": rotulo},
   h(Icon, {name: "bell"}));
+
+// Os 18 tons da ficha, na ordem dela: os seis de sentido, os quatro de operação e as oito cores de categoria.
+const TONS = {neutral: "Neutral", primary: "Primary", info: "Info", success: "Success", warning: "Warning",
+  danger: "Danger", running: "Running", paused: "Paused", offline: "Offline", review: "In review", red: "Red",
+  orange: "Orange", green: "Green", teal: "Teal", cyan: "Cyan", blue: "Blue", violet: "Violet", pink: "Pink"};
+// Os quatro cantos do `anchor`: o código e o desenho saem desta lista.
+const CANTOS = [
+  {anchor: "top-start", count: 2, rotulo: "Alerts, 2 unread"},
+  {anchor: "top-end", count: 8, rotulo: "Notifications, 8 unread"},
+  {anchor: "bottom-start", count: 1, rotulo: "Reminders, 1 due"},
+  {anchor: "bottom-end", count: 5, rotulo: "Mentions, 5 new"},
+];
 
 export default {
   description:
@@ -110,6 +123,43 @@ export default {
           variant: "danger"}, h(Avatar, {name: "Beto Lima"})),
         h(Badge, {anchor: "top-end", count: 3, emphasis: "solid", variant: "danger"},
           sino("Messages, 3 unread"))),
+    },
+    eixo({
+      titulo: "Every tone",
+      descricao: "Six tones that carry meaning, four for the state of a job, and eight category colours that mark a "
+        + "group and say nothing about health. There is no yellow: it belongs to the brand. Pair the colour with a word.",
+      Comp: Badge, nome: "Badge", prop: "tone", valores: Object.keys(TONS), filho: (v) => TONS[v],
+    }),
+    eixo({
+      titulo: "Four sizes",
+      descricao: "`xs` is 16 high and borderless: the counter that rides on an icon, the one BottomNav asks for. "
+        + "`md` is the default.",
+      Comp: Badge, nome: "Badge", prop: "size", valores: ["xs", "sm", "md", "lg"],
+      base: {tone: "primary", emphasis: "solid"},
+      filho: (v) => ({xs: "3", sm: "Small", md: "Medium", lg: "Large"})[v],
+    }),
+    {
+      title: "anchor — all four corners",
+      description: "The counter hangs off any corner of the thing it decorates. Each count lives in the accessible "
+        + "name of the button; the badge stays hidden from screen readers.",
+      code: CANTOS.map(({anchor, count, rotulo}) =>
+        `<Badge anchor="${anchor}" count={${count}} emphasis="solid" tone="danger">\n`
+        + `  <IconButton icon="bell" label="${rotulo}" />\n</Badge>`).join("\n"),
+      render: () => h("div", {style: {...row, gap: "var(--space-6)"}},
+        ...CANTOS.map(({anchor, count, rotulo}) =>
+          h(Badge, {key: anchor, anchor, count, emphasis: "solid", tone: "danger"}, sino(rotulo)))),
+    },
+    {
+      title: "fit — as wide as the text",
+      description: "Inside a column a badge follows the column's width. `fit=\"content\"` keeps it as wide as its "
+        + "text and leaves the row alone.",
+      code: `<Stack>
+  <Badge tone="info">Follows the column</Badge>
+  <Badge tone="info" fit="content">As wide as its text</Badge>
+</Stack>`,
+      render: () => h("div", {style: {width: "min(18rem,100%)"}}, h(Stack, null,
+        h(Badge, {tone: "info"}, "Follows the column"),
+        h(Badge, {tone: "info", fit: "content"}, "As wide as its text"))),
     },
   ],
 };

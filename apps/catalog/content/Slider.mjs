@@ -21,6 +21,10 @@ function Canais({canais, inicio, espaco}) {
       h(ColorSwatch, {color: cor, label: "The colour"}), h("code", null, cor)));
 }
 
+// Um `colorSpace` só para todas as trilhas (o catálogo fiel, 23/10/2026): as três do RGB e o matiz, que lê `rgb` como
+// `hsb` — o que a ficha promete. O código e o desenho saem desta lista.
+const RGB_E_MATIZ = [["hue", "Hue"], ["red", "Red"], ["green", "Green"], ["blue", "Blue"]];
+
 export default {
   description:
     "Slider picks a number by dragging a thumb along a track: label and value on top, the track with " +
@@ -138,6 +142,18 @@ export default {
       description: "Unavailable, not hidden.",
       code: '<Slider label="Brightness" defaultValue={70} disabled />',
       render: () => h("div", {style: col}, h(Slider, {label: "Brightness", defaultValue: 70, disabled: true})),
+    },
+    {
+      title: "One colour space for a whole picker",
+      description: "colorSpace=\"rgb\" on every track of a picker: red, green and blue are RGB channels already, and "
+        + "beside them a hue track reads rgb as hsb. So one value serves every track, and the picker passes it once.",
+      code: `const [colour, setColour] = useState("rgb(4, 133, 247)");
+
+${RGB_E_MATIZ.map(([canal, nome]) =>
+  `<Slider label="${nome}" channel="${canal}" colorSpace="rgb" value={colour} onValueChange={setColour} />`).join("\n")}
+<ColorSwatch color={colour} label="The colour" />`,
+      embed: true,
+      render: () => h(Canais, {inicio: "rgb(4, 133, 247)", espaco: "rgb", canais: RGB_E_MATIZ}),
     },
   ],
 };

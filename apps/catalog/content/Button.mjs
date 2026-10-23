@@ -191,5 +191,31 @@ export default {
       render: () => h("div", {style: {width: "min(320px,100%)"}},
         h(Button, {variant: "primary", fullWidth: true}, "Continue")),
     },
+    {
+      title: "Brand hierarchy",
+      description: "The brand tone in three weights, like the destructive one: the fill for the main action, the "
+        + "outline and the ghost for brand actions that should not compete with it.",
+      code: [
+        '<Button variant="primary">Upgrade</Button>',
+        '<Button variant="primary-outline">Compare plans</Button>',
+        '<Button variant="primary-ghost">See pricing</Button>',
+      ].join("\n"),
+      render: () => h("div", {style: row},
+        h(Button, {variant: "primary"}, "Upgrade"),
+        h(Button, {variant: "primary-outline"}, "Compare plans"),
+        h(Button, {variant: "primary-ghost"}, "See pricing")),
+    },
+    {
+      title: "Navigation item",
+      description: "nav is an appearance of its own, not a tone: a navigation item, muted at rest. variant=\"nav\" "
+        + "is the shortcut for appearance=\"nav\" with the neutral tone, so the two below draw the same.",
+      code: [
+        '<Button variant="nav">Overview</Button>',
+        '<Button appearance="nav">Reports</Button>',
+      ].join("\n"),
+      render: () => h("div", {style: row},
+        h(Button, {variant: "nav"}, "Overview"),
+        h(Button, {appearance: "nav"}, "Reports")),
+    },
   ],
 };

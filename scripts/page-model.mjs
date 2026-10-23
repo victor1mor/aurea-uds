@@ -85,7 +85,9 @@ export const AREA_PAGES = ["index.html", "components.html", "getting-started.htm
   // `hooks.html` (16/08/2026) entra como ÍNDICE e não como item, pela mesma razão do `tokens.html`:
   // o núcleo do modelo é preview + código, e hook não tem prévia estática. `useToast` só existe
   // depois de um clique — a página traz assinatura, exemplo e limites, que é o que dá para ler.
-  "hooks.html"];
+  "hooks.html",
+  // A saúde (o 1-F, bloco 1 — 23/10/2026): os números da biblioteca, medidos — página de leitura, não item.
+  "saude.html"];
 // As páginas da área Getting Started (lote U, SITE-03): texto, como as da documentação da referência — não são item
 // (não têm preview e código obrigatórios). A primeira é o `getting-started.html`, que já está na lista acima.
 // E as notas de versão da área Releases (lote U, 19/10/2026), uma página por versão: texto também, com o mesmo leitor.

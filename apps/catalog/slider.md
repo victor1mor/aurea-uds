@@ -131,6 +131,20 @@ Unavailable, not hidden.
 <Slider label="Brightness" defaultValue={70} disabled />
 ```
 
+### One colour space for a whole picker
+
+colorSpace="rgb" on every track of a picker: red, green and blue are RGB channels already, and beside them a hue track reads rgb as hsb. So one value serves every track, and the picker passes it once.
+
+```tsx
+const [colour, setColour] = useState("rgb(4, 133, 247)");
+
+<Slider label="Hue" channel="hue" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<Slider label="Red" channel="red" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<Slider label="Green" channel="green" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<Slider label="Blue" channel="blue" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<ColorSwatch color={colour} label="The colour" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

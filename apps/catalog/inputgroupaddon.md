@@ -13,6 +13,19 @@ import {InputGroupAddon} from "@aurea-uds/react";
 <InputGroupAddon side="end" layout="inline">.00</InputGroupAddon>
 ```
 
+## Examples
+
+### On its own line
+
+layout="block" puts the addon on its own line above the control instead of beside it.
+
+```tsx
+<InputGroup>
+  <InputGroupAddon side="start" layout="block">Search the reports</InputGroupAddon>
+  <Input placeholder="Search" aria-label="Search the reports" />
+</InputGroup>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

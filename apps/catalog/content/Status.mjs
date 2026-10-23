@@ -1,7 +1,11 @@
 import {createElement as h} from "react";
 import {Status, Badge} from "../../../packages/react/dist/index.js";
+import {eixo} from "./_eixos.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-5)"};
+// Os nomes de sentido da ficha, com o rótulo que cada um diria numa tela de operação.
+const SENTIDO = {neutral: "Draft", running: "Running", success: "Healthy", warning: "Slow", danger: "Down",
+  info: "Scheduled"};
 
 export default {
   description:
@@ -34,5 +38,19 @@ export default {
       render: () => h("div", {style: row},
         h(Status, {variant: "online"}, "Deployed"), h(Badge, {variant: "success"}, "v1.7.0")),
     },
+    eixo({
+      titulo: "Semantic names",
+      descricao: "The same dots in the vocabulary of a job or a service: running, success, warning, danger and info. "
+        + "Neutral is the default. The label still says what the colour means.",
+      Comp: Status, nome: "Status", prop: "variant", valores: Object.keys(SENTIDO), filho: (v) => SENTIDO[v],
+    }),
+    eixo({
+      titulo: "Universal states",
+      descricao: "state is the condition, an axis apart from the colour. With no children the label comes from the "
+        + "shared string table, so the same condition reads the same on every screen; with no variant the dot follows "
+        + "the severity — waiting is info, the rest is warning, and offline keeps its hollow dot.",
+      Comp: Status, nome: "Status", prop: "state",
+      valores: ["waiting_user", "waiting_approval", "waiting_dependency", "offline", "stale", "partial", "degraded"],
+    }),
   ],
 };

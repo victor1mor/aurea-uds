@@ -34,6 +34,19 @@ The tone says how it is going; without a value, it spins.
 <ProgressCircle label="Loading" />
 ```
 
+### Every tone
+
+The same closed list as Progress. Brand is the default; paused is neutral, failed is danger, and info is for work that is neither good nor bad news.
+
+```tsx
+<ProgressCircle label="Publishing" value={60} />
+<ProgressCircle label="Paused" value={40} tone="neutral" />
+<ProgressCircle label="Backup" value={100} tone="success" />
+<ProgressCircle label="Storage" value={92} tone="warning" />
+<ProgressCircle label="Failed upload" value={30} tone="danger" />
+<ProgressCircle label="Sync" value={50} tone="info" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

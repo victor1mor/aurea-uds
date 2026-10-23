@@ -43,6 +43,16 @@ The default has the neutral fill; ghost has none, for a quiet row. Pressed looks
 <Toggle variant="ghost" icon="text-italic" label="Italic" />
 ```
 
+### Sizes
+
+The button scale — sm, md and lg — so a toggle sits level with the controls beside it. md is the default.
+
+```tsx
+<Toggle size="sm">Small</Toggle>
+<Toggle size="md">Medium</Toggle>
+<Toggle size="lg">Large</Toggle>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -17,6 +17,64 @@ import {Text} from "@aurea-uds/react";
 <Text numeric>$ 41,118.00</Text>
 ```
 
+## Examples
+
+### Roles
+
+The closed list of roles. A role is a size, a weight and a line height together — there is no size between h3 and h4.
+
+```tsx
+<Text type="h1">Role h1</Text>
+<Text type="h2">Role h2</Text>
+<Text type="h3">Role h3</Text>
+<Text type="h4">Role h4</Text>
+<Text type="h5">Role h5</Text>
+<Text type="h6">Role h6</Text>
+<Text type="body">Role body</Text>
+<Text type="body-sm">Role body-sm</Text>
+<Text type="body-xs">Role body-xs</Text>
+<Text type="code">Role code</Text>
+```
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Text weight="normal">Weight normal</Text>
+<Text weight="medium">Weight medium</Text>
+<Text weight="semibold">Weight semibold</Text>
+<Text weight="bold">Weight bold</Text>
+<Text weight="extrabold">Weight extrabold</Text>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Text tone="default">Tone default</Text>
+<Text tone="muted">Tone muted</Text>
+<Text tone="subtle">Tone subtle</Text>
+<Text tone="primary">Tone primary</Text>
+<Text tone="link">Tone link</Text>
+<Text tone="info">Tone info</Text>
+<Text tone="success">Tone success</Text>
+<Text tone="warning">Tone warning</Text>
+<Text tone="danger">Tone danger</Text>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Text align="start">Aligned to start</Text>
+<Text align="center">Aligned to center</Text>
+<Text align="end">Aligned to end</Text>
+<Text align="justify">Aligned to justify</Text>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -63,6 +63,19 @@ const [colour, setColour] = useState("#0485f7");
 <ColorSwatch color={colour} label="Accent" />
 ```
 
+### Every channel on each axis
+
+Two areas per colour space, so each channel shows up across and up. In each area the channel left out is the one that stays fixed.
+
+```tsx
+<ColorArea colorSpace="hsb" xChannel="saturation" yChannel="brightness" defaultValue="#0485f7" aria-label="HSB, saturation and brightness" />
+<ColorArea colorSpace="hsb" xChannel="brightness" yChannel="hue" defaultValue="#0485f7" aria-label="HSB, brightness and hue" />
+<ColorArea colorSpace="hsl" xChannel="saturation" yChannel="lightness" defaultValue="#16a34a" aria-label="HSL, saturation and lightness" />
+<ColorArea colorSpace="hsl" xChannel="lightness" yChannel="hue" defaultValue="#16a34a" aria-label="HSL, lightness and hue" />
+<ColorArea colorSpace="rgb" xChannel="green" yChannel="red" defaultValue="#e11d48" aria-label="RGB, green and red" />
+<ColorArea colorSpace="rgb" xChannel="blue" yChannel="green" defaultValue="#e11d48" aria-label="RGB, blue and green" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

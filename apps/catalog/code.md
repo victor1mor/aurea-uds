@@ -12,6 +12,47 @@ import {Code} from "@aurea-uds/react";
 <Paragraph>Run <Code>pnpm build</Code> before you publish.</Paragraph>
 ```
 
+## Examples
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Code weight="normal">weight-normal</Code>
+<Code weight="medium">weight-medium</Code>
+<Code weight="semibold">weight-semibold</Code>
+<Code weight="bold">weight-bold</Code>
+<Code weight="extrabold">weight-extrabold</Code>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Code tone="default">tone-default</Code>
+<Code tone="muted">tone-muted</Code>
+<Code tone="subtle">tone-subtle</Code>
+<Code tone="primary">tone-primary</Code>
+<Code tone="link">tone-link</Code>
+<Code tone="info">tone-info</Code>
+<Code tone="success">tone-success</Code>
+<Code tone="warning">tone-warning</Code>
+<Code tone="danger">tone-danger</Code>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Code align="start">align-start</Code>
+<Code align="center">align-center</Code>
+<Code align="end">align-end</Code>
+<Code align="justify">align-justify</Code>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

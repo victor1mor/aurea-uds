@@ -136,6 +136,30 @@ children still works and is not legacy: when the list comes from a router or a C
 </Sidebar>
 ```
 
+### Plain — no box
+
+No background, no line, no shadow: the items sit loose on the page, in the floating sidebar's place and height. It is the "On this page" column of a documentation site.
+
+```tsx
+<Sidebar variant="plain" label="Components" current="button" items={items} />
+```
+
+### On the right
+
+placement="right" puts the sidebar on the other side of the screen, with the content before it. It is the AppShell's aside column.
+
+```tsx
+<Sidebar placement="right" label="Components" current="button" items={items} />
+```
+
+### Scrollbar always on
+
+By default the scrollbar is light and hidden at rest, and comes back with the pointer, with focus inside, and always on a touch screen. scrollbar="visible" keeps it on screen all the time.
+
+```tsx
+<Sidebar scrollbar="visible" label="Components" current="button" items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

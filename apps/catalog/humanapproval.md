@@ -18,6 +18,27 @@ import {HumanApproval} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Risk
+
+How much the action can break. The word goes on the card; the colour only repeats it.
+
+```tsx
+<HumanApproval title="Send the weekly report" risk="low" />
+<HumanApproval title="Send the weekly report" risk="medium" />
+<HumanApproval title="Send the weekly report" risk="high" />
+```
+
+### Decided
+
+Once decided, the pair of buttons becomes the result instead of disappearing, so the trace of the choice stays.
+
+```tsx
+<HumanApproval title="Send the weekly report" risk="low" decision="approved" />
+<HumanApproval title="Send the weekly report" risk="low" decision="denied" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -12,6 +12,18 @@ import {KPI} from "@aurea-uds/react";
 <KPI label="Revenue" value="$48.2k" trend="+12% vs last month" />
 ```
 
+## Examples
+
+### Tones
+
+What the change means, apart from its direction: a cost going up is bad news, so the tone is set by you, not guessed.
+
+```tsx
+<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="neutral" />
+<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="success" />
+<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="danger" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

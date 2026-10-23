@@ -23,6 +23,32 @@ import {ConfirmDialog} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Placement
+
+The same four places as Dialog: auto (bottom on a phone, centre from 640 up), bottom, center and top.
+
+```tsx
+<ConfirmDialog open={open} title="Placement auto" placement="auto" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement bottom" placement="bottom" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement center" placement="center" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement top" placement="top" onConfirm={confirm} onCancel={close} />
+```
+
+### Icon tones
+
+The colour of the circle behind the icon. destructive picks danger on its own.
+
+```tsx
+<ConfirmDialog open={open} title="Icon tone neutral" icon="info" iconTone="neutral" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone brand" icon="info" iconTone="brand" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone info" icon="info" iconTone="info" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone success" icon="info" iconTone="success" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone warning" icon="info" iconTone="warning" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone danger" icon="info" iconTone="danger" onConfirm={confirm} onCancel={close} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

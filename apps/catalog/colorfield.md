@@ -143,6 +143,33 @@ name sends the colour as hex.
 </form>
 ```
 
+### HSL channels
+
+colorSpace="hsl" makes hue and saturation the HSL ones, beside lightness. Three fields share one colour.
+
+```tsx
+const [colour, setColour] = useState("hsl(200, 80%, 50%)");
+
+<Field label="Hue"><ColorField channel="hue" colorSpace="hsl" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Saturation"><ColorField channel="saturation" colorSpace="hsl" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Lightness"><ColorField channel="lightness" colorSpace="hsl" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<ColorSwatch color={colour} label="The HSL colour" />
+```
+
+### RGB channels and alpha
+
+Red, green and blue from 0 to 255, and alpha. They are RGB channels with or without colorSpace="rgb"; the prop only changes hue and saturation, so one value can go to every field of a picker.
+
+```tsx
+const [colour, setColour] = useState("rgba(240, 194, 0, 0.8)");
+
+<Field label="Red"><ColorField channel="red" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Green"><ColorField channel="green" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Blue"><ColorField channel="blue" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Alpha"><ColorField channel="alpha" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<ColorSwatch color={colour} label="The RGB colour" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -18,6 +18,14 @@ import {AutomationCard} from "@aurea-uds/react";
   lastRun="yesterday, 02:00"
   lastResult="success"
 />
+<AutomationCard
+  name="Purge stale drafts"
+  trigger="On draft older than 30 days"
+  action="Move it to the archive"
+  onToggle={setEnabled}
+  lastRun="6 days ago"
+  lastResult="failure"
+/>
 ```
 
 ## API Reference
