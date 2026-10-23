@@ -18,7 +18,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Hooks públicos com ficha | 9 |
 | Maturidade declarada nas fichas | Deprecated 1 · Ready 48 · Stable 98 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 983 |
+| Classes declaradas no CSS do core | 987 |
 
 ## Tokens
 
@@ -34,12 +34,12 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Tipo de página | Quantidade |
 |---|---|
 | Componente | 147 |
-| Pattern | 224 |
+| Pattern | 226 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 77 |
+| Documentação | 78 |
 | Índice de área | 9 |
-| **Total** | **495** |
+| **Total** | **498** |
 
 ## Cobertura das fichas
 
@@ -70,9 +70,9 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 2155 |
+| Chamadas de `test()` nos testes unitários | 2161 |
 | Componentes citados nos testes unitários | 145 de 138 |
-| Specs de navegador (Playwright) | 60 |
+| Specs de navegador (Playwright) | 61 |
 | Baselines de screenshot no repositório | 48 |
 | Baselines `-linux.png` (o que a CI compara) | 24 |
 

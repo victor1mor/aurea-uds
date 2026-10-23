@@ -1755,6 +1755,33 @@ img,svg { display:block; }
 @media (max-width:1023px) {
   .sidebar-toggle-slot { display:none; }
   .app-shell-collapsible > .sidebar, .app-shell-collapsible > .content { grid-column:auto; grid-row:auto; } }
+/* A LATERAL ATÉ O TOPO (MNT-34, `AppShell layout="sidebar"`, 23/10/2026) — o pedido do app de rede (*"sidebar de canto e
+   que vá até o topo"*) e o PV-04 de um segundo app, na bancada aprovada pelo Victor (*"mantenha o atual e faça também os
+   outros 4"*). A marca mora no topo da lateral (o `header` da `Sidebar`, 4-C); a barra de cima só existe se o app passar
+   `topbar`, e fica só em cima do conteúdo (a coluna 2), como no sistema que serviu de modelo. Uma linha só na grade. */
+.app-shell-lateral { grid-template-rows:none; }
+.app-shell-lateral > .app-shell-column { grid-column:2; grid-row:1; min-width:0; display:flex; flex-direction:column; }
+.app-shell-lateral > .app-shell-column > .content { flex:1; }
+.app-shell-lateral.app-shell-collapsible > .sidebar { grid-row:1; }
+/* A lateral começa no topo da janela: a flutuante com a margem dela, a de canto encostada. Só na tela larga — abaixo de
+   1024 ela é gaveta, com a altura e a margem da gaveta. */
+@media (min-width:1024px) {
+  .app-shell-lateral > .sidebar { top:var(--space-4); height:calc(100vh - var(--space-4) * 2); max-height:none; }
+  .app-shell-lateral > .sidebar-flush { top:0; height:100vh; }
+}
+/* O respiro: a de canto não tem margem, e o conteúdo encostava nela (o MNT-34 mediu no app). */
+.app-shell-lateral:has(> .sidebar-flush) > .app-shell-column > .content { margin-inline-start:var(--space-4); }
+/* O botão de recolher é o das quinze laterais aprovadas (`AppShell.SidebarToggle`): o botão de ícone sem fundo, a 12 do
+   título — na barra do conteúdo, o primeiro dela. A bolinha da junção (ADR-0056) fica só no arranjo de sempre. Abaixo de
+   1024 ele some: a lateral é gaveta, e quem abre é o botão da gaveta. */
+.app-shell-lateral > .app-shell-column > .topbar { gap:var(--space-3); justify-content:flex-start; }
+@media (max-width:1023px) { .btn.sidebar-collapse-trigger { display:none; } }
+/* Sem barra, abaixo de 1024, uma faixa com o botão da gaveta e a marca (a altura da barra pequena, 56). */
+.app-shell-narrow-bar { display:none; }
+@media (max-width:1023px) {
+  .app-shell-lateral > .app-shell-column { grid-column:1; }
+  .app-shell-narrow-bar { display:flex; align-items:center; gap:var(--space-3); min-height:calc(var(--space-12) + var(--space-2)); padding-inline:var(--space-4); }
+}
 
 /* ── Navegação inferior — o vocabulário de APLICATIVO ───────────────────────────────
    Lacuna estrutural medida no `CONSUMIDOR-1.md` §4.1: `.topbar` e `.sidebar` são

@@ -19,7 +19,7 @@
     {
       "name": "brand",
       "type": "ReactNode",
-      "description": "Logotype and product name. Lives in the topbar, beside the navigation toggle."
+      "description": "Logotype and product name. Lives in the topbar, beside the navigation toggle. With layout=\"sidebar\" it lives at the top of the sidebar instead (a Sidebar.Brand fits there)."
     },
     {
       "name": "navigation",
@@ -65,6 +65,18 @@
       "description": "The left sidebar's scrollbar, forwarded to it: hover (light, shown with the pointer over it, with focus inside and on touch screens) or visible (always on screen)."
     },
     {
+      "name": "sidebarFooter",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The fixed bottom of the sidebar (Sidebar footer): the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav). Only the list in the middle scrolls. Works in every layout."
+    },
+    {
+      "name": "AppShell.SidebarToggle",
+      "type": "component",
+      "default": "—",
+      "description": "The collapse button of layout=\"sidebar\": the bare icon button with the sidebar glyph, placed 12 from the page title. With a topbar the shell puts it first in the bar; without one, place it beside your own title. It renders nothing without sidebarCollapsible, and hides below 1024, where the drawer button opens the sidebar."
+    },
+    {
       "name": "sidebarCollapsed",
       "type": "boolean",
       "default": "false",
@@ -101,9 +113,9 @@
     },
     {
       "name": "layout",
-      "type": "\"app\" | \"docs\"",
+      "type": "\"app\" | \"docs\" | \"sidebar\"",
       "default": "\"app\"",
-      "description": "The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. From 768 up the sidebar is a column; below, it is a drawer that opens from the end of the bar, where its button goes (after the bar's actions). Below 1280 the table of contents is a sticky bar under the top bar, 40 high, with the name of the section in view; it opens the list as a drawer. On a phone the text keeps 24 from the edge and 32 below that bar."
+      "description": "The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. From 768 up the sidebar is a column; below, it is a drawer that opens from the end of the bar, where its button goes (after the bar's actions). Below 1280 the table of contents is a sticky bar under the top bar, 40 high, with the name of the section in view; it opens the list as a drawer. On a phone the text keeps 24 from the edge and 32 below that bar. \"sidebar\": the sidebar runs from the top of the window to the bottom, with the brand at its top (the sidebar header); the topbar exists only when you pass `topbar`, and then it sits over the content column alone. With sidebarVariant, floating or flush. The collapse button is AppShell.SidebarToggle, beside the page title."
     },
     {
       "name": "topbarTabs",
@@ -178,7 +190,8 @@
       "caret-left",
       "caret-right",
       "list",
-      "list-bullets"
+      "list-bullets",
+      "sidebar-simple"
     ]
   },
   "related": {
@@ -218,7 +231,8 @@
     ],
     "layout": [
       "app",
-      "docs"
+      "docs",
+      "sidebar"
     ]
   }
 }

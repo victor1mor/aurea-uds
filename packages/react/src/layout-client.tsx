@@ -2,14 +2,14 @@
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import {useEffect, useRef, useState, useSyncExternalStore, type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
+import React, {useEffect, useRef, useState, useSyncExternalStore, type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
 import {Separator as BaseSeparator} from "@base-ui/react/separator";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {cx, useAureaStrings} from "./internal.js";
 import {type Orientation, type Responsive} from "./pure.js";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {ESCALA} from "./escala.js";
-import {IconButton} from "./actions.js";
+import {IconButton, type IconButtonProps} from "./actions.js";
 import {Tooltip} from "./overlays.js";
 import {Icon} from "./system.js";
 import {Sidebar, Header, type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarItem} from "./navigation.js";
@@ -146,11 +146,27 @@ function useLargura(query:string){
     ()=>typeof window!=="undefined"&&typeof window.matchMedia==="function"&&window.matchMedia(query).matches,
     ()=>false);
 }
-export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,layout="app",sidebarVariant,sidebarScrollbar,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+// O BOTÃO DE RECOLHER AO LADO DO TÍTULO (MNT-34, 0.42.0) — o desenho das quinze laterais que o Victor aprovou (o botão
+// de ícone, sem fundo, com o desenho de lateral, a 12 do título da página; *"quero o botão de recolher conforme eu tinha
+// aprovado"*). No `layout="sidebar"` ele substitui a bolinha da junção: com a barra no conteúdo, o shell o põe no começo
+// dela; sem barra, o app o põe ao lado do próprio título (`AppShell.SidebarToggle`). Abaixo de 1024 ele some — ali a
+// lateral é gaveta, e quem abre é o botão da gaveta.
+const ShellToggleContext=React.createContext<{alternar:()=>void;efetiva:boolean;rotulo:string}|null>(null);
+function AppShellSidebarToggle({className,...props}:Omit<IconButtonProps,"icon"|"label"|"onClick">){
+  const c=React.useContext(ShellToggleContext);
+  if(!c)return null;
+  return <IconButton className={cx("sidebar-collapse-trigger",className)} icon="sidebar-simple" label={c.rotulo} aria-expanded={!c.efetiva} aria-controls={SHELL_NAV_ID} onClick={c.alternar} {...props}/>;
+}
+export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,layout="app",sidebarVariant,sidebarScrollbar,sidebarFooter,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
   /** O arranjo (lote T, 17/10/2026): `"app"` (o padrão, o de sempre) ou `"docs"`, o da documentação da referência — um
    *  bloco CENTRALIZADO de 1400 com a lateral de 220, o texto e o índice de 268 (de 1280 para cima), a barra de cima de 56
-   *  com a linha das áreas (`topbarTabs`) embaixo. A lateral fica onde a variante dela mandar (`plain`: sem caixa). */
-  layout?:"app"|"docs";
+   *  com a linha das áreas (`topbarTabs`) embaixo. A lateral fica onde a variante dela mandar (`plain`: sem caixa).
+   *  `"sidebar"` (MNT-34, 0.42.0): a lateral até o topo, com a marca (`brand`) no topo dela; a barra de cima só existe se o
+   *  app passar `topbar`, e fica só em cima do conteúdo. Com `sidebarVariant` (flutuante ou de canto), as quatro formas da
+   *  bancada; sem `layout`, a de sempre. */
+  layout?:"app"|"docs"|"sidebar";
+  /** O pé fixo da lateral (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`). Só o meio rola. */
+  sidebarFooter?:ReactNode;
   /** A segunda linha da barra de cima: as áreas do site, com ícone (o `tabs` do `Header`). */
   topbarTabs?:HeaderTab[];
   /** O `id` da área atual da segunda linha. */
@@ -177,7 +193,7 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   defaultSidebarCollapsed?:boolean;
   /** AN-01: avisa cada troca — pelo botão, ou pela largura cruzando 1280. Guardar a preferência é do app. */
   onSidebarCollapsedChange?:(collapsed:boolean)=>void;
-  contentVariant?:"surface"|"plain"}){const s=useAureaStrings();const docs=layout==="docs";useGavetaFechaNoDesktop(docs);
+  contentVariant?:"surface"|"plain"}){const s=useAureaStrings();const docs=layout==="docs",lateral=layout==="sidebar";useGavetaFechaNoDesktop(docs);
   const controlado=sidebarCollapsed!==undefined;
   // `null` = ninguém escolheu, e vale a largura.
   const [escolha,setEscolha]=useState<boolean|null>(defaultSidebarCollapsed??null);
@@ -211,14 +227,19 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
   // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
   const botaoDaGaveta=<IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID} {...(docs?{size:"sm" as const}:{})}/>;
-  return <div className={cx("app-shell",layout==="docs"&&"app-shell-docs",topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
+  return <div className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
     É requisito de acessibilidade, não enfeite (WCAG 2.4.1, "pular blocos"): sem ele, quem navega
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a><Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} {...(docs?{maxWidth:"docs" as const,size:"sm" as const}:{})} brand={docs?brand:<>{botaoDaGaveta}{brand}</>}>{topbar}{docs&&botaoDaGaveta}</Header>{sidebarCollapsible&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta}>{navigation}</Sidebar>{docs&&aside!=null&&<div className="docs-toc-bar"><button type="button" className="docs-toc-toggle" popoverTarget={SHELL_TOC_ID}><Icon name="list-bullets"/><span className="docs-toc-current" data-toc-current="">{asideLabel??s.tocLabel}</span><Icon name="caret-down"/></button></div>}<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>{aside!=null&&<Sidebar placement="right" variant={asideVariant??sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel} {...(docs?{id:SHELL_TOC_ID,popover:"auto" as const,onToggle:focoDaGaveta}:{})}>{aside}</Sidebar>}</div>}
+<ShellToggleContext.Provider value={sidebarCollapsible?{alternar,efetiva,rotulo}:null}><a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a>{!lateral&&<Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} {...(docs?{maxWidth:"docs" as const,size:"sm" as const}:{})} brand={docs?brand:<>{botaoDaGaveta}{brand}</>}>{topbar}{docs&&botaoDaGaveta}</Header>}{sidebarCollapsible&&!lateral&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta} header={lateral?brand:undefined} footer={sidebarFooter}>{navigation}</Sidebar>{docs&&aside!=null&&<div className="docs-toc-bar"><button type="button" className="docs-toc-toggle" popoverTarget={SHELL_TOC_ID}><Icon name="list-bullets"/><span className="docs-toc-current" data-toc-current="">{asideLabel??s.tocLabel}</span><Icon name="caret-down"/></button></div>}{lateral
+?<div className="app-shell-column">{topbar!=null
+  ?<Header variant="flush" size="sm" divider={topbarDivider} brand={<>{botaoDaGaveta}<AppShellSidebarToggle/></>}>{topbar}</Header>
+  :<div className="app-shell-narrow-bar">{botaoDaGaveta}{brand}</div>}{<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>}</div>
+:<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>}{aside!=null&&<Sidebar placement="right" variant={asideVariant??sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel} {...(docs?{id:SHELL_TOC_ID,popover:"auto" as const,onToggle:focoDaGaveta}:{})}>{aside}</Sidebar>}</ShellToggleContext.Provider></div>}
+AppShell.SidebarToggle=AppShellSidebarToggle;
 
 // ── Separator ────────────────────────────────────────────────────────────────────────────────
 // A LINHA DO SISTEMA, e ela é de CLIENTE por necessidade, não por vizinhança.
