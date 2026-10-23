@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 9,
     "aliasesLiterais": 112,
-    "propsDistintas": 381
+    "propsDistintas": 383
   },
   "aliases": {
     "ButtonVariant": {
@@ -6937,7 +6937,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ value: string; label: ReactNode; }>",
+              "type": "Array<{ value: string; label: ReactNode; href?: string; }>",
               "values": null
             },
             {
@@ -6948,7 +6948,7 @@
             },
             {
               "name": "onChange",
-              "optional": false,
+              "optional": true,
               "type": "(v: string) => void",
               "values": null
             },
@@ -6963,6 +6963,15 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"sm\" | \"md\"",
+              "values": [
+                "sm",
+                "md"
+              ]
             }
           ]
         },
@@ -7403,6 +7412,12 @@
               "name": "topbarTabsLabel",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "topbarTabsEnd",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             },
             {
@@ -8367,6 +8382,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "tabsEnd",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             }
           ]
         },
@@ -9326,6 +9347,12 @@
               "name": "tabsLabel",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "tabsEnd",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             }
           ]

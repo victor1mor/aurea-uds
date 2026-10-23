@@ -680,6 +680,9 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
   currentTab?:string;
   /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
   tabsLabel?:string;
+  /** O que fica na PONTA da segunda linha, do lado oposto das áreas (bloco 1, o 5-A — 23/10/2026): a chave Web | Native
+   *  da documentação da referência. Some abaixo de 768, como lá. Sem `tabs`, não aparece. */
+  tabsEnd?:ReactNode;
 }
 /** Uma área da segunda linha do `Header`: o nome, o endereço e, se quiser, o ícone (o desenho que o app passa). */
 export interface HeaderTab{id:string;label:ReactNode;href?:string;icon?:ReactNode;render?:SidebarItem["render"]}
@@ -690,7 +693,7 @@ function linksDoHeader(items:SidebarItem[],current:string|undefined){
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }
-export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",size="md",blurred,menuActions,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",tabs,currentTab,tabsLabel="Sections",children,className,...props}:HeaderProps){
+export function Header({variant="floating",divider,brand,items,current,actions,maxWidth,itemsJustify="end",size="md",blurred,menuActions,navLabel="Main",menuLabel="Menu",menuId="aurea-header-menu",tabs,currentTab,tabsLabel="Sections",tabsEnd,children,className,...props}:HeaderProps){
   const site=!!items&&items.length>0,comAbas=!!tabs&&tabs.length>0;
   const miolo=<>
     {brand!=null&&<div className="brand">{brand}</div>}
@@ -702,11 +705,15 @@ export function Header({variant="floating",divider,brand,items,current,actions,m
       <nav id={menuId} popover="auto" className="topbar-menu-panel" aria-label={navLabel}>{linksDoHeader(items!,current)}
         {menuActions!=null&&<div className="topbar-menu-actions">{menuActions}</div>}</nav>
     </>}
-    {comAbas&&<nav className="topbar-tabs" aria-label={tabsLabel}>{tabs!.map(t=>{
-      const p={className:"topbar-tab","aria-current":t.id===currentTab?"page" as const:undefined,
-        children:<>{t.icon!=null&&<span className="topbar-tab-icon" aria-hidden="true">{t.icon}</span>}<span>{t.label}</span></>};
-      return <React.Fragment key={t.id}>{t.render?fundirRender(t.render,p,"a"):<a href={t.href} {...p}/>}</React.Fragment>;
-    })}</nav>}
+    {comAbas&&(()=>{
+      const abas=<nav className="topbar-tabs" aria-label={tabsLabel}>{tabs!.map(t=>{
+        const p={className:"topbar-tab","aria-current":t.id===currentTab?"page" as const:undefined,
+          children:<>{t.icon!=null&&<span className="topbar-tab-icon" aria-hidden="true">{t.icon}</span>}<span>{t.label}</span></>};
+        return <React.Fragment key={t.id}>{t.render?fundirRender(t.render,p,"a"):<a href={t.href} {...p}/>}</React.Fragment>;
+      })}</nav>;
+      // Sem o encaixe, a marcação de sempre; com ele, a linha das áreas e a ponta numa mesma faixa.
+      return tabsEnd==null?abas:<div className="topbar-tabs-row">{abas}<div className="topbar-tabs-end">{tabsEnd}</div></div>;
+    })()}
   </>;
   return <header className={cx("topbar",`topbar-${variant}`,divider&&variant==="flush"&&"topbar-divider",site&&"topbar-site",site&&itemsJustify==="start"&&"topbar-items-start",size==="sm"&&"topbar-sm",blurred&&variant==="flush"&&"topbar-blurred",maxWidth&&"topbar-contained",comAbas&&"topbar-with-tabs",className)} {...props}>
     {maxWidth?<div className={cx("container",maxWidth!=="xl"&&`container-${maxWidth}`,"topbar-inner")}>{miolo}</div>:miolo}

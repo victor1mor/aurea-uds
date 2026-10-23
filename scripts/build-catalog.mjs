@@ -202,6 +202,19 @@ if (semPreview.length) throw new Error(`sem preview nem starter (o modelo exige)
 const fiel = await medirCatalogo(root);
 if (fiel.erros.length) throw new Error(`o catálogo deixou de ser fiel — ${fiel.erros.join(" · ")}`);
 
+// ── O NATIVO NO SITE (bloco 1, o 5-A — 23/10/2026) ────────────────────────────────────────────────────────────────────
+// O Victor: "precisamos urgente separar web de nativo no site pra eu saber sempre o que tá mudando". Como a documentação
+// da referência: a chave Web | Native na ponta da linha das áreas troca o site, e cada peça do `@aurea-uds/native` tem a
+// sua página, com a peça RODANDO (o `react-native-web`, com o "pode" das 14:56) e a API lida dos tipos do pacote.
+// O desenho vem do `.nativo/ssr.mjs` (montado pelo Vite antes desta montagem: `vite.nativo-ssr.config.ts`).
+const nativo = await import(pathToFileURL(join(outDir, ".nativo/ssr.mjs")).href);
+const superficieNativa = JSON.parse(readFileSync(join(root, "packages/contracts/api-surface-native.json"), "utf8"));
+const pecasNativas = new Map(Object.entries(superficieNativa.modules)
+  .flatMap(([mod, m]) => m.components.map(c => [c.name, {...c, module: mod}])));
+const nativos = Object.keys(nativo.conteudo).sort((a, b) => a.localeCompare(b));
+for (const n of nativos) if (!pecasNativas.has(n)) throw new Error(`content/native/${n}.mjs: o pacote nativo não tem ${n}`);
+const paginaNativa = nome => `native-${slug(nome)}.html`;
+
 // BLOCKS: apps/catalog/content/blocks/*.mjs (default = lista). Seção/tela inteira montada
 // com componentes reais — maior que pattern, menor que uma tela de produto.
 // Carregado AQUI, e não depois das receitas como antes: o PRERENDER logo abaixo precisa da
@@ -892,6 +905,51 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
   return {node, toc};
 }
 
+// ── AS PÁGINAS DO NATIVO (bloco 1, o 5-A — 23/10/2026) ──────────────────────────────────────────────────────────────────
+// A caixa do nativo sai desenhada nos DOIS temas (o nativo resolve a cor em JavaScript, ADR-0027); o `native.css` mostra
+// a do tema da página. A parte viva (`live-nativo.js`) troca as duas por uma peça viva que segue o tema.
+const previaNativa = (nome, indice) => () => h("div", {className: "nativo-previa", "data-vivo-nativo": `${nome}:${indice}`,
+  dangerouslySetInnerHTML: {__html: ["light", "dark"].map(tema =>
+    `<div class="nativo-tema" data-nativo-tema="${tema}">${nativo.desenhar(nome, indice, tema).html}</div>`).join("")}});
+function nativePage(nome) {
+  const c = nativo.conteudo[nome];
+  const peca = pecasNativas.get(nome);
+  const ficha = fichas.find(f => f.name === nome);
+  const [principal, ...resto] = c.examples;
+  const descricaoDaWeb = Object.fromEntries((Array.isArray(ficha?.props) ? ficha.props : []).map(p => [p.name, p.description]));
+  const tipo = p => p.values ? p.values.map(v => `"${v}"`).join(" | ") : p.type;
+  const api = {id: "api", label: "API Reference", node: h("section", {className: "block", id: "api"}, h("h2", null, "API Reference"),
+    h("p", null, "Read from the types of the published package. Where the prop has the same name on the web, the "
+      + "description is the web's: the two packages share names on purpose."),
+    h(A.Table, {caption: `${nome} props`},
+      h("thead", null, h("tr", null, ...["Prop", "Type", "Description"].map(x => h("th", {key: x, scope: "col"}, x)))),
+      h("tbody", null, ...peca.props.map(p => h("tr", {key: p.name},
+        h("td", null, h("code", null, p.name + (p.optional ? "" : " *"))), h("td", null, h("code", null, tipo(p))),
+        h("td", null, descricaoDaWeb[p.name] || "—"))))))};
+  const exemplos = resto.length ? {id: "examples", label: "Examples",
+    toc: resto.map(ex => ({id: slug(ex.title), label: ex.title, sub: true})),
+    node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
+      ...resto.map((ex, n) => h("div", {className: "example", key: n, id: slug(ex.title)},
+        h("h3", null, ex.title), ex.description ? h("p", {className: "demo-lede"}, ex.description) : null,
+        demoBlock(previaNativa(nome, n + 1), ex.code))))} : null;
+  return itemPage({
+    title: nome, lede: c.description || ficha?.summary || "",
+    pills: [["Source", "code", `${REPO}/blob/main/packages/native/src/${peca.module}.tsx`]],
+    demo: {code: principal.code, description: principal.description, render: previaNativa(nome, 0)},
+    imports: c.install || `import {${nome}} from "@aurea-uds/native";`,
+    extras: [exemplos, api],
+    ...vizinhos("native", paginaNativa(nome)),
+  });
+}
+function nativeIndex() {
+  const node = h(Fragment, null,
+    cabecaDaPagina("All Components", "Every piece of @aurea-uds/native, the React Native package, running here through "
+      + "react-native-web — the same look as the web, in a phone's own components."),
+    h("div", {className: "related-grid"}, ...nativos.map(n => h("a", {key: n, className: "related-card", href: `./${paginaNativa(n)}`},
+      h("strong", null, n), h("span", null, fichas.find(f => f.name === n)?.summary || nativo.conteudo[n].description || "")))));
+  return {node, toc: []};
+}
+
 // ── A SAÚDE (`saude.html`, o 1-F — bloco 1, 23/10/2026) ─────────────────────────
 // Decisão do Victor (19/10/2026): uma página no site, feita com a Aurea, com letra grande, "OK"/"FAILED" em palavra, o
 // horário de Brasília e as 30 últimas rodadas — publicada MESMO quando a CI está vermelha. Os números do catálogo saem
@@ -1386,7 +1444,10 @@ const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All
 // Releases: "All Releases" e as versões, da mais nova à mais velha, como a da referência.
 const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
   {id: "releases", label: "Releases", items: releases.map(r => item(r.title, r.arquivo))}];
-const MENUS = {start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
+// O menu do nativo: as peças do `@aurea-uds/native` que o site mostra, em ordem alfabética, como o dos componentes.
+const menuNativo = () => [{id: "overview", label: "Overview", items: [item("All Components", "native.html")]},
+  {id: "native", label: "Components", items: nativos.map(n => item(n, paginaNativa(n)))}];
+const MENUS = {native: menuNativo, start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
 const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
@@ -1518,6 +1579,17 @@ function shell(activeHref, inner, section = "components") {
         h("a", {className: "section-footer-link", href: REPO, "aria-label": "GitHub"}, h(A.Icon, {name: GitHub}))))));
   }
   const menu = (MENUS[section] || menuComponentes)();
+  // A CHAVE WEB | NATIVE (bloco 1, o 5-A): a "Tabs em pílula" da referência, na ponta da linha das áreas (medida em
+  // 17/10/2026: abas de 24, letra 14, cápsula de 32). Ela leva à MESMA peça do outro lado quando existe; senão, à lista.
+  const nomeAqui = activeHref ? activeHref.replace(/^native-/, "").replace(/\.html$/, "") : null;
+  const daWeb = activeHref && section === "native" ? fichas.find(f => slug(f.name) === nomeAqui && f.platforms?.web && f.platforms.web !== "planned") : null;
+  const doNativo = activeHref && section !== "native" ? nativos.find(n => slug(n) === nomeAqui) : null;
+  const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "sm", value: section === "native" ? "native" : "web",
+    items: [
+      {value: "web", label: h(Fragment, null, h(A.Icon, {name: "globe"}), "Web"),
+        href: section === "native" ? (daWeb ? `./${slug(daWeb.name)}.html` : "./components.html") : `./${activeHref || "components.html"}`},
+      {value: "native", label: h(Fragment, null, h(A.Icon, {name: "device-mobile"}), "Native"),
+        href: section === "native" ? `./${activeHref}` : doNativo ? `./${paginaNativa(doNativo)}` : "./native.html"}]});
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
     // O ARRANJO DE DOCUMENTAÇÃO da referência (lote T, 17/10/2026 — o Victor: "quero sidebar como da referência, que
     // não seja mais flutuante", e o conteúdo centralizado): `layout="docs"` (o bloco de 1400 no centro) e a lateral
@@ -1526,8 +1598,11 @@ function shell(activeHref, inner, section = "components") {
     // (`topbarDivider`). Variantes do componente, e não regra do site (o Victor, 13/10/2026: "não edite componente
     // nosso, deve sempre criar novas variações").
     h(A.AppShell, {brand, topbar, topbarVariant: "flush", contentVariant: "plain", layout: "docs", sidebarVariant: "plain",
-      topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section,
-      topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${href}`, icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
+      topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section === "native" ? "components" : section,
+      topbarTabsEnd: chavePlataforma,
+      // No nativo, "Components" leva à lista do nativo: a chave troca o site, e as áreas acompanham.
+      topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`,
+        icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
       navItems: menu, currentNavId: activeHref || undefined, navLabel: "Contents", className: "site-shell",
       // A chave claro/escuro no alto da gaveta do celular, como a da referência (lote U, 19/10/2026): no topo ela não cabe.
       navigation: h("div", {className: "site-gaveta-topo"}, chaveDeTema()),
@@ -1987,7 +2062,9 @@ function pageHtml(title, activeHref, inner, section = "components") {
   // avisos com o mesmo nome: o `landmark-unique` do axe, medido). Se uma caixa é de componente com motor pesado
   // (`_starters-motores.mjs`), o `live-motores.js`, que é o mesmo com os motores. Um arquivo só por página.
   const vivas = [...corpo.matchAll(/data-vivo="([^":]+):/g)].map(m => m[1]);
-  const script = section === "home" ? "home"
+  // A página do nativo carrega a parte viva DELA (o `react-native-web` e as peças do nativo) e a folha delas.
+  const comNativo = corpo.includes("data-vivo-nativo");
+  const script = section === "home" ? "home" : comNativo ? "live-nativo"
     : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) ? "live-motores" : "live";
   return `<!doctype html>
 <html lang="en" data-theme="dark">
@@ -1995,7 +2072,7 @@ function pageHtml(title, activeHref, inner, section = "components") {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} — Aurea UDS</title>
-<link rel="stylesheet" href="./assets/catalog.css">
+<link rel="stylesheet" href="./assets/catalog.css">${comNativo ? '\n<link rel="stylesheet" href="./assets/native.css">' : ""}
 ${TEMA_SALVO}</head>
 <body>${SPRITE_SLOT}${corpo}<script src="./assets/catalog.js"></script>
 <script src="./assets/search-index.js" defer></script><script src="./assets/${script}.js" defer></script></body>
@@ -2011,6 +2088,8 @@ const paginas = [
   ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, docPage(d), "start")]),
   ["releases.html", pageHtml("All Releases", "releases.html", releasesPage(), "releases")],
   ["saude.html", pageHtml("Health", "saude.html", saudePage(), "releases")],
+  ["native.html", pageHtml("All Components", "native.html", nativeIndex(), "native")],
+  ...nativos.map(n => [paginaNativa(n), pageHtml(`${n} (React Native)`, paginaNativa(n), nativePage(n), "native")]),
   ...releases.map(r => [r.arquivo, pageHtml(`${r.title} release notes`, r.arquivo, releasePage(r), "releases")]),
   ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
   ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
@@ -2025,6 +2104,25 @@ const paginas = [
   ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i),
     f.kind === "hook" ? "hooks" : "components")]),
 ];
+
+// A FOLHA DO NATIVO (bloco 1, o 5-A): as regras das peças que o `react-native-web` gerou ao desenhar as páginas acima,
+// as fontes com o nome que o nativo pede (ver `apps/catalog/nativo/moldura.mjs`) e a troca dos dois desenhos pelo tema.
+// As fontes vão como ARQUIVO (`assets/fonts/`), não embutidas: o mesmo arquivo serve vários nomes e baixa uma vez — o
+// preço é que, aberto direto do disco, o navegador recusa fonte de arquivo e a caixa do nativo cai na fonte do sistema.
+{
+  mkdirSync(join(outDir, "assets/fonts"), {recursive: true});
+  const faces = nativo.FACES.map(f => `@font-face{font-family:"${f.nome}";src:url("./fonts/${f.arquivo}") format("woff2");`
+    + `font-weight:${f.peso};font-style:normal;font-display:swap}`);
+  for (const arquivo of new Set(nativo.FACES.map(f => f.arquivo)))
+    writeFileSync(join(outDir, "assets/fonts", arquivo), readFileSync(join(root, "packages/fonts/files", arquivo)));
+  write(join(outDir, "assets/native.css"), [
+    "/* GERADO por scripts/build-catalog.mjs — a folha das páginas do nativo (bloco 1, o 5-A). Não editar. */",
+    ...faces,
+    'html[data-theme="light"] [data-nativo-tema="dark"],html:not([data-theme="light"]) [data-nativo-tema="light"]{display:none}',
+    ".nativo-previa{display:contents}",
+    nativo.folha(),
+  ].join("\n") + "\n");
+}
 
 // OS LINKS das páginas de documentação apontam para páginas que EXISTEM (lote U, SITE-03). O texto é escrito à mão, e o
 // nome do arquivo de um componente não é o que se adivinha (`ThemeToggle` → `themetoggle.html`, sem hífen): um link

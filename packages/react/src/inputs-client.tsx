@@ -1111,9 +1111,14 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 // `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
 // linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É como o grupo
 // de botões alternáveis da referência ocupa a linha.
-export function SegmentedControl({items,value,onChange,label,fullWidth}:{items:Array<{value:string;label:ReactNode}>;value:string;onChange:(v:string)=>void;label?:string;fullWidth?:boolean}){
+// NAVEGAÇÃO (bloco 1, o 5-A — 23/10/2026): com `href` em TODOS os itens, a cápsula é um <nav> de links — o atual leva
+// `aria-current="page"` —, e não um grupo de escolha: ir para outra página é navegação, e o leitor de tela tem de ouvir
+// "link", não "opção". É a chave Web | Native do site. `size="sm"`: a cápsula baixa da referência (abas de 24).
+export function SegmentedControl({items,value,onChange,label,fullWidth,size="md"}:{items:Array<{value:string;label:ReactNode;href?:string}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"}){
 const s=useAureaStrings();
-return <BaseRadioGroup className={fullWidth?"segmented segmented-full":"segmented"} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange(String(v))}>
+const classe=cx("segmented",fullWidth&&"segmented-full",size==="sm"&&"segmented-sm");
+if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} aria-label={label??s.optionsLabel}>{items.map(i=><a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{i.label}</a>)}</nav>;
+return <BaseRadioGroup className={classe} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange?.(String(v))}>
 {items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} nativeButton render={<button type="button"/>}>{i.label}</BaseRadio.Root>)}
 </BaseRadioGroup>}
 

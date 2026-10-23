@@ -13,6 +13,10 @@
 // Rodar:  node scripts/build-api-surface.mjs   (ou `pnpm build`)
 // Escreve: packages/contracts/api-surface.json
 //
+// Com `--native`, o MESMO leitor lê o pacote do React Native (`packages/native/dist`) e escreve
+// `packages/contracts/api-surface-native.json` (bloco 1, o catálogo fiel — 23/10/2026): as páginas do nativo no site e a
+// trava das variações do nativo saem do compilador, como as da web.
+//
 // Não usa a API programática do TypeScript de propósito: ela não é estável até a 7.1
 // (CLAUDE.md, Toolchain). A emissão de declaração do tsc é regular o bastante para ser lida.
 
@@ -20,7 +24,9 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const DIST = path.join(ROOT, "packages/react/dist");
+const NATIVO = process.argv.includes("--native");
+const DIST = path.join(ROOT, NATIVO ? "packages/native/dist" : "packages/react/dist");
+const SAIDA = NATIVO ? "api-surface-native.json" : "api-surface.json";
 
 /** Fatia de `src` a partir de `i` (que aponta para o abre) até o fecha correspondente. */
 function balanced(src, i, open, close) {
@@ -319,6 +325,13 @@ for (const file of files) {
     let props = [];
     const bare = /^([A-Za-z_$][\w$]*)(?:<|$)/.exec(typeText)?.[1];
     if (bare && interfaces[bare]) { propsName = bare; props = resolveProps(bare); }
+    // O TIPO QUE É UNIÃO DE INTERFACES — `type CardProps = CardDaMarca | CardComum | CardTocavel` (o `Card` do nativo,
+    // bloco 1, 23/10/2026). O leitor só via interface e alias literal, e o `Card` saía com zero props. Os ramos se
+    // SOMAM, com a mesma regra da união dentro de um tipo (`somarRamos`).
+    else if (bare && aliases[bare]) {
+      const ramos = aliases[bare].raw.split("|").map((r) => /^\s*([A-Za-z_$][\w$]*)\s*$/.exec(r)?.[1]).filter((r) => r && interfaces[r]);
+      if (ramos.length) { propsName = bare; props = somarRamos(ramos.flatMap((r) => resolveProps(r))); }
+    }
     for (const piece of typeText.split("&")) {
       const n = /^\s*([A-Za-z_$][\w$]*)\s*$/.exec(piece)?.[1];
       if (n && interfaces[n] && n !== propsName) props.push(...resolveProps(n));
@@ -375,8 +388,8 @@ const out = {
 
 // Sem data no arquivo, de propósito: um carimbo de "gerado em" mudaria o conteúdo a cada
 // execução e a trava de árvore suja da CI acusaria diferença todo dia, sem defeito nenhum.
-fs.writeFileSync(path.join(ROOT, "packages/contracts/api-surface.json"),
+fs.writeFileSync(path.join(ROOT, "packages/contracts", SAIDA),
                  JSON.stringify(out, null, 2) + "\n");
 console.log(`build-api-surface: ${out.totals.componentes} componentes, ${out.totals.modulos} módulos, ` +
   `${out.totals.hooks} hooks, ${out.totals.propsDistintas} nomes de prop distintos ` +
-  `-> packages/contracts/api-surface.json`);
+  `-> packages/contracts/${SAIDA}`);

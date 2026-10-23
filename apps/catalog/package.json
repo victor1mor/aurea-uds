@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build:live": "vite build && vite build -c vite.motores.config.ts && vite build -c vite.search.config.ts && vite build -c vite.home.config.ts"
+    "build:live": "vite build && vite build -c vite.motores.config.ts && vite build -c vite.search.config.ts && vite build -c vite.home.config.ts && vite build -c vite.nativo.config.ts",
+    "build:nativo-ssr": "vite build -c vite.nativo-ssr.config.ts"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "6.0.3",
     "react": "19.2.7",
     "react-dom": "19.2.7",
+    "react-native-safe-area-context": "5.9.1",
+    "react-native-svg": "15.15.5",
+    "react-native-web": "0.21.4",
     "vite": "8.1.6"
   }
 }
