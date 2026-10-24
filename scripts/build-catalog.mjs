@@ -866,6 +866,15 @@ const pedacos = (lista, chave) => lista.map((p, n) => p.strong !== undefined ? h
   : p.link !== undefined ? h(A.Link, {key: `${chave}${n}`, href: p.href, external: /^https?:/.test(p.href)}, p.link)
   : p.t);
 
+// AS QUATRO ABAS DE INSTALAR (o 3-A, bloco 1 — 23/10/2026): um bloco de código que é UMA linha `pnpm add …` vira o mesmo
+// comando nos quatro gerenciadores, na ordem e na forma da referência (`npm i`, `pnpm add`, `yarn add`, `bun add`). `-D`
+// vale nos quatro.
+function comandosDePacote(codigo) {
+  const m = /^pnpm add (.+)$/.exec(codigo.trim());
+  if (!m || codigo.trim().includes("\n")) return null;
+  return [["npm", `npm i ${m[1]}`], ["pnpm", `pnpm add ${m[1]}`], ["yarn", `yarn add ${m[1]}`], ["bun", `bun add ${m[1]}`]]
+    .map(([label, code]) => ({label, code}));
+}
 // `area`: a lateral e o anterior/próximo (a Getting Started, ou a Releases para as notas de versão); `sobTitulo`: o que vem
 // logo abaixo da descrição (a data da nota); `markdown`: o texto do "Copy Markdown", quando não é o do arquivo puro.
 function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) {
@@ -884,6 +893,10 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     if (b.tipo === "h2" || b.tipo === "h3") filhos.push(h(b.tipo, {key: n, id: b.id}, ...pedacos(b.texto, "t")));
     else if (b.tipo === "p") filhos.push(h("p", {key: n}, ...pedacos(b.texto, "t")));
     else if (b.tipo === "ul" || b.tipo === "ol") filhos.push(h(b.tipo, {key: n}, ...b.itens.map((it, k) => h("li", {key: k}, ...pedacos(it, "t")))));
+    // O `pnpm add …` sozinho vira as quatro abas (npm primeiro, como a referência — o 3-A): o texto escreve um comando, e
+    // a página mostra o dos quatro gerenciadores.
+    else if (b.tipo === "codigo" && comandosDePacote(b.codigo)) filhos.push(h(A.CodeBlock, {key: n, language: "bash", copyable: true,
+      highlight: highlightCode, tabs: comandosDePacote(b.codigo)}));
     else if (b.tipo === "codigo") filhos.push(h(A.CodeBlock, {key: n, language: b.lingua, copyable: true, highlight: highlightCode,
       lineNumbers: b.codigo.split("\n").length >= LINHAS_PARA_NUMERO}, b.codigo));
     else if (b.tipo === "tabela") {

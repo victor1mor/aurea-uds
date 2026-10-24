@@ -1019,10 +1019,10 @@ export function Actions() {
   <Container>
     <Grid columns={12}>
       <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
-        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+        <Heading id="t-app" level={2}>A dark band</Heading>
       </Grid.Item>
       <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
-        <Button tone="brand">Baixar</Button>
+        <Button variant="primary-outline">Its own theme</Button>
       </Grid.Item>
     </Grid>
   </Container>
@@ -1611,8 +1611,8 @@ export function Actions() {
   ContainerScope: {
     code: `<ContainerScope>
   <Toolbar orientation={{base: "vertical", container: {sm: "horizontal"}}}>
-    <Button>Salvar</Button>
-    <Button>Descartar</Button>
+    <Button>Save</Button>
+    <Button>Discard</Button>
   </Toolbar>
 </ContainerScope>`,
     // Dois contêineres lado a lado, MESMA viewport: é o que a primitive existe para permitir, e
@@ -1620,23 +1620,23 @@ export function Actions() {
     render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start", justifyContent: "center"}},
       ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
         background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
-        h(A.Toolbar, {label: `Ações ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
-          h(A.Button, null, "Salvar"), h(A.Button, null, "Descartar"))))),
+        h(A.Toolbar, {label: `Actions, ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
+          h(A.Button, null, "Save"), h(A.Button, null, "Discard"))))),
   },
 
   useValorResponsivo: {
-    code: `const orientacao = useValorResponsivo(
+    code: `const orientation = useValorResponsivo(
   {base: "vertical", container: {sm: "horizontal"}},
   "horizontal",
-  ancora,
+  anchorRef,
 );`,
     // O hook resolve; quem mostra o resultado é o componente que o consome. O preview mostra o
     // efeito, que é o que se pode ver — o valor em si é um string.
     render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start", justifyContent: "center"}},
       ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
         background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
-        h(A.ToggleGroup, {label: `Alinhar ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
-          h(A.Toggle, {value: "e"}, "Esquerda"), h(A.Toggle, {value: "c"}, "Centro"))))),
+        h(A.ToggleGroup, {label: `Align, ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
+          h(A.Toggle, {value: "e"}, "Left"), h(A.Toggle, {value: "c"}, "Center"))))),
   },
 
   // ── Os três hooks que o merge de 28/08/2026 trouxe da outra linhagem ────────────────────────

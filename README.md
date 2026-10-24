@@ -21,10 +21,13 @@ escrita aqui de propósito**: ela mora no [CHANGELOG](CHANGELOG.md) e em cada `p
 validador reprova se ela voltar a aparecer neste arquivo. O que um número `0.x` promete está na
 [ADR-0014](decisions/0014-primeira-versao-publica-0-1-0.md).
 
-**Para a web:**
+**Para a web** (o mesmo comando nos quatro gerenciadores; use o do seu projeto):
 
 ```bash
+npm install @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
+yarn add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
+bun add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 ```
 
 Sem React? `@aurea-uds/core` e `@aurea-uds/fonts` bastam: o core traz a folha de estilo e um pouco
