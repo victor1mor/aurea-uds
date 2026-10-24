@@ -1716,14 +1716,14 @@ const chrome = `
    .chip-text: sem isto, a 320px o pill de "native: planned" perdia a borda direita. */
 .chip-status .status-label { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
-/* ALTURA IGUAL para todo demo, e sempre dentro da primeira tela (pedido do Victor: nada
-   de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem da referência; abaixo
-   disso a caixa cede à janela — 19rem cobre topo + cabeçalho da página + respiro (o
-   cabeçalho mais alto medido, o do Status, empurra o demo pra 277px). Numa mesma tela
-   todos os demos continuam do mesmo tamanho, que é o ponto.
+/* A CAIXA CRESCE COM O EXEMPLO (ADR-0081, 24/10/2026 — substitui a altura fixa da ADR-0002): com toda variação à mostra,
+   42 caixas rolavam por dentro. A fórmula de antes vira a MÍNIMA — o teto é o 32rem da referência; abaixo disso ela cede
+   à janela (19rem cobre topo + cabeçalho da página + respiro): 359 na tela do Victor, perto dos 350 da referência. A
+   prévia em documento próprio (o iframe) mantém a altura fixa: ela rola dentro do documento dela.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
-.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+.demo:has(.demo-frame) { height:var(--demo-height); }
+.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); min-height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
 /* As abas (.demo-tabs), os painéis (.demo-panel) e o código (.demo-code) do demo são os do core (a peça
    CodeBlock preview): o site não repete as regras deles (a trava do site, lote T, 17/10/2026). */
 .demo-lede { margin:0 0 var(--space-3); }

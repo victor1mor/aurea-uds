@@ -430,7 +430,12 @@ export function Combobox({
                         testID={testID ? `${testID}-limpar` : undefined} />
           )}
           {chevron && (
-            <Pressable accessible={false} disabled={inativo} style={s.setaToque}
+            // No aparelho, quem fala é o campo (a setinha é só área de toque); no navegador ela é uma parada de Tab, e sem
+            // papel nem nome era um alvo mudo — lá ela é o botão "abrir a lista", como o da web (ADR-0081, 24/10/2026).
+            <Pressable accessible={Platform.OS === "web"}
+                       role={Platform.OS === "web" ? "button" : undefined}
+                       accessibilityLabel={Platform.OS === "web" ? strings.comboboxOpen : undefined}
+                       disabled={inativo} style={s.setaToque}
                        onPress={inativo ? undefined : () => setAberto(true)}
                        testID={testID ? `${testID}-seta` : undefined}>
               <Icon name={chevron} size="sm" color={t.color.subtleForeground} />

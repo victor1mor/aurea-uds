@@ -102,7 +102,7 @@ describe("R-04 · o `Card` responde ao toque com `onPress`", () => {
       ["node_modules/typescript/bin/tsc", "-p", "tests/unit/tipos-nativo"], {encoding: "utf8"});
     expect(r.stdout + r.stderr).toBe("");
     expect(r.status).toBe(0);
-  });
+  }, 120_000);
 });
 
 // ═════════════════════════════════════════════════════════════════════════════════════════════

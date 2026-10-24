@@ -88,13 +88,13 @@ export default {
     {
       title: "With fields",
       description: "The window assembled with children: the area, the hue, and one field per channel — the colour space chosen in a Select.",
-      code: `const [space, setSpace] = useState<"rgb" | "hsl" | "hsb">("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]} as const;
+      code: `const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsla(220, 90%, 50%, 0.8)">
   <ColorArea />
   <Slider label="Hue" channel="hue" />
-  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as typeof space)}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
   <div style={{display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--space-2)"}}>
     {channels[space].map((channel) => (
@@ -108,11 +108,11 @@ const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "satura
     {
       title: "With sliders",
       description: "One track per channel, transparency included — the colour space chosen in a Select.",
-      code: `const [space, setSpace] = useState<"rgb" | "hsl" | "hsb">("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]} as const;
+      code: `const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsl(219, 58%, 93%)">
-  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as typeof space)}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
   {[...channels[space], "alpha" as const].map((channel) => (
     <Slider key={channel} label={channel} channel={channel} colorSpace={space} />

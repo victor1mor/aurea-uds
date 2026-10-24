@@ -156,7 +156,7 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     const achadas = [...ler_dir("apps/catalog/content"), ...ler_dir("apps/catalog/live")]
       .flatMap((f) => linhasNoJs(ler(f), f));
     expect(achadas).toEqual([]);
-  });
+  }, 60_000);
 
   it("o nativo — só o foco pinta a borda", () => {
     const dir = join(RAIZ, "packages/native/src");

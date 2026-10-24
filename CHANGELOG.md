@@ -123,8 +123,15 @@ como deveria funcionar"*.
 cinco blocos"*): o site mostra o que o pacote é — toda peça com página, toda variação num exemplo vivo, o nativo ao lado
 da web —, e travas na CI para continuar assim.
 
+### ⚠ Pode quebrar a compilação
+
+- **`comboboxOpen`**, frase nova no `AureaStrings` do nativo (a mesma da web: "Open list" / "Abrir lista"): quem monta o
+  dicionário inteiro com esse tipo precisa acrescentá-la. É o nome da setinha do Combobox nativo no navegador.
+
 ### Acrescentado
 
+- **`ColorSpace` e `ColorChannel`**, os tipos das props `colorSpace` e `channel` das peças de cor, saem pela porta
+  `@aurea-uds/react/inputs` (e pela raiz).
 - **`CodeBlock tabs`**: as alternativas do mesmo passo em abas, dentro da caixa do código (o comando de instalar em npm,
   pnpm, yarn e bun), nas medidas da documentação da referência.
 - **`SegmentedControl`** com `size` (`md`, `sm`) e itens com `href` (vira uma navegação de links — a chave Web | Native do
@@ -136,6 +143,17 @@ da web —, e travas na CI para continuar assim.
 
 ### Mudado
 
+As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md), 24/10/2026):
+
+- **A letra do `tone="primary"` é a de destaque** no `Text`, no `Paragraph`, no `Heading` e no `Code` (o azul no claro, o
+  amarelo no escuro), na web e no nativo. Era o amarelo de preencher — 1,75:1 no claro.
+- **Os botões da marca de contorno, fantasma e link, no claro, levam a letra azul** (`Button`, `IconButton`,
+  `ToolbarButton`: `primary-outline`, `primary-ghost`, `link-primary` e o `tone="brand"` sem caixa) — a ADR-0076 aplicada a
+  eles. A mistura marrom caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69.
+- **O `Avatar` suave com tom de estado** usa o fundo do selo suave (o info media 4,12 no claro).
+- **Os tons `running`, `paused`, `offline` e `review` do `Badge`** têm cor própria: azul, âmbar, cinza apagado e violeta.
+  Antes paused, offline e review saíam iguais ao neutral, e uma regra solta pintava o running de verde.
+- **O `align` do `Text` e do `Code`** vira bloco e alinha de verdade.
 - **O botão de copiar não cobre mais o fim da linha** em nenhum `CodeBlock`: o código reserva no fim o lugar do botão, e a
   linha mais longa rola antes de chegar nele (no Quick Start, o `pnpm add` terminava embaixo do botão).
 - **No nativo, a cor do escolhido é a da web**: a aba escolhida do SegmentedControl (no claro, a mistura da web), o visto
@@ -153,6 +171,8 @@ da web —, e travas na CI para continuar assim.
 
 - **O nativo no site**: a chave Web | Native na ponta da linha das áreas, e uma página por peça do nativo (79), com a peça
   de verdade rodando pelo `react-native-web` nos dois temas, os exemplos de todo valor e a API lida dos tipos.
+- **A caixa do exemplo cresce com ele** (substitui a ADR-0002): a altura de antes vira a mínima, e nenhuma caixa rola por
+  dentro; a varredura mede na tela 1280 × 663.
 - **Toda variação num exemplo**: as fichas da web somavam 473 valores sem exemplo em 70 peças; agora nenhum.
 - **A página de saúde** (`saude.html`, área Releases): os números do catálogo e das rodadas da CI.
 - **As abas de instalar** (npm, pnpm, yarn, bun) no Quick Start, no Frameworks, no Dark Mode e nas notas de versão.

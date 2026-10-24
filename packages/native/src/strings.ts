@@ -119,6 +119,8 @@ export interface AureaStrings {
    * campo próprio, que precisa de nome mesmo quando ninguém passou um.
    */
   comboboxSearch: string;
+  /** O nome do botão da setinha do `Combobox`, no navegador (a mesma frase da web — ADR-0081, 24/10/2026). */
+  comboboxOpen: string;
   /**
    * O botão que apaga o que foi digitado numa busca — no `SearchField` e no campo da folha do
    * `Combobox`. **Não existe na web** pela mesma razão: lá o `type="search"` do navegador desenha
@@ -178,6 +180,7 @@ export const defaultStrings: AureaStrings = {
   themeToLight: "Switch to light theme",
   comboboxLoading: "Loading…",
   comboboxSearch: "Search",
+  comboboxOpen: "Open list",
   searchClear: "Clear search",
   galleryLabel: "Gallery",
   fileChoose: "Choose file",
@@ -231,6 +234,7 @@ export const ptBR: AureaStrings = {
   themeToLight: "Mudar para o tema claro",
   comboboxLoading: "Carregando…",
   comboboxSearch: "Buscar",
+  comboboxOpen: "Abrir lista",
   searchClear: "Limpar busca",
   galleryLabel: "Galeria",
   fileChoose: "Escolher arquivo",

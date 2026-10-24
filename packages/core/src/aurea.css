@@ -1179,24 +1179,19 @@ img,svg { display:block; }
    Aurea não tinha o botão de ação secundária mais comum do mercado — contorno na cor da marca.
    Nada de novo aqui: mesma receita do par `danger-*` logo abaixo, com o token do outro tom, e o
    texto em `--primary` já era precedente do `.btn-link-primary`. */
-.btn-primary-outline { --btn-bg:transparent; --btn-fg:var(--primary); --btn-border:var(--primary); }
+.btn-primary-outline { --btn-bg:transparent; --btn-fg:var(--primary-emphasis); --btn-border:var(--primary-emphasis); }
 .btn-primary-outline:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
-.btn-primary-ghost { --btn-bg:transparent; --btn-fg:var(--primary); --btn-border:transparent; }
+.btn-primary-ghost { --btn-bg:transparent; --btn-fg:var(--primary-emphasis); --btn-border:transparent; }
 .btn-primary-ghost:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
 .btn-danger-outline { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:var(--danger-400); }
 .btn-danger-outline:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 .btn-danger-ghost { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:transparent; }
 .btn-danger-ghost:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 [data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-link-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
-/* A MESMA correção para a marca, que estava faltando. Medido em 21/08/2026 na varredura de AA
-   da matriz de tom: `.btn-primary-outline` e `.btn-primary-ghost` pintavam o rótulo com
-   `--primary` cru, e no tema claro isso dá **1.73:1** — reprovação grave, em componente
-   publicado. O `.btn-link-primary` logo abaixo já tinha a correção; as duas irmãs nasceram sem
-   ela. Não é conserto local: é a mesma pergunta do §21 — quem MAIS tem esse problema? — e a
-   resposta foram estas duas, mais a borda, que é componente de UI e pede 3:1. */
-[data-theme="light"] .btn-primary-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-primary-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-[data-theme="light"] .btn-primary-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-border:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-[data-theme="light"] .btn-outline.btn-tone-brand:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-border:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+/* A LETRA DA MARCA nos botões sem caixa é a de DESTAQUE (ADR-0081, 24/10/2026 — a ADR-0076 aplicada a eles): o azul no
+   claro, o amarelo no escuro, e na `lory` o laranja escuro dela. De 21/08 até aqui, o claro levava a mistura marrom
+   (a marca a 45% no texto): passava sobre a página e caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69. O
+   `--primary-outline` não serve de letra: na `lory` ele é translúcido (é do contorno). */
 /* LINK: aparência de texto, sem cápsula e sem altura de controle — o sublinhado é o que diz
    que é clicável, então ele existe desde o repouso (revelar no hover esconde a affordance).
    Três tons: neutro, marca e destrutivo. No claro a marca aprofunda, senão não passa o AA. */
@@ -1205,8 +1200,7 @@ img,svg { display:block; }
    prosa, e media 67×13px. O texto continua onde está — a caixa cresce centrada nele. */
 .btn-link { height:auto; min-height:24px; padding:0; gap:6px; border:0; border-radius:var(--radius-sm); --btn-bg:transparent; --btn-fg:var(--foreground); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
 .btn-link:hover:not(:disabled):not([aria-disabled="true"]) { text-decoration-thickness:2px; }
-.btn-link-primary { --btn-fg:var(--primary); }
-[data-theme="light"] .btn-link-primary:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+.btn-link-primary { --btn-fg:var(--primary-emphasis); }
 .btn-link-danger { --btn-fg:var(--danger-400); }
 /* pressed entra na linguagem única de "selecionado" acima; só-ícone não leva o fio. */
 /* Kbd — a tecla que dispara a ação, dentro ou fora do botão. Peça própria, não decoração.
@@ -1266,9 +1260,8 @@ img,svg { display:block; }
    token de tom (`--success`) é o FUNDO cheio — a mesma cor funda nos dois temas —, e não serve
    de letra no escuro. Letra, ícone, borda e barra sobre a superfície usam o par de letra
    (`--success-400`, `--info-400`, `--warning-400`, `--danger-400`), que cada tema ajusta. */
-.btn-tone-brand,.btn-tone-brand:hover:not(:disabled) { --btn-fg:var(--primary); }
-[data-theme="light"] .btn-tone-brand:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-brand:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-.btn-outline.btn-tone-brand { --btn-border:var(--primary); }
+.btn-tone-brand,.btn-tone-brand:hover:not(:disabled) { --btn-fg:var(--primary-emphasis); }
+.btn-outline.btn-tone-brand { --btn-border:var(--primary-emphasis); }
 .btn-tone-brand:not(.btn-link):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
 .btn-tone-danger,.btn-tone-danger:hover:not(:disabled) { --btn-fg:var(--danger-400); }
 [data-theme="light"] .btn-tone-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-danger:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
@@ -2051,9 +2044,13 @@ img,svg { display:block; }
    seis deixam o contador sobre a superfície da barra, onde ele já se lê. */
 
 .badge-success { --badge-accent:var(--success-400); --badge-fill:var(--success); --badge-on:var(--success-foreground); color:var(--success-400); background:var(--success-bg); border-color:transparent; }
-.badge-warning { --badge-accent:var(--warning-400); --badge-fill:var(--warning); --badge-on:var(--warning-foreground); color:var(--warning-400); background:var(--warning-bg); border-color:transparent; }
+.badge-warning,.badge-paused { --badge-accent:var(--warning-400); --badge-fill:var(--warning); --badge-on:var(--warning-foreground); color:var(--warning-400); background:var(--warning-bg); border-color:transparent; }
 .badge-danger { --badge-accent:var(--danger-400); --badge-fill:var(--destructive); --badge-on:var(--destructive-foreground); color:var(--danger-400); background:var(--danger-bg); border-color:transparent; }
 .badge-info,.badge-running { --badge-accent:var(--info-400); --badge-fill:var(--info); --badge-on:var(--info-foreground); color:var(--info-400); background:var(--info-bg); border-color:transparent; }
+/* Os tons de ESTADO DE TRABALHO (ADR-0081, 24/10/2026): running é o info (acima), paused o aviso, review o violeta de
+   categoria, e offline o apagado — como o `Status offline`. Antes paused, offline e review saíam iguais ao neutral. O
+   cheio do offline é o par do texto apagado invertido: a letra que passa sobre o fundo vira o fundo. */
+.badge-offline { --badge-accent:var(--subtle-foreground); --badge-fill:var(--muted-foreground); --badge-on:var(--background); color:var(--subtle-foreground); background:var(--fill-1); border-color:transparent; }
 /* AS OITO CORES DE CATEGORIA (GAR-07, ADR-0060, 09/10/2026): marcam GRUPO, não estado — "Motos" e
    "Carros" num site de notícias. Mesma receita dos quatro propósitos acima (acento, fundo suave e
    o fio misturado com a borda), e por isso as três ênfases valem para elas sem regra nova. O
@@ -2064,7 +2061,7 @@ img,svg { display:block; }
 .badge-teal { --badge-accent:var(--category-teal); color:var(--category-teal); background:var(--category-teal-bg); border-color:transparent; }
 .badge-cyan { --badge-accent:var(--category-cyan); color:var(--category-cyan); background:var(--category-cyan-bg); border-color:transparent; }
 .badge-blue { --badge-accent:var(--category-blue); color:var(--category-blue); background:var(--category-blue-bg); border-color:transparent; }
-.badge-violet { --badge-accent:var(--category-violet); color:var(--category-violet); background:var(--category-violet-bg); border-color:transparent; }
+.badge-violet,.badge-review { --badge-accent:var(--category-violet); color:var(--category-violet); background:var(--category-violet-bg); border-color:transparent; }
 .badge-pink { --badge-accent:var(--category-pink); color:var(--category-pink); background:var(--category-pink-bg); border-color:transparent; }
 /* ── AS TRÊS ÊNFASES — e elas vêm DEPOIS das variantes de propósito ─────────────────
    Cada variante declara só o ACENTO; as ênfases saem dele. Antes cada variante escrevia
@@ -2446,6 +2443,12 @@ img,svg { display:block; }
 .avatar:is(.avatar-tone-brand,.avatar-tone-danger,.avatar-tone-success,.avatar-tone-warning,.avatar-tone-info) { color:var(--avatar-ink); }
 .avatar.avatar-soft { border-color:transparent; background:var(--muted); }
 .avatar.avatar-soft:is(.avatar-tone-brand,.avatar-tone-danger,.avatar-tone-success,.avatar-tone-warning,.avatar-tone-info) { background:color-mix(in oklab, var(--avatar-tint) 14%, transparent); }
+/* Os quatro tons de ESTADO no fundo do selo suave (o `-bg` de cada um, a receita do `Badge` — ADR-0081, 24/10/2026): com
+   o tom a 14%, o info media 4,12 no claro. A marca fica na mistura: o fundo dela não tem par. */
+.avatar.avatar-soft.avatar-tone-info { background:var(--info-bg); }
+.avatar.avatar-soft.avatar-tone-success { background:var(--success-bg); }
+.avatar.avatar-soft.avatar-tone-warning { background:var(--warning-bg); }
+.avatar.avatar-soft.avatar-tone-danger { background:var(--danger-bg); }
 .avatar img { width:100%; height:100%; object-fit:cover; }
 /* LINK (0.32.0): o link de texto da referência — peso médio, a cor de link, sem sublinhado; com o mouse
    ou apertado, o sublinhado de 1,5 a 4 da letra, na cor esmaecida (a meia força com o mouse). A seta do
@@ -3031,7 +3034,9 @@ button.tag-main { cursor:pointer; }
 /* DOC-11 (0.32.0): o `tone` do nativo, na web. `link` é o amarelo de escrever; `primary`, o de
    preencher (no claro quase some, como no nativo); as cores de estado, o par `-400` (ADR-0061). */
 .typography-tone-subtle { color:var(--subtle-foreground); }
-.typography-tone-primary { color:var(--primary); }
+/* A letra do tom primary é a de DESTAQUE (ADR-0081, 24/10/2026): o azul no claro, o amarelo no escuro. Era o amarelo de
+   preencher, de propósito — 1,75:1 no claro. */
+.typography-tone-primary { color:var(--primary-emphasis); }
 .typography-tone-link { color:var(--link); }
 .typography-tone-danger { color:var(--danger-400); }
 .typography-tone-success { color:var(--success-400); }
@@ -4146,8 +4151,6 @@ button.graph-node-body { cursor:pointer; }
 }
 
 
-/* Aurea v1.7 stabilization patch — visual design unchanged. */
-.badge-running{background:var(--success-bg);color:var(--success-400);border-color:transparent}
 /* superfície (overflow, borda, fundo, raio) mora junto com a do `.table-wrap` lá em cima — aqui
    fica só o que é DESTA região: ela é focável, e o foco dela é a linha de dentro, abaixo. Era um
    halo de `--focus` a 38% (B-09, 24/09/2026): claro demais para se ver, e fora do contrato de foco.

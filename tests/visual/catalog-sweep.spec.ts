@@ -49,7 +49,8 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   });
 
   // O IRMÃO VERTICAL do teste acima, e ele nasceu de um defeito que passou porque ninguém media:
-  // a caixa de demonstração tem altura FIXA (ADR-0002), e a decisão lista como consequência boa
+  // a caixa de demonstração tinha altura FIXA (ADR-0002, substituída pela ADR-0081 em 24/10/2026: agora ela CRESCE com o
+  // exemplo, e este teste prova que nenhuma rola por dentro — na tela do Victor, 1280 × 663), e a decisão listava como consequência boa
   // que *"nenhuma demo exige rolagem"*. Medido em 11/08/2026, **10 das 520** caixas rolavam — duas
   // por CSS (`.media-player` tem `aspect-ratio:16/9`, que dá 464px na largura do painel), uma por
   // grid colapsado (`.health-matrix` sem largura vira uma coluna) e sete por conteúdo alto demais.
@@ -59,9 +60,9 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   // para decidir se põe barra —, e não a altura contra um número escrito aqui, que envelheceria
   // na primeira mudança de densidade.
   //
-  // 1440×761 é a régua registrada: é onde o `clamp` da altura bate no piso, ou seja, o pior caso.
+  // 1280 × 663 é a tela do Victor (o 3-B do bloco 1): a régua é a dele.
   test("nenhuma prévia do catálogo rola dentro da caixa", async ({page}) => {
-    await page.setViewportSize({width: 1440, height: 761});
+    await page.setViewportSize({width: 1280, height: 663});
     const falhas: string[] = [];
     for (const f of PAGES) {
       await abrir(page, url(f), avisar);
@@ -72,7 +73,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
       for (const c of caixas)
         falhas.push(`${f} [caixa ${c.i}]: conteúdo ${c.conteudo}px, sobra ${c.excesso}px além da caixa`);
     }
-    expect(falhas, `prévias que exigem rolagem (ADR-0002 diz que nenhuma deve):\n${falhas.join("\n")}`).toEqual([]);
+    expect(falhas, `prévias que exigem rolagem (a caixa cresce com o exemplo, ADR-0081):\n${falhas.join("\n")}`).toEqual([]);
   });
 
   // A prévia é uma AMOSTRA dentro de uma caixa, nunca um estado da página. O `CommandPaletteShell`

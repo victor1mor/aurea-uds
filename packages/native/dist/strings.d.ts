@@ -93,6 +93,8 @@ export interface AureaStrings {
      * campo próprio, que precisa de nome mesmo quando ninguém passou um.
      */
     comboboxSearch: string;
+    /** O nome do botão da setinha do `Combobox`, no navegador (a mesma frase da web — ADR-0081, 24/10/2026). */
+    comboboxOpen: string;
     /**
      * O botão que apaga o que foi digitado numa busca — no `SearchField` e no campo da folha do
      * `Combobox`. **Não existe na web** pela mesma razão: lá o `type="search"` do navegador desenha

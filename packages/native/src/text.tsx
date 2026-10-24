@@ -137,11 +137,9 @@ const PAPEL: Record<AureaTextType, Papel> = {
 };
 const COR: Record<AureaTextTone, string> = {
   default: "foreground", muted: "mutedForeground", subtle: "subtleForeground",
-  // ⚠ `primary` e `link` são o MESMO amarelo em matiz, e NÃO são intercambiáveis.
-  // `primary` é o amarelo de PREENCHER, e escrito sobre o tema claro ele mede 1,73:1 — some.
-  // `link` é o de ESCREVER: mesmo matiz, mais escuro, 5,02:1 no claro, e no escuro é o próprio
-  // amarelo da marca. Quem quer texto amarelo legível nos dois temas usa `link`.
-  primary: "primary", link: "link", danger: "destructive", success: "success",
+  // `primary` é a letra de DESTAQUE (ADR-0081, 24/10/2026, como a web): o azul no claro, o amarelo no escuro. Até aqui era
+  // o amarelo de PREENCHER, de propósito — 1,73:1 no claro, e o leitor com baixa visão não o via. `link` continua o do link.
+  primary: "primaryEmphasis", link: "link", danger: "destructive", success: "success",
   warning: "warning", info: "info",
 };
 
