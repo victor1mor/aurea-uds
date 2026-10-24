@@ -220,8 +220,10 @@ const folha = criarFolha((t) => ({
         paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
         ...canto(t.size.radiusControl),
     },
-    // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`), pelo mesmo motivo — ADR-0059.
-    abaDeTabAtiva: { backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm] },
+    // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`) — desde 24/10/2026, o AMARELO do botão primário,
+    // sem sombra, com o nome na tinta do botão (decisão do Victor: *"as abas do Tabs deixe como a aba escolhida amarelo
+    // tudo"*). ~~Era o `segment` com a sombra pequena (ADR-0059).~~
+    abaDeTabAtiva: { backgroundColor: t.color.primary },
     // `variant="secondary"` (R-12, 01/10/2026): a variante secundária da referência,
     // com o fio da casa no lugar do indicador azul dela.
     //   fila (secundária)               padding 0 · border-bottom 1px, cor da borda
@@ -329,7 +331,7 @@ const folha = criarFolha((t) => ({
  * usa `Screen` (uma fileira de botões presa no pé, por exemplo), o número está em
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
-export function BottomNav({ items, current, variant = "floating", indicator = "none", width = "full", label, style, ...rest }) {
+export function BottomNav({ items, current, variant = "floating", indicator = "capsule", width = "full", label, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
@@ -608,7 +610,11 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
                                 ativa && !secundaria && s.abaDeTabAtiva,
                                 it.disabled && { opacity: t.size.opacityDisabled },
                             ], children: [typeof it.label === "string"
-                                    ? _jsx(Text, { size: "sm", weight: secundaria ? (ativa ? 600 : 400) : 500, style: { color: ativa ? t.color.foreground : t.color.mutedForeground }, children: it.label })
+                                    ? _jsx(Text, { size: "sm", weight: secundaria ? (ativa ? 600 : 400) : 500, 
+                                        // Na cápsula escolhida (amarela, 24/10/2026), o nome vai na tinta do botão; na secundária, a
+                                        // cor do texto de sempre, sobre o fio amarelo.
+                                        style: { color: !ativa ? t.color.mutedForeground
+                                                : secundaria ? t.color.foreground : t.color.primaryForeground }, children: it.label })
                                     : it.label, ativa && secundaria && _jsx(View, { style: s.fioDaAba })] }, it.id));
                     }) }) }), aberta && panel === "plain" ? (_jsx(View, { accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : aberta ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : null] }));
 }

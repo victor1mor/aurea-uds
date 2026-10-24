@@ -150,7 +150,7 @@ da web —, e travas na CI para continuar assim.
 As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md), 24/10/2026):
 
 - **A letra do `tone="primary"` é a de destaque** no `Text`, no `Paragraph`, no `Heading` e no `Code` (o azul no claro, o
-  amarelo no escuro), na web e no nativo. Era o amarelo de preencher — 1,75:1 no claro.
+  amarelo no escuro), na web. Era o amarelo de preencher — 1,75:1 no claro. No nativo, fica como era.
 - **Os botões da marca de contorno, fantasma e link, no claro, levam a letra azul** (`Button`, `IconButton`,
   `ToolbarButton`: `primary-outline`, `primary-ghost`, `link-primary` e o `tone="brand"` sem caixa) — a ADR-0076 aplicada a
   eles. A mistura marrom caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69.
@@ -160,21 +160,26 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
 - **O `align` do `Text` e do `Code`** vira bloco e alinha de verdade.
 - **O botão de copiar não cobre mais o fim da linha** em nenhum `CodeBlock`: o código reserva no fim o lugar do botão, e a
   linha mais longa rola antes de chegar nele (no Quick Start, o `pnpm add` terminava embaixo do botão).
-- **No nativo, a cor do escolhido é a da web**: a aba escolhida do SegmentedControl (no claro, a mistura da web), o visto
-  da opção do Select e do Combobox, o ponto e o visto do menu, o passo atual do Stepper.
+- **No nativo, a cor do escolhido é a da web**: o visto da opção do Select e do Combobox, o ponto e o visto do menu, o
+  passo atual do Stepper.
+- **No nativo, a aba escolhida do SegmentedControl e a do Tabs em cápsula são o amarelo da marca, como o botão
+  primário**: a cápsula escolhida é amarela e o nome vai na tinta do botão; saem a sombra e, no SegmentedControl, o traço
+  amarelo de baixo. Nos dois temas. O Tabs sublinhado (`variant="secondary"`) continua com o traço amarelo.
+- **No nativo, a barra de baixo marca a aba escolhida com o amarelo por trás, por padrão**: o `indicator` padrão passa de
+  `none` (só a cor no ícone e no nome — no claro, o azul) a `capsule`. Quem passa `indicator="none"` continua como era.
 - **No nativo rodando no navegador** (`react-native-web`): o título leva o nível (o Heading pelo `type`, o item do
   Accordion com 3) — sem ele, todo título virava `<h1>`; e o cartão de contorno leva a marca `data-aurea-card="outline"`,
   a única linha que a ADR-0072 deixa. No aparelho, nada muda.
-- **No nativo, o Checkbox, o Radio e o Switch têm o toque de 44**: a linha mede no mínimo 44 de altura (no `md` era
-  24), e sem rótulo também 44 de largura — a regra do Button, altura de verdade e não área invisível, que o leitor de
-  tela do Android não enxerga. O desenho não muda; a linha cresce, e numa coluna os controles ficam mais afastados.
+- **No nativo, o Checkbox e o Radio ganham o toque a mais da referência**: 6 em volta, invisível (`hitSlop`), como a
+  caixa e o rádio do nativo dela. O desenho e a medida da linha não mudam. O Switch fica sem, como o dela.
 
 ### Consertado
 
 - **O tipo do `DataState`** proibia o `children` em função que o componente aceita: o `children` do HTML saía do
   cruzamento e a função virava `ReactNode`. Agora compila.
 - **A `Screen` do nativo no navegador** não exige mais um `SafeAreaProvider` acima: sem ele, a versão web da biblioteca
-  levantava erro e a tela não abria. Ela leva o próprio quando não há um; no aparelho, nada muda.
+  levantava erro e a tela não abria. Sem um provedor acima, no navegador ela usa a folga zerada — o app que precisa se
+  afastar do entalhe na web põe o `SafeAreaProvider` na raiz. No aparelho, nada muda.
 - **O DatePicker do nativo, com `mode="time"`,** escreve a hora e os minutos no formato do aparelho, e o vazio pede um horário.
   Sem `format`, ele escrevia a data do dia e dizia "Pick a date".
 - **O Switch do nativo lê o `align`**: com `start`, o trilho fica na primeira linha do rótulo longo. O tipo aceitava, e

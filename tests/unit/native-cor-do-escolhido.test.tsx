@@ -29,8 +29,10 @@ describe("a mistura no oklab (a do `color-mix(in oklab, …)` da web)", () => {
 });
 
 describe("as cinco peças que discordavam da web, pelo código", () => {
-  it("a aba escolhida do SegmentedControl usa a cor do escolhido", () => {
-    expect(fonte("inputs.tsx")).toMatch(/color: ativo \? corDoEscolhido\(t\) : t\.color\.mutedForeground/);
+  // 24/10/2026: a aba escolhida virou o amarelo do botão, e o nome vai na tinta dele (decisão do Victor) — era a mistura.
+  it("a aba escolhida do SegmentedControl leva o nome na tinta do botão, sobre o amarelo", () => {
+    expect(fonte("inputs.tsx")).toMatch(/color: ativo \? t\.color\.primaryForeground : t\.color\.mutedForeground/);
+    expect(fonte("inputs.tsx")).toMatch(/segmentoAtivo: \{backgroundColor: t\.color\.primary\}/);
   });
   it("o visto da opção escolhida (Select, Combobox) é a marca, como o `.combobox-check` da web", () => {
     expect(fonte("inputs.tsx")).toMatch(/<Icon name="check" size="sm" color=\{t\.color\.primary\} \/>/);

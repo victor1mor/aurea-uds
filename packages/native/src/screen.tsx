@@ -38,7 +38,7 @@
 // mas morde quem passar `padding: "5%"` no `style`.
 import * as React from "react";
 import {Keyboard, Platform, RefreshControl, ScrollView, View, type ViewProps} from "react-native";
-import {SafeAreaInsetsContext, SafeAreaProvider, SafeAreaView, initialWindowMetrics} from "react-native-safe-area-context";
+import {SafeAreaInsetsContext, SafeAreaView, initialWindowMetrics} from "react-native-safe-area-context";
 import {useBottomNavSpace} from "./barranav.js";
 import {criarFolha} from "./estilos.js";
 import {useAureaTokens} from "./theme.js";
@@ -141,21 +141,22 @@ export function Screen(props: ScreenProps) {
   // 🔴 NO NAVEGADOR, A `SafeAreaView` DA BIBLIOTECA É O GANCHO — bloco 1, 24/10/2026. A versão web
   // dela (`SafeAreaView.web.tsx`, 5.9.1) chama `useSafeAreaInsets`, que LEVANTA ERRO sem
   // `SafeAreaProvider` acima: a `Screen` quebrava num app do Expo aberto no navegador, e o
-  // comentário acima prometia o contrário. Sem provedor, a `Screen` leva o dela — só no navegador,
-  // porque no aparelho o provedor sem medidas não desenha nada até medir. As medidas começam
-  // zeradas para a tela sair no primeiro quadro (e na página montada no servidor); o provedor
-  // troca pelo `env(safe-area-inset-*)` do navegador assim que mede.
+  // comentário acima prometia o contrário. Sem provedor, a `Screen` põe a folga ZERADA no contexto —
+  // só no navegador; no aparelho nada muda.
+  // ⚠ Zerada, e não o `SafeAreaProvider` da biblioteca: o do navegador mede a caixa contra a JANELA e
+  // dá folga de baixo errada a toda tela que não começa no topo dela — medido na bancada (2.573) e
+  // na página do site (93 a 2.054), com o rodapé fora do pé. Decisão do Victor, 24/10/2026, vendo as
+  // duas lado a lado ("a alternativa: a folga zerada, sem medir"). O que se perde: a tela não se
+  // afasta sozinha do entalhe quando o app instalado no iPhone pelo navegador cobre a tela inteira —
+  // quem precisa disso põe o `SafeAreaProvider` na raiz, e ele vale.
   const temProvedor = React.useContext(SafeAreaInsetsContext) != null;
   if (Platform.OS === "web" && !temProvedor) {
-    return <SafeAreaProvider initialMetrics={MEDIDAS_ZERADAS}><CascaDaTela {...props} /></SafeAreaProvider>;
+    return <SafeAreaInsetsContext.Provider value={SEM_FOLGA}><CascaDaTela {...props} /></SafeAreaInsetsContext.Provider>;
   }
   return <CascaDaTela {...props} />;
 }
 
-const MEDIDAS_ZERADAS = {
-  insets: {top: 0, right: 0, bottom: 0, left: 0},
-  frame: {x: 0, y: 0, width: 0, height: 0},
-};
+const SEM_FOLGA = {top: 0, right: 0, bottom: 0, left: 0};
 
 function CascaDaTela({
   edges = TODAS_AS_BORDAS,

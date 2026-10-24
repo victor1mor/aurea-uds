@@ -20,6 +20,11 @@ export interface BottomNavProps extends ViewProps {
     /** O `id` do item corrente. */
     current?: string;
     variant?: AureaBottomNavVariant;
+    /**
+     * Como a aba escolhida se marca. Padrão: `capsule` — o amarelo da marca POR TRÁS do ícone, como o botão primário
+     * (decisão do Victor, 24/10/2026: *"O amarelo por trás, como o botão, na barra de baixo e na aba escolhida."*). ~~Era
+     * `none`: só a cor no ícone e no nome — no tema claro, o azul da letra de destaque.~~
+     */
     indicator?: AureaBottomNavIndicator;
     /**
      * `content` põe a pílula do tamanho das abas, no centro, em vez de ir de uma borda à outra.

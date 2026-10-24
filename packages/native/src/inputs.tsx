@@ -49,7 +49,7 @@ import {
   type ViewProps, type ViewStyle,
 } from "react-native";
 import Svg, {Path} from "react-native-svg";
-import {canto, cantosDeCima, corDoEscolhido, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
@@ -122,12 +122,6 @@ const folha = criarFolha((t: AureaTokens) => ({
   // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
   // 0.32.0: 12 entre a marca e o texto, o vão do campo de controle da referência (era 9).
   linhaDeControle: {flexDirection: "row", alignItems: "center", gap: t.size.space3},
-  // O TOQUE DE 44 do `Checkbox`, do `Radio` e do `Switch` (bloco 1, 24/10/2026): a linha media 24 de altura no `md` — a
-  // marca de 24 ou o trilho de 24 com o rótulo de uma linha —, abaixo do `targetMin`. A conta é a do `Button`
-  // (`actions.tsx`, "O ALVO DE TOQUE"): altura mínima no `Pressable`, e não `hitSlop`, que o TalkBack não enxerga. O
-  // desenho não muda; a linha cresce e centraliza. Sem rótulo, a largura também chega a 44, como no `IconButton`.
-  alvoDoControle: {minHeight: t.size.targetMin},
-  alvoSemTexto: {minWidth: t.size.targetMin, justifyContent: "center"},
   // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
   // no alto, na linha do título.
   itemCartao: {...peleDoCartao(t), alignItems: "flex-start"},
@@ -161,14 +155,12 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
   segmentoCheio: {flexGrow: 1, flexShrink: 0, flexBasis: "auto"},
   segmentadaCheia: {flexGrow: 1},
-  // A CÁPSULA ESCOLHIDA tem cor própria, sobre o trilho (ADR-0059, 08/10/2026): era `secondary`, que
-  // no tema claro é a MESMA cor do `muted` do trilho (1:1) e no escuro dá 1,02:1 — não se via. Agora
-  // `segment` com a sombra pequena, como a aba da referência principal. É um `Pressable`, que existe
-  // desde a montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
-  segmentoAtivo: {backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm]},
-  // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
-  // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
-  fioDoSegmento: fioDoEscolhido(t),
+  // A CÁPSULA ESCOLHIDA é o AMARELO DA MARCA, como o botão primário (decisão do Victor, 24/10/2026, vendo as duas formas
+  // desenhadas: *"O amarelo por trás, como o botão, na barra de baixo e na aba escolhida."*) — o nome vai na tinta do botão
+  // (`primaryForeground`), e saem a sombra e o fio amarelo de baixo, que no amarelo não se veriam. ~~Era o `segment` com a
+  // sombra pequena (ADR-0059) e o fio amarelo, com o nome na mistura marrom da web.~~ É um `Pressable`, que existe desde a
+  // montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
+  segmentoAtivo: {backgroundColor: t.color.primary},
 
   formulario: {gap: t.size.space5},
 
@@ -737,6 +729,9 @@ export function PasswordField({
 }
 
 export type CheckboxProps = ControleProps;
+
+// O `hitSlop` padrão da caixa e do rádio do nativo da referência: 6, a soma de dois tokens (4 + 2).
+const FOLGA_DO_TOQUE = (t: AureaTokens) => t.size.space1 + t.size.space05;
 export type RadioProps = ControleProps;
 
 function ControleMarcado({
@@ -772,8 +767,13 @@ function ControleMarcado({
       // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
       accessibilityLabel={accessibilityLabel ?? (typeof label === "string" ? label : campo?.label)}
       accessibilityHint={typeof description === "string" ? description : campo?.hint}
-      style={[s.linhaDeControle, s.alvoDoControle, !temTexto && s.alvoSemTexto, align === "start" && s.linhaNoTopo,
-              inativo && s.desabilitado, style]}>
+      // O TOQUE A MAIS DA REFERÊNCIA: 6 em volta, invisível, o `hitSlop` padrão da caixa e do rádio do nativo dela —
+      // decisão do Victor, 24/10/2026, depois de ver a bancada do celular: *"Fica igual à referência: o desenho de antes e
+      // o mesmo toque a mais invisível que ela usa (6 em volta)"*. Substitui a linha com altura de 44, do mesmo dia, que
+      // afastava a lista. O desenho e a medida da linha não mudam. ⚠ O leitor de tela do Android não enxerga essa folga
+      // (ver "O ALVO DE TOQUE", no `actions.tsx`); a referência aceita isso, e a Aurea segue a referência aqui.
+      hitSlop={FOLGA_DO_TOQUE(t)}
+      style={[s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style]}>
       <View style={[
         s.marcaBase, noTopo,
         // 0.32.0: o canto da caixa é o `radiusXs` (6), o mesmo do `.checkbox .control-mark` da
@@ -1111,9 +1111,8 @@ export function Switch({
       // irmãos com `flex:1` parte da largura do conteúdo. É a mesma família do `padding-block` do
       // `Input`: o que a cascata resolve de graça, aqui é conta explícita.
       style={[
+        // Sem toque a mais: o interruptor do nativo da referência não tem `hitSlop` (a caixa e o rádio têm 6).
         {flexDirection: "row", alignItems: align === "start" ? "flex-start" : "center"},
-        // O toque de 44 — ver `alvoDoControle`, na folha.
-        s.alvoDoControle, !temTexto && s.alvoSemTexto,
         // 0.32.0: 12 até o texto, o vão do campo de controle da referência e o do `Checkbox` (era 10).
         temTexto && {gap: t.size.space3},
         inativo && s.desabilitado, style,
@@ -1227,12 +1226,13 @@ export function SegmentedControl({
                       // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
                       // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
                       // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
-                      // azul?"*). A aba escolhida é a mistura da web, `corDoEscolhido`.
-                      style={{color: ativo ? corDoEscolhido(t) : t.color.mutedForeground}}>
+                      // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
+                      // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
+                      // o nome vai na tinta do botão.
+                      style={{color: ativo ? t.color.primaryForeground : t.color.mutedForeground}}>
                   {it.label}
                 </Text>
               : it.label}
-            {ativo && <View style={s.fioDoSegmento} />}
           </Pressable>
           );
         })}

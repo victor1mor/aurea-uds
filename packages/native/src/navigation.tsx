@@ -257,8 +257,10 @@ const folha = criarFolha((t: AureaTokens) => ({
     paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
     ...canto(t.size.radiusControl),
   },
-  // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`), pelo mesmo motivo — ADR-0059.
-  abaDeTabAtiva: {backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm]},
+  // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`) — desde 24/10/2026, o AMARELO do botão primário,
+  // sem sombra, com o nome na tinta do botão (decisão do Victor: *"as abas do Tabs deixe como a aba escolhida amarelo
+  // tudo"*). ~~Era o `segment` com a sombra pequena (ADR-0059).~~
+  abaDeTabAtiva: {backgroundColor: t.color.primary},
   // `variant="secondary"` (R-12, 01/10/2026): a variante secundária da referência,
   // com o fio da casa no lugar do indicador azul dela.
   //   fila (secundária)               padding 0 · border-bottom 1px, cor da borda
@@ -342,6 +344,11 @@ export interface BottomNavProps extends ViewProps {
   /** O `id` do item corrente. */
   current?: string;
   variant?: AureaBottomNavVariant;
+  /**
+   * Como a aba escolhida se marca. Padrão: `capsule` — o amarelo da marca POR TRÁS do ícone, como o botão primário
+   * (decisão do Victor, 24/10/2026: *"O amarelo por trás, como o botão, na barra de baixo e na aba escolhida."*). ~~Era
+   * `none`: só a cor no ícone e no nome — no tema claro, o azul da letra de destaque.~~
+   */
   indicator?: AureaBottomNavIndicator;
   /**
    * `content` põe a pílula do tamanho das abas, no centro, em vez de ir de uma borda à outra.
@@ -426,7 +433,7 @@ export interface BottomNavProps extends ViewProps {
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
 export function BottomNav({
-  items, current, variant = "floating", indicator = "none", width = "full", label, style, ...rest
+  items, current, variant = "floating", indicator = "capsule", width = "full", label, style, ...rest
 }: BottomNavProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -989,7 +996,10 @@ export function Tabs({
                     cor e na cápsula. A secundária fica como estava. */}
                 {typeof it.label === "string"
                   ? <Text size="sm" weight={secundaria ? (ativa ? 600 : 400) : 500}
-                          style={{color: ativa ? t.color.foreground : t.color.mutedForeground}}>
+                          // Na cápsula escolhida (amarela, 24/10/2026), o nome vai na tinta do botão; na secundária, a
+                          // cor do texto de sempre, sobre o fio amarelo.
+                          style={{color: !ativa ? t.color.mutedForeground
+                            : secundaria ? t.color.foreground : t.color.primaryForeground}}>
                       {it.label}
                     </Text>
                   : it.label}

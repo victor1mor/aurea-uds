@@ -36,25 +36,29 @@ describe("ADR-0059 · a cápsula escolhida tem cor própria no nativo", () => {
   for (const tema of ["dark", "light"] as const) {
     const t = resolverTokens(tema, "comfortable");
 
-    it(`tema ${tema}: o segmento escolhido é \`segment\` com a sombra inteira, e se distingue do trilho`, () => {
+    // 24/10/2026: o segmento escolhido passou a ser o AMARELO do botão primário, sem sombra (decisão do Victor, vendo as
+    // formas desenhadas: "O amarelo por trás, como o botão, na barra de baixo e na aba escolhida"). Era `segment` + sombra.
+    it(`tema ${tema}: o segmento escolhido é o amarelo do botão, sem sombra, e se distingue do trilho`, () => {
       __limpar();
       render(<AureaProvider theme={tema}><SegmentedControl items={PERIODOS} value="Mês" /></AureaProvider>);
       const trilho = estilo(__instancias("View").find((p) => p.accessibilityRole === "radiogroup")!);
       const escolhido = __instancias("Pressable").filter((p) => p.accessibilityRole === "radio")
         .map(estilo).find((e) => e.backgroundColor != null && e.backgroundColor !== "transparent")!;
-      expect(escolhido.backgroundColor).toBe(t.color.segment);
-      expect(escolhido.boxShadow).toEqual(t.shadowLayers.shadowSm);
+      expect(escolhido.backgroundColor).toBe(t.color.primary);
+      expect(escolhido.boxShadow).toBeUndefined();
       expect(razao(escolhido.backgroundColor as string, trilho.backgroundColor as string)).toBeGreaterThanOrEqual(1.08);
     });
 
-    it(`tema ${tema}: a aba escolhida do \`Tabs\` também`, () => {
+    // 24/10/2026: a aba escolhida do `Tabs` também é o amarelo do botão (decisão do Victor: "as abas do Tabs deixe como a
+    // aba escolhida amarelo tudo").
+    it(`tema ${tema}: a aba escolhida do \`Tabs\` também é o amarelo, sem sombra`, () => {
       __limpar();
       render(<AureaProvider theme={tema}><Tabs tabs={ABAS} value="a" /></AureaProvider>);
       const abas = __instancias("Pressable").filter((p) => p.accessibilityRole === "tab");
       const escolhida = estilo(abas.find((p) => (p.accessibilityState as {selected?: boolean})?.selected)!);
       const trilho = estilo(__instancias("View").find((p) => p.accessibilityRole === "tablist")!);
-      expect(escolhida.backgroundColor).toBe(t.color.segment);
-      expect(escolhida.boxShadow).toEqual(t.shadowLayers.shadowSm);
+      expect(escolhida.backgroundColor).toBe(t.color.primary);
+      expect(escolhida.boxShadow).toBeUndefined();
       expect(razao(escolhida.backgroundColor as string, trilho.backgroundColor as string)).toBeGreaterThanOrEqual(1.08);
     });
   }

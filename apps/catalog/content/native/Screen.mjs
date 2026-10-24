@@ -1,8 +1,10 @@
 // O Screen do nativo no site (bloco 1, o grupo 1 — 23/10/2026): a casca de uma tela. Aqui cada tela mora numa caixa do
 // tamanho de um pedaço de telefone, com sombra para se ver onde ela acaba — no app, a Screen ocupa a tela inteira.
 // No navegador, a `SafeAreaView` da biblioteca lê o `SafeAreaProvider` (a versão web dela usa o gancho de inset), e sem
-// ele a Screen levantava erro — medido aqui em 23/10/2026. Desde o bloco 1 (24/10/2026) a Screen leva o próprio provedor
-// no navegador quando não há um acima, e esta página prova isso: as caixas não põem provedor nenhum.
+// ele a Screen levantava erro — medido aqui em 23/10/2026.
+// Desde o bloco 1 (24/10/2026), sem provedor acima, a Screen põe no navegador a folga ZERADA — e esta página prova isso: as
+// caixas não põem nada. (O `SafeAreaProvider` do navegador mede a caixa contra a JANELA e dava folga de baixo errada a toda
+// caixa abaixo da dobra: 93, 778, 1.356 e 2.054 aqui, medido em 24/10/2026, com o rodapé fora do pé.)
 import {createElement as h, useState} from "react";
 import {Button, Card, Screen, Stack, Text} from "../../../../packages/native/dist/index.js";
 import {cada} from "../_eixos.mjs";
@@ -23,7 +25,7 @@ function Atualizavel() {
 
 export default {
   install: 'import {Screen} from "@aurea-uds/native";',
-  description: "The shell of one screen: it fills, paints the theme's surface, and keeps the content away from the notch and the gesture bar on all four sides. It needs no SafeAreaProvider above it: on a phone the safe-area view is native, and in the browser (react-native-web) the Screen brings its own when there is none.",
+  description: "The shell of one screen: it fills, paints the theme's surface, and keeps the content away from the notch and the gesture bar on all four sides. It needs no SafeAreaProvider above it: on a phone the safe-area view is native; in the browser (react-native-web), with no provider above, it takes no inset — put a SafeAreaProvider at the root when the web app must clear the notch.",
   api: {
     edges: "Which edges take the system inset. All four by default — in landscape the notch is on the left or the right.",
     padded: "16 of padding around the content. On by default; false for a list from edge to edge.",

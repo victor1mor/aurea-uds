@@ -84,11 +84,11 @@ describe("2 · o tom `link` no Text", () => {
     expect(StyleSheet.flatten(props("Text").style).color).toBe(claro.color.link);
   });
 
-  // `primary` é a letra de DESTAQUE desde a ADR-0081 (24/10/2026): no claro, o azul — o amarelo de preencher media 1,73:1.
-  it("e `primary` é a letra de destaque, legível no claro", () => {
+  // No nativo, `primary` continua o amarelo de PREENCHER (24/10/2026: a ADR-0081 trocou pela letra de destaque, e o Victor,
+  // vendo a bancada do nativo, deixou o nativo como era — a troca ficou só na web).
+  it("e `primary` continua sendo outra coisa", () => {
     render(<Envolve><Text tone="primary">x</Text></Envolve>);
-    expect(StyleSheet.flatten(props("Text").style).color).toBe(claro.color.primaryEmphasis);
-    expect(claro.color.primaryEmphasis).not.toBe(claro.color.primary);
+    expect(StyleSheet.flatten(props("Text").style).color).toBe(claro.color.primary);
   });
 });
 

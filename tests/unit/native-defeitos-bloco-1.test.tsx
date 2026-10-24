@@ -1,7 +1,8 @@
 // OS 8 DEFEITOS DAS PEÇAS DO NATIVO (bloco 1, 24/10/2026), achados ao montar as páginas do nativo no site — o Victor:
 // "Pode consertar os 8 defeitos das peças do nativo agora, no bloco 1." Cada `describe` é um defeito, e cada um prova o
 // CONTRATO no dublê: o que a peça pede ao React Native (estilo, props, provedor). O que o navegador faz com isso foi visto
-// na página do site. Provado contra o defeito: com o código de antes (`47533577`), reprovam todos os oito.
+// na página do site. Provado contra o defeito: com o código de antes (`47533577`), reprovam todos os oito (o 7, na forma
+// de hoje — ver o comentário dele).
 import {render, act} from "@testing-library/react";
 import {afterEach, describe, expect, it} from "vitest";
 import * as React from "react";
@@ -39,24 +40,33 @@ const achatarComoNaWeb = (estilo: unknown): Props => {
 
 afterEach(() => { __definirPlataforma("android"); });
 
+// O 1 também mudou no mesmo dia: a primeira versão punha o `SafeAreaProvider` da biblioteca, que no navegador mede a caixa
+// contra a janela e dava folga de baixo errada a tela que não começa no topo dela; o Victor escolheu, na bancada, "a
+// folga zerada, sem medir". Provado contra as duas versões de antes: a do `47533577` (nada no contexto) e a do
+// `68e6274d` (o provedor que mede, que no dublê não preenche o contexto) reprovam.
 describe("1 · a Screen no navegador não exige SafeAreaProvider", () => {
-  it("sem provedor acima, no navegador ela leva o próprio, com as medidas zeradas", () => {
+  const lidas: unknown[] = [];
+  const LeFolga = () => { lidas.push(React.useContext(SafeAreaInsetsContext)); return null; };
+
+  it("sem provedor acima, no navegador ela põe a folga ZERADA no contexto — sem o provedor que mede", () => {
     __definirPlataforma("web");
-    render(<Envolve><Screen><Text>Painel</Text></Screen></Envolve>);
-    const provedores = __instancias("SafeAreaProvider");
-    expect(provedores).toHaveLength(1);
-    expect((provedores[0].initialMetrics as {insets: Props}).insets).toEqual({top: 0, right: 0, bottom: 0, left: 0});
+    lidas.length = 0;
+    render(<Envolve><Screen><LeFolga /></Screen></Envolve>);
+    expect(lidas.at(-1)).toEqual({top: 0, right: 0, bottom: 0, left: 0});
+    expect(__instancias("SafeAreaProvider")).toHaveLength(0);
   });
 
-  it("com provedor acima, não põe outro; no aparelho, nunca põe", () => {
+  it("com provedor acima, usa o dele; no aparelho, não põe nada", () => {
     __definirPlataforma("web");
-    render(<SafeAreaInsetsContext.Provider value={{top: 0, right: 0, bottom: 0, left: 0}}>
-      <Envolve><Screen><Text>Painel</Text></Screen></Envolve>
+    lidas.length = 0;
+    render(<SafeAreaInsetsContext.Provider value={{top: 0, right: 0, bottom: 34, left: 0}}>
+      <Envolve><Screen><LeFolga /></Screen></Envolve>
     </SafeAreaInsetsContext.Provider>);
-    expect(__instancias("SafeAreaProvider")).toHaveLength(0);
+    expect(lidas.at(-1)).toEqual({top: 0, right: 0, bottom: 34, left: 0});
     __definirPlataforma("android");
-    render(<Envolve><Screen><Text>Painel</Text></Screen></Envolve>);
-    expect(__instancias("SafeAreaProvider")).toHaveLength(0);
+    lidas.length = 0;
+    render(<Envolve><Screen><LeFolga /></Screen></Envolve>);
+    expect(lidas.at(-1)).toBeNull();
   });
 });
 
@@ -143,28 +153,36 @@ describe("6 · o BottomNav `edge` não leva a sombra nem a camada da flutuante, 
   });
 });
 
-describe("7 · o Checkbox, o Radio e o Switch têm o toque de 44", () => {
-  it("com rótulo, a linha tem altura mínima de 44 (o `targetMin`)", () => {
+// O 7 mudou no mesmo dia (24/10/2026): a primeira versão deu à linha a altura de 44, e o Victor, vendo a bancada do
+// celular com a referência ao lado, decidiu *"Fica igual à referência: o desenho de antes e o mesmo toque a mais
+// invisível que ela usa (6 em volta)"*. No nativo dela, a caixa e o rádio têm `hitSlop` 6; o interruptor, nenhum.
+// Provado contra os dois: o código de antes (sem folga) e o do 44 (com a altura mínima) reprovam.
+describe("7 · o Checkbox e o Radio têm o toque a mais da referência; o Switch, como ela, não", () => {
+  it("a caixa e o rádio: 6 de toque a mais em volta, invisível", () => {
     render(<Envolve>
       <Checkbox testID="k" label="Remember me" />
       <Radio testID="r" label="Express" />
+      <Checkbox testID="k2" accessibilityLabel="Select row" />
+    </Envolve>);
+    for (const id of ["k", "r", "k2"]) expect(porID("Pressable", id).hitSlop, id).toBe(6);
+  });
+
+  it("o desenho e a medida da linha não mudam: nada de altura nem largura mínima", () => {
+    render(<Envolve>
+      <Checkbox testID="k" label="Remember me" />
+      <Radio testID="r" accessibilityLabel="Pick" />
       <Switch testID="s" label="Notifications" />
     </Envolve>);
     for (const id of ["k", "r", "s"]) {
-      expect(StyleSheet.flatten(porID("Pressable", id).style).minHeight, id).toBe(claro.size.targetMin);
+      const e = StyleSheet.flatten(porID("Pressable", id).style);
+      expect(e.minHeight, id).toBeUndefined();
+      expect(e.minWidth, id).toBeUndefined();
     }
   });
 
-  it("sem rótulo, a largura também chega a 44", () => {
-    render(<Envolve>
-      <Checkbox testID="k" accessibilityLabel="Select row" />
-      <Radio testID="r" accessibilityLabel="Pick" />
-    </Envolve>);
-    for (const id of ["k", "r"]) {
-      const e = StyleSheet.flatten(porID("Pressable", id).style);
-      expect(e.minHeight, id).toBe(claro.size.targetMin);
-      expect(e.minWidth, id).toBe(claro.size.targetMin);
-    }
+  it("o interruptor não ganha toque a mais (o da referência não tem)", () => {
+    render(<Envolve><Switch testID="s" label="Notifications" /></Envolve>);
+    expect(porID("Pressable", "s").hitSlop).toBeUndefined();
   });
 });
 
@@ -175,5 +193,25 @@ describe("8 · o SearchField sem `value`: o X apaga o texto", () => {
     expect(porID("TextInput", "b-campo").value).toBe("fuel");
     act(() => { (porID("Pressable", "b-limpar").onPress as () => void)(); });
     expect(porID("TextInput", "b-campo").value).toBe("");
+  });
+});
+
+// O AMARELO DO BOTÃO NA BARRA DE BAIXO (24/10/2026, decisão do Victor, vendo as formas desenhadas: "O amarelo por trás,
+// como o botão, na barra de baixo e na aba escolhida"): sem `indicator`, a aba escolhida ganha a cápsula amarela atrás
+// do ícone — o padrão era `none`, só a cor no ícone e no nome (no claro, o azul). Provado contra o padrão de antes: reprova.
+describe("a barra de baixo, por padrão, marca a aba escolhida com o amarelo por trás", () => {
+  const itens = [{id: "a", label: "Home", icon: "house" as const}, {id: "b", label: "Settings", icon: "gear" as const}];
+  it("sem `indicator`: há uma cápsula da cor da marca, e o nome não é o azul", () => {
+    const {container} = render(<Envolve><BottomNav items={itens} current="a" /></Envolve>);
+    const fundos = __instancias("View").map((v) => StyleSheet.flatten(v.style)?.backgroundColor);
+    expect(fundos).toContain(claro.color.primary);
+    const letras = __instancias("Text").map((v) => StyleSheet.flatten(v.style)?.color);
+    expect(letras).not.toContain(claro.color.primaryEmphasis);
+    expect(container.textContent).toContain("Home");
+  });
+  it("com `indicator=\"none\"` explícito, continua sem cápsula", () => {
+    render(<Envolve><BottomNav indicator="none" items={itens} current="a" /></Envolve>);
+    const fundos = __instancias("View").map((v) => StyleSheet.flatten(v.style)?.backgroundColor);
+    expect(fundos).not.toContain(claro.color.primary);
   });
 });
