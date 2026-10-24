@@ -4249,7 +4249,7 @@
           "props": [
             {
               "name": "children",
-              "optional": false,
+              "optional": true,
               "type": "string",
               "values": null
             },
@@ -4281,6 +4281,12 @@
               "name": "highlight",
               "optional": true,
               "type": "CodeHighlighter",
+              "values": null
+            },
+            {
+              "name": "tabs",
+              "optional": true,
+              "type": "CodeBlockTab[]",
               "values": null
             },
             {
