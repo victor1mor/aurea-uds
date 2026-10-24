@@ -10,7 +10,9 @@ const slug = (n: string) => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(
 // A ficha que só existe no nativo (`platforms.web: "n-a"`, bloco 1) não tem página da web: a dela é a `native-…`, que o
 // teste de baixo mede.
 const FICHAS = readdirSync(REG).filter((f) => f.endsWith(".json")).map((f) => JSON.parse(readFileSync(join(REG, f), "utf8")));
-const PAGINAS = FICHAS.filter((d) => d.platforms?.web !== "n-a").map((d) => d.name as string).sort().map((n) => `${slug(n)}.html`);
+const PAGINAS = [...FICHAS.filter((d) => d.platforms?.web !== "n-a").map((d) => d.name as string).sort().map((n) => `${slug(n)}.html`),
+  // Os padrões, os blocos e as receitas (bloco 1, o 3-C/3-D): a caixa deles acende também.
+  ...readdirSync(join(process.cwd(), "apps/catalog")).filter((f) => /^(pattern|block|recipe)-.+\.html$/.test(f)).sort()];
 const PAGINAS_DO_NATIVO = readdirSync(join(process.cwd(), "apps/catalog")).filter((f) => /^native-.+\.html$/.test(f)).sort();
 
 // Rola por cada caixa (ela acende quando chega perto da tela) e espera todas terem resposta.
@@ -22,8 +24,9 @@ async function acenderTudo(page: Page) {
     null, {timeout: 15000}).catch(() => {});
 }
 
-test("toda caixa de prévia de toda página de componente acende, sem erro", async ({page}) => {
-  test.setTimeout(20 * 60_000);
+test("toda caixa de prévia de toda página de componente, de padrão, de bloco e de receita acende, sem erro", async ({page}) => {
+  test.setTimeout(40 * 60_000);
+  expect(PAGINAS.filter((f) => /^pattern-/.test(f)).length, "as páginas de padrão sumiram").toBeGreaterThan(150);
   const erros: string[] = [];
   let atual = "";
   page.on("console", (m) => { if (m.type() === "error") erros.push(`${atual}: ${m.text().slice(0, 160)}`); });

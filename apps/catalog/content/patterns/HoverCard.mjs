@@ -21,7 +21,6 @@ export default [
     name: "Who this person is, without leaving the sentence",
     description: "A name in running text is an identifier, not an identity. The card answers \"who?\" in place, and the profile page it previews stays one click away — the preview is a shortcut, never the only route.",
     uses: ["HoverCard", "Avatar", "Badge"],
-    note: "Opens on pointer or focus; a static page shows the trigger.",
     code: `<HoverCard trigger={<a href="/people/analyst">Analyst</a>}>
   <div className="cluster">
     <Avatar fallback="AN" />
@@ -44,7 +43,6 @@ export default [
     name: "Previewing what a link leads to",
     description: "`side=\"top\"` when the trigger sits low in the viewport and a card below it would be cut off. The rest is unchanged: the preview saves a navigation, it does not replace one.",
     uses: ["HoverCard", "Badge"],
-    note: "Opens on pointer or focus; a static page shows the trigger.",
     code: `<HoverCard side="top" trigger={<a href="/runs/8814">Run #8814</a>}>
   <strong>Nightly sweep</strong>
   <p className="muted">Finished 09:13 · 1m 48s · 0 errors</p>

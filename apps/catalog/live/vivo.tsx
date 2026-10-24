@@ -15,6 +15,9 @@ import {montarSite} from "./site";
 type Exemplo = {render?: () => unknown};
 // O de partida pode trazer `examples`, os exemplos DEPOIS do principal (bloco 1, o catálogo fiel — 23/10/2026).
 export type Starters = Record<string, Exemplo & {examples?: Exemplo[]}>;
+// Os padrões, os blocos e as receitas (bloco 1, o 3-C/3-D): a entrada passa os módulos dela (a leve deixa de fora os que
+// usam motor pesado). A chave da caixa diz qual: `padrao/<Arquivo>.<n>`, `bloco/<arquivo>.<n>`, `receita/<id>`.
+export type Extras = {padroes?: Record<string, Exemplo[]>; blocos?: Record<string, Exemplo[]>; receitas?: Record<string, Exemplo>};
 
 // `import.meta.glob` com padrão NEGATIVO, e não um literal de template solto: o glob aberto casava também os arquivos `_`
 // do gerador. `import: "default"` traz só os objetos de conteúdo. O IIFE precisa deles eager no mesmo arquivo porque
@@ -24,7 +27,14 @@ const modulos = import.meta.glob<{examples?: Exemplo[]}>(["../content/*.mjs", "!
 
 // O MESMO caminho do gerador (`componentPage`): com arquivo próprio, o exemplo `i` dele; sem, o de partida no 0 e os
 // `examples` dele do 1 em diante.
-function exemplo(starters: Starters, nome: string, indice: number): Exemplo | undefined {
+function exemplo(starters: Starters, nome: string, indice: number, extras: Extras = {}): Exemplo | undefined {
+  const m = /^(padrao|bloco|receita)\/(.+)$/.exec(nome);
+  if (m) {
+    if (m[1] === "receita") return extras.receitas?.[m[2]];
+    const ponto = m[2].lastIndexOf(".");
+    const pasta = m[1] === "padrao" ? "patterns" : "blocks";
+    return (m[1] === "padrao" ? extras.padroes : extras.blocos)?.[`../content/${pasta}/${m[2].slice(0, ponto)}.mjs`]?.[Number(m[2].slice(ponto + 1))];
+  }
   const c = modulos[`../content/${nome}.mjs`];
   if (c) return c.examples?.[indice];
   return indice === 0 ? starters[nome] : starters[nome]?.examples?.[indice - 1];
@@ -32,9 +42,9 @@ function exemplo(starters: Starters, nome: string, indice: number): Exemplo | un
 
 // A moldura é um documento com UM exemplo; a página de componente, as caixas — e, junto, as peças vivas do topo do
 // site (a busca, o tema, a setinha), que nas outras páginas vêm do `search.js`.
-export function ligar(starters: Starters) {
+export function ligar(starters: Starters, extras: Extras = {}) {
   if (document.getElementById("root")?.dataset.componente) ligarMoldura(starters);
-  else if (document.querySelector("[data-vivo]")) montarSite(h(CaixasVivas, {starters}));
+  else if (document.querySelector("[data-vivo]")) montarSite(h(CaixasVivas, {starters, extras}));
 }
 
 // ── A MOLDURA (18/08/2026): o gerador já emite o exemplo com `renderToString` (os marcadores de hidratação), e
@@ -71,10 +81,10 @@ function ligarMoldura(starters: Starters) {
 // diz o resultado ("sim" ou "erro") — é o que o teste lê.
 type Ligada = {painel: HTMLElement; estatico: ChildNode[]; elemento: unknown; nome: string};
 
-function preparar(starters: Starters, painel: HTMLElement): Ligada | null {
+function preparar(starters: Starters, extras: Extras, painel: HTMLElement): Ligada | null {
   const nome = painel.dataset.vivo!;
   const [componente, indice] = nome.split(":");
-  const ex = exemplo(starters, componente, Number(indice));
+  const ex = exemplo(starters, componente, Number(indice), extras);
   try {
     if (!ex?.render) throw new Error("o exemplo não está nesta parte viva");
     // O elemento nasce UMA vez: um `render` que define um componente dentro dele criaria um tipo novo a cada desenho
@@ -98,11 +108,11 @@ const perto = (c: HTMLElement) => {
 };
 const preparadas = new WeakSet<Element>();
 
-function CaixasVivas({starters}: {starters: Starters}) {
+function CaixasVivas({starters, extras}: {starters: Starters; extras: Extras}) {
   const [ligadas, setLigadas] = useState<Ligada[]>(() => {
     const caixas = [...document.querySelectorAll<HTMLElement>("[data-vivo]")].filter(perto);
     caixas.forEach((c) => preparadas.add(c));
-    return caixas.map((c) => preparar(starters, c)).filter((l): l is Ligada => l !== null);
+    return caixas.map((c) => preparar(starters, extras, c)).filter((l): l is Ligada => l !== null);
   });
   useEffect(() => {
     const olho = new IntersectionObserver((vistas) => {
@@ -112,7 +122,7 @@ function CaixasVivas({starters}: {starters: Starters}) {
         olho.unobserve(v.target);
         if (preparadas.has(v.target)) continue;
         preparadas.add(v.target);
-        const l = preparar(starters, v.target as HTMLElement);
+        const l = preparar(starters, extras, v.target as HTMLElement);
         if (l) novas.push(l);
       }
       if (novas.length) setLigadas((xs) => [...xs, ...novas]);

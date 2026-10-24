@@ -229,7 +229,7 @@ const blocksDir = join(contentDir, "blocks");
 const blocks = [];
 for (const file of existsSync(blocksDir) ? readdirSync(blocksDir).filter(f => f.endsWith(".mjs")).sort() : []) {
   const mod = await import(pathToFileURL(join(blocksDir, file)).href);
-  for (const b of mod.default) blocks.push({...b, slug: `block-${slug(b.name)}`});
+  mod.default.forEach((b, idx) => blocks.push({...b, arquivo: file.replace(".mjs", ""), idx, slug: `block-${slug(b.name)}`}));
 }
 const blocksByCategory = {};
 for (const b of blocks) (blocksByCategory[b.category] ??= []).push(b);
@@ -251,7 +251,21 @@ for (const file of existsSync(patternsDir) ? readdirSync(patternsDir).filter(f =
   const component = file.replace(".mjs", "");
   if (!fichas.some(x => x.name === component))
     throw new Error(`content/patterns/${file}: "${component}" não é o name de nenhuma ficha do registry`);
-  for (const p of mod.default) patterns.push({...p, component, slug: `pattern-${slug(component)}-${slug(p.name)}`});
+  mod.default.forEach((p, idx) => patterns.push({...p, component, idx, slug: `pattern-${slug(component)}-${slug(p.name)}`}));
+}
+// OS ARQUIVOS COM MOTOR (bloco 1, o 3-C/3-D): o padrão ou o bloco que importa um motor pesado (o gráfico, a grade, o
+// editor, o mapa, o QR) acende com o `live-motores.js`, e a entrada leve (`live/main.tsx`) o deixa de fora — senão o
+// `live.js` de toda página levaria o motor junto. A lista se MEDE pelos imports; a da entrada leve tem de ser a mesma.
+const MOTOR_RE = /packages\/react\/dist\/(chart|data-grid|code-editor|graph|qrcode)\.js|from "recharts"|@xyflow/;
+const ARQUIVOS_COM_MOTOR = new Set(["patterns", "blocks"].flatMap((d) => existsSync(join(contentDir, d))
+  ? readdirSync(join(contentDir, d)).filter((f) => f.endsWith(".mjs") && MOTOR_RE.test(readFileSync(join(contentDir, d, f), "utf8")))
+    .map((f) => `${d}/${f.replace(".mjs", "")}`) : []));
+{
+  const leve = readFileSync(join(root, "apps/catalog/live/main.tsx"), "utf8");
+  const deFora = new Set([...leve.matchAll(/"!\.\.\/content\/((?:patterns|blocks)\/[^"]+)\.mjs"/g)].map((m) => m[1]));
+  const faltam = [...ARQUIVOS_COM_MOTOR].filter((f) => !deFora.has(f)), sobram = [...deFora].filter((f) => !ARQUIVOS_COM_MOTOR.has(f));
+  if (faltam.length || sobram.length) throw new Error(`live/main.tsx: a entrada leve tem de deixar de fora exatamente os arquivos com `
+    + `motor — faltam ${faltam.join(", ") || "nenhum"}; sobram ${sobram.join(", ") || "nenhum"}`);
 }
 const patternsByComponent = {};
 for (const p of patterns) (patternsByComponent[p.component] ??= []).push(p);
@@ -389,7 +403,7 @@ function demoBlock(render, code, anchor, vivo = null) {
     code ? h("div", {className: "demo-tabs"},
       h("div", {className: "segmented", role: "tablist"}, tab("preview", "Preview", true), tab("code", "Code", false))) : null,
     h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"),
-      ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`} : {}),
+      ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`, ...(vivo.motor ? {"data-vivo-motor": ""} : {})} : {}),
       ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
       // Componente cujo conteúdo vive num portal renderiza só o disparador; quem não renderiza
       // nada (Dialog, Drawer) mostra o disparador do próprio starter. O `note` do conteúdo
@@ -1123,7 +1137,9 @@ function patternPage(p, i) {
       // varredura do catálogo em 29/08/2026.
       : p.embed ? embedPreview(p.slug, p.render, p.name, null,
           p.layoutProprio === true, p.tituloProprio === true)
-      : p.render, code: p.code, description: p.note},
+      : p.render, code: p.code, description: p.note,
+      // A PARTE VIVA (bloco 1, o 3-C): a caixa do padrão acende como a do componente, pela chave `padrao/<Arquivo>.<n>`.
+      vivo: p.embed ? null : {componente: `padrao/${p.component}.${p.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`patterns/${p.component}`)}},
     imports: importLine(p.uses || [p.component]),
     related: relacionados([p.component, ...(p.uses || [])]),
     ...vizinhos("patterns", `${p.slug}.html`),
@@ -1140,7 +1156,9 @@ function blockPage(b, i) {
     // `.chart{width:100%}` de dentro resolve 100% de zero (medido em 01/08/2026).
     demo: {code: b.code, render: b.prerender
       ? () => h("div", {style: {width: "100%"}, dangerouslySetInnerHTML: {__html: preRenderizado[b.slug]}})
-      : b.render},
+      : b.render,
+      // A PARTE VIVA (bloco 1, o 3-D): a chave `bloco/<arquivo>.<n>`.
+      vivo: {componente: `bloco/${b.arquivo}.${b.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`blocks/${b.arquivo}`)}},
     imports: importLine(b.uses),
     related: relacionados(b.uses),
     ...vizinhos("blocks", `${b.slug}.html`),
@@ -1265,7 +1283,7 @@ function recipePage(id, archetype, i, ids) {
   return itemPage({
     title: recipeTitle(id),
     lede: intro || (archetype.capabilities || []).join(" · "),
-    demo: {render: c.render, code: c.code, description: c.description},
+    demo: {render: c.render, code: c.code, description: c.description, vivo: {componente: `receita/${id}`, indice: 0}},
     imports: importLine(c.uses),
     related: relacionados(c.uses),
     markdown: paraMarkdown({title: recipeTitle(id), lede: intro || (archetype.capabilities || []).join(" · "),
@@ -2089,7 +2107,7 @@ function pageHtml(title, activeHref, inner, section = "components") {
   // A página do nativo carrega a parte viva DELA (o `react-native-web` e as peças do nativo) e a folha delas.
   const comNativo = corpo.includes("data-vivo-nativo");
   const script = section === "home" ? "home" : comNativo ? "live-nativo"
-    : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) ? "live-motores" : "live";
+    : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) || corpo.includes("data-vivo-motor") ? "live-motores" : "live";
   return `<!doctype html>
 <html lang="en" data-theme="dark">
 <head>

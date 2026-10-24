@@ -5,16 +5,12 @@
 import {createElement as h} from "react";
 import {ContextMenu, Card} from "../../../../packages/react/dist/index.js";
 
-const PORTAL = "This page is static HTML: the popup lives in a portal and only exists in a real "
-  + "React app. The preview shows the trigger; the code is the whole composition.";
-
 export default [
   {
     variant: "Canvas",
     name: "Right-click on an item",
     description: "The menu the mouse expects on an item, and the keyboard reaches with Shift+F10. It never replaces a visible control: everything here has another way in.",
     uses: ["ContextMenu", "Card"],
-    note: PORTAL,
     code: `<ContextMenu label="Item actions" items={[
   {label: "Rename", leadingIcon: "pencil-simple"},
   {label: "Move to…", leadingIcon: "folder"},
