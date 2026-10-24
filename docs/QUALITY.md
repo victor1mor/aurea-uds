@@ -50,6 +50,7 @@ das duas coisas — a regra e uma asserção no `skin.spec.ts` que reprove se a 
 | 9 | `props` publicadas e batendo com a assinatura TypeScript | check 11 (formato) + check 22 (a ficha completa) + check 28 (`source.react` aponta para quem declara); o achado **M8 fechou** na Parte E, 07/08/2026 |
 | 9b | A plataforma que a ficha declara (`platforms`) é a que o pacote exporta, nos dois sentidos | check 48 (lote 1, as travas, 20/10/2026) |
 | 9c | Todo estado que a ficha promete (`states`) tem prova no código: o CSS que o desenha ou o código que o emite | check 49 (lote 1, as travas, 20/10/2026) |
+| 9d | Todo nome citado entre crases no texto escrito à mão (as páginas da Getting Started, o README, a skill) existe: token, pacote e caminho de import, componente e a parte dele, gancho, classe, caminho do repositório | check 50 (a trava 2, no bloco 1, 23/10/2026), que se prova sozinho contra um texto plantado a cada execução |
 | 10 | Um exemplo por feature declarada, com Preview e Código equivalentes | pessoa |
 | 11 | Página no modelo do tipo, sem seção faltando | gerador + `catalog-sweep` ([ADR-0001](../decisions/0001-modelo-de-pagina-do-catalogo.md)) |
 | 12 | Preview **e** código existem — em todo tipo de item | check 17 |

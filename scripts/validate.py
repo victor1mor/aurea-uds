@@ -35,6 +35,7 @@ import json
 import os
 import re
 import collections
+import fnmatch
 import sys
 
 root = Path(__file__).resolve().parents[1]
@@ -3965,6 +3966,151 @@ _sobra49 = sorted(f"{a}.{b}" for a, b in (set(PROVA_DO_ESTADO49) | set(EM_DIVIDA
 if _sobra49:
     errors.append(f"check 49: linha que sobrou em PROVA_DO_ESTADO49/EM_DIVIDA49 — {', '.join(_sobra49)}: a ficha "
                   "não declara mais o estado. Tire a linha")
+
+# ── 50. o nome citado no texto escrito à mão EXISTE ───────────────────────────────────────────
+# Lote 1, as travas (a trava 2, decidida pelo Victor em 19/10/2026 — *"padrões tão rigorosos que você ou qualquer
+# outra IA teria que seguir"*), feita no bloco 1 (o 1-A, 23/10/2026). O que se gera sozinho não envelhece; o que é
+# escrito à mão envelhece em silêncio: as páginas da Getting Started (`apps/catalog/content/docs/`), o README e a
+# skill. Esta trava confere cada nome entre crases desses textos contra a fonte da verdade:
+#   • token (`--space-4`, `--control-h-*`, `var(--card)`) — declarado no CSS dos tokens ou do core;
+#   • pacote (`@aurea-uds/react`) — existe; com caminho (`@aurea-uds/core/css`), o pacote exporta o caminho
+#     (os `exports` do `package.json`, com `*`) ou o arquivo existe dentro dele;
+#   • componente (`Button`, `<Badge tone="info">`, `Card.Content`) — algum pacote exporta o nome, e a parte existe;
+#   • gancho (`useTheme()`) — algum pacote exporta;
+#   • classe (`.btn-primary`) — o core a tem;
+#   • caminho do repositório (`packages/native`) — existe (no README quem cobra é o check 33).
+# Fica fora o que não é nome: blocos de código (quem cobra o código é a trava 1, o exemplo compila), linha riscada
+# com `~~` (menção deliberada a coisa removida, como no check 33), as notas de versão (registro, não manual). A
+# pesquisa da trava (item 76 do documento de achados) começou por tokens, caminhos e componentes; props e nomes de
+# ícone ficam para o passo seguinte. O protótipo, medido em 23/10/2026: 457 nomes, nenhum errado — a trava existe
+# para continuar assim.
+#
+# TRAVA CONTRA A CEGUEIRA: antes de conferir os textos, a mesma função confere um texto PLANTADO com um nome errado
+# de cada espécie; se ela deixar passar algum, a trava reprova a si mesma. Uma leitura que para de achar crase (ou
+# uma fonte da verdade que vem vazia) não fica verde em silêncio.
+TEXTOS50 = sorted((root / "apps/catalog/content/docs").glob("*.md")) + [root / "README.md", root / "skills/aurea-uds/SKILL.md"]
+# O que está entre crases e NÃO é nome da Aurea, com o motivo. Exceção que não aparece mais em texto nenhum reprova.
+NAO_E_NOME50 = {
+    "I": "letra, no exemplo de legibilidade (I, l, 1)",
+    "O": "letra, no exemplo de legibilidade (O, 0)",
+    "Tab": "tecla",
+    "Esc": "tecla",
+    "StyleSheet": "do React Native, citado como o jeito que a Aurea não usa",
+    "NOTICE": "o arquivo de aviso de licença dos ícones",
+    ".md": "extensão de arquivo",
+    ".html": "extensão de arquivo",
+    "useFonts": "o gancho do Expo, e a frase diz que é dele",
+}
+_css50 = ((root / "packages/tokens/dist/aurea.tokens.css").read_text(encoding="utf-8")
+          + (root / "packages/core/src/aurea.css").read_text(encoding="utf-8"))
+_tokens50 = set(re.findall(r"(--[a-z0-9-]+)\s*:", _css50))
+_classes50 = set(re.findall(r"\.([a-z][a-z0-9-]*)", re.sub(r"/\*.*?\*/", "", _css50, flags=re.S)))
+_exportados50, _partes50 = set(), collections.defaultdict(set)
+for _pac50 in ["react", "native"]:
+    for _f50 in (root / "packages" / _pac50 / "src").rglob("*.ts*"):
+        _t50 = _f50.read_text(encoding="utf-8")
+        _exportados50 |= set(re.findall(r"export\s+(?:declare\s+)?(?:const|let|function|type|interface|class|enum)\s+([A-Za-z_]\w*)", _t50))
+        for _bl50 in re.findall(r"export\s+(?:type\s+)?\{([^}]*)\}", _t50):
+            _exportados50 |= {p.strip().split(" as ")[-1].strip().removeprefix("type ").strip() for p in _bl50.split(",") if p.strip()}
+        for _n50, _p50 in re.findall(r"\b([A-Z]\w*)\.([A-Z]\w*)\s*=(?!=)", _t50):
+            _partes50[_n50].add(_p50)
+        for _n50, _ps50 in re.findall(r"export\s+const\s+([A-Z]\w*)\s*=\s*Object\.assign\(\s*\w+\s*,\s*\{([^}]*)\}", _t50):
+            _partes50[_n50] |= {p.split(":")[0].strip() for p in _ps50.split(",") if p.strip()}
+_pacotes50 = {}
+for _pj50 in (root / "packages").glob("*/package.json"):
+    _j50 = json.loads(_pj50.read_text(encoding="utf-8"))
+    _pacotes50[_j50["name"]] = (_pj50.parent, list(_j50["exports"]) if isinstance(_j50.get("exports"), dict) else ["."])
+
+
+def _confere50(c, caminho=True):
+    """O motivo de `c` não existir; "" se existe; None se o trecho não é um nome que a trava confere."""
+    if c in NAO_E_NOME50:
+        return None
+    if re.fullmatch(r"--[a-z0-9-]*\*?[a-z0-9-]*", c):
+        ok = any(fnmatch.fnmatch(t, c) for t in _tokens50) if "*" in c else c in _tokens50
+        return "" if ok else "token que o CSS dos tokens e do core não declara"
+    _vars = re.findall(r"var\((--[a-z0-9-]+)", c)
+    if _vars:
+        _falta = [v for v in _vars if v not in _tokens50]
+        return "" if not _falta else f"{', '.join(_falta)}: token que o CSS não declara"
+    if re.match(r"(apps|packages|scripts|tests|skills|docs|decisions)/", c):
+        if not caminho:
+            return None
+        return "" if (root / c.split("#")[0].rstrip("/")).exists() else "caminho que não existe no repositório"
+    m = re.fullmatch(r"(@aurea-uds/[a-z-]+)(/[A-Za-z0-9./<>*-]+)?", c)
+    if m:
+        if m.group(1) not in _pacotes50:
+            return "pacote que não existe"
+        if not m.group(2):
+            return ""
+        _dir, _exps = _pacotes50[m.group(1)]
+        _sub = "." + re.sub(r"<[^>]+>", "*", m.group(2))
+        ok = (_sub in _exps or any(fnmatch.fnmatch(_sub, e) or fnmatch.fnmatch(e, _sub) for e in _exps)
+              or ("*" not in _sub and (_dir / _sub).is_file()))
+        return "" if ok else f"o pacote não exporta `{_sub}` nem tem esse arquivo (exporta {', '.join(_exps)})"
+    m = re.fullmatch(r"<?([A-Z][A-Za-z0-9]*)(?:\.([A-Z][A-Za-z0-9]*))?(?:\s[^>]*)?\s*/?>?", c)
+    if m and (c.startswith("<") or re.fullmatch(r"[A-Z][A-Za-z0-9]*(?:\.[A-Z][A-Za-z0-9]*)?", c)):
+        if m.group(1) not in _exportados50:
+            return "nome que nenhum pacote exporta"
+        if m.group(2) and m.group(2) not in _partes50.get(m.group(1), set()):
+            return f"`{m.group(1)}` não tem a parte `{m.group(2)}`"
+        return ""
+    m = re.fullmatch(r"(use[A-Z][A-Za-z0-9]*)(?:\(\))?", c)
+    if m:
+        return "" if m.group(1) in _exportados50 else "gancho que nenhum pacote exporta"
+    m = re.fullmatch(r"\.([a-z][a-z0-9-]*)", c)
+    if m:
+        return "" if m.group(1) in _classes50 else "classe que o core não tem"
+    return None
+
+
+def _trechos50(texto):
+    _dentro = False
+    for _n, _l in enumerate(texto.splitlines(), 1):
+        if _l.lstrip().startswith("```"):
+            _dentro = not _dentro
+            continue
+        if _dentro or "~~" in _l:
+            continue
+        for _m in re.finditer(r"`([^`\n]+)`", _l):
+            yield _n, _m.group(1)
+
+
+# A prova contra a cegueira: um nome errado de cada espécie, e um certo de cada, num texto que não existe no disco.
+_PLANTADO50 = ("`--espaco-que-nao-existe` `var(--card-que-nao-existe)` `@aurea-uds/pacote-que-nao-existe` "
+               "`@aurea-uds/core/caminho-que-nao-existe` `PecaQueNaoExiste` `<Card.ParteQueNaoExiste>` "
+               "`useGanchoQueNaoExiste()` `.classe-que-nao-existe` `packages/pasta-que-nao-existe`\n"
+               "```tsx\n`--dentro-do-bloco-nao-conta`\n```\n"
+               "~~`--riscado-nao-conta`~~\n"
+               "`--space-4` `var(--card)` `@aurea-uds/react` `@aurea-uds/core/css` `Button` `<Card.Content>` "
+               "`useTheme()` `.btn` `packages/core`")
+_pegos50 = [c for _, c in _trechos50(_PLANTADO50) if _confere50(c)]
+if len(_pegos50) != 9 or any("nao-conta" in c for c in _pegos50):
+    errors.append(f"check 50: a trava está CEGA — no texto plantado ela pegou {len(_pegos50)} de 9 nomes errados "
+                  f"({', '.join(_pegos50)}). A leitura ou uma fonte da verdade quebrou")
+_conferidos50, _errados50, _usadas50 = 0, [], set()
+for _f50 in TEXTOS50:
+    for _n50, _c50 in _trechos50(_f50.read_text(encoding="utf-8")):
+        if _c50 in NAO_E_NOME50:
+            _usadas50.add(_c50)
+            continue
+        _r50 = _confere50(_c50, caminho=_f50.name != "README.md")
+        if _r50 is None:
+            continue
+        _conferidos50 += 1
+        if _r50:
+            _errados50.append(f"{_f50.relative_to(root).as_posix()}:{_n50} `{_c50}` ({_r50})")
+if _conferidos50 < 300:
+    errors.append(f"check 50: só {_conferidos50} nome(s) conferido(s) nos textos escritos à mão (eram 412 em "
+                  "23/10/2026) — a leitura está cega")
+if _errados50:
+    errors.append(f"check 50: {len(_errados50)} nome citado que não existe — {'; '.join(_errados50[:15])}"
+                  f"{'…' if len(_errados50) > 15 else ''}. Conserte o texto (ou, se o trecho não é nome da Aurea, "
+                  "ponha em NAO_E_NOME50 com o motivo)")
+_sobra50 = sorted(set(NAO_E_NOME50) - _usadas50)
+if _sobra50:
+    errors.append(f"check 50: exceção que sobrou em NAO_E_NOME50 — {', '.join(_sobra50)}: nenhum texto a cita mais. "
+                  "Tire a linha")
 
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")
