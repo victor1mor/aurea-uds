@@ -28,7 +28,7 @@ import * as React from "react";
 import {
   Animated, Easing, Pressable, View,
   type GestureResponderEvent, type LayoutChangeEvent, type NativeScrollEvent,
-  type NativeSyntheticEvent, type PressableProps, type StyleProp, type ViewStyle,
+  type NativeSyntheticEvent, type PressableProps, type StyleProp, type ViewProps, type ViewStyle,
 } from "react-native";
 import {canto, comOpacidade, criarFolha, estadoAcessivel, REACAO_AO_TOQUE} from "./estilos.js";
 import {NaSuperficie} from "./superficie.js";
@@ -200,6 +200,10 @@ export function Accordion({
   return surface ? <NaSuperficie.Provider value>{corpo}</NaSuperficie.Provider> : corpo;
 }
 
+// O cabeçalho do item tem nível 3, o padrão do cabeçalho de acordeão: no navegador (`react-native-web`) o título sem nível
+// vira `<h1>` (26 na página do Accordion, bloco 1, 23/10/2026); no aparelho a prop é ignorada.
+const NIVEL_DO_ITEM = {"aria-level": 3} as unknown as ViewProps;
+
 function ItemDoAccordion({item, aberto, surface, onAlternar, testID}: {
   item: AureaAccordionItem; aberto: boolean; surface: boolean;
   onAlternar: (id: string) => void; testID?: string;
@@ -238,7 +242,7 @@ function ItemDoAccordion({item, aberto, surface, onAlternar, testID}: {
 
   return (
     <View>
-      <View accessibilityRole="header">
+      <View accessibilityRole="header" {...NIVEL_DO_ITEM}>
         <Pressable
           testID={testID}
           disabled={inativo}

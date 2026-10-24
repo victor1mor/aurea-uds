@@ -31,7 +31,8 @@ import {ComOrdem, ComValor} from "./_estado.mjs";
 // O exemplo de cada valor de variação, com o código e a peça da mesma lista (bloco 1, o catálogo fiel — 23/10/2026).
 import {cada, eixo} from "./_eixos.mjs";
 
-export const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
+// A fileira que quebra centraliza cada linha, como a `linha` do `_eixos.mjs` (bloco 1, 23/10/2026).
+export const row = {display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "var(--space-3)"};
 const stack = {display: "grid", gap: "var(--space-3)"};
 export const wide = {width: "min(30rem,100%)"};
 // O mesmo limite, para peça que tem a largura do conteúdo (21/10/2026): a caixa encolhe até ela e o painel a
@@ -1332,10 +1333,10 @@ export function Actions() {
     examples: [
       eixo({titulo: "Risk", descricao: "How much the action can break. The word goes on the card; the colour only repeats it.",
         Comp: A.HumanApproval, nome: "HumanApproval", prop: "risk", valores: ["low", "medium", "high"],
-        base: {title: "Send the weekly report"}, estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+        base: (v) => ({title: `Send the weekly report (${v} risk)`}), estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
       eixo({titulo: "Decided", descricao: "Once decided, the pair of buttons becomes the result instead of disappearing, so the trace of the choice stays.",
         Comp: A.HumanApproval, nome: "HumanApproval", prop: "decision", valores: ["approved", "denied"],
-        base: {title: "Send the weekly report", risk: "low"}, estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+        base: (v) => ({title: `Send the weekly report (${v})`, risk: "low"}), estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
     ],
   },
   ToolPermission: {
@@ -1455,10 +1456,10 @@ export function Actions() {
     examples: [
       eixo({titulo: "Metrics", descricao: "Which measure the bars compare: tokens, cost or requests. The rows sort by the one in view.",
         Comp: A.ModelUsage, nome: "ModelUsage", prop: "metric", valores: ["tokens", "cost", "requests"],
-        baseCodigo: "entries={entries}", base: {entries: [
+        baseCodigo: (v) => `label="Model usage, ${v}" entries={entries}`, base: (v) => ({label: `Model usage, ${v}`, entries: [
           {id: "1", model: "opus", provider: "anthropic", tokens: 1840000, cost: 27.6, requests: 410},
           {id: "2", model: "haiku", provider: "anthropic", tokens: 620000, cost: 0.78, requests: 1290},
-          {id: "3", model: "embed-3", provider: "local", tokens: 95000, cost: 0, requests: 3020}]},
+          {id: "3", model: "embed-3", provider: "local", tokens: 95000, cost: 0, requests: 3020}]}),
         estilo: {display: "grid", gap: "var(--space-4)", ...wide}}),
     ],
   },

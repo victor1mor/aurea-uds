@@ -366,7 +366,7 @@
     },
     "DataStateProps": {
       "module": "feedback-client",
-      "raw": "HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & { state?: DataStateValue; message?: ReactNode; skeleton?: ReactNode; emptyTitle?: ReactNode; emptyIcon?: IconName; action?: ReactNode; children: ReactNode | (() => ReactNode); catchErrors?: boolean; onCatch?: (error: unknown, info: React.ErrorInfo) => void; }",
+      "raw": "Omit<HTMLAttributes<HTMLDivElement>, \"children\"> & RefAttributes<HTMLDivElement> & { state?: DataStateValue; message?: ReactNode; skeleton?: ReactNode; emptyTitle?: ReactNode; emptyIcon?: IconName; action?: ReactNode; children: ReactNode | (() => ReactNode); catchErrors?: boolean; onCatch?: (error: unknown, info: React.ErrorInfo) => void; }",
       "union": null
     },
     "UploadFn": {

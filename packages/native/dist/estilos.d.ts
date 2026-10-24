@@ -198,10 +198,19 @@ export type EstadoAcessivel = {
  * Uso: `<Pressable {...estadoAcessivel({checked, disabled})} />`. Ferramenta de dentro: **não
  * sai pela porta da frente do pacote.**
  */
-export declare function estadoAcessivel(estado: EstadoAcessivel | undefined): {
+/**
+ * `papel` (bloco 1, 24/10/2026): o "escolhido" na web depende de QUEM é escolhido. O `aria-selected` só vale em aba,
+ * opção, linha e célula — num link ou num botão o axe o recusa e o leitor de tela o ignora (o site, rodando o nativo no
+ * navegador, mediu 112 no `BottomNav`, 30 no `TagGroup`, 16 na `Gallery`, 32 no `Stepper`, 75 no `Chart`). Então, só na
+ * web: link escolhido é `aria-current="page"` (o par que a ficha do `BottomNav` já escreve), botão escolhido é
+ * `aria-pressed`, passo atual é `aria-current="step"`. No aparelho, o `accessibilityState` continua com o `selected`.
+ */
+export type PapelDoEscolhido = "link" | "button" | "step";
+export declare function estadoAcessivel(estado: EstadoAcessivel | undefined, papel?: PapelDoEscolhido): {
     accessibilityState: undefined;
     "aria-checked"?: undefined;
     "aria-selected"?: undefined;
+    "aria-current"?: undefined;
     "aria-disabled"?: undefined;
     "aria-expanded"?: undefined;
     "aria-busy"?: undefined;
@@ -216,6 +225,7 @@ export declare function estadoAcessivel(estado: EstadoAcessivel | undefined): {
     };
     "aria-checked": "mixed" | boolean | undefined;
     "aria-selected": boolean | undefined;
+    "aria-current": string | undefined;
     "aria-disabled": boolean | undefined;
     "aria-expanded": boolean | undefined;
     "aria-busy": boolean | undefined;

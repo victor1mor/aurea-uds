@@ -63,6 +63,7 @@ import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
     // ── Timeline ──
     trilha: { gap: t.size.space5 },
+    itemDaTrilha: { gap: t.size.space5 },
     trilho: {
         position: "absolute", top: t.size.space2, bottom: t.size.space2,
         // A MEIO DIÂMETRO do ponto, derivado do mesmo token — igual ao CSS, que faz
@@ -145,7 +146,8 @@ export function Timeline({ items, virtualized = false, style, testID }) {
                 : _jsx(View, { style: s.ponto });
         const entre = item.between != null && n < items.length - 1 ? (_jsx(View, { style: [s.entre, { paddingLeft: marcador + t.size.space3 }], children: typeof item.between === "string"
                 ? _jsx(Text, { size: "xs", tone: "muted", children: item.between }) : item.between })) : null;
-        return (_jsxs(_Fragment, { children: [_jsxs(View, { style: s.evento, children: [ponto, _jsxs(View, { style: s.colunaDoEvento, children: [item.trailing != null ? (_jsxs(View, { style: s.linhaDoTitulo, children: [titulo, typeof item.trailing === "string"
+        // O evento e o texto "entre" ele e o próximo são UM item da lista; o vão entre os dois é o mesmo da trilha.
+        return (_jsxs(View, { role: "listitem", style: s.itemDaTrilha, children: [_jsxs(View, { style: s.evento, children: [ponto, _jsxs(View, { style: s.colunaDoEvento, children: [item.trailing != null ? (_jsxs(View, { style: s.linhaDoTitulo, children: [titulo, typeof item.trailing === "string"
                                             ? _jsx(Text, { size: "md", weight: 600, children: item.trailing }) : item.trailing] })) : titulo, item.description != null
                                     ? (typeof item.description === "string"
                                         ? _jsx(Text, { size: "sm", tone: "muted", children: item.description }) : item.description)
@@ -191,7 +193,7 @@ export function DataList({ items, layout = "auto", style, testID }) {
             const nome = typeof item.term === "string" && typeof item.value === "string"
                 ? `${item.term}: ${item.value}`
                 : undefined;
-            return (_jsxs(View, { accessible: true, accessibilityLabel: nome, style: ladoALado ? s.parLadoALado : s.parEmpilhado, children: [typeof item.term === "string"
+            return (_jsxs(View, { role: "listitem", accessible: true, accessibilityLabel: nome, style: ladoALado ? s.parLadoALado : s.parEmpilhado, children: [typeof item.term === "string"
                         ? _jsx(Text, { size: "sm", tone: "muted", style: ladoALado ? s.termoLadoALado : undefined, children: item.term })
                         : item.term, typeof item.value === "string"
                         ? _jsx(Text, { size: "sm", style: s.valor, children: item.value })
@@ -246,9 +248,10 @@ export function Table({ caption, columns, rows, keyExtractor, onRowPress, empty,
                 })] }));
         // Só vira alvo se houver o que tocar. Uma linha `Pressable` sem ação é um botão que não faz
         // nada — e o leitor de tela a anunciaria como botão.
+        // A linha é o item da lista; a tocável é um botão DENTRO dele (o papel de item não pode ir no botão).
         return onRowPress
-            ? _jsx(Pressable, { accessibilityRole: "button", onPress: () => onRowPress(linha), style: [s.linha, s.linhaTocavel], children: corpo })
-            : _jsx(View, { style: s.linha, children: corpo });
+            ? _jsx(View, { role: "listitem", children: _jsx(Pressable, { accessibilityRole: "button", onPress: () => onRowPress(linha), style: [s.linha, s.linhaTocavel], children: corpo }) })
+            : _jsx(View, { role: "listitem", style: s.linha, children: corpo });
     }, [principal, secundarias, conteudo, onRowPress, s]);
     const chave = React.useCallback((linha, n) => keyExtractor ? keyExtractor(linha, n) : String(n), [keyExtractor]);
     const nomeDaLista = typeof caption === "string" ? caption : strings.tableLabel;

@@ -7,6 +7,11 @@ import {join} from "node:path";
 // rótulo do ColorField e do DatePicker cortado pelo canto de 22) e o BottomNav que perdia o ícone ao trocar de item.
 const DIR = join(process.cwd(), "apps/catalog/embeds");
 const MOLDURAS = readdirSync(DIR).filter((f) => f.endsWith(".html")).sort();
+// A moldura cuja tinta fica fora do centro de propósito, com a medida (a mesma regra do `FORA_DO_CENTRO`, mais abaixo).
+const MOLDURA_FORA_DO_CENTRO: Record<string, string> = {
+  "bottomnav-the-four-older-names.html": "a coluna das quatro barras está no centro (43 em cima, 42 embaixo); a tinta sobe 8 "
+    + "porque cada barra antiga pinta uma parte diferente do próprio retângulo",
+};
 
 // Todo <use> do documento aponta para um desenho que existe nele.
 const semDesenho = () => [...document.querySelectorAll("use")]
@@ -99,9 +104,10 @@ test("toda moldura tem o fundo da caixa de prévia, e a peça no centro, com fol
     });
     if (m.corpo !== m.esperado) erros.push(`${f}: fundo ${m.corpo}, a caixa é ${m.esperado}`);
     if (!m.pagina && m.visto !== m.esperado) erros.push(`${f}: no canto se vê ${m.visto}, a caixa é ${m.esperado}`);
-    if (m.centro && (Math.abs(m.centro.dx) > 4 || Math.abs(m.centro.dy) > 4)) erros.push(`${f}: fora do centro (${m.centro.dx}, ${m.centro.dy})`);
+    if (m.centro && !(f in MOLDURA_FORA_DO_CENTRO) && (Math.abs(m.centro.dx) > 4 || Math.abs(m.centro.dy) > 4)) erros.push(`${f}: fora do centro (${m.centro.dx}, ${m.centro.dy})`);
     if (m.centro && m.centro.folga < 16) erros.push(`${f}: a peça a ${m.centro.folga} da borda`);
   }
+  for (const f of Object.keys(MOLDURA_FORA_DO_CENTRO)) if (!MOLDURAS.includes(f)) erros.push(`${f}: está em MOLDURA_FORA_DO_CENTRO e a moldura não existe mais — tire a linha`);
   expect(erros).toEqual([]);
 });
 
@@ -114,12 +120,15 @@ const FORA_DO_CENTRO: Record<string, string> = {
   "Accordion:1": "o bloco está no centro; a medida conta o espaço que o item fechado reserva embaixo",
   "Prose:0": "texto corrido ocupa a largura; a última linha curta puxa a tinta para a esquerda",
   "Skeleton:0": "linhas de larguras diferentes, de propósito (70% e 90%)",
+  "Skeleton:1": "as linhas de 70% do texto que carrega, alinhadas como texto — o mesmo motivo da de cima",
+  "Header:1": "o floating e o pill descem 16 do topo de propósito (o descolamento da barra) e nada embaixo — medido: 10 abaixo",
   "Tabs:1": "na referência as abas esticam até encher a fila; as nossas (secondary) não — é da peça, lote 2",
 };
 const REG = join(process.cwd(), "packages/contracts/registry");
 const slug = (n: string) => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const PAGINAS = readdirSync(REG).filter((f) => f.endsWith(".json"))
-  .map((f) => JSON.parse(readFileSync(join(REG, f), "utf8")).name as string).sort().map((n) => `${slug(n)}.html`);
+// A ficha que só existe no nativo (`platforms.web: "n-a"`, bloco 1) não tem página da web.
+const PAGINAS = readdirSync(REG).filter((f) => f.endsWith(".json")).map((f) => JSON.parse(readFileSync(join(REG, f), "utf8")))
+  .filter((d) => d.platforms?.web !== "n-a").map((d) => d.name as string).sort().map((n) => `${slug(n)}.html`);
 
 test("toda caixa do meio da página de componente tem a peça no centro, já viva", async ({page}) => {
   test.setTimeout(20 * 60_000);

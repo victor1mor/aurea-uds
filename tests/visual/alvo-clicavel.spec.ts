@@ -145,10 +145,20 @@ test("o que o CSS declara clicável é operável pelo teclado, em toda página d
           //
           // O ancestral mais alto que também tem `cursor:pointer` e também não tem caminho é a
           // causa; ele será (ou já foi) visitado por este mesmo laço.
+          // A SUPERFÍCIE ABSOLVIDA absolve o que está nela (bloco 1, 23/10/2026): o pai com a mão de ponteiro que CONTÉM
+          // o controle (o campo escondido do `OTPField` do nativo, o `<input type="date">` por cima do `DatePicker`) é
+          // uma superfície com caminho de teclado — e o filho dela que não contém o controle (a fileira das caixas) é a
+          // mesma superfície, não um defeito à parte. Antes, o pai saía absolvido e o filho acusado.
+          const naSuperficieAbsolvida = (() => {
+            for (let a = el.parentElement; a && getComputedStyle(a).cursor === "pointer"; a = a.parentElement) {
+              if (a.matches(OPERAVEL) || a.querySelector(OPERAVEL)) return true;
+            }
+            return false;
+          })();
+          if (naSuperficieAbsolvida) continue;
           const paiTambemFalha = (() => {
             for (let a = el.parentElement; a; a = a.parentElement) {
               if (getComputedStyle(a).cursor !== "pointer") return false;
-              if (a.matches(OPERAVEL) || a.querySelector(OPERAVEL)) return false;
               return true;   // o pai imediato herda o defeito: ele é a causa, não este
             }
             return false;

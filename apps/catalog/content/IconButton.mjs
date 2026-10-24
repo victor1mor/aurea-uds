@@ -2,7 +2,8 @@ import {createElement as h} from "react";
 import {IconButton, Tooltip, ButtonGroup} from "../../../packages/react/dist/index.js";
 import {cada} from "./_eixos.mjs";
 
-const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
+// A fileira que quebra centraliza cada linha, como a do `_eixos.mjs` (bloco 1, 23/10/2026).
+const row = {display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "var(--space-2)"};
 
 export default {
   description:

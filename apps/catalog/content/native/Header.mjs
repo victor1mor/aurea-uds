@@ -10,7 +10,7 @@ const MENSAGENS = Array.from({length: 16}, (_, n) => `Message ${n + 1}: the week
 // A lista que rola por baixo da barra, com o recuo da tela (o `page` do `inset`), dos tokens.
 function Rolagem() {
   const t = useAureaTokens();
-  return h(ScrollView, {contentContainerStyle: {paddingHorizontal: t.size.space4, gap: t.size.space2}},
+  return h(ScrollView, {focusable: true, contentContainerStyle: {paddingHorizontal: t.size.space4, gap: t.size.space2}},
     ...MENSAGENS.map((m) => h(Text, {key: m}, m)));
 }
 const coluna = {display: "grid", gap: "var(--space-4)", width: "100%"};

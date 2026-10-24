@@ -67,7 +67,7 @@
 // folha, e ele leva `search` — que mapeia nos dois.
 import * as React from "react";
 import {
-  Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, type TextInputProps,
+  Animated, Easing, FlatList, Modal, PanResponder, Platform, Pressable, TextInput, View, type TextInputProps,
   type StyleProp, type ViewStyle,
 } from "react-native";
 import {IconButton} from "./actions.js";
@@ -491,8 +491,10 @@ export function Combobox({
                 autoFocus
                 autoCorrect={false}
                 autoCapitalize="none"
-                // Mapeia nos dois sistemas — conferido no fonte do RN, tabela no topo do módulo.
+                // Mapeia nos dois sistemas — conferido no fonte do RN, tabela no topo do módulo. No navegador, `search` num
+                // `<input>` não vale (é papel de região); o campo é `searchbox` (bloco 1, 24/10/2026).
                 accessibilityRole="search"
+                role={Platform.OS === "web" ? "searchbox" : undefined}
                 accessibilityLabel={searchPlaceholder ?? strings.comboboxSearch}
                 // `returnKeyType="search"` troca o "enter" do teclado pela lupa. É pista de
                 // plataforma, não decoração: diz à pessoa que aquele campo é de busca antes de
@@ -707,6 +709,7 @@ export function SearchField({
         onFocus={() => setFocado(true)}
         onBlur={() => setFocado(false)}
         accessibilityRole="search"
+        role={Platform.OS === "web" ? "searchbox" : undefined}
         accessibilityLabel={campo?.label ?? placeholder}
         accessibilityHint={campo?.hint}
         {...estadoAcessivel({disabled: !!inativo})}

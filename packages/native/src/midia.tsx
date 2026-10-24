@@ -37,7 +37,7 @@
 //                     e serve ao mesmo caso real: o consumidor que já usa `expo-image`.
 import * as React from "react";
 import {
-  Image as ImageRN, Pressable, View,
+  Image as ImageRN, Platform, Pressable, View,
   type ImageSourcePropType, type ImageStyle, type StyleProp, type ViewStyle,
 } from "react-native";
 import {canto, criarFolha, estadoAcessivel} from "./estilos.js";
@@ -294,22 +294,26 @@ export function Gallery({
             </>
           );
           if (!interativo) {
-            return <View key={item.id} style={s.ladrilho}>{miolo}</View>;
+            return <View key={item.id} role="listitem" style={s.ladrilho}>{miolo}</View>;
           }
           return (
+            <View key={item.id} role="listitem">
             <Pressable
-              key={item.id}
               testID={testID ? `${testID}-${item.id}` : undefined}
               onPress={() => { onSelect?.(item.id); if (zoom) setAmpliado(item.id); }}
+              // `imagebutton` é o papel do aparelho (botão com imagem); o `react-native-web` não o traduz e jogava o
+              // papel fora — no navegador é `button` (bloco 1, 24/10/2026).
               accessibilityRole="imagebutton"
+              role={Platform.OS === "web" ? "button" : undefined}
               // Com legenda, o nome do ladrilho é a legenda e a imagem já saiu da árvore (o
               // `alt=""` acima). Sem legenda, o nome é o `alt`.
               accessibilityLabel={temLegenda && typeof item.caption === "string"
                 ? item.caption : item.alt}
-              {...estadoAcessivel({selected: item.id === selected})}
+              {...estadoAcessivel({selected: item.id === selected}, "button")}
               style={[s.ladrilho, item.id === selected && s.ladrilhoEscolhido]}>
               {miolo}
             </Pressable>
+            </View>
           );
         })}
       </Grid>

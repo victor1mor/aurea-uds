@@ -374,7 +374,7 @@ export function Chart({
                 key={i}
                 onPress={() => tocar(i)}
                 accessibilityRole="button"
-                {...estadoAcessivel({selected: selecionado === i})}
+                {...estadoAcessivel({selected: selecionado === i}, "button")}
                 accessibilityLabel={[
                   rotulo,
                   ...series.map((serie) => {
@@ -436,7 +436,7 @@ export function ChartLegend({series, colors, style, testID}: ChartLegendProps) {
   return (
     <View accessibilityRole="list" style={[s.legenda, style]} testID={testID}>
       {series.map((serie, n) => (
-        <View key={n} accessible accessibilityLabel={serie.name} style={s.chave}>
+        <View key={n} role="listitem" accessible accessibilityLabel={serie.name} style={s.chave}>
           <View style={[s.amostra, {
             backgroundColor: serie.color ?? colors?.[n]
               ?? t.color[ORDEM[n % ORDEM.length]] ?? t.color.primary,

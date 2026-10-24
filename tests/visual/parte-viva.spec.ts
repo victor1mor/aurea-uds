@@ -7,8 +7,11 @@ import {join} from "node:path";
 // o CodeEditor saía vazio, o Combobox com "Interactive — see the code.", o CommandPaletteShell vazio.
 const REG = join(process.cwd(), "packages/contracts/registry");
 const slug = (n: string) => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const PAGINAS = readdirSync(REG).filter((f) => f.endsWith(".json"))
-  .map((f) => JSON.parse(readFileSync(join(REG, f), "utf8")).name as string).sort().map((n) => `${slug(n)}.html`);
+// A ficha que só existe no nativo (`platforms.web: "n-a"`, bloco 1) não tem página da web: a dela é a `native-…`, que o
+// teste de baixo mede.
+const FICHAS = readdirSync(REG).filter((f) => f.endsWith(".json")).map((f) => JSON.parse(readFileSync(join(REG, f), "utf8")));
+const PAGINAS = FICHAS.filter((d) => d.platforms?.web !== "n-a").map((d) => d.name as string).sort().map((n) => `${slug(n)}.html`);
+const PAGINAS_DO_NATIVO = readdirSync(join(process.cwd(), "apps/catalog")).filter((f) => /^native-.+\.html$/.test(f)).sort();
 
 // Rola por cada caixa (ela acende quando chega perto da tela) e espera todas terem resposta.
 async function acenderTudo(page: Page) {
@@ -42,6 +45,32 @@ test("toda caixa de prévia de toda página de componente acende, sem erro", asy
     if (r.semMarca) falhas.push(`${arquivo}: ${r.semMarca} caixa(s) sem a marca da parte viva`);
     if (r.apagadas.length) falhas.push(`${arquivo}: não acendeu ${r.apagadas.join(", ")}`);
     if (r.aviso) falhas.push(`${arquivo}: ainda diz "Interactive — see the code."`);
+  }
+  expect([...falhas, ...erros]).toEqual([]);
+});
+
+// A PARTE VIVA DO NATIVO (bloco 1, 23/10/2026): a página do nativo chega com a peça desenhada pelo gerador, nos dois temas, e
+// o `live-nativo.js` monta cada caixa (`createRoot` em `[data-vivo-nativo]`). A raiz do React no nó é a prova de que acendeu;
+// uma caixa sem ela é a peça parada, que o Victor não tem como validar.
+test("toda caixa de toda página do nativo acende, sem erro", async ({page}) => {
+  test.setTimeout(20 * 60_000);
+  const erros: string[] = [];
+  let atual = "";
+  page.on("console", (m) => { if (m.type() === "error") erros.push(`${atual}: ${m.text().slice(0, 160)}`); });
+  page.on("pageerror", (e) => erros.push(`${atual}: ${String(e).slice(0, 160)}`));
+  const falhas: string[] = [];
+  expect(PAGINAS_DO_NATIVO.length, "as páginas do nativo sumiram — o teste ficaria verde sem medir nada").toBeGreaterThan(70);
+  for (const arquivo of PAGINAS_DO_NATIVO) {
+    atual = arquivo;
+    await page.goto(`/apps/catalog/${arquivo}`);
+    await page.waitForLoadState("load");
+    const r = await page.evaluate(() => {
+      const caixas = [...document.querySelectorAll<HTMLElement>("[data-vivo-nativo]")];
+      return {total: caixas.length,
+        apagadas: caixas.filter((c) => !Object.keys(c).some((k) => k.startsWith("__reactContainer$"))).map((c) => c.dataset.vivoNativo)};
+    });
+    if (!r.total) falhas.push(`${arquivo}: nenhuma caixa do nativo`);
+    if (r.apagadas.length) falhas.push(`${arquivo}: não acendeu ${r.apagadas.join(", ")}`);
   }
   expect([...falhas, ...erros]).toEqual([]);
 });

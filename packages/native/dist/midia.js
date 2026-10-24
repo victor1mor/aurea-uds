@@ -37,7 +37,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   `render`          a web troca o elemento pelo `useRender` do Base UI. Aqui é `cloneElement`,
 //                     e serve ao mesmo caso real: o consumidor que já usa `expo-image`.
 import * as React from "react";
-import { Image as ImageRN, Pressable, View, } from "react-native";
+import { Image as ImageRN, Platform, Pressable, View, } from "react-native";
 import { canto, criarFolha, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Grid } from "./layout.js";
@@ -184,14 +184,17 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = 1, min
                                 ? _jsx(Text, { size: "sm", numberOfLines: 2, children: item.caption })
                                 : item.caption)] }));
                     if (!interativo) {
-                        return _jsx(View, { style: s.ladrilho, children: miolo }, item.id);
+                        return _jsx(View, { role: "listitem", style: s.ladrilho, children: miolo }, item.id);
                     }
-                    return (_jsx(Pressable, { testID: testID ? `${testID}-${item.id}` : undefined, onPress: () => { onSelect?.(item.id); if (zoom)
-                            setAmpliado(item.id); }, accessibilityRole: "imagebutton", 
-                        // Com legenda, o nome do ladrilho é a legenda e a imagem já saiu da árvore (o
-                        // `alt=""` acima). Sem legenda, o nome é o `alt`.
-                        accessibilityLabel: temLegenda && typeof item.caption === "string"
-                            ? item.caption : item.alt, ...estadoAcessivel({ selected: item.id === selected }), style: [s.ladrilho, item.id === selected && s.ladrilhoEscolhido], children: miolo }, item.id));
+                    return (_jsx(View, { role: "listitem", children: _jsx(Pressable, { testID: testID ? `${testID}-${item.id}` : undefined, onPress: () => { onSelect?.(item.id); if (zoom)
+                                setAmpliado(item.id); }, 
+                            // `imagebutton` é o papel do aparelho (botão com imagem); o `react-native-web` não o traduz e jogava o
+                            // papel fora — no navegador é `button` (bloco 1, 24/10/2026).
+                            accessibilityRole: "imagebutton", role: Platform.OS === "web" ? "button" : undefined, 
+                            // Com legenda, o nome do ladrilho é a legenda e a imagem já saiu da árvore (o
+                            // `alt=""` acima). Sem legenda, o nome é o `alt`.
+                            accessibilityLabel: temLegenda && typeof item.caption === "string"
+                                ? item.caption : item.alt, ...estadoAcessivel({ selected: item.id === selected }, "button"), style: [s.ladrilho, item.id === selected && s.ladrilhoEscolhido], children: miolo }) }, item.id));
                 }) }), zoom && (_jsx(FotoAmpliada, { source: aberto?.source, title: aberto ? (typeof aberto.caption === "string" ? aberto.caption : aberto.alt) : "", alt: aberto?.alt ?? "", ratio: ratio, onClose: () => setAmpliado(null), testID: testID ? `${testID}-ampliada` : undefined }))] }));
 }
 /**

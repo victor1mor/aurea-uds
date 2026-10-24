@@ -238,6 +238,9 @@ const folha = criarFolha((t) => ({
     // ── Stepper ────────────────────────────────────────────────────────────────────────────────
     trilha: { flexDirection: "row" },
     passo: { flex: 1, alignItems: "center" },
+    // O passo tocável: o item da lista leva o `flex: 1`, e o botão dentro dele, a largura toda — o alvo do toque não muda.
+    passoItem: { flex: 1 },
+    passoDentro: { alignItems: "center" },
     bolinha: {
         width: 32, height: 32, marginBottom: t.size.space2,
         alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
@@ -421,7 +424,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                 : (nomeVisivel ? it.label : _jsx(View, { style: s.rotuloEscondido, children: it.label }));
             return (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, 
                 // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
-                accessibilityRole: "link", accessibilityLabel: !nomeVisivel && typeof it.label === "string" ? it.label : undefined, ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }), style: [
+                accessibilityRole: "link", accessibilityLabel: !nomeVisivel && typeof it.label === "string" ? it.label : undefined, ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }, "link"), style: [
                     s.aba, justa && s.aba_content,
                     indicator === "subtle" && { ...canto(t.size.radiusCard - t.size.space1) },
                     ativo && (indicator === "subtle" || indicator === "pill")
@@ -513,7 +516,7 @@ export function NavList({ items, chevron = "caret-right", style, ...rest }) {
                                 ? _jsx(Text, { size: "xs", tone: "muted", numberOfLines: 1, children: it.description })
                                 : it.description)] }), it.indicators && it.indicators.length > 0 && (_jsx(View, { style: s.sinais, children: it.indicators.map((x) => (_jsx(View, { accessibilityLabel: x.label, children: _jsx(Icon, { name: x.icon, size: "sm", color: t.color.mutedForeground }) }, x.label))) })), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron
                         && _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground })] }));
-            return (_jsxs(View, { style: [s.linha, it.disabled && { opacity: t.size.opacityDisabled }], children: [temAcao ? (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, accessibilityRole: "link", ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })) : (_jsx(View, { accessible: true, ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })), !valorEhTexto && it.value != null ? it.value : null] }, it.id));
+            return (_jsxs(View, { role: "listitem", style: [s.linha, it.disabled && { opacity: t.size.opacityDisabled }], children: [temAcao ? (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, accessibilityRole: "link", ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })) : (_jsx(View, { accessible: true, ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })), !valorEhTexto && it.value != null ? it.value : null] }, it.id));
         }) }));
 }
 /**
@@ -546,7 +549,9 @@ export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circl
                         : it.label, it.optional != null && (typeof it.optional === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", align: "center", children: it.optional })
                         : it.optional)] }));
-            return it.onPress ? (_jsx(Pressable, { onPress: it.onPress, accessibilityRole: "button", ...estadoAcessivel({ selected: st === "active" }), style: s.passo, children: miolo }, n)) : (_jsx(View, { accessible: true, ...estadoAcessivel({ selected: st === "active" }), style: s.passo, children: miolo }, n));
+            // O item da lista é o passo; o tocável fica DENTRO dele (o papel de item não pode ir no botão). Na web, o passo
+            // atual é `aria-current="step"` (bloco 1, 24/10/2026).
+            return it.onPress ? (_jsx(View, { role: "listitem", style: s.passoItem, children: _jsx(Pressable, { onPress: it.onPress, accessibilityRole: "button", ...estadoAcessivel({ selected: st === "active" }, "step"), style: s.passoDentro, children: miolo }) }, n)) : (_jsx(View, { role: "listitem", accessible: true, ...estadoAcessivel({ selected: st === "active" }, "step"), style: s.passo, children: miolo }, n));
         }) }));
 }
 /**

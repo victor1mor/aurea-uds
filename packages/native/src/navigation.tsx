@@ -276,6 +276,9 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ── Stepper ────────────────────────────────────────────────────────────────────────────────
   trilha: {flexDirection: "row"},
   passo: {flex: 1, alignItems: "center"},
+  // O passo tocável: o item da lista leva o `flex: 1`, e o botão dentro dele, a largura toda — o alvo do toque não muda.
+  passoItem: {flex: 1},
+  passoDentro: {alignItems: "center"},
   bolinha: {
     width: 32, height: 32, marginBottom: t.size.space2,
     alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
@@ -546,7 +549,7 @@ export function BottomNav({
             // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
             accessibilityRole="link"
             accessibilityLabel={!nomeVisivel && typeof it.label === "string" ? it.label : undefined}
-            {...estadoAcessivel({selected: ativo, disabled: !!it.disabled})}
+            {...estadoAcessivel({selected: ativo, disabled: !!it.disabled}, "link")}
             style={[
               s.aba, justa && s.aba_content,
               indicator === "subtle" && {...canto(t.size.radiusCard - t.size.space1)},
@@ -747,7 +750,7 @@ export function NavList({items, chevron = "caret-right", style, ...rest}: NavLis
           </>
         );
         return (
-          <View key={it.id} style={[s.linha, it.disabled && {opacity: t.size.opacityDisabled}]}>
+          <View key={it.id} role="listitem" style={[s.linha, it.disabled && {opacity: t.size.opacityDisabled}]}>
             {temAcao ? (
               <Pressable
                 onPress={it.onPress}
@@ -839,16 +842,20 @@ export function Stepper({
               : it.optional)}
           </>
         );
+        // O item da lista é o passo; o tocável fica DENTRO dele (o papel de item não pode ir no botão). Na web, o passo
+        // atual é `aria-current="step"` (bloco 1, 24/10/2026).
         return it.onPress ? (
-          <Pressable
-            key={n} onPress={it.onPress}
-            accessibilityRole="button"
-            {...estadoAcessivel({selected: st === "active"})}
-            style={s.passo}>
-            {miolo}
-          </Pressable>
+          <View key={n} role="listitem" style={s.passoItem}>
+            <Pressable
+              onPress={it.onPress}
+              accessibilityRole="button"
+              {...estadoAcessivel({selected: st === "active"}, "step")}
+              style={s.passoDentro}>
+              {miolo}
+            </Pressable>
+          </View>
         ) : (
-          <View key={n} accessible {...estadoAcessivel({selected: st === "active"})} style={s.passo}>
+          <View key={n} role="listitem" accessible {...estadoAcessivel({selected: st === "active"}, "step")} style={s.passo}>
             {miolo}
           </View>
         );

@@ -67,7 +67,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // aceita digitação, então `button` é o que ele É nos dois sistemas. Quem digita é o campo da
 // folha, e ele leva `search` — que mapeia nos dois.
 import * as React from "react";
-import { Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, } from "react-native";
+import { Animated, Easing, FlatList, Modal, PanResponder, Platform, Pressable, TextInput, View, } from "react-native";
 import { IconButton } from "./actions.js";
 import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
@@ -321,8 +321,9 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
                                                 // exigir um segundo toque para o teclado subir é um toque a mais em cada
                                                 // cadastro. O foco entra com a folha; o teclado vem junto.
                                                 autoFocus: true, autoCorrect: false, autoCapitalize: "none", 
-                                                // Mapeia nos dois sistemas — conferido no fonte do RN, tabela no topo do módulo.
-                                                accessibilityRole: "search", accessibilityLabel: searchPlaceholder ?? strings.comboboxSearch, 
+                                                // Mapeia nos dois sistemas — conferido no fonte do RN, tabela no topo do módulo. No navegador, `search` num
+                                                // `<input>` não vale (é papel de região); o campo é `searchbox` (bloco 1, 24/10/2026).
+                                                accessibilityRole: "search", role: Platform.OS === "web" ? "searchbox" : undefined, accessibilityLabel: searchPlaceholder ?? strings.comboboxSearch, 
                                                 // `returnKeyType="search"` troca o "enter" do teclado pela lupa. É pista de
                                                 // plataforma, não decoração: diz à pessoa que aquele campo é de busca antes de
                                                 // ela digitar a primeira letra.
@@ -431,7 +432,7 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
             inativo && s.desabilitado,
             style,
-        ], children: [icon && _jsx(Icon, { name: icon, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-campo` : undefined, value: value, onChangeText: digitar, placeholder: placeholder, placeholderTextColor: peleDaMarca?.color ?? t.color.subtleForeground, editable: !inativo, autoCorrect: false, autoCapitalize: "none", returnKeyType: "search", onSubmitEditing: onSubmit, onFocus: () => setFocado(true), onBlur: () => setFocado(false), accessibilityRole: "search", accessibilityLabel: campo?.label ?? placeholder, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), style: [
+        ], children: [icon && _jsx(Icon, { name: icon, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-campo` : undefined, value: value, onChangeText: digitar, placeholder: placeholder, placeholderTextColor: peleDaMarca?.color ?? t.color.subtleForeground, editable: !inativo, autoCorrect: false, autoCapitalize: "none", returnKeyType: "search", onSubmitEditing: onSubmit, onFocus: () => setFocado(true), onBlur: () => setFocado(false), accessibilityRole: "search", role: Platform.OS === "web" ? "searchbox" : undefined, accessibilityLabel: campo?.label ?? placeholder, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), style: [
                     s.campoDeTexto,
                     { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
                         color: t.color.foreground },

@@ -13,12 +13,12 @@ const DIAS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 // repassam tudo o que recebem ao ScrollView, senão o fio nunca saberia que a lista rolou.
 function Lista({nome, ...avisos}) {
   const t = useAureaTokens();
-  return h(ScrollView, {...avisos, style: {height: t.size.space24}},
+  return h(ScrollView, {...avisos, focusable: true, style: {height: t.size.space24}},
     ...DIAS.map((d) => h(Text, {key: d, style: {paddingVertical: t.size.space1}}, `${nome} · ${d}`)));
 }
 function Fila({nome, ...avisos}) {
   const t = useAureaTokens();
-  return h(ScrollView, {...avisos, horizontal: true, contentContainerStyle: {gap: t.size.space3, paddingVertical: t.size.space1}},
+  return h(ScrollView, {...avisos, horizontal: true, focusable: true, contentContainerStyle: {gap: t.size.space3, paddingVertical: t.size.space1}},
     ...DIAS.map((d) => h(Badge, {key: d}, `${nome} · ${d}`)));
 }
 const vertical = (nome) => h(Lista, {nome});

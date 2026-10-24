@@ -458,7 +458,9 @@ export function PhotoInput({
           <View key={`${foto.uri}-${n}`} style={s.miniatura}>
             <Pressable
               onPress={() => setAberta(n)}
+              // No navegador o `react-native-web` não traduz `imagebutton` e joga o papel fora (bloco 1, 24/10/2026).
               accessibilityRole="imagebutton"
+              role={Platform.OS === "web" ? "button" : undefined}
               accessibilityLabel={nomeDa(n)}
               accessibilityHint={strings.photoOpen}>
               {/* `alt=""`: quem dá nome é a miniatura, e o leitor não diz a foto duas vezes. */}

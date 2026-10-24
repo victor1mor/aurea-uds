@@ -22,7 +22,9 @@ import {readdirSync, readFileSync} from "node:fs";
 // A regra é a do §131 — linguagem de estado consistente. Um vocabulário que vale para três
 // controles e não vale para os outros cinco não é vocabulário, é exceção.
 
-const PAGES = readdirSync("apps/catalog").filter((f) => f.endsWith(".html"));
+// As páginas do NATIVO (bloco 1, 23/10/2026) ficam fora: lá o inválido é desenhado pelo próprio componente a partir da
+// prop `invalid` (o `react-native-web` não tem CSS que reaja ao estado), e quem mede é o teste de unidade do nativo.
+const PAGES = readdirSync("apps/catalog").filter((f) => f.endsWith(".html") && !f.startsWith("native-"));
 
 // ORÇAMENTO DE TEMPO, e ele é DERIVADO do trabalho — não é um número escolhido a esmo.
 //
@@ -300,12 +302,14 @@ const FICHA_SEM_INVALIDO: Record<string, string> = {
 // O escopo é a categoria `Inputs` do registry, e é fechado de propósito: `invalid` é estado de
 // CAMPO. Varrer as 92 fichas acusaria o `Table` por causa do `.input` de filtro que aparece na
 // página dele, que não é um controle do `Table`.
-const FICHAS: {name: string; states?: string[]}[] =
+const FICHAS: {name: string; states?: string[]; platforms?: {web?: string}}[] =
   readdirSync("packages/contracts/registry").filter((f) => f.endsWith(".json"))
     .map((f) => JSON.parse(readFileSync(`packages/contracts/registry/${f}`, "utf8")))
     // Os grupos de CAMPO desde a ADR-0070 (14/10/2026), que trocou o "Inputs" pelos grupos da referência. A lista,
     // a peça e o bloco (ListBox, TagGroup, BlockEditor) foram para "Collections", com menus que não são campo.
-    .filter((d) => ["Forms", "Pickers", "Colors", "Date and Time", "Controls"].includes(d.category));
+    .filter((d) => ["Forms", "Pickers", "Colors", "Date and Time", "Controls"].includes(d.category))
+    // A ficha que só existe no nativo (`platforms.web: "n-a"`) não tem desenho na web para medir.
+    .filter((d) => d.platforms?.web !== "n-a");
 
 test("a ficha e o desenho concordam sobre `invalid`, campo por campo", async ({page}) => {
   const mentindo: string[] = [], calando: string[] = [], semAlvo: string[] = [];

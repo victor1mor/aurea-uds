@@ -314,17 +314,27 @@ export type EstadoAcessivel = {
  * Uso: `<Pressable {...estadoAcessivel({checked, disabled})} />`. Ferramenta de dentro: **não
  * sai pela porta da frente do pacote.**
  */
-export function estadoAcessivel(estado: EstadoAcessivel | undefined) {
+/**
+ * `papel` (bloco 1, 24/10/2026): o "escolhido" na web depende de QUEM é escolhido. O `aria-selected` só vale em aba,
+ * opção, linha e célula — num link ou num botão o axe o recusa e o leitor de tela o ignora (o site, rodando o nativo no
+ * navegador, mediu 112 no `BottomNav`, 30 no `TagGroup`, 16 na `Gallery`, 32 no `Stepper`, 75 no `Chart`). Então, só na
+ * web: link escolhido é `aria-current="page"` (o par que a ficha do `BottomNav` já escreve), botão escolhido é
+ * `aria-pressed`, passo atual é `aria-current="step"`. No aparelho, o `accessibilityState` continua com o `selected`.
+ */
+export type PapelDoEscolhido = "link" | "button" | "step";
+export function estadoAcessivel(estado: EstadoAcessivel | undefined, papel?: PapelDoEscolhido) {
   if (!estado) return {accessibilityState: undefined};
   const {pressed, ...resto} = estado;
   const doAparelho = pressed === undefined ? resto : {...resto, checked: pressed};
+  const escolhido = resto.selected;
   return {
     accessibilityState: doAparelho,
     "aria-checked": resto.checked,
-    "aria-selected": resto.selected,
+    "aria-selected": papel ? undefined : escolhido,
+    "aria-current": escolhido ? (papel === "link" ? "page" : papel === "step" ? "step" : undefined) : undefined,
     "aria-disabled": resto.disabled,
     "aria-expanded": resto.expanded,
     "aria-busy": resto.busy,
-    "aria-pressed": pressed,
+    "aria-pressed": pressed ?? (papel === "button" ? escolhido : undefined),
   };
 }

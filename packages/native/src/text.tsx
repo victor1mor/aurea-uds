@@ -257,7 +257,10 @@ function papelDe(type: AureaTextType, {color, weight, align, truncate, style, ..
 export interface HeadingProps extends AureaTypographyBase { type?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" }
 /** Título. Marca `accessibilityRole="header"` sozinho, como a referência. */
 export function Heading({type = "h1", accessibilityRole = "header", ...rest}: HeadingProps) {
-  return papelDe(type, {accessibilityRole, ...rest});
+  // O nível vai junto: no aparelho o leitor de tela não usa nível, e a prop é ignorada; no navegador (`react-native-web`)
+  // o título sem `aria-level` vira sempre `<h1>` — medido no site: 28 `h1` na página do Heading (bloco 1, 23/10/2026).
+  const nivel = {"aria-level": Number(type.slice(1))} as unknown as AureaTypographyBase;
+  return papelDe(type, {accessibilityRole, ...nivel, ...rest});
 }
 
 export interface ParagraphProps extends AureaTypographyBase { type?: "body" | "body-sm" | "body-xs" }

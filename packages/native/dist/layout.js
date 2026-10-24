@@ -236,6 +236,10 @@ export function Card(props) {
 const COR_DO_TRACO = {
     brand: "primary", success: "success", info: "info", warning: "warning", danger: "destructive",
 };
+// O cartão de contorno é a ÚNICA peça com linha (ADR-0072). No navegador (`react-native-web`), a marca `data-aurea-card`
+// diz isso à varredura "nenhuma peça desenha linha" do site, como a classe `.card-outline` diz na web; no aparelho a prop
+// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026).
+const MARCA_DO_CONTORNO = { dataSet: { aureaCard: "outline" } };
 function CorpoDoCartao({ variant, accent, style, ...rest }) {
     const t = useAureaTokens();
     const { theme: temaDoApp } = useAureaTheme();
@@ -250,10 +254,10 @@ function CorpoDoCartao({ variant, accent, style, ...rest }) {
                 s.cardBase, s[`card_${pele}`], contorno, traco != null && s.comTraco,
                 tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
                 style,
-            ], ...resto, children: [traco, children] }));
+            ], ...(pele === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: [traco, children] }));
     }
     const corpo = (_jsxs(_Fragment, { children: [traco, children, action != null && _jsx(View, { style: s.acaoDaMarca, children: action })] }));
-    const pele = (_jsx(View, { style: [s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style], ...resto, children: corpo }));
+    const pele = (_jsx(View, { style: [s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style], ...(variant === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: corpo }));
     // 🔴 SOBRE O AMARELO A COR DO TEXTO NÃO É ESCOLHA, É OBRIGAÇÃO — e os números decidiram isto.
     // Medido nos dois temas, texto contra o `primary`:
     //     texto comum ........ 10,34 no claro  ·  **1,83 no escuro**  🔴 ilegível

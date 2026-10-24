@@ -384,8 +384,9 @@ test.describe("catálogo · varredura de todas as páginas", () => {
           for (const e of document.body.querySelectorAll("*")) {
             if (e.getClientRects().length === 0) continue;
             n++;
-            // A única linha que fica (o Victor, 16/10/2026): a do cartão de contorno, a caixa da vitrine.
-            if (e.classList.contains("card-outline")) continue;
+            // A única linha que fica (o Victor, 16/10/2026): a do cartão de contorno, a caixa da vitrine — na web pela classe,
+            // no nativo pela marca que o `Card` põe só no navegador (`data-aurea-card="outline"`, bloco 1).
+            if (e.classList.contains("card-outline") || (e as HTMLElement).dataset.aureaCard === "outline") continue;
             for (const x of linhas(getComputedStyle(e))) out.push(`${nome(e)}: ${x}`);
             for (const ps of ["::before", "::after"]) {
               const s = getComputedStyle(e, ps);
@@ -507,8 +508,9 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const publicados = new Set(JSON.parse(readFileSync("scripts/released-surface.json", "utf8")).components);
     // Só os COMPONENTES: os hooks moram na lateral da área Hooks desde o lote T (cada área com a sua lateral).
     const novos = readdirSync("packages/contracts/registry").filter((f) => f.endsWith(".json"))
-      .map((f) => JSON.parse(readFileSync(join("packages/contracts/registry", f), "utf8")) as {name: string; kind?: string})
-      .filter((f) => f.kind !== "hook" && !publicados.has(f.name));
+      .map((f) => JSON.parse(readFileSync(join("packages/contracts/registry", f), "utf8")) as {name: string; kind?: string; platforms?: {web?: string}})
+      // A ficha só do nativo (`platforms.web: "n-a"`, bloco 1) mora na lateral do nativo, não nesta.
+      .filter((f) => f.kind !== "hook" && f.platforms?.web !== "n-a" && !publicados.has(f.name));
     await expect(lateral.getByText("New", {exact: true})).toHaveCount(novos.length);
   });
 

@@ -30,7 +30,7 @@ describe("aparece — o valor está no código como o consumidor o escreve", () 
 });
 
 describe("a trava no catálogo de verdade", () => {
-  // lê o catálogo inteiro (147 fichas, os exemplos e o pacote montado): leva alguns segundos
+  // lê o catálogo inteiro (as fichas, os exemplos e o pacote montado): com a máquina ocupada, passa de um minuto
   test("todo nome exportado tem página e todo valor de variação tem exemplo", async () => {
     const r = await medirCatalogo(raiz);
     expect(r.erros).toEqual([]);
@@ -38,7 +38,7 @@ describe("a trava no catálogo de verdade", () => {
     expect(r.web.faltam).toEqual({});
     expect(r.web.valores).toBeGreaterThan(800);
     expect(r.web.naPagina + r.web.porPadrao + r.web.emPadrao).toBe(r.web.valores);
-  }, 60_000);
+  }, 240_000);
   test("os apelidos continuam dizendo, na ficha, de quem são", () => {
     for (const [apelido, dono] of Object.entries(APELIDOS)) {
       const ficha = JSON.parse(readFileSync(join(raiz, `packages/contracts/registry/${apelido}.json`), "utf8"));
@@ -85,12 +85,12 @@ describe("a trava num catálogo de mentira, com um valor sem exemplo", () => {
     const r = await medirCatalogo(arvore(['<Pill size="sm" />']));
     expect(r.web.faltam).toEqual({Pill: ["size=lg"]});
     expect(r.erros.join(" ")).toContain("Pill (size=lg)");
-  });
+  }, 60_000);
   test("com o exemplo do lg — num exemplo extra do starter —, passa", async () => {
     const r = await medirCatalogo(arvore(['<Pill size="sm" />', '<Pill size="lg" />']));
     expect(r.web.faltam).toEqual({});
     expect(r.erros).toEqual([]);
-  });
+  }, 60_000);
 });
 
 describe("a trava do nativo (os exemplos de mentira: os de verdade só carregam pelo pacote do Vite)", () => {

@@ -38,7 +38,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // suportado** na soma. Os tokens da Aurea são todos numéricos (dp), então isto não morde aqui —
 // mas morde quem passar `padding: "5%"` no `style`.
 import * as React from "react";
-import { Keyboard, RefreshControl, ScrollView, View } from "react-native";
+import { Keyboard, Platform, RefreshControl, ScrollView, View } from "react-native";
 import { SafeAreaInsetsContext, SafeAreaView, initialWindowMetrics } from "react-native-safe-area-context";
 import { useBottomNavSpace } from "./barranav.js";
 import { criarFolha } from "./estilos.js";
@@ -92,6 +92,8 @@ export function Screen({ edges = TODAS_AS_BORDAS, padded = true, scroll = false,
     // **Zero** fora de um `BottomNavProvider`, que é o caso de toda tela cheia: sem abas, nada muda.
     const respiroDaBarra = useBottomNavSpace();
     return (_jsxs(SafeAreaView, { style: [s.raiz, fundo, !scroll && padded && s.respiro, style], edges: edges, ...rest, children: [scroll ? (_jsx(ScrollView, { style: s.raiz, 
+                // No navegador, a área que rola precisa de uma parada de Tab para quem usa o teclado (bloco 1, 24/10/2026).
+                focusable: Platform.OS === "web", 
                 // ⚠ O respiro da barra SOMA ao do tema em vez de substituí-lo: escrever
                 // `paddingBottom` depois de `s.respiro` apagaria os 16 do tema e colaria o último
                 // item na pílula. A conta é explícita porque a folha não soma sozinha.

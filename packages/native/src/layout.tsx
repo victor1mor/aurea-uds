@@ -397,6 +397,11 @@ const COR_DO_TRACO = {
   brand: "primary", success: "success", info: "info", warning: "warning", danger: "destructive",
 } as const satisfies Record<AureaCardAccent, string>;
 
+// O cartão de contorno é a ÚNICA peça com linha (ADR-0072). No navegador (`react-native-web`), a marca `data-aurea-card`
+// diz isso à varredura "nenhuma peça desenha linha" do site, como a classe `.card-outline` diz na web; no aparelho a prop
+// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026).
+const MARCA_DO_CONTORNO = {dataSet: {aureaCard: "outline"}} as unknown as ViewProps;
+
 function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   const t = useAureaTokens();
   const {theme: temaDoApp} = useAureaTheme();
@@ -425,6 +430,7 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
           tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
           style,
         ]}
+        {...(pele === "outline" ? MARCA_DO_CONTORNO : null)}
         {...resto}>
         {traco}
         {children}
@@ -441,7 +447,8 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   );
 
   const pele = (
-    <View style={[s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style]} {...resto}>
+    <View style={[s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style]}
+      {...(variant === "outline" ? MARCA_DO_CONTORNO : null)} {...resto}>
       {corpo}
     </View>
   );

@@ -92,7 +92,9 @@ export default {
         + "left out is the one that stays fixed.",
       code: PARES.map((p) => `<ColorArea ${Object.entries(p).map(([k, v]) => jsxProp(k, v)).join(" ")} />`).join("\n"),
       embed: true,
-      render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-6)"}},
+      // Grade de três: numa fileira que quebra, a caixa encolhia até uma área (120) e as seis empilhavam (840 de altura,
+      // mais que a moldura — bloco 1, 23/10/2026).
+      render: () => h("div", {style: {display: "grid", gridTemplateColumns: "repeat(3, auto)", justifyContent: "center", gap: "var(--space-6)"}},
         ...PARES.map((p) => h(ColorArea, {key: p["aria-label"], ...p}))),
     },
   ],

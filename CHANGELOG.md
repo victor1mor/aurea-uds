@@ -117,6 +117,57 @@ como deveria funcionar"*.
 
 ---
 
+## [0.43.0] — em construção
+
+⏳ **Em construção — o bloco 1 do plano único, o catálogo fiel** (aprovado pelo Victor em 23/10/2026: *"Aprovo o plano dos
+cinco blocos"*): o site mostra o que o pacote é — toda peça com página, toda variação num exemplo vivo, o nativo ao lado
+da web —, e travas na CI para continuar assim.
+
+### Acrescentado
+
+- **`CodeBlock tabs`**: as alternativas do mesmo passo em abas, dentro da caixa do código (o comando de instalar em npm,
+  pnpm, yarn e bun), nas medidas da documentação da referência.
+- **`SegmentedControl`** com `size` (`md`, `sm`) e itens com `href` (vira uma navegação de links — a chave Web | Native do
+  site); o `onChange` passa a ser opcional.
+- **`Header tabsEnd`** e **`AppShell topbarTabsEnd`**: o que fica na ponta direita da linha das áreas.
+- **Fichas das peças só do nativo**, com página no site: BottomNavProvider, IconRegistryProvider, Screen, LinkButton,
+  KeyboardAvoiding, BottomSheet, ToastHost, Toast, ScrollShadow, SkeletonGroup, PressableFeedback e PhotoInput
+  (`platforms.web: "n-a"`).
+
+### Mudado
+
+- **O botão de copiar não cobre mais o fim da linha** em nenhum `CodeBlock`: o código reserva no fim o lugar do botão, e a
+  linha mais longa rola antes de chegar nele (no Quick Start, o `pnpm add` terminava embaixo do botão).
+- **No nativo, a cor do escolhido é a da web**: a aba escolhida do SegmentedControl (no claro, a mistura da web), o visto
+  da opção do Select e do Combobox, o ponto e o visto do menu, o passo atual do Stepper.
+- **No nativo rodando no navegador** (`react-native-web`): o título leva o nível (o Heading pelo `type`, o item do
+  Accordion com 3) — sem ele, todo título virava `<h1>`; e o cartão de contorno leva a marca `data-aurea-card="outline"`,
+  a única linha que a ADR-0072 deixa. No aparelho, nada muda.
+
+### Consertado
+
+- **O tipo do `DataState`** proibia o `children` em função que o componente aceita: o `children` do HTML saía do
+  cruzamento e a função virava `ReactNode`. Agora compila.
+
+### O site
+
+- **O nativo no site**: a chave Web | Native na ponta da linha das áreas, e uma página por peça do nativo (79), com a peça
+  de verdade rodando pelo `react-native-web` nos dois temas, os exemplos de todo valor e a API lida dos tipos.
+- **Toda variação num exemplo**: as fichas da web somavam 473 valores sem exemplo em 70 peças; agora nenhum.
+- **A página de saúde** (`saude.html`, área Releases): os números do catálogo e das rodadas da CI.
+- **As abas de instalar** (npm, pnpm, yarn, bun) no Quick Start, no Frameworks, no Dark Mode e nas notas de versão.
+
+### Para quem cuida do repositório
+
+- **Três travas novas na CI:** o catálogo fiel (todo nome exportado com página; todo valor de variação da ficha num
+  exemplo — web e nativo); o check 50 do `validate.py` (todo nome citado entre crases na Getting Started, no README e na
+  skill existe — 412 nomes, nenhum errado); e `scripts/exemplos-compilam.mjs` (`pnpm check:exemplos`: os 1.079 trechos
+  TypeScript do site, da skill e do README compilam contra o pacote montado — antes, 120 erros). As três se provam
+  sozinhas contra o defeito plantado a cada execução.
+- **O registro da 0.42.0** entra quando ela for publicada.
+
+---
+
 ## [0.42.0] — 2026-10-23
 
 ⏳ **Ainda não publicada.** A lateral até o topo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o MNT-34 de um app

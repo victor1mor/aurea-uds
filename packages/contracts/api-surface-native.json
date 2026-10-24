@@ -6,7 +6,7 @@
     "modulos": 32,
     "componentes": 90,
     "hooks": 15,
-    "aliasesLiterais": 64,
+    "aliasesLiterais": 65,
     "propsDistintas": 204
   },
   "aliases": {
@@ -227,6 +227,15 @@
       "module": "estilos",
       "raw": "{ checked?: boolean | \"mixed\"; selected?: boolean; disabled?: boolean; expanded?: boolean; busy?: boolean; pressed?: boolean; }",
       "union": null
+    },
+    "PapelDoEscolhido": {
+      "module": "estilos",
+      "raw": "\"link\" | \"button\" | \"step\"",
+      "union": [
+        "link",
+        "button",
+        "step"
+      ]
     },
     "AureaAccordionVariant": {
       "module": "exibicao",
