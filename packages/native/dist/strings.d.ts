@@ -32,6 +32,8 @@ export interface AureaStrings {
     stepperLabel: string;
     /** O que o `DatePicker` mostra quando não há data escolhida. */
     datePlaceholder: string;
+    /** O que o `DatePicker` com `mode="time"` mostra quando não há hora escolhida. */
+    timePlaceholder: string;
     /** O que o `PhotoInput` diz quando a pessoa negou a câmera e o sistema não vai perguntar de novo. */
     cameraDenied: string;
     /** O botão que leva às configurações do app. */

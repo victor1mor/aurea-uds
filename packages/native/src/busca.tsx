@@ -702,7 +702,9 @@ export function SearchField({
       {icon && <Icon name={icon} size="sm" color={peleDaMarca?.color ?? t.color.subtleForeground} />}
       <TextInput
         testID={testID ? `${testID}-campo` : undefined}
-        value={value}
+        // O texto interno também comanda o campo (bloco 1, 24/10/2026): com `value={value}`, sem `value` o campo era livre
+        // e o X apagava o texto interno — o X sumia e o que estava escrito ficava.
+        value={texto}
         onChangeText={digitar}
         placeholder={placeholder}
         placeholderTextColor={peleDaMarca?.color ?? t.color.subtleForeground}

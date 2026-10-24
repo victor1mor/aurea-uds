@@ -39,7 +39,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // mas morde quem passar `padding: "5%"` no `style`.
 import * as React from "react";
 import { Keyboard, Platform, RefreshControl, ScrollView, View } from "react-native";
-import { SafeAreaInsetsContext, SafeAreaView, initialWindowMetrics } from "react-native-safe-area-context";
+import { SafeAreaInsetsContext, SafeAreaProvider, SafeAreaView, initialWindowMetrics } from "react-native-safe-area-context";
 import { useBottomNavSpace } from "./barranav.js";
 import { criarFolha } from "./estilos.js";
 import { useAureaTokens } from "./theme.js";
@@ -80,11 +80,30 @@ const TODAS_AS_BORDAS = ["top", "right", "bottom", "left"];
  * Com ele, o padding vai para o `contentContainerStyle` — que é o certo, porque padding no
  * `ScrollView` em si recorta a área rolável e deixa a barra de rolagem para dentro.
  *
- * ⚠ **Não precisa de `SafeAreaProvider` acima.** O `SafeAreaView` da biblioteca é uma view
- * nativa e lê o inset do sistema sozinha (medido no fonte da 5.9.1: ela não consome contexto
- * nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
+ * ⚠ **Não precisa de `SafeAreaProvider` acima.** No aparelho, o `SafeAreaView` da biblioteca é
+ * uma view nativa e lê o inset do sistema sozinha (medido no fonte da 5.9.1: ela não consome
+ * contexto nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
+ * No navegador é diferente, e a `Screen` resolve sozinha (ver abaixo).
  */
-export function Screen({ edges = TODAS_AS_BORDAS, padded = true, scroll = false, background = "background", onRefresh, refreshing, footer, style, children, ...rest }) {
+export function Screen(props) {
+    // 🔴 NO NAVEGADOR, A `SafeAreaView` DA BIBLIOTECA É O GANCHO — bloco 1, 24/10/2026. A versão web
+    // dela (`SafeAreaView.web.tsx`, 5.9.1) chama `useSafeAreaInsets`, que LEVANTA ERRO sem
+    // `SafeAreaProvider` acima: a `Screen` quebrava num app do Expo aberto no navegador, e o
+    // comentário acima prometia o contrário. Sem provedor, a `Screen` leva o dela — só no navegador,
+    // porque no aparelho o provedor sem medidas não desenha nada até medir. As medidas começam
+    // zeradas para a tela sair no primeiro quadro (e na página montada no servidor); o provedor
+    // troca pelo `env(safe-area-inset-*)` do navegador assim que mede.
+    const temProvedor = React.useContext(SafeAreaInsetsContext) != null;
+    if (Platform.OS === "web" && !temProvedor) {
+        return _jsx(SafeAreaProvider, { initialMetrics: MEDIDAS_ZERADAS, children: _jsx(CascaDaTela, { ...props }) });
+    }
+    return _jsx(CascaDaTela, { ...props });
+}
+const MEDIDAS_ZERADAS = {
+    insets: { top: 0, right: 0, bottom: 0, left: 0 },
+    frame: { x: 0, y: 0, width: 0, height: 0 },
+};
+function CascaDaTela({ edges = TODAS_AS_BORDAS, padded = true, scroll = false, background = "background", onRefresh, refreshing, footer, style, children, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const fundo = s[`fundo_${background}`];

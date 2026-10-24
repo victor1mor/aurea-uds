@@ -121,7 +121,6 @@ const FORA_DO_CENTRO: Record<string, string> = {
   "Prose:0": "texto corrido ocupa a largura; a última linha curta puxa a tinta para a esquerda",
   "Skeleton:0": "linhas de larguras diferentes, de propósito (70% e 90%)",
   "Skeleton:1": "as linhas de 70% do texto que carrega, alinhadas como texto — o mesmo motivo da de cima",
-  "Header:1": "o floating e o pill descem 16 do topo de propósito (o descolamento da barra) e nada embaixo — medido: 10 abaixo",
   "Tabs:1": "na referência as abas esticam até encher a fila; as nossas (secondary) não — é da peça, lote 2",
 };
 const REG = join(process.cwd(), "packages/contracts/registry");

@@ -36,7 +36,7 @@ function Campo(props) {
 export default {
   install: 'import {SearchField} from "@aurea-uds/native";',
   api: {
-    value: "The text, controlled.",
+    value: "The text, controlled. Without it the field keeps its own text, and the X still empties it.",
     onChangeText: "Called with the text on every keystroke, and with \"\" when the X clears it.",
     onSearchChange: "Called with the text once the typing pauses for searchDelay — the place to run a search that costs something.",
     searchDelay: "How long the typing must pause before onSearchChange, in ms. 250 by default; 0 calls on every keystroke.",
@@ -72,6 +72,14 @@ export default {
     onSearchChange={runSearch} searchDelay={400} placeholder="Order number" />
 </Field>`,
       render: () => h("div", {style: largo}, h(Esperar)),
+    },
+    {
+      title: "Without value",
+      description: "The field keeps its own text when the screen does not hold it; type, and the X empties the field.",
+      code: `<Field label="Quick search">
+  <SearchField placeholder="Anything" onSearchChange={runSearch} />
+</Field>`,
+      render: () => h("div", {style: largo}, h(Field, {label: "Quick search"}, h(SearchField, {placeholder: "Anything"}))),
     },
     {
       title: "Glyph, X and disabled",

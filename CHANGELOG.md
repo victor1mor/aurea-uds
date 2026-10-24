@@ -127,6 +127,10 @@ da web —, e travas na CI para continuar assim.
 
 - **`comboboxOpen`**, frase nova no `AureaStrings` do nativo (a mesma da web: "Open list" / "Abrir lista"): quem monta o
   dicionário inteiro com esse tipo precisa acrescentá-la. É o nome da setinha do Combobox nativo no navegador.
+- **`timePlaceholder`**, frase nova no `AureaStrings` do nativo ("Pick a time" / "Escolher horário"): o que o
+  DatePicker do nativo diz vazio, com `mode="time"`. Quem monta o dicionário inteiro precisa acrescentá-la.
+- **`leading` e `trailing` saem do tipo do IconButton e do ThemeToggle do nativo**: chegavam pelo tipo do Button e
+  não desenhavam nada. Quem passava uma das duas compila com erro — é só tirar; o desenho próprio do app vai no `name`.
 
 ### Acrescentado
 
@@ -161,11 +165,22 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
 - **No nativo rodando no navegador** (`react-native-web`): o título leva o nível (o Heading pelo `type`, o item do
   Accordion com 3) — sem ele, todo título virava `<h1>`; e o cartão de contorno leva a marca `data-aurea-card="outline"`,
   a única linha que a ADR-0072 deixa. No aparelho, nada muda.
+- **No nativo, o Checkbox, o Radio e o Switch têm o toque de 44**: a linha mede no mínimo 44 de altura (no `md` era
+  24), e sem rótulo também 44 de largura — a regra do Button, altura de verdade e não área invisível, que o leitor de
+  tela do Android não enxerga. O desenho não muda; a linha cresce, e numa coluna os controles ficam mais afastados.
 
 ### Consertado
 
 - **O tipo do `DataState`** proibia o `children` em função que o componente aceita: o `children` do HTML saía do
   cruzamento e a função virava `ReactNode`. Agora compila.
+- **A `Screen` do nativo no navegador** não exige mais um `SafeAreaProvider` acima: sem ele, a versão web da biblioteca
+  levantava erro e a tela não abria. Ela leva o próprio quando não há um; no aparelho, nada muda.
+- **O DatePicker do nativo, com `mode="time"`,** escreve a hora e os minutos no formato do aparelho, e o vazio pede um horário.
+  Sem `format`, ele escrevia a data do dia e dizia "Pick a date".
+- **O Switch do nativo lê o `align`**: com `start`, o trilho fica na primeira linha do rótulo longo. O tipo aceitava, e
+  o trilho ficava sempre no meio.
+- **O BottomNav do nativo com `variant="edge"`, no navegador,** saía com a sombra e a camada da barra flutuante.
+- **O SearchField do nativo sem `value`**: o X sumia e o texto escrito ficava. Agora o X apaga o campo.
 
 ### O site
 
@@ -186,6 +201,9 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
   vigiada (cada página da Getting Started declara no cabeçalho o trecho de código que descreve, `sources:`; o trecho
   mudou e a página não foi relida, reprova — `python scripts/validate.py --vigia-revisar <página>`). As quatro se provam
   sozinhas contra o defeito plantado a cada execução.
+- **O check 31b** (frase nova no `AureaStrings` sai com o aviso de compilação) lê as duas seções do que ainda não saiu —
+  a da versão datada que espera a publicação e a da versão em construção —, como o check 31 já fazia. Lia só a primeira,
+  e pedia na [0.42.0] as frases da 0.43.0.
 - **O registro da 0.42.0** entra quando ela for publicada.
 
 ---

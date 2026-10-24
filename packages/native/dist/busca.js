@@ -432,7 +432,10 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
             inativo && s.desabilitado,
             style,
-        ], children: [icon && _jsx(Icon, { name: icon, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-campo` : undefined, value: value, onChangeText: digitar, placeholder: placeholder, placeholderTextColor: peleDaMarca?.color ?? t.color.subtleForeground, editable: !inativo, autoCorrect: false, autoCapitalize: "none", returnKeyType: "search", onSubmitEditing: onSubmit, onFocus: () => setFocado(true), onBlur: () => setFocado(false), accessibilityRole: "search", role: Platform.OS === "web" ? "searchbox" : undefined, accessibilityLabel: campo?.label ?? placeholder, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), style: [
+        ], children: [icon && _jsx(Icon, { name: icon, size: "sm", color: peleDaMarca?.color ?? t.color.subtleForeground }), _jsx(TextInput, { testID: testID ? `${testID}-campo` : undefined, 
+                // O texto interno também comanda o campo (bloco 1, 24/10/2026): com `value={value}`, sem `value` o campo era livre
+                // e o X apagava o texto interno — o X sumia e o que estava escrito ficava.
+                value: texto, onChangeText: digitar, placeholder: placeholder, placeholderTextColor: peleDaMarca?.color ?? t.color.subtleForeground, editable: !inativo, autoCorrect: false, autoCapitalize: "none", returnKeyType: "search", onSubmitEditing: onSubmit, onFocus: () => setFocado(true), onBlur: () => setFocado(false), accessibilityRole: "search", role: Platform.OS === "web" ? "searchbox" : undefined, accessibilityLabel: campo?.label ?? placeholder, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), style: [
                     s.campoDeTexto,
                     { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
                         color: t.color.foreground },

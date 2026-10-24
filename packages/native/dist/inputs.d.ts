@@ -355,7 +355,7 @@ export interface SwitchProps extends ControleProps {
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
  */
-export declare function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, }: SwitchProps): React.JSX.Element;
+export declare function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align, }: SwitchProps): React.JSX.Element;
 export interface SegmentedControlProps extends ViewProps {
     items: Array<{
         value: string;

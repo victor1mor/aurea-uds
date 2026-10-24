@@ -57,7 +57,7 @@ export default {
     },
     {
       title: "An edge bar takes no space",
-      description: "variant=\"edge\" stays in the flow and already shortens the screen, so it reports 0. In the browser, react-native-web keeps the floating bar's shadow under it.",
+      description: "variant=\"edge\" stays in the flow and already shortens the screen, so it reports 0.",
       code: `<BottomNavProvider>
   <Space />
   <BottomNav variant="edge" current={tab} items={items} />

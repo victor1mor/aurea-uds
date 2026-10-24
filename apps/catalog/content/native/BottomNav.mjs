@@ -52,7 +52,7 @@ export default {
       code: `${ITENS_CODIGO}\n\n<BottomNav label="Main menu" current={tab} items={items} />`,
       render: () => h(Tela),
     },
-    cada({titulo: "Variants", descricao: "floating flies over the screen as a pill; edge lies against the bottom edge, in the flow. In the browser, react-native-web keeps the floating bar's shadow under the edge one.",
+    cada({titulo: "Variants", descricao: "floating flies over the screen as a pill; edge lies against the bottom edge, in the flow.",
       valores: ["floating", "edge"], estilo: coluna,
       codigo: v => `<BottomNav variant="${v}" current={tab} items={items} />`,
       peca: v => h(Tela, {variant: v, nome: `Main menu, ${v}`})}),

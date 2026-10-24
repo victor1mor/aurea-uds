@@ -68,7 +68,7 @@ export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullW
 }
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
-export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
+export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
     name: AureaIcon;
     /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
     label: string;

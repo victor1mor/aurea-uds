@@ -18,8 +18,6 @@ export default {
     name: "The glyph: a name from the icon registry, or the drawing itself (AureaIcon).",
     appearance: "How much weight the circle carries: solid, outline, or ghost (the default).",
     size: "The touch scale: the circle is as high as the Button of the same size, and the target is never under 44.",
-    leading: "Inherited from Button's type. The icon button draws only its glyph, so it does not draw this.",
-    trailing: "Inherited from Button's type. The icon button draws only its glyph, so it does not draw this.",
     icons: "A local icon registry, when there is none in context — or to override the provider's.",
     pressed: "Toggle state, announced to the screen reader as checked. It paints nothing by itself: change the appearance or the tone with it.",
     share: "The button shares {url, title, text}. On a phone it opens the system share sheet; in the browser it follows the web rule — share where the browser can, otherwise copy the link and say \"Link copied\" through the ToastHost.",

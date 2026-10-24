@@ -11,7 +11,7 @@ export interface DatePickerProps {
     maximumDate?: Date;
     disabled?: boolean;
     size?: AureaFieldSize;
-    /** Como a data vira texto no gatilho. Padrão: o formato do aparelho. */
+    /** Como a data vira texto no gatilho. Padrão: o formato do aparelho — a data, ou a hora e os minutos no `mode="time"`. */
     format?: (d: Date) => string;
     placeholder?: string;
     icon?: AureaIcon | false;

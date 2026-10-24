@@ -1,18 +1,15 @@
 // O Screen do nativo no site (bloco 1, o grupo 1 — 23/10/2026): a casca de uma tela. Aqui cada tela mora numa caixa do
 // tamanho de um pedaço de telefone, com sombra para se ver onde ela acaba — no app, a Screen ocupa a tela inteira.
-// ⚠ No navegador a `SafeAreaView` da biblioteca LÊ o `SafeAreaProvider` (a versão web dela usa o gancho de inset), e sem
-// ele a Screen levanta erro — medido aqui em 23/10/2026. No aparelho ela é uma view nativa e não precisa. Cada caixa leva
-// o provedor, com as medidas zeradas para o desenho parado da página sair (sem elas ele só desenha depois de medir).
+// No navegador, a `SafeAreaView` da biblioteca lê o `SafeAreaProvider` (a versão web dela usa o gancho de inset), e sem
+// ele a Screen levantava erro — medido aqui em 23/10/2026. Desde o bloco 1 (24/10/2026) a Screen leva o próprio provedor
+// no navegador quando não há um acima, e esta página prova isso: as caixas não põem provedor nenhum.
 import {createElement as h, useState} from "react";
-import {SafeAreaProvider} from "react-native-safe-area-context";
 import {Button, Card, Screen, Stack, Text} from "../../../../packages/native/dist/index.js";
 import {cada} from "../_eixos.mjs";
 
 const grade = {display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(14rem, 1fr))", gap: "var(--space-4)", width: "100%"};
-const MEDIDAS = {frame: {x: 0, y: 0, width: 0, height: 0}, insets: {top: 0, right: 0, bottom: 0, left: 0}};
 const telefone = (filho, altura = "18rem") => h("div", {style: {display: "flex", flexDirection: "column", height: altura,
-  width: "min(20rem, 100%)", borderRadius: "var(--radius-card)", overflow: "hidden", boxShadow: "var(--shadow-sm)"}},
-  h(SafeAreaProvider, {initialMetrics: MEDIDAS}, filho));
+  width: "min(20rem, 100%)", borderRadius: "var(--radius-card)", overflow: "hidden", boxShadow: "var(--shadow-sm)"}}, filho);
 
 const ITENS = ["Fuel", "Tolls", "Parking", "Lunch", "Hotel", "Taxi", "Train", "Coffee"];
 const lista = (titulo) => h(Stack, null, titulo, ...ITENS.map((n) => h(Card, {key: n}, h(Text, null, n))));
@@ -26,7 +23,7 @@ function Atualizavel() {
 
 export default {
   install: 'import {Screen} from "@aurea-uds/native";',
-  description: "The shell of one screen: it fills, paints the theme's surface, and keeps the content away from the notch and the gesture bar on all four sides. On a phone it needs no SafeAreaProvider above it; in the browser (react-native-web) it does.",
+  description: "The shell of one screen: it fills, paints the theme's surface, and keeps the content away from the notch and the gesture bar on all four sides. It needs no SafeAreaProvider above it: on a phone the safe-area view is native, and in the browser (react-native-web) the Screen brings its own when there is none.",
   api: {
     edges: "Which edges take the system inset. All four by default — in landscape the notch is on the left or the right.",
     padded: "16 of padding around the content. On by default; false for a list from edge to edge.",
@@ -40,15 +37,13 @@ export default {
   examples: [
     {
       title: "Usage",
-      description: "In the browser the safe-area view reads a SafeAreaProvider above it — put one at the top of the app (react-navigation already does). On a phone the Screen needs none.",
-      code: `<SafeAreaProvider>
-  <Screen scroll footer={<Button tone="brand" fullWidth onPress={submit}>Submit report</Button>}>
-    <Stack>
-      <Text type="h4">Expenses</Text>
-${ITENS.map((n) => `      <Card><Text>${n}</Text></Card>`).join("\n")}
-    </Stack>
-  </Screen>
-</SafeAreaProvider>`,
+      description: "No SafeAreaProvider is needed above it, on a phone or in the browser; one already at the root (react-navigation, expo-router) is used as it is.",
+      code: `<Screen scroll footer={<Button tone="brand" fullWidth onPress={submit}>Submit report</Button>}>
+  <Stack>
+    <Text type="h4">Expenses</Text>
+${ITENS.map((n) => `    <Card><Text>${n}</Text></Card>`).join("\n")}
+  </Stack>
+</Screen>`,
       render: () => telefone(h(Screen, {scroll: true, footer: h(Button, {tone: "brand", fullWidth: true}, "Submit report")},
         lista(h(Text, {key: "t", type: "h4"}, "Expenses"))), "22rem"),
     },

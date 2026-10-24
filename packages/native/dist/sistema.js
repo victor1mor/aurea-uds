@@ -149,9 +149,14 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
     const inativo = disabled ?? campo?.disabled;
     // Só o iOS precisa manter o seletor na árvore; no Android o diálogo é do sistema e some sozinho.
     const [abertoNoIOS, setAbertoNoIOS] = React.useState(false);
+    // No `mode="time"` o gatilho escreve a HORA, e o vazio pede um horário (bloco 1, 24/10/2026): sem `format`, ele
+    // escrevia a data do dia e dizia "Pick a date" — a pessoa escolhia 14:30 e via 24/10/2026.
+    const vazio = placeholder ?? (mode === "time" ? strings.timePlaceholder : strings.datePlaceholder);
     const texto = value
-        ? (format ? format(value) : value.toLocaleDateString())
-        : (placeholder ?? strings.datePlaceholder);
+        ? (format ? format(value)
+            : mode === "time" ? value.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })
+                : value.toLocaleDateString())
+        : vazio;
     const receber = React.useCallback((evento, data) => {
         setAbertoNoIOS(false);
         // `dismissed` é a pessoa cancelando. Chamar `onChange` aí gravaria uma data que ninguém
@@ -189,7 +194,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
             min: minimumDate && mode === "date" ? paraCampoWeb(minimumDate, mode) : undefined,
             max: maximumDate && mode === "date" ? paraCampoWeb(maximumDate, mode) : undefined,
             disabled: inativo,
-            "aria-label": campo?.label ?? (value ? texto : placeholder ?? strings.datePlaceholder),
+            "aria-label": campo?.label ?? (value ? texto : vazio),
             "aria-invalid": campo?.invalido || undefined,
             "aria-description": campo?.hint,
             "data-testid": testID ? `${testID}-campo` : undefined,

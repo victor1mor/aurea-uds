@@ -2429,18 +2429,6 @@
               ]
             },
             {
-              "name": "leading",
-              "optional": true,
-              "type": "React.ReactNode",
-              "values": null
-            },
-            {
-              "name": "trailing",
-              "optional": true,
-              "type": "React.ReactNode",
-              "values": null
-            },
-            {
               "name": "icons",
               "optional": true,
               "type": "AureaIconRegistry",
@@ -2568,18 +2556,6 @@
                 "lg",
                 "xl"
               ]
-            },
-            {
-              "name": "leading",
-              "optional": true,
-              "type": "React.ReactNode",
-              "values": null
-            },
-            {
-              "name": "trailing",
-              "optional": true,
-              "type": "React.ReactNode",
-              "values": null
             },
             {
               "name": "icons",

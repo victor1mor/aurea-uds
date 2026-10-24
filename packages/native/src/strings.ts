@@ -58,6 +58,8 @@ export interface AureaStrings {
   stepperLabel: string;
   /** O que o `DatePicker` mostra quando não há data escolhida. */
   datePlaceholder: string;
+  /** O que o `DatePicker` com `mode="time"` mostra quando não há hora escolhida. */
+  timePlaceholder: string;
   /** O que o `PhotoInput` diz quando a pessoa negou a câmera e o sistema não vai perguntar de novo. */
   cameraDenied: string;
   /** O botão que leva às configurações do app. */
@@ -155,6 +157,7 @@ export const defaultStrings: AureaStrings = {
   tabsLabel: "Tabs",
   stepperLabel: "Steps",
   datePlaceholder: "Pick a date",
+  timePlaceholder: "Pick a time",
   cameraDenied: "Camera access is off. Turn it on in Settings to attach a photo.",
   openSettings: "Open Settings",
   photoRemove: "Remove photo",
@@ -209,6 +212,7 @@ export const ptBR: AureaStrings = {
   tabsLabel: "Abas",
   stepperLabel: "Etapas",
   datePlaceholder: "Escolher data",
+  timePlaceholder: "Escolher horário",
   cameraDenied: "O acesso à câmera está desligado. Ligue nas configurações para anexar uma foto.",
   openSettings: "Abrir configurações",
   photoRemove: "Remover foto",

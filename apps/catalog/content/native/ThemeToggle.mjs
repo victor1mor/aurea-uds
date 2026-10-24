@@ -22,8 +22,6 @@ export default {
   api: {
     size: "The IconButton size, on the touch scale. The button is round, like every icon-only button (ADR-0052).",
     pressed: "Inherited from IconButton: announces a toggle state to the screen reader. The toggle's state is the provider's theme, not this prop.",
-    leading: "Inherited from Button's type; the icon-only button does not draw it.",
-    trailing: "Inherited from Button's type; the icon-only button does not draw it.",
     icons: "A local icon registry, for when there is none in context. The glyphs are moon and sun, in the filled form (moon-fill, sun-fill).",
   },
   examples: [

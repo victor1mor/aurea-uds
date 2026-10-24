@@ -8,7 +8,6 @@ import {cada} from "../_eixos.mjs";
 
 const largura = {display: "grid", gap: "var(--space-4)", width: "min(24rem, 100%)"};
 const curta = (d) => d.toLocaleDateString("en-GB", {day: "numeric", month: "short", year: "numeric"});
-const hora = (d) => d.toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit"});
 
 // O campo com a data guardada aqui: `props` vão para o DatePicker, `rotulo` para o Field.
 function Campo({rotulo, inicio, props}) {
@@ -22,11 +21,11 @@ export default {
   api: {
     value: "The chosen date (controlled). There is no range on native: one Date.",
     onChange: "Called with the picked Date. The system dialog closes on its own; cancelling it calls nothing.",
-    mode: "date (the default) or time: which system dialog opens. In time mode pass format too — without it the trigger writes the date.",
+    mode: "date (the default) or time: which system dialog opens. In time mode the trigger writes the hour and minutes, and the empty one asks for a time.",
     minimumDate: "The system dialog does not offer days before it (in the browser, the date field's min).",
     maximumDate: "The system dialog does not offer days after it (in the browser, the date field's max).",
-    format: "How the Date is written on the trigger. Without it, the device's date format (toLocaleDateString).",
-    placeholder: "The text of the empty trigger. Without it, the strings phrase (\"Pick a date\").",
+    format: "How the Date is written on the trigger. Without it, the device's format: the date, or the hour and minutes in time mode.",
+    placeholder: "The text of the empty trigger. Without it, the strings phrase: \"Pick a date\", or \"Pick a time\" in time mode.",
     icon: "The icon at the end of the trigger, calendar by default; false removes it. It has to be in the app's icon registry.",
     size: "The field height, the same steps as Select and Input: 40, 48 and 56.",
     disabled: "The trigger does not open.",
@@ -42,13 +41,11 @@ export default {
 </Field>`,
       render: () => h("div", {style: largura}, h(Campo, {rotulo: "Due date", inicio: new Date(2026, 9, 23)})),
     },
-    cada({titulo: "Modes", descricao: "Which system dialog opens: the calendar or the clock. In time mode, pass format so the trigger writes the time — the default writes the date.",
+    cada({titulo: "Modes", descricao: "Which system dialog opens: the calendar or the clock. In time mode the trigger writes the time in the device's format.",
       valores: ["date", "time"], estilo: largura,
-      codigo: v => v === "time"
-        ? `<Field label="Start time">\n  <DatePicker mode="time" value={start} onChange={setStart} format={(d) => d.toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit"})} placeholder="Pick a time" />\n</Field>`
-        : `<Field label="Start date">\n  <DatePicker mode="date" value={start} onChange={setStart} />\n</Field>`,
+      codigo: v => `<Field label="Start ${v}">\n  <DatePicker mode="${v}" value={start} onChange={setStart} />\n</Field>`,
       peca: v => h(Campo, {rotulo: v === "time" ? "Start time" : "Start date", inicio: new Date(2026, 9, 23, 9, 30),
-        props: v === "time" ? {mode: v, format: hora, placeholder: "Pick a time"} : {mode: v}})}),
+        props: {mode: v}})}),
     cada({titulo: "Sizes", descricao: "The touch scale: 40, 48 and 56, the same as the other fields.",
       valores: ["sm", "md", "lg"], estilo: largura,
       codigo: v => `<Field label="Date (${v})">\n  <DatePicker size="${v}" value={date} onChange={setDate} />\n</Field>`,

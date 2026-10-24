@@ -107,6 +107,12 @@ const folha = criarFolha((t) => ({
     // `marginTop: 1` fixo, e a bolinha ficava presa no topo do rótulo.
     // 0.32.0: 12 entre a marca e o texto, o vão do campo de controle da referência (era 9).
     linhaDeControle: { flexDirection: "row", alignItems: "center", gap: t.size.space3 },
+    // O TOQUE DE 44 do `Checkbox`, do `Radio` e do `Switch` (bloco 1, 24/10/2026): a linha media 24 de altura no `md` — a
+    // marca de 24 ou o trilho de 24 com o rótulo de uma linha —, abaixo do `targetMin`. A conta é a do `Button`
+    // (`actions.tsx`, "O ALVO DE TOQUE"): altura mínima no `Pressable`, e não `hitSlop`, que o TalkBack não enxerga. O
+    // desenho não muda; a linha cresce e centraliza. Sem rótulo, a largura também chega a 44, como no `IconButton`.
+    alvoDoControle: { minHeight: t.size.targetMin },
+    alvoSemTexto: { minWidth: t.size.targetMin, justifyContent: "center" },
     // CHK-01: o item do `RadioGroup variant="card"` — a pele do `Card` (`estilos.ts`), com a marca
     // no alto, na linha do título.
     itemCartao: { ...peleDoCartao(t), alignItems: "flex-start" },
@@ -397,7 +403,8 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
         // ⚠ O `accessibilityLabel` de fora vence o `label` escrito, e existe para o caso em que o
         // nome JÁ está na tela ao lado — uma linha de `NavList`, por exemplo. Sem ele, ou o nome
         // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
-        accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
+        accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, style: [s.linhaDeControle, s.alvoDoControle, !temTexto && s.alvoSemTexto, align === "start" && s.linhaNoTopo,
+            inativo && s.desabilitado, style], children: [_jsx(View, { style: [
                     s.marcaBase, noTopo,
                     // 0.32.0: o canto da caixa é o `radiusXs` (6), o mesmo do `.checkbox .control-mark` da
                     // web; era 5 cru.
@@ -496,7 +503,7 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoD
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
  */
-export function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, }) {
+export function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
     const s = folha(t);
     const campo = useCampo();
@@ -515,6 +522,10 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
     const larguraDoPolegar = alturaDoPolegar + t.size.space2;
     // O curso deixa os mesmos 2 da borda de fora na outra ponta (a conta do `--switch-x` da web).
     const curso = larguraDoTrilho - larguraDoPolegar - 2 * t.size.space05;
+    // O `align` (bloco 1, 24/10/2026): o tipo vem do `ControleProps` e o `Switch` não lia — com `start`, o trilho ficava no
+    // meio do bloco do rótulo longo. A mesma conta do `ControleMarcado`: o meio do trilho no meio da PRIMEIRA linha.
+    const linha = t.size.textBase * t.size.leadingNormal;
+    const noTopo = align === "start" ? { marginTop: Math.max(0, (linha - alturaDoTrilho) / 2) } : null;
     const pos = React.useRef(new Animated.Value(checked ? 1 : 0)).current;
     React.useEffect(() => {
         const destino = checked ? 1 : 0;
@@ -546,12 +557,14 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         // irmãos com `flex:1` parte da largura do conteúdo. É a mesma família do `padding-block` do
         // `Input`: o que a cascata resolve de graça, aqui é conta explícita.
         style: [
-            { flexDirection: "row", alignItems: "center" },
+            { flexDirection: "row", alignItems: align === "start" ? "flex-start" : "center" },
+            // O toque de 44 — ver `alvoDoControle`, na folha.
+            s.alvoDoControle, !temTexto && s.alvoSemTexto,
             // 0.32.0: 12 até o texto, o vão do campo de controle da referência e o do `Checkbox` (era 10).
             temTexto && { gap: t.size.space3 },
             inativo && s.desabilitado, style,
         ], children: [_jsx(View, { style: [
-                    s.trilho,
+                    s.trilho, noTopo,
                     { width: larguraDoTrilho, height: alturaDoTrilho },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
                 ], children: _jsx(Animated.View, { style: [

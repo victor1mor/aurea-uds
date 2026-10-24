@@ -84,19 +84,27 @@ const folha = criarFolha((t: AureaTokens) => ({
   // a faixa comeria o toque em silêncio.
   //
   // `zSticky` é token (20), o mesmo `--z-sticky` que a web usa na mesma peça.
+  //
+  // 🔴 O QUE É SÓ DA `floating` MORA FORA DA `barra` (bloco 1, 24/10/2026). O `edge` desfazia a flutuação escrevendo
+  // `undefined` por cima (`zIndex`, `boxShadow`, `bottom`), e `undefined` não apaga: o `react-native-web` pula a chave e
+  // fica a de baixo — no navegador a barra encostada saía com a sombra e o `zIndex` da flutuante —, e no aparelho apaga
+  // só na montagem (ver `barra_content`, abaixo). Agora cada variação recebe só o que é dela.
   barra: {
-    position: "absolute", bottom: 0, zIndex: t.size.zSticky,
-    flexDirection: "row", gap: t.size.space1, margin: t.size.space4, padding: t.size.space1,
+    flexDirection: "row", gap: t.size.space1, padding: t.size.space1,
     borderWidth: t.size.borderWidth, borderColor: "transparent",
+  },
+  barra_flutuante: {
+    position: "absolute", bottom: 0, zIndex: t.size.zSticky, margin: t.size.space4,
     ...canto(t.size.radiusControl), backgroundColor: t.color.card,
     boxShadow: [t.shadow.shadowMd],
   },
   // `edge` encosta na borda: sem margem, sem raio, só a linha de cima — e continua NO FLUXO,
   // porque uma barra encostada que flutuasse esconderia o fim da tela sem nada reservar.
+  // A posição, a margem e o canto vão escritos mesmo sendo o padrão: trocar `variant` com a tela aberta passa a escrever o
+  // valor da `edge` por cima do da `floating`, em vez de depender da chave que sumiu.
   barra_edge: {
-    position: "relative", left: undefined, right: undefined, bottom: undefined, zIndex: undefined,
-    margin: 0, paddingHorizontal: 0, ...canto(0), backgroundColor: t.color.background,
-    borderWidth: 0, borderTopWidth: t.size.borderWidth, boxShadow: undefined,
+    position: "relative", margin: 0, paddingHorizontal: 0, ...canto(0), backgroundColor: t.color.background,
+    borderWidth: 0, borderTopWidth: t.size.borderWidth,
   },
   // A pílula CHEIA, de uma borda à outra menos a margem — o de sempre. Mora fora da `barra` para
   // o `content` nunca precisar DESFAZER estes dois (ver abaixo).
@@ -441,7 +449,7 @@ export function BottomNav({
       onLayout={anotar == null ? undefined : (e) => anotar(
         flutua ? e.nativeEvent.layout.height + t.size.space4 * 2 + inset.bottom : 0)}
       style={[
-        s.barra, justa ? s.barra_content : s.barra_cheia, variant === "edge" && s.barra_edge,
+        s.barra, flutua ? [s.barra_flutuante, justa ? s.barra_content : s.barra_cheia] : s.barra_edge,
         // 🔴 NO `floating` A FOLGA DO SISTEMA VAI POR FORA — conserto de 19/09/2026, visto em
         // aparelho Samsung com os três botões (|||, ○, <).
         //
