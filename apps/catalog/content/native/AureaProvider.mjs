@@ -116,8 +116,8 @@ function Controls() {
     {
       title: "The app decides",
       description: "Controlled: the provider asks through onThemeChange and onDensityChange, and nothing changes until the app stores the new value.",
-      code: `const [theme, setTheme] = useState("light");
-const [density, setDensity] = useState("comfortable");
+      code: `const [theme, setTheme] = useState<AureaThemeName>("light");
+const [density, setDensity] = useState<AureaDensity>("comfortable");
 
 <AureaProvider theme={theme} density={density}
   onThemeChange={setTheme} onDensityChange={setDensity}

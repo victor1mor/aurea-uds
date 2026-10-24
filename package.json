@@ -27,6 +27,7 @@
     "build:proof-server": "pnpm --filter @aurea-uds/proof-server build",
     "build": "pnpm build:tokens && pnpm build:icons && pnpm build:responsive-layer && pnpm build:core && pnpm build:fonts && pnpm build:react && pnpm build:native && pnpm build:api-surface && pnpm build:catalog && pnpm build:live && pnpm build:proof-client && pnpm build:keyboard-probe",
     "validate": "python scripts/validate.py",
+    "check:exemplos": "node scripts/exemplos-compilam.mjs",
     "state": "python scripts/validate.py --write-state",
     "pack:check": "node scripts/check-pack.mjs",
     "published:check": "node scripts/check-published.mjs",

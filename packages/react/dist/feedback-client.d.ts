@@ -55,7 +55,7 @@ export declare function Spinner({ size, label, decorative, className, ...props }
     decorative?: boolean;
 }): React.JSX.Element;
 export type DataStateValue = "loading" | "error" | "empty" | UniversalState;
-export type DataStateProps = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export type DataStateProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & RefAttributes<HTMLDivElement> & {
     state?: DataStateValue;
     message?: ReactNode;
     skeleton?: ReactNode;

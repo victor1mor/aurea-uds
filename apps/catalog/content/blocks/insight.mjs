@@ -1233,7 +1233,7 @@ export default [
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>Activity <Badge>3</Badge></strong><Button variant="ghost" size="sm">Mark all read</Button>
   </div>
-  <Timeline items={[{title:"Curator published v1.7.0",time:"09:12"},…]} />
+  <Timeline items={[{title:"Curator published v1.7.0",time:"09:12"}]} />
 </Card>`,
     render: () => h("div", {style: {width: "min(520px,100%)"}}, h(Card, null,
       h("div", {style: stack},
@@ -1343,7 +1343,7 @@ const actions = allowedFrom(job.state);   // transferring -> ["pause", "verify"]
       costs the height the other four regions need */}
   <div className="grid" style={{gridTemplateColumns:"minmax(140px,1fr) 2fr"}}>
     <TreeView label="Workspace" items={job.tree} defaultExpandedIds={["brand"]} />
-    <Table caption="Resources">{...}</Table>
+    <Table caption="Resources">{/* … */}</Table>
   </div>
 
   {/* "conflict requires preview": the conflict is explained HERE, next to what arrived,
@@ -1401,7 +1401,7 @@ const actions = allowedFrom(job.state);   // transferring -> ["pause", "verify"]
 // the controls, and \`refresh\` lives with the range, which is what owns freshness.
 const actions = allowedFrom(view.state);   // ready -> ["refresh"]
 
-<div className="stack" style={{"--chart-h":"8rem"}}>
+<div className="stack" style={{"--chart-h":"8rem"} as CSSProperties}>
   <div className="cluster">
     <div role="group" aria-label="Time range">
       <SegmentedControl label="Time range" items={RANGES} value={view.range} onChange={setRange} />
@@ -1412,8 +1412,8 @@ const actions = allowedFrom(view.state);   // ready -> ["refresh"]
         : <Status variant={tone[view.state]}>{label[view.state]}</Status>}
       {actions.map(a => <Button key={a} size="sm" onClick={() => send(a)}>{label[a]}</Button>)}
     </div>
-    <div role="group" aria-label="Filters"><Select value={view.filter} …/></div>
-    <div role="group" aria-label="Segments"><Select value={view.segment} …/></div>
+    <div role="group" aria-label="Filters"><Select value={view.filter} /* … */ /></div>
+    <div role="group" aria-label="Segments"><Select value={view.segment} /* … */ /></div>
     {/* "export records scope and freshness": both in the LABEL, because whoever clicks
         needs to know what comes out before it comes out. Keep it SHORT — this row holds four
         control groups on one line, and a label that wraps costs the box 43px of height */}
@@ -1608,7 +1608,7 @@ const actions = allowedFrom(device.state);   // online -> ["update", "calibrate"
 // favorite — and that is not a hole: choosing a chapter does not change the library's state.
 const actions = allowedFrom(view.state);   // ready -> ["play"]
 
-<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"}}>
+<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"} as CSSProperties}>
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>{item.title} · {item.meta}</strong>
     {/* offline here IS the universal state (ADR-0018): it is OUR connection that dropped,

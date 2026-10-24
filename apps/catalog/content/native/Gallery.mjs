@@ -60,7 +60,6 @@ export default {
       code: `<Gallery label="Product photos" items={[
   {id: "front", source: front, alt: "Front"},
   {id: "back", source: back, alt: "Back"},
-  …
 ]} zoom />`,
       render: () => h("div", {style: largura}, h(Gallery, {label: "Product photos", items: FOTOS, zoom: true})),
     },

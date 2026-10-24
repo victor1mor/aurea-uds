@@ -35,13 +35,13 @@ export default {
     {
       title: "Alignment",
       description: "The lines line up inside the code's own box, so the alignment shows when the code wraps.",
-      code: ["start", "center", "end", "justify"].map(v => `<Code align="${v}">${LONGO}</Code>`).join("\n"),
+      code: ["start", "center", "end", "justify"].map(v => `<Code align="${v}">{${JSON.stringify(LONGO)}}</Code>`).join("\n"),
       render: () => coluna(["start", "center", "end", "justify"].map(v => h(Code, {key: v, align: v}, LONGO))),
     },
     {
       title: "Truncate",
       description: "One line, cut with an ellipsis.",
-      code: `<Code truncate>${LONGO}</Code>`,
+      code: `<Code truncate>{${JSON.stringify(LONGO)}}</Code>`,
       render: () => coluna([h(Code, {key: 1, truncate: true}, LONGO)]),
     },
   ],

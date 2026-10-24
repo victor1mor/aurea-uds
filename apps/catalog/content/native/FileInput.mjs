@@ -35,7 +35,7 @@ export default {
     {
       title: "Usage",
       description: "Inside a Field, the trigger takes the label as its name. Over maxSize, or of a type accept does not allow, the file is refused with a sentence under the field.",
-      code: `const [files, setFiles] = useState([]);
+      code: `const [files, setFiles] = useState<AureaFile[]>([]);
 
 <Field label="Invoice">
   <FileInput accept="application/pdf" maxSize={5000000} value={files} onChange={setFiles} />

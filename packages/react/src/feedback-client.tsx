@@ -218,7 +218,9 @@ class BarreiraDeErro extends React.Component<{onCatch?:(error:unknown,info:React
   tentar=()=>this.setState({quebrou:false});
   render(){return this.state.quebrou?this.props.falha(this.tentar):this.props.children}
 }
-export type DataStateProps=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode);
+// O `children` pode ser uma FUNÇÃO (o conteúdo só se monta no estado pronto); o `children` do HTML sai antes do cruzamento,
+// senão o cruzamento o reduz a `ReactNode` e a função — que o corpo já aceita — não compila (achado da trava 1, 23/10/2026).
+export type DataStateProps=Omit<HTMLAttributes<HTMLDivElement>,"children">&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode);
   /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com "Tentar de novo". */
   catchErrors?:boolean;
   /** Recebe o erro que a barreira pegou — para o app registrar. */
@@ -232,7 +234,7 @@ export function DataState({catchErrors,onCatch,...props}:DataStateProps){
       <div><Button size="sm" onClick={tentar}>{s.dataRetry}</Button></div>
     </div>}><CorpoDoDataState {...props}/></BarreiraDeErro>;
 }
-function CorpoDoDataState({state,message,skeleton,emptyTitle,emptyIcon,action,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode)}){
+function CorpoDoDataState({state,message,skeleton,emptyTitle,emptyIcon,action,children,className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode)}){
   const s=useAureaStrings();
   const conteudo=()=>typeof children==="function"?children():children;
   const caixa=(inner:ReactNode,ocupado?:boolean)=>

@@ -125,7 +125,7 @@ que só funciona quando o app é servido na raiz do domínio. **Se não for o se
 vez no provider**, ou todo ícone de todo componente falha em silêncio:
 
 ```tsx
-<AureaProvider spriteUrl="/assets/aurea-icons.svg">
+<AureaProvider spriteUrl="/assets/aurea-icons.svg">{children}</AureaProvider>
 ```
 
 Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou empacote e passe a
@@ -166,7 +166,10 @@ O CSS usa propriedades lógicas no eixo da linha e se espelha sozinho. São dois
 
 ```tsx
 <html dir="rtl">                        {/* espelha o CSS */}
-<AureaProvider direction="rtl">         {/* avisa o Base UI */}
+  <AureaProvider direction="rtl">       {/* avisa o Base UI */}
+    {children}
+  </AureaProvider>
+</html>
 ```
 
 O provider não mexe no DOM: pôr `dir` no `<html>` é da aplicação. Não se espelham, de propósito: o

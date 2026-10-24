@@ -388,10 +388,12 @@ export default {
       h(A.Card.Content, null, h("p", {style: {margin: 0}}, "The parts are optional: a card can hold anything.")),
       h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Save"), h(A.Button, null, "Cancel")))),
     examples: [
-      eixo({titulo: "Variants", descricao: "base is the floating surface; raised lifts it with a shadow; interactive answers the pointer; inset sinks into the page; outline is the one card with a line; selected and danger mark a state; contrast is the dark theme inside the card.",
-        Comp: A.Card, nome: "Card", prop: "variant", valores: ["base", "raised", "interactive", "inset", "outline", "selected", "danger", "contrast"],
+      cada({titulo: "Variants", descricao: "base is the floating surface; raised lifts it with a shadow; interactive answers the pointer; inset sinks into the page; outline is the one card with a line; selected and danger mark a state; contrast is the dark theme inside the card.",
+        valores: ["base", "raised", "interactive", "inset", "outline", "selected", "danger", "contrast"],
         estilo: {display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))", gap: "var(--space-3)", width: "100%"},
-        filho: (v) => `variant ${v}`}),
+        codigo: (v) => v === "interactive" ? `<Card variant="interactive" render={<a href="#" />}>variant interactive</Card>`
+          : `<Card variant="${v}">variant ${v}</Card>`,
+        peca: (v) => h(A.Card, v === "interactive" ? {variant: v, render: h("a", {href: "#"})} : {variant: v}, `variant ${v}`)}),
     ],
   },
   // Image (L4). A foto é um SVG em data URI porque o catálogo é HTML gerado e COMMITADO: preview
@@ -656,7 +658,7 @@ export default {
   Carousel: {
     description: "Slides that snap, in a native scroll container — no carousel engine. How many "
       + "show at once is CSS (--carousel-slide), not a prop, because that is a layout decision.",
-    code: `<Carousel label="Product photos" style={{"--carousel-slide": "50%"}}>
+    code: `<Carousel label="Product photos" style={{"--carousel-slide": "50%"} as CSSProperties}>
   <Card>Front</Card>
   <Card>Back</Card>
   <Card>In use</Card>
@@ -889,14 +891,14 @@ export function Actions() {
     examples: [
       janelas({titulo: "Placement", descricao: "The same four places as Dialog: auto (bottom on a phone, centre from 640 up), "
         + "bottom, center and top.", Comp: A.ConfirmDialog, prop: "placement", valores: ["auto", "bottom", "center", "top"],
-        props: (v, fecha) => ({title: `Placement ${v}`, description: `This confirmation uses placement="${v}".`,
+        props: (v, fecha) => ({title: `Placement ${v}`, description: `This confirmation opens at ${v}.`,
           confirmLabel: "Confirm", onConfirm: fecha, onCancel: fecha}),
-        codigo: v => `<ConfirmDialog open={open} title="Placement ${v}" placement="${v}" onConfirm={confirm} onCancel={close} />`}),
+        codigo: v => `<ConfirmDialog open={open} title="Placement ${v}" description="This confirmation opens at ${v}." placement="${v}" onConfirm={confirm} onCancel={close} />`}),
       janelas({titulo: "Icon tones", descricao: "The colour of the circle behind the icon. destructive picks danger on its own.",
         Comp: A.ConfirmDialog, prop: "iconTone", valores: ["neutral", "brand", "info", "success", "warning", "danger"],
-        props: (v, fecha) => ({title: `Icon tone ${v}`, description: `This confirmation uses iconTone="${v}".`, icon: "info",
+        props: (v, fecha) => ({title: `Icon tone ${v}`, description: `The circle behind the icon is ${v}.`, icon: "info",
           confirmLabel: "Confirm", onConfirm: fecha, onCancel: fecha}),
-        codigo: v => `<ConfirmDialog open={open} title="Icon tone ${v}" icon="info" iconTone="${v}" onConfirm={confirm} onCancel={close} />`}),
+        codigo: v => `<ConfirmDialog open={open} title="Icon tone ${v}" description="The circle behind the icon is ${v}." icon="info" iconTone="${v}" onConfirm={confirm} onCancel={close} />`}),
     ],
   },
   Drawer: {
@@ -1688,7 +1690,7 @@ const container = usePortalContainer();`,
 
 <SegmentedControl
   value={density ?? "comfortable"}
-  onChange={setDensity}
+  onChange={(v) => setDensity(v as AureaDensity)}
   items={[
     {value: "compact", label: "Compact"},
     {value: "comfortable", label: "Comfortable"},

@@ -44,7 +44,7 @@ const ITENS = [
 // landmarks de navegação com o mesmo nome reprovam no axe (`landmark-unique`).
 const LEGADO = [["flat", "Garage flat"], ["surface", "Garage surface"], ["pill", "Garage pill"], ["dock", "Garage dock"]];
 
-const CODIGO_ITENS = `const items = [
+const CODIGO_ITENS = `const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
     badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},

@@ -15,7 +15,7 @@ export default [
     description: "Each choice stays visible as a chip, so the user reads the whole selection without opening the list again. Backspace removes the last one — the keyboard shape people already expect from an email To: field.",
     uses: ["MultiCombobox"],
     note: LISTA,
-    code: `const [tags, setTags] = useState([]);
+    code: `const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox
   label="Labels"

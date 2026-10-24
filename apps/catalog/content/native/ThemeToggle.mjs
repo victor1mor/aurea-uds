@@ -29,7 +29,7 @@ export default {
   examples: [
     {
       title: "Usage",
-      code: `const [theme, setTheme] = useState("light");
+      code: `const [theme, setTheme] = useState<AureaThemeName>("light");
 <AureaProvider theme={theme} onThemeChange={setTheme}>
   <ThemeToggle />
 </AureaProvider>`,

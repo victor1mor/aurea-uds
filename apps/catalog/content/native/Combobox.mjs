@@ -61,7 +61,7 @@ export default {
   examples: [
     {
       title: "Usage",
-      code: `const [fruit, setFruit] = useState(null);
+      code: `const [fruit, setFruit] = useState<AureaComboboxItem | null>(null);
 <Field label="Fruit">
   <Combobox items={fruits} value={fruit} onValueChange={setFruit} placeholder="Pick a fruit" />
 </Field>`,

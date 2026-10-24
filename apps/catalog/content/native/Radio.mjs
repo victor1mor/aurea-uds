@@ -53,8 +53,10 @@ export default {
     {
       title: "With a description",
       description: "A muted line under the label; the screen reader reads it as the hint.",
-      code: `<Radio label="Monthly" description="$ 12 a month" checked={…} onChange={…} />
-<Radio label="Yearly" description="$ 120 a year — two months free" checked={…} onChange={…} />`,
+      code: `const [plan, setPlan] = useState("yearly");
+
+<Radio label="Monthly" description="$ 12 a month" checked={plan === "monthly"} onChange={() => setPlan("monthly")} />
+<Radio label="Yearly" description="$ 120 a year — two months free" checked={plan === "yearly"} onChange={() => setPlan("yearly")} />`,
       render: () => largo(h(Grupo, {nome: "Billing", inicial: "yearly", opcoes: [
         {id: "monthly", label: "Monthly", description: "$ 12 a month"},
         {id: "yearly", label: "Yearly", description: "$ 120 a year — two months free"}]})),
@@ -62,8 +64,10 @@ export default {
     {
       title: "Alignment",
       description: "With a long label, align=\"start\" puts the circle by the first line; center keeps it in the middle of the block.",
-      code: `<Radio align="center" label="${LONGO}" checked={…} onChange={…} />
-<Radio align="start" label="${LONGO}" checked={…} onChange={…} />`,
+      code: `const [choice, setChoice] = useState("center");
+
+<Radio align="center" label="${LONGO}" checked={choice === "center"} onChange={() => setChoice("center")} />
+<Radio align="start" label="${LONGO}" checked={choice === "start"} onChange={() => setChoice("start")} />`,
       render: () => largo(h(Grupo, {nome: "Delivery", opcoes: [
         {id: "center", align: "center", label: LONGO}, {id: "start", align: "start", label: LONGO}]})),
     },

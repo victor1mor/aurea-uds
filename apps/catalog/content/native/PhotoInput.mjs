@@ -49,7 +49,7 @@ export default {
   examples: [
     {
       title: "Usage",
-      code: `const [photos, setPhotos] = useState([]);
+      code: `const [photos, setPhotos] = useState<AureaPhoto[]>([]);
 <Field label="Receipt">
   <PhotoInput value={photos} onChange={setPhotos} />
 </Field>`,

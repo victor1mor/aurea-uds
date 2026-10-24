@@ -52,6 +52,7 @@ das duas coisas — a regra e uma asserção no `skin.spec.ts` que reprove se a 
 | 9c | Todo estado que a ficha promete (`states`) tem prova no código: o CSS que o desenha ou o código que o emite | check 49 (lote 1, as travas, 20/10/2026) |
 | 9d | Todo nome citado entre crases no texto escrito à mão (as páginas da Getting Started, o README, a skill) existe: token, pacote e caminho de import, componente e a parte dele, gancho, classe, caminho do repositório | check 50 (a trava 2, no bloco 1, 23/10/2026), que se prova sozinho contra um texto plantado a cada execução |
 | 10 | Um exemplo por feature declarada, com Preview e Código equivalentes | pessoa |
+| 10b | Todo código TypeScript que o site, o README e a skill mostram **compila** contra o pacote montado: prop, valor, nome de ícone e peça que existem | `scripts/exemplos-compilam.mjs` (a trava 1, no bloco 1, 23/10/2026), na CI depois do build; ela se prova sozinha contra trechos plantados a cada execução |
 | 11 | Página no modelo do tipo, sem seção faltando | gerador + `catalog-sweep` ([ADR-0001](../decisions/0001-modelo-de-pagina-do-catalogo.md)) |
 | 12 | Preview **e** código existem — em todo tipo de item | check 17 |
 | 12b | **A prévia RODA: hidrata e responde ao toque/teclado.** Marcação morta não conta como prévia | pessoa, abrindo e interagindo — o gate ainda não existe (ver abaixo) |

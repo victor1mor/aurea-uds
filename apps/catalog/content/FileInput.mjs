@@ -52,7 +52,7 @@ export default {
       description: "With upload() it owns progress, cancel and retry for each file.",
       code: [
         '<FileInput label="Import" accept=".csv" maxSize={2000000}',
-        "  upload={async ({file, onProgress, signal}) => {",
+        "  upload={async (file, {onProgress, signal}) => {",
         "    await put(file, {onProgress, signal});",
         "  }} />",
       ].join("\n"),

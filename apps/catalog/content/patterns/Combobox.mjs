@@ -15,7 +15,7 @@ export default [
     description: "A select stops working somewhere around twenty options — the eye cannot scan them. A combobox lets the user type what they already know instead of hunting for it.",
     uses: ["Combobox"],
     note: LISTA,
-    code: `const [zone, setZone] = useState(null);
+    code: `const [zone, setZone] = useState<ComboboxOption | null>(null);
 
 <Combobox
   label="Time zone"

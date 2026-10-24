@@ -36,7 +36,11 @@ const icons = criarRegistroDeIcones({house: House, gear: Gear});
     {
       title: "Your own glyph, by name",
       description: "A drawing made with criarGlifo goes into the registry like any glyph, and is then used by its name.",
-      code: `const Brand = criarGlifo({paths: [{d: "${ANEL}", fillRule: "evenodd"}]});
+      code: `declare module "@aurea-uds/native" {
+  interface AureaIconNames { brand: true }
+}
+
+const Brand = criarGlifo({paths: [{d: "${ANEL}", fillRule: "evenodd"}]});
 
 <IconRegistryProvider registry={criarRegistroDeIcones({brand: Brand})}>
   <Icon name="brand" size="xl" label="Our brand" />

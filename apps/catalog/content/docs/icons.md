@@ -58,8 +58,9 @@ Most components take an icon by name too: `leadingIcon` and `trailingIcon` on `B
 The name is the Phosphor name, exactly as Phosphor writes it. TypeScript checks it in `Icon` and in the props that take an icon. A wrong name does not compile:
 
 ```tsx
-<Icon name="caret-down" />   // compiles
-<Icon name="chevron-down" /> // does not compile: the Phosphor name is caret-down
+const right = <Icon name="caret-down" />;
+// @ts-expect-error: the Phosphor name is caret-down
+const wrong = <Icon name="chevron-down" />;
 ```
 
 The full API is on the [Icon](./icon.html) page.

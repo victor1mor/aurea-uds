@@ -114,7 +114,7 @@ export default {
         "On a circle the badge is pulled 14% back into the corner. Without that it floats off the "
         + "edge, which is the giveaway of a counter glued on by hand.",
       code: `<Badge anchor="bottom-end" anchorShape="circle" dot variant="success">
-  <Avatar name="Ana Prado" />
+  <Avatar alt="Ana Prado" fallback="AP" />
 </Badge>`,
       render: () => h("div", {style: row},
         h(Badge, {anchor: "bottom-end", anchorShape: "circle", dot: true, emphasis: "solid",

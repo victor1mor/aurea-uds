@@ -61,14 +61,18 @@ export default {
     {
       title: "Rows you can touch",
       description: "onRowPress turns each card into a button that receives its row.",
-      code: `<Table caption="October expenses" columns={columns} rows={rows} keyExtractor={row => row.id}
+      code: `${DADOS_CODIGO}
+
+<Table caption="October expenses" columns={columns} rows={rows} keyExtractor={row => row.id}
   onRowPress={row => open(row.id)} />`,
       render: () => h(Tocavel),
     },
     {
       title: "A cell of your own",
       description: "cell draws the cell from the row — here a Badge; the column's name still goes with it.",
-      code: `const TONE = {Paid: "success", Pending: "warning", Overdue: "danger"};
+      code: `${DADOS_CODIGO}
+const invoices = rows.map((row, n) => ({...row, status: ["Paid", "Pending", "Overdue"][n]}));
+const TONE = {Paid: "success", Pending: "warning", Overdue: "danger"};
 const withStatus = [...columns,
   {key: "status", header: "Status", cell: row => <Badge tone={TONE[row.status]}>{row.status}</Badge>}];
 

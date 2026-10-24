@@ -33,7 +33,7 @@ export default {
   examples: [
     {
       title: "Usage",
-      code: `const [quantity, setQuantity] = useState(1);
+      code: `const [quantity, setQuantity] = useState<number | null>(1);
 <NumberField label="Quantity" value={quantity} onValueChange={setQuantity} min={0} />`,
       render: () => h("div", {style: coluna}, h(Campo, {props: {label: "Quantity", min: 0}})),
     },

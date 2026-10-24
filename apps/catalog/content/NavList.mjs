@@ -46,7 +46,7 @@ export default {
     {id: "profile", label: "Profile", description: "Name, photo, handle", icon: "user", href: "/profile"},
     {id: "alerts", label: "Notifications", description: "Push, email", icon: "bell", value: "On", href: "/alerts"},
     {id: "plan", label: "Plan", icon: "wallet", value: <Badge size="xs">Free</Badge>, href: "/plan"},
-    {id: "sync", label: "Sync", icon: "cloud", value: <Status tone="success">Live</Status>, href: "/sync"},
+    {id: "sync", label: "Sync", icon: "cloud", value: <Status variant="success">Live</Status>, href: "/sync"},
   ]} />
 </Card>`,
       render: () => demo({items: [

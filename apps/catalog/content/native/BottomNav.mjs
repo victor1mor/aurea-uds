@@ -20,7 +20,7 @@ const ITENS = [
   {id: "saved", label: "Saved", icon: "heart"},
   {id: "profile", label: "Profile", icon: "user"},
 ];
-const ITENS_CODIGO = `const items = [
+const ITENS_CODIGO = `const items: AureaNavItem[] = [
   {id: "home", label: "Home", icon: "house", onPress: () => go("home")},
   {id: "alerts", label: "Alerts", icon: "bell", badge: 3, onPress: () => go("alerts")},
   {id: "saved", label: "Saved", icon: "heart", onPress: () => go("saved")},

@@ -13,8 +13,8 @@ const Brilho = criarGlifo({paths: ["M16 3 L19.5 12.5 L29 16 L19.5 19.5 L16 29 L1
 function Cores() {
   const t = useAureaTokens();
   return h("div", {style: linha},
-    h(Icon, {name: "heart-fill", color: t.color.danger400, label: "Liked"}),
-    h(Icon, {name: "star-fill", color: t.color.primary, label: "Starred"}),
+    h(Icon, {name: "heart", weight: "fill", color: t.color.danger400, label: "Liked"}),
+    h(Icon, {name: "star", weight: "fill", color: t.color.primary, label: "Starred"}),
     h(Icon, {name: "info", color: t.color.mutedForeground, label: "About"}));
 }
 
@@ -48,8 +48,8 @@ export default {
       title: "Colour",
       description: "The colour is a value. Read it from the theme with useAureaTokens, so it follows light and dark.",
       code: `const t = useAureaTokens();
-<Icon name="heart-fill" color={t.color.danger400} label="Liked" />
-<Icon name="star-fill" color={t.color.primary} label="Starred" />
+<Icon name="heart" weight="fill" color={t.color.danger400} label="Liked" />
+<Icon name="star" weight="fill" color={t.color.primary} label="Starred" />
 <Icon name="info" color={t.color.mutedForeground} label="About" />`,
       render: () => h(Cores),
     },
