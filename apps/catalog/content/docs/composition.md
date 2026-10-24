@@ -2,6 +2,7 @@
 title: Composition
 description: Build bigger pieces from parts, slots, item lists and the render prop.
 icon: stack
+sources: ts:Card, ts:Header, ts:AppShell, ts:RadioGroup
 ---
 
 Aurea components fit together in a few fixed ways. A component can have parts, take other elements in named slots, draw a list from data, or hand its look to an element you choose. This page shows each one.

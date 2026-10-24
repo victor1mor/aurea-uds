@@ -2,6 +2,7 @@
 title: Quick Start
 description: Install the packages, load the fonts before the core, and wrap the app in the provider.
 icon: rocket
+sources: ts:AureaProvider, pkg:react, pkg:core, pkg:fonts, pkg:native
 ---
 
 ## Requirements

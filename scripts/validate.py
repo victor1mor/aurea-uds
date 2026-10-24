@@ -29,6 +29,7 @@ Flags:
   --write-raw-px-baseline   regrava scripts/raw-px-baseline.json (check 12)
   --write-state             regrava STATE.md e o bloco do README (check 13)
   --write-core-boundary     regrava scripts/core-boundary.json (check 15)
+  --vigia-revisar <página|todas>  a página foi relida: regrava a impressão dela em scripts/vigia-das-paginas.json (check 51)
 """
 from pathlib import Path
 import json
@@ -40,6 +41,127 @@ import sys
 
 root = Path(__file__).resolve().parents[1]
 errors = []
+
+# ── 51. a página vigiada: o texto escrito à mão acompanha o trecho de código que ele descreve ─────────────────────
+# Lote 1, as travas (a trava 3, decidida pelo Victor em 19/10/2026), feita no bloco 1 (o 1-C, 24/10/2026). O que se gera
+# sozinho não envelhece; a página escrita à mão envelhece em silêncio quando o código que ela explica muda. Cada página da
+# Getting Started declara no cabeçalho o TRECHO que descreve (`sources:`), e não o arquivo inteiro — ligar a página ao
+# `aurea.css` inteiro daria ruído (ele muda em 21% dos commits; a pesquisa da trava, item 76 do documento de achados):
+#   css:--duration-*      as declarações dos tokens que casam (o CSS dos tokens e do core, todos os temas)
+#   ts:AureaProvider      a assinatura da peça ou do gancho (props, tipos e valores), lida do contrato da API
+#   pkg:core              as portas (`exports`) e as dependências de par do pacote
+#   file:AGENTS.md        o arquivo inteiro (só quando a página descreve um arquivo)
+#   none                  a página não descreve código (o Roadmap, a vitrine)
+# A impressão de cada trecho mora em `scripts/vigia-das-paginas.json` (gerado). Trecho mudou → a página reprova até
+# alguém relê-la e rodar `python scripts/validate.py --vigia-revisar <página>` (ou `todas`) — o "revisei" fica no diff.
+# Trecho que não acha nada reprova (a trava não fica cega por um nome errado), e a cada execução ela se prova sozinha:
+# a impressão de um trecho de mentira muda quando o valor muda.
+import hashlib
+
+VIGIA = root / "scripts/vigia-das-paginas.json"
+_DOCS51 = sorted((root / "apps/catalog/content/docs").glob("*.md"))
+_CSS51 = "\n".join((root / p).read_text(encoding="utf-8") for p in ["packages/tokens/dist/aurea.tokens.css", "packages/core/src/aurea.css"])
+_SUP51 = [json.loads((root / f"packages/contracts/{n}").read_text(encoding="utf-8")) for n in ["api-surface.json", "api-surface-native.json"]]
+
+
+def _impressao51(fonte, css=None, superficies=None):
+    """O texto canônico do trecho (vazio se não acha nada)."""
+    css = _CSS51 if css is None else css
+    superficies = _SUP51 if superficies is None else superficies
+    tipo, _, alvo = fonte.partition(":")
+    if tipo == "css":
+        linhas = sorted({f"{n}:{v.strip()}" for n, v in re.findall(r"(--[a-z0-9-]+)\s*:\s*([^;}]+)", re.sub(r"/\*.*?\*/", "", css, flags=re.S))
+                         if fnmatch.fnmatch(n, alvo)})
+        return "\n".join(linhas)
+    if tipo == "ts":
+        achados = []
+        for sup in superficies:
+            for mod in sup["modules"].values():
+                for c in mod.get("components", []):
+                    if c["name"] == alvo:
+                        achados.append(json.dumps(c.get("props", []), sort_keys=True, ensure_ascii=False))
+                for g in mod.get("hooks", []):
+                    if (g.get("name") if isinstance(g, dict) else g) == alvo:
+                        achados.append(json.dumps(g, sort_keys=True, ensure_ascii=False))
+        return "\n".join(achados)
+    if tipo == "pkg":
+        pj = root / "packages" / alvo / "package.json"
+        if not pj.is_file():
+            return ""
+        j = json.loads(pj.read_text(encoding="utf-8"))
+        return json.dumps({"exports": j.get("exports"), "peerDependencies": j.get("peerDependencies"),
+                           "peerDependenciesMeta": j.get("peerDependenciesMeta")}, sort_keys=True, ensure_ascii=False)
+    if tipo == "file":
+        f = root / alvo
+        return f.read_text(encoding="utf-8").replace("\r\n", "\n") if f.is_file() else ""
+    return ""
+
+
+def _hash51(texto):
+    return hashlib.sha256(texto.encode("utf-8")).hexdigest()[:16]
+
+
+def _fontes51(doc):
+    cab = doc.read_text(encoding="utf-8").replace("\r\n", "\n").split("\n---\n", 1)[0]
+    m = re.search(r"^sources:\s*(.+)$", cab, re.M)
+    return None if not m else [s.strip() for s in m.group(1).split(",") if s.strip()]
+
+
+# A prova contra a cegueira: um token de mentira; a impressão dele muda quando o valor muda, e um nome errado não acha nada.
+_falso51 = ":root { --vigia-prova: 4px; --vigia-prova-2: 8px; }"
+if (_impressao51("css:--vigia-prova*", css=_falso51) == _impressao51("css:--vigia-prova*", css=_falso51.replace("4px", "5px"))
+        or not _impressao51("css:--vigia-prova*", css=_falso51) or _impressao51("css:--vigia-nao-existe", css=_falso51)
+        or not _impressao51("ts:Button") or not _impressao51("pkg:react")):
+    errors.append("check 51: a trava está CEGA — a impressão de um trecho de mentira não muda com o valor, ou uma fonte "
+                  "da verdade (o contrato da API, os pacotes) veio vazia")
+_medido51 = {}
+for _d51 in _DOCS51:
+    _f51 = _fontes51(_d51)
+    if _f51 is None:
+        errors.append(f"check 51: {_d51.relative_to(root).as_posix()} não declara `sources:` no cabeçalho — o trecho de "
+                      "código que ela descreve (`css:--token-*`, `ts:Peça`, `pkg:pacote`, `file:caminho`) ou `none`")
+        continue
+    if _f51 == ["none"]:
+        _medido51[_d51.stem] = {}
+        continue
+    _medido51[_d51.stem] = {}
+    for _s51 in _f51:
+        _i51 = _impressao51(_s51)
+        if not _i51:
+            errors.append(f"check 51: {_d51.relative_to(root).as_posix()} vigia `{_s51}`, que não acha nada — nome errado, ou "
+                          "o código saiu (então a página também tem de mudar)")
+        _medido51[_d51.stem][_s51] = _hash51(_i51)
+if "--vigia-revisar" in sys.argv:
+    _alvo51 = sys.argv[sys.argv.index("--vigia-revisar") + 1] if len(sys.argv) > sys.argv.index("--vigia-revisar") + 1 else ""
+    _guardado51 = json.loads(VIGIA.read_text(encoding="utf-8")) if VIGIA.is_file() else {}
+    _paginas51 = list(_medido51) if _alvo51 == "todas" else [_alvo51]
+    _faltam51 = [p for p in _paginas51 if p not in _medido51]
+    if not _alvo51 or _faltam51:
+        print(f"vigia: diga a página (o nome do arquivo sem .md) ou 'todas' — {', '.join(_faltam51) or 'nenhuma'} não existe")
+        sys.exit(1)
+    if _alvo51 == "todas":
+        _guardado51 = {}
+    for _p51 in _paginas51:
+        _guardado51[_p51] = _medido51[_p51]
+    VIGIA.write_text(json.dumps(dict(sorted(_guardado51.items())), indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    print(f"vigia: revisada(s) {', '.join(_paginas51)} — scripts/vigia-das-paginas.json regravado")
+    sys.exit(0)
+_guardado51 = json.loads(VIGIA.read_text(encoding="utf-8")) if VIGIA.is_file() else {}
+for _p51, _m51 in _medido51.items():
+    if _p51 not in _guardado51:
+        errors.append(f"check 51: a página {_p51} nunca foi revisada — releia e rode 'python scripts/validate.py "
+                      f"--vigia-revisar {_p51}'")
+        continue
+    _mudou51 = sorted(s for s in _m51 if _guardado51[_p51].get(s) != _m51[s])
+    _saiu51 = sorted(s for s in _guardado51[_p51] if s not in _m51)
+    if _mudou51 or _saiu51:
+        errors.append(f"check 51: a página {_p51} descreve código que mudou desde a última revisão — "
+                      f"{', '.join(_mudou51 + [s + ' (saiu do cabeçalho)' for s in _saiu51])}. Releia a página, conserte o "
+                      f"que envelheceu e rode 'python scripts/validate.py --vigia-revisar {_p51}'")
+for _p51 in sorted(set(_guardado51) - set(_medido51)):
+    errors.append(f"check 51: scripts/vigia-das-paginas.json guarda a página {_p51}, que não existe mais — rode "
+                  "'python scripts/validate.py --vigia-revisar todas'")
+
 
 # ── 1. nomes privados (endurecido — auditoria 18/07/2026, ALTO 7) ──
 # A LISTA NÃO MORA NO REPOSITÓRIO — decisão do Victor, 24/09/2026, antes de abrir o repositório.

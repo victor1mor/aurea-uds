@@ -2,6 +2,7 @@
 title: Design Principles
 description: The ten rules behind every Aurea component, and how each one is checked.
 icon: book
+sources: css:--radius-*, css:--fill-*, css:--shadow-sm
 ---
 
 Aurea is a design system for React on the web and React Native. It follows ten principles. Each one comes from a recorded decision, and most of them are enforced by a test or a build check, not by convention.

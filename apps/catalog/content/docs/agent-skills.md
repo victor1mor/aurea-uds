@@ -2,6 +2,7 @@
 title: Agent Skills
 description: Give your AI coding assistant the rules for building interfaces with Aurea.
 icon: brain
+sources: file:skills/aurea-uds/SKILL.md
 ---
 
 The Aurea skill gives an AI coding assistant what it needs to build with Aurea: how to install it on the web and on React Native, the rules the look depends on, and where to read each component.

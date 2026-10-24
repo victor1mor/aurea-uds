@@ -2,6 +2,7 @@
 title: Icons
 description: The Phosphor icon set, how to serve its sprite, the filled form for the selected item, and how to add your own drawing.
 icon: shapes
+sources: ts:Icon, pkg:icons
 ---
 
 Aurea draws its icons from Phosphor Icons: 1,433 glyphs, each in a regular and a filled form. On the web they live in one SVG sprite, in the `@aurea-uds/icons` package. On React Native each glyph is its own module.

@@ -2,6 +2,7 @@
 title: LLMs.txt
 description: Files that let AI coding assistants read the Aurea documentation.
 icon: file-text
+sources: none
 ---
 
 Aurea publishes its documentation in the [llms.txt](https://llmstxt.org/) format, so an AI coding assistant can read it directly.

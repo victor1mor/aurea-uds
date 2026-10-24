@@ -1,0 +1,103 @@
+{
+  "accessibility": {
+    "css:--focus-*": "86ea17be31248050",
+    "css:--target-min": "d0046f97e4ab25d7",
+    "css:--touch-control-h-*": "d9503f8a8c4e4b2b",
+    "css:--success": "68a86ba602cf476a",
+    "css:--info": "90c21ef778a8f76c",
+    "css:--warning": "6cd8878774bacec0",
+    "css:--destructive": "d0da48808451126f"
+  },
+  "agent-skills": {
+    "file:skills/aurea-uds/SKILL.md": "a5a3a5a9836bbef3"
+  },
+  "agents-md": {
+    "file:AGENTS.md": "3a8373ec4e3691e8"
+  },
+  "animation": {
+    "css:--duration-*": "54c8734643cb3730",
+    "css:--ease-*": "839701adee489551"
+  },
+  "colors": {
+    "css:--primary*": "f5cbf06ae535c324",
+    "css:--secondary*": "5c9b59970be239e4",
+    "css:--card*": "918b2fb908c9dfca",
+    "css:--fill-*": "a2658d78c94cba5c",
+    "css:--foreground": "102af43cdf0c196f",
+    "css:--muted-foreground": "90f5bb699ee0007d",
+    "css:--accent*": "25336f7b2ff8e660",
+    "css:--success*": "f07ef43f82cc2564",
+    "css:--warning*": "af6be4baa006f3ac",
+    "css:--destructive*": "13880dda5981589a",
+    "css:--info*": "92ece3151e0bba36",
+    "css:--danger-*": "52f064fa71c0a64f"
+  },
+  "composition": {
+    "ts:Card": "8db73ade7d093995",
+    "ts:Header": "646693ff53f98171",
+    "ts:AppShell": "7c88fb2b01dd16a2",
+    "ts:RadioGroup": "4e594ff9064d0a23"
+  },
+  "dark-mode": {
+    "ts:AureaProvider": "28cd16e3d48d72ab",
+    "ts:useTheme": "5d2494b7e1044bad",
+    "pkg:core": "d3ffb7033c64dc05"
+  },
+  "density": {
+    "css:--control-h-*": "6ec7fe3e8052e6d6",
+    "css:--touch-control-h-*": "d9503f8a8c4e4b2b",
+    "css:--row-h": "79710a12ea62da2a",
+    "css:--card-pad": "fc740b0b096b684b",
+    "css:--section-gap": "85db11a2fedd634b",
+    "ts:useDensity": "6ebee4b4ef6290a1"
+  },
+  "design-principles": {
+    "css:--radius-*": "5afbde8236612bf7",
+    "css:--fill-*": "a2658d78c94cba5c",
+    "css:--shadow-sm": "f54ab9ee1a9fdc19"
+  },
+  "frameworks": {
+    "pkg:core": "d3ffb7033c64dc05",
+    "pkg:react": "e8e2943e9c489cd6",
+    "pkg:native": "6d31dc8bbb4227f6"
+  },
+  "icons": {
+    "ts:Icon": "989ac5ff365d6ee0",
+    "pkg:icons": "d494420044625115"
+  },
+  "introduction": {
+    "pkg:react": "e8e2943e9c489cd6",
+    "pkg:core": "d3ffb7033c64dc05",
+    "pkg:fonts": "fc077430a51b432a",
+    "pkg:icons": "d494420044625115",
+    "pkg:tokens": "68e6f15e59bde3d7",
+    "pkg:contracts": "d83ee40f35641490",
+    "pkg:native": "6d31dc8bbb4227f6"
+  },
+  "llms-txt": {},
+  "quick-start": {
+    "ts:AureaProvider": "28cd16e3d48d72ab",
+    "pkg:react": "e8e2943e9c489cd6",
+    "pkg:core": "d3ffb7033c64dc05",
+    "pkg:fonts": "fc077430a51b432a",
+    "pkg:native": "6d31dc8bbb4227f6"
+  },
+  "roadmap": {},
+  "rtl": {
+    "ts:AureaProvider": "28cd16e3d48d72ab"
+  },
+  "showcase": {},
+  "styling": {
+    "css:--fill-*": "a2658d78c94cba5c",
+    "css:--field-*": "3bd2d31ca3c2c43a",
+    "pkg:core": "d3ffb7033c64dc05"
+  },
+  "theming": {
+    "css:--primary*": "f5cbf06ae535c324",
+    "css:--card*": "918b2fb908c9dfca",
+    "css:--success*": "f07ef43f82cc2564",
+    "css:--fill-2-solid": "61c7a75d0c5263b7",
+    "pkg:tokens": "68e6f15e59bde3d7",
+    "ts:AureaProvider": "28cd16e3d48d72ab"
+  }
+}

@@ -2,6 +2,7 @@
 title: Introduction
 description: An open-source design system with one look for the web and for React Native, made to be read by people with low vision.
 icon: book-open
+sources: pkg:react, pkg:core, pkg:fonts, pkg:icons, pkg:tokens, pkg:contracts, pkg:native
 ---
 
 Aurea is a design system with two outputs: the **web** (React components and plain CSS) and **mobile** (React Native components). The look is the same on both sides.

@@ -2,6 +2,7 @@
 title: Accessibility
 description: What Aurea does for people with low vision, keyboard and screen-reader users, and how each part is checked.
 icon: eye
+sources: css:--focus-*, css:--target-min, css:--touch-control-h-*, css:--success, css:--info, css:--warning, css:--destructive
 ---
 
 Low vision is the first audience Aurea designs for. This page lists what the components do on their own, what the test suite checks, and the places where Aurea knowingly falls short.

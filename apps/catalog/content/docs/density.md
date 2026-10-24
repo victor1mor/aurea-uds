@@ -2,6 +2,7 @@
 title: Density
 description: Three sizes for the same interface, compact, comfortable and spacious, switched with one attribute.
 icon: arrows-in-line-vertical
+sources: css:--control-h-*, css:--touch-control-h-*, css:--row-h, css:--card-pad, css:--section-gap, ts:useDensity
 ---
 
 Density sets how tall the controls are and how much room the content gets. Aurea has three: `compact`, `comfortable` and `spacious`.

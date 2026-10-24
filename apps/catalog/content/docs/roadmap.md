@@ -2,6 +2,7 @@
 title: Roadmap
 description: Where Aurea stands, and what has to be true before version 1.0.
 icon: path
+sources: none
 ---
 
 Aurea is in `0.x`. No dates are promised here: each step ships when it is done and checked. What changed in each release is in the [changelog](https://github.com/victor1mor/aurea-uds/blob/main/CHANGELOG.md).

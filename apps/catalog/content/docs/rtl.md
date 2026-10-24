@@ -2,6 +2,7 @@
 title: RTL
 description: Mirror Aurea for right-to-left languages with two settings, and know what stays in place on purpose.
 icon: text-align-right
+sources: ts:AureaProvider
 ---
 
 Aurea supports right-to-left writing, such as Arabic and Hebrew. The stylesheet is written with logical properties along the line, so the layout mirrors itself. You set the direction in two places, and that is all.

@@ -159,10 +159,12 @@ da web —, e travas na CI para continuar assim.
 
 ### Para quem cuida do repositório
 
-- **Três travas novas na CI:** o catálogo fiel (todo nome exportado com página; todo valor de variação da ficha num
+- **Quatro travas novas na CI:** o catálogo fiel (todo nome exportado com página; todo valor de variação da ficha num
   exemplo — web e nativo); o check 50 do `validate.py` (todo nome citado entre crases na Getting Started, no README e na
-  skill existe — 412 nomes, nenhum errado); e `scripts/exemplos-compilam.mjs` (`pnpm check:exemplos`: os 1.079 trechos
-  TypeScript do site, da skill e do README compilam contra o pacote montado — antes, 120 erros). As três se provam
+  skill existe — 412 nomes, nenhum errado); `scripts/exemplos-compilam.mjs` (`pnpm check:exemplos`: os 1.079 trechos
+  TypeScript do site, da skill e do README compilam contra o pacote montado — antes, 120 erros); e o check 51, a página
+  vigiada (cada página da Getting Started declara no cabeçalho o trecho de código que descreve, `sources:`; o trecho
+  mudou e a página não foi relida, reprova — `python scripts/validate.py --vigia-revisar <página>`). As quatro se provam
   sozinhas contra o defeito plantado a cada execução.
 - **O registro da 0.42.0** entra quando ela for publicada.
 

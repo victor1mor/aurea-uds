@@ -2,6 +2,7 @@
 title: Colors
 description: The color roles of Aurea, what each one is for, and their values in the light and dark themes.
 icon: paint-bucket
+sources: css:--primary*, css:--secondary*, css:--card*, css:--fill-*, css:--foreground, css:--muted-foreground, css:--accent*, css:--success*, css:--warning*, css:--destructive*, css:--info*, css:--danger-*
 ---
 
 Aurea names colors by role, not by hue. A component asks for "the card" or "the text on the primary button", and each theme answers with its own value.

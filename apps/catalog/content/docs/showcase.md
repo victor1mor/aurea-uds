@@ -2,6 +2,7 @@
 title: Showcase
 description: What is built with Aurea today, and how to get your project listed here.
 icon: sparkle
+sources: none
 ---
 
 ## This site
