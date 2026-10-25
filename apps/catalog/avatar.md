@@ -15,6 +15,31 @@ import {Avatar} from "@aurea-uds/react";
 <Avatar fallback={<Icon name="floppy-disk" />} tone="warning" emphasis="soft" />
 ```
 
+## Examples
+
+### Tones
+
+The colour of the fallback, with soft emphasis: the tone tints the circle and the letters stay readable.
+
+```tsx
+<Avatar fallback="AU" emphasis="soft" tone="neutral" />
+<Avatar fallback="AU" emphasis="soft" tone="brand" />
+<Avatar fallback="AU" emphasis="soft" tone="info" />
+<Avatar fallback="AU" emphasis="soft" tone="success" />
+<Avatar fallback="AU" emphasis="soft" tone="warning" />
+<Avatar fallback="AU" emphasis="soft" tone="danger" />
+```
+
+### Sizes
+
+Three sizes from the control scale.
+
+```tsx
+<Avatar fallback="AU" size="sm" />
+<Avatar fallback="AU" size="md" />
+<Avatar fallback="AU" size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

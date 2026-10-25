@@ -2,6 +2,7 @@
 title: AGENTS.md
 description: Short Aurea rules to put in your project's AGENTS.md, for AI coding agents.
 icon: robot
+sources: file:AGENTS.md
 ---
 
 [AGENTS.md](https://agents.md/) is a file at the root of a project with instructions for AI coding agents. Aurea publishes its rules in a form you can put there.

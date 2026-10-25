@@ -5,17 +5,13 @@
 import {createElement as h} from "react";
 import {Combobox, Field} from "../../../../packages/react/dist/index.js";
 
-const LISTA = "This page is static HTML: the listbox opens in a portal and only exists in a real "
-  + "React app. The preview shows the closed field; the code is the whole composition.";
-
 export default [
   {
     variant: "Single",
     name: "Picking one out of many",
     description: "A select stops working somewhere around twenty options — the eye cannot scan them. A combobox lets the user type what they already know instead of hunting for it.",
     uses: ["Combobox"],
-    note: LISTA,
-    code: `const [zone, setZone] = useState(null);
+    code: `const [zone, setZone] = useState<ComboboxOption | null>(null);
 
 <Combobox
   label="Time zone"
@@ -36,7 +32,6 @@ export default [
     name: "Options that belong to sections",
     description: "A flat list of forty time zones is a wall; the same forty under continents is a map. Pass groups — `{label, items}` — in the same `items` prop, and the engine's filter runs inside each section, dropping a section that has nothing left to show. `empty` writes what appears when nothing matches, which is where a list stops saying No results and starts saying what the user can do about it.",
     uses: ["Combobox"],
-    note: LISTA,
     code: `<Combobox
   label="Time zone"
   placeholder="Start typing a city…"

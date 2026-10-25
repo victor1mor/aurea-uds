@@ -75,5 +75,17 @@ export default {
         h(Field, {label: "Name", hint: "Required"}, h(Input, {required: true, placeholder: "Your name"})),
         h(Field, {label: "Plan"}, h(Input, {defaultValue: "Pro", disabled: true}))),
     },
+    {
+      title: "Label beside the control",
+      description: "orientation=\"horizontal\" puts the label to the left of the control — the settings-form row. "
+        + "The error still falls under the control, because it talks about the value.",
+      code: [
+        '<Field label="Display name" orientation="horizontal"><Input defaultValue="Ana Prado" /></Field>',
+        '<Field label="Handle" orientation="horizontal" error="Already taken."><Input defaultValue="ana" /></Field>',
+      ].join("\n"),
+      render: () => h("div", {style: {...stack, width: "min(520px, 100%)"}},
+        h(Field, {label: "Display name", orientation: "horizontal"}, h(Input, {defaultValue: "Ana Prado"})),
+        h(Field, {label: "Handle", orientation: "horizontal", error: "Already taken."}, h(Input, {defaultValue: "ana"}))),
+    },
   ],
 };

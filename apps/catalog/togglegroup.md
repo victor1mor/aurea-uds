@@ -16,6 +16,47 @@ import {ToggleGroup} from "@aurea-uds/react";
 </ToggleGroup>
 ```
 
+## Examples
+
+### Orientation
+
+vertical stacks the toggles; the arrow keys follow the direction.
+
+```tsx
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} orientation="horizontal">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} orientation="vertical">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+```
+
+### Sizes
+
+The size reaches every toggle in the group.
+
+```tsx
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="sm">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="md">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="lg">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

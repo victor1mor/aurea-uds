@@ -9,7 +9,7 @@ import {BottomNav} from "@aurea-uds/react";
 ```
 
 ```tsx
-const items = [
+const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
     badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
@@ -138,6 +138,25 @@ An item without href is a <button>. Same skin, same aria-current — what change
     {id: "service", label: "Service", icon: "wrench", onClick: () => go("/service")},
   ]}
 />
+```
+
+### Content width — the pill as wide as its items
+
+width="content" sizes the floating pill to its items and centres it, instead of spanning the screen. It only applies while the bar floats; the edge bar stays as wide as the screen.
+
+```tsx
+<BottomNav width="content" indicator="capsule" label="Garage content" current={route} items={items} />
+```
+
+### The four older names
+
+flat, surface, pill and dock still work and map onto the pair: flat is edge with no indicator, surface and dock are floating with the circle, pill is floating with the pill. They are deprecated — write variant and indicator instead.
+
+```tsx
+<BottomNav variant="flat" label="Garage flat" current={route} items={items} />
+<BottomNav variant="surface" label="Garage surface" current={route} items={items} />
+<BottomNav variant="pill" label="Garage pill" current={route} items={items} />
+<BottomNav variant="dock" label="Garage dock" current={route} items={items} />
 ```
 
 ## API Reference

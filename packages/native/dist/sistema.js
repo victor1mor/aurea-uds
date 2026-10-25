@@ -149,9 +149,14 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
     const inativo = disabled ?? campo?.disabled;
     // Só o iOS precisa manter o seletor na árvore; no Android o diálogo é do sistema e some sozinho.
     const [abertoNoIOS, setAbertoNoIOS] = React.useState(false);
+    // No `mode="time"` o gatilho escreve a HORA, e o vazio pede um horário (bloco 1, 24/10/2026): sem `format`, ele
+    // escrevia a data do dia e dizia "Pick a date" — a pessoa escolhia 14:30 e via 24/10/2026.
+    const vazio = placeholder ?? (mode === "time" ? strings.timePlaceholder : strings.datePlaceholder);
     const texto = value
-        ? (format ? format(value) : value.toLocaleDateString())
-        : (placeholder ?? strings.datePlaceholder);
+        ? (format ? format(value)
+            : mode === "time" ? value.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })
+                : value.toLocaleDateString())
+        : vazio;
     const receber = React.useCallback((evento, data) => {
         setAbertoNoIOS(false);
         // `dismissed` é a pessoa cancelando. Chamar `onChange` aí gravaria uma data que ninguém
@@ -189,7 +194,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
             min: minimumDate && mode === "date" ? paraCampoWeb(minimumDate, mode) : undefined,
             max: maximumDate && mode === "date" ? paraCampoWeb(maximumDate, mode) : undefined,
             disabled: inativo,
-            "aria-label": campo?.label ?? (value ? texto : placeholder ?? strings.datePlaceholder),
+            "aria-label": campo?.label ?? (value ? texto : vazio),
             "aria-invalid": campo?.invalido || undefined,
             "aria-description": campo?.hint,
             "data-testid": testID ? `${testID}-campo` : undefined,
@@ -328,7 +333,9 @@ export function PhotoInput({ value = [], onChange, max = 1, source = "camera", d
         });
         onChange?.([...value, ...novas]);
     }, [source, max, value, onChange, onPermissionDenied, exif]);
-    return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: [s.galeria, value.length > 0 && s.comX], children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Pressable, { onPress: () => setAberta(n), accessibilityRole: "imagebutton", accessibilityLabel: nomeDa(n), accessibilityHint: strings.photoOpen, children: _jsx(Image, { source: foto.uri, alt: "", ratio: 1 }) }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "solid", size: "sm", name: removeIcon, label: `${strings.photoRemove} ${n + 1}`, disabled: inativo, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, `${foto.uri}-${n}`))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label ?? strings.photoAdd, ...estadoAcessivel({ disabled: !!inativo }), style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] }), _jsx(FotoAmpliada, { source: fotoAberta?.uri, title: aberta != null ? nomeDa(aberta) : "", alt: aberta != null ? nomeDa(aberta) : "", 
+    return (_jsxs(View, { testID: testID, style: style, children: [negadoDeVez && (_jsx(Alert, { variant: "warning", children: _jsxs(View, { style: { gap: t.size.space2 }, children: [_jsx(Text, { size: "sm", tone: "muted", children: strings.cameraDenied }), offerSettings && (_jsx(Pressable, { onPress: () => Linking.openSettings(), accessibilityRole: "button", accessibilityLabel: strings.openSettings, children: _jsx(Text, { size: "sm", weight: 600, tone: "primary", children: strings.openSettings }) }))] }) })), _jsxs(View, { style: [s.galeria, value.length > 0 && s.comX], children: [value.map((foto, n) => (_jsxs(View, { style: s.miniatura, children: [_jsx(Pressable, { onPress: () => setAberta(n), 
+                                // No navegador o `react-native-web` não traduz `imagebutton` e joga o papel fora (bloco 1, 24/10/2026).
+                                accessibilityRole: "imagebutton", role: Platform.OS === "web" ? "button" : undefined, accessibilityLabel: nomeDa(n), accessibilityHint: strings.photoOpen, children: _jsx(Image, { source: foto.uri, alt: "", ratio: 1 }) }), _jsx(View, { style: s.remover, children: _jsx(IconButton, { appearance: "solid", size: "sm", name: removeIcon, label: `${strings.photoRemove} ${n + 1}`, disabled: inativo, onPress: () => onChange?.(value.filter((_, i) => i !== n)) }) })] }, `${foto.uri}-${n}`))), !cheio && (_jsx(Pressable, { onPress: inativo ? undefined : escolher, disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label ?? strings.photoAdd, ...estadoAcessivel({ disabled: !!inativo }), style: [s.adicionar, inativo && s.desabilitado], children: addIcon && _jsx(Icon, { name: addIcon, size: "lg", color: t.color.subtleForeground }) }))] }), _jsx(FotoAmpliada, { source: fotoAberta?.uri, title: aberta != null ? nomeDa(aberta) : "", alt: aberta != null ? nomeDa(aberta) : "", 
                 // A proporção da foto, quando a câmera a deu: a grande aparece inteira, sem tarja à toa.
                 ratio: fotoAberta?.width && fotoAberta.height ? fotoAberta.width / fotoAberta.height : 1, onClose: () => setAberta(null) })] }));
 }

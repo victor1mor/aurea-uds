@@ -18,6 +18,58 @@ import {AppShell} from "@aurea-uds/react";
 </AppShell>
 ```
 
+## Examples
+
+### The documentation arrangement
+
+layout="docs" is the arrangement of this site: one block in the middle of the screen with the sidebar, the text and the table of contents. Here the sidebar, the content and the aside have no box (plain).
+
+```tsx
+<AppShell
+  layout="docs"
+  sidebarVariant="plain"
+  contentVariant="plain"
+  asideVariant="plain"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
+### A floating aside, and the scrollbar always on
+
+asideVariant="floating" puts the right column in a card of its own; sidebarScrollbar="visible" keeps the sidebar's scrollbar showing, instead of only under the pointer.
+
+```tsx
+<AppShell
+  asideVariant="floating"
+  sidebarScrollbar="visible"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
+### A flush aside
+
+asideVariant="flush" glues the right column to the edge of the window, like the flush sidebar.
+
+```tsx
+<AppShell
+  asideVariant="flush"
+  sidebarVariant="flush"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -47,3 +99,4 @@ import {AppShell} from "@aurea-uds/react";
 | `aside` | `ReactNode` | — | The right-hand column — a documentation page's "On this page" (a TableOfContents). From 1280 up it is the third column; below, it follows the content. With the docs layout, below 1280 it is the drawer of the table-of-contents bar instead. |
 | `asideLabel` | `string` | strings.tocLabel | The right column's name for screen readers. |
 | `asideVariant` | `"floating" \| "flush" \| "plain"` | sidebarVariant | Skin of the right-hand column. Without it, the same as the left sidebar. plain removes the box — the items sit loose on the page, like a documentation page's "On this page". |
+| `topbarTabsEnd` | `ReactNode` | — | The end of the areas row (the Header's tabsEnd): the Web \| Native switch of a documentation site. |

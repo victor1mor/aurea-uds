@@ -375,6 +375,9 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     currentTab?: string;
     /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
     tabsLabel?: string;
+    /** O que fica na PONTA da segunda linha, do lado oposto das áreas (bloco 1, o 5-A — 23/10/2026): a chave Web | Native
+     *  da documentação da referência. Some abaixo de 768, como lá. Sem `tabs`, não aparece. */
+    tabsEnd?: ReactNode;
 }
 /** Uma área da segunda linha do `Header`: o nome, o endereço e, se quiser, o ícone (o desenho que o app passa). */
 export interface HeaderTab {
@@ -384,7 +387,7 @@ export interface HeaderTab {
     icon?: ReactNode;
     render?: SidebarItem["render"];
 }
-export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, itemsJustify, size, blurred, menuActions, navLabel, menuLabel, menuId, tabs, currentTab, tabsLabel, children, className, ...props }: HeaderProps): React.JSX.Element;
+export declare function Header({ variant, divider, brand, items, current, actions, maxWidth, itemsJustify, size, blurred, menuActions, navLabel, menuLabel, menuId, tabs, currentTab, tabsLabel, tabsEnd, children, className, ...props }: HeaderProps): React.JSX.Element;
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export declare function Topbar(props: HeaderProps): React.JSX.Element;
 export declare function Kbd({ children, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>): React.JSX.Element;

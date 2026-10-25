@@ -20,6 +20,19 @@ import {Drawer} from "@aurea-uds/react";
 <Drawer open={open} onClose={() => setOpen(false)} title="Filters" side="bottom">…</Drawer>
 ```
 
+## Examples
+
+### Sides
+
+Which edge the panel comes from. bottom is the sheet that rises on a phone, with a 32 corner.
+
+```tsx
+<Drawer open={open} onClose={close} title="Side right" side="right">…</Drawer>
+<Drawer open={open} onClose={close} title="Side left" side="left">…</Drawer>
+<Drawer open={open} onClose={close} title="Side top" side="top">…</Drawer>
+<Drawer open={open} onClose={close} title="Side bottom" side="bottom">…</Drawer>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

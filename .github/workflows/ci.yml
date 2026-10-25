@@ -61,6 +61,11 @@ jobs:
             exit 1
           fi
 
+      # A trava 1 (o bloco 1, o 1-B — 23/10/2026): todo trecho TypeScript que o site, o README e a skill mostram compila
+      # pelo `tsc` 7 contra o pacote montado. Depois do build, porque lê `packages/*/dist` e o nativo do site.
+      - name: Os exemplos compilam (a trava 1)
+        run: node scripts/exemplos-compilam.mjs
+
       # Critério 26 do QUALITY.md e condição 1 da ADR-0010: só `dist/` entra no tarball.
       # Era conferência à mão até 31/07/2026. Roda DEPOIS do build porque mede o que sairia
       # publicado, e o que sairia depende do build.

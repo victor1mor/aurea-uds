@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {Toggle} from "../../../packages/react/dist/index.js";
+import {eixo} from "./_eixos.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 
@@ -65,5 +66,11 @@ export default {
         h(Toggle, {variant: "ghost", icon: "text-b", label: "Bold", defaultPressed: true}),
         h(Toggle, {variant: "ghost", icon: "text-italic", label: "Italic"})),
     },
+    eixo({
+      titulo: "Sizes",
+      descricao: "The button scale — sm, md and lg — so a toggle sits level with the controls beside it. md is the default.",
+      Comp: Toggle, nome: "Toggle", prop: "size", valores: ["sm", "md", "lg"],
+      filho: (v) => ({sm: "Small", md: "Medium", lg: "Large"})[v],
+    }),
   ],
 };

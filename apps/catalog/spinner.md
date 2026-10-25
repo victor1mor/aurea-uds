@@ -14,6 +14,19 @@ import {Spinner} from "@aurea-uds/react";
 <Spinner size="lg" />
 ```
 
+## Examples
+
+### Sizes
+
+Four sizes; the label is what the screen reader says.
+
+```tsx
+<Spinner label="Loading" size="sm" />
+<Spinner label="Loading" size="md" />
+<Spinner label="Loading" size="lg" />
+<Spinner label="Loading" size="xl" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

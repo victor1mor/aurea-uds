@@ -2,6 +2,7 @@
 title: Styling
 description: Style Aurea with props first, then with a class name, plain CSS and the tokens.
 icon: paint-brush
+sources: css:--fill-*, css:--field-*, pkg:core
 ---
 
 Aurea ships one stylesheet, `@aurea-uds/core/css`. Every component draws itself with class names from it. You change the look in four ways, from the most to the least preferred: props, a class name, your own CSS, and the tokens.

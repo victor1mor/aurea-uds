@@ -24,6 +24,48 @@ import {Header} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Variants
+
+floating is a detached card; flush merges into the page and frames the window; pill is a capsule floating over the content.
+
+```tsx
+<Header brand={<strong>Acme</strong>} variant="floating" />
+<Header brand={<strong>Acme</strong>} variant="flush" />
+<Header brand={<strong>Acme</strong>} variant="pill" />
+```
+
+### Content widths
+
+How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it.
+
+```tsx
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="sm" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="md" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="lg" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="xl" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="2xl" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="docs" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="full" />
+```
+
+### Links at the start
+
+itemsJustify="start" puts the links right after the brand; end, the default, puts them just before the actions.
+
+```tsx
+<Header
+  variant="flush"
+  brand={<strong>Acme</strong>}
+  items={[{id: "home", label: "Home", href: "/"}, {id: "docs", label: "Docs", href: "/docs"}]}
+  current="home"
+  itemsJustify="start"
+  navLabel="Links at the start"
+  menuId="header-start-menu"
+/>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -46,3 +88,4 @@ import {Header} from "@aurea-uds/react";
 | `tabs` | `HeaderTab[]` | — | A second row: the site's areas, each with an optional icon, like the area row of the reference documentation. The row is 40 tall, the areas sit at its bottom, 12 apart (4 on a phone), and it scrolls sideways when they do not fit. The current one gets aria-current="page" and a 2px bar in the accent color. It comes last in the Tab order, after the actions. With tabs the bar is exactly its height and the divider line hangs just below it. |
 | `currentTab` | `string` | — | The id of the current area in the second row. |
 | `tabsLabel` | `string` | "Sections" | The accessible name of the second row. |
+| `tabsEnd` | `ReactNode` | — | What sits at the END of the second row, opposite the areas: the Web \| Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs. |

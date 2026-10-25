@@ -509,7 +509,10 @@ describe("TagGroup · escolher", () => {
     expect(mudou).toHaveBeenLastCalledWith(["design"]);
     expect(escolher("design").accessibilityRole).toBe("button");
     expect((escolher("design").accessibilityState as {selected?: boolean}).selected).toBe(true);
-    expect(escolher("design")["aria-selected"]).toBe(true);
+    // Na web, botão escolhido é `aria-pressed` — o `aria-selected` não vale em botão (o axe o recusa; bloco 1, 24/10/2026).
+    // No aparelho o `accessibilityState.selected` continua, e o leitor ouve "selected".
+    expect(escolher("design")["aria-pressed"]).toBe(true);
+    expect(escolher("design")["aria-selected"]).toBeUndefined();
     expect((escolher("codigo").accessibilityState as {selected?: boolean}).selected).toBe(false);
     tocar(escolher("codigo"));
     expect(mudou).toHaveBeenLastCalledWith(["codigo"]);

@@ -2,6 +2,9 @@ import {createElement as h} from "react";
 import {ProgressCircle} from "../../../packages/react/dist/index.js";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-4)"};
+// Os seis tons, cada anel com o nome próprio: o código e o desenho saem desta lista.
+const TONS = [["brand", "Publishing", 60], ["neutral", "Paused", 40], ["success", "Backup", 100],
+  ["warning", "Storage", 92], ["danger", "Failed upload", 30], ["info", "Sync", 50]];
 
 export default {
   description:
@@ -44,6 +47,15 @@ export default {
         h(ProgressCircle, {label: "Storage", value: 92, tone: "warning"}),
         h(ProgressCircle, {label: "Errors", value: 30, tone: "danger"}),
         h(ProgressCircle, {label: "Loading"})),
+    },
+    {
+      title: "Every tone",
+      description: "The same closed list as Progress. Brand is the default; paused is neutral, failed is danger, "
+        + "and info is for work that is neither good nor bad news.",
+      code: TONS.map(([tone, label, value]) =>
+        `<ProgressCircle label="${label}" value={${value}}${tone === "brand" ? "" : ` tone="${tone}"`} />`).join("\n"),
+      render: () => h("div", {style: row}, ...TONS.map(([tone, label, value]) =>
+        h(ProgressCircle, {key: tone, label, value, ...(tone === "brand" ? {} : {tone})}))),
     },
   ],
 };

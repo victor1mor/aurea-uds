@@ -52,6 +52,16 @@ Unavailable but still readable — the reason belongs somewhere on the screen.
 <Checkbox label="SSO" defaultChecked disabled />
 ```
 
+### Sizes
+
+The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.
+
+```tsx
+<Checkbox label="Compact rows" defaultChecked size="sm" />
+<Checkbox label="Comfortable rows" defaultChecked />
+<Checkbox label="Spacious rows" defaultChecked size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

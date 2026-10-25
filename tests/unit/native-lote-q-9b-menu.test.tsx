@@ -392,8 +392,9 @@ describe("DropdownMenu · o que alterna e a escolha única", () => {
     p = linha("Barra lateral")!;
     expect(p.accessibilityState).toMatchObject({checked: true});
     expect(modal().visible).toBe(true);
-    // A marca: o `check` de 16 na cor de destaque, numa casa de 20 que existe marcada ou não.
-    expect(desenhados.findLast((d) => d.nome === "check")).toMatchObject({size: 16, color: ESCURO.color.primaryEmphasis});
+    // A marca: o `check` de 16 na cor do TEXTO da linha, como a web (`currentColor`) — era o destaque até 23/10/2026 —,
+    // numa casa de 20 que existe marcada ou não.
+    expect(desenhados.findLast((d) => d.nome === "check")).toMatchObject({size: 16, color: ESCURO.color.foreground});
     const casa = __instancias("View").findLast((v) => plano(v.style).width === ESCURO.size.iconMd);
     expect(plano(casa?.style).height).toBe(ESCURO.size.iconMd);
   });
@@ -418,7 +419,7 @@ describe("DropdownMenu · o que alterna e a escolha única", () => {
     expect(linha("Data")?.accessibilityState).toMatchObject({checked: false});
     const ponto = __instancias("View").map((p) => plano(p.style)).findLast((e) => e.width === ESCURO.size.space2);
     expect([ponto?.height, ponto?.backgroundColor, ponto?.borderRadius, ponto?.borderCurve])
-      .toEqual([ESCURO.size.space2, ESCURO.color.primaryEmphasis, ESCURO.size.radiusFull, "continuous"]);
+      .toEqual([ESCURO.size.space2, ESCURO.color.foreground, ESCURO.size.radiusFull, "continuous"]);
     await tocar(linha("Data"));
     expect(onValueChange).toHaveBeenCalledWith("data");
     expect(modal().visible).toBe(false);
@@ -523,6 +524,6 @@ describe("dentro de um `Card variant=\"contrast\"` — a janela sai no tema do A
     expect(estiloDoPainel().backgroundColor).toBe(CLARO.color.popover);
     expect(texto("Editar").e.color).toBe(CLARO.color.foreground);
     expect(plano(linha("Editar")!.__estiloTocando).backgroundColor).toBe(CLARO.color.surface3);
-    expect(desenhados.findLast((d) => d.nome === "check")?.color).toBe(CLARO.color.primaryEmphasis);
+    expect(desenhados.findLast((d) => d.nome === "check")?.color).toBe(CLARO.color.foreground);
   });
 });

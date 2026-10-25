@@ -29,16 +29,139 @@ Flags:
   --write-raw-px-baseline   regrava scripts/raw-px-baseline.json (check 12)
   --write-state             regrava STATE.md e o bloco do README (check 13)
   --write-core-boundary     regrava scripts/core-boundary.json (check 15)
+  --vigia-revisar <página|todas>  a página foi relida: regrava a impressão dela em scripts/vigia-das-paginas.json (check 51)
 """
 from pathlib import Path
 import json
 import os
 import re
 import collections
+import fnmatch
 import sys
 
 root = Path(__file__).resolve().parents[1]
 errors = []
+
+# ── 51. a página vigiada: o texto escrito à mão acompanha o trecho de código que ele descreve ─────────────────────
+# Lote 1, as travas (a trava 3, decidida pelo Victor em 19/10/2026), feita no bloco 1 (o 1-C, 24/10/2026). O que se gera
+# sozinho não envelhece; a página escrita à mão envelhece em silêncio quando o código que ela explica muda. Cada página da
+# Getting Started declara no cabeçalho o TRECHO que descreve (`sources:`), e não o arquivo inteiro — ligar a página ao
+# `aurea.css` inteiro daria ruído (ele muda em 21% dos commits; a pesquisa da trava, item 76 do documento de achados):
+#   css:--duration-*      as declarações dos tokens que casam (o CSS dos tokens e do core, todos os temas)
+#   ts:AureaProvider      a assinatura da peça ou do gancho (props, tipos e valores), lida do contrato da API
+#   pkg:core              as portas (`exports`) e as dependências de par do pacote
+#   file:AGENTS.md        o arquivo inteiro (só quando a página descreve um arquivo)
+#   none                  a página não descreve código (o Roadmap, a vitrine)
+# A impressão de cada trecho mora em `scripts/vigia-das-paginas.json` (gerado). Trecho mudou → a página reprova até
+# alguém relê-la e rodar `python scripts/validate.py --vigia-revisar <página>` (ou `todas`) — o "revisei" fica no diff.
+# Trecho que não acha nada reprova (a trava não fica cega por um nome errado), e a cada execução ela se prova sozinha:
+# a impressão de um trecho de mentira muda quando o valor muda.
+import hashlib
+
+VIGIA = root / "scripts/vigia-das-paginas.json"
+_DOCS51 = sorted((root / "apps/catalog/content/docs").glob("*.md"))
+_CSS51 = "\n".join((root / p).read_text(encoding="utf-8") for p in ["packages/tokens/dist/aurea.tokens.css", "packages/core/src/aurea.css"])
+_SUP51 = [json.loads((root / f"packages/contracts/{n}").read_text(encoding="utf-8")) for n in ["api-surface.json", "api-surface-native.json"]]
+
+
+def _impressao51(fonte, css=None, superficies=None):
+    """O texto canônico do trecho (vazio se não acha nada)."""
+    css = _CSS51 if css is None else css
+    superficies = _SUP51 if superficies is None else superficies
+    tipo, _, alvo = fonte.partition(":")
+    if tipo == "css":
+        linhas = sorted({f"{n}:{v.strip()}" for n, v in re.findall(r"(--[a-z0-9-]+)\s*:\s*([^;}]+)", re.sub(r"/\*.*?\*/", "", css, flags=re.S))
+                         if fnmatch.fnmatch(n, alvo)})
+        return "\n".join(linhas)
+    if tipo == "ts":
+        achados = []
+        for sup in superficies:
+            for mod in sup["modules"].values():
+                for c in mod.get("components", []):
+                    if c["name"] == alvo:
+                        achados.append(json.dumps(c.get("props", []), sort_keys=True, ensure_ascii=False))
+                for g in mod.get("hooks", []):
+                    if (g.get("name") if isinstance(g, dict) else g) == alvo:
+                        achados.append(json.dumps(g, sort_keys=True, ensure_ascii=False))
+        return "\n".join(achados)
+    if tipo == "pkg":
+        pj = root / "packages" / alvo / "package.json"
+        if not pj.is_file():
+            return ""
+        j = json.loads(pj.read_text(encoding="utf-8"))
+        return json.dumps({"exports": j.get("exports"), "peerDependencies": j.get("peerDependencies"),
+                           "peerDependenciesMeta": j.get("peerDependenciesMeta")}, sort_keys=True, ensure_ascii=False)
+    if tipo == "file":
+        f = root / alvo
+        return f.read_text(encoding="utf-8").replace("\r\n", "\n") if f.is_file() else ""
+    return ""
+
+
+def _hash51(texto):
+    return hashlib.sha256(texto.encode("utf-8")).hexdigest()[:16]
+
+
+def _fontes51(doc):
+    cab = doc.read_text(encoding="utf-8").replace("\r\n", "\n").split("\n---\n", 1)[0]
+    m = re.search(r"^sources:\s*(.+)$", cab, re.M)
+    return None if not m else [s.strip() for s in m.group(1).split(",") if s.strip()]
+
+
+# A prova contra a cegueira: um token de mentira; a impressão dele muda quando o valor muda, e um nome errado não acha nada.
+_falso51 = ":root { --vigia-prova: 4px; --vigia-prova-2: 8px; }"
+if (_impressao51("css:--vigia-prova*", css=_falso51) == _impressao51("css:--vigia-prova*", css=_falso51.replace("4px", "5px"))
+        or not _impressao51("css:--vigia-prova*", css=_falso51) or _impressao51("css:--vigia-nao-existe", css=_falso51)
+        or not _impressao51("ts:Button") or not _impressao51("pkg:react")):
+    errors.append("check 51: a trava está CEGA — a impressão de um trecho de mentira não muda com o valor, ou uma fonte "
+                  "da verdade (o contrato da API, os pacotes) veio vazia")
+_medido51 = {}
+for _d51 in _DOCS51:
+    _f51 = _fontes51(_d51)
+    if _f51 is None:
+        errors.append(f"check 51: {_d51.relative_to(root).as_posix()} não declara `sources:` no cabeçalho — o trecho de "
+                      "código que ela descreve (`css:--token-*`, `ts:Peça`, `pkg:pacote`, `file:caminho`) ou `none`")
+        continue
+    if _f51 == ["none"]:
+        _medido51[_d51.stem] = {}
+        continue
+    _medido51[_d51.stem] = {}
+    for _s51 in _f51:
+        _i51 = _impressao51(_s51)
+        if not _i51:
+            errors.append(f"check 51: {_d51.relative_to(root).as_posix()} vigia `{_s51}`, que não acha nada — nome errado, ou "
+                          "o código saiu (então a página também tem de mudar)")
+        _medido51[_d51.stem][_s51] = _hash51(_i51)
+if "--vigia-revisar" in sys.argv:
+    _alvo51 = sys.argv[sys.argv.index("--vigia-revisar") + 1] if len(sys.argv) > sys.argv.index("--vigia-revisar") + 1 else ""
+    _guardado51 = json.loads(VIGIA.read_text(encoding="utf-8")) if VIGIA.is_file() else {}
+    _paginas51 = list(_medido51) if _alvo51 == "todas" else [_alvo51]
+    _faltam51 = [p for p in _paginas51 if p not in _medido51]
+    if not _alvo51 or _faltam51:
+        print(f"vigia: diga a página (o nome do arquivo sem .md) ou 'todas' — {', '.join(_faltam51) or 'nenhuma'} não existe")
+        sys.exit(1)
+    if _alvo51 == "todas":
+        _guardado51 = {}
+    for _p51 in _paginas51:
+        _guardado51[_p51] = _medido51[_p51]
+    VIGIA.write_text(json.dumps(dict(sorted(_guardado51.items())), indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    print(f"vigia: revisada(s) {', '.join(_paginas51)} — scripts/vigia-das-paginas.json regravado")
+    sys.exit(0)
+_guardado51 = json.loads(VIGIA.read_text(encoding="utf-8")) if VIGIA.is_file() else {}
+for _p51, _m51 in _medido51.items():
+    if _p51 not in _guardado51:
+        errors.append(f"check 51: a página {_p51} nunca foi revisada — releia e rode 'python scripts/validate.py "
+                      f"--vigia-revisar {_p51}'")
+        continue
+    _mudou51 = sorted(s for s in _m51 if _guardado51[_p51].get(s) != _m51[s])
+    _saiu51 = sorted(s for s in _guardado51[_p51] if s not in _m51)
+    if _mudou51 or _saiu51:
+        errors.append(f"check 51: a página {_p51} descreve código que mudou desde a última revisão — "
+                      f"{', '.join(_mudou51 + [s + ' (saiu do cabeçalho)' for s in _saiu51])}. Releia a página, conserte o "
+                      f"que envelheceu e rode 'python scripts/validate.py --vigia-revisar {_p51}'")
+for _p51 in sorted(set(_guardado51) - set(_medido51)):
+    errors.append(f"check 51: scripts/vigia-das-paginas.json guarda a página {_p51}, que não existe mais — rode "
+                  "'python scripts/validate.py --vigia-revisar todas'")
+
 
 # ── 1. nomes privados (endurecido — auditoria 18/07/2026, ALTO 7) ──
 # A LISTA NÃO MORA NO REPOSITÓRIO — decisão do Victor, 24/09/2026, antes de abrir o repositório.
@@ -158,8 +281,10 @@ PATTERNS_REF = [
 # mesmo gerador de id — medido: um achado só, no mesmo trecho do `live.js`. O `home.js` (o Início, 15/10/2026) é o
 # `search.js` mais a vitrine: o mesmo caso, o mesmo achado. O `live-motores.js` (21/10/2026) é o `live.js` mais os
 # motores pesados (gráficos, editor, grade, mapa, QR): código de dependência montado, o mesmo caso.
+# O `live-nativo.js` (bloco 1, 23/10/2026) é o mesmo caso: as peças do topo do site (o mesmo gerador de id) e o
+# `react-native-web` montados — medido: um achado só, no mesmo trecho.
 REF_FORA = {root / "apps/catalog/assets/live.js", root / "apps/catalog/assets/search.js", root / "apps/catalog/assets/home.js",
-            root / "apps/catalog/assets/live-motores.js"}
+            root / "apps/catalog/assets/live-motores.js", root / "apps/catalog/assets/live-nativo.js"}
 REF_FORA_DIRS = {root / "apps/keyboard-probe/out"}
 
 
@@ -641,6 +766,17 @@ exported = set(re.findall(r"export function ([A-Z][A-Za-z0-9]*)", tsx)) | {
 # Hook público é `export const useX = …` ou `export function useX(…)`. Mesma varredura, outro
 # formato de nome — e é isto que permite a ficha de hook existir sem afrouxar a de componente.
 exported_hooks = set(re.findall(r"export (?:function|const) (use[A-Z][A-Za-z0-9]*)", tsx))
+
+
+# A PEÇA QUE SÓ EXISTE NO NATIVO (bloco 1, 23/10/2026): `platforms.web: "n-a"` — a `BottomSheet`, o `Screen`, o
+# `ToastHost`… Ela tem ficha (o contrato publicado diz o que existe, e onde) e página do NATIVO no site, e não é
+# componente do pacote da web: as cobranças que perguntam pela web (exportada pelo `@aurea-uds/react`, o
+# `source.react`, a página de componente) não valem para ela; o `source.native` vale no lugar do `source.react`.
+def _so_nativo(f):
+    return (f.get("platforms") or {}).get("web") == "n-a"
+
+
+FONTE_NATIVA_RE = re.compile(r"^packages/native/src/([\w-]+\.tsx)#([A-Z][A-Za-z0-9]*)$")
 for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     rel = fp.relative_to(root)
     try:
@@ -660,6 +796,14 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     elif kind == "hook":
         if f["name"] not in exported_hooks:
             errors.append(f"{rel}: '{f['name']}' não é hook exportado do pacote react")
+    elif _so_nativo(f):
+        _mn = FONTE_NATIVA_RE.match((f.get("source") or {}).get("native") or "")
+        if not _mn:
+            errors.append(f"{rel}: peça só do nativo sem source.native na forma packages/native/src/<arquivo>.tsx#<Componente>")
+        elif not re.search(rf"^export\s+(?:function|const)\s+{_mn.group(2)}\b",
+                           (root / "packages/native/src" / _mn.group(1)).read_text(encoding="utf-8")
+                           if (root / "packages/native/src" / _mn.group(1)).is_file() else "", re.M):
+            errors.append(f"{rel}: source.native aponta para {_mn.group(1)}, que não declara '{_mn.group(2)}'")
     elif f["name"] not in exported:
         errors.append(f"{rel}: '{f['name']}' não é componente exportado do pacote react")
     if f.get("icon") and f["icon"] not in ALLOWED_ICONS:
@@ -696,7 +840,8 @@ for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
                     errors.append(f"{rel}: prop {pr.get('name', '?')} sem: {', '.join(falta)}")
 # cobertura conjunto-exato (replicação concluída): todo componente exportado do
 # pacote react tem ficha. O sentido inverso (ficha sem componente) já é pego acima.
-fichas = {fp.stem for fp in (root / "packages/contracts/registry").glob("*.json")}
+fichas = {fp.stem for fp in (root / "packages/contracts/registry").glob("*.json")
+          if not _so_nativo(json.loads(fp.read_text(encoding="utf-8")))}
 # Nem todo export em PascalCase é componente. Estes dois são os contextos React que o
 # `internal.tsx` precisa expor para o `system.tsx` montar o AureaProvider — apareceram com o
 # split da Fase 9. Lista explícita e curta, no idioma das outras allowlists deste arquivo:
@@ -1480,6 +1625,8 @@ for _fp in sorted((root / "packages/react/src").glob("*.tsx")):
     _declara[_fp.name] = set(DECL_RE.findall(_fp.read_text(encoding="utf-8")))
 for fp in sorted((root / "packages/contracts/registry").glob("*.json")):
     f = json.loads(fp.read_text(encoding="utf-8"))
+    if _so_nativo(f):
+        continue
     alvo = (f.get("source") or {}).get("react") or ""
     m = FONTE_RE.match(alvo)
     if not m:
@@ -1859,16 +2006,24 @@ if CHANGELOG.is_file() and SURFACE.is_file():
     if not isinstance(_str31b, dict):
         errors.append("scripts/released-surface.json: sem `strings` — o check 31b não tem contra o que comparar")
     else:
-        _v31b = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
+        _vpac31b = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
         _ch31b = CHANGELOG.read_text(encoding="utf-8")
-        # Enquanto os pacotes não sobem de número, a seção que vale é a da versão EM CONSTRUÇÃO (19/10/2026): ler a
-        # [0.35.0], já publicada, pediria o aviso dentro de uma versão que não muda mais.
-        _emc31b = re.search(r"^## \[([0-9.]+)\] — em construção$", _ch31b, re.M)
-        if _v31b == _rel31b["version"] and _emc31b:
-            _v31b = _emc31b.group(1)
-        _sec31b = _ch31b.split(f"## [{_v31b}]", 1)[1].split("\n## [", 1)[0] if f"## [{_v31b}]" in _ch31b else ""
         _tit31b = "### ⚠ Pode quebrar a compilação"
-        _aviso31b = _sec31b.split(_tit31b, 1)[1].split("\n### ", 1)[0] if _tit31b in _sec31b else ""
+        # As seções que valem são as do que AINDA NÃO SAIU, como no check 31: a da versão EM CONSTRUÇÃO (19/10/2026 —
+        # ler a [0.35.0], já publicada, pediria o aviso dentro de uma versão que não muda mais) e a da versão DATADA que
+        # os pacotes carregam e ainda não foi registrada. As duas juntas (24/10/2026): com a 0.42.0 esperando a
+        # publicação e a 0.43.0 em construção, o check lia só a [0.42.0] e pedia nela as frases da 0.43.0.
+        _vs31b = []
+        if _vpac31b != _rel31b["version"]:
+            _vs31b.append(_vpac31b)
+        _emc31b = re.search(r"^## \[([0-9.]+)\] — em construção$", _ch31b, re.M)
+        if _emc31b and _emc31b.group(1) not in _vs31b:
+            _vs31b.append(_emc31b.group(1))
+        _v31b = " + ".join(_vs31b) or _vpac31b
+        _aviso31b = ""
+        for _vv31b in _vs31b:
+            _sec31b = _ch31b.split(f"## [{_vv31b}]", 1)[1].split("\n## [", 1)[0] if f"## [{_vv31b}]" in _ch31b else ""
+            _aviso31b += _sec31b.split(_tit31b, 1)[1].split("\n### ", 1)[0] if _tit31b in _sec31b else ""
         for _alvo31b, _arq31b in (("web", "packages/react/src/pure.tsx"), ("native", "packages/native/src/strings.ts")):
             _novas31b = sorted(_chaves31b(_arq31b) - set(_str31b.get(_alvo31b, [])))
             _sem31b = [k for k in _novas31b if not re.search(rf"(?<![A-Za-z0-9]){re.escape(k)}(?![A-Za-z0-9])", _aviso31b)]
@@ -2049,7 +2204,10 @@ def project_state():
         # (G-DX-01), somar os dois faria o número de fichas crescer sem o de componentes crescer,
         # e a trava logo abaixo — que existe para pegar export em PascalCase que não é componente
         # — reprovaria por um motivo falso.
-        "fichas": sum(1 for f in reg.values() if f.get("kind", "component") != "hook"),
+        # E conta só as da WEB: a peça só do nativo (`_so_nativo`, bloco 1 — 23/10/2026) tem ficha e não é componente
+        # do pacote da web; ela tem a contagem dela, logo abaixo.
+        "fichas": sum(1 for f in reg.values() if f.get("kind", "component") != "hook" and not _so_nativo(f)),
+        "fichas_so_nativo": sum(1 for f in reg.values() if _so_nativo(f)),
         "hooks": sum(1 for f in reg.values() if f.get("kind") == "hook"),
         "paginas_total": len(pages),
         "paginas": kind,
@@ -3346,6 +3504,14 @@ _FERRAMENTAS45 = {
     "vite": "monta a parte viva do catálogo (`apps/catalog/vite.config.ts`)",
     "@vitejs/plugin-react": "idem",
     "jsdom": "monta o HTML dos gráficos no build (`scripts/build-catalog.mjs`)",
+    # O NATIVO NO SITE (bloco 1, o 5-A — o Victor, 23/10/2026, 14:56: "Pode: o site usa o react-native-web, o react-native-svg
+    # e o react-native-safe-area-context para mostrar o nativo, com o motivo escrito na trava 45"). As páginas do nativo
+    # rodam as peças do `@aurea-uds/native` no navegador: o `react-native` dos exemplos vira o `react-native-web` na
+    # montagem (`apps/catalog/vite.nativo-ssr.config.ts`), e as outras duas são as que o pacote nativo pede.
+    "react-native": "nas páginas do nativo, trocado pelo `react-native-web` na montagem",
+    "react-native-web": "roda as peças do nativo no navegador",
+    "react-native-svg": "o desenho dos ícones e gráficos do nativo",
+    "react-native-safe-area-context": "a área segura da tela do nativo (o `Screen`)",
 }
 _PKG45 = root / "packages/react/package.json"
 _CAT45 = root / "apps/catalog"
@@ -3930,6 +4096,151 @@ _sobra49 = sorted(f"{a}.{b}" for a, b in (set(PROVA_DO_ESTADO49) | set(EM_DIVIDA
 if _sobra49:
     errors.append(f"check 49: linha que sobrou em PROVA_DO_ESTADO49/EM_DIVIDA49 — {', '.join(_sobra49)}: a ficha "
                   "não declara mais o estado. Tire a linha")
+
+# ── 50. o nome citado no texto escrito à mão EXISTE ───────────────────────────────────────────
+# Lote 1, as travas (a trava 2, decidida pelo Victor em 19/10/2026 — *"padrões tão rigorosos que você ou qualquer
+# outra IA teria que seguir"*), feita no bloco 1 (o 1-A, 23/10/2026). O que se gera sozinho não envelhece; o que é
+# escrito à mão envelhece em silêncio: as páginas da Getting Started (`apps/catalog/content/docs/`), o README e a
+# skill. Esta trava confere cada nome entre crases desses textos contra a fonte da verdade:
+#   • token (`--space-4`, `--control-h-*`, `var(--card)`) — declarado no CSS dos tokens ou do core;
+#   • pacote (`@aurea-uds/react`) — existe; com caminho (`@aurea-uds/core/css`), o pacote exporta o caminho
+#     (os `exports` do `package.json`, com `*`) ou o arquivo existe dentro dele;
+#   • componente (`Button`, `<Badge tone="info">`, `Card.Content`) — algum pacote exporta o nome, e a parte existe;
+#   • gancho (`useTheme()`) — algum pacote exporta;
+#   • classe (`.btn-primary`) — o core a tem;
+#   • caminho do repositório (`packages/native`) — existe (no README quem cobra é o check 33).
+# Fica fora o que não é nome: blocos de código (quem cobra o código é a trava 1, o exemplo compila), linha riscada
+# com `~~` (menção deliberada a coisa removida, como no check 33), as notas de versão (registro, não manual). A
+# pesquisa da trava (item 76 do documento de achados) começou por tokens, caminhos e componentes; props e nomes de
+# ícone ficam para o passo seguinte. O protótipo, medido em 23/10/2026: 457 nomes, nenhum errado — a trava existe
+# para continuar assim.
+#
+# TRAVA CONTRA A CEGUEIRA: antes de conferir os textos, a mesma função confere um texto PLANTADO com um nome errado
+# de cada espécie; se ela deixar passar algum, a trava reprova a si mesma. Uma leitura que para de achar crase (ou
+# uma fonte da verdade que vem vazia) não fica verde em silêncio.
+TEXTOS50 = sorted((root / "apps/catalog/content/docs").glob("*.md")) + [root / "README.md", root / "skills/aurea-uds/SKILL.md"]
+# O que está entre crases e NÃO é nome da Aurea, com o motivo. Exceção que não aparece mais em texto nenhum reprova.
+NAO_E_NOME50 = {
+    "I": "letra, no exemplo de legibilidade (I, l, 1)",
+    "O": "letra, no exemplo de legibilidade (O, 0)",
+    "Tab": "tecla",
+    "Esc": "tecla",
+    "StyleSheet": "do React Native, citado como o jeito que a Aurea não usa",
+    "NOTICE": "o arquivo de aviso de licença dos ícones",
+    ".md": "extensão de arquivo",
+    ".html": "extensão de arquivo",
+    "useFonts": "o gancho do Expo, e a frase diz que é dele",
+}
+_css50 = ((root / "packages/tokens/dist/aurea.tokens.css").read_text(encoding="utf-8")
+          + (root / "packages/core/src/aurea.css").read_text(encoding="utf-8"))
+_tokens50 = set(re.findall(r"(--[a-z0-9-]+)\s*:", _css50))
+_classes50 = set(re.findall(r"\.([a-z][a-z0-9-]*)", re.sub(r"/\*.*?\*/", "", _css50, flags=re.S)))
+_exportados50, _partes50 = set(), collections.defaultdict(set)
+for _pac50 in ["react", "native"]:
+    for _f50 in (root / "packages" / _pac50 / "src").rglob("*.ts*"):
+        _t50 = _f50.read_text(encoding="utf-8")
+        _exportados50 |= set(re.findall(r"export\s+(?:declare\s+)?(?:const|let|function|type|interface|class|enum)\s+([A-Za-z_]\w*)", _t50))
+        for _bl50 in re.findall(r"export\s+(?:type\s+)?\{([^}]*)\}", _t50):
+            _exportados50 |= {p.strip().split(" as ")[-1].strip().removeprefix("type ").strip() for p in _bl50.split(",") if p.strip()}
+        for _n50, _p50 in re.findall(r"\b([A-Z]\w*)\.([A-Z]\w*)\s*=(?!=)", _t50):
+            _partes50[_n50].add(_p50)
+        for _n50, _ps50 in re.findall(r"export\s+const\s+([A-Z]\w*)\s*=\s*Object\.assign\(\s*\w+\s*,\s*\{([^}]*)\}", _t50):
+            _partes50[_n50] |= {p.split(":")[0].strip() for p in _ps50.split(",") if p.strip()}
+_pacotes50 = {}
+for _pj50 in (root / "packages").glob("*/package.json"):
+    _j50 = json.loads(_pj50.read_text(encoding="utf-8"))
+    _pacotes50[_j50["name"]] = (_pj50.parent, list(_j50["exports"]) if isinstance(_j50.get("exports"), dict) else ["."])
+
+
+def _confere50(c, caminho=True):
+    """O motivo de `c` não existir; "" se existe; None se o trecho não é um nome que a trava confere."""
+    if c in NAO_E_NOME50:
+        return None
+    if re.fullmatch(r"--[a-z0-9-]*\*?[a-z0-9-]*", c):
+        ok = any(fnmatch.fnmatch(t, c) for t in _tokens50) if "*" in c else c in _tokens50
+        return "" if ok else "token que o CSS dos tokens e do core não declara"
+    _vars = re.findall(r"var\((--[a-z0-9-]+)", c)
+    if _vars:
+        _falta = [v for v in _vars if v not in _tokens50]
+        return "" if not _falta else f"{', '.join(_falta)}: token que o CSS não declara"
+    if re.match(r"(apps|packages|scripts|tests|skills|docs|decisions)/", c):
+        if not caminho:
+            return None
+        return "" if (root / c.split("#")[0].rstrip("/")).exists() else "caminho que não existe no repositório"
+    m = re.fullmatch(r"(@aurea-uds/[a-z-]+)(/[A-Za-z0-9./<>*-]+)?", c)
+    if m:
+        if m.group(1) not in _pacotes50:
+            return "pacote que não existe"
+        if not m.group(2):
+            return ""
+        _dir, _exps = _pacotes50[m.group(1)]
+        _sub = "." + re.sub(r"<[^>]+>", "*", m.group(2))
+        ok = (_sub in _exps or any(fnmatch.fnmatch(_sub, e) or fnmatch.fnmatch(e, _sub) for e in _exps)
+              or ("*" not in _sub and (_dir / _sub).is_file()))
+        return "" if ok else f"o pacote não exporta `{_sub}` nem tem esse arquivo (exporta {', '.join(_exps)})"
+    m = re.fullmatch(r"<?([A-Z][A-Za-z0-9]*)(?:\.([A-Z][A-Za-z0-9]*))?(?:\s[^>]*)?\s*/?>?", c)
+    if m and (c.startswith("<") or re.fullmatch(r"[A-Z][A-Za-z0-9]*(?:\.[A-Z][A-Za-z0-9]*)?", c)):
+        if m.group(1) not in _exportados50:
+            return "nome que nenhum pacote exporta"
+        if m.group(2) and m.group(2) not in _partes50.get(m.group(1), set()):
+            return f"`{m.group(1)}` não tem a parte `{m.group(2)}`"
+        return ""
+    m = re.fullmatch(r"(use[A-Z][A-Za-z0-9]*)(?:\(\))?", c)
+    if m:
+        return "" if m.group(1) in _exportados50 else "gancho que nenhum pacote exporta"
+    m = re.fullmatch(r"\.([a-z][a-z0-9-]*)", c)
+    if m:
+        return "" if m.group(1) in _classes50 else "classe que o core não tem"
+    return None
+
+
+def _trechos50(texto):
+    _dentro = False
+    for _n, _l in enumerate(texto.splitlines(), 1):
+        if _l.lstrip().startswith("```"):
+            _dentro = not _dentro
+            continue
+        if _dentro or "~~" in _l:
+            continue
+        for _m in re.finditer(r"`([^`\n]+)`", _l):
+            yield _n, _m.group(1)
+
+
+# A prova contra a cegueira: um nome errado de cada espécie, e um certo de cada, num texto que não existe no disco.
+_PLANTADO50 = ("`--espaco-que-nao-existe` `var(--card-que-nao-existe)` `@aurea-uds/pacote-que-nao-existe` "
+               "`@aurea-uds/core/caminho-que-nao-existe` `PecaQueNaoExiste` `<Card.ParteQueNaoExiste>` "
+               "`useGanchoQueNaoExiste()` `.classe-que-nao-existe` `packages/pasta-que-nao-existe`\n"
+               "```tsx\n`--dentro-do-bloco-nao-conta`\n```\n"
+               "~~`--riscado-nao-conta`~~\n"
+               "`--space-4` `var(--card)` `@aurea-uds/react` `@aurea-uds/core/css` `Button` `<Card.Content>` "
+               "`useTheme()` `.btn` `packages/core`")
+_pegos50 = [c for _, c in _trechos50(_PLANTADO50) if _confere50(c)]
+if len(_pegos50) != 9 or any("nao-conta" in c for c in _pegos50):
+    errors.append(f"check 50: a trava está CEGA — no texto plantado ela pegou {len(_pegos50)} de 9 nomes errados "
+                  f"({', '.join(_pegos50)}). A leitura ou uma fonte da verdade quebrou")
+_conferidos50, _errados50, _usadas50 = 0, [], set()
+for _f50 in TEXTOS50:
+    for _n50, _c50 in _trechos50(_f50.read_text(encoding="utf-8")):
+        if _c50 in NAO_E_NOME50:
+            _usadas50.add(_c50)
+            continue
+        _r50 = _confere50(_c50, caminho=_f50.name != "README.md")
+        if _r50 is None:
+            continue
+        _conferidos50 += 1
+        if _r50:
+            _errados50.append(f"{_f50.relative_to(root).as_posix()}:{_n50} `{_c50}` ({_r50})")
+if _conferidos50 < 300:
+    errors.append(f"check 50: só {_conferidos50} nome(s) conferido(s) nos textos escritos à mão (eram 412 em "
+                  "23/10/2026) — a leitura está cega")
+if _errados50:
+    errors.append(f"check 50: {len(_errados50)} nome citado que não existe — {'; '.join(_errados50[:15])}"
+                  f"{'…' if len(_errados50) > 15 else ''}. Conserte o texto (ou, se o trecho não é nome da Aurea, "
+                  "ponha em NAO_E_NOME50 com o motivo)")
+_sobra50 = sorted(set(NAO_E_NOME50) - _usadas50)
+if _sobra50:
+    errors.append(f"check 50: exceção que sobrou em NAO_E_NOME50 — {', '.join(_sobra50)}: nenhum texto a cita mais. "
+                  "Tire a linha")
 
 if SEM_LISTA and not PRIVATE:
     print("⚠ check 1 PULADO: AUREA_SEM_LISTA=1 e nenhuma lista de nomes privados.")

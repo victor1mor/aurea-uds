@@ -24,6 +24,45 @@ import {Dialog} from "@aurea-uds/react";
 </Dialog>
 ```
 
+## Examples
+
+### Placement
+
+auto, the default, sits at the bottom on a phone (where the thumb is) and in the centre from 640 up. bottom, center and top fix it in one place on every screen.
+
+```tsx
+<Dialog open={open} onClose={close} title="Placement auto" placement="auto">…</Dialog>
+<Dialog open={open} onClose={close} title="Placement bottom" placement="bottom">…</Dialog>
+<Dialog open={open} onClose={close} title="Placement center" placement="center">…</Dialog>
+<Dialog open={open} onClose={close} title="Placement top" placement="top">…</Dialog>
+```
+
+### Sizes
+
+The width: xs 320, sm 384, md 448 (the default), lg 512, xl 1024 and full, the whole screen.
+
+```tsx
+<Dialog open={open} onClose={close} title="Size xs" size="xs">…</Dialog>
+<Dialog open={open} onClose={close} title="Size sm" size="sm">…</Dialog>
+<Dialog open={open} onClose={close} title="Size md" size="md">…</Dialog>
+<Dialog open={open} onClose={close} title="Size lg" size="lg">…</Dialog>
+<Dialog open={open} onClose={close} title="Size xl" size="xl">…</Dialog>
+<Dialog open={open} onClose={close} title="Size full" size="full">…</Dialog>
+```
+
+### Icon tones
+
+The colour of the circle behind the icon: the state colours, or brand.
+
+```tsx
+<Dialog open={open} onClose={close} title="Icon tone neutral" icon="info" iconTone="neutral">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone brand" icon="info" iconTone="brand">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone info" icon="info" iconTone="info">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone success" icon="info" iconTone="success">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone warning" icon="info" iconTone="warning">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone danger" icon="info" iconTone="danger">…</Dialog>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

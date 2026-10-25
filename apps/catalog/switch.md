@@ -63,6 +63,16 @@ Locked by the plan or by permission — the state stays visible, the control doe
 <Switch label="SSO" defaultChecked disabled />
 ```
 
+### Sizes
+
+The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.
+
+```tsx
+<Switch label="Compact mode" defaultChecked size="sm" />
+<Switch label="Sound effects" defaultChecked />
+<Switch label="Large text" defaultChecked size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

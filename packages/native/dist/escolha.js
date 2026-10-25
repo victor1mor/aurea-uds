@@ -284,7 +284,7 @@ function AlcaDoDeslizante({ indice, ctl, vertical, deslocamento, arrastando, ina
         // O motor do aparelho converte min, max e now para INTEIRO, e um valor fracionário (0,75)
         // derruba a ponte — por isso a escala de 0 a 100, como na referência; quem fala o valor é o
         // `text`, já formatado.
-        accessibilityValue: { min: 0, max: 100, now: porcento, text: valorEscrito }, accessibilityActions: [{ name: "increment", label: rotulosDasAcoes[0] }, { name: "decrement", label: rotulosDasAcoes[1] }], onAccessibilityAction: (e) => {
+        accessibilityValue: { min: 0, max: 100, now: porcento, text: valorEscrito }, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": porcento, "aria-valuetext": valorEscrito, accessibilityActions: [{ name: "increment", label: rotulosDasAcoes[0] }, { name: "decrement", label: rotulosDasAcoes[1] }], onAccessibilityAction: (e) => {
             const nomeDaAcao = e.nativeEvent.actionName;
             if (nomeDaAcao === "increment")
                 ctl.current.passo(indice, 1);
@@ -459,13 +459,13 @@ export function TagGroup({ label, labelHidden, description, errorMessage, items,
                     const cor = escolhida ? t.color.primaryEmphasis : letra;
                     const conteudo = (_jsxs(_Fragment, { children: [it.icon != null && _jsx(Icon, { name: it.icon, size: "sm", color: cor, icons: icons }), _jsx(Text, { weight: 500, numberOfLines: 1, style: { fontSize: m.letra, lineHeight: m.linha, color: cor }, children: it.label })] }));
                     const estiloPrincipal = [s.principal, { gap: m.vao }];
-                    return (_jsxs(View, { testID: testID ? `${testID}-${it.id}` : undefined, style: [
+                    return (_jsxs(View, { role: "listitem", testID: testID ? `${testID}-${it.id}` : undefined, style: [
                             s.etiqueta,
                             { gap: m.vao, paddingVertical: m.vertical, paddingHorizontal: m.lados,
                                 // O fundo existe desde a montagem; escolher só troca a cor (a regra do raio no Android).
                                 backgroundColor: escolhida ? misturar(t.color.primary, t.color.secondary, 0.1) : fundo },
                             it.disabled && s.desabilitado,
-                        ], children: [escolhe ? (_jsx(Pressable, { onPress: it.disabled ? undefined : () => escolher(it), disabled: it.disabled, accessibilityRole: "button", accessibilityLabel: textoDaEtiqueta(it) || undefined, ...estadoAcessivel({ selected: escolhida, disabled: !!it.disabled }), hitSlop: { top: folgaDoTexto, bottom: folgaDoTexto, left: m.lados, right: onRemove ? 0 : m.lados }, testID: testID ? `${testID}-${it.id}-escolher` : undefined, style: estiloPrincipal, children: conteudo })) : (_jsx(View, { style: estiloPrincipal, children: conteudo })), onRemove && (_jsx(Pressable, { onPress: it.disabled ? undefined : () => onRemove([it.id]), disabled: it.disabled, accessibilityRole: "button", accessibilityLabel: `${strings.fileRemove} ${textoDaEtiqueta(it)}`.trim(), ...estadoAcessivel({ disabled: !!it.disabled }), hitSlop: folgaDoX, testID: testID ? `${testID}-${it.id}-remover` : undefined, style: s.remover, children: _jsx(Icon, { name: "x", weight: "bold", size: t.size.space3, color: cor, icons: icons }) }))] }, it.id));
+                        ], children: [escolhe ? (_jsx(Pressable, { onPress: it.disabled ? undefined : () => escolher(it), disabled: it.disabled, accessibilityRole: "button", accessibilityLabel: textoDaEtiqueta(it) || undefined, ...estadoAcessivel({ selected: escolhida, disabled: !!it.disabled }, "button"), hitSlop: { top: folgaDoTexto, bottom: folgaDoTexto, left: m.lados, right: onRemove ? 0 : m.lados }, testID: testID ? `${testID}-${it.id}-escolher` : undefined, style: estiloPrincipal, children: conteudo })) : (_jsx(View, { style: estiloPrincipal, children: conteudo })), onRemove && (_jsx(Pressable, { onPress: it.disabled ? undefined : () => onRemove([it.id]), disabled: it.disabled, accessibilityRole: "button", accessibilityLabel: `${strings.fileRemove} ${textoDaEtiqueta(it)}`.trim(), ...estadoAcessivel({ disabled: !!it.disabled }), hitSlop: folgaDoX, testID: testID ? `${testID}-${it.id}-remover` : undefined, style: s.remover, children: _jsx(Icon, { name: "x", weight: "bold", size: t.size.space3, color: cor, icons: icons }) }))] }, it.id));
                 }) }), description != null && (typeof description === "string"
                 ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description), errorMessage != null && (typeof errorMessage === "string"
                 ? _jsx(Text, { size: "xs", tone: "danger", children: errorMessage }) : errorMessage)] }));

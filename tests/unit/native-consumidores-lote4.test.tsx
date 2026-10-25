@@ -102,7 +102,7 @@ describe("R-04 · o `Card` responde ao toque com `onPress`", () => {
       ["node_modules/typescript/bin/tsc", "-p", "tests/unit/tipos-nativo"], {encoding: "utf8"});
     expect(r.stdout + r.stderr).toBe("");
     expect(r.status).toBe(0);
-  });
+  }, 120_000);
 });
 
 // ═════════════════════════════════════════════════════════════════════════════════════════════
@@ -129,7 +129,8 @@ describe("R-08 · `width=\"content\"`: a pílula do tamanho das abas, no centro"
   // no `flatten` e FALHA numa atualização do RN. Por isso o teste cobra que as duas chaves NÃO
   // EXISTAM no estilo achatado — nem como `undefined`.
   it("`content`: sem `left`/`right`, centralizada, e cada aba mede o próprio conteúdo", () => {
-    render(<Envolve><BottomNav width="content" items={ITENS} current="inicio" testID="nav" /></Envolve>);
+    // `indicator="none"` explícito: o teste é da LARGURA. Desde 24/10/2026 o padrão é a `capsule` (o amarelo por trás).
+    render(<Envolve><BottomNav width="content" indicator="none" items={ITENS} current="inicio" testID="nav" /></Envolve>);
     const e = barra();
     expect("left" in e).toBe(false);
     expect("right" in e).toBe(false);

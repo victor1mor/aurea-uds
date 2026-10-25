@@ -45,7 +45,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
@@ -138,14 +138,12 @@ const folha = criarFolha((t) => ({
     // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
     segmentoCheio: { flexGrow: 1, flexShrink: 0, flexBasis: "auto" },
     segmentadaCheia: { flexGrow: 1 },
-    // A CÁPSULA ESCOLHIDA tem cor própria, sobre o trilho (ADR-0059, 08/10/2026): era `secondary`, que
-    // no tema claro é a MESMA cor do `muted` do trilho (1:1) e no escuro dá 1,02:1 — não se via. Agora
-    // `segment` com a sombra pequena, como a aba da referência principal. É um `Pressable`, que existe
-    // desde a montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
-    segmentoAtivo: { backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm] },
-    // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
-    // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
-    fioDoSegmento: fioDoEscolhido(t),
+    // A CÁPSULA ESCOLHIDA é o AMARELO DA MARCA, como o botão primário (decisão do Victor, 24/10/2026, vendo as duas formas
+    // desenhadas: *"O amarelo por trás, como o botão, na barra de baixo e na aba escolhida."*) — o nome vai na tinta do botão
+    // (`primaryForeground`), e saem a sombra e o fio amarelo de baixo, que no amarelo não se veriam. ~~Era o `segment` com a
+    // sombra pequena (ADR-0059) e o fio amarelo, com o nome na mistura marrom da web.~~ É um `Pressable`, que existe desde a
+    // montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
+    segmentoAtivo: { backgroundColor: t.color.primary },
     formulario: { gap: t.size.space5 },
     // A folha do `Select`: no RN não existe `<select>`, então a lista é um `Modal` — que é
     // exatamente o "motor novo sobre `Modal`" que a §5.2.4 previu.
@@ -376,6 +374,8 @@ export function PasswordField({ defaultVisible = false, size, disabled, autoCapi
     const inativo = disabled ?? campo?.disabled;
     return (_jsxs(InputGroup, { size: tam, disabled: inativo, testID: testID, children: [leading ? _jsx(InputGroupAddon, { children: leading }) : null, _jsx(Input, { ...rest, size: tam, disabled: inativo, autoCapitalize: autoCapitalize, secureTextEntry: !visivel, style: style, testID: testID ? `${testID}-campo` : undefined }), _jsx(InputGroupAddon, { children: _jsx(IconButton, { name: visivel ? "eye-slash" : "eye", label: visivel ? strings.passwordHide : strings.passwordShow, appearance: "ghost", size: tam === "lg" ? "md" : "sm", disabled: inativo, icons: icons, onPress: () => setVisivel(v => !v), testID: testID ? `${testID}-olho` : undefined }) })] }));
 }
+// O `hitSlop` padrão da caixa e do rádio do nativo da referência: 6, a soma de dois tokens (4 + 2).
+const FOLGA_DO_TOQUE = (t) => t.size.space1 + t.size.space05;
 function ControleMarcado({ papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
     const s = folha(t);
@@ -397,7 +397,13 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
         // ⚠ O `accessibilityLabel` de fora vence o `label` escrito, e existe para o caso em que o
         // nome JÁ está na tela ao lado — uma linha de `NavList`, por exemplo. Sem ele, ou o nome
         // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
-        accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
+        accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), accessibilityHint: typeof description === "string" ? description : campo?.hint, 
+        // O TOQUE A MAIS DA REFERÊNCIA: 6 em volta, invisível, o `hitSlop` padrão da caixa e do rádio do nativo dela —
+        // decisão do Victor, 24/10/2026, depois de ver a bancada do celular: *"Fica igual à referência: o desenho de antes e
+        // o mesmo toque a mais invisível que ela usa (6 em volta)"*. Substitui a linha com altura de 44, do mesmo dia, que
+        // afastava a lista. O desenho e a medida da linha não mudam. ⚠ O leitor de tela do Android não enxerga essa folga
+        // (ver "O ALVO DE TOQUE", no `actions.tsx`); a referência aceita isso, e a Aurea segue a referência aqui.
+        hitSlop: FOLGA_DO_TOQUE(t), style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
                     s.marcaBase, noTopo,
                     // 0.32.0: o canto da caixa é o `radiusXs` (6), o mesmo do `.checkbox .control-mark` da
                     // web; era 5 cru.
@@ -496,7 +502,7 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoD
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
  */
-export function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, }) {
+export function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
     const s = folha(t);
     const campo = useCampo();
@@ -515,6 +521,10 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
     const larguraDoPolegar = alturaDoPolegar + t.size.space2;
     // O curso deixa os mesmos 2 da borda de fora na outra ponta (a conta do `--switch-x` da web).
     const curso = larguraDoTrilho - larguraDoPolegar - 2 * t.size.space05;
+    // O `align` (bloco 1, 24/10/2026): o tipo vem do `ControleProps` e o `Switch` não lia — com `start`, o trilho ficava no
+    // meio do bloco do rótulo longo. A mesma conta do `ControleMarcado`: o meio do trilho no meio da PRIMEIRA linha.
+    const linha = t.size.textBase * t.size.leadingNormal;
+    const noTopo = align === "start" ? { marginTop: Math.max(0, (linha - alturaDoTrilho) / 2) } : null;
     const pos = React.useRef(new Animated.Value(checked ? 1 : 0)).current;
     React.useEffect(() => {
         const destino = checked ? 1 : 0;
@@ -546,12 +556,13 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         // irmãos com `flex:1` parte da largura do conteúdo. É a mesma família do `padding-block` do
         // `Input`: o que a cascata resolve de graça, aqui é conta explícita.
         style: [
-            { flexDirection: "row", alignItems: "center" },
+            // Sem toque a mais: o interruptor do nativo da referência não tem `hitSlop` (a caixa e o rádio têm 6).
+            { flexDirection: "row", alignItems: align === "start" ? "flex-start" : "center" },
             // 0.32.0: 12 até o texto, o vão do campo de controle da referência e o do `Checkbox` (era 10).
             temTexto && { gap: t.size.space3 },
             inativo && s.desabilitado, style,
         ], children: [_jsx(View, { style: [
-                    s.trilho,
+                    s.trilho, noTopo,
                     { width: larguraDoTrilho, height: alturaDoTrilho },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
                 ], children: _jsx(Animated.View, { style: [
@@ -577,27 +588,28 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
     const inativo = disabled ?? campo?.disabled;
     return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
                 const ativo = it.value === value;
-                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo], children: [typeof it.label === "string"
-                            ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
-                                // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
-                                // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
-                                // MARCA (`aurea.css:937-938`), e o comentário de cima daquela regra diz
-                                // que nav ativo, aba ativa, item de lista e botão ligado mostram o mesmo
-                                // sinal — ordem do Victor, 24/07. O `SegmentedControl` daqui discordava
-                                // da web **e do `BottomNav` deste mesmo pacote**, que já usa este token.
-                                //
-                                // ⚠ **`primaryEmphasis` e NÃO `primary`, e a razão está no CSS:** *"sem
-                                // fundo, a marca vira TEXTO, e o amarelo puro"* não se lê no claro
-                                // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
-                                // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
-                                //
-                                // ⚠ **Uma divergência declarada, não escondida:** para o `.segmented` a
-                                // web usa uma mistura própria (`primary 45% + foreground`) em vez do
-                                // token, enquanto para o `.bottom-nav` usa o token. São dois âmbares
-                                // parecidos para a MESMA linguagem, e isso é incoerência DA WEB. Escolhi
-                                // o token, que deixa os dois componentes daqui iguais entre si.
-                                style: { color: ativo ? t.color.primaryEmphasis : t.color.mutedForeground }, children: it.label })
-                            : it.label, ativo && _jsx(View, { style: s.fioDoSegmento })] }, it.value));
+                return (_jsx(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo], children: typeof it.label === "string"
+                        ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
+                            // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
+                            // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
+                            // MARCA (`aurea.css:937-938`), e o comentário de cima daquela regra diz
+                            // que nav ativo, aba ativa, item de lista e botão ligado mostram o mesmo
+                            // sinal — ordem do Victor, 24/07. O `SegmentedControl` daqui discordava
+                            // da web **e do `BottomNav` deste mesmo pacote**, que já usa este token.
+                            //
+                            // ⚠ **`primaryEmphasis` e NÃO `primary`, e a razão está no CSS:** *"sem
+                            // fundo, a marca vira TEXTO, e o amarelo puro"* não se lê no claro
+                            // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
+                            // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
+                            //
+                            // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
+                            // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
+                            // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
+                            // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
+                            // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
+                            // o nome vai na tinta do botão.
+                            style: { color: ativo ? t.color.primaryForeground : t.color.mutedForeground }, children: it.label })
+                        : it.label }, it.value));
             }) }) }));
 }
 // ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -610,7 +622,7 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
  * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
  * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
  */
-export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicador, children: _jsx(Icon, { name: "check", size: "sm", color: t.color.primaryEmphasis }) }));
+export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicador, children: _jsx(Icon, { name: "check", size: "sm", color: t.color.primary }) }));
 /**
  * A escolha de um de muitos.
  *

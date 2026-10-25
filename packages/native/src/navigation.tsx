@@ -84,19 +84,27 @@ const folha = criarFolha((t: AureaTokens) => ({
   // a faixa comeria o toque em silêncio.
   //
   // `zSticky` é token (20), o mesmo `--z-sticky` que a web usa na mesma peça.
+  //
+  // 🔴 O QUE É SÓ DA `floating` MORA FORA DA `barra` (bloco 1, 24/10/2026). O `edge` desfazia a flutuação escrevendo
+  // `undefined` por cima (`zIndex`, `boxShadow`, `bottom`), e `undefined` não apaga: o `react-native-web` pula a chave e
+  // fica a de baixo — no navegador a barra encostada saía com a sombra e o `zIndex` da flutuante —, e no aparelho apaga
+  // só na montagem (ver `barra_content`, abaixo). Agora cada variação recebe só o que é dela.
   barra: {
-    position: "absolute", bottom: 0, zIndex: t.size.zSticky,
-    flexDirection: "row", gap: t.size.space1, margin: t.size.space4, padding: t.size.space1,
+    flexDirection: "row", gap: t.size.space1, padding: t.size.space1,
     borderWidth: t.size.borderWidth, borderColor: "transparent",
+  },
+  barra_flutuante: {
+    position: "absolute", bottom: 0, zIndex: t.size.zSticky, margin: t.size.space4,
     ...canto(t.size.radiusControl), backgroundColor: t.color.card,
     boxShadow: [t.shadow.shadowMd],
   },
   // `edge` encosta na borda: sem margem, sem raio, só a linha de cima — e continua NO FLUXO,
   // porque uma barra encostada que flutuasse esconderia o fim da tela sem nada reservar.
+  // A posição, a margem e o canto vão escritos mesmo sendo o padrão: trocar `variant` com a tela aberta passa a escrever o
+  // valor da `edge` por cima do da `floating`, em vez de depender da chave que sumiu.
   barra_edge: {
-    position: "relative", left: undefined, right: undefined, bottom: undefined, zIndex: undefined,
-    margin: 0, paddingHorizontal: 0, ...canto(0), backgroundColor: t.color.background,
-    borderWidth: 0, borderTopWidth: t.size.borderWidth, boxShadow: undefined,
+    position: "relative", margin: 0, paddingHorizontal: 0, ...canto(0), backgroundColor: t.color.background,
+    borderWidth: 0, borderTopWidth: t.size.borderWidth,
   },
   // A pílula CHEIA, de uma borda à outra menos a margem — o de sempre. Mora fora da `barra` para
   // o `content` nunca precisar DESFAZER estes dois (ver abaixo).
@@ -249,8 +257,10 @@ const folha = criarFolha((t: AureaTokens) => ({
     paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
     ...canto(t.size.radiusControl),
   },
-  // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`), pelo mesmo motivo — ADR-0059.
-  abaDeTabAtiva: {backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm]},
+  // A aba escolhida: a mesma cápsula do `segmentoAtivo` (`inputs.tsx`) — desde 24/10/2026, o AMARELO do botão primário,
+  // sem sombra, com o nome na tinta do botão (decisão do Victor: *"as abas do Tabs deixe como a aba escolhida amarelo
+  // tudo"*). ~~Era o `segment` com a sombra pequena (ADR-0059).~~
+  abaDeTabAtiva: {backgroundColor: t.color.primary},
   // `variant="secondary"` (R-12, 01/10/2026): a variante secundária da referência,
   // com o fio da casa no lugar do indicador azul dela.
   //   fila (secundária)               padding 0 · border-bottom 1px, cor da borda
@@ -276,6 +286,9 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ── Stepper ────────────────────────────────────────────────────────────────────────────────
   trilha: {flexDirection: "row"},
   passo: {flex: 1, alignItems: "center"},
+  // O passo tocável: o item da lista leva o `flex: 1`, e o botão dentro dele, a largura toda — o alvo do toque não muda.
+  passoItem: {flex: 1},
+  passoDentro: {alignItems: "center"},
   bolinha: {
     width: 32, height: 32, marginBottom: t.size.space2,
     alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
@@ -331,6 +344,11 @@ export interface BottomNavProps extends ViewProps {
   /** O `id` do item corrente. */
   current?: string;
   variant?: AureaBottomNavVariant;
+  /**
+   * Como a aba escolhida se marca. Padrão: `capsule` — o amarelo da marca POR TRÁS do ícone, como o botão primário
+   * (decisão do Victor, 24/10/2026: *"O amarelo por trás, como o botão, na barra de baixo e na aba escolhida."*). ~~Era
+   * `none`: só a cor no ícone e no nome — no tema claro, o azul da letra de destaque.~~
+   */
   indicator?: AureaBottomNavIndicator;
   /**
    * `content` põe a pílula do tamanho das abas, no centro, em vez de ir de uma borda à outra.
@@ -415,7 +433,7 @@ export interface BottomNavProps extends ViewProps {
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
 export function BottomNav({
-  items, current, variant = "floating", indicator = "none", width = "full", label, style, ...rest
+  items, current, variant = "floating", indicator = "capsule", width = "full", label, style, ...rest
 }: BottomNavProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -438,7 +456,7 @@ export function BottomNav({
       onLayout={anotar == null ? undefined : (e) => anotar(
         flutua ? e.nativeEvent.layout.height + t.size.space4 * 2 + inset.bottom : 0)}
       style={[
-        s.barra, justa ? s.barra_content : s.barra_cheia, variant === "edge" && s.barra_edge,
+        s.barra, flutua ? [s.barra_flutuante, justa ? s.barra_content : s.barra_cheia] : s.barra_edge,
         // 🔴 NO `floating` A FOLGA DO SISTEMA VAI POR FORA — conserto de 19/09/2026, visto em
         // aparelho Samsung com os três botões (|||, ○, <).
         //
@@ -546,7 +564,7 @@ export function BottomNav({
             // `link` e não `tab`: uma aba troca um painel DESTA tela; isto troca de tela.
             accessibilityRole="link"
             accessibilityLabel={!nomeVisivel && typeof it.label === "string" ? it.label : undefined}
-            {...estadoAcessivel({selected: ativo, disabled: !!it.disabled})}
+            {...estadoAcessivel({selected: ativo, disabled: !!it.disabled}, "link")}
             style={[
               s.aba, justa && s.aba_content,
               indicator === "subtle" && {...canto(t.size.radiusCard - t.size.space1)},
@@ -747,7 +765,7 @@ export function NavList({items, chevron = "caret-right", style, ...rest}: NavLis
           </>
         );
         return (
-          <View key={it.id} style={[s.linha, it.disabled && {opacity: t.size.opacityDisabled}]}>
+          <View key={it.id} role="listitem" style={[s.linha, it.disabled && {opacity: t.size.opacityDisabled}]}>
             {temAcao ? (
               <Pressable
                 onPress={it.onPress}
@@ -815,7 +833,8 @@ export function Stepper({
       {items.map((it, n) => {
         const st = it.state ?? "default";
         const cor = st === "error" ? (t.color.danger400 ?? t.color.destructive)
-          : st === "active" ? t.color.primaryEmphasis
+          // o passo atual na cor do TEXTO, como na web (`.step-active`) — era o destaque, azul no claro (23/10/2026)
+          : st === "active" ? t.color.foreground
           : t.color.foreground;
         const miolo = (
           <>
@@ -838,16 +857,20 @@ export function Stepper({
               : it.optional)}
           </>
         );
+        // O item da lista é o passo; o tocável fica DENTRO dele (o papel de item não pode ir no botão). Na web, o passo
+        // atual é `aria-current="step"` (bloco 1, 24/10/2026).
         return it.onPress ? (
-          <Pressable
-            key={n} onPress={it.onPress}
-            accessibilityRole="button"
-            {...estadoAcessivel({selected: st === "active"})}
-            style={s.passo}>
-            {miolo}
-          </Pressable>
+          <View key={n} role="listitem" style={s.passoItem}>
+            <Pressable
+              onPress={it.onPress}
+              accessibilityRole="button"
+              {...estadoAcessivel({selected: st === "active"}, "step")}
+              style={s.passoDentro}>
+              {miolo}
+            </Pressable>
+          </View>
         ) : (
-          <View key={n} accessible {...estadoAcessivel({selected: st === "active"})} style={s.passo}>
+          <View key={n} role="listitem" accessible {...estadoAcessivel({selected: st === "active"}, "step")} style={s.passo}>
             {miolo}
           </View>
         );
@@ -973,7 +996,10 @@ export function Tabs({
                     cor e na cápsula. A secundária fica como estava. */}
                 {typeof it.label === "string"
                   ? <Text size="sm" weight={secundaria ? (ativa ? 600 : 400) : 500}
-                          style={{color: ativa ? t.color.foreground : t.color.mutedForeground}}>
+                          // Na cápsula escolhida (amarela, 24/10/2026), o nome vai na tinta do botão; na secundária, a
+                          // cor do texto de sempre, sobre o fio amarelo.
+                          style={{color: !ativa ? t.color.mutedForeground
+                            : secundaria ? t.color.foreground : t.color.primaryForeground}}>
                       {it.label}
                     </Text>
                   : it.label}

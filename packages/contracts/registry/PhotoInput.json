@@ -1,0 +1,121 @@
+{
+  "name": "PhotoInput",
+  "category": "Forms",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "Takes or picks photos on the phone, shows them as square thumbnails that open large, with a remove button outside each one. Native only.",
+  "icon": "image",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "empty",
+    "with-photos",
+    "full",
+    "denied"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "The add button and each thumbnail are buttons with a name; removing a photo says so to the screen reader."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "FileInput",
+      "Gallery",
+      "Image"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/sistema.tsx#PhotoInput"
+  },
+  "props": [
+    {
+      "name": "value",
+      "type": "AureaPhoto[]",
+      "default": "—",
+      "description": "The photos chosen."
+    },
+    {
+      "name": "onChange",
+      "type": "(fotos: AureaPhoto[]) => void",
+      "default": "—",
+      "description": "Called with the new list."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "default": "—",
+      "description": "How many photos; the add button goes away at the limit."
+    },
+    {
+      "name": "source",
+      "type": "\"camera\" | \"library\"",
+      "default": "—",
+      "description": "camera takes a photo; library picks from the gallery, several at once."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "—",
+      "description": "Turns it off."
+    },
+    {
+      "name": "offerSettings",
+      "type": "boolean",
+      "default": "—",
+      "description": "Offers to open the settings when the permission was denied."
+    },
+    {
+      "name": "onPermissionDenied",
+      "type": "() => void",
+      "default": "—",
+      "description": "Called when the person denies the camera or the gallery."
+    },
+    {
+      "name": "exif",
+      "type": "boolean",
+      "default": "—",
+      "description": "Reads the date the photo was taken (takenAt)."
+    },
+    {
+      "name": "addIcon",
+      "type": "AureaIcon | false",
+      "default": "—",
+      "description": "The drawing of the add button."
+    },
+    {
+      "name": "removeIcon",
+      "type": "AureaIcon",
+      "default": "—",
+      "description": "The drawing of the remove button."
+    },
+    {
+      "name": "style",
+      "type": "StyleProp<ViewStyle>",
+      "default": "—",
+      "description": "Extra style."
+    },
+    {
+      "name": "testID",
+      "type": "string",
+      "default": "—",
+      "description": "The id for tests."
+    }
+  ],
+  "axes": {
+    "source": [
+      "camera",
+      "library"
+    ]
+  }
+}

@@ -49,7 +49,7 @@ import {
   type ViewProps, type ViewStyle,
 } from "react-native";
 import Svg, {Path} from "react-native-svg";
-import {canto, cantosDeCima, criarFolha, estadoAcessivel, fioDoEscolhido, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
@@ -155,14 +155,12 @@ const folha = criarFolha((t: AureaTokens) => ({
   // ficam de larguras parecidas, não iguais. Simulado no Yoga: 343 de 343, sem quebrar.
   segmentoCheio: {flexGrow: 1, flexShrink: 0, flexBasis: "auto"},
   segmentadaCheia: {flexGrow: 1},
-  // A CÁPSULA ESCOLHIDA tem cor própria, sobre o trilho (ADR-0059, 08/10/2026): era `secondary`, que
-  // no tema claro é a MESMA cor do `muted` do trilho (1:1) e no escuro dá 1,02:1 — não se via. Agora
-  // `segment` com a sombra pequena, como a aba da referência principal. É um `Pressable`, que existe
-  // desde a montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
-  segmentoAtivo: {backgroundColor: t.color.segment, boxShadow: [...t.shadowLayers.shadowSm]},
-  // 🔴 O FIO AMARELO DO ESCOLHIDO — ele faltava, e a falta era metade do defeito C4. Os números
-  // e a razão moram no `fioDoEscolhido` (`estilos.ts`), que a aba do `Tabs` secundário também usa.
-  fioDoSegmento: fioDoEscolhido(t),
+  // A CÁPSULA ESCOLHIDA é o AMARELO DA MARCA, como o botão primário (decisão do Victor, 24/10/2026, vendo as duas formas
+  // desenhadas: *"O amarelo por trás, como o botão, na barra de baixo e na aba escolhida."*) — o nome vai na tinta do botão
+  // (`primaryForeground`), e saem a sombra e o fio amarelo de baixo, que no amarelo não se veriam. ~~Era o `segment` com a
+  // sombra pequena (ADR-0059) e o fio amarelo, com o nome na mistura marrom da web.~~ É um `Pressable`, que existe desde a
+  // montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
+  segmentoAtivo: {backgroundColor: t.color.primary},
 
   formulario: {gap: t.size.space5},
 
@@ -731,6 +729,9 @@ export function PasswordField({
 }
 
 export type CheckboxProps = ControleProps;
+
+// O `hitSlop` padrão da caixa e do rádio do nativo da referência: 6, a soma de dois tokens (4 + 2).
+const FOLGA_DO_TOQUE = (t: AureaTokens) => t.size.space1 + t.size.space05;
 export type RadioProps = ControleProps;
 
 function ControleMarcado({
@@ -766,6 +767,12 @@ function ControleMarcado({
       // aparece escrito duas vezes, ou o controle sobe MUDO para quem usa leitor de tela.
       accessibilityLabel={accessibilityLabel ?? (typeof label === "string" ? label : campo?.label)}
       accessibilityHint={typeof description === "string" ? description : campo?.hint}
+      // O TOQUE A MAIS DA REFERÊNCIA: 6 em volta, invisível, o `hitSlop` padrão da caixa e do rádio do nativo dela —
+      // decisão do Victor, 24/10/2026, depois de ver a bancada do celular: *"Fica igual à referência: o desenho de antes e
+      // o mesmo toque a mais invisível que ela usa (6 em volta)"*. Substitui a linha com altura de 44, do mesmo dia, que
+      // afastava a lista. O desenho e a medida da linha não mudam. ⚠ O leitor de tela do Android não enxerga essa folga
+      // (ver "O ALVO DE TOQUE", no `actions.tsx`); a referência aceita isso, e a Aurea segue a referência aqui.
+      hitSlop={FOLGA_DO_TOQUE(t)}
       style={[s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style]}>
       <View style={[
         s.marcaBase, noTopo,
@@ -1044,6 +1051,7 @@ export interface SwitchProps extends ControleProps {}
  */
 export function Switch({
   label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel,
+  align = "center",
 }: SwitchProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -1064,6 +1072,10 @@ export function Switch({
   const larguraDoPolegar = alturaDoPolegar + t.size.space2;
   // O curso deixa os mesmos 2 da borda de fora na outra ponta (a conta do `--switch-x` da web).
   const curso = larguraDoTrilho - larguraDoPolegar - 2 * t.size.space05;
+  // O `align` (bloco 1, 24/10/2026): o tipo vem do `ControleProps` e o `Switch` não lia — com `start`, o trilho ficava no
+  // meio do bloco do rótulo longo. A mesma conta do `ControleMarcado`: o meio do trilho no meio da PRIMEIRA linha.
+  const linha = t.size.textBase * t.size.leadingNormal;
+  const noTopo = align === "start" ? {marginTop: Math.max(0, (linha - alturaDoTrilho) / 2)} : null;
 
   const pos = React.useRef(new Animated.Value(checked ? 1 : 0)).current;
   React.useEffect(() => {
@@ -1099,13 +1111,14 @@ export function Switch({
       // irmãos com `flex:1` parte da largura do conteúdo. É a mesma família do `padding-block` do
       // `Input`: o que a cascata resolve de graça, aqui é conta explícita.
       style={[
-        {flexDirection: "row", alignItems: "center"},
+        // Sem toque a mais: o interruptor do nativo da referência não tem `hitSlop` (a caixa e o rádio têm 6).
+        {flexDirection: "row", alignItems: align === "start" ? "flex-start" : "center"},
         // 0.32.0: 12 até o texto, o vão do campo de controle da referência e o do `Checkbox` (era 10).
         temTexto && {gap: t.size.space3},
         inativo && s.desabilitado, style,
       ]}>
       <View style={[
-        s.trilho,
+        s.trilho, noTopo,
         {width: larguraDoTrilho, height: alturaDoTrilho},
         checked && {backgroundColor: t.color.controlSelected, borderColor: "transparent"},
       ]}>
@@ -1210,16 +1223,16 @@ export function SegmentedControl({
                       // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
                       // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
                       //
-                      // ⚠ **Uma divergência declarada, não escondida:** para o `.segmented` a
-                      // web usa uma mistura própria (`primary 45% + foreground`) em vez do
-                      // token, enquanto para o `.bottom-nav` usa o token. São dois âmbares
-                      // parecidos para a MESMA linguagem, e isso é incoerência DA WEB. Escolhi
-                      // o token, que deixa os dois componentes daqui iguais entre si.
-                      style={{color: ativo ? t.color.primaryEmphasis : t.color.mutedForeground}}>
+                      // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
+                      // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
+                      // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
+                      // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
+                      // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
+                      // o nome vai na tinta do botão.
+                      style={{color: ativo ? t.color.primaryForeground : t.color.mutedForeground}}>
                   {it.label}
                 </Text>
               : it.label}
-            {ativo && <View style={s.fioDoSegmento} />}
           </Pressable>
           );
         })}
@@ -1241,7 +1254,8 @@ export function SegmentedControl({
  */
 export const indicadorDaEscolhida = (t: AureaTokens) => (
   <View style={folha(t).indicador}>
-    <Icon name="check" size="sm" color={t.color.primaryEmphasis} />
+    {/* A cor do visto da web (`.combobox-check`): a marca, nos dois temas — o destaque era o azul no claro (23/10/2026). */}
+    <Icon name="check" size="sm" color={t.color.primary} />
   </View>
 );
 

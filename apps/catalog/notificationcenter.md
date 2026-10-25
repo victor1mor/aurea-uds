@@ -18,6 +18,19 @@ import {NotificationCenter} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<NotificationCenter label="Notifications, side top" side="top" items={items} />
+<NotificationCenter label="Notifications, side right" side="right" items={items} />
+<NotificationCenter label="Notifications, side bottom" side="bottom" items={items} />
+<NotificationCenter label="Notifications, side left" side="left" items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

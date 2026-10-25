@@ -93,6 +93,12 @@
       "type": "string",
       "default": "—",
       "description": "Lands on the outer element either way — on the <pre> when plain, on the wrapper when copyable."
+    },
+    {
+      "name": "tabs",
+      "type": "Array<{label, code, language?}>",
+      "default": "—",
+      "description": "The alternatives of the same step, in tabs — the install command in npm, pnpm, yarn and bun: the row on top, inside the box, and one code per tab. With tabs, children is not read."
     }
   ]
 }

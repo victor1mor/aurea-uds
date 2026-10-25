@@ -25,10 +25,14 @@ import {Sidebar, Badge, Avatar, IconButton, SearchField} from "../../../packages
 // raio de card (22px) fecha nas duas pontas e o painel vira CÁPSULA em vez de cartão. A referência
 // mantém o trilho em 68px flutuando. Quem reserva a coluna é o shell; quem flutua dentro dela
 // precisa de espaço para a margem, senão a variante come a própria largura.
+// Com `placement="right"` (23/10/2026, o catálogo fiel) a coluna troca de lado: o vão do conteúdo vem primeiro e a
+// lateral fica na direita, como na coluna "On this page" do `AppShell`. Sem ele, a moldura é a de sempre.
 const moldura = (props, rotulo = "Sidebar") => {
   const painel = props.collapsed ? "var(--sidebar-rail)" : "var(--sidebar-width)";
   const coluna = props.variant === "flush" ? painel : `calc(${painel} + var(--space-4) * 2)`;
-  return h("div", {style: {display: "grid", gridTemplateColumns: `${coluna} minmax(0,1fr)`,
+  const direita = props.placement === "right";
+  return h("div", {style: {display: "grid",
+    gridTemplateColumns: direita ? `minmax(0,1fr) ${coluna}` : `${coluna} minmax(0,1fr)`,
     // Sem fundo próprio (21/10/2026): pintava o cinza da página do app, e a moldura saía cinza no meio das caixas pretas
     // do site — o Victor apontou. O fundo é o da moldura, o da caixa de prévia, como em toda outra.
     height: "100vh",
@@ -37,6 +41,7 @@ const moldura = (props, rotulo = "Sidebar") => {
     // de vazio guardados para um componente que não está na moldura. Quem mente sobre o contexto
     // é a moldura, não a lateral: o componente continua com a geometria do shell intacta.
     "--topbar-height": "0px"}},
+    direita && h("main", null),
     h(Sidebar, props),
     // A MOLDURA É UM LAYOUT DE APLICATIVO EM MINIATURA, e isso não é enfeite: o embed é um
     // DOCUMENTO de verdade, que alguém pode abrir direto. Sem `<main>` e sem `h1` o axe reprova
@@ -48,7 +53,7 @@ const moldura = (props, rotulo = "Sidebar") => {
     // O `<main>` fica AO LADO da lateral, nunca em volta: `<aside>` dentro de `<main>` é a
     // violação `landmark-complementary-is-top-level`. O `h1` quem dá é o gerador — aqui ele
     // duplicaria, e duas vezes é pior que nenhuma.
-    h("main", null));
+    !direita && h("main", null));
 };
 const demo = (props) => moldura(props);
 
@@ -68,6 +73,13 @@ const ITENS = [
   {id: "navlist", label: "NavList", icon: "list-bullets", href: "../navlist.html"},
   {id: "sidebar", label: "Sidebar", icon: "sidebar-simple", href: "../sidebar.html"},
 ];
+
+// Uma lista longa, para a barra de rolagem existir: com três itens a lateral não rola, e o `scrollbar` não teria o que
+// mostrar. Os nomes são páginas de verdade do site.
+const MUITOS = ["Accordion", "Alert", "Avatar", "Badge", "Banner", "Breadcrumb", "Button", "ButtonGroup", "Calendar",
+  "Card", "Checkbox", "ColorArea", "ColorField", "Combobox", "DataGrid", "DatePicker", "Dialog", "Drawer", "Field",
+  "Input", "Progress", "Radio", "Select", "Sidebar", "Slider", "Switch", "Tabs", "Textarea", "Toggle", "Tooltip"]
+  .map((nome) => ({id: nome.toLowerCase(), label: nome, href: `../${nome.toLowerCase()}.html`}));
 
 export default {
   description:
@@ -252,6 +264,33 @@ export default {
           h("span", {className: "sidebar-label"}, "Button")),
         h("a", {href: "../sidebar.html", className: "sidebar-item"},
           h("span", {className: "sidebar-label"}, "Sidebar")))}),
+    },
+    {
+      title: "Plain — no box",
+      description: "No background, no line, no shadow: the items sit loose on the page, in the floating sidebar's "
+        + "place and height. It is the \"On this page\" column of a documentation site.",
+      code: `<Sidebar variant="plain" label="Components" current="button" items={items} />`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components", variant: "plain", current: "button", items: ITENS}),
+    },
+    {
+      title: "On the right",
+      description: "placement=\"right\" puts the sidebar on the other side of the screen, with the content before it. "
+        + "It is the AppShell's aside column.",
+      code: `<Sidebar placement="right" label="Components" current="button" items={items} />`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components", placement: "right", current: "button", items: ITENS}),
+    },
+    {
+      title: "Scrollbar always on",
+      description: "By default the scrollbar is light and hidden at rest, and comes back with the pointer, with focus "
+        + "inside, and always on a touch screen. scrollbar=\"visible\" keeps it on screen all the time.",
+      code: `<Sidebar scrollbar="visible" label="Components" current="button" items={items} />`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components", scrollbar: "visible", current: "button", items: MUITOS}),
     },
   ],
 };

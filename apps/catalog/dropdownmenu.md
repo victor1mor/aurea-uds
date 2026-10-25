@@ -21,6 +21,19 @@ import {DropdownMenu} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<DropdownMenu label="Side top" side="top" trigger={<Button variant="outline">Side top</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+<DropdownMenu label="Side right" side="right" trigger={<Button variant="outline">Side right</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+<DropdownMenu label="Side bottom" side="bottom" trigger={<Button variant="outline">Side bottom</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+<DropdownMenu label="Side left" side="left" trigger={<Button variant="outline">Side left</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

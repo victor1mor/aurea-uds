@@ -1,0 +1,53 @@
+{
+  "name": "KeyboardAvoiding",
+  "category": "Forms",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "Keeps the field and its button above the keyboard, with the behaviour each platform needs: padding on iOS, height on Android. Native only.",
+  "icon": "keyboard",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "keyboard-open"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No role: it only moves its content."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Form",
+      "Screen",
+      "Input"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/inputs.tsx#KeyboardAvoiding"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The form that has to stay in view."
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "default": "—",
+      "description": "Extra room between the keyboard and the content, for a header above the screen."
+    }
+  ]
+}

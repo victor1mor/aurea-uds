@@ -21,10 +21,13 @@ escrita aqui de propósito**: ela mora no [CHANGELOG](CHANGELOG.md) e em cada `p
 validador reprova se ela voltar a aparecer neste arquivo. O que um número `0.x` promete está na
 [ADR-0014](decisions/0014-primeira-versao-publica-0-1-0.md).
 
-**Para a web:**
+**Para a web** (o mesmo comando nos quatro gerenciadores; use o do seu projeto):
 
 ```bash
+npm install @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
+yarn add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
+bun add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 ```
 
 Sem React? `@aurea-uds/core` e `@aurea-uds/fonts` bastam: o core traz a folha de estilo e um pouco
@@ -122,7 +125,7 @@ que só funciona quando o app é servido na raiz do domínio. **Se não for o se
 vez no provider**, ou todo ícone de todo componente falha em silêncio:
 
 ```tsx
-<AureaProvider spriteUrl="/assets/aurea-icons.svg">
+<AureaProvider spriteUrl="/assets/aurea-icons.svg">{children}</AureaProvider>
 ```
 
 Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou empacote e passe a
@@ -163,7 +166,10 @@ O CSS usa propriedades lógicas no eixo da linha e se espelha sozinho. São dois
 
 ```tsx
 <html dir="rtl">                        {/* espelha o CSS */}
-<AureaProvider direction="rtl">         {/* avisa o Base UI */}
+  <AureaProvider direction="rtl">       {/* avisa o Base UI */}
+    {children}
+  </AureaProvider>
+</html>
 ```
 
 O provider não mexe no DOM: pôr `dir` no `<html>` é da aplicação. Não se espelham, de propósito: o
@@ -199,7 +205,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-498 páginas geradas — 147 de componente, 226 de padrão, 15 de bloco, 23 de receita, 78 de documentação e 9 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 103 trazem um starter — o preview real e o código, ainda sem exemplos extras. 138 componentes publicam a tabela de props.
+580 páginas geradas — 226 de componente, 226 de padrão, 15 de bloco, 23 de receita, 79 de documentação e 11 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 103 trazem um starter — o preview real e o código, ainda sem exemplos extras. 150 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

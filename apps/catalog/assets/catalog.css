@@ -1312,6 +1312,13 @@ img,svg { display:block; }
 .topbar-tabs { flex-basis:100%; display:flex; align-items:flex-end; gap:var(--space-1); min-block-size:var(--space-10);
   overflow-x:auto; overflow-y:hidden; }
 @media (min-width:768px) { .topbar-tabs { gap:var(--space-3); } }
+/* A PONTA DA LINHA DAS ÁREAS (`Header tabsEnd`, bloco 1 — 23/10/2026): a chave Web | Native da documentação da
+   referência, do lado oposto das áreas e no meio da altura da linha. As áreas continuam rolando de lado quando não cabem;
+   a ponta não encolhe. Abaixo de 768 ela some, como lá. */
+.topbar-tabs-row { flex-basis:100%; display:flex; align-items:center; gap:var(--space-4); min-inline-size:0; }
+.topbar-tabs-row > .topbar-tabs { flex:1 1 auto; min-inline-size:0; }
+.topbar-tabs-end { flex:none; }
+@media (max-width:767px) { .topbar-tabs-end { display:none; } }
 .topbar-tab { position:relative; flex-shrink:0; display:inline-flex; align-items:center; gap:var(--space-2);
   padding:0 var(--space-1) calc(var(--space-2) + var(--focus-width)); color:var(--muted-foreground); font-size:var(--text-sm);
   font-weight:var(--weight-medium); white-space:nowrap; text-decoration:none; }
@@ -2193,24 +2200,19 @@ img,svg { display:block; }
    Aurea não tinha o botão de ação secundária mais comum do mercado — contorno na cor da marca.
    Nada de novo aqui: mesma receita do par `danger-*` logo abaixo, com o token do outro tom, e o
    texto em `--primary` já era precedente do `.btn-link-primary`. */
-.btn-primary-outline { --btn-bg:transparent; --btn-fg:var(--primary); --btn-border:var(--primary); }
+.btn-primary-outline { --btn-bg:transparent; --btn-fg:var(--primary-emphasis); --btn-border:var(--primary-emphasis); }
 .btn-primary-outline:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
-.btn-primary-ghost { --btn-bg:transparent; --btn-fg:var(--primary); --btn-border:transparent; }
+.btn-primary-ghost { --btn-bg:transparent; --btn-fg:var(--primary-emphasis); --btn-border:transparent; }
 .btn-primary-ghost:hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
 .btn-danger-outline { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:var(--danger-400); }
 .btn-danger-outline:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 .btn-danger-ghost { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:transparent; }
 .btn-danger-ghost:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 [data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-link-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
-/* A MESMA correção para a marca, que estava faltando. Medido em 21/08/2026 na varredura de AA
-   da matriz de tom: `.btn-primary-outline` e `.btn-primary-ghost` pintavam o rótulo com
-   `--primary` cru, e no tema claro isso dá **1.73:1** — reprovação grave, em componente
-   publicado. O `.btn-link-primary` logo abaixo já tinha a correção; as duas irmãs nasceram sem
-   ela. Não é conserto local: é a mesma pergunta do §21 — quem MAIS tem esse problema? — e a
-   resposta foram estas duas, mais a borda, que é componente de UI e pede 3:1. */
-[data-theme="light"] .btn-primary-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-primary-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-[data-theme="light"] .btn-primary-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-border:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-[data-theme="light"] .btn-outline.btn-tone-brand:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-border:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+/* A LETRA DA MARCA nos botões sem caixa é a de DESTAQUE (ADR-0081, 24/10/2026 — a ADR-0076 aplicada a eles): o azul no
+   claro, o amarelo no escuro, e na `lory` o laranja escuro dela. De 21/08 até aqui, o claro levava a mistura marrom
+   (a marca a 45% no texto): passava sobre a página e caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69. O
+   `--primary-outline` não serve de letra: na `lory` ele é translúcido (é do contorno). */
 /* LINK: aparência de texto, sem cápsula e sem altura de controle — o sublinhado é o que diz
    que é clicável, então ele existe desde o repouso (revelar no hover esconde a affordance).
    Três tons: neutro, marca e destrutivo. No claro a marca aprofunda, senão não passa o AA. */
@@ -2219,8 +2221,7 @@ img,svg { display:block; }
    prosa, e media 67×13px. O texto continua onde está — a caixa cresce centrada nele. */
 .btn-link { height:auto; min-height:24px; padding:0; gap:6px; border:0; border-radius:var(--radius-sm); --btn-bg:transparent; --btn-fg:var(--foreground); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
 .btn-link:hover:not(:disabled):not([aria-disabled="true"]) { text-decoration-thickness:2px; }
-.btn-link-primary { --btn-fg:var(--primary); }
-[data-theme="light"] .btn-link-primary:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+.btn-link-primary { --btn-fg:var(--primary-emphasis); }
 .btn-link-danger { --btn-fg:var(--danger-400); }
 /* pressed entra na linguagem única de "selecionado" acima; só-ícone não leva o fio. */
 /* Kbd — a tecla que dispara a ação, dentro ou fora do botão. Peça própria, não decoração.
@@ -2280,9 +2281,8 @@ img,svg { display:block; }
    token de tom (`--success`) é o FUNDO cheio — a mesma cor funda nos dois temas —, e não serve
    de letra no escuro. Letra, ícone, borda e barra sobre a superfície usam o par de letra
    (`--success-400`, `--info-400`, `--warning-400`, `--danger-400`), que cada tema ajusta. */
-.btn-tone-brand,.btn-tone-brand:hover:not(:disabled) { --btn-fg:var(--primary); }
-[data-theme="light"] .btn-tone-brand:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-brand:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
-.btn-outline.btn-tone-brand { --btn-border:var(--primary); }
+.btn-tone-brand,.btn-tone-brand:hover:not(:disabled) { --btn-fg:var(--primary-emphasis); }
+.btn-outline.btn-tone-brand { --btn-border:var(--primary-emphasis); }
 .btn-tone-brand:not(.btn-link):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
 .btn-tone-danger,.btn-tone-danger:hover:not(:disabled) { --btn-fg:var(--danger-400); }
 [data-theme="light"] .btn-tone-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-danger:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
@@ -2900,13 +2900,19 @@ img,svg { display:block; }
 /* A borda transparente de 1 (as abas não têm) entra no recheio: 1 + 3 = os 4 da referência, e o
    trilho mede 40 como o das abas — sem o desconto, 42 (a geometria pegou). */
 .segmented { display:inline-flex; gap:0; padding:calc(var(--space-1) - var(--border-width)); border-radius:var(--radius-control); background:var(--muted); border:var(--border-width) solid transparent; box-shadow:none; }
-.segmented button { min-block-size:var(--control-h-sm); padding:0 var(--space-4); border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; font-weight:var(--weight-medium); cursor:pointer; }
-.segmented button.active { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); border:0; }
+.segmented :is(button,a) { min-block-size:var(--control-h-sm); padding:0 var(--space-4); border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; font-weight:var(--weight-medium); cursor:pointer; }
+.segmented :is(button,a).active { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); border:0; }
 /* `fullWidth` (A5, 06/10/2026): ocupa a linha, e cada segmento cresce a partir do rótulo sem
    encolher abaixo dele — o mesmo desenho do nativo. `1 0 auto` e não `1` (= `1 1 0%`): base zero
    reparte a largura em partes iguais, e é isso que quebrava o rótulo no nativo rodando no
    navegador. Quando não cabe, rola pela regra de tela estreita, como sem a prop. */
-.segmented-full { display:flex; } .segmented-full button { flex:1 0 auto; }
+.segmented-full { display:flex; } .segmented-full :is(button,a) { flex:1 0 auto; }
+/* A CÁPSULA QUE NAVEGA (bloco 1, o 5-A — 23/10/2026): com `href` nos itens, o `SegmentedControl` é um <nav> de links — a
+   chave Web | Native do site, a peça "Tabs em pílula" da referência na ponta da linha das áreas. O link tem a pele do
+   segmento; o atual leva `aria-current="page"` e a mesma marca do escolhido. */
+.segmented a { display:inline-flex; align-items:center; justify-content:center; gap:var(--space-1); text-decoration:none; }
+/* `size="sm"`: a da referência (abas de 24 numa cápsula de 32, letra 14) — a altura do controle `xs` da densidade. */
+.segmented-sm :is(button,a) { min-block-size:var(--control-h-xs); padding:0 var(--space-4); font-size:var(--text-sm); }
 /* Toggle (Lote 1): pressionado usa o MESMO par de tokens do segmento aceso, logo acima. Um
    toggle solto e um segmento selecionado dizem a mesma coisa — se parecessem diferentes, o
    sistema teria dois idiomas para "isto está ligado". O estado vem do motor (`data-pressed`),
@@ -2920,12 +2926,12 @@ img,svg { display:block; }
    grita mais que o próprio rótulo. No tema CLARO o amarelo puro como texto dá 1.6:1, longe
    dos 4.5:1 do AA, então o rótulo aprofunda com --foreground e segue âmbar. */
 .is-selected,.btn-nav[aria-current]:not([aria-current="false"]),.btn[aria-pressed="true"],
-.segmented button.active { --btn-bg:var(--secondary); --btn-fg:var(--primary); position:relative; background:var(--secondary); color:var(--primary); }
+.segmented :is(button,a).active { --btn-bg:var(--secondary); --btn-fg:var(--primary); position:relative; background:var(--secondary); color:var(--primary); }
 /* A CÁPSULA ELEVADA que a regra acima promete, e que no trilho não se via (ADR-0059, 08/10/2026):
    o segmento aceso e a aba escolhida vivem sobre --muted, e --secondary dava 1:1 contra ele no
    claro e 1,02:1 no escuro. Sobre o trilho a cápsula é --segment, com a sombra pequena — como a
    aba da referência principal. O rótulo na cor da marca e o fio continuam. */
-.segmented button.active { --btn-bg:var(--segment); background:var(--segment); box-shadow:var(--shadow-sm); }
+.segmented :is(button,a).active { --btn-bg:var(--segment); background:var(--segment); box-shadow:var(--shadow-sm); }
 /* O TOGGLE LIGADO tem fundo próprio (0.32.0). Com o solto no fundo neutro (o `default` da referência),
    o cinza do "selecionado" acima deixava ligado e desligado com o MESMO fundo — só a letra e o fio
    mudavam, e o `skin.spec` cobra que o ligado pareça ligado pelo fundo. O ligado dela é o tom suave
@@ -2954,7 +2960,7 @@ img,svg { display:block; }
    saíram com a mesma cor. Com o `:not` ela pesa (0,3,1) e só alcança quem está em repouso. */
 [data-theme="light"] .doc-nav a:not(.active):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }
 .is-selected::after,.btn-nav[aria-current]:not([aria-current="false"])::after,
-.btn[aria-pressed="true"]:not(.btn-icon)::after,.segmented button.active::after,.tabs-secondary .tab[data-active]::after,
+.btn[aria-pressed="true"]:not(.btn-icon)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { background:var(--sidebar-current-line, color-mix(in oklab, var(--sidebar-primary) 75%, transparent)); }
@@ -2966,7 +2972,7 @@ img,svg { display:block; }
    botão: o azul sobre o amarelo mede 3,49:1 — o axe da varredura achou, no "12" do exemplo da `Sidebar`. */
 [data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
 [data-theme="light"] .is-selected:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] .btn[aria-pressed="true"]:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented button.active:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
+[data-theme="light"] .btn[aria-pressed="true"]:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 /* A NAV DA LATERAL SAIU DESTA LISTA em 20/08/2026. O ajuste existe porque o amarelo puro não se lê
    sobre o claro — mas ele mistura o `--foreground` da PÁGINA, e o item da lateral não está sobre a
@@ -3059,9 +3065,13 @@ img,svg { display:block; }
    seis deixam o contador sobre a superfície da barra, onde ele já se lê. */
 
 .badge-success { --badge-accent:var(--success-400); --badge-fill:var(--success); --badge-on:var(--success-foreground); color:var(--success-400); background:var(--success-bg); border-color:transparent; }
-.badge-warning { --badge-accent:var(--warning-400); --badge-fill:var(--warning); --badge-on:var(--warning-foreground); color:var(--warning-400); background:var(--warning-bg); border-color:transparent; }
+.badge-warning,.badge-paused { --badge-accent:var(--warning-400); --badge-fill:var(--warning); --badge-on:var(--warning-foreground); color:var(--warning-400); background:var(--warning-bg); border-color:transparent; }
 .badge-danger { --badge-accent:var(--danger-400); --badge-fill:var(--destructive); --badge-on:var(--destructive-foreground); color:var(--danger-400); background:var(--danger-bg); border-color:transparent; }
 .badge-info,.badge-running { --badge-accent:var(--info-400); --badge-fill:var(--info); --badge-on:var(--info-foreground); color:var(--info-400); background:var(--info-bg); border-color:transparent; }
+/* Os tons de ESTADO DE TRABALHO (ADR-0081, 24/10/2026): running é o info (acima), paused o aviso, review o violeta de
+   categoria, e offline o apagado — como o `Status offline`. Antes paused, offline e review saíam iguais ao neutral. O
+   cheio do offline é o par do texto apagado invertido: a letra que passa sobre o fundo vira o fundo. */
+.badge-offline { --badge-accent:var(--subtle-foreground); --badge-fill:var(--muted-foreground); --badge-on:var(--background); color:var(--subtle-foreground); background:var(--fill-1); border-color:transparent; }
 /* AS OITO CORES DE CATEGORIA (GAR-07, ADR-0060, 09/10/2026): marcam GRUPO, não estado — "Motos" e
    "Carros" num site de notícias. Mesma receita dos quatro propósitos acima (acento, fundo suave e
    o fio misturado com a borda), e por isso as três ênfases valem para elas sem regra nova. O
@@ -3072,7 +3082,7 @@ img,svg { display:block; }
 .badge-teal { --badge-accent:var(--category-teal); color:var(--category-teal); background:var(--category-teal-bg); border-color:transparent; }
 .badge-cyan { --badge-accent:var(--category-cyan); color:var(--category-cyan); background:var(--category-cyan-bg); border-color:transparent; }
 .badge-blue { --badge-accent:var(--category-blue); color:var(--category-blue); background:var(--category-blue-bg); border-color:transparent; }
-.badge-violet { --badge-accent:var(--category-violet); color:var(--category-violet); background:var(--category-violet-bg); border-color:transparent; }
+.badge-violet,.badge-review { --badge-accent:var(--category-violet); color:var(--category-violet); background:var(--category-violet-bg); border-color:transparent; }
 .badge-pink { --badge-accent:var(--category-pink); color:var(--category-pink); background:var(--category-pink-bg); border-color:transparent; }
 /* ── AS TRÊS ÊNFASES — e elas vêm DEPOIS das variantes de propósito ─────────────────
    Cada variante declara só o ACENTO; as ênfases saem dele. Antes cada variante escrevia
@@ -3454,6 +3464,12 @@ img,svg { display:block; }
 .avatar:is(.avatar-tone-brand,.avatar-tone-danger,.avatar-tone-success,.avatar-tone-warning,.avatar-tone-info) { color:var(--avatar-ink); }
 .avatar.avatar-soft { border-color:transparent; background:var(--muted); }
 .avatar.avatar-soft:is(.avatar-tone-brand,.avatar-tone-danger,.avatar-tone-success,.avatar-tone-warning,.avatar-tone-info) { background:color-mix(in oklab, var(--avatar-tint) 14%, transparent); }
+/* Os quatro tons de ESTADO no fundo do selo suave (o `-bg` de cada um, a receita do `Badge` — ADR-0081, 24/10/2026): com
+   o tom a 14%, o info media 4,12 no claro. A marca fica na mistura: o fundo dela não tem par. */
+.avatar.avatar-soft.avatar-tone-info { background:var(--info-bg); }
+.avatar.avatar-soft.avatar-tone-success { background:var(--success-bg); }
+.avatar.avatar-soft.avatar-tone-warning { background:var(--warning-bg); }
+.avatar.avatar-soft.avatar-tone-danger { background:var(--danger-bg); }
 .avatar img { width:100%; height:100%; object-fit:cover; }
 /* LINK (0.32.0): o link de texto da referência — peso médio, a cor de link, sem sublinhado; com o mouse
    ou apertado, o sublinhado de 1,5 a 4 da letra, na cor esmaecida (a meia força com o mouse). A seta do
@@ -3670,6 +3686,21 @@ button.tag-main { cursor:pointer; }
    é inalcançável por teclado (axe scrollable-region-focusable). Quem escreve esta marcação à
    mão precisa de `tabindex="0"` no <pre> — o componente React já o emite. */
 .code-block { overflow:auto; padding:16px; border:1px solid transparent; border-radius:var(--radius-lg); background:var(--surface-inset); color:var(--muted-foreground); font:12px/1.7 var(--font-code); }
+/* O CÓDIGO EM ABAS (`CodeBlock tabs`, bloco 1 — o 3-A): a caixa é UMA — a fileira em cima e o código embaixo —, como a
+   documentação da referência, medida na página dela (1280 × 663, 23/10/2026): a fileira de 37 (o texto 14, peso médio, a
+   entrelinha 20 → a `--leading-normal`, 21, com 8 em cima e embaixo), as abas a 14 uma da outra e a 16 da borda; o
+   código é o bloco de sempre. A fileira é um degrau acima da página e o código um acima dela (a referência: a página, a
+   superfície, o código) — no texto do site, a página 31, a fileira 41 e o código 51, a cor do bloco sozinho. A escolhida
+   na cor do texto, com o traço cheio de baixo, como as abas de área do site (o indicador, não uma linha — ADR-0072). */
+.code-tabs { border-radius:var(--radius-lg); background:var(--surface-1); overflow:hidden; }
+.prose .code-tabs { border-radius:var(--radius-card); }
+.code-tabs-list { display:flex; gap:calc(var(--space-3) + var(--space-05)); padding:0 var(--space-4); overflow-x:auto; }
+.code-tab { position:relative; flex:none; padding:var(--space-2) 0; border:0; background:transparent; color:var(--muted-foreground);
+  font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--leading-normal); cursor:pointer; }
+.code-tab:hover, .code-tab.active { color:var(--foreground); }
+.code-tab.active::after { content:""; position:absolute; inset-inline:0; inset-block-end:0; block-size:var(--focus-width); background:var(--primary); }
+.code-tab:focus-visible { outline-offset:calc(-1 * var(--focus-width)); }
+.code-tabs .code-block { border-radius:0; }
 /* Lote V (20/10/2026): o número da linha e as cores do código (`CodeBlock lineNumbers` e `highlight`). O número é o da
    referência, medido na página dela: uma coluna de 16 (--space-4), alinhada à direita, a 24 do código (--space-6); ela
    cresce com os algarismos da última linha (`--code-line-digits`, que o componente escreve), para a coluna não pular
@@ -3706,7 +3737,7 @@ button.tag-main { cursor:pointer; }
 .code-preview { display:flex; flex-direction:column; block-size:var(--demo-height,auto); padding:0; overflow:hidden; }
 .demo-tabs { display:flex; padding:var(--space-2); border-bottom:var(--border-width) solid transparent; }
 .demo-tabs .segmented { flex:1; display:flex; }
-.demo-tabs .segmented button { flex:1; }
+.demo-tabs .segmented :is(button,a) { flex:1; }
 .demo-panel { flex:1; min-height:0; overflow:auto; padding:var(--space-6); }
 .demo-panel[hidden] { display:none; }
 .demo-panel[data-panel="preview"] { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--space-4); background:var(--surface-inset); }
@@ -3715,6 +3746,11 @@ button.tag-main { cursor:pointer; }
 .demo-code .code-block-wrap { flex:1; }
 .demo-code .code-block { padding:var(--space-6); border:0; border-radius:0; }
 .copy-code { position:absolute; top:var(--space-3); inset-inline-end:var(--space-3); z-index:1; }
+/* O fim da linha fica fora do botão de copiar (achado no 3-A, 23/10/2026): no Quick Start, o `pnpm add` de uma linha
+   terminava a 915 e o botão começava a 901 — o fim do comando ficava embaixo dele. O código reserva no fim o lugar do
+   botão (a distância da borda, o botão e um vão), e a linha mais longa ROLA antes de chegar nele. Vale para todo bloco
+   com copiar: o sozinho, o do texto do site (`.prose pre`) e o do exemplo (`.demo-code`) — por isso vem depois deles. */
+.code-block-wrap > .code-block { padding-inline-end:calc(var(--space-3) + var(--control-h-md) + var(--space-2)); }
 .copy-code .c-done { display:none; }
 .copy-code.is-done .c-copy { display:none; } .copy-code.is-done .c-done { display:block; color:var(--primary); }
 /* "On this page": índice da própria página, fixo na lateral. Navegação, não decoração —
@@ -4019,7 +4055,9 @@ button.tag-main { cursor:pointer; }
 /* DOC-11 (0.32.0): o `tone` do nativo, na web. `link` é o amarelo de escrever; `primary`, o de
    preencher (no claro quase some, como no nativo); as cores de estado, o par `-400` (ADR-0061). */
 .typography-tone-subtle { color:var(--subtle-foreground); }
-.typography-tone-primary { color:var(--primary); }
+/* A letra do tom primary é a de DESTAQUE (ADR-0081, 24/10/2026): o azul no claro, o amarelo no escuro. Era o amarelo de
+   preencher, de propósito — 1,75:1 no claro. */
+.typography-tone-primary { color:var(--primary-emphasis); }
 .typography-tone-link { color:var(--link); }
 .typography-tone-danger { color:var(--danger-400); }
 .typography-tone-success { color:var(--success-400); }
@@ -4036,6 +4074,11 @@ button.tag-main { cursor:pointer; }
    identificação, como no sistema que serviu de modelo (na tabela dele, só a coluna de número e a de valor; o resto
    da tabela fica no texto). Vem depois dos `.typography-h*`, e por isso o título com `numeric` também troca. */
 .typography-numeric { font-family:var(--font-code); font-variant-numeric:tabular-nums; }
+/* O alinhamento só existe num bloco: o `Text` (um <span>) e o `Code` (um <code>) são texto em linha, e com o
+   `text-align` sozinho o `align` deles não fazia nada — achado pelo exemplo de cada valor (bloco 1, o catálogo fiel,
+   23/10/2026). Com `align`, a peça vira bloco, como já faz o `truncate`; no `Heading` e no `Paragraph`, que já são
+   bloco, nada muda. */
+.typography-align-start, .typography-align-center, .typography-align-end, .typography-align-justify { display:block; }
 .typography-align-start { text-align:start; }
 .typography-align-center { text-align:center; }
 .typography-align-end { text-align:end; }
@@ -5129,8 +5172,6 @@ button.graph-node-body { cursor:pointer; }
 }
 
 
-/* Aurea v1.7 stabilization patch — visual design unchanged. */
-.badge-running{background:var(--success-bg);color:var(--success-400);border-color:transparent}
 /* superfície (overflow, borda, fundo, raio) mora junto com a do `.table-wrap` lá em cima — aqui
    fica só o que é DESTA região: ela é focável, e o foco dela é a linha de dentro, abaixo. Era um
    halo de `--focus` a 38% (B-09, 24/09/2026): claro demais para se ver, e fora do contrato de foco.
@@ -5395,14 +5436,14 @@ button.graph-node-body { cursor:pointer; }
    .chip-text: sem isto, a 320px o pill de "native: planned" perdia a borda direita. */
 .chip-status .status-label { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
-/* ALTURA IGUAL para todo demo, e sempre dentro da primeira tela (pedido do Victor: nada
-   de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem da referência; abaixo
-   disso a caixa cede à janela — 19rem cobre topo + cabeçalho da página + respiro (o
-   cabeçalho mais alto medido, o do Status, empurra o demo pra 277px). Numa mesma tela
-   todos os demos continuam do mesmo tamanho, que é o ponto.
+/* A CAIXA CRESCE COM O EXEMPLO (ADR-0081, 24/10/2026 — substitui a altura fixa da ADR-0002): com toda variação à mostra,
+   42 caixas rolavam por dentro. A fórmula de antes vira a MÍNIMA — o teto é o 32rem da referência; abaixo disso ela cede
+   à janela (19rem cobre topo + cabeçalho da página + respiro): 359 na tela do Victor, perto dos 350 da referência. A
+   prévia em documento próprio (o iframe) mantém a altura fixa: ela rola dentro do documento dela.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
-.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+.demo:has(.demo-frame) { height:var(--demo-height); }
+.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); min-height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
 /* As abas (.demo-tabs), os painéis (.demo-panel) e o código (.demo-code) do demo são os do core (a peça
    CodeBlock preview): o site não repete as regras deles (a trava do site, lote T, 17/10/2026). */
 .demo-lede { margin:0 0 var(--space-3); }

@@ -16,6 +16,34 @@ import {Alert} from "@aurea-uds/react";
 </Alert>
 ```
 
+## Examples
+
+### Variants
+
+How serious it is. danger interrupts the screen reader (role=alert); the others wait for a pause (role=status).
+
+```tsx
+<Alert variant="info">A info alert.</Alert>
+<Alert variant="success">A success alert.</Alert>
+<Alert variant="warning">A warning alert.</Alert>
+<Alert variant="danger">A danger alert.</Alert>
+<Alert variant="accent">A accent alert.</Alert>
+```
+
+### Every state
+
+What is happening, apart from how serious it is. Without children, the alert says the state in words of its own.
+
+```tsx
+<Alert state="stale" />
+<Alert state="partial" />
+<Alert state="degraded" />
+<Alert state="offline" />
+<Alert state="waiting_user" />
+<Alert state="waiting_approval" />
+<Alert state="waiting_dependency" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

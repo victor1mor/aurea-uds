@@ -58,6 +58,8 @@ export interface AureaStrings {
   stepperLabel: string;
   /** O que o `DatePicker` mostra quando não há data escolhida. */
   datePlaceholder: string;
+  /** O que o `DatePicker` com `mode="time"` mostra quando não há hora escolhida. */
+  timePlaceholder: string;
   /** O que o `PhotoInput` diz quando a pessoa negou a câmera e o sistema não vai perguntar de novo. */
   cameraDenied: string;
   /** O botão que leva às configurações do app. */
@@ -119,6 +121,8 @@ export interface AureaStrings {
    * campo próprio, que precisa de nome mesmo quando ninguém passou um.
    */
   comboboxSearch: string;
+  /** O nome do botão da setinha do `Combobox`, no navegador (a mesma frase da web — ADR-0081, 24/10/2026). */
+  comboboxOpen: string;
   /**
    * O botão que apaga o que foi digitado numa busca — no `SearchField` e no campo da folha do
    * `Combobox`. **Não existe na web** pela mesma razão: lá o `type="search"` do navegador desenha
@@ -153,6 +157,7 @@ export const defaultStrings: AureaStrings = {
   tabsLabel: "Tabs",
   stepperLabel: "Steps",
   datePlaceholder: "Pick a date",
+  timePlaceholder: "Pick a time",
   cameraDenied: "Camera access is off. Turn it on in Settings to attach a photo.",
   openSettings: "Open Settings",
   photoRemove: "Remove photo",
@@ -178,6 +183,7 @@ export const defaultStrings: AureaStrings = {
   themeToLight: "Switch to light theme",
   comboboxLoading: "Loading…",
   comboboxSearch: "Search",
+  comboboxOpen: "Open list",
   searchClear: "Clear search",
   galleryLabel: "Gallery",
   fileChoose: "Choose file",
@@ -206,6 +212,7 @@ export const ptBR: AureaStrings = {
   tabsLabel: "Abas",
   stepperLabel: "Etapas",
   datePlaceholder: "Escolher data",
+  timePlaceholder: "Escolher horário",
   cameraDenied: "O acesso à câmera está desligado. Ligue nas configurações para anexar uma foto.",
   openSettings: "Abrir configurações",
   photoRemove: "Remover foto",
@@ -231,6 +238,7 @@ export const ptBR: AureaStrings = {
   themeToLight: "Mudar para o tema claro",
   comboboxLoading: "Carregando…",
   comboboxSearch: "Buscar",
+  comboboxOpen: "Abrir lista",
   searchClear: "Limpar busca",
   galleryLabel: "Galeria",
   fileChoose: "Escolher arquivo",

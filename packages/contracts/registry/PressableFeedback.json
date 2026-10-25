@@ -1,0 +1,71 @@
+{
+  "name": "PressableFeedback",
+  "category": "Utilities",
+  "layer": "Primitive",
+  "maturity": "Stable",
+  "summary": "A touch target that answers the finger: the piece shrinks a little, and the parts Highlight, Ripple and Scale combine. Native only.",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "pressed",
+    "disabled"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "A button for the screen reader. It is one element: no button inside it. With reduced motion, the feedback jumps instead of sliding."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Card",
+      "Button"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/exibicao.tsx#PressableFeedback"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "What is touched."
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "default": "—",
+      "description": "Turns the touch off."
+    },
+    {
+      "name": "animation",
+      "type": "boolean | \"disable-all\"",
+      "default": "—",
+      "description": "The feedback's timing."
+    },
+    {
+      "name": "scale",
+      "type": "number",
+      "default": "—",
+      "description": "How much it shrinks under the finger."
+    },
+    {
+      "name": "style",
+      "type": "StyleProp<ViewStyle>",
+      "default": "—",
+      "description": "Extra style."
+    }
+  ]
+}

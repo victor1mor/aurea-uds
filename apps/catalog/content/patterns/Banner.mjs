@@ -21,7 +21,7 @@ export default [
   {
     variant: "Consent",
     name: "The cookie notice",
-    description: "variant=\"consent\" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored. On this static page the buttons do not answer; in your app they do.",
+    description: "variant=\"consent\" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored.",
     uses: ["Banner", "Dialog", "Switch", "Link"],
     code: `<Banner
   variant="consent"

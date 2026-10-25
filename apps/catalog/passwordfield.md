@@ -14,6 +14,18 @@ import {PasswordField} from "@aurea-uds/react";
 </Field>
 ```
 
+## Examples
+
+### Sizes
+
+The control sizes; the show/hide button keeps a 44 target on touch at every size.
+
+```tsx
+<PasswordField aria-label="Password" size="sm" />
+<PasswordField aria-label="Password" size="md" />
+<PasswordField aria-label="Password" size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

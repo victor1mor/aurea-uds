@@ -18,6 +18,21 @@ import {AgentCard} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Every state
+
+The state is a word on the card, not only a colour: idle, running, thinking, paused, error, completed.
+
+```tsx
+<AgentCard name="Curator" model="opus-5" state="idle" />
+<AgentCard name="Curator" model="opus-5" state="running" />
+<AgentCard name="Curator" model="opus-5" state="thinking" />
+<AgentCard name="Curator" model="opus-5" state="paused" />
+<AgentCard name="Curator" model="opus-5" state="error" />
+<AgentCard name="Curator" model="opus-5" state="completed" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -110,6 +110,16 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
     o nome da BIBLIOTECA dela (nem de nenhuma outra) escrito em qualquer coisa do projeto —
     repositório, site, pacote, pedido de junção (seção 2, acima). Nomes de prop que a Aurea já
     decidiu continuam (o `tone`, seção 11).
+  - **O PADRÃO É O NOSSO; AS VARIAÇÕES, AS DELA** (regra do Victor, 24/10/2026: *"vamos ter nossos primários mas variações
+    iguais a deles, já que a deles é genérica as pessoas gostam de usar"*). Cada peça tem o seu jeito Aurea como padrão (o
+    que aparece sem escolher nada — por exemplo, a aba escolhida no amarelo do botão) e ganha, como VARIAÇÃO a mais, o
+    jeito da referência: o desenho e os nomes dela, com as cores, os cantos, a fonte e o "sem linha" da Aurea. O exemplo
+    que o Victor deu é a coluna "igual à referência" da bancada do nativo de 24/10/2026 (a aba escolhida branca com a
+    letra na cor do texto, o visto da lista no amarelo misturado com o texto, o menu no cinza apagado). Toda variação
+    passa na mesma régua de leitura e foco visível. Fazer peça por peça, com a bancada (a nossa ao lado da dela) — **em
+    outro momento**, não no meio de outro trabalho.
+  - ⚠ O toque: a caixa de marcar e o rádio do nativo seguem a referência (6 a mais, invisível — decisão do Victor,
+    24/10/2026); o "toque de 44" da lista acima vale para o resto.
 - **Antes de desenhar ou mostrar uma peça que a referência tem** (lição de 11/10/2026, quando cinco
   peças da prancha voltaram para correção): (1) abrir a PÁGINA DE EXEMPLOS dela — o pacote não traz
   exemplos, e uma ficha antiga dizia "não tem" o que estava num exemplo; (2) ler o CSS publicado
@@ -183,6 +193,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.40.0` | Os campos brancos no claro: o campo solto na página é a cor do cartão com o `--shadow-sm` (a sombra da referência); dentro de uma superfície branca, o cinza de antes; no escuro, nada muda — a web e o site ([ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)), pedido #92. **Publicada em 22/10/2026** (entre 23:41 e 23:45, Brasília, medido no npm), pelo terminal do Victor |
 | `0.40.1` | O nativo: a Inter, a Sora e a IBM Plex Mono em 14 `.ttf` completos (3,17 MB, *"Completas"*), o título na Sora, o `numeric` e o número do `KPI` na Plex Mono; os campos brancos no claro pelo contexto da superfície ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md) e [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)); na web, as quatro superfícies brancas que a 0.40.0 esqueceu — pedido #93. **Publicada em 23/10/2026** (entre 10:44 e 10:54, Brasília, medido no npm), pelo terminal do Victor |
 | `0.41.0` | A lateral com o topo e o pé fixos: `header` e `footer` no `Sidebar`, e as partes `Sidebar.Brand`, `Sidebar.User`, `Sidebar.Nav` e `Sidebar.Show` — o 4-C das quinze laterais ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)), pedido #94. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
+| `0.42.0` | A lateral até o topo: `AppShell layout="sidebar"` (a lateral do alto até embaixo, com a marca nela, e a barra de cima só sobre o conteúdo, quando o app passa `topbar`), `AppShell.SidebarToggle` e `sidebarFooter` — o MNT-34 ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)), pedido #95. **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #96 (a auditoria de volta ao verde) |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -593,6 +604,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (o leitor das notas só lê lista de um nível); e a regra da barra de rolagem mudou de seletor (`.sidebar-body`), e o
    `engine-batch.test` ainda cobrava o antigo. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor,
    da junção do pedido #94. O registro entrou no lote seguinte (a lateral até o topo, 0.42.0).
+
+40. **`0.42.0`, a lateral até o topo, feita em 23/10/2026** ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o
+   MNT-34 de um app de rede e o pedido de um segundo app: `AppShell layout="sidebar"` (a lateral do alto até embaixo, com a
+   marca nela; a barra de cima só existe se o app passar `topbar`, e fica só sobre o conteúdo), `AppShell.SidebarToggle`
+   (o botão de recolher das quinze laterais) e `sidebarFooter`. Aprovada na bancada com a peça de verdade (*"Aprovado o
+   MNT-34"*). O teste de navegador achou um defeito antes de sair: na barra do conteúdo, um título sozinho ia para a ponta
+   direita. ⚠ **A lição:** o `main` reprovou DEPOIS da junção do pedido #95, com a CI do pedido verde — dois alertas `high`
+   novos (`undici` e `zod`, só em ferramenta) saíram no intervalo, e a rodada do site ficou parada. O conserto foi o pedido
+   #96 (`overrides`; a `zod` saltou da 3 para a 4, conferida rodando os esquemas do `@expo/cli`); e no `main` a `visual` caiu
+   uma vez com o WebKit da máquina do GitHub travando (*"WebKit encountered an internal error"*), verde rodada de novo.
+   **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+   #96. O registro entrou no lote seguinte (o bloco 1, 0.43.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

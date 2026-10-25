@@ -53,6 +53,14 @@ Locked value: still readable, not draggable.
 <Range defaultValue={30} disabled />
 ```
 
+### Vertical
+
+orientation="vertical" stands the slider up, for a level or a mixer. Its height is --range-vertical-size.
+
+```tsx
+<Field label="Level"><Range orientation="vertical" defaultValue={40} /></Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -73,8 +73,74 @@ On a circle the badge is pulled 14% back into the corner. Without that it floats
 
 ```tsx
 <Badge anchor="bottom-end" anchorShape="circle" dot variant="success">
-  <Avatar name="Ana Prado" />
+  <Avatar alt="Ana Prado" fallback="AP" />
 </Badge>
+```
+
+### Every tone
+
+Six tones that carry meaning, four for the state of a job, and eight category colours that mark a group and say nothing about health. There is no yellow: it belongs to the brand. Pair the colour with a word.
+
+```tsx
+<Badge tone="neutral">Neutral</Badge>
+<Badge tone="primary">Primary</Badge>
+<Badge tone="info">Info</Badge>
+<Badge tone="success">Success</Badge>
+<Badge tone="warning">Warning</Badge>
+<Badge tone="danger">Danger</Badge>
+<Badge tone="running">Running</Badge>
+<Badge tone="paused">Paused</Badge>
+<Badge tone="offline">Offline</Badge>
+<Badge tone="review">In review</Badge>
+<Badge tone="red">Red</Badge>
+<Badge tone="orange">Orange</Badge>
+<Badge tone="green">Green</Badge>
+<Badge tone="teal">Teal</Badge>
+<Badge tone="cyan">Cyan</Badge>
+<Badge tone="blue">Blue</Badge>
+<Badge tone="violet">Violet</Badge>
+<Badge tone="pink">Pink</Badge>
+```
+
+### Four sizes
+
+`xs` is 16 high and borderless: the counter that rides on an icon, the one BottomNav asks for. `md` is the default.
+
+```tsx
+<Badge tone="primary" emphasis="solid" size="xs">3</Badge>
+<Badge tone="primary" emphasis="solid" size="sm">Small</Badge>
+<Badge tone="primary" emphasis="solid" size="md">Medium</Badge>
+<Badge tone="primary" emphasis="solid" size="lg">Large</Badge>
+```
+
+### anchor — all four corners
+
+The counter hangs off any corner of the thing it decorates. Each count lives in the accessible name of the button; the badge stays hidden from screen readers.
+
+```tsx
+<Badge anchor="top-start" count={2} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Alerts, 2 unread" />
+</Badge>
+<Badge anchor="top-end" count={8} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Notifications, 8 unread" />
+</Badge>
+<Badge anchor="bottom-start" count={1} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Reminders, 1 due" />
+</Badge>
+<Badge anchor="bottom-end" count={5} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Mentions, 5 new" />
+</Badge>
+```
+
+### fit — as wide as the text
+
+Inside a column a badge follows the column's width. `fit="content"` keeps it as wide as its text and leaves the row alone.
+
+```tsx
+<Stack>
+  <Badge tone="info">Follows the column</Badge>
+  <Badge tone="info" fit="content">As wide as its text</Badge>
+</Stack>
 ```
 
 ## API Reference

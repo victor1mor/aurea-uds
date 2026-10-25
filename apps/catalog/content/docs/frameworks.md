@@ -2,6 +2,7 @@
 title: Frameworks
 description: Use Aurea with Next.js, Vite, plain HTML or React Native.
 icon: stack
+sources: pkg:core, pkg:react, pkg:native
 ---
 
 Two proof apps are built on every check of the repository: one in Next.js with Server Components, one in Vite with client rendering only. The examples on this page follow what they do. If a `"use client"` directive goes missing or shows up where it is not needed, those builds fail.

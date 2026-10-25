@@ -1,0 +1,102 @@
+{
+  "name": "ScrollShadow",
+  "category": "Layout",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "A scrolling list on an Aurea surface that fades the edge where there is more to scroll. Native only.",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "at-start",
+    "middle",
+    "at-end"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No role of its own; the list inside keeps its semantics. The fade is decoration and is hidden from the screen reader."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Card",
+      "Accordion"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/exibicao.tsx#ScrollShadow"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactElement",
+      "default": "—",
+      "description": "What scrolls."
+    },
+    {
+      "name": "orientation",
+      "type": "AureaScrollShadowOrientation",
+      "default": "—",
+      "description": "The scroll direction."
+    },
+    {
+      "name": "visibility",
+      "type": "AureaScrollShadowVisibility",
+      "default": "—",
+      "description": "Which edge shows the fade: auto follows the scroll; the others fix it."
+    },
+    {
+      "name": "isEnabled",
+      "type": "boolean",
+      "default": "—",
+      "description": "Turns the fade on and off."
+    },
+    {
+      "name": "variant",
+      "type": "AureaScrollShadowVariant",
+      "default": "—",
+      "description": "surface is the card surface with the 22 corner; plain has no box, for inside a card."
+    },
+    {
+      "name": "style",
+      "type": "StyleProp<ViewStyle>",
+      "default": "—",
+      "description": "Extra style."
+    },
+    {
+      "name": "testID",
+      "type": "string",
+      "default": "—",
+      "description": "The id for tests."
+    }
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ],
+    "visibility": [
+      "auto",
+      "both",
+      "bottom",
+      "left",
+      "none",
+      "right",
+      "top"
+    ],
+    "variant": [
+      "plain",
+      "surface"
+    ]
+  }
+}

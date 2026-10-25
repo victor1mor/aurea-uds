@@ -30,7 +30,8 @@ describe("A5 · `SegmentedControl fullWidth` na web", () => {
     expect(container.querySelector(".segmented")).toHaveClass("segmented-full");
     expect(regra(".segmented-full")).toContain("display:flex");
     // `1 0 auto`, e NÃO `1` (= `1 1 0%`): base zero reparte em partes iguais e quebra o rótulo.
-    expect(regra(".segmented-full button")).toContain("flex:1 0 auto");
+    // o seletor cobre o link desde o bloco 1 (23/10/2026: a cápsula que navega, a chave Web | Native)
+    expect(regra(".segmented-full :is(button,a)")).toContain("flex:1 0 auto");
   });
 });
 

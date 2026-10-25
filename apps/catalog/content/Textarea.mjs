@@ -1,5 +1,5 @@
 import {createElement as h} from "react";
-import {Textarea, Field} from "../../../packages/react/dist/index.js";
+import {Textarea, Field, Card} from "../../../packages/react/dist/index.js";
 
 const stack = {display: "grid", gap: "var(--space-4)", width: "min(460px, 100%)"};
 
@@ -74,6 +74,17 @@ export default {
       render: () => h("div", {style: stack},
         h(Field, {label: "Last run"}, h(Textarea, {rows: 3, readOnly: true,
           defaultValue: "build-tokens: ok\nbuild-core: ok\nbuild-catalog: 160 pages"}))),
+    },
+    {
+      title: "Secondary, in a card",
+      description: "variant=\"secondary\" is the neutral fill, for a text area inside a card — the same two variants as Input.",
+      code: [
+        '<Card>',
+        '  <Field label="Notes"><Textarea variant="secondary" rows={3} /></Field>',
+        '</Card>',
+      ].join("\n"),
+      render: () => h(Card, {style: {width: "100%", maxWidth: "28rem"}},
+        h(Field, {label: "Notes"}, h(Textarea, {variant: "secondary", rows: 3}))),
     },
   ],
 };

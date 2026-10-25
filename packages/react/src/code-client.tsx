@@ -34,6 +34,32 @@ function CaixaDeExemplo({preview,codigo,className}:{preview:React.ReactNode;codi
     <div className="demo-panel demo-code" data-panel="code" role="tabpanel" id={`${id}-code-panel`} aria-labelledby={`${id}-code`} tabIndex={0} hidden={aba!=="code"}>{codigo}</div>
   </div>;
 }
+/** Uma aba do `CodeBlock` em abas: o nome (o "npm"), o código e, se for outra, a língua dele. */
+export interface CodeBlockTab{label:string;code:string;language?:string}
+// O CÓDIGO EM ABAS (bloco 1, o 3-A — 23/10/2026): as alternativas do MESMO passo, uma de cada vez — o comando de instalar
+// em npm, pnpm, yarn e bun, como na documentação da referência (a fileira em cima, dentro da caixa do código). O estado é
+// do React; os painéis levam `data-aurea-tabpanel` para o `aurea.js` do core trocar também na página que não acende (o
+// site estático). A tecla para aqui (`stopPropagation`): com os dois na página, a seta andaria duas abas.
+function CodigoEmAbas({tabs,language,copyable,highlight,className}:{tabs:CodeBlockTab[];language:string;copyable?:boolean;highlight?:CodeHighlighter;className?:string}){
+  const s=useAureaStrings();
+  const id=React.useId();
+  const [aba,setAba]=React.useState(0);
+  const refs=React.useRef<(HTMLButtonElement|null)[]>([]);
+  const ir=(i:number)=>{setAba(i);refs.current[i]?.focus()};
+  const tecla=(e:React.KeyboardEvent<HTMLButtonElement>)=>{
+    const n=tabs.length;
+    if(!["ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;
+    e.preventDefault();e.stopPropagation();
+    ir(e.key==="Home"?0:e.key==="End"?n-1:e.key==="ArrowRight"?(aba+1)%n:(aba-1+n)%n);
+  };
+  return <div className={cx("code-tabs",className)}>
+    <div className="code-tabs-list" role="tablist" aria-label={s.tabsLabel}>{tabs.map((t,i)=><button key={t.label} type="button" role="tab"
+      id={`${id}-${i}`} ref={el=>{refs.current[i]=el}} className={cx("code-tab",aba===i&&"active")} aria-selected={aba===i}
+      aria-controls={`${id}-${i}-panel`} tabIndex={aba===i?0:-1} onClick={()=>setAba(i)} onKeyDown={tecla}>{t.label}</button>)}</div>
+    {tabs.map((t,i)=><div key={t.label} role="tabpanel" id={`${id}-${i}-panel`} aria-labelledby={`${id}-${i}`} data-aurea-tabpanel=""
+      hidden={aba!==i}><CodeBlock language={t.language??language} copyable={copyable} highlight={highlight}>{t.code}</CodeBlock></div>)}
+  </div>;
+}
 /** Um pedaço de uma linha de código, com a classe da cor (`tok-keyword`, `tok-string`…) quando tem cor. */
 export interface CodeToken{text:string;className?:string}
 /** Uma linha de código: os pedaços, na ordem. */
@@ -49,14 +75,18 @@ function linhasDoCodigo(codigo:string,language:string,highlight?:CodeHighlighter
   const linhas=highlight?.(codigo,language)??codigo.split("\n").map(l=>l===""?[]:[{text:l}]);
   return codigo.endsWith("\n")&&linhas.length>1&&linhas[linhas.length-1]!.length===0?linhas.slice(0,-1):linhas;
 }
-export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,className}:{children:string;language?:string;copyable?:boolean;
+export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,tabs,className}:{children?:string;language?:string;copyable?:boolean;
   /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
   preview?:React.ReactNode;
   /** Mostra o número de cada linha à esquerda. O número não entra no texto copiado nem é lido pelo leitor de tela. */
   lineNumbers?:boolean;
   /** Colore o código. Passe o `highlightCode` de `@aurea-uds/react/code-highlight` (os analisadores são peer opcional). */
   highlight?:CodeHighlighter;
+  /** As alternativas do mesmo passo, em abas (o comando de instalar em npm, pnpm, yarn e bun): a fileira em cima, dentro
+   *  da caixa, e um código por aba. Com `tabs`, o `children` não é lido. */
+  tabs?:CodeBlockTab[];
   className?:string}){
+if(tabs&&tabs.length>0)return <CodigoEmAbas tabs={tabs} language={language} copyable={copyable} highlight={highlight} className={className}/>;
 if(preview!==undefined)return <CaixaDeExemplo preview={preview} className={className}
   codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 const s=useAureaStrings();
@@ -66,6 +96,7 @@ const s=useAureaStrings();
 // demo do catálogo já tinha corrigido em 30/07/2026 no lado dele; aqui, na biblioteca, ele
 // seguia aberto e só não aparecia porque nenhuma linha era comprida o bastante. Quem o achou
 // foi o `catalog-sweep` em 10/08/2026, quando o bloco do I1 fez a linha de import crescer.
+children??="";
 const linhas=lineNumbers||highlight?linhasDoCodigo(children,language,highlight):null;
 const colorido=linhas!=null&&highlight!=null&&linhas.some(l=>l.some(p=>p.className));
 // Os algarismos da última linha: a coluna do número tem a largura deles (99 → 2, 100 → 3).

@@ -2,6 +2,7 @@
 title: Design Principles
 description: The ten rules behind every Aurea component, and how each one is checked.
 icon: book
+sources: css:--radius-*, css:--fill-*, css:--shadow-sm
 ---
 
 Aurea is a design system for React on the web and React Native. It follows ten principles. Each one comes from a recorded decision, and most of them are enforced by a test or a build check, not by convention.
@@ -100,10 +101,14 @@ Props that exist on both targets have the same name and the same values. `tone`,
 ```tsx
 // Web
 import {Button} from "@aurea-uds/react";
-<Button appearance="solid" tone="brand" size="md">Save</Button>
 
+<Button appearance="solid" tone="brand" size="md">Save</Button>
+```
+
+```tsx
 // React Native
 import {Button} from "@aurea-uds/native";
+
 <Button appearance="solid" tone="brand" size="md" onPress={save}>Save</Button>
 ```
 

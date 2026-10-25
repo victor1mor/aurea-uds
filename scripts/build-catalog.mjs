@@ -20,6 +20,7 @@ import * as A from "../packages/react/dist/index.js";
 import {highlightCode} from "../packages/react/dist/code-highlight.js";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
+import {medirCatalogo, medirNativo, MODELO_DA_RODADA} from "./catalogo-fiel.mjs";
 import {lerDoc, lerLinha, paraTexto} from "./docs-markdown.mjs";
 import {linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
 // A aba "Components" da vitrine do Início (15/10/2026): o MESMO arquivo que o `home.js` deixa vivo.
@@ -64,9 +65,12 @@ const slug = name => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|
 
 // ── registry + conteúdo ───────────────────────────────────────────────────────
 const regDir = join(root, "packages/contracts/registry");
-const fichas = readdirSync(regDir).filter(f => f.endsWith(".json"))
+// TODAS as fichas, e as da WEB (bloco 1, 23/10/2026): a peça que só existe no nativo (`platforms.web: "n-a"` — a `BottomSheet`,
+// o `Screen`…) tem ficha e página do NATIVO, e nenhuma página de componente da web. Tudo o que monta o site da web lê `fichas`.
+const todasAsFichas = readdirSync(regDir).filter(f => f.endsWith(".json"))
   .map(f => JSON.parse(readFileSync(join(regDir, f), "utf8")))
   .sort((a, b) => a.name.localeCompare(b.name));
+const fichas = todasAsFichas.filter(f => f.platforms?.web !== "n-a");
 
 // A ORDEM DOS GRUPOS (ADR-0070, 14/10/2026): os 15 da referência, em ordem alfabética, como na página "All
 // Components" dela; depois os 3 da Aurea que ela não tem. Dentro do grupo, a ordem alfabética das fichas.
@@ -172,6 +176,10 @@ for (const g of hooks) {
 // não viu porque ele cobra que a ENTRADA exista, não que ela desenhe: é o mesmo "gate de nome
 // não é gate de efeito" que o Lote 3 já tinha encontrado no preview vazio do Chart.
 const CHAVES_STARTER = new Set(["install", "code", "render", "note", "embed", "prerender", "description",
+  // "examples": os exemplos DEPOIS do principal, com a mesma forma dos de um arquivo próprio (bloco 1, o catálogo fiel —
+  // 23/10/2026: toda variação da ficha em exemplo vivo). Mora aqui, e não num arquivo próprio, para os de motor pesado
+  // continuarem fora do `live.js` leve: o glob da parte viva leva todo `content/<Nome>.mjs` para ele.
+  "examples",
   // "layoutProprio"/"tituloProprio": o conteúdo declara que monta os PRÓPRIOS landmarks e o
   // próprio h1. Sem elas o gerador acrescenta `<main>` e `<h1>` na moldura — e o AppShell, que
   // já tem os dois, saía com "2 h1 na página" na varredura (18/08/2026).
@@ -186,9 +194,32 @@ for (const name of Object.keys(starters)) {
       + "Quem desenha o preview é `render`, uma FUNÇÃO. Chave desconhecida não desenha nada e "
       + "a página sai com o texto de fallback, sem ninguém reclamar.");
   }
+  const malFeitos = (starters[name].examples || []).filter(ex => !ex.title || !ex.code || typeof ex.render !== "function");
+  if (malFeitos.length) throw new Error(`_starters.mjs: "${name}" tem ${malFeitos.length} exemplo(s) sem title, code ou render — `
+    + "o exemplo extra do starter tem a forma do de um arquivo próprio.");
 }
 const semPreview = fichas.filter(f => !content[f.name] && !starters[f.name]).map(f => f.name);
 if (semPreview.length) throw new Error(`sem preview nem starter (o modelo exige): ${semPreview.join(", ")}`);
+// O CATÁLOGO FIEL (bloco 1 — 23/10/2026): todo nome exportado com página e todo valor de variação da ficha num exemplo.
+// A montagem PARA quando falta, e a página `saude.html` mostra os números (ver `scripts/catalogo-fiel.mjs`).
+const fiel = await medirCatalogo(root);
+if (fiel.erros.length) throw new Error(`o catálogo deixou de ser fiel — ${fiel.erros.join(" · ")}`);
+
+// ── O NATIVO NO SITE (bloco 1, o 5-A — 23/10/2026) ────────────────────────────────────────────────────────────────────
+// O Victor: "precisamos urgente separar web de nativo no site pra eu saber sempre o que tá mudando". Como a documentação
+// da referência: a chave Web | Native na ponta da linha das áreas troca o site, e cada peça do `@aurea-uds/native` tem a
+// sua página, com a peça RODANDO (o `react-native-web`, com o "pode" das 14:56) e a API lida dos tipos do pacote.
+// O desenho vem do `.nativo/ssr.mjs` (montado pelo Vite antes desta montagem: `vite.nativo-ssr.config.ts`).
+const nativo = await import(pathToFileURL(join(outDir, ".nativo/ssr.mjs")).href);
+const superficieNativa = JSON.parse(readFileSync(join(root, "packages/contracts/api-surface-native.json"), "utf8"));
+const pecasNativas = new Map(Object.entries(superficieNativa.modules)
+  .flatMap(([mod, m]) => m.components.map(c => [c.name, {...c, module: mod}])));
+const nativos = Object.keys(nativo.conteudo).sort((a, b) => a.localeCompare(b));
+for (const n of nativos) if (!pecasNativas.has(n)) throw new Error(`content/native/${n}.mjs: o pacote nativo não tem ${n}`);
+const paginaNativa = nome => `native-${slug(nome)}.html`;
+// A TRAVA DO NATIVO: toda peça que o pacote exporta com página, e todo valor das props do tipo dela num exemplo.
+const fielNativo = medirNativo(root, nativo.conteudo);
+if (fielNativo.erros.length) throw new Error(`o catálogo do nativo deixou de ser fiel — ${fielNativo.erros.join(" · ")}`);
 
 // BLOCKS: apps/catalog/content/blocks/*.mjs (default = lista). Seção/tela inteira montada
 // com componentes reais — maior que pattern, menor que uma tela de produto.
@@ -198,7 +229,7 @@ const blocksDir = join(contentDir, "blocks");
 const blocks = [];
 for (const file of existsSync(blocksDir) ? readdirSync(blocksDir).filter(f => f.endsWith(".mjs")).sort() : []) {
   const mod = await import(pathToFileURL(join(blocksDir, file)).href);
-  for (const b of mod.default) blocks.push({...b, slug: `block-${slug(b.name)}`});
+  mod.default.forEach((b, idx) => blocks.push({...b, arquivo: file.replace(".mjs", ""), idx, slug: `block-${slug(b.name)}`}));
 }
 const blocksByCategory = {};
 for (const b of blocks) (blocksByCategory[b.category] ??= []).push(b);
@@ -220,7 +251,21 @@ for (const file of existsSync(patternsDir) ? readdirSync(patternsDir).filter(f =
   const component = file.replace(".mjs", "");
   if (!fichas.some(x => x.name === component))
     throw new Error(`content/patterns/${file}: "${component}" não é o name de nenhuma ficha do registry`);
-  for (const p of mod.default) patterns.push({...p, component, slug: `pattern-${slug(component)}-${slug(p.name)}`});
+  mod.default.forEach((p, idx) => patterns.push({...p, component, idx, slug: `pattern-${slug(component)}-${slug(p.name)}`}));
+}
+// OS ARQUIVOS COM MOTOR (bloco 1, o 3-C/3-D): o padrão ou o bloco que importa um motor pesado (o gráfico, a grade, o
+// editor, o mapa, o QR) acende com o `live-motores.js`, e a entrada leve (`live/main.tsx`) o deixa de fora — senão o
+// `live.js` de toda página levaria o motor junto. A lista se MEDE pelos imports; a da entrada leve tem de ser a mesma.
+const MOTOR_RE = /packages\/react\/dist\/(chart|data-grid|code-editor|graph|qrcode)\.js|from "recharts"|@xyflow/;
+const ARQUIVOS_COM_MOTOR = new Set(["patterns", "blocks"].flatMap((d) => existsSync(join(contentDir, d))
+  ? readdirSync(join(contentDir, d)).filter((f) => f.endsWith(".mjs") && MOTOR_RE.test(readFileSync(join(contentDir, d, f), "utf8")))
+    .map((f) => `${d}/${f.replace(".mjs", "")}`) : []));
+{
+  const leve = readFileSync(join(root, "apps/catalog/live/main.tsx"), "utf8");
+  const deFora = new Set([...leve.matchAll(/"!\.\.\/content\/((?:patterns|blocks)\/[^"]+)\.mjs"/g)].map((m) => m[1]));
+  const faltam = [...ARQUIVOS_COM_MOTOR].filter((f) => !deFora.has(f)), sobram = [...deFora].filter((f) => !ARQUIVOS_COM_MOTOR.has(f));
+  if (faltam.length || sobram.length) throw new Error(`live/main.tsx: a entrada leve tem de deixar de fora exatamente os arquivos com `
+    + `motor — faltam ${faltam.join(", ") || "nenhum"}; sobram ${sobram.join(", ") || "nenhum"}`);
 }
 const patternsByComponent = {};
 for (const p of patterns) (patternsByComponent[p.component] ??= []).push(p);
@@ -358,7 +403,7 @@ function demoBlock(render, code, anchor, vivo = null) {
     code ? h("div", {className: "demo-tabs"},
       h("div", {className: "segmented", role: "tablist"}, tab("preview", "Preview", true), tab("code", "Code", false))) : null,
     h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"),
-      ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`} : {}),
+      ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`, ...(vivo.motor ? {"data-vivo-motor": ""} : {})} : {}),
       ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
       // Componente cujo conteúdo vive num portal renderiza só o disparador; quem não renderiza
       // nada (Dialog, Drawer) mostra o disparador do próprio starter. O `note` do conteúdo
@@ -582,7 +627,7 @@ function componentPage(f, i) {
       h(A.Status, {variant: s === "planned" ? "offline" : s === "n-a" ? "neutral" : "online"}, `${p}: ${s}`)));
   const usa = f.related.components || [];
   const resumoDe = nome => fichas.find(x => x.name === nome)?.summary || null;
-  const exemplos = c ? c.examples.slice(1) : [];
+  const exemplos = c ? c.examples.slice(1) : (starters[f.name]?.examples || []);
   const fonte = f.source?.react ? f.source.react.split("#")[0] : null;
   return itemPage({
     title: f.name, lede: c?.description || f.summary,
@@ -835,6 +880,15 @@ const pedacos = (lista, chave) => lista.map((p, n) => p.strong !== undefined ? h
   : p.link !== undefined ? h(A.Link, {key: `${chave}${n}`, href: p.href, external: /^https?:/.test(p.href)}, p.link)
   : p.t);
 
+// AS QUATRO ABAS DE INSTALAR (o 3-A, bloco 1 — 23/10/2026): um bloco de código que é UMA linha `pnpm add …` vira o mesmo
+// comando nos quatro gerenciadores, na ordem e na forma da referência (`npm i`, `pnpm add`, `yarn add`, `bun add`). `-D`
+// vale nos quatro.
+function comandosDePacote(codigo) {
+  const m = /^pnpm add (.+)$/.exec(codigo.trim());
+  if (!m || codigo.trim().includes("\n")) return null;
+  return [["npm", `npm i ${m[1]}`], ["pnpm", `pnpm add ${m[1]}`], ["yarn", `yarn add ${m[1]}`], ["bun", `bun add ${m[1]}`]]
+    .map(([label, code]) => ({label, code}));
+}
 // `area`: a lateral e o anterior/próximo (a Getting Started, ou a Releases para as notas de versão); `sobTitulo`: o que vem
 // logo abaixo da descrição (a data da nota); `markdown`: o texto do "Copy Markdown", quando não é o do arquivo puro.
 function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) {
@@ -853,6 +907,10 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     if (b.tipo === "h2" || b.tipo === "h3") filhos.push(h(b.tipo, {key: n, id: b.id}, ...pedacos(b.texto, "t")));
     else if (b.tipo === "p") filhos.push(h("p", {key: n}, ...pedacos(b.texto, "t")));
     else if (b.tipo === "ul" || b.tipo === "ol") filhos.push(h(b.tipo, {key: n}, ...b.itens.map((it, k) => h("li", {key: k}, ...pedacos(it, "t")))));
+    // O `pnpm add …` sozinho vira as quatro abas (npm primeiro, como a referência — o 3-A): o texto escreve um comando, e
+    // a página mostra o dos quatro gerenciadores.
+    else if (b.tipo === "codigo" && comandosDePacote(b.codigo)) filhos.push(h(A.CodeBlock, {key: n, language: "bash", copyable: true,
+      highlight: highlightCode, tabs: comandosDePacote(b.codigo)}));
     else if (b.tipo === "codigo") filhos.push(h(A.CodeBlock, {key: n, language: b.lingua, copyable: true, highlight: highlightCode,
       lineNumbers: b.codigo.split("\n").length >= LINHAS_PARA_NUMERO}, b.codigo));
     else if (b.tipo === "tabela") {
@@ -877,6 +935,97 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     h(A.Prose, null, ...filhos),
     anteriorProximo(prev, next),
     textoParaCopiar(markdown ?? paraTexto(doc.texto)));
+  return {node, toc};
+}
+
+// ── AS PÁGINAS DO NATIVO (bloco 1, o 5-A — 23/10/2026) ──────────────────────────────────────────────────────────────────
+// A caixa do nativo sai desenhada nos DOIS temas (o nativo resolve a cor em JavaScript, ADR-0027); o `native.css` mostra
+// a do tema da página. A parte viva (`live-nativo.js`) troca as duas por uma peça viva que segue o tema.
+const previaNativa = (nome, indice) => () => h("div", {className: "nativo-previa", "data-vivo-nativo": `${nome}:${indice}`,
+  dangerouslySetInnerHTML: {__html: ["light", "dark"].map(tema =>
+    `<div class="nativo-tema" data-nativo-tema="${tema}">${nativo.desenhar(nome, indice, tema).html}</div>`).join("")}});
+function nativePage(nome) {
+  const c = nativo.conteudo[nome];
+  const peca = pecasNativas.get(nome);
+  const ficha = todasAsFichas.find(f => f.name === nome);
+  const [principal, ...resto] = c.examples;
+  const descricaoDaWeb = Object.fromEntries((Array.isArray(ficha?.props) ? ficha.props : []).map(p => [p.name, p.description]));
+  const tipo = p => p.values ? p.values.map(v => `"${v}"`).join(" | ") : p.type;
+  const api = {id: "api", label: "API Reference", node: h("section", {className: "block", id: "api"}, h("h2", null, "API Reference"),
+    h("p", null, "Read from the types of the published package. A prop with the same name on the web means the same "
+      + "thing — the two packages share names on purpose; where the native one differs, the description says so."),
+    h(A.Table, {caption: `${nome} props`},
+      h("thead", null, h("tr", null, ...["Prop", "Type", "Description"].map(x => h("th", {key: x, scope: "col"}, x)))),
+      h("tbody", null, ...peca.props.map(p => h("tr", {key: p.name},
+        h("td", null, h("code", null, p.name + (p.optional ? "" : " *"))), h("td", null, h("code", null, tipo(p))),
+        // a frase do NATIVO (`api` no arquivo de exemplos) ganha da da web: onde o nativo é diferente, ela diz o dele
+        h("td", null, c.api?.[p.name] || descricaoDaWeb[p.name] || "—"))))))};
+  const exemplos = resto.length ? {id: "examples", label: "Examples",
+    toc: resto.map(ex => ({id: slug(ex.title), label: ex.title, sub: true})),
+    node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
+      ...resto.map((ex, n) => h("div", {className: "example", key: n, id: slug(ex.title)},
+        h("h3", null, ex.title), ex.description ? h("p", {className: "demo-lede"}, ex.description) : null,
+        demoBlock(previaNativa(nome, n + 1), ex.code))))} : null;
+  return itemPage({
+    title: nome, lede: c.description || ficha?.summary || "",
+    pills: [["Source", "code", `${REPO}/blob/main/packages/native/src/${peca.module}.tsx`]],
+    demo: {code: principal.code, description: principal.description, render: previaNativa(nome, 0)},
+    imports: c.install || `import {${nome}} from "@aurea-uds/native";`,
+    extras: [exemplos, api],
+    ...vizinhos("native", paginaNativa(nome)),
+  });
+}
+function nativeIndex() {
+  const node = h(Fragment, null,
+    cabecaDaPagina("All Components", "Every piece of @aurea-uds/native, the React Native package, running here through "
+      + "react-native-web — the same look as the web, in a phone's own components."),
+    h("div", {className: "related-grid"}, ...nativos.map(n => h("a", {key: n, className: "related-card", href: `./${paginaNativa(n)}`},
+      h("strong", null, n), h("span", null, todasAsFichas.find(f => f.name === n)?.summary || nativo.conteudo[n].description || "")))));
+  return {node, toc: []};
+}
+
+// ── A SAÚDE (`saude.html`, o 1-F — bloco 1, 23/10/2026) ─────────────────────────
+// Decisão do Victor (19/10/2026): uma página no site, feita com a Aurea, com letra grande, "OK"/"FAILED" em palavra, o
+// horário de Brasília e as 30 últimas rodadas — publicada MESMO quando a CI está vermelha. Os números do catálogo saem
+// desta montagem; as rodadas, da publicação (`scripts/saude-rodadas.mjs`, no `site.yml`), que copia a linha-modelo da
+// tabela para cada rodada — a publicação não instala nada e não roda o React, só troca texto.
+function saudePage() {
+  const w = fiel.web;
+  const palavra = ok => ok ? "OK" : "FAILED";
+  const linhas = [
+    ["Every name the web package exports has a page", `${w.exportados - w.semPagina.length} of ${w.exportados}`, palavra(!w.semPagina.length)],
+    ["Every variation value in the specs is shown in an example", `${w.naPagina + w.porPadrao + w.emPadrao} of ${w.valores}`,
+      palavra(!Object.keys(w.faltam).length)],
+    ["… in an example on the component's page", String(w.naPagina), ""],
+    ["… as the default value, which every example without the prop shows", String(w.porPadrao), ""],
+    ["… in a pattern of the same component", String(w.emPadrao), ""],
+    ["Every piece the native package exports has a page", `${fielNativo.pecas - fielNativo.semPagina.length} of ${fielNativo.pecas}`,
+      palavra(!fielNativo.semPagina.length)],
+    ["Every value of the native props is shown in an example", `${fielNativo.naPagina} of ${fielNativo.valores}`,
+      palavra(!Object.keys(fielNativo.faltam).length)],
+  ];
+  const toc = [{id: "catalogue", label: "The catalogue is complete"}, {id: "checks", label: "The last 30 checks"}];
+  const node = h(Fragment, null,
+    cabecaDaPagina("Health", "What the library promises, measured. The site is rebuilt from the measurement, and this page is "
+      + "published even when a check fails — it never hides a failure."),
+    h(A.Prose, null,
+      h("h2", {id: "catalogue"}, "The catalogue is complete"),
+      h("p", null, "Measured on every build of this site, from the published packages — the web one and the React Native one — "
+        + "and the code of the examples. The build stops when one of these fails."),
+      h(A.Table, {caption: "The catalogue is complete"},
+        h("thead", null, h("tr", null, ...["What", "Count", "Result"].map(c => h("th", {key: c, scope: "col"}, c)))),
+        h("tbody", null, ...linhas.map(([o, n, r], k) => h("tr", {key: k}, h("td", null, o), h("td", null, h(A.Text, {numeric: true}, n)),
+          h("td", null, r ? h("strong", null, r) : null))))),
+      h("h2", {id: "checks"}, "The last 30 checks"),
+      h("p", null, "Every run of the checks on the main branch: the build, the unit tests, the screenshots and the sweep of every "
+        + "page in three browsers. Times in Brasília (UTC−3)."),
+      h(A.Table, {caption: "The last 30 checks"},
+        h("thead", null, h("tr", null, ...["When", "Commit", "Result", "Checks"].map(c => h("th", {key: c, scope: "col"}, c)))),
+        h("tbody", {"data-saude-rodadas": ""},
+          h("tr", {"data-modelo": ""}, h("td", null, MODELO_DA_RODADA.data), h("td", null, h("code", null, MODELO_DA_RODADA.commit)),
+            h("td", null, h("strong", null, MODELO_DA_RODADA.resultado)), h("td", null, MODELO_DA_RODADA.trabalhos)))),
+      h("p", {"data-saude-vazia": ""}, "The list is filled in when the site is published.")),
+    anteriorProximo(vizinhos("releases", "saude.html").prev, vizinhos("releases", "saude.html").next));
   return {node, toc};
 }
 
@@ -988,7 +1137,9 @@ function patternPage(p, i) {
       // varredura do catálogo em 29/08/2026.
       : p.embed ? embedPreview(p.slug, p.render, p.name, null,
           p.layoutProprio === true, p.tituloProprio === true)
-      : p.render, code: p.code, description: p.note},
+      : p.render, code: p.code, description: p.note,
+      // A PARTE VIVA (bloco 1, o 3-C): a caixa do padrão acende como a do componente, pela chave `padrao/<Arquivo>.<n>`.
+      vivo: p.embed ? null : {componente: `padrao/${p.component}.${p.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`patterns/${p.component}`)}},
     imports: importLine(p.uses || [p.component]),
     related: relacionados([p.component, ...(p.uses || [])]),
     ...vizinhos("patterns", `${p.slug}.html`),
@@ -1005,7 +1156,9 @@ function blockPage(b, i) {
     // `.chart{width:100%}` de dentro resolve 100% de zero (medido em 01/08/2026).
     demo: {code: b.code, render: b.prerender
       ? () => h("div", {style: {width: "100%"}, dangerouslySetInnerHTML: {__html: preRenderizado[b.slug]}})
-      : b.render},
+      : b.render,
+      // A PARTE VIVA (bloco 1, o 3-D): a chave `bloco/<arquivo>.<n>`.
+      vivo: {componente: `bloco/${b.arquivo}.${b.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`blocks/${b.arquivo}`)}},
     imports: importLine(b.uses),
     related: relacionados(b.uses),
     ...vizinhos("blocks", `${b.slug}.html`),
@@ -1130,7 +1283,7 @@ function recipePage(id, archetype, i, ids) {
   return itemPage({
     title: recipeTitle(id),
     lede: intro || (archetype.capabilities || []).join(" · "),
-    demo: {render: c.render, code: c.code, description: c.description},
+    demo: {render: c.render, code: c.code, description: c.description, vivo: {componente: `receita/${id}`, indice: 0}},
     imports: importLine(c.uses),
     related: relacionados(c.uses),
     markdown: paraMarkdown({title: recipeTitle(id), lede: intro || (archetype.capabilities || []).join(" · "),
@@ -1331,9 +1484,12 @@ const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
 const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
   {id: "archetypes", label: "Archetypes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
 // Releases: "All Releases" e as versões, da mais nova à mais velha, como a da referência.
-const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html")]},
+const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
   {id: "releases", label: "Releases", items: releases.map(r => item(r.title, r.arquivo))}];
-const MENUS = {start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
+// O menu do nativo: as peças do `@aurea-uds/native` que o site mostra, em ordem alfabética, como o dos componentes.
+const menuNativo = () => [{id: "overview", label: "Overview", items: [item("All Components", "native.html")]},
+  {id: "native", label: "Components", items: nativos.map(n => item(n, paginaNativa(n)))}];
+const MENUS = {native: menuNativo, start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
 const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
@@ -1465,6 +1621,17 @@ function shell(activeHref, inner, section = "components") {
         h("a", {className: "section-footer-link", href: REPO, "aria-label": "GitHub"}, h(A.Icon, {name: GitHub}))))));
   }
   const menu = (MENUS[section] || menuComponentes)();
+  // A CHAVE WEB | NATIVE (bloco 1, o 5-A): a "Tabs em pílula" da referência, na ponta da linha das áreas (medida em
+  // 17/10/2026: abas de 24, letra 14, cápsula de 32). Ela leva à MESMA peça do outro lado quando existe; senão, à lista.
+  const nomeAqui = activeHref ? activeHref.replace(/^native-/, "").replace(/\.html$/, "") : null;
+  const daWeb = activeHref && section === "native" ? fichas.find(f => slug(f.name) === nomeAqui && f.platforms?.web && f.platforms.web !== "planned") : null;
+  const doNativo = activeHref && section !== "native" ? nativos.find(n => slug(n) === nomeAqui) : null;
+  const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "sm", value: section === "native" ? "native" : "web",
+    items: [
+      {value: "web", label: h(Fragment, null, h(A.Icon, {name: "globe"}), "Web"),
+        href: section === "native" ? (daWeb ? `./${slug(daWeb.name)}.html` : "./components.html") : `./${activeHref || "components.html"}`},
+      {value: "native", label: h(Fragment, null, h(A.Icon, {name: "device-mobile"}), "Native"),
+        href: section === "native" ? `./${activeHref}` : doNativo ? `./${paginaNativa(doNativo)}` : "./native.html"}]});
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
     // O ARRANJO DE DOCUMENTAÇÃO da referência (lote T, 17/10/2026 — o Victor: "quero sidebar como da referência, que
     // não seja mais flutuante", e o conteúdo centralizado): `layout="docs"` (o bloco de 1400 no centro) e a lateral
@@ -1473,8 +1640,11 @@ function shell(activeHref, inner, section = "components") {
     // (`topbarDivider`). Variantes do componente, e não regra do site (o Victor, 13/10/2026: "não edite componente
     // nosso, deve sempre criar novas variações").
     h(A.AppShell, {brand, topbar, topbarVariant: "flush", contentVariant: "plain", layout: "docs", sidebarVariant: "plain",
-      topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section,
-      topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${href}`, icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
+      topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section === "native" ? "components" : section,
+      topbarTabsEnd: chavePlataforma,
+      // No nativo, "Components" leva à lista do nativo: a chave troca o site, e as áreas acompanham.
+      topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`,
+        icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
       navItems: menu, currentNavId: activeHref || undefined, navLabel: "Contents", className: "site-shell",
       // A chave claro/escuro no alto da gaveta do celular, como a da referência (lote U, 19/10/2026): no topo ela não cabe.
       navigation: h("div", {className: "site-gaveta-topo"}, chaveDeTema()),
@@ -1546,14 +1716,14 @@ const chrome = `
    .chip-text: sem isto, a 320px o pill de "native: planned" perdia a borda direita. */
 .chip-status .status-label { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
-/* ALTURA IGUAL para todo demo, e sempre dentro da primeira tela (pedido do Victor: nada
-   de rolar pra ver o demo, nem no monitor de 14"). O teto é o 32rem da referência; abaixo
-   disso a caixa cede à janela — 19rem cobre topo + cabeçalho da página + respiro (o
-   cabeçalho mais alto medido, o do Status, empurra o demo pra 277px). Numa mesma tela
-   todos os demos continuam do mesmo tamanho, que é o ponto.
+/* A CAIXA CRESCE COM O EXEMPLO (ADR-0081, 24/10/2026 — substitui a altura fixa da ADR-0002): com toda variação à mostra,
+   42 caixas rolavam por dentro. A fórmula de antes vira a MÍNIMA — o teto é o 32rem da referência; abaixo disso ela cede
+   à janela (19rem cobre topo + cabeçalho da página + respiro): 359 na tela do Victor, perto dos 350 da referência. A
+   prévia em documento próprio (o iframe) mantém a altura fixa: ela rola dentro do documento dela.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
-.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+.demo:has(.demo-frame) { height:var(--demo-height); }
+.demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); min-height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
 /* As abas (.demo-tabs), os painéis (.demo-panel) e o código (.demo-code) do demo são os do core (a peça
    CodeBlock preview): o site não repete as regras deles (a trava do site, lote T, 17/10/2026). */
 .demo-lede { margin:0 0 var(--space-3); }
@@ -1897,6 +2067,7 @@ const indiceDaBusca = [
     .map(([label, href]) => ({label, href, group: "Pages"})),
   ...docs.map(d => ({label: d.title, href: d.arquivo, group: "Getting Started"})),
   {label: "All Releases", href: "releases.html", group: "Releases"},
+  {label: "Health", href: "saude.html", group: "Releases"},
   ...releases.map(r => ({label: r.title, href: r.arquivo, group: "Releases"})),
   ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components"})),
   ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks"})),
@@ -1933,15 +2104,17 @@ function pageHtml(title, activeHref, inner, section = "components") {
   // avisos com o mesmo nome: o `landmark-unique` do axe, medido). Se uma caixa é de componente com motor pesado
   // (`_starters-motores.mjs`), o `live-motores.js`, que é o mesmo com os motores. Um arquivo só por página.
   const vivas = [...corpo.matchAll(/data-vivo="([^":]+):/g)].map(m => m[1]);
-  const script = section === "home" ? "home"
-    : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) ? "live-motores" : "live";
+  // A página do nativo carrega a parte viva DELA (o `react-native-web` e as peças do nativo) e a folha delas.
+  const comNativo = corpo.includes("data-vivo-nativo");
+  const script = section === "home" ? "home" : comNativo ? "live-nativo"
+    : !vivas.length ? "search" : vivas.some(n => COM_MOTOR.has(n)) || corpo.includes("data-vivo-motor") ? "live-motores" : "live";
   return `<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} — Aurea UDS</title>
-<link rel="stylesheet" href="./assets/catalog.css">
+<link rel="stylesheet" href="./assets/catalog.css">${comNativo ? '\n<link rel="stylesheet" href="./assets/native.css">' : ""}
 ${TEMA_SALVO}</head>
 <body>${SPRITE_SLOT}${corpo}<script src="./assets/catalog.js"></script>
 <script src="./assets/search-index.js" defer></script><script src="./assets/${script}.js" defer></script></body>
@@ -1956,6 +2129,9 @@ const paginas = [
   ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
   ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, docPage(d), "start")]),
   ["releases.html", pageHtml("All Releases", "releases.html", releasesPage(), "releases")],
+  ["saude.html", pageHtml("Health", "saude.html", saudePage(), "releases")],
+  ["native.html", pageHtml("All Components", "native.html", nativeIndex(), "native")],
+  ...nativos.map(n => [paginaNativa(n), pageHtml(`${n} (React Native)`, paginaNativa(n), nativePage(n), "native")]),
   ...releases.map(r => [r.arquivo, pageHtml(`${r.title} release notes`, r.arquivo, releasePage(r), "releases")]),
   ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
   ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
@@ -1970,6 +2146,29 @@ const paginas = [
   ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i),
     f.kind === "hook" ? "hooks" : "components")]),
 ];
+
+// A FOLHA DO NATIVO (bloco 1, o 5-A): as regras das peças que o `react-native-web` gerou ao desenhar as páginas acima,
+// as fontes com o nome que o nativo pede (ver `apps/catalog/nativo/moldura.mjs`) e a troca dos dois desenhos pelo tema.
+// As fontes vão como ARQUIVO (`assets/fonts/`), não embutidas: o mesmo arquivo serve vários nomes e baixa uma vez — o
+// preço é que, aberto direto do disco, o navegador recusa fonte de arquivo e a caixa do nativo cai na fonte do sistema.
+{
+  mkdirSync(join(outDir, "assets/fonts"), {recursive: true});
+  const faces = nativo.FACES.map(f => `@font-face{font-family:"${f.nome}";src:url("./fonts/${f.arquivo}") format("woff2");`
+    + `font-weight:${f.peso};font-style:normal;font-display:swap}`);
+  for (const arquivo of new Set(nativo.FACES.map(f => f.arquivo)))
+    writeFileSync(join(outDir, "assets/fonts", arquivo), readFileSync(join(root, "packages/fonts/files", arquivo)));
+  write(join(outDir, "assets/native.css"), [
+    "/* GERADO por scripts/build-catalog.mjs — a folha das páginas do nativo (bloco 1, o 5-A). Não editar. */",
+    ...faces,
+    'html[data-theme="light"] [data-nativo-tema="dark"],html:not([data-theme="light"]) [data-nativo-tema="light"]{display:none}',
+    ".nativo-previa{display:contents}",
+    // A caixinha de exemplo pinta o FUNDO DO APP nativo de cada tema, lido do token (decisão do Victor, 24/10/2026): a do
+    // site era um tom mais escura, e o texto de destaque do nativo, que passa no fundo do app, ficava abaixo da régua nela.
+    `html[data-theme="light"] .demo-panel[data-panel="preview"]{background:${nativo.fundoDoApp("light")}}`,
+    `html:not([data-theme="light"]) .demo-panel[data-panel="preview"]{background:${nativo.fundoDoApp("dark")}}`,
+    nativo.folha(),
+  ].join("\n") + "\n");
+}
 
 // OS LINKS das páginas de documentação apontam para páginas que EXISTEM (lote U, SITE-03). O texto é escrito à mão, e o
 // nome do arquivo de um componente não é o que se adivinha (`ThemeToggle` → `themetoggle.html`, sem hífen): um link

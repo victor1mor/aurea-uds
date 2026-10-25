@@ -62,5 +62,13 @@ export default {
       render: () => h("div", {style: stack},
         h(Field, {label: "Threshold (locked)"}, h(Range, {defaultValue: 30, disabled: true}))),
     },
+    {
+      title: "Vertical",
+      description: "orientation=\"vertical\" stands the slider up, for a level or a mixer. Its height is "
+        + "--range-vertical-size.",
+      code: '<Field label="Level"><Range orientation="vertical" defaultValue={40} /></Field>',
+      render: () => h("div", {style: stack},
+        h(Field, {label: "Level"}, h(Range, {orientation: "vertical", defaultValue: 40}))),
+    },
   ],
 };

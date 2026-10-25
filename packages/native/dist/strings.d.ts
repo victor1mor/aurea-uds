@@ -32,6 +32,8 @@ export interface AureaStrings {
     stepperLabel: string;
     /** O que o `DatePicker` mostra quando não há data escolhida. */
     datePlaceholder: string;
+    /** O que o `DatePicker` com `mode="time"` mostra quando não há hora escolhida. */
+    timePlaceholder: string;
     /** O que o `PhotoInput` diz quando a pessoa negou a câmera e o sistema não vai perguntar de novo. */
     cameraDenied: string;
     /** O botão que leva às configurações do app. */
@@ -93,6 +95,8 @@ export interface AureaStrings {
      * campo próprio, que precisa de nome mesmo quando ninguém passou um.
      */
     comboboxSearch: string;
+    /** O nome do botão da setinha do `Combobox`, no navegador (a mesma frase da web — ADR-0081, 24/10/2026). */
+    comboboxOpen: string;
     /**
      * O botão que apaga o que foi digitado numa busca — no `SearchField` e no campo da folha do
      * `Combobox`. **Não existe na web** pela mesma razão: lá o `type="search"` do navegador desenha

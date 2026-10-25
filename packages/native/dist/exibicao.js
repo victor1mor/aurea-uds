@@ -144,6 +144,9 @@ export function Accordion({ items, variant = "default", multiple = false, defaul
     // ADR-0078: o `surface` é um cartão — o campo de dentro fica cinza. O comum herda o que está em volta.
     return surface ? _jsx(NaSuperficie.Provider, { value: true, children: corpo }) : corpo;
 }
+// O cabeçalho do item tem nível 3, o padrão do cabeçalho de acordeão: no navegador (`react-native-web`) o título sem nível
+// vira `<h1>` (26 na página do Accordion, bloco 1, 23/10/2026); no aparelho a prop é ignorada.
+const NIVEL_DO_ITEM = { "aria-level": 3 };
 function ItemDoAccordion({ item, aberto, surface, onAlternar, testID }) {
     const t = useAureaTokens();
     const s = folha(t);
@@ -173,7 +176,7 @@ function ItemDoAccordion({ item, aberto, surface, onAlternar, testID }) {
     // fechado, como lá (`:not([open])`).
     const realce = surface ? t.color.secondary : comOpacidade(t.color.foreground, 0.03);
     const emTexto = (n) => typeof n === "string" || typeof n === "number";
-    return (_jsxs(View, { children: [_jsx(View, { accessibilityRole: "header", children: _jsxs(Pressable, { testID: testID, disabled: inativo, 
+    return (_jsxs(View, { children: [_jsx(View, { accessibilityRole: "header", ...NIVEL_DO_ITEM, children: _jsxs(Pressable, { testID: testID, disabled: inativo, 
                     // A guarda repete o `disabled` de propósito, como o gatilho da referência: o toque que chega
                     // por outro caminho (o leitor de tela, um teste) também não abre o item desligado.
                     onPress: () => { if (!inativo)

@@ -187,7 +187,7 @@ export function Chart({ labels, series, label, mark = "line", height = ALTURA, y
                                             const v = serie.data[selecionado];
                                             return v == null ? null : (_jsx(Circle, { cx: x(selecionado), cy: y(v), r: 4, fill: cores[n], stroke: t.color.card, strokeWidth: 2 }, n));
                                         })] })) : null] }) })) : null, largura > 0 ? (_jsx(View, { style: { position: "absolute", left: CALHA.esquerda, top: CALHA.topo,
-                            width: areaL, height: areaA, flexDirection: "row" }, children: labels.map((rotulo, i) => (_jsx(Pressable, { onPress: () => tocar(i), accessibilityRole: "button", ...estadoAcessivel({ selected: selecionado === i }), accessibilityLabel: [
+                            width: areaL, height: areaA, flexDirection: "row" }, children: labels.map((rotulo, i) => (_jsx(Pressable, { onPress: () => tocar(i), accessibilityRole: "button", ...estadoAcessivel({ selected: selecionado === i }, "button"), accessibilityLabel: [
                                 rotulo,
                                 ...series.map((serie) => {
                                     const v = serie.data[i];
@@ -210,7 +210,7 @@ export function Chart({ labels, series, label, mark = "line", height = ALTURA, y
 export function ChartLegend({ series, colors, style, testID }) {
     const t = useAureaTokens();
     const s = folha(t);
-    return (_jsx(View, { accessibilityRole: "list", style: [s.legenda, style], testID: testID, children: series.map((serie, n) => (_jsxs(View, { accessible: true, accessibilityLabel: serie.name, style: s.chave, children: [_jsx(View, { style: [s.amostra, {
+    return (_jsx(View, { accessibilityRole: "list", style: [s.legenda, style], testID: testID, children: series.map((serie, n) => (_jsxs(View, { role: "listitem", accessible: true, accessibilityLabel: serie.name, style: s.chave, children: [_jsx(View, { style: [s.amostra, {
                             backgroundColor: serie.color ?? colors?.[n]
                                 ?? t.color[ORDEM[n % ORDEM.length]] ?? t.color.primary,
                         }] }), _jsx(Text, { size: "xs", tone: "muted", children: serie.name })] }, n))) }));

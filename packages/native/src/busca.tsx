@@ -67,7 +67,7 @@
 // folha, e ele leva `search` — que mapeia nos dois.
 import * as React from "react";
 import {
-  Animated, Easing, FlatList, Modal, PanResponder, Pressable, TextInput, View, type TextInputProps,
+  Animated, Easing, FlatList, Modal, PanResponder, Platform, Pressable, TextInput, View, type TextInputProps,
   type StyleProp, type ViewStyle,
 } from "react-native";
 import {IconButton} from "./actions.js";
@@ -430,7 +430,12 @@ export function Combobox({
                         testID={testID ? `${testID}-limpar` : undefined} />
           )}
           {chevron && (
-            <Pressable accessible={false} disabled={inativo} style={s.setaToque}
+            // No aparelho, quem fala é o campo (a setinha é só área de toque); no navegador ela é uma parada de Tab, e sem
+            // papel nem nome era um alvo mudo — lá ela é o botão "abrir a lista", como o da web (ADR-0081, 24/10/2026).
+            <Pressable accessible={Platform.OS === "web"}
+                       role={Platform.OS === "web" ? "button" : undefined}
+                       accessibilityLabel={Platform.OS === "web" ? strings.comboboxOpen : undefined}
+                       disabled={inativo} style={s.setaToque}
                        onPress={inativo ? undefined : () => setAberto(true)}
                        testID={testID ? `${testID}-seta` : undefined}>
               <Icon name={chevron} size="sm" color={t.color.subtleForeground} />
@@ -491,8 +496,10 @@ export function Combobox({
                 autoFocus
                 autoCorrect={false}
                 autoCapitalize="none"
-                // Mapeia nos dois sistemas — conferido no fonte do RN, tabela no topo do módulo.
+                // Mapeia nos dois sistemas — conferido no fonte do RN, tabela no topo do módulo. No navegador, `search` num
+                // `<input>` não vale (é papel de região); o campo é `searchbox` (bloco 1, 24/10/2026).
                 accessibilityRole="search"
+                role={Platform.OS === "web" ? "searchbox" : undefined}
                 accessibilityLabel={searchPlaceholder ?? strings.comboboxSearch}
                 // `returnKeyType="search"` troca o "enter" do teclado pela lupa. É pista de
                 // plataforma, não decoração: diz à pessoa que aquele campo é de busca antes de
@@ -695,7 +702,9 @@ export function SearchField({
       {icon && <Icon name={icon} size="sm" color={peleDaMarca?.color ?? t.color.subtleForeground} />}
       <TextInput
         testID={testID ? `${testID}-campo` : undefined}
-        value={value}
+        // O texto interno também comanda o campo (bloco 1, 24/10/2026): com `value={value}`, sem `value` o campo era livre
+        // e o X apagava o texto interno — o X sumia e o que estava escrito ficava.
+        value={texto}
         onChangeText={digitar}
         placeholder={placeholder}
         placeholderTextColor={peleDaMarca?.color ?? t.color.subtleForeground}
@@ -707,6 +716,7 @@ export function SearchField({
         onFocus={() => setFocado(true)}
         onBlur={() => setFocado(false)}
         accessibilityRole="search"
+        role={Platform.OS === "web" ? "searchbox" : undefined}
         accessibilityLabel={campo?.label ?? placeholder}
         accessibilityHint={campo?.hint}
         {...estadoAcessivel({disabled: !!inativo})}

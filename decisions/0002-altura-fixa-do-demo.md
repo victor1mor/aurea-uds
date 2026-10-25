@@ -1,7 +1,8 @@
 # ADR-0002 — O demo tem altura fixa, e o preview pequeno flutua
 
 - **Data:** 30/07/2026
-- **Estado:** aceita (mantém a decisão original do Victor, agora com o custo medido)
+- **Estado:** ~~aceita~~ **substituída pela [ADR-0081](0081-a-bancada-do-bloco-1.md)** em 24/10/2026: a caixa cresce com o
+  exemplo, com a altura mínima que era a fixa (o Victor, depois de ver a bancada do bloco 1).
 - **Registra:** o achado **B1** da auditoria de 26/07/2026, e fecha a tarefa **T7.7**
 - **Autoria:** decisão do Victor (24/07/2026, no comentário do gerador: "nada de rolar pra ver
   o exemplo, nem no monitor de 14\""). Esta ADR não a reabre — ela escreve o preço.

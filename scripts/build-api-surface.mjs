@@ -13,6 +13,10 @@
 // Rodar:  node scripts/build-api-surface.mjs   (ou `pnpm build`)
 // Escreve: packages/contracts/api-surface.json
 //
+// Com `--native`, o MESMO leitor lê o pacote do React Native (`packages/native/dist`) e escreve
+// `packages/contracts/api-surface-native.json` (bloco 1, o catálogo fiel — 23/10/2026): as páginas do nativo no site e a
+// trava das variações do nativo saem do compilador, como as da web.
+//
 // Não usa a API programática do TypeScript de propósito: ela não é estável até a 7.1
 // (CLAUDE.md, Toolchain). A emissão de declaração do tsc é regular o bastante para ser lida.
 
@@ -20,7 +24,9 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const DIST = path.join(ROOT, "packages/react/dist");
+const NATIVO = process.argv.includes("--native");
+const DIST = path.join(ROOT, NATIVO ? "packages/native/dist" : "packages/react/dist");
+const SAIDA = NATIVO ? "api-surface-native.json" : "api-surface.json";
 
 /** Fatia de `src` a partir de `i` (que aponta para o abre) até o fecha correspondente. */
 function balanced(src, i, open, close) {
@@ -97,9 +103,14 @@ const pseudoInterfaces = [];    // aliases que são interseção com objeto lite
 
 const files = fs.readdirSync(DIST).filter((f) => f.endsWith(".d.ts")).sort();
 
+// Os COMENTÁRIOS saem antes de procurar os tipos (bloco 1, 23/10/2026). O corte de cada interface conta as chaves, e uma
+// chave sem par dentro de um `/** … */` levava o corte até o fim do arquivo: o leitor pulava todo tipo que vinha depois.
+// O `InputProps` do nativo sumia assim, e o `Input` saía com zero props. Os comentários continuam fora do `parseMembers`.
+const lerSemComentario = (file) => fs.readFileSync(path.join(DIST, file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+
 // Passo 1 — aliases e interfaces de todos os módulos, porque um módulo estende o tipo do outro.
 for (const file of files) {
-  const src = fs.readFileSync(path.join(DIST, file), "utf8");
+  const src = lerSemComentario(file);
   const mod = file.replace(/\.d\.ts$/, "");
 
   // O corpo de um alias vai até o `;` de PROFUNDIDADE ZERO. Parar no primeiro `;` cru quebrava
@@ -291,17 +302,14 @@ for (const file of files) {
   const mod = file.replace(/\.d\.ts$/, "");
   const comps = [];
 
-  // export declare const X: React.ForwardRefExoticComponent<Omit<XProps, "ref"> & ...>
-  // Context não é componente, e um `const` cujo tipo é uma função é hook ou utilitário.
-  for (const m of src.matchAll(/export\s+declare\s+const\s+([A-Z][\w$]*)\s*:\s*([^;]+);/g)) {
-    if (/\bContext<;?/.test(m[2]) || /=>/.test(m[2])) continue;
-    const propsName = /Omit<\s*([A-Za-z_$][\w$]*)\s*,/.exec(m[2])?.[1]
-      ?? /ForwardRefExoticComponent<\s*([A-Za-z_$][\w$]*)/.exec(m[2])?.[1];
-    comps.push({name: m[1], kind: "const", propsType: propsName ?? null, props: resolveProps(propsName)});
-  }
+  const funcoes = {};
 
   // export declare function X(arg: T): React.JSX.Element
-  for (const m of src.matchAll(/export\s+declare\s+function\s+([A-Z][\w$]*)\s*(?:<[^(]*>)?\s*\(/g)) {
+  // Também a função NÃO exportada (bloco 1, 23/10/2026): a peça composta do nativo é `const X: typeof Raiz & {Item: …}`,
+  // e as props dela são as da `Raiz`, que o arquivo declara sem `export`. Toda função guarda as props em `funcoes`; só a
+  // exportada vira componente.
+  for (const m of src.matchAll(/(export\s+)?declare\s+function\s+([A-Z][\w$]*)\s*(?:<[^(]*>)?\s*\(/g)) {
+    const exportada = Boolean(m[1]), nome = m[2];
     const paren = src.indexOf("(", m.index + m[0].length - 1);
     const args = balanced(src, paren, "(", ")").slice(1, -1);
     const colon = (() => {
@@ -319,6 +327,13 @@ for (const file of files) {
     let props = [];
     const bare = /^([A-Za-z_$][\w$]*)(?:<|$)/.exec(typeText)?.[1];
     if (bare && interfaces[bare]) { propsName = bare; props = resolveProps(bare); }
+    // O TIPO QUE É UNIÃO DE INTERFACES — `type CardProps = CardDaMarca | CardComum | CardTocavel` (o `Card` do nativo,
+    // bloco 1, 23/10/2026). O leitor só via interface e alias literal, e o `Card` saía com zero props. Os ramos se
+    // SOMAM, com a mesma regra da união dentro de um tipo (`somarRamos`).
+    else if (bare && aliases[bare]) {
+      const ramos = aliases[bare].raw.split("|").map((r) => /^\s*([A-Za-z_$][\w$]*)\s*$/.exec(r)?.[1]).filter((r) => r && interfaces[r]);
+      if (ramos.length) { propsName = bare; props = somarRamos(ramos.flatMap((r) => resolveProps(r))); }
+    }
     for (const piece of typeText.split("&")) {
       const n = /^\s*([A-Za-z_$][\w$]*)\s*$/.exec(piece)?.[1];
       if (n && interfaces[n] && n !== propsName) props.push(...resolveProps(n));
@@ -339,7 +354,19 @@ for (const file of files) {
     }
     const seen = new Set();
     props = props.filter((p) => !seen.has(p.name) && seen.add(p.name));
-    comps.push({name: m[1], kind: "function", propsType: propsName, props});
+    funcoes[nome] = props;
+    if (exportada) comps.push({name: nome, kind: "function", propsType: propsName, props});
+  }
+
+  // export declare const X: React.ForwardRefExoticComponent<Omit<XProps, "ref"> & ...>
+  // Context não é componente, e um `const` cujo tipo é uma função é hook ou utilitário.
+  for (const m of src.matchAll(/export\s+declare\s+const\s+([A-Z][\w$]*)\s*:\s*([^;]+);/g)) {
+    if (/\bContext<;?/.test(m[2]) || /=>/.test(m[2])) continue;
+    const propsName = /Omit<\s*([A-Za-z_$][\w$]*)\s*,/.exec(m[2])?.[1]
+      ?? /ForwardRefExoticComponent<\s*([A-Za-z_$][\w$]*)/.exec(m[2])?.[1];
+    const raiz = propsName ? null : /^\s*typeof\s+([A-Za-z_$][\w$]*)/.exec(m[2])?.[1];
+    comps.push({name: m[1], kind: "const", propsType: propsName ?? null,
+      props: raiz && funcoes[raiz] ? funcoes[raiz] : resolveProps(propsName)});
   }
 
   const hooks = [
@@ -375,8 +402,8 @@ const out = {
 
 // Sem data no arquivo, de propósito: um carimbo de "gerado em" mudaria o conteúdo a cada
 // execução e a trava de árvore suja da CI acusaria diferença todo dia, sem defeito nenhum.
-fs.writeFileSync(path.join(ROOT, "packages/contracts/api-surface.json"),
+fs.writeFileSync(path.join(ROOT, "packages/contracts", SAIDA),
                  JSON.stringify(out, null, 2) + "\n");
 console.log(`build-api-surface: ${out.totals.componentes} componentes, ${out.totals.modulos} módulos, ` +
   `${out.totals.hooks} hooks, ${out.totals.propsDistintas} nomes de prop distintos ` +
-  `-> packages/contracts/api-surface.json`);
+  `-> packages/contracts/${SAIDA}`);

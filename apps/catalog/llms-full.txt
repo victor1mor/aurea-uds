@@ -298,10 +298,14 @@ Props that exist on both targets have the same name and the same values. `tone`,
 ```tsx
 // Web
 import {Button} from "@aurea-uds/react";
-<Button appearance="solid" tone="brand" size="md">Save</Button>
 
+<Button appearance="solid" tone="brand" size="md">Save</Button>
+```
+
+```tsx
 // React Native
 import {Button} from "@aurea-uds/native";
+
 <Button appearance="solid" tone="brand" size="md" onPress={save}>Save</Button>
 ```
 
@@ -1815,8 +1819,9 @@ Most components take an icon by name too: `leadingIcon` and `trailingIcon` on `B
 The name is the Phosphor name, exactly as Phosphor writes it. TypeScript checks it in `Icon` and in the props that take an icon. A wrong name does not compile:
 
 ```tsx
-<Icon name="caret-down" />   // compiles
-<Icon name="chevron-down" /> // does not compile: the Phosphor name is caret-down
+const right = <Icon name="caret-down" />;
+// @ts-expect-error: the Phosphor name is caret-down
+const wrong = <Icon name="chevron-down" />;
 ```
 
 The full API is on the [Icon](./icon.html) page.
@@ -2362,6 +2367,21 @@ import {AgentCard} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Every state
+
+The state is a word on the card, not only a colour: idle, running, thinking, paused, error, completed.
+
+```tsx
+<AgentCard name="Curator" model="opus-5" state="idle" />
+<AgentCard name="Curator" model="opus-5" state="running" />
+<AgentCard name="Curator" model="opus-5" state="thinking" />
+<AgentCard name="Curator" model="opus-5" state="paused" />
+<AgentCard name="Curator" model="opus-5" state="error" />
+<AgentCard name="Curator" model="opus-5" state="completed" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -2416,7 +2436,26 @@ import {AgentStatus} from "@aurea-uds/react";
 ```
 
 ```tsx
+<AgentStatus state="idle" />
 <AgentStatus state="running" />
+<AgentStatus state="paused" />
+<AgentStatus state="error" />
+<AgentStatus state="completed" />
+```
+
+## Examples
+
+### Every state
+
+thinking is the one between running and the answer: the agent is working, and has nothing to show yet.
+
+```tsx
+<AgentStatus state="idle" />
+<AgentStatus state="running" />
+<AgentStatus state="thinking" />
+<AgentStatus state="paused" />
+<AgentStatus state="error" />
+<AgentStatus state="completed" />
 ```
 
 ## API Reference
@@ -2445,6 +2484,34 @@ import {Alert} from "@aurea-uds/react";
 <Alert title="You have 2 credits left" action={<Button variant="tertiary">Upgrade</Button>}>
   Get a paid plan for more credits
 </Alert>
+```
+
+## Examples
+
+### Variants
+
+How serious it is. danger interrupts the screen reader (role=alert); the others wait for a pause (role=status).
+
+```tsx
+<Alert variant="info">A info alert.</Alert>
+<Alert variant="success">A success alert.</Alert>
+<Alert variant="warning">A warning alert.</Alert>
+<Alert variant="danger">A danger alert.</Alert>
+<Alert variant="accent">A accent alert.</Alert>
+```
+
+### Every state
+
+What is happening, apart from how serious it is. Without children, the alert says the state in words of its own.
+
+```tsx
+<Alert state="stale" />
+<Alert state="partial" />
+<Alert state="degraded" />
+<Alert state="offline" />
+<Alert state="waiting_user" />
+<Alert state="waiting_approval" />
+<Alert state="waiting_dependency" />
 ```
 
 ## API Reference
@@ -2481,6 +2548,58 @@ import {AppShell} from "@aurea-uds/react";
 </AppShell>
 ```
 
+## Examples
+
+### The documentation arrangement
+
+layout="docs" is the arrangement of this site: one block in the middle of the screen with the sidebar, the text and the table of contents. Here the sidebar, the content and the aside have no box (plain).
+
+```tsx
+<AppShell
+  layout="docs"
+  sidebarVariant="plain"
+  contentVariant="plain"
+  asideVariant="plain"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
+### A floating aside, and the scrollbar always on
+
+asideVariant="floating" puts the right column in a card of its own; sidebarScrollbar="visible" keeps the sidebar's scrollbar showing, instead of only under the pointer.
+
+```tsx
+<AppShell
+  asideVariant="floating"
+  sidebarScrollbar="visible"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
+### A flush aside
+
+asideVariant="flush" glues the right column to the edge of the window, like the flush sidebar.
+
+```tsx
+<AppShell
+  asideVariant="flush"
+  sidebarVariant="flush"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -2510,6 +2629,7 @@ import {AppShell} from "@aurea-uds/react";
 | `aside` | `ReactNode` | — | The right-hand column — a documentation page's "On this page" (a TableOfContents). From 1280 up it is the third column; below, it follows the content. With the docs layout, below 1280 it is the drawer of the table-of-contents bar instead. |
 | `asideLabel` | `string` | strings.tocLabel | The right column's name for screen readers. |
 | `asideVariant` | `"floating" \| "flush" \| "plain"` | sidebarVariant | Skin of the right-hand column. Without it, the same as the left sidebar. plain removes the box — the items sit loose on the page, like a documentation page's "On this page". |
+| `topbarTabsEnd` | `ReactNode` | — | The end of the areas row (the Header's tabsEnd): the Web \| Native switch of a documentation site. |
 </page>
 
 <page url="https://aureauds.dev/aspectratio.html">
@@ -2553,6 +2673,57 @@ import {AureaProvider} from "@aurea-uds/react";
 </AureaProvider>
 ```
 
+## Examples
+
+### Theme
+
+defaultTheme seeds the theme and lets the user change it; theme controls it from your state. "system" follows the computer and keeps following it. The switch below is this site's own provider, live.
+
+```tsx
+<AureaProvider defaultTheme="light">…</AureaProvider>
+<AureaProvider defaultTheme="dark">…</AureaProvider>
+<AureaProvider defaultTheme="system">…</AureaProvider>
+<AureaProvider theme="light" onThemePreferenceChange={setTheme}>…</AureaProvider>
+<AureaProvider theme="dark" onThemePreferenceChange={setTheme}>…</AureaProvider>
+<AureaProvider theme="system" onThemePreferenceChange={setTheme}>…</AureaProvider>
+```
+
+### Density
+
+The same two forms for the density: defaultDensity seeds it, density controls it. The control below changes this site's density, live — every control on the page follows.
+
+```tsx
+<AureaProvider defaultDensity="compact">…</AureaProvider>
+<AureaProvider defaultDensity="comfortable">…</AureaProvider>
+<AureaProvider defaultDensity="spacious">…</AureaProvider>
+<AureaProvider density="compact" onDensityChange={setDensity}>…</AureaProvider>
+<AureaProvider density="comfortable" onDensityChange={setDensity}>…</AureaProvider>
+<AureaProvider density="spacious" onDensityChange={setDensity}>…</AureaProvider>
+```
+
+### Direction
+
+direction="rtl" tells the engine that the inline axis runs right to left, so popups and arrow keys mirror. The CSS mirrors on its own from the dir attribute — the box below is a dir="rtl" page in miniature.
+
+```tsx
+<html dir="rtl">
+  <AureaProvider direction="rtl">…</AureaProvider>
+</html>
+```
+
+### Where the toasts appear
+
+toastPlacement picks one of six places for the messages of useToast(). bottom, the middle of the bottom edge, is the default — and the one this site uses: the button shows it.
+
+```tsx
+<AureaProvider toastPlacement="top-start">…</AureaProvider>
+<AureaProvider toastPlacement="top">…</AureaProvider>
+<AureaProvider toastPlacement="top-end">…</AureaProvider>
+<AureaProvider toastPlacement="bottom-start">…</AureaProvider>
+<AureaProvider toastPlacement="bottom">…</AureaProvider>
+<AureaProvider toastPlacement="bottom-end">…</AureaProvider>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -2593,6 +2764,14 @@ import {AutomationCard} from "@aurea-uds/react";
   lastRun="yesterday, 02:00"
   lastResult="success"
 />
+<AutomationCard
+  name="Purge stale drafts"
+  trigger="On draft older than 30 days"
+  action="Move it to the archive"
+  onToggle={setEnabled}
+  lastRun="6 days ago"
+  lastResult="failure"
+/>
 ```
 
 ## API Reference
@@ -2630,6 +2809,31 @@ import {Avatar} from "@aurea-uds/react";
 <Avatar fallback={<Icon name="floppy-disk" />} tone="warning" emphasis="soft" />
 ```
 
+## Examples
+
+### Tones
+
+The colour of the fallback, with soft emphasis: the tone tints the circle and the letters stay readable.
+
+```tsx
+<Avatar fallback="AU" emphasis="soft" tone="neutral" />
+<Avatar fallback="AU" emphasis="soft" tone="brand" />
+<Avatar fallback="AU" emphasis="soft" tone="info" />
+<Avatar fallback="AU" emphasis="soft" tone="success" />
+<Avatar fallback="AU" emphasis="soft" tone="warning" />
+<Avatar fallback="AU" emphasis="soft" tone="danger" />
+```
+
+### Sizes
+
+Three sizes from the control scale.
+
+```tsx
+<Avatar fallback="AU" size="sm" />
+<Avatar fallback="AU" size="md" />
+<Avatar fallback="AU" size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -2660,6 +2864,30 @@ import {AvatarGroup} from "@aurea-uds/react";
   <Avatar fallback="CT" />
   <Avatar fallback="RS" />
   <Avatar fallback="JP" />
+</AvatarGroup>
+```
+
+## Examples
+
+### Sizes
+
+The size reaches every avatar in the group and the counter at the end.
+
+```tsx
+<AvatarGroup max={3} total={9} label="Reviewers" size="sm">
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
+</AvatarGroup>
+<AvatarGroup max={3} total={9} label="Reviewers" size="md">
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
+</AvatarGroup>
+<AvatarGroup max={3} total={9} label="Reviewers" size="lg">
+  <Avatar fallback="AM" />
+  <Avatar fallback="CT" />
+  <Avatar fallback="RS" />
 </AvatarGroup>
 ```
 
@@ -2751,8 +2979,74 @@ On a circle the badge is pulled 14% back into the corner. Without that it floats
 
 ```tsx
 <Badge anchor="bottom-end" anchorShape="circle" dot variant="success">
-  <Avatar name="Ana Prado" />
+  <Avatar alt="Ana Prado" fallback="AP" />
 </Badge>
+```
+
+### Every tone
+
+Six tones that carry meaning, four for the state of a job, and eight category colours that mark a group and say nothing about health. There is no yellow: it belongs to the brand. Pair the colour with a word.
+
+```tsx
+<Badge tone="neutral">Neutral</Badge>
+<Badge tone="primary">Primary</Badge>
+<Badge tone="info">Info</Badge>
+<Badge tone="success">Success</Badge>
+<Badge tone="warning">Warning</Badge>
+<Badge tone="danger">Danger</Badge>
+<Badge tone="running">Running</Badge>
+<Badge tone="paused">Paused</Badge>
+<Badge tone="offline">Offline</Badge>
+<Badge tone="review">In review</Badge>
+<Badge tone="red">Red</Badge>
+<Badge tone="orange">Orange</Badge>
+<Badge tone="green">Green</Badge>
+<Badge tone="teal">Teal</Badge>
+<Badge tone="cyan">Cyan</Badge>
+<Badge tone="blue">Blue</Badge>
+<Badge tone="violet">Violet</Badge>
+<Badge tone="pink">Pink</Badge>
+```
+
+### Four sizes
+
+`xs` is 16 high and borderless: the counter that rides on an icon, the one BottomNav asks for. `md` is the default.
+
+```tsx
+<Badge tone="primary" emphasis="solid" size="xs">3</Badge>
+<Badge tone="primary" emphasis="solid" size="sm">Small</Badge>
+<Badge tone="primary" emphasis="solid" size="md">Medium</Badge>
+<Badge tone="primary" emphasis="solid" size="lg">Large</Badge>
+```
+
+### anchor — all four corners
+
+The counter hangs off any corner of the thing it decorates. Each count lives in the accessible name of the button; the badge stays hidden from screen readers.
+
+```tsx
+<Badge anchor="top-start" count={2} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Alerts, 2 unread" />
+</Badge>
+<Badge anchor="top-end" count={8} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Notifications, 8 unread" />
+</Badge>
+<Badge anchor="bottom-start" count={1} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Reminders, 1 due" />
+</Badge>
+<Badge anchor="bottom-end" count={5} emphasis="solid" tone="danger">
+  <IconButton icon="bell" label="Mentions, 5 new" />
+</Badge>
+```
+
+### fit — as wide as the text
+
+Inside a column a badge follows the column's width. `fit="content"` keeps it as wide as its text and leaves the row alone.
+
+```tsx
+<Stack>
+  <Badge tone="info">Follows the column</Badge>
+  <Badge tone="info" fit="content">As wide as its text</Badge>
+</Stack>
 ```
 
 ## API Reference
@@ -2790,6 +3084,33 @@ import {Banner} from "@aurea-uds/react";
 <Banner variant="success" title="Saved" icon="check" onDismiss={() => setShown(false)}>
   Your changes are live.
 </Banner>
+```
+
+## Examples
+
+### Variants
+
+The same live-region rule as Alert: danger interrupts, the others wait. The cookie notice, consent, has a page of its own on the site.
+
+```tsx
+<Banner variant="info">A info banner.</Banner>
+<Banner variant="success">A success banner.</Banner>
+<Banner variant="warning">A warning banner.</Banner>
+<Banner variant="danger">A danger banner.</Banner>
+```
+
+### Every state
+
+The condition, apart from the severity. Without a variant, the state picks it; without children, it supplies the message.
+
+```tsx
+<Banner state="stale" />
+<Banner state="partial" />
+<Banner state="degraded" />
+<Banner state="offline" />
+<Banner state="waiting_user" />
+<Banner state="waiting_approval" />
+<Banner state="waiting_dependency" />
 ```
 
 ## API Reference
@@ -2861,7 +3182,7 @@ import {BottomNav} from "@aurea-uds/react";
 ```
 
 ```tsx
-const items = [
+const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
     badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
@@ -2990,6 +3311,25 @@ An item without href is a <button>. Same skin, same aria-current — what change
     {id: "service", label: "Service", icon: "wrench", onClick: () => go("/service")},
   ]}
 />
+```
+
+### Content width — the pill as wide as its items
+
+width="content" sizes the floating pill to its items and centres it, instead of spanning the screen. It only applies while the bar floats; the edge bar stays as wide as the screen.
+
+```tsx
+<BottomNav width="content" indicator="capsule" label="Garage content" current={route} items={items} />
+```
+
+### The four older names
+
+flat, surface, pill and dock still work and map onto the pair: flat is edge with no indicator, surface and dock are floating with the circle, pill is floating with the pill. They are deprecated — write variant and indicator instead.
+
+```tsx
+<BottomNav variant="flat" label="Garage flat" current={route} items={items} />
+<BottomNav variant="surface" label="Garage surface" current={route} items={items} />
+<BottomNav variant="pill" label="Garage pill" current={route} items={items} />
+<BottomNav variant="dock" label="Garage dock" current={route} items={items} />
 ```
 
 ## API Reference
@@ -3180,6 +3520,25 @@ Stretched to the container for a form footer or a narrow screen — only the wid
 <Button variant="primary" fullWidth>Continue</Button>
 ```
 
+### Brand hierarchy
+
+The brand tone in three weights, like the destructive one: the fill for the main action, the outline and the ghost for brand actions that should not compete with it.
+
+```tsx
+<Button variant="primary">Upgrade</Button>
+<Button variant="primary-outline">Compare plans</Button>
+<Button variant="primary-ghost">See pricing</Button>
+```
+
+### Navigation item
+
+nav is an appearance of its own, not a tone: a navigation item, muted at rest. variant="nav" is the shortcut for appearance="nav" with the neutral tone, so the two below draw the same.
+
+```tsx
+<Button variant="nav">Overview</Button>
+<Button appearance="nav">Reports</Button>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3299,6 +3658,52 @@ One unavailable option does not disable the set, and it keeps its place so the r
 </ButtonGroup>
 ```
 
+### Every variant
+
+Any Button variant, set once on the group. The joined capsule and the hairline between the buttons stay the same; only the weight and the tone change.
+
+```tsx
+<ButtonGroup label="Primary" variant="primary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Secondary" variant="secondary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Tertiary" variant="tertiary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Outline" variant="outline"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Ghost" variant="ghost"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Primary outline" variant="primary-outline"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Primary ghost" variant="primary-ghost"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger" variant="danger"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger outline" variant="danger-outline"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger ghost" variant="danger-ghost"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Danger soft" variant="danger-soft"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Link" variant="link"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Link primary" variant="link-primary"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Link danger" variant="link-danger"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Nav" variant="nav"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+```
+
+### Every size
+
+The five button heights, from the density tokens. The group passes the size to every button inside.
+
+```tsx
+<ButtonGroup label="Extra small" size="xs"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Small" size="sm"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Medium" size="md"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Large" size="lg"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+<ButtonGroup label="Extra large" size="xl"><Button>Day</Button><Button>Week</Button><Button>Month</Button></ButtonGroup>
+```
+
+### Vertical
+
+The same buttons stacked. Visual only: the order, the semantics and the Tab stops do not change.
+
+```tsx
+<ButtonGroup label="Align" orientation="vertical">
+  <Button>Top</Button>
+  <Button>Middle</Button>
+  <Button>Bottom</Button>
+</ButtonGroup>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3376,6 +3781,23 @@ import {Card} from "@aurea-uds/react";
 </Card>
 ```
 
+## Examples
+
+### Variants
+
+base is the floating surface; raised lifts it with a shadow; interactive answers the pointer; inset sinks into the page; outline is the one card with a line; selected and danger mark a state; contrast is the dark theme inside the card.
+
+```tsx
+<Card variant="base">variant base</Card>
+<Card variant="raised">variant raised</Card>
+<Card variant="interactive" render={<a href="#" />}>variant interactive</Card>
+<Card variant="inset">variant inset</Card>
+<Card variant="outline">variant outline</Card>
+<Card variant="selected">variant selected</Card>
+<Card variant="danger">variant danger</Card>
+<Card variant="contrast">variant contrast</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3406,7 +3828,7 @@ import {Carousel} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Carousel label="Product photos" style={{"--carousel-slide": "50%"}}>
+<Carousel label="Product photos" style={{"--carousel-slide": "50%"} as CSSProperties}>
   <Card>Front</Card>
   <Card>Back</Card>
   <Card>In use</Card>
@@ -3569,6 +3991,16 @@ Unavailable but still readable — the reason belongs somewhere on the screen.
 ```tsx
 <Checkbox label="Audit log" disabled />
 <Checkbox label="SSO" defaultChecked disabled />
+```
+
+### Sizes
+
+The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.
+
+```tsx
+<Checkbox label="Compact rows" defaultChecked size="sm" />
+<Checkbox label="Comfortable rows" defaultChecked />
+<Checkbox label="Spacious rows" defaultChecked size="lg" />
 ```
 
 ## API Reference
@@ -3753,6 +4185,80 @@ import {Cluster} from "@aurea-uds/react";
 </Cluster>
 ```
 
+## Examples
+
+### Gap
+
+The space between the items, from the density scale: tight, normal or loose.
+
+```tsx
+<Cluster gap="tight">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster gap="normal">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster gap="loose">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+```
+
+### Justify
+
+Where the row sits along the line. between pushes the first and the last item to the ends.
+
+```tsx
+<Cluster justify="start">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster justify="center">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster justify="end">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+<Cluster justify="between">
+  <Badge>one</Badge>
+  <Badge>two</Badge>
+  <Badge>three</Badge>
+</Cluster>
+```
+
+### Align
+
+How items of different heights line up across the row. baseline lines up the text.
+
+```tsx
+<Cluster align="start">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+<Cluster align="center">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+<Cluster align="end">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+<Cluster align="baseline">
+  <Button size="lg">Large</Button>
+  <Badge>Small</Badge>
+</Cluster>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3778,6 +4284,47 @@ import {Code} from "@aurea-uds/react";
 
 ```tsx
 <Paragraph>Run <Code>pnpm build</Code> before you publish.</Paragraph>
+```
+
+## Examples
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Code weight="normal">weight-normal</Code>
+<Code weight="medium">weight-medium</Code>
+<Code weight="semibold">weight-semibold</Code>
+<Code weight="bold">weight-bold</Code>
+<Code weight="extrabold">weight-extrabold</Code>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Code tone="default">tone-default</Code>
+<Code tone="muted">tone-muted</Code>
+<Code tone="subtle">tone-subtle</Code>
+<Code tone="primary">tone-primary</Code>
+<Code tone="link">tone-link</Code>
+<Code tone="info">tone-info</Code>
+<Code tone="success">tone-success</Code>
+<Code tone="warning">tone-warning</Code>
+<Code tone="danger">tone-danger</Code>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Code align="start">align-start</Code>
+<Code align="center">align-center</Code>
+<Code align="end">align-end</Code>
+<Code align="justify">align-justify</Code>
 ```
 
 ## API Reference
@@ -3824,6 +4371,7 @@ import {highlightCode} from "@aurea-uds/react/code-highlight";
 | `lineNumbers` | `boolean` | false | Shows the number of each line on the left, in a 16px column 24px from the code. The column grows with the digits of the last line, so it does not jump at line 100. The number is drawing: it is not in the copied text and not read by screen readers. |
 | `highlight` | `CodeHighlighter` | — | Colors the code. Pass `highlightCode` from `@aurea-uds/react/code-highlight`; its grammars are optional peers (@lezer/javascript, @lezer/css, @lezer/html, @lezer/json, @codemirror/legacy-modes). A language it does not know comes back plain. The colors are the same as the CodeEditor's, mixed 20% with the text so each one reads at 4.5:1 or more on the block. |
 | `className` | `string` | — | Lands on the outer element either way — on the <pre> when plain, on the wrapper when copyable. |
+| `tabs` | `Array<{label, code, language?}>` | — | The alternatives of the same step, in tabs — the install command in npm, pnpm, yarn and bun: the row on top, inside the box, and one code per tab. With tabs, children is not read. |
 </page>
 
 <page url="https://aureauds.dev/codeeditor.html">
@@ -3953,6 +4501,19 @@ const [colour, setColour] = useState("#0485f7");
 
 <ColorArea value={colour} onValueChange={setColour} aria-label="Accent" />
 <ColorSwatch color={colour} label="Accent" />
+```
+
+### Every channel on each axis
+
+Two areas per colour space, so each channel shows up across and up. In each area the channel left out is the one that stays fixed.
+
+```tsx
+<ColorArea colorSpace="hsb" xChannel="saturation" yChannel="brightness" defaultValue="#0485f7" aria-label="HSB, saturation and brightness" />
+<ColorArea colorSpace="hsb" xChannel="brightness" yChannel="hue" defaultValue="#0485f7" aria-label="HSB, brightness and hue" />
+<ColorArea colorSpace="hsl" xChannel="saturation" yChannel="lightness" defaultValue="#16a34a" aria-label="HSL, saturation and lightness" />
+<ColorArea colorSpace="hsl" xChannel="lightness" yChannel="hue" defaultValue="#16a34a" aria-label="HSL, lightness and hue" />
+<ColorArea colorSpace="rgb" xChannel="green" yChannel="red" defaultValue="#e11d48" aria-label="RGB, green and red" />
+<ColorArea colorSpace="rgb" xChannel="blue" yChannel="green" defaultValue="#e11d48" aria-label="RGB, blue and green" />
 ```
 
 ## API Reference
@@ -4122,6 +4683,33 @@ name sends the colour as hex.
 </form>
 ```
 
+### HSL channels
+
+colorSpace="hsl" makes hue and saturation the HSL ones, beside lightness. Three fields share one colour.
+
+```tsx
+const [colour, setColour] = useState("hsl(200, 80%, 50%)");
+
+<Field label="Hue"><ColorField channel="hue" colorSpace="hsl" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Saturation"><ColorField channel="saturation" colorSpace="hsl" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Lightness"><ColorField channel="lightness" colorSpace="hsl" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<ColorSwatch color={colour} label="The HSL colour" />
+```
+
+### RGB channels and alpha
+
+Red, green and blue from 0 to 255, and alpha. They are RGB channels with or without colorSpace="rgb"; the prop only changes hue and saturation, so one value can go to every field of a picker.
+
+```tsx
+const [colour, setColour] = useState("rgba(240, 194, 0, 0.8)");
+
+<Field label="Red"><ColorField channel="red" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Green"><ColorField channel="green" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Blue"><ColorField channel="blue" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<Field label="Alpha"><ColorField channel="alpha" colorSpace="rgb" value={colour} onValueChange={setColour} width="6rem" /></Field>
+<ColorSwatch color={colour} label="The RGB colour" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -4186,7 +4774,7 @@ Ready colours under the hue track. Controlled: the code follows.
 const [colour, setColour] = useState("#0485f7");
 
 <ColorPicker label="Brand colour" value={colour} onValueChange={setColour}
-  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, …]} />
+  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}]} />
 ```
 
 ### A closed palette
@@ -4195,7 +4783,7 @@ variant="swatches": only the swatches and the hex field.
 
 ```tsx
 <ColorPicker label="Tag colour" variant="swatches" defaultValue="#16a34a"
-  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, …]} />
+  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}]} />
 ```
 
 ### With fields
@@ -4203,13 +4791,13 @@ variant="swatches": only the swatches and the hex field.
 The window assembled with children: the area, the hue, and one field per channel — the colour space chosen in a Select.
 
 ```tsx
-const [space, setSpace] = useState("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
+const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsla(220, 90%, 50%, 0.8)">
   <ColorArea />
   <Slider label="Hue" channel="hue" />
-  <Select aria-label="Colour space" value={space} onValueChange={setSpace}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
   <div style={{display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--space-2)"}}>
     {channels[space].map((channel) => (
@@ -4224,13 +4812,13 @@ const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "satura
 One track per channel, transparency included — the colour space chosen in a Select.
 
 ```tsx
-const [space, setSpace] = useState("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
+const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsl(219, 58%, 93%)">
-  <Select aria-label="Colour space" value={space} onValueChange={setSpace}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
-  {[...channels[space], "alpha"].map((channel) => (
+  {[...channels[space], "alpha" as const].map((channel) => (
     <Slider key={channel} label={channel} channel={channel} colorSpace={space} />
   ))}
 </ColorPicker>
@@ -4339,9 +4927,9 @@ The swatch is an image. label names it; without it, the screen reader reads the 
 The group takes the same five sizes.
 
 ```tsx
-<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={…} />
-<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={…} />
-<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={…} />
+<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={options} />
+<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={options} />
+<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={options} />
 ```
 
 ### A colour you cannot pick
@@ -4377,8 +4965,8 @@ layout="stack": one under the other.
 defaultValue picks one when the page opens; without it, none is picked.
 
 ```tsx
-<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={…} />
-<ColorSwatch name="none" label="No colour yet" options={…} />
+<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={options} />
+<ColorSwatch name="none" label="No colour yet" options={options} />
 ```
 
 ### Options with the value
@@ -4404,7 +4992,7 @@ indicator replaces the check on the chosen colour; it gets the ink that contrast
 
 ```tsx
 <ColorSwatch name="favourite" label="Favourite colour" defaultValue="#e11d48"
-  indicator={<Icon name="heart" />} options={…} />
+  indicator={<Icon name="heart" />} options={options} />
 ```
 
 ## API Reference
@@ -4463,7 +5051,7 @@ import {Combobox} from "@aurea-uds/react";
 One option out of many, with the list filtering as you type.
 
 ```tsx
-const [value, setValue] = useState(null);
+const [value, setValue] = useState<ComboboxOption | null>(null);
 
 <Combobox label="Component" placeholder="Search…" value={value}
   onValueChange={setValue}
@@ -4601,6 +5189,32 @@ import {ConfirmDialog} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Placement
+
+The same four places as Dialog: auto (bottom on a phone, centre from 640 up), bottom, center and top.
+
+```tsx
+<ConfirmDialog open={open} title="Placement auto" description="This confirmation opens at auto." placement="auto" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement bottom" description="This confirmation opens at bottom." placement="bottom" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement center" description="This confirmation opens at center." placement="center" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement top" description="This confirmation opens at top." placement="top" onConfirm={confirm} onCancel={close} />
+```
+
+### Icon tones
+
+The colour of the circle behind the icon. destructive picks danger on its own.
+
+```tsx
+<ConfirmDialog open={open} title="Icon tone neutral" description="The circle behind the icon is neutral." icon="info" iconTone="neutral" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone brand" description="The circle behind the icon is brand." icon="info" iconTone="brand" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone info" description="The circle behind the icon is info." icon="info" iconTone="info" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone success" description="The circle behind the icon is success." icon="info" iconTone="success" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone warning" description="The circle behind the icon is warning." icon="info" iconTone="warning" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone danger" description="The circle behind the icon is danger." icon="info" iconTone="danger" onConfirm={confirm} onCancel={close} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -4630,9 +5244,25 @@ import {Container} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Container>
-  <Heading level={2}>Fichas técnicas</Heading>
+<Container size="sm">
+  <Card>Content, centred and capped</Card>
 </Container>
+```
+
+## Examples
+
+### Sizes
+
+The cap, on the width scale: sm 640, md 768, lg 1024, xl 1280 (the default), 2xl 1536, docs (the text column of a documentation page) and full, no cap. In this box the larger ones fill the width.
+
+```tsx
+<Container size="sm"><Card>size sm</Card></Container>
+<Container size="md"><Card>size md</Card></Container>
+<Container size="lg"><Card>size lg</Card></Container>
+<Container size="xl"><Card>size xl</Card></Container>
+<Container size="2xl"><Card>size 2xl</Card></Container>
+<Container size="docs"><Card>size docs</Card></Container>
+<Container size="full"><Card>size full</Card></Container>
 ```
 
 ## API Reference
@@ -4658,8 +5288,8 @@ import {ContainerScope} from "@aurea-uds/react";
 ```tsx
 <ContainerScope>
   <Toolbar orientation={{base: "vertical", container: {sm: "horizontal"}}}>
-    <Button>Salvar</Button>
-    <Button>Descartar</Button>
+    <Button>Save</Button>
+    <Button>Discard</Button>
   </Toolbar>
 </ContainerScope>
 ```
@@ -4756,6 +5386,24 @@ import {DataGrid} from "@aurea-uds/react/data-grid";
 />
 ```
 
+## Examples
+
+### Every state
+
+loading and error replace the rows; the other states keep the rows you already had and put the notice above them.
+
+```tsx
+<DataGrid label="Members, loading" data={members} columns={columns} state="loading" />
+<DataGrid label="Members, error" data={members} columns={columns} state="error" />
+<DataGrid label="Members, stale" data={members} columns={columns} state="stale" />
+<DataGrid label="Members, partial" data={members} columns={columns} state="partial" />
+<DataGrid label="Members, degraded" data={members} columns={columns} state="degraded" />
+<DataGrid label="Members, offline" data={members} columns={columns} state="offline" />
+<DataGrid label="Members, waiting_user" data={members} columns={columns} state="waiting_user" />
+<DataGrid label="Members, waiting_approval" data={members} columns={columns} state="waiting_approval" />
+<DataGrid label="Members, waiting_dependency" data={members} columns={columns} state="waiting_dependency" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -4843,6 +5491,25 @@ import {DataState} from "@aurea-uds/react";
 </DataState>
 ```
 
+## Examples
+
+### Every state
+
+The three terminal faces (loading, error, empty) replace the content; every other state keeps the content and puts its notice above it.
+
+```tsx
+<DataState state="loading"><p>120 rows</p></DataState>
+<DataState state="error"><p>120 rows</p></DataState>
+<DataState state="empty"><p>120 rows</p></DataState>
+<DataState state="stale"><p>120 rows</p></DataState>
+<DataState state="partial"><p>120 rows</p></DataState>
+<DataState state="degraded"><p>120 rows</p></DataState>
+<DataState state="offline"><p>120 rows</p></DataState>
+<DataState state="waiting_user"><p>120 rows</p></DataState>
+<DataState state="waiting_approval"><p>120 rows</p></DataState>
+<DataState state="waiting_dependency"><p>120 rows</p></DataState>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -4909,6 +5576,22 @@ import {ptBR} from "react-day-picker/locale";
 </Field>
 ```
 
+### Sizes
+
+The field height, on the same scale as Select and Input. md is the default.
+
+```tsx
+<Field label="Small">
+  <DatePicker size="sm" defaultValue={new Date(2026, 7, 12)} />
+</Field>
+<Field label="Medium">
+  <DatePicker defaultValue={new Date(2026, 7, 12)} />
+</Field>
+<Field label="Large">
+  <DatePicker size="lg" defaultValue={new Date(2026, 7, 12)} />
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -4961,6 +5644,25 @@ import "@xyflow/react/dist/base.css";
   onSelect={setSelected}
   selectedId={selected}
 />
+```
+
+## Examples
+
+### Tree and circle
+
+Besides the layers, two arrangements of its own: tree, from the root down, and radial, the root in the middle with the rest around it.
+
+```tsx
+<DependencyGraph layout="tree" nodes={nodes} edges={edges} height="18rem" />
+<DependencyGraph layout="radial" nodes={nodes} edges={edges} height="18rem" />
+```
+
+### Large text
+
+textSize="lg" makes the names on the nodes and lines larger, for people who see little.
+
+```tsx
+<DependencyGraph textSize="lg" nodes={nodes} edges={edges} height="18rem" />
 ```
 
 ## API Reference
@@ -5036,6 +5738,45 @@ import {Dialog} from "@aurea-uds/react";
 </Dialog>
 ```
 
+## Examples
+
+### Placement
+
+auto, the default, sits at the bottom on a phone (where the thumb is) and in the centre from 640 up. bottom, center and top fix it in one place on every screen.
+
+```tsx
+<Dialog open={open} onClose={close} title="Placement auto" placement="auto">…</Dialog>
+<Dialog open={open} onClose={close} title="Placement bottom" placement="bottom">…</Dialog>
+<Dialog open={open} onClose={close} title="Placement center" placement="center">…</Dialog>
+<Dialog open={open} onClose={close} title="Placement top" placement="top">…</Dialog>
+```
+
+### Sizes
+
+The width: xs 320, sm 384, md 448 (the default), lg 512, xl 1024 and full, the whole screen.
+
+```tsx
+<Dialog open={open} onClose={close} title="Size xs" size="xs">…</Dialog>
+<Dialog open={open} onClose={close} title="Size sm" size="sm">…</Dialog>
+<Dialog open={open} onClose={close} title="Size md" size="md">…</Dialog>
+<Dialog open={open} onClose={close} title="Size lg" size="lg">…</Dialog>
+<Dialog open={open} onClose={close} title="Size xl" size="xl">…</Dialog>
+<Dialog open={open} onClose={close} title="Size full" size="full">…</Dialog>
+```
+
+### Icon tones
+
+The colour of the circle behind the icon: the state colours, or brand.
+
+```tsx
+<Dialog open={open} onClose={close} title="Icon tone neutral" icon="info" iconTone="neutral">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone brand" icon="info" iconTone="brand">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone info" icon="info" iconTone="info">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone success" icon="info" iconTone="success">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone warning" icon="info" iconTone="warning">…</Dialog>
+<Dialog open={open} onClose={close} title="Icon tone danger" icon="info" iconTone="danger">…</Dialog>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5075,6 +5816,19 @@ import {Drawer} from "@aurea-uds/react";
 <Drawer open={open} onClose={() => setOpen(false)} title="Filters" side="bottom">…</Drawer>
 ```
 
+## Examples
+
+### Sides
+
+Which edge the panel comes from. bottom is the sheet that rises on a phone, with a 32 corner.
+
+```tsx
+<Drawer open={open} onClose={close} title="Side right" side="right">…</Drawer>
+<Drawer open={open} onClose={close} title="Side left" side="left">…</Drawer>
+<Drawer open={open} onClose={close} title="Side top" side="top">…</Drawer>
+<Drawer open={open} onClose={close} title="Side bottom" side="bottom">…</Drawer>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5111,6 +5865,19 @@ import {DropdownMenu} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<DropdownMenu label="Side top" side="top" trigger={<Button variant="outline">Side top</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+<DropdownMenu label="Side right" side="right" trigger={<Button variant="outline">Side right</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+<DropdownMenu label="Side bottom" side="bottom" trigger={<Button variant="outline">Side bottom</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+<DropdownMenu label="Side left" side="left" trigger={<Button variant="outline">Side left</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5139,6 +5906,32 @@ import {EmptyState} from "@aurea-uds/react";
   description="Try a different filter."
   action={<Button variant="primary" leadingIcon="plus">New project</Button>}
 />
+```
+
+## Examples
+
+### Every state
+
+With a state, the empty view says why it is empty. It stays neutral on purpose: an absence is not an alarm.
+
+```tsx
+<EmptyState titleAs="h4" title="Nothing to show" state="stale" />
+<EmptyState titleAs="h4" title="Nothing to show" state="partial" />
+<EmptyState titleAs="h4" title="Nothing to show" state="degraded" />
+<EmptyState titleAs="h4" title="Nothing to show" state="offline" />
+<EmptyState titleAs="h4" title="Nothing to show" state="waiting_user" />
+<EmptyState titleAs="h4" title="Nothing to show" state="waiting_approval" />
+<EmptyState titleAs="h4" title="Nothing to show" state="waiting_dependency" />
+```
+
+### The title's tag
+
+The heading level belongs to the page, not to the component: h3 by default, the level that fits where it sits, or p when it is not a heading at all.
+
+```tsx
+<EmptyState title="No results" description="Try a different filter." titleAs="h3" />
+<EmptyState title="No results" description="Try a different filter." titleAs="h4" />
+<EmptyState title="No results" description="Try a different filter." titleAs="p" />
 ```
 
 ## API Reference
@@ -5247,6 +6040,15 @@ State belongs to the control, not to the wrapper: Field only shows what the cont
 <Field label="Plan"><Input defaultValue="Pro" disabled /></Field>
 ```
 
+### Label beside the control
+
+orientation="horizontal" puts the label to the left of the control — the settings-form row. The error still falls under the control, because it talks about the value.
+
+```tsx
+<Field label="Display name" orientation="horizontal"><Input defaultValue="Ana Prado" /></Field>
+<Field label="Handle" orientation="horizontal" error="Already taken."><Input defaultValue="ana" /></Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5300,7 +6102,7 @@ With upload() it owns progress, cancel and retry for each file.
 
 ```tsx
 <FileInput label="Import" accept=".csv" maxSize={2000000}
-  upload={async ({file, onProgress, signal}) => {
+  upload={async (file, {onProgress, signal}) => {
     await put(file, {onProgress, signal});
   }} />
 ```
@@ -5395,6 +6197,22 @@ import {Gallery} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Choosing several
+
+With selectionMode="multiple" every tile is a toggle: click to add or remove it, in the order chosen.
+
+```tsx
+<Gallery
+  label="Photos to share"
+  items={photos}
+  selectionMode="multiple"
+  selectedIds={chosen}
+  onSelectionChange={setChosen}
+/>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5427,6 +6245,30 @@ import {Grid} from "@aurea-uds/react";
 
 ```tsx
 <Grid>
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+```
+
+## Examples
+
+### Gap
+
+The space between the cells, from the density scale: tight, normal or loose.
+
+```tsx
+<Grid gap="tight">
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+<Grid gap="normal">
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+<Grid gap="loose">
   <Card>One</Card>
   <Card>Two</Card>
   <Card>Three</Card>
@@ -5472,6 +6314,48 @@ import {Header} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Variants
+
+floating is a detached card; flush merges into the page and frames the window; pill is a capsule floating over the content.
+
+```tsx
+<Header brand={<strong>Acme</strong>} variant="floating" />
+<Header brand={<strong>Acme</strong>} variant="flush" />
+<Header brand={<strong>Acme</strong>} variant="pill" />
+```
+
+### Content widths
+
+How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it.
+
+```tsx
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="sm" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="md" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="lg" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="xl" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="2xl" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="docs" />
+<Header variant="flush" brand={<strong>Acme</strong>} maxWidth="full" />
+```
+
+### Links at the start
+
+itemsJustify="start" puts the links right after the brand; end, the default, puts them just before the actions.
+
+```tsx
+<Header
+  variant="flush"
+  brand={<strong>Acme</strong>}
+  items={[{id: "home", label: "Home", href: "/"}, {id: "docs", label: "Docs", href: "/docs"}]}
+  current="home"
+  itemsJustify="start"
+  navLabel="Links at the start"
+  menuId="header-start-menu"
+/>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5494,6 +6378,7 @@ import {Header} from "@aurea-uds/react";
 | `tabs` | `HeaderTab[]` | — | A second row: the site's areas, each with an optional icon, like the area row of the reference documentation. The row is 40 tall, the areas sit at its bottom, 12 apart (4 on a phone), and it scrolls sideways when they do not fit. The current one gets aria-current="page" and a 2px bar in the accent color. It comes last in the Tab order, after the actions. With tabs the bar is exactly its height and the divider line hangs just below it. |
 | `currentTab` | `string` | — | The id of the current area in the second row. |
 | `tabsLabel` | `string` | "Sections" | The accessible name of the second row. |
+| `tabsEnd` | `ReactNode` | — | What sits at the END of the second row, opposite the areas: the Web \| Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs. |
 </page>
 
 <page url="https://aureauds.dev/heading.html">
@@ -5513,6 +6398,47 @@ import {Heading} from "@aurea-uds/react";
 <Heading level={4}>Analyst</Heading>
 <Heading level={5}>Notes</Heading>
 <Heading level={6}>Footnote</Heading>
+```
+
+## Examples
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Heading level={3} weight="normal">Heading, normal</Heading>
+<Heading level={3} weight="medium">Heading, medium</Heading>
+<Heading level={3} weight="semibold">Heading, semibold</Heading>
+<Heading level={3} weight="bold">Heading, bold</Heading>
+<Heading level={3} weight="extrabold">Heading, extrabold</Heading>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Heading level={3} tone="default">Heading, default</Heading>
+<Heading level={3} tone="muted">Heading, muted</Heading>
+<Heading level={3} tone="subtle">Heading, subtle</Heading>
+<Heading level={3} tone="primary">Heading, primary</Heading>
+<Heading level={3} tone="link">Heading, link</Heading>
+<Heading level={3} tone="info">Heading, info</Heading>
+<Heading level={3} tone="success">Heading, success</Heading>
+<Heading level={3} tone="warning">Heading, warning</Heading>
+<Heading level={3} tone="danger">Heading, danger</Heading>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Heading level={3} align="start">Heading, start</Heading>
+<Heading level={3} align="center">Heading, center</Heading>
+<Heading level={3} align="end">Heading, end</Heading>
+<Heading level={3} align="justify">Heading, justify</Heading>
 ```
 
 ## API Reference
@@ -5574,6 +6500,19 @@ import {HoverCard} from "@aurea-uds/react";
 </HoverCard>
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<HoverCard side="top" trigger={<Button variant="link" href="#side-top">Side top</Button>}>…</HoverCard>
+<HoverCard side="right" trigger={<Button variant="link" href="#side-right">Side right</Button>}>…</HoverCard>
+<HoverCard side="bottom" trigger={<Button variant="link" href="#side-bottom">Side bottom</Button>}>…</HoverCard>
+<HoverCard side="left" trigger={<Button variant="link" href="#side-left">Side left</Button>}>…</HoverCard>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5602,6 +6541,27 @@ import {HumanApproval} from "@aurea-uds/react";
   onApprove={() => {}}
   onDeny={() => {}}
 />
+```
+
+## Examples
+
+### Risk
+
+How much the action can break. The word goes on the card; the colour only repeats it.
+
+```tsx
+<HumanApproval title="Send the weekly report (low risk)" risk="low" />
+<HumanApproval title="Send the weekly report (medium risk)" risk="medium" />
+<HumanApproval title="Send the weekly report (high risk)" risk="high" />
+```
+
+### Decided
+
+Once decided, the pair of buttons becomes the result instead of disappearing, so the trace of the choice stays.
+
+```tsx
+<HumanApproval title="Send the weekly report (approved)" risk="low" decision="approved" />
+<HumanApproval title="Send the weekly report (denied)" risk="low" decision="denied" />
 ```
 
 ## API Reference
@@ -5635,6 +6595,29 @@ import {Icon} from "@aurea-uds/react";
 <Icon name="magnifying-glass" />
 <Icon name="plus" size="lg" />
 <Icon name="check" size="xl" />
+```
+
+## Examples
+
+### Weights
+
+regular is the line icon; bold is heavier for small sizes; fill is the solid shape the chosen item uses.
+
+```tsx
+<Icon name="star" weight="regular" />
+<Icon name="star" weight="bold" />
+<Icon name="star" weight="fill" />
+```
+
+### Sizes
+
+From the icon scale; the icon follows the text size when no size is given.
+
+```tsx
+<Icon name="star" size="sm" />
+<Icon name="star" size="md" />
+<Icon name="star" size="lg" />
+<Icon name="star" size="xl" />
 ```
 
 ## API Reference
@@ -5727,6 +6710,66 @@ Grouped, they get one accessible name for the set — the classic end of a table
   <IconButton icon="pencil-simple" label="Edit" />
   <IconButton icon="trash" label="Delete" variant="danger-ghost" />
 </ButtonGroup>
+```
+
+### Appearances
+
+How much weight the circle carries, from the fill to the bare glyph. nav is the navigation item.
+
+```tsx
+<IconButton icon="star" label="Appearance solid" appearance="solid" />
+<IconButton icon="star" label="Appearance soft" appearance="soft" />
+<IconButton icon="star" label="Appearance outline" appearance="outline" />
+<IconButton icon="star" label="Appearance ghost" appearance="ghost" />
+<IconButton icon="star" label="Appearance link" appearance="link" />
+<IconButton icon="star" label="Appearance nav" appearance="nav" />
+```
+
+### Tones
+
+What the colour means; every tone works with every appearance. Here, solid.
+
+```tsx
+<IconButton icon="star" label="Tone neutral" appearance="solid" tone="neutral" />
+<IconButton icon="star" label="Tone brand" appearance="solid" tone="brand" />
+<IconButton icon="star" label="Tone info" appearance="solid" tone="info" />
+<IconButton icon="star" label="Tone success" appearance="solid" tone="success" />
+<IconButton icon="star" label="Tone warning" appearance="solid" tone="warning" />
+<IconButton icon="star" label="Tone danger" appearance="solid" tone="danger" />
+```
+
+### Every shortcut
+
+variant is the short name for an (appearance, tone) pair — the same list as Button.
+
+```tsx
+<IconButton icon="star" label="Variant primary" variant="primary" />
+<IconButton icon="star" label="Variant secondary" variant="secondary" />
+<IconButton icon="star" label="Variant tertiary" variant="tertiary" />
+<IconButton icon="star" label="Variant outline" variant="outline" />
+<IconButton icon="star" label="Variant ghost" variant="ghost" />
+<IconButton icon="star" label="Variant link" variant="link" />
+<IconButton icon="star" label="Variant nav" variant="nav" />
+<IconButton icon="star" label="Variant primary-outline" variant="primary-outline" />
+<IconButton icon="star" label="Variant primary-ghost" variant="primary-ghost" />
+<IconButton icon="star" label="Variant link-primary" variant="link-primary" />
+<IconButton icon="star" label="Variant danger" variant="danger" />
+<IconButton icon="star" label="Variant danger-soft" variant="danger-soft" />
+<IconButton icon="star" label="Variant danger-outline" variant="danger-outline" />
+<IconButton icon="star" label="Variant danger-ghost" variant="danger-ghost" />
+<IconButton icon="star" label="Variant link-danger" variant="link-danger" />
+```
+
+### Every size
+
+The control scale; on a touch screen every size keeps a 44 target.
+
+```tsx
+<IconButton icon="star" label="Size xs" size="xs" />
+<IconButton icon="star" label="Size sm" size="sm" />
+<IconButton icon="star" label="Size md" size="md" />
+<IconButton icon="star" label="Size lg" size="lg" />
+<IconButton icon="star" label="Size xl" size="xl" />
 ```
 
 ## API Reference
@@ -5933,6 +6976,19 @@ import {InputGroupAddon} from "@aurea-uds/react";
 <InputGroupAddon side="end" layout="inline">.00</InputGroupAddon>
 ```
 
+## Examples
+
+### On its own line
+
+layout="block" puts the addon on its own line above the control instead of beside it.
+
+```tsx
+<InputGroup>
+  <InputGroupAddon side="start" layout="block">Search the reports</InputGroupAddon>
+  <Input placeholder="Search" aria-label="Search the reports" />
+</InputGroup>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6038,6 +7094,18 @@ import {KPI} from "@aurea-uds/react";
 
 ```tsx
 <KPI label="Revenue" value="$48.2k" trend="+12% vs last month" />
+```
+
+## Examples
+
+### Tones
+
+What the change means, apart from its direction: a cost going up is bad news, so the tone is set by you, not guessed.
+
+```tsx
+<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="neutral" />
+<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="success" />
+<KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="danger" />
 ```
 
 ## API Reference
@@ -6487,6 +7555,18 @@ import {ModelUsage} from "@aurea-uds/react";
 ]} />
 ```
 
+## Examples
+
+### Metrics
+
+Which measure the bars compare: tokens, cost or requests. The rows sort by the one in view.
+
+```tsx
+<ModelUsage label="Model usage, tokens" entries={entries} metric="tokens" />
+<ModelUsage label="Model usage, cost" entries={entries} metric="cost" />
+<ModelUsage label="Model usage, requests" entries={entries} metric="requests" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6511,7 +7591,7 @@ import {MultiCombobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [tags, setTags] = useState([]);
+const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox label="Tags" placeholder="Add a tag…" value={tags}
   onValueChange={setTags}
@@ -6600,7 +7680,7 @@ import {NavList} from "@aurea-uds/react";
     {id: "profile", label: "Profile", description: "Name, photo, handle", icon: "user", href: "/profile"},
     {id: "alerts", label: "Notifications", description: "Push, email", icon: "bell", value: "On", href: "/alerts"},
     {id: "plan", label: "Plan", icon: "wallet", value: <Badge size="xs">Free</Badge>, href: "/plan"},
-    {id: "sync", label: "Sync", icon: "cloud", value: <Status tone="success">Live</Status>, href: "/sync"},
+    {id: "sync", label: "Sync", icon: "cloud", value: <Status variant="success">Live</Status>, href: "/sync"},
   ]} />
 </Card>
 ```
@@ -6695,6 +7775,19 @@ import {NotificationCenter} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<NotificationCenter label="Notifications, side top" side="top" items={items} />
+<NotificationCenter label="Notifications, side right" side="right" items={items} />
+<NotificationCenter label="Notifications, side bottom" side="bottom" items={items} />
+<NotificationCenter label="Notifications, side left" side="left" items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6730,6 +7823,17 @@ import {NumberField} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Drag to change
+
+scrubbable adds a handle you pull to change the value; scrubDirection says which way. The buttons and the keys keep working.
+
+```tsx
+<NumberField scrubbable defaultValue={50} min={0} max={100} label="Opacity" scrubDirection="horizontal" />
+<NumberField scrubbable defaultValue={50} min={0} max={100} label="Opacity" scrubDirection="vertical" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6762,6 +7866,17 @@ import {OTPField} from "@aurea-uds/react";
 ```tsx
 <OTPField length={6} label="Verification code" />
 <OTPField length={6} groupSize={3} label="Verification code, in two groups" />
+```
+
+## Examples
+
+### Variants
+
+primary is the field on the page; secondary is the one inside a card or a dialog, a step darker.
+
+```tsx
+<OTPField length={6} variant="primary" label="Code, primary" />
+<OTPField length={6} variant="secondary" label="Code, secondary" />
 ```
 
 ## API Reference
@@ -6873,6 +7988,47 @@ import {Paragraph} from "@aurea-uds/react";
 <Paragraph size="xs" color="muted">Figures are rounded to the nearest unit.</Paragraph>
 ```
 
+## Examples
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Paragraph weight="normal">A paragraph in normal.</Paragraph>
+<Paragraph weight="medium">A paragraph in medium.</Paragraph>
+<Paragraph weight="semibold">A paragraph in semibold.</Paragraph>
+<Paragraph weight="bold">A paragraph in bold.</Paragraph>
+<Paragraph weight="extrabold">A paragraph in extrabold.</Paragraph>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Paragraph tone="default">A paragraph in default.</Paragraph>
+<Paragraph tone="muted">A paragraph in muted.</Paragraph>
+<Paragraph tone="subtle">A paragraph in subtle.</Paragraph>
+<Paragraph tone="primary">A paragraph in primary.</Paragraph>
+<Paragraph tone="link">A paragraph in link.</Paragraph>
+<Paragraph tone="info">A paragraph in info.</Paragraph>
+<Paragraph tone="success">A paragraph in success.</Paragraph>
+<Paragraph tone="warning">A paragraph in warning.</Paragraph>
+<Paragraph tone="danger">A paragraph in danger.</Paragraph>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Paragraph align="start">A paragraph aligned to start: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+<Paragraph align="center">A paragraph aligned to center: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+<Paragraph align="end">A paragraph aligned to end: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+<Paragraph align="justify">A paragraph aligned to justify: the weekly report is ready for review, with the figures rounded to the nearest unit and the notes at the end.</Paragraph>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6904,6 +8060,18 @@ import {PasswordField} from "@aurea-uds/react";
 </Field>
 ```
 
+## Examples
+
+### Sizes
+
+The control sizes; the show/hide button keeps a 44 target on touch at every size.
+
+```tsx
+<PasswordField aria-label="Password" size="sm" />
+<PasswordField aria-label="Password" size="md" />
+<PasswordField aria-label="Password" size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6932,6 +8100,19 @@ import {Popover} from "@aurea-uds/react";
   <Checkbox label="Only mine" />
   <Checkbox label="Archived" />
 </Popover>
+```
+
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<Popover title="Side top" side="top" arrow trigger={<Button variant="outline">Side top</Button>}>…</Popover>
+<Popover title="Side right" side="right" arrow trigger={<Button variant="outline">Side right</Button>}>…</Popover>
+<Popover title="Side bottom" side="bottom" arrow trigger={<Button variant="outline">Side bottom</Button>}>…</Popover>
+<Popover title="Side left" side="left" arrow trigger={<Button variant="outline">Side left</Button>}>…</Popover>
 ```
 
 ## API Reference
@@ -6991,6 +8172,24 @@ What the colour means. Paused is neutral; failed is danger.
 <Progress value={58} label="Upload" tone="danger" detail="Failed at 58%" />
 ```
 
+### Info
+
+For work that is neither good nor bad news — a sync, an import. Without a tone the bar is the brand's.
+
+```tsx
+<Progress value={45} label="Import" tone="info" detail="450 of 1,000 rows" />
+```
+
+### Track sizes
+
+The track is 4, 8 or 12 thick — the reference library's. md is the default.
+
+```tsx
+<Progress value={60} label="Small track" showLabel size="sm" />
+<Progress value={60} label="Medium track" showLabel />
+<Progress value={60} label="Large track" showLabel size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -7040,6 +8239,19 @@ The tone says how it is going; without a value, it spins.
 <ProgressCircle label="Backup" value={100} tone="success" />
 <ProgressCircle label="Storage" value={92} tone="warning" />
 <ProgressCircle label="Loading" />
+```
+
+### Every tone
+
+The same closed list as Progress. Brand is the default; paused is neutral, failed is danger, and info is for work that is neither good nor bad news.
+
+```tsx
+<ProgressCircle label="Publishing" value={60} />
+<ProgressCircle label="Paused" value={40} tone="neutral" />
+<ProgressCircle label="Backup" value={100} tone="success" />
+<ProgressCircle label="Storage" value={92} tone="warning" />
+<ProgressCircle label="Failed upload" value={30} tone="danger" />
+<ProgressCircle label="Sync" value={50} tone="info" />
 ```
 
 ## API Reference
@@ -7168,6 +8380,16 @@ The Field names the question; each Radio names an answer.
 <Field label="Visibility" hint="Who can open this workspace">
   <div className="stack">…radios…</div>
 </Field>
+```
+
+### Sizes
+
+The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.
+
+```tsx
+<Radio name="size" label="Small" size="sm" />
+<Radio name="size" label="Medium" defaultChecked />
+<Radio name="size" label="Large" size="lg" />
 ```
 
 ## API Reference
@@ -7320,6 +8542,14 @@ Locked value: still readable, not draggable.
 <Range defaultValue={30} disabled />
 ```
 
+### Vertical
+
+orientation="vertical" stands the slider up, for a level or a mixer. Its height is --range-vertical-size.
+
+```tsx
+<Field label="Level"><Range orientation="vertical" defaultValue={40} /></Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -7421,14 +8651,57 @@ import {Section} from "@aurea-uds/react";
   <Container>
     <Grid columns={12}>
       <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
-        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+        <Heading id="t-app" level={2}>A dark band</Heading>
       </Grid.Item>
       <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
-        <Button tone="brand">Baixar</Button>
+        <Button variant="primary-outline">Its own theme</Button>
       </Grid.Item>
     </Grid>
   </Container>
 </Section>
+```
+
+## Examples
+
+### Surfaces
+
+The band's background: the page's (the default), a card surface, or the recessed inset one.
+
+```tsx
+<Section spacing="sm" surface="background"><Container>surface background</Container></Section>
+<Section spacing="sm" surface="card"><Container>surface card</Container></Section>
+<Section spacing="sm" surface="inset"><Container>surface inset</Container></Section>
+```
+
+### A theme for the band
+
+The band takes its own theme, whatever the page's: a dark band in a light page, or the other way round.
+
+```tsx
+<Section spacing="sm" theme="light"><Container>theme light</Container></Section>
+<Section spacing="sm" theme="dark"><Container>theme dark</Container></Section>
+```
+
+### Footer widths
+
+On the footer, how far the content grows, on the Container's scale. inline is the one-line footer.
+
+```tsx
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="sm" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="md" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="lg" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="xl" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="2xl" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="docs" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="full" />
+```
+
+### An opening further down
+
+On the hero, the title is the page's h1 by default; titleAs="h2" when the band opens a section further down the page.
+
+```tsx
+<Section variant="hero" spacing="sm" title="Reports, ready by nine" description="Every team gets its numbers before the first meeting." titleAs="h2" />
 ```
 
 ## API Reference
@@ -7501,15 +8774,36 @@ Five is the limit. At this width it already asks to become a Select — which is
 // five options: still a track. six: use Select.
 ```
 
+### Sizes
+
+sm is the low capsule — the switch at the end of this site's areas row; md, the default, is the control height.
+
+```tsx
+<SegmentedControl size="sm" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />
+```
+
+### As navigation
+
+With href on every item it is a <nav> of links: going to another page is navigation, and the current one is marked with aria-current="page" — the Web | Native switch at the top of this site.
+
+```tsx
+<SegmentedControl size="sm" label="Platform" value="web" items={[
+  {value: "web", label: "Web", href: "/button.html"},
+  {value: "native", label: "Native", href: "/native-button.html"},
+]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `Array<{value, label}>` | — | The options. Two to five: past that it is a Select, not a segmented control. |
+| `items` | `Array<{value, label, href?}>` | — | The options. Two to five: past that it is a Select, not a segmented control. With href on EVERY item, the control is a <nav> of links — the current one gets aria-current="page" — instead of a choice: going to another page is navigation, and a screen reader hears "link", not "option". It is the Web \| Native switch of this site. |
 | `value` | `string` | — | The selected value. Controlled by design — one of many always has an owner. |
-| `onChange` | `(v: string) => void` | — | Fires with the new value. |
+| `onChange` | `(v: string) => void` | — | Fires with the new value. Not needed when the items are links (href). |
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
+| `size` | `"sm" \| "md"` | md | sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text. |
 </page>
 
 <page url="https://aureauds.dev/select.html">
@@ -7637,6 +8931,22 @@ The vertical rule stretches to the tallest sibling. Useful between counts, autho
   <Separator orientation="vertical" />
   <span>updated today</span>
 </Cluster>
+```
+
+### Spacing
+
+The space on both sides of the line, in the three steps of the layout gap. none, the default, leaves the spacing to the parent; on a vertical separator the space goes to the sides.
+
+```tsx
+<Card>
+  <p>Account</p>
+  <Separator spacing="tight" />
+  <p>Billing</p>
+  <Separator spacing="normal" />
+  <p>Team</p>
+  <Separator spacing="loose" />
+  <p>Security</p>
+</Card>
 ```
 
 ## API Reference
@@ -7787,6 +9097,30 @@ children still works and is not legacy: when the list comes from a router or a C
 </Sidebar>
 ```
 
+### Plain — no box
+
+No background, no line, no shadow: the items sit loose on the page, in the floating sidebar's place and height. It is the "On this page" column of a documentation site.
+
+```tsx
+<Sidebar variant="plain" label="Components" current="button" items={items} />
+```
+
+### On the right
+
+placement="right" puts the sidebar on the other side of the screen, with the content before it. It is the AppShell's aside column.
+
+```tsx
+<Sidebar placement="right" label="Components" current="button" items={items} />
+```
+
+### Scrollbar always on
+
+By default the scrollbar is light and hidden at rest, and comes back with the pointer, with focus inside, and always on a touch screen. scrollbar="visible" keeps it on screen all the time.
+
+```tsx
+<Sidebar scrollbar="visible" label="Components" current="button" items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -7821,6 +9155,17 @@ import {Skeleton} from "@aurea-uds/react";
 ```tsx
 <Skeleton style={{height: "0.875rem", width: "70%"}} />
 <Skeleton style={{height: "0.875rem", width: "90%"}} />
+```
+
+## Examples
+
+### Animation
+
+pulse breathes while loading; none stays still — and with reduced motion, pulse stays still too.
+
+```tsx
+<Skeleton style={{height: "0.875rem", width: "70%"}} animation="pulse" />
+<Skeleton style={{height: "0.875rem", width: "70%"}} animation="none" />
 ```
 
 ## API Reference
@@ -7966,6 +9311,20 @@ Unavailable, not hidden.
 <Slider label="Brightness" defaultValue={70} disabled />
 ```
 
+### One colour space for a whole picker
+
+colorSpace="rgb" on every track of a picker: red, green and blue are RGB channels already, and beside them a hue track reads rgb as hsb. So one value serves every track, and the picker passes it once.
+
+```tsx
+const [colour, setColour] = useState("rgb(4, 133, 247)");
+
+<Slider label="Hue" channel="hue" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<Slider label="Red" channel="red" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<Slider label="Green" channel="green" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<Slider label="Blue" channel="blue" colorSpace="rgb" value={colour} onValueChange={setColour} />
+<ColorSwatch color={colour} label="The colour" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -8044,6 +9403,19 @@ import {Spinner} from "@aurea-uds/react";
 <Spinner size="lg" />
 ```
 
+## Examples
+
+### Sizes
+
+Four sizes; the label is what the screen reader says.
+
+```tsx
+<Spinner label="Loading" size="sm" />
+<Spinner label="Loading" size="md" />
+<Spinner label="Loading" size="lg" />
+<Spinner label="Loading" size="xl" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -8068,6 +9440,50 @@ import {Stack} from "@aurea-uds/react";
 <Stack>
   <Card>First</Card>
   <Card>Second</Card>
+</Stack>
+```
+
+## Examples
+
+### Gap
+
+The space between the items, from the density scale: tight, normal or loose.
+
+```tsx
+<Stack gap="tight">
+  <Card>First</Card>
+  <Card>Second</Card>
+</Stack>
+<Stack gap="normal">
+  <Card>First</Card>
+  <Card>Second</Card>
+</Stack>
+<Stack gap="loose">
+  <Card>First</Card>
+  <Card>Second</Card>
+</Stack>
+```
+
+### Align
+
+Where each item sits across the column. stretch, the default, makes every item as wide as the stack.
+
+```tsx
+<Stack align="start">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+<Stack align="center">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+<Stack align="end">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+<Stack align="stretch">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
 </Stack>
 ```
 
@@ -8114,6 +9530,33 @@ A Badge is a pill of metadata; a Status is a state on the line.
 ```tsx
 <Status variant="online">Deployed</Status>
 <Badge variant="success">v1.7.0</Badge>
+```
+
+### Semantic names
+
+The same dots in the vocabulary of a job or a service: running, success, warning, danger and info. Neutral is the default. The label still says what the colour means.
+
+```tsx
+<Status variant="neutral">Draft</Status>
+<Status variant="running">Running</Status>
+<Status variant="success">Healthy</Status>
+<Status variant="warning">Slow</Status>
+<Status variant="danger">Down</Status>
+<Status variant="info">Scheduled</Status>
+```
+
+### Universal states
+
+state is the condition, an axis apart from the colour. With no children the label comes from the shared string table, so the same condition reads the same on every screen; with no variant the dot follows the severity — waiting is info, the rest is warning, and offline keeps its hollow dot.
+
+```tsx
+<Status state="waiting_user" />
+<Status state="waiting_approval" />
+<Status state="waiting_dependency" />
+<Status state="offline" />
+<Status state="stale" />
+<Status state="partial" />
+<Status state="degraded" />
 ```
 
 ## API Reference
@@ -8221,6 +9664,16 @@ Locked by the plan or by permission — the state stays visible, the control doe
 ```tsx
 <Switch label="Audit log" disabled />
 <Switch label="SSO" defaultChecked disabled />
+```
+
+### Sizes
+
+The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.
+
+```tsx
+<Switch label="Compact mode" defaultChecked size="sm" />
+<Switch label="Sound effects" defaultChecked />
+<Switch label="Large text" defaultChecked size="lg" />
 ```
 
 ## API Reference
@@ -8385,6 +9838,49 @@ The X removes; so does Delete on the active tag.
   description="Remove a filter to widen the search" />
 ```
 
+### Single selection
+
+One at a time: picking a tag releases the one before. Picking the same tag again clears it.
+
+```tsx
+const topics = [
+  {id: "news", label: "News"}, {id: "travel", label: "Travel"},
+  {id: "gaming", label: "Gaming"}, {id: "shopping", label: "Shopping"},
+];
+
+<TagGroup label="Section" selectionMode="single" defaultSelectedKeys={["news"]} items={topics} />
+```
+
+### Sizes
+
+20, 24 and 32 high — the reference library's tag. md is the default.
+
+```tsx
+const topics = [
+  {id: "news", label: "News"}, {id: "travel", label: "Travel"},
+  {id: "gaming", label: "Gaming"}, {id: "shopping", label: "Shopping"},
+];
+
+<TagGroup label="Small tags" size="sm" items={topics} />
+<TagGroup label="Medium tags" size="md" items={topics} />
+<TagGroup label="Large tags" size="lg" items={topics} />
+```
+
+### On a grey surface
+
+On a grey surface the neutral tag disappears into it. variant="surface" fills the tags with the card colour instead.
+
+```tsx
+const topics = [
+  {id: "news", label: "News"}, {id: "travel", label: "Travel"},
+  {id: "gaming", label: "Gaming"}, {id: "shopping", label: "Shopping"},
+];
+
+<Card variant="inset">
+  <TagGroup label="Saved topics" variant="surface" items={topics} />
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -8450,6 +9946,64 @@ import {Text} from "@aurea-uds/react";
 <Text weight="semibold">Semibold</Text>
 <Text weight="extrabold">Extrabold, for a cover title</Text>
 <Text numeric>$ 41,118.00</Text>
+```
+
+## Examples
+
+### Roles
+
+The closed list of roles. A role is a size, a weight and a line height together — there is no size between h3 and h4.
+
+```tsx
+<Text type="h1">Role h1</Text>
+<Text type="h2">Role h2</Text>
+<Text type="h3">Role h3</Text>
+<Text type="h4">Role h4</Text>
+<Text type="h5">Role h5</Text>
+<Text type="h6">Role h6</Text>
+<Text type="body">Role body</Text>
+<Text type="body-sm">Role body-sm</Text>
+<Text type="body-xs">Role body-xs</Text>
+<Text type="code">Role code</Text>
+```
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Text weight="normal">Weight normal</Text>
+<Text weight="medium">Weight medium</Text>
+<Text weight="semibold">Weight semibold</Text>
+<Text weight="bold">Weight bold</Text>
+<Text weight="extrabold">Weight extrabold</Text>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Text tone="default">Tone default</Text>
+<Text tone="muted">Tone muted</Text>
+<Text tone="subtle">Tone subtle</Text>
+<Text tone="primary">Tone primary</Text>
+<Text tone="link">Tone link</Text>
+<Text tone="info">Tone info</Text>
+<Text tone="success">Tone success</Text>
+<Text tone="warning">Tone warning</Text>
+<Text tone="danger">Tone danger</Text>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Text align="start">Aligned to start</Text>
+<Text align="center">Aligned to center</Text>
+<Text align="end">Aligned to end</Text>
+<Text align="justify">Aligned to justify</Text>
 ```
 
 ## API Reference
@@ -8529,6 +10083,16 @@ Selectable and copyable, not editable — for a log or a generated snippet you m
 <Textarea rows={3} readOnly defaultValue={log} />
 ```
 
+### Secondary, in a card
+
+variant="secondary" is the neutral fill, for a text area inside a card — the same two variants as Input.
+
+```tsx
+<Card>
+  <Field label="Notes"><Textarea variant="secondary" rows={3} /></Field>
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -8555,6 +10119,28 @@ import {ThemeToggle} from "@aurea-uds/react";
 
 ```tsx
 <ThemeToggle />
+```
+
+## Examples
+
+### Three positions — light, dark and the system
+
+mode="light-dark-system" is the switch at the top of this site: three choices in one capsule, and "System" follows the computer. It is a radio group named "Theme": Tab enters on the chosen one, the arrows move and choose.
+
+```tsx
+<ThemeToggle mode="light-dark-system" />
+```
+
+### Sizes
+
+The control sizes, from xs to xl; on a touch screen every size floors at 44.
+
+```tsx
+<ThemeToggle size="xs" />
+<ThemeToggle size="sm" />
+<ThemeToggle size="md" />
+<ThemeToggle size="lg" />
+<ThemeToggle size="xl" />
 ```
 
 ## API Reference
@@ -8640,6 +10226,16 @@ The default has the neutral fill; ghost has none, for a quiet row. Pressed looks
 <Toggle variant="ghost" icon="text-italic" label="Italic" />
 ```
 
+### Sizes
+
+The button scale — sm, md and lg — so a toggle sits level with the controls beside it. md is the default.
+
+```tsx
+<Toggle size="sm">Small</Toggle>
+<Toggle size="md">Medium</Toggle>
+<Toggle size="lg">Large</Toggle>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -8670,6 +10266,47 @@ import {ToggleGroup} from "@aurea-uds/react";
 
 ```tsx
 <ToggleGroup label="Text style" multiple defaultValue={["bold"]}>
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+```
+
+## Examples
+
+### Orientation
+
+vertical stacks the toggles; the arrow keys follow the direction.
+
+```tsx
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} orientation="horizontal">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} orientation="vertical">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+```
+
+### Sizes
+
+The size reaches every toggle in the group.
+
+```tsx
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="sm">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="md">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="lg">
   <Toggle value="bold">Bold</Toggle>
   <Toggle value="italic">Italic</Toggle>
   <Toggle value="underline">Underline</Toggle>
@@ -8823,6 +10460,74 @@ Even here the tone carries weight: ghost destructive reads as available, not as 
 <ToolbarButton>Duplicate</ToolbarButton>
 <ToolbarSeparator />
 <ToolbarButton variant="danger-ghost" leadingIcon="trash">Delete</ToolbarButton>
+```
+
+### Appearances
+
+ghost is the default inside a toolbar, where the bar already frames the action.
+
+```tsx
+<Toolbar label="Appearances">
+  <ToolbarButton appearance="solid">solid</ToolbarButton>
+  <ToolbarButton appearance="soft">soft</ToolbarButton>
+  <ToolbarButton appearance="outline">outline</ToolbarButton>
+  <ToolbarButton appearance="ghost">ghost</ToolbarButton>
+  <ToolbarButton appearance="link">link</ToolbarButton>
+  <ToolbarButton appearance="nav">nav</ToolbarButton>
+</Toolbar>
+```
+
+### Tones
+
+What the colour means, with the solid appearance.
+
+```tsx
+<Toolbar label="Tones">
+  <ToolbarButton tone="neutral" appearance="solid">neutral</ToolbarButton>
+  <ToolbarButton tone="brand" appearance="solid">brand</ToolbarButton>
+  <ToolbarButton tone="info" appearance="solid">info</ToolbarButton>
+  <ToolbarButton tone="success" appearance="solid">success</ToolbarButton>
+  <ToolbarButton tone="warning" appearance="solid">warning</ToolbarButton>
+  <ToolbarButton tone="danger" appearance="solid">danger</ToolbarButton>
+</Toolbar>
+```
+
+### Every shortcut
+
+The same variant shortcuts as Button.
+
+```tsx
+<Toolbar label="Every shortcut">
+  <ToolbarButton variant="primary">primary</ToolbarButton>
+  <ToolbarButton variant="secondary">secondary</ToolbarButton>
+  <ToolbarButton variant="tertiary">tertiary</ToolbarButton>
+  <ToolbarButton variant="outline">outline</ToolbarButton>
+  <ToolbarButton variant="ghost">ghost</ToolbarButton>
+  <ToolbarButton variant="link">link</ToolbarButton>
+  <ToolbarButton variant="nav">nav</ToolbarButton>
+  <ToolbarButton variant="primary-outline">primary-outline</ToolbarButton>
+  <ToolbarButton variant="primary-ghost">primary-ghost</ToolbarButton>
+  <ToolbarButton variant="link-primary">link-primary</ToolbarButton>
+  <ToolbarButton variant="danger">danger</ToolbarButton>
+  <ToolbarButton variant="danger-soft">danger-soft</ToolbarButton>
+  <ToolbarButton variant="danger-outline">danger-outline</ToolbarButton>
+  <ToolbarButton variant="danger-ghost">danger-ghost</ToolbarButton>
+  <ToolbarButton variant="link-danger">link-danger</ToolbarButton>
+</Toolbar>
+```
+
+### Every size
+
+The size step shared with Button.
+
+```tsx
+<Toolbar label="Every size">
+  <ToolbarButton size="xs">xs</ToolbarButton>
+  <ToolbarButton size="sm">sm</ToolbarButton>
+  <ToolbarButton size="md">md</ToolbarButton>
+  <ToolbarButton size="lg">lg</ToolbarButton>
+  <ToolbarButton size="xl">xl</ToolbarButton>
+</Toolbar>
 ```
 
 ## API Reference
@@ -9004,6 +10709,19 @@ import {Tooltip} from "@aurea-uds/react";
 </Tooltip>
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<Tooltip content="Opens on the top" side="top"><Button variant="outline">Side top</Button></Tooltip>
+<Tooltip content="Opens on the right" side="right"><Button variant="outline">Side right</Button></Tooltip>
+<Tooltip content="Opens on the bottom" side="bottom"><Button variant="outline">Side bottom</Button></Tooltip>
+<Tooltip content="Opens on the left" side="left"><Button variant="outline">Side left</Button></Tooltip>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -9055,6 +10773,7 @@ import {Topbar} from "@aurea-uds/react";
 | `tabs` | `HeaderTab[]` | — | A second row: the site's areas, each with an optional icon, like the area row of the reference documentation. The row is 40 tall, the areas sit at its bottom, 12 apart (4 on a phone), and it scrolls sideways when they do not fit. The current one gets aria-current="page" and a 2px bar in the accent color. It comes last in the Tab order, after the actions. With tabs the bar is exactly its height and the divider line hangs just below it. |
 | `currentTab` | `string` | — | The id of the current area in the second row. |
 | `tabsLabel` | `string` | "Sections" | The accessible name of the second row. |
+| `tabsEnd` | `ReactNode` | — | What sits at the END of the second row, opposite the areas: the Web \| Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs. |
 </page>
 
 <page url="https://aureauds.dev/tracetimeline.html">
@@ -9182,7 +10901,7 @@ const {density, setDensity} = useDensity();
 
 <SegmentedControl
   value={density ?? "comfortable"}
-  onChange={setDensity}
+  onChange={(v) => setDensity(v as AureaDensity)}
   items={[
     {value: "compact", label: "Compact"},
     {value: "comfortable", label: "Comfortable"},
@@ -9313,10 +11032,10 @@ import {useValorResponsivo} from "@aurea-uds/react";
 ```
 
 ```tsx
-const orientacao = useValorResponsivo(
+const orientation = useValorResponsivo(
   {base: "vertical", container: {sm: "horizontal"}},
   "horizontal",
-  ancora,
+  anchorRef,
 );
 ```
 </page>
@@ -9821,7 +11540,7 @@ import {Banner} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-banner-the-cookie-notice.html">
 # The cookie notice
 
-variant="consent" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored. On this static page the buttons do not answer; in your app they do.
+variant="consent" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored.
 
 ## Usage
 
@@ -11043,7 +12762,7 @@ import {Combobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [zone, setZone] = useState(null);
+const [zone, setZone] = useState<ComboboxOption | null>(null);
 
 <Combobox
   label="Time zone"
@@ -12474,10 +14193,10 @@ import {Menubar} from "@aurea-uds/react";
 ```tsx
 <Menubar label="Main" menus={[
   {label: "File", items: [
-    {label: "New file", kbd: "⌘N"}, {label: "Open…", kbd: "⌘O"},
-    "separator", {label: "Close", kbd: "⌘W"},
+    {label: "New file"}, {label: "Open…"},
+    "separator", {label: "Close"},
   ]},
-  {label: "Edit", items: [{label: "Undo", kbd: "⌘Z"}, {label: "Redo", kbd: "⇧⌘Z"}]},
+  {label: "Edit", items: [{label: "Undo"}, {label: "Redo"}]},
   {label: "View", items: [{label: "Zoom in"}, {label: "Zoom out"}, {label: "Reset zoom"}]},
 ]} />
 ```
@@ -12573,7 +14292,7 @@ import {MultiCombobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [tags, setTags] = useState([]);
+const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox
   label="Labels"
@@ -14089,7 +15808,7 @@ import {Card, Avatar, Badge, Timeline, Button} from "@aurea-uds/react";
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>Activity <Badge>3</Badge></strong><Button variant="ghost" size="sm">Mark all read</Button>
   </div>
-  <Timeline items={[{title:"Curator published v1.7.0",time:"09:12"},…]} />
+  <Timeline items={[{title:"Curator published v1.7.0",time:"09:12"}]} />
 </Card>
 ```
 </page>
@@ -14212,7 +15931,7 @@ const actions = allowedFrom(job.state);   // transferring -> ["pause", "verify"]
       costs the height the other four regions need */}
   <div className="grid" style={{gridTemplateColumns:"minmax(140px,1fr) 2fr"}}>
     <TreeView label="Workspace" items={job.tree} defaultExpandedIds={["brand"]} />
-    <Table caption="Resources">{...}</Table>
+    <Table caption="Resources">{/* … */}</Table>
   </div>
 
   {/* "conflict requires preview": the conflict is explained HERE, next to what arrived,
@@ -14266,7 +15985,7 @@ import {SegmentedControl, Status, Select, Button, KPI, Chart, Table, Alert} from
 // the controls, and `refresh` lives with the range, which is what owns freshness.
 const actions = allowedFrom(view.state);   // ready -> ["refresh"]
 
-<div className="stack" style={{"--chart-h":"8rem"}}>
+<div className="stack" style={{"--chart-h":"8rem"} as CSSProperties}>
   <div className="cluster">
     <div role="group" aria-label="Time range">
       <SegmentedControl label="Time range" items={RANGES} value={view.range} onChange={setRange} />
@@ -14277,8 +15996,8 @@ const actions = allowedFrom(view.state);   // ready -> ["refresh"]
         : <Status variant={tone[view.state]}>{label[view.state]}</Status>}
       {actions.map(a => <Button key={a} size="sm" onClick={() => send(a)}>{label[a]}</Button>)}
     </div>
-    <div role="group" aria-label="Filters"><Select value={view.filter} …/></div>
-    <div role="group" aria-label="Segments"><Select value={view.segment} …/></div>
+    <div role="group" aria-label="Filters"><Select value={view.filter} /* … */ /></div>
+    <div role="group" aria-label="Segments"><Select value={view.segment} /* … */ /></div>
     {/* "export records scope and freshness": both in the LABEL, because whoever clicks
         needs to know what comes out before it comes out. Keep it SHORT — this row holds four
         control groups on one line, and a label that wraps costs the box 43px of height */}
@@ -14491,7 +16210,7 @@ import {MediaPlayer, Status, DataList, Toolbar, ToolbarButton, EmptyState} from 
 // favorite — and that is not a hole: choosing a chapter does not change the library's state.
 const actions = allowedFrom(view.state);   // ready -> ["play"]
 
-<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"}}>
+<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"} as CSSProperties}>
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>{item.title} · {item.meta}</strong>
     {/* offline here IS the universal state (ADR-0018): it is OUR connection that dropped,
@@ -15156,6 +16875,74 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-43-0.html">
+# v0.43.0
+
+React Native on the site, with a page for every component; yellow selected states and fixes in React Native; tabs in CodeBlock.
+
+The site now shows React Native next to the web: every native component has its own page, with the real component running in both themes. In React Native, the selected segment, the selected tab and the bottom bar take the brand yellow, like the primary button, and six components get fixes. On the web, `CodeBlock` gets tabs, and the brand outline, ghost and link buttons use the blue text of the light theme. Read the Breaking changes section if you build the React Native `AureaStrings` yourself.
+
+## New
+
+- **`CodeBlock tabs`.** Alternatives for the same step in tabs, inside the code box: the install command in npm, pnpm, yarn and bun, for example.
+- **`SegmentedControl` `size`** (`md`, `sm`), and items with `href`: the control becomes a row of links. `onChange` is now optional.
+- **`Header tabsEnd` and `AppShell topbarTabsEnd`.** What sits at the right end of the row of area tabs.
+- **`ColorSpace` and `ColorChannel`**, the types of the `colorSpace` and `channel` props of the color components, are exported from `@aurea-uds/react/inputs` (and from the root).
+- **Metadata for the React Native components that have no web version**, in `@aurea-uds/contracts` (`platforms.web: "n-a"`): BottomNavProvider, IconRegistryProvider, Screen, LinkButton, KeyboardAvoiding, BottomSheet, ToastHost, Toast, ScrollShadow, SkeletonGroup, PressableFeedback and PhotoInput.
+- **`@aurea-uds/contracts` ships `api-surface-native.json`**: the React Native API read from the types by the compiler, next to the web one (`api-surface.json`).
+
+## Changed
+
+- **`tone="primary"` text uses the emphasis color** in `Text`, `Paragraph`, `Heading` and `Code` on the web: blue in the light theme, yellow in the dark theme. It used the fill yellow, which measures 1.75:1 in the light theme.
+- **The brand outline, ghost and link buttons use blue text in the light theme**: `Button`, `IconButton` and `ToolbarButton` with `primary-outline`, `primary-ghost`, `link-primary`, and `tone="brand"` without a box.
+- **A soft `Avatar` with a status tone** uses the soft `Badge` background.
+- **The `running`, `paused`, `offline` and `review` tones of `Badge`** have their own colors: blue, amber, dimmed gray and violet. Before, `paused`, `offline` and `review` looked like `neutral`.
+- **`align` on `Text` and `Code`** now aligns the text: the element becomes a block.
+- **The copy button no longer covers the end of a line** in `CodeBlock`. The code keeps room for the button, and the longest line scrolls before it reaches it.
+- **React Native: in the light theme, `tone="primary"` text is the brand yellow mixed with the text color**, so it passes the reading contrast on white and on the page background. In the dark theme it stays yellow.
+- **React Native: the selected color matches the web** — the check of a `Select` and `Combobox` option, the dot and check of a menu item, the current `Stepper` step.
+- **React Native: the selected segment of `SegmentedControl` and the selected capsule of `Tabs` are the brand yellow, like the primary button**, with the label in the button's ink, in both themes. The shadow is gone, and so is the yellow line under the `SegmentedControl` segment. Underlined `Tabs` (`variant="secondary"`) keep the yellow line.
+- **React Native: `BottomNav` marks the selected tab with the yellow behind it by default.** The default `indicator` changes from `none` (color on the icon and label only) to `capsule`. Pass `indicator="none"` to keep the previous look.
+- **React Native: `Checkbox` and `Radio` get an invisible extra touch area of 6 around them** (`hitSlop`). Their drawing and their size in the layout do not change. `Switch` has none.
+- **React Native in the browser** (`react-native-web`): headings carry their level (`Heading` from its `type`, the `Accordion` item as level 3) instead of all becoming `<h1>`, and the outline `Card` carries `data-aurea-card="outline"`. Nothing changes on a device.
+
+## Fixed
+
+- **The `DataState` type** rejected a function as `children`, which the component accepts. It compiles now.
+- **React Native: `Screen` in the browser no longer needs a `SafeAreaProvider` above it.** Without one, the web version of the safe-area library threw and the screen did not open. Without a provider, in the browser it uses zero insets; if your web app must keep clear of a notch, put a `SafeAreaProvider` at the root. Nothing changes on a device.
+- **React Native: `DatePicker` with `mode="time"`** shows the hours and minutes in the device's format, and when empty it asks for a time. Without `format`, it showed the day's date and said "Pick a date".
+- **React Native: `Switch` reads `align`.** With `start`, the track sits on the first line of a long label. The type accepted it, and the track always stayed in the middle.
+- **React Native: `BottomNav` with `variant="edge"`, in the browser,** came out with the shadow and the layer of the floating bar.
+- **React Native: `SearchField` without `value`.** The clear button disappeared and the typed text stayed. Now the clear button empties the field.
+
+## The documentation site
+
+- **React Native on the site**: a Web | Native switch at the end of the row of areas, and one page per React Native component (79), with the real component running through `react-native-web` in both themes, an example of every value and the API read from the types. The preview box of these pages uses the app's own background.
+- **Every variation in an example**: every value of every variant prop of the web components has a live example.
+- **The example box grows with the example**: no example scrolls inside its box.
+- **Install tabs** (npm, pnpm, yarn, bun) in Quick Start, Frameworks, Dark Mode and the release notes.
+
+## Breaking changes
+
+- **`comboboxOpen` is a new key in the React Native `AureaStrings`** ("Open list"; "Abrir lista" in `ptBR`), the same as on the web. It names the `Combobox` arrow in the browser. If you build the whole dictionary with this type, add it.
+- **`timePlaceholder` is a new key in the React Native `AureaStrings`** ("Pick a time"; "Escolher horário" in `ptBR`): what `DatePicker` says when it is empty with `mode="time"`. If you build the whole dictionary with this type, add it.
+- **`leading` and `trailing` are gone from the type of the React Native `IconButton` and `ThemeToggle`.** They came from the `Button` type and drew nothing. If you pass one of them, the code no longer compiles: remove it. Your own drawing goes in `name`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.43.0 @aurea-uds/core@0.43.0 @aurea-uds/fonts@0.43.0 @aurea-uds/icons@0.43.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.43.0
 ```
 </page>
 

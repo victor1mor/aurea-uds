@@ -40,8 +40,8 @@ export interface ScreenProps extends ViewProps {
      * A borda de baixo dele fica `space4` acima do topo da área do sistema, a mesma conta do
      * `BottomNav` flutuante. Dentro de um `BottomNavProvider`, ele sobe acima da barra de abas.
      *
-     * ⚠ **Sem gancho de inset, de propósito.** A `Screen` não exige `SafeAreaProvider` acima, e
-     * `useSafeAreaInsets` exige. Quando a tela não pega a borda de baixo (`edges` sem `"bottom"`), o
+     * ⚠ **Sem gancho de inset, de propósito.** A `Screen` não exige `SafeAreaProvider` acima (no
+     * navegador ela leva o próprio), e `useSafeAreaInsets` exige. Quando a tela não pega a borda de baixo (`edges` sem `"bottom"`), o
      * rodapé ganha a própria `SafeAreaView` só nessa borda — a mesma peça nativa que a raiz já usa.
      */
     footer?: React.ReactNode;
@@ -61,11 +61,12 @@ export interface ScreenProps extends ViewProps {
  * Com ele, o padding vai para o `contentContainerStyle` — que é o certo, porque padding no
  * `ScrollView` em si recorta a área rolável e deixa a barra de rolagem para dentro.
  *
- * ⚠ **Não precisa de `SafeAreaProvider` acima.** O `SafeAreaView` da biblioteca é uma view
- * nativa e lê o inset do sistema sozinha (medido no fonte da 5.9.1: ela não consome contexto
- * nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
+ * ⚠ **Não precisa de `SafeAreaProvider` acima.** No aparelho, o `SafeAreaView` da biblioteca é
+ * uma view nativa e lê o inset do sistema sozinha (medido no fonte da 5.9.1: ela não consome
+ * contexto nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
+ * No navegador é diferente, e a `Screen` resolve sozinha (ver abaixo).
  */
-export declare function Screen({ edges, padded, scroll, background, onRefresh, refreshing, footer, style, children, ...rest }: ScreenProps): React.JSX.Element;
+export declare function Screen(props: ScreenProps): React.JSX.Element;
 /** O recuo de baixo do sistema (barra de botões ou de gestos), em dp. */
 export declare function useRecuoDoSistema(): number;
 /**

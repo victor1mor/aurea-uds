@@ -13,14 +13,57 @@ import {Section} from "@aurea-uds/react";
   <Container>
     <Grid columns={12}>
       <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
-        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+        <Heading id="t-app" level={2}>A dark band</Heading>
       </Grid.Item>
       <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
-        <Button tone="brand">Baixar</Button>
+        <Button variant="primary-outline">Its own theme</Button>
       </Grid.Item>
     </Grid>
   </Container>
 </Section>
+```
+
+## Examples
+
+### Surfaces
+
+The band's background: the page's (the default), a card surface, or the recessed inset one.
+
+```tsx
+<Section spacing="sm" surface="background"><Container>surface background</Container></Section>
+<Section spacing="sm" surface="card"><Container>surface card</Container></Section>
+<Section spacing="sm" surface="inset"><Container>surface inset</Container></Section>
+```
+
+### A theme for the band
+
+The band takes its own theme, whatever the page's: a dark band in a light page, or the other way round.
+
+```tsx
+<Section spacing="sm" theme="light"><Container>theme light</Container></Section>
+<Section spacing="sm" theme="dark"><Container>theme dark</Container></Section>
+```
+
+### Footer widths
+
+On the footer, how far the content grows, on the Container's scale. inline is the one-line footer.
+
+```tsx
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="sm" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="md" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="lg" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="xl" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="2xl" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="docs" />
+<Section variant="footer" layout="inline" legal="© 2026 Acme" maxWidth="full" />
+```
+
+### An opening further down
+
+On the hero, the title is the page's h1 by default; titleAs="h2" when the band opens a section further down the page.
+
+```tsx
+<Section variant="hero" spacing="sm" title="Reports, ready by nine" description="Every team gets its numbers before the first meeting." titleAs="h2" />
 ```
 
 ## API Reference

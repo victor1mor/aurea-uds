@@ -49,8 +49,9 @@ describe("R-12 · Tabs: o jeito sublinhado da referência, com o fio da casa", (
     const e = fila();
     expect(e.backgroundColor).toBe(t.color.muted);
     expect(e.borderRadius).toBe(t.size.radiusControl);
-    // ADR-0059 (08/10/2026): era `secondary`, a mesma cor do trilho no tema claro — não se via.
-    expect(plano(tabs()[0]).backgroundColor).toBe(t.color.segment);
+    // ADR-0059 (08/10/2026): era `secondary`, a mesma cor do trilho no tema claro — não se via. Depois `segment`; desde
+    // 24/10/2026, o amarelo do botão (decisão do Victor: "as abas do Tabs deixe como a aba escolhida amarelo tudo").
+    expect(plano(tabs()[0]).backgroundColor).toBe(t.color.primary);
     for (const x of tabs()) expect(fiosDentroDe(x)).toHaveLength(0);
   });
   it("secondary: a fila perde a cápsula, e o fio de baixo é transparente (sem linha, ADR-0072)", () => {
@@ -75,11 +76,13 @@ describe("R-12 · Tabs: o jeito sublinhado da referência, com o fio da casa", (
     expect([a, b, c].map((x) => fiosDentroDe(x).length)).toEqual([0, 1, 0]);
     expect(plano(b).backgroundColor).toBeUndefined();
   });
-  it("o SegmentedControl continua com o MESMO fio (a peça mudou de casa, não de número)", () => {
+  // 24/10/2026: o SegmentedControl perdeu o fio — a cápsula escolhida virou o amarelo do botão, e o fio amarelo sumiria nela
+  // (decisão do Victor). O fio continua só no `Tabs` secundário, acima.
+  it("o SegmentedControl não tem mais o fio (a cápsula escolhida é o amarelo)", () => {
     render(<Envolve><SegmentedControl value="a" onChange={() => {}}
       items={[{value: "a", label: "A"}, {value: "b", label: "B"}]} /></Envolve>);
     const fios = __instancias("View").map((p) => plano(p)).filter(ehFio);
-    expect(fios).toHaveLength(1);
+    expect(fios).toHaveLength(0);
   });
 });
 

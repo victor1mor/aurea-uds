@@ -146,6 +146,25 @@ Stretched to the container for a form footer or a narrow screen — only the wid
 <Button variant="primary" fullWidth>Continue</Button>
 ```
 
+### Brand hierarchy
+
+The brand tone in three weights, like the destructive one: the fill for the main action, the outline and the ghost for brand actions that should not compete with it.
+
+```tsx
+<Button variant="primary">Upgrade</Button>
+<Button variant="primary-outline">Compare plans</Button>
+<Button variant="primary-ghost">See pricing</Button>
+```
+
+### Navigation item
+
+nav is an appearance of its own, not a tone: a navigation item, muted at rest. variant="nav" is the shortcut for appearance="nav" with the neutral tone, so the two below draw the same.
+
+```tsx
+<Button variant="nav">Overview</Button>
+<Button appearance="nav">Reports</Button>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

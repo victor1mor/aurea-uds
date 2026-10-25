@@ -47,6 +47,74 @@ Even here the tone carries weight: ghost destructive reads as available, not as 
 <ToolbarButton variant="danger-ghost" leadingIcon="trash">Delete</ToolbarButton>
 ```
 
+### Appearances
+
+ghost is the default inside a toolbar, where the bar already frames the action.
+
+```tsx
+<Toolbar label="Appearances">
+  <ToolbarButton appearance="solid">solid</ToolbarButton>
+  <ToolbarButton appearance="soft">soft</ToolbarButton>
+  <ToolbarButton appearance="outline">outline</ToolbarButton>
+  <ToolbarButton appearance="ghost">ghost</ToolbarButton>
+  <ToolbarButton appearance="link">link</ToolbarButton>
+  <ToolbarButton appearance="nav">nav</ToolbarButton>
+</Toolbar>
+```
+
+### Tones
+
+What the colour means, with the solid appearance.
+
+```tsx
+<Toolbar label="Tones">
+  <ToolbarButton tone="neutral" appearance="solid">neutral</ToolbarButton>
+  <ToolbarButton tone="brand" appearance="solid">brand</ToolbarButton>
+  <ToolbarButton tone="info" appearance="solid">info</ToolbarButton>
+  <ToolbarButton tone="success" appearance="solid">success</ToolbarButton>
+  <ToolbarButton tone="warning" appearance="solid">warning</ToolbarButton>
+  <ToolbarButton tone="danger" appearance="solid">danger</ToolbarButton>
+</Toolbar>
+```
+
+### Every shortcut
+
+The same variant shortcuts as Button.
+
+```tsx
+<Toolbar label="Every shortcut">
+  <ToolbarButton variant="primary">primary</ToolbarButton>
+  <ToolbarButton variant="secondary">secondary</ToolbarButton>
+  <ToolbarButton variant="tertiary">tertiary</ToolbarButton>
+  <ToolbarButton variant="outline">outline</ToolbarButton>
+  <ToolbarButton variant="ghost">ghost</ToolbarButton>
+  <ToolbarButton variant="link">link</ToolbarButton>
+  <ToolbarButton variant="nav">nav</ToolbarButton>
+  <ToolbarButton variant="primary-outline">primary-outline</ToolbarButton>
+  <ToolbarButton variant="primary-ghost">primary-ghost</ToolbarButton>
+  <ToolbarButton variant="link-primary">link-primary</ToolbarButton>
+  <ToolbarButton variant="danger">danger</ToolbarButton>
+  <ToolbarButton variant="danger-soft">danger-soft</ToolbarButton>
+  <ToolbarButton variant="danger-outline">danger-outline</ToolbarButton>
+  <ToolbarButton variant="danger-ghost">danger-ghost</ToolbarButton>
+  <ToolbarButton variant="link-danger">link-danger</ToolbarButton>
+</Toolbar>
+```
+
+### Every size
+
+The size step shared with Button.
+
+```tsx
+<Toolbar label="Every size">
+  <ToolbarButton size="xs">xs</ToolbarButton>
+  <ToolbarButton size="sm">sm</ToolbarButton>
+  <ToolbarButton size="md">md</ToolbarButton>
+  <ToolbarButton size="lg">lg</ToolbarButton>
+  <ToolbarButton size="xl">xl</ToolbarButton>
+</Toolbar>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

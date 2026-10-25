@@ -54,6 +54,16 @@ The Field names the question; each Radio names an answer.
 </Field>
 ```
 
+### Sizes
+
+The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.
+
+```tsx
+<Radio name="size" label="Small" size="sm" />
+<Radio name="size" label="Medium" defaultChecked />
+<Radio name="size" label="Large" size="lg" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -5,17 +5,13 @@
 import {createElement as h} from "react";
 import {MultiCombobox} from "../../../../packages/react/dist/index.js";
 
-const LISTA = "This page is static HTML: the listbox opens in a portal and only exists in a real "
-  + "React app. The preview shows the field with its chips; the code is the whole composition.";
-
 export default [
   {
     variant: "Tags",
     name: "Labelling something with several tags",
     description: "Each choice stays visible as a chip, so the user reads the whole selection without opening the list again. Backspace removes the last one — the keyboard shape people already expect from an email To: field.",
     uses: ["MultiCombobox"],
-    note: LISTA,
-    code: `const [tags, setTags] = useState([]);
+    code: `const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox
   label="Labels"

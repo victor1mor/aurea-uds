@@ -1,7 +1,9 @@
 name: Site
 
-# Publica o catálogo em aureauds.dev (Cloudflare) DEPOIS que a CI do `main` passa. Uma CI vermelha
-# não publica nada: o site mostra sempre o último `main` verde. Também dá para disparar à mão.
+# Publica o catálogo em aureauds.dev (Cloudflare) depois de CADA rodada da CI no `main`. O site é sempre o do último
+# `main` VERDE: uma CI vermelha não publica código reprovado. Mas a página `saude.html` é publicada MESMO vermelha
+# (decisão do Victor, 19/10/2026): quando a rodada falha, monta-se o último commit verde e só a saúde traz a rodada nova.
+# Também dá para disparar à mão.
 on:
   workflow_run:
     workflows: [CI]
@@ -11,6 +13,8 @@ on:
 
 permissions:
   contents: read
+  # ler as rodadas da CI, para a página de saúde e para achar o último commit verde
+  actions: read
 
 concurrency:
   group: site
@@ -18,13 +22,29 @@ concurrency:
 
 jobs:
   publicar:
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.event == 'push' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Qual commit publicar (o que a CI aprovou, ou o último verde)
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENTO: ${{ github.event_name }}
+          CONCLUSAO: ${{ github.event.workflow_run.conclusion }}
+          APROVADO: ${{ github.event.workflow_run.head_sha || github.sha }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ "$EVENTO" = "workflow_dispatch" ] || [ "$CONCLUSAO" = "success" ]; then
+            echo "sha=$APROVADO" >> "$GITHUB_OUTPUT"
+          else
+            verde=$(gh api "repos/$REPO/actions/workflows/ci.yml/runs?branch=main&event=push&status=success&per_page=1" --jq '.workflow_runs[0].head_sha')
+            echo "A rodada falhou ($CONCLUSAO): o site é o do último verde, $verde; só a saúde traz a rodada nova."
+            echo "sha=$verde" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          # o commit que a CI aprovou, não o que o `main` virou depois
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # o commit que a CI aprovou (ou o último verde), não o que o `main` virou depois
+          ref: ${{ steps.commit.outputs.sha }}
           # o passo de publicar não precisa da chave do git
           persist-credentials: false
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -32,6 +52,16 @@ jobs:
           node-version: 24
       - name: Montar site-dist (só o catálogo gerado; recusa recurso de fora)
         run: node scripts/montar-site.mjs
+      - name: A saúde, com as 30 últimas rodadas da CI (mesmo vermelhas)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ -f scripts/saude-rodadas.mjs ] && [ -f site-dist/saude.html ]; then
+            node scripts/saude-rodadas.mjs site-dist/saude.html
+          else
+            echo "O commit publicado é de antes da página de saúde: nada a preencher."
+          fi
       - name: Publicar na Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

@@ -2,6 +2,7 @@
 title: Icons
 description: The Phosphor icon set, how to serve its sprite, the filled form for the selected item, and how to add your own drawing.
 icon: shapes
+sources: ts:Icon, pkg:icons
 ---
 
 Aurea draws its icons from Phosphor Icons: 1,433 glyphs, each in a regular and a filled form. On the web they live in one SVG sprite, in the `@aurea-uds/icons` package. On React Native each glyph is its own module.
@@ -58,8 +59,9 @@ Most components take an icon by name too: `leadingIcon` and `trailingIcon` on `B
 The name is the Phosphor name, exactly as Phosphor writes it. TypeScript checks it in `Icon` and in the props that take an icon. A wrong name does not compile:
 
 ```tsx
-<Icon name="caret-down" />   // compiles
-<Icon name="chevron-down" /> // does not compile: the Phosphor name is caret-down
+const right = <Icon name="caret-down" />;
+// @ts-expect-error: the Phosphor name is caret-down
+const wrong = <Icon name="chevron-down" />;
 ```
 
 The full API is on the [Icon](./icon.html) page.

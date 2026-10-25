@@ -117,9 +117,9 @@ export default {
     {
       title: "Options in sizes",
       description: "The group takes the same five sizes.",
-      code: `<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={…} />
-<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={…} />
-<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={…} />`,
+      code: `<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={options} />
+<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={options} />
+<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={options} />`,
       render: () => h("div", {style: {display: "grid", gap: "var(--space-4)"}},
         h(ColorSwatch, {size: "sm", name: "small", label: "Small", defaultValue: "#0485f7", options: PALETA}),
         h(ColorSwatch, {name: "medium", label: "Medium", defaultValue: "#0485f7", options: PALETA}),
@@ -148,8 +148,8 @@ export default {
     {
       title: "Starting value",
       description: "defaultValue picks one when the page opens; without it, none is picked.",
-      code: `<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={…} />
-<ColorSwatch name="none" label="No colour yet" options={…} />`,
+      code: `<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={options} />
+<ColorSwatch name="none" label="No colour yet" options={options} />`,
       render: () => h("div", {style: {display: "grid", gap: "var(--space-4)"}},
         h(ColorSwatch, {name: "start", label: "Theme colour", defaultValue: "#7c3aed", options: PALETA}),
         h(ColorSwatch, {name: "none", label: "No colour yet", options: PALETA})),
@@ -168,7 +168,7 @@ export default {
       title: "Another mark",
       description: "indicator replaces the check on the chosen colour; it gets the ink that contrasts most.",
       code: `<ColorSwatch name="favourite" label="Favourite colour" defaultValue="#e11d48"
-  indicator={<Icon name="heart" />} options={…} />`,
+  indicator={<Icon name="heart" />} options={options} />`,
       render: () => h(ColorSwatch, {name: "favourite", label: "Favourite colour", defaultValue: "#e11d48",
         indicator: h(Icon, {name: "heart"}), options: PALETA}),
     },

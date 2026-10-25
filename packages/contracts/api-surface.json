@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 9,
     "aliasesLiterais": 112,
-    "propsDistintas": 381
+    "propsDistintas": 383
   },
   "aliases": {
     "ButtonVariant": {
@@ -366,7 +366,7 @@
     },
     "DataStateProps": {
       "module": "feedback-client",
-      "raw": "HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & { state?: DataStateValue; message?: ReactNode; skeleton?: ReactNode; emptyTitle?: ReactNode; emptyIcon?: IconName; action?: ReactNode; children: ReactNode | (() => ReactNode); /** A barreira de erro (MNT-25): o que quebrar ao desenhar o conteúdo vira a cara de erro, com \"Tentar de novo\". */ catchErrors?: boolean; /** Recebe o erro que a barreira pegou — para o app registrar. */ onCatch?: (error: unknown, info: React.ErrorInfo) => void; }",
+      "raw": "Omit<HTMLAttributes<HTMLDivElement>, \"children\"> & RefAttributes<HTMLDivElement> & { state?: DataStateValue; message?: ReactNode; skeleton?: ReactNode; emptyTitle?: ReactNode; emptyIcon?: IconName; action?: ReactNode; children: ReactNode | (() => ReactNode); catchErrors?: boolean; onCatch?: (error: unknown, info: React.ErrorInfo) => void; }",
       "union": null
     },
     "UploadFn": {
@@ -4249,7 +4249,7 @@
           "props": [
             {
               "name": "children",
-              "optional": false,
+              "optional": true,
               "type": "string",
               "values": null
             },
@@ -4281,6 +4281,12 @@
               "name": "highlight",
               "optional": true,
               "type": "CodeHighlighter",
+              "values": null
+            },
+            {
+              "name": "tabs",
+              "optional": true,
+              "type": "CodeBlockTab[]",
               "values": null
             },
             {
@@ -6937,7 +6943,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ value: string; label: ReactNode; }>",
+              "type": "Array<{ value: string; label: ReactNode; href?: string; }>",
               "values": null
             },
             {
@@ -6948,7 +6954,7 @@
             },
             {
               "name": "onChange",
-              "optional": false,
+              "optional": true,
               "type": "(v: string) => void",
               "values": null
             },
@@ -6963,6 +6969,15 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"sm\" | \"md\"",
+              "values": [
+                "sm",
+                "md"
+              ]
             }
           ]
         },
@@ -7403,6 +7418,12 @@
               "name": "topbarTabsLabel",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "topbarTabsEnd",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             },
             {
@@ -8367,6 +8388,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "tabsEnd",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             }
           ]
         },
@@ -9326,6 +9353,12 @@
               "name": "tabsLabel",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "tabsEnd",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             }
           ]

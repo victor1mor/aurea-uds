@@ -2,8 +2,20 @@
 // dentro da moldura, e é isso que a varredura mede.
 import {createElement as h, useState} from "react";
 import {ColorArea, ColorSwatch} from "../../../packages/react/dist/index.js";
+import {jsxProp} from "./_eixos.mjs";
 
 const coluna = {display: "grid", gap: "var(--space-3)", justifyItems: "start", width: "min(100%, 14rem)"};
+
+// Os pares de canais, dois por espaço de cor: cada canal da ficha aparece ATRAVESSADO (x) e EM PÉ (y). O código e o
+// desenho saem desta lista.
+const PARES = [
+  {colorSpace: "hsb", xChannel: "saturation", yChannel: "brightness", defaultValue: "#0485f7", "aria-label": "HSB, saturation and brightness"},
+  {colorSpace: "hsb", xChannel: "brightness", yChannel: "hue", defaultValue: "#0485f7", "aria-label": "HSB, brightness and hue"},
+  {colorSpace: "hsl", xChannel: "saturation", yChannel: "lightness", defaultValue: "#16a34a", "aria-label": "HSL, saturation and lightness"},
+  {colorSpace: "hsl", xChannel: "lightness", yChannel: "hue", defaultValue: "#16a34a", "aria-label": "HSL, lightness and hue"},
+  {colorSpace: "rgb", xChannel: "green", yChannel: "red", defaultValue: "#e11d48", "aria-label": "RGB, green and red"},
+  {colorSpace: "rgb", xChannel: "blue", yChannel: "green", defaultValue: "#e11d48", "aria-label": "RGB, blue and green"},
+];
 
 function ComOValor() {
   const [cor, setCor] = useState("#0485f7");
@@ -73,6 +85,17 @@ export default {
 <ColorSwatch color={colour} label="Accent" />`,
       embed: true,
       render: () => h(ComOValor),
+    },
+    {
+      title: "Every channel on each axis",
+      description: "Two areas per colour space, so each channel shows up across and up. In each area the channel "
+        + "left out is the one that stays fixed.",
+      code: PARES.map((p) => `<ColorArea ${Object.entries(p).map(([k, v]) => jsxProp(k, v)).join(" ")} />`).join("\n"),
+      embed: true,
+      // Grade de três: numa fileira que quebra, a caixa encolhia até uma área (120) e as seis empilhavam (840 de altura,
+      // mais que a moldura — bloco 1, 23/10/2026).
+      render: () => h("div", {style: {display: "grid", gridTemplateColumns: "repeat(3, auto)", justifyContent: "center", gap: "var(--space-6)"}},
+        ...PARES.map((p) => h(ColorArea, {key: p["aria-label"], ...p}))),
     },
   ],
 };

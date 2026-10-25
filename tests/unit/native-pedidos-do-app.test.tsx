@@ -20,6 +20,7 @@ import {
   comOpacidade, criarRegistroDeIcones, resolverTokens, useBottomNavSpace,
 } from "../../packages/native/src/index.js";
 import {__definirInsets} from "./native-stubs/react-native-safe-area-context";
+import {corDoEscolhido} from "../../packages/native/src/estilos.js";
 
 const claro = resolverTokens("light", "comfortable");
 const Glifo = () => null;
@@ -120,22 +121,28 @@ describe("B1 · linha sem ação não é `link`", () => {
 describe("C4 · o segmento escolhido usa a MARCA, não o texto comum", () => {
   const CASO = [{value: "a", label: "Um"}, {value: "b", label: "Dois"}];
 
-  it("o rótulo escolhido é `primaryEmphasis`", () => {
+  // ~~`primaryEmphasis`~~ → ~~a cor do escolhido DA WEB (bloco 1, 23/10/2026: a mistura da marca a 45% sobre o texto)~~
+  // → O AMARELO DO BOTÃO (24/10/2026, decisão do Victor, vendo as formas desenhadas: "O amarelo por trás, como o botão, na
+  // barra de baixo e na aba escolhida"). A cápsula escolhida é a marca, e o nome vai na tinta do botão. O azul e a mistura
+  // de antes reprovam.
+  it("o segmento escolhido é a MARCA por trás, com o nome na tinta do botão — nem o azul, nem a mistura", () => {
     render(<Envolve><SegmentedControl items={CASO} value="a" /></Envolve>);
     const cores = __instancias("Text").map((p) => StyleSheet.flatten(p.style)?.color);
-    expect(cores).toContain(claro.color.primaryEmphasis);
-    // e NÃO o cinza de antes, nem o texto comum
-    expect(cores).not.toContain(claro.color.foreground);
+    expect(cores).toContain(claro.color.primaryForeground);
+    expect(cores).not.toContain(claro.color.primaryEmphasis);
+    expect(cores).not.toContain(corDoEscolhido(claro));
+    const fundos = __instancias("Pressable").map((p) => StyleSheet.flatten(p.style)?.backgroundColor);
+    expect(fundos).toContain(claro.color.primary);
   });
 
-  // O fio amarelo é a outra metade da mesma linguagem (`aurea.css:958-960`).
-  it("e ele ganha o fio amarelo a 75%", () => {
+  // O fio amarelo saiu com a cápsula amarela: nela ele não se veria (24/10/2026).
+  it("e ele não tem mais o fio amarelo", () => {
     render(<Envolve><SegmentedControl items={CASO} value="a" /></Envolve>);
     const fios = __instancias("View").filter((p) => {
       const e = StyleSheet.flatten(p.style) ?? {};
       return e.position === "absolute" && e.height === 2 && e.bottom === 0;
     });
-    expect(fios.length).toBe(1);
+    expect(fios.length).toBe(0);
   });
 });
 

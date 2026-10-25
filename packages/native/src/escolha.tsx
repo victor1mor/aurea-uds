@@ -411,6 +411,9 @@ function AlcaDoDeslizante({
       // derruba a ponte — por isso a escala de 0 a 100, como na referência; quem fala o valor é o
       // `text`, já formatado.
       accessibilityValue={{min: 0, max: 100, now: porcento, text: valorEscrito}}
+      // O `react-native-web` 0.21 lê só os `aria-value*` (o `accessibilityValue` em objeto ficou para trás): sem eles, o
+      // `role="slider"` saía sem valor no navegador. O aparelho junta os dois com o mesmo número (bloco 1, 24/10/2026).
+      aria-valuemin={0} aria-valuemax={100} aria-valuenow={porcento} aria-valuetext={valorEscrito}
       accessibilityActions={[{name: "increment", label: rotulosDasAcoes[0]}, {name: "decrement", label: rotulosDasAcoes[1]}]}
       onAccessibilityAction={(e: AccessibilityActionEvent) => {
         const nomeDaAcao = e.nativeEvent.actionName;
@@ -713,6 +716,7 @@ export function TagGroup({
           return (
             <View
               key={it.id}
+              role="listitem"
               testID={testID ? `${testID}-${it.id}` : undefined}
               style={[
                 s.etiqueta,
@@ -727,7 +731,7 @@ export function TagGroup({
                   disabled={it.disabled}
                   accessibilityRole="button"
                   accessibilityLabel={textoDaEtiqueta(it) || undefined}
-                  {...estadoAcessivel({selected: escolhida, disabled: !!it.disabled})}
+                  {...estadoAcessivel({selected: escolhida, disabled: !!it.disabled}, "button")}
                   hitSlop={{top: folgaDoTexto, bottom: folgaDoTexto, left: m.lados, right: onRemove ? 0 : m.lados}}
                   testID={testID ? `${testID}-${it.id}-escolher` : undefined}
                   style={estiloPrincipal}>

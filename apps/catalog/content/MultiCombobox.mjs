@@ -39,7 +39,7 @@ export default {
       title: "Facets",
       description: "The filter row of a collection: several values, all visible at once.",
       code: [
-        "const [tags, setTags] = useState([]);",
+        "const [tags, setTags] = useState<ComboboxOption[]>([]);",
         "",
         '<MultiCombobox label="Tags" placeholder="Add a tag…" value={tags}',
         "  onValueChange={setTags}",

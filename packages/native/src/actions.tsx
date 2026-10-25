@@ -371,7 +371,10 @@ export function LinkButton(props: LinkButtonProps) {
   return <CorpoDoBotao {...props} appearance="ghost" semRecuo />;
 }
 
-export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "fullWidth"> {
+// Sem `leading` e `trailing` (bloco 1, 24/10/2026): o botão só de ícone não tem onde pôr peça antes ou depois do glifo, e as
+// duas props chegavam pelo `ButtonProps`, apareciam na ficha e não desenhavam nada. O desenho próprio do app vai no `name`
+// (R-11: toda prop de ícone aceita o `AureaIcon`). O `ThemeToggle` herda daqui.
+export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
   name: AureaIcon;
   /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
   label: string;
@@ -407,8 +410,10 @@ export function folgaDoToque(t: AureaTokens, size: AureaButtonSize = "md"): numb
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
 function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
-  icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...rest
+  icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...comSobras
 }: IconButtonProps & {corDoIcone?: string; pesoDoIcone?: IconWeight}) {
+  // Quem chama de JavaScript, sem o tipo, ainda pode mandar `leading`/`trailing`: elas não descem ao `Pressable`.
+  const {leading: _antes, trailing: _depois, ...rest} = comSobras as typeof comSobras & {leading?: unknown; trailing?: unknown};
   const t = useAureaTokens();
   const aoTocar = useToqueComShare(share, onPress);
   const s = folha(t);

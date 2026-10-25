@@ -53,7 +53,7 @@ export default {
       title: "Single choice",
       description: "One option out of many, with the list filtering as you type.",
       code: [
-        "const [value, setValue] = useState(null);",
+        "const [value, setValue] = useState<ComboboxOption | null>(null);",
         "",
         '<Combobox label="Component" placeholder="Search…" value={value}',
         "  onValueChange={setValue}",

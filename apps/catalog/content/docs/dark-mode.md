@@ -2,6 +2,7 @@
 title: Dark Mode
 description: Switch between the light and dark themes, follow the system, and save the choice.
 icon: moon
+sources: ts:AureaProvider, ts:useTheme, pkg:core
 ---
 
 Aurea's themes are CSS. The page reads its colors from the `data-theme` attribute on `<html>`: `light` or `dark`. Both themes are complete: light and dark are equal.

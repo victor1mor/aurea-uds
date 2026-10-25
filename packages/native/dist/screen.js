@@ -38,7 +38,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // suportado** na soma. Os tokens da Aurea são todos numéricos (dp), então isto não morde aqui —
 // mas morde quem passar `padding: "5%"` no `style`.
 import * as React from "react";
-import { Keyboard, RefreshControl, ScrollView, View } from "react-native";
+import { Keyboard, Platform, RefreshControl, ScrollView, View } from "react-native";
 import { SafeAreaInsetsContext, SafeAreaView, initialWindowMetrics } from "react-native-safe-area-context";
 import { useBottomNavSpace } from "./barranav.js";
 import { criarFolha } from "./estilos.js";
@@ -80,11 +80,31 @@ const TODAS_AS_BORDAS = ["top", "right", "bottom", "left"];
  * Com ele, o padding vai para o `contentContainerStyle` — que é o certo, porque padding no
  * `ScrollView` em si recorta a área rolável e deixa a barra de rolagem para dentro.
  *
- * ⚠ **Não precisa de `SafeAreaProvider` acima.** O `SafeAreaView` da biblioteca é uma view
- * nativa e lê o inset do sistema sozinha (medido no fonte da 5.9.1: ela não consome contexto
- * nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
+ * ⚠ **Não precisa de `SafeAreaProvider` acima.** No aparelho, o `SafeAreaView` da biblioteca é
+ * uma view nativa e lê o inset do sistema sozinha (medido no fonte da 5.9.1: ela não consome
+ * contexto nenhum). Quem exige o provider são os HOOKS — e quem usa `react-navigation` já o tem.
+ * No navegador é diferente, e a `Screen` resolve sozinha (ver abaixo).
  */
-export function Screen({ edges = TODAS_AS_BORDAS, padded = true, scroll = false, background = "background", onRefresh, refreshing, footer, style, children, ...rest }) {
+export function Screen(props) {
+    // 🔴 NO NAVEGADOR, A `SafeAreaView` DA BIBLIOTECA É O GANCHO — bloco 1, 24/10/2026. A versão web
+    // dela (`SafeAreaView.web.tsx`, 5.9.1) chama `useSafeAreaInsets`, que LEVANTA ERRO sem
+    // `SafeAreaProvider` acima: a `Screen` quebrava num app do Expo aberto no navegador, e o
+    // comentário acima prometia o contrário. Sem provedor, a `Screen` põe a folga ZERADA no contexto —
+    // só no navegador; no aparelho nada muda.
+    // ⚠ Zerada, e não o `SafeAreaProvider` da biblioteca: o do navegador mede a caixa contra a JANELA e
+    // dá folga de baixo errada a toda tela que não começa no topo dela — medido na bancada (2.573) e
+    // na página do site (93 a 2.054), com o rodapé fora do pé. Decisão do Victor, 24/10/2026, vendo as
+    // duas lado a lado ("a alternativa: a folga zerada, sem medir"). O que se perde: a tela não se
+    // afasta sozinha do entalhe quando o app instalado no iPhone pelo navegador cobre a tela inteira —
+    // quem precisa disso põe o `SafeAreaProvider` na raiz, e ele vale.
+    const temProvedor = React.useContext(SafeAreaInsetsContext) != null;
+    if (Platform.OS === "web" && !temProvedor) {
+        return _jsx(SafeAreaInsetsContext.Provider, { value: SEM_FOLGA, children: _jsx(CascaDaTela, { ...props }) });
+    }
+    return _jsx(CascaDaTela, { ...props });
+}
+const SEM_FOLGA = { top: 0, right: 0, bottom: 0, left: 0 };
+function CascaDaTela({ edges = TODAS_AS_BORDAS, padded = true, scroll = false, background = "background", onRefresh, refreshing, footer, style, children, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const fundo = s[`fundo_${background}`];
@@ -92,6 +112,8 @@ export function Screen({ edges = TODAS_AS_BORDAS, padded = true, scroll = false,
     // **Zero** fora de um `BottomNavProvider`, que é o caso de toda tela cheia: sem abas, nada muda.
     const respiroDaBarra = useBottomNavSpace();
     return (_jsxs(SafeAreaView, { style: [s.raiz, fundo, !scroll && padded && s.respiro, style], edges: edges, ...rest, children: [scroll ? (_jsx(ScrollView, { style: s.raiz, 
+                // No navegador, a área que rola precisa de uma parada de Tab para quem usa o teclado (bloco 1, 24/10/2026).
+                focusable: Platform.OS === "web", 
                 // ⚠ O respiro da barra SOMA ao do tema em vez de substituí-lo: escrever
                 // `paddingBottom` depois de `s.respiro` apagaria os 16 do tema e colaria o último
                 // item na pílula. A conta é explícita porque a folha não soma sozinha.

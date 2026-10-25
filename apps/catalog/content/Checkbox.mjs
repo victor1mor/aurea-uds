@@ -4,6 +4,8 @@ import {Checkbox} from "../../../packages/react/dist/index.js";
 // `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza, como na referência. Com
 // `width`, o texto curto ficava encostado à esquerda de uma caixa de 460 (o Victor apontou).
 const stack = {display: "grid", gap: "var(--space-3)", maxWidth: "min(460px, 100%)"};
+// Os três tamanhos, cada um com o nome próprio: o código e o desenho saem desta lista.
+const TAMANHOS = [["sm", "Compact rows"], ["md", "Comfortable rows"], ["lg", "Spacious rows"]];
 
 export default {
   description:
@@ -64,6 +66,14 @@ export default {
       render: () => h("div", {style: stack},
         h(Checkbox, {label: "Audit log", description: "Available on the Scale plan.", disabled: true}),
         h(Checkbox, {label: "SSO", defaultChecked: true, disabled: true})),
+    },
+    {
+      title: "Sizes",
+      description: "The system's size step — sm, md and lg, the same scale as the fields beside it. md is the default.",
+      code: TAMANHOS.map(([size, label]) =>
+        `<Checkbox label="${label}" defaultChecked${size === "md" ? "" : ` size="${size}"`} />`).join("\n"),
+      render: () => h("div", {style: stack}, ...TAMANHOS.map(([size, label]) =>
+        h(Checkbox, {key: size, label, defaultChecked: true, ...(size === "md" ? {} : {size})}))),
     },
   ],
 };

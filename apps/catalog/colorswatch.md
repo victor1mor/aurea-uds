@@ -82,9 +82,9 @@ The swatch is an image. label names it; without it, the screen reader reads the 
 The group takes the same five sizes.
 
 ```tsx
-<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={…} />
-<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={…} />
-<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={…} />
+<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={options} />
+<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={options} />
+<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={options} />
 ```
 
 ### A colour you cannot pick
@@ -120,8 +120,8 @@ layout="stack": one under the other.
 defaultValue picks one when the page opens; without it, none is picked.
 
 ```tsx
-<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={…} />
-<ColorSwatch name="none" label="No colour yet" options={…} />
+<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={options} />
+<ColorSwatch name="none" label="No colour yet" options={options} />
 ```
 
 ### Options with the value
@@ -147,7 +147,7 @@ indicator replaces the check on the chosen colour; it gets the ink that contrast
 
 ```tsx
 <ColorSwatch name="favourite" label="Favourite colour" defaultValue="#e11d48"
-  indicator={<Icon name="heart" />} options={…} />
+  indicator={<Icon name="heart" />} options={options} />
 ```
 
 ## API Reference

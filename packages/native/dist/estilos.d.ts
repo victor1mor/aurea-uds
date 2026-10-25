@@ -53,6 +53,22 @@ export declare const fundoDeCampo: (t: AureaTokens, naSuperficie: boolean) => Vi
  * `comOpacidade`; fora disso devolve a cor da frente.
  */
 export declare const misturaOpaca: (frente: string, fundo: string, pct: number) => string;
+export declare const misturaNoOklab: (frente: string, fundo: string, pct: number) => string;
+/**
+ * A COR DO ESCOLHIDO, a mesma da web (bloco 1, 23/10/2026): no claro, a marca a 45% sobre a cor do texto, no oklab — o
+ * `.is-selected`, o `.segmented .active` e o botão pressionado da web; no escuro, o destaque (o amarelo). Era o
+ * `primaryEmphasis`, que no claro é o AZUL (ADR-0076): o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web
+ * não é azul?"*) e pediu o conserto, 23/10/2026.
+ */
+export declare const corDoEscolhido: (t: AureaTokens) => string;
+/**
+ * A LETRA DO AMARELO, a do texto com `tone="primary"` (decisão do Victor, 24/10/2026, vendo a referência ao lado: *"fica
+ * como a referência: o nosso amarelo misturado com a cor do texto"*). No claro, o amarelo da marca misturado com a cor do
+ * texto do jeito que a referência mistura a letra do amarelo dela — `color-mix(in oklab, amarelo 80%, texto 70%)`: os
+ * pesos somam 150 e viram 80/150 —, que passa na leitura no branco e no cinza da página (o amarelo puro media 1,92). No
+ * escuro, o amarelo da marca, que já se lê.
+ */
+export declare const letraDoAmarelo: (t: AureaTokens) => string;
 /**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
@@ -190,10 +206,19 @@ export type EstadoAcessivel = {
  * Uso: `<Pressable {...estadoAcessivel({checked, disabled})} />`. Ferramenta de dentro: **não
  * sai pela porta da frente do pacote.**
  */
-export declare function estadoAcessivel(estado: EstadoAcessivel | undefined): {
+/**
+ * `papel` (bloco 1, 24/10/2026): o "escolhido" na web depende de QUEM é escolhido. O `aria-selected` só vale em aba,
+ * opção, linha e célula — num link ou num botão o axe o recusa e o leitor de tela o ignora (o site, rodando o nativo no
+ * navegador, mediu 112 no `BottomNav`, 30 no `TagGroup`, 16 na `Gallery`, 32 no `Stepper`, 75 no `Chart`). Então, só na
+ * web: link escolhido é `aria-current="page"` (o par que a ficha do `BottomNav` já escreve), botão escolhido é
+ * `aria-pressed`, passo atual é `aria-current="step"`. No aparelho, o `accessibilityState` continua com o `selected`.
+ */
+export type PapelDoEscolhido = "link" | "button" | "step";
+export declare function estadoAcessivel(estado: EstadoAcessivel | undefined, papel?: PapelDoEscolhido): {
     accessibilityState: undefined;
     "aria-checked"?: undefined;
     "aria-selected"?: undefined;
+    "aria-current"?: undefined;
     "aria-disabled"?: undefined;
     "aria-expanded"?: undefined;
     "aria-busy"?: undefined;
@@ -208,6 +233,7 @@ export declare function estadoAcessivel(estado: EstadoAcessivel | undefined): {
     };
     "aria-checked": "mixed" | boolean | undefined;
     "aria-selected": boolean | undefined;
+    "aria-current": string | undefined;
     "aria-disabled": boolean | undefined;
     "aria-expanded": boolean | undefined;
     "aria-busy": boolean | undefined;

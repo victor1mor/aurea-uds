@@ -16,6 +16,47 @@ import {Heading} from "@aurea-uds/react";
 <Heading level={6}>Footnote</Heading>
 ```
 
+## Examples
+
+### Weights
+
+The role keeps its size; weight only changes how heavy it reads. extrabold (800) is for a cover title.
+
+```tsx
+<Heading level={3} weight="normal">Heading, normal</Heading>
+<Heading level={3} weight="medium">Heading, medium</Heading>
+<Heading level={3} weight="semibold">Heading, semibold</Heading>
+<Heading level={3} weight="bold">Heading, bold</Heading>
+<Heading level={3} weight="extrabold">Heading, extrabold</Heading>
+```
+
+### Tones
+
+The text colour, with the same names as the native package. Every tone passes 4.5:1 on the page in both themes.
+
+```tsx
+<Heading level={3} tone="default">Heading, default</Heading>
+<Heading level={3} tone="muted">Heading, muted</Heading>
+<Heading level={3} tone="subtle">Heading, subtle</Heading>
+<Heading level={3} tone="primary">Heading, primary</Heading>
+<Heading level={3} tone="link">Heading, link</Heading>
+<Heading level={3} tone="info">Heading, info</Heading>
+<Heading level={3} tone="success">Heading, success</Heading>
+<Heading level={3} tone="warning">Heading, warning</Heading>
+<Heading level={3} tone="danger">Heading, danger</Heading>
+```
+
+### Alignment
+
+start and end follow the writing direction, so the same value mirrors in a right-to-left page.
+
+```tsx
+<Heading level={3} align="start">Heading, start</Heading>
+<Heading level={3} align="center">Heading, center</Heading>
+<Heading level={3} align="end">Heading, end</Heading>
+<Heading level={3} align="justify">Heading, justify</Heading>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

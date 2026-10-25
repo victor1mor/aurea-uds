@@ -292,7 +292,9 @@ export function folgaDoToque(t, size = "md") {
 }
 /** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
-function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...rest }) {
+function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...comSobras }) {
+    // Quem chama de JavaScript, sem o tipo, ainda pode mandar `leading`/`trailing`: elas não descem ao `Pressable`.
+    const { leading: _antes, trailing: _depois, ...rest } = comSobras;
     const t = useAureaTokens();
     const aoTocar = useToqueComShare(share, onPress);
     const s = folha(t);

@@ -20,6 +20,17 @@ import {NumberField} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Drag to change
+
+scrubbable adds a handle you pull to change the value; scrubDirection says which way. The buttons and the keys keep working.
+
+```tsx
+<NumberField scrubbable defaultValue={50} min={0} max={100} label="Opacity" scrubDirection="horizontal" />
+<NumberField scrubbable defaultValue={50} min={0} max={100} label="Opacity" scrubDirection="vertical" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

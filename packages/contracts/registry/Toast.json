@@ -1,0 +1,52 @@
+{
+  "name": "Toast",
+  "category": "Feedback",
+  "layer": "Component",
+  "maturity": "Stable",
+  "summary": "One message of the toast stack. The app creates toasts with useToast; Toast is exported because the host draws it. Native only as a component.",
+  "icon": "bell",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default",
+    "danger"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "danger is role=\"alert\", the others role=\"status\", announced by a live region."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "ToastHost",
+      "Alert"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/toast.tsx#Toast"
+  },
+  "props": [
+    {
+      "name": "toast",
+      "type": "AureaToast",
+      "default": "—",
+      "description": "The message the host draws."
+    },
+    {
+      "name": "onClose",
+      "type": "() => void",
+      "default": "—",
+      "description": "Called when the person closes it."
+    }
+  ]
+}

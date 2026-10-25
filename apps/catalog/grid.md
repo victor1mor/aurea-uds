@@ -16,6 +16,30 @@ import {Grid} from "@aurea-uds/react";
 </Grid>
 ```
 
+## Examples
+
+### Gap
+
+The space between the cells, from the density scale: tight, normal or loose.
+
+```tsx
+<Grid gap="tight">
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+<Grid gap="normal">
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+<Grid gap="loose">
+  <Card>One</Card>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

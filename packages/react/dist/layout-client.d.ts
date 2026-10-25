@@ -3,7 +3,7 @@ import { type Orientation, type Responsive } from "./pure.js";
 import { type IconButtonProps } from "./actions.js";
 import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarItem } from "./navigation.js";
 declare function AppShellSidebarToggle({ className, ...props }: Omit<IconButtonProps, "icon" | "label" | "onClick">): React.JSX.Element | null;
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
     navItems?: SidebarItem[];
@@ -28,6 +28,8 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     topbarCurrentTab?: string;
     /** O nome da segunda linha para o leitor de tela. Padrão: `"Sections"`. */
     topbarTabsLabel?: string;
+    /** A ponta da linha das áreas (o `tabsEnd` do `Header`): a chave Web | Native da documentação. */
+    topbarTabsEnd?: ReactNode;
     /** 0.32.0: a barra de rolagem da lateral da esquerda — o `scrollbar` da `Sidebar`. Padrão `hover` (clara, só com o
      *  ponteiro em cima); `visible` é a barra sempre à vista. */
     sidebarScrollbar?: SidebarScrollbar;

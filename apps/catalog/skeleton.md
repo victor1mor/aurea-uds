@@ -13,6 +13,17 @@ import {Skeleton} from "@aurea-uds/react";
 <Skeleton style={{height: "0.875rem", width: "90%"}} />
 ```
 
+## Examples
+
+### Animation
+
+pulse breathes while loading; none stays still — and with reduced motion, pulse stays still too.
+
+```tsx
+<Skeleton style={{height: "0.875rem", width: "70%"}} animation="pulse" />
+<Skeleton style={{height: "0.875rem", width: "70%"}} animation="none" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

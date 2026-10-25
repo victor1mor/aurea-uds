@@ -56,7 +56,9 @@ export function lerDoc(texto, arquivo) {
   for (const k of ["title", "description"]) if (!meta[k]) throw new Error(`${arquivo}: o cabeçalho não tem "${k}"`);
   // `icon` (opcional): o ícone do item na lateral, como os da área da referência — um nome do Phosphor.
   // `date` (opcional): o dia de uma nota de versão (as notas da área Releases usam o mesmo leitor), em AAAA-MM-DD.
-  const desconhecidas = Object.keys(meta).filter(k => !["title", "description", "icon", "date"].includes(k));
+  // `sources` (a trava 3, a página vigiada — check 51 do `validate.py`): o trecho de código que a página descreve. O site
+  // não o mostra; quem o lê é o validador.
+  const desconhecidas = Object.keys(meta).filter(k => !["title", "description", "icon", "date", "sources"].includes(k));
   if (desconhecidas.length) throw new Error(`${arquivo}: chave de cabeçalho que o gerador não lê — ${desconhecidas.join(", ")}`);
   if (meta.date && !/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) throw new Error(`${arquivo}: "date" fora da forma AAAA-MM-DD — "${meta.date}"`);
 

@@ -15,6 +15,50 @@ import {Stack} from "@aurea-uds/react";
 </Stack>
 ```
 
+## Examples
+
+### Gap
+
+The space between the items, from the density scale: tight, normal or loose.
+
+```tsx
+<Stack gap="tight">
+  <Card>First</Card>
+  <Card>Second</Card>
+</Stack>
+<Stack gap="normal">
+  <Card>First</Card>
+  <Card>Second</Card>
+</Stack>
+<Stack gap="loose">
+  <Card>First</Card>
+  <Card>Second</Card>
+</Stack>
+```
+
+### Align
+
+Where each item sits across the column. stretch, the default, makes every item as wide as the stack.
+
+```tsx
+<Stack align="start">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+<Stack align="center">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+<Stack align="end">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+<Stack align="stretch">
+  <Button>Save</Button>
+  <Button variant="secondary">Cancel</Button>
+</Stack>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

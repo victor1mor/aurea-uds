@@ -23,6 +23,32 @@ import {ConfirmDialog} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### Placement
+
+The same four places as Dialog: auto (bottom on a phone, centre from 640 up), bottom, center and top.
+
+```tsx
+<ConfirmDialog open={open} title="Placement auto" description="This confirmation opens at auto." placement="auto" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement bottom" description="This confirmation opens at bottom." placement="bottom" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement center" description="This confirmation opens at center." placement="center" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement top" description="This confirmation opens at top." placement="top" onConfirm={confirm} onCancel={close} />
+```
+
+### Icon tones
+
+The colour of the circle behind the icon. destructive picks danger on its own.
+
+```tsx
+<ConfirmDialog open={open} title="Icon tone neutral" description="The circle behind the icon is neutral." icon="info" iconTone="neutral" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone brand" description="The circle behind the icon is brand." icon="info" iconTone="brand" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone info" description="The circle behind the icon is info." icon="info" iconTone="info" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone success" description="The circle behind the icon is success." icon="info" iconTone="success" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone warning" description="The circle behind the icon is warning." icon="info" iconTone="warning" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone danger" description="The circle behind the icon is danger." icon="info" iconTone="danger" onConfirm={confirm} onCancel={close} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

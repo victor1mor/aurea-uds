@@ -2,6 +2,7 @@
 title: Theming
 description: How Aurea's tokens become CSS custom properties, the three attributes that switch them, and how to change a value.
 icon: palette
+sources: css:--primary*, css:--card*, css:--success*, css:--fill-2-solid, pkg:tokens, ts:AureaProvider
 ---
 
 Aurea's look comes from tokens. The tokens live in one file, in the DTCG format, and a build turns them into CSS custom properties for the web and a JavaScript module for React Native.

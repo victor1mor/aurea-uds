@@ -2,6 +2,7 @@
 title: Animation
 description: The motion Aurea ships, the tokens behind it, and how it stops when the user asks for less movement.
 icon: copy-simple
+sources: css:--duration-*, css:--ease-*
 ---
 
 Aurea moves little, and only to explain a change: a window that opens, a button that is pressed, something that is still loading. All of it is plain CSS in the core stylesheet. There is no animation library to install.

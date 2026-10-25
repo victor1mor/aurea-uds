@@ -158,6 +158,12 @@
       "type": "\"floating\" | \"flush\" | \"plain\"",
       "default": "sidebarVariant",
       "description": "Skin of the right-hand column. Without it, the same as the left sidebar. plain removes the box — the items sit loose on the page, like a documentation page's \"On this page\"."
+    },
+    {
+      "name": "topbarTabsEnd",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The end of the areas row (the Header's tabsEnd): the Web | Native switch of a documentation site."
     }
   ],
   "tokens": [

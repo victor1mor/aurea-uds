@@ -3,6 +3,8 @@ import {Progress} from "../../../packages/react/dist/index.js";
 
 // A largura do exemplo de antes (`_starters.mjs`, `wide`): a barra de uma tela, não a da página.
 const col = {display: "grid", gap: "var(--space-5)", width: "min(30rem,100%)"};
+// Os três trilhos, cada um com o nome à mostra: o código e o desenho saem desta lista.
+const SIZES = [["sm", "Small track"], ["md", "Medium track"], ["lg", "Large track"]];
 
 export default {
   description:
@@ -51,6 +53,21 @@ export default {
         h(Progress, {value: 100, label: "Done", tone: "success", detail: "Done"}),
         h(Progress, {value: 72, label: "Disk", tone: "warning", detail: "72% full"}),
         h(Progress, {value: 58, label: "Upload", tone: "danger", detail: "Failed at 58%"})),
+    },
+    {
+      title: "Info",
+      description: "For work that is neither good nor bad news — a sync, an import. Without a tone the bar is the brand's.",
+      code: '<Progress value={45} label="Import" tone="info" detail="450 of 1,000 rows" />',
+      render: () => h("div", {style: col},
+        h(Progress, {value: 45, label: "Import", tone: "info", detail: "450 of 1,000 rows"})),
+    },
+    {
+      title: "Track sizes",
+      description: "The track is 4, 8 or 12 thick — the reference library's. md is the default.",
+      code: SIZES.map(([size, label]) =>
+        `<Progress value={60} label="${label}" showLabel${size === "md" ? "" : ` size="${size}"`} />`).join("\n"),
+      render: () => h("div", {style: col}, ...SIZES.map(([size, label]) =>
+        h(Progress, {key: size, value: 60, label, showLabel: true, ...(size === "md" ? {} : {size})}))),
     },
   ],
 };

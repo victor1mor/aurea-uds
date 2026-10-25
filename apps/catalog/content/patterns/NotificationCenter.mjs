@@ -5,16 +5,12 @@
 import {createElement as h} from "react";
 import {NotificationCenter} from "../../../../packages/react/dist/index.js";
 
-const PORTAL = "This page is static HTML: the panel lives in a portal and only exists in a real "
-  + "React app. The preview shows the trigger with its count; the code is the whole composition.";
-
 export default [
   {
     variant: "Panel",
     name: "The bell in the top bar",
     description: "Grouped by day, unread first, and one control that clears the badge without opening every item. The count on the trigger is the only thing most people ever read.",
     uses: ["NotificationCenter"],
-    note: PORTAL,
     code: `<NotificationCenter
   label="Notifications"
   onMarkAllRead={markAll}

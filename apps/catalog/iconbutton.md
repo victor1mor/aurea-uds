@@ -79,6 +79,66 @@ Grouped, they get one accessible name for the set — the classic end of a table
 </ButtonGroup>
 ```
 
+### Appearances
+
+How much weight the circle carries, from the fill to the bare glyph. nav is the navigation item.
+
+```tsx
+<IconButton icon="star" label="Appearance solid" appearance="solid" />
+<IconButton icon="star" label="Appearance soft" appearance="soft" />
+<IconButton icon="star" label="Appearance outline" appearance="outline" />
+<IconButton icon="star" label="Appearance ghost" appearance="ghost" />
+<IconButton icon="star" label="Appearance link" appearance="link" />
+<IconButton icon="star" label="Appearance nav" appearance="nav" />
+```
+
+### Tones
+
+What the colour means; every tone works with every appearance. Here, solid.
+
+```tsx
+<IconButton icon="star" label="Tone neutral" appearance="solid" tone="neutral" />
+<IconButton icon="star" label="Tone brand" appearance="solid" tone="brand" />
+<IconButton icon="star" label="Tone info" appearance="solid" tone="info" />
+<IconButton icon="star" label="Tone success" appearance="solid" tone="success" />
+<IconButton icon="star" label="Tone warning" appearance="solid" tone="warning" />
+<IconButton icon="star" label="Tone danger" appearance="solid" tone="danger" />
+```
+
+### Every shortcut
+
+variant is the short name for an (appearance, tone) pair — the same list as Button.
+
+```tsx
+<IconButton icon="star" label="Variant primary" variant="primary" />
+<IconButton icon="star" label="Variant secondary" variant="secondary" />
+<IconButton icon="star" label="Variant tertiary" variant="tertiary" />
+<IconButton icon="star" label="Variant outline" variant="outline" />
+<IconButton icon="star" label="Variant ghost" variant="ghost" />
+<IconButton icon="star" label="Variant link" variant="link" />
+<IconButton icon="star" label="Variant nav" variant="nav" />
+<IconButton icon="star" label="Variant primary-outline" variant="primary-outline" />
+<IconButton icon="star" label="Variant primary-ghost" variant="primary-ghost" />
+<IconButton icon="star" label="Variant link-primary" variant="link-primary" />
+<IconButton icon="star" label="Variant danger" variant="danger" />
+<IconButton icon="star" label="Variant danger-soft" variant="danger-soft" />
+<IconButton icon="star" label="Variant danger-outline" variant="danger-outline" />
+<IconButton icon="star" label="Variant danger-ghost" variant="danger-ghost" />
+<IconButton icon="star" label="Variant link-danger" variant="link-danger" />
+```
+
+### Every size
+
+The control scale; on a touch screen every size keeps a 44 target.
+
+```tsx
+<IconButton icon="star" label="Size xs" size="xs" />
+<IconButton icon="star" label="Size sm" size="sm" />
+<IconButton icon="star" label="Size md" size="md" />
+<IconButton icon="star" label="Size lg" size="lg" />
+<IconButton icon="star" label="Size xl" size="xl" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

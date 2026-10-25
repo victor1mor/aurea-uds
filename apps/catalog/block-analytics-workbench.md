@@ -15,7 +15,7 @@ import {SegmentedControl, Status, Select, Button, KPI, Chart, Table, Alert} from
 // the controls, and `refresh` lives with the range, which is what owns freshness.
 const actions = allowedFrom(view.state);   // ready -> ["refresh"]
 
-<div className="stack" style={{"--chart-h":"8rem"}}>
+<div className="stack" style={{"--chart-h":"8rem"} as CSSProperties}>
   <div className="cluster">
     <div role="group" aria-label="Time range">
       <SegmentedControl label="Time range" items={RANGES} value={view.range} onChange={setRange} />
@@ -26,8 +26,8 @@ const actions = allowedFrom(view.state);   // ready -> ["refresh"]
         : <Status variant={tone[view.state]}>{label[view.state]}</Status>}
       {actions.map(a => <Button key={a} size="sm" onClick={() => send(a)}>{label[a]}</Button>)}
     </div>
-    <div role="group" aria-label="Filters"><Select value={view.filter} …/></div>
-    <div role="group" aria-label="Segments"><Select value={view.segment} …/></div>
+    <div role="group" aria-label="Filters"><Select value={view.filter} /* … */ /></div>
+    <div role="group" aria-label="Segments"><Select value={view.segment} /* … */ /></div>
     {/* "export records scope and freshness": both in the LABEL, because whoever clicks
         needs to know what comes out before it comes out. Keep it SHORT — this row holds four
         control groups on one line, and a label that wraps costs the box 43px of height */}

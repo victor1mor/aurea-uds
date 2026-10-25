@@ -19,6 +19,19 @@ import {Tooltip} from "@aurea-uds/react";
 </Tooltip>
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<Tooltip content="Opens on the top" side="top"><Button variant="outline">Side top</Button></Tooltip>
+<Tooltip content="Opens on the right" side="right"><Button variant="outline">Side right</Button></Tooltip>
+<Tooltip content="Opens on the bottom" side="bottom"><Button variant="outline">Side bottom</Button></Tooltip>
+<Tooltip content="Opens on the left" side="left"><Button variant="outline">Side left</Button></Tooltip>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

@@ -9,7 +9,26 @@ import {AgentStatus} from "@aurea-uds/react";
 ```
 
 ```tsx
+<AgentStatus state="idle" />
 <AgentStatus state="running" />
+<AgentStatus state="paused" />
+<AgentStatus state="error" />
+<AgentStatus state="completed" />
+```
+
+## Examples
+
+### Every state
+
+thinking is the one between running and the answer: the agent is working, and has nothing to show yet.
+
+```tsx
+<AgentStatus state="idle" />
+<AgentStatus state="running" />
+<AgentStatus state="thinking" />
+<AgentStatus state="paused" />
+<AgentStatus state="error" />
+<AgentStatus state="completed" />
 ```
 
 ## API Reference

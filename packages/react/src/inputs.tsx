@@ -11,3 +11,6 @@ export {Textarea, Checkbox, Radio, Switch, Range} from "./markup.js";
 // Saem do `markup` pela mesma razão dos seis acima: nenhum usa hook, então chegam como
 // componente de SERVIDOR e não arrastam a fronteira de cliente com eles.
 export {Label, InputGroup, InputGroupAddon, type AddonSide, type AddonLayout, type FieldSize, type FieldVariant} from "./markup.js";
+// Os tipos das props `colorSpace` e `channel` das peças de cor (ADR-0081, 24/10/2026): sem eles, o app não tipava o estado
+// que entrega à prop (`useState<ColorSpace>("hsl")`) e escrevia a união à mão. Só tipo: o módulo da cor fica onde está.
+export type {ColorSpace, ColorChannel} from "./color.js";

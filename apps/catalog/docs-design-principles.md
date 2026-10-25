@@ -98,10 +98,14 @@ Props that exist on both targets have the same name and the same values. `tone`,
 ```tsx
 // Web
 import {Button} from "@aurea-uds/react";
-<Button appearance="solid" tone="brand" size="md">Save</Button>
 
+<Button appearance="solid" tone="brand" size="md">Save</Button>
+```
+
+```tsx
 // React Native
 import {Button} from "@aurea-uds/native";
+
 <Button appearance="solid" tone="brand" size="md" onPress={save}>Save</Button>
 ```
 

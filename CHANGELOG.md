@@ -129,9 +129,121 @@ como deveria funcionar"*.
 
 ---
 
+## [0.43.0] — 2026-10-25
+
+⏳ **Ainda não publicada.** O bloco 1 do plano único, **o catálogo fiel** (aprovado pelo Victor em 23/10/2026: *"Aprovo o
+plano dos cinco blocos"*): o site mostra o que o pacote é — toda peça com página, toda variação num exemplo vivo, o nativo ao lado
+da web —, e travas na CI para continuar assim.
+
+### ⚠ Pode quebrar a compilação
+
+- **`comboboxOpen`**, frase nova no `AureaStrings` do nativo (a mesma da web: "Open list" / "Abrir lista"): quem monta o
+  dicionário inteiro com esse tipo precisa acrescentá-la. É o nome da setinha do Combobox nativo no navegador.
+- **`timePlaceholder`**, frase nova no `AureaStrings` do nativo ("Pick a time" / "Escolher horário"): o que o
+  DatePicker do nativo diz vazio, com `mode="time"`. Quem monta o dicionário inteiro precisa acrescentá-la.
+- **`leading` e `trailing` saem do tipo do IconButton e do ThemeToggle do nativo**: chegavam pelo tipo do Button e
+  não desenhavam nada. Quem passava uma das duas compila com erro — é só tirar; o desenho próprio do app vai no `name`.
+
+### Acrescentado
+
+- **`ColorSpace` e `ColorChannel`**, os tipos das props `colorSpace` e `channel` das peças de cor, saem pela porta
+  `@aurea-uds/react/inputs` (e pela raiz).
+- **`CodeBlock tabs`**: as alternativas do mesmo passo em abas, dentro da caixa do código (o comando de instalar em npm,
+  pnpm, yarn e bun), nas medidas da documentação da referência.
+- **`SegmentedControl`** com `size` (`md`, `sm`) e itens com `href` (vira uma navegação de links — a chave Web | Native do
+  site); o `onChange` passa a ser opcional.
+- **`Header tabsEnd`** e **`AppShell topbarTabsEnd`**: o que fica na ponta direita da linha das áreas.
+- **Fichas das peças só do nativo**, com página no site: BottomNavProvider, IconRegistryProvider, Screen, LinkButton,
+  KeyboardAvoiding, BottomSheet, ToastHost, Toast, ScrollShadow, SkeletonGroup, PressableFeedback e PhotoInput
+  (`platforms.web: "n-a"`).
+- **`api-surface-native.json`** no `@aurea-uds/contracts`: a API do nativo lida dos tipos pelo compilador, ao lado da da
+  web (`api-surface.json`, que já saía). É de onde as páginas do nativo no site tiram a tabela de props.
+
+### Mudado
+
+As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md), 24/10/2026):
+
+- **A letra do `tone="primary"` é a de destaque** no `Text`, no `Paragraph`, no `Heading` e no `Code` (o azul no claro, o
+  amarelo no escuro), na web. Era o amarelo de preencher — 1,75:1 no claro.
+- **No nativo, a letra do `tone="primary"`, no tema claro, é o amarelo da marca misturado com a cor do texto** — como a
+  referência faz com a letra do amarelo dela — e passa na leitura no branco e no fundo da página. No escuro, o amarelo.
+  Era o amarelo de preencher puro.
+- **Os botões da marca de contorno, fantasma e link, no claro, levam a letra azul** (`Button`, `IconButton`,
+  `ToolbarButton`: `primary-outline`, `primary-ghost`, `link-primary` e o `tone="brand"` sem caixa) — a ADR-0076 aplicada a
+  eles. A mistura marrom caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69.
+- **O `Avatar` suave com tom de estado** usa o fundo do selo suave (o info media 4,12 no claro).
+- **Os tons `running`, `paused`, `offline` e `review` do `Badge`** têm cor própria: azul, âmbar, cinza apagado e violeta.
+  Antes paused, offline e review saíam iguais ao neutral, e uma regra solta pintava o running de verde.
+- **O `align` do `Text` e do `Code`** vira bloco e alinha de verdade.
+- **O botão de copiar não cobre mais o fim da linha** em nenhum `CodeBlock`: o código reserva no fim o lugar do botão, e a
+  linha mais longa rola antes de chegar nele (no Quick Start, o `pnpm add` terminava embaixo do botão).
+- **No nativo, a cor do escolhido é a da web**: o visto da opção do Select e do Combobox, o ponto e o visto do menu, o
+  passo atual do Stepper.
+- **No nativo, a aba escolhida do SegmentedControl e a do Tabs em cápsula são o amarelo da marca, como o botão
+  primário**: a cápsula escolhida é amarela e o nome vai na tinta do botão; saem a sombra e, no SegmentedControl, o traço
+  amarelo de baixo. Nos dois temas. O Tabs sublinhado (`variant="secondary"`) continua com o traço amarelo.
+- **No nativo, a barra de baixo marca a aba escolhida com o amarelo por trás, por padrão**: o `indicator` padrão passa de
+  `none` (só a cor no ícone e no nome — no claro, o azul) a `capsule`. Quem passa `indicator="none"` continua como era.
+- **No nativo rodando no navegador** (`react-native-web`): o título leva o nível (o Heading pelo `type`, o item do
+  Accordion com 3) — sem ele, todo título virava `<h1>`; e o cartão de contorno leva a marca `data-aurea-card="outline"`,
+  a única linha que a ADR-0072 deixa. No aparelho, nada muda.
+- **No nativo, o Checkbox e o Radio ganham o toque a mais da referência**: 6 em volta, invisível (`hitSlop`), como a
+  caixa e o rádio do nativo dela. O desenho e a medida da linha não mudam. O Switch fica sem, como o dela.
+
+### Consertado
+
+- **O tipo do `DataState`** proibia o `children` em função que o componente aceita: o `children` do HTML saía do
+  cruzamento e a função virava `ReactNode`. Agora compila.
+- **A `Screen` do nativo no navegador** não exige mais um `SafeAreaProvider` acima: sem ele, a versão web da biblioteca
+  levantava erro e a tela não abria. Sem um provedor acima, no navegador ela usa a folga zerada — o app que precisa se
+  afastar do entalhe na web põe o `SafeAreaProvider` na raiz. No aparelho, nada muda.
+- **O DatePicker do nativo, com `mode="time"`,** escreve a hora e os minutos no formato do aparelho, e o vazio pede um horário.
+  Sem `format`, ele escrevia a data do dia e dizia "Pick a date".
+- **O Switch do nativo lê o `align`**: com `start`, o trilho fica na primeira linha do rótulo longo. O tipo aceitava, e
+  o trilho ficava sempre no meio.
+- **O BottomNav do nativo com `variant="edge"`, no navegador,** saía com a sombra e a camada da barra flutuante.
+- **O SearchField do nativo sem `value`**: o X sumia e o texto escrito ficava. Agora o X apaga o campo.
+
+### O site
+
+- **O nativo no site**: a chave Web | Native na ponta da linha das áreas, e uma página por peça do nativo (79), com a peça
+  de verdade rodando pelo `react-native-web` nos dois temas, os exemplos de todo valor e a API lida dos tipos. A caixinha
+  de exemplo das páginas do nativo pinta o fundo do próprio app em cada tema.
+- **A caixa do exemplo cresce com ele** (substitui a ADR-0002): a altura de antes vira a mínima, e nenhuma caixa rola por
+  dentro; a varredura mede na tela 1280 × 663.
+- **Toda variação num exemplo**: as fichas da web somavam 473 valores sem exemplo em 70 peças; agora nenhum.
+- **A página de saúde** (`saude.html`, área Releases): os números do catálogo e das rodadas da CI.
+- **As abas de instalar** (npm, pnpm, yarn, bun) no Quick Start, no Frameworks, no Dark Mode e nas notas de versão.
+
+### Para quem cuida do repositório
+
+- **Quatro travas novas na CI:** o catálogo fiel (todo nome exportado com página; todo valor de variação da ficha num
+  exemplo — web e nativo); o check 50 do `validate.py` (todo nome citado entre crases na Getting Started, no README e na
+  skill existe — 412 nomes, nenhum errado); `scripts/exemplos-compilam.mjs` (`pnpm check:exemplos`: os 1.079 trechos
+  TypeScript do site, da skill e do README compilam contra o pacote montado — antes, 120 erros); e o check 51, a página
+  vigiada (cada página da Getting Started declara no cabeçalho o trecho de código que descreve, `sources:`; o trecho
+  mudou e a página não foi relida, reprova — `python scripts/validate.py --vigia-revisar <página>`). As quatro se provam
+  sozinhas contra o defeito plantado a cada execução.
+- **O check 31b** (frase nova no `AureaStrings` sai com o aviso de compilação) lê as duas seções do que ainda não saiu —
+  a da versão datada que espera a publicação e a da versão em construção —, como o check 31 já fazia. Lia só a primeira,
+  e pedia na [0.42.0] as frases da 0.43.0.
+- **O registro da 0.42.0** (publicada entre 08:32 e 08:39 de 25/10/2026): o `released-surface.json` do commit do
+  publish (`6872bf3b`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
+- **A lista do que cada pacote publica** (`scripts/package-files.json`) ganhou o `api-surface-native.json` do
+  `@aurea-uds/contracts`: o `check-pack` reprovou no fechamento da versão, porque nenhuma conferência do bloco o rodava.
+- **O idioma da montagem das páginas do nativo** (`apps/catalog/nativo/idioma-da-montagem.mjs`): o nativo escreve data e
+  número no idioma do aparelho, e na montagem o aparelho era o computador — o Windows desenhava "23/10/2026" e "2.026", a
+  CI "10/23/2026" e "2,026", e a trava "dist desatualizado" reprovou o DatePicker e o NumberField. Na montagem, quem não
+  diz o idioma recebe o "en-US" (o do site); a parte viva continua com o do navegador. Quem cobra:
+  `tests/unit/site-nativo-idioma.test.tsx` (sem o conserto, reprova com "23/10/2026").
+
+---
+
 ## [0.42.0] — 2026-10-23
 
-⏳ **Ainda não publicada.** A lateral até o topo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o MNT-34 de um app
+✅ **Publicada em 25/10/2026, entre 08:32 e 08:39 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do pedido
+#96 (o #95, com a 0.42.0, foi juntado antes; o #96 pôs a auditoria de volta ao verde).
+A lateral até o topo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o MNT-34 de um app
 de rede e o pedido de um segundo app: a lateral do alto até embaixo, com a marca nela, e sem a barra que atravessa a tela.
 O Victor, na bancada com a peça de verdade: *"mantenha o atual e faça também os outros 4"*, *"quero o botão de recolher
 conforme eu tinha aprovado"* e *"Aprovado o MNT-34"*. Só a web.

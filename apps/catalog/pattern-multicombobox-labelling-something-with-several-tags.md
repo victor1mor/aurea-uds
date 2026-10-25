@@ -9,7 +9,7 @@ import {MultiCombobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [tags, setTags] = useState([]);
+const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox
   label="Labels"

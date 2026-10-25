@@ -33,7 +33,7 @@ import {Combobox} from "@aurea-uds/react";
 One option out of many, with the list filtering as you type.
 
 ```tsx
-const [value, setValue] = useState(null);
+const [value, setValue] = useState<ComboboxOption | null>(null);
 
 <Combobox label="Component" placeholder="Search…" value={value}
   onValueChange={setValue}

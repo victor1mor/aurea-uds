@@ -150,7 +150,10 @@ const PAGES = readdirSync(DIR).filter(f => f.endsWith(".html")).sort();
 // `.kbd` sem o de dentro do botão, pela mesma regra (0.32.0): o `Button` declara POR CLASSE (`btn-kbd`) a tecla de
 // 20 que cabe no botão pequeno; a solta é a de 24 da referência. Era sobrescrita por contexto (`.btn .kbd`), e esta
 // trava a pegou quando o botão de busca do site passou a estar em toda página (14/10/2026).
-const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs:not(.tabs-secondary)", ".segmented", ".tab", ".segmented button",
+// O `SegmentedControl` tem dois tamanhos desde o bloco 1 (23/10/2026): o `sm` é a chave Web | Native do topo do site, de 34;
+// o de sempre, de 40. Cada tamanho é um grupo — como os do `Badge`.
+const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs:not(.tabs-secondary)",
+               ".segmented:not(.segmented-sm)", ".segmented.segmented-sm", ".tab", ".segmented:not(.segmented-sm) button",
                ".kbd:not(.btn-kbd)", ".pagination button:not(.btn)"];
 
 test.describe("catálogo · geometria de todas as páginas", () => {

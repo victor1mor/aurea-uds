@@ -1,0 +1,45 @@
+{
+  "name": "BottomNavProvider",
+  "category": "Navigation",
+  "layer": "Foundation",
+  "maturity": "Stable",
+  "summary": "Tells the screens that a bottom bar floats over them, so a Screen reserves the room it takes. Native only.",
+  "icon": "squares-four",
+  "platforms": {
+    "web": "n-a",
+    "native": "stable"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "default"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": null,
+    "keyboard": [],
+    "apg": "No role: it renders no element of its own. Outside it, the bar's space is 0 and a Screen reserves nothing."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "BottomNav",
+      "Screen"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "native": "packages/native/src/barranav.tsx#BottomNavProvider"
+  },
+  "props": [
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "—",
+      "description": "The navigator whose screens sit under the bar."
+    }
+  ]
+}

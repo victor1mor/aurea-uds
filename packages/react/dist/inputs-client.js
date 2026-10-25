@@ -763,9 +763,15 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
 // `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
 // linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É como o grupo
 // de botões alternáveis da referência ocupa a linha.
-export function SegmentedControl({ items, value, onChange, label, fullWidth }) {
+// NAVEGAÇÃO (bloco 1, o 5-A — 23/10/2026): com `href` em TODOS os itens, a cápsula é um <nav> de links — o atual leva
+// `aria-current="page"` —, e não um grupo de escolha: ir para outra página é navegação, e o leitor de tela tem de ouvir
+// "link", não "opção". É a chave Web | Native do site. `size="sm"`: a cápsula baixa da referência (abas de 24).
+export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md" }) {
     const s = useAureaStrings();
-    return _jsx(BaseRadioGroup, { className: fullWidth ? "segmented segmented-full" : "segmented", "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
+    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm");
+    if (items.length > 0 && items.every(i => i.href != null))
+        return _jsx("nav", { className: classe, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: i.label }, i.value)) });
+    return _jsx(BaseRadioGroup, { className: classe, "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
 }
 const ehAgrupado = (items) => items != null && items.length > 0 && typeof items[0] === "object" && items[0] != null && "items" in items[0];
 // UM renderizador e UMA lista para os dois combobox: duas cópias da mesma árvore é como a

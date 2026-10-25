@@ -69,6 +69,7 @@ import type {AureaTokens} from "./tokens.js";
 const folha = criarFolha((t: AureaTokens) => ({
   // ── Timeline ──
   trilha: {gap: t.size.space5},
+  itemDaTrilha: {gap: t.size.space5},
   trilho: {
     position: "absolute", top: t.size.space2, bottom: t.size.space2,
     // A MEIO DIÂMETRO do ponto, derivado do mesmo token — igual ao CSS, que faz
@@ -213,8 +214,9 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
           ? <Text size="xs" tone="muted">{item.between}</Text> : item.between}
       </View>
     ) : null;
+    // O evento e o texto "entre" ele e o próximo são UM item da lista; o vão entre os dois é o mesmo da trilha.
     return (
-      <>
+      <View role="listitem" style={s.itemDaTrilha}>
         <View style={s.evento}>
           {ponto}
           <View style={s.colunaDoEvento}>
@@ -236,7 +238,7 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
           </View>
         </View>
         {entre}
-      </>
+      </View>
     );
   }, [s, t, comMoldura, marcador, items.length]);
 
@@ -314,6 +316,7 @@ export function DataList({items, layout = "auto", style, testID}: DataListProps)
         return (
           <View
             key={n}
+            role="listitem"
             accessible
             accessibilityLabel={nome}
             style={ladoALado ? s.parLadoALado : s.parEmpilhado}>
@@ -435,10 +438,11 @@ export function Table<T>({
 
     // Só vira alvo se houver o que tocar. Uma linha `Pressable` sem ação é um botão que não faz
     // nada — e o leitor de tela a anunciaria como botão.
+    // A linha é o item da lista; a tocável é um botão DENTRO dele (o papel de item não pode ir no botão).
     return onRowPress
-      ? <Pressable accessibilityRole="button" onPress={() => onRowPress(linha)}
-                   style={[s.linha, s.linhaTocavel]}>{corpo}</Pressable>
-      : <View style={s.linha}>{corpo}</View>;
+      ? <View role="listitem"><Pressable accessibilityRole="button" onPress={() => onRowPress(linha)}
+                   style={[s.linha, s.linhaTocavel]}>{corpo}</Pressable></View>
+      : <View role="listitem" style={s.linha}>{corpo}</View>;
   }, [principal, secundarias, conteudo, onRowPress, s]);
 
   const chave = React.useCallback(

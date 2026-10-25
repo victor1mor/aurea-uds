@@ -15,6 +15,25 @@ import {DataState} from "@aurea-uds/react";
 </DataState>
 ```
 
+## Examples
+
+### Every state
+
+The three terminal faces (loading, error, empty) replace the content; every other state keeps the content and puts its notice above it.
+
+```tsx
+<DataState state="loading"><p>120 rows</p></DataState>
+<DataState state="error"><p>120 rows</p></DataState>
+<DataState state="empty"><p>120 rows</p></DataState>
+<DataState state="stale"><p>120 rows</p></DataState>
+<DataState state="partial"><p>120 rows</p></DataState>
+<DataState state="degraded"><p>120 rows</p></DataState>
+<DataState state="offline"><p>120 rows</p></DataState>
+<DataState state="waiting_user"><p>120 rows</p></DataState>
+<DataState state="waiting_approval"><p>120 rows</p></DataState>
+<DataState state="waiting_dependency"><p>120 rows</p></DataState>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

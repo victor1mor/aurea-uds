@@ -19,6 +19,19 @@ import {Popover} from "@aurea-uds/react";
 </Popover>
 ```
 
+## Examples
+
+### Sides
+
+Which side of the trigger it opens on. When there is no room on that side, it flips to the opposite one.
+
+```tsx
+<Popover title="Side top" side="top" arrow trigger={<Button variant="outline">Side top</Button>}>…</Popover>
+<Popover title="Side right" side="right" arrow trigger={<Button variant="outline">Side right</Button>}>…</Popover>
+<Popover title="Side bottom" side="bottom" arrow trigger={<Button variant="outline">Side bottom</Button>}>…</Popover>
+<Popover title="Side left" side="left" arrow trigger={<Button variant="outline">Side left</Button>}>…</Popover>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

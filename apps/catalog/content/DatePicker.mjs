@@ -6,6 +6,8 @@ import {DatePicker} from "../../../packages/react/dist/calendar.js";
 import {ptBR} from "react-day-picker/locale";
 
 const coluna = {display: "grid", gap: "var(--space-4)", width: "min(100%, 20rem)"};
+// Os três tamanhos, cada campo com o rótulo próprio: o código e o desenho saem desta lista.
+const TAMANHOS = [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]];
 
 export default {
   description:
@@ -57,6 +59,16 @@ export default {
       render: () => h("div", {style: coluna},
         h(Field, {label: "Check-in"},
           h(DatePicker, {locale: ptBR, defaultValue: new Date(2026, 7, 12)}))),
+    },
+    {
+      title: "Sizes",
+      description: "The field height, on the same scale as Select and Input. md is the default.",
+      code: TAMANHOS.map(([size, label]) => `<Field label="${label}">\n  <DatePicker`
+        + `${size === "md" ? "" : ` size="${size}"`} defaultValue={new Date(2026, 7, 12)} />\n</Field>`).join("\n"),
+      embed: true,
+      render: () => h("div", {style: coluna}, ...TAMANHOS.map(([size, label]) =>
+        h(Field, {key: size, label},
+          h(DatePicker, {...(size === "md" ? {} : {size}), defaultValue: new Date(2026, 7, 12)})))),
     },
   ],
 };
