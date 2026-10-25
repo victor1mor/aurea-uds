@@ -3,7 +3,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Separator as BaseSeparator } from "@base-ui/react/separator";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { cx, useAureaStrings } from "./internal.js";
@@ -155,9 +155,21 @@ function useLargura(query) {
         return () => mq.removeEventListener?.("change", avisar);
     }, () => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia(query).matches, () => false);
 }
-export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, layout = "app", sidebarVariant, sidebarScrollbar, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant = "surface", aside, asideLabel, asideVariant, children, className, ...props }) {
+// O BOTÃO DE RECOLHER AO LADO DO TÍTULO (MNT-34, 0.42.0) — o desenho das quinze laterais que o Victor aprovou (o botão
+// de ícone, sem fundo, com o desenho de lateral, a 12 do título da página; *"quero o botão de recolher conforme eu tinha
+// aprovado"*). No `layout="sidebar"` ele substitui a bolinha da junção: com a barra no conteúdo, o shell o põe no começo
+// dela; sem barra, o app o põe ao lado do próprio título (`AppShell.SidebarToggle`). Abaixo de 1024 ele some — ali a
+// lateral é gaveta, e quem abre é o botão da gaveta.
+const ShellToggleContext = React.createContext(null);
+function AppShellSidebarToggle({ className, ...props }) {
+    const c = React.useContext(ShellToggleContext);
+    if (!c)
+        return null;
+    return _jsx(IconButton, { className: cx("sidebar-collapse-trigger", className), icon: "sidebar-simple", label: c.rotulo, "aria-expanded": !c.efetiva, "aria-controls": SHELL_NAV_ID, onClick: c.alternar, ...props });
+}
+export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, layout = "app", sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant = "surface", aside, asideLabel, asideVariant, children, className, ...props }) {
     const s = useAureaStrings();
-    const docs = layout === "docs";
+    const docs = layout === "docs", lateral = layout === "sidebar";
     useGavetaFechaNoDesktop(docs);
     const controlado = sidebarCollapsed !== undefined;
     // `null` = ninguém escolheu, e vale a largura.
@@ -196,8 +208,13 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
     // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
     // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
     const botaoDaGaveta = _jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID, ...(docs ? { size: "sm" } : {}) });
-    return _jsxs("div", { className: cx("app-shell", layout === "docs" && "app-shell-docs", topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, ...(docs ? { maxWidth: "docs", size: "sm" } : {}), brand: docs ? brand : _jsxs(_Fragment, { children: [botaoDaGaveta, brand] }), children: [topbar, docs && botaoDaGaveta] }), sidebarCollapsible && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children }), aside != null && _jsx(Sidebar, { placement: "right", variant: asideVariant ?? sidebarVariant, className: "app-shell-aside", "aria-label": asideLabel ?? s.tocLabel, ...(docs ? { id: SHELL_TOC_ID, popover: "auto", onToggle: focoDaGaveta } : {}), children: aside })] });
+    return _jsx("div", { className: cx("app-shell", layout === "docs" && "app-shell-docs", lateral && "app-shell-lateral", !lateral && topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: _jsxs(ShellToggleContext.Provider, { value: sidebarCollapsible ? { alternar, efetiva, rotulo } : null, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), !lateral && _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, ...(docs ? { maxWidth: "docs", size: "sm" } : {}), brand: docs ? brand : _jsxs(_Fragment, { children: [botaoDaGaveta, brand] }), children: [topbar, docs && botaoDaGaveta] }), sidebarCollapsible && !lateral && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, header: lateral ? brand : undefined, footer: sidebarFooter, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), lateral
+                    ? _jsxs("div", { className: "app-shell-column", children: [topbar != null
+                                ? _jsx(Header, { variant: "flush", size: "sm", divider: topbarDivider, brand: _jsxs(_Fragment, { children: [botaoDaGaveta, _jsx(AppShellSidebarToggle, {})] }), children: topbar })
+                                : _jsxs("div", { className: "app-shell-narrow-bar", children: [botaoDaGaveta, brand] }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] })
+                    : _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children }), aside != null && _jsx(Sidebar, { placement: "right", variant: asideVariant ?? sidebarVariant, className: "app-shell-aside", "aria-label": asideLabel ?? s.tocLabel, ...(docs ? { id: SHELL_TOC_ID, popover: "auto", onToggle: focoDaGaveta } : {}), children: aside })] }) });
 }
+AppShell.SidebarToggle = AppShellSidebarToggle;
 export function Separator({ orientation, spacing = "none", className, ...props }) {
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);

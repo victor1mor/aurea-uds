@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 9,
     "aliasesLiterais": 112,
-    "propsDistintas": 380
+    "propsDistintas": 381
   },
   "aliases": {
     "ButtonVariant": {
@@ -7374,11 +7374,18 @@
             {
               "name": "layout",
               "optional": true,
-              "type": "\"app\" | \"docs\"",
+              "type": "\"app\" | \"docs\" | \"sidebar\"",
               "values": [
                 "app",
-                "docs"
+                "docs",
+                "sidebar"
               ]
+            },
+            {
+              "name": "sidebarFooter",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             },
             {
               "name": "topbarTabs",
