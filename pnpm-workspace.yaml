@@ -21,7 +21,10 @@ overrides:
   # Sai quando o jsdom subir sozinho para a linha 8.x.
   # 30/09/2026: mais dois `high` na mesma linha (GHSA-rfgv-xxqx-mfg5 e GHSA-w293-vg96-wgc3),
   # corrigidos na 7.29.1. Continua cabendo no `^7.25.0` do jsdom.
-  undici: '^7.29.1'
+  # 25/10/2026: GHSA-xjj6-f33q-929c (alto, publicado em 23/10 depois da CI do pedido #95; o `main`
+  # reprovou na junção), negacao de servico com muitos `content-encoding`. Corrigido na 7.30.1, que
+  # cabe no `^7.25.0` do jsdom 29.1.1 (medido com `npm view`).
+  undici: '^7.30.1'
   # GHSA-2v37-7h3g-55p8 (alto): nanoid <3.3.17 entra em laco infinito quando um
   # gerador customizado recebe size zero. NAO veio do @xyflow/react — medido com
   # `pnpm why nanoid` em 09/08/2026: os dois caminhos sao postcss, um por vite
@@ -58,6 +61,15 @@ overrides:
   # xcode 3.0.1, sob o @expo/config-plugins das devDependencies do @aurea-uds/native (pede o 7.0.3). O xcode so' chama
   # `require('uuid').v4()`, e a entrada CommonJS do 11 tem o mesmo `v4` — lido no codigo dos dois.
   'uuid@<11.1.1': '^11.1.1'
+  # 25/10/2026: GHSA-mrhx-c7xc-m3w5 (alto, revisado em 23/10 e reprovou o `main` na junção do pedido #95): zod
+  # <4.6.6 esgota a memoria validando lista grande sem limite. Chega por UM caminho, de ferramenta — @aurea-uds/native
+  # (devDependencies) > expo-document-picker > expo > @expo/cli, que pede `^3.25.76`; a linha 3 nao tem correcao (a
+  # ultima e' a 3.25.76) e o @expo/cli mais novo (58.1.15) pede o mesmo. Por isso o salto para a 4, como o uuid acima:
+  # o @expo/cli so' usa `z.object/string/enum/array/union/literal/optional/number/boolean`, `.min`, `.describe`,
+  # `.strict`, `.safeParse` e `error.message` (lido em `DevToolsPlugin.schema.js`, `createMCPDevToolsExtensionSchema.js` e
+  # `DevToolsPlugin.js`), e a entrada CommonJS da 4 tem todos. E aqui ele nem roda: so' serve aos tipos, e o
+  # `apps/native-smoke`, que roda o Expo, fica fora do workspace. Sai quando o @expo/cli pedir a 4.6.6 sozinho.
+  'zod@<4.6.6': '^4.6.6'
 
 auditConfig:
   # DUAS VULNERABILIDADES `high` SEM PATCH PUBLICADO, aceitas em 02/09/2026 com registro.
