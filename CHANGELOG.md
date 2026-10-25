@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.43.0 (25/10/2026)
+
+- **A 0.43.0 publicada entre 17:23 e 17:29 de 25/10/2026** (Brasília, medido no npm): o `released-surface.json` do
+  commit do publish (`24eb582a`) — entram os 12 nomes das fichas das peças só do nativo que o bloco 1 criou (as peças já
+  saíam no pacote do nativo) e as duas frases novas do nativo, `comboboxOpen` e `timePlaceholder`; a web sem frase nova.
+  O CHANGELOG ([0.43.0] publicada) e o CLAUDE.md (a linha na tabela e o item 41).
+- Não muda nenhum pacote publicado.
+
 ### A auditoria de volta ao verde (25/10/2026)
 
 - **Dois alertas `high` novos** reprovaram a auditoria da `build` no `main`, na junção do pedido #95, sem nenhuma
@@ -131,7 +139,8 @@ como deveria funcionar"*.
 
 ## [0.43.0] — 2026-10-25
 
-⏳ **Ainda não publicada.** O bloco 1 do plano único, **o catálogo fiel** (aprovado pelo Victor em 23/10/2026: *"Aprovo o
+✅ **Publicada em 25/10/2026, entre 17:23 e 17:29 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do pedido
+#97. O bloco 1 do plano único, **o catálogo fiel** (aprovado pelo Victor em 23/10/2026: *"Aprovo o
 plano dos cinco blocos"*): o site mostra o que o pacote é — toda peça com página, toda variação num exemplo vivo, o nativo ao lado
 da web —, e travas na CI para continuar assim.
 

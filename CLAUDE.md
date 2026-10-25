@@ -194,6 +194,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.40.1` | O nativo: a Inter, a Sora e a IBM Plex Mono em 14 `.ttf` completos (3,17 MB, *"Completas"*), o título na Sora, o `numeric` e o número do `KPI` na Plex Mono; os campos brancos no claro pelo contexto da superfície ([ADR-0077](decisions/0077-a-fonte-e-a-inter-a-sora-e-a-ibm-plex-mono.md) e [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)); na web, as quatro superfícies brancas que a 0.40.0 esqueceu — pedido #93. **Publicada em 23/10/2026** (entre 10:44 e 10:54, Brasília, medido no npm), pelo terminal do Victor |
 | `0.41.0` | A lateral com o topo e o pé fixos: `header` e `footer` no `Sidebar`, e as partes `Sidebar.Brand`, `Sidebar.User`, `Sidebar.Nav` e `Sidebar.Show` — o 4-C das quinze laterais ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)), pedido #94. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.42.0` | A lateral até o topo: `AppShell layout="sidebar"` (a lateral do alto até embaixo, com a marca nela, e a barra de cima só sobre o conteúdo, quando o app passa `topbar`), `AppShell.SidebarToggle` e `sidebarFooter` — o MNT-34 ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)), pedido #95. **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #96 (a auditoria de volta ao verde) |
+| `0.43.0` | O bloco 1, o catálogo fiel: toda peça com página e toda variação num exemplo vivo, o nativo no site (a chave Web \| Native e as 79 páginas do nativo), quatro travas novas na CI, `CodeBlock tabs`, `SegmentedControl` com `size` e `href`, as fichas das peças só do nativo e as decisões da bancada ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md)) — pedido #97. **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -616,6 +617,21 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    uma vez com o WebKit da máquina do GitHub travando (*"WebKit encountered an internal error"*), verde rodada de novo.
    **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
    #96. O registro entrou no lote seguinte (o bloco 1, 0.43.0).
+
+41. **`0.43.0`, o bloco 1 do plano único — o catálogo fiel, feito de 23 a 25/10/2026** ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md))
+   — *"quero todos os componentes exemplos tudo"*: toda peça com página no site, toda variação num exemplo vivo (eram 473
+   valores sem exemplo em 70 peças; agora nenhum), o nativo ao lado da web (a chave Web | Native e as 79 páginas do nativo
+   pelo `react-native-web`) e quatro travas novas na CI (o catálogo fiel, o nome citado existe, o exemplo compila e a
+   página vigiada). As decisões de peça foram uma a uma, na bancada. ⚠ **As lições:** (1) o `check-pack` não rodava nas
+   conferências do bloco, e o `@aurea-uds/contracts` passou a levar o `api-surface-native.json` (210 KB) sem ninguém ver —
+   achado só no fechamento; entra no pacote, como o da web, e o `check-pack` vai nas conferências de todo lote; (2) as
+   páginas do nativo saíam diferentes em cada computador, porque o nativo escreve data e número no idioma do aparelho — a
+   trava "dist desatualizado" da CI reprovou; o conserto ficou só na montagem (`apps/catalog/nativo/idioma-da-montagem.mjs`,
+   o "en-US" para quem não diz o idioma), com `tests/unit/site-nativo-idioma.test.tsx` provado contra o defeito; (3) o
+   validador leva de 5 a 10 minutos por rodada na máquina do Victor — rodar em segundo plano; (4) mudar peça no meio de
+   trabalho de página entristeceu o Victor: mudança de peça é pergunta à parte, desenhada, com "pode" antes.
+   **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+   #97. O registro entrou no lote seguinte (o bloco 2).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
