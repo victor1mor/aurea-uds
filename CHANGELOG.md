@@ -225,13 +225,16 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
 - **O check 31b** (frase nova no `AureaStrings` sai com o aviso de compilação) lê as duas seções do que ainda não saiu —
   a da versão datada que espera a publicação e a da versão em construção —, como o check 31 já fazia. Lia só a primeira,
   e pedia na [0.42.0] as frases da 0.43.0.
-- **O registro da 0.42.0** entra quando ela for publicada.
+- **O registro da 0.42.0** (publicada entre 08:32 e 08:39 de 25/10/2026): o `released-surface.json` do commit do
+  publish (`6872bf3b`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
 
 ---
 
 ## [0.42.0] — 2026-10-23
 
-⏳ **Ainda não publicada.** A lateral até o topo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o MNT-34 de um app
+✅ **Publicada em 25/10/2026, entre 08:32 e 08:39 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do pedido
+#96 (o #95, com a 0.42.0, foi juntado antes; o #96 pôs a auditoria de volta ao verde).
+A lateral até o topo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)) — o MNT-34 de um app
 de rede e o pedido de um segundo app: a lateral do alto até embaixo, com a marca nela, e sem a barra que atravessa a tela.
 O Victor, na bancada com a peça de verdade: *"mantenha o atual e faça também os outros 4"*, *"quero o botão de recolher
 conforme eu tinha aprovado"* e *"Aprovado o MNT-34"*. Só a web.
