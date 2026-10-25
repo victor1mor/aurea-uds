@@ -11,8 +11,13 @@ import {createElement as h} from "react";
 import {renderToStaticMarkup, renderToString} from "react-dom/server";
 import {AppRegistry} from "react-native-web";
 import {FACES, ICONES_QUE_FALTAM, Moldura} from "./moldura.mjs";
+import {resolverTokens} from "../../../packages/native/dist/index.js";
 
 export {FACES, ICONES_QUE_FALTAM};
+
+// O FUNDO DO APP em cada tema — o que a caixinha de exemplo das páginas do nativo pinta (decisão do Victor, 24/10/2026:
+// "A caixinha de exemplo das páginas do nativo usa o fundo do próprio app"). Lido do token, para seguir o app sozinho.
+export const fundoDoApp = (tema) => resolverTokens(tema, "comfortable").color.background;
 
 const modulos = import.meta.glob(["../content/native/*.mjs"], {import: "default", eager: true});
 export const conteudo = Object.fromEntries(Object.entries(modulos)

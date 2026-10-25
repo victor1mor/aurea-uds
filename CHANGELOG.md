@@ -193,7 +193,8 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
 ### O site
 
 - **O nativo no site**: a chave Web | Native na ponta da linha das áreas, e uma página por peça do nativo (79), com a peça
-  de verdade rodando pelo `react-native-web` nos dois temas, os exemplos de todo valor e a API lida dos tipos.
+  de verdade rodando pelo `react-native-web` nos dois temas, os exemplos de todo valor e a API lida dos tipos. A caixinha
+  de exemplo das páginas do nativo pinta o fundo do próprio app em cada tema.
 - **A caixa do exemplo cresce com ele** (substitui a ADR-0002): a altura de antes vira a mínima, e nenhuma caixa rola por
   dentro; a varredura mede na tela 1280 × 663.
 - **Toda variação num exemplo**: as fichas da web somavam 473 valores sem exemplo em 70 peças; agora nenhum.

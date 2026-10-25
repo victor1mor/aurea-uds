@@ -2162,6 +2162,10 @@ const paginas = [
     ...faces,
     'html[data-theme="light"] [data-nativo-tema="dark"],html:not([data-theme="light"]) [data-nativo-tema="light"]{display:none}',
     ".nativo-previa{display:contents}",
+    // A caixinha de exemplo pinta o FUNDO DO APP nativo de cada tema, lido do token (decisão do Victor, 24/10/2026): a do
+    // site era um tom mais escura, e o texto de destaque do nativo, que passa no fundo do app, ficava abaixo da régua nela.
+    `html[data-theme="light"] .demo-panel[data-panel="preview"]{background:${nativo.fundoDoApp("light")}}`,
+    `html:not([data-theme="light"]) .demo-panel[data-panel="preview"]{background:${nativo.fundoDoApp("dark")}}`,
     nativo.folha(),
   ].join("\n") + "\n");
 }
