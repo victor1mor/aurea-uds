@@ -66,7 +66,7 @@ import VERSAO from "./versao.json";
 import {FileInput} from "@aurea-uds/native/system/file";
 // R-22 (02/10/2026): o `PhotoInput` vem do `/system`, que importa também o seletor de data. Os dois
 // módulos vêm no Expo Go ("Included in Expo Go", nas páginas da Expo).
-import {PhotoInput} from "@aurea-uds/native/system";
+import {DatePicker, PhotoInput} from "@aurea-uds/native/system";
 
 // O caminho PROFUNDO, que é a forma documentada pela ADR-0038. Importar do barril traria todos.
 // Desde a ADR-0053 (01/10/2026) os glifos são do Phosphor, e cada um tem duas formas: a regular
@@ -251,6 +251,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <Bloco0430 t={t} />
       <Bloco0401 t={t} />
       <Bloco0320b t={t} />
       <Bloco0320 t={t} />
@@ -1676,6 +1677,82 @@ function Bloco0320({t}) {
 // popover não fica embaixo da barra de status nem sai da tela; a onda do toque nasce no dedo e não
 // pisca no primeiro toque; o fio do ScrollShadow só aparece na ponta onde há mais lista; o X da
 // etiqueta e a etiqueta são DOIS alvos para o VoiceOver e o TalkBack; o código abre o teclado de números.
+// 0.43.0 (o bloco 1, ADR-0081): o que mudou nas PEÇAS do nativo e só tinha sido visto no navegador (`react-native-web`).
+// As decisões do Victor de 24/10/2026, uma a uma na bancada: a aba escolhida, o Tabs e a barra de baixo com o amarelo por
+// trás; a cor do escolhido igual à da web; o toque a mais, invisível, da caixa e do rádio (6 em volta, como a referência);
+// o `align` do interruptor; a busca sem `value`; o modo hora do seletor; a letra do amarelo no claro. A tela (`Screen`)
+// mudou só no navegador — no aparelho, a folga tem de ser a de antes (o modo "→ Screen" mede).
+function Bloco0430({t}) {
+  const [periodo, setPeriodo] = React.useState("semana");
+  const [aba, setAba] = React.useState("resumo");
+  const [abaFio, setAbaFio] = React.useState("resumo");
+  const [barra, setBarra] = React.useState("inicio");
+  const [comb, setComb] = React.useState("e");
+  const [ano, setAno] = React.useState("2026");
+  const [ordem, setOrdem] = React.useState("data");
+  const [marca, setMarca] = React.useState(false);
+  const [plano, setPlano] = React.useState("mensal");
+  const [liga, setLiga] = React.useState(true);
+  const [hora, setHora] = React.useState(undefined);
+  const fila = {flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center"};
+  return (
+    <Bloco t={t} n="0.43.0" titulo="O bloco 1: as peças do nativo que mudaram"
+      criterio={"1) A aba escolhida do SegmentedControl e a do Tabs são AMARELAS, com o nome escuro e sem sombra. O Tabs "
+        + "sublinhado tem só o traço amarelo embaixo e o nome na cor do texto. "
+        + "2) A barra de baixo mostra o escolhido numa cápsula amarela, sem passar nada (é o padrão novo); troque de aba e "
+        + "ela não anda. "
+        + "3) O texto \"primary\": no CLARO, um amarelo escurecido que se lê bem no branco; no ESCURO, o amarelo da marca. "
+        + "4) Abra o Select e o Combobox: o visto da opção escolhida é amarelo. Abra o menu: o ponto do \"Ordenar por\" está "
+        + "na cor do texto. No Stepper, o passo atual na cor do texto. "
+        + "5) Toque um pouco FORA da caixa e do rádio (logo ao lado do desenho): ainda marca. O desenho e o espaço entre as "
+        + "linhas são os de antes. "
+        + "6) O interruptor de rótulo longo: o trilho fica na PRIMEIRA linha do texto, não no meio. "
+        + "7) Escreva na busca e toque no X: o texto apaga. "
+        + "8) O seletor de hora vazio diz \"Escolher horário\"; escolha uma hora: aparece a hora e os minutos, não a data. "
+        + "9) Toque em \"→ Screen\" (no alto): a folga do entalhe e da barra de baixo é a de antes."}>
+      <SegmentedControl label="Período" value={periodo} onChange={setPeriodo}
+        items={[{value: "dia", label: "Dia"}, {value: "semana", label: "Semana"}, {value: "mes", label: "Mês"}]} />
+      <Tabs label="Abas" value={aba} onChange={setAba} panel="plain" tabs={[
+        {id: "resumo", label: "Resumo", content: <AText tone="muted">Aba em cápsula (o padrão).</AText>},
+        {id: "itens", label: "Itens", content: <AText tone="muted">Segunda aba.</AText>},
+      ]} />
+      <Tabs label="Abas sublinhadas" variant="secondary" value={abaFio} onChange={setAbaFio} panel="plain" tabs={[
+        {id: "resumo", label: "Resumo", content: <AText tone="muted">Aba sublinhada: só o traço amarelo.</AText>},
+        {id: "itens", label: "Itens", content: <AText tone="muted">Segunda aba.</AText>},
+      ]} />
+      <BottomNav width="content" label="Barra do bloco 0.43.0" current={barra} items={[
+        {id: "inicio", label: "Painel", icon: "squares-four", onPress: () => setBarra("inicio")},
+        {id: "busca", label: "Lista", icon: "list-bullets", onPress: () => setBarra("busca")},
+        {id: "perfil", label: "Avisos", icon: "bell", onPress: () => setBarra("perfil")},
+      ]} />
+      <AText tone="primary">Texto primary — Relatórios do mês</AText>
+      <Field label="Combustível">
+        <Select value={comb} onChange={setComb} items={[
+          {value: "g", label: "Gasolina"}, {value: "e", label: "Etanol"}, {value: "d", label: "Diesel"},
+        ]} />
+      </Field>
+      <Combobox placeholder="Ano" items={CINQUENTA} value={CINQUENTA.find((x) => x.value === ano)}
+        onValueChange={(x) => setAno(x?.value ?? "")} />
+      <View style={fila}>
+        <DropdownMenu trigger={<Button appearance="outline">Menu</Button>} items={[
+          {kind: "radiogroup", label: "Ordenar por", value: ordem, onValueChange: setOrdem,
+            items: [{value: "data", label: "Data"}, {value: "nome", label: "Nome"}]},
+        ]} />
+      </View>
+      <Stepper items={[{label: "Dados", state: "done"}, {label: "Foto", state: "active"}, {label: "Revisar"}]} />
+      <Checkbox label="Lembrar deste aparelho" checked={marca} onChange={setMarca} />
+      <Radio label="Mensal" checked={plano === "mensal"} onChange={() => setPlano("mensal")} />
+      <Radio label="Anual" checked={plano === "anual"} onChange={() => setPlano("anual")} />
+      <Switch align="start" checked={liga} onChange={setLiga}
+        label="Avisar quando um contrato estiver perto de vencer e quando um pagamento entrar na conta" />
+      <SearchField placeholder="Buscar (sem value)" />
+      <Field label="Horário">
+        <DatePicker mode="time" value={hora} onChange={setHora} />
+      </Field>
+    </Bloco>
+  );
+}
+
 // 0.40.1 (ADR-0077 e ADR-0078): a fonte nova no aparelho — Inter no texto, Sora nos títulos, IBM Plex Mono no código e
 // nos valores — e o campo branco com sombra no CLARO (cinza dentro do cartão; no escuro, como antes).
 function Bloco0401({t}) {

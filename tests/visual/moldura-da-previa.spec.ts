@@ -18,6 +18,38 @@ const semDesenho = () => [...document.querySelectorAll("use")]
   .map((u) => u.getAttribute("href") || u.getAttribute("xlink:href") || "")
   .filter((h) => h.startsWith("#") && !document.getElementById(h.slice(1)));
 
+// TODA MOLDURA ACENDE (bloco 1, 25/10/2026). 10 das 67 saíam paradas — as 9 de padrão de moldura própria e a primeira do
+// AppShell —, e o botão de recolher a lateral delas não respondia. A trava das caixas (`parte-viva.spec.ts`) deixa as
+// molduras de fora; esta abre cada uma na largura de computador (abaixo de 1024 a lateral vira gaveta e o botão some), lê o
+// `data-ligada` que a parte viva põe na raiz e, onde há lateral com botão de recolher, aperta e mede.
+test("toda moldura acende sem erro, e o botão de recolher a lateral responde", async ({page}) => {
+  test.setTimeout(10 * 60_000);
+  await page.setViewportSize({width: 1280, height: 663});
+  const erros: string[] = [];
+  let atual = "";
+  page.on("console", (m) => { if (m.type() === "error") erros.push(`${atual}: ${m.text().slice(0, 160)}`); });
+  page.on("pageerror", (e) => erros.push(`${atual}: ${String(e).slice(0, 160)}`));
+  let comBotao = 0;
+  for (const f of MOLDURAS) {
+    atual = f;
+    await page.goto(`/apps/catalog/embeds/${f}`);
+    const ligada = await page.waitForFunction(() => document.getElementById("root")?.dataset.ligada, null, {timeout: 5_000})
+      .then((h) => h.jsonValue()).catch(() => "nada");
+    if (ligada !== "sim") { erros.push(`${f}: a moldura não acendeu (${ligada})`); continue; }
+    const botao = page.locator(".sidebar-collapse-trigger:visible, .sidebar-toggle:visible").first();
+    if (!(await botao.count())) continue;
+    comBotao++;
+    const largura = () => page.locator(".sidebar").first().evaluate((e) => Math.round(e.getBoundingClientRect().width));
+    const aberta = await largura();
+    await botao.click();
+    await expect.poll(largura, {message: `${f}: recolher`}).toBeLessThan(aberta);
+    await botao.click();
+    await expect.poll(largura, {message: `${f}: abrir de novo`}).toBe(aberta);
+  }
+  expect(erros).toEqual([]);
+  expect(comBotao, "as molduras com o botão de recolher (os dois padrões da lateral que recolhe)").toBeGreaterThanOrEqual(2);
+});
+
 test("o BottomNav vivo troca de item sem perder o ícone — a forma cheia está no desenho embutido", async ({page}) => {
   const comBotao = MOLDURAS.filter((f) => f.startsWith("bottomnav"));
   expect(comBotao.length, "as molduras do BottomNav").toBeGreaterThan(5);

@@ -43,26 +43,41 @@ function exemplo(starters: Starters, nome: string, indice: number, extras: Extra
 // A moldura é um documento com UM exemplo; a página de componente, as caixas — e, junto, as peças vivas do topo do
 // site (a busca, o tema, a setinha), que nas outras páginas vêm do `search.js`.
 export function ligar(starters: Starters, extras: Extras = {}) {
-  if (document.getElementById("root")?.dataset.componente) ligarMoldura(starters);
+  if (document.getElementById("root")?.dataset.componente) ligarMoldura(starters, extras);
   else if (document.querySelector("[data-vivo]")) montarSite(h(CaixasVivas, {starters, extras}));
 }
 
 // ── A MOLDURA (18/08/2026): o gerador já emite o exemplo com `renderToString` (os marcadores de hidratação), e
-// `hydrateRoot` aproveita a marcação em vez de refazê-la.
-function ligarMoldura(starters: Starters) {
+// `hydrateRoot` aproveita a marcação em vez de refazê-la. Os `extras` entram desde 25/10/2026: a moldura de um PADRÃO
+// (`padrao/<Arquivo>.<n>`) acha o exemplo pelo mesmo caminho da caixa — sem eles, as nove molduras de padrão ficavam paradas.
+// `data-ligada` diz o resultado, como nas caixas ("sim" ou "erro") — é o que o teste lê.
+function ligarMoldura(starters: Starters, extras: Extras) {
   const raiz = document.getElementById("root")!;
   const componente = raiz.dataset.componente!;
-  const ex = exemplo(starters, componente, Number(raiz.dataset.indice ?? 0));
+  const ex = exemplo(starters, componente, Number(raiz.dataset.indice ?? 0), extras);
   if (!ex?.render) {
     console.error(`Aurea: não há conteúdo de catálogo para ${componente}`);
+    raiz.dataset.ligada = "erro";
     return;
   }
   try {
-    hydrateRoot(raiz, h(AureaProvider, {spriteUrl: ""}, ex.render() as never));
+    hydrateRoot(raiz, h(Acesa, {raiz}, h(AureaProvider, {spriteUrl: ""}, ex.render() as never)), {
+      onRecoverableError: (erro) => {
+        console.error(`Aurea: a prévia de ${componente} não hidratou —`, erro);
+        raiz.dataset.ligada = "erro";
+      },
+    });
   } catch (erro) {
     // Falha de hidratação NÃO pode apagar a prévia: o HTML estático já está na tela e continua valendo.
     console.error(`Aurea: a prévia de ${componente} não hidratou —`, erro);
+    raiz.dataset.ligada = "erro";
   }
+}
+
+// Não desenha nada (a marcação da moldura continua a do gerador): só anota que a moldura acendeu.
+function Acesa({raiz, children}: {raiz: HTMLElement; children: ReactNode}) {
+  useEffect(() => { if (raiz.dataset.ligada !== "erro") raiz.dataset.ligada = "sim"; }, [raiz]);
+  return children;
 }
 
 // ── AS CAIXAS DA PÁGINA (21/10/2026). O Victor: "adicione o javascript ao site da aurea assim todos os componente

@@ -25,6 +25,21 @@ em inglês e ficam como estão: são registro.
   O CHANGELOG ([0.43.0] publicada) e o CLAUDE.md (a linha na tabela e o item 41).
 - Não muda nenhum pacote publicado.
 
+### As duas pontas do bloco 1 (25/10/2026)
+
+- **O site: as 10 molduras de exemplo que estavam paradas acendem.** Das 67 molduras (`apps/catalog/embeds/`), as 9 dos
+  padrões de moldura própria (o AppShell, a abertura de página e a lateral) e a primeira prévia do AppShell não tinham a
+  parte viva: o botão de recolher a lateral não respondia. O gerador só dava a chave do exemplo à moldura de componente
+  com arquivo próprio; agora a dá também ao exemplo de partida e ao padrão (`padrao/<Arquivo>.<n>`), e a moldura carrega o
+  `live-motores.js` quando o exemplo tem motor. A moldura marca `data-ligada` ("sim" ou "erro"), como as caixas. Quem
+  cobra: `tests/unit/molduras-vivas.test.tsx` (com o site de antes, acusa as 10) e o teste "toda moldura acende" do
+  `moldura-da-previa.spec.ts` (abre as 67 na largura de computador e aperta o botão de recolher).
+- **O app de teste de aparelho ganha o bloco 0.43.0**, no topo: as mudanças das peças do nativo na 0.43.0, que só tinham
+  rodado no navegador — a aba escolhida e o Tabs amarelos, a barra de baixo com a cápsula, o texto primary, a cor do
+  escolhido, o toque a mais da caixa e do rádio, o align do interruptor, a busca sem value e o modo hora do seletor —,
+  com o critério de cada uma escrito na tela.
+- Não muda nenhum pacote publicado.
+
 ### A auditoria de volta ao verde (25/10/2026)
 
 - **Dois alertas `high` novos** reprovaram a auditoria da `build` no `main`, na junção do pedido #95, sem nenhuma

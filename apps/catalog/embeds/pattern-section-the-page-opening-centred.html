@@ -15,7 +15,11 @@
      layoutProprio existe para quem ja monta os proprios landmarks: a lateral poe o main AO LADO
      do aside, porque aside DENTRO de main e landmark-complementary-is-top-level. -->
 
-<main id="root"><div style="width:100%"><section class="section section-spacing-sm section-hero section-hero-center"><div class="container section-hero-inner"><div class="section-hero-content"><div class="section-hero-eyebrow"><span class="badge badge-primary badge-flat">Version 2.0 is out</span></div><div class="section-hero-text"><h1 class="section-hero-title">One design system. Web and native.</h1><p class="section-hero-description">The same look on both sides, made for people who see little.</p></div><div class="section-hero-actions"><a class="btn btn-primary" href="#"><span>Get started</span></a><a class="btn btn-outline" href="#"><span>View components</span></a></div><a class="link" href="#">Open source on GitHub</a></div></div></section></div></main>
+<main id="root" data-componente="padrao/Section.1" data-indice="0"><div style="width:100%"><section class="section section-spacing-sm section-hero section-hero-center"><div class="container section-hero-inner"><div class="section-hero-content"><div class="section-hero-eyebrow"><span class="badge badge-primary badge-flat">Version 2.0 is out</span></div><div class="section-hero-text"><h1 class="section-hero-title">One design system. Web and native.</h1><p class="section-hero-description">The same look on both sides, made for people who see little.</p></div><div class="section-hero-actions"><a class="btn btn-primary" href="#"><span>Get started</span></a><a class="btn btn-outline" href="#"><span>View components</span></a></div><a class="link" href="#">Open source on GitHub</a></div></div></section></div></main>
+<!-- O RUNTIME (18/08/2026). Sem ele a prévia é HTML morto: o `Tooltip` do trilho existe no
+     código, passa no teste, e não abria porque não havia JavaScript. O estático continua sendo o
+     piso — este script só ENXERTA por cima, e se falhar a marcação já está na tela. -->
+<script src="../assets/live.js"></script>
 <script>
 // O tema não atravessa documento, e em file:// este iframe é de outra origem — ler o pai seria
 // proibido. Então ele PEDE o tema por mensagem, e o catalog.js responde (e reenvia ao trocar).

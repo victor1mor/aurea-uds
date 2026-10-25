@@ -574,7 +574,7 @@ ${tituloProprio ? "" : `<header><h1 class="sr-only">${rotulo} preview</h1></head
 <!-- O RUNTIME (18/08/2026). Sem ele a prévia é HTML morto: o \`Tooltip\` do trilho existe no
      código, passa no teste, e não abria porque não havia JavaScript. O estático continua sendo o
      piso — este script só ENXERTA por cima, e se falhar a marcação já está na tela. -->
-<script src="../assets/live.js"></script>` : ""}
+<script src="../assets/${alvo.motor ? "live-motores" : "live"}.js"></script>` : ""}
 <script>
 // O tema não atravessa documento, e em file:// este iframe é de outra origem — ler o pai seria
 // proibido. Então ele PEDE o tema por mensagem, e o catalog.js responde (e reenvia ao trocar).
@@ -594,8 +594,10 @@ function componentPage(f, i) {
   const bruto = c ? c.examples[0] : starters[f.name];
   const main = {...bruto, description: bruto.description || bruto.note,
     ...(bruto.embed ? {render: embedPreview(f.name, bruto.render, f.name,
-      // índice 0: o exemplo principal é `c.examples[0]`
-      content[f.name] ? {componente: f.name, indice: 0} : null,
+      // índice 0: o exemplo principal é `c.examples[0]` — ou, sem arquivo próprio, o de partida (a parte viva acha os dois
+      // pelo mesmo caminho, `exemplo()` do `live/vivo.tsx`). Era `null` sem arquivo próprio, e a primeira prévia do
+      // AppShell saía parada (bloco 1, 25/10/2026).
+      {componente: f.name, indice: 0, motor: COM_MOTOR.has(f.name)},
       bruto.layoutProprio === true, bruto.tituloProprio === true)} : {}),
     // `width:100%` no involucro não é enfeite: o `.demo-panel` é flex, então um <div> solto
     // entra como item de largura automática, encolhe para zero e o `.chart{width:100%}` de
@@ -653,7 +655,7 @@ function componentPage(f, i) {
             demoBlock(ex.embed
               ? embedPreview(`${f.name}-${slug(ex.title)}`, ex.render, `${f.name} — ${ex.title}`,
                   // `n` é o índice DENTRO de `slice(1)`, então o índice real é `n + 1`
-                  {componente: f.name, indice: n + 1}, ex.layoutProprio === true,
+                  {componente: f.name, indice: n + 1, motor: COM_MOTOR.has(f.name)}, ex.layoutProprio === true,
                   ex.tituloProprio === true)
               : ex.render, ex.code, undefined, ex.embed ? null : {componente: f.name, indice: n + 1}))))} : null,
       // A "Reference" da Aurea, no nome e no lugar da referência ("Styling Reference"): os eixos, a
@@ -1135,7 +1137,10 @@ function patternPage(p, i) {
       // já monta os do documento. O caminho dos EXEMPLOS (linha ~537) já as encaminhava; o
       // dos PADRÕES, não — e o conteúdo declarava as duas sem efeito nenhum. Medido pela
       // varredura do catálogo em 29/08/2026.
-      : p.embed ? embedPreview(p.slug, p.render, p.name, null,
+      // A moldura do padrão acende pela MESMA chave da caixa (`padrao/<Arquivo>.<n>`). Saía sem alvo, e as nove molduras de
+      // padrão eram HTML morto — o botão de recolher a lateral não respondia (bloco 1, 25/10/2026).
+      : p.embed ? embedPreview(p.slug, p.render, p.name,
+          {componente: `padrao/${p.component}.${p.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`patterns/${p.component}`)},
           p.layoutProprio === true, p.tituloProprio === true)
       : p.render, code: p.code, description: p.note,
       // A PARTE VIVA (bloco 1, o 3-C): a caixa do padrão acende como a do componente, pela chave `padrao/<Arquivo>.<n>`.
