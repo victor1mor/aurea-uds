@@ -17,6 +17,18 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### A auditoria de volta ao verde (25/10/2026)
+
+- **Dois alertas `high` novos** reprovaram a auditoria da `build` no `main`, na junção do pedido #95, sem nenhuma
+  dependência nossa mudar (a CI do pedido tinha passado antes de eles saírem). Os dois são de ferramenta e nenhum entra
+  em pacote publicado; os dois têm correção, então vão por `overrides` no `pnpm-workspace.yaml`:
+  - **`undici` 7.30.1** (GHSA-xjj6-f33q-929c), sob o `jsdom` dos testes — cabe na faixa que ele pede.
+  - **`zod` 4.6.7** (GHSA-mrhx-c7xc-m3w5), sob o `@expo/cli` das devDependencies do `@aurea-uds/native`. A linha 3 não
+    tem correção, e o `@expo/cli` mais novo ainda pede a 3; o salto para a 4 foi conferido rodando os dois esquemas do
+    `@expo/cli` com ela. O `apps/native-smoke`, que roda o Expo, fica fora do workspace e não muda.
+- Com a CI verde no `main`, o site volta a publicar sozinho (a rodada do site ficou parada desde a junção).
+- Não muda nenhum pacote publicado.
+
 ### O site: a parte viva em toda caixa, as molduras e o centro (21/10/2026)
 
 Só o site — nenhum pacote muda. O Victor, no site publicado: *"o fundo de alguns é cinza e não preto"*, *"alguns
