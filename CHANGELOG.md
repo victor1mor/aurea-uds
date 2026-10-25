@@ -150,7 +150,10 @@ da web —, e travas na CI para continuar assim.
 As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md), 24/10/2026):
 
 - **A letra do `tone="primary"` é a de destaque** no `Text`, no `Paragraph`, no `Heading` e no `Code` (o azul no claro, o
-  amarelo no escuro), na web. Era o amarelo de preencher — 1,75:1 no claro. No nativo, fica como era.
+  amarelo no escuro), na web. Era o amarelo de preencher — 1,75:1 no claro.
+- **No nativo, a letra do `tone="primary"`, no tema claro, é o amarelo da marca misturado com a cor do texto** — como a
+  referência faz com a letra do amarelo dela — e passa na leitura no branco e no fundo da página. No escuro, o amarelo.
+  Era o amarelo de preencher puro.
 - **Os botões da marca de contorno, fantasma e link, no claro, levam a letra azul** (`Button`, `IconButton`,
   `ToolbarButton`: `primary-outline`, `primary-ghost`, `link-primary` e o `tone="brand"` sem caixa) — a ADR-0076 aplicada a
   eles. A mistura marrom caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69.

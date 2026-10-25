@@ -110,6 +110,16 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
     o nome da BIBLIOTECA dela (nem de nenhuma outra) escrito em qualquer coisa do projeto —
     repositório, site, pacote, pedido de junção (seção 2, acima). Nomes de prop que a Aurea já
     decidiu continuam (o `tone`, seção 11).
+  - **O PADRÃO É O NOSSO; AS VARIAÇÕES, AS DELA** (regra do Victor, 24/10/2026: *"vamos ter nossos primários mas variações
+    iguais a deles, já que a deles é genérica as pessoas gostam de usar"*). Cada peça tem o seu jeito Aurea como padrão (o
+    que aparece sem escolher nada — por exemplo, a aba escolhida no amarelo do botão) e ganha, como VARIAÇÃO a mais, o
+    jeito da referência: o desenho e os nomes dela, com as cores, os cantos, a fonte e o "sem linha" da Aurea. O exemplo
+    que o Victor deu é a coluna "igual à referência" da bancada do nativo de 24/10/2026 (a aba escolhida branca com a
+    letra na cor do texto, o visto da lista no amarelo misturado com o texto, o menu no cinza apagado). Toda variação
+    passa na mesma régua de leitura e foco visível. Fazer peça por peça, com a bancada (a nossa ao lado da dela) — **em
+    outro momento**, não no meio de outro trabalho.
+  - ⚠ O toque: a caixa de marcar e o rádio do nativo seguem a referência (6 a mais, invisível — decisão do Victor,
+    24/10/2026); o "toque de 44" da lista acima vale para o resto.
 - **Antes de desenhar ou mostrar uma peça que a referência tem** (lição de 11/10/2026, quando cinco
   peças da prancha voltaram para correção): (1) abrir a PÁGINA DE EXEMPLOS dela — o pacote não traz
   exemplos, e uma ficha antiga dizia "não tem" o que estava num exemplo; (2) ler o CSS publicado

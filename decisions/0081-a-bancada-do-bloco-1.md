@@ -16,8 +16,11 @@
    na tela do Victor.
 2. **A letra do `tone="primary"` é a de destaque** (`--primary-emphasis`: o azul no claro, o amarelo no escuro). Antes era
    o amarelo de preencher, de propósito — 1,75:1 no claro. Na web (o `Text`, o `Paragraph`, o `Heading`, o `Code`).
-   ~~E no nativo.~~ → **No nativo, fica como era** (o amarelo de preencher): o Victor viu a bancada de cada mudança no
-   nativo, antes e depois, e não aprovou esta (24/10/2026, ~18:15).
+   ~~E no nativo.~~ → ~~**No nativo, fica como era** (o amarelo de preencher): o Victor viu a bancada de cada mudança no
+   nativo, antes e depois, e não aprovou esta (24/10/2026, ~18:15).~~ → **No nativo, no tema claro, o amarelo da marca
+   misturado com a cor do texto**, como a referência faz com a letra do amarelo dela (`color-mix(in oklab, amarelo 80%,
+   texto 70%)`), que passa na leitura; no escuro, o amarelo. Decisão do Victor (24/10/2026, 20:30), vendo a referência
+   com o CSS dela ao lado: *"fica como a referência: o nosso amarelo misturado com a cor do texto."*
 3. **Os botões da marca de contorno, fantasma e link, no claro, levam a letra azul** (`--primary-emphasis`), como a
    [ADR-0076](0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md) diz do rótulo do botão secundário. A mistura marrom de
    21/08 passava sobre a página e caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69. Na `lory`, o

@@ -16,6 +16,7 @@ import {
   Text,
   criarRegistroDeIcones, resolverTokens,
 } from "../../packages/native/src/index.js";
+import {misturaNoOklab} from "../../packages/native/src/estilos.js";
 
 const claro = resolverTokens("light", "comfortable");
 const Glifo = () => null;
@@ -84,11 +85,23 @@ describe("2 · o tom `link` no Text", () => {
     expect(StyleSheet.flatten(props("Text").style).color).toBe(claro.color.link);
   });
 
-  // No nativo, `primary` continua o amarelo de PREENCHER (24/10/2026: a ADR-0081 trocou pela letra de destaque, e o Victor,
-  // vendo a bancada do nativo, deixou o nativo como era — a troca ficou só na web).
-  it("e `primary` continua sendo outra coisa", () => {
+  // No nativo, `primary` escreve com a LETRA do amarelo (24/10/2026, decisão do Victor, vendo a referência ao lado): no
+  // claro, o amarelo misturado com o texto do jeito que a referência mistura o dela (80/150), e ela passa na leitura no
+  // branco e no fundo da página; no escuro, o amarelo. O amarelo puro no claro (1,92) reprova.
+  it("e `primary` é a letra do amarelo: no claro, misturado com o texto, legível", () => {
     render(<Envolve><Text tone="primary">x</Text></Envolve>);
-    expect(StyleSheet.flatten(props("Text").style).color).toBe(claro.color.primary);
+    const cor = StyleSheet.flatten(props("Text").style).color as string;
+    expect(cor).toBe(misturaNoOklab(claro.color.primary, claro.color.foreground, 80 / 150));
+    const lum = (h: string) => { const v = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)
+      .map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+    const razao = (a: string, b: string) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+    expect(razao(cor, "#ffffff")).toBeGreaterThanOrEqual(4.5);
+    expect(razao(cor, claro.color.background)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("no escuro, `primary` é o próprio amarelo da marca", () => {
+    render(<AureaProvider theme="dark" icons={ICONES}><Text tone="primary">x</Text></AureaProvider>);
+    expect(StyleSheet.flatten(props("Text").style).color).toBe(resolverTokens("dark", "comfortable").color.primary);
   });
 });
 

@@ -62,6 +62,14 @@ export declare const misturaNoOklab: (frente: string, fundo: string, pct: number
  */
 export declare const corDoEscolhido: (t: AureaTokens) => string;
 /**
+ * A LETRA DO AMARELO, a do texto com `tone="primary"` (decisão do Victor, 24/10/2026, vendo a referência ao lado: *"fica
+ * como a referência: o nosso amarelo misturado com a cor do texto"*). No claro, o amarelo da marca misturado com a cor do
+ * texto do jeito que a referência mistura a letra do amarelo dela — `color-mix(in oklab, amarelo 80%, texto 70%)`: os
+ * pesos somam 150 e viram 80/150 —, que passa na leitura no branco e no cinza da página (o amarelo puro media 1,92). No
+ * escuro, o amarelo da marca, que já se lê.
+ */
+export declare const letraDoAmarelo: (t: AureaTokens) => string;
+/**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
  * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de

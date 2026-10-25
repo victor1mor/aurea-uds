@@ -21,7 +21,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 //   que os tokens já publicam seria uma segunda verdade sobre tipografia.
 import * as React from "react";
 import { Text as TextRN } from "react-native";
-import { canto, criarFolha, letraDoToken } from "./estilos.js";
+import { canto, criarFolha, letraDoAmarelo, letraDoToken } from "./estilos.js";
 import { useAureaTokens, useSobreAMarca } from "./theme.js";
 // 🔴 A ESCALA TEM CINCO DEGRAUS QUE SE ENXERGAM, E DEZ NOMES — ordem do Victor, 19/09/2026,
 // olhando o app no aparelho: *"o tamanho das fontes: existem variações demais, fica muito
@@ -84,12 +84,10 @@ const PAPEL = {
 };
 const COR = {
     default: "foreground", muted: "mutedForeground", subtle: "subtleForeground",
-    // ⚠ `primary` e `link` são o MESMO amarelo em matiz, e NÃO são intercambiáveis.
-    // `primary` é o amarelo de PREENCHER, e escrito sobre o tema claro ele mede 1,73:1 — some.
-    // `link` é o de ESCREVER: mesmo matiz, mais escuro, 5,02:1 no claro, e no escuro é o próprio
-    // amarelo da marca. Quem quer texto amarelo legível nos dois temas usa `link`.
-    // (24/10/2026: a ADR-0081 trocou o `primary` pela letra de destaque também aqui; o Victor viu a bancada do nativo e
-    // deixou o nativo como era — a troca ficou só na web.)
+    // `primary` escreve com a LETRA do amarelo (`letraDoAmarelo`, logo abaixo, na folha): no claro, o amarelo da marca
+    // misturado com a cor do texto, como a referência faz com a letra do amarelo dela; no escuro, o amarelo. Decisão do
+    // Victor, 24/10/2026, vendo a referência ao lado (~~o amarelo de PREENCHER puro, 1,73:1 no claro~~; ~~a letra de
+    // destaque da ADR-0081, o azul no claro~~, que ficou só na web).
     primary: "primary", link: "link", danger: "destructive", success: "success",
     warning: "warning", info: "info",
 };
@@ -104,6 +102,8 @@ const folha = criarFolha((t) => {
         // fundo — no escuro, ~2,5:1. Achado na 0.28.0; `paleta-adr0061.test.tsx` cobra.
         tons[tom] = { color: letraDoToken(t, token) ?? t.color.foreground };
     }
+    // O `primary` escreve com a LETRA do amarelo (24/10/2026): no claro, o amarelo misturado com o texto, como a referência.
+    tons.primary = { color: letraDoAmarelo(t) };
     return tons;
 });
 /**
