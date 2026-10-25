@@ -231,6 +231,11 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
   publish (`6872bf3b`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
 - **A lista do que cada pacote publica** (`scripts/package-files.json`) ganhou o `api-surface-native.json` do
   `@aurea-uds/contracts`: o `check-pack` reprovou no fechamento da versão, porque nenhuma conferência do bloco o rodava.
+- **O idioma da montagem das páginas do nativo** (`apps/catalog/nativo/idioma-da-montagem.mjs`): o nativo escreve data e
+  número no idioma do aparelho, e na montagem o aparelho era o computador — o Windows desenhava "23/10/2026" e "2.026", a
+  CI "10/23/2026" e "2,026", e a trava "dist desatualizado" reprovou o DatePicker e o NumberField. Na montagem, quem não
+  diz o idioma recebe o "en-US" (o do site); a parte viva continua com o do navegador. Quem cobra:
+  `tests/unit/site-nativo-idioma.test.tsx` (sem o conserto, reprova com "23/10/2026").
 
 ---
 

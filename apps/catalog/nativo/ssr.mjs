@@ -7,6 +7,7 @@
 //
 // Cada exemplo sai nos DOIS temas, e o CSS do site mostra o do tema da página: o nativo resolve a cor em JavaScript (hex,
 // ADR-0027), então um desenho só serviria a um tema até a parte viva acender.
+import "./idioma-da-montagem.mjs";
 import {createElement as h} from "react";
 import {renderToStaticMarkup, renderToString} from "react-dom/server";
 import {AppRegistry} from "react-native-web";
