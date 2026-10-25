@@ -298,10 +298,14 @@ Props that exist on both targets have the same name and the same values. `tone`,
 ```tsx
 // Web
 import {Button} from "@aurea-uds/react";
-<Button appearance="solid" tone="brand" size="md">Save</Button>
 
+<Button appearance="solid" tone="brand" size="md">Save</Button>
+```
+
+```tsx
 // React Native
 import {Button} from "@aurea-uds/native";
+
 <Button appearance="solid" tone="brand" size="md" onPress={save}>Save</Button>
 ```
 
@@ -1815,8 +1819,9 @@ Most components take an icon by name too: `leadingIcon` and `trailingIcon` on `B
 The name is the Phosphor name, exactly as Phosphor writes it. TypeScript checks it in `Icon` and in the props that take an icon. A wrong name does not compile:
 
 ```tsx
-<Icon name="caret-down" />   // compiles
-<Icon name="chevron-down" /> // does not compile: the Phosphor name is caret-down
+const right = <Icon name="caret-down" />;
+// @ts-expect-error: the Phosphor name is caret-down
+const wrong = <Icon name="chevron-down" />;
 ```
 
 The full API is on the [Icon](./icon.html) page.
@@ -2624,6 +2629,7 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `aside` | `ReactNode` | — | The right-hand column — a documentation page's "On this page" (a TableOfContents). From 1280 up it is the third column; below, it follows the content. With the docs layout, below 1280 it is the drawer of the table-of-contents bar instead. |
 | `asideLabel` | `string` | strings.tocLabel | The right column's name for screen readers. |
 | `asideVariant` | `"floating" \| "flush" \| "plain"` | sidebarVariant | Skin of the right-hand column. Without it, the same as the left sidebar. plain removes the box — the items sit loose on the page, like a documentation page's "On this page". |
+| `topbarTabsEnd` | `ReactNode` | — | The end of the areas row (the Header's tabsEnd): the Web \| Native switch of a documentation site. |
 </page>
 
 <page url="https://aureauds.dev/aspectratio.html">
@@ -2973,7 +2979,7 @@ On a circle the badge is pulled 14% back into the corner. Without that it floats
 
 ```tsx
 <Badge anchor="bottom-end" anchorShape="circle" dot variant="success">
-  <Avatar name="Ana Prado" />
+  <Avatar alt="Ana Prado" fallback="AP" />
 </Badge>
 ```
 
@@ -3176,7 +3182,7 @@ import {BottomNav} from "@aurea-uds/react";
 ```
 
 ```tsx
-const items = [
+const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
     badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
@@ -3784,7 +3790,7 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 ```tsx
 <Card variant="base">variant base</Card>
 <Card variant="raised">variant raised</Card>
-<Card variant="interactive">variant interactive</Card>
+<Card variant="interactive" render={<a href="#" />}>variant interactive</Card>
 <Card variant="inset">variant inset</Card>
 <Card variant="outline">variant outline</Card>
 <Card variant="selected">variant selected</Card>
@@ -3822,7 +3828,7 @@ import {Carousel} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Carousel label="Product photos" style={{"--carousel-slide": "50%"}}>
+<Carousel label="Product photos" style={{"--carousel-slide": "50%"} as CSSProperties}>
   <Card>Front</Card>
   <Card>Back</Card>
   <Card>In use</Card>
@@ -4365,6 +4371,7 @@ import {highlightCode} from "@aurea-uds/react/code-highlight";
 | `lineNumbers` | `boolean` | false | Shows the number of each line on the left, in a 16px column 24px from the code. The column grows with the digits of the last line, so it does not jump at line 100. The number is drawing: it is not in the copied text and not read by screen readers. |
 | `highlight` | `CodeHighlighter` | — | Colors the code. Pass `highlightCode` from `@aurea-uds/react/code-highlight`; its grammars are optional peers (@lezer/javascript, @lezer/css, @lezer/html, @lezer/json, @codemirror/legacy-modes). A language it does not know comes back plain. The colors are the same as the CodeEditor's, mixed 20% with the text so each one reads at 4.5:1 or more on the block. |
 | `className` | `string` | — | Lands on the outer element either way — on the <pre> when plain, on the wrapper when copyable. |
+| `tabs` | `Array<{label, code, language?}>` | — | The alternatives of the same step, in tabs — the install command in npm, pnpm, yarn and bun: the row on top, inside the box, and one code per tab. With tabs, children is not read. |
 </page>
 
 <page url="https://aureauds.dev/codeeditor.html">
@@ -4767,7 +4774,7 @@ Ready colours under the hue track. Controlled: the code follows.
 const [colour, setColour] = useState("#0485f7");
 
 <ColorPicker label="Brand colour" value={colour} onValueChange={setColour}
-  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, …]} />
+  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}]} />
 ```
 
 ### A closed palette
@@ -4776,7 +4783,7 @@ variant="swatches": only the swatches and the hex field.
 
 ```tsx
 <ColorPicker label="Tag colour" variant="swatches" defaultValue="#16a34a"
-  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, …]} />
+  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}]} />
 ```
 
 ### With fields
@@ -4784,13 +4791,13 @@ variant="swatches": only the swatches and the hex field.
 The window assembled with children: the area, the hue, and one field per channel — the colour space chosen in a Select.
 
 ```tsx
-const [space, setSpace] = useState("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
+const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsla(220, 90%, 50%, 0.8)">
   <ColorArea />
   <Slider label="Hue" channel="hue" />
-  <Select aria-label="Colour space" value={space} onValueChange={setSpace}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
   <div style={{display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--space-2)"}}>
     {channels[space].map((channel) => (
@@ -4805,13 +4812,13 @@ const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "satura
 One track per channel, transparency included — the colour space chosen in a Select.
 
 ```tsx
-const [space, setSpace] = useState("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
+const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsl(219, 58%, 93%)">
-  <Select aria-label="Colour space" value={space} onValueChange={setSpace}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
-  {[...channels[space], "alpha"].map((channel) => (
+  {[...channels[space], "alpha" as const].map((channel) => (
     <Slider key={channel} label={channel} channel={channel} colorSpace={space} />
   ))}
 </ColorPicker>
@@ -4920,9 +4927,9 @@ The swatch is an image. label names it; without it, the screen reader reads the 
 The group takes the same five sizes.
 
 ```tsx
-<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={…} />
-<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={…} />
-<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={…} />
+<ColorSwatch size="sm" name="small" label="Small" defaultValue="#0485f7" options={options} />
+<ColorSwatch name="medium" label="Medium" defaultValue="#0485f7" options={options} />
+<ColorSwatch size="xl" name="large" label="Large" defaultValue="#0485f7" options={options} />
 ```
 
 ### A colour you cannot pick
@@ -4958,8 +4965,8 @@ layout="stack": one under the other.
 defaultValue picks one when the page opens; without it, none is picked.
 
 ```tsx
-<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={…} />
-<ColorSwatch name="none" label="No colour yet" options={…} />
+<ColorSwatch name="start" label="Theme colour" defaultValue="#7c3aed" options={options} />
+<ColorSwatch name="none" label="No colour yet" options={options} />
 ```
 
 ### Options with the value
@@ -4985,7 +4992,7 @@ indicator replaces the check on the chosen colour; it gets the ink that contrast
 
 ```tsx
 <ColorSwatch name="favourite" label="Favourite colour" defaultValue="#e11d48"
-  indicator={<Icon name="heart" />} options={…} />
+  indicator={<Icon name="heart" />} options={options} />
 ```
 
 ## API Reference
@@ -5044,7 +5051,7 @@ import {Combobox} from "@aurea-uds/react";
 One option out of many, with the list filtering as you type.
 
 ```tsx
-const [value, setValue] = useState(null);
+const [value, setValue] = useState<ComboboxOption | null>(null);
 
 <Combobox label="Component" placeholder="Search…" value={value}
   onValueChange={setValue}
@@ -5189,10 +5196,10 @@ import {ConfirmDialog} from "@aurea-uds/react";
 The same four places as Dialog: auto (bottom on a phone, centre from 640 up), bottom, center and top.
 
 ```tsx
-<ConfirmDialog open={open} title="Placement auto" placement="auto" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Placement bottom" placement="bottom" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Placement center" placement="center" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Placement top" placement="top" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement auto" description="This confirmation opens at auto." placement="auto" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement bottom" description="This confirmation opens at bottom." placement="bottom" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement center" description="This confirmation opens at center." placement="center" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Placement top" description="This confirmation opens at top." placement="top" onConfirm={confirm} onCancel={close} />
 ```
 
 ### Icon tones
@@ -5200,12 +5207,12 @@ The same four places as Dialog: auto (bottom on a phone, centre from 640 up), bo
 The colour of the circle behind the icon. destructive picks danger on its own.
 
 ```tsx
-<ConfirmDialog open={open} title="Icon tone neutral" icon="info" iconTone="neutral" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Icon tone brand" icon="info" iconTone="brand" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Icon tone info" icon="info" iconTone="info" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Icon tone success" icon="info" iconTone="success" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Icon tone warning" icon="info" iconTone="warning" onConfirm={confirm} onCancel={close} />
-<ConfirmDialog open={open} title="Icon tone danger" icon="info" iconTone="danger" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone neutral" description="The circle behind the icon is neutral." icon="info" iconTone="neutral" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone brand" description="The circle behind the icon is brand." icon="info" iconTone="brand" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone info" description="The circle behind the icon is info." icon="info" iconTone="info" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone success" description="The circle behind the icon is success." icon="info" iconTone="success" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone warning" description="The circle behind the icon is warning." icon="info" iconTone="warning" onConfirm={confirm} onCancel={close} />
+<ConfirmDialog open={open} title="Icon tone danger" description="The circle behind the icon is danger." icon="info" iconTone="danger" onConfirm={confirm} onCancel={close} />
 ```
 
 ## API Reference
@@ -5281,8 +5288,8 @@ import {ContainerScope} from "@aurea-uds/react";
 ```tsx
 <ContainerScope>
   <Toolbar orientation={{base: "vertical", container: {sm: "horizontal"}}}>
-    <Button>Salvar</Button>
-    <Button>Descartar</Button>
+    <Button>Save</Button>
+    <Button>Discard</Button>
   </Toolbar>
 </ContainerScope>
 ```
@@ -5386,15 +5393,15 @@ import {DataGrid} from "@aurea-uds/react/data-grid";
 loading and error replace the rows; the other states keep the rows you already had and put the notice above them.
 
 ```tsx
-<DataGrid label="Members" data={members} columns={columns} state="loading" />
-<DataGrid label="Members" data={members} columns={columns} state="error" />
-<DataGrid label="Members" data={members} columns={columns} state="stale" />
-<DataGrid label="Members" data={members} columns={columns} state="partial" />
-<DataGrid label="Members" data={members} columns={columns} state="degraded" />
-<DataGrid label="Members" data={members} columns={columns} state="offline" />
-<DataGrid label="Members" data={members} columns={columns} state="waiting_user" />
-<DataGrid label="Members" data={members} columns={columns} state="waiting_approval" />
-<DataGrid label="Members" data={members} columns={columns} state="waiting_dependency" />
+<DataGrid label="Members, loading" data={members} columns={columns} state="loading" />
+<DataGrid label="Members, error" data={members} columns={columns} state="error" />
+<DataGrid label="Members, stale" data={members} columns={columns} state="stale" />
+<DataGrid label="Members, partial" data={members} columns={columns} state="partial" />
+<DataGrid label="Members, degraded" data={members} columns={columns} state="degraded" />
+<DataGrid label="Members, offline" data={members} columns={columns} state="offline" />
+<DataGrid label="Members, waiting_user" data={members} columns={columns} state="waiting_user" />
+<DataGrid label="Members, waiting_approval" data={members} columns={columns} state="waiting_approval" />
+<DataGrid label="Members, waiting_dependency" data={members} columns={columns} state="waiting_dependency" />
 ```
 
 ## API Reference
@@ -6095,7 +6102,7 @@ With upload() it owns progress, cancel and retry for each file.
 
 ```tsx
 <FileInput label="Import" accept=".csv" maxSize={2000000}
-  upload={async ({file, onProgress, signal}) => {
+  upload={async (file, {onProgress, signal}) => {
     await put(file, {onProgress, signal});
   }} />
 ```
@@ -6371,6 +6378,7 @@ itemsJustify="start" puts the links right after the brand; end, the default, put
 | `tabs` | `HeaderTab[]` | — | A second row: the site's areas, each with an optional icon, like the area row of the reference documentation. The row is 40 tall, the areas sit at its bottom, 12 apart (4 on a phone), and it scrolls sideways when they do not fit. The current one gets aria-current="page" and a 2px bar in the accent color. It comes last in the Tab order, after the actions. With tabs the bar is exactly its height and the divider line hangs just below it. |
 | `currentTab` | `string` | — | The id of the current area in the second row. |
 | `tabsLabel` | `string` | "Sections" | The accessible name of the second row. |
+| `tabsEnd` | `ReactNode` | — | What sits at the END of the second row, opposite the areas: the Web \| Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs. |
 </page>
 
 <page url="https://aureauds.dev/heading.html">
@@ -6542,9 +6550,9 @@ import {HumanApproval} from "@aurea-uds/react";
 How much the action can break. The word goes on the card; the colour only repeats it.
 
 ```tsx
-<HumanApproval title="Send the weekly report" risk="low" />
-<HumanApproval title="Send the weekly report" risk="medium" />
-<HumanApproval title="Send the weekly report" risk="high" />
+<HumanApproval title="Send the weekly report (low risk)" risk="low" />
+<HumanApproval title="Send the weekly report (medium risk)" risk="medium" />
+<HumanApproval title="Send the weekly report (high risk)" risk="high" />
 ```
 
 ### Decided
@@ -6552,8 +6560,8 @@ How much the action can break. The word goes on the card; the colour only repeat
 Once decided, the pair of buttons becomes the result instead of disappearing, so the trace of the choice stays.
 
 ```tsx
-<HumanApproval title="Send the weekly report" risk="low" decision="approved" />
-<HumanApproval title="Send the weekly report" risk="low" decision="denied" />
+<HumanApproval title="Send the weekly report (approved)" risk="low" decision="approved" />
+<HumanApproval title="Send the weekly report (denied)" risk="low" decision="denied" />
 ```
 
 ## API Reference
@@ -7554,9 +7562,9 @@ import {ModelUsage} from "@aurea-uds/react";
 Which measure the bars compare: tokens, cost or requests. The rows sort by the one in view.
 
 ```tsx
-<ModelUsage entries={entries} metric="tokens" />
-<ModelUsage entries={entries} metric="cost" />
-<ModelUsage entries={entries} metric="requests" />
+<ModelUsage label="Model usage, tokens" entries={entries} metric="tokens" />
+<ModelUsage label="Model usage, cost" entries={entries} metric="cost" />
+<ModelUsage label="Model usage, requests" entries={entries} metric="requests" />
 ```
 
 ## API Reference
@@ -7583,7 +7591,7 @@ import {MultiCombobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [tags, setTags] = useState([]);
+const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox label="Tags" placeholder="Add a tag…" value={tags}
   onValueChange={setTags}
@@ -7672,7 +7680,7 @@ import {NavList} from "@aurea-uds/react";
     {id: "profile", label: "Profile", description: "Name, photo, handle", icon: "user", href: "/profile"},
     {id: "alerts", label: "Notifications", description: "Push, email", icon: "bell", value: "On", href: "/alerts"},
     {id: "plan", label: "Plan", icon: "wallet", value: <Badge size="xs">Free</Badge>, href: "/plan"},
-    {id: "sync", label: "Sync", icon: "cloud", value: <Status tone="success">Live</Status>, href: "/sync"},
+    {id: "sync", label: "Sync", icon: "cloud", value: <Status variant="success">Live</Status>, href: "/sync"},
   ]} />
 </Card>
 ```
@@ -8643,10 +8651,10 @@ import {Section} from "@aurea-uds/react";
   <Container>
     <Grid columns={12}>
       <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
-        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+        <Heading id="t-app" level={2}>A dark band</Heading>
       </Grid.Item>
       <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
-        <Button tone="brand">Baixar</Button>
+        <Button variant="primary-outline">Its own theme</Button>
       </Grid.Item>
     </Grid>
   </Container>
@@ -8766,15 +8774,36 @@ Five is the limit. At this width it already asks to become a Select — which is
 // five options: still a track. six: use Select.
 ```
 
+### Sizes
+
+sm is the low capsule — the switch at the end of this site's areas row; md, the default, is the control height.
+
+```tsx
+<SegmentedControl size="sm" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />
+```
+
+### As navigation
+
+With href on every item it is a <nav> of links: going to another page is navigation, and the current one is marked with aria-current="page" — the Web | Native switch at the top of this site.
+
+```tsx
+<SegmentedControl size="sm" label="Platform" value="web" items={[
+  {value: "web", label: "Web", href: "/button.html"},
+  {value: "native", label: "Native", href: "/native-button.html"},
+]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `Array<{value, label}>` | — | The options. Two to five: past that it is a Select, not a segmented control. |
+| `items` | `Array<{value, label, href?}>` | — | The options. Two to five: past that it is a Select, not a segmented control. With href on EVERY item, the control is a <nav> of links — the current one gets aria-current="page" — instead of a choice: going to another page is navigation, and a screen reader hears "link", not "option". It is the Web \| Native switch of this site. |
 | `value` | `string` | — | The selected value. Controlled by design — one of many always has an owner. |
-| `onChange` | `(v: string) => void` | — | Fires with the new value. |
+| `onChange` | `(v: string) => void` | — | Fires with the new value. Not needed when the items are links (href). |
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
+| `size` | `"sm" \| "md"` | md | sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text. |
 </page>
 
 <page url="https://aureauds.dev/select.html">
@@ -10744,6 +10773,7 @@ import {Topbar} from "@aurea-uds/react";
 | `tabs` | `HeaderTab[]` | — | A second row: the site's areas, each with an optional icon, like the area row of the reference documentation. The row is 40 tall, the areas sit at its bottom, 12 apart (4 on a phone), and it scrolls sideways when they do not fit. The current one gets aria-current="page" and a 2px bar in the accent color. It comes last in the Tab order, after the actions. With tabs the bar is exactly its height and the divider line hangs just below it. |
 | `currentTab` | `string` | — | The id of the current area in the second row. |
 | `tabsLabel` | `string` | "Sections" | The accessible name of the second row. |
+| `tabsEnd` | `ReactNode` | — | What sits at the END of the second row, opposite the areas: the Web \| Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs. |
 </page>
 
 <page url="https://aureauds.dev/tracetimeline.html">
@@ -10871,7 +10901,7 @@ const {density, setDensity} = useDensity();
 
 <SegmentedControl
   value={density ?? "comfortable"}
-  onChange={setDensity}
+  onChange={(v) => setDensity(v as AureaDensity)}
   items={[
     {value: "compact", label: "Compact"},
     {value: "comfortable", label: "Comfortable"},
@@ -11002,10 +11032,10 @@ import {useValorResponsivo} from "@aurea-uds/react";
 ```
 
 ```tsx
-const orientacao = useValorResponsivo(
+const orientation = useValorResponsivo(
   {base: "vertical", container: {sm: "horizontal"}},
   "horizontal",
-  ancora,
+  anchorRef,
 );
 ```
 </page>
@@ -11510,7 +11540,7 @@ import {Banner} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-banner-the-cookie-notice.html">
 # The cookie notice
 
-variant="consent" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored. On this static page the buttons do not answer; in your app they do.
+variant="consent" asks before setting cookies that are not necessary: reject them, accept all, or choose by category in a window. Rejecting is as easy to see as accepting — same weight, same place —, the optional categories start off, and after the choice the confirmation takes the focus. Put the notice at the top of the page, before the skip link, and do not fix it to the screen. To change the choice later, show it again from a link in the footer, with value set to what you stored.
 
 ## Usage
 
@@ -12732,7 +12762,7 @@ import {Combobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [zone, setZone] = useState(null);
+const [zone, setZone] = useState<ComboboxOption | null>(null);
 
 <Combobox
   label="Time zone"
@@ -14163,10 +14193,10 @@ import {Menubar} from "@aurea-uds/react";
 ```tsx
 <Menubar label="Main" menus={[
   {label: "File", items: [
-    {label: "New file", kbd: "⌘N"}, {label: "Open…", kbd: "⌘O"},
-    "separator", {label: "Close", kbd: "⌘W"},
+    {label: "New file"}, {label: "Open…"},
+    "separator", {label: "Close"},
   ]},
-  {label: "Edit", items: [{label: "Undo", kbd: "⌘Z"}, {label: "Redo", kbd: "⇧⌘Z"}]},
+  {label: "Edit", items: [{label: "Undo"}, {label: "Redo"}]},
   {label: "View", items: [{label: "Zoom in"}, {label: "Zoom out"}, {label: "Reset zoom"}]},
 ]} />
 ```
@@ -14262,7 +14292,7 @@ import {MultiCombobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [tags, setTags] = useState([]);
+const [tags, setTags] = useState<ComboboxOption[]>([]);
 
 <MultiCombobox
   label="Labels"
@@ -15778,7 +15808,7 @@ import {Card, Avatar, Badge, Timeline, Button} from "@aurea-uds/react";
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>Activity <Badge>3</Badge></strong><Button variant="ghost" size="sm">Mark all read</Button>
   </div>
-  <Timeline items={[{title:"Curator published v1.7.0",time:"09:12"},…]} />
+  <Timeline items={[{title:"Curator published v1.7.0",time:"09:12"}]} />
 </Card>
 ```
 </page>
@@ -15901,7 +15931,7 @@ const actions = allowedFrom(job.state);   // transferring -> ["pause", "verify"]
       costs the height the other four regions need */}
   <div className="grid" style={{gridTemplateColumns:"minmax(140px,1fr) 2fr"}}>
     <TreeView label="Workspace" items={job.tree} defaultExpandedIds={["brand"]} />
-    <Table caption="Resources">{...}</Table>
+    <Table caption="Resources">{/* … */}</Table>
   </div>
 
   {/* "conflict requires preview": the conflict is explained HERE, next to what arrived,
@@ -15955,7 +15985,7 @@ import {SegmentedControl, Status, Select, Button, KPI, Chart, Table, Alert} from
 // the controls, and `refresh` lives with the range, which is what owns freshness.
 const actions = allowedFrom(view.state);   // ready -> ["refresh"]
 
-<div className="stack" style={{"--chart-h":"8rem"}}>
+<div className="stack" style={{"--chart-h":"8rem"} as CSSProperties}>
   <div className="cluster">
     <div role="group" aria-label="Time range">
       <SegmentedControl label="Time range" items={RANGES} value={view.range} onChange={setRange} />
@@ -15966,8 +15996,8 @@ const actions = allowedFrom(view.state);   // ready -> ["refresh"]
         : <Status variant={tone[view.state]}>{label[view.state]}</Status>}
       {actions.map(a => <Button key={a} size="sm" onClick={() => send(a)}>{label[a]}</Button>)}
     </div>
-    <div role="group" aria-label="Filters"><Select value={view.filter} …/></div>
-    <div role="group" aria-label="Segments"><Select value={view.segment} …/></div>
+    <div role="group" aria-label="Filters"><Select value={view.filter} /* … */ /></div>
+    <div role="group" aria-label="Segments"><Select value={view.segment} /* … */ /></div>
     {/* "export records scope and freshness": both in the LABEL, because whoever clicks
         needs to know what comes out before it comes out. Keep it SHORT — this row holds four
         control groups on one line, and a label that wraps costs the box 43px of height */}
@@ -16180,7 +16210,7 @@ import {MediaPlayer, Status, DataList, Toolbar, ToolbarButton, EmptyState} from 
 // favorite — and that is not a hole: choosing a chapter does not change the library's state.
 const actions = allowedFrom(view.state);   // ready -> ["play"]
 
-<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"}}>
+<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"} as CSSProperties}>
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>{item.title} · {item.meta}</strong>
     {/* offline here IS the universal state (ADR-0018): it is OUR connection that dropped,
@@ -16845,6 +16875,74 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-43-0.html">
+# v0.43.0
+
+React Native on the site, with a page for every component; yellow selected states and fixes in React Native; tabs in CodeBlock.
+
+The site now shows React Native next to the web: every native component has its own page, with the real component running in both themes. In React Native, the selected segment, the selected tab and the bottom bar take the brand yellow, like the primary button, and six components get fixes. On the web, `CodeBlock` gets tabs, and the brand outline, ghost and link buttons use the blue text of the light theme. Read the Breaking changes section if you build the React Native `AureaStrings` yourself.
+
+## New
+
+- **`CodeBlock tabs`.** Alternatives for the same step in tabs, inside the code box: the install command in npm, pnpm, yarn and bun, for example.
+- **`SegmentedControl` `size`** (`md`, `sm`), and items with `href`: the control becomes a row of links. `onChange` is now optional.
+- **`Header tabsEnd` and `AppShell topbarTabsEnd`.** What sits at the right end of the row of area tabs.
+- **`ColorSpace` and `ColorChannel`**, the types of the `colorSpace` and `channel` props of the color components, are exported from `@aurea-uds/react/inputs` (and from the root).
+- **Metadata for the React Native components that have no web version**, in `@aurea-uds/contracts` (`platforms.web: "n-a"`): BottomNavProvider, IconRegistryProvider, Screen, LinkButton, KeyboardAvoiding, BottomSheet, ToastHost, Toast, ScrollShadow, SkeletonGroup, PressableFeedback and PhotoInput.
+- **`@aurea-uds/contracts` ships `api-surface-native.json`**: the React Native API read from the types by the compiler, next to the web one (`api-surface.json`).
+
+## Changed
+
+- **`tone="primary"` text uses the emphasis color** in `Text`, `Paragraph`, `Heading` and `Code` on the web: blue in the light theme, yellow in the dark theme. It used the fill yellow, which measures 1.75:1 in the light theme.
+- **The brand outline, ghost and link buttons use blue text in the light theme**: `Button`, `IconButton` and `ToolbarButton` with `primary-outline`, `primary-ghost`, `link-primary`, and `tone="brand"` without a box.
+- **A soft `Avatar` with a status tone** uses the soft `Badge` background.
+- **The `running`, `paused`, `offline` and `review` tones of `Badge`** have their own colors: blue, amber, dimmed gray and violet. Before, `paused`, `offline` and `review` looked like `neutral`.
+- **`align` on `Text` and `Code`** now aligns the text: the element becomes a block.
+- **The copy button no longer covers the end of a line** in `CodeBlock`. The code keeps room for the button, and the longest line scrolls before it reaches it.
+- **React Native: in the light theme, `tone="primary"` text is the brand yellow mixed with the text color**, so it passes the reading contrast on white and on the page background. In the dark theme it stays yellow.
+- **React Native: the selected color matches the web** — the check of a `Select` and `Combobox` option, the dot and check of a menu item, the current `Stepper` step.
+- **React Native: the selected segment of `SegmentedControl` and the selected capsule of `Tabs` are the brand yellow, like the primary button**, with the label in the button's ink, in both themes. The shadow is gone, and so is the yellow line under the `SegmentedControl` segment. Underlined `Tabs` (`variant="secondary"`) keep the yellow line.
+- **React Native: `BottomNav` marks the selected tab with the yellow behind it by default.** The default `indicator` changes from `none` (color on the icon and label only) to `capsule`. Pass `indicator="none"` to keep the previous look.
+- **React Native: `Checkbox` and `Radio` get an invisible extra touch area of 6 around them** (`hitSlop`). Their drawing and their size in the layout do not change. `Switch` has none.
+- **React Native in the browser** (`react-native-web`): headings carry their level (`Heading` from its `type`, the `Accordion` item as level 3) instead of all becoming `<h1>`, and the outline `Card` carries `data-aurea-card="outline"`. Nothing changes on a device.
+
+## Fixed
+
+- **The `DataState` type** rejected a function as `children`, which the component accepts. It compiles now.
+- **React Native: `Screen` in the browser no longer needs a `SafeAreaProvider` above it.** Without one, the web version of the safe-area library threw and the screen did not open. Without a provider, in the browser it uses zero insets; if your web app must keep clear of a notch, put a `SafeAreaProvider` at the root. Nothing changes on a device.
+- **React Native: `DatePicker` with `mode="time"`** shows the hours and minutes in the device's format, and when empty it asks for a time. Without `format`, it showed the day's date and said "Pick a date".
+- **React Native: `Switch` reads `align`.** With `start`, the track sits on the first line of a long label. The type accepted it, and the track always stayed in the middle.
+- **React Native: `BottomNav` with `variant="edge"`, in the browser,** came out with the shadow and the layer of the floating bar.
+- **React Native: `SearchField` without `value`.** The clear button disappeared and the typed text stayed. Now the clear button empties the field.
+
+## The documentation site
+
+- **React Native on the site**: a Web | Native switch at the end of the row of areas, and one page per React Native component (79), with the real component running through `react-native-web` in both themes, an example of every value and the API read from the types. The preview box of these pages uses the app's own background.
+- **Every variation in an example**: every value of every variant prop of the web components has a live example.
+- **The example box grows with the example**: no example scrolls inside its box.
+- **Install tabs** (npm, pnpm, yarn, bun) in Quick Start, Frameworks, Dark Mode and the release notes.
+
+## Breaking changes
+
+- **`comboboxOpen` is a new key in the React Native `AureaStrings`** ("Open list"; "Abrir lista" in `ptBR`), the same as on the web. It names the `Combobox` arrow in the browser. If you build the whole dictionary with this type, add it.
+- **`timePlaceholder` is a new key in the React Native `AureaStrings`** ("Pick a time"; "Escolher horário" in `ptBR`): what `DatePicker` says when it is empty with `mode="time"`. If you build the whole dictionary with this type, add it.
+- **`leading` and `trailing` are gone from the type of the React Native `IconButton` and `ThemeToggle`.** They came from the `Button` type and drew nothing. If you pass one of them, the code no longer compiles: remove it. Your own drawing goes in `name`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.43.0 @aurea-uds/core@0.43.0 @aurea-uds/fonts@0.43.0 @aurea-uds/icons@0.43.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.43.0
 ```
 </page>
 

@@ -13,7 +13,7 @@ const {density, setDensity} = useDensity();
 
 <SegmentedControl
   value={density ?? "comfortable"}
-  onChange={setDensity}
+  onChange={(v) => setDensity(v as AureaDensity)}
   items={[
     {value: "compact", label: "Compact"},
     {value: "comfortable", label: "Comfortable"},

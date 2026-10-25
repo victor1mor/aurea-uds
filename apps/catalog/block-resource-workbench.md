@@ -18,7 +18,7 @@ const actions = allowedFrom(job.state);   // transferring -> ["pause", "verify"]
       costs the height the other four regions need */}
   <div className="grid" style={{gridTemplateColumns:"minmax(140px,1fr) 2fr"}}>
     <TreeView label="Workspace" items={job.tree} defaultExpandedIds={["brand"]} />
-    <Table caption="Resources">{...}</Table>
+    <Table caption="Resources">{/* … */}</Table>
   </div>
 
   {/* "conflict requires preview": the conflict is explained HERE, next to what arrived,

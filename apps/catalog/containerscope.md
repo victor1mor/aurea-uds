@@ -11,8 +11,8 @@ import {ContainerScope} from "@aurea-uds/react";
 ```tsx
 <ContainerScope>
   <Toolbar orientation={{base: "vertical", container: {sm: "horizontal"}}}>
-    <Button>Salvar</Button>
-    <Button>Descartar</Button>
+    <Button>Save</Button>
+    <Button>Discard</Button>
   </Toolbar>
 </ContainerScope>
 ```

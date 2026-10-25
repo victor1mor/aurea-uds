@@ -14,7 +14,7 @@ import {MediaPlayer, Status, DataList, Toolbar, ToolbarButton, EmptyState} from 
 // favorite — and that is not a hole: choosing a chapter does not change the library's state.
 const actions = allowedFrom(view.state);   // ready -> ["play"]
 
-<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"}}>
+<div className="stack" style={{"--media-h":"6rem", "--media-ar":"auto"} as CSSProperties}>
   <div className="cluster" style={{justifyContent:"space-between"}}>
     <strong>{item.title} · {item.meta}</strong>
     {/* offline here IS the universal state (ADR-0018): it is OUR connection that dropped,

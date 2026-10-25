@@ -9,9 +9,9 @@ import {useValorResponsivo} from "@aurea-uds/react";
 ```
 
 ```tsx
-const orientacao = useValorResponsivo(
+const orientation = useValorResponsivo(
   {base: "vertical", container: {sm: "horizontal"}},
   "horizontal",
-  ancora,
+  anchorRef,
 );
 ```

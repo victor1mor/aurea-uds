@@ -9,7 +9,7 @@ import {BottomNav} from "@aurea-uds/react";
 ```
 
 ```tsx
-const items = [
+const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
     badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},

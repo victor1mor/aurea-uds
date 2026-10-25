@@ -36,3 +36,4 @@ import {Topbar} from "@aurea-uds/react";
 | `tabs` | `HeaderTab[]` | — | A second row: the site's areas, each with an optional icon, like the area row of the reference documentation. The row is 40 tall, the areas sit at its bottom, 12 apart (4 on a phone), and it scrolls sideways when they do not fit. The current one gets aria-current="page" and a 2px bar in the accent color. It comes last in the Tab order, after the actions. With tabs the bar is exactly its height and the divider line hangs just below it. |
 | `currentTab` | `string` | — | The id of the current area in the second row. |
 | `tabsLabel` | `string` | "Sections" | The accessible name of the second row. |
+| `tabsEnd` | `ReactNode` | — | What sits at the END of the second row, opposite the areas: the Web \| Native switch of the reference's documentation. Hidden below 768, as there. Shown only with tabs. |

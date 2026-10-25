@@ -22,9 +22,9 @@ import {ModelUsage} from "@aurea-uds/react";
 Which measure the bars compare: tokens, cost or requests. The rows sort by the one in view.
 
 ```tsx
-<ModelUsage entries={entries} metric="tokens" />
-<ModelUsage entries={entries} metric="cost" />
-<ModelUsage entries={entries} metric="requests" />
+<ModelUsage label="Model usage, tokens" entries={entries} metric="tokens" />
+<ModelUsage label="Model usage, cost" entries={entries} metric="cost" />
+<ModelUsage label="Model usage, requests" entries={entries} metric="requests" />
 ```
 
 ## API Reference

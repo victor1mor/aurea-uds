@@ -9,7 +9,7 @@ import {Combobox} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [zone, setZone] = useState(null);
+const [zone, setZone] = useState<ComboboxOption | null>(null);
 
 <Combobox
   label="Time zone"

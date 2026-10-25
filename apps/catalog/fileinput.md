@@ -34,7 +34,7 @@ With upload() it owns progress, cancel and retry for each file.
 
 ```tsx
 <FileInput label="Import" accept=".csv" maxSize={2000000}
-  upload={async ({file, onProgress, signal}) => {
+  upload={async (file, {onProgress, signal}) => {
     await put(file, {onProgress, signal});
   }} />
 ```

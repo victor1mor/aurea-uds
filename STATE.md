@@ -16,9 +16,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Componentes exportados por `@aurea-uds/react` | 138 |
 | Fichas de registry | 138 |
 | Hooks públicos com ficha | 9 |
-| Maturidade declarada nas fichas | Deprecated 1 · Ready 48 · Stable 98 |
+| Maturidade declarada nas fichas | Deprecated 1 · Ready 48 · Stable 110 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 987 |
+| Classes declaradas no CSS do core | 996 |
 
 ## Tokens
 
@@ -33,24 +33,24 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Tipo de página | Quantidade |
 |---|---|
-| Componente | 147 |
+| Componente | 226 |
 | Pattern | 226 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 78 |
-| Índice de área | 9 |
-| **Total** | **498** |
+| Documentação | 79 |
+| Índice de área | 11 |
+| **Total** | **580** |
 
 ## Cobertura das fichas
 
 | Campo | Fichas que declaram |
 |---|---|
-| `props` (contrato de API publicado) | 138 de 138 |
+| `props` (contrato de API publicado) | 150 de 138 |
 | `variants` | 30 de 138 |
-| `sizes` | 35 de 138 |
-| `states` | 122 de 138 |
+| `sizes` | 36 de 138 |
+| `states` | 134 de 138 |
 | `tokens` | 139 de 138 |
-| `a11y.apg` | 143 de 138 |
+| `a11y.apg` | 155 de 138 |
 
 ## Conteúdo do catálogo
 
@@ -70,9 +70,9 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 2161 |
-| Componentes citados nos testes unitários | 145 de 138 |
-| Specs de navegador (Playwright) | 61 |
+| Chamadas de `test()` nos testes unitários | 2211 |
+| Componentes citados nos testes unitários | 157 de 138 |
+| Specs de navegador (Playwright) | 63 |
 | Baselines de screenshot no repositório | 48 |
 | Baselines `-linux.png` (o que a CI compara) | 24 |
 

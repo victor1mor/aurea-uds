@@ -73,7 +73,7 @@ On a circle the badge is pulled 14% back into the corner. Without that it floats
 
 ```tsx
 <Badge anchor="bottom-end" anchorShape="circle" dot variant="success">
-  <Avatar name="Ana Prado" />
+  <Avatar alt="Ana Prado" fallback="AP" />
 </Badge>
 ```
 

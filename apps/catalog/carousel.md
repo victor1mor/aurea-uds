@@ -9,7 +9,7 @@ import {Carousel} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Carousel label="Product photos" style={{"--carousel-slide": "50%"}}>
+<Carousel label="Product photos" style={{"--carousel-slide": "50%"} as CSSProperties}>
   <Card>Front</Card>
   <Card>Back</Card>
   <Card>In use</Card>

@@ -129,10 +129,10 @@ como deveria funcionar"*.
 
 ---
 
-## [0.43.0] — em construção
+## [0.43.0] — 2026-10-25
 
-⏳ **Em construção — o bloco 1 do plano único, o catálogo fiel** (aprovado pelo Victor em 23/10/2026: *"Aprovo o plano dos
-cinco blocos"*): o site mostra o que o pacote é — toda peça com página, toda variação num exemplo vivo, o nativo ao lado
+⏳ **Ainda não publicada.** O bloco 1 do plano único, **o catálogo fiel** (aprovado pelo Victor em 23/10/2026: *"Aprovo o
+plano dos cinco blocos"*): o site mostra o que o pacote é — toda peça com página, toda variação num exemplo vivo, o nativo ao lado
 da web —, e travas na CI para continuar assim.
 
 ### ⚠ Pode quebrar a compilação
@@ -156,6 +156,8 @@ da web —, e travas na CI para continuar assim.
 - **Fichas das peças só do nativo**, com página no site: BottomNavProvider, IconRegistryProvider, Screen, LinkButton,
   KeyboardAvoiding, BottomSheet, ToastHost, Toast, ScrollShadow, SkeletonGroup, PressableFeedback e PhotoInput
   (`platforms.web: "n-a"`).
+- **`api-surface-native.json`** no `@aurea-uds/contracts`: a API do nativo lida dos tipos pelo compilador, ao lado da da
+  web (`api-surface.json`, que já saía). É de onde as páginas do nativo no site tiram a tabela de props.
 
 ### Mudado
 
@@ -227,6 +229,8 @@ As decisões da bancada do bloco 1 ([ADR-0081](decisions/0081-a-bancada-do-bloco
   e pedia na [0.42.0] as frases da 0.43.0.
 - **O registro da 0.42.0** (publicada entre 08:32 e 08:39 de 25/10/2026): o `released-surface.json` do commit do
   publish (`6872bf3b`, sem peça nem frase nova), o CHANGELOG e o CLAUDE.md.
+- **A lista do que cada pacote publica** (`scripts/package-files.json`) ganhou o `api-surface-native.json` do
+  `@aurea-uds/contracts`: o `check-pack` reprovou no fechamento da versão, porque nenhuma conferência do bloco o rodava.
 
 ---
 

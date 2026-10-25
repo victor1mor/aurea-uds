@@ -13,10 +13,10 @@ import {Section} from "@aurea-uds/react";
   <Container>
     <Grid columns={12}>
       <Grid.Item span={{base: "12", viewport: {md: "7"}}}>
-        <Heading id="t-app" level={2}>O app no seu bolso</Heading>
+        <Heading id="t-app" level={2}>A dark band</Heading>
       </Grid.Item>
       <Grid.Item span={{base: "12", viewport: {md: "5"}}}>
-        <Button tone="brand">Baixar</Button>
+        <Button variant="primary-outline">Its own theme</Button>
       </Grid.Item>
     </Grid>
   </Container>

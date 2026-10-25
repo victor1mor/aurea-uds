@@ -11,10 +11,10 @@ import {Menubar} from "@aurea-uds/react";
 ```tsx
 <Menubar label="Main" menus={[
   {label: "File", items: [
-    {label: "New file", kbd: "⌘N"}, {label: "Open…", kbd: "⌘O"},
-    "separator", {label: "Close", kbd: "⌘W"},
+    {label: "New file"}, {label: "Open…"},
+    "separator", {label: "Close"},
   ]},
-  {label: "Edit", items: [{label: "Undo", kbd: "⌘Z"}, {label: "Redo", kbd: "⇧⌘Z"}]},
+  {label: "Edit", items: [{label: "Undo"}, {label: "Redo"}]},
   {label: "View", items: [{label: "Zoom in"}, {label: "Zoom out"}, {label: "Reset zoom"}]},
 ]} />
 ```

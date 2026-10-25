@@ -27,15 +27,15 @@ import {DataGrid} from "@aurea-uds/react/data-grid";
 loading and error replace the rows; the other states keep the rows you already had and put the notice above them.
 
 ```tsx
-<DataGrid label="Members" data={members} columns={columns} state="loading" />
-<DataGrid label="Members" data={members} columns={columns} state="error" />
-<DataGrid label="Members" data={members} columns={columns} state="stale" />
-<DataGrid label="Members" data={members} columns={columns} state="partial" />
-<DataGrid label="Members" data={members} columns={columns} state="degraded" />
-<DataGrid label="Members" data={members} columns={columns} state="offline" />
-<DataGrid label="Members" data={members} columns={columns} state="waiting_user" />
-<DataGrid label="Members" data={members} columns={columns} state="waiting_approval" />
-<DataGrid label="Members" data={members} columns={columns} state="waiting_dependency" />
+<DataGrid label="Members, loading" data={members} columns={columns} state="loading" />
+<DataGrid label="Members, error" data={members} columns={columns} state="error" />
+<DataGrid label="Members, stale" data={members} columns={columns} state="stale" />
+<DataGrid label="Members, partial" data={members} columns={columns} state="partial" />
+<DataGrid label="Members, degraded" data={members} columns={columns} state="degraded" />
+<DataGrid label="Members, offline" data={members} columns={columns} state="offline" />
+<DataGrid label="Members, waiting_user" data={members} columns={columns} state="waiting_user" />
+<DataGrid label="Members, waiting_approval" data={members} columns={columns} state="waiting_approval" />
+<DataGrid label="Members, waiting_dependency" data={members} columns={columns} state="waiting_dependency" />
 ```
 
 ## API Reference

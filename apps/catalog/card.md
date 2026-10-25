@@ -33,7 +33,7 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 ```tsx
 <Card variant="base">variant base</Card>
 <Card variant="raised">variant raised</Card>
-<Card variant="interactive">variant interactive</Card>
+<Card variant="interactive" render={<a href="#" />}>variant interactive</Card>
 <Card variant="inset">variant inset</Card>
 <Card variant="outline">variant outline</Card>
 <Card variant="selected">variant selected</Card>

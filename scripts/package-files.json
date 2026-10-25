@@ -6,6 +6,7 @@
     "@aurea-uds/contracts": [
       "LICENSE",
       "README.md",
+      "api-surface-native.json",
       "api-surface.json",
       "aurea.contract.json",
       "package.json"

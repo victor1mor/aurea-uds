@@ -34,7 +34,7 @@ Ready colours under the hue track. Controlled: the code follows.
 const [colour, setColour] = useState("#0485f7");
 
 <ColorPicker label="Brand colour" value={colour} onValueChange={setColour}
-  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, …]} />
+  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}]} />
 ```
 
 ### A closed palette
@@ -43,7 +43,7 @@ variant="swatches": only the swatches and the hex field.
 
 ```tsx
 <ColorPicker label="Tag colour" variant="swatches" defaultValue="#16a34a"
-  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}, …]} />
+  swatches={[{color: "#0485f7", label: "Ocean"}, {color: "#16a34a", label: "Forest"}]} />
 ```
 
 ### With fields
@@ -51,13 +51,13 @@ variant="swatches": only the swatches and the hex field.
 The window assembled with children: the area, the hue, and one field per channel — the colour space chosen in a Select.
 
 ```tsx
-const [space, setSpace] = useState("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
+const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsla(220, 90%, 50%, 0.8)">
   <ColorArea />
   <Slider label="Hue" channel="hue" />
-  <Select aria-label="Colour space" value={space} onValueChange={setSpace}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
   <div style={{display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--space-2)"}}>
     {channels[space].map((channel) => (
@@ -72,13 +72,13 @@ const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "satura
 One track per channel, transparency included — the colour space chosen in a Select.
 
 ```tsx
-const [space, setSpace] = useState("hsl");
-const channels = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
+const [space, setSpace] = useState<ColorSpace>("hsl");
+const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation", "brightness"], hsl: ["hue", "saturation", "lightness"], rgb: ["red", "green", "blue"]};
 
 <ColorPicker label="Pick a colour" defaultValue="hsl(219, 58%, 93%)">
-  <Select aria-label="Colour space" value={space} onValueChange={setSpace}
+  <Select aria-label="Colour space" value={space} onValueChange={(v) => setSpace(v as ColorSpace)}
     items={[{value: "hsl", label: "HSL"}, {value: "hsb", label: "HSB"}, {value: "rgb", label: "RGB"}]} />
-  {[...channels[space], "alpha"].map((channel) => (
+  {[...channels[space], "alpha" as const].map((channel) => (
     <Slider key={channel} label={channel} channel={channel} colorSpace={space} />
   ))}
 </ColorPicker>
